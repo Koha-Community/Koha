@@ -1760,8 +1760,8 @@ sub BornameSearch  {
 		or othernames like \"$data[0]%\" or othernames like \"% $data[0]%\")
 		";
 		for (my $i=1;$i<$count;$i++){
-		$query=$query." and (surname like \"$data[$i]%\" or surname like \"% $data[$i]%\"
-		or firstname  like \"$data[$i]%\" or firstname like \"% $data[$i]%\"
+		$query=$query." and (".
+		" firstname  like \"$data[$i]%\" or firstname like \"% $data[$i]%\"
 		or othernames like \"$data[$i]%\" or othernames like \"% $data[$i]%\")";
 					# FIXME - .= <<EOT;
 		}
