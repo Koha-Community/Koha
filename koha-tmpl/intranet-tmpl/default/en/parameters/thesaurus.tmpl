@@ -34,12 +34,12 @@
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
-<H1><TMPL_IF name="search_category">Modify<TMPL_ELSE>Add</TMPL_IF></H1>
+<H1><TMPL_IF name="search_category">Add<TMPL_ELSE>Modify</TMPL_IF></H1>
 	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
 	<TMPL_IF name="search_category">
-		<input type=hidden name=op value='mod_validate'>
-	<TMPL_ELSE>
 		<input type=hidden name=op value='add_validate'>
+	<TMPL_ELSE>
+		<input type=hidden name=op value='mod_validate'>
 	</TMPL_IF>
 	<table cellpadding=3 cellspacing=3>
 	<tr>
@@ -63,7 +63,6 @@
 		<td><input type="hidden" name="id" value="<TMPL_VAR name="id">">
 			<input type="hidden" name="father" value="<TMPL_VAR name="father" escape=HTML>">
 			<input type="hidden" name="branch" value="<TMPL_VAR name="branch" escape=HTML>">
-			<input type="hidden" name="toponly" value="<TMPL_VAR name="toponly">">
 			<input type="hidden" name="search_category" value="<TMPL_VAR name="search_category">">
 			<input type="hidden" name="searchstring" value="<TMPL_VAR name="searchstring" escape=HTML>">
 			<input type="hidden" name="offset" value="<TMPL_VAR name="offset">">
@@ -104,7 +103,6 @@
 	</ul>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<TMPL_VAR name="tab_list">
-		<input type="checkbox" name="toponly" value="1" <TMPL_IF name="toponly">checked</TMPL_IF>>Top hierarchy only
 		<input type="text" name="searchstring" value="<TMPL_VAR name="searchstring">">
 		<input type="submit" value="OK">
 		<a href="thesaurus.pl?op=add_form">New category...</a>

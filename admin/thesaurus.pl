@@ -29,7 +29,7 @@ use C4::Authorities;
 
 my $input = new CGI;
 my $search_category=$input->param('search_category');
-$search_category=$input->param('category') unless $search_category;
+# $search_category=$input->param('category') unless $search_category;
 #my $toponly = $input->param('toponly');
 my $branch = $input->param('branch');
 my $searchstring = $input->param('searchstring');

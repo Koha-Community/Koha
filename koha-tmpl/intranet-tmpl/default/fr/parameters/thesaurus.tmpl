@@ -66,7 +66,6 @@
 		<td><input type="hidden" name="id" value="<TMPL_VAR name="id">">
 			<input type="hidden" name="father" value="<TMPL_VAR name="father">">
 			<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-			<input type="hidden" name="toponly" value="<TMPL_VAR name="toponly">">
 			<input type="hidden" name="search_category" value="<TMPL_VAR name="search_category">">
 			<input type="hidden" name="searchstring" value="<TMPL_VAR name="searchstring">">
 			<input type="hidden" name="offset" value="<TMPL_VAR name="offset">">
@@ -113,7 +112,6 @@
 </ul>
 <form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 	<TMPL_VAR name="tab_list">
-	<input type="checkbox" name="toponly" value="1" ><TMPL_IF name="toponly">checked</TMPL_IF>Top hierarchy only
 	<input type="text" name="searchstring" value="<TMPL_VAR name="searchstring">">
 	<input type="submit" value="OK">
 	<a href="thesaurus.pl?op=add_form">Nouvelle catégorie...</a>
