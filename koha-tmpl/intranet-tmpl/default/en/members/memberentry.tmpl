@@ -1,12 +1,15 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<h1>
 <!-- TMPL_IF NAME=addAction -->
-	Add Member
+<h1>
+	Add member
+</h1>
 <!-- TMPL_ELSE -->
+<h1>
 	Update Member Details
+</h1>
 <!-- /TMPL_IF -->
-</h1><br>
+<br>
 
 <form action=/cgi-bin/koha/newmember.pl method=post>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
@@ -19,7 +22,7 @@
 
 	<tr valign=top>
 		<td COLSPAN=2><input type=reset value="Clear all Fields"></td>
-		<td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>Member# <!-- TMPL_VAR NAME=member -->, Card Number* <input type=text name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br></td>
+		<td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>Member# <!-- TMPL_VAR NAME=member -->, Card number* <input type=text name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br></td>
 	</tr>
 
 	<tr valign=top>
