@@ -279,7 +279,23 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
       close(HTTPDCONF);
    }
 }
-$httpduser ||= 'Undetermined';
+
+unless ($httpduser) {
+    print qq|
+I was not able to determine the user that Apache is running as.  This
+information is necessary in order to set the access privileges correctly on
+/etc/koha.conf.  This user should be set in one of the Apache configuration
+files using the "User" directive.
+|;
+    print "What is your Apache user? ";
+    chomp($input = <STDIN>);
+
+    if ($input) {
+	$httpduser = $input;
+    } else {
+	$httpduser='Undetermined';
+    }
+}
 
 print "\n\nINSTALLING KOHA...\n";
 print "\n\n==================\n";
@@ -298,6 +314,49 @@ system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 
 system("chown -R root.$httpduser $opacdir");
 system("chown -R root.$httpduser $intranetdir");
+
+
+
+open (KC, "/etc/koha.conf");
+my $kccontents='';
+my $kc;
+while (<KC>) {
+    if (/^\s*includes\s*=/) {
+	$kccontents.="includes=$intranetdir/htdocs/includes\n";
+	$kc->{'includes'}=1;
+    } elsif (/^\s*kohaversion\s*=/) {
+	$kccontents.="kohaversion=$newversion\n";
+	$kc->{'kohaversion'}=1;
+    } elsif (/^\s*intranetdir\s*=/) {
+	$kccontents.="intranetdir=$intranetdir\n";
+	$kc->{'intranetdir'}=1;
+    } elsif (/^\s*opacdir\s*=/) {
+	$kccontents.="opacdir=$opacdir\n";
+	$kc->{'opacdir'}=1;
+    } else {
+	$kccontents.="$_";
+    }
+}
+
+unless (defined($kc->{'kohaversion'})) {
+    $kccontents.="kohaversion=$newversion\n";
+}
+unless (defined($kc->{'includes'})) {
+    $kccontents.="includes=$intranetdir/htdocs/includes\n";
+}
+unless (defined($kc->{'intranetdir'})) {
+    $kccontents.="intranetdir=$intranetdir\n";
+}
+unless (defined($kc->{'opacdir'})) {
+    $kccontents.="opacdir=$opacdir\n";
+}
+
+
+system("mv /etc/koha.conf /etc/koha.conf.backup");
+
+open (KC, ">/etc/koha.conf") || warn "Couldn't open /etc/koha.conf for writing.";
+print KC $kccontents;
+close KC;
 
 
 print qq|
