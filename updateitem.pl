@@ -88,23 +88,20 @@ if ($wthdrawn == 0 && $override ne 'yes'){
 	     });
   if ($lost ==1){
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
-    $sth->execute;
+    my $sth=$dbh->prepare("Select * from issues where (itemnumber=?) and (returndate is null)");
+    $sth->execute($itemnum);
     my $data=$sth->fetchrow_hashref;
     if ($data->{'borrowernumber'} ne '') {
       #item on issue add replacement cost to borrowers record
       my $accountno=getnextacctno($env,$data->{'borrowernumber'},$dbh);
       my $item=getiteminformation($env, $itemnum);
-      my $account="Insert into accountlines
+      my $sth2=$dbh->prepare("Insert into accountlines
       (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
       values
-      ('$data->{'borrowernumber'}','$accountno',now(),'$item->{'replacementprice'}',
-      'Lost Item $item->{'title'} $item->{'barcode'}','L',
-      '$item->{'replacementprice'}','$itemnum')";
-      my $sth2=$dbh->prepare($account);
-#      print $input->header;
-#      print $account;
-      $sth2->execute;
+      (?,?,now(),?,?,'L',?,?)");
+      $sth2->execute($data->{'borrowernumber'},$accountno,$item->{'replacementprice'},
+      "Lost Item $item->{'title'} $item->{'barcode'}",
+      $item->{'replacementprice'},$itemnum);
       $sth2->finish;
     }
     $sth->finish;
@@ -123,8 +120,8 @@ if ($wthdrawn == 0 && $override ne 'yes'){
     print "The biblio or biblioitem this item belongs to has a reserve on it";
     $flag=1;
   }
-  my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from issues where (itemnumber=?) and (returndate is null)");
+  $sth->execute($itemnum);
   my $data=$sth->fetchrow_hashref;
   if ($data->{'borrowernumber'} ne '') {
     print $input->header;

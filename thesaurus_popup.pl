@@ -74,8 +74,8 @@ my %stdlib;
 my $select_list;
 if ($search_string) {
 #	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where freelib like '".$search_string."%' and category ='$category'");
-	my $sti=$dbh->prepare("select id,freelib,father from bibliothesaurus where match (category,freelib) AGAINST (?) and category ='$category'");
-	$sti->execute($search_string);
+	my $sti=$dbh->prepare("select id,freelib,father from bibliothesaurus where match (category,freelib) AGAINST (?) and category =?");
+	$sti->execute($search_string,$category);
 	while (my $line=$sti->fetchrow_hashref) {
 		$stdlib{$line->{'id'}} = "$line->{'father'} $line->{'freelib'}";
 		push(@freelib,$line->{'id'});

@@ -56,9 +56,8 @@ my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.s
 
 my $dbh = C4::Context->dbh;
 
-my $query="select date_due,borrowernumber,itemnumber from issues where isnull(returndate) && date_due<'$todaysdate' order by date_due,borrowernumber";
-my $sth=$dbh->prepare($query);
-$sth->execute;
+my $sth=$dbh->prepare("select date_due,borrowernumber,itemnumber from issues where isnull(returndate) && date_due<? order by date_due,borrowernumber");
+$sth->execute($todaysdate);
 
 my @overduedata;
 while (my $data=$sth->fetchrow_hashref) {
@@ -66,27 +65,22 @@ while (my $data=$sth->fetchrow_hashref) {
   $bornum=$data->{'borrowernumber'};
   $itemnum=$data->{'itemnumber'};
 
-  my $query="select concat(firstname,' ',surname),phone,emailaddress from borrowers where borrowernumber='$bornum'";
-  my $sth1=$dbh->prepare($query);
-  $sth1->execute;
+  my $sth1=$dbh->prepare("select concat(firstname,' ',surname),phone,emailaddress from borrowers where borrowernumber=?");
+  $sth1->execute($bornum);
   $data1=$sth1->fetchrow_hashref;
   $name=$data1->{'concat(firstname,\' \',surname)'};
   $phone=$data1->{'phone'};
   $email=$data1->{'emailaddress'};
   $sth1->finish;
 
-  # FIXME - There's already a $query in this scope.
-  my $query="select biblionumber from items where itemnumber='$itemnum'";
-  my $sth2=$dbh->prepare($query);
-  $sth2->execute;
+  my $sth2=$dbh->prepare("select biblionumber from items where itemnumber=?");
+  $sth2->execute($itemnum);
   $data2=$sth2->fetchrow_hashref;
   $biblionumber=$data2->{'biblionumber'};
   $sth2->finish;
 
-  # FIXME - There's already a $query in this scope.
-  my $query="select title,author from biblio where biblionumber='$biblionumber'";
-  my $sth3=$dbh->prepare($query);
-  $sth3->execute;
+  my $sth3=$dbh->prepare("select title,author from biblio where biblionumber=?");
+  $sth3->execute($biblionumber);
   $data3=$sth3->fetchrow_hashref;
   $title=$data3->{'title'};
   $author=$data3->{'author'};
