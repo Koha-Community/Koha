@@ -395,8 +395,10 @@ while (<HC>) {
     $httpdconf.=$_;
 }
 
+my $apachebackupmade=0;
 if ($envmodule || $includesmodule) {
     system("mv -f $realhttpdconf $realhttpdconf\.prekoha");
+    $apachebackupmade=1;
     open HC, ">$realhttpdconf";
     print HC $httpdconf;
     close HC;
@@ -416,6 +418,9 @@ configuration.
     <STDIN>;
     print "\n";
 } else {
+    unless ($apachebackupmade) {
+	system("cp -f $realhttpdconf $realhttpdconf\.prekoha");
+    }
     my $includesdirectives='';
     if ($includesmodule) {
 	$includesdirectives.="Options +Includes\n";
