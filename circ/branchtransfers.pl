@@ -92,13 +92,16 @@ if (my $barcode=$query->param('barcode')) {
 
 my $entrytext= << "EOF";
 <form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
-<table border=0 cellpadding=5 cellspacing=0 bgcolor='#dddddd' >
-<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
+<table border=1 cellpadding=5 cellspacing=0 align=left>
+<tr><td colspan=2 align=center background=$backgroundimage>
 <font color=black><b>Select Branch</b></font></td></tr>
 <tr><td>Destination Branch:</td>
     <td><select name=tobranchcd> $tobranchoptions </select></td></tr></table>    
-<table border=0 cellpadding=5 cellspacing=0 bgcolor='#dddddd' ><tr>
-<td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
+
+<img src="/images/holder.gif" width=24 height=50 align=left>
+
+<table border=1 cellpadding=5 cellspacing=0 ><tr>
+<td colspan=2 align=center background=$backgroundimage>
 <font color=black><b>Enter Book Barcode</b></font></td></tr>
 <tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
 </table>
@@ -125,7 +128,7 @@ EOF
 print $query->header;
 print startpage;
 print startmenu('circulation');
-print "<h3>Branch Transfers</h3>";
+print "<FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>";
 
 
 print $messagetable if (@messages);
@@ -136,7 +139,7 @@ print $entrytext;
 if (%transfereditems) {
     print << "EOF"; 
 <p>
-<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>                                                                
+<table border=1 cellpadding=5 cellspacing=0 bgcolor=#dddddd>                                                                
 <tr><th colspan=6 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Transfered Items</font></th></tr>
 <tr><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>From</th><th>To</th></tr>
 EOF
