@@ -41,7 +41,7 @@ if ($order2 eq ''){
   $order2="date_due desc";
 }
 my $limit=$input->param('limit');
-if ($limit eq 'full'){
+if ($limit eq 'full' || $limit eq 0){
   $limit=0;
 } else {
   $limit=50;
