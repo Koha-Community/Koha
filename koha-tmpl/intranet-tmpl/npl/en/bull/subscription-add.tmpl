@@ -1,0 +1,246 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- <!-- TMPL_IF name="mod" -->Modify a Subscription<!-- TMPL_ELSE -->Add a New Subscription<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<!-- TMPL_IF name="mod" -->
+	<h1>Modify subscription</h1>
+	<form method="post" name="f" action="subscription-detail.pl">
+		<input type="hidden" name="op" value="modsubscription">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+<!-- TMPL_ELSE -->
+	<h1>Add a subscription</h1>
+	<form method="post" name="f">
+<!-- /TMPL_IF -->
+<div class="details">
+	<table>
+	<caption>Subscription information</caption>
+		<tr><th><input type="hidden" name="op" value="addsubscription">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		Librarian</th><td><!-- TMPL_VAR name="user" --></td></tr>
+		<tr><th><label>Supplier</label></th><td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="4"> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>) <input type="button" class="submit" value="Search..." onclick="FindAcqui(f); return false;" /></td></tr>
+		<tr><th><label>Biblio</label></th><td><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="4"> (<input type="text" name="title" value="<!-- TMPL_VAR name="title" -->" disabled readonly>) <input type="button" class="submit" value="Search..." onclick="Plugin(f); return false;" /></td></tr>
+		<tr><th><label>Notes</label></th><td><textarea name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></td></tr>
+</table>
+		Warning!
+		<ul>
+			<li>remember you <b>must</b> have created a biblio <b>before</b> creating a subscription</li>
+			<li>You also must have selected a supplier if you want to ask for late issues</li>
+		</ul>
+</div>
+<div class="details">
+	<h2>Planning</h2>
+	<p><label>Beginnning date:</label> <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10"></p>
+	<p><label>Frequency (*)</label>
+			<select name="periodicity" size="1">
+				<option value="" selected>Unknown</option>
+				<!-- TMPL_IF name="periodicity1" -->
+					<option value="1" selected>1/day</option>
+				<!-- TMPL_ELSE -->
+					<option value="1">1/day</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity2" -->
+					<option value="2" selected>1/week</option>
+				<!-- TMPL_ELSE -->
+					<option value="2">1/week</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity3" -->
+					<option value="3" selected>1/2 weeks</option>
+				<!-- TMPL_ELSE -->
+					<option value="3">1/2 weeks</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity4" -->
+					<option value="4" selected>1/3 weeks</option>
+				<!-- TMPL_ELSE -->
+					<option value="4">1/3 weeks</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity5" -->
+					<option value="5" selected>1/month</option>
+				<!-- TMPL_ELSE -->
+					<option value="5">1/month</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity6" -->
+					<option value="6" selected>1/2 months</option>
+				<!-- TMPL_ELSE -->
+					<option value="6">1/2 months</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity7" -->
+					<option value="7" selected>1/3 months</option>
+				<!-- TMPL_ELSE -->
+					<option value="7">1/3 months</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity8" -->
+					<option value="8" selected>1/quarter</option>
+				<!-- TMPL_ELSE -->
+					<option value="8">1/quarter</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity9" -->
+					<option value="9" selected>1/2 quarters</option>
+				<!-- TMPL_ELSE -->
+					<option value="9">1/2 quarters</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity10" -->
+					<option value="10" selected>1/year</option>
+				<!-- TMPL_ELSE -->
+					<option value="10">1/year</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="periodicity11" -->
+					<option value="11" selected>1/2 years</option>
+				<!-- TMPL_ELSE -->
+					<option value="11">1/2 years</option>
+				<!-- /TMPL_IF -->
+			</select>
+	</p>
+	<p><label>Arrives on</label>
+			<select name="dow" size="1">
+				<option value="">None</option>
+				<!-- TMPL_IF name="dow1" -->
+					<option value="1" selected>Monday</option>
+				<!-- TMPL_ELSE -->
+					<option value="1">Monday</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dow2" -->
+					<option value="2" selected>Tuesday</option>
+				<!-- TMPL_ELSE -->
+					<option value="2">Tuesday</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dow3" -->
+					<option value="3" selected>Wednesday</option>
+				<!-- TMPL_ELSE -->
+					<option value="3">Wednesday</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dow4" -->
+					<option value="4" selected>Thursday</option>
+				<!-- TMPL_ELSE -->
+					<option value="4">Thursday</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dow5" -->
+					<option value="5" selected>Friday</option>
+				<!-- TMPL_ELSE -->
+					<option value="5">Friday</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dow6" -->
+					<option value="6" selected>Saturday</option>
+				<!-- TMPL_ELSE -->
+					<option value="6">Saturday</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dow7" -->
+					<option value="7" selected>Sunday</option>
+				<!-- TMPL_ELSE -->
+					<option value="7">Sunday</option>
+				<!-- /TMPL_IF -->
+			</select>
+</div>
+<div class="details">
+	<h2>Subscription length</h2>
+	<p>* fill 1 from :</p>
+	<ul>
+		<p><label>Number of num</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
+		<p><label>Number of weeks</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
+		<p><label>Number of months</label><input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></p>
+	</ul>
+</div>
+<div>
+	<h2>Numbering calculation</h2>
+	<p>
+		<p>Numbering formula: <input type="text" name="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->"></p>
+		<table class="small">
+			<tr>
+				<th>&nbsp;</th>
+				<th>X</th>
+				<th>Y</th>
+				<th>Z</th>
+			</tr>
+			<tr>
+				<td>Add</td>
+				<td>
+					<input type="text" name="add1" value="<!-- TMPL_VAR name="add1" -->">
+				</td>
+				<td>
+					<input type="text" name="add2" value="<!-- TMPL_VAR name="add2" -->">
+				</td>
+				<td>
+					<input type="text" name="add3" value="<!-- TMPL_VAR name="add3" -->">
+				</td>
+			</tr>
+			<tr>
+				<td>once every</td>
+				<td><input type="text" name="every1" value="<!-- TMPL_VAR name="every1" -->"></td>
+				<td><input type="text" name="every2" value="<!-- TMPL_VAR name="every2" -->"></td>
+				<td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
+			</tr>
+			<tr>
+				<td>When more than</td>
+				<td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
+				<td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
+				<td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
+			</tr>
+			<!-- TMPL_IF name="mod" -->
+			<tr>
+				<td>The loop is for instance</td>
+				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
+				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
+				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
+			</tr>
+			<!-- /TMPL_IF -->
+			<tr>
+				<td>Set back to</td>
+				<td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>
+				<td><input type="text" name="setto2" value="<!-- TMPL_VAR name="setto2" -->"></td>
+				<td><input type="text" name="setto3" value="<!-- TMPL_VAR name="setto3" -->"></td>
+			</tr>
+			<tr>
+				<td>
+					<!-- TMPL_IF name="mod" -->
+						Last value
+					<!-- TMPL_ELSE -->
+						Begins with
+					<!-- /TMPL_IF -->
+				</td>
+				<td><input type="text" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->"></td>
+				<td><input type="text" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->"></td>
+				<td><input type="text" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->"></td>
+			</tr>
+		</table>
+	</p>
+</div>
+<!-- TMPL_IF name="mod" -->
+	<input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" class="submit">
+<!-- TMPL_ELSE -->
+	<input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w" class="submit">
+<!-- /TMPL_IF -->
+</div>
+
+</form>
+
+
+<script language="JavaScript" type="text/javascript">
+
+function Plugin(f)
+{
+	 window.open("subscription-bib-search.pl","Find a bib index",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function FindAcqui(f)
+{
+	 window.open("acqui-search.pl","Find a supplier",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+
+function Check(f)
+{
+	if (f.startdate.value.length != 0 && 
+			f.numberlength.value+f.weeklength.value+f.monthlength.value > 0)
+		{
+			document.f.submit();
+		}
+else
+{
+ 	alert('field marked with * are mandatory');
+}
+	return false;
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,50 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials Subscriptions<!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<form action="bull-home.pl" method="post">
+	<table>
+		<caption>Serials Subscriptions</caption>
+		<tr>
+			<th>Title</th>
+			<th>ISSN</th>
+			<th colspan="2">&nbsp;</th>
+		</tr>
+		<!-- TMPL_IF NAME="subscriptions" -->
+		<tr>
+			<td>
+				<input type="text" size="40" maxlength="40" name="title" value="<!-- TMPL_VAR name="title" -->">
+			</td>
+			<td>
+				<input type="text" size="11" maxlength="11" name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->">
+			</td>
+			<td colspan="3">
+				<input type="submit" value="Filter" class="submit">
+			</td>
+		</tr><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="subscriptions" -->
+		<!-- TMPL_LOOP name="subscriptions" -->
+			<tr>
+				<td>
+					<!-- TMPL_VAR name="title" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="ISSN" -->
+				</td>
+				<td>
+					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Detail</a>
+					<a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Recieve</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<!-- TMPL_ELSE -->
+		<tr><td colspan="3">There are no subscriptions.</td></tr>
+		<!-- /TMPL_IF -->
+	</table></form>
+	<a href="/cgi-bin/koha/bull/subscription-add.pl">Add subscription</a>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

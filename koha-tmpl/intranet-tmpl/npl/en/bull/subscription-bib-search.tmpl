@@ -1,0 +1,33 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<div>
+
+<h1 class="authority">Bib search</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div>
+		<h2 class="authority">Search on</h2>
+		<p>
+			<label>Name or ISSN</label>
+			<!-- TMPL_VAR name="category" -->
+		</p>
+		<p>
+			<label>Search value</label>
+			<input type="text" name="value" value="<!-- TMPL_VAR name="value" -->">
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="category" -->">
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->"
+		</p>
+		<p>
+			<input type="submit" value="Start search" class="button authority">
+		</p>
+	</div>
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

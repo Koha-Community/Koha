@@ -1,0 +1,87 @@
+<!-- TMPL_INCLUDE NAME="main-top-blank.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div>
+<h1 class="catalogue">Issues for a subscription</h1>
+<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Biblio</a>
+<form method="post" name="f">
+<div>
+	<h2 class="catalogue">Subscription information</h2>
+		<p>For <b><!-- TMPL_VAR name="bibliotitle" --></b> that began on <b><!-- TMPL_VAR name="startdate" --></b> and is issued every
+		<b>
+		<!--TMPL_IF name="periodicity1" -->
+				day
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				week
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				2 weeks
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				3 weeks
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				month
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				2 monthes
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				3 Monthes
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				quarter
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				2 quarters
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				year
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				2 years
+		<!-- /TMPL_IF -->
+		</b>
+		on
+		<b>
+		<!--TMPL_IF name="arrival1" -->
+			Monday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				Tuesday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				Wednesday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				Thursday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				Friday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				Saturday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				Sunday
+		<!-- /TMPL_IF -->
+		</b>
+		</p>
+		<p>(subscription for 
+			<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> issues<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> weeks<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> months<!-- /TMPL_IF -->
+			)
+		</p>
+		<p><!-- TMPL_VAR name="notes" --></p>
+</div>
+<div>
+	<h2 class="catalogue">Issues summary</h2>
+	<p>
+		<!-- TMPL_VAR name="librariannote" -->
+	</p>
+</div>
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,99 @@
+<!-- TMPL_INCLUDE NAME="main-top-blank.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div>
+<h1>Subscription for <!-- TMPL_VAR name="bibliotitle" --></h1>
+<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="submit">Subscription</a>
+
+<div>
+	<h2>Subscription summary</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Librarian</label><!-- TMPL_VAR name="user" --></p>
+		<p><label>Beginnning date (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
+		<p><label>End date</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
+		<p>Arrived Numbers</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Gapped Numbers</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Opac's note</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<p>Intra's note</p>
+		<p>&nbsp;<textarea name="librariannote" COLS=60 ROWS=5><!-- TMPL_VAR name="librariannote" --></textarea></p>
+		<input type="submit" value="Save changes" class="submit">
+	</form>
+</div>
+
+<div>
+<h2>waited or late numbers</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="serialchangestatus">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+	<table class="small">
+	<tr>
+		<th>
+			Numbered
+		</th>
+		<th>
+			planned for
+		</th>
+		<th>
+			Status
+		</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
+			</td>
+			<td>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
+				<select name="status" size="1">
+					<!--TMPL_IF name="status1" -->
+						<option value="1" selected>Waited</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						<option value="2" selected>Arrived</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Arrived</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						<option value="3" selected>Late</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Late</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						<option value="4" selected>Missing</option>
+					<!-- TMPL_ELSE -->
+						<option value="4">Missing</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type="submit" value="Save changes" accesskey="w" class="submit">
+	<!-- TMPL_IF name="hassubscriptionexpired" -->
+		<p>Subscription has expired. Waited last issue status can't be changed. <a href="#" onClick="popup()" class="submit">Renew</a> your subscription</p>
+	<!-- /TMPL_IF -->
+	</form>
+</div>
+
+</form>
+</table>
+<script language="JavaScript" type="text/javascript">
+
+function popup()
+{
+	 window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid">","subscription renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

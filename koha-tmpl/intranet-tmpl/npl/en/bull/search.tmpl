@@ -1,0 +1,68 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<div id="main-compact">
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div class="form">
+	<table>
+		<caption>Catalog search</caption>
+		<tr><th><label for="keyword">Keyword</label></th><td><input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" id="keyword" name="value" onchange="sql_update()"></td></tr>
+		<tr><th><label for="resultsperpage">Results per page:</label></th><td><select align="right" name="resultsperpage" id="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select></td></tr>
+		<tr><th><label for="orderby">Order by:</label></th><td><select name="orderby" id="orderby" size="1">
+				<option value="biblio.title">Title</option>
+				<option value="biblio.author">Author</option>
+				<option value="biblioitems.dewey">Dewey</option>
+				<option value="biblioitems.publicationyear">Publication Year</option>
+				<option value="biblioitems.publishercode">Publisher</option>
+			</select></td></tr>
+		</table>		
+		<p><input type="submit" value="Start search" class="submit">
+			<a href="javascript:PopupSuggestion()" class="button catalogue">Suggestions</a></p>
+	</div>
+	<div>
+
+</form>
+
+<script>
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
+</div>

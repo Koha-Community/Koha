@@ -1,0 +1,28 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<div id="main-compact">
+	<h1>Supplier Search Results</h1>
+		<div class="results">You searched for  <span class="ex"><!-- TMPL_VAR name="supplier" --></span>. <!-- TMPL_VAR name="count" --> results found</div>
+	<table>
+			<tr>
+				<th>Supplier Name</th>
+				<th>Select</th>
+			</tr>
+			<!-- TMPL_LOOP name="loop_suppliers" -->
+				<tr>
+					<td><!-- TMPL_VAR name="name" --></td>
+					<td><form action="#" method="get"><input type="button" class="submit" value="Choose" onclick="GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->'); return false;" /></form></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+</div>
+
+<script language="Javascript" type="text/javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  self.close();
+}
+</script>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

@@ -1,0 +1,176 @@
+<!-- TMPL_INCLUDE NAME="main-top-blank.inc" -->
+<div>
+<h1>Subscription</h1>
+<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="submit">Edit</a>
+<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="submit">Issues</a>
+<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="submit">Biblio</a>
+<form method="post" name="f">
+<div>
+	<h2>Subscription information</h2>
+		<p>Librarian identity :</td><td> <!-- TMPL_VAR name="librarian" --></p>
+		<p><label>Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
+		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
+		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
+		<p><label>Biblio</label><!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label>Notes:</label><!-- TMPL_VAR name="notes" --></p>
+</div>
+<div>
+	<h2>Planning</h2>
+	<p><label>Beginnning date:</label> <!-- TMPL_VAR name="startdate" --></p>
+	<p><label>Frequency (*):</label>
+		<!--TMPL_IF name="periodicity1" -->
+				1/day
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				1/week
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				1/2 weeks
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				1/3 weeks
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				1/Month
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				1/2 Monthes
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				1/3 Monthes
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				1/quarter
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				1/2 quarters
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				1/year
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				1/2 years
+		<!-- /TMPL_IF -->
+	</p>
+	<p><label>Arrives on:</label>
+		<!--TMPL_IF name="arrival1" -->
+			Monday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				Tuesday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				Wednesday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				Thursday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				Friday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				Saturday
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				Sunday
+		<!-- /TMPL_IF -->
+</div>
+<div>
+	<h2>Subscription length</h2>
+	<p><label>Number of num</label><!-- TMPL_VAR name="numberlength" --></p>
+	<p><label>Number of weeks</label><!-- TMPL_VAR name="weeklength" --></p>
+	<p><label>Number of months</label><!-- TMPL_VAR name="monthlength" --></p>
+
+</div>
+<div>
+	<h2>Numbering calculation</h2>
+	<p>
+		<p>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></p>
+		<table class="small" width="20%">
+			<tr>
+				<th>&nbsp;</th>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;Y&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th>&nbsp;&nbsp;&nbsp;&nbsp;Z&nbsp;&nbsp;&nbsp;&nbsp;</th>
+			</tr>
+			<tr>
+				<td>Add</td>
+				<td>
+					<!-- TMPL_VAR name="add1" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add2" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add3" -->
+				</td>
+			</tr>
+			<tr>
+				<td>once every</td>
+				<td><!-- TMPL_VAR name="every1" --></td>
+				<td><!-- TMPL_VAR name="every2" --></td>
+				<td><!-- TMPL_VAR name="every3" --></td>
+			</tr>
+			<tr>
+				<td>When more than</td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
+					<i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
+					<i>(is <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
+					<i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
+			</tr>
+			<tr>
+				<td>Set back to</td>
+				<td><!-- TMPL_VAR name="setto1" --></td>
+				<td><!-- TMPL_VAR name="setto2" --></td>
+				<td><!-- TMPL_VAR name="setto3" --></td>
+			</tr>
+			<tr>
+				<td>
+						Last value
+				</td>
+				<td><!-- TMPL_VAR name="lastvalue1" --></td>
+				<td><!-- TMPL_VAR name="lastvalue2" --></td>
+				<td><!-- TMPL_VAR name="lastvalue3" --></td>
+			</tr>
+		</table>
+</div>
+<div>
+	<h2>Issues</h2>
+	<table class="small">
+	<tr>
+		<th>&nbsp;&nbsp;&nbsp;&nbsp;Issue number&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th>&nbsp;&nbsp;&nbsp;&nbsp;Planned date&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th>&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR name="serialseq" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR name="planneddate" -->
+			</td>
+			<td>
+					<!--TMPL_IF name="status1" -->
+						Waited
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						Arrived
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						Late
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						Missing
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

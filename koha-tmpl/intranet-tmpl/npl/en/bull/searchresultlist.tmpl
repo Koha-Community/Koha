@@ -1,0 +1,81 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<div>
+	<h1>Authority search results</h1>
+	<div class="results">
+		<p>
+			<!-- TMPL_IF NAME=displayprev -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search">&lt;&lt;Previous
+				</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME=numbers -->
+				<!-- TMPL_IF NAME=highlight -->
+					<img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+					<a href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search"><!-- TMPL_VAR NAME=number --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search">Next&gt;&gt;</a>
+				<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<!-- TMPL_IF name=total -->
+			&nbsp<b>Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --></b><br><br>
+			<!-- TMPL_ELSE -->
+			&nbsp No results found.<br>
+			<!-- /TMPL_IF -->
+		</p>
+	</div>
+	<div id="resultlist">
+		<table>
+			<tr>
+				<th class="authority">Summary</th>
+				<th class="authority">Used</th>
+				<th class="authority">View</th>
+				<th class="authority">Delete</th>
+			</tr>
+			<!-- TMPL_LOOP name="result" -->
+				<tr>
+					<td><!-- TMPL_VAR name="summary" --></td>
+					<td><!-- TMPL_VAR name="used" --> <a href="../search.marc/search.pl?type=intranet&op=do_search&marclist=<!-- TMPL_VAR name="biblio_fields" -->&operator==&value=<!-- TMPL_VAR name="authid" -->&and_or=&excluding=">...</a></td>
+					<td>
+						<a href="detail.pl?authid=<!-- TMPL_VAR name="authid" -->">
+							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority number <!-- TMPL_VAR name="authid" -->" title="Authority number<!-- TMPL_VAR name="authid" -->">
+						</a>
+					</td>
+					<td>
+						<!-- TMPL_UNLESS name="used" -->
+						<a href="javascript:do_delete('authorities-home.pl?op=delete&authid=<!-- TMPL_VAR name="authid" -->')">
+							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+						</a>
+						<!-- /TMPL_UNLESS -->
+					</td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+	<div id="resultnumber">
+		<p>
+			<!-- TMPL_IF NAME=displayprev -->
+			<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search">&lt;&lt;Previous</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME=numbers -->
+				<!-- TMPL_IF NAME=highlight -->
+				<img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search"><!-- TMPL_VAR NAME=number --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+			<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search">Next&gt;&gt;</a>
+				<!-- /TMPL_IF -->
+		</p>
+	</div>	
+</div>
+<script language="JavaScript" type="text/javascript" >
+function do_delete(page)
+{
+window.location = page;
+}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
