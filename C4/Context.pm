@@ -169,6 +169,8 @@ sub new
 	my $conf_fname = shift;		# Config file to load
 	my $self = {};
 
+	# check that the specified config file exists
+	undef $conf_fname unless (-e $conf_fname);
 	# Figure out a good config file to load if none was specified.
 	if (!defined($conf_fname))
 	{
@@ -177,7 +179,6 @@ sub new
 		$conf_fname = $ENV{"KOHA_CONF"} ||
 				CONFIG_FNAME;
 	}
-
 	$self->{"config_file"} = $conf_fname;
 
 	# Load the desired config file.
