@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 # Database Updater
 # This script checks for required updates to the database.  
 
@@ -9,6 +11,8 @@
 # Bugs/ToDo: 
 # - Would also be a good idea to offer to do a backup at this time...
 
+# NOTE:  If you do something more than once in here, make it table driven.
+
 use strict;
 
 # CPAN modules
@@ -17,9 +21,18 @@ use DBI;
 # Koha modules
 use C4::Database;
 
-my %existingtables;	# tables already in database
-my %types;
-my $table;
+my $debug=0;
+
+my (
+	$sth, $sti,
+	$query,
+	%existingtables,	# tables already in database
+	%types,
+	$table,
+	$column,
+    	$type, $null, $key, $default, $extra,
+	$prefitem,		# preference item in systempreferences table
+);
 
 #-------------------
 # Defines
@@ -60,6 +73,39 @@ my %requiretables=(
   	url varchar(255),
   	PRIMARY KEY (websitenumber) )",
 );
+    marcrecorddone=>"( isbn char(40),
+		      issn char(40),
+		      lccn char(40),
+		      controlnumber char(40))",
+    uploadedmarc=>"( id int(11) NOT NULL auto_increment PRIMARY KEY,
+		    marc longblob,
+		    hidden smallint(6) default NULL,
+		    name varchar(255) default NULL)",
+    ethnicity=>"( code varchar(10) NOT NULL default '',
+  		name varchar(255) default NULL,
+  		PRIMARY KEY  (code)   )",
+);
+
+my %requirefields=(
+    biblio=>{ 'abstract' => 'text' },
+    deletedbiblio=>{ 'abstract' => 'text' },
+    biblioitems=>{ 'lccn' => 'char(25)',
+		'url' => 'varchar(255)',
+		'marc' => 'text' },
+    deletedbiblioitems=>{ 'lccn' => 'char(25)',
+		'url' => 'varchar(255)',
+		'marc' => 'text' },
+    branchtransfers=>{ 'datearrived' => 'datetime' },
+    statistics=>{'borrowernumber' =>'int(11)'},
+    aqbooksellers=>{'invoicedisc' =>'float(6,4)',
+    		     'nocalc' => 'int(11)'},
+);
+
+# Default system preferences
+my %defaultprefs=(
+    'autoMemberNum'=> '1',
+    'acquisitions'=> 'simple',
+);
 
 #-------------------
 # Initialize
@@ -79,7 +125,7 @@ if ($mysqlversion ge '3.23') {
 # Tables
 
 # Collect all tables into a list
-my $sth=$dbh->prepare("show tables");
+$sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
     $existingtables{$table}=1;
@@ -87,6 +133,7 @@ while (my ($table) = $sth->fetchrow) {
 
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
+    print "Checking $table table...\n" if $debug;
     unless ($existingtables{$table} ) {
 	print "Adding $table table...\n";
 	my $sth=$dbh->prepare(
@@ -98,7 +145,6 @@ foreach $table ( keys %requiretables ) {
         } # if error
     } # unless exists
 } # foreach
-exit;
 
 unless ($existingtables{'z3950servers'}) {
     print "Adding z3950servers table...\n";
@@ -126,30 +172,34 @@ unless ($existingtables{'z3950servers'}) {
 #---------------------------------
 # Columns
 
+foreach $table ( keys %requirefields ) {
+    print "Check table $table\n" if $debug;
+    $sth=$dbh->prepare("show columns from $table");
+    $sth->execute();
+    undef %types;
+    while ( ($column, $type, $null, $key, $default, $extra) 
+		= $sth->fetchrow) {
+        $types{$column}=$type;
+    } # while 
+    foreach $column ( keys %{ $requirefields{$table} } )  {
+	print "  Check column $column\n" if $debug;
+	if ( ! $types{$column} ) {
+	    # column doesn't exist
+	    print "Adding $column field to $table table...\n";
+    	    $query="alter table $table
+		add column $column " . $requirefields{$table}->{$column} ;
+	    print "Execute: $query\n" if $debug;
+    	    my $sti=$dbh->prepare($query);
+    	    $sti->execute;
+            if ($sti->err) {
+                    print "**Error : $sti->errstr \n";
+                    $sti->finish;
+            } # if error
+	} # if column
+    } # foreach column
+} # foreach table
 
-# Get list of columns from biblioitems table
-
-my $sth=$dbh->prepare("show columns from biblioitems");
-$sth->execute;
-while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-    $types{$column}=$type;
-}
-unless ($types{'lccn'}) {
-    # Add LCCN field to biblioitems db
-    print "Adding lccn field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems 
-	add column lccn char(25)");
-    $sti->execute;
-}
-unless ($types{'marc'}) {
-    # Add MARC field to biblioitems db (not used anymore)
-    print "Adding marc field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems 
-	add column marc text");
-    $sti->execute;
-}
-
-# Get list of columns from biblioitems table
+# Get list of columns from items table
 my %itemtypes;
 
 my $sth=$dbh->prepare("show columns from items");
@@ -206,7 +256,7 @@ unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
     $sti->execute;
 }
 
-unless ($branchcategories{'branchcode'} eq 'varchar(4)') {
+unless ($branchcategories{'categoryname'} eq 'text') {
     print "Changing branchcode in branchcategories to categoryname text.\n";
     my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
     $sth->execute;
@@ -219,5 +269,30 @@ unless ($branchcategories{'codedescription'} eq 'text') {
 }
 
 
+# Populate systempreferences if it is empty
+
+foreach $prefitem ( keys %defaultprefs ) {
+    $sth=$dbh->prepare("select value 
+	from systempreferences 
+	where variable=?");
+    $sth->execute($prefitem);
+    unless ($sth->rows) {
+	print "Adding system preference item $prefitem with value " .
+        	$defaultprefs{$prefitem} ."\n";
+        $sti=$dbh->prepare("
+	  insert into systempreferences (variable, value) 
+	  values (?,?)");
+        $sti->execute($prefitem,$defaultprefs{$prefitem});
+    } # unless
+} # foreach
+
+
 $sth->finish;
 $dbh->disconnect;
+
+exit;
+
+# $Log$
+# Revision 1.12  2002/07/04 16:41:06  tonnesen
+# Merged changes from rel-1-2.  Abstracted table structure changes by alan.
+#
