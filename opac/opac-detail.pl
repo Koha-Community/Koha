@@ -10,15 +10,15 @@ my $query=new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
 
-my $template = gettemplate ("detail.tmpl", "opac");
+my $template = gettemplate ("opac-detail.tmpl", "opac");
 
 my $biblionumber=$query->param('bib');
-my $type='intra';
+
 
 # change back when ive fixed request.pl
-my @items = ItemInfo(undef, $biblionumber, $type);
-my $dat=bibdata($biblionumber);
-my ($authorcount, $addauthor)= &addauthor($biblionumber);
+my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
+my $dat                                   = &bibdata($biblionumber);
+my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 

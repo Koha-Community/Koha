@@ -11,13 +11,15 @@ my $query=new CGI;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
 
 
-my $template;
+my $template = gettemplate ("opac-searchresults.tmpl", "opac");
+
+
+
 my $subject=$query->param('subject');
-# if its a subject we need to use the subject.tmpl
+
+
 if ($subject) {
-    $template = gettemplate ("subject.tmpl", "opac");
-} else {
-    $template = gettemplate ("searchresults.tmpl", "opac");
+    $template->param(subjectsearch => $subject);
 }
 
 # get all the search variables
