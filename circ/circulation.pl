@@ -192,9 +192,7 @@ sub decode {
 
 sub returns {
     my %returneditems;
-    print << "EOF";
-    <table border=0 cellpadding=10 cellspacing=0 cellpadding=5><tr><th background=$backgroundimage>Circulation - Returns</th></tr><tr><td bgcolor=$circbackgroundcolor align=center>
-EOF
+    print "<FONT SIZE=6><em>Circulation: Returns</em></FONT><br>";
     foreach ($query->param) {
 	(next) unless (/ri-(\d*)/);
 	my $counter=$1;
@@ -420,6 +418,7 @@ EOF
 }
 
 sub issues {
+
     my ($noheader) = shift;
     my $print=$query->param('print');
     my $borrowernumber=$query->param('borrnumber');    
@@ -467,9 +466,10 @@ sub issues {
       <FONT SIZE=2  face="arial, helvetica">
       <a href=circulation.pl?borrnumber=$borrowernumber&module=issues&branch=$branch&printer=$printer&print>Next Borrower</a> ||
       <a href=circulation.pl?module=returns&branch=$branch&printer=$printer>Returns</a> ||
-      <a href=branchtransfers.pl>Transfer Book</a></font><p>
+      <a href=branchtransfers.pl>Transfers</a></font><p>
         
 	</p>
+<FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
 EOF
     }
     if (my $borrnumber=$query->param('borrnumber')) {
