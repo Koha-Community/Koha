@@ -131,7 +131,7 @@ $sth->finish;
 $sth=$dbh->prepare("Select description,itemtype from itemtypes order by description");
 $sth->execute;
 # $i=0;
-my $toggle="white";
+my $toggle= 1;
 my @row_loop;
 my @itemtypes;
 while (my $row=$sth->fetchrow_hashref){
@@ -145,10 +145,10 @@ push @itemtypes,\$line;
 foreach my $data (@itemtypes) {
 	my @trow2;
 	my @cell_loop;
-	if ( $toggle eq 'white' ) {
-		$toggle = '#ffffcc';
+	if ( $toggle eq 1 ) {
+		$toggle = 0;
 	} else {
-		$toggle = 'white';
+		$toggle = 1;
 	}
 	for (my $i=0;$i<=$#trow3;$i++){
 		my $sth2=$dbh->prepare("select * from issuingrules where branchcode=? and categorycode=? and itemtype=?");
