@@ -9,6 +9,7 @@ use C4::Auth;
 use C4::Context;
 use CGI;
 
+my $dbh = C4::Context->dbh;
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "about.tmpl",
@@ -22,8 +23,14 @@ my ($template, $loggedinuser, $cookie)
 my $kohaVersion = C4::Context->config("kohaversion");
 my $osVersion = `uname -a`;
 my $perlVersion = $];
-my $mysqlVersion = `mysql -V`;
-my $apacheVersion =  `httpd -v`;
+
+# mysql(1) may not be on the PATH, so we try to do a select statement instead
+my $sti = $dbh->prepare("select version()");
+$sti->execute;
+my $mysqlVersion = ($sti->fetchrow_array)[0]; # `mysql -V`
+
+# The web server may not be httpd, and/or may not be in the PATH
+my $apacheVersion =  $ENV{SERVER_SOFTWARE} || `httpd -v`;
 
 $template->param(
 					kohaVersion => $kohaVersion,
