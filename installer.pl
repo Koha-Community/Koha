@@ -24,7 +24,7 @@
 use strict; # please develop with the strict pragma
 
 if ($<) {
-    print "\n\nYou must run koha.upgrade as root.\n\n";
+    print "\n\nYou must run $0 as root.\n\n";
     exit;
 }
 unless ($< == 0) {
