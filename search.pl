@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -17,6 +18,11 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Log$
+# Revision 1.31  2003/05/11 07:31:37  rangi
+# Removing duplicate use C4::Auth
+#
+
 use strict;
 require Exporter;
 use CGI;
@@ -24,7 +30,6 @@ use C4::Auth;
 use HTML::Template;
 use C4::Context;
 use C4::Search;
-use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 
