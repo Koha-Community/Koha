@@ -76,7 +76,6 @@ sub remoteprint {
   my ($env,$items,$borrower)=@_;
 
   (return) unless (C4::Context->boolean_preference('printcirculationslips'));
-  my $file=time;		# FIXME - Not used
   my $queue = $env->{'queue'};
   # FIXME - If 'queue' is undefined or empty, then presumably it should
   # mean "use the default queue", whatever the default is. Presumably
@@ -170,28 +169,42 @@ EOF
 
 =item printslip
 
-  &printslip($env, $text)
+  &printslip($env, $borrowernumber)
 
-Prints the string C<$text> to a printer. C<$env-E<gt>{queue}>
-specifies the queue to print to.
-
-If C<$env-E<gt>{queue}> is empty or set to C<nulllp>, C<&printslip>
-will print to the file F</tmp/kohares>.
-
+  print a slip for the given $borrowernumber
+  
 =cut
 #'
-# FIXME - There's also a &printslip in circ/circulation.pl
 sub printslip {
-  my($env, $slip)=@_;
-  my $printer = $env->{'printer'};
-  (return) unless (C4::Context->boolean_preference('printcirculationslips'));
-  if ($printer eq "" || $printer eq 'nulllp') {
-    open (PRINTER,">/tmp/kohares");
-  } else {
-    open (PRINTER, "| lpr -P $printer >/dev/null") or die "Couldn't write to queue:$!\n";
-  }
-  print PRINTER $slip;
-  close PRINTER;
+    my ($env,$borrowernumber)=@_;
+    my ($borrower, $flags) = getpatroninformation($env,$borrowernumber,0);
+    $env->{'todaysissues'}=1;
+    my ($borrowerissues) = currentissues($env, $borrower);
+    $env->{'nottodaysissues'}=1;
+    $env->{'todaysissues'}=0;
+    my ($borroweriss2)=currentissues($env, $borrower);
+    $env->{'nottodaysissues'}=0;
+    my $i=0;
+    my @issues;
+    foreach (sort {$a <=> $b} keys %$borrowerissues) {
+	$issues[$i]=$borrowerissues->{$_};
+	my $dd=$issues[$i]->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable
+	my @tempdate=split(/-/,$dd);
+	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	$i++;
+    }
+    foreach (sort {$a <=> $b} keys %$borroweriss2) {
+	$issues[$i]=$borroweriss2->{$_};
+	my $dd=$issues[$i]->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable
+	my @tempdate=split(/-/,$dd);
+	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	$i++;
+    }
+    remoteprint($env,\@issues,$borrower);
 }
 
 END { }       # module clean-up code here (global destructor)
