@@ -1845,7 +1845,7 @@ INSERT INTO marc_subfield_structure VALUES ('851', 'g', 'Repository location cod
 INSERT INTO marc_subfield_structure VALUES ('852', '2', 'Source of classification or shelving scheme (NR)', 'Source of classification or shelving scheme (NR)', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', '3', 'Materials specified (NR)', 'Materials specified (NR)', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', '6', 'Linkage (NR)', 'Linkage (NR)', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('852', '8', '<ul>', '<ul>', 1, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('852', '8', '', '', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'a', 'Location', 'Location', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'b', 'Sublocation or collection', 'Sublocation or collection', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'c', 'Shelving location', 'Shelving location', 1, 0, '', -1, '', '', '');
