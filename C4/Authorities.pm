@@ -86,6 +86,7 @@ Note :
 sub newauthority  {
 	my ($dbh,$category,$stdlib,$freelib,$father,$level,$hierarchy)=@_;
 	exit unless ($stdlib);
+	$level=1 unless $level;
 	$freelib = $stdlib unless ($freelib);
 	my $dbh = C4::Context->dbh;
 	my $sth1b=$dbh->prepare("select id from bibliothesaurus where freelib=? and hierarchy=? and category=?");
@@ -110,7 +111,6 @@ sub newauthority  {
 	my $id;
 	if ($#Thierarchy >=0) {
 		# free form
-		$level='' unless $level;
 		$hierarchy='' unless $hierarchy;
 		$sth1b->execute($freelib,$hierarchy,$category);
 		($id) = $sth1b->fetchrow;
@@ -121,6 +121,7 @@ sub newauthority  {
 			$Fhierarchy[$#Fhierarchy] =~ s/\s+$// if ($#Fhierarchy>=0);
 			$freelib =~ s/\s+$//;
 			$sth2->execute($category,$Thierarchy[$#Thierarchy],$#Fhierarchy==$#Thierarchy?$Fhierarchy[$#Fhierarchy]:$freelib,$father,$level,$hierarchy);
+		} else {
 		}
 		# authority form
 		$sth1b->execute($Thierarchy[$#Thierarchy],$hierarchy,$category);
@@ -128,9 +129,11 @@ sub newauthority  {
 		unless ($id) {
 			$Thierarchy[$#Thierarchy] =~ s/^\s+//;
 			$Thierarchy[$#Thierarchy] =~ s/\s+$//;
-			$sth2->execute($category,$Thierarchy[$#Thierarchy],$Thierarchy[$#Thierarchy],$father,$level,$hierarchy);
 			$sth1b->execute($stdlib,$hierarchy,$category);
 			($id) = $sth1b->fetchrow;
+			unless ($id) {
+				$sth2->execute($category,$Thierarchy[$#Thierarchy],$Thierarchy[$#Thierarchy],$father,$level,$hierarchy);
+			}
 		}
 	}
 	return $id;
