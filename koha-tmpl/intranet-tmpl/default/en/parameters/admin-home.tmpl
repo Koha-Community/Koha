@@ -1,13 +1,15 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <center>
 <h1>Parameters</h1><br>
-<table width=100% cellspacing=0 cellpadding=5 border=1>
+<table width="100%" cellspacing=0 cellpadding=5 border=1>
 <tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 	<th>System parameters </th>
 </tr>
 </table>
-<table cellspacing=0 cellpadding=1 width=80%>
+<table cellspacing=0 cellpadding=1 width="80%">
+<tr>
 <th colspan=2>Fill those tables in the order they appear to get a working Koha</th>
+</tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>Library branches</a></td>
 	<td>The different branches you manage with this Koha server.</td>
@@ -55,7 +57,9 @@
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>MARC Check</a></td>
 	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
 
+<tr>
 <th colspan=2>Various parameters</th>
+</tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Printers</a></td>
 	<td>Printers (UNIX paths).</td>
@@ -74,18 +78,22 @@
 </tr>
 </table>
 
-<table width=100% cellspacing=0 cellpadding=5 border=1>
+<table width="100%" cellspacing=0 cellpadding=5 border=1>
 <tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 	<th>Tools</th>
 </tr>
 </table>
-<table cellspacing=5 cellpadding=1 width=80%>
+<table cellspacing=5 cellpadding=1 width="80%">
+	<tr>
 	<th colspan=2> Export</th>
+	</tr>
 	<tr>
 		<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">MARC biblio export</a></td>
 		<td> Exporting in MARC format.</td>
 	</tr>
+	<tr>
 	<th colspan=2>Import</th>
+	</tr>
 	<tr valign="top">
 		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Upload MARC records in Breeding Farm</a></td>
 		<td>The breeding farm is a table where imported MARC records are stored. A MARC record is stored in the breeding farm as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the breeding farm. If it is found, the biblio is added to Koha active table and removed from the breeding farm.
