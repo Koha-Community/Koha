@@ -144,7 +144,7 @@ foreach my $code (keys %$messages) {
 	$messagetext .= "<font color='red' size='+2'> Please return item to home branch: $braname  </font> <br>";
     }
     if ($code eq 'DestinationEqualsHolding'){
-	$messagetext .= "<font color='red' size='+2'> Item cannot be transfered to branch it is already at. </font> <br>";
+	$messagetext .= "<font color='red' size='+2'> Item is already at destination branch. </font> <br>";
     }
     if ($code eq 'WasReturned') {
 	my ($borrowerinfo) = getpatroninformation(\%env, $messages->{'WasReturned'}, 0);
