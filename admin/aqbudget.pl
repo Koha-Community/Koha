@@ -53,9 +53,8 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where (bookfundid like \"$data[0]%\") order by bookfundid,aqbudgetid";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where (bookfundid like ?) order by bookfundid,aqbudgetid");
+	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -103,10 +102,8 @@ if ($op eq 'add_form') {
 	my $dataaqbookfund;
 	if ($aqbudgetid) {
 		my $dbh = C4::Context->dbh;
-	        my $query="select aqbudgetid,bookfundname,aqbookfund.bookfundid,startdate,enddate,budgetamount from aqbudget,aqbookfund where aqbudgetid='$aqbudgetid' and aqbudget.bookfundid=aqbookfund.bookfundid";
-#	        print $query;
-		my $sth=$dbh->prepare($query);
-		$sth->execute;
+		my $sth=$dbh->prepare("select aqbudgetid,bookfundname,aqbookfund.bookfundid,startdate,enddate,budgetamount from aqbudget,aqbookfund where aqbudgetid=? and aqbudget.bookfundid=aqbookfund.bookfundid");
+		$sth->execute($aqbudgetid);
 		$dataaqbudget=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -136,8 +133,7 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace aqbudget (aqbudgetid,bookfundid,startdate,enddate,budgetamount) values (?,?,?,?,?)";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("replace aqbudget (aqbudgetid,bookfundid,startdate,enddate,budgetamount) values (?,?,?,?,?)");
 	$sth->execute($input->param('aqbudgetid'),$input->param('bookfundid'),
 						format_date_in_iso($input->param('startdate')),
 						format_date_in_iso($input->param('enddate')),
@@ -151,8 +147,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where aqbudgetid='$aqbudgetid'");
-	$sth->execute;
+	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount from aqbudget where aqbudgetid=?");
+	$sth->execute($aqbudgetid);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
@@ -166,9 +162,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	my $aqbudgetid=uc($input->param('aqbudgetid'));
-	my $query = "delete from aqbudget where aqbudgetid='$aqbudgetid'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from aqbudget where aqbudgetid=?");
+	$sth->execute($aqbudgetid);
 	$sth->finish;
 	 print $input->redirect("aqbookfund.pl");
 	 return;
@@ -189,9 +184,7 @@ if ($op eq 'add_form') {
 	#  	$fines=$fines+0;
 	        my $dataaqbookfund;
 	        my $dbh = C4::Context->dbh;
-	        my $query="select bookfundid,bookfundname from aqbookfund where bookfundid=?";
-#	        print $query;
-		my $sth=$dbh->prepare($query);
+		my $sth=$dbh->prepare("select bookfundid,bookfundname from aqbookfund where bookfundid=?");
 		$sth->execute($results->[$i]{'bookfundid'});
 		$dataaqbookfund=$sth->fetchrow_hashref;
 		$sth->finish;
