@@ -858,9 +858,16 @@ sub CatSearch  {
 	my $dbh = C4::Context->dbh;
 	my $query = '';
 	my @results;
+
+	# Why not just use quotemeta to escape all questionable characters,
+	# not just single-quotes? Because that would also escape spaces,
+	# which would cause titles/authors/illustrators with a space to
+	# become unsearchable (Bug 197)
+
 	for my $field ('title', 'author', 'illustrator') {
-	    $search->{$field} = quotemeta($search->{$field});
+	    $search->{$field} =~ s/['"]/\\\1/g;
 	}
+
 	my $title = lc($search->{'title'});
 	if ($type eq 'loose') {
 		if ($search->{'author'} ne ''){
