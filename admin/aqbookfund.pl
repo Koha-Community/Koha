@@ -51,14 +51,14 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid and (bookfundid like \"$data[0]%\") order by bookfundid";
+	my $query="select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundid like \"$data[0]%\") order by bookfundid";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
+		push(@results,$data);
+		$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -193,7 +193,7 @@ if ($op eq 'add_form') {
 	  	} else {
 	    		$toggle="white";
 	  	}
-	while (@toggle and @bookfundid and @bookfundname and @bookfundgroup) { 
+	while (@toggle and @bookfundid and @bookfundname and @bookfundgroup) {
 	   my %row_data;
 	   $row_data{toggle} = shift @toggle;
 	   $row_data{bookfundid} = shift @bookfundid;
