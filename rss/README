@@ -1,0 +1,102 @@
+About:
+rss.pl is meant to provide an extensible tool for creating RSS 0.91
+formatted files suitable for syndication.  The script relies on two
+external files for configuration information.  Rather than trying to
+explain how this occurs, I'll show you using the provided lastAcquired
+files.  There are currently three rss feeds bundled in this tarball
+(lastAcquired, longestUnseen, and mostReserved), the config files for 
+each of these should be modified to suit your local site.  A smallish 
+Koha image (sm-koha-icon.jpg) is included as well.
+
+Dependencies:
+rss.pl depends on an installed Koha system, and uses the C4::Context
+module it provides.
+
+Details:
+rss.pl is meant to be run from cron (probably once a day or so -- more
+often at larger libraries depending on the report being generated).  It 
+is invoked like this (in the case of lastAcquired):
+
+ rss.pl /path/to/rssKoha/lastAcquired.conf 
+
+The basic process is that rss reads the config file
+(lastAcquired.conf) to determine RSS header information, the SQL query
+used to generate the results, and the HTML::Template style used to
+format the output.  Since you'll likely to want to create your own RSS
+content, or at least modify the ones present here, let's review the
+config file and the template file.
+
+A config file is divided into three sections; channel, image, and
+config.  A section begins with the name of the section occuring alone
+on a line, and ends with the beginning of the next section (or the end
+of the file).  Each of these sections contains series of configuration
+options in the form:
+
+name=content
+
+The content section can contain spaces, but not newlines, special
+characters, or html mark-up.  It's also important that there are no
+blank lines within the config file.
+
+Here's the lastAquired.conf by way of example: 
+
+channel
+title=Recent Koha Acquisitions
+link=http://www.koha.org
+desc=The 15 most recent acquisitions
+lang=en
+lastBuild=Fri, 09 May 2003 08:00:00
+image
+title=Koha, the worlds best Open Source Library System
+url=http://www.koha.org/images/foo.jpg
+link=http://www.koha.org
+config
+tmpl=lastAcquired.tmpl
+output=lastAcquired.xml
+query=select biblioitems.isbn as isbn, biblio.title as title, biblio.author as author from biblio, biblioitems, items where biblioitems.biblionumber = items.biblionumber and biblio.biblionumber = items.biblionumber and items.dateaccessioned is not NULL order by items.dateaccessioned desc
+
+
+This data (and the data acquired from the query) are then used to fill
+in the template.  Most of the template is boilerplate and should not
+be edited.  The section within the <TMPL_LOOP NAME=ITEMS>
+... </TMPL_LOOP> is the part which can be modified to create your own
+RSS content.  
+
+Here's the lastAcquired.tmpl file:
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE rss PUBLIC "-//Netscape Communications/DTD RSS 0.91/EN"
+	  "http://my.netscape.com/publish/formats/rss-0.91.dtd">
+
+<rss version="0.91">
+
+<channel>
+ <title><TMPL_VAR CHANNELTITLE></title>
+ <link><TMPL_VAR CHANNELLINK></link>
+ <description><TMPL_VAR CHANNELDESC></description>
+ <language><TMPL_VAR CHANNELLANG></language>
+ <lastBuildDate><TMPL_VAR CHANNELLASTBUILD></lastBuildDate>
+
+ <image>
+  <title><TMPL_VAR IMAGETITLE></title>
+  <url><TMPL_VAR IMAGEURL></url>
+  <link><TMPL_VAR IMAGELINK></link>
+ </image>
+
+<TMPL_LOOP NAME=ITEMS>
+ <item>
+  <title><TMPL_VAR TITLE>, by <TMPL_VAR AUTHOR></title>
+  <link>http://opac.library.org.nz/cgi-bin/koha/opac-searchresults.pl?isbn=<TMPL_VAR ISBN></link>
+
+ </item>
+</TMPL_LOOP>
+
+</channel>
+</rss>
+
+Credits:
+Originally written by Pat Eyler (pate@eylerfamily.org), suggestions,
+advice, and help came from 'Content Syndication with RSS', Chris
+Cormack, Mike Hansen, Steve Tonnesen and a variety of folks on #koha at 
+irc.katipo.co.nz.
