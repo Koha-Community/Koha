@@ -1,5 +1,6 @@
-package C4::Stats; #assumes C4/Stats
+package C4::Stats;
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -22,7 +23,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Context;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -88,11 +89,11 @@ sub UpdateStats {
   $sth->finish;
 }
 
-# XXX - POD
 # FIXME - Why does this function exist? Why not just rename &circrep
 # to &statsreport?
 # Then again, it only appears to be used in reports.pl which, in turn,
 # doesn't appear to be used. So presumably this function is obsolete.
+# If not, it needs a POD.
 sub statsreport {
   #module to return a list of stats for a given day,time,branch type
   #or to return search stats
@@ -105,7 +106,7 @@ sub statsreport {
   return(@data);
 }
 
-# XXX - Doc. Only used internally. Probably useless: see comment for
+# Only used internally. Probably useless: see comment for
 # &statsreport.
 sub circrep {
   my ($time,$type)=@_;
@@ -115,6 +116,7 @@ sub circrep {
     # FIXME - What is this supposed to do? MySQL 3.23.42 barfs on it.
     $query=$query." where type='$type' and datetime
     >=datetime('yesterday'::date)";
+			# FIXME - .= <<EOT;
   }
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -129,8 +131,8 @@ sub circrep {
   return(@results);
 }
 
-# XXX - POD
 # FIXME - This is only used in stats.pl, which in turn is never used.
+# Otherwise, this needs a POD.
 sub Count {
   my ($type,$branch,$time,$time2)=@_;
   my $dbh = C4::Context->dbh;
@@ -144,7 +146,8 @@ sub Count {
   return($data->{'count(*)'});
 }
 
-# XXX - POD. Doesn't appear to be used
+# FIXME - This function doesn't appear to be used.
+# If it is, it needs a POD.
 sub Overdues{
   my $dbh = C4::Context->dbh;
   my $query="Select count(*) from issues where date_due >= now()";
@@ -155,13 +158,14 @@ sub Overdues{
   return($count->{'count(*)'});
 }
 
-# XXX - POD. Never used
+# FIXME - Never used.
+# Otherwise, it'd need a POD.
 sub TotalOwing{
   my ($type)=@_;
   my $dbh = C4::Context->dbh;
   my $query="Select sum(amountoutstanding) from accountlines";
   if ($type eq 'fine'){
-    $query=$query." where accounttype='F' or accounttype='FN'";
+    $query=$query." where accounttype='F' or accounttype='FN'";	# FIXME - .=
   }
   my $sth=$dbh->prepare($query);
 #  print $query;
@@ -171,7 +175,8 @@ sub TotalOwing{
   return($total->{'sum(amountoutstanding)'});
 }
 
-# XXX - POD. Never used
+# FIXME - Never used.
+# Otherwise, it'd need a POD.
 sub TotalPaid {
   my ($time)=@_;
   my $dbh = C4::Context->dbh;
@@ -179,7 +184,7 @@ sub TotalPaid {
 or accounttype ='W')
   and accountlines.borrowernumber = borrowers.borrowernumber";
   if ($time eq 'today'){
-    $query=$query." and date = now()";
+    $query=$query." and date = now()";				# FIXME - .=
   } else {
     $query.=" and date='$time'";
   }
@@ -206,7 +211,8 @@ or accounttype ='W')
   return(@results);
 }
 
-# XXX - POD. Only used in stats.pl, which in turn is never used.
+# FIXME - Only used in stats.pl, which in turn is never used.
+# Otherwise, it needs a POD.
 sub getcharges{
   my($borrowerno,$timestamp)=@_;
   my $dbh = C4::Context->dbh;
@@ -228,8 +234,9 @@ sub getcharges{
   return(@results);
 }
 
-# XXX - POD. This is only used in stats.pl and stats2.pl, neither of
-# which is used.
+# This is only used in stats.pl and stats2.pl, neither of which is
+# used.
+# Otherwise, this needs a POD.
 sub Getpaidbranch{
   my($date,$borrno)=@_;
   my $dbh = C4::Context->dbh;
@@ -243,8 +250,9 @@ sub Getpaidbranch{
   return($data->{'branch'});
 }
 
-# XXX - POD. This is only used in reservereport.pl and
-# reservereport.xls, neither of which is used.
+# FIXME - This is only used in reservereport.pl and reservereport.xls,
+# neither of which is used.
+# Otherwise, it needs a POD.
 sub unfilledreserves {
   my $dbh = C4::Context->dbh;
   my $query="select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where found <> 'F' and cancellationdate
@@ -279,8 +287,6 @@ biblio.title,reserves.reservedate";
   $sth->finish;
   return($i,\@results);
 }
-
-END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
