@@ -99,6 +99,7 @@ sub recordpayment{
      if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
 	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+				# FIXME - -=
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
@@ -375,6 +376,7 @@ sub fixcredit{
     if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
 	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+				# FIXME - -=
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
@@ -406,6 +408,7 @@ sub fixcredit{
      if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
 	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+				# FIXME - -=
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
@@ -458,6 +461,7 @@ sub refund{
      if ($accdata->{'amountoutstanding'} > $amountleft) {
         $newamtos = 0;
 	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+				# FIXME - -=
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;

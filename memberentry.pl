@@ -86,7 +86,7 @@ if ($delete){
     if (! $cardnumber) { 			# If DB has no values, start at 1000000
       $cardnumber = 1000000;
     } else {
-      $cardnumber = $cardnumber + 1;
+      $cardnumber = $cardnumber + 1;		# FIXME - $cardnumber++;
     }
   
     while ($i <8) {			# step from char 1 to 7.
@@ -94,6 +94,7 @@ if ($delete){
       my $temp2 = substr($cardnumber,$i,1);	# sequence left to right, 1 char at a time
   #print "$temp2<br>";
       $sum = $sum + ($temp1*$temp2);	# mult each char 1-7 by its corresponding weighting
+					# FIXME - +=
       $i++;				# increment counter
     }
     my $rem = ($sum%11);			# remainder of sum/11 (eg. 9999999/11, remainder=2)

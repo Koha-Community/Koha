@@ -53,11 +53,12 @@ my %inputs;
 
 # have to get all subtitles, subjects and additional authors
 for (my $i = 1; $i < $subjectcount; $i++) {
-  $sub = $sub . "|" . $subject->[$i]->{'subject'};
+  $sub = $sub . "|" . $subject->[$i]->{'subject'};	# FIXME - .=
 } # for
 
 for (my $i = 1; $i < $addauthorcount; $i++) {
   $additional = $additional . "|" . $addauthor->[$i]->{'author'};
+							# FIXME - .=
 } # for
 
 
