@@ -42,6 +42,7 @@ use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
+use C4::Charset;
 use C4::Search;
 use HTML::Template;
 
@@ -226,5 +227,8 @@ if ($op eq 'add_form') {
        $template->param(budget => \@loop_data);
 } #---- END $OP eq DEFAULT
 
-print $input->header(-cookie => $cookie), $template->output;
+print $input->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+), $template->output;
 

@@ -26,10 +26,17 @@ MARCdetail.pl : script to show a biblio in MARC format
 
 =head1 DESCRIPTION
 
-This script needs a biblionumber in bib parameter (bibnumber from koha style DB. Automaticaly maps to marc biblionumber).
-It shows the biblio in a (nice) MARC format depending on MARC parameters tables.
-The template is in <templates_dir>/catalogue/MARCdetail.tmpl. this template must be divided in 11 "tabs".
-The 10 firsts presents the biblio, the 11th one presents the items attached to the biblio
+This script needs a biblionumber in bib parameter (bibnumber
+from koha style DB.  Automaticaly maps to marc biblionumber).
+
+It shows the biblio in a (nice) MARC format depending on MARC
+parameters tables.
+
+The template is in <templates_dir>/catalogue/MARCdetail.tmpl.
+this template must be divided into 11 "tabs".
+
+The first 10 tabs present the biblio, the 11th one presents
+the items attached to the biblio
 
 =head1 FUNCTIONS
 
@@ -153,5 +160,8 @@ $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
 						bibid => $bibid);
-print $query->header(-cookie => $cookie),$template->output;
+print $query->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;
 
