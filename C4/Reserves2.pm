@@ -366,19 +366,19 @@ sub FillReserve {
 
     # fill in a reserve record....
     # FIXME - Remove some of the redundancy here
-    my $biblio = $res->{'biblionumber'}; my $qbiblio = $dbh->quote($biblio);
-    my $borr = $res->{'borrowernumber'}; $borr = $dbh->quote($borr);
-    my $resdate = $res->{'reservedate'}; $resdate = $dbh->quote($resdate);
+    my $biblio = $res->{'biblionumber'}; my $qbiblio =$biblio;
+    my $borr = $res->{'borrowernumber'}; 
+    my $resdate = $res->{'reservedate'}; 
 
     # get the priority on this record....
     my $priority;
     {
     my $query = "SELECT priority FROM reserves
-                                WHERE biblionumber   = $qbiblio
-                                  AND borrowernumber = $borr
-                                  AND reservedate    = $resdate)";
+                                WHERE biblionumber   = ?
+                                  AND borrowernumber = ?
+                                  AND reservedate    = ?";
     my $sth=$dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($qbiblio,$borr,$resdate);
     ($priority) = $sth->fetchrow_array;
     $sth->finish;
     }
@@ -387,11 +387,11 @@ sub FillReserve {
     {
     my $query = "UPDATE reserves SET found            = 'F',
                                      priority         = 0
-                               WHERE biblionumber     = $qbiblio
-                                 AND reservedate      = $resdate
-                                 AND borrowernumber   = $borr";
+                               WHERE biblionumber     = ?
+                                 AND reservedate      = ?
+                                 AND borrowernumber   = ?";
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($qbiblio,$resdate,$borr);
     $sth->finish;
     }
 
