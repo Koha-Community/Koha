@@ -13,7 +13,7 @@ my $circbackgroundcolor='#ffffcc';
 my $circbackgroundcolor='white';
 my $linecolor1='#bbbbbb';
 my $linecolor2='#dddddd';
-my $backgroundimage="/images/background-mem.gif";
+my $backgroundimage="/koha/images/background-mem.gif";
 my $query=new CGI;
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
@@ -83,13 +83,13 @@ print << "EOF";
 <th width=5%></th>
 <th width=30%><font color=black>$branchname</font></th>
 <th width=10%>
-	<a href=circulation.pl?module=issues&branch=$branch&printer=$printer><font color=black><img src=/images/issues.gif border=0 height=40></font></a>
+	<a href=circulation.pl?module=issues&branch=$branch&printer=$printer><font color=black><img src=/koha/images/issues.gif border=0 height=40></font></a>
 </th>
 <th width=10%>
     <a href=circulation.pl?selectnewbranchprinter=1><font color=black>Branch/Printer</font></a>
 </th>
 <th width=10%>
-    <a href=circulation.pl?module=returns&branch=$branch&printer=$printer><font color=black><img src=/images/returns.gif border=0 height=40></font></a>
+    <a href=circulation.pl?module=returns&branch=$branch&printer=$printer><font color=black><img src=/koha/images/returns.gif border=0 height=40></font></a>
 </th>
 <th width=30%><font color=black>$printername</font></th>
 <th width=5%></th>
@@ -166,6 +166,34 @@ EOF
 }
 
 
+sub decode {
+    ($encoded) = @_;
+    $seq = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-';
+    @s = map { index($seq,$_); } split(//,$encoded);
+    $l = ($#s+1) % 4;
+    if ($l)
+    {
+	if ($l == 1)
+	{
+	    print "Error!";
+	    return;
+	}
+	$l = 4-$l;
+	$#s += $l;
+    }
+    $r = '';
+    while ($#s >= 0)
+    {
+	$n = (($s[0] << 6 | $s[1]) << 6 | $s[2]) << 6 | $s[3];
+	$r .=chr(($n >> 16) ^ 67) .
+	     chr(($n >> 8 & 255) ^ 67) .
+	     chr(($n & 255) ^ 67);
+	@s = @s[4..$#s];
+    }
+    $r = substr($r,0,length($r)-$l);
+    return $r;
+}
+
 sub returns {
     my %returneditems;
     print << "EOF";
@@ -176,6 +204,16 @@ EOF
 	my $counter=$1;
 	(next) if ($counter>20);
 	my $barcode=$query->param("ri-$counter");
+      # I'm not POSITIVE this decode belongs here - can't tell what causes it to run.
+      # decode cuecat
+      chomp($barcode);
+      @fields = split(/\./,$barcode);
+      @results = map(decode($_), @fields[1..$#fields]);
+      if ($#results == 2)
+      {
+  	$barcode=$results[2];
+      }
+      # end decode
 	my $duedate=$query->param("dd-$counter");
 	my $borrowernumber=$query->param("bn-$counter");
 	$counter++;
@@ -187,6 +225,15 @@ EOF
 	$ritext.="<input type=hidden name=bn-$counter value=$borrowernumber>\n";
     }
     if (my $barcode=$query->param('barcode')) {
+      # decode cuecat
+      chomp($barcode);
+      @fields = split(/\./,$barcode);
+      @results = map(decode($_), @fields[1..$#fields]);
+      if ($#results == 2)
+      {
+  	$barcode=$results[2];
+      }
+      # end decode
 	$ritext.="<input type=hidden name=ri-0 value=$barcode>\n";
 	$returneditems{0}=$barcode;
     }
@@ -203,6 +250,15 @@ EOF
     $ritext
 EOF
     if ((my $barcode=$query->param('barcode')) || (%returneditems)) {
+      # decode cuecat
+      chomp($barcode);
+      @fields = split(/\./,$barcode);
+      @results = map(decode($_), @fields[1..$#fields]);
+      if ($#results == 2)
+      {
+  	$barcode=$results[2];
+      }
+      # end decode
 	my ($iteminformation, $borrower, $messages, $overduecharge) = returnbook(\%env, $barcode);
 	
 	(my $nosuchitem=1) unless ($iteminformation);
@@ -340,11 +396,11 @@ EOF
 	    my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 	    my $overduetext="$duedate";
 	    ($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
-	    ($duedate) || ($overduetext="<img src=/images/blackdot.gif>");
+	    ($duedate) || ($overduetext="<img src=/koha/images/blackdot.gif>");
 	    my $borrowernumber=$riborrowernumber{$_};
 	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
 	    my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
-	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td><td bgcolor=$color><img src=/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
+	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td><td bgcolor=$color><img src=/koha/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
 	}
 	print "</table>\n";
     } else {
@@ -398,6 +454,15 @@ EOF
 	my $month=$query->param('month');
 	my $day=$query->param('day');
 	if (my $barcode=$query->param('barcode')) {
+          # decode cuecat
+          chomp($barcode);
+          @fields = split(/\./,$barcode);
+          @results = map(decode($_), @fields[1..$#fields]);
+          if ($#results == 2)
+          {
+      	    $barcode=$results[2];
+          }
+          # end decode
 	    my $invalidduedate=0;
 	    $env{'datedue'}='';
 	    if (($year eq 0) && ($month eq 0) && ($year eq 0)) {
