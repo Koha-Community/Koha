@@ -111,7 +111,7 @@ C4::Auth - Authenticates Koha users
 
 sub get_template_and_user {
 	my $in = shift;
-	my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+	my $template = gettemplate($in->{'template_name'}, $in->{'type'},$in->{'query'});
 	my ($user, $cookie, $sessionID, $flags)
 		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
@@ -325,7 +325,7 @@ sub checkauth {
 		push @inputs, {name => $name , value => $value};
 	}
 
-	my $template = gettemplate($template_name, $type);
+	my $template = gettemplate($template_name, $type,$query);
 	$template->param(INPUTS => \@inputs);
 	$template->param(loginprompt => 1) unless $info{'nopermission'};
 
