@@ -120,7 +120,11 @@ printend
 my @data;
 ($count2,@data)=bibitems($bib);
 for (my $i=0;$i<$count2;$i++){
-  my @barcodes=barcodes($data[$i]->{'biblioitemnumber'});
+  my @barcodehashes=barcodes($data[$i]->{'biblioitemnumber'});
+  my @barcodes;
+  foreach (@barcodehashes) {
+      push @barcodes, $_->{barcode};
+  }
   if ($data[$i]->{'dewey'} == 0){
     $data[$i]->{'dewey'}="";
   }
