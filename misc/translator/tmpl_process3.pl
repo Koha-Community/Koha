@@ -138,6 +138,21 @@ sub listfiles ($$) {
 
 ###############################################################################
 
+sub mkdir_recursive ($) {
+    my($dir) = @_;
+    local($`, $&, $', $1);
+    $dir = $` if $dir ne /^\/+$/ && $dir =~ /\/+$/;
+    my ($prefix, $basename) = ($dir =~ /\/([^\/]+)$/s)? ($`, $1): ('.', $dir);
+    mkdir_recursive($prefix) if $prefix ne '.' && !-d $prefix;
+    if (!-d $dir) {
+	print STDERR "Making directory $dir...";
+	# creates with rwxrwxr-x permissions
+	mkdir($dir, 0775) || warn_normal "$dir: $!", undef;
+    }
+}
+
+###############################################################################
+
 sub usage ($) {
     my($exitcode) = @_;
     my $h = $exitcode? *STDERR: *STDOUT;
@@ -353,11 +368,7 @@ if ($action eq 'create')  {
 
 	my $target = $out_dir . substr($input, length($in_dir));
 	my $targetdir = $` if $target =~ /[^\/]+$/s;
-	if (!-d $targetdir) {
-	    print STDERR "Making directory $targetdir...";
-	    # creates with rwxrwxr-x permissions
-	    mkdir($targetdir, 0775) || warn_normal "$targetdir: $!", undef;
-	}
+	mkdir_recursive($targetdir) unless -d $targetdir;
 	print STDERR "Creating $target...\n";
 	open( OUTPUT, ">$target" ) || die "$target: $!\n";
 	text_replace( $h, *OUTPUT );
