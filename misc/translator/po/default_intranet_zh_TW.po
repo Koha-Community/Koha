@@ -609,7 +609,7 @@ msgstr "找到 %s 個結果。"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:32
 #, c-format
 msgid "%s suggestions waiting <a1>Manage</a>"
-msgstr "%s 個建議待理 <a1>管理</a>"
+msgstr "%s 個建議有待處理　<a1>處理</a>"
 
 #. %1$s: TMPL_VAR name=renewalsallowed
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:143
@@ -9809,9 +9809,9 @@ msgstr ""
 #. %4$s: TMPL_VAR name=name
 #. %5$s: TMPL_VAR name=borcnum
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:15
-#, fuzzy, c-format
+#, c-format
 msgid "Item %s (%s) is marked waiting at <b>%s</b> for %s (<a1>%s</a>)."
-msgstr "在分館 <b>%s</b> 等候由 %s (<a1>%s</a>) 取書。"
+msgstr "圖書資料「%1$s」(%2$s) 現為「等候」狀態，正等候由 %4$s (<a1>%5$s</a>) 在 <b>%3$s</b> 取書。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:43
 msgid "Item Barcode *"
@@ -9924,7 +9924,7 @@ msgstr "圖書資料類別"
 msgid ""
 "Item type : select here an item type. If none is selected, the search is "
 "done on every item type"
-msgstr ""
+msgstr "圖書資料類別：請在此處選擇圖書資料類別。如不選擇，將搜尋所有圖書資料類別。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:128
 msgid "Item type Admin"
@@ -9938,7 +9938,7 @@ msgstr "圖書資料類別"
 msgid ""
 "Item types are useful for many things, and <b>very</b> important in "
 "controlling how Koha works :"
-msgstr ""
+msgstr "圖書資料類別有多種用途，而且對 Koha 的運作有<b>莫大</b>的影響："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/itemtypes.tmpl:2
 msgid "Item types management"
@@ -10337,7 +10337,7 @@ msgstr "Koha：禮物、捐贈、或捐助也"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/auth.tmpl:36
 msgid "Koha Login"
-msgstr "登入Koha"
+msgstr "登入 Koha"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/authorised_values.tmpl:3
 msgid ""
@@ -10393,7 +10393,7 @@ msgstr "Koha 欄位：%s"
 msgid ""
 "Koha internal (you should have no reasons to modify the following default "
 "values)"
-msgstr ""
+msgstr "Koha 內部使用（你毋須修對以下的預設值作出任何修改）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:14
@@ -10409,7 +10409,7 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:30
 msgid "Koha link:"
-msgstr ""
+msgstr "Koha 連結："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:8
 msgid "Koha version"
@@ -10455,15 +10455,16 @@ msgstr ""
 #  FIXME spelling mistake in source
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:26
 msgid "Label heigth (Expressed in mm)"
-msgstr ""
+msgstr "標籤高度（公厘 / 毫米）"
 
+# XXX
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/barcodes.tmpl:156
 msgid "Label number to start printing"
-msgstr ""
+msgstr "起首列印之標籤號碼"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:23
 msgid "Label width (Expressed in mm)"
-msgstr ""
+msgstr "標籤闊度（公厘 / 毫米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:674
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_120.tmpl:676
@@ -10681,7 +10682,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:139
 #, c-format
 msgid "Link:%s,"
-msgstr ""
+msgstr "連結：%s、"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:48
 msgid "Links Koha - MARC DB"
@@ -10923,6 +10924,7 @@ msgid ""
 "simply not available for display on circulation screens and on some search "
 "results screens."
 msgstr ""
+"未被連結至 Koha 資料庫的機讀格式資料並不會消失&mdash;&mdash;它只是不會在流通畫面顯示，也不會在某些查詢館藏的結果列出。"
 
 #. %1$s: TMPL_VAR name=tagfield
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:157
@@ -11059,11 +11061,12 @@ msgstr ""
 msgid "Managed by"
 msgstr ""
 
+# FIXME bug in tokenizer
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:40
-#, fuzzy
 msgid "Managed in tab"
-msgstr "在第「-1」格 (即不顯示)"
+msgstr "在第幾格顯示："
 
+# FIXME grammatical mistake in original
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marc_subfields_structure.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/marctagstructure.tmpl:17
 msgid ""
@@ -11201,11 +11204,11 @@ msgstr "Marco Gaiarin"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:41
 msgid "Margin Bottom (Expressed in mm)"
-msgstr ""
+msgstr "頁面下面邊界（公厘 / 毫米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:44
 msgid "Margin Left (Expressed in mm)"
-msgstr ""
+msgstr "頁面左面邊界（公厘 / 毫米）"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_128b.tmpl:148
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_128b.tmpl:150
@@ -12389,7 +12392,7 @@ msgstr "沒有結果乎合查詢。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:34
 msgid "No suggestions waiting"
-msgstr ""
+msgstr "沒有未處理的新書建議"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/bookcount.tmpl:21
 msgid "No. of Issues"
@@ -15676,17 +15679,17 @@ msgstr ""
 
 #. %1$s: TMPL_VAR name=RESERVED
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:190
-#, fuzzy, c-format
+#, c-format
 msgid "Reserved by %s"
-msgstr "收貨人：%s"
+msgstr "圖書資料已被 %s 預約"
 
 # XXX
 #. %1$s: TMPL_VAR name=name
 #. %2$s: TMPL_VAR name=borcnum
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:22
-#, fuzzy, c-format
+#, c-format
 msgid "Reserved: reserve found for %s (<a1>%s</a>)."
-msgstr "%s 已預約 (<a1>%s</a>)。"
+msgstr "已預約：圖書資料已被 %s (<a1>%s</a>) 預約 。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:13
 msgid "Reserves"
@@ -15913,9 +15916,8 @@ msgstr "稱號"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-add.tmpl:19
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/bull/subscription-detail.tmpl:20
-#, fuzzy
 msgid "Sample"
-msgstr "姓"
+msgstr "樣本"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:348
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_116.tmpl:350
@@ -16004,11 +16006,11 @@ msgstr "儲存"
 msgid "Save Changes"
 msgstr "儲存"
 
+#  NOTE「Code」此處係指「Country Code」
 #. INPUT type=submit name=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/barcodes.tmpl:28
-#, fuzzy
 msgid "Save Code"
-msgstr "條碼"
+msgstr "儲存號碼"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:98
@@ -16483,21 +16485,22 @@ msgstr "設定預約狀態為「等候中」，然後把圖書資料移交至 <b
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:12
 msgid "Set the page type."
-msgstr ""
+msgstr "設定頁面類型。"
 
+# FIXME spelling mistake in original
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:10
 msgid "Set width and heigth of the label that you are going to work with."
-msgstr ""
+msgstr "設定你使用的標籤的闊度及高度。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/barcodes/printerConfig.tmpl:11
 msgid "Set your system dpi by default."
-msgstr ""
+msgstr "設定預設的 DPI 值。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/help/admin/itemtypes.tmpl:18
 msgid ""
 "Setting up item types is one of the first things you should do after "
 "installing the Koha software."
-msgstr ""
+msgstr "設定圖書資料類別，乃安裝 Koha 後其中一個必須儘快辦妥的步驟。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:67
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:95
