@@ -1065,9 +1065,9 @@ sub calc_charges {
 # Stolen from Issues.pm
 # calculate charges due
     my ($env, $dbh, $itemno, $bornum)=@_;
-#    if (!$dbh){
-#      $dbh=C4Connect();
-#    }
+    if (!defined($dbh)){
+      $dbh=C4Connect();
+    }
     my $charge=0;
 #    open (FILE,">>/tmp/charges");
     my $item_type;
