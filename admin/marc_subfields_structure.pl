@@ -51,7 +51,7 @@ my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
 my $pkfield="tagfield";
-my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield'";
+my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
 my $reqdel="delete from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
@@ -132,7 +132,6 @@ if ($op eq 'add_form') {
 	}
 	closedir DIR;
 
-	warn "$value_builder[0] § $value_builder[1]";
 	# build values list
 	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
 	$sth->execute;
@@ -291,7 +290,7 @@ if ($op eq 'add_form') {
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
-							tagsubfield => $tagsubfield,
+							tagsubfield => $data->{'tagsubfield'},
 							delete_link => $script_name,
 							tagfield      =>$tagfield,
 							tagsubfield => $tagsubfield,
