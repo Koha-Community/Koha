@@ -21,13 +21,12 @@
 <TMPL_INCLUDE name="cat-search.inc">
 <!--END LEFT NAV, START CRUMBS-->
 <TMPL_INCLUDE name="crumb-start.inc">	
-<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-user.pl'>My Account</a>
+<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-user.pl'>My Home</a>
 <!--END CRUMBS-->
 <TMPL_INCLUDE name="crumb-end.inc">
 <!--CONTENT-->
 <TMPL_LOOP NAME="BORROWER_INFO">
 <h1>Welcome <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></h1>
-</TMPL_LOOP>
 <!--FINES BOX-->
 <TMPL_IF NAME="amountoverfive">
 
@@ -70,6 +69,9 @@
 <tr><td valign="top" colspan="3"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr></table><br />
 
 </TMPL_IF>
+
+</TMPL_LOOP>
+
 
 <TMPL_IF NAME="overdues_count">
 
