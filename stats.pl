@@ -23,19 +23,27 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Stats;
 use strict;
-use Date::Manip;
 use CGI;
 use C4::Output;
+use HTML::Template;
+use C4::Auth;
+use C4::Interface::CGI::Output;
+use C4::Context;
+use Date::Manip;
+use C4::Stats;
 
 my $input=new CGI;
 my $time=$input->param('time');
-print $input->header;
 
-print startpage;
-print startmenu('report');
-print center;
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "stats.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 my $date;
 my $date2;
@@ -66,9 +74,8 @@ my %foxton;
 my %shannon;
 my $oldtime;
 my $totalw=0;
-#my $totalcf=0;
-print mktablehdr;
-print mktablerow(5,'#99cc33',bold('Name'),bold('Type'),bold('Date/time'),bold('Amount'), bold('Branch'),'/images/background-mem.gif');
+my @loop;
+my %row;
 my $i=0;
 while ($i<$count){
   my $time=$payments[$i]{'datetime'};
@@ -85,8 +92,12 @@ while ($i<$count){
   my $temptotalw=0;
   for (my $i2=0;$i2<$count;$i2++){
      $charge+=$charges[$i2]->{'amount'};
-      print mktablerow(6,'red',$charges[$i2]->{'description'},$charges[$i2]->{'accounttype'},$charges[$i2]->{'timestamp'},
-      $charges[$i2]->{'amount'},$charges[$i2]->{'amountoutstanding'});
+     %row = ( name   => $charges[$i2]->{'description'},
+              type   => $charges[$i2]->{'accounttype'},
+              time   => $charges[$i2]->{'timestamp'},
+              amount => $charges[$i2]->{'amount'},
+              branch => $charges[$i2]->{'amountoutstanding'} );
+      push(@loop, \%row);
       if ($payments[$i]{'accountytpe'} ne 'W'){
         if ($charges[$i2]->{'accounttype'} eq 'Rent'){
           $temptotalr+=$charges[$i2]->{'amount'}-$charges[$i2]->{'amountoutstanding'};
@@ -103,7 +114,6 @@ while ($i<$count){
      }
   }
 
-#  my $branch=
   my $hour=substr($payments[$i]{'timestamp'},8,2);
   my  $min=substr($payments[$i]{'timestamp'},10,2);
   my $sec=substr($payments[$i]{'timestamp'},12,2);
@@ -153,47 +163,27 @@ while ($i<$count){
       }
 
     }
-#    my $time2="$payments[$i]{'date'} $time";
 
-
-    print mktablerow(6,'white',"$payments[$i]{'firstname'} <b>$payments[$i]{'surname'}</b>",
-    ,$payments[$i]{'accounttype'},"$payments[$i]{'date'} $time",$payments[$i]{'amount'}
-    ,$branch);
+   %row = ( name   => $payments[$i]{'firstname'} . " <b>" . $payments[$i]{'surname'} . "</b>",
+            type   => $payments[$i]{'accounttype'},
+            time   => $payments[$i]{'date'},
+            amount => $payments[$i]{'amount'},
+            branch => $branch );
+    
+    push(@loop, \%row);
+             
     $oldtype=$payments[$i]{'accounttype'};
     $oldtime=$payments[$i]{'timestamp'};
     $bornum=$payments[$i]{'borrowernumber'};
     $i++;
 
   }
-  print mktablerow('6','white','','','','','','');
 }
-print mktableft;
-print endcenter;
-#$totalw=$totalw * -1;
-print "<p><b>Total Paid $total</b>";
-print "<br><b>total written off $totalw</b>";
-print mktablehdr;
-$levin{'issues'}=Count('issue','C',$date,$date2);
-$foxton{'issues'}=Count('issue','F',$date,$date2);
-$shannon{'issues'}=Count('issue','S',$date,$date2);
-$levin{'returns'}=Count('return','C',$date,$date2);
-$foxton{'returns'}=Count('return','F',$date,$date2);
-$shannon{'returns'}=Count('return','S',$date,$date2);
-$levin{'renewals'}=Count('renew','C',$date,$date2);
-$foxton{'renewals'}=Count('renew','F',$date,$date2);
-$shannon{'renewals'}=Count('renew','S',$date,$date2);
-$levin{'unknown'}=$levin{'total'}-($levin{'totalf'}+$levin{'totalr'}+$levin{'totalres'}+$levin{'totalren'});
-$foxton{'unknown'}=$foxton{'total'}-($foxton{'totalf'}+$foxton{'totalr'}+$foxton{'totalres'}+$foxton{'totalren'});
-$foxton{'unknown'}=$foxton{'total'}-($foxton{'totalf'}+$foxton{'totalr'}+$foxton{'totalres'}+$foxton{'totalren'});
-print mktablerow(10,'white',"<b>Levin</b>","Fines $levin{'totalf'}","Rental Charges $levin{'totalr'}",
-"Reserve Charges $levin{'totalres'}","Renewal Charges $levin{'totalren'}","Unknown $levin{'unknown'}","<b>Total $levin{'total'}</b>",
-"Issues $levin{'issues'}","Renewals $levin{'renewals'}","Returns $levin{'returns'}");
-print mktablerow(10,'white',"<b>foxton</b>","Fines $foxton{'totalf'}","Rental Charges $foxton{'totalr'}","Reserve Charges $foxton{'totalres'}","Renewal Charges $foxton{'totalren'}","Unknown $foxton{'unknown'}","<b>Total $foxton{'total'}</b>",
-"Issues $foxton{'issues'}","Renewals $foxton{'renewals'}","Returns $foxton{'returns'}");
-print mktablerow(10,'white',"<b>shannon</b>","Fines $shannon{'totalf'}","Rental Charges $shannon{'totalr'}","Reserve Charges $shannon{'totalres'}","Renewal Charges $shannon{'totalren'}","Unknown $shannon{'unknown'}","<b>Total $shannon{'total'}</b>",
-"Issues $shannon{'issues'}","Renewals $shannon{'renewals'}","Returns $shannon{'returns'}");
-print mktableft;
+
+$template->param( loop   => \@loop,
+		  totalw => $totalw,
+		  total  => $total );
+
+output_html_with_http_headers $input, $cookie, $template->output;
 
 
-print endmenu('report');
-print endpage;
