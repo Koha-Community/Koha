@@ -1601,13 +1601,12 @@ sub OLDmodsubject {
 
 sub OLDmodbibitem {
     my ( $dbh, $biblioitem ) = @_;
-
-    #    my $dbh   = C4Connect;
     my $query;
 
     $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
     $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
     $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
+    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
     $biblioitem->{'publishercode'} =
       $dbh->quote( $biblioitem->{'publishercode'} );
     $biblioitem->{'publicationyear'} =
@@ -1627,6 +1626,7 @@ sub OLDmodbibitem {
 itemtype        = $biblioitem->{'itemtype'},
 url             = $biblioitem->{'url'},
 isbn            = $biblioitem->{'isbn'},
+issn            = $biblioitem->{'issn'},
 publishercode   = $biblioitem->{'publishercode'},
 publicationyear = $biblioitem->{'publicationyear'},
 classification  = $biblioitem->{'classification'},
@@ -1644,8 +1644,6 @@ where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
     if ( $dbh->errstr ) {
         warn "$query";
     }
-
-    #    $dbh->disconnect;
 }    # sub modbibitem
 
 sub OLDmodnote {
@@ -2633,6 +2631,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.1  2005/01/11 14:45:37  tipaul
+# bugfix : issn were not stored correctly in non-MARC DB on biblio modification
+#
 # Revision 1.115  2005/01/06 14:32:17  tipaul
 # improvement of speed for bulkmarcimport.
 # A sub had been forgotten to use the C4::Context->marcfromkohafield array, that caches DB datas.
