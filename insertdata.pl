@@ -7,6 +7,7 @@
 use CGI;
 use C4::Database;
 use C4::Input;
+use C4::Search;
 use Date::Manip;
 use strict;
 
@@ -60,6 +61,24 @@ if (my $data=$sth->fetchrow_hashref){
   '$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
   '$data{'ethnicity'}','$data{'borrowernumber'}')";
 }
+# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
+# so when we update information for an adult we should check for guarantees and update the relevant part
+# of their records, ie addresses and phone numbers
+
+if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
+    # is adult check guarantees;
+    my ($count,$guarantees)=findguarantees($data{'borrowernumber'});
+    for (my $i=0;$i<$count;$i++){
+	my $guaquery="update borrowers set streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',
+        streetcity='$data{'streetcity'}',phoneday='$data{'phoneday'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}'
+        ,streetaddress='$data{'address'}'
+        where borrowernumber='$guarantees->[$i]->{'borrowernumber'}'";
+        my $sth3=$dbh->prepare($guaquery);
+        $sth3->execute;
+        $sth3->finish;
+     }
+}
+
 #print $query;
   my $sth2=$dbh->prepare($query);
   $sth2->execute;
