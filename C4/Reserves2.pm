@@ -1,5 +1,4 @@
-package C4::Reserves2; #assumes C4/Reserves2
-
+package C4::Reserves2;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -360,6 +359,8 @@ sub Findgroupreserve {
   return($i,@results);
 }
 
+# FIXME - A somewhat different version of this function appears in
+# C4::Reserves. Pick one and stick with it.
 sub CreateReserve {                                                           
   my
 ($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title)= @_;   
@@ -410,6 +411,8 @@ sub CreateReserve {
   return();   
 }             
 
+# FIXME - A functionally identical version of this function appears in
+# C4::Reserves. Pick one and stick with it.
 sub CalcReserveFee {
   my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;        
   #check for issues;    

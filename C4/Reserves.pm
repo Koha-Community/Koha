@@ -1,8 +1,4 @@
-package C4::Reserves; #asummes C4/Reserves
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
-
+package C4::Reserves;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -20,6 +16,8 @@ package C4::Reserves; #asummes C4/Reserves
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+# FIXME - I suspect that this module is obsolete.
 
 use strict;
 require Exporter;
@@ -75,6 +73,8 @@ my $priv_func = sub {
 						    
 # make all your functions, whether exported or not;
 
+# FIXME - This doesn't appear to ever be used, except in modules that
+# appear to be obsolete.
 sub EnterReserves{
   my ($env)=@_;  
   my $titlepanel = titlepanel($env,"Reserves","Enter Selection");
@@ -189,6 +189,8 @@ sub EnterReserves{
   return ($donext);  
 }
 
+# FIXME - A functionally identical version of this function appears in
+# C4::Reserves2. Pick one and stick with it.
 sub CalcReserveFee {
   my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;
   #check for issues;
@@ -261,6 +263,8 @@ sub CalcReserveFee {
   return $fee;
 } # end CalcReserveFee
 
+# FIXME - A somewhat different version of this function appears in
+# C4::Reserves2. Pick one and stick with it.
 sub CreateReserve {
   my ($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$fee) = @_;
   my $dbh = C4::Context->dbh;
