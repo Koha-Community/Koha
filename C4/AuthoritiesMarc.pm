@@ -22,6 +22,7 @@ use C4::Context;
 use C4::Database;
 use C4::Koha;
 use MARC::Record;
+use C4::Biblio;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -112,7 +113,7 @@ sub authoritysearch {
 	my @finalresult = ();
 	my $oldline;
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
-		warn "HERE";
+# 		warn " HERE : $counter, $#result, $offset, $length";
 		# get MARC::Record of the authority
 		my $record = AUTHgetauthority($dbh,$result[$counter]);
 		# then build the summary
@@ -135,14 +136,29 @@ sub authoritysearch {
 		}
 		$summary =~ s/\[(.*?)]//g;
 		$summary =~ s/\n/<br>/g;
+
+		# find biblio MARC field using this authtypecode (to jump to biblio)
+		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
+		my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
+		$sth->execute($authtypecode);
+		my $tags_using_authtype;
+		while (my ($tagfield) = $sth->fetchrow) {
+# 			warn "TAG : $tagfield";
+			$tags_using_authtype.= $tagfield."9,";
+		}
+		chop $tags_using_authtype;
+		
 		# then add a line for the template loop
 		my %newline;
 		$newline{summary} = $summary;
 		$newline{authid} = $result[$counter];
+		$newline{used} = &AUTHcount_usage($result[$counter]);
+		$newline{biblio_fields} = $tags_using_authtype;
+		$counter++;
 		push @finalresult, \%newline;
-		my $nbresults = $#result + 1;
-		return (\@finalresult, $nbresults);
 	}
+	my $nbresults = $#result + 1;
+	return (\@finalresult, $nbresults);
 }
 
 # Creates the SQL Request
@@ -171,7 +187,7 @@ sub create_request {
 					$sql_tables .= "auth_word as m$nb_table,";
 					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
-						 $sql_where1 .=" and m1.tag+m1.subfieldid in (@$tags[$i])";
+						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} else {
@@ -198,7 +214,7 @@ sub create_request {
 						$sql_tables .= "auth_word as m$nb_table,";
 						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
 						if (@$tags[$i]) {
-							$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldid in(@$tags[$i])";
+							$sql_where1 .=" and m$nb_table.tagsubfield in(@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.authid=m$nb_table.authid and ";
@@ -237,6 +253,55 @@ sub create_request {
 	return ($sql_tables, $sql_where1, $sql_where2);
 }
 
+
+sub AUTHcount_usage {
+	my ($authid) = @_;
+	my $dbh = C4::Context->dbh;
+	# find MARC fields using this authtype
+	my $authtypecode = AUTHfind_authtypecode($dbh,$authid);
+	my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
+	$sth->execute($authtypecode);
+	my $tags_using_authtype;
+	while (my ($tagfield) = $sth->fetchrow) {
+# 		warn "TAG : $tagfield";
+		$tags_using_authtype.= "'".$tagfield."9',";
+	}
+	chop $tags_using_authtype;
+	$sth = $dbh->prepare("select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=?");
+# 	warn "Q : select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=$authid";
+	$sth->execute($authid);
+	my ($result) = $sth->fetchrow;
+# 	warn "Authority $authid TOTAL USED : $result";
+	return $result;
+}
+
+# merging 2 authority entries. After a merge, the "from" can be deleted.
+# sub AUTHmerge {
+# 	my ($auth_merge_from,$auth_merge_to) = @_;
+# 	my $dbh = C4::Context->dbh;
+# 	# find MARC fields using this authtype
+# 	my $authtypecode = AUTHfind_authtypecode($dbh,$authid);
+# 	# retrieve records
+# 	my $record_from = AUTHgetauthority($dbh,$auth_merge_from);
+# 	my $record_to = AUTHgetauthority($dbh,$auth_merge_to);
+# 	my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
+# 	$sth->execute($authtypecode);
+# 	my $tags_using_authtype;
+# 	while (my ($tagfield) = $sth->fetchrow) {
+# 		warn "TAG : $tagfield";
+# 		$tags_using_authtype.= "'".$tagfield."9',";
+# 	}
+# 	chop $tags_using_authtype;
+# 	# now, find every biblio using this authority
+# 	$sth = $dbh->prepare("select bibid,tag,tag_indicator,tagorder from marc_subfield_table where tag+subfieldid in ($tags_using_authtype) and subfieldvalue=?");
+# 	$sth->execute($authid);
+# 	# and delete entries before recreating them
+# 	while (my ($bibid,$tag,$tag_indicator,$tagorder) = $sth->fetchrow) {
+# 		&MARCdelsubfield($dbh,$bibid,$tag);
+# 		
+# 	}
+# 
+# }
 
 sub AUTHfind_authtypecode {
 	my ($dbh,$authid) = @_;
@@ -443,7 +508,7 @@ sub AUTHdelauthority {
 # the best solution for a modif is to delete / recreate the record.
 
 	my $record = AUTHgetauthority($dbh,$authid);
-	$dbh->do("delete from auth_biblio where authid=$authid");
+	$dbh->do("delete from auth_header where authid=$authid");
 	$dbh->do("delete from auth_subfield_table where authid=$authid");
 	$dbh->do("delete from auth_word where authid=$authid");
 # FIXME : delete or not in biblio tables (depending on $keep_biblio flag)
@@ -582,14 +647,14 @@ sub AUTHaddword {
     $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
     my @words = split / /,$sentence;
     my $stopwords= C4::Context->stopwords;
-    my $sth=$dbh->prepare("insert into auth_word (authid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word)
-			values (?,?,?,?,?,?,soundex(?))");
+    my $sth=$dbh->prepare("insert into auth_word (authid, tagsubfield, tagorder, subfieldorder, word, sndx_word)
+			values (?,concat(?,?),?,?,?,soundex(?))");
     foreach my $word (@words) {
 # we record only words longer than 2 car and not in stopwords hash
 	if (length($word)>2 and !($stopwords->{uc($word)})) {
-	    $sth->execute($authid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,$word);
+	    $sth->execute($authid,$tag,$subfieldid,$tagorder,$subfieldorder,$word,$word);
 	    if ($sth->err()) {
-		warn "ERROR ==> insert into auth_word (authid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word) values ($authid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,soundex($word))\n";
+		warn "ERROR ==> insert into auth_word (authid, tagsubfield, tagorder, subfieldorder, word, sndx_word) values ($authid,concat($tag,$subfieldid),$tagorder,$subfieldorder,$word,soundex($word))\n";
 	    }
 	}
     }
@@ -598,8 +663,8 @@ sub AUTHaddword {
 sub AUTHdelword {
 # delete words. this sub deletes all the words from a sentence. a subfield modif is done by a delete then a add
     my ($dbh,$authid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
-    my $sth=$dbh->prepare("delete from auth_word where authid=? and tag=? and tagorder=? and subfieldid=? and subfieldorder=?");
-    $sth->execute($authid,$tag,$tagorder,$subfield,$subfieldorder);
+    my $sth=$dbh->prepare("delete from auth_word where authid=? and tagsubfield=concat(?,?) and tagorder=? and subfieldorder=?");
+    $sth->execute($authid,$tag,$subfield,$tagorder,$subfieldorder);
 }
 
 sub char_decode {
@@ -758,6 +823,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.3  2004/06/17 08:02:13  tipaul
+# merging tag & subfield in auth_word for better perfs
+#
 # Revision 1.2  2004/06/10 08:29:01  tipaul
 # MARC authority management (continued)
 #
