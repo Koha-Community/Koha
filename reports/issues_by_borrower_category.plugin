@@ -111,62 +111,117 @@ sub calculate {
 	$sthcategories->execute;
 	my %borrowertype;
 	my @categorycodeloop;
-	while (my ($categorycode,$description) = $sthcategories->fetchrow) {
-		$borrowertype{$categorycode}->{description} = $description;
-		$borrowertype{$categorycode}->{total} = 0;
-		my %categorycode;
-		$categorycode{categorycode} = $description;
-		push @categorycodeloop,\%categorycode;
-		foreach my $itemtype (keys %itemtypes) {
-			$itemtypes{$itemtype}->{results}->{$categorycode} = 0;
-		}
-		$sth->execute($categorycode);
-		while (my ($itemtype, $total) = $sth->fetchrow) {
-			$itemtypes{$itemtype}->{results}->{$categorycode} = $total;
-			$borrowertype{$categorycode}->{total} += $total;
-			$itemtypes{$itemtype}->{total} += $total;
-		}
-	}
-	my $grantotal = 0;
-# build the result
+	my $categorycode;
+	my $description;
+	my $borrower_categorycode =0;
 	my @mainloop;
 	my @itemtypeloop;
 	my @loopborrowertype;
+	my @loopborrowertotal;
 	my %globalline;
 	my $hilighted=-1;
-	foreach my $itemtype (keys %itemtypes) {
-		my @loopitemtype;
-		foreach my $categorycode (keys %{$itemtypes{$itemtype}->{results}}) {
+	my $grantotal =0;
+	#If no Borrower-category selected....
+	# Print all 
+	if (!$borrower_category) {
+		while ( ($categorycode,$description) = $sthcategories->fetchrow) {
+			$borrowertype{$categorycode}->{description} = $description;
+			$borrowertype{$categorycode}->{total} = 0;
+			my %categorycode;
+			$categorycode{categorycode} = $description;
+			push @categorycodeloop,\%categorycode;
+			foreach my $itemtype (keys %itemtypes) {
+				$itemtypes{$itemtype}->{results}->{$categorycode} = 0;
+			}
+			$sth->execute($categorycode);
+			while (my ($itemtype, $total) = $sth->fetchrow) {
+				$itemtypes{$itemtype}->{results}->{$categorycode} = $total;
+				$borrowertype{$categorycode}->{total} += $total;
+				$itemtypes{$itemtype}->{total} += $total;
+				$grantotal += $total;
+			}
+		}
+		# build the result
+		foreach my $itemtype (keys %itemtypes) {
+			my @loopitemtype;
+			$sthcategories->execute;
+			while (($categorycode,$description) =  $sthcategories->fetchrow ) {
+				my %cell;
+				$cell{issues} = $itemtypes{$itemtype}->{results}->{$categorycode};
+				#printf stderr "%s	",$categorycode;
+				push @loopitemtype,\%cell;
+			}
+			#printf stderr "\n";
+			my %line;
+			$line{loopitemtype} = \@loopitemtype;
+			if ($itemtypes{$itemtype}->{description}) {
+				$line{itemtype} = $itemtypes{$itemtype}->{description};
+			} else {
+				$line{itemtype} = "$itemtype (no entry in itemtype table)";
+			}
+			$line{hilighted} = 1 if $hilighted eq 1;
+			$line{totalitemtype} = $itemtypes{$itemtype}->{total};
+			$hilighted = -$hilighted;
+			push @loopborrowertype, \%line;
+		}
+		$sthcategories->execute;
+		while (($categorycode,$description) =  $sthcategories->fetchrow ) {
+			my %line;
+			$line{issues} = $borrowertype{$categorycode}->{total};
+			push @loopborrowertotal, \%line;
+		}
+	} else {
+		# A Borrower_category has been selected
+		# extracting corresponding data
+		$borrowertype{$categorycode}->{description} = $borrower_category;
+		$borrowertype{$categorycode}->{total} = 0;
+		while (($categorycode,$description) = $sthcategories->fetchrow) {
+			if ($description =~ /$borrower_category/ ) {
+				$borrower_categorycode = $categorycode;
+				my %cc;
+				$cc{categorycode} = $description;
+				push @categorycodeloop,\%cc;
+				foreach my $itemtype (keys %itemtypes) {
+					$itemtypes{$itemtype}->{results}->{$categorycode} = 0;
+				}
+				$sth->execute($categorycode);
+				while (my ($itemtype, $total) = $sth->fetchrow) {
+					$itemtypes{$itemtype}->{results}->{$categorycode} = $total;
+					$borrowertype{$categorycode}->{total} += $total;
+					$itemtypes{$itemtype}->{total} += $total;
+					$grantotal +=$total;
+				}
+			}
+		}
+		# build the result
+		foreach my $itemtype (keys %itemtypes) {
+			my @loopitemtype;
 			my %cell;
-			$cell{issues} = $itemtypes{$itemtype}->{results}->{$categorycode};
-			push @loopitemtype,\%cell;
+			$cell{issues}=$itemtypes{$itemtype}->{results}->{$borrower_categorycode};
+			push @loopitemtype, \%cell;
+			my %line;
+			$line{loopitemtype} = \@loopitemtype;
+			if ($itemtypes{$itemtype}->{description}) {
+				$line{itemtype} = $itemtypes{$itemtype}->{description};
+			} else {
+				$line{itemtype} = "$itemtype (no entry in itemtype table)";
+			}
+			$line{hilighted} = 1 if $hilighted eq 1;
+			$line{totalitemtype} = $itemtypes{$itemtype}->{total};
+			$hilighted = -$hilighted;
+			push @loopborrowertype, \%line;
 		}
-		my %line;
-		$line{loopitemtype} = \@loopitemtype;
-		if ($itemtypes{$itemtype}->{description}) {
-			$line{itemtype} = $itemtypes{$itemtype}->{description};
-		} else {
-			$line{itemtype} = "$itemtype (no entry in itemtype table)";
-		}
-		$line{hilighted} = 1 if $hilighted eq 1;
-		$line{totalitemtype} = $itemtypes{$itemtype}->{total};
-		$hilighted = -$hilighted;
-		push @loopborrowertype, \%line;
+		my %cell;
+		$cell{issues} = $borrowertype{$borrower_categorycode}->{total};
+		push @loopborrowertotal, \%cell;
 	}
 	# the header of the table
 	$globalline{loopborrowertype} = \@loopborrowertype;
 	# the core of the table
 	$globalline{categorycodeloop} = \@categorycodeloop;
 	# the foot (totals by borrower type)
-	my @loopborrowertotal;
-	foreach my $categorycode (keys %borrowertype) {
-		my %line;
-		$line{issues} = $borrowertype{$categorycode}->{total};
-		push @loopborrowertotal, \%line;
-	}
 	$globalline{loopborrowertotal} = \@loopborrowertotal;
-#	$globalline{total} = $grantotal;
-#	$globalline{borrower_category} = $borrower_category;
+	$globalline{grantotal}= $grantotal;
 	push @mainloop,\%globalline;
 	return \@mainloop;
 }
