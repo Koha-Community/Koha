@@ -406,13 +406,12 @@ biblionumber  = $bibnum,
 title         = $biblio->{'title'},
 author        = $biblio->{'author'},
 copyrightdate = $biblio->{'copyright'},
-series        = $series;
+serial        = $series,
 seriestitle   = $biblio->{'seriestitle'},
 notes         = $biblio->{'notes'},
 abstract      = $biblio->{'abstract'}";
 
   $sth = $dbh->prepare($query);
-#  print $query;
   $sth->execute;
 
   $sth->finish;
@@ -912,13 +911,17 @@ biblioitemnumber     = $item->{'biblioitemnumber'},
 barcode              = $barcode,
 booksellerid         = $item->{'booksellerid'},
 dateaccessioned      = NOW(),
-homebranch           = $item->{'branch'},
-holdingbranch        = $item->{'branch'},
+homebranch           = $item->{'homebranch'},
+holdingbranch        = $item->{'homebranch'},
 price                = $item->{'price'},
 replacementprice     = $item->{'replacementprice'},
 replacementpricedate = NOW(),
-notforloan           = $item->{'loan'},
 itemnotes            = $item->{'itemnotes'}";
+
+    if ($item->{'loan'}) {
+      $query .= ",
+notforloan           = $item->{'loan'}";
+    } # if
 
     $sth = $dbh->prepare($query);
     $sth->execute;

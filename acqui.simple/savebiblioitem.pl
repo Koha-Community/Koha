@@ -36,5 +36,5 @@ if (! $biblionumber) {
 
     $biblioitemnum = &newbiblioitem($biblioitem);
 
-    print $input->redirect('additem.pl?biblioitemnum=$biblioitemnum');
+    print $input->redirect("additem.pl?biblioitemnum=$biblioitemnum");
 } # else

@@ -5,13 +5,14 @@ use strict;
 use C4::Acquisitions;
 
 my $input = new CGI;
-my $biblio->{'title'}       = $input->param('title');
-my $biblio->{'subtitle'}    = $input->param('subtitle');
-my $biblio->{'author'}      = $input->param('author');
-my $biblio->{'seriestitle'} = $input->param('seriestitle');
-my $biblio->{'copyright'}   = $input->param('copyrightdate');
-my $biblio->{'abstract'}    = $input->param('abstract');
-my $biblio->{'notes'}       = $input->param('notes');
+my $biblio = { title       => $input->param('title'),
+               subtitle    => $input->param('subtitle'),
+               author      => $input->param('author'),
+               seriestitle => $input->param('seriestitle'),
+               copyright   => $input->param('copyrightdate'),
+               abstract    => $input->param('abstract'),
+               notes       => $input->param('notes')
+             }; # my $biblio
 my $biblionumber;
 
 if (! $biblio->{'title'}) {
@@ -19,7 +20,7 @@ if (! $biblio->{'title'}) {
 } else {
 
     $biblionumber = &newbiblio($biblio);
-    &newsubtitle($biblionumber, $subtitle);
+    &newsubtitle($biblionumber, $biblio->{'subtitle'});
 
-    print $input->redirect('addbiblioitem.pl?biblionumber=$biblionumber');
+    print $input->redirect("addbiblioitem.pl?biblionumber=$biblionumber");
 } # else

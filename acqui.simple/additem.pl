@@ -15,7 +15,7 @@ my @results;
 if (! $biblioitemnum) {
     print $input->redirect('addbooks.pl');
 } else {
-    
+
     ($count, @results) = &getbiblioitem($biblioitemnum);
     
     if (! $count) {
@@ -62,7 +62,7 @@ EOF
 	print << "EOF";
 <center>
 <h2>Section Three: Specific Item Information</h2>
-<form action="saveitems" method="post">
+<form action="saveitem.pl" method="post">
 <input type="hidden" name="biblioitemnum" value="$biblioitemnum">
 <table>
 <tr>

@@ -8,7 +8,7 @@ my $input         = new CGI;
 my $barcode       = $input->param('barcode');
 my $biblioitemnum = $input->param('biblioitemnum');
 my $item          = {
-    biblioitemnum    => $biblioitemnum,
+    biblioitemnumber => $biblioitemnum,
     homebranch       => $input->param('homebranch'),
     replacementprice => $input->param('replacementprice'),
     itemnotes        => $input->param('notes')
@@ -30,6 +30,6 @@ if (! $barcode) {
 	$item->{'biblionumber'} = $results[0]->{'biblionumber'};
 	&newitems($item, ($barcode));
 
-	print $input->redirect('additem.pl?biblioitemnum=$biblioitemnum');
+	print $input->redirect("additem.pl?biblioitemnum=$biblioitemnum");
     } # else
 } # else

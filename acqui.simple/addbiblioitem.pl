@@ -16,13 +16,17 @@ if (! $biblionumber) {
 } else {
     
     ($count, @results) = &getbiblio($biblionumber);
-    $title = @results[0]->{'title'};
+    
+    if (! $count) {
+	print $input->redirect('addbooks.pl');
+    } else {
+	$title = @results[0]->{'title'};
 
-    print $input->header;
-    print startpage();
-    print startmenu('acquisitions');
+	print $input->header;
+	print startpage();
+	print startmenu('acquisitions');
 
-    print << "EOF";
+	print << "EOF";
 <font size="6"><em>Adding New Group Information - $title</em></font>
 <table bgcolor="#ffcc00" width="80%" cellpadding="5">
 <tr valign="center">
@@ -63,14 +67,14 @@ if (! $biblionumber) {
 <td colspan="3"><select name="itemtype">
 EOF
 
-    ($count, @results) = &getitemtypes;
-    for (my $i = 0; $i < $count; $i++) {
-	print << "EOF";
+	($count, @results) = &getitemtypes;
+	for (my $i = 0; $i < $count; $i++) {
+	    print << "EOF";
 <option value="$results[$i]->{'itemtype'}">$results[$i]->{'itemtype'} - $results[$i]->{'description'}
 EOF
-    } # for
+	} # for
 
-    print << "EOF";
+	print << "EOF";
 </select></td>
 </tr>
 <tr>
@@ -116,6 +120,7 @@ EOF
   </table></FORM>
 EOF
 
-    print endmenu();
-    print endpage();
+	print endmenu();
+	print endpage();
+    } # else
 } # else
