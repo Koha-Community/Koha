@@ -194,7 +194,7 @@ sub checkauth {
 	# Using Basic Authentication, no cookies required
 	$cookie=$query->cookie(-name => 'sessionID',
 			       -value => '',
-			       -expires => '+1y');
+			       -expires => '');
 	$loggedin = 1;
     } elsif ($sessionID=$query->cookie('sessionID')) {
 	my ($ip , $lasttime);
@@ -238,7 +238,7 @@ sub checkauth {
 	    } else {
 		$cookie=$query->cookie(-name => 'sessionID',
 				       -value => $sessionID,
-				       -expires => '+1y');
+				       -expires => '');
 		$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
 			 undef, (time(), $sessionID));
 		$flags = haspermission($dbh, $userid, $flagsrequired);
@@ -266,7 +266,7 @@ sub checkauth {
 	    close L;
 	    $cookie=$query->cookie(-name => 'sessionID',
 				   -value => $sessionID,
-				   -expires => '+1y');
+				   -expires => '');
 	    if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
 		$loggedin = 1;
 	    } else {
@@ -285,7 +285,7 @@ sub checkauth {
 	unless ($cookie) {
 	    $cookie=$query->cookie(-name => 'sessionID',
 				   -value => '',
-				   -expires => '+1y');
+				   -expires => '');
 	}
 	return ($userid, $cookie, $sessionID, $flags);
     }
@@ -307,7 +307,7 @@ sub checkauth {
     $template->param(\%info);
     $cookie=$query->cookie(-name => 'sessionID',
 				  -value => $sessionID,
-				  -expires => '+1y');
+				  -expires => '');
     print $query->header(
       -type => guesstype($template->output),
       -cookie => $cookie
