@@ -23,7 +23,14 @@ my ($template, $loggedinuser, $cookie)
 my ($branchcount,@branches)=branches();
 my ($itemtypecount,@itemtypes)=getitemtypes();
 
-  my $classlist='';
+my $classlist='';
+my $dbh=C4::Context->dbh;
+my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
+$sth->execute;
+while (my ($description,$itemtype) = $sth->fetchrow) {
+    $classlist.="<option value=\"$itemtype\">$description\n";
+}
+
 $template->param(classlist => $classlist,
 						type => 'intranet',
 		 branches=>\@branches,
