@@ -2188,6 +2188,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.76  2003/12/03 01:43:41  slef
+# conflict markers?
+#
 # Revision 1.75  2003/12/03 01:42:03  slef
 # bug 662 fixes securing DBI
 #
@@ -3124,6 +3127,3 @@ Koha Developement team <info@koha.org>
 Paul POULAIN paul.poulain@free.fr
 
 =cut
-
-=======
->>>>>>> 1.74
