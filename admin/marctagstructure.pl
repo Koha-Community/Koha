@@ -161,7 +161,7 @@ if ($op eq 'add_form') {
 							);
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
