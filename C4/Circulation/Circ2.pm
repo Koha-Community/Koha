@@ -476,7 +476,7 @@ sub dotransfer {
 	$dbh->do("INSERT INTO	branchtransfers (itemnumber, frombranch, datearrived, tobranch)
 					VALUES ($itm, $fbr, now(), $tbr)");
 	#update holdingbranch in items .....
-	$dbh->do("UPDATE items holdingbranch = $tbr WHERE	items.itemnumber = $itm");
+	$dbh->do("UPDATE items set holdingbranch = $tbr WHERE	items.itemnumber = $itm");
 	&itemseen($itm);
 	return;
 }
