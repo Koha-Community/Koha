@@ -128,13 +128,15 @@ if ($op eq 'add_form') {
 	my $repeatable =$input->param('repeatable');
 	my $mandatory =$input->param('mandatory');
 	my $authorised_value =$input->param('authorised_value');
-	$sth->execute($tagfield,
-						$liblibrarian,
-						$libopac,
-						$repeatable?1:0,
-						$mandatory?1:0,
-						$authorised_value
-						);
+	unless (C4::Context->config('demo') eq 1) {
+		$sth->execute($tagfield,
+							$liblibrarian,
+							$libopac,
+							$repeatable?1:0,
+							$mandatory?1:0,
+							$authorised_value
+							);
+	}
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?tagfield=$tagfield\"></html>";
 	exit;
@@ -155,8 +157,10 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	$dbh->do("delete from marc_tag_structure where $pkfield='$searchfield'");
-	$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield'");
+	unless (C4::Context->config('demo') eq 1) {
+		$dbh->do("delete from marc_tag_structure where $pkfield='$searchfield'");
+		$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield'");
+	}
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT

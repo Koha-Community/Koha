@@ -96,56 +96,59 @@ $template->param(script_name => $script_name,
 }
 
 if ($op eq 'update_and_reedit') {
-    foreach ($input->param) {
-	warn "$_: ".$input->param($_)."\n";
-    }
-    my $value='';
-    if (my $currentorder=$input->param('currentorder')) {
-	my @currentorder=split /\|/, $currentorder;
-	my $orderchanged=0;
-	foreach my $param ($input->param) {
-	    if ($param=~m#up-(\d+).x#) {
-		my $temp=$currentorder[$1];
-		$currentorder[$1]=$currentorder[$1-1];
-		$currentorder[$1-1]=$temp;
-		$orderchanged=1;
-		last;
-	    } elsif ($param=~m#down-(\d+).x#) {
-		my $temp=$currentorder[$1];
-		$currentorder[$1]=$currentorder[$1+1];
-		$currentorder[$1+1]=$temp;
-		$orderchanged=1;
-		last;
-	    }
+	foreach ($input->param) {
 	}
-	$value=join ' ', @currentorder;
-	if ($orderchanged) {
-	    $op='add_form';
-	    $template->param(script_name => $script_name,
-						    $op              => 1); # we show only the TMPL_VAR names $op
-	} else {
-	    $op='';
-	    $searchfield='';
-	    $template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+	my $value='';
+	if (my $currentorder=$input->param('currentorder')) {
+		my @currentorder=split /\|/, $currentorder;
+		my $orderchanged=0;
+		foreach my $param ($input->param) {
+			if ($param=~m#up-(\d+).x#) {
+				my $temp=$currentorder[$1];
+				$currentorder[$1]=$currentorder[$1-1];
+				$currentorder[$1-1]=$temp;
+				$orderchanged=1;
+				last;
+			} elsif ($param=~m#down-(\d+).x#) {
+				my $temp=$currentorder[$1];
+				$currentorder[$1]=$currentorder[$1+1];
+				$currentorder[$1+1]=$temp;
+				$orderchanged=1;
+				last;
+			}
+		}
+		$value=join ' ', @currentorder;
+		if ($orderchanged) {
+			$op='add_form';
+			$template->param(script_name => $script_name,
+							$op              => 1); # we show only the TMPL_VAR names $op
+		} else {
+			$op='';
+			$searchfield='';
+			$template->param(script_name => $script_name,
+							else              => 1); # we show only the TMPL_VAR names $op
+		}
 	}
-    }
-    my $dbh = C4::Context->dbh;
-    my $query="select * from systempreferences where variable=?";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($input->param('variable'));
-    if ($sth->rows) {
-	    my $query = "update systempreferences set value=?,explanation=? where variable=?";
-	    my $sth=$dbh->prepare($query);
-	    $sth->execute($value, $input->param('explanation'), $input->param('variable'));
-	    $sth->finish;
+	my $dbh = C4::Context->dbh;
+	my $query="select * from systempreferences where variable=?";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($input->param('variable'));
+	if ($sth->rows) {
+		unless (C4::Context->config('demo') eq 1) {
+			my $query = "update systempreferences set value=?,explanation=? where variable=?";
+			my $sth=$dbh->prepare($query);
+			$sth->execute($value, $input->param('explanation'), $input->param('variable'));
+			$sth->finish;
+		}
     } else {
-	    my $query = "insert into systempreferences (variable,value,explanation) values (?,?,?)";
-	    my $sth=$dbh->prepare($query);
-	    $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
-	    $sth->finish;
-    }
-    $sth->finish;
+		unless (C4::Context->config('demo') eq 1) {
+			my $query = "insert into systempreferences (variable,value,explanation) values (?,?,?)";
+			my $sth=$dbh->prepare($query);
+			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
+			$sth->finish;
+		}
+	}
+	$sth->finish;
 
 }
 
@@ -237,15 +240,19 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare($query);
 	$sth->execute($input->param('variable'));
 	if ($sth->rows) {
-		my $query = "update systempreferences set value=?,explanation=? where variable=?";
-		my $sth=$dbh->prepare($query);
-		$sth->execute($input->param('value'), $input->param('explanation'), $input->param('variable'));
-		$sth->finish;
+		unless (C4::Context->config('demo') eq 1) {
+			my $query = "update systempreferences set value=?,explanation=? where variable=?";
+			my $sth=$dbh->prepare($query);
+			$sth->execute($input->param('value'), $input->param('explanation'), $input->param('variable'));
+			$sth->finish;
+		}
 	} else {
-		my $query = "insert into systempreferences (variable,value,explanation) values (?,?,?)";
-		my $sth=$dbh->prepare($query);
-		$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
-		$sth->finish;
+		unless (C4::Context->config('demo') eq 1) {
+			my $query = "insert into systempreferences (variable,value,explanation) values (?,?,?)";
+			my $sth=$dbh->prepare($query);
+			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
+			$sth->finish;
+		}
 	}
 	$sth->finish;
 ################## DELETE_CONFIRM ##################################

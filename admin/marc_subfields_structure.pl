@@ -271,17 +271,19 @@ if ($op eq 'add_form') {
 		my $thesaurus_category		=$thesaurus_category[$i];
 		my $value_builder=$value_builder[$i];
 		if ($liblibrarian) {
-			$sth->execute ($tagfield,
-								$tagsubfield,
-								$liblibrarian,
-								$libopac,
-								$repeatable,
-								$mandatory,
-								$kohafield,
-								$tab,
-								$authorised_value,
-								$thesaurus_category,
-								$value_builder);
+			unless (C4::Context->config('demo') eq 1) {
+				$sth->execute ($tagfield,
+									$tagsubfield,
+									$liblibrarian,
+									$libopac,
+									$repeatable,
+									$mandatory,
+									$kohafield,
+									$tab,
+									$authorised_value,
+									$thesaurus_category,
+									$value_builder);
+			}
 		}
 	}
 	$sth->finish;
@@ -308,9 +310,11 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
-	$sth->finish;
+	unless (C4::Context->config('demo') eq 1) {
+		my $sth=$dbh->prepare($reqdel);
+		$sth->execute;
+		$sth->finish;
+	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield\"></html>";
 	exit;
 	$template->param(tagfield => $tagfield);
