@@ -19,7 +19,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	padding:4px;
 	font-weight: bold;
 	text-align:center;
-	background-image:url("/images/background-mem.gif");
+	background-image:url("<TMPL_VAR name="themelang">/images/background-mem.gif");
 	}
 
 a.home {
@@ -154,7 +154,7 @@ a.parameters:hover {
 						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisition</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=cataloguing">Cataloguing</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=MARC">Marc</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
