@@ -56,7 +56,7 @@ print "\nChecking perl modules ...\n";
 #
 my @missing = ();
 unless (eval require DBI)               { push @missing,"DBI" };
-unless (eval require Date::Manip)       { push @missing,"Datr::Manip" };
+unless (eval require Date::Manip)       { push @missing,"Date::Manip" };
 unless (eval require DBD::mysql)        { push @missing,"DBD::mysql" };
 unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" };
 
@@ -330,7 +330,3 @@ print "Successfully updated Apache Configuration file.\n";
 #
 print "\nCongratulations ... your Koha installation is complete!\n";
 print "\nYou will need to restart your webserver before using Koha!\n";
-
-#
-#Sub for chown of conf and cgi-bin dir
-#    
