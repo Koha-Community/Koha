@@ -20,7 +20,7 @@ package Install; #assumes Install.pm
 # Suite 330, Boston, MA  02111-1307 USA
 #
 # Recent Authors
-# MJR: my.cnf, etcdir, prefix, new display, apache conf
+# MJR: my.cnf, etcdir, prefix, new display, apache conf, copying fixups
 
 use strict;
 use POSIX;
@@ -783,8 +783,8 @@ You must specify different directories for the OPAC and INTRANET files!
     unless ( -d $intranetdir ) {
        mkdir_parents (dirname($intranetdir), 0775) || print getmessage('DirFailed','parents of '.$intranetdir);
        mkdir ($intranetdir,                  0770) || print getmessage('DirFailed',$intranetdir);
-       chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir");
-       chmod (oct(770), "$intranetdir");
+       if ($>==0) { chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir"); }
+       chmod 0770, "$intranetdir";
     }
     mkdir_parents ("$intranetdir/htdocs",    0750);
     mkdir_parents ("$intranetdir/cgi-bin",   0750);
@@ -793,7 +793,7 @@ You must specify different directories for the OPAC and INTRANET files!
     unless ( -d $opacdir ) {
        mkdir_parents (dirname($opacdir),     0775) || print getmessage('DirFailed','parents of '.$opacdir);
        mkdir ($opacdir,                      0770) || print getmessage('DirFailed',$opacdir);
-       chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
+       if ($>==0) { chown (oct(0), (getgrnam($httpduser))[2], "$opacdir"); }
        chmod (oct(770), "$opacdir");
     }
     mkdir_parents ("$opacdir/htdocs",        0750);
@@ -803,7 +803,7 @@ You must specify different directories for the OPAC and INTRANET files!
     unless ( -d $kohalogdir ) {
        mkdir_parents (dirname($kohalogdir),  0775) || print getmessage('DirFailed','parents of '.$kohalogdir);
        mkdir ($kohalogdir,                   0770) || print getmessage('DirFailed',$kohalogdir);
-       chown (oct(0), (getgrnam($httpduser))[2,3], "$kohalogdir");
+       if ($>==0) { chown (oct(0), (getgrnam($httpduser))[2,3], "$kohalogdir"); }
        chmod (oct(770), "$kohalogdir");
     }
 }
@@ -1335,24 +1335,27 @@ sub installfiles {
 		if (-d $tgt) {
     		print getmessage('CopyingFiles', ["old ".$desc,$tgt.".old"]);
 			system("mv ".$tgt." ".$tgt.".old");
-			}
+		}
 
     	print getmessage('CopyingFiles', [$desc,$tgt]);
-	    system("cp -R ".$src."/* ".$tgt);
-		}
+	    system("cp -R ".$src." ".$tgt);
+	}
 
     showmessage(getmessage('InstallFiles'),'none');
 
     neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
     neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin");
-    neatcopy("main scripts", 'scripts', "$intranetdir/scripts/");
-    neatcopy("perl modules", 'modules', "$intranetdir/modules/");
-    neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs/");
-    neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin/");
+    neatcopy("main scripts", 'scripts', "$intranetdir/scripts");
+    neatcopy("perl modules", 'modules', "$intranetdir/modules");
+    neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs");
+    neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin");
     system("touch $opacdir/cgi-bin/opac");
 
-    system("chown -R $httpduser:$httpduser $opacdir");
-    system("chown -R $httpduser:$httpduser $intranetdir");
+	#MJR: is this necessary?
+	if ($> == 0) {
+	    system("chown -R $httpduser:$httpduser $opacdir $intranetdir");
+    }
+	system("chmod -R a+rx $opacdir $intranetdir");
 
     # Create /etc/koha.conf
 
@@ -1375,15 +1378,17 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
     close(SITES);
     umask($old_umask);
 
-    chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
+	#MJR: can't help but this be broken, can we?
     chmod 0440, "$etcdir/koha.conf.tmp";
+	
+	#MJR: does this contain any passwords?
+    chmod 0755, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh", "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh", "$intranetdir/scripts/z3950daemon/processz3950queue";
 
-    chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
-    chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
-    chmod 0750, "$intranetdir/scripts/z3950daemon/processz3950queue";
-    chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
-    chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
-
+	if ($> == 0) {
+	    chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
+    	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+    	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
+	} #MJR: FIXME: Should report that we haven't chown()d.
 }
 
 
