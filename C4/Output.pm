@@ -146,18 +146,17 @@ sub mktablerow {
   my $i=0;
   my $string="<tr valign=top bgcolor=$colour>";
   while ($i <$cols){
-    if ($data[$cols] ne ''){
-    #check for backgroundimage
-      $string.="<td background=\"$data[$cols]\">";
-    } else {
-      $string.="<td>";
-    }
-    if ($data[$i] eq "") {
-      $string.=" &nbsp; </td>";
-    } else {
-      $string.="$data[$i]</td>";
-    } 
-    $i++;
+      if (defined $data[$cols]) { # if there is a background image
+	  $string.="<td background=\"$data[$cols]\">";
+      } else { # if there's no background image
+	  $string.="<td>";
+      }
+      if ($data[$i] eq "") {
+	  $string.=" &nbsp; </td>";
+      } else {
+	  $string.="$data[$i]</td>";
+      } 
+      $i++;
   }
   $string=$string."</tr>\n";
   return($string);
