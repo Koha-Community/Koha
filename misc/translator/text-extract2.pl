@@ -25,7 +25,7 @@ use vars qw( $pedantic_p );
 
 ###############################################################################
 
-sub debug_dump (*) { # for testing only
+sub debug_dump ($) { # for testing only
     my($h) = @_;
     print "re_tag_compat is /", TmplTokenizer::re_tag(1), "/\n";
     for (;;) {
@@ -50,7 +50,7 @@ sub debug_dump (*) { # for testing only
 
 ###############################################################################
 
-sub text_extract (*) {
+sub text_extract ($) {
     my($h) = @_;
     my %text = ();
     for (;;) {
@@ -124,11 +124,11 @@ VerboseWarnings::set_pedantic_mode $pedantic_p;
 
 usage_error('Missing mandatory option -f') unless defined $input;
 
-open(INPUT, "<$input") || die "$0: $input: $!\n";
+my $h = TmplTokenizer->new( $input );
 if ($debug_dump_only_p) {
-    debug_dump(*INPUT);
+    debug_dump( $h );
 } else {
-    text_extract(*INPUT);
+    text_extract( $h );
 }
 
 warn "This input will not work with Mozilla standards-compliant mode\n", undef

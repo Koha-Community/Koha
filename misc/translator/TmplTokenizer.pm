@@ -12,7 +12,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 =head1 NAME
 
-TmplTokenizer.pm - Simple-minded tokenizer for HTML::Template .tmpl files
+TmplTokenizer.pm - Simple-minded tokenizer class for HTML::Template .tmpl files
 
 =head1 DESCRIPTION
 
@@ -31,16 +31,13 @@ on Ambrose's hideous Perl script known as subst.pl.
 
 ###############################################################################
 
-$VERSION = 0.01;
+$VERSION = 0.02;
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw();
 
-use vars qw( $input );
-use vars qw( $debug_dump_only_p );
 use vars qw( $pedantic_attribute_error_in_nonpedantic_mode_p );
 use vars qw( $pedantic_tmpl_var_use_in_nonpedantic_mode_p );
-use vars qw( $fatal_p );
 
 ###############################################################################
 
@@ -84,24 +81,155 @@ BEGIN {
 
 # End of the hideous stuff
 
-use vars qw( @readahead $lc_0 $lc $syntaxerror_p );
-use vars qw( $cdata_mode_p $cdata_close );
+use vars qw( $serial );
 
 ###############################################################################
 
-# Easy accessors
+sub FATAL_P		() {'fatal-p'}
+sub SYNTAXERROR_P	() {'syntaxerror-p'}
 
-sub fatal_p () {
-    return $fatal_p;
-}
+sub FILENAME		() {'input'}
+sub HANDLE		() {'handle'}
 
-sub syntaxerror_p () {
-    return $syntaxerror_p;
+sub READAHEAD		() {'readahead'}
+sub LINENUM_START	() {'lc_0'}
+sub LINENUM		() {'lc'}
+sub CDATA_MODE_P	() {'cdata-mode-p'}
+sub CDATA_CLOSE		() {'cdata-close'}
+
+sub new {
+    my $this = shift;
+    my($input) = @_;
+    my $class = ref($this) || $this;
+    my $self = {};
+    bless $self, $class;
+
+    my $handle = sprintf('TMPLTOKENIZER%d', $serial);
+    $serial += 1;
+
+    no strict;
+    open($handle, "<$input") || die "$input: $!\n";
+    use strict;
+    $self->{+FILENAME} = $input;
+    $self->{+HANDLE} = $handle;
+    $self->{+READAHEAD} = [];
+    return $self;
 }
 
 ###############################################################################
 
-sub extract_attributes ($;$) {
+# Simple getters
+
+sub _handle {
+    my $this = shift;
+    return $this->{+HANDLE};
+}
+
+sub fatal_p {
+    my $this = shift;
+    return $this->{+FATAL_P};
+}
+
+sub syntaxerror_p {
+    my $this = shift;
+    return $this->{+SYNTAXERROR_P};
+}
+
+sub has_readahead_p {
+    my $this = shift;
+    return @{$this->{+READAHEAD}};
+}
+
+sub _peek_readahead {
+    my $this = shift;
+    return $this->{+READAHEAD}->[$#{$this->{+READAHEAD}}];
+}
+
+sub line_number_start {
+    my $this = shift;
+    return $this->{+LINENUM_START};
+}
+
+sub line_number {
+    my $this = shift;
+    return $this->{+LINENUM};
+}
+
+sub cdata_mode_p {
+    my $this = shift;
+    return $this->{+CDATA_MODE_P};
+}
+
+sub cdata_close {
+    my $this = shift;
+    return $this->{+CDATA_CLOSE};
+}
+
+# Simple setters
+
+sub _set_fatal {
+    my $this = shift;
+    $this->{+FATAL_P} = $_[0];
+    return $this;
+}
+
+sub _set_syntaxerror {
+    my $this = shift;
+    $this->{+SYNTAXERROR_P} = $_[0];
+    return $this;
+}
+
+sub _push_readahead {
+    my $this = shift;
+    push @{$this->{+READAHEAD}}, $_[0];
+    return $this;
+}
+
+sub _pop_readahead {
+    my $this = shift;
+    return pop @{$this->{+READAHEAD}};
+}
+
+sub _append_readahead {
+    my $this = shift;
+    $this->{+READAHEAD}->[$#{$this->{+READAHEAD}}] .= $_[0];
+    return $this;
+}
+
+sub _set_readahead {
+    my $this = shift;
+    $this->{+READAHEAD}->[$#{$this->{+READAHEAD}}] = $_[0];
+    return $this;
+}
+
+sub _increment_line_number {
+    my $this = shift;
+    $this->{+LINENUM} += 1;
+    return $this;
+}
+
+sub _set_line_number_start {
+    my $this = shift;
+    $this->{+LINENUM_START} = $_[0];
+    return $this;
+}
+
+sub _set_cdata_mode {
+    my $this = shift;
+    $this->{+CDATA_MODE_P} = $_[0];
+    return $this;
+}
+
+sub _set_cdata_close {
+    my $this = shift;
+    $this->{+CDATA_CLOSE} = $_[0];
+    return $this;
+}
+
+###############################################################################
+
+sub _extract_attributes ($;$) {
+    my $this = shift;
     my($s, $lc) = @_;
     my %attr;
     $s = $1 if $s =~ /^<\S+(.*)\/\S$/s	# XML-style self-closing tags
@@ -139,7 +267,7 @@ sub extract_attributes ($;$) {
 	if ($s =~ /^([^\n]*)\n/s) { # this is even worse
 	    error_normal("Completely confused while extracting attributes: $1", $lc);
 	    error_normal((scalar(split(/\n/, $s)) - 1) . " more line(s) not shown.", undef);
-	    $fatal_p = 1;
+	    $this->_set_fatal( 1 );
 	} else {
 	    warn_normal "Strange attribute syntax: $s\n", $lc;
 	}
@@ -147,60 +275,66 @@ sub extract_attributes ($;$) {
     return \%attr;
 }
 
-sub next_token_internal (*) {
+sub _next_token_internal {
+    my $this = shift;
     my($h) = @_;
     my($it, $kind);
     my $eof_p = 0;
-    pop @readahead if @readahead && !ref $readahead[$#readahead]
-	    && !length $readahead[$#readahead];
-    if (!@readahead) {
+    $this->_pop_readahead if $this->has_readahead_p
+	    && !ref $this->_peek_readahead
+	    && !length $this->_peek_readahead;
+    if (!$this->has_readahead_p) {
 	my $next = scalar <$h>;
 	$eof_p = !defined $next;
 	if (!$eof_p) {
-	    $lc += 1;
-	    push @readahead, $next;
+	    $this->_increment_line_number;
+	    $this->_push_readahead( $next );
 	}
     }
-    $lc_0 = $lc;			# remember line number of first line
-    if (@readahead && ref $readahead[$#readahead]) {	# TmplToken object
-	my $t = pop @readahead;
-	($it, $kind, local $lc) = ($t->string, $t->type, $t->line_number);
-    } elsif ($eof_p && !@readahead) {	# nothing left to do
+    $this->_set_line_number_start( $this->line_number ); # remember 1st line num
+    if ($this->has_readahead_p && ref $this->_peek_readahead) {	# TmplToken obj.
+	($it, $kind) = ($this->_pop_readahead, undef);
+    } elsif ($eof_p && !$this->has_readahead_p) {	# nothing left to do
 	;
-    } elsif ($readahead[$#readahead] =~ /^\s+/s) {	# whitespace
-	($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TEXT, $&, $');
+    } elsif ($this->_peek_readahead =~ /^\s+/s) {	# whitespace
+	($kind, $it) = (TmplTokenType::TEXT, $&);
+	$this->_set_readahead( $' );
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
-    } elsif ($readahead[$#readahead] =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
-	($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TEXT, $&, $');
-	warn_normal "Unescaped < in $it\n", $lc_0
-		if !$cdata_mode_p && $it =~ /</s;
+    } elsif ($this->_peek_readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
+	($kind, $it) = (TmplTokenType::TEXT, $&);
+	$this->_set_readahead( $' );
+	warn_normal "Unescaped < in $it\n", $this->line_number_start
+		if !$this->cdata_mode_p && $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
-	for (;;) {
-	    if ($cdata_mode_p) {
-		if ($readahead[$#readahead] =~ /^$cdata_close/) {
-		    ($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TAG, $&, $');
+	for (my $cdata_close = $this->cdata_close;;) {
+	    if ($this->cdata_mode_p) {
+		if ($this->_peek_readahead =~ /^$cdata_close/) {
+		    ($kind, $it) = (TmplTokenType::TAG, $&);
+		    $this->_set_readahead( $' );
 		    $ok_p = 1;
 		} else {
-		    ($kind, $it) = (TmplTokenType::TEXT, pop @readahead);
+		    ($kind, $it) = (TmplTokenType::TEXT, $this->_pop_readahead);
 		    $ok_p = 1;
 		}
-	    } elsif ($readahead[$#readahead] =~ /^$re_tag_compat/os) {
-		($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TAG, "$1>", $3);
+	    } elsif ($this->_peek_readahead =~ /^$re_tag_compat/os) {
+		($kind, $it) = (TmplTokenType::TAG, "$1>");
+		$this->_set_readahead( $3 );
 		$ok_p = 1;
-		warn_normal "SGML \"closed start tag\" notation: $1<\n", $lc_0 if $2 eq '';
-	    } elsif ($readahead[$#readahead] =~ /^<!--(?:(?!-->).)*-->/s) {
-		($kind, $it, $readahead[$#readahead]) = (TmplTokenType::COMMENT, $&, $');
+		warn_normal "SGML \"closed start tag\" notation: $1<\n", $this->line_number_start if $2 eq '';
+	    } elsif ($this->_peek_readahead =~ /^<!--(?:(?!-->).)*-->/s) {
+		($kind, $it) = (TmplTokenType::COMMENT, $&);
+		$this->_set_readahead( $' );
 		$ok_p = 1;
-		warn_normal "Syntax error in comment: $&\n", $lc_0;
-		$syntaxerror_p = 1;
+		warn_normal "Syntax error in comment: $&\n", $this->line_number_start;
+		$this->_set_syntaxerror( 1 );
 	    }
 	last if $ok_p;
 	    my $next = scalar <$h>;
 	    $eof_p = !defined $next;
 	last if $eof_p;
-	    $lc += 1;
-	    $readahead[$#readahead] .= $next;
+	    $this->_increment_line_number;
+	    $this->_append_readahead( $next );
 	}
 	if ($kind ne TmplTokenType::TAG) {
 	    ;
@@ -210,44 +344,46 @@ sub next_token_internal (*) {
 	} elsif ($it =~ /^<\?/) {
 	    $kind = TmplTokenType::PI;
 	}
-	if ($it =~ /^$re_directive/ios && !$cdata_mode_p) {
+	if ($it =~ /^$re_directive/ios && !$this->cdata_mode_p) {
 	    $kind = TmplTokenType::DIRECTIVE;
 	}
 	if (!$ok_p && $eof_p) {
-	    ($kind, $it, $readahead[$#readahead]) = (TmplTokenType::UNKNOWN, $readahead[$#readahead], undef);
-	    $syntaxerror_p = 1;
+	    ($kind, $it) = (TmplTokenType::UNKNOWN, $this->_peek_readahead);
+	    $this->_set_readahead, undef;
+	    $this->_set_syntaxerror( 1 );
 	}
     }
-    warn_normal "Unrecognizable token found: $it\n", $lc_0
+    warn_normal "Unrecognizable token found: $it\n", $this->line_number_start
 	    if $kind eq TmplTokenType::UNKNOWN;
-    return defined $it? TmplToken->new($it, $kind, $lc): undef;
+    return defined $it? (ref $it? $it: TmplToken->new($it, $kind, $this->line_number)): undef;
 }
 
-sub next_token (*) {
-    my($h) = @_;
+sub next_token {
+    my $this = shift;
+    my $h = $this->_handle;
     my $it;
-    if (!$cdata_mode_p) {
-	$it = next_token_internal($h);
+    if (!$this->cdata_mode_p) {
+	$it = $this->_next_token_internal($h);
 	if (defined $it && $it->type eq TmplTokenType::TAG) {
-	    ($cdata_mode_p, $cdata_close) = (1, "</$1\\s*>")
-		    if $it->string =~ /^<(script|style|textarea)\b/i;
-	    $it->set_attributes( extract_attributes($it->string, $lc_0) );
+	    if ($it->string =~ /^<(script|style|textarea)\b/i) {
+		$this->_set_cdata_mode( 1 );
+		$this->_set_cdata_close( "</$1\\s*>" );
+	    }
+	    $it->set_attributes( $this->_extract_attributes($it->string, $it->line_number) );
 	}
     } else {
-	for ($it = '';;) {
-	    my $lc_prev = $lc;
-	    my $next = next_token_internal($h);
+	for ($it = '', my $cdata_close = $this->cdata_close;;) {
+	    my $next = $this->_next_token_internal($h);
 	last if !defined $next;
 	    if (defined $next && $next->string =~ /$cdata_close/i) {
-		push @readahead, $next; # push the entire TmplToken object
-		#$lc = $lc_prev; XXX
-		$cdata_mode_p = 0;
+		$this->_push_readahead( $next ); # push entire TmplToken object
+		$this->_set_cdata_mode( 0 );
 	    }
-	last unless $cdata_mode_p;
+	last unless $this->cdata_mode_p;
 	    $it .= $next->string;
 	}
-	$it = TmplToken->new( $it, TmplTokenType::CDATA, $lc );
-	$cdata_close = undef;
+	$it = TmplToken->new( $it, TmplTokenType::CDATA, $this->line_number );
+	$this->_set_cdata_close, undef;
     }
     return $it;
 }
