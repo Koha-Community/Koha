@@ -4,25 +4,25 @@
 # http://phpmyadmin.sourceforge.net/ (download page)
 #
 # Host: localhost
-# Generation Time: Nov 26, 2002 at 03:55 PM
+# Generation Time: Jan 03, 2003 at 05:01 PM
 # Server version: 3.23.52
 # PHP Version: 4.2.3
-# Database : `koha_fr`
+# Database : `koha_dombes`
 
 #
 # Dumping data for table `marc_subfield_structure`
 #
 
 INSERT INTO marc_subfield_structure VALUES ('090', '9', 'Numéro biblio (koha)', 'Numéro biblio (koha)', 0, 0, 'biblio.biblionumber', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('010', 'a', 'numéro (ISBN)', 'ISBN', 0, 1, 'biblioitems.isbn', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('010', 'b', 'qualificatif', '', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('010', 'a', 'numéro (ISBN)', 'ISBN', 0, 0, 'biblioitems.isbn', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('010', 'b', 'qualificatif', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('010', 'd', 'disponibilté et/ou prix', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('010', 'z', 'ISBN erroné', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('011', 'a', 'numéro (ISSN)', 'ISSN', 0, 0, 'biblioitems.issn', 1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('011', 'a', 'numéro (ISSN)', 'ISSN', 0, 0, 'biblioitems.issn', 4, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('011', 'b', 'qualificatif', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('011', 'd', 'disponibilté et/ou prix', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('011', 'y', 'ISSN annulé', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('011', 'z', 'ISSN erroné', '', 0, 1, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('011', 'y', 'ISSN annulé', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('011', 'z', 'ISSN erroné', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('012', '2', 'code du système utilisé pour l\'empreinte', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('012', '5', 'institution à laquelle s\'applique cette zone', '', 1, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('012', 'a', 'empreinte', '', 0, 0, NULL, NULL, NULL, NULL, '');
@@ -46,17 +46,17 @@ INSERT INTO marc_subfield_structure VALUES ('040', 'a', 'coden', '', 0, 0, NULL,
 INSERT INTO marc_subfield_structure VALUES ('040', 'z', 'coden erroné', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('071', 'a', 'numéro d\'éditeur (enregistrements sonores et musique imprimée)', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('071', 'b', 'source', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('100', 'a', 'données générales de traitement', '', 0, 0, '', 0, '', '', 'unimarc_field_100.pl');
-INSERT INTO marc_subfield_structure VALUES ('101', 'a', 'langue d\'un texte, d\'une bande son, etc', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'b', 'langue d\'un texte intermédiaire quand le document n\'est pas une traduction de l\'', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'c', 'langue de l\'œuvre original', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'd', 'langue d\'un résumé', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'e', 'langue de la table des matières', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'f', 'langue de la page de titre si elle diffère de celle du texte', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'g', 'langue du titre propre si elle diffère de la langue du texte ou de la bande son', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'h', 'langue d\'un livret', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'i', 'langue des textes d\'accompagnement', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('101', 'j', 'langue des sous-titres', '', 0, 1, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('100', 'a', 'données générales de traitement', '', 0, 0, '', 5, '', '', 'unimarc_field_100.pl');
+INSERT INTO marc_subfield_structure VALUES ('101', 'a', 'langue d\'un texte, d\'une bande son, etc', '', 0, 0, '', 4, 'LANGUE', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'b', 'langue d\'un texte intermédiaire quand le document n\'est pas une traduction de l\'', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'c', 'langue de l\'œuvre original', '', 0, 0, '', 4, 'LANGUE', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'd', 'langue d\'un résumé', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'e', 'langue de la table des matières', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'f', 'langue de la page de titre si elle diffère de celle du texte', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'g', 'langue du titre propre si elle diffère de la langue du texte ou de la bande son', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'h', 'langue d\'un livret', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'i', 'langue des textes d\'accompagnement', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('101', 'j', 'langue des sous-titres', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('102', 'a', 'pays d\'édition', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('102', 'b', 'lieu  d\'édition', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('105', 'a', 'données codées - monographies', '', 0, 0, NULL, NULL, NULL, NULL, '');
@@ -69,7 +69,7 @@ INSERT INTO marc_subfield_structure VALUES ('117', 'a', 'données codées de docum
 INSERT INTO marc_subfield_structure VALUES ('120', 'a', 'données codées sur les documents cartographiques-généralités', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('121', 'a', 'documents cartographiques-caractéristiques physiques', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('121', 'b', 'données codées : photographie aérienne et télédetection - caractéristiques physiques', '', 0, 1, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('122', 'a', 'Période  : de 9999 avant J.C. à nos jours', '', 0, 1, NULL, NULL, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('122', 'a', 'Période  : de 9999 avant J.C. à nos jours', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('123', '0', 'époque', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('123', 'a', 'type d\'échelle', '', 1, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('123', 'b', 'échelle horizontale à taux linéaire constant', '', 0, 1, NULL, NULL, NULL, NULL, '');
@@ -95,7 +95,7 @@ INSERT INTO marc_subfield_structure VALUES ('125', 'a', 'nature de la musique im
 INSERT INTO marc_subfield_structure VALUES ('125', 'b', 'type de texte écrit (enregistrements parlés)', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('126', 'a', 'données codées pour les enregistrements sonores (généralités)', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('126', 'b', 'données codées pour les enregistrements sonores (particularités)', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('127', 'a', 'durée', '', 0, 1, NULL, NULL, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('127', 'a', 'durée', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('128', 'a', 'forme de la composition (interprétation musicale ou partition)', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('128', 'b', 'instruments ou voix dans un ensemble (interprétation musicale ou partition)', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('128', 'c', 'instruments ou voix pour soliste (interprétation musicale ou partition)', '', 0, 1, NULL, NULL, NULL, NULL, '');
@@ -118,21 +118,21 @@ INSERT INTO marc_subfield_structure VALUES ('141', '5', 'institution à laquelle 
 INSERT INTO marc_subfield_structure VALUES ('141', 'a', 'données codées pour le livre ancien - caractères de l\'exemplaire', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('200', '5', 'nom de l\'institution à laquelle s\'applique cette zone', '', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('200', 'a', 'titre propre', '', 1, 1, 'biblio.title', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'b', 'indication générale du type de document', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'c', 'titre propre d\'un auteur différent', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'd', 'titre parallèle', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'e', 'complément du titre', '', 0, 0, '', 1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'b', 'indication générale du type de document', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'c', 'titre propre d\'un auteur différent', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'd', 'titre parallèle', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'e', 'complément du titre', '', 0, 0, '', 4, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('200', 'f', 'première mention de responsabilité', '', 0, 1, 'biblio.author', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('200', 'g', 'première mention de responsabilité suivante', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'h', 'numéro de partie', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'i', 'titre de partie', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'v', 'numéro de volume', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('200', 'z', 'langue du titre parallèle', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('205', 'a', 'mention d\'édition', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('205', 'b', 'mention de parution', '', 0, 1, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('205', 'd', 'mention parallèle d\'édition', '', 0, 1, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('205', 'f', 'mention de responsabilité relative à l\'édition', '', 0, 1, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('205', 'g', 'mention de responsabilité suivante', '', 0, 1, NULL, NULL, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'h', 'numéro de partie', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'i', 'titre de partie', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'v', 'numéro de volume', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('200', 'z', 'langue du titre parallèle', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('205', 'a', 'mention d\'édition', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('205', 'b', 'mention de parution', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('205', 'd', 'mention parallèle d\'édition', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('205', 'f', 'mention de responsabilité relative à l\'édition', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('205', 'g', 'mention de responsabilité suivante', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('206', 'a', 'mention des données mathématiques', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('207', 'a', 'numérotation : indication de date et de volume', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('207', 'z', 'source d\'information sur la numérotation', '', 0, 1, NULL, NULL, NULL, NULL, '');
@@ -140,7 +140,7 @@ INSERT INTO marc_subfield_structure VALUES ('208', 'a', 'mention spécifique de m
 INSERT INTO marc_subfield_structure VALUES ('208', 'd', 'mention spécifique parallèle de musique imprimée', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('210', 'a', 'lieu de publication, de diffusion, etc', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('210', 'b', 'adresse de l\'éditeur, du diffuseur', '', 1, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('210', 'c', 'nom de l\'éditeur, du diffuseur', '', 1, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('210', 'c', 'nom de l\'éditeur, du diffuseur', '', 0, 0, '', 0, '', '', 'unimarc_field_210c.pl');
 INSERT INTO marc_subfield_structure VALUES ('210', 'd', 'date de publication, de diffusion', '', 0, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('210', 'e', 'lieu de publication de fabrication', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('210', 'f', 'adresse du fabricant', '', 0, 1, '', -1, '', '', '');
@@ -148,20 +148,20 @@ INSERT INTO marc_subfield_structure VALUES ('210', 'g', 'nom du fabricant', '', 
 INSERT INTO marc_subfield_structure VALUES ('210', 'h', 'date de fabrication', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('211', 'a', 'date', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('215', 'a', 'indication du type de document et importance matérielle', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('215', 'c', 'autres caractéristiques matérielles', '', 0, 0, '', 1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('215', 'c', 'autres caractéristiques matérielles', '', 0, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('215', 'd', 'format', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('215', 'e', 'matériel d\'accompagnement', '', 0, 0, '', 1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('225', 'a', 'titre de la collection', '', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('215', 'e', 'matériel d\'accompagnement', '', 0, 0, '', 4, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('225', 'a', 'titre de la collection', '', 0, 0, '', 0, '', '', 'unimarc_field_225a.pl');
 INSERT INTO marc_subfield_structure VALUES ('225', 'd', 'titre parallèle de la collection', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('225', 'e', 'compléments de titre de la collection', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('225', 'f', 'mention de responsabilité', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('225', 'h', 'numéro de la sous-collection', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('225', 'i', 'titre de la sous-collection', '', 0, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('225', 'v', 'numéro du volume', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('225', 'x', 'ISSN de la collection', '', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('225', 'x', 'ISSN de la collection', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('225', 'z', 'langue du titre parallèle', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('230', 'a', 'définition et volume des fichiers', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('300', 'a', 'texte de la note', '', 0, 0, 'biblio.notes', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('300', 'a', 'texte de la note', '', 0, 0, 'biblio.notes', 4, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('301', 'a', 'texte de la note', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('302', 'a', 'texte de la note', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('303', 'a', 'texte de la note', '', 0, 0, NULL, NULL, NULL, NULL, '');
@@ -755,23 +755,23 @@ INSERT INTO marc_subfield_structure VALUES ('488', 'y', 'ISBN/numéro internation
 INSERT INTO marc_subfield_structure VALUES ('488', '0', 'numéro d\'identification de la notice', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('488', '3', 'numéro de la notice d\'autorité', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('488', '5', 'institution à laquelle s\'applique cette zone', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'a', 'titre uniforme', 'titre', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'b', 'indication générale du type de document', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'h', 'numéro de section ou de partie', 'numéro', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'i', 'titre de section ou de partie', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'k', 'date de publication', 'publié en', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'a', 'titre uniforme', 'titre', 0, 0, '', 3, '', 'TU', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'b', 'indication générale du type de document', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'h', 'numéro de section ou de partie', 'numéro', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'i', 'titre de section ou de partie', '', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'k', 'date de publication', 'publié en', 0, 0, '', 3, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'l', 'sous-vedette de forme', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'm', 'langue', 'langue', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'n', 'autres informations', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'q', 'version', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'r', 'mode d\'interprétation', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 's', 'indication du numéro (pour la musique)', '', 0, 1, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'm', 'langue', 'langue', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'n', 'autres informations', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'q', 'version', '', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'r', 'mode d\'interprétation', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 's', 'indication du numéro (pour la musique)', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'u', 'clé', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'v', 'indication du volume', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('500', 'w', 'mention d\'arrangement (pour la musique)', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'x', 'subdivision de sujet', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'y', 'subdivision géographique', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('500', 'z', 'subdivision chronologique', '', 0, 1, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'x', 'subdivision de sujet', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'y', 'subdivision géographique', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('500', 'z', 'subdivision chronologique', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('500', '2', 'code système', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('500', '3', 'numéro de la notice d\'autorité', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('501', 'a', 'rubrique de classement', '', 0, 0, NULL, NULL, NULL, NULL, '');
@@ -788,18 +788,18 @@ INSERT INTO marc_subfield_structure VALUES ('501', 'y', 'subdivision géographiqu
 INSERT INTO marc_subfield_structure VALUES ('501', 'z', 'subdivision chronologique', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('501', '2', 'code système', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('501', '3', 'numéro de la notice d\'autorité', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'a', 'titre de forme', 'titre', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'a', 'titre de forme', 'titre', 0, 0, '', 3, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('503', 'b', 'subdivision', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('503', 'd', 'mois et jour', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'e', 'nom de personne', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'f', 'élément(s) de nom rejeté(s)', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'h', 'qualificatif', '', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'e', 'nom de personne', '', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'f', 'élément(s) de nom rejeté(s)', '', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'h', 'qualificatif', '', 0, 0, '', 3, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('503', 'i', 'titre de partie', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'j', 'année', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'k', 'numérotation (chiffres arabes)', '', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'j', 'année', '', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'k', 'numérotation (chiffres arabes)', '', 0, 0, '', 3, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('503', 'l', 'numérotation (chiffres romains)', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'm', 'localisation', '', 0, 0, '', 0, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('503', 'n', 'établissement présidant la localisation', '', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'm', 'localisation', '', 0, 0, '', 3, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('503', 'n', 'établissement présidant la localisation', '', 0, 0, '', 3, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('510', 'a', 'titre parallèle', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('510', 'e', 'complément du titre', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('510', 'h', 'numéro de partie', '', 0, 1, NULL, NULL, NULL, NULL, '');
@@ -965,11 +965,11 @@ INSERT INTO marc_subfield_structure VALUES ('676', 'v', 'édition', '', 0, 0, '',
 INSERT INTO marc_subfield_structure VALUES ('676', 'z', 'langue d\'édition', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('680', 'a', 'indice LOC', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('680', 'b', 'numéro de livre', '', 0, 0, NULL, NULL, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('686', 'a', 'type (indice)', '', 0, 1, 'biblioitems.itemtype', 0, 'itemtypes', '', '');
-INSERT INTO marc_subfield_structure VALUES ('686', 'b', 'numéro de livre', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('686', 'c', 'subdivision de l\'indice', '', 0, 1, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('686', 'a', 'type (indice)', '', 0, 0, 'biblioitems.itemtype', 4, 'itemtypes', '', '');
+INSERT INTO marc_subfield_structure VALUES ('686', 'b', 'numéro de livre', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('686', 'c', 'subdivision de l\'indice', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('686', '2', 'code du système', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('700', 'a', 'élément d\'entrée', 'auteur', 0, 0, '', 0, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('700', 'a', 'élément d\'entrée', 'auteur', 0, 0, '', 0, '', '', 'unimarc_field_700_701_702.pl');
 INSERT INTO marc_subfield_structure VALUES ('700', 'b', 'partie du nom autre que l\'élément d\'entrée', '', 0, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('700', 'c', 'qualificatifs autres que les dates', '', 0, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('700', 'd', 'chiffres romains', '', 0, 0, '', 0, '', '', '');
@@ -978,7 +978,7 @@ INSERT INTO marc_subfield_structure VALUES ('700', 'g', 'forme développée des in
 INSERT INTO marc_subfield_structure VALUES ('700', 'p', 'affiliation ou adresse', '', 0, 0, '', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('700', '3', 'numéro de la notice d\'autorité', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('700', '4', 'code de fonction', '', 0, 0, '', 0, '', '', 'unimarc_field_700-4.pl');
-INSERT INTO marc_subfield_structure VALUES ('701', 'a', 'élément d\'entrée', '', 0, 0, '', 1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('701', 'a', 'élément d\'entrée', '', 0, 0, '', 1, '', '', 'unimarc_field_700_701_702.pl');
 INSERT INTO marc_subfield_structure VALUES ('701', 'b', 'partie du nom autre que l\'élément d\'entrée', '', 0, 0, '', 1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('701', 'c', 'qualificatifs autres que les dates', '', 0, 0, '', 1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('701', 'd', 'chiffres romains', '', 0, 0, '', 1, '', '', '');
@@ -986,8 +986,8 @@ INSERT INTO marc_subfield_structure VALUES ('701', 'f', 'dates', '', 0, 0, '', 1
 INSERT INTO marc_subfield_structure VALUES ('701', 'g', 'forme développée des initiales du prénom', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('701', 'p', 'affiliation ou adresse', '', 0, 0, '', 1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('701', '3', 'numéro de la notice d\'autorité', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('701', '4', 'code de fonction', '', 0, 0, '', -1, '', '', 'unimarc_field_700-4.pl');
-INSERT INTO marc_subfield_structure VALUES ('702', 'a', 'élément d\'entrée', '', 0, 0, '', 1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('701', '4', 'code de fonction', '', 0, 0, '', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('702', 'a', 'élément d\'entrée', '', 0, 0, '', 1, '', '', 'unimarc_field_700_701_702.pl');
 INSERT INTO marc_subfield_structure VALUES ('702', 'b', 'partie du nom autre que l\'élément d\'entrée', '', 0, 0, '', 1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('702', 'c', 'qualificatifs autres que les dates', '', 0, 0, '', 1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('702', 'd', 'chiffres romains', '', 0, 0, '', 1, '', '', '');
@@ -995,9 +995,9 @@ INSERT INTO marc_subfield_structure VALUES ('702', 'f', 'dates', '', 0, 0, '', 1
 INSERT INTO marc_subfield_structure VALUES ('702', 'g', 'forme développée des initiales du prénom', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('702', 'p', 'affiliation ou adresse', '', 0, 0, '', 1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('702', '3', 'numéro de la notice d\'autorité', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('702', '4', 'code de fonction', '', 0, 0, '', 1, '', '', 'unimarc_field_700-4.pl');
+INSERT INTO marc_subfield_structure VALUES ('702', '4', 'code de fonction', '', 0, 0, '', 1, 'CODEFONC', '', '');
 INSERT INTO marc_subfield_structure VALUES ('702', '5', 'institution à laquelle s\'applique cette zone', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('710', 'a', 'élément d\'entrée', '', 0, 0, '', 2, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('710', 'a', 'élément d\'entrée', '', 0, 0, '', 2, '', 'CO', '');
 INSERT INTO marc_subfield_structure VALUES ('710', 'b', 'subdivision', '', 0, 0, '', 2, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('710', 'c', 'élément ajouté au nom ou qualificatif', '', 0, 0, '', 2, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('710', 'd', 'numéro de congrès et/ou de session', '', 0, 0, '', 2, '', '', '');
@@ -1044,7 +1044,7 @@ INSERT INTO marc_subfield_structure VALUES ('722', 'f', 'dates', '', 0, 0, NULL,
 INSERT INTO marc_subfield_structure VALUES ('722', '3', 'numéro de la notice d\'autorité', '', 0, 0, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('722', '4', 'code de fonction', '', 0, 1, NULL, NULL, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('801', 'a', 'pays', '', 1, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('801', 'b', 'agence de catalogage', '', 0, 1, '', 0, 'SOURCE', '', '');
+INSERT INTO marc_subfield_structure VALUES ('801', 'b', 'agence de catalogage', '', 0, 1, '', 5, 'SOURCE', '', '');
 INSERT INTO marc_subfield_structure VALUES ('801', 'c', 'date de la transaction', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('801', 'g', 'règles de catalogage utilisées', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('801', '2', 'code du format utilisé', '', 0, 0, '', -1, '', '', '');
@@ -1292,23 +1292,25 @@ INSERT INTO marc_subfield_structure VALUES ('992', '5', 'identifiant de l\'exemp
 INSERT INTO marc_subfield_structure VALUES ('995', 'a', 'origine du document, texte libre', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'b', 'origine du document, donnée codée', '', 0, 1, 'items.homebranch', 10, 'branches', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'c', 'dépositaire permanent, texte libre', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'd', 'dépositaire permanent, donnée codée', '', 0, 1, 'items.holdingbranch', 10, 'branches', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'f', 'code à barres, suite numérique intégrale', '', 0, 0, 'items.barcode', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'v', 'code à barres de l\'exemplaire', '', 0, 1, 'items.barcode', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'd', 'Etablissement prêteur ou déposant, donnée codée', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'g', 'code à barres, préfixe', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'h', 'code à barres, incrémentation', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'i', 'code à barres, suffixe', '', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'k', 'cote', 'cote', 0, 1, 'items.homebranch', 10, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'l', 'volumaison', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'm', 'date de prêt ou de dépôt', '', 0, 0, 'items.datelastseen', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'm', 'date de prêt ou de dépôt', '', 0, 0, 'items.datelastseen', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'n', 'date de restitution prévue', 'à rendre pour le', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'o', 'catégorie de circulation', '', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'q', 'public visé (selon l\'âge)', '', 0, 0, '', 10, 'PUBLIC', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'o', 'catégorie de circulation (0 : empruntable, 1 : exclu du prêt)', '', 0, 1, 'items.notforloan', 10, '01', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'q', 'public visé (selon l\'âge)', '', 0, 0, '', -1, 'PUBLIC', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 'r', 'type de document et support matériel', '', 0, 1, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('995', 's', 'élément de tri', '', 0, 1, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('995', 'u', 'note sur l\'exemplaire', '', 0, 0, 'items.itemnotes', 10, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'u', 'note sur l\'exemplaire', '', 0, 0, 'items.itemnotes', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('090', 'a', 'Numéro biblioitem (koha)', '', 0, 0, 'biblioitems.biblioitemnumber', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('001', '', 'Numéro d\'identification notice', '', 0, 0, '', 0, '', '', NULL);
+INSERT INTO marc_subfield_structure VALUES ('001', '', 'Numéro d\'identification notice', '', 0, 0, '', -1, '', '', NULL);
 INSERT INTO marc_subfield_structure VALUES ('995', '9', 'itemnumber (koha)', '', 0, 0, 'items.itemnumber', -1, '', '', '');
+INSERT INTO marc_subfield_structure VALUES ('995', 'e', 'niveau de localisation', '', 0, 1, '', 10, 'LOCAL', '', '');
+INSERT INTO marc_subfield_structure VALUES ('127', 'z', 'zz', 'ee', 0, 0, 'biblio.author', -1, '', '', NULL);
 
 #
 # Dumping data for table `marc_tag_structure`
@@ -1507,5 +1509,5 @@ INSERT INTO marc_tag_structure VALUES ('987', 'numéro de notice archivé', '', 0,
 INSERT INTO marc_tag_structure VALUES ('990', 'cote ou note de contenu', '', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('991', 'indexation locale', 'sujets', 0, 1, NULL);
 INSERT INTO marc_tag_structure VALUES ('992', 'classification locale', 'cote', 0, 1, NULL);
-INSERT INTO marc_tag_structure VALUES ('995', 'recommandation 995', '', 0, 1, NULL);
+INSERT INTO marc_tag_structure VALUES ('995', 'Exemplaires', '', 0, 1, '');
 
