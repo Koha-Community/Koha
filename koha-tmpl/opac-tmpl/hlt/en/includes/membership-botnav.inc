@@ -1,1 +1,2 @@
-<br /><!--+Katipo+start name="botnav" include="/includes/membership-botnav.inc"-->In this Section: | <a href="/membership/">Membership</a> | <a href="/membership/login.html">Log In</a> | <a href="/membership/account.html">My Account</a> | <a href="/membership/record.html">Reading Record</a> | <a href="/membership/details.html">Personal Details</a> |<!--+Katipo+end--><br />&nbsp;</p>
+<br /><!--+Katipo+start name="botnav" include="/includes/membership-botnav.inc"-->
+In this Section: | <a href="/membership/">Membership</a> | <a href="/cgi-bin/koha/opac-user.pl">My Account</a> | <a href="/cgi-bin/koha/opac-readingrecord.pl">Reading Record</a> | <a href="/cgi-bin/koha/opac-userdetails.pl">Personal Details</a> |<!--+Katipo+end--><br />&nbsp;</p>

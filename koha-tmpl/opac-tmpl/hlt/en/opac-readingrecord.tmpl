@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--designed by rebecca@katipo.co.nz-->
+<!--updated by richard@katipo.co.nz 12/06/02-->
+<!--html::template conversion by finlay@katipo.co.nz 25/11/02-->
+<html>
+<head>
+<title>Reading Record</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/main.css" type="text/css" />
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/koha.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+<meta name="description" content=""><meta name="keywords" content=""></head>
+<body background="<TMPL_VAR NAME='themelang'>/images/styles/background.gif" marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="membership-start.inc">
+<!--TOP NAVIGATION-->
+<TMPL_INCLUDE name="top-navigation.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="membership-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="logout.inc">
+<TMPL_INCLUDE name="cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="crumb-start.inc">
+<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac/opac-readingrecord.pl'>Reading Record</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="crumb-end.inc">
+<!--CONTENT--><P>
+<span class="head1bold">Reading Record of: </span><span class="head1"><TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></span><P>
+<!--+Katipo+start name="maintext"-->
+
+<TMPL_UNLESS NAME="count">
+You have never borrowed anything from the library.
+<TMPL_ELSE>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr bgcolor="#D7AB7A">
+<td colspan="4" class="dk-brown"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/brown-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr class="table-heading"><td><a href="/cgi-bin/koha/opac-readingrecord.pl?order=title"><b>TITLE</b></a></td>
+<td><a href="/cgi-bin/koha/opac-readingrecord.pl?order=author"><b>AUTHOR</b></a></td>
+<td><a href="/cgi-bin/koha/opac-readingrecord.pl"><b>DATE</b></a></td>
+<td>Volume</td></tr>
+<tr><td colspan="4" class="dk-brown"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/brown-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<TMPL_LOOP NAME="READING_RECORD">
+
+<tr valign=top class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"pink"</TMPL_IF>>
+<td class="padded"><TMPL_VAR NAME="title"></td>
+<td class="padded"><TMPL_VAR NAME="author"></td>
+<td class="padded"><TMPL_VAR NAME="date_due"></td>
+<td class="padded"><TMPL_VAR NAME="volume"></td></tr>
+
+</TMPL_LOOP>
+
+<tr><td colspan="4" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+</table>
+
+</TMPL_UNLESS>
+
+<!--+Katipo+end-->
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="end-main.inc">
+</body>
+</html>

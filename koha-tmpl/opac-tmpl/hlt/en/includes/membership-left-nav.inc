@@ -13,10 +13,10 @@
     <td width="115" class="sidenav"><a href="/cgi-bin/koha/opac-user.pl">My Account</a></td></tr>
 <tr><td colspan="3"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="1" height="5" border="0" alt="" /></td></tr>
   <tr valign="top"><td></td><td><img src="<TMPL_VAR NAME='themelang'>/images/styles/nav-dot.gif" width="9" height="13" border="0" alt="" /></td>
-    <td width="115" class="sidenav"><a href="/membership/record.html">Reading Record</a></td></tr>
+    <td width="115" class="sidenav"><a href="/cgi-bin/koha/opac-readingrecord.pl">Reading Record</a></td></tr>
 <tr><td colspan="3"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="1" height="5" border="0" alt="" /></td></tr>
   <tr valign="top"><td></td><td><img src="<TMPL_VAR NAME='themelang'>/images/styles/nav-dot.gif" width="9" height="13" border="0" alt="" /></td>
-    <td width="115" class="sidenav"><a href="/membership/details.html">Personal Details</a></td></tr>
+    <td width="115" class="sidenav"><a href="/cgi-bin/koha/opac-userdetails.pl">Personal Details</a></td></tr>
  
 <!--+Katipo+end-->
   <tr><td colspan="3"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="1" height="10" border="0" alt="" /></td></tr>

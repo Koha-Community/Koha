@@ -21,7 +21,7 @@
 <TMPL_INCLUDE NAME="cat-search.inc">
 <!--END LEFT NAV, START CRUMBS-->
 <TMPL_INCLUDE NAME="crumb-start.inc">	
-<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-searchresults.pl'>Search Results</a>
+<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-searchresults.pl?<TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>'>Search Results</a>
 <!--END CRUMBS-->
 <TMPL_INCLUDE NAME="crumb-end.inc">
 <!--CONTENT-->
@@ -34,16 +34,15 @@
 <TMPL_IF NAME="numrecords">
 
 
-<table cellpadding=3 cellspacing=0 border=0><tr>
-
+<span>
     <TMPL_LOOP NAME="numbers">
 	<TMPL_IF NAME="highlight">
-	    <td><a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="selected-number"><TMPL_VAR NAME=number></a></td> 
+	   <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="selected-number"><TMPL_VAR NAME=number></a>
 	<TMPL_ELSE>
-	    <td><a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="search-number"><TMPL_VAR NAME='number'></a></td>
+	    <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="search-number"><TMPL_VAR NAME='number'></a>
 	</TMPL_IF>
     </TMPL_LOOP>
-</tr></table> 
+</span> 
 
 
 <P>Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.</p>
@@ -70,15 +69,18 @@
     <tr><td colspan=5 class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
 	</table>
    <P>
-<table cellpadding=3 cellspacing=0 border=0><tr>
+
+<span>
     <TMPL_LOOP NAME="numbers">
 	<TMPL_IF NAME="highlight">
-	    <td><a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="selected-number"><TMPL_VAR NAME=number></a></td> 
+	   <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="selected-number"><TMPL_VAR NAME=number></a>
 	<TMPL_ELSE>
-	    <td><a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="search-number"><TMPL_VAR NAME='number'></a></td>
+	    <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='startfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>" class="search-number"><TMPL_VAR NAME='number'></a>
 	</TMPL_IF>
     </TMPL_LOOP>
-</tr></table> 
+</span> 
+
+
 
 <TMPL_ELSE>
 Sorry, there were no results.

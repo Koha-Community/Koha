@@ -30,6 +30,7 @@
     <TMPL_VAR NAME="phone">
 </td></tr>
 </TMPL_IF>
+</TMPL_LOOP>
 <tr valign="top"><td class="small"></td><td class="small">
  >><A HREF="/cgi-bin/koha/opac-userupdate.pl" class="sidenav">Edit Details</A>
 </td></tr>
