@@ -1,4 +1,4 @@
-package C4::Database; #asummes C4/Database
+package C4::Database; #assumes C4/Database
 
 #requires DBI.pm to be installed
 
@@ -68,12 +68,28 @@ sub C4Connect  {
   return $dbh;
 } # sub C4Connect
 
+=item requireDBI
+
+  &requireDBI($dbh, $functionnname);
+
+Verifies that C<$dbh> is a valid DBI::db database handle (presumably
+to the Koha database). If it isn't, the function dies.
+
+C<$functionname> is the name of the calling function, which will be
+used in error messages.
+
+=cut
+#'
 #------------------
 # Helper subroutine to make sure database handle was passed properly
 sub requireDBI {
     my (
 	$dbh,
 	$subrname,	# name of calling subroutine
+			# FIXME - Ought to get this with 'caller',
+			# instead of requiring developers to always
+			# get it right. Plus, it'd give the line
+			# number.
     )=@_;
 
     unless ( ref($dbh) =~ /DBI::db/ ) {
@@ -85,3 +101,13 @@ sub requireDBI {
 
 
 END { }
+
+1;
+__END__
+=back
+
+=head1 SEE ALSO
+
+L<DBI(3)|DBI>
+
+=cut
