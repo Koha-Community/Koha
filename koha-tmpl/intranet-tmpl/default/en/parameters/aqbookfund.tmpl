@@ -110,7 +110,7 @@
 <TMPL_ELSE>
 <tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
 </TMPL_IF>
-<tr><td>Name</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<TMPL_VAR name="bookfundname">'>&nbsp;</td></tr>
+<tr><td>Name</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<TMPL_VAR name="bookfundname" escape=HTML>'>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>

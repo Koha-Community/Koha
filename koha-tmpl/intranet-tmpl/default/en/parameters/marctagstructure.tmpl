@@ -58,8 +58,8 @@
 	<input type=hidden name=op value='add_validate'>
 	<table>
 	<tr><td>Tag</td><td><TMPL_VAR name="searchfield"></td></tr>
-	<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=80 maxlength=100></td></tr>
-	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value='<TMPL_VAR name="libopac">' size=80 maxlength=100></td></tr>
+	<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value='<TMPL_VAR name="liblibrarian" escape=HTML>' size=80 maxlength=100></td></tr>
+	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value='<TMPL_VAR name="libopac" escape=HTML>' size=80 maxlength=100></td></tr>
 	<tr><td>Repeatable</td><td><TMPL_VAR name="repeatable"></td></tr>
 	<tr><td>Mandatory</td><td><TMPL_VAR name="mandatory"></td></tr>
 	<tr><td>Authorised value</td><td><TMPL_VAR name="authorised_value"> (if you select a value here, the indicators will be limited to the authorised value list)</td></tr>

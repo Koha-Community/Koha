@@ -69,8 +69,8 @@
 	<TMPL_ELSE>
 		<tr><td>Variable</td><td><input type=text name=variable></td></tr>
 	</TMPL_IF>
-	<tr><td>Value</td><td><input type=text name=value value='<TMPL_VAR name="value">'></td></tr>
-	<tr><td>Explanation</td><td><input type=text name=explanation size=80 value='<TMPL_VAR name="explanation">'></td></tr>
+	<tr><td>Value</td><td><input type=text name=value value='<TMPL_VAR name="value" escape=HTML>'></td></tr>
+	<tr><td>Explanation</td><td><input type=text name=explanation size=80 value='<TMPL_VAR name="explanation" escape=HTML>'></td></tr>
 	<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 	</table>
 	</form>

@@ -21,8 +21,8 @@
 	<TMPL_LOOP name="loop">
 		<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 		<td><TMPL_VAR name="tagfield"> - <TMPL_VAR name="tagsubfield"></td>
-		<td><input type=text name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80><br/>
-				<input type=text name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td>
+		<td><input type=text name="liblibrarian" value='<TMPL_VAR name="liblibrarian" escape=HTML>' size=40 maxlength=80><br/>
+				<input type=text name="libopac" value='<TMPL_VAR name="libopac" escape=HTML>' size=40 maxlength=80></td>
 		<td><TMPL_VAR name="repeatable"></td>
 		<td><TMPL_VAR name="mandatory"></td>
 		<td><TMPL_VAR name="kohafield"></td>

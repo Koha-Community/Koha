@@ -53,13 +53,13 @@
 		<TMPL_IF name="id">
 			<td><TMPL_VAR name="father"><TMPL_VAR name="stdlib"><input type="hidden" name="stdlib" value="<TMPL_VAR name="stdlib">" ></td>
 		<TMPL_ELSE>
-			<td><TMPL_VAR name="father"><input type="text" name="stdlib" value="<TMPL_VAR name="stdlib">" maxlength="80" size="80"></td>
+			<td><TMPL_VAR name="father"><input type="text" name="stdlib" value="<TMPL_VAR name="stdlib" escape=HTML>" maxlength="80" size="80"></td>
 		</TMPL_IF>
 	</tr>
 	<tr>
 
       <td>Autre forme</td>
-		<td><TMPL_VAR name="father"><input type=text name="freelib" value='<TMPL_VAR name="freelib">' maxlength="80" size="80"></td>
+		<td><TMPL_VAR name="father"><input type=text name="freelib" value='<TMPL_VAR name="freelib" escape=HTML>' maxlength="80" size="80"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
