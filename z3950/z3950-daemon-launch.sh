@@ -14,7 +14,7 @@
 #   Needs SysV-type start/stop options
 
 #----------------------------
-. z3950-daemon-options
+. $(dirname $0)/z3950-daemon-options
 export KohaZ3950Dir
 
 #----------------------------
@@ -38,6 +38,9 @@ exit
 
 #--------------
 # $Log$
+# Revision 1.4  2003/11/05 23:33:45  slef
+# Now figures out what directory the scripts are in
+#
 # Revision 1.3  2003/10/06 09:10:39  slef
 # Removing config info from z3950*sh and using C4::Context in processz3950queue (Fixed bug 39)
 #

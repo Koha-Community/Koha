@@ -12,7 +12,7 @@
 #    Call  z3950-daemon-launch.sh  instead
 
 #----------------------------
-. z3950-daemon-options
+. $(dirname $0)/z3950-daemon-options
 
 #----------------------------
 LOGFILE=$LogDir/z3950-daemon-`date +%Y%m%d-%H%M`.log
@@ -41,6 +41,9 @@ exec $KohaZ3950Script $LogDir >>$LOGFILE 2>&1
 
 #-------------------
 # $Log$
+# Revision 1.5  2003/11/05 23:33:45  slef
+# Now figures out what directory the scripts are in
+#
 # Revision 1.4  2003/10/20 19:16:50  slef
 # Work on install bugs (see bug 632)
 #
