@@ -4,6 +4,7 @@
 <!-- TMPL_IF NAME="message" -->
 	<h2>Impossible to set reserve because </h2>
 	<ul>
+		<!-- TMPL_IF name="noreserve" --><li>You can't make reserve in this library (feature unactivated)</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_much_oweing" --><li>you owe <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_many_reserves" --><li>you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves.</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="already_reserved" --><li>you already have a reserve placed on this item.</li><!-- /TMPL_IF -->
@@ -68,7 +69,7 @@
 			</li>
 		</ul>
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-		<!-- TMPL_IF NAME="fee" -->
+		<!-- TMPL_IF NAME="istherefee" -->
 			<p>Note there will be a reserve charge of <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
 		<!-- /TMPL_IF -->
 		<input class="button" type="submit" value="Place Reserve" />
