@@ -499,7 +499,7 @@ sub showmessage {
     $noclear = 0 unless defined $noclear; # defaults to "clear"
     ($noclear) || (system('clear'));
     if ($responsetype =~ /^yn$/) {
-	$responsetype='restrictchar yn';
+	$responsetype='restrictchar ynYN';
     }
     print $message;
     if ($responsetype =~/^restrictchar (.*)/i) {
