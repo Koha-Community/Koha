@@ -4,7 +4,7 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=oui">
+				<a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
 				Emprunteur suivant</a>&nbsp;
 				<a class="button" href="returns.pl">
 				Retours</a>&nbsp;
@@ -82,7 +82,7 @@
 							<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
 							<!-- /TMPL_LOOP -->
 							<input type="hidden" name="answer" value="Y">
-							<input type="submit" value="Oui">
+							<input type="submit" value="Yes">
 							</form>
 						</td>
 						<td>
@@ -212,7 +212,7 @@
 					<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 					<input type="hidden" name="print" value="peut-être">
 					<!-- TMPL_IF name="FRAIS" -->
-						<input type="hidden" name="charges" value="oui">
+						<input type="hidden" name="charges" value="yes">
 						<input type="hidden" name="oldamount" value="<!-- TMPL_VAR name="amountold" -->">
 					<!-- /TMPL_IF -->
 				</td>
