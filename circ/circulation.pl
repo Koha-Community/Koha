@@ -87,7 +87,7 @@ if ($findborrower) {
 	my @borrowers=@$borrowers;
 	if ($#borrowers == -1) {
 		$query->param('findborrower', '');
-		$message =  "No borrower matched '$findborrower'";
+		$message =  "'$findborrower'";
 	} elsif ($#borrowers == 0) {
 		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
 		$query->param('barcode','');
@@ -229,18 +229,18 @@ if ($borrower) {
     }
 	my $tcolor = '';
 	my $pcolor = '';
+	my $od = '';
 	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
 		my $dd = $book->{'date_due'};
 		my $datedue = $book->{'date_due'};
 		$dd=format_date($dd);
 		$datedue=~s/-//g;
-# FIXME - Instead of declaring the font color here, can we set a variable 
-# that says 'overdue'?  Then the template can check for it: <TMPL_IF
-# NAME="overdue"><font color="red"></TMPL_IF>
 		if ($datedue < $todaysdate) {
-			$dd="<font color=red>$dd</font>\n";
+			$od = 'true';
+			$dd="$dd\n";
 		}
 		($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
+		$book->{'od'}=$od;
 		$book->{'dd'}=$dd;
 		$book->{'tcolor'}=$tcolor;
 	        if ($book->{'author'} eq ''){
@@ -263,13 +263,15 @@ if ($borrower) {
 	my $datedue = $book->{'date_due'};
 	$dd=format_date($dd);
 	my $pcolor = '';
+	my $od = '';
 	$datedue=~s/-//g;
 	if ($datedue < $todaysdate) {
-# FIXME - See line 233 above regarding overdues
-	    $dd="<font color=red>$dd</font>\n";
+		$od = 'true';
+	    $dd="$dd\n";
 	}
 	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1); 
 	$book->{'dd'}=$dd; 
+	$book->{'od'}=$od;
 	$book->{'tcolor'}=$pcolor;
 	if ($book->{'author'} eq ''){
 	    $book->{'author'}=' ';
