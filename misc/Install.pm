@@ -157,9 +157,9 @@ Aborting as requested.  Please rerun when you are ready.
 $messages->{'ReleaseCandidateWarning'}->{en} =
    heading('RELEASE CANDIDATE') . qq|
 WARNING: You are about to install Koha version %s.  This is a
-release candidate, not intended for production systems.
-It is being released so that users can test it before we release a final
-version and report bugs to us.
+release candidate, It is NOT bugfree.
+However, it worked, and has been declared stable enough to
+be released.
 
 Most people should answer Yes here.
 
@@ -1760,19 +1760,18 @@ sub updatedatabase {
 		exit;
 	}
 
-	if ($kohaversion =~ /^1\.[012]\./) {
-		my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
+	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
 
-		startsysout();
-		if ($response eq '1') {
-			system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
-		}
-		if ($response eq '2') {
-			system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
-			system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $database");
-		}
-		delete($ENV{"KOHA_CONF"});
+	startsysout();
+	if ($response eq '1') {
+		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+		system("cat scripts/misc/lang-datas/en/stopwords.sql | $mysqldir/bin/mysql -u$user $database");
 	}
+	if ($response eq '2') {
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $database");
+	}
+	delete($ENV{"KOHA_CONF"});
 
 	print RESET."\n\nFinished updating of database. Press <ENTER> to continue...";
 	<STDIN>;
