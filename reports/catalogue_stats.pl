@@ -102,14 +102,16 @@ if ($do_it) {
 	my $dbh = C4::Context->dbh;
 	my @values;
 	my %labels;
+	my $count=0;
 	my $req;
 	$req = $dbh->prepare("select distinctrow left(dewey,3) from biblioitems order by dewey");
 	$req->execute;
-	my $hasdewey=1;
+	my $hasdewey;
 	my @select;
 	push @select,"";
 	while (my ($value) =$req->fetchrow) {
 		$hasdewey =1 if (($value) and (! $hasdewey));
+		$count++ if (($value) and (! $hasdewey));
 		push @select, $value;
 	}
 	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
@@ -122,11 +124,12 @@ if ($do_it) {
 	$req->execute;
 	undef @select;
 	push @select,"";
-	my $haslccn=1;
+	my $haslccn;
 	my $hlghtlccn;
 	while (my ($value) =$req->fetchrow) {
 		$hlghtlccn = !($hasdewey);
 		$haslccn =1 if (($value) and (! $haslccn));
+		$count++ if (($value) and (! $haslccn));
 		push @select, $value;
 	}
 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
@@ -139,10 +142,11 @@ if ($do_it) {
 	$req->execute;
 	undef @select;
 	push @select,"";
-	my $hascote=1;
+	my $hascote;
 	my $hlghtcote;
 	while (my ($value) =$req->fetchrow) {
 		$hascote =1 if (($value) and (! $hascote));
+		$count++ if (($value) and (! $hascote));
 		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
 		push @select, $value;
 	}
@@ -151,17 +155,32 @@ if ($do_it) {
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
+	$count++;
+	my $hglghtDT =$count % 2;
+#	warn "highlightDT ".$hglghtDT;
+	$count++;
+	my $hglghtPub =$count % 2;
+#	warn "highlightPub ".$hglghtPub;
+	$count++;
+	my $hglghtPY =$count % 2;
+#	warn "highlightPY ".$hglghtPY;
+	$count++;
+	my $hglghtHB =$count % 2;
+#	warn "highlightHB ".$hglghtHB;
+	$count++;
+	my $hglghtLOC =$count % 2;
+#	warn "highlightLOC ".$hglghtLOC;
 	
-	undef @select;
-	push @select,"";
-	for (my $i=1950;$i<=2050;$i++) {
-		push @select, $i;
-	}
-	my $CGIpublicationyear=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select,
-				-size     => 1,
-				-multiple => 0 );
+# 	undef @select;
+# 	push @select,"";
+# 	for (my $i=1950;$i<=2050;$i++) {
+# 		push @select, $i;
+# 	}
+# 	my $CGIpublicationyear=CGI::scrolling_list( -name     => 'Filter',
+# 				-id => 'Filter',
+# 				-values   => \@select,
+# 				-size     => 1,
+# 				-multiple => 0 );
 	
 	$req = $dbh->prepare("select distinctrow itemtype from biblioitems order by itemtype");
 	$req->execute;
@@ -217,7 +236,7 @@ if ($do_it) {
 	
 	my @mime = ( C4::Context->preference("MIME") );
 	foreach my $mime (@mime){
-		warn "".$mime;
+#		warn "".$mime;
 	}
 	
 	my $CGIextChoice=CGI::scrolling_list(
@@ -244,11 +263,16 @@ if ($do_it) {
 					CGIToLoCClass => $CGIlccn,
 					hascote=> $hascote,
 					hlghtcote => $hlghtcote,
+					hglghtDT => $hglghtDT,
+					hglghtPub => $hglghtPub,
+					hglghtPY => $hglghtPY,
+					hglghtHB => $hglghtHB,
+					hglghtLOC => $hglghtLOC,
 					CGIFromCoteClass => $CGIcote,
 					CGIToCoteClass => $CGIcote,
 					CGIItemType => $CGIitemtype,
-					CGIFromPublicationYear => $CGIpublicationyear,
-					CGIToPublicationYear => $CGIpublicationyear,
+# 					CGIFromPublicationYear => $CGIpublicationyear,
+# 					CGIToPublicationYear => $CGIpublicationyear,
 					CGIPublisher => $CGIpublisher,
 					CGIBranch => $CGIbranch,
 					CGILocation => $CGIlocation,
@@ -358,7 +382,7 @@ sub calculate {
 		}
 	}
 	$strsth .=" order by $linefield";
-	warn "". $strsth;
+#	warn "". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
 	if (( @linefilter ) and ($linefilter[1])){
@@ -400,7 +424,7 @@ sub calculate {
 		$strsth2 .= " and $column LIKE ? ";
 	} 
 	$strsth2 .= " order by $colfield";
-	warn "". $strsth2;
+#	warn "". $strsth2;
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if ((@colfilter) and ($colfilter[1])) {
 		$sth2->execute($colfilter[0],$colfilter[1]);
@@ -460,12 +484,12 @@ sub calculate {
 	@$filters[11]=~ s/\*/%/g if (@$filters[11]);
 	$strcalc .= " AND items.location like '" . @$filters[11] ."'" if ( @$filters[11] );
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
-	warn "". $strcalc;
+#	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
-	warn "filling table";
+#	warn "filling table";
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-		warn "filling table $row / $col / $value ";
+#		warn "filling table $row / $col / $value ";
 		$table{$row}->{$col}=$value;
 		$table{$row}->{totalrow}+=$value;
 		$grantotal += $value;
@@ -485,14 +509,14 @@ sub calculate {
 		$hilighted = -$hilighted;
 	}
 	
-	warn "footer processing";
+#	warn "footer processing";
 	foreach my $col ( @loopcol ) {
 		my $total=0;
 		foreach my $row ( @looprow ) {
 			$total += $table{$row->{rowtitle}}->{$col->{coltitle}};
-			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
+#			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
 		}
-		warn "summ for column ".$col->{coltitle}."  = ".$total;
+#		warn "summ for column ".$col->{coltitle}."  = ".$total;
 		push @loopfooter, {'totalcol' => $total};
 	}
 			
