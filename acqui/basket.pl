@@ -101,7 +101,7 @@ $template->param(basket => $basket,
 						name => $booksellers[0]->{'name'},
 						books_loop => \@books_loop,
 						count =>$count,
-						subtotal => $sub_total,
+						sub_total => $sub_total,
 						gist => $gist,
 						grand_total =>$grand_total,
 						);
