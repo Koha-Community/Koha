@@ -3,6 +3,8 @@
 #  This script loops through each overdue item, determines the fine,
 #  and updates the total amount of fines due by each user.  It relies on 
 #  the existence of /tmp/fines, which is created by ???
+# Doesnt really rely on it, it relys on being able to write to /tmp/
+# It creates the fines file
 #
 #  This script is meant to be run nightly out of cron.
 
@@ -24,6 +26,7 @@ my $overdueItemsCounted=0 if $DEBUG;
 
 # FIXME
 # delete this?
+# yep just a debuging thing
 #$numOverdueItems=1000;
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
@@ -34,6 +37,8 @@ my $date=Date_DaysSince1BC($mon,$mday,$year);
 
 # FIXME
 # delete this?
+# another debugging thing, and yep it can go (you can make the script fake a day, say u want to rerun the overdues for
+# a day when for some reason the script didnt run)
 #my $date=Date_DaysSince1BC(1,24,2002);
 print $date if $DEBUG;
 
@@ -49,6 +54,7 @@ my $total=0;
 # this probably ought to be a global variable or constant
 # defined in a central place
 #
+# Yep
 my $maxFine=5;
 
 # FIXME
@@ -126,7 +132,7 @@ for (my $i=0;$i<$numOverdueItems;$i++){
 	  (borrowernumber,itemnumber,accountno,date,amount,
 	  description,accounttype,amountoutstanding) values
 	  ($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
-	  '$accountno',now(),'$cost','Lost item $item->{'title'} $item->{'barcode'}','L','$cost')";
+	  '$accountno',now(),'$cost','Lost item $item->{'title'} $item->{'barcode'} $due','L','$cost')";
 	  my $sth=$dbh->prepare($query);
 	  $sth->execute;
 	  $sth->finish;
