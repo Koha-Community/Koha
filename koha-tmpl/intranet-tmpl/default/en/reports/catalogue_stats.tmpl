@@ -1,0 +1,183 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc" >
+
+<!-- TMPL_IF NAME="do_it" -->
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1 class="reports">Koha : Catalogue statistics </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>Filtered on</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<br>
+		<table border="1">
+			<tr >
+				<th class="reports"><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+				<th class="reports">TOTAL</th>
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+								<!--TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" -->
+								<!--TMPL_ELSE-->&nbsp;
+								<!--/TMPL_IF-->
+							</td>
+						<!-- /TMPL_LOOP -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="totalrow" -->
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+				<tr >
+					<th class="reports">TOTAL</th>
+					<!-- TMPL_LOOP NAME="loopfooter" -->
+						<th class="reports">
+							<!-- TMPL_VAR NAME="totalcol" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+					<th class="reports"><!-- TMPL_VAR NAME="total" --></th>
+				</tr>
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1 class = "reports">Koha : Catalogue statistics</h1>
+	<form method="post">
+	<table>
+		<thead>
+			<tr>
+			<th class="reports"><div class="label100">Title</div></th>
+			<th class="reports">Row</th>
+			<th class="reports">Column</th>
+			<th class="reports">Filter</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- TMPL_IF Name="hasdewey" -->
+				<tr class="hilighted">
+					<td>Dewey Classification</td>
+					<td align="center"><input type="radio" name="Line" value="dewey"></td>
+					<td align="center"><input type="radio" name="Column" value="dewey"></td>
+					<td > From <!-- TMPL_VAR NAME="CGIFromDeweyClass" --> To <!-- TMPL_VAR NAME="CGIToDeweyClass" --></td>
+				</tr>
+				<tr class="hilighted">
+					<td>&nbsp;</td>
+					<td align="center" colspan="2"><select name="deweydigits">
+						<option value=""> </option>
+						<option value ="1">1</option>
+						<option value ="2">2</option>
+						<option value ="3">3</option>
+						<option value ="4">4</option>
+						<option value ="5">5</option>
+						</select>
+						digits 
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+				<!-- TMPL_ELSE -->
+				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" ></tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="haslccn" -->
+				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+					<td>LoC Classification</td>
+					<td align="center"><input type="radio" name="Line" value="lccn"></td>
+					<td align="center"><input type="radio" name="Column" value="lccn"></td>
+					<td > From <!-- TMPL_VAR NAME="CGIFromLoCClass" --> To <!-- TMPL_VAR NAME="CGIToLoCClass" --></td>
+				</tr>
+				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+					<td>&nbsp;</td>
+					<td align="center" colspan="2"><select name="lccndigits">
+						<option value=""> </option>
+						<option value ="1">1</option>
+						<option value ="2">2</option>
+						<option value ="3">3</option>
+						<option value ="4">4</option>
+						<option value ="5">5</option>
+						</select>
+						characters
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+				<!-- TMPL_ELSE -->
+				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" ></tr>
+			<!-- /TMPL_IF  -->
+			<!-- TMPL_IF Name="hascote" -->
+				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+					<td>Callnumber</td>
+					<td align="center"><input type="radio" name="Line" value="items.itemcallnumber"></td>
+					<td align="center"><input type="radio" name="Column" value="items.itemcallnumber"></td>
+					<td>From <!-- TMPL_VAR NAME="CGIFromCoteClass" --> To <!-- TMPL_VAR NAME="CGIToCoteClass" --></td>
+				</tr>
+				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+					<td>&nbsp;</td>
+					<td align="center" colspan="2"><select name="cotedigits">
+						<option value=""> </option>
+						<option value ="1">1</option>
+						<option value ="2">2</option>
+						<option value ="3">3</option>
+						<option value ="4">4</option>
+						<option value ="5">5</option>
+						</select>
+						characters 
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+				<!-- TMPL_ELSE -->
+				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" ></tr>
+			<!-- /TMPL_IF -->
+			<!--TMPL_IF Name="hglghtDT"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+				<td>Document Type</td>
+				<td align="center"><input type="radio" name="Line" value="itemtype"></td>
+				<td align="center"><input type="radio" name="Column" value="itemtype"></td>
+				<td ><!-- TMPL_VAR NAME="CGIItemType" --></td>
+			</tr>
+			<!--TMPL_IF Name="hglghtPub"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+				<td>Publisher</td>
+				<td align="center"><input type="radio" name="Line" value="publishercode"></td>
+				<td align="center"><input type="radio" name="Column" value="publishercode"></td>
+				<td><!-- TMPL_VAR NAME="CGIPublisher" --></td>
+			</tr>
+			<!--TMPL_IF Name="hglghtPY"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+				<td>Publication Year</td>
+				<td align="center"><input type="radio" name="Line" value="publicationyear"></td>
+				<td align="center"><input type="radio" name="Column" value="publicationyear"></td>
+				<td>From <input type="text" name="Filter" > To <input type="text" name="Filter" ></td>
+			</tr>
+			<!--TMPL_IF Name="hglghtHB"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+				<td>Home Branch</td>
+				<td align="center"><input type="radio" name="Line" value="items.homebranch"></td>
+				<td align="center"><input type="radio" name="Column" value="items.homebranch"></td>
+				<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
+			</tr>
+			<!--TMPL_IF Name="hglghtLOC"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+				<td>Location</td>
+				<td align="center"><input type="radio" name="Line" value="items.location"></td>
+				<td align="center"><input type="radio" name="Column" value="items.location"></td>
+				<td><!-- TMPL_VAR NAME="CGILocation" --> </td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Output </h3>
+		<input type="radio" checked name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input TYPE="submit" value="OK" class="button reports">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
-<div id="mainbloc">
+<div id="mainbloc" >
 <!-- TMPL_IF NAME="do_it" -->
 <!-- TMPL_LOOP NAME="mainloop" -->
-	<h1>Koha : Issues by borrower category <!--TMPL_IF NAME="borrower_category" --> for category = <!-- TMPL_VAR NAME="borrower_category" --><!-- /TMPL_IF --></h1>
+	<h1 class="reports">Koha : Issues by borrower category <!--TMPL_IF NAME="borrower_category" --> for category = <!-- TMPL_VAR NAME="borrower_category" --><!-- /TMPL_IF --></h1>
 	<table>
 		<tr>
 			<th>&nbsp;</th>
@@ -32,16 +32,16 @@
 						<!-- TMPL_VAR NAME="issues" -->
 					</th>
 				<!-- /TMPL_LOOP -->
-				<th>&nbsp;</th>
+				<th><!-- TMPL_VAR NAME="grantotal" --></th>
 			</tr>
 	</table>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Issues by borrower category</h1>
+	<h1 class = "reports">Issues by borrower category</h1>
 	<form method="post">
 		<p>Select a borrower category (or don't if you want to see global status) <input type="text" name="value"></p>
 		<p>Select a branch : <!-- TMPL_VAR NAME="CGIbranch" --></p>
-		<input type="submit" value="OK" class="button">
+		<input type="submit" value="OK" class="button reports">
 		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
 		<input type="hidden" name="do_it" value="1">
 	</form>

@@ -1,0 +1,136 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc" >
+
+<!-- TMPL_IF NAME="do_it" -->
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1 class="reports">Koha : Borrowers statistics </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>Filtered on</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><label> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<table border="1">
+			<tr >
+				<th class="reports"><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+				<th class="reports">TOTAL</th>
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+								<!--TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" -->
+								<!--TMPL_ELSE-->
+									&nbsp;
+								<!--/TMPL_IF-->
+								</td>
+						<!-- /TMPL_LOOP -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="totalrow" -->
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+				<tr >
+					<th class="reports">TOTAL</th>
+					<!-- TMPL_LOOP NAME="loopfooter" -->
+						<th class="reports">
+							<!-- TMPL_VAR NAME="totalcol" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+					<th class="reports"><!-- TMPL_VAR NAME="total" --></th>
+				</tr>
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1 class = "reports">Borrowers statistics</h1>
+	<form method="post">
+	<table>
+		<thead>
+			<tr>
+			<th class="reports">Title</th>
+			<th class="reports">Row</th>
+			<th class="reports">Column</th>
+			<th class="reports">Filter</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="hilighted">
+			<td>Borrower category</td>
+			<td align="center"><input type="radio" name="Line" value="categorycode"></td>
+			<td align="center"><input type="radio" name="Column" value="categorycode"></td>
+			<td ><!-- TMPL_VAR NAME="CGICatCode" --></td>
+			</tr>
+			<tr>
+			<td>Borrower status</td>
+			<td></td>
+			<td></td>
+			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td>
+			</tr>
+			<tr class="hilighted">
+			<td>
+			Zip Code
+			</td>
+			<td align="center"><input type="radio" name="Line" value="zipcode"></td>
+			<td align="center"><input type="radio" name="Column" value="zipcode"></td>
+			<td><input type="text"  name="Filter"></td>
+			</tr>
+			<tr class="hilighted">
+			<td>&nbsp;</td>
+			<td align="center" colspan="2"><select name="digits">
+			<option value=""> </option>
+			<option value ="1">1</option>
+			<option value ="2">2</option>
+			<option value ="3">3</option>
+			<option value ="4">4</option>
+			<option value ="5">5</option>
+			<option value ="6">6</option>
+			<option value ="7">7</option>
+			<option value ="8">8</option>
+			<option value ="9">9</option>
+			<option value ="10">10</option>
+			</select>
+			digits 
+			</td>
+			<td>&nbsp;</td>
+			</tr>
+			<!-- TMPL_IF name="hassort1" -->
+				<tr>
+				<td>Sort1</td>
+				<td align="center"><input type="radio" name="Line" value="sort1"></td>
+				<td align="center"><input type="radio" name="Column" value="sort1"></td>
+				<td ><!-- TMPL_VAR NAME="CGISort1" --></td>
+				</tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="hassort2" -->
+				<tr class="hilighted" >
+				<td>Sort2</td>
+				<td align="center"><input type="radio" name="Line" value="sort2"></td>
+				<td align="center"><input type="radio" name="Column" value="sort2"></td>
+				<td><!-- TMPL_VAR NAME="CGISort2" --></td>
+				</tr>
+			<!-- /TMPL_IF -->
+		</tbody>
+	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Output </h3>
+		<input type="radio" checked name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input TYPE="submit" value="OK" class="button reports">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
