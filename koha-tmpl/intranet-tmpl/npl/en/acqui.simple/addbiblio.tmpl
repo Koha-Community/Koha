@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: <!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="bibid" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
 
@@ -9,7 +9,7 @@
 <input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="oldbiblionumber" -->" />
 
 <h3><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="bibid" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h3><input type="button" value="<!-- TMPL_IF NAME="oldbiblionumtagfield" -->Save Bibliographic Record and Go To Items<!-- TMPL_ELSE -->Add Bibliographic Record and Go To Items<!-- /TMPL_IF -->" onclick="Check(this.form);" class="submit" accesskey="w" />
-<input type="button" value="z39.50 Search" class="submit" onclick="PopupZ3950(); return false;" />
+ <input type="button" value="z39.50 Search" class="submit" onclick="PopupZ3950(); return false;" />  <input type="button" class="cancel" value="Delete this Record" onclick="confirm_deletion(); return false;">
 	
 <div id="tabholder" class="tabholder">
    <span id="tab1" class="tab" onclick =" showPanel(1);" onmouseover="hover(this);" onmouseout="setState(1)">007-130</span>
@@ -436,6 +436,13 @@ function AddField(field) {
       tab.style.backgroundColor = '#ccff99';
 			tab.style.color = '#330000';
    }
+
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+	if (is_confirmed) {
+		window.location="addbiblio.pl?op=delete&bibid=<!-- TMPL_VAR name="bibid" -->";
+	}
+}
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Item Details for <!-- TMPL_LOOP NAME="BIBITEM_DATA" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -55,7 +55,7 @@
 <!-- TMPL_IF NAME="dateaccessioned" --><tr><th><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&amp;catview=yes">
 Accession</a>
 Date:</th><td><!-- TMPL_VAR NAME="dateaccessioned" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="wthdrawn" --><tr><th>Withdrawn: </th><td><!-- TMPL_VAR NAME="wthdrawn" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="wthdrawn" --><tr><th>Withdrawn: </th><td>Yes</td></tr><!-- /TMPL_IF -->
 <tr><th><a
 href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total
 Issues:</a></th><td>&nbsp; <!-- TMPL_VAR NAME="issues" --></td></tr>

@@ -1,102 +1,83 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue: Virtual Book <!-- TMPL_IF Name="viewshelf" -->Shelf '<!-- TMPL_VAR Name="shelfname" -->'<!-- TMPL_ELSE -->Shelves<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<div id="topmenu">
+<strong>Logged in as: <!-- TMPL_VAR Name="loggedinuser" --></strong> [<a href="/cgi-bin/koha/logout.pl">Log Out</a>]</div>
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
-<div id="main"><p align=left>Logged in as: <!-- TMPL_VAR Name="loggedinuser" --> [<a href="/cgi-bin/koha/logout.pl">Log Out</a>]</p>
-
+<div id="main">
 
 <!-- TMPL_IF Name="viewshelf" -->
-    <center>
-    <form>
-    <a href=shelves.pl>Shelf List</a><p>
-    <table border="0" cellpadding=0 cellspacing=0>
-		<tr><td colspan=7>
+ <h2>Virtual Shelf '<!-- TMPL_VAR Name="shelfname" -->'</h2> <form class="inline">
+	<label for="addbarcode">Add a book by barcode:</label> <input id="addbarcode" name="addbarcode" type="text" size="14" maxlength="14" />
 			<table>
-			<tr><td>Add a book by barcode:</td><td><input name=addbarcode></td></tr>
-			</table>
-			<br>
-			<table border="0" cellpadding=5 cellspacing=0 width=100%>
-			<tr><th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-			<font color=white>Contents of <!-- TMPL_VAR Name="shelfname" --> shelf</font>
-			</th></tr>
-			</table>
-		</td></tr>
+			
+		<tr><th>&nbsp;</th><th>Title</th><th>Author</th><th>Barcode</th></tr>
+	<!-- TMPL_IF NAME="itemsloop" -->
 		<!-- TMPL_LOOP Name="itemsloop" -->
 			<tr>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><input type=checkbox name="REM-<!-- TMPL_VAR Name="itemnumber" -->"></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->" width=10 align=center><img src=/images/blankdot.gif></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="barcode" --></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->" width=10 align=center><img src=/images/blankdot.gif></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="title" --></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->" width=10 align=center><img src=/images/blankdot.gif></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="author" --></td>
+				<td><input type="checkbox" name="REM-<!-- TMPL_VAR Name="itemnumber" -->"></td>
+				<td><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="title" --></a></td>
+				<td><!-- TMPL_VAR Name="author" --></td><td><!-- TMPL_VAR Name="barcode" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+		<tr><td colspan="4">This shelf has no contents</td></tr>
+	<!-- /TMPL_IF -->
     </table>
-    <br>
-    <input type="hidden" name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
-    <input type="hidden" name=modifyshelfcontents value=1>
-    <input type="hidden" name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
-    <input type=submit value="Remove Selected Items">
-    </form>
+    <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
+    <input type="hidden" name="modifyshelfcontents" value="1" />
+    <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
+    <input type="submit" class="cancel" value="Remove Selected Items" />
+    </form><form class="inline" action="shelves.pl" method="get"><input type="submit" class="submit" value="Back to Virtual Book Shelves" /></form>
 <!-- TMPL_ELSE -->
+<h2>Virtual Book Shelves</h2>
 	<!-- TMPL_IF Name="shelves" -->
 		<!-- TMPL_IF Name="status1" -->
-			<font color=red><!-- TMPL_VAR Name="string1" --></font><p>
+				<div class="error">Shelf "<!-- TMPL_VAR Name="string1" -->" already exists.</div>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP Name="paramsloop" -->
-			<!-- TMPL_IF Name="status" -->
-				<font color=red><!-- TMPL_VAR Name="string" --></font><p>
+			<!-- TMPL_IF Name="status" -->			<div class="error">Shelf has <!-- TMPL_VAR Name="string" --> items on it.  Please remove all items before deleting this shelf.</div>
+
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
-		<center>
-		<a href=shelves.pl>Modify Shelf Contents</a><p>
-		<h1>Bookshelves</h1>
-		<table border="0" cellpadding=7>
-			<tr><td align=center>
-				<form method=post>
-				<input type="hidden" name=shelves value=1>
-				<table border="0" cellpadding=0 cellspacing=0>
-				<tr><th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-				<font color=white>Select Shelves to Delete</font>
-			</th></tr>
+    <form method="post">
+    <input type="hidden" name="shelves" value="1">
+    <label for="addshelf">Add Shelf:</label> <input name="addshelf" id="addshelf" type="text" size="25" />
+    <input type="submit" value="Add New Shelf" class="submit" />
+    </form>
+	<form method="post">
+				<input type="hidden" name="shelves" value="1">
+				<table>
+				<tr><th>Shelf Name</th><th>Delete?</th></tr>
 			<!-- TMPL_LOOP Name="shelvesloop" -->
 				<tr>
-					<td bgcolor="<!-- TMPL_VAR Name="color" -->">
-						<input type=checkbox name="DEL-<!-- TMPL_VAR Name="shelf" -->">
-						<!-- TMPL_VAR Name="shelfname" --> (<!-- TMPL_VAR Name="shelfbookcount" --> books)
-					</td>
-				</tr>
+					<td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><strong><!-- TMPL_VAR Name="shelfname" --></strong> (<!-- TMPL_VAR Name="shelfbookcount" --> books)</a></td><td>
+						<input type="checkbox" name="DEL-<!-- TMPL_VAR Name="shelf" -->"></td></tr>
 			<!-- /TMPL_LOOP -->
-    </table>
-    <p><input type=submit value="Delete Shelves"><p>
-    </td><td align=center valign=top>
-    <form method=post>
-    <input type="hidden" name=shelves value=1>
-    <p>Add Shelf: <input name=addshelf size=25><p>
-    <p><input type=submit value="Add New Shelf"><p>
-    </form>
-    </td></tr></table>
+	
+    </table><input type="submit" value="Delete Selected Shelves" class="cancel" /></form>
+	
 
-	<!-- TMPL_ELSE -->
-		<center>
-		<table border="0" cellpadding=4 cellspacing=0>
-			<tr><td bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-				<table border="0" cellpadding=5 cellspacing=0 width=100%>
-					<tr><th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-					<font color=white>Shelf List</font>
-					</th></tr>
-				</table>
-			</td></tr>
+	<!-- TMPL_ELSE --><form method="post">
+    <input type="hidden" name="shelves" value="1">
+    <label for="addshelf">Add Shelf:</label> <input name="addshelf" id="addshelf" type="text" size="25" />
+    <input type="submit" value="Add New Shelf" class="submit" />
+    </form>
+		<form action="shelves.pl" method="get"><input type="hidden" name="shelves" value="1" /><table>
+		<tr><th>Shelf Name</th><th>Delete?</th></tr>
+		<!-- TMPL_IF NAME="shelvesloop" -->
 			<!-- TMPL_LOOP Name="shelvesloop" -->
-				<tr><td bgcolor="<!-- TMPL_VAR Name="color" -->">
-					<a href="shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->">
-						<!-- TMPL_VAR Name="shelfname" -->(<!-- TMPL_VAR Name="shelfbookcount" --> books)
-					</a>
-				</td></tr>
+				<tr><td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->">
+						<strong><!-- TMPL_VAR Name="shelfname" --></strong> (<!-- TMPL_VAR Name="shelfbookcount" --> books)</a>
+				</td><td>
+						<input type="checkbox" name="DEL-<!-- TMPL_VAR Name="shelf" -->"></td></tr>
 			<!-- /TMPL_LOOP -->
+		<!-- TMPL_ELSE -->
+		<tr><td colspan="2">There are no virtual book shelves</td></tr>
+		<!-- /TMPL_IF -->
 		</table>
-		<P><a href=shelves.pl?shelves=1>Add or Remove Book Shelves</a>
+		<input type="submit" value="Delete Selected Shelves" class="cancel" /></form>
+
 	<!-- /TMPL_IF -->
 
 <!-- /TMPL_IF --></div>

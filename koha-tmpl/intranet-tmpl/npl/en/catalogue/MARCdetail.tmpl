@@ -1,157 +1,157 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: MARC Record View<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
 <div class="tabitem"><form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" value="intra" name="type" /><input type="submit" class="submit" value="Brief Display" /></form><!-- TMPL_IF NAME="norequests" -->&nbsp;<!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /> <input type="submit" class="submit" value="Place Reserve" /></form>
-		<!-- /TMPL_IF --></div>
+		<!-- /TMPL_IF --><form action="/cgi-bin/koha/detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Simple Print View" /></form></div>
 
-<div class="table"><table>
-	<!-- TMPL_LOOP name="0XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+<div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="0XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
 	</tr>
 	</tmpl_loop>
 	</tmpl_loop>
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="1XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="1XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="2XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="2XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="3XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="3XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="4XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="4XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="5XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="5XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="6XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="6XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="7XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="7XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="8XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="8XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
 
-    <div class="table"><table>
-	<!-- TMPL_LOOP name="9XX" -->
-	<tr><td colspan="5"><tmpl_var name="tag"></td></tr>
-	<!-- TMPL_LOOP name="subfield" -->
+    <div class="table"><table class="marc">
+	<!-- TMPL_LOOP NAME="9XX" -->
+	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
-	    <td><!-- TMPL_VAR name="marc_subfield" --></td>
-		<td><!-- TMPL_VAR name="marc_lib" --></td>
-		<td><!-- TMPL_VAR name="marc_value" --></td>
-		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">?</a></td>
+	    <td><!-- TMPL_VAR NAME="marc_subfield" --></td>
+		<td class="label"><!-- TMPL_VAR NAME="marc_lib" --></td>
+		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
+		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
        </tr>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
@@ -159,13 +159,21 @@
 
     <div class="table"><table>
 		<tr>
-			<!-- TMPL_LOOP name="item_header_loop" --><th><tmpl_var name="header_value"></th><!-- /TMPL_LOOP -->
+			<!-- TMPL_LOOP NAME="item_header_loop" --><th><tmpl_VAR NAME="header_value"></th><!-- /TMPL_LOOP -->
 		</tr>
-		<!-- TMPL_LOOP name="item_loop" -->
+		<!-- TMPL_LOOP NAME="item_loop" -->
 			<tr>
-					<!-- TMPL_VAR name="item_value" -->
+					<!-- TMPL_VAR NAME="item_value" -->
 			</tr>
 		<!-- /TMPL_LOOP -->
      </table></div>
 	 </div>
+	<script language="JavaScript" type="text/javascript">
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+	if (is_confirmed) {
+		window.location="acqui.simple/addbiblio.pl?op=delete&bibid=<!-- TMPL_VAR NAME="bibid" -->";
+	}
+}
+</script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

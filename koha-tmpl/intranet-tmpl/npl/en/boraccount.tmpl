@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Account for  <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -31,10 +31,7 @@
 </table></div>
 <!-- The manual invoice and credit buttons -->
 <div class="tabitem">
-<form action="/cgi-bin/koha/maninvoice.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><input type="submit" class="submit" value="Create
- Manual Invoice" /></form> <form action="/cgi-bin/koha/mancredit.pl" method="get"> <input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" value="Create
- Manual Credit" /></form> <form action="moremember.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" value="Return to 
-Patron Record" class="submit" /></form>
+<form action="/cgi-bin/koha/maninvoice.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><input type="submit" class="submit" value="Create Manual Invoice" /></form> <form action="/cgi-bin/koha/mancredit.pl" method="get"> <input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" value="Create Manual Credit" /></form> <form action="moremember.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" value="Return to Patron Record" class="submit" /></form>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Patrons: <!-- TMPL_IF NAME="modify" -->Edit Record for  <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- TMPL_ELSE -->Add New Patron<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<form action="/cgi-bin/koha/newmember.pl" method="post">
-<h1><!-- TMPL_VAR NAME="header" -->:</h1><!-- TMPL_IF NAME="modify" --> <h2><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --></h2><!-- /TMPL_IF -->
+<form action="/cgi-bin/koha/members/newmember.pl" method="post">
+<h1><!-- TMPL_IF NAME="addAction" -->Add New Patron<!-- TMPL_ELSE -->Update Patron Details<!-- /TMPL_IF -->:</h1><!-- TMPL_IF NAME="modify" --> <h2><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --></h2><!-- /TMPL_IF -->
   
 	<div class="table">
 	<table>
@@ -25,7 +25,8 @@
 
 	<tr>
 		<td><label for="address">Address:</label> </td>
-		<td colspan="3"><input type="text" id="address" name="address" size="25" value="<!-- TMPL_VAR NAME="address" -->" /></td>
+		<td colspan="3"><input type="text" id="address" name="address" size="25" value="<!-- TMPL_VAR NAME="address" -->" /><br />
+<input type="text" name="streetaddress" size="25" value="<!-- TMPL_VAr NAME="streetaddress" -->" /></td>
 	</tr>
 	
 	<tr>
@@ -127,7 +128,7 @@
 	</table></div>
 
 	  			<p><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input name="submit" type="submit" class="submit" value="<!-- TMPL_IF NAME="modify" -->Update<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> This Member" />
-<input class="cancel" type="button" value="Cancel" onclick="location.href='/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="member" -->'; return false;" /></p>
+<input class="cancel" type="button" value="Cancel" onclick="location.href='/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="member" -->'; return false;" /></p>
 
 </form>
 </div>

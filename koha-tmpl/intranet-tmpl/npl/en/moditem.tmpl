@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Edit Item Details<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -21,23 +21,23 @@
 
 <div class="form">
 <table>
+<caption>Set Item Status:</caption>
 <tr>
-<th><label for="lost">Set Item Status to Lost:</label></th>
-<td>
-<input type="radio" id="lost" name="Lost" value="1"<!-- TMPL_IF Name="itemlost" --> checked="checked"<!-- /TMPL_IF --> />
+<th><label for="Lost">Lost:</label></th>
+<td><input type="radio" id="Lost" name="Lost" value="1"<!-- TMPL_IF Name="itemlost" --> checked="checked"<!-- /TMPL_IF -->>
 Yes
 <input type="radio" name="Lost" value="0"<!-- TMPL_UNLESS Name="itemlost" --> checked="checked"<!-- /TMPL_UNLESS --> />
 No
 </td>
 </tr>
-<!-- <tr>
-<td>Cancelled</td>
-<td><input type="radio" name="withdrawn" value="1"<!-- TMPL_IF Name="withdrawn" --> checked="checked"<!-- /TMPL_IF -->>
+<tr>
+<th><label for="withdrawn">Cancelled</label></th>
+<td><input type="radio" id="withdrawn" name="withdrawn" value="1"<!-- TMPL_IF Name="itemwithdrawn" --> checked="checked"<!-- /TMPL_IF -->>
 Yes
-<input type="radio" name="withdrawn" value="0"<!-- TMPL_UNLESS Name="withdrawn" --> checked="checked"<!-- /TMPL_UNLESS -->>
+<input type="radio" name="withdrawn" value="0"<!-- TMPL_UNLESS Name="itemwithdrawn" --> checked="checked"<!-- /TMPL_UNLESS -->>
 No
 </td>
-</tr> -->
+</tr>
 </table>
 
 </div>

@@ -1,13 +1,12 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Search Results for <!-- TMPL_VAR NAME="searchdesc" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-
+<h3>You searched for <!-- TMPL_VAR NAME="searchdesc" --></h3>
 <div class="results">Results <!-- TMPL_VAR NAME="startfrom" --> through <!-- TMPL_VAR NAME="endat" --> of <!-- TMPL_VAR NAME="numrecords" --> records.</div>
 <table>
-<tr>
-<th>Subject</th></tr>
+<tr><th>Subject Heading</th></tr>
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
   <tr>
   <td><a href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;subjectitems=<!-- TMPL_VAR NAME="subject2" ESCAPE="HTML" -->"><!-- TMPL_VAR NAME="subject" --></a></td>

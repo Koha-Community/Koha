@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Search Results for <!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR name="title" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -36,11 +36,11 @@ Results <!-- TMPL_VAR name="showoffset" --> to <!-- TMPL_VAR name="total" --> di
 	<!-- TMPL_IF name="loop" -->
 	<!-- TMPL_LOOP name="loop" -->
 		<tr>
-			<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>
+			<td><a class="searchresults" href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>
 			<td><!-- TMPL_VAR name="author" --></td>
 			<td><!-- TMPL_IF name="copytrightdate" --><!-- TMPL_VAR name="copyrightdate" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_IF NAME="class" --><!-- TMPL_VAR NAME="class" --><!-- /TMPL_IF --></td>
-			<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->">Edit Biblio</a></td><td>&nbsp;</td>
+			<td><a class="searchresults" href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->">Edit Biblio</a></td><td>&nbsp;</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	<!-- TMPL_ELSE -->

@@ -1,5 +1,5 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
 
 <div id="main">
@@ -9,6 +9,7 @@
 <div class="tabitem">
 <form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form>
 </div>
+<div class="error">Date Accessioned must be entered in this format:  <span class="ex">yyyy-mm-dd</span></div>
 <!-- TMPL_IF NAME="item_loop" -->
 <div class="table">
 <table>
@@ -20,6 +21,7 @@
 		<tr>
 			<!-- TMPL_VAR name="item_value" -->
 			<td><a href="/cgi-bin/koha/acqui.simple/additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR name="bibid" -->&amp;itemnum=<!-- TMPL_VAR name="itemnum" -->">Edit</a> </td>
+<td><a href="#" onclick="confirm_deletion(<!-- TMPL_VAR name="bibid" -->,<!-- TMPL_VAR name="itemnum" -->)">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 </table>
@@ -100,6 +102,12 @@ function Check(f) {
 function Dopop(link,i) {
 	defaultvalue=document.forms[0].field_value[i].value;
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function confirm_deletion(bibid,itemnum) {
+	var is_confirmed = confirm('Do you confirm item deletion ?');
+	if (is_confirmed) {
+	window.location = "additem.pl?op=delitem&bibid="+bibid+"&itemnum="+itemnum;
+	}
 }
 </script>
 </body>

@@ -1,17 +1,18 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Details for <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
-
 <div id="main">
-
-<div class="details"><!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-			<div style="float: right;"><img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/images/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" /></div>
-<h3><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
-	<!-- TMPL_VAR NAME="class" --></h3><h4>Biblio Record <!-- TMPL_VAR NAME="biblionumber" --></h4>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<h3 class="title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
+	<!-- TMPL_VAR NAME="class" --></h3><div class="details">
+			<div style="float: right;">
+<img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/koha/intranet/htdocs/intranet-tmpl/npl/en/images/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" />
+</div>
+<h4>Biblio Record <!-- TMPL_VAR NAME="biblionumber" --></h4>
 	<div class="tabitem"><form action="MARCdetail.pl" method="get">
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
-<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Place Reserve" class="submit" /></form>
+<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Place Reserve" class="submit" /></form> <form action="acqui.simple/addbiblio.pl"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Edit this Record" class="submit" /></form>
 </div>
 	<!-- /TMPL_IF -->
 <ul>
@@ -33,6 +34,7 @@
 	<!-- /TMPL_LOOP --></li>
 		<!-- /TMPL_IF -->
 			</ul>
+
 			</div>
 <div class="table"><table>
 	<tr>
@@ -93,26 +95,22 @@
 </table>
 </center>
 <br clear=all>
-<p />
- -->
-<!--
-<table border="1" cellspacing="0" cellpadding="5" width="90%">
-<tr>
-<td bgcolor="$main"
-background="/images/background-mem.gif"><b>Abstract</b></td>
-</tr>
-<tr>
+<p /> -->
+
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<!-- TMPL_IF NAME="abstract -->
+<table>
+<caption>Abstract</caption>
+<tr>
 <td><!-- TMPL_VAR NAME="abstract" --></td>
-<!-- /TMPL_LOOP -->
 </tr>
 </table>
-<p />
-<table border="1" cellspacing="0" cellpadding="5" width="90%">
-<tr>
-<td bgcolor="$main" background="/images/background-mem.gif"><b>Links to
-Associated Websites<b></td>
-</tr>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="SITE_RESULTS" -->
+<table>
+<caption>Links to Associated Web Sites</caption>
 <!-- TMPL_LOOP NAME="SITE_RESULTS" -->
 <tr>
 <td><b>Title:</b> <!-- TMPL_VAR name="title" --><br>
@@ -123,7 +121,7 @@ name="url"></a><br>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
+<!-- /TMPL_IF -->
 
--->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

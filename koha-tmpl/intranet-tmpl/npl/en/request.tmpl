@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue: Add Reserve for <!-- TMPL_VAR Name="title" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 <div id="main">
@@ -13,20 +13,21 @@
 <!-- TMPL_VAR Name="author" --></h3>
 <div class="form">
 	<table>
-		<tr><th>Rank</th><td><select name="rank-request">
-			<!--$priorityoptions-->
+		<tr><th>Rank</th><td>
+<select name="rank-request">
 			<!-- TMPL_LOOP Name="optionloop" -->
 				<option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR Name="num" -->
 				</option>
 			<!-- /TMPL_LOOP -->
-			</select></td></tr>
+			</select>
+			</td></tr>
 
 <!-- 		<tr><th>Notes</th><td><input type="text" size="20" name="notes"></tr> -->
 		<tr><th>Date</th><td><!-- TMPL_VAR name="date" --></td></tr>
 		<tr><th>Pickup</th><td><!-- TMPL_VAR name="CGIbranch" --></td></tr>
 		<!-- <tr><th>Request</th><td><input type="checkbox" name="request" value="any">Next Available, (or choose from list below)</tr> -->
-		<tr><th>Card Number <a href="/cgi-bin/koha/member-search.pl" onclick="PopWin(this, 'newwin', 300, 400); return false;">?</a></th><td><input type="text" size="10" name="member" /></td></tr>
+		<tr><th>Card Number <a href="/cgi-bin/koha/member-search.pl" onclick="PopWin(this, 'newwin', 300, 400); return false;">(Quick Search)</a></th><td><input type="text" size="10" name="member" /></td></tr>
 	</table>
 </div>
 

@@ -1,10 +1,10 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Advanced Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 
 <div id="main">
-<h1>Catalogue Search</h1>
+<h1>Advanced Catalogue Search</h1>
 <h3>Search by Number</h3>
 <div class="form">
 <form action="/cgi-bin/koha/search.pl" method="post">
@@ -26,10 +26,6 @@
 			<option value="">Any</option>
 			<!-- TMPL_VAR name="classlist" -->
 			</select></td></tr>
-
-<!-- This is commented out because it doesn't seem to actually work -->			
-<!-- <tr><th>Branch</th><td><select name="branch"><option value="">-- Choose a Branch -- </option></select></td></tr> -->
-
 <tr><th>Pub Date</th><td>(before) <input type="text" size="8" name="date-before">  (after) <input type="text" size="8" name="date-after" /></td></tr>
 <tr><th>Search Type</th><td><input type="radio" name="ttype" value="normal" checked="checked" />Normal	<input type="radio" name="ttype" value="exact" />Exact</td></tr>
 </table>

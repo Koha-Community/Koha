@@ -4,6 +4,7 @@
 <head>
 <title>Athens County Library Services -- Koha Intranet</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME='themelang' -->/includes/favicon.ico" type="image/x-icon" />
 <style type="text/css"> 
 	@import url(<!-- TMPL_VAR NAME='themelang' -->/includes/intranet.css);
 </style>
@@ -20,7 +21,7 @@ function openWindow(targeturl, windowname) {
 	// Open the popup window if it doesn't already exist and give it focus.
 	function PopWin(targeturl, windowname) {
 	
-		if (!newwin || newwin.closed) newwin = window.open(targeturl,windowname, "height=300,width=400");
+		if (!newwin || newwin.closed) newwin = window.open(targeturl,windowname, "height=300,width=400,scrollbars=yes,resizable=yes");
 	  newwin.focus();
 	}
 	

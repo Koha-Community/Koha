@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-circ-open.inc" -->Koha -- Circulation: Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation: Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -12,7 +12,7 @@
 		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
 		<tr><th>Patron: </th><td>
 			<ul>
-						<li><a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
+						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
 			<li><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> </li>
 			<li><!-- TMPL_VAR Name="borstraddress" --><br />
 			<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
@@ -56,7 +56,7 @@
 			<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
 			<tr><th>Patron: </th><td>
 			<ul>
-						<li><a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
+						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
 			<li><!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" --></li>
 			<li><!-- TMPL_VAR Name="borstraddress" --><br />
 			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
@@ -79,8 +79,8 @@
 <h1>Circulation: Returns</h1>
 	<div class="details">
 	<form method="post" action="/cgi-bin/koha/circ/returns.pl"  name="mainform" id="mainform">
-			<label for="barcode">Enter Book Barcode</label>
-		<input name="barcode" id="barcode" size="14" maxlength="14" />
+			<label for="barcode">Enter Item Barcode</label>
+			<input name="barcode" id="barcode" size="14" maxlength="14" class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" />
 			<input type="submit" class="submit" value="Submit" />
 			<!-- TMPL_LOOP Name="inputloop" -->
 				<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
@@ -111,10 +111,10 @@
 
 <!-- TMPL_IF Name="returned" -->
 <div class="table"><table>
-		<tr><th>Item Information</th><th>Borrower Information</th></tr>
+		<tr><th>Item Information</th><th>Patron Information</th></tr>
 		<tr><td><!-- TMPL_VAR Name="itemtitle" -->
 		</td><td><div class="flags">
-<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->"><!-- TMPL_VAR Name="riborcnum" --></a>
+<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->"><!-- TMPL_VAR Name="riborcnum" --></a>
 		<!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" -->
 
 <!-- removed: removed-from-returns.tmpl -->
@@ -128,25 +128,13 @@
 
 
 
-<!-- TMPL_IF Name="returneditems" -->
+<!-- TMPL_IF Name="riloop" -->
 <div class="table">
 		<table>
 		<caption>Returned Items</caption>
-		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
+		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Patron</th></tr>
 		<!-- TMPL_LOOP Name="riloop" -->
-			<tr><td>
-				<!-- TMPL_IF Name="duedate" -->
-					<!-- TMPL_IF Name="early" -->
-						<font color="red">
-					<!-- /TMPL_IF -->
-						<!-- TMPL_VAR Name="year" -->/<!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="day" -->
-					<!-- TMPL_IF Name="early" -->
-						</font>
-					<!-- /TMPL_IF -->
-				<!-- TMPL_ELSE -->
-					Not on Issue.
-				<!-- /TMPL_IF -->
-			</td>
+			<tr><td><!-- TMPL_IF Name="duedate" --><!-- TMPL_IF Name="early" --><span class="error"><!-- /TMPL_IF --><!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="day" -->/<!-- TMPL_VAR Name="year" --><!-- TMPL_IF Name="early" --></span><!-- /TMPL_IF --><!-- TMPL_ELSE -->Not on Issue.<!-- /TMPL_IF --></td>
 			<td>
 			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra"><!-- TMPL_VAR Name="barcode" --></a></td>
 			<td><!-- TMPL_VAR Name="itemtitle" --></td>
@@ -154,11 +142,11 @@
 			<td><!-- TMPL_VAR Name="itemtype" --></td>
 			<td>
 			<!-- TMPL_IF Name="duedate" -->
-				<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->">
+				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->">
 					<!-- TMPL_VAR Name="borcnum" -->
 				</a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
 			<!-- TMPL_ELSE -->
-				<!-- TMPL_VAR Name="bornum" -->
+								<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
 			<!-- /TMPL_IF -->
 			</td></tr>
 		<!-- /TMPL_LOOP -->

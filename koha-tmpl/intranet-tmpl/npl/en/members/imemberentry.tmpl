@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Patrons: <!-- TMPL_IF NAME="surname" -->Edit Record for  <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- TMPL_ELSE -->Add New Institution<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -31,7 +31,7 @@
     <tr><td><label for="contactname">Contact Name:</label> </td><td><input type="text" id="contactname" name="contactname" size="40" value="<!-- TMPL_VAR name="contactname" -->" /></td></tr>
 	<tr><td><label for="phoneday">Phone:</label> </td><td><input type="text" id="phoneday" name="phoneday" size="20" value="<!-- TMPL_VAR name="phoneday" -->" /></td></tr>
 	<tr><td><label for="faxnumber">Fax:</label> </td><td><input type="text" id="faxnumber" name="faxnumber" size="20" value="<!-- TMPL_VAR name="faxnumber" -->" /></td></tr>
-	<tr><td><label for="emailaddress">Email:</label> </td><td><input type="text" id="emailaddress" name="emailaddress" size="20" value="<!-- TMPL_VAR name="emailaddress" -->" /></td></tr>
+	<tr><td><label for="emailaddress">Email:</label> </td><td><input type="text" id="emailaddress" name="emailaddress" size="40" value="<!-- TMPL_VAR name="emailaddress" -->" /></td></tr>
 	<tr><td><label for="altnotes">Notes:</label> </td><td><textarea id="altnotes" name="altnotes" cols="30" rows="3"><!-- TMPL_VAR name="altnotes" --></textarea></td></tr>
 </table></div>
 
@@ -39,7 +39,7 @@
 	<caption>Institution Details</caption>
 	<tr><td><label>Member Number:</label> </td><td><!-- TMPL_VAR NAME="member" --></td></tr>
 	<tr><td><label for="branchcode">Branch:</label> </td><td><!-- TMPL_VAR name="CGIbranch" --></td></tr>
-	<tr><td><label for="cardnumber_institution">Card Number: </label></td><td><input type="text" id="cardnumber_institution" name="cardnumber_institution" size="20" value="<!-- TMPL_VAR NAME="cardnumber_institution" -->" /></td></tr>
+	<tr><td><label for="cardnumber_institution">Card Number: </label></td><td><input type="text" id="cardnumber_institution" name="cardnumber_institution" size="7" maxlength="7" value="<!-- TMPL_VAR NAME="cardnumber_institution" -->" /></td></tr>
 	</table></div>
 
 	<p><input type="submit" class="submit" value="Add this Member" /></p>

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- <!-- TMPL_IF NAME="nopermission" -->Access Denied<!-- /TMPL_IF --><!-- TMPL_IF NAME="timed_out" -->Session Timed Out --<!-- /TMPL_IF --><!-- TMPL_IF NAME="different_ip" -->IP Change -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid Username or Password -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <div id="main">
 
@@ -26,7 +26,7 @@
 <!-- TMPL_IF NAME="loginprompt" -->
 <!-- login prompt time-->
 
-<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post" name="mainform" id="mainform">
 <!-- TMPL_LOOP NAME="INPUTS" -->
   <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_LOOP -->

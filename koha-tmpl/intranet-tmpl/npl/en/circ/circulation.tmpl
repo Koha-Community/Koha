@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top-circ.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation<!-- TMPL_IF Name="borrowernumber" -->: Issuing to <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->  (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -54,7 +54,7 @@
 
 <!-- TMPL_IF name="message" -->
 	<div class="details">
-	No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span> <a href="/cgi-bin/koha/memberentry.pl?type=Add">Add a new patron</a>
+	No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span> <a href="/cgi-bin/koha/members/memberentry.pl?type=Add">Add a new patron</a>
 	</div>
 <!-- /TMPL_IF -->
 
@@ -66,7 +66,7 @@
 	<p><!-- TMPL_VAR name="CGIselectborrower" --></p>
 	<p><input type="submit" class="submit" value="Select" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /></p>
-	<p>Patron not found? <a href="/cgi-bin/koha/memberentry.pl?type=Add">Add a new patron</a></p>
+	<p>Patron not found? <a href="/cgi-bin/koha/members/memberentry.pl?type=Add">Add a new patron</a></p>
 	</form>
 </div>
 <!-- TMPL_ELSE -->
@@ -93,7 +93,7 @@
 <li><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></li>
 <li><!-- TMPL_VAR NAME="phone" --></li>
 <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
-<li>(<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/memberentry.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit">edit</a>)</li>
+<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit">edit</a>)</li>
 </ul>
  </div>
     <h3><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
@@ -172,7 +172,7 @@
 <div class="table"><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post">
 			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 <table>
-	<caption>Issues <span class="print"><a href="/cgi-bin/koha/moremember-print.pl?bornum=<TMPL_VAR NAME="borrowernumber">">(Print Page)</a> <a href="/cgi-bin/koha/moremember-receipt.pl?bornum=<TMPL_VAR NAME="borrowernumber">">(Print Slip)</a></span></caption>
+	<caption>Issues</caption>
 	<tr>
 		<th>Due Date</th><th>Title</th><th>Author</th><th>Call No</th><th>Barcode</th><th>Renew?</th>
 	</tr>

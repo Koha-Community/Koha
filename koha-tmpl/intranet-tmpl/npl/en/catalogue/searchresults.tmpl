@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: <!-- TMPL_IF NAME="searchdesc" -->Search results for <!-- TMPL_VAR NAME="searchdesc" --><!-- TMPL_ELSE -->You did not specify any seach criteria<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -43,15 +43,15 @@
 <!-- Actual Search Results -->
 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 	<tr>
-		<td class="data"><a href="/cgi-bin/koha/detail.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> (<!-- TMPL_VAR NAME="isbn" -->)<!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></a></td>
-		<td class="data"><!-- TMPL_IF NAME="author" --><a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="author" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+		<td class="data"><a class="searchresults" href="/cgi-bin/koha/detail.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> (<!-- TMPL_VAR NAME="isbn" -->)<!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></a></td>
+		<td class="data"><!-- TMPL_IF NAME="author" --><a class="searchresults"  href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="author" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 		<td class="data"> <!-- TMPL_IF NAME="copyrightdate" --><!-- TMPL_VAR NAME="copyrightdate" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td>
 		<td><!-- TMPL_IF NAME="classification" --><!-- TMPL_VAR NAME="classification" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 		<td class="data"> <!-- TMPL_IF NAME="itemcount" --><!-- TMPL_VAR NAME="itemcount" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td>
 		<td class="data"> <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td>
 		<!-- TMPL_IF NAME="opac" -->
 		<!-- TMPL_ELSE -->
-			<td class="data"> <a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserves</a></td>
+			<td class="data"> <a class="searchresults"  href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reserves</a></td>
 		<!-- /TMPL_IF -->
 	</tr>
 <!-- /TMPL_LOOP -->
