@@ -27,6 +27,8 @@ use CGI;
 use C4::Search;
 use C4::Catalogue;
 use C4::Output; # contains gettemplate
+use C4::Auth;
+  
 my $query=new CGI;
 
 my $includes = C4::Context->config('includes') ||
@@ -41,6 +43,11 @@ if ($subject){
 } else {
 	$template = gettemplate("catalogue/moredetail.tmpl");
 }
+my $flagsrequired;
+$flagsrequired->{catalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
+
+# get variables 
 
 my $biblionumber=$query->param('bib');
 my $title=$query->param('title');
@@ -64,6 +71,9 @@ my (@items)=itemissues($bi);
 my $count=@items;
 $data->{'count'}=$count;
 my ($order,$ordernum)=getorder($bi,$biblionumber);
+
+my $env;
+$env->{itemcount}=1;
 
 $results[0]=$data;
 
@@ -92,5 +102,6 @@ foreach my $item (@items){
 $template->param(includesdir => $includes);
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);
+$template->param(loggedinuser => $loggedinuser);
 print "Content-Type: text/html\n\n", $template->output;
 
