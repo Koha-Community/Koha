@@ -1,0 +1,250 @@
+<TMPL_INCLUDE NAME="circulation-top.inc">
+
+<TMPL_IF name="borrowernumber">
+	<table align="right">
+		<tr>
+			<td>
+				<a href=circulation.pl?borrnumber=<TMPL_VAR name="borrowernumber">&branch=<TMPL_VAR name="branch">&printer=<TMPL_VAR name="printer">&print=yes>
+				<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" border="0" alt="Pr&oacute;ximo Usuario"></a> &nbsp;
+				<a href=returns.pl>
+				<img src="<TMPL_VAR name="themelang">/images/button-returns.gif" width="110" height="42" border="0" alt="Devoluciones"></a>
+				&nbsp;<a href=branchtransfers.pl><img src="<TMPL_VAR name="themelang">/images/button-transfers.gif" width="127" height="42" border="0" alt="Transferencias"></a>
+			</td>
+		</tr>
+	</table>
+	<FONT SIZE=6><em>Circulaci&oacute;n: Pr&eacute;stamos</em></FONT><br>
+	<b>Biblioteca:</b> <TMPL_VAR name="branchname">&nbsp;
+	<b>Impresora:</b> <TMPL_VAR name="printername"><br>
+	<a href=selectbranchprinter.pl>Cambiar Configuraci&oacute;n</a>
+	<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+	<p>
+<TMPL_ELSE>
+	<table align="right">
+		<tr>
+			<td>
+				<a href=returns.pl>
+				<img src="<TMPL_VAR name="themelang">/images/button-returns.gif" width="110" height="42" border="0" alt="Devoluciones"></a>
+				&nbsp<a href=branchtransfers.pl><img src="<TMPL_VAR name="themelang">/images/button-transfers.gif" width="127" height="42" border="0" alt="Transferencias"></a>
+			</td>
+		</tr>
+	</table>
+	
+<FONT SIZE=6><em>Circulaci&oacute;n: Pr&eacute;stamos</em></FONT><br>
+	<b>Biblioteca:</b> <TMPL_VAR name="branchname"> &nbsp;
+	<b>Impresora:</b> <TMPL_VAR name="printername"><br>
+	<a href=selectbranchprinter.pl>Cambiar Configuraci&oacute;n</a>
+	<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+	<p>
+</TMPL_IF>
+
+<TMPL_IF name="question">
+	<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
+		<tr>
+			
+    <th background="<TMPL_VAR name="themelang">/images/background-mem.gif"> <font size=+2 color=red><b>Consulta 
+      de Pr&eacute;stamo</b></font> </th>
+		</tr>
+		<tr>
+			<td>
+				<table border=0 cellpadding=10>
+					<tr>
+						
+          <td> Intentando prestar<TMPL_VAR name="title"> por <TMPL_VAR name="author"> 
+            a <TMPL_VAR name="firstname"> <TMPL_VAR name="surname">. 
+            <p><TMPL_VAR name="question">
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td align=center>
+				<table border=0>
+					<tr>
+						<td>
+							<form method=get>
+							<input type=hidden name=borrnumber value=<TMPL_VAR name="borrowernumber">>
+							<input type=hidden name=barcode value=<TMPL_VAR name="barcode">>
+							<input type=hidden name=questionnumber value=<TMPL_VAR name="questionnumber">>
+							<input type=hidden name=day value=<TMPL_VAR name="day">>
+							<input type=hidden name=month value=<TMPL_VAR name="month">>
+							<input type=hidden name=year value=<TMPL_VAR name="year">>
+							<input type=hidden name=stickyduedate value=<TMPL_VAR name="stickyduedate">>
+							<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+							<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+							<TMPL_VAR name="responsesform">
+							<input type=hidden name=answer value=Y>
+							<input type=submit value=Si>
+							</form>
+						</td>
+						<td>
+							<form method=get>
+							<input type=hidden name=borrnumber value=<TMPL_VAR name="borrowernumber">>
+							<input type=hidden name=barcode value=<TMPL_VAR name="barcode">>
+							<input type=hidden name=questionnumber value=<TMPL_VAR name="questionnumber">>
+							<input type=hidden name=day value=<TMPL_VAR name="day">>
+							<input type=hidden name=month value=<TMPL_VAR name="month">>
+							<input type=hidden name=year value=<TMPL_VAR name="year">>
+							<input type=hidden name=stickyduedate value=<TMPL_VAR name="stickyduedate">>
+							<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+							<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+							<TMPL_VAR name="responsesform">
+							<input type=hidden name=answer value=N>
+							<input type=submit value=No>
+							</form>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+</TMPL_IF>
+
+<TMPL_IF name="rejected">
+	<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
+		<tr>
+    <th><font color=black size=5>Error Prestando Libro</font></th>
+  </tr>
+		<tr><td><font color=red size=5><TMPL_VAR name="rejected"></font></td></tr>
+	</table>
+	<br>
+</TMPL_IF>
+
+<TMPL_IF name="message">
+	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+		<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif">Mensajes</th></tr>
+		<tr><td><TMPL_VAR name="message"></td></tr>
+	</table>
+</TMPL_IF>
+
+<TMPL_IF name="CGIselectborrower">
+	<form method=post action=/cgi-bin/koha/circ/circulation.pl>
+	<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+	<table border=1 cellspacing=0 cellpadding=5 bgcolor="#dddddd">
+		<tr>
+			<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<font color=black><b>Seleccionar usuario</b></font>
+			</th>
+		</tr>
+		<tr>
+			<td align=center>
+				<TMPL_VAR name="CGIselectborrower">
+				<br>
+				
+        <input type=submit value="Seleccionar">
+			</td>
+		</tr>
+	</table>
+<TMPL_ELSE>
+	</form><form method=post action=/cgi-bin/koha/circ/circulation.pl>
+	<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
+		<tr>
+			<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<font color=black><b>Ingresar Identificaci&oacute;n de Usuario<br> o parte del apellido</b></font>
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<input name=findborrower>
+				<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+				<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+			</td>
+		</tr>
+	</table>
+	</form>
+</TMPL_IF>
+<TMPL_IF name="borrowernumber">
+	<TMPL_VAR name="patrontable">
+	<TMPL_VAR name="flaginfotable">
+</TMPL_IF>
+
+<TMPL_IF name="borrowernumber">
+<form method=post action=/cgi-bin/koha/circ/circulation.pl>
+<table border=1 cellpadding=5>
+	<tr>
+	<td align=center valign=top>
+		<table border=0 cellspacing=0 cellpadding=5>
+			<tr>
+				<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+					<font color=black><b>Ingresar C&oacute;digo del Libro</b></font>
+				</th>
+			</tr>
+			<tr>
+				<td align=center>
+					<table border=0>
+						<tr>
+							<td>C&oacute;digo del Item:</td>
+							<td><input name=barcode size=10></td>
+							<td>
+                    <input type=submit value=Prestar>
+                  </td>
+						</tr>
+						<tr>
+							<td colspan=3 align=center>
+								<table border=0 cellpadding=0 cellspacing=0>
+									<tr>
+										<td>
+											<select name=day><option value=0>D&iacute;a<TMPL_VAR name="dayoptions"></select>
+										</td>
+										<td>
+											<select name=month><option value=0>Mes<TMPL_VAR name="monthoptions"></select>
+										</td>
+										<td>
+											<select name=year><option value=0>A&ntilde;o<TMPL_VAR name="yearoptions"></select>
+										</td>
+									</tr>
+								</table>
+								<input type=checkbox name=stickyduedate ><TMPL_VAR name="selected">> Sticky Due Date
+							</td>
+						</tr>
+					</table>
+					<input type=hidden name=borrnumber value=<TMPL_VAR name="borrowernumber">>
+					<input type=hidden name=branch value=<TMPL_VAR name="branch">>
+					<input type=hidden name=printer value=<TMPL_VAR name="printer">>
+					<input type=hidden name=print value=maybe>
+					<TMPL_IF name="CHARGES">
+						<input type=hidden name=charges value=yes>
+						<input type=hidden name=oldamount value=<TMPL_VAR name="amountold">>
+					</TMPL_IF>
+				</td>
+			</tr>
+		</table>
+	</td>
+	</tr>
+</table>
+</form>
+</TMPL_IF>
+<p clear=all><br><br>
+<TMPL_IF name="todayissues">
+<table border=1 cellpadding=5 cellspacing=0 width=80%>
+	<tr>
+		
+    <th colspan=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"> 
+      <font color=black> <b>Pr&eacute;stamos de Hoy</b></font> </th>
+	</tr>
+	<tr>
+		<th>Due Date</th><th>C&oacute;digo</th><th>T&iacute;tulo</th><th>Autor</th><th>Clase</th>
+	</tr>
+	<TMPL_VAR name="todayissues">
+</table>
+</TMPL_IF>
+
+<TMPL_IF name="previssues">
+	<table border=1 cellpadding=5 cellspacing=0 width=80%>
+		<tr>
+			
+    <th colspan=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"> 
+      <font color=black> <b>Pr&eacute;stamos Anteriores</b></font> </th>
+		</tr>
+		<tr>
+			<th>Due Date</th><th>C&oacute;digo</th><th>T&iacute;tulo</th><th>Autor</th><th>Clase</th>
+		</tr>
+		<TMPL_VAR name="previssues">
+	</table>
+</TMPL_IF>
+
+

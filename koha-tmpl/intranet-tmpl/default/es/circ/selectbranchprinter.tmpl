@@ -1,0 +1,42 @@
+<TMPL_INCLUDE Name="circulation-top.inc">
+
+<FONT SIZE=6><em>Circulaci&oacute;n: Seleccionar Impresora y Configuraci&oacute;n de Biblioteca</em></FONT><br>
+
+<center>
+<form method=post action=/cgi-bin/koha/circ/circulation.pl>
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><td colspan=2 bgcolor=<TMPL_VAR Name="headerbackgroundcolor"> align=center background=<TMPL_VAR Name="backgroundimage">>
+<font color=black><b>Por favor seleccione Biblioteca e Impresora</b></font></td></tr>
+<tr><td>
+<!--branchselection-->
+<TMPL_IF Name="onebranch">
+Biblioteca: <TMPL_VAR Name="branchname"><br>
+<TMPL_ELSE>
+	<select name=branch>
+	<TMPL_LOOP Name="branchloop">
+		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
+	</TMPL_LOOP>
+	</select>
+</TMPL_IF>
+</td>
+<td>
+<!--printerselection-->
+<TMPL_IF Name="oneprinter">
+Impresora: <TMPL_VAR Name="printername"><br>
+<TMPL_ELSE>
+	<select name=printer>
+	<TMPL_LOOP Name="printerloop">
+		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
+	</TMPL_LOOP>
+	</select>
+</TMPL_IF>
+</td></tr>
+</table>
+<input type="hidden" name="setcookies" value=1>
+<input type="submit" value="Grabar">
+</form>
+</center>
+
+
+<TMPL_INCLUDE Name="circulation-bottom.inc">
+

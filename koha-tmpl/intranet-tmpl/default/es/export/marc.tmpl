@@ -1,0 +1,15 @@
+<TMPL_INCLUDE NAME="cat-top.inc">
+
+<center>
+<FONT SIZE=6><em>Koha admin page</em></FONT><br /><br /><br />
+Export in MARC format the following biblios :
+<form method="post">
+<p>from biblio number : <input type="text" name="start_bib">
+to biblio number : <input type="text" name="end_bib"></p>
+<input type="hidden" name="op" value="export">
+<input type="submit" value="Export">
+</form>
+
+<p>(leave blank to export every biblio)</p>
+<p>Note : the items are NOT exported by this tool</p>
+<TMPL_INCLUDE NAME="cat-bottom.inc">
