@@ -2,8 +2,8 @@
 				Circulation Home</a> | <a class="button" href="returns.pl">
 				Returns</a> | <a class="button" href="branchtransfers.pl">
 				Transfers</a> | <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<label for="findborrower">Issue to Patron: </label>
-  				<input id="findborrower" name="findborrower" type="text" size="15" />
+<label for="findborrower-top">Issue to Patron: </label>
+  				<input id="findborrower-top" name="findborrower" type="text" size="15" />
 				<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
 				<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
 <input type="submit" class="submit" value="Enter Patron" />
