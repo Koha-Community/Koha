@@ -335,7 +335,9 @@ sub _next_token_internal {
 		# following token looks like a TMPL_VAR, don't stop
 		my($head, $tail, $post) = ($1, $2, $3);
 		if ($tail eq '' && $post =~ $re_tmpl_var) {
-		    warn_normal "Possible SGML \"closed start tag\" notation: $head<\n", $this->line_number;
+		    # Don't bother to show the warning if we're too confused
+		    warn_normal "Possible SGML \"closed start tag\" notation: $head<\n", $this->line_number
+			    if split(/\n/, $head) < 10;
 		} else {
 		    ($kind, $it) = (TmplTokenType::TAG, "$head>");
 		    $this->_set_readahead( $post );
@@ -376,8 +378,10 @@ sub _next_token_internal {
 	    $this->_set_syntaxerror( 1 );
 	}
     }
-    warn_normal "Unrecognizable token found: $it\n", $this->line_number_start
-	    if $kind == TmplTokenType::UNKNOWN;
+    warn_normal "Unrecognizable token found: "
+	    . (split(/\n/, $it) < 10? $it: '(too confused to show details)')
+	    . "\n", $this->line_number_start
+	if $kind == TmplTokenType::UNKNOWN;
     return defined $it? (ref $it? $it: TmplToken->new($it, $kind, $this->line_number, $this->filename)): undef;
 }
 
