@@ -1,6 +1,5 @@
 package C4::Auth;
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -63,6 +62,9 @@ sub haspermission {
     my ($cardnumber) = $sth->fetchrow;
     ($cardnumber) || ($cardnumber=$userid);
     my $flags=getuserflags($cardnumber,$dbh);
+    foreach my $fl (keys %$flags){
+	warn "$fl : $flags->{$fl}\n";
+    }
     my $configfile=configfile();
     if ($userid eq $configfile->{'user'}) {
 	# Super User Account from /etc/koha.conf
@@ -93,6 +95,7 @@ sub checkauth {
     my $template = gettemplate("opac-auth.tmpl", "opac");
     my $dbh=C4Connect();
     my $sth=$dbh->prepare("SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?");
+    warn "SessionID = $sessionID\n";
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
@@ -121,7 +124,9 @@ sub checkauth {
 	    my $sti=$dbh->prepare("UPDATE sessions SET lasttime=? WHERE sessionID=?");
 	    $sti->execute(time(), $sessionID);
 
-	    if (my $flags = haspermission($dbh, $userid, $flagsrequired)) {
+	    my $flags = haspermission($dbh, $userid, $flagsrequired);
+	    warn "Flags : $flags\n";
+	    if ($flags) {
 		return ($userid, $cookie, $sessionID, $flags);
 	    } else {
 		$template->param(nopermission => 1);
@@ -140,6 +145,7 @@ sub checkauth {
 
     } else {
 	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
+	warn "sessionID : $sessionID";
 	my $userid=$query->param('userid');
 	my $password=$query->param('password');
 	my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
@@ -177,6 +183,7 @@ sub checkauth {
 	    if ($userid) {
 		$template->param(message => "Invalid userid or password entered.");
 	    }
+	    warn "Im in here!\n";
 	    my @inputs;
 	    my $self_url = $query->self_url();
 	    foreach my $name (param $query) {

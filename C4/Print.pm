@@ -49,6 +49,7 @@ The functions in this module handle sending text to a printer.
 =cut
 
 @ISA = qw(Exporter);
+
 @EXPORT = qw(&remoteprint &printreserve &printslip);
 
 =item remoteprint
@@ -69,9 +70,7 @@ C<$items> is a reference-to-list, where each element is a
 reference-to-hash describing a borrowed item. C<$items> may be gotten
 from C<&currentissues>.
 
-=cut
 #'
-# FIXME - It'd be nifty if this could generate pretty PostScript.
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
 
