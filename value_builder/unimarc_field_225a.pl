@@ -119,7 +119,7 @@ my ($input) = @_;
 	# if there is an isbn, complete search
 		my @collections;
 	if ($isbn_found) {
-		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father=? and category='EDITORS'");
+		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father=? and category='EDITORS' order by stdlib");
 		my @splited = split //, $isbn_found;
 		my $isbn_rebuild='';
 		foreach my $x (@splited) {
@@ -131,7 +131,7 @@ my ($input) = @_;
 		}
 	} else {
 	# if there is no isbn, search with %
-		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father like ? and category='EDITORS'");
+		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father like ? and category='EDITORS' order by stdlib");
 		$sth->execute("\%$authoritysep $editor_found $authoritysep");
 		while (my ($line)= $sth->fetchrow) {
 			push @collections,$line;
