@@ -100,8 +100,7 @@ if (my $qnumber = $query->param('questionnumber')) {
 }
 
 
-# if the barcode is set    
-
+# if the barcode is set
 my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
 
 my $year=$query->param('year');
@@ -450,21 +449,11 @@ my @inp=startmenu('circulation');
 if ($query->param('barcode') eq '' && $query->param('charges') eq 'yes'){
     my $count=@inp;
      for (my $i=0;$i<$count;$i++){
-	 $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\"\)\;window1.focus\(\)/;
+	 $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\",700,600\)\;window1.focus\(\)/;
      }
 }
 
 print @inp;
-print <<EOF
-  <script language="javascript" type="text/javascript">
-  <!--
-  function messenger(url){
-         window1=window.open(url,"window1","height=700,width=600,left=150,top=50,350,screenY=50");
-      }
-//-->
-  </script>
-EOF
-;
 
 
 #print startmenu('circulation');
