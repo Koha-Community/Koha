@@ -399,11 +399,11 @@ EOF
 	    my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 	    my $overduetext="$duedate";
 	    ($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
-	    ($duedate) || ($overduetext="<img src=/koha/images/blackdot.gif>");
+	    ($duedate) || ($overduetext="<img src=/images/blackdot.gif>");
 	    my $borrowernumber=$riborrowernumber{$_};
 	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
 	    my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
-	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td><td bgcolor=$color><img src=/koha/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
+	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td><td bgcolor=$color><img src=/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
 	  } else {
 	    last
 	  }
