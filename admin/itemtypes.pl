@@ -73,13 +73,13 @@ my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 print $input->header;
 
-#start the page and read in includes
-print startpage();
-print startmenu('admin');
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
+	#start the page and read in includes
+	print startpage();
+	print startmenu('admin');
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($itemtype) {
@@ -133,11 +133,11 @@ if ($op eq 'add_form') {
 		if (!(isNotNull(window.document.Aform.description,1))) {
 			_alertString += "- description missing\\n";
 		}
-		if (!isNum(f.loanlength,0)) {
+		if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
 			_alertString += "- loan length is not a number\\n";
 		}
-		if (!isNum(f.rentalcharge,0)) {
-			_alertString += "- loan length is not a number\\n";
+		if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+			_alertString += "- rental charge is not a number\\n";
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
@@ -196,14 +196,15 @@ print "</table>";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data recorded";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
+	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
+	#start the page and read in includes
+	print startpage();
+	print startmenu('admin');
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from categoryitem where itemtype='$itemtype'");
 	$sth->execute;
@@ -232,6 +233,9 @@ print "</table>";
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
+	#start the page and read in includes
+	print startpage();
+	print startmenu('admin');
 	my $dbh = C4::Context->dbh;
 	my $itemtype=uc($input->param('itemtype'));
 	my $query = "delete from itemtypes where itemtype='$itemtype'";
@@ -245,14 +249,13 @@ print "</table>";
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
+	#start the page and read in includes
+	print startpage();
+	print startmenu('admin');
 	my @inputs=(["text","description",$searchfield],
 		["reset","reset","clr"]);
 	print mkheadr(2,'Item types admin');
 	print mkformnotable("$script_name",@inputs);
-	print <<printend
-
-printend
-	;
 	if  ($searchfield ne '') {
 		print "You Searched for <b>$searchfield<b><p>";
 	}
