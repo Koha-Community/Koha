@@ -14,6 +14,7 @@ use C4::Search;
 use Date::Manip;
 use C4::Reserves2;
 use C4::Circulation::Renewals2;
+use C4::Circulation::Circ2;
 my $input = new CGI;
 my $bornum=$input->param('bornum');
 
@@ -95,9 +96,9 @@ $data->{'borrowernotes'}<!--</a>-->
 <p align=right>
 <form action=/cgi-bin/koha/memberentry.pl method=post>
 <input type=hidden name=bornum value=$bornum>
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif"> 
+<INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif"> 
 
-<INPUT TYPE="image" name="submit"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
+<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
 </p>
 
 </TD>
@@ -131,7 +132,13 @@ for (my$i=0;$i<$numaccts;$i++){
     }
     print "<td>$accts->[$i]{'date'}</td>";
 #  print "<TD>$accts->[$i]{'accounttype'}</td>";
-    print "<TD>$accts->[$i]{'description'} $accts->[$i]{'title'}</td>
+    print "<TD>";
+    my $env;
+    if ($accts->[$i]{'accounttype'} ne 'Res'){
+      my $iteminfo=C4::Circulation::Circ2::getiteminformation($env,$accts->[$i]->{'itemnumber'},'');
+      print "<a href=/cgi-bin/koha/moredetail.pl?itemnumber=$accts->[$i]->{'itemnumber'}&bib=$iteminfo->{'biblionumber'}&bi=$iteminfo->{'biblioitemnumber'}>$accts->[$i]->{'description'} $accts->[$i]{'title'}</a>";
+    }
+    print "</td>
     <TD>$amount</td><td>$amount2</td>
     </tr>";
   }
