@@ -1,0 +1,128 @@
+<HTML>
+
+<!-- startmenu (member)
+     this  includes the head-container and <body>
+     including this via var contradicts the separation of code and design
+     a solution via tmpl_include would be better -->
+
+<TMPL_VAR NAME=startmenumember>
+
+<!-- here comes the junior stuff -->
+
+<BLOCKQUOTE>
+
+<FONT SIZE=6><em>Dodaj nowego m³odocianego czytelnika </em></font><br>
+<form action=/cgi-bin/koha/newjmember.pl method=post>
+  <!--<input type=hidden name=joining value="">
+  <input type=hidden name=expiry value="">
+  <input type=hidden name=type value="borrowers">-->
+  <input type=hidden name=borrowernumber value="<TMPL_VAR NAME=member>">
+  <input type=hidden name=updtype value=I>
+  <input type=hidden name=area value="<TMPL_VAR NAME=area>">
+  <input type=hidden name=city value="<TMPL_VAR NAME=city>">
+  <input type=hidden name=street value="<TMPL_VAR NAME=address>">
+  <input type=hidden name=streetaddress value="<TMPL_VAR NAME=streetaddress>">
+  <input type=hidden name=streetcity value="<TMPL_VAR NAME=streetcity>">
+  <input type=hidden name=phone value="<TMPL_VAR NAME=phone>">
+  <input type=hidden name=phoneday value="<TMPL_VAR NAME=phoneday>">
+  <input type=hidden name=faxnumber value="<TMPL_VAR NAME=faxnumber>">
+  <input type=hidden name=emailaddress value="<TMPL_VAR NAME=emailaddress>">
+  <input type=hidden name=contactname value="<TMPL_VAR NAME=contactname>">
+  <input type=hidden name=altphone value"<TMPL_VAR NAME=altphone>">
+
+  <table border=0 cellspacing=0 cellpadding=5 >
+
+    <tr valign=top><td  COLSPAN=1><input type=reset value="Clear all Fields"></td></tr>
+
+    <tr valign=top bgcolor="99cc33" ><td  COLSPAN=5 background="/images/background-mem.gif"></td></tr>
+
+    <tr valign=top bgcolor="99cc33" ><td  COLSPAN=5 background="/images/background-mem.gif">
+      <B>RODZIC LUB OPIEKUN </b></td></tr>
+
+    <tr valign=top bgcolor=white>
+      <td>
+        <SELECT NAME="title" SIZE="1">
+          <OPTION value=" ">Bez tytu³u
+          <TMPL_LOOP NAME=titleloop>
+            <OPTION value="<TMPL_VAR NAME=title>"<TMPL_VAR NAME=selected>><TMPL_VAR NAME=title>
+          </TMPL_LOOP>
+        </SELECT>
+      </td>
+      <td><input type=text name=firstname_guardian size=20 value="<TMPL_VAR NAME=firstname>"></td>
+      <td colspan=2><input type=text name=surname_guardian size=20 value="<TMPL_VAR NAME=surname>"></td>
+      <td><input type=text name=guardian_number size=20 value="<TMPL_VAR NAME=cardnumber>"></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td><FONT SIZE=2>Tytu³</FONT></td>
+      <td><FONT SIZE=2>Imiona*</FONT></td>
+      <td colspan=2><FONT SIZE=2>Nazwisko*</FONT></td>
+      <td><FONT SIZE=2>Numer czyteln.</FONT></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <TMPL_LOOP NAME=cmemloop>
+      <tr valign=top bgcolor="99cc33">
+        <td COLSPAN=5 background="/images/background-mem.gif">
+          <B>DZIECKO <TMPL_VAR NAME=count></b>
+        </td>
+      </TR>
+
+      <tr valign=top></tr>
+
+      <TR>
+        <td  COLSPAN=4   ALIGN=RIGHT ><font size=3 face='arial,helvetica'>
+          <STRONG>CZYTELNIK# <TMPL_VAR NAME=cmember>, Numer Karty*</STRONG>
+        </TD>
+        <TD>
+          <input type=text name=cardnumber_child_<TMPL_VAR NAME=i> size=20 value=""><br>
+          <input type=hidden name=bornumber_child_<TMPL_VAR NAME=i> value="<TMPL_VAR NAME=cmember>">
+        </td>
+      </TR>
+
+      <tr bgcolor=white>
+        <td><input type=text name=firstname_child_<TMPL_VAR NAME=i> size=20 value=""></td>
+        <td><input type=text name=surname_child_<TMPL_VAR NAME=i> size=20 value=""></td>
+        <td><input type=text name=dateofbirth_child_<TMPL_VAR NAME=i> size=10 value=""></TD>
+        <TD>
+          <input type="radio" name="sex_child_<TMPL_VAR NAME=i>" value="F">F
+          <input type="radio" name="sex_child_<TMPL_VAR NAME=i>" value="M">M*
+        </td>
+        <TD align=right><input type=text name=school_child_<TMPL_VAR NAME=i> size=20 value=""></TD>
+      </tr>
+ 
+      <tr valign=top bgcolor=white>
+        <td><FONT SIZE=2>Imiona*</FONT></td>
+        <td><FONT SIZE=2>Nazwisko*</FONT></td>
+        <td><FONT SIZE=2>Data urodzenia<BR> (dd/mm/rr)*</FONT></td>
+        <td><FONT SIZE=2>&nbsp;</FONT></td>
+        <td><FONT SIZE=2>Szko³a</FONT></td>
+      </tr>
+
+      <tr valign=top bgcolor=white>
+        <td  COLSPAN=5><textarea name=altnotes_child_<TMPL_VAR NAME=i> wrap=physical cols=70 rows=3></textarea></td>
+      </tr>
+
+      <tr valign=top bgcolor=white>
+        <td><FONT SIZE=2>Uwagi</font></td>
+      </tr>
+
+      <tr><td>&nbsp; </TD></TR>
+
+    </TMPL_LOOP>
+
+    <tr valign=top bgcolor=white>
+      <td  COLSPAN=5 align=right >
+        <input type=image src="/images/save-changes.gif" WIDTH=188 HEIGHT=44 ALT="Dodaj czytelnika" border=0>
+      </td>
+    </tr>
+
+  </TABLE>
+</form>
+   
+
+<TMPL_VAR NAME=endmenumember>
+
+</body>
+</HTML>
