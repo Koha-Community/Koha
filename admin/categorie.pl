@@ -96,7 +96,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
+		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -106,8 +106,6 @@ if ($op eq 'add_form') {
 				enrolmentperiod         => $data->{'enrolmentperiod'},
 				upperagelimit           => $data->{'upperagelimit'},
 				dateofbirthrequired     => $data->{'dateofbirthrequired'},
-				finetype                => $data->{'finetype'},
-				bulk                    => $data->{'bulk'},
 				enrolmentfee            => $data->{'enrolmentfee'},
 				overduenoticerequired   => $data->{'overduenoticerequired'},
 				issuelimit              => $data->{'issuelimit'},
@@ -118,14 +116,12 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $query = "replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (";
+	my $query = "replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (";
 	$query.= $dbh->quote($input->param('categorycode')).",";
 	$query.= $dbh->quote($input->param('description')).",";
 	$query.= $dbh->quote($input->param('enrolmentperiod')).",";
 	$query.= $dbh->quote($input->param('upperagelimit')).",";
 	$query.= $dbh->quote($input->param('dateofbirthrequired')).",";
-	$query.= $dbh->quote($input->param('finetype')).",";
-	$query.= $dbh->quote($input->param('bulk')).",";
 	$query.= $dbh->quote($input->param('enrolmentfee')).",";
 	$query.= $dbh->quote($input->param('issuelimit')).",";
 	$query.= $dbh->quote($input->param('reservefee')).",";
@@ -146,7 +142,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(total => $total->{'total'});
 	
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
 	$sth2->execute;
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -158,8 +154,6 @@ if ($op eq 'add_form') {
                                 enrolmentperiod         => $data->{'enrolmentperiod'},
                                 upperagelimit           => $data->{'upperagelimit'},
                                 dateofbirthrequired     => $data->{'dateofbirthrequired'},
-                                finetype                => $data->{'finetype'},
-                                bulk                    => $data->{'bulk'},
                                 enrolmentfee            => $data->{'enrolmentfee'},
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
                                 issuelimit              => $data->{'issuelimit'},
@@ -190,8 +184,6 @@ if ($op eq 'add_form') {
 				enrolmentperiod => $results->[$i]{'enrolmentperiod'},
 				upperagelimit => $results->[$i]{'upperagelimit'},
 				dateofbirthrequired => $results->[$i]{'dateofbirthrequired'},
-				finetype => $results->[$i]{'finetype'},
-				bulk => $results->[$i]{'bulk'},
 				enrolmentfee => $results->[$i]{'enrolmentfee'},
 				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
 				issuelimit => $results->[$i]{'issuelimit'},

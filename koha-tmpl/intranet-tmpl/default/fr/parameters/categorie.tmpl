@@ -96,7 +96,7 @@
 		<tr>
 			<td>Enrollment</td>
 			<td>
-				<input type=text name=enrolmentperiod size=2 maxlength=2 value=<TMPL_VAR NAME=enrolmentperiod>>
+				<input type=text name=enrolmentperiod size=3 maxlength=2 value=<TMPL_VAR NAME=enrolmentperiod>>
 			</td>
 		</tr>
 		<tr>
@@ -108,19 +108,7 @@
 		<tr>
 			<td>Age Minimum</td>
 			<td>
-				<input type=text name=dateofbirthrequired value=<TMPL_VAR NAME=dateofbirthrequired>>
-			</td>
-		</tr>
-		<tr>
-			<td>Profil</td>
-			<td>
-				<input type=text name=finetype size=30 maxlength=30 value=<TMPL_VAR NAME=finetype>>
-			</td>
-		</tr>
-		<tr>
-			<td>??</td>
-			<td>
-				<input type=text name=bulk value=<TMPL_VAR NAME=bulk>>
+				<input type=text name=dateofbirthrequired value=<TMPL_VAR NAME=dateofbirthrequired> size=3 maxlength=2>
 			</td>
 		</tr>
 		<tr>
@@ -132,7 +120,10 @@
 		<tr>
 			<td>D&eacute;passement</td>
 			<td>
-				<input type=text name=overduenoticerequired value=<TMPL_VAR NAME=overduenoticerequired>>
+				<select name="overduenoticerequired">
+					<option <TMPL_UNLESS name="overduenoticerequired">selected</TMPL_UNLESS> value="0">Non</option>
+					<option <TMPL_IF name="overduenoticerequired">selected</TMPL_IF> value="1">Oui</option>
+				</select>
 			</td>
 		</tr>
 		<tr>
@@ -210,7 +201,7 @@
 		</tr>
 		<tr>
 			<td>D&eacute;passement</td>
-			<td><TMPL_VAR NAME=overduenoticerequired></td>
+			<td><TMPL_IF NAME=overduenoticerequired>Oui<TMPL_ELSE>Non</TMPL_IF></td>
 		</tr>
 		<tr>
 			<td>Nb maxi emprunts</td>
@@ -288,7 +279,7 @@
                         <td><TMPL_VAR NAME=finetype></td>
                         <td><TMPL_VAR NAME=bulk></td>
                         <td><TMPL_VAR NAME=enrolmentfee></td>
-                        <td><TMPL_VAR NAME=overduenoticerequired></td>
+                        <td><TMPL_IF NAME=overduenoticerequired>Oui<TMPL_ELSE>Non</TMPL_IF></td>
                         <td><TMPL_VAR NAME=issuelimit></td>
                         <td><TMPL_VAR NAME=reservefee></td>
                         <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&categorycode=<TMPL_VAR NAME=categorycode>">Edit</a></td>
