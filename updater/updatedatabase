@@ -88,7 +88,7 @@ my %requirefields=(
 		'marc' => 'text' },
     branchtransfers=>{ 'datearrived' => 'datetime' },
     statistics=>{'borrowernumber' =>'int(11)'},
-    aqbooksellsers=>{'invoicedisc' =>'float(6,4)',
+    aqbooksellers=>{'invoicedisc' =>'float(6,4)',
     		     'nocalc' => 'int(11)'},
 );
 
@@ -284,6 +284,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.13  2002/06/27 13:30:26  tonnesen
+# Fixed typo
+#
 # Revision 1.4.2.12  2002/06/26 18:19:53  tonnesen
 # Missing two fields for aqbooksellers.
 #
