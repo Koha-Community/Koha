@@ -99,251 +99,35 @@ print startmenu('acquisitions');
 
 #-------------
 # Process input parameters
+
 my $file=$input->param('file');
 
 if ($input->param('z3950queue')) {
-    my $query=$input->param('query');
- 
-    my @serverlist;
+	PostToZ3950Queue($dbh,$input);
+} 
 
-    my $isbngood=1;
-    if ($input->param('type') eq 'isbn') {
-	$isbngood=checkvalidisbn($query);
-    }
-    if ($isbngood) {
-    foreach ($input->param) {
-	if (/S-(.*)/) {
-	    my $server=$1;
-	    if ($server eq 'MAN') {
-                push @serverlist, "MAN/".$input->param('manualz3950server')."//"
-;
-	    } else {
-                push @serverlist, $server;
-            }
-          }
-        }
 
-	addz3950queue($dbh,$input->param('query'), $input->param('type'), 
-		$input->param('rand'), @serverlist);
-    } else {
-	print "<font color=red size=+1>$query is not a valid ISBN
-	Number</font><p>\n";
-    }
+if ($input->param('uploadmarc')) {
+	AcceptMarcUpload($dbh,$input)
 }
 
-
-
-if (my $data=$input->param('uploadmarc')) {
-    my $name=$input->param('name');
-    ($name) || ($name=$data);
-    my $marcrecord='';
-    if (length($data)>0) {
-	while (<$data>) {
-	    $marcrecord.=$_;
-	}
-    }
-    my $q_marcrecord=$dbh->quote($marcrecord);
-    my $q_name=$dbh->quote($name);
-    my $sth=$dbh->prepare("insert into uploadedmarc (marc,name) values ($q_marcrecord, $q_name)");
-    $sth->execute;
-}
-
-
-#------------------------------------
-# Add biblio item, and set up menu for adding item copies
 
 if ($input->param('insertnewrecord')) {
-    my $sth;
-    my $isbn=$input->param('isbn');
-    my $issn=$input->param('issn');
-    my $lccn=$input->param('lccn');
-    my $q_origisbn=$dbh->quote($input->param('origisbn'));
-    my $q_origissn=$dbh->quote($input->param('origissn'));
-    my $q_origlccn=$dbh->quote($input->param('origlccn'));
-    my $q_origcontrolnumber=$dbh->quote($input->param('origcontrolnumber'));
-    my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
-    my $q_issn=$dbh->quote((($issn) || ('NIL')));
-    my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
-
-    #my $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
-    #$sth->execute;
-
-    print "<center>\n";
-    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file>New Record</a> | <a href=marcimport.pl>New File</a><br>\n";
-
-    # See if it already exists
-    my $sth=$dbh->prepare("select biblionumber,biblioitemnumber 
-	from biblioitems 
-	where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
-    $sth->execute;
-    my $biblionumber=0;
-    my $biblioitemnumber=0;
-    if ($sth->rows) {
-	# Already exists
-	($biblionumber, $biblioitemnumber) = $sth->fetchrow;
-	my $title=$input->param('title');
-	print << "EOF";
-	<table border=0 width=50% cellpadding=10 cellspacing=0>
-	<tr><th bgcolor=black><font color=white>Record already in database</font></th></tr>
-	<tr><td bgcolor=#dddddd>$title is already in the database with biblionumber $biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
-	</table>
-	<p>
-EOF
-    } else {
-	use strict;
-
-	# It doesn't exist; add it.
-
-  	my $error;
-  	my %biblio;
-  	my %biblioitem;
-  
-  	# convert to upper case and split on lines
-  	my $subjectheadings=$input->param('subject');
-  	my @subjectheadings=split(/[\r\n]+/,$subjectheadings);
-  
-  	my $additionalauthors=$input->param('additionalauthors');
-  	my @additionalauthors=split(/[\r\n]+/,uc($additionalauthors));
-  
-  	# Use individual assignments to hash buckets, in case
-  	#  any of the input parameters are empty or don't exist
-  	$biblio{title}		=$input->param('title');
-  	$biblio{author}		=$input->param('author');
-  	$biblio{copyright}	=$input->param('copyrightdate');
-  	$biblio{seriestitle}	=$input->param('seriestitle');
-  	$biblio{notes}		=$input->param('notes');
-  	$biblio{abstract}	=$input->param('abstract');
-  	$biblio{subtitle}	=$input->param('subtitle');
-  
- 	$biblioitem{volume}		=$input->param('volume');
-  	$biblioitem{number}		=$input->param('number');
- 	$biblioitem{itemtype}		=$input->param('itemtype');
- 	$biblioitem{isbn}		=$input->param('isbn');
- 	$biblioitem{issn}		=$input->param('issn');
- 	$biblioitem{dewey}		=$input->param('dewey');
- 	$biblioitem{subclass}		=$input->param('subclass');
- 	$biblioitem{publicationyear}	=$input->param('publicationyear');
- 	$biblioitem{publishercode}	=$input->param('publishercode');
- 	$biblioitem{volumedate}		=$input->param('volumedate');
- 	$biblioitem{volumeddesc}	=$input->param('volumeddesc');
- 	$biblioitem{illus}		=$input->param('illustrator');
- 	$biblioitem{pages}		=$input->param('pages');
- 	$biblioitem{notes}		=$input->param('notes');
-	$biblioitem{size}		=$input->param('size');
-	$biblioitem{place}		=$input->param('place');
-	$biblioitem{lccn}		=$input->param('lccn');
- 	$biblioitem{marc}	 	=$input->param('marc');
- 
- 	#print "<PRE>subjects=@subjectheadings</PRE>\n";
- 	#print "<PRE>auth=@additionalauthors</PRE>\n";
- 		
- 	($biblionumber, $biblioitemnumber, $error)=
-  	  newcompletebiblioitem($dbh,
- 		\%biblio,
- 		\%biblioitem,
- 		\@subjectheadings,
- 		\@additionalauthors
- 	);
-  
- 	if ( $error ) {
-	    print "<H2>Error adding biblio item</H2> $error\n";
-	} else { 
-
-	  my $title=$input->param('title');
-	  print << "EOF";
-	    <table cellpadding=10 cellspacing=0 border=0 width=50%>
-	    <tr><th bgcolor=black><font color=white>Record entered into database</font></th></tr>
-	    <tr><td bgcolor=#dddddd>$title has been entered into the database with biblionumber
-	    $biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
-	  </table>
-EOF
-	} # if error
-    } # if new record
-
-    my $title=$input->param('title');
-
-    # Get next barcode, or pick random one if none exist yet
-    $sth=$dbh->prepare("select max(barcode) from items");
-    $sth->execute;
-    my ($barcode) = $sth->fetchrow;
-    $barcode++;
-    if ($barcode==1) {
-	$barcode=int(rand()*1000000);
-    }
-
-    my $branchselect=GetKeyTableSelectOptions(
-		$dbh, 'branches', 'branchcode', 'branchname', 0);
-
-    print << "EOF";
-    <table border=0 cellpadding=10 cellspacing=0>
-      <tr><th bgcolor=black>
-	<font color=white> Add a New Item for $title </font>
-      </th></tr>
-      <tr><td bgcolor=#dddddd>
-      <form>
-        <input type=hidden name=newitem value=1>
-        <input type=hidden name=biblionumber value=$biblionumber>
-        <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
-        <input type=hidden name=file value=$file>
-        <table border=0>
-          <tr><td>BARCODE</td><td><input name=barcode size=10 value=$barcode>
-          Home Branch: <select name=homebranch> $branchselect </select>
-	  </td></tr>
-          <tr><td>Replacement Price:</td>
-	  <td><input name=replacementprice size=10></td></tr>
-          <tr><td>Notes</td>
-	  <td><textarea name=notes rows=4 cols=40 wrap=physical></textarea>
-	  </td></tr>
-        </table>
-        <p>
-        <input type=submit value="Add Item">
-      </form>
-      </td></tr>
-    </table>
-EOF
+    # Add biblio item, and set up menu for adding item copies
+    ($biblionumber,$biblioitemnumber)=AcceptBiblioitem($dbh,$input);
+    ItemCopyForm($dbh,$input,$biblionumber,$biblioitemnumber);
     print endmenu();
     print endpage();
-
     exit;
 }
-
 
 
 #---------------------------------------
 # Add item copy
 if ($input->param('newitem')) {
-    use strict;
-    my $error;
-    my $barcode=$input->param('barcode');
-    my $replacementprice=($input->param('replacementprice') || 0);
+    &AcceptItemCopy($dbh,$input);
+} # if newitem
 
-    my $sth=$dbh->prepare("select barcode 
-	from items 
-	where barcode=?");
-    $sth->execute($barcode);
-    if ($sth->rows) {
-	print "<font color=red>Barcode '$barcode' has already been assigned.</font><p>\n";
-    } else {
-	   # Insert new item into database
-           $error=&newitems(
-                { biblionumber=> $input->param('biblionumber'),
-                  biblioitemnumber=> $input->param('biblioitemnumber'),
-                  itemnotes=> $input->param('notes'),
-                  homebranch=> $input->param('homebranch'),
-                  replacementprice=> $replacementprice,
-                },
-                $barcode
-            );
-            if ( $error ) {
-		print "<font color=red>Error: $error </font><p>\n";
-	    } else {
-
-		print "<table border=1><tr><td bgcolor=yellow>
-			Item added with barcode $barcode
-			</td></tr></table>\n";
-            } # if error
-    } # if barcode exists
-}
 
 
 my $menu = $input->param('menu');
@@ -1182,6 +966,290 @@ sub parsemarcdata {
     return @records;
 }
 
+#----------------------------
+# Accept form results to add query to z3950 queue
+sub PostToZ3950Queue {
+    use strict;
+
+    # input parameters
+    my (
+	$dbh, 		# DBI handle
+	$input,		# CGI parms
+    )=@_;
+
+    my @serverlist;
+
+    my $query=$input->param('query');
+
+    my $isbngood=1;
+    if ($input->param('type') eq 'isbn') {
+	$isbngood=checkvalidisbn($query);
+    }
+    if ($isbngood) {
+    foreach ($input->param) {
+	if (/S-(.*)/) {
+	    my $server=$1;
+	    if ($server eq 'MAN') {
+                push @serverlist, "MAN/".$input->param('manualz3950server')."//"
+;
+	    } else {
+                push @serverlist, $server;
+            }
+          }
+        }
+
+	addz3950queue($dbh,$input->param('query'), $input->param('type'), 
+		$input->param('rand'), @serverlist);
+    } else {
+	print "<font color=red size=+1>$query is not a valid ISBN
+	Number</font><p>\n";
+    }
+} # sub PostToZ3950Queue
+
+#---------------------------------------------
+sub AcceptMarcUpload {
+    my (
+	$dbh,		# DBI handle
+	$input,		# CGI parms
+    )=@_;
+
+    my $name=$input->param('name');
+    my $data=$input->param('uploadmarc');
+    my $marcrecord='';
+
+    ($name) || ($name=$data);
+    if (length($data)>0) {
+	while (<$data>) {
+	    $marcrecord.=$_;
+	}
+    }
+    my $q_marcrecord=$dbh->quote($marcrecord);
+    my $q_name=$dbh->quote($name);
+    my $sth=$dbh->prepare("insert into uploadedmarc 
+		(marc,name) 
+	values ($q_marcrecord, $q_name)");
+    $sth->execute;
+} # sub AcceptMarcUpload
+
+#-------------------------------------------
+sub AcceptBiblioitem {
+    use strict;
+    my (
+	$dbh,
+	$input,
+    )=@_;
+
+    my $biblionumber=0;
+    my $biblioitemnumber=0;
+
+    my $sth;
+    my $isbn=$input->param('isbn');
+    my $issn=$input->param('issn');
+    my $lccn=$input->param('lccn');
+    my $q_origisbn=$dbh->quote($input->param('origisbn'));
+    my $q_origissn=$dbh->quote($input->param('origissn'));
+    my $q_origlccn=$dbh->quote($input->param('origlccn'));
+    my $q_origcontrolnumber=$dbh->quote($input->param('origcontrolnumber'));
+    my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
+    my $q_issn=$dbh->quote((($issn) || ('NIL')));
+    my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
+    my $file=$input->param('file');
+
+    #my $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
+    #$sth->execute;
+
+    print "<center>\n";
+    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file>New Record</a> | <a href=marcimport.pl>New File</a><br>\n";
+
+    # See if it already exists
+    my $sth=$dbh->prepare("select biblionumber,biblioitemnumber 
+	from biblioitems 
+	where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
+    $sth->execute;
+    if ($sth->rows) {
+	# Already exists
+	($biblionumber, $biblioitemnumber) = $sth->fetchrow;
+	my $title=$input->param('title');
+	print << "EOF";
+	<table border=0 width=50% cellpadding=10 cellspacing=0>
+	  <tr><th bgcolor=black><font color=white>Record already in database</font>
+	  </th></tr>
+	  <tr><td bgcolor=#dddddd>$title is already in the database with 
+		biblionumber $biblionumber and biblioitemnumber $biblioitemnumber
+	  </td></tr>
+	</table>
+	<p>
+EOF
+    } else {
+	use strict;
+
+	# It doesn't exist; add it.
+
+  	my $error;
+  	my %biblio;
+  	my %biblioitem;
+  
+  	# convert to upper case and split on lines
+  	my $subjectheadings=$input->param('subject');
+  	my @subjectheadings=split(/[\r\n]+/,$subjectheadings);
+  
+  	my $additionalauthors=$input->param('additionalauthors');
+  	my @additionalauthors=split(/[\r\n]+/,uc($additionalauthors));
+  
+  	# Use individual assignments to hash buckets, in case
+  	#  any of the input parameters are empty or don't exist
+  	$biblio{title}		=$input->param('title');
+  	$biblio{author}		=$input->param('author');
+  	$biblio{copyright}	=$input->param('copyrightdate');
+  	$biblio{seriestitle}	=$input->param('seriestitle');
+  	$biblio{notes}		=$input->param('notes');
+  	$biblio{abstract}	=$input->param('abstract');
+  	$biblio{subtitle}	=$input->param('subtitle');
+  
+ 	$biblioitem{volume}		=$input->param('volume');
+  	$biblioitem{number}		=$input->param('number');
+ 	$biblioitem{itemtype}		=$input->param('itemtype');
+ 	$biblioitem{isbn}		=$input->param('isbn');
+ 	$biblioitem{issn}		=$input->param('issn');
+ 	$biblioitem{dewey}		=$input->param('dewey');
+ 	$biblioitem{subclass}		=$input->param('subclass');
+ 	$biblioitem{publicationyear}	=$input->param('publicationyear');
+ 	$biblioitem{publishercode}	=$input->param('publishercode');
+ 	$biblioitem{volumedate}		=$input->param('volumedate');
+ 	$biblioitem{volumeddesc}	=$input->param('volumeddesc');
+ 	$biblioitem{illus}		=$input->param('illustrator');
+ 	$biblioitem{pages}		=$input->param('pages');
+ 	$biblioitem{notes}		=$input->param('notes');
+	$biblioitem{size}		=$input->param('size');
+	$biblioitem{place}		=$input->param('place');
+	$biblioitem{lccn}		=$input->param('lccn');
+ 	$biblioitem{marc}	 	=$input->param('marc');
+ 
+ 	#print "<PRE>subjects=@subjectheadings</PRE>\n";
+ 	#print "<PRE>auth=@additionalauthors</PRE>\n";
+ 		
+ 	($biblionumber, $biblioitemnumber, $error)=
+  	  newcompletebiblioitem($dbh,
+ 		\%biblio,
+ 		\%biblioitem,
+ 		\@subjectheadings,
+ 		\@additionalauthors
+ 	);
+  
+ 	if ( $error ) {
+	    print "<H2>Error adding biblio item</H2> $error\n";
+	} else { 
+
+	  my $title=$input->param('title');
+	  print << "EOF";
+	    <table cellpadding=10 cellspacing=0 border=0 width=50%>
+	    <tr><th bgcolor=black><font color=white>Record entered into database</font></th></tr>
+	    <tr><td bgcolor=#dddddd>$title has been entered into the database with biblionumber
+	    $biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
+	  </table>
+EOF
+	} # if error
+    } # if new record
+
+    return $biblionumber,$biblioitemnumber;
+} # sub AcceptBiblioitem
+
+sub ItemCopyForm {
+    use strict;
+    my (
+	$dbh,
+	$input,		# CGI input object
+	$biblionumber,
+	$biblioitemnumber,
+    )=@_;
+
+    my $sth;
+    my $barcode;
+
+    my $title=$input->param('title');
+    my $file=$input->param('file');
+
+    # Get next barcode, or pick random one if none exist yet
+    $sth=$dbh->prepare("select max(barcode) from items");
+    $sth->execute;
+    ($barcode) = $sth->fetchrow;
+    $barcode++;
+    if ($barcode==1) {
+	$barcode=int(rand()*1000000);
+    }
+
+    my $branchselect=GetKeyTableSelectOptions(
+		$dbh, 'branches', 'branchcode', 'branchname', 0);
+
+    print << "EOF";
+    <table border=0 cellpadding=10 cellspacing=0>
+      <tr><th bgcolor=black>
+	<font color=white> Add a New Item for $title </font>
+      </th></tr>
+      <tr><td bgcolor=#dddddd>
+      <form>
+        <input type=hidden name=newitem value=1>
+        <input type=hidden name=biblionumber value=$biblionumber>
+        <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
+        <input type=hidden name=file value=$file>
+        <table border=0>
+          <tr><td>BARCODE</td><td><input name=barcode size=10 value=$barcode>
+          Home Branch: <select name=homebranch> $branchselect </select>
+	  </td></tr>
+          <tr><td>Replacement Price:</td>
+	  <td><input name=replacementprice size=10></td></tr>
+          <tr><td>Notes</td>
+	  <td><textarea name=notes rows=4 cols=40 wrap=physical></textarea>
+	  </td></tr>
+        </table>
+        <p>
+        <input type=submit value="Add Item">
+      </form>
+      </td></tr>
+    </table>
+EOF
+
+} # sub ItemCopyForm
+
+#---------------------------------------
+# Accept form data to add an item copy
+sub AcceptItemCopy {
+    use strict;
+    my ( $dbh, $input )=@_;
+
+    my $error;
+    my $barcode=$input->param('barcode');
+    my $replacementprice=($input->param('replacementprice') || 0);
+
+    my $sth=$dbh->prepare("select barcode 
+	from items 
+	where barcode=?");
+    $sth->execute($barcode);
+    if ($sth->rows) {
+	print "<font color=red>Barcode '$barcode' has already been assigned.</font><p>\n";
+    } else {
+	   # Insert new item into database
+           $error=&newitems(
+                { biblionumber=> $input->param('biblionumber'),
+                  biblioitemnumber=> $input->param('biblioitemnumber'),
+                  itemnotes=> $input->param('notes'),
+                  homebranch=> $input->param('homebranch'),
+                  replacementprice=> $replacementprice,
+                },
+                $barcode
+            );
+            if ( $error ) {
+		print "<font color=red>Error: $error </font><p>\n";
+	    } else {
+
+		print "<table border=1 align=center cellpadding=10>
+			<tr><td bgcolor=yellow>
+			Item added with barcode $barcode
+			</td></tr></table>\n";
+            } # if error
+    } # if barcode exists
+} # sub AcceptItemCopy
+
 #---------------
 # Create an HTML option list for a <SELECT> form tag by using
 #    values from a DB file
@@ -1235,7 +1303,7 @@ sub newcompletebiblioitem {
 
 	my ( $biblionumber, $biblioitemnumber, $error);		# return values
 
-	my $debug=1;
+	my $debug=0;
 	my $sth;
 	my $subjectheading;
 	my $additionalauthor;
@@ -1342,7 +1410,7 @@ sub getoraddbiblio {
 	# return
 	my $biblionumber;
 
-	my $debug=1;
+	my $debug=0;
 	my $sth;
 	my $error;
 	
