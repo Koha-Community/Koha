@@ -50,6 +50,7 @@ my $branchoptions;
 my $printeroptions;
 foreach (keys %$branches) {
     (next) unless ($_);
+    (next) unless ($branches->{$_}->{'IS'});
     $branchcount++;
     my $selected='';
     ($selected='selected') if ($_ eq $oldbranch);
@@ -116,7 +117,8 @@ $branchform
 $printerform
 </td></tr>
 </table>
-<input type="submit" value="Change Settings" type="changesettings">
+<input type="hidden" name="setcookies" value=1>
+<input type="submit" value="Submit" type="changesettings">
 </form>
 </center>
 

@@ -30,12 +30,11 @@ my $printer = $query->param("printer");
 ($printer) || ($printer=$query->cookie('printer')) ;
 
 #set up cookie.....
+my $info = '';
 my $branchcookie;
 my $printercookie;
-unless ($query->cookie('branch')) {
+if ($query->param('setcookies')) {
     $branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
-}
-unless ($query->cookie('printer')) {
     $printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 }
 
@@ -324,7 +323,6 @@ EOF
 # make the issued books table.....
 my $todaysissues='';
 my $previssues='';
-my $info='';
 if ($borrower) {
     my $issueslist = getissues($borrower);
     my $tcolor = '';
