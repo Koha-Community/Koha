@@ -57,6 +57,21 @@ if ($type eq 'allsub'){
   undeletebib($bib);
   print "Succesfully undeleted";
   print "<p><a href=/cgi-bin/koha/maint/catmaintain.pl>Back to Catalogue Maintenance</a>";
+} elsif ($type eq 'fixitemtype'){
+  my $bi=$input->param('bi');
+  my $item=$input->param('item');
+  print "<form method=post action=/cgi-bin/koha/maint/catmaintain.pl>";
+  print "<input type=hidden name=bi value=$bi>";
+  print "<input type=hidden name=type value=updatetype>";
+  print "Itemtype:<input type=text name=itemtype value=$item><br>\n";
+  print "<input type=submit value=Change>";
+  print "</form>";
+} elsif ($type eq 'updatetype'){
+  my $bi=$input->param('bi');
+  my $itemtype=$input->param('itemtype');
+  updatetype($bi,$itemtype);
+  print "Updated successfully";
+  print "<p><a href=/cgi-bin/koha/maint/catmaintain.pl>Back to Catalogue Maintenance</a>";
 } else {
   print "<B>Subject Maintenance</b><br>";
   print "<form action=/cgi-bin/koha/maint/catmaintain.pl method=post>";

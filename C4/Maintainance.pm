@@ -13,7 +13,8 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&listsubjects &updatesub &shiftgroup &deletedbib &undeletebib);
+@EXPORT = qw(&listsubjects &updatesub &shiftgroup &deletedbib &undeletebib
+&updatetype);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -138,6 +139,13 @@ sub undeletebib{
   $dbh->disconnect;
 }
 
-
+sub updatetype{
+  my ($bi,$type)=@_;
+  my $dbh=C4Connect;
+  my $sth=$dbh->prepare("Update biblioitems set itemtype='$type' where biblioitemnumber=$bi");
+  $sth->execute;
+  $sth->finish;
+  $dbh->disconnect;
+}
 END { }       # module clean-up code here (global destructor)
     
