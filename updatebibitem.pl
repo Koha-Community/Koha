@@ -13,42 +13,45 @@ my $input= new CGI;
 #print $input->Dump;
 
 
-my $bibitemnum=checkinp($input->param('bibitemnum'));
-my $bibnum=checkinp($input->param('bibnum'));
-my $itemtype=checkinp($input->param('Item'));
-my $isbn=checkinp($input->param('ISBN'));
-my $publishercode=checkinp($input->param('Publisher'));
-my $publicationdate=checkinp($input->param('Publication'));
-my $class=checkinp($input->param('Class'));
+my $bibitemnum      = checkinp($input->param('bibitemnum'));
+my $bibnum          = checkinp($input->param('bibnum'));
+my $itemtype        = checkinp($input->param('Item'));
+my $isbn            = checkinp($input->param('ISBN'));
+my $publishercode   = checkinp($input->param('Publisher'));
+my $publicationdate = checkinp($input->param('Publication'));
+my $class           = checkinp($input->param('Class'));
+my $illus           = checkinp($input->param('Illustrations'));
+my $pages           = checkinp($input->param('Pages'));
+my $volumeddesc     = checkinp($input->param('Volume'));
+my $notes           = checkinp($input->param('Notes'));
+my $size            = checkinp($input->param('Size'));
+my $place           = checkinp($input->param('Place'));
 my $classification;
 my $dewey;
 my $subclass;
-if ($itemtype ne 'NF'){
+
+if ($itemtype ne 'NF') {
   $classification=$class;
-}
-if ($class =~/[0-9]+/){
+} # if
+
+if ($class =~/[0-9]+/) {
 #   print $class;
    $dewey= $class;
    $dewey=~ s/[a-z]+//gi;
    my @temp;
-   if ($class =~ /\./){
+   if ($class =~ /\./) {
      @temp=split(/[0-9]+\.[0-9]+/,$class);
    } else {
      @temp=split(/[0-9]+/,$class);
-   }
+   } # else
    $classification=$temp[0];
    $subclass=$temp[1];
 #   print $classification,$dewey,$subclass;
-}else{
+} else {
   $dewey='';
   $subclass='';
-}
-my $illus=checkinp($input->param('Illustrations'));
-my $pages=checkinp($input->param('Pages'));
-my $volumeddesc=checkinp($input->param('Volume'));
-my $notes=checkinp($input->param('Notes'));
-my $size=checkinp($input->param('Size'));
-my $place=checkinp($input->param('Place'));
+} # else
+
 my (@items)=itemissues($bibitemnum);
 #print @items;           
 my $count=@items;
