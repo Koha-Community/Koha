@@ -50,7 +50,8 @@ border="0" src="/images/delete-mem.gif">
 NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
 <b>Additional Author:</b> <TMPL_VAR NAME="additional"><br>
 <b>Series Title:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Subject:</b> <TMPL_VAR NAME="subject"><br>
+<b>Subject:</b> <TMPL_LOOP NAME="subjects"><a href="/cgi-bin/koha/search.pl?subject=<TMPL_VAR NAME="subject" ESCAPE="URL">"><TMPL_VAR NAME="subject"> </a>|
+</TMPL_LOOP><br>
 <b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
 <b>Notes:</b> <TMPL_VAR NAME="notes"><br>
 <b>Unititle:</b> <TMPL_VAR NAME="unititle"><br>
