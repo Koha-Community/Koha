@@ -266,25 +266,26 @@ sub mkform3{
 sub mkformnotable{
   my ($action,@inputs)=@_;
   my $string="<form action=$action method=post>\n";
-  my $count=@inputs;
-  for (my $i=0; $i<$count; $i++){
-    if ($inputs[$i][0] eq 'hidden'){
-      $string=$string."<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
-    }
-    if ($inputs[$i][0] eq 'radio') {
-      $string.="<input type=radio name=$inputs[$i][1] value=$inputs[$i][2]>$inputs[$i][2]";
-    } 
-    if ($inputs[$i][0] eq 'text') {
-      $string.="<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }
-    if ($inputs[$i][0] eq 'textarea') {
-        $string.="<textarea name=$inputs[$i][1] wrap=physical cols=40 rows=4>$inputs[$i][2]</textarea>";
-    }
-    if ($inputs[$i][0] eq 'reset'){
-      $string.="<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }    
-    if ($inputs[$i][0] eq 'submit'){
-      $string.="<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+  foreach my $input (@inputs){
+      if ($$input[0] eq 'hidden'){
+	  $string .= 
+	      "<input type=hidden name=$$input[1] value=\"$$input[2]\">\n";
+      } elsif ($$input[0] eq 'radio') {
+	  $string .= 
+	      "<input type=radio name=$$input[1] value=$$input[2]>$$input[2]";
+      } elsif ($$input[0] eq 'text') {
+	  $string .= 
+	      "<input type=$$input[0] name=$$input[1] value=\"$$input[2]\">";
+      } elsif ($$input[0] eq 'textarea') {
+        $string .= 
+	    "<textarea name=$$input[1] wrap=physical cols=40 rows=4>";
+	$string .= 
+	    "$$input[2]</textarea>";
+    } elsif ($$input[0] eq 'reset'){
+	$string .= 
+	    "<input type=reset name=$$input[1] value=\"$$input[2]\">";
+    } elsif ($$input[0] eq 'submit'){
+      $string.="<input type=submit name=$$input[1] value=\"$$input[2]\">";
     }    
   }
   $string=$string."</form>";
