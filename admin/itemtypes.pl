@@ -113,22 +113,11 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan) values (";
-	$query.= $dbh->quote($input->param('itemtype')).",";
-	$query.= $dbh->quote($input->param('description')).",";
-	if ($input->param('renewalsallowed') ne 1) {
-		$query.= "0,";
-	} else {
-		$query.= "1,";
-	}
-	$query.= $dbh->quote($input->param('rentalcharge')).",";
-	if ($input->param('notforloan') ne 1) {
-		$query.= "0)";
-	} else {
-		$query.= "1)";
-	}
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan) values (?,?,?,?,?)");
+	$sth->execute(
+		$input->param('itemtype'),$input->param('description'),
+		$input->param('renewalsallowed'),$input->param('rentalcharge'),
+		$input->param('notforloan')?1:0);
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
 	exit;
