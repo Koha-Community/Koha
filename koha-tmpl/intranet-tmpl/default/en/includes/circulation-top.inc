@@ -73,7 +73,7 @@ a.acquisition {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#7777777;
+	color:#777777;
 	padding:4px;
 	font-weight: bold;
 	}
