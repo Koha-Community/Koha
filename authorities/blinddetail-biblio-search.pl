@@ -61,7 +61,7 @@ my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
 
 my $auth_type = AUTHgetauth_type($authtypecode);
-warn "XX = ".$auth_type->{auth_tag_to_report};
+# warn "XX = ".$auth_type->{auth_tag_to_report};
 
 my $record =AUTHgetauthority($dbh,$authid);
 # open template
@@ -78,25 +78,43 @@ my ($template, $loggedinuser, $cookie)
 my @loop_data =();
 my $tag;
 my @loop_data =();
-foreach my $field ($record->fields($auth_type->{auth_tag_to_report})) {
-		my @subfields_data;
-		my @subf=$field->subfields;
-	# loop through each subfield
-	for my $i (0..$#subf) {
-		$subf[$i][0] = "@" unless $subf[$i][0];
-		my %subfield_data;
+if ($authid) {
+	foreach my $field ($record->fields($auth_type->{auth_tag_to_report})) {
+			my @subfields_data;
+			my @subf=$field->subfields;
+		# loop through each subfield
+		for my $i (0..$#subf) {
+			$subf[$i][0] = "@" unless $subf[$i][0];
+			my %subfield_data;
 			$subfield_data{marc_value}=$subf[$i][1];
-		$subfield_data{marc_subfield}=$subf[$i][0];
-		$subfield_data{marc_tag}=$field->tag();
-		push(@subfields_data, \%subfield_data);
+			$subfield_data{marc_subfield}=$subf[$i][0];
+			$subfield_data{marc_tag}=$field->tag();
+			push(@subfields_data, \%subfield_data);
+		}
+		if ($#subfields_data>=0) {
+			my %tag_data;
+			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+			$tag_data{subfield} = \@subfields_data;
+			push (@loop_data, \%tag_data);
+		}
 	}
-	if ($#subfields_data>=0) {
+} else {
+# authid is empty => the user want to empty the entry.
+	my @subfields_data;
+	foreach my $subfield ('a'..'z') {
+			my %subfield_data;
+			$subfield_data{marc_value}='';
+			$subfield_data{marc_subfield}=$subfield;
+			push(@subfields_data, \%subfield_data);
+		}
+# 	if ($#subfields_data>=0) {
 		my %tag_data;
-		$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+# 			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
 		$tag_data{subfield} = \@subfields_data;
 		push (@loop_data, \%tag_data);
-	}
+# 	}
 }
+
 $template->param("0XX" =>\@loop_data);
 
 # my $authtypes = getauthtypes;
@@ -110,7 +128,7 @@ $template->param("0XX" =>\@loop_data);
 # 	push @authtypesloop, \%row;
 # }
 
-$template->param(authid => $authid,
+$template->param(authid => $authid?$authid:"",
 # 				authtypesloop => \@authtypesloop,
 				index => $index);
 output_html_with_http_headers $query, $cookie, $template->output;

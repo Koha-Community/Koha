@@ -160,7 +160,7 @@ sub create_input () {
 
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
-warn "=>".$record->as_formatted;
+# warn "=>".$record->as_formatted;
     # fill arrays
     my @loop_data =();
     my $tag;
@@ -334,7 +334,6 @@ if ($op eq "add") {
 	}
 	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record built => now, record in DB
-	warn "IN ADD : ".$record->as_formatted();
 	if ($is_a_modif) {
 		 AUTHmodauthority($dbh,$authid,$record,$authtypecode);
 	} else {
