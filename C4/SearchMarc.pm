@@ -60,17 +60,17 @@ sub findseealso {
 	my ($dbh, $fields) = @_;
 	my $tagslib = MARCgettagslib ($dbh,1);
 	for (my $i=0;$i<=$#{$fields};$i++) {
-		my ($tag) =substr(@$fields[$i],1,4);
+		my ($tag) =substr(@$fields[$i],1,3);
 		my ($subfield) =substr(@$fields[$i],4,1);
-		warn "$tag / $subfield =>".$tagslib->{$tag}->{$subfield}->{seealso};
+		@$fields[$i].=','.$tagslib->{$tag}->{$subfield}->{seealso} if ($tagslib->{$tag}->{$subfield}->{seealso});
 	}
 }
+
 # marcsearch : search in the MARC biblio table.
 # everything is choosen by the user : what to search, the conditions...
 
 sub catalogsearch {
-	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length) = @_;
-	warn "=>@$tags / @$and_or, $excluding = $operator / $value";
+	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby) = @_;
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
@@ -79,18 +79,16 @@ sub catalogsearch {
 
 	# "Normal" statements
 	my @normal_tags = ();
-#	my @normal_subfields = ();
 	my @normal_and_or = ();
 	my @normal_operator = ();
 	my @normal_value = ();
 	# Extracts the NOT statements from the list of statements
 	my @not_tags = ();
-#	my @not_subfields = ();
 	my @not_and_or = ();
 	my @not_operator = ();
 	my @not_value = ();
 	my $any_not = 0;
-
+	$orderby = "biblio.title" unless $orderby;
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
 		if(@$excluding[$i])	# NOT statements
@@ -102,7 +100,6 @@ sub catalogsearch {
 				{
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @not_tags, @$tags[$i];
-#						push @not_subfields, @$subfields[$i];
 						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
 						push @not_operator, @$operator[$i];
 						push @not_value, $word;
@@ -112,7 +109,6 @@ sub catalogsearch {
 			else
 			{
 				push @not_tags, @$tags[$i];
-#				push @not_subfields, @$subfields[$i];
 				push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
 				push @not_operator, @$operator[$i];
 				push @not_value, @$value[$i];
@@ -125,8 +121,9 @@ sub catalogsearch {
 				foreach my $word (split(/ /, @$value[$i]))
 				{
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
+						my $tag = substr(@$tags[$i],0,3);
+						my $subf = substr(@$tags[$i],3,1);
 						push @normal_tags, @$tags[$i];
-#						push @normal_subfields, @$subfields[$i];
 						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
 						push @normal_operator, @$operator[$i];
 						push @normal_value, $word;
@@ -136,7 +133,6 @@ sub catalogsearch {
 			else
 			{
 				push @normal_tags, @$tags[$i];
-#				push @normal_subfields, @$subfields[$i];
 				push @normal_and_or, @$and_or[$i];
 				push @normal_operator, @$operator[$i];
 				push @normal_value, @$value[$i];
@@ -149,11 +145,12 @@ sub catalogsearch {
 
 	my $sth;
 	if ($sql_where2) {
-		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
+		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby");
+		warn "Q2 : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby";
 	} else {
-		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where1");
+		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby");
+		warn "Q : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby";
 	}
-	warn "===> select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)";
 	$sth->execute();
 	my @result = ();
 
@@ -170,12 +167,12 @@ sub catalogsearch {
 			push @tmpresult,$bibid;
 		}
 		my $sth_not;
+		warn "NOT : select distinct m1.bibid from $not_sql_tables where $not_sql_where2 and ($not_sql_where1)";
 		if ($not_sql_where2) {
 			$sth_not = $dbh->prepare("select distinct m1.bibid from $not_sql_tables where $not_sql_where2 and ($not_sql_where1)");
 		} else {
 			$sth_not = $dbh->prepare("select distinct m1.bibid from $not_sql_tables where $not_sql_where1");
 		}
-
 		$sth_not->execute();
 
 		if($sth_not->rows)
