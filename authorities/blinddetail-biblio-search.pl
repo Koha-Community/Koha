@@ -79,7 +79,8 @@ my @loop_data =();
 my $tag;
 my @loop_data =();
 if ($authid) {
-	foreach my $field ($record->fields($auth_type->{auth_tag_to_report})) {
+warn "report $authtypecode => ".$auth_type->{auth_tag_to_report}.$record->as_formatted;
+	foreach my $field ($record->field($auth_type->{auth_tag_to_report})) {
 			my @subfields_data;
 			my @subf=$field->subfields;
 		# loop through each subfield
