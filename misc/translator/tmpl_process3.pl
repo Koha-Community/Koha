@@ -127,6 +127,33 @@ sub listfiles ($$) {
 
 ###############################################################################
 
+sub usage ($) {
+    my($exitcode) = @_;
+    my $h = $exitcode? *STDERR: *STDOUT;
+    print $h <<EOF;
+Usage: $0 create [OPTION]
+  or:  $0 update [OPTION]
+  or:  $0 install [OPTION]
+  or:  $0 --help
+Create or update PO files from templates, or install translated templates.
+
+  -i, --input=SOURCE          Get or update strings from SOURCE file.
+                              SOURCE is a directory if -r is also specified.
+  -o, --outputdir=DIRECTORY   Install translation(s) to specified DIRECTORY
+      --pedantic-warnings     Issue warnings even for detected problems
+                              which are likely to be harmless
+  -r, --recursive             SOURCE in the -i option is a directory
+  -s, --str-file=FILE         Specify FILE as the translation (po) file
+                              for input (install) or output (create, update)
+  -x, --exclude=REGEXP        Exclude files matching the given REGEXP
+      --help                  Display this help and exit
+
+The -o option is ignored for the "create" and "update" actions.
+EOF
+    exit($exitcode);
+}
+
+###############################################################################
 sub usage_error (;$) {
     for my $msg (split(/\n/, $_[0])) {
 	print STDERR "$msg\n";
@@ -144,13 +171,11 @@ GetOptions(
     'str-file|s=s'			=> \$str_file,
     'exclude|x=s'			=> \@excludes,
     'pedantic-warnings|pedantic'	=> sub { $pedantic_p = 1 },
+    'help'				=> \&usage,
 ) || usage_error;
 
 VerboseWarnings::set_application_name $0;
 VerboseWarnings::set_pedantic_mode $pedantic_p;
-
-# try to make sure .po files are backed up (see BUGS)
-$ENV{VERSION_CONTROL} = 't';
 
 # keep the buggy Locale::PO quiet if it says stupid things
 $SIG{__WARN__} = sub {
@@ -330,15 +355,10 @@ read strings in the PO file.
 
 =head1 BUGS
 
-The --help option has not been implemented yet.
-
 xgettext.pl must be present in the current directory; the
 msgmerge(1) command must also be present in the search path.
 The script currently does not check carefully whether these
 dependent commands are present.
-
-If xgettext.pl is interrupted by the user, a corrupted po file
-will result. This is very seriously wrong.
 
 Locale::PO(3) has a lot of bugs. It can neither parse nor
 generate GNU PO files properly; a couple of workarounds have
