@@ -233,7 +233,7 @@ printend
 	  	}
 		print mktablerow(4,$toggle,$results->[$i]{'currency'},$results->[$i]{'rate'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'currency'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'currency'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'currency'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";

@@ -257,7 +257,7 @@ printend
 		$results->[$i]{'description'},$results->[$i]{'loanlength'},
 		$results->[$i]{'renewalsallowed'}==1?'Yes':'No',$results->[$i]{'rentalcharge'},
 		mklink("$script_name?op=add_form&itemtype=".$results->[$i]{'itemtype'},'Edit'),
-		mklink("$script_name?op=delete_confirm&itemtype=".$results->[$i]{'itemtype'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&itemtype=".$results->[$i]{'itemtype'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";

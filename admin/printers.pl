@@ -224,7 +224,7 @@ printend
 	  	}
 		print mktablerow(5,$toggle,$results->[$i]{'printername'},$results->[$i]{'printqueue'},$results->[$i]{'printtype'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'printername'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'printername'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'printername'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";

@@ -213,7 +213,7 @@ printend
 	    		$toggle="white";
 	  	}
 		print mktablerow(2,$toggle,$results->[$i]{'word'},
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'word'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'word'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";
