@@ -36,12 +36,31 @@ if (defined $shelf) {
 }
 
 
-# Add an item to a shelf
+# Add some items to the shelves
 
 
-for ($i=1; $i<20; $i++) {
+for ($i=0; $i<20; $i++) {
     $shelf->addtoshelf( -add => [[ $$itemdata[$i]->{biblionumber},
 				   $$itemdata[$i]->{biblioitemnumber},
 				   $$itemdata[$i]->{itemnumber} ]]);
 }
+for ($i=20; $i<30; $i++) {
+    $shelf2->addtoshelf( -add => [[ $$itemdata[$i]->{biblionumber},
+				   $$itemdata[$i]->{biblioitemnumber},
+				   $$itemdata[$i]->{itemnumber} ]]);
+}
 
+if ($shelf->itemcounter() == 20 && $shelf2->itemcounter() == 10 ) {
+    print "ok 4\n";
+} else {
+    print "not ok 4\n";
+}
+
+$shelf->attribute('testattribute1', 'testvalue1');
+$shelf->attribute('testattribute2', 'testvalue2');
+
+if ($shelf->attribute('testattribute1') eq 'testvalue1' && $shelf->attribute('testattribute2') eq 'testvalue2') {
+    print "ok 5\n";
+} else {
+    print "not ok 5\n";
+}

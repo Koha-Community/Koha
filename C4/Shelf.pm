@@ -247,6 +247,23 @@ sub bibliocontents {
     return \@return;
 }
 
+
+=head2 C<itemcounter()>
+
+returns the number of items on the shelf
+
+    my $itemcount=$shelf->itemcounter();
+
+=cut
+sub itemcounter {
+    my $self=shift;
+    unless ($self->{ITEMCONTENTS}->{orderby}->{'natural'}) {
+	$self->loadcontents();
+    }
+    my @temparray=@{$self->{ITEMCONTENTS}->{orderby}->{'natural'}};
+    return $#temparray+1;
+}
+
 sub shelfcontents {
     my $self=shift;
 }
@@ -341,7 +358,7 @@ sub attribute {
 	    my $sti=$dbh->prepare("update bookshelfattributes set value=? where bookshelfid=? and attribute=?");
 	    $sti->execute($value, $self->{ID}, $attribute);
 	} else {
-	    my $sti=$dbh->prepare("inesrt into bookshelfattributes (bookshelfid, attribute, value) values (?, ?, ?)");
+	    my $sti=$dbh->prepare("insert into bookshelfattributes (bookshelfid, attribute, value) values (?, ?, ?)");
 	    $sti->execute($self->{ID}, $attribute, $value);
 	}
     }
@@ -408,6 +425,7 @@ sub loadcontents {
 	($orderby,$startat,$number)=@_;
     }
     my $bookshelfid=$self->{ID};
+    ($orderby) || ($orderby='natural');
     $self->{ITEMCONTENTS}->{orderby}->{$orderby}=$self->{CACHE}->get( "$bookshelfid\_ITEMCONTENTS_$orderby" );
     $self->{BIBLIOITEMCONTENTS}->{orderby}->{$orderby}=$self->{CACHE}->get( "$bookshelfid\_BIBLIOITEMCONTENTS_$orderby" );
     $self->{BIBLIOCONTENTS}->{orderby}->{$orderby}=$self->{CACHE}->get( "$bookshelfid\_BIBLIOCONTENTS_$orderby" );
