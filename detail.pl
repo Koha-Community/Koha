@@ -235,7 +235,7 @@ printend
 ;
 } else {
 print <<printend
-If some of the items listed above need a different biblio, or are on the wrong biblio, you must use the <a href="/acquisitions/">acquisitions</a> process to fix this. You will need to "re-order" the items, and delete them from this biblio.
+If some of the items listed above need a different biblio, or are on the wrong biblio, you must use the <a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a> process to fix this. You will need to "re-order" the items, and delete them from this biblio.
 <p>
 
    </TR>
