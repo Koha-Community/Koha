@@ -1,6 +1,9 @@
-package C4::Biblio; 
+package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.13  2002/10/02 16:26:44  tipaul
+# road to 1.3.1
+#
 # Revision 1.12  2002/10/01 11:48:51  arensb
 # Added some FIXME comments, mostly marking duplicate functions.
 #
@@ -126,6 +129,9 @@ $VERSION = 0.01;
 	     &skip
 	     &newcompletebiblioitem
 
+	     &MARCfind_oldbiblionumber_from_MARCbibid
+	     &MARCfind_MARCbibid_from_oldbiblionumber
+
 	     &ALLnewbiblio &ALLnewitem
 
 	     &MARCgettagslib
@@ -137,45 +143,13 @@ $VERSION = 0.01;
 	     &MARCgetbiblio &MARCgetitem
 	     &MARCaddword &MARCdelword
  );
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+
+%EXPORT_TAGS = ( );
 
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - These are never used
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);		# FIXME - These are never used
-
-# initalize package globals, first exported ones
-
-# FIXME - These are never used
-my $Var1   = '';
-my %Hashit = ();
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-# FIXME - These are never used
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-# FIXME - These are never used
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-# FIXME - This is never used
-my $priv_func = sub {
-  # stuff goes here.
-  };
-  
-# make all your functions, whether exported or not;
+@EXPORT_OK   = qw($Var1 %Hashit);
 
 #
 #
@@ -183,7 +157,7 @@ my $priv_func = sub {
 #
 #
 # all the following subs takes a MARC::Record as parameter and manage
-# the MARC-DB. They are called by the 1.0/1.2 xxx subs, and by the 
+# the MARC-DB. They are called by the 1.0/1.2 xxx subs, and by the
 # ALLxxx subs (xxx deals with old-DB parameters, the ALLxxx deals with MARC-DB parameter)
 
 =head1 SYNOPSIS
@@ -262,22 +236,31 @@ my $priv_func = sub {
 =head1 AUTHOR
 
 Paul POULAIN paul.poulain@free.fr
-
+/
 =cut
 
 sub MARCgettagslib {
     my ($dbh,$forlibrarian)= @_;
     my $sth;
     if ($forlibrarian eq 1) {
+	$sth=$dbh->prepare("select tagfield,liblibrarian as lib from marc_tag_structure");
+    } else {
+	$sth=$dbh->prepare("select tagfield,libopac as lib from marc_tag_structure");
+    }
+    $sth->execute;
+    my ($lib,$tag,$res);
+    while ( ($tag,$lib) = $sth->fetchrow) {
+	$res->{$tag}->{lib}=$lib;
+    }
+
+    if ($forlibrarian eq 1) {
 	$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib from marc_subfield_structure");
     } else {
 	$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib from marc_subfield_structure");
     }
     $sth->execute;
-    my $lib;
-    my $tag;
+
     my $subfield;
-    my $res;
     while ( ($tag,$subfield,$lib) = $sth->fetchrow) {
 	$res->{$tag}->{$subfield}=$lib;
     }
