@@ -16,20 +16,27 @@
 	<dt><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog Search</a></dt>
 		<dd>Search bibilographic records
 <form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="keyword">Quick Search: </label><input type="hidden" name="marclist" value="" /><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="keyword" name="value" size="25" /><input type="submit" value="Start search" class="submit"></form>
-		<ul><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Advanced Search</a></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li> /Display for NPL --></ul>
-		</dd>
+		<ul><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Advanced Search</a></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li> /Display for NPL --><li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual shelves</a></li></ul>
+		</dd></dl></div>
+		<div id="submenu">
+<dl>
+<dt><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a></dt>
+			<dd><ul>
+<!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Enter Brief Record (Temp Cards)</a> </li> /Display for NPL -->
+<li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Advanced Cataloging</a></li>  <!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li> <li><a href="/cgi-bin/koha/bull-home.pl">Serials</a></li> <!-- /Hide from NPL --></ul></dd></dl>
+
+<dl>
 <!-- Hide from NPL -->
 <dt><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports
 			</a></dt>
 			<dd>Till reconciliation, overdues, and inventory</dd>
 <!-- /Hide from NPL -->
-<dt><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a></dt>
-			<dd><ul>
-<!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Enter Brief Record (Temp Cards)</a> </li> /Display for NPL -->
-<li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Advanced Cataloging</a></li>  <!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li> <li><a href="/cgi-bin/koha/bull-home.pl">Serials</a></li> <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual shelves</a></li><!-- /Hide from NPL --></ul></dd>
+</dl>
+<dl>
 <!-- Hide from NPL --><dt><a href="/cgi-bin/koha/admin-home.pl">Koha Administration</a></dt>
 <dd><ul><li><a href="/cgi-bin/koha/admin-home.pl">System Adminstration Home</a></li> <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li> <li><a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes generator</a></li> <li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></li> <li><a href="/cgi-bin/koha/import/breeding.pl">Import to reservoir</a></li></ul></dd> <!-- /Hide from NPL -->
-</dl></div>
+</dl>
+<br clear="both" /></div>
             
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
