@@ -84,7 +84,7 @@ Modify Group - <TMPL_VAR Name="description"></h1><br>
 
 		<TMPL_LOOP Name="itemloop">
 			<tr valign=top gcolor=#ffffcc>
-				<td><input type=checkbox name="<TMPL_VAR Name="barcode">"></td>
+				<td><input type=checkbox name="check_group_<TMPL_VAR Name="barcode">"></td>
 				<td><a href="/cgi-bin/koha/moredetail.pl?item="<TMPL_VAR Name="itemnumber">"&bib="<TMPL_VAR Name="biblionumber">"&bi="<TMPL_VAR Name="biblioitemnumber">""><TMPL_VAR Name="barcode"></a></td>
 				<td><TMPL_VAR Name="holdingbranch"></td>
 				<td></td>
