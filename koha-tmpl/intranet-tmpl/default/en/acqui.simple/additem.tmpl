@@ -1,4 +1,11 @@
 <TMPL_INCLUDE NAME="acquisitions-top.inc">
+<STYLE TYPE="text/css" MEDIA=screen>
+	table {	font-family:Arial;
+	font-weight:normal;
+	text-decoration:none;
+	font-size:10pt;}
+</STYLE>
+
 <form method="post" action="additem.pl">
 <table width=100% cellspacing=0 cellpadding=5 border=1>
 <tr background="/images/background-mem.gif">
@@ -52,7 +59,7 @@
 	<tr  background="/images/background-mem.gif">
 		<th>New Item</th>
 	</tr>
-</table><table width=100%  cellspacing=0 cellpadding=5 border=0>
+</table><table width=100%  cellspacing=0 cellpadding=1 border=0>
 	<TMPL_LOOP name="item">
 	<tr>
 		<td width="3%">&nbsp;</td>
@@ -66,8 +73,15 @@
 	</tr>
 	</tmpl_loop>
 </table>
+<input type="hidden" name="tag" value="<TMPL_VAR name="itemtagfield">">
+<input type="hidden" name="subfield" value="<TMPL_VAR name="itemtagsubfield">">
+<input type="hidden" name="field_value" value="<TMPL_VAR name="itemnum">">
 <input type="hidden" name="itemnum" value="<TMPL_VAR name="itemnum">">
-<input type="submit" value=">>> Enter item">
+<TMPL_IF name="opisadd">
+<input type="submit" value="Add item">
+<TMPL_ELSE>
+<input type="submit" value="Modify item">
+</TMPL_IF>
 </center>
 </form>
 
