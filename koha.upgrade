@@ -324,6 +324,9 @@ while (<KC>) {
     if (/^\s*includes\s*=/) {
 	$kccontents.="includes=$intranetdir/htdocs/includes\n";
 	$kc->{'includes'}=1;
+    } elsif (/^\s*httpduser\s*=/) {
+	$kccontents.="httpduser=$httpduser\n";
+	$kc->{'httpduser'}=1;
     } elsif (/^\s*kohaversion\s*=/) {
 	$kccontents.="kohaversion=$newversion\n";
 	$kc->{'kohaversion'}=1;
@@ -343,6 +346,9 @@ unless (defined($kc->{'kohaversion'})) {
 }
 unless (defined($kc->{'includes'})) {
     $kccontents.="includes=$intranetdir/htdocs/includes\n";
+}
+unless (defined($kc->{'httpduser'})) {
+    $kccontents.="httpduser=$httpduser\n";
 }
 unless (defined($kc->{'intranetdir'})) {
     $kccontents.="intranetdir=$intranetdir\n";

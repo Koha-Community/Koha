@@ -279,6 +279,7 @@ includes=$kohadir/htdocs/includes
 intranetdir=$kohadir
 opacdir=$opacdir
 kohaversion=$kohaversion
+httpduser=$httpduser
 EOP
 ;
 close(SITES);
