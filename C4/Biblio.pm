@@ -1,6 +1,11 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.26  2002/11/12 15:58:43  tipaul
+# road to 1.3.2 :
+# * many bugfixes
+# * adding value_builder : you can map a subfield in the marc_subfield_structure to a sub stored in "value_builder" directory. In this directory you can create screen used to build values with any method. In this commit is a 1st draft of the builder for 100$a unimarc french subfield, which is composed of 35 digits, with 12 differents values (only the 4th first are provided for instance)
+#
 # Revision 1.25  2002/10/25 10:58:26  tipaul
 # Road to 1.3.2
 # * bugfixes and improvements
@@ -355,20 +360,24 @@ sub MARCgettagslib {
 	}
 
 	if ($forlibrarian eq 1) {
-		$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab, mandatory, repeatable,authorised_value from marc_subfield_structure");
+		$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure");
 	} else {
-		$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib,tab, mandatory, repeatable,authorised_value from marc_subfield_structure");
+		$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure");
 	}
 	$sth->execute;
 
 	my $subfield;
 	my $authorised_value;
-	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value) = $sth->fetchrow) {
+	my $thesaurus_category;
+	my $value_builder;
+	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder) = $sth->fetchrow) {
 		$res->{$tag}->{$subfield}->{lib}=$lib;
 		$res->{$tag}->{$subfield}->{tab}=$tab;
 		$res->{$tag}->{$subfield}->{mandatory}=$mandatory;
 		$res->{$tag}->{$subfield}->{repeatable}=$repeatable;
 		$res->{$tag}->{$subfield}->{authorised_value}=$authorised_value;
+		$res->{$tag}->{$subfield}->{thesaurus_category}=$thesaurus_category;
+		$res->{$tag}->{$subfield}->{value_builder}=$value_builder;
 	}
 	return $res;
 }
@@ -461,7 +470,7 @@ sub MARCadditem {
 
 sub MARCaddsubfield {
 # Add a new subfield to a tag into the DB.
-    my ($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue) = @_;
+    my ($dbh,$bibid,$tagid,$tag_indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue) = @_;
     # if not value, end of job, we do nothing
     if (not($subfieldvalue)) {
 	return;
@@ -476,21 +485,21 @@ sub MARCaddsubfield {
 	$sth=$dbh->prepare("select max(blobidlink)from marc_blob_subfield");
 	$sth->execute;
 	my ($res)=$sth->fetchrow;
-	$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?)");
+	$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?,?)");
 	if ($tagid<100) {
-	    $sth->execute($bibid,'0'.$tagid,$tagorder,$subfieldcode,$subfieldorder,$res);
+	    $sth->execute($bibid,'0'.$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
 	} else {
-	    $sth->execute($bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$res);
+	    $sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
 	}
 	if ($sth->errstr) {
-	    print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
+	    print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 	}
 #	$dbh->do("unlock tables");
     } else {
-	my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?)");
-	$sth->execute($bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
+	my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
+	$sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
 	if ($sth->errstr) {
-	    print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
+	    print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 	}
     }
     &MARCaddword($dbh,$bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
@@ -509,6 +518,7 @@ sub MARCgetbiblio {
     $sth->execute($bibid);
     my $prevtagorder=1;
     my $prevtag;
+    my $previndicator;
     my %subfieldlist={};
     while (my $row=$sth->fetchrow_hashref) {
 		if ($row->{'valuebloblink'}) { #---- search blob if there is one
@@ -517,16 +527,24 @@ sub MARCgetbiblio {
 			$sth2->finish;
 			$row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
 		}
+#		warn "$row->{bibid} = $row->{tag} - $row->{subfieldcode}";
 		if ($row->{tagorder} ne $prevtagorder) {
-			my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+		    if (length($prevtag) <3) {
+				$prevtag = "0".$prevtag;
+			}
+			$previndicator.="  ";
+			my $field = MARC::Field->new( $prevtag, substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
+#			warn $field->as_formatted();
 			$record->add_fields($field);
 			$prevtagorder=$row->{tagorder};
 			$prevtag = $row->{tag};
+			$previndicator=$row->{tag};
 			%subfieldlist={};
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 		} else {
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 			$prevtag= $row->{tag};
+			$previndicator=$row->{indicator};
 		}
 	}
 	# the last has not been included inside the loop... do it now !
@@ -841,14 +859,18 @@ sub MARCkoha2marcOnefield {
 }
 
 sub MARChtml2marc {
-	my ($dbh,$rtags,$rsubfields,$rvalues) = @_;
+	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
 	my $prevtag = @$rtags[0];
 	my $record = MARC::Record->new();
 	my %subfieldlist={};
 	for (my $i=0; $i<= @$rtags; $i++) {
 		# rebuild MARC::Record
 		if (@$rtags[$i] ne $prevtag) {
-			my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+			if ($prevtag<10) {
+				$prevtag='0'.10;
+			}
+			$indicators{$prevtag}.='  ';
+			my $field = MARC::Field->new( $prevtag, substr($indicators{$prevtag},0,1),substr($indicators{$prevtag},1,1), %subfieldlist);
 			$record->add_fields($field);
 			$prevtag = @$rtags[$i];
 			%subfieldlist={};
@@ -991,8 +1013,8 @@ sub NEWnewbiblio {
     $sth->execute("biblioitems.biblioitemnumber");
     (my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
     if ($tagsubfield1 != $tagsubfield2) {
-	print STDERR "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
- 	print "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
+	print STDERR "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same subfield number";
+ 	print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same subfield number";
 	die;
     }
     my $newfield = MARC::Field->new( $tagfield1,'','',
@@ -1008,6 +1030,7 @@ sub NEWnewbiblio {
 
 sub NEWnewitem {
 	my ($dbh, $record,$bibid) = @_;
+	warn "add item : ".$record->as_formatted();
 	# add item in old-DB
 	my $item = &MARCmarc2koha($dbh,$record);
 	# needs old biblionumber and biblioitemnumber
@@ -1408,7 +1431,7 @@ sub OLDnewitems {
 	#  foreach my $barcode (@barcodes) {
 	#    $barcode = uc($barcode);
 	$barcode = $dbh->quote($barcode);
-	$sth->prepare("Insert into items set
+	$sth=$dbh->prepare("Insert into items set
 						itemnumber           = ?,				biblionumber         = ?,
 						biblioitemnumber     = ?,				barcode              = ?,
 						booksellerid         = ?,					dateaccessioned      = NOW(),
@@ -1422,7 +1445,7 @@ sub OLDnewitems {
 							$item->{'booksellerid'},
 							$item->{'homebranch'},$item->{'homebranch'},
 							$item->{'price'},$item->{'replacementprice'},
-							NOW(),$item->{'itemnotes'},$item->{'loan'});
+							$item->{'itemnotes'},$item->{'loan'});
 
 	$sth->execute;
 	if (defined $sth->errstr) {

@@ -35,16 +35,19 @@ use HTML::Template;
 use MARC::File::USMARC;
 
 sub find_value {
-	my ($tagfield,$subfield,$record) = @_;
+	my ($tagfield,$insubfield,$record) = @_;
 	my $result;
+	my $indicator;
 	foreach my $field ($record->field($tagfield)) {
 		my @subfields = $field->subfields();
 		foreach my $subfield (@subfields) {
-			if (@$subfield[0] eq $subfield) {
+			if (@$subfield[0] eq $insubfield) {
 				$result .= @$subfield[1];
+				$indicator = $field->indicator(1).$field->indicator(2);
 			}
 		}
 	}
+	return($indicator,$result);
 }
 
 sub MARCfindbreeding {
@@ -55,13 +58,12 @@ sub MARCfindbreeding {
 	if ($marc) {
 		my $record = MARC::File::USMARC::decode($marc);
 		if (ref($record) eq undef) {
-			warn "not a MARC record !";
+			warn "not a MARC record : $marc";
 			return -1;
 		} else {
 			return $record;
 		}
 	}
-	warn "not MARC";
 	return -1;
 
 }
@@ -88,12 +90,21 @@ my $record = MARCfindbreeding($dbh,$isbn) if ($isbn);
 if ($op eq "addbiblio") {
 #------------------------------------------------------------------------------------------------------------------------------
 	# rebuild
-	my @tags = $input->param('tag[]');
-	my @subfields = $input->param('subfield[]');
-	my @values = $input->param('value[]');
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values);
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+	# build indicator hash.
+	my @ind_tag = $input->param('ind_tag');
+	my @indicator = $input->param('indicator');
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
+	}
+	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+#	warn "record ".$record->as_formatted();
 # MARC::Record builded => now, record in DB
 	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
+	my $authorised_values_sth = $dbh->prepare("select authorised_value from authorised_values where category=?");
 # build item screen. There is no item for instance.
 	my @loop_data =();
 	my $i=0;
@@ -111,7 +122,23 @@ if ($op eq "addbiblio") {
 			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+			if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+				$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+				my @authorised_values;
+				push @authorised_values, "" unless ($subfield_data{mandatory});
+				while ((my $value) = $authorised_values_sth->fetchrow_array) {
+					push @authorised_values, $value;
+				}
+				$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
+																			-values=> \@authorised_values,
+																			-size=>1,
+																			-multiple=>0,
+																			);
+			} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+				$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+			} else {
+				$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+			}
 			push(@loop_data, \%subfield_data);
 		}
 	}
@@ -121,10 +148,19 @@ if ($op eq "addbiblio") {
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "additem") {
 #------------------------------------------------------------------------------------------------------------------------------
-	my @tags = $input->param('tag[]');
-	my @subfields = $input->param('subfield[]');
-	my @values = $input->param('value[]');
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values);
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+#	my @ind_tag = $input->param('ind_tag');
+#	my @indicator = $input->param('indicator');
+#	my %indicators;
+#	for (my $i=0;$i<=$#ind_tag;$i++) {
+#		$indicators{$ind_tag[$i]} = $indicator[$i];
+#	}
+	my %indicators;
+	$indicators{995}='  ';
+	warn "REs : $tags[0] - $tags[1] - $subfields[0] - $subfields[1] - $values[0] - $values[1]";
+	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
 	# now, build existiing item list
 	my $temp = MARCgetbiblio($dbh,$bibid);
@@ -203,17 +239,17 @@ if ($op eq "addbiblio") {
 	my $tag;
 	my $i=0;
 	my $authorised_values_sth = $dbh->prepare("select authorised_value from authorised_values where category=?");
-	# loop through each tab 0 through 9
+# loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop<=9;$tabloop++) {
-	# loop through each tag
 	#	my @fields = $record->fields();
 		my @loop_data =();
 		foreach my $tag (keys %{$tagslib}) {
 			my $previous_tag = '';
 			my @subfields_data;
-	# loop through each subfield
+			my $indicator;
+# loop through each subfield
 			foreach my $subfield (keys %{$tagslib->{$tag}}) {
-				next if ($subfield eq 'lib');
+				next if ($subfield eq 'lib'); # skip lib and tabs, which are koha internal
 				next if ($subfield eq 'tab');
 				next if ($tagslib->{$tag}->{$subfield}->{tab}  ne $tabloop);
 				my %subfield_data;
@@ -222,8 +258,10 @@ if ($op eq "addbiblio") {
 				$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
 				$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 				$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+				# if breeding is not empty
 				if ($record ne -1) {
-					my $value = find_value($tag,$subfield,$record);
+					my ($x,$value) = find_value($tag,$subfield,$record);
+					$indicator = $x if $x;
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
 						my @authorised_values;
@@ -237,9 +275,14 @@ if ($op eq "addbiblio") {
 																					-size=>1,
 																					-multiple=>0,
 																					);
+					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+					} elsif ($tagslib->{$tag}->{$subfield}->{value_builder}) {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../value_builder/$tagslib->{$tag}->{$subfield}->{value_builder}?index=$i',$i)\">...</a>";
 					} else {
 						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\">";
 					}
+				# if breeding is empty
 				} else {
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
@@ -253,6 +296,10 @@ if ($op eq "addbiblio") {
 																					-size=>1,
 																					-multiple=>0,
 																					);
+					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+					} elsif ($tagslib->{$tag}->{$subfield}->{value_builder}) {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../value_builder/$tagslib->{$tag}->{$subfield}->{value_builder}?index=$i',$i)\">...</a>";
 					} else {
 						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
 					}
@@ -262,8 +309,10 @@ if ($op eq "addbiblio") {
 			}
 			if ($#subfields_data>=0) {
 				my %tag_data;
-				$tag_data{tag}=$tag.' -'. $tagslib->{$tag}->{lib};
-				$tag_data{subfield} = \@subfields_data;
+				$tag_data{tag}=$tag;
+				$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
+				$tag_data{indicator} = $indicator;
+				$tag_data{subfield_loop} = \@subfields_data;
 				push (@loop_data, \%tag_data);
 			}
 		}
@@ -283,7 +332,7 @@ if ($op eq "addbiblio") {
 			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\">";
+			$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value[]\">";
 			push(@loop_data, \%subfield_data);
 			$i++
 		}

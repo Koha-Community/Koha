@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # written 10/5/2002 by Paul
-# build Subject field using bibliothesaurus table
+# build result field using bibliothesaurus table
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -24,68 +24,64 @@
 use strict;
 use CGI;
 use C4::Context;
+use HTML::Template;
 use C4::Search;
-use C4::Circulation::Circ2;
+#use C4::Circulation::Circ2;
 use C4::Output;
+#use C4::Biblio;
 
 # get all the data ....
 my %env;
 
 my $input = new CGI;
-my $subject = $input->param('subject');
+my $result = $input->param('result');
 my $search_string= $input->param('search_string');
 my $op = $input->param('op');
-my $freelib_text = $input->param('freelib_text');
+my $id = $input->param('id');
+my $category = $input->param('category');
+my $index= $input->param('index');
 
 my $dbh = C4::Context->dbh;
 
 # make the page ...
-print $input->header;
+#print $input->header;
 if ($op eq "select") {
-	$subject .= "|$freelib_text";
-}
-print <<"EOF";
-	<html>
-	<head>
-	<title>Subject builder</title>
-	</head>
-	<body>
-	<form name="f_pop" action="thesaurus_popup.pl" method="post">
-	<textarea name="subject" rows=10 cols=60>$subject </textarea></br>
-	<p><input type="text" name="search_string" value="$search_string">
-	<input type="hidden" name="op" value="search">
-	<input type="submit" value="Search"></p>
-	</form>
-EOF
-# /search thesaurus terms starting by search_string
-	if ($search_string) {
-		print '<form name="f2_pop" action="thesaurus_popup.pl" method="post">';
-		print '<select name="freelib_text">';
-		my $sti=$dbh->prepare("select freelib,stdlib from bibliothesaurus where freelib like '".$search_string."%'");
-		$sti->execute;
-		while (my $line=$sti->fetchrow_hashref) {
-			print "<option value='$line->{'stdlib'}'>$line->{freelib}</option>";
-		}
-	print <<"EOF";
-		</select>
-		<input type="hidden" name="op" value="select">
-		<input type="hidden" name="subject" value="$subject">
-		<input type="submit" name="OK" value="OK">
-		</form>
-EOF
+	my $sti = $dbh->prepare("select stdlib from bibliothesaurus where id=?");
+	$sti->execute($id);
+	my ($freelib_text) = $sti->fetchrow_array;
+	if (length($result)>0) {
+		$result .= "|$freelib_text";
+	} else {
+		$result = $freelib_text;
 	}
-	print <<"EOF";
-		<form name="f3_pop" onSubmit="javascript:report()">
-		<input type="submit" value="END">
-		</form>
-		<script>
-		function report() {
-			alert("REPORT");
-			opener.document.f.subject.value= document.f_pop.subject.value;
-			self.close();
-			return false;
-		}
-		</script>
-		</body>
-		</html>
-EOF
+}
+
+my $template = gettemplate("thesaurus_popup.tmpl",0);
+# /search thesaurus terms starting by search_string
+my @freelib;
+my %stdlib;
+my $select_list;
+if ($search_string) {
+	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where freelib like '".$search_string."%' and category ='$category'");
+	$sti->execute;
+	while (my $line=$sti->fetchrow_hashref) {
+		$stdlib{$line->{'id'}} = "$line->{'freelib'}";
+		push(@freelib,$line->{'id'});
+	}
+	$select_list= CGI::scrolling_list( -name=>'id',
+			-values=> \@freelib,
+			-default=> "",
+			-size=>1,
+			-multiple=>0,
+			-labels=> \%stdlib
+			);
+}
+$template->param(select_list => $select_list,
+						search_string => $search_string,
+						result => $result,
+						category => $category,
+						index => $index
+						);
+print "Content-Type: text/html\n\n", $template->output;
+
+

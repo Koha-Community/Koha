@@ -59,6 +59,7 @@ my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 my $tagslib = &MARCgettagslib($dbh,1);
 
 my $record =MARCgetbiblio($dbh,$bibid);
+warn $record->as_formatted();
 # open template
 my $template = gettemplate("catalogue/MARCdetail.tmpl",0);
 # fill arrays

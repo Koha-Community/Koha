@@ -95,6 +95,8 @@ if ($uploadmarc && length($uploadmarc)>0) {
 			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord);
 			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
 			if ($oldbiblio->{isbn} || $oldbiblio->{issn}) {
+				# drop every "special" char : spaces, - ...
+				$oldbiblio->{isbn} =~ s/ |-|\.//g,
 				# search if biblio exists
 				my $biblioitemnumber;
 				if ($oldbiblio->{isbn}) {
@@ -117,10 +119,11 @@ if ($uploadmarc && length($uploadmarc)>0) {
 						($breedingresult) = $searchbreeding->fetchrow;
 					}
 					if (!$breedingresult || $overwrite_biblio) {
-						if ($oldbiblio->{isbn} eq '0025003402') {
-							warn "IMPORT => $marcarray[$i]\x1D')";
-						}
-						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$marcarray[$i]."\x1D')");
+						my $recoded;
+						warn "IMPORT => $marcarray[$i]\x1D')";
+						$recoded = $marcrecord->as_usmarc(); #MARC::File::USMARC::encode($marcrecord);
+						warn "RECODED : $recoded";
+						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$recoded);
 						$imported++;
 					} else {
 						$alreadyinfarm++;
@@ -796,6 +799,11 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.22  2002/11/12 15:58:43  tipaul
+# road to 1.3.2 :
+# * many bugfixes
+# * adding value_builder : you can map a subfield in the marc_subfield_structure to a sub stored in "value_builder" directory. In this directory you can create screen used to build values with any method. In this commit is a 1st draft of the builder for 100$a unimarc french subfield, which is composed of 35 digits, with 12 differents values (only the 4th first are provided for instance)
+#
 # Revision 1.21  2002/10/22 15:50:23  tipaul
 # road to 1.3.2 : adding a biblio in MARC format.
 # seems to work a few.
