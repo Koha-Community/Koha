@@ -1,0 +1,49 @@
+
+<TMPL_IF NAME="nopermission">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Sorry, KOHA doesnt think you have permission for this page.<h2>
+
+</TMPL_IF>
+
+
+<TMPL_IF NAME="loginprompt">
+<!-- login prompt time-->
+
+<center>
+<h2><TMPL_VAR NAME="message"></h2>
+
+<form action='<TMPL_VAR NAME="url">' method="post">
+<TMPL_LOOP NAME="INPUTS">
+  <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
+</TMPL_LOOP>
+<table border="0" cellpadding="10" cellspacing="0" width="60%">
+    <tr><td align="center" valign="top">
+
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha Login</font></th></tr>
+    <tr><td>Cardnumber:</td><td><input name="userid"></td></tr>
+    <tr><td>Password:</td><td><input type=password name=password></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="login"></td></tr>
+    </table>
+    </td><td align="center" valign="top">
+
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th background="/images/background-mem.gif"><font size="+2">Demo Information</font></th></tr>
+    <td>
+    This message will have to change in the live version! <br>
+
+    Login as finlay : finlay or frank : frank to see what happens.
+    or go and get yourself a password from the password link from the moremember page in the intradev. <br>
+
+    Oh, and you can also login as superuser : koha :-)
+
+    </td>
+    </tr>
+    </table>
+
+    </td></tr>
+</table>
+</form>
+
+
+</TMPL_IF>

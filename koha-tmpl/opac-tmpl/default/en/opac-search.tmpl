@@ -1,0 +1,68 @@
+<TMPL_INCLUDE NAME="opac-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+</TMPL_IF>
+
+
+<CENTER>
+<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
+<TABLE >
+
+<tr valign=top>
+<TD></td><td></td><td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="OK Start Search" width=164 height=44 border=0 >
+</td></tr>
+
+<TR VALIGN=TOP>
+<TD>Keywords</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+</TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+<td><input type=radio name=ttype value=normal checked>Normal<input
+type=radio name=ttype value=exact>Exact</td>
+</TR>
+
+<TR VALIGN=TOP> 
+<TD>Author</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD>Illustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Subject</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
+
+<td>Class</td>
+  <td>
+    <select size="1"  name="class">
+    <option value="">Any
+    <!-- fetch class list -->
+    <TMPL_INCLUDE NAME="cat-class-list.inc">
+    <!--#include virtual="/includes/cat-class-list.inc" -->
+    </select>
+ </td>
+</tr>
+
+<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+-->
+<TR VALIGN=TOP>
+<TD>Item Number</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="item"></TD></TR>
+
+<!-- <TR VALIGN=TOP>
+<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+-->
+</TR>
+
+<TR VALIGN=TOP>
+<td></td>
+<TD><font size=4 face="arial,helvetica">
+<INPUT TYPE="reset"  value="Clear All Fields"></font></td></tr>
+
+</TABLE>
+</FORM>
+</CENTER>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
