@@ -72,10 +72,11 @@
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="delete_confirm" -->
-		Confirm delete:
+		Confirm deletion of <!-- TMPL_VAR NAME="branchname" --> (<!-- TMPL_VAR NAME="branchcode" -->)?
 		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed">
 			<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
+			<input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">
 			<input type="submit" value="YES" class="button">
 		</form>
 		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
@@ -149,6 +150,7 @@
 					<td align="left" valign="top">
 						<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 						<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
+<input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->">
 						<input type="hidden" name="op" value="delete"><input type="submit" value="Delete" class="button">
 						</form>
 					</td>
