@@ -1,0 +1,29 @@
+RELEASE NOTES
+=============
+
+This version of Koha is still in the "unstable" directory, because some bugs are still reported. But it's fully useable and used in (at least) 4 libraries in "real world" :
+* Nelsonville Public Library, Ohio, USA
+* Esiee, high school, France
+* Dombes Abbey, France
+* Wesford school, France
+
+This release fixes a few bugs, and MANY french translation fixes/improvements.
+
+BUGFIXES/IMPROVEMENTS
+---------
+* new script : koha/koha/misc/overduenotices.pl
+   This is a script for the use of printing, and emailing overdue notices.
+   The script must be run from the command line
+   Documentation is contained in the script
+* fix for bug 603 : patron searches are wonky when first letter of first and last name are the same
+* removing trailing "," in subject.
+* fixing some bugs in charges.pl, script that fills the categoryitem table.
+   The categoryitem table contains fines for every itemtype-borrowercategory.
+   Still has to be templated and added to admin part of Koha
+* notforloan bug fix : now, if a specific item is "notforloan" and the itemtype "forloan", the "notforloan" is used. Before this fix, it was overwritted by the itemtype info/
+* fixing a bug that deleted the MARC part of a biblio when using full acqui system.
+   Now, when you acquire a book through full acqui system, what you enter during acqui appears in the right MARC fields in MARC editor.
+
+FRENCH SPECIFIC
+---------
+More than 30 improvements/bugfixes in french templates.
