@@ -128,5 +128,22 @@ if ($res && $res2 eq 10 && $field eq "branches") {
 	$total++;
 }
 
+# checks that itemtypes & branches tables are not empty
+$sth = $dbh->prepare("select count(*) from itemtypes");
+$sth->execute;
+($res) = $sth->fetchrow;
+unless ($res) {
+	$template->param(itemtypes_empty =>1);
+	$total++;
+}
+
+$sth = $dbh->prepare("select count(*) from branches");
+$sth->execute;
+($res) = $sth->fetchrow;
+unless ($res) {
+	$template->param(branches_empty =>1);
+	$total++;
+}
+
 $template->param(total => $total);
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -33,6 +33,18 @@
 	</tr>
 </TMPL_IF>
 <!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="itemtypes_empty">
+	<tr>
+		<td><b>itemtypes table empty</b></td>
+		<td>the itemtypes table is empty. It must contain at least 1 value</td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>itemtypes table filled with at least 1 value</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
 <TMPL_IF name="itemtype">
 	<tr>
 		<td><b>itemtype NOT mapped</b></td>
@@ -44,6 +56,18 @@
 	<tr>
 		<td>OK</td>
 		<td><i>biblioitems.itemtype defined</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="branches_empty">
+	<tr>
+		<td><b>branch table empty</b></td>
+		<td>the branch table is empty. It must contain at least 1 value !</td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>branch table filled with at least 1 value</i></td>
 	</tr>
 </TMPL_IF>
 <!----------------------------------------------------------------------------------------------------------->
