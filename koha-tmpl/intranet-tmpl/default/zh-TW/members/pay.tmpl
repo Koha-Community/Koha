@@ -1,20 +1,20 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
-<FONT SIZE=6><em>Pay Fines for <TMPL_VAR name="firstname"> <TMPL_VAR name="surname"></em></FONT><P>
+<FONT SIZE=6><em>替 <TMPL_VAR name="firstname"> <TMPL_VAR name="surname"> 繳交款項</em></FONT><P>
 <center>
 <p>
+	<form action="/cgi-bin/koha/pay.pl" method=post>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=4><B>FINES & CHARGES</TD>
-	<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=4><B>AMOUNT OWING</TD>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>罰款、手續費等</B></TD>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>尚欠</B></TD>
 </TR>
-	<form action=/cgi-bin/koha/pay.pl method=post>
 	<input type="hidden" name="bornum" value="<TMPL_VAR name="bornum">">
 <TMPL_LOOP name="loop_pay">
 <tr VALIGN=TOP  >
 	<TD><input type=radio name="payfine<TMPL_VAR name="i">" value="no" checked>Unpaid
-	<input type=radio name="payfine<TMPL_VAR name="i">" value="yes">Pay
-	<input type=radio name="payfine<TMPL_VAR name="i">" value="wo">Writeoff
+	<input type=radio name="payfine<TMPL_VAR name="i">" value="yes">繳交
+	<input type=radio name="payfine<TMPL_VAR name="i">" value="wo">註銷
 	<input type=hidden name="itemnumber<TMPL_VAR name="i">" value="<TMPL_VAR name="itemnumber">">
 	<input type=hidden name="accounttype<TMPL_VAR name="i">" value="<TMPL_VAR name="accounttype">">
 	<input type=hidden name="amount<TMPL_VAR name="i">" value="<TMPL_VAR name="amount'}">">
@@ -29,16 +29,15 @@
 </tr>
 </TMPL_LOOP>
 <tr VALIGN=TOP  >
-	<TD></td>
-	<TD colspan=2><b>Total Due</b></td>
+	<TD colspan=4 align=right><b>共欠款項</b></td>
 	<TD><b><TMPL_VAR name="total"></b></td>
 	</tr>
 	<tr VALIGN=TOP  >
 	<TD colspan=5 align=right>
 	<INPUT TYPE="image" name="submit"  VALUE="pay" height=42  WIDTH=187 BORDER=0 src="/images/pay-fines.gif"></td>
 </tr>
-</form>
 </table>
+</form>
 <br clear=all>
 <p> &nbsp; </p>
 <TMPL_INCLUDE NAME="members-bottom.inc">
