@@ -23,26 +23,17 @@
 <!-- TMPL_IF NAME="loginprompt" -->
 <!-- login prompt time-->
 
-<center>
 
-<form action='<!-- TMPL_VAR NAME="url" -->' method="post">
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
 <!-- TMPL_LOOP NAME="INPUTS" -->
-  <input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->'>
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
 <!-- /TMPL_LOOP -->
-<table border="0" cellpadding="10" cellspacing="0" width="60%">
-    <tr><td align="center" valign="top">
-
-    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
-    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha Login</font></th></tr>
-    <tr><td>Cardnumber:</td><td><input name="userid"></td></tr>
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0" align="center">
+    <tr><th colspan="2" background="/images/background-mem.gif"><h3>Koha Login</h3></th></tr>
+    <tr><td>Cardnumber:</td><td><input type="text" name="userid"></td></tr>
     <tr><td>Password:</td><td><input type="password" name="password"></td></tr>
-    <tr><td colspan="2" align="center"><input type="submit" value="login"></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="Log In"></td></tr>
     </table>
-    </td><td align="center" valign="top">
-
-
-    </td></tr>
-</table>
 </form>
 
 
