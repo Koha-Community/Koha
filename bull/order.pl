@@ -47,13 +47,6 @@ my ($template, $loggedinuser, $cookie)
 my $supplier=$query->param('supplier');
 my ($count,@suppliers)=bookseller($supplier);
 
-# check if we have to "close" a basket before building page
-my $op = $query->param('op');
-my $basket = $query->param('basket');
-if ($op eq 'close') {
-	closebasket($basket);
-}
-
 #build reult page
 my $toggle=0;
 my @loop_suppliers;
@@ -67,7 +60,7 @@ for (my $i=0; $i<$count; $i++) {
 		$line{even}=0;
 		$toggle=0;
 	}
-	$line{supplierid} =$suppliers[$i]->{'id'};
+	$line{aqbooksellerid} =$suppliers[$i]->{'id'};
 	$line{name} = $suppliers[$i]->{'name'};
 	$line{active} = $suppliers[$i]->{'active'};
 	my @loop_basket;
