@@ -55,7 +55,7 @@
 		<TMPL_IF NAME="url">		
 	<tr valign="top">
 			<td class="label">		
-			Website</td><td class="result"> <TMPL_VAR NAME="url"></td></tr>
+			Website</td><td class="result"><a href="http://<TMPL_VAR name="url">">http://<TMPL_VAR name="url"></td></tr>
 
 			
 	</TMPL_IF>	
@@ -127,12 +127,15 @@
 			
 	</TMPL_IF>	
 	
+
 </TMPL_LOOP>	
 <TMPL_LOOP NAME="SITE_RESULTS">
 <tr valign="top">
-<td class="label">Additional Web Links<td><td class="result"><a href="http://<TMPL_VAR name="url">"><TMPL_VAR name="title"></a><br>
+<td class="label">Additional Web Links</td>
+<td class="result"><a href="http://<TMPL_VAR name="url">"><TMPL_VAR name="title"></a><br>
+
 <TMPL_VAR name="description"><br>
-<b>URL:</b><a href="http://<TMPL_VAR name="url">">http://<TMPL_VAR name="url"></a><p>
+<a href="http://<TMPL_VAR name="url">">http://<TMPL_VAR name="url"></a><p>
 </td>
 </tr>
 </TMPL_LOOP>
