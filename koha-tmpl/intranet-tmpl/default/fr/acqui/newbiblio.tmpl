@@ -2,7 +2,7 @@
 <script language="javascript" type="text/javascript">
 
 <!--
-function mettre à jour(f){
+function update(f){
   //collect values
   quantity=f.quantity.value
   discount=f.discount.value
@@ -93,7 +93,7 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 	</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Format</td>
+		<TD>Catég ouvrage</td>
 		<td><!-- TMPL_VAR name="CGIitemtype" --></td>
 	</tr>
 	<TR VALIGN=TOP>
@@ -114,7 +114,7 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>DETAILS COMPTABILITE</B></td></tr>
 	<TR VALIGN=TOP>
 		<TD>Quantité</td>
-		<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='mettre à jour(this.form)' ></td>
+		<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='update(this.form)' ></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Comptes</td>
@@ -122,23 +122,23 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Prix catalogue du fournisseur</td>
-		<td><input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='mettre à jour(this.form)'></td>
+		<td><input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Frais Remplacement <br><FONT SIZE=2></td>
-		<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='mettre à jour(this.form)'>
+		<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='update(this.form)'>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Coûts budgetés<BR><FONT SIZE=2>(ex TVA, remise)</FONT> </td>
-		<td><input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='mettre à jour(this.form)'></td>
+		<td><input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>GST budgeté</td>
-		<td><input type=text size=20 name=GST value="" onchange='mettre à jour(this.form)'></td>
+		<td><input type=text size=20 name=GST value="" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD><B>TOTAL BUDGETE</B></td>
-		<td><input type=text size=20 name=total value="" onchange='mettre à jour(this.form)'></td>
+		<td><input type=text size=20 name=total value="" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP  bgcolor=#ffffcc>
 		<TD>Coût effectif</td>

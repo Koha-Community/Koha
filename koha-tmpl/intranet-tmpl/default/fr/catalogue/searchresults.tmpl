@@ -54,7 +54,11 @@
 		<td> <!-- TMPL_VAR NAME=location --> </td>
 		<!-- TMPL_IF NAME="opac" -->
 		<!-- TMPL_ELSE -->
-			<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Réservation</a></td>
+			<!-- TMPL_UNLESS NAME="norequests" -->
+				<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Réservation</a></td>
+			<!-- TMPL_ELSE -->
+				<td>Not Reservable</td>
+			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
 	</tr>
 <!-- /TMPL_LOOP -->

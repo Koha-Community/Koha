@@ -16,6 +16,7 @@
 		<tr>
 			<td width=8%><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"></td>
 			<td width=8%><a href="../detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">Normal</a></td>
+			<td width=8%><a href="javascript:Doprint('../detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')">Imprimer</a></td>
 			<td align="center"><b>Notice biblio MARC : <!-- TMPL_VAR name="biblionumber" --></b></td>
 		</tr>
 	</table>
@@ -122,6 +123,10 @@ function Dopop(link,i) {
 	defaultvalue=document.forms[0].field_value[i].value;
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=oui');
 }
+function Doprint(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=oui');
+}
+
 function confirm_deletion(bibid,itemnum) {
 	var is_confirmed = confirm('Do you confirm item deletion ?');
 	if (is_confirmed) {
