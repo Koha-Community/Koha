@@ -1144,7 +1144,7 @@ configuration.
 Press <ENTER> to continue: |;
 
 sub updateapacheconf {
-    my $logfiledir=$kohalogdir.'/logs';
+    my $logfiledir=$kohalogdir;
     my $httpdconf = $etcdir."/koha-httpd.conf";
    
     showmessage(getmessage('StartUpdateApache'), 'none');
