@@ -419,7 +419,48 @@ sub returnbook {
 		my $usth = $dbh->prepare($uquery);
 		$usth->execute();
 		$usth->finish;
+		#check if any credit is left if so writeoff other accounts]
 		my $nextaccntno = getnextacctno($env,$data->{'borrowernumber'},$dbh);
+		if ($amountleft < 0){
+		  $amountleft*=-1;
+		}
+		if ($amountleft > 0){
+#		  print $amountleft;
+  		  my $query = "select * from accountlines
+		  where (borrowernumber = '$data->{'borrowernumber'}') and (amountoutstanding >0)
+		  order by date";
+		  my $sth = $dbh->prepare($query);
+		  $sth->execute;
+		  # offset transactions
+		  my $newamtos;
+		  my $accdata;
+		  while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
+		    if ($accdata->{'amountoutstanding'} < $amountleft) {
+		      $newamtos = 0;
+		      $amountleft = $amountleft - $accdata->{'amountoutstanding'};
+		    }  else {
+		      $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
+		      $amountleft = 0;
+		    }
+		    my $thisacct = $accdata->{accountno};
+		    my $updquery = "update accountlines set amountoutstanding= '$newamtos'
+		    where (borrowernumber = '$data->{'borrowernumber'}') and (accountno='$thisacct')";
+		    my $usth = $dbh->prepare($updquery);
+		    $usth->execute;
+	            $usth->finish;
+		    $updquery = "insert into accountoffsets
+		    (borrowernumber, accountno, offsetaccount,  offsetamount)
+		    values
+		    ($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos)";
+		    my $usth = $dbh->prepare($updquery);
+		    $usth->execute;
+	            $usth->finish;
+	          }
+		}
+		if ($amountleft > 0){
+		  $amountleft*=-1;
+		}
+		$sth->finish;
 		my $desc="Book Returned ".$iteminformation->{'barcode'};
 		$uquery = "insert into accountlines
 		  (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
@@ -462,13 +503,18 @@ sub patronflags {
     my %flags;
     my ($env,$patroninformation,$dbh) = @_;
     my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
-    if ($amount>0) { 
+    if ($amount > 0) { 
 	my %flaginfo;
 	$flaginfo{'message'}=sprintf "Patron owes \$%.02f", $amount; 
 	if ($amount>5) {
 	    $flaginfo{'noissues'}=1;
 	}
 	$flags{'CHARGES'}=\%flaginfo;
+    } elsif ($amount < 0){
+       my %flaginfo;
+       $amount=$amount*-1;
+       $flaginfo{'message'}=sprintf "Patron has credit of \$%.02f", $amount;
+       	$flags{'CHARGES'}=\%flaginfo;
     }
     if ($patroninformation->{'gonenoaddress'} == 1) {
 	my %flaginfo;
