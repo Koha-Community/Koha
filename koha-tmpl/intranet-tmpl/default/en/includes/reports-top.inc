@@ -9,12 +9,10 @@
 <body>
 
 <style>
-a.reports {
-	font-weight: normal;
+.reports {
 	background-color: #6b7cbe;
-	text-decoration: none;
-	cursor: hand;
 	color:#FFFFFF;
+	text-decoration: normal;
 	font-weight: bold;
 	}
 a.reports:hover {

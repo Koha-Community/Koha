@@ -1,10 +1,25 @@
-label10 {
+p {
+	margin-bottom:0px;
+	margin-top:0px;
+	margin-left:10px;
+	margin-right:10px;
+	padding:0px;
+}
+.center {
+	text-align:center;
+}
+
+label {
 	float:left;
 	width: 10em;
 }
 label20 {
 	float:left;
 	width: 10em;
+}
+label100 {
+	float:left;
+	width: 100em;
 }
 
 body {
@@ -19,12 +34,15 @@ body {
 	text-align: center;
 	font: 1.2em sans-serif;
 	padding: 3px;
+	margin:5px;
+	display:block;
 	border-style: solid;
 	border-width: 1px;
 	border-color: black;
 	text-decoration: none;
 	color: black;
 	border-radius: 6px;
+	cursor:pointer;
 	-moz-border-radius: 6px;
 	background-color:#FFFFFF;
 	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
@@ -49,7 +67,7 @@ table.noborder {
 /* header */
 th {
 	background-color: #99cccc;
-	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
 	font-weight:bold;
 	text-align:center;
 	border:1px solid #000000;
@@ -79,15 +97,21 @@ td.numberhilighted {
 h1 {
 	color:#000000;
 	background-color:#DDDDDD;
-	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
 	font-size: 150%;
 	text-align:center;
 	padding: 4px;
 	border: 4px inset #666666;
 }
 
+h2 {
+	margin-top:0px;
+	margin-bottom:4px;
+	text-align:center;
+	padding:0px;
+}
 #bloctitle{
-	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	background-image:url("/intranet-tmpl/default/images/background-mem.gif");
 	color:#000000;
 	font-size: 125%;
 	text-align:center;
@@ -96,8 +120,14 @@ h1 {
 	border-bottom: 1px solid #666666;
 }
 #problem {
-	color: red;
+	color: white;
 	font-weight:bold;
+	background-color:red;
+}
+.problem {
+	color: white;
+	font-weight:bold;
+	background-color:red;
 }
 
 #mainbloc {
@@ -114,6 +144,9 @@ h1 {
 	padding-left:10px;
 	padding-top:10px;
 	padding-right:10px;
+}
+#main {
+	position:absolute;
 }
 
 #bloc25 {
@@ -134,9 +167,11 @@ h1 {
 a {
 	text-decoration: none;
 }
+
 a:hover {
 	text-decoration: none;
 }
+
 a.submenu {
 	font-weight: normal;
 	text-decoration: none;
@@ -208,7 +243,7 @@ a.submenu2:hover {
 	padding-bottom:5px;
 }
 
-a.home {
+.home {
 	color:#777777;
 	}
 a.home:hover {
@@ -216,14 +251,14 @@ a.home:hover {
 	color: #000000;
 	}
 
-a.catalogue {
+.catalogue {
 	color:#777777;
 	}
 a.catalogue:hover {
 	color:#FFFFFF;
 	}
 
-a.members {
+.members {
 	color:#777777;
 	}
 a.members:hover {
@@ -231,7 +266,7 @@ a.members:hover {
 	color: #000000;
 	}
 
-a.acquisition {
+.acquisition {
 	color:#777777;
 	}
 a.acquisition:hover {
@@ -239,7 +274,7 @@ a.acquisition:hover {
 	color: #000000;
 	}
 
-a.reports {
+.reports {
 	color:#777777;
 	}
 a.reports:hover {
@@ -247,7 +282,7 @@ a.reports:hover {
 	color: #000000;
 	}
 
-a.circulation {
+.circulation {
 	color:#777777;
 	}
 a.circulation:hover {
@@ -255,14 +290,14 @@ a.circulation:hover {
 	color: #000000;
 	}
 
-a.parameters {
+.parameters {
 	color:#777777;
 	}
 a.parameters:hover {
 	background-color: #86c268;
 	color: #000000;
 	}
-a.about {
+.about {
 	color:#777777;
 	}
 a.about:hover {

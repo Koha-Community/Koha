@@ -60,11 +60,11 @@
 
 </head>
 <body onload="Load();">
-<div class="mainbloc">
+<div id="mainbloc">
 	<div class="image">
 		<img src="<!--TMPL_VAR name="themelang">/images/koha-front-koha.gif">
 	</div>
-	<div class="menus">
+	<div id="menus">
 <!-- RIGHT (disappearing) BLOC -->
 		<div id="Hint1" class="hint">
 			<h1 class="catalogue">Catalogue</h1>
@@ -82,18 +82,18 @@
 					<input type="hidden" name="type" value="intranet">
 					<input type="text" name="keyword" size="27">
 					<input type="reset" value="clr"><br>
-					<b>Type in the box and press the enter key.</b><br>
+					<p>Type in the box and press the enter key.</p>
 					<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue">Advanced Search (More Options)</a><br>
 				</form>
 			<!-- /TMPL_IF -->
 		</div>
 		<div id="Hint2" class="hint">
 			<h1 class="members">Members</h1>
-			<a href="">Search</a>
+			<h2 class="members">Search</h2>
 			<form action="/cgi-bin/koha/members/member.pl" method="post">
 				<input type="text" size="27" name="member">
 				<input type="submit" value="OK"><br>
-				<font size="1" face="arial,helvetica,sans-serif"><b>Type in the box and press the enter key.</b></font><br>
+				<p>Type in the box and press the enter key.</p>
 				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" width="1" height="12" alt="" hspace="0" vspace="0">
 			</form>
 

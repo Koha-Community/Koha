@@ -7,12 +7,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <style>
-a.parameters {
+.parameters {
 	background-color: #86c268;
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color: #FFFFFF;
+	text-decoration: normal;
 	font-weight: bold;
 	}
 a.parameters:hover {

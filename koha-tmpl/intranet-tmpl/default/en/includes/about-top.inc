@@ -12,12 +12,10 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
 
-a.about {
+.about {
 	background-color: #86c268;
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color: #FFFFFF;
+	text-decoration: normal;
 	font-weight: bold;
 	}
 a.about:hover {

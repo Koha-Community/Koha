@@ -16,14 +16,12 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <style>
-a.catalogue {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
+.catalogue {
 	background-color:#ad11ad;
 	color:#FFFFFF;
+	background-image:none;
+	text-decoration: normal;
 	font-weight: bold;
-	margin:0;
 	}
 a.catalogue:hover {
 	background-color: #ad11ad;
@@ -31,7 +29,6 @@ a.catalogue:hover {
 	text-decoration: none;
 	font-weight: normal;
 	font-weight: bold;
-	margin:0;
 	}
 </style>
 </head>

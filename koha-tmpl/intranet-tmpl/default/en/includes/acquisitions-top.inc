@@ -9,12 +9,11 @@
 <body>
 
 <style>
-a.acquisition {
-	font-weight: normal;
-	text-decoration: none;
+.acquisition {
 	background-color: #ffdf61;
-	cursor: hand;
-	color:#FFFFFF;
+	color:#000000;
+	background-image:none;
+	text-decoration: normal;
 	font-weight: bold;
 	}
 a.acquisition:hover {

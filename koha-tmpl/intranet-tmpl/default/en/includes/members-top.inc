@@ -9,18 +9,16 @@
 <body>
 
 <style>
-a.members {
-	font-weight: normal;
-	text-decoration: none;
+.members {
 	background-color: #86c268;
-	cursor: hand;
 	color:#FFFFFF;
+	text-decoration: normal;
 	font-weight: bold;
 	}
 a.members:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
-	text-decoration: none;
+	text-decoration: normal;
 	font-weight: bold;
 	}
 </style>
