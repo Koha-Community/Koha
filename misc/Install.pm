@@ -1578,6 +1578,7 @@ Which language do you choose? |;
 sub updatedatabase {
     # At this point, $etcdir/koha.conf must exist, for C4::Context
     $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf.tmp';
+	startsysout();	
 	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 	if ($result) {
 		restoremycnf();
@@ -1662,9 +1663,11 @@ sub populatedatabase {
 		my $printerqueue='lp';
 		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
 		$printerqueue=~s/[^A-Za-z0-9]//g;
+		startsysout();	
 		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 # 		}
 	my $language=showmessage(getmessage('Language'), 'free', 'en');
+	startsysout();	
 	system("$mysqldir/bin/mysql -u$user $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
 }
@@ -1701,7 +1704,7 @@ sub restartapache {
 	if (-e "/etc/rc.d/init.d/httpd") {
 	    system('su root -c /etc/rc.d/init.d/httpd restart');
 	} elsif (-e "/etc/init.d/apache") {
-	    system('su root -c /etc//init.d/apache restart');
+	    system('su root -c /etc/init.d/apache restart');
 	} elsif (-e "/etc/init.d/apache-ssl") {
 	    system('su root -c /etc/init.d/apache-ssl restart');
 	}
