@@ -166,7 +166,7 @@ while ($i < $count2){
       $stuff[7]=$stuff[5];
       $stuff[5]='';
       $stuff[0]=mklink($url,$stuff[0]);
-      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount)=itemcount($env,$stuff[2],$type);
+      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount,$branchcount)=itemcount($env,$stuff[2],$type);
       $stuff[4]=$count;
       if ($nacount > 0){
         $stuff[5]=$stuff[5]."On Loan";
@@ -196,7 +196,17 @@ while ($i < $count2){
          }                                                                                                                         
 	 $stuff[5].=" ";	
       }
-      if ($lostcount > 0){
+      $stuff[5]='';
+      foreach my $branchcode (sort keys %$branchcount) {
+	  my $branchname=branchname($branchcode);
+	  my $c=$branchcount->{$branchcode};
+	  $stuff[5].="$branchname";
+	  if ($c>1) {
+	      $stuff[5].=" ($c)";
+	  }
+	  $stuff[5].=" ";
+      }
+      if ($lostcount > 0) {
         $stuff[5]=$stuff[5]."Lost";
          if ($lostcount >1 ){                                                                                                         
 	  $stuff[5]=$stuff[5]." ($lostcount)";                                                                                            

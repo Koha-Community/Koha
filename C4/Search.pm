@@ -18,7 +18,7 @@ $VERSION = 0.01;
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
-&findguarantor); 
+&findguarantor &branchname); 
 
 sub findguarantees{         
   my ($bornum)=@_;         
@@ -1166,7 +1166,8 @@ sub itemcount {
   my $mending=0;
   my $transit=0;
   my $ocount=0;
-  while (my $data=$sth->fetchrow_hashref){
+  my $branchcount;
+  while (my $data=$sth->fetchrow_hashref) {
     $count++;                     
     my $query2="select * from issues,items where issues.itemnumber=                          
     '$data->{'itemnumber'}' and returndate is NULL
@@ -1195,21 +1196,22 @@ sub itemcount {
       if ($data->{'holdingbranch'} eq 'TR'){
         $transit++;
       }
+      unless ($data->{'itemlost'} || $data->{'holdingbranch'} eq 'FM' || $data->{'holdingbranch'} eq 'TR') {
+	  $branchcount->{$data->{'holdingbranch'}}++;
+      }
     }                             
     $sth2->finish;     
   } 
-#  if ($count == 0){
     my $query2="Select * from aqorders where biblionumber=$bibnum";
     my $sth2=$dbh->prepare($query2);
     $sth2->execute;
     if (my $data=$sth2->fetchrow_hashref){
       $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
     }
-#    $count+=$ocount;
     $sth2->finish;
   $sth->finish; 
   $dbh->disconnect;                   
-  return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount); 
+  return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount, $branchcount); 
 }
 
 sub ItemType {
@@ -1260,8 +1262,21 @@ sub barcodes{
   $sth->finish;
   $dbh->disconnect;
   return(@barcodes);
-  
 }
+
+sub branchname {
+  my ($branchcode)=@_;
+  my $dbh=C4Connect;
+  my $query="Select branchname from branches where
+  branchcode=?";
+  my $sth=$dbh->prepare($query);
+  $sth->execute($branchcode);
+  my ($branchname) = $sth->fetchrow;
+  $sth->finish;
+  $dbh->disconnect;
+  return($branchname);
+}
+
 END { }       # module clean-up code here (global destructor)
 
 
