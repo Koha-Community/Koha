@@ -52,7 +52,7 @@
 	</SCRIPT>
 
 <!-- TMPL_IF name="add_form" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 	<H1><!-- TMPL_VAR name="action" --></H1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
 	<input type=hidden name=op value='add_validate'>
@@ -70,7 +70,7 @@
 
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>tag</b></td>
@@ -83,14 +83,14 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 	Data deleted
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>MARC tag structure admin</h1>
 <b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>

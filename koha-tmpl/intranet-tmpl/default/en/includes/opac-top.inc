@@ -22,7 +22,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 -->
 
-<!------------------------MENUS-------------------------------->
+<!--------------------------MENUS---------------------------------->
 
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr BGCOLOR="#339999" >
@@ -74,5 +74,5 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
 
-<!-------------------------MAIN BODY OF PAGE-------------------------->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
 <BLOCKQUOTE>

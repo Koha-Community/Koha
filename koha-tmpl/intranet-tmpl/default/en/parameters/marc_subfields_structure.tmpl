@@ -4,7 +4,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <!-- TMPL_IF name="add_form" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 	<H1><!-- TMPL_VAR name="action" --></H1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
@@ -43,7 +43,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Subfield</b></td>
@@ -58,14 +58,14 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 	Data deleted
-	<form action='<!-- TMPL_VAR name="script_name" --> method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->">
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->">
 	<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --></h1>
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
@@ -76,13 +76,13 @@
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>Subfield</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Lib</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Koha field</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%>Delete</td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%">Delete</td>
 <!-- TMPL_LOOP name="loop" -->
 <tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
 	<td><!-- TMPL_VAR name="tagsubfield" --></td>
