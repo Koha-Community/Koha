@@ -3,8 +3,9 @@
 <font size="6"><em>Biblio Search Results</em></font><br />
 <CENTER>
 You searched on <b><TMPL_IF name="isbn">ISBN <TMPL_VAR name="isbn"></TMPL_IF><TMPL_IF name="title">title <TMPL_VAR name="title"></TMPL_IF></b><br />
-						<TMPL_VAR name="count"> results found <br />
+<TMPL_IF name="total">
 Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
+</TMPL_IF>
 <p />
 
 <table width="80%" cellpadding="3">
@@ -19,6 +20,7 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 		<td><b>&copy;</b></td>
 		<td>&nbsp;</td>
 	</tr>
+	<TMPL_IF name="loop">
 	<TMPL_LOOP name="loop">
 		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
 			<td><TMPL_VAR name="title"></a>
@@ -27,6 +29,9 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 			<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
 		</tr>
 	</TMPL_LOOP>
+	<TMPL_ELSE>
+	<tr><td colspan=4>Nothing found</td></tr>
+	</TMPL_IF>
 </table>
 <br />
 <table width="80%" cellpadding="3">
@@ -43,6 +48,7 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 		<td><b>&nbsp;</b></td>
 		<td>&nbsp;</td>
 	</tr>
+	<TMPL_IF name="breeding_loop">
 	<TMPL_LOOP name="breeding_loop">
 		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
 			<td><TMPL_VAR name="title"></a>
@@ -52,6 +58,9 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 			<td><a href="addbiblio.pl?breedingid=<TMPL_VAR name="id">">Add biblio</a></td>
 		</tr>
 	</TMPL_LOOP>
+	<TMPL_ELSE>
+	<tr><td colspan=6>Nothing found</td></tr>
+	</TMPL_IF>
 	<tr>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
