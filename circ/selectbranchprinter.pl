@@ -22,7 +22,9 @@ use strict;
 use CGI qw/:standard/;
 use C4::Circulation::Circ2;
 use C4::Output;
+use C4::Auth;
 use C4::Print;
+use HTML::Template;
 use DBI;
 
 
@@ -68,87 +70,62 @@ $env{'queue'}=$printer;
 # set up select options....
 my $branchcount=0;
 my $printercount=0;
-my $branchoptions;
-my $printeroptions;
+my @branchloop;
 foreach (keys %$branches) {
     (next) unless ($_);
     (next) unless ($branches->{$_}->{'IS'});
     $branchcount++;
-    my $selected='';
-    ($selected='selected') if ($_ eq $oldbranch);
-    $branchoptions.="<option value=$_ $selected>$branches->{$_}->{'branchname'}\n";
+	my %branch;
+	$branch{selected}=($_ eq $oldbranch);
+	$branch{name}=$branches->{$_}->{'branchname'};
+	$branch{value}=$_;
+    push(@branchloop,\%branch);
 }
+my @printerloop;
 foreach (keys %$printers) {
     (next) unless ($_);
     $printercount++;
-    my $selected='';
-    ($selected='selected') if ($_ eq $oldprinter);
-    $printeroptions.="<option value=$_ $selected>$printers->{$_}->{'printername'}\n";
+	my %printer;
+	$printer{selected}=($_ eq $oldprinter);
+	$printer{name}=$printers->{$_}->{'printername'};
+	$printer{value}=$_;
+    push(@printerloop,\%printer);
 }
 
 # if there is only one....
-
+my $oneprinter=($printercount==1) ;
+my $onebranch=($branchcount==1) ;
 if ($printercount==1) {
     ($printer)=keys %$printers;
+	$printername=$printers->{$printer}->{printername};
 }
 if ($branchcount==1) {
     ($branch)=keys %$branches;
+	$branchname=$branches->{$branch}->{branchname};
 }
-
-# set up printer and branch selection forms....
-my ($printerform, $branchform);
-if ($printercount>1) {
-    $printerform=<<"EOF";
-<select name=printer> $printeroptions </select>
-EOF
-} else {
-    my ($printer) = keys %$printers;
-    $printerform.="Printer: ".$printers->{$printer}->{printername};
-} 
-
-if ($branchcount>1) {
-    $branchform=<<"EOF";
-<select name=branch> $branchoptions </select>
-EOF
-} else {
-    my ($branch) = keys %$branches;
-    $branchform.= "Branch: ".$branches->{$branch}->{branchname};
-} 
-
 
 
 #############################################################################################
 # Start writing page....
 # set header with cookie....
 
-print $query->header();
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "circ/selectbranchprinter.tmpl",
+							query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {parameters => 1},
+                         });
+$template->param(headerbackgroundcolor => $headerbackgroundcolor,
+							backgroundimage => $backgroundimage,
+							oneprinter => $oneprinter,
+							onebranch => $onebranch,
+							printername => $printername,
+							branchname => $branchname,
+							printerloop => \@printerloop,
+							branchloop => \@branchloop
+							);
 
-print startpage();
-print startmenu('circulation');
+print $query->header(), $template->output;
 
-print << "EOF";
-<FONT SIZE=6><em>Circulation: Select Printer and Branch Settings</em></FONT><br>
-
-<center>
-<form method=post action=/cgi-bin/koha/circ/circulation.pl>
-<table border=1 cellpadding=5 cellspacing=0>
-<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
-<font color=black><b>Please Set Branch and Printer</b></font></td></tr>
-<tr><td>
-$branchform
-</td>
-<td>
-$printerform
-</td></tr>
-</table>
-<input type="hidden" name="setcookies" value=1>
-<input type="submit" value="Submit" type="changesettings">
-</form>
-</center>
-
-EOF
-
-
-print endmenu('circulation');
-print endpage();
 
