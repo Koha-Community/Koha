@@ -66,6 +66,16 @@ if ($subjectitems) {
     ($count, @results) = catalogsearch($env,'',\%search,$num,$startfrom);
 }
 
+foreach my $res (@results) {
+    my @items = ItemInfo(undef, $res->{'biblionumber'}, "intra");
+    my $norequests = 1;
+    foreach my $itm (@items) {
+	$norequests = 0 unless $itm->{'notforloan'};
+    }
+    $res->{'norequests'} = $norequests;
+}
+
+
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 
