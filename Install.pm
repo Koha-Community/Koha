@@ -21,6 +21,7 @@ $VERSION = 0.01;
 		&basicauthentication
 		&installfiles
 		&databasesetup
+		&restartapache
 		);
 
 
@@ -146,6 +147,44 @@ $messages->{'GetKohaLogDir'}->{en}=qq|
 Specify a log directory where any Koha daemons can create log files.
 
 Koha Log Directory [%s]: |;
+
+$messages->{'AuthenticationWarning'}->{en}=qq|
+==================
+= Authentication =
+==================
+
+This release of Koha has a new authentication module.  If you are not already
+using basic authentication on your intranet, you will be required to log in to
+access some of the features of the intranet.  You can log in using the userid
+and password from the /etc/koha.conf configuration file at any time.  Use the
+"Members" module to add passwords for other accounts and set their permissions.
+
+[NOTE PERMISSIONS ARE NOT COMPLETED AS OF THIS RELEASE.  Do not give passwords
+to any patrons unless you want them to have full access to your intranet.]
+
+print "Press the <ENTER> key to continue: |;
+
+$messages->{'Completed'}->{en}=qq|
+==============================
+= KOHA INSTALLATION COMPLETE =
+==============================
+
+Congratulations ... your Koha installation is complete!
+
+You will be able to connect to your Librarian interface at:
+
+   http://%s\:%s/
+
+and the OPAC interface at :
+
+   http://%s\:%s/
+
+
+Be sure to read the INSTALL, and Hints files. 
+
+For more information visit http://www.koha.org
+
+Press <ENTER> to exit the installer: |;
 
 sub releasecandidatewarning {
     my $message=getmessage('ReleaseCandidateWarning', [$::kohaversion, $::kohaversion]);
@@ -930,6 +969,13 @@ httpduser=$::httpduser
 
     chown((getpwnam($::httpduser)) [2,3], "$::etcdir/koha.conf") or warn "can't chown koha.conf: $!";
     chmod 0440, "$::etcdir/koha.conf";
+
+    chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
+    chmod 0750, "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
+    chmod 0750, "$::intranetdir/scripts/z3950daemon/processz3950queue";
+    chown(0, (getpwnam($::httpduser)) [3], "$::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $::intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+    chown(0, (getpwnam($::httpduser)) [3], "$::intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $::intranetdir/scripts/z3950daemon/processz3950queue: $!";
+
 }
 
 $messages->{'MysqlRootPassword'}->{en}=qq|
@@ -1090,6 +1136,34 @@ sub databasesetup {
 	}
 
 
+    }
+
+}
+
+$messages->{'RestartApache'}->{en}=qq|
+==================
+= RESTART APACHE =
+==================
+
+Apache needs to be restarted to load the new configuration for Koha.
+
+Would you like to restart Apache now?  [Y]/N: |;
+
+sub restartapache {
+
+    my $response=showmessage(getmessage('RestartApache'), 'yn', 'y');
+
+
+
+    unless ($response=~/^n/i) {
+	# Need to support other init structures here?
+	if (-e "/etc/rc.d/init.d/httpd") {
+	    system('/etc/rc.d/init.d/httpd restart');
+	} elsif (-e "/etc/init.d/apache") {
+	    system('/etc//init.d/apache restart');
+	} elsif (-e "/etc/init.d/apache-ssl") {
+	    system('/etc/init.d/apache-ssl restart');
+	}
     }
 
 }
