@@ -1,5 +1,12 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
+
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=./logout.pl>Déconnecter</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=./userpage.pl>S'identifier</a> à Koha</p>
+</TMPL_IF>
+
 <center>
 
 <table border=0 cellspacing=0 cellpadding=2>
@@ -14,7 +21,7 @@
 &nbsp;</td></tr>
 </table>
 <br>
-Resultats <TMPL_VAR NAME="startfrom"> &agrave; <TMPL_VAR NAME="endat"> sur <TMPL_VAR NAME="numrecords"> enregistrements.
+Results <TMPL_VAR NAME="startfrom"> à <TMPL_VAR NAME="endat"> de <TMPL_VAR NAME="numrecords"> réponses
 <br>
     <TMPL_IF NAME="displayprev">
 	<a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/prev.gif border=0></a>

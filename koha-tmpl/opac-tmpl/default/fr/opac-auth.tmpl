@@ -1,16 +1,29 @@
-
+<TMPL_INCLUDE NAME="opac-top.inc">
 <TMPL_IF NAME="nopermission">
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>D&eacute;sol&eacute;, il semble que vous n'ayez pas d'autorisation pour cette page.<h2>
+<h2>INTERDIT<h2>
+</TMPL_IF>
 
+<TMPL_IF NAME="timed_out">
+<!-- This is what is displayed if Connecter has timed out -->
+<h2>Déconnecté. Identifiez vous à nouveau.<h2>
+</TMPL_IF>
+
+<TMPL_IF NAME="different_ip">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Vous avez changé d'adresse IP. Identifiez vous à nouveau<h2>
+</TMPL_IF>
+
+<TMPL_IF NAME="invalid_username_or_password">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Identifiant ou mot de passe erroné. Essayez encore.<h2>
 </TMPL_IF>
 
 
 <TMPL_IF NAME="loginprompt">
-<!-- login prompt time-->
+<!-- Connecter prompt time-->
 
 <center>
-<h2><TMPL_VAR NAME="message"></h2>
 
 <form action='<TMPL_VAR NAME="url">' method="post">
 <TMPL_LOOP NAME="INPUTS">
@@ -20,12 +33,13 @@
     <tr><td align="center" valign="top">
 
     <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
-    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha - Identification</font></th></tr>
-    <tr><td>num&eacute;ro carte de lecteur:</td><td><input name="userid"></td></tr>
-    <tr><td>mot de passe:</td><td><input type=password name=password></td></tr>
-    <tr><td colspan="2" align="center"><input type="submit" value="Entrer"></td></tr>
+    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Identifiant Koha</font></th></tr>
+    <tr><td>N° de carte</td><td><input name="userid"></td></tr>
+    <tr><td>Mot de passe :</td><td><input type="password" name="password"></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="Connecter"></td></tr>
     </table>
     </td><td align="center" valign="top">
+
 
     </td></tr>
 </table>

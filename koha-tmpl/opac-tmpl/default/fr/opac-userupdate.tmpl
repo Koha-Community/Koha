@@ -1,6 +1,14 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
-<i>Si des informations sont erronées, vous pouvez les corriger. <b>Notez</b> qu'un <b>mail</b> sera envoyé à la bibliothèque, qui <b>validera</b> vos modifications.<br/>
-en conséquence, vos modifications n'apparaitront pas immédiatement.</i><br/><br/>
+
+<TMPL_IF NAME="loggedinusername">
+    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
+</TMPL_IF>
+
+<i> Changer le nécessaire<br/>
+Your changes won't appear until the library has validated them.</i><br/><br/>
+
 <TMPL_LOOP NAME="BORROWER_INFO">
 
 <CENTER>
@@ -14,28 +22,28 @@ en conséquence, vos modifications n'apparaitront pas immédiatement.</i><br/><br/
 <TD>Titre</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='title'>"  NAME="title"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Pr&eacute;nom</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
+<TD>Prénom</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Adresse</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
+<TD>Adresse postale</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
 
 <TR VALIGN=TOP> 
 <TD>Ville</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='city'>"  NAME="city"></TD></TR>
 
 
 <TR VALIGN=TOP> 
-<TD>T&eacute;l. domicile</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
+<TD>Téléphone maison</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>T&eacute;l. bur./Fax</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
+<TD>Tel bureau</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Email</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
+<TD>Mail</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
 
 
 
 <TR VALIGN=TOP>
-<td><font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font></td>
+<td><font size=4 face="arial,helvetica"><INPUT type="submit" value="OK"></font></td>
 <TD><font size=4 face="arial,helvetica">
 </font></td></tr>
 

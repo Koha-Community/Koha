@@ -3,101 +3,123 @@
 <TMPL_LOOP NAME="BORROWER_INFO">
 
 <table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
-<tr   bgcolor="#fecc99" >
-<td><b>VOS DONNEES PERSONNELLES SONT-ELLES EXACTES?</B></td></tr>
-<tr>
-<td><font size=2 face="arial,helvetica">
-Carte lecteur: <TMPL_VAR NAME="cardnumber"> <p>
-<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
-<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
-<TMPL_VAR NAME="phone"> (dom.)<br>
-<TMPL_VAR NAME="faxnumber"> (bur.)<br>
+	<tr   bgcolor="#fecc99" >
+		<td><b>Est-ce correct?</B></td>
+	</tr>
+	<tr>
+		<td><font size=2 face="arial,helvetica">Carte lecteur <TMPL_VAR NAME="cardnumber"> <br/>
+			<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
+			<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
+			<TMPL_VAR NAME="phone"> (hm)<br>
+			<TMPL_VAR NAME="faxnumber"> (wk)<br>
+			<TMPL_VAR NAME="emailaddress"><br/>
+			<p>quelque chose à modifier ??</p>
+			<a href="/cgi-bin/koha/opac-userupdate.pl">Mettre à jour</a>
+		</td>
+	</tr>
+</table>
 
-<TMPL_VAR NAME="emailaddress"><p>
 
-Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&eacute; de num&eacute;ro de t&eacute;l&eacute;phone ou d'adresse e-mail?<p>
-
-<a href="/cgi-bin/koha/opac-userupdate.pl">Mettre &agrave; jour vos donn&eacute;es personnelles</a>
-
-</td></tr></table>
 
 <font size=6><em>Bonjour, <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font>
-<p>[<a href="/cgi-bin/koha/opac-logout.pl">D&eacute;connexion</a>] [<a href='/cgi-bin/koha/opac-account.pl'>Voir vos finances</a>]<p>
+[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Déconnecter</a>]<p>
+
 
 <TMPL_IF NAME="amountoverfive">
-<table cellpadding=5 cellspacing=0 border=1>
-<tr bgcolor="#fecc99">
-<td>
-<font face="arial,helvetica" color="red" size=+2><B>Vous devez <TMPL_VAR NAME="amountoutstanding"> Euros à la bibliothèque</B></font>
-</td></tr></table>
-
+	<table cellpadding=5 cellspacing=0 border=1>
+		<tr bgcolor="#fecc99">
+			<td>
+				<font face="arial,helvetica" color="red" size=+2><B>Vous avez des dettes de <TMPL_VAR NAME="amountoutstanding"></B></font>
+			</td>
+		</tr>
+	</table>
 </TMPL_IF>
 
 <TMPL_IF NAME="amountoverzero">
-<table cellpadding=5 cellspacing=0 border=1>
-<tr bgcolor="#fecc99">
-<td>
-<td><font face="arial,helvetica" size=+2><B>Vous devez <TMPL_VAR NAME="amountoutstanding"> Euros à la bibliothèque</B></font>
-</td></tr></table>
+	<table cellpadding=5 cellspacing=0 border=1>
+		<tr bgcolor="#fecc99">
+			<td>
+				<font face="arial,helvetica" size=+2>
+					<B>Vous avez des dettes de <TMPL_VAR NAME="amountoutstanding"></B>
+				</font>
+			</td>
+		</tr>
+	</table>
 </TMPL_IF>
 
 <TMPL_IF NAME"amountlessthanzero">
-<table cellpadding=5 cellspacing=0 border=1>
-<tr bgcolor="#fecc99">
-<td>
-<td><font face="arial,helvetica" size=+2><B>Vous avez un cr&eacute;dit de <TMPL_VAR NAME="amountoutstanding"> Euros</B></font>
-</td></tr></table>
+	<table cellpadding=5 cellspacing=0 border=1>
+		<tr bgcolor="#fecc99">
+			<td>
+				<font face="arial,helvetica" size=+2>
+					<B>Vous avez un crédit de <TMPL_VAR NAME="amountoutstanding"></B>
+				</font>
+			</td>
+		</tr>
+	</table>
 </TMPL_IF>
+<a href='/cgi-bin/koha/opac-account.pl'>Voir compte</a>
 
 </TMPL_LOOP>
 
 <TMPL_IF NAME="waiting_count">
-   <table  cellpadding=5 cellspacing=0 border=0><tr bgcolor="#fecc99" >
-   <td colspan=2><font color="red" face="arial,helvetica" size=+2><B>
-   Vous avez r&eacute;serv&eacute; ces documents; ils vous attendent:
-   </B></font><P></td></tr>
-      <TMPL_LOOP NAME="WAITING">
-      <tr><td><b><TMPL_VAR NAME="btitle"></b></td><td>venez les prendre &agrave;: <b><TMPL_VAR NAME="branch"></b></td></tr>
-      </TMPL_LOOP>
-   </table>
+	<table  cellpadding=5 cellspacing=0 border=0>
+		<tr bgcolor="#fecc99" >
+			<td colspan=2>
+				<font color="red" face="arial,helvetica" size=+2>
+					<B>	Vouas avez des réservations en attente</B>
+				</font>
+				<P>
+			</td>
+		</tr>
+		<TMPL_LOOP NAME="WAITING">
+			<tr>
+				<td>
+					<b><TMPL_VAR NAME="btitle"></b></td><td>Prendre à : <b><TMPL_VAR NAME="branch"></b>
+				</td>
+			</tr>
+		</TMPL_LOOP>
+	</table>
 </TMPL_IF>
 
 <p>
 
 <TMPL_IF NAME="issues_count">
-	<p>Vous avez <TMPL_VAR NAME="issues_count"> document(s) en pr&ecirc;t actuellement :</p>
-	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-	<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-		<TD><B>Titre</B></TD>
-		<TD><B>Auteur</B></TD>
-		<TD><B>Date de retour</B></TD>
-		<TD><B>Type de doc.</B></TD>
-		<TD><B>Amendes</B></TD>
-		<TD><B>Pr&ecirc;ts en cours</B></TD>
-	</TR>
 
-	<TMPL_LOOP NAME="ISSUES">
-		<TR VALIGN=TOP>
-		<TD><TMPL_VAR NAME="title"></TD>
-		<TD><TMPL_VAR NAME="author"></TD>
-		<TD><TMPL_VAR NAME="date_due"></TD>
-		<TD><TMPL_VAR NAME="itemtype"></TD>
-		<TD><TMPL_IF NAME="charges">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
-		<TD><TMPL_IF NAME="status">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
+	Vous avez <TMPL_VAR NAME="issues_count"> Ouvrage en prêt actuellement<br>
+	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+		<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+			<TD><B>Titre</B></TD>
+			<TD><B>Auteur</B></TD>
+			<TD><B>Date retour</B></TD>
+			<TD><B>Type d'ouvrage</B></TD>
+			<TD><B>Charges</B></TD>
+			<TD><B>Prêt</B></TD>
 		</TR>
-	</TMPL_LOOP>
+		<TMPL_LOOP NAME="ISSUES">
+			<TR VALIGN=TOP>
+				<TD><TMPL_VAR NAME="title"></TD>
+				<TD><TMPL_VAR NAME="author"></TD>
+				<TD><TMPL_VAR NAME="date_due"></TD>
+				<TD><TMPL_VAR NAME="itemtype"></TD>
+				<TD><TMPL_IF NAME="charges">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
+				<TD><TMPL_IF NAME="status">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
+			</TR>
+		</TMPL_LOOP>
 	</table>
 <TMPL_ELSE>
-	<p>Vous n'avez aucun pr&ecirc;t en cours.</p>
+<p>Vous n'avez pas d'exemplaire en prêt</p>
 </TMPL_IF>
 
+<p>
+
 <TMPL_IF NAME="reserves_count">
-	<p>Vous avez r&eacute;serv&eacute; <TMPL_VAR NAME="reserves_count"> document(s) :</p>
+	Vous avez <TMPL_VAR NAME="reserves_count"> Ouvrages réservés actuellement<br>
 	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
 		<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-		<TD><B>Titre</B></TD>
-		<TD><B>Auteur</B></TD>
-		<TD><B>Date de r&eacute;servation</B></TD>
+			<TD><B>Titre</B></TD>
+			<TD><B>Auteur</B></TD>
+			<TD><B>Date réservation</B></TD>
 		</TR>
 		<TMPL_LOOP NAME="RESERVES">
 			<TR VALIGN=TOP>
@@ -108,7 +130,6 @@ Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&
 		</TMPL_LOOP>
 	</table>
 </TMPL_IF>
-
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
 

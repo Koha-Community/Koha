@@ -1,22 +1,25 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
+<TMPL_IF NAME="loggedinusername">
+    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
+</TMPL_IF>
+
+
 <CENTER>
 <FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
 <TABLE >
 
-<tr valign=top>
-	<TD></td>
-	<td></td>
-	<td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="Lancer recherche" width=164 height=44 border=0 ></td>
-</tr>
 
 <TR VALIGN=TOP>
-	<TD>Mots clefs</TD>
+	<TD>Mot-clefs</TD>
 	<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-	<td></td>
+	<td></TD>
 </TR>
+
 <TR VALIGN=TOP>
-	<TD colspan=3><B>OU :</B></TD>
+	<TD colspan=3><B>OU</B></TD>
 <td></TD></TR>
 <TR VALIGN=TOP>
 	<TD>Sujet</TD>
@@ -25,7 +28,7 @@
 </TR>
 
 <TR VALIGN=TOP>
-	<TD colspan=3><B>OU autres critères (plusieurs possibles) :</B></TD>
+	<TD colspan=3><B>OU un ou plus de :</B></TD>
 <td></TD></TR>
 
 <TR VALIGN=TOP>
@@ -47,34 +50,37 @@
 </TR>
 
 <tr>
-	<td>Catégorie</td>
+<td>Classe</td>
 	<td>
 	<select size="1"  name="class">
-	<option value="">Toutes
+	<option value="">Tout
 	<!-- fetch class list -->
 	<TMPL_VAR name="classlist">
+	<!--#include virtual="/includes/cat-class-list.inc" -->
 	</select>
 	</td>
 	<td></td>
 </tr>
 
 <TR VALIGN=TOP>
-	<TD>Numéro d'exemplaire</TD>
+	<TD>Code barre</TD>
 	<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
 	<td></td>
 </TR>
 
 <TR VALIGN=TOP>
-	<td></td>
-	<TD><font size=4 face="arial,helvetica"><INPUT TYPE="reset"  value="Tout effacer"></font></td>
+
+	<td><input type="submit" value="Lancer recherche"></td>
+	<TD><font size=4 face="arial,helvetica"><INPUT TYPE="reset"  value="Effacer"></font></td>
 	<td></td>
 </tr>
 
 <TR VALIGN=TOP>
-	<TD colspan=3>Notez que si vous entrez un mot clef et une valeur dans une autre zone, seul le mot clef sera utilisé.</TD>
+	<TD colspan=3>Notez que le mot clef est prioritaire</TD>
 </TD></TR>
 
 </TABLE>
+
 </FORM>
 </CENTER>
 

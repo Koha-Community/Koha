@@ -2,15 +2,15 @@
 
 <TMPL_LOOP NAME="BORROWER_INFO">
 <FONT SIZE=6><em>Compte de <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></FONT>
-[<a href=/cgi-bin/koha/opac-user.pl>Accueil</a>][<a href=/cgi-bin/koha/opac-logout.pl>D&eacute;connexion</a>]<p>
+[<a href=/cgi-bin/koha/opac-user.pl>Accueil</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]<p>
 </TMPL_LOOP>
 <center>
 <p>
 <TABLE  CELLSPACING=0 CELLPADDING=5 border=1>
 <TR VALIGN=TOP>
-<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=2><B>AMENDES</TD>
-<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=1><B>MONTANT</TD>
-<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=1><B>RESTANT DU</TD>
+<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=2><B>Dettes</TD>
+<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=1><B>COUT</TD>
+<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=1><B>EN ATTENTE</TD>
 </TR>
 
 <TMPL_LOOP NAME="ACCOUNT_LINES">
@@ -26,14 +26,14 @@
 
 <tr VALIGN=TOP  >
 <TD></td>
-<TD colspan=2><b>Total</b></td>
+<TD colspan=2><b>Total dû</b></td>
 
 <TD><b><TMPL_VAR NAME="total"></b></td>
 
 </tr>
 </table>
 <br clear=all>
-<p>&nbsp;  </p>
+<p> &nbsp; </p>
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
