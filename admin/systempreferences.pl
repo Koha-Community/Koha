@@ -107,18 +107,13 @@ if ($op eq 'add_form') {
 		$sth->finish;
 	}
 	if ($searchfield) {
-		$template->param(action => "Modify pref");
-	} else {
-		$template->param(action => "Add pref");
+		$template->param(modify => 1);
 	}
+
 	$template->param(explanation => $data->{'explanation'},
-							value => $data->{'value'},
-							);
-	if ($searchfield) {
-		$template->param(searchfield => "<input type=hidden name=variable value='$searchfield'>$searchfield");
-	} else {
-		$template->param(searchfield => "<input type=text name=variable size=80 maxlength=80>");
-	}
+			 value => $data->{'value'},
+			 searchfield => $searchfield);
+
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
