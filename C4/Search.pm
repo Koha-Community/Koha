@@ -1887,10 +1887,11 @@ sub BornameSearch  {
 		";
 		@bind=("$data[0]%","% $data[0]%","$data[0]%","% $data[0]%","$data[0]%","% $data[0]%");
 		for (my $i=1;$i<$count;$i++){
-		$query=$query." and (".
-		" firstname  like ? or firstname like ?
-		or othernames like ? or othernames like ?)";
-		push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
+		        $query=$query." and (".
+		        " surname like ? or surname like ?
+                        or firstname  like ? or firstname like ?
+		        or othernames like ? or othernames like ?)";
+		        push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
 					# FIXME - .= <<EOT;
 		}
 		$query=$query.") or cardnumber = ?

@@ -50,6 +50,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $member=$input->param('member');
+$member =~ s/,//g;   #remove any commas from search string
 
 my $env;
 
