@@ -4,33 +4,98 @@
     <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <!-- /TMPL_IF -->
 
-<span style="font-size:2em; text-align:left;">MARC search</span>
+<h1>Catalogue search</h1>
 
-<center>
 <form name="f" method="post">
-
-<input type="hidden" name="op" value="do_search">
-<input type="hidden" name="type" value="intranet">
-<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-
-	<table border=0 cellspacing=0 cellpadding=2 width="100%">
-		<tr align="center">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<table class="noborder">
+		<tr>
+			<th colspan=4>
+    Quick search
+			</th>
+		</tr>
+		<tr>
 			<td>
-				<div name="sql">
-				<textarea name="sql" rows=5 cols=60 disabled readonly></textarea>
-				</div>
+				Keyword <input type="hidden" name="marclist" value="">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+			</td>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+			<td>
+    Illustrator<input type="hidden" name="marclist" value="biblioitems.illus">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+			</td>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
 			</td>
 		</tr>
-		<tr align="center">
-			<td bgcolor="#ad11ad" valign="top" align="left">
-				<span style="color:#FFFFFF;">
-					<b>HELP :</b><br/>
-					Build your request using MARC fields and subfields. Add criteria lets you add another criteria to your search. Search commits the request and displays the results.
-				</span>
+		<tr>
+			<td>
+				Title <input type="hidden" name="marclist" value="biblio.title">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+			</td>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+			<td>
+				Dewey<input type="hidden" name="marclist" value="biblioitems.dewey">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+			</td>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				author <input type="hidden" name="marclist" value="biblio.author">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+			</td>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+			<td>
+				Item Type <input type="hidden" name="marclist" value="items.itemtype">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+			</td>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				barcode
+			</td>
+			<td>
+				<input type="hidden" name="marclist" value="items.barcode">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value">
 			</td>
 		</tr>
 	</table>
-	<table border=0 cellspacing=0 cellpadding=2 width="100%">
+
+	<table class="noborder">
+		<tr>
+			<th colspan=5>
+				Complete (MARC) search
+			</th>
+		</tr>
 		<!-- TMPL_LOOP NAME="statements" -->
 		<tr>
 			<td>
@@ -61,27 +126,46 @@
 					<option <!-- TMPL_IF NAME="le" -->selected<!-- /TMPL_IF --> value="<=">Is lower or equal to</option>
 				</select>
 			</td>
-			<td><input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->value="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF -->></td>
+			<td>
+				<input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->value="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF -->>
+			</td>
 		</tr>
 		<!-- /TMPL_LOOP -->
+		<tr>
+			<td align="left" width="15%"><input type="button" value="Add criteria" onClick="AddStatement()" class="button"></td>
+		</tr>
+
+		<tr align="center">
+			<td colspan="5">
+				<div name="sql">
+				<textarea name="sql" rows=3 cols=60 disabled readonly></textarea>
+				</div>
+			</td>
+		</tr>
 	</table>
 	<br>
 
-	<table width="90%">
+	<table class="noborder">
 	<tr>
-	<td align="left" width="33%"><input type="button" value="Add criteria" onClick="AddStatement()" class="button"></td>
-	<td align="middle" width="33%"><input type="submit" value="Start search" class="button"></td>
-	<td align="right" width="33%">Results per page :
+	<td align="right">Results per page :
 		<select align="right" name="resultsperpage" size="1">
 			<option value="20">20</option>
 			<option value="50">50</option>
 			<option value="100">100</option>
 		</select>
 	</td>
+	<td>Ordered by
+		<select name="orderby" size="1">
+			<option value="biblio.title">Title</option>
+			<option value="biblio.author">Author</option>
+			<option value="biblioitems.dewey">Dewey</option>
+			<option value="biblioitems.publicationyear">Publication Year</option>
+			<option value="biblioitems.publishercode">Publisher</option>
+		</select>
+	<td align="middle"><input type="submit" value="Start search" class="button"></td>
 	</tr>
 	</table>
 </form>
-</center>
 
 <script>
 function sql_update() {
