@@ -13,7 +13,6 @@ function Help() {
 </script>
 
 <style type="text/css">
-th.doNotPrint,
 .acquisition {
 	background-color: #ffdf61;
 	color:#000000;
