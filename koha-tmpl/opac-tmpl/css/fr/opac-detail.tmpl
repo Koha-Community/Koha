@@ -69,11 +69,12 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-	<!-- TMPL_UNLESS NAME="norequests" -->
 	<p>
-		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">Reserver</a>
-	</p>
+	<!-- TMPL_UNLESS NAME="norequests" -->
+		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">Reserver</a>&nbsp;&nbsp;&nbsp;
 	<!-- /TMPL_UNLESS -->
+	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Ajouter au panier</a>
+	</p>
 	</div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
