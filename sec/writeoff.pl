@@ -6,6 +6,7 @@
 use strict;
 use CGI;
 use C4::Database;
+use C4::Stats;
 my $input=new CGI;
 
 #print $input->header;
@@ -43,7 +44,9 @@ print $input->redirect("/cgi-bin/koha/pay.pl?bornum=$bornum");
 #needs to be shifted to a module when time permits
 sub writeoff{
   my ($bornum,$accountnum,$itemnum,$accounttype,$amount)=@_;
+  my $user=$input->remote_user;
   my $dbh=C4Connect;
+  my $env;
   my $query="Update accountlines set amountoutstanding=0 where ";
   if ($accounttype eq 'Res'){
     $query.="accounttype='Res' and accountno='$accountnum' and borrowernumber='$bornum'";
@@ -67,4 +70,5 @@ sub writeoff{
   $sth->finish; 
 #  print $query;
   $dbh->disconnect;
+  UpdateStats($env,$user,'writeoff',$amount,'','','',$bornum);
 }
