@@ -46,7 +46,7 @@
 		Relationship: <TMPL_VAR NAME="altrelationship"><BR>
 		Notes: <TMPL_VAR NAME="altnotes"><P>
 		<TMPL_IF NAME="isguarantee">
-			Guarantees:<TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME="cardnumber"></a><br></TMPL_LOOP>
+			Guarantees:<br><TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME=name> - <TMPL_VAR NAME="cardnumber"></a><br></TMPL_LOOP>
 		<TMPL_ELSE>
 			Guarantor:
 			<TMPL_IF NAME="guarantorborrowernumber">

@@ -99,7 +99,8 @@ if ($data->{'categorycode'} ne 'C'){
   my @guaranteedata;
   for (my $i=0;$i<$count;$i++){
     push (@guaranteedata, {borrowernumber => $guarantees->[$i]->{'borrowernumber'},
-    			   cardnumber => $guarantees->[$i]->{'cardnumber'}});
+    			   cardnumber => $guarantees->[$i]->{'cardnumber'},
+			   name => $guarantees->[$i]->{'firstname'} . " " . $guarantees->[$i]->{'surname'}});
   }
   $template->param(guaranteeloop => \@guaranteedata);
 

@@ -84,7 +84,7 @@ of references to hash, which gives the actual results.
 sub findguarantees{
   my ($bornum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="select cardnumber,borrowernumber from borrowers where
+  my $query="select cardnumber,borrowernumber, firstname, surname from borrowers where
   guarantor='$bornum'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
