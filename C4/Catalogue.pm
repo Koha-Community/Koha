@@ -1,5 +1,9 @@
 package C4::Catalogue; #asummes C4/Acquisitions.pm
 
+# Continue working on updateItem!!!!!!
+#
+
+
 use strict;
 require Exporter;
 use C4::Database;
@@ -54,6 +58,7 @@ sub newBiblio {
 # This subroutine makes no modifications to the MARC tables.  MARC records are
 # only created when new biblioitems are added.
     my ($env, $biblio) = @_;
+    my $dbh=&C4Connect;  
     my $title=$biblio->{'title'};
     my $q_title=$dbh->quote($title);
     my $subtitle=$biblio->{'subtitle'};
@@ -105,6 +110,9 @@ sub changeSubfield {
 #
 # Might be nice to be able to pass a Subfield_ID directly to this routine to
 # remove ambiguity, if possible.
+#
+# Pass barcode to remove ambiguity for changes to individual items.  Look up
+# field link and sequence number based on barcode.
 
     my $Record_ID=shift;
     my $tag=shift;
@@ -112,6 +120,8 @@ sub changeSubfield {
     my $Subfield_Mark=shift;
     my $Subfield_OldValue=shift;
     my $Subfield_Value=shift;
+    my $barcode=shift;
+    my $Subfield_ID;
     my $dbh=&C4Connect;  
     my $sth=$dbh->prepare("select S.Subfield_ID, S.Subfield_Value from Bib_Table B, $firstdigit\XX_Tag_Table T, $firstdigit\XX_Subfield_Table S where B.Record_ID=$Record_ID and B.Tag_$firstdigit\XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and S.Subfield_Mark='$Subfield_Mark'");
     $sth->execute;
@@ -120,9 +130,11 @@ sub changeSubfield {
 	    my $q_Subfield_Value=$dbh->quote($Subfield_Value);
 	    my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_ID=$ID");
 	    $sti->execute;
+	    $Subfield_ID=$ID;
 	    last;
 	}
     }
+    return($Subfield_ID);
 }
 
 sub updateBiblio {
@@ -328,7 +340,7 @@ sub newBiblioItem {
 	$sth->execute;
 	my ($biblioitemnumber) =$sth->fetchrow;
 	$biblioitemnumber++;
-	$sth=$dbh->prepare("insert into biblioitems (biblionumber,biblioitemnumber,volume,number,classification,itemtype,isbn,issn,dewey,subclass,publicationyear,publishercode,volumedate,illus,pages,notes,size,place,lccn) values ($biblionumber, $biblioitemnumber, $q_volume, $q_number, $q_classification, $q_itemtype, $q_isbn, $q_issn, $dewey, $q_subclass, $q_publicationyear, $q_publishercode, $q_volumedate, $q_illus, $q_pages,$q_notes, $q_size, $q_place, $q_lccn)");
+	$sth=$dbh->prepare("insert into biblioitems (biblionumber,biblioitemnumber,volume,number,classification,itemtype,isbn,issn,dewey,subclass,publicationyear,publishercode,volumedate,illus,pages,notes,size,place,lccn) values ($biblionumber, $biblioitemnumber, $q_volume, $q_number, $q_classification, $q_itemtype, $q_isbn, $q_issn, $dewey, $q_subclass, $publicationyear, $q_publishercode, $q_volumedate, $q_illus, $q_pages,$q_notes, $q_size, $q_place, $q_lccn)");
 	$sth->execute;
 	#my $sth=$dbh->prepare("unlock tables");
 	#$sth->execute;
@@ -338,7 +350,7 @@ sub newBiblioItem {
 # Should we check if there is already a biblioitem/marc with the
 # same isbn/lccn/issn?
 
-    $sth=$dbh->prepare("select title,unititle,seriestitle,copyrightdate,notes,author from biblio where biblionumber=$biblionumber");
+    my $sth=$dbh->prepare("select title,unititle,seriestitle,copyrightdate,notes,author from biblio where biblionumber=$biblionumber");
     $sth->execute;
     my ($title, $unititle,$seriestitle,$copyrightdate,$biblionotes,$author) = $sth->fetchrow;
     $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber");
@@ -402,7 +414,7 @@ sub newBiblioItem {
 	$subfields->{1}->{'Subfield_Value'}=$biblionotes;
 	$subfields->{2}->{'Subfield_Mark'}='3';
 	$subfields->{2}->{'Subfield_Value'}='biblio';
-	my $tag='440';
+	my $tag='500';
 	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
     }
 # Additional Authors
@@ -539,7 +551,6 @@ sub newBiblioItem {
 
 sub updateBiblioItem {
 # Update the biblioitem with biblioitemnumber $biblioitem->{'biblioitemnumber'}
-# This routine should also modify the corresponding MARC record data.
 #
 # This routine should also check to see which fields are actually being
 # modified, and log all changes.
@@ -597,7 +608,7 @@ sub updateBiblioItem {
     }
     if ($biblioitem->{'dewey'} ne $obi->{'dewey'}) {
 	logchange('kohadb', 'biblioitems', 'dewey', $obi->{'dewey'}, $biblioitem->{'dewey'});
-	my $sth=$dbh->prepare("update biblioitems set dewey=$dewey where biblioitemnumber=$biblioitemnumber");
+	my $sth=$dbh->prepare("update biblioitems set dewey=$biblioitem->{'dewey'} where biblioitemnumber=$biblioitemnumber");
 	logchange('marc', '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
 	changeSubfield($Record_ID, '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
     }
@@ -672,18 +683,25 @@ sub newItem {
     my ($env, $Record_ID, $item) = @_;
     my $dbh=&C4Connect;  
     my $barcode=$item->{'barcode'};
+    my $q_barcode=$dbh->quote($barcode);
+    my $biblionumber=$item->{'biblionumber'};
+    my $biblioitemnumber=$item->{'biblioitemnumber'};
     my $dateaccessioned=$item->{'dateaccessioned'};
     my $booksellerid=$item->{'booksellerid'};
+    my $q_booksellerid=$dbh->quote($booksellerid);
     my $homebranch=$item->{'homebranch'};
+    my $q_homebranch=$dbh->quote($homebranch);
     my $holdingbranch=$item->{'holdingbranch'};
     my $price=$item->{'price'};
     my $replacementprice=$item->{'replacementprice'};
     my $replacementpricedate=$item->{'replacementpricedate'};
+    my $q_replacementpricedate=$dbh->quote($replacementpricedate);
     my $notforloan=$item->{'notforloan'};
     my $itemlost=$item->{'itemlost'};
     my $wthdrawn=$item->{'wthdrawn'};
     my $restricted=$item->{'restricted'};
     my $itemnotes=$item->{'itemnotes'};
+    my $q_itemnotes=$dbh->quote($itemnotes);
     my $itemtype=$item->{'itemtype'};
     my $subclass=$item->{'subclass'};
 
@@ -762,6 +780,80 @@ sub updateItem {
 # modified, and log all changes.
 
     my ($env, $item) = @_;
+    my $dbh=&C4Connect;  
+    my $itemnumber=$item->{'itemnumber'};
+    my $biblionumber=$item->{'biblionumber'};
+    my $biblioitemnumber=$item->{'biblioitemnumber'};
+    my $barcode=$item->{'barcode'};
+    my $dateaccessioned=$item->{'dateaccessioned'};
+    my $booksellerid=$item->{'booksellerid'};
+    my $homebranch=$item->{'homebranch'};
+    my $price=$item->{'price'};
+    my $replacementprice=$item->{'replacementprice'};
+    my $replacementpricedate=$item->{'replacementpricedate'};
+    my $multivolume=$item->{'multivolume'};
+    my $stack=$item->{'stack'};
+    my $notforloan=$item->{'notforloan'};
+    my $itemlost=$item->{'itemlost'};
+    my $wthdrawn=$item->{'wthdrawn'};
+    my $bulk=$item->{'bulk'};
+    my $restricted=$item->{'restricted'};
+    my $binding=$item->{'binding'};
+    my $itemnotes=$item->{'itemnotes'};
+    my $holdingbranch=$item->{'holdingbranch'};
+    my $interim=$item->{'interim'};
+    my $sth=$dbh->prepare("select * from items where itemnumber=$itemnumber");
+    $sth->execute;
+    my $olditem=$sth->fetchrow_hashref;
+    my $q_barcode=$dbh->quote($olditem->{'barcode'});
+    $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark='p' and Subfield_Value=$q_barcode");
+    $sth->execute;
+    my ($Subfield852_ID) = $sth->fetchrow;
+    $sth=$dbh->prepare("select Subfield_Value from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_ID=$Subfield852_ID");
+    $sth->execute;
+    my ($link) = $sth->fetchrow;
+    $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_Value=$link");
+    $sth->execute;
+    my ($Subfield876_ID) = $sth->fetchrow;
+    
+    if ($item->{'barcode'} ne $olditem->{'barcode'}) {
+	logchange('kohadb', 'items', 'barcode', $olditem->{'barcode'}, $item->{'barcode'});
+	my $q_barcode=$dbh->quote($item->{'barcode'});
+	my $sth=$dbh->prepare("update items set barcode=$q_barcode where itemnumber=$itemnumber");
+	logchange('marc', '876', 'p', $olditem->{'barcode'}, $item->{'barcode'});
+	($Subfield_ID) = changeSubfield($Record_ID, '876', 'p', $olditem->{'barcode'}, $item->{'barcode'});
+    }
+    if ($item->{'booksellerid'} ne $olditem->{'booksellerid'}) {
+	logchange('kohadb', 'items', 'booksellerid', $olditem->{'booksellerid'}, $item->{'booksellerid'});
+	my $q_booksellerid=$dbh->quote($item->{'booksellerid'});
+	my $sth=$dbh->prepare("update items set booksellerid=$q_booksellerid where itemnumber=$itemnumber");
+	logchange('marc', '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'});
+	changeSubfield($Record_ID, '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'});
+    }
+    if ($item->{'dateaccessioned'} ne $olditem->{'dateaccessioned'}) {
+	logchange('kohadb', 'items', 'dateaccessioned', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
+	my $q_dateaccessioned=$dbh->quote($item->{'dateaccessioned'});
+	my $sth=$dbh->prepare("update items set dateaccessioned=$q_dateaccessioned where itemnumber=$itemnumber");
+	logchange('marc', '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
+	changeSubfield($Record_ID, '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
+    }
+    if ($item->{'homebranch'} ne $olditem->{'homebranch'}) {
+	# FIX ME!!!!  This really needs to check the field link and sequence
+	# number entry to make sure the right item is being modified!
+	# Use 876 p (piece designation) to ensure.
+	logchange('kohadb', 'items', 'homebranch', $olditem->{'homebranch'}, $item->{'homebranch'});
+	my $q_homebranch=$dbh->quote($item->{'homebranch'});
+	my $sth=$dbh->prepare("update items set homebranch=$q_homebranch where itemnumber=$itemnumber");
+	logchange('marc', '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'});
+	changeSubfield($Record_ID, '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'});
+    }
+    if ($item->{'holdingbranch'} ne $olditem->{'holdingbranch'}) {
+	logchange('kohadb', 'items', 'holdingbranch', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+	my $q_holdingbranch=$dbh->quote($item->{'holdingbranch'});
+	my $sth=$dbh->prepare("update items set holdingbranch=$q_holdingbranch where itemnumber=$itemnumber");
+	logchange('marc', '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+	changeSubfield($Record_ID, '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+    }
 }
 
 END { }       # module clean-up code here (global destructor)

@@ -6,7 +6,7 @@
 # This next line deletes _ALL_ of the existing MARC data from the
 # MySQL tables!!!  It is only in here during development!!!!
 
-system("mysql Koha -ptestpass < deletemarc");
+system("mysql Koha -pkohapass < deletemarc");
 
 use C4::Database;
 use C4::Catalogue;
@@ -25,6 +25,7 @@ my $dbh=C4Connect;
 my $sth=$dbh->prepare("select * from biblio,biblioitems where biblio.biblionumber=biblioitems.biblionumber");
 $sth->execute;
 my $env;
+$env->{'marconly'}=1;
 
 while (my $biblioitem=$sth->fetchrow_hashref) {
     print "Processing $biblioitem->{'title'}\n";
