@@ -248,7 +248,7 @@ my %requirefields = (
     		 	   'type' => 'char(20)',
 			   'options' => 'text' },
     z3950servers      => { 'syntax'      => 'char(80)' },
-    marc_subfield_structure =>{'seealso'  => 'char(80)'},
+    marc_subfield_structure =>{'seealso'  => 'char(255)'},
     bookshelf => {'owner' => 'char(80)',
     					'category' => 'char(1)',
 				}
@@ -967,6 +967,25 @@ unless ( $branchcategories{'codedescription'} eq 'text' ) {
     $sth->execute;
 }
 
+# changing the items table around...
+my %items;
+
+$sth = $dbh->prepare("show columns from items");
+$sth->execute;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $items{$column} = $type;
+}
+
+if ($items{'bulk'} eq "varchar(30)") {
+    print "  Setting callnumber in items table\n";
+    my $sti =
+      $dbh->prepare("ALTER TABLE `items` CHANGE `bulk` `itemcallnumber` VARCHAR( 30 ) DEFAULT NULL");
+    $sti->execute;
+    $sti = $dbh->prepare("update marc_subfield_structure set kohafield=\"items.itemcallnumber\" where kohafield=\"items.bulk\"");
+    $sti->execute;
+}
+
 # Populate tables with required data
 
 foreach my $table ( keys %tabledata ) {
@@ -1018,6 +1037,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.75  2004/04/14 19:49:00  tipaul
+# seealso field set to 255 chars
+#
 # Revision 1.74  2004/03/11 16:10:16  tipaul
 # *** empty log message ***
 #
