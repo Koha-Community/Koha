@@ -267,7 +267,7 @@ printend
 print <<printend
 	<form action='$script_name' method=post>
 	<input type=hidden name=op value=add_form>
-	<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Add Category" BORDER=0 ></a><br>
+	<input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add Category" BORDER=0 ></a><br>
 	</form>
 printend
 	;
