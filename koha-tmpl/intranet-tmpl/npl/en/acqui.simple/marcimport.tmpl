@@ -6,7 +6,7 @@
 <table border="0" cellpadding="0" cellspacing="0" align="center" class="results" width="80%">
 <tr><td class="header" colspan="2"><h1>MARC acquisition system</h1></td></tr>
 	<tr>
-	<td class="bheader" colspan="2"><h3>Import into breeding farm</h3></td>
+	<td class="bheader" colspan="2"><h3>Import into the reservoir</h3></td>
 	</tr>
 <tr><td class="cell" colspan="2">
 
@@ -21,8 +21,8 @@
 	<p><a href="addbooks.pl">Back to acquisition</a>
 </ul>
 <!-- TMPL_ELSE -->
-<ul class="notes"><li>Select a file to import into breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in breeding farm.
-If an ISBN already exists in the breeding farm, you can choose wether to ignore the new one, or overwrite the old one.</li>
+<ul class="notes"><li>Select a file to import into the reservoir. It will be parsed, and for each ISBN found, a new record will be created in the reservoir.
+If an ISBN already exists in the reservoir, you can choose wether to ignore the new one, or overwrite the old one.</li>
 <li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested marc data comes !</li>
 <li>Of course, if the ISBN already exists in active DB, the biblio will be ignored.</li></ul>
 </td></tr>
@@ -39,7 +39,7 @@ If an ISBN already exists in the breeding farm, you can choose wether to ignore 
 		</td>
 	</tr>
 	<tr>
-		<td class="label">If ISBN already in breeding farm : </td>
+		<td class="label">If ISBN is already in the reservoir : </td>
 		<td class="input"><input type="radio" name="overwrite_biblio" value="0" checked>Ignore this one, keep the existing one<br>
 			<input type="radio" name="overwrite_biblio" value="1">Overwrite the existing one with this</td>
 	</tr>
