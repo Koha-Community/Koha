@@ -8,15 +8,19 @@ use C4::Output;
 use Net::Z3950;
 
 
+my $configfile=configfile();
+
 if ($< == 0) {
     # Running as root, switch privs 
-    if (-d "/var/run") {
+    my $kohalogdir=$configfile->{'kohalogdir'};
+    if (-d $kohalogdir) {
 	open PID, ">/var/run/processz3950queue.pid";
 	print PID $$."\n";
 	close PID;
     }
     # Get real apacheuser from koha.conf or reparsing httpd.conf
-    my $apacheuser='www-data';  
+    my $apacheuser=$configfile->{'httpduser'};
+    ($apacheuser) || ($apacheuser='www-data'); 
     my $uid=0;
     unless ($uid = (getpwnam($apacheuser))[2]) { 
 	die "Attempt to run daemon as non-existent or superuser\n";
@@ -24,7 +28,6 @@ if ($< == 0) {
     $>=$uid;
     $<=$uid;
 }
-    
 
 my $dbh=C4Connect;
 
@@ -35,7 +38,7 @@ $SIG{CHLD}='reap';
 $SIG{HUP}='checkqueue';
 
 
-my $logdir=$ARGV[0];
+my $logdir=$configfile->{'kohalogdir'};
 
 open PID, ">$logdir/processz3950queue.pid";
 print PID $$."\n";
