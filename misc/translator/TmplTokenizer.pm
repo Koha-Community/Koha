@@ -485,6 +485,20 @@ sub next_token {
 	    for (my $i = 0; $i < $n_trailing_spaces; $i += 1) {
 		push @{$this->{_queue}}, pop @structure;
 	    }
+	    # FIXME: If the last token is a close tag but there are no tags
+	    # FIXME: before it, drop the close tag back into the queue. This
+	    # FIXME: is an ugly hack to get rid of "foo %s</h1>" type mess.
+	    if (@structure >= 2
+		    && $structure[$#structure]->type == TmplTokenType::TAG
+		    && $structure[$#structure]->string =~ /^<\//) {
+		my $has_other_tags_p = 0;
+		for (my $i = 0; $i < $#structure; $i += 1) {
+		    $has_other_tags_p = 1
+			    if $structure[$i]->type == TmplTokenType::TAG;
+		last if $has_other_tags_p;
+		}
+		push @{$this->{_queue}}, pop @structure unless $has_other_tags_p
+	    }
 	    if (@structure < 2) {
 		# Nothing to do
 		;
