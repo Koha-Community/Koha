@@ -29,7 +29,7 @@
 		<!-- TMPL_IF NAME="gonenoaddress" --><li>Patron's <span class="error">address is in doubt</span>.</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="lost" --><li>Patron's card has been reported <span class="error">lost</span>.</li><!-- /TMPL_IF -->
 	</ul>
-<!-- TMPL_IF name="borrowernotes" --><dl><dt>Notes:</dt> <dd class="error"><!-- TMPL_VAR name="borrowernotes" --></dd></dl></div><!-- /TMPL_IF -->
+<!-- TMPL_IF name="borrowernotes" --><dl><dt>Notes:</dt> <dd class="error"><!-- TMPL_VAR name="borrowernotes" --></dd></dl><!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
 
 <div class="compact">
@@ -64,6 +64,20 @@
 		<!-- /TMPL_IF -->
 </table>
 </div>
+
+
+<div class="compact">
+<table>
+<!-- TMPL_IF NAME="userid" -->
+	<tr><th>OPAC login: </th><td><!-- TMPL_VAR name="userid" --></td></tr>
+	<tr><th>OPAC Password: </th><td><!-- TMPL_IF name="password" -->On Record<!-- TMPL_ELSE -->Not Set <form class="inline compact" action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Set Password" /></form><!-- /TMPL_IF --></td></tr> 
+<!-- TMPL_ELSE -->
+	<tr><th>OPAC Login Not Defined!</th><td><form class="inline compact" action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Set Login and Password" /></form></td></tr>
+<!-- /TMPL_IF -->
+</table>
+</div>
+
+
 <div class="compact">
 <table>
 		<!-- TMPL_IF NAME="borrowernotes" -->
