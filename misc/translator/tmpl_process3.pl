@@ -262,16 +262,41 @@ if ($action eq 'create')  {
 	unlink $str_file || die "$str_file: $!\n";
     }
     die "$str_file: Output file already exists\n" if -f $str_file;
-    my($tmph, $tmpfile) = tmpnam();
+    my($tmph1, $tmpfile1) = tmpnam();
+    my($tmph2, $tmpfile2) = tmpnam();
+    close $tmph2; # We just want a name
     # Generate the temporary file that acts as <MODULE>/POTFILES.in
     for my $input (@in_files) {
-	print $tmph "$input\n";
+	print $tmph1 "$input\n";
     }
-    close $tmph;
+    close $tmph1;
     # Generate the specified po file ($str_file)
-    $st = system ($xgettext, '-s', '-f', $tmpfile, '-o', $str_file);
-    warn_normal "Text extraction failed: $xgettext: $!\n", undef if $st != 0;
-#   unlink $tmpfile || warn_normal "$tmpfile: unlink failed: $!\n", undef;
+    $st = system ($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2);
+    # Run msgmerge so that the pot file looks like a real pot file
+    # We need to help msgmerge a bit by pre-creating a dummy po file that has
+    # the headers and the "" msgid & msgstr. It will fill in the rest.
+    if ($st == 0) {
+	# Merge the temporary "pot file" with the specified po file ($str_file)
+	# FIXME: msgmerge(1) is a Unix dependency
+	# FIXME: need to check the return value
+	unless (-f $str_file) {
+	    local(*INPUT, *OUTPUT);
+	    open(INPUT, "<$tmpfile2");
+	    open(OUTPUT, ">$str_file");
+	    while (<INPUT>) {
+		print OUTPUT;
+	    last if /^\n/s;
+	    }
+	    close INPUT;
+	    close OUTPUT;
+	}
+	$st = system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
+    } else {
+	error_normal "Text extraction failed: $xgettext: $!\n", undef;
+	error_additional "Will not run msgmerge\n", undef;
+    }
+#   unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
+#   unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'update') {
     my($tmph1, $tmpfile1) = tmpnam();
