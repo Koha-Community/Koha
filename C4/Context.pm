@@ -291,10 +291,46 @@ sub config
 	return $context->{"config"}{$var};
 }
 
+=item preference
+
+  $sys_preference = C4::Context->preference("some_variable");
+
+Looks up the value of the given system preference in the
+systempreferences table of the Koha database, and returns it. If the
+variable is not set, or in case of error, returns the undefined value.
+
+=cut
+#'
+# FIXME - The preferences aren't likely to change over the lifetime of
+# the script (and things might break if they did change), so perhaps
+# this function should cache the results it finds.
+sub preference
+{
+	my $self = shift;
+	my $var = shift;		# The system preference to return
+	my $retval;			# Return value
+	my $dbh = C4::Context->dbh;	# Database handle
+	my $sth;			# Database query handle
+
+	# Look up systempreferences.variable==$var
+	$retval = $dbh->selectrow_array(<<EOT);
+		SELECT	value
+		FROM	systempreferences
+		WHERE	variable='$var'
+		LIMIT	1
+EOT
+	return $retval;
+}
+
 # AUTOLOAD
 # This implements C4::Config->foo, and simply returns
 # C4::Context->config("foo"), as described in the documentation for
 # &config, above.
+
+# FIXME - Perhaps this should be extended to check &config first, and
+# then &preference if that fails. OTOH, AUTOLOAD could lead to crappy
+# code, so it'd probably be best to delete it altogether so as not to
+# encourage people to use it.
 sub AUTOLOAD
 {
 	my $self = shift;
