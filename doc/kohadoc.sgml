@@ -1,0 +1,2749 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+<book>
+
+<!-- Header -->
+ <!-- High Availability info -->
+ <!-- Wiki-ize this? -->
+ <bookheader>
+  <title>Koha Manual</title>
+  <author>
+     <firstname>Koha</firstname>
+     <surname>DocTeam</surname>
+     <affiliation>
+        <address>
+           <email>info@koha.org</email>
+        </address>
+     </affiliation>
+  </author>
+    <revhistory>
+      <revision>
+         <revnumber>0.01</revnumber>
+         <date>2002-05-23</date>
+          <revremark> Started Document  </revremark>
+      </revision>
+      <revision>
+		<revnumber>0.02</revnumber>
+		  <date>2002-12-17</date>
+          <revremark> Attempted to cover 1.2, 1.3(devel) Koha versions.  Updates to MARC information, other major enhancements to Koha also noted.  </revremark>
+      </revision>
+            <revision>
+	  		<revnumber>0.03</revnumber>
+	  		  <date>2003-01-09</date>
+	  		  <authorinitials>nsr</authorinitials>
+	            <revremark> Still attempting to cover 1.2, 1.3(devel, specifically recent 1.3.3 release) Koha versions.  Proofing, CREDITS, MySQL bias, other corrections. </revremark>
+      </revision>
+      <!-- Additional (*earlier*) revision histories go here -->
+   </revhistory>
+
+  <abstract>
+    <indexterm>
+      <primary>Koha</primary>
+    </indexterm>
+     <para>
+     This is the full documentation set for the Koha Library application suite.  All of the information found in subsets of the documentation (ie the INSTALL file) are contained in this file.  It is conveniently grouped into 3 major sections, plus appendices, intended for the three broad classes of reader the developers and documenters anticipate.  Happy Cataloging!
+    </para>
+<para><emphasis>*** Editor's note:  This is the third edition of the manual, covering the Koha version 2.0.X release series.  ***</emphasis></para>
+
+  </abstract>
+
+ </bookheader>
+<!-- Section1: intro -->
+
+ <sect1 id="intro">
+   <title>Introduction</title>
+
+   <indexterm>
+    <primary>disk!introduction</primary>
+   </indexterm>
+
+  <para>
+   Koha is a library cataloging application, originally created for the Horowhenua Library Trust by Katipo, a small company in New Zealand.  It has always been under the Gnu Public License, and today is installed as a production system in at least 4 countries indexing thousands of individual library items, and currently supports users in 2 languages.  New features and support are handled by a variety of international volunteers.
+  </para>
+
+
+  <sect2 id="copyright">
+   <title>Copyright Information</title>
+
+   <para>
+    This document is copyrighted (c) 2002 The Koha Project and is distributed under the same terms as the Linux Documentation Project (LDP) license, stated below.
+   </para>
+
+   <para>
+    Unless otherwise stated, Koha documents are copyrighted by their respective authors. Koha related documents may
+    be reproduced and distributed in whole or in part, in any medium physical or electronic, as long as this copyright notice is retained on all copies. Commercial redistribution is allowed and encouraged; however, the author would like to be notified of any such distributions.  Please check your local laws on copyright.
+   </para>
+
+   <para>
+    If you have any questions about the documentation, please contact
+    <email>info@koha.org</email>.
+    If you have any questions about Koha releases, please contact
+    <email>info@koha.org</email>.
+   </para>
+  </sect2>
+  <!-- Section2: disclaimer -->
+
+  <sect2 id="disclaimer">
+   <title>Disclaimer</title>
+
+   <para>
+    No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. As this is a new edition of this document, there may be errors and inaccuracies, that may of course be damaging to your system. Proceed with caution, and although damage is highly unlikely, the author(s) do not take any responsibility for that, or anything else that occurs.
+   </para>
+
+   <para>
+    All copyrights are held by their by their respective owners, unless specifically noted otherwise.  Use of a term in this document should not be regarded as affecting the validity of any trademark or service mark.
+   </para>
+
+   <para>
+    Naming of particular products or brands should not be seen as endorsements.
+   </para>
+
+   <para>
+    You are strongly recommended to take a backup of your system before major installation and backups at regular intervals.
+   </para>
+  </sect2>
+
+<!-- Section2: newversions-->
+
+  <sect2 id="newversions">
+   <title>New Versions</title>
+
+    <indexterm>
+     <primary>(your index root)!news on</primary>
+    </indexterm>
+
+
+   <para>
+    This is the third release.
+   </para>
+
+   <para>
+	This document's home page is www.koha.org.
+   </para>
+
+
+   <para>
+    The latest version number of this document can be
+    obtained from www.koha.org.
+   </para>
+
+   <para>
+    This HOWTO will always be made available on
+    the koha website, and will eventually have a variety of formats:
+   </para>
+
+   <para>
+   <itemizedlist>
+    <listitem>
+     <para>
+      <ulink url="http://www.koha.org/manual">HTML</ulink>.
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+       <ulink URL="http://www.koha.org/manual">plain text</ulink>.
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <ulink url="http://www.koha.org/manual">compressed
+       postscript (US letter format)</ulink>.
+     </para>
+    </listitem>
+
+    <listitem>
+     <para>
+      <ulink url="http://www.koha.org/manual">SGML source</ulink>.
+     </para>
+    </listitem>
+   </itemizedlist>
+   </para>
+
+   <para>
+    Since paper sizes vary in the world, this documentation is available in
+    <emphasis>universal format</emphasis> (8.27x11in; 210x279mm).  More or less :0.
+   </para>
+  </sect2>
+
+<!-- Section2: credits -->
+
+  <sect2 id="credits">
+   <title>Credits</title>
+
+   <para>
+    In this version I have the pleasure of acknowledging:
+   </para>
+
+   <para>Mike Mylonas, Rachel Hamilton-Williams, Pat Eyler, and Jo Ransom in particular for either their specific contributions to the manual, or their support for the editing.  Rosalie Blake is the true, peerless guru of proofreading, and saved you the reader, and I from numerous ugly sentences and errors.  Naturally, I (and the entire community) are also indebted to all of the Koha contributors collectively.-- Nick, The Sometime Documeister, Koha
+   </para>
+
+   <para>
+    The entire project is indebted to <emphasis>Katipo</emphasis> and <emphasis>HLT</emphasis>
+    for opening the source in the first place.
+   </para>
+  </sect2>
+
+<!-- Section2: feedback -->
+
+  <sect2 id="feedback">
+   <title>Feedback</title>
+
+   <para>
+    Feedback is most certainly welcome for this document. Without
+    your submissions and input, this document wouldn't exist. Please
+    send your additions, comments and criticisms to the following
+    email address : <email>info AT koha.org</email>.
+   </para>
+   </sect2>
+
+<!-- Section2: translations -->
+
+  <sect2 id="translations">
+   <title>Translations </title>
+
+	<para>Translations are or should soon be available in the following languages:</para>
+   <para>
+    <itemizedlist>
+
+      <listitem>
+       <para>
+         <ulink url="NEEDLINK">Bengali/Bangla Translation</ulink>
+         by <email>someone (at) somewhere.in</email>
+       </para>
+      </listitem>
+
+      <listitem>
+        <para>
+  		<ulink url="NEEDLINK">Portuguese Translation</ulink>
+         by <email>someone (at) somewhere.portugal</email>
+       </para>
+       </listitem>
+
+
+      <listitem>
+       <para>
+         <ulink url="NEEDLINK">Catalan Translation</ulink>
+         by <email>someone (at) somewhere.catalonia</email>
+      </para>
+      </listitem>
+
+      <listitem>
+       <para>
+         <ulink url="http://fr.koha.org/manual/book1.html">French Translation / Traduction Française</ulink>
+         by <email>morinn (at) free.fr</email>
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+         <ulink url="NEEDLINK">Hindi Translation</ulink>
+         by <email>someone (at) somewhere.in</email>
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+         <ulink url="NEEDLINK">Italian Translation</ulink>
+         by <email>someone (at) somewhere.it</email>
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+         <ulink url="NEEDLINK">Maori Translation</ulink>
+         by <email>someone (at) somewhere.nz</email>
+       </para>
+      </listitem>
+
+     <listitem>
+      <para>
+        <ulink url="http://www.koha.org">Polish Translation</ulink>
+        by <email>Benedict (at) somewhere.po</email>
+      </para>
+     </listitem>
+
+     <listitem>
+      <para>
+        <ulink url="http://es.koha.org/">Spanish Translation</ulink>
+        by <email>someone (at) somewhere.es</email>
+      </para>
+     </listitem>
+    </itemizedlist>
+   </para>
+   </sect2>
+
+ </sect1>
+
+<!-- Section1: intro: END -->
+
+ <sect1 id="Koha_Welcome">
+  <title>Welcome to Koha</title>
+  <para>
+  Dear User,</para>
+  <para>Hello, and welcome to Koha.  The manual you're reading and the software that it documents are the fruits of a lot of volunteer labor, hard work by the staff of Katipo Communications, and donations by Horowhenua Library Trust and other libraries.</para>
+
+<para> Koha was initially developed in 1999 and the first library went live in January of 2000.  Koha's code has been in production since then and is continuing to move towards higher levels of functionality and standards compliance, including embracing the international records and cataloging standards MARC and Z39.50.  Our development community has also grown and now includes contributors on four continents and ports in several languages.</para>
+
+<para>This is one of the beauties of Free Software -- all of the people involved have reasons to work on a Library System, by working together they've been able to create something far more useful than anything they could have done on their own, while enjoying the benefits of all the work done before.</para>
+
+<para>Why is all this feel good philosophy here?  Isn't this a 'Welcome to Koha' letter, you ask?  Well, this stuff <emphasis>is</emphasis> part of our welcome.  We're proud of the work that we've done so far.  We're also excited about the improvements and additions that are just over the horizon.  We want you to get comfortable with Koha, to make it your own.  In fact, we want you to be so comfortable with it that you're ready to make changes in it, and we want you to feel at home enough to contribute them back to the community.</para>
+
+<para>We're a friendly bunch, we've got a users mailing list where you should feel free to ask questions.  You can subscribe by filling out the form at http://koha.org/mailing_list.html .  If you'd rather ask questions in real time, you can use irc and meet with us on the #Koha-Support channel at irc.katipo.co.nz, port 6667. </para>
+
+<para>I hope I've convinced you to join the project, but even if I haven't I hope that you'll enjoy the time you spend with our software.</para>
+
+  <para>
+  Happy cataloging!
+  </para>
+  <para><emphasis>Pat Eyler<emphasis></para>
+  <para>Kaitiaki, Koha</para>
+</sect1>
+
+
+ <sect1 id="How_To_Use_this_Manual">
+  <title>How To Use This Manual</title>
+   <sect2 id="UseTop">
+   <title>As always...<title>
+  <para>
+   <emphasis>As always, the usual Disclaimer applies: <emphasis> This manual, like much of everything on the Web, is continually under construction.
+  </para>
+   </sect2>
+   <sect2 id="Formats">
+   <title>Formats</title>
+
+   <para>As a convention, blocks of code or screen capture are formatted like the below:</para>
+   <para><screen>[bookish@server]$ command</screen></para>
+
+   <para>  Additionally, email addresses are formatted for antispam purposes, eg:</para>
+   <para> info AT koha.org </para>
+   <para> info AT koha DOT org </para>
+   </sect2>
+
+</sect1>
+
+<!-- Section1: Library IT Support  -->
+ <sect1 id="Book1_Library_IT_Support">
+  <title>Book 1:  For the Library IT Support Staff</title>
+
+
+  <para>"What is written without effort is, in general, read without pleasure."</para>
+<para><emphasis>  -Samuel Johnson</emphasis></para>
+
+<!-- ALL THIS NEEDS AN ASSESSMENT -->
+
+  <sect2 id="To_Start">
+	   <title>To Start</title>
+
+   <para>
+    The usual pattern for a Koha installation is the setup of a dedicated server in the library to support the installation of a server grade operating system and the necessary support software.  Koha was originally designed to run with Apache running on Linux.  Most sites have continued this trend.    Koha should run with little or no adjustment necessary on most versions of Unix.  Similarly, there are no Apache specific areas in the code, however we have little feedback on how the application will run with other HTTP daemons.  Any feedback is most appreciated.
+   </para>
+   <!-- <para><emphasis>It is possible to run Koha on Microsoft's Windows server platform with appropriate ports of support tools.  A mail list devoted to windows related koha issues has been started at, please see the FAQ section for more information and the links for downloads. </emphasis></para> -->
+   <para>NB: All the Koha system administrators are firm believers in backing up the database on a regular schedule, especially before upgrades to existing Koha installations.</para>
+   </sect2>
+
+   <sect2 id="Installer.pl">
+   	   <title>Option 1: Automated Configuration</title>
+  <para>The preferred method of Koha installation for anyone running a Unix operating system and a machine explicity for Koha is to run the installation script:</para>
+   <para> <screen> perl -Imodules installer.pl</screen>
+   </para>
+   <para> which can be found with the tarball. </para>
+</sect2>
+
+<sect2 id="Install_Manual">
+ <Title>Option 2: Manual Koha Installation</Title>
+<para> It is possible to install Koha manually, however this procedure is recommended for very experienced admins only.</para>  
+<para>To do so:</para>
+    	<itemizedlist>
+    	<listitem><para>    Make directory in tmp called Koha ( mkdir /tmp/Koha )   	</para></listitem>
+    	<listitem><para>    Make sure to install the following packages:  libexpect-perl </para></listitem>
+    	<listitem><para>Download the following files, from the following locations:	</para>
+    				<para><itemizedlist>
+			    	<listitem><para> Bundle-KohaSupport-0.08.tar.gz  from <ulink url="http://www.cpan.org">http://www.cpan.org/</ulink>, Locate by searching for Koha </para></listitem>
+		    	  	<listitem><para>Net-Z3950-0.32.tar.gz  [Net::Z3950]  from <ulink url="http://www.cpan.org">http://www.cpan.org</ulink>, Locate by searching for 3950</para></listitem>
+    	<listitem><para> yaz-2.0.tar.gz from <ulink url="http://www.indexdata.dk/yaz/">http://www.indexdata.dk/yaz/</ulink>
+    (Specific instructions: right-hand menu/download/sources)
+    	</para></listitem>
+    	<listitem><para>Koha-2.0 from www.koha.org, Specific instructions: <ulink url="http://www.sourceforge.net/FIXME"http://www.sourceforge.net/FIXME/>
+    	</para></listitem> 	
+    	<listitem><para>Unpack all sources into reasonably named directories.</para></listitem>
+    	</listitem> 
+    	<listitem><para>  Install yaz:  Go into yaz-2.0, until you see the file README.  Installation instructions:
+         	<programlisting>
+          $ ./configure
+          $ make
+          $ su
+          PASSWORD: XXXX
+          # make install
+          # exit
+          $
+    		</programlisting>
+    
+    	</para></listitem>
+    	<listitem><para>
+    Install the Koha Bundle
+      	<programlisting>
+               $ cd /tmp/Koha/Bundle-KohaSupport-0.08
+               $ perl Makefile.PL
+               $ make
+               $ su
+               PASSWORD: XXXX
+               # make install
+               # exit
+               $
+    		</programlisting>
+    
+    	</para></listitem>
+    	<listitem><para>
+    Install Net::Z3950.  Use one of the two following scripts:
+    	<programlisting>
+          	   $ su
+               PASSWORD: XXXX
+               # perl -MCPAN -e 'install Net::Z3950'
+    		</programlisting>
+    
+     <emphasis>or</emphasis>
+          	<programlisting>
+               $ cd /tmp/Koha/Net-Z3950-0.32
+               $ perl Makefile.PL
+               $ make
+               $ make test
+               $ su
+               PASSWORD: XXXX
+               # make install
+               # exit
+    		</programlisting>
+    
+    	</para></listitem>
+    	<listitem><para>
+    Get your MySQL server running - check the MySQL website for more assistance.
+    	</para></listitem>
+    	<listitem><para>
+    Get your Apache server running - chances are that your distribution of Linux includes this and has it running already.
+    	</para></listitem>
+<!--  <section> 	<title>    Start the Koha Install    	</title>
+    	<itemizedlist>
+    	
+<para>
+    Start the installer
+    	<programlisting>
+       perl -Imodules installer.pl
+    		</programlisting>
+    
+    	</para></listitem>
+    	<para>
+     <emphasis>or</emphasis> 
+    	</para> 
+    Install manually [for advanced users] 
+    	</para></listitem>
+    	<listitem><para> 
+-->
+    	<listitem><para>Start the Koha Install: [note, this is a rough outline of the steps necessary!] </para>
+    	<itemizedlist>
+    	<listitem>
+    	<para>Things to know: </para>
+    	<itemizedlist>
+    		<listitem><para>    server's domain name and system configuration directory (normally /etc - This should be an absolute path; a trailing / is not required.) </para></listitem>
+    		<listitem><para>
+    PAT FIXME:  Should they create a koha.conf here, or where?  Could you stick an example of a current one in appropriate place?
+    		</para></listitem>
+    		<!--<listitem><para>    Setup apache    		</para></listitem> -->
+    		<listitem><para>
+    Select a virtual server name, port for the OPAC (catalog), and port for the intranet (librarian's interface)
+    		</para></listitem></listitem>
+    		<listitem><para>
+    add the appropriate entries to the Apache Virtual Host setup. (see enclosed)
+    	<programlisting>
+    &lt;VirtualHost _default_:*>
+        ServerAdmin webmaster@dummy-opac
+        DocumentRoot /usr/www/opac/htdocs
+        ScriptAlias  /cgi-bin/ /usr/www/opac/cgi-bin/
+        ServerName opac
+        ErrorLog logs/opac-error_log
+        CustomLog logs/opac-access_log common
+    &lt;/VirtualHost>
+    			</programlisting>
+    
+    		</para></listitem>
+    		<listitem><para>
+    set Serveradmin, Servername, DocumentRoot, ScriptAlias with associated (below) info in httpd.conf
+    	<programlisting>
+    &lt;Directory "PATHofSOMEsort">
+        AllowOverride None
+        Options None
+        Order allow,deny
+        Allow from all
+    &lt;/Directory>
+    			</programlisting>
+    
+    		</para></listitem>
+    		<listitem><para>
+    Place the appropriate koha files in the appropriate directories (/usr/local/koha usually, with subdirs OPAC and INTRANET)
+    		</para></listitem>
+    		<listitem><para>
+    Load the MySQL configuration [PAT FIXME:  what's the command/file for this now???] NOTE:  koha.conf must exist by this point.
+    		</para></listitem>
+    		<listitem><para>
+    Restart apache.
+    		</para></listitem>
+    		</itemizedlist>
+		</listitem>
+    
+    </sect2>
+
+<sect2 id="Windows_Install">
+<Title>Windows Installation</Title>
+    	<para>--</para>
+</sect2>
+
+
+<!-- FIXME:REASSESS **EVERYTHING** here -->
+    <sect2 id="Exceptions_To_Install">
+  	   <title>Installation Alternative Options</title>
+	       <sect3 id="Rootless">
+	     	   <title>Installing without Root</title>
+	     	<para>To install Koha without access to superuser/root/sysadmin level privileges, ask your system administrator to arrange for a user called opac and then set the user in the OPAC virtual host.  This will permit all of the cgi scripts to be executed as 'user' opac.  The Virtualhost then may suexec to the user installing Koha, and koha.conf can then be written by that user, avoiding the need for the chown command, which is restricted to a superuser.  It is then extremely important to set PERL5LIB environment variable to point at the libraries you have installed: </para>
+		</para> <screen> SetEnv PERL5LIB /some/path/to/modules </screen></para>
+	   	</sect3>
+   		 <sect3 id="NoVirt">
+		 <title>Installation without Virtual Hosts</title>
+
+			<para>Koha is designed to be installed as two separate services - each having a unique web address and folder structure (two virtual web hosts). Both services access a single SQL database which may be hosted on the same server or on a remote server. Following the steps below reconfigure koha (the intranet and opac) to run on a single, non-virual server.</para>
+
+			<para>NB: In the examples below, pathto = /usr/local/www</para>
+
+			Create new /etc/koha.conf</para>
+			<para><screen>
+			database=kohadb
+			hostname=localhost
+			user=kohadbuser
+			pass=xxxxxxxx
+			includes=/pathto/html/koha/includes
+			</screen></para>
+
+			<para><emphasis>Create a general purpose web site:</emphasis></para>
+
+			<para>/pathto/html</para>
+			<para>/pathto/cgi-bin</para>
+
+
+			<para><emphasis>Create koha web installations folders:</emphasis></para>
+
+			<para>/pathto/html/koha/includes</para>
+			<para>/pathto/html/koha/oadmin</para>
+			<para>/pathto/html/koha/opac</para>
+
+
+			<para><emphasis>Create koha cgi-bin folders:</emphasis></para>
+
+			<para>/pathto/cgi-bin/opac</para>
+			<para>/pathto/cgi-bin/koha</para>
+			<para>/pathto/cgi-bin/koha/C4</para>
+
+			<para>Copy koha distro opac-html\* into /pathto/koha/opac/*</para>
+			<para>Copy koha distro intranet-html\* into /pathto/koha/oadmin/*</para>
+
+			<para>koha distro koha\* into /pathto/cgi-bin/oadmin <emphasis>(including C4 directory and its contents)</emphasis>.</para>
+
+			<para>Copy member.pl + seach.pl into /pathto/cgi-bin/opac</para>
+
+			<para>Move /pathto/koha/opac/images/* into /pathto/images/opac/*</para>
+			<para>Move /pathto/koha/oadmin/images/* into /pathto/images/oadmin/*</para>
+
+			<para>Rename opac *.inc files so that they all have opac-* prefix ie</para>
+			<para> rename "join-top.inc" to "opac-join-top.inc"</para>
+			<para><emphasis>and</emphasis> rename "members-top.inc" to "opac-members-top.inc"</para>
+
+			<para>Move <emphasis>ALL</emphasis> includes from koha distro into /pathto/koha/includes
+			[(It is preferable that any new includes for opac should be named using the "opac-" prefix convention (or similar)].</para>
+
+
+			<para>Example excerpts from apache httpd.conf:</para>
+			<para><screen>
+			ServerName library.example.org
+			ServerPath /usr/local/www
+			DocumentRoot /usr/local/www/html
+			#
+			Alias /images/ "/usr/local/www/html/images/"
+			SetEnv PERL5LIB "/usr/local/www/cgi-bin/koha"
+
+			&lt;Directory /var/www/html >
+			# This is the root of general purpose website
+			# NO server side includes!
+			AllowOverride None
+			Options -Includes -FollowSymlinks -Indexes
+			Order Deny,Allow
+			Allow From All
+			&lt;/Directory>
+
+			# ======== Use Server Side Includes Here =======
+			&lt;Directory /usr/local/www/html/koha/opac>
+			AllowOverride None
+			Options +Includes -FollowSymlinks -Indexes
+			AddHandler server-parsed .html
+			&lt;/Directory>
+			#
+			&lt;Directory "/usr/local/www/html/koha/oadmin">
+			#
+			AllowOverride None
+			#
+			# First, you must enable +Includes or +IncludesNoExec
+			# in "Options"...
+			Options +Includes -FollowSymlinks -Indexes
+			#
+			# Allow server-parsed content (SSI) for files
+			AddHandler server-parsed .html
+			#
+			# Optional simple server based authentication....
+			# Authtype Basic
+			# AuthName Koha-Online-Admin
+			# AuthUserFile /usr/local/www/ok_users/koha-users
+			# AuthGroupFile /usr/local/www/ok_groups/koha-groups
+			# &lt;Limit GET POST PUT DELETE>
+			# require user koha-admin group lib-admins
+			# &lt;/Limit>
+			&lt;/Directory>
+			&lt;/VirtualHost>
+		</screen></para>
+
+	   	<para> Note:  You will also need to change the include files to reflect the new "root" directory -- if you don't do this, everything will work until you click on a section button at the top of a page.</para>
+	   	</sect3>
+
+
+   </sect2>
+
+   </sect1>
+<!-- Section1: Librarian  -->
+ <sect1 id="Book_2_Librarian">
+  <title>Book 2:  For the Librarian</title>
+<!-- Ideally, I'd like caricature style images of these "people"  -->
+ <sect2 id="Lib_Home_Page">
+  <title>The Home Page</title>
+<para>The home page offers links to these sections of Koha:</para>
+   <para>
+    <itemizedlist>
+	     <listitem>
+      <para>Catalogue Search: This will search on any word/words in the title, subtitle, series title or subject fields (?abstract, web URL?). It will search on truncated strings. For a more specific search, click on the advanced search link below the box.
+      </para>
+     </listitem>
+	     <listitem>
+      <para>Member search: will search on a member's barcode number, or on any part of the member's name (including truncated names).
+      </para>
+     </listitem>
+	     <listitem>
+      <para>Acquisitions: Koha has two acquisitions processes. The full acquisitions is a sophisticated system for keeping track of spending on books and other materials in multiple budgets. The simple version is a much quicker method of adding data if budget tracking is not required.
+      </para>
+     </listitem>
+	     <listitem>
+      <para>
+	Accounts and Reports
+	</para>
+     </listitem>
+	     <listitem>
+      <para>
+	Circulation: Koha has two Circulation processes. This link takes you to the web-based circulation system. The alternate text-only system is intended for faster access over a slow comms link. Talk to your system administrator if you need this version.
+	</para>
+     </listitem>
+    </itemizedlist>
+   </para>
+</sect2>
+<sect2 id="Catalog_sec">
+<title>Catalog</title>
+<para>The Catalog is the heart of Koha, and the search system for it the principal tool for most users.</para>
+  <sect3 id="CatalogSearch">
+  <title>Catalogue Search:</title>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image002" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+  <para>The Catalogue search is the first step to identify a particular item or material on a particular subject. It offers the option of an item barcode search (the barcode can be scanned or typed), or single or combined specific searches, which can be customized for individual sites. The Horowhenua Library Trust searches (above) offer Keyword and Title and/or Author and/or Dewey (i.e.class number) and/or Class (i.e. item type), and/or Subject search. Other fields such as Publisher, Abstract, web site etc. are also possible.  Searches can be constructed using more than one field e.g. to find a video of Les Miserables: a search for Title Miserables and Class Video, will bring up a listing for the video, but not the book with the same title. Searching over more than one field will slow the search down.</para>
+
+<para>The title search offers the alternative of an exact title search, (by clicking on the exact button). This is useful for short titles consisting only of very common words eg Time, War</para>
+
+<sect3 id="CatalogRecord">
+  <title>Catalogue Record:</title>
+
+<para>The full cataloguing record is stored in three sections: Biblio, Group, and Item records. </para>
+
+<sect4 id="TheBibliosection">
+  <title>The Biblio Section</title>
+<para> The Biblio section contains the copyright information: author, title, series, copyright date and subject. Several printings of the same work can be attached to one Biblio record - paperback, hard back, large print, e-book.</para>
+</sect4>
+
+<sect4 id="TheGroupSection">
+  <title>The Group Section</title>
+
+<para>The Group section contains bibliographic data for a particular publication of that work, such as ISBN number, physical description, imprint (publisher information), etc. A Group record can contain one or several items. It also specifies the item type (and associated borrowing parameters), and classification. You might have eg 2 copies of a title, one of which is to be Reference only, and the other a borrowing copy. You would make 2 group records, one for each copy. But if you later added another borrowing copy, you would add it to the group containing the first borrowing copy, since all the data in that Group record is true of both copies.</para>
+</sect4>
+
+<sect4 id="TheItemSection">
+  <title>The Item Section</title>
+<para>Item section contains the information relating to one specific copy: barcode, purchasing information, branch attachment, lending record.</para>
+</sect4>
+
+</sect3>
+<sect3 id="CatalogueMaintenance">
+  <title>Catalogue Maintenance</title>
+<para>Simple changes, e.g. spelling/typing corrections can be made by using the Modify buttons on the Biblio Record display, the Group Record display and the Item (Barcode number) display. </para>
+
+<para>Further catalogue maintenance is available by clicking on the Catalogue maintenance link (in the Help box). (Access to this section may be password protected). The Catalogue maintenance section lets a cataloguer correct some other errors that creep into the catalogue: subject and group maintenance, and retrieving a biblio that has been deleted by mistake.</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="image004" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+<para>Subject Maintenance allows you to correct misspellings, or to change one subject to another, and have the change applied globally in your database. </para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image006" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image008" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+<para>The wrong subject can be corrected, and applied by clicking on the Modify button.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image010" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+<para>Group Maintenance allows you to move a group from one biblio to another.
+The third option in Catalogue maintenance also allows you to undelete a biblio that you have deleted by mistake, or restore the record of an item that was lost and then found.
+</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image012" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image014" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+<para>Clicking on the undelete link will restore the biblio record. </para>
+
+
+</sect3>
+</sect2>
+<sect2 id="Acquisitions">
+  <title>Acquisitions</title>
+  <para>Koha has two acquisitions processes. The full acquisitions is a sophisticated system for keeping track of spending on books and other materials in multiple budgets. The simple version is a much quicker method of adding data if budget tracking is not required.</para>
+  <sect3 id="SimpleAcquisitions">
+    <title>Simple Acquisitions</title>
+    <para>http://intradev.katipo.co.nz/cgi-bin/koha/acqui.simple/addbooks.pl is the simple version.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image016" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+    <para>Start by typing any distinctive keyword from the title into the Keyword field, or typing or scanning the ISBN into the ISBN field.</para>
+
+	<para>If you find a biblio record that fits, clicking on it takes you to the additem.pl screen (see below) where you can add the item info.</para>
+
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image018" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+	<para>If the catalogue check for a matching record fails, you can add a new biblio by downloading a MARC record, if this has been set up for you (more in Koha v1.4.), or you can add items manually by clicking on Add New Biblio. </para>
+	<para>The first screen when adding a biblio is Section One, Copyright Information. The only mandatory field is the title.</para>
+
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image020" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+	<para>After submitting the screen, you reach the same additem.pl? screen as described above.
+Section Two covers Group Information and Item information. You are asked first for the Item information: a barcode, the branch to which it is allocated (for multi-branch systems), the replacement price and any notes that apply to this copy only. Only the barcode and branch are mandatory. Then you have the option of adding to an existing group, or of creating a new group to add it to (see description under 1.2 Cataloguing Record.) </para>
+<para>Adding a New Group requires you to specify the Format, or item type from a list you will have compiled with your installer. Standard cataloguing fields follow. Dewey subclass is used for filing letters, if you use them.  Volume, Number and Volume Description can be used to identify separate issues of a periodical, for issuing purposes. It is useful to standardize the Volume description -- so use Apr 2002, May 2002, or 2002/04, 2002/05 and stick to your standardized description every time.
+</para>
+
+</sect3>
+<sect3 id="FullAcquisitions">
+    <title>Full Acquisitions</title>
+    <para>The full Acquisitions programme is designed so that items cannot be added to the data base without an explanation of where they have come from. If you want to add a lot of items without going through this process, or if you don't have to worry about keeping track of a budget, use the simplified Acquisitions process.</para>
+
+    <sect4 id="FullAcquisitionsSetup">
+	    <title>Setup</title>
+	    <para>--</para>
+	</sect4>
+	 <sect4 id="FullAcquisitionsSuppliers">
+		    <title>Suppliers</title>
+		    <para>For regular suppliers, Koha lets you build a list of your regular suppliers on by typing in the Start, receive, modify any order.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image022" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image024" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+		    	<para>Click on Add New Supplier and fill in the fields in the left column. </para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image026" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+		    	<para>The right hand column of Ordering Information works like this:</para>
+<para>List prices and Invoice prices: you have the option of selecting the currency in which the price is quoted. If it is to be imported, Koha will do the calculation for the cost in your own currency by using the currency conversion table on:
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image027" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+		    	<para>It does this separately for the List price for the amount that is committed at the time of ordering, and then corrects the amount if it is different at the time the invoice is paid, due to currency fluctuations.</para>
+		    	<para>(GST is a local tax in New Zealand, similar to VAT in Britain. It is paid to the supplier as a separate item, but it can be reclaimed as an expense, so that book prices are effectively net, not including GST. This field could be used for a local Sales Tax in other countries if it is reclaimed. Ask your administrator to set the right percentage. If you don't pay any local taxes, and don't want to use this field for anything else, set all your suppliers to No. )</para>
+		    	<para>The next three fields allow for a variety of invoice formats. Some suppliers list items by the full retail price, then deduct discount and add tax to the subtotals at the bottom of the invoice. Others deduct discount line by line and don't charge tax. Koha can accommodate all these variations in calculating the exact amount any one item costs. </para>
+	</sect4>
+	<sect4 id="ManualCalculations">
+			    <title>Manual Calculations</title>
+		    <para>Manual Calculations only is used for sundry purchases for which it's not worthwhile setting up a separate supplier profile. Save changes when you're done. You can update a supplier profile at any future date by clicking on the supplier link on /koha/acqui/order.pl.</para>
+	</sect4>
+	<sect4 id="ManualCalculations">
+			    <title>Bookfunds</title>
+			    <para>Bookfunds: Your installer will help you set up Bookfunds and the currencies you might be importing in. Get the exchange rates from your bank, enter them, and you're ready to go. </para>
+	</sect4>
+	<sect4 id="Placing_an_Order">
+				<title>Placing An Order</title>
+				<para>Enter a keyword for the supplier, and go to:</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image029" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+				<para>Click the Order button. </para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image031" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+				<para>Do the catalogue search.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image033" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+				<para>If it's a new title, click on Add New Biblio and reach.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="image035" scale="40">
+</imageobject>
+<textobject>
+<phrase>
+screenshot
+</phrase>
+</mediaobject>
+
+				<para> (If you're adding an extra copy to an existing biblio, you'll reach this screen with some fields already filled in).</para>
+				<para>Fill in the catalogue information on the left, except for the barcode. On the right column, enter the number of copies, bookfund and supplier's list price. Tab down through the next 5 fields and Koha will enter the Replacement cost (usually the same as the List Price, but you can change it later if you need to), the budgeted cost, which is the list price less the discount expected, the GST (tax) if any, and the budgeted total. Then click on Add order.</para>
+
+				<para>The budget is updated. The budgeted amount is added to the committed total, and the same amount is deducted from the available total.</para>
+
+				<para>To add another title to the same order, start with a new Keyword search on http://test.library.org.nz/cgi-bin/koha/acqui/newbasket.pl?id=(supplier number). Use the same basket for all the books ordered at the same time. If you can't get them all entered in one session, you can reopen the basket and add more titles the next day.</para>
+	</sect4>
+	<sect4 id="Receiving_an_Order">
+			<title>Receiving an Order</title>
+	<para>Start at /acquisitions/ with a supplier search. Click on Receive. Koha will ask for the Invoice number, the amount of GST on the Invoice, any freight charged and the number of items included on this invoice. </para>
+	<para>When you have entered this data, Koha takes you to a Receipt Summary screen. Identify the item you have received by ISBN or by title keyword, and return to the order screen you filled partially when placing the order.</para>
+	<para>Catalogue Detail: Fill in any new details in the Catalogue Detail column, and assign the item a barcode. Creating a branch called Processing, and receiving orders into it is a help in tracking down new arrivals. </para>
+	<para>Accounting Details: Fill in Quantity received, the actual cost and the Invoice number. </para>
+	<para>Carry on with the next item.</para>
+	<para>When you have finished receiving all the items on this invoice, Koha will have divided the Postage and Packing cost between the all the items received; totaled the GST and it will have calculated the correct net price for each item. Each item will have this price added to its Acquisition record as the Actual Price. This record is retrievable in future by clicking on the Accession link on the item detail page in Catalogue Inquiry. Koha will have updated the budget, moving the money from committed to Spent.</para>
+	</sect4>
+	<sect4 id="Donations">
+			<title>Donations</title>
+	<para>Donations can be handled in the full Acquisitions programme by creating a virtual supplier called Donations. Koha will require you to enter all prices manually, and will show a warning each time that this is necessary.</para>
+	</sect4>
+	<sect4 id="SundrySuppliers">
+			<title>Sundry Suppliers</title>
+	<para>Occasional suppliers from whom you expect to make only one purchase can be treated by shortcut. Choose the manual calculations option, and enter the name and address of the supplier in the notes field on the item record.</para>
+	</sect4>
+</sect3>
+	</sect2>
+<!-- MANUAL v 1.2 Regula's document -->
+
+<!-- INTERNET -->
+
+<sect2 id="OPAC-Internet">
+       <title>OPAC - Internet</title>
+<para>
+Cataloguing is done from two points of access, but starts always with a catalogue search which identifies whether the title is in the library or not.
+
+After a catalogue search, if there is already a record, clicking on the title will allow to modify or to delete the biblio record in the next step, clicking on the item's barcode number will allow to update the group or item record.
+
+If the title is not yet in the database, a new record must be entered through acquisitions where a record linked to a supplier must be created first. For further detail consult the acquisitions part of the manual.
+</sect3>
+<sect3 id="Catalogue search">
+       <title>Catalogue search</title>
+<para>
+Anyone who has access to the library's home page through the internet can search the Koha catalogue through the web-OPAC. Two search possibilities are available: a keyword search and a more detailed search.
+</para>
+<itemizedlist>
+<listitem><para>
+Keyword search:
+On the library's homepage typing one or more words in the Search the catalogue field results in a keyword search on the catalogue.</para>
+<!-- *screenshot* -->
+<para>
+A keyword search leads to a list of all records that contain the keyword in title, subtitle, series or subject fields. From the list it's possible to look at the detailed information attached to the biblio record: i.e. what kind of items exist, and their whereabouts. From the details, it is possible to place a reservation on an item if you are a member of the library.</para>
+<para>
+Getting the search-result is really quick for a very specific search, e.g. Silmarillion, but can take a moment if the search term is general and appears in many titles, e.g. New Zealand.</para>
+</listitem>
+<listitem><para>Advanced search:
+Search the catalogue by Title, Author, Keyword or Class (choice from a list). It's possible to search in only one of these options or to make it a combined search, the latter takes longer to be executed.</para>
+<para>Search by List of Subjects: A two-stage search which first searches the databse for a term in the list of all the subjects, then searches for bibliots containing the selected subject.</para>
+</listitem>
+<listitem><para>Search by Specific Item: Using the item number (barcode) allows to access the information of the specified item.</para>
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3 id="Member login">
+       <title>Member login</title>
+
+<para>Any member signed up by the library, and thus having received a member number and a password can access the member's record and the library catalogue through the web-OPAC.</para>
+
+<!-- *screenshot* -->
+
+<para>
+After having logged in with a member number and password, members can look up their own reading record, their account which includes the fees due or paid, and their address details. A member can notify a change of address directly from here.The actual change of address in the database has to be approved and taken care of - as any other change of record details - by the library staff.</para>
+<para>
+Furthermore, the member login allows an online-renewal of books as well as placing a reservation to a borrowed item. See these sections for further information.</para>
+</sect3>
+</sect2>
+
+<sect2 id="Intranet">
+       <title>Intranet</title>
+<sect3 id="Members">
+       <title>Members</title>
+<para>
+To sign in new members, for maintenance of existing records, new password attribution and deleting members, as well as renewal of loans. In certain libraries, a borrower type can be linked to another type and their data will be linked and taken over automatically. For example: a child in a library needs a guarantor to use that library.</para>
+<para>Any member can ask for and be given a system generated password to use the online services of the library: catalogue search, requests, looking up member data and modifying their own address information.</para>
+
+
+<sect4 id="Sign in new member">
+          <title>Sign in new member</title>
+
+<!-- *screenshot memb-1* -->
+
+<para>Always search by the member name first to check if he or she already has a member account.</para>
+<para>
+
+<!-- *screenshot memb-2* -->
+
+<para>If not: Add a new member and check Person or Organization accordingly + fill in the details and save.</para>
+
+<para>
+<para>The Personal member screen offers the opportunity to collect details which may be useful for borrower analysis.</para>
+
+<!-- *screenshot* -->
+<para>
+The mandatory fields are marked with an asterisk: card number, gender, given name, surname, membership category, postal address, town, alternate contact and relationship. Depending on the member category date of birth may be mandatory (see below for guarantee). After having filled in all fields required by your library, click on Save changes, check that all data is correct on the Confirm record screen, and click on Submit to save the record. (Note that the record is not saved until the Submit button has been clicked).</para>
+<para>
+<para>The Organization option leads to a screen which does not ask for date of birth, gender and other fields which are not relevant to an organization.</para>
+<!-- *screenshot* -->
+
+<para>Mandatory fields here are card number, address fields and contact name.
+</para>
+
+<para>If there is already a member account, make sure it's not the same person before signing in the new member or modify the data of the existing account if necessary.</para>
+
+</sect4>
+
+<sect4 id="Member information">
+            <title>Member information</title?
+<para>
+The right side of the Member's screen displays Fines and Charges, items currently on issue, Items Requested and the Reading record.</para>
+
+<!-- *screenshot* -->
+<para>Fines and charges:
+(See also under Circulation - Payment of fees).
+Fines and charges are calculated automatically by Koha according to the set up.
+A complete account history with each charge showing as a separate line can be viewed by clicking on View Account./<para>
+
+<!-- *screenshot* -->
+
+<para>The Account screen of a member also offers the options of creating manual invoices and manual credit notes. Manual invoices are useful when a member returns an item which is damaged, or if the library wishes to record any other money owing (e.g. for photocopying or printing) against a member's record. Credit notes can also be used when someone wants to pay only part of a charge. Note that the amount field accepts only numbers - so write 2.50, not $2.50.</para>
+
+<para>Fine regimes are set up by parameters.</para>
+</sect4>
+<sect4 id="Modify member data">
+        <title>Modify member data</title>
+<para>
+On the member screen, search by member name or enter the borrower name. On the list of names, click on the name to update + enter.</para>
+
+<!-- *screenshot* -->
+
+<para>Member record on screen, click on modify, change the data and save.</para>
+</sect4>
+<sect4 id="Delete member">
+        <title>Delete member</title>
+<para>
+Any member can be deleted if necessary as long as they don't have items on issue, don't owe money or are not a guarantor with guarantees still linked.</para>
+<!-- *screenshot* -->
+
+<para>Check the member to be deleted, check that there are no items on issue, that there is no money due and that the member is not a guarantor. If all is clear, click on <delete>.
+If items are still on issue, or money is owing, or guarantees are still attached, Koha will display an error message, and refuse the deletion.</para>
+
+</sect4>
+<sect4 id="Password">
+        <title>Password</title>
+
+<para>
+A password is needed for the borrower to log into the online OPAC screen and place a request or check his/her member data. The password is generated by the system on request.</para>
+<para>
+To create a new password, go to Member screen, search for the member, and show the member details on the screen first. Press the button password and the system shows an automatically generated password on the next screen, where the borrower can change it.</para>
+
+<!-- *screenshot* -->
+<para>
+A forgotten password cannot be retrieved, simply make the system create a new one.</para>
+
+</sect4>
+<sect4 id="Guarantor - guarantee">
+        <title>Guarantor - guarantee</title>
+
+<para>
+In HLT a child needs a guarantor, mostly a parent, to use the library and thus children cannot join on their own account, but only guaranteed by an adult member. This guarantor takes over the responsibility of the books borrowed by the child.</para>
+
+<para>To add a child, i.e. a guarantee, first bring up (or join) the adult, i.e. the guarantor, then click on the Guarantee button at the top of the Membership Record column, and Koha shows the member screen for the guarantee with all the parent's address data copied by the system into the child's data. The child's record asks only for the information which is distinctive for the child.
+Up to three children can be registered on the same screen before clicking on Save Change, then Submit to save the record. The number of children registered will now display as links on the guarantor's record, and the users are thus linked.</para>
+<para>
+A guarantor can only be deleted if all linked guarantees have already been deleted. The guarantee still receives his/her own borrower card and can use the library on its own - but may have other use conditions (e.g. guarantees can borrow less items)</para>
+
+<sect4 id="Renewals">
+        <title>Renewals</title>
+
+<para>Items currently on issue are displayed in the Items currently on issue box on the Members screen (see above for screenshot). They may be renewed from here (as well as in the Circulation area of both intranet or telnet interfaces). The number of times an item can be renewed, the number of days and wheter a requested item can or not be renewed depends on the parameter's value set up for your library.</para>
+
+
+<sect4 id="Reading record">
+        <title>Reading record</title>
+<para>
+In public libraries, a reading record that keeps track of what a reader has borrowed, has been found to be very helpful, e.g. with housebound readers.
+Koha keeps a record of all the items a member borrows if the parameter is set accordingly. If this option is active, the reading record is accessible only for a logged in member, or for consultation by staff.</para>
+<para>
+The reading record can display the most recent 50 items or the complete list (click on Full Output), and it can be sorted by date, author or title (click on the link at the top of the column).</para>
+</sect4>
+</sect3>
+
+
+
+<sect3 id="Circulation">
+        <title>Circulation</title>
+
+
+<sect4 id="Issues">
+        <title>Issues</title>
+
+<para>
+To issue items to a member of the library</para>
+
+<!-- *screenshot circ-2* -->
+
+<para>On the circulation screen, read or enter the borrower's card number or enter the first part of the member's surname.</para>
+
+<!-- *screenshot circ-3* -->
+
+<para>After having typed part of the member's name, choose the right entry from the "Select a borrower" pop-up list and Submit query.</para>
+
+<!-- *screenshot circ-4* -->
+
+<para>On the issues screen, read or enter the barcode number. To issue another book to the same borrower, enter simply another barcode number, to end lending to one borrower and to print the due dates slip, press enter./<para>
+
+
+<para>It is also possible to adjust the default date of issue, by changing the date before the item is issued. If more than one item is to be issued to the altered date due, check the sticky due date button.</para>
+
+</sect4>
+
+<sect4 id="Returns">
+        <title>Returns</title>
+<para>
+To return books in the system when back in the library
+>From any screen in circulation, the box returns leads to the returns screen.</para>
+
+<!-- *screenshot circ-10-ret1* -->
+
+<para>Return books in the system by reading or entering the barcode number. You can read in an unlimited number of books to return them one after the other. The system will show the last item returned with information on overdue dates or payments involved. Also, the last ten items returned are shown. </para>
+
+<para>If a book is reserved, a window pops up to ask confirmation of the reservation. A click on yes prints the reserve slip. In case that there are any overdue charges, the date on the returned items list will show up in red and the overdue charges will show up beside the book. They can be "paid" in the system immediately if wished. Note that the change displayed is the total amount owing, not just the charge for this one book.</para>
+</para>
+If a item hasn't been issued, a special message will indicate this<para>
+
+
+</sect4>
+
+<sect4 id="Payment of fees">
+        <title>Payment of fees</title>
+
+<para>
+Fine regimes are set up by parameters.</para>
+<para>If an item can cause a fee to be charged to a member, the system keeps track of these fees. They can be left unpaid, marked off as paid or written off (should be used only according to the library policy).</para>
+
+<para>Looking up and treating fees of a certain member is possible from the circulation and the members section of koha. The first is the direct way when a member card is used, the latter when the name is to be searched. In practice, fee payments occur most often during circulation, the access through issues is thus shown here. For the options from the members section, see above under Member - Fines.</para>
+
+<!-- *screenshot circ-7* -->
+
+<para>To access payment options click on the Payment link in the Patron Information box.</para>
+
+
+<!-- *screenshot circ-6-pay* -->
+
+<para>Any fee paid must be checked off as such. To signal a paid fee, check the box Paid.</para>
+
+<para>Depending on the parameters set for each user category, a certain amount of unpaid fees can result in blocking the member for any further borrowing. As long as the member hasn't paid up, the system doesn't allow borrowing any more items and will tell you so.</para>
+
+<!-- *screenshot* -->
+
+<para>Manual invoices and credit notes can be entered by clicking on the buttons so marked. Note that the amount entered does not required a $ or any other currency symbol. Any amount can be booked in, independent of the actual fees due. If a borrower's account goes into credit, the sum owing will show up as a negative sum.</para>
+
+<!-- *screenshot* -->
+
+<para>In Koha, there exists an elegant way of dealing with lost (= very overdue) books. The borrower is charged with the cost of the book, which effectively blocks further borrowing. The book's status is changed to Lost (very overdue), and the item is removed from OPAC displays, but remains on the intranet displays. If the book is returned later, the value of the book is credited to the borrower, and only the fine remains. So, if the borrower says that he or she can't find the book and pays for it, and if they eventually find it, they still can get their money back. And all is accounted for in Koha.</para>
+
+
+</sect4>
+
+<sect4 id="Reserves">
+        <title>Reserves</title>
+<para>
+Reserves result from requests on borrowed items. On return, a requested item, will ask if a reserve slip should be printed or not. Confirm if needed</para>
+
+<!-- *screenshot* -->
+
+
+</sect4>
+
+<sect4 id="Transfers">
+        <title>Transfers</title>
+<para>
+To change the branch of an item.</para>
+<para>In practice, it's common to define some additional "virtual" branches, like processing or mending to indicate other whereabouts of an item.</para>
+<para>On the transfer screen, choose a new branch and read or enter the item number + enter
+
+<!-- *screenshot* -->
+
+</sect4>
+</sect3>
+
+<sect3 id="Accounts and Reports">
+        <title>Accounts and Reports</title>
+
+<para>Some default reports are offered by Koha. All sort of other reports can be generated with an SQL report writer. Koha will work with most reporting tools. It also has its own reporting tool which is undergoing constant improvement. But this documentation does not take into account this part of Koha.</para>
+
+<sect4 id="Actual reports">
+        <title>Actual reports</title>
+<para>
+Two reports on till reconciliation, one of the current day and the other of the day before which allow a detailed analysis of the fees.</para>
+</sect4>
+</sect3>
+
+<sect3 id="Parameters">
+        <title>Parameters</title>
+<para><itemizedlist>
+<listitem><para>setup</para><listitem>
+<listitem><para>description of parameters</para></listitem>
+<listitem><para>adding new "thing" e.g. a new item-type and modification of a basic parameter (how to)</para></listitem>
+</itemizedlist>
+
+<sect4 id="Setup">
+        <title>Setup</title>
+<para>
+At installation, Koha comes with a set of default values for the parameters. Each library will edit these values according to their need. In order to prepare a first configuration and to give a general idea of which parameters can take what values, a description of the parameters follows. This list is not exhaustive and will undergo some changes with each new release. Right now it must be considered, even for the actual releases, as "very much under construction" yet.</para>
+
+<para>The actual editing of the parameters is done from the Koha admin page. Clicking on the link of any parameter leads to its admin page, where it is possible to add a new category to a parameter, to edit existing ones or to delete an outdated one.</para>
+
+<para>The values of systempreferences influence which features Koha is going to support. It is the section of parameters which each library should take care of first. The default values are listed below as well as their options.</para
+
+</sect4>
+<sect4 id="Description of parameters">
+        <title>Description of parameters</title>
+<table>
+<title>Library branches</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Library branches</entry>
+<entry>the different branches you manage with this Koha server</entry>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Library branches</entry>
+<entry>the different branches you manage withh this Koha server</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entryBranch code</entry>
+<entry>Code of 4 characters</entry>
+</row>
+</row>
+</thead>
+<tbody>
+<row>
+<entryBranch code</entry>
+<entry>Code of 4 characters</entry>
+</row>
+<row>
+<entry>Name</entry>
+<entryFull name of the branch </entry>
+</row>
+<row>
+<entryIssuing</entry>
+<entry>Check box if the branch can issue documents</entry>
+</row>
+<row>
+<entry> Permanent</entry>
+<entry>Check box if an item of this branch must be returned at the Home branch</entry>
+</row>
+<entry> Home</entry>
+<entry>Check box to set as Home branch</entry>
+</row>
+<row>
+<entry>Current</entry>
+<entry>Check box to set as Current branch</entry>
+</row>
+<row>
+<entry>Address</entry>
+<entry>3 lines for the mail address of the branch</entry>
+</row>
+<row>
+<entry>Phone</entry>
+<entry>Phone number of the branch</entry>
+</row>
+<row>
+<entry>Fax</entry>
+<entry>Fax number of the branch</entry>
+</row>
+<row>
+<entry>E-mail</entry>
+<entry>E-mail address of the branch or the responsible person</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Budget</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Budget</entry>
+<entry>the budgets allowed to different book funds</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Book fund</entry>
+<entry>Choose a book fund from the proposed list</entry>
+</row>
+<row>
+<entry>Start date</entry>
+<entry>Start date of the financial period of the budget in format yyyy-mm-dd</entry>
+</row>
+<row>
+<entry>End date</entry>
+<entry>End date of the financial period for the budget in format yyyy-mm-dd</entry>
+</row>
+<row>
+<entry>Budget amount</entry>
+<entry>Amount for the above mentioned financial period
+</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Book funds</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Book funds </entry>
+<entry>the different book funds</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Book fund</entry>
+<entry>Code of max. 5 characters</entry>
+</row>
+<row>
+<entry>Name</entry>
+<entry>Full name of the coded book fund/entry>
+</row>
+<row>
+<entry>Group</entry>
+<entry>Code of max. 5 characters</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Categories</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Categories</entry>
+<entry>the different types of borrowers</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Category</entry>
+<entry>Code of max. 2 letters (at HLT one letter describes an area code, and one an age category, they are actually two different fields)</entry>
+</row>
+<row>
+<entry>Description</entry>
+<entry>Full text explanation of the category type</entry>
+</row>
+<row>
+<entry>Enrollment</entry>
+<entry>Period during which a member of the category is allowed to use the library</entry>
+</row>
+<row>
+<entry>Age max</entry>
+<entry>Maximum age of how long a member can stay in a category, e.g. a child is a child-member up to the age of 16</entry>
+</row>
+<row>
+<entry>Birth needed
+1 for birth date in format dd/mm/yyyy if it must be a required field</entry>
+</row>
+<row>
+<entry></entry>
+<entry>0 for not a required field</entry>
+</row>
+<row>
+<entry>Fine</entry>
+<entry>Type of fine charged to this category of members - 1 letter code</entry>
+</row>
+<row>
+<entry>Bulk</entry>
+<entry>... Ignore it</entry>
+</row>
+<row>
+<entry>Fee</entry>
+<entry>Any other value than 0.00, leads to an enrolment fee charged to a user signed in under this category</entry>
+</row>
+<row>
+<entry>Over-due</entry>
+<entry>1 for having a overdue notice for this category of members</entry>
+</row>
+<row>
+<entry></entry>
+<entry>0 no overdue notice</entry>
+</row>
+<row>
+<entry>Issue limit</entry>
+<entry>Max. number of items allowed per borrower</entry>
+</row>
+<row>
+<entry>Reserve</entry>
+<entry>Any other value than 0.00 leads to a fee upon a reserve made by a member of this category</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Item types</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Item types</entry>
+<entry>the supports of an item</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Code</entry>
+<entry>Code with max. 4 characters</entry>
+</row>
+<row>
+<entry>Description</entry>
+<entry>Full description of the item type</entry>
+</row>
+<row>
+<entry>Loan length</entry>
+<entry>Number of days this item-type can be borrowed, with 0 days for no loan</entry>
+</row>
+<row>
+<entry>Renewals allowed</entry>
+<entry>Check if renewals are allowed</entry>
+</row>
+<row>
+<entry>Rental charge</entry>
+<entry>Default value is 0.00. Any other amount induces a rental charge for this item-type
+</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Currencies</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Currencies</entry>
+<entry<Currencies of the booksellers</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Currency</entry>
+<entry>Abbreviation of the currency</entry>
+</row>
+<row>
+<entry>Rate</entry>
+<entry>Actual exchange rate</entry>
+</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Printers</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Printers</entry>
+<entry>Printers (UNIX paths).</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Name</entry>
+<entry>Full text name of the printer</entry>
+</row>
+<row>
+<entry>Queue</entry>
+<entry>UNIX name of the printer</entry>
+</row>
+<row>
+<entry>Type</entry>
+<entry>Type of printer</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Stopwords</title>
+</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Stopwords</entry>
+<entry>Words deleted during searches</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Word</entry>
+<entry>A word contained in this list will not be searched.
+Used for very frequent words e.g. articles ("the" "a"), or others like "and", "co" etc. Add or delete an entry of this list.</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>System Preferences</title>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Systempreferences</entry>
+<entry>System preferences -2 variables are useful in this table</entry>
+<entry></entry>
+</thead>
+<tbody>
+<row>
+<entry>acquisitions</entry>
+<entry>simple</entry>
+<entry>simple = version</entry>
+</row>
+<row>
+<entry></entry>
+<entry></entry>
+<entry>full = complex version with budget tracking, supplier list etc.</entry>
+</row>
+<row>
+<entry>autoBarcode</entry>
+<entry>1</entry>
+<entry>1 for automatic barcode creation</entry>
+</row>
+<row>
+<entry></entry>
+<entry></entry>
+<entry>0 for no barcode creation</entry>
+</row>
+<row>
+<entry>autoMemberNum</entry>
+<entry>1</entry>
+<entry>1 for automatic member numbers</entry>
+</row>
+<row>
+<entry></entry>
+<entry></entry>
+<entry>0 for manual member number creation</entry>
+</row>
+<row>
+<entry>dateformat</entry>
+<entry>metric</entry>
+<entry>default value: metric = dd/mm/yyyy</entry>
+</row>
+<row>
+<entry>KohaAdminEmailAddress</entry>
+<entry>name AT server</entry>
+<entry>e-mail of the person responsible for the parameter administration of the present koha server</entry>
+</row>
+<row>
+<entry>opaclanguages</entry>
+<entry>en fr</entry>
+<entry>the languages in which KOHA is available (currently en - English; fr - Francais)</entry>
+</row>
+<row>
+<entry>opacthemes</entry>
+<entry>hlt default<entry>
+choice of OPAC (Versions of OPAC themes)</entry>
+</row>
+<row>
+<entry>template</entry>
+<entry>default</entry>
+<entry>choice of templates to be used (which set of templates is used for the chosen Koha version)</entry>
+</row>
+<row>
+<entry>hlt</entry>
+<entry>	The Horowhenua Library Trust - the first KOHA OPAC</entry>
+</row>
+<row>
+<entry>Aqbooksellers</entry>
+<entry>Book sellers</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<table>
+<title>Search Results</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry></entry>
+<entry></entry>
+</thead>
+<tbody>
+<row>
+<entry>List of fields searched</entry>
+
+<entry>Check each box to have the possibility to search in the fields below as well as in the Keywords and in the Subject field. There is a different setup possible for the web-OPAC (OPAC) and the Intranet Catalogue search (Intranet). The admin page lists the default values if no other choices are made and the choice of the fields for the Intranet Catalogue search can be previewed, after having submitted a choice.</entry>
+</row>
+<row>
+<entry>Author</entry>
+<entry>Author (Surname Given-Name)</entry>
+</row>
+<row>
+<entry>Title</entry>
+<entry>Title</entry>
+</row>
+<row>
+<entry>Subject</entry>
+<entry>Subject</entry>
+</row>
+<row>
+<entry>Dewey</entry>
+<entry>Dewey number</entry>
+</row>
+<row>
+<entry>Class</entry>
+<entry>Item class (offers a pop-up list to choose from)</entry>
+</row>
+<row>
+<entry>Item Number (Barcode)</entry>
+<entry>Item number</entry>
+</row>
+<row>
+<entry>Illustrator</entry>
+<entry>Illustrator (Surname Given-Name)</entry>
+</row>
+<row>
+<entry>Copyright Date</entry>
+<entry>Date of the copyright of the item</entry>
+</row>
+<row>
+<entry>Serial</entry>
+<entry>Serial title</entry>
+</row>
+<row>
+<entry>Item Type</entry>
+<entry>Item type (used to limit a search to e.g. CDs or books only)</entry>
+</row>
+<row>
+<entry>Publisher</entry>
+<entry>Name of the publisher</entry>
+</row>
+<row>
+<entry>ISBN</entry>
+<entry>ISBN number without hyphens or spaces</entry>
+</row>
+<row>
+<entry>Publication Date</entry>
+<entry>Publication date other than Copyright</entry>
+</row>
+<row>
+<entry>Pages</entry>
+<entry>Number of pages</entry>
+</row>
+<row>
+<entry>Illustrators</entry>
+<entry>Name of illustrators</entry>
+</row>
+<row>
+<entry>Volume</entry>
+<entry>Volume number for a serial item or a part of a multi-volume document</entry>
+</row>
+<row>
+<entry>Size</entry>
+<entry>Height of the document</entry>
+</row>
+<row>
+<entry>Branch</entry>
+<entry>Name of the branch (used to limit a search to the documents in one particular branch only)</entry>
+</row>
+<row>
+<entry>Lost</entry>
+<entry>To limit a search for lost items (box to check)</entry>
+</row>
+<row>
+<entry>Cancelled</entry>
+<entry>To limit a search for cancelled items (box to check)</entry>
+</row>
+</body>
+</group>
+</table>
+
+</sect4>
+<sect4 id="Add a new category / Modification">
+      <title>Add a new category / Modification</title>
+<para>
+To add a new category under each parameter, double-check whether it exists or not. If it does exist, editing or deleting can be done with the links on the far left of same line. Please keep in mind that editing or deleting a category from the parameter's list will affect the database and change all the data linked to that particular category. Deleting is possible only if no data-record is linked.</para>
+<para>
+<para>If no category is found click on the Add category box and create a new category. Fill in the necessary data for each property of a new category and save.</para>
+<para>Each parameter has its own properties and some of them are required to be filled in. The fields that are required are marked in each add-form.</para>
+</sect4>
+</sect3>
+</sect2>
+</sect1>
+
+
+
+<!-- Section1: Developer  -->
+ <sect1 id="Book_3_For_the_Developer">
+  <title>Book 3:  For the Developer</title>
+<!-- Ideally, I'd like caricature style images of these "people"  -->
+  <para> For humans, honesty is a matter of degree. Engineers are always honest in matters of technology and human relationships. That's why it's a good idea to keep engineers away from customers, romantic interests, and other people who can't handle the truth.</para>
+<para><emphasis>- Scott Adams, The Dilbert Principle</emphasis> </para>
+
+<para><emphasis>Real World, The (n.)</emphasis>: Where a computer science student goes after graduation; used pejoratively ("Poor slob, he got his degree and had to go out into the REAL WORLD."). Among programmers, discussing someone in residence there is not unlike talking about a deceased person.</para>
+
+
+ <sect2 id="Basic_Rules_of_Thumb">
+ <title> Basic Rules of Thumb</title>
+ <para>When writing perl code for Koha ...</para>
+ <para>All DBI calls should be checked for errors.</para>
+ <para>All scripts or modules should have "use strict" and preferably "use warnings".</para>
+ <para><emphasis> Editor's Note:  This was true until just recently... we are currently in the midst of sorting out how to handle modules and -w / use warnings in addition to some questions about which Perl version to use as a baseline for installs.  If you're deeply interested, ask the collective mind of the developer list, and they'll fill you in on the current status of the discussion. </emphasis></para>
+ <para>Subroutines should NOT open and close the database every time. The DBI handle (usually $dbh) should be passed as a parameter from the main script running. Opening the DB every time will impose a performance and overhead penalty for large or busy installations, limiting Koha's ability to scale.</para>
+ </sect2>
+ <sect2 id="Unit_Testing">
+  <title>Unit Testing</title>
+<para><emphasis>What is unit testing?</emphasis></para>
+<para>Unit testing is a method for verifying that you software does what it is supposed to. The idea is that you have a testing framework (Test::Harness in our case) that will automatically run your tests for you, reporting any failures. You'll then write a series of tests to exercise every function of every module in your program. Instead of boring you with details, let's start with an example.  For the Koha project, it is a key part of our effort to have production grade, reliable code.</para>
+
+<para><emphasis>How do I do it?</emphasis></para>
+<para>I'll start with the Koha.pm module. It contains four functions: </para>
+<para><itemizedlist>
+<listitem><para>slashifyDate</para></listitem>
+<listitem><para>fixEthnicity</para></listitem>
+<listitem><para>borrowercategories</para></listitem>
+<listitem><para>ethnicitycategories</para></listitem>
+</itemizedlist></para>
+<para>All of our tests should go into the t/ directory, and should be put into a file showing which module we're testing. In this case, we'll create a file t/koha.t to hold our tests. Tests start with a bit of magic to make them work:</para>
+
+<para><programlisting role="perl">
+BEGIN { $| = 1; print "1..1\n"; }
+END {print "not ok 1\n" unless $loaded;}
+use C4::Koha;
+$loaded = 1;
+print "ok 1\n";
+</programlisting>
+</para>
+<para>This sets up the test, tells the harness that it will be running one test (the 'print "1..1\n"' bit), and ensures that the test can load the module (that would be the first test).</para>
+
+<para>If we run the test now, we'll get:</para>
+<para><screen>
+[pate@gnupate t]$ perl koha.t
+1..1
+ok 1
+[pate@gnupate t]$
+</screen></para>
+<para>or:</para>
+<para><screen>
+[pate@gnupate koha]$ ./testKoha.pl
+t/koha..............ok
+All tests successful.
+Files=1, Tests=1, 1 wallclock secs ( 0.25 cusr + 0.11 csys = 0.36 CPU)
+[pate@gnupate koha]$
+</screen></para>
+<para>
+slashifyDate takes a string representing a (MySQL style) date,
+replaces '-'s with '/'s and returns it in European style date. We can
+test it like this:
+</para>
+<para><screen>
+$date = "02/01/2002";
+$newdate = &amp;slashifyDate("2002-01-02");
+
+if ($date eq $newdate) {
+print "ok 2\n";
+} else {
+print "not ok 2\n";
+}
+</screen></para>
+<para>We'll also need to let the harness know that we've added a test, so let's change the first line to look like this:</para>
+
+<para><screen>
+BEGIN { $| = 1; print "1..2\n"; }
+</screen></para>
+
+<para>Now, running the tests looks like this:</para>
+<para><screen>
+[pate@gnupate koha]$ ./testKoha.pl
+t/koha..............ok
+All tests successful.
+Files=1, Tests=2, 1 wallclock secs ( 0.23 cusr + 0.09 csys = 0.32 CPU)
+[pate@gnupate koha]$
+</screen></para>
+<para>Then, we can go on and add tests until we end up with something like:</para>
+<para><screen>
+[pate@gnupate koha]$ ./testKoha.pl
+t/format............ok
+t/koha..............ok
+t/output............ok
+t/require...........ok
+All tests successful.
+Files=4, Tests=40, 1 wallclock secs ( 1.25 cusr + 0.11 csys = 1.36 CPU)
+</screen></para>
+
+<para><emphasis>What needs to be tested?</emphasis></para>
+<para>You don't need to test everything, just the things that can fail.</para>
+
+<para>Ok, so maybe this is overkill. But we really should (and try to) test aggresively. Not only should we write tests for expected input, but also for fringe cases that should produce failures.</para>
+
+<para>Additionally, anytime we fix a bug, we should try to represent it in one (or more) unit tests. That way we can feel comfortable that no one accidentally reintroduces the bug later on.</para>
+
+<para><emphasis>Who writes the tests?</emphasis></para>
+<para>We do. In fact, it is best if the programmer who sits down to write new code would do well to write some tests first. This way, he (or she) will know they got the code right. It's a tremendously liberating way to write code.</para>
+
+
+<para><emphasis>When do I run the tests?</emphasis></para>
+<para>Please, run the tests every time you're ready to check code in! Then fix any errors before you check in. Right now, the tests all pass on the rel_1_2 branch. Let's keep it that way ;)</para>
+</sect2>
+ <sect2 id="Using_CVS">
+ <Title>Using CVS at Sourceforge</Title>
+<sect3 id="AnonCVS">
+ <Title>Anonymous CVS Access</Title>
+<para>The Koha CVS repository can be checked out anonymously (via pserver) with the following commands. You must specify a modulename. When prompted for a password for anonymous, simply press the Enter key.
+<emphasis>This is recommended only for those willing to deal with Alpha and Beta versions of Koha.  Do Not use this software on production
+hardware.</emphasis></para>
+<para><screen>
+cvs -d:pserver:anonymous@cvs.koha.sourceforge.net:/cvsroot/koha login
+
+cvs -z3 -d:pserver:anonymous@cvs.koha.sourceforge.net:/cvsroot/koha co modulename
+</screen></para>
+
+<para>Updating from within the directory of the module avoids the -d parameter requirement.
+</sect3>
+<sect3 id="DevelCVS">
+<Title>Developer CVS Access via SSH </Title>
+
+<para><emphasis>Only</emphasis> project developers can access the CVS tree via this method. SSH1 must be installed on your client machine. Substitute modulename and developername with the proper values. Enter your site password when prompted.</para>
+<para><screen>
+export CVS_RSH=ssh
+
+cvs -z3 -d:ext:developername@cvs.koha.sourceforge.net:/cvsroot/koha co modulename
+</screen></para>
+</sect3>
+ </sect2>
+
+ <sect2 id="Bug_Reporting">
+ <Title>Bug Reporting and Tracking</Title>
+  <para>Currently, we are in the process of setting up Bugzilla for bug tracking.  More on this later.</para>
+ </sect2>
+
+
+ <sect2 id="Translating">
+  <Title>Making Koha Available in Your Language</Title>
+   <para>Koha has a dedicated group of people who translate both the application and it's documentation.  You are invited to join them on the koha-translate list(see "Mailings Lists", in the Developer's sections of the documentation), and sign up as a volunteer on the wiki [http://www.saas.nsw.edu.au/wiki/index.php?page=TranslationTeams].  We ask that, if you are interested in fully supporting koha, you find at least two people willing to participate, including yourself.  We prefer at least one person have conversation-grade or better English and translation expertise, and all translation volunteers to be members of the koha-translate list.</para>
+   <para>There is an automated tool we expect to be used for submission of translationed documents, see: http://www.haz.cmsd.bc.ca/cgi-bin/kohadoc/upload for more information.  Information on submitting translations for the templating system can be found in the <emphasis>Templating</emphasis> section below.</para>
+   <para>Additionally, Katipo makes a user-friendly tool called Kea for creating versions of the koha.org site available, if you are interested.  We'll be using Kea (eventually) to make translation easier.</para>
+ </sect2>
+
+
+ <sect2 id="Documentation">
+   <Title>Documentation</Title>
+    <para>Like many open source applications, Koha uses the DocBook SGML system for creating formal documentation.  This manual is the product of the db2<emphasis>format</emphasis> tool suite.  Translations of the manual are done of the SGML edition of the manual, not of the generated HTML.  </para>
+	<para>To create the online edition the SGML is run through db2html, and the resulting output (html files) is run through htmltidy -- currently this is run automagically, and the results sent to CVS, by Steve Tonnesen's CMSD hosted uploader. </para>
+ </sect2>
+
+ <sect2 id="emaillists">
+   <Title>E-Mail Lists</Title>
+    <para>The Koha project team, users, and translators use a variety of mail lists to facilitate communications:</para>
+	<para>The Sourceforge project page for koha (http://sourceforge.net/mail/?group_id=16466) has instructions for the primary lists for developers and translators:  </para>
+	<para><emphasis>For Developers</emphasis><para>
+	<para>* Koha-devel, the primary contributors list for Koha,</para>
+	<para>* Koha-win32, for those interested in or developing the windows port of Koha,</para>
+	<para>* Koha-cvs, for those who contribute code to the CVS repository hosted at sourceforge.</para>
+	<para>For discussion of advanced features and long range goals, and potential library system proposals (ie, if you're interested in Koha as a possible solution for a state or county system) investigate the koha2010 list at http://www.kohalabs.com/projects/koha2010/mail.html.
+
+
+	<para><emphasis>For Translators</emphasis></para>
+	<para>* Koha-translate, the primary list for work on and about documentation and translation efforts.</para>
+
+	<para>In addition, a number <emphasis>Specialty lists</emphasis> are hosted at other sites.  These include:</para>
+	<para>* Koha-fr, the French language and translators list,</para>
+	<para>* Koha-de, the German language and translators list,</para>
+	<para>* Koha-biz, for those interested in doing commercial support for Koha,</para>
+	<para>* Koha-presents, for those who do Koha related presentations/pitches. </para>
+	<para>Subscriptions to and archives of these lists are available by sending email to koha-subscribe AT fr.koha.org,koha-subscribe AT de.koha.org,kohabiz-subscribe@eylerfamily.org, kohapresents-request AT world.std.com, respectively.</para>
+
+	<para>For <emphasis>general users</emphasis>, there is the original Koha list (info: http://koha.org/mailing).
+
+	<para><emphasis>For those interested in Koha's general progress,</emphasis> Koha-announce is used for bare-minimum updates on the status of the project, including new version notices, the semiweekly newsletter, and major announcements.</para>
+
+ </sect2>
+
+
+<sect2 id="Templating">
+<Title>Themes and Templating</Title>
+<para> The koha project uses the terms themes and templating to refer to a set of functions that permit easy porting of koha to other languages and customization of the appearance of Koha's front end.
+
+<para><emphasis>How does it work?</emphasis></para>
+<para>Every page served up by koha comes from two files: </para>
+<para> * A perl script that makes database searchs and handles requests etc. The script loads a template and defines some template-parameters that are displayed in the template.</para>
+<para> * A template that provides the HTML design. Data generated by the script is substituted into the template where you enter special template-parameter tags. </para>
+<para>Koha uses templates to handle internationalization and appearance customization.</para></para>
+
+<para><emphasis>About Templates</emphasis></para>
+<para>Templates are principally a means of separating presentation and style from the data. This simplifies the data processing code while providing enhanced opportunities to customise the look and feel of the interface. Koha uses HTML::Template to export information from the underlying perl scripts. This information is combined with code contained in the template themselves. This results in the display of an apparently normal web page.</para>
+
+<para>Template files are composed of mostly standard HTML code which is viewed by the end user via a standard Web browser. The template file also contain some special HTML-like tags which allow information passd from the perl scrips to appear as if they were embedded in the HTML template document itself. This is a similar principle (but not the same) employed by Koha Server Side Includes (SSI).</para>
+
+<para><emphasis>How to use it?</emphasis></para>
+The systempreferences table in the database holds the settings that control how Koha chooses templates.
+
+<para>To configure themes (currently) you have to set a variable</para>
+
+<para>At present there are two places for settings:  the koha.conf file (/etc/koha.conf), and the systempreferences table in the database.</para>
+
+<para>In the systempreferences table, there is a block of options responsible for theme/template issues:</para>
+<para><screen>
+Name=opacthemes
+Value=theme1 theme2 theme3 ...
+</screen></para>
+<para><empahsis>Note: You have to specify at least one theme.<emphasis></para>
+
+<para><emphasis>Go try it out!</emphasis></para>
+So you can play around with the various settings, and look at some of the templates that have already been contributed, we have set up koha specially for you.
+opac-templates.koha.org &lt;http://opac-templates.koha.org> is the publically accessible part of koha. You can access the user pages using the login.....
+intranet-templates.koha.org &lt;http://intranet-templates.koha.org> is the librarians access into koha. In particular you can navigate through the "parameters" page to system preferences to try setting the themes and languages.
+
+<para><emphasis>Can I Contribute My Templates?</emphasis></para>
+Of course. We welcome contributions from simple bug fixes to full multi-language theme suites!
+Templates can be uploaded into and edited on test koha sites mentioned above using the Kea content management system. You will need to register and learn a little about how to use kea. However it is very easy :-)
+Please read the instructions &lt;contribute.html> on how to register and access content mangement system. Also we have collect some documents on how it all works and style/code guidelines etc.
+
+<para><emphasis>So.....</emphasis></para>
+<para>Currently, to make a template to make koha available in a particular language, you need to do a CVS checkout of the latest source, and copy /koha-tmpl/intranet-tmpl/default/en into /koha-tmpl/intranet-tmpl/default/XX, where XX is the two letter abbreviation appropriate for the language you are translating to (for help with getting an appropriate code, email the developer list).  After that you can simply translate strings within the files.  You also need to take care of the image URLs, as most templates make use of our "old" images, which live in SERVERROOT/images.  Those specific to your language template should be placed in SERVERROOT/default/XX/images (only for your default theme, of course).  Imagines specific to a theme (ie, a different look and feel for koha, not a language template) shoudl be in SERVERROOT/default/all/images.  You may wish to substitute the default/XX bit with &lt;TMPL_VAR NAME = "themelang">. </para>
+You also need to to add "opaclanguages / XX en" and "opacthemes / default" into the systempreferences file.  If added, koha will use the translated templates when the exist, and the english one otherwise. If you don't do this, Koha will only the english templates.</para>
+<para>If you're interested in creating just a new look-and-feel configuration for Koha, please get in touch!</para.
+
+<para>As the above is a fairly complicated list of things to do and keep track of, efforts are underway to use a tool provided by Katipo called Kea (a brief introduction to which is included in the appendices) for more user-friendly templating access.</para>
+
+<para><emphasis>If You're 'Theming', Please Remember:</emphasis></para>
+
+<para> * All templates should live in koha-tmpl, along with there associated includes and images (style sheets, javascripts, etc)</para>
+
+<para> * The associated cvs branch will eventually replace the koha-html tree all together.</para>
+
+<para> * Under koha-tmpl there are two subtrees: intranet-tmpl/ and opac-tmpl/, which correspond to what should go into the &lt;serverroot>/intranet/htdocs/ and &lt;serverroot>/opac/htdocs/ directories on the live sites.</para>
+
+<para> * Under each of these are /&lt;theme>/&lt;lang>/ directories. Each theme can have different language settings. At present I have been working only on
+the /default/en/ templates.</para>
+
+<para> * To do theme, language selection: In the scripts there should be the lines:</para>
+<para><screen>
+use C4::Output;
+my $template = gettemplate("opac-search.tmpl", "opac");
+
+The gettemplate subroutine looks for the theme and language settings,
+looks for a template, loads the template and sets the &lt;themelang> tag for
+use in all the includes etc. I.e.
+
+src="&lt;TMPL_VAR NAME='themelang'>/images/search-button.gif"
+</screen></para>
+ </sect2>
+<sect2 id="MARC">
+<Title>MARC Information</Title>
+<para>In the 1.3/2.0 releases of Koha, the exciting new function is marc compliance.  As koha is an international project, every marc flavour is supported <emphasis>(at least, that's what we hope...)</emphasis> and as some users don't want to see marc in their ILS, the old-db style is supported as well.  Thus, an important work is to define the parameters tables for the marc you want to manage.  As this function is still being tested and ajdusted, documentation is currently available at http://www.saas.nsw.edu.au/wiki/index.php?page=UserDoc which covers the various parameters, and more technical information about the plugin is available at http://www.saas.nsw.edu.au/wiki/index.php?page=PlugInDoc .</para>
+ </sect2>
+</sect1>
+
+<sect1 id="References">
+<title>References</title>
+<para>Temporary example - Koha OPAC theme using templates + css &lt;http://www.library.nsw.org.au/> </para>
+<para>Main Link to Koha Templating http://koha.org/contribute/templating/ </para>
+<para>HTML::Template http://www.perldoc.com/cpan/HTML/Template.html </para>
+<para>Web Design Group http://www.htmlhelp.com/ </para>
+<para>Recommended by Katipo http://www.richinstyle.com/ </para>
+<para>Docbook Publishing Brockmeier and Pritchard, Primatech's linux series</para>
+<para>Extreme programming (see list)</para>
+<para>O'Reilly published Perl Series</para>
+</sect1>
+
+
+<sect1 id="Appendix_A_Frequently_Asked_Questions">
+<title>Appendix A: Frequently Asked Questions</title>
+<para>About the Project</para>
+<para>
+<variablelist>
+<varlistentry><term><emphasis>What is Koha*?/What can Koha do?</emphasis></term>
+<listitem>
+<para>
+Koha is intended to be:
+   a library catalogue front end/OPAC
+   a library system intranet
+   a circulation tracking system
+   an acquisitions/budgeting system
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Where did Koha come from?</emphasis></term>
+<listitem>
+<para>
+The name comes from the Maori word for a gift or donation. The programme was written by Katipo Communications for the Horowhenua Library Trust, in response to a need for a library programme that would run at branch libraries connected to the central library by ordinary phone lines. See http://www.library.org.nz/koha.htm (Or Appendix 2) for the full story.
+</para>
+</listitem>
+</varlistentry></para>
+</variablelist>
+
+
+<varlistentry><term><emphasis>Who is this Kaitiaki person?</emphasis></term>
+<listitem>
+<para>
+Kaitiaki is the Maori word for Guardian.  When the Koha user and developer community realized some sort of combination Benevolent Dictator/Juggler might be a good idea, they chose a name that would reflect what they felt his/her role would be.  The Kaitiaki is currently elected from among the membership of the developer's list -- this includes the Katipo staff as well as representatives of several of the libraries and the far flung contributors of code, documentation, and kibitzing.  This person is also responsible, with the advice and consent of the community, for trying to decide target dates for things like releases and features scheduling... and trying to help bring some order from the chaos ;). He also helps coordinate efforts and agendas, particularly through the mechanism of the every-few-weeks IRC meetings. Traditionally, the Kaitiaki also handles things like release announcements to sites like OSS4lib.
+</para>
+</listitem>
+</varlistentry></para>
+</variablelist>
+
+<varlistentry><term><emphasis>Who or what is Katipo?</emphasis></term>
+<listitem>
+<para>
+Katipo is a company. See
+   http://www.katipo.co.nz/
+for more information. It is named after a small native spider.
+The Katipo spider is a dune-dweller and New Zealand's only poisonous native creature.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>What language are the words Koha, Horowhenua and Katipo in?</emphasis></term>
+<listitem>
+<para>
+They are in the Maori language, the language of the people native to New Zealand.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Where is Horowhenua?</emphasis></term>
+<listitem>
+<para>
+It's a small district on the west coast of the North Island of New Zealand, wedged between the Tararua mountains and the Tasman Sea. It's about an hour's drive north of the city of Wellington, and has population of 30,000. The name means erosion or landslide in Maori.
+</para>
+</listitem>
+</varlistentry></para>
+<varlistentry><term><emphasis>How are the words Koha*, Horowhenua and Katipo pronounced?</emphasis></term>
+<listitem>
+<para>
+For vowel sounds, think French: a as in far; e as in egg; i as the
+e in me; o as the a in paw; u as the oo in moon, dipthong ai as y in sky
+
+For consonants, wh is pronounced variously as h, w and f; we use the
+f pronunciation in Horowhenua. Other consonants as you would expect, with
+the p a little softer and less explosive than in English.
+The stress is always on the first syllable, with a secondary stress
+on the third syllable in Horowhenua. So:
+   <para>koha (kaw_ha)</para>
+   <para>horowhenua (haw_raw_fen_oo_a)</para>
+   <para>katipo (kah_tee_paw)</para>
+   <para>kaitiaki (ky tee a kee)</para>
+*If you are serving a community where Spanish is spoken, you may want to use a different name to refer to the software. The reason for this is that the Maori word "Koha" (gift) sounds like the Spanish word "coja" (cripple).
+</para>
+</listitem>
+</varlistentry></para>
+</variablelist>
+
+
+<para><emphasis>On Choosing the Software...</emphasis></para>
+
+<para>
+<variablelist>
+<varlistentry><term><emphasis>How scalable is Koha?/(as in) How big a library system can it support?</emphasis></term>
+<listitem>
+<para>
+Good question. :)
+The Koha developers think this is most likely a database(ie MySql) issue, primarily. Big server, lots of RAM is better for heavier use.  It comes down to what an acceptable number of seconds is for any given lookup to complete. Our guess is that it would be most important for circulation side of things. Librarians generally don't want to wait for more than a second to complete a return, for example. This would require some benchmarking with real data. The next question would provide a rough guideline, although we're pretty confident that Koha could be scaled to libraries larger than CMSD and HTL. To date, no speed complaints have been received.
+</para>
+</listitem>
+</varlistentry></para>
+<varlistentry><term><emphasis>Who is using Koha? On what hardware/operating system?</emphasis></term>
+<listitem>
+<para>
+   As far as hardware and operating system:
+<screen>
+HLT   (3 branches, 80,000 books, 25,000 patrons)
+Dual Intel Pentium III 1 Gigahertz processor
+1Gb of RAM
+mirrored Maxtor 20Gb 7200rpm disks
+Debian Linux "woody" (the testing distribution)
+
+<emphasis>Administrator comment: "The above appears to be somewhat overpowered."</emphasis>
+
+CMSD (8 branches, 2,000 to 8,000 books per site, 1,000 patrons)
+Pentium 200 MHz to 300 MHz machines (1 per site)
+64 MB of ram
+
+<emphasis>Respectively:
+       HLT - Horowhenua Library Trust, New Zealand
+       CMSC - Coast Mountain School District, British Columbia, Canada </emphasis>
+</screen>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Do I have to pay to use Koha?</emphasis></term>
+<listitem>
+<para>
+   Nope.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Do you have any recommendations about servers and configuration?</emphasis></term>
+<listitem>
+<para>
+[The following is a comment from Simon Blake (simon AT katipo.co.nz) on the subject]</para>
+<para> Were I specifying a new box for Koha, given current prices I'd put as much RAM as I could into the machine - 1.5Gb of RAM costs (I assume) around US$100-150 at the moment, and with that much RAM in the box, most of the Koha database will be in memory rather than on disk, and this does brilliant things for the performance of MySQL. So, lots of RAM is crucial, and then as much CPU and disk performance as you can afford.  Bear in mind that Koha will work fine on a low spec machine (say, a Pentium 150 with 32Mb RAM), it'll just be slow, and the slowness will increase as usage increases. So you can run it on almost any machine that can run MySQL and Apache, and see how it goes, and if it's too slow then you can throw money at the problem until you get the performance you want.  You'll need to tune MySQL to use all that RAM, here's what Chris has in the MySQL config at the moment:</para><para>
+<screen>
+set-variable   = key_buffer=256M
+set-variable   = max_allowed_packet=1M
+set-variable   = table_cache=256
+set-variable   = sort_buffer=1M
+set-variable   = record_buffer=1M
+set-variable   = myisam_sort_buffer_size=64M
+set-variable   = thread_cache=8
+</screen>
+</para><para>
+Make sure, also, that your disks are setup correctly, with the highest possible DMA support - hdparm is your friend. I'd observe, also, that long term Koha should get faster, and thus need less in the way of resources to run it - there are some fairly inefficient table structures in Koha, a hangover from the previous system HLT ran, and as these get ironed out and removed, I'd expect Koha to get quicker.
+</para>
+</listitem>
+</varlistentry>
+
+<para>
+<variablelist>
+<varlistentry><term><emphasis>Can you give a brief explanation of koha/opac/site-search differences for a non-librarian?</emphasis></term>
+<listitem>
+<para>
+KOHA : This is the name for the "product" the library system as a whole.
+The same as say "ExLibris" or "BookPlus".
+There are two main access points into Koha, the Librarians "view" which we talk about as "The Intranet" and the Publics "view" which we talk about as "The Opac". Opac seems to be a fairly meaningful library term which stands for "Online Public Access Catalogue".  Because all of the functionality of Koha is delivered via a web-browser those seemed to be terms that made sense to us.  I'm not sure where you got "site search" from in the context of Koha (there isn't one as part of koha). Usually that's a term used for a search engine that indexes and searches the parts of a libraries website that *are not* the catalogue. So basically it searches the parts of a library website that are the library hours, membership information, supplementary info about the collections etc etc.  On our sites (library and non library) we use htdig as a generic site search.
+Koha does not by default have a generic library site "attached" to it, although there is no reason why you couldn't add more HTML pages to it if you wanted to.
+I'm not sure what work is duplicated in the various products (koha vs. opac) and what's unique in each.
+The Intranet and The OPAC are two sides of the same coin - the OPAC has more limited information displayed, because we assume you wouldn't want the public/members able to edit library information etc, and that they wouldn't want to see as much of the information held about a book (like the 3 or 4 "prices" for example).
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>Where can I find information about this MAchine Readable Cataloging (MARC) that everyone keeps talking about?</emphasis></term>
+<listitem>
+<para>
+Information about MAchine Readable Cataloging (MARC) dhttp://www.oasis-open.org/cover/marc.html/para>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Can I get Koha for Windows?</emphasis></term>
+<listitem>
+<para>
+Yes!
+There is a version of Koha ported to Windows available at:
+http://www.kohalabs.com/resources/Win32/
+It is highly recommended you join the koha-windows mailing list (see under 'Mail Lists' in the developer's section of the manual for assistance).  The Win32 version is usually a little behind (testing, version etc wise) of the Unix based version.
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>Can I get Koha in my own language?</emphasis></term>
+<listitem>
+<para>
+The Polish package that exists at the Sourceforge site (see under "Where can I get Koha?"), but is not reflective of the current version -- it is a legacy item, as we now use templates instead of distinct versions of the code to provide multiple language availability.   We're very open to new languages being added.  We currently have additional language development in the discussion/development stage stage, including French, Spanish, and German.  For more information, join the Koha-translate list (see under "Mailing Lists", in the developer's section) and ask about adding yourself to the list of people interested.  A running list of people who have expressed interest is at:  http://www.saas.nsw.edu.au/wiki/index.php?page=TranslationTeams .
+</para>
+</listitem>
+</varlistentry>
+
+
+<para><emphasis>On Operating the Software...</emphasis></para>
+
+
+<varlistentry><term><emphasis>What is the breeding farm ?  How do I use it to get biblio items into the system? </emphasis></term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>How do I enter a biblio in koha without acquiring it (I already have it) and without DB import ? It seems the only solution is to create a "false" supplier ?</emphasis></term>
+<listitem>
+<para>
+Yep, this is the case if you are using the full acquisitions system.
+In cvs there is a simple acquisitions system that you can use if you set the value in the systemprefences table to be simple.
+Using the full acquisitions system you might like to create a supplier
+called donation, or something like that, and use it to receive items.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Acquisitions fail and I see httpd log errors like "DBD::mysql::st execute failed: Unknown column 'lccn' in 'field list' at /var/www/cgi-bin/koha/acqui.simple/addbooks.pl line 207." What's wrong?</emphasis></term>
+<listitem>
+<para>
+Your database tables are not up to date. From the command line, run the koha "updatedatabase" script like this: "perl updatedatabase -I /pathtoC4folder"</para>
+[Editor's note: if this errors, try: perl -I/pathtoC4 updatedatabase].
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>What are valid library card numbers? I keep trying... We've worked out a spreadsheet that does the checkdigit subroutine inside C4::Input.pm and got the last digit to match the result.. and its still not valid.</emphasis></term>
+<listitem>
+<para>
+Library cards employ check digits. Check digits are numbers that are based on a mathematical formula devised to help detect typical data entry errors.
+Koha library cards employ a 9 character number, the first character is an alpha code, and the last "number" may be an X - Let's refer to the card number as (ALPHA)ABCDEFG(1..9 or X). </para>
+<para>To calculate the check digit:</para>
+<para>Calculate= (4xA) + (6xB) + (3xC) + (5xD) + (2xE) + F G is the remainder when divided by 11. If the remainder is 10, then use  "X".</para>
+
+<para>The standard for Koha is a barcode standard. The library would get a batch of barcodes from the printer with checkdigits included. Here is an excel spreadsheet to generate koha compatible card numbers http://developer.koha.org/HLT2.xls</para>
+
+<para>Brief history of cardnumbers and koha:</para>
+<para>Horowhenua Libraries get their cards with a barcode and a number on them. The number conforms to the checkdigit routine. So Koha didn't need to generate cardnumbers. It just needed to check that the number entered conformed to the checkdigit routine.</para>
+</listitem>
+</varlistentry></para>
+</variablelist>
+</para>
+
+<varlistentry><term><emphasis>What is the easiest way to allocate new koha library card numbers?</emphasis></term>
+<listitem>
+<para>
+Go to your admin page, and set AutoMemberNum to 1 - that will get koha making its own card numbers. Otherwise, make a little routine that generates numbers that fits that checkdigit. But what is more pertinent I guess is how to change the checkdigit routine so it fits your existing numbering scheme. At the moment there is no easy way, apart from hacking at the perl.</para>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Where's the code for using a barcode reader in Koha?</emphasis></term>
+<listitem>
+<para>
+Code to allow barcoder reader use with Koha is available at http://www.saas.nsw.edu.au/wiki/index.php?page=BarCode
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>How can I prevent users from accidentally deleting items and borrowers from the database?</emphasis></term>
+<listitem>
+<para>
+The undelete biblio option at the bottom of this page: http://hlt.katipo.co.nz/cgi-bin/koha/maint/catmaintain.pl .  It provides a quick way to undo a mistake - and it is tucked away in an admistration 'bit' of Koha. It would be pretty cool (and might eventually happen) to have an undelete borrowers option on a page somewhere which retrieves from the deleted borrowers table (as opposed to the borrowers table).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Every once in awhile I find a hardcoded reference to a user=Rachel in some of the scripts.... Who is Rachel?  Is this like the General Failure that reads a harddrive without permission, or what?</emphasis></term>
+<listitem>
+<para>
+Rachel IS a general - the general who runs Katipo in New Zealand, Rachel Hamilton-Williams.  Those absolute parameters are legacies from the early work on Koha, and can be removed.
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>What is the license?</emphasis></term>
+<listitem>
+<para>
+Koha is distributed under the General Public License (GPL). More information on the GPL can be found at:
+   http://www.gnu.org/licenses/licenses.html#GPL
+The gist of the license is that you are free to use, modify and distribute the program at no cost to yourself, provided that modifications you distribute are also released under the GPL. Obviously, we'd appreciate an email about it... and the chance to add anything we find useful to the primary Koha package.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Why is Koha given away?</emphasis></term>
+<listitem>
+<para>
+Koha is open source software. In open source software, software developers give away the fruits of their labour in the hopes that others will help them develop the software.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>How do I install Koha?</emphasis></term>
+<listitem>
+<para>
+See the INSTALL.pl and text files included in the distribution, or the manual["For the Library IT Staffer"].</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Where can I get Koha?</emphasis></term>
+<listitem>
+<para>
+If you're in New Zealand, a mirror is at http://www.koha.org/download/
+Otherwise, try
+ http://sourceforge.net/project/showfiles.php?group_id=16466
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>How do I set up printer options?</emphasis></term>
+<listitem>
+<para>
+Insert into the printer table something like:
+insert into <emphasis>printer</emphasis>
+ (printername,printqueue) values ('No Printer','nullip');
+And in the branch table try:
+insert into branches
+ (branchcode,branchname) values ('T','Test');
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>How do we empty the database?</emphasis></term>
+<listitem>
+<para>Use these instructions with great care!  This assumes that you are running
+version 1.2 of Koha...</para>
+<para><screen>
+Connect to your koha database
+
+mysql Koha -pROOTPASSWORD
+
+or use the "user" and "password" settings from /etc/koha.conf with:
+
+mysql Koha -uUSER -pPASSWORD
+
+then run:
+
+delete from items;
+delete from biblioitems;
+delete from bibliosubject;
+delete from bibliosubtitle;
+delete from additionalauthors;
+delete from biblio;
+delete from issues;
+</screen></para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>How do I diagnose problems with Koha?</emphasis></term>
+<listitem>
+<para>
+The Koha troubleshooting section (in the appendices), and this FAQ section,  covers the some of the common procedures a member of the Koha team will ask you to try if you have a problem.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>What is the "user" table used for... and where is it used?</emphasis></term>
+<listitem>
+<para>
+We use the users table for doing authentication with Apache::AuthDBI, so it contains the users and passwords for valid users to connect to the librarian part of koha.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Is there a config guide or menu for what to put into the SQL tables for preferences, etc for a new blank installation?</emphasis></term>
+<listitem>
+<para>
+Nope.  We at Koha are sorely lacking that. What you need in the systempreferences table is to use the simple acquisitions module.  That is: </para>
+<para>Insert into systempreferences (variable,value) the values ('acquisitions','simple'); Then, from the index page of the intranet page (eg your equivalent of http://hlt.katipo.co.nz/ ) clicking on acquisitions will take you to the simple acqui screen and you should be able to start loading in data from there.</para>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>What other software do I need to run Koha?</emphasis></term>
+<listitem>
+<para>
+See the Install section in Book 1.  The -very- short answer is, you can get by with most free versions of Unix(GNU/Linux, etc), Apache, Perl (and some additional modules - which you can get by running: perl -MCPAN -e 'install Bundle::KohaSupport'), and MySQL.
+</para>
+</listitem>
+</varlistentry>
+
+<para><emphasis>For help </emphasis>
+<varlistentry><term><emphasis>Where can I get help with Koha?/Where can I get support?</emphasis></term>
+<listitem>
+<para>
+Katipo, the company that built the original Koha, makes a mailing list available to Koha users, who (as is customary with Open Source software) help each other out with questions. Usually most of the development team monitors and comments on this list as well. See:
+http://lists.katipo.co.nz/mailman/listinfo/koha
+</para>
+</listitem>
+</varlistentry>
+<varlistentry><term><emphasis>Where can I get help with databases?</emphasis></term>
+<listitem>
+<para>
+Best bet at the moment is to ask the list (above).
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Who maintains Koha?</emphasis></term>
+<listitem>
+<para>
+Koha is currently maintained by a team of volunteer developers spread across New Zealand, France, Canada, and the United States. There is a sourceforge mailing list for the development team.  If you're interested in joining please email info AT koha.org.
+Additionally, we have had assistance and contributions from Pawel in Poland, who gave us a neat translation script and has helped with installs in Poland.
+</para>
+</listitem>
+</varlistentry>
+
+
+
+<varlistentry><term><emphasis>Can I pay for support? (If so, who?)</emphasis></term>
+<listitem>
+<para> Please see the SUPPORT page off the Koha website to get in touch with Koha contributors willing to do contracting work.
+</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry><term><emphasis>I see people are working on feature X. Can you tell me when a release with feature X will ship?</emphasis></term>
+<listitem>
+<para>
+The Kaitiaki's weekly messages to the Koha user list are your best bet for information on features intended for the upcoming release, as well as target dates.
+The Koha Roadmap is a working outline of where development is headed, longer term.  Please contact info @ koha.org for a pointer to the current version of the Roadmap.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Can I pay for feature additions? (If so, who?)</emphasis></term>
+<listitem>
+<para>
+Try the Support page on the koha.org site -- Koha contributors willing to do contracting work are listed there.  Please contact the development team (info AT koha.org) if you wish to become a contractor-contributor.
+</para>
+</listitem>
+</varlistentry></para>
+<varlistentry><term><emphasis>How can I contribute to Koha?</emphasis></term>
+<listitem>
+<para>
+Check with a member of the development team:  info AT Koha.org for information about our current assistance needs, etc.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>I heard about you through OpenBook/LearningAccess ILS  -- what exactly is your relationship to that project?</emphasis></term>
+<listitem>
+<para>
+OpenBook was inspired by Koha, and is now called the LearningAccess ILS. Originally they were associated Waitt Family Foundation funded Technology Resource Foundation (formerly at http://www.trfoundation.org/). Under the terms of the Open Source license, "forks" such as this are entirely acceptable.  OpenBook, like Koha, is released under the GPL.  Currently it is installaed at some Washington state (US) local libraries.
+
+<para>OpenBook is now available as a Beta download: http://resources.centralmanclc.com/openbook/ </para>
+<para>Information is available at: http://www.learningaccess.org/ </para>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term><emphasis>Who has been involved with Koha's creation and development?/The Credits</emphasis></term>
+<listitem>
+<para><screen>
+Koha Credits
+
+Horowhenua Library Trust
+Rosalie Blake, Head of Libraries
+Jo Ransom
+
+Katipo Communications
+Rachel Hamilton-Williams, General Manager (Webmistress)
+Simon Blake, Technical Manager, Server Administrator
+Amanda Atkins, Operations Manager
+Chris Cormack, 1.2 release guru
+Olwen Williams
+
+Finlay Thompson
+Gynn Lomax
+Richard Anderson
+Jeremy Blake, Katipo Koha Project Manager
+Rebecca Holden, New Koha.org page
+
+Olive T. Canine, Crate Testing and Kiwi Stress Relief
+
+Steve Tonnesen, early MARC work, Virtual Bookshelves concept, KohaCD
+Pawel Skuza, Polish Language porter
+Benedykt P. Barszcz
+Glen Stewart
+Paul Poulain, 1.4 release manager
+Pat Eyler, Kaitiaki
+Roger Buck
+Adam Thick
+Florian Bischof
+Dorian Meid
+Sebastiaan Durand
+Kip DeGraaf
+Andrew Hooper
+Daniel Holth
+Mike Mylonas
+Joshua Ferraro
+Ed Summers
+Mike Johnson
+Ron Wickersham
+Brig C. McCoy
+Mike Hansen
+Nicolas Morin, French Translation/Traduction Française of the Documentation
+Henri-Damien Laurent
+David Strainchamps
+Md. Aftabuddin
+Marco Gaiarin
+Francisco M. Marzoa Alonso
+Andrew Arensburger
+Michaes Herman
+Regula Sebastiao
+Nicholas Rosasco, Documentation Compiler
+</screen>
+</para>
+</listitem>
+</varlistentry></para>
+</variablelist>
+</para>
+</sect1>
+
+<sect1 id="Appendix_B_An_Interview_About_Koha">
+<title>Appendix B: An Interview on Koha</title>
+
+<para>Welcome to the worlds first Free Open Source Library System. Made in New Zealand by the Horowhenua Library Trust and Katipo Communications Ltd theKoha system is a full catalogue, opac, circulation and acquisitions system. </para>
+
+<para>The Koha story so far......</para>
+
+<para>Koha : Free Library Software</para>
+
+<para>by Rosalie Blake, Head of Libraries, Horowhenua Library Trust, Levin and Rachel Hamilton-Williams, General Manager and Webmistress, Katipo Communications, Wellington.</para>
+
+<para><emphasis>Rosalie:</emphasis>
+The first thing I remember learning about computers, back in the early eighties, was "Never buy the hardware and then try to make the software fit". This worthy precept was followed fairly quickly by "Never buy programme that someone promises to write for you".</para>
+
+<para>Why then, in 1999, the year that INCIS hit the headlines, and with the memory of NDIS still lingering, was I contemplating a course of action that defied both precepts?</para>
+
+<para>I found myself in 1999 with a system we'd had and loved for 12 years. It was simple to operate and ran fast at our branch libraries over an ordinary dial up modem. But it was looking tired, and we suspected our networking system wasn't going to stand the challenge of 2000.</para>
+
+<para>I started the time-honoured procedure of searching for a new system. As I read through the 25cm high pile of paper that resulted from a (very selective) RFP, I got more and more depressed. It wasn't just that the new offerings were expensive to purchase, the real killer was in the running costs. The support charges were a steep increase, but added to that was huge 500% increase in telecommunication costs every year, stretching relentlessly into the future. That pretty Windows interface was going to be hideously expensive to implement.</para>
+
+<para>Now, along with every other red-blooded kiwi, I resent sacrificing a huge chunk of my hard-won budget to a telco. What to do? 1-1-2000 was approaching much too fast for comfort.</para>
+
+<para><emphasis>Rachel</emphasis>
+Katipo have worked with the Library for many years, training staff and supporting the network. We watched the RFP process with interest - read it and thought "you could do this using the Internet, and that would at least take care of the telco costs". We'd already done an OPAC for Wellington City Library and lots of database work, and somewhat naively thought "How hard can it be?"</para>
+
+<para>So we got together a plan: as long as the library could tell us how library worked, we could do the rest. As it turned out, figuring out how a library worked really was the hard bit. </para>
+
+<para>Our Mission was to have a new system running in the library for the first day of business in 2000. The requirements: At the branches it should issue and return at least at the same speed as the incumbent system, It should run on the libraries existing equipment, a motley collection of 486 and pentium hardware, It must still be nice and easy for the public and librarians to use. </para>
+
+<para>With the lofty goals in place it was time for the hard grind. It would have two interfaces - a web browser for most of the system, but a simple fast Telnet interface for issues and returns. We quickly choose the systems we would use, free and fast all the way. Linux server OS, MySQL database, Perl programming for the web and telnet interfaces - hmm all we were missing was a report writer, but one would turn up.</para>
+
+<para>What followed was 16 weeks of incredibly close work with the library. Drop dead dates came and went - amazingly without us dropping dead. </para>
+
+<para><emphasis>Rosalie:</emphasis>
+The new system started to take shape, and it looked good. When you change to a new system it has to look good - people are more sympathetic to something that looks nice, and there are all those members of the public to win over. </para>
+
+<para>What colour should the screens be? And what shall we call it? Hard experience teaches you never to let a committee near decisions like these.But we were wedded to democratic processes, and we finally found solutions everyone could live with. The colours were a compromise, and the name chosen was Koha. Why Koha? Because it's free. Because it's our gift.</para>
+
+<para><emphasis>Rachel:</emphasis>
+We recommended to the library that they release the software as "OpenSource". That means that anyone else can download the software and run itup on their machine without paying either us or Horowhenua Library Trust a cent. </para>
+
+<para>I can see the colour draining from your faces from here. Really a free system? But why? </para>
+
+<para><emphasis>Rosalie:</emphasis>
+Not just for the glory (though this is a world first)! </para>
+
+<para>Katipo convinced us this was a good idea for several reasons. One was to give the library some surety. Katipo is a small business, and it's important that the library be future-proofed against anything happening to that company. Another was because neither the Library Trust nor Katipo saw themselves as in the business of marketing and supporting a new library system. With an open-source system, that's not a problem. Word of mouth markets it, and the users support each other. The more libraries and programmers using and working on a system, the better it becomes.</para>
+
+<para><emphasis>Rachel:</emphasis>
+We tested on the librarians who were fantastic, coming in over the holidays to throw us the curve balls. We had Christmas day off, and then started installing in the library. The last days on the old system were between Christmas and New Year. On the third of January 2000 Koha met the public, for real, for the first time.  </para>
+
+<para>By lunch time we still hadn't switched back to the old system. The OPACs were in use, and issues and returns, while a bit flakey, were happening. Neither the librarians nor the patrons had stormed out in protest. We'd done it! </para>
+
+<para>Since then the pace has eased a little, and we've fine-tuned and even rewritten some of the code that went by as a blur before Christmas. We won two awards for Koha in September 2000 - the 3M Award for Innovation in Libraries 2000 and the ANZ Interactive Award, Community/Not for Profit category 2000. </para>
+
+<para>We have big plans for stage two. That's when the online features for members get added in, and some sexier bits to make the library staff's lives easier.</para>
+
+<para><emphasis>Both of us:</emphasis>
+We'd like to see other libraries take it on. If you're a small to medium-sized library, with or without satellite sites, or a mobile library (yes you could run this from a laptop and cell phone!) Koha could be just what you're looking for. But don't just take our word for it. Have a look. www.koha.org </para><para>
+Or email either of us: rosalie AT library.org.nz and rachel AT katipo.co.nz </para>
+<para>
+If you're interested in the project please join our mailing list. </para>
+</sect1>
+
+
+<sect1 id="Migration">
+<title>Appendix C: Migrating to Koha</title>
+<sect2>
+<title>Migrating to Koha from the Alexandria Library Sysytem</title>
+<para>Migrating data from an Alexandria library system to Koha, courtesy the Coast Mountains School District and Steve Tonnesen</para>
+
+<para><emphasis>Export MARC data from Alexandria system</emphasis></para>
+<para>
+<itemizedlist>
+<listitem><para>Edit bulkmarcimport.pl to set the $branchname variable if your branch code is other than 'MAIN' </para></listitem>
+<listitem><para>Run bulkmarcimport.pl on this file, redirecting stdout and stderr to files</para></listitem>
+<listitem><para>bulkmarcimport.pl kksexport.mrc >import.out 2>import.err </para></listitem>
+<listitem><para>You may need to run this script several times before you get the import all figured out. Each time you run it, use the instructions at the bottom of this page to clear out the old bibliographic data from your Koha database. </para></listitem>
+<listitem><para>The standard output of bulkmarcimport.pl will be a human readable version of the MARC data. </para></listitem>
+<listitem><para>Decide how the existing data is going to map to Koha's item types</para></listitem>
+<listitem><para>Koha uses itemtypes to differentiate things like Fiction, Non-Fiction, CDs, CDROMs, Large Print, etc.
+<listitem><para>In my data, the 245 h marc subfield contained info like [book], [magazines], [cd], [computer disks], [puzzle] etc. so this was a good place to grab some itemtype info. </para></listitem>
+<listitem><para>I also used the 008 fixed length data elements field to grab Literary Form (0 for non-fiction, 1 for fiction, etc.), target audience (b for primary, j for juvenile etc.) </para></listitem>
+<listitem><para>Modify bulkmarcimport.pl to generate appropriate item types --
+This can be tricky if you are not familiar with perl </para></listitem>
+<listitem><para><emphasis>The developer team may eventually add some templates to bulkmarcimport.pl to assist in this task, as well as a way that bulkmarcimport.pl could step through each record and show what would be done before actually committing changes to the database.</emphasis></para></listitem>
+<listitem><para>You may also need to edit your itemtypes to add or remove itemtypes according to your needs.</para></listitem>
+<listitem><para>From the intranet interface, click on the "Parameters" graphic and then click on the Item types link.
+</para></listitem>
+</itemizedlist>
+</para>
+
+
+<para><emphasis>Borrowers</emphasis></para>
+
+
+<para>In the case of CMSC, the borrowers database is populated from the same user database that is used on the school servers with a a custom script that runs nightly that updates the Koha borrower database automatically </para>
+
+
+
+<para><emphasis>Clearing all bibliographic data out of Koha between import attempts </emphasis></para>
+<para><emphasis>WARNING!! These instructions are dangerous!! You should only do this on a clean Koha system where you are testing importing of MARC records from another library system. Do _NOT_ do this on a system which already has data stored in it. These instructions will delete _ALL_ bibliographic and holdings data from the Koha database.</emphasis></para>
+
+<para><screen>
+Connect to your Koha database
+mysql Koha -ukohaadmin -pmypassword
+(get your koha userid and password from the /etc/koha.conf file)
+Delete all of the bibliographic data <-- warning, very dangerous!
+delete from biblio;
+delete from bibliosubtitle;
+delete from bibliosubject;
+delete from biblioitems;
+delete from items;
+</screen></para>
+</sect2>
+</sect1>
+
+
+
+<sect1 id="Troubleshooting">
+<title>Appendix D: Troubleshooting Koha</title>
+<para><emphasis>Item/Concern/Usual diagnostic procedure</emphasis></para>
+<para>Recommendations wanted</para>
+</sect1>
+
+<sect1 id="KeaSection">
+<!-- NEEDLINK NEED The Picture and link here!! -->
+<title>Appendix E: Using Kea</title>
+<para><emphasis>This section is derived from documentation (c) Katipo.  Kea is itself (c) Katipo.  Used with permission.</emphasis></para>
+<para><emphasis>BEFORE STARTING</emphasis></para>
+<para>To create a new language template, you need to contact one of the following people, who will arrange for an area for your language to be created in the Kea system.  </para>
+
+<para><emphasis>System Requirements</emphasis></para>
+<para>Minimum Requirements are:</para>
+<para>A Computer Connected to the Internet,</para>
+<para>Internet Explorer 5.0 or newer or a Mozilla browser such as Netscape 6,</para>
+<para>- NB: Kea is affected on the speed of your internet connection and to a smaller degree by the power of your machine. A faster internet connection will make Kea easier to use.</para>
+
+<para><emphasis>Things You Need To Ask Someone Else To Do</emphasis></para>
+<para>Restore pages from backup,</para>
+<para>Roll back a website to a previous state, </para>
+<para>Undelete files marked for deletion.</para>
+
+<para><emphasis>Logging Into The Kea File Manager</emphasis></para>
+<para>In order to login to File Manager you will need 3 things:</para>
+<para>Your Kea user name,</para>
+<para>Your Kea password,</para>
+<para>The URL of the File Manager on the edit site.</para>
+
+<para><emphasis>Differences Between The File Manager And Edit Content</emphasis></para>
+
+<para>The File Manager is the tool where you preform actions on files such as finding files to edit, or preview, deleting moving and triggering files. In order to edit a page, you will first need to find it in the File Manager.</para>
+<para>Edit Content: Once you have found the file you wish to edit in the file manager, click on "Edit Content" to launch the content editor. You make your changes in the yellow box and then Submit them to the page, click "Ok" to stay on that page, or "Exit" to return to the file manager.</para>
+
+
+<para><emphasis>Navigating In File Manager</emphasis></para>
+<para>To Navigate around our edit site in File Manager, it is best to think of the File Manager Screen in 3 sections.</para>
+<para>Breadcrumbs: Breadcrumbs show you the path to where you are now, and enable you to retrace your steps. The first element in the path is the home or root folder for the website. All the names in this path are links, click on any name in the breadcrumbs to jump back to that folder.</para>
+<para>Folders: This is a listing of all the folders within the folder you are currently in. If you click on the name of a folder, you will be taken to the File Manager screen for that folder. Clicking on subfolders is how you go forward in a site. You can only move forward one folder at a time (just the same as in the Windows File Manager - -Explorer).</para>
+<para>File Listing: This is a listing of all the files in the current folder. If you click on the file name, you will get a preview of the page.</para>
+
+<para><emphasis>The File Manager Screen Explained</emphasis></para>
+<para>Below is an example of a File Manager Screen for a user with full privileges. Note that some of the Screen options are not availble to all users.
+
+<para>1. You Are Here: These are "breadcrumbs", showing the path through the folders you have taken. They show which folder you are working in at the moment. You can use these for navigation. Click on any of the links in the breadcrumbs to take you back to that folder.</para>
+<para>2. Checked Out Files: This is a listing of all the files that are Checked Out to you. Once you have finished working on a file, make sure that it has been released so that others can work on it. To release the file so that others may edit it, click the file name next to "Checked Out Files".</para>
+<para>3. Create Folder: Used to make a new folder with the name given in the field next to it. Only letters, hyphens,underscores, full stops and numbers are acceptable characters in the folder name. Spaces are unacceptable. We strongly recommend you use lower case letters in your file and folder names.</para>
+<para>4. Folders: Listing of sub folders below the current folder. Use these for navigation. Click on a folder name to access the files in that folder.</para>
+<para>5. Upload File: Use this to locate the file you wish to upload locally from your own drive. Clicking Browse will bring up a window from which you can select your file. Click Ok to select the file you want and the name will appear in the field to the left of the browse button. Click Upload to copy the file into the current folder. Note: Files over 1Mb will not be uploaded.</para>
+<para>6. Create New File: Used to Create A New Page on the Website (you probably will not need this feature, as you should only be changing copies of the existing files).</para>
+<para>7. Check Boxes: Click a box to select a file so you can trigger/notify, move or delete it. Click multiple boxes to preform the same action on multiple files at once (again, not something you should need for a translation). </para>
+<para>8. Edit Content: Clicking on the Edit Content link will launch the Kea Editor on this page. </para>
+<para>9. Filename: Click on the file name to preview the page.</para>
+<para>10. Column Headings: Click on a Column heading to reorder the files.</para>
+<para>11. Edit Info: This page contains information about the page such as the page title (appears in the status bar of the browser and breadcrumbs) meta data used by search engines to search your page, who "owns" the page , and when it was published.</para>
+<para>12. Edit Source: Opens up the source editor. Only enabled for the webmaster or people with advanced HTML skills.</para>
+<para>13. Last Modified: Shows when page was last modified.</para>
+<para>14. Modified By: Gives the username of the last person, usually an email address to edit this page. Clicking the username will bring up a history of all the users who have edited this page. </para>
+<para>15. Trigger: Copies the page across to the live site. This option is only available to site administrators or those with Trigger privileges.</para>
+<para>16. Delete: Deletes the page from the File Manager listing. Note that all deleted files go into a "Trash Can" that is normally deleted weekly. If you have deleted a file by accident contact your website administrator to get the file reinstated. </para>
+<para>17. Notify: Appears in place of the Trigger button for most users. This option will send an email to your site administrator, notifying them that changes have been made and requesting that they trigger the page live.</para>
+<para>18. Move: Moves the selected file to another folder within the site. Note that it pays to check files after they have been moved to fix links etc. Move also allows users to rename a file. (Again, not something you should need for Koha work.)</para>
+<para>19. Select All: Selects all the files in the folder.</para>
+
+<para><emphasis>Launching The Kea Content Editor</emphasis></para>
+<para>Log on to File Manager</para>
+<para>Use the folder listings and breadcrumbs to locate the folder in which your page resides.</para>
+<para>Once you are in the correct folder, click the folder name eg index.html, to preview the page in your web browser. Check that this is the correct page that you want to edit. Use the browser back button to go from the preview back to the File Manager screen.</para>
+<para>In File Manager, click "Edit Content" to the right of the file name you wish to edit.</para>
+<para>You will be taken to a view of the page where the editable text is highlighted yellow. Note that there may also be some text highlighted purple, changes to this text may appear on other pages. </para>
+
+<para><emphasis>Making Changes</emphasis></para>
+<para>Clicking on an area of yellow highlighted text, will open up the Kea window. It is in the Kea window that you edit a block of text.</para>
+<para>Different parts of the page are separated into kea blocks. For example, the page heading is normally in a different Kea block to the main body text.</para>
+<para>You can now change the text as you would do normally in Word. Try adding some text. eg "Adding some text".</para>
+<para>Kea will recognise line breaks (carriage returns) and paragraph breaks. Hit enter once for a line break. Hit enter twice for a paragraph. Note: Kea will only recognise one paragraph break at a time. If you try to enter several paragraph breaks between paragraphs, kea will ignore all but the first one.</para>
+<para>To commit your changes to the page, press Submit.</para>
+<para>The Kea box will close and be replaced by a smaller one as per below:</para>
+<para>To continue editing the page press Ok, to exit the Kea editor and return to the File Manager screen click exit.  We want to continue editing the page so click Ok.</para>
+<para>You should now be able to see the change you have made to the page. Click the text you have just changed again to open the Kea window.</para>
+<para>Now we are going to look at the other buttons on the Kea window.</para>
+<para>In the top right corner of the kea window there are 3 buttons. The horizontal line (-) minimises the kea window. The question mark (?) opens the Kea help pages (Note this function is currently disabled). The cross closes (X) the Kea window. You will loose any changes you have made. In the bottom left of the screen there is the Submit button we used before to commit changes and the Cancel button. Make a change to the page and then press Cancel. You will get a little box that comes up "Loose Changes". Click OK. Your changes will be lost and the Kea window closed.</para>
+</sect1>
+
+</book>
