@@ -32,7 +32,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			 });
 if ($op eq "add_confirm") {
-	&newsuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn);
+	&newsuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,'');
 	# empty fields, to avoid filter in "searchsuggestion"
 	$title='';
 	$author='';

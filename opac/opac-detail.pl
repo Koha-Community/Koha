@@ -4,6 +4,7 @@ require Exporter;
 use CGI;
 use C4::Search;
 use C4::Auth;
+use C4::Bull; #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
 use HTML::Template;
 
@@ -26,6 +27,7 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
+my $subscriptionid = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
 
@@ -49,10 +51,11 @@ my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
 
-$template->param(BIBLIO_RESULTS => $resultsarray);
-$template->param(ITEM_RESULTS => $itemsarray);
-$template->param(WEB_RESULTS => $webarray);
-$template->param(SITE_RESULTS => $sitearray,
+$template->param(BIBLIO_RESULTS => $resultsarray,
+				ITEM_RESULTS => $itemsarray,
+				WEB_RESULTS => $webarray,
+				SITE_RESULTS => $sitearray,
+				subscriptionid => $subscriptionid,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
