@@ -15,6 +15,7 @@ my ($template, $borrowernumber, $cookie)
 			     type => "opac",
 			     authnotrequired => 0,
 			     flagsrequired => {borrow => 1},
+			     debug => 1,
 			     });
 
 # get borrower information ....
@@ -46,16 +47,13 @@ $template->param(BORROWER_INFO => \@bordat);
 #get issued items ....
 my $issues = getissues($borr);
 
-my $count=0;
+my $count = 0;
+my $overdues_count = 0;
+my @overdues;
 my @issuedat;
 foreach my $key (keys %$issues) {
     my $issue = $issues->{$key};
     $issue->{'date_due'}  = slashifyDate($issue->{'date_due'});
-    if ($issue->{'overdue'}) {
-	$issue->{'status'} = "<font color='red'>OVERDUE</font>";
-    } else {
-	$issue->{'status'} = "Issued";
-    }
 # check for reserves
     my ($restype, $res) = CheckReserves($issue->{'itemnumber'});
     if ($restype) {
@@ -63,6 +61,19 @@ foreach my $key (keys %$issues) {
     }
     my ($charges, $itemtype) = calc_charges(undef, undef, $issue->{'itemnumber'}, $borrowernumber);
     $issue->{'charges'} = $charges;
+
+    my $publictype = $issue->{'publictype'};
+    $issue->{$publictype} = 1;
+
+
+    if ($issue->{'overdue'}) {
+	push @overdues, $issue;
+	foreach my $k (keys %$issue) {warn "$k : $issue->{$k}";}
+	$overdues_count++;
+	$issue->{'status'} = "<font color='red'>OVERDUE</font>";
+    } else {
+	$issue->{'status'} = "Issued";
+    }
     push @issuedat, $issue;
     $count++;
 }
@@ -70,16 +81,24 @@ foreach my $key (keys %$issues) {
 $template->param(ISSUES => \@issuedat);
 $template->param(issues_count => $count);
 
+$template->param(OVERDUES => \@overdues);
+$template->param(overdues_count => $overdues_count);
+
+my $branches = getbranches();
+
 # now the reserved items....
 my ($rcount, $reserves) = FindReserves(undef, $borrowernumber);
 foreach my $res (@$reserves) {
     $res->{'reservedate'}  = slashifyDate($res->{'reservedate'});
+    my $publictype = $res->{'publictype'};
+    $res->{$publictype} = 1;
+    $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
+    $res->{'branch'} = $branches->{$res->{'branchcode'}}->{'branchname'};
 }
 
 $template->param(RESERVES => $reserves);
 $template->param(reserves_count => $rcount);
 
-my $branches = getbranches();
 my @waiting;
 my $wcount = 0;
 foreach my $res (@$reserves) {
@@ -90,7 +109,7 @@ foreach my $res (@$reserves) {
     }
 }
 
-$template->param(WAITING => \@waiting);
+# $template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount);
 
 print $query->header(-cookie => $cookie), $template->output;

@@ -60,16 +60,16 @@ $template->param(FORMINPUTS => $forminputs);
 # do the searchs ....
 my $env;
 $env->{itemcount}=1;
-my $num=10;
+my $number_of_results = 20;
 my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
-    @results = subsearch($env,$subjectitems, $num, $startfrom);
+    @results = subsearch($env,$subjectitems, $number_of_results, $startfrom);
     $count = $#results+1;
 } else {
-    ($count, @results) = catalogsearch($env,'',\%search,$num,$startfrom);
+    ($count, @results) = catalogsearch($env,'',\%search,$number_of_results,$startfrom);
 }
 
 my $num = 1;
