@@ -73,8 +73,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	template_name   => ('opac-detailprint.tmpl'),
 	query           => $query,
 	type            => "opac",
-	authnotrequired => ($type eq 'opac'),
-	flagsrequired   => {catalogue => 1},
+	authnotrequired => 1,
     });
 
 my $count=1;
