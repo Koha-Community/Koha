@@ -1,3 +1,5 @@
+#!/usr/bin/perl -w
+
 package C4::Date;
 
 use strict;
@@ -15,8 +17,9 @@ $VERSION = 0.01;
 @EXPORT = qw(
              &display_date_format
              &format_date
-             &format_date_in_iso
 );
+
+
 
 sub get_date_format
 {
@@ -65,19 +68,16 @@ sub format_date
 	
 	if ( $dateformat eq "us" )
 	{
-		Date_Init("DateFormat=US");
 		$olddate = ParseDate($olddate);
 		$newdate = UnixDate($olddate,'%m/%d/%Y');
 	}
 	elsif ( $dateformat eq "metric" )
 	{
-		Date_Init("DateFormat=metric");
 		$olddate = ParseDate($olddate);
 		$newdate = UnixDate($olddate,'%d/%m/%Y');
 	}
 	elsif ( $dateformat eq "iso" )
 	{
-		Date_Init("DateFormat=iso");
 		$olddate = ParseDate($olddate);
 		$newdate = UnixDate($olddate,'%Y-%m-%d');
 	}
@@ -87,37 +87,4 @@ sub format_date
 	}
 }
 
-sub format_date_in_iso
-{
-        my $olddate = shift;
-        my $newdate;
-                
-        my $dateformat = get_date_format();
-
-        if ( $dateformat eq "us" )
-        {
-                Date_Init("DateFormat=US");
-                $olddate = ParseDate($olddate);
-        }
-        elsif ( $dateformat eq "metric" )
-        {
-                Date_Init("DateFormat=metric");
-                $olddate = ParseDate($olddate);
-        }
-        elsif ( $dateformat eq "iso" )
-        {
-                Date_Init("DateFormat=iso");
-                $olddate = ParseDate($olddate);
-        }
-        else
-        {
-                return "9999-99-99";
-        }
-
-	$newdate = UnixDate($olddate, '%Y-%m-%d');
-
-	return $newdate;
-}
-
 1;
-__END__

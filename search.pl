@@ -169,7 +169,6 @@ $template->param(search => $search);
 $template->param(searchdesc => $searchdesc);
 $template->param(SEARCH_RESULTS => $resultsarray);
 #$template->param(includesdir => $includes);
-$template->param(loggedinuser => $loggedinuser);
 
 my @numbers = ();
 if ($count>10) {

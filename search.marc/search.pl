@@ -68,8 +68,7 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
-	$template->param(loggedinuser => $loggedinuser,
-							result => \@results);
+	#$template->param(result => \@results);
 
 } else {
 	($template, $loggedinuser, $cookie)
@@ -80,7 +79,7 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
-	$template->param(loggedinuser => $loggedinuser);
+	#$template->param(loggedinuser => $loggedinuser);
 	my $tagslib;
 	if ($type eq "opac") {
 		$tagslib = &MARCgettagslib($dbh,1);
