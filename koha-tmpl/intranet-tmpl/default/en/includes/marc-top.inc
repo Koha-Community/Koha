@@ -8,6 +8,7 @@
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
+<TMPL_INCLUDE NAME="common-style.css">
 #menubar {
 	border-top:1px solid #666;
 }
