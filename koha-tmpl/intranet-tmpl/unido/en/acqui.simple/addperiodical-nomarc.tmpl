@@ -76,45 +76,47 @@ added to</font>
 
 <tr valign="top">
 <td>Volume:</td>
-<td><input name="volume" size="40"></td>
+<td><input name="volume" size="40" value="<TMPL_VAR NAME="volume">"></td>
 </tr>
 <tr valign="top">
 <td>Number:</td>
-<td><input name="number" size="40"></td>
+<td><input name="number" size="40" value="<TMPL_VAR NAME="number">"></td>
 </tr>
 <tr valign="top">
 <td>Volume Description:</td>
-<td><input name="volumeddesc" size="40"></td>
+<td><input name="volumeddesc" size="40" value="<TMPL_VAR NAME="volumeddesc">"></td>
 </tr>
 
 <tr valign="top">
 <td>ISSN:</td>
-<td><input name="issn" size="40"></td>
+<td><input name="issn" size="40" value="<TMPL_VAR NAME="issn">"></td>
 </tr>
 <tr valign="top">
 <td>LCCN:</td>
-<td><input name="lccn" size="40"</td>
+<td><input name="lccn" size="40" value="<TMPL_VAR NAME="lccn">"></td>
 </tr>
 <tr valign="top">
 <td>Dewey/UDC:</td>
-<td><INPUT name="dewey" size="40"></td>
+<td><INPUT name="dewey" size="40" value="<TMPL_VAR NAME="dewey">"></td>
 </tr>
 <tr valign="top">
 <td>Dewey Subclass:</td>
-<td><input name="subclass" size="40"></td>
+<td><input name="subclass" size="40" value="<TMPL_VAR NAME="subclass">"></td>
 </tr>
 
 <tr valign="top">
 <td>Publisher:</td>
-<td><input name="publishercode" size="40"></td>
+<td><input name="publishercode" size="40" value="<TMPL_VAR
+NAME="publishercode">"></td>
 </tr>
 <tr valign="top">
 <td>Publication Year:</td>
-<td><input name="publicationyear" size="40"></td>
+<td><input name="publicationyear" size="40" value="<TMPL_VAR
+NAME="publicationyear">"></td>
 </tr>
 <tr valign="top">
 <td>Place of Publication:</td>
-<td><input name="place" size="40"></td>
+<td><input name="place" size="40" value="<TMPL_VAR NAME="place">"></td>
 </tr>
 
 
@@ -153,14 +155,7 @@ value="Save"></td>
 
 </table>
 
-<h4>Holdings</h4>
-<b><TMPL_VAR NAME="biblioitemnumber"> Volume: </b>
- <TMPL_VAR NAME="volumeddesc"> <TMPL_IF NAME="publicationyear">, <TMPL_VAR NAME="publicationyear"></TMPL_IF> 
-<TMPL_IF NAME="hombranch">, <TMPL_VAR NAME="hombranch"></TMPL_IF> 
 
-
-
-</TMPL_LOOP>
 
 </form>
 </center>

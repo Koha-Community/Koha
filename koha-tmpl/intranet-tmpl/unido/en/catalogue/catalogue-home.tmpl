@@ -44,7 +44,11 @@
 		<TD class="label">Type of Item</TD>
 		<TD class="field" class="field">
 		<SELECT NAME="class">
-		<OPTION VALUE="" SELECTED>Any</OPTION>
+		<option value="">All</option>
+		<TMPL_LOOP NAME="itemtypes">
+		<option value="<TMPL_VAR NAME="itemtype">"><TMPL_VAR NAME="description"></option>
+		</TMPL_LOOP>
+
 		</SELECT></td>
 	</tr>
 					
@@ -76,7 +80,12 @@
 		<td class="label">Branch</td>
 		<TD class="field">
 		<select name=branch>
-		<option value="M">Main
+		<option value="">All</option>
+		<TMPL_LOOP NAME="branches">
+		
+		<option value="<TMPL_VAR NAME="branchcode">"><TMPL_VAR NAME="branchname"></option>
+		</TMPL_LOOP>
+
 		</select>
 		</td>
 	</tr>
@@ -104,7 +113,7 @@
 	</tr>
 									
 	<TR>
-		<TD>  class="label">Barcode</TD>
+		<TD class="label">Barcode</TD>
 			
 		<TD class="field-medium"><INPUT TYPE=TEXT NAME="itemnumber" class="mid-field"> 			<input type="submit" class="go" value="GO">
 		</TD>
@@ -127,7 +136,7 @@
 	<div class="tip">
 	<Span class="tip-big">tip</span>
 	<span class="tip-text"> you can use more than one field for your search, 
-	eg Keyword + Author, but this may slow it down.  
+	eg Title + Author, but this may slow it down.  
 	There is an implicit "and" between search terms.</span></div>
 		
 		

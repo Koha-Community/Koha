@@ -49,11 +49,13 @@ is set up to only display those fields that a record has data for
 <b>Biblionumber:</b> <TMPL_VAR NAME="biblionumber"><br>
 <b>Item Type:</b> <TMPL_VAR NAME="itemtype"><br>
 <b>Classification:</b> <TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"><br>
+
 <TMPL_IF NAME="url"><b>URL:</b> <TMPL_VAR NAME="url"><br>	</TMPL_IF>
 <TMPL_IF NAME="isbn"><b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>	</TMPL_IF>
 <TMPL_IF NAME="issn"><b>ISSN:</b> <TMPL_VAR NAME="issn"><br>	</TMPL_IF>
 <TMPL_IF NAME="lccn"><b>LCCN:</b> <TMPL_VAR NAME="lccn"><br>	</TMPL_IF>
-<TMPL_IF NAME="publishercodel"><b>Publisher:</b> <TMPL_VAR NAME="publishercode"> <br>	</TMPL_IF>
+
+<TMPL_IF NAME="publishercode"><b>Publisher:</b> <TMPL_VAR NAME="publishercode"> <br>	</TMPL_IF>
 <TMPL_IF NAME="place"><b>Place:</b> <TMPL_VAR NAME="place"><br>	</TMPL_IF>
 <TMPL_IF NAME="publicationyear"><b>Date:</b> <TMPL_VAR NAME="publicationyear"><br>	</TMPL_IF>
 <TMPL_IF NAME="volume"><b>Volume:</b> <TMPL_VAR NAME="volume"><br>	</TMPL_IF>
@@ -62,8 +64,8 @@ is set up to only display those fields that a record has data for
 <TMPL_IF NAME="pages"><b>Pages:</b> <TMPL_VAR NAME="pages"><br>	</TMPL_IF>
 <TMPL_IF NAME="size"><b>Size:</b> <TMPL_VAR NAME="size"><br>	</TMPL_IF>
 <TMPL_IF NAME="loanlength"><b>Loan Length:</b> <TMPL_VAR NAME="loanlength"><br>	</TMPL_IF>
-<TMPL_IF NAME="rentalchargel"><b>Rental Charge:</b> <TMPL_VAR NAME="rentalcharge"><br>	</TMPL_IF>
-<TMPL_IF NAME="bnotesl"><b>Notes:</b> <TMPL_VAR NAME="bnotes"><br>	</TMPL_IF>
+<TMPL_IF NAME="rentalcharge"><b>Rental Charge:</b> <TMPL_VAR NAME="rentalcharge"><br>	</TMPL_IF>
+<TMPL_IF NAME="bnotes"><b>Notes:</b> <TMPL_VAR NAME="bnotes"><br>	</TMPL_IF>
 <b>No. of Items:</b> <TMPL_VAR NAME="count">
 </TD>
 </tr>
