@@ -604,6 +604,9 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.6  2002/10/10 04:44:28  arensb
+# Added whitespace to make the POD work.
+#
 # Revision 1.5  2002/10/07 00:51:22  arensb
 # Added POD and some comments.
 #
@@ -633,6 +636,7 @@ sub taglabel {
 # Moved acqui.simple MARC handling to new module SimpleMarc.pm
 #
 __END__
+
 =back
 
 =head1 AUTHOR
