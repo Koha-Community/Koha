@@ -18,7 +18,7 @@
 # XXX acquisition is always translated 採購 for libraries despite being translated as 購置 in HK Government's glossary
 # XXX Exact 在 goo 網站譯「完全一致」，可以參考
 # XXX "borrower" HKPL 稱「借用人」
-# XXX "group"譯「群組」應該是錯的，舊筆記寫[NCL]稱譯「著錄」，但現在到[NCL]卻找不到相關資訊:-/
+# NOTE "Group"譯「群組」似乎是對的，「著錄」似乎是Biblio, 但「著錄」和「書目」有什麼不同就不清楚
 # NOTE "Clear"要譯「重設」，不譯「清空」，因為某些欄位的預設值並非空白，按「Clear」只會重設成預設值，不會清空欄位
 #
 msgid ""
@@ -1224,13 +1224,14 @@ msgstr "<b>館別：</b>%s　　<b>打印機：</b>%s"
 msgid "<b>Classification:</b> %s"
 msgstr "<b>分類：</b>%s"
 
+#  NOTE classification+dewey+subclass = 索書號，所以其實原文是錯的
 #. %1$s: TMPL_VAR name=classification
 #. %2$s: TMPL_VAR name=dewey
 #. %3$s: TMPL_VAR name=subclass
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:37
 #, c-format
 msgid "<b>Classification:</b> %s%s%s"
-msgstr "<b>分類：</b>%s%s%s"
+msgstr "<b>索書號：</b>%s%s%s"
 
 # NOTE: http://www.lib.ntu.edu.tw/pub/univj/uj1-1/uj1_5.html
 #. For the first occurrence,
@@ -1856,10 +1857,11 @@ msgstr "新增網站"
 msgid "Add Shelf"
 msgstr "新增虛擬書架"
 
+#  NOTE 譯文更動 by Arthur
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:170
 msgid "Add Stop word"
-msgstr "新增Stop word"
+msgstr "新增忽略字"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:148
@@ -2015,7 +2017,7 @@ msgstr "新增至已有群組："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:59
 msgid "Add word"
-msgstr "新增字眼"
+msgstr "新增字詞"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_60X.tmpl:100
 msgid "Adding"
@@ -2739,10 +2741,11 @@ msgstr "修改密碼"
 msgid "Change Settings"
 msgstr "設定"
 
+#  FIXME 這是很差的譯文，而且可能有錯，有待核實及改進
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:60
 #, c-format
 msgid "Change status to waiting and print<a1>slip</a>?:"
-msgstr ""
+msgstr "變更狀態為「等待中」，並列印<a1>單據</a>？："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/marcimport.tmpl:42
 #: ../../koha-tmpl/intranet-tmpl/default/en/import/breeding.tmpl:42
@@ -3165,9 +3168,10 @@ msgid "Delete this Website link"
 msgstr "移除這個連結"
 
 #  TODO 看了原始碼，連法文原文也看了，都不知這是什麼
+#  FIXME 「依存關係」似乎是Unix術語，但這是無法翻譯中的一個暫時譯法
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_60X.tmpl:84
 msgid "Dependancies"
-msgstr ""
+msgstr "依存關係"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/mancredit.tmpl:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:19
@@ -3203,10 +3207,11 @@ msgid "Dewey"
 msgstr "杜威分類號"
 
 #  NOTE 譯文更動 by Arthur
-#  NOTE This seems to be Koha jargon and has a different meaning than normal "Dewey subclass"
+#  NOTE 譯文更動 by Ambrose
+#  NOTE 這是索書號內的 Cutter Code 或作者姓名之類的東西，和類別全無關係
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:167
 msgid "Dewey Subclass:"
-msgstr "杜威子類別"
+msgstr "作者號："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:163
 msgid "Dewey:"
@@ -4774,7 +4779,7 @@ msgstr "修改欄"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:57
 msgid "Modify word"
-msgstr "修改字眼"
+msgstr "修改字詞"
 
 # FIXME looks like a BUG in the English template
 #. %1$s: TMPL_VAR name=monthoptions
@@ -5101,15 +5106,15 @@ msgstr "有特備活動時，請以電郵通知我"
 msgid "Notify me about overdues by email"
 msgstr "以電郵通知我過期"
 
+#  NOTE MARC21 的 440$n, "Number of part/section of a work (R)", 例如 "Part C"、"Series 1" 等
+#  NOTE 看來是對應 CMARC 的 225$h,「集叢編次」
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:22
-#, fuzzy
 msgid "Number"
-msgstr "讀者"
+msgstr "集叢編次"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:183
-#, fuzzy
 msgid "Number:"
-msgstr "姓名："
+msgstr "集叢編次："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member.tmpl:20
 msgid "OD/Issues"
@@ -6018,10 +6023,10 @@ msgstr "含杜威分類號之結果"
 msgid "Return to Details Page"
 msgstr "返回細節畫面"
 
-# XXX
+#  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:150
 msgid "Returned Item Information"
-msgstr "已還圖書資料細節"
+msgstr "已還圖書資料"
 
 # XXX
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:203
@@ -6368,13 +6373,15 @@ msgstr "不要重設應歸還日期"
 msgid "Still %s requests to go"
 msgstr "還有 %s 個請求"
 
+#  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:76
 msgid "Stop words"
-msgstr "Stop word"
+msgstr "忽略字"
 
+#  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:132
 msgid "Stop words admin"
-msgstr "Stop word 管理"
+msgstr "忽略字管理"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:114
 msgid "Street Address if different"
@@ -6384,10 +6391,10 @@ msgstr "住址 (如與上列不同)"
 msgid "SubTotal"
 msgstr "小計"
 
+#  NOTE 這是索書號內的 Cutter Code 或作者姓名之類的東西，和類別全無關係
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:32
-#, fuzzy
 msgid "Subclass"
-msgstr "子類別"
+msgstr "作者號"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:168
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:49
@@ -7062,38 +7069,44 @@ msgstr "虛擬書架"
 msgid "Virtual shelves"
 msgstr "虛擬書架"
 
+#  NOTE MARC21 的 440$v, "Volume number/sequential designation (NR)", 例如 "v.1" 等
+#  NOTE 對應 CMARC 的 225$v,「集叢號」
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:49
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:67
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:21
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/readingrec.tmpl:27
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:49
-#, fuzzy
 msgid "Volume"
-msgstr "值"
+msgstr "集叢號"
 
+#  NOTE Koha 資料庫內的 volumedate 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:23
 #, fuzzy
 msgid "Volume Date"
 msgstr "到期日"
 
+#  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:24
 #, fuzzy
 msgid "Volume Description"
 msgstr "說明"
 
+#  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:187
 #, fuzzy
 msgid "Volume Description:"
 msgstr "說明"
 
+#  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:74
 msgid "Volume Info (for serials) *"
 msgstr ""
 
+#  NOTE MARC21 的 440$v, "Volume number/sequential designation (NR)", 例如 "v.1" 等
+#  NOTE 對應 CMARC 的 225$v,「集叢號」
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:179
-#, fuzzy
 msgid "Volume:"
-msgstr "值"
+msgstr "集叢號："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:252
 msgid "WAITING"
@@ -7147,11 +7160,11 @@ msgstr "修改完這份訂單後，請記緊儲存。"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:99
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:145
 msgid "Word"
-msgstr "字眼"
+msgstr "字詞"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:77
 msgid "Words deleted during searches."
-msgstr "查詢時忽略的字眼。"
+msgstr "查詢時忽略的字詞。"
 
 # TODO Should do a proper idiomatic translation regardless...
 # NOTE (00:23:26) ambrose: what does "worked off" mean?
@@ -7932,7 +7945,7 @@ msgstr "沒有填寫變數名稱"
 #. SCRIPT
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/stopwords.tmpl:54
 msgid "word missing"
-msgstr "沒有填寫字眼"
+msgstr "沒有填寫字詞"
 
 # XXX can improve
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:315
