@@ -156,17 +156,13 @@ printend
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh=C4Connect;
-	my $sth=$dbh->prepare("select * from printers where printername=?");
-	$sth->execute($input->param('printername'));
-	if ($sth->rows) {
-	    my $sti=$dbh->prepare("update printers set printqueue=?,printtype=? where printername=?");
-	    $sti->execute($input->param('printqueue'), $input->param('printtype'), $input->param('printername'));
-	    $sti->finish;
-	} else {
-	    my $sti=$dbh->prepare("insert into printers (printqueue,printtype,printername) values (?,?,?)");
-	    $sti->execute($input->param('printqueue'), $input->param('printtype'), $input->param('printername'));
-	    $sti->finish;
-	}
+	my $query = "replace printers (printername,printqueue,printtype) values (";
+	$query.= $dbh->quote($input->param('printername')).",";
+	$query.= $dbh->quote($input->param('printqueue')).",";
+	$query.= $dbh->quote($input->param('printtype')).")";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
 	print "data recorded";
 	print "<form action='$script_name' method=post>";
 	print "<input type=submit value=OK>";
