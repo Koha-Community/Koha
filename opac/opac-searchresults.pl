@@ -14,7 +14,6 @@ my ($template, $borrowernumber, $cookie)
 			     query => $query,
 			     type => "opac",
 			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
 			 });
 
 
