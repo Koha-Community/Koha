@@ -1,6 +1,8 @@
 package TmplTokenizer;
 
 use strict;
+use TmplTokenType;
+use TmplToken;
 use VerboseWarnings qw( pedantic_p error_normal warn_normal warn_pedantic );
 require Exporter;
 
@@ -32,16 +34,7 @@ on Ambrose's hideous Perl script known as subst.pl.
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(
-    &KIND_TEXT
-    &KIND_CDATA
-    &KIND_TAG
-    &KIND_DECL
-    &KIND_PI
-    &KIND_DIRECTIVE
-    &KIND_COMMENT
-    &KIND_UNKNOWN
-);
+@EXPORT_OK = qw();
 
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );
@@ -90,15 +83,6 @@ BEGIN {
 }
 
 # End of the hideous stuff
-
-sub KIND_TEXT      () { 'TEXT' }
-sub KIND_CDATA     () { 'CDATA' }
-sub KIND_TAG       () { 'TAG' }
-sub KIND_DECL      () { 'DECL' }
-sub KIND_PI        () { 'PI' }
-sub KIND_DIRECTIVE () { 'HTML::Template' }
-sub KIND_COMMENT   () { 'COMMENT' }   # empty DECL with exactly one SGML comment
-sub KIND_UNKNOWN   () { 'ERROR' }
 
 use vars qw( $readahead $lc_0 $lc $syntaxerror_p );
 use vars qw( $cdata_mode_p $cdata_close );
@@ -179,29 +163,29 @@ sub next_token_internal (*) {
     if ($eof_p && !length $readahead) {	# nothing left to do
 	;
     } elsif ($readahead =~ /^\s+/s) {	# whitespace
-	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
+	($kind, $it, $readahead) = (TmplTokenType::TEXT, $&, $');
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
     } elsif ($readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
-	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
-	warn_normal "Warning: Unescaped < $it\n", $lc_0
+	($kind, $it, $readahead) = (TmplTokenType::TEXT, $&, $');
+	warn_normal "Unescaped < in $it\n", $lc_0
 		if !$cdata_mode_p && $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
 	for (;;) {
 	    if ($cdata_mode_p) {
 		if ($readahead =~ /^$cdata_close/) {
-		    ($kind, $it, $readahead) = (KIND_TAG, $&, $');
+		    ($kind, $it, $readahead) = (TmplTokenType::TAG, $&, $');
 		    $ok_p = 1;
 		} else {
-		    ($kind, $it, $readahead) = (KIND_TEXT, $readahead, undef);
+		    ($kind, $it, $readahead) = (TmplTokenType::TEXT, $readahead, undef);
 		    $ok_p = 1;
 		}
 	    } elsif ($readahead =~ /^$re_tag_compat/os) {
-		($kind, $it, $readahead) = (KIND_TAG, "$1>", $3);
+		($kind, $it, $readahead) = (TmplTokenType::TAG, "$1>", $3);
 		$ok_p = 1;
 		warn_normal "SGML \"closed start tag\" notation: $1<\n", $lc_0 if $2 eq '';
 	    } elsif ($readahead =~ /^<!--(?:(?!-->).)*-->/s) {
-		($kind, $it, $readahead) = (KIND_COMMENT, $&, $');
+		($kind, $it, $readahead) = (TmplTokenType::COMMENT, $&, $');
 		$ok_p = 1;
 		warn_normal "Syntax error in comment: $&\n", $lc_0;
 		$syntaxerror_p = 1;
@@ -213,26 +197,25 @@ sub next_token_internal (*) {
 	    $lc += 1;
 	    $readahead .= $next;
 	}
-	if ($kind ne KIND_TAG) {
+	if ($kind ne TmplTokenType::TAG) {
 	    ;
 	} elsif ($it =~ /^<!/) {
-	    $kind = KIND_DECL;
-	    $kind = KIND_COMMENT if $it =~ /^<!--(?:(?!-->).)*-->/;
+	    $kind = TmplTokenType::DECL;
+	    $kind = TmplTokenType::COMMENT if $it =~ /^<!--(?:(?!-->).)*-->/;
 	} elsif ($it =~ /^<\?/) {
-	    $kind = KIND_PI;
+	    $kind = TmplTokenType::PI;
 	}
 	if ($it =~ /^$re_directive/ios && !$cdata_mode_p) {
-	    $kind = KIND_DIRECTIVE;
+	    $kind = TmplTokenType::DIRECTIVE;
 	}
 	if (!$ok_p && $eof_p) {
-	    ($kind, $it, $readahead) = (KIND_UNKNOWN, $readahead, undef);
+	    ($kind, $it, $readahead) = (TmplTokenType::UNKNOWN, $readahead, undef);
 	    $syntaxerror_p = 1;
 	}
     }
     warn_normal "Unrecognizable token found: $it\n", $lc_0
-	    if $kind eq KIND_UNKNOWN;
-    return defined $it? (wantarray? ($kind, $it):
-				    [$kind, $it]): undef;
+	    if $kind eq TmplTokenType::UNKNOWN;
+    return defined $it? TmplToken->new($it, $kind, $lc): undef;
 }
 
 sub next_token (*) {
@@ -240,27 +223,27 @@ sub next_token (*) {
     my $it;
     if (!$cdata_mode_p) {
 	$it = next_token_internal($h);
-	if (defined $it && $it->[0] eq KIND_TAG) { # FIXME
+	if (defined $it && $it->type eq TmplTokenType::TAG) {
 	    ($cdata_mode_p, $cdata_close) = (1, "</$1\\s*>")
-		    if $it->[1] =~ /^<(script|style|textarea)\b/i; #FIXME
-	    push @$it, extract_attributes($it->[1], $lc_0); #FIXME
+		    if $it->string =~ /^<(script|style|textarea)\b/i;
+	    $it->set_attributes( extract_attributes($it->string, $lc_0) );
 	}
     } else {
 	for ($it = '';;) {
 	    my $lc_prev = $lc;
 	    my $next = next_token_internal($h);
 	last if !defined $next;
-	    if (defined $next && $next->[1] =~ /$cdata_close/i) { #FIXME
-		($lc, $readahead) = ($lc_prev, $next->[1] . $readahead); #FIXME
+	    if (defined $next && $next->string =~ /$cdata_close/i) {
+		($lc, $readahead) = ($lc_prev, $next->string . $readahead);
 		$cdata_mode_p = 0;
 	    }
 	last unless $cdata_mode_p;
-	    $it .= $next->[1]; #FIXME
+	    $it .= $next->string;
 	}
-	$it = [KIND_CDATA, $it]; #FIXME
+	$it = TmplToken->new( $it, TmplTokenType::CDATA, $lc );
 	$cdata_close = undef;
     }
-    return defined $it? (wantarray? @$it: $it): undef;
+    return $it;
 }
 
 ###############################################################################
@@ -290,4 +273,16 @@ to languages where word order is very unlike English word order.
 This will be relatively major rework, requiring corresponding
 rework in tmpl_process.pl
 
+Gettext-style line number references would also be very helpful in
+disambiguating the strings. Ultimately, we should generate and work
+with gettext-style po files, so that translators are able to use
+tools designed for gettext.
+
+An example of a string untranslatable to Chinese is "Accounts for";
+"Accounts for %s", however, would be translatable. Short words like
+"in" would also be untranslatable, not only to Chinese, but also to
+languages requiring declension of nouns.
+
 =cut
+
+1;

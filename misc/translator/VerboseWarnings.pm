@@ -24,9 +24,6 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
-    &set_application_name
-    &set_input_file_name
-    &set_pedantic_mode
     &pedantic_p
     &warn_normal
     &warn_pedantic
@@ -45,7 +42,7 @@ sub set_application_name ($) {
 sub set_input_file_name ($) {
     my($s) = @_;
     $input = $s;
-    $input_abbr = $& if !defined $input && defined $s && $s =~ /[^\/]+$/;
+    $input_abbr = $& if defined $s && $s =~ /[^\/]+$/;
 }
 
 sub set_pedantic_mode ($) {

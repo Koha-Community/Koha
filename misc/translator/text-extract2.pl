@@ -32,11 +32,11 @@ sub debug_dump (*) { # for testing only
 	my $s = TmplTokenizer::next_token $h;
     last unless defined $s;
 	printf "%s\n", ('-' x 79);
-	my($kind, $t, $attr) = @$s; # FIXME
+	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
 	printf "%s:\n", $kind;
 	printf "%4dH%s\n", length($t),
 		join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $t));
-	if ($kind eq TmplTokenizer::KIND_TAG && %$attr) {
+	if ($kind eq TmplTokenType::TAG && %$attr) {
 	    printf "Attributes:\n";
 	    for my $a (keys %$attr) {
 		my($key, $val, $val_orig, $order) = @{$attr->{$a}};
@@ -56,11 +56,11 @@ sub text_extract (*) {
     for (;;) {
 	my $s = TmplTokenizer::next_token $h;
     last unless defined $s;
-	my($kind, $t, $attr) = @$s; # FIXME
-	if ($kind eq TmplTokenizer::KIND_TEXT) {
+	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
+	if ($kind eq TmplTokenType::TEXT) {
 	    $t = TmplTokenizer::trim $t;
 	    $text{$t} = 1 if $t =~ /\S/s;
-	} elsif ($kind eq TmplTokenizer::KIND_TAG && %$attr) {
+	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
 	    # value [tag=input], meta
 	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
 	    for my $a ('alt', 'content', 'title', 'value') {
