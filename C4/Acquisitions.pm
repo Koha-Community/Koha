@@ -951,7 +951,7 @@ sub newitems {
   $itemnumber = $data->{'max(itemnumber)'} + 1;
   $sth->finish;
   
-  $item->{'booksellerid'}     = $dbh->quote($item->{'bookselletid'});
+  $item->{'booksellerid'}     = $dbh->quote($item->{'booksellerid'});
   $item->{'homebranch'}       = $dbh->quote($item->{'homebranch'});
   $item->{'price'}            = $dbh->quote($item->{'price'});
   $item->{'replacementprice'} = $dbh->quote($item->{'replacementprice'});
