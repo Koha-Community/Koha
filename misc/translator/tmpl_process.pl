@@ -221,8 +221,8 @@ sub update_strhash
 		while(my $str = <$fh>)
 		{
 			$str =~ s/[\n\r\f]+$//; # chomps the trailing \n (or <cr><lf> if file was edited with Windows)
-			$str =~ s/^\s+//; # remove trailing blanks
-			$str =~ s/\s+$//;
+			$str =~ s/^\s+//; # remove trailing blanks, ':' or '*'
+			$str =~ s/\s*\**:*\s*$//;
 
 			# the line begins with letter(s) followed by optional words and/or spaces
 			if($str =~ /^[ ]*[\w]+[ \w]*/)
@@ -241,7 +241,7 @@ sub update_strhash
 
 		close($fh);
 	}
-	
+
 	return %{$strhash};
 }
 
