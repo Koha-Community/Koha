@@ -64,6 +64,7 @@ foreach my $branch (keys %$branches) {
   	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
 my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+			-id => 'branchcode',
 			-values   => \@select_branch,
 			-default  => $data->{'branchcode'},
 			-labels   => \%select_branches,
