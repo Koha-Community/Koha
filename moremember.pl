@@ -121,7 +121,7 @@ for (my$i=0;$i<$numaccts;$i++){
 #if ($accts->[$i]{'accounttype'} ne 'Pay'){
   my $amount= $accts->[$i]{'amount'} + 0.00;
     my $amount2= $accts->[$i]{'amountoutstanding'} + 0.00;
-  if ($amount2 > 0){
+  if ($amount2 != 0){
     print "<tr VALIGN=TOP  >";
     my $item=" &nbsp; ";
     @temp=split('-',$accts->[$i]{'date'});

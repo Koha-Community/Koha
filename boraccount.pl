@@ -27,6 +27,8 @@ print startpage();
 print startmenu('member');
 print <<printend
 <FONT SIZE=6><em>Account for $data->{'firstname'} $data->{'surname'}</em></FONT><P>
+<a href=/cgi-bin/koha/maninvoice.pl?bornum=$bornum><image src=/images/create-man-invoice.gif border=0></a>
+ &nbsp; <a href=/cgi-bin/koha/mancredit.pl?bornum=$bornum><image src=/images/create-man-credit.gif border=0></a>
 <center>
 <p>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
@@ -34,10 +36,8 @@ print <<printend
 <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><B>FINES & CHARGES</TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>AMOUNT</TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>STILL OWING</TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>FIX</B></TD>
 </TR>
 
-<form method=post action=tidyaccounts.pl>
 printend
 ;
 for (my $i=0;$i<$numaccts;$i++){
@@ -57,7 +57,6 @@ printend
 
   <td>$accts->[$i]{'amount'}</td>
   <TD>$accts->[$i]{'amountoutstanding'}</td>
-  <td><input type=text size=5 name=$accts->[$i]{'accountno'} value="$accts->[$i]{'amount'}"></td>
 </tr>
 printend
 ;
@@ -70,17 +69,7 @@ print <<printend
 <TD><b>$total</b></td>
 
 </tr>
-
-
-
-
 </table>
-<input type=hidden name=bornum value=$bornum>
-<input type=submit value="Tidy Accounts">
-</form>
-
-
-
 <br clear=all>
 <p> &nbsp; </p>
 
