@@ -1001,20 +1001,14 @@ sub CatSearch  {
 		}
 	}
 	if ($type eq 'subject'){
-		# FIXME - Subject search is badly broken. The query defined by
-		# $query returns a single item (the subject), but later code
-		# expects a ref-to-hash with all sorts of stuff in it.
-		# Also, the count of items (biblios?) with the given subject is
-		# wrong.
-
 		my @key=split(' ',$search->{'subject'});
 		my $count=@key;
 		my $i=1;
-		$query="select distinct(subject) from bibliosubject where( subject like
-		'$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject like '%($key[0])%')";
-		while ($i<$count){
-			$query.=" and (subject like '$key[$i]%' or subject like '% $key[$i]%'
-			or subject like '% $key[$i]'
+		$query="select * from bibliosubject, biblioitems where 
+(bibliosubject.biblionumber = biblioitems.biblionumber) and ( subject like		
+'$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject 
+like '%($key[0])%')";		while ($i<$count){			$query.=" and (subject like 
+'$key[$i]%' or subject like '% $key[$i]%'			or subject like '% $key[$i]'
 			or subject like '%($key[$i])%')";
 			$i++;
 		}
@@ -1180,7 +1174,7 @@ sub subsearch {
 #  print $query;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]="$data->{'title'}\t$data->{'author'}\t$data->{'biblionumber'}";
+    push @results, $data;
     $i++;
   }
   $sth->finish;

@@ -68,7 +68,8 @@ my $count;
 my $startfrom = $query->param('startfrom');
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
-    @results = subsearch($env,$subjectitems, $number_of_results, $startfrom);
+    #@results = subsearch($env,$subjectitems, $number_of_results, $startfrom);
+    @results = subsearch($enc, $subjectitems);
     $count = $#results+1;
 } else {
     ($count, @results) = catalogsearch($env,'',\%search,$number_of_results,$startfrom);
