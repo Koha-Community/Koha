@@ -26,6 +26,7 @@
 use strict;
 use C4::Auth;
 use C4::Output;
+use C4::Charset;
 use CGI;
 use C4::Search;
 use HTML::Template;
@@ -71,12 +72,14 @@ for (my $i=0;$i<$numaccts;$i++){
   push(@accountrows, \%row);
 }
 
-$template->param( startmenumember => join('', startmenu('member')),
-			 endmenumember   => join('', endmenu('member')),
+$template->param(
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
 			bornum          => $bornum,
 			total           => $total,
 			accounts        => \@accountrows );
 
-print $input->header(-cookie => $cookie),$template->output;
+print $input->header(
+   -type => guesstype($template->output),
+   -cookie => $cookie
+),$template->output;

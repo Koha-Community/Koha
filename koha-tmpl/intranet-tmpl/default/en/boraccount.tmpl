@@ -1,11 +1,4 @@
-<HTML>
-
-<!-- startmenu (member)
-     this  includes the head-container and <body>
-     including this via var contradicts the separation of code and design
-     a solution via tmpl_include would be better -->
-
-<TMPL_VAR NAME=startmenumember>
+<TMPL_INCLUDE NAME="members-top.inc">
 
 <!-- The manual invoice and credit buttons -->
 
@@ -21,9 +14,9 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><B>FINES & CHARGES</TD>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>AMOUNT</TD>
-    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>STILL OWING</TD>
+    <td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=2><B>FINES & CHARGES</TD>
+    <td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=1><B>AMOUNT</TD>
+    <td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=1><B>STILL OWING</TD>
   </TR>
 
   <TMPL_LOOP NAME=accounts>
@@ -50,7 +43,7 @@
 
 <!-- endmenu (member) -->
 
-<TMPL_VAR NAME=member>
+<TMPL_INCLUDE NAME="members-bottom.inc">
 
 </body>
 </HTML>
