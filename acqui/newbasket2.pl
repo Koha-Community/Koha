@@ -76,12 +76,17 @@ printend
 ;
 
 print center();
-my $count;
-my @results;
 
 
-      ($count,@results)=&CatSearch(\$blah,'loose',\%search,$num,$offset);
-
+    if ($keyword ne ''){
+#      print "hey";
+      ($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
+    } elsif ($search{'front'} ne '') {
+    ($count,@results)=FrontSearch(undef,'intra',\%search,$num,$offset);
+    }else {
+      ($count,@results)=CatSearch(undef,'loose',\%search,$num,$offset);
+#            print "hey";
+    }
 
 print "You searched on ";
 while ( my ($key, $value) = each %search) {                                 
