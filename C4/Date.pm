@@ -25,21 +25,13 @@ sub get_date_format
 {
 	#Get the database handle
 	my $dbh = C4::Context->dbh;
-
-	#Query the database to get the dateformat
-	my $sth = $dbh->prepare("SELECT value FROM systempreferences WHERE variable='dateformat'");
-
-	$sth->execute();
-
-	my ($dateformat) = $sth->fetchrow;
-	
-	return $dateformat
+	return C4::Context->preference('dateformat');
 }
 
 sub display_date_format
 {
 	my $dateformat = get_date_format();
-	
+
 	if ( $dateformat eq "us" )
 	{
 		return "mm/dd/yyyy";
