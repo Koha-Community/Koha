@@ -15,7 +15,7 @@
 		<TMPL_IF name="IS_ADULT">
 			<p align=right>
 			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
-				<INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
+				<INPUT TYPE="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
 				<input type=hidden name=type value=Add>
 				<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
 			</form>
@@ -59,15 +59,21 @@
 		General Notes: <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
 		<TMPL_VAR NAME="borrowernotes"><!--</a>-->
 		<p align=right>
+		</font>
 		<form action=/cgi-bin/koha/memberentry.pl method=post>
 			<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-			<INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="<TMPL_VAR name="themelang">/images/modify-mem.gif">
-			<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="<TMPL_VAR name="themelang">/images/delete-mem.gif">
-			<p>
-			<a href="member-password.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=124 BORDER=0 src="<TMPL_VAR NAME='themelang'>/images/password-mem.gif" alt="Password">
-			</p>
-			<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR NAME='themelang'>/images/modify-user-flags.gif" alt="Privileges"></a>
+			<INPUT TYPE=submit class="button" value="Modify">
+			<INPUT TYPE=submit class="button" value="Delete">
 		</form>
+		<form action=/cgi-bin/koha/member-password.pl method=post>
+			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
+			<input type=submit class="button" value="Change Password">
+		</form>
+		<form action=/cgi-bin/koha/member-flags.pl method=post>
+			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
+			<input type=submit class="button" value="Modify User Flags">
+		</form>
+
 	</TD>
 	</TR>
 </TABLE>
@@ -98,10 +104,12 @@
 
 	<tr VALIGN=TOP  >
 	<TD colspan=3 align=right>
-		<nobr>
-		<a href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/view-account.gif"></a>
-		<a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/pay-fines.gif"></a>
-		</nobr>
+		<p>
+			<br>
+			<a class="button" href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum">>View Account</a>
+			<a class="button" href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum">>Pay Fines</a>
+			<br><br>
+		</p>
 	</td>
 	</tr>
 </table>
@@ -148,7 +156,7 @@
 
 	<tr VALIGN=TOP  >
 		<TD colspan=5 align=right>
-		<INPUT TYPE="image" name="submit"  VALUE="update" height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/update-renewals.gif">
+		<INPUT TYPE=submit class="button" VALUE="Renew Items">
 		</td>
 	</tr>
 
@@ -203,15 +211,7 @@
 </table>
 <br />
 <br />
-<table>
-	<tr VALIGN=TOP  >
-		<td colspan=5 align=right>
-			<p align=right>
-			<a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/reading-record.gif"></a>
-			</p>
-		</td>
-	</tr>
-</table>
+<a class=button href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">">Reading Record</a>
 
 <!-- endmenu -->
 
