@@ -45,28 +45,28 @@ my $force=$input->param('Force');
 my $error=modsubject($bibnum,$force,@sub);
 
 if ($error ne ''){
-  print $input->header;
-  print startpage();
-  print startmenu('catalogue');
-  print $error;
-  my @subs=split('\n',$error);
-  print "<p> Click submit to force the subject";
-  my @names=$input->param;
-  my %data;
-  my $count=@names;
-  for (my $i=0;$i<$count;$i++){
-    if ($names[$i] ne 'Force'){
-      my $value=$input->param("$names[$i]");
-      $data{$names[$i]}="hidden\t$value\t$i";
-    }
-  }
-  $data{"Force"}="hidden\t$subs[0]\t$count";
-  print mkform3('updatebiblio.pl',%data);
-  print endmenu();
-  print endpage();
+    print $input->header;
+    print startpage();
+    print startmenu('catalogue');
+    print $error;
+    my @subs=split('\n',$error);
+    print "<p> Click submit to force the subject";
+    my @names=$input->param;
+    my %data;
+    my $count=@names;
+    for (my $i=0;$i<$count;$i++) {
+	if ($names[$i] ne 'Force') {
+	    my $value=$input->param("$names[$i]");
+	    $data{$names[$i]}="hidden\t$value\t$i";
+	} # if
+    } # for
+    $data{"Force"}="hidden\t$subs[0]\t$count";
+    print mkform3('updatebiblio.pl',%data);
+    print endmenu();
+    print endpage();
 } else {
-  print $input->redirect("detail.pl?type=intra&bib=$bibnum");
-}
+    print $input->redirect("detail.pl?type=intra&bib=$bibnum");
+} # else
 
 sub checkinp{
   my ($inp)=@_;
