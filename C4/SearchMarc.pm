@@ -513,7 +513,7 @@ sub getMARCnotes {
 		        $value=$value . "  ";
 		}
 		if ($thistag ne $tag && $note ne "") {
-		        $marcnote = {MARCNOTES => $note,};
+		        $marcnote = {marcnote => $note,};
 			push @marcnotes, $marcnote;
 			$note=$value;
 			$tag=$thistag;
@@ -524,7 +524,7 @@ sub getMARCnotes {
 	}
 
 	if ($note) {
-	        $marcnote = {MARCNOTES => $note};
+	        $marcnote = {marcnote => $note};
 		push @marcnotes, $marcnote;   #load last tag into array
 	}
 
