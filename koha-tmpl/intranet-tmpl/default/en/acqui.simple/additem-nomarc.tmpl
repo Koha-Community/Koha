@@ -99,6 +99,14 @@ ITEM:</b><br>
 <td>Group:</td>
 <td><select name="biblioitemnumber">
 
+<TMPL_LOOP NAME="BIBITEMS">
+<TMPL_IF NAME="WEB">
+<TMPL_ELSE>
+    <option value="<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="itemtype"></option>
+
+</TMPL_IF>
+
+</TMPL_LOOP>
 <!-- for (my $i = 0; $i < $biblioitemcount; $i++) {
             if ($biblioitems[$i]->{'itemtype'} ne "WEB") {
 	                    print << "EOF";
