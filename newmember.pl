@@ -4,6 +4,7 @@
 
 #script to print confirmation screen, then if accepted calls itself to insert data
 # FIXME - Yes, but what does it _do_?
+# 2002/12/18 hdl@ifrance.com templating
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,6 +28,7 @@ use C4::Output;
 use C4::Input;
 use CGI;
 use Date::Manip;
+use HTML::Template;
 
 my %env;
 my $input = new CGI;
@@ -40,9 +42,11 @@ my @names=$input->param;
 foreach my $key (@names){
   $data{$key}=$input->param($key);
 }
-print $input->header;
-print startpage();
-print startmenu('member');
+
+my $template = gettemplate("newmember.tmpl");
+#print $input->header;
+#print startpage();
+#print startmenu('member');
 my $main="#99cc33";
 my $image="/images/background-mem.gif";
 if ($insert eq ''){
@@ -87,10 +91,9 @@ if ($insert eq ''){
     $ok=1;
   }
   #we are printing confirmation page
-  print mkheadr(1,'Confirm Record');
+$template->param(	OK=> ($ok==0),
+								string=> $string);
   if ($ok ==0){
-   print mktablehdr;
-   print mktablerow(2,$main,bold('NEW MEMBER'),"",$image);
    my $name=$data{'title'}." ";
    if ($data{'othernames'} ne ''){
      $name.=$data{'othernames'}." ";
@@ -98,38 +101,21 @@ if ($insert eq ''){
      $name.=$data{'firstname'}." ";
    }
    $name.="$data{'surname'} ( $data{'firstname'}, $data{'initials'})";
-   print mktablerow(2,'white',bold('Name'),$name);
-   print mktablerow(2,$main,bold('MEMBERSHIP DETAILS'),"",$image);
-   print mktablerow(2,'white',bold('Membership Number'),$data{'borrowernumber'});
-   print mktablerow(2,'white',bold('Cardnumber'),$data{'cardnumber'});
-   print mktablerow(2,'white',bold('Membership Category'),$data{'categorycode'});
-   print mktablerow(2,'white',bold('Area'),$data{'area'});
-   print mktablerow(2,'white',bold('Fee'),$data{'fee'});
-   if ($data{'joining'} eq ''){
-     $data{'joining'}=ParseDate('today');
-     $data{'joining'}=&UnixDate($data{'joining'},'%Y-%m-%d');
-   }
-   print mktablerow(2,'white',bold('Joining Date'),$data{'joining'});
-   if ($data{'expiry'} eq ''){
-     $data{'expiry'}=ParseDate('in 1 year');
-     $data{'expiry'}=&UnixDate($data{'expiry'},'%Y-%m-%d');
-   }
-   print mktablerow(2,'white',bold('Expiry Date'),$data{'expiry'});
-   print mktablerow(2,'white',bold('Joining Branch'),$data{'joinbranch'});
-   print mktablerow(2,$main,bold('PERSONAL DETAILS'),"",$image);
-   my $ethnic=$data{'ethnicity'}." ".$data{'ethnicnotes'};
-   print mktablerow(2,'white',bold('Ethnicity'),$ethnic);
-   $data{'dateofbirth'}=ParseDate($data{'dateofbirth'});
-   $data{'dateofbirth'}=UnixDate($data{'dateofbirth'},'%Y-%m-%d');
-   print mktablerow(2,'white',bold('Date of Birth'),$data{'dateofbirth'});
    my $sex;
    if ($data{'sex'} eq 'M'){
      $sex="Male";
    } else {
      $sex="Female";
    }
-   print mktablerow(2,'white',bold('Sex'),$sex);
-   print mktablerow(2,$main,bold('MEMBER ADDRESS'),"",$image);
+   if ($data{'joining'} eq ''){
+     $data{'joining'}=ParseDate('today');
+     $data{'joining'}=&UnixDate($data{'joining'},'%Y-%m-%d');
+   }
+   if ($data{'expiry'} eq ''){
+     $data{'expiry'}=ParseDate('in 1 year');
+     $data{'expiry'}=&UnixDate($data{'expiry'},'%Y-%m-%d');
+   }
+   my $ethnic=$data{'ethnicity'}." ".$data{'ethnicnotes'};
    my $postal=$data{'address'}."<br>".$data{'city'};
    my $home;
    if ($data{'streetaddress'} ne ''){
@@ -137,40 +123,40 @@ if ($insert eq ''){
    } else {
      $home=$postal;
    }
-   print mktablerow(2,'white',bold('Postal Address'),$postal);
-   print mktablerow(2,'white',bold('Home Address'),$home);
-   print mktablerow(2,$main,bold('MEMBER CONTACT DETAILS'),"",$image);
-   print mktablerow(2,'white',bold('Phone (Home)'),$data{'phone'});
-   print mktablerow(2,'white',bold('Phone (Daytime)'),$data{'phoneday'});
-   print mktablerow(2,'white',bold('Fax'),$data{'faxnumber'});
-   print mktablerow(2,'white',bold('Email'),$data{'emailaddress'});
-   print mktablerow(2,$main,bold('ALTERNATIVE CONTACT DETAILS'),"",$image);
-   print mktablerow(2,'white',bold('Name'),$data{'contactname'});
-   print mktablerow(2,'white',bold('Phone'),$data{'altphone'});
-   print mktablerow(2,'white',bold('Relationship'),$data{'altrelationship'});
-   print mktablerow(2,'white',bold('Notes'),$data{'altnotes'});
-   print mktablerow(2,$main,bold('Notes'),"",$image);
-   print mktablerow(2,'white',bold('General Notes'),$data{'borrowernotes'});
-
-   print mktableft;
-   #set up form to post data thru for modification or insertion
-   my $i=0;
-   my @inputs;
+   my @inputsloop;
    while (my ($key, $value) = each %data) {
      $value=~ s/\"/%22/g;
-     $inputs[$i]=["hidden","$key","$value"];
-     $i++;
-   }
-   $inputs[$i]=["submit","submit","submit"];
-   print mkformnotable("/cgi-bin/koha/insertdata.pl",@inputs);
-  } else {
-    print $string;
+			my %line;
+			$line{'key'}=$key;
+			$line{'value'}=$value;
+			push(@inputsloop, \%line);
   }
-}
-#print $input->dump;
 
-print mktablehdr;
+   $template->param(name => $name,
+									bornum => $data{'borrowernumber'},
+									cardnum => $data{'cardnumber'},
+									memcat => $data{'categorycode'},
+									area => $data{'area'},
+									fee => $data{'fee'},
+									joindate => $data{'joining'},
+									expdate => $data{'expiry'},
+									joinbranch => $data{'joinbranch'},
+									ethnic => $ethnic,
+									dob => $data{'dateofbirth'},
+									sex => $sex,
+									postal => $postal,
+									home => $home,
+									phone => $data{'phone'},
+									phoneday => $data{'phoneday'},
+									faxnumber => $data{'faxnumber'},
+									emailaddress => $data{'emailaddress'},
+									contactname => $data{'contactname'},
+									altphone => $data{'altphone'},
+									altrelationship => $data{'altrelationship'},
+									altnotes => $data{'altnotes'},
+									bornotes => $data{'borrowernotes'},
+									inputsloop => \@inputsloop);
+  }
+print "Content-Type: text/html\n\n", $template->output;
 
-print mktableft;
-print endmenu('member');
-print endpage();
+

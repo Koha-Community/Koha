@@ -118,4 +118,4 @@ $template->param( 	NOK => (ok==1),
 								inputsloop => \@inputsloop,
 								string => $string);
 
-print "Content-Type:Text/html\n\n",$template->output;
+print "Content-Type: text/html\n\n", $template->output;
