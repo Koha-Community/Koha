@@ -221,47 +221,57 @@ sub branchinfotable {
     my @loop_data =();
     foreach my $branch (@$branchinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-	# FIXME. The $address should not be pre-composed (bug 180)
-	my $address = '';
-	$address .= $branch->{'branchaddress1'}          if ($branch->{'branchaddress1'});
-	$address .= '<br>'.$branch->{'branchaddress2'}   if ($branch->{'branchaddress2'});
-	$address .= '<br>'.$branch->{'branchaddress3'}   if ($branch->{'branchaddress3'});
-	$address .= '<br>ph: '.$branch->{'branchphone'}   if ($branch->{'branchphone'});
-	$address .= '<br>fax: '.$branch->{'branchfax'}    if ($branch->{'branchfax'});
-	$address .= '<br>email: '.$branch->{'branchemail'} if ($branch->{'branchemail'});
-	$address = '(nothing entered)' unless ($address);
+	#
+	# We export the following fields to the template. These are not
+	# pre-composed as a single "address" field because the template
+	# might (and should) escape what is exported here. (See bug 180)
+	#
+	# - color
+	# - branch_name     (Note: not "branchname")
+	# - branch_code     (Note: not "branchcode")
+	# - address         (containing a static error message)
+	# - branchaddress1 \
+	# - branchaddress2  |
+	# - branchaddress3  | comprising the old "address" field
+	# - branchphone     |
+	# - branchfax       |
+	# - branchemail    /
+	# - address-empty-p (1 if no address information, 0 otherwise)
+	# - categories (FIXME... need to convert this to a TMPL_LOOP too)
+	# - value
+	# - action
+	#
+	my %row = ();
+
+	# Handle address fields separately
+	my $address_empty_p = 1;
+	for my $field ('branchaddress1', 'branchaddress2', 'branchaddress3',
+		'branchphone', 'branchfax', 'branchemail') {
+
+	    $row{$field} = $branch->{$field};
+	    $address_empty_p = 0;
+	}
+	$row{'address-empty-p'} = $address_empty_p;
+	$row{'address'} = 'Your template is out of date (see bug 180)';
+
+	# Handle categories
+	# FIXME. This should be another TMPL_LOOP
 	my $categories = '';
 	foreach my $cat (@{$branch->{'categories'}}) {
 	    my ($catinfo) = @{getcategoryinfo($cat)};
 	    $categories .= $catinfo->{'categoryname'}."<br>";
 	}
 	$categories = '(no categories set)' unless ($categories);
-	my @colors = ();
-	my @branch_name = ();
-	my @branch_code = ();
-	my @address = ();
-	my @categories = ();
-	my @value = ();
-	my @action =();
-	push(@colors,$color);
-	push(@branch_name,$branch->{'branchname'});
-	push(@branch_code,$branch->{'branchcode'});
-	push(@address,$address);
-	push(@categories,$categories);
-	push(@value,$branch->{'branchcode'});
-	push(@action,"/cgi-bin/koha/admin/branches.pl");
-	while (@colors and @branch_name and @branch_code and @address and @categories and @value and @action) {
-	    my %row_data;
-	    $row_data{color} = shift @colors;
-	    $row_data{branch_name} = shift @branch_name;
-	    $row_data{branch_code} = shift @branch_code;
-	    $row_data{address} = shift @address;
-	    $row_data{categories} = shift @categories;
-	    $row_data{value} = shift @value;
-	    $row_data{action} = shift @action;
-	    push(@loop_data, \%row_data);
-	}
-    
+	$row{'categories'} = $categories; #FIXME
+
+	# Handle all other fields
+	$row{'branch_name'} = $branch->{'branchname'};
+	$row{'branch_code'} = $branch->{'branchcode'};
+	$row{'color'} = $color;
+	$row{'value'} = $branch->{'branchcode'};
+	$row{'action'} = '/cgi-bin/koha/admin/branches.pl';
+
+	push @loop_data, { %row };
     }
     $template->param(branches => \@loop_data);
 
