@@ -9,7 +9,9 @@ use vars qw($VERSION @ISA @EXPORT);
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&checkflds &checkdigit);
+@EXPORT = qw(
+	&checkflds &checkdigit &checkvalidisbn
+);
  
 sub checkflds {
   my ($env,$reqflds,$data) = @_;
@@ -49,7 +51,43 @@ sub checkdigit {
     $valid = 1;
   }
   return $valid;
-}
+} # sub checkdigit
+
+#--------------------------------------
+# Determine if a number is a valid ISBN number, according to length
+#   of 10 digits and valid checksum
+sub checkvalidisbn {
+        use strict; 
+        my ($q)=@_ ;	# Input: ISBN number
+
+        my $isbngood = 0; # Return: true or false
+
+        $q=~s/x$/X/g;           # upshift lower case X
+        $q=~s/[^X\d]//g;
+        $q=~s/X.//g;
+        if (length($q)==10) {
+            my $checksum=substr($q,9,1);
+            my $isbn=substr($q,0,9);
+            my $i;  
+            my $c=0;
+            for ($i=0; $i<9; $i++) { 
+                my $digit=substr($q,$i,1);
+                $c+=$digit*(10-$i);
+            }
+            $c=int(11-($c/11-int($c/11))*11+.1);
+            ($c==10) && ($c='X');
+            if ($c eq $checksum) {
+                $isbngood=1;
+            } else {
+                $isbngood=0;
+            }
+        } else {
+            $isbngood=0;
+        } # if length good
+
+        return $isbngood;
+
+} # sub checkvalidisbn
+
  
 END { }       # module clean-up code here (global destructor)
-    

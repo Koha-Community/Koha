@@ -17,6 +17,7 @@ use DBI;
 use C4::Database;
 use C4::Acquisitions;
 use C4::Output;
+use C4::Input;
 
 #------------------
 # Constants
@@ -1570,40 +1571,6 @@ sub addz3950queue {
 } # sub addz3950queue
 
 #--------------------------------------
-sub checkvalidisbn {
-	use strict;
-	my ($q)=@_ ;
-
-	my $isbngood = 0;
-
-	$q=~s/x$/X/g;		# upshift lower case X
-	$q=~s/[^X\d]//g;
-	$q=~s/X.//g;
-	if (length($q)==10) {
-	    my $checksum=substr($q,9,1);
-	    my $isbn=substr($q,0,9);
-	    my $i;
-	    my $c=0;
-	    for ($i=0; $i<9; $i++) {
-		my $digit=substr($q,$i,1);
-		$c+=$digit*(10-$i);
-	    }
-	    $c=int(11-($c/11-int($c/11))*11+.1);
-	    ($c==10) && ($c='X');
-	    if ($c eq $checksum) {
-		$isbngood=1;
-	    } else {
-		$isbngood=0;
-	    }
-	} else {
-	    $isbngood=0;
-	} # if length good
-
-	return $isbngood;
-
-} # sub checkvalidisbn
-
-#-------------------------
 sub FormatMarcText {
     use strict;
 
