@@ -1024,8 +1024,8 @@ opacdir=$::opacdir
 kohalogdir=$::kohalogdir
 kohaversion=$::kohaversion
 httpduser=$::httpduser
-intrahtdocs=$::intranetdir/htdocs/includes/templates
-opachtdocs=$::opacdir/htdocs/includes/templates
+intrahtdocs=$::intranetdir/htdocs/intranet-tmpl
+opachtdocs=$::opacdir/htdocs/opac-tmpl
 |;
     close(SITES);
     umask($old_umask);
@@ -1124,7 +1124,7 @@ are doing.  To change your MySql root password use the mysqladmin command:
 
 mysqladmin password NEWPASSWORDHERE
 
-Press <ENTER> to continue: 
+Press <ENTER> to continue:
 |;
 
 sub databasesetup {

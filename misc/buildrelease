@@ -270,7 +270,7 @@ system("mv $rootdir/intranet-cgi/C4 $rootdir/modules");
 system("mv $rootdir/intranet-cgi/misc/info/* $rootdir");
 system("mv $rootdir/intranet-cgi/misc/installer.pl $rootdir");
 system("mv $rootdir/intranet-cgi/misc/koha.upgrade $rootdir");
-system("mv $rootdir/intranet-cgi/Install.pm $rootdir"); #does not exist ??
+system("mv $rootdir/intranet-cgi/misc/Install.pm $rootdir");
 #system("mv $rootdir/intranet-cgi/kohareporter $rootdir"); # does not exist ??
 chmod 0770, "$rootdir/installer.pl";
 chmod 0770, "$rootdir/koha.upgrade";
@@ -320,9 +320,9 @@ system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
 
 # Move koha-tmpl files
-#system("mv $rootdir/intranet-cgi/koha-tmpl/opac-tmpl/* $rootdir/opac-html");
-#system("mv $rootdir/intranet-cgi/koha-tmpl/intranet-tmpl/* $rootdir/intranet-html");
-#system("rm -rf $rootdir/intranet-cgi/koha-tmpl");
+system("mv $rootdir/intranet-cgi/koha-tmpl/opac-tmpl $rootdir/opac-html");
+system("mv $rootdir/intranet-cgi/koha-tmpl/intranet-tmpl $rootdir/intranet-html");
+system("rm -rf $rootdir/intranet-cgi/koha-tmpl");
 
 # Remove extraneous files from opac-html
 system("rm -f $rootdir/opac-html/koha.mo");
@@ -351,7 +351,7 @@ if (-e "$roothomedir/docs") {
 
 chdir("/tmp");
 system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
-system("rm -rf $rootdir");
+#system("rm -rf $rootdir");
 
 print qq|
 ============
