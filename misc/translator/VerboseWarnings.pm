@@ -60,14 +60,14 @@ sub construct_warn_prefix ($$) {
     die "construct_warn_prefix called before set_application_name"
 	    unless defined $appName;
     die "construct_warn_prefix called before set_input_file_name"
-	    unless defined $input;
+	    unless defined $input || !defined $lc; # be a bit lenient
     die "construct_warn_prefix called before set_pedantic_mode"
 	    unless defined $pedantic_tag;
 
     # FIXME: The line number is not accurate, but should be "close enough"
     # FIXME: This wording is worse than what was there, but it's wrong to
     # FIXME: hard-code this thing in each warn statement. Need improvement.
-    return "$appName: $prefix: " . (defined $lc? "$input_abbr: line $lc: ": "$input_abbr: ");
+    return "$appName: $prefix: " . (defined $lc? "$input_abbr: line $lc: ": defined $input_abbr? "$input_abbr: ": '');
 }
 
 sub warn_normal ($$) {
