@@ -1,0 +1,152 @@
+<TMPL_INCLUDE NAME="parameters-top.inc">
+
+<script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNum(v,maybenull) {
+var n = new Number(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isDate(f) {
+	var t = Date.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.itemtype.value.length==0) {
+		_alertString += "- itemtype missing\\n";
+	}
+	if (!(isNotNull(window.document.Aform.description,1))) {
+		_alertString += "- description missing\\n";
+	}
+	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
+		_alertString += "- loan length is not a number\\n";
+	}
+	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+		_alertString += "- rental charge is not a number\\n";
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2 = "Form not submitted because of the following problem(s)\\n";
+		alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+		alertString2 += _alertString;
+		alert(alertString2);
+	}
+}
+</SCRIPT>
+<TMPL_IF name="add_form">
+	<TMPL_IF name="itemtype">
+		<h1>Modify item type</h1>
+	<TMPL_ELSE>
+		<h1>Add item type</h1>
+	</TMPL_IF>
+	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+		<input type=hidden name=op value='add_validate'>
+		<input type=hidden name=checked value=0>
+		<table>
+			<TMPL_IF name="itemtype">
+				<tr><td>Item type</td><td><input type=hidden name=itemtype value=<TMPL_VAR name="itemtype">><TMPL_VAR name="itemtype"></td></tr>
+			<TMPL_ELSE>
+				<tr><td>Item type</td><td><input type=text name=itemtype size=5 maxlength=3 onBlur=toUC(this)></td></tr>
+			</TMPL_IF>
+			<tr>
+				<td>Description</td>
+				<td><input type=text name=description size=40 maxlength=80 value='<TMPL_VAR name="description">'>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>loan length</td>
+				<td><input type=text name=loanlength value='<TMPL_VAR name="loanlength">'></td>
+			</tr>
+			<tr>
+				<td>Renewals allowed</td>
+				<td><input type=checkbox name=renewalsallowed <TMPL_IF name="renewalsallowed">checked</TMPL_IF> value=1></td>
+			</tr>
+			<tr>
+				<td>Rental charge</td>
+				<td><input type=text name=rentalcharge value='<TMPL_VAR name="rentalcharge">'></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
+			</tr>
+		</table>
+	</form>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirm">
+	<TABLE bg="#99cc33">
+		<tr>
+			<th>Item type</th>
+			<th><TMPL_VAR name="itemtype"></th>
+		</tr>
+	<form action='<TMPL_VAR name="script_name">' method=post>
+		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<TMPL_VAR name="itemtype">'>
+	<tr><td>Description</td><td><TMPL_VAR name="description"></td></tr>
+	<tr><td>Loan length</td><td><TMPL_VAR name="loanlength"></td></tr>
+	<tr><td>Renewals allowed</td><td><TMPL_VAR name="renewalsallowed"></td></tr>
+	<tr><td>Rental charge</td><td><TMPL_VAR name="rentalcharge"></td></tr>
+	<TMPL_IF name="total">
+		<tr><td colspan=2 align=center><b>This record is used <TMPL_VAR name="total"> times. Deletion not possible</b></td></tr>
+		<tr><td colspan=2></form><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=OK></form></td></tr>
+	<TMPL_ELSE>
+		<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
+		<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=NO></form></td></tr>
+	</TMPL_IF>
+
+	</table>
+</TMPL_IF>
+
+<TMPL_IF name="else">
+<table border='1' cellpadding='5' cellspacing='0' width='550'>
+	<tr>
+		<td background="/images/background-mem.gif"><b>Code</b></th>
+		<td background="/images/background-mem.gif"><b>Description</b></td>
+		<td background="/images/background-mem.gif"><b>loan length</b></td>
+		<td background="/images/background-mem.gif"><b>Renewable</b></td>
+		<td background="/images/background-mem.gif"><b>charge</b></td>
+		<td background="/images/background-mem.gif">&nbsp;</td>
+		<td background="/images/background-mem.gif">&nbsp;</td>
+	</tr>
+	<TMPL_LOOP name="loop">
+		<tr>
+			<td><TMPL_VAR name="itemtype"></td>
+			<td><TMPL_VAR name="description"></td>
+			<td><TMPL_VAR name="loanlength"></td>
+			<td><TMPL_IF name="renewalsallowed">Oui<TMPL_ELSE>Non</TMPL_IF></td>
+			<td><TMPL_VAR name="rentalcharge"></td>
+			<td><a href="<TMPL_VAR name="script_name">?op=add_form&itemtype=<TMPL_VAR name="itemtype" escape="HTML">">Edit</a></td>
+			<td><a href="<TMPL_VAR name="script_name">?op=delete_confirm&itemtype=<TMPL_VAR name="itemtype" escape="HTML">">Delete</a></td>
+		</tr>
+	</TMPL_LOOP>
+</table>
+<form action='<TMPL_VAR name="script_name">' method=post>
+<input type=hidden name=op value=add_form>
+<input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add item type" BORDER=0 ></a>
+</form>
+</TMPL_IF>
+<TMPL_INCLUDE NAME="parameters-bottom.inc">

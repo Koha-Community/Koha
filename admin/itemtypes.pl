@@ -42,6 +42,9 @@ use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Search;
+use C4::Auth;
+use C4::Interface::CGI::Output;
+use HTML::Template;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -71,15 +74,26 @@ my $itemtype=$input->param('itemtype');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
-print $input->header;
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "parameters/itemtypes.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 
-
+if ($op) {
+$template->param(script_name => $script_name,
+						$op              => 1); # we show only the TMPL_VAR names $op
+} else {
+$template->param(script_name => $script_name,
+						else              => 1); # we show only the TMPL_VAR names $op
+}
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 	#start the page and read in includes
-	print startpage();
-	print startmenu('admin');
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($itemtype) {
@@ -89,94 +103,11 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	print <<printend
-	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.itemtype.value.length==0) {
-			_alertString += "- itemtype missing\\n";
-		}
-		if (!(isNotNull(window.document.Aform.description,1))) {
-			_alertString += "- description missing\\n";
-		}
-		if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-			_alertString += "- loan length is not a number\\n";
-		}
-		if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-			_alertString += "- rental charge is not a number\\n";
-		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-	</SCRIPT>
-printend
-;#/
-	if ($itemtype) {
-		print "<h1>Modify item type</h1>";
-	} else {
-		print "<h1>Add item type</h1>";
-	}
-	print "<form action='$script_name' name=Aform method=post>";
-	print "<input type=hidden name=op value='add_validate'>";
-	print "<input type=hidden name=checked value=0>";
-	print "<table>";
-	if ($itemtype) {
-		print "<tr><td>Item type</td><td><input type=hidden name=itemtype value=$itemtype>$itemtype</td></tr>";
-	} else {
-		print "<tr><td>Item type</td><td><input type=text name=itemtype size=5 maxlength=3 onBlur=toUC(this)></td></tr>";
-	}
-	print "<tr><td>Description</td><td><input type=text name=description size=40 maxlength=80 value='$data->{'description'}'>&nbsp;</td></tr>";
-	print "<tr><td>loan length</td><td><input type=text name=loanlength value='$data->{'loanlength'}'></td></tr>";
-	if ($data->{'renewalsallowed'} eq 1) {
-		print "<tr><td>Renewals allowed</td><td><input type=checkbox name=renewalsallowed checked value=1></td></tr>";
-	} else {
-		print "<tr><td>Renewals allowed</td><td><input type=checkbox name=renewalsallowed value=1></td></tr>";
-	}
-#	print "<tr><td>Renewals allowed</td><td><input type=text name=renewalsallowed value='$data->{'renewalsallowed'}'></td></tr>";
-	print "<tr><td>Rental charge</td><td><input type=text name=rentalcharge value='$data->{'rentalcharge'}'></td></tr>";
-	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
-print "</table>";
-	print "</form>";
+	$template->param(itemtype => $itemtype,
+							description => $data->{'description'},
+							loanlength => $data->{'loanlength'},
+							renewalsallowed => $data->{'renewalsallowed'},
+							rentalcharge => $data->{'rentalcharge'});
 ;
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -203,8 +134,6 @@ print "</table>";
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	#start the page and read in includes
-	print startpage();
-	print startmenu('admin');
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from categoryitem where itemtype='$itemtype'");
 	$sth->execute;
@@ -215,85 +144,46 @@ print "</table>";
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Item type'),bold("$itemtype"),'/images/background-mem.gif');
-	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='$itemtype'>";
-	print "<tr><td>Description</td><td>$data->{'description'}</td></tr>";
-	print "<tr><td>Loan length</td><td>$data->{'loanlength'}</td></tr>";
-	print "<tr><td>Renewals allowed</td><td>$data->{'renewalsallowed'}</td></tr>";
-	print "<tr><td>Rental charge</td><td>$data->{'rentalcharge'}</td></tr>";
-	if ($total->{'total'} >0) {
-		print "<tr><td colspan=2 align=center><b>This record is used $total->{'total'} times. Deletion not possible</b></td></tr>";
-		print "<tr><td colspan=2></form><form action='$script_name' method=post><input type=submit value=OK></form></td></tr>";
-	} else {
-		print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
-		print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
-	}
+	$template->param(itemtype => $itemtype,
+							description => $data->{'description'},
+							loanlength => $data->{'loanlength'},
+							renewalsallowed => $data->{'renewalsallowed'},
+							rentalcharge => $data->{'rentalcharge'},
+							total => $total->{'total'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	#start the page and read in includes
-	print startpage();
-	print startmenu('admin');
 	my $dbh = C4::Context->dbh;
 	my $itemtype=uc($input->param('itemtype'));
 	my $query = "delete from itemtypes where itemtype='$itemtype'";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data deleted";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
+	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	#start the page and read in includes
-	print startpage();
-	print startmenu('admin');
-	my @inputs=(["text","description",$searchfield],
-		["reset","reset","clr"]);
-	print mkheadr(2,'Item types admin');
-	print mkformnotable("$script_name",@inputs);
-	if  ($searchfield ne '') {
-		print "You Searched for <b>$searchfield<b><p>";
-	}
-	print mktablehdr;
-	print mktablerow(7,'#99cc33',bold('Code'),bold('Description'),bold('loan<br>length'),bold('Renewals<br>allowed')
-	,bold('Rental<br>charge'),'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
+	my @loop_data;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		#find out stats
-	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
-	#  	$fines=$fines+0;
-	  	if ($toggle eq 'white'){
-	    		$toggle="#ffffcc";
-	  	} else {
-	    		$toggle="white";
-	  	}
-		print mktablerow(7,$toggle,$results->[$i]{'itemtype'},
-		$results->[$i]{'description'},$results->[$i]{'loanlength'},
-		$results->[$i]{'renewalsallowed'}==1?'Yes':'No',$results->[$i]{'rentalcharge'},
-		mklink("$script_name?op=add_form&itemtype=".$results->[$i]{'itemtype'},'Edit'),
-		mklink("$script_name?op=delete_confirm&itemtype=".$results->[$i]{'itemtype'},'Delete'));
+		my %row_data;
+		if ($toggle eq 'white'){
+			$row_data{toggle}="#ffffcc";
+		} else {
+			$row_data{toggle}="white";
+		}
+		$row_data{itemtype} = $results->[$i]{'itemtype'};
+		$row_data{description} = $results->[$i]{'description'};
+		$row_data{loanlength} = $results->[$i]{'loanlength'};
+		$row_data{renewalsallowed} = $results->[$i]{'renewalsallowed'};
+		$row_data{rentalcharge} = $results->[$i]{'rentalcharge'};
+		push(@loop_data, \%row_data);
 	}
-	print mktableft;
-	print "<form action='$script_name' method=post>";
-	print "<input type=hidden name=op value=add_form>";
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		print mklink("$script_name?offset=".$prevpage,'&lt;&lt; Prev');
-	}
-	print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		print mklink("$script_name?offset=".$nextpage,'Next &gt;&gt;');
-	}
-	print "<br><input type=image src=\"/images/button-add-new.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add itemtype\" BORDER=0 ></a><br>";
-	print "</form>";
+	$template->param(loop => \@loop_data);
 } #---- END $OP eq DEFAULT
-print endmenu('admin');
-print endpage();
+output_html_with_http_headers $input, $cookie, $template->output;
