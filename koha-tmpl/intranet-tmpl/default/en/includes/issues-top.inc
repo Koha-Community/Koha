@@ -253,7 +253,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - New This Year
 
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Borrower Enquiry
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">->  Borrower Enquiry
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - All Books Out
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Overdues
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - History
