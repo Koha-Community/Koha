@@ -5,15 +5,14 @@
 <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-<p><font size="6"><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+<p><font size="6"><em><!-- TMPL_VAR NAME="title" -->
 <!-- TMPL_VAR NAME="class" --></em></font></p>
 
-<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
+<table cellspacing="0" cellpadding="5" border="1" align="left" width="40%">
 	<!-- BIBLIO RECORD TABLE -->
 	<tr valign="top">
 		<td bgcolor="#99cccc">
-			<b>BIBLIO RECORD</b>
-			<!-- TMPL_VAR NAME="biblionumber" -->
+			<b><!-- TMPL_VAR NAME="title" --></b>  (record <!-- TMPL_VAR NAME="biblionumber" -->)
 		</td>
 	</tr>
 	<tr valign="top">
@@ -40,7 +39,7 @@
 	</tr>
 </table>
 <!-- /TMPL_LOOP -->
-<table border="0" cellspacing="2" cellpadding="2" align="center">
+<table border="0" cellspacing="2" cellpadding="2" align="center" width="55%">
 	<tr bgcolor="#99cccc">
 		<td>Item Type</td>
 		<td>Class</td>
