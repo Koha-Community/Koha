@@ -56,7 +56,9 @@ on what is passed to it, it calls the appropriate search function.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
+@EXPORT = qw(
+&newsearch
+&CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
 &itemdata &bibdata &GetItems &borrdata &itemnodata &itemcount
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
@@ -64,6 +66,34 @@ on what is passed to it, it calls the appropriate search function.
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
 &isbnsearch &breedingsearch &getallthemes &getalllanguages &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
+
+
+=item newsearch
+	my (@results) = newsearch($itemtype,$duration,$number_of_results,$startfrom);
+c<newsearch> find biblio acquired recently (last 30 days)
+=cut
+sub newsearch {
+	my ($itemtype,$duration,$num,$offset)=@_;
+
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("SELECT to_days( now( ) ) - to_days( dateaccessioned ) AS duration,  biblio.biblionumber, barcode, title, author, classification, itemtype, dewey, dateaccessioned, price, replacementprice
+						FROM items, biblio, biblioitems
+						WHERE biblio.biblionumber = biblioitems.biblionumber AND
+						items.biblionumber = biblio.biblionumber AND
+						to_days( now( ) ) - to_days( dateaccessioned ) < ? and itemtype=?
+						ORDER BY duration ASC ");
+	$sth->execute($duration,$itemtype);
+	my $i=0;
+	my @result;
+	while (my $line = $sth->fetchrow_hashref) {
+		if ($i>=$offset && $i+$offset<$num) {
+			push @result,$line;
+		}
+		$i++
+	}
+	return(@result);
+
+}
 
 =item findguarantees
 

@@ -6,6 +6,15 @@
 <style type="text/css">
 <!--
 input{font-size:16px}
+
+a {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	color:#FFFFFF;
+	padding:4px;
+	font-weight: bold;
+	}
 -->
 
 </style>
@@ -14,121 +23,85 @@ input{font-size:16px}
 </HEAD>
 
 <BODY   onload="document.catsearch.keyword.focus()"
-	BGCOLOR="#339999" 
-	text="black" 
-	link="white" 
-	vlink="white" 
-	alink="#663366" 
-	leftmargin=0 
+	BGCOLOR="#339999"
+	text="black"
+	link="white"
+	vlink="white"
+	alink="#663366"
+	leftmargin=0
 	topmargin=0
 	marginheight=0
 	marginwidth=0 >
 
 <center>
 <table cellspacing=0 cellpadding=0 border=0 >
-	
-  <tr valign=top >
-	<td background="<TMPL_VAR NAME='themelang'>/images/front-background-med.gif"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
-	width=1 height=440 align=left alt="" hspace=0 vspace=0><table
-cellspacing=0 cellpadding=0 border=0 >
-	
-  <tr valign=top >
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=228 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=57 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=47 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=88 
-	alt=" " hspace=0 vspace=0></td>
-  </tr>
+<tr valign=center >
+	<td background="<TMPL_VAR NAME='themelang'>/images/front-background-med.gif">
+	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=440 align=left alt="" hspace=0 vspace=0>
+	<table cellspacing=0 cellpadding=0 border=0>
+		<tr valign=center >
+			<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=260 height=88 alt=" " hspace=0 vspace=0></td>
+			<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=88 alt=" " hspace=0 vspace=0></td>
+			<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=350 height=88 alt=" " hspace=0 vspace=0></td>
+		</tr>
 
-  <tr valign=top >
-	<td background=" " rowspan=2 align="right" colspan=2><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
- 	width=1 height=30
-	alt=" " hspace=0 vspace=0>
-	<i><b>Koha<br/>
-	Free Software ILS<br/><br/></b>
-	Koha : a gift, a contribution<br/> in Maori</i>
-	<td background=" "  colspan=3><font size=+2><a href="/cgi-bin/koha/opac-search.pl"><img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" border=0>Search the catalogue</a></font></td>
-
-  </tr>
-
-
-<tr valign=top >
-	<td>&nbsp; &nbsp; </td>
-	<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
-	<input type=hidden name=type value=opac>
-	<td background=" " >
-
-	<input type=text size="27" name="keyword"><br>
-	</font>
-	<b>Type in the box and press the enter key.</b><br>
-	<a href="/cgi-bin/koha/opac-search.pl">
-
-	<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22
-	alt="-" hspace=0 vspace=0 border=0 align=middle >Advanced Search, More Options</a><br>
-
-	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
-	alt=" " hspace=0 vspace=0>
-	<p>
-	<TMPL_IF NAME="loggedinuser">
-	    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
-	<TMPL_ELSE>
-	    <p align=left><a href="/cgi-bin/koha/opac-user.pl">Log In to Koha</a></p>
-	</TMPL_IF>
+		<tr valign=top >
+			<td align="right">
+				<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=30 alt=" " hspace=0 vspace=0>
+					<i><b>Koha<br/>
+					Free Software ILS<br/><br/></b>
+					Koha : a gift, a contribution<br/> in Maori</i>
+			</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" border=0>
+			</td>
+			<td>
+				<font size=+2>
+						Search the catalogue
+				</font>
+				<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
+					<input type=hidden name=type value=opac>
+					<input type=text size="27" name="keyword"><br>
+					<b>Type in the box and press the enter key.</b><br>
+					<a href="/cgi-bin/koha/opac-search.pl">
+						<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=20 alt="-" hspace=0 vspace=0 border=0 align=middle >
+						Advanced Search, More Options
+					</a>
+				</form>
+			</td>
+		</tr>
+		<tr valign=top height="50">
+			<td>&nbsp;</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" border=0>
+			</td>
+			<td>
+				<font size=+2>
+						Recent acquisitions
+				</font><br/>
+					<form action="/cgi-bin/koha/opac-new.pl" name="new">
+						<TMPL_VAR name="CGIitemtype"> acquired <br/>
+						in the last <b><input type="text" name="duration" value="30" size=3></b> days
+						<br/>
+						<input type="submit" value="OK">
+					</form>
+			</td>
+		</tr>
+		<tr valign=center>
+			<td>&nbsp;</td>
+			<td>
+				<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" border=0>
+			</td>
+			<td>
+					<TMPL_IF NAME="loggedinuser">
+					<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
+					<TMPL_ELSE>
+					<p align=left><a href="/cgi-bin/koha/opac-user.pl">Log In to Koha</a></p>
+					</TMPL_IF>
+			</td>
+		</tr>
+	</table>
 	</td>
-	</form>
-  </tr>
-
-
- 
-
-<!--
-  <tr valign=top ><form action="/cgi-bin/koha/member.pl" method=get >
-	<td background=" "  colspan=3><img src="<TMPL_VAR NAME='themelang'>/images/heading-login.gif" width=279 		height=38
-	alt="Member Login" hspace=0 vspace=0 border=0></td>
-
-  </tr>
-<tr valign=top >
-        <td></td>
-	<form action="/cgi-bin/koha/member.pl" method=get >
-	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">Card Number &nbsp;</font></td>
-	<td background=" " ><input type=text size="12" name="card"></td>
-
-  </tr>
-
-  <tr valign=top><td></td>
-	<td></td>
-	<td></td>
-	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">Password</font></td>
-	<td background=" " ><input type=password size="12" name="password"><br>
-	<input type=submit value="OK"><br>
-
-	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
-	alt=" " hspace=0 vspace=0></td>
-	</font>
- </tr>
-
-  <tr valign=top >
-	<td></td>
-	<td background=" " colspan=4><A href="/cgi-bin/koha/join.html"><img src="<TMPL_VAR NAME='themelang'>/images/heading-member.gif" width=331 		height=38
-	alt="Become a Website Member" hspace=0 vspace=0 border=0></a>
-	</td>
-	<td>
-	</td>
-
-  </tr>
-
--->
+</tr>
 </table>
-
-</td>
-  </tr>
-</table>
-<p>
 </center>

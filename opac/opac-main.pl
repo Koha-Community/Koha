@@ -7,14 +7,31 @@ use HTML::Template;
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 
-my $query = new CGI;
+my $input = new CGI;
+my $dbh = C4::Context->dbh;
+my $query="Select itemtype,description from itemtypes order by description";
+my $sth=$dbh->prepare($query);
+$sth->execute;
+my  @itemtype;
+my %itemtypes;
+while (my ($value,$lib) = $sth->fetchrow_array) {
+	push @itemtype, $value;
+	$itemtypes{$value}=$lib;
+}
 
-my ($template, $borrowernumber, $cookie) 
+my $CGIitemtype=CGI::scrolling_list( -name     => 'itemtype',
+			-values   => \@itemtype,
+			-labels   => \%itemtypes,
+			-size     => 1,
+			-multiple => 0 );
+$sth->finish;
+my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-main.tmpl",
-			     query => $query,
 			     type => "opac",
+			     query => $input,
 			     authnotrequired => 1,
 			     flagsrequired => {borrow => 1},
 			 });
 
-output_html_with_http_headers $query, $cookie, $template->output;
+$template->param(CGIitemtype => $CGIitemtype);
+output_html_with_http_headers $input, $cookie, $template->output;

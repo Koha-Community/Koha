@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 <center>
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
+    <p align=left>Connecté en tant que: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
 </TMPL_IF>
@@ -29,26 +29,26 @@ href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL
 <TD width=210 >
 <INPUT TYPE="image" name="submit"  VALUE="Modifier" height=42  WIDTH=93
 BORDER=0 src="/images/Modifier-mem.gif">
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
-BORDER=0 src="/images/delete-mem.gif">
+<INPUT TYPE="image" name="Supprimer"  VALUE="Supprimer" height=42  WIDTH=93
+BORDER=0 src="/images/Supprimer-mem.gif">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Numéro notice :</b> <TMPL_VAR NAME="biblionumber"><br>
-<b>Type d'ouvrage :</b> <TMPL_VAR NAME="itemtype"><br>
-<b>URL</b> <TMPL_VAR NAME="url"><br>
-<b>Durée prêt</b> <TMPL_VAR NAME="loanlength"><br>
-<b>Coût du prêt</b> <TMPL_VAR NAME="rentalcharge"><br>
+<b>Numéro notice ::</b> <TMPL_VAR NAME="biblionumber"><br>
+<b>Type d'ouvrage ::</b> <TMPL_VAR NAME="itemtype"><br>
+<b>URL:</b> <TMPL_VAR NAME="url"><br>
+<b>Durée prêt:</b> <TMPL_VAR NAME="loanlength"><br>
+<b>Coût du prêt:</b> <TMPL_VAR NAME="rentalcharge"><br>
 <b>Classification:</b> <TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"><br>
 <b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
-<b>Editions</b> <TMPL_VAR NAME="publishercode"> <br>
-<b>Place:</b> <TMPL_VAR NAME="place"><br>
+<b>Editions:</b> <TMPL_VAR NAME="publishercode"> <br>
+<b>Placer:</b> <TMPL_VAR NAME="place"><br>
 <b>Date:</b> <TMPL_VAR NAME="publicationyear"><br>
 <b>Volume:</b> <TMPL_VAR NAME="volumeddesc"><br>
 <b>Pages:</b> <TMPL_VAR NAME="pages"><br>
 <b>Illus:</b> <TMPL_VAR NAME="illus"><br>
-<b>Taille</b> <TMPL_VAR NAME="size"><br>
-<b>Notes</b> <TMPL_VAR NAME="bnotes"><br>
-<b>N° ouvrage</b> <TMPL_VAR NAME="count">
+<b>Taille:</b> <TMPL_VAR NAME="size"><br>
+<b>Notes:</b> <TMPL_VAR NAME="bnotes"><br>
+<b>N° ouvrage:</b> <TMPL_VAR NAME="count">
 </font>
 </TD>
 </tr>
@@ -70,31 +70,31 @@ BORDER=0 src="/images/delete-mem.gif">
 <input type=hidden name=type value=<TMPL_VAR NAME="type">>
 <INPUT TYPE="image" name="submit"  VALUE="Modifier" height=42  WIDTH=93
 BORDER=0 src="/images/Modifier-mem.gif">
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
-BORDER=0 src="/images/delete-mem.gif">
+<INPUT TYPE="image" name="Supprimer"  VALUE="Supprimer" height=42  WIDTH=93
+BORDER=0 src="/images/Supprimer-mem.gif">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Annexe propriétaire</b> <TMPL_VAR NAME="homebranch"><br>
-<b>Vu :</b> <TMPL_VAR NAME="datelastseen"><br>
-<b>Dernier prêt</b> <TMPL_VAR NAME="timestamp0"><br>
+<b>Annexe propriétaire:</b> <TMPL_VAR NAME="homebranch"><br>
+<b>Vu:</b> <TMPL_VAR NAME="datelastseen"><br>
+<b>Dernier prêt:</b> <TMPL_VAR NAME="timestamp0"><br>
 on issue bit <!-- FIXME - What's this, then? -->
-<b>Dernier emprunteur 1</b> <TMPL_VAR NAME="card0"><br>
-<b>Dernier emprunteur 2</b> <TMPL_VAR NAME="card1"><br>
-<b>Annexe</b> <TMPL_VAR NAME="holdingbranch"><br>
-<b>Coût de remplacement</b> <TMPL_VAR NAME="replacementprice"><br>
-<b>Ouvrage perdu</b> <TMPL_VAR NAME="itemlost"><br>
-<b>Payé pour :</b> <TMPL_VAR NAME="paidfor"><br>
-<b>Notes</b> <TMPL_VAR NAME="itemnotes"><br>
-<b>Renouvellements</b> <TMPL_VAR NAME="renewals"><br>
+<b>Dernier emprunteur 1:</b> <TMPL_VAR NAME="card0"><br>
+<b>Dernier emprunteur 2:</b> <TMPL_VAR NAME="card1"><br>
+<b>Annexe:</b> <TMPL_VAR NAME="holdingbranch"><br>
+<b>Coût de remplacement:</b> <TMPL_VAR NAME="replacementprice"><br>
+<b>Ouvrage perdu:</b> <TMPL_VAR NAME="itemlost"><br>
+<b>Payé pour ::</b> <TMPL_VAR NAME="paidfor"><br>
+<b>Notes:</b> <TMPL_VAR NAME="itemnotes"><br>
+<b>Renouvellements:</b> <TMPL_VAR NAME="renewals"><br>
 <b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<TMPL_VAR NAME="ordernumber">&biblio=<TMPL_VAR NAME="biblionumber">&invoice=<TMPL_VAR NAME="booksellerinvoicenumber">&catview=yes">
 Accession</a>
 Date:<TMPL_VAR NAME="dateaccessioned"><br>
-<b>Annul? <TMPL_VAR NAME="wthdrawn"><br>
+<b>Annul?: <TMPL_VAR NAME="wthdrawn"><br>
 <b><a
 href=/cgi-bin/koha/bookcount.pl?&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">&itm=<TMPL_VAR NAME="itemnumber">>Total
 Issues:</a></b> <TMPL_VAR NAME="issues"><br>
-<b>Numéro groupe :</b> <TMPL_VAR NAME="biblioitemnumber"> <br>
-<b>Notice biblio :</b> <TMPL_VAR NAME="biblionumber"> <br>
+<b>Groupe numéro:</b> <TMPL_VAR NAME="biblioitemnumber"> <br>
+<b>Notice biblio ::</b> <TMPL_VAR NAME="biblionumber"> <br>
 
 
 

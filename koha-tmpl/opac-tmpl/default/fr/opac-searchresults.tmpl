@@ -3,7 +3,7 @@
 <center>
 
 <TMPL_IF NAME="loggedinusername">
-    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
+    <p align=left>Connecté en tant que: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
 </TMPL_IF>
@@ -12,7 +12,11 @@
 <TMPL_IF NAME="searchdesc">
     Recherche effectuée sur <b><TMPL_VAR NAME="searchdesc"></b>
 <TMPL_ELSE>
-    Vous n'avez pas spécifié de critère<br>
+	<TMPL_IF name="searchnew">
+		<TMPL_VAR name=itemtype> acquis dans les derniers <i><TMPL_VAR name="duration"></i> jours<br/>
+	<TMPL_ELSE>
+		Vous n'avez pas spécifié de critère<br>
+	</TMPL_IF>
 </TMPL_IF>
 
 <TMPL_VAR NAME="numrecords"> Réponses trouvées

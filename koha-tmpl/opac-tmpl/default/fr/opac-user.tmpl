@@ -7,7 +7,7 @@
 		<td><b>Est-ce correct?</B></td>
 	</tr>
 	<tr>
-		<td><font size=2 face="arial,helvetica">Carte lecteur <TMPL_VAR NAME="cardnumber"> <br/>
+		<td><font size=2 face="arial,helvetica">Carte lecteur: <TMPL_VAR NAME="cardnumber"> <br/>
 			<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
 			<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
 			<TMPL_VAR NAME="phone"> (hm)<br>
@@ -67,7 +67,7 @@
 		<tr bgcolor="#fecc99" >
 			<td colspan=2>
 				<font color="red" face="arial,helvetica" size=+2>
-					<B>	Vouas avez des réservations en attente</B>
+					<B>	Vous avez des réservations en attente:</B>
 				</font>
 				<P>
 			</td>
@@ -75,7 +75,7 @@
 		<TMPL_LOOP NAME="WAITING">
 			<tr>
 				<td>
-					<b><TMPL_VAR NAME="btitle"></b></td><td>Prendre à : <b><TMPL_VAR NAME="branch"></b>
+					<b><TMPL_VAR NAME="btitle"></b></td><td>Prendre à :: <b><TMPL_VAR NAME="branch"></b>
 				</td>
 			</tr>
 		</TMPL_LOOP>

@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_IF NAME="loggedinusername">
-    <p align="left">Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href="/cgi-bin/koha/opac-user.pl">Accueil lecteur</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Déconnecter</a>]</p>
+    <p align="left">Connecté en tant que: <TMPL_VAR NAME="loggedinuser"> [<a href="/cgi-bin/koha/opac-user.pl">Accueil lecteur</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Déconnecter</a>]</p>
 <TMPL_ELSE>
     <p align="left"><a href="/cgi-bin/koha/opac-user.pl">S'identifier</a> à Koha</p>
 </TMPL_IF>
@@ -25,22 +25,22 @@
 	<tr valign="top">
 		<td>
 			<FONT size="2"  face="arial,helvetica,sans-serif">
-				<TMPL_IF name="subtitle"><b>Sous-titre</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
-				<TMPL_IF name="author"><b>Auteur</b> <a href="/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>"><TMPL_VAR NAME="author"></a></TMPL_IF><br>
-				<TMPL_IF name="additional"><b>Autres auteurs</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
-				<TMPL_IF name="publishercode"><b>Publié par</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
+				<TMPL_IF name="subtitle"><b>Sous-titre:</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
+				<TMPL_IF name="author"><b>Auteur:</b> <a href="/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>"><TMPL_VAR NAME="author"></a></TMPL_IF><br>
+				<TMPL_IF name="additional"><b>Autres auteurs:</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
+				<TMPL_IF name="publishercode"><b>Publié par :</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
 				<TMPL_IF name="publicationyear"><b>dans </b></TMPL_IF><TMPL_VAR NAME="publicationyear">
 				<TMPL_IF name="pages">, </TMPL_IF><TMPL_VAR name="pages">
 				<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br>
 				<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br>
-				<TMPL_IF name="subject"><b>Sujet :</b></TMPL_IF> <TMPL_VAR NAME="subject"><br>
+				<TMPL_IF name="subject"><b>Sujet:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br>
 				<TMPL_IF name="copyrightdate"><b>Année :</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br>
-				<TMPL_IF name="notes"><b>Notes</b></TMPL_IF> <TMPL_VAR NAME="notes"><br>
-				<TMPL_IF name="unititle"><b>Titre unifié</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br>
-				<TMPL_IF name="serial"><b>Périodique</b><TMPL_VAR NAME="serial"></TMPL_IF><br>
+				<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br>
+				<TMPL_IF name="unititle"><b>Titre unifié:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br>
+				<TMPL_IF name="serial"><b>Périodique:</b><TMPL_VAR NAME="serial"></TMPL_IF><br>
 				<TMPL_IF name="dewey"><b>Dewey:</b></TMPL_IF><TMPL_VAR name="dewey"><br>
-				<TMPL_IF name="url"><b>URL</b> <a href="<TMPL_VAR name="url">"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
-				<b>Nombre total d'exemplaires</b> <TMPL_VAR NAME="count">
+				<TMPL_IF name="url"><b>URL:</b> <a href="<TMPL_VAR name="url">"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
+				<b>Nombre total d'exemplaires:</b> <TMPL_VAR NAME="count">
 			</font>
 		</td>
 	</tr>
@@ -48,7 +48,7 @@
 </TMPL_LOOP>
 <table border="0" cellspacing="2" cellpadding="2" align="center">
 	<tr bgcolor="#99cccc">
-		<td>Type d'ouvrage</td>
+		<td>Type d'ouvrage :</td>
 		<td>Classe</td>
 		<td>Localisation</td>
 		<td>Date retour</td>

@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 <TMPL_IF NAME="nopermission">
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>INTERDIT<h2>
+<h2>Désolé, je pense que vous n'avez pas les permissions suffisantes.<h2>
 </TMPL_IF>
 
 <TMPL_IF NAME="timed_out">
@@ -34,8 +34,8 @@
 
     <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
     <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Identifiant Koha</font></th></tr>
-    <tr><td>N° de carte</td><td><input name="userid"></td></tr>
-    <tr><td>Mot de passe :</td><td><input type="password" name="password"></td></tr>
+    <tr><td>N° de carte:</td><td><input name="userid"></td></tr>
+    <tr><td>Mot de passe ::</td><td><input type="password" name="password"></td></tr>
     <tr><td colspan="2" align="center"><input type="submit" value="Connecter"></td></tr>
     </table>
     </td><td align="center" valign="top">
