@@ -395,28 +395,32 @@ exit;
 }
 
 if ($input->param('newitem')) {
+    use strict;
+    my $error;
     my $barcode=$input->param('barcode');
-    my $q_barcode=$dbh->quote($barcode);
-    my $q_notes=$dbh->quote($input->param('notes'));
-    my $q_homebranch=$dbh->quote($input->param('homebranch'));
-    my $biblionumber=$input->param('biblionumber');
-    my $biblioitemnumber=$input->param('biblioitemnumber');
     my $replacementprice=($input->param('replacementprice') || 0);
-    my $sth=$dbh->prepare("select barcode from items where
-    barcode=$q_barcode");
-    $sth->execute;
+
+    my $sth=$dbh->prepare("select barcode 
+	from items 
+	where barcode=?");
+    $sth->execute($barcode);
     if ($sth->rows) {
 	print "<font color=red>Barcode '$barcode' has already been assigned.</font><p>\n";
     } else {
-	$sth=$dbh->prepare("select max(itemnumber) from items");
-	$sth->execute;
-	my ($itemnumber) = $sth->fetchrow;
-	$itemnumber++;
-	my @datearr=localtime(time);
-	my $date=(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-	$sth=$dbh->prepare("insert into items (itemnumber, biblionumber, biblioitemnumber, barcode, itemnotes, homebranch, holdingbranch, dateaccessioned, replacementprice) values ($itemnumber, $biblionumber, $biblioitemnumber, $q_barcode, $q_notes, $q_homebranch, 'STWE', '$date', $replacementprice)");
-	$sth->execute;
-    }
+	   # Insert new item into database
+           $error=&newitems(
+                { biblionumber=> $input->param('biblionumber'),
+                  biblioitemnumber=> $input->param('biblioitemnumber'),
+                  itemnotes=> $input->param('notes'),
+                  homebranch=> $input->param('homebranch'),
+                  replacementprice=> $replacementprice,
+                },
+                $barcode
+            );
+            if ( $error ) {
+		print "<font color=red>Error: $error </font><p>\n";
+            } # if error
+    } # if barcode exists
 }
 
 
