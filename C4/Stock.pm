@@ -1,4 +1,4 @@
-package C4::Stock; #assumes C4/Stock.pm
+package C4::Stock;
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -50,8 +50,3 @@ sub stockreport {
   $sth->finish;
   return(@results);
 }
-
-END { }       # module clean-up code here (global destructor)
-  
-    
-
