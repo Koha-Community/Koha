@@ -64,14 +64,6 @@
 		<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">
 			Log Out
 		</a>
-		<form action="/cgi-bin/koha/changelanguage.pl" method="post">
-			<select name="language">
-				<TMPL_LOOP NAME="languages">
-					<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
-				</TMPL_LOOP>
-			</select>
-			<input type="submit" value="Change Language" class="button">
-		</form>
 		<!-- TMPL_IF name="textmessaging"-->
 			<h2>Message from the library</h2>
 			<!-- TMPL_VAR name="textmessaging" -->
@@ -79,6 +71,14 @@
 	<!-- TMPL_ELSE -->
 		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
 	<!-- /TMPL_IF -->
+	<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+		<select name="language">
+			<TMPL_LOOP NAME="languages">
+				<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+			</TMPL_LOOP>
+		</select>
+		<input type="submit" value="Change Language" class="button">
+	</form>
 	<p class="copyright">
 		This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards
 		<a href="http://validator.w3.org/check/referer">
