@@ -256,6 +256,7 @@ sub MARCgettagslib {
 
 sub MARCfind_marc_from_kohafield {
     my ($dbh,$kohafield) = @_;
+    return 0,0 unless $kohafield;
     my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
     $sth->execute($kohafield);
     my ($tagfield,$tagsubfield) = $sth->fetchrow;
@@ -2193,6 +2194,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.83  2004/03/15 14:31:50  tipaul
+# adding a minor check
+#
 # Revision 1.82  2004/03/07 05:47:31  acli
 # Various updates/fixes from rel_2_0
 # Fixes for bugs 721 (templating), 727, and 734
