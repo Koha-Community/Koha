@@ -79,7 +79,8 @@ We are using 2 and 3 column display tables, and there is a different set of incl
 <UL class="sidenav">
 <li> <b>Edit Catalogue Record:</b> To edit a record first search for it here. When you get to the details page you will be able to edit it.
 <li> <a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions&type=intranet">Add New Item</a>
-<li> <a href="/cgi-bin/koha/maint/catmaintain.pl">Subject Maintenance</a>
+<!--<li> <a href="/cgi-bin/koha/maint/catmaintain.pl">Subject
+Maintenance</a>-->
 </ul>
 
 
