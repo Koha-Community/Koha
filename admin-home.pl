@@ -14,7 +14,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {parameters => 1, management => 1, tools => 1},
 			     debug => 1,
 			     });
 
