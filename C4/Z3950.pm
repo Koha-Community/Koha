@@ -104,29 +104,45 @@ sub addz3950queue {
 	$dbh,		# DBI handle
 	$query,		# value to look up
 	$type,		# type of value ("isbn", "lccn", etc).
-	$requestid,
+	$requestid,	# Unique value to prevent duplicate searches from multiple HTML form submits
 	@z3950list,	# list of z3950 servers to query
     )=@_;
+    # Returns:
+    my $error;
 
     my (
 	$sth,
 	@serverlist,
 	$server,
 	$failed,
+	$servername,
     );
+
+    my $pidfile='/var/log/koha/processz3950queue.pid';
     
+    $error="";
+
     requireDBI($dbh,"addz3950queue");
 
 	# list of servers: entry can be a fully qualified URL-type entry
         #   or simply just a server ID number.
 
-        $sth=$dbh->prepare("select host,port,db,userid,password 
-	  from z3950servers 
-	  where id=? ");
         foreach $server (@z3950list) {
 	    if ($server =~ /:/ ) {
 		push @serverlist, $server;
+	    } elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
+                $sth=$dbh->prepare("select host,port,db,userid,password ,name
+	          from z3950servers 
+	          where checked <> 0 ");
+		$sth->execute;
+		while ( my ($host, $port, $db, $userid, $password,$servername) 
+			= $sth->fetchrow ) {
+		    push @serverlist, "$servername/$host\:$port/$db/$userid/$password";
+		} # while
 	    } else {
+                $sth=$dbh->prepare("select host,port,db,userid,password
+	          from z3950servers 
+	          where id=? ");
 		$sth->execute($server);
 		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
 		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
@@ -139,26 +155,45 @@ sub addz3950queue {
     	} # foreach
 	chop $serverlist;
 
-	# Don't allow reinsertion of the same request number.
-	$sth=$dbh->prepare("select identifier from z3950queue 
+	if ( $serverlist !~ /^ +$/ ) {
+	    # Don't allow reinsertion of the same request identifier.
+	    $sth=$dbh->prepare("select identifier from z3950queue 
 		where identifier=?");
-	$sth->execute($requestid);
-	unless ($sth->rows) {
-	    $sth=$dbh->prepare("insert into z3950queue 
-		(term,type,servers, identifier) 
-		values (?, ?, ?, ?)");
-	    $sth->execute($query, $type, $serverlist, $requestid);
-	    my $pid=`cat /var/log/koha/processz3950queue.pid`;
-	    chomp $pid;
-	    my $processcount=kill 1, $pid;
-	    if ($processcount==0) {
-		return 1;
-	    }
-	}
+	    $sth->execute($requestid);
+	    if ( ! $sth->rows) {
+	        $sth=$dbh->prepare("insert into z3950queue 
+		    (term,type,servers, identifier) 
+		    values (?, ?, ?, ?)");
+	        $sth->execute($query, $type, $serverlist, $requestid);
+		if ( -r $pidfile ) { 
+	            my $pid=`cat $pidfile`;
+	            chomp $pid;
+	            my $processcount=kill 1, $pid;
+	            if ($processcount==0) {
+		        $error.="Z39.50 search daemon error: no process signalled. ";
+	            }
+		} else {
+		    $error.="No Z39.50 search daemon running: no file $pidfile. ";
+		} # if $pidfile
+	    } else {
+	        $error.="Duplicate request ID $requestid. ";
+	    } # if rows
+	} else {
+	    # server list is empty
+	    $error.="No Z39.50 search servers specified. ";
+	} # if serverlist empty
+	
+	return $error;
+
 } # sub addz3950queue
 
 #--------------------------------------
 # $Log$
+# Revision 1.1.2.5  2002/06/29 17:33:47  amillar
+# Allow DEFAULT as input to addz3950search.
+# Check for existence of pid file (cat crashed otherwise).
+# Return error messages in addz3950search.
+#
 # Revision 1.1.2.4  2002/06/28 18:07:27  tonnesen
 # marcimport.pl will print an error message if it can not signal the
 # processz3950queue program.  The message contains instructions for starting the

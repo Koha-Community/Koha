@@ -734,6 +734,7 @@ sub AcceptZ3950Queue {
     )=@_;
 
     my @serverlist;
+    my $error;
 
     requireDBI($dbh,"AcceptZ3950Queue");
 
@@ -756,26 +757,33 @@ sub AcceptZ3950Queue {
           }
         }
 
-	if (addz3950queue($dbh,$input->param('query'), $input->param('type'), 
-		$input->param('rand'), @serverlist)) {
+	$error=addz3950queue($dbh,$input->param('query'), $input->param('type'), 
+		$input->param('rand'), @serverlist);
+	if ( $error ) {
 	    print qq|
 <table border=1 cellpadding=5 cellspacing=0 align=center>
 <tr><td bgcolor=#99cc33 background=/images/background-acq.gif colspan=2><font color=red><b>Error</b></font></td></tr>
 <tr><td colspan=2>
-<b>No Z39.50 client daemon running on the server.</b><p>
+<b>$error</b><p>
+|;
+	    if ( $error =~ /daemon/i ) {
+	        print qq|
 There is a launcher for the Z39.50 client daemon in your intranet installation<br>
 directory under <b>./scripts/z3950daemon/z3950-daemon-launch.sh</b>.  This<br>
 script should be run as root, and it will start up the program running with the<br>
 privileges of your apache user.  Ideally, this script should be started from a<br>
 system init directory so that is running after the machine starts up.
+|;
 	
+	    } # if daemon
+	    print qq|
 </td></tr>
 </table>
 
 <table border
 
 |;
-	}
+	} # if error
     } else {
 	print "<font color=red size=+1>$query is not a valid ISBN
 	Number</font><p>\n";
@@ -1136,6 +1144,11 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.32  2002/06/29 17:33:47  amillar
+# Allow DEFAULT as input to addz3950search.
+# Check for existence of pid file (cat crashed otherwise).
+# Return error messages in addz3950search.
+#
 # Revision 1.6.2.31  2002/06/28 18:50:46  tonnesen
 # Got rid of white text on black, replaced with black on background-acq.gif
 #
