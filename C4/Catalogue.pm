@@ -2,6 +2,11 @@ package C4::Catalogue; #asummes C4/Acquisitions.pm
 
 # Continue working on updateItem!!!!!!
 #
+# updateItem is looking not bad.  Need to add addSubfield and deleteSubfield
+# functions
+#
+# Trying to track down $dbh's that aren't disconnected....
+#
 
 
 use strict;
@@ -154,6 +159,7 @@ sub changeSubfield {
 	    }
 	}
     }
+    $dbh->disconnect;
     return($Subfield_ID, $Subfield_Key);
 }
 
@@ -166,8 +172,6 @@ sub updateBiblio {
 # Also, this subroutine should search through the $biblio object and compare it
 # to the existing record and _LOG ALL CHANGES MADE_ in some way.  I'd like for
 # this logging feature to be usable to undo changes easily.
-#
-# Need to add support for bibliosubject, additionalauthors, bibliosubtitle tables
 
     my ($env, $biblio) = @_;
     my $biblionumber=$biblio->{'biblionumber'};
@@ -175,7 +179,7 @@ sub updateBiblio {
     my $sth=$dbh->prepare("select * from biblio where biblionumber=$biblionumber");
     $sth->execute;
     my $origbiblio=$sth->fetchrow_hashref;
-    $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber"):
+    $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber");
     $sth->execute;
     my ($subtitle)=$sth->fetchrow;
     $origbiblio->{'subtitle'}=$subtitle;
@@ -184,7 +188,7 @@ sub updateBiblio {
     my $origadditionalauthors;
     while (my ($author) = $sth->fetchrow) {
 	push (@{$origbiblio->{'additionalauthors'}}, $author);
-	$origadditionalauthors->{$subject}=1;
+	$origadditionalauthors->{$author}=1;
     }
     $sth=$dbh->prepare("select subject from bibliosubjects where biblionumber=$biblionumber");
     $sth->execute;
@@ -282,6 +286,7 @@ sub updateBiblio {
 # Check for subject heading changes
     
     my $newsubject='';
+    my $subjects;
     foreach $newsubject (@{$biblio->{'subject'}}) {
 	$subjects->{$newsubject}=1;
 	if ($origsubjects->{$newsubject}) {
@@ -302,6 +307,7 @@ sub updateBiblio {
 	    }
 	}
     }
+    my $origsubject;
     foreach $origsubject (keys %$origsubjects) {
 	if ($subjects->{$origsubject} == 1) {
 	    my $q_origsubject=$dbh->quote($origsubject);
@@ -311,6 +317,7 @@ sub updateBiblio {
 	}
     }
 
+    $dbh->disconnect;
 }
 
 sub logchange {
@@ -322,15 +329,16 @@ sub logchange {
 	my $item=shift;
 	my $original=shift;
 	my $new=shift;
-	print "KOHA: $section $item $original $new\n";
+	print "KOHA: $type $section $item $original $new\n";
     } elsif ($database eq 'marc') {
 	my $type=shift;
+	my $Record_ID=shift;
 	my $tag=shift;
 	my $mark=shift;
 	my $subfield_ID=shift;
 	my $original=shift;
 	my $new=shift;
-	print "MARC: $tag $mark $subfield_ID $original $new\n";
+	print "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
     }
 }
 
@@ -769,6 +777,8 @@ sub updateBiblioItem {
 	logchange('marc', 'change', $Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
 	changeSubfield($Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
     }
+    $sth->finish;
+    $dbh->disconnect;
 
 }
 
@@ -1014,6 +1024,8 @@ sub updateItem {
 	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Restricted');
 	}
     }
+    $sth->finish;
+    $dbh->disconnect;
 }
 
 END { }       # module clean-up code here (global destructor)
