@@ -59,7 +59,7 @@ while ($i < $count2){
     $stuff[1]=~ s/\`/\'/g;
     my $title2=$stuff[1];
     $title2=~ s/ /%20/g;
-
+    $title2=~ s/\W//g;
       $stuff[1]=mklink("/cgi-bin/koha/detail.pl?bib=$stuff[2]&title=$title2&type=opac",$stuff[1]);
       my $word=$stuff[0];
       $word=~ s/  //g;
