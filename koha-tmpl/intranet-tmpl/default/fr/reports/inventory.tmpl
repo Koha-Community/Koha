@@ -4,12 +4,12 @@
 	<table>
 		<tr>
 			<th colspan=2>
-				Sélectionnez les ouvrages que vous voulez récoler
+				Selectionner les ouvrages a vérifier
 			</th>
 		</tr>
 		<tr>
 			<td>
-					Ouvrage (champ items.bulk) localisé entre
+					Localisation (items.bulk) entre
 			</td>
 			<td>
 				 <input type="text" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->"> et <input type="text" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
@@ -17,7 +17,7 @@
 		</tr>
 		<tr>
 			<td>
-					pas vu depuis le (AAAA-MM-JJ)
+					Pas vu depuis (jj/mm/aaa)
 			</td>
 			<td>
 				<input type="text" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
@@ -25,11 +25,11 @@
 		</tr>
 		<tr>
 			<td>
-					Voir
+					voir
 			</td>
 			<td>
 				<input type="text" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
-				<i> ouvrage à partir du</i>
+				<i> Ouvrages debutant au</i>
 				 <input type="text" name="offset" value="<!-- TMPL_VAR name="offset" -->">
 			</td>
 		</tr>
@@ -53,7 +53,7 @@
 	<tr>
 		<th>Vu</th>
 		<th>Code barre</th>
-		<th>en gros</th>
+		<th>Localisation</th>
 		<th>Titre</th>
 		<th>Auteur</th>
 	</tr>
@@ -77,7 +77,7 @@
 	</tr>
 <!-- /TMPL_LOOP -->
 </table>
-<input type="submit" value="Noté vu" class="button">
+<input type="submit" value="Noter vu" class="button">
 </form>
 <!-- /TMPL_IF -->
 

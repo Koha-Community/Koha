@@ -71,15 +71,15 @@ pour être retiré à <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremem
 			<input type=hidden name=resslip value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Date: <!-- TMPL_VAR Name="today" -->
 
-ITEM RESERVED:<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)
-barcode: <!-- TMPL_VAR Name="itembarcode" -->
-itemtype: <!-- TMPL_VAR Name="itemtype" -->
-COLLECT AT: <!-- TMPL_VAR Name="branchname" -->
+ITEM RESERVED:<b><!-- TMPL_VAR Name="itemtitle" --></b> (<!-- TMPL_VAR Name="itemauthor" -->)
+barcode: <!-- TMPL_VAR Name="itembarcode" --><br/>
+itemtype: <!-- TMPL_VAR Name="itemtype" --><br/>
+COLLECTER A: <!-- TMPL_VAR Name="branchname" --><br/>
 
-BORROWER:
-<!-- TMPL_VAR Name="bortitle" --> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
-card number: <!-- TMPL_VAR Name="borcnum" -->
-Téléphone: <!-- TMPL_VAR Name="borphone" -->
+EMPRUNTEUR:
+<!-- TMPL_VAR Name="bortitle" --> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" --><br/>
+Numéro de carte: <!-- TMPL_VAR Name="borcnum" --><br/>
+Téléphone: <!-- TMPL_VAR Name="borphone" --><br/>
 <!-- TMPL_VAR Name="borstraddress" -->
 <!-- TMPL_VAR Name="borsub" -->
 <!-- TMPL_VAR Name="bortown" -->
@@ -122,19 +122,19 @@ Téléphone: <!-- TMPL_VAR Name="borphone" -->
 			<!-- TMPL_LOOP Name="errmsgloop" -->
 				<font color='red' size='+2'>
 				<!-- TMPL_IF Name="badbarcode" -->
-					No Ouvrage with barcode: <!-- TMPL_VAR Name="msg" -->
+					Pas d'ouvrage avec le code barre: <!-- TMPL_VAR Name="msg" --><br/>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="ispermanent" -->
-					Please return to  <!-- TMPL_VAR Name="msg" -->
+					A retourner a  <!-- TMPL_VAR Name="msg" --><br/>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="notissued" -->
-					Not On Prêt.
+					Pas en prêt.<br/>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="waslost" -->
-					Ouvrage was lost, now found.
+					Ouvrage perdu, noté retrouvé.<br/>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="withdrawn" -->
-					Ouvrage Annulé
+					Ouvrage annulé<br/>
 				<!-- /TMPL_IF -->
 				</font>
 				<BR>

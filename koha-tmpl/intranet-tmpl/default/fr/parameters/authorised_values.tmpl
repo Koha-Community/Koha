@@ -1,8 +1,14 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <!-- TMPL_IF name="add_form" -->
-<!-------------------------------------------------------------------------------------------------->
-	<H1><!-- TMPL_VAR name="action" --></H1>
+<!---------------------------------------------------------------------------->
+	<H1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modifier-authorized-value-p" -->Modifier authorised value<!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="heading-add-new-category-p" -->Ajouter new category<!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="heading-add-authorized-value-p" -->Ajouter authorised value<!-- /TMPL_IF --><br/>
+	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	</H1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
@@ -29,7 +35,7 @@
 
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
@@ -46,7 +52,7 @@
 		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
 <!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>Admin Valeurs autorisées</h1>
 <p>Cette table est utilisée dans les définitions MARC. Vous pouvez définir autant de catégories et autant de valeurs autorisées pour chaque catégorie que vous voulez.</p>

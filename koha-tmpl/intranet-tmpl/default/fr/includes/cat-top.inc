@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Catalogue</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <script language="JavaScript">
 <!-- Hide from old browsers
@@ -95,7 +96,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Ajouter une notice biblio</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Maintenance Cat</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Maintenance Cat</a>
 					</td>
 				</tr>
 			</table>

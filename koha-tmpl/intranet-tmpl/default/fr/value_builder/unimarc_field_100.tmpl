@@ -6,16 +6,38 @@
 <form name="f_pop" onSubmit="javascript:report()">
 <table>
 	<tr>
-		<td>Date d'enregistrement </td>
+		<td>Date enregistrement</td>
 		<td><input type="text" name="f1" maxlength=8 size=8 value="<!-- TMPL_VAR name="f1" -->"></td>
 	</tr>
 	<tr>
-		<td>Code date publication </td><td><select name="f2" size="1">
-		<option value="a" <!-- TMPL_IF name="f2a" -->SELECTED<!-- /TMPL_IF -->>périodique en cours</option>
-			<option value="b" <!-- TMPL_IF name="f2b" -->SELECTED<!-- /TMPL_IF -->>périodique mort</option>
-			<option value="c" <!-- TMPL_IF name="f2c" -->SELECTED<!-- /TMPL_IF -->>périodique d'état inconnu</option>
-			<option value="d" <!-- TMPL_IF name="f2d" -->SELECTED<!-- /TMPL_IF -->>monographie complète</option>
-			<option value="e" <!-- TMPL_IF name="f2e" -->SELECTED<!-- /TMPL_IF -->>reproduction</option>
+		<td>Code publication </td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>périodiques</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">périodiques</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>Périodique mort</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Périodique mort</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>periodique d'etat inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">periodique d'etat inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Monographie complete</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Monographie complete</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2e" -->
+				<option value="e" SELECTED>reproduction</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">reproduction</option>
+			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
@@ -24,7 +46,7 @@
 		<td><input type="text" name="f3" maxlength=4 size=5 value="<!-- TMPL_VAR name="f3" -->"></td>
 	</tr>
 	<tr>
-	<td>Année fin</td>
+	<td>Anné de fin</td>
 	<td><input type="text" name="f4" maxlength=4 size=5 value="<!-- TMPL_VAR name="f4" -->"></td>
 	</tr>
 	<tr><td colspan=2><input type="submit" value="OK"></td></tr>

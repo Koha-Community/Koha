@@ -4,7 +4,7 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a class="button" href="circulation.pl?branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=oui">
+				<a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=oui">
 				Emprunteur suivant</a>&nbsp;
 				<a class="button" href="returns.pl">
 				Retours</a>&nbsp;
@@ -13,10 +13,13 @@
 			</td>
 		</tr>
 	</table>
-	<h1>Circulation: Prêts</h1>
-	<i>Annexe:</i> <!-- TMPL_VAR name="branchname" --> <i>Imprimante:</i> <!-- TMPL_VAR name="printername" --> <a href="selectbranchprinter.pl" class="button">Changer Paramètres</a>
+	<h1>Circulation: Prêts</h1><br>
+	<b>Annexe:</b> <!-- TMPL_VAR name="branchname" --><br>
+	<b>Imprimante:</b> <!-- TMPL_VAR name="printername" --><br>
+	<a href="selectbranchprinter.pl">Changer Paramètres</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+	<p>&nbsp;</p>
 <!-- TMPL_ELSE -->
 	<table align="right" cellpadding="10">
 		<tr>
@@ -34,7 +37,7 @@
 	<h1>Circulation: Prêts</h1><br>
 	<b>Annexe:</b> <!-- TMPL_VAR name="branchname" --> <br>
 	<b>Imprimante:</b> <!-- TMPL_VAR name="printername" --><br>
-	<a href="selectbranchprinter.pl" class="button">Changer Paramètres</a>
+	<a href="selectbranchprinter.pl">Changer Paramètres</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<p>&nbsp;</p>
@@ -119,7 +122,7 @@
 <!-- TMPL_IF name="message" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">Messages</th></tr>
-		<tr><td><!-- TMPL_VAR name="message" --></td></tr>
+		<tr><td>Pas de lecteur correspondant <!-- TMPL_VAR name="message" --></td></tr>
 	</table>
 <!-- /TMPL_IF -->
 
@@ -137,7 +140,7 @@
 			<td align="center">
 				<!-- TMPL_VAR name="CGIselectborrower" -->
 				<br>
-				<input type="submit" value="OK" class="button">
+				<input type="submit">
 			</td>
 		</tr>
 	</table>
@@ -168,7 +171,7 @@
 <tr>
 <td>
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<table border="1" cellpadding="2">
+<table border="1" cellpadding="5">
 	<tr>
 	<td align="center" valign="top">
 		<table border="0" cellspacing="0" cellpadding="5">
@@ -183,7 +186,7 @@
 						<tr>
 							<td>Code barre d'un ouvrage:</td>
 							<td><input name="barcode" size="10"></td>
-							<td><input type="submit" value="Prêt" class="button"></td>
+							<td><input type="submit" value="Prêt"></td>
 						</tr>
 						<tr>
 							<td colspan="3" align="center">
@@ -221,7 +224,7 @@
 </form>
 </td>
 <td>
-<table border="1" cellpadding="2" cellspacing="0" align="right">
+<table border="1" cellpadding="5" cellspacing="0" align="right">
     <tr><td colspan="2"><font color="black"><b>Informations emprunteur</b></font></td></tr>
     <tr><td colspan="2">
     <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this,'Lecteur', 480, 640)">
@@ -230,18 +233,18 @@
     </td></tr>
 <!-- TMPL_IF name="noissues" -->
 <!-- TMPL_IF NAME="gna" -->
-<tr><td valign="top"><font color="red">GNA</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Emprunteur is gone with no address</td></tr>
+<tr><td valign="top"><font color="red">Disparu</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Emprunteur is gone with no address</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="lost" -->
 <tr><td valign="top"><font color="red">PERDU</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Emprunteur's card is lost</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<tr><td valign="top"><font color="red">DBARRED</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Emprunteur is debarred</td></tr>
+<tr><td valign="top"><font color="red">SORTI</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Emprunteur is debarred</td></tr>
 <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
 		<tr><td valign="top"><font color="red">FRAIS</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 	<!-- TMPL_ELSE -->
-		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" --><!-- TMPL_VAR name="message" --></td></tr>
+		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><!-- TMPL_VAR name="message" --></td></tr>
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 		<!-- TMPL_IF name="charges" -->
@@ -259,7 +262,7 @@
 		<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="odues" -->
 				<!-- TMPL_IF name="nonreturns" -->
-					<tr><td valign="top"><font color="red">RETARDS</font></td><td><font color="red">Oui, voir plus bas</font></td></tr>
+					<tr><td valign="top">RETARDS</td><td>Oui, voir plus bas</td></tr>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" -->
@@ -269,9 +272,9 @@
 </table>
 <!-- /TMPL_IF -->
 </table>
-<br/>
+<p clear="all"><br><br></p>
 <!-- TMPL_IF name="todayissues" -->
-<table border="1" cellpadding="5" cellspacing="0" width="100%">
+<table border="1" cellpadding="5" cellspacing="0" width="80%">
 	<tr>
 		<th colspan="5" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<font color="black">
@@ -304,7 +307,7 @@
 			<th>Date de retour</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Catégorie</th>
 		</tr>
 	<!-- TMPL_LOOP name="previssues" -->
-	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dd" --></td>
+	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_IF NAME="od" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></font><!-- /TMPL_IF --></td>
 	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->">
 	    <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Ouvrage', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
 	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="title" --></td>

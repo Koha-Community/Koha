@@ -4,7 +4,7 @@
 	<h1>Admin Budget</h1><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
 	<input type=text name=searchfield value=""><input type=reset name=reset value="effacer"></form>
 	<!-- TMPL_IF name=search -->
-	<br>Votre recherche sur <b><!-- TMPL_VAR name=searchfield --><b><p><br>
+	<br>Votre recherche sur <b><!-- TMPL_VAR name=searchfield --></b><p><br>
 	<!-- /TMPL_IF -->
 	<table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Compte</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Date de début</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Date de fin</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Montant budget</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
@@ -27,6 +27,7 @@
 
 <!-- TMPL_IF name="add_form" -->
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -64,13 +65,13 @@
 		var _alertString="";
 		var alertString2;
 		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
-			_alertString += "- Budget missing\n";
+			_alertString += "\n- " + _("Budget missing");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because sur the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Form not submitted because sur the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}

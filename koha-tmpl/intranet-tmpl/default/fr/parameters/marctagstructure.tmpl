@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -38,13 +39,13 @@
 		var _alertString="";
 		var alertString2;
 		if (f.tagfield.value.length==0) {
-			_alertString += "- tag number missing\n";
+			_alertString += "\n- " + _("tag number missing");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because sur the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Form not submitted because sur the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
@@ -52,8 +53,13 @@
 	</SCRIPT>
 
 <!-- TMPL_IF name="add_form" -->
-<!-------------------------------------------------------------------------------------------------->
-	<H1><!-- TMPL_VAR name="action" --></H1>
+<!---------------------------------------------------------------------------->
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modifier-tag-p" -->Modifier champ MARC<!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="heading-add-tag-p" -->Ajouter champ MARC<!-- /TMPL_IF --><br/>
+	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	</h1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
 	<input type=hidden name=op value='add_validate'>
 	<table>
@@ -70,7 +76,7 @@
 
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>etiquette</b></td>
@@ -83,14 +89,14 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 	Donnée effacée
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>Admin Structure étiquette MARC</h1>
 <b>Note : si vous changez le lien du sous-champ MARC vers un champ non-MARC, demandez à votre administrateur de lancer le script misc/rebuildnonmarc.pl.</b>
@@ -116,7 +122,7 @@
 	<td><!-- TMPL_IF name="repeatable" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_IF name="mandatory" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
-	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">subfields</a></td>
+	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">sous-champs</a></td>
 	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>

@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Circulation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <script language="JavaScript">
 <!-- Hide from old browsers

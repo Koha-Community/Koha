@@ -1,18 +1,40 @@
 <html>
 <head>
-<title>UNIMARC constructeur champ 700-4</title>
+<title>Constructeur UNIMARC 700-4</title>
 </head>
 <body>
-<p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
+<p>Select a value for 700 $4. It will be reported to the next 700$8</p>
 <form name="f_pop" onSubmit="javascript:report()">
 <table>
 	<tr>
-		<td>Code date publication </td><td><select name="f1" size="1">
-		<option value="075 - postface" <!-- TMPL_IF name="f1_075" -->SELECTED<!-- /TMPL_IF -->>postface</option>
-			<option value="651 - dir. de publication" <!-- TMPL_IF name="f1_651" -->SELECTED<!-- /TMPL_IF -->>dir. de publication</option>
-			<option value="440 - illustrateur" <!-- TMPL_IF name="f1_440" -->SELECTED<!-- /TMPL_IF -->>illustrateur</option>
-			<option value="080 - préface, notes" <!-- TMPL_IF name="f1_080" -->SELECTED<!-- /TMPL_IF -->>préface, notes</option>
-			<option value="730 - traducteur" <!-- TMPL_IF name="f1_730" -->SELECTED<!-- /TMPL_IF -->>traducteur</option>
+		<td>Code publication </td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1_075" -->
+				<option value="075 - postface" SELECTED>postface</option>
+			<!-- TMPL_ELSE -->
+				<option value="075 - postface">postface</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_651" -->
+				<option value="651 - directeur publication" SELECTED>directeur publication</option>
+			<!-- TMPL_ELSE -->
+				<option value="651 - directeur publication">directeur publication</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_440" -->
+				<option value="440 - illustrateur" SELECTED>illustrateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="440 - illustrateur" SELECTED>illustrateur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_080" -->
+				<option value="080 - notes" SELECTED>notes</option>
+			<!-- TMPL_ELSE -->
+				<option value="080 - notes">notes</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1_730" -->
+				<option value="730 - traducteur" SELECTED>traducteur</option>
+			<!-- TMPL_ELSE -->
+				<option value="730 - traducteur">traducteur</option>
+			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>

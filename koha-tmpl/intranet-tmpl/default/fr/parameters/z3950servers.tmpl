@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,31 +40,31 @@
                 var _alertString="";
                 var alertString2;
                 if (f.searchfield.value.length==0) {
-                        _alertString += "- site name missing\n";
+                        _alertString += "\n- " + _("site name missing");
                 }
                 if (f.host.value.length==0) {
-                        _alertString += "- host missing\n";
+                        _alertString += "\n- " + _("host missing");
                 }
                 if (f.port.value.length==0) {
-                        _alertString += "- port missing\n";
+                        _alertString += "\n- " + _("port missing");
                 }
                 if (f.db.value.length==0) {
-                        _alertString += "- database missing\n";
+                        _alertString += "\n- " + _("database missing");
                 }
                 if (isNaN(f.port.value)) {
-                        _alertString += "- port doit be a number\n";
+                        _alertString += "\n- " + _("port doit be a number");
                 }
                 if (isNaN(f.rank.value)) {
-                        _alertString += "- rank doit be a number\n";
+                        _alertString += "\n- " + _("rank doit be a number");
                 }
                 if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-                        _alertString += "- checked doit be 0 ou 1\n";
+                        _alertString += "\n- " + _("checked doit be 0 ou 1");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because sur the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("Form not submitted because sur the following problem(s)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
@@ -176,7 +177,7 @@
                 </tr>
                 <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                         <input type=hidden name=op value=delete_confirmed>
-                        <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
+                        <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=id -->>
                 <tr>
                         <td>Nom de l'hébergeur</td>
                         <td><!-- TMPL_VAR NAME=host --></td>
@@ -269,13 +270,13 @@
         <input type=hidden name=op value=add_form>
                         
         <!-- TMPL_IF NAME=offsetgtzero -->
-                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->"><< Prev</a>
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->">&lt;&lt; Prev</a>
         <!-- /TMPL_IF -->
         
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         <!-- TMPL_IF NAME=ltcount -->
-                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Suivant >></a>
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Next &gt;&gt;</a>
         <!-- /TMPL_iF -->
                 
         <br>

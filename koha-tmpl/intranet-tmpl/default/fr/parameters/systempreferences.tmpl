@@ -1,20 +1,21 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<script language="JavaScript" type="text/javascript">
+	function _(s) { return s } // dummy function for gettext
+	//
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
    return false;
 		}
 		return true;
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	function toUC(f) {
 		var x=f.value.toUpperCase();
 		f.value=x;
 		return true;
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	function isNum(v,maybenull) {
 	var n = new Number(v.value);
 	if (isNaN(n)) {
@@ -25,126 +26,125 @@
 	}
 	return true;
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	function isDate(f) {
 		var t = Date.parse(f.value);
 		if (isNaN(t)) {
 			return false;
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	function Check(f) {
 		var ok=1;
 		var _alertString="";
 		var alertString2;
 		if (f.variable.value.length==0) {
-			_alertString += "- variable missing\n";
+			_alertString += "\n- " + _("variable missing");
 		}
 		if (f.value.value.length==0) {
-			_alertString += "- value missing\n";
+			_alertString += "\n- " + _("value missing");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because sur the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Form not submitted because sur the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
 	}
-	</SCRIPT>
+	</script>
 
 <!-- TMPL_IF name="add_form" -->
-<!------------------------------------------------------------------------------------------------>
+
 	<!-- TMPL_IF NAME=modifier -->
 		<h1>Modifier une préférence système</h1>
 	<!-- TMPL_ELSE -->
-		<H1>Ajouter une préférence système</H1>
+		<h1>Ajouter une préférence système</h1>
 	<!-- /TMPL_IF -->
-	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
+	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
 	<table>
-	<!-- TMPL_IF NAME=searchfield -->
-		<tr><td>Variable</td><td><!-- TMPL_VAR name="searchfield" --><input type=hidden name=variable value='<!-- TMPL_VAR NAME=searchfield -->'></td></tr>
+	<!-- TMPL_IF NAME="searchfield" -->
+		<tr><td>Variable</td><td><!-- TMPL_VAR name="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->"></td></tr>
 	<!-- TMPL_ELSE -->
-		<tr><td>Variable</td><td><input type=text name=variable></td></tr>
+		<tr><td>Variable</td><td><input type="text" name="variable" size="60"></td></tr>
 	<!-- /TMPL_IF -->
-	<tr><td>Valeur</td><td><input type=text name=value value="<!-- TMPL_VAR name="value" escape=HTML -->"></td></tr>
-	<tr><td>Explication</td><td><input type=text name=explanation size=80 value="<!-- TMPL_VAR name="explanation" escape=HTML -->"></td></tr>
-	<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
+	<tr><td>Valeur</td><td><input type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" size="60"></td></tr>
+	<tr><td>Explication</td><td><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->"></td></tr>
+	<tr><td>&nbsp;</td><td><INPUT type="button" value="OK" onclick="Check(this.form)"></td></tr>
 	</table>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_validate" -->
-<!------------------------------------------------------------------------------------------------>
+
 	Donnée enregistrée
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<input type=submit value=OK>
+	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="submit" value="OK">
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!------------------------------------------------------------------------------------------------>
-<table border=0 cellspacing=0 cellpadding=2>
-	<tr valign=top bgcolor="#99cc33">
+
+<table border="0" cellspacing="0" cellpadding="2">
+	<tr valign="top" bgcolor="#99cc33">
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
 	<tr><td>Valeur</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
-	<tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
-	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
+	<form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
+	<tr><td colspan="2" align="center">CONFIRMER SUPPRESSION</td></tr>
+	<tr><td><input type="submit" value="OUI"></form></td><td><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="NO"></form></td></tr>
 </table>
 
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<!------------------------------------------------------------------------------------------------>
+
 	Donnée effacée
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<input type=submit value=OK>
+	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="submit" value="OK">
 	</form>
 <!-- /TMPL_IF -->
 
-<!------------------------------------------------------------------------------------------------>
 <!-- TMPL_IF name="else" -->
 <h1>Admin Préférences système</h1>
-<form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
-	<input type=text name=searchfield value="">
-	<input type=reset name=reset value="effacer">
+<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+	<input type="text" name="searchfield" value="">
+	<input type="reset" name="reset" value="effacer">
 </form>
 <!-- TMPL_VAR name="searchfield" -->
-<table border=0 cellspacing=0 cellpadding=2>
-<tr valign=top bgcolor="#99cc33">
+<table border="0" cellspacing="0" cellpadding="2">
+<tr valign="top" bgcolor="#99cc33">
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Valeur</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Explication</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
 <!-- TMPL_LOOP name="loop" -->
-</tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+<tr valign="top" bgcolor="<!-- TMPL_VAR name="bgcolor" -->">
 	<td><!-- TMPL_VAR name="variable" --></td>
 	<td><!-- TMPL_VAR name="value" --></td>
 	<td><!-- TMPL_VAR name="explanation" --></td>
-	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>Editer</a></td>
-	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0>Supprimer</a></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"><br>Editer</a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"><br>Supprimer</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-<input type=hidden name=op value=add_form>
+<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+<input type="hidden" name="op" value="add_form">
 </table>
-<table width=40%>
+<table width="40%">
 	<tr>
-		<td width=50%><!-- TMPL_VAR name="previous" --></td>
-		<td width=50%><!-- TMPL_VAR name="next" --></td>
+		<td width="50%"><!-- TMPL_VAR name="previous" --></td>
+		<td width="50%"><!-- TMPL_VAR name="next" --></td>
 	</tr>
 </table>
 </form>
 
-<form action=<!-- TMPL_VAR name="script_name" --> method=post>
-        <input type='hidden' name='op' value='add_form'>
-        <input type=submit class="button" value='Ajouter une préférence système'>
+<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+        <input type="hidden" name="op" value="add_form">
+        <input type="submit" class="button" value="Ajouter une préférence système">
 </form>
 
 <!-- /TMPL_IF -->

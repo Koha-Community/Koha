@@ -4,7 +4,7 @@
 <a class="button" href=circulation.pl>
 Emprunteur suivant</a>
 <a class="button" href=returns.pl>
-Retours
+Retours</a>
 </td></tr></table>
 
 <h1>Circulation: Transferts</h1><br>
@@ -94,16 +94,16 @@ Retours
 	<!-- TMPL_LOOP Name="errmsgloop" -->
 		<font color='red' size='+2'>
 		<!-- TMPL_IF Name="errbadcode" -->
-			No Ouvrage with barcode: <!-- TMPL_VAR Name="msg" -->
+			Pas d'ouvrage avec le code barre: <!-- TMPL_VAR Name="msg" --><br/>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errispermanent" -->
-			Please return item to home branch: <!-- TMPL_VAR Name="msg" -->
+			Renvoyer l'ouvrage a son annexe d'origine: <!-- TMPL_VAR Name="msg" --><br>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errdesteqholding" -->
-			Ouvrage is already at destination branch.
+			Ouvrage dejà arrivé à destination.<br/>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errwasreturned" -->
-			Ouvrage was on loan to <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"
+			Ouvrage en pret <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"
 onClick="openWindow(this,'Lecteur', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>
 <!-- TMPL_VAR Name="name" --> et a été retourné.
 		<!-- /TMPL_IF -->

@@ -5,6 +5,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Prêts & Retours</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
@@ -35,7 +36,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=210 height=4 alt=" " hspace=0 vspace=0>
 						<br>
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=35 height=21 align=left alt=" " hspace=0 vspace=0>
-						KOHA: <A HREF="/cgi-bin/koha/mainpage.pl">HDL INTRANET</A>
+						KOHA: <A HREF="/cgi-bin/koha/mainpage.pl">HDL</A>
 						<br>
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0>
 						</FONT>
@@ -90,7 +91,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Signaler retard Books
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Signaler retard Today
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Reçu
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Recu
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Today
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Week
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Mois
@@ -252,7 +253,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - New This Année
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Emprunteur Enquirey
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Emprunteur Enquiry
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - All Books Out
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Overdues
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - History
@@ -276,7 +277,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Renouveler Books
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Lecteur Details
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Mettre à jour Details
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Update Details
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Resources
