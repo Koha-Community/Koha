@@ -96,7 +96,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($itemtype) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge from itemtypes where itemtype=?");
+		my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge,notforloan from itemtypes where itemtype=?");
 		$sth->execute($itemtype);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -105,14 +105,16 @@ if ($op eq 'add_form') {
 							description => $data->{'description'},
 							loanlength => $data->{'loanlength'},
 							renewalsallowed => $data->{'renewalsallowed'},
-							rentalcharge => $data->{'rentalcharge'});
+							rentalcharge => $data->{'rentalcharge'},
+							notforloan => $data->{'notforloan'}
+							);
 ;
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace itemtypes (itemtype,description,loanlength,renewalsallowed,rentalcharge) values (";
+	my $query = "replace itemtypes (itemtype,description,loanlength,renewalsallowed,rentalcharge,notforloan) values (";
 	$query.= $dbh->quote($input->param('itemtype')).",";
 	$query.= $dbh->quote($input->param('description')).",";
 	$query.= $dbh->quote($input->param('loanlength')).",";
@@ -121,7 +123,12 @@ if ($op eq 'add_form') {
 	} else {
 		$query.= "1,";
 	}
-	$query.= $dbh->quote($input->param('rentalcharge')).")";
+	$query.= $dbh->quote($input->param('rentalcharge')).",";
+	if ($input->param('notforloan') ne 1) {
+		$query.= "0)";
+	} else {
+		$query.= "1)";
+	}
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
