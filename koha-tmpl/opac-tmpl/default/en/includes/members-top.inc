@@ -34,10 +34,6 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	src="<TMPL_VAR NAME='themelang'>/images/menu-search.gif" 
 	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
 	
-	<a href="/cgi-bin/koha/opac-user.pl"
-	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-login.gif" 
-	width=111 height=30 alt="Member Login" hspace=0 vspace=0 border=0 name="menu-login"></a>
-
 	<a href="/join.html"
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-join.gif" 
 	width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
