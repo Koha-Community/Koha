@@ -1,52 +1,17 @@
-package C4::Input; #asummes C4/Input
-
-#package to deal with marking up output
+package C4::Input; #assumes C4/Input
 
 use strict;
 require Exporter;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&checkflds &checkdigit);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-# stuff goes here.
-  };
-   
-# make all your functions, whether exported or not;
+@EXPORT = qw(
+	&checkflds &checkdigit &checkvalidisbn
+);
  
 sub checkflds {
   my ($env,$reqflds,$data) = @_;
@@ -86,7 +51,43 @@ sub checkdigit {
     $valid = 1;
   }
   return $valid;
-}
+} # sub checkdigit
+
+#--------------------------------------
+# Determine if a number is a valid ISBN number, according to length
+#   of 10 digits and valid checksum
+sub checkvalidisbn {
+        use strict; 
+        my ($q)=@_ ;	# Input: ISBN number
+
+        my $isbngood = 0; # Return: true or false
+
+        $q=~s/x$/X/g;           # upshift lower case X
+        $q=~s/[^X\d]//g;
+        $q=~s/X.//g;
+        if (length($q)==10) {
+            my $checksum=substr($q,9,1);
+            my $isbn=substr($q,0,9);
+            my $i;  
+            my $c=0;
+            for ($i=0; $i<9; $i++) { 
+                my $digit=substr($q,$i,1);
+                $c+=$digit*(10-$i);
+            }
+            $c=int(11-($c/11-int($c/11))*11+.1);
+            ($c==10) && ($c='X');
+            if ($c eq $checksum) {
+                $isbngood=1;
+            } else {
+                $isbngood=0;
+            }
+        } else {
+            $isbngood=0;
+        } # if length good
+
+        return $isbngood;
+
+} # sub checkvalidisbn
+
  
 END { }       # module clean-up code here (global destructor)
-    
