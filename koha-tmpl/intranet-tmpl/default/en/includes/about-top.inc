@@ -32,7 +32,7 @@ a.about:hover {
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr height="45">
 	<td valign="bottom" align="left">
-		<table bgcolor="dddddd" width="100%" cellpadding=0 cellspacing=0>
+		<table bgcolor="#dddddd" width="100%" cellpadding=0 cellspacing=0>
 		<tr>
 			<td>
 			<div id="menubar">
