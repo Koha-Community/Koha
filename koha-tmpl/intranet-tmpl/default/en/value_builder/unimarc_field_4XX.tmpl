@@ -313,6 +313,8 @@
 	</form>
 	
 	<!--TMPL_ELSE-->
+	
+
 		<h2 class="catalogue">Search results</h2>
 		<div id="resultnumber">
 			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
