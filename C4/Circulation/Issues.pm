@@ -323,7 +323,7 @@ sub issueitem{
        info_msg($env,"Can't issue $item->{'cardnumber'}");
      }
    } else {
-     my $valid = checkdigit($env,$itemnum);
+     my $valid = checkdigit($env,$itemnum, 1);
      if ($valid ==1) {
        if (substr($itemnum,0,1) = "V") {
          #this is a borrower

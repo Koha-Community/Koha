@@ -79,11 +79,33 @@ C<$env> is ignored.
 =cut
 #'
 sub checkdigit {
+
+	my ($env,$infl, $nounique) =  @_;
+	$infl = uc $infl;
+
+
+	#Check to make sure the cardnumber is unique
+
+	#FIXME: We should make the error for a nonunique cardnumber
+	#different from the one where the checkdigit on the number is
+	#not correct
+
+	unless ( $nounique ) 
+	{
+		my $dbh=C4::Context->dbh;
+		my $query=qq{SELECT * FROM borrowers WHERE cardnumber="$infl"};
+		my $sth=$dbh->prepare($query);
+		$sth->execute;
+		my %results = $sth->fetchrow_hashref();
+		if ( $sth->rows != 0 )
+		{
+			return 0;
+		}
+	}
+
 	if (C4::Context->preference("checkdigit") eq "none") {
 		return 1;
 	} else {
-		my ($env,$infl) =  @_;
-		$infl = uc $infl;
 		my @weightings = (8,4,6,3,5,2,1);
 		my $sum;
 		my $i = 1;

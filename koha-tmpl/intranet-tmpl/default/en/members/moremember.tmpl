@@ -66,20 +66,13 @@
 		<TMPL_VAR NAME="borrowernotes"><!--</a>-->
 		<p align=right>
 		</font>
-		<TMPL_IF name="A">
-			<form action=/cgi-bin/koha/memberentry.pl method=post>
-				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-				<INPUT TYPE=submit class="button" value="Modify">
-			</form>
-		</TMPL_IF>
-		<TMPL_IF name="C">
-			<form action=/cgi-bin/koha/memberentry.pl method=post>
-				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-				<INPUT TYPE=submit class="button" value="Modify">
-			</form>
-		</TMPL_IF>
 		<TMPL_IF name="I">
 			<form action=/cgi-bin/koha/imemberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE=submit class="button" value="Modify">
+			</form>
+		<TMPL_ELSE>
+			<form action=/cgi-bin/koha/memberentry.pl method=post>
 				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
 				<INPUT TYPE=submit class="button" value="Modify">
 			</form>
