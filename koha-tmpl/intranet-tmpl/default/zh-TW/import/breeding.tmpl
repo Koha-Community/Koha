@@ -19,15 +19,15 @@
 </ul>
 <!-- TMPL_ELSE -->
 <ul>
-	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
-	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
+	<li>請選擇希望匯入Breeding Farm之檔案。系統將會分析檔案，凡是找到有國際標準書號的記錄，系統會在Breeding Farm內建立相應的新書目。</li>
+	<li>假如國際標準書號已在Breeding Farm之內，您可選擇忽略新的書目記錄，也可選擇覆蓋原有的那個記錄。</li>
 	<li>您可以給這次的匯入命名。命名可能會有用；譬如是當您建立一個書目的時候可以提醒一下建議的機讀格式的數據從何而來！</li>
 	<li>當然，如果該個國際標準書號已在正式的資料庫內，書目將被忽略。</li>
 </ul>
 <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 <table cellpadding="3" border=0>
 	<tr valign="top">
-		<td>匯入哪個檔案：</td>
+		<td>選擇匯入檔案：</td>
 		<td>
 			<input type="file" name="uploadmarc"/><br/>
 		</td>

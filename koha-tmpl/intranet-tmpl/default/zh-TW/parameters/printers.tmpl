@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,16 +40,16 @@
                 var _alertString="";
                 var alertString2;
                 if (f.printername.value.length==0) {
-                        _alertString += "- printer name missing\n";
+                        _alertString += "\n- " + _("沒有填寫印表機名稱");
                 }
                 if (f.printqueue.value.length==0) {
-                        _alertString += "- Queue missing\n";
+                        _alertString += "\n- " + _("沒有填寫佇列名稱");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("無法遞交表格，因為發現以下問題：");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
@@ -56,9 +57,9 @@
         </SCRIPT>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		<h1>修改打印機</h1>
+		<h1>修改印表機</h1>
 	<!-- TMPL_ELSE -->
-		<h1>新增打印機</h1>
+		<h1>新增印表機</h1>
 	<!-- /TMPL_IF -->
 
         <form action='<!-- TMPL_VAR NAME=script_name -->' name=Aform method=post>
@@ -69,14 +70,14 @@
 
 	<!-- TMPL_IF NAME=searchfield -->
 		<tr>
-			<td>打印機名稱</td>
+			<td>印表機名稱</td>
 			<td>
 				<input type=hidden name=printername value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>打印機名稱</td>
+			<td>印表機名稱</td>
 			<td>
 				<input type=text name=printername size=50 maxlength=50>
 			</td>
@@ -110,7 +111,7 @@
 <!-- TMPL_IF NAME=delete_confirm -->
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>打印機</b></td>
+			<td background='/images/background-mem.gif'><b>印表機</b></td>
 			<td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
 		</tr>
 
@@ -151,10 +152,10 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-	<h2>打印機管理</h2>
+	<h2>印表機管理</h2>
         <form action='<TMP_VAR NAME=script_name>' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="清空">
+                <input type=reset name=reset value="重設">
         </form>
 
 	<!-- TMPL_IF NAME=searchfield -->
@@ -194,7 +195,7 @@
 	<!-- /TMPL_iF -->
 
         <br>
-	<input type=submit class="button" value="新增打印機" alt="新增打印機">
+	<input type=submit class="button" value="新增印表機" alt="新增印表機">
 	<br>
         </form>
 

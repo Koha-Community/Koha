@@ -10,7 +10,7 @@
 	</table>
 	<h1>流通：借出</h1><br>
 	<b>館別：</b><!-- TMPL_VAR name="branchname" --><br>
-	<b>打印機：</b><!-- TMPL_VAR name="printername" --><br>
+	<b>印表機：</b><!-- TMPL_VAR name="printername" --><br>
 	<a href="selectbranchprinter.pl">設定</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
@@ -19,13 +19,13 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a href="returns.pl" class="button">下個讀者</a>　<a href="branchtransfers.pl" class="button">移交</a>
+				<a href="returns.pl" class="button">還書</a>　<a href="branchtransfers.pl" class="button">移交</a>
 			</td>
 		</tr>
 	</table>
 	<h1>流通：借出</h1><br>
 	<b>館別：</b><!-- TMPL_VAR name="branchname" --> <br>
-	<b>打印機：</b><!-- TMPL_VAR name="printername" --><br>
+	<b>印表機：</b><!-- TMPL_VAR name="printername" --><br>
 	<a href="selectbranchprinter.pl">設定</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
@@ -191,7 +191,7 @@
 										</td>
 									</tr>
 								</table>
-								<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR name="selected" -->> 不要重設到期日
+								<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR name="selected" -->> 不要重設應歸還日期
 							</td>
 						</tr>
 					</table>
@@ -227,16 +227,16 @@
 <tr><td valign="top"><font color="red">已遺失</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>讀者遺失借書證</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<tr><td valign="top"><font color="red">被禁</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>禁止此讀者</td></tr>
+<tr><td valign="top"><font color="red">不准借書</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>讀者目前失去借書權利</td></tr>
 <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
-		<tr><td valign="top"><font color="red">欠款</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+		<tr><td valign="top"><font color="red">欠款</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">付款</a></td></tr>
 	<!-- TMPL_ELSE -->
 		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><!-- TMPL_VAR name="message" --></td></tr>
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 		<!-- TMPL_IF name="charges" -->
-			<tr><td valign=top>欠款</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+			<tr><td valign=top>欠款</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">付款</a></td></tr>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="waiting" -->
 			<tr>
@@ -250,7 +250,7 @@
 		<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="odues" -->
 				<!-- TMPL_IF name="nonreturns" -->
-					<tr><td valign="top">過期</td><td>有 (下列)</td></tr>
+					<tr><td valign="top">過期未還</td><td>有，請看下列</td></tr>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" -->

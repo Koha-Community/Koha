@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<H1><a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a><!-- TMPL_VAR name="name" --> 的購物籃 <!-- TMPL_VAR name="basket" --></H1><br />
+<h1><a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a><!-- TMPL_VAR name="name" --> 的購物籃 <!-- TMPL_VAR name="basket" --></h1><br />
 檔號：<!-- TMPL_VAR name="entrydate" -->, #<!-- TMPL_VAR name="basket" -->，負責人：<!-- TMPL_VAR name="loggedinusername" --><br />
 <CENTER>
 <p>
@@ -34,7 +34,7 @@
 	<tr valign=top bgcolor=white>
 		<td colspan=6 rowspan=3  bgcolor="#ffdf61">
   			<b>說明</b><br>
-			To change any of the catalogue or accounting information attached to an order, click on the title.<br>
+			修改任何書目或會計方面的訂單資料，按一按圖書資料的題名即可。<br>
 		</td>
   		<td><b>小計</b></td>
   		<td><!-- TMPL_VAR name="currency" --><!-- TMPL_VAR name="sub_total" --></td>
@@ -52,7 +52,7 @@
 			<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
 				<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
 				<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
-				<b> 新增訂單：請輸入關鍵詞或題名 </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+				<b>新增訂單：請輸入關鍵詞或題名：</b><INPUT TYPE="text"  SIZE="25"   NAME="search">
 			</form>
 		</td>
 	</tr>

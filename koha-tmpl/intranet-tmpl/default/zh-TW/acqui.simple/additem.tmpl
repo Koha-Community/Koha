@@ -81,6 +81,7 @@
 </center>
 </form>
 <script LANGUAGE="JavaScript">
+function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
 	for (i=10; i < 11 ; i++ ) {
@@ -113,9 +114,9 @@ function Check(f) {
 	if (total_errors==0) {
 		document.f.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
-		alertString2 += "------------------------------------------------------------------------------------\n\n";
-		alertString2 += "- "+ total_errors+" mandatory fields empty (see bold subfields)";
+		alertString2  = _("無法遞交表格，因為發現以下問題：");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += "\n- "+ total_errors+_("個必備欄位沒有填寫（見粗體的分欄）");
 		alert(alertString2);
 	}
 }
@@ -128,7 +129,7 @@ function Doprint(link) {
 }
 
 function confirm_deletion(bibid,itemnum) {
-	var is_confirmed = confirm('Do you confirm item deletion ?');
+	var is_confirmed = confirm(_('確定要移除這項圖書資料嗎？'));
 	if (is_confirmed) {
 	window.location = "additem.pl?op=delitem&bibid="+bibid+"&itemnum="+itemnum;
 	}

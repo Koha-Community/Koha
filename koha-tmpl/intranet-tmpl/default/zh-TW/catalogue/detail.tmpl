@@ -34,7 +34,7 @@
 			<!-- TMPL_IF name="collection" --><b>館藏：</b><!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="subject" --><b>主題：</b><!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="copyrightdate" --><b>著作年：</b><!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="notes" --><b>備註：</b><!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="notes" --><b>附註：</b><!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="unititle" --><b>劃一題名：</b><!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
 			<!-- TMPL_IF name="serial" --><b>期刊：</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="dewey" --><b>杜威分類號：</b><a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
@@ -60,10 +60,10 @@
 	<tr bgcolor="#cccc99" background="/images/background-mem.gif">
 		<th>圖書資料類別</th>
 		<th>存放地點</th>
-		<th>到期日</th>
+		<th>應歸還日期</th>
 		<th>最近出現</th>
 		<th>條碼</th>
-		<td>Volume</td>
+		<td>集叢號</td>
 	</tr>
 	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
@@ -75,7 +75,7 @@
 			<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 			<!-- TMPL_IF NAME="type" -->
 				<td>
-					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&item=<!-- TMPL_VAR NAME="itemtype" -->>改正圖書資資類別</a>
+					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&item=<!-- TMPL_VAR NAME="itemtype" -->>改正圖書資料類別</a>
 				</td>
 			<!-- /TMPL_IF -->
 		</tr>
@@ -84,7 +84,7 @@
 		<tr>
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
 			<td>網站</td>
-			<td>上線</td>
+			<td>網上</td>
 			<td>可用</td>
 			<td></td>
 			<td>

@@ -15,7 +15,7 @@
 	<TD>
 		<FONT SIZE=2  face="arial, helvetica"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF name="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><p>
 		借書證號碼：<!-- TMPL_VAR NAME="cardnumber" --><BR>
-		郵政地址：<!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --><BR>
+		郵址：<!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --><BR>
 		<!-- TMPL_UNLESS name="I" -->住址：<!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR name="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><BR>
 		電話 (住宅)：<!-- TMPL_VAR NAME="phone" --><BR><!-- /TMPL_UNLESS -->
 		電話 (日間)：<!-- TMPL_VAR NAME="phoneday" --><BR>
@@ -33,7 +33,7 @@
 		<!-- TMPL_UNLESS name="I" -->
 			出生日期：<!-- TMPL_VAR NAME="dateofbirth" --><BR>
 			性別：<!-- TMPL_VAR NAME="sex" --><P>
-			Alternative<!-- /TMPL_UNLESS --> 聯絡人：<!-- TMPL_VAR NAME="contactname" --><BR>
+			緊急<!-- /TMPL_UNLESS --> 聯絡人：<!-- TMPL_VAR NAME="contactname" --><BR>
 		電話：<!-- TMPL_VAR NAME="altphone" --><BR>
 		<!-- TMPL_UNLESS name="I" -->
 			關係：<!-- TMPL_VAR NAME="altrelationship" --><BR>
@@ -132,7 +132,7 @@
 
 	<TR VALIGN=TOP>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>題名</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>到期</b></TD>
+		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>應歸還日期</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>圖書資料類別</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>費用</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>續借</b></TD>

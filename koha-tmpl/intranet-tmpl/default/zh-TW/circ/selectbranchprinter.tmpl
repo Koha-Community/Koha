@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
-<h1>流通：選擇打印機及分館設定</h1><br>
+<h1>流通：選擇印表機及分館設定</h1><br>
 
 <center>
 <form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5 cellspacing=0>
 <tr><td colspan=2 bgcolor=<!-- TMPL_VAR Name="headerbackgroundcolor" --> align=center background=<!-- TMPL_VAR Name="backgroundimage" -->>
-<font color=black><b>請設定分館及打印機</b></font></td></tr>
+<font color=black><b>請設定分館及印表機</b></font></td></tr>
 <tr><td>
 <!--branchselection-->
 <!-- TMPL_IF Name="onebranch" -->
@@ -22,7 +22,7 @@
 <td>
 <!--printerselection-->
 <!-- TMPL_IF Name="oneprinter" -->
-打印機：<!-- TMPL_VAR Name="printername" --><br>
+印表機：<!-- TMPL_VAR Name="printername" --><br>
 <!-- TMPL_ELSE -->
 	<select name=printer>
 	<!-- TMPL_LOOP Name="printerloop" -->

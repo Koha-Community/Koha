@@ -2,9 +2,9 @@
 <!-- TMPL_IF name=else -->
 <h1>書籍採購資金管理</h1>
 <form action=<!-- TMPL_VAR name=scriptname --> method=post>
-<input type=text name=searchfield value=""><input type=reset name=reset value="清空"></form>
+<input type=text name=searchfield value=""><input type=reset name=reset value="重設"></form>
 <!-- TMPL_IF name=search -->
-	<br>You Searched for <b><!-- TMPL_VAR name=searchfield --></b><p><br>
+	<br>您查詢 <b><!-- TMPL_VAR name=searchfield --></b><p><br>
 <!-- /TMPL_IF -->
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
@@ -48,6 +48,7 @@
 
 <!-- TMPL_IF name="add_form" -->
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -85,22 +86,29 @@
 		var _alertString="";
 		var alertString2;
 		if (f.bookfundid.value.length==0) {
-			_alertString += "- bookfundid missing\n";
+			_alertString += "\n- " + _("沒有填寫書籍採購資金代號");
 		}
 		if (f.bookfundname.value.length==0) {
-			_alertString += "- bookfundname missing\n";
+			_alertString += "\n- " + _("沒有填寫書籍採購資金名稱");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("無法遞交表格，因為發現以下問題：");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
 	}
 	</SCRIPT>
-<h1><!-- TMPL_VAR name="header" --></h1>
+<h1>
+<!-- TMPL_IF name=use-header-flags-p -->
+<!-- TMPL_IF name=header-is-add-p -->新增書籍採購資金<!-- /TMPL_IF -->
+<!-- TMPL_IF name=header-is-modify-p -->修改書籍採購資金<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<!-- TMPL_VAR name="header" -->
+<!-- /TMPL_IF -->
+</h1>
 <form action='<!-- TMPL_VAR name="action" -->' name=Aform method=post>
 <input type=hidden name=op value='add_validate'>
 <input type=hidden name=checked value=0>

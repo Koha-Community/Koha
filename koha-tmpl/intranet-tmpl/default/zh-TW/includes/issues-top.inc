@@ -148,17 +148,17 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- Levin
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 書藉
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 錄音書籍
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 影碟/影帶
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 錄影資料
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- Shanon
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 書藉
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 錄音書籍
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 影碟/影帶
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 錄影資料
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- Foxton
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 書藉
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 錄音書籍
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 影碟/影帶
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 錄影資料
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 
 
@@ -194,7 +194,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> 交貨
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Accept Delivery
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 收貨
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 報表
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- - 本月交貨
@@ -203,26 +203,26 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> 預算案
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 書藉預算案1
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 本月
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Year to Date
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 全年累積
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 書藉預算案2
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 本月
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Year to Date
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 全年累積
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 書藉預算案4
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 本月
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Year to Date
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 全年累積
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 書藉預算案5
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 本月
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Year to Date
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 全年累積
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 預算總額
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 本月
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Year to Date
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 全年累積
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 年終報告
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
@@ -254,7 +254,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> 讀者查詢
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - All Books Out
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 所有已借出之書藉
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 過期
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 歷史紀錄
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 訊息
@@ -287,7 +287,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> -> 圖書館網站
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> ->  End of Year
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> -> 年終
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Stocktake
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 建立新預算案
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>　　- 帳目審查報告
@@ -311,7 +311,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 						<font size=1 face="arial">
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=223 height=12 alt=" " hspace=0 vspace=0>
 						<br>
-						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=26 height=17 align=right alt=" " hspace=0 vspace=0>你在此：<A HREF="index.html">借出及還書</a><br>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=26 height=17 align=right alt=" " hspace=0 vspace=0>您在此：<A HREF="index.html">借出及還書</a><br>
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=223 height=1 alt=" " hspace=0 vspace=0></FONT>
 					</td>
 				</TR>
@@ -328,5 +328,5 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinusername" --> 【<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>】</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a>Koh</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a>Koha</p>
 <!-- /TMPL_IF -->

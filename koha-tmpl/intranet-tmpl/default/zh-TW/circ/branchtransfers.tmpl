@@ -1,11 +1,11 @@
 <!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
 <table align=right cellpadding=10><tr><td>
-<a class="button" href=circulation.pl>下個讀者</a>　<a class="button" href=returns.pl>還書
+<a class="button" href=circulation.pl>下個讀者</a>　<a class="button" href=returns.pl>還書</a>
 </td></tr></table>
 
 <h1>流通：移交</h1><br>
-<b>館別：</b><!-- TMPL_VAR Name="genbrname" -->　　<b>打印機：</b><!-- TMPL_VAR Name="genprname" --><br>
+<b>館別：</b><!-- TMPL_VAR Name="genbrname" -->　　<b>印表機：</b><!-- TMPL_VAR Name="genprname" --><br>
 <a href=selectbranchprinter.pl>設定</a>
 <input type=hidden name=branch value=<!-- TMPL_VAR Name="branch" -->>
 <input type=hidden name=printer value=<!-- TMPL_VAR Name="printer" -->>
@@ -16,11 +16,11 @@
 	<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font>找到預約</font></th></tr>
 	<tr><td> <font color='red' size='+2'>
 		<!-- TMPL_IF Name="reserved" -->已預約：</font> <!-- TMPL_VAR Name="name" --> 已預約 (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>)。<!-- /TMPL_IF -->
-		<!-- TMPL_IF Name="waiting" --> 圖書資料在被等候中：</font><br>
+		<!-- TMPL_IF Name="waiting" --> 圖書資料在等候中：</font><br>
     圖書資料已標記為在 <!-- TMPL_VAR Name="branchname" --> 等候由 <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>) 取書。<br><!-- /TMPL_IF -->
 		<table border=1 cellpadding=5 cellspacing=0>
 		<tr><td>
-			<!-- TMPL_IF Name="reserved" -->Set reserve to waiting and transfer book to <b><!-- TMPL_VAR Name="branchname" --> </b>: <!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="reserved" -->設定預約狀態為「等候中」，然後把圖書資料移交至 <b><!-- TMPL_VAR Name="branchname" --> </b>： <!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="waiting" -->取消預約，然後嘗試移交 <!-- /TMPL_IF -->
 		</td>
 		<td>

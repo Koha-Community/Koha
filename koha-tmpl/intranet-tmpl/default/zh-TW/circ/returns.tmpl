@@ -4,7 +4,7 @@
 	<a class="button" href=circulation.pl>借出</a>　<a class="button" href=branchtransfers.pl>移交</a>
 </td></tr></table>
 <h1>流通：還書</h1><br>
-<b>館別：</b><!-- TMPL_VAR Name="genbrname" -->　　<b>打印機：</b><!-- TMPL_VAR Name="genprname" --><br>
+<b>館別：</b><!-- TMPL_VAR Name="genbrname" -->　　<b>印表機：</b><!-- TMPL_VAR Name="genprname" --><br>
 <a href=selectbranchprinter.pl>設定</a>
 <input type=hidden name=branch value=<!-- TMPL_VAR Name="branch" -->>
 <input type=hidden name=printer value=<!-- TMPL_VAR Name="printer" -->>
@@ -19,9 +19,9 @@
 		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font>找到預約</font></th></tr>
 		<tr><td>
 		<!-- TMPL_IF Name="waiting" -->
-			<font color='red' size='+2'>圖書資料在被等候中：</font><br>
+			<font color='red' size='+2'>圖書資料在等候中：</font><br>
 		圖書資料《<!-- TMPL_VAR Name="itemtitle" -->》(<!-- TMPL_VAR Name="itemauthor" -->) <br>
-	is marked waiting at <b><!-- TMPL_VAR Name="branchname" --></b> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
+	在分館 <b><!-- TMPL_VAR Name="branchname" --></b> 等候由 <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>) 取書。
 			<center><form method=post action='returns.pl'>
 			<!-- TMPL_LOOP Name="inputloop" -->
 				<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
@@ -33,9 +33,9 @@
 			</form></center>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="diffbranch" -->
-			<font color='red' size='+2'>圖書資料在被等候中：</font><br>
+			<font color='red' size='+2'>圖書資料在等候中：</font><br>
     圖書資料：<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)<br>
- needs to be transfered to <b><!-- TMPL_VAR Name="branchname" --></b> <br>
+ 須移交至 <b><!-- TMPL_VAR Name="branchname" --></b> <br>
 在 <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>) 取書。
 			<center><form method=post action='returns.pl'>
 			<!-- TMPL_LOOP Name="inputloop" -->
@@ -51,9 +51,9 @@
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="reserved" -->
 			<font color='red' size='+2'>找到預約</font> 圖書資料：<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->) <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Item'); return false;"><!-- TMPL_VAR Name="itembarcode" --></a> <br>
-			for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false"><!-- TMPL_VAR Name="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR Name="branchname" --></b>.
+			預約者：<!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false"><!-- TMPL_VAR Name="borcnum" --></a>)　　取書分館：<b><!-- TMPL_VAR Name="branchname" --></b>
 			<table cellpadding=5 cellspacing=0>
-			<tr><td valign="top">Change status to waiting and print<a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
+			<tr><td valign="top">變更狀態為「等待中」，並列印<a href="" onClick='alert(document.forms[0].resslip.value); return false'>單據</a>？： </td>
 			<td valign="top">
 			<form method=post action='returns.pl'>
 			<!-- TMPL_LOOP Name="inputloop" -->
@@ -130,7 +130,7 @@ Phone: <!-- TMPL_VAR Name="borphone" -->
 					圖書資料遺失了，現已找回。
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="withdrawn" -->
-					已註消
+					已註銷
 				<!-- /TMPL_IF -->
 				</font>
 				<BR>
@@ -143,7 +143,7 @@ Phone: <!-- TMPL_VAR Name="borphone" -->
 	<td valign=top align=left>
 		<table border=1 cellpadding=5 cellspacing=0>
 		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-		<font color=black>已還圖書資料細節</font></th></tr>
+		<font color=black>已還圖書資料</font></th></tr>
 		<tr><td>
 		題名：<!-- TMPL_VAR Name="itemtitle" --><br>
 		</td></tr>
@@ -154,7 +154,7 @@ Phone: <!-- TMPL_VAR Name="borphone" -->
 		<tr><td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 		<font color=black><b>讀者資料</b></font></td></tr>
 		<tr><td colspan=2>
-		<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->','Member'); return false;"><!-- TMPL_VAR Name="riborcnum" --></a> <!-- TMPL_VAR Name="riborsurname" --> <!-- TMPL_VAR Name="riborfirstname" --> <!-- TMPL_VAR Name="ribortitle" --><br>
+		<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->','Member'); return false;"><!-- TMPL_VAR Name="riborcnum" --></a> <!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" --><br>
 		</td></tr>
 		<!-- TMPL_IF Name="flagset" -->
 			<tr><td  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2>

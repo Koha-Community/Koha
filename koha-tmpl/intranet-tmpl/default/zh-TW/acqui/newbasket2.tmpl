@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 
- <H1><!-- TMPL_VAR name="bookselname" --> 的購物籃</H1>
+ <H1><!-- TMPL_VAR name="bookselname" --> 的購物藍</H1>
 
 <!-- TMPL_IF name ="testdonation" -->
 	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&sub=<!-- TMPL_VAR name="parsub" -->">
@@ -15,12 +15,12 @@
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
 <input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 <input type=hidden name=basket value=<!-- TMPL_VAR name="basket" -->>
-<b>新的搜尋： </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
+<b>新的搜尋：</b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
 <br clear=all>
 
 <CENTER>
 
-您的查詢是按
+您的查詢是
 <B>
 <!-- TMPL_LOOP name="loopsearch" -->
 	<!-- TMPL_VAR name="key" --> <!-- TMPL_VAR name="value" -->
@@ -35,7 +35,7 @@
 	<TR  VALIGN=TOP bgcolor="#ffdf61">
 		<TD><b>題名</b></TD>
 		<TD><b>著者</b></TD>
-		<TD><b>著作年份</b></TD>
+		<TD><b>出版年</b></TD>
 		<TD><b>數量</b></TD>
 		<TD><b>存放地點</b></TD>
 	</TR>
@@ -65,7 +65,15 @@
 			<!-- TMPL_VAR name="itemcount" -->
 		</TD>
 		<TD>
+			<!-- TMPL_IF name="use-location-flags-p" -->
+			<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR name="location-only" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="on-loan-p" -->借出<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="lost-p" -->遺失<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="mending-p" -->修補中<br><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="in-transit-p" -->移交中<br><!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
 			<!-- TMPL_VAR name="location" -->
+			<!-- /TMPL_IF -->
 		</TD>
 	</TR>
 

@@ -24,9 +24,9 @@
 	//-->
 	</script>
 	<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
-	<H1><!-- TMPL_VAR name="ordernumber" --> - 收貨</H1><br>
+	<h1><!-- TMPL_VAR name="ordernumber" --> - 收貨</h1><br>
 	<!-- TMPL_VAR name="name" --> 的購物藍
-	<br> Order placed: <!-- TMPL_VAR name="date" -->
+	<br> 訂單日期：<!-- TMPL_VAR name="date" -->
 	<P>
 	<CENTER>
 	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
@@ -46,7 +46,7 @@
 			</td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>版權日期</td>
+			<TD>著作年份</td>
 			<td><input type=text size=20 name=copyright value="<!-- TMPL_VAR name="copyrightdate" -->" >
 			</td>
 		</tr>
@@ -59,7 +59,7 @@
 			<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>叢刊</td>
+			<TD>集叢</td>
 			<td><input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->"></td>
 		</tr>
 		<TR VALIGN=TOP>
@@ -71,7 +71,7 @@
 			<td><input type=text size=20 name=barcode value="<!-- TMPL_VAR name="barcode" -->"></td>
 		</tr>
 		<TR VALIGN=TOP bgcolor=#ffffcc >
-			<TD><B>Volume Info (for serials) *</B></td>
+			<TD><B>集叢號/敘述 (期刊適用) *</B></td>
 			<td><input type=text size=20 name=volinf></td>
 		</tr>
 		<TR VALIGN=TOP>
@@ -128,7 +128,7 @@
 			</td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>備註</td>
+			<TD>附註/備註</td>
 			<td><input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->"></td>
 		</tr>
 	</table>

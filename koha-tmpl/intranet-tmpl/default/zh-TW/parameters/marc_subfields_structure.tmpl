@@ -14,7 +14,7 @@
 		<th>可重覆</th>
 		<th>必備</th>
 		<th>Koha欄位</th>
-		<th>Tab</th>
+		<th>在第幾格顯示</th>
 		<th>容許值或<br/>
 				同義字類別</th>
 	</tr>
@@ -33,10 +33,10 @@
 	<!-- /TMPL_LOOP -->
 	</table>
 	<input type=submit value="好！">
-	<p>注意：在最後一欄，你可以選擇：
-	<ul><li>「容許值」：指容許在這個分欄輸入的各種值，見「設定」的「容許值」。</li>
+	<p>注意：在最後一欄，您可以選擇：
+	<ul><li>「容許值」：指容許在這個分欄輸入的各種數值，見「設定」的「容許值」。</li>
 	<li>「同義字典類別」：指「同義字典」內的一個「類別」，見「設定」的「同義字典管理」。</li>
-	<li>「值建立程序」：「值建立程序」是一些簡短的Perl程式，幫助您選擇某欄的值。不同版本的機讀格式須用不用的「值建立程序」。某些「值建立程序」會自動替您填寫另一個相關分欄的值。</li>
+	<li>「數值建立程序」：「數值建立程序」是一些簡短的Perl程式，幫助您選擇某欄的數值。不同版本的機讀格式須用不用的「數值建立程序」。某些「數值建立程序」會自動替您填寫另一個相關分欄的數值。</li>
 	</ul>
 	</p>
 	</form>
@@ -78,10 +78,10 @@
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Koha欄位</b> <span style="font-size:8;color:red" title="鏈結至此分欄的 Koha 資料庫欄位">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>可重覆</b> <span style="font-size:8;color:red" title="分欄是否可重覆 (1=可重覆，0=不可重覆)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>必備</b> <span style="font-size:8;color:red" title="分欄是否必備 (1=必備，0=自由使用)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Tab</b> <span style="font-size:8;color:red" title="分欄在那一格顯示 (0-9號，抑或「圖書資料」格)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>容許值</b> <span style="font-size:8;color:red" title="此分欄可用之值">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>同義字典</b> <span style="font-size:8;color:red" title="鏈結至此分欄的同義字典">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>建立此值</b> <span style="font-size:8;color:red" title="值建立程序">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>在第幾格顯示</b> <span style="font-size:8;color:red" title="分欄在那一格顯示 (0-9號，抑或「圖書資料」格)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>容許值</b> <span style="font-size:8;color:red" title="在此分欄容許使用之數值">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>同義字典</b> <span style="font-size:8;color:red" title="連結至此分欄的同義字典">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>建立數值</b> <span style="font-size:8;color:red" title="數值建立程序">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%>移除</td>
 <!-- TMPL_LOOP name="loop" -->
 <tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>

@@ -96,7 +96,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">新增書目</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">目錄維護</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">目錄維護</a>
 					</td>
 				</tr>
 			</table>
@@ -108,5 +108,5 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinusername" --> 【<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>】</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a>Koh</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a>Koha</p>
 <!-- /TMPL_IF -->

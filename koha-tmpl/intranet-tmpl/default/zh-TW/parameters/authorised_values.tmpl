@@ -2,7 +2,13 @@
 
 <!-- TMPL_IF name="add_form" -->
 <!---------------------------------------------------------------------------->
-	<H1><!-- TMPL_VAR name="action" --></H1>
+	<H1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modify-authorized-value-p" -->修改容許值<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-new-category-p" -->新增類別<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-authorized-value-p" -->新增容許值<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	</H1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
@@ -36,7 +42,7 @@
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>說明</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
-	<tr><td>值</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	<tr><td>數值</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 		<input type=hidden name=op value=delete_confirmed>
 		<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
@@ -50,7 +56,7 @@
 <!-- TMPL_IF name="else" -->
 <h1>容許值管理</h1>
 <p>這個表是機讀格式定義的一部分。您可以設定數量不限的類別，每個類別亦可設定數量不限的容許值。</p>
-<p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds or modifies a biblio, the subfield is not entered through a free field, but though a list of authorised values.</p>
+<p>當您定義機讀格式的分欄結構時，您可以把分欄連結至一個容許值類別；當有使用者新增或修改書目時，這個分欄就不以自由形態輸入，而是由容許值的列表選取。</p>
 <form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
 	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="好！">   <a href="authorised_values.pl?op=add_form">新增類別...</a>
 </form>

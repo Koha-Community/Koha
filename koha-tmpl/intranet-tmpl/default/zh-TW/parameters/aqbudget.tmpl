@@ -2,9 +2,9 @@
 
 <!-- TMPL_IF name="else" -->
 	<h1>預算案管理</h1><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
-	<input type=text name=searchfield value=""><input type=reset name=reset value="清空"></form>
+	<input type=text name=searchfield value=""><input type=reset name=reset value="重設"></form>
 	<!-- TMPL_IF name=search -->
-	<br>You Searched for <b><!-- TMPL_VAR name=searchfield --></b><p><br>
+	<br>您查詢 <b><!-- TMPL_VAR name=searchfield --></b><p><br>
 	<!-- /TMPL_IF -->
 	<table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>書籍採購資金</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>開始日期</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>End date</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>預算金額</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
@@ -27,6 +27,7 @@
 
 <!-- TMPL_IF name="add_form" -->
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -64,13 +65,13 @@
 		var _alertString="";
 		var alertString2;
 		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
-			_alertString += "- Budget missing\n";
+			_alertString += "\n- " + _("沒有填寫預算金額");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("無法遞交表格，因為發現以下問題：");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}

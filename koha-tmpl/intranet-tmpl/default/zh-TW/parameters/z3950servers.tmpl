@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,31 +40,31 @@
                 var _alertString="";
                 var alertString2;
                 if (f.searchfield.value.length==0) {
-                        _alertString += "- site name missing\n";
+                        _alertString += "\n- " + _("沒有填寫Z39.50伺服器名稱");
                 }
                 if (f.host.value.length==0) {
-                        _alertString += "- host missing\n";
+                        _alertString += "\n- " + _("沒有填寫主機名稱");
                 }
                 if (f.port.value.length==0) {
-                        _alertString += "- port missing\n";
+                        _alertString += "\n- " + _("沒有填寫埠號");
                 }
                 if (f.db.value.length==0) {
-                        _alertString += "- database missing\n";
+                        _alertString += "\n- " + _("沒有填寫資料庫");
                 }
                 if (isNaN(f.port.value)) {
-                        _alertString += "- port must be a number\n";
+                        _alertString += "\n- " + _("埠號必須是數字");
                 }
                 if (isNaN(f.rank.value)) {
-                        _alertString += "- rank must be a number\n";
+                        _alertString += "\n- " + _("優先次序必須是數字");
                 }
                 if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-                        _alertString += "- checked must be 0 or 1\n";
+                        _alertString += "\n- " + _("「預設使用」只可填 0 或者 1");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("無法遞交表格，因為發現以下問題：");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
@@ -137,7 +138,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Syntax (z3950 can send records in various format. Choose one)</td>
+			<td>語法（以Z39.50方式送出之記錄可能是幾種格式其中之一種，請指明。）</td>
 			<td>
 				<select name="syntax">
 					<option value="MARC21">MARC21</option>
@@ -176,7 +177,7 @@
                 </tr>
                 <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                         <input type=hidden name=op value=delete_confirmed>
-                        <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
+                        <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=id -->>
                 <tr>
                         <td>主機名稱</td>
                         <td><!-- TMPL_VAR NAME=host --></td>
@@ -227,7 +228,7 @@
         <h2>Z39.50伺服器管理</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="清空">
+                <input type=reset name=reset value="重設">
         </form>
 
         <!-- TMPL_IF NAME=searchfield -->
@@ -244,7 +245,7 @@
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>密碼</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>預設使用</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>優先次序</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Syntax</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>語法</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
                 </tr>

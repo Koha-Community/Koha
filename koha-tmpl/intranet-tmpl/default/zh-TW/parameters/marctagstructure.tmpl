@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -38,13 +39,13 @@
 		var _alertString="";
 		var alertString2;
 		if (f.tagfield.value.length==0) {
-			_alertString += "- tag number missing\n";
+			_alertString += "\n- " + _("沒有填寫欄號");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("無法遞交表格，因為發現以下問題：");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
@@ -53,7 +54,12 @@
 
 <!-- TMPL_IF name="add_form" -->
 <!---------------------------------------------------------------------------->
-	<H1><!-- TMPL_VAR name="action" --></H1>
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modify-tag-p" -->修改欄<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-tag-p" -->新增欄<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	</h1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
 	<input type=hidden name=op value='add_validate'>
 	<table>
@@ -62,7 +68,7 @@
 	<tr><td>給大眾的說明</td><td><input type="text" name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></td></tr>
 	<tr><td>可重覆</td><td><!-- TMPL_VAR name="repeatable" --></td></tr>
 	<tr><td>必備</td><td><!-- TMPL_VAR name="mandatory" --></td></tr>
-	<tr><td>容許值</td><td><!-- TMPL_VAR name="authorised_value" --> (如果在這裏輸入了容許值的名稱，指標的值將會被限制在相應的容許值內)</td></tr>
+	<tr><td>容許值</td><td><!-- TMPL_VAR name="authorised_value" --> (如果在這裏輸入了容許值的名稱，指標的數值將會被限制在相應的容許值內)</td></tr>
 	<tr><td>&nbsp;</td><td><input type="button" value="好！" onclick='Check(this.form)'></td></tr>
 	</table>
 	</form>
@@ -93,10 +99,10 @@
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>機讀格式欄位結構管理</h1>
-<b>注意：如果你修改任何一個機讀格式欄與非機讀格式欄位之間的連結，請要求你的系統管理員執行misc/rebuildnonmarc.pl。</b>
+<b>注意：如果您修改任何一個機讀格式欄與非機讀格式欄位之間的連結，請要求您的系統管理員執行misc/rebuildnonmarc.pl。</b>
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=text name=searchfield value="">
-	<input type=reset name=reset value="清空">
+	<input type=reset name=reset value="重設">
 </form>
 <!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2>
@@ -105,7 +111,7 @@
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>說明</b></td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>可重覆</b></td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>必備</b></td>
-	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Authorised<br />值</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>容許<br />數值</b></td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>分欄</b></td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">修改</td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">移除</td>

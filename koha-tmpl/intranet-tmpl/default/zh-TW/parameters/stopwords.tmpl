@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,13 +40,13 @@
                 var _alertString="";
                 var alertString2;
                 if (f.word.value.length==0) {
-                        _alertString += "- word missing\n";
+                        _alertString += "\n- " + _("沒有填寫字詞");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("無法遞交表格，因為發現以下問題：");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
@@ -53,9 +54,9 @@
         </SCRIPT>
 
         <!-- TMPL_IF NAME=searchfield -->
-                <h1>修改字眼</h1>
+                <h1>修改字詞</h1>
         <!-- TMPL_ELSE -->
-                <h1>新增字眼</h1>
+                <h1>新增字詞</h1>
         <!-- /TMPL_IF -->
         <form action="<!-- TMPL_VAR NAME=script_name -->" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
@@ -64,14 +65,14 @@
         
         <!-- TMPL_IF NAME=searchfield -->
                 <tr>
-                        <td>字眼</td>
+                        <td>字詞</td>
                         <td>
                                 <input type=hidden name=word value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
                         </td>
                 </tr>
         <!-- TMPL_ELSE -->
                 <tr>
-                        <td>字眼</td>
+                        <td>字詞</td>
                         <td>
                                 <input type=text name=word size=80 maxlength=250 onBlur=toUC(this)>
                         </td>
@@ -95,7 +96,7 @@
 <!-- TMPL_IF NAME=delete_confirm -->
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='/images/background-mem.gif'><b>字眼</b></td>
+                        <td background='/images/background-mem.gif'><b>字詞</b></td>
                         <td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
                 </tr>
 
@@ -128,11 +129,11 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-        <h2>Stop word 管理</h2>
-	<b>注意：如果你修改這個表的任何項目，請要求你的系統管理員執行misc/rebuildnonmarc.pl。</b>
+        <h2>忽略字管理</h2>
+	<b>注意：如果您修改這個表的任何項目，請要求您的系統管理員執行misc/rebuildnonmarc.pl。</b>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="清空">
+                <input type=reset name=reset value="重設">
         </form>
 
         <!-- TMPL_IF NAME=searchfield -->
@@ -141,7 +142,7 @@
 
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='/images/background-mem.gif'><b>字眼</b></td>
+                        <td background='/images/background-mem.gif'><b>字詞</b></td>
                         <td background='/images/background-mem.gif'> </td>
                 </tr>
                 <!-- TMPL_LOOP NAME=loop -->
@@ -166,7 +167,7 @@
         <!-- /TMPL_iF -->
 
         <br>
-        <input type=submit class="button" value="新增Stop word" alt="新增Stop word">
+        <input type=submit class="button" value="新增忽略字" alt="新增忽略字">
         <br>
         </form>
 <!-- /TMPL_IF -->

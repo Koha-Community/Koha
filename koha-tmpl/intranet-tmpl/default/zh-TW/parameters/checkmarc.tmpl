@@ -15,7 +15,7 @@
 <!-- TMPL_ELSE -->
 	<tr>
 		<td>好！</td>
-		<td><i>itemnum : the field itemnumber is mapped to a field in tab -1</i></td>
+		<td><i>itemnumber 欄位連結至第「-1」格 (即不顯示)</i></td>
 	</tr>
 <!-- /TMPL_IF -->
 <!------------------------------------------------------------------------------------------------------------>
@@ -23,8 +23,8 @@
 	<tr>
 		<td><b>圖書資料相關欄位</b></td>
 		<td>圖書資料的所有欄位都必須：<br/>
-			<li>be mapped to the same tag,</li>
-			<li>and they must all be in the 10 (items) tab</li></td>
+			<li>連結至同一機讀格式的欄內，</li>
+			<li>而且它們必須全部在第 10 格 (「圖書資料」格)</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
@@ -35,21 +35,21 @@
 <!------------------------------------------------------------------------------------------------------------>
 <!-- TMPL_IF name="itemtypes_empty" -->
 	<tr>
-		<td><b>itemtypes table 是空白的</b></td>
-		<td>itemtypes table是空白的，它必須有至少一個值</td>
+		<td><b>itemtypes 表是空白的</b></td>
+		<td>itemtypes table是空白的，它必須有至少一個數值</td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
 		<td>好！</td>
-		<td><i>itemtypes table 有至少一個值</i></td>
+		<td><i>itemtypes 表有至少一個數值</i></td>
 	</tr>
 <!-- /TMPL_IF -->
 <!------------------------------------------------------------------------------------------------------------>
 <!-- TMPL_IF name="itemtype" -->
 	<tr>
-		<td><b>itemtype NOT mapped</b></td>
+		<td><b>itemtype 欄位沒有連結</b></td>
 		<td>biblioitems.itemtype欄必須：<br/>
-			<li>be mapped to a MARC subfield, </li>
+			<li>連結至一個機讀格式的分欄內， </li>
 			<li>對應的分欄必須設定容許值為itemtype</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
@@ -62,20 +62,20 @@
 <!-- TMPL_IF name="branches_empty" -->
 	<tr>
 		<td><b>branch table 是空白的</b></td>
-		<td>branch table是空白的，它必須至少有一個值！</td>
+		<td>branch table是空白的，它必須至少有一個數值！</td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
 		<td>好！</td>
-		<td><i>branch table 有至少一個值</i></td>
+		<td><i>branch table 有至少一個數值</i></td>
 	</tr>
 <!-- /TMPL_IF -->
 <!------------------------------------------------------------------------------------------------------------>
 <!-- TMPL_IF name="branch" -->
 	<tr>
-		<td><b>homebranch 沒有鏈結</b></td>
+		<td><b>homebranch 欄位沒有鏈結</b></td>
 		<td>items.homebranch欄必須<br/>
-			<li>be mapped to a MARC subfield,</li>
+			<li>連結至一個機讀格式的分欄內，</li>
 			<li>對應的分欄必須設定容許值為branches</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
@@ -87,9 +87,9 @@
 <!------------------------------------------------------------------------------------------------------------>
 <!-- TMPL_IF name="holdingbranch" -->
 	<tr>
-		<td><b>holdingbranch 沒有鏈結</b></td>
+		<td><b>holdingbranch 欄位沒有鏈結</b></td>
 		<td>items.holdingbranch欄必須：<br/>
-			<li>be mapped to a MARC subfield, </li>
+			<li>連結至一個機讀格式的分欄內， </li>
 			<li>對應的分欄必須設定容許值為branches</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
@@ -103,9 +103,9 @@
 	<tr>
 		<td><b>書目及書目記錄號碼</b></td>
 		<td>biblio.biblionumber 及 biblioitems.biblioitemnumber 欄位必須：<br/>
-			<li>be mapped to a MARC subfield,</li>
-			<li>be in the SAME tag (for example : 090$a and 090$b)</li>
-			<li>be in tab -1</li></td>
+			<li>連結至一個機讀格式的分欄內，</li>
+			<li>在同一機讀格式的欄內 (例如：090$a 及 090$b)</li>
+			<li>在第「-1」格 (即不顯示)</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
