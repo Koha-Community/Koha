@@ -187,11 +187,11 @@ if ($op eq 'add_form') {
 
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "<a href=\"$script_name?offset=".$prevpage.'">');
+		$template->param(previous => "<a href=\"$script_name?offset=$prevpage&searchfield=$searchfield\">");
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "<a href=\"$script_name?offset=".$nextpage.'">');
+		$template->param(next => "<a href=\"$script_name?offset=$nextpage&searchfield=$searchfield\">");
 
 
 	}

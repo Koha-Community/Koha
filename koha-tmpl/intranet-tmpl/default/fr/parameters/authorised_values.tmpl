@@ -86,10 +86,7 @@ n'est pas renseigné par un champ vide mais par une liste de valeurs autorisées.<
 		<td width=50%><TMPL_VAR name="next"></td>
 	</tr>
 </table>
-<form action='<TMPL_VAR name="script_name">' method=post>
-<input type="hidden" name="op" value="add_form">
-<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-<br><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" border="0"><br>
+
 <table width=40%>
 	<tr>
 		<td width=50%><TMPL_IF name="previous"><TMPL_VAR name="previous"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a></TMPL_IF></td>
@@ -97,6 +94,10 @@ n'est pas renseigné par un champ vide mais par une liste de valeurs autorisées.<
 	</tr>
 </table>
 
+<form action='<TMPL_VAR name="script_name">' method=post>
+<input type="hidden" name="op" value="add_form">
+<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+<br><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" border="0"><br>
 </form>
 </TMPL_IF>
 
