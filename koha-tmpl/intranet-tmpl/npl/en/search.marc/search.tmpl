@@ -14,39 +14,39 @@
 <table>
 <caption>Quick Search</caption>
 					<tr>
-			<th><label>Any word</label></th>
+			<th><label for="keyword">Any word</label></th>
 			<td><input type="hidden" name="marclist" value="" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="keyword" name="value" onchange="sql_update()" size="35" /></td>
 		</tr>
 		<tr>
-			<th><label>Title</label></th>
+			<th><label for="title">Title</label></th>
 			<td><input type="hidden" name="marclist" value="biblio.title" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="title" name="value" onchange="sql_update()" size="35" /></td>
 		</tr>
 		<tr>
-			<th><label>Author</label></th>
+			<th><label for="author">Author</label></th>
 			<td><input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="author" name="value" onchange="sql_update()" size="35" /></td>
 		</tr>
 		<tr>
-			<th><label>Subject</label></th>
+			<th><label for="subject">Subject</label></th>
 			<td><input type="hidden" name="marclist" value="bibliosubject.subject" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" /></td>
 		</tr>
 		<tr>
-			<th><label>Item Type</label></th>
+			<th><label for="itemtype">Item Type</label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.itemtype" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -54,7 +54,7 @@
 			<!-- TMPL_VAR name="CGIitemtype" --></td>
 		</tr>
 		<tr>
-				<th><label>Branch</label></th>
+				<th><label for="branch">Branch</label></th>
 				<td><input type="hidden" name="marclist" value="items.holdingbranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
@@ -62,36 +62,36 @@
 				<!-- TMPL_VAR name="CGIbranch" --></td>
 		</tr>
 		<tr>
-				<th><label>Item barcode</label></th>
+				<th><label for="barcode">Item barcode</label></th>
 				<td><input type="hidden" name="marclist" value="items.barcode" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="contains" />
-				<input type="text" name="value" onchange="sql_update()" /></td> 
+				<input type="text" id="barcode" name="value" onchange="sql_update()" size="14" maxlength="14" /></td> 
 		</tr>
 		<tr>
-			<th><label>Call Number</label></th>
+			<th><label for="callno">Call Number</label></th>
 			<td><input type="hidden" name="marclist" value="items.itemcallnumber" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" /></td>
+			<input type="text" id="callno" name="value" onchange="sql_update()" /></td>
 		</tr>
 		<tr>
-			<th><label>ISBN</label></th>
+			<th><label for="isbn">ISBN</label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.isbn" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<input type="text" name="value" onchange="sql_update()" /></td>
+			<input type="text" id="isbn" name="value" onchange="sql_update()" /></td>
 		</tr>
 		<tr>
-			<th><label>Publisher</label></th>
+			<th><label for="publisher">Publisher</label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.publishercode" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" /></td>
+			<input type="text" id="publisher" name="value" onchange="sql_update()" /></td>
 		</tr>
 		</table>
 
@@ -149,7 +149,7 @@
 		</tr></table>
 		<p>
 			<input type="submit" value="Start search" class="submit">
-			<input type="button" value="Suggestions" class="submit" onclick="PopupSuggestion(); return false;">
+			<input type="button" value="Suggest Search Term" class="submit" onclick="PopupSuggestion(); return false;">
 		</p>
 		</div>
 	</form>
