@@ -251,6 +251,7 @@ my %requiretables = (
 					)",
     auth_header => "(
 						authid bigint(20) unsigned NOT NULL auto_increment,
+						authtypecode char(10) NOT NULL default '',
 						datecreated date NOT NULL default '0000-00-00',
 						datemodified date default NULL,
 						origincode char(20) default NULL,
@@ -283,6 +284,22 @@ my %requiretables = (
 				KEY marc_search (tagsubfield,word),
 				KEY word (word),
 				KEY sndx_word (sndx_word)
+			)",
+	suggestions => "(
+				suggestionnumber int(8) NOT NULL auto_increment,
+				suggestedby int(11) NOT NULL default '0',
+				managedby int(11) default NULL,
+				status varchar(10) NOT NULL default '',
+				note text,
+				author varchar(80) default NULL,
+				title varchar(80) default NULL,
+				copyrightdate smallint(6) default NULL,
+				publishercode varchar(255) default NULL,
+				date timestamp(8) NOT NULL,
+				mailoverseeing smallint(1) default 0,
+				PRIMARY KEY  (suggestionnumber),
+				KEY suggestedby (suggestedby),
+				KEY managedby (managedby)
 			)",
 );
 
@@ -825,6 +842,9 @@ unless ( $existingtables{'z3950servers'} ) {
 }
 unless ( $existingtables{'issuingrules'} ) {
 	$dbh->do("alter table categoryitem rename issuingrules");
+	$dbh->do("ALTER TABLE issuingrules ADD maxissueqty int(4) default NULL");
+	$dbh->do("ALTER TABLE issuingrules ADD issuelength int(4) detault NULL");
+	$dbh->do("ALTER TABLE issuingrules ADD branchcode varchar(4) NOT NULL default ''");
 	print "renaming categoryitem\n" unless $silent;
 }
 
@@ -1225,6 +1245,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.87  2004/06/23 13:03:09  tipaul
+# fixes in DB structure
+#
 # Revision 1.86  2004/06/22 11:30:57  tipaul
 # adding -s (silent) flag, to have a silent install.
 # only updater will be verbose
