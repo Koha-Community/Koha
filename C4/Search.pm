@@ -64,7 +64,7 @@ on what is passed to it, it calls the appropriate search function.
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
-&isbnsearch &breedingsearch &getallthemes &getalllanguages &getbranchname &getborrowercategory);
+&isbnsearch &breedingsearch &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
 
 
@@ -2568,116 +2568,6 @@ sub breedingsearch {
 } # sub breedingsearch
 
 
-=item getalllanguages
-
-  (@languages) = &getalllanguages($type);
-  (@languages) = &getalllanguages($type,$theme);
-
-Returns an array of all available languages.
-
-=cut
-
-sub getalllanguages {
-    my $type=shift;
-    my $theme=shift;
-    my $htdocs;
-    my @languages;
-    if ($type eq 'opac') {
-	$htdocs=C4::Context->config('opachtdocs');
-	if ($theme and -d "$htdocs/$theme") {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		push @languages, $language;
-	    }
-	    return sort @languages;
-	} else {
-	    my $lang;
-	    foreach my $theme (getallthemes('opac')) {
-		opendir D, "$htdocs/$theme";
-		foreach my $language (readdir D) {
-		    next if $language=~/^\./;
-		    next if $language eq 'all';
-		    $lang->{$language}=1;
-		}
-	    }
-	    @languages=keys %$lang;
-	    return sort @languages;
-	}
-    } elsif ($type eq 'intranet') {
-	$htdocs=C4::Context->config('intrahtdocs');
-	if ($theme and -d "$htdocs/$theme") {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		push @languages, $language;
-	    }
-	    return sort @languages;
-	} else {
-	    my $lang;
-	    foreach my $theme (getallthemes('opac')) {
-		opendir D, "$htdocs/$theme";
-		foreach my $language (readdir D) {
-		    next if $language=~/^\./;
-		    next if $language eq 'all';
-		    $lang->{$language}=1;
-		}
-	    }
-	    @languages=keys %$lang;
-	    return sort @languages;
-	}
-    } else {
-	my $lang;
-	my $htdocs=C4::Context->config('intrahtdocs');
-	foreach my $theme (getallthemes('intranet')) {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		$lang->{$language}=1;
-	    }
-	}
-	my $htdocs=C4::Context->config('opachtdocs');
-	foreach my $theme (getallthemes('opac')) {
-	    opendir D, "$htdocs/$theme";
-	    foreach my $language (readdir D) {
-		next if $language=~/^\./;
-		next if $language eq 'all';
-		$lang->{$language}=1;
-	    }
-	}
-	@languages=keys %$lang;
-	return sort @languages;
-    }
-}
-
-=item getallthemes
-
-  (@themes) = &getallthemes('opac');
-  (@themes) = &getallthemes('intranet');
-
-Returns an array of all available themes.
-
-=cut
-
-sub getallthemes {
-    my $type=shift;
-    my $htdocs;
-    my @themes;
-    if ($type eq 'intranet') {
-	$htdocs=C4::Context->config('intrahtdocs');
-    } else {
-	$htdocs=C4::Context->config('opachtdocs');
-    }
-    opendir D, "$htdocs";
-    my @dirlist=readdir D;
-    foreach my $directory (@dirlist) {
-	-d "$htdocs/$directory/en" and push @themes, $directory;
-    }
-    return @themes;
-}
 
 
 
