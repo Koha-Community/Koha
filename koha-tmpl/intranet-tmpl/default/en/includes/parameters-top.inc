@@ -163,6 +163,9 @@ a.parameters:hover {
 					<td>
 						<a class="parameters" href="/cgi-bin/koha/admin-home.pl" alt="Paramètres">Parameters</a>
 					</td>
+					<td>
+						<a class="parameters" href="/cgi-bin/koha/about.pl">About</a>
+					</td>
 				</TR>
 			</TABLE>
 			</div>
