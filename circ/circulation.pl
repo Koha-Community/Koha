@@ -332,6 +332,10 @@ $template->param(
 		previssues => $previssues,
 	);
 
+if ($branchcookie) {
+    $cookie=[$cookie, $branchcookie, $printercookie];
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;
 
 ####################################################################
