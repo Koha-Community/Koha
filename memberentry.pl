@@ -80,6 +80,7 @@ if ($delete){
 	my $ethcatpopup;
 	if ($ethnicitycategoriescount>=0) {
 		$ethcatpopup = CGI::popup_menu(-name=>'ethnicity',
+					-id => 'ethnicity',
 					-values=>$categories,
 					-default=>$data->{'ethnicity'},
 					-labels=>$labels);
@@ -88,6 +89,7 @@ if ($delete){
 
 	($categories,$labels)=borrowercategories();
 	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
+					-id => 'categorycode',
 					-values=>$categories,
 					-default=>$data->{'categorycode'},
 					-labels=>$labels);
@@ -142,6 +144,7 @@ if ($delete){
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
+				-id => 'branchcode',
 				-values   => \@select_branch,
 				-default  => $data->{'branchcode'},
 				-labels   => \%select_branches,
