@@ -37,8 +37,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
 							type => "opac",
-							authnotrequired => 0,
-							flagsrequired => {catalogue => 1},
+							authnotrequired => 1,
 						});
 
 if ($query->param('modifyshelfcontents')) {
@@ -152,6 +151,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.2  2004/11/12 16:27:33  tipaul
+# fixes for printing a biblio
+#
 # Revision 1.1  2004/03/15 15:02:19  tipaul
 # adding virtual shelves to opac
 #
