@@ -5,6 +5,24 @@ package C4::BookShelves; #asummes C4/BookShelves
 #
 #requires DBI.pm to be installed
 
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 use strict;
 require Exporter;
 use DBI;
@@ -133,6 +151,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.2.2.2  2002/08/14 18:30:50  tonnesen
+# Adding copyright statements to all .pl and .pm files in rel-1-2 branch
+#
 # Revision 1.2.2.1  2002/06/26 20:46:48  tonnesen
 # Inserting some changes I made locally a while ago.
 #
