@@ -1,0 +1,102 @@
+<TMPL_INCLUDE Name="cat-top.inc">
+
+<p align=left>Zalogowano jako: <TMPL_VAR Name="loggedinuser"> [<a href="/cgi-bin/koha/logout.pl">Wyloguj</a>]</p>
+
+
+<TMPL_IF Name="viewshelf">
+    <center>
+    <form>
+    <a href=shelves.pl>Lista pó³ek</a><p>
+    <table border=0 cellpadding=0 cellspacing=0>
+		<tr><td colspan=7>
+			<table>
+			<tr><td>Dodaj ksi±¿kê wed³ug kodu kreskowego:</td><td><input name=addbarcode></td></tr>
+			</table>
+			<br>
+			<table border=0 cellpadding=5 cellspacing=0 width=100%>
+			<tr><th bgcolor="<TMPL_VAR Name="headerbackgroundcolor">">
+			<font color=white>Zawarto¶æ pó³ki <TMPL_VAR Name="shelfname"> shelf</font>
+			</th></tr>
+			</table>
+		</td></tr>
+		<TMPL_LOOP Name="itemsloop">
+			<tr>
+				<td bgcolor="<TMPL_VAR Name="color">"><input type=checkbox name="REM-<TMPL_VAR Name="itemnumber">"></td>
+				<td bgcolor="<TMPL_VAR Name="color">" width=10 align=center><img src=/images/blankdot.gif></td>
+				<td bgcolor="<TMPL_VAR Name="color">"><TMPL_VAR Name="barcode"></td>
+				<td bgcolor="<TMPL_VAR Name="color">" width=10 align=center><img src=/images/blankdot.gif></td>
+				<td bgcolor="<TMPL_VAR Name="color">"><TMPL_VAR Name="title"></td>
+				<td bgcolor="<TMPL_VAR Name="color">" width=10 align=center><img src=/images/blankdot.gif></td>
+				<td bgcolor="<TMPL_VAR Name="color">"><TMPL_VAR Name="author"></td>
+			</tr>
+		</TMPL_LOOP>
+    </table>
+    <br>
+    <input type=hidden name=shelfnumber value="<TMPL_VAR Name="shelfnumber">">
+    <input type=hidden name=modifyshelfcontents value=1>
+    <input type=hidden name=viewshelf value="<TMPL_VAR Name="shelfnumber">">
+    <input type=submit value="Remove Selected Items">
+    </form>
+<TMPL_ELSE>
+	<TMPL_IF Name="shelves">
+		<TMPL_IF Name="status1">
+			<font color=red><TMPL_VAR Name="string1"></font><p>
+		</TMPL_IF>
+		<TMPL_LOOP Name="paramsloop">
+			<TMPL_IF Name="status">
+				<font color=red><TMPL_VAR Name="string"></font><p>
+			</TMPL_IF>
+		</TMPL_LOOP>
+		<center>
+		<a href=shelves.pl>Modyfikuj zawarto¶æ pó³ki</a><p>
+		<h1>Pó³ki z ksi±¿kami</h1>
+		<table border=0 cellpadding=7>
+			<tr><td align=center>
+				<form method=post>
+				<input type=hidden name=shelves value=1>
+				<table border=0 cellpadding=0 cellspacing=0>
+				<tr><th bgcolor="<TMPL_VAR Name="headerbackgroundcolor">">
+				<font color=white>Wybierz pó³ki do wymazania</font>
+			</th></tr>
+			<TMPL_LOOP Name="shelvesloop">
+				<tr>
+					<td bgcolor="<TMPL_VAR Name="color">">
+						<input type=checkbox name="DEL-<TMPL_VAR Name="shelf">">
+						<TMPL_VAR Name="shelfname"> (<TMPL_VAR Name="shelfbookcount"> books)
+					</td>
+				</tr>
+			</TMPL_LOOP>
+    </table>
+    <p><input type=submit value="Wyma¿ pó³ki"><p>
+    </td><td align=center valign=top>
+    <form method=post>
+    <input type=hidden name=shelves value=1>
+    <p>Dodaj pó³kê: <input name=addshelf size=25><p>
+    <p><input type=submit value="Dodaj now± pó³kê"><p>
+    </form>
+    </td></tr></table>
+
+	<TMPL_ELSE>
+		<center>
+		<table border=0 cellpadding=4 cellspacing=0>
+			<tr><td bgcolor="<TMPL_VAR Name="headerbackgroundcolor">">
+				<table border=0 cellpadding=5 cellspacing=0 width=100%>
+					<tr><th bgcolor="<TMPL_VAR Name="headerbackgroundcolor">">
+					<font color=white>Lista pó³ek</font>
+					</th></tr>
+				</table>
+			</td></tr>
+			<TMPL_LOOP Name="shelvesloop">
+				<tr><td bgcolor="<TMPL_VAR Name="color">">
+					<a href="shelves.pl?viewshelf=<TMPL_VAR Name="shelf">">
+						<TMPL_VAR Name="shelfname">(<TMPL_VAR Name="shelfbookcount"> ksi±¿ki)
+					</a>
+				</td></tr>
+			</TMPL_LOOP>
+		</table>
+		<P><a href=shelves.pl?shelves=1>Dodaj lub usuñ pó³ki</a>
+	</TMPL_IF>
+
+</TMPL_IF>
+
+<TMPL_INCLUDE Name="cat-bottom.inc">

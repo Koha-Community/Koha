@@ -1,0 +1,111 @@
+<html>
+<TMPL_INCLUDE Name="cat-top.inc">
+
+<BLOCKQUOTE><FONT SIZE=6>
+<em><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
+Modyfikuj Grupê - <TMPL_VAR Name="description"></em></FONT><br>
+
+<form action=updatebibitem.pl method=post>
+	<table border=0 cellspacing=0 cellpadding=5 align=left>
+
+		<TR VALIGN=TOP  bgcolor="99cc33">
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=YES > PRZYPISZ DO ISTNIEJ¡CEJ GRUPY</b></td>
+		</tr>
+
+		<tr valign=top>
+			<td colspan=3>
+				<select name=existinggroup><br>
+					<TMPL_LOOP Name="bibitemloop">
+						<option value="<TMPL_VAR Name="biblioitemnumber">"><TMPL_VAR Name="description"> - <TMPL_VAR Name="isbn"><br>
+					</TMPL_LOOP>
+				</select>
+			</td>
+		</tr>
+
+		<TR VALIGN=TOP  bgcolor="99cc33">
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >LUB ZMIEÑ SZCZEGÓ£Y</b></td>
+		</tr>
+
+		<tr valign=top bgcolor=white><td>Typ pozycji</td><td><input type=text name=Item Type value="<TMPL_VAR Name="itemtype">" size=20></td></tr>
+
+		<tr valign="top" bgcolor="white">
+			<td>URL</td>
+			<td><input type="text" name="url" value="<TMPL_VAR Name="url">" size="20"></td>
+		</tr>
+
+		<tr valign=top bgcolor=white><td>Klasa</td><td><input type=text name=Class value="<TMPL_VAR Name="classification"><TMPL_VAR Name="dewey"><TMPL_VAR Name="subclass">" size=20></td></tr>
+
+
+
+		<tr valign=top bgcolor=white><td>Wydawca</td><td><input type=text name=Publisher value="<TMPL_VAR Name="publishercode">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Miejsce</td><td><input type=text name=Place value="<TMPL_VAR Name="place">" size=20></td></tr>
+
+
+		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<TMPL_VAR Name="isbn">" size=20></td></tr>
+
+		<tr valign=top bgcolor=white><td>Rok publikacji</td><td><input type=text name=Publication Year value="<TMPL_VAR Name="publicationyear">" size=20></td></tr>
+
+		<tr valign=top bgcolor=white><td>Strony</td><td><input type=text name=Pages value="<TMPL_VAR Name="pages">" size=20></td></tr>
+
+		<tr valign=top bgcolor=white><td>Ilustracje</td><td><input type=text name=Illustrations value="<TMPL_VAR Name="illustration">" size=20></td></tr>
+
+		<tr valign=top bgcolor=white><td>Tom</td>
+		<td><input type=text name=Volume value="<TMPL_VAR Name="volumeddesc">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Notatki</td>
+		<td><input name="Notes" size="20" value="<TMPL_VAR name="bnotes">"></td></tr>
+		<tr valign=top bgcolor=white><td>Wymiary</td>
+		<td><input type=text name=Size value="<TMPL_VAR Name="size">" size=20></td></tr>
+
+		<input type=hidden name=bibnum value="<TMPL_VAR Name="biblionumber">">
+
+		<input type=hidden name=bibitemnum value="<TMPL_VAR Name="biblioitemnumber">">
+
+	</table>
+
+	<img src="/images/holder.gif" width=16 height=500 align=left>
+
+
+
+
+	<TABLE  cellspacing=0 cellpadding=5 border=0 >
+
+		<TR VALIGN=TOP  bgcolor="99cc33">
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5 ><b>ZMIANY DOTYCZ¡CE TYCH KODÓW KRESKOWYCH<br>
+			Zaznacz te kody kreskowe, których zmiany maj± dotyczyæ. Te nie-zaznaczone zachowaj± swoj± oryginaln± grupê.</td>
+		</tr>
+
+		<tr valign=top bgcolor=99cc33>
+			<td background="/images/background-mem.gif">&nbsp;</td>
+			<td background="/images/background-mem.gif">Kod kreskowy</td>
+			<td background="/images/background-mem.gif">Lokalizacja</td>
+			<td background="/images/background-mem.gif">Termin zwrotu</td>
+			<td background="/images/background-mem.gif">Odprawiono</td>
+		</tr>
+
+		<TMPL_LOOP Name="itemloop">
+			<tr valign=top gcolor=#ffffcc>
+				<td><input type=checkbox name="<TMPL_VAR Name="barcode">"></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?item="<TMPL_VAR Name="itemnumber">"&bib="<TMPL_VAR Name="biblionumber">"&bi="<TMPL_VAR Name="biblioitemnumber">""><TMPL_VAR Name="barcode"></a></td>
+				<td><TMPL_VAR Name="holdingbranch"></td>
+				<td></td>
+				<td><TMPL_VAR Name="datelastseen"></td>
+			</tr>
+		</TMPL_LOOP>
+	</table>
+	<p>
+
+	<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42>
+
+
+</form>
+<p>
+
+
+<B>POMOC:</B><b> Musisz</b> klikn±æ w ¿adane kó³ko wyboru (na zielonym tle), i albo przypisaæ pozycjê/e do istniej±cego ju¿ w systemie rekordu,
+albo zmodyfikowaæ ten rekord. JE¦LI zmiany maj± dotyczyæ jedynie niektórych pozycji, zaznacz je odpowiednio, wówczas utworzony zostanie dla nich
+automatycznie osobny rekord grupowy.
+ <br clear=all>
+ <p> &nbsp; </p>
+
+<TMPL_INCLUDE Name="cat-bottom.inc">
+</html>
