@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
 <!-- TMPL_IF NAME="loggedinuser" -->
-	<p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+	<p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="/cgi-bin/koha/logout.pl">Log Out</a>]</p>
 	<p>
 	<center>
 	<h3>This page is just a mock up</h3>
@@ -10,7 +10,7 @@
 	<tr><td valign=top>
 
 	<table border=1 cellpadding=10>
-	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Reserves</font></th></tr>
+	<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Reserves</font></th></tr>
 	<tr><td>
 	<b>You have the following books waiting to be picked up:</b>
 	<ul>
@@ -29,10 +29,10 @@
 
 	</td><td valign=top>
 
-		<form method=post>
+		<form method="post">
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>User Preferences</font></th></tr>
-		<tr><td align =center>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">User Preferences</font></th></tr>
+		<tr><td align ="center">
 		<table border=0 cellpadding=5>
 			<tr><td>Language</td><td>
 			<select name=language>
@@ -42,7 +42,7 @@
 			<option value=english>Polish
 			</select>
 			</td></tr>
-			<tr><td>E-mail Address</td><td><input name=email size=30 value=<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com></td></tr>
+			<tr><td>E-mail Address</td><td><input name=email size=30 value="<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com"></td></tr>
 			<tr><td>Preferred Branch<br>for reserve pickups</td><td>
 			<select name=pickupbranch>
 			<option value=MAIN>Main Library
@@ -52,10 +52,10 @@
 			</select>
 			</td></tr>
 			<tr><td colspan=2>
-			<input name=specialeventsbyemail type=checkbox checked> Notify me about Special Events by email<br>
-			<input name=overduesbyemail type=checkbox checked> Notify me about overdues by email<br>
-			<input name=recordreadingrecord type=checkbox> Keep a record of books I have read<br>
-			<input name=recordreadingrecord type=checkbox> Allow library staff to see my reading record<br>
+			<input name="specialeventsbyemail" type="checkbox" checked> Notify me about Special Events by email<br>
+			<input name="overduesbyemail" type="checkbox" checked> Notify me about overdues by email<br>
+			<input name="recordreadingrecord" type="checkbox"> Keep a record of books I have read<br>
+			<input name="recordreadingrecord" type="checkbox"> Allow library staff to see my reading record<br>
 			</td></tr>
 			<tr><td align=center colspan=2>
 			<input type=submit value="Set Preferences">
@@ -74,11 +74,11 @@
 	<center>
 	<form method=post>
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>User Preferences</font></th></tr>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif" colspan=2><font size=+2>User Preferences</font></th></tr>
 		<tr><td>Name:</td><td><input name="userid"></td></tr>
-		<tr><td>Password:</td><td><input type=password name=password></td></tr>
-		<tr><td align=center colspan=2>
-		    <input type=submit value="Login">
+		<tr><td>Password:</td><td><input type="password" name="password"></td></tr>
+		<tr><td align="center" colspan=2>
+		    <input type="submit" value="Login">
 		</td>
 		</tr>
 	    </table>
