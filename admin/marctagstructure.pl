@@ -118,6 +118,7 @@ if ($op eq 'add_form') {
 	my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
 			-values=> \@authorised_values,
 			-size=>1,
+			-id=>"authorised_value",
 			-multiple=>0,
 			-default => $data->{'authorised_value'},
 			);
@@ -133,8 +134,16 @@ if ($op eq 'add_form') {
 	$template->param('use-heading-flags-p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							libopac => $data->{'libopac'},
-							repeatable => CGI::checkbox('repeatable',$data->{'repeatable'}?'checked':'',1,''),
-							mandatory => CGI::checkbox('mandatory',$data->{'mandatory'}?'checked':'',1,''),
+							repeatable => CGI::checkbox(-name=>'repeatable',
+						-checked=> $data->{'repeatable'}?'checked':'',
+						-value=> 1,
+						-label => '',
+						-id=> 'repeatable'),
+			mandatory => CGI::checkbox(-name => 'mandatory',
+						-checked => $data->{'mandatory'}?'checked':'',
+						-value => 1,
+						-label => '',
+						-id => 'mandatory'),
 							authorised_value => $authorised_value,
 							frameworkcode => $frameworkcode,
 							);
