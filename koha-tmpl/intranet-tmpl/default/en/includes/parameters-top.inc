@@ -13,6 +13,7 @@
 	color: #FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
+	background-image:none;
 	}
 a.parameters:hover {
 	background-color: #86c268;
