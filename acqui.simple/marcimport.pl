@@ -35,15 +35,13 @@ use DBI;
 
 # Koha modules used
 use C4::Context;
-#use C4::Database;
-#use C4::Acquisitions;
 use C4::Output;
 use C4::Input;
 use C4::Biblio;
-#use C4::SimpleMarc;
-#use C4::Z3950;
 use MARC::File::USMARC;
 use HTML::Template;
+use C4::Output;
+use C4::Auth;
 
 #------------------
 # Constants
@@ -67,8 +65,15 @@ my $dbh = C4::Context->dbh;
 my $uploadmarc=$input->param('uploadmarc');
 my $overwrite_biblio = $input->param('overwrite_biblio');
 my $filename = $input->param('filename');
+my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "acqui.simple/marcimport.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {parameters => 1},
+					debug => 1,
+					});
 
-my $template = gettemplate("acqui.simple/marcimport.tmpl");
 $template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
 						uploadmarc => $uploadmarc);
 if ($uploadmarc && length($uploadmarc)>0) {
@@ -799,6 +804,10 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.24  2003/01/14 16:41:17  tipaul
+# bugfix : use gettemplate_and_user instead of gettemplate.
+# fix a blank screen in 1.3.3 in "import in breeding farm"
+#
 # Revision 1.23  2003/01/06 13:06:28  tipaul
 # removing trailing #
 #
