@@ -1,0 +1,45 @@
+
+A proposed perl data structure for storing marc info
+
+
+$record is a hash reference
+
+$record->{leader}=
+$record->{bibid}=58973
+$record->{tags}=$tags
+
+$tags is a hash reference
+
+$tags->{1}=$tag
+$tags->{2}=$tag
+$tags->{3}=$tag
+
+$tag->{tag}=110
+$tag->{indicator}='04'
+$tag->{tagid}=573498
+$tag->{subfields}=$subfields
+
+
+$subfields->{1}=$subfield
+$subfields->{2}=$subfield
+$subfields->{3}=$subfield
+
+$subfield is a hash reference
+
+$subfield->{mark}='a'
+$subfield->{value}='MacDonald, John A.'
+
+This takes care of possible repeating tags and subfields as well as ordering of
+tags and subfields, but it makes it difficult to look up specific tags and
+subfields without looping through every time.  It might be an idea to add an
+index to the structure to aid these lookups.
+
+$record->{index}->{110}->{tags}=\(3,4)   <-- array ref shows that tags 3 and 4
+					     are 110 tags
+
+This still needs more work.  This will also require an API for accessing or
+modifying this structure, as it is non-trivial to parse the data.  I'm also
+starting to wonder how difficult it is going to be to develop templates using
+this kind of structure.  HTML::Template has no facility for parsing this kind
+of data structure.  We might need an alternate (or completely different) data
+structure that is parseable by HTML::Template.
