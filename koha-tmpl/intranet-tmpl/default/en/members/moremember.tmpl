@@ -58,7 +58,7 @@
 		</font>
 		<!-- TMPL_IF name="IS_ADULT" -->
 			<p align=right>
-			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
+			<form action=/cgi-bin/koha/members/jmemberentry.pl method=post>
 				<INPUT TYPE="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
 				<input type=hidden name=type value=Add>
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
@@ -67,12 +67,12 @@
 		<!-- /TMPL_IF -->
 		<br>
 		<!-- TMPL_IF name="I" -->
-			<form action=/cgi-bin/koha/imemberentry.pl method=post>
+			<form action=/cgi-bin/koha/members/imemberentry.pl method=post>
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
 				<INPUT TYPE=submit class="button" value="Modify">
 			</form>
 		<!-- TMPL_ELSE -->
-			<form action=/cgi-bin/koha/memberentry.pl method=post>
+			<form action=/cgi-bin/koha/members/memberentry.pl method=post>
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
 				<INPUT TYPE=submit class="button" name="modify" value="Modify">
 			</form>
@@ -81,11 +81,11 @@
                         <input type=hidden name=member value="<!-- TMPL_VAR NAME="bornum" -->">
 			<INPUT TYPE=submit class="button" value="Delete">
 		</form>
-		<form action=/cgi-bin/koha/member-password.pl method=post>
+		<form action=/cgi-bin/koha/members/member-password.pl method=post>
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 			<input type=submit class="button" value="Change Password">
 		</form>
-		<form action=/cgi-bin/koha/member-flags.pl method=post>
+		<form action=/cgi-bin/koha/members/member-flags.pl method=post>
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 			<input type=submit class="button" value="Modify User Flags">
 		</form>
@@ -230,7 +230,7 @@
 function confirm_deletion() {
 	var is_confirmed = confirm('do you confirm deletetion ?');
 	if (is_confirmed) {
-		window.location="/cgi-bin/koha/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
+		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
 	}
 }
 </script>
