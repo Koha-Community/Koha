@@ -313,7 +313,11 @@ $template->param(
 		amountold => $amountold,
 		todayissues => \@realtodayissues,
 		previssues => \@realprevissues,
-		responseloop => \@responsearray 
+		responseloop => \@responsearray,
+		 month=>$month,
+		 day=>$day,
+		 year=>$year
+		 
 	);
 
 if ($branchcookie) {
