@@ -54,7 +54,8 @@ $date
 
 EOP
 ;
-my ($count,@results)=invoice($invoice);
+my @results;
+($count,@results)=invoice($invoice);
 if ($invoice eq ''){
   ($count,@results)=getallorders($id);
 }

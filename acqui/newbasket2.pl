@@ -24,7 +24,6 @@ my $secondary;
 
 
 #print $input->dump;
-my $blah;
 my %search;
 #build hash of users input
 my $title=$input->param('search');
@@ -68,16 +67,15 @@ printend
 ;
 
 print center();
-my $count;
-my @results;
+
 
     if ($keyword ne ''){
 #      print "hey";
-      ($count,@results)=&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
+      ($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
     } elsif ($search{'front'} ne '') {
-    ($count,@results)&FrontSearch(\$blah,'intra',\%search,$num,$offset);
+    ($count,@results)=FrontSearch(undef,'intra',\%search,$num,$offset);
     }else {
-      ($count,@results)=&CatSearch(\$blah,'loose',\%search,$num,$offset);
+      ($count,@results)=CatSearch(undef,'loose',\%search,$num,$offset);
 #            print "hey";
     }
 

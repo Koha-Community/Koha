@@ -187,7 +187,8 @@ print <<printend
 <td><select name=branch size=1>
 printend
 ;
-my ($count2,@branches)=branches;
+my @branches;
+($count2,@branches)=branches();
 for (my $i=0;$i<$count2;$i++){
   print "<option value=$branches[$i]->{'branchcode'}";
   if ($data->{'branchcode'} == $branches[$i]->{'branchcode'}){
@@ -236,8 +237,8 @@ print <<printend
 <td><select name=bookfund size=1>
 printend
 ;
-
-my ($count2,@bookfund)=bookfunds;
+my @bookfund;
+($count2,@bookfund)=bookfunds();
 for (my $i=0;$i<$count2;$i++){
   print "<option value=$bookfund[$i]->{'bookfundid'}";
   if ($data->{'bookfundid'} == $bookfund[$i]->{'bookfundid'}){

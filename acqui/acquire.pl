@@ -190,7 +190,8 @@ print <<EOP
 <td><select name=bookfund size=1>
 EOP
 ;
-my ($count2,@bookfund)=bookfunds;                                                    
+my @bookfund;
+($count2,@bookfund)=bookfunds();                                                    
 for (my $i=0;$i<$count2;$i++){                                                       
   print "<option value=$bookfund[$i]->{'bookfundid'}";
   if ($bookfund[$i]->{'bookfundid'}==$results[0]->{'bookfundid'}){
