@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w 
+#!/usr/bin/perl
 
 # This script can be used to generate rss 0.91 files for syndication.
 
@@ -30,7 +30,9 @@ use strict;
 use HTML::Template;
 use C4::Context;
 use Time::Local;
+use POSIX;
 
+my $dbh = C4::Context->dbh;
 my $file = $ARGV[0];
 my %config = getConf("config");
 my $outFile = $config{"output"};
@@ -47,6 +49,9 @@ my %image = getConf("image");
 $feed->param(IMAGETITLE => $image{'title'});
 $feed->param(IMAGEURL => $image{'url'});
 $feed->param(IMAGELINK => $image{'link'});
+$feed->param(IMAGEDESCRIPTION => $image{'description'});
+$feed->param(IMAGEWIDTH => $image{'width'});
+$feed->param(IMAGEHEIGHT => $image{'height'});
 
 #
 # handle the items
@@ -58,7 +63,8 @@ print FILE $feed->output();
 close FILE;
 
 sub getDate {
-    my $date = localtime(timelocal(localtime));
+#    my $date = localtime(timelocal(localtime));
+    my $date = strftime("%a, %d %b %Y %T %Z", localtime);
     return $date;
 }
 
@@ -87,7 +93,6 @@ sub getConf {
 sub getItems {
     my $query = shift;
     $query .= " limit 15";
-    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare($query);
     $sth->execute;
     my @return;
@@ -101,9 +106,3 @@ sub getItems {
     $sth->finish;
     return \@return;
 }
-
-
-
-
-
-
