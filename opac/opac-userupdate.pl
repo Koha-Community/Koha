@@ -7,6 +7,7 @@ use Mail::Sendmail;
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;
+use HTML::Template;
 
 
 my $query = new CGI;

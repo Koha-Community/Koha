@@ -3,12 +3,14 @@ use strict;
 require Exporter;
 
 use C4::Auth;
+use C4::Context;
 use CGI;
 use C4::Database;
+use HTML::Template;
 
 my $classlist='';
 
-my $dbh=C4Connect;
+my $dbh=C4::Context->dbh;
 my $sth=$dbh->prepare("select groupname,itemtypes from itemtypesearchgroups order by groupname");
 $sth->execute;
 while (my ($groupname,$itemtypes) = $sth->fetchrow) {

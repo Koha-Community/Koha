@@ -9,9 +9,10 @@ use CGI;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Auth;
+use HTML::Template;
 
 my $query = new CGI;
-my ($template, $borrowernumber, $cookie) 
+my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-account.tmpl",
 			     query => $query,
 			     type => "opac",
@@ -30,7 +31,7 @@ $template->param( BORROWER_INFO => \@bordat );
 
 
 #get account details
-my ($numaccts,$accts,$total) = getboracctrecord(undef,$borr);   
+my ($numaccts,$accts,$total) = getboracctrecord(undef,$borr);
 
 for (my $i=0;$i<$numaccts;$i++){
     $accts->[$i]{'amount'}+=0.00;
@@ -53,4 +54,6 @@ $template->param( ACCOUNT_LINES => $accts );
 
 $template->param( total => $total );
 
-print $query->header(-cookie => $cookie), $template->output; 
+#$template->param(loggeninuser => $loggedinuser);
+print $query->header(-cookie => $cookie), $template->output;
+

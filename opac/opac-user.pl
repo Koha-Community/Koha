@@ -9,6 +9,7 @@ use C4::Circulation::Circ2;
 use C4::Circulation::Renewals2;
 use C4::Reserves2;
 use C4::Search;
+use HTML::Template;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 

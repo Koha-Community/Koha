@@ -8,6 +8,9 @@ use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Reserves2;
+use HTML::Template;
+
+my $MAXIMUM_NUMBER_OF_RESERVES = 5;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 
@@ -41,9 +44,11 @@ foreach my $res (@$reserves) {
 	$rank--;
     }
 }
+
+
+
 $rank++;
 $template->param(rank => $rank);
-
 
 
 # pass the pickup branch along....
@@ -195,7 +200,7 @@ if ($query->param('item_types_selected')) {
 	$noreserves = 1;
 	$template->param(too_much_oweing => $amount);
     }
-    my ($resnum, $reserves) = FindReserves(undef, $borrowernumber); 
+    my ($resnum, $reserves) = FindReserves(undef, $borrowernumber);
     $template->param(RESERVES => $reserves);
     if ($resnum >= $MAXIMUM_NUMBER_OF_RESERVES) {
 	$template->param(message => 1);

@@ -4,6 +4,7 @@ require Exporter;
 use CGI;
 use C4::Search;
 use C4::Auth;
+use HTML::Template;
 
 my $query=new CGI;
 my ($template, $borrowernumber, $cookie) 
