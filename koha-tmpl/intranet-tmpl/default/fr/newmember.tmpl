@@ -1,7 +1,7 @@
 <TMPL_INCLUDE Name="members-top.inc">
 
-<H1> Confirmer l'enregistrement </H1>
 <TMPL_IF Name="OK">
+	<H1> Confirmer l'enregistrement </H1>
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
 			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
@@ -222,7 +222,29 @@
 			<input type=submit name=submit value=Submit>
 		</form>
 <TMPL_ELSE>
-	<TMPL_VAR Name="string">
+	<h1>ERREUR</H1>
+	<p>Les champs suivants sont erronés. Cliquer sur le bouton "retour" et corrigez.</p>
+	<TMPL_IF name="cardnumber">
+		Numéro carte lecteur vide<br/>
+	</TMPL_IF>
+	<TMPL_IF name="invalid_cardnumber">
+		Numéro de carte invalide<br/>
+	</TMPL_IF>
+	<TMPL_IF name="gender">
+		Zone sexe vide<br/>
+	</TMPL_IF>
+	<TMPL_IF name="firstname">
+		Zone nom vide<br/>
+	</TMPL_IF>
+	<TMPL_IF name="surname">
+		Zone prénom vide<br/>
+	</TMPL_IF>
+	<TMPL_IF name="address">
+		Adresse vide<br/>
+	</TMPL_IF>
+	<TMPL_IF name="city">
+		Commune vide<br/>
+	</TMPL_IF>
 </TMPL_IF>
 
 

@@ -16,7 +16,6 @@
 #   error message to display
 
 # FIXME - What is the correct value of "flagsrequired"?
-# FIXME - untranslatable strings here
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -71,9 +70,9 @@ my $dbh = C4::Context->dbh;
 my $ok=0;
 my $string = "The following compulsary fields have been left blank. "
 	. "Please push the back button and try again<p>";
-
+my @errors;
 if ($data{'cardnumber'} eq ''){
-    $string.=" Cardnumber<br>";
+	push @errors,"cardnumber";
     $ok=1;
 } else {
     #check cardnumber is valid
@@ -89,33 +88,35 @@ if ($data{'cardnumber'} eq ''){
     my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
     if ($valid != 1){
         $ok=1;
-        $string.=" Invalid Cardnumber<br>";
+    	push @errors, "invalid_cardnumber";
     }
 }
 if ($data{'sex'} eq ''){
-    $string.=" Gender <br>";
+    push @errors, "gender";
     $ok=1;
 }
 if ($data{'firstname'} eq ''){
-    $string.=" Given Names<br>";
+    push @errors,"firstname";
     $ok=1;
 }
 if ($data{'surname'} eq ''){
-    $string.=" Surname<br>";
+    push @errors,"surname";
     $ok=1;
 }
 if ($data{'address'} eq ''){
-    $string.=" Postal Street Address<br>";
+    push @errors, "address";
     $ok=1;
 }
 if ($data{'city'} eq ''){
-    $string.=" Postal City<br>";
+    push @errors, "city";
     $ok=1;
 }
 
 # Pass the ok/not ok status and the error message to the template
-$template->param(	OK=> ($ok==0),
-			string=> $string);
+$template->param(	OK=> ($ok==0));
+foreach my $error (@errors) {
+	$template->param( $error => 1);
+}
 
 # If things are ok, display the confirmation page
 if ($ok == 0) {

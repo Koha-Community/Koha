@@ -1,7 +1,7 @@
 <TMPL_INCLUDE Name="members-top.inc">
 
-<H1> Confirm Record </H1>
 <TMPL_IF Name="OK">
+	<H1> Confirm Record </H1>
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
 			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
@@ -222,7 +222,29 @@
 			<input type=submit name=submit value=Submit>
 		</form>
 <TMPL_ELSE>
-	<TMPL_VAR Name="string">
+	<h1>ERROR</H1>
+	<p>The following  fields have a forbidden value. Please push the back button and try again : </p>
+	<TMPL_IF name="cardnumber">
+		Cardnumber<br/>
+	</TMPL_IF>
+	<TMPL_IF name="invalid_cardnumber">
+		Invalid_cardnumber<br/>
+	</TMPL_IF>
+	<TMPL_IF name="gender">
+		Gender<br/>
+	</TMPL_IF>
+	<TMPL_IF name="firstname">
+		Given Names<br/>
+	</TMPL_IF>
+	<TMPL_IF name="surname">
+		Surname<br/>
+	</TMPL_IF>
+	<TMPL_IF name="address">
+		Postal Street Address<br/>
+	</TMPL_IF>
+	<TMPL_IF name="city">
+		Postal city<br/>
+	</TMPL_IF>
 </TMPL_IF>
 
 
