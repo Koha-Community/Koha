@@ -622,6 +622,15 @@ sub delbiblio{
     $query = "Delete from biblioitems where biblionumber=$biblio";
     $sth=$dbh->prepare($query);
     $sth->execute;
+    $query = "Delete from bibliosubtitle where biblionumber=$biblio";
+    $sth=$dbh->prepare($query);
+    $sth->execute;
+    $query = "Delete from bibliosubject where biblionumber=$biblio";
+    $sth=$dbh->prepare($query);
+    $sth->execute;
+    $query = "Delete from additionalauthors where biblionumber=$biblio";
+    $sth=$dbh->prepare($query);
+    $sth->execute;
     $sth->finish;
   }
 
@@ -1002,6 +1011,12 @@ END { }       # module clean-up code here (global destructor)
 
 #---------------------------------------
 # $Log$
+# Revision 1.1.2.7  2003/01/23 22:38:15  tonnesen
+# Deletes subtitle, subject, and additionalauthors info when a biblio is deleted.
+# This kind of defeats the purpose of backing up deleted biblios in the
+# deletedbiblios table, but having the subjects appear in the next item added is
+# probably not a good idea.
+#
 # Revision 1.1.2.6  2003/01/15 21:37:19  tonnesen
 # Fixes dangling biblioitems problem.  Will no longer allow you to delete a
 # biblio without also removing the biblioitems.
