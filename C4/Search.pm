@@ -462,11 +462,10 @@ sub CatSearch  {
 	my $count=@key;
 	my $i=1;
         $query="select *,biblio.author,biblio.biblionumber from
-         biblioitems,biblio
+         biblio
 	 left join additionalauthors
 	 on additionalauthors.biblionumber =biblio.biblionumber
-         where biblioitems.biblionumber=biblio.biblionumber 
-	 and
+	 where
          ((biblio.author like '$key[0]%' or biblio.author like '% $key[0]%' or
 	 additionalauthors.author like '$key[0]%' or additionalauthors.author 
 	 like '% $key[0]%'
@@ -504,22 +503,7 @@ sub CatSearch  {
 	   #$query=$query. " and (title like '%$search->{'title'}%' 
 	   #or seriestitle like '%$search->{'title'}%')";
 	 }
-	 if ($search->{'class'} ne ''){
-      	   my @temp=split(/\|/,$search->{'class'});
-	   my $count=@temp;
-	   $query.= "and ( itemtype='$temp[0]'";
-	   for (my $i=1;$i<$count;$i++){
-	     $query.=" or itemtype='$temp[$i]'";
-  	   }
-	   $query.=") ";
-	 }
-	 if ($search->{'dewey'} ne ''){
-	      $query.=" and dewey='$search->{'dewey'}' ";
-         }           
-	  if ($search->{'illustrator'} ne ''){
-	    $query.=" and illus like '%".$search->{'illustrator'}."%' ";
-	  }
-	 
+	 	 
 	 $query.=" group by biblio.biblionumber";
       } else {
           if ($search->{'title'} ne '') {
@@ -539,11 +523,10 @@ sub CatSearch  {
 	    my @key=split(' ',$search->{'title'});
 	    my $count=@key;
 	    my $i=1;
-            $query="select * from biblio,biblioitems
+            $query="select * from biblio
 	    left join bibliosubtitle on
 	    biblio.biblionumber=bibliosubtitle.biblionumber
 	    where
-            biblioitems.biblionumber=biblio.biblionumber and
 	    (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
 	    while ($i<$count){
 	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
@@ -562,21 +545,6 @@ sub CatSearch  {
 	      $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
 	    }
 	    $query=$query."))";
-	    if ($search->{'class'} ne ''){
-	      my @temp=split(/\|/,$search->{'class'});
-	      my $count=@temp;
-	      $query.= " and ( itemtype='$temp[0]'";
-	      for (my $i=1;$i<$count;$i++){
-	       $query.=" or itemtype='$temp[$i]'";
-	      }
-	      $query.=")";
-	    }
-	    if ($search->{'dewey'} ne ''){
-	      $query.=" and dewey='$search->{'dewey'}' ";
-	    }
-	    if ($search->{'illustrator'} ne ''){
-	      $query.=" and illus like '%".$search->{'illustrator'}."%' ";
-	    }
 	   }
 	  } elsif ($search->{'class'} ne ''){
 	     $query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
@@ -680,13 +648,36 @@ my $count=1;
 my $i=0;
 my $limit= $num+$offset;
 while (my $data=$sth->fetchrow_hashref){
-  my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}");
+  my $query="select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}";
+  	    if ($search->{'class'} ne ''){
+	      my @temp=split(/\|/,$search->{'class'});
+	      my $count=@temp;
+	      $query.= " and ( itemtype='$temp[0]'";
+	      for (my $i=1;$i<$count;$i++){
+	       $query.=" or itemtype='$temp[$i]'";
+	      }
+	      $query.=")";
+	    }
+	    if ($search->{'dewey'} ne ''){
+	      $query.=" and dewey='$search->{'dewey'}' ";
+	    }
+	    if ($search->{'illustrator'} ne ''){
+	      $query.=" and illus like '%".$search->{'illustrator'}."%' ";
+	    }
+#print $query;
+  my $sti=$dbh->prepare($query);
   $sti->execute;
-  my ($dewey, $subclass) = $sti->fetchrow;
+  my $dewey;
+  my $subclass;
+  my $true=0;
+  if (($dewey, $subclass) = $sti->fetchrow){
+    $true=1;
+  }
   $dewey=~s/\.*0*$//;
   ($dewey == 0) && ($dewey='');
   ($dewey) && ($dewey.=" $subclass");
   $sti->finish;
+  if ($true == 1){
   if ($count > $offset && $count <= $limit){
     if ($type ne 'subject' && $type ne 'precise'){
        $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
@@ -698,6 +689,7 @@ while (my $data=$sth->fetchrow_hashref){
     $i++;
   }
   $count++;
+  }
 }
 $sth->finish;
 #if ($type ne 'precise'){
