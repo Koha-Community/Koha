@@ -1437,10 +1437,11 @@ configuration.
 Press <ENTER> to continue: |;
 
 sub updateapacheconf {
+	my ($auto_install)=@_;
     my $logfiledir=$kohalogdir;
     my $httpdconf = $etcdir."/koha-httpd.conf";
    
-    showmessage(getmessage('StartUpdateApache'), 'none');
+    showmessage(getmessage('StartUpdateApache'), 'none') unless $auto_install->{NoPressEnter};
 	# to be polite about it: I don't think this should touch the main httpd.conf
 
 	# QUESTION: Should we warn for includes_module too?
@@ -1628,23 +1629,24 @@ $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 
 sub installfiles {
 
+	my ($auto_install) = @_;
 	#MJR: preserve old files, just in case
 	sub neatcopy {
 		my $desc = shift;
 		my $src = shift;
 		my $tgt = shift;
 		if (-e $tgt) {
-    		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]);
+    		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]) unless ($auto_install->{NoPressEnter});
 			startsysout();
 			system("mv ".$tgt." ".$tgt.strftime("%Y%m%d%H%M",localtime()));
 		}
-		print getmessage('CopyingFiles', [$desc,$tgt]);
+		print getmessage('CopyingFiles', [$desc,$tgt]) unless ($auto_install->{NoPressEnter});
 		startsysout;
 		system("cp -R ".$src." ".$tgt);
 	}
 
 	my ($auto_install) = @_;
-	showmessage(getmessage('InstallFiles'),'none');
+	showmessage(getmessage('InstallFiles'),'none') unless ($auto_install->{NoPressEnter});
 
 	neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
 	neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin");
@@ -1893,6 +1895,9 @@ sample data, install them.
 
 =cut
 
+$messages->{'ConfirmFileUpload'}->{en} = qq|
+Confirm loading of this file into Koha  [Y]/N: |;
+
 sub populatedatabase {
 	my ($auto_install) = @_;
 	my $input;
@@ -1957,8 +1962,46 @@ sub populatedatabase {
 	}
 	startsysout();	
 	system("$mysqldir/bin/mysql -u$user $database -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
+	# CHECK for any other file to append...
+	my @sql;
+	push @sql,"FINISHED";
+	if (-d "scripts/misc/sql-datas") {
+	    opendir D, "scripts/misc/sql-datas";
+	    foreach my $sql (readdir D) {
+			next unless ($sql =~ /.txt$/);
+			push @sql, $sql;
+	    }
+	}
+	my $loopend=0;
+	while (not $loopend) {
+		print heading("SELECT SQL FILE");
+		print qq|
+Select a file to append to the Koha DB.
+enter a number. A detailled explanation of the file will be given
+if you confirm, the file will be added to the DB
+|;
+		for (my $i=0;$i<=$#sql;$i++) {
+			print "$i => ".$sql[$i]."\n";
+		}
+		my $response =<STDIN>;
+		if ($response==0) {
+			$loopend = 1;
+		} else {
+			# show the content of the file
+			my $FileToUpload = $sql[$response];
+			open FILE,"scripts/misc/sql-datas/$FileToUpload";
+			my $content = <FILE>;
+			print heading("INSERT $FileToUpload ?")."$content\n";
+			# ask confirmation
+			$response=showmessage(getmessage('ConfirmFileUpload'), 'yn', 'y');
+			# if confirmed, upload the file in the DB
+			unless ($response =~/^n/i) {
+				$FileToUpload =~ s/\.txt/\.sql/;
+				system("$mysqldir/bin/mysql -u$user $database <scripts/misc/sql-datas/$FileToUpload");
+			}
+		}
+	}
 }
-
 
 =item restartapache
 
@@ -1985,11 +2028,11 @@ sub restartapache {
 		startsysout();
 		# Need to support other init structures here?
 		if (-e "/etc/rc.d/init.d/httpd") {
-			system('su root -c /etc/rc.d/init.d/httpd restart');
+			system('su root -c "/etc/rc.d/init.d/httpd restart"');
 		} elsif (-e "/etc/init.d/apache") {
-			system('su root -c /etc/init.d/apache restart');
+			system('su root -c "/etc/init.d/apache restart"');
 		} elsif (-e "/etc/init.d/apache-ssl") {
-			system('su root -c /etc/init.d/apache-ssl restart');
+			system('su root -c "/etc/init.d/apache-ssl restart"');
 		}
 	}
 }

@@ -109,7 +109,7 @@ getdatabaseinfo($auto_install);
 
 getapachevhostinfo($auto_install);
 
-updateapacheconf();
+updateapacheconf($auto_install);
 
 # basicauthentication();
 
