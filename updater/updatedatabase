@@ -53,7 +53,7 @@ my %requiretables=(
 	term text, 
 	type char(10), 
 	startdate int, 
-	enddate int, 
+	enddate int,
 	done smallint, 
 	results longblob, 
 	numrecords int, 
@@ -126,8 +126,10 @@ my %requiretables=(
                                   repeatable tinyint(4) NOT NULL default '0',
                                   mandatory tinyint(4) NOT NULL default '0',
                                   kohafield char(40) NOT NULL default '',
+                                  tab tinyint(1),
                                   PRIMARY KEY  (tagfield,tagsubfield),
-                                  KEY kohafield (kohafield)
+                                  KEY kohafield (kohafield),
+                                  KEY tab (tab)
                                  )",
      marc_subfield_table => "(
                               subfieldid bigint(20) unsigned NOT NULL auto_increment,
@@ -412,6 +414,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.21  2002/10/14 11:48:59  tipaul
+# bugfix
+#
 # Revision 1.20  2002/10/10 04:49:41  arensb
 # Added some FIXME comments.
 #
