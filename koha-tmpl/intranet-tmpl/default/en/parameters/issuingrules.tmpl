@@ -45,7 +45,7 @@
 						<!-- TMPL_VAR NAME="categorycode" -->
 					</th>
 					<!-- TMPL_LOOP NAME="cell" -->
-						<td bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+						<td<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
 							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10"> /
 							<input name="<!-- TMPL_VAR NAME="finesname" -->" value="<!-- TMPL_VAR NAME="finesvalue" -->" size="6" maxlength="10">
 						</td>
