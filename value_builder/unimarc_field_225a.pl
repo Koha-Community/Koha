@@ -118,7 +118,6 @@ my ($input) = @_;
 # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
 	# if there is an isbn, complete search
 		my @collections;
-	if ($isbn_found) {
 		my $sth = $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
 						left join auth_header on auth_subfield_table.authid=auth_header.authid 
 						where authtypecode='EDITORS' and tag='200' and subfieldcode='a' and subfieldvalue=?");
@@ -134,14 +133,6 @@ my ($input) = @_;
 				push @collections,$line;
 			}
 		}
-	} else {
-	# if there is no isbn, search with %
-		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father like ? and category='EDITORS' order by stdlib");
-		$sth->execute("\%$authoritysep $editor_found $authoritysep");
-		while (my ($line)= $sth->fetchrow) {
-			push @collections,$line;
-		}
-	}
 #	my @collections = ["test"];
 	my $collection =CGI::scrolling_list(-name=>'f1',
 												-values=> \@collections,
