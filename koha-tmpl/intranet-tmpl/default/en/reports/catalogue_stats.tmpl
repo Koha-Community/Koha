@@ -78,6 +78,8 @@
 					</td>
 					<td>&nbsp;</td>
 				</tr>
+				<!-- TMPL_ELSE -->
+				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" ></tr>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="haslccn" -->
 				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
@@ -100,6 +102,8 @@
 					</td>
 					<td>&nbsp;</td>
 				</tr>
+				<!-- TMPL_ELSE -->
+				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" ></tr>
 			<!-- /TMPL_IF  -->
 			<!-- TMPL_IF Name="hascote" -->
 				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
@@ -122,32 +126,34 @@
 					</td>
 					<td>&nbsp;</td>
 				</tr>
+				<!-- TMPL_ELSE -->
+				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" ></tr>
 			<!-- /TMPL_IF -->
-			<tr>
+			<!--TMPL_IF Name="hglghtDT"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Document Type</td>
 				<td align="center"><input type="radio" name="Line" value="itemtype"></td>
 				<td align="center"><input type="radio" name="Column" value="itemtype"></td>
 				<td ><!-- TMPL_VAR NAME="CGIItemType" --></td>
 			</tr>
-			<tr class="hilighted" >
+			<!--TMPL_IF Name="hglghtPub"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Publisher</td>
 				<td align="center"><input type="radio" name="Line" value="publishercode"></td>
 				<td align="center"><input type="radio" name="Column" value="publishercode"></td>
 				<td><!-- TMPL_VAR NAME="CGIPublisher" --></td>
 			</tr>
-			<tr>
+			<!--TMPL_IF Name="hglghtPY"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Publication Year</td>
 				<td align="center"><input type="radio" name="Line" value="publicationyear"></td>
 				<td align="center"><input type="radio" name="Column" value="publicationyear"></td>
 				<td>From <input type="text" name="Filter" > To <input type="text" name="Filter" ></td>
 			</tr>
-			<tr class="hilighted" >
+			<!--TMPL_IF Name="hglghtHB"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Home Branch</td>
 				<td align="center"><input type="radio" name="Line" value="items.homebranch"></td>
 				<td align="center"><input type="radio" name="Column" value="items.homebranch"></td>
 				<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
 			</tr>
-			<tr>
+			<!--TMPL_IF Name="hglghtLOC"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Location</td>
 				<td align="center"><input type="radio" name="Line" value="items.location"></td>
 				<td align="center"><input type="radio" name="Column" value="items.location"></td>
