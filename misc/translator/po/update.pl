@@ -46,7 +46,7 @@ for my $spec (
       # (for Koha probably something like koha_intranet_css.pot),
       # but this is not Koha's convention.
       #
-      my $target = "po/${theme}_${module}" . ($pot_p? ".pot": "$lang.po");
+      my $target = "po/${theme}_${module}" . ($pot_p? ".pot": "_$lang.po");
       rename($target, "$target~") if $pot_p;
       exec('./tmpl_process3.pl', ($pot_p? 'create': 'update'),
 	    '-i', "../../koha-tmpl/$module-tmpl/$theme/en/",
