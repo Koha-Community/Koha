@@ -83,9 +83,12 @@ print "\n";
 my $input;
 my $domainname = `hostname -d`;
 chomp $domainname;
-my $opacdir = '/usr/local/www/opac';
-my $kohadir = '/usr/local/www/koha';
-print qq|
+my $opacdir = '/usr/local/koha/opac';
+my $kohadir = '/usr/local/koha/intranet';
+my $getdirinfo=1;
+while ($getdirinfo) {
+    # Loop until opac directory and koha directory are different
+    print qq|
 
 OPAC DIRECTORY
 ==============
@@ -96,15 +99,15 @@ exist.
 Usually $opacdir
 |;
 
-print "Enter directory [$opacdir]: ";
-chomp($input = <STDIN>);
+    print "Enter directory [$opacdir]: ";
+    chomp($input = <STDIN>);
 
-if ($input) {
-  $opacdir = $input;
-}
+    if ($input) {
+      $opacdir = $input;
+    }
 
 
-print qq|
+    print qq|
 
 INTRANET/LIBRARIANS DIRECTORY
 =============================
@@ -112,14 +115,23 @@ Please supply the directory you want Koha to store its Intranet/Librarians files
 in.  Leave off the trailing slash.  This directory will be auto-created for you if 
 it doesn't exist.
 
-Usually $kohadir
 |;
 
-print "Enter directory [$kohadir]: ";
-chomp($input = <STDIN>);
+    print "Enter directory [$kohadir]: ";
+    chomp($input = <STDIN>);
 
-if ($input) {
-  $kohadir = $input;
+    if ($input) {
+      $kohadir = $input;
+    }
+    if ($kohadir eq $opacdir) {
+	print qq|
+
+You must specify different directories for the OPAC and INTRANET files!
+
+|;
+    } else {
+	$getdirinfo=0;
+    }
 }
 
 #
@@ -310,6 +322,19 @@ if ($input) {
 #
 # Update Apache Conf File.
 #
+#
+
+my $logfiledir=`grep ^ErrorLog $realhttpdconf`;
+chomp $logfiledir;
+
+if ($logfiledir) {
+    $logfiledir=~m#ErrorLog (.*)/[^/]*$#;
+    $logfiledir=$1;
+}
+
+unless ($logfiledir) {
+    $logfiledir='logs';
+}
 print qq|
 
 UPDATING APACHE.CONF
@@ -330,8 +355,8 @@ if (`grep 'VirtualHost $opac_svr_name' $realhttpdconf`) {
    DocumentRoot $opacdir/htdocs
    ServerName $opac_svr_name
    ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
-   ErrorLog logs/opac-error_log
-   TransferLog logs/opac-access_log common
+   ErrorLog $logfiledir/opac-error_log
+   TransferLog $logfiledir/opac-access_log
    SetEnv PERL5LIB "$kohadir/modules"
 </VirtualHost>
 
@@ -340,8 +365,8 @@ if (`grep 'VirtualHost $opac_svr_name' $realhttpdconf`) {
    DocumentRoot $kohadir/htdocs
    ServerName $koha_svr_name
    ScriptAlias /cgi-bin/koha/ "$kohadir/cgi-bin/"
-   ErrorLog logs/koha-error_log
-   TransferLog logs/koha-access_log common
+   ErrorLog $logfiledir/koha-error_log
+   TransferLog $logfiledir/koha-access_log
    SetEnv PERL5LIB "$kohadir/modules"
 </VirtualHost>
 
@@ -349,7 +374,6 @@ EOP
 ;
     close(SITE);
     print "Successfully updated Apache Configuration file.\n";
-
 }
 
 #
@@ -481,7 +505,7 @@ if ($result) {
 } else {
     system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname < koha.mysql");
     system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
-    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y');");
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
     system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
 
     system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
