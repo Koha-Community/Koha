@@ -335,7 +335,7 @@ sub catalogsearch {
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
 	# so if you dont' has an item, you get a not nice empty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid,itemtypes.notforloan
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid,itemtypes.notforloan,itemtypes.description
 							FROM biblio, marc_biblio 
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
 							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
@@ -400,7 +400,7 @@ sub catalogsearch {
 		$newline{totitem} = $totalitems;
 		# if $totalitems == 0, check if it's being ordered.
 		if ($totalitems == 0) {
-			my $sth = $dbh->prepare("select count(*) from aqorders where biblionumber=?");
+			my $sth = $dbh->prepare("select count(*) from aqorders where biblionumber=? and datecancellationprinted is NULL");
 			$sth->execute($biblionumber);
 			my ($ordered) = $sth->fetchrow;
 			$newline{onorder} = 1 if $ordered;
