@@ -185,7 +185,7 @@
 			<!-- /TMPL_IF -->
 			<br/>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="needsconfirmation" -->
+		<!-- TMPL_IF name="NEEDSCONFIRMATION" -->
 		<h2 class="problem">I need confirmation before issuing</h2>
 			<!-- TMPL_IF name="DEBT" -->
 				<p>The borrower has debts</p>
@@ -199,7 +199,9 @@
 			<!-- TMPL_IF name="ISSUED_TO_ANOTHER" -->
 				<p>Item issued to <!-- TMPL_VAR name="ISSUED_TO_ANOTHER" -->. Return & issue ?</p>
 			<!-- /TMPL_IF -->
-			
+			<!-- TMPL_IF name="TOO_MUCH" -->
+				<p class="problem">Too much book!</p>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
 			<form method="post">
 				<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">

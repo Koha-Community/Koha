@@ -589,10 +589,51 @@ reserved for someone else.
 
 sticky due date is invalid
 
+=head3 TOO_MUCH
+
+if the borrower borrows to much things
+
 =cut
 
 # check if a book can be issued.
 # returns an array with errors if any
+
+sub HowManyBurrows ($){
+    my $borrower = shift;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare('select COUNT(borrowernumber) nombre_livre_emprunte from issues where borrowernumber = ?');
+    $sth->execute($borrower->{'borrowernumber'});
+    my $data = $sth->fetchrow;
+    return $data;
+}
+
+sub NumberBurrowsOk(@)
+{
+    (my $biblionbr, my $cat) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare('select itemtype from biblioitems where biblionumber = ?');
+    $sth->execute($biblionbr);
+    my $data = $sth->fetchrow;
+    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = ? and itemtype = ?');
+    $sth->execute($cat, $data);
+    my $value = $sth->fetchrow;
+    return $value if (defined($value));
+    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = "*" and itemtype = ?');
+    $sth->execute($data);
+    $value = $sth->fetchrow;
+    return $value if (defined($value));
+    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = ? and itemtype = "*"');
+    $sth->execute($cat);
+    $value = $sth->fetchrow;
+    return $value if (defined($value));
+    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = "*" and itemtype = "*"');
+    $sth->execute();
+    $value = $sth->fetchrow;
+    return $value if (defined($value));
+    return 5; # valeur max par default si la base est endommagee
+}
 
 sub canbookbeissued {
 	my ($env,$borrower,$barcode,$year,$month,$day) = @_;
@@ -629,6 +670,15 @@ sub canbookbeissued {
 		$needsconfirmation{DEBT} = $amount;
 	}
 
+
+#
+# JB34 CHECK IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
+#
+
+	$needsconfirmation{TOO_MUCH} = 1 
+	if (HowManyBurrows($borrower) > NumberBurrowsOk($iteminformation->{'biblionumber'}, 
+							    $borrower->{'categorycode'}));
+
 #
 # ITEM CHECKING
 #
@@ -648,6 +698,8 @@ sub canbookbeissued {
 		$issuingimpossible{RESTRICTED} = 1;
 	}
 
+	    
+
 #
 # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
 #
@@ -664,7 +716,7 @@ sub canbookbeissued {
 	} elsif ($currentborrower) {
 # issued to someone else
 		my $currborinfo = getpatroninformation(0,$currentborrower);
-		warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
+#		warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
 		$needsconfirmation{ISSUED_TO_ANOTHER} = "$currborinfo->{'reservedate'} : $currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
 	}
 # See if the item is on reserve.
@@ -715,7 +767,7 @@ sub issuebook {
 	my $dbh = C4::Context->dbh;
 #	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
-		warn "B : ".$borrower->{borrowernumber}." / I : ".$iteminformation->{'itemnumber'};
+#		warn "B : ".$borrower->{borrowernumber}." / I : ".$iteminformation->{'itemnumber'};
 #
 # check if we just renew the issue.
 #
