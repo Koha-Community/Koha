@@ -1,41 +1,23 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
 <title>KOHA: OPAC Catalogue Search</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
-
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css">
 </head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
-<!--HDL Colours
-
-        Yellow = ffcc00
-        light blue = ccccff
-        bright blue links = 0000ff
-        aubergine = 663266
-        light green/grey = cccc99
+<body>
 
 
--->
-<style>
-a.white {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#FFFFFF;
-	padding:4px;
-	font-weight: bold;
-	}
-</style>
-<!------------------------MENUS-------------------------------->
 
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
-<tr BGCOLOR="#339999" >
+<!-- MENUS -->
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr bgcolor="#339999">
 
 	<td width="7%">
-		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height=50 align="center"><b>KOHA</b>
+		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" border="0" alt=""><b>KOHA</b>
 	</td>
         <td width="10%">
 		<a href="/cgi-bin/koha/opac-search.pl" title="Search the catalogue" class="white">
@@ -53,13 +35,14 @@ a.white {
 	<td width="60%">
 		&nbsp;
 	</td>
-        </TR>
-</TABLE>
+        </tr>
+</table>
 
-<!-------------------------MAIN BODY OF PAGE-------------------------->
-<BLOCKQUOTE>
+<!-- MAIN BODY OF PAGE -->
+
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+    <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/opac-user.pl">Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 <!-- /TMPL_IF -->
+
