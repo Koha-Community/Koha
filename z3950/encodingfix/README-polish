@@ -1,0 +1,18 @@
+IMPORTOWANIE DANYCH BIBLIOGRAFICZNYCH Z SERWERA BIBLIOTEKI NARODOWEJ W KODOWANIU  win1250 (ISO 6937/2) DO KOHA-2.0 Z KODOWANIEM UTF-8.
+
+Pliki w tym katalogu są czasowym rozwiązaniem problemu, który istnieje podczas importowania danych bibliograficznych przez sieć z biblioteki Narodowej w Warszawie. Rozwiązanie działa prawdopodobnie tylko dla języka polskiego dlatego deweloperzy Koha będą musieli coś zrobić z tym problemem w przyszłości.
+Pliki z tego katalogu należy przekopiować do ich właściwego katalogu na zainstalowanym serwerze Koha-2.0:
+/usr/local/koha/intranet/modules/C4/Biblio.pm
+/usr/local/koha/intranet/cgi-bin/z3950/search.pl
+
+Po skopiowaniu należy upewnić się, że przywileje plików są właściwe. U mnie to jest:
+-rwxr-xr-x    1 apache   apache      91813 May  2 18:34 Biblio.pm
+-rwxr-xr-x    1 apache   apache       3263 May  2 18:39 search.pl
+
+Po tym zabiegu można spokojnie korzystać z serwera ( http://www.bn.org.pl/Z3950_eng.htm) INNOPAC biblioteki Narodowej w Warszawie do importu rekordów, które jakimś cudem nadal trzymają w  win1250 (ISO 6937/2).
+
+Autorem przedstawionego rozwiązania jest Zbigniew Bomart.
+
+Benedykt P. Barszcz
+
+

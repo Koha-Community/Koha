@@ -1,0 +1,18 @@
+IMPORTING FROM Z39.50 SERVER WITH Character Set: win1250 (ISO 6937/2) into KOHA-2.0 WITH UTF-8 
+
+Files from this directory are here as a fix only and are of temporary nature. The fix was delivered to me by Zbigniew Bomart.
+It will probably work for the Polish Language only. The issue needs to be addressed by Koha developers for the general audience.
+There's a general problem with z39.50 import feature for koha instalations whose default charset IS NOT iso-8859-1.
+When importing from z39.50 servers that keep their records in windows-1250 charset encoding and koha installation with UTF-8 one may use the replacement files in this directory. 
+Copy them to the following location:
+/usr/local/koha/intranet/modules/C4/Biblio.pm
+/usr/local/koha/intranet/cgi-bin/z3950/search.pl
+
+and enjoy importing records in UTF-8 from Character Set: win1250 (ISO 6937/2) servers.
+I tested it and the files seem to work on Fedora Core 1 and Koha-2.0
+
+Remember to set the appropriate permissions on the files once you copy them. On my machine it is:
+-rwxr-xr-x    1 apache   apache      91813 May  2 18:34 Biblio.pm
+-rwxr-xr-x    1 apache   apache       3263 May  2 18:39 search.pl
+
+Benedict P. Barszcz
