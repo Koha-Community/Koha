@@ -2128,14 +2128,14 @@ sub itemcount2 {
   my ($env,$bibnum,$type)=@_;
   my $dbh = C4::Context->dbh;
   my $query="Select * from items,branches where
-  biblionumber=$bibnum and items.holdingbranch=branches.branchcode";
+  biblionumber=? and items.holdingbranch=branches.branchcode";
   if ($type ne 'intra'){
     $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
     (wthdrawn <> 1 or wthdrawn is NULL)";
   }
   my $sth=$dbh->prepare($query);
   #  print $query;
-  $sth->execute;
+  $sth->execute($bibnum);
   my %counts;
   $counts{'total'}=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -2174,10 +2174,10 @@ sub itemcount2 {
     $status = $data->{'branchname'} unless defined $status;
     $counts{$status}++;
   }
-  my $query2="Select * from aqorders where biblionumber=$bibnum and
+  my $query2="Select * from aqorders where biblionumber=? and
   datecancellationprinted is NULL and quantity > quantityreceived";
   my $sth2=$dbh->prepare($query2);
-  $sth2->execute;
+  $sth2->execute($bibnum);
   if (my $data=$sth2->fetchrow_hashref){
       $counts{'order'}=$data->{'quantity'} - $data->{'quantityreceived'};
   }
