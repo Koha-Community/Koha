@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.19  2002/10/13 05:56:10  arensb
+# Added some FIXME comments.
+#
 # Revision 1.18  2002/10/11 12:34:53  arensb
 # Replaced &requireDBI with C4::Context->dbh
 #
@@ -1202,7 +1205,7 @@ sub OLDmodsubject {
 
         $sth2->execute;
         while (my $data = $sth2->fetchrow_hashref) {
-          $error = $error."<br>$data->{'catalogueentry'}";
+          $error = $error."<br>$data->{'catalogueentry'}";	# FIXME - .=
         } # while
         $sth2->finish;
       } # else
@@ -1466,7 +1469,7 @@ sub OLDdelitem{
   $sth->finish;
   $query="Insert into deleteditems values (";
   foreach my $temp (@data){
-    $query=$query."'$temp',";
+    $query=$query."'$temp',";		# FIXME - .=
   }
   $query=~ s/\,$/\)/;
 #  print $query;
@@ -1535,7 +1538,7 @@ sub OLDdelbiblio{
     $query="Insert into deletedbiblio values (";
     foreach my $temp (@data){
       $temp=~ s/\'/\\\'/g;
-      $query=$query."'$temp',";
+      $query=$query."'$temp',";		# FIXME - .=
     }
     $query=~ s/\,$/\)/;
 #   print $query;
@@ -1616,6 +1619,7 @@ sub newbiblio {
 
 # FIXME - This is in effect the same as &C4::Acquisitions::modbiblio.
 # Pick one and stick with it.
+# FIXME - Get the POD from C4::Acquisitions
 sub modbiblio {
   my ($biblio) = @_;
   my $dbh  = C4::Context->dbh;
@@ -1625,6 +1629,7 @@ sub modbiblio {
 
 # FIXME - This is in effect identical to &C4::Acquisitions::modsubtitle.
 # Pick one and stick with it.
+# FIXME - Get the POD from C4::Acquisitions
 sub modsubtitle {
   my ($bibnum, $subtitle) = @_;
   my $dbh   = C4::Context->dbh;
@@ -1635,6 +1640,7 @@ sub modsubtitle {
 # FIXME - This is functionally identical to
 # &C4::Acquisitions::modaddauthor
 # Pick one and stick with it.
+# FIXME - Get the POD from C4::Acquisitions
 sub modaddauthor {
     my ($bibnum, $author) = @_;
     my $dbh   = C4::Context->dbh;
