@@ -186,10 +186,15 @@ my %requiretables=(
 				KEY word (word),
 				KEY sndx_word (sndx_word)
 			)",
-	marc_breeding =>"( file varchar(80) NOT NULL default '',
+	marc_breeding =>"(  id bigint(20) NOT NULL auto_increment,
+								file varchar(80) NOT NULL default '',
 								isbn varchar(10) NOT NULL default '',
+								title varchar(128) default NULL,
+								author varchar(80) default NULL,
 								marc text NOT NULL,
-								PRIMARY KEY  (isbn)
+								PRIMARY KEY  (id),
+								KEY title (title),
+								KEY isbn (isbn)
 								)",
 	authorised_values => "(id int(11) NOT NULL auto_increment,
   									category char(10) NOT NULL default '',
@@ -267,6 +272,7 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'opacthemes', value => 'default', explanation => 'theme' },
     	{ uniquefieldrequired => 'variable', variable => 'timeout', value => '12000000', explanation => 'login timeout' },
     	{ uniquefieldrequired => 'variable', variable => 'marc', value => 'ON', explanation => 'MARC support (ON or OFF)' },
+    	{ uniquefieldrequired => 'variable', variable => 'marcflavour', value => 'MARC21', explanation => 'your MARC flavor (MARC21 or UNIMARC) used for character encoding' },
     ],
 
 );
@@ -532,6 +538,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.34  2003/01/23 12:30:02  tipaul
+# introducint marcflavour in systempref file : used for character decoding
+#
 # Revision 1.33  2003/01/21 09:03:27  tipaul
 # bugfix (NOTE : this bugs makes installation of the 1.3.3 a little fuzzy. Please fix your DB if you installed 1.3.3)
 #
