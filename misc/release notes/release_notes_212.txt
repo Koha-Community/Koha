@@ -1,0 +1,51 @@
+RELEASE NOTES
+=============
+(HELP NEEDED chapter at the end of document)
+
+ROADMAP : 
+A roadmap for Koha 2.2 is available here :
+http://www.saas.nsw.edu.au/koha_wiki/index.php?page=KohaRoadmap
+
+
+This is the 3nd UNSTABLE VERSION of the future Koha 2.2.
+Please install this version only if you want to test and give some help to the team that develops this software.
+NEVER, NEVER, NEVER use it on a production machine.
+
+WARNING : 
+* This version is ONLY available in ENGLISH. biblio frameworks are only available in UNIMARC - french.
+* This version is tested only with mozilla. Should work (partially) with IE.
+* Any 2.1.0 install must be uninstalled before installing 2.1.1 No update is provided for 2.1.0.
+
+INSTALLATION
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* Follow the instructions
+
+UPGRADE from previous 2.0.0preX or RCx version
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+UPGRADE from previous 1.2.x version :
+UPGRADE TO A 2.0.0 version before upgrading to 2.1.2
+This will be mandatory for the 2.2 official release.
+
+UPDATE from a 2.1.x version is NOT AVAILABLE. Don't install 2.1.2 on a 2.1.x test database. A lot of DB changes have been done since 2.1.x & could not be handled by the DB updater.
+
+============
+WHAT'S NEW
+============
+* Barcode printing : a barcode printing module has been added in the "parameters" module. It requires PDF::API2 Perl module. this requirement is NOT tested by the installer, and will be non-mandatory on official 2.2.0 release.
+* A lot of bugfixes. The list is too long to be done.
+
+This "snapshot" is a good basis for translation process. Feel free to subscribe to koha-translate and become involved in a localisation to your own language.
+
+===========
+WHAT'S NEXT
+===========
+This version is quite stable. The next one should be called "2.2.0RC1".
+It still requires some work in LDAP handling.
