@@ -289,9 +289,10 @@ sub dotransfer {
 sub issuebook {
     my ($env, $patroninformation, $barcode, $responses, $date) = @_;
     my $dbh=&C4Connect;
-    my $iteminformation=getiteminformation($env, 0, $barcode);
+    my $iteminformation = getiteminformation($env, 0, $barcode);
     my ($datedue);
     my ($rejected,$question,$defaultanswer,$questionnumber, $noissue);
+    my $message;
     SWITCH: {
 	if ($patroninformation->{'gonenoaddress'}) {
 	    $rejected="Patron is gone, with no known address.";
@@ -306,16 +307,16 @@ sub issuebook {
 	    last SWITCH;
 	}
 	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
-	if ($amount>5 && $patroninformation->{'categorycode'} ne 'L' &&
+	if ($amount > 5 && $patroninformation->{'categorycode'} ne 'L' &&
                          $patroninformation->{'categorycode'} ne 'W' &&
                          $patroninformation->{'categorycode'} ne 'I' && 
                          $patroninformation->{'categorycode'} ne 'B' &&
                          $patroninformation->{'categorycode'} ne 'P') {
-	    $rejected=sprintf "Patron owes \$%.02f.", $amount;
+	    $rejected = sprintf "Patron owes \$%.02f.", $amount;
 	    last SWITCH;
 	}
 	unless ($iteminformation) {
-	    $rejected="$barcode is not a valid barcode.";
+	    $rejected = "$barcode is not a valid barcode.";
 	    last SWITCH;
 	}
 	if ($iteminformation->{'notforloan'} == 1) {
@@ -343,15 +344,15 @@ sub issuebook {
 		last SWITCH;
 	    } else {
 		if ($responses->{4} eq '') {
-		    $questionnumber=4;
-		    $question="Book is issued to this borrower.\nRenew?";
-		    $defaultanswer='Y';
+		    $questionnumber = 4;
+		    $question = "Book is issued to this borrower.\nRenew?";
+		    $defaultanswer = 'Y';
 		    last SWITCH;
 		} elsif ($responses->{4} eq 'Y') {
 		    my $charge = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
 		    if ($charge > 0) {
 			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
-			$iteminformation->{'charge'}=$charge;
+			$iteminformation->{'charge'} = $charge;
 		    }
 		    &UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
 		    renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
@@ -376,35 +377,63 @@ sub issuebook {
 	    }
 	}
 
-	my ($resbor, $resrec) = checkreserve($env, $dbh, $iteminformation->{'itemnumber'});
-
-	if ($resbor eq $patroninformation->{'borrowernumber'}) {
-	     my $rquery = "update reserves set found = 'F' where reservedate = '$resrec->{'reservedate'}' and borrowernumber = '$resrec->{'borrowernumber'}' and biblionumber = '$resrec->{'biblionumber'}'";
-	     my $rsth = $dbh->prepare($rquery);
-	     $rsth->execute;
-	     $rsth->finish;
-	} elsif ($resbor ne "") {
-	    my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-	    if ($responses->{2} eq '') {
-		$questionnumber=2;
-		$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $resrec->{'reservedate'}\nAllow issue?";
-		$defaultanswer='N';
-		last SWITCH;
-	    } elsif ($responses->{2} eq 'N') {
-		#printreserve($env, $resrec, $resborrower, $iteminformation);
-		$rejected=-1;
-		last SWITCH;
-	    } else {
-		if ($responses->{3} eq '') {
-		    $questionnumber=3;
-		    $question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
+	my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
+	if ($restype) {
+	    my $resbor = $res->{'borrowernumber'};
+	    if ($resbor eq $patroninformation->{'borrowernumber'}) {
+		FillReserve($res);
+	    } elsif ($restype eq "Waiting") {
+		my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+		my $branches = getbranches();
+		my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+		if ($responses->{2} eq '') {
+		    $questionnumber=2;
+		    $question="Waiting for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
 		    $defaultanswer='N';
 		    last SWITCH;
-		} elsif ($responses->{3} eq 'Y') {
-		    my $rquery = "update reserves set found = 'F' where reservedate = '$resrec->{'reservedate'}' and borrowernumber = '$resrec->{'borrowernumber'}' and biblionumber = '$resrec->{'biblionumber'}'";
-		    my $rsth = $dbh->prepare($rquery);
-		    $rsth->execute;
-		    $rsth->finish;
+		} elsif ($responses->{2} eq 'N') {
+		    $rejected=-1;
+		    last SWITCH;
+		} else {
+		    if ($responses->{3} eq '') {
+			$questionnumber=3;
+			$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
+			$defaultanswer='N';
+			last SWITCH;
+		    } elsif ($responses->{3} eq 'Y') {
+			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+		    }
+		}
+	    } elsif ($restype eq "Reserved") {
+		my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+		my $branches = getbranches();
+		my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+		if ($responses->{5} eq '') {
+		    $questionnumber=5;
+		    $question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $res->{'reservedate'} \nAllow issue?";
+		    $defaultanswer='N';
+		    last SWITCH;
+		} elsif ($responses->{5} eq 'N') {
+		    if ($responses->{6} eq '') {
+			$questionnumber=6;
+			$question="Set reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) to waiting and transfer to $branchname?";
+			$defaultanswer='N';
+		    } elsif ($responses->{6} eq 'Y') {
+			my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
+			transferbook($tobrcd, $barcode, 1);
+			$message = "Item should now be waiting at $branchname";
+		    }
+		    $rejected=-1;
+		    last SWITCH;
+		} else {
+		    if ($responses->{7} eq '') {
+			$questionnumber=7;
+			$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
+			$defaultanswer='N';
+			last SWITCH;
+		    } elsif ($responses->{7} eq 'Y') {
+			CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+		    }
 		}
 	    }
 	}
@@ -437,7 +466,6 @@ sub issuebook {
 	}
 	&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
     }
-    my $message='';
     if ($iteminformation->{'charge'}) {
 	$message=sprintf "Rental charge of \$%.02f applies.", $iteminformation->{'charge'};
     }
@@ -679,7 +707,8 @@ sub patronflags {
 	$flaginfo{'message'} = "$patroninformation->{'borrowernotes'}";
 	$flags{'NOTES'} = \%flaginfo;
     }
-    my ($odues, $itemsoverdue) = checkoverdues($env, $patroninformation->{'borrowernumber'}, $dbh);
+    my ($odues, $itemsoverdue) 
+                  = checkoverdues($env, $patroninformation->{'borrowernumber'}, $dbh);
     if ($odues > 0) {
 	my %flaginfo;
 	$flaginfo{'message'} = "Yes";
@@ -689,12 +718,12 @@ sub patronflags {
 	}
 	$flags{'ODUES'} = \%flaginfo;
     }
-    my ($nowaiting, $itemswaiting) = checkwaiting($env, $dbh, $patroninformation->{'borrowernumber'});
+    my ($nowaiting, $itemswaiting) 
+                  = CheckWaiting($patroninformation->{'borrowernumber'});
     if ($nowaiting > 0) {
 	my %flaginfo;
 	$flaginfo{'message'} = "Reserved items available";
 	$flaginfo{'itemlist'} = $itemswaiting;
-	$flaginfo{'itemfields'} = ['barcode', 'title', 'author', 'dewey', 'subclass', 'holdingbranch'];
 	$flags{'WAITING'} = \%flaginfo;
     }
     return(\%flags);
@@ -704,13 +733,19 @@ sub patronflags {
 sub checkoverdues {
 # From Main.pm, modified to return a list of overdueitems, in addition to a count
   #checks whether a borrower has overdue items
-  my ($env,$bornum,$dbh)=@_;
+  my ($env, $bornum, $dbh)=@_;
   my @datearr = localtime;
   my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
   my @overdueitems;
-  my $count=0;
-  my $query = "Select * from issues,biblio,biblioitems,items where items.biblioitemnumber=biblioitems.biblioitemnumber and items.biblionumber=biblio.biblionumber and issues.itemnumber=items.itemnumber and borrowernumber=$bornum and returndate is NULL and date_due < '$today'";
-  my $sth=$dbh->prepare($query);
+  my $count = 0;
+  my $query = "SELECT * FROM issues,biblio,biblioitems,items 
+                       WHERE items.biblioitemnumber = biblioitems.biblioitemnumber 
+                         AND items.biblionumber     = biblio.biblionumber 
+                         AND issues.itemnumber      = items.itemnumber 
+                         AND issues.borrowernumber  = $bornum 
+                         AND issues.returndate is NULL 
+                         AND issues.date_due < '$today'";
+  my $sth = $dbh->prepare($query);
   $sth->execute;
   while (my $data = $sth->fetchrow_hashref) {
       push (@overdueitems, $data);
