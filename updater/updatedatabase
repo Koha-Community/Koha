@@ -103,7 +103,7 @@ my %requiretables = (
 							category char(10) NOT NULL default '',
 							level tinyint(4) NOT NULL default '1',
 							hierarchy char(80) NOT NULL default '',
-							father bigint(20) NOT NULL default '',
+							father char(80) NOT NULL default '',
 							PRIMARY KEY  (id),
 							KEY freelib (freelib),
 							KEY stdlib (stdlib),
@@ -237,7 +237,7 @@ my %requirefields = (
 			'homezipcode' => 'varchar(25)',
     },
     aqorders => { 'budgetdate' => 'date' },
-    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment'},
+    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key'},
 
     #added so that reference items are not available for reserves...
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
@@ -857,6 +857,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.52  2003/06/23 15:54:32  tipaul
+# *** empty log message ***
+#
 # Revision 1.51  2003/06/23 11:27:29  tipaul
 # *** empty log message ***
 #
