@@ -1,0 +1,133 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+
+<table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
+<tr   bgcolor="#fecc99" >
+<td><b>VOS DONNEES PERSONNELLES SONT-ELLES EXACTES?</B></td></tr>
+<tr>
+<td><font size=2 face="arial,helvetica">
+Carte lecteur: <TMPL_VAR NAME="cardnumber"> <p>
+<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
+<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
+<TMPL_VAR NAME="phone"> (dom.)<br>
+<TMPL_VAR NAME="faxnumber"> (bur.)<br>
+
+<TMPL_VAR NAME="emailaddress"><p>
+
+Des informations sont inexactes? Vous avez d&eacute;m&eacute;nag&eacute;, chang&eacute; de num&eacute;ro de t&eacute;l&eacute;phone ou d'adresse e-mail?<p>
+
+<a href="/cgi-bin/koha/opac-userupdate.pl">Mettre &agrave; jour vos donn&eacute;es personnelles</a>
+
+</td></tr></table>
+
+
+
+<font size=6><em>Bonjour, <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font> 
+[<a href="/cgi-bin/koha/opac-logout.pl">D&eacute;connexion</a>]<p>
+
+
+<TMPL_IF NAME="amountoverfive">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<font face="arial,helvetica" color="red" size=+2><B>Vous avez une amende de <TMPL_VAR NAME="amountoutstanding"></B></font>
+</td></tr></table>
+
+</TMPL_IF>
+
+<TMPL_IF NAME="amountoverzero">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<td><font face="arial,helvetica" size=+2><B>Vous avez une amende de <TMPL_VAR NAME="amountoutstanding"></B></font>
+</td></tr></table>
+</TMPL_IF>
+
+<TMPL_IF NAME"amountlessthanzero">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<td><font face="arial,helvetica" size=+2><B>Vous avez un cr&eacute;dit de <TMPL_VAR NAME="amountoutstanding"></B></font>
+</td></tr></table>
+</TMPL_IF>
+<a href='/cgi-bin/koha/opac-account.pl'>Voir votre compte</a>
+
+</TMPL_LOOP>
+
+<TMPL_IF NAME="waiting_count">
+   <table  cellpadding=5 cellspacing=0 border=0><tr bgcolor="#fecc99" >
+   <td colspan=2><font color="red" face="arial,helvetica" size=+2><B>
+   Vous avez r&eacute;serv&eacute; ces documents; ils vous attendent:
+   </B></font><P></td></tr>
+      <TMPL_LOOP NAME="WAITING">
+      <tr><td><b><TMPL_VAR NAME="btitle"></b></td><td>venez les prendre &agrave;: <b><TMPL_VAR NAME="branch"></b></td></tr>
+      </TMPL_LOOP>
+   </table>
+</TMPL_IF>
+
+<p>
+
+<TMPL_IF NAME="issues_count">
+
+Vous avez <TMPL_VAR NAME="issues_count"> documents en pr&ecirc;t actuellement.<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+<TD><B>Titre</B></TD>
+<TD><B>Auteur</B></TD>
+<TD><B>Date de retour</B></TD>
+<TD><B>Type de doc.</B></TD>
+<TD><B>Amendes</B></TD>
+<TD><B>Pr&ecirc;ts en cours</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="ISSUES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="title"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="date_due"></TD>
+<TD><TMPL_VAR NAME="itemtype"></TD>
+<TD><TMPL_VAR NAME="charges"></TD>
+<TD><TMPL_VAR NAME="status"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+
+<TMPL_ELSE>
+Vous n'avez aucun pr&ecirc;t en cours.
+</TMPL_IF>
+
+<p>
+
+
+<TMPL_IF NAME="reserves_count">
+
+Vous avez r&eacute;serv&eacute; <TMPL_VAR NAME="reserves_count"> documents.<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+<TD><B>Titre</B></TD>
+<TD><B>Auteur</B></TD>
+<TD><B>Date de r&eacute;servation</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="RESERVES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="btitle"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="reservedate"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+</TMPL_IF>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
+

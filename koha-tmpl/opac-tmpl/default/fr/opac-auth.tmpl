@@ -1,0 +1,49 @@
+
+<TMPL_IF NAME="nopermission">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>D&eacute;sol&eacute;, il semble que vous n'ayez pas d'autorisation pour cette page.<h2>
+
+</TMPL_IF>
+
+
+<TMPL_IF NAME="loginprompt">
+<!-- login prompt time-->
+
+<center>
+<h2><TMPL_VAR NAME="message"></h2>
+
+<form action='<TMPL_VAR NAME="url">' method="post">
+<TMPL_LOOP NAME="INPUTS">
+  <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
+</TMPL_LOOP>
+<table border="0" cellpadding="10" cellspacing="0" width="60%">
+    <tr><td align="center" valign="top">
+
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha - Identification</font></th></tr>
+    <tr><td>num&eacute;ro carte de lecteur:</td><td><input name="userid"></td></tr>
+    <tr><td>mot de passe:</td><td><input type=password name=password></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="Entrer"></td></tr>
+    </table>
+    </td><td align="center" valign="top">
+
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th background="/images/background-mem.gif"><font size="+2">Information [version démo]</font></th></tr>
+    <td>
+    <p>Ce message doit &ecirc;tre personnalis&eacute; par la biblioth&egrave;que pour la version de production! </p>
+
+    <p>Exemple : le num&eacute;ro de carte et le mot de passe que vous avez utilis&eacute; ne sont pas reconnu pas Koha. 
+	Contactez le personnel de la bilioth&egrave;que si vous avez perdu votre mot de passe. mailto:bibli@bibli.fr</p>
+
+    <p>Pour la d&eacute;mo vous pouvez utiliser finlay : finlay ou bien superuser : koha</p>
+
+    </td>
+    </tr>
+    </table>
+
+    </td></tr>
+</table>
+</form>
+
+
+</TMPL_IF>
