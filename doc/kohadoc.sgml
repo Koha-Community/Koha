@@ -423,7 +423,21 @@
     	<itemizedlist>
     		<listitem><para>    server's domain name and system configuration directory (normally /etc - This should be an absolute path; a trailing / is not required.) </para></listitem>
     		<listitem><para>
-    PAT FIXME:  Should they create a koha.conf here, or where?  Could you stick an example of a current one in appropriate place?
+			Make sure that a koha.conf file exits at /etc/koha.conf.  An example koha.conf file is shown below.
+	<programlisting>
+	database=Koha
+	hostname=localhost
+	user=kohaadmin
+	pass=kohaadmin
+	includes=/usr/local/koha/opac/htdocs/includes
+	intranetdir=/usr/local/koha/intranet
+	opacdir=/usr/local/koha/opac
+	kohalogdir=/usr/local/koha/log
+	kohaversion=2.0.0pre1
+	httpduser=apache
+	intrahtdocs=/usr/local/koha/intranet/htdocs/intranet-tmpl
+	opachtdocs=/usr/local/koha/opac/htdocs/opac-tmpl
+		</programlisting>
     		</para></listitem>
     		<!--<listitem><para>    Setup apache    		</para></listitem> -->
     		<listitem><para>
