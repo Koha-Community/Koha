@@ -1,0 +1,31 @@
+<TMPL_INCLUDE name="cat-top.inc">
+
+<TMPL_VAR NAME=about>
+
+<p>En esta pantalla se presentarán datos generales acerca del Koha, sus sistema operativo y otros.
+
+<center>
+<table border=1>
+  <tr bgcolor="white">
+      <td width=25%>versión del Koha:</td>
+      <td><TMPL_VAR NAME=kohaVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>versión del SO:</td>
+      <td><TMPL_VAR NAME=osVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>versión de Perl:</td>
+      <td><TMPL_VAR NAME=perlVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>versión de Mysql:</td>
+      <td><TMPL_VAR NAME=mysqlVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>versión de Apache:</td>
+      <td><TMPL_VAR NAME=apacheVersion></td>
+  </tr>
+</table>
+</center>
+<TMPL_INCLUDE name="cat-bottom.inc">
