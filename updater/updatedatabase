@@ -347,7 +347,7 @@ my %tabledata = (
             uniquefieldrequired => 'variable',
             variable            => 'autoMemberNum',
             value               => '1',
-            explanation         => '1 or else. If 1, Barcode is auto-calculated'
+            explanation         => '1 or 0. If 1, Member number is auto-calculated'
         },
         {
             uniquefieldrequired => 'variable',
@@ -372,7 +372,7 @@ my %tabledata = (
             uniquefieldrequired => 'variable',
             variable            => 'autoBarcode',
             value               => '1',
-            explanation         => '1 or else. If 1, Barcode is auto-calculated'
+            explanation         => '1 or 0. If 1, Barcode is auto-calculated'
         },
         {
             uniquefieldrequired => 'variable',
@@ -757,6 +757,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.44  2003/05/03 05:39:57  rangi
+# Fixing bug 429
+# (Wording changes in the explanation fields in system preferences)
+#
 # Revision 1.43  2003/05/02 23:01:09  rangi
 # Adding the textmessaging column to the borrowers table.
 # insertdata.pl is expecting this to exist, and hence modifying/adding
