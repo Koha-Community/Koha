@@ -208,7 +208,7 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} = "<input type='text' name='tagsubfield' value='".$data->{'tagsubfield'}."' size=3 maxlength=1>";
+		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"3\" maxlength=\"1\">";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{repeatable} = CGI::checkbox('repeatable','',1,'');
@@ -233,7 +233,7 @@ if ($op eq 'add_form') {
 		push(@loop_data, \%row_data);
 	}
 	$template->param(action => "Edit subfields",
-							tagfield => "<input type=hidden name=tagfield value='$tagfield'>$tagfield",
+							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\">$tagfield",
 							loop => \@loop_data,
 							more_subfields => $more_subfields,
 							more_tag => $tagfield);
@@ -339,19 +339,19 @@ if ($op eq 'add_form') {
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{thesaurus_category}	= $results->[$i]{'thesaurus_category'};
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
-		$row_data{delete} = "$script_name?op=delete_confirm&tagfield=$tagfield&tagsubfield=".$results->[$i]{'tagsubfield'};
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'};
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
-	$template->param(edit => "<a href='$script_name?op=add_form&tagfield=$tagfield'>");
+	$template->param(edit => "<a href=\"$script_name?op=add_form&amp;tagfield=$tagfield\">");
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(prev =>"<a href=$script_name?offset=$prevpage>");
+		$template->param(prev =>"<a href=\"$script_name?offset=$prevpage\">");
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "<a href=$script_name?offset=$nextpage>");
+		$template->param(next => "<a href=\"$script_name?offset=$nextpage\">");
 	}
 } #---- END $OP eq DEFAULT
 
