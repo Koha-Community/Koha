@@ -1,9 +1,9 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=./logout.pl>Log Out</a>]</p>
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-logout.pl>Log Out</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=./userpage.pl>Log In</a> to Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
 
 
