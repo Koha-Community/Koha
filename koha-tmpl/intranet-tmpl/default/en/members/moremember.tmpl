@@ -2,7 +2,7 @@
 
 <div id="mainbloc">
 	<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
-	<div id="bloc25">
+	<div class="bloc25">
 		<h2 class="members">Membership record</h2>
 		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
 		<p>Card number: <!-- TMPL_VAR NAME="cardnumber" --><br>
@@ -93,8 +93,17 @@
 			<input type="submit" class="button" value="Modify User Flags">
 		</form>
 	</div>
+	
+<!-- TMPL_IF NAME="flagged" -->	<div class="bloc25">
+		<h2 class="members">Member Flags</h2>
+		<ul>
+		<!-- TMPL_IF NAME="debarred" --><li>Member is debarred.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="gonenoaddress" --><li>Member's address is in doubt.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="lost" --><li>Member's card has been reported lost.</li><!-- /TMPL_IF -->
+		</ul>
+	</div><!-- /TMPL_IF -->
 
-	<div id="bloc25">
+	<div class="bloc25">
 		<h2 class="members">Fines &amp; charges</h2>
 		<!-- TMPL_IF NAME="totaldue" -->
 			Total due <!-- TMPL_VAR NAME="totaldue"-->
@@ -110,7 +119,7 @@
 			</a>
 		</p>
 	</div>
-	<div id="bloc25">
+	<div class="bloc25">
 		<h2 class="members">Items requested</h2>
 			<!-- TMPL_IF NAME="reserveloop" -->
 			<form action="/cgi-bin/koha/modrequest.pl" method="post">
@@ -154,11 +163,11 @@
 			<!-- /TMPL_IF -->
 	</div>
 
-	<div id="bloc25">
+	<div class="bloc25">
 		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Reading Record</a>
 	</div>
 
-	<div id="bloc25">
+	<div class="bloc25">
 		<h2 class="members">Items currently on issue</h2>
 		<!-- TMPL_IF NAME="issueloop" -->
 			<form action="../renewscript.pl" method="post">
