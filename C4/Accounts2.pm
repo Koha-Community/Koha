@@ -9,6 +9,7 @@ use DBI;
 use C4::Database;
 use C4::Stats;
 use C4::Search;
+use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
 # set the version for version checking
@@ -208,16 +209,18 @@ sub returnlost{
 }
 
 sub manualinvoice{
-  my ($bornum,$itemnum,$desc,$type,$amount)=@_;
+  my ($bornum,$itemnum,$desc,$type,$amount,$user)=@_;
   my $dbh=C4Connect;
   my $insert;
   $itemnum=~ s/ //g;
+  my %env;
   my $accountno=getnextacctno('',$bornum,$dbh);
   my $amountleft=$amount;
   
-  if ($type eq 'C' || $type eq 'BAY' || $type eq 'WORK'){
+  if ($type eq 'CS' || $type eq 'CB' || $type eq 'CW'
+  || $type eq 'CF' || $type eq 'CL'){
     my $amount2=$amount*-1;
-    $amountleft=fixcredit('',$bornum,$amount2);
+    $amountleft=fixcredit(\%env,$bornum,$amount2,$itemnum,$type,$user);
   }
   if ($type eq 'N'){
     $desc.="New Card";
@@ -234,11 +237,13 @@ sub manualinvoice{
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
     $desc.=" ".$itemnum;
+    $desc=$dbh->quote($desc);
     $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-    values ($bornum,$accountno,now(),'$amount','$desc','$type','$amountleft','$data->{'itemnumber'}')";
+    values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft','$data->{'itemnumber'}')";
   } else {
+      $desc=$dbh->quote($desc);
     $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-    values ($bornum,$accountno,now(),'$amount','$desc','$type','$amountleft')";
+    values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft')";
   }
   
   my $sth=$dbh->prepare($insert);
@@ -250,13 +255,50 @@ sub manualinvoice{
   
 sub fixcredit{
   #here we update both the accountoffsets and the account lines
-  my ($env,$bornumber,$data)=@_;
+  my ($env,$bornumber,$data,$barcode,$type,$user)=@_;
   my $dbh=C4Connect;
   my $updquery = "";
   my $newamtos = 0;
   my $accdata = "";
-#  my $branch=$env->{'branchcode'};
   my $amountleft = $data;
+  if ($barcode ne ''){    
+    my $item=getiteminformation($env,'',$barcode);
+    my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
+    my $query="Select * from accountlines where (borrowernumber='$bornumber'
+    and itemnumber='$item->{'itemnumber'}' and amountoutstanding > 0)";
+    if ($type eq 'CL'){
+      $query.=" and (accounttype = 'L' or accounttype = 'Rep')";
+    } elsif ($type eq 'CF'){
+      $query.=" and (accounttype = 'F' or accounttype = 'FU' or
+      accounttype='Res' or accounttype='Rent')";
+    } elsif ($type eq 'CB'){
+      $query.=" and accounttype='A'";
+    }
+#    print $query;
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    $accdata=$sth->fetchrow_hashref;
+    $sth->finish;   
+    if ($accdata->{'amountoutstanding'} < $amountleft) {
+        $newamtos = 0;
+	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+     }  else {
+        $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
+	$amountleft = 0;
+     }
+          my $thisacct = $accdata->{accountno};
+     my $updquery = "update accountlines set amountoutstanding= '$newamtos'
+     where (borrowernumber = '$bornumber') and (accountno='$thisacct')";
+     my $usth = $dbh->prepare($updquery);
+     $usth->execute;
+     $usth->finish;
+     $updquery = "insert into accountoffsets 
+     (borrowernumber, accountno, offsetaccount,  offsetamount)
+     values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
+     my $usth = $dbh->prepare($updquery);
+     $usth->execute;
+     $usth->finish;
+  }
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
@@ -290,7 +332,12 @@ sub fixcredit{
   }
   $sth->finish;
   $dbh->disconnect;
+  $env->{'branch'}=$user;
+  $type="Credit ".$type;
+  UpdateStats($env,$user,$type,$data,$user,'','',$bornumber);
+  $amountleft*=-1;
   return($amountleft);
+  
 }
 
 sub refund{
