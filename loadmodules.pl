@@ -36,7 +36,19 @@ SWITCH: {
 }
 
 sub acquisitions {
-		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
+    my $aq_type = C4::Context->preference("acquisitions") || "normal"; 
+    # Get the acquisition preference. This should be: 
+    #       "simple" - minimal information required 
+    #       "normal" - full information required 
+    #       other - Same as "normal" 
+     
+    if ($aq_type eq 'simple') { 
+	print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl"); 
+    } elsif ($aq_type eq 'normal') { 
+	print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl"); 
+    } else {
+	print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
+    }
 }
 
 sub catalogue_search {
