@@ -75,11 +75,11 @@ $::etcdir = '/etc';
 checkperlmodules();
 
 # Ask for installation directories
+getapacheinfo();
+
 getinstallationdirectories();
 
 getdatabaseinfo();
-
-getapacheinfo();
 
 getapachevhostinfo();
 
@@ -97,6 +97,11 @@ restartapache();
 # Installation is complete.  Rename the koha.conf.tmp file
 
 rename "$::etcdir/koha.conf.tmp", "$::etcdir/koha.conf" || warn "Couldn't rename file at $::etcdir. Must have write capability.\n";
+
+
+updatedatabase();
+
+populatedatabase();
 
 showmessage(getmessage('AuthenticationWarning'), 'PressEnter');
 

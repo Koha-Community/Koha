@@ -39,6 +39,8 @@ $VERSION = 0.01;
 		&basicauthentication
 		&installfiles
 		&databasesetup
+		&updatedatabase
+		&populatedatabase
 		&restartapache
 		&loadconfigfile
 		);
@@ -986,9 +988,9 @@ sub installfiles {
 
 
     showmessage(getmessage('InstallFiles'),'none');
-    print getmessage('CopyingFiles', ['internet-html', "$::intranetdir/htdocs" ]);
+    print getmessage('CopyingFiles', ['intranet-html', "$::intranetdir/htdocs" ]);
     system("cp -R intranet-html/* $::intranetdir/htdocs/");
-    print getmessage('CopyingFiles', ['internet-cgi', "$::intranetdir/cgi-bin" ]);
+    print getmessage('CopyingFiles', ['intranet-cgi', "$::intranetdir/cgi-bin" ]);
     system("cp -R intranet-cgi/* $::intranetdir/cgi-bin/");
     print getmessage('CopyingFiles', ['stand-alone scripts', "$::intranetdir/scripts" ]);
     system("cp -R scripts/* $::intranetdir/scripts/");
@@ -1108,7 +1110,6 @@ $messages->{'PrinterQueue'}->{en}="Printer Queue [%s]: ";
 $messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
 
 sub databasesetup {
-    my $mysqldir;
     $::mysqluser = 'root';
     $::mysqlpass = '';
 
@@ -1117,15 +1118,15 @@ sub databasesetup {
 			  /usr
 			  )) {
        if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
-	    $mysqldir=$mysql;
+	    $::mysqldir=$mysql;
        }
     }
-    if (!$mysqldir){
+    if (!$::mysqldir){
 	print "I don't see mysql in the usual places.\n";
 	for (;;) {
 	    print "Where have you installed mysql? ";
-	    chomp($mysqldir = <STDIN>);
-	    last if -f "$mysqldir/bin/mysqladmin";
+	    chomp($::mysqldir = <STDIN>);
+	    last if -f "$::mysqldir/bin/mysqladmin";
 	print <<EOP;
 
 I can't find it there either. If you compiled mysql yourself,
@@ -1144,7 +1145,7 @@ EOP
 	$::mysqlpass=showmessage(getmessage('MysqlRootPassword'), 'free');
 	$::mysqlpass_quoted = $::mysqlpass;
 	$::mysqlpass_quoted =~ s/"/\\"/g;
-	my $result=system("$mysqldir/bin/mysqladmin -u$::mysqluser -p\"$::mysqlpass_quoted\" proc > /dev/null 2>&1");
+	my $result=system("$::mysqldir/bin/mysqladmin -u$::mysqluser -p\"$::mysqlpass_quoted\" proc > /dev/null 2>&1");
 	if ($result) {
 	    print getmessage('InvalidMysqlRootPassword');
 	} else {
@@ -1154,68 +1155,80 @@ EOP
 
     showmessage(getmessage('CreatingDatabase'),'none');
 
-    my $result=system("$mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass create $::dbname");
+    my $result=system("$::mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass create $::dbname");
     if ($result) {
 	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
     } else {
 	# Populate the Koha database
-	system("$mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname < koha.mysql");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname < koha.mysql");
 	# Set up permissions
-	system("$mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
-	system("$mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
-	system("$mysqldir/bin/mysqladmin -u$::mysqluser -p\"$::mysqlpass_quoted\" reload");
-
-	system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$::mysqldir/bin/mysqladmin -u$::mysqluser -p\"$::mysqlpass_quoted\" reload");
 
 
-	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
-	if ($response =~/^y/i) {
-	    system("gunzip sampledata-1.2.gz");
-	    system("cat sampledata-1.2 | $mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
-	    system("gzip -9 sampledata-1.2");
-	    system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-	    system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-	    system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-	    system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
-	    showmessage(getmessage('SampleDataInstalled'), 'PressEnter');
-	} else {
-	    my $input;
-	    my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
 
-	    unless ($response =~/^n/i) {
-		my $branch='Main Library';
-		print "Enter a name for the library branch [$branch]: ";
-		$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
-		$branch=~s/[^A-Za-z0-9\s]//g;
-
-		my $branchcode=$branch;
-		$branchcode=~s/[^A-Za-z0-9]//g;
-		$branchcode=uc($branchcode);
-		$branchcode=substr($branchcode,0,4);
-		$branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
-		$branchcode=~s/[^A-Z]//g;
-		$branchcode=uc($branchcode);
-		$branchcode=substr($branchcode,0,4);
-
-		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-
-		my $printername='Library Printer';
-		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
-		$printername=~s/[^A-Za-z0-9\s]//g;
-
-		my $printerqueue='lp';
-		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
-		$printerqueue=~s/[^A-Za-z0-9]//g;
-		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
-
-	    }
-	}
 
 
     }
 
+}
+
+sub updatedatabase {
+    my $result=system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
+    if ($result) {
+	print "Problem updating database...\n";
+	exit;
+    }
+    print "\n\nFinished updating database. Press <ENTER> to continue...";
+    <STDIN>;
+}
+
+sub populatedatabase {
+    my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
+    if ($response =~/^y/i) {
+	system("gunzip sampledata-1.2.gz");
+	system("cat sampledata-1.2 | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+	system("gzip -9 sampledata-1.2");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+	showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
+    } else {
+	my $input;
+	my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
+
+	unless ($response =~/^n/i) {
+	    my $branch='Main Library';
+	    print "Enter a name for the library branch [$branch]: ";
+	    $branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
+	    $branch=~s/[^A-Za-z0-9\s]//g;
+
+	    my $branchcode=$branch;
+	    $branchcode=~s/[^A-Za-z0-9]//g;
+	    $branchcode=uc($branchcode);
+	    $branchcode=substr($branchcode,0,4);
+	    $branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
+	    $branchcode=~s/[^A-Z]//g;
+	    $branchcode=uc($branchcode);
+	    $branchcode=substr($branchcode,0,4);
+
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+
+	    my $printername='Library Printer';
+	    $printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
+	    $printername=~s/[^A-Za-z0-9\s]//g;
+
+	    my $printerqueue='lp';
+	    $printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
+	    $printerqueue=~s/[^A-Za-z0-9]//g;
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+
+	}
+    }
 }
 
 $messages->{'RestartApache'}->{en}=qq|
