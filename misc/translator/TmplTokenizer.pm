@@ -545,9 +545,7 @@ sub _optimize {
 		    push @{$this->{_queue}}, [1, pop @structure];
 		}
 	    };
-	    print "DEBUG: optimize: entry: checking: ", join('', map {$_->string} @structure), "\n";
     &$undo_trailing_blanks;
-	    print "DEBUG: optimize: structure length is ", scalar @structure, "\n";
     while (@structure >= 2) {
 	my $something_done_p = 0;
 	# FIXME: If the last token is a close tag but there are no tags
@@ -557,19 +555,16 @@ sub _optimize {
 		&& $structure[$#structure]->type == TmplTokenType::TAG
 		&& $structure[$#structure]->string =~ /^<\//s) {
 	    my $has_other_tags_p = 0;
-	    print "DEBUG: checking for unmatched close tag: ", join('', map {$_->string} @structure), "\n";
 	    for (my $i = 0; $i < $#structure; $i += 1) {
 		$has_other_tags_p = 1
 			if $structure[$i]->type == TmplTokenType::TAG;
 	    last if $has_other_tags_p;
 	    }
 	    if (!$has_other_tags_p) {
-	    print "DEBUG: requeuing ", $structure[$#structure]->string, "\n";
 		push @{$this->{_queue}}, [0, pop @structure]
 		&$undo_trailing_blanks;
 		$something_done_p = 1;
 	    }
-	    print "DEBUG: finished checking for unmatched closed tag\n";
 	}
 	# FIXME: Do the same ugly hack for the last token being a ( or [
 	if (@structure >= 2
@@ -587,7 +582,6 @@ sub _optimize {
 		&& $structure[0]->string =~ /^<([a-z0-9]+)/is
 		&& (my $tag = $1) !~ /^(?:br|hr|img|input)\b/is
 	) {
-	    print "DEBUG: checking for unmatched open tag: ", join('', map {$_->string} @structure), "\n";
 	    my $tag_open_count = 1;
 	    for (my $i = 1; $i <= $#structure; $i += 1) {
 		if ($structure[$i]->type == TmplTokenType::TAG) {
@@ -597,14 +591,11 @@ sub _optimize {
 		}
 	    }
 	    if ($tag_open_count > 0) {
-	    print "DEBUG: tag open count is $tag_open_count, requeuing...\n";
 		for (my $i = $#structure; $i; $i -= 1) {
-	    print "DEBUG: requeuing ", $structure[$#structure]->string, "\n";
 		    push @{$this->{_queue}}, [1, pop @structure];
 		}
 		$something_done_p = 1;
 	    }
-	    print "DEBUG: finished checking structure\n\n";
 	}
 	# FIXME: If the first token is an open tag, the last token is the
 	# FIXME: corresponding close tag, and there are no other close tags 
@@ -616,7 +607,6 @@ sub _optimize {
 		&& $structure[$#structure]->type == TmplTokenType::TAG
 		&& $structure[$#structure]->string =~ /^<\/$1\s*>$/is) {
 	    my $has_other_open_or_close_tags_p = 0;
-	    print "DEBUG: checking for matching open and close tags: ", join('', map {$_->string} @structure), "\n";
 	    for (my $i = 1; $i < $#structure; $i += 1) {
 		$has_other_open_or_close_tags_p = 1
 			if $structure[$i]->type == TmplTokenType::TAG
@@ -625,12 +615,10 @@ sub _optimize {
 	    }
 	    if (!$has_other_open_or_close_tags_p) {
 		for (my $i = $#structure; $i; $i -= 1) {
-	    print "DEBUG: requeuing ", $structure[$#structure]->string, "\n";
 		    push @{$this->{_queue}}, [1, pop @structure];
 		}
 		$something_done_p = 1;
 	    }
-	    print "DEBUG: finished checking for matching open and close tags\n";
 	}
     last if !$something_done_p;
     }
