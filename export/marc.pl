@@ -24,9 +24,8 @@ if ($op eq "export") {
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	while (my ($bibid) = $sth->fetchrow) {
-		warn "getting : $bibid";
 		my $record = MARCgetbiblio($dbh,$bibid);
-		warn $record->as_formatted();
+
 		print $record->as_usmarc();
 	}
 } else {
