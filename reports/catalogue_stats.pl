@@ -398,8 +398,8 @@ sub calculate {
  		my %cell;
 		if ($celvalue) {
 			$cell{rowtitle} = $celvalue;
-		} else {
-			$cell{rowtitle} = "";
+#		} else {
+#			$cell{rowtitle} = "";
 		}
  		$cell{totalrow} = 0;
 		push @loopline, \%cell;
@@ -440,8 +440,8 @@ sub calculate {
 		my %ft;
 		if ($celvalue) {
 			$cell{coltitle} = $celvalue;
-		} else {
-			$cell{coltitle} = "";
+#		} else {
+#			$cell{coltitle} = "";
 		}
  		$ft{totalcol} = 0;
 		push @loopcol, \%cell;
@@ -605,7 +605,7 @@ sub calculate {
 		# and the number matches the number of columns
 		foreach my $col ( @loopcol ) {
 			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
-			push @loopcell, {value => ($value)?$value:""  } ;
+			push @loopcell, {value => $value  } ;
 		}
 		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
 						'loopcell' => \@loopcell,

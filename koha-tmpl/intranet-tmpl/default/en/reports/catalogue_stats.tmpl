@@ -24,9 +24,15 @@
 						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
-								<!-- TMPL_VAR NAME="value" -->
-							</td>
+							<!--TMPL_IF NAME="value" -->
+								<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+									<!-- TMPL_VAR NAME="value" -->
+								</td>
+							<!--TMPL_ELSE-->
+								<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+									&nbsp;
+								</td>
+							<!--/TMPL_IF-->
 						<!-- /TMPL_LOOP -->
 						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
 							<!-- TMPL_VAR NAME="totalrow" -->
