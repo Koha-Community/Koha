@@ -105,7 +105,7 @@ sub startpage() {
 }
 
 sub gotopage($) {
-  my ($target) = shif;
+  my ($target) = shift;
   #print "<br>goto target = $target<br>";
   my $string = "<META HTTP-EQUIV=Refresh CONTENT=\"0;URL=http:$target\">";
   return $string;
