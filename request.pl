@@ -36,7 +36,6 @@ my $priorityoptions = priorityoptions($num, $num);
 my $branch = $input->cookie('branch');
 my $branches = getbranches();
 
-warn $branch;
 
 my $branchoptions = branchoptions($branch);
 
@@ -83,7 +82,6 @@ my $existingreserves = "";
 foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
     my $prioropt = priorityoptions($count, $res->{'priority'});
     my $bropt = branchoptions($res->{'branchcode'});
-    warn $res->{'branchcode'};
     my $bor=$res->{'borrowernumber'};
     $date = slashifyDate($res->{'reservedate'});
 
