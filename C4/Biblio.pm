@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.64  2003/10/06 15:20:51  tipaul
+# fix for 536 (subtitle error)
+#
 # Revision 1.63  2003/10/01 13:25:49  tipaul
 # seems a char encoding problem modified something in char_decode sub... changing back to something that works...
 #
@@ -1131,6 +1134,7 @@ sub MARCmarc2koha {
 		$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
 	}
 	# additional authors : specific
+	$result = &MARCmarc2kohaOneField($sth,"bibliosubtitle","subtitle",$record,$result);
 	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
 # modify copyrightdate to keep only the 1st year found
 	my $temp = $result->{'copyrightdate'};
@@ -1252,7 +1256,7 @@ sub NEWnewbiblio {
 			OLDmodaddauthor($dbh,$oldbibnum,$addiauthsubfields[$subfieldcount]);
 		}
 	}
-	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle");
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.title");
 	my @subtitlefields = $record->field($tagfield);
 	foreach my $subtitlefield (@subtitlefields) {
 		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
