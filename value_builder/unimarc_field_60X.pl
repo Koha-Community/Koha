@@ -77,13 +77,12 @@ sub plugin {
 	my $authoritysep = C4::Context->preference('authoritysep');
 	my @splitted = /$authoritysep/,$search_string;
 	my $level = $#splitted+1;
-	my $query;
+	my $sti;
 	if ($search_string) { # if no search pattern, returns only the 50 1st top level values
-		$query = "select distinct freelib,father,level from bibliothesaurus where category='NC' and freelib like ? order by father,freelib";
+		$sti=$dbh->prepare("select distinct freelib,father,level from bibliothesaurus where category='NC' and freelib like ? order by father,freelib");
 	} else {
-		$query = "select distinct freelib,father,level from bibliothesaurus where category='NC' and level=0 and freelib like ? order by father,freelib limit 0,50";
+		$sti=$dbh->prepare("select distinct freelib,father,level from bibliothesaurus where category='NC' and level=0 and freelib like ? order by father,freelib limit 0,50");
 	}
-	my $sti=$dbh->prepare($query);
 	$sti->execute($Rsearch_string);
 	my @results;
 	while (my ($freelib,$father,$level)=$sti->fetchrow) {

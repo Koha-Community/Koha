@@ -107,10 +107,8 @@ use DBI;
 sub itemdatanum {
     my ($itemnumber)=@_;
     my $dbh = C4::Context->dbh;
-    my $itm = $dbh->quote("$itemnumber");
-    my $query = "select * from items where itemnumber=$itm";
-    my $sth=$dbh->prepare($query);
-    $sth->execute;
+    my $sth=$dbh->prepare("select * from items where itemnumber=?");
+    $sth->execute($itemnumber);
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
     return($data);
@@ -119,14 +117,12 @@ sub itemdatanum {
 sub lastmove {
       my ($itemnumber)=@_;
       my $dbh = C4::Context->dbh;
-      my $var1 = $dbh->quote($itemnumber);
-      my $sth =$dbh->prepare("select max(branchtransfers.datearrived) from branchtransfers where branchtransfers.itemnumber=$var1");
-      $sth->execute;
+      my $sth =$dbh->prepare("select max(branchtransfers.datearrived) from branchtransfers where branchtransfers.itemnumber=?");
+      $sth->execute($itemnumber);
       my ($date) = $sth->fetchrow_array;
       return(0, "Item has no branch transfers record") if not $date;
-      my $var2 = $dbh->quote($date);
-      $sth=$dbh->prepare("Select * from branchtransfers where branchtransfers.itemnumber=$var1 and branchtransfers.datearrived=$var2");
-      $sth->execute;
+      $sth=$dbh->prepare("Select * from branchtransfers where branchtransfers.itemnumber=? and branchtransfers.datearrived=?");
+      $sth->execute($itemnumber,$date);
       my ($data) = $sth->fetchrow_hashref;
       return(0, "Item has no branch transfers record") if not $data;
       $sth->finish;
@@ -136,10 +132,8 @@ sub lastmove {
 sub issuessince {
       my ($itemnumber, $date)=@_;
       my $dbh = C4::Context->dbh;
-      my $itm = $dbh->quote($itemnumber);
-      my $dat = $dbh->quote($date);
-      my $sth=$dbh->prepare("Select count(*) from issues where issues.itemnumber=$itm and issues.timestamp > $dat");
-      $sth->execute;
+      my $sth=$dbh->prepare("Select count(*) from issues where issues.itemnumber=? and issues.timestamp > ?");
+      $sth->execute($itemnumber,$date);
       my $count=$sth->fetchrow_hashref;
       $sth->finish;
       return($count->{'count(*)'});
@@ -148,32 +142,25 @@ sub issuessince {
 sub issuesat {
       my ($itemnumber, $brcd)=@_;
       my $dbh = C4::Context->dbh;
-      my $itm = $dbh->quote($itemnumber);
-      my $brc = $dbh->quote($brcd);
-      my $query = "Select count(*) from issues where itemnumber=$itm and branchcode = $brc";
-      my $sth=$dbh->prepare($query);
-      $sth->execute;
+      my $sth=$dbh->prepare("Select count(*) from issues where itemnumber=? and branchcode = ?");
+      $sth->execute($itemnumber,$brcd);
       my ($count)=$sth->fetchrow_array;
       $sth->finish;
       return($count);
 }
 
 sub lastseenat {
-      my ($itemnumber, $brcd)=@_;
+      my ($itm, $brc)=@_;
       my $dbh = C4::Context->dbh;
-      my $itm = $dbh->quote($itemnumber);
-      my $brc = $dbh->quote($brcd);
-      my $query = "Select max(timestamp) from issues where itemnumber=$itm and branchcode = $brc";
-      my $sth=$dbh->prepare($query);
-      $sth->execute;
+      my $sth=$dbh->prepare("Select max(timestamp) from issues where itemnumber=? and branchcode = ?");
+      $sth->execute($itm,$brc);
       my ($date1)=$sth->fetchrow_array;
       $sth->finish;
-      $query = "Select max(datearrived) from branchtransfers where itemnumber=$itm and tobranch = $brc";
-      # FIXME - There's already a $sth in this scope.
-      my $sth=$dbh->prepare($query);
-      $sth->execute;
+      $sth=$dbh->prepare("Select max(datearrived) from branchtransfers where itemnumber=? and tobranch = ?");
+      $sth->execute($itm,$brc);
       my ($date2)=$sth->fetchrow_array;
       $sth->finish;
+      #FIXME: MJR thinks unsafe
       $date2 =~ s/-//g;
       $date2 =~ s/://g;
       $date2 =~ s/ //g;
