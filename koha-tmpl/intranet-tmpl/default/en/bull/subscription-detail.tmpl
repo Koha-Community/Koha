@@ -1,0 +1,463 @@
+
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1>Subscription</h1>
+<ul>
+
+
+
+<div align="center"><font color="black"><b>View an actual subscription</b> </div></font>
+<table>
+<form method="post" name="f">
+<tr>
+<td>	
+<div align="center"> </div>
+	<input type="hidden" name="op" value="modsubscription">
+	<input type="hidden" name="suscr" value="<!-- TMPL_VAR name="suscr" -->">
+	<input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->">
+	Librarian identity :</td><td> <!-- TMPL_VAR name="user" --></td></tr>
+<tr><br><br>
+<td>Supplier (*) :</td>
+<td>	<input type="text" name="supplier" value="<!-- TMPL_VAR name="aqbooksellerid" -->"><a href="#" OnClick="FindAcqui()">...</td></a></tr>
+<tr><td>
+Cost  :</td>
+<td>	<input type="text" name="cost" value="<!-- TMPL_VAR name="cost" -->"></td>
+<td>
+Suscribtion's budget  :</td>
+<td>	<input type="text" name="budget" value="<!-- TMPL_VAR name="aqbudgetid" -->"></td></tr>
+<tr><td>
+Beginnning date (*) :</td>
+<td>	<input type="text" name="begin" value="<!-- TMPL_VAR name="startdate" -->"></td>
+
+<td>
+Frequency (*) :</td>
+<td>	<select name="frequency" size="1" value="2">
+				<option value="">None</option>
+		<!--TMPL_IF name="frequency1" -->
+				<option value="1" selected>1/day</option>
+		<!-- TMPL_ELSE -->
+				<option value="1">1/day</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency2" -->
+				<option value="2" selected>1/week</option>
+		<!-- TMPL_ELSE -->
+				<option value="2">1/week</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency3" -->
+				<option value="3" selected>2/weeks</option>
+		<!-- TMPL_ELSE -->
+				<option value="3">2/weeks</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency4" -->
+				<option value="4" selected>3/weeks</option>
+		<!-- TMPL_ELSE -->
+				<option value="4">3/weeks</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency5" -->
+				<option value="5" selected>1 Month</option>
+		<!-- TMPL_ELSE -->
+				<option value="5">1 Month</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency6" -->
+				<option value="6" selected>2 Monthes</option>
+		<!-- TMPL_ELSE -->
+				<option value="6">2 Monthes</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency7" -->
+				<option value="7" selected>3 Monthes</option>
+		<!-- TMPL_ELSE -->
+				<option value="7">3 Monthes</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency8" -->
+				<option value="8" selected>1 quarter</option>
+		<!-- TMPL_ELSE -->
+				<option value="8">1 quarter</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency9" -->
+				<option value="9" selected>2 quarters</option>
+		<!-- TMPL_ELSE -->
+				<option value="9">2 quarters</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency10" -->
+				<option value="10" selected>1 year</option>
+		<!-- TMPL_ELSE -->
+				<option value="10">1 year</option>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="frequency11" -->
+				<option value="11" selected>2 years</option>
+		<!-- TMPL_ELSE -->
+				<option value="11">2 years</option>
+		<!-- /TMPL_IF -->
+				</select></td></tr>
+<tr>
+<td>
+Arrival week's day (*) :
+</td>
+<td>
+	<select name="arrival" size="1">
+				<option value="" selected>None</option>
+		<!--TMPL_IF name="arrival1" -->
+				<option value="1" SELECTED>Monday</option>
+		<!-- TMPL_ELSE -->
+				<option value="1">Monday</option>
+
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				<option value="2" SELECTED>Tuesday</option>
+		<!-- TMPL_ELSE -->
+				<option value="2">Tuesday</option>
+
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				<option value="3"  SELECTED>Wednesday</option>
+		<!-- TMPL_ELSE -->
+				<option value="3">Wednesday</option>
+
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				<option value="4"  SELECTED>Thursday</option>
+		<!-- TMPL_ELSE -->
+				<option value="4">Thursday</option>
+
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				<option value="5"  SELECTED>Friday</option>
+		<!-- TMPL_ELSE -->
+				<option value="5">Friday</option>
+
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				<option value="6"  SELECTED>Saturday</option>
+		<!-- TMPL_ELSE -->
+				<option value="6">Saturday</option>
+
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				<option value="7" SELECTED>Sunday</option>
+		<!-- TMPL_ELSE -->
+				<option value="7">Sunday</option>
+
+		<!-- /TMPL_IF -->
+
+				</select>
+</td>
+<td>Number of num</td><td>	<input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></td>
+</tr>
+<tr>
+<td>Number of weeks</td><td>	<input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></td>
+<td>Number of months</td><td>	<input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></td>
+
+</tr>
+<tr>
+<td>X:</td><td>	<input type="text" name="X" value="<!-- TMPL_VAR name="seqnum1" -->">
+</td>
+<td>
+Evolution : 
+</td>
+<td>
+	<select name="Xstate" size="1" onChange="select(this[this.selectedIndex].value, 'X')">
+				<option value="" selected>None</option>
+	<!-- TMPL_IF NAME="Xstate1" -->	
+				<option value="1" SELECTED>Added</option>
+	<!-- TMPL_ELSE -->
+			<option value="1" > Added </option>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="Xstate2" -->	
+				<option value="2" SELECTED>Reinitialize each</option>
+	<!-- TMPL_ELSE -->
+			<option value="2" >Reinitialize each</option>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="Xstate3"	-->
+				<option value="3" SELECTED>Constant</option>
+	<!-- TMPL_ELSE -->
+			<option value="3" > Constant </option>
+	<!-- /TMPL_IF -->
+				</select>
+
+</td>
+</tr>
+<tr>
+<td> Xfrequency:</td><td>	<input type="text" name="Xfreq" value="<!-- TMPL_VAR name="freq1" -->"></td>
+<td> Xstep:</td><td>	<input type="text" name="Xstep" value="<!-- TMPL_VAR name="step1" -->"></td>
+</tr>
+<tr>
+<td> Y:</td><td>	<input type="text" name="Y" value="<!-- TMPL_VAR name="seqnum2" -->">
+</td><td>
+Evolution : 
+</td>
+<td>
+	<select name="Ystate" size="1" onChange="select(this[this.selectedIndex].value, 'Y')">
+				<option value="" selected>None</option>
+	<!-- TMPL_IF NAME="Ystate1" -->	
+				<option value="1" SELECTED>Added</option>
+	<!-- TMPL_ELSE -->
+			<option value="1" > Added </option>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="Ystate2" -->	
+				<option value="2" SELECTED>Reinitialize each</option>
+	<!-- TMPL_ELSE -->
+			<option value="2" >Reinitialize each</option>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="Ystate3"	-->
+				<option value="3" SELECTED>Constant</option>
+	<!-- TMPL_ELSE -->
+			<option value="3" > Constant </option>
+	<!-- /TMPL_IF -->
+				</select>
+
+</td>
+</tr>
+<tr>
+<td> Yfrequency:</td><td>	<input type="text" name="Yfreq" value="<!-- TMPL_VAR name="freq2" -->"></td>
+<td> Ystep:</td><td>	<input type="text" name="Ystep" value="<!-- TMPL_VAR name="step2" -->"></td>
+</tr>
+<tr>
+<td> Z:</td><td>	<input type="text" name="Z" value="<!-- TMPL_VAR name="seqnum3" -->">
+</td><td>
+Evolution : 
+</td>
+<td>
+	<select name="Zstate" size="1" onChange="select(this[this.selectedIndex].value, 'Z')">
+				<option value="" selected>None</option>
+	<!-- TMPL_IF NAME="Zstate1" -->	
+				<option value="1" SELECTED>Added</option>
+	<!-- TMPL_ELSE -->
+			<option value="1" > Added </option>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="Zstate2" -->	
+				<option value="2" SELECTED>Reinitialize each</option>
+	<!-- TMPL_ELSE -->
+			<option value="2" >Reinitialize each</option>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="Zstate3"	-->
+				<option value="3" SELECTED>Constant</option>
+	<!-- TMPL_ELSE -->
+			<option value="3" > Constant </option>
+	<!-- /TMPL_IF -->
+				</select>
+				</select>
+
+</td></tr>
+<tr>
+<td> Zfrequency:</td><td>	<input type="text" name="Zfreq" value="<!-- TMPL_VAR name="freq3" -->"></td>
+<td> Zstep:</td><td>	<input type="text" name="Zstep" value="<!-- TMPL_VAR name="step3" -->"></td>
+</tr>
+
+<tr>
+<td>
+Sequencial phrase (*): 
+</td>
+<td>
+	<input type="text" name="sequence" value="<!-- TMPL_VAR name="sequence" -->">
+
+<input type="button" value="help" onclick="Help()" accesskey="h" class="button catalogue">
+</td>
+<td>
+</tr>
+<tr>
+<td> Notes : </td><td><TEXTAREA NAME="notes" COLS=30 ROWS=2 value="<!-- TMPL_VAR name="notes" -->"></TEXTAREA></td>
+<td>Arrival date : </td><td>	<input type="text" name="arrivalplanified" value="<!-- TMPL_VAR name="arrivalplanified" -->">
+</td>
+</tr>
+<tr>
+<td>Bib number : </td><td>	<input type="text" name="biblioid" value="<!-- TMPL_VAR name="biblioid" -->"> <a href="#" onClick="Plugin(f)">...</a>
+</td>
+</tr>
+<tr>
+<td>
+<bR>
+<input type="button" value="Mod Subscription" onclick="Check(this.form)" accesskey="w" class="button catalogue">
+
+
+</td>
+</tr>
+</div>
+
+</form>
+</table>
+
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+
+<script language="JavaScript" type="text/javascript">
+select(document.f.Xstate[document.f.Xstate.selectedIndex].value, 'X');
+select(document.f.Ystate[document.f.Xstate.selectedIndex].value, 'Y');
+select(document.f.Zstate[document.f.Xstate.selectedIndex].value, 'Z');
+
+function Plugin(f)
+{
+	 window.open("subscription-bib-search.pl","Find a bib index",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function FindAcqui(f)
+{
+	 window.open("acqui-search.pl","Find a supplier",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+
+function Check(f)
+{
+  if (f.supplier.value.length != 0 && f.arrival.value.length != 0
+	&& f.begin.value.length != 0 && f.sequence.value.length != 0
+	&& f.frequency.value.length != 0)
+	{
+		alert('subscription ok');
+		document.f.submit();
+        }
+else
+{
+ 	alert('field marked with * are mandatory');
+}
+	return false;
+}
+
+function Help()
+{
+  window.open("subscription-add-help.pl","Add subscription help page",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function select(reponse, type)
+{
+ if (type == 'X')
+     {
+	if (reponse == 0)
+	{
+	   document.f.Xstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Xstep.value = "";
+	   document.f.Xstep.disabled = true;
+	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Xfreq.value = "";
+	   document.f.Xfreq.disabled = true;
+	   document.f.X.style.backgroundColor="#DCDCDC";	
+	   document.f.X.value = "";
+	   document.f.X.disabled = true;
+	   
+        }
+	if (reponse == 1)
+	{
+	   document.f.Xstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Xstep.disabled = false;
+	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Xfreq.value = "";
+	   document.f.Xfreq.disabled = true;
+	   document.f.X.style.backgroundColor="#FFFFFF";	
+	   document.f.X.disabled = false;
+        }	
+	if (reponse == 2)
+	{
+	   document.f.Xstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Xstep.disabled = false;
+	   document.f.Xfreq.style.backgroundColor="#FFFFFF";	
+	   document.f.Xfreq.disabled = false;
+	   document.f.X.style.backgroundColor="#FFFFFF";	
+	   document.f.X.disabled = false;
+        }
+	if (reponse == 3)
+	{
+	   document.f.Xstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Xstep.value = "";
+	   document.f.Xstep.disabled = true;
+	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Xfreq.value = "";
+	   document.f.Xfreq.disabled = true;
+	   document.f.X.style.backgroundColor="#FFFFFF";	
+	   document.f.X.disabled = false;
+        }
+     }
+ if (type == 'Y')
+     {
+	if (reponse == 0)
+	{
+	   document.f.Ystep.style.backgroundColor="#DCDCDC";	
+	   document.f.Ystep.value = "";
+	   document.f.Ystep.disabled = true;
+	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Yfreq.value = "";
+	   document.f.Yfreq.disabled = true;
+	   document.f.Y.style.backgroundColor="#DCDCDC";	
+	   document.f.Y.value = "";
+	   document.f.Y.disabled = true;
+	   
+        }
+	if (reponse == 1)
+	{
+	   document.f.Ystep.style.backgroundColor="#FFFFFF";	
+	   document.f.Ystep.disabled = false;
+	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Yfreq.value = "";
+	   document.f.Yfreq.disabled = true;
+	   document.f.Y.style.backgroundColor="#FFFFFF";	
+	   document.f.Y.disabled = false;
+        }	
+	if (reponse == 2)
+	{
+	   document.f.Ystep.style.backgroundColor="#FFFFFF";	
+	   document.f.Ystep.disabled = false;
+	   document.f.Yfreq.style.backgroundColor="#FFFFFF";	
+	   document.f.Yfreq.disabled = false;
+	   document.f.Y.style.backgroundColor="#FFFFFF";	
+	   document.f.Y.disabled = false;
+        }
+	if (reponse == 3)
+	{
+	   document.f.Ystep.style.backgroundColor="#DCDCDC";	
+	   document.f.Ystep.value = "";
+	   document.f.Ystep.disabled = true;
+	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Yfreq.value = "";
+	   document.f.Yfreq.disabled = true;
+	   document.f.Y.style.backgroundColor="#FFFFFF";	
+	   document.f.Y.disabled = false;
+        }
+
+     }
+ if (type == 'Z')
+     {
+	if (reponse == 0)
+	{
+	   document.f.Zstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Zstep.value = "";
+	   document.f.Zstep.disabled = true;
+	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Zfreq.value = "";
+	   document.f.Zfreq.disabled = true;
+	   document.f.Z.style.backgroundColor="#DCDCDC";	
+	   document.f.Z.value = "";
+	   document.f.Z.disabled = true;
+	   
+        }
+	if (reponse == 1)
+	{
+	   document.f.Zstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Zstep.disabled = false;
+	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Zfreq.value = "";
+	   document.f.Zfreq.disabled = true;
+	   document.f.Z.style.backgroundColor="#FFFFFF";	
+	   document.f.Z.disabled = false;
+        }	
+	if (reponse == 2)
+	{
+	   document.f.Zstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Zstep.disabled = false;
+	   document.f.Zfreq.style.backgroundColor="#FFFFFF";	
+	   document.f.Zfreq.disabled = false;
+	   document.f.Z.style.backgroundColor="#FFFFFF";	
+	   document.f.Z.disabled = false;
+        }
+	if (reponse == 3)
+	{
+	   document.f.Zstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Zstep.value = "";
+	   document.f.Zstep.disabled = true;
+	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Zfreq.value = "";
+	   document.f.Zfreq.disabled = true;
+	   document.f.Z.style.backgroundColor="#FFFFFF";	
+	   document.f.Z.disabled = false;
+        }
+
+     }
+}
+
+</script>

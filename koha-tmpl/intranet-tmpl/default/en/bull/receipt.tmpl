@@ -1,0 +1,51 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1>Reception</h1>
+<ul>
+
+
+
+<div align="center"><font color="black"><b>periodical reception menu </b> </div></font>
+<br>
+<br>
+<br>
+<br>
+<table border=0>
+<tr>
+<td>Please enter the issn or the title of the periodical you have juste received:
+</td>
+<form method="post" name="f">
+	<td><input type="text" onclick="Clean()" name="titleorissn" value="Title / ISSN"><input type="hidden" name="op" value="search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">		<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+
+</td>
+<td><input type="button" value="Go search!" onclick="Check(this.form)" accesskey="w" class="button catalogue"></td>
+</form>
+<tr>
+</table>
+</div>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+
+<script language="Javascript">
+function Clean()
+{
+ document.f.titleorissn.value = "";
+}
+
+function Check(f)
+{
+	if (document.f.titleorissn.value.length == 0 || document.f.titleorissn.value == 'Title / ISSN')
+	{
+		alert('You must enter the Title or the issn in the field !!!');
+	}
+	else
+	{
+        }
+	f.submit();
+}
+</script>

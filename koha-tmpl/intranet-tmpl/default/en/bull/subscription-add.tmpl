@@ -1,0 +1,345 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1>Subscription</h1>
+<ul>
+
+
+
+<div align="center"><font color="black"><b>Add a new subscription </b> </div></font>
+<table>
+<form method="post" name="f">
+<tr>
+<td>	
+<div align="center"> </div>
+	<input type="hidden" name="op" value="addsubscription">
+	<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+	Librarian identity :</td><td> <!-- TMPL_VAR name="user" --></td></tr>
+<tr><br><br>
+<td>Supplier (*) :</td>
+<td>	<input type="text" name="supplier" value=""><a href="#" OnClick="FindAcqui()">...</td></a></tr>
+<tr><td>
+Cost  :</td>
+<td>	<input type="text" name="cost" value=""></td>
+<td>
+Suscribtion's budget  :</td>
+<td>	<input type="text" name="budget" value=""></td></tr>
+<tr><td>
+Beginnning date (*) :</td>
+<td>	<input type="text" name="begin" value=""></td>
+
+<td>
+Frequency (*) :</td>
+<td>	<select name="frequency" size="1">
+				<option value="" selected>None</option>
+				<option value="1">1/day</option>
+				<option value="2">1 week</option>
+				<option value="3">2 weeks</option>
+				<option value="4">3 weeks</option>
+				<option value="5">1 month</option>
+				<option value="6">2 months</option>
+				<option value="7">3 months</option>
+				<option value="8">1 quarter</option>
+				<option value="9">2 quarters</option>
+				<option value="10">1 year</option>
+				<option value="11">2 years</option>
+				</select></td></tr>
+<tr>
+<td>
+Arrival week's day (*) :
+</td>
+<td>
+	<select name="arrival" size="1">
+				<option value="" selected>None</option>
+				<option value="1">Monday</option>
+				<option value="2">Tuesday</option>
+				<option value="3">Wednesday</option>
+				<option value="4">Thursday</option>
+				<option value="5">Friday</option>
+				<option value="6">Saturday</option>
+				<option value="7">Sunday</option>
+
+
+				</select>
+</td>
+<td>Number of num</td><td>	<input type="text" name="numberlength" value=""></td>
+</tr>
+<tr>
+<td>Number of weeks</td><td>	<input type="text" name="weeklength" value=""></td>
+<td>Number of months</td><td>	<input type="text" name="monthlength" value=""></td>
+
+</tr>
+<tr>
+<td>X:</td><td>	<input type="text" name="X" value="">
+</td>
+<td>
+Evolution : 
+</td>
+<td>
+	<select name="Xstate" size="1" onChange="select(this[this.selectedIndex].value, 'X')">
+				<option value="" selected>None</option>
+				<option value="1">Added</option>
+				<option value="2">Reinitialize each</option>
+				<option value="3">Constant</option>
+				</select>
+
+</td>
+</tr>
+<tr>
+<td> Xfrequency:</td><td>	<input type="text" name="Xfreq" value=""></td>
+<td> Xstep:</td><td>	<input type="text" name="Xstep" value=""></td>
+</tr>
+<tr>
+<td> Y:</td><td>	<input type="text" name="Y" value="">
+</td><td>
+Evolution : 
+</td>
+<td>
+	<select name="Ystate" size="1" onChange="select(this[this.selectedIndex].value, 'Y')">
+				<option value="" selected>None</option>
+				<option value="1">Added each</option>
+				<option value="2">Reinitialize each</option>
+				<option value="3">Constant</option>
+				</select>
+
+</td>
+</tr>
+<tr>
+<td> Yfrequency:</td><td>	<input type="text" name="Yfreq" value=""></td>
+<td> Ystep:</td><td>	<input type="text" name="Ystep" value=""></td>
+</tr>
+<tr>
+<td> Z:</td><td>	<input type="text" name="Z" value="">
+</td><td>
+Evolution : 
+</td>
+<td>
+	<select name="Zstate" size="1" onChange="select(this[this.selectedIndex].value, 'Z')">
+				<option value="" selected>None</option>
+				<option value="1">Added each</option>
+				<option value="2">Reinitialize each</option>
+				<option value="3">Constant</option>
+				</select>
+
+</td></tr>
+<tr>
+<td> Zfrequency:</td><td>	<input type="text" name="Zfreq" value=""></td>
+<td> Zstep:</td><td>	<input type="text" name="Zstep" value=""></td>
+</tr>
+
+<tr>
+<td>
+Sequencial phrase (*): 
+</td>
+<td>
+	<input type="text" name="sequence" value="">
+
+<input type="button" value="help" onclick="Help()" accesskey="h" class="button catalogue">
+</td>
+<td>
+</tr>
+<tr>
+<td> Notes : </td><td><TEXTAREA NAME="notes" COLS=30 ROWS=2></TEXTAREA></td>
+<td>Arrival date : </td><td>	<input type="text" name="arrivalplanified" value="">
+</td>
+</tr>
+<tr>
+<td>Bib number : </td><td>	<input type="text" name="biblioid" value=""> <a href="#" onClick="Plugin(f)">...</a>
+</td>
+</tr>
+<tr>
+<td>
+<bR>
+<input type="button" value="Add Subscription" onclick="Check(this.form)" accesskey="w" class="button catalogue">
+
+</td>
+</tr>
+</div>
+
+</form>
+</table>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+
+<script language="JavaScript" type="text/javascript">
+
+select(0, 'X');
+select(0, 'Y');
+select(0, 'Z');
+
+function Plugin(f)
+{
+	 window.open("subscription-bib-search.pl","Find a bib index",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function FindAcqui(f)
+{
+	 window.open("acqui-search.pl","Find a supplier",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+
+function Check(f)
+{
+  if (f.supplier.value.length != 0 && f.arrival.value.length != 0
+	&& f.begin.value.length != 0 && f.sequence.value.length != 0
+	&& f.frequency.value.length != 0)
+	{
+		alert('subscription ok');
+		document.f.submit();
+        }
+else
+{
+ 	alert('field marked with * are mandatory');
+}
+	return false;
+}
+
+function Help()
+{
+  window.open("subscription-add-help.pl","Add subscription help page",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function select(reponse, type)
+{
+ if (type == 'X')
+     {
+	if (reponse == 0)
+	{
+	   document.f.Xstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Xstep.value = "";
+	   document.f.Xstep.disabled = true;
+	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Xfreq.value = "";
+	   document.f.Xfreq.disabled = true;
+	   document.f.X.style.backgroundColor="#DCDCDC";	
+	   document.f.X.value = "";
+	   document.f.X.disabled = true;
+	   
+        }
+	if (reponse == 1)
+	{
+	   document.f.Xstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Xstep.disabled = false;
+	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Xfreq.value = "";
+	   document.f.Xfreq.disabled = true;
+	   document.f.X.style.backgroundColor="#FFFFFF";	
+	   document.f.X.disabled = false;
+        }	
+	if (reponse == 2)
+	{
+	   document.f.Xstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Xstep.disabled = false;
+	   document.f.Xfreq.style.backgroundColor="#FFFFFF";	
+	   document.f.Xfreq.disabled = false;
+	   document.f.X.style.backgroundColor="#FFFFFF";	
+	   document.f.X.disabled = false;
+        }
+	if (reponse == 3)
+	{
+	   document.f.Xstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Xstep.value = "";
+	   document.f.Xstep.disabled = true;
+	   document.f.Xfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Xfreq.value = "";
+	   document.f.Xfreq.disabled = true;
+	   document.f.X.style.backgroundColor="#FFFFFF";	
+	   document.f.X.disabled = false;
+        }
+     }
+ if (type == 'Y')
+     {
+	if (reponse == 0)
+	{
+	   document.f.Ystep.style.backgroundColor="#DCDCDC";	
+	   document.f.Ystep.value = "";
+	   document.f.Ystep.disabled = true;
+	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Yfreq.value = "";
+	   document.f.Yfreq.disabled = true;
+	   document.f.Y.style.backgroundColor="#DCDCDC";	
+	   document.f.Y.value = "";
+	   document.f.Y.disabled = true;
+	   
+        }
+	if (reponse == 1)
+	{
+	   document.f.Ystep.style.backgroundColor="#FFFFFF";	
+	   document.f.Ystep.disabled = false;
+	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Yfreq.value = "";
+	   document.f.Yfreq.disabled = true;
+	   document.f.Y.style.backgroundColor="#FFFFFF";	
+	   document.f.Y.disabled = false;
+        }	
+	if (reponse == 2)
+	{
+	   document.f.Ystep.style.backgroundColor="#FFFFFF";	
+	   document.f.Ystep.disabled = false;
+	   document.f.Yfreq.style.backgroundColor="#FFFFFF";	
+	   document.f.Yfreq.disabled = false;
+	   document.f.Y.style.backgroundColor="#FFFFFF";	
+	   document.f.Y.disabled = false;
+        }
+	if (reponse == 3)
+	{
+	   document.f.Ystep.style.backgroundColor="#DCDCDC";	
+	   document.f.Ystep.value = "";
+	   document.f.Ystep.disabled = true;
+	   document.f.Yfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Yfreq.value = "";
+	   document.f.Yfreq.disabled = true;
+	   document.f.Y.style.backgroundColor="#FFFFFF";	
+	   document.f.Y.disabled = false;
+        }
+
+     }
+ if (type == 'Z')
+     {
+	if (reponse == 0)
+	{
+	   document.f.Zstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Zstep.value = "";
+	   document.f.Zstep.disabled = true;
+	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Zfreq.value = "";
+	   document.f.Zfreq.disabled = true;
+	   document.f.Z.style.backgroundColor="#DCDCDC";	
+	   document.f.Z.value = "";
+	   document.f.Z.disabled = true;
+	   
+        }
+	if (reponse == 1)
+	{
+	   document.f.Zstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Zstep.disabled = false;
+	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Zfreq.value = "";
+	   document.f.Zfreq.disabled = true;
+	   document.f.Z.style.backgroundColor="#FFFFFF";	
+	   document.f.Z.disabled = false;
+        }	
+	if (reponse == 2)
+	{
+	   document.f.Zstep.style.backgroundColor="#FFFFFF";	
+	   document.f.Zstep.disabled = false;
+	   document.f.Zfreq.style.backgroundColor="#FFFFFF";	
+	   document.f.Zfreq.disabled = false;
+	   document.f.Z.style.backgroundColor="#FFFFFF";	
+	   document.f.Z.disabled = false;
+        }
+	if (reponse == 3)
+	{
+	   document.f.Zstep.style.backgroundColor="#DCDCDC";	
+	   document.f.Zstep.value = "";
+	   document.f.Zstep.disabled = true;
+	   document.f.Zfreq.style.backgroundColor="#DCDCDC";	
+	   document.f.Zfreq.value = "";
+	   document.f.Zfreq.disabled = true;
+	   document.f.Z.style.backgroundColor="#FFFFFF";	
+	   document.f.Z.disabled = false;
+        }
+
+     }
+}
+
+</script>
