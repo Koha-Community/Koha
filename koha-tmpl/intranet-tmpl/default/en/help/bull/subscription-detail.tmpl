@@ -1,0 +1,24 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Serials subscription detail help</h1>
+	In this screen, you can see subscription detail, and modify it if you need.
+	<ul>
+		<h2>Subscription information bloc</h2>
+		<p>it contains the name of the librarian that created the subscription, the name of the supplier providing the subscription, the cost and the budget affected. It also contains the title of the biblio managed by the subscription.</p>
+		<h2>Planning information bloc</h2>
+		<p>it contains various information to calculate arrival dates.</p>
+		<h2>Subscription length</h2>
+		<p>one field in this bloc should be filled : the subscription length can be calculated in weeks, months or number of issues to recieve</p>
+		<h2>Numbering calculation</h2>
+		<p>The numbering of items recieved can contain complex formulas. The "numbering formula" can be filled with any text and/or numbers. 3 special tokens <b>{X} {Y}</b> and <b>{Z}</b> can be user to define the calculation formula. XYZ values are calculated with the following method:</p>
+			<ul>
+				<li>Added : a XYZ number "Added" has "step" increase for each new recieve. The "value" contains the next number to recieve (= the 1st one when subscription is created)</li>
+				<li>Reinitialize each : a XYZ number "Reinitialize each" has a "step" increase on each recieve, but the number is reinitialized every "frequency"</li>
+				<li>Constant is a constant number. Should be useless, as a contant number can be set in the formula</li>
+			</ul>
+		<h2>Sample</h2>
+		<p>
+			<li>Added, value=1021, step=1 gives : 1021,1022,1023,1024...</li>
+			<li>Added, value=0, step=4 gives : 0,4,8,12,16,20,...</li>
+			<li>Reinitialize each, value=1, frequency=4, step=1 gives : 1,2,3,4,1,2,3,4...</li>
+		</p>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->
