@@ -382,10 +382,15 @@ sub endcenter() {
   return ("</CENTER>\n");
 }  
 
+=pod
+=head2 &bold
+    &bold requires that a single string be passed in by the caller.  &bold 
+    will return "<b>$text</b>" where $text is the string passed in.
+=cut
+
 sub bold($) {
-  my ($text)=@_;
-  my $string="<b>$text</b>";
-  return($string);
+  my ($text)=shift;
+  return("<b>$text</b>");
 }
 
 END { }       # module clean-up code here (global destructor)
