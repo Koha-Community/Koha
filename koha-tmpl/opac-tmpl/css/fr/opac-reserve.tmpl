@@ -6,7 +6,7 @@
 	<ul>
 		<!-- TMPL_IF NAME="too_much_oweing" --><li>Vous devez <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_many_reserves" --><li>you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves.</li><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="already_reserved" --><li>Vous avez déjà placé une réservation sur cet exemplaire</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="already_reserved" --><li>Vous avez déjà placé une réservation sur cet exemplaire.</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="no_items_selected" --><li>Vous devez sélectionner au moins 1 type</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="no_branch_selected" --><li>Vous devez sélectionner une annexe ou retirer l'ouvrage</li><!-- /TMPL_IF -->
 	</ul>
@@ -14,8 +14,8 @@
 
 <!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
-	<p> Il y a <b><!-- TMPL_VAR NAME="reservecount" --></b> Réservations déjà faites sur cet ouvrage </p>
-	<p>Sélectionnez les types d'ouvrages souhaités. Le premier disponible sera gardé pour vous.</p>
+	<p> Il y a <b><!-- TMPL_VAR NAME="reservecount" --></b> Réservations déjà faites sur cet ouvrage. </p>
+	<p>Sélectionnez les types d'ouvrages souhaités. Le premier disponible sera gardé pour vous..</p>
 
 	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
 		<input type="hidden" name="item_types_selected" value="1">

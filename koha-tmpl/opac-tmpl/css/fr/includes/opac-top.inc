@@ -9,8 +9,8 @@
 <body>
 	<!-- MENUS -->
 	<div id="menuline">
-		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo" />
-		<span class="LibraryName"><!--TMPL_VAR name="LibraryName"--></span>
+		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo" align="left"/>
+		<span class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></span>
 		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Page d'accueil">Accueil</a>
 		<span class="spacer">&nbsp;</span>

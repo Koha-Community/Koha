@@ -3,7 +3,7 @@
 <div id="mainbloc">
 <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 	<div id="bloc20">
-		<h2>Nos informations sont-elles correctes \?</h2>
+		<h2>Nos informations sont-elles correctes ?</h2>
 		<p>Carte lecteur: <!-- TMPL_VAR NAME="cardnumber" --> </p>
 		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) </p>
 		<p><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p
@@ -48,7 +48,7 @@
 
 <div id="bloc60">
 	<!-- TMPL_IF NAME="issues_count" -->
-		Vous avez <b><!-- TMPL_VAR NAME="issues_count" --></b> ouvrages en cours de prêt<br>
+		Vous avez <b><!-- TMPL_VAR NAME="issues_count" --></b> Ouvrages en cours de prêt.<br>
 		<table cellspacing=0 >
 			<tr>
 				<th>Titre</th>
@@ -70,13 +70,13 @@
 			<!-- /TMPL_LOOP -->
 		</table>
 	<!-- TMPL_ELSE -->
-		<h2>Vous n'avez pas d'ouvrage en prêt</h2>
+		<h2>Vous n'avez pas d'ouvrage en prêt.</h2>
 	<!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_IF NAME="reserves_count" -->
 <div id="bloc60">
-	<h2>Vous avez <b><!-- TMPL_VAR NAME="reserves_count" --></b> ouvrages réservés</h2>
+	<h2>Vous avez <b><!-- TMPL_VAR NAME="reserves_count" --></b> ouvrages réservés.</h2>
 	<table cellspacing=0 align="center">
 		<Tr>
 			<th>Titre</th>
