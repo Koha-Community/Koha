@@ -1,16 +1,19 @@
-<TMPL_INCLUDE NAME="/usr/share/koha/intranet/htdocs/includes/cat-top.inc">
-<TMPL_INCLUDE NAME="searchheader.tmpl">
-<table border=0 cellspacing=0 cellpadding=0>
-<tr bgcolor=#ccccff><th>Title</th><th>Author</th><th>Item Count</th><th>Biblionumber</th></tr>
+<TMPL_INCLUDE NAME="cat-top.inc">
+<a href=search.pl?template=cmsdsearchresults.tmpl&startfrom=<TMPL_VAR NAME="startfrom">>Results with dewey</a>
+| <a href=search.pl?template=searchresults.tmpl&startfrom=<TMPL_VAR NAME="startfrom">>Results with biblionumber</a>
+<hr>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr bgcolor=#ccccff><th>Title</th><th>Author</th><th>Item Count</th><th>Biblionumber</th><th>MARC detail</th></tr>
 <TMPL_LOOP NAME=SEARCH_RESULTS>
   <tr>
   <td> <TMPL_VAR NAME=title> </td>
   <td> <TMPL_VAR NAME=author> </td>
   <td align=center> <TMPL_VAR NAME=itemcount> </td>
   <td> <TMPL_VAR NAME=biblionumber> </td>
+  <td> <a href="MARCdetail.pl?biblionumber=<TMPL_VAR name="biblionumber">">MARC</a>
   </tr>
 </TMPL_LOOP>
-<tr><td colspan=4 bgcolor=#ccccff>
+<tr><td colspan=5 bgcolor=#ccccff>
     <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr><td align=left>
     <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="prevstartfrom">>Previous Records</a>
