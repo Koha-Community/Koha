@@ -40,7 +40,7 @@ $VERSION = 0.01;
 	     &newitems &modbibitem
 	     &modsubtitle &modsubject &modaddauthor &moditem &countitems
 	     &delitem &deletebiblioitem &delbiblio
-	     &getitemtypes &getbiblio
+	     &getbiblio
 	     &getbiblioitembybiblionumber
 	     &getbiblioitem &getitemsbybiblioitem
 	     &skip
@@ -1867,22 +1867,6 @@ sub delbiblio {
 	&MARCdelbiblio($dbh,$bibid,0);
 }
 
-sub getitemtypes {
-  my $dbh   = C4::Context->dbh;
-  my $sth   = $dbh->prepare("select * from itemtypes order by description");
-  my $count = 0;
-  my @results;
-
-  $sth->execute;
-  while (my $data = $sth->fetchrow_hashref) {
-    $results[$count] = $data;
-    $count++;
-  } # while
-
-  $sth->finish;
-  return($count, @results);
-} # sub getitemtypes
-
 sub getbiblio {
     my ($biblionumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -2194,6 +2178,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.87  2004/05/18 11:54:07  tipaul
+# getitemtypes moved in Koha.pm
+#
 # Revision 1.86  2004/05/03 09:19:22  tipaul
 # some fixes for mysql prepare & execute
 #

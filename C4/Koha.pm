@@ -55,15 +55,16 @@ Koha.pm provides many functions for Koha scripts.
 			&borrowercategories
 			&ethnicitycategories
 			&subfield_is_koha_internal_p
-			&getbranches &getbranch &CGIbranches
+			&getbranches &getbranch
 			&getprinters &getprinter
+			&getitemtypes &getitemtypeinfo
 			$DEBUG);
 
 use vars qw();
 
 my $DEBUG = 0;
 
-=item slashifyDate
+=head2 slashifyDate
 
   $slash_date = &slashifyDate($dash_date);
 
@@ -79,7 +80,7 @@ sub slashifyDate {
     return("$dateOut[2]/$dateOut[1]/$dateOut[0]")
 }
 
-=item fixEthnicity
+=head2 fixEthnicity
 
   $ethn_name = &fixEthnicity($ethn_code);
 
@@ -101,7 +102,7 @@ sub fixEthnicity($) {
     return $data->{'name'};
 }
 
-=item borrowercategories
+=head2 borrowercategories
 
   ($codes_arrayref, $labels_hashref) = &borrowercategories();
 
@@ -127,7 +128,7 @@ sub borrowercategories {
     return(\@codes,\%labels);
 }
 
-=item ethnicitycategories
+=head2 ethnicitycategories
 
   ($codes_arrayref, $labels_hashref) = &ethnicitycategories();
 
@@ -164,23 +165,33 @@ sub subfield_is_koha_internal_p ($) {
     return length $subfield != 1;
 }
 
-=item getbranches
+=head2 getbranches
 
   $branches = &getbranches();
-  @branch_codes = keys %$branches;
-  %main_branch_info = %{$branches->{"MAIN"}};
+  returns informations about branches.
+  Create a branch selector with the following code
+  
+=head3 in PERL SCRIPT
 
-Returns information about existing library branches.
+my $branches = getbranches;
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+	my $selected = 1 if $thisbranch eq $branch;
+	my %row =(value => $thisbranch,
+				selected => $selected,
+				branchname => $branches->{$thisbranch}->{'branchname'},
+			);
+	push @branchloop, \%row;
+}
 
-C<$branches> is a reference-to-hash. Its keys are the branch codes for
-all of the existing library branches, and its values are
-references-to-hash describing that particular branch.
 
-In each branch description (C<%main_branch_info>, above), there is a
-key for each field in the branches table of the Koha database. In
-addition, there is a key for each branch category code to which the
-branch belongs (the category codes are taken from the branchrelations
-table).
+=head3 in TEMPLATE  
+			<select name="branch">
+				<option value="">Default</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
 
 =cut
 
@@ -210,7 +221,75 @@ sub getbranches {
 	return (\%branches);
 }
 
-=item getprinters
+=head2 itemtypes
+
+  $itemtypes = &getitemtypes();
+
+Returns information about existing itemtypes.
+
+build a HTML select with the following code :
+
+=head3 in PERL SCRIPT
+
+my $itemtypes = getitemtypes;
+my @itemtypesloop;
+foreach my $thisitemtype (keys %$itemtypes) {
+	my $selected = 1 if $thisitemtype eq $itemtype;
+	my %row =(value => $thisitemtype,
+				selected => $selected,
+				description => $itemtypes->{$thisitemtype}->{'description'},
+			);
+	push @itemtypesloop, \%row;
+}
+$template->param(itemtypeloop => \@itemtypesloop);
+
+=head3 in TEMPLATE
+
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<select name="itemtype">
+		<option value="">Default</option>
+	<!-- TMPL_LOOP name="itemtypeloop" -->
+		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+	<!-- /TMPL_LOOP -->
+	</select>
+	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+	<input type="submit" value="OK" class="button">
+</form>
+
+
+=cut
+
+sub getitemtypes {
+# returns a reference to a hash of references to branches...
+	my %itemtypes;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from itemtypes");
+	$sth->execute;
+	while (my $IT=$sth->fetchrow_hashref) {
+			$itemtypes{$IT->{'itemtype'}}=$IT;
+	}
+	return (\%itemtypes);
+}
+
+
+=head2 itemtypes
+
+  $itemtype = &getitemtype($itemtype);
+
+Returns information about an itemtype.
+
+=cut
+
+sub getitemtypeinfo {
+	my ($itemtype) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from itemtypes where itemtype=?");
+	$sth->execute($itemtype);
+	my $res = $sth->fetchrow_hashref;
+	return $res;
+}
+
+=head2 getprinters
 
   $printers = &getprinters($env);
   @queues = keys %$printers;
@@ -260,6 +339,6 @@ __END__
 
 =head1 AUTHOR
 
-Pat Eyler, pate@gnu.org
+Koha Team
 
 =cut
