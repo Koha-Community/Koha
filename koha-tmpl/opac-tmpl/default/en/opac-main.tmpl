@@ -1,100 +1,90 @@
-<HTML>
-<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
-<TITLE>WELCOME TO THE  KOHA OPAC </TITLE>
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>WELCOME TO THE  KOHA OPAC </title>
 
 <style type="text/css">
 <!--
-input{font-size:16px}
+input {
+	font-size: 16px
+	}
 
 a {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color:#FFFFFF;
-	padding:4px;
+	color: #FFFFFF;
+	padding: 4px;
 	font-weight: bold;
 	}
 -->
-
 </style>
+</head>
 
+<body bgcolor="#339999" text="#000000" link="#FFFFFF" vlink="#FFFFFF" alink="#663366" leftmargin="0" topmargin="0" marginwidth="0" onload="document.catsearch.keyword.focus();">
 
-</HEAD>
-
-<BODY   onload="document.catsearch.keyword.focus()"
-	BGCOLOR="#339999"
-	text="black"
-	link="white"
-	vlink="white"
-	alink="#663366"
-	leftmargin=0
-	topmargin=0
-	marginheight=0
-	marginwidth=0 >
-
-<center>
-<table cellspacing=0 cellpadding=0 border=0 >
-<tr valign=center >
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif">
-	<img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" width=1 height=440 align=left alt="" hspace=0 vspace=0>
-	<table cellspacing=0 cellpadding=0 border=0>
-		<tr valign=center >
-			<td background=" "><img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" width=260 height=88 alt=" " hspace=0 vspace=0></td>
-			<td background=" "><img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" width=30 height=88 alt=" " hspace=0 vspace=0></td>
-			<td background=" "><img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" width=350 height=88 alt=" " hspace=0 vspace=0></td>
+<table border="0" cellspacing="0" cellpadding="0" align="center">
+<tr>
+	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/front-background-med.gif">
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="1" height="440" hspace="0" vspace="0" border="0" align="left">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="260" height="88" hspace="0" vspace="0" border="0"></td>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="30" height="88" hspace="0" vspace="0" border="0"></td>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="350" height="88" hspace="0" vspace="0" border="0"></td>
 		</tr>
 
-		<tr valign=top >
+		<tr>
 			<td align="right">
-				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/holder.gif" width=1 height=30 alt=" " hspace=0 vspace=0>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="1" height="30" hspace="0" vspace="0" border="0">
 					<TMPL_VAR name="LibraryName">
 			</td>
-			<td>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-arrow.gif" border=0>
+			<td valign="top">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow.gif" alt="" border="0" width="27" height="22">
 			</td>
 			<td>
-				<font size=+2>
+				<font size="+2">
 						Search the catalogue
 				</font>
-				<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
-					<input type=hidden name=type value=opac>
-					<input type=text size="27" name="keyword"><br>
+				<form action="/cgi-bin/koha/opac-searchresults.pl" name="catsearch" id="catsearch">
+					<input type="hidden" name="type" value="opac">
+					<input type="text" name="keyword" size="27"><br>
 					<b>Type in the box and press the enter key.</b><br>
 					<a href="/cgi-bin/koha/opac-search.pl">
-						<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-arrow.gif" width=20 alt="-" hspace=0 vspace=0 border=0 align=middle >
+						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow-small.gif" alt="-" width="20" height="16" hspace="0" vspace="0" border="0" align="middle">
 						Advanced Search, More Options
 					</a>
 				</form>
 			</td>
 		</tr>
-		<tr valign=top height="50">
+		<tr>
 			<td>&nbsp;</td>
-			<td>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-arrow.gif" border=0>
+			<td valign="top">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<!-- TMPL_VAR NAME="themelang"  -->/images/front-arrow.gif" alt="" width="27" height="22" border="0">
 			</td>
 			<td>
-				<font size=+2>
+				<font size="+2">
 						Recent acquisitions
-				</font><br/>
+				</font><br>
 					<form action="/cgi-bin/koha/opac-new.pl" name="new">
-						<!-- TMPL_VAR name="CGIitemtype" --> acquired <br/>
-						in the last <b><input type="text" name="duration" value="30" size=3></b> days
-						<br/>
+						<!-- TMPL_VAR name="CGIitemtype" --> <b>acquired <br>
+						in the last <input type="text" name="duration" value="30" size=3> days</b>
+						<br>
 						<input type="submit" value="OK">
 					</form>
 			</td>
 		</tr>
-		<tr valign=center>
+		<tr>
 			<td>&nbsp;</td>
 			<td>
-				<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-arrow.gif" border=0>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow.gif" alt="" width="27" height="22" border="0">
 			</td>
 			<td>
 					<!-- TMPL_IF NAME="loggedinuser" -->
-					<p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
+					<p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
 					<!-- TMPL_ELSE -->
-					<p align=left><a href="/cgi-bin/koha/opac-user.pl">Log In to Koha</a></p>
+					<p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In to Koha</a></p>
 					<!-- /TMPL_IF -->
 			</td>
 		</tr>
@@ -102,4 +92,5 @@ a {
 	</td>
 </tr>
 </table>
-</center>
+</body>
+</html>
