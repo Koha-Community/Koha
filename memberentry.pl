@@ -198,8 +198,8 @@ if ($delete){
   foreach (keys(%flags)) {
     my $key = $_;
     my %row =  ('key'   => $key,
-    		'name'  => $flags{$key}[0],
-    		'html'  => $flags{$key}[1]);
+		'name'  => $flags{$key}[0],
+		'html'  => $flags{$key}[1]);
     if ($data->{$key}) {
       $row{'yes'}=' checked';
       $row{'no'}='';
@@ -223,7 +223,7 @@ if ($delete){
   			initials	=> $data->{'initials'},
   			ethcatpopup	=> $ethcatpopup,
   			catcodepopup	=> $catcodepopup,
-  			streetaddress   => $data->{'physstreet'},
+  			streetaddress   => $data->{'streetaddress'},
   			streetcity      => $data->{'streetcity'},
 			city		=> $data->{'city'},
   			phone           => $data->{'phone'},
