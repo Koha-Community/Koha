@@ -62,7 +62,7 @@ on what is passed to it, it calls the appropriate search function.
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
-&isbnsearch &breedingsearch &getallthemes &getalllanguages);
+&isbnsearch &breedingsearch &getallthemes &getalllanguages &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
 
 =item findguarantees
@@ -1844,10 +1844,10 @@ sub borrissues {
   my ($bornum)=@_;
   my $dbh = C4::Context->dbh;
   my $query;
-  $query="Select * from issues,biblio,items where borrowernumber='$bornum' and
-items.itemnumber=issues.itemnumber and
-items.biblionumber=biblio.biblionumber and issues.returndate is NULL order
-by date_due";
+  $query="Select * from issues,biblio,items where borrowernumber='$bornum'
+   and items.itemnumber=issues.itemnumber
+	and items.biblionumber=biblio.biblionumber
+	and issues.returndate is NULL order by date_due";
   #print $query;
   my $sth=$dbh->prepare($query);
     $sth->execute;
@@ -2439,7 +2439,7 @@ sub breedingsearch {
 } # sub breedingsearch
 
 
-=item getalllanguages 
+=item getalllanguages
 
   (@languages) = &getalllanguages();
   (@languages) = &getalllanguages($theme);
@@ -2524,7 +2524,7 @@ sub getalllanguages {
     }
 }
 
-=item getallthemes 
+=item getallthemes
 
   (@themes) = &getallthemes('opac');
   (@themes) = &getallthemes('intranet');
@@ -2593,6 +2593,49 @@ sub isbnsearch {
     $sth->finish;
     return($count, @results);
 } # sub isbnsearch
+
+=item getbranchname
+
+  $branchname = &getbranchname($branchcode);
+
+Given the branch code, the function returns the corresponding
+branch name for a comprehensive information display
+
+=cut
+
+sub getbranchname
+{
+	my ($branchcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = "SELECT branchname FROM branches WHERE branchcode = '$branchcode'";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	my $branchname = $sth->fetchrow();
+	$sth->finish();
+	return $branchname;
+} # sub getbranchname
+
+=item getborrowercategory
+
+  $description = &getborrowercategory($categorycode);
+
+Given the borrower's category code, the function returns the corresponding
+description for a comprehensive information display.
+
+=cut
+
+sub getborrowercategory
+{
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = "SELECT description FROM categories WHERE categorycode = '$catcode'";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	my $description = $sth->fetchrow();
+	$sth->finish();
+	return $description;
+} # sub getborrowercategory
+
 
 END { }       # module clean-up code here (global destructor)
 
