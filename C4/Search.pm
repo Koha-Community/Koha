@@ -855,7 +855,6 @@ not ordered.
 #'
 sub CatSearch  {
 	my ($env,$type,$search,$num,$offset)=@_;
-	warn "type = $type";
 	my $dbh = C4::Context->dbh;
 	my $query = '';
 	my @results;
@@ -1005,10 +1004,10 @@ sub CatSearch  {
 		my @key=split(' ',$search->{'subject'});
 		my $count=@key;
 		my $i=1;
-		$query="select * from bibliosubject, biblioitems where 
-(bibliosubject.biblionumber = biblioitems.biblionumber) and ( subject like		
-'$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject 
-like '%($key[0])%')";		while ($i<$count){			$query.=" and (subject like 
+		$query="select * from bibliosubject, biblioitems where
+(bibliosubject.biblionumber = biblioitems.biblionumber) and ( subject like
+'$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject
+like '%($key[0])%')";		while ($i<$count){			$query.=" and (subject like
 '$key[$i]%' or subject like '% $key[$i]%'			or subject like '% $key[$i]'
 			or subject like '%($key[$i])%')";
 			$i++;
@@ -1113,7 +1112,7 @@ like '%($key[0])%')";		while ($i<$count){			$query.=" and (subject like
 		my $true=0;
 		my $publishercode;
 		my $bibitemdata;
-		if ($bibitemdata = $sti->fetchrow_hashref() || $type eq 'subject'){
+		if ($bibitemdata = $sti->fetchrow_hashref()){
 			$true=1;
 			$dewey=$bibitemdata->{'dewey'};
 			$subclass=$bibitemdata->{'subclass'};
@@ -1666,7 +1665,6 @@ and issues.borrowernumber = borrowers.borrowernumber";
 									and issues.borrowernumber = borrowers.borrowernumber
 									and returndate is not NULL
 									order by returndate desc,timestamp desc";
-warn "$query2";
         $sth2 = $dbh->prepare($query2) || die $dbh->errstr;
         $sth2->execute($data->{'itemnumber'}) || die $sth2->errstr;
         for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
@@ -1798,7 +1796,6 @@ the C<borrowers> table in the Koha database.
 #'
 sub borrdata {
   my ($cardnumber,$bornum)=@_;
-   warn "bornum $bornum";
   $cardnumber = uc $cardnumber;
   my $dbh = C4::Context->dbh;
   my $query;
@@ -2426,7 +2423,6 @@ sub breedingsearch {
 			$query .= "isbn like \"$isbn%\"";
 		}
 	}
-	warn "Q : $query";
 	$sth   = $dbh->prepare($query);
 	$sth->execute;
 	while (my $data = $sth->fetchrow_hashref) {
@@ -2581,7 +2577,6 @@ sub isbnsearch {
 	if ($title) {
 		$query .= " and title like ".$dbh->quote($title."%");
 	}
-	warn $query;
     $sth   = $dbh->prepare($query);
 
     $sth->execute;
