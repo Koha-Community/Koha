@@ -23,12 +23,28 @@
 
 use strict;
 use CGI;
+use C4::Auth;
 use C4::Output;
 use C4::Catalogue;
 use C4::Biblio;
+use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::Database;
+use HTML::Template;
+
 #use Date::Manip;
 
 my $input = new CGI;
+# get_template_and_user used only to check auth & get user id
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/order.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {acquisition => 1},
+			     debug => 1,
+			     });
+
 my $existing=$input->param('existing');
 my $title=$input->param('title');
 $title=~ s/\'/\\\'/g;
@@ -48,7 +64,7 @@ if ($listprice eq ''){
 my $supplier=$input->param('supplier');
 my $notes=$input->param('notes');
 my $bookfund=$input->param('bookfund');
-my $who=$input->remote_user;
+my $who=$loggedinuser;
 my $bibnum;
 my $bibitemnum;
 my $rrp=$input->param('rrp');
