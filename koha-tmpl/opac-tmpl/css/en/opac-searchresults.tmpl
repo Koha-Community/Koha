@@ -27,9 +27,11 @@
 		</p>
 		<p class="center">
 			<!-- TMPL_IF name=total -->
-			&nbsp;<b>Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --></b>
+				<p class="center">
+					Results <b><i><!-- TMPL_VAR NAME="from" --></i> through <i><!-- TMPL_VAR NAME="to" --></i> of <i><!-- TMPL_VAR NAME="total" --></i></b>
+				</p>
 			<!-- TMPL_ELSE -->
-			&nbsp; No results found.
+				&nbsp; No results found.
 			<!-- /TMPL_IF -->
 		</p>
 	</div>
@@ -66,7 +68,15 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_LOOP name="CN" -->
-						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
+						<p><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --> 
+						<!-- TMPL_IF name="date_due" -->
+							<i>(On Loan until <!-- TMPL_VAR name="date_due" -->)</i>
+						<!-- TMPL_ELSE -->
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR name="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+						</p>
 					<!-- /TMPL_LOOP -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
@@ -98,11 +108,9 @@
 	</table>
 </form>
 	<p class="center">
-		Results <i><!-- TMPL_VAR NAME="from" --></i> through <i><!-- TMPL_VAR NAME="to" --></i> of <i><!-- TMPL_VAR NAME="total" --></i> records.
+		Results <b><i><!-- TMPL_VAR NAME="from" --></i> through <i><!-- TMPL_VAR NAME="to" --></i> of <i><!-- TMPL_VAR NAME="total" --></i></b>
 	</p>
 
-	<div id="resultnumber">
-<p class="center"><!-- TMPL_VAR NAME="total" --> results found</p>
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME="displayprev" -->
@@ -124,7 +132,7 @@
 <!-- /TMPL_IF -->
 
 <p class="center">
-	Try another <a href="/cgi-bin/koha/opac-search.pl">search</a>
+	Try another <a href="/cgi-bin/koha/opac-search.pl" class="button">Advanced search</a>
 </p>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
