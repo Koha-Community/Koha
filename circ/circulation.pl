@@ -33,6 +33,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
+use C4::Date;
 
 my $query=new CGI;
 #my ($loggedinuser, $sessioncookie, $sessionID) = checkauth
@@ -218,11 +219,8 @@ if ($borrower) {
     foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
-	#convert to nz style dates
-	#this should be set with some kinda config variable
-	my @tempdate=split(/-/,$dd);
-	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
-     	$datedue=~s/-//g;
+	$dd=format_date($dd);
+	$datedue=~s/-//g;
 	if ($datedue < $todaysdate) {
 	    $dd="<font color=red>$dd</font>\n";
 	}
@@ -243,11 +241,8 @@ EOF
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
-	#convert to nz style dates
-	#this should be set with some kinda config variable
-	my @tempdate=split(/-/,$dd);
-	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
-     	$datedue=~s/-//g;
+	$dd=format_date($dd);
+	$datedue=~s/-//g;
 	if ($datedue < $todaysdate) {
 	    $dd="<font color=red>$dd</font>\n";
 	}
@@ -370,7 +365,7 @@ sub fixdate {
 	    } elsif (($month == 2) && ($day > 28) && (($year%4) && ((!($year%100) || ($year%400))))) {
 		$invalidduedate="Invalid Due Date Specified. Book was not issued.  $year is not a leap year.<p>\n";
 	    } else {
-		$date="$year-$month-$day";
+		$date=format_date("$year-$month-$day");
 	    }
 	}
     }
