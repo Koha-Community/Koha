@@ -85,6 +85,7 @@ if ($request eq "SetWaiting") {
 if ($request eq 'KillReserved'){
     my $biblio = $query->param('biblionumber');
     my $borrnum = $query->param('borrowernumber');
+    warn "In Kill Reserved";
     CancelReserve($biblio, 0, $borrnum);
     $messagetext .= "Reserve Cancelled<br>";
 }

@@ -284,24 +284,19 @@ print startmenu('circulation');
 #}
 
 print <<"EOF";
-<p>
-<table border=0 cellpadding=5><tr>
-<td align="left"><FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
+<table align=right><tr><td>
+<img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Next Borrower"></a> &nbsp
+<a href=returns.pl>
+<img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
+</td></tr></table>
+
+<FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
 <b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
 <b>Printer:</b> $printers->{$printer}->{'printername'}<br>
 <a href=selectbranchprinter.pl>Change Settings</a>
-</td>
-<td align="left"><img src="/images/holder.gif" width=40 height=35>
-</td>
-<td align="right" valign="top">
-<FONT SIZE=2  face="arial, helvetica">
-<a href=circulation.pl>Next Borrower</a> || 
-<a href=returns.pl>Returns</a> || 
-<a href=branchtransfers.pl>Transfers</a></font><p>
-</td></tr></table>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
-</p>
+<p>           
 EOF
 
 if ($reservefoundtext) {

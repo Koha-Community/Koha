@@ -44,7 +44,7 @@ $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", $datearr[3]);
-
+warn $todaysdate;
 
 
 my $message;
@@ -118,8 +118,8 @@ if ($rejected) {
     } else {
 	$rejectedtext = << "EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
-<tr><th><font color=black size=6>Error Issuing Book</font></th></tr>
-<tr><td><font color=red size=6>$rejected</font></td></tr>
+<tr><th><font color=black size=5>Error Issuing Book</font></th></tr>
+<tr><td><font color=red size=5>$rejected</font></td></tr>
 </table>
 <br>
 EOF
@@ -129,7 +129,7 @@ EOF
 my $selectborrower;
 if ($borrowerslist) {
     $selectborrower = <<"EOF";
-<form method=get action=/cgi-bin/koha/circ/issues.pl>
+<form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
 <table border=1 cellspacing=0 cellpadding=5 bgcolor="#dddddd">
@@ -152,34 +152,33 @@ EOF
 
 # title....
 my $title = <<"EOF";
-<p>
-<table border=0 cellpadding=5 width=90%><tr>
-<td align="left"><FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
+<table align="right"><tr><td>
+<a href=circulation.pl>
+<img src="/images/button-next-borrower.gif" width="171" height="42" border="0" alt="Next Borrower"></a> &nbsp
+<a href=returns.pl>
+<img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
+&nbsp<a href=branchtransfers.pl>
+<img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers">
+</a>
+</td></tr></table>
+<FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
 <b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
 <b>Printer:</b> $printers->{$printer}->{'printername'} <br>
 <a href=selectbranchprinter.pl>Change Settings</a></td>
-<td align="right" valign="top">
-<FONT SIZE=2  face="arial, helvetica">
-<a href=circulation.pl>Next Borrower</a> || 
-<a href=returns.pl>Returns</a> || 
-<a href=branchtransfers.pl>Transfers</a></font><p>
-</td></tr></table>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
-</p>
+<p>
 EOF
 
 
 
 my $cardnumberinput = << "EOF";
-<form method=get action=/cgi-bin/koha/circ/issues.pl>
+<form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <font color=black><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
 <tr><td><input name=findborrower></td></tr>
 </table>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
 </form>
 EOF
 
@@ -276,7 +275,7 @@ my $selected='';
 
 
 my $barcodeentrytext = <<"EOF";
-<form method=post action=/cgi-bin/koha/circ/issues.pl>
+<form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5>
 <tr>
 <td align=center valign=top>
@@ -432,7 +431,7 @@ if ($borrower) {
     print $patrontable;
     print $flaginfotable;
     print $barcodeentrytext;
-    print "<p clear=all>";
+    print "<p clear=all><br><br>";
     print $issuedbookstable;
 }
 
