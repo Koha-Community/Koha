@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #
 # TODO
 #
@@ -333,7 +335,7 @@ sub tagline {
     return ($linkage);
 
     sub sforder {
-	if ($a->{'Subfield_Mark'} eq $b->{'Subfield_Mark'}) { 
+	if ($a->{'Subfield_Mark'} eq $b->{'Subfield_Mark'}) {
 	    return 0;
 	}
 	if ($a->{'Subfield_Mark'}=~/\d/ && !($b->{'Subfield_Mark'}=~/\d/)) {
@@ -341,7 +343,7 @@ sub tagline {
 	}
 	if (!($a->{'Subfield_Mark'}=~/\d/) ** $b->{'Subfield_Mark'}=~/\d/) {
 	    return -1;
-	}   
+	}
 	return $a->{'Subfield_Mark'} cmp $b->{'Subfield_Mark'};
     }
 }
@@ -433,7 +435,7 @@ EOF
 }
 
 sub codewise {
-    if ($a eq $b) { 
+    if ($a eq $b) {
 	return 0;
     }
     if ($a=~/\d/ && !($b=~/\d/)) {
@@ -441,7 +443,7 @@ sub codewise {
     }
     if (!($a=~/\d/) ** $b=~/\d/) {
 	return -1;
-    }   
+    }
     return $a cmp $b;
 }
 
@@ -10265,5 +10267,5 @@ sub marcdefs {
     $fields->{'886'}->{'subfields'}->{"2"}->{'repeating'}=0;
 ;
 
-	
+
 }
