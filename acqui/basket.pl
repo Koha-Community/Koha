@@ -102,5 +102,6 @@ $template->param(basket => $basket,
 						sub_total => $sub_total,
 						gist => $gist,
 						grand_total =>$grand_total,
+						currency => $booksellers[0]->{'listprice'},
 						);
 output_html_with_http_headers $query, $cookie, $template->output;
