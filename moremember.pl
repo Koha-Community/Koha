@@ -240,7 +240,6 @@ for (my $i=0;$i<$count;$i++){
   $issue->[$i]{'barcode'}</a></td>
   <TD>$issue->[$i]{'date_due'}</td>";
   #find the charge for an item
-  warn "calling calc_charges\n";
   my ($charge,$itemtype)=calc_charges(undef,undef,$issue->[$i]{'itemnumber'},$bornum);
   print "<TD>$itemtype</td>";
   print "<TD>$charge</td>";
