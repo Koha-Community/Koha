@@ -44,16 +44,36 @@ foreach (sort keys %$issues) {
     $i++;
 }
 
+my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 my $newpassword = $input->param('newpassword');
 
 if ( $newpassword ) {
     my $digest=md5_base64($input->param('newpassword'));
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
-    $sth->execute($uid, $digest, $member);
+
+    #Make sure the userid chosen is unique. If it is not,
+    #Then we need to tell the user and have them create a new one.
+    my $sth2=$dbh->prepare("select * from borrowers where userid=?");
+    $sth2->execute($uid);
+
+    if ( $sth2->fetchrow ) {
+	#The userid exists so we should display a warning.
+	my $warn = 1;
+        $template->param( warn => $warn,
+		        othernames => $bor->{'othernames'},
+                        surname     => $bor->{'surname'},
+                        firstname   => $bor->{'firstname'},
+                        userid      => $bor->{'userid'},
+                        defaultnewpassword => $newpassword );
+    } else {
+	#Everything is good so we can update the information.
+	my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
+    	$sth->execute($uid, $digest, $member);
+	$template->param(newpassword => $newpassword);
+    }
+
 } else {
-    my ($bor,$flags)=getpatroninformation(\%env, $member,'');
     my $userid = $bor->{'userid'};
 
     my $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -71,6 +91,6 @@ if ( $newpassword ) {
 
 }
 
-$template->param( member => $member, newpassword => $newpassword );
+$template->param( member => $member );
 
 output_html_with_http_headers $input, $cookie, $template->output;
