@@ -931,9 +931,9 @@ $messages->{'IntranetAuthenticationQuestion'}->{en}=qq|
 ===========================
 
 I can set it up so that the Intranet/Librarian site is password protected using
-Apache's Basic Authorization.
+Apache's Basic Authorization.  If you do not do this, Koha will default to an internal authentication system that uses cookies to maintain an authenticated connection.
 
-Would you like to do this ([Y]/N): |;
+Would you like to use Apache's Basic Authentication instead (Y/[N]): |;
 
 $messages->{'BasicAuthUsername'}->{en}="Please enter a userid for intranet access [%s]: ";
 $messages->{'BasicAuthPassword'}->{en}="Please enter a password for %s: ";
@@ -941,7 +941,7 @@ $messages->{'BasicAuthPasswordWasBlank'}->{en}="\nYou cannot use a blank passwor
 
 sub basicauthentication {
     my $message=getmessage('IntranetAuthenticationQuestion');
-    my $answer=showmessage($message, 'yn', 'y');
+    my $answer=showmessage($message, 'yn', 'n');
 
     my $apacheauthusername='librarian';
     my $apacheauthpassword='';
