@@ -1,9 +1,10 @@
-package C4::Acquisitions; #asummes C4/Acquisitions.pm
+package C4::Acquisitions; #assumes C4/Acquisitions.pm
 
 use strict;
 require Exporter;
 use C4::Database;
-
+use warnings;
+ #use C4::Biblio;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -96,10 +97,11 @@ sub itemcount{
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh=C4Connect;
-  my $query="Select ordernumber from aqorders where biblionumber=$bib and
-  biblioitemnumber='$bi'";
+  my $query="Select ordernumber 
+ 	from aqorders 
+ 	where biblionumber=? and biblioitemnumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bib,$bi);
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
@@ -112,12 +114,12 @@ sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh=C4Connect;
   my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
-  where aqorders.ordernumber='$ordnum' 
+  where aqorders.ordernumber=? 
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
   aqorders.ordernumber=aqorderbreakdown.ordernumber";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   $dbh->disconnect;
@@ -150,10 +152,9 @@ sub getallorders {
   my $dbh=C4Connect;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
-  and (quantityreceived < quantity or quantityreceived is NULL)
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
-  aqorders.biblioitemnumber
-  group by aqorders.biblioitemnumber
+  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
+  aqorders.biblioitemnumber 
+  group by aqorders.biblioitemnumber 
   order by
   biblio.title";
   my $i=0;
@@ -196,27 +197,28 @@ sub getrecorders {
 }
 
 sub ordersearch {
-  my ($search,$biblio,$catview) = @_;
-  my $dbh   = C4Connect;
-  my $query = "Select *,biblio.title from aqorders,biblioitems,biblio
-where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
-and biblio.biblionumber=aqorders.biblionumber
-and ((datecancellationprinted is NULL)
-or (datecancellationprinted = '0000-00-00'))
-and ((";
-  my @data  = split(' ',$search);
-  my $count = @data;
-  for (my $i = 0; $i < $count; $i++) {
-    $query .= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
+  my ($search,$biblio,$catview)=@_;
+  my $dbh=C4Connect;
+  my $query="Select *,biblio.title from aqorders,biblioitems,biblio
+	where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+	and biblio.biblionumber=aqorders.biblionumber
+	and ((datecancellationprinted is NULL)
+	or (datecancellationprinted = '0000-00-00')
+  and ((";
+  my @data=split(' ',$search);
+  my $count=@data;
+  for (my $i=0;$i<$count;$i++){
+    $query.= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
   }
   $query=~ s/ and $//;
-  $query.=" ) or biblioitems.isbn='$search'
+  $query.=" ) or biblioitems.isbn='$search' 
   or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
   if ($catview ne 'yes'){
     $query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
   }
   $query.=" group by aqorders.ordernumber";
   my $sth=$dbh->prepare($query);
+#  print $query;
   $sth->execute;
   my $i=0;
   my @results;
@@ -290,7 +292,7 @@ sub basket {
   '0000-00-00')";
   if ($supplier ne ''){
     $query.=" and aqorders.booksellerid='$supplier'";
-  }
+  } 
   $query.=" group by aqorders.ordernumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -322,7 +324,8 @@ sub newbasket {
 sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-  =aqbudget.bookfundid
+  =aqbudget.bookfundid 
+   and aqbudget.startdate='2001-07-01'
   group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -338,21 +341,21 @@ sub bookfunds {
 }
 
 sub branches {
-    my $dbh   = C4Connect;
-    my $query = "Select * from branches";
-    my $sth   = $dbh->prepare($query);
-    my $i     = 0;
-    my @results;
+  my $dbh=C4Connect;
+  my $query="Select * from branches";
+  my $sth=$dbh->prepare($query);
+  my $i=0;
+  my @results;
 
     $sth->execute;
-    while (my $data = $sth->fetchrow_hashref) {
-        $results[$i] = $data;
-    	$i++;
+  while (my $data = $sth->fetchrow_hashref){
+    $results[$i]=$data;
+    $i++;
     } # while
 
-    $sth->finish;
-    $dbh->disconnect;
-    return($i, @results);
+  $sth->finish;
+  $dbh->disconnect;
+  return($i, @results);
 } # sub branches
 
 sub bookfundbreakdown {
@@ -360,7 +363,9 @@ sub bookfundbreakdown {
   my $dbh=C4Connect;
   my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
   from aqorders,aqorderbreakdown where bookfundid='$id' and 
-  aqorders.ordernumber=aqorderbreakdown.ordernumber
+   aqorders.ordernumber=aqorderbreakdown.ordernumber and ((budgetdate >=
+   '2001-07-01' and budgetdate <'2002-07-01') or
+   (datereceived >= '2001-07-01' and datereceived < '2002-07-01'))
   and (datecancellationprinted is NULL or
   datecancellationprinted='0000-00-00')";
   my $sth=$dbh->prepare($query);
