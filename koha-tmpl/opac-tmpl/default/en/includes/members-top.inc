@@ -30,7 +30,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
         <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-member.gif" 
 	width=353 height=50 alt="KOHA: Members Area" hspace=0 vspace=0 border=0></td>
 
-        <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 
+        <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR name="themelang">/images/holder.gif'"><img 
 	src="<TMPL_VAR NAME='themelang'>/images/menu-search.gif" 
 	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
 	

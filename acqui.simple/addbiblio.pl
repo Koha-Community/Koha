@@ -33,7 +33,6 @@ use MARC::File::USMARC;
 use vars qw( $tagslib );
 use vars qw( $is_a_modif );
 
-
 =item find_value
 
     ($indicators, $value) = find_value($tag, $subfield, $record,$encoding);
@@ -47,7 +46,6 @@ returned.
 
 sub find_value {
 	my ($tagfield,$insubfield,$record,$encoding) = @_;
-	warn "FIND_VALUE : $encoding /";
 	my @result;
 	my $indicator;
 	if ($tagfield <10) {
@@ -61,7 +59,6 @@ sub find_value {
 			my @subfields = $field->subfields();
 			foreach my $subfield (@subfields) {
 				if (@$subfield[0] eq $insubfield) {
-					warn "@$subfield[1]==> ".char_decode(@$subfield[1],$encoding);
 					push @result,char_decode(@$subfield[1],$encoding);
 					$indicator = $field->indicator(1).$field->indicator(2);
 				}
