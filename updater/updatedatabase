@@ -535,6 +535,13 @@ my %tabledata = (
             flagdesc            => 'Update borrower charges',
             defaulton           => 0
         },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 11,
+            flag                => 'acquisition',
+            flagdesc            => 'Acquisition and/or suggestion management',
+            defaulton           => 0
+        },
     ],
     systempreferences => [
         {
@@ -1360,6 +1367,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.99  2004/12/02 17:17:00  tipaul
+# adding acquisition permission
+#
 # Revision 1.98  2004/11/26 20:26:49  tipaul
 # bugfix for auth_header creation
 #
