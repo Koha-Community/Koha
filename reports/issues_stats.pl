@@ -19,29 +19,6 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use strict;
-use C4::Auth;
-use CGI;
-use C4::Context;
-use HTML::Template;
-use C4::Search;
-use C4::Output;
-use C4::Koha;
-use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;
-use Date::Manip;
-
-=head1 NAME
-
-plugin that shows a stats on borrowers
-
-=head1 DESCRIPTION
-
-
-=over2
-
-=cut
-
 my $input = new CGI;
 my $do_it=$input->param('do_it');
 my $fullreportname = "reports/issues_stats.tmpl";
@@ -436,203 +413,78 @@ sub calculate {
 
 # preparing calculation
 	my $strcalc ;
-	if ($process ==2) {
-		$linefield=~s/datetime/issues.returndate/;
-		$linefield=~s/itemtype/biblioitems.itemtype/;
-		$colfield=~s/datetime/issues.returndate/;
-		$colfield=~s/itemtype/biblioitems.itemtype/;
+
+	$strcalc .= "SELECT $linefield, $colfield, ";
+	$strcalc .= "COUNT( * ) " if ($process ==1);
+	if ($process ==3){
+		my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
+		$rqbookcount->execute;
+		my ($bookcount) = $rqbookcount->fetchrow;
+		$strcalc .= "100*(COUNT(itemnumber))/ $bookcount " ;
+	}
+	$strcalc .= "FROM statistics,borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
+
+	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
+	$strcalc .= " AND statistics.datetime > '" . @$filters[0] ."'" if ( @$filters[0] );
+	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
+	$strcalc .= " AND statistics.datetime < '" . @$filters[1] ."'" if ( @$filters[1] );
+	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
+	$strcalc .= " AND borrowers.categorycode like '" . @$filters[2] ."'" if ( @$filters[2] );
+	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
+	$strcalc .= " AND statistics.itemtype like '" . @$filters[3] ."'" if ( @$filters[3] );
+	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
+	$strcalc .= " AND statistics.branch like '" . @$filters[4] ."'" if ( @$filters[4] );
+	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
+	$strcalc .= " AND borrowers.sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
+	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
+	$strcalc .= " AND borrowers.sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
+	$strcalc .= " AND dayname(datetime) like '" . $daysel ."'" if ( $daysel );
+	$strcalc .= " AND monthname(datetime) like '" . $monthsel ."'" if ( $monthsel );
+	$strcalc .= " AND statistics.type like '" . $type ."'" if ( $type );
+	
+	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
+#	warn "". $strcalc;
+	my $dbcalc = $dbh->prepare($strcalc);
+	$dbcalc->execute;
+# 	warn "filling table";
+	my $emptycol; 
+	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
+#		warn "filling table $row / $col / $value ";
+		$emptycol = 1 if ($col eq undef);
+		$col = "zzEMPTY" if ($col eq undef);
+		$row = "zzEMPTY" if ($row eq undef);
 		
-	# Processing average loanperiods
- 		$strcalc .= "SELECT $linefield, $colfield, ";
- 		$strcalc .= " DATE_SUB(date_due, INTERVAL CAST(issuingrules.issuelength AS SIGNED INTEGER) * (CAST(issues.renewals AS SIGNED INTEGER)+1) DAY) AS issuedate, returndate, COUNT(*), date_due, issues.renewals, issuelength FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
-# 	
- 		@$filters[0]=~ s/\*/%/g if (@$filters[0]);
- 		$strcalc .= " AND issues.returndate > '" . @$filters[0] ."'" if ( @$filters[0] );
- 		@$filters[1]=~ s/\*/%/g if (@$filters[1]);
- 		$strcalc .= " AND issues.returndate < '" . @$filters[1] ."'" if ( @$filters[1] );
- 		@$filters[2]=~ s/\*/%/g if (@$filters[2]);
- 		$strcalc .= " AND borrowers.categorycode like '" . @$filters[2] ."'" if ( @$filters[2] );
- 		@$filters[3]=~ s/\*/%/g if (@$filters[3]);
- 		$strcalc .= " AND biblioitems.itemtype like '" . @$filters[3] ."'" if ( @$filters[3] );
- 		@$filters[4]=~ s/\*/%/g if (@$filters[4]);
- 		$strcalc .= " AND issues.branchcode like '" . @$filters[4] ."'" if ( @$filters[4] );
- 		@$filters[5]=~ s/\*/%/g if (@$filters[5]);
- 		$strcalc .= " AND borrowers.sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
- 		@$filters[6]=~ s/\*/%/g if (@$filters[6]);
- 		$strcalc .= " AND borrowers.sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
- 		$strcalc .= " AND dayname(timestamp) like '" . $daysel ."'" if ( $daysel );
- 		$strcalc .= " AND monthname(timestamp) like '" . $monthsel ."'" if ( $monthsel );
-# 		
- 		$strcalc .= " group by issuedate, returndate, $linefield, $colfield order by $linefield,$colfield";
-		warn "SQL :". $strcalc;
-		
- 		my $dbcalc = $dbh->prepare($strcalc);
- 		$dbcalc->execute;
- 	# 	warn "filling table";
- 		my $emptycol;
- 		my $issues_count=0;
- 		my $previous_row; 
- 		my $previous_col;
- 		my $loanlength; 
- 		my $err;
-		my $weightrow;
- 		while (my  @data = $dbcalc->fetchrow) {
-			my ($row, $col, $issuedate, $returndate, $weight)=@data;
- 			warn "filling table $row / $col / $issuedate / $returndate /$weight";
-			$emptycol = 1 if ($col eq undef);
-			$col = "zzEMPTY" if ($col eq undef);
-			$row = "zzEMPTY" if ($row eq undef);
-			warn "row :".$row." column :".$col;
- 			if (($previous_row== $row) and ($previous_col==$col)){
- 				my @result =split /:/,DateCalc($returndate,$issuedate) ;
-#  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
-#  and seconds between the two
-				$loanlength = $result[2]*7+$result[3];
- 				warn "DateCalc returns :$loanlength with return ". $returndate ."issue ". $issuedate ."weight : ". $weight;
-				
-				$table{$row}->{$col}->{value}+=$weight*$loanlength;
-				$issues_count+=$weight;
-			
-			} elsif ($previous_row==$row) {
-				$table{$row}->{$previous_col}->{value}=$table{$row}->{$previous_col}->{value}/$issues_count;
-				$table{$row}->{$previous_col}->{weight}=1;
-				$table{$row}->{$previous_col}->{realweight}=$issues_count;
-				$weightrow+=$table{$row}->{$previous_col}->{weight};
-				$table{$row}->{totalrow}+=$table{$row}->{$previous_col}->{value};
- 				
-				my @result =split /:/,DateCalc($returndate,$issuedate) ;
-#  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
-#  and seconds between the two
-				$loanlength = $result[2]*7+$result[3];
-				$table{$row}->{$col}->{value}+=$weight*$loanlength;
- 				$issues_count=$weight;
-				$previous_col=$col;
- 			} else {
-				unless (($previous_row) or ($previous_col)){
-					$table{$previous_row}->{$previous_col}->{value}=$table{$previous_row}->{$previous_col}->{value}/$issues_count;
-					$table{$previous_row}->{$previous_col}->{weight}=1;
-					$table{$previous_row}->{$previous_col}->{realweight}=$issues_count;
-					$table{$previous_row}->{totalrow}+=$table{$previous_row}->{$previous_col}->{value};
-					$weightrow+=$table{$row}->{$previous_col}->{weight};
-					$table{$previous_row}->{totalrow}=$table{$previous_row}->{totalrow}/$weightrow;
- 				}
-				my @result =split /:/,DateCalc($returndate,$issuedate) ;
-#  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
-#  and seconds between the two
-				$loanlength = $result[2]*7+$result[3];
- 				warn "DateCalc returns :$loanlength with return ". $returndate ."issue ". $issuedate ."weight : ". $weight;
-				
-				$table{$row}->{$col}->{value}=$weight*$loanlength;
-				$issues_count=$weight;
-				$previous_row=$row;
-				$previous_col=$col;
-				$weightrow=0;
-			}
- 		}
-  		push @loopcol,{coltitle => "NULL"} if ($emptycol);
-	 	foreach my $row ( sort keys %table ) {
-	 		my @loopcell;
-# 		#@loopcol ensures the order for columns is common with column titles
-# 		# and the number matches the number of columns
-			foreach my $col ( @loopcol ) {
-				my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}}->{value};
-				push @loopcell, {value => $value  } ;
-			}
-			push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
+		$table{$row}->{$col}+=$value;
+		$table{$row}->{totalrow}+=$value;
+		$grantotal += $value;
+	}
+	push @loopcol,{coltitle => "NULL"} if ($emptycol);
+
+	foreach my $row ( sort keys %table ) {
+		my @loopcell;
+		#@loopcol ensures the order for columns is common with column titles
+		# and the number matches the number of columns
+		foreach my $col ( @loopcol ) {
+			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+			push @loopcell, {value => $value  } ;
+		}
+		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
 							'loopcell' => \@loopcell,
 							'hilighted' => ($hilighted >0),
 							'totalrow' => $table{$row}->{totalrow}
 						};
-			$hilighted = -$hilighted;
-		}
-# 	
-# #	warn "footer processing";
-		foreach my $col ( @loopcol ) {
-			my $total=0;
-			my $nbrow=0;
-			foreach my $row ( @looprow ) {
-				$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}}->{value};
-				$nbrow++;
+		$hilighted = -$hilighted;
+	}
+	
+#	warn "footer processing";
+	foreach my $col ( @loopcol ) {
+		my $total=0;
+		foreach my $row ( @looprow ) {
+			$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
 #			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
-			}
+		}
 #		warn "summ for column ".$col->{coltitle}."  = ".$total;
-			$total = $total/$nbrow if ($nbrow);
-			push @loopfooter, {'totalcol' => $total};
-		}
-	
-	}else {
-		$strcalc .= "SELECT $linefield, $colfield, ";
-		$strcalc .= "COUNT( * ) " if ($process ==1);
-		if ($process ==3){
-			my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
-			$rqbookcount->execute;
-			my ($bookcount) = $rqbookcount->fetchrow;
-			$strcalc .= "100*(COUNT(itemnumber))/ $bookcount " ;
-		}
-		$strcalc .= "FROM statistics,borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
-	
-		@$filters[0]=~ s/\*/%/g if (@$filters[0]);
-		$strcalc .= " AND statistics.datetime > '" . @$filters[0] ."'" if ( @$filters[0] );
-		@$filters[1]=~ s/\*/%/g if (@$filters[1]);
-		$strcalc .= " AND statistics.datetime < '" . @$filters[1] ."'" if ( @$filters[1] );
-		@$filters[2]=~ s/\*/%/g if (@$filters[2]);
-		$strcalc .= " AND borrowers.categorycode like '" . @$filters[2] ."'" if ( @$filters[2] );
-		@$filters[3]=~ s/\*/%/g if (@$filters[3]);
-		$strcalc .= " AND statistics.itemtype like '" . @$filters[3] ."'" if ( @$filters[3] );
-		@$filters[4]=~ s/\*/%/g if (@$filters[4]);
-		$strcalc .= " AND statistics.branch like '" . @$filters[4] ."'" if ( @$filters[4] );
-		@$filters[5]=~ s/\*/%/g if (@$filters[5]);
-		$strcalc .= " AND borrowers.sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
-		@$filters[6]=~ s/\*/%/g if (@$filters[6]);
-		$strcalc .= " AND borrowers.sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
-		$strcalc .= " AND dayname(datetime) like '" . $daysel ."'" if ( $daysel );
-		$strcalc .= " AND monthname(datetime) like '" . $monthsel ."'" if ( $monthsel );
-		$strcalc .= " AND statistics.type like '" . $type ."'" if ( $type );
-		
-		$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
-	#	warn "". $strcalc;
-		my $dbcalc = $dbh->prepare($strcalc);
-		$dbcalc->execute;
-	# 	warn "filling table";
-		my $emptycol; 
-		while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-	#		warn "filling table $row / $col / $value ";
-			$emptycol = 1 if ($col eq undef);
-			$col = "zzEMPTY" if ($col eq undef);
-			$row = "zzEMPTY" if ($row eq undef);
-			
-			$table{$row}->{$col}+=$value;
-			$table{$row}->{totalrow}+=$value;
-			$grantotal += $value;
-		}
-		push @loopcol,{coltitle => "NULL"} if ($emptycol);
-		
-		foreach my $row ( sort keys %table ) {
-			my @loopcell;
-			#@loopcol ensures the order for columns is common with column titles
-			# and the number matches the number of columns
-			foreach my $col ( @loopcol ) {
-				my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
-				push @loopcell, {value => $value  } ;
-			}
-			push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
-							'loopcell' => \@loopcell,
-							'hilighted' => ($hilighted >0),
-							'totalrow' => $table{$row}->{totalrow}
-						};
-			$hilighted = -$hilighted;
-		}
-		
-	#	warn "footer processing";
-		foreach my $col ( @loopcol ) {
-			my $total=0;
-			foreach my $row ( @looprow ) {
-				$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
-	#			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
-			}
-	#		warn "summ for column ".$col->{coltitle}."  = ".$total;
-			push @loopfooter, {'totalcol' => $total};
-		}
+		push @loopfooter, {'totalcol' => $total};
 	}
 			
 
