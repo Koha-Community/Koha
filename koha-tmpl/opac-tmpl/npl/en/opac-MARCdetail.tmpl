@@ -5,19 +5,19 @@
 
 <div id="main">
 <h2>MARC View</h2>
-<TMPL_UNLESS NAME="norequests">
+<!-- TMPL_UNLESS NAME="norequests" -->
     <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
-    <input type="submit" name="submit"  VALUE="Place Reserve" class="submit" />
+    <input type="submit" name="submit"  VALUE="Place Reserve" class="icon reserve" />
     <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     </form>
-</TMPL_UNLESS>
+<!-- /TMPL_UNLESS -->
 <!-- <form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="isbd" value="ISBD" /></form> -->
 
-<form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="brief" value="Normal View" /></form>
+<form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon brief" value="Normal View" /></form>
 
-<!-- <form class="inline" action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="print" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form> -->
+<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Print" /></form>
 
-<form class="inline"><input type="submit" class="cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
+<form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
 <div class="table">
 		<table><!-- TMPL_LOOP name="0XX" -->
 		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
@@ -119,7 +119,7 @@
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_LOOP -->
 	</table>
-	
+<!-- TMPL_IF NAME="item_header_loop" -->
 		<table>
 		<caption>Copies</caption>
 				<tr>
@@ -134,7 +134,11 @@
 						<!-- TMPL_VAR name="item_value" -->
 					</tr>
 				<!-- /TMPL_LOOP -->
+		</table><!-- TMPL_ELSE -->
+		<table>
+			<tr><td>No copies available.</td></tr>
 		</table>
+	<!-- /TMPL_IF -->
 </div>
 </div>
 </body>

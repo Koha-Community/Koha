@@ -34,11 +34,9 @@
 <!-- TMPL_IF NAME="marcnotes" -->
 <tr><th>Notes:</th><td><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnotes" --></li><!-- /TMPL_LOOP --></ul></td></tr>
 	<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="subjects" -->	
-		<tr><th>Subject(s):</th><td> <!-- TMPL_LOOP NAME="SUBJECTS" -->
-	: <a href="http://koha.athenscounty.lib.oh.us/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="SUBJECTS" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=SUBJECTS --></a>  
-	<!-- /TMPL_LOOP --></td></tr>
-		<!-- /TMPL_IF -->
+<!-- TMPL_IF name="subjects" -->
+		<!-- TMPL_LOOP name="subjects" -->
+		<tr><th>Subject(s):</th><td><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a></td></tr><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
 <!-- <tr><th>Biblio Record:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> -->
 </table>
 
@@ -71,17 +69,20 @@
 	<!-- /TMPL_IF -->
 	</table>
 
-<TMPL_UNLESS NAME="norequests">
+<!-- TMPL_UNLESS NAME="norequests" -->
     <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
-    <input type="submit" name="submit"  VALUE="Place Reserve" class="submit" />
+    <input type="submit" name="submit"  value="Place Reserve" class="icon reserve" />
     <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     </form>
-</TMPL_UNLESS>
-<!--  <form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="isbd" value="ISBD" /></form> -->
+<!-- /TMPL_UNLESS -->
 
-<!-- <form class="inline" action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="detail" value="MARC View" /></form> -->
+<form class="inline" action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon detail" value="MARC View" /></form>
 
-<!-- <form class="inline" action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="print" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form> -->
+<form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon isbd" value="ISBD" /></form>
+
+<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Print" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form>
+
+<form class="inline" action="opac-addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="icon shelf" value="Add to Shelf" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form>
 
 <form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
 </div>
@@ -111,6 +112,9 @@
 <!-- TMPL_ELSE -->
 <table><tr><td>No copies available.</td></tr></table>
 <!-- /TMPL_IF -->
+	<!-- TMPL_IF name="subscriptionsnumber" -->
+		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title). You can see which <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Issues</a> we have and don't have</p>
+	<!-- /TMPL_IF -->
 </div>
 </div>
 </body>

@@ -1,0 +1,24 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Subscription Details
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+<h1>Subscription Details</h1>
+<div class="table details">
+<!-- TMPL_LOOP name="subscription_LOOP" -->
+	<table>
+	<caption><em><!-- TMPL_VAR name="bibliotitle" --></em></caption>
+	<tr><th>Details:</th><td><p>It began on <b><!-- TMPL_VAR name="startdate" --></b> and is issued every <b> <!--TMPL_IF name="periodicity1" --> day <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity2" --> week <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity3" --> 2 weeks <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity4" --> 3 weeks <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity5" --> month <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity6" --> 2 months <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity7" --> 3 months <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity8" --> quarter <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity9" --> 2 quarters <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity10" --> year <!-- /TMPL_IF --> <!--TMPL_IF name="periodicity11" --> 2 years <!-- /TMPL_IF --> </b> on <b> <!--TMPL_IF name="arrival1" --> 	Monday <!-- /TMPL_IF --> <!--TMPL_IF name="arrival2" --> Tuesday <!-- /TMPL_IF --> <!--TMPL_IF name="arrival3" --> Wednesday <!-- /TMPL_IF --> <!--TMPL_IF name="arrival4" --> Thursday <!-- /TMPL_IF --> <!--TMPL_IF name="arrival5" --> Friday <!-- /TMPL_IF --> <!--TMPL_IF name="arrival6" --> Saturday <!-- /TMPL_IF --> <!--TMPL_IF name="arrival7" --> Sunday <!-- /TMPL_IF --> </b> for <b> 	<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> issues<!-- /TMPL_IF --> 	<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> weeks<!-- /TMPL_IF --> 	<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> months<!-- /TMPL_IF --> 	</b> since <b><!-- TMPL_VAR name="startdate" --></b> </p></td></tr>
+<!-- TMPL_IF name="notes" --><tr><th>Notes: </th><td><!-- TMPL_VAR name="notes" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF name="opacnotes" --><tr><th>Issues summary</th><td><!-- TMPL_VAR name="opacnote" --></td></tr><!-- /TMPL_IF -->
+	</table><!-- /TMPL_LOOP -->
+</div>
+<form action="/cgi-bin/koha/opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><p><input type="submit" class="submit" value="Back to Normal View" /></p></form>
+
+</div>
+</body>
+</html>
+
+
