@@ -16,7 +16,7 @@ use Getopt::Long;
 use Locale::PO;
 use File::Temp qw( :POSIX );
 use TmplTokenizer;
-use VerboseWarnings qw( error_normal warn_normal );
+use VerboseWarnings qw( :warn :die );
 
 ###############################################################################
 
@@ -149,11 +149,13 @@ Create or update PO files from templates, or install translated templates.
       --help                  Display this help and exit
 
 The -o option is ignored for the "create" and "update" actions.
+Try `perldoc $0' for perhaps more information.
 EOF
     exit($exitcode);
 }
 
 ###############################################################################
+
 sub usage_error (;$) {
     for my $msg (split(/\n/, $_[0])) {
 	print STDERR "$msg\n";
@@ -240,6 +242,7 @@ if (!defined $charset_in) {
 }
 
 my $xgettext = './xgettext.pl';	# actual text extractor script
+my $st;
 
 if ($action eq 'create')  {
     # updates the list. As the list is empty, every entry will be added
@@ -255,9 +258,9 @@ if ($action eq 'create')  {
     }
     close $tmph;
     # Generate the specified po file ($str_file)
-    my $st = system ($xgettext, '-s', '-f', $tmpfile, '-o', $str_file);
+    $st = system ($xgettext, '-s', '-f', $tmpfile, '-o', $str_file);
     warn_normal "Text extraction failed: $xgettext: $!\n", undef if $st != 0;
-    unlink $tmpfile || warn_normal "$tmpfile: unlink failed: $!\n", undef;
+#   unlink $tmpfile || warn_normal "$tmpfile: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'update') {
     my($tmph1, $tmpfile1) = tmpnam();
@@ -269,7 +272,7 @@ if ($action eq 'create')  {
     }
     close $tmph1;
     # Generate the temporary file that acts as <MODULE>/<LANG>.pot
-    my $st = system($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
+    $st = system($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
 	    '--po-mode',
 	    (defined $charset_in? ('-I', $charset_in): ()),
 	    (defined $charset_out? ('-O', $charset_out): ()));
@@ -277,13 +280,13 @@ if ($action eq 'create')  {
 	# Merge the temporary "pot file" with the specified po file ($str_file)
 	# FIXME: msgmerge(1) is a Unix dependency
 	# FIXME: need to check the return value
-	system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
+	$st = system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
     } else {
-	warn_normal "Text extraction failed: $xgettext: $!\n", undef;
-	warn_normal "Will not run msgmerge\n", undef;
+	error_normal "Text extraction failed: $xgettext: $!\n", undef;
+	error_additional "Will not run msgmerge\n", undef;
     }
-    unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
-    unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
+#   unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
+#   unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'install') {
     if(!defined($out_dir)) {
@@ -327,6 +330,13 @@ if ($action eq 'create')  {
 
 } else {
     usage_error('Unknown action specified.');
+}
+
+if ($st == 0) {
+    printf "The %s seems to be successful, with %d warning(s).\n",
+	    $action, VerboseWarnings::warned;
+} else {
+    printf "%s FAILED.\n", "\u$action";
 }
 exit 0;
 

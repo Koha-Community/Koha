@@ -236,6 +236,8 @@ Output details:
 
 Informative output:
       --help                     Display this help and exit
+
+Try `perldoc $0' for perhaps more information.
 EOF
     exit($exitcode);
 }
