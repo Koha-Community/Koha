@@ -96,4 +96,4 @@ for (my $i=0;$i<1;$i++){
 	$sth2->finish;
 	$sth->finish;
 }
-print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");
+print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$data{'borrowernumber'}");

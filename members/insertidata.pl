@@ -104,4 +104,4 @@ if (my $data2=$sth->fetchrow_hashref){
 $sth2->finish;
 $sth->finish;
 
-print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");
+print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$data{'borrowernumber'}");
