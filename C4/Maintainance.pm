@@ -79,15 +79,17 @@ C<$n> is 0, it will return all matching subjects.
 sub listsubjects {
   my ($sub,$num,$offset)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from bibliosubject where subject like '$sub%' group by subject";
+  my $query="Select * from bibliosubject where subject like '?%' group by subject";
+  my @bind = ($sub);
   # FIXME - Make $num and $offset optional.
   # If $num was given, make sure $offset was, too.
   if ($num != 0){
-    $query.=" limit $offset,$num";
+    $query.=" limit ?,?";
+    push(@bind,$offset,$num);
   }
   my $sth=$dbh->prepare($query);
 #  print $query;
-  $sth->execute;
+  $sth->execute(@bind);
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -112,10 +114,8 @@ sub updatesub{
   my $dbh = C4::Context->dbh;
   $sub=$dbh->quote($sub);
   $oldsub=$dbh->quote($oldsub);
-  # FIXME - Just use $dbh->do();
-  my $query="update bibliosubject set subject=$sub where subject=$oldsub";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("update bibliosubject set subject=? where subject=?");
+  $sth->execute($sub,$oldsub);
   $sth->finish;
 }
 
@@ -132,15 +132,12 @@ C<$biblionumber> is the biblionumber to associate it with.
 sub shiftgroup{
   my ($bib,$bi)=@_;
   my $dbh = C4::Context->dbh;
-  # FIXME - Just use $dbh->do();
-  my $query="update biblioitems set biblionumber=$bib where biblioitemnumber=$bi";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("update biblioitems set biblionumber=? where biblioitemnumber=?");
+  $sth->execute($bib,$bi);
   $sth->finish;
-  # FIXME - Just use $dbh->do();
-  $query="update items set biblionumber=$bib where biblioitemnumber=$bi";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $query="";
+  $sth=$dbh->prepare("update items set biblionumber=? where biblioitemnumber=?");
+  $sth->execute($bib,$bi);
   $sth->finish;
 }
 
@@ -160,9 +157,8 @@ is the number of elements in C<$results>.
 sub deletedbib{
   my ($title)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from deletedbiblio where title like '$title%' order by title";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from deletedbiblio where title like '?%' order by title");
+  $sth->execute($title);
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -186,27 +182,22 @@ moves its entry to the biblio table.
 sub undeletebib{
   my ($bib)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="select * from deletedbiblio where biblionumber=$bib";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("select * from deletedbiblio where biblionumber=?");
+  $sth->execute($bib);
   if (my @data=$sth->fetchrow_array){
     $sth->finish;
     # FIXME - Doesn't this keep the same biblionumber? Isn't this
     # forbidden by the definition of 'biblio'? Or doesn't it matter?
-    $query="Insert into biblio values (";
-    foreach my $temp (@data){
-      $temp=~ s/\'/\\\'/g;
-      $query .= "'$temp',";
-    }
+    my $query="Insert into biblio values (";
+    $query .= ("?," x $#data);
     $query=~ s/\,$/\)/;
     #   print $query;
     $sth=$dbh->prepare($query);
-    $sth->execute;
+    $sth->execute(@data);
     $sth->finish;
   }
-  $query="Delete from deletedbiblio where biblionumber=$bib";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("Delete from deletedbiblio where biblionumber=?");
+  $sth->execute($bib);
   $sth->finish;
 }
 
@@ -222,9 +213,8 @@ C<$itemtype>.
 sub updatetype{
   my ($bi,$type)=@_;
   my $dbh = C4::Context->dbh;
-  # FIXME - Use $dbh->do(...);
-  my $sth=$dbh->prepare("Update biblioitems set itemtype='$type' where biblioitemnumber=$bi");
-  $sth->execute;
+  my $sth=$dbh->prepare("Update biblioitems set itemtype=? where biblioitemnumber=?");
+  $sth->execute($type,$bi);
   $sth->finish;
 }
 
