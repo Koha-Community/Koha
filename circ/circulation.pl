@@ -296,6 +296,7 @@ $template->param(
 		author => $iteminformation->{'author'},
 		firstname => $borrower->{'firstname'},
 		surname => $borrower->{'surname'},
+		categorycode => $borrower->{'categorycode'},
 		question => $question,
 		barcode => $barcode,
 		questionnumber => $questionnumber,
@@ -308,11 +309,8 @@ $template->param(
 		message => $message,
 		CGIselectborrower => $CGIselectborrower,
 
-		patrontable => $patrontable,
-		flaginfotable => $flaginfotable,
-		CHARGES => $flags->{'CHARGES'},
 		amountold => $amountold,
-		todayissues => \@realtodayissues, 
+		todayissues => \@realtodayissues,
 		previssues => \@realprevissues
 	);
 
@@ -366,61 +364,74 @@ sub patrontable {
     my ($borrower) = @_;
     my $flags = $borrower->{'flags'};
     my $flaginfotable='';
-    my $flaginfotext='';
+    my $flaginfotext;
+    #my $flaginfotext='';
     my $flag;
     my $color='';
     foreach $flag (sort keys %$flags) {
+    	warn $flag;
+    	my @itemswaiting='';
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {
-	    if ($flag eq 'CHARGES') {
-		$flaginfotext.="<tr><td valign=top><font color=red>$flag</font></td><td bgcolor=$color><b>$flags->{$flag}->{'message'}</b> <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
-	    } else {
-		$flaginfotext.="<tr><td valign=top><font color=red>$flag</font></td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
-	    }
+		$template->param(
+			noissues => 'true',
+			color => $color,
+			 );
+		if ($flag eq 'CHARGES') {
+			$template->param(
+				charges => 'true',
+				chargesmsg => $flags->{'CHARGES'}->{'message'}
+				 );
+		}
 	} else {
-	    if ($flag eq 'CHARGES') {
-		$flaginfotext.="<tr><td valign=top>$flag</td><td> $flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
-	    } elsif ($flag eq 'WAITING') {
-		my $itemswaiting='';
-		my $items=$flags->{$flag}->{'itemlist'};
-		foreach my $item (@$items) {
-		    my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-		    $itemswaiting.="<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a> $iteminformation->{'title'} ($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>\n";
+		 if ($flag eq 'CHARGES') {
+			$template->param(
+				charges => 'true',
+				chargesmsg => $flags->{'CHARGES'}->{'message'}
+			 );
 		}
-		$flaginfotext.="<tr><td valign=top>$flag</td><td>$itemswaiting</td></tr>\n";
-	    } elsif ($flag eq 'ODUES') {
-		my $items=$flags->{$flag}->{'itemlist'};
-		my $itemswaiting="<table border=1 cellspacing=0 cellpadding=2>\n";
-		my $currentcolor=$color;
-		{
-		    my $color=$currentcolor;
-		    foreach my $item (@$items) {
-			($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+	    	if ($flag eq 'WAITING') {
+			my $items=$flags->{$flag}->{'itemlist'};
+			foreach my $item (@$items) {
 			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-			$itemswaiting.="<tr><td><font color=red>$iteminformation->{'date_due'}</font></td><td bgcolor=$color><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a></td><td>$iteminformation->{'title'}</td></tr>\n";
-		    }
+			$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
+			push @itemswaiting, $iteminformation;
+			}
+			$template->param(
+				waiting => 'true',
+				waitingmsg => $flags->{'WAITING'}->{'message'},
+				itemswaiting => \@itemswaiting,
+				 );
 		}
-		$itemswaiting.="</table>\n";
-		if ($query->param('module') ne 'returns'){
-  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}, See below</td></tr>\n";
-		} else {
-  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
+		if ($flag eq 'ODUES') {
+			$template->param(
+				odues => 'true',
+				oduesmsg => $flags->{'ODUES'}->{'message'}
+				 );
+
+			my $items=$flags->{$flag}->{'itemlist'};
+			my $currentcolor=$color;
+			{
+			my $color=$currentcolor;
+			foreach my $item (@$items) {
+				($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
+				push @itemswaiting, $iteminformation;
+			}
+			}
+			if ($query->param('module') ne 'returns'){
+				$template->param( nonreturns => 'true' );
+			}
 		}
-	    } else {
-		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
-	    }
+		if ($flag eq 'NOTES') {
+			$template->param(
+				notes => 'true',
+				notesmsg => $flags->{'NOTES'}->{'message'}
+				 );
+		}
 	}
     }
-    ($flaginfotext) && ($flaginfotext="<tr><td  colspan=2><b>Flags</b></td></tr>$flaginfotext\n");
-    $flaginfotext.="</table>";
-    my $patrontable= << "EOF";
-<br><p>
-    <table border=1 cellpadding=5 cellspacing=0 align=right>
-    <tr><td colspan=2><font color=black><b>Patron Information</b></font></td></tr>
-    <tr><td colspan=2>
-    <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>$borrower->{'streetaddress'} $borrower->{'city'} Cat: $borrower->{'categorycode'} </td></tr>
-EOF
     return($patrontable, $flaginfotext);
 }
 
