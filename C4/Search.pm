@@ -1105,7 +1105,6 @@ like '%($key[0])%')";		while ($i<$count){			$query.=" and (subject like
 		if ($search->{'publisher'} ne ''){
 			$query.= " and (publishercode like '%$search->{'publisher'}%')";
 		}
-		warn $query;
 		my $sti=$dbh->prepare($query);
 		$sti->execute;
 		my $dewey;

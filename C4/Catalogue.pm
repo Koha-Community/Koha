@@ -271,14 +271,12 @@ sub modorder {
   where
   ordernumber=$ordnum and biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
-#  print $query;
   $sth->execute;
   $sth->finish;
-  $query="update aqorderbreakdown set bookfundid=$bookfund where
-  ordernumber=$ordnum";
+  $query="update aqorderbreakdown set bookfundid=? where
+  ordernumber=?";
   $sth=$dbh->prepare($query);
-#  print $query;
-  $sth->execute;
+  $sth->execute($bookfund,$ordnum);
   $sth->finish;
 }
 
@@ -324,20 +322,15 @@ Also updates the book fund ID in the aqorderbreakdown table.
 sub receiveorder {
   my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="update aqorders set quantityreceived='$quantrec',
-  datereceived=now(),booksellerinvoicenumber='$invoiceno',
-  biblioitemnumber=$bibitemno,unitprice='$cost',freight='$freight',
-  rrp='$rrp'
-  where biblionumber=$biblio and ordernumber=$ordnum
-  ";
-#  print $query;
+  my $query="update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
+  										biblioitemnumber=?,unitprice=?,freight=?,rrp=?
+  						where biblionumber=? and ordernumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($quantrec,$invoiceno,$bibitemno,$cost,$freight,$rrp,$biblio,$ordnum);
   $sth->finish;
   $query="update aqorderbreakdown set bookfundid=? where
   ordernumber=?";
   $sth=$dbh->prepare($query);
-#  print $query;
   $sth->execute($bookfund,$ordnum);
   $sth->finish;
 }
@@ -597,52 +590,49 @@ following keys:
 =cut
 #'
 sub ordersearch {
-  my ($search,$biblio,$catview) = @_;
-  my $dbh   = C4::Context->dbh;
-  my $query = "Select *,biblio.title from aqorders,biblioitems,biblio
-where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
-and biblio.biblionumber=aqorders.biblionumber
-and ((datecancellationprinted is NULL)
-or (datecancellationprinted = '0000-00-00'))
-and ((";
-  my @data  = split(' ',$search);
-  my $count = @data;
-  for (my $i = 0; $i < $count; $i++) {
-    $query .= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
-  }
-  $query=~ s/ and $//;
-		# FIXME - Redo this properly instead of hacking off the
-		# trailing 'and'.
-  $query.=" ) or biblioitems.isbn='$search'
-  or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
-  if ($catview ne 'yes'){
-    $query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
-  }
-  $query.=" group by aqorders.ordernumber";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-     my $sth2=$dbh->prepare("Select * from biblio where
-     biblionumber='$data->{'biblionumber'}'");
-     $sth2->execute;
-     my $data2=$sth2->fetchrow_hashref;
-     $sth2->finish;
-     $data->{'author'}=$data2->{'author'};
-     $data->{'seriestitle'}=$data2->{'seriestitle'};
-     $sth2=$dbh->prepare("Select * from aqorderbreakdown where
-    ordernumber=$data->{'ordernumber'}");
-    $sth2->execute;
-    $data2=$sth2->fetchrow_hashref;
-    $sth2->finish;
-    $data->{'branchcode'}=$data2->{'branchcode'};
-    $data->{'bookfundid'}=$data2->{'bookfundid'};
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  return($i,@results);
+	my ($search,$biblio,$catview) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $query = "Select *,biblio.title from aqorders,biblioitems,biblio
+							where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+									and biblio.biblionumber=aqorders.biblionumber
+									and ((datecancellationprinted is NULL)
+									or (datecancellationprinted = '0000-00-00'))
+									and ((";
+	my @data  = split(' ',$search);
+	my $count = @data;
+	for (my $i = 0; $i < $count; $i++) {
+		$query .= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
+	}
+	$query=~ s/ and $//;
+			# FIXME - Redo this properly instead of hacking off the
+			# trailing 'and'.
+	$query.=" ) or biblioitems.isbn='$search' or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
+	if ($catview ne 'yes'){
+		$query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
+	}
+	$query.=" group by aqorders.ordernumber";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my $i=0;
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+		my $sth2=$dbh->prepare("Select * from biblio where biblionumber=?");
+		$sth2->execute($data->{'biblionumber'});
+		my $data2=$sth2->fetchrow_hashref;
+		$sth2->finish;
+		$data->{'author'}=$data2->{'author'};
+		$data->{'seriestitle'}=$data2->{'seriestitle'};
+		$sth2=$dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
+		$sth2->execute($data->{'ordernumber'});
+		$data2=$sth2->fetchrow_hashref;
+		$sth2->finish;
+		$data->{'branchcode'}=$data2->{'branchcode'};
+		$data->{'bookfundid'}=$data2->{'bookfundid'};
+		$results[$i]=$data;
+		$i++;
+	}
+	$sth->finish;
+	return($i,@results);
 }
 
 #

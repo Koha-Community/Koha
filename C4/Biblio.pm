@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.38  2003/02/27 16:51:59  tipaul
+# * moving prepare / execute to ? form.
+# * some # cleaning
+# * little bugfix.
+# * road to 1.9.2 => acquisition and cataloguing merging
+#
 # Revision 1.37  2003/02/12 11:03:03  tipaul
 # Support for 000 -> 010 fields.
 # Those fields doesn't have subfields.
@@ -1521,14 +1527,10 @@ sub OLDnewitems {
 							$item->{'homebranch'},$item->{'homebranch'},
 							$item->{'price'},$item->{'replacementprice'},
 							$item->{'itemnotes'},$item->{'loan'});
-
-	$sth->execute;
 	if (defined $sth->errstr) {
 		$error .= $sth->errstr;
 	}
 	$sth->finish;
-	#  $itemnumber++;
-	#  $dbh->disconnect;
 	return($itemnumber,$error);
 }
 
