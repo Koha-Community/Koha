@@ -13,8 +13,8 @@
 	<table>
 	<tr><th>欄號</th>
 		<th>給圖書館員看的說明 / 給讀者看的說明</th>
-		<th>可否重覆</th>
-		<th>是否必備</th>
+		<th nowrap>可否重覆</th>
+		<th nowrap>是否必備</th>
 		<th>Koha 欄位</th>
 		<th>在那格出現</th>
 		<th>Authorised value or<br/>
@@ -69,18 +69,17 @@
 
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
-<font SIZE=6><em>MARC subfield structure admin for <TMPL_VAR name="tagfield"></em></font>
-<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on "edit". </p>
-<p>The column <b>koha field</b> shows that the subfield is linked with a "koha field". Koha can manage a marc interface, or a koha interface. This link
-ensure that both DB are synchronized, thus you can change from MARC to KOHA interface easily.</p>
+<font SIZE=6><em><TMPL_VAR name="tagfield"> 號欄之結構定義</em></font>
+<p>這個畫面顯示您揀選了的欄的各個分欄。您可以按「<span lang=en>Edit</span>」更改這些分欄，或加入未有顯示的分欄。</p>
+<p>「<span lang=mi>koha</span> 欄位」顯示對應某一分欄的「<span lang=mi>koha</span> 欄位」。您可以選擇使用一個「<span lang=mi>Koha</span>式介面」或一個「機讀格式介面」來操作 <span lang=mi>Koha</span>。定義這些「<span lang=mi>koha</span> 欄位」使 <span lang=mi>Koha</span> 可以知道 <span lang=mi>Koha</span> 資料庫和機讀格式資料庫間的關係，從而使兩個資料庫能同步更新，而您也因此可以順利的轉換操作介面而不會發生兩組資料不同步所引發的種種問題。</p>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
 	<td background="/images/background-mem.gif" width=5%><b>分欄</b></td>
 	<td background="/images/background-mem.gif" width=30%><b>說明</b></td>
 	<td background="/images/background-mem.gif" width=10%><b>koha 欄位</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
-	<td background="/images/background-mem.gif" width=8%><b>可否重覆</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
-	<td background="/images/background-mem.gif" width=8%><b>是否必備</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
-	<td background="/images/background-mem.gif" width=8%><b>第幾格</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b title="此分欄可否重覆">可否重覆</b></span></td>
+	<td background="/images/background-mem.gif" width=8%><b title="此分欄是否必備 (mandatory)，還是可以自由使用 (optional)">是否必備</b></span></td>
+	<td background="/images/background-mem.gif" width=8%><b title="在輸入書目時，此分欄在畫面的那一格(tab) 顯示 (0 至 9、Items)，抑或不顯示 (ignore)">格號</b></span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
@@ -90,8 +89,8 @@ ensure that both DB are synchronized, thus you can change from MARC to KOHA inte
 	<td><TMPL_VAR name="tagsubfield"></td>
 	<td><TMPL_VAR name="liblibrarian"></td>
 	<td><TMPL_VAR name="kohafield"></td>
-	<td><TMPL_IF name="repeatable">是<TMPL_ELSE>否</TMPL_IF></td>
-	<td><TMPL_IF name="mandatory">是<TMPL_ELSE>否</TMPL_IF></td>
+	<td nowrap><TMPL_IF name="repeatable">可重覆<TMPL_ELSE>不可重覆</TMPL_IF></td>
+	<td nowrap><TMPL_IF name="mandatory">必備<TMPL_ELSE>自由使用</TMPL_IF></td>
 	<td><TMPL_VAR name="tab"></td>
 	<td><TMPL_VAR name="authorised_value"></td>
 	<td><TMPL_VAR name="thesaurus_category"></td>
