@@ -11,14 +11,14 @@
     <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     </form>
 <!-- /TMPL_UNLESS -->
-<!-- <form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="isbd" value="ISBD" /></form> -->
+<form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon isbd" value="ISBD" /></form>
 
 <form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon brief" value="Normal View" /></form>
 
-<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Print" /></form>
+<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Print" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form> -->
 
 <form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
-<div class="table">
+
 		<table><!-- TMPL_LOOP name="0XX" -->
 		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
 		<!-- TMPL_LOOP name="subfield" -->
@@ -139,7 +139,6 @@
 			<tr><td>No copies available.</td></tr>
 		</table>
 	<!-- /TMPL_IF -->
-</div>
 </div>
 </body>
 </html>
