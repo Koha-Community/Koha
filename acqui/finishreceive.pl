@@ -67,8 +67,21 @@ if ($itemtype =~ /PER/){
 if ($quantity != 0){
   receiveorder($biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund);
   modbiblio($biblio);
-  modbibitem($bibitemno,$itemtype,$isbn,$publisher,$pubdate,$class,$dewey,$subclass,$illus,$pages,$volinf,$notes,$size);
-  #print $notes;
+  &modbibitem({
+      biblioitemnumber => $bibitemno,
+      itemtype         => $itemtype?$itemtype:"",
+      isbn             => $isbn?$isbn:"",
+      publisher        => $publisher?$publisher:"",
+      publicationyear  => $pubdate?$pubdate:"",
+      class            => $class?$class:"",
+      dewey            => $dewey?$dewey:"",
+      subclass         => $subclass?$subclass:"",
+      illus            => $illus?$illus:"",
+      pages            => $pages?$pages:"",
+      volumeddesc      => $volinf?$volinf:"",
+      notes            => $notes?$notes:"",
+      size             => $size?$size:"" });
+
   my $barcode=$input->param('barcode');
   my @barcodes;
   if ($barcode =~ /\,/){

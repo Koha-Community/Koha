@@ -15,8 +15,9 @@ my @items = &ItemInfo(undef, $bib, $type);
 my @temp  = split('\t', $items[0]);
 my $count = @items;
 my $dat   = &bibdata($bib);
-my ($websitecount, @websites) = &getwebsites($bib);
-my ($authorcount, $addauthor) = &addauthor($bib);
+my ($websitecount, @websites)             = &getwebsites($bib);
+my ($authorcount, $addauthor)             = &addauthor($bib);
+my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($bib);
 my $additional = $addauthor->[0]->{'author'};
 my $main;
 my $secondary;
@@ -176,21 +177,13 @@ print mktablehdr;
 
 if ($type eq 'opac') {
     print mktablerow(6,$main,'Item Type','Class','Branch','Date Due','Last Seen');
-    if ($dat->{'url'} ne '') {
-	$dat->{'url'} =~ s/^http:\/\///;
-	print mktablerow(6, $colour, 'Website', 'WEB', 'Online', 'Available', "<a href=\"http://$dat->{'url'}\">$dat->{'url'}</a>");
-    } # if
 } else {
     print mktablerow(7,$main,'Itemtype','Class','Location','Date Due','Last Seen','Barcode',"","/images/background-mem.gif");
-    if ($dat->{'url'} ne '') {
-	$dat->{'url'} =~ s/^http:\/\///;
-	print mktablerow(7, $colour, 'WEB', '', 'Online', 'Available', "<a href=\"http://$dat->{'url'}\">$dat->{'url'}</a>");
-    } # if
 } # else
 
 $colour = 'white';
 for (my $i = 0; $i < $count; $i ++) {
-    
+
     my @results = split('\t', $items[$i]);
 
     if ($type ne 'opac') {
@@ -223,6 +216,18 @@ for (my $i = 0; $i < $count; $i ++) {
     } # else
 
 } # for
+
+
+for (my $i = 0; $i < $webbiblioitemcount; $i++) {
+    if ($type eq 'opac') {
+	$webbiblioitems[$i]->{'url'} =~ s/^http:\/\///;
+	print mktablerow(6, $colour, 'Website', 'WEB', 'Online', 'Available', "http://$webbiblioitems[$i]->{'url'}");
+    } else {
+	$webbiblioitems[$i]->{'url'} =~ s/^http:\/\///;
+	print mktablerow(7, $colour, 'WEB', '', 'Online', 'Available', "", "<a href='moredetail.pl?bib=$bib&bi=$webbiblioitems[$i]->{'biblioitemnumber'}&type=$type'>http://$webbiblioitems[$i]->{'url'}</a>");
+    } # else
+} # for
+
 
 print mktableft();
 print "<p>";

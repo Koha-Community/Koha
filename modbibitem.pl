@@ -14,7 +14,6 @@ use CGI;
 
 
 my $input = new CGI;
-#
 my $bibitemnum=$input->param('bibitem');
 my $data=bibitemdata($bibitemnum);
 my $biblio=$input->param('biblio');
@@ -48,7 +47,7 @@ if ($dewey <= 0){
 $dewey=~ s/\.$//;
 $inputs{'Class'}="text\t$data->{'classification'}$dewey$data->{'subclass'}\t2";
 $inputs{'Item Type'}="text\t$data->{'itemtype'}\t3";
-#$inputs{'Subject'}="textarea\t$sub\t4";
+$inputs{'URL'}="text\t$data->{'url'}\t4";
 $inputs{'Publisher'}="text\t$data->{'publishercode'}\t5";
 #$inputs{'Copyright date'}="text\t$data->{'copyrightdate'}\t6";
 $inputs{'ISBN'}="text\t$data->{'isbn'}\t7";
@@ -73,7 +72,7 @@ print <<printend
 <BLOCKQUOTE><FONT SIZE=6>
 <em><a href=/cgi-bin/koha/detail.pl?bib=$data->{'biblionumber'}&type=intra>$data->{'title'} ($data->{'author'})</a><br>
 Modify Group - $data->{'description'}</em></FONT><br>             
-<form action=updatebibitem.pl method=post>
+<form action="updatebibitem.pl" method="post">
 <table border=0 cellspacing=0 cellpadding=5 align=left>
 
 <TR VALIGN=TOP  bgcolor="99cc33">
@@ -96,6 +95,11 @@ print <<printend
 
 
 <tr valign=top bgcolor=white><td>Item Type</td><td><input type=text name=Item Type value="$data->{'itemtype'}" size=20></td></tr>
+
+<tr valign="top" bgcolor="white">
+<td>URL</td>
+<td><input type="text" name="url" value="$data->{'url'}" size="20"></td>
+</tr>
 
 <tr valign=top bgcolor=white><td>Class</td><td><input type=text name=Class value="$data->{'classification'}$dewey$data->{'subclass'}" size=20></td></tr>
 

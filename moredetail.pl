@@ -4,18 +4,18 @@
 #written 8/11/99
 
 use strict;
-#use DBI;
 use C4::Search;
 use C4::Koha;
 use C4::Output;
 use C4::Acquisitions;
-
 use CGI;
+
 my $input = new CGI;
-print $input->header;
-#whether it is called from the opac of the intranet
 my $type=$input->param('type');
-#setup colours
+
+print $input->header;
+
+# setup colours
 my $main;
 my $secondary;
 if ($type eq 'opac'){
@@ -78,6 +78,7 @@ print <<printend
 <FONT SIZE=2  face="arial, helvetica">
 <b>Biblionumber:</b> $bib<br>
 <b>Item Type:</b> $data->{'itemtype'}<br>
+<b>URL:</b> $data->{'url'}<br>
 <b>Loan Length:</b> $data->{'loanlength'}<br>
 <b>Rental Charge:</b> $data->{'rentalcharge'}<br>
 <b>Classification:</b> $data->{'classification'}$dewey$data->{'subclass'}<br>

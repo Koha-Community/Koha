@@ -563,21 +563,47 @@ values ('$subject[$i]', $bibnum)");
   return($error);
 } # sub modsubject
 
+
 sub modbibitem {
-  my ($bibitemnum,$itemtype,$isbn,$publishercode,$publicationdate,$classification,$dewey,$subclass,$illus,$pages,$volumeddesc,$notes,$size,$place)=@_;
-  my $dbh=C4Connect;
-  my $query="update biblioitems set itemtype='$itemtype',
-  isbn='$isbn',publishercode='$publishercode',publicationyear='$publicationdate',
-  classification='$classification',dewey='$dewey',subclass='$subclass',illus='$illus',
-  pages='$pages',volumeddesc='$volumeddesc',notes='$notes',size='$size',place='$place'
-  where
-  biblioitemnumber=$bibitemnum";
-  my $sth=$dbh->prepare($query);
-#    print $query;
-  $sth->execute;
-  $sth->finish;
-  $dbh->disconnect;
-}
+    my ($biblioitem) = @_;
+    my $dbh   = C4Connect;
+    my $query;
+
+    $biblioitem->{'itemtype'}        = $dbh->quote($biblioitem->{'itemtype'});
+    $biblioitem->{'isbn'}            = $dbh->quote($biblioitem->{'isbn'});
+    $biblioitem->{'publishercode'}   = $dbh->quote($biblioitem->{'publishercode'});
+    $biblioitem->{'publicationyear'} = $dbh->quote($biblioitem->{'publicationyear'});
+    $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
+    $biblioitem->{'dewey'}	     = $dbh->quote($biblioitem->{'dewey'});
+    $biblioitem->{'subclass'}	     = $dbh->quote($biblioitem->{'subclass'});
+    $biblioitem->{'illus'}           = $dbh->quote($biblioitem->{'illus'});
+    $biblioitem->{'pages'}           = $dbh->quote($biblioitem->{'pages'});
+    $biblioitem->{'volumeddesc'}     = $dbh->quote($biblioitem->{'volumeddesc'});
+    $biblioitem->{'notes'}           = $dbh->quote($biblioitem->{'notes'});
+    $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
+    $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
+
+    $query = "Update biblioitems set
+itemtype        = $biblioitem->{'itemtype'},
+isbn            = $biblioitem->{'isbn'},
+publishercode   = $biblioitem->{'publishercode'},
+publicationyear = $biblioitem->{'publicationyear'},
+classification  = $biblioitem->{'classification'},
+dewey           = $biblioitem->{'dewey'},
+subclass        = $biblioitem->{'subclass'},
+illus           = $biblioitem->{'illus'},
+pages           = $biblioitem->{'pages'},
+volumeddesc     = $biblioitem->{'volumeddesc'},
+notes 		= $biblioitem->{'notes'},
+size		= $biblioitem->{'size'},
+place		= $biblioitem->{'place'}
+where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
+
+    $dbh->do($query);
+
+    $dbh->disconnect;
+} # sub modbibitem
+
 
 sub modnote {
   my ($bibitemnum,$note)=@_;
@@ -611,6 +637,7 @@ sub newbiblioitem {
   $biblioitem->{'publishercode'}   = $dbh->quote($biblioitem->{'publishercode'});
   $biblioitem->{'volumedate'}      = $dbh->quote($biblioitem->{'volumedate'});
   $biblioitem->{'volumeddesc'}     = $dbh->quote($biblioitem->{'volumeddesc'});  $biblioitem->{'illus'}            = $dbh->quote($biblioitem->{'illus'});
+  $biblioitem->{'illus'}	   = $dbh->quote($biblioitem->{'illus'});
   $biblioitem->{'pages'}           = $dbh->quote($biblioitem->{'pages'});
   $biblioitem->{'notes'}           = $dbh->quote($biblioitem->{'notes'});
   $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
