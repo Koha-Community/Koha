@@ -11,7 +11,7 @@ i=index_start
 // go forward, until reaching the end of the field.
 while (i<=opener.opener.document.f.field_value.length) {
 	if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
-		opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="authid">";
+		opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="authid" -->";
 	}
 	<!-- TMPL_LOOP NAME="0XX" -->
 		<!-- TMPL_LOOP NAME="subfield" -->
