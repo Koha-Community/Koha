@@ -338,20 +338,22 @@ sub bookfunds {
 }
 
 sub branches {
-  my $dbh=C4Connect;
-  my $query="Select * from branches";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return($i,@results);
-}
+    my $dbh   = C4Connect;
+    my $query = "Select * from branches";
+    my $sth   = $dbh->prepare($query);
+    my $i     = 0;
+    my @results;
+
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$i] = $data;
+    	$i++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($i, @results);
+} # sub branches
 
 sub bookfundbreakdown {
   my ($id)=@_;
@@ -419,36 +421,55 @@ abstract      = $biblio->{'abstract'}";
   return($bibnum);
 }
 
+
 sub modbiblio {
-  my ($bibnum, $title, $author, $copyright, $seriestitle, $serial, $unititle, $notes)=@_;
+  my ($biblio) = @_;
   my $dbh   = C4Connect;
-  my $query = "Update biblio set
-title         = '$title',
-author        = '$author',
-copyrightdate = '$copyright',
-seriestitle   = '$seriestitle',
-serial        = '$serial',
-unititle      = '$unititle',
-notes         = '$notes'
+  my $query;
+  my $sth;
+  
+  $biblio->{'title'}         = $dbh->quote($biblio->{'title'});
+  $biblio->{'author'}        = $dbh->quote($biblio->{'author'});
+  $biblio->{'abstract'}      = $dbh->quote($biblio->{'abstract'});
+  $biblio->{'copyrightdate'} = $dbh->quote($biblio->{'copyrightdate'});
+  $biblio->{'seriestitle'}   = $dbh->quote($biblio->{'serirestitle'});
+  $biblio->{'serial'}        = $dbh->quote($biblio->{'serial'});
+  $biblio->{'unititle'}      = $dbh->quote($biblio->{'unititle'});
+  $biblio->{'notes'}         = $dbh->quote($biblio->{'notes'});
+
+  $query = "Update biblio set
+title         = $biblio->{'title'},
+author        = $biblio->{'author'},
+abstract      = $biblio->{'abstract'},
+copyrightdate = $biblio->{'copyrightdate'},
+seriestitle   = $biblio->{'seriestitle'},
+serial        = $biblio->{'serial'},
+unititle      = $biblio->{'unititle'},
+notes         = $biblio->{'notes'}
+where biblionumber = $biblio->{'biblionumber'}";
+  $sth   = $dbh->prepare($query);
+
+  $sth->execute;
+
+  $sth->finish;
+  $dbh->disconnect;
+  return($biblio->{'biblionumber'});
+} # sub modbiblio
+
+
+sub modsubtitle {
+  my ($bibnum, $subtitle) = @_;
+  my $dbh   = C4Connect;
+  my $query = "update bibliosubtitle set
+subtitle = '$subtitle'
 where biblionumber = $bibnum";
   my $sth   = $dbh->prepare($query);
 
   $sth->execute;
-
   $sth->finish;
   $dbh->disconnect;
-  return($bibnum);
-}
+} # sub modsubtitle
 
-sub modsubtitle {
-  my ($bibnum,$subtitle)=@_;
-  my $dbh=C4Connect;
-  my $query="update bibliosubtitle set subtitle='$subtitle' where biblionumber=$bibnum";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  $sth->finish;
-  $dbh->disconnect;
-}
 
 sub modaddauthor {
     my ($bibnum, $author) = @_;
@@ -475,64 +496,72 @@ biblionumber = '$bibnum'";
 
 
 sub modsubject {
-  my ($bibnum,$force,@subject)=@_;
-  my $dbh=C4Connect;
-  my $count=@subject;
+  my ($bibnum, $force, @subject) = @_;
+  my $dbh   = C4Connect;
+  my $count = @subject;
   my $error;
-  for (my $i=0;$i<$count;$i++){
-    $subject[$i]=~ s/^ //g;
-    $subject[$i]=~ s/ $//g;
-    my $query="select * from catalogueentry where entrytype='s' and
-    catalogueentry='$subject[$i]'";
-    my $sth=$dbh->prepare($query);
+  for (my $i = 0; $i < $count; $i++) {
+    $subject[$i] =~ s/^ //g;
+    $subject[$i] =~ s/ $//g;
+    my $query = "select * from catalogueentry
+where entrytype = 's'
+and catalogueentry = '$subject[$i]'";
+    my $sth   = $dbh->prepare($query);
     $sth->execute;
-    if (my $data=$sth->fetchrow_hashref){
-      
+
+    if (my $data = $sth->fetchrow_hashref) {
     } else {
-      if ($force eq $subject[$i]){
-         #subject not in aut, chosen to force anway
-	 #so insert into cataloguentry so its in auth file
-	 $query="Insert into catalogueentry (entrytype,catalogueentry)
-	 values ('s','$subject[$i]')";
-	 my $sth2=$dbh->prepare($query);
-#	 print $query;
+      if ($force eq $subject[$i]) {
+
+         # subject not in aut, chosen to force anway
+         # so insert into cataloguentry so its in auth file
+	 $query = "Insert into catalogueentry
+(entrytype,catalogueentry)
+values ('s','$subject[$i]')";
+	 my $sth2 = $dbh->prepare($query);
+
 	 $sth2->execute;
 	 $sth2->finish;
-      } else {      
-        $error="$subject[$i]\n does not exist in the subject authority file";
-        $query= "Select * from catalogueentry where
-        entrytype='s' and (catalogueentry like '$subject[$i] %' or 
-        catalogueentry like '% $subject[$i] %' or catalogueentry like
-        '% $subject[$i]')";
-        my $sth2=$dbh->prepare($query);
-#        print $query;
+
+      } else {
+
+        $error = "$subject[$i]\n does not exist in the subject authority file";
+        $query = "Select * from catalogueentry
+where entrytype = 's'
+and (catalogueentry like '$subject[$i] %'
+or catalogueentry like '% $subject[$i] %'
+or catalogueentry like '% $subject[$i]')";
+        my $sth2 = $dbh->prepare($query);
+
         $sth2->execute;
-        while (my $data=$sth2->fetchrow_hashref){
-          $error=$error."<br>$data->{'catalogueentry'}";
-        }
+        while (my $data = $sth2->fetchrow_hashref) {
+          $error = $error."<br>$data->{'catalogueentry'}";
+        } # while
         $sth2->finish;
-#       $error=$error."<br>$query";
-     }
-   }
+      } # else
+    } # else
     $sth->finish;
-  }
-  if ($error eq ''){  
-    my $query="Delete from bibliosubject where biblionumber=$bibnum";
-#  print $query;
-    my $sth=$dbh->prepare($query);
-#  print $query;
+  } # else
+
+  if ($error eq '') {
+    my $query = "Delete from bibliosubject where biblionumber = $bibnum";
+    my $sth   = $dbh->prepare($query);
+
     $sth->execute;
     $sth->finish;
-    for (my $i=0;$i<$count;$i++){
-      $sth=$dbh->prepare("Insert into bibliosubject values ('$subject[$i]',$bibnum)");
-#     print $subject[$i];
+
+    for (my $i = 0; $i < $count; $i++) {
+      $sth = $dbh->prepare("Insert into bibliosubject
+values ('$subject[$i]', $bibnum)");
+
       $sth->execute;
       $sth->finish;
-    }
-  }
+    } # for
+  } # if
+
   $dbh->disconnect;
   return($error);
-}
+} # sub modsubject
 
 sub modbibitem {
   my ($bibitemnum,$itemtype,$isbn,$publishercode,$publicationdate,$classification,$dewey,$subclass,$illus,$pages,$volumeddesc,$notes,$size,$place)=@_;

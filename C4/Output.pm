@@ -215,16 +215,16 @@ sub mkform{
   $string=$string."</form>";
 }
 
-sub mkform3{
-  my ($action,%inputs)=@_;
-  my $string="<form action=$action method=post>\n";
-  $string=$string.mktablehdr();
+sub mkform3 {
+  my ($action, %inputs) = @_;
+  my $string = "<form action=\"$action\" method=\"post\">\n";
+  $string   .= mktablehdr();
   my $key;
-  my @keys=sort keys %inputs;
+  my @keys = sort(keys(%inputs));
   my @order;  
-  my $count=@keys;
-  my $i2=0;
-  while ( $i2<$count) {
+  my $count = @keys;
+  my $i2 = 0;
+  while ($i2 < $count) {
     my $value=$inputs{$keys[$i2]};
     my @data=split('\t',$value);
     my $posn = $data[2];

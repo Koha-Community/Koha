@@ -725,28 +725,28 @@ sub itemdata {
 }
 
 sub bibdata {
-  my ($bibnum,$type)=@_;
-  my $dbh=C4Connect;
-  my $query="Select *,biblio.notes  
-  from biblio,biblioitems 
-  left join bibliosubtitle on                                                
-  biblio.biblionumber=bibliosubtitle.biblionumber
-  
-  where biblio.biblionumber=$bibnum
-  and biblioitems.biblionumber=$bibnum"; 
-#  print $query;
-  my $sth=$dbh->prepare($query);
+  my ($bibnum, $type)=@_;
+  my $dbh   = C4Connect;
+  my $query = "Select *, biblio.notes  
+from biblio, biblioitems 
+left join bibliosubtitle on
+biblio.biblionumber = bibliosubtitle.biblionumber
+where biblio.biblionumber = $bibnum
+and biblioitems.biblionumber = $bibnum";
+
+  my $sth   = $dbh->prepare($query);
   $sth->execute;
-  my $data=$sth->fetchrow_hashref;
+  my $data  = $sth->fetchrow_hashref;
   $sth->finish;
-  $query="Select * from bibliosubject where biblionumber='$bibnum'";
+
+  $query = "Select * from bibliosubject where biblionumber = '$bibnum'";
   $sth=$dbh->prepare($query);
   $sth->execute;
-  while (my $dat=$sth->fetchrow_hashref){
-    $data->{'subject'}.=" | $dat->{'subject'}";
+  while (my $dat = $sth->fetchrow_hashref){
+    $data->{'subject'} .= " | $dat->{'subject'}";
 
   }
-  #print $query;
+
   $sth->finish;
   $dbh->disconnect;
   return($data);
