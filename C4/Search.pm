@@ -2039,8 +2039,7 @@ C<$ocount> is the number of items that haven't arrived yet
 =cut
 #'
 
-# FIXME - There's also a &C4::Acquisitions::itemcount and
-# &C4::Biblio::itemcount.
+# FIXME - There's also a &C4::Biblio::itemcount.
 # Since they're all exported, acqui/acquire.pl doesn't compile with -w.
 sub itemcount {
   my ($env,$bibnum,$type)=@_;
