@@ -59,6 +59,10 @@
 			<!-- TMPL_VAR NAME="borrowernotes" -->
 		</p>
 		<p>
+			 <label class="label100">OPAC login : </label><!-- TMPL_VAR name="userid" -->
+			 <!-- TMPL_IF name="password" -->(password defined)<!-- TMPL_ELSE -->(no password)<!-- /TMPL_IF -->
+		</p>
+		<p>
 		<!-- TMPL_IF NAME="I" -->
 			<a href="/cgi-bin/koha/members/imemberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
 		<!-- TMPL_ELSE -->
