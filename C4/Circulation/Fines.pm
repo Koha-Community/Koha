@@ -151,7 +151,7 @@ sub CalcFine {
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
   categoryitem.itemtype=itemtypes.itemtype and
-  categoryitem.categorycode='?' and (items.itemlost <> 1 or items.itemlost is NULL)");
+  categoryitem.categorycode=? and (items.itemlost <> 1 or items.itemlost is NULL)");
 #  print $query;
   $sth->execute($itemnumber,$bortype);
   my $data=$sth->fetchrow_hashref;
