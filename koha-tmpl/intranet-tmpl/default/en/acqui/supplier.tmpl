@@ -84,9 +84,6 @@
 		<td><textarea name=notes cols=20 rows=4><!-- TMPL_VAR name="contnotes" --></textarea>
 		</td>
 	</tr>
-	<tr>
-		<td colspan=2 align="center"><input type=image  name=submit src="/<!-- TMPL_VAR name="theme" -->/images/filesave.png" border=0 title="save" alt="save"></td>
-	</tr>
 </table>
 
 <table border=1 cellspacing=0 cellpadding=5 width="40%">
@@ -95,8 +92,14 @@
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Supplier is</td>
-		<td><input type="radio" name="status" value="1" <!-- TMPL_IF name="active" -->checked<!-- /TMPL_IF -->>Active
-			<input type="radio" name="status" value="0" <!-- TMPL_UNLESS name="active" -->checked<!-- /TMPL_UNLESS -->>Inactive</td>
+		<td>
+			 <!-- TMPL_IF name="active" -->
+				<input type="radio" name="status" value="1" checked>Active
+				<input type="radio" name="status" value="0">Inactive</td>
+			<!-- TMPL_ELSE -->
+				<input type="radio" name="status" value="1">Active
+				<input type="radio" name="status" value="0"checked>Inactive</td>
+			<!-- /TMPL_IF -->
 	</tr>
 	<tr valign=top bgcolor="#ffdf61">
 		<td colspan=2><B>ORDERING INFORMATION</B></td>
@@ -152,7 +155,8 @@
 		<td><input type=text size=3 name=discount value=<!-- TMPL_VAR name="discount" -->> %
 	</tr>
 </table>
-
+<br/>
+<br/><input type=image  name=submit src="/<!-- TMPL_VAR name="theme" -->/images/filesave.png" border=0 title="save" alt="save" class="button">
 </form>
 </center>
 

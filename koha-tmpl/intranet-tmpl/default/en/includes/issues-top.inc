@@ -171,7 +171,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<form name=choose2>
 			<select name=dest size=1 onChange="leapto(this.form)">
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>AQUISITIONS
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>ACQUISITIONS
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Orders
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Order Books
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Order Serials

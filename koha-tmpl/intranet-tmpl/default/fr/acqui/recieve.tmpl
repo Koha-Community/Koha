@@ -1,20 +1,20 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <div align=right>
-Facture : <TMPL_VAR name="invoice"><br>
-Réceptionnée par : <TMPL_VAR name="user"><br>
-<TMPL_VAR name="date">
+Facture: <!-- TMPL_VAR name="invoice" --><br>
+Reçu par: <!-- TMPL_VAR name="user" --><br>
+<!-- TMPL_VAR name="date" -->
 </div>
-<FONT SIZE=6><em>Réception pour : <TMPL_VAR name="name">, Facture <TMPL_VAR name="invoice"></em></FONT>
+<h1>Sommaire pour : <i><!-- TMPL_VAR name="name" --></i> Facture <i><!-- TMPL_VAR name="invoice" --></i></h1>
 <CENTER>
 
 <FORM ACTION="/cgi-bin/koha/acqui/acquire.pl">
-<input type=hidden name=id value="<TMPL_VAR name="id">">
-<input type=hidden name=gst value="<TMPL_VAR name="gst">">
-<input type=hidden name=freight value="<TMPL_VAR name="freight">">
-<input type=hidden name=invoice value="<TMPL_VAR name="invoice">">
+<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
+<input type=hidden name=gst value="<!-- TMPL_VAR name="gst" -->">
+<input type=hidden name=freight value="<!-- TMPL_VAR name="freight" -->">
+<input type=hidden name=invoice value="<!-- TMPL_VAR name="invoice" -->">
 
-<b>Rechercher ISBN or Titre:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
+<b>Rechercher ISBN ou Titre:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
 </form>
 <p>
 <FORM ACTION="" method=get name=orderform>
@@ -26,23 +26,23 @@ Réceptionnée par : <TMPL_VAR name="user"><br>
 		<td><b>TITRE</b></td>
 		<td><b>AUTEUR</b></td>
 		<td><b>ACTUEL</b></td>
-		<td><b>Port</b></td>
-		<td><b>QTE</b></td>
+		<td><b>P&P</b></td>
+		<td><b>QUANTITE</b></td>
 		<td><b>TOTAL</b></td>
 	</tr>
-	<TMPL_VAR name="count">
-	<TMPL_LOOP name="loop_orders">
-		<tr valign=top bgcolor="<TMPL_VAR name="color">">
-			<td><TMPL_VAR name="basketno"></td>
-			<td><TMPL_VAR name="isbn"></td>
-			<td><a href="acquire.pl?recieve=<TMPL_VAR name="ordernumber">&biblio=<TMPL_VAR name="biblionumber">&invoice=<TMPL_VAR name="invoice">&gst=<TMPL_VAR name="gst">&freight=<TMPL_VAR name="freight">&id=<TMPL_VAR name="id">"><TMPL_VAR name="title"></a></td>
-			<td><TMPL_VAR name="author"></td>
-			<td>$<TMPL_VAR name="unitprice"></td>
+	<!-- TMPL_VAR name="count" -->
+	<!-- TMPL_LOOP name="loop_orders" -->
+		<tr valign=top bgcolor="<!-- TMPL_VAR name="color" -->">
+			<td><!-- TMPL_VAR name="basketno" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><a href="acquire.pl?recieve=<!-- TMPL_VAR name="ordernumber" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->&invoice=<!-- TMPL_VAR name="invoice" -->&gst=<!-- TMPL_VAR name="gst" -->&freight=<!-- TMPL_VAR name="freight" -->&id=<!-- TMPL_VAR name="id" -->"><!-- TMPL_VAR name="title" --></a></td>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td>$<!-- TMPL_VAR name="unitprice" --></td>
 			<td></td>
-			<td><TMPL_VAR name="quantityrecieved"></td>
-			<td>$<TMPL_VAR name="total"></td>
+			<td><!-- TMPL_VAR name="quantityrecieved" --></td>
+			<td>$<!-- TMPL_VAR name="total" --></td>
 		</tr>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 	<tr valign=top bgcolor=white>
 		<td colspan=8><hr>
 		</td>
@@ -51,24 +51,25 @@ Réceptionnée par : <TMPL_VAR name="user"><br>
 		<td></td>
 		<td></td>
 		<td></td>
-		<td><b>SUBTOTALS</b></td>
-		<td>$<TMPL_VAR name="totalprice"></td>
-		<td><TMPL_VAR name="totalfreight"></td>
-		<td><TMPL_VAR name="totalquantity"></td>
-		<td>$<TMPL_VAR name="tototal"></td>
+		<td><b>SOUS-TOTAUX</b></td>
+		<td>$<!-- TMPL_VAR name="totalprice" --></td>
+		<td><!-- TMPL_VAR name="totalfreight" --></td>
+		<td><!-- TMPL_VAR name="totalquantity" --></td>
+		<td>$<!-- TMPL_VAR name="tototal" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td colspan=5 rowspan=2  bgcolor="#ffdf61">
 		<b>AIDE</b>
-		<br>Le total en bas de la page doit être le même que sur la facture à quelques cents près.</p>
-		 Quand vous avez terminé, enregistrez les modifications
+		<br>
+		Le total au fond de la page devrait correspondre à quelques centimes au total de la facture.<p>
+		Quand vous avez fini cette facture, sauvegardez les changements.
 		</td>
 		<td colspan=2 align=right><b>GST</b></td>
-		<td>?<TMPL_VAR name="gst"></td>
+		<td>$<!-- TMPL_VAR name="gst" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td colspan=2 align=right ><b>TOTAL</b></td>
-		<td>?<TMPL_VAR name="grandtot"></td>
+		<td>$<!-- TMPL_VAR name="grandtot" --></td>
 	</tr>
 </table>
 </CENTER>

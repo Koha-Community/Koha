@@ -1,0 +1,99 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac-user.css">
+<div id="mainbloc">
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+	<div id="bloc20">
+		<h2>Are our records correct ?</h2>
+		<p>Library Card: <!-- TMPL_VAR NAME="cardnumber" --> </p>
+		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) </p>
+		<p><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p
+		<p><!-- TMPL_VAR NAME="phone" --> (hm)</p>
+		<p><!-- TMPL_VAR NAME="faxnumber" --> (wk)</p>
+		<p><!-- TMPL_VAR NAME="emailaddress" --></p>
+		<p>Something new : <a href="/cgi-bin/koha/opac-userupdate.pl" class="button">Update Record</a></p>
+	</div>
+	<!-- TMPL_IF NAME="amountoverfive" -->
+	<div id="bloc20">
+		<h2>You have outstanding charges and fines of <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">View Accounts</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="amountoverzero" -->
+	<div id="bloc20">
+		<h2>You have outstanding charges and fines of <!-- TMPL_VAR NAME="amountoutstanding" --></h2>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">View Accounts</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME"amountlessthanzero" -->
+	<div id="bloc20">
+		<p>You have a credit of <!-- TMPL_VAR NAME="amountoutstanding" --></p>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">View Accounts</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="waiting_count" -->
+<div id="bloc60">
+	<h2>You have reserved items waiting:</h2>
+	<ul>
+		<!-- TMPL_LOOP NAME="WAITING" -->
+			<li><!-- TMPL_VAR NAME="btitle" -->, pick up at: <b><!-- TMPL_VAR NAME="branch" --></b></li>
+		<!-- /TMPL_LOOP -->
+	</ul>
+</div>
+<!-- /TMPL_IF -->
+
+<div id="bloc60">
+	<!-- TMPL_IF NAME="issues_count" -->
+		You have <b><!-- TMPL_VAR NAME="issues_count" --></b> items currently issued.<br>
+		<table cellspacing=0 >
+			<tr>
+				<th>Title</th>
+				<th>Author</th>
+				<th>Due date</th>
+				<th>Itemtype</th>
+				<th>Charges</th>
+				<th>Current Loan</th>
+			</TR>
+			<!-- TMPL_LOOP NAME="ISSUES" -->
+				<TR>
+					<TD><!-- TMPL_VAR NAME="title" --></TD>
+					<TD><!-- TMPL_VAR NAME="author" --></TD>
+					<TD><!-- TMPL_VAR NAME="date_due" --></TD>
+					<TD><!-- TMPL_VAR NAME="itemtype" --></TD>
+					<TD><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></TD>
+					<TD><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></TD>
+				</TR>
+			<!-- /TMPL_LOOP -->
+		</table>
+	<!-- TMPL_ELSE -->
+		<h2>You have no items on issue.</h2>
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_IF NAME="reserves_count" -->
+<div id="bloc60">
+	<h2>You have <b><!-- TMPL_VAR NAME="reserves_count" --></b> items currently reserved.</h2>
+	<table cellspacing=0 align="center">
+		<Tr>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Reserve date</th>
+		</TR>
+		<!-- TMPL_LOOP NAME="RESERVES" -->
+			<TR VALIGN=TOP>
+			<TD><!-- TMPL_VAR NAME="btitle" --></TD>
+			<TD><!-- TMPL_VAR NAME="author" --></TD>
+			<TD><!-- TMPL_VAR NAME="reservedate" --></TD>
+			</TR>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<br/>
+</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

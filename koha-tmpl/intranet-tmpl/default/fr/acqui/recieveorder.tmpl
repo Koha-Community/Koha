@@ -1,33 +1,33 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<FONT SIZE=6><em>Réceptionner commande du fournisseur <TMPL_VAR name="name"></em></FONT>
+<h1>Réceptionner commandes d'un fournisseur <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR name="name" --></a></h1>
 <p>
 <CENTER>
 <form method=get action="receive.pl">
-<input type=hidden name=id value=<TMPL_VAR name="id">>
+<input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 <p>
 <table border=1 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor="#ffdf61"><td  colspan=2><B>INFORMATIONS DE FACTURE FOURNISSEUR</B></td></tr>
+<tr valign=top bgcolor="#ffdf61"><td  colspan=2><B>INFORMATION FACTURE FOURNISSEUR</B></td></tr>
 <TR VALIGN=TOP >
-<TD>N° commande fournisseur</td>
+<TD>N° de facture de fournisseur</td>
 <td><input type=text size=20 name=invoice>
 </td>
 </tr>
 <TR VALIGN=TOP bgcolor="#ffffcc">
-<TD>gst</td>
+<TD>GST</td>
 <td><input type=text size=20 name=gst>
 </td>
 </tr>
 <TR VALIGN=TOP>
-<TD>Port</td>
+<TD>Fret</td>
 <td><input type=text size=20 name=freight>
 </td>
 </tr>
 <TR VALIGN=TOP>
-<td colspan=2 align="center"><input type=image  name=submit src="/<TMPL_VAR name="theme">/images/2rightarrow.png" border=0 title="continue" alt="save" border=0>
+<td colspan=2 align="center"><input type="submit" class="button" value="Enregistrer">
 </td>
 </tr>
 </table>
 </CENTER>
 
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

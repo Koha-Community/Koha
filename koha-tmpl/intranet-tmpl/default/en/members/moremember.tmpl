@@ -13,22 +13,12 @@
 
 	<tr VALIGN=TOP  >
 	<TD>
-		<!-- TMPL_IF name="IS_ADULT" -->
-			<p align=right>
-			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
-				<INPUT TYPE="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
-				<input type=hidden name=type value=Add>
-				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
-			</form>
-			</P>
-		<!-- /TMPL_IF -->
-		<br>
 		<FONT SIZE=2  face="arial, helvetica"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF name="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><p>
-		Card Number: <!-- TMPL_VAR NAME="cardnumber" --><BR>
+		Card number: <!-- TMPL_VAR NAME="cardnumber" --><BR>
 		Postal Address: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --><BR>
 		<!-- TMPL_UNLESS name="I" -->Home Address: <!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR name="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><BR>
-		Phone (Home): <!-- TMPL_VAR NAME="phone" --><BR><!-- /TMPL_UNLESS -->
-		Phone (Daytime): <!-- TMPL_VAR NAME="phoneday" --><BR>
+		Phone home: <!-- TMPL_VAR NAME="phone" --><BR><!-- /TMPL_UNLESS -->
+		Phone daytime: <!-- TMPL_VAR NAME="phoneday" --><BR>
 		Fax: <!-- TMPL_VAR NAME="faxnumber" --><BR>
 		E-mail: <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
 		Text messaging: <!-- TMPL_VAR NAME="textmessaging" --><p>
@@ -66,6 +56,16 @@
 		<!-- TMPL_VAR NAME="borrowernotes" --><!--</a>-->
 		<p align=right>
 		</font>
+		<!-- TMPL_IF name="IS_ADULT" -->
+			<p align=right>
+			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
+				<INPUT TYPE="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
+				<input type=hidden name=type value=Add>
+				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
+			</form>
+			</P>
+		<!-- /TMPL_IF -->
+		<br>
 		<!-- TMPL_IF name="I" -->
 			<form action=/cgi-bin/koha/imemberentry.pl method=post>
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
@@ -114,8 +114,12 @@
 	<TD colspan=2 align=right>
 		<p>
 			<br>
-			<a class="button" href=/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->>View Account</a>
-			<a class="button" href=/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->>Pay Fines</a>
+			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+				View Account
+			</a>
+			<a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+				Pay Fines
+			</a>
 			<br><br>
 		</p>
 	</td>
@@ -219,7 +223,9 @@
 </table>
 <br />
 <br />
-<a class=button href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Reading Record</a>
+<a class=button href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
+	Reading Record
+</a>
 <script>
 function confirm_deletion() {
 	var is_confirmed = confirm('do you confirm deletetion ?');

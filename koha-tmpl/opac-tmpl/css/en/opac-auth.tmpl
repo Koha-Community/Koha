@@ -1,0 +1,38 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Sorry, KOHA doesnt think you have permission for this page.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is displayed if login has timed out -->
+<h2>Sorry, your session has timed out, please login again.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>You are accessing koha from a different ip address! please login again.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>You entered an incorrect username or password, please try again.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- login prompt time-->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+	<h1>Koha Login</h1>
+	<p><label>Cardnumber</label><input name="userid" /></p>
+	<p><label>Password</label><input type="password" name="password" /></p>
+	<!-- TMPL_LOOP NAME="INPUTS" -->
+		<input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->' />
+	<!-- /TMPL_LOOP -->
+	<input type="submit" value="login" class="button" />
+</form>
+
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -1,0 +1,35 @@
+<!-- TMPL_INCLUDE name="opac-top.inc" -->
+
+<div id="mainbloc">
+	<h1>Advanced search</h1>
+	<form action="/cgi-bin/koha/opac-searchresults.pl" method="get">
+	<ul>
+		<li><label>keyword</label><input type="text"  size="25"   name="keyword" /></li>
+	</ul>
+	<p><b>OR :</b></p>
+	<ul>
+		<li><label>subject</label><input type="text"  size="25"   name="subject" /></li>
+	</ul>
+	<p><b>OR one or more from :</b></p>
+	<ul>
+		<li><label>Title</label><input type="text"  size="25"   name="title" /></li>
+		<li><label>Author</label><input type="text"  size="25"   name="author" /></li>
+		<li><label>Illustrator</label><input type="text"  size="25"   name="illustrator" /></li>
+		<li><label>Item type</label>
+			<select size="1"  name="class">
+				<option value="">Any</option>
+				<!-- TMPL_VAR name="classlist" -->
+			</select>
+		</li>
+		<li><label>Barcode</label><input type="text"  size="25"   name="itemnumber" /></li>
+	</ul>
+		<p>using <input type="radio" name="ttype" value="normal" />Normal or <input type="radio" name="ttype" value="exact" />Exact search</p>
+
+	<p>
+		<input type="submit" value="OK Start Search" class="button" />
+		<input type="reset"  value="Clear All Fields" class="button" />
+	</p>
+	<p>Note that if you enter a value in Keyword and a value somewhere else, only keyword will be used</p>
+	</form>
+</div>
+<!-- TMPL_INCLUDE name="opac-bottom.inc" -->

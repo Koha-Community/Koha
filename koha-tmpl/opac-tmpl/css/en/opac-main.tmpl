@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css" />
+	<title><!--TMPL_VAR name="LibraryName"--></title>
+</head>
+
+<body>
+<div id="leftbloc">
+	<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="koha" alt="koha" />
+</div>
+
+<div id="homebloc">
+	<h1 class="LibraryName"><TMPL_VAR name="LibraryName"></h1>
+	<h2>Search the catalogue</h2>
+	<form action="/cgi-bin/koha/opac-searchresults.pl">
+		<p>
+			<input type="hidden" name="type" value="opac" />
+			<input type="text" size="27" name="keyword" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
+		</p>
+		<p>
+			<a href="/cgi-bin/koha/opac-search.pl">Advanced Search, More Options	</a>
+		</p>
+	</form>
+
+	<h2>Recent acquisitions</h2>
+	<form action="/cgi-bin/koha/opac-new.pl">
+		<p>
+		<!-- TMPL_VAR name="CGIitemtype" --> acquired in the last <b><input type="text" name="duration" value="30" size="3" /></b> days
+		<input type="submit" value="OK" class="button" />
+		</p>
+	</form>
+	<!-- TMPL_IF NAME="loggedinusername" -->
+		<h2>Logged in as <!-- TMPL_VAR NAME="loggedinusername" --></h2>
+		<p><a href="/cgi-bin/koha/opac-user.pl">Members Home</a> || <a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a></p>
+	<!-- TMPL_ELSE -->
+	<h2><a href="/cgi-bin/koha/opac-user.pl">Log In to Koha</a></h2>
+	<!-- /TMPL_IF -->
+	<p class="copyright">
+		This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards
+		<a href="http://validator.w3.org/check/referer">
+			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="16" width="44" />
+		</a>
+	</p>
+</div>
+
+</body>
+</html>

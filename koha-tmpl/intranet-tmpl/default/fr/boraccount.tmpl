@@ -1,11 +1,11 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<FONT SIZE=6><em>Compte de<TMPL_VAR NAME=firstname>
-<TMPL_VAR NAME=surname></em></FONT>
-<P>
-<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<TMPL_VAR NAME=bornum>">Ajouter une dette</a>
+<!-- The manual invoice et credit buttons -->
+
+<h1>Compte pour <a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->"><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></a></h1><P>
+<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<!-- TMPL_VAR NAME=bornum -->">Créer une facture manuelle</a>
 &nbsp;
-<a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<TMPL_VAR NAME=bornum>">Encaisser</a>
+<a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<!-- TMPL_VAR NAME=bornum -->">Créer un crédit manuel</a>
 <center>
 <p>
 
@@ -14,34 +14,34 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
   <TR VALIGN=TOP>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>AMENDES
-		&amp; FRAIS</b></TD>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=1><B>MONTANT</b></TD>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=1><B>SOLDE
-		</b></TD>
+    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>AMENDES & FRAIS</TD>
+    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=1><B>MONTANT</TD>
+    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=1><B>DOIT ENCORE</TD>
   </TR>
 
-  <TMPL_LOOP NAME=accounts>
+  <!-- TMPL_LOOP NAME=accounts -->
 
     <tr VALIGN=TOP>
-      <td><TMPL_VAR NAME=date></td>
-      <td><TMPL_VAR NAME=description><TMPL_IF NAME=printtitle> <TMPL_VAR NAME=title></TMPL_IF></td>
-      <td><TMPL_VAR NAME=amount></td>
-      <td><TMPL_VAR NAME=amountoutstanding></td>
+      <td><!-- TMPL_VAR NAME=date --></td>
+      <td><!-- TMPL_VAR NAME=description --><!-- TMPL_IF NAME=printtitle --> <!-- TMPL_VAR NAME=title --><!-- /TMPL_IF --></td>
+      <td><!-- TMPL_VAR NAME=amount --></td>
+      <td><!-- TMPL_VAR NAME=amountoutstanding --></td>
     </tr>
 
-  </TMPL_LOOP>
+  <!-- /TMPL_LOOP -->
 
   <tr VALIGN=TOP  >
-      <td></td>
-    <td colspan=2><b>Total d&ucirc;</b></td>
-    <td><b><TMPL_VAR NAME=total></b></td>
+    <td></td>
+    <td colspan=2><b>Total dû</b></td>
+    <td><b><!-- TMPL_VAR NAME=total --></b></td>
   </tr>
 
 </table>
 
 <br clear=all>
-<p>&nbsp;  </p>
+<p> &nbsp; </p>
 
 <!-- endmenu (member) -->
-<TMPL_INCLUDE NAME="members-bottom.inc">
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
+

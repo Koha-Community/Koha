@@ -1,8 +1,8 @@
-<TMPL_IF NAME="opac">
-    <TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-    <TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
 
 <span style="font-size:2em; text-align:left;">Recherche MARC</span>
 
@@ -11,65 +11,64 @@
 
 <input type="hidden" name="op" value="do_search">
 <input type="hidden" name="type" value="intranet">
-<input type="hidden" name="nbstatements" value="<TMPL_VAR NAME="nbstatements">">
+<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
 
-	<table border=0 cellspacing=0 cellpadding=2 width="80%>
+	<table border=0 cellspacing=0 cellpadding=2 width="100%">
 		<tr align="center">
-			<td colspan=3>
+			<td>
 				<div name="sql">
 				<textarea name="sql" rows=5 cols=60 disabled readonly></textarea>
 				</div>
 			</td>
-			<td colspan=2 bgcolor="#ad11ad" valign="top" align="left">
+			<td bgcolor="#ad11ad" valign="top" align="left">
 				<span style="color:#FFFFFF;">
 					<b>AIDE :</b><br/>
-					Construisez votre requète en utilisant les champs MARC puis lancez
-					la recherche pour afficher la liste des notices correspondant à vos critères.
-					En cliquant sur "Ajouter un critère" vous pouvez ajouter un critère de recherche sans perdre vos critères déjà entrés.
+					Construisez votre requête avec les champs et les sous-champs MARC. "Ajouter des critères" permet d'ajouter un autre critère à la recherche. "Recherche" lance la requête et affiche les résultats.
 				</span>
 			</td>
 		</tr>
-
-		<TMPL_LOOP NAME="statements">
+	</table>
+	<table border=0 cellspacing=0 cellpadding=2 width="100%">
+		<!-- TMPL_LOOP NAME="statements" -->
 		<tr>
 			<td>
-				<TMPL_IF NAME="first">
+				<!-- TMPL_IF NAME="first" -->
 					<input type="hidden" name="and_or" value="">&nbsp;
-				<TMPL_ELSE>
+				<!-- TMPL_ELSE -->
 					<select name="and_or" size="1" onchange="sql_update()">
-						<option value="and">et</option>
-						<option <TMPL_IF NAME="or">selected </TMPL_IF>value="or">ou</option>
+						<option value="et">et</option>
+						<option <!-- TMPL_IF NAME="ou" -->selected <!-- /TMPL_IF -->valeur="ou">ou</option>
 					</select>
-				</TMPL_IF>
+				<!-- /TMPL_IF -->
 			</td>
-			<td><TMPL_VAR name="marclist"></td>
+			<td><!-- TMPL_VAR name="marclist" --></td>
 			<td>
 				<select name="excluding" size="1" onchange="sql_update()">
 					<option value="0"> </option>
-					<option <TMPL_IF NAME="not">selected </TMPL_IF>value="1">non</option>
+					<option <!-- TMPL_IF NAME="not" -->selected <!-- /TMPL_IF -->valeur="1">not</option>
 				</select>
 			</td>
 			<td>
 				<select name="operator" size="1" onchange="sql_update()">
-					<option <TMPL_IF NAME="contains">selected</TMPL_IF> value="contains">Contient</option>
-					<option <TMPL_IF NAME="eq">selected</TMPL_IF> value="=">Egale</option>
-					<option <TMPL_IF NAME="start">selected</TMPL_IF> value="start">Commence par</option>
-					<option <TMPL_IF NAME="gt">selected</TMPL_IF> value=">">Supérieur à</option>
-					<option <TMPL_IF NAME="ge">selected</TMPL_IF> value=">=">Supérieur ou égal à</option>
-					<option <TMPL_IF NAME="lt">selected</TMPL_IF> value="<">Inférieur à</option>
-					<option <TMPL_IF NAME="le">selected</TMPL_IF> value="<=">Inférieur ou égal à</option>
+					<option <!-- TMPL_IF NAME="contains" -->selected<!-- /TMPL_IF --> value="contains">Contains</option>
+					<option <!-- TMPL_IF NAME="eq" -->selected<!-- /TMPL_IF --> value="=">Is equal to</option>
+					<option <!-- TMPL_IF NAME="start" -->selected<!-- /TMPL_IF --> value="start">Starts with</option>
+					<option <!-- TMPL_IF NAME="gt" -->selected<!-- /TMPL_IF --> value=">">Is greater than</option>
+					<option <!-- TMPL_IF NAME="ge" -->selected<!-- /TMPL_IF --> value=">=">Is greater ou equal to</option>
+					<option <!-- TMPL_IF NAME="lt" -->selected<!-- /TMPL_IF --> value="<">Is lower than</option>
+					<option <!-- TMPL_IF NAME="le" -->selected<!-- /TMPL_IF --> value="<=">Is lower ou equal to</option>
 				</select>
 			</td>
-			<td><input type="text" name="value" onChange="sql_update()" <TMPL_IF NAME="value">value="<TMPL_VAR NAME="value">"</TMPL_IF>></td>
+			<td><input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->valeur="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF -->></td>
 		</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 	</table>
 	<br>
 
 	<table width="90%">
 	<tr>
-	<td align="left" width="33%"><input type="button" value="Ajouter un critère" onClick="AddStatement()"></td>
-	<td align="center" width="33%"><input type="submit" value="Lancer la recherche"></td>
+	<td align="left" width="33%"><input type="button" value="Ajouter un critère" onClick="AddStatement()" class="button"></td>
+	<td align="middle" width="33%"><input type="submit" value="Lancer la recherche" class="button"></td>
 	<td align="right" width="33%">Résultats par page :
 		<select align="right" name="resultsperpage" size="1">
 			<option value="20">20</option>
@@ -104,9 +103,9 @@ function AddStatement() {
 }
 
 </script>
-<TMPL_IF NAME="opac">
-    <TMPL_INCLUDE NAME="opac-bottom.inc">
-<TMPL_ELSE>
-    <TMPL_INCLUDE NAME="cat-bottom.inc">
-</TMPL_IF>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->
 

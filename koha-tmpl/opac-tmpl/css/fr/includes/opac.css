@@ -1,0 +1,276 @@
+body {
+	background-color:#009999;
+	font-family:verdana,arial,helvetica;
+	font-size:12pt;
+	margin:0px;
+	padding:0px
+}
+
+/* base tags */
+a {
+	background-color: #ACE6E6;
+	text-decoration:none;
+	color:#000000;
+}
+
+a.transparent {
+	background-color: transparent;
+	text-decoration:none;
+	color:#000000;
+}
+
+a:hover {
+	background-color: #FF6600;
+	text-decoration:none;
+	color:#000000;
+}
+
+label {
+	float:left;
+	width: 10em;
+}
+
+img {
+	border-width:0px;
+	text-align:left;
+}
+
+
+h1 {
+	color:#FFD9BF;
+	background-color:#FF6600;
+	font-weight:bold;
+	font-size: 150%;
+	text-align:center;
+	padding: 2px;
+	border: 4px inset #FFD9BF;
+	width:60%;
+}
+
+/* style for library name, on top of menu (defined in LibraryName systempref) */
+.LibraryName {
+	color:#FFD9BF;
+	background-color:transparent;
+	font-weight:bold;
+	font-size: 150%;
+	text-align:center;
+	vertical-align:top;
+	padding: 2px;
+	border: 4px inset #FF6600;
+	width:75%;
+}
+
+h2 {
+	color:#FFD9BF;
+	background-color:#FF6600;
+	font-weight:bold;
+	font-size: 125%;
+}
+
+p {
+	padding-left:10pt;
+	padding-bottom:0pt;
+	margin:0pt;
+}
+p.center {
+	padding-left:10pt;
+	padding-bottom:0pt;
+	margin:0pt;
+	text-align:center;
+}
+p.copyright {
+	border-top: 1px solid #000000;
+	margin-top:10px;
+	text-align:center;
+}
+
+/* TABLES */
+table {
+	border:1px solid #000000;
+	border-collapse:collapse;
+	width:90%;
+}
+/* header */
+th {
+	background-color: #99cccc;
+	background-image: url(/opac-tmpl/css/en/images/background-opac.gif);
+	font-weight:bold;
+	text-align:center;
+	font-size:10pt;
+	border-left:1px solid #000000;
+	border-bottom:1px solid #000000;
+	border-top:1px solid #000000;
+	padding:5px;
+}
+/* standard cell */
+td {
+	font-size:10pt;
+	border-left:1px solid #000000;
+}
+
+/* hilighted cell */
+td.hilighted {
+	font-size:10pt;
+	border-left:1px solid #000000;
+	background-color:#ffffcc;
+}
+
+/* FORMS */
+/* class used in form buttons */
+.button {
+	text-align: center;
+	padding: 2px 2px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	text-decoration: none;
+	color: black;
+	line-height:175%;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	background-color:#FFD9BF;
+}
+
+.button:hover {
+	text-align: center;
+	padding: 2px 2px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	text-decoration: none;
+	color: black;
+	line-height:175%;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	background-color:#FF6600;
+}
+
+input {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#009999;
+}
+
+input:hover {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#FF6600;
+}
+
+select {
+	background-color: #ACE6E6;
+	text-decoration:none;
+	color:#000000;
+}
+
+/* span classes */
+/* used to show small 1,2,3, to reach other pages when too much results */
+.smallnumber {
+	background-color:#99cccc;
+	font-family:Times,serif;
+	font-size:small;
+	border:1px solid #000000;
+	padding:1pt;
+	vertical-align:top;
+}
+
+.smallnumberactive {
+	background-color:#FF6600;
+	font-family:Times,serif;
+	font-size:small;
+	border:1px solid #000000;
+	padding:1pt;
+	vertical-align:top;
+}
+
+/* BLOCS */
+
+/* the mainbloc : everything is in mainbloc, except menu */
+#mainbloc {
+	float:left;
+	width:90%;
+	background-color:#ACE6E6;
+	border:1px solid #000000;
+	margin-left:10px;
+	margin-right:10px;
+	padding-bottom:100px;
+	padding-left:10px;
+	padding-top:10px;
+	padding-right:10px;
+}
+
+#homebloc {
+	float:left;
+	width:60%;
+	border:0;
+}
+
+#leftbloc {
+	float:left;
+	width=30%;
+	border:1;
+}
+
+#bottombloc {
+	width:100%;
+	height:200%;
+	margin-top:10px;
+	vertical-align:top;
+	text-align:center;
+	float:left;
+}
+
+/* used in members */
+#bloc20 {
+	float:left;
+	width:30%;
+	border:0;
+	border:1px solid #000000;
+	margin-right:20px;
+	margin-bottom:20px;
+}
+#bloc60 {
+	float:left;
+	width:60%;
+	border:0;
+	border:1px solid #000000;
+	margin-right:20px;
+	margin-bottom:20px;
+}
+
+/* used in biblio detail */
+
+#bibliobloc {
+	float:left;
+	width:40%;
+	border:0;
+}
+
+#itembloc {
+	float:left;
+	width:50%;
+	border:0;
+}
+
+/* menu styles */
+.menu {
+	border:1px solid #000000;
+	padding-left:10pt;
+	padding-right:10pt;
+	float:left;
+	margin-bottom:10px;
+	-moz-border-radius: 6px;
+}
+#menuline {
+	width:100%;
+	height:200%;
+	vertical-align:top;
+	float:none;
+	position:relative;
+}
+
+/* a little spacer. should not be used */
+.spacer {
+	padding-left:20pt;
+	float:left;
+}

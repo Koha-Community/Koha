@@ -1,128 +1,129 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
 <table width="100%" cellpadding=5 cellspacing=5>
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+	<tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 		<td><b>Test</b></td>
-		<td><b>Result</b></td>
+		<td><b>Résultat</b></td>
 	</tr>
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="itemnum">
+<!-- TMPL_IF name="itemnum" -->
 	<tr>
 		<td><b>itemnum</b></td>
-		<td><li>Le champ "itemnum" DOIT être connecté à un champs MARC </li>
-			<li>Le sous champ correspondant DOIT être dans le "tab" -1 (ignore)</td>
+		<td><li>Le champ itemnumb DOIT être connecté </li>
+			<li>Le sous-champ correspondant DOIT être dans l'onglet -1 (ignore)</td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>itemnum : le champ est connecté et dans le tab -1 (ignore)</i></td>
+		<td><i>Ouvrage : le champ itemnumber est connecté à un sous-champ dans un onglet -1</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="itemfields">
+<!-- TMPL_IF name="itemfields" -->
 	<tr>
-		<td><b>champ item</b></td>
-		<td>TOUS les sous champs des exemplaires (items) DOIVENT :<br/>
-			<li>être reliés à 1 seul champ MARC (995 à priori pour l'UNIMARC),</li>
-			<li>et ils doivent être dans le "tab" 10 (items)</li></td>
+		<td><b>champ ouvrage</b></td>
+		<td>TOUS les champs ouvrage DOIVENT :<br/>
+			<li>être relié à la même étiquette,</li>
+			<li>et ils doivent tous être dans l'onglet 10 (items)</li></td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>Tous les sous-champs des exemplaires (items) sont dans le même champ et dans le tab 10 (items)</i></td>
+		<td><i>Les étiquettes d'exemplaire sont dans le même champ MARC et dans le même onglet.</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="itemtypes_empty">
+<!-- TMPL_IF name="itemtypes_empty" -->
 	<tr>
-		<td><b>Table itemtypes vide</b></td>
-		<td>La table itemtypes est vide. Elle doit contenir au moins 1 entrée</td>
+		<td><b>table types d'ouvrage est vide</b></td>
+		<td>La table types d'ouvrage est vide. Elle doit contenir au moins une valeur</td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>la table itemtypes contient 1 entrée au moins</i></td>
+		<td><i>table types d'ouvrage remplie avec au moins une valeur</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="itemtype">
+<!-- TMPL_IF name="itemtype" -->
 	<tr>
-		<td><b>itemtype NON connecté</b></td>
+		<td><b>itemtype n'est PAS connecté</b></td>
 		<td>Le champ biblioitems.itemtype DOIT :<br/>
-			<li>être connecté à un sous-champ MARC</li>
-			<li>Le sous champ correspondant DOIT avoir authorised_value=itemtype</li></td>
+			<li>être relié à l'étiquette MARC, </li>
+			<li>Le sous-champ correspondant DOIT contenir la valeur autorisée=typeouvrage</li></td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>biblioitems.itemtype défini</i></td>
+		<td><i>champ biblioitems.itemtype défini</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="branches_empty">
+<!-- TMPL_IF name="branches_empty" -->
 	<tr>
-		<td><b>table branch est vide</b></td>
-		<td>La table "branches" est vide. Elle doit contenir au moins 1 entrée</td>
+		<td><b>Table Annexe vide</b></td>
+		<td>La table Annexe est vide. Elle doit contenir au moins une valeur !</td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>La table "branches" contient au moins 1 entrée</i></td>
+		<td><i>table Annexe remplie avec au moins une valeur</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="branch">
+<!-- TMPL_IF name="branch" -->
 	<tr>
-		<td><b>branch NON connecté</b></td>
-		<td>le champ Koha items.homebranch field DOIT :<br/>
-			<li>être connecté à un sous-champ MARC,</li>
-			<li>Le sous-champ correspondant DOIT avec authorised value=branch</li></td>
+		<td><b>Annexe propriétaire non reliée</b></td>
+		<td>le champ items.homebranch DOIT :<br/>
+			<li>être relié à l'étiquette MARC,</li>
+			<li>Le sous-champ correspondant DOIT contenir la valeur autorisée=annexes</li></td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>homebranch défini</i></td>
+		<td><i>Annexe propriétaire définie</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="holdingbranch">
+<!-- TMPL_IF name="holdingbranch" -->
 	<tr>
-		<td><b>holdingbranch NON connecté</b></td>
-		<td>le champ Koha items.holdingbranch field DOIT :<br/>
-			<li>être connecté à un sous-champ MARC,</li>
-			<li>Le sous-champ correspondant DOIT avec authorised value=branch</li></td>
+		<td><b>Annexe dépositaire non reliée</b></td>
+		<td>le champ items.holdingbranch DOIT :<br/>
+			<li>être relié à l'étiquette MARC, </li>
+			<li>Le sous-champ correspondant DOIT contenir la valeur autorisée=annexes</li></td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>holdingbranch défini</i></td>
+		<td><i>Annexe dépositaire définie</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="biblionumber">
+<!-- TMPL_IF name="biblionumber" -->
 	<tr>
-		<td><b>biblio et biblionumber</b></td>
-		<td>Les champs Koha biblio.biblionumber et biblioitems.biblioitemnumber DOIVENT :<br/>
-			<li>être reliés à un sous-champ MARC</li>
-			<li>être connectés au même champ marc(par exemple : 090$a et 090$b)</li>
-			<li>Etre dans le "tab" -1</li></td>
+		<td><b>notice bibliographique et n° biblio</b></td>
+		<td>Les champs biblio.biblionumber et biblioitems.biblioitemnumber DOIVENT :<br/>
+			<li>être relié à l'étiquette MARC,</li>
+			<li>être dans la MEME étiquette (par ex. : 090$a et 090$b)</li>
+			<li>être dans l'onglet -1 (items)</li></td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>OK</td>
-		<td><i>biblionumber et biblioitemnumber correctement définis</i></td>
+		<td><i>n° biblio et n° d'ouvrage corrects</i></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <!----------------------------------------------------------------------------------------------------------->
-<TMPL_IF name="total">
+<!-- TMPL_IF name="total" -->
 	<tr>
 		<td><b>TOTAL</b></td>
-		<td>Il y a <TMPL_VAR name="total"> erreurs dans votre configuration MARC. corrigez les avant d'utiliser Koha !!!</td>
+		<td>Vous avez <b><!-- TMPL_VAR name="total" --></b> erreurs dans votre configuration MARC. Corrigez-les avant d'utiliser Koha</td>
 	</tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<tr>
 		<td>&nbsp;</td>
-		<td><b>Configuration OK, pas d'erreur dans les paramètres MARC</b></td>
+		<td><b>Configuration OK. Vous n'avez pas d'erreurs dans la table des paramètres MARC.</b></td>
 	</tr>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </table>
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

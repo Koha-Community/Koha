@@ -1,8 +1,8 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <script language="javascript" type="text/javascript">
 
 <!--
-function update(f){
+function mettre à jour(f){
   //collect values
   quantity=f.quantity.value
   discount=f.discount.value
@@ -14,20 +14,19 @@ function update(f){
   //  ecost=f.ecost.value  //budgetted cost
   //  GST=f.GST.value
   //  total=f.total.value
-  //make useful constants out of the above
+  //make useful constants out sur the above
   exchangerate=f.elements[currency].value      //get exchange rate
   gst_on=(!listinc && applygst);
   //do real stuff
   rrp=listprice*exchangerate;
-  ecost=Math.round(rrp*(100-discount))/100;
+  ecost=rrp*(100-discount)/100
   GST=0;
   if (gst_on){
-    rrp= Math.round(rrp*(1+<TMPL_VAR name="gstrate">)*100)/100;
-    GST=ecost*<TMPL_VAR name="gstrate">;
+    rrp=rrp*(1+<!-- TMPL_VAR name="gstrate" -->);
+    GST=ecost*(<!-- TMPL_VAR name="gstrate" -->);
   }
 
   total=(ecost+GST)*quantity
-
 
   f.rrp.value=rrp;
   f.ecost.value=ecost;
@@ -51,97 +50,95 @@ win.document.write("</font></body></html>");
 
 </script>
 <form action=/cgi-bin/koha/acqui/addorder.pl method=post name=frusin>
-<TMPL_UNLESS name="existing"><input type=hidden name=existing value=no></TMPL_UNLESS>
-<!-- <TMPL_VAR name="title"> -->
-<input type=hidden name=ordnum value="<TMPL_VAR name="ordnum">">
-<input type=hidden name=basket value="<TMPL_VAR name="basket">">
-<input type=hidden name=supplier value="<TMPL_VAR name="id">">
-<input type=hidden name=biblio value="<TMPL_VAR name="biblio">">
-<input type=hidden name=bibitemnum value="<TMPL_VAR name="biblioitemnumber">">
-<input type=hidden name=oldtype value="<TMPL_VAR name="itemtype">">
-<input type=hidden name=discount value="<TMPL_VAR name="discount">">
-<input type=hidden name=listinc value="<TMPL_VAR name="listincgst">">
-<input type=hidden name=currency value="<TMPL_VAR name="currency">">
-<input type=hidden name=applygst value="<TMPL_VAR name="gstreg">">
-<TMPL_LOOP name="loop_currencies">
-	<input type=hidden name="<TMPL_VAR name="currency">" value="<TMPL_VAR name="rate">">
-</TMPL_LOOP>
-<TMPL_IF name="orderexists"><input type=hidden name=orderexists value=yes></TMPL_IF>
-<table width="80%">
-<tr><td>
-	<FONT SIZE=6><em><TMPL_VAR name="ordnum"> - Détail commande</em></FONT><br>
-	Panier pour : <TMPL_VAR name="name">
-</td><td>
-	<a href="basket.pl?basket=<TMPL_VAR name="basket">">
-		<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1uparrow.png" border=0 alt="View Basket">
-	</a>
-</td></tr></table>
+<!-- TMPL_UNLESS name="existing" --><input type=hidden name=existing value=no><!-- /TMPL_UNLESS -->
+<!-- <!-- TMPL_VAR name="title" --> -->
+<input type=hidden name=ordnum value="<!-- TMPL_VAR name="ordnum" -->">
+<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
+<input type=hidden name=supplier value="<!-- TMPL_VAR name="id" -->">
+<input type=hidden name=biblio value="<!-- TMPL_VAR name="biblio" -->">
+<input type=hidden name=bibitemnum value="<!-- TMPL_VAR name="biblioitemnumber" -->">
+<input type=hidden name=oldtype value="<!-- TMPL_VAR name="itemtype" -->">
+<input type=hidden name=discount value="<!-- TMPL_VAR name="discount" -->">
+<input type=hidden name=listinc value="<!-- TMPL_VAR name="listincgst" -->">
+<input type=hidden name=currency value="<!-- TMPL_VAR name="currency" -->">
+<input type=hidden name=applygst value="<!-- TMPL_VAR name="gstreg" -->">
+<!-- TMPL_LOOP name="loop_currencies" -->
+	<input type=hidden name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->">
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF name="orderexists" --><input type=hidden name=orderexists value=oui><!-- /TMPL_IF -->
+<a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button">Voir Panier</a>
+<h1><!-- TMPL_VAR name="ordnum" --> - Commande Details </h1><br>
+Panier pour: <!-- TMPL_VAR name="name" -->
 <P>
 <CENTER>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
 	<tr valign=top bgcolor=#99cc33>
-		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>DETAIL CATALOGUE </B></td>
+		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>DETAILS CATALOGUE</B></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD><b>Titre *</b></td>
-		<td><input type=text size=20 name=title value="<TMPL_VAR name="title">"></td>
+		<td><input type=text size=20 name=title value="<!-- TMPL_VAR name="title" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Auteur</td>
-		<td><input type=text size=20 name=author value="<TMPL_VAR name="author">" ></td>
+		<td><input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" ></td>
 	</tr>
 	<TR VALIGN=TOP>
-	<TD>Date copyright</td>
-	<td><input type=text size=20 name=copyright value="<TMPL_VAR name="copyrightdate">">
+		<TD> Editeur</td>
+		<td><input type=text size=30 name=publishercode value="<!-- TMPL_VAR name="publishercode" -->" ></td>
+	</tr>
+	<TR VALIGN=TOP>
+	<TD>Date Copyright</td>
+	<td><input type=text size=20 name=copyrightdate value="<!-- TMPL_VAR name="copyrightdate" -->">
 	</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Catégorie</td>
-		<td><TMPL_VAR name="CGIitemtype"></td>
+		<TD>Format</td>
+		<td><!-- TMPL_VAR name="CGIitemtype" --></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>ISBN</td>
-		<td><input type=text size=20 name=ISBN value="<TMPL_VAR name="isbn">"></td>
+		<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Périodiques</td>
-		<td><input type=text size=20 name=Series value="<TMPL_VAR name="seriestitle">"></td>
+		<TD>Séries</td>
+		<td><input type=text size=20 name=Séries value="<!-- TMPL_VAR name="seriestitle" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Site</td>
-		<td><TMPL_VAR name="CGIbranch"></td>
+		<TD>Annexe</td>
+		<td><!-- TMPL_VAR name="CGIbranch" --></td>
 	</tr>
 </table>
-<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=32 height=250 align=left>
+<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=32 height=250 align=left>
 <table border=1 cellspacing=0 cellpadding=5 width="40%">
-	<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>DETAILS FINANCIERS</B></td></tr>
+	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>DETAILS COMPTABILITE</B></td></tr>
 	<TR VALIGN=TOP>
 		<TD>Quantité</td>
-		<td><input type=text size=20 name=quantity value="<TMPL_VAR name="quantity">" onchange='update(this.form)' ></td>
+		<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='mettre à jour(this.form)' ></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Fonds</td>
-		<td><TMPL_VAR name="CGIbookfund"></td>
+		<TD>Comptes</td>
+		<td><!-- TMPL_VAR name="CGIbookfund" --></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Prix fournisseur</td>
-		<td><input type=text size=20 name=list_price value="<TMPL_VAR name="listprice">" onchange='update(this.form)'></td>
+		<TD>Prix catalogue du fournisseur</td>
+		<td><input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='mettre à jour(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Coût remplacement <br><FONT SIZE=2></td>
-		<td><input type=text size=20 name=rrp value="<TMPL_VAR name="rrp">" onchange='update(this.form)'>
+		<TD>Frais Remplacement <br><FONT SIZE=2></td>
+		<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='mettre à jour(this.form)'>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Cout budgété<BR><FONT SIZE=2></FONT> </td>
-		<td><input type=text size=20 name=ecost value="<TMPL_VAR name="ecost">" onchange='update(this.form)'></td>
+		<TD>Coûts budgetés<BR><FONT SIZE=2>(ex TVA, remise)</FONT> </td>
+		<td><input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='mettre à jour(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Taxes</td>
-		<td><input type=text size=20 name=GST value="" onchange='update(this.form)'></td>
+		<TD>GST budgeté</td>
+		<td><input type=text size=20 name=GST value="" onchange='mettre à jour(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD><B>TOTAL BUDGETE</B></td>
-		<td><input type=text size=20 name=total value="" onchange='update(this.form)'></td>
+		<td><input type=text size=20 name=total value="" onchange='mettre à jour(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP  bgcolor=#ffffcc>
 		<TD>Coût effectif</td>
@@ -152,22 +149,23 @@ win.document.write("</font></body></html>");
 		<td><input type=text size=20 name=invoice ></td>
 	<TR VALIGN=TOP>
 		<TD>Notes</td>
-		<td><input type=text size=20 name=notes value="<TMPL_VAR name="notes">"></td>
+		<td><input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD colspan=2><input type=image  name=submit src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" border=0 align=right>	</td>
+		<TD colspan=2>
+		<input type="submit" value="OK" class="button">
 	</tr>
 </table>
 </form>
 </center>
 <table>
-<tr><td bgcolor=#cccc99  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>HELP</B><br>
+<tr><td bgcolor=#cccc99  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>AIDE</B><br>
 <UL>
-<LI>les champs en <B>GRAS</B> doivent être remplis pour créer une nouvelle notice et un exemplaire</li>
-<LI>Les champs en italique peuvent être utilisés pour faire une "réception rapide" lorsque les exemplaires seront réceptionnés</li>
+<LI>Les champs en gras sont obligatoires.<p>
+<LI>Les champs ombrés peuvent être utilisés pour effectuer un retour "rapide", quand les ouvrages ont été acheté localement ou reçus en don. Dans ce cas, la quantité "commandée" sera aussi affectée dans la base de données à la quantité "reçue".
 </UL>
 </td></tr></table>
 <p> &nbsp; </p>
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
 
 

@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<h2>Page de réservation pour <u><!-- TMPL_VAR NAME="title" --></u> (<!-- TMPL_VAR NAME="author" -->, N°<!-- TMPL_VAR name="biblionumber" -->)</h2>
+<!-- TMPL_IF NAME="message" -->
+	<h2>Impossible de réserver parce que </h2>
+	<ul>
+		<!-- TMPL_IF NAME="too_much_oweing" --><li>Vous devez <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="too_many_reserves" --><li>you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="already_reserved" --><li>Vous avez déjà placé une réservation sur cet exemplaire</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_items_selected" --><li>Vous devez sélectionner au moins 1 type</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_branch_selected" --><li>Vous devez sélectionner une annexe ou retirer l'ouvrage</li><!-- /TMPL_IF -->
+	</ul>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p> Il y a <b><!-- TMPL_VAR NAME="reservecount" --></b> Réservations déjà faites sur cet ouvrage </p>
+	<p>Sélectionnez les types d'ouvrages souhaités. Le premier disponible sera gardé pour vous.</p>
+
+	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+		<input type="hidden" name="item_types_selected" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
+		<TABLE cellspacing=0>
+			<tr>
+				<th>Reserver</th>
+				<th>Type d'ouvrage :</th>
+				<th>Copies</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+				<tr>
+					<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->" checked></td>
+					<!-- TMPL_ELSE -->
+						<td>Non réservable</td>
+					<!-- /TMPL_UNLESS -->
+					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><!-- TMPL_VAR NAME="copies" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<p>Sélectionnez l'annexe ou vous prendrez l'ouvrage: <!-- TMPL_VAR NAME="CGIbranch" --></p>
+		<p>Réserver à cette date ::
+			<select name=required-day><option value=0>Jour<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+			<select name=required-month><option value=0>Mois<option value=1 >Jan<option value=2 >Fev<option value=3 >Mars<option value=4 >Avril<option value=5 >Mai<option value=6 >Juin<option value=7 >Juill<option value=8 >Aout<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+			<select name=required-year><option value=0>Année<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+		</p>
+		<p>Annuler réservation à cette date:
+			<select name=expires-day><option value=0>Jour<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+			<select name=expires-month><option value=0>Mois<option value=1 >Jan<option value=2 >Fev<option value=3 >Mars<option value=4 >Avril<option value=5 >Mai<option value=6 >Juin<option value=7 >Juill<option value=8 >Aout<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+			<select name=expires-year><option value=0>Année<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+		</p>
+		<INPUT class="button" type="submit" value="OK">
+	</FORM>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+	<p>Confirmez que vous souhaitez réserver un ouvrage ::<p>
+
+	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+		<input type="hidden" name="place_reserve" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME='required_date' -->">
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME='expires_date' -->">
+		<ul>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+					<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->"></td>
+					<li><!-- TMPL_VAR NAME="description" --></li>
+			<!-- /TMPL_LOOP -->
+		</ul>
+		Qui sera retiré à
+		<ul>
+			<li>
+				<!-- TMPL_VAR NAME="branchname" -->
+			</li>
+		</ul>
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME='branch' -->">
+		<!-- TMPL_IF NAME="fee" -->
+			<p>Il y aura des frais de réservation de <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<INPUT class="button" type="submit" value="Réserver">
+	</FORM>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

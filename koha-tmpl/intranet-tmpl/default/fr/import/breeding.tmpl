@@ -1,57 +1,60 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
-<h1>syst&egrave;me d'importation de notices MARC</h1>
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<h1>Système d'acquisition MARC</h1>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Importer dans le r&eacute;voir</font></td>
+	<td><font size="4">Importer vers le réservoir</font></td>
 	</tr>
 </table>
 
-<TMPL_IF name="uploadmarc">
-<p>R&eacute;sultats de l'importation :</p>
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Résultats de l'importation :</p>
 <ul>
-	<p><TMPL_VAR name="imported"> notices import&eacute;es</p>
-	<p><TMPL_VAR name="alreadyindb"> pas import&eacute; : d&eacute;j&agrave; dans la base</p>
-	<p><TMPL_VAR name="alreadyinfarm"> pas import&eacute; : d&eacute;j&agrave;dans le r&eacute;servoir</p>
-	<p><TMPL_VAR name="notmarcrecord"> pas import&eacute; : ne semble pas au format MARC (ou ISBN/ISSN manquent) !</p>
-	<p><TMPL_VAR name="total">  notices trait&eacute;es</p>
+	<p><!-- TMPL_VAR name="imported" --> notices importées</p>
+	<p><!-- TMPL_VAR name="alreadyindb" --> pas importé, car déjà existant dans la base de données</p>
+	<p><!-- TMPL_VAR name="alreadyinfarm" --> pas importé, car déjà existant dans le réservoir</p>
+	<p><!-- TMPL_VAR name="notmarcrecord" --> pas importé, car il semble que ce n'est pas un format MARC (ou ISBN/ISSN manquant) !</p>
+	<p><!-- TMPL_VAR name="total" -->  enregistrements étudiés</p>
 	<p><a href="/cgi-bin/koha/admin-home.pl">Retour</a>
 </ul>
-<TMPL_ELSE>
-<ul>S&eacute;lectionnez un fichier &agrave; importer dans le r&eacute;servoir. Il sera trait&eacute;, et pour chaque ISBN trouv&eacute;, une nouvelle notice sera cr&eacute;e dans le r&eacute;servoir. Si un ISBN existe d&eacute;j&agrave; dans le r&eacute;servoir, vous pouvez choisir ou bien d'ignorer la nouvelle notice, ou bien d'&eacute;craser l'ancienne.<br/>
-Vous pouvez nommer cette importation. Cela peut &ecirc;tre utile, lorsque vous cre nouvel ISez une notice, de se souvenir de l'origine des donne nouvel ISes MARC propos&eacute;es !<br/>
-Bien s&ucirc;r, si l'ISBN existe d&eacute;j&agrave; dans la base de donn&eacute;es active, la notice sera ignor&eacute;e.<br/></ul>
-<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Sélectionner un fichier à importer dans le réservoir. Il sera analysé et pour chaque ISBN trouvé, une entrée enfant sera créée dans le réservoir.</li>
+	<li>Si un ISBN existe déjà dans le réservoir, vous pouvez soit ignorer le nouveau, soit écrire par dessus l'ancien.</li>
+	<li>Vous pouvez nommer ce fichier d'importation. Cela peut servir lors de la création de notice biblio pour se souvenir d'où viennent les données MARC par défaut.</li>
+	<li>Si l'ISBN existe déjà dans la base active, la notice biblio sera ignorée.</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 <table cellpadding="3" border=0>
 	<tr valign="top">
-		<td>S&eacute;lectionnez le fichier &agrave; importer :</td>
+		<td>Sélectionner le fichier à importer:</td>
 		<td>
 			<input type="file" name="uploadmarc"/><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Nom de cette importation :</td>
+		<td>Nom de ce fichier d'importation:</td>
 		<td>
 			<input type="text" name="filename"/><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>encodage (MARC21 or UNIMARC)</td>
+		<td>Codage des caractères (MARC21 ou UNIMARC)</td>
 		<td>
 			<select name="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Si l'ISBN existe d&eacute;j&agrave; dans le r&eacute;servoir : </td>
-		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorer celui-ci, conserver celui qui existe d&eacute;j&agrave;<br/>
-			<input type="radio" name="overwrite_biblio" value="1">Ecraser celui qui existe d&eacute;j&agrave; par celui-ci</td>
+		<td>Si un ISBN existe déjà dans le réservoir: </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorer celui-là, conserver l'existant<br/>
+			<input type="radio" name="overwrite_biblio" value="1">Ecrire par dessus l'actuel avec cet</td>
 	</tr>
 	<tr valign="top">
 		<td>&nbsp; </td>
-		<td><input type="submit" value="import"></td>
+		<td><input type="submit" value="Importer"></td>
 	</tr>
 
 </table>
 </form>
-</TMPL_IF>
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,63 +1,63 @@
-<TMPL_INCLUDE Name="cat-top.inc">
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
-<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">Modifier Liens web</a>
+<a href="modwebsites.pl?biblionumber=<!-- TMPL_VAR Name="biblionumber" -->">Modifier Site Web Links</a>
 <form action="updatebiblio.pl" method="post" name="f">
-<input type="hidden" name="biblionumber" value="<TMPL_VAR Name="biblionumber">">
-<input type="hidden" name="biblioitemnumber" value="<TMPL_VAR Name="biblioitemnumber">">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->">
+<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->">
 <table border="0" cellspacing="0" cellpadding="5">
 <tr valign="top">
 <td>Auteur</td>
-<td><input type="text" name="author" value="<TMPL_VAR Name="author" ESCAPE=HTML>"></td>
+<td><input type="text" name="author" value="<!-- TMPL_VAR Name="author" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
 <td>Titre</td>
-<td><input type="text" name="title" value="<TMPL_VAR Name="title" ESCAPE=HTML>"></td>
+<td><input type="text" name="title" value="<!-- TMPL_VAR Name="title" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
 <td>Résumé</td>
-<td><textarea name="abstract" cols="40" rows="4"><TMPL_VAR Name="abstract"></textarea></td>
+<td><textarea name="abstract" cols="40" rows="4"><!-- TMPL_VAR Name="abstract" --></textarea></td>
 </tr>
 <tr valign="top">
 <td>Sujet</td>
-<td><textarea name="subject" cols="40" rows="4"><TMPL_VAR Name="subject"></textarea>
+<td><textarea name="subject" cols="40" rows="4"><!-- TMPL_VAR Name="subject" --></textarea>
 </td>
 </tr>
 <tr valign="top">
-<td>Copyright</td>
-<td><input type="text" name="copyrightdate" value="<TMPL_VAR Name="copyrightdate" ESCAPE=HTML>"></td>
+<td>Date Copyright</td>
+<td><input type="text" name="copyrightdate" value="<!-- TMPL_VAR Name="copyrightdate" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Titre périodique</td>
-<td><input type="text" name="seriestitle" value="<TMPL_VAR Name="seriestitle" ESCAPE=HTML>"></td>
+<td>Titre Séries</td>
+<td><input type="text" name="seriestitle" value="<!-- TMPL_VAR Name="seriestitle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Autres auteurs</td>
-<td><input type="text" name="additionalauthor" value="<TMPL_VAR Name="additionalauthor" ESCAPE=HTML>"></td>
+<td>Auteur supplémentaire</td>
+<td><input type="text" name="additionalauthor" value="<!-- TMPL_VAR Name="additionalauthor" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Sous titre</td>
-<td><input type="text" name="subtitle" value="<TMPL_VAR Name="subtitle" ESCAPE=HTML>"></td>
+<td>Sous-titre</td>
+<td><input type="text" name="subtitle" value="<!-- TMPL_VAR Name="subtitle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
 <td>Titre uniforme</td>
-<td><input type="text" name="unititle" value="<TMPL_VAR Name="untitle" ESCAPE=HTML>"></td>
+<td><input type="text" name="unititle" value="<!-- TMPL_VAR Name="unititle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
 <td>Notes</td>
-<td><textarea name="notes" cols="40" rows="4"><TMPL_VAR Name="notes" ESCAPE=HTML></textarea></td>
+<td><textarea name="notes" cols="40" rows="4"><!-- TMPL_VAR Name="notes" ESCAPE=HTML --></textarea></td>
 </tr>
 <tr valign="top">
-<td>Périodique</td>
-<td><input type="text" name="serial" value="<TMPL_VAR Name="serial" ESCAPE=HTML>"></td>
+<td>Périodiques</td>
+<td><input type="text" name="serial" value="<!-- TMPL_VAR Name="serial" ESCAPE=HTML -->"></td>
 </tr>
 </table>
 <br>
-<input type="submit" name="submit" value="Save Changes">
+<input type="submit" name="submit" value="Enregistrer changements">
 </form>
 <script>
 function Dopop() {
-        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
+        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=oui');
 }
 </script>
 
-<TMPL_INCLUDE Name="cat-bottom.inc">
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

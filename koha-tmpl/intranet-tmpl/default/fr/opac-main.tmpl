@@ -1,5 +1,5 @@
 <HTML>
-<TITLE>Bienvenue sur l'OPAC Koha</TITLE>
+<TITRE>WELCOME TO THE  KOHA OPAC </TITRE>
 
 
 <style type="text/css">
@@ -49,10 +49,10 @@ cellspacing=0 cellpadding=0 border=0 >
  	width=1 height=30
 	alt=" " hspace=0 vspace=0><br>
 	<img src="/images/koha.gif" width=200 height=128
-	alt="Koha: Horowhenua Library Trust Catalogue and Member Services" hspace=0 vspace=0></td>
+	alt="Koha: Horowhenua Library Trust Catalogue et Lecteur Services" hspace=0 vspace=0></td>
 
 	<td background=" "  colspan=3><font size=+2><a href="/cgi-bin/koha/catalogue-home.pl"><img src="/images/heading-search.gif" width=272 	height=38
-	alt="Search the Catalogue" hspace=0 vspace=0 border=0></a></font></td>
+	alt="Rechercher dans le catalogue" hspace=0 vspace=0 border=0></a></font></td>
 
   </tr>
 
@@ -64,20 +64,21 @@ cellspacing=0 cellpadding=0 border=0 >
 	<td background=" " >
 
 	<input type=text size="27" name="keyword"><br>
-				<b>Apr&egrave;s la saisie, pressez la touche Entr&eacute;e.</b><br>
-				<a href="/cgi-bin/koha/catalogue-home.pl"> <img src="/images/front-arrow.gif" width=27 height=22
-	alt="-" hspace=0 vspace=0 border=0 align=middle >Recherche avanc&eacute;e 
-				(Plus d'ptions)</a><br>
+	</font>
+	<b>Saisir in the box et press the enter 			key.</b><br>
+	<a href="/cgi-bin/koha/catalogue-home.pl">
+      
+	<img src="/images/front-arrow.gif" width=27 height=22
+	alt="-" hspace=0 vspace=0 border=0 align=middle >Recherche avancée (plus d'options)</a><br>
 
 	<img src="/images/holder.gif" width=1 height=8
 	alt=" " hspace=0 vspace=0>
 	<p>
-	<TMPL_IF NAME="loggedinuser">
-	    		<p align=left>Connect&eacute; en tant que: <TMPL_VAR NAME="loggedinuser"> 
-				  [<a href=/cgi-bin/koha/logout.pl>D&eacute;connexion</a>]</p>
-	<TMPL_ELSE>
-	    <p align=left><a href=/cgi-bin/koha/userpage.pl>Connectez-vous</a> &agrave; Koha</p>
-	</TMPL_IF>
+	<!-- TMPL_IF NAME="loggedinuser" -->
+	    <p align=left>Connecté comme: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Déconnecter</a>]</p>
+	<!-- TMPL_ELSE -->
+	    <p align=left><a href=/cgi-bin/koha/userpage.pl>S'identifier</a> à Koha</p>
+	<!-- /TMPL_IF -->
 	</td>
 	</form>
   </tr>
@@ -87,15 +88,15 @@ cellspacing=0 cellpadding=0 border=0 >
 
 <!--
   <tr valign=top ><form action="/cgi-bin/member.pl" method=get >
-	<td background=" "  colspan=3><img src="/images/heading-login.gif" width=279 		height=38
-	alt="Nom d'utilisateur" hspace=0 vspace=0 border=0></td>
+	<td background=" "  colspan=3><img src="/images/heading-connecter.gif" width=279 		height=38
+	alt="Lecteur Identifiant" hspace=0 vspace=0 border=0></td>
 
   </tr>
 <tr valign=top >
         <td></td>
 	<form action="/cgi-bin/member.pl" method=get >
 	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">Num&eacute;ro de lecteur &nbsp;</font></td>
+	<font size=3 face="arial narrow,arial,helvetica">N° Carte &nbsp;</font></td>
 	<td background=" " ><input type=text size="12" name="card"></td>
 
   </tr>
@@ -104,9 +105,9 @@ cellspacing=0 cellpadding=0 border=0 >
 	<td></td>
 	<td></td>
 	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">Password</font></td>
+	<font size=3 face="arial narrow,arial,helvetica">Mot de passe</font></td>
 	<td background=" " ><input type=password size="12" name="password"><br>
-	<input type=submit value="Envoyer"><br>
+	<input type=submit value="OK"><br>
 
 	<img src="/images/holder.gif" width=1 height=8
 	alt=" " hspace=0 vspace=0></td>
@@ -116,7 +117,7 @@ cellspacing=0 cellpadding=0 border=0 >
   <tr valign=top >
 	<td></td>
 	<td background=" " colspan=4><A href="join.html"><img src="/images/heading-member.gif" width=331 		height=38
-	alt="Inscrivez-vous" hspace=0 vspace=0 border=0></a>
+	alt="Become a Site Web Lecteur" hspace=0 vspace=0 border=0></a>
 	</td>
 	<td>
 	</td>

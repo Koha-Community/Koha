@@ -79,8 +79,22 @@ function Check(f) {
 				<td><input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
 			</tr>
 			<tr>
+				<td>Not for loan</td>
+				<td>
+					<!-- TMPL_IF name="notforloan" -->
+						<input type=checkbox name=notforloan checked value=1>
+					<!-- TMPL_ELSE -->
+						<input type=checkbox name=notforloan value=1>
+					<!-- /TMPL_IF -->
+					if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item
+				</td>
+			</tr>
+			<tr>
 				<td>Loan length</td>
-				<td><input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'></td>
+				<td>
+					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
+					meaningful only if not for loan is not set
+				</td>
 			</tr>
 			<tr>
 				<td>Renewals allowed</td>
@@ -151,7 +165,7 @@ function Check(f) {
 <table width=40%>
 	<tr>
 		<td width="33%">
-			<input type=submit class="button" value="Add Item Type" title="Add item type" alt="Add item type" >
+			<input type=submit class="button" value="Add item type" title="Add item type" alt="Add item type" >
 		</td>
 		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a><!-- /TMPL_IF --></td>
 		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a><!-- /TMPL_IF --></td>

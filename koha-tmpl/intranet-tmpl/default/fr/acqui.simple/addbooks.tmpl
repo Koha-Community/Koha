@@ -1,19 +1,19 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 
-<font size="5"><em>Import et saisie de notices</em></font>
-<TMPL_IF name="noitemsfound">
+<font size="5"><em>Gérer une notice biblio MARC</em></font>
+<!-- TMPL_IF name="noitemsfound" -->
 	<p />
-	<font color="red" size="4">Pas d'exemplaires</font>
-</TMPL_IF>
-<TMPL_IF name="websiteadded">
+	<font color="red" size="4">Pas d'ouvrages trouvés</font>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="websiteadded" -->
 	<p />
-	<font color="red" size="4">Site web ajouté</font>
-</TMPL_IF>
+	<font color="red" size="4">Notice site Web ajoutée</font>
+<!-- /TMPL_IF -->
 
 <p />
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Pour ajouter une nouvelle notice, scanner le code barre ou saisir l'ISBN/ISSN/titre de l'ouvrage</font></td>
+	<td><font size="4">Pour ajouter une nouvelle notice ou un ouvrage, scannez ou saisissez l'ISBN ou l'ISSN.:</font></td>
 	</tr>
 </table>
 <form action="isbnsearch.pl">
@@ -21,20 +21,20 @@
 		<tr valign="top">
 			<td width="5%">ISBN:</td>
 			<td width="20%"><input type="text" name="isbn" /></td>
-			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
-			<td rowspan=2>Si l'ouvrage est trouvé dans la table des notices actives, il sera rappelé et pourra être modifié.<br />
-			Si l'ouvrage est trouvé dans le réservoir, il pourra être appelé pour la saisie d'une nouvelle notice active.<br />
-			Sinon, il est possible de créer une notice à partir de 0</td>
+			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" class="button"/></td>
+			<td rowspan=2>Si l'ISBN ou le titre est trouvé dans la table biblio, il sera récupéré et peut être modifié.<br/>
+					Si l'ISBN ou le titre existe déjà dans le réservoir, il va être récupéré et une notice biblio sera ajoutée.<br/>
+					Sinon, une notice biblio peut être créée manuellement.</td>
 		</tr>
 			<td width="5%">Titre</td>
 			<td width="20%"><input type="text" name="title" /></td>
 		</tr>
 		<tr><td>&nbsp;</td>
-			<TMPL_IF NAME="NOTMARC">
-				<td colspan=2><a href=addbiblio-nomarc.pl>Créer une notice vide</a></td></tr>
-			<TMPL_ELSE>
-				<td colspan=2><a href=addbiblio.pl>Créer une notice vide</a></td></tr>
-			</TMPL_IF>
+		<!-- TMPL_IF NAME="NOTMARC" -->
+			<td colspan=2><a href="addbiblio-nomarc.pl" class="button">Créer une notice biblio vide</a></td></tr>
+		<!-- TMPL_ELSE -->
+			<td colspan=2><a href="addbiblio.pl" class="button">Créer une notice biblio vide</a></td></tr>
+		<!-- /TMPL_IF -->
 	</table>
 </form>
 
@@ -43,17 +43,17 @@
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-		<td><FONT SIZE=4>Ajout d'un site web</font></td>
+		<td><FONT SIZE=4>Ajouter un nouveau site Web</font></td>
 	</tr>
 </table>
 <form action="websitesearch.pl" method="post">
 	<table>
 	<tr>
-		<td>mot-clef:</td>
+		<td>Mot-clé:</td>
 		<td><input type="text" name="keyword" /></td>
-		<td><input type="submit" value="Go" /></td>
+		<td><input type="submit" value="Go" class="button"/></td>
 	</tr>
 	</table>
 </FORM>
 <p />
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -23,10 +23,10 @@
 		<TD colspan=2 > &nbsp;</td>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
+		<TD  bgcolor="#ad11ad" colspan=2>
 			<span style="color:#FFFFFF;">
 				<b>HELP</b><br>
-				<b>Searching:</b>Using more fields for your search (eg Keyword + author + class) will slow it down.<p>
+				<b>Search :</b>Using more fields for your search will slow it down.<p>
 			</span>
 		</td>
 	</TR>
@@ -63,7 +63,7 @@
 	<TD>Class</TD>
 		<td>
 			<select name="class" size="1">
-			<option value="">Any
+			<option value=""> Any
 			<!-- TMPL_VAR name="classlist" -->
 			</select>
 		</td>
@@ -90,13 +90,13 @@
 				<tr align="center">
 					<td>
 						<input type="hidden" name="type" value="intra">
-						<INPUT TYPE="image"  alt="Start Search" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" BORDER=0 >
+						<input type="submit" class="button" value="Start search">
 					</td>
 					<td>
-						<INPUT TYPE="reset"  VALUE= "Clear">
+						<INPUT TYPE="reset"  VALUE= "Clear" class="button">
 					</td>
 					<td>
-						<a href=/cgi-bin/koha/shelves.pl>Virtual Bookshelves</a>
+						<a href="/cgi-bin/koha/shelves.pl" class="button">Virtual Bookshelves</a>
 					</td>
 				</tr>
 			</table>

@@ -1,0 +1,106 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<center>
+
+<br>
+<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
+<a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->
+<img src=/images/requests.gif
+width=120 height=42 border=0 align=right border=0></a>
+<FONT SIZE=6><em><a
+href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intra><!-- TMPL_VAR NAME="title" -->
+(<!-- TMPL_VAR NAME="author" -->)</a></em></FONT><P>
+<p>
+<form action=/cgi-bin/koha/modbibitem.pl>
+<input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+<input type=hidden name=biblio value=<!-- TMPL_VAR NAME="biblionumber" -->>
+<!-------------------BIBLIO ITEM------------>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left>
+<TR VALIGN=TOP>
+<td  bgcolor="99cc33" background="/images/background-mem.gif"
+><B><!-- TMPL_VAR NAME="biblioitemnumber" --> GROUPE <!-- TMPL_VAR NAME="description" --> </b> </TD>
+</TR>
+<tr VALIGN=TOP  >
+<TD width=210 >
+<INPUT TYPE="image" name="submit"  VALUE="Modifier" height=42  WIDTH=93
+BORDER=0 src="/images/Modifier-mem.gif">
+<INPUT TYPE="image" name="Supprimer"  VALUE="Supprimer" height=42  WIDTH=93
+BORDER=0 src="/images/Supprimer-mem.gif">
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>Numéro notice ::</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
+<b>Type d'ouvrage ::</b> <!-- TMPL_VAR NAME="itemtype" --><br>
+<b>URL:</b> <!-- TMPL_VAR NAME="url" --><br>
+<b>Durée prêt:</b> <!-- TMPL_VAR NAME="loanlength" --><br>
+<b>Coût du prêt:</b> <!-- TMPL_VAR NAME="rentalcharge" --><br>
+<b>Classification:</b> <!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --><br>
+<b>ISBN:</b> <!-- TMPL_VAR NAME="isbn" --><br>
+<b>Editions:</b> <!-- TMPL_VAR NAME="publishercode" --> <br>
+<b>Placer:</b> <!-- TMPL_VAR NAME="place" --><br>
+<b>Date:</b> <!-- TMPL_VAR NAME="publicationyear" --><br>
+<b>Volume:</b> <!-- TMPL_VAR NAME="volumeddesc" --><br>
+<b>Pages:</b> <!-- TMPL_VAR NAME="pages" --><br>
+<b>Illus:</b> <!-- TMPL_VAR NAME="illus" --><br>
+<b>Taille:</b> <!-- TMPL_VAR NAME="size" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="bnotes" --><br>
+<b>N° ouvrage:</b> <!-- TMPL_VAR NAME="count" -->
+</font>
+</TD>
+</tr>
+</table>
+</form>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="ITEM_DATA" -->
+<img src="/images/holder.gif" width=16 height=300 align=left>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
+<TR VALIGN=TOP>
+<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>CODE BARRE
+<!-- TMPL_VAR NAME="barcode" --></b></TD>
+</TR>
+<tr VALIGN=TOP>
+<TD width=220>
+<form action=/cgi-bin/koha/moditem.pl method=post>
+<input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblionumber" -->>
+<input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
+<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
+<INPUT TYPE="image" name="submit"  VALUE="Modifier" height=42  WIDTH=93
+BORDER=0 src="/images/Modifier-mem.gif">
+<INPUT TYPE="image" name="Supprimer"  VALUE="Supprimer" height=42  WIDTH=93
+BORDER=0 src="/images/Supprimer-mem.gif">
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>Annexe propriétaire:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
+<b>Vu:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
+<b>Dernier prêt:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
+En prêt \? <!-- FIXME - What's this, then? -->
+<b>Dernier emprunteur 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
+<b>Dernier emprunteur 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
+<b>Annexe:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
+<b>Coût de remplacement:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
+<b>Ouvrage perdu:</b> <!-- TMPL_VAR NAME="itemlost" --><br>
+<b>Payé pour ::</b> <!-- TMPL_VAR NAME="paidfor" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
+<b>Renouvellements:</b> <!-- TMPL_VAR NAME="renewals" --><br>
+<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">
+Accession</a>
+Date:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
+<b>Annul\?: <!-- TMPL_VAR NAME="wthdrawn" --><br>
+<b><a
+href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>Total
+Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
+<b>Groupe numéro:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
+<b>Notice biblio ::</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
+
+
+
+</font>
+</TD>
+</tr>
+</table>
+</form>
+<!-- /TMPL_LOOP -->
+
+<p>
+</form>
+</center>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

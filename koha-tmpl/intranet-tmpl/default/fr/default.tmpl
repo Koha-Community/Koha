@@ -1,35 +1,28 @@
-<TMPL_INCLUDE NAME="/usr/share/koha/intranet/htdocs/includes/cat-top.inc">
+<!-- TMPL_INCLUDE NAME="/usr/share/koha/intranet/htdocs/includes/cat-top.inc" -->
 <center>
 
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor=#ccccff background="/images/background-mem.gif">
-	  <th>Titre</th>
-	  <th>Auteur</th>
-	  <th>Nbre de doc.</th>
-	  <th>Localisation</th>
-	</tr>
-<TMPL_LOOP NAME=SEARCH_RESULTS>
+<th>Titre</th><th>Auteur</th><th>Nombre d'ouvrages</th><th>Biblionumber</th></tr>
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
   <tr>
-  <td><a href=/cgi-bin/koha/detail.pl?type=intra&bib=><TMPL_VAR NAME=biblionumber ESCAPE=HTML>><TMPL_VAR NAME=title></a></td>
-  <td> <TMPL_VAR NAME=author> </td>
-  <td align=center> <TMPL_VAR NAME=itemcount> </td>
-  <td> <TMPL_VAR NAME=biblionumber> </td>
+  <td><a href=/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=HTML -->><!-- TMPL_VAR NAME=title --></a></td>
+  <td> <!-- TMPL_VAR NAME=author --> </td>
+  <td align=center> <!-- TMPL_VAR NAME=itemcount --> </td>
+  <td> <!-- TMPL_VAR NAME=biblionumber --> </td>
   </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <tr bgcolor=#ccccff backgound="/images/background-mem.gif"><td colspan=4>
     <table border=0 cellpadding=0 cellspacing=0 width=100% background="/images/background-mem.gif">
-    <tr>
-			<td align=left> <a href=search.pl?template=><TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="prevstartfrom">>R&eacute;sultats 
-			  pr&eacute;c&eacute;dants</a> </td>
-			<td align=right> <a href=search.pl?template=><TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>R&eacute;sultats 
-			  suivants</a> </td>
-		  </tr>
+    <tr><td align=left>
+    <a href=search.pl?template=<!-- TMPL_VAR NAME="template" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->>Previous Records</a>
+    </td><td align=right>
+    <a href=search.pl?template=<!-- TMPL_VAR NAME="template" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->>Next Records</a>
+    </td></tr>
     </table>
 </td></tr>
 </table>
 <br>
-  R&eacute;sultats <TMPL_VAR NAME="startfrom"> &agrave; <TMPL_VAR NAME="endat"> 
-  sur <TMPL_VAR NAME="numrecords"> enregistrements. 
-  <hr>
-<TMPL_INCLUDE NAME="/usr/share/koha/intranet/htdocs/includes/cat-bottom.inc">
-</center>
+Résultats <i><!-- TMPL_VAR NAME="startfrom" --></i> à </i><!-- TMPL_VAR NAME="endat" --></i> sur <i><!-- TMPL_VAR NAME="numrecords" --></i> enregistrements.
+<hr>
+<!-- TMPL_INCLUDE NAME="/usr/share/koha/intranet/htdocs/includes/cat-bottom.inc" -->

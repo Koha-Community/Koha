@@ -1,23 +1,25 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<h1>Shopping Basket <!-- TMPL_VAR name="basket" --> for <a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a> <!-- TMPL_VAR name="name" --></h1><br />
-(Our Reference: <!-- TMPL_VAR name="entrydate" -->, #<!-- TMPL_VAR name="basket" -->, authorised by: <!-- TMPL_VAR name="loggedinusername" -->)<br />
+<h1>Shopping Basket <b><!-- TMPL_VAR name="basket" --> </b>for <a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a> <!-- TMPL_VAR name="name" --></h1><br />
+Our Reference: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name="basket" --></b> authorised by <b><!-- TMPL_VAR name="loggedinusername" --></b><br />
 <CENTER>
 <p>
 <table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor="#ffdf61">
 		<td width="5%"><b>Order</b></td>
+		<td width="10%"><b> Publisher</b></td>
 		<td width="10%"><b>Isbn</b></td>
 		<td width="30%"><b>Title</b></td>
 		<td width="20%"><b>Author</b></td>
-		<td width="6%"><b>$ rrp</b></td>
-		<td width="8%"><b>$est</b></td>
-		<td width="8%"><b>Qty</b></td>
-		<td width="8%"><b>Total</b></td>
+		<td width="5%"><b>$ rrp</b></td>
+		<td width="7%"><b>$est</b></td>
+		<td width="7%"><b>Qty</b></td>
+		<td width="7%"><b> Total</b></td>
 	</tr>
 	<!-- TMPL_LOOP name="books_loop" -->
 		<tr valign=top bgcolor="<!-- TMPL_VAR name="color" -->">
 			<td><!-- TMPL_VAR name="ordernumber" --></td>
+			<td><!-- TMPL_VAR name="publishercode" --></td>
 			<td><!-- TMPL_VAR name="isbn" --></td>
 			<td><a href="newbiblio.pl?ordnum=<!-- TMPL_VAR name="ordernumber" -->&id=<!-- TMPL_VAR name="booksellerid" -->&basket=<!-- TMPL_VAR name="basket" -->"><!-- TMPL_VAR name="title" --></a></td>
 			<td><!-- TMPL_VAR name="author" --></td>
@@ -32,7 +34,7 @@
 	<tr valign=top bgcolor=white>
 		<td colspan=6 rowspan=3  bgcolor="#ffdf61">
   			<b>HELP</b><br>
-			To change any of the catalogue or accounting information attached to an order,  click on the title.<br>
+			To change any of the catalogue or accounting information attached to an order, click on the title.<br>
 		</td>
   		<td><b>SubTotal</b></td>
   		<td><!-- TMPL_VAR name="currency" --><!-- TMPL_VAR name="sub_total" --></td>

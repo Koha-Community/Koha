@@ -4,7 +4,7 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
+				<a class="button" href="circulation.pl?branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
 				Next Borrower</a>&nbsp;
 				<a class="button" href="returns.pl">
 				Returns</a>&nbsp;
@@ -13,13 +13,10 @@
 			</td>
 		</tr>
 	</table>
-	<h1>Circulation: Issues</h1><br>
-	<b>Branch:</b> <!-- TMPL_VAR name="branchname" --><br>
-	<b>Printer:</b> <!-- TMPL_VAR name="printername" --><br>
-	<a href="selectbranchprinter.pl">Change Settings</a>
+	<h1>Circulation: Issues</h1>
+	<i>Branch:</i> <!-- TMPL_VAR name="branchname" --> <i>Printer:</i> <!-- TMPL_VAR name="printername" --> <a href="selectbranchprinter.pl" class="button">Change Settings</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-	<p>&nbsp;</p>
 <!-- TMPL_ELSE -->
 	<table align="right" cellpadding="10">
 		<tr>
@@ -37,7 +34,7 @@
 	<h1>Circulation: Issues</h1><br>
 	<b>Branch:</b> <!-- TMPL_VAR name="branchname" --> <br>
 	<b>Printer:</b> <!-- TMPL_VAR name="printername" --><br>
-	<a href="selectbranchprinter.pl">Change Settings</a>
+	<a href="selectbranchprinter.pl" class="button">Change Settings</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<p>&nbsp;</p>
@@ -140,7 +137,7 @@
 			<td align="center">
 				<!-- TMPL_VAR name="CGIselectborrower" -->
 				<br>
-				<input type="submit">
+				<input type="submit" value="OK" class="button">
 			</td>
 		</tr>
 	</table>
@@ -171,7 +168,7 @@
 <tr>
 <td>
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<table border="1" cellpadding="5">
+<table border="1" cellpadding="2">
 	<tr>
 	<td align="center" valign="top">
 		<table border="0" cellspacing="0" cellpadding="5">
@@ -186,7 +183,7 @@
 						<tr>
 							<td>Item Barcode:</td>
 							<td><input name="barcode" size="10"></td>
-							<td><input type="submit" value="Issue"></td>
+							<td><input type="submit" value="Issue" class="button"></td>
 						</tr>
 						<tr>
 							<td colspan="3" align="center">
@@ -224,14 +221,23 @@
 </form>
 </td>
 <td>
-<table border="1" cellpadding="5" cellspacing="0" align="right">
-    <tr><td colspan="2"><font color="black"><b>Patron information</b></font></td></tr>
+<table border="1" cellpadding="2" cellspacing="0" align="right">
+    <tr><td colspan="2"><font color="black"><b>Borrower information</b></font></td></tr>
     <tr><td colspan="2">
     <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this,'Member', 480, 640)">
 		<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
     </a> <br> Category: <!-- TMPL_VAR name="categorycode" -->
     </td></tr>
 <!-- TMPL_IF name="noissues" -->
+<!-- TMPL_IF NAME="gna" -->
+<tr><td valign="top"><font color="red">GNA</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Borrower is gone with no address</td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lost" -->
+<tr><td valign="top"><font color="red">LOST</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Borrower's card is lost</td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="dbarred" -->
+<tr><td valign="top"><font color="red">DBARRED</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Borrower is debarred</td></tr>
+<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
 		<tr><td valign="top"><font color="red">CHARGES</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 	<!-- TMPL_ELSE -->
@@ -253,7 +259,7 @@
 		<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="odues" -->
 				<!-- TMPL_IF name="nonreturns" -->
-					<tr><td valign="top">ODUES</td><td>Yes, See below</td></tr>
+					<tr><td valign="top"><font color="red">ODUES</font></td><td><font color="red">Yes, See below</font></td></tr>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" -->
@@ -263,9 +269,9 @@
 </table>
 <!-- /TMPL_IF -->
 </table>
-<p clear="all"><br><br></p>
+<br/>
 <!-- TMPL_IF name="todayissues" -->
-<table border="1" cellpadding="5" cellspacing="0" width="80%">
+<table border="1" cellpadding="5" cellspacing="0" width="100%">
 	<tr>
 		<th colspan="5" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<font color="black">

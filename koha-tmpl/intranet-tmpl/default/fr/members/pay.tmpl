@@ -1,49 +1,48 @@
-<TMPL_INCLUDE NAME="members-top.inc">
-<FONT SIZE=6><em>Dettes &agrave; r&eacute;gler
-pour <TMPL_VAR name="firstname"> <TMPL_VAR name="surname"></em></FONT>
-<P>
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<h1>Payer une amende pour <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h1><P>
 <center>
 <p>
+	<form action=/cgi-bin/koha/pay.pl method=post>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	  <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=4><B>AMENDES
-        ET FRAIS</b></TD>
-	  <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=4><B>MONTANT 
-        DU </b></TD>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>AMENDES & FRAIS</B></TD>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>Montant de l'avoir</B></TD>
 </TR>
-	<form action=/cgi-bin/koha/pay.pl method=post>
-	<input type="hidden" name="bornum" value="<TMPL_VAR name="bornum">">
-<TMPL_LOOP name="loop_pay">
+	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
+<!-- TMPL_LOOP name="loop_pay" -->
 <tr VALIGN=TOP  >
-	<TD><input type=radio name="payfine<TMPL_VAR name="i">
-          " value="oui" checked>A payer 
-          <input type=radio name="payfine<TMPL_VAR name="i">
-          " value="oui">Pay&eacute; 
-          <input type=radio name="payfine<TMPL_VAR name="i">" value="wo">Abandonner
-	<input type=hidden name="itemnumber<TMPL_VAR name="i">" value="<TMPL_VAR name="itemnumber">">
-	<input type=hidden name="accounttype<TMPL_VAR name="i">" value="<TMPL_VAR name="accounttype">">
-	<input type=hidden name="amount<TMPL_VAR name="i">" value="<TMPL_VAR name="amount'}">">
-	<input type=hidden name="out<TMPL_VAR name="i">" value="<TMPL_VAR name="amountoutstanding">">
-	<input type=hidden name="bornum<TMPL_VAR name="i">" value="<TMPL_VAR name="bornum">">
-	<input type=hidden name="accountno<TMPL_VAR name="i">" value="<TMPL_VAR name="accountno">">
+	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>Unpaid
+	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="oui">Pay
+	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">Writeoff
+	<input type=hidden name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->">
+	<input type=hidden name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->">
+	<input type=hidden name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount'}" -->">
+	<input type=hidden name="out<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amountoutstanding" -->">
+	<input type=hidden name="bornum<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="bornum" -->">
+	<input type=hidden name="accountno<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accountno" -->">
 	</td>
-	<TD><TMPL_VAR name="description"> <TMPL_VAR name="title"></td>
-	<TD><TMPL_VAR name="accounttype"></td>
-	<td><TMPL_VAR name="amount"></td>
-	<TD><TMPL_VAR name="amountoutstanding"></td>
+	<TD><!-- TMPL_VAR name="description" --> <!-- TMPL_VAR name="title" --></td>
+	<TD><!-- TMPL_VAR name="accounttype" --></td>
+	<td><!-- TMPL_VAR name="amount" --></td>
+	<TD><!-- TMPL_VAR name="amountoutstanding" --></td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <tr VALIGN=TOP  >
-	<TD>&nbsp;</td>
-	    <TD colspan=2><b>Montant total</b></td>
-	<TD><b><TMPL_VAR name="total"></b></td>
+	<TD colspan=4 align=right><b>Total dû</b></td>
+	<TD><b><!-- TMPL_VAR name="total" --></b></td>
 	</tr>
 	<tr VALIGN=TOP  >
 	<TD colspan=5 align=right>
-	<INPUT TYPE="submit" name="submit"  VALUE="payer" class="button"></td>
+	<INPUT TYPE="submit" name="submit"  VALUE="pay" class="button"></td>
 </tr>
-</form>
 </table>
+</form>
 <br clear=all>
-<p>&nbsp;  </p>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<p> &nbsp; </p>
+
+<br>
+<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">Return</a> to Lecteur Record
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
+

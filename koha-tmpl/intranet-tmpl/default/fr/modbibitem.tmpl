@@ -1,61 +1,61 @@
-<TMPL_INCLUDE Name="cat-top.inc">
-<h1><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
-Modifier Groupe - <TMPL_VAR Name="description"></h1><br>
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
+<h1><a href=/cgi-bin/koha/detail.pl?bib="<!-- TMPL_VAR Name="biblionumber" -->"&type=intra><!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</a><br>
+Modifier groupe <!-- TMPL_VAR Name="description" --></h1><br>
 
 <form action=updatebibitem.pl method=post>
 	<table border=0 cellspacing=0 cellpadding=5 align=left>
 
 		<TR VALIGN=TOP  bgcolor="99cc33">
-			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=YES > Assigner à un groupe existant</b></td>
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=OUI > RE-ASSIGNE AU GROUPE EXISTANT</b></td>
 		</tr>
 
 		<tr valign=top>
 			<td colspan=3>
 				<select name=existinggroup><br>
-					<TMPL_LOOP Name="bibitemloop">
-						<option value="<TMPL_VAR Name="biblioitemnumber">"><TMPL_VAR Name="description"> - <TMPL_VAR Name="isbn"><br>
-					</TMPL_LOOP>
+					<!-- TMPL_LOOP Name="bibitemloop" -->
+						<option value="<!-- TMPL_VAR Name="biblioitemnumber" -->"><!-- TMPL_VAR Name="description" --> - <!-- TMPL_VAR Name="isbn" --><br>
+					<!-- /TMPL_LOOP -->
 				</select>
 			</td>
 		</tr>
 
 		<TR VALIGN=TOP  bgcolor="99cc33">
-			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >OR MODIFY DETAILS</b></td>
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >ou modifie les détails</b></td>
 		</tr>
 
-		<tr valign=top bgcolor=white><td>Item Type</td><td><input type=text name=Item Type value="<TMPL_VAR Name="itemtype">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Catég ouvrage</td><td><input type=text name=Ouvrage Type value="<!-- TMPL_VAR Name="itemtype" -->" size=20></td></tr>
 
 		<tr valign="top" bgcolor="white">
 			<td>URL</td>
-			<td><input type="text" name="url" value="<TMPL_VAR Name="url">" size="20"></td>
+			<td><input type="text" name="url" value="<!-- TMPL_VAR Name="url" -->" size="20"></td>
 		</tr>
 
-		<tr valign=top bgcolor=white><td>Class</td><td><input type=text name=Class value="<TMPL_VAR Name="classification"><TMPL_VAR Name="dewey"><TMPL_VAR Name="subclass">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Catégorie</td><td><input type=text name=Catégorie value="<!-- TMPL_VAR Name="classification" --><!-- TMPL_VAR Name="dewey" --><!-- TMPL_VAR Name="subclass" -->" size=20></td></tr>
 
 
 
-		<tr valign=top bgcolor=white><td>Publisher</td><td><input type=text name=Publisher value="<TMPL_VAR Name="publishercode">" size=20></td></tr>
-		<tr valign=top bgcolor=white><td>Place</td><td><input type=text name=Place value="<TMPL_VAR Name="place">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Editeur</td><td><input type=text name=Editeur value="<!-- TMPL_VAR Name="publishercode" -->" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Lieu</td><td><input type=text name=Lieu value="<!-- TMPL_VAR Name="place" -->" size=20></td></tr>
 
 
-		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<TMPL_VAR Name="isbn">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<!-- TMPL_VAR Name="isbn" -->" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Publication Year</td><td><input type=text name=Publication Year value="<TMPL_VAR Name="publicationyear">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Année de publication</td><td><input type=text name=Année de publication value="<!-- TMPL_VAR Name="publicationyear" -->" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Pages</td><td><input type=text name=Pages value="<TMPL_VAR Name="pages">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Pages</td><td><input type=text name=Pages value="<!-- TMPL_VAR Name="pages" -->" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Illustrations</td><td><input type=text name=Illustrations value="<TMPL_VAR Name="illustration">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>Illustations</td><td><input type=text name=Illustations value="<!-- TMPL_VAR Name="illustration" -->" size=20></td></tr>
 
 		<tr valign=top bgcolor=white><td>Volume</td>
-		<td><input type=text name=Volume value="<TMPL_VAR Name="volumeddesc">" size=20></td></tr>
+		<td><input type=text name=Volume value="<!-- TMPL_VAR Name="volumeddesc" -->" size=20></td></tr>
 		<tr valign=top bgcolor=white><td>Notes</td>
-		<td><input name="Notes" size="20" value="<TMPL_VAR name="bnotes">"></td></tr>
-		<tr valign=top bgcolor=white><td>Size</td>
-		<td><input type=text name=Size value="<TMPL_VAR Name="size">" size=20></td></tr>
+		<td><input name="Notes" size="20" value="<!-- TMPL_VAR name="bnotes" -->"></td></tr>
+		<tr valign=top bgcolor=white><td>Taille</td>
+		<td><input type=text name=Taille value="<!-- TMPL_VAR Name="size" -->" size=20></td></tr>
 
-		<input type=hidden name=bibnum value="<TMPL_VAR Name="biblionumber">">
+		<input type=hidden name=bibnum value="<!-- TMPL_VAR Name="biblionumber" -->">
 
-		<input type=hidden name=bibitemnum value="<TMPL_VAR Name="biblioitemnumber">">
+		<input type=hidden name=bibitemnum value="<!-- TMPL_VAR Name="biblioitemnumber" -->">
 
 	</table>
 
@@ -67,40 +67,40 @@ Modifier Groupe - <TMPL_VAR Name="description"></h1><br>
 	<TABLE  cellspacing=0 cellpadding=5 border=0 >
 
 		<TR VALIGN=TOP  bgcolor="99cc33">
-			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5 ><b>CHANGES TO AFFECT THESE BARCODES<br>
-			Tick ALL barcodes that changes are to apply too. Those left un-ticked will keep the original group record.</td>
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5 ><b>MODIFS SUR CES CODES-BARRES<br>
+			Sélectionner TOUS les codes barre auxquels s'appliquent les changements. Les non-sélectionnés ne seront pas affectés.</td>
 		</tr>
 
 		<tr valign=top bgcolor=99cc33>
 			<td background="/images/background-mem.gif">&nbsp;</td>
-			<td background="/images/background-mem.gif">Barcode</td>
-			<td background="/images/background-mem.gif">Location</td>
-			<td background="/images/background-mem.gif">Date Due</td>
-			<td background="/images/background-mem.gif">Last Seen</td>
+			<td background="/images/background-mem.gif">Code barre</td>
+			<td background="/images/background-mem.gif">Localisation</td>
+			<td background="/images/background-mem.gif">Date de retour</td>
+			<td background="/images/background-mem.gif">Vu</td>
 		</tr>
 
-		<TMPL_LOOP Name="itemloop">
+		<!-- TMPL_LOOP Name="itemloop" -->
 			<tr valign=top gcolor=#ffffcc>
-				<td><input type=checkbox name="check_group_<TMPL_VAR Name="barcode">"></td>
-				<td><a href="/cgi-bin/koha/moredetail.pl?item="<TMPL_VAR Name="itemnumber">"&bib="<TMPL_VAR Name="biblionumber">"&bi="<TMPL_VAR Name="biblioitemnumber">""><TMPL_VAR Name="barcode"></a></td>
-				<td><TMPL_VAR Name="holdingbranch"></td>
+				<td><input type=checkbox name="check_group_<!-- TMPL_VAR Name="barcode" -->"></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?item="<!-- TMPL_VAR Name="itemnumber" -->"&bib="<!-- TMPL_VAR Name="biblionumber" -->"&bi="<!-- TMPL_VAR Name="biblioitemnumber" -->""><!-- TMPL_VAR Name="barcode" --></a></td>
+				<td><!-- TMPL_VAR Name="holdingbranch" --></td>
 				<td></td>
-				<td><TMPL_VAR Name="datelastseen"></td>
+				<td><!-- TMPL_VAR Name="datelastseen" --></td>
 			</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 	</table>
 	<p>
 
-	<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42>
+	<input type=image  name=submit src=/images/Enregistrer-changes.gif border=0 width=187 height=42>
 
 
 </form>
 <p>
 
 
-<B>HELP:</B> You <b>must</b> click on the appropriate radio button (in the green boxes), and choose to either re-assign the item/s to a record already in the system, or modify this record.  IF your changes only apply to some
- items, tick the appropriate ones and a new group record will be created automatically for them.
+<B>AIDE:</B> Vous <b>doit</b> click on the appropriate radio button (in the green boxes), et choose to either re-assign the item/s to a record already in the system, ou modifier this record.  IF your changes only apply to some
+ items, tick the appropriate ones et a new group record will be created automatically for them.
  <br clear=all>
  <p> &nbsp; </p>
 
-<TMPL_INCLUDE Name="cat-bottom.inc">
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

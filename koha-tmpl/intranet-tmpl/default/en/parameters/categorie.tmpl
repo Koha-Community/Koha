@@ -193,10 +193,6 @@
 			<td><!-- TMPL_VAR NAME=finetype --></td>
 		</tr>
 		<tr>
-			<td>Bulk</td>
-			<td><!-- TMPL_VAR NAME=bulk --></td>
-		</tr>
-		<tr>
 			<td>Enrollment fee</td>
 			<td><!-- TMPL_VAR NAME=enrolmentfee --></td>
 		</tr>
@@ -237,7 +233,7 @@
 
 <!-- TMPL_IF NAME=delete_confirmed -->
 	Data deleted
-        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+        <form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
         <input type=submit value=OK>
         </form>
 
@@ -246,26 +242,25 @@
 <!-- TMPL_IF NAME=else -->
 	<h2>Category admin</h2>
 	<!-- TMPL_IF NAME=searchfield -->
-		You Searched for <!-- TMPL_VAR NAME=searchfield -->
+		You Searched for <!-- TMPL_VAR name=searchfield -->
 	<!-- /TMPL_IF -->
 
-	<form action='<TMP_VAR NAME=script_name>' method=post>
-		<input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-		<input type=reset name=reset value="clr">
+	<form action='<TMPL_VAR NAME="script_name">' method=post>
+		<input type=text name=description value=<!-- TMPL_VAR name="searchfield" -->>
+		<input type="submit" name="submit" value="OK" class="button">
 	</form>
-	
+
         <table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Category</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Description</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Enrollment</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Enrollment period</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Enrollment fee</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Upper Age Limit</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Age Required</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Fine</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Bulk</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Fee</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Overdue</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Issue Limit</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Issue limit</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Reserve</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
@@ -275,12 +270,16 @@
                         <td><!-- TMPL_VAR NAME=categorycode --></td>
                         <td><!-- TMPL_VAR NAME=description --></td>
                         <td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
+                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
                         <td><!-- TMPL_VAR NAME=upperagelimit --></td>
                         <td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
                         <td><!-- TMPL_VAR NAME=finetype --></td>
-                        <td><!-- TMPL_VAR NAME=bulk --></td>
-                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
-                        <td><!-- TMPL_IF NAME=overduenoticerequired -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+                        <td><!-- TMPL_IF NAME=overduenoticerequired -->
+					<i>Yes</i>
+				<!-- TMPL_ELSE -->
+					<i>No</i>
+				<!-- /TMPL_IF -->
+			</td>
                         <td><!-- TMPL_VAR NAME=issuelimit --></td>
                         <td><!-- TMPL_VAR NAME=reservefee --></td>
                         <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&categorycode=<!-- TMPL_VAR NAME=categorycode -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
@@ -291,7 +290,7 @@
 	</table>
 	<p><form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 		<input type=hidden name=op value=add_form>
-		<input type=submit class="button" value="Add Category"  ALT="Add Category"><br>
+		<input type=submit class="button" value="Add category"  ALT="Add category"><br>
 	</form></p>
 <!-- /TMPL_IF -->
 

@@ -1,0 +1,15 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<center>
+<h1>Exporter une notice biblio MARC</h1><br /><br /><br />
+Exporter en format MARC les les biblios suivants :
+<form method="post">
+<p>du N° Biblio : <input type="text" name="start_bib">
+to biblio number : <input type="text" name="end_bib"></p>
+<input type="hidden" name="op" value="export">
+<input type="submit" value="Export">
+</form>
+
+<p>(Laisser blanc pour tout exporter)</p>
+<p>Note: les ouvrages en sont PAS exportés par cet outil</p>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

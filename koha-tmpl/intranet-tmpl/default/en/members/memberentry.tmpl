@@ -1,6 +1,15 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<h1><!-- TMPL_VAR NAME=header --></h1><br>
+<!-- TMPL_IF NAME=addAction -->
+<h1>
+	Add member
+</h1>
+<!-- TMPL_ELSE -->
+<h1>
+	Update Member Details
+</h1>
+<!-- /TMPL_IF -->
+<br>
 
 <form action=/cgi-bin/koha/newmember.pl method=post>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
@@ -13,7 +22,7 @@
 
 	<tr valign=top>
 		<td COLSPAN=2><input type=reset value="Clear all Fields"></td>
-		<td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>Member# <!-- TMPL_VAR NAME=member -->, Card Number* <input type=text name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br></td>
+		<td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>Member# <!-- TMPL_VAR NAME=member -->, Card number* <input type=text name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br></td>
 	</tr>
 
 	<tr valign=top>
@@ -29,9 +38,9 @@
 	<tr valign=top bgcolor=white>
 		<td><FONT SIZE=2>Title</FONT></td>
 		<td><FONT SIZE=2>Initials</FONT></td>
-		<td><FONT SIZE=2><b>Given Names*</b></FONT></td>
-		<td><FONT SIZE=2><b>Surname*</b></FONT></td>
-		<td><FONT SIZE=2>Prefered Name</FONT></td>
+		<td><FONT SIZE=2><b> Given Names*</b></FONT></td>
+		<td><FONT SIZE=2><b> Surname*</b></FONT></td>
+		<td><FONT SIZE=2> Prefered Name</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td><!-- TMPL_VAR name="Mr" -->
@@ -112,13 +121,8 @@
 			<input type=text name=streetcity size=20 value="<!-- TMPL_VAR NAME=streetcity -->"></td>
 	</tr>
 
-
-	<tr valign=top bgcolor="99cc33">
-		<td COLSPAN=5 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>MEMBER CONTACT DETAILS</b></td>
-	</tr>
-
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=2 ><FONT SIZE=2>Phone (Home)</td>
+		<td COLSPAN=2 ><FONT SIZE=2>Phone home</td>
 		<td><FONT SIZE=2>Fax</td>
 		<td><FONT SIZE=2>Email</td>
 		<td><FONT SIZE=2>Text Messaging</td>
@@ -132,7 +136,7 @@
 
 
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=2 ><FONT SIZE=2>Phone (Daytime)</td>
+		<td COLSPAN=2 ><FONT SIZE=2>Phone daytime</td>
 		<td></td>
 		<td></td>
 		<td></td>
@@ -150,7 +154,7 @@
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td   COLSPAN=3 ><FONT SIZE=2><b>Name*</b></td>
+		<td   COLSPAN=3 ><FONT SIZE=2><b> Surname*</b></td>
 		<td><FONT SIZE=2>Phone</td>
 		<td><FONT SIZE=2><b>Relationship*</b></td>
 	</tr>
@@ -167,7 +171,7 @@
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td><FONT SIZE=2>Notes</font></td>
+		<td><FONT SIZE=2> Notes</font></td>
 		<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><!-- TMPL_VAR NAME=altnotes --></textarea></td>
 	</tr>
 
@@ -177,7 +181,7 @@
 	</tr>
 
 	<tr valign=top >
-		<td><FONT SIZE=2>Notes</font></td>
+		<td><FONT SIZE=2> Notes</font></td>
 		<td COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3><!-- TMPL_VAR NAME=borrowernotes --></textarea></td>
 	</tr>
 
@@ -198,7 +202,7 @@
 		<td></td>
 		<td>
 			<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-			<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" ALT="Add New Member" border=0 >
+			<input type="submit" value="save" class="button">
 		</td>
 	</tr>
 	</table>

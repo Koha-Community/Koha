@@ -5,7 +5,7 @@ Invoice: <!-- TMPL_VAR name="invoice" --><br>
 Received By: <!-- TMPL_VAR name="user" --><br>
 <!-- TMPL_VAR name="date" -->
 </div>
-<h1>Receipt Summary for: <!-- TMPL_VAR name="name" --> Invoice, <!-- TMPL_VAR name="invoice" --></h1>
+<h1>Receipt Summary for: <i><!-- TMPL_VAR name="name" --></i> Invoice <i><!-- TMPL_VAR name="invoice" --></i></h1>
 <CENTER>
 
 
@@ -83,16 +83,16 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 				<input type=hidden name=freight value="<!-- TMPL_VAR name="freight" -->">
 				<input type=hidden name=gst value="<!-- TMPL_VAR name="gst" -->">
 				<!-- TMPL_IF name="catview" -->
-					<input type=image  name=submit src="/<!-- TMPL_VAR name="theme" -->/images/filesave.png" border=0 title="continue" alt="save" border=0 border=0>
+					<input type="submit" class="button" value="save">
 				<!-- TMPL_ELSE -->
-					<a href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!-- TMPL_VAR name="ordernumber" -->&id=<!-- TMPL_VAR name="booksellerid" -->><img src="/<!-- TMPL_VAR name="theme" -->/images/fileopen.png" border=0 title="edit" alt="edit" border=0 border=0></a>
+					<a class="button" href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!-- TMPL_VAR name="ordernumber" -->&id=<!-- TMPL_VAR name="booksellerid" -->>Edit</a>
 				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 	</table>
 	<table border=1 cellspacing=0 cellpadding=5 width="40%">
 		<tr valign=top bgcolor=#99cc33>
-			<td background="/images/background-mem.gif" colspan=2><B>ACCOUNTING DETAILS</B></td>
+			<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>ACCOUNTING DETAILS</B></td>
 		</tr>
 		<TR VALIGN=TOP>
 			<TD><B>Bookfund *</B></td>

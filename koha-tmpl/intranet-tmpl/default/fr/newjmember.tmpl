@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+
+<!-- TMPL_IF Name="NOK" -->
+	<!-- TMPL_VAR Name="string" -->
+<!-- TMPL_ELSE -->
+	<H1> Confirmer Enregistrement </H1>
+	<!-- TMPL_LOOP Name="identsloop" -->
+		<!-- TMPL_IF Name="cardchild" -->
+			<table border=0 cellspacing=0 cellpadding=5>
+				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+					<td background="<!-- TMPL_VAR Name="image" -->">
+					<B> NOUVEAU LECTEUR </B>
+					</td>
+					<td>
+					&nbsp;
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>Nom</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="name" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+					<td background="<!-- TMPL_VAR Name="image" -->">
+					<B> DETAILS LECTEUR </B>
+					</td>
+					<td>
+					&nbsp;
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>N° Lecteur</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="bornum" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>Date de naissance</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="dob" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>Sexe</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="sex" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>Ecole</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="school" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>Notes générales</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="notes" -->
+					</td>
+				</tr>
+			</TABLE><p>
+		<!-- /TMPL_IF -->
+  <!-- /TMPL_LOOP -->
+	<form action="/cgi-bin/koha/insertjdata.pl" method=post>
+		<!-- TMPL_LOOP NAME=inputsloop -->
+			<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+		<!-- /TMPL_LOOP -->
+		<input type=submit name=submit value=submit>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

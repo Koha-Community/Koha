@@ -1,75 +1,69 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Connect&eacute;: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 
-<TMPL_LOOP NAME="BIBLIO_RESULTS">
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font><p>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+<!-- TMPL_VAR NAME="class" --></em></font><p>
 <!-- FIXME - "callpadding" should be "cellpadding", right? -->
 <table cellspacing="0" callpadding="5" border="1" align="left" width="220">
-<!-----------------BIBLIO RECORD TABLE--------->
+<!-----------------Notice bibliographique TABLE--------->
 <tr valign="top">
 
 <td bgcolor="#99cccc">
-<b>NOTICE</b>
+<b>Notice bibliographique</b>
 
-<TMPL_VAR NAME="biblionumber">
+<!-- TMPL_VAR NAME="biblionumber" -->
 </td>
 </tr>
 <tr valign="top">
 <td>
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Sous-titre:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Auteur:</b> <TMPL_VAR NAME="author"><br>
-<b>Autre auteur:</b> <TMPL_VAR NAME="additional"><br>
-<b>Collection:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Sujet:</b> <TMPL_VAR NAME="subject"><br>
-<b>Date de publi.:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Notes:</b> <TMPL_VAR NAME="notes"><br>
-<b>Unititle:</b> <TMPL_VAR NAME="unititle"><br>
-<b>P&eacute;rio.:</b> <TMPL_VAR NAME="serial"><br>
-<b>Nombre d'ex.:</b> <TMPL_VAR NAME="count">
+<b>Sous-titre:</b> <!-- TMPL_VAR NAME="subtitle" --><br>
+<b>Auteur:</b> <!-- TMPL_VAR NAME="author" --><br>
+<b>Auteur supplémentaire:</b> <!-- TMPL_VAR NAME="additional" --><br>
+<b>Titre Séries:</b> <!-- TMPL_VAR NAME="seriestitle" --><br>
+<b>Sujet:</b> <!-- TMPL_VAR NAME="subject" --><br>
+<b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><br>
+<b>Titre uniforme:</b> <!-- TMPL_VAR NAME="unititle" --><br>
+<b>Périodiques:</b> <!-- TMPL_VAR NAME="serial" --><br>
+<b>Nombre total d'ouvrages:</b> <!-- TMPL_VAR NAME="count" -->
 <p>
 </font></td>
 </tr>
 </table>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor="#99cccc">
-<td>Type de doc.</td>
-<td>Cote</td>
+<td>Catég ouvrage</td>
+<td>Catégorie</td>
 <td>Localisation</td>
-<td>Retour le</td>
-<td>Derni&egrave;re transaction</td>
+<td>Date de retour</td>
+<td>Vu</td>
 </tr>
-<TMPL_LOOP NAME="ITEM_RESULTS">
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td><TMPL_VAR NAME="class"></td>
-<td><TMPL_VAR NAME="branchname"></td>
-<td><TMPL_VAR NAME="datedue"></td>
-<td><TMPL_VAR NAME="datelastseen"></td>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
+<td><!-- TMPL_VAR NAME="class" --></td>
+<td><!-- TMPL_VAR NAME="branchname" --></td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 </tr>
-</TMPL_LOOP>
-<TMPL_LOOP NAME="WEB_RESULTS">
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td>Site web</td>
-<td>disponible</td>
-<td>en ligne</td>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
+<td>Site Web</td>
+<td>En ligne</td>
+<td>Disponible</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
+NAME="itemnumber>&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<TMPL_VAR
+NAME="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
 <p>
 </center>
@@ -77,4 +71,4 @@ NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
 <p />
 <p />
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

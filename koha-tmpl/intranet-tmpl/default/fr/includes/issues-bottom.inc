@@ -10,9 +10,11 @@
 <A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a> ||
 <A HREF="/cgi-bin/koha/members-home.pl">Lecteurs</a> ||
 <A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> ||
-<A HREF="/cgi-bin/koha/reports-home.pl">Etats</a> ||
+<A HREF="/cgi-bin/koha/circ/circulation.pl">Circulation</a> ||
+<A HREF="/cgi-bin/koha/reports-home.pl">Rapports</a> ||
 <A HREF="/cgi-bin/koha/admin-home.pl">Paramètres</a> ||
-<A HREF="/help/">Aide</a>
+<A HREF="/cgi-bin/koha/about.pl">A propos</a> || 
+Help
 </FONT>
 </CENTER>
 </BODY>

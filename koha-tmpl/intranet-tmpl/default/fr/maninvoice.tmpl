@@ -1,37 +1,25 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<Center>
-  <h3>Facture manuelle</h3>
-</center>
+<Center><h3>Facture manuelle</h3></center>
 <form action=/cgi-bin/koha/maninvoice.pl method=post>
 <table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name=bornum value="<TMPL_VAR Name="bornum">">
-<tr>
-	  <td><b>Num&eacute;ro de lecteur<b></b></b></td>
-	  <td><TMPL_VAR Name="bornum"></td></tr>
-<tr>
-	  <td><b>Type de facture</b></td>
-	  <Td>
+<input type=hidden name=bornum value="<!-- TMPL_VAR Name="bornum" -->">
+<tr><td><b>N° Lecteur<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+<tr><td><b>Saisir</b></td><Td>
 <select name=type>
 <option value=L>Document perdu</option>
 <option value=F>Amende</option>
-<option value=A>Frais de gestion</option>
+<option value=A>Frais de gestion de compte</option>
 <option value=N>Nouvelle carte</option>
 <option value=M>Divers</option>
-<option value=REF>Remboursement</option>
+<option value=REF>Argent rendu</option>
 </select>
 </td></tr>
-<tr>
-	  <td><b>Num&eacute;ro de document</b></td>
-	  <td><input type=text name=itemnum></td></tr>
+<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
 <tr><td><b>Description</b></td><td><input type=text name=desc size=50></td></tr>
-<tr>
-	  <td><b>Montant</b></td>
-	  <td><input type=text name=amount></td></tr>
-<tr><td>
-		<input type=submit name=add value=Ajouter>
-	  </td></tr>
+<tr><td><b>Montant</b></td><td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value=Add></td></tr>
 </table>
 </form>
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Recherche Th&eacute;saurus</title>
+	<title>Recherche Thésaurus</title>
 </head>
 <body>
 	<script>
@@ -15,14 +15,14 @@
 	</script>
 	<script>
 		function finish() {
-			opener.document.f.field_value[<TMPL_VAR name="index">].value= document.f_pop.result.value;
+			opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.result.value;
 			self.close();
 			return false;
 		}
 	</script>
 	<form name="f_pop" action="plugin_launcher.pl" method="post">
 		<input type="hidden" name="plugin_name" value="unimarc_field_60X.pl">
-		<textarea name="result" rows=10 cols=50><TMPL_VAR name="result"></textarea>
+		<textarea name="result" rows=10 cols=50><!-- TMPL_VAR name="result" --></textarea>
 		<br/><input type="button" value="OK" onClick="javascript:finish()">
 		<p><h2>Recherche</h2>
 			<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&search_string=A">A</a>
@@ -52,9 +52,9 @@
 			<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&search_string=Y">Y</a>
 			<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&search_string=Z">Z</a>
 			<br/>
-			<input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
-			<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-			<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+			<input type="text" name="search_string" value="<!-- TMPL_VAR name="search_string" -->">
+			<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+			<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 			<input type="hidden" name="op" value="search">
 			<input type="submit" value="Chercher">
 		</p>
@@ -64,45 +64,45 @@
 		<td valign="top">
 		<h2>Résultats</h2>
 			<table>
-				<TMPL_LOOP name="results">
+				<!-- TMPL_LOOP name="results" -->
 					<tr>
 					<td>
-						<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=<TMPL_VAR name="index">&level=<TMPL_VAR name="level">&search_string=<TMPL_VAR name=value ESCAPE=URL>">
-							<TMPL_VAR name="value">
+						<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=<!-- TMPL_VAR name="index" -->&level=<!-- TMPL_VAR name="level" -->&search_string=<!-- TMPL_VAR name=value ESCAPE=URL -->">
+							<!-- TMPL_VAR name="value" -->
 						</a>
 					</td>
 					<td>
-						<input type="button" value="Reporter" OnClick="javascript:report('<TMPL_VAR name="value">')"><br/>
+						<input type="button" value="Reporter" OnClick="javascript:report('<!-- TMPL_VAR name="value" -->')"><br/>
 					</td>
 					</tr>
-				</TMPL_LOOP>
+				<!-- /TMPL_LOOP -->
 			</table>
 		</td>
 		<td>
-		<TMPL_IF name=deeper>
+		<!-- TMPL_IF name=deeper -->
 		<td valign="top">
-			<h2>Dépendances</h2>
-			</TMPL_IF>
+			<h2>Subordinations</h2>
+			<!-- /TMPL_IF -->
 			<table>
-			<TMPL_LOOP name="deeper">
+			<!-- TMPL_LOOP name="deeper" -->
 				<tr><td>
-				<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=<TMPL_VAR name="index">&level=<TMPL_VAR name="level">&search_string=<TMPL_VAR ESCAPE="URL" name="father">+<TMPL_VAR ESCAPE="URL" name="stdlib">">
-					<TMPL_VAR name="father"> <TMPL_VAR name="stdlib">
+				<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=<!-- TMPL_VAR name="index" -->&level=<!-- TMPL_VAR name="level" -->&search_string=<!-- TMPL_VAR ESCAPE="URL" name="father" -->+<!-- TMPL_VAR ESCAPE="URL" name="stdlib" -->">
+					<!-- TMPL_VAR name="father" --> <!-- TMPL_VAR name="stdlib" -->
 				</a></td>
 				<td>
-					<input type="button" value="Reporter" OnClick="javascript:report('<TMPL_VAR ESCAPE=HTML name="father"> <TMPL_VAR ESCAPE=HTML name="stdlib">')"><br/>
+					<input type="button" value="Reporter" OnClick="javascript:report('<!-- TMPL_VAR ESCAPE=HTML name="father" --> <!-- TMPL_VAR ESCAPE=HTML name="stdlib" -->')"><br/>
 				</td></tr>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 			</table>
 		</td>
 	</tr>
 	</table>
-<h2>Création</h2>
+<h2>Ajout</h2>
 <form name="f3_pop"  action="thesaurus_popup.pl" method="post">
-	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="op" value="add">
-	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-	Insérer une nouvelle autorité : <input type="text" name="insert" value="<TMPL_VAR name="search_string">">
+	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+	Create a new authority/thesaurus entry : <input type="text" name="insert" value="<!-- TMPL_VAR name="search_string" -->">
 	<input type="submit" name="NEW" value="Ajouter">
 	</form>
 </body>

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
 <!--STYLE TYPE="text/css" MEDIA=screen>
 	table {	font-family:Arial;
@@ -16,21 +16,25 @@
 	<td>
 	<table width=100% border=0 colspacing=0 cellpadding=0>
 	<tr>
-		<td width=9% align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(1)"><div id="link1">1</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(2)"><div id="link2">2</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(3)"><div id="link3">3</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(4)"><div id="link4">4</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(5)"><div id="link5">5</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(6)"><div id="link6">6</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(7)"><div id="link7">7</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(8)"><div id="link8">8</div></a></td>
-		<td width=9% align="center"><a href="javascript:active(9)"><div id="link9">9</div></a></td>
-		<td width=10% align="center"><input type="hidden" name="op" value="addbiblio">
+		<td width="8" align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(1)"><div id="link1">1</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(2)"><div id="link2">2</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(3)"><div id="link3">3</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(4)"><div id="link4">4</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(5)"><div id="link5">5</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(6)"><div id="link6">6</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(7)"><div id="link7">7</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(8)"><div id="link8">8</div></a></td>
+		<td width="8" align="center"><a href="javascript:active(9)"><div id="link9">9</div></a></td>
+		<td width="20" align="center"><input type="hidden" name="op" value="addbiblio">
 												<input type="hidden" name="addfield_field">
 												<input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="oldbiblionumber" -->">
-												<input type="button" value="Add biblio" onClick='Check(this.form)' accesskey="w">
-												<a href="javascript:PopupZ3950()">z3950 search</a>
+												<!-- TMPL_IF name="bibid" -->
+													<input type="button" value="Save" onClick='Check(this.form)' accesskey="w" class="button">
+												<!-- TMPL_ELSE -->
+													<input type="button" value="Add biblio" onClick='Check(this.form)' accesskey="w" class="button">
+												<!-- /TMPL_IF -->
+												<a href="javascript:PopupZ3950()" class="button">z3950 search</a>
 		</td>
 	</tr>
 	</table>
@@ -59,6 +63,17 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				&nbsp;
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(1)">
+					<div id="link1"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
+
 		</table>
 		</DIV>
 
@@ -84,6 +99,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(0)">
+					<div id="link0"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(2)">
+					<div id="link2"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -109,6 +136,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(1)">
+					<div id="link1"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(3)">
+					<div id="link3"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -134,6 +173,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(2)">
+					<div id="link2"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(4)">
+					<div id="link4"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -159,6 +210,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(3)">
+					<div id="link3"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(5)">
+					<div id="link5"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -184,6 +247,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(4)">
+					<div id="link4"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(6)">
+					<div id="link6"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -209,6 +284,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(5)">
+					<div id="link5"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(7)">
+					<div id="link7"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -234,6 +321,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(6)">
+					<div id="link6"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(8)">
+					<div id="link8"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -259,6 +358,18 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+		<tr>
+			<td width=9% align="center">
+				<a href="javascript:active(7)">
+					<div id="link7"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
+			<td width=9% align="center">
+				<a href="javascript:active(9)">
+					<div id="link9"  class="button">&gt;&gt;&gt;&gt;</div>
+				</a>
+			</td>
+		</tr>
 		</table>
 		</DIV>
 
@@ -284,6 +395,11 @@
 				</tr>
 			</tmpl_loop>
 	</tmpl_loop>
+			<td width=9% align="center">
+				<a href="javascript:active(8)">
+					<div id="link8"  class="button">&lt;&lt;&lt;&lt;</div>
+				</a>
+			</td>
 		</table>
 		</DIV>
 
@@ -327,7 +443,7 @@ function active(numlayer)
 {
 	for (i=0; i < 10 ; i++ ) {
 		ong = i+"XX";
-			link = "link"+i;
+		link = "link"+i;
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
 			document.getElementById(link).style.backgroundColor="#11AA11";
@@ -395,7 +511,7 @@ function Check(f) {
 }
 function Dopop(link,i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
 }
 
 function PopupZ3950() {

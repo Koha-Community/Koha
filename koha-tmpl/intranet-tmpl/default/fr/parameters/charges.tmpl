@@ -1,33 +1,27 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <p>
-Chaque zone doit être remplie avec :
-<ul>
-<li>Le montant de l'amende</li>
-<li>Le retard toléré avant amende</li>
-<li>La période de répétition de l'amende</li>
-</ul>
-exemple : 1,7,7 1Euro d'amende après 7 jours, tous les 7 jours.</p>
-<p>Note : Les amendes sont calculées par le script fines2.pl situé dans le répertoire misc.
-Demandez à votre administrateur de mettre ce script dans la crontab (après minuit) pour que les amendes soient calculées toutes les nuits.
+Chaque champ/boîte doit être remplie avec le montant de l'amende, quand débute son calcul, sa périodicité<br/>
+ex 1,7,7 = 1EUR,FS,CFA,etc d'amende, après 7 jours, chaque 7 jours</p>
+<p>Note : les amendes sont calculées par le misc/script fines2.pl. Demandez à votre administrateur de mettre ce script dans le crontab, après minuit,  pour que les amendes soient calculées chaque nuit
 </p>
 <form action=/cgi-bin/koha/admin/updatecharges.pl method=post>
 <table border=0>
 <TR align="center">
-	<th>&nbsp;</th><TMPL_LOOP name="title"><th><TMPL_VAR name="in_title"></th></TMPL_LOOP>
+	<th>&nbsp;</th><!-- TMPL_LOOP name="title" --><th><!-- TMPL_VAR name="in_title" --></th><!-- /TMPL_LOOP -->
 </TR>
-<TMPL_LOOP name="row">
+<!-- TMPL_LOOP name="row" -->
 	<TR align="center">
 		<th>
-			<TMPL_VAR name="categorycode">
+			<!-- TMPL_VAR name="categorycode" -->
 		</th>
-		<TMPL_LOOP name="cell">
-			<td bgcolor="<TMPL_VAR name="toggle">">
-				<input name="<TMPL_VAR name="inputname">" value="<TMPL_VAR name="inputvalue">" size=6 maxlength=10>
+		<!-- TMPL_LOOP name="cell" -->
+			<td bgcolor="<!-- TMPL_VAR name="toggle" -->">
+				<input name="<!-- TMPL_VAR name="inputname" -->" value="<!-- TMPL_VAR name="inputvalue" -->" size=6 maxlength=10>
 			</td>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 	</TR>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
 <center><input type=submit value="OK"></center>
 </form>
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <!-- TMPL_IF name="add" -->
+
 <h1><!-- TMPL_VAR name=head --></h1><br>
 <form action='<!-- TMPL_VAR name=action -->' name=Aform method=post>
 <input type=hidden name=op value='add_validate'>
@@ -56,7 +57,7 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type=submit value='Submit'></td>
+		<td><input type=submit value='Save' class="button"></td>
 	</tr>
 </table>
 </form>
@@ -126,7 +127,7 @@
 					<form action='<!-- TMPL_VAR name=action -->' method=post>
 					<input type='hidden' name='op' value='edit'>
 					<input type='hidden' name='branchcode' value='<!-- TMPL_VAR name=value escape="HTML" -->'>
-					<input type=submit value=Edit class="button">
+					<input type=submit value="Edit" class="button">
 					</form>
 				</td>
 				<td align='left' valign='top'>

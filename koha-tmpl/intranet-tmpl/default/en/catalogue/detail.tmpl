@@ -24,23 +24,25 @@
 		<td>
 			<br/><a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">MARC</a><br/><br/>
 			<FONT SIZE=2  face="arial, helvetica">
-			<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle" -->
-			<!-- TMPL_IF name="author" --><b>Author:</b> <a href=/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE=URL -->><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><br><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="publishercode" --><b>Published by :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" -->
-			<!-- TMPL_IF name="publicationyear" --><b>in </b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
+			<!-- TMPL_IF name="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="author" --><b>Author:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="publishercode" --><b>Published by :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="publicationyear" --><b>in </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
-			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br/>
-			<!-- TMPL_IF name="collection" --><b>Collection:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="seriestitle" --><br/>
-			<!-- TMPL_IF name="subject" --><b>Subject:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subject" --><br/>
-			<!-- TMPL_IF name="copyrightdate" --><b>Year :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="copyrightdate" --><br/>
-			<!-- TMPL_IF name="notes" --><b>Notes:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="notes" --><br/>
-			<!-- TMPL_IF name="unititle" --><b>Unititle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="unititle" --><br/>
-			<!-- TMPL_IF name="serial" --><b>Serial:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br/>
-			<!-- TMPL_IF name="dewey" --><b>Dewey:</b><!-- /TMPL_IF --><!-- TMPL_VAR name="dewey" --><br/>
-			<!-- TMPL_IF name="url" --><b>URL:</b> <a hre="<!-- TMPL_VAR name="url" --><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
-			<b>total number of Items:</b> <!-- TMPL_VAR NAME="count" -->
-			<p>
+			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br>
+			<!-- TMPL_IF name="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subject" --><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="copyrightdate" --><b>Year :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
+			<!-- TMPL_IF name="serial" --><b>Serial:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="classification" --><b>Classification:</b> <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
+			<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
 			</font>
 		</td>
 	</tr>
@@ -57,22 +59,20 @@
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr bgcolor="#cccc99" background="/images/background-mem.gif">
-		<td>Item Type</td>
-		<td>Class</td>
-		<td>Location</td>
-		<td>Date Due</td>
-		<td>Last Seen</td>
-		<td>Barcode</td>
+		<th>Item type</th>
+		<th>Location</th>
+		<th>Date Due</th>
+		<th>Last seen</th>
+		<th>Barcode</th>
 		<td>Volume</td>
 	</tr>
 	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="description" --></td>
-			<td><a href=/cgi-bin/koha/search.pl?dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE=URL -->><!-- TMPL_VAR NAME="class" --></a></td>
-			<td><!-- TMPL_VAR NAME="branchname" --></td>
+			<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="bulk" --> <!-- TMPL_VAR NAME="bulk" --><!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR NAME="datedue" --></td>
 			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
-			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
 			<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 			<!-- TMPL_IF NAME="type" -->
 				<td>
@@ -95,22 +95,6 @@
 	<!-- /TMPL_LOOP -->
 </table>
 <p>
-<table border="0" cellspacing="0" cellpadding="5" width=70%>
-	<tr valign="top">
-		<td bgcolor="99cc33" background="/images/background-mem.gif" colspan="2">
-			<p><b>HELP</b><br>
-			<b>Update Biblio for all Items:</b> Click on the <b>Modify</b>
-			button [left] to amend the biblio.  Any changes you make will update
-			the record for <b>all</b> the items listed above. <p>
-			<b>Updating the Biblio for only ONE or SOME Items:</b>
-			If some of the items listed above need a different biblio, or are on the
-			wrong biblio, you must use the
-			<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>
-			process to fix this. You will need to "re-order" the items, and delete them
-			from this biblio.<p />
-		</td>
-	</tr>
-</table>
 </center>
 <br clear=all>
 <p />

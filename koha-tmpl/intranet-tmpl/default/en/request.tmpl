@@ -1,7 +1,6 @@
 <!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
 <form action="placerequest.pl" method=post>
-<INPUT TYPE="image" name="submit"  VALUE="request" height=42  WIDTH=187 BORDER=0 src="<!-- TMPL_VAR name="themelang" -->/images/place-request.gif" align=right >
 <input type=hidden name=biblio value="<!-- TMPL_VAR Name="bib" -->">
 <input type=hidden name=type value=str8>
 <input type=hidden name=title value="<!-- TMPL_VAR Name="title" -->">
@@ -36,16 +35,16 @@
 		<td><!-- TMPL_VAR Name=date --></td>
 		<td><!-- TMPL_VAR name="CGIbranch" --></td>
 		<td>
-			<input type=checkbox name=request value=any>Next Available,<br>(or choose from list below)
+			<input type=checkbox name=request value=any>Next Available, or choose from list below
 		</td>
 	</tr>
 </table>
-
+<INPUT type="submit" value="request" class="button">
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
 	<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Request</b></TD>
-	<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Item Type</b></TD>
+	<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Item type</b></TD>
 	<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Classification</b></TD>
 	<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Volume</b></TD>
 	<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Pubdate</b></TD>
@@ -142,10 +141,10 @@
 					</a>
 				<!-- TMPL_ELSE -->
 					<!-- TMPL_IF Name="constrainttypea" -->
-						Next Available
+						<i>Next Available</i>
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_IF Name="constrainttypeo" -->
-							This type only : <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_VAR Name="itemtype" -->
+							This type only : <b><!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_VAR Name="itemtype" --></b>
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
@@ -155,8 +154,9 @@
 	<!-- /TMPL_LOOP -->
 	<tr VALIGN=TOP>
 	<TD colspan=6 align=right>
-	Delete a request by selecting "del" from the rank list.
-	<INPUT TYPE="image" name="submit"  VALUE="request" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png"></td>
+		Delete a request by selecting "del" from the rank list.
+		<INPUT TYPE="image" name="submit"  VALUE="request" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png">
+	</td>
 	</tr>
 </table>
 <P>

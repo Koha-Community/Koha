@@ -1,6 +1,6 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<TMPL_IF NAME=add_form>
+<!-- TMPL_IF NAME=add_form -->
         <script>
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
@@ -44,7 +44,7 @@
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 = "Form not submitted because sur the following problem(s)\n";
                         alertString2 += "------------------------------------------------------------------------------------\n\n";
                         alertString2 += _alertString;
                         alert(alertString2);
@@ -52,122 +52,124 @@
         }
         </SCRIPT>
 
-        <TMPL_IF NAME=searchfield>
-                <h1>Modifier mot vide</h1>
-        <TMPL_ELSE>
-                <h1>Ajouter mot vide</h1>
-        </TMPL_IF>
-        <form action="<TMPL_VAR NAME=script_name>" name=Aform method=post>
+        <!-- TMPL_IF NAME=searchfield -->
+                <h1>Modifier un mot</h1>
+        <!-- TMPL_ELSE -->
+                <h1>Ajouter un mot</h1>
+        <!-- /TMPL_IF -->
+        <form action="<!-- TMPL_VAR NAME=script_name -->" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
          
         <table>
-
-        <TMPL_IF NAME=searchfield>
+        
+        <!-- TMPL_IF NAME=searchfield -->
                 <tr>
-                        <td>Mot vide</td>
+                        <td>Mot</td>
                         <td>
-                                <input type=hidden name=word value='<TMPL_VAR NAME=searchfield>'><TMPL_VAR NAME=searchfield>
+                                <input type=hidden name=word value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
                         </td>
                 </tr>
-        <TMPL_ELSE>
+        <!-- TMPL_ELSE -->
                 <tr>
-                        <td>Mot vide</td>
+                        <td>Mot</td>
                         <td>
                                 <input type=text name=word size=80 maxlength=250 onBlur=toUC(this)>
                         </td>
                 </tr>
-        </TMPL_IF>
+        <!-- /TMPL_IF -->
                 <tr>
                         <td> </td>
                         <td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
                 </tr>
         </table>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=add_validate>
-        Mot vide enregistr&eacute;
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+<!-- TMPL_IF NAME=add_validate -->
+        Donnée enregistrée
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=submit value=OK>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=delete_confirm>
+<!-- TMPL_IF NAME=delete_confirm -->
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Mot vide</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b><TMPL_VAR NAME=searchfield></b></td>
+                        <td background='/images/background-mem.gif'><b>Mot</b></td>
+                        <td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
                 </tr>
 
-                <form action='<TMPL_VAR NAME=script_name>' method=post>
+                <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                         <input type=hidden name=op value=delete_confirmed>
-                        <input type=hidden name=searchfield value='<TMPL_VAR NAME=searchfield>'>
+                        <input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
 
                 <tr>
                         <td colspan=2 align=center>CONFIRMER SUPPRESSION</td>
                 </tr>
                 <tr>
                         <td>
-                                <input type=submit value='YES'>
+                                <input type=submit value='OUI'>
                                 </form>
                         </td>
                         <td>
-                                <form action='<TMPL_VAR NAME=script_name>' method=post>
+                                <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                                         <input type=submit value=NO>
                                 </form>
                         </td>
                 </tr>
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=delete_confirmed>
-        Donn&eacute;e supprim&eacute;e
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+<!-- TMPL_IF NAME=delete_confirmed -->
+        Donnée effacée
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=submit value=OK>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=else>
-        <h2>Mots vides</h2>
-	<b>NOTE : Si vous modifiez cette table, demandez à votre administrateur système d'exécuter le script misc/rebuildnonmarc.pl</b>
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
-                <input type=text name=searchfield value=<TMPL_VAR NAME=searchfield>>
-                <input type=reset name=reset value="clr">
+<!-- TMPL_IF NAME=else -->
+        <h2>Admin Mots vide</h2>
+	<b>Note : si vous changez quelque chose dans cette table, demandez à votre administrateur de lancer le script misc/rebuildnonmarc.pl.</b>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                <input type=text name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
+                <input type=reset name=reset value="effacer">
         </form>
 
-        <TMPL_IF NAME=searchfield>
-                Rechercher sur <b><TMPL_VAR NAME=searchfield></b>
-        </TMPL_IF>
+        <!-- TMPL_IF NAME=searchfield -->
+                Votre recherche sur <b><!-- TMPL_VAR NAME=searchfield --></b>
+        <!-- /TMPL_IF -->
 
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Mot vide</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
+                        <td background='/images/background-mem.gif'><b>Mot</b></td>
+                        <td background='/images/background-mem.gif'> </td>
                 </tr>
-                <TMPL_LOOP NAME=loop>
-                <tr bgcolor="<TMPL_VAR NAME=toggle>">
-                        <td><TMPL_VAR NAME=word></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=word>">Delete</a></td>
+                <!-- TMPL_LOOP NAME=loop -->
+                <tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
+                        <td><!-- TMPL_VAR NAME=word --></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=word -->">Supprimer</a></td>
                 </tr>
-                </TMPL_LOOP>
+                <!-- /TMPL_LOOP -->
         </table>
 
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=hidden name=op value=add_form>
 
-        <TMPL_IF NAME=offsetgtzero>
-                <a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=prevpage>"><< Prec</a>
-        </TMPL_IF>
+        <!-- TMPL_IF NAME=offsetgtzero -->
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->"><< Prev</a>
+        <!-- /TMPL_IF -->
 
-        <TMPL_IF NAME=ltcount>
-                <a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=nextpage>">Suiv >></a>
-        </TMPL_iF>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <!-- TMPL_IF NAME=ltcount -->
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Suivant >></a>
+        <!-- /TMPL_iF -->
 
         <br>
-        <input type=submit class="button" value="Ajouter">
+        <input type=submit class="button" value="Ajouter un mot vide" ALT="Ajouter un mot vide" >
         <br>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

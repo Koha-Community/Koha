@@ -1,77 +1,77 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 
- <H1>Panier pour: <TMPL_VAR name="bookselname"></H1>
+ <H1>Panier pour: <!-- TMPL_VAR name="bookselname" --></H1>
 
-<TMPL_IF name ="testdonation">
-	<a href="newbiblio.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" align=right alt="Ajouter Notice" border=0></a>
-<TMPL_ELSE>
-	<a href="newdonation.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" border=0 align=right alt="Ajouter Notice"></a>
-</TMPL_IF>
+<!-- TMPL_IF name ="testdonation" -->
+	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&sub=<!-- TMPL_VAR name="parsub" -->">
+	<img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" border=0 align=right alt="Ajouter New Biblio"></a>
+<!-- TMPL_ELSE -->
+	<a href="newdonation.pl?id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&sub=<!-- TMPL_VAR name="parsub" -->">
+	<img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png"  border=0 align=right alt="Ajouter New Biblio"></a>
+<!-- /TMPL_IF -->
 
-<a href="basket.pl?basket=<TMPL_VAR name="basket">">
-<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1uparrow.png" border=0 align=right alt="Voir Panier"></a>
+<a href="basket.pl?basket=<!-- TMPL_VAR name="basket" -->">
+<img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1uparrow.png"  border=0 align=right alt="Voir Panier"></a>
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
-<input type=hidden name=id value=<TMPL_VAR name="id">>
-<input type=hidden name=basket value=<TMPL_VAR name="basket">>
-<b>Nouvelle Recherche: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
+<input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
+<input type=hidden name=basket value=<!-- TMPL_VAR name="basket" -->>
+<b>Nouvelle recherche: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
 <br clear=all>
 
 <CENTER>
 
-Votre recherche:
+Recherche effectuée sur
 <B>
-<TMPL_LOOP name="loopsearch">
-	<TMPL_VAR name="key"> <TMPL_VAR name="value">
-</TMPL_LOOP>
+<!-- TMPL_LOOP name="loopsearch" -->
+	<!-- TMPL_VAR name="key" --> <!-- TMPL_VAR name="value" -->
+<!-- /TMPL_LOOP -->
 </B>
 <BR>
-<TMPL_VAR name="count">  r&eacute;sultats.
+<!-- TMPL_VAR name="count" -->  Résultats trouvés.
 
-<br> Affichage des r&eacute;sultats <TMPL_VAR name="dispnum"> &agrave; <TMPL_VAR name="offset2">.
+<br> Résultats <i><!-- TMPL_VAR name="dispnum" --></i> to <i><!-- TMPL_VAR name="offset2" --></i> affiché.
 
-<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 Color="<TMPL_VAR name="main">">
-	<TR  VALIGN=TOP  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+<TABLE  CELLSPACING=0  CELLPADDING=6 border=0>
+	<TR  VALIGN=TOP bgcolor="#ffdf61">
 		<TD><b>TITRE</b></TD>
 		<TD><b>AUTEUR</b></TD>
-		<TD><b>ANNEE</b></TD>
-		<TD><b>NOMBRE</b></TD>
+		<TD><b>&copy;</b></TD>
+		<TD><b>COMPTE</b></TD>
 		<TD><b>LOCALISATION</b></TD>
 	</TR>
 
-<TMPL_LOOP name="loopresult">
-	<TR VALIGN=TOP bgcolor="<TMPL_VAR name="coltab">">
+<!-- TMPL_LOOP name="loopresult" -->
+	<TR VALIGN=TOP bgcolor="<!-- TMPL_VAR name="toggle" -->">
 		<TD>
-			<TMPL_IF name="testdonation">
-				<A HREF="/cgi-bin/koha/acqui/newbiblio.pl?sub=<TMPL_VAR name="sub">&author=<TMPL_VAR name="author2">&copyright=<TMPL_VAR name="copyright">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&biblio=<TMPL_VAR name="biblionumber">&title=<TMPL_VAR name="title2">">
-				<TMPL_VAR name="title">
+			<!-- TMPL_IF name="testdonation" -->
+				<A HREF="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR name="sub" -->&author=<!-- TMPL_VAR name="author2" -->&copyright=<!-- TMPL_VAR name="copyright" -->&id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->&title=<!-- TMPL_VAR name="title2" -->">
+				<!-- TMPL_VAR name="title" -->
 				</A>
-			<TMPL_ELSE>
-				<A HREF="/cgi-bin/koha/acqui/newdonation.pl?author=<TMPL_VAR name="author2">&copyright=<TMPL_VAR name="copyright">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&biblio=<TMPL_VAR name="biblionumber">&title=<TMPL_VAR name="title2">">
-				<TMPL_VAR name="title">
+			<!-- TMPL_ELSE -->
+				<A HREF="/cgi-bin/koha/acqui/newdonation.pl?author=<!-- TMPL_VAR name="author2" -->&copyright=<!-- TMPL_VAR name="copyright" -->&id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->&title=<!-- TMPL_VAR name="title2" -->">
+				<!-- TMPL_VAR name="title" -->
 				</A>
-			</TMPL_IF>
+			<!-- /TMPL_IF -->
 		</TD>
 		<TD>
-			<A HREF="/cgi-bin/koha/search.pl?author=<TMPL_VAR name="word">&type=<TMPL_VAR name="type">">
-			<TMPL_VAR name="author">
+			<A HREF="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR name="word" -->&type=<!-- TMPL_VAR name="type" -->">
+			<!-- TMPL_VAR name="author" -->
 			</A>
 		</TD>
 		<TD>
-			<TMPL_VAR name="copyright">
+			<!-- TMPL_VAR name="copyright" -->
 		</TD>
 		<TD>
-			<TMPL_VAR name="itemcount">
+			<!-- TMPL_VAR name="itemcount" -->
 		</TD>
 		<TD>
-			<TMPL_VAR name="location">
+			<!-- TMPL_VAR name="location" -->
 		</TD>
 	</TR>
 
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 
-	<TR VALIGN=TOP>
+	<TR VALIGN=TOP bgcolor="#ffdf61">
 		<TD>
 			&nbsp;
 		</TD>
@@ -90,11 +90,11 @@ Votre recherche:
 	</TR>
 </TABLE>
 
-<TMPL_IF name="offsetover">
-<A HREF="/cgi-bin/koha/acqui/newbasket2.pl?num=<TMPL_VAR name="num">&offset=<TMPL_VAR name="offset">&type=<TMPL_VAR name="type">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&search=<TMPL_VAR name="title">&author=<TMPL_VAR name="author">">
+<!-- TMPL_IF name="offsetover" -->
+<A HREF="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&offset=<!-- TMPL_VAR name="offset" -->&type=<!-- TMPL_VAR name="type" -->&id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&search=<!-- TMPL_VAR name="title" -->&author=<!-- TMPL_VAR name="author" -->">
 Next
 </A>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </CENTER>
 
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,30 +1,32 @@
-<TMPL_IF name="opac">
-	<TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-	<TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF name="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
 
 <!-- ----------------------- MAIN BODY OF PAGE ------------------------ -->
 <FORM ACTION="/cgi-bin/koha/search.pl" method=post>
 
-<FONT SIZE=6><em>Recherche Catalogue</em></FONT>
+<h1>Recherche Catalogue</h1>
 
 <CENTER>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
 	<TR VALIGN=TOP>
-		<TD>Code barre exemplaires</TD>
+		<TD>Code barre</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
-		<td> <b> &nbsp; &nbsp; OU</b></TD>
-	</TR>
+		<td><b> &nbsp; &nbsp; OU</b></TD></TR>
+	<!-- <TR VALIGN=TOP>
+	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+	-->
 	<TR VALIGN=TOP>
 		<TD colspan=2 > &nbsp;</td>
 	</TR>
-
 	<TR VALIGN=TOP>
-		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
+		<TD  bgcolor="#ad11ad" colspan=2>
 			<span style="color:#FFFFFF;">
-				<b>Note :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-cl&eacute;s + auteur + cote) ralentira la recherche.<p>
+				<b>AIDE</b><br>
+				<b>Chercher :</b>L'utilisation de plusieurs critères pour votre recherche ralentit le système.<p>
 			</span>
 		</td>
 	</TR>
@@ -32,15 +34,17 @@
 
 
 
-<TABLE >
+<TABLE border=0>
 	<TR VALIGN=TOP>
-		<TD>Mots-cl&eacute;s</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+		<TD>Mots-clés</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
 	</TR>
 	<TR VALIGN=TOP>
 		<TD>Titre</TD>
-		<TD>
-			<INPUT TYPE="text"  SIZE="25" NAME="title"></TD><td><input type=radio name=ttype value=normal checked>Normal
-			<input type=radio name=ttype value=exact>Exacte
+		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
+		<td>
+			<input type=radio name=ttype value=normal checked>Normal
+			<input type=radio name=ttype value=exact>Exact
 		</td>
 	</TR>
 	<TR VALIGN=TOP>
@@ -51,51 +55,56 @@
 		<TD>Illustrateur</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
 	</TR>
-
-	<TR VALIGN=TOP>
-		<TD>Dewey</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
+		<TR VALIGN=TOP>
+		<TD>Dewey</TD><TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
 	</TR>
 
 	<TR VALIGN=TOP>
-		<TD>Cote</TD>
+	<TD>Catégorie</TD>
 		<td>
 			<select name="class" size="1">
-				<option value="">Toute
-				<TMPL_VAR name="classlist">
+			<option value=""> Tout
+			<!-- TMPL_VAR name="classlist" -->
 			</select>
 		</td>
 	</tr>
 	<!-- <TR VALIGN=TOP>
-	<td>Localisation</td><td><select name=branch>
+	<td>Annexe</td><td><select name=branch>
 	<option value="F">Foxton
 	</select>
 	</td></tr> -->
 
-	<!-- <TD>Date de publication (avant)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (apr&egrave;s) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
 	-->
 	<TR VALIGN=TOP>
-		<TD><b>OU</b></TD>
+	<TD><b>OU</b></TD>
 	</TR>
-
 
 	<TR VALIGN=TOP>
-		<TD>Sujet</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+		<TD>Sujet</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
 	</TR>
 	<tr>
-		<TD>
-			<input type="hidden" name="type" value="intra">
-			<input type="submit" class="button" value="Chercher">
-		</TD>
-		<TD>
-			<div align="right"><INPUT TYPE="reset"  VALUE= "effacer" class="button"></div>
+		<TD colspan=3>
+			<table width="100%" cellpadding=0 cellspacing=0>
+				<tr align="center">
+					<td>
+						<input type="hidden" name="type" value="intra">
+						<input type="submit" class="button" value="Lancer la recherche">
+					</td>
+					<td>
+						<INPUT TYPE="reset"  VALUE= "Effacer" class="button">
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/shelves.pl" class="button">Rayonnages virtuels</a>
+					</td>
+				</tr>
+			</table>
 		</TD>
 	</TR>
 </TABLE>
-</FORM>
-<p>
-<a href=/cgi-bin/koha/shelves.pl>Etag&egrave;res virtuelles</a>
-</CENTER>
-
+	</FORM>
+	<p>
+	</CENTER>
 <!--#include virtual="/includes/cat-bottom.inc" -->
 

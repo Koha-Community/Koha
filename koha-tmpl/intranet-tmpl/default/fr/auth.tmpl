@@ -1,0 +1,49 @@
+
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is affiché if user doesn't have permission -->
+<h2>Désolé, vous n'avez pas la permission d'accéder à cette page.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is affiché if connecter has timed out -->
+<h2>Sorry, your session has timed out.  Please connecter again.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is affiché if user's IP has changed -->
+<h2>Vous avez changé d'adresse IP. Identifiez-vous à nouveau.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is affiché if the username ou password doesn't work -->
+<h2>Vous entered an incorrect username ou password.  Please try again.</h2>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- connecter prompt time-->
+
+<center>
+
+<form action='<!-- TMPL_VAR NAME="url" -->' method="post">
+<!-- TMPL_LOOP NAME="INPUTS" -->
+  <input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->'>
+<!-- /TMPL_LOOP -->
+<table border="0" cellpadding="10" cellspacing="0" width="60%">
+    <tr><td align="center" valign="top">
+
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th colspan="2"><font size="+2">Identifiant</font></th></tr>
+    <tr><td>N° Carte:</td><td><input name="userid"></td></tr>
+    <tr><td>Mot de passe:</td><td><input type="password" name="password"></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="connecter"></td></tr>
+    </table>
+    </td><td align="center" valign="top">
+
+
+    </td></tr>
+</table>
+</form>
+
+
+<!-- /TMPL_IF -->

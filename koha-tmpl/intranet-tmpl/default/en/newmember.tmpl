@@ -31,7 +31,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Card Number</B>
+				<B>Card number</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="cardnum" -->
@@ -84,7 +84,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Date Of Birth</B>
+				<B>Date of birth</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="dob" -->
@@ -95,7 +95,11 @@
 				<B>Sex</B>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="sex" -->
+				<!-- TMPL_IF Name="sex" -->
+					Male
+				<!-- TMPL_ELSE -->
+					Female
+				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
@@ -126,7 +130,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone (Home)</B>
+				<B>Phone home</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="phone" -->
@@ -134,7 +138,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Phone (Daytime)</B>
+				<B>Phone daytime</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="phoneday" -->
@@ -223,12 +227,12 @@
 		</form>
 <!-- TMPL_ELSE -->
 	<h1>ERROR</H1>
-	<p>The following  fields have a forbidden value. Please push the back button and try again : </p>
+	<p>The following fields have a forbidden value. Please push the back button and try again : </p>
 	<!-- TMPL_IF name="cardnumber" -->
-		Cardnumber<br/>
+		Card number<br/>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="invalid_cardnumber" -->
-		Invalid_cardnumber<br/>
+		Invalid cardnumber<br/>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="gender" -->
 		Gender<br/>

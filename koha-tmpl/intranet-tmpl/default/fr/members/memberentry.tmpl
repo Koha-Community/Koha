@@ -1,203 +1,211 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<h1><TMPL_VAR NAME=header></h1><br>
+<!-- TMPL_IF NAME=addAction -->
+<h1>
+	Ajouter un lecteur
+</h1>
+<!-- TMPL_ELSE -->
+<h1>
+	Mise à jour du lecteur
+</h1>
+<!-- /TMPL_IF -->
+<br>
 
 <form action=/cgi-bin/koha/newmember.pl method=post>
-	<input type=hidden name=joining value="<TMPL_VAR NAME=dateenrolled>">
-	<input type=hidden name=expiry value="<TMPL_VAR NAME=expiry>">
-	<input type=hidden name=type value="borrowers">
-	<input type=hidden name=borrowernumber value="<TMPL_VAR NAME=member>">
-	<input type=hidden name=updtype value="<TMPL_VAR NAME=updtype>">
+	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
+	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
+	<input type=hidden name=type value="emprunteurs">
+	<input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
+	<input type=hidden name=updtype value="<!-- TMPL_VAR NAME=updtype -->">
 
 	<table border=0 cellspacing=0 cellpadding=5 >
+
 	<tr valign=top>
-		<td COLSPAN=2>
-		<input type=reset value="Effacer tous les champs">
-		</td>
-		<td COLSPAN=3 ALIGN=RIGHT>
-			<font size="4" face="arial,helvetica">N&deg; de lecteur<TMPL_VAR NAME=member>, N&deg; de carte*
-			<input type=text name=cardnumber size=10 value="<TMPL_VAR NAME=cardnumber>">
-			<br>
-			</font>
-		</td>
+		<td COLSPAN=2><input type=reset value="Effacer tous les champs"></td>
+		<td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>N° Lecteur <!-- TMPL_VAR NAME=member -->, N° Carte* <input type=text name=cardnumber size=10 value="<!-- TMPL_VAR NAME=cardnumber -->"><br></td>
 	</tr>
+
 	<tr valign=top>
-		<td COLSPAN=3 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>DETAILS PERSONNELS LECTEUR</b></td>
-		<td COLSPAN=2 ALIGN=RIGHT background="<TMPL_VAR name="themelang">/images/background-mem.gif">*
-			<input type="radio" name="sex" value="F" <TMPL_IF NAME=female>checked</TMPL_IF>>F
-			<input type="radio" name="sex" value="M" <TMPL_UNLESS NAME=female>checked</TMPL_UNLESS>> M <B>Date de naissance</B> (jj/mm/aa)
-			<input type=text name=dateofbirth size=10 value="<TMPL_VAR NAME=dateofbirth>">
+		<td COLSPAN=3 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>DETAILS LECTEUR</b></td>
+		<td COLSPAN=2 ALIGN=RIGHT background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">*
+		<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
+		<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> M
+		&nbsp; &nbsp;  <B>Date de Naissance</B> (<!-- TMPL_VAR NAME=dateformat -->)
+		<input type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
 		</td>
 	</tr>
 
 	<tr valign=top bgcolor=white>
 		<td><FONT SIZE=2>Titre</FONT></td>
 		<td><FONT SIZE=2>Initiales</FONT></td>
-		<td><font size="2">Pr&eacute;noms*</font></td>
-		<td><font size="2">Nom*</font></td>
-		<td><font size="2">Nom d'usage</font></td>
+		<td><FONT SIZE=2><b> Prénoms*</b></FONT></td>
+		<td><FONT SIZE=2><b> Nom*</b></FONT></td>
+		<td><FONT SIZE=2> Nom d'usage</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td><TMPL_VAR name="Mr">
+		<td><!-- TMPL_VAR name="Mr" -->
 		<SELECT NAME="title">
-			<option<TMPL_VAR name="title_selected_ "> value=" ">Aucun</option>
-			<option value="Miss"<TMPL_VAR name="title_Mlle">>Mlle</option>
-			<option value="Mrs"<TMPL_VAR name="title_Mme">>Mme</option>
-			<option <TMPL_VAR name="title_M"> value="M" >M</option>
-			<option value="Dr" <TMPL_VAR name="title_Dr">>Dr</option>
+			<option<!-- TMPL_VAR name="title_selected_ " --> value=" ">Pas de Titre</option>
+			<option value="Miss"<!-- TMPL_VAR name="title_Miss" -->>Miss</option>
+			<option value="Mrs"<!-- TMPL_VAR name="title_Mrs" -->>Mrs</option>
+			<option value="Ms"<!-- TMPL_VAR name="title_Ms" -->>Ms</option>
+			<option <!-- TMPL_VAR name="title_Mr" --> value="Mr" >Mr</option>
+			<option value="Dr" <!-- TMPL_VAR name="title_Dr" -->>Dr</option>
+			<option value="Sir" <!-- TMPL_VAR name="title_Sir" -->>Sir</option>
 		</SELECT>
 		</td>
-		<td>
-		<input type=text name=initials size=5 value="<TMPL_VAR NAME=initials>">
-		</td>
-		<td>
-		<input type=text name=firstname size=20 value="<TMPL_VAR NAME=firstname>">
-		</td>
-		<td>
-		<input type=text name=surname size=20 value="<TMPL_VAR NAME=surname>">
-		</td>
-		<td>
-		<input type=text name=othernames size=20 value="<TMPL_VAR NAME=othernames>">
-		</td>
+		<td><input type=text name=initials size=5 value="<!-- TMPL_VAR NAME=initials -->"></td>
+		<td><input type=text name=firstname size=20 value="<!-- TMPL_VAR NAME=firstname -->"></td>
+		<td><input type=text name=surname size=20 value="<!-- TMPL_VAR NAME=surname -->"></td>
+		<td><input type=text name=othernames size=20 value="<!-- TMPL_VAR NAME=othernames -->"></td>
 	</tr>
 
-	<tr valign=top bgcolor=white> <TMPL_IF NAME=ethcatpopup><TMPL_VAR NAME=ethcatpopup>
-		<td colspan=2>&nbsp;</td>
-		<td colspan=2>&nbsp;</td>
-		<TMPL_ELSE>
-		<td colspan=2>&nbsp;</td>
-		<td colspan=2>&nbsp;</td>
-		</TMPL_IF>
-		<td><font size="2">Cat&eacute;gorie d'utilisateur*</font></td>
+
+	<tr valign=top bgcolor=white>
+		<!-- TMPL_IF NAME=ethcatpopup --><!-- TMPL_VAR NAME=ethcatpopup -->
+		<td colspan=2><FONT SIZE=2>Appartenance éthnique</FONT></td>
+		<td colspan=2><FONT SIZE=2>Notes appartenance ethnique</FONT></td>
+		<!-- TMPL_ELSE -->
+		<td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>
+		<!-- /TMPL_IF -->
+		<td><FONT SIZE=2><b>Catégorie Lecteur*</b></FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td colspan=4>
-			<TMPL_VAR NAME=catcodepopup></td>
+		<td colspan=2>
+			<!-- TMPL_IF name="ethcatpopup" -->
+				<select name="ethnicity" size=1>
+					<!-- TMPL_LOOP NAME=ethnicityloop -->
+					<option value=<!-- TMPL_VAR NAME=value --><!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=label -->
+					<!-- /TMPL_LOOP -->
+				</select>
+			<!-- /TMPL_IF -->
+			</td>
+			<!-- TMPL_IF NAME=ethcatpopup --><!-- TMPL_VAR NAME=ethcatpopup -->
+			<td colspan=2><input type=text name=ethnicnotes size=40 ></td>
+			<!-- TMPL_ELSE -->
+			<td colspan=2>&nbsp;</td>
+			<!-- /TMPL_IF -->
+		<td><!-- TMPL_VAR NAME=catcodepopup --></td>
 	</tr>
 
+
 	<tr valign=top bgcolor="99cc33" >
-		<td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>ADRESSE DU LECTEUR</b></td>
+		<td COLSPAN=5 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>ADRESSE LECTEUR</b></td>
 	</tr>
 
 	<tr valign=top bgcolor=white>
 		<td  COLSPAN=3><FONT SIZE=2><b>Adresse postale*</b></FONT></td>
-		<td><FONT SIZE=2><b>CP /Ville*</b></FONT></td>
-		<td><FONT SIZE=2>Annexe rattachement</FONT></td>
+		<td><FONT SIZE=2><b>Code postal / Localité*</b></FONT></td>
+		<td><FONT SIZE=2>Annexe d'inscription</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=address>"></td>
+		<td COLSPAN=3><input type=text name=address size=40 value="<!-- TMPL_VAR NAME=address -->"></td>
 		<td>
-			<input type=text name="zipcode" size=20 value="<TMPL_VAR NAME="zipcode">"><br />
-			<input type=text name=city size=20 value="<TMPL_VAR NAME=city>">
+			<input type=text name="zipcode" size=20 value="<!-- TMPL_VAR NAME="zipcode" -->"><br />
+			<input type=text name=city size=20 value="<!-- TMPL_VAR NAME=city -->">
 		</td>
 		<td>
-			<TMPL_VAR name="CGIbranch">
+			<!-- TMPL_VAR name="CGIbranch" -->
 		</td>
 	</tr>
 
+
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=3><FONT SIZE=2>Autre adresse</FONT></td>
-		<td><FONT SIZE=2>CP / Ville</FONT></td>
+		<td COLSPAN=3><FONT SIZE=2>Adresse si différente</FONT></td>
+		<td><FONT SIZE=2>Code postal / Localité</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
+		<td COLSPAN=3><input type=text name=streetaddress size=40 value="<!-- TMPL_VAR NAME=streetaddress -->"></td>
 		<td>
-			<input type=text name="homezipcode" size=20 value="<TMPL_VAR NAME="homezipcode">"></br/>
-			<input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
+			<input type=text name="homezipcode" size=20 value="<!-- TMPL_VAR NAME="homezipcode" -->"></br/>
+			<input type=text name=streetcity size=20 value="<!-- TMPL_VAR NAME=streetcity -->"></td>
 	</tr>
+
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=2 ><FONT SIZE=2>Téléphone personnel</td>
+		<td><FONT SIZE=2>Fax</td>
+		<td><FONT SIZE=2>E-mail</td>
+		<td><FONT SIZE=2>Ecriture d'un texte</td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=2><input type=text name=phone size=20 value="<!-- TMPL_VAR NAME=phone -->"></td>
+		<td><input type=text name=faxnumber size=20 value="<!-- TMPL_VAR NAME=faxnumber -->"></td>
+		<td><input type=text name=emailaddress size=20 value="<!-- TMPL_VAR NAME=emailaddress -->"></td>
+		<td><input type=text name=textmessaging size=20 value="<!-- TMPL_VAR NAME=textmessaging -->"></td>
+	</tr>
+
+
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=2 ><FONT SIZE=2>Téléphone professionnel</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=2><input type=text name=phoneday size=20 value="<!-- TMPL_VAR NAME=phoneday -->"></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+
 
 	<tr valign=top bgcolor="99cc33">
-		<td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>CONTACTER LE LECTEUR</b></td>
+		<td  COLSPAN=5  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>AUTRE CONTACT</b></td>
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=2 ><font size="2">T&eacute;l&eacute;phone personnel</font></td>
-		<td><font size="2">T&eacute;l&eacute;phone professionnel</font></td>
-		<td><FONT SIZE=2>Fax</font></td>
-		<td><FONT SIZE=2>Email</font></td>
+		<td   COLSPAN=3 ><FONT SIZE=2><b> Nom*</b></td>
+		<td><FONT SIZE=2>Téléphone</td>
+		<td><FONT SIZE=2><b>Relation*</b></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=2>
-		<input type=text name=phone size=20 value="<TMPL_VAR NAME=phone>">
-		</td>
-		<td>
-		<input type=text name=phoneday size=20 value="<TMPL_VAR NAME=phoneday>">
-		</td>
-		<td>
-		<input type=text name=faxnumber size=20 value="<TMPL_VAR NAME=faxnumber>">
-		</td>
-		<td>
-		<input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>">
-		</td>
-		<td>
-		<input type=text name=textmessaging size=20 value="<TMPL_VAR NAME=textmessaging>">
-		</td>
-	</tr>
-
-	<tr valign=top bgcolor="99cc33">
-		<td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>AUTRE CONTACT</b></td>
-	</tr>
-
-	<tr valign=top bgcolor=white>
-		<td   COLSPAN=3 ><FONT SIZE=2>Nom*</font></td>
-		<td><font size="2">T&eacute;l&eacute;phone</font></td>
-		<td><FONT SIZE=2>Relation avec le lecteur*</font></td>
-	</tr>
-	<tr valign=top bgcolor=white>
-		<td COLSPAN=3 >
-		<input type=text name=contactname size=40 value="<TMPL_VAR NAME=contactname>">
-		</td>
-		<td>
-		<input type=text name=altphone size=20 value="<TMPL_VAR NAME=altphone>">
-		</td>
+		<td COLSPAN=3 ><input type=text name=contactname size=40 value="<!-- TMPL_VAR NAME=contactname -->"></td>
+		<td><input type=text name=altphone size=20 value="<!-- TMPL_VAR NAME=altphone -->"></td>
 		<td>
 		<select name=altrelationship size=1>
-			<TMPL_LOOP NAME=relshiploop>
-			<OPTION <TMPL_VAR NAME=selected>><TMPL_VAR NAME=relationship>
-			</TMPL_LOOP>
+		<!-- TMPL_LOOP NAME=relshiploop -->
+			<OPTION <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=relationship -->
+		<!-- /TMPL_LOOP -->
 		</select>
 		</td>
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td><font size="2">Remarques</font></td>
-		<td COLSPAN=4>
-		<textarea name=altnotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=altnotes></textarea>
-		</td>
+		<td><FONT SIZE=2> Notes</font></td>
+		<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><!-- TMPL_VAR NAME=altnotes --></textarea></td>
 	</tr>
 
+
 	<tr valign=top bgcolor="99cc33">
-		<td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>UTILISATION DE
-		LA BIBLIOTHEQUE</B></td>
+		<td  COLSPAN=5  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>UTILISATION BIBLIOTHEQUE</B></td>
 	</tr>
+
 	<tr valign=top >
-		<td><font size="2">Remarques</font></td>
-		<td COLSPAN=4>
-		<textarea name=borrowernotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=borrowernotes></textarea>
-		</td>
+		<td><FONT SIZE=2> Notes</font></td>
+		<td COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3><!-- TMPL_VAR NAME=borrowernotes --></textarea></td>
 	</tr>
-	<tr>
-		<td>&nbsp; </TD>
-	</TR>
-	<TMPL_IF NAME=modify>
-	<tr>
-		<td COLSPAN=5><Font size=2>Indicateurs</font></td>
-	</tr>
-	<TMPL_LOOP NAME=flagloop>
-	<tr>
-		<td COLSPAN=2><TMPL_VAR NAME=html></td>
-		<td COLSPAN=3>
-		<input type=radio name="<TMPL_VAR NAME=name>" value="1" <TMPL_VAR NAME=yes>>Oui
-		<input type=radio name="<TMPL_VAR NAME=name>" value="0" <TMPL_VAR NAME=no>>Non </td>
-	</tr>
-	</TMPL_LOOP> </TMPL_IF>
+
+	<!-- TMPL_IF NAME=modifier -->
+		<tr><td COLSPAN=5><Font size=2>DRAPEAUX</font></td></tr>
+		<!-- TMPL_LOOP NAME=flagloop -->
+		<tr>
+			<td COLSPAN=2><!-- TMPL_VAR NAME=html --></td>
+			<td COLSPAN=3><input type=radio name="<!-- TMPL_VAR NAME=name -->" value="1" <!-- TMPL_VAR NAME=oui -->>Oui
+			<input type=radio name="<!-- TMPL_VAR NAME=name -->" value="0" <!-- TMPL_VAR NAME=no -->>Non
+			</td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
+
+
 	<tr>
 		<td></td>
 		<td>
-			<input type=hidden name=type value=<TMPL_VAR NAME="type">>
-			<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" ALT="Add New Member" border=0 ></td>
+			<input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
+			<input type="submit" value="Enregistrer" class="button">
+		</td>
 	</tr>
-
 	</table>
 </form>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

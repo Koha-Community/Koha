@@ -13,7 +13,7 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 // end hiding -->
 </script>
 
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <style>
 a.catalogue {
 	font-weight: normal;
@@ -61,13 +61,13 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a class="members" href="/cgi-bin/koha/members-home.pl">Lecteurs</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisition</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 					</td>
 					<td>
-						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Etats</a>
+						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Rapports</a>
 					</td>
 					<td>
 						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a>
@@ -83,16 +83,19 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 					<td width="100"></td>
 					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
 					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Recherche simple</a>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Recherche rapide</a>
 					</td>
 					<td>
 						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">Recherche MARC</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu">Ajout notice</a>
+						<a href="/cgi-bin/koha/shelves.pl" class="submenu">Rayonnages virtuels</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu2">Maintenance catalogue</a>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Ajouter une notice biblio</a>
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Maintenance Cat</a>
 					</td>
 				</tr>
 			</table>
@@ -101,8 +104,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 </tr>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Déconnecter</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> à Koha</p>
-</TMPL_IF>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Connecté comme: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Déconnecter</a>]</p>
+<!-- TMPL_ELSE -->
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
+<!-- /TMPL_IF -->

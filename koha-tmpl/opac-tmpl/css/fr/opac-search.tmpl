@@ -1,0 +1,35 @@
+<!-- TMPL_INCLUDE name="opac-top.inc" -->
+
+<div id="mainbloc">
+	<h1>Recherche avancée</h1>
+	<form action="/cgi-bin/koha/opac-searchresults.pl" method="get">
+	<ul>
+		<li><label>mot-clef</label><input type="text"  size="25"   name="keyword" /></li>
+	</ul>
+	<p><b>OU :</b></p>
+	<ul>
+		<li><label>sujet</label><input type="text"  size="25"   name="sujet" /></li>
+	</ul>
+	<p><b>OU un ou plus de : :</b></p>
+	<ul>
+		<li><label>Titre</label><input type="text"  size="25"   name="title" /></li>
+		<li><label>Auteur</label><input type="text"  size="25"   name="author" /></li>
+		<li><label>Illustrateur</label><input type="text"  size="25"   name="illustrator" /></li>
+		<li><label>Type d'exemplaire</label>
+			<select size="1"  name="class">
+				<option value="">Tout</option>
+				<!-- TMPL_VAR name="classlist" -->
+			</select>
+		</li>
+		<li><label>Code barre</label><input type="text"  size="25"   name="itemnumber" /></li>
+	</ul>
+		<p>qui utilise <input type="radio" name="ttype" value="normal" />Normal ou <input type="radio" name="ttype" value="exact" />Recherche exacte</p>
+
+	<p>
+		<input type="submit" value="Lancer recherche" class="button" />
+		<input type="reset"  value="Effacer" class="button" />
+	</p>
+	<p>Notez que le mot clef est prioritaire</p>
+	</form>
+</div>
+<!-- TMPL_INCLUDE name="opac-bottom.inc" -->

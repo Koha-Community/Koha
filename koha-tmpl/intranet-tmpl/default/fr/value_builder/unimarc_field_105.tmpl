@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 100</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Date d'enregistrement </td>
+		<td><input type="text" name="f1" maxlength=8 size=8 value="<!-- TMPL_VAR name="f1" -->"></td>
+	</tr>
+	<tr>
+		<td>Code date publication </td><td><select name="f2" size="1">
+		<option value="a" <!-- TMPL_IF name="f2a" -->SELECTED<!-- /TMPL_IF -->>p?riodique en cours</option>
+			<option value="b" <!-- TMPL_IF name="f2b" -->SELECTED<!-- /TMPL_IF -->>p?riodique mort</option>
+			<option value="c" <!-- TMPL_IF name="f2c" -->SELECTED<!-- /TMPL_IF -->>p?riodique d'?tat inconnu</option>
+			<option value="d" <!-- TMPL_IF name="f2d" -->SELECTED<!-- /TMPL_IF -->>monographie compl?te</option>
+			<option value="e" <!-- TMPL_IF name="f2e" -->SELECTED<!-- /TMPL_IF -->>reproduction</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Ann?e d?but</td>
+		<td><input type="text" name="f3" maxlength=4 size=5 value="<!-- TMPL_VAR name="f3" -->"></td>
+	</tr>
+	<tr>
+	<td>Ann?e fin</td>
+	<td><input type="text" name="f4" maxlength=4 size=5 value="<!-- TMPL_VAR name="f4" -->"></td>
+	</tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		document.f_pop.f1.value=document.f_pop.f1.value+'        ';
+		document.f_pop.f3.value=document.f_pop.f3.value+'    ';
+		document.f_pop.f4.value=document.f_pop.f4.value+'    ';
+		document.f_pop.f1.value=document.f_pop.f1.value.substring(0,8);
+		document.f_pop.f3.value=document.f_pop.f3.value.substring(0,4);
+		document.f_pop.f4.value=document.f_pop.f4.value.substring(0,4);
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

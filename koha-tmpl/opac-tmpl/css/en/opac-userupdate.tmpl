@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+
+<div id="mainbloc">
+<h2>Member informations change</h2>
+<p><i>Please, change what's needed. An email will be sent to the library.<br />
+Your changes won't appear until the library has validated them.</i></p>
+
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+	<p>Surname: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='surname' -->"  NAME="surname"></p>
+	<p>Title: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='title' -->"  NAME="title"></p>
+	<p>Firstname: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='firstname' -->"  NAME="firstname"></p>
+	<p>Street address: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='streetaddress' -->"  NAME="streetaddress"></p>
+	<p>City: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='city' -->"  NAME="city"></p>
+	<p>Home phone: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='phone' -->"  NAME="phone"></p>
+	<p>Work/Fax phone: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='faxnumber' -->"  NAME="faxnumber"></p>
+	<p>Email: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='emailaddress' -->"  NAME="emailaddress"></p>
+	<p><input type="submit" value="Submit" class="button" /></p>
+</form>
+</div>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

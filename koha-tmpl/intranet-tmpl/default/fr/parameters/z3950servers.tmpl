@@ -1,6 +1,6 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<TMPL_IF NAME=add_form>
+<!-- TMPL_IF NAME=add_form -->
         <script>
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
@@ -51,18 +51,18 @@
                         _alertString += "- database missing\n";
                 }
                 if (isNaN(f.port.value)) {
-                        _alertString += "- port must be a number\n";
+                        _alertString += "- port doit be a number\n";
                 }
                 if (isNaN(f.rank.value)) {
-                        _alertString += "- rank must be a number\n";
+                        _alertString += "- rank doit be a number\n";
                 }
                 if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-                        _alertString += "- checked must be 0 or 1\n";
+                        _alertString += "- checked doit be 0 ou 1\n";
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 = "Form not submitted because sur the following problem(s)\n";
                         alertString2 += "------------------------------------------------------------------------------------\n\n";
                         alertString2 += _alertString;
                         alert(alertString2);
@@ -70,77 +70,77 @@
         }
         </SCRIPT>
 
-        <TMPL_IF NAME=searchfield>
-                <h1>ModifierServeur Z39.50</h1>
-        <TMPL_ELSE>
-                <h1>Ajouter Serveur Z39.50</h1>
-        </TMPL_IF>
-        <form action="<TMPL_VAR NAME=script_name>" name=Aform method=post>
+        <!-- TMPL_IF NAME=searchfield -->
+                <h1>Modifier serveur Z39.50</h1>
+        <!-- TMPL_ELSE -->
+                <h1>Ajouter un serveur Z39.50</h1>
+        <!-- /TMPL_IF -->
+        <form action="<!-- TMPL_VAR NAME=script_name -->" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
                 
         <table>
         
-        <TMPL_IF NAME=searchfield>
+        <!-- TMPL_IF NAME=searchfield -->
                 <tr>
                         <td>Serveur Z39.50</td>
                         <td>
-                                <input type=hidden name=searchfield value='<TMPL_VAR NAME=searchfield>'><TMPL_VAR NAME=searchfield>
+                                <input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
                         </td>
                 </tr>
-        <TMPL_ELSE>
+        <!-- TMPL_ELSE -->
                 <tr>
-                        <td>Server Z39.50</td>
+                        <td>Serveur Z39.50</td>
                         <td>
                                 <input type=text name=searchfield size=100 maxlength=100 onBlur=toUC(this)>
                         </td>
                 </tr>
-        </TMPL_IF>
+        <!-- /TMPL_IF -->
 
 		<tr>
-			<td>Hostname</td>
+			<td>Nom de l'hébergeur</td>
 			<td>
-				<input type=text name=host size=30 value='<TMPL_VAR NAME=host>'>
+				<input type=text name=host size=30 value='<!-- TMPL_VAR NAME=host -->'>
 			</td>
 		</tr>
 		<tr>
 			<td>Port</td>
 			<td>
-				<input type=text name=port size=5 value='<TMPL_VAR NAME=port>' onBlur=isNum(this)>
+				<input type=text name=port size=5 value='<!-- TMPL_VAR NAME=port -->' onBlur=isNum(this)>
 			</td>
 		</tr>
 		<tr>
-			<td>Database</td>
+			<td>Base de données</td>
 			<td>
-				<input type=text name=db value='<TMPL_VAR NAME=db>'>
+				<input type=text name=db value='<!-- TMPL_VAR NAME=db -->'>
 			</td>
 		</tr>
 		<tr>
-			<td>Userid</td>
+			<td>Identifiant utilisateur</td>
 			<td>
-				<input type=text name=userid value='<TMPL_VAR NAME=userid>'>
+				<input type=text name=userid value='<!-- TMPL_VAR NAME=userid -->'>
 			</td>
 		</tr>
 		<tr>
-			<td>Password</td>
+			<td>Mot de passe</td>
 			<td>
-				<input type=text name=password value='<TMPL_VAR NAME=password>'>
+				<input type=text name=password value='<!-- TMPL_VAR NAME=password -->'>
 			</td>
 		</tr>
 		<tr>
-			<td>Actif</td>
+			<td>Coché (recherche par défaut)</td>
 			<td>
-				<input type=text size=1 name=checked value='<TMPL_VAR NAME=checked>' onBlur=isNum(this)>  
+				<input type=text size=1 name=checked value='<!-- TMPL_VAR NAME=checked -->' onBlur=isNum(this)>  
 		<tr>
-			<td>Priorité (d'affichage)</td>
+			<td>Rang (ordre d'affichage)</td>
 			<td>
-				<input type=text name=rank size=4 value='<TMPL_VAR NAME=rank>' onBlur=isNum(this)>
+				<input type=text name=rank size=4 value='<!-- TMPL_VAR NAME=rank -->' onBlur=isNum(this)>
 			</td>
 		</tr>
 		<tr>
-			<td>Syntaxe (les serveurs renvoient les données dans des formats variables. En choisir un)</td>
+			<td>Syntaxe (Z39.50 peut envoyer des notices en différents formats. Sélectionnez lequel)</td>
 			<td>
 				<select name="syntax">
-					<option value="USMARC">USMARC</option>
+					<option value="MARC21">MARC21</option>
 					<option value="UNIMARC">UNIMARC</option>
 				</select>
 			</td>
@@ -153,136 +153,136 @@
 		</tr>
         </table>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=add_validate>
-        Donn&eacute;e enregistr&eacute;e
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+<!-- TMPL_IF NAME=add_validate -->
+        Donnée enregistrée
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=submit value=OK>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=delete_confirm>
-	<TMPL_VAR NAME=reqsel>
+<!-- TMPL_IF NAME=delete_confirm -->
+	<!-- TMPL_VAR NAME=reqsel -->
 	
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'>
                                 <b>Site</b>
                         </td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'>
-                                <TMPL_VAR NAME=searchfield>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'>
+                                <!-- TMPL_VAR NAME=searchfield -->
                         </td>
                 </tr>
-                <form action='<TMPL_VAR NAME=script_name>' method=post>
+                <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                         <input type=hidden name=op value=delete_confirmed>
-                        <input type=hidden name=searchfield value=<TMPL_VAR NAME=searchfield>>
+                        <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
                 <tr>
-                        <td>Hostname</td>
-                        <td><TMPL_VAR NAME=host></td>
+                        <td>Nom de l'hébergeur</td>
+                        <td><!-- TMPL_VAR NAME=host --></td>
                 </tr>
                 <tr>
                         <td>Port</td>
-                        <td><TMPL_VAR NAME=port></td>
+                        <td><!-- TMPL_VAR NAME=port --></td>
                 </tr>
                 <tr>
-                        <td>Database</td>
-                        <td><TMPL_VAR NAME=db></td>
+                        <td>Base de données</td>
+                        <td><!-- TMPL_VAR NAME=db --></td>
                 </tr>
                 <tr>
-                        <td>Userid</td>
-                        <td><TMPL_VAR NAME=userid></td>
+                        <td>Identifiant utilisateur</td>
+                        <td><!-- TMPL_VAR NAME=userid --></td>
                 </tr>
                 <tr>
-                        <td>Password</td>
-                        <td><TMPL_VAR NAME=password></td>
+                        <td>Mot de passe</td>
+                        <td><!-- TMPL_VAR NAME=password --></td>
                 </tr>
                 <tr>
-                        <td>Checked</td>
-                        <td><TMPL_VAR NAME=checked></td>
+                        <td>Vérifié</td>
+                        <td><!-- TMPL_VAR NAME=checked --></td>
                 </tr>
                 <tr>
-                        <td>Rank</td>
-                        <td><TMPL_VAR NAME=rank></td>
+                        <td>Rang</td>
+                        <td><!-- TMPL_VAR NAME=rank --></td>
                 </tr>
                 <tr>
                         <td colspan=2 align=center>CONFIRMER SUPPRESSION</td>
                 </tr>
                 <tr>
-                        <td><INPUT type=submit value='YES'></form></td>
-                        <td><form action='<TMPL_VAR NAME=script_name>' method=post><input type=submit value=NO></form></td>
+                        <td><INPUT type=submit value='OUI'></form></td>
+                        <td><form action='<!-- TMPL_VAR NAME=script_name -->' method=post><input type=submit value=NO></form></td>
                 </tr>
 	</table>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=delete_confirmed>
-        Donn&eacute;e supprim&eacute;e
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+<!-- TMPL_IF NAME=delete_confirmed -->
+        Donnée effacée
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=submit value=OK>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=else>
-        <h2>Serveurs z3950</h2>
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
-                <input type=text name=description value=<TMPL_VAR NAME=searchfield>>
-                <input type=reset name=reset value="clr">
+<!-- TMPL_IF NAME=else -->
+        <h2>Admin Serveurs Z39.50</h2>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
+                <input type=reset name=reset value="effacer">
         </form>
 
-        <TMPL_IF NAME=searchfield>
-                Rechercher sur <b><TMPL_VAR NAME=searchfield></b>
-        </TMPL_IF>
+        <!-- TMPL_IF NAME=searchfield -->
+                Votre recherche sur <b><!-- TMPL_VAR NAME=searchfield --></b>
+        <!-- /TMPL_IF -->
 
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Site</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Hostname</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Port</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Database</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Userid</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Password</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Checked</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Rank</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Syntax</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Site</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Nom de l'hébergeur</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Port</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Base de données</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Identifiant utilisateur</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Mot de passe</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Vérifié</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Rang</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Syntaxe</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
                 </tr>
-                <TMPL_LOOP NAME=loop>
-                <tr bgcolor="<TMPL_VAR NAME=toggle>">
-                        <td><TMPL_VAR NAME=name></td>
-                        <td><TMPL_VAR NAME=host></td>
-                        <td><TMPL_VAR NAME=port></td>
-                        <td><TMPL_VAR NAME=db></td>
-                        <td><TMPL_VAR NAME=userid></td>
-                        <td><TMPL_VAR NAME=password></td>
-                        <td><TMPL_VAR NAME=checked></td>
-                        <td><TMPL_VAR NAME=rank></td>
-                        <td><TMPL_VAR NAME=syntax></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" ALT="Edit" title="edit" BORDER=0 ></a></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" ALT="Delete" title="delete" BORDER=0 ></a></td>
+                <!-- TMPL_LOOP NAME=loop -->
+                <tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
+                        <td><!-- TMPL_VAR NAME=name --></td>
+                        <td><!-- TMPL_VAR NAME=host --></td>
+                        <td><!-- TMPL_VAR NAME=port --></td>
+                        <td><!-- TMPL_VAR NAME=db --></td>
+                        <td><!-- TMPL_VAR NAME=userid --></td>
+                        <td><!-- TMPL_VAR NAME=password --></td>
+                        <td><!-- TMPL_VAR NAME=checked --></td>
+                        <td><!-- TMPL_VAR NAME=rank --></td>
+                        <td><!-- TMPL_VAR NAME=syntax --></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=name -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png" ALT="Edit" title="éditer" BORDER=0 ></a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=name -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" ALT="Delete" title="supprimer" BORDER=0 ></a></td>
 			</tr>
-                </TMPL_LOOP>
+                <!-- /TMPL_LOOP -->
 	</table>
 
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=hidden name=op value=add_form>
                         
-        <TMPL_IF NAME=offsetgtzero>
-                <a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=prevpage>"><< Prec</a>
-        </TMPL_IF>
+        <!-- TMPL_IF NAME=offsetgtzero -->
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->"><< Prev</a>
+        <!-- /TMPL_IF -->
         
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-        <TMPL_IF NAME=ltcount>
-                <a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=nextpage>">suiv >></a>
-        </TMPL_iF>
+        <!-- TMPL_IF NAME=ltcount -->
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Suivant >></a>
+        <!-- /TMPL_iF -->
                 
         <br>
-        <input type=submit class="button" alt="Ajouter" value="Ajouter serveur Z39.50">
+        <input type=submit class="button" alt="Ajouter un serveur Z39.50" value="Ajouter un serveur Z39.50">
         <br>
         </form>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

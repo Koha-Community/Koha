@@ -1,0 +1,33 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+
+<CENTER>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'><b>Nom</b></td>
+			<td background='/images/background-mem.gif'><b>Saisir</b></td>
+			<td background='/images/background-mem.gif'><b>Date/Heure</b></td>
+			<td background='/images/background-mem.gif'><b>Montant</b></td>
+			<td background='/images/background-mem.gif'><b>Annexe</b></td>
+		<tr>
+		<!-- TMPL_LOOP name=loop1 -->
+		<tr>
+			<td><!-- TMPL_VAR NAME=name --></td>
+			<td><!-- TMPL_VAR NAME=type --></td>
+			<td><!-- TMPL_VAR NAME=time --></td>
+			<td><!-- TMPL_VAR NAME=amount --></td>
+			<td><!-- TMPL_VAR NAME=branch --></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</CENTER>
+
+
+<p>
+	<b>Total payé: <!-- TMPL_VAR NAME=total --></b>
+	<br>
+	<b>Total déduit: <!-- TMPL_VAR NAME=totalw --></b>
+</p>
+
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</BODY>
+</HTML>

@@ -1,115 +1,100 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
-<!--
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Connect&eacute;: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
--->
-
-<TMPL_LOOP NAME="BIBLIO_RESULTS">
-
-<p><font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font>
-<TMPL_IF NAME="norequests">
-<TMPL_ELSE>
-	<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber"> class="button">R&eacute;servations</a>
-</TMPL_IF>
-</p>
-<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
-	<!-----------------BIBLIO RECORD TABLE--------->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<!-- TMPL_IF NAME="norequests" -->
+	<!-- TMPL_ELSE -->
+		<table border=0 cellpadding=10 align=right>
+		<tr>
+			<td>
+				<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
+			</td>
+		</tr>
+		</table>
+	<!-- /TMPL_IF -->
+	<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+	<!-- TMPL_VAR NAME="class" --></em></font><p>
+	<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
+	<!-----------------Notice bibliographique TABLE--------->
 	<tr valign="top">
 		<td bgcolor="#cccc99" background="/images/background-mem.gif">
-			<b>Notice N° <TMPL_VAR NAME="biblionumber"></b>
+			<b>Notice bibliographique <!-- TMPL_VAR NAME="biblionumber" --></b>
 		</td>
 	</tr>
 	<tr valign="top">
 		<td>
-			<br/><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">" class="button">MARC</a><br/><br/>
+			<br/><a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">MARC</a><br/><br/>
 			<FONT SIZE=2  face="arial, helvetica">
-			<TMPL_IF name="subtitle"><b>Sous-titre:</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
-			<TMPL_IF name="author"><b>Auteur:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></TMPL_IF><br>
-			<TMPL_IF name="additional"><b>Autre Auteur:</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
-			<TMPL_IF name="publishercode"><b>Publié par :</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
-			<TMPL_IF name="publicationyear"><b>en </b></TMPL_IF><TMPL_VAR NAME="publicationyear">
-			<TMPL_IF name="pages">, </TMPL_IF><TMPL_VAR name="pages">
-			<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br/>
-			<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br/>
-			<TMPL_IF name="subject"><b>Sujet:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br/>
-			<TMPL_IF name="copyrightdate"><b>Ann&eacute;e:</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br/>
-			<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br/>
-			<TMPL_IF name="unititle"><b>Titre uniforme:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br/>
-			<TMPL_IF name="serial"><b>P&eacute;riodique:</b><TMPL_VAR NAME="serial"></TMPL_IF><br/>
-			<TMPL_IF name="dewey"><b>Côte dewey :</b></TMPL_IF><TMPL_VAR name="dewey"><br/>
-			<TMPL_IF name="url"><b>URL :</b> <a hre="<TMPL_VAR name="url"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
-			<b>Nbre total d'exemplaires:</b> <TMPL_VAR NAME="count">
-			<p>
+			<!-- TMPL_IF name="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subtitle" --><b>Sous-titre:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="author" --><b>Auteur:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="additional" --><b>Auteur supplémentaire:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="publishercode" --><b>Publié par :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="publicationyear" --><b>en </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
+			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br>
+			<!-- TMPL_IF name="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subject" --><b>Sujet:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="copyrightdate" --><b>Année :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="unititle" --><b>Titre uniforme:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
+			<!-- TMPL_IF name="serial" --><b>Périodiques:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="classification" --><b>Classification:</b> <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
+			<b>Nombre total d'ouvrages:</b> <!-- TMPL_VAR NAME="count" -->
 			</font>
 		</td>
 	</tr>
-</table>
-</TMPL_LOOP>
+	</table>
+<!-- /TMPL_LOOP -->
 <!-- FIXME - The help box overflows on the right. I think this is
      because it is specified as "width=70%", which the browser
-     interprets as 70% of the width of the browser window. However,
+     interprets as 70% sur the width sur the browser window. However,
      leaving out the "width=70%" makes the help box abut the "biblio
      record" box. I think the fix is to put all three boxes in a
-     table, for layout, and make the help box as wide as it wants to
+     table, for layout, et make the help box as wide as it wants to
      be. -->
 
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
-<tr bgcolor="#cccc99" background="/images/background-mem.gif">
-<td>Type de document</td>
-<td>Cote</td>
-<td>Localisation</td>
-<td>Retour pr&eacute;vu</td>
-<td>Derni&egrave;re transaction</td>
-<td>Code-barres</td>
-<td>Volume</td>
-</tr>
-<TMPL_LOOP NAME="ITEM_RESULTS">
-<tr>
-<td><TMPL_VAR NAME="description"></td>
-<td><a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></td>
-<td><TMPL_VAR NAME="branchname"></td>
-<td><TMPL_VAR NAME="datedue"></td>
-<td><TMPL_VAR NAME="datelastseen"></td>
-<td><a href="/cgi-bin/koha/moredetail.pl?type=<TMPL_VAR NAME="type">&item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="barcode"></a></td>
-<td><TMPL_VAR NAME="volumeddesc"></td>
-<TMPL_IF NAME="type">
-<td><a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<TMPL_VAR
-NAME="biblioitemnumber">&item=<TMPL_VAR NAME="itemtype">>Fix Itemtype</a></td>
-</TMPL_IF>
-</tr>
-</TMPL_LOOP>
-<TMPL_LOOP NAME="WEB_RESULTS">
-<tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td>Site web</td>
-<td>disponible</td>
-<td>en ligne</td>
-<td></td>
-<td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
-</tr>
-</TMPL_LOOP>
+	<tr bgcolor="#cccc99" background="/images/background-mem.gif">
+		<th>Catég ouvrage</th>
+		<th>Localisation</th>
+		<th>Date de retour</th>
+		<th>Vu</th>
+		<th>Code barre</th>
+		<td>Volume</td>
+	</tr>
+	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="description" --></td>
+			<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="bulk" --> <!-- TMPL_VAR NAME="bulk" --><!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="datedue" --></td>
+			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+			<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
+			<!-- TMPL_IF NAME="type" -->
+				<td>
+					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&item=<!-- TMPL_VAR NAME="itemtype" -->>Fix Itemtype</a>
+				</td>
+			<!-- /TMPL_IF -->
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td>Site Web</td>
+			<td>En ligne</td>
+			<td>Disponible</td>
+			<td></td>
+			<td>
+				<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">http://<!-- TMPL_VAR NAME="url" --></a>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
 </table>
 <p>
-<table border="0" cellspacing="0" cellpadding="5" width=70%>
-<tr valign="top">
-<td bgcolor="99cc33" background="/images/background-mem.gif"
-colspan="2"><p><b>HELP</b><br>
-<b>Mettre &agrave; jour la notice pour tous les exemplaires:</b> cliquez sur le bouton <b>Modifier</b>
-      [&agrave; gauche] pour modifier la notice.  Tout changement sera r&eacute;percut&eacute; sur la notice de <b>tous</b> les exemplaires ci-dessus. <p>
-<b>Mettre &agrave; jour la notice pour UN ou QUELQUES exemplaires:</b>
-Si certains exemplaires ci-dessus doivent avoir une notice diff&eacute;rente, ou sont li&eacute;s &agrave; la mauvaise notice, vous devez utiliser le module
-<a
-href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>. Vous devrez "re-commander" les exemplaires, et les effacer de cette notice.
-<p /></tr>
-</table>
 </center>
 <br clear=all>
 <p />
@@ -118,30 +103,31 @@ href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>. Vous d
 <table border="1" cellspacing="0" cellpadding="5" width="90%">
 <tr valign="top">
 <td bgcolor="$main"
-background="/images/background-mem.gif"><b>R&eacute;sum&eacute;</b></td>
+background="/images/background-mem.gif"><b>Résumé</b></td>
 </tr>
 <tr valign="top">
-<TMPL_LOOP NAME="BIBLIO_RESULTS">
-<td><TMPL_VAR NAME="abstract"></td>
-</TMPL_LOOP>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<td><!-- TMPL_VAR NAME="abstract" --></td>
+<!-- /TMPL_LOOP -->
 </tr>
 </table>
 <p />
 <table border="1" cellspacing="0" cellpadding="5" width="90%">
 <tr valign="top">
-<td bgcolor="$main" background="/images/background-mem.gif"><b>Liens vers des sites web associ&eacute;s<b></td>
+<td bgcolor="$main" background="/images/background-mem.gif"><b>Links to
+Associated Websites<b></td>
 </tr>
-<TMPL_LOOP NAME="SITE_RESULTS">
+<!-- TMPL_LOOP NAME="SITE_RESULTS" -->
 <tr>
-<td><b>Titre:</b> <TMPL_VAR name="title"><br>
-<b>Description:</b> <TMPL_VAR name="description"><br>
-<b>URL:</b><a href="http://<TMPL_VAR name="url">">http://<TMPL_VAR
+<td><b>Titre:</b> <!-- TMPL_VAR name="title" --><br>
+<b>Description:</b> <!-- TMPL_VAR name="description" --><br>
+<b>URL:</b><a href="http://<!-- TMPL_VAR name="url" -->">http://<TMPL_VAR
 name="url"></a><br>
 </td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
 
 -->
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

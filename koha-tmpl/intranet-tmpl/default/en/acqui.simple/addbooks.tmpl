@@ -21,7 +21,7 @@
 		<tr valign="top">
 			<td width="5%">ISBN:</td>
 			<td width="20%"><input type="text" name="isbn" /></td>
-			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
+			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" class="button"/></td>
 			<td rowspan=2>If the ISBN or title is found in the biblio table, it will be retrieved and can be modified.<br/>
 					If the ISBN or title is found in the breeding farm, it will be retrieved and a biblio will be added.<br/>
 					Otherwise, a biblio can be added from scratch.</td>
@@ -31,9 +31,9 @@
 		</tr>
 		<tr><td>&nbsp;</td>
 		<!-- TMPL_IF NAME="NOTMARC" -->
-			<td colspan=2><a href=addbiblio-nomarc.pl>Create Empty biblio</a></td></tr>
+			<td colspan=2><a href="addbiblio-nomarc.pl" class="button">Create Empty biblio</a></td></tr>
 		<!-- TMPL_ELSE -->
-			<td colspan=2><a href=addbiblio.pl>Create Empty biblio</a></td></tr>
+			<td colspan=2><a href="addbiblio.pl" class="button">Create Empty biblio</a></td></tr>
 		<!-- /TMPL_IF -->
 	</table>
 </form>
@@ -51,7 +51,7 @@
 	<tr>
 		<td>Keyword:</td>
 		<td><input type="text" name="keyword" /></td>
-		<td><input type="submit" value="Go" /></td>
+		<td><input type="submit" value="Go" class="button"/></td>
 	</tr>
 	</table>
 </FORM>

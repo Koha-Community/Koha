@@ -4,7 +4,7 @@
     <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <!-- /TMPL_IF -->
 
-<span style="font-size:2em; text-align:left;">MARC Search</span>
+<span style="font-size:2em; text-align:left;">MARC search</span>
 
 <center>
 <form name="f" method="post">
@@ -13,22 +13,22 @@
 <input type="hidden" name="type" value="intranet">
 <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
 
-	<table border=0 cellspacing=0 cellpadding=2 width="80%>
+	<table border=0 cellspacing=0 cellpadding=2 width="100%">
 		<tr align="center">
-			<td colspan=3>
+			<td>
 				<div name="sql">
 				<textarea name="sql" rows=5 cols=60 disabled readonly></textarea>
 				</div>
 			</td>
-			<td colspan=2 bgcolor="#ad11ad" valign="top" align="left">
+			<td bgcolor="#ad11ad" valign="top" align="left">
 				<span style="color:#FFFFFF;">
 					<b>HELP :</b><br/>
-					Build your request using MARC fields and subfields. Add criteria lets you add another criteria to your search.
-					Search commits the request and displays the results.
+					Build your request using MARC fields and subfields. Add criteria lets you add another criteria to your search. Search commits the request and displays the results.
 				</span>
 			</td>
 		</tr>
-
+	</table>
+	<table border=0 cellspacing=0 cellpadding=2 width="100%">
 		<!-- TMPL_LOOP NAME="statements" -->
 		<tr>
 			<td>
@@ -67,8 +67,8 @@
 
 	<table width="90%">
 	<tr>
-	<td align="left" width="33%"><input type="button" value="Add criteria" onClick="AddStatement()"></td>
-	<td align="middle" width="33%"><input type="submit" value="Search"></td>
+	<td align="left" width="33%"><input type="button" value="Add criteria" onClick="AddStatement()" class="button"></td>
+	<td align="middle" width="33%"><input type="submit" value="Start search" class="button"></td>
 	<td align="right" width="33%">Results per page :
 		<select align="right" name="resultsperpage" size="1">
 			<option value="20">20</option>
