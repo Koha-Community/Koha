@@ -42,6 +42,9 @@ use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Search;
+use HTML::Template;
+
+
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -49,7 +52,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select aqbudget.bookfundid,startdate,enddate,budgetamount,bookfundname from aqbudget,aqbookfund where aqbudget.bookfundid=aqbookfund.bookfundid and (aqbudget.bookfundid like \"$data[0]%\") order by bookfundid";
+	my $query="Select bookfundid,startdate,enddate,budgetamount from aqbudget where bookfundid and (bookfundid like \"$data[0]%\") order by bookfundid";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -71,104 +74,55 @@ my $bookfundid=$input->param('bookfundid');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
-print $input->header;
 
-#start the page and read in includes
-print startpage();
-print startmenu('admin');
+my $template = gettemplate("parameters/aqbudget.tmpl",0);
+if ($op) {
+$template->param(script_name => $script_name,
+						$op              => 1); # we show only the TMPL_VAR names $op
+} else {
+$template->param(script_name => $script_name,
+						else              => 1); # we show only the TMPL_VAR names $op
+}
 
+$template->param(action => $script_name);
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
+	my $dataaqbudget;
+	my $dataaqbookfund;
 	if ($bookfundid) {
 		my $dbh = C4::Context->dbh;
-	        my $query="select aqbookfund.bookfundid,startdate,enddate,budgetamount,bookfundname from aqbudget,aqbookfund where aqbudget.bookfundid=aqbookfund.bookfundid and aqbookfund.bookfundid='$bookfundid'";
+	        my $query="select bookfundid,startdate,enddate,budgetamount from aqbudget where bookfundid='$bookfundid'";
 #	        print $query;
 		my $sth=$dbh->prepare($query);
 		$sth->execute;
-		$data=$sth->fetchrow_hashref;
+		$dataaqbudget=$sth->fetchrow_hashref;
+		$sth->finish;
+		my $query="select bookfundid,bookfundname from aqbookfund where bookfundid='$bookfundid'";
+#	        print $query;
+		my $sth=$dbh->prepare($query);
+		$sth->execute;
+		$dataaqbookfund=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	print <<printend
-	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.bookfundid.value.length==0) {
-			_alertString += "- bookfundid missing\\n";
-		}
-		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
-			_alertString += "- Budget missing\\n";
-		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-	</SCRIPT>
-printend
-;#/
+	my $header;
 	if ($bookfundid) {
-		print "<h1>Modify budget</h1>";
+		$header = "Modify budget";
 	} else {
-		print "<h1>Add budget</h1>";
+		$header = "Add budget";
 	}
-	print "<form action='$script_name' name=Aform method=post>";
-	print "<input type=hidden name=op value='add_validate'>";
-	print "<input type=hidden name=checked value=0>";
-	print "<table>";
+	$template->param(header => $header);
 	if ($bookfundid) {
-		print "<tr><td>Book fund</td><td><input type=hidden name=bookfundid value=$bookfundid>$bookfundid</td></tr>";
-	        print "<tr><td>Book fund</td><td>$data->{'bookfundname'}</td></tr>";
+	    $template->param(modify => 1);
+	    $template->param(bookfundid => $bookfundid);
+	    $template->param(bookfundname => $dataaqbookfund->{bookfundname});
 	} else {
-		print "<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>";
+	    $template->param(adding => 1);
 	}
-	print "<tr><td>Start date</td><td><input type=text name=startdate size=40 maxlength=80 value='$data->{'startdate'}'>&nbsp;</td></tr>";
-	print "<tr><td>End date</td><td><input type=text name=enddate value='$data->{'enddate'}'></td></tr>";
-	print "<tr><td>Budget amount</td><td><input type=text name=budgetamount value='$data->{'budgetamount'}'></td></tr>";
-	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
-print "</table>";
-	print "</form>";
-;
+	$template->param(startdate => $dataaqbudget->{'startdate'});
+	$template->param(enddate => $dataaqbudget->{'enddate'});
+	$template->param(budgetamount => $dataaqbudget->{'budgetamount'});
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -182,10 +136,6 @@ print "</table>";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data recorded";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
@@ -199,19 +149,10 @@ print "</table>";
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Book fund'),bold("$bookfundid"),'/images/background-mem.gif');
-	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='$bookfundid'>";
-	print "<tr><td>Start date</td><td>$data->{'startdate'}</td></tr>";
-	print "<tr><td>End date</td><td>$data->{'enddate'}</td></tr>";
-	print "<tr><td>budgetamount</td><td>$data->{'budgetamount'}</td></tr>";
-#	if ($total->{'total'} >0) {
-#		print "<tr><td colspan=2 align=center><b>This record is used $total->{'total'} times. Deletion not possible</b></td></tr>";
-#		print "<tr><td colspan=2></form><form action='$script_name' method=post><input type=submit value=OK></form></td></tr>";
-#	} else {
-		print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
-		print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
-#	}
+	$template->param(bookfundid => $bookfundid);
+	$template->param(startdate => $data->{'startdate'});
+	$template->param(enddate => $data->{'enddate'});
+	$template->param(budgetamount => $data->{'budgetamount'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -222,59 +163,58 @@ print "</table>";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data deleted";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my @inputs=(["text","searchfield",$searchfield],
-		["reset","reset","clr"]);
-	print mkheadr(2,'Budget admin');
-	print mkformnotable("$script_name",@inputs);
-	print <<printend
-
-printend
-	;
 	if  ($searchfield ne '') {
-		print "You Searched for <b>$searchfield<b><p>";
+	        $template->param(search => 1);
+		$template->param(searchfield => $searchfield);
 	}
-	print mktablehdr;
-	print mktablerow(6,'#99cc33',bold('Book fund'),bold('Start date'),bold('End date'),bold('Budget amount'),
-	'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
+	my @loop_data =();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		#find out stats
 	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
 	#  	$fines=$fines+0;
+	        my $dataaqbookfund;
+	        my $dbh = C4::Context->dbh;
+	        my $query="select bookfundid,bookfundname from aqbookfund where bookfundid=$results->[$i]{'bookfundid'}";
+#	        print $query;
+		my $sth=$dbh->prepare($query);
+		$sth->execute;
+		$dataaqbookfund=$sth->fetchrow_hashref;
+		$sth->finish;
+	        my @toggle = ();
+	        my @bookfundid = ();
+		my @bookfundname = ();
+	        my @startdate = ();
+	        my @enddate = ();
+		my @budgetamount = ();
+		push(@toggle,$toggle);
+		push(@bookfundid,$results->[$i]{'bookfundid'});
+		push(@bookfundname,$dataaqbookfund->{'bookfundname'});
+		push(@startdate,$results->[$i]{'startdate'});
+		push(@enddate,$results->[$i]{'enddate'});
+		push(@budgetamount,$results->[$i]{'budgetamount'});
 	  	if ($toggle eq 'white'){
 	    		$toggle="#ffffcc";
 	  	} else {
 	    		$toggle="white";
 	  	}
-		print mktablerow(6,$toggle,$results->[$i]{'bookfundid'}.' ('.$results->[$i]{'bookfundname'}.')',
-		$results->[$i]{'startdate'},$results->[$i]{'enddate'},
-		$results->[$i]{'budgetamount'},
-		mklink("$script_name?op=add_form&bookfundid=".$results->[$i]{'bookfundid'},'Edit'),
-		mklink("$script_name?op=delete_confirm&bookfundid=".$results->[$i]{'bookfundid'},'Delete',''));	# FIXME - Too many arguments. Drop the 3d one?
-	}
-	print mktableft;
-	print "<form action='$script_name' method=post>";
-	print "<input type=hidden name=op value=add_form>";
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		print mklink("$script_name?offset=".$prevpage,'&lt;&lt; Prev');
-	}
-	print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		print mklink("$script_name?offset=".$nextpage,'Next &gt;&gt;');
-	}
-	print "<br><input type=image src=\"/images/button-add-new.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";
-	print "</form>";
+		while (@toggle and @bookfundid and @bookfundname and @startdate and @enddate and @budgetamount) { 
+	   my %row_data;
+	   $row_data{toggle} = shift @toggle;
+	   $row_data{bookfundid} = shift @bookfundid;
+	   $row_data{bookfundname} = shift @bookfundname;
+	   $row_data{startdate} = shift @startdate;
+	   $row_data{enddate} = shift @enddate;
+	   $row_data{budgetamount} = shift @budgetamount;
+	   push(@loop_data, \%row_data);
+       }
+       }
+       $template->param(budget => \@loop_data);
 } #---- END $OP eq DEFAULT
-print endmenu('admin');
-print endpage();
+
+print "Content-Type: text/html\n\n", $template->output;
