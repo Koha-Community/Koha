@@ -5,7 +5,6 @@
 <title>KOHA: INTRANET: Parameters</title>
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
 <link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
-</head>
 
 <style>
 td.parameters {
@@ -26,8 +25,8 @@ td.parameters a:hover {
 	font-weight: bold;
 	}
 </style>
-
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
+</head>
+<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <!------------------------MENUS-------------------------------->
