@@ -229,7 +229,7 @@ sub transferbook {
     my $branches = getbranches();
     my $iteminformation = getiteminformation(\%env,0, $barcode);
     if (not $iteminformation) {
-	$message = "<font color='red' size='+2'>There is no book with barcode: $barcode </font>";
+	$message = "<font color='red' size='+2'>No item with barcode: $barcode </font>";
 	return (0, $message, 0);
     }
     my $fbr = $iteminformation->{'holdingbranch'};
