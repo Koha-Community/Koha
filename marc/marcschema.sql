@@ -1,6 +1,9 @@
 #  $Id$
 #  
 #  $Log$
+#  Revision 1.16  2002/08/30 17:26:14  tonnesen
+#  Added bibliothesaurus table
+#
 #  Revision 1.15  2002/07/24 15:52:53  tipaul
 #  1st scripts for MARC-DB.
 #
@@ -123,4 +126,16 @@ CREATE TABLE marc_subfield_table (
 		KEY word (word),
 		KEY sndx_word (sndx_word)
 		) TYPE=MyISAM;
+
+
+CREATE TABLE bibliothesaurus ( 
+   code bigint(20) NOT NULL auto_increment, 
+   freelib char(255) NOT NULL default '', 
+   stdlib char(255) NOT NULL default '', 
+   type char(80) NOT NULL default '', 
+   PRIMARY KEY  (code), 
+   KEY freelib (freelib), 
+   KEY stdlib (stdlib), 
+   KEY type (type) 
+ ) TYPE=MyISAM; 
 
