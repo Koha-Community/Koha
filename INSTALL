@@ -60,18 +60,18 @@ as www-data)
 
 6. Create directories for scripts and html documents.
 Here you need to decide where your scripts and html are going to live.
-And edit C4/Output.pm to reflect that.
+And edit modules/C4/Output.pm to reflect that.
 Set $path= where your includes live,
 for example: $path="/usr/local/www/koha/htdocs/includes";
 
 You do not need to do that if you have already entered the includes path in koha.conf (see example above) 
 
-Next copy the C4 directory (in scripts/) to somewhere in your perl path
+Next copy the C4 directory (in modules/) to somewhere in your perl path
 eg /usr/local/lib/site_perl/i386-linux/
 
 If you do not have sufficient access to copy the files to the default perl folder (maybe you are using your ISPs hosting server) then you can copy the modules to any other location and add a line to apache.conf like:
 
-SetEnv? PERL5LIB "/usr/local/www/koha/modules"
+SetEnv PERL5LIB "/usr/local/www/koha/modules"
 
 Copy the C4 directory into the modules folder (see detailed example in KohaHints)
 
@@ -80,7 +80,8 @@ Copy the C4 directory into the modules folder (see detailed example in KohaHints
 
 Set up a webspace for the OPAC: For example: You might make /usr/local/www/opac ... and set a virtual host in apache to use that dir 
 In your opac dir make a dir called htdocs, and copy everything in opac-html/ to it. 
-Again in ur opac dir make a dir called cgi-bin and copy all the files in scripts/ that have a .pl extension to it, eg copy scripts/*.pl /usr/local/www/opac/cgi-bin/koha/ 
+Again in ur opac dir make a dir called cgi-bin and copy all the files in
+opac-cgi/ that have a .pl extension to it, eg copy opac-cgi/*.pl /usr/local/www/opac/cgi-bin/koha/ 
 Your virtual host should be set up to use these dirs, some thing like this: 
 
 
@@ -104,8 +105,8 @@ For example:
 
 In the dir you have just created make an htdocs dir and a cgi-bin dir 
 Copy everything in intranet-html/ to the htdocs dir 
-Copy all the .pl files in scripts/ to the cgi-bin/koha dir 
-Make sure ur virtual host is set up to use these dirs 
+Copy all the .pl files in intranet-cgi/ to the cgi-bin/koha dir 
+Make sure your virtual host is set up to use these dirs 
 Restart apache point your browser at koha.your.site and it should work 
 
 
