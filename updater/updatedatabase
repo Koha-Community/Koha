@@ -13,6 +13,18 @@
 
 # NOTE:  If you do something more than once in here, make it table driven.
 
+# Set C4 module directory
+
+BEGIN {
+    $::intranetdir=`grep intranetdir /etc/koha.conf`;
+    chomp $::intranetdir;
+    $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
+    print "$::intranetdir\n";
+}
+
+use lib $::intranetdir."/modules";
+
+
 use strict;
 
 # CPAN modules
@@ -403,6 +415,12 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.24  2002/10/25 18:52:47  tonnesen
+# Moved bulkmracimport.pl to scripts directory (through buildrelease script)
+# Made bulkmarcimport.pl and updatedatabase able to run from the command line
+# without specifying the location of the C4 module directory (determines the
+# directory from /etc/koha.conf).
+#
 # Revision 1.4.2.23  2002/10/25 18:28:39  tonnesen
 # Added admin script for editing z39.50 server list.
 #

@@ -10,6 +10,14 @@
 
 
 
+BEGIN {
+    $::intranetdir=`grep intranetdir /etc/koha.conf`;
+    chomp $::intranetdir;
+    $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
+    print "$::intranetdir\n";
+}
+
+use lib $::intranetdir."/modules";
 
 $file=$ARGV[0];
 
