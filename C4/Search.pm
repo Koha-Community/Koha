@@ -2495,7 +2495,7 @@ sub isbnsearch {
     my $sth;
     my @results;
 
-    $query = "Select distinct biblio.* from biblio, biblioitems where
+    $query = "Select distinct biblio.*, biblioitems.classification from biblio, biblioitems where
 				biblio.biblionumber = biblioitems.biblionumber";
 	@bind=();
 	if ($isbn) {
