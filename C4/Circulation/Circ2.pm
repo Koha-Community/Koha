@@ -154,16 +154,16 @@ sub getpatroninformation {
 	my $query;
 	my $sth;
 	if ($borrowernumber) {
-		$query = "select * from borrowers where borrowernumber=$borrowernumber";
+		$sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
+		$sth->execute($borrowernumber);
 	} elsif ($cardnumber) {
-		$query = "select * from borrowers where cardnumber=$cardnumber";
+		$sth = $dbh->$prepare("select * from borrowers where cardnumber=?");
+		$sth->execute($cardnumber);
 	} else {
 		$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
 		return();
 	}
 	$env->{'mess'} = $query;
-	$sth = $dbh->prepare($query);
-	$sth->execute;
 	my $borrower = $sth->fetchrow_hashref;
 	my $amount = checkaccount($env, $borrowernumber, $dbh);
 	$borrower->{'amountoutstanding'} = $amount;
@@ -259,16 +259,16 @@ sub getiteminformation {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($itemnumber) {
-		$sth=$dbh->prepare("select * from biblio,items,biblioitems where items.itemnumber=$itemnumber and biblio.biblionumber=items.biblionumber and biblioitems.biblioitemnumber = items.biblioitemnumber");
+		$sth=$dbh->prepare("select * from biblio,items,biblioitems where items.itemnumber=? and biblio.biblionumber=items.biblionumber and biblioitems.biblioitemnumber = items.biblioitemnumber");
+		$sth->execute($itemnumber);
 	} elsif ($barcode) {
-		my $q_barcode=$dbh->quote($barcode);
-		$sth=$dbh->prepare("select * from biblio,items,biblioitems where items.barcode=$q_barcode and biblio.biblionumber=items.biblionumber and biblioitems.biblioitemnumber = items.biblioitemnumber");
+		$sth=$dbh->prepare("select * from biblio,items,biblioitems where items.barcode=? and biblio.biblionumber=items.biblionumber and biblioitems.biblioitemnumber = items.biblioitemnumber");
+		$sth->execute($barcode);
 	} else {
 		$env->{'apierror'}="getiteminformation() subroutine must be called with either an itemnumber or a barcode";
 		# Error condition.
 		return();
 	}
-	$sth->execute;
 	my $iteminformation=$sth->fetchrow_hashref;
 	$sth->finish;
 	# FIXME - Style: instead of putting the entire rest of the
@@ -276,8 +276,8 @@ sub getiteminformation {
 	#	return undef unless $iteminformation;
 	# That way, the rest of the function needn't be indented as much.
 	if ($iteminformation) {
-		$sth=$dbh->prepare("select date_due from issues where itemnumber=$iteminformation->{'itemnumber'} and isnull(returndate)");
-		$sth->execute;
+		$sth=$dbh->prepare("select date_due from issues where itemnumber=? and isnull(returndate)");
+		$sth->execute($iteminformation->{'itemnumber'});
 		my ($date_due) = $sth->fetchrow;
 		$iteminformation->{'date_due'}=$date_due;
 		$sth->finish;
@@ -291,8 +291,8 @@ sub getiteminformation {
 		#	$sth->execute;
 		#	($iteminformation->{loanlength},
 		#	 $iteminformation->{notforloan}) = fetchrow_array;
-		$sth=$dbh->prepare("select * from itemtypes where itemtype='$iteminformation->{'itemtype'}'");
-		$sth->execute;
+		$sth=$dbh->prepare("select * from itemtypes where itemtype=?");
+		$sth->execute($iteminformation->{'itemtype'});
 		my $itemtype=$sth->fetchrow_hashref;
 		$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
 		$iteminformation->{'notforloan'}=$itemtype->{'notforloan'};
@@ -750,14 +750,12 @@ sub issuebook {
 			# FIXME - What's this for? Leftover from debugging?
 
 		# Record in the database the fact that the book was issued.
-		# FIXME - Use $dbh->do();
-		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values ($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, '$dateduef', '$env->{'branchcode'}')");
-		$sth->execute;
+		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values (?,?,?,?)");
+		$sth->execute($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
 		$sth->finish;
 		$iteminformation->{'issues'}++;
-		# FIXME - Use $dbh->do();
-		$sth=$dbh->prepare("update items set issues=$iteminformation->{'issues'},datelastseen=now() where itemnumber=$iteminformation->{'itemnumber'}");
-		$sth->execute;
+		$sth=$dbh->prepare("update items set issues=?,datelastseen=now() where itemnumber=?");
+		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
 		$sth->finish;
 		# If it costs to borrow this book, charge it to the patron's account.
 		my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
@@ -914,16 +912,12 @@ sub returnbook {
 sub doreturn {
 	my ($brn, $itm) = @_;
 	my $dbh = C4::Context->dbh;
-	$brn = $dbh->quote($brn);
-	$itm = $dbh->quote($itm);
-	my $query = "update issues set returndate = now() where (borrowernumber = $brn)
-		and (itemnumber = $itm) and (returndate is null)";
-	my $sth = $dbh->prepare($query);
-	$sth->execute;
+	my $sth = $dbh->prepare("update issues set returndate = now() where (borrowernumber = ?)
+		and (itemnumber = ?) and (returndate is null)");
+	$sth->execute($brn,$itm);
 	$sth->finish;
-	$query="update items set datelastseen=now() where itemnumber=$itm";
-	$sth=$dbh->prepare($query);
-	$sth->execute;
+	$sth=$dbh->prepare("update items set datelastseen=now() where itemnumber=?");
+	$sth->execute($itm);
 	$sth->finish;
 	return;
 }
@@ -935,7 +929,9 @@ sub updateitemlost{
 	my ($itemno)=@_;
 	my $dbh = C4::Context->dbh;
 
-	$dbh->do("UPDATE items SET itemlost = 0 WHERE	itemnumber = $itemno");
+	my $sth = $dbh->prepare("UPDATE items SET itemlost = 0 WHERE	itemnumber =?");
+	$sth->execute($itemno);
+	$sth->finish();
 }
 
 # Not exported
@@ -943,12 +939,11 @@ sub fixaccountforlostandreturned {
 	my ($iteminfo, $borrower) = @_;
 	my %env;
 	my $dbh = C4::Context->dbh;
-	my $itm = $dbh->quote($iteminfo->{'itemnumber'});
+	my $itm = $iteminfo->{'itemnumber'};
 	# check for charge made for lost book
-	my $query = "select * from accountlines where (itemnumber = $itm)
-				and (accounttype='L' or accounttype='Rep') order by date desc";
-	my $sth = $dbh->prepare($query);
-	$sth->execute;
+	my $sth = $dbh->prepare("select * from accountlines where (itemnumber = ?)
+				and (accounttype='L' or accounttype='Rep') order by date desc");
+	$sth->execute($itm);
 	if (my $data = $sth->fetchrow_hashref) {
 	# writeoff this amount
 		my $offset;
@@ -962,11 +957,10 @@ sub fixaccountforlostandreturned {
 		$offset = $amount - $data->{'amountoutstanding'};
 		$amountleft = $data->{'amountoutstanding'} - $amount;
 		}
-		my $uquery = "update accountlines set accounttype = 'LR',amountoutstanding='0'
-			where (borrowernumber = '$data->{'borrowernumber'}')
-			and (itemnumber = $itm) and (accountno = '$acctno') ";
-		my $usth = $dbh->prepare($uquery);
-		$usth->execute;
+		my $usth = $dbh->prepare("update accountlines set accounttype = 'LR',amountoutstanding='0'
+			where (borrowernumber = ?)
+			and (itemnumber = ?) and (accountno = ?) ");
+		$usth->execute($data->{'borrowernumber'},$itm,$acctno);
 		$usth->finish;
 	#check if any credit is left if so writeoff other accounts
 		my $nextaccntno = getnextacctno(\%env,$data->{'borrowernumber'},$dbh);
@@ -974,10 +968,9 @@ sub fixaccountforlostandreturned {
 		$amountleft*=-1;
 		}
 		if ($amountleft > 0){
-		my $query = "select * from accountlines where (borrowernumber = '$data->{'borrowernumber'}')
-							and (amountoutstanding >0) order by date";
-		my $msth = $dbh->prepare($query);
-		$msth->execute;
+		my $msth = $dbh->prepare("select * from accountlines where (borrowernumber = ?)
+							and (amountoutstanding >0) order by date");
+		$msth->execute($data->{'borrowernumber'});
 	# offset transactions
 		my $newamtos;
 		my $accdata;
@@ -990,18 +983,16 @@ sub fixaccountforlostandreturned {
 			$amountleft = 0;
 			}
 			my $thisacct = $accdata->{'accountno'};
-			my $updquery = "update accountlines set amountoutstanding= '$newamtos'
-					where (borrowernumber = '$data->{'borrowernumber'}')
-					and (accountno='$thisacct')";
-			my $usth = $dbh->prepare($updquery);
-			$usth->execute;
+			my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
+					where (borrowernumber = ?)
+					and (accountno=?)");
+			$usth->execute($amtos,$data->{'borrowernumber'},'$thisacct');
 			$usth->finish;
-			$updquery = "insert into accountoffsets
+			$usth = $dbh->prepare("insert into accountoffsets
 				(borrowernumber, accountno, offsetaccount,  offsetamount)
 				values
-				('$data->{'borrowernumber'}','$accdata->{'accountno'}','$nextaccntno','$newamtos')";
-			$usth = $dbh->prepare($updquery);
-			$usth->execute;
+				(?,?,?,?)");
+			$usth->execute($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos);
 			$usth->finish;
 		}
 		$msth->finish;
@@ -1010,22 +1001,18 @@ sub fixaccountforlostandreturned {
 			$amountleft*=-1;
 		}
 		my $desc="Book Returned ".$iteminfo->{'barcode'};
-		$uquery = "insert into accountlines
+		$usth = $dbh->prepare("insert into accountlines
 			(borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-			values ('$data->{'borrowernumber'}','$nextaccntno',now(),0-$amount,'$desc',
-			'CR',$amountleft)";
-		$usth = $dbh->prepare($uquery);
-		$usth->execute;
+			values (?,?,now(),?,?,'CR',?)");
+		$usth->execute($data->{'borrowernumber'},$nextaccntno,0-$amount,$desc,$amountleft);
 		$usth->finish;
-		$uquery = "insert into accountoffsets
+		$usth = $dbh->prepare("insert into accountoffsets
 			(borrowernumber, accountno, offsetaccount,  offsetamount)
-			values ($borrower->{'borrowernumber'},$data->{'accountno'},$nextaccntno,$offset)";
-		$usth = $dbh->prepare($uquery);
-		$usth->execute;
+			values (?,?,?,?)");
+		$usth->execute($borrower->{'borrowernumber'},$data->{'accountno'},$nextaccntno,$offset);
 		$usth->finish;
-		$uquery = "update items set paidfor='' where itemnumber=$itm";
-		$usth = $dbh->prepare($uquery);
-		$usth->execute;
+		$usth = $dbh->prepare("update items set paidfor='' where itemnumber=?");
+		$usth->execute($itm);
 		$usth->finish;
 	}
 	$sth->finish;
@@ -1036,22 +1023,16 @@ sub fixaccountforlostandreturned {
 sub fixoverduesonreturn {
 	my ($brn, $itm) = @_;
 	my $dbh = C4::Context->dbh;
-	$itm = $dbh->quote($itm);
-	$brn = $dbh->quote($brn);
 	# check for overdue fine
-	my $query = "select * from accountlines where (borrowernumber=$brn)
-				and (itemnumber = $itm) and (accounttype='FU' or accounttype='O')";
-	my $sth = $dbh->prepare($query);
-	$sth->execute;
+	my $sth = $dbh->prepare("select * from accountlines where (borrowernumber = ?) and (itemnumber = ?) and (accounttype='FU' or accounttype='O')");
+	$sth->execute($brn,$itm);
 	# alter fine to show that the book has been returned
 	if (my $data = $sth->fetchrow_hashref) {
-		my $query = "update accountlines set accounttype='F' where (borrowernumber = $brn)
-				and (itemnumber = $itm) and (acccountno='$data->{'accountno'}')";
-		my $usth=$dbh->prepare($query);
-		$usth->execute();
+		my $usth=$dbh->prepare("update accountlines set accounttype='F' where (borrowernumber = ?) and (itemnumber = ?) and (acccountno = ?)");
+		$usth->execute($brn,$itm,$data->{'accountno'});
 		$usth->finish();
 	}
-	$sth->finish;
+	$sth->finish();
 	return;
 }
 
@@ -1157,15 +1138,14 @@ sub checkoverdues {
 	my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
 	my @overdueitems;
 	my $count = 0;
-	my $query = "SELECT * FROM issues,biblio,biblioitems,items
+	my $sth = $dbh->prepare("SELECT * FROM issues,biblio,biblioitems,items
 			WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
 				AND items.biblionumber     = biblio.biblionumber
 				AND issues.itemnumber      = items.itemnumber
-				AND issues.borrowernumber  = $bornum
+				AND issues.borrowernumber  = ?
 				AND issues.returndate is NULL
-				AND issues.date_due < '$today'";
-	my $sth = $dbh->prepare($query);
-	$sth->execute;
+				AND issues.date_due < ?");
+	$sth->execute($bornum,$today);
 	while (my $data = $sth->fetchrow_hashref) {
 	push (@overdueitems, $data);
 	$count++;
@@ -1195,15 +1175,14 @@ sub checkreserve {
 # Check for reserves for biblio
 	my ($env,$dbh,$itemnum)=@_;
 	my $resbor = "";
-	my $query = "select * from reserves,items
-	where (items.itemnumber = '$itemnum')
+	my $sth = $dbh->prepare("select * from reserves,items
+	where (items.itemnumber = ?)
 	and (reserves.cancellationdate is NULL)
 	and (items.biblionumber = reserves.biblionumber)
 	and ((reserves.found = 'W')
 	or (reserves.found is null))
-	order by priority";
-	my $sth = $dbh->prepare($query);
-	$sth->execute();
+	order by priority");
+	$sth->execute($itemnum);
 	my $resrec;
 	my $data=$sth->fetchrow_hashref;
 	while ($data && $resbor eq '') {
@@ -1213,14 +1192,13 @@ sub checkreserve {
 	$resbor = $data->{'borrowernumber'};
 	} else {
 	my $found = 0;
-	my $cquery = "select * from reserveconstraints,items
-		where (borrowernumber='$data->{'borrowernumber'}')
-		and reservedate='$data->{'reservedate'}'
-		and reserveconstraints.biblionumber='$data->{'biblionumber'}'
-		and (items.itemnumber=$itemnum and
-		items.biblioitemnumber = reserveconstraints.biblioitemnumber)";
-	my $csth = $dbh->prepare($cquery);
-	$csth->execute;
+	my $csth = $dbh->prepare("select * from reserveconstraints,items
+		where (borrowernumber=?)
+		and reservedate=?
+		and reserveconstraints.biblionumber=?
+		and (items.itemnumber=? and
+		items.biblioitemnumber = reserveconstraints.biblioitemnumber)");
+	$csth->execute($data->{'borrowernumber'},$data->{'biblionumber'},$data->{'reservedate'},$itemnum);
 	if (my $cdata=$csth->fetchrow_hashref) {$found = 1;}
 	if ($const eq 'o') {
 		if ($found eq 1) {$resbor = $data->{'borrowernumber'};}
@@ -1300,14 +1278,12 @@ sub currentissues {
 
 	# FIXME - Does the caller really need every single field from all
 	# four tables?
-	my $select="select * from issues,items,biblioitems,biblio where
-	borrowernumber='$borrowernumber' and issues.itemnumber=items.itemnumber and
+	my $sth=$dbh->prepare("select * from issues,items,biblioitems,biblio where
+	borrowernumber=? and issues.itemnumber=items.itemnumber and
 	items.biblionumber=biblio.biblionumber and
 	items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null
-	$crit order by issues.date_due";
-	#    warn $select;
-	my $sth=$dbh->prepare($select);
-	$sth->execute;
+	$crit order by issues.date_due");
+	$sth->execute($borrownumber);
 	while (my $data = $sth->fetchrow_hashref) {
 		# FIXME - The Dewey code is a string, not a number.
 		$data->{'dewey'}=~s/0*$//;
@@ -1422,9 +1398,8 @@ sub checkwaiting {
 # check for reserves waiting
 	my ($env,$dbh,$bornum)=@_;
 	my @itemswaiting;
-	my $query = "select * from reserves where (borrowernumber = '$bornum') and (reserves.found='W') and cancellationdate is NULL";
-	my $sth = $dbh->prepare($query);
-	$sth->execute();
+	my $sth = $dbh->prepare("select * from reserves where (borrowernumber = ?) and (reserves.found='W') and cancellationdate is NULL");
+	$sth->execute($bornum);
 	my $cnt=0;
 	if (my $data=$sth->fetchrow_hashref) {
 		$itemswaiting[$cnt] =$data;
@@ -1443,14 +1418,16 @@ sub checkaccount  {
 	my ($env,$bornumber,$dbh,$date)=@_;
 	my $select="SELECT SUM(amountoutstanding) AS total
 			FROM accountlines
-		WHERE borrowernumber = $bornumber
+		WHERE borrowernumber = ?
 			AND amountoutstanding<>0";
+	my @bind = ($bornumber);
 	if ($date ne ''){
-	$select.=" AND date < '$date'";
+	$select.=" AND date < ?";
+	push(@bind,$date);
 	}
 	#  print $select;
 	my $sth=$dbh->prepare($select);
-	$sth->execute;
+	$sth->execute(@bind);
 	my $data=$sth->fetchrow_hashref;
 	my $total = $data->{'total'};
 	$sth->finish;
@@ -1473,19 +1450,17 @@ sub renewstatus {
   my ($env,$dbh,$bornum,$itemno)=@_;
   my $renews = 1;
   my $renewokay = 0;
-  my $q1 = "select * from issues
-    where (borrowernumber = '$bornum')
-    and (itemnumber = '$itemno')
-    and returndate is null";
-  my $sth1 = $dbh->prepare($q1);
-  $sth1->execute;
+  my $sth1 = $dbh->prepare("select * from issues
+    where (borrowernumber = ?)
+    and (itemnumber = ?)
+    and returndate is null");
+  $sth1->execute($bornum,$itemno);
   if (my $data1 = $sth1->fetchrow_hashref) {
-    my $q2 = "select renewalsallowed from items,biblioitems,itemtypes
-       where (items.itemnumber = '$itemno')
+    my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
+       where (items.itemnumber = ?)
        and (items.biblioitemnumber = biblioitems.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth2 = $dbh->prepare($q2);
-    $sth2->execute;
+       and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth2->execute($itemno);
     if (my $data2=$sth2->fetchrow_hashref) {
       $renews = $data2->{'renewalsallowed'};
     }
@@ -1505,12 +1480,11 @@ sub renewbook {
   $datedue=$env->{'datedue'};
   if ($datedue eq "" ) {
     my $loanlength=21;
-    my $query= "Select * from biblioitems,items,itemtypes
-       where (items.itemnumber = '$itemno')
+    my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes
+       where (items.itemnumber = ?)
        and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth=$dbh->prepare($query);
-    $sth->execute;
+       and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth->execute($itemno);
     if (my $data=$sth->fetchrow_hashref) {
       $loanlength = $data->{'loanlength'}
     }
@@ -1522,20 +1496,18 @@ sub renewbook {
   }
   my @date = split("-",$datedue);
   my $odatedue = ($date[2]+0)."-".($date[1]+0)."-".$date[0];
-  my $issquery = "select * from issues where borrowernumber='$bornum' and
-    itemnumber='$itemno' and returndate is null";
-  my $sth=$dbh->prepare($issquery);
-  $sth->execute;
+  my $sth=$dbh->prepare("select * from issues where borrowernumber=? and
+    itemnumber=? and returndate is null");
+  $sth->execute($bornum,$itemno);
   my $issuedata=$sth->fetchrow_hashref;
   $sth->finish;
   my $renews = $issuedata->{'renewals'} +1;
-  my $updquery = "update issues
-    set date_due = '$datedue', renewals = '$renews'
-    where borrowernumber='$bornum' and
-    itemnumber='$itemno' and returndate is null";
-  $sth=$dbh->prepare($updquery);
+  $sth=$dbh->prepare("update issues
+    set date_due = ?, renewals = ?
+    where borrowernumber=? and
+    itemnumber=? and returndate is null");
 
-  $sth->execute;
+  $sth->execute($datedue,$renews,$bornum,$itemno);
   $sth->finish;
   return($odatedue);
 }
@@ -1554,24 +1526,22 @@ sub calc_charges {
     my $charge=0;
 #    open (FILE,">>/tmp/charges");
     my $item_type;
-    my $q1 = "select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
-    where (items.itemnumber ='$itemno')
+    my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
+    where (items.itemnumber =?)
     and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-    and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth1= $dbh->prepare($q1);
+    and (biblioitems.itemtype = itemtypes.itemtype)");
 #    print FILE "$q1\n";
-    $sth1->execute;
+    $sth1->execute($itemno);
     if (my $data1=$sth1->fetchrow_hashref) {
 	$item_type = $data1->{'itemtype'};
 	$charge = $data1->{'rentalcharge'};
 #	print FILE "charge is $charge\n";
-	my $q2 = "select rentaldiscount from borrowers,categoryitem
-	where (borrowers.borrowernumber = '$bornum')
+	my $sth2=$dbh->prepare("select rentaldiscount from borrowers,categoryitem
+	where (borrowers.borrowernumber = ?)
 	and (borrowers.categorycode = categoryitem.categorycode)
-	and (categoryitem.itemtype = '$item_type')";
-	my $sth2=$dbh->prepare($q2);
+	and (categoryitem.itemtype = ?)");
 #	warn $q2;
-	$sth2->execute;
+	$sth2->execute($bornum,$item_type);
 	if (my $data2=$sth2->fetchrow_hashref) {
 	    my $discount = $data2->{'rentaldiscount'};
 #	    print FILE "discount is $discount";
@@ -1611,9 +1581,8 @@ sub getnextacctno {
 # Stolen from Accounts.pm
     my ($env,$bornumber,$dbh)=@_;
     my $nextaccntno = 1;
-    my $query = "select * from accountlines where (borrowernumber = '$bornumber') order by accountno desc";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
+    my $sth = $dbh->prepare("select * from accountlines where (borrowernumber = ?) order by accountno desc");
+    $sth->execute($bornumber);
     if (my $accdata=$sth->fetchrow_hashref){
 	$nextaccntno = $accdata->{'accountno'} + 1;
     }
@@ -1648,11 +1617,8 @@ sub find_reserves {
     my ($itemdata) = getiteminformation(\%env, $itemno,0);
     my $bibno = $dbh->quote($itemdata->{'biblionumber'});
     my $bibitm = $dbh->quote($itemdata->{'biblioitemnumber'});
-    my $query = "select * from reserves where ((found = 'W') or (found is null))
-                       and biblionumber = $bibno and cancellationdate is NULL
-                       order by priority, reservedate ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
+    my $sth = $dbh->prepare("select * from reserves where ((found = 'W') or (found is null)) and biblionumber = ? and cancellationdate is NULL order by priority, reservedate");
+    $sth->execute($bibno);
     my $resfound = 0;
     my $resrec;
     my $lastrec;
@@ -1681,23 +1647,19 @@ sub find_reserves {
 	    if ($resrec->{'constrainttype'} eq "a") {
 		$resfound = 1;
 	    } else {
-                my $conquery = "select * from reserveconstraints where borrowernumber = $brn
-                     and reservedate = $rdate and biblionumber = $bibno and biblioitemnumber = $bibitm";
-		my $consth = $dbh->prepare($conquery);
-		$consth->execute;
-		if (my $conrec = $consth->fetchrow_hashref) {
-		    if ($resrec->{'constrainttype'} eq "o") {
-			$resfound = 1;
-		    }
-		}
+			my $consth = $dbh->prepare("select * from reserveconstraints where borrowernumber = ? and reservedate = ? and biblionumber = ? and biblioitemnumber = ?");
+			$consth->execute($brn,$rdate,$bibno,$bibitm);
+			if (my $conrec = $consth->fetchrow_hashref) {
+				if ($resrec->{'constrainttype'} eq "o") {
+				$resfound = 1;
+				}
+			}
 		$consth->finish;
-	    }
+		}
 	}
 	if ($resfound) {
-            my $updquery = "update reserves set found = 'W', itemnumber = '$itemno'
-                  where borrowernumber = $brn and reservedate = $rdate and biblionumber = $bibno";
-	    my $updsth = $dbh->prepare($updquery);
-	    $updsth->execute;
+	    my $updsth = $dbh->prepare("update reserves set found = 'W', itemnumber = ? where borrowernumber = ? and reservedate = ? and biblionumber = ?");
+	    $updsth->execute($itemno,$brn,$rdate,$bibno);
 	    $updsth->finish;
 	    # FIXME - "last;" here to break out of the loop early.
 	}
