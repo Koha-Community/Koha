@@ -460,7 +460,7 @@ sub calculate {
 	}
 
 # preparing calculation
-	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM biblioitems, items WHERE (items.biblioitemnumber = biblioitems.biblioitemnumber) AND $line is not null AND $column is not null";
+	my $strcalc .= "SELECT $linefield, $colfield, count( * ) FROM biblioitems, items WHERE (items.biblioitemnumber = biblioitems.biblioitemnumber) ";
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND dewey >" . @$filters[0] ."" if ( @$filters[0] );
 	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
@@ -486,16 +486,23 @@ sub calculate {
 	@$filters[11]=~ s/\*/%/g if (@$filters[11]);
 	$strcalc .= " AND items.location like '" . @$filters[11] ."'" if ( @$filters[11] );
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
-#	warn "". $strcalc;
+	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 #	warn "filling table";
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
 #		warn "filling table $row / $col / $value ";
+		$row="ZZEMPTY" unless $row;
+		$col="ZZEMPTY" unless $col;
 		$table{$row}->{$col}=$value;
 		$table{$row}->{totalrow}+=$value;
 		$grantotal += $value;
 	}
+	
+	my %cell = {rowtitle => 'ZZEMPTY'};
+	push @loopline,\%cell;
+	my %cell = {coltitle => 'ZZEMPTY'};
+	push @loopcol,\%cell;
 	
 	foreach my $row ( sort keys %table ) {
 		my @loopcell;
