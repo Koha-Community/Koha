@@ -23,6 +23,7 @@ use strict;
 
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );
+use vars qw( $pedantic_p );
 
 ###############################################################################
 
@@ -42,7 +43,6 @@ sub re_tag ($) {
    my $etag = $compat? '>': '<>\/';
    # See the file "subst.pl.test1" for how the following mess is derived
    # Unfortunately, inserting $re_directive's has made this even messier
-   # FIXME: The following is somehow wrong. Paul's 1st report shouldn't happen.
    q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:} . $re_directive . q{|[^-"'} . $etag . q{]|-[^-]))+))([} . $etag . q{])(.*)};
 }
 BEGIN {
@@ -81,7 +81,8 @@ sub extract_attributes ($;$) {
 	$s = $rest;
 	warn "Warning: Attribute should be quoted"
 		. (defined $lc? " in line $lc": '') . ": $val_orig\n"
-		if $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
+		if $pedantic_p
+		&& $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
     }
     if ($s =~ /\S/s) { # should never happen
 	warn "Warning: Strange attribute syntax"
@@ -248,9 +249,27 @@ sub text_extract (*) {
 
 ###############################################################################
 
+sub usage ($) {
+    my($exitcode) = @_;
+    my $h = $exitcode? *STDERR: *STDOUT;
+    print $h <<EOF;
+Usage: $0 [OPTIONS]
+Extract strings from HTML file.
+
+      --debug-dump-only     Do not extract strings; but display scanned tokens
+  -f, --file=FILE           Extract from the specified FILE
+      --pedantic-warnings   Issue warnings even for detected problems which
+			    are likely to be harmless
+      --help                Display this help and exit
+EOF
+    exit($exitcode);
+}
+
 GetOptions(
-    'f|file=s' => \$input,
-    'debug-dump-only-p' => \$debug_dump_only_p,
+    'f|file=s'		=> \$input,
+    'debug-dump-only'	=> \$debug_dump_only_p,
+    'pedantic-warnings'	=> sub { $pedantic_p = 1 },
+    'help'		=> sub { usage(0) },
 ) || exit(-1);
 
 open(INPUT, "<$input") || die "$0: $input: $!\n";
