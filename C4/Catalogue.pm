@@ -545,11 +545,132 @@ sub updateBiblioItem {
 # modified, and log all changes.
 
     my ($env, $biblioitem) = @_;
+    my $dbh=&C4Connect;  
+
+    my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
+    my $sth=$dbh->prepare("select * from biblioitems where biblioitemnumber=$biblioitemnumber");
+# obi = original biblioitem
+    my $obi=$sth->fetchrow_hashref;
+    $sth=$dbh->prepare("select B.Record_ID from Bib_Table B, 0XX_Tag_Table T, 0XX_Subfield_Table S where B.Tag_0XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and T.Tag='090' and S.Subfield_Mark='c' and S.Subfield_Value=$biblioitemnumber");
+    $sth->execute;
+    my ($Record_ID) = $sth->fetchrow;
+    if ($biblioitem->{'biblionumber'} ne $obi->{'biblionumber'}) {
+	logchange('kohadb', 'biblioitems', 'biblionumber', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
+	my $sth=$dbh->prepare("update biblioitems set biblionumber=$biblioitem->{'biblionumber'} where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
+	changeSubfield($Record_ID, '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
+    }
+    if ($biblioitem->{'volume'} ne $obi->{'volume'}) {
+	logchange('kohadb', 'biblioitems', 'volume', $obi->{'volume'}, $biblioitem->{'volume'});
+	my $q_volume=$dbh->quote($biblioitem->{'volume'});
+	my $sth=$dbh->prepare("update biblioitems set volume=$q_volume where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
+	changeSubfield($Record_ID, '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
+    }
+    if ($biblioitem->{'number'} ne $obi->{'number'}) {
+	logchange('kohadb', 'biblioitems', 'number', $obi->{'number'}, $biblioitem->{'number'});
+	my $q_number=$dbh->quote($biblioitem->{'number'});
+	my $sth=$dbh->prepare("update biblioitems set number=$q_number where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
+	changeSubfield($Record_ID, '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
+    }
+    if ($biblioitem->{'itemtype'} ne $obi->{'itemtype'}) {
+	logchange('kohadb', 'biblioitems', 'itemtype', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
+	my $q_itemtype=$dbh->quote($biblioitem->{'itemtype'});
+	my $sth=$dbh->prepare("update biblioitems set itemtype=$q_itemtype where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
+	changeSubfield($Record_ID, '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
+    }
+    if ($biblioitem->{'isbn'} ne $obi->{'isbn'}) {
+	logchange('kohadb', 'biblioitems', 'isbn', $obi->{'isbn'}, $biblioitem->{'isbn'});
+	my $q_isbn=$dbh->quote($biblioitem->{'isbn'});
+	my $sth=$dbh->prepare("update biblioitems set isbn=$q_isbn where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
+	changeSubfield($Record_ID, '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
+    }
+    if ($biblioitem->{'issn'} ne $obi->{'issn'}) {
+	logchange('kohadb', 'biblioitems', 'issn', $obi->{'issn'}, $biblioitem->{'issn'});
+	my $q_issn=$dbh->quote($biblioitem->{'issn'});
+	my $sth=$dbh->prepare("update biblioitems set issn=$q_issn where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
+	changeSubfield($Record_ID, '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
+    }
+    if ($biblioitem->{'dewey'} ne $obi->{'dewey'}) {
+	logchange('kohadb', 'biblioitems', 'dewey', $obi->{'dewey'}, $biblioitem->{'dewey'});
+	my $sth=$dbh->prepare("update biblioitems set dewey=$dewey where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
+	changeSubfield($Record_ID, '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
+    }
+    if ($biblioitem->{'subclass'} ne $obi->{'subclass'}) {
+	logchange('kohadb', 'biblioitems', 'subclass', $obi->{'subclass'}, $biblioitem->{'subclass'});
+	my $q_subclass=$dbh->quote($biblioitem->{'subclass'});
+	my $sth=$dbh->prepare("update biblioitems set subclass=$q_subclass where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
+	changeSubfield($Record_ID, '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
+    }
+    if ($biblioitem->{'place'} ne $obi->{'place'}) {
+	logchange('kohadb', 'biblioitems', 'place', $obi->{'place'}, $biblioitem->{'place'});
+	my $q_place=$dbh->quote($biblioitem->{'place'});
+	my $sth=$dbh->prepare("update biblioitems set place=$q_place where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
+	changeSubfield($Record_ID, '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
+    }
+    if ($biblioitem->{'publishercode'} ne $obi->{'publishercode'}) {
+	logchange('kohadb', 'biblioitems', 'publishercode', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
+	my $q_publishercode=$dbh->quote($biblioitem->{'publishercode'});
+	my $sth=$dbh->prepare("update biblioitems set publishercode=$q_publishercode where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
+	changeSubfield($Record_ID, '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
+    }
+    if ($biblioitem->{'publicationyear'} ne $obi->{'publicationyear'}) {
+	logchange('kohadb', 'biblioitems', 'publicationyear', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
+	my $q_publicationyear=$dbh->quote($biblioitem->{'publicationyear'});
+	my $sth=$dbh->prepare("update biblioitems set publicationyear=$q_publicationyear where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
+	changeSubfield($Record_ID, '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
+    }
+    if ($biblioitem->{'illus'} ne $obi->{'illus'}) {
+	logchange('kohadb', 'biblioitems', 'illus', $obi->{'illus'}, $biblioitem->{'illus'});
+	my $q_illus=$dbh->quote($biblioitem->{'illus'});
+	my $sth=$dbh->prepare("update biblioitems set illus=$q_illus where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
+	changeSubfield($Record_ID, '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
+    }
+    if ($biblioitem->{'pages'} ne $obi->{'pages'}) {
+	logchange('kohadb', 'biblioitems', 'pages', $obi->{'pages'}, $biblioitem->{'pages'});
+	my $q_pages=$dbh->quote($biblioitem->{'pages'});
+	my $sth=$dbh->prepare("update biblioitems set pages=$q_pages where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
+	changeSubfield($Record_ID, '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
+    }
+    if ($biblioitem->{'size'} ne $obi->{'size'}) {
+	logchange('kohadb', 'biblioitems', 'size', $obi->{'size'}, $biblioitem->{'size'});
+	my $q_size=$dbh->quote($biblioitem->{'size'});
+	my $sth=$dbh->prepare("update biblioitems set size=$q_size where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
+	changeSubfield($Record_ID, '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
+    }
+    if ($biblioitem->{'notes'} ne $obi->{'notes'}) {
+	logchange('kohadb', 'biblioitems', 'notes', $obi->{'notes'}, $biblioitem->{'notes'});
+	my $q_notes=$dbh->quote($biblioitem->{'notes'});
+	my $sth=$dbh->prepare("update biblioitems set notes=$q_notes where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
+	changeSubfield($Record_ID, '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
+    }
+    if ($biblioitem->{'lccn'} ne $obi->{'lccn'}) {
+	logchange('kohadb', 'biblioitems', 'lccn', $obi->{'lccn'}, $biblioitem->{'lccn'});
+	my $q_lccn=$dbh->quote($biblioitem->{'lccn'});
+	my $sth=$dbh->prepare("update biblioitems set lccn=$q_lccn where biblioitemnumber=$biblioitemnumber");
+	logchange('marc', '010', 'c', $obi->{'lccn'}, $biblioitem->{'lccn'});
+	changeSubfield($Record_ID, '010', 'c', $obi->{'lccn'}, $biblioitem->{'lccn'});
+    }
+
 }
 
 
 sub newItem {
     my ($env, $Record_ID, $item) = @_;
+    my $dbh=&C4Connect;  
     my $barcode=$item->{'barcode'};
     my $dateaccessioned=$item->{'dateaccessioned'};
     my $booksellerid=$item->{'booksellerid'};
