@@ -21,25 +21,31 @@
 		</tr>
 		<tr>
 			<td>
-				<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle" -->
-				<!-- TMPL_IF name="author" --><b>Author:</b> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br />
-				<!-- TMPL_IF name="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="publishercode" --><b>Published by :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" -->
-				<!-- TMPL_IF name="publicationyear" --><b>in </b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
+				<!-- TMPL_IF name="subtitles" -->
+					<label class="label100"><b>Subtitle(s):</b> </label>
+					<!-- TMPL_LOOP name="subtitles" -->
+						<!-- TMPL_VAR NAME="subtitle" --> ; 
+					<!-- /TMPL_LOOP -->
+					<br />
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="author" --><label class="label100"><b>Author:</b> </label><!-- TMPL_VAR NAME="author" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="additional" --><label class="label100"><b>Additional Author:</b></label><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="publishercode" --><label class="label100"><b>Published by :</b></label><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" --><br />
+				<!-- TMPL_IF name="publicationyear" --><label class="label100"><b>in </b></label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" -->
 				<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
 				<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br />
-				<!-- TMPL_IF name="isbn" --><b>ISBN:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="isbn" --><br />
-				<!-- TMPL_IF name="seriestitle" --><b>Collection:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="seriestitle" --><br />
-				<!-- TMPL_IF name="subjects" --><b>Subject(s):</b><!-- /TMPL_IF --> 
+				<!-- TMPL_IF name="isbn" --><label class="label100"><b>ISBN:</b> </label><!-- TMPL_VAR NAME="isbn" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="seriestitle" --><label class="label100"><b>Collection:</b> </label><!-- TMPL_VAR NAME="seriestitle" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="subjects" --><label class="label100"><b>Subject(s):</b> </label>
 					<!-- TMPL_LOOP name="subjects" -->
-						<a href="/cgi-bin/koha/search.marc/search.pl?op=do_search&type=intranet&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP -->
-					<br />
-				<!-- TMPL_IF name="copyrightdate" --><b>Year :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="copyrightdate" --><br />
-				<!-- TMPL_IF name="notes" --><b>Notes:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="notes" --><br />
-				<!-- TMPL_IF name="unititle" --><b>Unititle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="unititle" --><br />
-				<!-- TMPL_IF name="dewey" --><b>Dewey:</b><!-- /TMPL_IF --><!-- TMPL_VAR name="dewey" --><br />
-				<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br />
-				<b>Item type : </b>
+						<a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP -->
+					<br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="copyrightdate" --><label class="label100"><b>Year :</b> </label><!-- TMPL_VAR NAME="copyrightdate" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="notes" --><label class="label100"><b>Notes:</b> </label><!-- TMPL_VAR NAME="notes" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="unititle" --><label class="label100"><b>Unititle:</b> </label><!-- TMPL_VAR NAME="unititle" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="dewey" --><label class="label100"><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --><br /><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="url" --><label class="label100"><b>URL:</b> </label><a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><br /><!-- /TMPL_IF -->
+				<label class="label100"><b>Item type : </b></label>
 					<!-- TMPL_IF name="description" -->
 						<!-- TMPL_VAR name="description" -->
 					<!-- TMPL_ELSE -->
