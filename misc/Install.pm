@@ -1770,7 +1770,7 @@ sub databasesetup {
 	# Set up permissions
 	startsysout();
 	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");#"
-	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv,lock_tables_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y','Y')\"");
 	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
 	# Change to admin user login
 	setmysqlclipass($pass);
