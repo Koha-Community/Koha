@@ -266,6 +266,11 @@
 		<input type="hidden" name="tag" value="<TMPL_VAR name="oldbiblionumtagfield">">
 		<input type="hidden" name="subfield" value="<TMPL_VAR name="oldbiblionumtagsubfield">">
 		<input type="hidden" name="field_value" value="<TMPL_VAR name="oldbiblionumber">">
+		<input type="hidden" name="mandatory" value="0">
+		<input type="hidden" name="tag" value="<TMPL_VAR name="oldbiblioitemnumtagfield">">
+		<input type="hidden" name="subfield" value="<TMPL_VAR name="oldbiblioitemnumtagsubfield">">
+		<input type="hidden" name="field_value" value="<TMPL_VAR name="oldbiblioitemnumber">">
+		<input type="hidden" name="mandatory" value="0">
 	</TMPL_IF>
 </form>
 
@@ -295,6 +300,8 @@ function Check(f) {
 		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
 			document.getElementById("error"+i).style.backgroundColor="#FF0000";
 			total_errors++;
+		} else {
+			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
 		}
 	}
 	var alertString2;
