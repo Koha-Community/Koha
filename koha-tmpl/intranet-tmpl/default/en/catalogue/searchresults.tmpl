@@ -40,7 +40,7 @@
 	<!-- TMPL_IF NAME="opac" -->
 		<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 	<!-- TMPL_ELSE --> 
-		<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+		<tr bgcolor="#ccfff" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
 	<!-- /TMPL_IF -->
 	<th align="left">Title</th><th align="left">Author</th><th>&copy;</th><th>Item Count</th><th>Location</th>
 	<!-- TMPL_IF NAME="opac" -->
@@ -98,10 +98,19 @@
 	</tr>
 <!-- /TMPL_LOOP -->
 
-<tr <!-- TMPL_IF NAME="opac" -->bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor="#CCCCFF" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
+<!-- TMPL_IF NAME="opac" -->
+	<tr bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif>
+<!-- TMPL_ELSE -->
+	<tr bgcolor="#CCCCFF" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+<!-- /TMPL_IF -->
+
 	<td colspan="6">
 		<table border="0" cellpadding="0" cellspacing="0" width="100%">
-			<tr <!-- TMPL_IF NAME="opac" -->bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor="#CCCCFF" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
+			<!-- TMPL_IF NAME="opac" -->
+				<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+			<!-- TMPL_ELSE --> 
+				<tr bgcolor="#ccfff" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+			<!-- /TMPL_IF -->
 			<td align="left">
 				<!-- TMPL_IF NAME="displayprev" -->
 				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Previous Records</a>
