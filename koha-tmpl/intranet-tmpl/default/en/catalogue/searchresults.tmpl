@@ -37,7 +37,11 @@
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="numrecords" -->
 <table border="0" cellspacing="0" cellpadding="2" width="90%">
-<tr <!-- TMPL_IF NAME="opac" -->bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE --> background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->">
+	<!-- TMPL_IF NAME="opac" -->
+		<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+	<!-- TMPL_ELSE --> 
+		<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+	<!-- /TMPL_IF -->
 	<th align="left">Title</th><th align="left">Author</th><th>&copy;</th><th>Item Count</th><th>Location</th>
 	<!-- TMPL_IF NAME="opac" -->
 	<!-- TMPL_ELSE -->
@@ -47,8 +51,29 @@
 <!-- Actual Search Results -->
 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 	<tr>
-		<td><a href="/cgi-bin/koha/<!-- TMPL_VAR NAME="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->><!-- TMPL_VAR NAME="title" --></a></td>
-		<td><a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="author" --></a></td>
+		<!-- TMPL_IF NAME="opac" -->
+			<td>
+				<a href="/cgi-bin/koha/<!-- TMPL_VAR NAME="script" -->?type=opac&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+					<!-- TMPL_VAR NAME="title" -->
+				</a>
+			</td>
+			<td>
+				<a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=opac">
+					<!-- TMPL_VAR NAME="author" -->
+				</a>
+			</td>
+		<!-- TMPL_ELSE -->
+			<td>
+				<a href="/cgi-bin/koha/<!-- TMPL_VAR NAME="script" -->?type=intra&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+					<!-- TMPL_VAR NAME="title" -->
+				</a>
+			</td>
+			<td>
+				<a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=intra">
+					<!-- TMPL_VAR NAME="author" -->
+				</a>
+			</td>
+		<!-- /TMPL_IF -->
 		<td align="center"> <!-- TMPL_VAR NAME="copyrightdate" --> </td>
 		<td align="center"> <!-- TMPL_VAR NAME="itemcount" --> </td>
 		<td>

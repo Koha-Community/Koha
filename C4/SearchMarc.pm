@@ -319,59 +319,64 @@ sub catalogsearch {
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
 	# so if you dont' has an item, you get a not nice epty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,count(*) as tot,biblio.*, biblioitems.*, items.*,marc_biblio.bibid
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid
 							FROM biblio, marc_biblio 
-							LEFT JOIN items on items.biblionumber = biblio.biblionumber
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
-							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?
-							GROUP BY items.biblionumber, items.holdingbranch, items.itemcallnumber");
+							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?");
 	my @finalresult = ();
 	my @CNresults=();
 	my $totalitems=0;
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
+	my $sth_itemCN = $dbh->prepare("select * from items where biblionumber=?");
+	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
 	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
 		# search & parse all items & note itemcallnumber
 		$sth->execute($result[$counter]);
 		my $continue=1;
 		my $line = $sth->fetchrow_hashref;
-		my $oldbiblionumber=$line->{bn};
-		$continue=0 unless $line->{bn};
-		while ($continue) {
+		my $biblionumber=$line->{bn};
+# 		$continue=0 unless $line->{bn};
+# 		my $lastitemnumber;
+		$sth_itemCN->execute($biblionumber);
+		my @CNresults = ();
+		while (my $item = $sth_itemCN->fetchrow_hashref) {
 			# parse the result, putting holdingbranch & itemcallnumber in separate array
 			# then all other fields in the main array
-			if ($oldbiblionumber && ($oldbiblionumber ne $line->{bn}) && $oldline) {
-				my %newline;
-				%newline = %$oldline;
-				$newline{totitem} = $totalitems;
-				$newline{biblionumber} = $oldbiblionumber;
-				my @CNresults2= @CNresults;
-				$newline{CN} = \@CNresults2;
-			    $newline{'even'} = 1 if $#finalresult % 2 == 0;
-				$newline{'odd'} = 1 if $#finalresult % 2 == 1;
-				$newline{'timestamp'} = format_date($newline{timestamp});
-				@CNresults = ();
-				push @finalresult, \%newline;
-				$totalitems=0;
+			
+			# search if item is on loan
+			my $date_due;
+			$sth_issue->execute($item->{itemnumber});
+			while (my $loan = $sth_issue->fetchrow_hashref) {
+				if ($loan->{date_due} and !$loan->{returndate}) {
+					$date_due = $loan->{date_due};
+				}
 			}
-			$continue=0 unless $line->{bn};
-			if ($continue) {
-				$oldbiblionumber = $line->{bn};
-				$totalitems +=$line->{tot} if ($line->{holdingbranch});
-				$oldline = $line;
-				# item callnumber & branch
-				my %lineCN;
-				$lineCN{holdingbranch} = $line->{holdingbranch};
-				$lineCN{itemcallnumber} = $line->{itemcallnumber};
-				$lineCN{location} = $line->{location};
-				push @CNresults,\%lineCN;
-				$line = $sth->fetchrow_hashref;
-			}
+			# store this item
+			my %lineCN;
+			$lineCN{holdingbranch} = $item->{holdingbranch};
+			$lineCN{itemcallnumber} = $item->{itemcallnumber};
+			$lineCN{location} = $item->{location};
+			$lineCN{date_due} = format_date($date_due);
+			push @CNresults,\%lineCN;
+			$totalitems++;
 		}
+		# save the biblio in the final array, with item and item issue status
+		my %newline;
+		%newline = %$line;
+		$newline{totitem} = $totalitems;
+		$newline{biblionumber} = $biblionumber;
+		my @CNresults2= @CNresults;
+		$newline{CN} = \@CNresults2;
+		$newline{'even'} = 1 if $#finalresult % 2 == 0;
+		$newline{'odd'} = 1 if $#finalresult % 2 == 1;
+		$newline{'timestamp'} = format_date($newline{timestamp});
+		@CNresults = ();
+		push @finalresult, \%newline;
+		$totalitems=0;
 		$counter++;
 	}
-#add the last line, that is not reached byt the loop / if ($oldbiblionumber...)
 	my $nbresults = $#result+1;
 	return (\@finalresult, $nbresults);
 }
