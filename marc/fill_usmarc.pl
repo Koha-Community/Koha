@@ -53,6 +53,7 @@ foreach $tag (sort keys %$fields) {
 				  );
 	}
 }
+$dbh->do("update marc_subfield_structure set tab = tagfield/100");
 #---- now we populate the tables with the link between koha-DB and MARC-DB
 # items
 $dbh->do("update marc_subfield_structure set kohafield='biblio.title' where tagfield='245' and tagsubfield='a'");
