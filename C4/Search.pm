@@ -1793,14 +1793,14 @@ C<$count> is the number of elements in C<$borrowers>.
 #used by member enquiries from the intranet
 #called by member.pl
 sub BornameSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($env,$searchstring,$orderby,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query = ""; my $count; my @data;
 	my @bind=();
 
 	if($type eq "simple")	# simple search for one letter only
 	{
-		$query="Select * from borrowers where surname like ? order by surname,firstname";
+		$query="Select * from borrowers where surname like ? order by $orderby";
 		@bind=("$searchstring%");
 	}
 	else	# advanced search looking in surname, firstname and othernames
@@ -1821,13 +1821,14 @@ sub BornameSearch  {
 		        push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
 					# FIXME - .= <<EOT;
 		}
-		$query=$query.") or cardnumber = ?
-		order by surname,firstname";
+		$query=$query.") or cardnumber like ?
+		order by $orderby";
 		push(@bind,$searchstring);
 					# FIXME - .= <<EOT;
 	}
 
 	my $sth=$dbh->prepare($query);
+	warn "Q $orderby : $query";
 	$sth->execute(@bind);
 	my @results;
 	my $cnt=$sth->rows;
