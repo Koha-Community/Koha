@@ -6,11 +6,12 @@
 	<TMPL_IF NAME=invalid>
 		Invalid cardnumber.<p>
 	<TMPL_ELSE>
+		Valid values. click OK to confirm this new borrower
 		<form action="/cgi-bin/koha/insertidata.pl" method=post>
 			<TMPL_LOOP NAME=inputsloop>
 				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
 			</TMPL_LOOP>
-			<input type=submit name=submit value=submit>
+			<input type=submit name=submit value=OK>
 		</form>
 	</TMPL_IF>
 </TMPL_IF>

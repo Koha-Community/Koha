@@ -73,11 +73,12 @@ if (my $data2=$sth->fetchrow_hashref){
 	now(),'$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
 	'$data{'phoneday'}','I','$data{'city'}','$data{'area'}','$data{'phone'}',
 	'$data{'borrowernotes'}','$data{'altphone'}','$surname','$data{'initials'}',
-	'$data{'ethnicity'}','$data{'borrowernumber'}','','',$data{'branchcode'},$data{'zipcode'},$data{'homezipcode'})";
+	'$data{'ethnicity'}','$data{'borrowernumber'}','','','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
 }
 
 #print $query;
 my $sth2=$dbh->prepare($query);
+warn "==> $query";
 $sth2->execute;
 $sth2->finish;
 #$sth->finish;
