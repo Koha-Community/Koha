@@ -6,10 +6,12 @@
 use strict;
 #use DBI;
 use C4::Search;
-use CGI;
 use C4::Output;
 use C4::Reserves2;
 use C4::Acquisitions;
+use C4::Koha;
+
+use CGI;
 my $input = new CGI;
 print $input->header;
 
@@ -159,8 +161,8 @@ print "<input type=hidden name=biblio value=$reserves->[$i]{'biblionumber'}>";
 #my $bor=$reserves->[$i]{'firstname'}."%20".$reserves->[$i]{'surname'};
 #$bor=~ s/ /%20/g;
 my $bor=$reserves->[$i]{'borrowernumber'};
-my @temp=split('-',$reserves->[$i]{'reservedate'});
-$date="$temp[2]/$temp[1]/$temp[0]";
+$date = slashifyDate($reserves->[$i]{'reservedate'});
+
 my $type=$reserves->[$i]{'constrainttype'};
 #print "test";
 if ($type eq 'a'){

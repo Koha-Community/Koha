@@ -15,21 +15,44 @@ use Date::Manip;
 use C4::Reserves2;
 use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
+use C4::Koha;
+
 my $input = new CGI;
 my $bornum=$input->param('bornum');
 
+
+# FIXME
+# this hash is never assigned, though it is used (as a placeholder?)
+#
 my %env;
+
 print $input->header;
 #start the page and read in includes
 print startpage();
 print startmenu('member');
 my $data=borrdata('',$bornum);
-my @temp=split('-',$data->{'dateenrolled'});
-$data->{'dateenrolled'}="$temp[2]/$temp[1]/$temp[0]";
-@temp=split('-',$data->{'expiry'});
-$data->{'expiry'}="$temp[2]/$temp[1]/$temp[0]";
-@temp=split('-',$data->{'dateofbirth'});
-$data->{'dateofbirth'}="$temp[2]/$temp[1]/$temp[0]";
+
+
+$data->{'dateenrolled'} = slashifyDate($data->{'dateenrolled'});
+$data->{'expiry'} = slashifyDate($data->{'expiry'});
+$data->{'dateofbirth'} = slashifyDate($data->{'dateofbirth'});
+
+# FIXME
+# turn the ethnicity into a function and make it generalizable
+# check these files to see if one convention or the other makes sense
+#   boraccount.pl
+#   imemberentry.pl
+#   jmemberentry.pl
+#   mancredit.pl
+#   maninvoice.pl
+#   member.pl
+#   memberentry.pl
+#   moremember.pl
+#   moremember.pl
+#   pay.pl
+#   placerequest.pl
+#   readingrec.pl
+#
 if ($data->{'ethnicity'} eq 'maori'){
   $data->{'ethnicity'} = 'Maori';
 }
@@ -42,6 +65,7 @@ if ($data->{'ethnicity'}eq 'pi'){
 if ($data->{'ethnicity'}eq 'asian'){
   $data->{'ethnicity'} = 'Asian';
 }
+
 print <<printend
 <FONT SIZE=6><em>$data->{'firstname'} $data->{'surname'}</em></FONT><P>
 <p>
@@ -97,6 +121,10 @@ printend
 
 if ($data->{'categorycode'} ne 'C'){
   print " Guarantees:";
+  # FIXME
+  # It looks like the $i is only being returned to handle walking through
+  # the array, which is probably better done as a foreach loop.
+  #
   my ($count,$guarantees)=findguarantees($data->{'borrowernumber'});
   for (my $i=0;$i<$count;$i++){
     print "<A HREF=\"/cgi-bin/koha/moremember.pl?bornum=$guarantees->[$i]->{'borrowernumber'}\">$guarantees->[$i]->{'cardnumber'}</a><br>";
@@ -137,6 +165,12 @@ printend
 ;
 my %bor;
 $bor{'borrowernumber'}=$bornum;
+
+# FIXME
+# it looks like $numaccts is a temp variable and that the 
+# for (my $i;$i<$numaccts;$i+++) 
+# can be turned into a foreach loop instead
+#
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 #if ($numaccts > 10){
 #  $numaccts=10;
@@ -148,8 +182,9 @@ for (my$i=0;$i<$numaccts;$i++){
   if ($amount2 != 0){
     print "<tr VALIGN=TOP  >";
     my $item=" &nbsp; ";
-    @temp=split('-',$accts->[$i]{'date'});
-    $accts->[$i]{'date'}="$temp[2]/$temp[1]/$temp[0]";
+    
+    $accts->[$i]{'date'} = slashifyDate($accts->[$i]{'date'});
+
     if ($accts->[$i]{'accounttype'} ne 'Res'){
     #get item data
     #$item=
@@ -157,6 +192,10 @@ for (my$i=0;$i<$numaccts;$i++){
     print "<td>$accts->[$i]{'date'}</td>";
 #  print "<TD>$accts->[$i]{'accounttype'}</td>";
     print "<TD>";
+
+    # FIXME
+    # why set this variable if it's not going to be used?
+    #
     my $env;
     if ($accts->[$i]{'accounttype'} ne 'Res'){
       my $iteminfo=C4::Circulation::Circ2::getiteminformation($env,$accts->[$i]->{'itemnumber'},'');
@@ -206,8 +245,9 @@ for (my $i=0;$i<$count;$i++){
   print "<tr VALIGN=TOP  >
   <TD>";
     my $datedue=ParseDate($issue->[$i]{'date_due'});
-  @temp=split('-',$issue->[$i]{'date_due'});
-  $issue->[$i]{'date_due'}="$temp[2]/$temp[1]/$temp[0]";
+
+  $issue->[$i]{'date_due'} = slashifyDate($issue->[$i]{'date_due'});
+
   if ($datedue < $today){  
     print "<font color=red>";
   }
@@ -276,10 +316,16 @@ print <<printend
 <input type=hidden name=from value=borrower>
 printend
 ;
+
 my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
+
+# FIXME
+# does it make sense to turn this into a foreach my $i (0..$rescount) 
+# kind of loop? 
+#
 for (my $i=0;$i<$rescount;$i++){
-  @temp=split('-',$reserves->[$i]{'reservedate'});
-  $reserves->[$i]{'reservedate'}="$temp[2]/$temp[1]/$temp[0]";
+  $reserves->[$i]{'reservedate'} = slashifyDate($reserves->[$i]{'reservedate'});
+
   print "<tr VALIGN=TOP  >
   <TD><a href=\"/cgi-bin/koha/request.pl?bib=$reserves->[$i]{'biblionumber'}\">$reserves->[$i]{'btitle'}</a></td>
   <TD>$reserves->[$i]{'reservedate'}</td>
@@ -310,3 +356,5 @@ printend
 
 print endmenu('member');
 print endpage();
+
+

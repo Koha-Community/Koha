@@ -40,9 +40,8 @@ if (my $data=$sth->fetchrow_hashref){
   altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
   categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
   borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
-  initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
-  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',textmessaging='$data{'textmessaging'}',
-  guarantor='$data{'guarantor'}'
+  initials='$data{'initials'}',streetaddress='$data{'address'}',ethnicity='$data{'ethnicity'}',
+  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}'
   where borrowernumber=$data{'borrowernumber'}";
 #  print $query;
 
@@ -54,14 +53,13 @@ if (my $data=$sth->fetchrow_hashref){
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   firstname,altnotes,dateofbirth,contactname,emailaddress,dateenrolled,streetcity,
   altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-  initials,ethnicity,textmessaging) 
-  values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
+  initials,ethnicity,borrowernumber) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
   '$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
   '$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}',
   '$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
   '$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
   '$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
-  '$data{'ethnicity'}','$data{'textmessaging'}')";
+  '$data{'ethnicity'}','$data{'borrowernumber'}')";
 }
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
@@ -71,6 +69,10 @@ if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
     # is adult check guarantees;
     my ($count,$guarantees)=findguarantees($data{'borrowernumber'});
     for (my $i=0;$i<$count;$i++){
+	# FIXME
+	# It looks like the $i is only being returned to handle walking through
+	# the array, which is probably better done as a foreach loop.
+	#
 	my $guaquery="update borrowers set streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',
         streetcity='$data{'streetcity'}',phoneday='$data{'phoneday'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}'
         ,streetaddress='$data{'address'}'

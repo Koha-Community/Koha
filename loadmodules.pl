@@ -18,6 +18,10 @@ SWITCH: {
 
 
 sub acquisitions {
+    # FIXME
+    # instead of getting a hash, then reading/writing to it at least twice 
+    # and up to four times, maybe this should be a different function -
+    # areAquisitionsSimple() which returns a boolean
     my %systemprefs=systemprefs();
     ($systemprefs{'acquisitions'}) || ($systemprefs{'acquisitions'}='normal');
     if ($systemprefs{'acquisitions'} eq 'simple') {

@@ -6,10 +6,11 @@
 use strict;
 #use DBI;
 use C4::Search;
-use CGI;
+use C4::Koha;
 use C4::Output;
 use C4::Acquisitions;
 
+use CGI;
 my $input = new CGI;
 print $input->header;
 #whether it is called from the opac of the intranet
@@ -130,14 +131,15 @@ $items[$i]->{'itemlost'}=~ s/1/Yes/;
 $items[$i]->{'withdrawn'}=~ s/0/No/;
 $items[$i]->{'withdrawn'}=~ s/1/Yes/;
 $items[$i]->{'replacementprice'}+=0.00;
+
 my $year=substr($items[$i]->{'timestamp0'},0,4);
 my $mon=substr($items[$i]->{'timestamp0'},4,2);
 my $day=substr($items[$i]->{'timestamp0'},6,2);
 $items[$i]->{'timestamp0'}="$day/$mon/$year";
-my @temp=split('-',$items[$i]->{'dateaccessioned'});
-$items[$i]->{'dateaccessioned'}="$temp[2]/$temp[1]/$temp[0]";
-@temp=split('-',$items[$i]->{'datelastseen'});
-$items[$i]->{'datelastseen'}="$temp[2]/$temp[1]/$temp[0]";
+
+$items[$i]->{'dateaccessioned'} = slashifyDate($items[$i]->{'dateaccessioned'});
+$items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});
+
 print <<printend
 <FONT SIZE=2  face="arial, helvetica">
 <b>Home Branch:</b> $items[$i]->{'homebranch'}<br>

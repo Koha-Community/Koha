@@ -72,8 +72,7 @@ my $priv_func = sub {
 # make all your functions, whether exported or not;
  
 sub startpage{
-  my $string="<html>\n";
-  return($string);
+  return("<html>\n");
 }
 
 sub gotopage{
@@ -133,13 +132,16 @@ sub endmenu{
 }
 
 sub mktablehdr {
-  my $string="<table border=0 cellspacing=0 cellpadding=5>\n";
-  return($string);
+    return("<table border=0 cellspacing=0 cellpadding=5>\n");
 }
 
 
 sub mktablerow {
-  #the last item in data may be a backgroundimage
+    #the last item in data may be a backgroundimage
+    
+    # FIXME
+    # should this be a foreach (1..$cols) loop?
+
   my ($cols,$colour,@data)=@_;
   my $i=0;
   my $string="<tr valign=top bgcolor=$colour>";
@@ -162,8 +164,7 @@ sub mktablerow {
 }
 
 sub mktableft {
-  my $string="</table>\n";
-  return($string);
+  return("</table>\n");
 }
 
 sub mkform{
@@ -350,8 +351,7 @@ sub mkform2{
 
 
 sub endpage{
-  my $string="</body></html>\n";
-  return($string);
+  return("</body></html>\n");
 }
 
 sub mklink {
@@ -376,15 +376,11 @@ sub mkheadr {
 }
 
 sub center {
-  my ($text)=@_;
-  my $string="<CENTER>\n";
-  return ($string);
+  return ("<CENTER>\n");
 }  
 
 sub endcenter {
-  my ($text)=@_;
-  my $string="</CENTER>\n";
-  return ($string);
+  return ("</CENTER>\n");
 }  
 
 sub bold {
@@ -395,3 +391,5 @@ sub bold {
 
 END { }       # module clean-up code here (global destructor)
     
+
+

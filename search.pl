@@ -10,51 +10,68 @@ my $env;
 my $input = new CGI;
 print $input->header;
 #print $input->dump;
-#whether it is called from the opac of the intranet                                                            
-my $type=$input->param('type');                                                  
-if ($type eq ''){
+
+#whether it is called from the opac or the intranet
+my $type=$input->param('type');if ($type eq ''){
   $type = 'intra';
 }
+
 my $ttype=$input->param('ttype');
-#setup colours                                                                                                 
-my $main;                                                                                                      
-my $secondary;                                                                                                 
-if ($type eq 'opac'){                                                                                          
+
+#setup colours                 
+my $main;
+my $secondary;
+
+if ($type eq 'opac'){
   $main='#99cccc';    
   $secondary='#efe5ef';
-} else {                                                                                                       
-  $main='#cccc99';                                                                                             
-  $secondary='#ffffcc';                                                                                        
+} else {
+  $main='#cccc99';
+  $secondary='#ffffcc';
 }       
 
 #print $input->Dump;
 my $blah;
 my %search;
+
 #build hash of users input
 my $title=validate($input->param('title'));
 $search{'title'}=$title;
+
 my $keyword=validate($input->param('keyword'));
 $search{'keyword'}=$keyword;
+
 $search{'front'}=validate($input->param('front'));
+
 my $author=validate($input->param('author'));
 $search{'author'}=$author;
+
 my $illustrator=validate($input->param('illustrator'));
 $search{'illustrator'}=$illustrator;
+
 my $subject=validate($input->param('subject'));
 $search{'subject'}=$subject;
+
 my $itemnumber=validate($input->param('item'));
 $search{'item'}=$itemnumber;
+
 my $isbn=validate($input->param('isbn'));
 $search{'isbn'}=$isbn;
+
 my $datebefore=validate($input->param('date-before'));
 $search{'date-before'};
+
 my $class=$input->param('class');
 $search{'class'}=$class;
+
 $search{'ttype'}=$ttype;
+
 my $dewey=validate($input->param('dewey'));
 $search{'dewey'}=$dewey;
+
 my $branch=validate($input->param('branch'));
 $search{'branch'}=$branch;
+
 my @results;
 my $offset=$input->param('offset');
 if ($offset eq ''){

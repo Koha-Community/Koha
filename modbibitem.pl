@@ -8,8 +8,10 @@
 use strict;
 
 use C4::Search;
-use CGI;
 use C4::Output;
+use C4::Koha;
+use CGI;
+
 
 my $input = new CGI;
 #
@@ -152,8 +154,7 @@ my (@items)=itemissues($data->{'biblioitemnumber'});
 #print @items;                                                                                      
 my $count=@items;           
 for (my $i=0;$i<$count;$i++){
-  my @temp=split('-',$items[$i]->{'datelastseen'});                                                      
-  $items[$i]->{'datelastseen'}="$temp[2]/$temp[1]/$temp[0]"; 
+  $items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});                                                      
   print <<printend
 <tr valign=top gcolor=#ffffcc>
 <td><input type=checkbox name="check_group_$items[$i]->{'barcode'}"></td>

@@ -45,7 +45,11 @@ if ($type eq 'Add'){
 }
 
 my $cardnumber=$data->{'cardnumber'};
-my %systemprefs=systemprefs();
+my %sysemprefs=systemprefs();
+# FIXME
+# This logic should probably be moved out of the presentation code.
+# Not tonight though.
+#
 if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
   my $dbh=C4Connect;
   my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
