@@ -1,6 +1,12 @@
 package C4::Biblio; 
 # $Id$
 # $Log$
+# Revision 1.9  2002/09/20 12:57:46  tipaul
+# long is the road to 1.4.0
+# * MARCadditem and MARCmoditem now wroks
+# * various bugfixes in MARC management
+# !!! 1.3.0 should be released very soon now. Be careful !!!
+#
 # Revision 1.8  2002/09/10 13:53:52  tipaul
 # MARC API continued...
 # * some bugfixes
@@ -431,6 +437,7 @@ sub MARCgetbiblio {
 sub MARCgetitem {
 # Returns MARC::Record of the biblio passed in parameter.
     my ($dbh,$bibid,$itemnumber)=@_;
+    warn "MARCgetitem :   $bibid, $itemnumber\n";
     my $record = MARC::Record->new();
 # search MARC tagorder
     my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
@@ -528,12 +535,15 @@ sub MARCmoditem {
 	    $subfieldorder++;
 	    if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
 # just adding datas...
+warn "ADD = $bibid,".$field->tag().",".$field->indicator(1).".".$field->indicator(2).", $tagorder,".@$subfield[0].",$subfieldorder,@$subfield[1])\n";
 		&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
 				 $tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
 	    } else {
 # modify he subfield if it's a different string
+warn "MODIFY = $bibid,".$field->tag().",".$field->indicator(1).".".$field->indicator(2).", $tagorder,".@$subfield[0].",$subfieldorder,@$subfield[1])\n";
 		if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 		    my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
+warn "MODIFY2 = $bibid, $subfieldid, ".@$subfield[1]."\n";
 		    &MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 		} else {
 		}
@@ -986,9 +996,8 @@ sub ALLnewitem {
 =head2 ($itemnumber,$errors)= OLDnewitems($dbh,$item,$barcode);
   create a item. $item is a hash and $barcode the barcode.
 
-=head2 OLDmoditem($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement);
+=head2 OLDmoditem($dbh,$item);
   modify item
-  NOTE : not standard API-style. Should be rewriten to be OLDmoditem($dbh,$item) where $item is a hash
 
 =head2 OLDdelitem($dbh,$itemnum);
   delete item
@@ -1376,25 +1385,26 @@ sub OLDnewitems {
 }
 
 sub OLDmoditem {
-  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
+    my ($dbh,$item) = @_;
+#  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
 #  my $dbh=C4Connect;
-  my $query="update items set biblioitemnumber=$bibitemnum,
-                              barcode='$barcode',itemnotes='$notes'
-                          where itemnumber=$itemnum";
-  if ($barcode eq ''){
-    $query="update items set biblioitemnumber=$bibitemnum,notforloan=$loan where itemnumber=$itemnum";
+  my $query="update items set biblioitemnumber=$item->{'bibitemnum'},
+                              barcode='$item->{'barcode'}',itemnotes='$item->{'notes'}'
+                          where itemnumber=$item->{'itemnum'}";
+  if ($item->{'barcode'} eq ''){
+    $query="update items set biblioitemnumber=$item->{'bibitemnum'},notforloan=$item->{'loan'} where itemnumber=$item->{'itemnum'}";
   }
-  if ($lost ne ''){
-    $query="update items set biblioitemnumber=$bibitemnum,
-                             barcode='$barcode',
-                             itemnotes='$notes',
-                             homebranch='$homebranch',
-                             itemlost='$lost',
-                             wthdrawn='$wthdrawn' 
-                          where itemnumber=$itemnum";
+  if ($item->{'lost'} ne ''){
+    $query="update items set biblioitemnumber=$item->{'bibitemnum'},
+                             barcode='$item->{'barcode'}',
+                             itemnotes='$item->{'notes'}',
+                             homebranch='$item->{'homebranch'}',
+                             itemlost='$item->{'lost'}',
+                             wthdrawn='$item->{'wthdrawn'}' 
+                          where itemnumber=$item->{'itemnum'}";
   }
-  if ($replacement ne ''){
-    $query=~ s/ where/,replacementprice='$replacement' where/;
+  if ($item->{'replacement'} ne ''){
+    $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
   }
 
   my $sth=$dbh->prepare($query);
@@ -1650,10 +1660,18 @@ sub newitems {
 }
 
 sub moditem {
-  my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
-  my $dbh=C4Connect;
-  &OLDmoditem($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement);
-  $dbh->disconnect;
+    my ($item) = @_;
+#  my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
+    my $dbh=C4Connect;
+    &OLDmoditem($dbh,$item);
+    warn "biblionumber : $item->{'biblionumber'} / $item->{'itemnum'}\n";
+    my $MARCitem = &MARCkoha2marcItem($dbh,$item->{'biblionumber'},$item->{'itemnum'});
+    warn "before MARCmoditem : $item->{biblionumber}, $item->{'itemnum'}\n";
+    warn $MARCitem->as_formatted();
+#      print STDERR "MARCitem ".$MARCitem->as_formatted()."\n";
+    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$item->{biblionumber});
+    &MARCmoditem($dbh,$MARCitem,$bibid,$item->{itemnum},0);
+    $dbh->disconnect;
 }
 
 sub checkitems{
