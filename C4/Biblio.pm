@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.66  2003/10/17 10:02:56  tipaul
+# Indexing only words longer than 2 letters. Was >=2 before, & 2 letters words usually means nothing.
+#
 # Revision 1.65  2003/10/14 09:45:29  tipaul
 # adding rebuildnonmarc.pl script : run this script when you change a link between marc and non MARC DB. It rebuilds the non-MARC DB (long operation)
 #
@@ -1192,7 +1195,7 @@ sub MARCaddword {
 			values (?,?,?,?,?,?,soundex(?))");
     foreach my $word (@words) {
 # we record only words longer than 2 car and not in stopwords hash
-	if (length($word)>1 and !($stopwords->{uc($word)})) {
+	if (length($word)>2 and !($stopwords->{uc($word)})) {
 	    $sth->execute($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,$word);
 	    if ($sth->err()) {
 		warn "ERROR ==> insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word) values ($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,soundex($word))\n";
