@@ -43,7 +43,24 @@ my @more   = ();
 #
 # Change this value to reflect where you will store your includes
 #
-my $path="/usr/local/www/hdl/htdocs/includes";
+my %configfile;
+open (KC, "/etc/koha.conf");
+while (<KC>) {
+ chomp;
+ (next) if (/^\s*#/);
+ if (/(.*)\s*=\s*(.*)/) {
+   my $variable=$1;
+   my $value=$2;
+   # Clean up white space at beginning and end
+   $variable=~s/^\s*//g;
+   $variable=~s/\s*$//g;
+   $value=~s/^\s*//g;
+   $value=~s/\s*$//g;
+   $configfile{$variable}=$value;
+ }
+}
+my $path=$configfile{'path'};
+($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
 
 # here's a file-private function as a closure,
