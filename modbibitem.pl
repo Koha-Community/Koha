@@ -25,8 +25,8 @@ my $bibitemnum=$input->param('bibitem');
 my $data=bibitemdata($bibitemnum);
 my $biblio=$input->param('biblio');
 my $submit=$input->param('submit.x');
-if ($submit eq ''){                                                                                                      
-  print $input->redirect("/cgi-bin/koha/delbibitem.pl?bibitemnum=$bibitemnum&biblio=$biblio");                            
+if ($submit eq ''){
+  print $input->redirect("/cgi-bin/koha/deletebiblioitem.pl?biblioitemnumber=$bibitemnum&biblionumber=$biblio");
 }
 print $input->header;
 #my ($count,$subject)=subject($data->{'biblionumber'});
