@@ -56,7 +56,7 @@
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
+	<H1><TMPL_VAR NAME=action></H1>
 	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<input type=hidden name=explanation value='<TMPL_VAR name="explanation">'>
@@ -117,22 +117,20 @@
 	<td><TMPL_VAR name="variable"></td>
 	<td><TMPL_VAR name="value"></td>
 	<td><TMPL_VAR name="explanation"></td>
-	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>Edit</a></td>
+	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0>Delete</a></td>
 </tr>
 </TMPL_LOOP>
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type=hidden name=op value=add_form>
 </table>
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type=hidden name=op value=add_form>
 <table width=40%>
 	<tr>
 		<td width=50%><TMPL_VAR name="previous"></td>
 		<td width=50%><TMPL_VAR name="next"></td>
 	</tr>
 </table>
-<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add system parameter" ALT="Add" BORDER=0 ><br>
+<br><a href='<TMPL_VAR name="script_name">?op=add_form'><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add a system preference" ALT="Add" BORDER=0 >Add a system preference</a><br>
 </form>
 </TMPL_IF>
 
