@@ -129,10 +129,14 @@ sub themelanguage {
   THEME:
   foreach my $th (@themes) {
     foreach my $la (@languages) {
-	if (-e "$htdocs/$th/$la/$tmpl") {
-	    $theme = $th;
-	    $lang = $la;
-	    last THEME;
+	for (my $pass = 1; $pass <= 2; $pass += 1) {
+	  $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
+	  if (-e "$htdocs/$th/$la/$tmpl") {
+	      $theme = $th;
+	      $lang = $la;
+	      last THEME;
+	  }
+	last unless $la =~ /[-_]/;
 	}
     }
   }
