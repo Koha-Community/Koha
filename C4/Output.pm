@@ -27,8 +27,6 @@ require Exporter;
 
 use C4::Context;
 use C4::Database;
-use C4::Search; #for getting the systempreferences
-	# FIXME - Get rid of this, and use C4::Context->preference
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -762,7 +760,8 @@ sub mkformnotable{
 =item mkform2
 
   $str = &mkform2($action,
-	$fieldname => "$fieldpos\t$required\t$label\t$fieldtype\t$value0\t$value1\t...",
+	$fieldname =>
+	  "$fieldpos\t$required\t$label\t$fieldtype\t$value0\t$value1\t...",
 	...
 	);
   print $str;
@@ -1027,6 +1026,7 @@ sub getkeytableselectoptions {
 	# inputs
 	my (
 		$dbh,		# DBI handle
+				# FIXME - Obsolete argument
 		$tablename,	# name of table containing list of choices
 		$keyfieldname,	# column name of code to use in option list
 		$descfieldname,	# column name of descriptive field
@@ -1041,7 +1041,7 @@ sub getkeytableselectoptions {
 	);
 	my $debug=0;
 
-    	requireDBI($dbh,"getkeytableselectoptions");
+    	$dbh = C4::Context->dbh;
 
 	if ( $showkey ) {
 		$orderfieldname=$keyfieldname;
