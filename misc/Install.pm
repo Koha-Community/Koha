@@ -1644,7 +1644,8 @@ sub installfiles {
 
 	#MJR: is this necessary?
 	if ($> == 0) {
-		system("chown -R $httpduser:$httpduser $opacdir $intranetdir");
+		my $httpdgrp = getgrnam($httpduser);
+		system("chown -R $httpduser:$httpdgrp $opacdir $intranetdir");
 	}
 	system("chmod -R a+rx $opacdir $intranetdir");
 
