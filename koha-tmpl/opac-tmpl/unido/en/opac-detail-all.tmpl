@@ -34,7 +34,7 @@ NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
 <TMPL_INCLUDE name="vanilla-crumb-start.inc">	
 <a href="/">Home</a> &gt;<a
 href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a
-href='/cgi-bin/koha/opac-detail-all.pl?bib=<TMPL_VAR
+href='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR
 NAME="biblionumber">'>Details</a>
 <!--END CRUMBS-->
 <TMPL_INCLUDE name="vanilla-crumb-end.inc">
@@ -136,6 +136,10 @@ NAME="abstract">abstrac</div></td></tr>
 <TMPL_IF NAME="holdings">
 <tr valign="top"><td><div class="padded"><b>Holdings:</b></div></td>
     <td><div class="padded"><TMPL_VAR NAME="holdings"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="frequency">
+<tr valign="top"><td><div class="padded"><b>Frequency:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="frequency"></div></td></tr>
 </TMPL_IF>
 </TMPL_LOOP>
 
