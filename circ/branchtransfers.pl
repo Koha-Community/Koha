@@ -19,12 +19,23 @@ my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
 
-my $branches=getbranches();
+my $branches = getbranches();
+my $printers = getprinters(\%env);
+
 
 ###############################################
 #  Getting state
 
 my $query=new CGI;
+
+
+my $branch = $query->param("branch");
+my $printer = $query->param("printer");
+
+
+($branch) || ($branch=$query->cookie('branch')) ;
+($printer) || ($printer=$query->cookie('printer')) ;
+
 
 my $tobranchcd=$query->param('tobranchcd');
 my $frbranchcd='';
@@ -60,17 +71,14 @@ foreach ($query->param){
     }
 
 # Warnings etc that get displayed at top of next page....
-my @messages;
-
+my $messages;
 #if the barcode has been entered action that and write a message and onto the top of the stack...
 my $iteminformation;
 if (my $barcode=$query->param('barcode')) {
-    my $iteminformation = getiteminformation(\%env,0 ,$barcode);
-    my ($transfered, $message, $iteminformation) = transferbook($tobranchcd, $barcode);
-    if (not $transfered) {
-	push(@messages, $message);
-    }
-    else {
+    my $transfered;
+    my $iteminformation;
+    ($transfered, $messages, $iteminformation) = transferbook($tobranchcd, $barcode);
+    if ($transfered) {
 	my $frbranchcd = $iteminformation->{'holdingbranch'};
 	$ritext.="<input type=hidden name=bc-0 value=$barcode>\n";
 	$ritext.="<input type=hidden name=fb-0 value=$frbranchcd>\n";
@@ -78,9 +86,9 @@ if (my $barcode=$query->param('barcode')) {
 	$transfereditems{0}=$barcode;
 	$frbranchcds{0}=$frbranchcd;
 	$tobranchcds{0}=$tobranchcd;
-	push(@messages, "Book: $barcode has been transfered");
     }
 }
+
 
 #################################################################################
 # Html code....
@@ -105,13 +113,56 @@ $ritext
 </form>
 EOF
 
-my $messagetable;
-if (@messages) {
-    my $messagetext='';
-    foreach (@messages) {
-	$messagetext.="$_<br>";
+
+
+#####################
+
+my $reservefoundtext;
+if ($messages->{'ResFound'}) {
+    my $resrec = $messages->{'ResFound'};
+    my ($borr) = getpatroninformation(\%env, $resrec->{'borrowernumber'}, 0);
+    my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
+    my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
+    my $branch = $branches->{$resrec->{'branchcode'}}->{'branchname'};
+    my $reservetext = "<font size='+2' color='red'>RESERVED</font><font size='+2'> for collection by $name ($number) at $branch </font>";
+    $reservefoundtext = <<"EOF";
+<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Reserve Found</font></th></tr>
+<tr><td> $reservetext </td></tr></table>
+EOF
+}
+
+#####################
+
+my $messagetext='';
+foreach my $code (keys %$messages) {
+    if ($code eq 'BadBarcode'){
+	$messagetext .= "<font color='red' size='+2'> No Item with barcode: $messages->{'BadBarcode'} </font> <br>";
     }
-    $messagetext = substr($messagetext, 0, -4);
+    if ($code eq 'IsPermanent'){
+	my $braname = $branches->{$messages->{'IsPermanent'}}->{'branchname'};
+	$messagetext .= "<font color='red' size='+2'> Please return item to home branch: $braname  </font> <br>";
+    }
+    if ($code eq 'DestinationEqualsHolding'){
+	$messagetext .= "<font color='red' size='+2'> Item cannot be transfered to branch it is already at. </font> <br>";
+    }
+    if ($code eq 'WasReturned') {
+	my ($borrowerinfo) = getpatroninformation(\%env, $messages->{'WasReturned'}, 0);
+
+	my $binfo = <<"EOF";
+<a href=/cgi-bin/koha/moremember.pl?bornum=$borrowerinfo->{'borrowernumber'} 
+onClick="openWindow(this,'Member', 480, 640)">$borrowerinfo->{'cardnumber'}</a>
+$borrowerinfo->{'surname'}, $borrowerinfo->{'title'} $borrowerinfo->{'firstname'}
+EOF
+	$messagetext .= "Item was on loan to $binfo and has been returned. <br>";
+    }
+    if ($code eq 'WasTransfered'){
+    }
+}
+$messagetext = substr($messagetext, 0, -4);
+
+my $messagetable;
+if ($messagetext) {
     $messagetable = << "EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Messages</font></th></tr>
@@ -126,12 +177,25 @@ print $query->header;
 print startpage;
 print startmenu('circulation');
 print <<"EOF";
-<p align=right>
+<p>
+<table border=0 cellpadding=5 width=90%><tr>
+<td align="left"><FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
+<b>Printer:</b> $printers->{$printer}->{'printername'}<br>
+<a href=selectbranchprinter.pl>Change Settings</a>
+</td>
+<td align="right">
 <FONT SIZE=2  face="arial, helvetica">
-<a href=circulationold.pl?module=issues>Next Borrower</a> ||
-<a href=returns.pl>Returns</a> ||
-<a href=branchtransfers.pl>Transfers</a></font></p><FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
+<a href=circulation.pl>Next Borrower</a> || 
+<a href=returns.pl>Returns</a> || 
+<a href=branchtransfers.pl>Transfers</a></font><p>
+</td></tr></table>
+<input type=hidden name=branch value=$branch>
+<input type=hidden name=printer value=$printer>
+</p>
 EOF
+
+print $reservefoundtext;
 
 print $messagetable;
 
@@ -168,4 +232,5 @@ EOF
 
 print endmenu('circulation');
 print endpage;
+
 
