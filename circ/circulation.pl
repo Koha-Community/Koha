@@ -107,6 +107,11 @@ if ($findborrower) {
 my $borrower;
 if ($borrowernumber) {
     $borrower = getpatroninformation(\%env,$borrowernumber,0);
+	
+		my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
+	$template->param(overduecount => $od,
+							issuecount => $issue,
+							finetotal => $fines);
 }
 
 
