@@ -645,6 +645,7 @@ foreach $table ( keys %dropable_table ) {
     }
 }
 unless ( $existingtables{'z3950servers'} ) {
+	#MJR: added syntax entries to close bug 624
     print "Adding z3950servers table...\n";
     my $sti = $dbh->prepare( "create table z3950servers (
 										host char(255),
@@ -918,6 +919,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.63  2003/10/20 16:13:01  slef
+# Omitted annotation added. Closes: 624
+#
 # Revision 1.62  2003/10/20 16:10:19  slef
 # Adding USMARC to LOC z3950 entry
 #
