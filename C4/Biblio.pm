@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.22  2002/10/15 13:39:17  tipaul
+# removing Acquisition.pm
+# deleting unused code in biblio.pm, rewriting POD and answering most FIXME comments
+#
 # Revision 1.21  2002/10/13 11:34:14  arensb
 # Replaced expressions of the form "$x = $x <op> $y" with "$x <op>= $y".
 # Thus, $x = $x+2 becomes $x += 2, and so forth.
@@ -205,78 +209,99 @@ $VERSION = 0.01;
 # the MARC-DB. They are called by the 1.0/1.2 xxx subs, and by the
 # ALLxxx subs (xxx deals with old-DB parameters, the ALLxxx deals with MARC-DB parameter)
 
+=head1 NAME
+
+C4::Biblio : acquisition, catalog  management functions
+
 =head1 SYNOPSIS
 
-  MARCxxx related subs
-  all subs requires/use $dbh as 1st parameter.
-  NOTE : all those subs are private and must be used only inside Biblio.pm (called by a old API sub, or the ALLsub)
+MARCxxx related subs
+all subs requires/use $dbh as 1st parameter.
+NOTE : all those subs are private and must be used only inside Biblio.pm (called by a old API sub, or the ALLsub)
 
 =head1 DESCRIPTION
 
-=head2 @tagslib = &MARCgettagslib($dbh,1|0);
-      last param is 1 for liblibrarian and 0 for libopac
-      returns a hash with tag/subfield meaning
+I<@tagslib = &MARCgettagslib($dbh,1|0);>
 
-=head2 ($tagfield,$tagsubfield) = &MARCfindmarc_from_kohafield($dbh,$kohafield);
-      finds MARC tag and subfield for a given kohafield
-      kohafield is "table.field" where table= biblio|biblioitems|items, and field a field of the previous table
+last param is 1 for liblibrarian and 0 for libopac
+returns a hash with tag/subfield meaning
 
-=head2 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$MARCbibi);
-      finds a old-db biblio number for a given MARCbibid number
+I<($tagfield,$tagsubfield) = &MARCfindmarc_from_kohafield($dbh,$kohafield);>
 
-=head2 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
-      finds a MARC bibid from a old-db biblionumber
+finds MARC tag and subfield for a given kohafield
+kohafield is "table.field" where table= biblio|biblioitems|items, and field a field of the previous table
 
-=head2 &MARCaddbiblio($dbh,$MARC::Record,$biblionumber);
-      creates a biblio (in the MARC tables only). $biblionumber is the old-db biblionumber of the biblio
+I<$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$MARCbibi);>
 
-=head2 &MARCaddsubfield($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
-      adds a subfield in a biblio (in the MARC tables only).
+finds a old-db biblio number for a given MARCbibid number
 
-=head2 $MARCRecord = &MARCgetbiblio($dbh,$bibid);
-      Returns a MARC::Record for the biblio $bibid.
+I<$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);>
 
-=head2 &MARCmodbiblio($dbh,$bibid,$delete,$record);
-      MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
-      if $delete == 1, every field/subfield not found is deleted in the biblio
-      otherwise, only data passed to MARCmodbiblio is managed.
-      thus, you can change only a small part of a biblio (like an item, or a subtitle, or a additionalauthor...)
+finds a MARC bibid from a old-db biblionumber
 
-=head2 ($subfieldid,$subfieldvalue) = &MARCmodsubfield($dbh,$subfieldid,$subfieldvalue);
-      MARCmodsubfield changes the value of a given subfield
+I<&MARCaddbiblio($dbh,$MARC::Record,$biblionumber);>
 
-=head2 $subfieldid = &MARCfindsubfield($dbh,$bibid,$tag,$subfieldcode,$subfieldorder,$subfieldvalue);
-      MARCfindsubfield returns a subfield number given a bibid/tag/subfieldvalue values.
-      Returns -1 if more than 1 answer
+creates a biblio (in the MARC tables only). $biblionumber is the old-db biblionumber of the biblio
 
-=head2 $subfieldid = &MARCfindsubfieldid($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-      MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldorder
+I<&MARCaddsubfield($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);>
 
-=head2 &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-      MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
+adds a subfield in a biblio (in the MARC tables only).
 
-=head2 &MARCdelbiblio($dbh,$bibid);
-      MARCdelbiblio delete biblio $bibid
+I<$MARCRecord = &MARCgetbiblio($dbh,$bibid);>
 
-=head2 $MARCRecord = &MARCkoha2marcBiblio($dbh,$biblionumber,biblioitemnumber);
-      MARCkoha2marcBiblio is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB biblio/biblioitem
+Returns a MARC::Record for the biblio $bibid.
 
-=head2 $MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
-      MARCkoha2marcItem is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB item
+I<&MARCmodbiblio($dbh,$bibid,$delete,$record);>
 
-=head2 $MARCRecord = &MARCkoha2marcSubtitle($dbh,$biblionumber,$subtitle);
-      MARCkoha2marcSubtitle is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB subtitle
+MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
+if $delete == 1, every field/subfield not found is deleted in the biblio
+otherwise, only data passed to MARCmodbiblio is managed.
+thus, you can change only a small part of a biblio (like an item, or a subtitle, or a additionalauthor...)
 
-=head2 &MARCkoha2marcOnefield => used by MARCkoha2marc and should not be useful elsewhere
+I<($subfieldid,$subfieldvalue) = &MARCmodsubfield($dbh,$subfieldid,$subfieldvalue);>
 
-=head2 $olddb = &MARCmarc2koha($dbh,$MARCRecord);
-      builds a hash with old-db datas from a MARC::Record
+MARCmodsubfield changes the value of a given subfield
 
-=head2 &MARCmarc2kohaOnefield => used by MARCmarc2koha and should not be useful elsewhere
+I<$subfieldid = &MARCfindsubfield($dbh,$bibid,$tag,$subfieldcode,$subfieldorder,$subfieldvalue);>
 
-=head2 MARCaddword => used to manage MARC_word table and should not be useful elsewhere
+MARCfindsubfield returns a subfield number given a bibid/tag/subfieldvalue values.
+Returns -1 if more than 1 answer
 
-=head2 MARCdelword => used to manage MARC_word table and should not be useful elsewhere
+I<$subfieldid = &MARCfindsubfieldid($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);>
+
+MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldorder
+
+I<&MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);>
+
+MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
+
+I<&MARCdelbiblio($dbh,$bibid);>
+
+MARCdelbiblio delete biblio $bibid
+
+I<$MARCRecord = &MARCkoha2marcBiblio($dbh,$biblionumber,biblioitemnumber);>
+
+MARCkoha2marcBiblio is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB biblio/biblioitem
+
+I<$MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);>
+
+MARCkoha2marcItem is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB item
+
+I<$MARCRecord = &MARCkoha2marcSubtitle($dbh,$biblionumber,$subtitle);>
+
+MARCkoha2marcSubtitle is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB subtitle
+
+I<&MARCkoha2marcOnefield => used by MARCkoha2marc and should not be useful elsewhere>
+
+I<$olddb = &MARCmarc2koha($dbh,$MARCRecord);>
+
+builds a hash with old-db datas from a MARC::Record
+
+I<&MARCmarc2kohaOnefield => used by MARCmarc2koha and should not be useful elsewhere>
+
+I<MARCaddword => used to manage MARC_word table and should not be useful elsewhere>
+
+I<MARCdelword => used to manage MARC_word table and should not be useful elsewhere>
 
 =head1 AUTHOR
 
@@ -479,7 +504,6 @@ sub MARCgetbiblio {
 sub MARCgetitem {
 # Returns MARC::Record of the biblio passed in parameter.
     my ($dbh,$bibid,$itemnumber)=@_;
-    warn "MARCgetitem :   $bibid, $itemnumber\n";
     my $record = MARC::Record->new();
 # search MARC tagorder
     my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
@@ -490,15 +514,14 @@ sub MARCgetitem {
 		 		 from marc_subfield_table
 		 		 where bibid=? and tagorder=? order by subfieldorder
 		 	 ");
-    # FIXME - There's already a $sth2 in this scope.
-    my $sth2=$dbh->prepare("select subfieldvalue from marc_blob_subfield where blobidlink=?");
-    $sth->execute($bibid,$tagorder);
-    while (my $row=$sth->fetchrow_hashref) {
+	$sth2=$dbh->prepare("select subfieldvalue from marc_blob_subfield where blobidlink=?");
+	$sth->execute($bibid,$tagorder);
+	while (my $row=$sth->fetchrow_hashref) {
 	if ($row->{'valuebloblink'}) { #---- search blob if there is one
-	    $sth2->execute($row->{'valuebloblink'});
-	    my $row2=$sth2->fetchrow_hashref;
-	    $sth2->finish;
-	    $row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
+		$sth2->execute($row->{'valuebloblink'});
+		my $row2=$sth2->fetchrow_hashref;
+		$sth2->finish;
+		$row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
 	}
 	if ($record->field($row->{'tag'})) {
 	    my $field;
@@ -578,15 +601,12 @@ sub MARCmoditem {
 	    $subfieldorder++;
 	    if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
 # just adding datas...
-warn "ADD = $bibid,".$field->tag().",".$field->indicator(1).".".$field->indicator(2).", $tagorder,".@$subfield[0].",$subfieldorder,@$subfield[1])\n";
 		&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
 				 $tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
 	    } else {
 # modify he subfield if it's a different string
-warn "MODIFY = $bibid,".$field->tag().",".$field->indicator(1).".".$field->indicator(2).", $tagorder,".@$subfield[0].",$subfieldorder,@$subfield[1])\n";
 		if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 		    my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-warn "MODIFY2 = $bibid, $subfieldid, ".@$subfield[1]."\n";
 		    &MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 		} else {
 		}
@@ -788,39 +808,33 @@ sub MARCkoha2marcOnefield {
 }
 
 sub MARCmarc2koha {
-    my ($dbh,$record) = @_;
-    my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
-    my $result;
-    my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
-    $sth2->execute;
-    my $field;
-#    print STDERR $record->as_formatted;
-    while (($field)=$sth2->fetchrow) {
-	$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result);
-    }
-    # FIXME - There's already a $sth2 in this scope.
-    my $sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
-    $sth2->execute;
-    # FIXME - There's already a $field in this scope.
-    my $field;
-    while (($field)=$sth2->fetchrow) {
-	$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result);
-    }
-    # FIXME - There's already a $sth2 in this scope.
-    my $sth2=$dbh->prepare("SHOW COLUMNS from items");
-    $sth2->execute;
-    # FIXME - There's already a $field in this scope.
-    my $field;
-    while (($field)=$sth2->fetchrow) {
-	$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
-    }
-# additional authors : specific
-    $result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
-    return $result;
+	my ($dbh,$record) = @_;
+	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
+	my $result;
+	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
+	$sth2->execute;
+	my $field;
+	#    print STDERR $record->as_formatted;
+	while (($field)=$sth2->fetchrow) {
+		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result);
+	}
+	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
+	$sth2->execute;
+	while (($field)=$sth2->fetchrow) {
+		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result);
+	}
+	$sth2=$dbh->prepare("SHOW COLUMNS from items");
+	$sth2->execute;
+	while (($field)=$sth2->fetchrow) {
+		$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
+	}
+	# additional authors : specific
+	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
+	return $result;
 }
 
 sub MARCmarc2kohaOneField {
-# to check : if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
+# FIXME ? if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
     my ($sth,$kohatable,$kohafield,$record,$result)= @_;
     my $res="";
     my $tagfield;
@@ -845,14 +859,6 @@ sub MARCaddword {
     my ($dbh,$bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$sentence) =@_;
     $sentence =~ s/(\.|\?|\:|\!|\'|,|\-)/ /g;
     my @words = split / /,$sentence;
-# build stopword list
-#    my $sth2 =$dbh->prepare("select word from stopwords");
-#    $sth2->execute;
-#    my $stopwords;
-#    my $stopword;
-#    while(($stopword) = $sth2->fetchrow_array)  {
-#	$stopwords->{$stopword} = $stopword;
-#    }
     my $stopwords= C4::Context->stopwords;
     my $sth=$dbh->prepare("insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word)
 			values (?,?,?,?,?,?,soundex(?))");
@@ -890,12 +896,14 @@ sub MARCdelword {
 
 =head1 DESCRIPTION
 
-=head2 (oldbibnum,$oldbibitemnum) = ALLnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
-  creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
-  are builded from the MARC::Record. If they are passed, they are used.
+I<(oldbibnum,$oldbibitemnum) = ALLnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);>
+  
+creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
+are builded from the MARC::Record. If they are passed, they are used.
 
-=head2 ALLnewitem($dbh,$olditem);
-  adds an item in the db. $olditem is a old-db hash.
+I<ALLnewitem($dbh,$olditem);>
+  
+adds an item in the db. $olditem is a old-db hash.
 
 =head1 AUTHOR
 
@@ -934,7 +942,6 @@ sub ALLnewbiblio {
     (my $tagfield1, my $tagsubfield1) = $sth->fetchrow;
     $sth->execute("biblioitems.biblioitemnumber");
     (my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
-    print STDERR "tag1 : $tagfield1 / $tagsubfield1\n tag2 : $tagfield2 / $tagsubfield2\n";
     if ($tagsubfield1 != $tagsubfield2) {
 	print STDERR "Error in ALLnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
  	print "Error in ALLnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
@@ -968,7 +975,6 @@ sub ALLnewitem {
     foreach my $itemkey (keys %$item) {
 	my $tagfield;
 	my $tagsubfield;
-	print STDERR "=============> $itemkey : ".$item->{$itemkey}."\n";
 	if ($itemkey eq "biblionumber" || $itemkey eq "biblioitemnumber") {
 	    ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"biblio.".$itemkey);
 	} else {
@@ -997,6 +1003,7 @@ sub ALLnewitem {
 #
 
 =head1 SYNOPSIS
+  
   OLDxxx related subs
   all subs requires/use $dbh as 1st parameter.
   those subs are used by the MARC-compliant version of koha : marc import, or marc management.
@@ -1011,51 +1018,67 @@ sub ALLnewitem {
 
 =head1 DESCRIPTION
 
-=head2 $biblionumber = OLDnewbiblio($dbh,$biblio);
-  adds a record in biblio table. Datas are in the hash $biblio.
+I<$biblionumber = OLDnewbiblio($dbh,$biblio);>
 
-=head2 $biblionumber = OLDmodbiblio($dbh,$biblio);
-  modify a record in biblio table. Datas are in the hash $biblio.
+adds a record in biblio table. Datas are in the hash $biblio.
 
-=head2 OLDmodsubtitle($dbh,$bibnum,$subtitle);
-  modify subtitles in bibliosubtitle table.
+I<$biblionumber = OLDmodbiblio($dbh,$biblio);>
 
-=head2 OLDmodaddauthor($dbh,$bibnum,$author);
-  adds or modify additional authors
-  NOTE :  Strange sub : seems to delete MANY and add only ONE author... maybe buggy ?
+modify a record in biblio table. Datas are in the hash $biblio.
 
-=head2 $errors = OLDmodsubject($dbh,$bibnum, $force, @subject);
-  modify/adds subjects
+I<OLDmodsubtitle($dbh,$bibnum,$subtitle);>
 
-=head2 OLDmodbibitem($dbh, $biblioitem);
-  modify a biblioitem
+modify subtitles in bibliosubtitle table.
 
-=head2 OLDmodnote($dbh,$bibitemnum,$note
-  modify a note for a biblioitem
+I<OLDmodaddauthor($dbh,$bibnum,$author);>
 
-=head2 OLDnewbiblioitem($dbh,$biblioitem);
-  adds a biblioitem ($biblioitem is a hash with the values)
+adds or modify additional authors
+NOTE :  Strange sub : seems to delete MANY and add only ONE author... maybe buggy ?
 
-=head2 OLDnewsubject($dbh,$bibnum);
-  adds a subject
-=head2 OLDnewsubtitle($dbh,$bibnum,$subtitle);
-  create a new subtitle
+I<$errors = OLDmodsubject($dbh,$bibnum, $force, @subject);>
 
-=head2 ($itemnumber,$errors)= OLDnewitems($dbh,$item,$barcode);
-  create a item. $item is a hash and $barcode the barcode.
+modify/adds subjects
 
-=head2 OLDmoditem($dbh,$item);
-  modify item
+I<OLDmodbibitem($dbh, $biblioitem);>
 
-=head2 OLDdelitem($dbh,$itemnum);
-  delete item
+modify a biblioitem
 
-=head2 OLDdeletebiblioitem($dbh,$biblioitemnumber);
-  deletes a biblioitem
-  NOTE : not standard sub name. Should be OLDdelbiblioitem()
+I<OLDmodnote($dbh,$bibitemnum,$note>
 
-=head2 OLDdelbiblio($dbh,$biblio);
-  delete a biblio
+modify a note for a biblioitem
+
+I<OLDnewbiblioitem($dbh,$biblioitem);>
+
+adds a biblioitem ($biblioitem is a hash with the values)
+
+I<OLDnewsubject($dbh,$bibnum);>
+  
+adds a subject
+
+I<OLDnewsubtitle($dbh,$bibnum,$subtitle);>
+
+create a new subtitle
+
+I<($itemnumber,$errors)= OLDnewitems($dbh,$item,$barcode);>
+
+create a item. $item is a hash and $barcode the barcode.
+
+I<OLDmoditem($dbh,$item);>
+  
+modify item
+
+I<OLDdelitem($dbh,$itemnum);>
+
+delete item
+
+I<OLDdeletebiblioitem($dbh,$biblioitemnumber);>
+
+deletes a biblioitem
+NOTE : not standard sub name. Should be OLDdelbiblioitem()
+
+I<OLDdelbiblio($dbh,$biblio);>
+
+delete a biblio
 
 =head1 AUTHOR
 
@@ -1458,8 +1481,6 @@ sub OLDmoditem {
 #  $dbh->disconnect;
 }
 
-# FIXME - A nearly-identical function, &delitem, appears in
-# C4::Acquisitions
 sub OLDdelitem{
   my ($dbh,$itemnum)=@_;
 #  my $dbh=C4Connect;
@@ -1561,9 +1582,6 @@ sub OLDdelbiblio{
 #
 #
 
-# FIXME - This is the same as &C4::Acquisitions::itemcount, but not
-# the same as &C4::Search::itemcount
-# Since they're both exported, acqui/acquire.pl doesn't compile with -w.
 sub itemcount{
   my ($biblio)=@_;
   my $dbh = C4::Context->dbh;
@@ -1575,6 +1593,19 @@ sub itemcount{
   $sth->finish;
   return($data->{'count(*)'});
 }
+
+=item getorder
+
+  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
+
+Looks up the order with the given biblionumber and biblioitemnumber.
+
+Returns a two-element array. C<$ordernumber> is the order number.
+C<$order> is a reference-to-hash describing the order; its keys are
+fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
+tables of the Koha database.
+
+=cut
 
 sub getorder{
   my ($bi,$bib)=@_;
@@ -1591,8 +1622,18 @@ sub getorder{
   return ($order,$ordnum->{'ordernumber'});
 }
 
-# FIXME - This is practically the same function as
-# &C4::Acquisitions::getsingleorder and &C4::Catalogue::getsingleorder
+=item getsingleorder
+
+  $order = &getsingleorder($ordernumber);
+
+Looks up an order by order number.
+
+Returns a reference-to-hash describing the order. The keys of
+C<$order> are fields from the biblio, biblioitems, aqorders, and
+aqorderbreakdown tables of the Koha database.
+
+=cut
+
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -1608,8 +1649,6 @@ sub getsingleorder {
   return($data);
 }
 
-# FIXME - This is in effect identical to &C4::Acquisitions::newbiblio.
-# Pick one and stick with it.
 sub newbiblio {
   my ($biblio) = @_;
   my $dbh    = C4::Context->dbh;
@@ -1618,9 +1657,24 @@ sub newbiblio {
   return($bibnum);
 }
 
-# FIXME - This is in effect the same as &C4::Acquisitions::modbiblio.
-# Pick one and stick with it.
-# FIXME - Get the POD from C4::Acquisitions
+=item modbiblio
+
+  $biblionumber = &modbiblio($biblio);
+
+Update a biblio record.
+
+C<$biblio> is a reference-to-hash whose keys are the fields in the
+biblio table in the Koha database. All fields must be present, not
+just the ones you wish to change.
+
+C<&modbiblio> updates the record defined by
+C<$biblio-E<gt>{biblionumber}> with the values in C<$biblio>.
+
+C<&modbiblio> returns C<$biblio-E<gt>{biblionumber}> whether it was
+successful or not.
+
+=cut
+
 sub modbiblio {
   my ($biblio) = @_;
   my $dbh  = C4::Context->dbh;
@@ -1628,29 +1682,50 @@ sub modbiblio {
   return($biblionumber);
 } # sub modbiblio
 
-# FIXME - This is in effect identical to &C4::Acquisitions::modsubtitle.
-# Pick one and stick with it.
-# FIXME - Get the POD from C4::Acquisitions
+=item modsubtitle
+
+  &modsubtitle($biblionumber, $subtitle);
+
+Sets the subtitle of a book.
+
+C<$biblionumber> is the biblionumber of the book to modify.
+
+C<$subtitle> is the new subtitle.
+
+=cut
+
 sub modsubtitle {
   my ($bibnum, $subtitle) = @_;
   my $dbh   = C4::Context->dbh;
   &OLDmodsubtitle($dbh,$bibnum,$subtitle);
 } # sub modsubtitle
 
+=item modaddauthor
 
-# FIXME - This is functionally identical to
-# &C4::Acquisitions::modaddauthor
-# Pick one and stick with it.
-# FIXME - Get the POD from C4::Acquisitions
+  &modaddauthor($biblionumber, $author);
+
+Replaces all additional authors for the book with biblio number
+C<$biblionumber> with C<$author>. If C<$author> is the empty string,
+C<&modaddauthor> deletes all additional authors.
+
+=cut
+
 sub modaddauthor {
     my ($bibnum, $author) = @_;
     my $dbh   = C4::Context->dbh;
     &OLDmodaddauthor($dbh,$bibnum,$author);
 } # sub modaddauthor
 
+=item modsubject
 
-# FIXME - This is in effect identical to &C4::Acquisitions::modsubject.
-# Pick one and stick with it.
+  $error = &modsubject($biblionumber, $force, @subjects);
+
+$force - a subject to force
+
+$error - Error message, or undef if successful.
+
+=cut
+
 sub modsubject {
   my ($bibnum, $force, @subject) = @_;
   my $dbh   = C4::Context->dbh;
@@ -1658,8 +1733,6 @@ sub modsubject {
   return($error);
 } # sub modsubject
 
-# FIXME - This is very similar to &C4::Acquisitions::modbibitem.
-# Pick one and stick with it.
 sub modbibitem {
     my ($biblioitem) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1668,17 +1741,12 @@ sub modbibitem {
     &MARCmodbiblio($dbh,$biblioitem->{biblionumber},0,$MARCbibitem);
 } # sub modbibitem
 
-# FIXME - This is in effect identical to &C4::Acquisitions::modnote.
-# Pick one and stick with it.
 sub modnote {
   my ($bibitemnum,$note)=@_;
   my $dbh = C4::Context->dbh;
   &OLDmodnote($dbh,$bibitemnum,$note);
 }
 
-# FIXME - This is quite similar in effect to &C4::newbiblioitem,
-# except for the MARC stuff. There's also a &newbiblioitem in
-# acqui.simple/addbookslccn.pl
 sub newbiblioitem {
   my ($biblioitem) = @_;
   my $dbh   = C4::Context->dbh;
@@ -1690,24 +1758,18 @@ sub newbiblioitem {
   return($bibitemnum);
 }
 
-# FIXME - This is in effect identical to &C4::Acquisitions::newsubject.
-# Pick one and stick with it.
 sub newsubject {
   my ($bibnum)=@_;
   my $dbh = C4::Context->dbh;
   &OLDnewsubject($dbh,$bibnum);
 }
 
-# FIXME - This is just a wrapper around &OLDnewsubtitle
-# FIXME - This is in effect the same as &C4::Acquisitions::newsubtitle
 sub newsubtitle {
     my ($bibnum, $subtitle) = @_;
     my $dbh   = C4::Context->dbh;
     &OLDnewsubtitle($dbh,$bibnum,$subtitle);
 }
 
-# FIXME - This is different from &C4::Acquisitions::newitems, though
-# both are exported.
 sub newitems {
   my ($item, @barcodes) = @_;
   my $dbh   = C4::Context->dbh;
@@ -1717,34 +1779,21 @@ sub newitems {
   foreach my $barcode (@barcodes) {
       ($itemnumber,$error)=&OLDnewitems($dbh,$item,uc($barcode));
       $errors .=$error;
-#      print STDERR "biblionumber : $item->{biblionumber} / MARCbibid : $MARCbibid / itemnumber : $itemnumber\n";
       my $MARCitem = &MARCkoha2marcItem($dbh,$item->{biblionumber},$itemnumber);
-#      print STDERR "MARCitem ".$MARCitem->as_formatted()."\n";
       &MARCadditem($dbh,$MARCitem,$item->{biblionumber});
-#      print STDERR "MARCmodbiblio called\n";
   }
   return($errors);
 }
 
-# FIXME - This appears to be functionally equivalent to
-# &C4::Acquisitions::moditem.
-# Pick one and stick with it.
 sub moditem {
     my ($item) = @_;
-#  my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
     my $dbh = C4::Context->dbh;
     &OLDmoditem($dbh,$item);
-    warn "biblionumber : $item->{'biblionumber'} / $item->{'itemnum'}\n";
     my $MARCitem = &MARCkoha2marcItem($dbh,$item->{'biblionumber'},$item->{'itemnum'});
-    warn "before MARCmoditem : $item->{biblionumber}, $item->{'itemnum'}\n";
-    warn $MARCitem->as_formatted();
-#      print STDERR "MARCitem ".$MARCitem->as_formatted()."\n";
     my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$item->{biblionumber});
     &MARCmoditem($dbh,$MARCitem,$bibid,$item->{itemnum},0);
 }
 
-# FIXME - This is the same as &C4::Acquisitions::Checkitems.
-# Pick one and stick with it.
 sub checkitems{
   my ($count,@barcodes)=@_;
   my $dbh = C4::Context->dbh;
@@ -1762,8 +1811,6 @@ sub checkitems{
   return($error);
 }
 
-# FIXME - This is identical to &C4::Acquisitions::countitems.
-# Pick one and stick with it.
 sub countitems{
   my ($bibitemnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -1775,18 +1822,12 @@ sub countitems{
   return($data->{'count(*)'});
 }
 
-# FIXME - This is just a wrapper around &OLDdelitem, and acts
-# identically to &C4::Acquisitions::delitem
-# Pick one and stick with it.
 sub delitem{
   my ($itemnum)=@_;
   my $dbh = C4::Context->dbh;
   &OLDdelitem($dbh,$itemnum);
 }
 
-# FIXME - This is functionally identical to
-# &C4::Acquisitions::deletebiblioitem.
-# Pick one and stick with it.
 sub deletebiblioitem {
     my ($biblioitemnumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1794,16 +1835,12 @@ sub deletebiblioitem {
 } # sub deletebiblioitem
 
 
-# FIXME - This is functionally identical to &C4::Acquisitions::delbiblio.
-# Pick one and stick with it.
 sub delbiblio {
   my ($biblio)=@_;
   my $dbh = C4::Context->dbh;
   &OLDdelbiblio($dbh,$biblio);
 }
 
-# FIXME - This is identical to &C4::Acquisitions::getitemtypes.
-# Pick one and stick with it.
 sub getitemtypes {
   my $dbh   = C4::Context->dbh;
   my $query = "select * from itemtypes";
@@ -1843,8 +1880,6 @@ sub getbiblio {
     return($count, @results);
 } # sub getbiblio
 
-# FIXME - This is identical to &C4::Acquisitions::getbiblioitem.
-# Pick one and stick with it.
 sub getbiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1865,9 +1900,6 @@ biblioitemnumber = $biblioitemnum";
     return($count, @results);
 } # sub getbiblioitem
 
-# FIXME - This is identical to
-# &C4::Acquisitions::getbiblioitembybiblionumber.
-# Pick one and stick with it.
 sub getbiblioitembybiblionumber {
     my ($biblionumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1888,9 +1920,6 @@ $biblionumber";
     return($count, @results);
 } # sub
 
-# FIXME - This is identical to
-# &C4::Acquisitions::getbiblioitembybiblionumber.
-# Pick one and stick with it.
 sub getitemsbybiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1913,8 +1942,6 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     return($count, @results);
 } # sub getitemsbybiblioitem
 
-# FIXME - This is identical to &C4::Acquisitions::isbnsearch.
-# Pick one and stick with it.
 sub isbnsearch {
     my ($isbn) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1924,7 +1951,7 @@ sub isbnsearch {
     my @results;
 
     $isbn  = $dbh->quote($isbn);
-    $query = "Select biblio.* from biblio, biblioitems where
+    $query = "Select distinct biblio.* from biblio, biblioitems where
 biblio.biblionumber = biblioitems.biblionumber
 and isbn = $isbn";
     $sth   = $dbh->prepare($query);
@@ -1991,7 +2018,7 @@ sub logchange {
 	my $item=shift;
 	my $original=shift;
 	my $new=shift;
-	print STDERR "KOHA: $type $section $item $original $new\n";
+#	print STDERR "KOHA: $type $section $item $original $new\n";
     } elsif ($database eq 'marc') {
 	my $type=shift;
 	my $Record_ID=shift;
@@ -2000,7 +2027,7 @@ sub logchange {
 	my $subfield_ID=shift;
 	my $original=shift;
 	my $new=shift;
-	print STDERR "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
+#	print STDERR "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
     }
 }
 
@@ -2057,868 +2084,13 @@ sub getoraddbiblio {
 
 } # sub getoraddbiblio
 
-#
-#
-# UNUSEFUL SUBs. Could be deleted, kept only until beta test
-# maybe useful for some MARC tricks steve used.
-#
-
-sub OLD_MAYBE_DELETED_newBiblioItem {
-    my ($env, $biblioitem) = @_;
-    my $dbh = C4::Context->dbh;
-    my $biblionumber=$biblioitem->{'biblionumber'};
-    my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
-    my $volume=$biblioitem->{'volume'};
-    my $q_volume=$dbh->quote($volume);
-    my $number=$biblioitem->{'number'};
-    my $q_number=$dbh->quote($number);
-    my $classification=$biblioitem->{'classification'};
-    my $q_classification=$dbh->quote($classification);
-    my $itemtype=$biblioitem->{'itemtype'};
-    my $q_itemtype=$dbh->quote($itemtype);
-    my $isbn=$biblioitem->{'isbn'};
-    my $q_isbn=$dbh->quote($isbn);
-    my $issn=$biblioitem->{'issn'};
-    my $q_issn=$dbh->quote($issn);
-    my $dewey=$biblioitem->{'dewey'};
-    $dewey=~s/\.*0*$//;
-    ($dewey == 0) && ($dewey='');
-    my $subclass=$biblioitem->{'subclass'};
-    my $q_subclass=$dbh->quote($subclass);
-    my $publicationyear=$biblioitem->{'publicationyear'};
-    my $publishercode=$biblioitem->{'publishercode'};
-    my $q_publishercode=$dbh->quote($publishercode);
-    my $volumedate=$biblioitem->{'volumedate'};
-    my $q_volumedate=$dbh->quote($volumedate);
-    my $illus=$biblioitem->{'illus'};
-    my $q_illus=$dbh->quote($illus);
-    my $pages=$biblioitem->{'pages'};
-    my $q_pages=$dbh->quote($pages);
-    my $notes=$biblioitem->{'notes'};
-    my $q_notes=$dbh->quote($notes);
-    my $size=$biblioitem->{'size'};
-    my $q_size=$dbh->quote($size);
-    my $place=$biblioitem->{'place'};
-    my $q_place=$dbh->quote($place);
-    my $lccn=$biblioitem->{'lccn'};
-    my $q_lccn=$dbh->quote($lccn);
-
-
-# Unless the $env->{'marconly'} flag is set, update the biblioitems table with
-# the new data
-
-    unless ($env->{'marconly'}) {
-	#my $sth=$dbh->prepare("lock tables biblioitems write");
-	#$sth->execute;
-	my $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
-	$sth->execute;
-	my ($biblioitemnumber) =$sth->fetchrow;
-	$biblioitemnumber++;
-	$sth=$dbh->prepare("insert into biblioitems (biblionumber,biblioitemnumber,volume,number,classification,itemtype,isbn,issn,dewey,subclass,publicationyear,publishercode,volumedate,illus,pages,notes,size,place,lccn) values ($biblionumber, $biblioitemnumber, $q_volume, $q_number, $q_classification, $q_itemtype, $q_isbn, $q_issn, $dewey, $q_subclass, $publicationyear, $q_publishercode, $q_volumedate, $q_illus, $q_pages,$q_notes, $q_size, $q_place, $q_lccn)");
-	$sth->execute;
-	#my $sth=$dbh->prepare("unlock tables");
-	#$sth->execute;
-    }
-
-
-# Should we check if there is already a biblioitem/amrc with the
-# same isbn/lccn/issn?
-
-    my $sth=$dbh->prepare("select title,unititle,seriestitle,copyrightdate,notes,author from biblio where biblionumber=$biblionumber");
-    $sth->execute;
-    my ($title, $unititle,$seriestitle,$copyrightdate,$biblionotes,$author) = $sth->fetchrow;
-    $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber");
-    $sth->execute;
-    my ($subtitle) = $sth->fetchrow;
-    $sth=$dbh->prepare("select author from additionalauthors where biblionumber=$biblionumber");
-    $sth->execute;
-    my @additionalauthors;
-    while (my ($additionalauthor) = $sth->fetchrow) {
-	push (@additionalauthors, $additionalauthor);
-    }
-    $sth=$dbh->prepare("select subject from bibliosubject where biblionumber=$biblionumber");
-    $sth->execute;
-    my @subjects;
-    while (my ($subject) = $sth->fetchrow) {
-	push (@subjects, $subject);
-    }
-
-# MARC SECTION
-
-    $sth=$dbh->prepare("insert into Resource_Table (Record_ID) values (0)");
-    $sth->execute;
-    my $Resource_ID=$dbh->{'mysql_insertid'};
-    my $Record_ID=$Resource_ID;
-    $sth=$dbh->prepare("update Resource_Table set Record_ID=$Record_ID where Resource_ID=$Resource_ID");
-    $sth->execute;
-
-# Title
-    {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$title;
-	if ($subtitle) {
-	    $subfields->{2}->{'Subfield_Mark'}='b';
-	    $subfields->{2}->{'Subfield_Value'}=$subtitle;
-	}
-	my $tag='245';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-
-# author
-    {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$author;
-	my $tag='100';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Series Title
-    if ($seriestitle) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$seriestitle;
-	my $tag='440';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Biblio Note
-    if ($biblionotes) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$biblionotes;
-	$subfields->{2}->{'Subfield_Mark'}='3';
-	$subfields->{2}->{'Subfield_Value'}='biblio';
-	my $tag='500';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Additional Authors
-    foreach (@additionalauthors) {
-	my $author=$_;
-	(next) unless ($author);
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$author;
-	$subfields->{2}->{'Subfield_Mark'}='e';
-	$subfields->{2}->{'Subfield_Value'}='author';
-	my $tag='700';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Illustrator
-    if ($illus) {
-	(next) unless ($illus);
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$illus;
-	$subfields->{2}->{'Subfield_Mark'}='e';
-	$subfields->{2}->{'Subfield_Value'}='illustrator';
-	my $tag='700';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Subjects
-    foreach (@subjects) {
-	my $subject=$_;
-	(next) unless ($subject);
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$subject;
-	my $tag='650';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-
-
-# ISBN
-    if ($isbn) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$isbn;
-	my $tag='020';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# LCCN
-    if ($lccn) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$lccn;
-	my $tag='010';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# ISSN
-    if ($issn) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$issn;
-	my $tag='022';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# DEWEY
-    if ($dewey) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$dewey;
-	my $tag='082';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# DEWEY subclass and itemtype
-    {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$itemtype;
-	$subfields->{2}->{'Subfield_Mark'}='b';
-	$subfields->{2}->{'Subfield_Value'}=$subclass;
-	$subfields->{3}->{'Subfield_Mark'}='c';
-	$subfields->{3}->{'Subfield_Value'}=$biblionumber;
-	$subfields->{4}->{'Subfield_Mark'}='d';
-	$subfields->{4}->{'Subfield_Value'}=$biblioitemnumber;
-	my $tag='090';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# PUBLISHER
-    {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$place;
-	$subfields->{2}->{'Subfield_Mark'}='b';
-	$subfields->{2}->{'Subfield_Value'}=$publishercode;
-	$subfields->{3}->{'Subfield_Mark'}='c';
-	$subfields->{3}->{'Subfield_Value'}=$publicationyear;
-	if ($copyrightdate) {
-	    $subfields->{4}->{'Subfield_Mark'}='c';
-	    $subfields->{4}->{'Subfield_Value'}="c$copyrightdate";
-	}
-	my $tag='260';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# PHYSICAL
-    if ($pages || $size) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$pages;
-	$subfields->{2}->{'Subfield_Mark'}='c';
-	$subfields->{2}->{'Subfield_Value'}=$size;
-	my $tag='300';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Volume/Number
-    if ($volume || $number) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='v';
-	$subfields->{1}->{'Subfield_Value'}=$volume;
-	$subfields->{2}->{'Subfield_Mark'}='n';
-	$subfields->{2}->{'Subfield_Value'}=$number;
-	my $tag='440';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-# Biblioitem Note
-    if ($notes) {
-	my $subfields;
-	$subfields->{1}->{'Subfield_Mark'}='a';
-	$subfields->{1}->{'Subfield_Value'}=$notes;
-	$subfields->{2}->{'Subfield_Mark'}='3';
-	$subfields->{2}->{'Subfield_Value'}='biblioitem';
-	my $tag='500';
-	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    }
-    $sth->finish;
-    return ($env, $Record_ID);
-}
-
-sub OLD_MAYBE_DELETED_newItem {
-    my ($env, $Record_ID, $item) = @_;
-    my $dbh = C4::Context->dbh;
-    my $barcode=$item->{'barcode'};
-    my $q_barcode=$dbh->quote($barcode);
-    my $biblionumber=$item->{'biblionumber'};
-    my $biblioitemnumber=$item->{'biblioitemnumber'};
-    my $dateaccessioned=$item->{'dateaccessioned'};
-    my $booksellerid=$item->{'booksellerid'};
-    my $q_booksellerid=$dbh->quote($booksellerid);
-    my $homebranch=$item->{'homebranch'};
-    my $q_homebranch=$dbh->quote($homebranch);
-    my $holdingbranch=$item->{'holdingbranch'};
-    my $price=$item->{'price'};
-    my $replacementprice=$item->{'replacementprice'};
-    my $replacementpricedate=$item->{'replacementpricedate'};
-    my $q_replacementpricedate=$dbh->quote($replacementpricedate);
-    my $notforloan=$item->{'notforloan'};
-    my $itemlost=$item->{'itemlost'};
-    my $wthdrawn=$item->{'wthdrawn'};
-    my $restricted=$item->{'restricted'};
-    my $itemnotes=$item->{'itemnotes'};
-    my $q_itemnotes=$dbh->quote($itemnotes);
-    my $itemtype=$item->{'itemtype'};
-    my $subclass=$item->{'subclass'};
-
-# KOHADB Section
-
-    unless ($env->{'marconly'}) {
-	my $sth=$dbh->prepare("select max(itemnumber) from items");
-	$sth->execute;
-	my ($itemnumber) =$sth->fetchrow;
-	$itemnumber++;
-	$sth=$dbh->prepare("insert into items (itemnumber,biblionumber,biblioitemnumber,barcode,dateaccessioned,booksellerid,homebranch,price,replacementprice,replacementpricedate,notforloan,itemlost,wthdrawn,restricted,itemnotes) values ($itemnumber,$biblionumber,$biblioitemnumber,$q_barcode,$dateaccessioned,$q_booksellerid,$q_homebranch,$price,$q_replacementpricedate,$notforloan,$itemlost,$wthdrawn,$restricted,$q_itemnotes)");
-	$sth->execute;
-    }
-
-
-# MARC SECTION
-    my $subfields;
-    $subfields->{1}->{'Subfield_Mark'}='p';
-    $subfields->{1}->{'Subfield_Value'}=$barcode;
-    $subfields->{2}->{'Subfield_Mark'}='d';
-    $subfields->{2}->{'Subfield_Value'}=$dateaccessioned;
-    $subfields->{3}->{'Subfield_Mark'}='e';
-    $subfields->{3}->{'Subfield_Value'}=$booksellerid;
-    $subfields->{4}->{'Subfield_Mark'}='b';
-    $subfields->{4}->{'Subfield_Value'}=$homebranch;
-    $subfields->{5}->{'Subfield_Mark'}='l';
-    $subfields->{5}->{'Subfield_Value'}=$holdingbranch;
-    $subfields->{6}->{'Subfield_Mark'}='c';
-    $subfields->{6}->{'Subfield_Value'}=$price;
-    $subfields->{7}->{'Subfield_Mark'}='c';
-    $subfields->{7}->{'Subfield_Value'}=$replacementprice;
-    $subfields->{8}->{'Subfield_Mark'}='d';
-    $subfields->{8}->{'Subfield_Value'}=$replacementpricedate;
-    if ($notforloan) {
-	$subfields->{9}->{'Subfield_Mark'}='h';
-	$subfields->{9}->{'Subfield_Value'}='Not for loan';
-    }
-    if ($notforloan) {
-	$subfields->{10}->{'Subfield_Mark'}='j';
-	$subfields->{10}->{'Subfield_Value'}='Item lost';
-    }
-    if ($notforloan) {
-	$subfields->{11}->{'Subfield_Mark'}='j';
-	$subfields->{11}->{'Subfield_Value'}='Item withdrawn';
-    }
-    if ($notforloan) {
-	$subfields->{12}->{'Subfield_Mark'}='z';
-	$subfields->{12}->{'Subfield_Value'}=$itemnotes;
-    }
-    my $tag='876';
-    my $Tag_ID;
-    $env->{'linkage'}=1;
-    ($env, $Tag_ID) = addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-    $env->{'linkage'}=0;
-    $env->{'linkid'}=$Tag_ID;
-    $tag='852';
-    my $subfields2;
-    $subfields2->{1}->{'Subfield_Mark'}='a';
-    $subfields2->{1}->{'Subfield_Value'}='Coast Mountains School District';
-    $subfields2->{1}->{'Subfield_Mark'}='b';
-    $subfields2->{1}->{'Subfield_Value'}=$homebranch;
-    $subfields2->{1}->{'Subfield_Mark'}='c';
-    $subfields2->{1}->{'Subfield_Value'}=$itemtype;
-    $subfields2->{2}->{'Subfield_Mark'}='m';
-    $subfields2->{2}->{'Subfield_Value'}=$subclass;
-    addTag($env, $Record_ID, $tag, ' ', ' ', $subfields2);
-    $env->{'linkid'}='';
-}
-
-sub OLD_MAYBE_DELETED_updateBiblio {
-# Update the biblio with biblionumber $biblio->{'biblionumber'}
-# I guess this routine should search through all marc records for a record that
-# has the same biblionumber stored in it, and modify the MARC record as well as
-# the biblio table.
-#
-# Also, this subroutine should search through the $biblio object and compare it
-# to the existing record and _LOG ALL CHANGES MADE_ in some way.  I'd like for
-# this logging feature to be usable to undo changes easily.
-
-    my ($env, $biblio) = @_;
-    my $Record_ID;
-    my $biblionumber=$biblio->{'biblionumber'};
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select * from biblio where biblionumber=$biblionumber");
-    $sth->execute;
-    my $origbiblio=$sth->fetchrow_hashref;
-    $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber");
-    $sth->execute;
-    my ($subtitle)=$sth->fetchrow;
-    $origbiblio->{'subtitle'}=$subtitle;
-    $sth=$dbh->prepare("select author from additionalauthors where biblionumber=$biblionumber");
-    $sth->execute;
-    my $origadditionalauthors;
-    while (my ($author) = $sth->fetchrow) {
-	push (@{$origbiblio->{'additionalauthors'}}, $author);
-	$origadditionalauthors->{$author}=1;
-    }
-    $sth=$dbh->prepare("select subject from bibliosubject where biblionumber=$biblionumber");
-    $sth->execute;
-    my $origsubjects;
-    while (my ($subject) = $sth->fetchrow) {
-	push (@{$origbiblio->{'subjects'}}, $subject);
-	$origsubjects->{$subject}=1;
-    }
-
-
-# Obtain a list of MARC Record_ID's that are tied to this biblio
-    $sth=$dbh->prepare("select bibid from marc_subfield_table where tag='090' and subfieldvalue=$biblionumber and subfieldcode='c'");
-    $sth->execute;
-    my @marcrecords;
-    while (my ($bibid) = $sth->fetchrow) {
-	push(@marcrecords, $bibid);
-    }
-
-    my $bibid='';
-    if ($biblio->{'author'} ne $origbiblio->{'author'}) {
-	my $q_author=$dbh->quote($biblio->{'author'});
-	logchange('kohadb', 'change', 'biblio', 'author', $origbiblio->{'author'}, $biblio->{'author'});
-	my $sti=$dbh->prepare("update biblio set author=$q_author where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-	foreach $bibid (@marcrecords) {
-	    logchange('marc', 'change', $bibid, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
-	    changeSubfield($bibid, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
-	}
-    }
-    if ($biblio->{'title'} ne $origbiblio->{'title'}) {
-	my $q_title=$dbh->quote($biblio->{'title'});
-	logchange('kohadb', 'change', 'biblio', 'title', $origbiblio->{'title'}, $biblio->{'title'});
-	my $sti=$dbh->prepare("update biblio set title=$q_title where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-	foreach $Record_ID (@marcrecords) {
-	    logchange('marc', 'change', $Record_ID, '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
-	    changeSubfield($Record_ID, '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
-	}
-    }
-    if ($biblio->{'subtitle'} ne $origbiblio->{'subtitle'}) {
-	my $q_subtitle=$dbh->quote($biblio->{'subtitle'});
-	logchange('kohadb', 'change', 'biblio', 'subtitle', $origbiblio->{'subtitle'}, $biblio->{'subtitle'});
-	my $sti=$dbh->prepare("update bibliosubtitle set subtitle=$q_subtitle where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-	foreach $Record_ID (@marcrecords) {
-	    logchange('marc', 'change', $Record_ID, '245', 'b', $origbiblio->{'subtitle'}, $biblio->{'subtitle'});
-	    changeSubfield($Record_ID, '245', 'b', $origbiblio->{'subtitle'}, $biblio->{'subtitle'});
-	}
-    }
-    if ($biblio->{'unititle'} ne $origbiblio->{'unititle'}) {
-	my $q_unititle=$dbh->quote($biblio->{'unititle'});
-	logchange('kohadb', 'change', 'biblio', 'unititle', $origbiblio->{'unititle'}, $biblio->{'unititle'});
-	my $sti=$dbh->prepare("update biblio set unititle=$q_unititle where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-    }
-    if ($biblio->{'notes'} ne $origbiblio->{'notes'}) {
-	my $q_notes=$dbh->quote($biblio->{'notes'});
-	logchange('kohadb', 'change', 'biblio', 'notes', $origbiblio->{'notes'}, $biblio->{'notes'});
-	my $sti=$dbh->prepare("update biblio set notes=$q_notes where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-	foreach $Record_ID (@marcrecords) {
-	    logchange('marc', 'change', $Record_ID, '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
-	    changeSubfield($Record_ID, '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
-	}
-    }
-    if ($biblio->{'serial'} ne $origbiblio->{'serial'}) {
-	my $q_serial=$dbh->quote($biblio->{'serial'});
-	logchange('kohadb', 'change', 'biblio', 'serial', $origbiblio->{'serial'}, $biblio->{'serial'});
-	my $sti=$dbh->prepare("update biblio set serial=$q_serial where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-    }
-    if ($biblio->{'seriestitle'} ne $origbiblio->{'seriestitle'}) {
-	my $q_seriestitle=$dbh->quote($biblio->{'seriestitle'});
-	logchange('kohadb', 'change', 'biblio', 'seriestitle', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
-	my $sti=$dbh->prepare("update biblio set seriestitle=$q_seriestitle where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-	foreach $Record_ID (@marcrecords) {
-	    logchange('marc', 'change', $Record_ID, '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
-	    changeSubfield($Record_ID, '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
-	}
-    }
-    if ($biblio->{'copyrightdate'} ne $origbiblio->{'copyrightdate'}) {
-	my $q_copyrightdate=$dbh->quote($biblio->{'copyrightdate'});
-	logchange('kohadb', 'change', 'biblio', 'copyrightdate', $origbiblio->{'copyrightdate'}, $biblio->{'copyrightdate'});
-	my $sti=$dbh->prepare("update biblio set copyrightdate=$q_copyrightdate where biblionumber=$biblio->{'biblionumber'}");
-	$sti->execute;
-	foreach $Record_ID (@marcrecords) {
-	    logchange('marc', 'change', $Record_ID, '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
-	    changeSubfield($Record_ID, '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
-	}
-    }
-
-# Check for subject heading changes
-
-    my $newsubject='';
-    my $subjects;
-    foreach $newsubject (@{$biblio->{'subject'}}) {
-	$subjects->{$newsubject}=1;
-	if ($origsubjects->{$newsubject}) {
-	    $subjects->{$newsubject}=2;
-	} else {
-	    my $q_newsubject=$dbh->quote($newsubject);
-	    my $sth=$dbh->prepare("insert into bibliosubject (subject,biblionumber) values ($q_newsubject, $biblionumber)");
-	    $sth->execute;
-	    logchange('kohadb', 'add', 'biblio', 'subject', $newsubject);
-	    my $subfields;
-	    $subfields->{1}->{'Subfield_Mark'}='a';
-	    $subfields->{1}->{'Subfield_Value'}=$newsubject;
-	    my $tag='650';
-	    my $Record_ID;
-	    foreach $Record_ID (@marcrecords) {
-		addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-		logchange('marc', 'add', $Record_ID, '650', 'a', $newsubject);
-	    }
-	}
-    }
-    my $origsubject;
-    foreach $origsubject (keys %$origsubjects) {
-	if ($subjects->{$origsubject} == 1) {
-	    my $q_origsubject=$dbh->quote($origsubject);
-	    logchange('kohadb', 'delete', 'biblio', '$biblionumber', 'subject', $origsubject);
-	    my $sth=$dbh->prepare("delete from bibliosubject where biblionumber=$biblionumber and subject=$q_origsubject");
-	    $sth->execute;
-	}
-    }
-}
-
-sub OLD_MAYBE_DELETED_updateBiblioItem {
-# Update the biblioitem with biblioitemnumber $biblioitem->{'biblioitemnumber'}
-#
-# This routine should also check to see which fields are actually being
-# modified, and log all changes.
-
-    my ($env, $biblioitem) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
-    my $sth=$dbh->prepare("select * from biblioitems where biblioitemnumber=$biblioitemnumber");
-# obi = original biblioitem
-    my $obi=$sth->fetchrow_hashref;
-    $sth=$dbh->prepare("select B.Record_ID from Bib_Table B, 0XX_Tag_Table T, 0XX_Subfield_Table S where B.Tag_0XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and T.Tag='090' and S.Subfield_Mark='c' and S.Subfield_Value=$biblioitemnumber");
-    $sth->execute;
-    my ($Record_ID) = $sth->fetchrow;
-    if ($biblioitem->{'biblionumber'} ne $obi->{'biblionumber'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'biblionumber', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
-	my $sth=$dbh->prepare("update biblioitems set biblionumber=$biblioitem->{'biblionumber'} where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
-	changeSubfield($Record_ID, '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
-    }
-    if ($biblioitem->{'volume'} ne $obi->{'volume'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'volume', $obi->{'volume'}, $biblioitem->{'volume'});
-	my $q_volume=$dbh->quote($biblioitem->{'volume'});
-	my $sth=$dbh->prepare("update biblioitems set volume=$q_volume where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
-	changeSubfield($Record_ID, '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
-    }
-    if ($biblioitem->{'number'} ne $obi->{'number'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'number', $obi->{'number'}, $biblioitem->{'number'});
-	my $q_number=$dbh->quote($biblioitem->{'number'});
-	my $sth=$dbh->prepare("update biblioitems set number=$q_number where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
-	changeSubfield($Record_ID, '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
-    }
-    if ($biblioitem->{'itemtype'} ne $obi->{'itemtype'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'itemtype', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
-	my $q_itemtype=$dbh->quote($biblioitem->{'itemtype'});
-	my $sth=$dbh->prepare("update biblioitems set itemtype=$q_itemtype where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
-	changeSubfield($Record_ID, '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
-    }
-    if ($biblioitem->{'isbn'} ne $obi->{'isbn'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'isbn', $obi->{'isbn'}, $biblioitem->{'isbn'});
-	my $q_isbn=$dbh->quote($biblioitem->{'isbn'});
-	my $sth=$dbh->prepare("update biblioitems set isbn=$q_isbn where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
-	changeSubfield($Record_ID, '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
-    }
-    if ($biblioitem->{'issn'} ne $obi->{'issn'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'issn', $obi->{'issn'}, $biblioitem->{'issn'});
-	my $q_issn=$dbh->quote($biblioitem->{'issn'});
-	my $sth=$dbh->prepare("update biblioitems set issn=$q_issn where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
-	changeSubfield($Record_ID, '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
-    }
-    if ($biblioitem->{'dewey'} ne $obi->{'dewey'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'dewey', $obi->{'dewey'}, $biblioitem->{'dewey'});
-	my $sth=$dbh->prepare("update biblioitems set dewey=$biblioitem->{'dewey'} where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
-	changeSubfield($Record_ID, '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
-    }
-    if ($biblioitem->{'subclass'} ne $obi->{'subclass'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'subclass', $obi->{'subclass'}, $biblioitem->{'subclass'});
-	my $q_subclass=$dbh->quote($biblioitem->{'subclass'});
-	my $sth=$dbh->prepare("update biblioitems set subclass=$q_subclass where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
-	changeSubfield($Record_ID, '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
-    }
-    if ($biblioitem->{'place'} ne $obi->{'place'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'place', $obi->{'place'}, $biblioitem->{'place'});
-	my $q_place=$dbh->quote($biblioitem->{'place'});
-	my $sth=$dbh->prepare("update biblioitems set place=$q_place where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
-	changeSubfield($Record_ID, '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
-    }
-    if ($biblioitem->{'publishercode'} ne $obi->{'publishercode'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'publishercode', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
-	my $q_publishercode=$dbh->quote($biblioitem->{'publishercode'});
-	my $sth=$dbh->prepare("update biblioitems set publishercode=$q_publishercode where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
-	changeSubfield($Record_ID, '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
-    }
-    if ($biblioitem->{'publicationyear'} ne $obi->{'publicationyear'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'publicationyear', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
-	my $q_publicationyear=$dbh->quote($biblioitem->{'publicationyear'});
-	my $sth=$dbh->prepare("update biblioitems set publicationyear=$q_publicationyear where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
-	changeSubfield($Record_ID, '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
-    }
-    if ($biblioitem->{'illus'} ne $obi->{'illus'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'illus', $obi->{'illus'}, $biblioitem->{'illus'});
-	my $q_illus=$dbh->quote($biblioitem->{'illus'});
-	my $sth=$dbh->prepare("update biblioitems set illus=$q_illus where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
-	changeSubfield($Record_ID, '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
-    }
-    if ($biblioitem->{'pages'} ne $obi->{'pages'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'pages', $obi->{'pages'}, $biblioitem->{'pages'});
-	my $q_pages=$dbh->quote($biblioitem->{'pages'});
-	my $sth=$dbh->prepare("update biblioitems set pages=$q_pages where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
-	changeSubfield($Record_ID, '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
-    }
-    if ($biblioitem->{'size'} ne $obi->{'size'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'size', $obi->{'size'}, $biblioitem->{'size'});
-	my $q_size=$dbh->quote($biblioitem->{'size'});
-	my $sth=$dbh->prepare("update biblioitems set size=$q_size where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
-	changeSubfield($Record_ID, '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
-    }
-    if ($biblioitem->{'notes'} ne $obi->{'notes'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'notes', $obi->{'notes'}, $biblioitem->{'notes'});
-	my $q_notes=$dbh->quote($biblioitem->{'notes'});
-	my $sth=$dbh->prepare("update biblioitems set notes=$q_notes where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
-	changeSubfield($Record_ID, '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
-    }
-    if ($biblioitem->{'lccn'} ne $obi->{'lccn'}) {
-	logchange('kohadb', 'change', 'biblioitems', 'lccn', $obi->{'lccn'}, $biblioitem->{'lccn'});
-	my $q_lccn=$dbh->quote($biblioitem->{'lccn'});
-	my $sth=$dbh->prepare("update biblioitems set lccn=$q_lccn where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', 'change', $Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
-	changeSubfield($Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
-    }
-    $sth->finish;
-}
-
-sub OLD_MAYBE_DELETED_updateItem {
-# Update the item with itemnumber $item->{'itemnumber'}
-# This routine should also modify the corresponding MARC record data. (852 and
-# 876 tags with 876p tag the same as $item->{'barcode'}
-#
-# This routine should also check to see which fields are actually being
-# modified, and log all changes.
-
-    my ($env, $item) = @_;
-    my $dbh = C4::Context->dbh;
-    my $itemnumber=$item->{'itemnumber'};
-    my $biblionumber=$item->{'biblionumber'};
-    my $biblioitemnumber=$item->{'biblioitemnumber'};
-    my $barcode=$item->{'barcode'};
-    my $dateaccessioned=$item->{'dateaccessioned'};
-    my $booksellerid=$item->{'booksellerid'};
-    my $homebranch=$item->{'homebranch'};
-    my $price=$item->{'price'};
-    my $replacementprice=$item->{'replacementprice'};
-    my $replacementpricedate=$item->{'replacementpricedate'};
-    my $multivolume=$item->{'multivolume'};
-    my $stack=$item->{'stack'};
-    my $notforloan=$item->{'notforloan'};
-    my $itemlost=$item->{'itemlost'};
-    my $wthdrawn=$item->{'wthdrawn'};
-    my $bulk=$item->{'bulk'};
-    my $restricted=$item->{'restricted'};
-    my $binding=$item->{'binding'};
-    my $itemnotes=$item->{'itemnotes'};
-    my $holdingbranch=$item->{'holdingbranch'};
-    my $interim=$item->{'interim'};
-    my $sth=$dbh->prepare("select * from items where itemnumber=$itemnumber");
-    $sth->execute;
-    my $olditem=$sth->fetchrow_hashref;
-    my $q_barcode=$dbh->quote($olditem->{'barcode'});
-    $sth=$dbh->prepare("select S.Subfield_ID, B.Record_ID from 8XX_Subfield_Table S, 8XX_Tag_Table T, Bib_Table B where B.Tag_8XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and Subfield_Mark='p' and Subfield_Value=$q_barcode");
-    $sth->execute;
-    my ($Subfield876_ID, $Record_ID) = $sth->fetchrow;
-    $sth=$dbh->prepare("select Subfield_Value from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_ID=$Subfield876_ID");
-    $sth->execute;
-    my ($link) = $sth->fetchrow;
-    $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_Value=$link and !(Subfield_ID=$Subfield876_ID)");
-    $sth->execute;
-    my ($Subfield852_ID) = $sth->fetchrow;
-
-    if ($item->{'barcode'} ne $olditem->{'barcode'}) {
-	logchange('kohadb', 'change', 'items', 'barcode', $olditem->{'barcode'}, $item->{'barcode'});
-	my $q_barcode=$dbh->quote($item->{'barcode'});
-	my $sth=$dbh->prepare("update items set barcode=$q_barcode where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'p', $olditem->{'barcode'}, $item->{'barcode'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'p', $Subfield_Key, $olditem->{'barcode'}, $item->{'barcode'});
-    }
-    if ($item->{'booksellerid'} ne $olditem->{'booksellerid'}) {
-	logchange('kohadb', 'change', 'items', 'booksellerid', $olditem->{'booksellerid'}, $item->{'booksellerid'});
-	my $q_booksellerid=$dbh->quote($item->{'booksellerid'});
-	my $sth=$dbh->prepare("update items set booksellerid=$q_booksellerid where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'e', $Subfield_Key, $olditem->{'booksellerid'}, $item->{'booksellerid'});
-    }
-    if ($item->{'dateaccessioned'} ne $olditem->{'dateaccessioned'}) {
-	logchange('kohadb', 'change', 'items', 'dateaccessioned', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
-	my $q_dateaccessioned=$dbh->quote($item->{'dateaccessioned'});
-	my $sth=$dbh->prepare("update items set dateaccessioned=$q_dateaccessioned where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'd', $Subfield_Key, $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
-    }
-    if ($item->{'homebranch'} ne $olditem->{'homebranch'}) {
-	logchange('kohadb', 'change', 'items', 'homebranch', $olditem->{'homebranch'}, $item->{'homebranch'});
-	my $q_homebranch=$dbh->quote($item->{'homebranch'});
-	my $sth=$dbh->prepare("update items set homebranch=$q_homebranch where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'b', $Subfield_Key, $olditem->{'homebranch'}, $item->{'homebranch'});
-    }
-    if ($item->{'holdingbranch'} ne $olditem->{'holdingbranch'}) {
-	logchange('kohadb', 'change', 'items', 'holdingbranch', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
-	my $q_holdingbranch=$dbh->quote($item->{'holdingbranch'});
-	my $sth=$dbh->prepare("update items set holdingbranch=$q_holdingbranch where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'l', $Subfield_Key, $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
-    }
-    if ($item->{'price'} ne $olditem->{'price'}) {
-	logchange('kohadb', 'change', 'items', 'price', $olditem->{'price'}, $item->{'price'});
-	my $q_price=$dbh->quote($item->{'price'});
-	my $sth=$dbh->prepare("update items set price=$q_price where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'c', $olditem->{'price'}, $item->{'price'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'c', $Subfield_Key, $olditem->{'price'}, $item->{'price'});
-    }
-    if ($item->{'itemnotes'} ne $olditem->{'itemnotes'}) {
-	logchange('kohadb', 'change', 'items', 'itemnotes', $olditem->{'itemnotes'}, $item->{'itemnotes'});
-	my $q_itemnotes=$dbh->quote($item->{'itemnotes'});
-	my $sth=$dbh->prepare("update items set itemnotes=$q_itemnotes where itemnumber=$itemnumber");
-	$sth->execute;
-	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'c', $olditem->{'itemnotes'}, $item->{'itemnotes'}, $Subfield876_ID);
-	logchange('marc', 'change', $Record_ID, '876', 'c', $Subfield_Key, $olditem->{'itemnotes'}, $item->{'itemnotes'});
-    }
-    if ($item->{'notforloan'} ne $olditem->{'notforloan'}) {
-	logchange('kohadb', 'change', 'items', 'notforloan', $olditem->{'notforloan'}, $item->{'notforloan'});
-	my $sth=$dbh->prepare("update items set notforloan=$notforloan where itemnumber=$itemnumber");
-	$sth->execute;
-	if ($item->{'notforloan'}) {
-	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Not for loan', $Subfield876_ID);
-	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Not for loan');
-	} else {
-	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Not for loan', $Subfield876_ID);
-	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Not for loan');
-	}
-    }
-    if ($item->{'itemlost'} ne $olditem->{'itemlost'}) {
-	logchange('kohadb', 'change', 'items', 'itemlost', $olditem->{'itemlost'}, $item->{'itemlost'});
-	my $sth=$dbh->prepare("update items set itemlost=$itemlost where itemnumber=$itemnumber");
-	$sth->execute;
-	if ($item->{'itemlost'}) {
-	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Item lost', $Subfield876_ID);
-	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Item lost');
-	} else {
-	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Item lost', $Subfield876_ID);
-	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Item lost');
-	}
-    }
-    if ($item->{'wthdrawn'} ne $olditem->{'wthdrawn'}) {
-	logchange('kohadb', 'change', 'items', 'wthdrawn', $olditem->{'wthdrawn'}, $item->{'wthdrawn'});
-	my $sth=$dbh->prepare("update items set wthdrawn=$wthdrawn where itemnumber=$itemnumber");
-	$sth->execute;
-	if ($item->{'wthdrawn'}) {
-	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Withdrawn', $Subfield876_ID);
-	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Withdrawn');
-	} else {
-	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Withdrawn', $Subfield876_ID);
-	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Withdrawn');
-	}
-    }
-    if ($item->{'restricted'} ne $olditem->{'restricted'}) {
-	logchange('kohadb', 'change', 'items', 'restricted', $olditem->{'restricted'}, $item->{'restricted'});
-	my $sth=$dbh->prepare("update items set restricted=$restricted where itemnumber=$itemnumber");
-	$sth->execute;
-	if ($item->{'restricted'}) {
-	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Restricted', $Subfield876_ID);
-	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Restricted');
-	} else {
-	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Restricted', $Subfield876_ID);
-	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Restricted');
-	}
-    }
-    $sth->finish;
-}
-
-# Add a biblioitem and related data to Koha database
-sub OLD_MAY_BE_DELETED_newcompletebiblioitem {
-	use strict;
-
-	my (
-	  $dbh,			# DBI handle
-				# FIXME - Unused argument
-	  $biblio,		# hash ref to biblio record
-	  $biblioitem,		# hash ref to biblioitem record
-	  $subjects,		# list ref of subjects
-	  $addlauthors,		# list ref of additional authors
-	)=@_ ;
-
-	my ( $biblionumber, $biblioitemnumber, $error);		# return values
-
-	my $debug=0;
-	my $sth;
-	my $subjectheading;
-	my $additionalauthor;
-
-	#--------
-    	$dbh = C4::Context->dbh;
-
-	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
-		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
-
-	# Make sure master biblio entry exists
-	($biblionumber,$error)=getoraddbiblio($dbh, $biblio);
-
-        if ( ! $error ) {
-
-	  $biblioitem->{biblionumber}=$biblionumber;
-
-	  # Add biblioitem
-	  $biblioitemnumber=newbiblioitem($biblioitem);
-
-	  # Add subjects
-	  $sth=$dbh->prepare("insert into bibliosubject
-		(biblionumber,subject)
-		values (?, ? )" );
-	  foreach $subjectheading (@{$subjects} ) {
-	      $sth->execute($biblionumber, $subjectheading)
-			or $error.=$sth->errstr ;
-
-	  } # foreach subject
-
-	  # Add additional authors
-	  $sth=$dbh->prepare("insert into additionalauthors
-		(biblionumber,author)
-		values (?, ? )");
-	  foreach $additionalauthor (@{$addlauthors} ) {
-	    $sth->execute($biblionumber, $additionalauthor)
-			or $error.=$sth->errstr ;
-	  } # foreach author
-
-	} else {
-	  # couldn't get biblio
-	  $biblionumber='';
-	  $biblioitemnumber='';
-
-	} # if no biblio error
-
-	return ( $biblionumber, $biblioitemnumber, $error);
-
-} # sub newcompletebiblioitem
-
-#
-#
-# END OF UNUSEFUL SUBs
-#
-#
-
 END { }       # module clean-up code here (global destructor)
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut
+
