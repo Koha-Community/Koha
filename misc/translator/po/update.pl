@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Convenience script to update a po file
+# Convenience script to update two po files at once
 # This emulates the GNOME "update.pl" script
 
 use strict;
