@@ -255,7 +255,9 @@ foreach my $code (keys %$messages) {
     } else {
 		die "Unknown error code $code"; # XXX
     }
+    if (%err){
 	push (@errmsgloop, \%err);
+	}
 last if $exit_required_p;
 }
 $template->param(errmsgloop => \@errmsgloop);

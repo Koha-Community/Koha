@@ -126,6 +126,7 @@ Phone: <TMPL_VAR Name="borphone">
 	</td>
 	<td valign=top align=left>
 </TMPL_IF>
+<TMPL_IF NAME="errmsgloop">
 		<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 		<tr><th  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Messages</font></th></tr>
 		<tr><td>
@@ -150,6 +151,7 @@ Phone: <TMPL_VAR Name="borphone">
 				<BR>
 			</TMPL_LOOP>
 		</td></tr></table>
+		</TMPL_IF>
 	</td>
 	</tr>
 <TMPL_IF Name="returned">
