@@ -232,6 +232,7 @@ my %requirefields=(
 	#added so that reference items are not available for reserves...
 	itemtypes=>{'notforloan' => 'smallint(6)'},
 	systempreferences =>{'explanation' => 'char(80)'},
+	z3950servers =>{'syntax' => 'char(80)'},
 );
 
 my %dropable_table=(
@@ -281,6 +282,7 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'marcflavour', value => 'MARC21', explanation => 'your MARC flavor (MARC21 or UNIMARC) used for character encoding' },
     	{ uniquefieldrequired => 'variable', variable => 'checkdigit', value => 'katipo', explanation => 'none= no check on member cardnumber. katipo= katipo check' },
     	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'ISO', explanation => 'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd) ' },
+    	{ uniquefieldrequired => 'variable', variable => 'KohaAdminEmailAddress', value => 'your.mail@here', explanation => 'the email adress where borrowers modifs are sent' },
    ],
 
 );
@@ -546,6 +548,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.41  2003/04/29 08:09:44  tipaul
+# z3950 support is coming...
+# * adding a syntax column in z3950 table = this column will say wether the z3950 must be called with PerferedRecordsyntax => USMARC or PerferedRecordsyntax => UNIMARC. I tried some french UNIMARC z3950 servers, and some only send USMARC, some only UNIMARC, some can answer with both.
+# Note this is a 1st draft. More to follow (today ? I hope).
+#
 # Revision 1.40  2003/04/22 10:48:27  wolfpac444
 # Added "father" column to bibliothesaurus table
 #

@@ -4,7 +4,7 @@
 
 use C4::Context;
 use DBI;
-#use strict;
+use strict;
 use C4::Biblio;
 use C4::Output;
 use C4::Breeding;
@@ -19,7 +19,7 @@ if ($< == 0) {
 	close PID;
     }
     # Get real apacheuser from koha.conf or reparsing httpd.conf
-    my $apacheuser='www-data';
+    my $apacheuser='paul';
     my $uid=0;
     unless ($uid = (getpwnam($apacheuser))[2]) {
 	die "Attempt to run daemon as non-existent or superuser\n";
@@ -27,8 +27,6 @@ if ($< == 0) {
     $>=$uid;
     $<=$uid;
 }
-
-
 my $dbh = C4::Context->dbh;
 
 my $sth=$dbh->prepare("update z3950results set active=0");
@@ -52,15 +50,14 @@ my $lastrun=0;
 while (1) {
 	if ((time-$lastrun)>5) {
 		print "starting loop\n";
-		if ($checkqueue) {
-			print "checkqueue=1\n";
+		if ($checkqueue) { # everytime a SIG{HUP} is recieved
 			$checkqueue=0;
 			my $sth=$dbh->prepare("select id,term,type,servers from z3950queue order by id");
 			$sth->execute;
 			while (my ($id, $term, $type, $servers) = $sth->fetchrow) {
 				if ($forkcounter<12) {
 					my $now=time();
-					$stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=$id");
+					my $stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=$id");
 					($stk->execute) || (next);
 					my %serverdone;
 					unless ($stk->rows) {
@@ -91,21 +88,20 @@ while (1) {
 						$attr='1=1016';
 					}
 					$term='"'.$term.'"';
-					$query="\@attr $attr $term";
+					my $query="\@attr $attr $term";
 					my $totalrecords=0;
 					my $serverinfo;
 					my $stillprocessing=0;
+					my $globalname;
 					foreach $serverinfo (split(/\s+/, $servers)) {
 						(next) if ($serverdone{$serverinfo} == 1);
 						my $stillprocessing=1;
 						if (my $pid=fork()) {
 							$forkcounter++;
 						} else {
-							#$sth->finish;
-							#$sti->finish;
-							#$dbh->disconnect;
 							my $dbi = C4::Context->dbh;
 							my ($name, $server, $database, $user, $password) = split(/\//, $serverinfo, 5);
+							$globalname=$name;
 							$server=~/(.*)\:(\d+)/;
 							my $servername=$1;
 							my $port=$2;
@@ -117,14 +113,17 @@ while (1) {
 								my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
 								$stj->execute;
 								($resultsid) = $stj->fetchrow;
+								$stj->finish;
 							} else {
 								my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
 								$stj->execute;
 								($resultsid) = $stj->fetchrow;
+								$stj->finish;
 								unless ($resultsid) {
-									my $stj=$dbi->prepare("insert into z3950results (server, queryid, startdate) values ($q_serverinfo, $id, $now)");
+									$stj=$dbi->prepare("insert into z3950results (server, queryid, startdate) values ($q_serverinfo, $id, $now)");
 									$stj->execute;
 									$resultsid=$dbi->{'mysql_insertid'};
+									$stj->finish;
 								}
 							}
 							my $stj=$dbh->prepare("update z3950results set active=1 where id=$resultsid");
@@ -148,23 +147,27 @@ while (1) {
 								}
 							}
 							if ($noconnection || $error) {
+								warn "no connection at $globalname ";
 							} else {
-								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);};
-								if ($@) {
-									print "ERROR: $@\n";
-								} else {
-									print "Q: $query\n";
+ 								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);};
+ 								if ($@) {
+ 									print "$globalname ERROR: $@\n";
+ 								} else {
+ 									print "Q: $query\n";
 									my $rs=$conn->search($query);
-									pe();
+ 									pe();
 									my $numresults=$rs->size();
-									pe();
+ 									pe();
 									my $i;
 									my $result='';
 									my $scantimerstart=time();
 									for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
 										my $rec=$rs->record($i);
-										my $marcdata=$rec->rawdata();
+										my $marcdata=$rec->render();
+										my $marcrecord = MARC::File::USMARC::decode($rec->render());
+										warn "$globalname ==> ".$marcrecord->as_formatted();
 										$result.=$marcdata;
+										my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcdata,1,"Z3950-$globalname");
 									}
 									my $scantimerend=time();
 									my $numrecords;
@@ -172,16 +175,20 @@ while (1) {
 									my $elapsed=$scantimerend-$scantimerstart;
 									if ($elapsed) {
 										my $speed=int($numresults/$elapsed*100)/100;
-										print "  SPEED: $speed  $server done $numrecords\n";
+										print "$globalname   SPEED: $speed  $server done $numrecords\n";
 									}
-
 									my $q_result=$dbi->quote($result);
 									($q_result) || ($q_result='""');
 									$now=time();
-									my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results=$q_result,enddate=$now where id=$resultsid";
-									my $stj=$dbi->prepare($task);
-									$stj->execute;
-									ImportBreeding($q_result,1,"Z3950");
+									if ($numresults >0) {
+										my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results=$q_result,enddate=$now where id=$resultsid";
+										my $stj=$dbi->prepare($task);
+										$stj->execute;
+									} else { # no results...
+										my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results='',enddate=$now where id=$resultsid";
+										my $stj=$dbi->prepare($task);
+										$stj->execute;
+									}
 									my $counter=0;
 									while ($counter<60 && $numrecords<$numresults) {
 										$counter++;
@@ -214,7 +221,7 @@ while (1) {
 										}
 										sleep 5;
 									}
-								}
+ 								}
 							}
 							# FIXME - There's already a $stj in this scope
 							my $stj=$dbi->prepare("update z3950results set active=0 where id=$resultsid");
@@ -223,7 +230,7 @@ while (1) {
 							print "    $server done.\n";
 							exit;
 sub pe {
-	return 0;
+#   	return 0;
 	my $code=$conn->errcode();
 	my $msg=$conn->errmsg();
 	my $ai=$conn->addinfo();
@@ -232,8 +239,8 @@ CODE:  $code
 MSG:   $msg
 ADDTL: $ai
 EOF
-							return 0;
-							}
+	return 0;
+}
 						}
 					}
 					unless ($stillprocessing) {
@@ -251,36 +258,6 @@ EOF
 	}
 }
 
-# sub getrecord {
-#     my $server=shift;
-#     my $base=shift;
-#     my $query=shift;
-#     my $auth=shift;
-#     my $id=shift;
-#     open  (M, "|yaz-client -m yaz-$id.mrc >>yaz.out 2>>yaz.err");
-#     select M;
-#     $|=1;
-#     select STDOUT;
-#     ($auth) && ($auth="authentication $auth\n");
-#     print M << "EOF";
-# $auth\open $server
-# base $base
-# setnames
-# $query
-# s
-# s
-# s
-# s
-# s
-# s
-# s
-# s
-# s
-# s
-# quit
-# EOF
-#     close M;
-# }
 sub reap {
     $forkcounter--;
     wait;

@@ -66,11 +66,37 @@ entering Z39.50 lookup requests.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	 &z3950servername
-	 &addz3950queue
+	&getz3950servers
+	&z3950servername
+	&addz3950queue
 );
 
 #------------------------------------------------
+=item getz3950servers
+
+  @servers= &getz3950servers(checked);
+
+Returns the list of declared z3950 servers
+
+C<$checked> should always be true (1) => returns only active servers.
+If 0 => returns all servers
+
+=cut
+sub getz3950servers {
+	my ($checked) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+	if ($checked) {
+		$sth = $dbh->prepare("select * from z3950servers where checked=1");
+	} else {
+		$sth = $dbh->prepare("select * from z3950servers");
+	}
+	my @result;
+	while ( my ($host, $port, $db, $userid, $password,$servername) = $sth->fetchrow ) {
+		push @result, "$servername/$host\:$port/$db/$userid/$password";
+	} # while
+	return @result;
+}
 
 =item z3950servername
 
@@ -87,41 +113,34 @@ C<$dbh> is ignored.
 #'
 
 sub z3950servername {
-    # inputs
-    my (
-	$srvid,		# server id number
-	$default,
-    )=@_;
-    # return
-    my $longname;
-    #----
+	# inputs
+	my ($srvid,		# server id number
+		$default,)=@_;
+	# return
+	my $longname;
+	#----
 
-    $dbh = C4::Context->dbh;
+	my $dbh = C4::Context->dbh;
 
-    my $sti=$dbh->prepare("
-        select name 
-	from z3950servers 
-	where id=?");
-	
-    $sti->execute($srvid);
-    if ( ! $sti->err ) {
-        ($longname)=$sti->fetchrow;
-    }
-    if (! $longname) {
-        $longname="$default";
-    }
-	return $longname;
+	my $sti=$dbh->prepare("select name from z3950servers where id=?");
+
+	$sti->execute($srvid);
+	if ( ! $sti->err ) {
+		($longname)=$sti->fetchrow;
+	}
+	if (! $longname) {
+		$longname="$default";
+	}
+		return $longname;
 } # sub z3950servername
 
 #---------------------------------------
 
 =item addz3950queue
 
-  $errmsg = &addz3950queue($dbh, $query, $type, $request_id, @servers);
+  $errmsg = &addz3950queue($query, $type, $request_id, @servers);
 
 Adds a Z39.50 search query for the Z39.50 server to look up.
-
-C<$dbh> is obsolete and is ignored.
 
 C<$query> is the term to search for.
 
@@ -148,63 +167,53 @@ error message is the empty string.
 =cut
 #'
 sub addz3950queue {
-    use strict;
-    # input
-    my (
-	$query,		# value to look up
-	$type,		# type of value ("isbn", "lccn", etc).
-			# FIXME - What other values are legal?
-	$requestid,	# Unique value to prevent duplicate searches from multiple HTML form submits
-	@z3950list,	# list of z3950 servers to query
-    )=@_;
-    # Returns:
-    my $error;
+	use strict;
+	# input
+	my (
+		$query,		# value to look up
+		$type,			# type of value ("isbn", "lccn", "title", "author", "keyword")
+		$requestid,	# Unique value to prevent duplicate searches from multiple HTML form submits
+		@z3950list,	# list of z3950 servers to query
+	)=@_;
+	# Returns:
+	my $error;
 
-    my (
-	$sth,
-	@serverlist,
-	$server,
-	$failed,
-	$servername,
-    );
+	my (
+		$sth,
+		@serverlist,
+		$server,
+		$failed,
+		$servername,
+	);
 
-    # FIXME - Should be configurable, probably in /etc/koha.conf.
-    my $pidfile='/var/log/koha/processz3950queue.pid';
+	# FIXME - Should be configurable, probably in /etc/koha.conf.
+	my $pidfile='/var/log/koha/processz3950queue.pid';
 
-    $error="";
+	$error="";
 
-    $dbh = C4::Context->dbh;
-
-	# FIXME - Fix indentation
-
+	my $dbh = C4::Context->dbh;
 	# list of servers: entry can be a fully qualified URL-type entry
-        #   or simply just a server ID number.
-
-        foreach $server (@z3950list) {
-	    if ($server =~ /:/ ) {
-		push @serverlist, $server;
-	    } elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
-                $sth=$dbh->prepare("select host,port,db,userid,password ,name
-	          from z3950servers
-	          where checked <> 0 ");
-		$sth->execute;
-		while ( my ($host, $port, $db, $userid, $password,$servername)
-			= $sth->fetchrow ) {
-		    push @serverlist, "$servername/$host\:$port/$db/$userid/$password";
-		} # while
-	    } else {
-                $sth=$dbh->prepare("select host,port,db,userid,password
-	          from z3950servers
-	          where id=? ");
-		$sth->execute($server);
-		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
-		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
-	    }
+	#   or simply just a server ID number.
+	foreach $server (@z3950list) {
+		if ($server =~ /:/ ) {
+			push @serverlist, $server;
+		} elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
+			$sth=$dbh->prepare("select host,port,db,userid,password ,name from z3950servers where checked <> 0 ");
+			$sth->execute;
+			while ( my ($host, $port, $db, $userid, $password,$servername) = $sth->fetchrow ) {
+				push @serverlist, "$servername/$host\:$port/$db/$userid/$password";
+			} # while
+		} else {
+			$sth=$dbh->prepare("select host,port,db,userid,password from z3950servers where id=? ");
+			$sth->execute($server);
+			my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
+			push @serverlist, "$server/$host\:$port/$db/$userid/$password";
+		}
 	}
 
 	my $serverlist='';
-	
-	$severlist = join(" ", @serverlist);
+
+	$serverlist = join(" ", @serverlist);
 	chop $serverlist;
 
 	# FIXME - Is this test supposed to test whether @serverlist is
@@ -214,44 +223,43 @@ sub addz3950queue {
 	# of one or more spaces, which is never the case, not even
 	# when there are 0 or 1 elements in @serverlist.
 	if ( $serverlist !~ /^ +$/ ) {
-	    # Don't allow reinsertion of the same request identifier.
-	    $sth=$dbh->prepare("select identifier from z3950queue
-		where identifier=?");
-	    $sth->execute($requestid);
-	    if ( ! $sth->rows) {
-	        $sth=$dbh->prepare("insert into z3950queue
-		    (term,type,servers, identifier)
-		    values (?, ?, ?, ?)");
-	        $sth->execute($query, $type, $serverlist, $requestid);
-		if ( -r $pidfile ) {
-		    # FIXME - Perl is good at opening files. No need to
-		    # spawn a separate 'cat' process.
-	            my $pid=`cat $pidfile`;
-	            chomp $pid;
-	            # Kill -HUP the Z39.50 daemon to tell it to process
-	            # this query.
-	            my $processcount=kill 1, $pid;
-	            if ($processcount==0) {
-		        $error.="Z39.50 search daemon error: no process signalled. ";
-	            }
+		# Don't allow reinsertion of the same request identifier.
+		$sth=$dbh->prepare("select identifier from z3950queue
+			where identifier=?");
+		$sth->execute($requestid);
+		if ( ! $sth->rows) {
+			$sth=$dbh->prepare("insert into z3950queue (term,type,servers, identifier) values (?, ?, ?, ?)");
+			$sth->execute($query, $type, $serverlist, $requestid);
+			if ( -r $pidfile ) {
+				# FIXME - Perl is good at opening files. No need to
+				# spawn a separate 'cat' process.
+				my $pid=`cat $pidfile`;
+				chomp $pid;
+				warn "PID : $pid";
+				# Kill -HUP the Z39.50 daemon to tell it to process
+				# this query.
+				my $processcount=kill 1, $pid;
+				if ($processcount==0) {
+					$error.="Z39.50 search daemon error: no process signalled. ";
+				}
+			} else {
+				# FIXME - Error-checking like this should go close
+				# to the test.
+				$error.="No Z39.50 search daemon running: no file $pidfile. ";
+			} # if $pidfile
 		} else {
-		    # FIXME - Error-checking like this should go close
-		    # to the test.
-		    $error.="No Z39.50 search daemon running: no file $pidfile. ";
-		} # if $pidfile
-	    } else {
-		# FIXME - Error-checking like this should go close
-		# to the test.
-	        $error.="Duplicate request ID $requestid. ";
-	    } # if rows
+			# FIXME - Error-checking like this should go close
+			# to the test.
+			$error.="Duplicate request ID $requestid. ";
+		} # if rows
 	} else {
-	    # FIXME - Error-checking like this should go close to the
-	    # test. I.e.,
-	    #	return "No Z39.50 search servers specified. "
-	    #		if @serverlist eq ();
+		# FIXME - Error-checking like this should go close to the
+		# test. I.e.,
+		#	return "No Z39.50 search servers specified. "
+		#		if @serverlist eq ();
 
-	    # server list is empty
-	    $error.="No Z39.50 search servers specified. ";
+		# server list is empty
+		$error.="No Z39.50 search servers specified. ";
 	} # if serverlist empty
 
 	return $error;
@@ -271,6 +279,11 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
+# Revision 1.8  2003/04/29 08:09:45  tipaul
+# z3950 support is coming...
+# * adding a syntax column in z3950 table = this column will say wether the z3950 must be called with PerferedRecordsyntax => USMARC or PerferedRecordsyntax => UNIMARC. I tried some french UNIMARC z3950 servers, and some only send USMARC, some only UNIMARC, some can answer with both.
+# Note this is a 1st draft. More to follow (today ? I hope).
+#
 # Revision 1.7  2003/02/19 01:01:06  wolfpac444
 # Removed the unecessary $dbh argument from being passed.
 # Resolved a few minor FIXMEs.
