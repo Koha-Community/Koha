@@ -59,6 +59,7 @@ $VERSION = 0.01;
 		&getmessage
 		&showmessage
 		&releasecandidatewarning
+		&setkohaversion
 		&getinstallationdirectories
 		&getdatabaseinfo
 		&getapacheinfo
@@ -270,7 +271,7 @@ Please read the Hints file and visit http://www.koha.org
 
 Press <ENTER> to exit the installer: |;
 
-$messages->{'UpgradeCompleted'}->{en} = heading('UPGRDE COMPLETE') . qq|
+$messages->{'UpgradeCompleted'}->{en} = heading('UPGRADE COMPLETE') . qq|
 Congratulations ... your Koha upgrade is finished!
 
 If you are upgrading from a version of Koha
@@ -278,14 +279,14 @@ prior to 1.2.1, it is likely that you will have to modify your Apache
 configuration to point it to the new files.
 
 In your INTRANET VirtualHost section you should have:
-  DocumentRoot $::intranetdir/htdocs
-  ScriptAlias /cgi-bin/koha/ $::intranetdir/cgi-bin/
-  SetEnv PERL5LIB $::intranetdir/modules
+  DocumentRoot %s/htdocs
+  ScriptAlias /cgi-bin/koha/ %s/cgi-bin/
+  SetEnv PERL5LIB %s/modules
 
 In the OPAC VirtualHost section you should have:
-  DocumentRoot $::opacdir/htdocs
-  ScriptAlias /cgi-bin/koha/ $::opacdir/cgi-bin/
-  SetEnv PERL5LIB $::intranetdir/modules
+  DocumentRoot %s/htdocs
+  ScriptAlias /cgi-bin/koha/ %s/cgi-bin/
+  SetEnv PERL5LIB %s/modules
 
 You may also need to uncomment a "LoadModules env_module ... " line and restart
 Apache.
@@ -737,7 +738,7 @@ I believe that your old files are located in:
 
 Does this look right?  ([Y]/N):
 |;
-    $answer = <STDIN>;
+    my $answer = <STDIN>;
     chomp $answer;
 
     if ($answer =~/n/i) {
@@ -754,7 +755,7 @@ if (!$opacdir || !$intranetdir) {
     while (!$intranetdir) {
 	print "Please specify the location of your LIBRARIAN files: ";
 
-	$answer = <STDIN>;
+	my $answer = <STDIN>;
 	chomp $answer;
 
 	if ($answer) {
@@ -768,7 +769,7 @@ if (!$opacdir || !$intranetdir) {
     while (!$opacdir) {
 	print "Please specify the location of your OPAC files: ";  
 
-	$answer = <STDIN>;
+	my $answer = <STDIN>;
 	chomp $answer;
 
 	if ($answer) {
@@ -1891,7 +1892,7 @@ Does this look right? ([Y]/N): |;
 sub backupkoha {
 my $backupdir=$ENV{'prefix'}.'/backups';
 
-$answer = showmessage(getmessage('BackupDir',[$backupdir]),'free',$backupdir);
+my $answer = showmessage(getmessage('BackupDir',[$backupdir]),'free',$backupdir);
 
 if (! -e $backupdir) {
 	my $result=mkdir ($backupdir, oct(770));

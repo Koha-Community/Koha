@@ -22,10 +22,10 @@ if ($::newversion =~ /RC/) {
 }
 
 #FIXME: need kohaversion number
-showmessage(getmessage('WelcomeToUpgrader',[$::kohaversion,$::newversion]),'yn');
+my $answer = showmessage(getmessage('WelcomeToUpgrader',[$::kohaversion,$::newversion]),'yn');
 
 unless ($answer =~/y/i) {
-	showmessage(getmessage('AbortingInstall'),'PressEnter');
+	showmessage(getmessage('AbortingInstall'),'none');
 	exit;
 } else {
 	print "Great! continuing upgrade... \n";
@@ -40,7 +40,7 @@ installfiles();
 updatedatabase();
 finalizeconfigfile();
 
-showmessage(getmessage('UpgradeCompleted'),'PressEnter');
+showmessage(getmessage('UpgradeCompleted',['FIXME','FIXME','FIXME','FIXME','FIXME','FIXME']),'PressEnter');
 
 my $reply=showmessage('Would you like to complete a survey about your library?', 'yn', 'y');
 if ($reply=~/y/i) {
