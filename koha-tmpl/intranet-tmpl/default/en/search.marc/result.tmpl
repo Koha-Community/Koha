@@ -33,21 +33,41 @@
 	</div>
 	<div id="resultlist">
 		<table>
-			<!-- TMPL_IF NAME="opac" -->
 			<tr>
-				<!-- TMPL_ELSE -->
-			<tr>
-				<!-- /TMPL_IF -->
-			<th class="catalogue">Biblio #</th>
-			<th class="catalogue">Author</th>
-			<th class="catalogue">Title</th>
+			<th class="catalogue">Summary</th>
+			<th class="catalogue">Item Count</th>
+			<th class="catalogue">Location</th>
+			<th class="catalogue">&nbsp;</th>
 			</tr>
 			<!-- TMPL_LOOP name="result" -->
-				<tr>
-					<td><a href="../MARCdetail.pl?bibid=<!-- TMPL_VAR name="bibid" -->"><!-- TMPL_VAR name="bibid" --></a></td>
-					<td><!-- TMPL_VAR name="author" --></td>
-					<td><!-- TMPL_VAR name="title" --></td>
-				</tr>
+			<tr>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<p>
+						<p>							<b><a class="transparent" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
+						<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="totitem" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_LOOP name="CN" -->
+						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
+					<!-- /TMPL_LOOP -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_UNLESS NAME="norequests" -->
+						<a class="transparent" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a>
+					<!-- TMPL_ELSE -->
+						Not Reservable
+					<!-- /TMPL_UNLESS -->
+				</td>
+			</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
 	</div>
