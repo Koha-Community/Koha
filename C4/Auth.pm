@@ -33,6 +33,9 @@ sub checkauth {
 	    $message="You have been logged out due to inactivity.";
 	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
 	    $sti->execute($sessionID);
+	    open L, ">>/tmp/sessionlog";
+	    print L "$userid from $ip logged out at ".localtime(time())." (inactivity).\n";
+	    close L;
 	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 	    # Different ip than originally logged in from
 	    warn "$sessionID came from a new ip address.";
@@ -58,10 +61,16 @@ sub checkauth {
     if ($userid eq 'librarian' && $password eq 'koha') {
 	my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	$sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+	open L, ">>/tmp/sessionlog";
+	print L "$userid from ".$ENV{'REMOTE_ADDR'}." logged in at ".localtime(time()).".\n";
+	close L;
 	return ($userid, $sessionID, $sessionID);
     } elsif ($userid eq 'patron' && $password eq 'koha') {
 	my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	$sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+	open L, ">>/tmp/sessionlog";
+	print L "$userid from ".$ENV{'REMOTE_ADDR'}." at ".localtime(time()).".\n";
+	close L;
 	return ($userid, $sessionID, $sessionID);
     } else {
 	if ($userid) {

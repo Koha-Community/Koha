@@ -26,7 +26,7 @@ print startpage();
 print startmenu('catalogue');
 
 
-print "Logged in as: $loggedinuser  <a href=logout.pl>Log Out</a><br>\n";
+print "Logged in as: $loggedinuser<br><a href=logout.pl>Log Out</a><br>\n";
 
 
 my ($shelflist) = GetShelfList();
@@ -169,6 +169,10 @@ EOF
 
 #
 # $Log$
+# Revision 1.6  2002/07/04 21:09:43  tonnesen
+# Additions to authentication scheme.  Logs to /tmp/sessionlog.  Will move this
+# to a db table.
+#
 # Revision 1.5  2002/07/04 19:42:48  tonnesen
 # Minor changes
 #
