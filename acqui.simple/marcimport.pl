@@ -83,30 +83,29 @@ my %tagtext = (
     '856' => 'Electronic location and access',
 );
 
-# tag, subfield, field name, repeats, stripchars
-my @tagmaplist=(
-	['010', 'a', 'lccn',			0 	],
-	['015', 'a', 'lccn',			0	],
-	['020', 'a', 'isbn',			0	],
-	['022', 'a', 'issn',			0	],
-	['082', 'a', 'dewey',			0	],
-	['100', 'a', 'author',			0	],
-	['245', 'a', 'title',			0, ':;'	],
-	['245', 'b', 'subtitle',		0	],
-	['260', 'a', 'place',			0, ':'	],
-	['260', 'b', 'publisher',		0, ':'	],
-	['260', 'c', 'year' ,			0	],
-	['300', 'a', 'pages',			0, ':;'	],
-	['300', 'c', 'size',			0	],
-	['362', 'a', 'volume-number',		0	],
-	['440', 'a', 'seriestitle',		0	],
-	['440', 'v', 'series-volume-number',	0	],
-	['700', 'a', 'addtional-author-illus',	1	],
-	['5xx', 'a', 'notes',			1	],
-	['65x', 'a', 'subject',			1, '.'	],
-);
-my (
-    $tagmap,	# hash ref of mappings
+# tag, subfield, field name, repeats, striptrailingchars
+my %tagmap=(
+    '010'=>{'a'=>{name=> 'lccn',	rpt=>0 	}},
+    '015'=>{'a'=>{name=> 'lccn',	rpt=>0	}},
+    '020'=>{'a'=>{name=> 'isbn',	rpt=>0	}},
+    '022'=>{'a'=>{name=> 'issn',	rpt=>0	}},
+    '082'=>{'a'=>{name=> 'dewey',	rpt=>0	}},
+    '100'=>{'a'=>{name=> 'author',	rpt=>0, striptrail=>',:;/-'	}},
+    '245'=>{'a'=>{name=> 'title',	rpt=>0, striptrail=>',:;/'	},
+            'b'=>{name=> 'subtitle',	rpt=>0, striptrail=>',:;/'	}},
+    '260'=>{'a'=>{name=> 'place',	rpt=>0, striptrail=>',:;/-'	},
+            'b'=>{name=> 'publisher',	rpt=>0, striptrail=>',:;/-'	},
+            'c'=>{name=> 'year' ,	rpt=>0, striptrail=>'.,:;/-'	}},
+    '300'=>{'a'=>{name=> 'pages',	rpt=>0, striptrail=>',:;/-'	},
+            'c'=>{name=> 'size',	rpt=>0, striptrail=>',:;/-'	}},
+    '362'=>{'a'=>{name=> 'volume-number',	rpt=>0	}},
+    '440'=>{'a'=>{name=> 'seriestitle',	rpt=>0, striptrail=>',:;/'	},
+            'v'=>{name=> 'volume-number',rpt=>0	}},
+    '490'=>{'a'=>{name=> 'seriestitle',	rpt=>0, striptrail=>',:;/'	},
+            'v'=>{name=> 'volume-number',rpt=>0	}},
+    '700'=>{'a'=>{name=> 'addtional-author-illus',rpt=>1, striptrail=>',:;/'	}},
+    '5xx'=>{'a'=>{name=> 'notes',	rpt=>1	}},
+    '65x'=>{'a'=>{name=> 'subject',	rpt=>1, striptrail=>'.,:;/-'	}},
 );
 
 #-------------
@@ -117,8 +116,6 @@ my $userid=$ENV{'REMOTE_USER'};
 
 my $input = new CGI;
 my $dbh=C4Connect;
-
-$tagmap=BuildTagMap(@tagmaplist);
 
 #-------------
 # Display output
@@ -614,26 +611,50 @@ sub extractmarcfields {
     my $debug=0;
 
     my (
-	$field, $value,
+	$field, 	# hash ref
+	$value, 
+	$subfield,	# Marc subfield [a-z]
+	$fieldname,	# name of field "author", "title", etc.
+	$strip,		# chars to remove from end of field
+	$stripregex,	# reg exp pattern
     );
-    my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, 
-	$publisher, $publicationyear, $volume, $number, @subjects, $subject,
-	$size, $pages, $controlnumber, $subtitle,
+    my ($lccn, $isbn, $issn,    
+	$publicationyear, @subjects, $subject,
+	$controlnumber, 
 	$notes, $additionalauthors, $illustrator, $copyrightdate, 
 	$s, $subdivision, $subjectsubfield,
-	$seriestitle);
+    );
 
     print "<PRE>\n" if $debug;
 
     if ( ref($record) eq "ARRAY" ) {
         foreach $field (@$record) {
+
+	    # Check each subfield in field
+	    foreach $subfield ( keys %{$field->{subfields}} ) {
+		# see if it is defined in our Marc to koha mapping table
+	    	if ( $fieldname=$tagmap{ $field->{'tag'} }->{$subfield}->{name} ) {
+		    # Yes, so keep the value
+		    $bib->{$fieldname}=$field->{'subfields'}->{$subfield};
+		    # if it was an array, just keep first element.
+		    if (ref($bib->{$fieldname}) eq 'ARRAY') {
+			$bib->{$fieldname}=$$bib->{fieldname}[0]
+		    } # if array
+		    # see if this field should have trailing chars dropped
+	    	    if ($strip=$tagmap{ $field->{'tag'} }->{$subfield}->{striptrail} ) {
+			$strip=~s//\\/; # backquote each char
+			$stripregex='[ ' . $strip . ']+$';  # remove trailing spaces also
+			$bib->{$fieldname}=~s/$stripregex//;
+		    } # if strip
+		    print "Found subfield $field->{'tag'} $subfield " .
+			"$fieldname = $bib->{$fieldname}\n" if $debug;
+		} # if tagmap exists
+
+	    } # foreach subfield
+
+
 	    if ($field->{'tag'} eq '001') {
 		$bib->{controlnumber}=$field->{'indicator'};
-	    }
-	    if ($field->{'tag'} eq '010') {
-		$bib->{lccn}=$field->{'subfields'}->{'a'};
-		$bib->{lccn}=~s/^\s*//;
-		($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0];
 	    }
 	    if ($field->{'tag'} eq '015') {
 		$bib->{lccn}=$field->{'subfields'}->{'a'};
@@ -641,40 +662,9 @@ sub extractmarcfields {
 		$bib->{lccn}=~s/^C//;
 		($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0];
 	    }
-	    if ($field->{'tag'} eq '020') {
-		$bib->{isbn}=$field->{'subfields'}->{'a'};
-		if (ref($bib->{isbn}) eq 'ARRAY') {$bib->{isbn}=$$bib->{isbn}[0]};
-		$bib->{isbn}=~s/[^\d]*//g;
-	    }
-	    if ($field->{'tag'} eq '022') {
-		$bib->{issn}=$field->{'subfields'}->{'a'};
-		$bib->{issn}=~s/^\s*//;
-		($bib->{issn}) = (split(/\s+/, $bib->{issn}))[0];
-	    }
-	    if ($field->{'tag'} eq '100') {
-		$bib->{author}=$field->{'subfields'}->{'a'};
-	    }
-	    if ($field->{'tag'} eq '245') {
-		$bib->{title}=$field->{'subfields'}->{'a'};
-		$bib->{title}=~s/ \/$//;
-		$bib->{subtitle}=$field->{'subfields'}->{'b'};
-		$bib->{subtitle}=~s/ \/$//;
-	    }
 
 
-		if ($field->{'tag'} eq '082') {
-		    $dewey=$field->{'subfields'}->{'a'};
-		    if (ref($dewey) eq 'ARRAY') { $dewey=$$dewey[0]; }
-		    $dewey=~s/\///g;
-		}
 		if ($field->{'tag'} eq '260') {
-		    $place=$field->{'subfields'}->{'a'};
-		    if (ref($place) eq 'ARRAY') { $place=$$place[0]; }
-		    $place=~s/\s*:$//g;
-
-		    $publisher=$field->{'subfields'}->{'b'};
-		    if (ref($publisher) eq 'ARRAY') { $publisher=$$publisher[0]; }
-		    $publisher=~s/\s*:$//g;
 
 		    $publicationyear=$field->{'subfields'}->{'c'};
 		    if ($publicationyear=~/c(\d\d\d\d)/) {
@@ -687,26 +677,6 @@ sub extractmarcfields {
 		    } else {
 			$publicationyear=~/(\d\d\d\d)/;
 			$publicationyear=$1;
-		    }
-		}
-		if ($field->{'tag'} eq '300') {
-		    $pages=$field->{'subfields'}->{'a'};
-		    $pages=~s/ \;$//;
-		    $size=$field->{'subfields'}->{'c'};
-		    $pages=~s/\s*:$//g;
-		    $size=~s/\s*:$//g;
-		}
-		if ($field->{'tag'} eq '362') {
-		    if ($field->{'subfields'}->{'a'}=~/(\d+).*(\d+)/) {
-			$volume=$1;
-			$number=$2;
-		    }
-		}
-		if ($field->{'tag'} eq '440') {
-		    $seriestitle=$field->{'subfields'}->{'a'};
-		    if ($field->{'subfields'}->{'v'}=~/(\d+).*(\d+)/) {
-			$volume=$1;
-			$number=$2;
 		    }
 		}
 		if ($field->{'tag'} eq '700') {
@@ -740,25 +710,37 @@ sub extractmarcfields {
 		    } # foreach subfield
 		    print "Subject=$subject\n" if $debug;
 		    push @subjects, $subject;
-		}
-
-		($dewey			) && ($bib->{dewey}=$dewey );
-		($place			) && ($bib->{place}=$place  );
-		($publisher		) && ($bib->{publisher}=$publisher  );
-		($publicationyear	) && ($bib->{publicationyear}=$publicationyear  );
-		($copyrightdate		) && ($bib->{copyrightdate}=$copyrightdate  );
-		($pages			) && ($bib->{pages}=$pages  );
-		($size			) && ($bib->{size}=$size  );
-		($volume		) && ($bib->{volume}=$volume  );
-		($number		) && ($bib->{number}=$number  );
-		($seriestitle		) && ($bib->{seriestitle}=$seriestitle  );
-		($additionalauthors	) && ($bib->{additionalauthors}=$additionalauthors  );
-		($illustrator		) && ($bib->{illustrator}=$illustrator  );
-		($notes			) && ($bib->{notes}=$notes  );
-		($#subjects		) && ($bib->{subject}=\@subjects  );
+		} # if tag 65x
 
 
         } # foreach field
+	($publicationyear	) && ($bib->{publicationyear}=$publicationyear  );
+	($copyrightdate		) && ($bib->{copyrightdate}=$copyrightdate  );
+	($additionalauthors	) && ($bib->{additionalauthors}=$additionalauthors  );
+	($illustrator		) && ($bib->{illustrator}=$illustrator  );
+	($notes			) && ($bib->{notes}=$notes  );
+	($#subjects		) && ($bib->{subject}=\@subjects  );
+
+	# Misc cleanup
+	$bib->{dewey}=~s/\///g;	# drop any slashes
+
+	($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0]; # only keep first word
+
+	$bib->{isbn}=~s/[^\d]*//g;	# drop non-digits
+
+	$bib->{issn}=~s/^\s*//;
+	($bib->{issn}) = (split(/\s+/, $bib->{issn}))[0];
+
+	if ( $bib->{'volume-number'} ) {
+	    if ($bib->{'volume-number'}=~/(\d+).*(\d+)/ ) {
+		$bib->{'volume'}=$1;
+		$bib->{'number'}=$2;
+	    } else {
+		$bib->{volume}=$bib->{'volume-number'};
+	    }
+	    delete $bib->{'volume-number'};
+	} # if volume-number
+
     } else {
 	print "Error: extractmarcfields: input ref $record is " .
 		ref($record) . " not ARRAY. Contact sysadmin.\n";
@@ -1572,27 +1554,6 @@ sub checkvalidisbn {
 
 } # sub checkvalidisbn
 
-#-------------------------
-sub BuildTagMap {
-    use strict;
-
-    my (@tagmaplist)=@_;	# input
-    my ($tagmap);		#return
-
-    my (
-	$row,
-    	$tagnum, $subfield, $fieldname, $repeat, $stripchars,
-    );
-
-    foreach $row (@tagmaplist) {
-    	($tagnum, $subfield, $fieldname, $repeat, $stripchars)= @$row;
-	#print "tagnum=$tagnum name=$fieldname\n";
-	$tagmap->{$tagnum}{$subfield}{fieldname}=$fieldname;
-	$tagmap->{$tagnum}{$subfield}{repeat}=$repeat;
-	$tagmap->{$tagnum}{$subfield}{stripchars}=$stripchars;
-    } # foreach row
-    return $tagmap;
-} # sub BuildTagMap
 #-------------------------
 sub FormatMarcText {
     use strict;
