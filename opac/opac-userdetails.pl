@@ -8,6 +8,7 @@ use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Search;
 use HTML::Template;
+use C4::Interface::CGI::Output;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 

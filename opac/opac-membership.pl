@@ -4,6 +4,7 @@ require Exporter;
 use CGI;
 use C4::Auth;       # get_template_and_user
 use HTML::Template;
+use C4::Interface::CGI::Output;
 
 my $query = new CGI;
 

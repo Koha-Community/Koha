@@ -256,9 +256,6 @@ if ($query->param('item_types_selected')) {
 
 # check that you can actually make the reserve.
 
-# $template->param(BIBLIOITEMS => \@data);
-
-
 output_html_with_http_headers $query, $cookie, $template->output;
 
 # Local Variables:
