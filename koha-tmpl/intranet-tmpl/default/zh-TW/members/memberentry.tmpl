@@ -27,10 +27,7 @@
 
 	<tr valign=top>
 		<td COLSPAN=3 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>讀者個人資料</b></td>
-		<td COLSPAN=2 ALIGN=RIGHT background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">*
-		<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>F
-		<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->> 男　　<b>出生日期</b> (<!-- TMPL_VAR NAME=dateformat -->)
-		<input type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
+		<td COLSPAN=2 ALIGN=RIGHT background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">* <input type="radio" name="sex" value="F"<!-- TMPL_IF NAME=female --> checked<!-- /TMPL_IF -->>女 <input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME=female --> checked<!-- /TMPL_UNLESS -->>男　　<b>出生日期</b> (<!-- TMPL_VAR NAME=dateformat -->) <input type=text name=dateofbirth size=10 value="<!-- TMPL_VAR NAME=dateofbirth -->">
 		</td>
 	</tr>
 
@@ -189,8 +186,7 @@
 		<!-- TMPL_LOOP NAME=flagloop -->
 		<tr>
 			<td COLSPAN=2><!-- TMPL_VAR NAME=html --></td>
-			<td COLSPAN=3><input type=radio name="<!-- TMPL_VAR NAME=name -->" value="1" <!-- TMPL_VAR NAME=yes -->>是
-			<input type=radio name="<!-- TMPL_VAR NAME=name -->" value="0" <!-- TMPL_VAR NAME=no -->>否
+			<td COLSPAN=3><input type=radio name="<!-- TMPL_VAR NAME=name -->" value="1" <!-- TMPL_VAR NAME=yes -->>是 <input type=radio name="<!-- TMPL_VAR NAME=name -->" value="0" <!-- TMPL_VAR NAME=no -->>否
 			</td>
 		</tr>
 		<!-- /TMPL_LOOP -->

@@ -4,8 +4,8 @@
 -->
 <option value="E">淺易/圖畫書
 <option value="ER">淺易讀本	
-<option value="JNF">兒童非小說類
-<option value="JF">兒童小說類
+<option value="JNF">學童/初級非小說
+<option value="JF">學童/初級小說
 <option value="TREF">教師參考書
 <option value="FYA">青年小說類	
 <option value="REF">參考書

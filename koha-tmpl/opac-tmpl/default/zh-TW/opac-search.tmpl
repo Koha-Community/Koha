@@ -5,7 +5,7 @@
 
 
 <tr>
-	<td>關鍵字</td>
+	<td>關鍵詞</td>
 	<td colspan="2"><input type="text"  size="25"   name="keyword"></td>
 </tr>
 
@@ -24,7 +24,7 @@
 <tr>
 	<td>題名</td>
 	<td><input type="text"  size="25"   name="title"></td>
-	<td><input type="radio" name="ttype" value="normal" checked="checked">一般<input type="radio" name="ttype" value="exact">Exact</td>
+	<td><input type="radio" name="ttype" value="normal" checked="checked">一般<input type="radio" name="ttype" value="exact">完全吻合</td>
 </tr>
 
 <tr>
@@ -41,7 +41,7 @@
 <td>類別</td>
 	<td colspan="2">
 	<select size="1"  name="class">
-	<option value="">無所謂</option>
+	<option value="">任何</option>
 	<!-- fetch class list -->
 	<!-- TMPL_VAR name="classlist" -->
 	<!--#include virtual="/includes/cat-class-list.inc" -->
@@ -56,11 +56,11 @@
 
 <tr>
 	<td><input type="submit" value="開始查詢"></td>
-	<td colspan="2"><input type="reset" value="清空"></td>
+	<td colspan="2"><input type="reset" value="全部清空"></td>
 </tr>
 
 <tr>
-	<td colspan="3">注意：一旦輸入了「關鍵字」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵字。</td>
+	<td colspan="3">注意：一旦輸入了「關鍵詞」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵字。</td>
 </tr>
 
 </table>

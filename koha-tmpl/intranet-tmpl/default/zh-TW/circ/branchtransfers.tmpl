@@ -1,10 +1,7 @@
 <!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
 <table align=right cellpadding=10><tr><td>
-<a class="button" href=circulation.pl>
-下一個讀者</a>
-<a class="button" href=returns.pl>
-還書
+<a class="button" href=circulation.pl>下個讀者</a> <a class="button" href=returns.pl>還書
 </td></tr></table>
 
 <h1>Circulation: Transfers</h1><br>
@@ -99,7 +96,7 @@
 			請還給讀者所屬的分館：<!-- TMPL_VAR Name="msg" -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errdesteqholding" -->
-			Item is already at destination branch.
+			圖書資料已在目的分館。
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errwasreturned" -->
 			圖書資料借了給 <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"
@@ -114,7 +111,7 @@ onClick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR Name=
 	<table border=1 cellpadding=5 cellspacing=0 align=left>
 	<tr><td colspan=2 align=center background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 	<font color=black><b>選擇分館</b></font></td></tr>
-	<tr><td>Destination Branch:</td>
+	<tr><td>目的分館：</td>
 		<td><select name=tobranchcd>
 			<!-- TMPL_LOOP Name="branchoptionloop" -->
 				<option value=<!-- TMPL_VAR Name="code" --> <!-- TMPL_VAR Name="selected" -->><!-- TMPL_VAR Name="name" --> <br>

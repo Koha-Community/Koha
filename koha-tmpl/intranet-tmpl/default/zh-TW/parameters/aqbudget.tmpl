@@ -7,7 +7,7 @@
 	<br>您查詢 <b><!-- TMPL_VAR name=searchfield --></b><p><br>
 	<!-- /TMPL_IF -->
 	<table border=0 cellspacing=0 cellpadding=5>
-	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>書籍購置資金</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Start date</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>End date</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>預算金額</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
+	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>書籍購置資金</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>開始日期</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>End date</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>預算金額</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
 	<!-- TMPL_LOOP name="budget" -->
 		<tr valign=top bgcolor=<!-- TMPL_VAR name="toggle" --> >
 			<td><!-- TMPL_VAR name="bookfundid" --> (<!-- TMPL_VAR name="bookfundname" -->)</td>
@@ -91,7 +91,7 @@
 	<tr><td>書籍購置資金</td><td><input type=hidden name=bookfundid size=5 maxlength=5 value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundid" --></td></tr>
 <!-- /TMPL_IF -->
 
-<tr><td>Start date <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=startdate size=11 value='<!-- TMPL_VAR name="startdate" -->'>&nbsp;</td></tr>
+<tr><td>開始日期 <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=startdate size=11 value='<!-- TMPL_VAR name="startdate" -->'>&nbsp;</td></tr>
 <tr><td>End date <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=enddate size=11 value='<!-- TMPL_VAR name="enddate" -->'></td></tr>
 <tr><td>預算金額</td><td><input type=text name=budgetamount value='<!-- TMPL_VAR name="budgetamount" -->'></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->"><input type=button value="好！" onclick='Check(this.form)'></td></tr>
@@ -121,7 +121,7 @@
 
 	<form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=aqbudgetid value='<!-- TMPL_VAR name="aqbudgetid" -->'>
 	<tr>
-		<td>Start date</td>
+		<td>開始日期</td>
 		<td><!-- TMPL_VAR name="startdate" --></td>
 	</tr>
 	<tr>

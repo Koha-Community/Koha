@@ -12,9 +12,7 @@
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
 <!-- TMPL_LOOP name="loop_pay" -->
 <tr VALIGN=TOP  >
-	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>未付款
-	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="yes">繳交
-	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">註銷
+	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>未付 <input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="yes">付款 <input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">註銷
 	<input type=hidden name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->">
 	<input type=hidden name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->">
 	<input type=hidden name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount'}" -->">
@@ -42,7 +40,7 @@
 <p> &nbsp; </p>
 
 <br>
-<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">返回</a> 至讀者記錄
+<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">返回</a>至讀者記錄
 
 <!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 

@@ -87,7 +87,7 @@
 		</form>
 		<form action=/cgi-bin/koha/member-flags.pl method=post>
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
-			<input type=submit class="button" value="Modify User Flags">
+			<input type=submit class="button" value="修改使用者旗標">
 		</form>
 
 	</TD>
@@ -114,12 +114,7 @@
 	<TD colspan=2 align=right>
 		<p>
 			<br>
-			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
-				查看帳戶
-			</a>
-			<a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
-				繳交罰款
-			</a>
+			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">查看帳戶</a> <a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">繳交罰款</a>
 			<br><br>
 		</p>
 	</td>
@@ -158,8 +153,7 @@
 		<!-- TMPL_IF NAME=norenew -->
 			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">On Request - no renewals</a>
 		<!-- TMPL_ELSE -->
-			<input type=radio name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value=y>Y
-			<input type=radio name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value=n>N
+			<input type=radio name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value=y>Y  <input type=radio name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value=n>N
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME=red --></font><!-- /TMPL_IF -->
 		</td>

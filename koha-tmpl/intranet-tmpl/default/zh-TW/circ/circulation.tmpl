@@ -4,12 +4,7 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a class="button" href="circulation.pl?branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
-				下一個讀者</a>&nbsp;
-				<a class="button" href="returns.pl">
-				還書</a>&nbsp;
-				<a class="button" href="branchtransfers.pl">
-				Transfers</a>
+				<a class="button" href="circulation.pl?branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">  Next Borrower</a>&nbsp;  <a class="button" href="returns.pl">  Returns</a>&nbsp;  <a class="button" href="branchtransfers.pl">  Transfers</a>
 			</td>
 		</tr>
 	</table>
@@ -21,13 +16,7 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a href="returns.pl" class="button">
-					還書
-				</a>
-				&nbsp;
-				<a href="branchtransfers.pl" class="button">
-					Transfers
-				</a>
+				<a href="returns.pl" class="button">  Returns  </a>  &nbsp;  <a href="branchtransfers.pl" class="button">  Transfers  </a>
 			</td>
 		</tr>
 	</table>
@@ -52,7 +41,7 @@
 				<table border="0" cellpadding="10">
 					<tr>
 						<td>
-							Attempting to issue <!-- TMPL_VAR name="title" -->  by <!-- TMPL_VAR name="author" --> to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.
+							<!-- TMPL_VAR name="author" --> 嘗試借《<!-- TMPL_VAR name="title" -->》給 <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
 							<p><!-- TMPL_VAR name="question" -->
 						</td>
 					</tr>
@@ -118,7 +107,7 @@
 <!-- TMPL_IF name="message" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">訊息</th></tr>
-		<tr><td><!-- TMPL_VAR name="message" --></td></tr>
+		<tr><td>找不到讀者乎合 <!-- TMPL_VAR name="message" --></td></tr>
 	</table>
 <!-- /TMPL_IF -->
 
@@ -235,7 +224,7 @@
 <tr><td valign="top"><font color="red">已遺失</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>讀者遺失借書證</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<tr><td valign="top"><font color="red">DBARRED</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>禁止此讀者</td></tr>
+<tr><td valign="top"><font color="red">被禁</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>禁止此讀者</td></tr>
 <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
 		<tr><td valign="top"><font color="red">費用</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
@@ -303,7 +292,7 @@
 			<th>到期日</th><th>條碼</th><th>題名</th><th>著者</th><th>類別</th>
 		</tr>
 	<!-- TMPL_LOOP name="previssues" -->
-	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dd" --></td>
+	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_IF NAME="od" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></font><!-- /TMPL_IF --></td>
 	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->">
 	    <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
 	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="title" --></td>

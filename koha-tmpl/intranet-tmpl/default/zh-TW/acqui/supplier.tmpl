@@ -94,11 +94,9 @@
 		<TD>供應商為</td>
 		<td>
 			 <!-- TMPL_IF name="active" -->
-				<input type="radio" name="status" value="1" checked>使用中
-				<input type="radio" name="status" value="0">不使用</td>
+				<input type="radio" name="status" value="1" checked>Active  <input type="radio" name="status" value="0">Inactive</td>
 			<!-- TMPL_ELSE -->
-				<input type="radio" name="status" value="1">使用中
-				<input type="radio" name="status" value="0" checked>不使用</td>
+				<input type="radio" name="status" value="1">Active  <input type="radio" name="status" value="0" checked>Inactive</td>
 			<!-- /TMPL_IF -->
 	</tr>
 	<tr valign=top bgcolor="#ffdf61">
@@ -132,22 +130,19 @@
 	<TR VALIGN=TOP>
 		<TD>已登記貨勞稅號碼</td>
 		<td>
-			<input type=radio name=gst value=1 <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>是
-			<input type=radio name=gst value=0 <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>否
+			<input type=radio name=gst value=1 <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>是 <input type=radio name=gst value=0 <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>否
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>List Item Price Includes GST</td>
+		<TD>圖書資料的標價已連貨勞稅</td>
 		<td>
-			<input type=radio name=list_gst value=1 <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>是
-			<input type=radio name=list_gst value=0 <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>否
+			<input type=radio name=list_gst value=1 <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>是 <input type=radio name=list_gst value=0 <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>否
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>發票上之價錢已包括貨勞稅</td>
 		<td>
-			<input type=radio name=invoice_gst value=1 <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>是
-			<input type=radio name=invoice_gst value=0 <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>否
+			<input type=radio name=invoice_gst value=1 <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>是 <input type=radio name=invoice_gst value=0 <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>否
 		</td>
 	</tr>
 	<TR VALIGN=TOP>

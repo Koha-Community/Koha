@@ -92,8 +92,7 @@ function Check(f) {
 			<tr>
 				<td>借閱期限</td>
 				<td>
-					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
-					只適用於可以外借之圖書資料
+					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'> (只適用於可以外借之圖書資料)
 				</td>
 			</tr>
 			<tr>
@@ -125,7 +124,7 @@ function Check(f) {
 	<tr><td>續借</td><td><!-- TMPL_IF name="renewalsallowed" -->批准<!-- TMPL_ELSE -->不可<!-- /TMPL_IF --></td></tr>
 	<tr><td>借書費用</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
 	<!-- TMPL_IF name="total" -->
-		<tr><td colspan=2 align=center><b>This record is used <!-- TMPL_VAR name="total" --> times. Deletion not possible</b></td></tr>
+		<tr><td colspan=2 align=center><b>這個記錄目前用了 <!-- TMPL_VAR name="total" --> 次，不可移除</b></td></tr>
 		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="好！"></form></td></tr>
 	<!-- TMPL_ELSE -->
 		<tr><td colspan=2 align=center>確定要移除嗎</td></tr>

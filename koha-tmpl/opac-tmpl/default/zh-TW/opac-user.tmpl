@@ -11,9 +11,9 @@
 			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) <br>
 			<!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --><br>
 			<!-- TMPL_VAR NAME="phone" --> (住宅)<br>
-			<!-- TMPL_VAR NAME="faxnumber" --> (辦公)<br>
+			<!-- TMPL_VAR NAME="faxnumber" --> (辦公室)<br>
 			<!-- TMPL_VAR NAME="emailaddress" --><br>
-			<br>有沒有要更新的？<br><br>
+			<br>有沒有更新？<br><br>
 			<a href="/cgi-bin/koha/opac-userupdate.pl">更新紀錄</a>
 			</font>
 		</td>
@@ -25,7 +25,7 @@
 	<table cellpadding="5" cellspacing="0" border="1">
 		<tr bgcolor="#fecc99">
 			<td>
-				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>您尚欠罰款或其他費用<!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
+				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>您尚欠款項 <!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
 			</td>
 		</tr>
 	</table>
@@ -36,7 +36,7 @@
 		<tr bgcolor="#fecc99">
 			<td>
 				<font face="arial, helvetica, sans-serif" size="+2">
-					<b>您尚欠罰款或其他費用<!-- TMPL_VAR NAME="amountoutstanding" --></b>
+					<b>您尚欠款項 <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
@@ -63,7 +63,7 @@
 		<tr bgcolor="#fecc99" >
 			<td colspan="4">
 				<font color="red" face="arial, helvetica, sans-serif" size="+2">
-					<b>	您有預約了的圖書資料可以取書：</b>
+					<b>	您可取書的預約圖書資料：</b>
 				</font>
 			</td>
 		</tr>
@@ -71,7 +71,7 @@
 			<th>題名</th>
 			<th>著者</th>
 			<th>預約日期</th>
-			<th>取書處</th>
+			<th>取書分館</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="WAITING" -->
 			<tr>
@@ -92,7 +92,7 @@
 		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 			<th>題名</th>
 			<th>著者</th>
-			<th>到期日</th>
+			<th>歸還日期</th>
 			<th>圖書資料類別</th>
 			<th>費用</th>
 			<th>目前狀態</th>

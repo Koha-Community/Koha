@@ -253,17 +253,17 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- - 今年遺失
 
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Borrower Enquiry
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">->  Borrower Enquiry
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - All Books Out
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Overdues
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- 過期
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - History
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Messages
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Reports
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Average Borrowings
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Total Borrowings
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- 報表
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- - 借書平均次數
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- - 借書總次數
 
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">->  Advanced Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> 進階報表
 			</select>
 			</form>
 		</TD>
@@ -272,33 +272,33 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<form name=choose2>
 			<select name=dest size=1 onChange="leapto(this.form)">
 
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=57">OTHER
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> OPAC
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Catalogue Search
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=57">其他
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> 線上目錄
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- 查詢館藏
 
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Renew Books
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- 續借
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Member Details
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Update Details
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- - 更新細節
 
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> Resources
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Fundview CD
 
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  Library Website
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> -> 圖書館網站
 
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  End of Year
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Stocktake
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Set New Budgets
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- 建立新預算案
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Audit Reports
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  Help
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> -> 線上說明
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Telnet Help
 			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Intranet Help
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Searching Help
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">　　- 查詢說明
 
-			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  Advanced Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> -> 進階報表
 			</select>
 			</form>
 		</td>
@@ -312,7 +312,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 						<font size=1 face="arial">
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=223 height=12 alt=" " hspace=0 vspace=0>
 						<br>
-						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=26 height=17 align=right alt=" " hspace=0 vspace=0>you are in <A HREF="index.html">ISSUES & RETURNS</a><br>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=26 height=17 align=right alt=" " hspace=0 vspace=0>你在此：<A HREF="index.html">借出及還書</a><br>
 						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=223 height=1 alt=" " hspace=0 vspace=0></FONT>
 					</td>
 				</TR>
@@ -327,7 +327,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 </table>
 <BLOCKQUOTE>
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
+    <p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinusername" --> 【<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">登出</a>】</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
+    <p align=left><a href="/cgi-bin/koha/opac-user.pl">登入</a>Koha</p>
 <!-- /TMPL_IF -->
