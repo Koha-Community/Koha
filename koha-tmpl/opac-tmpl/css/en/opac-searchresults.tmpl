@@ -1,16 +1,16 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <div id="mainbloc">
 <!-- TMPL_IF NAME="searchdesc" -->
-    <p class="center">You searched on <b><!-- TMPL_VAR NAME="searchdesc" --></b></p>
+    <p class="center">You searched on <b><!-- TMPL_VAR NAME="searchdesc" --></b>. <!-- TMPL_VAR NAME="total" --> results found</p>
 <!-- TMPL_ELSE -->
 	<!-- TMPL_IF name="searchnew" -->
-		<p class="center"><!-- TMPL_VAR name=itemtype --> acquired in the last <i><!-- TMPL_VAR name="duration" --></i> days</p>
+		<p class="center"><!-- TMPL_VAR name=itemtype --> acquired in the last <i><!-- TMPL_VAR name="duration" --></i> days. <!-- TMPL_VAR NAME="total" --> results found</p>
 	<!-- TMPL_ELSE -->
 		<p class="center">You did not specify any search criteria</p>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<p class="center"><!-- TMPL_VAR NAME="total" --> results found</p>
+<!-- <p class="center"><!-- TMPL_VAR NAME="total" --> results found</p> -->
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME=displayprev -->
@@ -27,17 +27,19 @@
 		</p>
 		<p class="center">
 			<!-- TMPL_IF name=total -->
-			&nbsp;<b>Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --></b><br /><br />
+			&nbsp;<b>Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --></b>
 			<!-- TMPL_ELSE -->
-			&nbsp; No results found.<br />
+			&nbsp; No results found.
 			<!-- /TMPL_IF -->
 		</p>
 	</div>
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
+<form action="opac-searchresults.pl" method="get" name="myform">
+<input type="submit" class="button" value="Add Checked Items to Book Bag" onclick="addMultiple(); return false;"> <input type="reset" value="Clear All" class="button">
 	<table>
 		<tr>
-			<th>Summary</th>
+			<th colspan="2">Summary</th>
 			<th>Item Count</th>
 			<th>Location</th>
 			<th>&nbsp;</th>
@@ -45,6 +47,7 @@
 		<!-- Actual Search Results -->
 		<!-- TMPL_LOOP NAME="results" -->
 			<tr>
+			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->"></td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p>
 						<p><b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
@@ -91,7 +94,7 @@
 			</th>
 		</tr>
 	</table>
-
+</form>
 	<p class="center">
 		Results <i><!-- TMPL_VAR NAME="from" --></i> through <i><!-- TMPL_VAR NAME="to" --></i> of <i><!-- TMPL_VAR NAME="total" --></i> records.
 	</p>
