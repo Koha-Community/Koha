@@ -10,8 +10,8 @@ use C4::Acquisitions;
 #print $inp->header;
 my ($count,@results)=bookfunds;
 
-open (FILE,'>/usr/local/www/hdl/htdocs/includes/budgets.inc') || die "Cant open file";
-print FILE <<printend
+
+print <<printend
 
 <TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
 <FORM ACTION="/cgi-bin/koha/search.pl">
@@ -32,25 +32,25 @@ my $totavail=0;
 for (my $i=0;$i<$count;$i++){
   my ($spent,$comtd)=bookfundbreakdown($results[$i]->{'bookfundid'});
   my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
-  print FILE <<EOP
+  print  <<EOP
 <tr><td>
 $results[$i]->{'bookfundname'} </TD> 
 <TD>$results[$i]->{'budgetamount'}</TD> <TD>
 EOP
 ;
-printf FILE ("%.2f", $spent);
-print FILE "</TD><TD>";
-printf FILE ("%.2f",$comtd);
-print FILE "</TD><TD>";
-printf FILE ("%.2f",$avail);
-print FILE "</TD></TR>";
+printf  ("%.2f", $spent);
+print  "</TD><TD>";
+printf  ("%.2f",$comtd);
+print  "</TD><TD>";
+printf  ("%.2f",$avail);
+print  "</TD></TR>";
   $total+=$results[$i]->{'budgetamount'};
   $totspent+=$spent;
   $totcomtd+=$comtd;
   $totavail+=$avail;
 }
 
-print FILE <<printend
+print  <<printend
 <tr><td colspan=5>
 <hr size=1 noshade></TD></TR>
 
@@ -58,13 +58,13 @@ print FILE <<printend
 Total </TD> <TD>$total</TD> <TD>
 printend
 ;
-printf FILE ("%.2f",$totspent);
-print FILE "</TD><TD>";
-printf FILE ("%.2f",$totcomtd);
-print FILE "</TD><TD>";
-printf FILE ("%.2f",$totavail);
-print FILE "</TD></TR>";
-print FILE <<printend
+printf  ("%.2f",$totspent);
+print  "</TD><TD>";
+printf  ("%.2f",$totcomtd);
+print  "</TD><TD>";
+printf  ("%.2f",$totavail);
+print  "</TD></TR>";
+print  <<printend
 </table><br>
 Use your reload button [ctrl + r] to get the most recent figures.
 Committed figures are approximate only, as exchange rates will affect the amount actually paid.
@@ -76,4 +76,4 @@ Committed figures are approximate only, as exchange rates will affect the amount
 printend
 ;
 
-close FILE;
+#close ;
