@@ -421,6 +421,7 @@ function Check(f) {
 
 	// Scan for missing mandatory subfields
 	var total_missing_mandatory_subfields = 0;
+	var missing_mandatory_subfields = new Array();
 	for (i=0 ; i<f.field_value.length-2 ; i++) {
 		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
 		    // We should not flag an error unless the tag is also
@@ -429,7 +430,16 @@ function Check(f) {
 		    if (f.tag_mandatory[i].value == 1 || field_is_nonempty_p[f.tag[i].value]) {
 			document.getElementById("error"+i).style.backgroundColor="#FF0000";
 			total_missing_mandatory_subfields++;
-		    }
+			if (document.getElementById("error"+i).parentNode.tagName == "B")
+			{
+				missing_mandatory_subfields.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.parentNode.id.substr(0,1) + ")");
+			}
+			else
+			{
+				missing_mandatory_subfields.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.id.substr(0,1) + ")");
+			}
+
+			}
 		} else {
 			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
 		}
@@ -438,12 +448,21 @@ function Check(f) {
 	// Scan for missing mandatory tags
 	var total_missing_mandatory_tags = 0;
 	var seen_mandatory_tag_p = new Array();
+	var missing_mandatory_tags = new Array();
 	for (i=0 ; i<f.field_value.length ; i++) {
 	    var j = f.tag[i].value;
 	    if (!field_is_nonempty_p[j] && f.tag_mandatory[i].value == 1) {
 		if (seen_mandatory_tag_p[j] != 1) {
 		    seen_mandatory_tag_p[j] = 1;
 		    total_missing_mandatory_tags++;
+ 		    if (document.getElementById("error"+i).parentNode.tagName == "B")
+		    {
+				missing_mandatory_tags.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.parentNode.id.substr(0,1) + ")");
+		    }
+		    else
+		    {
+				missing_mandatory_tags.push(document.getElementById("error"+i).innerHTML + " (tab " +  document.getElementById("error"+i).parentNode.parentNode.parentNode.id.substr(0,1) + ")");
+			}
 		}
 		document.getElementById("error"+i).style.backgroundColor="#ffff00";
 	    }
@@ -455,7 +474,15 @@ function Check(f) {
 		alertString2  = _("Form not submitted because of the following problem(s)");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
 		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
-		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
+		for (i=0; i<missing_mandatory_tags.length; i++)
+		{
+			alertString2 += "\n--->"+ missing_mandatory_tags[i];
+		}
+  		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
+		for (i=0; i<missing_mandatory_subfields.length; i++)
+		{
+			alertString2 += "\n--->"+ missing_mandatory_subfields[i];
+		}
 		alert(alertString2);
 	} else {
 		document.forms[0].submit();

@@ -16,6 +16,9 @@
 				<th class="catalogue">Author</th>
 				<th class="catalogue">&copy;</th>
 				<th class="catalogue">&nbsp;</th>
+				<!-- TMPL_UNLESS NAME="NOTMARC" -->
+					<th class="catalogue">&nbsp;</th>
+				<!-- /TMPL_UNLESS -->
 			</tr>
 			<!-- TMPL_IF name="loop" -->
 			<!-- TMPL_LOOP NAME="loop" -->
@@ -28,6 +31,13 @@
 					<!-- TMPL_ELSE -->
 					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Edit...</a></td>
 					<!-- /TMPL_IF -->
+					<!-- TMPL_UNLESS NAME="NOTMARC" -->
+					<td>
+						<a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">
+							Duplicate
+						</a>
+					</td>
+					<!-- /TMPL_UNLESS -->
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_ELSE -->
@@ -72,7 +82,7 @@
 					<th>&nbsp;</th>
 				</tr>
 					<!-- TMPL_LOOP NAME="breeding_loop" -->
-				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
 							<td><!-- TMPL_VAR NAME="title" --></a>
 							<td><!-- TMPL_VAR NAME="author" --></td>
 							<td><!-- TMPL_VAR NAME="isbn" --></td>
