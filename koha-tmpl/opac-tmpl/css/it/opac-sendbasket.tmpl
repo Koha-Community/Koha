@@ -1,0 +1,33 @@
+<SUBJECT>
+Il tuo cestino schede bibliografiche.
+<END_SUBJECT>
+
+<HEADER>
+Salve, ecco il cestino inviato da <!-- TMPL_VAR name="email_sender" -->
+<END_HEADER>
+
+<FILENAME>
+basket.txt
+<END_FILENAME>
+
+<MESSAGE>
+---------------------------------------------
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF name="isbn" -->
+ISBN: <!-- TMPL_VAR NAME="ISBN" --><!-- /TMPL_IF --><!-- TMPL_IF name="subtitle" -->
+Sottotitolo: <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="author" -->
+Autore: <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF name="additional" -->
+Autori supplementari: <!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
+Pubblicato da: <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" --><!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><!-- TMPL_IF name="collection" -->
+Collezione: <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="subject" -->
+Argomento: <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" -->
+Data di pubblicazione: <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->
+Note: <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><!-- TMPL_IF name="unititle" -->
+Titolo unificato: <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF name="serial" -->
+Periodico: <!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><!-- TMPL_IF name="dewey" -->
+Dewey: <!-- TMPL_VAR name="dewey" --><!-- /TMPL_IF --><!-- TMPL_IF name="classification" -->
+Classificazione: <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><!-- TMPL_IF name="lccn" -->
+LCCN: <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><!-- TMPL_IF name="url" -->
+URL: <!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
+---------------------------------------------
+<!-- /TMPL_LOOP -->
+<END_MESSAGE>

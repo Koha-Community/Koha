@@ -1,0 +1,185 @@
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="catalogue">Ricerca nel catalogo</h1>
+
+<form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
+	
+	<div id="bloc60">
+		<h2 class="catalogue">Cerca su</h2>
+		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+			<label class="label20">Qualsiasi parola</label>
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">Titolo</label>
+			<input type="hidden" name="marclist" value="biblio.title" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">Autore</label> <input type="hidden" name="marclist" value="biblio.author" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">Argomento</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />  
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">Titolo del periodico</label>
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35"/>
+		</p>
+		<p>
+			<label class="label20">Tipo di volume</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<!-- TMPL_VAR name="CGIitemtype" -->
+		</p>
+		<p>
+				<label class="label20">Sezione</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+				<!-- TMPL_VAR name="CGIbranch" -->
+		</p>
+	</div>
+	<div id="bloc20">
+		<h2>Altre opzioni</h2>
+		<p>
+				<label class="label20">Codice a barre del volume</label>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="start" />
+				<input type="text" name="value" onchange="sql_update()" /> 
+		</p>
+		<p>
+			<label class="label20">Collocazione</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="start" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">ISBN</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Casa editrice</label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Pubblicato tra</label>
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value=">=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" /> e
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="<=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+		</p>
+		<p>Risultati per pagina:
+			<select name="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		</p>
+		<p>Ordinato da
+			<select name="orderby" size="1">
+				<option value="biblio.title">Titolo</option>
+				<option value="biblio.author">Autore</option>
+				<option value="biblioitems.dewey">Dewey:</option>
+				<option value="biblioitems.publicationyear">Anno di pubblicazione</option>
+				<option value="biblioitems.publishercode">Casa editrice</option>
+				<option value="biblio.timestamp desc">Data di acquisto</option>
+			</select>
+		</p>
+	</div>
+	<p>
+		<input type="submit" value="Inizia la ricerca" class="button catalogue">
+		<input type="reset" value="Clear all" class="button catalogue" />
+	</p>
+	<div id="bloc60">
+		<h2>Suggerimenti</h2>
+		<h3>Titolo</h3>
+		<p>È possibile selezionare un titolo completo o parte di esso. La ricerca verrà effettuata anche tra i sottotitoli ed altri campi analoghi.</p>
+		<h3>Autore</h3>
+		<p>È possibile selezionare un nome o un cognome. La ricerca verrà effettuata anche tra gli autori supplementari ed altri campi analoghi (traduttore, illustratore...)</p>
+		<p>Si ricorda che un titolo può essere relativo ad un effettivo autore (Victor Hugo), o ad una collaborazione, gruppo, o collezione di autori (CNRS, Biblioteca del Congresso)</p>
+		<h3>Sezioni</h3>
+		<p>Seleziona una sezione se desideri limitare la ricerca ad una sezione specifica. Di norma, la ricerca viene effettuata su tutte le sezioni della biblioteca.</p>
+		<h3>Ricerca parziale</h3>
+		<p>Verrà effettuata una ricerca su ogni parola immessa. Le stringhe vuote verranno ignorate. Selezionando, ad esempio, "the two towers" nel campo "titolo", la lista dei risultati conterrà tutti i volumi contenenti "two" e "tower" nel titolo. La stringa "the" verrà ignorata.</p>
+		<p>Se desideri specificare l'inizio di una parola, aggiungi un * o un % alla fine della parola. Ad esempio "due torri*" cercherà "le due torri", "due torri bianche", "una torre e due città"</p>
+	</div>
+</form>
+
+<script type="text/javascript">
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

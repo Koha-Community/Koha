@@ -1,0 +1,23 @@
+<!-- TMPL_INCLUDE NAME="opac-basket-top.inc" -->
+
+<div id="mainbloc" style="padding-bottom:20px;margin-top:10px;margin-bottom:10px;">
+<h1>Il cestino sta per essere inviato</h1>
+<!-- TMPL_IF NAME="email_add" -->
+	<!-- TMPL_IF NAME="SENT" -->
+	<p>Il cestino è stato inviato a: <!-- TMPL_VAR NAME="email_add" --></p>
+	<!-- TMPL_ELSE -->
+	<p>Problema nell'invio del cestino...</p>
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+	<p><label>messaggio inviato da</label><input name="email_sender" size="25" /></p>
+	<p><label>Indirizzo e-mail</label><input name="email_add" size="25" /></p>
+	<p><label>&nbsp;</label><input type="submit" value="Invia" class="button"></p>
+	<input type='hidden' name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
+</form>
+<!-- /TMPL_IF -->
+</div>
+<div id="bottombloc">
+	<p><a href="javascript:this.close()">Chiudi</a></p>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->

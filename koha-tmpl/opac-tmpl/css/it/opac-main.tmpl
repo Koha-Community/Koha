@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<title><!--TMPL_VAR name="LibraryName"--></title>
+</head>
+
+<body>
+<div id="leftbloc">
+	<img class="relative" src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="koha" alt="koha" />
+</div>
+
+<div id="homebloc">
+	<h1 class="LibraryName"><TMPL_VAR name="LibraryName"></h1>
+	<h2>Cerca nel catalogo</h2>
+	<form action="/cgi-bin/koha/opac-search.pl">
+		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			Ricerca rapida: <input type="text" size="27" name="value" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
+		</p>
+		<p>
+			<a href="/cgi-bin/koha/opac-search.pl" class="button">Ricerca avanzata, maggiori opzioni	</a>
+		</p>
+	</form>
+
+	<h2>Acquisti recenti</h2>
+	<form action="/cgi-bin/koha/opac-search.pl">
+		<p>
+			<!-- TMPL_VAR name="CGIitemtype" --> recentemente acquisiti (in ordine inverso di acquisizione)
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="orderby" value="biblio.timestamp desc">
+			<input type="submit" value="OK" class="button" />
+		</p>
+	</form>
+	<h2>Altre opzioni</h2>
+	<!-- TMPL_IF NAME="loggedinusername" -->
+		<!-- TMPL_IF name="virtualshelves" -->
+			<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Scaffali virtuali</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="suggestion" -->
+			<a href="opac-suggestions.pl" class="button">Rivedi e gestisci le proposte</a>
+		<!-- /TMPL_IF -->
+		<a href="/cgi-bin/koha/opac-user.pl" class="button"><!-- TMPL_VAR NAME="loggedinusername" --> abitazione</a><a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">Logout</a>
+		<!-- TMPL_IF name="textmessaging"-->
+			<h2>Messaggio dalla biblioteca</h2>
+			<!-- TMPL_VAR name="textmessaging" -->
+		<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE -->
+		<p><a href="/cgi-bin/koha/opac-user.pl">Entra in Koha</a> per abilitare le opzioni personali.</p>
+	<!-- /TMPL_IF -->
+	<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+		<select name="language">
+			<TMPL_LOOP NAME="languages">
+				<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+			</TMPL_LOOP>
+		</select>
+		<input type="submit" value="Seleziona lingua" class="button">
+	</form>
+	<p class="copyright">
+		La Biblioteca è potenziata da <a href="http://www.koha.org">Koha</a>, un software libero ILS e conforme agli standard del web <a href="http://validator.w3.org/check/referer">
+			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="16" width="44" />
+		</a>
+	</p>
+</div>
+
+</body>
+</html>

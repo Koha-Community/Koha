@@ -1,0 +1,79 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<h2>Pagina della prenotazione per <i><!-- TMPL_VAR NAME="title" --></i> (<!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF --> N°<!-- TMPL_VAR name="biblionumber" -->)</h2>
+<!-- TMPL_IF NAME="message" -->
+	<h2>Non è possibile la prenotazione perché </h2>
+	<ul>
+		<!-- TMPL_IF name="noreserve" --><li>You can't make reserve in this library (feature unactivated)</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="too_much_oweing" --><li>devi <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="too_many_reserves" --><li>non puoi effettuare piú di <!-- TMPL_VAR NAME="too_many_reserves" --> prenotazioni.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="already_reserved" --><li>hai già una prenotazione per questo volume.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_items_selected" --><li>devi selezionare almeno un tipo di volume!</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_branch_selected" --><li>devi scegliere una sezione dove effettuare il ritiro!</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="GNA" --><li>Risulti senza indirizzo. La prenotazione non è consentita. Si prega di contattare la biblioteca.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="lost" --><li>Questo tesserino è stato dichiarato disperso. Non è possibile effettuare la prenotazione. Si prega di contattare la Biblioteca.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="debarred" --><li>L'account è temporaneamente sospeso. Si prega di contattare la biblioteca.</li><!-- /TMPL_IF -->
+	</ul>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p> Esistono già <b><!-- TMPL_VAR NAME="reservecount" --></b> prenotazioni per questo volume. </p>
+	<p>Selezionare quali volumi siano OK. Ne sarà riservato uno non appena si renderà disponibile.</p>
+
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="item_types_selected" value="1" />
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+		<table cellspacing="0">
+			<tr>
+				<th>Richiesta</th>
+				<th>Tipo di volume</th>
+				<th>Copie</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+				<tr>
+					<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" checked="checked" /></td>
+					<!-- TMPL_ELSE -->
+						<td>Non è possibile la prenotazione</td>
+					<!-- /TMPL_UNLESS -->
+					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><!-- TMPL_VAR NAME="copies" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<p>Selezionare la sezione dalla quale si desidera ricevere il volume: <!-- TMPL_VAR NAME="CGIbranch" --></p>
+				
+		<input class="button" type="submit" value="Invia">
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+	<p>Confermare che si desidera richiedere un volume di questi tipi:</p>
+
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="place_reserve" value="1" />
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME="required_date" -->" />
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME="expires_date" -->" />
+		<ul>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+			<li><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_VAR NAME="description" --></li>
+			<!-- /TMPL_LOOP -->
+		</ul>
+		che verrà ritirato da
+		<ul>
+			<li>
+				<!-- TMPL_VAR NAME="branchname" -->
+			</li>
+		</ul>
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+		<!-- TMPL_IF NAME="istherefee" -->
+			<p>Si noti che è prevista una cauzione di <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<input class="button" type="submit" value="Effettua la prenotazione">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

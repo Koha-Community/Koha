@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<div id="bibliomenu">
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Semplice</a><a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">Completo</a><a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">ISBD</a><a href="javascript:Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">Aggiungi allo scaffale</a><a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">Stampa</a>
+	<!-- TMPL_UNLESS NAME="norequests" -->
+		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+			Richiesta
+		</a>
+	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF name="subscriptionid" -->
+	<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Prestiti di periodici">
+		Prestiti
+	</a>
+	<!-- /TMPL_IF -->
+	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Aggiungi al cestino</a>
+</div>
+
+<div id="mainbloc">
+	<p><!-- TMPL_VAR name="ISBD" --></p>
+</div>
+</body>
+</html>

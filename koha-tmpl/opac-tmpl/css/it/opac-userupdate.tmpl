@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE name="opac-top.inc" -->
+
+<div id="mainbloc">
+<h2>Cambiare le informazioni dell'utente</h2>
+<p><i>Cambiare ciò che si ritiene necessario. Verrà inviato un e-mail alla biblioteca.<br />
+I cambiamenti diventeranno effettivi non appena saranno convalidati dalla biblioteca.</i></p>
+
+<!-- TMPL_LOOP name="BORROWER_INFO" -->
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+	<p><label>Cognome</label><input type="text"  size="25" value="<!-- TMPL_VAR name='surname' -->"  name="surname" /></p>
+	<p><label>Titolo</label><input type="text"  size="25" value="<!-- TMPL_VAR name='title' -->"  name="title" /></p>
+	<p><label>Nome</label><input type="text"  size="25" value="<!-- TMPL_VAR name='firstname' -->"  name="firstname" /></p>
+	<p><label>Indirizzo postale</label><input type="text"  size="25" value="<!-- TMPL_VAR name='streetaddress' -->"  name="streetaddress" /></p>
+	<p><label>Località</label><input type="text"  size="25" value="<!-- TMPL_VAR name='city' -->"  name="city" /></p>
+	<p><label>Telefono abitazione</label><input type="text"  size="25" value="<!-- TMPL_VAR name='phone' -->"  name="phone" /></p>
+	<p><label>Telefono/Fax ufficio</label><input type="text"  size="25" value="<!-- TMPL_VAR name='faxnumber' -->"  name="faxnumber" /></p>
+	<p><label>E-mail</label><input type="text"  size="25" value="<!-- TMPL_VAR name='emailaddress' -->"  name="emailaddress" /></p>
+	<p><input type="submit" value="Invia" class="button"></p>
+</form>
+</div>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="opac-bottom.inc" -->

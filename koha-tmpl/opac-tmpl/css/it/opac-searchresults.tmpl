@@ -1,0 +1,148 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="searchdesc" -->
+    <p class="center">È stata effettuata una ricerca con parametri <b><!-- TMPL_VAR NAME="searchdesc" --></b>. Trovati <!-- TMPL_VAR NAME="total" --> risultati.</p>
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF name="searchnew" -->
+		<p class="center"><!-- TMPL_VAR name=itemtype --> acquisito negli ultimi <i><!-- TMPL_VAR name="duration" --></i> giorni. Trovati <!-- TMPL_VAR NAME="total" --> risultati</p>
+	<!-- TMPL_ELSE -->
+		<p class="center">Non è stato specificato alcun criterio di ricerca.</p>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- <p class="center"><!-- TMPL_VAR NAME="total" --> results found</p> -->
+	<div id="resultnumber">
+		<p class="center">
+			<!-- TMPL_IF NAME=displayprev -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><<Precedente</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Successivo >></a>
+				<!-- /TMPL_IF -->
+		</p>
+		<p class="center">
+			<!-- TMPL_IF name=total -->
+				<p class="center">
+					Risultati da <b><i><!-- TMPL_VAR NAME="from" --></i> a <i><!-- TMPL_VAR NAME="to" --></i> di <i><!-- TMPL_VAR NAME="total" --></i></b>
+				</p>
+			<!-- TMPL_ELSE -->
+				  Nessun risultato trovato.
+			<!-- /TMPL_IF -->
+		</p>
+	</div>
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="total" -->
+<form action="opac-searchresults.pl" method="get" name="myform">
+<input type="submit" class="button" value="Aggiungi i volumi selezionati al cestino" onclick="addMultiple(); return false;"> <input type="reset" value="Cancella tutti" class="button">
+	<table>
+		<tr>
+			<th colspan="2">Dati generali</th>
+			<th>Numero volumi</th>
+			<th>Collocazione</th>
+			<th>&nbsp;</th>
+		</tr>
+		<!-- Actual Search Results -->
+		<!-- TMPL_LOOP NAME="results" -->
+			<tr>
+			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<p>
+						<p>
+							<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+								<b><a class="transparent" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+									<b><a class="transparent" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<!-- TMPL_ELSE -->
+									<b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+						</p>
+						<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="timestamp" --> <i>(modificato in data <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
+					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="totitem" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_LOOP name="CN" -->
+						<p><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --> 
+						<!-- TMPL_IF name="date_due" -->
+							<i>(In prestito fino a <!-- TMPL_VAR name="date_due" -->)</i>
+						<!-- TMPL_ELSE -->
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR name="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+						</p>
+					<!-- /TMPL_LOOP -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_UNLESS NAME="norequests" -->
+						<a class="transparent" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Richiesta</a>
+					<!-- TMPL_ELSE -->
+						Non prenotabile
+					<!-- /TMPL_UNLESS -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<th>&nbsp;</th>
+			<th colspan="2" align="left">
+				<!-- TMPL_IF NAME="displayprev" -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><<Precedente</a>
+				<!-- TMPL_ELSE -->
+					&nbsp;
+				<!-- /TMPL_IF -->
+			</th>
+			<th colspan="2" align="right">
+				<!-- TMPL_IF NAME="displaynext" -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Successivo >>></a>
+				<!-- TMPL_ELSE -->
+					&nbsp;
+				<!-- /TMPL_IF -->
+			</th>
+		</tr>
+	</table>
+</form>
+	<p class="center">
+		Risultati da <b><i><!-- TMPL_VAR NAME="from" --></i> a <i><!-- TMPL_VAR NAME="to" --></i> di <i><!-- TMPL_VAR NAME="total" --></i></b>
+	</p>
+
+	<div id="resultnumber">
+		<p class="center">
+			<!-- TMPL_IF NAME="displayprev" -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><<Precedente</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME="displaynext" -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Successivo >></a>
+				<!-- /TMPL_IF -->
+		</p>
+	</div>
+
+<!-- TMPL_ELSE -->
+	<p class="center">	Spiacente, nessun risultato </p>
+<!-- /TMPL_IF -->
+
+<p class="center">
+	<a href="/cgi-bin/koha/opac-search.pl" class="button">Ricerca avanzata</a>'>Prova un'altra <a href="/cgi-bin/koha/opac-search.pl" class="button">Ricerca avanzata</a>
+</p>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

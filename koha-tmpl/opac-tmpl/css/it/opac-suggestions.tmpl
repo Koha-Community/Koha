@@ -1,0 +1,156 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF name="op_add" -->
+	<h1>Sottometti una nuova proposta</h1>
+	<p>Riempi questo modulo per proporre un nuovo acquisto per la biblioteca. Verrai contattato quando la biblioteca prenderà in considerazione la tua proposta.</p>
+	<p>Nessun campo è obbligatorio. Riempi solo quelli noti. Il campo "Nota" può essere usato per quel che si vuole.</p>
+	<form>
+		<input type="hidden" name="op" value="add_confirm">
+		<p><label>Titolo</label><input type="text" name="title" size=60 maxlentgh=80></p>
+		<p><label>Autore</label><input type="text" name="author" size=60 maxlength=80></p>
+		<p><label>Data di pubblicazione</label><input type="text" name="copyrightdate" size="5" maxlength="4"></p>
+		<p><label>Casa editrice</label><input type="text" name="publishercode" size="60" maxlength="80"></p>
+		<p><label>Volume</label><input type="text" name="volumedesc" size="60" maxlength="80"></p>
+		<p><label>Anno di pubblicazione</label><input type="text" name="publicationyear" size="5" maxlength="4"></p>
+		<p><label>Luogo di pubblicazione</label><input type="text" name="place" size="60" maxlength="80"></p>
+		<p><label>ISBN/ISSN</label><input type="text" name="isbn" size="14" maxlength="10"></p>
+		<p><label>Nota</label><textarea name="note" rows="10" cols="60"></textarea></p>
+		<p><label>&nbsp;</label><input type="submit" value="Invia la proposta al personale della biblioteca" class="button"></p>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="op_else" -->
+	<h1>Proposte</h1>
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Titolo</th>
+			<th>Autore</th>
+			<th>©</th>
+			<th>Casa editrice</th>
+			<th>Stato</th>
+			<th>Proposto da</th>
+			<th>Gestito da</th>
+			<th>Nota</th>
+		</tr>
+		<tr>
+			<form>
+				<th>
+					Filtro attivo
+				</th>
+				<th>
+					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
+				</th>
+				<th>
+					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->">
+				</th>
+				<th>
+					<select name="status">
+						<option value="">Qualsiasi</option>
+						<!-- TMPL_IF name="ASKED" -->
+							<option value="ASKED" selected>Richiesto</option>
+						<!-- TMPL_ELSE -->
+							<option value="ASKED">Richiesto</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ACCEPTED" -->
+							<option value="ACCEPTED" selected>Accettato.</option>
+						<!-- TMPL_ELSE -->
+							<option value="ACCEPTED">Accettato.</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ORDERED" -->
+							<option value="ORDERED" selected>Ordinato</option>
+						<!-- TMPL_ELSE -->
+							<option value="ORDERED">Ordinato</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="REJECTED" -->
+							<option value="REJECTED" selected>Respinto</option>
+						<!-- TMPL_ELSE -->
+							<option value="REJECTED">Respinto</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="AVAILABLE" -->
+							<option value="AVAILABLE" selected>Disponibile</option>
+						<!-- TMPL_ELSE -->
+							<option value="AVAILABLE">Disponibile</option>
+						<!-- /TMPL_IF -->
+					</select>
+				</th>
+				<th>
+					<select name="suggestedbyme">
+						<option value="1" <!-- TMPL_IF name="suggestedbyme" -->selected<!-- /TMPL_IF -->>Io</option>
+						<option value="0" <!-- TMPL_UNLESS name="suggestedbyme" -->selected<!-- /TMPL_UNLESS -->>Chiunque</option>
+					</select>
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					<input type="submit" class="button" value="Seleziona un filtro">
+				</th>
+			</form>
+		</tr>
+		<form>
+			<input type="hidden" name="op" value="delete_confirm">
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td>
+					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->">
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="title" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="author" -->
+				</td>
+				<td align="center"<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="copyrightdate" -->
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="publishercode" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF name="ASKED" -->Richiesto<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ACCEPTED" -->Accettato: verrà ordinato presto.<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ORDERED" -->Ordinato dalla biblioteca<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="REJECTED" -->La proposta è stata respinta: non verrà acquistato<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Ricevuto dalla biblioteca<!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="note" -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td>
+				<input type="submit" class="button" value="Cancella">
+			</td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+		</tr>
+		</form>
+	</table>
+	<form>
+		<input type="hidden" name="op" value="add">
+		<input type="submit" class="button" value="Sottometti una nuova proposta">
+	<br />
+	<p>Nota: se si richiede una proposta effettuata da qualcuno, il risultato conterrà nuove proposte. Non verranno mostrate proposte già prese in considerazione dal bibliotecario.</p>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
