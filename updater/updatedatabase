@@ -247,7 +247,7 @@ unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
     $sti->execute;
 }
 
-unless ($branchcategories{'branchcode'} eq 'varchar(4)') {
+unless ($branchcategories{'categoryname'} eq 'text') {
     print "Changing branchcode in branchcategories to categoryname text.\n";
     my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
     $sth->execute;
@@ -284,6 +284,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.14  2002/06/27 20:48:59  tonnesen
+# Fixing bug that reported an error if updatedatabase was run twice.
+#
 # Revision 1.4.2.13  2002/06/27 13:30:26  tonnesen
 # Fixed typo
 #
