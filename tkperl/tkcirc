@@ -22,13 +22,14 @@ my $dbh=&C4Connect;
 my $issuebut, $returnbut, $mainholder;
 my $borrnumber, $borrower, $borrowerlist;
 my @items2, $currentissues;
+my $returnedframe;
 
 my $MW=MainWindow->new(-height => 500, -width => 600);
 $MW->fontCreate('C_normal',-family => 'courier', -size => -12);
 my $titlebar=$MW->Frame(-height => 100, -width => 600, -relief => 'ridge', -borderwidth => '4');
 my $frametop=$MW->Frame(-height => 100, -width => 600, -relief => 'ridge', -borderwidth => '2');
 my $framebot=$MW->Frame(-height => 430, -width => 600, -relief => 'ridge', -borderwidth => '2');
-$framebot->gridPropagate(0);
+#$framebot->gridPropagate(0);
 my $kohalabel=$titlebar->Label(-text => 'Koha');
 my $menulabel=$titlebar->Label(-text => 'Main Menu');
 my $branchlabel=$titlebar->Label(-text => 'Stewart Elementary-lp');
@@ -45,7 +46,7 @@ $returnsbut->pack(qw/-side right -padx 2 -pady 2 -expand 1 -fill x/);
 Tk::grid($titlebar, -col => 0, -row => 0, -sticky => 'nsew');
 Tk::grid($frametop, -col => 0, -row => 1, -sticky => 'nsew');
 Tk::grid($framebot, -col => 0, -row => 2, -sticky => 'nsew');
-$MW->gridPropagate(0);
+#$MW->gridPropagate(0);
 
 MainLoop;
 
@@ -59,7 +60,7 @@ sub getborrnumber {
     $mainholder->gridPropagate(0);
     my $borrentryframe=$mainholder->Frame(-height => 40, -width => 200, -relief=>'ridge', -borderwidth=>4);
     $borrentryframe->pack(-ipadx => 10, -ipady => 10);
-    $label=$borrentryframe->Label(-text => 'Borrower CardNumber or Last Name:', -anchor => 'w');
+    $label=$borrentryframe->Label(-text => "Borrower CardNumber\nor Last Name:", -anchor => 'w');
     Tk::grid($label, -col => 0, -row => 0, -sticky => 'nw');
     $borrentry=$borrentryframe->Entry(-width => 15);
     $borrentry->bind('<Return>' => \&checkborrower);
@@ -686,28 +687,52 @@ sub returnbook {
 	if ($itemno ne "" ) {                                                                                                        
 	    my $item = itemnodata($env,$dbh,$itemno);                                                                                  
 	    my $fmtitem = C4::Circulation::Issues::formatitem($env,$item,"",$amt_owing);                                               
-	    unshift @items,$fmtitem;                                                                                                   
+	    $item->{'borrower'}=$borrower->{'cardnumber'};
+	    unshift @items,$item;
 	    if ($items[20] > "") {                                                                                                     
 		#pop @items;                                                                                                              
 	    }                                                                                                                          
 	}                                                                                                                            
     }                                                                                                                              
-    my $itemsreturnedtext='';
-    foreach (@items) {
-	$itemsreturnedtext.="$_\n";
+    displayitemsreturned();
+}
+
+sub displayitemsreturned {
+    my $counter=0;
+    $itemsreturned->put($counter,0,$itemsreturned->Label(-text=>"Bar Code", -relief => 'groove', borderwidth=>'3'));
+    $itemsreturned->put($counter,1,$itemsreturned->Label(-text=>"Title", -relief => 'groove', borderwidth=>'3'));
+    $itemsreturned->put($counter,2,$itemsreturned->Label(-text=>"Author", -relief => 'groove', borderwidth=>'3'));
+    $itemsreturned->put($counter,3,$itemsreturned->Label(-text=>"Class", -relief => 'groove', borderwidth=>'3'));
+    $itemsreturned->put($counter,4,$itemsreturned->Label(-text=>"Borrower", -relief => 'groove', borderwidth=>'3'));
+    $itemsreturned->see($counter,0);
+    $itemsreturned->see($counter,1);
+    $itemsreturned->see($counter,2);
+    $itemsreturned->see($counter,3);
+    $itemsreturned->see($counter,4);
+    $counter++;
+    my $itemno;
+    foreach $itemno (reverse @items) {
+	$itemno->{'dewey'}=~s/0*$//;
+	$itemsreturned->put($counter,0,$itemsreturned->Label(-text=>$itemno->{'barcode'}, -relief => 'groove', borderwidth=>'2'));
+	$itemsreturned->put($counter,1,$itemsreturned->Label(-text=>$itemno->{'title'}, -relief => 'groove', borderwidth=>'2'));
+	$itemsreturned->put($counter,2,$itemsreturned->Label(-text=>$itemno->{'author'}, -relief => 'groove', borderwidth=>'2'));
+	$itemsreturned->put($counter,3,$itemsreturned->Label(-text=>$itemno->{'dewey'}.$itemno->{'subclass'}, -relief => 'groove', borderwidth=>'2'));
+	$itemsreturned->put($counter,4,$itemsreturned->Label(-text=>$itemno->{'borrower'}, -relief => 'groove', borderwidth=>'2'));
+	$itemsreturned->see($counter,0);
+	$itemsreturned->see($counter,1);
+	$itemsreturned->see($counter,2);
+	$itemsreturned->see($counter,3);
+	$itemsreturned->see($counter,4);
+	$counter++;
     }
-    $itemsreturned->configure(-state => 'normal');
-    $itemsreturned->delete('0.0','end');
-    $itemsreturned->insert('0.0',$itemsreturnedtext);
-    $itemsreturned->configure(-state => 'disabled');
 }
 
 sub returns {
-    @items=();
+    #@items=();
     ($mainholder) && ($mainholder->destroy);
     $mainholder=$framebot->Frame(-height => 500, -width => 600);
     Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'nsew');
-    $mainholder->gridPropagate(0);
+    #$mainholder->gridPropagate(0);
     $topline=$mainholder->Frame();
     $topline->pack(-side => top, -fill => 'x', -expand => '1');
 
@@ -726,12 +751,15 @@ sub returns {
     $borrowerinfo->grid(-col=>1, -row=>0, -sticky=>'w');
 
 
-    my $returnedframe=$mainholder->LabFrame(-label=>'Items Returned', -labelside=>acrosstop);
+    $returnedframe=$mainholder->LabFrame(-label=>'Items Returned', -labelside=>acrosstop);
     $returnedframe->pack;
-    $itemsreturned=$returnedframe->Scrolled(Text, -height=>20, -width=>80, -relief => 'flat', -scrollbars => 'e');
-    $itemsreturned->insert('0.0','');
-    $itemsreturned->configure(-state => 'disabled');
+    $itemsreturned=$returnedframe->Table(-rows=>10, -columns => 5, -scrollbars=>e, -fixedrows => 1);
     $itemsreturned->pack(-side => top);
+    displayitemsreturned();
+    #$itemsreturned=$returnedframe->Scrolled(Text, -height=>20, -width=>80, -relief => 'flat', -scrollbars => 'e');
+    #$itemsreturned->insert('0.0','');
+    #$itemsreturned->configure(-state => 'disabled');
+    #$itemsreturned->pack(-side => top);
 }
 
 
