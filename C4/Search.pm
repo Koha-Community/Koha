@@ -110,11 +110,37 @@ sub catalogsearch {
       my $subject2=$data->{'subject'};
       $subject2=~ s/ /%20/g;
       $data->{'itemcount'}=$counts->{'total'};
+      my $totalitemcounts=0;
       foreach my $key (keys %$counts){
         if ($key ne 'total'){
-          $data->{'location'}.="$key $counts->{$key} ";
+          #$data->{'location'}.="$key $counts->{$key} ";
+	  $totalitemcounts+=$counts->{$key};
+          $data->{'locationhash'}->{$key}=$counts->{$key};
          }
       }
+      my $locationtext='';
+      my $notavailabletext='';
+      foreach (sort keys %{$data->{'locationhash'}}) {
+	  if ($_ eq 'notavailable') {
+	      $notavailabletext="Not available";
+	      my $c=$data->{'locationhash'}->{$_};
+	      if ($totalitemcounts>1) {
+		  $notavailabletext.=" ($c)";
+	      }
+	  } else {
+	      $locationtext.="$_";
+	      my $c=$data->{'locationhash'}->{$_};
+	      if ($totalitemcounts>1) {
+		  $locationtext.=" ($c), ";
+	      }
+	  }
+      }
+      if ($notavailabletext) {
+	  $locationtext.=$notavailabletext;
+      } else {
+	  $locationtext=~s/, $//;
+      }
+      $data->{'location'}=$locationtext;
       $data->{'subject2'}=$subject2;
     }
   }
@@ -761,7 +787,7 @@ sub ItemInfo {
     and (wthdrawn <> 1 or wthdrawn is NULL)";
   }
   $query .= " order by items.dateaccessioned desc";
-    warn $query;
+    #warn $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
