@@ -19,7 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Acquisitions;
+use C4::Biblio;			# For &deletebiblioitem
 use CGI;
 
 my $input = new CGI;
