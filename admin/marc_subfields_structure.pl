@@ -106,6 +106,8 @@ if ($op eq 'add_form') {
 	
 	# other subfields
 	push @kohafields, "additionalauthors.author";
+	push @kohafields, "bibliosubject.subject";
+	push @kohafields, "bibliosubtitle.title";
 	# build authorised value list
 	$sth2->finish;
 	$sth2 = $dbh->prepare("select distinct category from authorised_values");
