@@ -31,14 +31,17 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use HTML::Template;
+use C4::Auth;
+use C4::Context;
+use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 
 my $bibnum=$input->param('bibnum');
 my $data=&bibdata($bibnum);
-my ($subjectcount, $subject)     = &subject($data->{'biblionumber'});
-my ($subtitlecount, $subtitle)   = &subtitle($data->{'biblionumber'});
-my ($addauthorcount, $addauthor) = &addauthor($data->{'biblionumber'});
+my ($subjectcount, $subject)     = &subject($bibnum);
+my ($subtitlecount, $subtitle)   = &subtitle($bibnum);
+my ($addauthorcount, $addauthor) = &addauthor($bibnum);
 my $sub        = $subject->[0]->{'subject'};
 my $additional = $addauthor->[0]->{'author'};
 my $dewey;
@@ -47,12 +50,14 @@ if ($submit eq '') {
   print $input->redirect("/cgi-bin/koha/delbiblio.pl?biblio=$bibnum");
 } # if
 
-#print $input->header;
-# my ($analytictitle)  = &analytic($biblionumber,'t');
-# my ($analyticauthor) = &analytic($biblionumber,'a');
-#print startpage();
-#print startmenu('catalogue');
-my $template = gettemplate("modbib.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "modbib.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {acquisition => 1},
+			     debug => 1,
+			     });
 
 # have to get all subtitles, subjects and additional authors
 $sub = join("|", map { $_->{'subject'} } @{$subject});
@@ -77,21 +82,21 @@ $dewey = ~ s/\.$//;
 
 $data->{'title'} = &tidyhtml($data->{'title'});
 
-$template->param ( biblionumber => $data->{'biblionumber'});
-$template->param ( biblioitemnumber => $data->{'biblioitemnumber'});
-$template->param ( author => $data->{'author'});
-$template->param ( title => $data->{'title'});
-$template->param ( abstract => $data->{'abstract'});
-$template->param ( subject => $sub);
-$template->param ( copyrightdate => $data->{'copyrightdate'});
-$template->param ( seriestitle => $data->{'seriestitle'});
-$template->param ( additionalauthor => $additional);
-$template->param ( subtitle => $data->{'subtitle'});
-$template->param ( untitle => $data->{'untitle'});
-$template->param ( notes => $data->{'notes'});
-$template->param ( serial => $data->{'serial'});
+$template->param ( biblionumber => $bibnum,
+						biblioitemnumber => $data->{'biblioitemnumber'},
+						author => $data->{'author'},
+						title => $data->{'title'},
+						abstract => $data->{'abstract'},
+						subject => $sub,
+						copyrightdate => $data->{'copyrightdate'},
+						seriestitle => $data->{'seriestitle'},
+						additionalauthor => $additional,
+						subtitle => $data->{'subtitle'},
+						untitle => $data->{'untitle'},
+						notes => $data->{'notes'},
+						serial => $data->{'serial'});
 
-print "Content-Type: text/html\n\n", $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
 
 sub tidyhtml {
   my ($inp)=@_;

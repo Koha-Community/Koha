@@ -31,24 +31,12 @@ my $module=$input->param('module');
 SWITCH: {
 	if ($module eq 'acquisitions') { acquisitions(); last SWITCH; }
 	if ($module eq 'search') { catalogue_search(); last SWITCH; }
-	if ($module eq 'cataloguing') {cataloguing(); last SWITCH; }
+	if ($module eq 'MARC') {marc(); last SWITCH; }
 	if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
 }
 
 sub acquisitions {
-	my $aq_type = C4::Context->preference("acquisitions") || "normal";
-		# Get the acquisition preference. This should be:
-		#	"simple" - minimal information required
-		#	"normal" - full information required
-		#	other - Same as "normal"
-
-	if ($aq_type eq 'simple') {
-		print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
-	} elsif ($aq_type eq 'normal') {
 		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
-	} else {
-		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
-	}
 }
 
 sub catalogue_search {
@@ -72,16 +60,16 @@ sub catalogue_search {
 	}
 }
 
-sub cataloguing {
-	my $marc_p = C4::Context->boolean_preference("marc");
-	$marc_p = 1 unless defined $marc_p;
-	my $query = new CGI;
-	my $type = $query->param('type');
-	if ($marc_p) {
-		print $input->redirect("/cgi-bin/koha/cataloguing.marc/cataloguing-home.pl");
-	} else {
-		print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
-	}
+sub marc {
+#	my $marc_p = C4::Context->boolean_preference("marc");
+#	$marc_p = 1 unless defined $marc_p;
+#	my $query = new CGI;
+#	my $type = $query->param('type');
+#	if ($marc_p) {
+#		print $input->redirect("/cgi-bin/koha/cataloguing.marc/cataloguing-home.pl");
+#	} else {
+		print $input ->redirect("/cgi-bin/koha/acqui.simple/isbnsearch.pl");
+#	}
 }
 
 sub somethingelse {

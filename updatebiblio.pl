@@ -19,27 +19,29 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+require Exporter;
+use C4::Context;
+use C4::Output;  # contains gettemplate
+use C4::Search;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 use CGI;
-use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 use HTML::Template;
-
-# FIXME - This script uses a bunch of functions that appear in both
-# C4::Acquisitions and C4::Biblio. But I gather that the latter are
-# preferred. So should this script "use C4::Biblio;" ?
 
 my $input       = new CGI;
 my $bibnum      = checkinp($input->param('biblionumber'));
 my $biblio = {
-    biblionumber => $bibnum,
-    title        => $input->param('title')?$input->param('title'):"",
-    author       => $input->param('author')?$input->param('author'):"",
-    abstract     => $input->param('abstract')?$input->param('abstract'):"",
-    copyright    => $input->param('copyrightdate')?$input->param('copyrightdate'):"",
-    seriestitle  => $input->param('seriestitle')?$input->param('seriestitle'):"",
-    serial       => $input->param('serial')?$input->param('serial'):"",
-    unititle     => $input->param('unititle')?$input->param('unititle'):"",
-    notes        => $input->param('notes')?$input->param('notes'):"",
+	biblionumber => $bibnum,
+	title        => $input->param('title')?$input->param('title'):"",
+	author       => $input->param('author')?$input->param('author'):"",
+	abstract     => $input->param('abstract')?$input->param('abstract'):"",
+	copyrightdate    => $input->param('copyrightdate')?$input->param('copyrightdate'):"",
+	seriestitle  => $input->param('seriestitle')?$input->param('seriestitle'):"",
+	serial       => $input->param('serial')?$input->param('serial'):"",
+	unititle     => $input->param('unititle')?$input->param('unititle'):"",
+	notes        => $input->param('notes')?$input->param('notes'):"",
 }; # my $biblio
 my $subtitle    = checkinp($input->param('subtitle'));
 my $subject     = checkinp($input->param('subject'));
@@ -61,32 +63,38 @@ $subject = uc($subject);
 $count   = @sub;
 
 for (my $i = 0; $i < $count; $i++) {
-    $sub[$i] =~ s/ +$//;
+	$sub[$i] =~ s/ +$//;
 } # for
 
 $error = &modsubject($bibnum,$force,@sub);
 
 if ($error ne ''){
-	my $template = gettemplate("updatebiblio.tmpl");
+		my ($template, $loggedinuser, $cookie) = get_template_and_user({
+			template_name   => "updatebiblio.tmpl",
+			query           => $input,
+			type            => "intranet",
+			flagsrequired   => {catalogue => 1},
+		});
 
-    my @subs=split('\n',$error);
-    my @names=$input->param;
-    my $count=@names;
-	my @dataloop;
-    for (my $i=0;$i<$count;$i++) {
-	if ($names[$i] ne 'Force') {
-		my %line;
-	    $line{'value'}=$input->param("$names[$i]");
-		$line{'name'}=$names[$i];
-		push(@dataloop, \%line);
-	} # if
-    } # for
-    template->param(substring =>$subs[0]);
-    template->param(error =>$error);
-    template->param(dataloop => \@dataloop);
-	print "Content-Type: text/html\n\n", $template->output;
+
+	my @subs=split('\n',$error);
+	my @names=$input->param;
+	my $count=@names;
+		my @dataloop;
+	for (my $i=0;$i<$count;$i++) {
+		if ($names[$i] ne 'Force') {
+			my %line;
+		$line{'value'}=$input->param("$names[$i]");
+			$line{'name'}=$names[$i];
+			push(@dataloop, \%line);
+		} # if
+	} # for
+	$template->param(substring =>$subs[0],
+						error =>$error,
+						dataloop => \@dataloop);
+		print "Content-Type: text/html\n\n", $template->output;
 } else {
-    print $input->redirect("detail.pl?type=intra&bib=$bibnum");
+	print $input->redirect("detail.pl?type=intra&bib=$bibnum");
 } # else
 
 sub checkinp{

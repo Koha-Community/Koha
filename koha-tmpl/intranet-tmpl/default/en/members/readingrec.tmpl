@@ -1,38 +1,35 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
+<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Full output</a>
+<br/><br/>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<TD bgcolor="white" colspan=4 >
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Full output</a>
-	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TITLE</b></a>
 	</TD>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>AUTHOR</b></a>
 	</TD>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=<TMPL_VAR name="limit">"><b>DATE</b></a>
 	</TD>
-	<TD  bgcolor="white">
+	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<b>Volume</b>
 	</TD>
 </TR>
 <TMPL_LOOP name="loop_reading">
 <TR VALIGN=TOP>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="title">
+ 		<TMPL_VAR name="title">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="author">
+ 		<TMPL_VAR name="author">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="returndate">
+		<TMPL_VAR name="returndate">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="volumeddesc">
+		<TMPL_VAR name="volumeddesc">&nbsp;
 	</TD>
 </TMPL_LOOP>
 </TABLE>

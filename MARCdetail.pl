@@ -166,6 +166,7 @@ foreach my $subfield_code (keys(%witness)) {
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
-						bibid => $bibid);
+						bibid => $bibid,
+						biblionumber => $biblionumber);
 output_html_with_http_headers $query, $cookie, $template->output;
 

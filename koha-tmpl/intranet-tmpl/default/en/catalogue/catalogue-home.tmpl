@@ -14,82 +14,104 @@
 
 <FONT SIZE=6><em>Catalogue Search</em></FONT>
 
-<div align=right>
-<input type="hidden" name="type" value="intra">
-<INPUT TYPE="image"  alt="Start Search" src="/images/ok-start-search.gif"  WIDTH=187  HEIGHT=42 BORDER=0 > 
-</div>
 <CENTER>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
-
-<TR VALIGN=TOP>
-<TD>Barcode</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td><td> <b> &nbsp; &nbsp; OR</b></TD></TR>
-<!-- <TR VALIGN=TOP>
-<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
- -->
-<TR VALIGN=TOP>
-<TD colspan=2 > &nbsp;</td></TR>
-
-
-<TR VALIGN=TOP>
-<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><b>HELP</b><br>
-<b>Searching:</b>Using more fields for your search (eg Keyword + author + class) will slow it down.<p>
-<b><a href=/cgi-bin/koha/maint/catmaintain.pl target=window0>Catalogue
-Maintenance:</a></b> To  add a <b>new</b> biblio or item go to 
-<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>.<p>
-To <b>request, modify or delete</b> a biblio or item  first search for it here.
-   </TR>
+	<TR VALIGN=TOP>
+		<TD>Barcode</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
+		<td><b> &nbsp; &nbsp; OR</b></TD></TR>
+	<!-- <TR VALIGN=TOP>
+	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+	-->
+	<TR VALIGN=TOP>
+		<TD colspan=2 > &nbsp;</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2>
+			<b>HELP</b><br>
+			<b>Searching:</b>Using more fields for your search (eg Keyword + author + class) will slow it down.<p>
+			<b><a href=/cgi-bin/koha/maint/catmaintain.pl target=window0>Catalogue
+			Maintenance:</a></b> To  add a <b>new</b> biblio or item go to
+			<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>.<p>
+			To <b>request, modify or delete</b> a biblio or item  first search for it here.
+		</td>
+	</TR>
 </table>
 
 
 
-<TABLE >
-<TR VALIGN=TOP>
-<TD>Keywords</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD></TR>
-<TR VALIGN=TOP>
-<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25"
-NAME="title"></TD><td><input type=radio name=ttype value=normal checked>Normal<input
-type=radio name=ttype value=exact>Exact</td></TR>
-<TR VALIGN=TOP> 
-<TD>Author</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
-<TR VALIGN=TOP> 
-<TD>Illustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+<TABLE border=0>
+	<TR VALIGN=TOP>
+		<TD>Keywords</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Title</TD>
+		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
+		<td rowspan=2>
+			<input type=radio name=ttype value=normal checked>Normal<br/>
+			<input type=radio name=ttype value=exact>Exact
+		</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Author</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Illustrator</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
+	</TR>
+		<TR VALIGN=TOP>
+		<TD>Dewey</TD><TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
+	</TR>
 
-<TR VALIGN=TOP> 
-<TD>Dewey</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD></TR>
+	<TR VALIGN=TOP>
+	<TD>Class</TD>
+		<td>
+			<select name="class" size="1">
+			<option value="">Any
+			<TMPL_VAR name="classlist">
+			</select>
+		</td>
+	</tr>
+	<!-- <TR VALIGN=TOP>
+	<td>Branch</td><td><select name=branch>
+	<option value="F">Foxton
+	</select>
+	</td></tr> -->
 
-<TR VALIGN=TOP>
-<TD>Class</TD>
-  <td>
-  <select name="class" size="1">
-  <option value="">Any
-  <TMPL_VAR name="classlist">
-  </select>
-  </td>
-</tr>
-<!-- <TR VALIGN=TOP>
-<td>Branch</td><td><select name=branch>
-<option value="F">Foxton
-</select>
-</td></tr> -->
+	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+	-->
+	<TR VALIGN=TOP>
+	<TD><b>OR</b></TD>
+	</TR>
 
-<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
- -->
-<TR VALIGN=TOP>
-<TD><b>OR</b></TD></TR>
-
-
-<TR VALIGN=TOP>
-<TD>Subject</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
-<TD></TD> <TD><INPUT TYPE="reset"  VALUE= "Clear Fields">
-
-
-
-</TD></TR></TABLE>
-</FORM>
-<p>
-<a href=/cgi-bin/koha/shelves.pl>Virtual Bookshelves</a>
-</CENTER>
-
+	<TR VALIGN=TOP>
+		<TD>Subject</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+	</TR>
+	<tr>
+		<TD colspan=3>
+			<table width="100%" cellpadding=0 cellspacing=0>
+				<tr align="center">
+					<td>
+						<input type="hidden" name="type" value="intra">
+						<INPUT TYPE="image"  alt="Start Search" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" BORDER=0 >
+					</td>
+					<td>
+						<INPUT TYPE="reset"  VALUE= "Clear">
+					</td>
+					<td>
+						<a href=/cgi-bin/koha/shelves.pl>Virtual Bookshelves</a>
+					</td>
+				</tr>
+			</table>
+		</TD>
+	</TR>
+</TABLE>
+	</FORM>
+	<p>
+	</CENTER>
 <!--#include virtual="/includes/cat-bottom.inc" -->
 

@@ -84,18 +84,20 @@ my $count=1;
 # now to get the items into a hash we can use and whack that thru
 
 
-$template->param(startfrom => $startfrom+1);
-$template->param(endat => $startfrom+20);
-$template->param(numrecords => $count);
 my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
 my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
-$template->param(nextstartfrom => $nextstartfrom);
-$template->param(prevstartfrom => $prevstartfrom);
-$template->param(BIBLIO_RESULTS => $resultsarray);
-$template->param(ITEM_RESULTS => $itemsarray);
-$template->param(WEB_RESULTS => $webarray);
-$template->param(SITE_RESULTS => $sitearray);
-$template->param(loggedinuser => $loggedinuser);
+$template->param(startfrom => $startfrom+1,
+						endat => $startfrom+20,
+						numrecords => $count,
+						nextstartfrom => $nextstartfrom,
+						prevstartfrom => $prevstartfrom,
+						BIBLIO_RESULTS => $resultsarray,
+						ITEM_RESULTS => $itemsarray,
+						WEB_RESULTS => $webarray,
+						SITE_RESULTS => $sitearray,
+						loggedinuser => $loggedinuser,
+						biblionumber => $biblionumber);
+
 output_html_with_http_headers $query, $cookie, $template->output;
 
 

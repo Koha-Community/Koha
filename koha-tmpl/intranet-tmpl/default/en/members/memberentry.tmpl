@@ -10,7 +10,7 @@
   <input type=hidden name=type value="borrowers">
   <input type=hidden name=borrowernumber value="<TMPL_VAR NAME=member>">
   <input type=hidden name=updtype value="<TMPL_VAR NAME=updtype>">
-  
+
   <table border=0 cellspacing=0 cellpadding=5 >
     
     <tr valign=top>
@@ -19,8 +19,8 @@
     </tr>
     
     <tr valign=top>
-      <td COLSPAN=3 background="/images/background-mem.gif"><B>MEMBER PERSONAL DETAILS</b></td>
-      <td COLSPAN=2 ALIGN=RIGHT background="/images/background-mem.gif">* 
+      <td COLSPAN=3 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>MEMBER PERSONAL DETAILS</b></td>
+      <td COLSPAN=2 ALIGN=RIGHT background="<TMPL_VAR name="themelang">/images/background-mem.gif">* 
         <input type="radio" name="sex" value="F"<TMPL_IF NAME=female> checked</TMPL_IF>>F
         <input type="radio" name="sex" value="M"<TMPL_UNLESS NAME=female> checked</TMPL_UNLESS>> M
         &nbsp; &nbsp;  <B>Date of Birth</B> (dd/mm/yy)
@@ -50,8 +50,6 @@
       <td><FONT SIZE=2>Surname*</FONT></td>
       <td><FONT SIZE=2>Prefered Name</FONT></td>
     </tr>
-    
-    <tr><td>&nbsp; </TD></TR>
 
     <tr valign=top bgcolor=white>
       <td colspan=2>
@@ -67,7 +65,7 @@
         <td colspan=2>&nbsp;</td>
       </TMPL_IF>
       <td><TMPL_VAR NAME=catcodepopup></td>
-    </tr>																																													
+    </tr>
 
     <tr valign=top bgcolor=white>
       <TMPL_IF NAME=ethcatpopup><TMPL_VAR NAME=ethcatpopup>
@@ -79,10 +77,8 @@
       <td><FONT SIZE=2>Membership Category*</FONT></td>
     </tr>
 
-    <tr><td>&nbsp; </TD></TR>
-    
     <tr valign=top bgcolor="99cc33" >
-      <td COLSPAN=5 background="/images/background-mem.gif"><B>MEMBER ADDRESS</b></td>
+      <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>MEMBER ADDRESS</b></td>
     </tr>
 
     <tr valign=top bgcolor=white>
@@ -96,14 +92,12 @@
         </SELECT>
       </td>
     </tr>
-    
+
     <tr valign=top bgcolor=white>
       <td  COLSPAN=3><FONT SIZE=2>Postal Address*</FONT></td>
       <td><FONT SIZE=2>Town*</FONT></td>
       <td><FONT SIZE=2>Area</FONT></td>
     </tr>
-
-    <tr><td>&nbsp; </TD></TR>
 
     <tr valign=top bgcolor=white>
       <td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
@@ -115,19 +109,17 @@
       <td><FONT SIZE=2>Town</FONT></td>
     </tr>
 
-    <tr><td>&nbsp; </TD></TR>
-
     <tr valign=top bgcolor="99cc33">
-      <td COLSPAN=5 background="/images/background-mem.gif"><B>MEMBER CONTACT DETAILS</b></td>
+      <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>MEMBER CONTACT DETAILS</b></td>
     </tr>
-    
+
     <tr valign=top bgcolor=white>
       <td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phone>"></td>
       <td><input type=text name=phoneday size=20 value="<TMPL_VAR NAME=phoneday>"></td>
       <td><input type=text name=faxnumber size=20 value="<TMPL_VAR NAME=faxnumber>"></td>
       <td><input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>"></td>
     </tr>
-    
+
     <tr valign=top bgcolor=white>
       <td COLSPAN=2 ><FONT SIZE=2>Phone (Home)</td>
       <td><FONT SIZE=2>Phone (day)</td>
@@ -135,12 +127,10 @@
       <td><FONT SIZE=2>Email</td>
     </tr>
 
-    <tr><td>&nbsp; </TD></TR>
-
     <tr valign=top bgcolor="99cc33">
-      <td  COLSPAN=5  background="/images/background-mem.gif"><B>ALTERNATE CONTACT DETAILS</b></td>
+      <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>ALTERNATE CONTACT DETAILS</b></td>
     </tr>
-    
+
     <tr valign=top bgcolor=white>
       <td COLSPAN=3 ><input type=text name=contactname size=40 value="<TMPL_VAR NAME=contactname>"></td>
       <td><input type=text name=altphone size=20 value="<TMPL_VAR NAME=altphone>"></td>
@@ -152,33 +142,29 @@
         </select>
       </td>
     </tr>
-    
+
     <tr valign=top bgcolor=white>
       <td   COLSPAN=3 ><FONT SIZE=2>Name*</td>
       <td><FONT SIZE=2>Phone</td>
       <td><FONT SIZE=2>Relationship*</td>
     </tr>
-    
-    <tr><td>&nbsp; </TD></TR>
-    
+
     <tr valign=top bgcolor=white>
       <td><FONT SIZE=2>Notes</font></td>
       <td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=altnotes></textarea></td>
     </tr>
-    
+
     <tr><td>&nbsp; </TD></TR>
-    
+
     <tr valign=top bgcolor="99cc33">
-      <td  COLSPAN=5  background="/images/background-mem.gif"><B>LIBRARY USE</B></td>
+      <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>LIBRARY USE</B></td>
     </tr>
-    
+
     <tr valign=top >
       <td><FONT SIZE=2>Notes</font></td>
       <td COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=borrowernotes></textarea></td>
     </tr>
 
-    <tr><td>&nbsp; </TD></TR>
-    
     <TMPL_IF NAME=modify>
       <tr><td COLSPAN=5><Font size=2>FLAGS</font></td></tr>                                                                                                        
       <TMPL_LOOP NAME=flagloop>
@@ -192,11 +178,8 @@
     </TMPL_IF>
     
     <tr>
-      <TMPL_UNLESS NAME=modify><!-- Don't know what's this unless for -->
-        <td></td><td><input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
-      <TMPL_ELSE>
-        <td></td><td><input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
-      </TMPL_UNLESS>
+        <td></td>
+	   <td><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" ALT="Add New Member" border=0 ></td>
     </tr>
   </table>
 </form>																																																													

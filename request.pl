@@ -24,7 +24,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-#use DBI;
 use C4::Search;
 use C4::Output;
 use C4::Auth;
@@ -33,7 +32,7 @@ use C4::Biblio;
 use C4::Koha;
 use C4::Circulation::Circ2;
 use HTML::Template;
-
+use C4::Catalogue;
 use CGI;
 my $input = new CGI;
 
@@ -172,12 +171,22 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 	push(@reserveloop,\%reserve);
 }
 
+my @branches;
+my @select_branch;
+my %select_branches;
+my ($count2,@branches)=branches();
+for (my $i=0;$i<$count2;$i++){
+	push @select_branch, $branches[$i]->{'branchcode'};#
+	$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+}
+my $CGIbranch=CGI::scrolling_list( -name     => 'pickup',
+			-values   => \@select_branch,
+			-labels   => \%select_branches,
+			-size     => 1,
+			-multiple => 0 );
+
 #get the time for the form name...
 my $time = time();
-
-
-
-
 
 #setup colours
 my ($template, $borrowernumber, $cookie)
@@ -188,10 +197,12 @@ my ($template, $borrowernumber, $cookie)
                             flagsrequired => {parameters => 1},
                          });
 $template->param(	optionloop =>\@optionloop,
-								branchloop => \@branchloop,
+								CGIbranch => $CGIbranch,
 								reserveloop => \@reserveloop,
 								'time' => $time,
 								bibitemloop => \@bibitemloop,
-								date => $date);
+								date => $date,
+								bib => $bib,
+								title =>$dat->{title});
 # printout the page
 print $input->header(-expires=>'now'), $template->output;

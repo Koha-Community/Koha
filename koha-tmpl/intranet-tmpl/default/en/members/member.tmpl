@@ -12,14 +12,14 @@
 You Searched for <TMPL_VAR NAME=member><p>
 <table>
   <tr bgcolor="#99cc33">
-    <td background="/images/background-mem.gif"><b>Card</b></td>
-    <td background="/images/background-mem.gif"><b>Surname</b></td>
-    <td background="/images/background-mem.gif"><b>Firstname</b></td>
-    <td background="/images/background-mem.gif"><b>Category</b></td>
-    <td background="/images/background-mem.gif"><b>Address</b></td>
-    <td background="/images/background-mem.gif"><b>OD/Issues</b></td>
-    <td background="/images/background-mem.gif"><b>Charges</b></td>
-    <td background="/images/background-mem.gif"><b>Notes</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Card</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Surname</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Firstname</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Category</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Address</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>OD/Issues</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Charges</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Notes</b></td>
   </tr>
   
   <TMPL_LOOP NAME=resultsloop>
@@ -41,12 +41,8 @@ You Searched for <TMPL_VAR NAME=member><p>
 </table>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" BORDER=0 ></a><br>
+<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png"  ALT="Add New Member" BORDER=0 ></a>
 <INPUT TYPE="radio" name="chooseform" value="adult" checked>Adult
 <INPUT TYPE="radio" name="chooseform" value="organisation" >Organisation
 </form>
-
 <TMPL_INCLUDE NAME="members-bottom.inc">
-
-</body>
-</HTML>
