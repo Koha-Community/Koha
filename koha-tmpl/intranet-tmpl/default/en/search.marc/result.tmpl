@@ -34,10 +34,10 @@
 	<div id="resultlist">
 		<table>
 			<tr>
-			<th class="catalogue">Summary</th>
-			<th class="catalogue">Item Count</th>
-			<th class="catalogue">Location</th>
-			<th class="catalogue">&nbsp;</th>
+				<th class="catalogue">Summary</th>
+				<th class="catalogue">Item Count</th>
+				<th class="catalogue">Location</th>
+				<th class="catalogue">&nbsp;</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 			<tr>
@@ -62,7 +62,7 @@
 				</td>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_UNLESS name="norequests" -->
-						<a class="transparent" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a>
+						<a class="button catalogue" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a>
 					<!-- TMPL_ELSE -->
 						Not Reservable
 					<!-- /TMPL_UNLESS -->
