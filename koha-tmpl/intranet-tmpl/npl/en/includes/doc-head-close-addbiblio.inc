@@ -8,9 +8,8 @@
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
 function openWindow(targeturl, windowname) {
-// newwin =
-// window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
-	location.href = targeturl;
+	newwin =
+	window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 }
  
  	var newwin;
