@@ -884,7 +884,7 @@ sub MARCkoha2marcBiblio {
     my ( $dbh, $biblionumber, $biblioitemnumber ) = @_;
     my $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
+"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
     my $record = MARC::Record->new();
 
@@ -901,7 +901,7 @@ sub MARCkoha2marcBiblio {
         foreach $code ( keys %$row ) {
             if ( $row->{$code} ) {
                 &MARCkoha2marcOnefield( $sth, $record, "biblio." . $code,
-                    $row->{$code} );
+                    $row->{$code}, '');
             }
         }
     }
@@ -923,7 +923,7 @@ sub MARCkoha2marcBiblio {
         foreach $code ( keys %$row ) {
             if ( $row->{$code} ) {
                 &MARCkoha2marcOnefield( $sth, $record, "biblioitems." . $code,
-                    $row->{$code} );
+                    $row->{$code},'' );
             }
         }
     }
@@ -935,14 +935,14 @@ sub MARCkoha2marcBiblio {
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
         &MARCkoha2marcOnefield( $sth, $record, "additionalauthors.author",
-            $row->{'author'} );
+            $row->{'author'},'' );
     }
     my $sth2 =
       $dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
         &MARCkoha2marcOnefield( $sth, $record, "bibliosubject.subject",
-            $row->{'subject'} );
+            $row->{'subject'},'' );
     }
     my $sth2 =
       $dbh->prepare(
@@ -950,7 +950,7 @@ sub MARCkoha2marcBiblio {
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
         &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.title",
-            $row->{'subtitle'} );
+            $row->{'subtitle'},'' );
     }
     return $record;
 }
@@ -963,7 +963,7 @@ sub MARCkoha2marcItem {
     #    my $dbh=&C4Connect;
     my $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
+"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
     my $record = MARC::Record->new();
 
@@ -986,7 +986,7 @@ sub MARCkoha2marcItem {
         foreach $code ( keys %$row ) {
             if ( $row->{$code} ) {
                 &MARCkoha2marcOnefield( $sth, $record, "items." . $code,
-                    $row->{$code} );
+                    $row->{$code},'' );
             }
         }
     }
@@ -999,19 +999,19 @@ sub MARCkoha2marcSubtitle {
     my ( $dbh, $bibnum, $subtitle ) = @_;
     my $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
+"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
     my $record = MARC::Record->new();
     &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
-        $subtitle );
+        $subtitle,'' );
     return $record;
 }
 
 sub MARCkoha2marcOnefield {
-    my ( $sth, $record, $kohafieldname, $value ) = @_;
+    my ( $sth, $record, $kohafieldname, $value,$frameworkcode ) = @_;
     my $tagfield;
     my $tagsubfield;
-    $sth->execute($kohafieldname);
+    $sth->execute($frameworkcode,$kohafieldname);
     if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
         if ( $record->field($tagfield) ) {
             my $tag = $record->field($tagfield);
@@ -1089,7 +1089,8 @@ sub MARCmarc2koha {
 	$sth2=$dbh->prepare("SHOW COLUMNS from items");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
-		$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
+# 	warn "X";
+		$result=&MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
 	}
 	# additional authors : specific
 	$result = &MARCmarc2kohaOneField($sth,"bibliosubtitle","subtitle",$record,$result,$frameworkcode);
@@ -1119,12 +1120,11 @@ sub MARCmarc2kohaOneField {
 
 # FIXME ? if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
     my ( $sth, $kohatable, $kohafield, $record, $result,$frameworkcode ) = @_;
-
     #    warn "kohatable / $kohafield / $result / ";
     my $res = "";
     my $tagfield;
     my $subfield;
-    $sth->execute( $frameworkcode,$kohatable . "." . $kohafield );
+    $sth->execute($frameworkcode, $kohatable . "." . $kohafield );
     ( $tagfield, $subfield ) = $sth->fetchrow;
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->subfield($subfield) ) {
@@ -1136,6 +1136,7 @@ sub MARCmarc2kohaOneField {
             }
         }
     }
+# 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
     return $result;
 }
 
@@ -1330,9 +1331,7 @@ sub NEWnewitem {
 
     # add item in old-DB
 	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
-	
     my $item = &MARCmarc2koha( $dbh, $record,$frameworkcode );
-
     # needs old biblionumber and biblioitemnumber
     $item->{'biblionumber'} =
       MARCfind_oldbiblionumber_from_MARCbibid( $dbh, $bibid );
@@ -1346,9 +1345,9 @@ sub NEWnewitem {
     # add itemnumber to MARC::Record before adding the item.
     my $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
+"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
-    &MARCkoha2marcOnefield( $sth, $record, "items.itemnumber", $itemnumber );
+    &MARCkoha2marcOnefield( $sth, $record, "items.itemnumber", $itemnumber,$frameworkcode );
 
     # add the item
     my $bib = &MARCadditem( $dbh, $record, $item->{'biblionumber'} );
@@ -2534,6 +2533,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.101  2004/08/18 16:01:37  tipaul
+# modifs to support frameworkcodes
+#
 # Revision 1.100  2004/08/13 16:37:25  tipaul
 # adding frameworkcode to API in some subs
 #
