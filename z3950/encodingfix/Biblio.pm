@@ -1202,7 +1202,7 @@ sub OLDnewbiblio {
   if ($biblio->{'seriestitle'}) { $series = 1 };
   $sth->finish;
   $sth = $dbh->prepare("insert into biblio set biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?");
-  $sth->execute($bibnum,$biblio->{'title'},$biblio->{'author'},$biblio->{'copyrightdate'},$series,$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'});
+  $sth->execute($bibnum,$biblio->{'title'},$biblio->{'author'},$biblio->{'copyrightdate'},$biblio->{'serial'},$biblio->{'seriestitle'},$biblio->{'notes'},$biblio->{'abstract'});
 
   $sth->finish;
 #  $dbh->disconnect;
@@ -2168,6 +2168,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.2  2004/07/30 14:21:27  doxulting
+# *** empty log message ***
+#
 # Revision 1.1  2004/05/02 18:06:58  kb2qzv
 # Replacement file to be used as a temporary fix to get properly formatted records in UTF-8 when importing records from z39.50 server with win1250 (ISO 6937/2) charset.
 #
