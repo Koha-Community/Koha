@@ -19,7 +19,7 @@ use strict;
 use DBI;
 
 # Koha modules
-use C4::Context;
+use C4::Context("/etc/koha.conf.tmp");
 	# FIXME - /etc/koha.conf might not exist, so shouldn't use
 	# C4::Context.
 
@@ -214,7 +214,8 @@ my %requirefields=(
 	aqbooksellers=>{'invoicedisc' =>'float(6,4)',
 						'nocalc' => 'int(11)'},
 	borrowers=>{'userid' => 'char(30)',
-					'password' => 'char(30)',},
+					'password' => 'char(30)',
+					'flags' => 'int(11)'},
 	aqorders=>{'budgetdate' => 'date'},
 	#added so that reference items are not available for reserves...
 	itemtypes=>{'notforloan' => 'smallint(6)'},
@@ -257,10 +258,13 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
     	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple', explanation => 'normal or simple : will use acquisition system found in directory acqui.simple or acquisition' },
     	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'metric', explanation => 'metric or us' },
-    	{ uniquefieldrequired => 'variable', variable => 'template', value => 'metric', explanation => 'template default name' },
-    	{ uniquefieldrequired => 'variable', variable => 'autoBarcode', value => 'metric', explanation => '1 or else. If 1, Barcode is auto-calculated' },
-    	{ uniquefieldrequired => 'variable', variable => 'insecure', value => 'metric', explanation => 'if YES, no auth at all is needed. Be careful if you set this to yes !' },
+    	{ uniquefieldrequired => 'variable', variable => 'template', value => "default', explanation => 'template default name' },
+    	{ uniquefieldrequired => 'variable', variable => 'autoBarcode', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
+    	{ uniquefieldrequired => 'variable', variable => 'insecure', value => 'NO', explanation => 'if YES, no auth at all is needed. Be careful if you set this to yes !' },
     	{ uniquefieldrequired => 'variable', variable => 'authoritysep', value => '--', explanation => 'the separator used in authority/thesaurus. Usually --' },
+    	{ uniquefieldrequired => 'variable', variable => 'opaclanguages', value => 'en', explanation => 'languages' },
+    	{ uniquefieldrequired => 'variable', variable => 'opacthemes', value => 'default', explanation => 'theme' },
+    	{ uniquefieldrequired => 'variable', variable => 'timeout', value => '12000000', explanation => 'login timeout' },
     ],
 
 );
@@ -526,6 +530,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.29  2003/01/06 11:14:11  tipaul
+# last bugfixes before 1.3.3 : systempref table correctly filled
+#
 # Revision 1.28  2002/12/10 13:27:47  tipaul
 # bugfixes (davide mails in koha-dev)
 #
