@@ -88,14 +88,14 @@ sub findguarantees{
   guarantor='$bornum'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
+
   my @dat;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $dat[$i]=$data;
-    $i++;
+  while (my $data = $sth->fetchrow_hashref)
+  {
+    push @dat, $data;
   }
   $sth->finish;
-  return($i,\@dat);
+  return (scalar(@dat), \@dat);
 }
 
 =item findguarantor
@@ -141,6 +141,9 @@ dump of the C<systempreferences> database table.
 
 =cut
 #'
+# FIXME - This function is no longer used; in cases where you just
+# care about one preference (which is true for most scripts), use
+# C4::Context->preference.
 sub systemprefs {
     my %systemprefs;
     my $dbh = C4::Context->dbh;
@@ -161,6 +164,9 @@ Allocates a new, unused borrower number, and returns it.
 
 =cut
 #'
+# FIXME - This is identical to C4::Circulation::Borrower::NewBorrowerNumber.
+# Pick one and stick with it. Preferably use the other one. This function
+# doesn't belong in C4::Search.
 sub NewBorrowerNumber {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
