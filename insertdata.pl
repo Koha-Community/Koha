@@ -49,7 +49,6 @@ my $query="Select * from borrowers where borrowernumber=$data{'borrowernumber'}"
 my $sth=$dbh->prepare($query);
 $sth->execute;
 if (my $data=$sth->fetchrow_hashref){
-<<<<<<< insertdata.pl
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
   $data{'joining'}=format_date_in_iso($data{'joining'});
   $data{'expiry'}=format_date_in_iso($data{'expiry'});
