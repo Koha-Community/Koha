@@ -12,6 +12,7 @@ use C4::Output;
 my $input = new CGI;
 print $input->header;
 my $type=$input->param('type');
+(-e "opac") && ($type='opac');
 print startpage();
 print startmenu($type);
 my $blah;

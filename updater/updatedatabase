@@ -21,7 +21,7 @@ use DBI;
 # Koha modules
 use C4::Database;
 
-my $debug=0;
+my $debug=1;
 
 my (
 	$sth, $sti,
@@ -42,6 +42,11 @@ my %requiretables=(
     shelfcontents=>"( shelfnumber int not null, 
 	itemnumber int not null, 
 	flags int)",
+    userflags=>"( bit int not null,
+	flag char(30),
+	flagdesc char(255),
+	defaulton int
+    )",
     bookshelf=>"( shelfnumber int auto_increment primary key, 
 	shelfname char(255))",
     z3950queue=>"( id int auto_increment primary key, 
@@ -109,7 +114,8 @@ my %requirefields=(
     aqbooksellers=>{'invoicedisc' =>'float(6,4)',
     		     'nocalc' => 'int(11)'},
     borrowers=>{'userid' => 'char(30)',
-    		'password' => 'char(30)',},
+    		'password' => 'char(30)',
+		'flags' => 'int',},
     aqorders=>{'budgetdate' => 'date'},		   
 );
 
@@ -118,6 +124,33 @@ my %defaultprefs=(
     'autoMemberNum'=> '1',
     'acquisitions'=> 'simple',
 );
+
+
+
+
+# The uniquefieldrequired hash entry is used to determine which (if any) fields
+# must not exist in the table for this row to be inserted.
+
+my %tabledata=(
+    userflags => [ 
+    	{ uniquefieldrequired => 'bit', bit => 0, flag => 'superlibrarian', flagdesc => 'Access to all librarian functions', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 1, flag => 'circulate', flagdesc => 'Circulate books', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 2, flag => 'catalogue', flagdesc => 'Catalogue books', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 3, flag => 'parameters', flagdesc => 'Set Koha system paramters', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 4, flag => 'borrowers', flagdesc => 'Add or modify borrowers', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 5, flag => 'permissions', flagdesc => 'Set user permissions', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 6, flag => 'reserveforothers', flagdesc => 'Reserve books for patrons', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 7, flag => 'borrow', flagdesc => 'Borrow books', defaulton => 1 },
+    	{ uniquefieldrequired => 'bit', bit => 8, flag => 'reserveforself', flagdesc => 'Reserve books for self', defaulton => 0 },
+    ],
+    systempreferences => [
+    	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1' },
+    	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple' },
+    ],
+
+);
+
+
 
 #-------------------
 # Initialize
@@ -281,23 +314,37 @@ unless ($branchcategories{'codedescription'} eq 'text') {
 }
 
 
-# Populate systempreferences if it is empty
-
-foreach $prefitem ( keys %defaultprefs ) {
-    $sth=$dbh->prepare("select value 
-	from systempreferences 
-	where variable=?");
-    $sth->execute($prefitem);
-    unless ($sth->rows) {
-	print "Adding system preference item $prefitem with value " .
-        	$defaultprefs{$prefitem} ."\n";
-        $sti=$dbh->prepare("
-	  insert into systempreferences (variable, value) 
-	  values (?,?)");
-        $sti->execute($prefitem,$defaultprefs{$prefitem});
-    } # unless
-} # foreach
-
+# Populate tables with required data
+ 
+foreach my $table (keys %tabledata) {
+    print "Checking for data required in table $table...\n";
+    my $tablerows=$tabledata{$table};
+    foreach my $row (@$tablerows) {
+	my $uniquefieldrequired=$row->{uniquefieldrequired};
+	my $uniquevalue=$row->{$uniquefieldrequired};
+	my $sth=$dbh->prepare("select $uniquefieldrequired from $table where $uniquefieldrequired=?");
+	$sth->execute($uniquevalue);
+	unless ($sth->rows) {
+	    print "Adding row to $table: ";
+	    my @values;
+	    my $fieldlist;
+	    my $placeholders;
+	    foreach my $field (keys %$row) {
+		(next) if ($field eq 'uniquefieldrequired');
+		my $value=$row->{$field};
+		push @values, $value;
+		print "  $field => $value";
+		$fieldlist.="$field,";
+		$placeholders.="?,";
+	    }
+	    print "\n";
+	    $fieldlist=~s/,$//;
+	    $placeholders=~s/,$//;
+	    my $sth=$dbh->prepare("insert into $table ($fieldlist) values ($placeholders)");
+	    $sth->execute(@values);
+	}
+    }
+}
 
 $sth->finish;
 $dbh->disconnect;
@@ -305,6 +352,12 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.19  2002/07/26 18:23:54  tonnesen
+# Added flags to borrowers table and userflags table.  Also, OPAC scripts now
+# check for the existence of a file named 'opac' in the directory they are run
+# from and set the $type variable to 'opac' if it exists.  No longer have to
+# "trust" that the type query parameter is correct.
+#
 # Revision 1.4.2.18  2002/07/20 22:28:13  rangi
 # Fixing missing column (budgetdate) in aqorders
 # re bug 69

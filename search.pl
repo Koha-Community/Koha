@@ -10,6 +10,8 @@ use C4::Output; # no contains picktemplate
   
 my $query=new CGI;
 my $type=$query->param('type');
+(-e "opac") && ($type='opac');
+
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 

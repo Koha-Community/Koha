@@ -10,6 +10,7 @@ use C4::Auth;
  
 my $query=new CGI;
 my $type=$query->param('type');
+(-e "opac") && ($type='opac');
 ($type) || ($type='intra');
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 

@@ -946,6 +946,7 @@ sub installfiles {
     system("cp -R opac-html/* $::opacdir/htdocs/");
     print getmessage('CopyingFiles', ['opac-cgi', "$::opacdir/cgi-bin" ]);
     system("cp -R opac-cgi/* $::opacdir/cgi-bin/");
+    system("touch $::opacdir/cgi-bin/opac");
 
     system("chown -R root.$::httpduser $::opacdir");
     system("chown -R root.$::httpduser $::intranetdir");
