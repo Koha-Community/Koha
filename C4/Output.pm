@@ -56,10 +56,10 @@ printable string.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&startpage &endpage 
+@EXPORT = qw(&startpage &endpage
 	     &mktablehdr &mktableft &mktablerow &mklink
-	     &startmenu &endmenu &mkheadr 
-	     &center &endcenter 
+	     &startmenu &endmenu &mkheadr
+	     &center &endcenter
 	     &mkform &mkform2 &bold
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
@@ -152,7 +152,7 @@ sub picktemplate {
     #(next) unless (/\.tmpl$/);
     (next) unless (-e "$includes/templates/$_/$base");
     $templates->{$_}=1;
-  }							    
+  }
   my $sth=$dbh->prepare("select value from systempreferences where
   variable='template'");
   $sth->execute;
@@ -164,9 +164,74 @@ sub picktemplate {
   } else {
     return 'default';
   }
-  
+
 }
-				    
+
+=item pathtotemplate
+
+  %values = &pathtotemplate(template => $template,
+	theme => $themename,
+	language => $language,
+	type => $ptype,
+	path => $includedir);
+
+Finds a directory containing the desired template. The C<template>
+argument specifies the template you're looking for (this should be the
+name of the script you're using to generate an HTML page, without the
+C<.pl> extension). Only the C<template> argument is required; the
+others are optional.
+
+C<theme> specifies the name of the theme to use. This will be used
+only if it is allowed by the C<allowthemeoverride> system preference
+option (in the C<systempreferences> table of the Koha database).
+
+C<language> specifies the desired language. If not specified,
+C<&pathtotemplate> will use the list of acceptable languages specified
+by the browser, then C<all>, and finally C<en> as fallback options.
+
+C<type> may be C<intranet>, C<opac>, C<none>, or some other value.
+C<intranet> and C<opac> specify that you want a template for the
+internal web site or the public OPAC, respectively. C<none> specifies
+that the template you're looking for is at the top level of one of the
+include directories. Any other value is taken as-is, as a subdirectory
+of one of the include directories.
+
+C<path> specifies an include directory.
+
+C<&pathtotemplate> searches first in the directory given by the
+C<path> argument, if any, then in the directories given by the
+C<templatedirectory> and C<includes> directives in F</etc/koha.conf>,
+in that order.
+
+C<&pathtotemplate> returns a hash with the following keys:
+
+=over 4
+
+=item C<path>
+
+The full pathname to the desired template.
+
+=item C<foundlanguage>
+
+The value is set to 1 if a template in the desired language was found,
+or 0 otherwise.
+
+=item C<foundtheme>
+
+The value is set to 1 if a template of the desired theme was found, or
+0 otherwise.
+
+=back
+
+If C<&pathtotemplate> cannot find an acceptable template, it returns 0.
+
+Note that if a template of the desired language or theme cannot be
+found, C<&pathtotemplate> will print a warning message. Unless you've
+set C<$SIG{__WARN__}>, though, this won't show up in the output HTML
+document.
+
+=cut
+#'
 sub pathtotemplate {
   my %params = @_;
   my $template = $params{'template'};
@@ -174,12 +239,14 @@ sub pathtotemplate {
   my $languageor = lc($params{'language'});
   my $ptype = lc($params{'type'} or 'intranet');
 
+  # FIXME - Make sure $params{'template'} was given. Or else assume
+  # "default".
   my $type;
   if ($ptype eq 'opac') {$type = 'opac-tmpl/'; }
   elsif ($ptype eq 'none') {$type = ''; }
   elsif ($ptype eq 'intranet') {$type = 'intranet-tmpl/'; }
   else {$type = $ptype . '/'; }
-  
+
   my %returns;
   my %prefs= systemprefs();
   my $theme= $prefs{'theme'} || 'default';
@@ -194,6 +261,7 @@ sub pathtotemplate {
 
   my ($edir, $etheme, $elanguage, $epath);
 
+  # FIXME - Use 'foreach my $var (...)'
   CHECK: foreach (@tmpldirs) {
     $edir= $_;
     foreach ($theme, 'all', 'default') {
@@ -207,12 +275,12 @@ sub pathtotemplate {
       }
     }
   }
-  
+
   unless ($epath) {
     warn "Could not find $template in @tmpldirs";
     return 0;
   }
-  
+
   if ($language eq $elanguage) {
     $returns{'foundlanguage'} = 1;
   } else {
@@ -228,13 +296,25 @@ sub pathtotemplate {
 
   $returns{'path'} = $epath;
 
-  return (%returns);  
+  return (%returns);
 }
 
+=item getlanguageorder
+
+  @languages = &getlanguageorder();
+
+Returns the list of languages that the user will accept, and returns
+them in order of decreasing preference. This is retrieved from the
+browser's headers, if possible; otherwise, C<&getlanguageorder> uses
+the C<languageorder> setting from the C<systempreferences> table in
+the Koha database. If neither is set, it defaults to C<en> (English).
+
+=cut
+#'
 sub getlanguageorder () {
   my @languageorder;
   my %prefs = systemprefs();
-  
+
   if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
     @languageorder = split (/,/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
   } elsif ($prefs{'languageorder'}) {
@@ -246,11 +326,29 @@ sub getlanguageorder () {
   return (@languageorder);
 }
 
+=item startpage
 
+  $str = &startpage();
+  print $str;
+
+Returns a string of HTML, the beginning of a new HTML document.
+
+=cut
+#'
 sub startpage() {
   return("<html>\n");
 }
 
+=item gotopage
+
+  $str = &gotopage("//opac.koha.org/index.html");
+  print $str;
+
+Generates a snippet of HTML code that will redirect to the given URL
+(which should not include the initial C<http:>), and returns it.
+
+=cut
+#'
 sub gotopage($) {
   my ($target) = shift;
   #print "<br>goto target = $target<br>";
@@ -258,7 +356,20 @@ sub gotopage($) {
   return $string;
 }
 
+=item startmenu
 
+  @lines = &startmenu($type);
+  print join("", @lines);
+
+Given a page type, or category, returns a set of lines of HTML which,
+when concatenated, generate the menu at the top of the web page.
+
+C<$type> may be one of C<issue>, C<opac>, C<member>, C<acquisitions>,
+C<report>, C<circulation>, or something else, in which case the menu
+will be for the catalog pages.
+
+=cut
+#'
 sub startmenu($) {
   # edit the paths in here
   my ($type)=shift;
@@ -323,14 +434,46 @@ sub endmenu {
   return @string;
 }
 
+=item mktablehdr
+
+  $str = &mktablehdr();
+  print $str;
+
+Returns a string of HTML, which generates the beginning of a table
+declaration.
+
+=cut
+#'
 sub mktablehdr() {
     return("<table border=0 cellspacing=0 cellpadding=5>\n");
 }
 
+=item mktablerow
 
+  $str = &mktablerow($columns, $color, @column_data, $bgimage);
+  print $str;
+
+Returns a string of HTML, which generates a row of data inside a table
+(see also C<&mktablehdr>, C<&mktableft>).
+
+C<$columns> specifies the number of columns in this row of data.
+
+C<$color> specifies the background color for the row, e.g., C<"white">
+or C<"#ffacac">.
+
+C<@column_data> is an array of C<$columns> elements, each one a string
+of HTML. These are the contents of the row.
+
+The optional C<$bgimage> argument specifies the pathname to an image
+to use as the background for each cell in the row. This pathname will
+used as is in the output, so it should be relative to the HTTP
+document root.
+
+=cut
+#'
 sub mktablerow {
     #the last item in data may be a backgroundimage
-    
+
     # FIXME
     # should this be a foreach (1..$cols) loop?
 
@@ -348,24 +491,35 @@ sub mktablerow {
 	  $string.=" &nbsp; </td>";
       } else {
 	  $string.="$data[$i]</td>";
-      } 
+      }
       $i++;
   }
   $string=$string."</tr>\n";
   return($string);
 }
 
+=item mktableft
+
+  $str = &mktableft();
+  print $str;
+
+Returns a string of HTML, which generates the end of a table
+declaration.
+
+=cut
+#'
 sub mktableft() {
   return("</table>\n");
 }
 
+# FIXME - This is never used.
 sub mkform{
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
   $string=$string.mktablehdr();
   my $key;
   my @keys=sort keys %inputs;
-  
+
   my $count=@keys;
   my $i2=0;
   while ( $i2<$count) {
@@ -379,7 +533,7 @@ sub mkform{
       if ($data[0] eq 'radio') {
         $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
 	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
-      } 
+      }
       if ($data[0] eq 'text') {
         $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\">";
       }
@@ -395,7 +549,7 @@ sub mkform{
 	  $i = $i+2;
 	}
 	$text=$text."</select>";
-      }	
+      }
       $string=$string.mktablerow(2,'white',$keys[$i2],$text);
       #@order[$posn] =mktablerow(2,'white',$keys[$i2],$text);
     }
@@ -407,17 +561,87 @@ sub mkform{
   $string=$string."</form>";
 }
 
+=item mkform3
+
+  $str = &mkform3($action,
+	$fieldname => "$fieldtype\t$fieldvalue\t$fieldpos",
+	...
+	);
+  print $str;
+
+Takes a set of arguments that define an input form, generates an HTML
+string for the form, and returns the string.
+
+C<$action> is the action for the form, usually the URL of the script
+that will process it.
+
+The remaining arguments define the fields in the form. C<$fieldname>
+is the field's name. This is for the script's benefit, and will not be
+shown to the user.
+
+C<$fieldpos> is an integer; fields will be output in order of
+increasing C<$fieldpos>. This number must be unique: if two fields
+have the same C<$fieldpos>, one will be picked at random, and the
+other will be ignored. See below for special considerations, however.
+
+C<$fieldtype> specifies the type of the input field. It may be one of
+the following:
+
+=over 4
+
+=item C<hidden>
+
+Generates a hidden field, used to pass data to the script without
+showing it to the user. C<$fieldvalue> is the value.
+
+=item C<radio>
+
+Generates a pair of radio buttons, with values C<$fieldvalue> and
+C<$fieldpos>. In both cases, C<$fieldvalue> and C<$fieldpos> will be
+shown to the user.
+
+=item C<text>
+
+Generates a one-line text input field. It initially contains
+C<$fieldvalue>.
+
+=item C<textarea>
+
+Generates a four-line text input area. The initial text (which, of
+course, may not contain any tabs) is C<$fieldvalue>.
+
+=item C<select>
+
+Generates a list of items, from which the user may choose one. This is
+somewhat different from other input field types, and should be
+specified as:
+  "myselectfield" => "select\t<label0>\t<text0>\t<label1>\t<text1>...",
+where the C<text>N strings are the choices that will be presented to
+the user, and C<label>N are the labels that will be passed to the
+script.
+
+However, C<text0> should be an integer, since it will be used to
+determine the order in which this field appears in the form. If any of
+the C<label>Ns are empty, the rest of the list will be ignored.
+
+=back
+
+=cut
+#'
 sub mkform3 {
   my ($action, %inputs) = @_;
   my $string = "<form action=\"$action\" method=\"post\">\n";
   $string   .= mktablehdr();
   my $key;
-  my @keys = sort(keys(%inputs));
+  my @keys = sort(keys(%inputs));	# FIXME - Why do these need to be
+					# sorted?
   my @order;
   my $count = @keys;
   my $i2 = 0;
   while ($i2 < $count) {
     my $value=$inputs{$keys[$i2]};
+    # FIXME - Why use a tab-separated string? Why not just use an
+    # anonymous array?
     my @data=split('\t',$value);
     my $posn = $data[2];
     if ($data[0] eq 'hidden'){
@@ -445,7 +669,7 @@ sub mkform3 {
 	  $i = $i+2;		# FIXME - Use $i += 2.
 	}
 	$text=$text."</select>";
-      }	
+      }
 #      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
       $order[$posn]=mktablerow(2,'white',$keys[$i2],$text);
     }
@@ -460,7 +684,67 @@ sub mkform3 {
   # FIXME - A return statement, while not strictly necessary, would be nice.
 }
 
-# XXX - POD
+=item mkformnotable
+
+  $str = &mkformnotable($action, @inputs);
+  print $str;
+
+Takes a set of arguments that define an input form, generates an HTML
+string for the form, and returns the string. Unlike C<&mkform2> and
+C<&mkform3>, it does not put the form inside a table.
+
+C<$action> is the action for the form, usually the URL of the script
+that will process it.
+
+The remaining arguments define the fields in the form. Each is an
+anonymous array, e.g.:
+
+  &mkformnotable("/cgi-bin/foo",
+	[ "hidden", "hiddenvar", "value" ],
+	[ "text", "username", "" ]);
+
+The first element of each argument defines its type. The remaining
+ones are type-dependent. The supported types are:
+
+=over 4
+
+=item C<[ "hidden", $name, $value]>
+
+Generates a hidden field, for passing information to a script without
+showing it to the user. C<$name> is the name of the field, and
+C<$value> is the value to pass.
+
+=item C<[ "radio", $groupname, $value ]>
+
+Generates a radio button. Its name (or button group name) is C<$name>.
+C<$value> is the value associated with the button; this is both the
+value that will be shown to the user, and that which will be passed on
+to the C<$action> script.
+
+=item C<[ "text", $name, $inittext ]>
+
+Generates a text input field. C<$name> specifies its name, and
+C<$inittext> specifies the text that the field should initially
+contain.
+
+=item C<[ "textarea", $name ]>
+
+Creates a 40x4 text area, named C<$name>.
+
+=item C<[ "reset", $name, $label ]>
+
+Generates a reset button, with name C<$name>. C<$label> specifies the
+text for the button.
+
+=item C<[ "submit", $name, $label ]>
+
+Generates a submit button, with name C<$name>. C<$label> specifies the
+text for the button.
+
+=back
+
+=cut
+#'
 sub mkformnotable{
   my ($action,@inputs)=@_;
   my $string="<form action=$action method=post>\n";
@@ -471,7 +755,7 @@ sub mkformnotable{
     }
     if ($inputs[$i][0] eq 'radio') {
       $string.="<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
-    } 
+    }
     if ($inputs[$i][0] eq 'text') {
       $string.="<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
     }
@@ -480,10 +764,10 @@ sub mkformnotable{
     }
     if ($inputs[$i][0] eq 'reset'){
       $string.="<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }    
+    }
     if ($inputs[$i][0] eq 'submit'){
       $string.="<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-    }    
+    }
   }
   $string=$string."</form>";
 }
@@ -578,7 +862,7 @@ sub mkform2{
     my @data=split('\t',$value);
     my $posn = shift(@data);
     my $reqd = shift(@data);
-    my $ltext = shift(@data);    
+    my $ltext = shift(@data);
     if ($data[0] eq 'hidden'){
       $string=$string."<input type=hidden name=$key value=\"$data[1]\">\n";
     } else {
@@ -608,7 +892,7 @@ sub mkform2{
        	  $text = $text."<option value=\"$data[$i]\"";
 	  if ($data[$i] eq $sel) {
 	     $text = $text." selected";
-	  }   
+	  }
           $text = $text.">$val";
 	  $i = $i+2;
 	}
@@ -626,60 +910,49 @@ sub mkform2{
   $string=$string."</form>";
 }
 
-=pod
+=item endpage
 
-=head2 &endpage
+  $str = &endpage();
+  print $str;
 
- &endpage does not expect any arguments, it returns the string:
-   </body></html>\n
+Returns a string of HTML, the end of an HTML document.
 
 =cut
-
+#'
 sub endpage() {
   return("</body></html>\n");
 }
 
-=pod
+=item mklink
 
-=head2 &mklink
+  $str = &mklink($url, $text);
+  print $str;
 
- &mklink expects two arguments, the url to link to and the text of the link.
- It returns this string:
-   <a href="$url">$text</a>
- where $url is the first argument and $text is the second.
+Returns an HTML string, where C<$text> is a link to C<$url>.
 
 =cut
-
+#'
 sub mklink($$) {
   my ($url,$text)=@_;
   my $string="<a href=\"$url\">$text</a>";
   return ($string);
 }
 
-=pod
+=item mkheadr
 
-=head2 &mkheadr
+  $str = &mkheadr($type, $text);
+  print $str;
 
- &mkeadr expects two strings, a type and the text to use in the header.
- types are:
+Takes a header type and header text, and returns a string of HTML,
+where C<$text> is rendered with emphasis in a large font size (not an
+actual HTML header).
 
-=over
-
-=item 1  ends with <br>
-
-=item 2  no special ending tag
-
-=item 3  ends with <p>
-
-=back
-
- Other than this, the return value is the same:
-   <FONT SIZE=6><em>$text</em></FONT>$string
- Where $test is the text passed in and $string is the tag generated from 
- the type value.
+C<$type> may be 1, 2, or 3. A type 1 "header" ends with a line break;
+Type 2 has no special tag at the end; Type 3 ends with a paragraph
+break.
 
 =cut
-
+#'
 sub mkheadr {
     # FIXME
     # would it be better to make this more generic by accepting an optional
@@ -691,7 +964,7 @@ sub mkheadr {
     $string="<FONT SIZE=6><em>$text</em></FONT><br>";
   }
   if ($type eq '2'){
-    $string="<FONT SIZE=6><em>$text</em></FONT><br>";
+    $string="<FONT SIZE=6><em>$text</em></FONT>";
   }
   if ($type eq '3'){
     $string="<FONT SIZE=6><em>$text</em></FONT><p>";
@@ -699,37 +972,66 @@ sub mkheadr {
   return ($string);
 }
 
-=pod
+=item center and endcenter
 
-=head2 &center and &endcenter
+  print &center(), "This is a line of centered text.", &endcenter();
 
- &center and &endcenter take no arguments and return html tags <CENTER> and
- </CENTER> respectivley.
+C<&center> and C<&endcenter> take no arguments and return HTML tags
+<CENTER> and </CENTER> respectively.
 
 =cut
-
+#'
 sub center() {
   return ("<CENTER>\n");
-}  
+}
 
 sub endcenter() {
   return ("</CENTER>\n");
-}  
+}
 
-=pod
+=item bold
 
-=head2 &bold
+  $str = &bold($text);
+  print $str;
 
- &bold requires that a single string be passed in by the caller.  &bold 
- will return "<b>$text</b>" where $text is the string passed in.
+Returns a string of HTML that renders C<$text> in bold.
 
 =cut
-
+#'
 sub bold($) {
   my ($text)=shift;
   return("<b>$text</b>");
 }
 
+=item getkeytableselectoptions
+
+  $str = &getkeytableselectoptions($dbh, $tablename,
+	$keyfieldname, $descfieldname,
+	$showkey, $default);
+  print $str;
+
+Builds an HTML selection box from a database table. Returns a string
+of HTML that implements this.
+
+C<$dbh> is a DBI::db database handle.
+
+C<$tablename> is the database table in which to look up the possible
+values for the selection box.
+
+C<$keyfieldname> is field in C<$tablename>. It will be used as the
+internal label for the selection.
+
+C<$descfieldname> is a field in C<$tablename>. It will be used as the
+option shown to the user.
+
+If C<$showkey> is true, then both the key and value will be shown to
+the user.
+
+If the C<$default> argument is given, then if a value (from
+C<$keyfieldname>) matches C<$default>, it will be selected by default.
+
+=cut
+#'
 #---------------------------------------------
 # Create an HTML option list for a <SELECT> form tag by using
 #    values from a DB file
@@ -747,7 +1049,7 @@ sub getkeytableselectoptions {
 	my $selectclause;	# return value
 
 	my (
-		$sth, $query, 
+		$sth, $query,
 		$key, $desc, $orderfieldname,
 	);
 	my $debug=0;
@@ -762,7 +1064,7 @@ sub getkeytableselectoptions {
 	$query= "select $keyfieldname,$descfieldname
 		from $tablename
 		order by $orderfieldname ";
-	print "<PRE>Query=$query </PRE>\n" if $debug; 
+	print "<PRE>Query=$query </PRE>\n" if $debug;
 	$sth=$dbh->prepare($query);
 	$sth->execute;
 	while ( ($key, $desc) = $sth->fetchrow) {
@@ -772,7 +1074,7 @@ sub getkeytableselectoptions {
 		$selectclause.=" selected";
 	    }
 	    $selectclause.=" value='$key'>$desc\n";
-	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
+	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug;
 	}
 	return $selectclause;
 } # sub getkeytableselectoptions
