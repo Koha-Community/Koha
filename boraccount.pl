@@ -27,6 +27,7 @@ use strict;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
+use C4::Date;
 use CGI;
 use C4::Search;
 use HTML::Template;
@@ -53,16 +54,35 @@ my $data=borrdata('',$bornum);
 my %bor;
 $bor{'borrowernumber'}=$bornum;
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
-
+my $totalcredit;
+if($total <= 0){
+	$totalcredit = 1;
+}
 my @accountrows; # this is for the tmpl-loop
 
+my $toggle;
 for (my $i=0;$i<$numaccts;$i++){
+	if($i%2){
+		$toggle = 0;
+	} else {
+		$toggle = 1;
+	}
+  $accts->[$i]{'toggle'} = $toggle;
   $accts->[$i]{'amount'}+=0.00;
+  if($accts->[$i]{'amount'} <= 0){
+  	$accts->[$i]{'amountcredit'} = 1;
+  }
   $accts->[$i]{'amountoutstanding'}+=0.00;
-  my %row = (   'date'              => $accts->[$i]{'date'},
+  if($accts->[$i]{'amountoutstanding'} <= 0){
+  	$accts->[$i]{'amountoutstandingcredit'} = 1;
+  }
+  my %row = (   'date'              => format_date($accts->[$i]{'date'}),
+  		'amountcredit' => $accts->[$i]{'amountcredit'},
+  		'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
+  		'toggle' => $accts->[$i]{'toggle'},
 		'description'       => $accts->[$i]{'description'},
-  		'amount'            => $accts->[$i]{'amount'},
-		'amountoutstanding' => $accts->[$i]{'amountoutstanding'} );
+  		'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
+		'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}) );
 
   if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
     $row{'printtitle'}=1;
@@ -76,7 +96,8 @@ $template->param(
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
 			bornum          => $bornum,
-			total           => $total,
+			total           => sprintf("%.2f",$total),
+			totalcredit => $totalcredit,
 			accounts        => \@accountrows );
 
 output_html_with_http_headers $input, $cookie, $template->output;
