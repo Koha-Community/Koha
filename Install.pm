@@ -17,6 +17,8 @@ $VERSION = 0.01;
 		&getdatabaseinfo
 		&getapacheinfo
 		&getapachevhostinfo
+		&updateapacheconf
+		&basicauthentication
 		);
 
 
@@ -238,6 +240,36 @@ sub showmessage {
 	    ($response) || ($response=$defaultresponse);
 	    return $response;
 	}
+	if ($responsetype =~/^numerical$/i) {
+	    (defined($defaultresponse)) || ($defaultresponse='');
+	    my $response='';
+	    until ($response=~/^\d+$/) {
+		$response=<STDIN>;
+		chomp $response;
+		($response) || ($response=$defaultresponse);
+		unless ($response=~/^\d+$/) {
+		    ($noclear) || (system('clear'));
+		    print "Invalid Response ($response).  Response must be a number.\n\n";
+		    print $message;
+		}
+	    }
+	    return $response;
+	}
+	if ($responsetype =~/^email$/i) {
+	    (defined($defaultresponse)) || ($defaultresponse='');
+	    my $response='';
+	    until ($response=~/.*\@.*\..*/) {
+		$response=<STDIN>;
+		chomp $response;
+		($response) || ($response=$defaultresponse);
+		unless ($response=~/.*\@.*\..*/) {
+		    ($noclear) || (system('clear'));
+		    print "Invalid Response ($response).  Response must be a valid email address.\n\n";
+		    print $message;
+		}
+	    }
+	    return $response;
+	}
 	if ($responsetype =~/^PressEnter$/i) {
 	    <STDIN>;
 	    return;
@@ -249,29 +281,29 @@ sub showmessage {
 }
 
 sub getinstallationdirectories {
-    my $opacdir = '/usr/local/koha/opac';
-    my $intranetdir = '/usr/local/koha/intranet';
+    $::opacdir = '/usr/local/koha/opac';
+    $::intranetdir = '/usr/local/koha/intranet';
     my $getdirinfo=1;
     while ($getdirinfo) {
 	# Loop until opac directory and koha directory are different
-	my $message=getmessage('GetOpacDir', [$opacdir]);
-	$opacdir=showmessage($message, 'free', $opacdir);
+	my $message=getmessage('GetOpacDir', [$::opacdir]);
+	$::opacdir=showmessage($message, 'free', $::opacdir);
 
-	my $message=getmessage('GetIntranetDir', [$intranetdir]);
-	$intranetdir=showmessage($message, 'free', $intranetdir);
+	$message=getmessage('GetIntranetDir', [$::intranetdir]);
+	$::intranetdir=showmessage($message, 'free', $::intranetdir);
 
-	if ($intranetdir eq $opacdir) {
+	if ($::intranetdir eq $::opacdir) {
 	    print qq|
 
 You must specify different directories for the OPAC and INTRANET files!
- :: $intranetdir :: $opacdir ::
+ :: $::intranetdir :: $::opacdir ::
 |;
 <STDIN>
 	} else {
 	    $getdirinfo=0;
 	}
     }
-    return ($opacdir, $intranetdir);
+    return ($::opacdir, $::intranetdir);
 }
 
 
@@ -325,6 +357,12 @@ Press <ENTER> to try again:
 |;
 
 sub getdatabaseinfo {
+
+    $::dbname = 'Koha';
+    $::hostname = 'localhost';
+    $::user = 'kohaadmin';
+    $::pass = '';
+
 #Get the database name
 
     my $message=getmessage('DatabaseName', [$::dbname]);
@@ -472,22 +510,14 @@ sub getapacheinfo {
 	}
 	print "AU: $::httpduser\n";
     }
-    exit;
 }
 
 
-sub getapachevhostinfo {
+$messages->{'ApacheConfigIntroduction'}->{en}=qq|
+========================
+= APACHE CONFIGURATION =
+========================
 
-    my $svr_admin = "webmaster\@$::domainname";
-    my $servername=`hostname -f`;
-    chomp $servername;
-    my $opacport=80;
-    my $kohaport=8080;
-
-    print qq|
-
-OPAC and KOHA/LIBRARIAN CONFIGURATION
-=====================================
 Koha needs to setup your Apache configuration file for the
 OPAC and LIBRARIAN virtual hosts.  By default this installer
 will do this by using one ip address and two different ports
@@ -495,37 +525,273 @@ for the virtual hosts.  There are other ways to set this up,
 and the installer will leave comments in httpd.conf detailing
 what these other options are.
 
-Please enter the e-mail address for your webserver admin.
-Usually $svr_admin
-|;
 
-    print "Enter e-mail address [$svr_admin]:";
-      #$svr_admin = $input;
+Press <ENTER> to continue: |;
 
+$messages->{'GetVirtualHostEmail'}->{en}=qq|
+=============================
+= WEB SERVER E-MAIL CONTACT =
+=============================
 
-    print qq|
+Enter the e-mail address to be used as a contact for the virtual hosts (this
+address is displayed if any errors are encountered).
 
+E-mail contact [%s]: |;
+
+$messages->{'GetServerName'}->{en}=qq|
+======================================
+= WEB SERVER HOST NAME OR IP ADDRESS =
+======================================
 
 Please enter the domain name or ip address of your computer.
-|;
-      #$servername = $input;
 
-    print qq|
+Host name or IP Address [%s]: |;
 
-Please enter the port for your OPAC interface.
-|;
-    print "Enter OPAC port [$opacport]:";
-      #$opacport = $input;
+$messages->{'GetOpacPort'}->{en}=qq|
+==========================
+= OPAC VIRTUAL HOST PORT =
+==========================
 
-    print qq|
+Please enter the port for your OPAC interface.  This defaults to port 80, but
+if you are already serving web content from this server, you should change it
+to a different port (8000 might be a good choice).
 
-Please enter the port for your Intranet/Librarian interface.
-|;
-      #$kohaport = $input;
+Enter the OPAC Port [%s]: |;
+
+$messages->{'GetIntranetPort'}->{en}=qq|
+==============================
+= INTRANET VIRTUAL HOST PORT =
+==============================
+
+Please enter the port for your Intranet interface.  This must be different from
+the OPAC port (%s).
+
+Enter the Intranet Port [%s]: |;
 
 
+sub getapachevhostinfo {
+
+    $::svr_admin = "webmaster\@$::domainname";
+    $::servername=`hostname -f`;
+    chomp $::servername;
+    $::opacport=80;
+    $::intranetport=8080;
+
+    showmessage(getmessage('ApacheConfigIntroduction'), 'PressEnter');
+
+    $::svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$::svr_admin]), 'email', $::svr_admin);
+    $::servername=showmessage(getmessage('GetServerName', [$::servername]), 'free', $::servername);
+
+
+    $::opacport=showmessage(getmessage('GetOpacPort', [$::opacport]), 'numerical', $::opacport);
+    $::intranetport=showmessage(getmessage('GetIntranetPort', [$::opacport, $::intranetport]), 'numerical', $::intranetport);
 
 }
+
+$messages->{'StartUpdateApache'}->{en}=qq|
+=================================
+= UPDATING APACHE CONFIGURATION =
+=================================
+
+Checking for modules that need to be loaded...
+|;
+
+$messages->{'LoadingApacheModuleModEnv'}->{en}="Loading SetEnv Apache module.\n";
+
+$messages->{'LoadingApacheModuleModInc'}->{en}="Loading Includes Apache module.\n";
+
+$messages->{'ApacheConfigBackupFailed'}->{en}=qq|
+======================================
+= APACHE CONFIGURATION BACKUP FAILED =
+======================================
+
+An error occurred while trying to make a backup copy of %s.
+
+  %s
+
+No changes will be made to the apache configuration file at this time.
+
+Press <ENTER> to continue: |;
+
+
+$messages->{'ApacheAlreadyConfigured'}->{en}=qq|
+$::realhttpdconf appears to already have an entry for Koha
+Virtual Hosts.  You may need to edit $::realhttpdconf
+f anything has changed since it was last set up.  This
+script will not attempt to modify an existing Koha apache
+configuration.
+
+Press <ENTER> to continue: |;
+
+sub updateapacheconf {
+    my $logfiledir=`grep ^ErrorLog $::realhttpdconf`;
+    chomp $logfiledir;
+
+    if ($logfiledir) {
+	$logfiledir=~m#ErrorLog (.*)/[^/]*$#;
+	$logfiledir=$1;
+    }
+
+    unless ($logfiledir) {
+	$logfiledir='logs';
+    }
+
+    showmessage(getmessage('StartUpdateApache'), 'none');
+
+    my $httpdconf;
+    my $envmodule=0;
+    my $includesmodule=0;
+    open HC, $::realhttpdconf;
+    while (<HC>) {
+	if (/^\s*#\s*LoadModule env_module /) {
+	    s/^\s*#\s*//;
+	    showmessage(getmessage('LoadingApacheModuleModEnv'));
+	    $envmodule=1;
+	}
+	if (/^\s*#\s*LoadModule includes_module /) {
+	    s/^\s*#\s*//;
+	    showmessage(getmessage('LoadingApacheModuleModInc'));
+	}
+	if (/\s*LoadModule includes_module / ) {
+	    $includesmodule=1;
+	}
+	$httpdconf.=$_;
+    }
+
+    my $backupfailed=0;
+    $backupfailed=`cp -f $::realhttpdconf $::realhttpdconf\.prekoha`;
+    if ($backupfailed) {
+	showmessage(getmessage('ApacheConfigBackupFailed', [$::realhttpdconf,$backupfailed ]), 'PressEnter');
+	return;
+    }
+
+    if ($envmodule || $includesmodule) {
+	open HC, ">$::realhttpdconf";
+	print HC $httpdconf;
+	close HC;
+    }
+
+
+    
+    if (`grep 'VirtualHost $::servername' $::realhttpdconf`) {
+	showmessage(getmessage('ApacheAlreadyConfigured'), 'PressEnter');
+	return;
+    } else {
+	my $includesdirectives='';
+	if ($includesmodule) {
+	    $includesdirectives.="Options +Includes\n";
+	    $includesdirectives.="   AddHandler server-parsed .html\n";
+	}
+	open(SITE,">>$::realhttpdconf") or warn "Insufficient priveleges to open $::realhttpdconf for writing.\n";
+	my $opaclisten = '';
+	if ($::opacport != 80) {
+	    $opaclisten="Listen $::opacport";
+	}
+	my $intranetlisten = '';
+	if ($::intranetport != 80) {
+	    $intranetlisten="Listen $::intranetport";
+	}
+	print SITE <<EOP
+
+# Ports to listen to for Koha
+$opaclisten
+$intranetlisten
+
+# NameVirtualHost is used by one of the optional configurations detailed below
+
+#NameVirtualHost 11.22.33.44
+
+# KOHA's OPAC Configuration
+<VirtualHost $::servername\:$::opacport>
+   ServerAdmin $::svr_admin
+   DocumentRoot $::opacdir/htdocs
+   ServerName $::servername
+   ScriptAlias /cgi-bin/koha/ $::opacdir/cgi-bin/
+   ErrorLog $logfiledir/opac-error_log
+   TransferLog $logfiledir/opac-access_log
+   SetEnv PERL5LIB "$::intranetdir/modules"
+   $includesdirectives
+</VirtualHost>
+
+# KOHA's INTRANET Configuration
+<VirtualHost $::servername\:$::intranetport>
+   ServerAdmin $::svr_admin
+   DocumentRoot $::intranetdir/htdocs
+   ServerName $::servername
+   ScriptAlias /cgi-bin/koha/ "$::intranetdir/cgi-bin/"
+   ErrorLog $logfiledir/koha-error_log
+   TransferLog $logfiledir/koha-access_log
+   SetEnv PERL5LIB "$::intranetdir/modules"
+   $includesdirectives
+</VirtualHost>
+
+# If you want to use name based Virtual Hosting:
+#   1. remove the two Listen lines
+#   2. replace $::servername\:$::opacport wih your.opac.domain.name
+#   3. replace ServerName $::servername wih ServerName your.opac.domain.name
+#   4. replace $::servername\:$::intranetport wih your intranet domain name
+#   5. replace ServerName $::servername wih ServerName your.intranet.domain.name
+#
+# If you want to use NameVirtualHost'ing (using two names on one ip address):
+#   1.  Follow steps 1-5 above
+#   2.  Uncomment the NameVirtualHost line and set the correct ip address
+
+EOP
+
+
+    }
+}
+
+$messages->{'IntranetAuthenticationQuestion'}->{en}=qq|
+===========================
+= INTRANET AUTHENTICATION =
+===========================
+
+I can set it up so that the Intranet/Librarian site is password protected using
+Apache's Basic Authorization.
+
+Would you like to do this ([Y]/N): |;
+
+$messages->{'BasicAuthUsername'}->{en}="Please enter a userid for intranet access [%s]: ";
+$messages->{'BasicAuthPassword'}->{en}="Please enter a password for %s: ";
+$messages->{'BasicAuthPasswordWasBlank'}->{en}="\nYou cannot use a blank password!\n\n";
+
+sub basicauthentication {
+    my $message=getmessage('IntranetAuthenticationQuestion');
+    my $answer=showmessage($message, 'yn', 'y');
+
+    my $apacheauthusername='librarian';
+    my $apacheauthpassword='';
+    if ($answer=~/^y/i) {
+	($apacheauthusername) = showmessage(getmessage('BasicAuthUsername', [ $apacheauthusername]), 'free', $apacheauthusername, 1);
+	$apacheauthusername=~s/[^a-zA-Z0-9]//g;
+	while (! $apacheauthpassword) {
+	    ($apacheauthpassword) = showmessage(getmessage('BasicAuthPassword', [ $apacheauthusername]), 'free', 1);
+	    if (!$apacheauthpassword) {
+		($apacheauthpassword) = showmessage(getmessage('BasicAuthPasswordWasBlank'), 'none', '', 1);
+	    }
+	}
+	open AUTH, ">/etc/kohaintranet.pass";
+	my $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	my $salt=substr($chars, int(rand(length($chars))),1);
+	$salt.=substr($chars, int(rand(length($chars))),1);
+	print AUTH $apacheauthusername.":".crypt($apacheauthpassword, $salt)."\n";
+	close AUTH;
+	open(SITE,">>$::realhttpdconf") or warn "Insufficient priveleges to open $::realhttpdconf for writing.\n";
+	print SITE <<EOP
+
+<Directory $::intranetdir>
+    AuthUserFile /etc/kohaintranet.pass
+    AuthType Basic
+    AuthName "Koha Intranet (for librarians only)"
+    Require  valid-user
+</Directory>
+EOP
+    }
+    close(SITE);
+}
+
+
 
 
 END { }       # module clean-up code here (global destructor)
