@@ -5,14 +5,15 @@ use strict;
 use C4::Acquisitions;
 
 my $input = new CGI;
-my $biblio = { title       => $input->param('title'),
-               subtitle    => $input->param('subtitle'),
-               author      => $input->param('author'),
-               seriestitle => $input->param('seriestitle'),
-               copyright   => $input->param('copyrightdate'),
-               abstract    => $input->param('abstract'),
-               notes       => $input->param('notes')
-             }; # my $biblio
+my $biblio = {
+    title       => $input->param('title'),
+    subtitle    => $input->param('subtitle')?$input->param('subtitle'):"",
+    author      => $input->param('author')?$input->param('author'):"",
+    seriestitle => $input->param('seriestitle')?$input->param('seriestitle'):"",
+    copyright   => $input->param('copyrightdate')?$input->param('copyrightdate'):"",
+    abstract    => $input->param('abstract')?$input->param('abstract'):"",
+    notes       => $input->param('notes')?$input->param('notes'):""
+}; # my $biblio
 my $biblionumber;
 
 if (! $biblio->{'title'}) {

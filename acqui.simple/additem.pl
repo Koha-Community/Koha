@@ -11,6 +11,8 @@ my $maxbarcode;
 my $isbn;
 my $count;
 my @results;
+my $branchcount;
+my @branches;
 
 if (! $biblioitemnum) {
     print $input->redirect('addbooks.pl');
@@ -29,6 +31,7 @@ if (! $biblioitemnum) {
 	print startmenu('acquisitions');
     
 	($count, @results) = &getitemsbybiblioitem($biblioitemnum);
+	($branchcount, @branches) = &branches;
 
 	if ($count) {
 	    print << "EOF";
@@ -69,7 +72,17 @@ EOF
 <td align="right">BARCODE:</td>
 <td><input name="barcode" size="10" value="$maxbarcode" /></td>
 <td align="right">Home Branch:</td>
-<td><select name="homebranch"><option value="STWE">Stewart Elementary<option value="MEZ">Meziadin Elementary</select></td>
+<td><select name="homebranch">
+EOF
+
+	for (my $i = 0; $i < $branchcount; $i ++) {
+	    print << "EOF";
+<option value="$branches[$i]->{'branchcode'}">$branches[$i]->{'branchname'}
+EOF
+	} # for
+
+	print << "EOF";
+</select></td>
 </tr>
 <tr>
 <td align="right">Replacement Price:</td>

@@ -114,7 +114,7 @@ EOF
 <td colspan="3"><textarea name="notes" cols="30" rows="6"></textarea></td>
 </tr>
 <tr valign="top">
-<td colspan="4" align="center"><input type="submit" value="Add New Item"></td>
+<td colspan="4" align="center"><input type="submit" value="Add New Group"></td>
 </tr>
     
   </table></FORM>

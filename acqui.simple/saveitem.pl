@@ -10,9 +10,9 @@ my $biblioitemnum = $input->param('biblioitemnum');
 my $item          = {
     biblioitemnumber => $biblioitemnum,
     homebranch       => $input->param('homebranch'),
-    replacementprice => $input->param('replacementprice'),
-    itemnotes        => $input->param('notes')
-};
+    replacementprice => $input->param('replacementprice')?$input->param('replacementprice'):"",
+    itemnotes        => $input->param('notes')?$input->param('notes'):""
+}; # my $item
 my $count;
 my @results;
 
