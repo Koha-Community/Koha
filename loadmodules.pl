@@ -53,7 +53,7 @@ sub acquisitions {
 
 sub catalogue_search {
 	my $marc_p = C4::Context->boolean_preference("marc");
-	$marc_p = 1 unless defined $aq_type;
+	$marc_p = 1 unless defined $marc_p;
 	my $query = new CGI;
 	my $type = $query->param('type');
 	if ($marc_p) {
