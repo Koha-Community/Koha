@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha OPAC 2.0.0RC4\n"
-"POT-Creation-Date: 2004-02-25 03:21-0500\n"
+"POT-Creation-Date: 2004-02-26 00:13-0500\n"
 "PO-Revision-Date: 2004-02-18 02:40-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -24,15 +24,20 @@ msgstr ""
 msgid "%s (hm)"
 msgstr "%s (住宅)"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:14
 #, c-format
 msgid "%s (wk)"
-msgstr "%s (辦公)"
+msgstr "%s (辦公室)"
 
+# NOTE This refers to new books acquired in the last so-and-so days
+# NOTE This is essentially the same string as the next, but different
+# NOTE due to technical difficulties (in creating an msgid from the HTML)
+# FIXME This string as it is is nearly untranslatable. The scanner need to be fixed.
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:105
 #, c-format
 msgid "%s <b>acquired in the last"
-msgstr ""
+msgstr "最近新到的 %s 圖書資料：最近"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:9
 #, c-format
@@ -118,10 +123,11 @@ msgstr "<b>分類：</b>%s%s%s"
 msgid "<b>Collection:</b> %s"
 msgstr "<b>館藏：</b>%s"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:77
 #, c-format
 msgid "<b>Current Branch:</b> %s"
-msgstr "<b>目前館別：</b>%s"
+msgstr "<b>目前分館：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:39
 #, c-format
@@ -174,15 +180,17 @@ msgstr "<b>遺失圖書資料：</b>%s"
 msgid "<b>LCCN:</b> %s"
 msgstr "<b>LCCN：</b>%s"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:75
 #, c-format
 msgid "<b>Last Borrower 1:</b> %s"
-msgstr "<b>最近借書之讀者1：</b>%s"
+msgstr "<b>最近借閱者1：</b>%s"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:76
 #, c-format
 msgid "<b>Last Borrower 2:</b> %s"
-msgstr "<b>最近借書之讀者2：</b>%s"
+msgstr "<b>最近借閱者2：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:73
 #, c-format
@@ -216,10 +224,13 @@ msgstr "<b>備註：</b>%s"
 msgid "<b>Pages:</b> %s"
 msgstr "<b>頁數：</b>%s"
 
+# NOTE The meaning of this mysterious string can only be known if you read C4/Accounts2.pm
+# NOTE in sub returnlost (and/or read <URL:http://www.koha.org/download/files/ChangeLog>).
+# NOTE This is a "theoretically free form" field storing strings like "Paid for by $bor $date"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:80
 #, c-format
 msgid "<b>Paid for:</b> %s"
-msgstr ""
+msgstr "<b>賠償：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:38
 #, c-format
@@ -340,13 +351,15 @@ msgstr "紀錄正確嗎？"
 msgid "Advanced Search, More Options"
 msgstr "進階查詢（更多選項）"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/kohaerror.tmpl:6
 msgid "An error has occurred"
-msgstr "發生了錯誤"
+msgstr "發生錯誤"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:44
 msgid "Any"
-msgstr "無所謂"
+msgstr "任何"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
@@ -366,9 +379,10 @@ msgstr "八月"
 msgid "Author"
 msgstr "著者"
 
+# NOTE See disambiguation notes for "Online"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:67
 msgid "Available"
-msgstr "仍在館內"
+msgstr "在館內"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:51
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:53
@@ -402,7 +416,7 @@ msgstr "類別"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:59
 msgid "Clear All Fields"
-msgstr "清空"
+msgstr "全部清空"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:14
 msgid "Compact Disc"
@@ -417,9 +431,10 @@ msgstr "數量"
 msgid "Current Loan"
 msgstr "目前狀態"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:49
 msgid "Date Due"
-msgstr "到期日"
+msgstr "歸還日期"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:51
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:66
@@ -431,9 +446,10 @@ msgstr "日"
 msgid "Dec"
 msgstr "十二月"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:95
 msgid "Due date"
-msgstr "到期日"
+msgstr "歸還日期"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:5
 msgid "Easy / Picture Books"
@@ -452,9 +468,10 @@ msgid "End reserve on this date:"
 msgstr "在此日期停止預約："
 
 # TODO:舊譯「這是整個書名」
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
 msgid "Exact"
-msgstr ""
+msgstr "完全吻合"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:9
 msgid "FINES &amp; CHARGES"
@@ -523,13 +540,15 @@ msgstr "七月"
 msgid "Jun"
 msgstr "六月"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:8
 msgid "Junior Fiction"
-msgstr "兒童小說類"
+msgstr "學童/初級小說"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:7
 msgid "Junior Non-Fiction"
-msgstr "兒童非小說類"
+msgstr "學童/初級非小說"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:20
 msgid "KOHA"
@@ -658,17 +677,22 @@ msgstr "或下列最少一項："
 msgid "Oct"
 msgstr "十月"
 
+# NOTE 譯文更動 by Arthur
+# NOTE From Chris Cormack's example, the context of "Online" is actually like this:
+# NOTE    Item Type  Class    Location  Date Due   Last Seen  Barcode
+# NOTE    WEB        Website  Online    Available             www.useit.com
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:66
 msgid "Online"
-msgstr "上線"
+msgstr "網上"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:34
 msgid "Password:"
 msgstr "密碼："
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:74
 msgid "Pick Up Branch"
-msgstr "取書處"
+msgstr "取書分館"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:107
 msgid "Place Reserve"
@@ -682,11 +706,11 @@ msgstr "請按需要更新，閣下所作之修改將以電郵方式寄至圖書
 msgid "Please confirm that you wish to request an item of these types:"
 msgstr "請確定您要預約下列種類的圖書資料："
 
-# XXX tentative
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:44
 #, c-format
 msgid "Please select the branch from which you want to collect the item: %s"
-msgstr "請指定您希望在哪間圖書館取書《%s》"
+msgstr "請指定您希望在哪間分館取書《%s》"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:20
 msgid ""
@@ -726,22 +750,24 @@ msgstr "預約日期"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:49
 msgid "Reserve on this date:"
-msgstr "預約在這一日終止："
+msgstr "預約在這日開始："
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:18
 #, c-format
 msgid "Reserve page for item: <b>%s (%s %s)</b>"
 msgstr "圖書資料《<b>%s (%s %s)</b>》之預約頁"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/subject.tmpl:15
 #, c-format
 msgid "Results %s through %s of %s records."
-msgstr "共%3$s筆結果中的第%1$s至%2$s項結果"
+msgstr "共%3$s項結果中的第%1$s至%2$s項結果"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:122
 #, c-format
 msgid "Results <i>%s</i> through <i>%s</i> of <i>%s</i> records."
-msgstr "共<i>%3$s</i>筆結果中的第<i>%1$s</i>至<i>%2$s</i>項結果"
+msgstr "共<i>%3$s</i>項結果中的第<i>%1$s</i>至<i>%2$s</i>項結果"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:11
 msgid "STILL OWING"
@@ -761,9 +787,10 @@ msgstr "查詢館藏"
 msgid "Sep"
 msgstr "九月"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:16
 msgid "Something new ?"
-msgstr "有沒有要更新的？"
+msgstr "有沒有更新？"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:4
 msgid "Sorry, KOHA doesnt think you have permission for this page."
@@ -798,10 +825,11 @@ msgstr "地址"
 msgid "Subject"
 msgstr "主題"
 
+# FIXME 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:79
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:39
 msgid "Submit"
-msgstr ""
+msgstr "遞交"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:12
 msgid "Surname"
@@ -834,9 +862,10 @@ msgstr "共欠"
 msgid "Try another <a1>search</a>"
 msgstr "請以別的條件重試<a1>查詢</a>"
 
+# NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:87
 msgid "Type in the box and press the enter key."
-msgstr "在空格輸入後，再按回車鍵即可。"
+msgstr "在空格輸入後，再按輸入鍵即可。"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:17
 msgid "Update Record"
@@ -904,9 +933,10 @@ msgstr "您目前預約了 %s 項圖書資料。"
 msgid "You have no items on issue."
 msgstr "您沒有借出任何圖書資料。"
 
+# FIXME 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:66
 msgid "You have reserved items waiting:"
-msgstr "您有預約了的圖書資料可以取書："
+msgstr "您可取書的預約圖書資料："
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:13
 msgid "You must select a branch for pickup!"
