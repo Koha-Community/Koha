@@ -94,7 +94,9 @@ sub gettemplate {
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 
-    $template->param(themelang => "/$theme/$lang");
+    $template->param(themelang => "/$theme/$lang",
+    							theme => $theme,
+							lang => $lang);
     return $template;
 }
 
