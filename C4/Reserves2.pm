@@ -30,7 +30,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
+@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve &CalcReserveFee);
 
 						    
 # make all your functions, whether exported or not;
@@ -354,90 +354,45 @@ sub CreateReserve {
 }             
 
 sub CalcReserveFee {
-  my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;        
-  #check for issues;    
-  my $dbh = &C4Connect;           
-  my $const = lc substr($constraint,0,1); 
-  my $query = "select * from borrowers,categories 
-  where (borrowernumber = '$borrnum')         
-  and (borrowers.categorycode = categories.categorycode)";   
-  my $sth = $dbh->prepare($query);                       
-  $sth->execute;                                    
-  my $data = $sth->fetchrow_hashref;                  
-  $sth->finish();       
-  my $fee = $data->{'reservefee'};         
-  my $cntitems = @->$bibitems;   
-  if ($fee > 0) {                         
-    # check for items on issue      
-    # first find biblioitem records       
-    my @biblioitems;    
-    my $query1 = "select * from biblio,biblioitems                           
-    where (biblio.biblionumber = '$biblionumber')     
-    and (biblio.biblionumber = biblioitems.biblionumber)";
-    my $sth1 = $dbh->prepare($query1);                   
-    $sth1->execute();                                     
-    while (my $data1=$sth1->fetchrow_hashref) { 
-      if ($const eq "a") {    
-        push @biblioitems,$data1;       
-      } else {                     
-        my $found = 0;        
-	my $x = 0;
-	while ($x < $cntitems) {                                             
-          if (@$bibitems->{'biblioitemnumber'} == $data->{'biblioitemnumber'}) {         
-            $found = 1;   
-	  }               
-	  $x++;                                       
-	}               
-	if ($const eq 'o') {
-	  if ( $found == 1) {
-	    push @biblioitems,$data1;
-	  }                            
-        } else {
-	  if ($found == 0) {
-	    push @biblioitems,$data1;
-	  } 
-	}     
-      }   
-    }             
-    $sth1->finish;                                  
-    my $cntitemsfound = @biblioitems; 
-    my $issues = 0;                 
-    my $x = 0;                   
-    my $allissued = 1; 
-    while ($x < $cntitemsfound) { 
-      my $bitdata = $biblioitems[$x];                                       
-      my $query2 = "select * from items                   
-      where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'";     
-      my $sth2 = $dbh->prepare($query2);                       
-      $sth2->execute;   
-      while (my $itdata=$sth2->fetchrow_hashref) { 
-        my $query3 = "select * from issues
-        where itemnumber = '$itdata->{'itemnumber'}' and
-        returndate is null";
-	
-        my $sth3 = $dbh->prepare($query3);                      
-        $sth3->execute();                     
-        if (my $isdata=$sth3->fetchrow_hashref) {
+    my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;        
+    #check for issues;    
+    my $dbh = &C4Connect;           
+    my $const = lc substr($constraint,0,1); 
+    my $query = "SELECT categorycode FROM borrowers WHERE borrowernumber = ?";   
+    my $sth = $dbh->prepare($query);                       
+    $sth->execute($borrnum);
+    my ($categorycode) = $sth->fetchrow_array;
+    $sth->finish();
+
+    my %itemtypes;
+    my $query = "SELECT biblioitems.itemtype, biblioitems.biblioitemnumber 
+                   FROM biblio, biblioitems 
+                  WHERE biblio.biblionumber = ?
+                    AND biblio.biblionumber = biblioitems.biblionumber";
+    $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    while (my $data = $sth->fetchrow_hashref) {
+	if ($const eq "a") {
+	    $itemtypes{$data->{'itemtype'}} = 1;
 	} else {
-	  $allissued = 0; 
-	}  
-      }                                                           
-      $x++;   
-    }         
-    if ($allissued == 0) { 
-      my $rquery = "select * from reserves           
-      where biblionumber = '$biblionumber'"; 
-      my $rsth = $dbh->prepare($rquery);   
-      $rsth->execute();   
-      if (my $rdata = $rsth->fetchrow_hashref) { 
-      } else {                                     
-        $fee = 0;                                                           
-      }   
-    }             
-  }                   
-#  print "fee $fee";
-  $dbh->disconnect();   
-  return $fee;                                      
+	    foreach my $bibitem (@$bibitems) {
+		$itemtypes{$data->{'itemtype'}} = 1 if $bibitem == $data->{'biblioitemnumber'};
+	    }
+	}
+    }
+    $sth->finish;
+    $query = "SELECT itemtype, reservecharge FROM categoryitem WHERE categorycode = ?";
+    $sth = $dbh->prepare($query);
+    $sth->execute($categorycode);
+    my $fee = 0;
+    while (my $data = $sth->fetchrow_hashref) {
+	if ($itemtypes{$data->{'itemtype'}}) {
+	    $fee = $data->{'reservecharge'} if $fee < $data->{'reservecharge'};
+	}
+    }
+    $sth->finish;
+    $dbh->disconnect();   
+    return $fee;                                      
 }                   
 
 sub getnextacctno {                                                           
