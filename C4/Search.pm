@@ -1,5 +1,4 @@
-package C4::Search; #assumes C4/Search
-
+package C4::Search;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -25,7 +24,6 @@ use C4::Context;
 use C4::Reserves2;
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
-use Set::Scalar;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -299,139 +297,159 @@ C<$num> to 5 will return results 100 through 104 inclusive.
 
 =cut
 #'
-
-# FIXME - Everything that's being done here with Set::Scalar can be
-# done with hashes: to add a result to the set, just use:
-#	$results{$foo} = 1;
-# To get the list of results, just use
-#	@biblionumbers = sort keys %results;
-# This would remove the dependency on Set::Scalar, which means one
-# fewer package that people have to install.
-
 sub KeywordSearch {
   my ($env,$type,$search,$num,$offset)=@_;
   my $dbh = C4::Context->dbh;
   $search->{'keyword'}=~ s/ +$//;
   $search->{'keyword'}=~ s/'/\\'/;
   my @key=split(' ',$search->{'keyword'});
+		# FIXME - Naive users might enter comma-separated
+		# words, e.g., "training, animal". Ought to cope with
+		# this.
   my $count=@key;
   my $i=1;
-  my @results;
+  my %biblionumbers;		# Set of biblionumbers returned by the
+				# various searches.
+
+  # FIXME - Ought to filter the stopwords out of the list of keywords.
+  #	@key = map { !defined($stopwords{$_}) } @key;
+
+  # FIXME - The way this code is currently set up, it looks for all of
+  # the keywords first in (title, notes, seriestitle), then in the
+  # subtitle, then in the subject. Thus, if you look for keywords
+  # "science fiction", this search won't find a book with
+  #	title    = "How to write fiction"
+  #	subtitle = "A science-based approach"
+  # Is this the desired effect? If not, then the first SQL query
+  # should look in the biblio, subtitle, and subject tables all at
+  # once. The way the first query is built can accomodate this easily.
 
   # Look for keywords in table 'biblio'.
 
-  # FIXME - The next 15 lines can be rewritten in somewhat Lisp-ish
-  # fashion as follows:
-  #
-  # my $query = "select biblionumber from biblio where (" .
-  #	join(") or (",
-  #	     map {
-  #		     my $field = $_;
-  #		     join (" and ",
-  #			   map {
-  #			     "($field like '$_\%' or $field like '\% $_\%')"
-  #		           }
-  #		           @key)
-  #	     }
-  #	     qw( title biblio.notes seriestitle )) .
-  #	")";
-  # FIXME - Also,
-  #	field like 'string%' or field like '% string%'
-  # can be rewritten (in MySQL, at least) as
-  #	field regexp '(^| )string';
-  # However, this isn't portable. Though PostgreSQL allows you to use "~"
-  # instead of "regexp".
-  my $query="Select biblionumber from biblio
-  where ((title like '$key[0]%' or title like '% $key[0]%')";
-  while ($i < $count){
-      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
-      $i++;
+  # Build an SQL query that finds each of the keywords in any of the
+  # title, biblio.notes, or seriestitle. To do this, we'll build up an
+  # array of clauses, one for each keyword.
+  my $query;			# The SQL query
+  my @clauses = ();		# The search clauses
+
+  $query = <<EOT;		# Beginning of the query
+	SELECT	biblionumber
+	FROM	biblio
+	WHERE
+EOT
+  foreach my $keyword (@key)
+  {
+    my @subclauses = ();	# Subclauses, one for each field we're
+				# searching on
+
+    # For each field we're searching on, create a subclause that'll
+    # match the current keyword in the current field.
+    foreach my $field (qw(title notes seriestitle))
+    {
+      push @subclauses,
+	"$field LIKE '\Q$keyword\E%' OR $field LIKE '% \Q$keyword\E%'";
+    }
+    # (Yes, this could have been done as
+    #	@subclauses = map {...} qw(field1 field2 ...)
+    # )but I think this way is more readable.
+
+    # Construct the current clause by joining the subclauses.
+    push @clauses, "(" . join(")\n\tOR (", @subclauses) . ")";
   }
-  $query.= ") or ((biblio.notes like '$key[0]%' or biblio.notes like '% $key[0]%')";
-  for ($i=1;$i<$count;$i++){
-      $query.=" and (biblio.notes like '$key[$i]%' or biblio.notes like '% $key[$i]%')";
-  }
-   $query.= ") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%')";
-  for ($i=1;$i<$count;$i++){
-      $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
-  }
-  $query.=" )";
-#  print $query;
+  # Now join all of the clauses together and append to the query.
+  $query .= "(" . join(")\nAND (", @clauses) . ")";
+
+  # FIXME - Perhaps use $sth->bind_columns() ? Documented as the most
+  # efficient way to fetch data.
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  $i=0;
-  while (my @res=$sth->fetchrow_array){
-    $results[$i]=$res[0];
-    $i++;
+  while (my @res = $sth->fetchrow_array) {
+    for (@res)
+    {
+	$biblionumbers{$_} = 1;		# Add these results to the set
+    }
   }
   $sth->finish;
-  my $set1=Set::Scalar->new(@results);
 
   # Now look for keywords in the 'bibliosubtitle' table.
-  $query="Select biblionumber from bibliosubtitle where
-  ((subtitle like '$key[0]%' or subtitle like '% $key[0]%')";
-  for ($i=1;$i<$count;$i++){
-        $query.= " and (subtitle like '$key[$i]%' or subtitle like '% $key[$i]%')";
+
+  # Again, we build a list of clauses from the keywords.
+  @clauses = ();
+  $query = "SELECT biblionumber FROM bibliosubtitle WHERE ";
+  foreach my $keyword (@key)
+  {
+    push @clauses,
+	"subtitle LIKE '\Q$keyword\E%' OR subtitle like '% \Q$keyword\E%'";
   }
-  $query.=" )";
-#  print $query;
+  $query .= "(" . join(") AND (", @clauses) . ")";
+
   $sth=$dbh->prepare($query);
   $sth->execute;
-  $i=0;
-  while (my @res=$sth->fetchrow_array){
-    $results[$i]=$res[0];
-    $i++;
+  while (my @res = $sth->fetchrow_array) {
+    for (@res)
+    {
+	$biblionumbers{$_} = 1;		# Add these results to the set
+    }
   }
   $sth->finish;
-  my $set2=Set::Scalar->new(@results);
-  if ($i > 0){
-    $set1=$set1+$set2;
-  }
 
   # Look for the keywords in the notes for individual items
   # ('biblioitems.notes')
-  $query ="Select biblionumber from biblioitems where
-  ((biblioitems.notes like '$key[0]%' or biblioitems.notes like '% $key[0]%')";
-  for ($i=1;$i<$count;$i++){
-      $query.=" and (biblioitems.notes like '$key[$i]%' or biblioitems.notes like '% $key[$i]%')";
+
+  # Again, we build a list of clauses from the keywords.
+  @clauses = ();
+  $query = "SELECT biblionumber FROM biblioitems WHERE ";
+  foreach my $keyword (@key)
+  {
+    push @clauses,
+	"notes LIKE '\Q$keyword\E%' OR notes like '% \Q$keyword\E%'";
   }
-  $query.=" )";
-#  print $query;
+  $query .= "(" . join(") AND (", @clauses) . ")";
+
   $sth=$dbh->prepare($query);
   $sth->execute;
-  $i=0;
-  while (my @res=$sth->fetchrow_array){
-    $results[$i]=$res[0];
-    $i++;
+  while (my @res = $sth->fetchrow_array) {
+    for (@res)
+    {
+	$biblionumbers{$_} = 1;		# Add these results to the set
+    }
   }
   $sth->finish;
-  my $set3=Set::Scalar->new(@results);
-  if ($i > 0){
-    $set1=$set1+$set3;
-  }
 
   # Look for keywords in the 'bibliosubject' table.
+
+  # FIXME - The other queries look for words in the desired field that
+  # begin with the individual keywords the user entered. This one
+  # searches for the literal string the user entered. Is this the
+  # desired effect?
+  # Note in particular that spaces are retained: if the user typed
+  #	science  fiction
+  # (with two spaces), this won't find the subject "science fiction"
+  # (one space). Likewise, a search for "%" will return absolutely
+  # everything.
+  # If this isn't the desired effect, see the previous searches for
+  # how to do it.
+
   $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
   like '%$search->{'keyword'}%' group by biblionumber");
   $sth->execute;
-  $i=0;
-  while (my @res=$sth->fetchrow_array){
-    $results[$i]=$res[0];
-    $i++;
+
+  while (my @res = $sth->fetchrow_array) {
+    for (@res)
+    {
+	$biblionumbers{$_} = 1;		# Add these results to the set
+    }
   }
   $sth->finish;
-  my $set4=Set::Scalar->new(@results);
-  if ($i > 0){
-    $set1=$set1+$set4;
-  }
+
   my $i2=0;
   my $i3=0;
   my $i4=0;
 
   my @res2;
-  my @res = $set1->members;
+  my @res = keys %biblionumbers;
   $count=@res;
-#  print $set1;
+
   $i=0;
 #  print "count $count";
   if ($search->{'class'} ne ''){
@@ -493,21 +511,19 @@ sub KeywordSearch {
 
    } else {
   # $search->{'class'} was not specified
+
+  # FIXME - This is bogus: it makes a separate query for each
+  # biblioitem, and returns results in apparently random order. It'd
+  # be much better to combine all of the previous queries into one big
+  # one (building it up a little at a time, of course), and have that
+  # big query select all of the desired fields, instead of just
+  # 'biblionumber'.
+
   while ($i2 < $num && $i2 < $count){
     my $query="select * from biblio,biblioitems where
     biblio.biblionumber='$res[$i2+$offset]' and
     biblio.biblionumber=biblioitems.biblionumber ";
 
-    if ($search->{'class'} ne ''){	# FIXME - Ignored: we already know
-					# that $search->{'class'} eq '';
-      my @temp=split(/\|/,$search->{'class'});
-      my $count=@temp;
-      $query.= "and ( itemtype='$temp[0]'";
-      for (my $i=1;$i<$count;$i++){
-        $query.=" or itemtype='$temp[$i]'";
-      }
-      $query.=")";
-    }
     if ($search->{'dewey'} ne ''){
       $query.= "and (dewey like '$search->{'dewey'}%') ";
     }
