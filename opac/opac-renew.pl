@@ -5,7 +5,7 @@
 #script to renew items from the web
 
 use CGI;
-use C4::Circulation::Renewals2;
+use C4::Circulation::Circ2;
 
 my $query = new CGI;
 

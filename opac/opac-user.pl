@@ -6,7 +6,6 @@ use CGI;
 use C4::Auth;
 use C4::Koha;
 use C4::Circulation::Circ2;
-use C4::Circulation::Renewals2;
 use C4::Reserves2;
 use C4::Search;
 use C4::Interface::CGI::Output;
