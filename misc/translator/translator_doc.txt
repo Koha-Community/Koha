@@ -1,0 +1,54 @@
+TRANSLATION TOOL :
+============
+This transation tool should greatly help Koha translators.
+It's composed of 2 script :
+* test-extract.pl, that extracts the texts in a template. It is called by
+* tmpl_process.
+tmpl process can do 3 things :
+- create a file with all sentences all files in a directory (& it's subdirectories)
+- update an existing translation file.
+- rebuild translated templates from english & translation file.
+
+Call tmpl_process --help to get full explanations.
+
+HOW TO TRANSLATE Koha :
+============
+1- create your translation file :
+./tmpl_process.pl update -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -s opac.fr -r
+2- translate your opac.fr file (english & french being separated by a tab
+3- create your translated version :
+./tmpl_process.pl install -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s opac.fr -r
+4- copy images in your new directory (as they are NOT moved by tmpl_process.pl install)
+
+If something changes in english version, go back to pt1 & repeat.
+
+WEAKNESSES
+=======
+I've found some weaknesses (some solvable probably, but maybe some unsolvable)
+- HTML::Templates pb :
+ if there is only a <TMPL* > tag between 2 strings, text-extract sometimes merges both strings, and so can't replace them in the translated template. I've solved all those cases with a <br/> or another HTML statement.
+
+- SHORT STATEMENTS
+ short statements (like "in") can be replaced stupidly (like in cgi-bin => gives cgi-bdans in french). the workaround has been to replace only complete words (
+line 185 of tmpl_process :
+$line =~ s/(\W)$text(\W)/$1$subst$2/g;
+)
+Don't seem to have any side effect.
+
+- WORD exist in FILENAME
+words that are in the templates and in a perl script name are replaced !
+For example : Search is replace by Recherche in french, thus,giving <a href="cgi-bin/opac-Recherche.pl">, which is wrong...
+The only way I've found to solve this is to ignore any translation whose translation string is IGNORE
+(search is the only cas i've found in french opac)
+
+- MISSING STRINGS
+Maybe some strings that should be translated are missing.
+You can add whatever you want in text-extract.pl.
+For instance, it extracts :
+- standard text
+- text in alt="SOMETEXT"
+- meta html encoding (8859-1) to enable non european translations.
+
+COPYRIGHT
+======
+@ paul poulain (paul.poulain _@_ free.fr) & Jerome Vizcaino vizcainj _@_ esiee.fr
