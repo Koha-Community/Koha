@@ -1,4 +1,6 @@
-package C4::Circulation::Renewals; #assumes C4/Circulation/Renewals
+package C4::Circulation::Renewals;
+
+# $Id$
 
 #package to deal with Renewals
 #written 7/11/99 by olwen@katipo.co.nz
@@ -32,75 +34,91 @@ use C4::Circulation::Issues;
 use C4::Circulation::Main;
 	# FIXME - C4::Circulation::Main and C4::Circulation::Renewals
 	# use each other, so functions get redefined.
-
 use C4::Search;
 use C4::Scan;
 use C4::Stats;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-  
+use vars qw($VERSION @ISA @EXPORT);
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
+=head1 NAME
+
+C4::Circulation::Renewals - Old Koha module dealing with renewals
+
+=head1 SYNOPSIS
+
+  use C4::Circulation::Renewals;
+
+=head1 DESCRIPTION
+
+This module contains a function for checking whether a book may be
+renewed.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&renewstatus &renewbook &bulkrenew);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+=item renewstatus
 
+  $ok = &renewstatus($env, $dbh, $borrowernumber, $itemnumber);
 
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
+Find out whether a borrowed item may be renewed.
 
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
+C<$env> is ignored.
 
+C<$dbh> is a DBI handle to the Koha database.
 
-sub Return  {
-  
-}    
+C<$borrowernumber> is the borrower number of the patron who currently
+has the item on loan.
 
+C<$itemnumber> is the number of the item to renew.
+
+C<$renewstatus> returns a true value iff the item may be renewed. The
+item must currently be on loan to the specified borrower; renewals
+must be allowed for the item's type; and the borrower must not have
+already renewed the loan.
+
+=cut
+#'
+# FIXME - This is identical to &C4::Circulation::Circ2::renewstatus,
+# and virtually identical to &C4::Circulation::Renewals2::renewstatus.
+# Pick one and stick with it.
 sub renewstatus {
   # check renewal status
+  # FIXME - Two people can't borrow the same book at once, so
+  # presumably we can get $bornum from $itemno.
   my ($env,$dbh,$bornum,$itemno)=@_;
-  my $renews = 1;
+  my $renews = 1;		# FIXME - I think this is the maximum
+				# number of allowed renewals.
+  # FIXME - I think this function could be redone to use only one SQL
+  # call.
   my $renewokay = 0;
-  my $q1 = "select * from issues 
+  # Look in the issues table for this item, lent to this borrower,
+  # and not yet returned.
+  my $q1 = "select * from issues
     where (borrowernumber = '$bornum')
-    and (itemnumber = '$itemno') 
+    and (itemnumber = '$itemno')
     and returndate is null";
   my $sth1 = $dbh->prepare($q1);
   $sth1->execute;
+  # Found a matching item
   if (my $data1 = $sth1->fetchrow_hashref) {
+    # See if this item may be renewed. This query is convoluted
+    # because it's a bit messy: given the item number, we need to find
+    # the biblioitem, which gives us the itemtype, which tells us
+    # whether it may be renewed.
     my $q2 = "select renewalsallowed from items,biblioitems,itemtypes
        where (items.itemnumber = '$itemno')
-       and (items.biblioitemnumber = biblioitems.biblioitemnumber) 
+       and (items.biblioitemnumber = biblioitems.biblioitemnumber)
        and (biblioitems.itemtype = itemtypes.itemtype)";
     my $sth2 = $dbh->prepare($q2);
-    $sth2->execute;     
+    $sth2->execute;
     if (my $data2=$sth2->fetchrow_hashref) {
       $renews = $data2->{'renewalsallowed'};
     }
@@ -108,16 +126,22 @@ sub renewstatus {
       $renewokay = 1;
     }
     $sth2->finish;
-  }   
+  }
   $sth1->finish;
-  return($renewokay);    
+  return($renewokay);
 }
 
-
+# FIXME - A different version of this function appears in
+# C4::Circulation::Renewals2. Pick one and stick with it.
+# FIXME - This function doesn't appear to be used. Presumably it's
+# obsolete.
+# Otherwise, it needs a POD.
 sub renewbook {
   # mark book as renewed
+  # FIXME - Get $dbh from C4::Context->dbh, instead of requiring
+  # an additional argument.
   my ($env,$dbh,$bornum,$itemno,$datedue)=@_;
-  if ($datedue eq "" ) {    
+  if ($datedue eq "" ) {
     my $loanlength=21;
     my $query= "Select * from biblioitems,items,itemtypes
        where (items.itemnumber = '$itemno')
@@ -143,20 +167,23 @@ sub renewbook {
   my $issuedata=$sth->fetchrow_hashref;
   $sth->finish;
   my $renews = $issuedata->{'renewals'} +1;
-  my $updquery = "update issues 
+  my $updquery = "update issues
     set date_due = '$datedue', renewals = '$renews'
     where borrowernumber='$bornum' and
     itemnumber='$itemno' and returndate is null";
   my $sth=$dbh->prepare($updquery);
-  
+
   $sth->execute;
   $sth->finish;
   return($odatedue);
 }
 
+# FIXME - Only used in C4:InterfaceCDK. Presumably this function is
+# obsolete.
+# Otherwise, it needs a POD.
 sub bulkrenew {
   my ($env,$dbh,$bornum,$amount,$borrower,$odues) = @_;
-  my $query = "select * from issues 
+  my $query = "select * from issues
     where borrowernumber = '$bornum' and returndate is null order by date_due";
   my $sth = $dbh->prepare($query);
   $sth->execute();
@@ -175,17 +202,19 @@ sub bulkrenew {
      my ($resbor,$resrec) = C4::Circulation::Main::checkreserve($env,
         $dbh,$issrec->{'itemnumber'});
      if ($resbor ne "") {
-       $line = $line."R";
+       $line = $line."R";		# FIXME - .=
        $rstatuses[$x] ="R";
      } elsif ($renewstatus == 0) {
-       $line = $line."N";
+       $line = $line."N";		# FIXME - .=
        $rstatuses[$x] = "N";
      } else {
-       $line = $line."Y";
+       $line = $line."Y";		# FIXME - .=
        $rstatuses[$x] = "Y";
-     }  
+     }
      $line = $line.fmtdec($env,$issrec->{'renewals'},"20")." ";
+					# FIXME - .=
      $line = $line.$itemdata->{'barcode'}." ".$itemdata->{'itemtype'}." ".$itemdata->{'title'};
+					# FIXME - .=
      $items[$x] = $line;
      #debug_msg($env,$line);
      $issues[$x] = $issrec;
@@ -196,10 +225,10 @@ sub bulkrenew {
      }
      $renewdef[$x] = $rdef;
      $x++;
-  }  
-  if ($x < 1) { 
+  }
+  if ($x < 1) {
      return;
-  }   
+  }
   my $renews = C4::Interface::RenewalsCDK::renew_window($env,
      \@items,$borrower,$amount,$odues);
   my $isscnt = $x;
@@ -220,14 +249,24 @@ sub bulkrenew {
         &UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$issrec->{'itemnumber'});
       } elsif ($rstatuses[$x] eq "N") {
         C4::InterfaceCDK::info_msg($env,
-	   "</S>$barcodes[$x] - can't renew");	
+	   "</S>$barcodes[$x] - can't renew");
       } else {
         C4::InterfaceCDK::info_msg($env,
 	   "</S>$barcodes[$x] - on reserve");
       }
-    }  
+    }
     $x++;
   }
   $sth->finish();
 }
-END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut
