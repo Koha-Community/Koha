@@ -120,7 +120,7 @@ if ($op eq 'add_form') {
 			_alertString += "- loan length is not a number\\n";
 		}
 		if (!isNum(f.rentalcharge,0)) {
-			_alertString += "- loan length is not a number\\n";
+			_alertString += "- rental charge is not a number\\n";
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
