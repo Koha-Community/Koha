@@ -1,0 +1,44 @@
+<HTML>
+<!-- TMPL_IF name="refresh" -->
+	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR name="refresh" -->">
+<!-- /TMPL_IF -->
+<font size="6"><em>Résultats Recherche Z39.50</em></font><br />
+
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Notices bibliographiques trouvées</font></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>Titre</b></td>
+		<td><b>Auteur</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>provenant de</b></td>
+		<td><b>&nbsp;</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<!-- TMPL_IF name="breeding_loop" -->
+	<!-- TMPL_LOOP name="breeding_loop" -->
+		<tr valign="top" bgcolor="<!-- TMPL_VAR name="toggle" -->">
+			<td><!-- TMPL_VAR name="title" --></a>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="file" --></td>
+			<td><a href="javascript:Importer(<!-- TMPL_VAR name="id" -->)">Importer this biblio</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+		<tr><td colspan=6>Rien trouvé</td></tr>
+	<!-- /TMPL_IF -->
+</table>
+<!-- TMPL_IF name="numberpending" --><H1><center>Still <!-- TMPL_VAR name="numberpending" --> requests to go</center></H1><!-- /TMPL_IF -->
+<br />
+<script>
+	function Importer(GetThisOne) {
+		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR name="oldbiblionumber" -->&breedingid="+GetThisOne;
+		self.close();
+		return false;
+	}
+</script>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

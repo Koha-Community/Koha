@@ -1,0 +1,41 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->>Menu principal</a></h1>
+<h2>Sélectionner un ensemble de notices MARC</h2>\n<ul>
+<!-- TMPL_LOOP name="marc" -->
+	<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="id" -->&menu=<!-- TMPL_VAR name="menu" -->><!-- TMPL_VAR name="name" --></a></li>
+<!-- /TMPL_LOOP -->
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Recherche Z39.50</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Charger des notices MARC</a>
+</ul>
+</ul>
+<p>
+<table border=1 bgcolor=#dddddd>
+	<tr><th bgcolor=#bbbbbb colspan=2>
+		Charger un ensemble de notices MARC</th>
+	</tr>
+	<tr>
+		<td>Charger un ensemble de notices MARC:</td>
+		<td>
+			<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=<!-- TMPL_VAR name="menu" -->" enctype="multipart/form-data">
+			<input type="file" name="uploadmarc"/>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type=hidden name=menu value=<!-- TMPL_VAR name="menu" -->
+			Nommer cet ensemble de notices MARC:
+		</td>
+		<td>
+			<input type=text name=name>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=2 align=center>
+			<input type=submit>
+		</td>
+	</tr>
+</table>
+</form>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+

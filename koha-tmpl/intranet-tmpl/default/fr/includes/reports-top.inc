@@ -2,8 +2,8 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Reports</title>
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+<title>KOHA: INTRANET: Rapports</title>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
@@ -47,13 +47,13 @@ a.reports:hover {
 						<a class="members" href="/cgi-bin/koha/members-home.pl">Lecteurs</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisition</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 					</td>
 					<td>
-						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Etats</a>
+						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Rapports</a>
 					</td>
 					<td>
 						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a>
@@ -69,8 +69,8 @@ a.reports:hover {
 </tr>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Connecté en tant que: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Déconnecter</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> à Koha</p>
-</TMPL_IF>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Connecté comme: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Déconnecter</a>]</p>
+<!-- TMPL_ELSE -->
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
+<!-- /TMPL_IF -->

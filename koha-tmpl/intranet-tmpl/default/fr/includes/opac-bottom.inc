@@ -6,8 +6,9 @@
 
 <font size=2  face="arial, helvetica">
 
-<A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Recherche</a> ||
-<A HREF="/cgi-bin/koha/members-home.pl">Zone Lecteur</a> ||
+<A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Recherche Catalogue</a> ||
+<!--<A HREF="/cgi-bin/koha/members-home.pl">Lecteurs Aire</a> || -->
+<A HREF="/join.html">S'inscrire</a> ||
 <A HREF="/cgi-bin/koha/mainpage.pl">Accueil</a>
 
 </font>
