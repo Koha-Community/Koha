@@ -2,14 +2,23 @@
 
 <div id="mainbloc">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
+	<a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">MARC</a>
+	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+		ISBD
+	</a>
+	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+		Add to shelf
+	</a>
+	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+		Print
+	</a>
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
-		<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
+		<a class="button catalogue" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
 	<!-- /TMPL_IF -->
-	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
 	<div id="bloc25">
 		<h2 class="catalogue">BIBLIO RECORD <!-- TMPL_VAR NAME="biblionumber" --></h2>
-		<p><a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">MARC</a></p>
 		<p>
 			<!-- TMPL_IF name="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
@@ -72,4 +81,10 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 </div>
+<script>
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
 <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

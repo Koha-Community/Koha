@@ -1,0 +1,35 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<div id="mainbloc">
+	<div id="bibliomenu">
+		<a href="detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+			Normal
+		</a>
+		<a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+			MARC
+		</a>
+		<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+			Add to shelf
+		</a>
+		<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+			Print
+		</a>
+		<!-- TMPL_UNLESS NAME="norequests" -->
+			<a class="button catalogue" href="/cgi-bin/koha/reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+				Request
+			</a>
+		<!-- /TMPL_UNLESS -->
+	</div>
+
+	<div id="bloc100">
+		<h2 class="catalogue">ISBD</h2>
+		<p>ISBD : <!-- TMPL_VAR name="ISBD" --></p>
+	</div>
+</div>
+<script>
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

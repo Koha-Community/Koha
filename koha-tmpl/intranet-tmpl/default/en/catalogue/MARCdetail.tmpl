@@ -11,9 +11,16 @@
 	<a href="detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
 		Normal
 	</a>
+	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+		ISBD
+	</a>
+	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+		Add to shelf
+	</a>
 	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
 		Print
 	</a>
+
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
 		<a href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" --> class="button catalogue">Request</a>
