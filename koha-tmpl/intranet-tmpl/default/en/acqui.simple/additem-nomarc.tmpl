@@ -53,7 +53,7 @@ GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
 <TMPL_LOOP NAME="ITEMS>
 <tr valign="top" bgcolor="#FFFFCC">
 <td><b>Item:</b> <TMPL_VAR NAME="barcode"><br>
-<b>Home Branch:</b> $branchnames{$items[$j]->{'homebranch'}}<br>
+<b>Home Branch:</b> <TMPL_VAR NAME="homebranch"><br>
 <b>Notes:</b> <TMPL_VAR NAME="itemnotes"></td>
 </tr>
 </TMPL_LOOP>
@@ -65,7 +65,7 @@ GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
 <center>
 
 <form action="saveitem.pl" method="post">
-<input type="hidden" name="biblionumber" value="$biblionumber">
+<input type="hidden" name="biblionumber" value="<TMPL_VAR NAME="biblionumber">">
 <table border="1" cellspacing="0" cellpadding="5">
 <tr valign="top" bgcolor="#CCCC99">
 <td background="/images/background-mem.gif" colspan="2"><b>ADD NEW
@@ -80,7 +80,7 @@ ITEM:</b><br>
 <td>Branch:</td>
 <td><select name="homebranch">
 <TMPL_LOOP NAME="BRANCHES">
-<option value="$branches[$i]->{'branchcode'}">$branches[$i]->{'branchname'}</option>
+<option value="<TMPL_VAR NAME="branchcode">"><TMPL_VAR NAME="branchname"></option>
 </TMPL_LOOP>
 </select></td>
 </tr>
