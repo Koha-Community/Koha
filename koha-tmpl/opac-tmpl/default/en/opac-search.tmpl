@@ -1,81 +1,71 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<CENTER>
-<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
-<TABLE >
+<form action="/cgi-bin/koha/opac-searchresults.pl" method=get>
+<table border="0" align="center">
 
 
-<TR VALIGN=TOP>
-	<TD>Keywords</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-	<td></TD>
-</TR>
+<tr>
+	<td>Keywords</td>
+	<td colspan="2"><input type="text"  size="25"   name="keyword"></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD colspan=3><B>OR :</B></TD>
-<td></TD></TR>
-<TR VALIGN=TOP>
-	<TD>Subject</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td colspan="3"><b>OR :</b></td>
+</tr>
+<tr>
+	<td>Subject</td>
+	<td colspan="2"><input type="text"  size="25"   name="subject"></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD colspan=3><B>OR one or more from :</B></TD>
-<td></TD></TR>
+<tr>
+	<td colspan="3"><b>OR one or more from :</b></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD>Title</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
-	<td><input type=radio name=ttype value=normal checked>Normal<input type=radio name=ttype value=exact>Exact</td>
-</TR>
+<tr>
+	<td>Title</td>
+	<td><input type="text"  size="25"   name="title"></td>
+	<td><input type="radio" name="ttype" value="normal" checked="checked">Normal<input type="radio" name="ttype" value="exact">Exact</td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD>Author</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td>Author</td>
+	<td colspan="2"><input type="text" size="25" name="author"></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD>Illustrator</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td>Illustrator</td>
+	<td colspan="2"><input type="text" size="25" name="illustrator"></td>
+</tr>
 
 <tr>
 <td>Class</td>
-	<td>
+	<td colspan="2">
 	<select size="1"  name="class">
-	<option value="">Any
+	<option value="">Any</option>
 	<!-- fetch class list -->
 	<!-- TMPL_VAR name="classlist" -->
 	<!--#include virtual="/includes/cat-class-list.inc" -->
 	</select>
 	</td>
-	<td></td>
 </tr>
 
-<TR VALIGN=TOP>
-	<TD>Barcode</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td>Barcode</td>
+	<td colspan="2"><input type="text"  size="25"   name="itemnumber"></td>
+</tr>
 
-<TR VALIGN=TOP>
-
+<tr>
 	<td><input type="submit" value="OK Start Search"></td>
-	<TD><font size=4 face="arial,helvetica"><INPUT TYPE="reset"  value="Clear All Fields"></font></td>
-	<td></td>
+	<td colspan="2"><input type="reset"  value="Clear All Fields"></td>
 </tr>
 
-<TR VALIGN=TOP>
-	<TD colspan=3>Note that if you enter a value in Keyword and a value somewhere else, only keyword will be used</TD>
-</TD></TR>
+<tr>
+	<td colspan="3">Note that if you enter a value in Keyword and a value somewhere else, only keyword will be used</td>
+</tr>
 
-</TABLE>
+</table>
 
-</FORM>
-</CENTER>
+</form>
 
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
