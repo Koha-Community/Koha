@@ -60,16 +60,16 @@ $template->param(FORMINPUTS => $forminputs);
 # do the searchs ....
 my $env;
 $env->{itemcount}=1;
-my $number_of_results = 20;
+my $number_of_results_per_page = 20;
 my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
-    @results = subsearch($env,$subjectitems, $number_of_results, $startfrom);
+    @results = subsearch($env,$subjectitems, $number_of_results_per_page, $startfrom);
     $count = $#results+1;
 } else {
-    ($count, @results) = catalogsearch($env,'',\%search,$number_of_results,$startfrom);
+    ($count, @results) = catalogsearch($env,'',\%search,$number_of_results_per_page,$startfrom);
 }
 
 my $num = 1;
@@ -114,12 +114,12 @@ $template->param(SEARCH_RESULTS => $resultsarray);
 
 my $numbers;
 @$numbers = ();
-if ($count>10) {
-    for (my $i=1; $i<$count/10+1; $i++) {
+if ($count>$number_of_results_per_page) {
+    for (my $i=1; $i<$count/$number_of_results_per_page+1; $i++) {
 	my $highlight=0;
 	my $themelang = $template->param('themelang');
-	($startfrom==($i-1)*10) && ($highlight=1);
-	push @$numbers, { number => $i, highlight => $highlight , startfrom => ($i-1)*10 };
+	($startfrom==($i-1)*$number_of_results_per_page) && ($highlight=1);
+	push @$numbers, { number => $i, highlight => $highlight , startfrom => ($i-1)*$number_of_results_per_page };
     }
 }
 
