@@ -15,6 +15,39 @@ unless ($< == 0) {
 my $kohaversion=`cat koha.version`;
 chomp $kohaversion;
 
+
+if ($kohaversion =~ /RC/) {
+    print qq|
+=====================
+= RELEASE CANDIDATE =
+=====================
+
+WARNING WARNING WARNING WARNING WARNING
+
+You are about to install Koha version $kohaversion.  This version of Koha is a
+release candidate.  It is not intended to be installed on production systems.
+It is being released so that users can test it before we release a final
+version.
+
+|;
+    print "Are you sure you want to install Koha $kohaversion? (Y/[N]): ";
+
+    my $answer = <STDIN>;
+    chomp $answer;
+
+    if ($answer eq "Y" || $answer eq "y") {
+	print "Great! continuing setup... \n";
+    } else {
+	print qq|
+
+Watch for announcements of Koha releases on the Koha mailing list or the Koha
+web site (http://www.koha.org/).
+
+|;
+	exit;
+    };
+}
+
 if (-e "/etc/koha.conf") {
     my $installedversion=`grep kohaversion= /etc/koha.conf`;
     chomp $installedversion;
