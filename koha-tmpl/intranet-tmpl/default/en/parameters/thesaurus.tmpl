@@ -34,12 +34,12 @@
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
-<H1><TMPL_IF name="search_category">Add<TMPL_ELSE>Modify</TMPL_IF></H1>
+<H1><TMPL_IF name="search_category">Modify<TMPL_ELSE>Add</TMPL_IF></H1>
 	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
 	<TMPL_IF name="search_category">
-		<input type=hidden name=op value='add_validate'>
-	<TMPL_ELSE>
 		<input type=hidden name=op value='mod_validate'>
+	<TMPL_ELSE>
+		<input type=hidden name=op value='add_validate'>
 	</TMPL_IF>
 	<table cellpadding=3 cellspacing=3>
 	<tr>
