@@ -32,7 +32,6 @@ use strict;
 require Exporter;
 use C4::Database;
 use MARC::Record;
-use warnings;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 

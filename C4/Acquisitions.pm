@@ -3,7 +3,6 @@ package C4::Acquisitions; #assumes C4/Acquisitions.pm
 use strict;
 require Exporter;
 use C4::Database;
-use warnings;
  #use C4::Biblio;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 

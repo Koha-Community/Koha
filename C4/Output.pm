@@ -6,7 +6,6 @@ package C4::Output;
 
 use strict;
 require Exporter;
-use warnings;
 
 use C4::Database;
 
