@@ -70,7 +70,7 @@ my $date="$mday/$mon/$year";
 my ($count2,@data) = bibitems($bib);
 my $bibitemrows = "";
 for (my $i=0; $i<$count2; $i++) {
-    if ($data[$i]->{'renewalsallowed'}){
+    unless ($data[$i]->{'notforloan'}){
 	my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
 	if ($data[$i]->{'dewey'} == 0){
 	    $data[$i]->{'dewey'}="";

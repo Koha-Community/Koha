@@ -204,6 +204,7 @@ sub getiteminformation {
 	$sth->execute;
 	my $itemtype=$sth->fetchrow_hashref;
 	$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
+	$iteminformation->{'notforloan'}=$itemtype->{'notforloan'};
 	$sth->finish;
     }
     $dbh->disconnect;
@@ -339,7 +340,7 @@ sub issuebook {
 	    last SWITCH;
 	}
 	if ($iteminformation->{'notforloan'} == 1) {
-	    $rejected="Item not for loan.";
+	    $rejected="Reference item: not for loan.";
 	    last SWITCH;
 	}
 	if ($iteminformation->{'wthdrawn'} == 1) {
@@ -348,10 +349,6 @@ sub issuebook {
 	}
 	if ($iteminformation->{'restricted'} == 1) {
 	    $rejected="Restricted item.";
-	    last SWITCH;
-	}
-	if ($iteminformation->{'itemtype'} eq 'REF') {
-	    $rejected="Reference item:  Not for loan.";
 	    last SWITCH;
 	}
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});

@@ -42,17 +42,17 @@ my $type=$input->param('type');
 my $title=$input->param('title');
 my $bornum=borrdata($borrower,'');
 if ($type eq 'str8' && $bornum ne ''){
-my $count=@bibitems;
-@bibitems=sort @bibitems;
-my $i2=1;
-my @realbi;
-$realbi[0]=$bibitems[0];
+    my $count=@bibitems;
+    @bibitems=sort @bibitems;
+    my $i2=1;
+    my @realbi;
+    $realbi[0]=$bibitems[0];
 for (my $i=1;$i<$count;$i++){
-  my $i3=$i2-1;
-  if ($realbi[$i3] ne $bibitems[$i]){
-    $realbi[$i2]=$bibitems[$i];
-    $i2++;
-  }
+    my $i3=$i2-1;
+    if ($realbi[$i3] ne $bibitems[$i]){
+	$realbi[$i2]=$bibitems[$i];
+	$i2++;
+    }
 }
 #print $input->dump;
 my $env;
