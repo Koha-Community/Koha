@@ -1,0 +1,44 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Print Receipt for <!-- TMPL_VAR NAME="cardnumber" --><!-- TMPL_INCLUDE NAME="doc-head-close-receipt.inc" -->
+
+<!-- main site -->
+<div id="main">
+<h3>Athens County Library</h3>
+<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><br><!-- /TMPL_IF -->
+Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber">"><!-- TMPL_VAR NAME="cardnumber" --></a><br>
+<!-- TMPL_VAR NAME="todaysdate" --><br>
+<table>
+	<caption>Issues</caption>
+	<tr>
+		<th>Date Due</th>
+		<th>Title</th>
+	</tr>
+
+	<!-- TMPL_loop name="issueloop" -->
+	<!-- TMPL_IF name="red" --><!-- TMPL_ELSE -->
+		<tr>
+		<td><!-- TMPL_VAR NAME="date_due" --></td>
+		<td><a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</table>
+	
+	<table>
+	<caption>Overdues</caption>
+	<tr>
+	<th>Date Due</th>
+	<th>Title</th>
+	</tr>
+	<!-- TMPL_LOOP NAME="issueloop" -->
+	<!-- TMPL_IF NAME="red" --><tr>
+	<td><!-- TMPL_VAR NAME="date_due" --></td>
+	<td><a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+	</tr>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</table>
+
+</div>
+<!-- endmenu -->
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
