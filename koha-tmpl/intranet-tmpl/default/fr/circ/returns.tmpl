@@ -23,7 +23,7 @@
 		<TMPL_IF Name="waiting">
 			<font color='red' size='+2'>Exemplaires en attente :</font><br>
 		L'exemplaire <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">) <br>
-		est en attente à <b><TMPL_VAR Name="branchname"></b> pour <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick='openWindow(this,'Member', 480, 640)'><TMPL_VAR Name="borcnum"></a>).
+		est en attente à <b><TMPL_VAR Name="branchname"></b> pour <TMPL_VAR Name="name"> (<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">', 'Member'); return false;"><TMPL_VAR Name="borcnum"></a>).
 			<center><form method=post action='returns.pl'>
 			<TMPL_LOOP Name="inputloop">
 				<input type=hidden name=ri-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
@@ -38,7 +38,7 @@
 			<font color='red' size='+2'>Item marked Waiting:</font><br>
 		L'exemplaire : <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">)<br>
 		doit être transféré à <b><TMPL_VAR Name="branchname"></b> <br>
-		pour être emprunté par <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick='openWindow(this,'Member', 480, 640)'><TMPL_VAR Name="borcnum"></a>).
+		pour être emprunté par <TMPL_VAR Name="name"> (<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">', 'Member'); return false;"><TMPL_VAR Name="borcnum"></a>).
 			<center><form method=post action='returns.pl'>
 			<TMPL_LOOP Name="inputloop">
 				<TMPL_UNLESS Name="first">
@@ -52,8 +52,8 @@
 			</form></center>
 		</TMPL_IF>
 		<TMPL_IF Name="reserved">
-			<font color='red' size='+2'>Réservation trouvée :</font> Exemplaire : <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">) <a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\"><TMPL_VAR Name="itembarcode"></a> <br>
-			pour <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick='openWindow(this,'Member', 480, 640)'><TMPL_VAR Name="borcnum"></a>) Pour être ramassé à <b><TMPL_VAR Name="branchname"></b>.
+			<font color='red' size='+2'>Reservation trouvée :</font> Exemplaire : <TMPL_VAR Name="itemtitle"> (<TMPL_VAR Name="itemauthor">) <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra', 'Item'); return false;"><TMPL_VAR Name="itembarcode"></a> <br>
+			pour <TMPL_VAR Name="name"> (<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">', 'Member'); return false"><TMPL_VAR Name="borcnum"></a>) Pour être ramassé à <b><TMPL_VAR Name="branchname"></b>.
 			<table cellpadding=5 cellspacing=0>
 			<tr><td valign="top">Modifier statut ("attente") et imprimer <a href="" onClick='alert(document.forms[0].resslip.value); return false'>déplacer</a>?: </td>
 			<td valign="top">
@@ -156,7 +156,7 @@ Tel : <TMPL_VAR Name="borphone">
 		<tr><td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<font color=black><b>Information emprunteur</b></font></td></tr>
 		<tr><td colspan=2>
-		<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="ribornum"> onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="riborcnum"></a>
+		<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="ribornum">" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="ribornum">','Member'); return false;"><TMPL_VAR Name="riborcnum"></a>
 		<TMPL_VAR Name="riborsurname">, <TMPL_VAR Name="ribortitle"> <TMPL_VAR Name="riborfirstname"><br>
 		</td></tr>
 		<TMPL_IF Name="flagset">
@@ -165,12 +165,12 @@ Tel : <TMPL_VAR Name="borphone">
 			<TMPL_LOOP Name="flagloop">
 				<tr><td valign=top><TMPL_IF Name="redfont"><font color="red"></TMPL_IF><TMPL_VAR Name="flag"><TMPL_IF Name="redfont"></font></TMPL_IF></td>
 				<TMPL_IF Name="charges">
-					<td bgcolor=<TMPL_VAR Name="color">><b><TMPL_VAR Name="msg"></b><a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR Name="borrowernumber"> onClick="openWindow(this, 'Payment', 480,640)">Paiement</a></td></tr>
+					<td bgcolor=<TMPL_VAR Name="color">><b><TMPL_VAR Name="msg"></b><a href="/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR Name="bornum">" onclick="openWindow('/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR Name="bornum">', 'Payment'); return false;">Paiement</a></td></tr>
 				</TMPL_IF>
 				<TMPL_IF Name="waiting">
 					<td bgcolor=<TMPL_VAR Name="color">>
 					<TMPL_LOOP Name="itemloop">
-						<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type=intraonClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR Name="barcode"></a><TMPL_VAR Name="title">(<TMPL_VAR Name="brname">)<br>
+						<a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type=intra','Item'); return false;"><TMPL_VAR Name="barcode"></a><TMPL_VAR Name="title">(<TMPL_VAR Name="brname">)<br>
 					</TMPL_LOOP>
 					</td></tr>
 				</TMPL_IF>
@@ -178,7 +178,7 @@ Tel : <TMPL_VAR Name="borphone">
 					<td bgcolor=<TMPL_VAR Name="color">>
 					<TMPL_LOOP Name="itemloop">
 					<font color=red><TMPL_VAR Name="duedate"></font>
-						<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type='intra' onClick="openWindow(this, 'Item', 480, 640)">
+						<a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionum">&type=intra', 'Item'); return false;">
 							<TMPL_VAR Name="barcode">
 						</a>
 						<TMPL_VAR Name="title">
@@ -215,14 +215,14 @@ Tel : <TMPL_VAR Name="borphone">
 				</TMPL_IF>
 			</td>
 			<td bgcolor=<TMPL_VAR Name="color">> align=center>
-			<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\"><TMPL_VAR Name="barcode"></a></td>
+			<a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="itembiblionumber">&type=intra', 'Item'); return false;"><TMPL_VAR Name="barcode"></a></td>
 			<td bgcolor=<TMPL_VAR Name="color">><TMPL_VAR Name="itemtitle"></td>
 			<td bgcolor=<TMPL_VAR Name="color">><TMPL_VAR Name="itemauthor"></td>
 			<td bgcolor=<TMPL_VAR Name="color"> align=center><TMPL_VAR Name="itemtype"></td>
 			<td bgcolor=<TMPL_VAR Name="color">>
 			<TMPL_IF Name="duedate">
-				<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick=\"openWindow(this,'Member', 480, 640)\">
-					<TMPL_VAR Name="borcnum">
+				<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">','Member'); return false;">
+  					<TMPL_VAR Name="borcnum">
 				</a> <TMPL_VAR Name="borfirstname"> <TMPL_VAR Name="borsurname">
 			<TMPL_ELSE>
 				<TMPL_VAR Name="bornum">
