@@ -201,13 +201,15 @@ printend
 	print mkformnotable("$script_name",@inputs);
 	print <<printend
 <b>Hints :</b>
-6 variables are useful in this table :
+8 variables are useful in this table :
 <li><i>acquisitions</i>, which value may be "simple" or "normal"</li>
 <li><i>autoMemberNum</i> which may be 1 or 0</li>
 <li><i>dateformat</i> which may be "US" for mm/dd/yy format, or "metric" for dd/mm/yy format.
 <li><i>printcirculationslips</i> which may be 1 or 0</li> 
 <li><i>printreserveslips</i> which may be 1 or 0</li> 
 <li><i>KohaAdminEmailAddress</i> - currently used for patron's to request changes to their information.
+<li><i>opacthemes</i> - a space separated list of themes (note that opacthemes is applied to intranet and opac together for now, and defaults to 'default')
+<li><i>opaclanguages</i> - a space separated list of languages (will fall back to 'en')
 <br><br>
 printend
 	;
