@@ -1,0 +1,118 @@
+<html>
+<!-- clarification needed about this page. many questions... what is Lib? a Library? -->
+
+<TMPL_INCLUDE NAME="cat-top.inc">
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
+</TMPL_IF>
+
+<TMPL_IF name="add_form">
+<!-------------------------------------------------------------------------------------------------->
+	<H1><TMPL_VAR name="action"></H1>
+	<form action='<TMPL_VAR name="script_name">' name=Aform method=put>
+	<input type=hidden name=op value='add_validate'>
+	<table>
+	<tr><th>Pole</th>
+		<th>Lib for librarians / for opac</th>
+		<th>Repet</th>
+		<th>Mand</th>
+		<th>Pole Koha</th>
+		<th>Tab</th>
+		<th>Authorised value or<br/>
+				Thesaurus category</th>
+	</tr>
+	<TMPL_LOOP name="loop">
+		<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
+		<td><TMPL_VAR name="tagfield"> - <TMPL_VAR name="tagsubfield"></td>
+		<td><input type=text name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80><br/>
+				<input type=text name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td>
+		<td><TMPL_VAR name="repeatable"></td>
+		<td><TMPL_VAR name="mandatory"></td>
+		<td><TMPL_VAR name="kohafield"></td>
+		<td><TMPL_VAR name="tab"></td>
+		<td><TMPL_VAR name="authorised_value"><br/>
+				or <TMPL_VAR name="thesaurus_category"><br/>
+				or <TMPL_VAR name="value_builder"></td>
+	</TMPL_LOOP>
+	</table>
+	<INPUT type=submit value='OK'>
+	<p>Uwaga: w ostatniej kolumnie nale¿y wybraæ:
+	<ul><li>"Warto¶æ autoryzown±": Odnosi siê do szeregu warto¶ci autoryzowanych dla tego podpola. Spójrz: odpowiednia tablica administratora</li>
+	<li>"Kategoria tezaurusa": Odnosi siê do kategorii tezaurusa. Zobacz odpowiedni± tablice administratora.</li>
+	<li>"Kreator warto¶ci: Jest to program w perlu, który pomaga wybraæ warto¶æ pola. Zale¿y on od odmiany-MARC i wype³nia automatycznie niektóre podpola.</li>
+	</ul>
+	</p>
+	</form>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirm">
+<!-------------------------------------------------------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=2>
+	<tr valign=top bgcolor=#99cc33>
+		<td background="/images/background-mem.gif"><b>Podpole</b></td>
+		<td background="/images/background-mem.gif"><b><TMPL_VAR name="tagsubfield"></b></td>
+	</tr>
+	<tr><td>&nbsp;</td><td><TMPL_VAR name="liblibrarian"></td></tr>
+	<form action='<TMPL_VAR name="delete_link">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
+	<input type=hidden name=tagfield value='<TMPL_VAR name="tagfield">'>
+	<input type=hidden name=tagsubfield value='<TMPL_VAR name="tagsubfield">'>
+	<tr><td colspan=2 align=center>POTWIERD¬ WYMAZANIE</td></tr>
+	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="script_name">' method=post><input type="hidden" name="tagfield" value="<TMPL_VAR name="tagfield">"><input type=submit value=NO></form></td></tr>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirmed">
+<!-------------------------------------------------------------------------------------------------->
+	dane wymazane
+	<form action='<TMPL_VAR name="script_name"> method=post><input type="hidden" name="tagfield" value="<TMPL_VAR name="tagfield">">
+	<input type=submit value=OK>
+	</form>
+</TMPL_IF>
+
+<!-------------------------------------------------------------------------------------------------->
+<TMPL_IF name="else">
+<font SIZE=6><em>Administracja struktury podpola MARC dla <TMPL_VAR name="tagfield"></em></font>
+<p>Ten ekran pokazuje podpola zwi±zane z wybranym znacznikiem. Mozna modyfikowaæ podpola lub dodawaæ nowe klikaj±c w "edit". </p>
+<p>Kolumna <b>pole koha</b> pokazuje, ¿e to podpole ma zwi±zek z "polem koha". System Koha potrafi zarz±dzaæ interfejsem marc lub interfejsem koha.
+To dowi±zanie (link) zapaeniwa w³a¶ciw± synchronizacjê obydwu baz. Mo¿na ³atwo przej¶æ z interfejsu MARC do KOHA.
+</p>
+<table border=0 cellspacing=0 cellpadding=2>
+<tr valign=top bgcolor=#99cc33>
+	<td background="/images/background-mem.gif" width=5%><b>Podpole</b></td>
+	<td background="/images/background-mem.gif" width=30%><b>Lib</b></td>
+	<td background="/images/background-mem.gif" width=10%><b>pole koha</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Tezaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Kreator Warto¶ci</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
+	<td background="/images/background-mem.gif" width=8%>&nbsp;</td>
+<TMPL_LOOP name="loop">
+<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
+	<td><TMPL_VAR name="tagsubfield"></td>
+	<td><TMPL_VAR name="liblibrarian"></td>
+	<td><TMPL_VAR name="kohafield"></td>
+	<td><TMPL_IF name="repeatable">Tak<TMPL_ELSE>Nie</TMPL_IF></td>
+	<td><TMPL_IF name="mandatory">Tak<TMPL_ELSE>Nie</TMPL_IF></td>
+	<td><TMPL_VAR name="tab"></td>
+	<td><TMPL_VAR name="authorised_value"></td>
+	<td><TMPL_VAR name="thesaurus_category"></td>
+	<td><TMPL_VAR name="value_builder"></td>
+	<td><a href="<TMPL_VAR name="delete">">usuñ</a></td>
+</tr>
+</TMPL_LOOP>
+</table>
+<TMPL_VAR name="edit">
+<table width=60%>
+	<tr>
+		<td width=33%><TMPL_VAR name="previous"></td>
+		<td width=33%><TMPL_VAR name="next"></td>
+		<td width=33%><a href="marctagstructure.pl?searchfield=<TMPL_VAR name="tagfield">">Powrót do znaczników</a></td>
+	</tr>
+</table>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="cat-bottom.inc">
+</html>
