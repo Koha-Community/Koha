@@ -176,10 +176,11 @@ if ($op eq 'add_form') {
 			$toggle=0;
 		}
 		$row_data{toggle} = $toggle;
-		$row_data{itemtype} = $results->[$i]{'itemtype'};
-		$row_data{description} = $results->[$i]{'description'};
-		$row_data{renewalsallowed} = $results->[$i]{'renewalsallowed'};
-		$row_data{rentalcharge} = sprintf("%.2f",$results->[$i]{'rentalcharge'});
+		$row_data{itemtype} = $results->[$i]{itemtype};
+		$row_data{description} = $results->[$i]{description};
+		$row_data{renewalsallowed} = $results->[$i]{renewalsallowed};
+		$row_data{notforloan} = $results->[$i]{notforloan};
+		$row_data{rentalcharge} = sprintf("%.2f",$results->[$i]{rentalcharge});
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
