@@ -63,12 +63,13 @@ my $query=new CGI;
 my $dbh=C4::Context->dbh;
 
 my $biblionumber=$query->param('bib');
-my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
+my $bibid = $query->param('bibid');
+$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 
 my $tagslib = &MARCgettagslib($dbh,1);
 
 my $record =MARCgetbiblio($dbh,$bibid);
-#warn $record->as_formatted();
+warn $record->as_formatted();
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
@@ -89,15 +90,20 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 	my @loop_data =();
 	foreach my $field (@fields) {
 		my @subf=$field->subfields;
-		my $previous_tag = '';
+#		my $previous_tag = '';
 		my @subfields_data;
 # loop through each subfield
 		for my $i (0..$#subf) {
-			$previous_tag = $field->tag();
+#			$previous_tag = $field->tag();
+			$subf[$i][0] = "@" unless $subf[$i][0];
 			next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-			$subfield_data{marc_value}=$subf[$i][1];
+			if ($field->tag()<10) {
+				$subfield_data{marc_value}=$field->data();
+			} else {
+				$subfield_data{marc_value}=$subf[$i][1];
+			}
 			$subfield_data{marc_tag}=$subf[$i][0];
 			push(@subfields_data, \%subfield_data);
 		}
