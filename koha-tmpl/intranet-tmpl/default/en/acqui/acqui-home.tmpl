@@ -9,7 +9,7 @@
 	</TD>
 </TR>
 <TR VALIGN=TOP>
-	<TD>Supplier ID or Name</TD>
+	<TD>Supplier Name</TD>
 	<TD>
 		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
 		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
@@ -77,18 +77,18 @@
 			<TMPL_LOOP name="loop_budget">
 				<tr>
 					<td><TMPL_VAR name="bookfundname"></TD>
-					<TD><TMPL_VAR name="budgetamount"></TD>
-					<TD><TMPL_VAR name="spent"></TD>
-					<TD><TMPL_VAR name="comtd"></TD>
-					<TD><TMPL_VAR name="avail"></TD>
+					<TD align=right><TMPL_VAR name="budgetamount"></TD>
+					<TD align=right><TMPL_VAR name="spent"></TD>
+					<TD align=right><TMPL_VAR name="comtd"></TD>
+					<TD align=right><TMPL_VAR name="avail"></TD>
 				</TR>
 			</TMPL_LOOP>
 			<tr>
 				<td><b>Total</b></TD>
-				<TD><b><TMPL_VAR name="total"></b></TD>
-				<TD><b><TMPL_VAR name="totspent"></b></TD>
-				<TD><b><TMPL_VAR name="totcomtd"></b></TD>
-				<TD><b><TMPL_VAR name="totavail"></b></TD>
+				<TD align=right><b><TMPL_VAR name="total"></b></TD>
+				<TD align=right><b><TMPL_VAR name="totspent"></b></TD>
+				<TD align=right><b><TMPL_VAR name="totcomtd"></b></TD>
+				<TD align=right><b><TMPL_VAR name="totavail"></b></TD>
 			</TR>
 		</table><br>
 		Use your reload button [ctrl + r] to get the most recent figures.
