@@ -137,7 +137,7 @@
 <li><span class="error">Lost:</span> Patron's card is lost</li>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<li><span class="error">Debarred:</span> Patron is debarred</li>
+<li><span class="error">Debarred:</span> Patron is debarred <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" value="circ" name="destination" /><input type="hidden" name="status" value="0" /><input type="submit" class="submit" value="Lift Debarment" /></form></li>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="odues" -->	<li><!-- TMPL_IF name="nonreturns" -->
 					<span class="error">Overdues:</span> Patron has <span class="error">ITEMS OVERDUE</span> See highlighted items <a href="#previous">below</a>
