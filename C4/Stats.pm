@@ -65,7 +65,7 @@ statistics table in the Koha database.
 If C<$branch> is the empty string, the branch code will be taken from
 C<$env-E<gt>{branchcode}>.
 
-C<$env-E<gt>{usercode} specifies the value of the C<usercode> field.
+C<$env-E<gt>{usercode}> specifies the value of the C<usercode> field.
 
 =cut
 #'
