@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css" />
+	<title><!--TMPL_VAR name="LibraryName"--></title>
+</head>
+<body>
+	<!-- MENUS -->
+	<div id="menuline">
+		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="koha logo" />
+		<span class="LibraryName"><!--TMPL_VAR name="LibraryName"--></span>
+		<span class="spacer">&nbsp;</span>
+		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Page d'accueil">Accueil</a>
+		<span class="spacer">&nbsp;</span>
+		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Recherche avancée">Recherche avancée</a>
+		<span class="spacer">&nbsp;</span>
+		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Accueil lecteur" >Lecteurs</a>
+	</div>
+	<!-- MAIN BODY OF PAGE -->

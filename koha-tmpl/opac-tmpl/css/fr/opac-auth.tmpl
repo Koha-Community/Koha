@@ -1,0 +1,38 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Désolé, je pense que vous n'avez pas les permissions suffisantes.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is displayed if Connecter has timed out -->
+<h2>Déconnecté. Identifiez vous à nouveau.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Vous avez changé d'adresse IP. Identifiez vous à nouveau<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Identifiant ou mot de passe erroné. Essayez encore.<h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- Connecter prompt time-->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+	<h1>Identifiant Koha</h1>
+	<p><label>N° de carte</label><input name="userid" /></p>
+	<p><label>Mot de passe :</label><input type="password" name="password" /></p>
+	<!-- TMPL_LOOP NAME="INPUTS" -->
+		<input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->' />
+	<!-- /TMPL_LOOP -->
+	<input type="submit" value="Connecter" class="button" />
+</form>
+
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
