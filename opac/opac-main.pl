@@ -7,6 +7,7 @@ use HTML::Template;
 use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::BookShelves;
+use C4::Koha;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -34,8 +35,19 @@ my ($template, $borrowernumber, $cookie)
 			     authnotrequired => 1,
 			     flagsrequired => {borrow => 1},
 			 });
+my @options;
+my $counter=0;
+foreach my $language (getalllanguages()) {
+	next if $language eq 'images';
+	my $selected='0';
+#                            next if $currently_selected_languages->{$language};
+	push @options, { language => $language, counter => $counter };
+	$counter++;
+}
+
 $template->param(CGIitemtype => $CGIitemtype,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
+				languages => \@options,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

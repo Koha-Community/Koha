@@ -57,7 +57,7 @@ related to the (guessed) charset.
 		&guesscharset
 		&guesstype
 		&output_html_with_http_headers
-	     );
+		);
 
 =item guesscharset
 
