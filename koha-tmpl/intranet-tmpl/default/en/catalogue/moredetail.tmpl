@@ -46,23 +46,22 @@
 	<input type="image" name="delete"  VALUE="delete" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
 	<br>
 	<b>Home Branch:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
+	<b>Current Branch:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
 	<b>Last seen:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
-	<b>Last borrowed:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
-	<!-- on issue bit -->
-	<!-- TMPL_VAR NAME="issue" -->
-	<!-- after -->
+	<b>Last borrowed:</b> <!-- TMPL_VAR NAME="datelastborrowed" --><br>
+	<b>Item Status:</b> <!-- TMPL_IF NAME="issue" -->On issue to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Available <!-- /TMPL_IF --><br>
+	<!-- TMPL_IF NAME="issue" --><b>Date Due:</b> <!-- TMPL_VAR NAME="date_due" --><br><!-- /TMPL_IF -->
 	<b>Last Borrower 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
 	<b>Last Borrower 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
-	<b>Current Branch:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
 	<b>Replacement Price:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
 	<b>Item lost:</b> <!-- TMPL_VAR NAME="itemlost" --><br>
 	<b>Paid for:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 	<b>Notes:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 	<b>Renewals:</b> <!-- TMPL_VAR NAME="renewals" --><br>
 	<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">
-	Accession</a>
-	Date:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
-	<b>Cancelled: <!-- TMPL_VAR NAME="wthdrawn" --><br>
+	Accession
+	Date:</a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br>
+	<b>Cancelled:</b> <!-- TMPL_VAR NAME="wthdrawn" --><br>
 	<b><a
 	href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total
 	Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
