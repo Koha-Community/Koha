@@ -24,17 +24,6 @@ Received By: <TMPL_VAR name="user"><br>
 	//-->
 	</script>
 	<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
-	<input type=hidden name=biblio value=<TMPL_VAR name="biblionumber">>
-	<input type=hidden name=ordnum value=<TMPL_VAR name="ordernumber">>
-	<input type=hidden name=biblioitemnum value=<TMPL_VAR name="biblioitemnumber">>
-	<input type=hidden name=id value="<TMPL_VAR name="booksellerid">">
-	<input type=hidden name=freight value="<TMPL_VAR name="freight">">
-	<input type=hidden name=gst value="<TMPL_VAR name="gst">">
-	<TMPL_IF name="catview">
-		<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right>
-	<TMPL_ELSE>
-		<a href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<TMPL_VAR name="ordernumber">&id=<TMPL_VAR name="booksellerid">><img src=/images/modify-mem.gif align=right border=0></a>
-	</TMPL_IF>
 	<FONT SIZE=6><em><TMPL_VAR name="ordernumber"> - Receive Order</em></FONT><br>
 	Shopping Basket For: <TMPL_VAR name="name">
 	<br> Order placed: <TMPL_VAR name="date">
@@ -85,8 +74,22 @@ Received By: <TMPL_VAR name="user"><br>
 			<TD><B>Volume Info (for serials) *</B></td>
 			<td><input type=text size=20 name=volinf></td>
 		</tr>
+		<TR VALIGN=TOP>
+			<td colspan=2 align="center">
+				<input type=hidden name=biblio value=<TMPL_VAR name="biblionumber">>
+				<input type=hidden name=ordnum value=<TMPL_VAR name="ordernumber">>
+				<input type=hidden name=biblioitemnum value=<TMPL_VAR name="biblioitemnumber">>
+				<input type=hidden name=id value="<TMPL_VAR name="booksellerid">">
+				<input type=hidden name=freight value="<TMPL_VAR name="freight">">
+				<input type=hidden name=gst value="<TMPL_VAR name="gst">">
+				<TMPL_IF name="catview">
+					<input type=image  name=submit src="/<TMPL_VAR name="theme">/images/filesave.png" border=0 title="continue" alt="save" border=0 border=0>
+				<TMPL_ELSE>
+					<a href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<TMPL_VAR name="ordernumber">&id=<TMPL_VAR name="booksellerid">><img src="/<TMPL_VAR name="theme">/images/fileopen.png" border=0 title="edit" alt="edit" border=0 border=0></a>
+				</TMPL_IF>
+			</td>
+		</tr>
 	</table>
-	<img src="/images/holder.gif" width=32 height=250 align=left>
 	<table border=1 cellspacing=0 cellpadding=5 width="40%">
 		<tr valign=top bgcolor=#99cc33>
 			<td background="/images/background-mem.gif" colspan=2><B>ACCOUNTING DETAILS</B></td>
