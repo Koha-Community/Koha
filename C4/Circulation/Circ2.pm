@@ -905,21 +905,27 @@ sub getissues {
     my ($borrower) = @_;
     my $dbh=&C4Connect;
     my $borrowernumber = $borrower->{'borrowernumber'};
-    my $brn =$dbh->quote($borrowernumber);
     my %currentissues;
-    my $select = "select issues.timestamp, issues.date_due, items.biblionumber,
-                         items.barcode, biblio.title, biblio.author, biblioitems.dewey, 
-                         biblioitems.subclass 
-                    from issues,items,biblioitems,biblio
-                   where issues.borrowernumber = $brn 
-                     and issues.itemnumber = items.itemnumber 
-                     and items.biblionumber = biblio.biblionumber 
-                     and items.biblioitemnumber = biblioitems.biblioitemnumber 
-                     and issues.returndate is null
-                         order by issues.date_due";
+    my $select = "SELECT issues.timestamp      AS timestamp, 
+                         issues.date_due       AS date_due, 
+                         items.biblionumber    AS biblionumber,
+                         items.barcode         AS barcode, 
+                         biblio.title          AS title, 
+                         biblio.author         AS author, 
+                         biblioitems.dewey     AS dewey, 
+                         itemtypes.description AS itemtype,
+                         biblioitems.subclass  AS subclass
+                    FROM issues,items,biblioitems,biblio, itemtypes
+                   WHERE issues.borrowernumber  = ?
+                     AND issues.itemnumber      = items.itemnumber 
+                     AND items.biblionumber     = biblio.biblionumber 
+                     AND items.biblioitemnumber = biblioitems.biblioitemnumber 
+                     AND itemtypes.itemtype     = biblioitems.itemtype
+                     AND issues.returndate      IS NULL
+                ORDER BY issues.date_due";
 #    print $select;
     my $sth=$dbh->prepare($select);
-    $sth->execute;
+    $sth->execute($borrowernumber);
     my $counter = 0;
     while (my $data = $sth->fetchrow_hashref) {
 	$data->{'dewey'} =~ s/0*$//;
@@ -1023,6 +1029,9 @@ sub renewbook {
 # Stolen from Renewals.pm
   # mark book as renewed
   my ($env,$dbh,$bornum,$itemno,$datedue)=@_;
+  if (!defined($dbh)){
+      $dbh=C4Connect();
+  }
   $datedue=$env->{'datedue'};
   if ($datedue eq "" ) {    
     my $loanlength=21;
@@ -1064,10 +1073,11 @@ sub renewbook {
 sub calc_charges {
 # Stolen from Issues.pm
 # calculate charges due
+    warn "Im in calc_charges!\n";
     my ($env, $dbh, $itemno, $bornum)=@_;
-    if (!defined($dbh)){
-      $dbh=C4Connect();
-    }
+
+    $dbh=C4Connect() unless $dbh;
+
     my $charge=0;
 #    open (FILE,">>/tmp/charges");
     my $item_type;
@@ -1075,8 +1085,9 @@ sub calc_charges {
     where (items.itemnumber ='$itemno')
     and (biblioitems.biblioitemnumber = items.biblioitemnumber) 
     and (biblioitems.itemtype = itemtypes.itemtype)";
+    warn "$q1\n";
     my $sth1= $dbh->prepare($q1);
-#    print FILE "$q1\n";
+
     $sth1->execute;
     if (my $data1=$sth1->fetchrow_hashref) {
 	$item_type = $data1->{'itemtype'};
