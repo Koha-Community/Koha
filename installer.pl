@@ -127,6 +127,7 @@ my $dbname;
 my $hostname;
 my $user;
 my $pass;
+my $inc_path;
 do {
 	print "Enter path:";
 	chomp($conf_path = <STDIN>);
@@ -189,6 +190,19 @@ do {
 };
 
 
+print "\n";
+print "\n";
+print qq|
+Please provide the path to your Koha includes folder.
+|;
+
+#Get the password for the database user
+do {
+	print "Enter path to includes:";
+	chomp($inc_path = <STDIN>);
+};
+
+
 #Create the configuration file
 open(SITES,">$conf_path/koha.conf") or die "Couldn't create file
 at $conf_path.  Must have write capability.\n";
@@ -197,6 +211,7 @@ database=$dbname
 hostname=$hostname
 user=$user
 password=$pass
+includes=$inc_path
 EOP
 ;
 close(SITES);
@@ -205,14 +220,9 @@ print "Successfully created the Koha configuration file.\n";
 
 
 
+print "\n";
+print "\n";
 
-
-# FIXME
-# Again, this may be something to automate.  We could ask a 
-# series of questions, then fill out a form with the answers and 
-# edit the existing config file in place.  (Again, giving the
-# installer.pl user a chance to edit the file first.)
-#
 
 #
 #SETUP opac
@@ -300,3 +310,4 @@ print "Successfully updated Apache Configuration file.\n";
 # It is completed
 #
 print "\nCongratulations ... your Koha installation is complete!\n";
+print "\nYou will need to restart your webserver before using Koha!\n";
