@@ -79,14 +79,16 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($authtypecode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select authtypecode,authtypetext,auth_tag_to_report from auth_types where authtypecode=?");
+		my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
 		$sth->execute($authtypecode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
+	warn "=> $data->{'authtypetext'} : ".$data->{'summary'};
 	$template->param(authtypecode => $authtypecode,
 							authtypetext => $data->{'authtypetext'},
 							auth_tag_to_report => $data->{'auth_tag_to_report'},
+							summary => $data->{'summary'},
 							);
 ;
 													# END $OP eq ADD_FORM
@@ -94,8 +96,8 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace auth_types (authtypecode,authtypetext,auth_tag_to_report) values (?,?,?)");
-	$sth->execute($input->param('authtypecode'),$input->param('authtypetext'),$input->param('auth_tag_to_report'));
+	my $sth=$dbh->prepare("replace auth_types (authtypecode,authtypetext,auth_tag_to_report,summary) values (?,?,?,?)");
+	$sth->execute($input->param('authtypecode'),$input->param('authtypetext'),$input->param('auth_tag_to_report'),$input->param('summary'));
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
 	exit;
@@ -114,13 +116,14 @@ if ($op eq 'add_form') {
 	   $sth->finish;
 	}
 
-	my $sth=$dbh->prepare("select authtypecode,authtypetext from auth_types where authtypecode=?");
+	my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
 	$sth->execute($authtypecode);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 
 	$template->param(authtypecode => $authtypecode,
 							authtypetext => $data->{'authtypetext'},
+							summary => $data->{'summary'},
 							total => $total);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -155,6 +158,7 @@ if ($op eq 'add_form') {
 		$row_data{authtypecode} = $results->[$i]{'authtypecode'};
 		$row_data{authtypetext} = $results->[$i]{'authtypetext'};
 		$row_data{auth_tag_to_report} = $results->[$i]{'auth_tag_to_report'};
+		$row_data{summary} = $results->[$i]{'summary'};
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);

@@ -119,11 +119,8 @@ if ($op eq 'add_form') {
 			$toggle="white";
 	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
-					-values=>['-1','0','1','2','3','4','5','6','7','8','9'],
-					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1',
-									'2' =>'2','3'=>'3','4'=>'4',
-									'5' =>'5','6'=>'6','7'=>'7',
-									'8' =>'8','9'=>'9',
+					-values=>['-1','0'],
+					-labels => {'-1' =>'No (ignore)','0'=>'yes'
 									},
 					-default=>$data->{'tab'},
 					-size=>1,
@@ -155,11 +152,8 @@ if ($op eq 'add_form') {
 	for (my $i=1;$i<=$more_subfields;$i++) {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
-					-values=>['-1','0','1','2','3','4','5','6','7','8','9'],
-					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1',
-									'2' =>'2','3'=>'3','4'=>'4',
-									'5' =>'5','6'=>'6','7'=>'7',
-									'8' =>'8','9'=>'9',
+					-values=>['-1','0'],
+					-labels => {'-1' =>'no (ignore)','0'=>'yes',
 									},
 					-default=>"",
 					-size=>1,

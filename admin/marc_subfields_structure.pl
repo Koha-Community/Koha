@@ -121,12 +121,12 @@ if ($op eq 'add_form') {
 	push (@authorised_values,"itemtypes");
 	# build thesaurus categories list
 	$sth2->finish;
-	$sth2 = $dbh->prepare("select distinct category from bibliothesaurus");
+	$sth2 = $dbh->prepare("select authtypecode from auth_types");
 	$sth2->execute;
-	my @thesaurus_category;
-	push @thesaurus_category,"";
-	while ((my $category) = $sth2->fetchrow_array) {
-		push @thesaurus_category, $category;
+	my @authtypes;
+	push @authtypes,"";
+	while ((my $authtypecode) = $sth2->fetchrow_array) {
+		push @authtypes, $authtypecode;
 	}
 	# build value_builder list
 	my @value_builder=('');
@@ -184,9 +184,9 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{thesaurus_category}  = CGI::scrolling_list(-name=>'thesaurus_category',
-					-values=> \@thesaurus_category,
-					-default=>$data->{'thesaurus_category'},
+		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
+					-values=> \@authtypes,
+					-default=>$data->{'authtypecode'},
 					-size=>1,
 					-multiple=>0,
 					);
@@ -231,8 +231,8 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{thesaurus_category}  = CGI::scrolling_list(-name=>'thesaurus_category',
-					-values=> \@thesaurus_category,
+		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
+					-values=> \@authtypes,
 					-size=>1,
 					-multiple=>0,
 					);
@@ -253,7 +253,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder,hidden,isurl,frameworkcode)
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode)
 									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
@@ -262,7 +262,7 @@ if ($op eq 'add_form') {
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
 	my @authorised_values	= $input->param('authorised_value');
-	my @thesaurus_category	= $input->param('thesaurus_category');
+	my @authtypecodes	= $input->param('authtypecode');
 	my @value_builder	=$input->param('value_builder');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
@@ -276,7 +276,7 @@ if ($op eq 'add_form') {
 		my $tab				=$tab[$i];
 		my $seealso				=$seealso[$i];
 		my $authorised_value		=$authorised_values[$i];
-		my $thesaurus_category		=$thesaurus_category[$i];
+		my $authtypecode		=$authtypecodes[$i];
 		my $value_builder=$value_builder[$i];
 		my $hidden = $input->param("hidden$i")?1:0;
 		my $isurl = $input->param("isurl$i")?1:0;
@@ -292,7 +292,7 @@ if ($op eq 'add_form') {
 									$tab,
 									$seealso,
 									$authorised_value,
-									$thesaurus_category,
+									$authtypecode,
 									$value_builder,
 									$hidden,
 									$isurl,
@@ -357,7 +357,7 @@ if ($op eq 'add_form') {
 		$row_data{tab} = $results->[$i]{'tab'};
 		$row_data{seealso} = $results->[$i]{'seealso'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-		$row_data{thesaurus_category}	= $results->[$i]{'thesaurus_category'};
+		$row_data{authtypecode}	= $results->[$i]{'authtypecode'};
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{hidden}	= $results->[$i]{'hidden'};
 		$row_data{isurl}	= $results->[$i]{'isurl'};

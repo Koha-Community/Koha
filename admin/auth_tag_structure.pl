@@ -286,11 +286,11 @@ sub duplicate_auth_framework {
 		$sth_insert->execute($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value,$newauthtype);
 	}
 
-	$sth = $dbh->prepare("select authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder,seealso from auth_subfield_structure where authtypecode=?");
+	$sth = $dbh->prepare("select authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,seealso from auth_subfield_structure where authtypecode=?");
 	$sth->execute($oldauthtype);
-	$sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-	while ( my ($authtypecode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso) = $sth->fetchrow) {
-		$sth_insert->execute($newauthtype, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso);
+	$sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?)");
+	while ( my ($authtypecode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $tab, $authorised_value, $thesaurus_category, $seealso) = $sth->fetchrow) {
+		$sth_insert->execute($newauthtype, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $tab, $authorised_value, $thesaurus_category, $seealso);
 	}
 }
 
