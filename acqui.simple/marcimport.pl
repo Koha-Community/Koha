@@ -575,6 +575,8 @@ sub AcceptBiblioitem {
 
   	my $additionalauthors=$input->param('additionalauthors');
   	my @additionalauthors=split(/[\r\n]+|\|/,uc($additionalauthors));
+			# FIXME - WTF are the additional authors
+			# converted to upper case?
 
   	# Use individual assignments to hash buckets, in case
   	#  any of the input parameters are empty or don't exist
@@ -791,6 +793,9 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.20  2002/10/16 12:46:19  arensb
+# Added a FIXME comment.
+#
 # Revision 1.19  2002/10/15 10:14:44  tipaul
 # road to 1.3.2. Full rewrite of marcimport.pl.
 # The acquisition system in MARC version will work like this :
