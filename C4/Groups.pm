@@ -21,6 +21,9 @@ package C4::Groups;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - This package is only used in groups.pl, which in turn is
+# never used. Presumably this module is therefore obsolete.
+
 use strict;
 require Exporter;
 use DBI;

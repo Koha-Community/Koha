@@ -30,6 +30,9 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(&stockreport);
 
+# FIXME - This function is only used in reports.pl, which in turn is
+# never used. This function (and therefore this module) is probably
+# obsolete.
 sub stockreport {
   my $dbh=C4Connect;
   my @results;

@@ -29,6 +29,7 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(&getbarcode);
 
+# FIXME - Never used
 sub Getbarcode {
 }
 
