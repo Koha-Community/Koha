@@ -57,7 +57,6 @@ sub plugin {
 	my $dbh = C4::Context->dbh;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
-	warn "RES : $result";
 	my $search_string= $input->param('search_string');
 	my $op = $input->param('op');
 	my $id = $input->param('id');
