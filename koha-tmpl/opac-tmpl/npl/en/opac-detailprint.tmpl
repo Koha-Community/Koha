@@ -1,47 +1,87 @@
-<html>
-<body onLoad="window.print();self.close();">
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-	<table cellspacing="0" cellpadding="1" border="1" width=500>
-	<tr valign="top">
-		<td bgcolor="#cccc99" background="/images/background-mem.gif">
-			<b>BIBLIO RECORD <!-- TMPL_VAR NAME="biblionumber" --></b>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td>
-			<!-- TMPL_VAR NAME="author" --><br>
-			<b><!-- TMPL_VAR NAME="title" --></b><!-- TMPL_VAR NAME="subtitle" --><br>
-			<!-- TMPL_VAR NAME="additional" --><br>
-			<!-- TMPL_IF NAME="publishercode" --><b>Published by :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="publicationyear" --><b>in </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR NAME="pages" -->
-			<!-- TMPL_IF NAME="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR NAME="size" --><br>
-			<!-- TMPL_IF NAME="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="subject" --><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="copyrightdate" --><b>Year :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
-			<!-- TMPL_IF NAME="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&amp;dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="dewey" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="classification" --><b>Classification:</b> <!-- TMPL_VAR NAME="classification" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="lccn" --><b>LCCN:</b> <!-- TMPL_VAR NAME="lccn" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="url" --><b>URL:</b> <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
-			<b>ISBN:</b><!-- TMPL_VAR NAME="ISBN" --><br>
-			</font>
-		</td>
-	</tr>
-	</table>
-<!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Details for: <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-basket-print.inc" -->
 
-<table border="0" cellspacing="0" cellpadding="2">
-	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-		<tr>
-			<td><!-- TMPL_VAR NAME="description" --></td>
-			<td><!-- TMPL_VAR NAME="branchname" -->, <!-- TMPL_VAR NAME="itemcallnumber" --></td>
-			<td><!-- TMPL_VAR NAME="barcode" --></td>
-			<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
-		</tr>
+<div id="window">
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<div class="details">
+<!-- Display for NPL 			<div style="float: right; padding: 5px;">
+<img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/images2/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" />
+</div>
+ /Display for NPL --><h2><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" -->: <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="author" -->; By <!-- TMPL_VAR NAME="author" --></h2><!-- /TMPL_IF --> 
+
+<table>
+
+<!-- TMPL_IF NAME="abstract" --><tr><th>Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="copyrightdate" -->
+    <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="isbn" -->
+	    <tr><th>ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lccn" -->
+	    <tr><th>LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publishercode" -->
+	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="pages" -->
+	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="notes" -->
+<tr><th>Notes:</th><td><div class="notes"><!-- TMPL_VAR NAME="notes" --></div></td></tr>
+	<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
+	
+<!-- TMPL_UNLESS NAME="MARCSUBJCTS" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<!-- TMPL_IF name="subjects" --><tr><th>Subject(s):</th><td><!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP --></td></tr><!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_UNLESS -->
+
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+ <tr><th>Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="MARCNOTES" -->
+		<tr>
+			<th>Detailed notes:</th>
+			<td><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnote" --></li><!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="MARCSUBJCTS" -->
+		<tr>
+			<th>Related links:</th>
+			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" --><li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
 </table>
+</div>
+
+<!-- TMPL_IF NAME="ITEM_RESULTS" -->
+<div class="table"><table>
+<!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
+<tr><!-- <th>&nbsp;</th> -->
+<th>Type/Format</th>
+<th>Call Number</th>
+<th>Location</th>
+<th>Due Date</th>
+<th>Last Seen</th>
+<!-- <th>Barcode</th> --></tr>
+<tbody>
+<!--INFORMATION ROWS-->
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+<tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
+<td><!-- TMPL_VAR NAME="classification" --></td>
+<td><!-- TMPL_VAR NAME="branchname" --></td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+<!-- <td><!-- TMPL_VAR NAME="barcode" --></td> --></tr>
+<!-- /TMPL_LOOP -->
+</tbody>
+</table>
+<!-- TMPL_ELSE -->
+<table><tr><td>No copies available.</td></tr></table>
+<!-- /TMPL_IF -->
+
+</div>
 <script language="javascript" type="text/javascript">
 function docprint() {
 	window.print();
