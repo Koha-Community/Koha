@@ -13,13 +13,25 @@ use C4::Auth;
 use C4::Context;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
+use HTML::Template;
+use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 $flagsrequired->{permissions}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "member-flags.tmpl",
+                             query => $input,
+                             type => "intranet",
+                             authnotrequired => 0,
+                             debug => 1,
+                             });
+
+
+
 
 my $member=$input->param('member');
 my %env;
@@ -31,6 +43,7 @@ my $i=0;
 foreach (sort keys %$issues) {
     $i++;
 }
+
 if ($input->param('newflags')) {
     my $dbh=C4::Context->dbh();
     my $flags=0;
@@ -49,32 +62,24 @@ if ($input->param('newflags')) {
     my $dbh=C4::Context->dbh();
     my $sth=$dbh->prepare("select bit,flag,flagdesc from userflags order by bit");
     $sth->execute;
-    my $flagtext='';
+    my @loop;
     while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
 	my $checked='';
 	if ($accessflags->{$flag}) {
 	    $checked='checked';
 	}
-	$flagtext.="<tr><td><input type=checkbox name=flag-$bit $checked></td><td>$flag</td><td>$flagdesc</td></tr>\n";
+	my %row = ( bit => $bit,
+		 flag => $flag,
+		 checked => $checked,
+		 flagdesc => $flagdesc );
+	push @loop, \%row;
     }
-    print $input->header(-cookie => $cookie);
-    print startpage();
-    print startmenu('member');
-    print qq|
-    <h2>$bor->{'surname'}, $bor->{'firstname'}</h2>
-    <form method=post>
-    <input type=hidden name=member value=$member>
-    <input type=hidden name=newflags value=1>
-    <table border=1>
-    <tr><th background=/koha/images/background-mem.gif colspan=3>FLAGS</th></tr>
-    $flagtext
-    </table>
 
-    <p>
-    <input type=submit value="Set Flags">
-    </form>
-    |;
+    $template->param(member => $member,
+			surname => $bor->{'surname'},
+			firstname => $bor->{'firstname'},
+			loop => \@loop);
 
-    print endmenu('member');
-    print endpage();
+    output_html_with_http_headers $input, $cookie, $template->output;
+
 }
