@@ -214,8 +214,7 @@ if ($delete){
     $template->param( modify => 1 );
   }
 
-  $template->param( startmenumember => join ('', startmenu('member')),
-  			endmenumember   => join ('', endmenu('member')),
+  $template->param( 
   			member          => $member,
   			firstname       => $data->{'firstname'},
   			surname         => $data->{'surname'},
