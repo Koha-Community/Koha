@@ -455,7 +455,7 @@ my %tabledata = (
             variable            => 'opacthemes',
 	    forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1 },
-            value               => 'default',
+            value               => 'css',
             explanation         => 'Set the preferred order for themes.  The top theme will be tried first.',
 	    type		=> 'Themes'
         },
@@ -1067,6 +1067,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.78  2004/05/10 09:29:33  tipaul
+# css is now the default theme for OPAC.
+# It will be the theme used for improvements and new things in OPAC.
+#
 # Revision 1.77  2004/05/06 14:56:51  tipaul
 # adding table issuingrules (previously called categoryitem
 #
