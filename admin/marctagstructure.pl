@@ -124,11 +124,10 @@ if ($op eq 'add_form') {
 
 	if ($searchfield) {
 		$template->param(action => "Modify tag",
-								searchfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$searchfield\" />$searchfield");
+								searchfield => $searchfield);
 		$template->param('heading-modify-tag-p' => 1);
 	} else {
-		$template->param(action => "Add tag",
-								searchfield => "<input type=\"text\" name=\"tagfield\" size=\"5\" maxlength=\"3\" />");
+		$template->param(action => "Add tag");
 		$template->param('heading-add-tag-p' => 1);
 	}
 	$template->param('use-heading-flags-p' => 1);
@@ -224,9 +223,6 @@ if ($op eq 'add_form') {
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-		$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
