@@ -65,6 +65,7 @@ my $month=$query->param('month');
 my $day=$query->param('day');
 my $stickyduedate=$query->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
+my $cancelreserve = $query->param('cancelreserve');
 
 
 #set up cookie.....
@@ -138,7 +139,7 @@ if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
 	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
 	if ($issueconfirmed) {
-			issuebook(\%env, $borrower, $barcode, $datedue);
+			issuebook(\%env, $borrower, $barcode, $datedue,$cancelreserve);
 	} else {
 		my ($error, $question) = canbookbeissued(\%env, $borrower, $barcode, $year, $month, $day);
 		my $noerror=1;

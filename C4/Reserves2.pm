@@ -291,48 +291,41 @@ sub CancelReserve {
     my $dbh = C4::Context->dbh;
     #warn "In CancelReserve";
     if (($item and $borr) and (not $biblio)) {
-	# removing a waiting reserve record....
-	# update the database...
-	my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
-                                         found            = Null,
-                                         priority         = 0
-                                   where itemnumber       = ?
-                                     and borrowernumber   = ?");
-	$sth->execute($item,$borr);
-	$sth->finish;
+		# removing a waiting reserve record....
+		# update the database...
+		my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
+											found            = Null,
+											priority         = 0
+									where itemnumber       = ?
+										and borrowernumber   = ?");
+		$sth->execute($item,$borr);
+		$sth->finish;
     }
     if (($biblio and $borr) and (not $item)) {
+		# removing a reserve record....
+		# get the prioritiy on this record....
+		my $priority;
+		my $sth=$dbh->prepare("SELECT priority FROM reserves
+										WHERE biblionumber   = ?
+										AND borrowernumber = ?
+										AND cancellationdate is NULL
+										AND (found <> 'F' or found is NULL)");
+		$sth->execute($biblio,$borr);
+		($priority) = $sth->fetchrow_array;
+		$sth->finish;
 
-	# removing a reserve record....
-
-	# get the prioritiy on this record....
-	my $priority;
-	{
-	my $sth=$dbh->prepare("SELECT priority FROM reserves
-                                    WHERE biblionumber   = ?
-                                      AND borrowernumber = ?
-                                      AND cancellationdate is NULL
-                                      AND (found <> 'F' or found is NULL)");
-	$sth->execute($biblio,$borr);
-	($priority) = $sth->fetchrow_array;
-	$sth->finish;
-	}
-
-	# update the database, removing the record...
-	{
-	my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
-                                         found            = Null,
-                                         priority         = 0
-                                   where biblionumber     = ?
-                                     and borrowernumber   = ?
-                                     and cancellationdate is NULL
-                                     and (found <> 'F' or found is NULL)");
-	$sth->execute($biblio,$borr);
-	$sth->finish;
-	}
-
-	# now fix the priority on the others....
-	fixpriority($priority, $biblio);
+		# update the database, removing the record...
+		my $sth = $dbh->prepare("update reserves set cancellationdate = now(),
+											found            = Null,
+											priority         = 0
+									where biblionumber     = ?
+										and borrowernumber   = ?
+										and cancellationdate is NULL
+										and (found <> 'F' or found is NULL)");
+		$sth->execute($biblio,$borr);
+		$sth->finish;
+		# now fix the priority on the others....
+		fixpriority($priority, $biblio);
     }
 }
 

@@ -800,7 +800,7 @@ C<$date> contains the max date of return. calculated if empty.
 # issuing book. We already have checked it can be issued, so, just issue it !
 #
 sub issuebook {
-	my ($env,$borrower,$barcode,$date) = @_;
+	my ($env,$borrower,$barcode,$date,$cancelreserve) = @_;
 	my $dbh = C4::Context->dbh;
 #	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -833,7 +833,9 @@ sub issuebook {
 			if ($resbor eq $borrower->{'borrowernumber'}) {
 				# The item is on reserve to the current patron
 				FillReserve($res);
+				warn "FillReserve";
 			} elsif ($restype eq "Waiting") {
+				warn "Waiting";
 				# The item is on reserve and waiting, but has been
 				# reserved by some other patron.
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
@@ -841,12 +843,25 @@ sub issuebook {
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
 			} elsif ($restype eq "Reserved") {
+				warn "Reserved";
 				# The item is on reserve for someone else.
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
-				transferbook($tobrcd,$barcode, 1);
+				if ($cancelreserve) {
+					# cancel reserves on this item
+					CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+					# also cancel reserve on biblio related to this item
+					my $st_Fbiblio = $dbh->prepare("select biblionumber from items where itemnumber=?");
+					$st_Fbiblio->execute($res->{'itemnumber'});
+					my $biblionumber = $st_Fbiblio->fetchrow;
+					CancelReserve($biblionumber,0,$res->{'borrowernumber'});
+					warn "CancelReserve $res->{'itemnumber'}, $res->{'borrowernumber'}";
+				} else {
+					my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
+					transferbook($tobrcd,$barcode, 1);
+					warn "transferbook";
+				}
 			}
 		}
 		# Record in the database the fact that the book was issued.

@@ -197,6 +197,12 @@
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
 			<form method="post">
+				<!-- TMPL_IF NAME="RESERVED" -->
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Cancel Reserve</p>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Cancel Reserve</p>
+				<!-- /TMPL_IF -->
 				<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
 				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber">">
 				<input type="hidden" name="issueconfirmed" value="1">
@@ -204,6 +210,7 @@
 				<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
 				<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
 				<input type="submit" value="Confirm issue" class="button circulation">
+				<a href="circulation.pl?borrnumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button circulation">Don't issue</a>
 			</form>
 			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
