@@ -76,14 +76,16 @@ sub checkauth {
 	my $userid=$query->param('userid');
 	my $password=$query->param('password');
 	if (checkpw($dbh, $userid, $password)) {
-	#if (($userid eq 'librarian' || $userid eq 'tonnesen' || $userid eq 'patron') && $password eq 'koha') {
 	    my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
 	    open L, ">>/tmp/sessionlog";
 	    my $time=localtime(time());
 	    printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
 	    close L;
-	    return ($userid, $sessionID, $sessionID);
+	    my $cookie=$query->cookie(-name => 'sessionID',
+				      -value => $sessionID,
+				      -expires => '+1y');
+	    return ($userid, $cookie, $sessionID);
 	} else {
 	    if ($userid) {
 		$message="Invalid userid or password entered.";
@@ -122,8 +124,11 @@ sub checkauth {
     inactivity for the purposes of this demo.  You can navigate to the Circulation
     or Acquisitions modules and you should see an indicator in the upper left of
     the screen saying who you are logged in as.  If you want to try it out with
-    a longer timout period, log in as tonnesen/koha and the timeout period will
-    be 10 minutes.
+    a longer timout period, log in as tonnesen/koha and there will be no
+    timeout period.
+    <p>
+    You can also log in using a patron cardnumber.   Try V10000008 and
+    V1000002X with password koha.
     </td>
     </tr>
     </table>
