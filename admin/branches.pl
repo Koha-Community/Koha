@@ -2,7 +2,7 @@
 # NOTE: Use standard 8-space tabs for this file (indents are 4 spaces)
 
 #require '/u/acli/lib/cvs.pl';#DEBUG
-open(DEBUG,'>/tmp/koha.debug');
+#open(DEBUG,'>/tmp/koha.debug');
 
 # FIXME: individual fields in branch address need to be exported to templates,
 #        in order to fix bug 180; need to notify translators
@@ -14,6 +14,9 @@ open(DEBUG,'>/tmp/koha.debug');
 # FIXME: there are too many TMPL_IF's; the proper way to do it is to have
 #        separate templates for each individual action; need to notify
 #        translators
+# FIXME: there are lots of error messages exported to the template; a lot
+#        of these should be converted into exported booleans / counters etc
+#        so that the error messages can be localized; need to notify translators
 
 # Finlay working on this file from 26-03-2002
 # Reorganising this branches admin page.....
@@ -168,7 +171,7 @@ sub editbranchform {
 # FIXME: this way of doing it is wrong (bug 130)
     my $catinfo = getcategoryinfo();
     my $catcheckbox;
-    print DEBUG "catinfo=".cvs($catinfo)."\n";
+#    print DEBUG "catinfo=".cvs($catinfo)."\n";
     foreach my $cat (@$catinfo) {
 	my $checked = "";
 	my $tmp = $cat->{'categorycode'};
@@ -202,6 +205,7 @@ sub branchinfotable {
     my @loop_data =();
     foreach my $branch (@$branchinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+	# FIXME. The $address should not be pre-composed (bug 180)
 	my $address = '';
 	$address .= $branch->{'branchaddress1'}          if ($branch->{'branchaddress1'});
 	$address .= '<br>'.$branch->{'branchaddress2'}   if ($branch->{'branchaddress2'});
@@ -271,21 +275,20 @@ sub getbranchinfo {
 
     my ($branchcode) = @_;
     my $dbh = C4::Context->dbh;
-    my $query;
+    my ($query, @query_args);
     if ($branchcode) {
-	my $bc = $dbh->quote($branchcode);
-	$query = "Select * from branches where branchcode = $bc";
+	$query = "Select * from branches where branchcode = ?";
+	@query_args = ($branchcode);
     } else {
 	$query = "Select * from branches";
     }
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute(@query_args);
     my @results;
     while (my $data = $sth->fetchrow_hashref) { 
-	my $tmp = $data->{'branchcode'}; my $brc = $dbh->quote($tmp);
-	$query = "select categorycode from branchrelations where branchcode = $brc";
+	$query = "select categorycode from branchrelations where branchcode = ?";
 	my $nsth = $dbh->prepare($query);
-	$nsth->execute;
+	$nsth->execute($data->{'branchcode'});;
 	my @cats = ();
 	while (my ($cat) = $nsth->fetchrow_array) {
 	    push(@cats, $cat);
@@ -303,26 +306,27 @@ sub getcategoryinfo {
 # returns a reference to an array of hashes containing branches,
     my ($catcode) = @_;
     my $dbh = C4::Context->dbh;
-    my $query;
-    print DEBUG "getcategoryinfo: entry: catcode=".cvs($catcode)."\n";
+    my ($query, @query_args);
+#    print DEBUG "getcategoryinfo: entry: catcode=".cvs($catcode)."\n";
     if ($catcode) {
-	my $cc = $dbh->quote($catcode);
-	$query = "select * from branchcategories where categorycode = $cc";
+	$query = "select * from branchcategories where categorycode = ?";
+	@query_args = ($catcode);
     } else {
 	$query = "Select * from branchcategories";
     }
-    print DEBUG "getcategoryinfo: query=".cvs($query)."\n";
+#    print DEBUG "getcategoryinfo: query=".cvs($query)."\n";
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute(@query_args);
     my @results;
     while (my $data = $sth->fetchrow_hashref) { 
 	push(@results, $data);
     }
     $sth->finish;
-    print DEBUG "getcategoryinfo: exit: returning ".cvs(\@results)."\n";
+#    print DEBUG "getcategoryinfo: exit: returning ".cvs(\@results)."\n";
     return \@results;
 }
 
+# FIXME This doesn't belong here; it should be moved into a module
 sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
     my ($data) = @_;
@@ -368,15 +372,15 @@ sub setbranchinfo {
     # FIXME - There's already a $dbh in this scope.
     my $dbh = C4::Context->dbh;
     foreach my $cat (@addcats) {
-	my $query = "insert into branchrelations (branchcode, categorycode) values('$branchcode', '$cat')";
+	my $query = "insert into branchrelations (branchcode, categorycode) values(?, ?)";
 	my $sth = $dbh->prepare($query);
-	$sth->execute;
+	$sth->execute($branchcode, $cat);
 	$sth->finish;
     }
     foreach my $cat (@removecats) {
-	my $query = "delete from branchrelations where branchcode='$branchcode' and categorycode='$cat'";
+	my $query = "delete from branchrelations where branchcode=? and categorycode=?";
 	my $sth = $dbh->prepare($query);
-	$sth->execute;
+	$sth->execute($branchcode, $cat);
 	$sth->finish;
     }
 }
@@ -384,10 +388,10 @@ sub setbranchinfo {
 sub deletebranch {
 # delete branch...
     my ($branchcode) = @_;
-    my $query = "delete from branches where branchcode = '$branchcode'";
+    my $query = "delete from branches where branchcode = ?";
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($branchcode);
     $sth->finish;
 }
 
@@ -395,12 +399,13 @@ sub checkdatabasefor {
 # check to see if the branchcode is being used in the database somewhere....
     my ($branchcode) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select count(*) from items where holdingbranch='$branchcode' or homebranch='$branchcode'");
-    $sth->execute;
+    my $sth=$dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
+    $sth->execute($branchcode, $branchcode);
     my ($total) = $sth->fetchrow_array;
     $sth->finish;
     my $message;
     if ($total) {
+	# FIXME: need to be replaced by an exported boolean parameter
 	$message = "Branch cannot be deleted because there are $total items using that branch.";
     } 
     return $message;
