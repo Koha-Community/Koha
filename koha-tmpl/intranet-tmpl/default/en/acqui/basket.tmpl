@@ -22,25 +22,24 @@
 	<!-- TMPL_IF name="books_loop" -->
 		<table>
 			<tr valign="top" bgcolor="#ffdf61">
-				<th class="acquisition">Order</th>
-				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode">[order]</a></th>
+				<th class="doNotPrint">Order</th>
+				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="doNotPrint">[order]</a></th>
 				<th class="acquisition">Isbn</th>
 				<th class="acquisition">Title</th>
 				<th class="acquisition">Author</th>
 				<th class="acquisition">rrp</th>
-				<th class="acquisition">est</th>
+				<th class="doNotPrint">est</th>
 				<th class="acquisition">Qty</th>
 				<th class="acquisition">Total</th>
-				<th class="acquisition">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
-				<!-- TMPL_IF name="closedate" -->
-				<!-- TMPL_ELSE -->
-					<th class="acquisition">Remove</th>
-				<!-- /TMPL_IF -->
+				<th class="doNotPrint">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
+				<!-- TMPL_UNLESS name="closedate" -->
+					<th class="doNotPrint">Remove</th>
+				<!-- /TMPL_UNLESS -->
 
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
 				<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="color" -->">
-					<td><!-- TMPL_VAR NAME="ordernumber" --></td>
+					<td class="doNotPrint"><!-- TMPL_VAR NAME="ordernumber" --></td>
 					<td><!-- TMPL_VAR NAME="publishercode" --></td>
 					<td><!-- TMPL_VAR NAME="isbn" --></td>
 					<!-- TMPL_IF name="closedate" -->
@@ -50,35 +49,34 @@
 					<!-- /TMPL_IF -->
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="rrp" --></td>
-					<td><!-- TMPL_VAR NAME="ecost" --></td>
+					<td class="doNotPrint"><!-- TMPL_VAR NAME="ecost" --></td>
 					<td><!-- TMPL_VAR NAME="quantity" --></td>
 					<td><!-- TMPL_VAR NAME="line_total" --></td>
-					<td><!-- TMPL_VAR NAME="bookfundid" --></td>
-					<!-- TMPL_IF name="closedate" -->
-					<!-- TMPL_ELSE -->
-						<td>
+					<td class="doNotPrint"><!-- TMPL_VAR NAME="bookfundid" --></td>
+					<!-- TMPL_UNLESS name="closedate" -->
+						<td class="doNotPrint">
 							<a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
 								<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
 							</a>
 						</td>
-					<!-- /TMPL_IF -->
+					<!-- /TMPL_UNLESS -->
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
 			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
 			<tr>
-				<td colspan="7" rowspan=3>
+				<td colspan="4" rowspan=3>
 					&nbsp;
 				</td>
-				<th class="acquisition">SubTotal</th>
+				<th colspan="2" class="acquisition">SubTotal</th>
 				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="sub_total" --></th>
 			</tr>
 			<tr>
-				<th class="acquisition">GST</th>
+				<th colspan="2" class="acquisition">GST</th>
 				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="gist" --></th>
 			</tr>
 			<tr>
-				<th class="acquisition">TOTAL</th>
+				<th colspan="2" class="acquisition">TOTAL</th>
 				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="grand_total" --></th>
 			</tr>
 		</table>
