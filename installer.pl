@@ -40,6 +40,8 @@ EOM
     exit;
 };
 
+print "\n";
+print "Unpack the tarball - still to be done.\n";
 #
 #  Hmm, on further thought, this file came out of the tarball ... so
 #  is it likely to be untarred again?
@@ -86,6 +88,8 @@ if (@missing > 0) {
 };
 
 
+print "\n";
+print "Testing for mysql - still to be done\n";
 #test for MySQL?
 #print "Are you using MySql?(Y/[N]): ";
 #$answer = $_;                      
@@ -127,10 +131,17 @@ Checking to see if koha.conf already exists...
 EOM
 
 # Check to see if the koha.conf file exists.
+# and what its contents may be.
+#
+#
 my($file) = "/etc/koha.conf";
 my($content);
-open(FILE, "<$file") or die "cannot open $file for reading : $!";
+open(FILE, "<", "$file") or die "cannot open $file for reading : $!";
 $content = <FILE>;
+print "\n";
+print "Contents of koha.conf ...\n";
+print $content;
+print <FILE>;
 close (FILE);
 
 
@@ -178,4 +189,4 @@ close (FILE);
 #
 # It is competed
 #
-print "\nCongratulations ... you Koha installation is complete!\n";
+print "\nCongratulations ... your Koha installation is complete!\n";
