@@ -56,9 +56,8 @@ sub text_replace_tag ($$) {
 	    next if $a eq 'value' && ($tag ne 'input'
 		|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio)$/)); # FIXME
 	    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
-	    my($pre, $trimmed, $post) = TmplTokenizer::trim $val;
 	    if ($val =~ /\S/s) {
-		my $s = $pre . find_translation($trimmed) . $post;
+		my $s = find_translation($val);
 		if ($attr->{$a}->[1] ne $s) { #FIXME
 		    $attr->{$a}->[1] = $s; # FIXME
 		    $attr->{$a}->[2] = ($s =~ /"/s)? "'$s'": "\"$s\""; #FIXME
@@ -88,8 +87,7 @@ sub text_replace (**) {
     last unless defined $s;
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
 	if ($kind eq TmplTokenType::TEXT) {
-	    my($pre, $trimmed, $post) = TmplTokenizer::trim $t;
-	    print $output $pre, find_translation($trimmed), $post;
+	    print $output find_translation($t);
 	} elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
 	    my $fmt = find_translation($s->form);
 	    print $output TmplTokenizer::parametrize($fmt, [ map {
