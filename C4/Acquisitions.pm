@@ -347,7 +347,7 @@ sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid 
-  and aqbudget.startdate<'$today' and aqbudget.enddate > '$today'
+  and aqbudget.startdate<='$today' and aqbudget.enddate >= '$today'
   group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
   $sth->execute;
