@@ -1,0 +1,112 @@
+<TMPL_INCLUDE NAME="cat-top.inc">
+<center>
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a> <span lang=mi>Koha</span></p>
+</TMPL_IF>
+
+
+<br>
+<TMPL_LOOP NAME="BIBITEM_DATA">
+<a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">
+<img src=/images/requests.gif
+width=120 height=42 border=0 align=right border=0></a>
+<FONT SIZE=6><em><a
+href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
+(<TMPL_VAR NAME="author">)</a></em></FONT><P>
+<p>
+<form action=/cgi-bin/koha/modbibitem.pl>
+<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
+<input type=hidden name=biblio value=<TMPL_VAR NAME="biblionumber">>
+<!-------------------BIBLIO ITEM------------>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left>
+<TR VALIGN=TOP>
+<td  bgcolor="99cc33" background="/images/background-mem.gif"
+><B><TMPL_VAR NAME="biblioitemnumber"> GROUP - <TMPL_VAR NAME="description"> </b> </TD>
+</TR>
+<tr VALIGN=TOP  >
+<TD width=210 >
+<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
+BORDER=0 src="/images/modify-mem.gif">
+<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
+BORDER=0 src="/images/delete-mem.gif">
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>書目記錄號碼：</b> <TMPL_VAR NAME="biblionumber"><br>
+<b>Item Type:</b> <TMPL_VAR NAME="itemtype"><br>
+<b>URL:</b> <TMPL_VAR NAME="url"><br>
+<b>Loan Length:</b> <TMPL_VAR NAME="loanlength"><br>
+<b>Rental Charge:</b> <TMPL_VAR NAME="rentalcharge"><br>
+<b>Classification:</b> <TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"><br>
+<b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
+<b>出版社：</b> <TMPL_VAR NAME="publishercode"> <br>
+<b>出版地：</b> <TMPL_VAR NAME="place"><br>
+<b>出版日期：</b> <TMPL_VAR NAME="publicationyear"><br>
+<b>Volume:</b> <TMPL_VAR NAME="volumeddesc"><br>
+<b>頁數：</b> <TMPL_VAR NAME="pages"><br>
+<b>Illus:</b> <TMPL_VAR NAME="illus"><br>
+<b>Size:</b> <TMPL_VAR NAME="size"><br>
+<b>備註：</b> <TMPL_VAR NAME="bnotes"><br>
+<b>館內存量：</b> <TMPL_VAR NAME="count">
+</font>
+</TD>
+</tr>
+</table>
+</form>
+</TMPL_LOOP>
+<TMPL_LOOP NAME="ITEM_DATA">
+<img src="/images/holder.gif" width=16 height=300 align=left>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
+<TR VALIGN=TOP>
+<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>BARCODE
+<TMPL_VAR NAME="barcode"></b></TD>
+</TR>
+<tr VALIGN=TOP>
+<TD width=220>
+<form action=/cgi-bin/koha/moditem.pl method=post>
+<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblionumber">>
+<input type=hidden name=item value=<TMPL_VAR NAME="itemnumber">>
+<input type=hidden name=type value=<TMPL_VAR NAME="type">>
+<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
+BORDER=0 src="/images/modify-mem.gif">
+<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
+BORDER=0 src="/images/delete-mem.gif">
+<br>
+<FONT SIZE=2  face="arial, helvetica">
+<b>Home Branch:</b> <TMPL_VAR NAME="homebranch"><br>
+<b>Last seen:</b> <TMPL_VAR NAME="datelastseen"><br>
+<b>Last borrowed:</b> <TMPL_VAR NAME="timestamp0"><br>
+on issue bit <!-- FIXME - What's this, then? -->
+<b>Last Borrower 1:</b> <TMPL_VAR NAME="card0"><br>
+<b>Last Borrower 2:</b> <TMPL_VAR NAME="card1"><br>
+<b>Current Branch:</b> <TMPL_VAR NAME="holdingbranch"><br>
+<b>Replacement Price:</b> <TMPL_VAR NAME="replacementprice"><br>
+<b>Item lost:</b> <TMPL_VAR NAME="itemlost"><br>
+<b>Paid for:</b> <TMPL_VAR NAME="paidfor"><br>
+<b>Notes:</b> <TMPL_VAR NAME="itemnotes"><br>
+<b>Renewals:</b> <TMPL_VAR NAME="renewals"><br>
+<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<TMPL_VAR NAME="ordernumber">&biblio=<TMPL_VAR NAME="biblionumber">&invoice=<TMPL_VAR NAME="booksellerinvoicenumber">&catview=yes">
+Accession</a>
+Date:<TMPL_VAR NAME="dateaccessioned"><br>
+<b>Cancelled: <TMPL_VAR NAME="wthdrawn"><br>
+<b><a
+href=/cgi-bin/koha/bookcount.pl?&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">&itm=<TMPL_VAR NAME="itemnumber">>Total
+Issues:</a></b> <TMPL_VAR NAME="issues"><br>
+<b>Group Number:</b> <TMPL_VAR NAME="biblioitemnumber"> <br>
+<b>Biblio number:</b> <TMPL_VAR NAME="biblionumber"> <br>
+
+
+
+</font>
+</TD>
+</tr>
+</table>
+</form>
+</TMPL_LOOP>
+
+<p>
+</form>
+</center>
+
+<TMPL_INCLUDE NAME="cat-bottom.inc">
