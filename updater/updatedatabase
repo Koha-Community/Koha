@@ -135,13 +135,15 @@ my %tabledata=(
     userflags => [ 
     	{ uniquefieldrequired => 'bit', bit => 0, flag => 'superlibrarian', flagdesc => 'Access to all librarian functions', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 1, flag => 'circulate', flagdesc => 'Circulate books', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 2, flag => 'catalogue', flagdesc => 'Catalogue books', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 2, flag => 'catalogue', flagdesc => 'View Catalogue (Librarian Interface)', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 3, flag => 'parameters', flagdesc => 'Set Koha system paramters', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 4, flag => 'borrowers', flagdesc => 'Add or modify borrowers', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 5, flag => 'permissions', flagdesc => 'Set user permissions', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 6, flag => 'reserveforothers', flagdesc => 'Reserve books for patrons', defaulton => 0 },
     	{ uniquefieldrequired => 'bit', bit => 7, flag => 'borrow', flagdesc => 'Borrow books', defaulton => 1 },
     	{ uniquefieldrequired => 'bit', bit => 8, flag => 'reserveforself', flagdesc => 'Reserve books for self', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 9, flag => 'editcatalogue', flagdesc => 'Edit Catalogue (Modify bibliographic/holdings data)', defaulton => 0 },
+    	{ uniquefieldrequired => 'bit', bit => 10, flag => 'updatecharges', flagdesc => 'Update borrower charges', defaulton => 0 },
     ],
     systempreferences => [
     	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1' },
@@ -352,6 +354,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.20  2002/09/09 19:45:40  uid41696
+# Adding authentication calls to intranet scripts
+#
 # Revision 1.4.2.19  2002/07/26 18:23:54  tonnesen
 # Added flags to borrowers table and userflags table.  Also, OPAC scripts now
 # check for the existence of a file named 'opac' in the directory they are run

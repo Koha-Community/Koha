@@ -6,10 +6,15 @@ use strict;
 use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
+use C4::Auth;
 
 my $input= new CGI;
 #print $input->header;
 #print $input->dump;
+
+my $flagsrequired;
+$flagsrequired->{editcatalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 
 my $title=checkinp($input->param('Title'));

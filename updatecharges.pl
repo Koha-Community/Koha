@@ -9,12 +9,17 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Database;
+use C4::Auth;
 
 my $input = new CGI;
 #print $input->header;
 #print startpage();
 #print startmenu('issue');
+#
 
+my $flagsrequired;
+$flagsrequired->{updatecharges}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
 
 my $dbh=C4Connect;
 #print $input->dump;

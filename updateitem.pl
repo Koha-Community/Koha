@@ -8,9 +8,15 @@ use C4::Biblio;
 use C4::Output;
 use C4::Circulation::Circ2;
 use C4::Accounts2;
+use C4::Auth;
 
 my $env;
 my $input= new CGI;
+
+my $flagsrequired;
+$flagsrequired->{editcatalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 
 my $bibnum=checkinp($input->param('bibnum'));
 my $itemnum=checkinp($input->param('itemnumber'));

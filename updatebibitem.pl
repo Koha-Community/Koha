@@ -7,10 +7,16 @@ use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
 use C4::Search;
+use C4::Auth;
 
 my $input= new CGI;
 #print $input->header;
 #print $input->Dump;
+
+my $flagsrequired;
+$flagsrequired->{editcatalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 
 
 my $bibitemnum      = checkinp($input->param('bibitemnum'));
