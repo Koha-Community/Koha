@@ -18,6 +18,7 @@ use vars qw( $extract_all_p );
 use vars qw( $pedantic_p );
 use vars qw( %text %translation );
 use vars qw( $charset_in $charset_out );
+use vars qw( $verbose_p );
 
 ###############################################################################
 
@@ -225,6 +226,7 @@ HTML::Template options:
 Output details:
   -s, --sort-output              generate sorted output
   -F, --sort-by-file             sort output by file location
+  -v, --verbose                  explain what is being done
 
 Informative output:
       --help                     Display this help and exit
@@ -255,6 +257,7 @@ GetOptions(
     'output|o=s'			=> \$output,
     's|sort-output'			=> sub { $sort = 's' },
     'F|sort-by-file'			=> sub { $sort = 'F' },
+    'v|verbose'				=> \$verbose_p,
     'help'				=> sub { usage(0) },
 ) || usage_error;
 
@@ -269,22 +272,27 @@ usage_error('You cannot specify both --convert-from and --files-from')
 	if defined $convert_from && defined $files_from;
 
 if (defined $output && $output ne '-') {
+    print STDERR "$0: Opening output file \"$output\"\n" if $verbose_p;
     open(OUTPUT, ">$output") || die "$output: $!\n";
 } else {
+    print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
     open(OUTPUT, ">&STDOUT");
 }
 
 if (defined $files_from) {
+    print STDERR "$0: Opening input file list \"$files_from\"\n" if $verbose_p;
     open(INPUT, "<$files_from") || die "$files_from: $!\n";
     while (<INPUT>) {
 	chomp;
 	my $h = TmplTokenizer->new( "$directory/$_" );
 	$h->set_allow_cformat( 1 );
 	VerboseWarnings::set_input_file_name "$directory/$_";
+	print STDERR "$0: Processing file \"$directory/$_\"\n" if $verbose_p;
 	text_extract( $h );
     }
     close INPUT;
 } else {
+    print STDERR "$0: Converting \"$convert_from\"\n" if $verbose_p;
     convert_translation_file;
 }
 generate_po_file;
