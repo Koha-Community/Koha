@@ -1805,8 +1805,8 @@ sub databasesetup {
 	setmysqlclipass($mysqlpass);
 	# Set up permissions
 	startsysout();
-	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");#"
-	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	print system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\" mysql\;");
+	system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\" mysql");
 	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
 	# Change to admin user login
 	setmysqlclipass($pass);
@@ -1950,9 +1950,9 @@ sub populatedatabase {
 		$branchcode or $branchcode='DEF';
 
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
 
 		my $printername='lp';
 		my $printerqueue='/dev/lp0';
@@ -1971,7 +1971,7 @@ sub populatedatabase {
 			$printerqueue=~s/[^A-Za-z0-9]//g;
 		}
 		startsysout();	
-		system("$mysqldir/bin/mysql -u$user $database -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+		system("$mysqldir/bin/mysql -u$user -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
 	}
 	my $language;
 	if ($auto_install->{Language}) {
@@ -1981,7 +1981,7 @@ sub populatedatabase {
 		$language=showmessage(getmessage('Language'), 'free', 'en');
 	}
 	startsysout();	
-	system("$mysqldir/bin/mysql -u$user $database -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
+	system("$mysqldir/bin/mysql -u$user -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
 	my @dirs;
 	if (-d "scripts/misc/sql-datas") {
 		# ask for directory to look for files to append
