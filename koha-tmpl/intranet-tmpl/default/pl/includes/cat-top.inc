@@ -5,6 +5,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Katalog</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
 
 
 <style type="text/css">

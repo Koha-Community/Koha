@@ -5,6 +5,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Wypożyczenia i zwroty</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"

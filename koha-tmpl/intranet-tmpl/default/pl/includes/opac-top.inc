@@ -4,6 +4,7 @@
 <html>
 <head>
 <title>KOHA: Wyszukiwanie w katalogu On-line</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
