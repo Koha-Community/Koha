@@ -25,9 +25,9 @@ my $datehintstring='';
 
 
 my $member=$input->param('bornum');
-if ($member eq ''){
-  $member=NewBorrowerNumber();
-}
+# if ($member eq ''){              THESE three lines have been removed.
+#   $member=NewBorrowerNumber();
+# }
 my $type=$input->param('type');
 my $modify=$input->param('modify.x'); 
 my $delete=$input->param('delete.x');
@@ -66,6 +66,7 @@ my $cardnumber=$data->{'cardnumber'};
 # This logic should probably be moved out of the presentation code.
 # Not tonight though.
 #
+
 if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
   my $dbh=C4Connect;
   my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
@@ -81,11 +82,13 @@ if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
   my @weightings = (8,4,6,3,5,2,1);
   my $sum;
   my $i = 0;
-  if (! $cardnumber) { 			# If DB has no values, start at 1000000
+
+  if (! $cardnumber || $cardnumber eq 'super') { 			# If DB has no values, start at 1000000
     $cardnumber = 1000000;
   } else {
     $cardnumber = $cardnumber + 1;
   }
+
 
   while ($i <8) {			# step from char 1 to 7.
     my $temp1 = $weightings[$i];	# read weightings, left to right, 1 char at a time
@@ -103,13 +106,14 @@ if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
   $cardnumber=$data->{'cardnumber'};
 }
 
+
 print <<printend
 
 <table border=0 cellspacing=0 cellpadding=5 >
 
 
 <tr valign=top><td  COLSPAN=2><input type=reset value="Clear all Fields"></td><td  COLSPAN=3   ALIGN=RIGHT ><font size=4 face='arial,helvetica'>
-Member# $member,   Card Number* <input type=text name=cardnumber size=10 value="$cardnumber"><br>
+Card Number* <input type=text name=cardnumber size=10 value="$cardnumber"><br>
 </td></tr>
 
 

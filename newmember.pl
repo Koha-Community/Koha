@@ -92,7 +92,7 @@ if ($insert eq ''){
    $name.="$data{'surname'} ( $data{'firstname'}, $data{'initials'})";
    print mktablerow(2,'white',bold('Name'),$name);
    print mktablerow(2,$main,bold('MEMBERSHIP DETAILS'),"",$image);
-   print mktablerow(2,'white',bold('Membership Number'),$data{'borrowernumber'});
+#   print mktablerow(2,'white',bold('Membership Number'),$data{'borrowernumber'});
    print mktablerow(2,'white',bold('Cardnumber'),$data{'cardnumber'});
    print mktablerow(2,'white',bold('Membership Category'),$data{'categorycode'});
    print mktablerow(2,'white',bold('Area'),$data{'area'});

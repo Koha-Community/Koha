@@ -52,6 +52,9 @@ if (my $data=$sth->fetchrow_hashref){
 #  print $query;
 
 }else{
+    # create new borrowernumber here....
+    $data{'borrowernumber'} = NewBorrowerNumber();
+
   $data{'dateofbirth'}=ParseDate($data{'dateofbirth'});
   $data{'dateofbirth'}=UnixDate($data{'dateofbirth'},'%Y-%m-%d');
   $data{'joining'}=ParseDate($data{'joining'});

@@ -11,11 +11,6 @@ my $input=new CGI;
 
 # Authentication script added, superlibrarian set as default requirement
 
-my $flagsrequired;
-$flagsrequired->{superlibrarian}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
-
-
 my $choice=$input->param('chooseform');
 
 if ($choice eq 'adult'){
