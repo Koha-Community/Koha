@@ -44,7 +44,7 @@
 <!-- on issue bit -->
 <!-- TMPL_IF NAME="card0" --><tr><th>Last Borrower 1:</th><td> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="card0" -->"><!-- TMPL_VAR NAME="card0" --></a></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="card1" --><tr><th>Last Borrower 2:</th><td> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="card1" -->"><!-- TMPL_VAR NAME="card1" --></a></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="replacementprice" --><tr><th>Replacement Price:</th><td> <!-- TMPL_VAR NAME="replacementprice" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="replacementprice" --><tr><th>Replacement Price:</th><td> $<!-- TMPL_VAR NAME="replacementprice" --></td></tr><!-- /TMPL_IF -->
 <tr><th><a href="/cgi-bin/koha/moditem.pl?bibitem=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Lost Status:</a></th><td><!-- TMPL_IF NAME="itemlost" -->Lost<!-- TMPL_ELSE -->Not Lost<!-- /TMPL_IF -->
 <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="Barcode" value="<!-- TMPL_VAR Name="barcode" -->" /><input type="hidden" name="Home Branch" value="<!-- TMPL_VAR Name="homebranch" -->" /><input type="hidden" name="bibnum" value="<!-- TMPL_VAR Name="biblionumber" -->" />
 <input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
