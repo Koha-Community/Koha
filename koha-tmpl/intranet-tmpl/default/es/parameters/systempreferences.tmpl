@@ -38,16 +38,16 @@
 		var _alertString="";
 		var alertString2;
 		if (f.variable.value.length==0) {
-			_alertString += "- variable missing\\n";
+			_alertString += "- variable missing\n";
 		}
 		if (f.value.value.length==0) {
-			_alertString += "- value missing\\n";
+			_alertString += "- value missing\n";
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
@@ -56,13 +56,21 @@
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
+	<TMPL_IF NAME=modify>
+		<h1>Modify a system preference</h1>
+	<TMPL_ELSE>
+		<H1>Add a system preference</H1>
+	</TMPL_IF>
 	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
-	<input type=hidden name=explanation value='<TMPL_VAR name="explanation">'>
 	<table>
-	<tr><td>Variable</td><td><TMPL_VAR name="searchfield"></td></tr>
-	<tr><td>Value</td><td><input type=text name=value value='<TMPL_VAR name="value">'></td></tr>
+	<TMPL_IF NAME=searchfield>
+		<tr><td>Variable</td><td><TMPL_VAR name="searchfield"><input type=hidden name=variable value='<TMPL_VAR NAME=searchfield>'></td></tr>
+	<TMPL_ELSE>
+		<tr><td>Variable</td><td><input type=text name=variable></td></tr>
+	</TMPL_IF>
+	<tr><td>Value</td><td><input type=text name=value value='<TMPL_VAR name="value" escape=HTML>'></td></tr>
+	<tr><td>Explanation</td><td><input type=text name=explanation size=80 value='<TMPL_VAR name="explanation" escape=HTML>'></td></tr>
 	<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 	</table>
 	</form>
@@ -70,7 +78,7 @@
 
 <TMPL_IF name="add_validate">
 <!-------------------------------------------------------------------------------------------------->
-	data recorded
+	Data recorded
 	<form action='<TMPL_VAR name="script_name">' method=post>
 	<input type=submit value=OK>
 	</form>
@@ -87,11 +95,13 @@
 	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
 	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
 	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
+</table>
+
 </TMPL_IF>
 
 <TMPL_IF name="delete_confirmed">
 <!-------------------------------------------------------------------------------------------------->
-	data deleted
+	Data deleted
 	<form action='<TMPL_VAR name="script_name">' method=post>
 	<input type=submit value=OK>
 	</form>
@@ -99,7 +109,7 @@
 
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
-<font SIZE=6><em>System preferences admin</em></font>
+<h1>System preferences admin</h1>
 <form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
 	<input type=text name=searchfield value="">
 	<input type=reset name=reset value="clr">
@@ -124,8 +134,6 @@
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type=hidden name=op value=add_form>
 </table>
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type=hidden name=op value=add_form>
 <table width=40%>
 	<tr>
 		<td width=50%><TMPL_VAR name="previous"></td>
@@ -134,6 +142,8 @@
 </table>
 <br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add system parameter" ALT="Add" BORDER=0 ><br>
 </form>
+
 </TMPL_IF>
+
 
 <TMPL_INCLUDE NAME="parameters-bottom.inc">
