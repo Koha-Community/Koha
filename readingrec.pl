@@ -61,6 +61,7 @@ my @loop_reading;
 
 for (my $i=0;$i<$count;$i++){
  	my %line;
+	$line{biblionumber}=$issues->[$i]->{'biblionumber'};
 	$line{title}=$issues->[$i]->{'title'};
 	$line{author}=$issues->[$i]->{'author'};
 	$line{date_due}=$issues->[$i]->{'date_due'};
@@ -69,7 +70,9 @@ for (my $i=0;$i<$count;$i++){
 	push(@loop_reading,\%line);
 }
 
-$template->param(title => $data->{'title'},
+$template->param(
+						biblionumber => $data->{'biblionumber'},
+						title => $data->{'title'},
 						initials => $data->{'initials'},
 						surname => $data->{'surname'},
 						bornum => $bornum,
