@@ -214,10 +214,6 @@ and ((";
     $query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
   }
   $query.=" group by aqorders.ordernumber";
-  my $input=new CGI;
-print $input->header();
-print $query;
-die;
   my $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
