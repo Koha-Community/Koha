@@ -99,11 +99,11 @@ for (my $i=0;$i<$count;$i++){
 my $prefgist =C4::Context->preference("gist");
 $gist=sprintf("%.2f",$sub_total*$prefgist);
 $grand_total=$sub_total+$gist;
-
 $template->param(basketno => $basketno,
 				creationdate => $basket->{creationdate},
 				authorisedby => $basket->{authorisedby},
 				authorisedbyname => $basket->{authorisedbyname},
+				closedate => format_date($basket->{closedate}),
 				booksellerid=> $booksellers[0]->{'id'},
 				name => $booksellers[0]->{'name'},
 				entrydate => format_date($results[0]->{'entrydate'}),

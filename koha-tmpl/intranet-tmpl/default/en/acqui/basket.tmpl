@@ -2,15 +2,21 @@
 
 <div id="mainbloc">
 	<h1 class="acquisition"><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->shopping Basket <b><!-- TMPL_VAR NAME="basketno" --> </b>for <a href="supplier.pl?id=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
-	<div id="bloc25">
-		<h2 class="acquisition">Basket info</h2>
+	<!-- TMPL_UNLESS name="closedate" -->
+		<div id="bloc25">
+			<h2 class="acquisition">Basket info</h2>
 			<p><label class="label100">Basket number<label> <!-- TMPL_VAR NAME="basketno" --></p>
 			<p><label class="label100">Managed by<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
 			<p><label class="label100">open on<label> <!-- TMPL_VAR NAME="creationdate" --></p>
 			<p><label class="label100">for<label> <!-- TMPL_VAR NAME="booksellerid" --></p>
 			<p><label class="label100">Invoice number </label><!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
-			<a href="/cgi-bin/koha/acqui/order.pl?op=close&amp;basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Close</a>
-	</div>
+			<!-- TMPL_IF name="closedate" -->
+				Closed on <!-- TMPL_VAR name="closedate" -->
+			<!-- TMPL_ELSE -->
+				<a href="/cgi-bin/koha/acqui/order.pl?op=close&amp;basket=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->" class="button acquisition">Close</a>
+			<!-- /TMPL_IF -->
+		</div>
+	<!-- /TMPL_UNLESS -->
 	<div id="bloc100">
 	<h2 class="acquisition">Order</h2>
 	<!-- TMPL_IF name="books_loop" -->
@@ -61,6 +67,7 @@
 		<p>Basket empty</p>
 	<!-- /TMPL_IF -->
 	</div>
+	<!-- TMPL_UNLESS name="closedate" -->
 	<div id="bloc25">
 		<h2 class="acquisition">Add order line</h2>
 		<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
@@ -77,5 +84,6 @@
 			</p>
 		</form>
 	</div>
+	<!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
