@@ -260,7 +260,7 @@
 
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
 <!-- TMPL_IF NAME="borrowernumber" -->
-<div class="table"><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+<div class="table"><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post"><input type="hidden" value="circ" name="destination" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 	<table>
 		<caption>Issues <!-- Display for NPL --><span class="print"><a href="/cgi-bin/koha/moremember-print.pl?bornum=<TMPL_VAR NAME="borrowernumber">">(Print Page)</a> <a href="/cgi-bin/koha/moremember-receipt.pl?bornum=<TMPL_VAR NAME="borrowernumber">">(Print Slip)</a></span><!-- /Display for NPL --></caption>
 		<tr>
