@@ -167,6 +167,7 @@ if ($ok == 0) {
 		     phoneday => $data{'phoneday'},
 		     faxnumber => $data{'faxnumber'},
 		     emailaddress => $data{'emailaddress'},
+                     textmessaging => $data{'textmessaging'},
 		     contactname => $data{'contactname'},
 		     altphone => $data{'altphone'},
 		     altrelationship => $data{'altrelationship'},

@@ -59,7 +59,7 @@ if (my $data=$sth->fetchrow_hashref){
   categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
   borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
   initials='$data{'initials'}',physstreet='$data{'address'}',ethnicity='$data{'ethnicity'}',
-  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}'
+  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',textmessaging='$data{'textmessaging'}'
   where borrowernumber=$data{'borrowernumber'}";
 #  print $query;
 
@@ -69,11 +69,11 @@ if (my $data=$sth->fetchrow_hashref){
   $data{'joining'}=ParseDate($data{'joining'});
   $data{'joining'}=UnixDate($data{'joining'},'%Y-%m-%d');
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
-  firstname,altnotes,dateofbirth,contactname,emailaddress,dateenrolled,streetcity,
+  firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
   altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
   initials,ethnicity,borrowernumber) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
   '$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
-  '$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}',
+  '$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
   '$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
   '$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
   '$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
