@@ -1,14 +1,16 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<center>
-<h1>Exportation de notice MARC</h1><br /><br /><br />
-Exporter au format MARC les notices suivantes :
-<form method="post">
-<p>de la notice : <input type="text" name="start_bib"> à  la notice : <input type="text" name="end_bib"></p>
-<input type="hidden" name="op" value="export">
-<input type="submit" value="Exportation">
-</form>
-
-<p>(laisser des blancs pour exporter toutes les notices)</p>
-<p>Remarque : les exemplaires NE SONT PAS exportés par cet outil</p>
+<div id="mainbloc">
+<h1>Exportation de notice MARC</h1>
+	<div id="bloc25">
+		<h2 class="parameters">Sélectionnez les notices à exporter :</h2>
+		<form method="post">
+			<p>de la notice : <input type="text" name="start_bib"> à  la notice : <input type="text" name="end_bib"></p>
+			<input type="hidden" name="op" value="export">
+			<p>(laisser des blancs pour exporter toutes les notices)</p>
+			<p>Remarque : les exemplaires NE SONT PAS exportés par cet outil</p>
+			<input type="submit" value="Exportation" class="button">
+		</form>
+	</div>
+</div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

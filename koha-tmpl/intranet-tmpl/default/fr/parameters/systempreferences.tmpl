@@ -127,7 +127,7 @@
 	
 	<!-- TMPL_IF NAME="delete_confirmed" -->
 	
-		Donnée détruite
+		Donnée supprimée
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="submit" value="OK">
 		</form>
@@ -147,7 +147,7 @@
 		<th colspan="3">Explication</th>
 	</tr>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+	<!-- TMPL_IF NAME="toggle" --><tr valign="top" class="hilighted"><!-- TMPL_ELSE --><tr valign="top"><!-- /TMPL_IF -->
 		<td><!-- TMPL_VAR NAME="variable" --></td>
 		<td><!-- TMPL_VAR NAME="value" --></td>
 		<td><!-- TMPL_VAR NAME="explanation" --></td>

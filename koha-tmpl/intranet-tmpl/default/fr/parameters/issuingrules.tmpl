@@ -4,7 +4,7 @@
 	<div id="bloc25">
 		<h2 class="parameters">Astuces pour les prêts</h2>
 		<p>Remplir chaque pavé  avec la durée du prêt, le nombre maximum de prêts</p>
-		<p>égal à 21,5 permet 5 prêts pour une durée de 21 jours</p>
+		<p> - par exemple : 21,5 autorisé 21 jours et 5 documents</p>
 		<h2 class="parameters">Astuce pour les amendes</h2>
 		<p>Chaque cellule doit être remplie avec l'amende, l'échéance et la durée des charges</p>
 		<p>par ex. 1,7,7 = 1Eur d'amende, au bout de 7 jours, par tranche de 7 jours</p>
@@ -45,7 +45,7 @@
 						<!-- TMPL_VAR NAME="categorycode" -->
 					</th>
 					<!-- TMPL_LOOP NAME="cell" -->
-						<td bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+						<td<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
 							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10"> /
 							<input name="<!-- TMPL_VAR NAME="finesname" -->" value="<!-- TMPL_VAR NAME="finesvalue" -->" size="6" maxlength="10">
 						</td>

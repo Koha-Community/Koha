@@ -37,7 +37,7 @@ function Help() {
 </div>
 <div id="submenu">
 	<span class="koha">options >></span>
-	<a href="/cgi-bin/koha/admin/aqbookfund.pl" class="submenu">Crédits</a> <a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu2">Valeurs autorisées</a> <a href="/cgi-bin/koha/admin/currency.pl" class="submenu2">Devises</a> <a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Imprimantes</a>
+	<a href="/cgi-bin/koha/admin/aqbookfund.pl" class="submenu">Crédits</a> <a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu2">Valeurs autorisées</a> <a href="/cgi-bin/koha/admin/currency.pl" class="submenu2">Devises</a> <a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Imprimantes</ a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Connecté en tant que : <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Déconnecter</a>]</p>
