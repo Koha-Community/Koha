@@ -32,9 +32,9 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select host,port,db,userid,password,name,id,checked,rank from 
-z3950servers where (name like \"$data[0]\%\") order by rank,name";	my 
-$sth=$dbh->prepare($query);	$sth->execute;
+	my $query="Select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name like \"$data[0]\%\") order by rank,name";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref) {
@@ -49,11 +49,11 @@ $sth=$dbh->prepare($query);	$sth->execute;
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $reqsel="select host,port,db,userid,password,name,id,checked,rank from 
-z3950servers where (name = '$searchfield') order by rank,name";my 
-$reqdel="delete from z3950servers where name='$searchfield'";my 
-$offset=$input->param('offset');my 
-$script_name="/cgi-bin/koha/admin/z3950servers.pl";
+my $reqsel="select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name = '$searchfield') order by rank,name";
+my $reqdel="delete from z3950servers where name='$searchfield'";
+my $offset=$input->param('offset');
+my $script_name="/cgi-bin/koha/admin/z3950servers.pl";
+
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
@@ -70,28 +70,28 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select 
-host,port,db,userid,password,name,id,checked,rank from z3950servers where (name 
-= '$searchfield') order by rank,name");		$sth->execute;		
-$data=$sth->fetchrow_hashref;		$sth->finish;
+		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name = '$searchfield') order by rank,name");
+		$sth->execute;
+		$data=$sth->fetchrow_hashref;
+		$sth->finish;
 	}
 	print <<printend
 	<script>
-	///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////	function isNotNull(f,noalert) {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
 		    return false;
 		}
 		return true;
 	}
-	///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////	function toUC(f) {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function toUC(f) {
 		var x=f.value.toUpperCase();
 		f.value=x;
 		return true;
 	}
-	///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////	function isNum(v,maybenull) {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNum(v,maybenull) {
 	var n = new Number(v.value);
 	if (isNaN(n)) {
 		return false;
@@ -101,15 +101,15 @@ $data=$sth->fetchrow_hashref;		$sth->finish;
 	}
 	return true;
 	}
-	///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////	function isDate(f) {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isDate(f) {
 		var t = Date.parse(f.value);
 		if (isNaN(t)) {
 			return false;
 		}
 	}
-	///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////	function Check(f) {
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function Check(f) {
 		var ok=1;
 		var _alertString="";
 		var alertString2;
@@ -138,9 +138,9 @@ $data=$sth->fetchrow_hashref;		$sth->finish;
 			document.Aform.submit();
 		} else {
 			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += 
-"-------------------------------------------------------------------------------
------\\n\\n";			alertString2 += _alertString;			alert(alertString2);
+			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+			alertString2 += _alertString;
+			alert(alertString2);
 		}
 	}
 	</SCRIPT>
@@ -155,32 +155,32 @@ printend
 	print "<input type=hidden name=op value='add_validate'>";
 	print "<table>";
 	if ($searchfield) {
-		print "<tr><td>Z39.50 Server</td><td><input type=hidden name=searchfield 
-value=\"$searchfield\">$searchfield</td></tr>\n";	} else {
-		print "<tr><td>Z39.50 Server</td><td><input type=text name=searchfield 
-size=40></td></tr>\n";	}
-	print "<tr><td>Hostname</td><td><input type=text name=host size=30 
-value='$data->{'host'}'></td></tr>\n";	print "<tr><td>Port</td><td><input 
-type=text name=port size=5 value='$data->{'port'}' 
-onBlur=isNum(this)></td></tr>\n";	print "<tr><td>Database</td><td><input 
-type=text name=db value='$data->{'db'}'></td></tr>\n";	print 
-"<tr><td>Userid</td><td><input type=text name=userid 
-value='$data->{'userid'}'></td></tr>\n";	print "<tr><td>Password</td><td><input 
-type=text name=password value='$data->{'password'}'></td></tr>\n";	print 
-"<tr><td>Checked (searched by default)</td><td><input type=text size=1 
-name=checked value='$data->{'checked'}' onBlur=isNum(this)></td></tr>";	print 
-"<tr><td>Rank (display order)</td><td><input type=text name=rank size=4 
-value='$data->{'rank'}' onBlur=isNum(this)></td></tr>";	print 
-"<tr><td>&nbsp;</td><td><INPUT type=button value='OK' 
-onClick='Check(this.form)'></td></tr>";	print "</table>";	print "</form>";;						
-							# END $OP eq ADD_FORM################## ADD_VALIDATE 
-################################### called by add_form, used to insert/modify 
-data in DB} elsif ($op eq 'add_validate') {	my $dbh=C4::Context->dbh;	my 
-$sth=$dbh->prepare("select * from z3950servers where name=?");	
-$sth->execute($input->param('searchfield'));	if ($sth->rows) {
-		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, 
-password=?, name=?, checked=?, rank=? where name=?");		
-$sth->execute($input->param('host'),		      $input->param('port'),
+		print "<tr><td>Z39.50 Server</td><td><input type=hidden name=searchfield value=\"$searchfield\">$searchfield</td></tr>\n";
+	} else {
+		print "<tr><td>Z39.50 Server</td><td><input type=text name=searchfield size=40></td></tr>\n";
+	}
+	print "<tr><td>Hostname</td><td><input type=text name=host size=30 value='$data->{'host'}'></td></tr>\n";
+	print "<tr><td>Port</td><td><input type=text name=port size=5 value='$data->{'port'}' onBlur=isNum(this)></td></tr>\n";
+	print "<tr><td>Database</td><td><input type=text name=db value='$data->{'db'}'></td></tr>\n";
+	print "<tr><td>Userid</td><td><input type=text name=userid value='$data->{'userid'}'></td></tr>\n";
+	print "<tr><td>Password</td><td><input type=text name=password value='$data->{'password'}'></td></tr>\n";
+	print "<tr><td>Checked (searched by default)</td><td><input type=text size=1 name=checked value='$data->{'checked'}' onBlur=isNum(this)></td></tr>";
+	print "<tr><td>Rank (display order)</td><td><input type=text name=rank size=4 value='$data->{'rank'}' onBlur=isNum(this)></td></tr>";
+	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
+	print "</table>";
+	print "</form>";
+;
+													# END $OP eq ADD_FORM
+################## ADD_VALIDATE ##################################
+# called by add_form, used to insert/modify data in DB
+} elsif ($op eq 'add_validate') {
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from z3950servers where name=?");
+	$sth->execute($input->param('searchfield'));
+	if ($sth->rows) {
+		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=? where name=?");
+		$sth->execute($input->param('host'),
+		      $input->param('port'),
 		      $input->param('db'),
 		      $input->param('userid'),
 		      $input->param('password'),
@@ -190,9 +190,9 @@ $sth->execute($input->param('host'),		      $input->param('port'),
 		      $input->param('searchfield')
 		      );
 	} else {
-		$sth=$dbh->prepare("insert into z3950servers 
-(host,port,db,userid,password,name,checked,rank) values (?, ?, ?, ?, ?, ?, ?, 
-?)");		$sth->execute($input->param('host'),		      $input->param('port'),
+		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank) values (?, ?, ?, ?, ?, ?, ?, ?)");
+		$sth->execute($input->param('host'),
+		      $input->param('port'),
 		      $input->param('db'),
 		      $input->param('userid'),
 		      $input->param('password'),
@@ -211,8 +211,8 @@ $sth->execute($input->param('host'),		      $input->param('port'),
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from borrowers where 
-branchcode='$searchfield'");	$sth->execute;
+	my $sth=$dbh->prepare("select count(*) as total from borrowers where branchcode='$searchfield'");
+	$sth->execute;
 	my $total = $sth->fetchrow_hashref;
 	$sth->finish;
 	print "$reqsel";
@@ -221,32 +221,32 @@ branchcode='$searchfield'");	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Branch 
-code'),bold("$searchfield"),'/images/background-mem.gif');	print "<form 
-action='$script_name' method=post><input type=hidden name=op 
-value=delete_confirmed><input type=hidden name=searchfield 
-value='$searchfield'>";	print "<tr><td>Branch 
-code</td><td>$data->{'branchcode'}</td></tr>";	print "<tr><td>&nbsp; 
-name</td><td>$data->{'branchname'}</td></tr>";	print "<tr><td>&nbsp; 
-adress</td><td>$data->{'branchaddress1'}</td></tr>";	print 
-"<tr><td>&nbsp;</td><td>$data->{'branchaddress2'}</td></tr>";	print 
-"<tr><td>&nbsp;</td><td>$data->{'branchaddress3'}</td></tr>";	print 
-"<tr><td>&nbsp;phone</td><td>$data->{'branchphone'}</td></tr>";	print 
-"<tr><td>&nbsp; fax</td><td>$data->{'branchfax'}</td></tr>";	print 
-"<tr><td>&nbsp; e-mail</td><td>$data->{'branchemail'}</td></tr>";	print 
-"<tr><td>&nbsp; issuing</td><td>$data->{'issuing'}</td></tr>";	if 
-($total->{'total'} >0) {		print "<tr><td colspan=2 align=center><b>This record 
-is used $total->{'total'} times. Deletion not possible</b></td></tr>";		print 
-"<tr><td colspan=2></form><form action='$script_name' method=post><input 
-type=submit value=OK></form></td></tr>";	} else {		print "<tr><td colspan=2 
-align=center>CONFIRM DELETION</td></tr>";		print "<tr><td><INPUT type=submit 
-value='YES'></form></td><td><form action='$script_name' method=post><input 
-type=submit value=NO></form></td></tr>";	}													# END $OP eq 
-DELETE_CONFIRM################## DELETE_CONFIRMED 
-################################### called by delete_confirm, used to 
-effectively confirm deletion of data in DB} elsif ($op eq 'delete_confirmed') {	
-my $dbh=C4::Context->dbh;#	my $searchfield=$input->param('branchcode');	my 
-$sth=$dbh->prepare($reqdel);	$sth->execute;
+	print mktablerow(2,'#99cc33',bold('Branch code'),bold("$searchfield"),'/images/background-mem.gif');
+	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='$searchfield'>";
+	print "<tr><td>Branch code</td><td>$data->{'branchcode'}</td></tr>";
+	print "<tr><td>&nbsp; name</td><td>$data->{'branchname'}</td></tr>";
+	print "<tr><td>&nbsp; adress</td><td>$data->{'branchaddress1'}</td></tr>";
+	print "<tr><td>&nbsp;</td><td>$data->{'branchaddress2'}</td></tr>";
+	print "<tr><td>&nbsp;</td><td>$data->{'branchaddress3'}</td></tr>";
+	print "<tr><td>&nbsp;phone</td><td>$data->{'branchphone'}</td></tr>";
+	print "<tr><td>&nbsp; fax</td><td>$data->{'branchfax'}</td></tr>";
+	print "<tr><td>&nbsp; e-mail</td><td>$data->{'branchemail'}</td></tr>";
+	print "<tr><td>&nbsp; issuing</td><td>$data->{'issuing'}</td></tr>";
+	if ($total->{'total'} >0) {
+		print "<tr><td colspan=2 align=center><b>This record is used $total->{'total'} times. Deletion not possible</b></td></tr>";
+		print "<tr><td colspan=2></form><form action='$script_name' method=post><input type=submit value=OK></form></td></tr>";
+	} else {
+		print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
+		print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
+	}
+													# END $OP eq DELETE_CONFIRM
+################## DELETE_CONFIRMED ##################################
+# called by delete_confirm, used to effectively confirm deletion of data in DB
+} elsif ($op eq 'delete_confirmed') {
+	my $dbh=C4::Context->dbh;
+#	my $searchfield=$input->param('branchcode');
+	my $sth=$dbh->prepare($reqdel);
+	$sth->execute;
 	$sth->finish;
 	print "data deleted";
 	print "<form action='$script_name' method=post>";
@@ -273,8 +273,8 @@ printend
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); 
-$i++){	  	if ($toggle eq 'white'){
+	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+	  	if ($toggle eq 'white'){
 	    		$toggle="#ffffcc";
 	  	} else {
 	    		$toggle="white";
@@ -292,9 +292,9 @@ $i++){	  	if ($toggle eq 'white'){
 			$results->[$i]{'checked'},
 			$results->[$i]{'rank'},
 		mklink("$script_name?op=add_form&searchfield=$urlsearchfield".'','Edit'),
-		
-mklink("$script_name?op=delete_confirm&searchfield=$urlsearchfield",'Delete'));	
-}	print mktableft;
+		mklink("$script_name?op=delete_confirm&searchfield=$urlsearchfield",'Delete'));
+	}
+	print mktableft;
 	print "<form action='$script_name' method=post>";
 	print "<input type=hidden name=op value=add_form>";
 	if ($offset>0) {
@@ -306,8 +306,8 @@ mklink("$script_name?op=delete_confirm&searchfield=$urlsearchfield",'Delete'));
 		my $nextpage =$offset+$pagesize;
 		print mklink("$script_name?offset=".$nextpage,'Next &gt;&gt;');
 	}
-	print "<br><input type=image src=\"/images/button-add-new.gif\"  WIDTH=188  
-HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";	print "</form>";
+	print "<br><input type=image src=\"/images/button-add-new.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";
+	print "</form>";
 } #---- END $OP eq DEFAULT
 print endmenu('admin');
 print endpage();
