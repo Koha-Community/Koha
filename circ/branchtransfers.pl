@@ -57,6 +57,9 @@ my $printer = $query->param("printer");
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
 
+($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+($printers->{$printer}) || ($printer=(keys %$printers)[0]);
+
 my $request=$query->param('request');
 
 

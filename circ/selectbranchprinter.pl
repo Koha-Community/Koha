@@ -49,6 +49,10 @@ my $printer=$query->param('printer');
 ($branch) || ($branch=$query->cookie('branch'));
 ($printer) || ($printer=$query->cookie('printer'));
 
+($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+($printers->{$printer}) || ($printer=(keys %$printers)[0]);
+
+
 # is you force a selection....
 my $oldbranch = $branch;
 my $oldprinter = $printer;
@@ -99,6 +103,7 @@ if ($printercount>1) {
 EOF
 } else {
     my ($printer) = keys %$printers;
+    $printerform.="Printer: ".$printers->{$printer}->{printername};
 } 
 
 if ($branchcount>1) {
@@ -107,6 +112,7 @@ if ($branchcount>1) {
 EOF
 } else {
     my ($branch) = keys %$branches;
+    $branchform.= "Branch: ".$branches->{$branch}->{branchname};
 } 
 
 
