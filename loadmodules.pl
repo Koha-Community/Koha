@@ -39,15 +39,14 @@ sub acquisitions {
 	my $aq_type = $input->param('acquisitions');
 	$aq_type = C4::Context->preference("acquisitions") || "normal" unless $aq_type;
 	my $marc_bool =$input->param('MARC');
-	$marc_bool = C4::Context->preference("MARC") ||"OFF" unless $marc_bool;
-
+	$marc_bool = C4::Context->boolean_preference('marc') || 0 unless $marc_bool;
 	# Get the acquisition preference. This should be:
 	#       "simple" - minimal information required
 	#       "normal" - full information required
 	#       other - Same as "normal"
 
 	if ($aq_type eq 'simple') {
-		if ($marc_bool eq "ON") {
+		if ($marc_bool eq "1") {
 			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
 		} else {
 			print $input->redirect("/cgi-bin/koha/acqui.simple/addbiblio-nomarc.pl");
@@ -58,8 +57,8 @@ sub acquisitions {
 }
 
 sub addbiblio {
-	my $marc_bool = C4::Context->preference("MARC") ||"OFF";
-		if ($marc_bool eq "ON") {
+	my $marc_bool = C4::Context->boolean_preference("MARC") || 0;
+		if ($marc_bool eq "1") {
 			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
 		} else {
 			print $input->redirect("/cgi-bin/koha/acqui.simple/addbiblio-nomarc.pl");
