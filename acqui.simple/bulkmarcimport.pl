@@ -416,7 +416,7 @@ RECORD:
 	my $biblioitemnumber=0;
 	if ($sth->rows) {
 	    ($biblionumber, $biblioitemnumber) = $sth->fetchrow;
-	    my $title=$title;
+	    my $title=$title;			# FIXME - WTF?
 #title already in the database
 	} else {
 	    my $q_title=$dbh->quote("$title");
