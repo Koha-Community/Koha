@@ -179,7 +179,22 @@ if ($delete){
   #Convert dateofbirth to correct format
   $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
 
-  $template->param( 
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my $branches=getbranches();
+	foreach my $branch (keys %$branches) {
+		push @select_branch, $branch;
+		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+				-values   => \@select_branch,
+				-default  => $data->{'branchcode'},
+				-labels   => \%select_branches,
+				-size     => 1,
+				-multiple => 0 );
+
+  $template->param(
   			member          => $member,
 			address         => $data->{'streetaddress'},
   			firstname       => $data->{'firstname'},
@@ -208,7 +223,8 @@ if ($delete){
   			expiry		=> $data->{'expiry'},
   			cardnumber	=> $cardnumber,
   			dateofbirth	=> $data->{'dateofbirth'},
-			dateformat      => display_date_format());
+			dateformat      => display_date_format(),
+			CGIbranch => $CGIbranch);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

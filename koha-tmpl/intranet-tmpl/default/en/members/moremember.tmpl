@@ -1,6 +1,5 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
-
 <!-- main site -->
 
 <FONT SIZE=6><em><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></em></FONT><P>
@@ -13,14 +12,17 @@
 
 	<tr VALIGN=TOP  >
 	<TD>
-		<p align=right>
-		<form action=/cgi-bin/koha/jmemberentry.pl method=post>
-			<INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
-			<input type=hidden name=type value=Add>
-			<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
-		</form>
-		</P><br>
-		<FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)<p>
+		<TMPL_IF name="IS_ADULT">
+			<p align=right>
+			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
+				<INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
+				<input type=hidden name=type value=Add>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
+			</form>
+			</P>
+		</TMPL_IF>
+		<br>
+		<FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF><p>
 		Card Number: <TMPL_VAR NAME="cardnumber"><BR>
 		Postal Address: <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><BR>
 		Home Address: <TMPL_VAR NAME="physstreet">, <TMPL_VAR NAME="streetcity"><BR>

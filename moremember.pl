@@ -68,6 +68,7 @@ my $data=borrdata('',$bornum);
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
 $data->{'expiry'} = format_date($data->{'expiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
+$data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 

@@ -62,7 +62,8 @@ if ( $newpassword ) {
     for (my $i=0; $i<$length; $i++) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
     }
-    $template->param(	surname     => $bor->{'surname'},
+	$template->param(	othernames => $bor->{'othernames'},
+			surname     => $bor->{'surname'},
 			firstname   => $bor->{'firstname'},
 			userid      => $bor->{'userid'},
 			defaultnewpassword => $defaultnewpassword );

@@ -36,7 +36,6 @@ my $input = new CGI;
 #or insert data
 my $insert=$input->param('insert');
 
-#print $input->header;
 my $template = gettemplate("newjmember.tmpl");
 
 #get rest of data

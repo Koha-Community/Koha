@@ -28,6 +28,7 @@ use C4::Output;
 use CGI;
 use C4::Search;
 use C4::Interface::CGI::Output;
+use C4::Koha;
 use HTML::Template;
 
 my $input = new CGI;
@@ -50,9 +51,23 @@ my $type=$input->param('type');
 
 my $data=borrdata('',$member);
 
-$template->param({ startmenumember => startmenu('member'),
-			endmenumember   => endmenu('member'),
-			member          => $member });
+my @branches;
+my @select_branch;
+my %select_branches;
+my $branches=getbranches();
+foreach my $branch (keys %$branches) {
+	push @select_branch, $branch;
+  	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+}
+my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+			-values   => \@select_branch,
+			-default  => $data->{'branchcode'},
+			-labels   => \%select_branches,
+			-size     => 1,
+			-multiple => 0 );
+
+$template->param(member => $member,
+						CGIbranch => $CGIbranch);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

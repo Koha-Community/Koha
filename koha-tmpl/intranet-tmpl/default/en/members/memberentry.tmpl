@@ -29,6 +29,13 @@
     </tr>
 
     <tr valign=top bgcolor=white>
+      <td><FONT SIZE=2>Title</FONT></td>
+      <td><FONT SIZE=2>Initials</FONT></td>
+      <td><FONT SIZE=2><b>Given Names*</b></FONT></td>
+      <td><FONT SIZE=2><b>Surname*</b></FONT></td>
+      <td><FONT SIZE=2>Prefered Name</FONT></td>
+    </tr>
+    <tr valign=top bgcolor=white>
       <td>
         <SELECT NAME="title" SIZE="1">
           <OPTION value=" ">No Title
@@ -43,14 +50,16 @@
       <td><input type=text name=othernames size=20 value="<TMPL_VAR NAME=othernames>"></td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-      <td><FONT SIZE=2>Title</FONT></td>
-      <td><FONT SIZE=2>Initials</FONT></td>
-      <td><FONT SIZE=2><b>Given Names*</b></FONT></td>
-      <td><FONT SIZE=2><b>Surname*</b></FONT></td>
-      <td><FONT SIZE=2>Prefered Name</FONT></td>
-    </tr>
 
+    <tr valign=top bgcolor=white>
+      <TMPL_IF NAME=ethcatpopup><TMPL_VAR NAME=ethcatpopup>
+        <td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
+        <td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
+      <TMPL_ELSE>
+        <td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>
+      </TMPL_IF>
+      <td><FONT SIZE=2><b>Membership Category*</b></FONT></td>
+    </tr>
     <tr valign=top bgcolor=white>
       <td colspan=2>
         <select name="ethnicity" size=1>
@@ -67,30 +76,9 @@
       <td><TMPL_VAR NAME=catcodepopup></td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-      <TMPL_IF NAME=ethcatpopup><TMPL_VAR NAME=ethcatpopup>
-        <td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
-        <td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
-      <TMPL_ELSE>
-        <td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>
-      </TMPL_IF>
-      <td><FONT SIZE=2><b>Membership Category*</b></FONT></td>
-    </tr>
 
     <tr valign=top bgcolor="99cc33" >
       <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>MEMBER ADDRESS</b></td>
-    </tr>
-
-    <tr valign=top bgcolor=white>
-      <td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=address>"></td>
-      <td><input type=text name=city size=20 value="<TMPL_VAR NAME=city>"></td>
-      <td>
-        <SELECT NAME="area" SIZE="1">
-          <TMPL_LOOP NAME=arealoop>
-            <OPTION value="<TMPL_VAR NAME=shortcut>"<TMPL_VAR NAME=selected>><TMPL_VAR NAME=shortcut> - <TMPL_VAR NAME=area>
-          </TMPL_LOOP>
-        </SELECT>
-      </td>
     </tr>
 
     <tr valign=top bgcolor=white>
@@ -98,26 +86,27 @@
       <td><FONT SIZE=2><b>Town*</b></FONT></td>
       <td><FONT SIZE=2>Area</FONT></td>
     </tr>
-
     <tr valign=top bgcolor=white>
-      <td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
-      <td><input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
+      <td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=address>"></td>
+      <td><input type=text name=city size=20 value="<TMPL_VAR NAME=city>"></td>
+      <td>
+      	<TMPL_VAR name="CGIbranch">
+	 </td>
     </tr>
+
 
     <tr valign=top bgcolor=white>
       <td COLSPAN=3><FONT SIZE=2>Street Address if different</FONT></td>
       <td><FONT SIZE=2>Town</FONT></td>
     </tr>
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
+      <td><input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
+    </tr>
+
 
     <tr valign=top bgcolor="99cc33">
       <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>MEMBER CONTACT DETAILS</b></td>
-    </tr>
-
-    <tr valign=top bgcolor=white>
-      <td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phone>"></td>
-      <td><input type=text name=faxnumber size=20 value="<TMPL_VAR NAME=faxnumber>"></td>
-      <td><input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>"></td>
-      <td><input type=text name=textmessaging size=20 value="<TMPL_VAR NAME=textmessaging>"></td>
     </tr>
 
     <tr valign=top bgcolor=white>
@@ -126,25 +115,37 @@
       <td><FONT SIZE=2>Email</td>
       <td><FONT SIZE=2>Text Messaging</td>
     </tr>
-
     <tr valign=top bgcolor=white>
-      <td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phoneday>"></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phone>"></td>
+      <td><input type=text name=faxnumber size=20 value="<TMPL_VAR NAME=faxnumber>"></td>
+      <td><input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>"></td>
+      <td><input type=text name=textmessaging size=20 value="<TMPL_VAR NAME=textmessaging>"></td>
     </tr>
-      
+
+
     <tr valign=top bgcolor=white>
       <td COLSPAN=2 ><FONT SIZE=2>Phone (Day)</td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phoneday>"></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+
 
     <tr valign=top bgcolor="99cc33">
       <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>ALTERNATE CONTACT DETAILS</b></td>
     </tr>
 
+    <tr valign=top bgcolor=white>
+      <td   COLSPAN=3 ><FONT SIZE=2><b>Name*</b></td>
+      <td><FONT SIZE=2>Phone</td>
+      <td><FONT SIZE=2><b>Relationship*</b></td>
+    </tr>
     <tr valign=top bgcolor=white>
       <td COLSPAN=3 ><input type=text name=contactname size=40 value="<TMPL_VAR NAME=contactname>"></td>
       <td><input type=text name=altphone size=20 value="<TMPL_VAR NAME=altphone>"></td>
@@ -157,22 +158,15 @@
       </td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-      <td   COLSPAN=3 ><FONT SIZE=2><b>Name*</b></td>
-      <td><FONT SIZE=2>Phone</td>
-      <td><FONT SIZE=2><b>Relationship*</b></td>
-    </tr>
 
+    <tr valign=top bgcolor="99cc33">
+      <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>LIBRARY USE</B></td>
+    </tr>
     <tr valign=top bgcolor=white>
       <td><FONT SIZE=2>Notes</font></td>
       <td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=altnotes></textarea></td>
     </tr>
 
-    <tr><td>&nbsp; </TD></TR>
-
-    <tr valign=top bgcolor="99cc33">
-      <td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>LIBRARY USE</B></td>
-    </tr>
 
     <tr valign=top >
       <td><FONT SIZE=2>Notes</font></td>
