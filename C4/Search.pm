@@ -1,7 +1,4 @@
-package C4::Search; #asummes C4/Search
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
+package C4::Search; #assumes C4/Search
 
 use strict;
 require Exporter;
@@ -22,40 +19,7 @@ $VERSION = 0.01;
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
 &findguarantor); 
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
 sub findguarantees{         
   my ($bornum)=@_;         
   my $dbh=C4Connect;           

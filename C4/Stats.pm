@@ -1,7 +1,4 @@
-package C4::Stats; #asummes C4/Stats
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
+package C4::Stats; #assumes C4/Stats
 
 use strict;
 require Exporter;
@@ -15,41 +12,7 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(&UpdateStats &statsreport &Count &Overdues &TotalOwing
 &TotalPaid &getcharges &Getpaidbranch &unfilledreserves);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-  };
-  
-# make all your functions, whether exported or not;
 
 sub UpdateStats {
   #module to insert stats data into stats table
