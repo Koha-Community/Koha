@@ -5,6 +5,7 @@
 #called as an include by the acquisitions index page
 
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Search;
 use CGI;
 my $input=new CGI;

@@ -10,6 +10,7 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;
+use C4::Biblio;
 
 my $input = new CGI;
 my $submit=$input->param('delete.x');
@@ -28,7 +29,7 @@ my $item=itemnodata('blah','',$itemnum);
 #my ($analytictitle)=analytic($biblionumber,'t');
 #my ($analyticauthor)=analytic($biblionumber,'a');
 print startpage();
-print startmenu();
+print startmenu('catalogue');
 my %inputs;
 
 
