@@ -7,7 +7,7 @@
 
 # Licensed under the GPL
 
-#use strict;
+use strict;
 
 # standard or CPAN modules used
 use CGI;
@@ -133,7 +133,7 @@ my $file=$input->param('file');
 my $menu = $input->param('menu');
 
 if ($input->param('z3950queue')) {
-	PostToZ3950Queue($dbh,$input);
+	AcceptZ3950Queue($dbh,$input);
 } 
 
 if ($input->param('uploadmarc')) {
@@ -142,7 +142,7 @@ if ($input->param('uploadmarc')) {
 
 if ($input->param('insertnewrecord')) {
     # Add biblio item, and set up menu for adding item copies
-    ($biblionumber,$biblioitemnumber)=AcceptBiblioitem($dbh,$input);
+    my ($biblionumber,$biblioitemnumber)=AcceptBiblioitem($dbh,$input);
     ItemCopyForm($dbh,$input,$biblionumber,$biblioitemnumber);
     print endmenu();
     print endpage();
@@ -175,15 +175,23 @@ print endpage();
 
 sub ProcessFile {
     # A MARC file has been specified; process it for review form
+    use strict;
 
+    # Input params
     my (
 	$dbh,
 	$input,
     )=@_;
 
-    my $debug=1;
+    # local vars
+    my (
+	$sth,
+	$record,
+    );
 
-    my $sth;
+    my $debug=0;
+    my $splitchar=chr(29);
+
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $qisbn=$input->param('isbn');
     my $qissn=$input->param('issn');
@@ -196,6 +204,7 @@ sub ProcessFile {
 	#open (F, "$file");
 	#my $data=<F>;
 	my $data;
+
 	if ($file=~/Z-(\d+)/) {
 	    my $id=$1;
 	    my $resultsid=$input->param('resultsid');
@@ -208,116 +217,80 @@ sub ProcessFile {
 	    ($data) = $sth->fetchrow;
 	}
 
-	$splitchar=chr(29);
 	my @records;
-	foreach $record (split(/$splitchar/, $data)) {
-	    my $marctext="<table border=0 cellspacing=0>\n";
-	    $marctext.="<tr><th colspan=3 bgcolor=black><font color=white>MARC RECORD</font></th></tr>\n";
-	    $leader=substr($record,0,24);
-	    $marctext.="<tr><td>Leader:</td><td colspan=2>$leader</td></tr>\n";
-	    $record=substr($record,24);
-	    $splitchar2=chr(30);
-	    my $directory=0;
-	    my $tagcounter=0;
-	    my %tag;
-	    my @record;
-	    foreach $field (split(/$splitchar2/, $record)) {
-		my %field;
-		($color eq $lc1) ? ($color=$lc2) : ($color=$lc1);
-		unless ($directory) {
-		    $directory=$field;
-		    my $itemcounter=1;
-		    $counter=0;
-		    while ($item=substr($directory,0,12)) {
-			$tag=substr($directory,0,3);
-			$length=substr($directory,3,4);
-			$start=substr($directory,7,6);
-			$directory=substr($directory,12);
-			$tag{$counter}=$tag;
-			$counter++;
-		    }
-		    $directory=1;
-		    next;
-		}
-		$tag=$tag{$tagcounter};
-		$tagcounter++;
-		$field{'tag'}=$tag;
-		$marctext.="<tr><td bgcolor=$color valign=top>$tagtext{$tag}</td><td bgcolor=$color valign=top>$tag</td>";
-		$splitchar3=chr(31);
-		my @subfields=split(/$splitchar3/, $field);
-		$indicator=$subfields[0];
-		$field{'indicator'}=$indicator;
-		my $firstline=1;
-		if ($#subfields==0) {
-		    $marctext.="<td bgcolor=$color valign=top>$indicator</td></tr>";
-		} else {
-		    my %subfields;
-		    $marctext.="<td bgcolor=$color valign=top><table border=0 cellspacing=0>\n";
-		    my $color2=$color;
-		    for ($i=1; $i<=$#subfields; $i++) {
-			($color2 eq $lc1) ? ($color2=$lc2) : ($color2=$lc1);
-			my $text=$subfields[$i];
-			my $subfieldcode=substr($text,0,1);
-			my $subfield=substr($text,1);
-			$marctext.="<tr><td colour=$color2><table border=0 cellpadding=0 cellspacing=0><tr><td>$subfieldcode </td></tr></table></td><td colour=$color2>$subfield</td></tr>\n";
-			if ($subfields{$subfieldcode}) {
-			    my $subfieldlist=$subfields{$subfieldcode};
-			    my @subfieldlist=@$subfieldlist;
-			    if ($#subfieldlist>=0) {
-				push (@subfieldlist, $subfield);
-			    } else {
-				@subfieldlist=($subfields{$subfieldcode}, $subfield);
-			    }
-			    $subfields{$subfieldcode}=\@subfieldlist;
-			} else {
-			    $subfields{$subfieldcode}=$subfield;
-			}
-		    }
-		    $marctext.="</table></td></tr>\n";
-		    $field{'subfields'}=\%subfields;
-		}
-		push (@record, \%field);
-	    }
-	    $marctext.="</table>\n";
-	    $marctext{\@record}=$marctext;
-	    $marc{\@record}=$record;
-	    push (@records, \@record);
-	    $counter++;
-	}
-RECORD:
-	foreach $record (@records) {
-	    my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $additionalauthors, $illustrator, $copyrightdate, $seriestitle);
-	    my $marctext=$marctext{$record};
-	    my $marc=$marc{$record};
 
-	    $bib=extractmarcfields($record);
+RECORD:
+	foreach $record (split(/$splitchar/, $data)) {
+
+	    my (
+		$bib,		# hash ref to named fields
+		$fieldlist,	# list ref
+		$lccn, $isbn, $issn, $dewey, $author, 
+		$place, $publisher, $publicationyear, $volume, 
+		$number, @subjects, $notes, $additionalauthors, 
+		$copyrightdate, $seriestitle,
+		$origisbn, $origissn, $origlccn, $origcontrolnumber,
+		$subtitle,
+		$controlnumber,
+		$cleanauthor,
+		$subject,
+                $volumedate,
+                $volumeddesc,
+		$itemtypeselect,
+	    );
+	    my ($lccninput, $isbninput, $issninput, $deweyinput, $authorinput, $titleinput, 
+		$placeinput, $publisherinput, $publicationyearinput, $volumeinput, 
+		$numberinput, $notesinput, $additionalauthorsinput, 
+		$illustratorinput, $copyrightdateinput, $seriestitleinput,
+                $subtitleinput,
+                $copyrightinput,
+                $volumedateinput,
+                $volumeddescinput,
+                $subjectinput,
+                $noteinput,
+                $subclassinput,
+                $pubyearinput,
+                $pagesinput,
+                $sizeinput,
+		$marcinput,
+		$fileinput,
+	    );
+
+
+	    my $marctext;
+
+	    my $marc=$record;
+
+	    ($fieldlist)=parsemarcfileformat($record );
+
+	    $bib=extractmarcfields($fieldlist );
+
+	    print "Title=$bib->{title}\n" if $debug;
+
+	    $marctext=FormatMarcText($fieldlist);
 
 		$controlnumber		=$bib->{controlnumber};
 		$lccn			=$bib->{lccn};
 		$isbn			=$bib->{isbn};
 		$issn			=$bib->{issn};
 		$author			=$bib->{author};
-		$title			=$bib->{title};
-		$subtitle		=$bib->{subtitle};
-		$dewey			=$bib->{dewey};
 		$place			=$bib->{place};
 		$publisher		=$bib->{publisher};
 		$publicationyear	=$bib->{publicationyear};
 		$copyrightdate		=$bib->{copyrightdate};
-		$pages			=$bib->{pages};
-		$size			=$bib->{size};
+		
 		$volume			=$bib->{volume};
 		$number			=$bib->{number};
 		$seriestitle		=$bib->{seriestitle};
 		$additionalauthors	=$bib->{additionalauthors};
-		$illustrator		=$bib->{illustrator};
 		$notes			=$bib->{notes};
 
-	    $titleinput=$input->textfield(-name=>'title', -default=>$title, -size=>40);
+	    $titleinput=$input->textfield(-name=>'title', -default=>$bib->{title}, -size=>40);
 	    $marcinput=$input->hidden(-name=>'marc', -default=>$marc);
-	    $subtitleinput=$input->textfield(-name=>'subtitle', -default=>$subtitle, -size=>40);
+	    $subtitleinput=$input->textfield(-name=>'subtitle', -default=>$bib->{subtitle}, -size=>40);
 	    $authorinput=$input->textfield(-name=>'author', -default=>$author);
-	    $illustratorinput=$input->textfield(-name=>'illustrator', -default=>$illustrator);
+	    $illustratorinput=$input->textfield(-name=>'illustrator', 
+		-default=>$bib->{illustrator});
 	    $additionalauthorsinput=$input->textarea(-name=>'additionalauthors', -default=>$additionalauthors, -rows=>4, -cols=>20);
 
 	    my $subject='';
@@ -340,15 +313,15 @@ RECORD:
 	    $issninput=$input->textfield(-name=>'issn', -default=>$issn);
 	    $lccninput=$input->textfield(-name=>'lccn', -default=>$lccn);
 	    $isbninput=$input->textfield(-name=>'isbn', -default=>$isbn);
-	    $deweyinput=$input->textfield(-name=>'dewey', -default=>$dewey);
+	    $deweyinput=$input->textfield(-name=>'dewey', -default=>$bib->{dewey});
 	    $cleanauthor=$author;
 	    $cleanauthor=~s/[^A-Za-z]//g;
 	    $subclassinput=$input->textfield(-name=>'subclass', -default=>uc(substr($cleanauthor,0,3)));
 	    $publisherinput=$input->textfield(-name=>'publishercode', -default=>$publisher);
 	    $pubyearinput=$input->textfield(-name=>'publicationyear', -default=>$publicationyear);
 	    $placeinput=$input->textfield(-name=>'place', -default=>$place);
-	    $pagesinput=$input->textfield(-name=>'pages', -default=>$pages);
-	    $sizeinput=$input->textfield(-name=>'size', -default=>$size);
+	    $pagesinput=$input->textfield(-name=>'pages', -default=>$bib->{pages});
+	    $sizeinput=$input->textfield(-name=>'size', -default=>$bib->{size});
 	    $fileinput=$input->hidden(-name=>'file', -default=>$file);
 	    $origisbn=$input->hidden(-name=>'origisbn', -default=>$isbn);
 	    $origissn=$input->hidden(-name=>'origissn', -default=>$issn);
@@ -421,7 +394,7 @@ EOF
 } # sub ProcessFile
 
 sub ListSearchResults {
-    #use strict;
+    use strict;
 
     # Input parameters
     my (
@@ -438,6 +411,7 @@ sub ListSearchResults {
 	my $z3950=0;
 	my $recordsource;
 	my $record;
+	my ($numrecords,$resultsid,$data,$startdate,$enddate);
 
 	# File can be results of z3950 search or uploaded MARC data
 
@@ -570,10 +544,16 @@ EOF
 } # sub ListSearchResults
 
 sub PrintResultRecordLink {
+    use strict;
     my ($record,$resultsid)=@_; 	# input
 
-	my $bib;	# hash ref to named fields
-	my $searchfield, $searchvalue;
+    my (
+	$sth,
+	$bib,	# hash ref to named fields
+	$searchfield, $searchvalue,
+	$donetext,
+	$fieldname,
+    );
 	
 
 	$bib=extractmarcfields($record);
@@ -603,10 +583,10 @@ sub PrintResultRecordLink {
 		"&$searchfield=$searchvalue" .
 		"&searchfield=$searchfield" .
 		"&searchvalue=$searchvalue" .
-		">$bib->{title} by $bib->{author}</a>" .
+		">$bib->{title} $bib->{author}</a>" .
 		" $donetext <BR>\n";
 	} else {
-	    print "Error: Problem with $title by $bib->{author}<br>\n";
+	    print "Error: Problem with $bib->{title} $bib->{author}<br>\n";
 	} # if searchfield
 } # sub PrintResultRecordLink
 
@@ -615,11 +595,13 @@ sub extractmarcfields {
     use strict;
     # input
     my (
-	$record,	# list ref
+	$record,	# pointer to list of MARC field hashes.
+			# Example: $record->[0]->{'tag'} = '100' # Author
+			# 	$record->[0]->{'subfields'}->{'a'} = subfieldvalue
     )=@_;
 
     # return 
-    my $bib;		# hash of named fields
+    my $bib;		# pointer to hash of named output fields
 
     my $debug=0;
 
@@ -635,7 +617,8 @@ sub extractmarcfields {
 
     print "<PRE>\n" if $debug;
 
-    foreach $field (@$record) {
+    if ( ref($record) eq "ARRAY" ) {
+        foreach $field (@$record) {
 	    if ($field->{'tag'} eq '001') {
 		$bib->{controlnumber}=$field->{'indicator'};
 	    }
@@ -767,7 +750,11 @@ sub extractmarcfields {
 		($#subjects		) && ($bib->{subject}=\@subjects  );
 
 
-    } # foreach field
+        } # foreach field
+    } else {
+	print "Error: extractmarcfields: input ref $record is " .
+		ref($record) . " not ARRAY. Contact sysadmin.\n";
+    }
     print "</PRE>\n" if $debug;
 
     return $bib;
@@ -834,8 +821,8 @@ sub z3950menu {
 		    if ($r_enddate>$realenddate) {
 			$realenddate=$r_enddate;
 		    }
-		    # Snag any title from the results
-		    if ( ! $title ) {
+		    # Snag any title from the results if there were any
+		    if ( ! $title && $r_marcdata ) {
 	    	        ($record)=parsemarcfileformat($r_marcdata);
 		        $bib=extractmarcfields($record);
 		        if ( $bib->{title} ) { $title=$bib->{title} };
@@ -915,10 +902,11 @@ print << "EOF";
 
     </form>
 EOF
-print "</td></tr></table>\n";
-} # sub z3950
+    print "</td></tr></table>\n";
+} # sub z3950menu
 
 sub uploadmarc {
+    use strict;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
     $sth->execute;
@@ -959,45 +947,39 @@ sub mainmenu {
 <li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Upload MARC Records</a>
 </ul>
 EOF
-}
-
-sub skip {
-
-    #opendir(D, "/home/$userid/");
-    #my @dirlist=readdir D;
-    #foreach $file (@dirlist) {
-#	(next) if ($file=~/^\./);
-#	(next) if ($file=~/^nsmail$/);
-#	(next) if ($file=~/^public_html$/);
-#	($file=~/\.mrc/) || ($filelist.="$file<br>\n");
-#	(next) unless ($file=~/\.mrc$/);
-#	$file=~s/ /\%20/g;
-#	print "<a href=$ENV{'SCRIPT_NAME'}?file=/home/$userid/$file>$file</a><br>\n";
-#    }
+} # sub mainmenu
 
 
-    #<form action=$ENV{'SCRIPT_NAME'} method=POST enctype=multipart/form-data>
-
-}
-
+#--------------------------
+# Parse MARC data in file format with control-character separators
+#   May be multiple records.
 sub parsemarcfileformat {
-    #use strict;
+    use strict;
+    # Input is one big text string
     my $data=shift;
+    # Output is list of records.  Each record is list of field hashes
+    my @records;
+
     my $splitchar=chr(29);
     my $splitchar2=chr(30);
     my $splitchar3=chr(31);
-    my $debug=1;
-    my @records;
+    my $debug=0;
     my $record;
     foreach $record (split(/$splitchar/, $data)) {
-	my $leader=substr($record,0,24);
-	#print "<tr><td>Leader:</td><td>$leader</td></tr>\n";
-	$record=substr($record,24);
+	my @record;
 	my $directory=0;
 	my $tagcounter=0;
 	my %tag;
-	my @record;
 	my $field;
+
+	my $leader=substr($record,0,24);
+	print "<tr><td>Leader:</td><td>$leader</td></tr>\n" if $debug;
+	push (@record, {
+		'tag' => 'Leader',
+		'indicator' => $leader ,
+	} );
+
+	$record=substr($record,24);
 	foreach $field (split(/$splitchar2/, $record)) {
 	    my %field;
 	    my $tag;
@@ -1029,23 +1011,29 @@ sub parsemarcfileformat {
 	    my $firstline=1;
 	    unless ($#subfields==0) {
 		my %subfields;
+		my @subfieldlist;
 		my $i;
 		for ($i=1; $i<=$#subfields; $i++) {
 		    my $text=$subfields[$i];
 		    my $subfieldcode=substr($text,0,1);
 		    my $subfield=substr($text,1);
+		    # if this subfield already exists, do array
 		    if ($subfields{$subfieldcode}) {
 			my $subfieldlist=$subfields{$subfieldcode};
-			my @subfieldlist=@$subfieldlist;
-			if ($#subfieldlist>=0) {
-#			print "$tag Adding to array $subfieldcode -- $subfield<br>\n";
+			if ( ref($subfieldlist) eq 'ARRAY' ) {
+                            # Already an array, add on to it
+			    print "$tag Adding to array $subfieldcode -- $subfield<br>\n" if $debug;
+			    @subfieldlist=@$subfieldlist;
 			    push (@subfieldlist, $subfield);
 			} else {
-#			print "$tag Arraying $subfieldcode -- $subfield<br>\n";
+                            # Change simple value to array
+			    print "$tag Arraying $subfieldcode -- $subfield<br>\n" if $debug;
 			    @subfieldlist=($subfields{$subfieldcode}, $subfield);
 			}
+			# keep new array
 			$subfields{$subfieldcode}=\@subfieldlist;
 		    } else {
+			# subfield doesn't exist yet, keep simple value
 			$subfields{$subfieldcode}=$subfield;
 		    }
 		}
@@ -1062,7 +1050,7 @@ sub parsemarcfileformat {
 
 #----------------------------
 # Accept form results to add query to z3950 queue
-sub PostToZ3950Queue {
+sub AcceptZ3950Queue {
     use strict;
 
     # input parameters
@@ -1098,10 +1086,11 @@ sub PostToZ3950Queue {
 	print "<font color=red size=+1>$query is not a valid ISBN
 	Number</font><p>\n";
     }
-} # sub PostToZ3950Queue
+} # sub AcceptZ3950Queue
 
 #---------------------------------------------
 sub AcceptMarcUpload {
+    use strict;
     my (
 	$dbh,		# DBI handle
 	$input,		# CGI parms
@@ -1348,6 +1337,7 @@ sub AcceptItemCopy {
 # Create an HTML option list for a <SELECT> form tag by using
 #    values from a DB file
 sub GetKeyTableSelectOptions {
+	use strict;
 	# inputs
 	my (
 		$dbh,		# DBI handle
@@ -1590,10 +1580,12 @@ sub addz3950queue {
 
 #--------------------------------------
 sub checkvalidisbn {
+	use strict;
 	my ($q)=@_ ;
 
 	my $isbngood = 0;
 
+	$q=~s/x$/X/g;		# upshift lower case X
 	$q=~s/[^X\d]//g;
 	$q=~s/X.//g;
 	if (length($q)==10) {
@@ -1642,3 +1634,60 @@ sub BuildTagMap {
     return $tagmap;
 } # sub BuildTagMap
 #-------------------------
+sub FormatMarcText {
+    use strict;
+
+    # Input
+    my (
+	$fields,	# list ref to MARC fields
+    )=@_;
+    # Return
+
+    my (
+        $marctext,
+	$color,
+	$field,
+	$tag,
+	$label,
+	$subfieldcode,$subfieldvalue,
+    );
+
+	#return "MARC text here";
+
+    $marctext="<table border=0 cellspacing=0>
+    	<tr><th colspan=3 bgcolor=black>
+		<font color=white>MARC RECORD</font>
+	</th></tr>\n";
+
+    foreach $field ( @$fields ) {
+	($color eq $lc1) ? ($color=$lc2) : ($color=$lc1);
+	$tag=$field->{'tag'};
+	$label=$tagtext{$tag};
+	if ( $tag eq 'Leader' ) {
+		$tag='';
+		$label="Leader:";
+	}
+	$marctext.="<tr><td bgcolor=$color valign=top>$label</td> \n" .
+		"<td bgcolor=$color valign=top>$tag</td> \n";
+	if ( ! $field->{'subfields'} )  {
+	    $marctext.="<td bgcolor=$color valign=top>$field->{'indicator'}</td>";
+	} else {
+	    # start another table for subfields
+	    $marctext.="<td bgcolor=$color valign=top>\n " .
+		"  <table border=0 cellspacing=0>\n";
+	    foreach $subfieldcode ( sort( keys %{ $field->{'subfields'} }   )) {
+	        $subfieldvalue=$field->{'subfields'}->{$subfieldcode};
+	        $marctext.="<tr><td>$subfieldcode </td>" .
+		    "<td>$subfieldvalue</td></tr>\n";
+	    } # foreach subfield
+	    $marctext.="</table></td>\n";
+	} # if subfields
+	$marctext.="</tr>\n";
+
+    } # foreach field
+
+    $marctext.="</table>\n";
+
+    return $marctext;
+
+} # sub FormatMarcText
