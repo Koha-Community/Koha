@@ -122,11 +122,11 @@ function Check(f) {
 	
 	<!-- TMPL_LOOP NAME="loop" -->
 		<tr>
-			<td><!-- TMPL_VAR NAME="frameworkcode" --></td>
-			<td><!-- TMPL_VAR NAME="frameworktext" --></td>
-			<td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->" class="button parameters" >MARC structure</a></td>
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;authtypecode=<!-- TMPL_VAR NAME="frameworkcode" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
+			<td><!-- TMPL_VAR name="frameworkcode" --></td>
+			<td><!-- TMPL_VAR name="frameworktext" --></td>
+			<td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->" class="button parameters" >MARC structure</a></td>
+			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&frameworkcode=<!-- TMPL_VAR name="frameworkcode" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&frameworkcode=<!-- TMPL_VAR name="frameworkcode" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
