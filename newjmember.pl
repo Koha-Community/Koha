@@ -24,8 +24,13 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
+use C4::Context;
 use C4::Output;
 use C4::Input;
+use C4::Interface::CGI::Output;
+use C4::Interface::CGI::Template;
+use C4::Koha;
 use CGI;
 use Date::Manip;
 use HTML::Template;
@@ -36,7 +41,14 @@ my $input = new CGI;
 #or insert data
 my $insert=$input->param('insert');
 
-my $template = gettemplate("newjmember.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "newjmember.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 #get rest of data
 my %data;
@@ -88,7 +100,7 @@ for (my $i=0;$i<3;$i++){
 		my %ident;
 #		$ident{'main'}=$main;
 #		$ident{'image'}=$image;
-		$ident{'cardchlid')=($data{"cardnumber_child_$i"} ne '');
+		$ident{'cardchild'}=($data{"cardnumber_child_$i"} ne '');
 		if ($data{"cardnumber_child_$i"} ne ''){
 			my $name=$data{"firstname_child_$i"}.$data{"surname_child_$i"};
 			$ident{'name'}=$name;
@@ -96,7 +108,7 @@ for (my $i=0;$i<3;$i++){
 			$ident{'dob'}=$data{"dateofbirth_child_$i"};
 			($data{"sex_child_$i"} eq 'M') ? ($ident{'sex'}="Male") : ($ident{'sex'}="Female") ;
 			$ident{'school'}=$data{"school_child_$i"};
-			$ident{'notes'}=$data{"altnotes_child_$i"}
+			$ident{'notes'}=$data{"altnotes_child_$i"};
 			push(@identsloop, \%ident);
 		}
 	}
@@ -111,10 +123,8 @@ for (my $i=0;$i<3;$i++){
 
 # FIXME IF main and image are not fetched by HTML::TEMPLATE get them into identsloop
 $template->param( 	NOK => ($missing==1),
-								main => $main,
-								image => $image,
 								identsloop => \@identsloop,
 								inputsloop => \@inputsloop,
 								string => $string);
 
-print "Content-Type: text/html\n\n", $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

@@ -157,7 +157,7 @@ if ($ok == 0) {
 		     fee => $data{'fee'},
 		     joindate => format_date($data{'joining'}),
 		     expdate => format_date($data{'expiry'}),
-		     joinbranch => $data{'joinbranch'},
+		     branchcode => $data{'branchcode'},
 		     ethnic => $ethnic,
 		     dob => format_date($data{'dateofbirth'}),
 		     sex => $sex,

@@ -148,7 +148,7 @@ if ($delete){
 		push @select_branch, $branch;
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
-	my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+	my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
 				-values   => \@select_branch,
 				-default  => $data->{'branchcode'},
 				-labels   => \%select_branches,
