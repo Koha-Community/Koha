@@ -104,6 +104,55 @@ unless ($itemtypes{'barcode'} eq 'varchar(20)') {
     }
 }
 
+# extending the timestamp in branchtransfers...
+my %branchtransfers;
+
+my $sth=$dbh->prepare("show columns from branchtransfers");
+$sth->execute;
+while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
+    $branchtransfers{$column}=$type;
+}
+
+unless ($branchtransfers{'datesent'} eq 'datetime') {
+    print "Setting type of datesent in branchtransfers to datetime.\n";
+    my $sti=$dbh->prepare("alter table branchtransfers change datesent datesent datetime");
+    $sti->execute;
+}
+
+unless ($branchtransfers{'datearrived'} eq 'datetime') {
+    print "Setting type of datearrived in branchtransfers to datetime.\n";
+    my $sti=$dbh->prepare("alter table branchtransfers change datearrived datearrived datetime");
+    $sti->execute;
+}
+
+# changing the branchcategories table around...
+my %branchcategories;
+
+my $sth=$dbh->prepare("show columns from branchcategories");
+$sth->execute;
+while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
+    $branchcategories{$column}=$type;
+}
+
+unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
+    print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
+    my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
+    $sti->execute;
+    $sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
+    $sti->execute;
+}
+
+unless ($branchcategories{'branchcode'} eq 'varchar(4)') {
+    print "Setting type of branchcode in branchcategories to varchar(4).\n";
+    my $sti=$dbh->prepare("alter table branchcategories change branchcode branchcode varchar(4)");
+    $sti->execute;
+}
+
+unless ($branchcategories{'codedescription'} eq 'text') {
+    print "Replacing branchholding in branchcategories with codedescription text.\n";
+    my $sti=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
+    $sti->execute;
+}
 
 $sth->finish;
 $dbh->disconnect;
