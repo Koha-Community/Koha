@@ -224,9 +224,10 @@ sub renewbook {
     my $account="Insert into accountlines
     (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
     values
-    ('$bornum','$accountno',now(),$charge,'Renewal of Rental Item $item->{'title'} $item->{'barcode'}','Rent',$charge,'$itemno')";
+    (?,?,now(),?,?,?,?,?)";
     $sth=$dbh->prepare($account);
-    $sth->execute;
+    $sth->execute($bornum,$accountno,$charge,"Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
+    'Rent',$charge,$itemno)";
     $sth->finish;
 #     print $account;
   }
