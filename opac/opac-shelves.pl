@@ -174,6 +174,8 @@ sub viewshelf {
 		$line{'barcode'}=$item->{'barcode'};
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
+		$line{'classification'}=$item->{'classification'};		
+		$line{'itemtype'}=$item->{'itemtype'};		
 		$line{biblionumber} = $item->{biblionumber};
 		push(@itemsloop, \%line);
 	}
@@ -187,6 +189,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.2  2005/01/11 20:18:29  oleonard
+# Adding call number and item type to list of returned variables
+#
 # Revision 1.3.2.1  2005/01/11 16:33:57  tipaul
 # fix for http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=811 :
 # The OPAC requires uses to log in to view virtual shelves, and it requires a user
