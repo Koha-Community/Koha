@@ -31,7 +31,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
+@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &UpdateReserve &getreservetitle &Findgroupreserve);
 						    
 # make all your functions, whether exported or not;
 
@@ -510,7 +510,7 @@ sub updatereserves{
   my ($rank,$biblio,$borrower,$del,$branch)=@_;
   my $dbh=C4Connect;
   my $query="Update reserves ";
-  if ($del ==0){
+  if ($del == 0){
     $query.="set  priority='$rank',branchcode='$branch' where
     biblionumber=$biblio and borrowernumber=$borrower";
   } else {
@@ -542,6 +542,32 @@ sub updatereserves{
   $sth->execute;
   $sth->finish;  
   $dbh->disconnect;
+}
+sub UpdateReserve {
+    #subroutine to update a reserve 
+    my ($rank,$biblio,$borrower,$branch)=@_;
+    return if $rank eq "W";
+    my $dbh=C4Connect;
+    if ($rank eq "del") {
+	my $query = "UPDATE reserves SET cancellationdate=now() 
+                                   WHERE biblionumber   = ? 
+                                     AND borrowernumber = ?    
+	                             AND cancellationdate is NULL
+                                     AND (found <> 'F' or found is NULL)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($biblio, $borrower);
+	$sth->finish;  
+    } else {
+	my $query = "UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = NULL, found = NULL 
+                                   WHERE biblionumber   = ? 
+                                     AND borrowernumber = ?
+	                             AND cancellationdate is NULL
+                                     AND (found <> 'F' or found is NULL)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($rank, $branch, $biblio, $borrower);
+	$sth->finish;  
+    }
+    $dbh->disconnect;
 }
 
 sub getreservetitle {

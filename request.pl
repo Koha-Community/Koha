@@ -39,6 +39,7 @@ my $dat = bibdata($bib);
 
 # get existing reserves .....
 my ($count,$reserves) = FindReserves($bib);
+my $totalcount = $count;
 foreach my $res (@$reserves) {
     if ($res->{'found'} eq 'W') {
 	$count--;
@@ -111,7 +112,7 @@ EOF
 
 my $existingreserves = "";
 foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
-    my $prioropt = priorityoptions($count, $res->{'priority'});
+    my $prioropt = priorityoptions($totalcount, $res->{'priority'});
     my $bropt = branchoptions($res->{'branchcode'});
     my $bor=$res->{'borrowernumber'};
     $date = slashifyDate($res->{'reservedate'});
@@ -126,26 +127,26 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
     my $notes = $res->{'reservenotes'}." ";
     my $rank;
     my $pickup;
-    my $change;
     if ($res->{'found'} eq 'W') {
 	my %env;
 	my $item = $res->{'itemnumber'};
 	$item = getiteminformation(\%env,$item);
 	$item = "<a href=/cgi-bin/koha/detail.pl?bib=$item->{'biblionumber'} &type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$item->{'barcode'}</a>";
-	my $wbra = $branches->{$res->{'branchcode'}}->{'branchname'};
-	$rank = "Item waiting";
+	my $wbrcd = $res->{'branchcode'};
+	my $wbra = $branches->{$wbrcd}->{'branchname'};
 	$type = $item;
-	$pickup = "at <b>".$wbra."</b>";
-	$change = "<input type=checkbox name=rank-request value=del>delete";
+	$rank = "<select name=rank-request><option value=W selected>Waiting</option>$prioropt<option value=del>Del</option></select>";
+	$pickup = "Item waiting at <b>".$wbra."</b> <input type=hidden name=pickup value=$wbrcd>";
     } else {
-	$rank = "<select name=rank-request>$prioropt<option value=del>Del</select>";
+	$rank = "<select name=rank-request>$prioropt<option value=del>Del</option></select>";
 	$pickup = "<select name=pickup>$bropt</select>";
     }
     $existingreserves .= <<"EOF";
+<tr VALIGN=TOP>
+<TD>
 <input type=hidden name=borrower value=$res->{'borrowernumber'}>
 <input type=hidden name=biblio value=$res->{'biblionumber'}>
-<tr VALIGN=TOP>
-<TD>$rank</td>
+$rank</td>
 <TD>
 <a href=/cgi-bin/koha/moremember.pl?bornum=$bor>$res->{'firstname'} $res->{'surname'}</a>
 </td>
@@ -167,7 +168,7 @@ sub priorityoptions {
 	if ($sel == $i){
 	    $out .= " selected";
 	}
-	$out .= ">$i\n";
+	$out .= ">$i</option>\n";
     }
     return $out;
 }
@@ -182,21 +183,25 @@ sub branchoptions {
 	if ($br eq $selbr) {
 	    $selected = "selected";
 	}
-	$out .= "<option value=$br $selected>$branches->{$br}->{'branchname'}\n";
+	$out .= "<option value=$br $selected>$branches->{$br}->{'branchname'}</option>\n";
     }
     return $out;
 }
 
 
+#get the time for the form name...
+my $time = time();
+
 
 # printout the page
 
 
-print $input->header;
+
+
+print $input->header(-expires=>'now');
 
 
 #setup colours
-print startpage();
 print startmenu('catalogue');
 
 
@@ -215,7 +220,7 @@ print <<printend
 <p>
 
 
-<!----------------BIBLIO RESERVE TABLE-------------->
+
 
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
@@ -240,7 +245,7 @@ $branchoptions
 <td><input type=checkbox name=request value=any>Next Available, 
 <br>(or choose from list below)</td>
 </tr></table>
-</p>
+
 
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
@@ -255,13 +260,15 @@ $branchoptions
 </TR>
 $bibitemrows
 </table>
-</p>
+
 </form>
 <p>&nbsp;</p>
 
 
 
-<!-----------MODIFY EXISTING REQUESTS----------------->
+
+
+<form name=T$time action=modrequest.pl method=post>
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
@@ -269,7 +276,6 @@ $bibitemrows
 
 <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=7><B>MODIFY EXISTING REQUESTS </b></TD>
 </TR>
-<form action=modrequest.pl method=post>
 <TR VALIGN=TOP>
 
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Rank</b></TD>
