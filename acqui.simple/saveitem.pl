@@ -21,7 +21,7 @@
 
 use CGI;
 use strict;
-use C4::Catalogue;
+# use C4::Catalogue;
 use C4::Biblio;
 
 my $input            = new CGI;

@@ -20,7 +20,7 @@
 
 use CGI;
 use strict;
-use C4::Catalogue;
+# use C4::Catalogue;
 use C4::Biblio;
 use C4::Search;
 use C4::Output;

@@ -38,7 +38,7 @@ my $dbh = C4::Context->dbh;
 my $i=0;
 my $starttime = time();
 #1st of all, find item MARC tag.
-my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
+my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 my $sth = $dbh->prepare("select bibid from marc_biblio");
 $sth->execute;

@@ -288,13 +288,13 @@ sub MARCgettagslib {
 }
 
 sub MARCfind_marc_from_kohafield {
-    my ( $dbh, $kohafield ) = @_;
+    my ( $dbh, $kohafield,$frameworkcode ) = @_;
     return 0, 0 unless $kohafield;
     my $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
+"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
     );
-    $sth->execute($kohafield);
+    $sth->execute($frameworkcode,$kohafield);
     my ( $tagfield, $tagsubfield ) = $sth->fetchrow;
     return ( $tagfield, $tagsubfield );
 }
@@ -1071,29 +1071,29 @@ sub MARChtml2marc {
 }
 
 sub MARCmarc2koha {
-	my ($dbh,$record) = @_;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
+	my ($dbh,$record,$frameworkcode) = @_;
+	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?");
 	my $result;
 	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
 	$sth2->execute;
 	my $field;
 	while (($field)=$sth2->fetchrow) {
-		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result);
+		$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result,$frameworkcode);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
 		if ($field eq 'notes') { $field = 'bnotes'; }
-		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result);
+		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result,$frameworkcode);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from items");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
-		$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
+		$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result,$frameworkcode);
 	}
 	# additional authors : specific
-	$result = &MARCmarc2kohaOneField($sth,"bibliosubtitle","subtitle",$record,$result);
-	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
+	$result = &MARCmarc2kohaOneField($sth,"bibliosubtitle","subtitle",$record,$result,$frameworkcode);
+	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result,$frameworkcode);
 # modify copyrightdate to keep only the 1st year found
 	my $temp = $result->{'copyrightdate'};
 	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
@@ -1118,13 +1118,13 @@ sub MARCmarc2koha {
 sub MARCmarc2kohaOneField {
 
 # FIXME ? if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
-    my ( $sth, $kohatable, $kohafield, $record, $result ) = @_;
+    my ( $sth, $kohatable, $kohafield, $record, $result,$frameworkcode ) = @_;
 
     #    warn "kohatable / $kohafield / $result / ";
     my $res = "";
     my $tagfield;
     my $subfield;
-    $sth->execute( $kohatable . "." . $kohafield );
+    $sth->execute( $frameworkcode,$kohatable . "." . $kohafield );
     ( $tagfield, $subfield ) = $sth->fetchrow;
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->subfield($subfield) ) {
@@ -1202,14 +1202,14 @@ sub NEWnewbiblio {
     my ( $dbh, $record, $frameworkcode ) = @_;
     my $oldbibnum;
     my $oldbibitemnum;
-    my $olddata = MARCmarc2koha( $dbh, $record );
+    my $olddata = MARCmarc2koha( $dbh, $record,$frameworkcode );
     $oldbibnum = OLDnewbiblio( $dbh, $olddata );
     $olddata->{'biblionumber'} = $oldbibnum;
     $oldbibitemnum = OLDnewbiblioitem( $dbh, $olddata );
 
     # search subtiles, addiauthors and subjects
     my ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "additionalauthors.author" );
+      MARCfind_marc_from_kohafield( $dbh, "additionalauthors.author",$frameworkcode );
     my @addiauthfields = $record->field($tagfield);
     foreach my $addiauthfield (@addiauthfields) {
         my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
@@ -1219,7 +1219,7 @@ sub NEWnewbiblio {
         }
     }
     ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.title" );
+      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.title",$frameworkcode );
     my @subtitlefields = $record->field($tagfield);
     foreach my $subtitlefield (@subtitlefields) {
         my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
@@ -1229,7 +1229,7 @@ sub NEWnewbiblio {
         }
     }
     ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubject.subject" );
+      MARCfind_marc_from_kohafield( $dbh, "bibliosubject.subject",$frameworkcode );
     my @subj = $record->field($tagfield);
     my @subjects;
     foreach my $subject (@subj) {
@@ -1278,11 +1278,11 @@ sub NEWmodbiblio {
 	my ($dbh,$record,$bibid,$frameworkcode) =@_;
 	$frameworkcode="" unless $frameworkcode;
 	&MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
-	my $oldbiblio = MARCmarc2koha($dbh,$record);
+	my $oldbiblio = MARCmarc2koha($dbh,$record,$frameworkcode);
 	my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
 	OLDmodbibitem($dbh,$oldbiblio);
 	# now, modify addi authors, subject, addititles.
-	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author");
+	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author",$frameworkcode);
 	my @addiauthfields = $record->field($tagfield);
 	foreach my $addiauthfield (@addiauthfields) {
 		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
@@ -1290,7 +1290,7 @@ sub NEWmodbiblio {
 			OLDmodaddauthor($dbh,$oldbiblionumber,$addiauthsubfields[$subfieldcount]);
 		}
 	}
-	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle");
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle",$frameworkcode);
 	my @subtitlefields = $record->field($tagfield);
 	foreach my $subtitlefield (@subtitlefields) {
 		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
@@ -1298,7 +1298,7 @@ sub NEWmodbiblio {
 			OLDmodsubtitle($dbh,$oldbiblionumber,$subtitlesubfields[$subfieldcount]);
 		}
 	}
-	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject",$frameworkcode);
 	my @subj = $record->field($tagfield);
 	my @subjects;
 	foreach my $subject (@subj) {
@@ -1329,7 +1329,9 @@ sub NEWnewitem {
     my ( $dbh, $record, $bibid ) = @_;
 
     # add item in old-DB
-    my $item = &MARCmarc2koha( $dbh, $record );
+	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
+	
+    my $item = &MARCmarc2koha( $dbh, $record,$frameworkcode );
 
     # needs old biblionumber and biblioitemnumber
     $item->{'biblionumber'} =
@@ -1355,7 +1357,8 @@ sub NEWnewitem {
 sub NEWmoditem {
     my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
     &MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
-    my $olditem = MARCmarc2koha( $dbh, $record );
+	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
+    my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
     OLDmoditem( $dbh, $olditem );
 }
 
@@ -2531,6 +2534,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.100  2004/08/13 16:37:25  tipaul
+# adding frameworkcode to API in some subs
+#
 # Revision 1.99  2004/07/30 13:54:50  doxulting
 # Beginning of serial commit
 #

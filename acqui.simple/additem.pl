@@ -138,7 +138,7 @@ my @fields = $temp->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
-my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
+my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$itemtype);
 my @itemnums; # array to store itemnums
 foreach my $field (@fields) {
 	next if ($field->tag()<10);

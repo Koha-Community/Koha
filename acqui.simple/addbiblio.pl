@@ -351,8 +351,8 @@ my ($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield,$bibitem,$oldbiblioit
 if ($bibid) {
 	$is_a_modif=1;
 	# if it's a modif, retrieve old biblio and bibitem numbers for the future modification of old-DB.
-	($oldbiblionumtagfield,$oldbiblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber");
-	($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblioitems.biblioitemnumber");
+	($oldbiblionumtagfield,$oldbiblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber",$frameworkcode);
+	($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
 	# search biblioitems value
 	my $sth=$dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
 	$sth->execute($oldbiblionumber);

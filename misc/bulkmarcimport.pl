@@ -74,7 +74,7 @@ $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
 #1st of all, find item MARC tag.
-my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
+my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 while ( my $record = $batch->next() ) {
 	$i++;
@@ -130,7 +130,7 @@ while ( my $record = $batch->next() ) {
 	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord);
+		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord,'');
 		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
 			NEWnewitem($dbh,$items[$i],$bibid);

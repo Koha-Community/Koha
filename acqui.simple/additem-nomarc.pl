@@ -20,6 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.3  2004/08/13 16:37:25  tipaul
+# adding frameworkcode to API in some subs
+#
 # Revision 1.2  2003/05/11 06:59:11  rangi
 # Mostly templated.
 # Still needs some work
@@ -27,7 +30,7 @@
 
 use CGI;
 use strict;
-use C4::Catalogue;
+# use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use HTML::Template;
