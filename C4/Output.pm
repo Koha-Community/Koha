@@ -1081,10 +1081,11 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
+
 =back
 
-=head1 SEE ALSO
+=head1 AUTHOR
 
-L<DBI(3)|DBI>
+Koha Developement team <info@koha.org>
 
 =cut
