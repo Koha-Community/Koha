@@ -1,0 +1,180 @@
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+
+<!-- TMPL_IF NAME="missingloop" -->
+	<!-- TMPL_VAR Name="string" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF NAME=invalid -->
+		Niewłaściwy numer karty.<p>
+	<!-- TMPL_ELSE -->
+	<H1> Potwierdź Wpis </H1>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> NOWY CZYTELNIK </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nazwa</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="institution_name" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> DANE CZŁONKOWSKIE </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Numer Członkowski</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornum" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Numer karty</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="cardnumber_institution" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Oddział Zapisu</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="branchcode" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>ADRES CZYTELNIKA</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Adres Pocztowy</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="postal" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Adres Domowy</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="home" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>SZCZEGÓŁY DANYCH KONTAKTOWYCH</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Telefon (Dom)</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Telefon (Praca)</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phoneday" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fax</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>E-mail</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>Komunikatory</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME=textmessaging -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>POŚREDNI RODZAJ KONTAKTU</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nazwa</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="contactname" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Telefon</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altphone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Relacja</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Uwagi</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altnotes" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>UWAGI</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Uwagi Ogólne</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornotes" -->
+			</td>
+		</tr>
+		</TABLE><p>
+		Prawidłowe wartości. Naciśnij OK by potwierdzić tego nowego czytelnika
+		<form action="/cgi-bin/koha/members/insertidata.pl" method=post>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type=submit name=submit value=OK>
+		</form>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
