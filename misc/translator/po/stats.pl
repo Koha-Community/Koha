@@ -47,7 +47,7 @@ closedir DIR;
 
 $now = `date`;
 
-#system("./update.pl --pot > /dev/null");
+system("./update.pl --pot > /dev/null");
 
 print "<html>\n";
 print "<head><title>$PACKAGE i18n statistics</title></head>\n";
