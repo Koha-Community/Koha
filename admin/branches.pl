@@ -174,6 +174,20 @@ printend
 	$query.= $dbh->quote($input->param('issuing')).")";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
+	$sth=$dbh->prepare("select categorycode from branchrelations where branchcode=?");
+	$sth->execute($input->param('searchfield'));
+	my $categorycodes;
+	while (my ($categorycode) = $sth->fetchrow) {
+	    $categorycodes->{$categorycode}=1;
+	}
+	unless ($categorycodes->{IS}) {
+	    $sth=$dbh->prepare("insert into branchrelations (branchcode,categorycode) values (?, 'IS')");
+	    $sth->execute($input->param('searchfield'));
+	}
+	unless ($categorycodes->{CU}) {
+	    $sth=$dbh->prepare("insert into branchrelations (branchcode,categorycode) values (?, 'CU')");
+	    $sth->execute($input->param('searchfield'));
+	}
 	$sth->finish;
 	print "data recorded";
 	print "<form action='$script_name' method=post>";
