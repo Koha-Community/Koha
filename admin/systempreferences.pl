@@ -270,7 +270,7 @@ if ($op eq 'add_form') {
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	if  ($searchfield ne '') {
-		 $template->param(searchfield => "You Searched for <b>$searchfield<b><p>");
+		 $template->param(searchfield => "<p>You Searched for <strong>$searchfield</strong></p>");
 	}
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
@@ -286,8 +286,8 @@ if ($op eq 'add_form') {
 		$row_data{variable} = $results->[$i]{'variable'};
 		$row_data{value} = $results->[$i]{'value'};
 		$row_data{explanation} = $results->[$i]{'explanation'};
-		$row_data{edit} = "$script_name?op=add_form&searchfield=".$results->[$i]{'variable'};
-		$row_data{delete} = "$script_name?op=delete_confirm&searchfield=".$results->[$i]{'variable'};
+		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'variable'};
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
