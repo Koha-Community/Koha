@@ -459,9 +459,7 @@ sub _optimize {
 	    && $structure[$#structure]->type == TmplTokenType::TAG
 	    && $structure[$#structure]->string =~ /^<\//s) {
 	my $has_other_tags_p = 0;
-	    printf STDERR "last token %d is type %s: %s\n", $#structure, $structure[$#structure]->type->to_string, $structure[$#structure]->string;
 	for (my $i = 0; $i < $#structure; $i += 1) {
-	    printf STDERR "token %d is type %s: %s\n", $i, $structure[$i]->type->to_string, $structure[$i]->string;
 	    $has_other_tags_p = 1 if $structure[$i]->type == TmplTokenType::TAG;
 	last if $has_other_tags_p;
 	}
@@ -478,11 +476,38 @@ sub _optimize {
     return @structure;
 }
 
+sub looks_plausibly_like_groupable_text_p (@) {
+    my @structure = @_;
+    # The text would look plausibly groupable if all open tags are also closed.
+    my @tags = ();
+    my $error_p = 0;
+    for (my $i = 0; $i <= $#structure; $i += 1) {
+	if ($structure[$i]->type == TmplTokenType::TAG) {
+	    if ($structure[$i]->string =~ /^<([A-Z0-9]+)/i) {
+		push @tags, lc($1);
+	    } elsif ($structure[$i]->string =~ /^<\/([A-Z0-9]+)/i) {
+		if (@tags && lc($1) eq $tags[$#tags]) {
+		    pop @tags;
+		} else {
+		    $error_p = 1;
+		}
+	    }
+	} elsif ($structure[$i]->type != TmplTokenType::TEXT) {
+	    $error_p = 1;
+	}
+    last if $error_p;
+    }
+    return !$error_p && !@tags;
+}
+
 sub next_token {
     my $this = shift;
     my $h = $this->_handle;
     my $it;
     $this->{_queue} = [] unless defined $this->{_queue};
+
+    # Don't reparse anything in the queue. We can put a parametrized token
+    # there if we need to, however.
     if (@{$this->{_queue}}) {
 	$it = pop @{$this->{_queue}};
     } else {
@@ -532,7 +557,9 @@ sub next_token {
 		$it = TmplToken->new($string, TmplTokenType::TEXT_PARAMETRIZED, $it->line_number, $it->pathname);
 		$it->set_form( $form );
 		$it->set_children( @structure );
-	    } elsif ($nonblank_text_p && $structure[0]->type == TmplTokenType::TEXT && $structure[$#structure]->type == TmplTokenType::TEXT) {
+	    } elsif ($nonblank_text_p
+	    && looks_plausibly_like_groupable_text_p( @structure )
+	    && $structure[$#structure]->type == TmplTokenType::TEXT) {
 		# Combine the strings
 		my $string = join('', map { $_->string } @structure);
 		$it = TmplToken->new($string, TmplTokenType::TEXT, $it->line_number, $it->pathname);;
