@@ -340,7 +340,7 @@ EOT
 
     # For each field we're searching on, create a subclause that'll
     # match the current keyword in the current field.
-    foreach my $field (qw(title notes seriestitle))
+    foreach my $field (qw(title notes seriestitle author))
     {
       push @subclauses,
 	"$field LIKE '\Q$keyword\E%' OR $field LIKE '% \Q$keyword\E%'";
