@@ -72,7 +72,10 @@
 			</select>
 			<input type="submit" value="Change Language" class="button">
 		</form>
-
+		<!-- TMPL_IF name="textmessaging"-->
+			<h2>Message from the library</h2>
+			<!-- TMPL_VAR name="textmessaging" -->
+		<!-- /TMPL_IF -->
 	<!-- TMPL_ELSE -->
 		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
 	<!-- /TMPL_IF -->

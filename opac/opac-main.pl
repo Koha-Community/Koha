@@ -8,6 +8,7 @@ use C4::Auth;       # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::BookShelves;
 use C4::Koha;
+use C4::Members;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -35,6 +36,7 @@ my ($template, $borrowernumber, $cookie)
 			     authnotrequired => 1,
 			     flagsrequired => {borrow => 1},
 			 });
+my $borrower = getmember('',$borrowernumber);
 my @options;
 my $counter=0;
 foreach my $language (getalllanguages()) {
@@ -49,5 +51,6 @@ $template->param(CGIitemtype => $CGIitemtype,
 				suggestion => C4::Context->preference("suggestion"),
 				virtualshelves => C4::Context->preference("virtualshelves"),
 				languages => \@options,
+				textmessaging => $borrower->{textmessaging},
 );
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -182,13 +182,11 @@
 				<td colspan="2" >Phone home</td>
 				<td>Fax</td>
 				<td>Email</td>
-				<td>Text Messaging</td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="text" name="phone" size="20" value="<!-- TMPL_VAR NAME="phone" -->"></td>
 				<td><input type="text" name="faxnumber" size="20" value="<!-- TMPL_VAR NAME="faxnumber" -->"></td>
 				<td><input type="text" name="emailaddress" size="20" value="<!-- TMPL_VAR NAME="emailaddress" -->"></td>
-				<td><input type="text" name="textmessaging" size="20" value="<!-- TMPL_VAR NAME="textmessaging" -->"></td>
 			</tr>
 
 
@@ -237,7 +235,10 @@
 			<tr>
 				<th colspan="5" >LIBRARY USE</th>
 			</tr>
-
+			<tr>
+				<td>Borrower message (appears in OPAC)</td>
+				<td colspan="4"><textarea name="textmessaging" cols="70" rows="3"><!-- TMPL_VAR NAME="textmessaging" --></textarea></td>
+			</tr>
 			<tr>
 				<td> Notes</td>
 				<td colspan="4"><textarea name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td>
