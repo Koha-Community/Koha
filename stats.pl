@@ -82,6 +82,7 @@ for (my $i=0;$i<$count;$i++){
   }                 
   my $time2="$payments[$i]{'date'} $time";
   my $branch=Getpaidbranch($time2);
+  $branch=~ s/Levi/C/;
   if ($branch eq 'C'){
     $levin{'total'}+=$payments[$i]{'amount'};
     $levin{'totalr'}+=$temptotalr;
