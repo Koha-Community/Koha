@@ -259,7 +259,7 @@ printend
 		$results->[$i]{'branchaddress1'}.$results->[$i]{'branchaddress2'}.$results->[$i]{'branchaddress3'},
 		$results->[$i]{'branchphone'},,$results->[$i]{'branchfax'},,$results->[$i]{'branchmail'},,$results->[$i]{'issuing'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'branchcode'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'branchcode'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'branchcode'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";

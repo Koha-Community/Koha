@@ -242,7 +242,7 @@ printend
 		$results->[$i]{'startdate'},$results->[$i]{'enddate'},
 		$results->[$i]{'budgetamount'},
 		mklink("$script_name?op=add_form&bookfundid=".$results->[$i]{'bookfundid'},'Edit'),
-		mklink("$script_name?op=delete_confirm&bookfundid=".$results->[$i]{'bookfundid'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&bookfundid=".$results->[$i]{'bookfundid'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";

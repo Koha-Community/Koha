@@ -224,7 +224,7 @@ printend
 	  	}
 		print mktablerow(4,$toggle,$results->[$i]{'variable'},$results->[$i]{'value'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'variable'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'variable'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'variable'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";
