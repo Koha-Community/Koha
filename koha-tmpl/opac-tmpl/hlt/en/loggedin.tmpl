@@ -54,7 +54,7 @@
 </td></tr>
 <TMPL_ELSE>
 <tr><td colspan="3">
-<form action='<TMPL_VAR NAME="url">' method="post">
+<form action="/cgi-bin/koha/opac-user.pl" method="post">
   <TMPL_LOOP NAME="INPUTS">
   <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
   </TMPL_LOOP>
