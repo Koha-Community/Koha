@@ -1,0 +1,198 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<!-- main site -->
+
+
+
+
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href=/cgi-bin/koha/members-home.pl">Patrons</a> > Patron Details</div>
+
+<h1><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></h1><P>
+<p>
+
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=270>
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33"><B>PATRON RECORD</TD>
+	</TR>
+
+	<tr VALIGN=TOP  >
+	<TD>
+		
+		
+		<FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF><p>
+		Card Number: <TMPL_VAR NAME="cardnumber"><BR>
+		Location: <TMPL_VAR NAME="address">, <TMPL_VAR name="suburb"><BR>
+	
+		Phone: <TMPL_VAR NAME="phone"><BR>
+		
+		Phone (Home): <TMPL_VAR NAME="phoneday"><BR>
+		
+		E-mail: <a href="mailto:<TMPL_VAR NAME="emailaddress">"><TMPL_VAR NAME="emailaddress"></a><br>
+		Mobile: <TMPL_VAR NAME="textmessaging"><p>
+		Membership Number: <TMPL_VAR NAME="borrowernumber"><BR>
+		Membership Category: <TMPL_VAR NAME="categorycode"><BR>
+		
+		Joined: <TMPL_VAR NAME="dateenrolled">,  Expires: <TMPL_VAR NAME="expiry"><BR>
+		Joining Branch: <TMPL_VAR NAME="branchcode"><P>
+		<TMPL_IF NAME="printethnicityline">
+			Ethnicity: <TMPL_VAR NAME="ethnicity">, <TMPL_VAR NAME="ethnotes"><br>
+		</TMPL_IF>
+		
+		
+	<TMPL_IF NAME="contactname">	Alternative</TMPL_UNLESS> Contact: <TMPL_VAR NAME="contactname"><BR></TMPL_IF>
+		<TMPL_IF NAME="altphone">Phone: <TMPL_VAR NAME="altphone"><BR></TMPL_IF>
+		<TMPL_IF NAME="altrelationship"><TMPL_UNLESS name="I">
+			Relationship: <TMPL_VAR NAME="altrelationship"><BR>
+		</TMPL_UNLESS></TMPL_IF>
+		<TMPL_IF NAME="altnotes">Notes: <TMPL_VAR NAME="altnotes"><P></TMPL_IF>
+		<TMPL_UNLESS name="I">
+			<TMPL_IF NAME="isguarantee">
+				Guarantees:<br><TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME=name> - <TMPL_VAR NAME="cardnumber"></a><br></TMPL_LOOP>
+			<TMPL_ELSE>
+				Guarantor:
+				<TMPL_IF NAME="guarantorborrowernumber">
+					<A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
+				<TMPL_ELSE>
+					no guarantor<br>
+				</TMPL_IF>
+			</TMPL_IF>
+		</TMPL_UNLESS>
+		<P>
+		<TMPL_IF NAME="borrowernotes">General Notes: 
+		<TMPL_VAR NAME="borrowernotes">
+		<p>
+		</font>
+		
+		<form action=/cgi-bin/koha/member-password.pl method=post>
+			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
+			<input type=submit class="go" value="Set Username & Password">
+		</form>
+
+
+
+			<form action=/cgi-bin/koha/memberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE=submit class="go" value="Edit Contact Details">
+			</form>
+		
+		
+		
+		<form action=/cgi-bin/koha/member-flags.pl method=post>
+			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
+			<input type=submit class="go" value="Change User Flags">
+		</form>
+
+		<form action=/cgi-bin/koha/deletemem.pl method=post>
+                        <input type=hidden name=member value="<TMPL_VAR NAME="bornum">">
+			<INPUT TYPE=submit class="delete" value="Delete">
+		</form>
+
+	</TD>
+	</TR>
+</TABLE>
+
+<img src="/images/holder.gif" width=16 height=800 align=left>
+
+
+
+<form action="renewscript.pl" method=post>
+	<input type="hidden" name="bornum" value="<TMPL_VAR name="bornum">">
+	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33" colspan=6><B>ITEMS CURRENTLY ON ISSUE</b></TD>
+	</TR>
+
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33"><B>Title</b></TD>
+		<td  bgcolor="99cc33" ><B>Due</b></TD>
+		<td  bgcolor="99cc33"><B>Itemtype</b></TD>
+		<td  bgcolor="99cc33" ><B>Charge</b></TD>
+		<td  bgcolor="99cc33" ><b>Renew</b></TD>
+	</TR>
+
+	<TMPL_LOOP NAME=issueloop>
+	<tr VALIGN=TOP>
+		<td><TMPL_IF NAME=red><font color=red></TMPL_IF>
+		<TMPL_VAR NAME="title">
+		<a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR NAME="itemnumber">&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">
+			<TMPL_VAR NAME="barcode">
+		</a>
+		</td>
+		<td><TMPL_VAR NAME="date_due"></td>
+		<td><TMPL_VAR NAME="itemtype"></td>
+		<td><TMPL_VAR NAME="charge"></td>
+		<td>
+		<TMPL_IF NAME=norenew>
+			<a href="/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">">On Request - no renewals</a>
+		<TMPL_ELSE>
+			<input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=y>Y
+			<input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=n>N
+		</TMPL_IF>
+		<TMPL_IF NAME=red></font></TMPL_IF>
+		</td>
+	</tr>
+	</TMPL_LOOP>
+
+	<tr VALIGN=TOP  >
+		<TD colspan=5 align=right>
+		<INPUT TYPE=submit class="go" VALUE="Renew Items">
+		</td>
+	</tr>
+
+	</table>
+</form>
+
+<P>
+
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33"colspan=5><B>ITEMS REQUESTED</b></TD>
+	</TR>
+
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33"><B>Title</b></TD>
+		<td  bgcolor="99cc33" ><B>Requested</b></TD>
+		<td  bgcolor="99cc33" ><B>Remove</b></TD>
+	</TR>
+
+	<form action=/cgi-bin/koha/modrequest.pl method=post>
+	<input type=hidden name=from value=borrower>
+
+	<TMPL_LOOP NAME=reserveloop>
+	<tr VALIGN=TOP>
+		<td>
+			<a href="/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">"><TMPL_VAR NAME="btitle"></a>
+			<TMPL_IF NAME=volumeddesc>
+				<TMPL_VAR NAME="volumeddesc">
+				<TMPL_VAR NAME="itemtype">
+			</TMPL_IF>
+		</td>
+		<td><TMPL_VAR NAME="reservedate2"></td>
+		<td>
+			<select name="rank-request">
+			<option value=n>No
+			<option value=del>Yes
+			</select>
+		</td>
+		<input type=hidden name=biblio value="<TMPL_VAR NAME="biblionumber">">
+		<input type=hidden name=borrowernumber value="<TMPL_VAR NAME="bornum">">
+	</tr>
+	</TMPL_LOOP>
+
+	<tr VALIGN=TOP  >
+		<td colspan=5 align=right>
+		<TMPL_IF name="reserveloop">
+			<INPUT TYPE="image" name="submit" VALUE="save" class="go">
+		</TMPL_IF>
+		</td>
+	</tr>
+	</form>
+</table>
+<br />
+<br />
+<a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">">Reading Record</a>
+
+<!-- endmenu -->
+
+<TMPL_INCLUDE NAME="members-bottom.inc">

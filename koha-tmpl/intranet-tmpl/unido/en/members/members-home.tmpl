@@ -1,0 +1,33 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+
+
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > Patrons</div>
+
+
+<h1>Patrons</h1><P>
+
+
+
+<FORM ACTION="/cgi-bin/koha/member.pl" method=post>
+
+<h2>Patron Search</h2>
+<span class="lable">Patron number, name or part of name:</span> 
+
+<INPUT TYPE="text" name="member" class="field" />
+<input type="submit" value="Go" class="go"/>
+<p>
+ 
+<div class="tip"><span class="tip-big">tip</span> <span class="tip-text">renew items patrons have out on loan, view add, modify and delete patron records, all by starting with this search.<br><br>
+
+Type a borrower name, part of a name,  or number in the field above and hit the <BR>
+enter key to activate search
+</span></div>
+
+
+</form>
+ 
+<P>
+
+<P>
+<TMPL_INCLUDE NAME="members-bottom.inc">
