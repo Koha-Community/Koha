@@ -20,10 +20,10 @@
 		<!-- TMPL_ELSE -->
 			<p>
 				<form action="addbiblio.pl" method="post">
-					<select name="itemtype">
+					<select name="frameworkcode">
 						<option value="">Default</option>
-						<!-- TMPL_LOOP name="itemtypeloop" -->
-							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" --></option>
+						<!-- TMPL_LOOP name="frameworkcodeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="frameworktext" --></option>
 						<!-- /TMPL_LOOP -->
 					</select>
 					<input type="submit" value="Create Empty biblio" class="button acquisition">
