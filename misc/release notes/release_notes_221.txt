@@ -22,20 +22,50 @@ Diff 2.2.0 => 2.2.1
 BUGFIXES
 
 ***** Critical
+* fix for http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=811 : The OPAC requires uses to log in to view virtual shelves, but it does not require a user with librarian privileges
+* multiple biblio subtitles are correctly stored & shown in simple (non-MARC) view, even after a biblio modif.
+* multiple main authors are now correctly handled in simple (non-MARC) view
+* it was possible to create a cardnumber that was already defined
 
 ***** Minor
 * in serials module >> add subscription >> select biblio : The next / previous page were invalid.
 * in serials module >> add subscription >> select biblio : impossible to report the biblio when there is a quote in it (' was not escaped)
+* "waiting" status was often inaccurate for a reserved material (should show "in transit" while not in destination branch)
 * issn were not stored correctly in non-MARC DB on biblio modification
+* in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
+* in thesaurus structure, deleting a tag delete the tag in each authtype, not only in the selected authtype.
+* plugin unimarc_225a (seriestitle) did not show the seriestitle list, when there was no ISBN
+* in authority structure, trying to delete a tag in an authority type, deleted the tag in the default authority type.
+* in authority structure, trying to define the 400$0 created a "400$@" ("subfield" for fields <100)
+* many bugfixes for a better mod_perl support
+* bug in acquisition : the title was also stored as subtitle.
 
 IMPROVEMENTS
 ***** Major
 * serial subscriptions : modifs to handdle correctly more than 1 subscription of the same biblio. Enter subscription detail in subscription notes (like "for branch XX" or "for 2nd floor"). The subscription details are all shown in OPAC.
 * serial subscriptions : you can now delete a subscription that is not yet active (= has only 1 issue in "waiting" state)
+* adding series title and publication year limits in opac-search form.
+* improvements and fixes in Nelsonville templates
+* adding a brief/detailled display in biblio basket view.
+
 **** Minor
-* adding publicationyear and series title in opac advanced search form
 * in biblio basket, adding the possibility to open a biblio (in the main window) by clicking on the title
 * circulation >> issue : showing borrowernumber code just after the borrower name.
+* the search on barcodes has been changed to "start" instead of "contains". It's more logic
+* in ISBD & MARC view, codes like itemtypes, authorized values... are shown in complete form, not as code.
+* do not show reserve fees if they are not applicable (0)
+* show a message for libraries with no reserve possible, when the user clic on "request" button.
+* adding a "un-debar" button in circulation screen, to unset "debarred" flag for a borrower (ported from nelsonville templates)
+* adding a link to member page to jump to issues page directly (ported from nelsonville templates)
+* Adding two print versions of the member details screen (ported from nelsonville templates)
+- moremember-print.tmpl is a full-page view with information about the patron, issues, and reserves
+- moremember-receipt.tmpl is a brief view with information about issues, designed to be appropriate for a slip printer.
+* member detail : adding opac login in main page
+* adding notforloan column in admin/itemtypes list
+* in unimarc_field_225a plugin (collection chooser), ordering the list alphabetically
+* in member search, adding an option to order result by name or cardnumber
+* added the price in order history
+
 
 Diff 2.2RC5 => 2.2.0
 ********************
