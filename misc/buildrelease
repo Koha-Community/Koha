@@ -7,7 +7,6 @@ sub guess_kohahtmldir ($;$);
 my $kohadir=`pwd`;
 chomp $kohadir;
 my $kohahtmldir=guess_kohahtmldir($kohadir, "/koha/koha/koha-html/");
-my $kohatmpldir=guess_kohatmpldir($kohadir, "/koha/koha/koha-tmpl/");
 my $roothomedir=(getpwuid(0))[7];	# ~root is traditionally just /
 $roothomedir='/root' unless defined $roothomedir;
 
@@ -22,9 +21,6 @@ if (-e "$roothomedir/.kohaautobuild.conf") {
 	}
 	if (/kohahtmldir=(.*)/) {
 	    $kohahtmldir=$1;
-	}
-	if (/kohatmpldir=(.*)/) {
-	    $kohatmpldir=$1;
 	}
     }
     $has_kohaautobuild_conf = 1;
@@ -50,7 +46,6 @@ if ($input) {
     $kohadir=$input;
     unless ($has_kohaautobuild_conf) {
 	$kohahtmldir=guess_kohahtmldir($kohadir, $kohahtmldir);
-	$kohatmpldir=guess_kohatmpldir($kohadir, $kohatmpldir);
     }
 }
 
@@ -61,24 +56,17 @@ if ($input) {
     $kohahtmldir=$input;
 }
 
-print "\nWhere is the 'koha-tmpl' cvs module located [$kohatmpldir]: ";
-chomp($input = <STDIN>);
-if ($input) {
-    $kohatmpldir=$input;
-}
-
 open (C, ">$roothomedir/.kohaautobuild.conf");
 print C qq|
 kohadir=$kohadir
 kohahtmldir=$kohahtmldir
-kohatmpldir=$kohatmpldir
 |;
 
 #----------------------------------------------------------
 # which VERSION are we building ?
 #----------------------------------------------------------
 print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
-open (CVSLOG, "cvs log buildrelease|");
+open (CVSLOG, "cvs log $kohadir/misc/buildrelease|");
 my $symbolicnamessection=0;
 my $symbolicnames;
 my $highestversion;
@@ -256,21 +244,6 @@ Tagging koha-html with tag R_$tagname
 # MOVE files to /tmp and build tar.gz
 #----------------------------------------------------------
 
-print qq|
-Updating your checked-out copy of the 'koha-tmpl' CVS files.
-You may need to enter your SourceForge password.
-Using $kohatmpldir.
-|;
-chdir($kohatmpldir) || die "$kohatmpldir: $!\n";
-system("cvs update");
-
-if ($cvstag) {
-    print qq|
-Tagging koha-tmpl with tag R_$tagname
-|;
-    system("cvs tag -F R_$tagname");
-}
-
 
 
 
@@ -356,8 +329,8 @@ system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
 
 # Copy koha-tmpl files
 # FIXME: "cp -a" is GNU-ism. It is not portable.
-system('cp', '-a', "$kohatmpldir/opac-tmpl", "$rootdir/opac-html");
-system('cp', '-a', "$kohatmpldir/intranet-tmpl", "$rootdir/intranet-html");
+system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/opac-tmpl", "$rootdir/opac-html");
+system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/intranet-tmpl", "$rootdir/intranet-html");
 system('rm', '-rf', "$rootdir/intranet-cgi/koha-tmpl");
 
 # Remove extraneous files from opac-html
@@ -428,18 +401,3 @@ sub guess_kohahtmldir ($;$) {
     return $kohahtmldir;
 }
 
-sub guess_kohatmpldir ($;$) {
-    my($kohadir, $default) = @_;
-    my $kohatmpldir;
-    # "koha-tmpl" is now just a subdirectory within the "koha" module.
-    # Otherwise, it probably makes sense to assume that the "koha" and
-    # "koha-tmpl" modules are checked out within the same parent directory
-    if (-d $kohadir && -d "$kohadir/koha-tmpl") {
-	$kohatmpldir = "$kohadir/koha-tmpl";
-    } elsif (-d $kohadir && $kohadir =~ /^(.*)\/[^\/]+$/) {
-	$kohatmpldir = "$1/koha-tmpl"
-    } else {
-	$kohatmpldir = $default;
-    }
-    return $kohatmpldir;
-}
