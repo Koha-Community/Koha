@@ -104,7 +104,6 @@ reserves, borrowers, and biblio tables of the Koha database.
 #'
 sub FindReserves {
 	my ($bib,$bor)=@_;
-	warn "bib : $bib , bor : $bor";
 	my $dbh = C4::Context->dbh;
 	# Find the desired items in the reserves
 	my $query="SELECT *,reserves.branchcode,biblio.title AS btitle  FROM reserves,borrowers,biblio ";
@@ -378,7 +377,6 @@ sub FillReserve {
                                 WHERE biblionumber   = $qbiblio
                                   AND borrowernumber = $borr
                                   AND reservedate    = $resdate)";
-	warn "q : $query";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     ($priority) = $sth->fetchrow_array;
@@ -456,13 +454,11 @@ sub ReserveWaiting {
     my $timestamp = $data->{'timestamp'};
     my $q_biblio = $dbh->quote($biblio);
     my $q_timestamp = $dbh->quote($timestamp);
-    warn "Timestamp: ".$timestamp."\n";
 # update reserves record....
     $query = "UPDATE reserves SET priority = 0, found = 'W', itemnumber = $item
                             WHERE borrowernumber = $borr
                               AND biblionumber = $q_biblio
                               AND timestamp = $q_timestamp";
-    warn "Query: ".$query."\n";
     $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
@@ -786,7 +782,6 @@ sub getreservetitle {
  = $bor and reserveconstraints.reservedate='$date' and
  reserveconstraints.timestamp=$timestamp";
  my $sth=$dbh->prepare($query);
- warn "q : $query";
  $sth->execute;
  my $data=$sth->fetchrow_hashref;
  $sth->finish;
