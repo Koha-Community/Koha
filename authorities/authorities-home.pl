@@ -36,10 +36,10 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
-warn "La authtypecode = $authtypecode\n";
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
+my $authid=$query->param('authid');
 $startfrom=0 if(!defined $startfrom);
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
@@ -65,8 +65,6 @@ if ($op eq "do_search") {
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	my @tags;
-	warn "a ce pont labas dbh ($dbh), tags(\@tags), and_or (\@and_or), excluding (\@excluding), operator (\@operator), value (\@value), resultsperpage $resultsperpage, $startfrom, [$authtypecode]";
-
 	my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
@@ -144,8 +142,8 @@ if ($op eq "do_search") {
 
 } elsif ($op eq "delete") {
 
-	warn "Ici effacement\n";
-	
+	&AUTHdelauthority($dbh,$authid, 1);
+
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
 				query => $query,

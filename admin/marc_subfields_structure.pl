@@ -197,6 +197,7 @@ if ($op eq 'add_form') {
 		$row_data{hidden} = CGI::checkbox("hidden$i",$data->{'hidden'}?'checked':'',1,'');
 		$row_data{isurl} = CGI::checkbox("isurl$i",$data->{'isurl'}?'checked':'',1,'');
 		$row_data{bgcolor} = $toggle;
+		$row_data{link} = CGI::escapeHTML($data->{'link'});
 		push(@loop_data, \%row_data);
 		$i++;
 	}
@@ -238,6 +239,7 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
+		$row_data{link} = CGI::escapeHTML($data->{'link'});
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
@@ -255,8 +257,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode)
-									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link)
+									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
@@ -266,6 +268,7 @@ if ($op eq 'add_form') {
 	my @authorised_values	= $input->param('authorised_value');
 	my @authtypecodes	= $input->param('authtypecode');
 	my @value_builder	=$input->param('value_builder');
+	my @link		=$input->param('link');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
@@ -282,6 +285,7 @@ if ($op eq 'add_form') {
 		my $value_builder=$value_builder[$i];
 		my $hidden = $input->param("hidden$i")?1:0;
 		my $isurl = $input->param("isurl$i")?1:0;
+		my $link = $link[$i];
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
 				$sth->execute ($tagfield,
@@ -299,7 +303,9 @@ if ($op eq 'add_form') {
 									$hidden,
 									$isurl,
 									$frameworkcode,
-									);
+
+	 $link,
+					      );
 			}
 		}
 	}
