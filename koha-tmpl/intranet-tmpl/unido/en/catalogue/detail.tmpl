@@ -21,7 +21,7 @@
 		</td></tr></table>
 	</TMPL_IF>
 	<h1><TMPL_VAR NAME="title">
-	<TMPL_IF NAME="author"> (<TMPL_VAR NAME="author">)</h1></TMPL_IF>
+	<TMPL_IF NAME="author"> (<TMPL_VAR NAME="author">)</TMPL_IF></h1>
 	 
 	 
 	<TMPL_VAR NAME="class">
@@ -127,8 +127,19 @@
 			
 	</TMPL_IF>	
 	
+	
+	<TMPL_LOOP NAME="SITE_RESULTS">
+<tr>
+<td class="label">Website Links<td><td class="result"><a href="http://<TMPL_VAR name="url">"><TMPL_VAR name="title"></a><br>
+<TMPL_VAR name="description"><br>
+<b>URL:</b><a href="http://<TMPL_VAR name="url">">http://<TMPL_VAR name="url"></a><p>
+</td>
+</tr>
+</TMPL_LOOP>
+	
 			<tr valign="top">
-			<td class="label">
+			<td class="label">Viewing Options</td>
+			<td>
 			<a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">Show MARC </a>
 		
 		</td>
