@@ -863,8 +863,8 @@ sub currentissues {
        borrowernumber='$borrowernumber' and issues.itemnumber=items.itemnumber and
        items.biblionumber=biblio.biblionumber and
        items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null
-       $crit order by issues.timestamp desc";
-#    print $select;
+       $crit order by issues.date_due";
+#    warn $select;
     my $sth=$dbh->prepare($select);
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
@@ -903,7 +903,7 @@ sub getissues {
                      and items.biblioitemnumber = biblioitems.biblioitemnumber 
                      and issues.returndate is null
                          order by issues.date_due";
-#    print $select;
+#    warn $select;
     my $sth=$dbh->prepare($select);
     $sth->execute;
     my $counter = 0;

@@ -422,7 +422,7 @@ if ($borrower) {
 <td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
     } 
-    foreach my $book (sort {$a->{'due_date'} <=> $b->{'due_date'}} @previousissues){
+    foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
@@ -651,18 +651,20 @@ sub printslip {
     $env->{'nottodaysissues'}=0;
     my $i=0;
     my @issues;
-    foreach (sort keys %$borrowerissues) {
+    foreach (sort {$a <=> $b} keys %$borrowerissues) {
 	$issues[$i]=$borrowerissues->{$_};
 	my $dd=$issues[$i]->{'date_due'};
+#	warn $_,$dd;
 	#convert to nz style dates
 	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
 	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
 	$i++;
     }
-    foreach (sort keys %$borroweriss2) {
+    foreach (sort {$a <=> $b} keys %$borroweriss2) {
 	$issues[$i]=$borroweriss2->{$_};
 	my $dd=$issues[$i]->{'date_due'};
+#	warn $_,$dd;
 	#convert to nz style dates
 	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
