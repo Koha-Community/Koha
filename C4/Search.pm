@@ -1077,7 +1077,7 @@ like '%($key[0])%')";		while ($i<$count){			$query.=" and (subject like
 		}
 	} else {
 		if ($type eq 'subject'){
-			$query .= " order by subject";
+			$query .= "group by subject order by subject ";
 		}
 	}
 	my $sth=$dbh->prepare($query);
