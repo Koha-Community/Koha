@@ -187,40 +187,39 @@ my %requiretables=(
 				KEY sndx_word (sndx_word)
 			)",
 	marc_breeding =>"(  id bigint(20) NOT NULL auto_increment,
-								file varchar(80) NOT NULL default '',
-								isbn varchar(10) NOT NULL default '',
-								title varchar(128) default NULL,
-								author varchar(80) default NULL,
-								marc text NOT NULL,
-								PRIMARY KEY  (id),
-								KEY title (title),
-								KEY isbn (isbn)
-								)",
+				file varchar(80) NOT NULL default '',
+				isbn varchar(10) NOT NULL default '',
+				title varchar(128) default NULL,
+				author varchar(80) default NULL,
+				marc text NOT NULL,
+				PRIMARY KEY  (id),
+				KEY title (title),
+				KEY isbn (isbn)
+			)",
 	authorised_values => "(id int(11) NOT NULL auto_increment,
-  									category char(10) NOT NULL default '',
-  									authorised_value char(80) NOT NULL default '',
-									lib char(80) NULL,
-  									PRIMARY KEY  (id),
-  									KEY name (category)
-								)",
+				category char(10) NOT NULL default '',
+				authorised_value char(80) NOT NULL default '',
+				lib char(80) NULL,
+				PRIMARY KEY  (id),
+				KEY name (category)
+			)",
 	userflags =>		"( bit int(11) NOT NULL default '0',
-  							flag char(30), flagdesc char(255),
-  							defaulton int(11)
-						)",
+				flag char(30), flagdesc char(255),
+				defaulton int(11)
+			)",
 );
 
-	);
 
 
 my %requirefields=(
 	biblio=>{ 'abstract' => 'text' },
 	deletedbiblio=>{ 'abstract' => 'text' },
 	biblioitems=>{ 'lccn' => 'char(25)',
-						'url' => 'varchar(255)',
-						'marc' => 'text' },
+			'url' => 'varchar(255)',
+			'marc' => 'text' },
 	deletedbiblioitems=>{ 'lccn' => 'char(25)',
-								'url' => 'varchar(255)',
-								'marc' => 'text' },
+			'url' => 'varchar(255)',
+			'marc' => 'text' },
 	branchtransfers=>{ 'datearrived' => 'datetime' },
 	statistics=>{'borrowernumber' =>'int(11)'},
 	aqbooksellers=>{'invoicedisc' =>'float(6,4)',
@@ -544,6 +543,12 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.37  2003/01/30 01:47:48  acli
+# Corrected syntax error reported by Benedict
+#
+# Made the indentation somewhat easier to read; the messiness probably caused
+# the original syntax error.
+#
 # Revision 1.36  2003/01/28 15:13:30  tipaul
 # userflag table now created in upgrade script (bugfix #171)
 #
