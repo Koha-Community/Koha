@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.32  2002/12/16 15:08:50  tipaul
+# small but important bugfix (fixes a problem in export)
+#
 # Revision 1.31  2002/12/13 16:22:04  tipaul
 # 1st draft of marc export
 #
@@ -547,7 +550,7 @@ sub MARCgetbiblio {
     my $prevtagorder=1;
     my $prevtag='  ';
     my $previndicator;
-    my %subfieldlist={};
+    my %subfieldlist;
     while (my $row=$sth->fetchrow_hashref) {
 		if ($row->{'valuebloblink'}) { #---- search blob if there is one
 			$sth2->execute($row->{'valuebloblink'});
@@ -561,20 +564,23 @@ sub MARCgetbiblio {
 				$prevtag = "0".$prevtag;
 			}
 			$previndicator.="  ";
-#			warn "NEW : subfieldcode : $prevtag";
+#			warn "NEW : subfieldcode : $prevtag".substr($previndicator,0,1).substr($previndicator,1,1),;
+#			foreach my $x (keys %subfieldlist) {
+#				warn "                      $x => ".$subfieldlist{$x};
+#			}
 			my $field = MARC::Field->new( $prevtag, substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
-#			warn $field->as_formatted();
+#			warn $field;
 			$record->add_fields($field);
 			$prevtagorder=$row->{tagorder};
 			$prevtag = $row->{tag};
 			$previndicator=$row->{tag_indicator};
-			%subfieldlist={};
+			%subfieldlist;
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 		} else {
 #			warn "subfieldcode : $row->{'subfieldcode'} / value : $row->{'subfieldvalue'}, tag : $row->{tag}";
-			if (%subfieldlist->{$row->{'subfieldcode'}}) {
-				%subfieldlist->{$row->{'subfieldcode'}}.='|';
-			}
+#			if (%subfieldlist->{$row->{'subfieldcode'}}) {
+#				%subfieldlist->{$row->{'subfieldcode'}}.='|';
+#			}
 			%subfieldlist->{$row->{'subfieldcode'}} .= $row->{'subfieldvalue'};
 			$prevtag= $row->{tag};
 			$previndicator=$row->{tag_indicator};
@@ -582,6 +588,10 @@ sub MARCgetbiblio {
 	}
 	# the last has not been included inside the loop... do it now !
 	my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+#			warn "NEW : subfieldcode : $prevtag".substr($previndicator,0,1).substr($previndicator,1,1),;
+#			foreach my $x (keys %subfieldlist) {
+#				warn "                      $x => ".$subfieldlist{$x};
+#			}
 	$record->add_fields($field);
 	return $record;
 }
@@ -973,23 +983,23 @@ sub MARCmarc2koha {
 
 sub MARCmarc2kohaOneField {
 # FIXME ? if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
-    my ($sth,$kohatable,$kohafield,$record,$result)= @_;
+	my ($sth,$kohatable,$kohafield,$record,$result)= @_;
 #    warn "kohatable / $kohafield / $result / ";
-    my $res="";
-    my $tagfield;
-    my $subfield;
-    $sth->execute($kohatable.".".$kohafield);
-    ($tagfield,$subfield) = $sth->fetchrow;
-    foreach my $field ($record->field($tagfield)) {
-	if ($field->subfield($subfield)) {
-	    if ($result->{$kohafield}) {
-		$result->{$kohafield} .= " | ".$field->subfield($subfield);
-	    } else {
-		$result->{$kohafield}=$field->subfield($subfield);
-	    }
+	my $res="";
+	my $tagfield;
+	my $subfield;
+	$sth->execute($kohatable.".".$kohafield);
+	($tagfield,$subfield) = $sth->fetchrow;
+	foreach my $field ($record->field($tagfield)) {
+		if ($field->subfield($subfield)) {
+		if ($result->{$kohafield}) {
+			$result->{$kohafield} .= " | ".$field->subfield($subfield);
+		} else {
+			$result->{$kohafield}=$field->subfield($subfield);
+		}
+		}
 	}
-    }
-    return $result;
+	return $result;
 }
 
 sub MARCaddword {
