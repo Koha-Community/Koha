@@ -21,6 +21,9 @@ if ($domainname =~ /^[^\s\.]+\.([-a-z0-9\.]+)$/) {
       }
       close INPUT;
    }
+   elsif (open(INPUT, "</etc/hostname")) {
+      $domainname = <INPUT>;
+   }
 }
 Install::setdomainname $domainname;
 

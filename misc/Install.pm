@@ -108,12 +108,12 @@ a line of equal signs as illegal POD directives.
 my $termios = POSIX::Termios->new();
 $termios->getattr();
 my $terminal = Term::Cap->Tgetent({OSPEED=>$termios->getospeed()});
-my $clear_string = $terminal->Tputs('cl');
+my $clear_string = "\n\n"; #MJR: was $terminal->Tputs('cl');
 
 sub heading ($) {
   my $title = shift;
   my $bal = 5;
-  return($clear_string."koha-".$kohaversion." Installer\n".ON_BLUE.WHITE.BOLD." "x$bal.uc($title)." "x$bal.RESET."\n\n");
+  return($clear_string.ON_BLUE.WHITE.BOLD." "x$bal.uc($title)." "x$bal.RESET."\n\n");
 }
 
 my $mycnf = $ENV{HOME}."/.my.cnf";
@@ -446,7 +446,7 @@ found.
 sub getmessage {
     my $messagename=shift;
     my $variables=shift;
-    my $message=$messages->{$messagename}->{$language} || $messages->{$messagename}->{en} || "Error: No message named $messagename in Install.pm\n";
+    my $message=$messages->{$messagename}->{$language} || $messages->{$messagename}->{en} || RED.BOLD."Error: No message named $messagename in Install.pm\n";
     if (defined($variables)) {
 	$message=sprintf $message, @$variables;
     }
@@ -521,7 +521,7 @@ screen-clearing is not done.
 sub showmessage {
     #MJR: Maybe refactor to use anonymous functions that
     # check the responses instead of RnP branching.
-    my $message=shift;
+    my $message=join('',fill('','',(shift)));
     my $responsetype=shift;
     my $defaultresponse=shift;
     my $noclear=shift;
@@ -530,7 +530,7 @@ sub showmessage {
     if ($responsetype =~ /^yn$/) {
 	$responsetype='restrictchar ynYN';
     }
-    print $message;
+    print RESET.$message;
     if ($responsetype =~/^restrictchar (.*)/i) {
 	my $response='\0';
 	my $options=$1;
@@ -541,14 +541,14 @@ sub showmessage {
 	    (length($response)) || ($response=$defaultresponse);
             if ( $response=~/.*[\:\(\)\^\$\*\!\\].*/ ) {
                 ($noclear) || (print $clear_string);
-                print "Response contains invalid characters.  Choose from [$options].\n\n";
-                print $message;
+                print RED."Response contains invalid characters.  Choose from [$options].\n\n";
+                print RESET.$message;
                 $response='\0';
             } else {
                 unless ($options=~/$response/) {
                     ($noclear) || (print $clear_string);
-                    print "Invalid Response.  Choose from [$options].\n\n";
-                    print $message;
+                    print RED."Invalid Response.  Choose from [$options].\n\n";
+                    print RESET.$message;
                 }
             }
 	}
@@ -570,8 +570,8 @@ sub showmessage {
 	    ($response) || ($response=$defaultresponse);
 	    unless ($response=~/^\d+$/) {
 		($noclear) || (print $clear_string);
-		print "Invalid Response ($response).  Response must be a number.\n\n";
-		print $message;
+		print RED."Invalid Response ($response).  Response must be a number.\n\n";
+		print RESET.$message;
 	    }
 	}
 	return $response;
@@ -584,8 +584,8 @@ sub showmessage {
 	    ($response) || ($response=$defaultresponse);
 	    if ($response!~/.*\@.*\..*/) {
 			($noclear) || (print $clear_string);
-			print "Invalid Response ($response).  Response must be a valid email address.\n\n";
-			print $message;
+			print RED."Invalid Response ($response).  Response must be a valid email address.\n\n";
+			print RESET.$message;
 	    }
 	}
 	return $response;
@@ -600,6 +600,22 @@ sub showmessage {
 	# legitimize this usage and say "none" is the default if not specified?
 	#die "Illegal response type \"$responsetype\"";
     }
+}
+
+
+=back
+
+=item startsysout
+
+	startsysout;
+
+Changes the display to show system output until the next showmessage call.
+At the time of writing, this means using red text.
+
+=cut
+
+sub startsysout {
+	print RED."\n";
 }
 
 
@@ -667,6 +683,7 @@ sub checkperlmodules {
     unless ($] >= 5.006001) {			# Bug 179
 	die getmessage('PerlVersionFailure', ['5.6.1']);
     }
+	startsysout();
 
     my @missing = ();
     unless (eval {require DBI})              { push @missing,"DBI" };
@@ -701,6 +718,7 @@ sub checkperlmodules {
     }
 
 
+	startsysout();
     unless (-x "/usr/bin/perl") {
 	my $realperl=`which perl`;
 	chomp $realperl;
@@ -710,6 +728,7 @@ sub checkperlmodules {
 	}
 	my $response=showmessage(getmessage('ConfirmPerlExecutableSymlink', $realperl), 'yn', 'y', 1);
 	unless ($response eq 'n') {
+		startsysout();
 	    system("ln -s $realperl /usr/bin/perl");
 	}
     }
@@ -731,7 +750,7 @@ The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
 May I create this symlink? ([Y]/N):
 : |;
 
-$messages->{'DirFailed'}->{en} = qq|
+$messages->{'DirFailed'}->{en} = RED.qq|
 We could not create %s, but continuing anyway...
 
 |;
@@ -781,8 +800,8 @@ You must specify different directories for the OPAC and INTRANET files!
 
     # FIXME: Need better error handling for all mkdir calls here
     unless ( -d $intranetdir ) {
-       mkdir_parents (dirname($intranetdir), 0775) || print getmessage('DirFailed','parents of '.$intranetdir);
-       mkdir ($intranetdir,                  0770) || print getmessage('DirFailed',$intranetdir);
+       mkdir_parents (dirname($intranetdir), 0775) || print getmessage('DirFailed',['parents of '.$intranetdir]);
+       mkdir ($intranetdir,                  0770) || print getmessage('DirFailed',[$intranetdir]);
        if ($>==0) { chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir"); }
        chmod 0770, "$intranetdir";
     }
@@ -791,8 +810,8 @@ You must specify different directories for the OPAC and INTRANET files!
     mkdir_parents ("$intranetdir/modules",   0750);
     mkdir_parents ("$intranetdir/scripts",   0750);
     unless ( -d $opacdir ) {
-       mkdir_parents (dirname($opacdir),     0775) || print getmessage('DirFailed','parents of '.$opacdir);
-       mkdir ($opacdir,                      0770) || print getmessage('DirFailed',$opacdir);
+       mkdir_parents (dirname($opacdir),     0775) || print getmessage('DirFailed',['parents of '.$opacdir]);
+       mkdir ($opacdir,                      0770) || print getmessage('DirFailed',[$opacdir]);
        if ($>==0) { chown (oct(0), (getgrnam($httpduser))[2], "$opacdir"); }
        chmod (oct(770), "$opacdir");
     }
@@ -801,8 +820,8 @@ You must specify different directories for the OPAC and INTRANET files!
 
 
     unless ( -d $kohalogdir ) {
-       mkdir_parents (dirname($kohalogdir),  0775) || print getmessage('DirFailed','parents of '.$kohalogdir);
-       mkdir ($kohalogdir,                   0770) || print getmessage('DirFailed',$kohalogdir);
+       mkdir_parents (dirname($kohalogdir),  0775) || print getmessage('DirFailed',['parents of '.$kohalogdir]);
+       mkdir ($kohalogdir,                   0770) || print getmessage('DirFailed',[$kohalogdir]);
        if ($>==0) { chown (oct(0), (getgrnam($httpduser))[2,3], "$kohalogdir"); }
        chmod (oct(770), "$kohalogdir");
     }
@@ -986,7 +1005,7 @@ sub getapacheinfo {
 	$realhttpdconf=$confpossibilities[0];
     }
     unless (open (HTTPDCONF, "<$realhttpdconf")) {
-	warn "Insufficient privileges to open $realhttpdconf for reading.\n";
+	warn RED."Insufficient privileges to open $realhttpdconf for reading.\n";
 	sleep 4;
     }
 
@@ -997,12 +1016,9 @@ sub getapacheinfo {
     }
     close(HTTPDCONF);
 
-
-
-
-    unless ($httpduser) {
+    unless (defined($httpduser)) {
 	my $message=getmessage('EnterApacheUser', [$etcdir]);
-	until (length($httpduser) && getpwnam($httpduser)) {
+	until (defined($httpduser) && length($httpduser) && getpwnam($httpduser)) {
 	    $httpduser=showmessage($message, "free", '');
 	    if (length($httpduser)>0) {
 		unless (getpwnam($httpduser)) {
@@ -1012,7 +1028,6 @@ sub getapacheinfo {
 	    } else {
 	    }
 	}
-	print "AU: $httpduser\n";
     }
 }
 
@@ -1164,6 +1179,7 @@ sub updateapacheconf {
 	}
     }
 
+	startsysout;
     if (`grep 'VirtualHost $servername' "$httpdconf"`) {
 	showmessage(getmessage('ApacheAlreadyConfigured', [$httpdconf, $httpdconf]), 'PressEnter');
 	return;
@@ -1334,10 +1350,12 @@ sub installfiles {
 		
 		if (-d $tgt) {
     		print getmessage('CopyingFiles', ["old ".$desc,$tgt.".old"]);
+			startsysout;
 			system("mv ".$tgt." ".$tgt.".old");
 		}
 
     	print getmessage('CopyingFiles', [$desc,$tgt]);
+    	startsysout;
 	    system("cp -R ".$src." ".$tgt);
 	}
 
@@ -1349,6 +1367,7 @@ sub installfiles {
     neatcopy("perl modules", 'modules', "$intranetdir/modules");
     neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs");
     neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin");
+	startsysout();
     system("touch $opacdir/cgi-bin/opac");
 
 	#MJR: is this necessary?
@@ -1378,6 +1397,7 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
     close(SITES);
     umask($old_umask);
 
+	startsysout();
 	#MJR: can't help but this be broken, can we?
     chmod 0440, "$etcdir/koha.conf.tmp";
 	
@@ -1489,6 +1509,7 @@ EOP
 	# set the login up
 	setmysqlclipass($mysqlpass);
 	# Set up permissions
+	startsysout();
 	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
 	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
 	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
@@ -1499,6 +1520,7 @@ EOP
 		showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
 	} else {
 		# Create the database structure
+		startsysout();
 		system("$mysqldir/bin/mysql -u$user $dbname < koha.mysql");
 	}
 
@@ -1565,6 +1587,7 @@ sub updatedatabase {
 
 	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
 
+	startsysout();
 	if ($response eq '1') {
 		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
 	}
@@ -1581,7 +1604,7 @@ sub updatedatabase {
 	}
 	delete($ENV{"KOHA_CONF"});
 
-	print "\n\nFinished updating of database. Press <ENTER> to continue...";
+	print RESET."\n\nFinished updating of database. Press <ENTER> to continue...";
 	<STDIN>;
 }
 
@@ -1627,6 +1650,7 @@ sub populatedatabase {
 		$branchcode=substr($branchcode,0,4);
 		$branchcode or $branchcode='DEF';
 
+		startsysout();
 		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
 		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
 		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
@@ -1672,6 +1696,7 @@ sub restartapache {
 
 
     unless ($response=~/^n/i) {
+	startsysout();
 	# Need to support other init structures here?
 	if (-e "/etc/rc.d/init.d/httpd") {
 	    system('su root -c /etc/rc.d/init.d/httpd restart');
