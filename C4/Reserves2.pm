@@ -30,7 +30,43 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
+<<<<<<< Reserves2.pm
+@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &Findgroupreserve);
+%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+		  
+# your exported package globals go here,
+# as well as any optionally exported functions
+
+@EXPORT_OK   = qw($Var1 %Hashit);
+
+
+# non-exported package globals go here
+use vars qw(@more $stuff);
+	
+# initalize package globals, first exported ones
+
+my $Var1   = '';
+my %Hashit = ();
+		    
+# then the others (which are still accessible as $Some::Module::stuff)
+my $stuff  = '';
+my @more   = ();
+	
+# all file-scoped lexicals must be created before
+# the functions below that use them.
+		
+# file-private lexicals go here
+my $priv_var    = '';
+my %secret_hash = ();
+			    
+# here's a file-private function as a closure,
+# callable as &$priv_func;  it cannot be prototyped.
+my $priv_func = sub {
+  # stuff goes here.
+};
+=======
 @EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
+>>>>>>> 1.8
 						    
 # make all your functions, whether exported or not;
 
@@ -69,8 +105,14 @@ sub FindReserves {
   my $i=0;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+      if ($data->{'constrainttype'} eq "o") {
+	  my $bibres = getreservetitle($data->{'biblionumber'},$data->{'borrowernumber'},$data->{'reservedate'},$data->{'timestamp'});
+	  foreach my $key (keys %$bibres) {
+	      $data->{$key} = $bibres->{$key};
+	  }
+      }
+      $results[$i]=$data;
+      $i++;
   }
 #  print $query;
   $sth->finish;
@@ -448,25 +490,25 @@ sub getnextacctno {
   }                       
   $sth->finish;                                       
   return($nextaccntno);                   
-}              
+}     
 
 sub updatereserves{
   #subroutine to update a reserve 
-  my ($rank,$biblio,$borrower,$del,$branch)=@_;
-  my $dbh=C4Connect;
-  my $query="Update reserves ";
-  if ($del ==0){
-    $query.="set  priority='$rank',branchcode='$branch' where
-    biblionumber=$biblio and borrowernumber=$borrower";
+  my ($rank, $biblio, $borrower, $del, $branch)=@_;
+  my $dbh = C4Connect;
+  my $query = "UPDATE reserves ";
+  if ($del == 0) {
+    $query.="SET priority='$rank', branchcode='$branch' WHERE
+    biblionumber=$biblio AND borrowernumber=$borrower";
   } else {
-    $query="Select * from reserves where biblionumber=$biblio and
+    $query="SELECT * FROM reserves WHERE biblionumber=$biblio AND
     borrowernumber=$borrower";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
-    $query="Select * from reserves where biblionumber=$biblio and 
-    priority > '$data->{'priority'}' and cancellationdate is NULL 
+    $query="SELECT * FROM reserves WHERE biblionumber=$biblio AND 
+    priority > '$data->{'priority'}' AND cancellationdate is NULL 
     order by priority";
     my $sth2=$dbh->prepare($query) || die $dbh->errstr;
     $sth2->execute || die $sth2->errstr;
@@ -490,20 +532,23 @@ sub updatereserves{
 }
 
 sub getreservetitle {
- my ($biblio,$bor,$date,$timestamp)=@_;
- my $dbh=C4Connect;
- my $query="Select * from reserveconstraints,biblioitems where
- reserveconstraints.biblioitemnumber=biblioitems.biblioitemnumber
- and reserveconstraints.biblionumber=$biblio and reserveconstraints.borrowernumber
- = $bor and reserveconstraints.reservedate='$date' and
- reserveconstraints.timestamp=$timestamp";
- my $sth=$dbh->prepare($query);
- $sth->execute;
- my $data=$sth->fetchrow_hashref;
- $sth->finish;
- $dbh->disconnect;
+    my ($biblio,$bor,$date,$timestamp)=@_;
+    my $dbh=C4Connect;
+    my $query = "SELECT biblioitems.volumeddesc AS volumeddesc,
+                        biblioitems.itemtype AS itemtype 
+                   FROM reserveconstraints,biblioitems 
+                  WHERE reserveconstraints.biblioitemnumber = biblioitems.biblioitemnumber
+                    AND reserveconstraints.biblionumber     = $biblio 
+                    AND reserveconstraints.borrowernumber   = $bor 
+                    AND reserveconstraints.reservedate      = '$date' 
+                    AND reserveconstraints.timestamp        = $timestamp";
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
+    $dbh->disconnect;
 # print $query;
- return($data);
+    return($data);
 }
 
 
