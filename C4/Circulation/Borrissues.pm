@@ -1,4 +1,6 @@
-package C4::Circulation::Borrissues; #assumes C4/Circulation/Borrissues
+package C4::Circulation::Borrissues;
+
+# $Id$
 
 #package to deal with Issues
 #written 3/11/99 by chris@katipo.co.nz
@@ -68,7 +70,9 @@ my $priv_func = sub {
 						    
 # make all your functions, whether exported or not;
 
-
+# FIXME - This function is only used in C4::InterfaceCDK, which looks
+# obsolete. Does that mean that this module is also obsolete?
+# Otherwise, this needs a POD.
 sub printallissues {
   my ($env,$borrower)=@_;
   my @issues;
@@ -92,4 +96,3 @@ sub printallissues {
   $sth->finish();
   remoteprint ($env,\@issues,$borrower);
 }
-END { }       # module clean-up code here (global destructor)
