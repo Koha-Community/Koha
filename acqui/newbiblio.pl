@@ -148,7 +148,7 @@ $template->param( existing => $biblio,
 						biblioitemnumber => $data->{'biblioitemnumber'},
 						itemtype => $data->{'itemtype'},
 						discount => $booksellers[0]->{'discount'},
-      						listincgst => $booksellers[0]->{'listincgst'},
+						listincgst => $booksellers[0]->{'listincgst'},
 						listprice => $booksellers[0]->{'listprice'},
 						gstreg => $booksellers[0]->{'gstreg'},
 						name => $booksellers[0]->{'name'},
@@ -169,8 +169,9 @@ $template->param( existing => $biblio,
 						rrp => $data->{'rrp'},
 						ecost => $data->{'ecost'},
 						notes => $data->{'notes'},
+						sort1 => $data->{'sort1'},
+						sort2 => $data->{'sort2'},
 						barcode => $data->{'barcode'},
 						publishercode => $data->{'publishercode'});
 
 output_html_with_http_headers $input, $cookie, $template->output;
-

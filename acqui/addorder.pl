@@ -62,6 +62,8 @@ if ($listprice eq ''){
 my $supplier=$input->param('supplier');
 my $notes=$input->param('notes');
 my $bookfund=$input->param('bookfund');
+my $sort1=$input->param('sort1');
+my $sort2=$input->param('sort2');
 my $who=$loggedinuser;
 my $bibnum;
 my $bibitemnum;
@@ -116,9 +118,9 @@ if ($quantity ne '0'){
 			);
 	}
 	if ($orderexists ne '') {
-		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice);
+		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
 	}else {
-		neworder($bibnum,$title,$ordnum,$basketno,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice);
+		neworder($bibnum,$title,$ordnum,$basketno,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
 	}
 } else {
 	$bibnum=$input->param('biblio');

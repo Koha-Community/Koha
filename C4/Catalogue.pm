@@ -174,7 +174,7 @@ C<$subscription> may be either "yes", or anything else for "no".
 =cut
 #'
 sub neworder {
-  my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice)=@_;
+  my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2)=@_;
   if ($budget eq 'now'){
     $budget="now()";
   } else {
@@ -188,11 +188,11 @@ sub neworder {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("insert into aqorders (biblionumber,title,basketno,
   quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
-  biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber)
-  values (?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?)");
+  biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber,sort1,sort2)
+  values (?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?,?,?)");
   $sth->execute($bibnum,$title,$basket,$quantity,$listprice,$supplier,
   $who,$who,$notes,$bibitemnum,$rrp,$ecost,$gst,$cost,
-  $sub,$invoice);
+  $sub,$invoice,$sort1,$sort2);
   $sth->finish;
   $sth=$dbh->prepare("select * from aqorders where
   biblionumber=? and basketno=? and ordernumber >=?");
@@ -252,15 +252,16 @@ table are also updated to the new book fund ID.
 =cut
 #'
 sub modorder {
-  my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
+  my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice,$sort1,$sort2)=@_;
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("update aqorders set title=?,
   quantity=?,listprice=?,basketno=?,
   rrp=?,ecost=?,unitprice=?,
-  booksellerinvoicenumber=?
+  booksellerinvoicenumber=?,
+  sort1=?, sort2=?
   where
   ordernumber=? and biblionumber=?");
-  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$invoice,$ordnum,$bibnum);
+  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$invoice,$sort1,$sort2,$ordnum,$bibnum);
   $sth->finish;
   $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
   ordernumber=?");

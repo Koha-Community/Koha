@@ -331,7 +331,9 @@ my %requirefields = (
 	   'zipcode' => 'varchar(25)',
 			'homezipcode' => 'varchar(25)',
     },
-    aqorders => { 'budgetdate' => 'date' },
+    aqorders => { 'budgetdate' => 'date',
+				'sort1' => 'char(80)',
+				'sort2' => 'char(80)', },
     aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key'},
     items => {'paidfor' => 'text'},
 
@@ -1245,6 +1247,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.89  2004/07/02 15:55:08  tipaul
+# Adding 2 new fields, called "sort1" and "sort2"
+# They can be used for sorting & statistics reasons by the library.
+#
 # Revision 1.88  2004/06/26 23:34:26  rangi
 # Fixing typo
 #
