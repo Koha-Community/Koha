@@ -91,6 +91,7 @@ if ($query->param('resbarcode')) {
     my $borrnum = $query->param('borrowernumber');
     my $resbarcode = $query->param('resbarcode');
 # set to waiting....
+    my $iteminfo = getiteminformation(\%env, $item);
     my $tobranchcd = ReserveWaiting($item, $borrnum);
     my $branchname = $branches->{$tobranchcd}->{'branchname'};
     my ($borr) = getpatroninformation(\%env, $borrnum, 0);
