@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--designed by rebecca@katipo.co.nz-->
+<!--updated by richard@katipo.co.nz 12/06/02-->
+<html>
+<head>
+<title>Details</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+<meta name="description" content=""><meta name="keywords" content=""></head>
+<body background="<TMPL_VAR NAME='themelang'>/images/styles/background.gif" marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="search-start.inc">
+<!--TOP NAVIGATION-->
+<TMPL_INCLUDE name="top-navigation.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="search-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="crumb-start.inc">	
+<!--breadcrumbs--><!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/search/'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">'>Details</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="crumb-end.inc">
+<!--CONTENT--><P>
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<table border="0" cellspacing="0" cellpadding="3"><tr><td valign="top">
+<table border="0" cellspacing="0" cellpadding="3"><tr>
+<td valign="top" class="head1bold" colspan=2><TMPL_VAR NAME="title"></td>
+<td valign="top" class="head1"> (<TMPL_VAR NAME="author">)</td>
+</tr>
+</table>
+<P><table border="0" cellspacing="0" cellpadding="2">
+<TMPL_IF NAME="subtitle">
+  <tr> 
+    <td VALIGN="TOP"><B><!--+Katipo+start name="subtitle" -->Subtitle:<!--+Katipo+end--> </B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="subtitle"></td>
+  </tr>
+</TMPL_IF>
+  <tr>
+    <td VALIGN="TOP"><B><!--+Katipo+start name="copyright" -->Copyright:<!--+Katipo+end--> </B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="copyrightdate"></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP"><B><!--+Katipo+start name="subject" -->Subject:<!--+Katipo+end--> </B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="subject"></a></td>
+  </tr>
+  <tr>
+    <td VALIGN="TOP"><B><!--+Katipo+start name="biblio" -->Biblio Record:<!--+Katipo+end--> </B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="biblionumber"></td>
+  </tr>
+</table>
+</td>
+<TMPL_UNLESS NAME="norequests">
+<TD valign="top">
+    <form action="placerequest.pl" method=post>
+    <INPUT TYPE="image" name="submit"  VALUE="Place Reserve" height=83  WIDTH=120 BORDER=0 src="<TMPL_VAR NAME='themelang'>/images/place-reserve.gif" align=right >
+    <input type=hidden name=biblio value=52677>
+    <input type=hidden name=type value=str8>
+    <input type=hidden name=title value="I am a Fish">
+    </form>
+</TD>
+</TMPL_UNLESS>
+</tr></table>
+</TMPL_LOOP>
+<P>
+
+<H2><!--+Katipo+start name="holdings-info" rows="2" -->Holdings Information<!--+Katipo+end--></H2>
+<table border=0 cellspacing=0 cellpadding=0>
+<!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
+<tr><td colspan="12" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""></td></tr>
+<tr><TD>&nbsp;</TD>
+<td valign="top"><div class="padded"><B><!--+Katipo+start name="format" rows="2" -->Type/Format<!--+Katipo+end--></B></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><B><!--+Katipo+start name="class" rows="2" -->Class<!--+Katipo+end--></B></div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><B><!--+Katipo+start name="location" rows="2" -->Location<!--+Katipo+end--></B></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><B><!--+Katipo+start name="due" rows="2" -->Due Date<!--+Katipo+end--></B></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><B><!--+Katipo+start name="seen" rows="2" -->Last Seen<!--+Katipo+end--></B></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><B><!--+Katipo+start name="barcode" rows="2" -->Barcode<!--+Katipo+end--></B></div></td></tr>
+<!--LINE-->
+<tr><td colspan="12" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<!--INFORMATION ROWS-->
+<tr><td valign="top"><TMPL_INCLUDE NAME="itemtype-image.inc"></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="description"></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="class"></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="branchname"></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="datedue"></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="datelastseen"></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="barcode"></div></td></tr>
+</TMPL_LOOP>
+
+</table>
+<P>
+
+<!--+Katipo+end-->
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="search-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="end-main.inc">
+</body>
+</html>
