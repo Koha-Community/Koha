@@ -25,6 +25,7 @@ use Digest::MD5 qw(md5_base64);
 require Exporter;
 use C4::Database;
 use C4::Koha;
+use C4::Output;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -52,12 +53,28 @@ sub getuserflags {
 	    $userflags->{$flag}=1;
 	}
     }
-#    warn "Userflags: \n";
-#    foreach my $f (keys %$userflags) {
-#	warn ":    Flag: $f  => $userflags->{$f}\n ";
-#    }
     return $userflags;
 }
+
+sub haspermission {
+    my ($dbh, $userid, $flagsrequired) = @_;
+    my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
+    $sth->execute($userid);
+    my ($cardnumber) = $sth->fetchrow;
+    ($cardnumber) || ($cardnumber=$userid);
+    my $flags=getuserflags($cardnumber,$dbh);
+    my $configfile=configfile();
+    if ($userid eq $configfile->{'user'}) {
+	# Super User Account from /etc/koha.conf
+	$flags->{'superlibrarian'}=1;
+    }
+    return $flags if $flags->{superlibrarian};
+    foreach (keys %$flagsrequired) {
+	return $flags if $flags->{$_};
+    }
+    return 0;
+}
+
 
 
 sub checkauth {
@@ -73,20 +90,20 @@ sub checkauth {
 	return ($userid, $cookie, '');
     }
     my $sessionID=$query->cookie('sessionID');
-    my $message = '';
+    my $template = gettemplate("opac-auth.tmpl", "opac");
     my $dbh=C4Connect();
-    my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
+    my $sth=$dbh->prepare("SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?");
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
 	if ($lasttime<time()-7200) {
 	    # timed logout
-	    $message="You have been logged out due to inactivity.";
-	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
+	    $template->param( message => "You have been logged out due to inactivity.");
+	    my $sti=$dbh->prepare("DELETE FROM sessions WHERE sessionID=?");
 	    $sti->execute($sessionID);
 #	    my $scriptname=$ENV{'SCRIPT_NAME'};
 	    my $selfurl=$query->self_url();
-	    $sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, url) values (?, ?, ?)");
+	    $sti=$dbh->prepare("INSERT INTO sessionqueries (sessionID, userid, url) VALUES (?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $selfurl);
 	    $sti->finish;
 	    open L, ">>/tmp/sessionlog";
@@ -96,41 +113,21 @@ sub checkauth {
 	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 	    # Different ip than originally logged in from
 	    my $newip=$ENV{'REMOTE_ADDR'};
-	    $message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
+	    $template->param( message => "ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)");
 	} else {
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
 				      -expires => '+1y');
-	    my $sti=$dbh->prepare("update sessions set lasttime=? where sessionID=?");
+	    my $sti=$dbh->prepare("UPDATE sessions SET lasttime=? WHERE sessionID=?");
 	    $sti->execute(time(), $sessionID);
-	    my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
-	    $sth->execute($userid);
-	    my ($cardnumber) = $sth->fetchrow;
-	    ($cardnumber) || ($cardnumber=$userid);
-	    my $flags=getuserflags($cardnumber,$dbh);
-	    my $configfile=configfile();
-	    if ($userid eq $configfile->{'user'}) {
-		# Super User Account from /etc/koha.conf
-		$flags->{'superlibrarian'}=1;
-	    }
-	    foreach (keys %$flagsrequired) {
-		unless ($flags->{superlibrarian}) {
-		    unless ($flags->{$_}) {
-			print qq|Content-type: text/html
 
-<html>
-<body>
-REJECTED
-<hr>
-You do not have access to this portion of Koha
-</body>
-</html>
-|;
-			exit;
-		    }
-		}
+	    if (my $flags = haspermission($dbh, $userid, $flagsrequired)) {
+		return ($userid, $cookie, $sessionID, $flags);
+	    } else {
+		$template->param(nopermission => 1);
+		print "Content-Type: text/html\n\n", $template->output;
+		exit;
 	    }
-	    return ($userid, $cookie, $sessionID, $flags);
 	}
     }
     $sth->finish;
@@ -147,15 +144,15 @@ You do not have access to this portion of Koha
 	my $password=$query->param('password');
 	my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 	if ($return) {
-	    my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
+	    my $sti=$dbh->prepare("DELETE FROM sessions WHERE sessionID=? AND userid=?");
 	    $sti->execute($sessionID, $userid);
-	    $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
+	    $sti=$dbh->prepare("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
-	    $sti=$dbh->prepare("select url from sessionqueries where sessionID=? and userid=?");
+	    $sti=$dbh->prepare("SELECT url FROM sessionqueries WHERE sessionID=? AND userid=?");
 	    $sti->execute($sessionID, $userid);
 	    if ($sti->rows) {
 		my ($selfurl) = $sti->fetchrow;
-		my $stj=$dbh->prepare("delete from sessionqueries where sessionID=?");
+		my $stj=$dbh->prepare("DELETE FROM sessionqueries WHERE sessionID=?");
 		$stj->execute($sessionID);
 		($selfurl) || ($selfurl=$ENV{'SCRIPT_NAME'});
 		print $query->redirect($selfurl);
@@ -168,86 +165,33 @@ You do not have access to this portion of Koha
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
 				      -expires => '+1y');
-	    my $flags;
-	    if ($return==2) {
-		$flags->{'superlibrarian'}=1;
-	    } else {
-		$flags=getuserflags($cardnumber, $dbh);
-	    }
-	    foreach (keys %$flagsrequired) {
-		warn "Checking required flag $_";
-		unless ($flags->{superlibrarian}) {
-		    unless ($flags->{$_}) {
-			print qq|Content-type: text/html
 
-<html>
-<body>
-REJECTED
-<hr>
-You do not have access to this portion of Koha
-</body>
-</html>
-|;
-			exit;
-		    }
-		}
+	    if (my $flags = haspermission($dbh, $userid, $flagsrequired)) {
+		return ($userid, $cookie, $sessionID, $flags);
+	    } else {
+		$template->param(nopermission => 1);
+		print "Content-Type: text/html\n\n", $template->output;
+		exit;
 	    }
-	    return ($userid, $cookie, $sessionID, $flags);
 	} else {
 	    if ($userid) {
-		$message="Invalid userid or password entered.";
+		$template->param(message => "Invalid userid or password entered.");
 	    }
-	    my $parameters;
-#	    foreach (param $query) {
-#		$parameters->{$_}=$query->{$_};
-#	    }
+	    my @inputs;
+	    my $self_url = $query->self_url();
+	    foreach my $name (param $query) {
+		my $value = $query->param($name);
+		push @inputs, {name => $name , value => $value};
+	    }
+	    @inputs = () unless @inputs;
+	    $template->param(INPUTS => \@inputs);
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
 				      -expires => '+1y');
-	    print $query->header(-cookie=>$cookie);
-	    print qq|
-<html>
-<body background=/images/kohaback.jpg>
-<center>
-<h2>$message</h2>
 
-<form method="post">
-<table border="0" cellpadding="10" cellspacing="0" width="60%">
-    <tr><td align="center" valign="top">
-
-    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
-    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha Login</font></th></tr>
-    <tr><td>Name:</td><td><input name="userid"></td></tr>
-    <tr><td>Password:</td><td><input type=password name=password></td></tr>
-    <tr><td colspan="2" align="center"><input type="submit" value="login"></td></tr>
-    </table>
-<!--
-    
-    </td><td align="center" valign="top">
-
-    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
-    <tr><th background="/images/background-mem.gif"><font size="+2">Demo Information</font></th></tr>
-    <td>
-    Log in as librarian/koha or patron/koha.  The timeout is set to 40 seconds of
-    inactivity for the purposes of this demo.  You can navigate to the Circulation
-    or Acquisitions modules and you should see an indicator in the upper left of
-    the screen saying who you are logged in as.  If you want to try it out with
-    a longer timout period, log in as tonnesen/koha and there will be no
-    timeout period.
-    <p>
-    You can also log in using a patron cardnumber.   Try V10000008 and
-    V1000002X with password koha.
-    </td>
-    </tr>
-    </table>
--->
-
-    </td></tr>
-</table>
-</form>
-</body>
-</html>
-|;
+	    $template->param(loginprompt => 1);
+	    $template->param(url => $query->self_url());
+	    print $query->header(-cookie=>$cookie), $template->output;
 	    exit;
 	}
     }
