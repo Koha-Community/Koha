@@ -49,7 +49,7 @@ if ($op eq "do_search") {
 		if ($marc) {
 			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
 			if ($tag) {
-				push @tags,$dbh->quote("$tag$,subfield");
+				push @tags,$dbh->quote("$tag$subfield");
 			} else {
 				push @tags, $dbh->quote(substr($marc,0,4));
 			}
