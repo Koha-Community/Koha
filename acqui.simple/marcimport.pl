@@ -87,14 +87,13 @@ if ($input->param('z3950queue')) {
     foreach ($input->param) {
 	if (/S-(.*)/) {
 	    my $server=$1;
-	    if ($server eq 'LOC') {
-		push @serverlist, "LOC/z3950.loc.gov:7090/voyager//";
-	    }
-	    if ($server eq 'NLC') {
-		push @serverlist, "NLC/amicus.nlc-bnc.ca:210/AMICUS/bccms1/hawk5fad";
-	    }
 	    if ($server eq 'MAN') {
 		push @serverlist, "MAN/".$input->param('manualz3950server')."//";
+	    } else {
+		my $sth=$dbh->prepare("select host,port,db,userid,password from z3950servers where id=$server");
+		$sth->execute;
+		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
+		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
 	    }
 	}
     }
@@ -277,6 +276,9 @@ EOF
     $sth->execute;
     my ($barcode) = $sth->fetchrow;
     $barcode++;
+    if ($barcode==1) {
+	$barcode=int(rand()*1000000);
+    }
     print << "EOF";
     <table border=0 cellpadding=10 cellspacing=0>
     <tr><th bgcolor=black><font color=white>
@@ -315,14 +317,21 @@ if ($input->param('newitem')) {
     my $biblionumber=$input->param('biblionumber');
     my $biblioitemnumber=$input->param('biblioitemnumber');
     my $replacementprice=($input->param('replacementprice') || 0);
-    my $sth=$dbh->prepare("select max(itemnumber) from items");
+    my $sth=$dbh->prepare("select barcode from items where
+    barcode=$q_barcode");
     $sth->execute;
-    my ($itemnumber) = $sth->fetchrow;
-    $itemnumber++;
-    my @datearr=localtime(time);
-    my $date=(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-    $sth=$dbh->prepare("insert into items (itemnumber, biblionumber, biblioitemnumber, barcode, itemnotes, homebranch, holdingbranch, dateaccessioned, replacementprice) values ($itemnumber, $biblionumber, $biblioitemnumber, $q_barcode, $q_notes, $q_homebranch, 'STWE', '$date', $replacementprice)");
-    $sth->execute;
+    if ($sth->rows) {
+	print "<font color=red>Barcode '$barcode' has already been assigned.</font><p>\n";
+    } else {
+	$sth=$dbh->prepare("select max(itemnumber) from items");
+	$sth->execute;
+	my ($itemnumber) = $sth->fetchrow;
+	$itemnumber++;
+	my @datearr=localtime(time);
+	my $date=(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+	$sth=$dbh->prepare("insert into items (itemnumber, biblionumber, biblioitemnumber, barcode, itemnotes, homebranch, holdingbranch, dateaccessioned, replacementprice) values ($itemnumber, $biblionumber, $biblioitemnumber, $q_barcode, $q_notes, $q_homebranch, 'STWE', '$date', $replacementprice)");
+	$sth->execute;
+    }
 }
 
 
@@ -688,12 +697,18 @@ EOF
 	    my $serverstring;
 	    foreach $serverstring (split(/\s+/, $servers)) {
 		my ($name, $server, $database, $auth) = split(/\//, $serverstring, 4);
-		if ($name eq 'LOC') {
+		if ($name eq 'MAN') {
+		    print "$server/$database<br>\n";
+		} elsif ($name eq 'LOC') {
 		    print "Library of Congress<br>\n";
 		} elsif ($name eq 'NLC') {
 		    print "National Library of Canada<br>\n";
 		} else {
-		    print "$server/$database<br>\n";
+		    my $sti=$dbh->prepare("select name from
+		    z3950servers where id=$name");
+		    $sti->execute;
+		    my ($longname)=$sti->fetchrow;
+		    print "$longname<br>\n";
 		}
 		print "<ul>\n";
 		my $q_server=$dbh->quote($serverstring);
@@ -886,7 +901,7 @@ sub z3950 {
     $sth->execute;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     print "<table border=0><tr><td valign=top>\n";
-    print "<h2>Results of Z3950 searches</h2>\n";
+    print "<h2>Results of Z39.50 searches</h2>\n";
     print "<a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Refresh</a><br>\n<ul>\n";
     while (my ($id, $term, $type, $done, $numrecords, $length, $startdate, $enddate, $servers) = $sth->fetchrow) {
 	$type=uc($type);
@@ -920,19 +935,26 @@ sub z3950 {
     }
     print "</ul>\n";
     print "</td><td valign=top width=30%>\n";
+    my $sth=$dbh->prepare("select id,name,checked from z3950servers order by rank");
+    $sth->execute;
+    my $serverlist='';
+    while (my ($id, $name, $checked) = $sth->fetchrow) {
+	($checked) ? ($checked='checked') : ($checked='');
+	$serverlist.="<input type=checkbox name=S-$id $checked> $name<br>\n";
+    }
+    $serverlist.="<input type=checkbox name=S-MAN> <input name=manualz3950server size=25 value=otherserver:210/DATABASE>\n";
+    
 print << "EOF";
     <form action=$ENV{'SCRIPT_NAME'} method=GET>
     <input type=hidden name=z3950queue value=1>
     <input type=hidden name=menu value=$menu>
     <p>
     <input type=hidden name=test value=testvalue>
-    <table border=1 bgcolor=#dddddd><tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records<br>LOC and NLC</th></tr>
+    <table border=1 bgcolor=#dddddd><tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records</th></tr>
     <tr><td>Query Term</td><td><input name=query></td></tr>
     <tr><td colspan=2 align=center><input type=radio name=type value=isbn checked> ISBN <input type=radio name=type value=lccn> LCCN <input type=radio name=type value=title> Title</td></tr>
     <tr><td colspan=2>
-    <input type=checkbox name=S-LOC checked> Library of Congress<br>
-    <input type=checkbox name=S-NLC checked> National Library of Canada<br>
-    <input type=checkbox name=S-MAN> <input name=manualz3950server size=25 value=otherserver:210/DATABASE>
+    $serverlist
     </td></tr>
     <tr><td colspan=2 align=center>
     <input type=submit>
