@@ -73,7 +73,6 @@ if ($query->param('resbarcode')) {
     my $borrnum = $query->param('borrowernumber');
     my $resbarcode = $query->param('resbarcode');
     my $tobranchcd = ReserveWaiting($item, $borrnum);
-    warn "tobranchcd = $tobranchcd";
     my $branchname = $branches->{$tobranchcd}->{'branchname'};
     my ($borr) = getpatroninformation(\%env, $borrnum, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
@@ -202,6 +201,7 @@ Date: $todaysdate;
 ITEM RESERVED: 
 $iteminfo->{'title'} ($iteminfo->{'author'})
 barcode: $iteminfo->{'barcode'}
+itemtype: $iteminfo->{'itemtype'} 
 
 COLLECT AT: $branchname
 
@@ -294,8 +294,6 @@ EOF
     my $flaginfotext='';
     my $color = '';
     foreach my $flag (sort keys %$flags) {
-	warn "$flag : $flags->{$flag} \n ";
-
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	if ($flags->{$flag}->{'noissues'}) {
 	    $flag = "<font color=red>$flag</font>";
