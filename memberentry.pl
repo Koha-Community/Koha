@@ -27,6 +27,7 @@ use strict;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
+use C4::Charset;
 use CGI;
 use C4::Search;
 use C4::Koha;
@@ -242,7 +243,10 @@ if ($delete){
   			cardnumber	=> $cardnumber,
   			dateofbirth	=> $data->{'dateofbirth'});
 
-print $input->header(-cookie => $cookie),$template->output;
+print $input->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;
 
 
 }

@@ -25,6 +25,7 @@ use C4::Catalogue;
 use C4::Biblio;
 use C4::Search;
 use C4::Output;
+use C4::Charset;
 use HTML::Template;
 
 my $input      = new CGI;
@@ -90,5 +91,8 @@ if (! $isbn) {
 							loop => \@loop_data,
 							loop_links => \@loop_links);
 
-	print $input->header(-cookie => $cookie),$template->output;
+	print $input->header(
+	    -type => guesstype($template->output),
+	    -cookie => $cookie
+	),$template->output;
 } # else

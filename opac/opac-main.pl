@@ -5,6 +5,7 @@ use CGI;
 use HTML::Template;
 
 use C4::Auth;       # get_template_and_user
+use C4::Charset;
 
 my $query = new CGI;
 
@@ -16,4 +17,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			 });
 
-print $query->header(-cookie => $cookie), $template->output;
+print $query->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+), $template->output;
