@@ -101,7 +101,7 @@
 		<td colspan=2><B>INFORMATIONS COMMANDE</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Publishers and Imprints</td>
+		<TD>Publications</td>
 		<td><textarea name="publishers_imprints" cols=20 rows=4><TMPL_VAR name="specialty"></textarea>
 		</td>
 	</tr>
@@ -128,22 +128,22 @@
 	<TR VALIGN=TOP>
 		<TD>GST</td>
 		<td>
-			<input type=radio name=gst value=1 <TMPL_IF name="gstreg">checked</TMPL_IF>>Yes
-			<input type=radio name=gst value=0 <TMPL_UNLESS name="gstreg">checked</TMPL_UNLESS>>No
+			<input type=radio name=gst value=1 <TMPL_IF name="gstreg">checked</TMPL_IF>>Oui
+			<input type=radio name=gst value=0 <TMPL_UNLESS name="gstreg">checked</TMPL_UNLESS>>Non
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>List Item Price Includes GST</td>
+		<TD>Prix incluent la TVA</td>
 		<td>
-			<input type=radio name=list_gst <TMPL_IF name="listincgst">checked</TMPL_IF>>Yes
-			<input type=radio name=list_gst value=0 <TMPL_UNLESS name="listincgst">checked</TMPL_UNLESS>>No
+			<input type=radio name=list_gst <TMPL_IF name="listincgst">checked</TMPL_IF>>Oui
+			<input type=radio name=list_gst value=0 <TMPL_UNLESS name="listincgst">checked</TMPL_UNLESS>>Non
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Invoice Item Price Includes GST</td>
+		<TD>Le prix des factures incluent la TVA</td>
 		<td>
-			<input type=radio name=invoice_gst value=1 <TMPL_IF name= "invoiceincgst">checked</TMPL_IF>>Yes
-			<input type=radio name=invoice_gst value=0 <TMPL_UNLESS name="invoiceincgst">checked</TMPL_UNLESS>>No
+			<input type=radio name=invoice_gst value=1 <TMPL_IF name= "invoiceincgst">checked</TMPL_IF>>Oui
+			<input type=radio name=invoice_gst value=0 <TMPL_UNLESS name="invoiceincgst">checked</TMPL_UNLESS>>Non
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
