@@ -52,6 +52,7 @@ It contains every functions to manage/find authorities.
 						&searchauthority
 						&delauthority
 						&modauthority
+						&SearchDeeper
 					);
 
 =item newauthority
@@ -109,6 +110,8 @@ sub newauthority  {
 	my $id;
 	if ($#Thierarchy >=0) {
 		# free form
+		$level='' unless $level;
+		$hierarchy='' unless $hierarchy;
 		$sth1b->execute($freelib,$hierarchy,$category);
 		($id) = $sth1b->fetchrow;
 		unless ($id) {
@@ -152,7 +155,7 @@ sub modauthority {
 
 =item SearchAuthority
 
-  $id = &SearchAuthority($dbh,$category,$branch,$searchstring,$type,$offset,$pagesize);
+  ($count, \@array) = &SearchAuthority($dbh,$category,$branch,$searchstring,$type,$offset,$pagesize);
 
   searches for an authority
 
@@ -165,6 +168,9 @@ entries beginning by 1024|2345
 
 C<$searchstring> contains a string. Only entries beginning by C<$searchstring> are returned
 
+return :
+C<$count> : the number of authorities found
+C<\@array> : the authorities found. The array contains stdlib,freelib,father,id,hierarchy and level
 
 =cut
 sub searchauthority  {
@@ -196,6 +202,45 @@ sub searchauthority  {
 	my ($cnt) = $sth->fetchrow;
 	$cnt = $pagesize+1 if ($cnt>$pagesize);
 	return ($cnt,\@results);
+}
+
+=item SearchDeeper
+
+ @array = &SearchAuthority($dbh,$category,$father);
+
+  Finds everything depending on the parameter.
+
+C<$dbh> is a DBI::db handle for the Koha database.
+
+C<$category> is the category of the authority
+
+C<$father> Is the string "father".
+
+return :
+@array : the authorities found. The array contains stdlib,freelib,father,id,hierarchy and level
+
+For example :
+Geography -- Europe is the father and the result is : France and Germany if there is
+Geography -- Europe -- France and Geography -- Europe -- Germany in the thesaurus
+
+
+=cut
+sub SearchDeeper  {
+	my ($category,$father)=@_;
+	my $dbh = C4::Context->dbh;
+	my $query="Select distinct level,stdlib,father from bibliothesaurus where category =? and father =? order by category,stdlib";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($category,"$father --");
+	my @results;
+	while (my ($level,$stdlib,$father)=$sth->fetchrow){
+			my %line;
+			$line{level} = $level;
+			$line{stdlib}= $stdlib;
+			$line{father} = $father;
+			push(@results,\%line);
+	}
+	$sth->finish;
+	return (@results);
 }
 
 

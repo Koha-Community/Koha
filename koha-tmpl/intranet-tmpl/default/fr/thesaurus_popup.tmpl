@@ -7,21 +7,30 @@
 		<textarea name="result" rows=10 cols=50><TMPL_VAR name="result"></textarea>
 		<br/><input type="button" value="OK" onClick="javascript:report()">
 		<p>
-			<input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
+			Rechercher : <input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
 			<input type="hidden" name="category" value="<TMPL_VAR name="category">">
 			<input type="hidden" name="index" value="<TMPL_VAR name="index">">
 			<input type="hidden" name="op" value="search">
-			<input type="submit" value="Rechercher">
+			<input type="submit" value="OK">
 		</p>
 	</form>
-<TMPL_IF name="search_string">
 	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
-	<TMPL_VAR name="select_list">
+	Descendre : <TMPL_VAR name="dig_list">
 	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
 	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
 	<input type="hidden" name="op" value="select">
 	<input type="hidden" name="result" value="<TMPL_VAR name="result">">
-	<input type="submit" name="OK" value="Sélectionner">
+	<input type="submit" name="OK" value="OK">
+	</form>
+
+<TMPL_IF name="search_string">
+	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
+	Sélectionner : <TMPL_VAR name="select_list">
+	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="op" value="select">
+	<input type="hidden" name="result" value="<TMPL_VAR name="result">">
+	<input type="submit" name="OK" value="OK">
 	</form>
 </TMPL_IF>
 <form name="f3_pop"  action="thesaurus_popup.pl" method="post">

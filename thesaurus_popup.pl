@@ -47,13 +47,13 @@ my $dbh = C4::Context->dbh;
 # make the page ...
 #print $input->header;
 if ($op eq "select") {
-	my $sti = $dbh->prepare("select stdlib from bibliothesaurus where id=?");
+	my $sti = $dbh->prepare("select father,stdlib from bibliothesaurus where id=?");
 	$sti->execute($id);
-	my ($freelib_text) = $sti->fetchrow_array;
+	my ($father,$freelib_text) = $sti->fetchrow_array;
 	if (length($result)>0) {
-		$result .= "|$freelib_text";
+		$result .= "|$father $freelib_text";
 	} else {
-		$result = $freelib_text;
+		$result = "$father $freelib_text";
 	}
 }
 if ($op eq "add") {
@@ -74,10 +74,10 @@ my %stdlib;
 my $select_list;
 if ($search_string) {
 #	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where freelib like '".$search_string."%' and category ='$category'");
-	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where match (category,freelib) AGAINST (?) and category ='$category'");
+	my $sti=$dbh->prepare("select id,freelib,father from bibliothesaurus where match (category,freelib) AGAINST (?) and category ='$category'");
 	$sti->execute($search_string);
 	while (my $line=$sti->fetchrow_hashref) {
-		$stdlib{$line->{'id'}} = "$line->{'freelib'}";
+		$stdlib{$line->{'id'}} = "$line->{'father'} $line->{'freelib'}";
 		push(@freelib,$line->{'id'});
 	}
 	$select_list= CGI::scrolling_list( -name=>'id',
@@ -88,8 +88,21 @@ if ($search_string) {
 			-labels=> \%stdlib
 			);
 }
+my $x = SearchDeeper('',$category,$search_string);
+#my @son;
+#foreach (my $value @$x) {
+#	warn \@$x[$value]->{'stdlib'};
+#}
+my $dig_list= CGI::scrolling_list( -name=>'search_string',
+		-values=> \@$x,
+		-default=> "",
+		-size=>1,
+		-multiple=>0,
+		);
+
 $template->param(select_list => $select_list,
 						search_string => $search_string,
+						dig_list => $dig_list,
 						result => $result,
 						category => $category,
 						index => $index
