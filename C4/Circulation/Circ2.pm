@@ -694,7 +694,7 @@ sub issuebook {
 				$defaultanswer='Y';
 				last SWITCH;
 			} elsif ($responses->{1} eq 'Y') {
-				returnbook($iteminformation->{'barcode'}, $env->{'branch'});
+				returnbook($iteminformation->{'barcode'}, $env->{'branchcode'});
 			} else {
 				$rejected=-1;
 				last SWITCH;
