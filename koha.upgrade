@@ -18,9 +18,9 @@ loadconfigfile();
 
 
 ($::kohaversion) || ($::kohaversion='unknown version');
-my $newversion=`cat koha.version`;
-chomp $newversion;
-if ($::kohaversion =~ /RC/) {
+$::newversion=`cat koha.version`;
+chomp $::newversion;
+if ($::newversion =~ /RC/) {
     releasecandidatewarning();
 }
 
@@ -30,7 +30,7 @@ print qq|
 = Koha Upgrade =
 ================
 
-You are attempting to upgrade from Koha $::kohaversion to $newversion.
+You are attempting to upgrade from Koha $::kohaversion to $::newversion.
 
 We recommend that you do a complete backup of all your files before upgrading.
 This upgrade script will make a backup copy of your files for you.
@@ -358,7 +358,7 @@ while (<KC>) {
 	$kccontents.="httpduser=$httpduser\n";
 	$kc->{'httpduser'}=1;
     } elsif (/^\s*kohaversion\s*=/) {
-	$kccontents.="kohaversion=$newversion\n";
+	$kccontents.="kohaversion=$::newversion\n";
 	$kc->{'kohaversion'}=1;
     } elsif (/^\s*kohalogdir\s*=/) {
 	$kccontents.="kohalogdir=$::kohalogdir\n";
@@ -375,7 +375,7 @@ while (<KC>) {
 }
 
 unless (defined($kc->{'kohaversion'})) {
-    $kccontents.="kohaversion=$newversion\n";
+    $kccontents.="kohaversion=$::newversion\n";
 }
 unless (defined($kc->{'includes'})) {
     $kccontents.="includes=$::intranetdir/htdocs/includes\n";
