@@ -6,6 +6,113 @@
 <!-- TMPL_INCLUDE NAME="opac-basket-menu.inc" -->
 <!-- /TMPL_IF -->
 <div id="mainbloc" style="margin-top:10px;margin-bottom:20px;padding-top:10px;padding-bottom:10px;">
+<!-- TMPL_IF NAME="verbose" -->
+	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<h3><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></h3>
+	<table>
+		<!-- TMPL_UNLESS NAME="print_basket" -->
+			<tr><td colspan="2">
+				<form>
+					<label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
+						<input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)"> Select this Item
+					</label>
+				</form>
+			</td></tr>
+		<!-- /TMPL_UNLESS -->
+		<!-- TMPL_IF name="isbn" -->
+			<tr>
+				<th>ISBN:</th>
+				<td><!-- TMPL_VAR NAME="ISBN" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="author" -->
+			<tr>
+				<th>Author:</th>
+				<td> <!-- TMPL_VAR NAME="author" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="additional" -->
+			<tr>
+				<th>Additional authors:</th>
+				<td><!-- TMPL_VAR NAME="additional" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="publishercode" -->
+			<tr>
+				<th>Publisher:</th>
+				<td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="pages" -->
+			<tr>
+				<th>Details: </th>
+				<td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="collection" -->
+			<tr>
+				<th>Collection:</th>
+				<td> <!-- TMPL_VAR NAME="seriestitle" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="subject" -->
+			<tr>
+				<th>Subject:</th>
+				<td> <!-- TMPL_VAR NAME="subject" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="copyrightdate" -->
+			<tr>
+				<th>Copyright:</th>
+				<td> <!-- TMPL_VAR NAME="copyrightdate" --></td>
+				</tr>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="notes" -->
+			<tr>
+				<th>Notes:</th>
+				<td> <!-- TMPL_VAR NAME="notes" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="unititle" -->
+			<tr>
+				<th>Unified title:</th>
+				<td> <!-- TMPL_VAR NAME="unititle" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="serial" -->
+			<tr>
+				<th>Serial:</th>
+				<td><!-- TMPL_VAR NAME="serial" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="dewey" -->
+			<tr>
+				<th>Dewey:</th>
+				<td><!-- TMPL_VAR name="dewey" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="classification" -->
+			<tr>
+				<th>Call Number:</th>
+				<td> <!-- TMPL_VAR name="classification" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="lccn" -->
+			<tr>
+				<th>LCCN:</th>
+				<td> <!-- TMPL_VAR name="lccn" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="url" -->
+			<tr>
+				<th>URL:</th>
+				<td> <!-- TMPL_VAR NAME="url" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<div width="100%" style="margin-top:0px;margin-bottom:0px;padding-top:10px;padding-bottom:10px;">
 	<table cellspacing="0" style="border:0;width:100%;">
@@ -51,6 +158,7 @@
 	</table>
 	</div>
 	<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_UNLESS NAME="print_basket" -->
