@@ -19,8 +19,8 @@
 </ul>
 <TMPL_ELSE>
 <ul>
-	<li>Wybierz plik, by importowaæ go do hurtowni opisów. Bêdzie przeczytany i dla ka¿dego znalezionego numeru ISBN utworzone zostanie nowe "ciel±tko" w hurtowni.</li>
-	<li>Je¶li ISBN ju¿ w hurtowni istnieje mo¿na zdecydowaæ czy nowe powinno byæ zignorowane czy te¿ stare nadpisane nowym.</li>
+	<li>Wybierz plik, by importowaæ go do hurtowni opisów. Bêdzie przeczytany i dla ka¿dego znalezionego numeru ISBN utworzone zostanie nowe "ciel±tko" w farmie.</li>
+	<li>Je¶li ISBN ju¿ w farmie istnieje mo¿na zdecydowaæ czy nowe powinno byæ zignorowane czy te¿ stare nadpisane nowym.</li>
 	<li>Mo¿na nadaæ nazwê dla tego importu. Mo¿e siê przydaæ przy tworzeniu opisu bibliograficznego wskazuj±c pochodzenie sugerowanych danych MARC !</li>
 	<li>Oczywi¶cie opis bêdzie ignorowany je¶li numer ISBN istnieje ju¿ w aktywnej bazie Koha.</li>
 </ul>
@@ -39,9 +39,15 @@
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Je¶li ISBN ju¿ jest w hurtowni : </td>
-		<td><input type="radio" name="overwrite_biblio" value="0" checked>Odrzuæ ten, zatrzymaj istniej±cy<br/>
-			<input type="radio" name="overwrite_biblio" value="1">Zast±p istniej±cy nowym</td>
+		<td>Character encoding (USMARC or UNIMARC)</td>
+		<td>
+			<select name="syntax"/><option value="USMARC">USMARC</option><option value="UNIMARC">UNIMARC</option></select><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Je¶li ISBN ju¿ jest w hurtowni: </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignoruj to, zatrzymaj istniej±ce<br/>
+			<input type="radio" name="overwrite_biblio" value="1">Nadpisz istniej±ce obecnym</td>
 	</tr>
 	<tr valign="top">
 		<td>&nbsp; </td>
