@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# Please use 8-character tabs for this file (indents are 4 spaces)
 
 #written 11/3/2002 by Finlay
 #script to execute returns of books
@@ -29,6 +30,7 @@ use C4::Output;
 use C4::Print;
 use C4::Reserves2;
 use C4::Auth;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 
@@ -55,14 +57,8 @@ my $backgroundimage="/images/background-mem.gif";
 my $branches = getbranches();
 my $printers = getprinters(\%env);
 
-my $branch = $query->param("branch");
-my $printer = $query->param("printer");
-
-($branch) || ($branch=$query->cookie('branch')) ;
-($printer) || ($printer=$query->cookie('printer')) ;
-
-my $genbrname=$branches->{$branch}->{'branchname'};
-my $genprname=$printers->{$printer}->{'printer'};
+my $branch = getbranch($query, $branches);
+my $printer = getprinter($query, $printers);
 
 #
 # Some code to handle the error if there is no branch or printer setting.....
@@ -364,17 +360,17 @@ foreach (sort {$a <=> $b} keys %returneditems) {
 }
 $template->param(riloop => \@riloop);
 
-$template->param(	genbrname => $genbrname,
-								genprname => $genprname,
-								branch => $branch,
-								printer => $printer,
-								hdrbckgdcolor => $headerbackgroundcolor,
-								bckgdimg => $backgroundimage,
-								errmsgloop => \@errmsgloop
-							);
+$template->param(	genbrname => $branches->{$branch}->{'branchname'},
+			genprname => $printers->{$printer}->{'printername'},
+			branch => $branch,
+			printer => $printer,
+			hdrbckgdcolor => $headerbackgroundcolor,
+			bckgdimg => $backgroundimage,
+			errmsgloop => \@errmsgloop
+		);
 
 # actually print the page!
-print $query->header(), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 
 sub cuecatbarcodedecode {
     my ($barcode) = @_;
@@ -386,3 +382,7 @@ sub cuecatbarcodedecode {
     } else {
 	return $barcode;
     }}
+
+# Local Variables:
+# tab-width: 8
+# End:

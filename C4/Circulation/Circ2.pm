@@ -1,3 +1,6 @@
+# -*- tab-width: 8 -*-
+# Please use 8-character tabs for this file (indents are every 4 characters)
+
 package C4::Circulation::Circ2;
 
 # $Id$
@@ -64,6 +67,7 @@ returns, as well as general information about the library.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&getbranches &getprinters &getpatroninformation
+	&getbranch &getprinter
 	&currentissues &getissues &getiteminformation &findborrower
 	&issuebook &returnbook &find_reserves &transferbook &decode
 	&calc_charges);
@@ -146,6 +150,25 @@ sub getprinters {
 	$printers{$printer->{'printqueue'}}=$printer;
     }
     return (\%printers);
+}
+
+# FIXME - This function doesn't feel as if it belongs here. It should
+# go in some generic or administrative module, not in circulation.
+sub getbranch ($$) {
+    my($query, $branches) = @_; # get branch for this query from branches
+    my $branch = $query->param('branch');
+    ($branch) || ($branch = $query->cookie('branch'));
+    ($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+    return $branch;
+}
+
+# FIXME - Perhaps this really belongs in C4::Print?
+sub getprinter ($$) {
+    my($query, $printers) = @_; # get printer for this query from printers
+    my $printer = $query->param('printer');
+    ($printer) || ($printer = $query->cookie('printer'));
+    ($printers->{$printer}) || ($printer = (keys %$printers)[0]);
+    return $printer;
 }
 
 =item getpatroninformation
@@ -977,6 +1000,7 @@ sub returnbook {
     my %env;
     my $messages;
     my $doreturn = 1;
+    die '$branch not defined' unless defined $branch; # just in case (bug 170)
 # get information on item
     my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
     if (not $iteminformation) {
@@ -1042,7 +1066,7 @@ sub returnbook {
 # Updates items.datelastseen for the item.
 # Not exported
 # FIXME - This is only used in &returnbook. Why make it into a
-# separate function?
+# separate function? (is this a recognizable step in the return process? - acli)
 sub doreturn {
     my ($brn, $itm) = @_;
     my $dbh = C4::Context->dbh;

@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# Please use 8-character tabs for this file (indents are every 4 characters)
 
 #written 8/5/2002 by Finlay
 #script to execute issuing of books
@@ -47,15 +48,8 @@ my $printers = getprinters(\%env);
 
 my $query = new CGI;
 
-my $branch = $query->param("branch");
-my $printer = $query->param("printer");
-
-($branch) || ($branch=$query->cookie('branch')) ;
-($printer) || ($printer=$query->cookie('printer')) ;
-
-($branches->{$branch}) || ($branch=(keys %$branches)[0]);
-($printers->{$printer}) || ($printer=(keys %$printers)[0]);
-
+my $branch = getbranch($query, $branches);
+my $printer = getprinter($query, $printers);
 
 
 #set up cookie.....
@@ -689,3 +683,7 @@ sub printslip {
     }
     remoteprint($env,\@issues,$borrower);
 }
+
+# Local Variables:
+# tab-width: 8
+# End:
