@@ -377,6 +377,7 @@ sub AUTHaddauthority {
 		($authid)=$sth->fetchrow;
 		$sth->finish;
 	}
+	warn "auth : $authid";
 	my $fieldcount=0;
 	# now, add subfields...
 	foreach my $field (@fields) {
@@ -823,6 +824,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.4  2004/06/22 11:35:37  tipaul
+# removing % at the beginning of a string to avoid loooonnnngggg searchs
+#
 # Revision 1.3  2004/06/17 08:02:13  tipaul
 # merging tag & subfield in auth_word for better perfs
 #
