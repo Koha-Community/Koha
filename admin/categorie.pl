@@ -122,7 +122,7 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirm => 1);
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from categoryitem where categorycode=?");
+	my $sth=$dbh->prepare("select count(*) as total from borrowers where categorycode=?");
 	$sth->execute($categorycode);
 	my $total = $sth->fetchrow_hashref;
 	$sth->finish;
@@ -185,7 +185,17 @@ if ($op eq 'add_form') {
 		}
 	}
 	$template->param(loop => \@loop);
-
+	# check that I (institution) and C (child) exists. otherwise => warning to the user
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select categorycode from categories where categorycode='C'");
+	$sth->execute;
+	my ($categoryChild) = $sth->fetchrow;
+	$template->param(categoryChild => $categoryChild);
+	$sth=$dbh->prepare("select categorycode from categories where categorycode='I'");
+	$sth->execute;
+	my ($categoryInstitution) = $sth->fetchrow;
+	$template->param(categoryInstitution => $categoryInstitution);
+	$sth->finish;
 
 
 } #---- END $OP eq DEFAULT
