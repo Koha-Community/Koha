@@ -13,6 +13,7 @@
 		<table>
 			<tr>
 				<th class="catalogue">Summary</th>
+				<th class="catalogue">Item type</th>
 				<th class="catalogue">Item Count</th>
 				<th class="catalogue">Location</th>
 				<th class="catalogue">&nbsp;</th>
@@ -31,6 +32,9 @@
 						<!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
 					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<p><!-- TMPL_VAR NAME="description" --></p>
 				</td>
 				<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR NAME="totitem" -->
