@@ -99,7 +99,7 @@ $context = undef;		# Initially, no context is set
 sub read_config_file
 {
 	my $fname = shift;	# Config file to read
-	my $retval;		# Return value: ref-to-hash holding the
+	my $retval = {};	# Return value: ref-to-hash holding the
 				# configuration
 
 	open (CONF, $fname) or return undef;
@@ -141,7 +141,8 @@ sub import
 
 	# Create a new context from the given config file name, if
 	# any, then set it as the current context.
-	$context = __PACKAGE__->new($conf_fname);
+	$context = new C4::Context($conf_fname);
+	return undef if !defined($context);
 	$context->set_context;
 }
 
@@ -178,7 +179,7 @@ sub new
 
 	# Load the desired config file.
 	$self->{"config"} = &read_config_file($conf_fname);
-	return null if !defined($self->{"config"});
+	return undef if !defined($self->{"config"});
 
 	$self->{"dbh"} = undef;		# Database handle
 
