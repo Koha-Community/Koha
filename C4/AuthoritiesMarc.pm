@@ -42,6 +42,7 @@ $VERSION = 0.01;
 	&AUTHgetauthority
 	
 	&AUTHgetauth_type
+	&AUTHcount_usage
 	
 	&authoritysearch
 	
@@ -836,6 +837,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.8  2004/11/05 10:11:39  tipaul
+# export auth_count_usage (bugfix)
+#
 # Revision 1.7  2004/09/23 16:13:00  tipaul
 # Bugfix in modification
 #
