@@ -185,6 +185,23 @@ my $title = <<"EOF";
 <p>
 EOF
 
+my $titlenoborrower = <<"EOF";
+<table align="right"><tr><td>
+<a href=returns.pl>
+<img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
+&nbsp<a href=branchtransfers.pl>
+<img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers">
+</a>
+</td></tr></table>
+<FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
+<b>Printer:</b> $printers->{$printer}->{'printername'} <br>
+<a href=selectbranchprinter.pl>Change Settings</a></td>
+<input type=hidden name=branch value=$branch>
+<input type=hidden name=printer value=$printer>
+<p>
+EOF
+
 
 
 my $cardnumberinput = << "EOF";
@@ -451,8 +468,11 @@ EOF
 
 
 #print startmenu('circulation');
-
-print $title;
+if ($borrower) {
+    print $title;
+} else {
+    print $titlenoborrower;
+}
 
 
 print $info;

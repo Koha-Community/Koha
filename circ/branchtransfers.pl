@@ -291,6 +291,7 @@ print @inp;
 
 print <<"EOF";
 <table align=right><tr><td>
+<a href=circulation.pl>
 <img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Next Borrower"></a> &nbsp
 <a href=returns.pl>
 <img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
