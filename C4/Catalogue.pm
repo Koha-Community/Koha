@@ -264,7 +264,11 @@ sub modorder {
   $sth->finish;
   $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
   ordernumber=?");
-  $sth->execute($bookfund,$ordnum);
+  if ($sth->execute($bookfund,$ordnum) == 0) { # zero rows affected [Bug 734]
+    $query="insert into aqorderbreakdown (ordernumber,bookfundid) values (?,?)";
+    $sth=$dbh->prepare($query);
+    $sth->execute($ordnum,$bookfund);
+  }
   $sth->finish;
 }
 
@@ -450,11 +454,11 @@ aqorderbreakdown tables of the Koha database.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
+  on aqorders.ordernumber=aqorderbreakdown.ordernumber
   where aqorders.ordernumber=?
   and biblio.biblionumber=aqorders.biblionumber and
-  biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber");
+  biblioitems.biblioitemnumber=aqorders.biblioitemnumber");
   $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;

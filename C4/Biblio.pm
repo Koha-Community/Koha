@@ -1658,11 +1658,11 @@ aqorderbreakdown tables of the Koha database.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
+  on aqorders.ordernumber=aqorderbreakdown.ordernumber
   where aqorders.ordernumber=?
-  and biblio.biblionumber=aqorders.biblionumber and
-  biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber");
+  and biblio.biblionumber=aqorders.biblionumber
+  and biblioitems.biblioitemnumber=aqorders.biblioitemnumber");
   $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
@@ -2193,6 +2193,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.82  2004/03/07 05:47:31  acli
+# Various updates/fixes from rel_2_0
+# Fixes for bugs 721 (templating), 727, and 734
+#
 # Revision 1.81  2004/03/06 20:26:13  tipaul
 # adding seealso feature in MARC searches
 #

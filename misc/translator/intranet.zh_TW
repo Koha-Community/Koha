@@ -23,13 +23,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha INTRANET 2.1cvs\n"
-"POT-Creation-Date: 2004-02-29 19:22-0500\n"
+"POT-Creation-Date: 2004-03-07 00:14-0500\n"
 "PO-Revision-Date: 2004-02-23 17:20-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#. %1$s: TMPL_VAR name=subject
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:6
+#, c-format
+msgid "\"<a1>%s\"</a>"
+msgstr "\"<a1>%s\"</a>"
 
 #  NOTE = Replacement Cost (after tax)
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:14
@@ -590,9 +596,8 @@ msgid "&nbsp; &nbsp; - - Year to Date"
 msgstr "　　- 全年累積"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:197
-#, fuzzy
 msgid "&nbsp; &nbsp; - Accept Delivery"
-msgstr "　　- 移除"
+msgstr "　　- 收貨"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:126
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:137
@@ -2247,6 +2252,7 @@ msgstr "容許值"
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:304
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/z3950/searchresult.tmpl:16
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:35
 msgid "Author"
 msgstr "著者"
 
@@ -2336,6 +2342,11 @@ msgstr "預算案及書籍採購資金"
 #: ../../koha-tmpl/intranet-tmpl/default/en/import/breeding.tmpl:18
 msgid "Back"
 msgstr "返回"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:66
+msgid "Back to Catalogue Maintenance"
+msgstr "返回目錄維護"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/marcimport.tmpl:18
 msgid "Back to acquisition"
@@ -2759,6 +2770,11 @@ msgid "Category: %s"
 msgstr "類別：%s"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:59
+msgid "Change"
+msgstr "修改"
+
+#. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:86
 msgid "Change Password"
 msgstr "修改密碼"
@@ -2980,17 +2996,15 @@ msgstr "數量"
 msgid "Copyright"
 msgstr "版權"
 
-# FIXME This is likely WRONG
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:91
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:49
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbib.tmpl:26
 msgid "Copyright Date"
-msgstr "版權日期"
+msgstr "著作年份"
 
-# FIXME This is likely WRONG
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio-nomarc.tmpl:38
 msgid "Copyright Date:"
-msgstr "版權日期："
+msgstr "著作年份："
 
 #  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:33
@@ -3306,8 +3320,8 @@ msgid ""
 "Each box needs to be filled in with fine,time to start charging,charging "
 "cycle"
 msgstr ""
-"每欄須填寫罰款金額、過多少日開始計算罰款、以及每隔多少日罰款一次。"
-"三個數字須以半形逗號分隔。"
+"每欄須填寫罰款金額、過多少日開始計算罰款、以及每隔多少日罰款一次。三個數字須"
+"以半形逗號分隔。"
 
 #  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-class-list.inc:5
@@ -3648,6 +3662,10 @@ msgstr "Glen Stewart"
 msgid "Go"
 msgstr "執行"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:78
+msgid "Group Maintenance"
+msgstr "群組維護"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:101
 msgid "Group:"
 msgstr "群組："
@@ -3814,16 +3832,15 @@ msgid ""
 "If an ISBN already exists in the breeding farm, you can choose whether to "
 "ignore the new one or overwrite the old one."
 msgstr ""
-"假如國際標準書號已在Breeding Farm之內，您可選擇忽略新的書目記錄，"
-"也可選擇覆蓋原有的那個記錄。"
+"假如國際標準書號已在Breeding Farm之內，您可選擇忽略新的書目記錄，也可選擇覆蓋"
+"原有的那個記錄。"
 
 #  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbooks.tmpl:25
 msgid ""
 "If the ISBN or title is found in the biblio table, it will be retrieved and "
 "can be modified."
-msgstr ""
-"如果國際標準書號已在書目表內，書目記錄將被取出，您可修改這些書目記錄。"
+msgstr "如果國際標準書號已在書目表內，書目記錄將被取出，您可修改這些書目記錄。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbooks.tmpl:26
 msgid ""
@@ -4016,6 +4033,10 @@ msgstr "數量"
 msgid "Item Location (items.bulk) between"
 msgstr "圖書資料位於 (items.bulk) "
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:82
+msgid "Item Number"
+msgstr "圖書資料號碼"
+
 #. %1$s: TMPL_VAR name=barcode
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptItemCopy.tmpl:12
 #, c-format
@@ -4115,6 +4136,10 @@ msgstr "圖書資料"
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:141
 msgid "Itemtype"
 msgstr "圖書資料類別"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:58
+msgid "Itemtype:"
+msgstr "圖書資料類別："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:49
 msgid "Jo Ransom"
@@ -5156,7 +5181,7 @@ msgstr "訂單詳情"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/about.tmpl:15
 msgid "OS version (from 'uname -a'):"
-msgstr "作業系統版本 (經由 uname -a 取得)："
+msgstr "作業系統版本<br>(經由 uname -a 取得)："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:275
 msgid "OTHER"
@@ -5703,8 +5728,8 @@ msgid ""
 "search. Type a borrower name, part of a name, or number in the field above "
 "and hit the enter key to activate search"
 msgstr ""
-"續借圖書資料、登記新讀者、或給現有的讀者更新或刪除記錄，統統都由這個查詢開始。在"
-"上列空格內輸入讀者姓名、姓名的一部分、或借書證編號，再按輸入鍵即可。"
+"續借圖書資料、登記新讀者、或給現有的讀者更新或刪除記錄，統統都由這個查詢開"
+"始。在上列空格內輸入讀者姓名、姓名的一部分、或借書證編號，再按輸入鍵即可。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:145
 msgid "Renewable"
@@ -6049,8 +6074,8 @@ msgid ""
 "Select a file to import into the breeding farm. It will be parsed, and for "
 "each ISBN found, a new baby will be created in the breeding farm."
 msgstr ""
-"請選擇希望匯入Breeding Farm之檔案。系統將會分析檔案，凡是找到有國際標準書號的記錄，"
-"系統會在Breeding Farm內建立相應的新書目。"
+"請選擇希望匯入Breeding Farm之檔案。系統將會分析檔案，凡是找到有國際標準書號的"
+"記錄，系統會在Breeding Farm內建立相應的新書目。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptMarcUpload.tmpl:3
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/uploadmarc.tmpl:7
@@ -6122,8 +6147,8 @@ msgid ""
 "purchased locally or gifted. In this case the quantity \"ordered\" will also "
 "be entered into the database as the quantity received."
 msgstr ""
-"如有已購買或獲贈之圖書資料，可用有底色之欄位做個「快速」採購，"
-"資料庫內的「訂購」數量將被設成跟所收數量相同。"
+"如有已購買或獲贈之圖書資料，可用有底色之欄位做個「快速」採購，資料庫內的「訂"
+"購」數量將被設成跟所收數量相同。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:118
 msgid "Shelf List"
@@ -6141,6 +6166,23 @@ msgstr "虛擬書架一覽"
 #, c-format
 msgid "Shopping Basket For: %s"
 msgstr "%s 的購物藍"
+
+# FIXME Strictly speaking untranslatable. Arguably a template bug, but difficult to fix
+#. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:75
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:90
+msgid "Show"
+msgstr "顯示"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:81
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:89
+msgid "Show all Titles beginning with"
+msgstr ""
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:74
+msgid "Show all subjects beginning with"
+msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:54
 msgid "Sir"
@@ -6260,6 +6302,14 @@ msgstr "主題"
 msgid "Subject Headings:"
 msgstr "主題標目："
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:71
+msgid "Subject Maintenance"
+msgstr "主題維護"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:13
+msgid "Subject:"
+msgstr "主題："
+
 # NOTE 譯文更動 by Arthur
 #. INPUT type=submit name=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:226
@@ -6276,6 +6326,17 @@ msgstr "副題"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio-nomarc.tmpl:25
 msgid "Subtitle:"
 msgstr "副題："
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:49
+msgid "Succesfully undeleted"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=oldsub
+#. %2$s: TMPL_VAR name=sub
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:23
+#, c-format
+msgid "Successfully modified %s is now %s"
+msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:14
 msgid "Sundry"
@@ -6471,8 +6532,7 @@ msgstr "下列的欄位含不容許的值。請您按瀏覽器的「往後」(Ba
 msgid ""
 "The total at the bottom of the page should be within a few cents of the "
 "total for the invoice."
-msgstr ""
-"這頁最底下所列出的總額，和發票上所列出者，差別應該在只在幾分錢以內。"
+msgstr "這頁最底下所列出的總額，和發票上所列出者，差別應該在只在幾分錢以內。"
 
 #  TODO 譯文有待改進
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:108
@@ -6550,12 +6610,17 @@ msgstr ""
 msgid "This type only : <b>%s %s</b>"
 msgstr "只此類別 : <b>%s %s</b>"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:18
+msgid ""
+"This will change the subject headings on all the biblios this subject is "
+"applied to."
+msgstr ""
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:71
 msgid ""
 "Tick ALL barcodes that changes are to apply too. Those left un-ticked will "
 "keep the original group record."
-msgstr ""
-"請點選需要修改的圖書資料的條碼。不被點選者將維持原有的群組記錄。"
+msgstr "請點選需要修改的圖書資料的條碼。不被點選者將維持原有的群組記錄。"
 
 # NOTE Please make sure "Title" only means book title; use "Salutation" for personal titles
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:20
@@ -6581,6 +6646,7 @@ msgstr ""
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:304
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:51
 #: ../../koha-tmpl/intranet-tmpl/default/en/z3950/searchresult.tmpl:15
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:35
 msgid "Title"
 msgstr "題名"
 
@@ -6619,8 +6685,7 @@ msgstr "新增書目或圖書資料，掃描或輸入ISBN/ISSN即可："
 msgid ""
 "To change any of the catalogue or accounting information attached to an "
 "order, click on the title."
-msgstr ""
-"修改任何書目或會計方面的訂單資料，按一按圖書資料的題名即可。"
+msgstr "修改任何書目或會計方面的訂單資料，按一按圖書資料的題名即可。"
 
 #  XXX 根本沒有「confirm basket」按鈕，暫時不要理會這個字串
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:110
@@ -6737,6 +6802,15 @@ msgstr "UNIMARC 欄 700-4 建立程序"
 msgid "URL"
 msgstr "網址"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:35
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:41
+msgid "Undelete"
+msgstr "反移除"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:86
+msgid "Undelete Biblio"
+msgstr "反移除書目"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbib.tmpl:42
 msgid "Unititle"
 msgstr "劃一題名"
@@ -6749,6 +6823,10 @@ msgstr "更新讀者的個人資料"
 #: ../../koha-tmpl/intranet-tmpl/default/en/modwebsites.tmpl:25
 msgid "Update this Website Link"
 msgstr "更新這個網站的連結"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:65
+msgid "Updated successfully"
+msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptItemCopy.tmpl:25
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptMarcUpload.tmpl:8
@@ -6931,9 +7009,8 @@ msgid ""
 "subfield is not entered through a free field, but though a list of "
 "authorised values."
 msgstr ""
-"當您定義機讀格式的分欄結構時，您可以把分欄連結至一個容許值類別；"
-"當有使用者新增或修改書目時，這個分欄就不以自由形態輸入，"
-"而是由容許值的列表選取。"
+"當您定義機讀格式的分欄結構時，您可以把分欄連結至一個容許值類別；當有使用者新"
+"增或修改書目時，這個分欄就不以自由形態輸入，而是由容許值的列表選取。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:65
 msgid "When you have finished this invoice save the changes."
@@ -7377,6 +7454,7 @@ msgstr "登入"
 #. INPUT type=image name=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:28
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:67
+#: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:16
 msgid "modify"
 msgstr "修改"
 
