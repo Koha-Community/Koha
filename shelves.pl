@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 #script to provide bookshelf management
+# WARNING: This file uses 4-character tabs!
 #
 # $Header$
 #
@@ -29,18 +30,24 @@ use C4::Output;
 use C4::BookShelves;
 use C4::Circulation::Circ2;
 use C4::Auth;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 my $env;
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 #print $query->header(-cookie => $cookie);
 my $headerbackgroundcolor='#663266';
 my $circbackgroundcolor='#555555';
 my $circbackgroundcolor='#550000';
 my $linecolor1='#bbbbbb';
 my $linecolor2='#dddddd';
-my $template=gettemplate("shelves.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "shelves.tmpl",
+							query => $query,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {parameters => 1},
+                         });
 #print startpage();
 #print startmenu('catalogue');
 #print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
@@ -65,13 +72,13 @@ SWITCH: {
 	$template->param(	loggedinuser => $loggedinuser,
 									viewshelf => $query->param('viewshelf'),
 									shelves => $query->param('shelves'),
-									headerbackground => $headerbackground,
+									headerbackgroundcolor => $headerbackgroundcolor,
 									circbackgroundcolor => $circbackgroundcolor);
     if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
     if ($query->param('shelves')) {  shelves(); last SWITCH;}
 	my $color='';
 	my @shelvesloop;
-    foreach $element (sort keys %$shelflist) {
+    foreach my $element (sort keys %$shelflist) {
 		my %line;
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}= $color;
@@ -111,7 +118,7 @@ sub shelves {
     my ($shelflist) = GetShelfList();
     my $color='';
 	my @shelvesloop;
-    foreach $element (sort keys %$shelflist) {
+    foreach my $element (sort keys %$shelflist) {
 		my %line;
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}=$color;
@@ -151,6 +158,10 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.11  2003/02/05 09:23:03  acli
+# Fixed a few minor errors to make it run
+# Noted correct tab size
+#
 # Revision 1.10  2003/02/02 07:18:37  acli
 # Moved C4/Charset.pm to C4/Interface/CGI/Output.pm
 #
@@ -192,3 +203,7 @@ sub viewshelf {
 
 
 
+
+# Local Variables:
+# tab-width: 4
+# End:
