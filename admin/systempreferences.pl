@@ -219,9 +219,7 @@ printend
 		["reset","reset","clr"]);
 	print mkheadr(2,'System preferences admin');
 	print mkformnotable("$script_name",@inputs);
-	print <<printend
-printend
-	;
+
 	if  ($searchfield ne '') {
 		print "You Searched for <b>$searchfield<b><p>";
 	}
