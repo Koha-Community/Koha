@@ -87,10 +87,11 @@ if ($input->param('insertnewrecord')) {
     my $q_origisbn=$dbh->quote($input->param('origisbn'));
     my $q_origissn=$dbh->quote($input->param('origissn'));
     my $q_origlccn=$dbh->quote($input->param('origlccn'));
+    my $q_origcontrolnumber=$dbh->quote($input->param('origcontrolnumber'));
     my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
     my $q_issn=$dbh->quote((($issn) || ('NIL')));
     my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
-    $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn)");
+    $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
     $sth->execute;
     my $sth=$dbh->prepare("select biblionumber,biblioitemnumber from biblioitems where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
     $sth->execute;
