@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<form method="post" action="<!-- TMPL_VAR NAME="script_name" -->">
+	<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="member" -->" />
+	<input type="hidden" name="newflags" value="1" />
+<div class="table">	<table>
+	<caption>Set Privileges for <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></caption>
+	<tr><th>Flag</th><th>Name</th><th>Description</th></tr>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr>
+			<td>
+				<input type="checkbox" name="flag-<!-- TMPL_VAR NAME="bit" -->" <!-- TMPL_VAR NAME="checked" --> />
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="flag" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="flagdesc" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table></div>
+<p><input type="submit" value="Set Flags" class="submit" /> <input class="cancel" type="button" value="Cancel" onclick="location.href='/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="member" -->'; return false;" /></p>
+
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
