@@ -1,0 +1,162 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+
+<div align=right>
+Rachunek: <TMPL_VAR name="invoice"><br>
+Otrzymany przez: <TMPL_VAR name="user"><br>
+<TMPL_VAR name="date">
+</div>
+<h1>Receipt Summary for: <TMPL_VAR name="name"> Invoice, <TMPL_VAR name="invoice"></h1>
+<CENTER>
+
+
+<TMPL_IF name="count">
+	<script language="javascript" type="text/javascript">
+	<!--
+	function messenger(X,Y,etc){
+	win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+	win.focus();
+	win.document.close();
+	win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size=2><p><br>");
+	win.document.write(etc);
+	win.document.write("<center><form><input type=button onclick='self.close()' value=Close></form></center>");
+	win.document.write("</font></body></html>");
+	}
+	//-->
+	</script>
+	<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
+	<h1><TMPL_VAR name="ordernumber"> - Odbiór zamówienia</h1><br>
+	Koszyk dla: <TMPL_VAR name="name">
+	<br> Zamówienie z³o¿one: <TMPL_VAR name="date">
+	<P>
+	<CENTER>
+	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
+		<tr valign=top bgcolor=#99cc33>
+			<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2>
+				<B>SZCZEGÓ£Y KATALOGU</B>
+			</td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD><b>Tytu³ *</b></td>
+			<td><input type=text size=20 name=title value="<TMPL_VAR name="title">" >
+			</td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Autor</td>
+			<td><input type=text size=20 name=author value="<TMPL_VAR name="author">" >
+			</td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Data Copyright</td>
+			<td><input type=text size=20 name=copyright value="<TMPL_VAR name="copyrightdate">" >
+			</td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Format</td>
+			<td><TMPL_VAR name="CGIitemtype"></td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>ISBN</td>
+			<td><input type=text size=20 name=ISBN value="<TMPL_VAR name="isbn">"></td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Series</td>
+			<td><input type=text size=20 name=Series value="<TMPL_VAR name="seriestitle">"></td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Oddzia³</td>
+			<td><TMPL_VAR name="CGIbranch"></td>
+		</tr>
+		<TR VALIGN=TOP bgcolor=#ffffcc >
+			<TD><B>Kod kreskowy pozycji *</B></td>
+			<td><input type=text size=20 name=barcode value="<TMPL_VAR name="barcode">"></td>
+		</tr>
+		<TR VALIGN=TOP bgcolor=#ffffcc >
+			<TD><B>Informacje tomowe (for serials) *</B></td>
+			<td><input type=text size=20 name=volinf></td>
+		</tr>
+		<TR VALIGN=TOP>
+			<td colspan=2 align="center">
+				<input type=hidden name=biblio value=<TMPL_VAR name="biblionumber">>
+				<input type=hidden name=ordnum value=<TMPL_VAR name="ordernumber">>
+				<input type=hidden name=biblioitemnum value=<TMPL_VAR name="biblioitemnumber">>
+				<input type=hidden name=id value="<TMPL_VAR name="booksellerid">">
+				<input type=hidden name=freight value="<TMPL_VAR name="freight">">
+				<input type=hidden name=gst value="<TMPL_VAR name="gst">">
+				<TMPL_IF name="catview">
+					<input type=image  name=submit src="/<TMPL_VAR name="theme">/images/filesave.png" border=0 title="continue" alt="save" border=0 border=0>
+				<TMPL_ELSE>
+					<a href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<TMPL_VAR name="ordernumber">&id=<TMPL_VAR name="booksellerid">><img src="/<TMPL_VAR name="theme">/images/fileopen.png" border=0 title="edit" alt="edit" border=0 border=0></a>
+				</TMPL_IF>
+			</td>
+		</tr>
+	</table>
+	<table border=1 cellspacing=0 cellpadding=5 width="40%">
+		<tr valign=top bgcolor=#99cc33>
+			<td background="/images/background-mem.gif" colspan=2><B>DETALE KSIÊGOWO-FINANSOWE</B></td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD><B>Bookfund *</B></td>
+			<td><TMPL_VAR name="CGIbookfund">
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Ilo¶æ zamówiona</td>
+			<td><input type=text size=20 name=quantity value="<TMPL_VAR name="quantity">">
+			</td>
+		</tr>
+		<TR VALIGN=TOP bgcolor=#ffffcc>
+			<TD><B>Ilo¶æ odebrana *</B></td>
+			<td><input type=text size=20 name=quantityrec value="<TMPL_VAR name="quantityreceived">">
+			</td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Koszt wymiany</td>
+			<td><input type=text size=20 name=rrp value="<TMPL_VAR name="rrp">">
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Budgeted Cost </td>
+			<td><input type=text size=20 name=ecost value="<TMPL_VAR name="ecost">"></td>
+		</tr>
+		<TR VALIGN=TOP bgcolor=#ffffcc>
+			<TD><B>Faktyczny koszt *</B></td>
+			<td><input type=text size=20 name=cost value="<TMPL_VAR name="unitprice">"></td>
+		</tr>
+		<TR VALIGN=TOP bgcolor=#ffffcc>
+			<TD>Numer rachunku</td>
+			<td>
+				<TMPL_VAR name="invoice">
+				<input type=hidden name=invoice value="<TMPL_VAR name="invoice">">
+			</td>
+		</tr>
+		<TR VALIGN=TOP>
+			<TD>Uwagi</td>
+			<td><input type=text size=20 name=notes value="<TMPL_VAR name="notes">"></td>
+		</tr>
+	</table>
+	</form>
+	</center>
+	<br clear=all>
+	<p> &nbsp; </p>
+<TMPL_ELSE>
+	<br />
+	<center>
+	<table width=80%>
+	<tr valign=top bgcolor="#ffdf61">
+		<td><b>Koszyk</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>TYTU£</b></td>
+		<td><b>AUTOR</b></td>
+		<td><b>Ilo¶æ</b></td>
+		<td><b>Otrzymano</b></td>
+	</tr>
+	<TMPL_LOOP name="loop">
+		<tr>
+			<TD><TMPL_VAR name="basketno"></td>
+			<TD><TMPL_VAR name="isbn"></td>
+			<td><a href=acquire.pl?recieve=<TMPL_VAR name="ordernumber">&biblio=<TMPL_VAR name="biblionumber">&invoice=<TMPL_VAR name="invoice">&freight=<TMPL_VAR name="freight">&gst=<TMPL_VAR name="gst">&id=<TMPL_VAR name="id">><TMPL_VAR name="title"></a></td>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="quantity"></td>
+			<td><TMPL_VAR name="quantityrecieved"></td>
+		</tr>
+	</TMPL_LOOP>
+	</table>
+</TMPL_IF>
