@@ -716,10 +716,11 @@ foreach $table ( keys %fielddefinitions ) {
 				$extra = '';
 			}
 # if it's a primary key, drop the previous pk, before altering the table
+			my $sth;
 			if ($key eq 'PRI') {
-				my $sth =$dbh->prepare("alter table $table change $field $field $type $null $key $extra default ?");
+				$sth =$dbh->prepare("alter table $table change $field $field $type $null $key $extra default ?");
 			} else {
-				my $sth =$dbh->prepare("alter table $table drop primary key, change $field $field $type $null $key $extra default ?");
+				$sth =$dbh->prepare("alter table $table drop primary key, change $field $field $type $null $key $extra default ?");
 			}
 			$sth->execute($default);
 			print "  Alter $field in $table\n";
@@ -868,8 +869,8 @@ $sth->finish;
 exit;
 
 # $Log$
-# Revision 1.55  2003/07/07 15:36:13  tipaul
-# (again) fix to avoid errors when creating fields that are primary keys and a previous primary key exist.
+# Revision 1.56  2003/07/07 15:37:20  tipaul
+# *** empty log message ***
 #
 # Revision 1.53  2003/07/07 14:11:16  tipaul
 # fixing bug #526 : gst rate is now calculated through systempref gist entry.
