@@ -1437,49 +1437,43 @@ sub ItemType {
 sub bibitems {
     my ($bibnum) = @_;
     my $dbh   = C4Connect;
-    my $query = "Select * from biblioitems, itemtypes, items
-where biblioitems.biblionumber = '$bibnum'
-and biblioitems.itemtype = itemtypes.itemtype
-and biblioitems.biblioitemnumber = items.biblioitemnumber
-group by items.biblioitemnumber";
+    my $query = "SELECT biblioitems.*, itemtypes.*, MIN(items.itemlost) as itemlost
+                          FROM biblioitems, itemtypes, items
+                         WHERE biblioitems.biblionumber     = ?
+                           AND biblioitems.itemtype         = itemtypes.itemtype
+                           AND biblioitems.biblioitemnumber = items.biblioitemnumber
+                      GROUP BY items.biblioitemnumber";
     my $sth   = $dbh->prepare($query);
     my $count = 0;
     my @results;
-
-    $sth->execute;
-
+    $sth->execute($bibnum);
     while (my $data = $sth->fetchrow_hashref) {
         $results[$count] = $data;
         $count++;
-    } # while
-    
+    } # while    
     $sth->finish;
     $dbh->disconnect;
     return($count, @results);
 } # sub bibitems
 
-
 sub barcodes{
-  #called from request.pl
-  my ($biblioitemnumber)=@_;
-  my $dbh=C4Connect;
-  my $query="Select barcode from items where
-   biblioitemnumber='$biblioitemnumber'
-   and ((itemlost <> 1 and itemlost <> 2) or itemlost is NULL) and
-   (wthdrawn <> 1 or wthdrawn is NULL)";
-
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @barcodes;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $barcodes[$i]=$data->{'barcode'};
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return(@barcodes);
-  
+    #called from request.pl
+    my ($biblioitemnumber)=@_;
+    my $dbh=C4Connect;
+    my $query="SELECT barcode, itemlost FROM items
+                           WHERE biblioitemnumber = ?
+                             AND (wthdrawn <> 1 OR wthdrawn IS NULL)";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($biblioitemnumber);
+    my @barcodes;
+    my $i=0;
+    while (my $data=$sth->fetchrow_hashref){
+	$barcodes[$i]=$data;
+	$i++;
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return(@barcodes);
 }
 
 

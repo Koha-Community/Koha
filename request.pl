@@ -69,24 +69,30 @@ my $date="$mday/$mon/$year";
 # get biblioitem information and build rows for form
 my ($count2,@data) = bibitems($bib);
 my $bibitemrows = "";
+
+
 for (my $i=0; $i<$count2; $i++) {
     my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
-    if ($data[$i]->{'dewey'} == 0){
-	$data[$i]->{'dewey'}="";
+    my $barcodestext = "";
+    foreach my $num (@barcodes) {
+	my $message = $num->{'itemlost'} == 1 ? "(lost)" :
+	    $num->{'itemlost'} == 2 ? "(long overdue)" : "";
+	$barcodestext .= "$num->{'barcode'} $message <br>";
     }
+    $barcodestext = substr($barcodestext, 0, -4);
+
+    $data[$i]->{'dewey'}="" if ($data[$i]->{'dewey'} == 0);
+
+    warn "Itemlost: $data[$i]->{itemlost} \n";
     $data[$i]->{'volumeddesc'} = "&nbsp;" unless $data[$i]->{'volumeddesc'};
     $data[$i]->{'dewey'}=~ s/\.0000$//;
     $data[$i]->{'dewey'}=~ s/00$//;
     my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
     my $select;
-    if ($data[$i]->{'notforloan'}) {
-	$select = "Reference Item.";
-    } elsif ($data[$i]->{'itemlost'} == 1) {
-	$select = "Item Lost";
-    } elsif ($data[$i]->{'itemlost'} == 2) {
-	$select = "Long Overdue";
-    } elsif ($data[$i]->{'wthdrawn'}) {
-	$select = "Item Cancelled";
+    if (($data[$i]->{'notforloan'}) 
+	|| ($data[$i]->{'itemlost'} == 1)
+	|| ($data[$i]->{'itemlost'} == 2))  {
+	$select = "Cannot be reserved.";
     } else {
 	$select = " <input type=checkbox name=reqbib value=$data[$i]->{'biblioitemnumber'}><input type=hidden name=biblioitem value=$data[$i]->{'biblioitemnumber'}>";
     }
@@ -96,10 +102,8 @@ for (my $i=0; $i<$count2; $i++) {
 <TD>$data[$i]->{'description'}</td>
 <TD>$class</td>
 <td>$data[$i]->{'volumeddesc'}</td>
-<td>$data[$i]->{'isbn'}</td>
-<td>$dat->{'copyrightdate'}</td>
 <td>$data[$i]->{'publicationyear'}</td>
-<td>@barcodes</td>
+<td>$barcodestext</td>
 </tr>
 EOF
 }
@@ -138,10 +142,6 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
     } else {
 	$rank = "<select name=rank-request>$prioropt<option value=del>Del</select>";
 	$pickup = "<select name=pickup>$bropt</select>";
-        $change = "<select name=itemtype>
-                   <option value=next>Next Available
-                   <option value=change>Change Selection
-                   <option value=nc >No Change</select>";
     }
     $existingreserves .= <<"EOF";
 <input type=hidden name=borrower value=$res->{'borrowernumber'}>
@@ -155,7 +155,6 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 <TD>$date</td>
 <TD>$pickup</td>
 <TD>$type</td>
-<TD>$change</td>
 </tr>
 EOF
 }
@@ -253,8 +252,6 @@ $branchoptions
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Item Type</b></TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Classification</b></TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Volume</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>ISBN</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Copyright</b></TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Pubdate</b></TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Copies</b></TD>
 </TR>
@@ -283,7 +280,6 @@ $bibitemrows
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Date</b></TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Pickup</b></TD>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Request</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Change To</b></TD>
 </TR>
 $existingreserves
 <tr VALIGN=TOP>
