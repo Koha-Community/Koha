@@ -422,6 +422,10 @@ if ($borrower) {
 <td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
     } 
+    # FIXME - For small and private libraries, it'd be nice if this
+    # table included a "Return" link next to each book, so that you
+    # don't have to remember the book's bar code and type it in on the
+    # "Returns" page.
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
