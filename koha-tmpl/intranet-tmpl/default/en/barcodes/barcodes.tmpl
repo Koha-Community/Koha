@@ -15,11 +15,11 @@
 			</tr>
 			<tr>
 				<td>
-					Country Name&nbsp<input type="text" size="10" id="countryName" name="countryName"  
+					Country Name &nbsp;<input type="text" size="10" id="countryName" name="countryName"  
 					                        style="background-color:#FFFFFF;color:Black"/>
 				</td>
 				<td>
-					Country Code&nbsp<input type="text" size="3" id="countryCode" name="countryCode"  
+					Country Code &nbsp;<input type="text" size="3" id="countryCode" name="countryCode"  
 					                        style="background-color:#FFFFFF;color:Black"/>
 				</td>
 			</tr>
@@ -29,7 +29,7 @@
 				</td>
 				<td align="left">
 					<input type="button" name="cancel" id="cancel" value="Cancel"
-					       onclick="javascript: document.getElementById('addCountryCode').style.display = 'none'"/>
+					       onclick="document.getElementById('addCountryCode').style.display = 'none'"/>
 				</td>
 			</tr>
 		</table>
@@ -44,11 +44,11 @@
 	<h1>Barcodes Generator</h1>
 	<table bgcolor="#ffcc00" width="80%" cellpadding="3">
 		<tr valign="center">
-			<td><font size="4">Generate barcodes from inventary codes</font></td>
+			<td><font size="4">Generate barcodes from inventory codes</font></td>
 		</tr>
 	</table>
 	<ul>
-		<li>Select a range of inventary codes. You can select wether a continuous range or individual inventary codes</li>
+		<li>Select a range of inventary codes. You can choose a continuous range or individual inventory codes</li>
 		<li>Select the standard type to generate barcodes.</li>
 		<li>Define the page size for output the PDF.</li>
 		<li>Depending on page size, Koha will show you how the page is arranged
@@ -56,14 +56,13 @@
 		</li>
 	</ul>
 	<br>
-	<form id="formulario" method="POST" action='<!-- TMPL_VAR NAME="SCRIPT_NAME" -->' name="form1"
-	      onsubmit="return checkFields(this);" target="_blank">
+	<form id="formulario" method="POST" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1" onsubmit="return checkFields(this);" target="_blank">
 		
 		<table cellpadding="3" border=0 class="myTable">
 			<!-- TMPL_IF NAME="ERROR" -->
 			<tr align="center">
 				<td colspan="2" >
-					<p style="font-size:13pt;color:red">Can't find inventary codes on that range. Please try again.</p>
+					<p style="font-size:13pt;color:red">Can't find inventory codes in that range. Please try again.</p>
 				</td>
 			</tr>
 			<!-- /TMPL_IF -->
@@ -95,7 +94,7 @@
 						<table class="ranges">
 							<tr valign="top">
 								<td width="5%">
-									Inventary Code <BR>
+									Inventory Code <BR>
 									<input id="inventaryCode" type="text" name="inventaryCode" size="20">
 								<td>
 								<td align="center">	
@@ -104,9 +103,9 @@
 									<img src="<!-- TMPL_VAR NAME="themelang" -->/images/leftarrow.png" onclick="javascript: removeItem();" border="0" style="cursor:pointer" style="display:table-cell">
 								</td>
 								<td width="95%">		   
-									<select id='inventaryList' size='5' style="width:150px">
+									<select id="inventaryList" size="5" style="width:150px">
 									</select>
-									<input type="hidden" id='individualCodes' name="individualCodes">																						
+									<input type="hidden" id="individualCodes" name="individualCodes">																						
 								</td>
 							</tr>
 						</table>	
@@ -122,9 +121,7 @@
 						<tr align="right">
 							<td>
 								<div style="display:inline">
-									<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" 
-									     style="vertical-align:bottom;cursor:pointer"
-									     onclick="javascript: addCountryCode()">
+									<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:bottom;cursor:pointer" onclick="addCountryCode();">
 									<!-- TMPL_VAR NAME="NUMBER_SYSTEM" -->
 								</div>
 							</td>
@@ -149,12 +146,12 @@
 			<tr> 
 				<td align="right" style="padding-left:20px">Text under label</td>
 				<td>
-					<input type="text" name="text_under_label" size="40" value="<!-- TMPL_VAR name="text_under_label -->"> If this field is empty, author and title will be put instead
+					<input type="text" name="text_under_label" size="40" value="<!-- TMPL_VAR name="text_under_label -->"> If this field is empty, author and title will be used instead
 				</td>
 			</tr>
   			<tr valign="top">
   			    <td colspan="2" align="center">
-			    	<table style='width:50%'>
+			    	<table style="width:50%">
 						<tr style="border-color:#000FCD">
 							<th colspan="<!-- TMPL_VAR NAME="COL_SPAN" -->">Label number to start printing</th>
 						</tr>
@@ -162,10 +159,7 @@
 							<tr style="align:left">
 								<!-- TMPL_LOOP NAME="columns" -->
 									<td style="border:1px solid #000000">
-										<input type="radio" id="label" value="<!-- TMPL_VAR NAME="tagname" -->"      
-										       name="label" <!-- TMPL_VAR NAME="check" -->>
-										       Label  <!-- TMPL_VAR NAME="labelname" -->
-									</td>
+										<input type="radio" id="label" value="<!-- TMPL_VAR NAME="tagname" -->" name="label" <!-- TMPL_VAR NAME="check" -->>  Label  <!-- TMPL_VAR NAME="labelname" --></td>
 								<!-- /TMPL_LOOP -->
 							</tr>
 						<!-- /TMPL_LOOP -->  			    
