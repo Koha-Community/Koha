@@ -1,52 +1,52 @@
 <HTML>
 <TMPL_INCLUDE NAME="parameters-top.inc">
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log out</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
+    <p align=left><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to Koha</p>
 </TMPL_IF>
 
 <TMPL_IF name="add">
 <form action='<TMPL_VAR name=action>' name=Aform method=post>
 <input type=hidden name=op value='add_validate'>
 <table>
-<tr><td>Kod odzia³u</td><td><input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'</td></tr>
-<tr><td>Nazwa</td><td><input type=text name=branchname size=40 maxlength=80 value="<TMPL_VAR name=branchname escape="HTML">">&nbsp;</td></tr>
+<tr><td>Branch code</td><td><input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'</td></tr>
+<tr><td>Name</td><td><input type=text name=branchname size=40 maxlength=80 value="<TMPL_VAR name=branchname escape="HTML">">&nbsp;</td></tr>
 <FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
 <tr><td><TMPL_VAR name=categoryname></td>
 <td><INPUT TYPE="checkbox" NAME="<TMPL_VAR name=categorycode>" VALUE="1" ><TMPL_VAR name=codedescription></td></tr>
-<tr><td>Adres</td><td><input type=text name=branchaddress1 value='<TMPL_VAR name=branchaddress1 escape="HTML">'></td></tr>
+<tr><td>Address</td><td><input type=text name=branchaddress1 value='<TMPL_VAR name=branchaddress1 escape="HTML">'></td></tr>
 <tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='<TMPL_VAR name=branchaddress2 escape="HTML">'></td></tr>
 <tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='<TMPL_VAR name=branchaddress3 escape="HTML">'></td></tr>
 <tr><td>Phone</td><td><input type=text name=branchphone value='<TMPL_VAR name=branchphone escape="HTML">'></td></tr>
 <tr><td>Fax</td><td><input type=text name=branchfax value='<TMPL_VAR name=branchfax escape="HTML">'></td></tr>
 <tr><td>E-mail</td><td><input type=text name=branchemail value='<TMPL_VAR name=branchemail escape="HTML">'></td></tr>
-<tr><td>&nbsp;</td><td><input type=submit value='Prze¶lij'></td></tr>
+<tr><td>&nbsp;</td><td><input type=submit value='Submit'></td></tr>
 </table>
 </form>
 </TMPL_IF>
 
 <TMPL_IF name="delete_confirm">
-Potwierd¼ usuniêcie:
+Confirm delete:
 <form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value='delete_confirmed'>
 <input type='hidden' name='branchcode' value=<TMPL_VAR name=branchcode escape="HTML">>
-<input type=submit value=Tak></form>
+<input type=submit value=YES></form>
 <form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value=''>
-<input type=submit value=Nie></form>
+<input type=submit value=NO></form>
 </TMPL_IF>
 
 <TMPL_IF name="else">
 <FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
 <font color='red'><TMPL_VAR name="message"></font>
-<form action=<TMPL_VAR name=action> method=post><input type='hidden' name='op' value='add'><input type=submit value='Dodaj nowy oddzia³'></form>
+<form action=<TMPL_VAR name=action> method=post><input type='hidden' name='op' value='add'><input type=submit value='Add New Branch'></form>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Oddzia³y</b></font></th> </tr>
+<font size='5'><b>Branches</b></font></th> </tr>
 <tr bgcolor='#889999'>
-<td width='175'><b>Nazwa</b></td>
-<td width='25'><b>Kod</b></td>
-<td width='175'><b>Adres</b></td>
-<td width='175'><b>Kategorie</b></td>
+<td width='175'><b>Name</b></td>
+<td width='25'><b>Code</b></td>
+<td width='175'><b>Address</b></td>
+<td width='175'><b>Categories</b></td>
 <td width='50'><b>&nbsp;</b></td>
 </tr>
 <TMPL_LOOP name="branches">
@@ -59,11 +59,11 @@ Potwierd¼ usuniêcie:
 <form action='<TMPL_VAR name=action>' method=post>
 <input type='hidden' name='op' value='edit'>
 <input type='hidden' name='branchcode' value='<TMPL_VAR name=value escape="HTML">'>
-<input type=submit value=Edytuj>
+<input type=submit value=Edit>
 </form>
 <form action='<TMPL_VAR name=action>' method=post>
 <input type='hidden' name='branchcode' value='<TMPL_VAR name=value escape="HTML">'>
-<input type='hidden' name='op' value='delete'><input type=submit value=Usuñ>
+<input type='hidden' name='op' value='delete'><input type=submit value=Delete>
 </form></td>
 </tr>
 </TMPL_LOOP>
@@ -71,11 +71,11 @@ Potwierd¼ usuniêcie:
 <br>
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Kategorie oddzia³ow</b></font></th> </tr>
+<font size='5'><b>Branches Categories</b></font></th> </tr> 
 <tr bgcolor='#889999'> 
-<td width='175'><b>Nazwa</b></td>
-<td width='25'><b>Kod</b></td>
-<td width='200'><b>Opis</b></td>
+<td width='175'><b>Name</b></td> 
+<td width='25'><b>Code</b></td> 
+<td width='200'><b>Description</b></td>
 </tr>
 <tr bgcolor='$color'>
     <td align='left' valign='top'><TMPL_VAR name=categoryname></td>
