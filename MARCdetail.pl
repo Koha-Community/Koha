@@ -114,7 +114,6 @@ foreach my $field (@fields) {
 	}
 }
 #fill big_row with missing datas
-#warn "loop 2";
 foreach my $subfield_code  (keys(%witness)) {
 	for (my $i=0;$i<=$#big_array;$i++) {
 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
@@ -122,7 +121,6 @@ foreach my $subfield_code  (keys(%witness)) {
 	}
 }
 # now, construct template !
-#warn "loop 3";
 my @item_value_loop;
 my @header_value_loop;
 for (my $i=0;$i<=$#big_array; $i++) {

@@ -29,25 +29,25 @@ my $input=new CGI;
 my $module=$input->param('module');
 
 SWITCH: {
-    if ($module eq 'acquisitions') { acquisitions(); last SWITCH; }
-    if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
+	if ($module eq 'acquisitions') { acquisitions(); last SWITCH; }
+	if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
 }
 
 
 sub acquisitions {
-    my $aq_type = C4::Context->preference("acquisitions") || "normal";
+	my $aq_type = C4::Context->preference("acquisitions") || "normal";
 		# Get the acquisition preference. This should be:
 		#	"simple" - minimal information required
 		#	"normal" - full information required
 		#	other - Same as "normal"
 
-    if ($aq_type eq 'simple') {
-	print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
-    } elsif ($aq_type eq 'normal') {
-	print $input ->redirect("/acquisitions");
-    } else {
-	print $input ->redirect("/acquisitions");
-    }
+	if ($aq_type eq 'simple') {
+		print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
+	} elsif ($aq_type eq 'normal') {
+		print $input ->redirect("/acquisitions");
+	} else {
+		print $input ->redirect("/acquisitions");
+	}
 }
 
 
