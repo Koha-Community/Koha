@@ -3,7 +3,8 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Acquisitions</title>
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<link rel="stylesheet" type="text/css" media="print" href="<!-- TMPL_VAR name="themelang" -->/includes/common-print.css">
+<link rel="stylesheet" type="text/css" media="screen" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script language="JavaScript" type="text/javascript">
 function Help() {
@@ -12,6 +13,7 @@ function Help() {
 </script>
 
 <style type="text/css">
+th.doNotPrint,
 .acquisition {
 	background-color: #ffdf61;
 	color:#000000;
