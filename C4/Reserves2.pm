@@ -65,7 +65,6 @@ sub FindReserves {
                     (found <> 'F' or found is NULL)";
   }
   $query.=" order by priority";
-  warn $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
@@ -123,12 +122,7 @@ sub CheckReserves {
 		}
 	    }
 	}
-	warn "highest = $highest";
 	$highest->{'itemnumber'} = $item;
-	foreach my $key (keys %$highest) {
-	    warn "$key : $highest->{$key}\n";
-	}
-
 	return ("Reserved", $highest);
     } else {
 	return (0, 0);
@@ -202,8 +196,6 @@ sub FillReserve {
     $sth->execute;
     $sth->finish;
     $dbh->disconnect;
-# now fix the priority on the others....
-    fixpriority($res->{'priority'}, $biblio);
 }
 
 sub fixpriority {
@@ -336,7 +328,7 @@ sub CreateReserve {
 #    print $fee;
     my $nextacctno = &getnextacctno($env,$borrnum,$dbh);   
     my $updquery = "insert into accountlines       
-    (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)                                              
+    (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
 						          values
     ($borrnum,$nextacctno,now(),$fee,'Reserve Charge - $title','Res',$fee)";          
     my $usth = $dbh->prepare($updquery);                      
