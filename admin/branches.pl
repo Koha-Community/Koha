@@ -59,6 +59,7 @@ my $pagesize=20;
 # Main loop....
 my $input = new CGI;
 my $branchcode=$input->param('branchcode');
+my $categorycode = $input->param('categorycode');
 my $op = $input->param('op');
 
 my ($template, $borrowernumber, $cookie)
@@ -70,62 +71,82 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 if ($op) {
-    $template->param(script_name => $script_name,
-		     $op         => 1); # we show only the TMPL_VAR names $op
+	$template->param(script_name => $script_name,
+				$op         => 1); # we show only the TMPL_VAR names $op
 } else {
-    $template->param(script_name => $script_name,
-		     else        => 1); # we show only the TMPL_VAR names $op
+	$template->param(script_name => $script_name,
+				else        => 1); # we show only the TMPL_VAR names $op
 }
 $template->param(action => $script_name);
 
 if ($op eq 'add') {
-# If the user has pressed the "add new branch" button.
-    heading("Branches: Add Branch");
-    editbranchform();
+	# If the user has pressed the "add new branch" button.
+	heading("Branches: Add Branch");
+	editbranchform();
 
 } elsif ($op eq 'edit') {
-# if the user has pressed the "edit branch settings" button.
-    heading("Branches: Edit Branch");
-    $template->param(add => 1);
-    editbranchform($branchcode);
-
+	# if the user has pressed the "edit branch settings" button.
+	heading("Branches: Edit Branch");
+	$template->param(add => 1);
+	editbranchform($branchcode);
 } elsif ($op eq 'add_validate') {
-# confirm settings change...
-    my $params = $input->Vars;
-    unless ($params->{'branchcode'} && $params->{'branchname'}) {
-	default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
-    } else {
-	setbranchinfo($params);
-	$template->param(else => 1);
-	default ("Branch record changed for branch: $params->{'branchname'}");
-    }
-
+	# confirm settings change...
+	my $params = $input->Vars;
+	unless ($params->{'branchcode'} && $params->{'branchname'}) {
+		default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
+	} else {
+		setbranchinfo($params);
+		$template->param(else => 1);
+		default ("Branch record changed for branch: $params->{'branchname'}");
+	}
 } elsif ($op eq 'delete') {
-# if the user has pressed the "delete branch" button.
-    my $message = checkdatabasefor($branchcode);
-    if ($message) {
-	$template->param(else => 1);
-	default($message);
-    } else {
-	deleteconfirm($branchcode);
-        $template->param(delete_confirm => 1);
-	$template->param(branchcode => $branchcode);
-    }
-
+	# if the user has pressed the "delete branch" button.
+	my $message = checkdatabasefor($branchcode);
+	if ($message) {
+		$template->param(else => 1);
+		default($message);
+	} else {
+		$template->param(delete_confirm => 1);
+		$template->param(branchcode => $branchcode);
+	}
 } elsif ($op eq 'delete_confirmed') {
-# actually delete branch and return to the main screen....
-    deletebranch($branchcode);
-    $template->param(else => 1);
-    default("The branch with code $branchcode has been deleted.");
-
-} elsif ($op eq 'add_cat') {
-# If the user has pressed the "add new category" button.
-    heading("Branches: Add Branch");
-    editcatform();
+	# actually delete branch and return to the main screen....
+	deletebranch($branchcode);
+	$template->param(else => 1);
+	default("The branch with code $branchcode has been deleted.");
+} elsif ($op eq 'editcategory') {
+	# If the user has pressed the "add new category" button.
+	heading("Branches: Edit Category");
+	editcatform($categorycode);
+} elsif ($op eq 'addcategory_validate') {
+	# confirm settings change...
+	my $params = $input->Vars;
+	unless ($params->{'categorycode'} && $params->{'categoryname'}) {
+		default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
+	} else {
+		setcategoryinfo($params);
+		$template->param(else => 1);
+		default ("Category record changed for category $params->{'categoryname'}");
+	}
+} elsif ($op eq 'delete_category') {
+	# if the user has pressed the "delete branch" button.
+	my $message = checkcategorycode($categorycode);
+	if ($message) {
+		$template->param(else => 1);
+		default($message);
+	} else {
+		$template->param(delete_category => 1);
+		$template->param(categorycode => $categorycode);
+	}
+} elsif ($op eq 'categorydelete_confirmed') {
+	# actually delete branch and return to the main screen....
+	deletecategory($categorycode);
+	$template->param(else => 1);
+	default("The category with code $categorycode has been deleted.");
 
 } else {
-# if no operation has been set...
-    default();
+	# if no operation has been set...
+	default();
 }
 
 
@@ -135,36 +156,34 @@ if ($op eq 'add') {
 # html output functions....
 
 sub default {
-    my ($message) = @_;
-    heading("Branches");
-    $template->param(message => $message);
-    $template->param(action => $script_name);
-    branchinfotable();
-    
-    
+	my ($message) = @_;
+	heading("Branches");
+	$template->param(message => $message);
+	$template->param(action => $script_name);
+	branchinfotable();
 }
 
 # FIXME: this function should not exist; otherwise headings are untranslatable
 sub heading {
-    my ($head) = @_;
-    $template->param(head => $head);
+	my ($head) = @_;
+	$template->param(head => $head);
 }
 
 sub editbranchform {
-# prepares the edit form...
-    my ($branchcode) = @_;
-    my $data;
-    if ($branchcode) {
-	$data = getbranchinfo($branchcode);
-	$data = $data->[0];
-	$template->param(branchcode => $data->{'branchcode'});
-        $template->param(branchname => $data->{'branchname'});
-        $template->param(branchaddress1 => $data->{'branchaddress1'});
-        $template->param(branchaddress2 => $data->{'branchaddress2'});
-        $template->param(branchaddress3 => $data->{'branchaddress3'});
-        $template->param(branchphone => $data->{'branchphone'});
-        $template->param(branchfax => $data->{'branchfax'});
-        $template->param(branchemail => $data->{'branchemail'});
+	# prepares the edit form...
+	my ($branchcode) = @_;
+	my $data;
+	if ($branchcode) {
+		$data = getbranchinfo($branchcode);
+		$data = $data->[0];
+		$template->param(branchcode => $data->{'branchcode'});
+		$template->param(branchname => $data->{'branchname'});
+		$template->param(branchaddress1 => $data->{'branchaddress1'});
+		$template->param(branchaddress2 => $data->{'branchaddress2'});
+		$template->param(branchaddress3 => $data->{'branchaddress3'});
+		$template->param(branchphone => $data->{'branchphone'});
+		$template->param(branchfax => $data->{'branchfax'});
+		$template->param(branchemail => $data->{'branchemail'});
     }
 
     # make the checkboxs.....
@@ -182,7 +201,7 @@ sub editbranchform {
 	my $checked = "";
 	my $tmp = quotemeta($cat->{'categorycode'});
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
-	    $checked = "CHECKED";
+		$checked = "CHECKED";
 	}
 	push @categoryloop, {
 		categoryname    => $cat->{'categoryname'},
@@ -190,18 +209,32 @@ sub editbranchform {
 		codedescription => $cat->{'codedescription'},
 		checked         => $checked,
 	    };
-    }
-    $template->param(categoryloop => \@categoryloop);
+	}
+	$template->param(categoryloop => \@categoryloop);
 
     # {{{ Leave this here until bug 130 is completely resolved in the templates
-    for my $obsolete ('categoryname', 'categorycode', 'codedescription') {
-	$template->param($obsolete => 'Your template is out of date (bug 130)');
-    }
+	for my $obsolete ('categoryname', 'categorycode', 'codedescription') {
+		$template->param($obsolete => 'Your template is out of date (bug 130)');
+	}
     # }}}
 }
 
+sub editcatform {
+	# prepares the edit form...
+	my ($categorycode) = @_;
+	warn "cat : $categorycode";
+	my $data;
+	if ($categorycode) {
+		$data = getcategoryinfo($categorycode);
+		$data = $data->[0];
+		$template->param(categorycode => $data->{'categorycode'});
+		$template->param(categoryname => $data->{'categoryname'});
+		$template->param(codedescription => $data->{'codedescription'});
+    }
+}
+
 sub deleteconfirm {
-# message to print if the 
+# message to print if the
     my ($branchcode) = @_;
 }
 
@@ -209,78 +242,88 @@ sub deleteconfirm {
 sub branchinfotable {
 # makes the html for a table of branch info from reference to an array of hashs.
 
-    my ($branchcode) = @_;
-    my $branchinfo;
-    if ($branchcode) {
-	$branchinfo = getbranchinfo($branchcode);
-    } else {
-	$branchinfo = getbranchinfo();
-    }
-    my $color;
-    my @loop_data =();
-    foreach my $branch (@$branchinfo) {
-	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-	#
-	# We export the following fields to the template. These are not
-	# pre-composed as a single "address" field because the template
-	# might (and should) escape what is exported here. (See bug 180)
-	#
-	# - color
-	# - branch_name     (Note: not "branchname")
-	# - branch_code     (Note: not "branchcode")
-	# - address         (containing a static error message)
-	# - branchaddress1 \
-	# - branchaddress2  |
-	# - branchaddress3  | comprising the old "address" field
-	# - branchphone     |
-	# - branchfax       |
-	# - branchemail    /
-	# - address-empty-p (1 if no address information, 0 otherwise)
-	# - categories      (containing a static error message)
-	# - category_list   (loop containing "categoryname")
-	# - no-categories-p (1 if no categories set, 0 otherwise)
-	# - value
-	# - action
-	#
-	my %row = ();
-
-	# Handle address fields separately
-	my $address_empty_p = 1;
-	for my $field ('branchaddress1', 'branchaddress2', 'branchaddress3',
-		'branchphone', 'branchfax', 'branchemail') {
-
-	    $row{$field} = $branch->{$field};
-	    $address_empty_p = 0;
+	my ($branchcode) = @_;
+	my $branchinfo;
+	if ($branchcode) {
+		$branchinfo = getbranchinfo($branchcode);
+	} else {
+		$branchinfo = getbranchinfo();
 	}
-	$row{'address-empty-p'} = $address_empty_p;
-	# {{{ Leave this here until bug 180 is completely resolved in templates
-	$row{'address'} = 'Your template is out of date (see bug 180)';
-	# }}}
+	my $color;
+	my @loop_data =();
+	foreach my $branch (@$branchinfo) {
+		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		#
+		# We export the following fields to the template. These are not
+		# pre-composed as a single "address" field because the template
+		# might (and should) escape what is exported here. (See bug 180)
+		#
+		# - color
+		# - branch_name     (Note: not "branchname")
+		# - branch_code     (Note: not "branchcode")
+		# - address         (containing a static error message)
+		# - branchaddress1 \
+		# - branchaddress2  |
+		# - branchaddress3  | comprising the old "address" field
+		# - branchphone     |
+		# - branchfax       |
+		# - branchemail    /
+		# - address-empty-p (1 if no address information, 0 otherwise)
+		# - categories      (containing a static error message)
+		# - category_list   (loop containing "categoryname")
+		# - no-categories-p (1 if no categories set, 0 otherwise)
+		# - value
+		# - action
+		#
+		my %row = ();
 
-	# Handle categories
-	my $no_categories_p = 1;
-	my @categories = '';
-	foreach my $cat (@{$branch->{'categories'}}) {
-	    my ($catinfo) = @{getcategoryinfo($cat)};
-	    push @categories, {'categoryname' => $catinfo->{'categoryname'}};
-	    $no_categories_p = 0;
+		# Handle address fields separately
+		my $address_empty_p = 1;
+		for my $field ('branchaddress1', 'branchaddress2', 'branchaddress3',
+			'branchphone', 'branchfax', 'branchemail') {
+			$row{$field} = $branch->{$field};
+			$address_empty_p = 0;
+		}
+		$row{'address-empty-p'} = $address_empty_p;
+		# {{{ Leave this here until bug 180 is completely resolved in templates
+		$row{'address'} = 'Your template is out of date (see bug 180)';
+		# }}}
+
+		# Handle categories
+		my $no_categories_p = 1;
+		my @categories = '';
+		foreach my $cat (@{$branch->{'categories'}}) {
+			my ($catinfo) = @{getcategoryinfo($cat)};
+			push @categories, {'categoryname' => $catinfo->{'categoryname'}};
+			$no_categories_p = 0;
+		}
+		# {{{ Leave this here until bug 180 is completely resolved in templates
+		$row{'categories'} = 'Your template is out of date (see bug 180)';
+		# }}}
+		$row{'category_list'} = \@categories;
+		$row{'no-categories-p'} = $no_categories_p;
+
+		# Handle all other fields
+		$row{'branch_name'} = $branch->{'branchname'};
+		$row{'branch_code'} = $branch->{'branchcode'};
+		$row{'color'} = $color;
+		$row{'value'} = $branch->{'branchcode'};
+		$row{'action'} = '/cgi-bin/koha/admin/branches.pl';
+
+		push @loop_data, { %row };
 	}
-	# {{{ Leave this here until bug 180 is completely resolved in templates
-	$row{'categories'} = 'Your template is out of date (see bug 180)';
-	# }}}
-	$row{'category_list'} = \@categories;
-	$row{'no-categories-p'} = $no_categories_p;
+	my @branchcategories =();
+	my $catinfo = getcategoryinfo();
+	foreach my $cat (@$catinfo) {
+		push @branchcategories, {
+			categoryname    => $cat->{'categoryname'},
+			categorycode    => $cat->{'categorycode'},
+			codedescription => $cat->{'codedescription'},
+		};
+	}
 
-	# Handle all other fields
-	$row{'branch_name'} = $branch->{'branchname'};
-	$row{'branch_code'} = $branch->{'branchcode'};
-	$row{'color'} = $color;
-	$row{'value'} = $branch->{'branchcode'};
-	$row{'action'} = '/cgi-bin/koha/admin/branches.pl';
-
-	push @loop_data, { %row };
-    }
-    $template->param(branches => \@loop_data);
+	$template->param(branches => \@loop_data,
+							branchcategories => \@branchcategories);
 
 }
 
@@ -318,7 +361,7 @@ sub getbranchinfo {
     my $sth = $dbh->prepare($query);
     $sth->execute(@query_args);
     my @results;
-    while (my $data = $sth->fetchrow_hashref) { 
+    while (my $data = $sth->fetchrow_hashref) {
 	$query = "select categorycode from branchrelations where branchcode = ?";
 	my $nsth = $dbh->prepare($query);
 	$nsth->execute($data->{'branchcode'});;
@@ -337,80 +380,80 @@ sub getbranchinfo {
 # FIXME This doesn't belong here; it should be moved into a module
 sub getcategoryinfo {
 # returns a reference to an array of hashes containing branches,
-    my ($catcode) = @_;
-    my $dbh = C4::Context->dbh;
-    my ($query, @query_args);
-#    print DEBUG "getcategoryinfo: entry: catcode=".cvs($catcode)."\n";
-    if ($catcode) {
-	$query = "select * from branchcategories where categorycode = ?";
-	@query_args = ($catcode);
-    } else {
-	$query = "Select * from branchcategories";
-    }
-#    print DEBUG "getcategoryinfo: query=".cvs($query)."\n";
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@query_args);
-    my @results;
-    while (my $data = $sth->fetchrow_hashref) {
-	push(@results, $data);
-    }
-    $sth->finish;
-#    print DEBUG "getcategoryinfo: exit: returning ".cvs(\@results)."\n";
-    return \@results;
+	my ($catcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my ($query, @query_args);
+	#    print DEBUG "getcategoryinfo: entry: catcode=".cvs($catcode)."\n";
+	if ($catcode) {
+		$query = "select * from branchcategories where categorycode = ?";
+		@query_args = ($catcode);
+	} else {
+		$query = "Select * from branchcategories";
+	}
+	#    print DEBUG "getcategoryinfo: query=".cvs($query)."\n";
+	my $sth = $dbh->prepare($query);
+	$sth->execute(@query_args);
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		push(@results, $data);
+	}
+	$sth->finish;
+	#    print DEBUG "getcategoryinfo: exit: returning ".cvs(\@results)."\n";
+	return \@results;
 }
 
 # FIXME This doesn't belong here; it should be moved into a module
 sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
-    my ($data) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)";
-    my $sth=$dbh->prepare($query);
-    $sth->execute(uc($data->{'branchcode'}), $data->{'branchname'},
-	    $data->{'branchaddress1'}, $data->{'branchaddress2'},
-	    $data->{'branchaddress3'}, $data->{'branchphone'},
-	    $data->{'branchfax'}, $data->{'branchemail'});
+	my ($data) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute(uc($data->{'branchcode'}), $data->{'branchname'},
+		$data->{'branchaddress1'}, $data->{'branchaddress2'},
+		$data->{'branchaddress3'}, $data->{'branchphone'},
+		$data->{'branchfax'}, $data->{'branchemail'});
 
-    $sth->finish;
-# sort out the categories....
-    my @checkedcats;
-    my $cats = getcategoryinfo();
-    foreach my $cat (@$cats) {
-	my $code = $cat->{'categorycode'};
-	if ($data->{$code}) {
-	    push(@checkedcats, $code);
-	}
-    }
-    my $branchcode =uc($data->{'branchcode'});
-    my $branch = getbranchinfo($branchcode);
-    $branch = $branch->[0];
-    my $branchcats = $branch->{'categories'};
-    my @addcats;
-    my @removecats;
-    foreach my $bcat (@$branchcats) {
-	unless (grep {/^$bcat$/} @checkedcats) {
-	    push(@removecats, $bcat);
-	}
-    }
-    foreach my $ccat (@checkedcats){
-	unless (grep {/^$ccat$/} @$branchcats) {
-	    push(@addcats, $ccat);
-	}
-    }
-    # FIXME - There's already a $dbh in this scope.
-    my $dbh = C4::Context->dbh;
-    foreach my $cat (@addcats) {
-	my $query = "insert into branchrelations (branchcode, categorycode) values(?, ?)";
-	my $sth = $dbh->prepare($query);
-	$sth->execute($branchcode, $cat);
 	$sth->finish;
-    }
-    foreach my $cat (@removecats) {
-	my $query = "delete from branchrelations where branchcode=? and categorycode=?";
-	my $sth = $dbh->prepare($query);
-	$sth->execute($branchcode, $cat);
-	$sth->finish;
-    }
+	# sort out the categories....
+	my @checkedcats;
+	my $cats = getcategoryinfo();
+	foreach my $cat (@$cats) {
+		my $code = $cat->{'categorycode'};
+		if ($data->{$code}) {
+			push(@checkedcats, $code);
+		}
+	}
+	my $branchcode =uc($data->{'branchcode'});
+	my $branch = getbranchinfo($branchcode);
+	$branch = $branch->[0];
+	my $branchcats = $branch->{'categories'};
+	my @addcats;
+	my @removecats;
+	foreach my $bcat (@$branchcats) {
+		unless (grep {/^$bcat$/} @checkedcats) {
+			push(@removecats, $bcat);
+		}
+	}
+	foreach my $ccat (@checkedcats){
+		unless (grep {/^$ccat$/} @$branchcats) {
+			push(@addcats, $ccat);
+		}
+	}
+	# FIXME - There's already a $dbh in this scope.
+	my $dbh = C4::Context->dbh;
+	foreach my $cat (@addcats) {
+		my $query = "insert into branchrelations (branchcode, categorycode) values(?, ?)";
+		my $sth = $dbh->prepare($query);
+		$sth->execute($branchcode, $cat);
+		$sth->finish;
+	}
+	foreach my $cat (@removecats) {
+		my $query = "delete from branchrelations where branchcode=? and categorycode=?";
+		my $sth = $dbh->prepare($query);
+		$sth->execute($branchcode, $cat);
+		$sth->finish;
+	}
 }
 
 sub deletebranch {
@@ -420,6 +463,26 @@ sub deletebranch {
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare($query);
     $sth->execute($branchcode);
+    $sth->finish;
+}
+
+sub setcategoryinfo {
+# sets the data from the editbranch form, and writes to the database...
+	my ($data) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = "replace branchcategories (categorycode,categoryname,codedescription) values (?,?,?)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute(uc($data->{'categorycode'}), $data->{'categoryname'},$data->{'codedescription'});
+
+	$sth->finish;
+}
+sub deletecategory {
+# delete branch...
+    my ($categorycode) = @_;
+    my $query = "delete from branchcategories where categorycode = ?";
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare($query);
+    $sth->execute($categorycode);
     $sth->finish;
 }
 
@@ -435,7 +498,23 @@ sub checkdatabasefor {
     if ($total) {
 	# FIXME: need to be replaced by an exported boolean parameter
 	$message = "Branch cannot be deleted because there are $total items using that branch.";
-    } 
+    }
+    return $message;
+}
+
+sub checkcategorycode {
+# check to see if the branchcode is being used in the database somewhere....
+    my ($categorycode) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select count(*) from branchrelations where categorycode=?");
+    $sth->execute($categorycode);
+    my ($total) = $sth->fetchrow_array;
+    $sth->finish;
+    my $message;
+    if ($total) {
+	# FIXME: need to be replaced by an exported boolean parameter
+	$message = "Category cannot be deleted because there are $total branches using that category.";
+    }
     return $message;
 }
 
