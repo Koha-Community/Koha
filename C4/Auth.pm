@@ -139,6 +139,7 @@ sub checkauth {
 		# timed logout
 		$info{'timed_out'} = 1;
 		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		$userid = undef;
 		$sessionID = undef;
 		open L, ">>/tmp/sessionlog";
 		my $time=localtime(time());
@@ -151,6 +152,7 @@ sub checkauth {
 		$info{'different_ip'} = 1;
 		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
 		$sessionID = undef;
+		$userid = undef;
 		open L, ">>/tmp/sessionlog";
 		my $time=localtime(time());
 		printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
