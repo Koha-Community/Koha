@@ -33,7 +33,7 @@ my ($template, $borrowernumber, $cookie)
 			     type => "intranet",
 			     query => $input,
 			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
+			     flagsrequired => {acquisition => 1},
 			 });
 
 my $suggestions_loop= &searchsuggestion($borrowernumber,$author,$title,$publishercode,$status,$suggestedbyme);
