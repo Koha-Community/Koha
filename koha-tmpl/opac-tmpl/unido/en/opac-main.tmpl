@@ -71,8 +71,8 @@ h1 {
 BGCOLOR="#FF9933" 
 text="black" 
 link="#0066FF" 
-vlink="#6699FF" 
-alink="white" 
+vlink="#0066FF" 
+alink="#000000" 
 leftmargin=0 
 topmargin=0
 marginheight=0
@@ -86,7 +86,7 @@ marginwidth=0 >
 <img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
 </td>
 
-<td>
+<td colspan="3">
 
 <img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
 </td>
@@ -101,22 +101,24 @@ marginwidth=0 >
 <img src="<TMPL_VAR NAME='themelang'>/images/unido-logo.gif" width=43 height=42 
 alt="UNIDO Logo " hspace=0 vspace=0>
 </td>
-<td><h1>Welcome to the<br>
+<td colspan="3"><h1>Welcome to the<br>
  UNIDO Library</h1>
  </td></tr>
 
 
-<tr valign=top >
-<td align="right" ><img src="<TMPL_VAR NAME='themelang'>/images/unido-home-photos.jpg" width="198" height="198" border="0" alt="Photos of Wellington">
+<tr>
+<td align="right" rowspan="2"  valign=bottom ><img src="<TMPL_VAR NAME='themelang'>/images/unido-home-photos.jpg" width="198" height="198" border="0" alt="Photos of Wellington">
 <td>
 <form ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
 <input type=hidden name=type value=opac>
-<span class="search-heading">Search</span>
+<span class="search-heading">Search</span></td>
 
-<input type=text size="24" name="keyword">  <input type="submit" value="OK" class="ok">
+<td><input type=text size="24" name="keyword"> <input type="submit" value="OK" class="ok"></td>
 
 
 </form>
+</tr>
+<tr><td colspan=3>
 <div class="menu"><a href="/cgi-bin/koha/opac-search.pl">More Search Options</a> | <a href="/cgi-bin/koha/about.pl">About</a> | <a href="/cgi-bin/koha/contact.pl">Contact</a>  </div>
 <p> &nbsp; </p>
 <div class="credit">
