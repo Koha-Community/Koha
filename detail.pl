@@ -48,13 +48,19 @@ my $dat=bibdata($biblionumber);
 my ($authorcount, $addauthor)= &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
+my ($subjectcount, $subjects) = &subject($biblionumber);
 
 $dat->{'count'}=@items;
 $dat->{'norequests'} = $norequests;
 
 $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {
-        $dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
+	$dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
+} # for
+
+$dat->{'subjects'}=$subjects->[0]->{'subject'};
+for (my $i = 1; $i < $subjectcount; $i++) {
+	$dat->{'subjects'} .= ", " . $subjects->[$i]->{'subject'};
 } # for
 
 my @results;

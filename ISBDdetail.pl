@@ -79,7 +79,6 @@ my $res;
 	my $bloc = $ISBD;
 	my $blocres;
 	foreach my $isbdfield (split /#/,$bloc) {
-	warn "ISBDFIELD : $isbdfield";
 # 		$isbdfield= /(.?.?.?)/;
 		$isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
 		my $fieldvalue=$1;
