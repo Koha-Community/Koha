@@ -22,30 +22,24 @@
 	</tr>
 	<tr valign="top">
 		<td>
-			<form action="/cgi-bin/koha/modbib.pl" method="post">
-			<table width="100%" border=0 cellspacing=0 cellpadding=0>
-				<tr>
-					<td width="33%">
-						<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
-						<input type="image" name="submit" value="modify" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
-					</td>
-					<td width="33%"><input type="image" name="delete" value="delete" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0"></td>
-					<td width="33%"><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">MARC</a></td>
-				</tr>
-			</table>
-			</form>
-			<br>
+			<br/><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">" class="button">MARC</a><br/><br/>
 			<FONT SIZE=2  face="arial, helvetica">
-			<TMPL_IF name="subtitle"><b>Podtytu³:</b></TMPL_IF> <TMPL_VAR NAME="subtitle"><br>
-			<TMPL_IF name="author"><b>Autor:</b></TMPL_IF> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
-			<TMPL_IF name="additional"><b>Dodatkowy Autor:</b></TMPL_IF> <TMPL_VAR NAME="additional"><br>
-			<TMPL_IF name="collection"><b>Tytu³ serii:</b> </TMPL_IF><TMPL_VAR NAME="seriestitle"><br>
-			<TMPL_IF name="subject"><b>Has³o:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br>
-			<TMPL_IF name="copyrightdate"><b>Copyright:</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br>
-			<TMPL_IF name="notes"><b>Uwagi:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br>
-			<TMPL_IF name="unititle"><b>Tytu³ ujednol.:</b> </TMPL_IF><TMPL_VAR NAME="unititle"><br>
-			<TMPL_IF name="serial"><b>Seria:</b></TMPL_IF> <TMPL_VAR NAME="serial"><br>
-			<b>Ca³kowita liczba pozycji:</b> <TMPL_VAR NAME="count">
+			<TMPL_IF name="subtitle"><b>Podtytu³:</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
+			<TMPL_IF name="author"><b>Autor:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></TMPL_IF><br>
+			<TMPL_IF name="additional"><b>Autor dodatkowy:</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
+			<TMPL_IF name="publishercode"><b>Wydano przez:</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
+			<TMPL_IF name="publicationyear"><b>w </b></TMPL_IF><TMPL_VAR NAME="publicationyear">
+			<TMPL_IF name="pages">, </TMPL_IF><TMPL_VAR name="pages">
+			<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br/>
+			<TMPL_IF name="collection"><b>Kolekcja:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br/>
+			<TMPL_IF name="subject"><b>Has³o przedm:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br/>
+			<TMPL_IF name="copyrightdate"><b>Rok:</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br/>
+			<TMPL_IF name="notes"><b>Uwagi:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br/>
+			<TMPL_IF name="unititle"><b>Ujednolicony:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br/>
+			<TMPL_IF name="serial"><b>Serial:</b><TMPL_VAR NAME="serial"></TMPL_IF><br/>
+			<TMPL_IF name="dewey"><b>Dewey:</b></TMPL_IF><TMPL_VAR name="dewey"><br/>
+			<TMPL_IF name="url"><b>URL:</b> <a hre="<TMPL_VAR name="url"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
+			<b>W sumie pozycji:</b> <TMPL_VAR NAME="count">
 			<p>
 			</font>
 		</td>

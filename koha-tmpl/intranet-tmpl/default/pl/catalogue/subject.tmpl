@@ -1,14 +1,7 @@
-<html>
 <TMPL_IF NAME="opac">
     <TMPL_INCLUDE NAME="opac-top.inc">
 <TMPL_ELSE>
     <TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Zaloguj siê</a> do Koha</p>
 </TMPL_IF>
 
 <center>
@@ -40,4 +33,3 @@ Trafienia od <TMPL_VAR NAME="startfrom"> do <TMPL_VAR NAME="endat"> z <TMPL_VAR 
 <TMPL_ELSE>
     <TMPL_INCLUDE NAME="cat-bottom.inc">
 </TMPL_IF>
-</html>
