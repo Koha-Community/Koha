@@ -190,10 +190,10 @@ if ($op eq 'add_form') {
 	#  	$fines=$fines+0;
 	        my $dataaqbookfund;
 	        my $dbh = C4::Context->dbh;
-	        my $query="select bookfundid,bookfundname from aqbookfund where bookfundid=$results->[$i]{'bookfundid'}";
+	        my $query="select bookfundid,bookfundname from aqbookfund where bookfundid=?";
 #	        print $query;
 		my $sth=$dbh->prepare($query);
-		$sth->execute;
+		$sth->execute($results->[$i]{'bookfundid'});
 		$dataaqbookfund=$sth->fetchrow_hashref;
 		$sth->finish;
 	        my @toggle = ();
