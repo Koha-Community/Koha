@@ -3,8 +3,8 @@
 </head>
 <body>
 <TMPL_INCLUDE NAME="searchheader.tmpl">
-<table border=1>
-<tr><th>Title</th><th>Author</th><th>Biblionumber</th></tr>
+<table border=0 cellspacing=0 cellpadding=0>
+<tr bgcolor=#ccccff><th>Title</th><th>Author</th><th>Biblionumber</th></tr>
 <TMPL_LOOP NAME=SEARCH_RESULTS>
   <tr>
   <td> <TMPL_VAR NAME=title> </td>
@@ -12,7 +12,7 @@
   <td> <TMPL_VAR NAME=biblionumber> </td>
   </tr>
 </TMPL_LOOP>
-<tr><td colspan=3><a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Next Records</a></td></tr>
+<tr><td colspan=3 bgcolor=#ccccff><a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Next Records</a></td></tr>
 </table>
 <hr>
 </body>
