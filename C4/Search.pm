@@ -61,7 +61,7 @@ on what is passed to it, it calls the appropriate search function.
 &itemdata &bibdata &GetItems &borrdata &itemnodata &itemcount
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
-&addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
+&addauthor &bibitems &barcodes &findguarantees &allissues
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2);
 # make all your functions, whether exported or not;
 
@@ -130,30 +130,6 @@ sub findguarantor{
   $data=$sth->fetchrow_hashref;
   $sth->finish;
   return($data);
-}
-
-=item systemprefs
-
-  %prefs = &systemprefs();
-
-Returns a hash giving the system preferences. This is basically just a
-dump of the C<systempreferences> database table.
-
-=cut
-#'
-# FIXME - This function is no longer used; in cases where you just
-# care about one preference (which is true for most scripts), use
-# C4::Context->preference.
-sub systemprefs {
-    my %systemprefs;
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select variable,value from systempreferences");
-    $sth->execute;
-    while (my ($variable,$value)=$sth->fetchrow) {
-	$systemprefs{$variable}=$value;
-    }
-    $sth->finish;
-    return(%systemprefs);
 }
 
 =item NewBorrowerNumber
