@@ -453,7 +453,9 @@ RECORD:
 	    my $q_dewey=$dbh->quote($dewey);
 	    $cleanauthor=$author;
 	    $cleanauthor=~s/[^A-Za-z]//g;
-	    $subclass=uc(substr($cleanauthor,0,3));
+	    $subclass=ucz(substr($cleanauthor,0,3));
+			# FIXME - WTF is the author being converted
+			# to upper case?
 	    my $q_subclass=$dbh->quote($subclass);
 	    my $q_publicationyear=$dbh->quote($publicationyear);
 	    my $q_publishercode=$dbh->quote($publishercode);	# FIXME - $publishercode undefined
@@ -473,6 +475,8 @@ RECORD:
 	    foreach $subjectheading (@subjects) {
 		# convert to upper case
 		$subjectheading=uc($subjectheading);
+				# FIXME - WTF is the subject being
+				# converted to upper case?
 		# quote value
 		my $q_subjectheading=$dbh->quote($subjectheading);
 		$sth=$dbh->prepare("insert into bibliosubject (biblionumber,subject)
@@ -487,6 +491,8 @@ RECORD:
 		$additionalauthor=~s/\010//g;
 		# convert to upper case
 		$additionalauthor=uc($additionalauthor);
+				# FIXME - WTF is the author being converted
+				# to upper case?
 		# quote value
 		my $q_additionalauthor=$dbh->quote($additionalauthor);
 		$sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values ($biblionumber, $q_additionalauthor)");

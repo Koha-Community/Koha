@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.23  2002/10/16 12:43:08  arensb
+# Added some FIXME comments.
+#
 # Revision 1.22  2002/10/15 13:39:17  tipaul
 # removing Acquisition.pm
 # deleting unused code in biblio.pm, rewriting POD and answering most FIXME comments
@@ -1606,7 +1609,9 @@ fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
 tables of the Koha database.
 
 =cut
-
+#'
+# FIXME - This is effectively identical to &C4::Catalogue::getorder.
+# Pick one and stick with it.
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
@@ -1615,6 +1620,8 @@ sub getorder{
  	where biblionumber=? and biblioitemnumber=?";
   my $sth=$dbh->prepare($query);
   $sth->execute($bib,$bi);
+  # FIXME - Use fetchrow_array(), since we're only interested in the one
+  # value.
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
@@ -1633,7 +1640,10 @@ C<$order> are fields from the biblio, biblioitems, aqorders, and
 aqorderbreakdown tables of the Koha database.
 
 =cut
-
+#'
+# FIXME - This is effectively identical to
+# &C4::Catalogue::getsingleorder.
+# Pick one and stick with it.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;

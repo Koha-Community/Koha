@@ -20,6 +20,7 @@ src="/images/requests.gif" align="right" border="0"></a>
 
 <font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
 <TMPL_VAR NAME="class"></em></font><p>
+<!-- FIXME - "callpadding" should be "cellpadding", right? -->
 <table cellspacing="0" callpadding="5" border="1" align="left" width="220">
 <!-----------------BIBLIO RECORD TABLE--------->
 <tr valign="top">
@@ -60,6 +61,14 @@ NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
 </tr>
 </table>
 </TMPL_LOOP>
+<!-- FIXME - The help box overflows on the right. I think this is
+     because it is specified as "width=70%", which the browser
+     interprets as 70% of the width of the browser window. However,
+     leaving out the "width=70%" makes the help box abut the "biblio
+     record" box. I think the fix is to put all three boxes in a
+     table, for layout, and make the help box as wide as it wants to
+     be. -->
+
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor="#cccc99" background="/images/background-mem.gif">
