@@ -1,5 +1,29 @@
 2002-10-13  Andrew Arensburger  <arensb@baa.ooblick.com>
 
+	* acqui.simple/processz3950queue, acqui/newbasket2.pl,
+	acqui/finishreceive.pl, C4/Circulation/Renewals2.pm,
+	C4/Circulation/Renewals.pm, C4/Circulation/Issues.pm,
+	C4/Circulation/Circ2.pm, C4/Stats.pm, C4/Search.pm, C4/Output.pm,
+	C4/Maintainance.pm, C4/Input.pm, C4/Format.pm, C4/Biblio.pm,
+	C4/Acquisitions.pm, C4/Accounts2.pm, C4/Accounts.pm,
+	thesaurus_popup.pl, search.pl, memberentry.pl, deletemem.pl:
+	Replaced expressions of the form "$x = $x <op> $y" with
+	"$x <op>= $y". Thus, $x = $x+2 becomes $x += 2, and so forth.
+
+	* misc/tidyaccounts.pl, translator/translator.pl,
+	telnet/startint.pl, telnet/returnswrapper.pl,
+	telnet/issuewrapper.pl, sec/writeoff.pl, opac/opac-userupdate.pl,
+	opac/opac-user.pl, opac/opac-searchresults.pl,
+	opac/opac-search.pl, opac/opac-reserve.pl,
+	opac/opac-moredetail.pl, opac/opac-detail.pl, misc/makeformats.pl,
+	misc/makebaskets.pl, misc/fixorders.pl, misc/fixborrower.pl,
+	misc/fines2.pl, marc/USMARC.pm, marc/MARCdetail.pl, marc/File.pm,
+	circ/selectbranchprinter.pl, Removed trailing whitespace. *
+	circ/circulation.pl, admin/koha2marclinks.pl, admin/branches.pl,
+	C4/test.pl, C4/InterfaceCDK.pm: Removed trailing whitespace.
+
+	* modbib.pl: Removed unused variables. Unbogofied some code.
+
 	* C4/Stock.pm: Removed unused finalizer.
 
 	* moditem.pl: Added a FIXME comment.
@@ -13,8 +37,8 @@
 	C4/BookShelves.pm, C4/Biblio.pm, C4/Acquisitions.pm: Deleted
 	unused variables. Removed trailing whitespace.
 	
-	* newmember.pl, newjmember.pl: Removed trailing whitespace. Added a FIXME
-	comment.
+	* newmember.pl, newjmember.pl: Removed trailing whitespace. Added
+	a FIXME comment.
 
 	* acqui.simple/viewmarc.pl, acqui.simple/saveitem.pl,
 	acqui.simple/processz3950queue, acqui.simple/marcimport.pl,
