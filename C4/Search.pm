@@ -485,6 +485,9 @@ sub CatSearch  {
 	      if ($search->{'illustrator'} ne ''){
 	        $query.=" and illus like '%".$search->{'illustrator'}."%' ";
 	      }
+	      if ($search->{'dewey'} ne ''){
+	        $query.=" and biblioitems.dewey like '$search->{'dewey'}%'";
+	      }
 	  } elsif ($search->{'dewey'} ne ''){
 	     $query="select * from biblioitems,biblio 
 	     where biblio.biblionumber=biblioitems.biblionumber
