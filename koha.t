@@ -19,22 +19,22 @@ if ($date eq $newdate) {
 #
 # Check that &fixEthnicity returns correct values
 #
-if ('Maori' eq fixEthnicity('maori') {
+if ('Maori' eq fixEthnicity('maori')) {
     print "ok 3\n";
 } else {
     print "not ok 3\n";
 }
-if ('European/Pakeha' eq fixEthnicity('european') {
+if ('European/Pakeha' eq fixEthnicity('european')) {
     print "ok 4\n";
 } else {
     print "not ok 4\n";
 }
-if ('Pacific Islander' eq fixEthnicity('pi') {
+if ('Pacific Islander' eq fixEthnicity('pi')) {
     print "ok 5\n";
 } else {
     print "not ok 5\n";
 }
-if ('Asian' eq fixEthnicity('asian') {
+if ('Asian' eq fixEthnicity('asian')) {
     print "ok 6\n";
 } else {
     print "not ok 6\n";
