@@ -4,5 +4,5 @@ use strict;
 use Test::Harness;
 
 # please add many tests here
-runtests 'koha.t';
-runtests 'output.t';
+runtests ('koha.t', 'output.t');
+
