@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.55  2003/07/15 00:02:49  slef
+# Work on bug 515... can we do a single-side rename of notes to bnotes?
+#
 # Revision 1.54  2003/07/11 11:51:32  tipaul
 # *** empty log message ***
 #
@@ -947,7 +950,7 @@ sub MARCkoha2marcBiblio {
     if ($biblioitemnumber>0) {
 	my $sth2=$dbh->prepare(" SELECT biblioitemnumber,biblionumber,volume,number,classification,
 						itemtype,url,isbn,issn,dewey,subclass,publicationyear,publishercode,
-						volumedate,volumeddesc,timestamp,illus,pages,notes,size,place
+						volumedate,volumeddesc,timestamp,illus,pages,notes AS bnotes,size,place
 					FROM biblioitems
 					WHERE biblionumber=? and biblioitemnumber=?
 					");
@@ -1525,7 +1528,7 @@ sub OLDmodbibitem {
     $biblioitem->{'illus'}           = $dbh->quote($biblioitem->{'illus'});
     $biblioitem->{'pages'}           = $dbh->quote($biblioitem->{'pages'});
     $biblioitem->{'volumeddesc'}     = $dbh->quote($biblioitem->{'volumeddesc'});
-    $biblioitem->{'notes'}           = $dbh->quote($biblioitem->{'notes'});
+    $biblioitem->{'bnotes'}          = $dbh->quote($biblioitem->{'bnotes'});
     $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
     $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
 
@@ -1541,7 +1544,7 @@ subclass        = $biblioitem->{'subclass'},
 illus           = $biblioitem->{'illus'},
 pages           = $biblioitem->{'pages'},
 volumeddesc     = $biblioitem->{'volumeddesc'},
-notes 		= $biblioitem->{'notes'},
+notes 		= $biblioitem->{'bnotes'},
 size		= $biblioitem->{'size'},
 place		= $biblioitem->{'place'}
 where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
@@ -1596,7 +1599,7 @@ sub OLDnewbiblioitem {
 						$biblioitem->{'subclass'},			$biblioitem->{'publicationyear'},
 						$biblioitem->{'publishercode'},	$biblioitem->{'volumedate'},
 						$biblioitem->{'volumeddesc'},		$biblioitem->{'illus'},
-						$biblioitem->{'pages'},				$biblioitem->{'notes'},
+						$biblioitem->{'pages'},				$biblioitem->{'binotes'},
 						$biblioitem->{'size'},				$biblioitem->{'lccn'},
 						$biblioitem->{'marc'},				$biblioitem->{'place'});
 	$sth->finish;
@@ -2264,122 +2267,122 @@ sub char_decode {
 	$_ = $string ;
 # 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
 	if ($encoding eq "UNIMARC") {
-		s/\xe1/Æ/gm ;
-		s/\xe2/Ð/gm ;
-		s/\xe9/Ø/gm ;
-		s/\xec/þ/gm ;
-		s/\xf1/æ/gm ;
-		s/\xf3/ð/gm ;
-		s/\xf9/ø/gm ;
-		s/\xfb/ß/gm ;
-		s/\xc1\x61/à/gm ;
-		s/\xc1\x65/è/gm ;
-		s/\xc1\x69/ì/gm ;
-		s/\xc1\x6f/ò/gm ;
-		s/\xc1\x75/ù/gm ;
-		s/\xc1\x41/À/gm ;
-		s/\xc1\x45/È/gm ;
-		s/\xc1\x49/Ì/gm ;
-		s/\xc1\x4f/Ò/gm ;
-		s/\xc1\x55/Ù/gm ;
-		s/\xc2\x41/Á/gm ;
-		s/\xc2\x45/É/gm ;
-		s/\xc2\x49/Í/gm ;
-		s/\xc2\x4f/Ó/gm ;
-		s/\xc2\x55/Ú/gm ;
-		s/\xc2\x59/Ý/gm ;
-		s/\xc2\x61/á/gm ;
-		s/\xc2\x65/é/gm ;
-		s/\xc2\x69/í/gm ;
-		s/\xc2\x6f/ó/gm ;
-		s/\xc2\x75/ú/gm ;
-		s/\xc2\x79/ý/gm ;
-		s/\xc3\x41/Â/gm ;
-		s/\xc3\x45/Ê/gm ;
-		s/\xc3\x49/Î/gm ;
-		s/\xc3\x4f/Ô/gm ;
-		s/\xc3\x55/Û/gm ;
-		s/\xc3\x61/â/gm ;
-		s/\xc3\x65/ê/gm ;
-		s/\xc3\x69/î/gm ;
-		s/\xc3\x6f/ô/gm ;
-		s/\xc3\x75/û/gm ;
-		s/\xc4\x41/Ã/gm ;
-		s/\xc4\x4e/Ñ/gm ;
-		s/\xc4\x4f/Õ/gm ;
-		s/\xc4\x61/ã/gm ;
-		s/\xc4\x6e/ñ/gm ;
-		s/\xc4\x6f/õ/gm ;
-		s/\xc8\x45/Ë/gm ;
-		s/\xc8\x49/Ï/gm ;
-		s/\xc8\x65/ë/gm ;
-		s/\xc8\x69/ï/gm ;
-		s/\xc8\x76/ÿ/gm ;
-		s/\xc9\x41/Ä/gm ;
-		s/\xc9\x4f/Ö/gm ;
-		s/\xc9\x55/Ü/gm ;
-		s/\xc9\x61/ä/gm ;
-		s/\xc9\x6f/ö/gm ;
-		s/\xc9\x75/ü/gm ;
-		s/\xca\x41/Å/gm ;
-		s/\xca\x61/å/gm ;
-		s/\xd0\x43/Ç/gm ;
-		s/\xd0\x63/ç/gm ;
+		s/\xe1/Â€/gm ;
+		s/\xe2/Â€/gm ;
+		s/\xe9/Â€/gm ;
+		s/\xec/Â€/gm ;
+		s/\xf1/Â€/gm ;
+		s/\xf3/Â€/gm ;
+		s/\xf9/Â€/gm ;
+		s/\xfb/Â€/gm ;
+		s/\xc1\x61/Â€/gm ;
+		s/\xc1\x65/Â€/gm ;
+		s/\xc1\x69/Â€/gm ;
+		s/\xc1\x6f/Â€/gm ;
+		s/\xc1\x75/Â€/gm ;
+		s/\xc1\x41/Â€/gm ;
+		s/\xc1\x45/Â€/gm ;
+		s/\xc1\x49/Â€/gm ;
+		s/\xc1\x4f/Â€/gm ;
+		s/\xc1\x55/Â€/gm ;
+		s/\xc2\x41/Â€/gm ;
+		s/\xc2\x45/Â€/gm ;
+		s/\xc2\x49/Â€/gm ;
+		s/\xc2\x4f/Â€/gm ;
+		s/\xc2\x55/Â€/gm ;
+		s/\xc2\x59/Â€/gm ;
+		s/\xc2\x61/Â€/gm ;
+		s/\xc2\x65/Â€/gm ;
+		s/\xc2\x69/Â€/gm ;
+		s/\xc2\x6f/Â€/gm ;
+		s/\xc2\x75/Â€/gm ;
+		s/\xc2\x79/Â€/gm ;
+		s/\xc3\x41/Â€/gm ;
+		s/\xc3\x45/Â€/gm ;
+		s/\xc3\x49/Â€/gm ;
+		s/\xc3\x4f/Â€/gm ;
+		s/\xc3\x55/Â€/gm ;
+		s/\xc3\x61/Â€/gm ;
+		s/\xc3\x65/Â€/gm ;
+		s/\xc3\x69/Â€/gm ;
+		s/\xc3\x6f/Â€/gm ;
+		s/\xc3\x75/Â€/gm ;
+		s/\xc4\x41/Â€/gm ;
+		s/\xc4\x4e/Â€/gm ;
+		s/\xc4\x4f/Â€/gm ;
+		s/\xc4\x61/Â€/gm ;
+		s/\xc4\x6e/Â€/gm ;
+		s/\xc4\x6f/Â€/gm ;
+		s/\xc8\x45/Â€/gm ;
+		s/\xc8\x49/Â€/gm ;
+		s/\xc8\x65/Â€/gm ;
+		s/\xc8\x69/Â€/gm ;
+		s/\xc8\x76/Â€/gm ;
+		s/\xc9\x41/Â€/gm ;
+		s/\xc9\x4f/Â€/gm ;
+		s/\xc9\x55/Â€/gm ;
+		s/\xc9\x61/Â€/gm ;
+		s/\xc9\x6f/Â€/gm ;
+		s/\xc9\x75/Â€/gm ;
+		s/\xca\x41/Â€/gm ;
+		s/\xca\x61/Â€/gm ;
+		s/\xd0\x43/Â€/gm ;
+		s/\xd0\x63/Â€/gm ;
 		# this handles non-sorting blocks (if implementation requires this)
 		$string = nsb_clean($_) ;
 	} elsif ($encoding eq "USMARC") {
 		if(/[\xc1-\xff]/) {
-			s/\xe1\x61/à/gm ;
-			s/\xe1\x65/è/gm ;
-			s/\xe1\x69/ì/gm ;
-			s/\xe1\x6f/ò/gm ;
-			s/\xe1\x75/ù/gm ;
-			s/\xe1\x41/À/gm ;
-			s/\xe1\x45/È/gm ;
-			s/\xe1\x49/Ì/gm ;
-			s/\xe1\x4f/Ò/gm ;
-			s/\xe1\x55/Ù/gm ;
-			s/\xe2\x41/Á/gm ;
-			s/\xe2\x45/É/gm ;
-			s/\xe2\x49/Í/gm ;
-			s/\xe2\x4f/Ó/gm ;
-			s/\xe2\x55/Ú/gm ;
-			s/\xe2\x59/Ý/gm ;
-			s/\xe2\x61/á/gm ;
-			s/\xe2\x65/é/gm ;
-			s/\xe2\x69/í/gm ;
-			s/\xe2\x6f/ó/gm ;
-			s/\xe2\x75/ú/gm ;
-			s/\xe2\x79/ý/gm ;
-			s/\xe3\x41/Â/gm ;
-			s/\xe3\x45/Ê/gm ;
-			s/\xe3\x49/Î/gm ;
-			s/\xe3\x4f/Ô/gm ;
-			s/\xe3\x55/Û/gm ;
-			s/\xe3\x61/â/gm ;
-			s/\xe3\x65/ê/gm ;
-			s/\xe3\x69/î/gm ;
-			s/\xe3\x6f/ô/gm ;
-			s/\xe3\x75/û/gm ;
-			s/\xe4\x41/Ã/gm ;
-			s/\xe4\x4e/Ñ/gm ;
-			s/\xe4\x4f/Õ/gm ;
-			s/\xe4\x61/ã/gm ;
-			s/\xe4\x6e/ñ/gm ;
-			s/\xe4\x6f/õ/gm ;
-			s/\xe8\x45/Ë/gm ;
-			s/\xe8\x49/Ï/gm ;
-			s/\xe8\x65/ë/gm ;
-			s/\xe8\x69/ï/gm ;
-			s/\xe8\x76/ÿ/gm ;
-			s/\xe9\x41/Ä/gm ;
-			s/\xe9\x4f/Ö/gm ;
-			s/\xe9\x55/Ü/gm ;
-			s/\xe9\x61/ä/gm ;
-			s/\xe9\x6f/ö/gm ;
-			s/\xe9\x75/ü/gm ;
-			s/\xea\x41/Å/gm ;
-			s/\xea\x61/å/gm ;
+			s/\xe1\x61/Â€/gm ;
+			s/\xe1\x65/Â€/gm ;
+			s/\xe1\x69/Â€/gm ;
+			s/\xe1\x6f/Â€/gm ;
+			s/\xe1\x75/Â€/gm ;
+			s/\xe1\x41/Â€/gm ;
+			s/\xe1\x45/Â€/gm ;
+			s/\xe1\x49/Â€/gm ;
+			s/\xe1\x4f/Â€/gm ;
+			s/\xe1\x55/Â€/gm ;
+			s/\xe2\x41/Â€/gm ;
+			s/\xe2\x45/Â€/gm ;
+			s/\xe2\x49/Â€/gm ;
+			s/\xe2\x4f/Â€/gm ;
+			s/\xe2\x55/Â€/gm ;
+			s/\xe2\x59/Â€/gm ;
+			s/\xe2\x61/Â€/gm ;
+			s/\xe2\x65/Â€/gm ;
+			s/\xe2\x69/Â€/gm ;
+			s/\xe2\x6f/Â€/gm ;
+			s/\xe2\x75/Â€/gm ;
+			s/\xe2\x79/Â€/gm ;
+			s/\xe3\x41/Â€/gm ;
+			s/\xe3\x45/Â€/gm ;
+			s/\xe3\x49/Â€/gm ;
+			s/\xe3\x4f/Â€/gm ;
+			s/\xe3\x55/Â€/gm ;
+			s/\xe3\x61/Â€/gm ;
+			s/\xe3\x65/Â€/gm ;
+			s/\xe3\x69/Â€/gm ;
+			s/\xe3\x6f/Â€/gm ;
+			s/\xe3\x75/Â€/gm ;
+			s/\xe4\x41/Â€/gm ;
+			s/\xe4\x4e/Â€/gm ;
+			s/\xe4\x4f/Â€/gm ;
+			s/\xe4\x61/Â€/gm ;
+			s/\xe4\x6e/Â€/gm ;
+			s/\xe4\x6f/Â€/gm ;
+			s/\xe8\x45/Â€/gm ;
+			s/\xe8\x49/Â€/gm ;
+			s/\xe8\x65/Â€/gm ;
+			s/\xe8\x69/Â€/gm ;
+			s/\xe8\x76/Â€/gm ;
+			s/\xe9\x41/Â€/gm ;
+			s/\xe9\x4f/Â€/gm ;
+			s/\xe9\x55/Â€/gm ;
+			s/\xe9\x61/Â€/gm ;
+			s/\xe9\x6f/Â€/gm ;
+			s/\xe9\x75/Â€/gm ;
+			s/\xea\x41/Â€/gm ;
+			s/\xea\x61/Â€/gm ;
 			# this handles non-sorting blocks (if implementation requires this)
 			$string = nsb_clean($_) ;
 		}

@@ -1435,7 +1435,7 @@ the first one is considered.
 sub bibdata {
     my ($bibnum, $type) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "Select *, biblio.notes
+    my $query = "Select *, biblioitems.notes AS bnotes, biblio.notes
     from biblio, biblioitems
     left join bibliosubtitle on
     biblio.biblionumber = bibliosubtitle.biblionumber

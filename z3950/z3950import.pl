@@ -806,7 +806,7 @@ sub AcceptBiblioitem {
  	$biblioitem{volumeddesc}	=$input->param('volumeddesc');
  	$biblioitem{illus}		=$input->param('illustrator');
  	$biblioitem{pages}		=$input->param('pages');
- 	$biblioitem{notes}		=$input->param('notes');
+ 	$biblioitem{bnotes}		=$input->param('notes');
 	$biblioitem{size}		=$input->param('size');
 	$biblioitem{place}		=$input->param('place');
 	$biblioitem{lccn}		=$input->param('lccn');
@@ -997,6 +997,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.4  2003/07/15 00:02:49  slef
+# Work on bug 515... can we do a single-side rename of notes to bnotes?
+#
 # Revision 1.3  2003/04/22 12:22:53  tipaul
 # 1st draft for z3950 client import.
 # moving Breeding farm script to a perl package C4/Breeding.pm
