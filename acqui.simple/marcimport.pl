@@ -231,6 +231,7 @@ if (my $data=$input->param('uploadmarc')) {
 
 
 if ($input->param('insertnewrecord')) {
+    my $sth;
     my $isbn=$input->param('isbn');
     my $issn=$input->param('issn');
     my $lccn=$input->param('lccn');
@@ -241,8 +242,9 @@ if ($input->param('insertnewrecord')) {
     my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
     my $q_issn=$dbh->quote((($issn) || ('NIL')));
     my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
-    my $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
-    $sth->execute;
+
+    #my $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
+    #$sth->execute;
     my $sth=$dbh->prepare("select biblionumber,biblioitemnumber from biblioitems where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
     $sth->execute;
     my $biblionumber=0;
@@ -316,16 +318,19 @@ EOF
  		\@additionalauthors
  	);
   
-  
+ 	if ( $error ) {
+	    print "<H2>Error adding biblio item</H2> $error\n";
+	} else { 
 
-	my $title=$input->param('title');
-	print << "EOF";
-	<table cellpadding=10 cellspacing=0 border=0 width=50%>
-	<tr><th bgcolor=black><font color=white>Record entered into database</font></th></tr>
-	<tr><td bgcolor=#dddddd>$title has been entered into the database with biblionumber
-	$biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
-	</table>
+	  my $title=$input->param('title');
+	  print << "EOF";
+	    <table cellpadding=10 cellspacing=0 border=0 width=50%>
+	    <tr><th bgcolor=black><font color=white>Record entered into database</font></th></tr>
+	    <tr><td bgcolor=#dddddd>$title has been entered into the database with biblionumber
+	    $biblionumber and biblioitemnumber $biblioitemnumber</td></tr>
+	  </table>
 EOF
+	} # if error
     } # if new record
 
     my $title=$input->param('title');
@@ -398,74 +403,85 @@ sub NewBiblioItem {
 		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
 
 	# Make sure master biblio entry exists
-	$biblionumber=GetOrAddBiblio($dbh, $biblio);
+	($biblionumber,$error)=GetOrAddBiblio($dbh, $biblio);
 
-	# Get next biblioitemnumber
-	$sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
-	$sth->execute;
-	($biblioitemnumber) = $sth->fetchrow;
-	$biblioitemnumber++;
+        if ( ! $error ) { 
+	  # Get next biblioitemnumber
+	  $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
+	  $sth->execute;
+	  ($biblioitemnumber) = $sth->fetchrow;
+	  $biblioitemnumber++;
 
-	print "<PRE>Next biblio item is $biblioitemnumber</PRE>\n" if $debug;
+	  print "<PRE>Next biblio item is $biblioitemnumber</PRE>\n" if $debug;
+  
+	  $sth=$dbh->prepare("insert into biblioitems (
+	    biblioitemnumber,
+	    biblionumber,
+	    volume,
+	    number,
+	    itemtype,
+	    isbn,
+	    issn,
+	    dewey,
+	    subclass,
+	    publicationyear,
+	    publishercode,
+	    volumedate,
+	    volumeddesc,
+	    illus,
+	    pages,
+	    notes,
+	    size,
+	    place,
+	    lccn,
+	    marc)
+	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
 
-	$sth=$dbh->prepare("insert into biblioitems (
-	  biblioitemnumber,
-	  biblionumber,
-	  volume,
-	  number,
-	  itemtype,
-	  isbn,
-	  issn,
-	  dewey,
-	  subclass,
-	  publicationyear,
-	  publishercode,
-	  volumedate,
-	  volumeddesc,
-	  illus,
-	  pages,
-	  notes,
-	  size,
-	  place,
-	  lccn,
-	  marc)
-	values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
+	  $sth->execute(
+	    $biblioitemnumber,
+	    $biblionumber,
+	    $biblioitem->{volume},
+	    $biblioitem->{number},
+	    $biblioitem->{itemtype},
+	    $biblioitem->{isbn},
+	    $biblioitem->{issn},
+	    $biblioitem->{dewey},
+	    $biblioitem->{subclass},
+	    $biblioitem->{publicationyear},
+	    $biblioitem->{publishercode},
+	    $biblioitem->{volumedate},
+	    $biblioitem->{volumeddesc},
+	    $biblioitem->{illus},
+	    $biblioitem->{pages},
+	    $biblioitem->{notes},
+	    $biblioitem->{size},
+	    $biblioitem->{place},
+	    $biblioitem->{lccn},
+	    $biblioitem->{marc} ) or  $error.=$sth->errstr ;
 
-	$sth->execute(
-	  $biblioitemnumber,
-	  $biblionumber,
-	  $biblioitem->{volume},
-	  $biblioitem->{number},
-	  $biblioitem->{itemtype},
-	  $biblioitem->{isbn},
-	  $biblioitem->{issn},
-	  $biblioitem->{dewey},
-	  $biblioitem->{subclass},
-	  $biblioitem->{publicationyear},
-	  $biblioitem->{publishercode},
-	  $biblioitem->{volumedate},
-	  $biblioitem->{volumeddesc},
-	  $biblioitem->{illus},
-	  $biblioitem->{pages},
-	  $biblioitem->{notes},
-	  $biblioitem->{size},
-	  $biblioitem->{place},
-	  $biblioitem->{lccn},
-	  $biblioitem->{marc} );
-
-	$sth=$dbh->prepare("insert into bibliosubject 
+	  $sth=$dbh->prepare("insert into bibliosubject 
 		(biblionumber,subject)
 		values (?, ? )" );
-	foreach $subjectheading (@{$subjects} ) {
-	    $sth->execute($biblionumber, $subjectheading);
-	}
+	  foreach $subjectheading (@{$subjects} ) {
+	      $sth->execute($biblionumber, $subjectheading) 
+			or $error.=$sth->errstr ;
+	
+	  } # foreach subject
 
-	$sth=$dbh->prepare("insert into additionalauthors 
+	  $sth=$dbh->prepare("insert into additionalauthors 
 		(biblionumber,author)
 		values (?, ? )");
-	foreach $additionalauthor (@{$addlauthors} ) {
-	    $sth->execute($biblionumber, $additionalauthor);
-	}
+	  foreach $additionalauthor (@{$addlauthors} ) {
+	    $sth->execute($biblionumber, $additionalauthor) 
+			or $error.=$sth->errstr ;
+	  } # foreach author
+
+	} else {
+	  # couldn't get biblio
+	  $biblionumber='';
+	  $biblioitemnumber='';
+
+	} # if no biblio error
 
 	return ( $biblionumber, $biblioitemnumber, $error);
 
@@ -486,6 +502,7 @@ sub GetOrAddBiblio {
 
 	my $debug=1;
 	my $sth;
+	my $error;
 	
 	#-----
 	print "<PRE>Looking for biblio </PRE>\n" if $debug;
@@ -502,9 +519,15 @@ sub GetOrAddBiblio {
 	} else {
 	    # Doesn't exist.  Add new one.
 	    print "<PRE>Adding biblio</PRE>\n" if $debug;
-	    $biblionumber=&newbiblio($biblio);
-	    print "<PRE>Added with biblio number $biblionumber</PRE>\n" if $debug;
-	    &newsubtitle($biblionumber,$biblio->{subtitle} );
+	    ($biblionumber,$error)=&newbiblio($biblio);
+	    if ( $biblionumber ) {
+	      print "<PRE>Added with biblio number=$biblionumber</PRE>\n" if $debug;
+	      if ( $biblio->{subtitle} ) {
+	    	&newsubtitle($biblionumber,$biblio->{subtitle} );
+	      } # if subtitle
+	    } else {
+		print "<PRE>Couldn't add biblio: $error</PRE>\n" if $debug;
+	    } # if added
 	}
 
 	return $biblionumber;
@@ -539,7 +562,7 @@ if ($input->param('newitem')) {
 		print "<font color=red>Error: $error </font><p>\n";
 	    } else {
 
-		print "<font color=green>Item added with barcode $barcode
+		print "<font color=green size=+1>Item added with barcode $barcode
 			</font><P>\n";
             } # if error
     } # if barcode exists
@@ -548,6 +571,7 @@ if ($input->param('newitem')) {
 
 my $menu = $input->param('menu');
 if ($file) {
+    my $sth;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $qisbn=$input->param('isbn');
     my $qissn=$input->param('issn');
@@ -1021,12 +1045,12 @@ EOF
 			my $q_issn=$dbh->quote((($issn) || ('NIL')));
 			my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
 			my $q_controlnumber=$dbh->quote((($controlnumber) || ('NIL')));
-			my $sth=$dbh->prepare("select * from marcrecorddone where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn or controlnumber=$q_controlnumber");
-			$sth->execute;
-			my $donetext='';
-			if ($sth->rows) {
-			    $donetext="DONE";
-			}
+			#my $sth=$dbh->prepare("select * from marcrecorddone where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn or controlnumber=$q_controlnumber");
+			#$sth->execute;
+			#my $donetext='';
+			#if ($sth->rows) {
+			#    $donetext="DONE";
+			#}
 			$sth=$dbh->prepare("select * from biblioitems where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn");
 			$sth->execute;
 			if ($sth->rows) {
@@ -1109,12 +1133,12 @@ EOF
 		my $q_issn=$dbh->quote((($issn) || ('NIL')));
 		my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
 		my $q_controlnumber=$dbh->quote((($controlnumber) || ('NIL')));
-		my $sth=$dbh->prepare("select * from marcrecorddone where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn or controlnumber=$q_controlnumber");
-		$sth->execute;
-		my $donetext='';
-		if ($sth->rows) {
-		    $donetext="DONE";
-		}
+		#my $sth=$dbh->prepare("select * from marcrecorddone where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn or controlnumber=$q_controlnumber");
+		#$sth->execute;
+		#my $donetext='';
+		#if ($sth->rows) {
+		#    $donetext="DONE";
+		#}
 		$sth=$dbh->prepare("select * from biblioitems where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn");
 		$sth->execute;
 		if ($sth->rows) {
