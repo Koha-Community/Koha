@@ -5,7 +5,6 @@ require Exporter;
 use C4::Database;
 #use C4::Biblio;
 
-use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
