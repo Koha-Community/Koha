@@ -4,7 +4,11 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<h3>Search Results</h3>
+<!-- TMPL_IF NAME="searchdesc" -->
+    <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span></h3>
+<!-- TMPL_ELSE -->
+  		<h3>You did not specify any search criteria</h3>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="total" --><div id="pages">
 <!-- TMPL_IF NAME="displayprev" -->
@@ -22,7 +26,7 @@
 				<!-- /TMPL_IF --></div>
 <!-- TMPL_ELSE --><!-- /TMPL_IF -->
 
-<div id="results">Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --> records.</div>
+<div id="results"><!-- TMPL_IF name="total" -->Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --> records.<!-- TMPL_ELSE -->No results found.<!-- /TMPL_IF --></div>
 
 <div class="table searchresults"><table>
 	<tr>
