@@ -59,7 +59,7 @@ while (<KC>) {
    $configfile{$variable}=$value;
  }
 }
-my $path=$configfile{'path'};
+my $path=$configfile{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
 
