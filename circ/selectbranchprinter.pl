@@ -93,6 +93,9 @@ foreach (keys %$printers) {
 }
 
 # if there is only one....
+my $printername;
+my $branchname;
+
 my $oneprinter=($printercount==1) ;
 my $onebranch=($branchcount==1) ;
 if ($printercount==1) {
@@ -111,7 +114,7 @@ if ($branchcount==1) {
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "circ/selectbranchprinter.tmpl",
-							query => $input,
+							query => $query,
                             type => "intranet",
                             authnotrequired => 0,
                             flagsrequired => {parameters => 1},
