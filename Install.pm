@@ -19,6 +19,8 @@ $VERSION = 0.01;
 		&getapachevhostinfo
 		&updateapacheconf
 		&basicauthentication
+		&installfiles
+		&databasesetup
 		);
 
 
@@ -135,6 +137,15 @@ Please supply the directory you want Koha to store its Intranet/Librarians
 files in.  This directory will be auto-created for you if it doesn't exist.
 
 Intranet Directory [%s]: |;
+
+$messages->{'GetKohaLogDir'}->{en}=qq|
+======================
+= KOHA LOG DIRECTORY =
+======================
+
+Specify a log directory where any Koha daemons can create log files.
+
+Koha Log Directory [%s]: |;
 
 sub releasecandidatewarning {
     my $message=getmessage('ReleaseCandidateWarning', [$::kohaversion, $::kohaversion]);
@@ -303,7 +314,77 @@ You must specify different directories for the OPAC and INTRANET files!
 	    $getdirinfo=0;
 	}
     }
-    return ($::opacdir, $::intranetdir);
+    $::kohalogdir='/var/log/koha';
+    my $message=getmessage('GetKohaLogDir', [$::kohalogdir]);
+    $::kohalogdir=showmessage($message, 'free', $::kohalogdir);
+
+
+    unless ( -d $::intranetdir ) {
+       my $result=mkdir ($::intranetdir, oct(770));
+       if ($result==0) {
+	   my @dirs = split(m#/#, $::intranetdir);
+	    my $checkdir='';
+	    foreach (@dirs) {
+		$checkdir.="$_/";
+		unless (-e "$checkdir") {
+		    mkdir($checkdir, 0775);
+		}
+	    }
+       }
+       chown (oct(0), (getgrnam($::httpduser))[2], "$::intranetdir");
+       chmod (oct(770), "$::intranetdir");
+    }
+    unless ( -d "$::intranetdir/htdocs" ) {
+       mkdir ("$::intranetdir/htdocs", oct(750));
+    }
+    unless ( -d "$::intranetdir/cgi-bin" ) {
+       mkdir ("$::intranetdir/cgi-bin", oct(750));
+    }
+    unless ( -d "$::intranetdir/modules" ) {
+       mkdir ("$::intranetdir/modules", oct(750));
+    }
+    unless ( -d "$::intranetdir/scripts" ) {
+       mkdir ("$::intranetdir/scripts", oct(750));
+    }
+    unless ( -d $::opacdir ) {
+       my $result=mkdir ($::opacdir, oct(770));
+       if ($result==0) {
+	   my @dirs = split(m#/#, $::opacdir);
+	    my $checkdir='';
+	    foreach (@dirs) {
+		$checkdir.="$_/";
+		unless (-e "$checkdir") {
+		    mkdir($checkdir, 0775);
+		}
+	    }
+       }
+       chown (oct(0), (getgrnam($::httpduser))[2], "$::opacdir");
+       chmod (oct(770), "$::opacdir");
+    }
+    unless ( -d "$::opacdir/htdocs" ) {
+       mkdir ("$::opacdir/htdocs", oct(750));
+    }
+    unless ( -d "$::opacdir/cgi-bin" ) {
+       mkdir ("$::opacdir/cgi-bin", oct(750));
+    }
+
+
+    unless ( -d $::kohalogdir ) {
+       my $result=mkdir ($::kohalogdir, oct(770));
+       if ($result==0) {
+	   my @dirs = split(m#/#, $::kohalogdir);
+	    my $checkdir='';
+	    foreach (@dirs) {
+		$checkdir.="$_/";
+		unless (-e "$checkdir") {
+		    mkdir($checkdir, 0775);
+		}
+	    }
+       }
+
+       chown (oct(0), (getgrnam($::httpduser))[2,3], "$::kohalogdir");
+       chmod (oct(770), "$::kohalogdir");
+    }
 }
 
 
@@ -615,8 +696,12 @@ Press <ENTER> to continue: |;
 
 
 $messages->{'ApacheAlreadyConfigured'}->{en}=qq|
-$::realhttpdconf appears to already have an entry for Koha
-Virtual Hosts.  You may need to edit $::realhttpdconf
+=============================
+= APACHE ALREADY CONFIGURED =
+=============================
+
+%s appears to already have an entry for Koha
+Virtual Hosts.  You may need to edit %s
 f anything has changed since it was last set up.  This
 script will not attempt to modify an existing Koha apache
 configuration.
@@ -674,7 +759,7 @@ sub updateapacheconf {
 
     
     if (`grep 'VirtualHost $::servername' $::realhttpdconf`) {
-	showmessage(getmessage('ApacheAlreadyConfigured'), 'PressEnter');
+	showmessage(getmessage('ApacheAlreadyConfigured', [$::realhttpdconf, $::realhttpdconf]), 'PressEnter');
 	return;
     } else {
 	my $includesdirectives='';
@@ -791,8 +876,223 @@ EOP
     close(SITE);
 }
 
+$messages->{'InstallFiles'}->{en}=qq|
+====================
+= INSTALLING FILES =
+====================
+
+Copying files to installation directories:
+
+|;
 
 
+$messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
+
+
+
+sub installfiles {
+
+
+    showmessage(getmessage('InstallFiles'),'none');
+    print getmessage('CopyingFiles', ['internet-html', "$::intranetdir/htdocs" ]);
+    system("cp -R intranet-html/* $::intranetdir/htdocs/");
+    print getmessage('CopyingFiles', ['internet-cgi', "$::intranetdir/cgi-bin" ]);
+    system("cp -R intranet-cgi/* $::intranetdir/cgi-bin/");
+    print getmessage('CopyingFiles', ['stand-alone scripts', "$::intranetdir/scripts" ]);
+    system("cp -R scripts/* $::intranetdir/scripts/");
+    print getmessage('CopyingFiles', ['perl modules', "$::intranetdir/modules" ]);
+    system("cp -R modules/* $::intranetdir/modules/");
+    print getmessage('CopyingFiles', ['opac-html', "$::opacdir/htdocs" ]);
+    system("cp -R opac-html/* $::opacdir/htdocs/");
+    print getmessage('CopyingFiles', ['opac-cgi', "$::opacdir/cgi-bin" ]);
+    system("cp -R opac-cgi/* $::opacdir/cgi-bin/");
+
+    system("chown -R root.$::httpduser $::opacdir");
+    system("chown -R root.$::httpduser $::intranetdir");
+
+    # Create /etc/koha.conf
+
+    open(KC,">$::etcdir/koha.conf") or warn "Couldn't create file
+    at $::etcdir.  Must have write capability.\n";
+    print KC qq|
+database=$::dbname
+hostname=$::hostname
+user=$::user
+pass=$::pass
+includes=$::intranetdir/htdocs/includes
+intranetdir=$::intranetdir
+opacdir=$::opacdir
+kohalogdir=$::kohalogdir
+kohaversion=$::kohaversion
+httpduser=$::httpduser
+|;
+    close(KC);
+
+    chown((getpwnam($::httpduser)) [2,3], "$::etcdir/koha.conf") or warn "can't chown koha.conf: $!";
+    chmod 0440, "$::etcdir/koha.conf";
+}
+
+$messages->{'MysqlRootPassword'}->{en}=qq|
+============================
+= MYSQL ROOT USER PASSWORD =
+============================
+
+To allow us to create the koha database please supply your
+mysql server's root user password:
+
+Enter MySql root user password: |;
+
+$messages->{'InvalidMysqlRootPassword'}->{en}="Invalid Password.  Please try again.";
+
+$messages->{'CreatingDatabase'}->{en}=qq|
+=====================
+= CREATING DATABASE =
+=====================
+
+Creating the MySql database for Koha...
+
+|;
+
+$messages->{'CreatingDatabaseError'}->{en}=qq|
+===========================
+= ERROR CREATING DATABASE =
+===========================
+
+Couldn't connect to the MySQL server for the reason given above.
+This is a serious problem, the database will not get installed.
+
+Press <ENTER> to continue: |;
+
+$messages->{'SampleData'}->{en}=qq|
+===============
+= SAMPLE DATA =
+===============
+
+If you are installing Koha for evaluation purposes,  I have a batch of sample
+data that you can install now.
+
+If you are installing Koha with the intention of populating it with your own
+data, you probably don't want this sample data installed.
+
+Would you like to install the sample data? Y/[N]: |;
+
+$messages->{'SampleDataInstalled'}->{en}=qq|
+=========================
+= SAMPLE DATA INSTALLED =
+=========================
+
+Sample data has been installed.  For some suggestions on testing Koha, please
+read the file doc/HOWTO-Testing.  If you find any bugs, please submit them at
+http://bugs.koha.org/.  If you need help with testing Koha, you can post a
+question through the koha-devel mailing list, or you can check for a developer
+online at +irc.katipo.co.nz:6667 channel #koha.
+
+You can find instructions for subscribing to the Koha mailing lists at:
+
+    http://www.koha.org
+
+
+Press <ENTER> to continue: |;
+
+$messages->{'AddBranchPrinter'}->{en}=qq|
+==========================
+= Add Branch and Printer =
+==========================
+
+Would you like to install an initial branch and printer? [Y]/N: |;
+
+$messages->{'BranchName'}->{en}="Branch Name [%s]: ";
+$messages->{'BranchCode'}->{en}="Branch Code (4 letters or numbers) [%s]: ";
+$messages->{'PrinterQueue'}->{en}="Printer Queue [%s]: ";
+$messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
+
+sub databasesetup {
+    my $mysqldir;
+    $::mysqluser = 'root';
+    $::mysqlpass = '';
+
+    foreach my $mysql (qw(/usr/local/mysql
+			  /opt/mysql
+			  )) {
+       if ( -d $mysql ) {
+		$mysqldir=$mysql;
+       }
+    }
+    if (!$mysqldir){
+	$mysqldir='/usr';
+    }
+
+
+    my $needpassword=1;
+    while ($needpassword) {
+	$::mysqlpass=showmessage(getmessage('MysqlRootPassword'), 'free');
+	my $result=system("$mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass proc > /dev/null 2>&1");
+	if ($result) {
+	    print getmessage('InvalidMysqlRootPassword');
+	} else {
+	    $needpassword=0;
+	}
+    }
+
+    showmessage(getmessage('CreatingDatabase'),'none');
+
+    my $result=system("$mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass create $::dbname");
+    if ($result) {
+	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
+    } else {
+	system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname < koha.mysql");
+	system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
+	system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass reload");
+
+	system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
+
+
+	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
+	if ($response =~/^y/i) {
+	    system("gunzip sampledata-1.2.gz");
+	    system("cat sampledata-1.2 | $mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+	    system("gzip -9 sampledata-1.2");
+	    system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+	    system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+	    showmessage(getmessage('SampleDataInstalled'), 'PressEnter');
+	} else {
+	    my $input;
+	    my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
+
+	    unless ($response =~/^n/i) {
+		my $branch='Main Library';
+		print "Enter a name for the library branch [$branch]: ";
+		$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
+		$branch=~s/[^A-Za-z0-9\s]//g;
+
+		my $branchcode=$branch;
+		$branchcode=~s/[^A-Za-z0-9]//g;
+		$branchcode=uc($branchcode);
+		$branchcode=substr($branchcode,0,4);
+		$branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
+		$branchcode=~s/[^A-Z]//g;
+		$branchcode=uc($branchcode);
+		$branchcode=substr($branchcode,0,4);
+
+		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+
+		my $printername='Library Printer';
+		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
+		$printername=~s/[^A-Za-z0-9\s]//g;
+
+		my $printerqueue='lp';
+		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
+		$printerqueue=~s/[^A-Za-z0-9]//g;
+		system("$mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+
+	    }
+	}
+
+
+    }
+
+}
 
 END { }       # module clean-up code here (global destructor)
 
