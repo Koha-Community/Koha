@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
 							type => "opac",
-							authnotrequired => 0,
+							authnotrequired => 1,
 						});
 
 if ($query->param('modifyshelfcontents')) {
@@ -187,6 +187,12 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.1  2005/01/11 16:33:57  tipaul
+# fix for http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=811 :
+# The OPAC requires uses to log in to view virtual shelves, and it requires a user
+# with librarian privileges.  Virtual shelves should be viewable by all users,
+# logged in or not, and editable by all logged-in users in good standing.
+#
 # Revision 1.3  2005/01/03 11:09:34  tipaul
 # synch'ing virtual shelves management in opac with the librarian one, that has more features
 #
