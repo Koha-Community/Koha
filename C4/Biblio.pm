@@ -1,6 +1,9 @@
 package C4::Biblio; 
 # $Id$
 # $Log$
+# Revision 1.6  2002/07/25 13:40:31  tipaul
+# pod documenting the API.
+#
 # Revision 1.5  2002/07/24 16:11:37  tipaul
 # Now, the API...
 # Database.pm and Output.pm are almost not modified (var test...)
@@ -22,9 +25,6 @@ package C4::Biblio;
 # Note we have decided with steve that a old-biblio <=> a MARC-Biblio.
 #
 
-# Contains all sub used for biblio management. tables :
-# biblio, biblioitems, items
-# bibliosubject, bibliosubtitle
 
 # move from 1.2 to 1.4 version : 
 # 1.2 and previous version uses a specific API to manage biblios. This API uses old-DB style parameters.
@@ -137,15 +137,76 @@ my $priv_func = sub {
 # ALLxxx subs (xxx deals with old-DB parameters, the ALLxxx deals with MARC-DB parameter)
 
 =head1 SYNOPSIS
-
-  use Biblio.pm;
-  $dbh=&C4Connect;
-  taglibs = &MARCgettagslib($dbh,1|0);
-  last param is 1 for liblibrarian and 0 for libopac
+  MARCxxx related subs
+  all subs requires/use $dbh as 1st parameter.
+  NOTE : all those subs are private and must be used only inside Biblio.pm (called by a old API sub, or the ALLsub)
 
 =head1 DESCRIPTION
 
-  returns a hash with tag/subfield meaning
+=head2 @tagslib = &MARCgettagslib($dbh,1|0);
+      last param is 1 for liblibrarian and 0 for libopac
+      returns a hash with tag/subfield meaning
+
+=head2 ($tagfield,$tagsubfield) = &MARCfindmarc_from_kohafield($dbh,$kohafield);
+      finds MARC tag and subfield for a given kohafield
+      kohafield is "table.field" where table= biblio|biblioitems|items, and field a field of the previous table
+
+=head2 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$MARCbibi);
+      finds a old-db biblio number for a given MARCbibid number
+
+=head2 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
+      finds a MARC bibid from a old-db biblionumber
+
+=head2 &MARCaddbiblio($dbh,$MARC::Record,$biblionumber);
+      creates a biblio (in the MARC tables only). $biblionumber is the old-db biblionumber of the biblio
+
+=head2 &MARCaddsubfield($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
+      adds a subfield in a biblio (in the MARC tables only).
+     
+=head2 $MARCRecord = &MARCgetbiblio($dbh,$bibid);
+      Returns a MARC::Record for the biblio $bibid.
+
+=head2 &MARCmodbiblio($dbh,$bibid,$delete,$record);
+      MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
+      if $delete == 1, every field/subfield not found is deleted in the biblio
+      otherwise, only data passed to MARCmodbiblio is managed.
+      thus, you can change only a small part of a biblio (like an item, or a subtitle, or a additionalauthor...)
+
+=head2 ($subfieldid,$subfieldvalue) = &MARCmodsubfield($dbh,$subfieldid,$subfieldvalue);
+      MARCmodsubfield changes the value of a given subfield
+
+=head2 $subfieldid = &MARCfindsubfield($dbh,$bibid,$tag,$subfieldcode,$subfieldorder,$subfieldvalue);
+      MARCfindsubfield returns a subfield number given a bibid/tag/subfieldvalue values.
+      Returns -1 if more than 1 answer
+
+=head2 $subfieldid = &MARCfindsubfieldid($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
+      MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldorder
+
+=head2 &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
+      MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
+
+=head2 &MARCdelbiblio($dbh,$bibid);
+      MARCdelbiblio delete biblio $bibid
+
+=head2 $MARCRecord = &MARCkoha2marcBiblio($dbh,$biblionumber,biblioitemnumber);
+      MARCkoha2marcBiblio is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB biblio/biblioitem
+
+=head2 $MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
+      MARCkoha2marcItem is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB item
+
+=head2 $MARCRecord = &MARCkoha2marcSubtitle($dbh,$biblionumber,$subtitle);
+      MARCkoha2marcSubtitle is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB subtitle
+
+=head2 &MARCkoha2marcOnefield => used by MARCkoha2marc and should not be useful elsewhere
+
+=head2 $olddb = &MARCmarc2koha($dbh,$MARCRecord);
+      builds a hash with old-db datas from a MARC::Record
+
+=head2 &MARCmarc2kohaOnefield => used by MARCmarc2koha and should not be useful elsewhere
+
+=head2 MARCaddword => used to manage MARC_word table and should not be useful elsewhere
+
+=head2 MARCdelword => used to manage MARC_word table and should not be useful elsewhere
 
 =head1 AUTHOR
 
@@ -172,22 +233,6 @@ sub MARCgettagslib {
     return $res;
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $dbh=&C4Connect;
-  $biblio= MARC::Record->new();
-  fill $biblio
-  $bibid = &MARCfindmarcfromkohafield($dbh,$kohafield);
-
-=head1 DESCRIPTION
-
-finds tag and subfield for a given kohafield
-
-=head1 AUTHOR
-    paul.poulain@free.fr
-=cut
-
 sub MARCfind_marc_from_kohafield {
     my ($dbh,$kohafield) = @_;
     my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
@@ -211,24 +256,6 @@ sub MARCfind_MARCbibid_from_oldbiblionumber {
     my ($bibid) = $sth->fetchrow;
     return $bibid;
 }
-
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $dbh=&C4Connect;
-  $biblio= MARC::Record->new();
-  fill $biblio
-  $bibid = &MARCaddbiblio($dbh,$biblio,$oldbiblionumber);
-
-=head1 DESCRIPTION
-
-  Creates a biblio (in the MARC tables only).
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCaddbiblio {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
@@ -263,21 +290,6 @@ sub MARCaddbiblio {
     }
     return $bibid;
 }
-
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  &MARCaddsubfield($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
-
-=head1 DESCRIPTION
-
-  Adds a subfield in a biblio (in the MARC tables only).
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCaddsubfield {
 # Add a new subfield to a tag into the DB.
@@ -334,20 +346,6 @@ sub MARCaddsubfield {
     &MARCaddword($dbh,$bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $MARCRecord = &MARCgetbiblio($dbh,$bibid);
-
-=head1 DESCRIPTION
-
-  Returns a MARC::Record for the biblio $bibid.
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCgetbiblio {
 # Returns MARC::Record of the biblio passed in parameter.
@@ -393,25 +391,8 @@ sub MARCgetbiblio {
     return $record;
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $MARCRecord = &MARCmodbiblio($dbh,$bibid,$delete,$record);
-
-=head1 DESCRIPTION
-
-  MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
-  if $delete == 1, every field/subfield not found is deleted in the biblio
-  otherwise, only data passed to MARCmodbiblio is managed.
-  thus, you can change only a small part of a biblio (like an item, or a subtitle, or a additionalauthor...)
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCmodbiblio {
+# NOT SURE THIS SUB WORKS WELL...
     my ($dbh,$bibid,$delete,$record)=@_;
     my $oldrecord=&MARCgetbiblio($dbh,$bibid);
 # if nothing to change, don't waste time...
@@ -446,21 +427,6 @@ sub MARCmodbiblio {
 	}
     }
 }
-
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  ($subfieldid,$subfieldvalue) = &MARCmodsubfield($dbh,$subfieldid,$subfieldvalue);
-
-=head1 DESCRIPTION
-
-  MARCmodsubfield changes the value of a given subfield
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCmodsubfield {
 # Subroutine changes a subfield value given a subfieldid.
@@ -503,22 +469,6 @@ sub MARCmodsubfield {
     return($subfieldid, $subfieldvalue);
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $subfieldid = &MARCfindsubfield($dbh,$bibid,$tag,$subfieldcode,$subfieldorder,$subfieldvalue);
-
-=head1 DESCRIPTION
-
-  MARCfindsubfield returns a subfield number given a bibid/tag/subfield values.
-  Returns -1 if more than 1 answer
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCfindsubfield {
     my ($dbh,$bibid,$tag,$subfieldcode,$subfieldorder,$subfieldvalue) = @_;
     my $resultcounter=0;
@@ -548,21 +498,6 @@ sub MARCfindsubfield {
     }
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $subfieldid = &MARCfindsubfieldid($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-
-=head1 DESCRIPTION
-
-  MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldorder
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCfindsubfieldid {
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
     my $sth=$dbh->prepare("select subfieldid from marc_subfield_table
@@ -572,21 +507,6 @@ sub MARCfindsubfieldid {
     my ($res) = $sth->fetchrow;
     return $res;
 }
-
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
-
-=head1 DESCRIPTION
-
-  MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCdelsubfield {
 # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
@@ -598,21 +518,6 @@ sub MARCdelsubfield {
 			");
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  &MARCdelbiblio($dbh,$bibid);
-
-=head1 DESCRIPTION
-
-  MARCdelbiblio delete biblio $bibid
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCdelbiblio {
 # delete a biblio for a $bibid
     my ($dbh,$bibid) = @_;
@@ -620,21 +525,6 @@ sub MARCdelbiblio {
     $dbh->do("delete from marc_subfield_table where bibid='$bibid'");
     $dbh->do("delete from marc_biblio where bibid='$bibid'");
 }
-
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $MARCRecord = &MARCkoha2marcBiblio($dbh,$biblionumber,biblioitemnumber);
-
-=head1 DESCRIPTION
-
-  MARCkoha2marcBiblio is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB biblio/biblioitem
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCkoha2marcBiblio {
 # this function builds partial MARC::Record from the old koha-DB fields
@@ -676,21 +566,6 @@ sub MARCkoha2marcBiblio {
 # TODO : retrieve notes, additionalauthors
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $MARCRecord = &MARCkoha2marcItem($dbh,$biblionumber,itemnumber);
-
-=head1 DESCRIPTION
-
-  MARCkoha2marcItem is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB item
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCkoha2marcItem {
 # this function builds partial MARC::Record from the old koha-DB fields
     my ($dbh,$biblionumber,$itemnumber) = @_;
@@ -718,21 +593,6 @@ sub MARCkoha2marcItem {
 # TODO : retrieve notes, additionalauthors
 }
 
-=head1 SYNOPSIS
-
-  use Biblio.pm;
-  $MARCRecord = &MARCkoha2marcSubtitle($dbh,$biblionumber,$subtitle);
-
-=head1 DESCRIPTION
-
-  MARCkoha2marcSubtitle is a wrapper between old-DB and MARC-DB. It returns a MARC::Record builded with old-DB subtitle
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCkoha2marcSubtitle {
 # this function builds partial MARC::Record from the old koha-DB fields
     my ($dbh,$bibnum,$subtitle) = @_;
@@ -743,16 +603,6 @@ sub MARCkoha2marcSubtitle {
     return $record;
 }
 
-
-=head1 DESCRIPTION
-
-  MARCkoha2marcOnefield is used by MARCkoha2marc and is not exported
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 sub MARCkoha2marcOnefield {
     my ($sth,$record,$kohafieldname,$value)=@_;
     my $tagfield;
@@ -772,16 +622,6 @@ sub MARCkoha2marcOnefield {
     }
     return $record;
 }
-
-=head1 DESCRIPTION
-
-  MARCmarc2koha recieves a MARC::Record as parameter and returns a hash with old-DB datas
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
 
 sub MARCmarc2koha {
     my ($dbh,$record) = @_;
@@ -835,16 +675,6 @@ sub MARCmarc2kohaOneField {
     return $result;
 }
 
-=head1 DESCRIPTION
-
-  MARCaddword is used to manage MARC_word table and is not exported
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCaddword {
 # split a subfield string and adds it into the word table.
 # removes stopwords
@@ -863,16 +693,6 @@ sub MARCaddword {
     }
 }
 
-=head1 DESCRIPTION
-
-  MARCdelword is used to manage MARC_word table and is not exported
-
-=head1 AUTHOR
-
-Paul POULAIN paul.poulain@free.fr
-
-=cut
-
 sub MARCdelword {
 # delete words. this sub deletes all the words from a sentence. a subfield modif is done by a delete then a add
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
@@ -888,6 +708,26 @@ sub MARCdelword {
 # all the following subs are useful to manage MARC-DB with complete MARC records.
 # it's used with marcimport, and marc management tools
 #
+
+=head1 SYNOPSIS
+  ALLxxx related subs
+  all subs requires/use $dbh as 1st parameter.
+  those subs are used by the MARC-compliant version of koha : marc import, or marc management.
+
+=head1 DESCRIPTION
+
+=head2 (oldbibnum,$oldbibitemnum) = ALLnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
+  creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
+  are builded from the MARC::Record. If they are passed, they are used.
+
+=head2 ALLnewitem($dbh,$olditem);
+  adds an item in the db. $olditem is a old-db hash.
+
+=head1 AUTHOR
+
+Paul POULAIN paul.poulain@free.fr
+
+=cut
 
 sub ALLnewbiblio {
     my ($dbh, $record, $oldbiblio, $oldbiblioitem) = @_;
@@ -981,12 +821,74 @@ sub ALLnewitem {
 # OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD
 #
 #
-# all the following subs are the exact copy of 1.0/1.2 version of the sub
-# without the OLD. The OLDxxx is called by the original xxx sub.
-# the 1.4 xxx sub also builds MARC::Record an calls the MARCxxx
-# WARNING : there is 1 difference between initialxxx and OLDxxx :
-# the db header $dbh is always passed as parameter
-# to avoid over-DB connexion
+
+=head1 SYNOPSIS
+  OLDxxx related subs
+  all subs requires/use $dbh as 1st parameter.
+  those subs are used by the MARC-compliant version of koha : marc import, or marc management.
+
+  They all are the exact copy of 1.0/1.2 version of the sub
+  without the OLD. The OLDxxx is called by the original xxx sub.
+  the 1.4 xxx sub also builds MARC::Record an calls the MARCxxx
+ 
+  WARNING : there is 1 difference between initialxxx and OLDxxx :
+  the db header $dbh is always passed as parameter
+  to avoid over-DB connexion
+
+=head1 DESCRIPTION
+
+=head2 $biblionumber = OLDnewbiblio($dbh,$biblio);
+  adds a record in biblio table. Datas are in the hash $biblio.
+
+=head2 $biblionumber = OLDmodbiblio($dbh,$biblio);
+  modify a record in biblio table. Datas are in the hash $biblio.
+
+=head2 OLDmodsubtitle($dbh,$bibnum,$subtitle);
+  modify subtitles in bibliosubtitle table.
+
+=head2 OLDmodaddauthor($dbh,$bibnum,$author);
+  adds or modify additional authors
+  NOTE :  Strange sub : seems to delete MANY and add only ONE author... maybe buggy ?
+
+=head2 $errors = OLDmodsubject($dbh,$bibnum, $force, @subject);
+  modify/adds subjects
+
+=head2 OLDmodbibitem($dbh, $biblioitem);
+  modify a biblioitem
+
+=head2 OLDmodnote($dbh,$bibitemnum,$note
+  modify a note for a biblioitem
+
+=head2 OLDnewbiblioitem($dbh,$biblioitem);
+  adds a biblioitem ($biblioitem is a hash with the values)
+
+=head2 OLDnewsubject($dbh,$bibnum);
+  adds a subject
+=head2 OLDnewsubtitle($dbh,$bibnum,$subtitle);
+  create a new subtitle
+
+=head2 ($itemnumber,$errors)= OLDnewitems($dbh,$item,$barcode);
+  create a item. $item is a hash and $barcode the barcode.
+
+=head2 OLDmoditem($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement);
+  modify item
+  NOTE : not standard API-style. Should be rewriten to be OLDmoditem($dbh,$item) where $item is a hash
+
+=head2 OLDdelitem($dbh,$itemnum);
+  delete item
+
+=head2 OLDdeletebiblioitem($dbh,$biblioitemnumber);
+  deletes a biblioitem
+  NOTE : not standard sub name. Should be OLDdelbiblioitem()
+ 
+=head2 OLDdelbiblio($dbh,$biblio);
+  delete a biblio
+
+=head1 AUTHOR
+
+Paul POULAIN paul.poulain@free.fr
+
+=cut
 
 sub OLDnewbiblio {
   my ($dbh,$biblio) = @_;
