@@ -141,11 +141,18 @@ my @issuedata;
 for (my $i=0;$i<$count;$i++){
   my $datedue=ParseDate($issue->[$i]{'date_due'});
   $issue->[$i]{'date_due'} = slashifyDate($issue->[$i]{'date_due'});
-  my %row = %$issue->[$i];
+  my %row = %{$issue->[$i]};
   if ($datedue < $today){  
     $row{'red'}=1; #print "<font color=red>";
   }
   #find the charge for an item
+  # FIXME - This is expecting
+  # &C4::Circulation::Renewals2::calc_charges, but it's getting
+  # &C4::Circulation::Circ2::calc_charges, which only returns one
+  # element, so itemtype isn't being set.
+  # But &C4::Circulation::Renewals2::calc_charges doesn't appear to
+  # return the correct item type either (or a properly-formatted
+  # charge, for that matter).
   my ($charge,$itemtype)=calc_charges(undef,$dbh,$issue->[$i]{'itemnumber'},$bornum);
   $row{'itemtype'}=$itemtype;
   $row{'charge'}=$charge;
