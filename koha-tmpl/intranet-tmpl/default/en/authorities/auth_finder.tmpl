@@ -11,7 +11,7 @@
 		<h2 class="authority">Search on</h2>
 		<p>
 			<label class="label100">Authority type</label>
-			<select name="authtype">
+			<select name="authtypecode">
 			<!-- TMPL_LOOP name="authtypesloop" -->
 				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="authtypetext" -->
@@ -22,10 +22,12 @@
 		<p>
 			<label class="label100">Search value</label>
 			<input type="text" name="value" value="<!-- TMPL_VAR name="value" -->">
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
+	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->"
 		</p>
 		<p>
 			<input type="submit" value="Start search" class="button authority">

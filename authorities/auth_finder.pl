@@ -36,6 +36,7 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
+my $index = $query->param('index');
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
@@ -50,6 +51,7 @@ foreach my $thisauthtype (keys %$authtypes) {
 	my %row =(value => $thisauthtype,
 				selected => $selected,
 				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+			  index => $index,
 			);
 	push @authtypesloop, \%row;
 }
@@ -63,17 +65,17 @@ if ($op eq "do_search") {
 
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
-	my $orderby = $query->param('orderby');
+# 	my $orderby = $query->param('orderby');
 
 	# builds tag and subfield arrays
 	my @tags;
 
 	my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage,$orderby);
+										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
 
 	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "authorities/auth_finder.tmpl",
+		= get_template_and_user({template_name => "authorities/searchresultlist-auth.tmpl",
 				query => $query,
 				type => 'intranet',
 				authnotrequired => 0,
@@ -81,7 +83,6 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
-
 	# multi page display gestion
 	my $displaynext=0;
 	my $displayprev=$startfrom;
@@ -128,21 +129,24 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
-	$template->param(result => $results,
-							startfrom=> $startfrom,
+	$template->param(result => $results) if $results;
+	$template->param(index => $query->param('index'));
+	warn "ici query $index  $query->param('resultsperpage')" ;
+	$template->param(startfrom=> $startfrom,
 							displaynext=> $displaynext,
 							displayprev=> $displayprev,
 							resultsperpage => $resultsperpage,
 							startfromnext => $startfrom+1,
 							startfromprev => $startfrom-1,
+					        index => $index,
 							searchdata=>\@field_data,
 							total=>$total,
 							from=>$from,
 							to=>$to,
 							numbers=>\@numbers,
 							);
-
 } else {
+	warn "Je suis la de base $index\n";
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/auth_finder.tmpl",
 				query => $query,
@@ -152,6 +156,7 @@ if ($op eq "do_search") {
 				debug => 1,
 				});
 
+	$template->param(index => $index);
 }
 
 $template->param(authtypesloop => \@authtypesloop);

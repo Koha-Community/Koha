@@ -93,6 +93,7 @@ sub authoritysearch {
 	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
 
 	my $sth;
+
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)");
 		warn "Q2 : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)";
@@ -102,7 +103,6 @@ sub authoritysearch {
 	}
 	$sth->execute($authtypecode);
 	my @result = ();
-
 	while (my ($authid) = $sth->fetchrow) {
 			warn "AUTH: $authid";
 			push @result,$authid;
@@ -172,6 +172,7 @@ sub create_request {
 	my $nb_active=0; # will contain the number of "active" entries. and entry is active is a value is provided.
 	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
 
+
 	for(my $i=0; $i<=@$value;$i++) {
 		if (@$value[$i]) {
 			$nb_active++;
@@ -183,14 +184,15 @@ sub create_request {
 						$sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where1.=")";
-				} elsif (@$operator[$i] eq "contains") {
-					$sql_tables .= "auth_word as m$nb_table,";
+				} elsif (@$operator[$i] eq "contains") {	
+				$sql_tables .= "auth_word as m$nb_table,";
 					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} else {
+
 					$sql_tables .= "auth_subfield_table as m$nb_table,";
 					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
@@ -250,6 +252,7 @@ sub create_request {
 		$sql_where2 = "";
 	}
 	chop $sql_tables;	# deletes the trailing ','
+	
 	return ($sql_tables, $sql_where1, $sql_where2);
 }
 
@@ -824,6 +827,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.5  2004/07/05 13:37:22  doxulting
+# First step for working authorities
+#
 # Revision 1.4  2004/06/22 11:35:37  tipaul
 # removing % at the beginning of a string to avoid loooonnnngggg searchs
 #
