@@ -2,9 +2,8 @@
 #script to provide intranet (librarian) advanced search facility
 #modified 9/11/1999 by chris@katipo.co.nz
 #adding an extra comment to play with CVS (Si, 19/11/99)
-#modified 29/12/99 by chris@katipo.co.nz to be usable by opac as well
+#modified 29/12/99 by chris@katipo.co.nz to be usavle by opac as well
 #modified by chris 10/11/00 to fix dewey search
-#modified by chris@katipo.co.nz 3/2/01 to fix glitch with " in titles
 
 use strict;
 use C4::Search;
@@ -41,9 +40,10 @@ $search{'title'}=$title;
 my $keyword=validate($input->param('keyword'));
 $search{'keyword'}=$keyword;
 $search{'front'}=validate($input->param('front'));
-
 my $author=validate($input->param('author'));
 $search{'author'}=$author;
+my $illustrator=validate($input->param('illustrator'));
+$search{'illustrator'}=$illustrator;
 my $subject=validate($input->param('subject'));
 $search{'subject'}=$subject;
 my $itemnumber=validate($input->param('item'));
@@ -87,10 +87,9 @@ if ($itemnumber ne '' || $isbn ne ''){
 #      print "hey";
       ($count,@results)=&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
     } elsif ($search{'front'} ne '') {
-     $search{'keyword'}=$search{'front'};
-    ($count,@results)&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
+    ($count,@results)&FrontSearch(\$blah,'intra',\%search,$num,$offset);
 #    print "hey";
-    }elsif ($title ne '' || $author ne '' || $dewey ne '' || $class ne '') {
+    }elsif ($title ne '' || $author ne '' || $illustrator ne '' || $dewey ne '' || $class ne '') {
       ($count,@results)=&CatSearch(\$blah,'loose',\%search,$num,$offset);
 #            print "hey";
     }
@@ -111,12 +110,16 @@ print mktablehdr;
 if ($type ne 'opac'){
   if ($subject ne ''){
    print mktablerow(1,$main,'<b>SUBJECT</b>','/images/background-mem.gif');
+  } elsif ($illustrator ne '') {
+   print mktablerow(7,$main,'<b>TITLE</b>','<b>AUTHOR</b>', '<b>ILLUSTRATOR<b>', bold('&copy;'),'<b>COUNT</b>',bold('LOCATION'),'','/images/background-mem.gif');
   } else {
    print mktablerow(6,$main,'<b>TITLE</b>','<b>AUTHOR</b>',bold('&copy;'),'<b>COUNT</b>',bold('LOCATION'),'','/images/background-mem.gif');
   }
 } else {
   if ($subject ne ''){
    print mktablerow(6,$main,'<b>SUBJECT</b>',' &nbsp; ',' &nbsp; ');
+  } elsif ($illustrator ne '') {
+   print mktablerow(7,$main,'<b>TITLE</b>','<b>AUTHOR</b>','<b>ILLUSTRATOR</b>', bold('&copy;'),'<b>COUNT</b>',bold('BRANCH'),'');
   } else {
    print mktablerow(6,$main,'<b>TITLE</b>','<b>AUTHOR</b>',bold('&copy;'),'<b>COUNT</b>',bold('BRANCH'),'');
   }
@@ -137,7 +140,6 @@ while ($i < $count2){
     $stuff[1]=~ s/\`/\\\'/g;
     my $title2=$stuff[1];
     $title2=~ s/ /%20/g;
-    $title2=~ s/\W//g;
     if ($subject eq ''){
 #      print $stuff[0];
       $stuff[1]=mklink("/cgi-bin/koha/detail.pl?type=$type&bib=$stuff[2]&title=$title2",$stuff[1]);
@@ -149,6 +151,8 @@ while ($i < $count2){
       $word=~ s/\,/\,%20/g;
       $word=~ s/\n//g;
       my $url="/cgi-bin/koha/search.pl?author=$word&type=$type";
+      $stuff[7]=$stuff[5];
+      $stuff[5]='';
       $stuff[0]=mklink($url,$stuff[0]);
       my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount)=itemcount($env,$stuff[2],$type);
       $stuff[4]=$count;
@@ -221,19 +225,35 @@ while ($i < $count2){
     }
 
     if ($colour == 1){
-      print mktablerow(6,$secondary,$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      if ($illustrator) {
+	  print mktablerow(7,$secondary,$stuff[1],$stuff[0],$stuff[7],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      } else {
+	  print mktablerow(6,$secondary,$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      }
       $colour=0;
-    } else{
-      print mktablerow(6,'white',$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+    } else {
+      if ($illustrator) {
+	  print mktablerow(7,'white',$stuff[1],$stuff[0],$stuff[7],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      } else {
+	  print mktablerow(6,'white',$stuff[1],$stuff[0],$stuff[3],$stuff[4],$stuff[5],$stuff[6]);
+      }
       $colour=1;
     }
     $i++;
 }
 $offset=$num+$offset;
 if ($type ne 'opac'){
- print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp;','','','/images/background-mem.gif');
+    if ($illustrator) {
+	 print mktablerow(7,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp;','','','','/images/background-mem.gif');
+    } else {
+	 print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp;','','','/images/background-mem.gif');
+    }
 } else {
- print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp; ','','');
+ if ($illustrator) {
+     print mktablerow(7,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp; ','', '','');
+ } else {
+     print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp; ','','');
+ }
 }
 print mktableft();
 my $search;

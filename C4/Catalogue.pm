@@ -175,6 +175,24 @@ sub updateBiblio {
     my $sth=$dbh->prepare("select * from biblio where biblionumber=$biblionumber");
     $sth->execute;
     my $origbiblio=$sth->fetchrow_hashref;
+    $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber"):
+    $sth->execute;
+    my ($subtitle)=$sth->fetchrow;
+    $origbiblio->{'subtitle'}=$subtitle;
+    $sth=$dbh->prepare("select author from additionalauthors where biblionumber=$biblionumber");
+    $sth->execute;
+    my $origadditionalauthors;
+    while (my ($author) = $sth->fetchrow) {
+	push (@{$origbiblio->{'additionalauthors'}}, $author);
+	$origadditionalauthors->{$subject}=1;
+    }
+    $sth=$dbh->prepare("select subject from bibliosubjects where biblionumber=$biblionumber");
+    $sth->execute;
+    my $origsubjects;
+    while (my ($subject) = $sth->fetchrow) {
+	push (@{$origbiblio->{'subjects'}}, $subject);
+	$origsubjects->{$subject}=1;
+    }
 
     
 # Obtain a list of MARC Record_ID's that are tied to this biblio
@@ -187,80 +205,126 @@ sub updateBiblio {
 
 
 
+    my $Record_ID='';
     if ($biblio->{'author'} ne $origbiblio->{'author'}) {
 	my $q_author=$dbh->quote($biblio->{'author'});
-	logchange('kohadb', 'biblio', 'author', $origbiblio->{'author'}, $biblio->{'author'});
+	logchange('kohadb', 'change', 'biblio', 'author', $origbiblio->{'author'}, $biblio->{'author'});
 	my $sti=$dbh->prepare("update biblio set author=$q_author where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
-	logchange('marc', '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
-	foreach (@marcrecords) {
-	    changeSubfield($_, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
+	foreach $Record_ID (@marcrecords) {
+	    logchange('marc', 'change', $Record_ID, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
+	    changeSubfield($Record_ID, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
 	}
     }
     if ($biblio->{'title'} ne $origbiblio->{'title'}) {
 	my $q_title=$dbh->quote($biblio->{'title'});
-	logchange('kohadb', 'biblio', 'title', $origbiblio->{'title'}, $biblio->{'title'});
+	logchange('kohadb', 'change', 'biblio', 'title', $origbiblio->{'title'}, $biblio->{'title'});
 	my $sti=$dbh->prepare("update biblio set title=$q_title where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
-	logchange('marc', '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
-	foreach (@marcrecords) {
-	    changeSubfield($_, '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
+	foreach $Record_ID (@marcrecords) {
+	    logchange('marc', 'change', $Record_ID, '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
+	    changeSubfield($Record_ID, '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
+	}
+    }
+    if ($biblio->{'subtitle'} ne $origbiblio->{'subtitle'}) {
+	my $q_subtitle=$dbh->quote($biblio->{'subtitle'});
+	logchange('kohadb', 'change', 'biblio', 'subtitle', $origbiblio->{'subtitle'}, $biblio->{'subtitle'});
+	my $sti=$dbh->prepare("update bibliosubtitle set subtitle=$q_subtitle where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+	foreach $Record_ID (@marcrecords) {
+	    logchange('marc', 'change', $Record_ID, '245', 'b', $origbiblio->{'subtitle'}, $biblio->{'subtitle'});
+	    changeSubfield($Record_ID, '245', 'b', $origbiblio->{'subtitle'}, $biblio->{'subtitle'});
 	}
     }
     if ($biblio->{'unititle'} ne $origbiblio->{'unititle'}) {
 	my $q_unititle=$dbh->quote($biblio->{'unititle'});
-	logchange('kohadb', 'biblio', 'unititle', $origbiblio->{'unititle'}, $biblio->{'unititle'});
+	logchange('kohadb', 'change', 'biblio', 'unititle', $origbiblio->{'unititle'}, $biblio->{'unititle'});
 	my $sti=$dbh->prepare("update biblio set unititle=$q_unititle where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
     }
     if ($biblio->{'notes'} ne $origbiblio->{'notes'}) {
 	my $q_notes=$dbh->quote($biblio->{'notes'});
-	logchange('kohadb', 'biblio', 'notes', $origbiblio->{'notes'}, $biblio->{'notes'});
+	logchange('kohadb', 'change', 'biblio', 'notes', $origbiblio->{'notes'}, $biblio->{'notes'});
 	my $sti=$dbh->prepare("update biblio set notes=$q_notes where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
-	logchange('marc', '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
-	foreach (@marcrecords) {
-	    changeSubfield($_, '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
+	foreach $Record_ID (@marcrecords) {
+	    logchange('marc', 'change', $Record_ID, '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
+	    changeSubfield($Record_ID, '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
 	}
     }
     if ($biblio->{'serial'} ne $origbiblio->{'serial'}) {
 	my $q_serial=$dbh->quote($biblio->{'serial'});
-	logchange('kohadb', 'biblio', 'serial', $origbiblio->{'serial'}, $biblio->{'serial'});
+	logchange('kohadb', 'change', 'biblio', 'serial', $origbiblio->{'serial'}, $biblio->{'serial'});
 	my $sti=$dbh->prepare("update biblio set serial=$q_serial where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
     }
     if ($biblio->{'seriestitle'} ne $origbiblio->{'seriestitle'}) {
 	my $q_seriestitle=$dbh->quote($biblio->{'seriestitle'});
-	logchange('kohadb', 'biblio', 'seriestitle', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
+	logchange('kohadb', 'change', 'biblio', 'seriestitle', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
 	my $sti=$dbh->prepare("update biblio set seriestitle=$q_seriestitle where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
-	logchange('marc', '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
-	foreach (@marcrecords) {
-	    changeSubfield($_, '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
+	foreach $Record_ID (@marcrecords) {
+	    logchange('marc', 'change', $Record_ID, '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
+	    changeSubfield($Record_ID, '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
 	}
     }
     if ($biblio->{'copyrightdate'} ne $origbiblio->{'copyrightdate'}) {
 	my $q_copyrightdate=$dbh->quote($biblio->{'copyrightdate'});
-	logchange('kohadb', 'biblio', 'copyrightdate', $origbiblio->{'copyrightdate'}, $biblio->{'copyrightdate'});
+	logchange('kohadb', 'change', 'biblio', 'copyrightdate', $origbiblio->{'copyrightdate'}, $biblio->{'copyrightdate'});
 	my $sti=$dbh->prepare("update biblio set copyrightdate=$q_copyrightdate where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
-	logchange('marc', '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
-	foreach (@marcrecords) {
-	    changeSubfield($_, '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
+	foreach $Record_ID (@marcrecords) {
+	    logchange('marc', 'change', $Record_ID, '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
+	    changeSubfield($Record_ID, '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
 	}
     }
+
+# Check for subject heading changes
+    
+    my $newsubject='';
+    foreach $newsubject (@{$biblio->{'subject'}}) {
+	$subjects->{$newsubject}=1;
+	if ($origsubjects->{$newsubject}) {
+	    $subjects->{$newsubject}=2;
+	} else {
+	    my $q_newsubject=$dbh->quote($newsubject);
+	    my $sth=$dbh->prepare("insert into bibliosubjects (subject,biblionumber) values ($q_newsubject, $biblionumber)");
+	    $sth->execute;
+	    logchange('kohadb', 'add', 'biblio', 'subject', $newsubject);
+	    my $subfields;
+	    $subfields->{1}->{'Subfield_Mark'}='a';
+	    $subfields->{1}->{'Subfield_Value'}=$newsubject;
+	    my $tag='650';
+	    my $Record_ID;
+	    foreach $Record_ID (@marcrecords) {
+		addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+		logchange('marc', 'add', $Record_ID, '650', 'a', $newsubject);
+	    }
+	}
+    }
+    foreach $origsubject (keys %$origsubjects) {
+	if ($subjects->{$origsubject} == 1) {
+	    my $q_origsubject=$dbh->quote($origsubject);
+	    logchange('kohadb', 'delete', 'biblio', '$biblionumber', 'subject', $origsubject);
+	    my $sth=$dbh->prepare("delete from bibliosubjects where biblionumber=$biblionumber and subject=$q_origsubject");
+	    $sth->execute;
+	}
+    }
+
 }
 
 sub logchange {
 # Subroutine to log changes to databases
     my $database=shift;
     if ($database eq 'kohadb') {
+	my $type=shift;
 	my $section=shift;
 	my $item=shift;
 	my $original=shift;
 	my $new=shift;
 	print "KOHA: $section $item $original $new\n";
     } elsif ($database eq 'marc') {
+	my $type=shift;
 	my $tag=shift;
 	my $mark=shift;
 	my $subfield_ID=shift;
@@ -596,114 +660,114 @@ sub updateBiblioItem {
     $sth->execute;
     my ($Record_ID) = $sth->fetchrow;
     if ($biblioitem->{'biblionumber'} ne $obi->{'biblionumber'}) {
-	logchange('kohadb', 'biblioitems', 'biblionumber', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
+	logchange('kohadb', 'change', 'biblioitems', 'biblionumber', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
 	my $sth=$dbh->prepare("update biblioitems set biblionumber=$biblioitem->{'biblionumber'} where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
+	logchange('marc', 'change', $Record_ID, '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
 	changeSubfield($Record_ID, '090', 'c', $obi->{'biblionumber'}, $biblioitem->{'biblionumber'});
     }
     if ($biblioitem->{'volume'} ne $obi->{'volume'}) {
-	logchange('kohadb', 'biblioitems', 'volume', $obi->{'volume'}, $biblioitem->{'volume'});
+	logchange('kohadb', 'change', 'biblioitems', 'volume', $obi->{'volume'}, $biblioitem->{'volume'});
 	my $q_volume=$dbh->quote($biblioitem->{'volume'});
 	my $sth=$dbh->prepare("update biblioitems set volume=$q_volume where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
+	logchange('marc', 'change', $Record_ID, '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
 	changeSubfield($Record_ID, '440', 'v', $obi->{'volume'}, $biblioitem->{'volume'});
     }
     if ($biblioitem->{'number'} ne $obi->{'number'}) {
-	logchange('kohadb', 'biblioitems', 'number', $obi->{'number'}, $biblioitem->{'number'});
+	logchange('kohadb', 'change', 'biblioitems', 'number', $obi->{'number'}, $biblioitem->{'number'});
 	my $q_number=$dbh->quote($biblioitem->{'number'});
 	my $sth=$dbh->prepare("update biblioitems set number=$q_number where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
+	logchange('marc', 'change', $Record_ID, '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
 	changeSubfield($Record_ID, '440', 'v', $obi->{'number'}, $biblioitem->{'number'});
     }
     if ($biblioitem->{'itemtype'} ne $obi->{'itemtype'}) {
-	logchange('kohadb', 'biblioitems', 'itemtype', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
+	logchange('kohadb', 'change', 'biblioitems', 'itemtype', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
 	my $q_itemtype=$dbh->quote($biblioitem->{'itemtype'});
 	my $sth=$dbh->prepare("update biblioitems set itemtype=$q_itemtype where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
+	logchange('marc', 'change', $Record_ID, '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
 	changeSubfield($Record_ID, '090', 'a', $obi->{'itemtype'}, $biblioitem->{'itemtype'});
     }
     if ($biblioitem->{'isbn'} ne $obi->{'isbn'}) {
-	logchange('kohadb', 'biblioitems', 'isbn', $obi->{'isbn'}, $biblioitem->{'isbn'});
+	logchange('kohadb', 'change', 'biblioitems', 'isbn', $obi->{'isbn'}, $biblioitem->{'isbn'});
 	my $q_isbn=$dbh->quote($biblioitem->{'isbn'});
 	my $sth=$dbh->prepare("update biblioitems set isbn=$q_isbn where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
+	logchange('marc', 'change', $Record_ID, '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
 	changeSubfield($Record_ID, '020', 'a', $obi->{'isbn'}, $biblioitem->{'isbn'});
     }
     if ($biblioitem->{'issn'} ne $obi->{'issn'}) {
-	logchange('kohadb', 'biblioitems', 'issn', $obi->{'issn'}, $biblioitem->{'issn'});
+	logchange('kohadb', 'change', 'biblioitems', 'issn', $obi->{'issn'}, $biblioitem->{'issn'});
 	my $q_issn=$dbh->quote($biblioitem->{'issn'});
 	my $sth=$dbh->prepare("update biblioitems set issn=$q_issn where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
+	logchange('marc', 'change', $Record_ID, '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
 	changeSubfield($Record_ID, '022', 'a', $obi->{'issn'}, $biblioitem->{'issn'});
     }
     if ($biblioitem->{'dewey'} ne $obi->{'dewey'}) {
-	logchange('kohadb', 'biblioitems', 'dewey', $obi->{'dewey'}, $biblioitem->{'dewey'});
+	logchange('kohadb', 'change', 'biblioitems', 'dewey', $obi->{'dewey'}, $biblioitem->{'dewey'});
 	my $sth=$dbh->prepare("update biblioitems set dewey=$biblioitem->{'dewey'} where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
+	logchange('marc', 'change', $Record_ID, '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
 	changeSubfield($Record_ID, '082', 'a', $obi->{'dewey'}, $biblioitem->{'dewey'});
     }
     if ($biblioitem->{'subclass'} ne $obi->{'subclass'}) {
-	logchange('kohadb', 'biblioitems', 'subclass', $obi->{'subclass'}, $biblioitem->{'subclass'});
+	logchange('kohadb', 'change', 'biblioitems', 'subclass', $obi->{'subclass'}, $biblioitem->{'subclass'});
 	my $q_subclass=$dbh->quote($biblioitem->{'subclass'});
 	my $sth=$dbh->prepare("update biblioitems set subclass=$q_subclass where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
+	logchange('marc', 'change', $Record_ID, '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
 	changeSubfield($Record_ID, '090', 'b', $obi->{'subclass'}, $biblioitem->{'subclass'});
     }
     if ($biblioitem->{'place'} ne $obi->{'place'}) {
-	logchange('kohadb', 'biblioitems', 'place', $obi->{'place'}, $biblioitem->{'place'});
+	logchange('kohadb', 'change', 'biblioitems', 'place', $obi->{'place'}, $biblioitem->{'place'});
 	my $q_place=$dbh->quote($biblioitem->{'place'});
 	my $sth=$dbh->prepare("update biblioitems set place=$q_place where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
+	logchange('marc', 'change', $Record_ID, '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
 	changeSubfield($Record_ID, '260', 'a', $obi->{'place'}, $biblioitem->{'place'});
     }
     if ($biblioitem->{'publishercode'} ne $obi->{'publishercode'}) {
-	logchange('kohadb', 'biblioitems', 'publishercode', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
+	logchange('kohadb', 'change', 'biblioitems', 'publishercode', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
 	my $q_publishercode=$dbh->quote($biblioitem->{'publishercode'});
 	my $sth=$dbh->prepare("update biblioitems set publishercode=$q_publishercode where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
+	logchange('marc', 'change', $Record_ID, '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
 	changeSubfield($Record_ID, '260', 'b', $obi->{'publishercode'}, $biblioitem->{'publishercode'});
     }
     if ($biblioitem->{'publicationyear'} ne $obi->{'publicationyear'}) {
-	logchange('kohadb', 'biblioitems', 'publicationyear', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
+	logchange('kohadb', 'change', 'biblioitems', 'publicationyear', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
 	my $q_publicationyear=$dbh->quote($biblioitem->{'publicationyear'});
 	my $sth=$dbh->prepare("update biblioitems set publicationyear=$q_publicationyear where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
+	logchange('marc', 'change', $Record_ID, '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
 	changeSubfield($Record_ID, '260', 'c', $obi->{'publicationyear'}, $biblioitem->{'publicationyear'});
     }
     if ($biblioitem->{'illus'} ne $obi->{'illus'}) {
-	logchange('kohadb', 'biblioitems', 'illus', $obi->{'illus'}, $biblioitem->{'illus'});
+	logchange('kohadb', 'change', 'biblioitems', 'illus', $obi->{'illus'}, $biblioitem->{'illus'});
 	my $q_illus=$dbh->quote($biblioitem->{'illus'});
 	my $sth=$dbh->prepare("update biblioitems set illus=$q_illus where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
+	logchange('marc', 'change', $Record_ID, '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
 	changeSubfield($Record_ID, '700', 'a', $obi->{'illus'}, $biblioitem->{'illus'});
     }
     if ($biblioitem->{'pages'} ne $obi->{'pages'}) {
-	logchange('kohadb', 'biblioitems', 'pages', $obi->{'pages'}, $biblioitem->{'pages'});
+	logchange('kohadb', 'change', 'biblioitems', 'pages', $obi->{'pages'}, $biblioitem->{'pages'});
 	my $q_pages=$dbh->quote($biblioitem->{'pages'});
 	my $sth=$dbh->prepare("update biblioitems set pages=$q_pages where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
+	logchange('marc', 'change', $Record_ID, '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
 	changeSubfield($Record_ID, '300', 'a', $obi->{'pages'}, $biblioitem->{'pages'});
     }
     if ($biblioitem->{'size'} ne $obi->{'size'}) {
-	logchange('kohadb', 'biblioitems', 'size', $obi->{'size'}, $biblioitem->{'size'});
+	logchange('kohadb', 'change', 'biblioitems', 'size', $obi->{'size'}, $biblioitem->{'size'});
 	my $q_size=$dbh->quote($biblioitem->{'size'});
 	my $sth=$dbh->prepare("update biblioitems set size=$q_size where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
+	logchange('marc', 'change', $Record_ID, '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
 	changeSubfield($Record_ID, '300', 'c', $obi->{'size'}, $biblioitem->{'size'});
     }
     if ($biblioitem->{'notes'} ne $obi->{'notes'}) {
-	logchange('kohadb', 'biblioitems', 'notes', $obi->{'notes'}, $biblioitem->{'notes'});
+	logchange('kohadb', 'change', 'biblioitems', 'notes', $obi->{'notes'}, $biblioitem->{'notes'});
 	my $q_notes=$dbh->quote($biblioitem->{'notes'});
 	my $sth=$dbh->prepare("update biblioitems set notes=$q_notes where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
+	logchange('marc', 'change', $Record_ID, '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
 	changeSubfield($Record_ID, '500', 'a', $obi->{'notes'}, $biblioitem->{'notes'});
     }
     if ($biblioitem->{'lccn'} ne $obi->{'lccn'}) {
-	logchange('kohadb', 'biblioitems', 'lccn', $obi->{'lccn'}, $biblioitem->{'lccn'});
+	logchange('kohadb', 'change', 'biblioitems', 'lccn', $obi->{'lccn'}, $biblioitem->{'lccn'});
 	my $q_lccn=$dbh->quote($biblioitem->{'lccn'});
 	my $sth=$dbh->prepare("update biblioitems set lccn=$q_lccn where biblioitemnumber=$biblioitemnumber");
-	logchange('marc', '010', 'c', $obi->{'lccn'}, $biblioitem->{'lccn'});
-	changeSubfield($Record_ID, '010', 'c', $obi->{'lccn'}, $biblioitem->{'lccn'});
+	logchange('marc', 'change', $Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
+	changeSubfield($Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
     }
 
 }
@@ -847,44 +911,108 @@ sub updateItem {
     my ($Subfield852_ID) = $sth->fetchrow;
     
     if ($item->{'barcode'} ne $olditem->{'barcode'}) {
-	logchange('kohadb', 'items', 'barcode', $olditem->{'barcode'}, $item->{'barcode'});
+	logchange('kohadb', 'change', 'items', 'barcode', $olditem->{'barcode'}, $item->{'barcode'});
 	my $q_barcode=$dbh->quote($item->{'barcode'});
 	my $sth=$dbh->prepare("update items set barcode=$q_barcode where itemnumber=$itemnumber");
 	$sth->execute;
 	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'p', $olditem->{'barcode'}, $item->{'barcode'}, $Subfield876_ID);
-	logchange('marc', '876', 'p', $Subfield_Key, $olditem->{'barcode'}, $item->{'barcode'});
+	logchange('marc', 'change', $Record_ID, '876', 'p', $Subfield_Key, $olditem->{'barcode'}, $item->{'barcode'});
     }
     if ($item->{'booksellerid'} ne $olditem->{'booksellerid'}) {
-	logchange('kohadb', 'items', 'booksellerid', $olditem->{'booksellerid'}, $item->{'booksellerid'});
+	logchange('kohadb', 'change', 'items', 'booksellerid', $olditem->{'booksellerid'}, $item->{'booksellerid'});
 	my $q_booksellerid=$dbh->quote($item->{'booksellerid'});
 	my $sth=$dbh->prepare("update items set booksellerid=$q_booksellerid where itemnumber=$itemnumber");
 	$sth->execute;
 	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'}, $Subfield876_ID);
-	logchange('marc', '876', 'e', $Subfield_Key, $olditem->{'booksellerid'}, $item->{'booksellerid'});
+	logchange('marc', 'change', $Record_ID, '876', 'e', $Subfield_Key, $olditem->{'booksellerid'}, $item->{'booksellerid'});
     }
     if ($item->{'dateaccessioned'} ne $olditem->{'dateaccessioned'}) {
-	logchange('kohadb', 'items', 'dateaccessioned', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
+	logchange('kohadb', 'change', 'items', 'dateaccessioned', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
 	my $q_dateaccessioned=$dbh->quote($item->{'dateaccessioned'});
 	my $sth=$dbh->prepare("update items set dateaccessioned=$q_dateaccessioned where itemnumber=$itemnumber");
 	$sth->execute;
 	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'}, $Subfield876_ID);
-	logchange('marc', '876', 'd', $Subfield_Key, $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
+	logchange('marc', 'change', $Record_ID, '876', 'd', $Subfield_Key, $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
     }
     if ($item->{'homebranch'} ne $olditem->{'homebranch'}) {
-	logchange('kohadb', 'items', 'homebranch', $olditem->{'homebranch'}, $item->{'homebranch'});
+	logchange('kohadb', 'change', 'items', 'homebranch', $olditem->{'homebranch'}, $item->{'homebranch'});
 	my $q_homebranch=$dbh->quote($item->{'homebranch'});
 	my $sth=$dbh->prepare("update items set homebranch=$q_homebranch where itemnumber=$itemnumber");
 	$sth->execute;
 	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'}, $Subfield876_ID);
-	logchange('marc', '876', 'b', $Subfield_Key, $olditem->{'homebranch'}, $item->{'homebranch'});
+	logchange('marc', 'change', $Record_ID, '876', 'b', $Subfield_Key, $olditem->{'homebranch'}, $item->{'homebranch'});
     }
     if ($item->{'holdingbranch'} ne $olditem->{'holdingbranch'}) {
-	logchange('kohadb', 'items', 'holdingbranch', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+	logchange('kohadb', 'change', 'items', 'holdingbranch', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
 	my $q_holdingbranch=$dbh->quote($item->{'holdingbranch'});
 	my $sth=$dbh->prepare("update items set holdingbranch=$q_holdingbranch where itemnumber=$itemnumber");
 	$sth->execute;
 	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'}, $Subfield876_ID);
-	logchange('marc', '876', 'l', $Subfield_Key, $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+	logchange('marc', 'change', $Record_ID, '876', 'l', $Subfield_Key, $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+    }
+    if ($item->{'price'} ne $olditem->{'price'}) {
+	logchange('kohadb', 'change', 'items', 'price', $olditem->{'price'}, $item->{'price'});
+	my $q_price=$dbh->quote($item->{'price'});
+	my $sth=$dbh->prepare("update items set price=$q_price where itemnumber=$itemnumber");
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'c', $olditem->{'price'}, $item->{'price'}, $Subfield876_ID);
+	logchange('marc', 'change', $Record_ID, '876', 'c', $Subfield_Key, $olditem->{'price'}, $item->{'price'});
+    }
+    if ($item->{'itemnotes'} ne $olditem->{'itemnotes'}) {
+	logchange('kohadb', 'change', 'items', 'itemnotes', $olditem->{'itemnotes'}, $item->{'itemnotes'});
+	my $q_itemnotes=$dbh->quote($item->{'itemnotes'});
+	my $sth=$dbh->prepare("update items set itemnotes=$q_itemnotes where itemnumber=$itemnumber");
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'c', $olditem->{'itemnotes'}, $item->{'itemnotes'}, $Subfield876_ID);
+	logchange('marc', 'change', $Record_ID, '876', 'c', $Subfield_Key, $olditem->{'itemnotes'}, $item->{'itemnotes'});
+    }
+    if ($item->{'notforloan'} ne $olditem->{'notforloan'}) {
+	logchange('kohadb', 'change', 'items', 'notforloan', $olditem->{'notforloan'}, $item->{'notforloan'});
+	my $sth=$dbh->prepare("update items set notforloan=$notforloan where itemnumber=$itemnumber");
+	$sth->execute;
+	if ($item->{'notforloan'}) {
+	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Not for loan', $Subfield876_ID);
+	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Not for loan');
+	} else {
+	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Not for loan', $Subfield876_ID);
+	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Not for loan');
+	}
+    }
+    if ($item->{'itemlost'} ne $olditem->{'itemlost'}) {
+	logchange('kohadb', 'change', 'items', 'itemlost', $olditem->{'itemlost'}, $item->{'itemlost'});
+	my $sth=$dbh->prepare("update items set itemlost=$itemlost where itemnumber=$itemnumber");
+	$sth->execute;
+	if ($item->{'itemlost'}) {
+	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Item lost', $Subfield876_ID);
+	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Item lost');
+	} else {
+	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Item lost', $Subfield876_ID);
+	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Item lost');
+	}
+    }
+    if ($item->{'wthdrawn'} ne $olditem->{'wthdrawn'}) {
+	logchange('kohadb', 'change', 'items', 'wthdrawn', $olditem->{'wthdrawn'}, $item->{'wthdrawn'});
+	my $sth=$dbh->prepare("update items set wthdrawn=$wthdrawn where itemnumber=$itemnumber");
+	$sth->execute;
+	if ($item->{'wthdrawn'}) {
+	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Withdrawn', $Subfield876_ID);
+	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Withdrawn');
+	} else {
+	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Withdrawn', $Subfield876_ID);
+	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Withdrawn');
+	}
+    }
+    if ($item->{'restricted'} ne $olditem->{'restricted'}) {
+	logchange('kohadb', 'change', 'items', 'restricted', $olditem->{'restricted'}, $item->{'restricted'});
+	my $sth=$dbh->prepare("update items set restricted=$restricted where itemnumber=$itemnumber");
+	$sth->execute;
+	if ($item->{'restricted'}) {
+	    my ($Subfield_ID, $Subfield_Key) = addSubfield($Record_ID, '876', 'h', 'Restricted', $Subfield876_ID);
+	    logchange('marc', 'add', $Record_ID, '876', 'h', $Subfield_Key, 'Restricted');
+	} else {
+	    my ($Subfield_ID, $Subfield_Key) = deleteSubfield($Record_ID, '876', 'h', 'Restricted', $Subfield876_ID);
+	    logchange('marc', 'delete', $Record_ID, '876', 'h', $Subfield_Key, 'Restricted');
+	}
     }
 }
 

@@ -1,8 +1,9 @@
 create table Resource_Table (Resource_ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
-Date_Added TIMESTAMP, Date_Modified TIMESTAMP, Record_ID INT UNSIGNED,
+Date_Added TIMESTAMP, Date_Modified TIMESTAMP, Record_ID INT UNSIGNED NOT NULL,
 Statement_ID INT UNSIGNED, Scope_ID INT UNSIGNED,
 Container_ID INT UNSIGNED,
-primary key(Resource_ID));
+primary key(Resource_ID),
+key(Record_ID));
 
 create table Schema_Table (Schema_ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
 Date_Added TIMESTAMP, Date_Modified TIMESTAMP,
@@ -39,20 +40,23 @@ primary key(Scope_ID));
 
 create table Bib_Table (Bib_ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
 Record_ID INT UNSIGNED NOT NULL,
-Date_Added TIMESTAMP, Date_Modified TIMESTAMP, Control_ID INT UNSIGNED, 
-Tag_0XX_ID INT UNSIGNED, Tag_1XX_ID INT UNSIGNED, Tag_2XX_ID INT
-UNSIGNED, Tag_3XX_ID INT UNSIGNED, Tag_4XX_ID INT UNSIGNED, Tag_5XX_ID
-INT UNSIGNED, Tag_6XX_ID INT UNSIGNED, Tag_7XX_ID INT UNSIGNED,
-Tag_8XX_ID INT UNSIGNED, Tag_9XX_ID INT UNSIGNED, Storage_ID INT
-UNSIGNED, Holdings_ID INT UNSIGNED,
-KEY ID_Index(Record_ID), primary key(Bib_ID));
+Date_Added TIMESTAMP, Date_Modified TIMESTAMP, Control_ID INT UNSIGNED NOT NULL, 
+Tag_0XX_ID INT UNSIGNED NOT NULL, Tag_1XX_ID INT UNSIGNED NOT NULL, Tag_2XX_ID INT
+UNSIGNED NOT NULL, Tag_3XX_ID INT UNSIGNED NOT NULL, Tag_4XX_ID INT UNSIGNED NOT NULL, Tag_5XX_ID
+INT UNSIGNED NOT NULL, Tag_6XX_ID INT UNSIGNED NOT NULL, Tag_7XX_ID INT UNSIGNED NOT NULL,
+Tag_8XX_ID INT UNSIGNED NOT NULL, Tag_9XX_ID INT UNSIGNED NOT NULL, Storage_ID INT
+UNSIGNED NOT NULL, Holdings_ID INT UNSIGNED NOT NULL,
+KEY ID_Index(Record_ID), primary key(Bib_ID),
+key (TAG_0XX_ID), key (TAG_1XX_ID), key (TAG_2XX_ID), key (TAG_3XX_ID), key (TAG_4XX_ID), key (TAG_5XX_ID), key (TAG_6XX_ID), key (TAG_7XX_ID), key (TAG_8XX_ID), key (TAG_9XX_ID), key (Storage_ID), key (Holdings_ID));
 
 create table 0XX_Tag_Table (Tag_Key INT UNSIGNED NOT NULL AUTO_INCREMENT,
 Tag_ID INT UNSIGNED NOT NULL, Indicator1 CHAR(1) NOT NULL,
 Indicator2 CHAR(1) NOT NULL,
-Tag CHAR(3) NOT NULL, Subfield_ID INT UNSIGNED, Authority_ID INT UNSIGNED, 
-Link_Flag ENUM('Y','N','B'), Storage_ID INT UNSIGNED,
+Tag CHAR(3) NOT NULL, Subfield_ID INT UNSIGNED NOT NULL, Authority_ID INT UNSIGNED, 
+Link_Flag ENUM('Y','N','B'), Storage_ID INT UNSIGNED NOT NULL,
 KEY ID_Index(Tag_ID),
+key (Subfield_ID),
+key (Storage_ID),
 KEY Tag_Index (Tag(3)), primary key(Tag_Key));
 
 create table 0XX_Subfield_Table 
@@ -66,9 +70,10 @@ KEY Subfield_Index (Subfield_Value(255)), primary key(Subfield_Key));
 create table 1XX_Tag_Table (Tag_Key INT UNSIGNED NOT NULL AUTO_INCREMENT,
 Tag_ID INT UNSIGNED NOT NULL, Indicator1 CHAR(1) NOT NULL,
 Indicator2 CHAR(1) NOT NULL,
-Tag CHAR(3) NOT NULL, Subfield_ID INT UNSIGNED, Authority_ID INT UNSIGNED, 
-Link_Flag ENUM('Y','N','B'), Storage_ID INT UNSIGNED,
+Tag CHAR(3) NOT NULL, Subfield_ID INT UNSIGNED NOT NULL, Authority_ID INT UNSIGNED, 
+Link_Flag ENUM('Y','N','B'), Storage_ID INT UNSIGNED NOT NULL,
 KEY ID_Index(Tag_ID),
+key (Subfield_ID), key (Storage_ID),
 KEY Tag_Index (Tag(3)), primary key(Tag_Key));
 
 create table 1XX_Subfield_Table 
