@@ -267,22 +267,6 @@ if ($input) {
 print "\n";
 
 
-#Create the configuration file
-open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
-at $etcdir.  Must have write capability.\n";
-print SITES <<EOP
-database=$dbname
-hostname=$hostname
-user=$user
-pass=$pass
-includes=$kohadir/htdocs/includes
-intranetdir=$kohadir
-opacdir=$opacdir
-kohaversion=$kohaversion
-httpduser=$httpduser
-EOP
-;
-close(SITES);
 
 print "Successfully created the Koha configuration file.\n";
 
@@ -326,6 +310,24 @@ files using the "User" directive.
 	$httpduser='Undetermined';
     }
 }
+
+
+#Create the configuration file
+open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
+at $etcdir.  Must have write capability.\n";
+print SITES <<EOP
+database=$dbname
+hostname=$hostname
+user=$user
+pass=$pass
+includes=$kohadir/htdocs/includes
+intranetdir=$kohadir
+opacdir=$opacdir
+kohaversion=$kohaversion
+httpduser=$httpduser
+EOP
+;
+close(SITES);
 
 #
 # Set ownership of the koha.conf file for security
