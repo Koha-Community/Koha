@@ -1,0 +1,111 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Advanced Search<!-- TMPL_INCLUDE NAME="doc-head-barcodes-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+<div id="main">
+
+<!-- ******************************************************************************************************** -->
+<!-- ******                              END OF ADD COUNTRY CODE PANEL                                 ****** -->
+<!-- ******************************************************************************************************** -->
+
+<div class="data">
+	<h1>Barcodes Generator</h1>
+	<ul>
+		<li>Select a range of inventary codes. You can choose a continuous range or individual inventory codes</li>
+		<li>Select the standard type to generate barcodes.</li>
+		<li>Define the page size for output the PDF.</li>
+		<li>Depending on page size, Koha will show you how the page is arranged
+		    for each barcode. You can define wich point to start printing the page.
+		</li>
+	</ul>
+
+	<form id="formulario" method="POST" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1" onsubmit="return checkFields(this);" target="_blank">
+		
+		<table class="myTable" border="1">
+		<caption>Generate barcodes from inventory codes</caption>
+			<!-- TMPL_IF NAME="ERROR" -->
+			<tr>
+				<td colspan="2">
+					<p class="error">Can't find inventory codes in that range. Please try again.</p>
+				</td>
+			</tr>
+			<!-- /TMPL_IF -->
+  			<tr>
+				<td><label for="rangeType">Type of Interval:</label> <!-- TMPL_VAR NAME="RANGE_TYPE" --></td>
+				<td> 
+					<div id="continuous" class="panel" style="display:inline">
+						<table class="ranges">
+							<tr>
+					   			<td>From:</td> 
+								<td><input id="from" type="text" name="from" size="20"></td>
+							</tr>
+							<tr>
+					   			<td>To:</td>
+								<td><input id="to" type="text" name="to" size="20"></td>
+							</tr>
+						</table>
+					</div> 
+ 				    <div id="individuals" class="panel" style="display:none">
+						<table class="ranges">
+							<tr>
+								<td width="5%">
+									Inventory Code <BR>
+									<input id="inventaryCode" type="text" name="inventaryCode" size="20">
+								<td>
+								<td>	
+									<a href="#" onclick="addItem(); return false;">&lt;&lt;</a><br>
+									<a href="#" onclick="removeItem(); return false;">&gt;&gt;</a>
+								</td>
+								<td width="95%">		   
+									<select id="inventaryList" size="5" style="width:150px">
+									</select>
+									<input type="hidden" id="individualCodes" name="individualCodes">																						
+								</td>
+							</tr>
+						</table>	
+					</div>						
+				</td> <!-- Fin Rangos -->
+			</tr>
+			<tr> 
+				<td><label for="numbersystem">Country Code:</label> <div style="display:inline">
+									<a href="#" onclick="addCountryCode(); return false;">+</a>
+									<!-- TMPL_VAR NAME="NUMBER_SYSTEM" -->
+									<div class="countryPanel" style="position:absolute" id="addCountryCode">
+ 	<form action="/cgi-bin/koha/barcodes/barcodes.pl" method="post" style="display:inline">
+		<input type="hidden" name="addCode" value="1">
+		<table>
+			<tr><th colspan="2">Add a new Country Code</th></tr>
+			<tr><td><label for="countryName">Country Name:</label></td><td><input type="text" size="10" id="countryName" name="countryName" /></td></tr>
+			<tr><td><label for="countryCode">Country Code:</label></td><td><input type="text" size="3" id="countryCode" name="countryCode" /></td></tr>
+			<tr>
+				<td><input type="submit" name="submit" id="submit" value="Save Code" class="submit" /></td>
+	<td><input type="button" name="cancel" id="cancel" value="Cancel" onclick="document.getElementById('addCountryCode').style.display = 'none'" class="cancel" /></td></tr>
+		</table>
+	</form>
+</div>
+								</div>
+				</td>
+				<td><label for="pageType">Page Size</label> <input type="text" name="pageType" id="pageType" readonly value="<!-- TMPL_VAR NAME="PAGES" -->" size="10"> <a href="/cgi-bin/koha/barcodes/printerConfig.pl">[Go to Printer Configuration]</a></td>
+			</tr>
+			<tr> 
+				<td colspan="2"><label for="text_under_label">Text under label: </label>	<input type="text" name="text_under_label" id="text_under_label" size="40" value="<!-- TMPL_VAR name="text_under_label -->"> <p>If this field is empty, author and title will be used instead</p></td>
+			</tr></table>
+
+						    	<table style="width:50%">
+						<tr>
+							<th colspan="<!-- TMPL_VAR NAME="COL_SPAN" -->">Label number to start printing</th>
+						</tr>
+						<!-- TMPL_LOOP NAME="LABEL_TABLE" -->
+							<tr>
+								<!-- TMPL_LOOP NAME="columns" -->
+									<td style="white-space: nowrap;">
+										<input type="radio" id="label" value="<!-- TMPL_VAR NAME="tagname" -->" name="label" <!-- TMPL_VAR NAME="check" -->>  Label  <!-- TMPL_VAR NAME="labelname" --></td>
+								<!-- /TMPL_LOOP -->
+							</tr>
+						<!-- /TMPL_LOOP -->  			    
+					</table>
+					
+<p><input type="submit" value="Generate Barcodes" name="B1" class="submit"></p>
+	</form>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
