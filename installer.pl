@@ -272,15 +272,21 @@ chmod 0440, "$etcdir/koha.conf";
 #SETUP opac
 #
 my $svr_admin = "webmaster\@$domainname";
-my $opac_svr_name = "opac.$domainname";
-my $koha_svr_name = "koha.$domainname";
+my $servername=`hostname -f`;
+chomp $servername;
+$opacport=80;
+$kohaport=8080;
 
 print qq|
 
 OPAC and KOHA/LIBRARIAN CONFIGURATION
 =====================================
 Koha needs to setup your Apache configuration file for the
-OPAC virtual host.
+OPAC and LIBRARIAN virtual hosts.  By default this installer
+will do this by using one ip address and two different ports
+for the virtual hosts.  There are other ways to set this up,
+and the installer will leave comments in httpd.conf detailing
+what these other options are.
 
 Please enter the e-mail address for your webserver admin.
 Usually $svr_admin
@@ -296,26 +302,36 @@ if ($input) {
 
 print qq|
 
-Please enter the servername for your OPAC interface.
-Usually $opac_svr_name
+
+Please enter the domain name or ip address of your computer.
 |;
-print "Enter servername address [$opac_svr_name]:";
+print "Enter server name/ip address [$servername]:";
 chomp($input = <STDIN>);
 
 if ($input) {
-  $opac_svr_name = $input;
+  $servername = $input;
 }
 
 print qq|
 
-Please enter the servername for your Intranet/Librarian interface.
-Usually $koha_svr_name
+Please enter the port for your OPAC interface.
 |;
-print "Enter servername address [$koha_svr_name]:";
+print "Enter OPAC port [$opacport]:";
 chomp($input = <STDIN>);
 
 if ($input) {
-  $koha_svr_name = $input;
+  $opacport = $input;
+}
+
+print qq|
+
+Please enter the port for your Intranet/Librarian interface.
+|;
+print "Enter intranet port [$kohaport]:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $kohaport = $input;
 }
 
 
@@ -341,8 +357,15 @@ UPDATING APACHE.CONF
 ====================
 
 |;
-if (`grep 'VirtualHost $opac_svr_name' $realhttpdconf`) {
-    warn "$realhttpdconf appears to already have an entry for Koha\nVirtual Hosts.\n";
+if (`grep 'VirtualHost $servername' $realhttpdconf`) {
+    print qq|
+$realhttpdconf appears to already have an entry for Koha
+Virtual Hosts.  You may need to edit $realhttpdconf
+if anything has changed since it was last set up.  This
+script will not attempt to modify an existing Koha apache
+configuration.
+
+|;
     print "Press <ENTER> to continue...";
     <STDIN>;
     print "\n";
@@ -350,25 +373,47 @@ if (`grep 'VirtualHost $opac_svr_name' $realhttpdconf`) {
     open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
     print SITE <<EOP
 
-<VirtualHost $opac_svr_name>
+
+# Ports to listen to for Koha
+Listen $opacport
+Listen $kohaport
+
+# NameVirtualHost is used by one of the optional configurations detailed below
+
+#NameVirtualHost 11.22.33.44
+
+# KOHA's OPAC Configuration
+<VirtualHost $servername\:$opacport>
    ServerAdmin $svr_admin
    DocumentRoot $opacdir/htdocs
-   ServerName $opac_svr_name
+   ServerName $servername
    ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
    ErrorLog $logfiledir/opac-error_log
    TransferLog $logfiledir/opac-access_log
    SetEnv PERL5LIB "$kohadir/modules"
 </VirtualHost>
 
-<VirtualHost $koha_svr_name>
+# KOHA's INTRANET Configuration
+<VirtualHost $servername\:$kohaport>
    ServerAdmin $svr_admin
    DocumentRoot $kohadir/htdocs
-   ServerName $koha_svr_name
+   ServerName $servername
    ScriptAlias /cgi-bin/koha/ "$kohadir/cgi-bin/"
    ErrorLog $logfiledir/koha-error_log
    TransferLog $logfiledir/koha-access_log
    SetEnv PERL5LIB "$kohadir/modules"
 </VirtualHost>
+
+# If you want to use name based Virtual Hosting:
+#   1. remove the two Listen lines
+#   2. replace $servername\:$opacport wih your.opac.domain.name
+#   3. replace ServerName $servername wih ServerName your.opac.domain.name
+#   4. replace $servername\:$kohaport wih your intranet domain name
+#   5. replace ServerName $servername wih ServerName your.intranet.domain.name
+#
+# If you want to use NameVirtualHost'ing (using two names on one ip address):
+#   1.  Follow steps 1-5 above
+#   2.  Uncomment the NameVirtualHost line and set the correct ip address
 
 EOP
 ;
