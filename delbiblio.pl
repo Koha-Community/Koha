@@ -27,6 +27,6 @@ if ($count > 0){
   print "This biblio has $count items attached, please delete them before deleting this biblio<p>
   ";
 } else {
-#delbiblio($biblio);
-print $input->redirect("/catalogue/");
+	delbiblio($biblio);
+	print $input->redirect("/catalogue/");
 }
