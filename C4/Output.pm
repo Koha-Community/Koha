@@ -51,7 +51,7 @@ C4::Output - Functions for managing templates
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-		&themelanguage &gettemplate
+		&themelanguage &gettemplate setlanguagecookie
 		);
 
 #FIXME: this is a quick fix to stop rc1 installing broken
@@ -61,8 +61,10 @@ my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub gettemplate {
-	my ($tmplbase, $opac) = @_;
-
+	my ($tmplbase, $opac, $query) = @_;
+if (!$query){
+  warn "no query in gettemplate";
+  }
 	my $htdocs;
 	if ($opac ne "intranet") {
 		$htdocs = C4::Context->config('opachtdocs');
@@ -70,7 +72,7 @@ sub gettemplate {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
+	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac, $query);
 
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
 				   die_on_bad_params => 0,
@@ -78,18 +80,24 @@ sub gettemplate {
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 
 	# XXX temporary patch for Bug 182 for themelang
+	warn "theme is $theme lang is $lang";
 	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
 							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
 							theme => $theme,
 							lang => $lang);
+
+        
 	return $template;
 }
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
-  my ($htdocs, $tmpl, $section) = @_;
-
+  my ($htdocs, $tmpl, $section, $query) = @_;
+  if (!$query) {
+    warn "no query";
+    
+  }
   my $dbh = C4::Context->dbh;
   my @languages;
   my @themes;
@@ -100,8 +108,19 @@ sub themelanguage {
   }
   else
   {
+  # we are in the opac here, what im trying to do is let the individual user
+  # set the theme they want to use.
+  # and perhaps the them as well.
+  my $lang=$query->cookie('KohaOpacLanguage');
+  if ($lang){
+  
+    push @languages,$lang;
+    @themes = split " ", C4::Context->preference("opacthemes");
+  } 
+  else {
     @languages = split " ", C4::Context->preference("opaclanguages");
     @themes = split " ", C4::Context->preference("opacthemes");
+    }
   }
 
   my ($theme, $lang);
@@ -127,6 +146,15 @@ sub themelanguage {
     return ('default', 'en');
   }
 }
+
+sub setlanguagecookie {
+   my ($query,$language,$uri)=@_;
+   my $cookie=$query->cookie(-name => 'KohaOpacLanguage',
+                                           -value => $language,
+					   -expires => '');
+   print $query->redirect(-uri=>$uri,
+   -cookie=>$cookie);
+}				   
 
 
 END { }       # module clean-up code here (global destructor)
