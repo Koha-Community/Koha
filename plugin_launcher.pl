@@ -29,5 +29,12 @@ use C4::Output;
 my $input = new CGI;
 my $plugin_name=$input->param("plugin_name");
 my $plugin_name="value_builder/".$input->param("plugin_name");
-require $plugin_name;
+
+# opening plugin. Just check wether we are on a developper computer on a production one
+# (the cgidir differs)
+my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+unless (opendir(DIR, "$cgidir/value_builder")) {
+	$cgidir = C4::Context->intranetdir;
+} 
+require $cgidir."/".$plugin_name;
 &plugin($input);

@@ -41,7 +41,11 @@ my ($template, $borrowernumber, $cookie)
 				});
 $template->param(do_it => $do_it,
 		report_name => $report_name);
-my $plugin = "./".$report_name.".plugin";
+my $cgidir = C4::Context->config('intranetdir')."/cgi-bin/reports/";
+unless (opendir(DIR, "$cgidir")) {
+	$cgidir = C4::Context->intranetdir."/reports/";
+} 
+my $plugin = $cgidir.$report_name.".plugin";
 require $plugin;
 if ($do_it) {
 	my $results = calculate(\@values);
