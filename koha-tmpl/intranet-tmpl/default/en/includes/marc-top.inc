@@ -55,8 +55,8 @@ a.catalogue:hover {
 	<div id="submenu">
 		<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
 		<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">search</a>
-		<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
-		<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>
+		<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu">Add biblio</a>
+		<a class="submenu2" href="/cgi-bin/koha/bull-home.pl">Serial</a>
 		<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
 	</div>
 <!-- /TMPL_UNLESS -->

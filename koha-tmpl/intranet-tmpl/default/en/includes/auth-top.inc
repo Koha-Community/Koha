@@ -23,6 +23,11 @@ function addauthority() {
 	X = document.forms[0].authtype.value;
 	window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
 }
+function searchauthority() {
+	X = document.forms[0].authtype2.value;
+	Y = document.forms[0].value.value;
+	window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
+}
 </script>
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
@@ -45,7 +50,6 @@ a.authority:hover {
 
 <body>
 <!-- MENUS -->
-<form>
 <div id="menubar">
 	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
 	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
@@ -58,8 +62,20 @@ a.authority:hover {
 	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
 	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
 </div>
+<form>
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
+	<select name="authtype2">
+		<!-- TMPL_LOOP name="authtypesloop" -->
+			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+				<!-- TMPL_VAR name="authtypetext" -->
+			</option>
+		<!-- /TMPL_LOOP -->
+	</select>
+	<input type="text" size="10" maxlength="100" name="value">
+	<a href="javascript:searchauthority()" class="submenu">
+		Search
+	</a>
 	<select name="authtype">
 		<!-- TMPL_LOOP name="authtypesloop" -->
 			<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
@@ -68,7 +84,8 @@ a.authority:hover {
 		<!-- /TMPL_LOOP -->
 	</select>
 	<a href="javascript:addauthority()" class="submenu2">
-		Add authority</a>
+		Add authority
+	</a>
 </div>
 </form>
 <!-- TMPL_IF NAME="loggedinusername" -->
