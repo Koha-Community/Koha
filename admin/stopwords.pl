@@ -143,9 +143,20 @@ if ($op eq 'add_form') {
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my @loop;
+	my $toggle = 'white';
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row = (word => $results->[$i]{'word'});
+		my %row = (word => $results->[$i]{'word'},
+			   toggle => $toggle);
 		push @loop, \%row;
+
+                if ( $toggle eq 'white' )
+                {
+                        $toggle = '#ffffcc';
+                }
+                else
+                {
+                        $toggle = 'white';
+                }
 	}
 	$template->param(loop => \@loop);
 

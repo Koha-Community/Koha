@@ -182,6 +182,7 @@ if ($op eq 'add_form') {
 	my $env;
 	my @loop;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my $toggle='white';
 	for (my $i=0; $i < $count; $i++){
 		my %row = (categorycode => $results->[$i]{'categorycode'},
 				description => $results->[$i]{'description'},
@@ -193,8 +194,17 @@ if ($op eq 'add_form') {
 				enrolmentfee => $results->[$i]{'enrolmentfee'},
 				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
 				issuelimit => $results->[$i]{'issuelimit'},
-				reservefee => $results->[$i]{'reservefee'} );	
+				reservefee => $results->[$i]{'reservefee'},
+				toggle = $toggle );	
 		push @loop, \%row;
+		if ( $toggle eq 'white' )
+		{
+			$toggle = '#ffffcc';
+		}
+		else
+		{
+			$toggle = 'white';
+		}
 	}
 	$template->param(loop => \@loop);
 

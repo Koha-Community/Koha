@@ -165,6 +165,7 @@ if ($op eq 'add_form') {
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my @loop;
+	my $toggle = 'white';
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 			
 		my $urlsearchfield=$results->[$i]{name};
@@ -176,8 +177,19 @@ if ($op eq 'add_form') {
 			userid =>$results->[$i]{'userid'},
 			password => ($results->[$i]{'password'}) ? ('#######') : ('&nbsp;'),
 			checked => $results->[$i]{'checked'},
-			rank => $results->[$i]{'rank'});
+			rank => $results->[$i]{'rank'},
+			toggle => $toggle);
 		push @loop, \%row;
+
+                if ( $toggle eq 'white' )
+                {
+                        $toggle = '#ffffcc';
+                }
+                else
+                {
+                        $toggle = 'white';
+                }
+
 	}
 	$template->param(loop => \@loop);
 	if ($offset>0) {
