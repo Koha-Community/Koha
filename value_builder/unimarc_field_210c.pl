@@ -19,13 +19,17 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use strict;
+require Exporter;
+use C4::AuthoritiesMarc;
 use C4::Auth;
-use CGI;
 use C4::Context;
-use HTML::Template;
-use C4::Search;
 use C4::Output;
+use C4::Interface::CGI::Output;
+use CGI;
+use C4::Search;
+use MARC::Record;
+use C4::Koha;
+use HTML::Template;
 
 =head1
 
@@ -103,8 +107,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(subfield_managed) {
 	defaultvalue=escape(document.forms[0].field_value[subfield_managed].value);
-	newin=window.open(\"../authorities/authorities-home.pl\",\"value builder\",'width=500,height=400,toolbar=false,scrollbars=yes');
-
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=no');
 }
 </script>
 ";
@@ -121,10 +124,124 @@ sub plugin {
 my ($input) = @_;
 	my $index = $input->param("index");
 	my $result =  $input->param("result");
-	$result=~s/ /&nbsp;/g;
-	$result=~s/"/&quot;/g;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus_popup.pl?category=EDITORS&nohierarchy=1&index=$index&result=$result\"></html>";
-	exit;
+
+	my $query=new CGI;
+	my $op = $query->param('op');
+	my $authtypecode = $query->param('authtypecode');
+	my $index = $query->param('index');
+	my $category = $query->param('category');
+	my $resultstring = $query->param('result');
+	my $dbh = C4::Context->dbh;
+	
+	my $startfrom=$query->param('startfrom');
+	$startfrom=0 if(!defined $startfrom);
+	my ($template, $loggedinuser, $cookie);
+	my $resultsperpage;
+	
+	my $authtypes = getauthtypes;
+	my @authtypesloop;
+	foreach my $thisauthtype (keys %$authtypes) {
+		my $selected = 1 if $thisauthtype eq $authtypecode;
+		my %row =(value => $thisauthtype,
+					selected => $selected,
+					authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+				index => $index,
+				);
+		push @authtypesloop, \%row;
+	}
+
+	if ($op eq "do_search") {
+		my @marclist = $query->param('marclist');
+		my @and_or = $query->param('and_or');
+		my @excluding = $query->param('excluding');
+		my @operator = $query->param('operator');
+		my @value = $query->param('value');
+	
+		$resultsperpage= $query->param('resultsperpage');
+		$resultsperpage = 19 if(!defined $resultsperpage);
+	
+		# builds tag and subfield arrays
+		my @tags;
+	
+		my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
+											\@excluding, \@operator, \@value,
+											$startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
+	
+		($template, $loggedinuser, $cookie)
+			= get_template_and_user({template_name => "value_builder/unimarc_field_210c.tmpl",
+					query => $query,
+					type => 'intranet',
+					authnotrequired => 0,
+					flagsrequired => {borrowers => 1},
+					flagsrequired => {catalogue => 1},
+					debug => 1,
+					});
+	
+		# multi page display gestion
+		my $displaynext=0;
+		my $displayprev=$startfrom;
+		if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
+			$displaynext = 1;
+		}
+	
+		my @numbers = ();
+	
+		if ($total>$resultsperpage) {
+			for (my $i=1; $i<$total/$resultsperpage+1; $i++) {
+				if ($i<16) {
+					my $highlight=0;
+					($startfrom==($i-1)) && ($highlight=1);
+					push @numbers, { number => $i,
+						highlight => $highlight ,
+						startfrom => ($i-1)};
+				}
+			}
+		}
+	
+		my $from = $startfrom*$resultsperpage+1;
+		my $to;
+	
+		if($total < (($startfrom+1)*$resultsperpage)) {
+			$to = $total;
+		} else {
+			$to = (($startfrom+1)*$resultsperpage);
+		}
+		$template->param(result => $results) if $results;
+		$template->param(index => $query->param('index'));
+		$template->param(startfrom=> $startfrom,
+								displaynext=> $displaynext,
+								displayprev=> $displayprev,
+								resultsperpage => $resultsperpage,
+								startfromnext => $startfrom+1,
+								startfromprev => $startfrom-1,
+								index => $index,
+								total=>$total,
+								from=>$from,
+								to=>$to,
+								numbers=>\@numbers,
+								authtypecode =>$authtypecode,
+								resultstring =>$value[0],
+								);
+	} else {
+		($template, $loggedinuser, $cookie)
+			= get_template_and_user({template_name => "value_builder/unimarc_field_210c.tmpl",
+					query => $query,
+					type => 'intranet',
+					authnotrequired => 0,
+					flagsrequired => {catalogue => 1},
+					debug => 1,
+					});
+	
+		$template->param(index => $index,
+						resultstring => $resultstring
+						);
+	}
+	
+	$template->param(authtypesloop => \@authtypesloop);
+	$template->param(category => $category);
+	
+	# Print the page
+	output_html_with_http_headers $query, $cookie, $template->output;
 }
 
 1;
