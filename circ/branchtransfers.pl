@@ -7,6 +7,7 @@ use strict;
 use CGI;
 use C4::Circulation::Circ2;
 use C4::Output;
+use C4::Reserves2;
 
 ###############################################
 # constants
@@ -36,10 +37,11 @@ my $printer = $query->param("printer");
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
 
+my $request=$query->param('request');
+
 
 my $tobranchcd=$query->param('tobranchcd');
 my $frbranchcd='';
-
 
 # set up the branchselect options....
 my $tobranchoptions;
@@ -70,14 +72,47 @@ foreach ($query->param){
     $ritext.="<input type=hidden name=tb-$counter value=$tobcd>\n";
     }
 
+
+# Collect a few messages here...
+my $messagetext='';
+
+############
+# Deal with the requests....
+if ($request eq "KillWaiting") {
+    my $item = $query->param('itemnumber');
+    my $borrnum = $query->param('borrowernumber');
+    CancelReserve(0, $item, $borrnum);
+    $messagetext .= "Reserve Cancelled<br>";
+}
+my $ignoreRs = 0;
+if ($request eq "SetWaiting") {
+    my $item = $query->param('itemnumber');
+    my $borrnum = $query->param('borrowernumber');
+    $tobranchcd = ReserveWaiting($item, $borrnum);
+    $ignoreRs = 1;
+    $messagetext .= "Item should now be waiting at branch: $branches->{$tobranchcd}->{'branchname'}<br>";
+}
+if ($request eq 'KillReserved'){
+    my $biblio = $query->param('biblionumber');
+    my $borrnum = $query->param('borrowernumber');
+    CancelReserve($biblio, 0, $borrnum);
+    $messagetext .= "Reserve Cancelled<br>";
+}
+
+
+
+
 # Warnings etc that get displayed at top of next page....
 my $messages;
-#if the barcode has been entered action that and write a message and onto the top of the stack...
+# if the barcode has been entered action that and write a message 
+# and put onto the top of the stack...
 my $iteminformation;
-if (my $barcode=$query->param('barcode')) {
+my $barcode = $query->param('barcode');
+if ($barcode) {
     my $transfered;
     my $iteminformation;
-    ($transfered, $messages, $iteminformation) = transferbook($tobranchcd, $barcode);
+    ($transfered, $messages, $iteminformation) 
+                   = transferbook($tobranchcd, $barcode, $ignoreRs);
     if ($transfered) {
 	my $frbranchcd = $iteminformation->{'holdingbranch'};
 	$ritext.="<input type=hidden name=bc-0 value=$barcode>\n";
@@ -92,6 +127,7 @@ if (my $barcode=$query->param('barcode')) {
 
 #################################################################################
 # Html code....
+# collect together the various elements...
 
 my $entrytext= << "EOF";
 <form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
@@ -119,12 +155,77 @@ EOF
 
 my $reservefoundtext;
 if ($messages->{'ResFound'}) {
-    my $resrec = $messages->{'ResFound'};
-    my ($borr) = getpatroninformation(\%env, $resrec->{'borrowernumber'}, 0);
+    my $res = $messages->{'ResFound'};
+    my $reservetext;
+    my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+    my ($borr) = getpatroninformation(\%env, $res->{'borrowernumber'}, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
     my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
-    my $branch = $branches->{$resrec->{'branchcode'}}->{'branchname'};
-    my $reservetext = "<font size='+2' color='red'>RESERVED</font><font size='+2'> for collection by $name ($number) at $branch </font>";
+    if ($res->{'ResFound'} eq "Waiting") {
+	$reservetext = <<"EOF";
+<font color='red' size='+2'>Item marked Waiting:</font><br>
+    Item is marked waiting at $branchname for $name ($number).<br>
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><td>Cancel reservation and then attempt transfer: </td>
+<td>
+<form method=post action='branchtransfers.pl'>
+$ritext
+<input type=hidden name=itemnumber value=$res->{'itemnumber'}>
+<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
+<input type=hidden name=tobranchcd value=$tobranchcd>
+<input type=hidden name=barcode value=$barcode>
+<input type=hidden name=request value='KillWaiting'>
+<input type=submit value="Cancel">
+</form>
+</td></tr>
+<tr><td>Ignore and return to transfers: </td>
+<td>
+<form method=post action='branchtransfers.pl'>
+$ritext
+<input type=hidden name=tobranchcd value=$tobranchcd>
+<input type=hidden name=barcode value=0>
+<input type=submit value="Ignore">
+</form>
+</td></tr></table>
+EOF
+    } 
+    if ($res->{'ResFound'} eq "Reserved") {
+	$reservetext = <<"EOF";
+<font color='red' size='+2'>Reserved:</font> reserve found for $name ($number).
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><td>Set reserve to waiting and transfer book to <b>$branchname </b>: </td>
+<td>
+<form method=post action='branchtransfers.pl'>
+$ritext
+<input type=hidden name=itemnumber value=$res->{'itemnumber'}>
+<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
+<input type=hidden name=barcode value=$barcode>
+<input type=hidden name=request value='SetWaiting'>
+<input type=submit value="Waiting">
+</form>
+</td></tr>
+<tr><td>Cancel reservation and then attempt transfer: </td>
+<td>
+<form method=post action='branchtransfers.pl'>
+$ritext
+<input type=hidden name=biblionumber value=$res->{'biblionumber'}>
+<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
+<input type=hidden name=tobranchcd value=$tobranchcd>
+<input type=hidden name=barcode value=$barcode>
+<input type=hidden name=request value='KillReserved'>
+<input type=submit value="Cancel">
+</form>
+</td></tr><tr><td>Ignore and return to transfers: </td>
+<td>
+<form method=post action='branchtransfers.pl'>
+<input type=hidden name=tobranchcd value=$tobranchcd>
+<input type=hidden name=barcode value=0>
+$ritext
+<input type=submit value="Ignore">
+</form>
+</td></tr></table>
+EOF
+    }
     $reservefoundtext = <<"EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Reserve Found</font></th></tr>
@@ -134,7 +235,6 @@ EOF
 
 #####################
 
-my $messagetext='';
 foreach my $code (keys %$messages) {
     if ($code eq 'BadBarcode'){
 	$messagetext .= "<font color='red' size='+2'> No Item with barcode: $messages->{'BadBarcode'} </font> <br>";
@@ -157,6 +257,7 @@ EOF
 	$messagetext .= "Item was on loan to $binfo and has been returned. <br>";
     }
     if ($code eq 'WasTransfered'){
+# Put code here if you want to notify the user that item was transfered...
     }
 }
 $messagetext = substr($messagetext, 0, -4);
@@ -167,6 +268,7 @@ if ($messagetext) {
 <table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Messages</font></th></tr>
 <tr><td> $messagetext </td></tr></table>
+<img src="/images/holder.gif" width=24 height=24>
 EOF
 }
 
@@ -176,15 +278,22 @@ EOF
 print $query->header;
 print startpage;
 print startmenu('circulation');
+
+#foreach my $key (%$messages) {
+#    print $key." : ".$messages->{$key}."<br>";
+#}
+
 print <<"EOF";
 <p>
-<table border=0 cellpadding=5 width=90%><tr>
+<table border=0 cellpadding=5><tr>
 <td align="left"><FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
 <b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
 <b>Printer:</b> $printers->{$printer}->{'printername'}<br>
 <a href=selectbranchprinter.pl>Change Settings</a>
 </td>
-<td align="right">
+<td align="left"><img src="/images/holder.gif" width=40 height=35>
+</td>
+<td align="right" valign="top">
 <FONT SIZE=2  face="arial, helvetica">
 <a href=circulation.pl>Next Borrower</a> || 
 <a href=returns.pl>Returns</a> || 
@@ -195,27 +304,27 @@ print <<"EOF";
 </p>
 EOF
 
-print $reservefoundtext;
+if ($reservefoundtext) {
+    print $reservefoundtext;
+} else {
+    print $messagetable;
+    print $entrytext;
 
-print $messagetable;
-
-print $entrytext;
-
-if (%transfereditems) {
-    print << "EOF"; 
+    if (%transfereditems) {
+	print << "EOF";
 <p>
 <table border=1 cellpadding=5 cellspacing=0 bgcolor=#dddddd>                                                                
 <tr><th colspan=6 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Transfered Items</font></th></tr>
 <tr><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>From</th><th>To</th></tr>
 EOF
-    my $color='';
-    foreach (keys %transfereditems) {
-	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-	my $barcode=$transfereditems{$_};
-	my $frbcd=$frbranchcds{$_};
-	my $tobcd=$tobranchcds{$_};
-	my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
-	print << "EOF";
+        my $color='';
+	foreach (sort keys %transfereditems) {
+	    ($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+	    my $barcode=$transfereditems{$_};
+	    my $frbcd=$frbranchcds{$_};
+	    my $tobcd=$tobranchcds{$_};
+	    my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
+	    print << "EOF";
 <tr><td bgcolor=$color align=center>
 <a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}
 &type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td>
@@ -226,8 +335,9 @@ EOF
 <td bgcolor=$color align=center>$branches->{$tobcd}->{'branchname'}</td>
 </tr>\n
 EOF
-}
-    print "</table>\n";
+        }
+	print "</table>\n";
+    }
 }
 
 print endmenu('circulation');
