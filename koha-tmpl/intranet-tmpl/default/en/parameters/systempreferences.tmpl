@@ -89,6 +89,14 @@
 	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
 </TMPL_IF>
 
+<TMPL_IF name="delete_confirmed">
+<!-------------------------------------------------------------------------------------------------->
+	data deleted
+	<form action='<TMPL_VAR name="script_name">' method=post>
+	<input type=submit value=OK>
+	</form>
+</TMPL_IF>
+
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
 <font SIZE=6><em>System preferences admin</em></font>
