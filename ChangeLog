@@ -1,0 +1,1108 @@
+2002-04-17 14:35  pate
+
+	* C4/Koha.pm: starting to move ethnicity stuff out of programs and
+	into modules
+
+2002-04-17 13:28  rangi
+
+	* installer.pl: Submitting on behalf of Nicholas First cut (not
+	functional yet) of an installer script
+
+2002-04-16 12:49  tonnesen
+
+	* acqui.simple/bulkmarcimport.pl: Added some comments detailing how
+	MARC fields are mapped to Koha data
+
+2002-04-16 11:00  tonnesen
+
+	* acqui.simple/bulkmarcimport.pl: Fixed typo
+
+2002-04-16 10:37  tonnesen
+
+	* acqui.simple/bulkmarcimport.pl: This is my bulk MARC record
+	importing tool.  Feel free to test it out, but DO NOT use it on a
+	production system yet!	It needs to be more adaptable to different
+	MARC implementations.
+	
+	Note that the script will spit out a plain text copy of the records
+	being imported to STDOUT, so you will probably want to redirect to
+	a file, or pipe to less.
+
+2002-04-15 09:17  pate
+
+	* moremember.pl: moved ethnicity fixups into C4::Koha, eventually
+	to be replaced with a better (non-NZ specific) solution.
+
+2002-04-15 09:15  pate
+
+	* C4/Koha.pm: moved ethnicity fixing out of moremember.pl into a
+	function, eventually to replace with a more configurable version
+	(non-NZ specific)
+
+2002-04-14 22:33  truth_nz
+
+	* updatebibitem.pl, C4/Acquisitions.pm, acqui/addorder.pl:
+	Acquisitions::newbiblioitem updated to be usable for new
+	acqui.simple addorder.pl and updatebibitem.pl modified to use new
+	newbiblioitem
+
+2002-04-10 02:55  rangi
+
+	* C4/Search.pm: Fixing the subject search i broke ;)
+
+2002-04-10 00:59  rangi
+
+	* C4/Search.pm: Working on a fix to speed up title and author
+	searches
+
+2002-04-09 22:49  truth_nz
+
+	* C4/Acquisitions.pm: Altered newbiblio to be more generic - so can
+	use with new acui.simple scripts (which are not finished yet).
+
+2002-04-09 22:47  truth_nz
+
+	* acqui/addorder.pl: Updates to use changed newbiblio sub in
+	C4/Acquisitions.pm
+
+2002-04-09 17:02  pate
+
+	* misc/fines2.pl: whacked a couple of bits that Chris marked as
+	okay to delete.
+
+2002-04-09 16:30  rangi
+
+	* misc/fines2.pl: Just added some comments for Pat (Is this a good
+	way of doing it? if not let me know)
+
+2002-04-09 15:08  pate
+
+	* misc/: fines2.pl, fixborrower.pl: refactoring, marking spots for
+	further refactoring
+
+2002-04-08 17:16  rangi
+
+	* memberentry.pl: Little typo, missing t in systemprefs Apart from
+	that, all the patch files seem to be running happily on
+	hlt.katipo.co.nz
+
+2002-04-08 17:04  rangi
+
+	* insertdata.pl: Just a quick little fix the sql to update a
+	borrower was setting the postal address twice, instead of the
+	postal, then the physical address. My little fix got overwrote by
+	pat's fix so im updating now before i forget :)
+
+2002-04-08 16:44  pate
+
+	* insertdata.pl, koha.t, loadmodules.pl, memberentry.pl,
+	modbibitem.pl, moredetail.pl, moremember.pl, request.pl, search.pl,
+	testKoha.pl, C4/Koha.pm, C4/Output.pm: refactored slashifyDate
+	function out of inline code, created C4/Koha.pm to hold it and
+	wrote tests for it, started marking other places for potential
+	refactoring.
+
+2002-04-08 15:47  rangi
+
+	* insertdata.pl: Script wasnt setting street address correctly
+
+2002-04-04 19:13  rangi
+
+	* fines.pl: Have realised misc/fines2.pl is the real fines script,
+	this one can be removed so as to remove one more source of
+	confusion
+
+2002-04-04 19:09  rangi
+
+	* admin/aqbudget.pl: Fixing up the query to pickup budget
+
+2002-04-03 00:58  rangi
+
+	* borrwraper.pl: Actually lives in telnet/
+
+2002-04-03 00:44  rangi
+
+	* acqui.simple/: addbooks.pl, addbookslccn.pl: More work on the
+	addbooks scripts, committing on behalf of Roger
+	
+	Need testing before use in a production environment
+
+2002-03-30 22:50  rangi
+
+	* acqui.simple/: addbooks.pl, addbookslccn.pl: Fixed the holding
+	branch insertion code. It was inserting the correct homebranch but
+	was still inserting the wrong home branch
+
+2002-03-30 18:48  rangi
+
+	* acqui.simple/addbookslccn.pl: Fixing branches
+
+2002-03-30 17:18  rangi
+
+	* acqui.simple/addbooks.pl: Draws list of branches from the
+	branches table now, when adding an item
+
+2002-03-26 16:02  rangi
+
+	* pay.pl: Shifting writeoff code back into pay.pl (redirecting to
+	writeoff.pl was breaking when the borrower owes a lot of fines)
+
+2002-03-25 21:08  finlayt
+
+	* updater/updatedatabase: added database patchs to the
+	updater/updatedatabase script
+	
+	changes the type of the datesent and datearrived fields in the
+	branchtransfers table from date to datetime.
+	
+	completely re-organises the branchcategories table. As this has
+	previously been unused it shouldnt effect anyone.
+
+2002-03-21 13:24  rangi
+
+	* showbudget.pl: Doesnt write to an include anymore
+
+2002-03-19 07:39  tipaul
+
+	* updater/updatedatabase2.pl: Script to apply to sample DB only. It
+	makes a few modifications in the DB (indexes creation, some data
+	deletion, and unused tables drop) Creates a thesaurus table from
+	the bilbiosubject one
+
+2002-03-19 07:37  tipaul
+
+	* updater/sample_only_param_tables.sql: Sample database only for
+	parameters tables
+
+2002-03-16 18:58  rangi
+
+	* C4/Circulation/Fines.pm: Deals with lost book charges now
+
+2002-03-16 18:31  rangi
+
+	* misc/fines2.pl: tidied up, less hlt specific now
+
+2002-03-13 17:51  finlayt
+
+	* circ/branchtransfers.pl: Changed heading to look like the rest of
+	Koha
+
+2002-03-13 17:50  finlayt
+
+	* circ/circulation.pl: Added a heading to be consistent with rest
+	of Koha
+
+2002-03-13 17:04  finlayt
+
+	* circ/: circulation.pl, circulation2.pl: This is the begining of a
+	process of dividing up circulation.pl
+	
+	This script deals with the branch and printer selection stuff
+
+2002-03-13 13:13  finlayt
+
+	* C4/Circulation/Circ2.pm: Added a transferbook subroutine that is
+	called from /circ/branchtransfers.pl
+	
+	It writes a new line in the branchtransfers table and changes the
+	currentbranch field in items.
+
+2002-03-13 13:07  finlayt
+
+	* circ/branchtransfers.pl: Fixed a small problem in the <form>, not
+	hidden inputs are getting passed correctly.
+
+2002-03-12 23:46  rangi
+
+	* search.pl: Removing reference to the FrontSearch subroutine as
+	its never called
+
+2002-03-12 23:36  rangi
+
+	* C4/Search.pm: Tidy up, removing deprecated routines
+
+2002-03-12 23:14  rangi
+
+	* opac-search.pl: Deprecated searching is all handled by search.pl
+
+2002-03-12 19:26  rangi
+
+	* moremember.pl, C4/Reserves2.pm, C4/Search.pm: Getting Iteminfo in
+	Search to only display correct reserves (mainly used on detail.pl)
+	and another typo fix in moremember.pl
+
+2002-03-12 18:46  rangi
+
+	* moremember.pl: Typo fix (doh!)
+
+2002-03-12 18:03  rangi
+
+	* moremember.pl, C4/Reserves2.pm: Fix so that reserves are only
+	showing for the biblioitem not the biblio on the moremembers screen
+
+2002-03-12 13:04  finlayt
+
+	* circ/: branchtransfers.pl, circulation.pl: 
+	Branchtransfers.pl provides a form for entering barcodes and
+	selecting a destination branch.
+	
+	New rows are entered into the branchtransfers table for each item
+	"transfered".
+
+2002-03-10 19:36  rangi
+
+	* C4/Accounts2.pm: Fix for manual invoices
+
+2002-03-05 12:48  tipaul
+
+	* admin/: aqbookfund.pl, aqbudget.pl, branches.pl, categorie.pl,
+	categoryitem.pl, currency.pl, itemtypes.pl, printers.pl,
+	stopwords.pl, systempreferences.pl: scripts to manage parameters
+	tables
+
+2002-02-26 01:31  rangi
+
+	* C4/Maintainance.pm, maint/catmaintain.pl: Fixed apostrophe '
+	handling
+
+2002-02-26 01:06  rangi
+
+	* acqui/basket.pl: Fix for displaying prices
+
+2002-02-20 13:05  rangi
+
+	* C4/Search.pm: Making a "fix" to normal title search
+
+2002-02-20 12:53  rangi
+
+	* C4/Search.pm: Playing with keyword search trying to speed it up
+	more
+
+2002-02-12 13:31  rangi
+
+	* C4/Search.pm: Fixing bug in subject searching that was causing
+	subjects with ' to break the search
+
+2002-02-12 13:07  rangi
+
+	* C4/Acquisitions.pm, updatebibitem.pl: Fixing bug that was
+	duplicating additional authors, and a bug that was breaking the
+	updating classicification field
+
+2002-02-01 10:00  tonnesen
+
+	* acqui.simple/: marcimport.pl, processz3950queue: Changes from a
+	long time ago that I don't even remember anymore.  :)
+
+2001-12-11 18:31  rangi
+
+	* C4/Search.pm: Added the facility to restrict a keyword search by
+	dewey number
+
+2001-11-26 18:01  rangi
+
+	* C4/Search.pm: Fixing error in keyword search (fixing my mistake
+	from yesterday)
+
+2001-11-25 20:33  rangi
+
+	* C4/Search.pm: Fixing a bug in keyword search was duplicating
+	results
+
+2001-11-25 18:03  rangi
+
+	* insertdata.pl: Modify an adult with guarantees now modifies the
+	guarantees also.  IE change of address effects the guarantees
+	record as well
+
+2001-11-25 16:41  rangi
+
+	* C4/Search.pm: Added a findguarantor routine to search for the
+	guarantor of a given borrower.	Probably it and findgurantees need
+	to moved out to borrowers.pm
+
+2001-11-25 14:25  rangi
+
+	* C4/Search.pm: Author combined with Title search was not searching
+	the series title field Fixed now
+
+2001-11-25 12:17  rangi
+
+	* C4/: Reserves2.pm, Circulation/Circ2.pm: Fixing reserve handling.
+	 Mulitple copy reserves now handled correctly, and correct charges
+	are being applied
+
+2001-11-22 18:12  rangi
+
+	* C4/Search.pm: Adding the facility to search on just dewey and
+	class
+
+2001-11-19 15:28  tonnesen
+
+	* updater/updatedatabase: Added code to determine mysqld version
+	for possibility of converting databases to MyISAM format
+
+2001-11-19 12:29  tonnesen
+
+	* updater/updatedatabase: Added some more tables to the database
+	updater.  Modified barcode to be 20 characters long instead of 9.
+
+2001-11-19 10:26  tonnesen
+
+	* updater/updatedatabase: Script that will update existing
+	databases, creating any new tables, adding, modifying or removing
+	any fields from existing tables.
+	
+	This is in very early stages.  Need to go through and ascertain
+	which tables and fields need to be added/modified.  Also need to
+	add a "backup" before any modifications are made.  Thoughts on this
+	are welcome.
+
+2001-11-06 10:25  tonnesen
+
+	* acqui.simple/addbooks.pl, marc/koha2marc: Minor changes
+
+2001-11-06 10:24  tonnesen
+
+	* marc/test: Script that I'm using to check MARC record support.
+
+2001-11-06 10:15  tonnesen
+
+	* C4/Catalogue.pm: Working out problems with MARC record support.
+
+2001-11-06 10:15  tonnesen
+
+	* acqui.simple/addbookslccn.pl: Modified version of addbooks.pl
+	that uses LCCN as base identifier instead of ISBN.  Should probably
+	be merged with addbooks.pl so that the user can enter either and
+	ISBN _or_ and LCCN from the same form.
+
+2001-11-06 10:13  tonnesen
+
+	* acqui.simple/: marcimport.pl, processz3950queue: Continuing work
+	on Z39.50 search tool.	Daemon now forks up to 12 processes to do
+	Z39.50 searches.  Daemon will also wait to see if the user looks
+	beyond the first couple of pages of results, and will download more
+	results if necessary.
+
+2001-11-02 23:29  tonnesen
+
+	* C4/Catalogue.pm: Minor cleanups.  Needs testing.  Starting to
+	think about modifying updatebiblio.pl to use this API.
+
+2001-11-02 23:28  tonnesen
+
+	* acqui.simple/marcimport.pl: Z39.50 now stores list of servers to
+	query in a database table.
+
+2001-11-02 13:40  tonnesen
+
+	* acqui.simple/processz3950queue: Daemon to process the queue of
+	pending Z39.50 searches.  I still need to come up with a way for
+	this process to get launched.  Looks like Koha might need its first
+	init script.  :)
+
+2001-11-02 13:21  tonnesen
+
+	* acqui.simple/marcimport.pl: Added Z39.50 searching capability,
+	and MARC file uploading from workstation using HTML forms.   Z39.50
+	functionality requires the YAZ toolkit.
+
+2001-10-31 21:00  tonnesen
+
+	* acqui.simple/marcimport.pl: Use MARC controlnumber as a unique
+	identifier for MARC records, in addition to ISBN, ISSN, and LCCN.
+
+2001-10-10 12:28  tonnesen
+
+	* C4/Circulation/Circ2.pm: Typo in printf format string was causing
+	all issues to appear in the Previous issues box and not in today's
+	issues.
+
+2001-10-10 12:27  tonnesen
+
+	* updatebibitem.pl: Fixed bug where a biblioitem with a subclass
+	but no dewey would get the subclass erased when editing the
+	biblioitem.
+
+2001-10-10 12:26  tonnesen
+
+	* modbibitem.pl: used CGI.pm's textfield function to create the
+	notes text input box.  Notes with question marks '"' in them were
+	getting deleted when an item was modified.
+
+2001-10-05 14:27  tonnesen
+
+	* acqui.simple/marcimport.pl: Added rudimentary marc importing
+	tool.  Just takes a marc record and converts to koha database. 
+	Does not keep data in marc format.
+
+2001-10-05 14:23  tonnesen
+
+	* marc/viewmarc.pl: Removed duplicate viewmarc.pl from acqui.simple
+	directory
+
+2001-10-05 14:19  tonnesen
+
+	* acqui.simple/: addbooks.pl, viewmarc.pl: Added simple
+	acquisitions script
+
+2001-10-05 13:13  tonnesen
+
+	* search.pl, C4/Catalogue.pm, C4/Search.pm, marc/marcschema.sql:
+	Changed search interface to allow searches on Illustrator.  This is
+	apparently a common search in elementary school libraries.
+
+2001-09-27 13:39  tonnesen
+
+	* C4/Catalogue.pm: Tested updateItem subroutine, made some better
+	checks for Subfield_IDs and Subfield_Keys when modifying MARC data
+	based on changes to Koha data.
+
+2001-09-27 12:24  tonnesen
+
+	* C4/Catalogue.pm, marc/koha2marc: Started on updateItem
+	subroutine.
+
+2001-09-10 19:03  rangi
+
+	* deletemem.pl: Fixing member deletion, so that it checks fines,
+	issues and guarantees before deleting
+
+2001-09-10 16:37  rangi
+
+	* modbibitem.pl, moredetail.pl, C4/Search.pm: Fixing a glitch that
+	was showing the biblio notes field where the biblioitems notes
+	should have been displaying
+
+2001-08-17 00:54  rangi
+
+	* circ/circulation.pl: Changed the sorting of the hash of items on
+	issue. To sort numerically, (so 10 comes after 2) Just a quick fix
+	to get the items showing in date_due order
+
+2001-07-12 04:12  pawelzc
+
+	* translator/translator.readme: Spelling and english language
+	corrections.
+
+2001-07-05 14:37  rangi
+
+	* deletemem.pl: Script to delete a member/patron
+
+2001-07-05 14:37  rangi
+
+	* memberentry.pl: Fix to handle the delete call, redirects to
+	deletemem.pl
+
+2001-06-27 14:53  rangi
+
+	* translator/translator.pl: Modified so that the first available
+	language is chosen if none is specified
+
+2001-06-26 15:27  tonnesen
+
+	* C4/Catalogue.pm: Finished updateBiblioItem subroutine
+
+2001-06-26 15:13  rangi
+
+	* translator/: translator.pl, translator.readme: Scripts to permit
+	koha webpages to display in different natural languages Courtesy of
+	Pawel Skuza
+
+2001-06-26 14:13  tonnesen
+
+	* C4/Catalogue.pm: newBiblio subroutine completed.
+
+2001-06-26 13:17  tonnesen
+
+	* C4/Catalogue.pm: Added biblioitems table update when
+	newBiblioItem() routine is called.
+
+2001-06-26 10:15  tonnesen
+
+	* C4/Catalogue.pm: Beginning updateBiblio routine.
+
+2001-06-25 13:15  tonnesen
+
+	* marc/viewmarc.pl: Prototype marc record viewer and editor.
+
+2001-06-25 13:12  tonnesen
+
+	* marc/TODO: A TODO file for MARC support
+
+2001-06-25 12:43  tonnesen
+
+	* C4/Catalogue.pm: Added skeletons of update routines.
+
+2001-06-25 12:07  tonnesen
+
+	* marc/koha2marc: Minor documentation changes.
+
+2001-06-25 11:55  tonnesen
+
+	* marc/koha2marc: Perl script to convert existing Koha tables to
+	the new MARC tables.
+
+2001-06-25 11:54  tonnesen
+
+	* marc/deletemarc: SQL commands to clear all of the MARC tables. 
+	This is terribly dangerous, but I find it useful during the
+	development work.  :)
+
+2001-06-25 11:52  tonnesen
+
+	* marc/marcschema.sql: Schema for MARC storage tables.	Blatantly
+	stolen from www.pytheas.org.  I also added the 0XX tables.
+
+2001-06-25 11:49  tonnesen
+
+	* C4/Catalogue.pm: Cataloguing API.  Very early draft at this
+	point.
+
+2001-06-19 20:36  rangi
+
+	* readingrec.pl, C4/Search.pm: Made a little change to allow the
+	reading record to be sorted, and now defaults to the last 50 items
+	borrowed
+
+2001-05-17 15:36  rangi
+
+	* database.mysql: Changed the interim field in the items table, to
+	be paidfor The horowhenua librarians wanted a place to store
+	information when a lost item was paid for. The information is
+	removed if the item is ever returned.  The interim field was a
+	hangover from the previous system and wasnt be used so I stole it
+	:-)
+
+2001-05-15 16:05  rangi
+
+	* C4/Accounts2.pm: More little bug fixes in the manual credits
+	section
+
+2001-05-09 16:29  rangi
+
+	* C4/Circulation/Circ2.pm: Changed the way a lost book being
+	returned is handled.  If the book has already been paid for a
+	credit is added to their account.  And offset against any current
+	charges
+
+2001-05-09 16:26  rangi
+
+	* updateitem.pl: Set up so marking a item lost, adds a charge for
+	the replacement price to a borrowers record (if it is on issue)
+
+2001-05-09 16:23  rangi
+
+	* renewscript.pl: Fixed so renewing a rental item adds a charge
+
+2001-05-09 16:22  rangi
+
+	* mancredit.pl, maninvoice.pl, C4/Accounts2.pm: Added facility to
+	do a cash refund.  Also HLT allows ppl to work off their bill,so
+	added a facility to do manual credit for that
+
+2001-05-08 17:05  rangi
+
+	* C4/Circulation/Renewals2.pm: Renewing a rental or pay item from
+	the borrowers record screen Now adds a charge to the borrowers
+	account
+
+2001-05-02 16:06  tonnesen
+
+	* groups.pl, C4/Groups.pm: Steve Tonnesen's K12Admin-specific (for
+	the time-being) group based overdue reports.
+
+2001-05-02 15:38  tonnesen
+
+	* C4/Circulation/Circ2.pm: Added an overdue variable to the
+	itemdata returned by the currentissues subroutine.  This makes it
+	easier to pick out overdue items in other modules (ie circulation,
+	reports, etc.)
+
+2001-05-02 14:15  rangi
+
+	* C4/Circulation/Circ2.pm: Fixed the code that adds a credit or
+	wipes a lost book charge from a borrowers account if said book is
+	returned
+
+2001-05-02 14:13  rangi
+
+	* C4/Accounts2.pm: Added functions to add credits and invoices to
+	borrowers account
+
+2001-05-02 14:11  rangi
+
+	* boraccount.pl, moremember.pl: Turned off the tidy accounts
+	feature in the view accounts screen (boraccount.pl) And got it so
+	outstanding credits are shown on the moremember.pl (view member
+	screen)
+
+2001-05-02 14:08  rangi
+
+	* mancredit.pl, maninvoice.pl: Scripts to add manual invoices, or
+	credits to a borrower/member/patron's account.	Called from
+	boraccount.pl (ie the view account screen)
+
+2001-05-01 16:24  rangi
+
+	* C4/Accounts2.pm: Fixed a bug in the return lost routine (when a
+	payment is made on a lost item) So that the correct date was being
+	recorded
+
+2001-04-19 17:31  rangi
+
+	* circ/circulation.pl: Quick bodge to restrict the number of
+	returned books showing to 8.  (Request from the librarians here to
+	speed up the screen reload) Needs to be tidied up
+
+2001-04-17 19:51  rangi
+
+	* C4/Accounts2.pm: Add functionality so that when the replacement
+	cost of a lost item is paid Its returned off the members/patrons
+	card. And a note is placed on the item saying that its been paid
+	for.  The item stays marked as lost. But the patron does not accrue
+	more fines
+
+2001-04-03 14:32  rangi
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Making a change to
+	the way charges are handled, the system originally worked such that
+	if a borrower owed more than $5 issues werent allowed. This worked
+	fine except that often borrowers wish to borrows say 3 pay videos
+	at $2 each, then 2 books say. The three pay videos rack up charges
+	of $6 and then they cant issue the books until that is paid. 
+	Reworked so that it cares about previous charges, not the ones
+	accrued during current issue process.
+
+2001-04-02 15:51  rangi
+
+	* pay.pl, stats.pl, C4/Accounts2.pm, C4/Stats.pm, sec/writeoff.pl:
+	Reworking statistics for payments and writeoffs
+
+2001-03-28 18:11  rangi
+
+	* moremember.pl: Commenting out the code that doesnt allow renewals
+	if a renewal has already occured
+
+2001-03-27 19:00  rangi
+
+	* circ/circulation.pl: Adding in javscript code to open a new
+	window for payments
+
+2001-03-27 18:23  rangi
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Reworked layout of
+	issues section.
+
+2001-03-27 13:45  rangi
+
+	* sec/writeoff.pl: Getting writeoff stats being stored as well
+
+2001-03-27 13:43  rangi
+
+	* C4/: Accounts2.pm, Stats.pm: Modified the update stats routine to
+	store borrowernumbers also Passing borrowernumbers to update stats
+	from Account routines
+
+2001-03-22 14:20  rangi
+
+	* circ/circulation.pl: Changes made by Glen to allow the
+	circulation module to work with a ASCII-wand, or CueCat (weird
+	encoded) input equally well.
+	
+	Do not bother installing the CueCat driver or any other software -
+	it's not needed.
+
+2001-03-18 14:06  rangi
+
+	* overdue.pl: Script to list overdue books under the headings
+	Due-Date Patron Phone Title Author
+	
+	The patron can be email by clicking on the name (if the database
+	contains an email address for them)
+	
+	Courtesy of Glen Stewart
+
+2001-03-15 02:17  rangi
+
+	* detail.pl, moredetail.pl: Added code to allow searches to be used
+	by catalogue maintenance
+
+2001-03-15 02:15  rangi
+
+	* C4/Maintainance.pm, maint/catmaintain.pl: Added functionality to
+	allow invalid itemtype to be fixed
+
+2001-03-15 02:11  rangi
+
+	* maint/shiftbib.pl: Script to shift a group to another biblio,
+	called as part of catalogue maintenance
+
+2001-03-13 14:41  rangi
+
+	* catmaintain.pl, maint/catmaintain.pl: Shifted catmaintain.pl to a
+	dir that can be easily passowrd protected
+
+2001-03-13 14:04  rangi
+
+	* catmaintain.pl, C4/Maintainance.pm: Got undeleting biblios going
+	(catalogue maintenance should probably be in a password protected
+	super librarian area or the like)
+
+2001-03-12 15:33  rangi
+
+	* newbiblio.pl: Just realised this is supposed to be in the acqui/
+	dir (doh)
+
+2001-03-12 15:32  rangi
+
+	* acqui/: acquire.pl, newbiblio.pl: Glens updates to automatically
+	increment barcode, and to remove hardcoded itemtypes in scripts
+
+2001-03-12 15:29  rangi
+
+	* memberentry.pl: Modified to include Glen Stewarts automatic
+	member/patron cardnumber incrementation
+
+2001-03-12 15:15  rangi
+
+	* newbiblio.pl: Script from Glen Stewart, i think to do with
+	simplified acqusitions module? (correct me if im wrong glen)
+
+2001-03-12 14:43  rangi
+
+	* database.mysql: Database definition file, checked into cvs to
+	make keeping database current easier
+
+2001-03-07 13:12  rangi
+
+	* insertdata.pl: Fixing stupid bug that was causing the sql insert
+	command to break if a person had a ' in their name
+
+2001-03-07 13:02  rangi
+
+	* moremember.pl: Changing the form so it passes through a modify
+	value to tell the script to show the flags
+
+2001-03-06 17:48  rangi
+
+	* insertdata.pl, memberentry.pl: Added the functionality to allow
+	librarians to manipulate the flag status on borrowers ie lost,
+	debarred, and gone no address
+
+2001-03-06 13:16  rangi
+
+	* search.pl: Fixing " glitch in titles
+
+2001-03-06 13:13  rangi
+
+	* opac-search.pl: Fixing a bug in the opac search that meant that
+	titles that contained " were caused the detail page to error
+
+2001-02-27 14:08  rangi
+
+	* delbiblio.pl: Quick fix to stop ppl from being able to delete
+	biblios that have items attached
+
+2001-02-21 14:33  rangi
+
+	* circ/circulation.pl: Rejigged printing issues, to print out
+	everything on issue to the borrower
+
+2001-02-21 14:27  rangi
+
+	* stats.pl: Fixed a little glitch in the daily stats script that
+	meant it wasnt counting renewals
+
+2001-02-21 14:17  rangi
+
+	* moremember.pl: Got a link from items on issue thru to item
+	details (like in the circ module) And also stopped already renewed
+	books from being renewable in the issues list
+
+2001-02-18 14:13  rangi
+
+	* C4/Circulation/Circ2.pm: Little fix to the returnbook routine so
+	the correct branchcode is passed to the updatestats routine
+
+2001-02-13 18:41  rangi
+
+	* circ/circulation.pl: A bodgy hack so that hitting enter in issues
+	(with no barcode) prints out the borrowers issue slip and starts a
+	new borrower
+
+2001-02-13 16:29  rangi
+
+	* circ/circulation.pl: The Horowhenua libraries wanted less patron
+	and item information displaying at returns So Added some if
+	statements to not display patron addresses, and to only display the
+	title of the item These presumably would be changed to suit
+	individual libraries wants
+
+2001-02-13 16:27  rangi
+
+	* C4/Circulation/Circ2.pm: Made some changes to checkreserve and
+	find_reserves, so that items are always displayed as reserved when
+	returned, not just once
+
+2001-02-11 14:44  rangi
+
+	* detail.pl: Little fix so that if the item has no author
+	information, empty () dont disply
+
+2001-02-11 14:38  rangi
+
+	* search.pl: Changing the front page search of the intranet site to
+	just be a keyword search
+
+2001-02-07 15:47  tonnesen
+
+	* shelves.pl, C4/BookShelves.pm: Added header and log substition
+	variables
+
+2001-02-07 12:27  tonnesen
+
+	* shelves.pl, C4/BookShelves.pm: Start of code to implement virtual
+	bookshelves in Koha.
+
+2001-02-05 10:48  tonnesen
+
+	* loadmodules.pl, C4/Search.pm: loadmodules.pl allows redirection
+	to different modules based on systemprefs Added subroutine in
+	Search.pm load systemprefs from new systempreferences table in
+	database.  Initial use is to allow using my simplified acquisitions
+	module in place of vendor-based acquisitions module.  Default is
+	vendor-based module.
+
+2001-02-05 09:47  tonnesen
+
+	* C4/Circulation/Circ2.pm: Added a couple of missing
+	$dbh->disconnect lines that were logging errors in apache log
+	files.
+
+2001-02-05 09:24  tonnesen
+
+	* circ/circulation.pl: Fixed backgroundimage in circulation module.
+	 Background image now displays only in header lines.
+
+2001-02-04 14:25  rangi
+
+	* C4/Print.pm, circ/circulation.pl: Fixing printing error, now is
+	printing all of the days issues for borrower
+
+2001-01-31 20:09  rangi
+
+	* circ/circulation.pl: Made sure the printer queue value was being
+	set before calling print
+
+2001-01-31 18:08  rangi
+
+	* C4/Print.pm, C4/Circulation/Circ2.pm, circ/circulation.pl:
+	Attempting to get issues slip to print when borrower is finished
+	with
+
+2001-01-31 15:40  rangi
+
+	* stats.pl: Fixed a bug that was meaning some payments werent
+	counted
+
+2001-01-31 14:09  rangi
+
+	* C4/Circulation/Circ2.pm: Fixed a little bug in
+	getiteminformation, it wasnt returning item loanlength
+
+2001-01-31 13:38  rangi
+
+	* C4/Output.pm, circ/circulation.pl: Added a line to Ouput.pm to
+	enable circulation to use its own includes Changed the look of
+	circulation.pl to the green/yellow colours
+	
+	Note: Steve, i added another variable $backgroundimage that sets
+	the background image for the main tables, so it should be
+	straightforward to change the look back to the colours you had if
+	you want to
+
+2001-01-31 11:34  rangi
+
+	* moremember.pl: Changed it so you cant renew a book that is on
+	request, made a link from the on request text to the
+	request(reserve) data
+
+2001-01-31 10:14  tonnesen
+
+	* circ/circulation.pl: Mostly just look changes, got rid of table
+	borders, alternating colors on table rows.  Some fixes to returned
+	items in returns module.
+
+2001-01-31 10:13  tonnesen
+
+	* C4/Circulation/Circ2.pm: Return itemlist array, and itemlisttext
+	(text version of overdues) with overdue flag in
+	getpatroninformation()
+
+2001-01-25 16:39  rangi
+
+	* misc/fines2.pl: Script to generate overdue fines.  Ideally run as
+	a cronjob each night
+
+2001-01-25 16:17  tonnesen
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Returns module
+	lists recently returned items, cookies used to store branch and
+	printer preferences.
+
+2001-01-24 16:01  tonnesen
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Refined Returns
+	module.  Added ability to select branch and printer.  Fixed charges
+	for rental items.
+
+2001-01-23 15:48  tonnesen
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Changes to web
+	circulation module: rudimentary returns module, arbitrary due date
+	for issues, flag info displayed, overdue books are displayed in
+	red.
+
+2001-01-22 16:12  tonnesen
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Fixed a bug in
+	issuing reserved books.  Was calling non-existent printreserve
+	subroutine
+
+2001-01-22 15:48  tonnesen
+
+	* C4/Circulation/Circ2.pm, circ/circulation.pl: Started work on a
+	web-based circulation interface.
+
+2001-01-17 15:45  tonnesen
+
+	* C4/Circulation/Circ2.pm, tkperl/tkcirc: Added support for showing
+	patron flags in the issues module.  Moved popup message windows to
+	a Toplevel widget instead of a message widget.	Toplevel widgets
+	come up much faster than message widgets.
+
+2001-01-16 15:34  rangi
+
+	* C4/Circulation/Fines.pm: Fixing a glitch in the fines routine,
+	was failing if adding a new fine to the same user for the same item
+
+2001-01-15 11:31  tonnesen
+
+	* C4/Circulation/Circ2.pm: API for circulation modules
+
+2001-01-15 11:22  tonnesen
+
+	* tkperl/tkcirc: Now uses Circ2.pm generic interface subroutines.
+
+2001-01-09 12:47  tonnesen
+
+	* tkperl/tkcirc: Moved returned item list from a scrolled text box
+	to a scrolled table.
+
+2001-01-09 09:36  tonnesen
+
+	* tkperl/tkcirc: First release of Perl/Tk circulation interface
+
+2001-01-05 09:47  tonnesen
+
+	* C4/Output.pm: Renamed koha.conf config entry from "path" to
+	"includes", which is more meaningful in the koha.conf file.
+
+2001-01-05 09:39  tonnesen
+
+	* C4/Circulation/Main.pm: Modified getbranch() and getprinter()
+	subroutines to not pop up a menu if there is only one branch or one
+	printer, but just select the single option automatically.
+
+2001-01-05 08:30  tonnesen
+
+	* C4/Output.pm: Added support for moving path=... variable to
+	/etc/koha.conf
+
+2000-12-21 11:56  rangi
+
+	* C4/Database.pm: Shifted Database connection variables out into a
+	configuration file The permissions on this config file should also
+	be strict, since they contain the database password.  At a minimum,
+	the apache user needs to be able to read it, as well as any other
+	user that runs circ.  I would suggest ownership of
+	www-data.libadmins with no access to others.  libadmins contain all
+	users that use circ
+	
+	destined for v1.08
+
+2000-12-19 15:45  rangi
+
+	* boraccount.pl, borrwraper.pl, catmaintain.pl, charges.pl,
+	currency.pl, delbiblio.pl, delitem.pl, detail.pl, fines.pl,
+	imemberentry.pl, insertdata.pl, insertidata.pl, insertjdata.pl,
+	jmemberentry.pl, member.pl, memberentry.pl, modbib.pl,
+	modbibitem.pl, moditem.pl, modrequest.pl, moredetail.pl,
+	moremember.pl, newimember.pl, newjmember.pl, newmember.pl,
+	opac-search.pl, orderbreakdown.pl, pay.pl, placerequest.pl,
+	readingrec.pl, renewscript.pl, reports.pl, request.pl,
+	reservereport.pl, reservereport.xls, search.pl, showbudget.pl,
+	simpleredirect.pl, stats.pl, stats2.pl, subjectsearch.pl,
+	tidyaccounts.pl, updatebibitem.pl, updatebiblio.pl,
+	updatecharges.pl, updateitem.pl, C4/Accounts.pm, C4/Accounts2.pm,
+	C4/Acquisitions.pm, C4/Circmain.pm, C4/Circulation.pm,
+	C4/Database.pm, C4/Format.pm, C4/Input.pm, C4/InterfaceCDK.pm,
+	C4/Maintainance.pm, C4/Output.pm, C4/Print.pm, C4/Reserves.pm,
+	C4/Reserves2.pm, C4/Scan.pm, C4/Search.pm, C4/Security.pm,
+	C4/Stats.pm, C4/Stock.pm, C4/Circulation/Borrissues.pm,
+	C4/Circulation/Borrower.pm, C4/Circulation/Fines.pm,
+	C4/Circulation/Issues.pm, C4/Circulation/Main.pm,
+	C4/Circulation/Renewals.pm, C4/Circulation/Renewals2.pm,
+	C4/Circulation/Returns.pm, C4/Interface/AccountsCDK.pm,
+	C4/Interface/BorrowerCDK.pm, C4/Interface/FlagsCDK.pm,
+	C4/Interface/RenewalsCDK.pm, C4/Interface/ReserveentCDK.pm,
+	acqui/acquire.pl, acqui/addorder.pl, acqui/basket.pl,
+	acqui/finishreceive.pl, acqui/modorders.pl, acqui/newbasket.pl,
+	acqui/newbasket2.pl, acqui/newbiblio.pl, acqui/order.pl,
+	acqui/receive.pl, acqui/recieveorder.pl, acqui/supplier.pl,
+	acqui/updatesupplier.pl, misc/fixborrower.pl, misc/fixcatalog.pl,
+	misc/fixorders.pl, misc/fixorders.pl2, misc/fixrefs.pl,
+	misc/makebaskets.pl, misc/makeformats.pl, misc/tidyaccounts.pl,
+	sec/writeoff.pl, telnet/borrwraper.pl, telnet/circ,
+	telnet/doreturns.pl, telnet/issuewrapper.pl,
+	telnet/returnswrapper.pl, telnet/startint.pl: Initial revision
+
+2000-12-19 15:45  rangi
+
+	* boraccount.pl, borrwraper.pl, catmaintain.pl, charges.pl,
+	currency.pl, delbiblio.pl, delitem.pl, detail.pl, fines.pl,
+	imemberentry.pl, insertdata.pl, insertidata.pl, insertjdata.pl,
+	jmemberentry.pl, member.pl, memberentry.pl, modbib.pl,
+	modbibitem.pl, moditem.pl, modrequest.pl, moredetail.pl,
+	moremember.pl, newimember.pl, newjmember.pl, newmember.pl,
+	opac-search.pl, orderbreakdown.pl, pay.pl, placerequest.pl,
+	readingrec.pl, renewscript.pl, reports.pl, request.pl,
+	reservereport.pl, reservereport.xls, search.pl, showbudget.pl,
+	simpleredirect.pl, stats.pl, stats2.pl, subjectsearch.pl,
+	tidyaccounts.pl, updatebibitem.pl, updatebiblio.pl,
+	updatecharges.pl, updateitem.pl, C4/Accounts.pm, C4/Accounts2.pm,
+	C4/Acquisitions.pm, C4/Circmain.pm, C4/Circulation.pm,
+	C4/Database.pm, C4/Format.pm, C4/Input.pm, C4/InterfaceCDK.pm,
+	C4/Maintainance.pm, C4/Output.pm, C4/Print.pm, C4/Reserves.pm,
+	C4/Reserves2.pm, C4/Scan.pm, C4/Search.pm, C4/Security.pm,
+	C4/Stats.pm, C4/Stock.pm, C4/Circulation/Borrissues.pm,
+	C4/Circulation/Borrower.pm, C4/Circulation/Fines.pm,
+	C4/Circulation/Issues.pm, C4/Circulation/Main.pm,
+	C4/Circulation/Renewals.pm, C4/Circulation/Renewals2.pm,
+	C4/Circulation/Returns.pm, C4/Interface/AccountsCDK.pm,
+	C4/Interface/BorrowerCDK.pm, C4/Interface/FlagsCDK.pm,
+	C4/Interface/RenewalsCDK.pm, C4/Interface/ReserveentCDK.pm,
+	acqui/acquire.pl, acqui/addorder.pl, acqui/basket.pl,
+	acqui/finishreceive.pl, acqui/modorders.pl, acqui/newbasket.pl,
+	acqui/newbasket2.pl, acqui/newbiblio.pl, acqui/order.pl,
+	acqui/receive.pl, acqui/recieveorder.pl, acqui/supplier.pl,
+	acqui/updatesupplier.pl, misc/fixborrower.pl, misc/fixcatalog.pl,
+	misc/fixorders.pl, misc/fixorders.pl2, misc/fixrefs.pl,
+	misc/makebaskets.pl, misc/makeformats.pl, misc/tidyaccounts.pl,
+	sec/writeoff.pl, telnet/borrwraper.pl, telnet/circ,
+	telnet/doreturns.pl, telnet/issuewrapper.pl,
+	telnet/returnswrapper.pl, telnet/startint.pl: Files shifted into
+	Sourceforge CVS
+
