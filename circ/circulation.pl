@@ -201,6 +201,8 @@ my $selected='';
 # make the issued books table.....
 my $todaysissues='';
 my $previssues='';
+my @realtodayissues;
+my @realprevissues;
 if ($borrower) {
     my @todaysissues;
     my @previousissues;
@@ -225,19 +227,18 @@ if ($borrower) {
 	    $dd="<font color=red>$dd</font>\n";
 	}
 	($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
-	$todaysissues .=<< "EOF";
-<tr><td bgcolor=$tcolor align=center>$dd</td>
-<td bgcolor=$tcolor align=center>
-<a href=/cgi-bin/koha/detail.pl?bib=$book->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$book->{'barcode'}</a></td>
-<td bgcolor=$tcolor>$book->{'title'}</td>
-<td bgcolor=$tcolor>$book->{'author'}</td>
-<td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
-EOF
+	$book->{'dd'}=$dd;
+	$book->{'tcolor'}=$tcolor;
+	push @realtodayissues,$book
     }
     # FIXME - For small and private libraries, it'd be nice if this
     # table included a "Return" link next to each book, so that you
     # don't have to remember the book's bar code and type it in on the
     # "Returns" page.
+    
+    # This is in the template now, so its possible for a small library to make that link in their
+    # template
+    
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
@@ -247,14 +248,9 @@ EOF
 	    $dd="<font color=red>$dd</font>\n";
 	}
 	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
-	$previssues .= << "EOF";
-<tr><td bgcolor=$pcolor align=center>$dd</td>
-<td bgcolor=$pcolor align=center>
-<a href=/cgi-bin/koha/detail.pl?bib=$book->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$book->{'barcode'}</a></td>
-<td bgcolor=$pcolor>$book->{'title'}</td>
-<td bgcolor=$pcolor>$book->{'author'}</td>
-<td bgcolor=$pcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
-EOF
+	$book->{'dd'}=$dd;
+	$book->{'tcolor'}=$pcolor;
+	push @realprevissues,$book
     }
 }
 
@@ -323,8 +319,8 @@ $template->param(
 		flaginfotable => $flaginfotable,
 		CHARGES => $flags->{'CHARGES'},
 		amountold => $amountold,
-		todayissues => $todaysissues,
-		previssues => $previssues,
+		todayissues => \@realtodayissues,
+		previssues => \@realprevissues,
 	);
 
 if ($branchcookie) {
