@@ -1,17 +1,11 @@
-<HTML>
-
-<!-- startmenu (member)
-     this  includes the head-container and <body>
-     including this via var contradicts the separation of code and design
-     a solution via tmpl_include would be better -->
-
-<TMPL_VAR NAME=startmenumember>
-
-<!-- here comes the main table -->
-
+<TMPL_INCLUDE name="members-top.inc">
 <BLOCKQUOTE>
 
-<FONT SIZE=6><em>Dodaj now± instytucjê</em></FONT><br>
+<TMPL_IF name="surname">
+	<h1>Edytuj instytucjê</h1><br>
+<TMPL_ELSE>
+	<h1>Dodaj now± instytucjê</h1><br>
+</TMPL_IF>
 <form action=/cgi-bin/koha/newimember.pl method=post>
   <input type=hidden name=joining value="">
   <input type=hidden name=expiry value="">
@@ -27,119 +21,101 @@
 
     <tr align=right>
       <td COLSPAN=2 ALIGN=RIGHT><font size=3 face='arial,helvetica'>
-        <STRONG>Czytelnik# <TMPL_VAR NAME=member>, Numer Karty*</STRONG>
+        <STRONG>Czytelnik# <TMPL_VAR NAME="member">, Numer karty*</STRONG>
       </TD>
-      <TD align=right><input type=text name=cardnumber_institution size=20 value=" "><br></td>
+      <TD align=right><input type=text name=cardnumber_institution size=20 value=<TMPL_VAR NAME=cardnumber_institution>><br></td>
     </TR>
 
     <tr><td>&nbsp;</TD></TR>
 
     <tr valign=top bgcolor="99cc33" >
-      <td  COLSPAN=5 background="/images/background-mem.gif">
-        <B>SZCZEGÓ£Y INSTYTUCJI</b>
+      <td  COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+        <B>DANE INSTYTUCJI</b>
       </td>
-      <td  COLSPAN=2  ALIGN=RIGHT background="/images/background-mem.gif">
+      <td  COLSPAN=2  ALIGN=RIGHT background="<TMPL_VAR name="themelang">/images/background-mem.gif">
       </td>
-    </tr>
-
-    <tr valign=top bgcolor=white>
-      <td colspan=3><input type=text name=institution_name size=50 value=""></td>
     </tr>
 
     <tr valign=top bgcolor=white>
       <td><FONT SIZE=2>Nazwa instytucji</FONT></td>
     </tr>
-
+    <tr valign=top bgcolor=white>
+      <td colspan=3><input type=text name=institution_name size=50 value="<TMPL_VAR name="surname">"></td>
+    </tr>
     <tr><td>&nbsp;</TD></TR>
 
     <tr valign=top bgcolor="99cc33" >
-      <td  COLSPAN=5 background="/images/background-mem.gif">
-	  <B>Adres Instytucji</b>
+      <td  COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+	  <B>ADRES INSTYTUCJI</b>
       </td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-	<td><input type=text name=address size=40 value=""></td>
-	<td><input type=text name=city size=20 value=""></td>
-	<td>
-	  <SELECT NAME="area" SIZE="1">
-          <!-- this truely shouldn't be hardcoded -->
-	    <OPTION value=L>L - Levin
-	    <OPTION value=F>F - Foxton
-	    <OPTION value=S>S - Shannon
-	    <OPTION value=H>H - Horowhenua
-	    <OPTION value=K>K - Kapiti
-	    <OPTION value=O>O - Out of District
-	    <OPTION value=X>X - Temporary Visitor
-	    <OPTION value=Z>Z - Interloan Libraries
-	    <OPTION value=V>V - Villlage
-        </SELECT>
-      </td>
-    </tr>
-	
     <tr valign=top bgcolor=white>
 	<td ><FONT SIZE=2>Adres pocztowy*</FONT></td>
-	<td><FONT SIZE=2>Miasto*</FONT></td>
-	<td><FONT SIZE=2>Rejon</FONT></td>
+	<td><FONT SIZE=2>Kod / Miasto*</FONT></td>
+	<td><FONT SIZE=2>Area</FONT></td>
     </tr>
-
+    <tr valign=top bgcolor=white>
+	<td><input type=text name=address size=40 value="<TMPL_VAR name="streetaddress">"></td>
+	<td><input type=text name=zipcode size=20 value="<TMPL_VAR name="zipcode">"> <br/><input type=text name=city size=20 value="<TMPL_VAR name="city">"></td>
+	<td>
+      	<TMPL_VAR name="CGIbranch">
+      </td>
+    </tr>
     <tr><td>&nbsp;</TD></TR>
 
     <tr valign=top bgcolor="99cc33">
-      <td COLSPAN=5 background="/images/background-mem.gif">
+      <td COLSPAN=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	  <B>Dane kontaktowe</b>
       </td>
     </tr>
 
     <tr valign=top bgcolor=white>
-	<td COLSPAN=3><input type=text name=contactname size=40 value=""></td>
-    </tr>
-	
-    <tr valign=top bgcolor=white>
 	<td COLSPAN=3><FONT SIZE=2>Nazwisko osoby kontaktowej*</td>
     </tr>
-	
     <tr valign=top bgcolor=white>
-	<td ><input type=text name=phoneday size=20 value=""></td>
-	<td><input type=text name=faxnumber size=20 value=""></td>
-	<td ><input type=text name=emailaddress size=20 value=""></td>
+	<td COLSPAN=3><input type=text name=contactname size=40 value="<TMPL_VAR name="contactname">"></td>
     </tr>
 	
+	
     <tr valign=top bgcolor=white>
-	<td><FONT SIZE=2>Tel. (w dzieñ)</td>
+	<td><FONT SIZE=2>Tel. (dzienny)</td>
 	<td><FONT SIZE=2>Fax</td>
 	<td><FONT SIZE=2>Email</td>
+    </tr>
+    <tr valign=top bgcolor=white>
+	<td ><input type=text name=phoneday size=20 value="<TMPL_VAR name="phoneday">"></td>
+	<td><input type=text name=faxnumber size=20 value="<TMPL_VAR name="faxnumber">"></td>
+	<td ><input type=text name=emailaddress size=20 value="<TMPL_VAR name="emailaddress">"></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
 	
     <tr valign=top bgcolor=white>
-	<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3></textarea></td>
-    </tr>
-
-    <tr valign=top bgcolor=white>
 	<td><FONT SIZE=2>Uwagi</font></td>
+    </tr>
+    <tr valign=top bgcolor=white>
+	<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><TMPL_VAR name="altnotes"></textarea></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
 	
     <tr valign=top bgcolor="99cc33"  >
-	<td  COLSPAN=5  background="/images/background-mem.gif"><B>Na u¿ytek biblioteki</B></td>
+	<td  COLSPAN=5  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>DO U¯YTKU BIBLIOTEKI</B></td>
     </tr>
 	
+    <tr valign=top bgcolor=white>
+	<td ><FONT SIZE=2>Uwagi</font></td>
+    </tr>
     <tr valign=top >
-	<td  COLSPAN=5><textarea name=borrowernotes wrap=physical cols=70 rows=3></textarea></td>
+	<td  COLSPAN=5><textarea name=borrowernotes wrap=physical cols=70 rows=3><TMPL_VAR name="borrowernotes"></textarea></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
 
     <tr valign=top bgcolor=white>
-	<td ><FONT SIZE=2>Uwagi</font></td>
-    </tr>
-
-    <tr valign=top bgcolor=white>
 	<td  COLSPAN=5 align=right >
-	  <input type=image src="/images/save-changes.gif" WIDTH=188 HEIGHT=44 ALT="Dodaj nowego czytelnika" border=0 >
+	  <input type=submit class="button" value="Zapisz zmiany" ALT="Add New Member" border=0 >
       </td>
     </tr>
   </TABLE>

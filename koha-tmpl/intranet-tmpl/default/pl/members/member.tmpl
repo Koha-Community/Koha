@@ -12,18 +12,18 @@
 Szukano <TMPL_VAR NAME=member><p>
 <table>
   <tr bgcolor="#99cc33">
-    <td background="/images/background-mem.gif"><b>Karta</b></td>
-    <td background="/images/background-mem.gif"><b>Nazwisko</b></td>
-    <td background="/images/background-mem.gif"><b>Imiê</b></td>
-    <td background="/images/background-mem.gif"><b>Kategoria</b></td>
-    <td background="/images/background-mem.gif"><b>Adres</b></td>
-    <td background="/images/background-mem.gif"><b>Zaleg³e pozycje</b></td>
-    <td background="/images/background-mem.gif"><b>Op³aty</b></td>
-    <td background="/images/background-mem.gif"><b>Uwagi</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Karta</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Nazwisko</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Imiê</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Kategoria</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Adres</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Zaleg³e pozycje</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Op³aty</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Uwagi</b></td>
   </tr>
   
   <TMPL_LOOP NAME=resultsloop>
-    <TMPL_IF NAME="__ODD__">
+    <TMPL_IF NAME="background">
     <TR bgcolor="#ffffcc">
     <TMPL_ELSE>
     <TR bgcolor=white>
@@ -41,12 +41,8 @@ Szukano <TMPL_VAR NAME=member><p>
 </table>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Dodaj nowego czyteln." BORDER=0 ></a><br>
-<INPUT TYPE="radio" name="chooseform" value="adult" checked>Osoba
+<input type=submit class="button" value="Dodaj czytelnika" title="Add Member" alt="Add Member">
+<INPUT TYPE="radio" name="chooseform" value="adult" checked>Doros³y
 <INPUT TYPE="radio" name="chooseform" value="organisation" >Organizacja
 </form>
-
 <TMPL_INCLUDE NAME="members-bottom.inc">
-
-</body>
-</HTML>
