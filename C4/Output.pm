@@ -92,8 +92,9 @@ sub gettemplate {
 
     my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
 
-    my $template = HTML::Template->new(filename          => "$htdocs/$theme/$lang/$tmplbase", 
-				   die_on_bad_params => 0, 
+    my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase", 
+				   die_on_bad_params => 0,
+				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 
     $template->param(themelang => "/$theme/$lang");
@@ -135,7 +136,6 @@ sub themelanguage {
   my ($lang) = $sth->fetchrow;
   $sth->finish;
   my @languages = split " ", $lang;
-  warn "Lang = @languages\n";
 
 # theme preferences....
   my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opacthemes'");
@@ -143,7 +143,6 @@ sub themelanguage {
   my ($theme) = $sth->fetchrow;
   $sth->finish;
   my @themes = split " ", $theme;
-  warn "Theme = @themes \n";
 
   $dbh->disconnect;
 
