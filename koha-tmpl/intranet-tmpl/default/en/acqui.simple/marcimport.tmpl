@@ -3,7 +3,7 @@
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Import into breeding farm</font></td>
+	<td><font size="4">Import into the breeding farm</font></td>
 	</tr>
 </table>
 
@@ -18,32 +18,34 @@
 	<p><a href="addbooks.pl">Back to acquisition</a>
 </ul>
 <TMPL_ELSE>
-<ul>Select a file to import into breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in breeding farm.
-If an ISBN already exists in the breeding farm, you can choose wether to ignore the new one, or overwrite the old one.<br/>
-You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested marc data comes !<br/>
-Of course, if the ISBN already exists in active DB, the biblio will be ignored.<br/></ul>
+<ul>
+	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
+	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
+	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
+	<li>Of course, if the ISBN already exists in the active DB, the biblio will be ignored.</li>
+</ul>
 <form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
 <table cellpadding="3" border=0>
 	<tr valign="top">
-		<td>Select the file to import :</td>
+		<td>Select the file to import:</td>
 		<td>
 			<input type="file" name="uploadmarc"/><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Name of this import :</td>
+		<td>Name of this import:</td>
 		<td>
 			<input type="text" name="filename"/><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>If ISBN already in breeding farm : </td>
+		<td>If ISBN already in breeding farm: </td>
 		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignore this one, keep the existing one<br/>
 			<input type="radio" name="overwrite_biblio" value="1">Overwrite the existing one with this</td>
 	</tr>
 	<tr valign="top">
 		<td>&nbsp; </td>
-		<td><input type="submit" value="import"></td>
+		<td><input type="submit" value="Import"></td>
 	</tr>
 
 </table>
