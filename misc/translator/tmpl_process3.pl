@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-tmpl_process3.pl - Experimental version of tmpl_process.pl
+tmpl_process3.pl - Alternative version of tmpl_process.pl
 using gettext-compatible translation files
 
 =cut
@@ -348,26 +348,67 @@ exit 0;
 
 =head1 DESCRIPTION
 
-This is an experimental version of the tmpl_process.pl script,
-using standard gettext-style PO files.  Note that the behaviour
-of this script should still be considered unstable.
+This is an alternative version of the tmpl_process.pl script,
+using standard gettext-style PO files.  While there still might
+be changes made to the way it extracts strings, at this moment
+it should be stable enough for general use; it is already being
+used for the Chinese and Polish translations.
 
 Currently, the create, update, and install actions have all been
 reimplemented and seem to work.
 
+=head2 Features
+
+=over
+
+=item -
+
+Translation files in standard Uniforum PO format.
+All standard tools including all gettext tools,
+plus PO file editors like kbabel(1) etc.
+can be used.
+
+=item -
+
+Minor changes in whitespace in source templates
+do not generally require new strings to be re-translated.
+
+=item -
+
+Able to handle <TMPL_VAR> variables in the templates;
+<TMPL_VAR> variables are usually extracted in proper context.
+
+=item -
+
+Able to handle text input and radio button INPUT elements
+in the templates; these INPUT elements are also usually
+extracted in proper context.
+
+=item -
+
+Automatic comments in the generated PO files to provide
+even more context (line numbers, and the names and types
+of the variables).
+
+=item -
+
+Using the PO format also means translators can add their
+own comments in the translation files, if necessary.
+
+=item -
+
+Create, update, and install actions are all based on the
+same scanner module. This ensures that when installing the
+translation file, nothing that should not be translated is
+accidentally translated.
+
+=back
+
+=head1 NOTES
+
 The create action calls xgettext.pl to do the actual work;
 the update action calls xgettext.pl and msgmerge(1) to do the
 actual work.
-
-The script can detect <TMPL_VAR> directives embedded inside what
-appears to be a full sentence (this actual work being done by
-TmplTokenizer(3)); these larger patterns appear in the translation
-file as c-format strings with %s.
-
-Whitespace in extracted strings are folded to single blanks, in
-order to prevent new strings from appearing when minor changes in
-the original templates occur, and to prevent overly difficult to
-read strings in the PO file.
 
 =head1 BUGS
 
@@ -381,12 +422,15 @@ generate GNU PO files properly; a couple of workarounds have
 been written in TmplTokenizer and more is likely to be needed
 (e.g., to get rid of the "Strange line" warning for #~).
 
+This script may not work in Windows.
+
 There are probably some other bugs too, since this has not been
 tested very much.
 
 =head1 SEE ALSO
 
 xgettext.pl,
+TmplTokenizer.pm,
 msgmerge(1),
 Locale::PO(3),
 translator_doc.txt
