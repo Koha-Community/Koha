@@ -101,6 +101,63 @@ Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
     exit;
 };
 
+
+
+#
+# Test for Perl and Modules
+#
+print qq|
+
+PERL & MODULES
+==============
+
+|;
+
+print "\nChecking perl modules ...\n";
+    unless (eval "require 5.004") {
+    die "Sorry, you need at least Perl 5.004\n";
+}
+
+my @missing = ();
+unless (eval {require DBI})               { push @missing,"DBI" };
+unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
+unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
+unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
+unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
+unless (eval {require HTML::Template})       { push @missing,"HTML::Template" };
+#unless (eval {require Net::Z3950})        { 
+#    print qq|
+#
+#The Net::Z3950 module is missing.  This module is necessary if you want to use
+#Koha's Z39.50 client to download bibliographic records from other libraries.
+#To install this module, you will need the yaz client installed from
+#http://www.indexdata.dk/yaz/ and then you can install the perl module with the
+#command:
+#
+#perl -MCPAN -e 'install Net::Z3950'
+#
+#Press the <ENTER> key to continue:
+#|;
+#    <STDIN>;
+#}
+
+#
+# Print out a list of any missing modules
+#
+if (@missing > 0) {
+    print "\n\n";
+    print "You are missing some Perl modules which are required by Koha.\n";
+    print "Once these modules have been installed, rerun this installer.\n";
+    print "They can be installed by running (as root) the following:\n";
+    foreach my $module (@missing) {
+	print "   perl -MCPAN -e 'install \"$module\"'\n";
+	exit(1);
+    }} else{
+    print "All modules appear to be installed, continuing...\n";
+};
+
+
+
 my $backupdir='/usr/local/koha/backups';
 print "Please specify a backup directory [$backupdir]: ";  
 
