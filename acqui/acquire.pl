@@ -22,7 +22,6 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use CGI;
 use C4::Context;
@@ -30,14 +29,16 @@ use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use C4::Search;
+use C4::Auth;
+use C4::Biblio;
+use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::Database;
+use HTML::Template;
 
 my $input=new CGI;
-print $input->header();
 my $id=$input->param('id');
-
-print startpage;
-
-print startmenu('acquisitions');
+my $dbh = C4::Context->dbh;
 
 my $search=$input->param('recieve');
 my $invoice=$input->param('invoice');
@@ -47,256 +48,133 @@ my $catview=$input->param('catview');
 my $gst=$input->param('gst');
 my ($count,@results)=ordersearch($search,$biblio,$catview);
 my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
-#print $count;
 my @date=split('-',$results[0]->{'entrydate'});
 my $date="$date[2]/$date[1]/$date[0]";
 
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/acquire.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {acquisition => 1},
+			     debug => 1,
+			     });
+
+$template->param($count);
 if ($count == 1){
+	my $query="Select itemtype,description from itemtypes order by description";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my  @itemtype;
+	my %itemtypes;
+	push @itemtype, "";
+	$itemtypes{''} = "Please choose";
+	while (my ($value,$lib) = $sth->fetchrow_array) {
+		push @itemtype, $value;
+		$itemtypes{$value}=$lib;
+	}
 
+	my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
+				-values   => \@itemtype,
+				-default  => $results[0]->{'itemtype'},
+				-labels   => \%itemtypes,
+				-size     => 1,
+				-multiple => 0 );
+	$sth->finish;
 
-print <<EOP
+	my @branches;
+	my @select_branch;
+	my %select_branches;
+	my ($count2,@branches)=branches();
+	for (my $i=0;$i<$count2;$i++){
+		push @select_branch, $branches[$i]->{'branchcode'};#
+		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
+	}
+	my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+				-values   => \@select_branch,
+				-default  => $results[0]->{'branchcode'},
+				-labels   => \%select_branches,
+				-size     => 1,
+				-multiple => 0 );
+	$sth->finish;
 
-<script language="javascript" type="text/javascript">
-<!--
-function messenger(X,Y,etc){
-win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
-win.focus();
-win.document.close();
-win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size=2><p><br>");
-win.document.write(etc);
-win.document.write("<center><form><input type=button onclick='self.close()' value=Close></form></center>");
-win.document.write("</font></body></html>");
-}
-//-->
-</script>
-<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
-<input type=hidden name=biblio value=$results[0]->{'biblionumber'}>
-<input type=hidden name=ordnum value=$results[0]->{'ordernumber'}>
-<input type=hidden name=biblioitemnum value=$results[0]->{'biblioitemnumber'}>
-<input type=hidden name=bookseller value=$results[0]->{'booksellerid'}>
-<input type=hidden name=freight value=$freight>
-<input type=hidden name=gst value=$gst>
-EOP
-;
-if ($catview ne 'yes'){
-  print "<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right>";
+	my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
+		# See whether barcodes should be automatically allocated.
+		# Defaults to 0, meaning "no".
+	my $barcode;
+	if ($auto_barcode eq '1') {
+		$sth=$dbh->prepare("Select max(barcode) from items");
+		$sth->execute;
+		my $data=$sth->fetchrow_hashref;
+		$barcode = $results[0]->{'barcode'}+1;
+		$sth->finish;
+	}
+
+	my @bookfund;
+	my @select_bookfund;
+	my %select_bookfunds;
+	($count2,@bookfund)=bookfunds();
+	for (my $i=0;$i<$count2;$i++){
+		push @select_bookfund, $bookfund[$i]->{'bookfundid'};
+		$select_bookfunds{$bookfund[$i]->{'bookfundid'}} = $bookfund[$i]->{'bookfundname'}
+	}
+	my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
+				-values   => \@select_bookfund,
+				-default  => $results[0]->{'bookfundid'},
+				-labels   => \%select_bookfunds,
+				-size     => 1,
+				-multiple => 0 );
+
+	my $rrp=$results[0]->{'rrp'};
+	if ($results[0]->{'quantityreceived'} == 0){
+	$results[0]->{'quantityreceived'}='';
+	}
+	if ($results[0]->{'unitprice'} == 0){
+	$results[0]->{'unitprice'}='';
+	}
+	$template->param(
+		count => 1,
+		biblionumber => $results[0]->{'biblionumber'},
+		ordernumber => $results[0]->{'ordernumber'},
+		biblioitemnumber => $results[0]->{'biblioitemnumber'},
+		booksellerid => $results[0]->{'booksellerid'},
+		freight => $freight,
+		gst => $gst,
+		catview => ($catview ne 'yes'?1:0),
+		name => $booksellers[0]->{'name'},
+		date => $date,
+		title => $results[0]->{'title'},
+		author => $results[0]->{'author'},
+		copyrightdate => $results[0]->{'copyrightdate'},
+		CGIitemtype => $CGIitemtype,
+		CGIbranch => $CGIbranch,
+		isbn => $results[0]->{'isbn'},
+		seriestitle => $results[0]->{'seriestitle'},
+		barcode => $barcode,
+		CGIbookfund => $CGIbookfund,
+		quantity => $results[0]->{'quantity'},
+		quantityreceived => $results[0]->{'quantityreceived'},
+		rrp => $rrp,
+		ecost => $results[0]->{'ecost'},
+		unitprice => $results[0]->{'unitprice'},
+		invoice => $invoice,
+		notes => $results[0]->{'notes'},
+	);
 } else {
-  print "<a href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=$results[0]->{'ordernumber'}&id=$results[0]->{'booksellerid'}><img src=/images/modify-mem.gif align=right border=0></a>";
+	my @loop;
+	for (my $i=0;$i<$count;$i++){
+		my %line;
+		$line{isbn} = $results[$i]->{'isbn'};
+		$line{ordernumber} = $results[$i]->{'ordernumber'};
+		$line{biblionumber} = $results[$i]->{'biblionumber'};
+		$line{invoice} = $invoice;
+		$line{freight} = $freight;
+		$line{gst} = $gst;
+		$line{title} = $results[$i]->{'title'};
+		$line{author} = $results[$i]->{'author'};
+		push @loop,\%line;
+	}
+	$template->param( loop => \@loop);
+
 }
-print <<EOP
-<FONT SIZE=6><em>$results[0]->{'ordernumber'} - Receive Order</em></FONT><br>
-Shopping Basket For: $booksellers[0]->{'name'}
-<br> Order placed: $date
-<P>
-<CENTER>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif" colspan=2><B>CATALOGUE DETAILS</B></td></tr>
-
-<TR VALIGN=TOP>
-<TD><b>Title *</b></td>
-<td><input type=text size=20 name=title value="$results[0]->{'title'}" >
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Author</td>
-<td><input type=text size=20 name=author value="$results[0]->{'author'}" >
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Copyright Date</td>
-<td><input type=text size=20 name=copyright value="$results[0]->{'copyrightdate'}" >
-</td>
-</tr>
-<TR VALIGN=TOP>
-
-<TD>Format</td>
-<td>
-<select name=format size=1>
-EOP
-;
-
-my $dbh = C4::Context->dbh;
-my $query="Select itemtype,description from itemtypes order by description";
-my $sth=$dbh->prepare($query);
-$sth->execute;
-while (my $data=$sth->fetchrow_hashref){
-  if ($data->{'itemtype'} eq $results[0]->{'itemtype'}) {
-    print "<option SELECTED value=\"" . $data->{'itemtype'} . "\">" . $data->{'description'} . "\n";
-  } else {
-    print "<option value=\"" . $data->{'itemtype'} . "\">" . $data->{'description'} . "\n";
-  }
-}
-$sth->finish;
-
-print <<EOP
-</select>
-
-</td>
-</tr>
-
-<TR VALIGN=TOP>
-
-<TD>ISBN</td>
-<td><input type=text size=20 name=ISBN value="$results[0]->{'isbn'}">
-</td>
-</tr>
-
-<TR VALIGN=TOP>
-
-<TD>Series</td>
-<td><input type=text size=20 name=Series value="$results[0]->{'seriestitle'}">
-</td>
-</tr>
-
-<TR VALIGN=TOP>
-<TD>Branch</td>
-<td><select name=branch size=1>
-EOP
-;
-my ($count2,@branches)=branches();
-for (my $i=0;$i<$count2;$i++){
-  print "<option value=$branches[$i]->{'branchcode'}";
-  if ($results[0]->{'branchcode'} == $branches[$i]->{'branchcode'}){
-  print " Selected";
-  }
-  print ">$branches[$i]->{'branchname'}";
-}
-print <<EOP
-</select>
-</td>
-</tr>
-
-<TR VALIGN=TOP bgcolor=#ffffcc >
-<TD><B>Item Barcode *</B></td>
-
-<td><input type=text size=20 name=barcode value=
-EOP
-;
-
-my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
-	# See whether barcodes should be automatically allocated.
-	# Defaults to 0, meaning "no".
-if ($auto_barcode eq '1') {
-  my $dbh = C4::Context->dbh;
-  my $query="Select barcode from items order by barcode desc";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  print $data->{'barcode'}+1;
-  $sth->finish;
-}
-
-print <<EOP
->
-</td>
-</tr>
-
-<TR VALIGN=TOP bgcolor=#ffffcc >
-<TD><B>Volume Info (for serials) *</B></td>
-
-<td><input type=text size=20 name=volinf>
-</td>
-</tr>
-</table>
-
-
-
-<img src="/images/holder.gif" width=32 height=250 align=left>
-
-<table border=1 cellspacing=0 cellpadding=5 width="40%">
-
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif" colspan=2><B>ACCOUNTING DETAILS</B></td></tr>
-<TR VALIGN=TOP>
-<TD><B>Bookfund *</B></td>
-<td><select name=bookfund size=1>
-EOP
-;
-my @bookfund;
-($count2,@bookfund)=bookfunds();
-for (my $i=0;$i<$count2;$i++){
-  print "<option value=$bookfund[$i]->{'bookfundid'}";
-  if ($bookfund[$i]->{'bookfundid'}==$results[0]->{'bookfundid'}){
-    print " Selected";
-  }
-  print ">$bookfund[$i]->{'bookfundname'}";
-}
-
-my $rrp=$results[0]->{'rrp'};
-if ($results[0]->{'quantityreceived'} == 0){
-  $results[0]->{'quantityreceived'}='';
-}
-if ($results[0]->{'unitprice'} == 0){
-  $results[0]->{'unitprice'}='';
-}
-print <<EOP
-</select>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Quantity Ordered</td>
-<td><input type=text size=20 name=quantity value=$results[0]->{'quantity'}>
-</td>
-</tr>
-<TR VALIGN=TOP bgcolor=#ffffcc>
-<TD><B>Quantity Received *</B></td>
-<td><input type=text size=20 name=quantityrec value=$results[0]->{'quantityreceived'}>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Replacement Cost</td>
-<td><input type=text size=20 name=rrp value=$rrp>
-</tr>
-<TR VALIGN=TOP>
-<TD>
-Budgeted Cost </td>
-<td><input type=text size=20 name=ecost value="$results[0]->{'ecost'}">
-</td>
-</tr>
-<TR VALIGN=TOP bgcolor=#ffffcc>
-<TD><B>Actual Cost *</B></td>
-<td><input type=text size=20 name=cost value="$results[0]->{'unitprice'}">
-</td>
-</tr>
-<TR VALIGN=TOP bgcolor=#ffffcc>
-<TD>Invoice Number</td>
-<td>$invoice
-<input type=hidden name=invoice value="$invoice">
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Notes</td>
-<td><input type=text size=20 name=notes value="$results[0]->{'notes'}">
-</td>
-</tr>
-</table>
-</form>
-</center>
-<br clear=all>
-<p> &nbsp; </p>
-
-EOP
-;
-} else {
-print "<center><table>";
-print <<EOP
-<tr valign=top bgcolor=#99cc33>
-
-<td background="/images/background-mem.gif"><b>ISBN</b></td>
-<td background="/images/background-mem.gif"><b>TITLE</b></td>
-<td background="/images/background-mem.gif"><b>AUTHOR</b></td>
-</tr>
-EOP
-;
-for (my $i=0;$i<$count;$i++){
-  print "<tr><td>$results[$i]->{'isbn'}</td>
-  <td><a href=acquire.pl?recieve=$results[$i]->{'ordernumber'}&biblio=$results[$i]->{'biblionumber'}&invoice=$invoice&freight=$freight&gst=$gst>$results[$i]->{'title'}</a></td>
-  <td>$results[$i]->{'author'}</td></tr>";
-}
-print "</table></center>";
-}
-
-
-
-print endmenu('acquisitions');
-
-print endpage;
+output_html_with_http_headers $input, $cookie, $template->output;

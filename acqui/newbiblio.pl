@@ -36,7 +36,6 @@ use C4::Database;
 use HTML::Template;
 
 my $input=new CGI;
-#print $input->header();
 my $id=$input->param('id');
 my $title=$input->param('title');
 my $author=$input->param('author');
@@ -102,7 +101,7 @@ my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
 			-size     => 1,
 			-multiple => 0 );
 $sth->finish;
-# TODO
+
 my @branches;
 my @select_branch;
 my %select_branches;
