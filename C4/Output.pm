@@ -125,24 +125,13 @@ sub gettemplate {
 sub themelanguage {
   my ($htdocs, $tmpl) = @_;
 
-# language preferences....
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opaclanguages'");
-  $sth->execute;
-  my ($lang) = $sth->fetchrow;
-  $sth->finish;
-  my @languages = split " ", $lang;
-
-# theme preferences....
-  # FIXME - There's already a $sth in this scope
-  my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opacthemes'");
-  $sth->execute;
-  my ($theme) = $sth->fetchrow;
-  $sth->finish;
-  my @themes = split " ", $theme;
+  my @languages = split " ", C4::Context->preference("opaclanguages");
+			# language preference
+  my @themes = split " ", C4::Context->preference("opacthemes");
+			# theme preferences
 
   my ($theme, $lang);
-  # FIXME - There are already $theme and $lang in this scope
 # searches through the themes and languages. First template it find it returns.
 # Priority is for getting the theme right.
   THEME:
@@ -247,9 +236,12 @@ sub pathtotemplate {
   else {$type = $ptype . '/'; }
 
   my %returns;
-  my %prefs= systemprefs();
-  my $theme= $prefs{'theme'} || 'default';
-  if ($themeor and ($prefs{'allowthemeoverride'} =~ qr/$themeor/i )) {$theme = $themeor;}
+  my $theme = C4::Context->preference("theme") || "default";
+  if ($themeor and
+      C4::Context->preference("allowthemeoverride") =~ qr/$themeor/i)
+  {
+    $theme = $themeor;
+  }
   my @languageorder = getlanguageorder();
   my $language = $languageor || shift(@languageorder);
 
@@ -309,12 +301,11 @@ the Koha database. If neither is set, it defaults to C<en> (English).
 #'
 sub getlanguageorder () {
   my @languageorder;
-  my %prefs = systemprefs();
 
   if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
     @languageorder = split (/\s*,\s*/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
-  } elsif ($prefs{'languageorder'}) {
-    @languageorder = split (/\s*,\s*/ ,lc($prefs{'languageorder'}));
+  } elsif (my $order = C4::Context->preference("languageorder")) {
+    @languageorder = split (/\s*,\s*/ ,lc($order));
   } else { # here should be another elsif checking for apache's languageorder
     @languageorder = ('en');
   }
