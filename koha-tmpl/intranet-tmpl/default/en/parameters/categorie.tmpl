@@ -90,32 +90,32 @@
 		<tr>
 			<td>Description</td>
 			<td>
-				<input type=text name=description size=40 maxlength=80 value=<TMPL_VAR NAME=description escape=HTML>>
+				<input type=text name=description size=40 maxlength=80 value="<TMPL_VAR NAME=description escape=HTML>">
 				&nbsp;
 			</td>
 		</tr>
 		<tr>
 			<td>Enrollment period</td>
 			<td>
-				<input type=text name=enrolmentperiod size=3 maxlength=2 value=<TMPL_VAR NAME=enrolmentperiod>>
+				<input type=text name=enrolmentperiod size=3 maxlength=2 value="<TMPL_VAR NAME=enrolmentperiod>">
 			</td>
 		</tr>
 		<tr>
 			<td>Upperage limit</td>
 			<td>
-				<input type=text name=upperagelimit size=3 maxlength=3 value=<TMPL_VAR NAME=upperagelimit>>
+				<input type=text name=upperagelimit size=3 maxlength=3 value="<TMPL_VAR NAME=upperagelimit>">
 			</td>
 		</tr>
 		<tr>
 			<td>Age Required</td>
 			<td>
-				<input type=text name=dateofbirthrequired value=<TMPL_VAR NAME=dateofbirthrequired> size=3 maxlength=2>
+				<input type=text name=dateofbirthrequired value="<TMPL_VAR NAME=dateofbirthrequired>" size=3 maxlength=2>
 			</td>
 		</tr>
 		<tr>
 			<td>Enrollment fee</td>
 			<td>
-				<input type=text name=enrolmentfee value=<TMPL_VAR NAME=enrolmentfee>>
+				<input type=text name=enrolmentfee value="<TMPL_VAR NAME=enrolmentfee>">
 			</td>
 		</tr>
 		<tr>
@@ -130,13 +130,13 @@
 		<tr>
 			<td>Issue limit</td>
 			<td>
-				<input type=text name=issuelimit size=2 maxlength=2 value=<TMPL_VAR NAME=issuelimit>>
+				<input type=text name=issuelimit size=2 maxlength=2 value="<TMPL_VAR NAME=issuelimit>">
 			</td>
 		</tr>
 		<tr>
 			<td>Reserve fee</td>
 			<td>
-				<input type=text name=reservefee value=<TMPL_VAR NAME=reservefee>>
+				<input type=text name=reservefee value="<TMPL_VAR NAME=reservefee>">
 			</td>
 		</tr>
 		<tr>
@@ -283,8 +283,8 @@
                         <td><TMPL_IF NAME=overduenoticerequired>Yes<TMPL_ELSE>No</TMPL_IF></td>
                         <td><TMPL_VAR NAME=issuelimit></td>
                         <td><TMPL_VAR NAME=reservefee></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&categorycode=<TMPL_VAR NAME=categorycode>">Edit</a></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&categorycode=<TMPL_VAR NAME=categorycode>">Delete</a></td>
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&categorycode=<TMPL_VAR NAME=categorycode>"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&categorycode=<TMPL_VAR NAME=categorycode>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" border="0"></a></td>
 		</tr>
 		</TMPL_LOOP>
 
