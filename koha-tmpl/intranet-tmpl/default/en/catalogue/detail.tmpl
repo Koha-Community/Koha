@@ -1,65 +1,59 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 
-<!--
 <TMPL_IF NAME="loggedinuser">
     <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
 </TMPL_IF>
--->
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
+	<TMPL_IF NAME="norequests">
+	<TMPL_ELSE>
+		<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber">><img height=42  WIDTH=120 BORDER="0"
+		src="<TMPL_VAR name="themelang">/images/requests.gif" align="right" border="0"></a>
+	</TMPL_IF>
 
-
-
-<TMPL_IF NAME="norequests">
-<TMPL_ELSE>
-<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber">><img height=42  WIDTH=120 BORDER="0"
-src="/images/requests.gif" align="right" border="0"></a>
-</TMPL_IF>
-
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font><p>
-<!-- FIXME - "callpadding" should be "cellpadding", right? -->
-<table cellspacing="0" callpadding="5" border="1" align="left" width="220">
-<!-----------------BIBLIO RECORD TABLE--------->
-<tr valign="top">
-
-<td bgcolor="#cccc99" background="/images/background-mem.gif">
-<b>BIBLIO RECORD</b>
-
-
-
-
-<TMPL_VAR NAME="biblionumber">
-</td>
-</tr>
-<tr valign="top">
-<td>
-<form action="/cgi-bin/koha/modbib.pl" method="post">
-<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
-<input type="image" name="submit" value="modify" height="42" width="93"
-border="0" src="/images/modify-mem.gif">
-<input type="image" name="delete" value="delete" height="42" width="93"
-border="0" src="/images/delete-mem.gif">
-</form>
-<br>
-<FONT SIZE=2  face="arial, helvetica">
-<b>Subtitle:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Author:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR
-NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
-<b>Additional Author:</b> <TMPL_VAR NAME="additional"><br>
-<b>Series Title:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Subject:</b> <TMPL_VAR NAME="subject"><br>
-<b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Notes:</b> <TMPL_VAR NAME="notes"><br>
-<b>Unititle:</b> <TMPL_VAR NAME="unititle"><br>
-<b>Serial:</b> <TMPL_VAR NAME="serial"><br>
-<b>Total Number of Items:</b> <TMPL_VAR NAME="count">
-<p>
-</font></td>
-</tr>
-</table>
+	<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
+	<TMPL_VAR NAME="class"></em></font><p>
+	<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
+	<!-----------------BIBLIO RECORD TABLE--------->
+	<tr valign="top">
+		<td bgcolor="#cccc99" background="/images/background-mem.gif">
+			<b>BIBLIO RECORD <TMPL_VAR NAME="biblionumber"></b>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>
+			<form action="/cgi-bin/koha/modbib.pl" method="post">
+			<table width="100%" border=0 cellspacing=0 cellpadding=0>
+				<tr>
+					<td width="33%">
+						<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
+						<input type="image" name="submit" value="modify" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
+					</td>
+					<td width="33%"><input type="image" name="delete" value="delete" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0"></td>
+					<td width="33%"><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">MARC</a></td>
+				</tr>
+			</table>
+			</form>
+			<br>
+			<FONT SIZE=2  face="arial, helvetica">
+			<b>Subtitle:</b> <TMPL_VAR NAME="subtitle"><br>
+			<b>Author:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR
+			NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
+			<b>Additional Author:</b> <TMPL_VAR NAME="additional"><br>
+			<b>Series Title:</b> <TMPL_VAR NAME="seriestitle"><br>
+			<b>Subject:</b> <TMPL_VAR NAME="subject"><br>
+			<b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
+			<b>Notes:</b> <TMPL_VAR NAME="notes"><br>
+			<b>Unititle:</b> <TMPL_VAR NAME="unititle"><br>
+			<b>Serial:</b> <TMPL_VAR NAME="serial"><br>
+			<b>Total Number of Items:</b> <TMPL_VAR NAME="count">
+			<p>
+			</font>
+		</td>
+	</tr>
+	</table>
 </TMPL_LOOP>
 <!-- FIXME - The help box overflows on the right. I think this is
      because it is specified as "width=70%", which the browser
@@ -71,59 +65,60 @@ NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
 
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
-<tr bgcolor="#cccc99" background="/images/background-mem.gif">
-<td>Item Type</td>
-<td>Class</td>
-<td>Location</td>
-<td>Date Due</td>
-<td>Last Seen</td>
-<td>Barcode</td>
-<td>Volume</td>
-</tr>
-<TMPL_LOOP NAME="ITEM_RESULTS">
-<tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td><a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></td>
-<td><TMPL_VAR NAME="branchname"></td>
-<td><TMPL_VAR NAME="datedue"></td>
-<td><TMPL_VAR NAME="datelastseen"></td>
-<td><a href="/cgi-bin/koha/moredetail.pl?type=<TMPL_VAR NAME="type">&item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="barcode"></a></td>
-<td><TMPL_VAR NAME="volumeddesc"></td>
-<TMPL_IF NAME="type">
-<td><a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<TMPL_VAR
-NAME="biblioitemnumber">&item=<TMPL_VAR NAME="itemtype">>Fix Itemtype</a></td>
-</TMPL_IF>
-</tr>
-</TMPL_LOOP>
-<TMPL_LOOP NAME="WEB_RESULTS">
-<tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td>Website</td>
-<td>Online</td>
-<td>Available</td>
-<td></td>
-<td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
-</tr>
-</TMPL_LOOP>
+	<tr bgcolor="#cccc99" background="/images/background-mem.gif">
+		<td>Item Type</td>
+		<td>Class</td>
+		<td>Location</td>
+		<td>Date Due</td>
+		<td>Last Seen</td>
+		<td>Barcode</td>
+		<td>Volume</td>
+	</tr>
+	<TMPL_LOOP NAME="ITEM_RESULTS">
+		<tr>
+			<td><TMPL_VAR NAME="itemtype"></td>
+			<td><a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></td>
+			<td><TMPL_VAR NAME="branchname"></td>
+			<td><TMPL_VAR NAME="datedue"></td>
+			<td><TMPL_VAR NAME="datelastseen"></td>
+			<td><a href="/cgi-bin/koha/moredetail.pl?type=<TMPL_VAR NAME="type">&item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="barcode"></a></td>
+			<td><TMPL_VAR NAME="volumeddesc"></td>
+			<TMPL_IF NAME="type">
+				<td>
+					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<TMPL_VAR NAME="biblioitemnumber">&item=<TMPL_VAR NAME="itemtype">>Fix Itemtype</a>
+				</td>
+			</TMPL_IF>
+		</tr>
+	</TMPL_LOOP>
+	<TMPL_LOOP NAME="WEB_RESULTS">
+		<tr>
+			<td><TMPL_VAR NAME="itemtype"></td>
+			<td>Website</td>
+			<td>Online</td>
+			<td>Available</td>
+			<td></td>
+			<td>
+				<a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a>
+			</td>
+		</tr>
+	</TMPL_LOOP>
 </table>
 <p>
 <table border="0" cellspacing="0" cellpadding="5" width=70%>
-<tr valign="top">
-<td bgcolor="99cc33" background="/images/background-mem.gif"
-colspan="2"><p><b>HELP</b><br>
-<b>Update Biblio for all Items:</b> Click on the <b>Modify</b>
-      button [left] to amend the biblio.  Any changes you make will update
-the record for <b>all</b> the items listed above. <p>
-<b>Updating the Biblio for only ONE or SOME Items:</b>
-If some of the items listed above need a different biblio, or are on the
-wrong biblio, you must use the
-<a
-href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>
-process to fix this. You will need to "re-order" the items, and delete them
-from this biblio.
-<p /></tr>
+	<tr valign="top">
+		<td bgcolor="99cc33" background="/images/background-mem.gif" colspan="2">
+			<p><b>HELP</b><br>
+			<b>Update Biblio for all Items:</b> Click on the <b>Modify</b>
+			button [left] to amend the biblio.  Any changes you make will update
+			the record for <b>all</b> the items listed above. <p>
+			<b>Updating the Biblio for only ONE or SOME Items:</b>
+			If some of the items listed above need a different biblio, or are on the
+			wrong biblio, you must use the
+			<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>
+			process to fix this. You will need to "re-order" the items, and delete them
+			from this biblio.<p />
+		</td>
+	</tr>
 </table>
 </center>
 <br clear=all>

@@ -1,6 +1,6 @@
 <TMPL_INCLUDE name="acquisitions-top.inc">
 <FONT SIZE=6><em>Supplier Search Results</em></FONT><br />
-<a href=supplier.pl?id=0><input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add supplier" ALT="Add" BORDER=0 ></a>
+<a href=supplier.pl?id=0><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add supplier" ALT="Add" BORDER=0 ></a>
 <CENTER>
 You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="count"> results found<p>
 <table border=0 cellspacing=0 cellpadding=5 width="80%">
@@ -23,10 +23,10 @@ You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="coun
 <TMPL_LOOP name="loop_suppliers">
 	<tr valign=top bgcolor=<TMPL_VAR name="color">>
 		<td>
-			<a href="basket.pl?id=<TMPL_VAR name="id">"><input type=image src="/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<a href="basket.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><input type=image src="/<TMPL_VAR name="theme">/images/mail_get.png" title="recieve" ALT="Add" BORDER=0 ></a>
+			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="recieve" ALT="Add" BORDER=0 ></a>
 		</td>
 		<td><a href="supplier.pl?id=<TMPL_VAR name="id">"><TMPL_VAR name="name"></a></td>
 		<td>

@@ -1,35 +1,23 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<TMPL_INCLUDE NAME="cat-top.inc">
 <STYLE TYPE="text/css" MEDIA=screen>
 	table {	font-family:Arial;
 	font-weight:normal;
 	text-decoration:none;
 	font-size:10pt;}
 </STYLE>
-
+<br /><br />
 <form method="post" action="additem.pl" name="f">
-<table width=100% cellspacing=0 cellpadding=5 border=1>
+<input type="hidden" name="op" value="<TMPL_VAR name="op">">
+<input type="hidden" name="bibid" value="<TMPL_VAR name="bibid">">
+<table width="80%" align="center" cellspacing=0 cellpadding=5 border=1>
 <tr background="/images/background-mem.gif">
-	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
-</tr>
-<tr>
 	<td>
-	<table width=100% border=0 colspacing=0 cellpadding=0>
-	<tr>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=9% align="center">&nbsp;</td>
-		<td width=10% align="center">
-			<input type="hidden" name="op" value="<TMPL_VAR name="op">">
-			<input type="hidden" name="bibid" value="<TMPL_VAR name="bibid">">
-			</td>
-	</tr>
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td width=8%><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png"></td>
+			<td width=8%><a href="../detail.pl?bib=<TMPL_VAR name="biblionumber">">Normal</a></td>
+			<td align="center"><b>MARC biblio : <TMPL_VAR name="bibid"></b></td>
+		</tr>
 	</table>
 	</td>
 </tr>
@@ -37,12 +25,12 @@
 <br />
 <center>
 <DIV name="10XX" id="10XX">
-<table border=1 cellspacing=0 cellpadding=5 width=100%>
+<table border=1 cellspacing=0 cellpadding=5 width=80%>
 	<tr  background="/images/background-mem.gif">
 		<th>Existing items</th>
 	</tr>
 </table>
-<table border=1 cellspacing=0 cellpadding=0 width=100%>
+<table border=1 cellspacing=0 cellpadding=0 width=80%>
 	<tr  background="/images/background-mem.gif">
 		<TMPL_LOOP name="item_header_loop"><th><tmpl_var name="header_value"></th></TMPL_LOOP><th colspan=2>&nbsp;</th>
 	</tr>
@@ -55,11 +43,11 @@
 </table>
 </DIV>
 <br /><br />
-<table border=1 cellspacing=0 cellpadding=5 width=100%>
+<table border=1 cellspacing=0 cellpadding=5 width=80%>
 	<tr  background="/images/background-mem.gif">
 		<th>New Item</th>
 	</tr>
-</table><table width=100%  cellspacing=0 cellpadding=1 border=0>
+</table><table width=80%  cellspacing=0 cellpadding=1 border=0>
 	<TMPL_LOOP name="item">
 	<tr>
 		<td width="3%">&nbsp;</td>

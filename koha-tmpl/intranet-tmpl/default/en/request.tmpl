@@ -1,65 +1,55 @@
 <TMPL_INCLUDE Name="cat-top.inc">
 
 <form action="placerequest.pl" method=post>
-<INPUT TYPE="image" name="submit"  VALUE="request" height=42  WIDTH=187 BORDER=0 src="/images/place-request.gif" align=right >
+<INPUT TYPE="image" name="submit"  VALUE="request" height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/place-request.gif" align=right >
 <input type=hidden name=biblio value="<TMPL_VAR Name="bib">">
 <input type=hidden name=type value=str8>
 <input type=hidden name=title value="<TMPL_VAR Name="title">">
-<FONT SIZE=6><em>Requesting: <br>
-<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="bib">><TMPL_VAR Name="bib"></a>
+<FONT SIZE=6><em>Requesting:
+<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="bib">><TMPL_VAR Name="title"></a>
 <TMPL_VAR Name="author">)</em></FONT><P>
 <p>
 
 
-
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Rank</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Member Number</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Notes</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Date</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Pickup</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Request</b></TD>
+	</TR>
+	<tr VALIGN=TOP  >
+		<td>
+			<select name=rank-request>
+			<!--$priorityoptions-->
+			<TMPL_LOOP Name="optionloop">
+				<option value="<TMPL_VAR Name="num">" <TMPL_IF Name="selected"> selected</TMPL_IF>>
+					<TMPL_VAR Name="num">
+				</option>
+			</TMPL_LOOP>
+			</select>
+		</td>
+		<td><input type=text size=10 name=member></td>
+		<td><input type=text size=20 name=notes></td>
+		<td><TMPL_VAR Name=date></td>
+		<td><TMPL_VAR name="CGIbranch"></td>
+		<td>
+			<input type=checkbox name=request value=any>Next Available,<br>(or choose from list below)
+		</td>
+	</tr>
+</table>
 
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Rank</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Member Number</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Notes</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Date</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Pickup</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Request</b></TD>
-</TR>
-<tr VALIGN=TOP  >
-<td><select name=rank-request>
-<!--$priorityoptions-->
-<TMPL_LOOP Name="optionloop">
-	<option value="<TMPL_VAR Name="num">" <TMPL_IF Name="selected"> selected</TMPL_IF>>
-		<TMPL_VAR Name="num">
-	</option>
-</TMPL_LOOP>
-</select>
-</td>
-<td><input type=text size=10 name=member></td>
-<td><input type=text size=20 name=notes></td>
-<td><TMPL_VAR Name=date></td>
-<td><select name=pickup>
-<!--$branchoptions-->
-<TMPL_LOOP Name="branchloop">
-	<option value=<TMPL_VAR Name="branch"> <TMPL_IF Name="selected">selected</TMPL_IF>>
-		<TMPL_VAR Name="branchname">
-	</option>
-</TMPL_LOOP>
-
-</select></td>
-<td><input type=checkbox name=request value=any>Next Available,
-<br>(or choose from list below)</td>
-</tr></table>
-
-
-
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-<TR VALIGN=TOP>
-
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Request</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Item Type</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Classification</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Volume</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Pubdate</b></TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Copies</b></TD>
+	<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Request</b></TD>
+	<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Item Type</b></TD>
+	<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Classification</b></TD>
+	<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Volume</b></TD>
+	<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Pubdate</b></TD>
+	<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Copies</b></TD>
 </TR>
 <!--$bibitemrows-->
 <TMPL_LOOP Name="bibitemloop">
@@ -98,25 +88,18 @@
 <p>&nbsp;</p>
 
 
-
-
-
 <form name=T<TMPL_VAR Name="time"> action=modrequest.pl method=post>
-
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-
 	<TR VALIGN=TOP>
-
-		<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=7><B>MODIFY EXISTING REQUESTS </b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=7><B>MODIFY EXISTING REQUESTS </b></TD>
 	</TR>
 	<TR VALIGN=TOP>
-
-		<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Rank</b></TD>
-		<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Member</b></TD>
-		<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Notes</b></TD>
-		<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Date</b></TD>
-		<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Pickup</b></TD>
-		<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Request</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Rank</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Member</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Notes</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Date</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Pickup</b></TD>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Request</b></TD>
 	</TR>
 	<!--$existingreserves-->
 	<TMPL_LOOP Name="reserveloop">
@@ -140,19 +123,19 @@
 			</td>
 			<td><TMPL_VAR Name="notes"></td>
 			<TD><TMPL_VAR Name="date"></td>
-			<TD>OO <TMPL_IF Name="wait">
+			<TD><TMPL_IF Name="wait">
 				Item waiting at <b> <TMPL_VAR Name="wbrname"></b> <input type=hidden name=pickup value=<TMPL_VAR Name="wbrcd">>
-			<TMPL_ELSE>
-				<select name=pickup>
-					<TMPL_LOOP Name="branchloop">
-						<option value=<TMPL_VAR Name="branch">
-							<TMPL_IF Name="selected">
-								selected
-							</TMPL_IF>
-						><TMPL_VAR Name="branchname"></option>
-					</TMPL_LOOP>
-				</select>
-			</TMPL_IF>
+				<TMPL_ELSE>
+					<select name=pickup>
+						<TMPL_LOOP Name="branchloop">
+							<option value=<TMPL_VAR Name="branch">
+								<TMPL_IF Name="selected">
+									selected
+								</TMPL_IF>
+							><TMPL_VAR Name="branchname"></option>
+						</TMPL_LOOP>
+					</select>
+				</TMPL_IF>
 			</td>
 			<TD>
 				<TMPL_IF Name="wait">
@@ -175,7 +158,7 @@
 	<tr VALIGN=TOP>
 	<TD colspan=6 align=right>
 	Delete a request by selecting "del" from the rank list.
-	<INPUT TYPE="image" name="submit"  VALUE="request" height=42  WIDTH=64 BORDER=0 src="/images/ok.gif"></td>
+	<INPUT TYPE="image" name="submit"  VALUE="request" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png"></td>
 	</tr>
 </table>
 <P>

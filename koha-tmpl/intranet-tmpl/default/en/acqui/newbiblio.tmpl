@@ -67,7 +67,7 @@ win.document.write("</font></body></html>");
 	<input type=hidden name="<TMPL_VAR name="currency">" value="<TMPL_VAR name="rate">">
 </TMPL_LOOP>
 <TMPL_IF name="orderexists"><input type=hidden name=orderexists value=yes></TMPL_IF>
-<a href=basket.pl?basket=<TMPL_VAR name="basket">><img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a>
+<a href=basket.pl?basket=<TMPL_VAR name="basket">><img src=<TMPL_VAR name="themelang">/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a>
 <FONT SIZE=6><em><TMPL_VAR name="ordnum"> - Order Details </em></FONT><br>
 Shopping Basket For: <TMPL_VAR name="name">
 <P>
@@ -110,7 +110,7 @@ Shopping Basket For: <TMPL_VAR name="name">
 		<td><input type=text size=20 name=barcode value="<TMPL_VAR name="barcode">"></td>
 	</tr>
 </table>
-<img src="/images/holder.gif" width=32 height=250 align=left>
+<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=32 height=250 align=left>
 <table border=1 cellspacing=0 cellpadding=5 width="40%">
 	<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif" colspan=2><B>ACCOUNTING DETAILS</B></td></tr>
 	<TR VALIGN=TOP>
@@ -153,7 +153,7 @@ Shopping Basket For: <TMPL_VAR name="name">
 		<td><input type=text size=20 name=notes value="<TMPL_VAR name="notes">"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD colspan=2><input type=image  name=submit src=/images/add-order.gif border=0 width=187 height=42 align=right>	</td>
+		<TD colspan=2><input type=image  name=submit src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" border=0 align=right>	</td>
 	</tr>
 </table>
 </form>
