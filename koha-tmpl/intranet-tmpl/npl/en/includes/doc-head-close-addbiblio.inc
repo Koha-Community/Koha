@@ -7,6 +7,9 @@
 </style>
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
+function Help() {
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
 function openWindow(targeturl, windowname) {
 	newwin =
 	window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
