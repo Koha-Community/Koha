@@ -283,7 +283,6 @@ sub catalogsearch {
 	#    $search->{$key}=$dbh->quote($search->{$key});
 	#  }
 	my ($count,@results);
-	#  print STDERR "Doing a search \n";
 	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
 		print STDERR "Doing a precise search\n";
 		($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
@@ -992,6 +991,7 @@ sub CatSearch  {
 	my @results;
 
 	my $title = lc($search->{'title'});
+
 	if ($type eq 'loose') {
 		if ($search->{'author'} ne ''){
 			my @key=split(' ',$search->{'author'});

@@ -71,6 +71,10 @@ $template->param(script_name => $script_name,
 $template->param(script_name => $script_name,
 						else              => 1); # we show only the TMPL_VAR names $op
 }
+
+
+
+
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {

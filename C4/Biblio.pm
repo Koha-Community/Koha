@@ -1455,7 +1455,7 @@ sub OLDnewbiblio {
     $sth->execute(
         $bibnum,             $biblio->{'title'},
         $biblio->{'author'}, $biblio->{'copyrightdate'},
-        $series,             $biblio->{'seriestitle'},
+        $biblio->{'serial'},             $biblio->{'seriestitle'},
         $biblio->{'notes'},  $biblio->{'abstract'}
     );
 
@@ -2531,6 +2531,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.99  2004/07/30 13:54:50  doxulting
+# Beginning of serial commit
+#
 # Revision 1.98  2004/07/15 09:48:10  tipaul
 # * removing useless sub
 # * minor bugfix in moditem (managing homebranch & holdingbranch)
