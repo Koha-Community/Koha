@@ -54,7 +54,7 @@ $VERSION = 0.01;
 
 		&NEWnewbiblio &NEWnewitem
 		&NEWmodbiblio &NEWmoditem
-		&NEWdelbiblio
+		&NEWdelbiblio &NEWdelitem
 
 	     &MARCaddbiblio &MARCadditem
 	     &MARCmodsubfield &MARCaddsubfield
@@ -538,6 +538,23 @@ sub MARCdelbiblio {
 		$dbh->do("delete from marc_word where bibid=$bibid");
 	}
 }
+
+sub MARCdelitem {
+# delete the item passed in parameter in MARC tables.
+	my ($dbh,$bibid,$itemnumber)=@_;
+	#    my $record = MARC::Record->new();
+	# search MARC tagorder
+	my $record = MARCgetitem($dbh,$bibid,$itemnumber);
+	my $copy2deleted=$dbh->prepare("update deleteditems set marc=? where itemnumber=?");
+	$copy2deleted->execute($record->as_usmarc(),$itemnumber);
+
+	my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
+	$sth2->execute($bibid,$itemnumber);
+	my ($tagorder) = $sth2->fetchrow_array();
+	my $sth=$dbh->prepare("delete from marc_subfield_table where bibid=? and tagorder=?");
+	$sth->execute($bibid,$tagorder);
+}
+
 sub MARCmoditem {
 	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
 	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
@@ -1090,6 +1107,13 @@ sub NEWmoditem {
 	OLDmoditem($dbh,$olditem);
 }
 
+sub NEWdelitem {
+	my ($dbh,$bibid,$itemnumber)=@_;
+	my $biblio = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	&OLDdelitem($dbh,$itemnumber);
+	&MARCdelitem($dbh,$bibid,$itemnumber);
+}
+
 #
 #
 # OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD
@@ -1484,13 +1508,13 @@ sub OLDdelitem{
   my $query="select * from items where itemnumber=$itemnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  my @data=$sth->fetchrow_array;
+  my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $query="Insert into deleteditems values (";
-  foreach my $temp (@data){
-    $query .= "'$temp',";
+  $query="Insert into deleteditems set ";
+  foreach my $temp (keys %$data){
+    $query .= "$temp = ".$dbh->quote($data->{$temp}).",";
   }
-  $query=~ s/\,$/\)/;
+  $query=~ s/\,$//;
 #  print $query;
   $sth=$dbh->prepare($query);
   $sth->execute;
@@ -2185,6 +2209,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.71  2003/11/24 16:28:49  tipaul
+# biblio & item deletion now works fine in MARC editor.
+# Stores deleted biblio/item in the marc field of the deletedbiblio/deleteditem table.
+#
 # Revision 1.70  2003/11/24 13:29:55  tipaul
 # moving $id from beginning to end of file (70 commits... huge comments...)
 #
