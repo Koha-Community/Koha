@@ -190,7 +190,6 @@ sub create_input () {
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
 
-    warn "REC : ".$record->as_formatted;
     # fill arrays
     my @loop_data =();
     my $tag;
@@ -242,7 +241,6 @@ sub build_tabs ($$$$) {
 						$tag_data{indicator} = $indicator;
 						$tag_data{subfield_loop} = \@subfields_data;
 						push (@loop_data, \%tag_data);
-						warn "I is : $i";
 					}
 # If there is more than 1 field, add an empty hidden field as separator.
 					if ($#fields >=1) {
