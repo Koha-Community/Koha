@@ -330,6 +330,31 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
       close(HTTPDCONF);
    }
 }
+unless ($realhttpdconf) {
+    print qq|
+
+I was not able to find your apache configuration file.  It is usually
+called httpd.conf or apache.conf.
+|;
+    print "Where is your Apache configuratin file? ";
+    chomp($input = <STDIN>);
+
+    if ($input) {
+	$realhttpdconf = $input;
+    } else {
+	$realhttpdconf='';
+    }
+    if ( -f $realhttpdconf ) {
+	open (HTTPDCONF, $realhttpdconf) or warn "Insufficient privileges to open $realhttpdconf for reading.\n";
+	while (<HTTPDCONF>) {
+	    if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+		$httpduser = $1;
+	    }
+	}
+	close(HTTPDCONF);
+    }
+}
+
 unless ($httpduser) {
     print qq|
 
@@ -928,24 +953,6 @@ chmod 0750, "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh";
 chmod 0750, "$kohadir/scripts/z3950daemon/processz3950queue";
 chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
 chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/processz3950queue") or warn "can't chown $kohadir/scripts/z3950daemon/processz3950queue: $!";
-
-print qq|
-
-==================
-= Authentication =
-==================
-
-This release of Koha has a new authentication module.  If you are not already
-using basic authentication on your intranet, you will be required to log in to
-access some of the features of the intranet.  You can log in using the userid
-and password from the /etc/koha.conf configuration file at any time.  Use the
-"Members" module to add passwords for other accounts and set their permissions.
-
-[NOTE PERMISSIONS ARE NOT COMPLETED AS OF 1.2.3RC1.  Do not give passwords to
- any patrons unless you want them to have full access to your intranet.]
-|;
-print "Press the <ENTER> key to continue: ";
-<STDIN>;
 
 
 #RESTART APACHE
