@@ -43,7 +43,6 @@ sub FindReserves {
                     and cancellationdate is NULL and 
                     (found <> 'F' or found is NULL)";
   }
-  }
   $query.=" order by priority";
   my $sth=$dbh->prepare($query);
   $sth->execute;
