@@ -19,7 +19,7 @@ $VERSION = 0.01;
 &itemdata &bibdata &GetItems &borrdata &getacctlist &itemnodata &itemcount
 &OpacSearch &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &FrontSearch &subject &subtitle
-&addauthor &bibitems &barcodes &findguarantees &allissues); 
+&addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs); 
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -1148,6 +1148,20 @@ sub barcodes{
   return(@barcodes);
   
 }
+
+sub systemprefs {
+    my %systemprefs;
+    my $dbh=C4Connect;
+    my $sth=$dbh->prepare("select variable,value from systempreferences");
+    $sth->execute;
+    while (my ($variable,$value)=$sth->fetchrow) {
+	$systemprefs{$variable}=$value;
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return(%systemprefs);
+}
+
 END { }       # module clean-up code here (global destructor)
 
 

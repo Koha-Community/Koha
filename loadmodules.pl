@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+#script to show list of budgets and bookfunds
+#written 4/2/00 by chris@katipo.co.nz
+#called as an include by the acquisitions index page
+
+use C4::Acquisitions;
+use C4::Search;
+use CGI;
+my $input=new CGI;
+
+my $module=$input->param('module');
+
+SWITCH: {
+    if ($module eq 'acquisitions') { acquisitions(); last SWITCH; }
+    if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
+}
+
+
+sub acquisitions {
+    my %systemprefs=systemprefs();
+    ($systemprefs{'acquisitions'}) || ($systemprefs{'acquisitions'}='normal');
+    if ($systemprefs{'acquisitions'} eq 'simple') {
+	print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
+    } elsif ($systemprefs{'acquisitions'} eq 'normal') {
+	print $input ->redirect("/acquisitions");
+    } else {
+	print $input ->redirect("/acquisitions");
+    }
+}
+
+
+sub somethingelse {
+# just an example subroutine
+}
