@@ -73,7 +73,7 @@
 <!-- /TMPL_LOOP -->
 </table></div>
 
-<input type="submit" name="submit"  value="Place New Request"  class="submit" onclick="this.value='Please wait...'; this.disabled=true; this.form.submit();" />
+<input type="submit" name="submit"  value="Place New Request"  class="submit" onclick="this.value='Please wait...'; this.disabled=true;" />
 </form>
 <!-- TMPL_IF NAME="reserveloop" -->
 <form name="T<!-- TMPL_VAR Name="time" -->" action="modrequest.pl" method="post">
@@ -105,7 +105,7 @@
 				<option value="del">Del</option>
 			</select></td>
 			<td>
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+			<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
 			</td>
 			<td><!-- TMPL_IF NAME="notes" --><!-- TMPL_VAR Name="notes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR Name="date" --></td>
