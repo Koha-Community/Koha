@@ -4,7 +4,7 @@ BEGIN {
 	exit;
     }
 
-    $| = 1; print "1..6\n";
+    $| = 1; print "1..9\n";
     $::intranetdir=`grep intranetdir /etc/koha.conf`;
     chomp $::intranetdir;
     $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
