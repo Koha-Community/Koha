@@ -339,7 +339,7 @@ if (`grep 'VirtualHost $opac_svr_name' $realhttpdconf`) {
    ServerAdmin $svr_admin
    DocumentRoot $kohadir/htdocs
    ServerName $koha_svr_name
-   ScriptAlias /cgi-bin/koha/ "$kohadir/cgi-bin"
+   ScriptAlias /cgi-bin/koha/ "$kohadir/cgi-bin/"
    ErrorLog logs/koha-error_log
    TransferLog logs/koha-access_log common
    SetEnv PERL5LIB "$kohadir/modules"
