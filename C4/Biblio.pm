@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.48  2003/06/16 09:22:53  rangi
+# Just added an order clause to getitemtypes
+#
 # Revision 1.47  2003/05/20 16:22:44  tipaul
 # fixing typo in Biblio.pm POD
 #
@@ -1615,11 +1618,12 @@ sub OLDnewitems {
 						price                = ?,						replacementprice     = ?,
 						replacementpricedate = NOW(),	itemnotes            = ?,
 						notforloan = ?
+
 						");
 	$sth->execute($itemnumber,	$item->{'biblionumber'},
 							$item->{'biblioitemnumber'},$barcode,
 							$item->{'booksellerid'},
-							$item->{'homebranch'},$item->{'homebranch'},
+							$item->{'homebranch'},$item->{'holdingbranch'},
 							$item->{'price'},$item->{'replacementprice'},
 							$item->{'itemnotes'},$item->{'loan'});
 	if (defined $sth->errstr) {
@@ -2034,7 +2038,7 @@ sub delbiblio {
 
 sub getitemtypes {
   my $dbh   = C4::Context->dbh;
-  my $query = "select * from itemtypes";
+  my $query = "select * from itemtypes order by description";
   my $sth   = $dbh->prepare($query);
     # || die "Cannot prepare $query" . $dbh->errstr;
   my $count = 0;
