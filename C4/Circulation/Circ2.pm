@@ -800,7 +800,6 @@ C<$date> contains the max date of return. calculated if empty.
 #
 sub issuebook {
 	my ($env,$borrower,$barcode,$date) = @_;
-	warn "D : $date";
 	my $dbh = C4::Context->dbh;
 #	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -1043,7 +1042,7 @@ sub returnbook {
 	if ($resfound) {
 	#	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
 		$resrec->{'ResFound'} = $resfound;
-	 	$messages->{'ResFound'} = $resrec;
+		$messages->{'ResFound'} = $resrec;
 	}
 	# update stats?
 	# Record the fact that this book was returned.
@@ -1308,7 +1307,7 @@ sub currentborrower {
 }
 
 # FIXME - Not exported, but used in 'updateitem.pl' anyway.
-sub checkreserve {
+sub checkreserve_to_delete {
 # Stolen from Main.pm
 # Check for reserves for biblio
 	my ($env,$dbh,$itemnum)=@_;
