@@ -158,7 +158,7 @@ $messages->{'ReleaseCandidateWarning'}->{en} =
    heading('RELEASE CANDIDATE') . qq|
 WARNING: You are about to install Koha version %s.  This is a
 release candidate, It is NOT bugfree.
-However, it worked, and has been declared stable enough to
+However, it works, and has been declared stable enough to
 be released.
 
 Most people should answer Yes here.
