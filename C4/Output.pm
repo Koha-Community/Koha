@@ -26,6 +26,7 @@ use strict;
 require Exporter;
 
 use C4::Database;
+use C4::Search; #for getting the systempreferences
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -40,6 +41,7 @@ $VERSION = 0.01;
 	     &mkform &mkform2 &bold
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
+	     &pathtotemplate
 	     &picktemplate);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -117,6 +119,86 @@ sub picktemplate {
   
 }
 				    
+sub pathtotemplate {
+  my %params = @_;
+  my $template = $params{'template'};
+  my $themeor = $params{'theme'};
+  my $languageor = lc($params{'language'});
+  my $ptype = lc($params{'type'} or 'intranet');
+
+  my $type;
+  if ($ptype eq 'opac') {$type = 'opac-tmpl/'; }
+  elsif ($ptype eq 'none') {$type = ''; }
+  elsif ($ptype eq 'intranet') {$type = 'intranet-tmpl/'; }
+  else {$type = $ptype . '/'; }
+  
+  my %returns;
+  my %prefs= systemprefs();
+  my $theme= $prefs{'theme'} || 'default';
+  if ($themeor and ($prefs{'allowthemeoverride'} =~ qr/$themeor/i )) {$theme = $themeor;}
+  my @languageorder = getlanguageorder();
+  my $language = $languageor || shift(@languageorder);
+
+  #where to search for templates
+  my @tmpldirs = ("$path/templates", $path);
+  unshift (@tmpldirs, $configfile{'templatedirectory'}) if $configfile{'templatedirectory'};
+  unshift (@tmpldirs, $params{'path'}) if $params{'path'};
+
+  my ($edir, $etheme, $elanguage, $epath);
+
+  CHECK: foreach (@tmpldirs) {
+    $edir= $_;
+    foreach ($theme, 'all', 'default') {
+      $etheme=$_;
+      foreach ($language, @languageorder, 'all','en') {  # 'en' is the fallback-language
+        $elanguage = $_;
+      	if (-e "$edir/$type$etheme/$elanguage/$template") {
+      	  $epath = "$edir/$type$etheme/$elanguage/$template";
+      	  last CHECK;
+      	}
+      }
+    }
+  }
+  
+  unless ($epath) {
+    warn "Could not find $template in @tmpldirs";
+    return 0;
+  }
+  
+  if ($language eq $elanguage) {
+    $returns{'foundlanguage'} = 1;
+  } else {
+    $returns{'foundlanguage'} = 0;
+    warn "The language $language could not be found for $template of $theme.\nServing $elanguage instead.\n";
+  }
+  if ($theme eq $etheme) {
+    $returns{'foundtheme'} = 1;
+  } else {
+    $returns{'foundtheme'} = 0;
+    warn "The template $template could not be found for theme $theme.\nServing $template of $etheme instead.\n";
+  }
+
+  $returns{'path'} = $epath;
+
+  return (%returns);  
+}
+
+sub getlanguageorder () {
+  my @languageorder;
+  my %prefs = systemprefs();
+  
+  if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
+    @languageorder = split (/,/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
+  } elsif ($prefs{'languageorder'}) {
+    @languageorder = split (/,/ ,lc($prefs{'languageorder'}));
+  } else { # here should be another elsif checking for apache's languageorder
+    @languageorder = ('en');
+  }
+
+  return (@languageorder);
+}
+
+
 sub startpage() {
   return("<html>\n");
 }
