@@ -843,7 +843,7 @@ unless ( $existingtables{'z3950servers'} ) {
 unless ( $existingtables{'issuingrules'} ) {
 	$dbh->do("alter table categoryitem rename issuingrules");
 	$dbh->do("ALTER TABLE issuingrules ADD maxissueqty int(4) default NULL");
-	$dbh->do("ALTER TABLE issuingrules ADD issuelength int(4) detault NULL");
+	$dbh->do("ALTER TABLE issuingrules ADD issuelength int(4) default NULL");
 	$dbh->do("ALTER TABLE issuingrules ADD branchcode varchar(4) NOT NULL default ''");
 	print "renaming categoryitem\n" unless $silent;
 }
@@ -1245,6 +1245,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.88  2004/06/26 23:34:26  rangi
+# Fixing typo
+#
 # Revision 1.87  2004/06/23 13:03:09  tipaul
 # fixes in DB structure
 #
