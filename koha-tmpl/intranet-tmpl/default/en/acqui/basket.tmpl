@@ -22,15 +22,16 @@
 	<!-- TMPL_IF name="books_loop" -->
 		<table>
 			<tr valign="top" bgcolor="#ffdf61">
-				<th class="acquisition" width="5%">Order</th>
-				<th class="acquisition" width="10%">Publisher</th>
-				<th class="acquisition" width="10%">Isbn</th>
-				<th class="acquisition" width="30%">Title</th>
-				<th class="acquisition" width="20%">Author</th>
-				<th class="acquisition" width="5%">$ rrp</th>
-				<th class="acquisition" width="7%">$est</th>
-				<th class="acquisition" width="7%">Qty</th>
-				<th class="acquisition" width="7%">Total</th>
+				<th class="acquisition">Order</th>
+				<th class="acquisition">Publisher</th>
+				<th class="acquisition">Isbn</th>
+				<th class="acquisition">Title</th>
+				<th class="acquisition">Author</th>
+				<th class="acquisition">rrp</th>
+				<th class="acquisition">est</th>
+				<th class="acquisition">Qty</th>
+				<th class="acquisition">Total</th>
+				<th class="acquisition">Book fund</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
 				<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="color" -->">
@@ -43,24 +44,25 @@
 					<td><!-- TMPL_VAR NAME="ecost" --></td>
 					<td><!-- TMPL_VAR NAME="quantity" --></td>
 					<td><!-- TMPL_VAR NAME="line_total" --></td>
+					<td><!-- TMPL_VAR NAME="bookfundid" --></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
 			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
 			<tr>
-				<td colspan="6" rowspan=3>
+				<td colspan="7" rowspan=3>
 					&nbsp;
 				</td>
-				<td><b>SubTotal</b></td>
-				<td><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="sub_total" --></td>
+				<th class="acquisition">SubTotal</th>
+				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="sub_total" --></th>
 			</tr>
 			<tr>
-				<td><b>GST</b></td>
-				<td><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="gist" --></td>
+				<th class="acquisition">GST</th>
+				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="gist" --></th>
 			</tr>
 			<tr>
-				<td><b>TOTAL</b></td>
-				<td><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="grand_total" --></td>
+				<th class="acquisition">TOTAL</th>
+				<th class="acquisition"><!-- TMPL_VAR NAME="currency" --><!-- TMPL_VAR NAME="grand_total" --></th>
 			</tr>
 		</table>
 	<!-- TMPL_ELSE -->

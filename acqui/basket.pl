@@ -94,6 +94,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
 	$line{line_total} = $line_total;
 	$line{biblionumber} = $results[$i]->{'biblionumber'};
+	$line{bookfundid} = $results[$i]->{'bookfundid'};
 	push @books_loop, \%line;
 }
 my $prefgist =C4::Context->preference("gist");
