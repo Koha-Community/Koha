@@ -73,7 +73,7 @@ R
 
        <TMPL_LOOP NAME=SEARCH_RESULTS>
        <tr class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"shaded"</TMPL_IF>>
-       <td><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL> class="padded"><TMPL_VAR NAME=subject></a></td>
+       <td class="padded"><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL> ><TMPL_VAR NAME=subject></a></td>
        </tr>
        </TMPL_LOOP>
     <tr><td colspan=5 class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
@@ -101,11 +101,11 @@ R
 <!-- Actual Search Results -->
 <TMPL_LOOP NAME="SEARCH_RESULTS">    
       <tr class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"pink"</TMPL_IF>>
-      <td><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL> class="padded"><TMPL_VAR NAME="title"></a></td>
-      <td><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL> class="padded"><TMPL_VAR NAME="author"></a></td>
-      <td> <div class="padded"><TMPL_VAR NAME="copyrightdate"></div> </td>
-      <td align="center"> <div class="padded"><TMPL_VAR NAME="itemcount"></div> </td>
-      <td> <div class="padded"><TMPL_VAR NAME="location"></div> </td>
+      <td class="padded" ><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL> ><TMPL_VAR NAME="title"></a></td>
+      <td class="padded"><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL> ><TMPL_VAR NAME="author"></a></td>
+      <td class="padded"><div><TMPL_VAR NAME="copyrightdate"></div> </td>
+      <td align="center" class="padded"> <div><TMPL_VAR NAME="itemcount"></div> </td>
+      <td class="padded"> <div ><TMPL_VAR NAME="location"></div> </td>
       </tr>
 </TMPL_LOOP>
 
