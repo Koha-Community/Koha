@@ -6,14 +6,14 @@
 	<TMPL_IF NAME=invalid>
 		Niewa¿ny numer karty.<p>
 	<TMPL_ELSE>
+		Warto¶ci zgodne. Kliknij OK, by potwierdziæ nowego czytelnika
 		<form action="/cgi-bin/koha/insertidata.pl" method=post>
 			<TMPL_LOOP NAME=inputsloop>
 				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
 			</TMPL_LOOP>
-			<input type=submit name=submit value=Prze¶lij>
+			<input type=submit name=submit value=OK>
 		</form>
 	</TMPL_IF>
 </TMPL_IF>
 
 <TMPL_INCLUDE NAME="members-bottom.inc">
-</html>

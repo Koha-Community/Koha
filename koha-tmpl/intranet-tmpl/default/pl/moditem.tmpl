@@ -1,6 +1,6 @@
 <TMPL_INCLUDE Name="cat-top.inc">
 
-<FONT SIZE=6><em><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</em></FONT><br>
+<h1><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</h1><br>
 <table border=0 cellspacing=0 cellpadding=5>
 <tr valign=top bgcolor=white><td><form action=updateitem.pl method=post>
 <table border=0 cellspacing=0 cellpadding=5>
@@ -18,18 +18,18 @@
 
 <td>Zagubiona</td>
 <td>
-<input type=radio name=Lost value=1 <TMPL_IF Name="itemlost">  zaznaczono </TMPL_IF> >
-Tak
-<input type=radio name=Lost value=0 <TMPL_UNLESS Name="itemlost"> zaznaczono </TMPL_UNLESS> >
-Nie
+<input type=radio name=Lost value=1 <TMPL_IF Name="itemlost">  checked </TMPL_IF> >
+Yes
+<input type=radio name=Lost value=0 <TMPL_UNLESS Name="itemlost"> checked </TMPL_UNLESS> >
+No
 </td>
 </tr>
 <tr valign=top bgcolor=white>
-<td>Anulowana</td>
-<td><input type=radio name=withdrawn value=1 <TMPL_IF Name="withdrawn"> zaznaczono </TMPL_IF> >
-Tak
-<input type=radio name=withdrawn value=0 <TMPL_UNLESS Name="withdrawn"> zaznaczono </TMPL_UNLESS> >
-Nie
+<td>Cancelled</td>
+<td><input type=radio name=withdrawn value=1 <TMPL_IF Name="withdrawn"> checked </TMPL_IF> >
+Yes
+<input type=radio name=withdrawn value=0 <TMPL_UNLESS Name="withdrawn"> checked </TMPL_UNLESS> >
+No
 </td>
 </tr>
 <input type=hidden name=bibnum value="<TMPL_VAR Name="biblionumber">">
@@ -37,12 +37,10 @@ Nie
 <input type=hidden name=itemnumber value="<TMPL_VAR Name="itemnumber">">
 <tr valign=top bgcolor=white><td></td><td>
 
-<input type=image  name=submit src=/images/save-changes.gif border=0 width=187
-height=42></td></tr>
+<input type=image  name=submit src=<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filesave.png border=0></td></tr>
 </table>
 </form></td></tr>
 </table>
 
 
 <TMPL_INCLUDE Name="cat-bottom.inc">
-</html>
