@@ -1,0 +1,105 @@
+<TMPL_INCLUDE NAME="parameters-top.inc">
+
+<table width="100%" cellpadding=5 cellspacing=5>
+	<tr background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">
+		<td><b>Test</b></td>
+		<td><b>Result</b></td>
+	</tr>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="itemnum">
+	<tr>
+		<td><b>itemnum</b></td>
+		<td><li>The field itemnum MUST be mapped </li>
+			<li>The correspounding subfield MUST be in with -1 (ignore) tab</td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>itemnum : the field itemnumber is mapped to a field in tab -1</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="itemfields">
+	<tr>
+		<td><b>item fields</b></td>
+		<td>ALL items fields MUST :<br/>
+			<li>be mapped to the same tag,</li>
+			<li>and they must all be in the 10 (items) tab</li></td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>All item fields are in the same tag and in item tab</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="itemtype">
+	<tr>
+		<td><b>itemtype NOT mapped</b></td>
+		<td>the biblioitems.itemtype field MUST :<br/>
+			<li>be mapped to a MARC subfield, </li>
+			<li>the correspounding subfield MUST have authorised_value=itemtype</li></td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>biblioitems.itemtype defined</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="branch">
+	<tr>
+		<td><b>homebranch NOT mapped</b></td>
+		<td>the items.homebranch field MUST :<br/>
+			<li>be mapped to a MARC subfield,</li>
+			<li>the correspounding subfield MUST have authorised value=branches</li></td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>homebranch defined</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="holdingbranch">
+	<tr>
+		<td><b>holdingbranch NOT mapped</b></td>
+		<td>the items.holdingbranch field MUST :<br/>
+			<li>be mapped to a MARC subfield, </li>
+			<li>the correspounding subfield MUST have authorised value=branches</li></td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>holdingbranch defined</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="biblionumber">
+	<tr>
+		<td><b>biblio and biblionumber</b></td>
+		<td>The biblio.biblionumber and biblioitems.biblioitemnumber fields MUST :<br/>
+			<li>be mapped to a MARC subfield,</li>
+			<li>be in the SAME tag (for example : 090$a and 090$b)</li>
+			<li>be in tab -1</li></td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>OK</td>
+		<td><i>biblionumber and biblioitemnumber mapped correctly</i></td>
+	</tr>
+</TMPL_IF>
+<!----------------------------------------------------------------------------------------------------------->
+<TMPL_IF name="total">
+	<tr>
+		<td><b>TOTAL</b></td>
+		<td>You have <TMPL_VAR name="total"> error(s) in your MARC configuration. Please fix them before using koha</td>
+	</tr>
+<TMPL_ELSE>
+	<tr>
+		<td>&nbsp;</td>
+		<td><b>Configuration OK, you don't have errors in your MARC parameters table</b></td>
+	</tr>
+</TMPL_IF>
+</table>
+<TMPL_INCLUDE NAME="parameters-bottom.inc">
