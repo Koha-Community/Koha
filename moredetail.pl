@@ -1,8 +1,9 @@
 #!/usr/bin/perl
+# NOTE: Use standard 8-space tabs for this file (indents are 4 spaces)
 
 # $Id$
 
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2000-2003 Katipo Communications
 #
 # This file is part of Koha.
 #
@@ -28,13 +29,11 @@ use C4::Search;
 use C4::Catalogue;
 use C4::Output; # contains gettemplate
 use C4::Auth;
+use C4::Interface::CGI::Output;
   
 my $query=new CGI;
 
-my $includes = C4::Context->config('includes') ||
-	"/usr/local/www/hdl/htdocs/includes";
-my $startfrom=$query->param('startfrom') || 0;
-
+# FIXME  subject is not exported to the template?
 my $subject=$query->param('subject');
 
 # if its a subject we need to use the subject.tmpl
@@ -55,6 +54,7 @@ my $bi=$query->param('bi');
 
 my $data=bibitemdata($bi);
 my $dewey = $data->{'dewey'};
+# FIXME Dewey is a string, not a number, & we should use a function
 $dewey =~ s/0+$//;
 if ($dewey eq "000.") { $dewey = "";};
 if ($dewey < 10){$dewey='00'.$dewey;}
@@ -92,6 +92,7 @@ foreach my $item (@items){
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
+    # FIXME untranslatable strings
     if ($item->{'date_due'} eq 'Available'){
 	$item->{'issue'}="<b>Available</b><br>";
     } else {
@@ -99,9 +100,13 @@ foreach my $item (@items){
     }
 }
 
-$template->param(includesdir => $includes);
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);
 $template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output;
 
+output_html_with_http_headers $query, $cookie, $template->output;
+
+
+# Local Variables:
+# tab-width: 8
+# End:
