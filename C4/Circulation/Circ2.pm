@@ -1103,7 +1103,7 @@ sub calc_charges {
     }      
     $sth1->finish;
 #    close FILE;
-    return ($charge);
+    return ($charge, $itemtype);
 }
 
 sub createcharge {
