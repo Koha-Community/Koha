@@ -678,53 +678,53 @@ foreach $table ( keys %requirefields ) {
 }    # foreach table
 
 foreach $table ( keys %fielddefinitions ) {
-    print "Check table $table\n" if $debug;
-    $sth = $dbh->prepare("show columns from $table");
-    $sth->execute();
-    my $definitions;
-    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-    {
-        $definitions->{$column}->{type}    = $type;
-        $definitions->{$column}->{null}    = $null;
-        $definitions->{$column}->{key}     = $key;
-        $definitions->{$column}->{default} = $default;
-        $definitions->{$column}->{extra}   = $extra;
-    }    # while
-    my $fieldrow = $fielddefinitions{$table};
-    foreach my $row (@$fieldrow) {
-        my $field   = $row->{field};
-        my $type    = $row->{type};
-        my $null    = $row->{null};
-        my $key     = $row->{key};
-        my $default = $row->{default};
-        my $extra   = $row->{extra};
-        my $def     = $definitions->{$field};
-        unless ( $type eq $def->{type}
-            && $null eq $def->{null}
-            && $key eq $def->{key}
-            && $default eq $def->{default}
-            && $extra eq $def->{extra} )
-        {
+	print "Check table $table\n" if $debug;
+	$sth = $dbh->prepare("show columns from $table");
+	$sth->execute();
+	my $definitions;
+	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+	{
+		$definitions->{$column}->{type}    = $type;
+		$definitions->{$column}->{null}    = $null;
+		$definitions->{$column}->{key}     = $key;
+		$definitions->{$column}->{default} = $default;
+		$definitions->{$column}->{extra}   = $extra;
+	}    # while
+	my $fieldrow = $fielddefinitions{$table};
+	foreach my $row (@$fieldrow) {
+		my $field   = $row->{field};
+		my $type    = $row->{type};
+		my $null    = $row->{null};
+		my $key     = $row->{key};
+		my $default = $row->{default};
+		my $extra   = $row->{extra};
+		my $def     = $definitions->{$field};
+		unless ( $type eq $def->{type}
+			&& $null eq $def->{null}
+			&& $key eq $def->{key}
+			&& $default eq $def->{default}
+			&& $extra eq $def->{extra} )
+		{
 
-            if ( $null eq '' ) {
-                $null = 'NOT NULL';
-            }
-            if ( $key eq 'PRI' ) {
+			if ( $null eq '' ) {
+				$null = 'NOT NULL';
+			}
+			if ( $key eq 'PRI' ) {
+				$key = 'PRIMARY KEY';
+			}
+			unless ( $extra eq 'auto_increment' ) {
+				$extra = '';
+			}
 # if it's a primary key, drop the previous pk, before altering the table
-			$dbh->do("alter table $table drop primary key");
-                $key = 'PRIMARY KEY';
-            }
-            unless ( $extra eq 'auto_increment' ) {
-                $extra = '';
-            }
-            my $sth =
-              $dbh->prepare(
-"alter table $table change $field $field $type $null $key $extra default ?"
-            );
-            $sth->execute($default);
-            print "  Alter $field in $table\n";
-        }
-    }
+			if ($key eq 'PRI') {
+				my $sth =$dbh->prepare("alter table $table change $field $field $type $null $key $extra default ?");
+			} else {
+				my $sth =$dbh->prepare("alter table $table drop primary key, change $field $field $type $null $key $extra default ?");
+			}
+			$sth->execute($default);
+			print "  Alter $field in $table\n";
+		}
+	}
 }
 
 # Get list of columns from items table
@@ -868,8 +868,8 @@ $sth->finish;
 exit;
 
 # $Log$
-# Revision 1.54  2003/07/07 15:23:56  tipaul
-# fix to avoid errors when creating fields that are primary keys and a previous primary key exist.
+# Revision 1.55  2003/07/07 15:36:13  tipaul
+# (again) fix to avoid errors when creating fields that are primary keys and a previous primary key exist.
 #
 # Revision 1.53  2003/07/07 14:11:16  tipaul
 # fixing bug #526 : gst rate is now calculated through systempref gist entry.
