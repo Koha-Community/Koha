@@ -108,7 +108,7 @@ if ($input->param('z3950queue')) {
 
     my $isbngood=1;
     if ($input->param('type') eq 'isbn') {
-	$isbngood=CheckIsbn($query);
+	$isbngood=checkvalidisbn($query);
     }
     if ($isbngood) {
     foreach ($input->param) {
@@ -123,94 +123,13 @@ if ($input->param('z3950queue')) {
           }
         }
 
-	Addz3950queue($input->param('query'), $input->param('type'), 
+	addz3950queue($dbh,$input->param('query'), $input->param('type'), 
 		$input->param('rand'), @serverlist);
     } else {
 	print "<font color=red size=+1>$query is not a valid ISBN
 	Number</font><p>\n";
     }
 }
-
-sub Addz3950queue {
-    use strict;
-    my (
-	$query,		# value to look up
-	$type,		# type of value ("isbn", "lccn", etc).
-	$requestid,
-	@z3950list,	# list of z3950 servers to query
-    )=@_;
-
-    my (
-	@serverlist,
-	$server,
-	$failed,
-    );
-
-	# list of servers: entry can be a fully qualified URL-type entry
-        #   or simply just a server ID number.
-
-        my $sth=$dbh->prepare("select host,port,db,userid,password 
-	  from z3950servers 
-	  where id=? ");
-        foreach $server (@z3950list) {
-	    if ($server =~ /:/ ) {
-		push @serverlist, $server;
-	    } else {
-		$sth->execute($server);
-		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
-		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
-	    }
-	}
-
-	my $serverlist='';
-	foreach (@serverlist) {
-	    $serverlist.="$_ ";
-    }
-	chop $serverlist;
-
-	# Don't allow reinsertion of the same request number.
-	my $sth=$dbh->prepare("select identifier from z3950queue 
-		where identifier=?");
-	$sth->execute($requestid);
-	unless ($sth->rows) {
-	    $sth=$dbh->prepare("insert into z3950queue 
-		(term,type,servers, identifier) 
-		values (?, ?, ?, ?)");
-	    $sth->execute($query, $type, $serverlist, $requestid);
-	}
-} # sub
-
-#--------------------------------------
-sub CheckIsbn {
-	my ($q)=@_ ;
-
-	my $isbngood = 0;
-
-	$q=~s/[^X\d]//g;
-	$q=~s/X.//g;
-	if (length($q)==10) {
-	    my $checksum=substr($q,9,1);
-	    my $isbn=substr($q,0,9);
-	    my $i;
-	    my $c=0;
-	    for ($i=0; $i<9; $i++) {
-		my $digit=substr($q,$i,1);
-		$c+=$digit*(10-$i);
-	    }
-	    $c=int(11-($c/11-int($c/11))*11+.1);
-	    ($c==10) && ($c='X');
-	    if ($c eq $checksum) {
-		$isbngood=1;
-	    } else {
-		$isbngood=0;
-	    }
-	} else {
-	    $isbngood=0;
-}
-
-	return $isbngood;
-
-} # sub CheckIsbn
 
 
 
@@ -230,6 +149,9 @@ if (my $data=$input->param('uploadmarc')) {
 }
 
 
+#------------------------------------
+# Add biblio item, and set up menu for adding item copies
+
 if ($input->param('insertnewrecord')) {
     my $sth;
     my $isbn=$input->param('isbn');
@@ -245,13 +167,19 @@ if ($input->param('insertnewrecord')) {
 
     #my $sth=$dbh->prepare("insert into marcrecorddone values ($q_origisbn, $q_origissn, $q_origlccn, $q_origcontrolnumber)");
     #$sth->execute;
-    my $sth=$dbh->prepare("select biblionumber,biblioitemnumber from biblioitems where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
+
+    print "<center>\n";
+    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file>New Record</a> | <a href=marcimport.pl>New File</a><br>\n";
+
+    # See if it already exists
+    my $sth=$dbh->prepare("select biblionumber,biblioitemnumber 
+	from biblioitems 
+	where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
     $sth->execute;
     my $biblionumber=0;
     my $biblioitemnumber=0;
-    print "<center>\n";
-    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file>New Record</a> | <a href=marcimport.pl>New File</a><br>\n";
     if ($sth->rows) {
+	# Already exists
 	($biblionumber, $biblioitemnumber) = $sth->fetchrow;
 	my $title=$input->param('title');
 	print << "EOF";
@@ -265,7 +193,6 @@ EOF
 	use strict;
 
 	# It doesn't exist; add it.
-
 
   	my $error;
   	my %biblio;
@@ -311,7 +238,7 @@ EOF
  	#print "<PRE>auth=@additionalauthors</PRE>\n";
  		
  	($biblionumber, $biblioitemnumber, $error)=
-  	  NewBiblioItem($dbh,
+  	  newcompletebiblioitem($dbh,
  		\%biblio,
  		\%biblioitem,
  		\@subjectheadings,
@@ -349,192 +276,41 @@ EOF
 
     print << "EOF";
     <table border=0 cellpadding=10 cellspacing=0>
-    <tr><th bgcolor=black><font color=white>
-Add a New Item for $title
-</font>
-</th></tr>
-<tr><td bgcolor=#dddddd>
-<form>
-<input type=hidden name=newitem value=1>
-<input type=hidden name=biblionumber value=$biblionumber>
-<input type=hidden name=biblioitemnumber value=$biblioitemnumber>
-<input type=hidden name=file value=$file>
-<table border=0>
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$barcode>
-
-Home Branch: <select name=homebranch> $branchselect </select></td></tr>
-
-</tr><td>Replacement Price:</td><td><input name=replacementprice size=10></td></tr>
-<tr><td>Notes</td><td><textarea name=notes rows=4 cols=40
-wrap=physical></textarea></td></tr>
-</table>
-</td></tr>
-</table>
-<p>
-<input type=submit value="Add Item">
-</form>
+      <tr><th bgcolor=black>
+	<font color=white> Add a New Item for $title </font>
+      </th></tr>
+      <tr><td bgcolor=#dddddd>
+      <form>
+        <input type=hidden name=newitem value=1>
+        <input type=hidden name=biblionumber value=$biblionumber>
+        <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
+        <input type=hidden name=file value=$file>
+        <table border=0>
+          <tr><td>BARCODE</td><td><input name=barcode size=10 value=$barcode>
+          Home Branch: <select name=homebranch> $branchselect </select>
+	  </td></tr>
+          <tr><td>Replacement Price:</td>
+	  <td><input name=replacementprice size=10></td></tr>
+          <tr><td>Notes</td>
+	  <td><textarea name=notes rows=4 cols=40 wrap=physical></textarea>
+	  </td></tr>
+        </table>
+        <p>
+        <input type=submit value="Add Item">
+      </form>
+      </td></tr>
+    </table>
 EOF
-print endmenu();
-print endpage();
+    print endmenu();
+    print endpage();
 
-exit;
+    exit;
 }
 
-sub NewBiblioItem {
-	use strict;
 
-	my ( $dbh,		# DBI handle
-	  $biblio,		# hash ref to biblio record
-	  $biblioitem,		# hash ref to biblioitem record
-	  $subjects,		# list ref of subjects
-	  $addlauthors,		# list ref of additional authors
-	)=@_ ;
-
-	my ( $biblionumber, $biblioitemnumber, $error);		# return values
-
-	my $debug=1;
-	my $sth;
-	my $subjectheading;
-	my $additionalauthor;
-
-	#--------
-
-	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
-		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
-
-	# Make sure master biblio entry exists
-	($biblionumber,$error)=GetOrAddBiblio($dbh, $biblio);
-
-        if ( ! $error ) { 
-	  # Get next biblioitemnumber
-	  $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
-	  $sth->execute;
-	  ($biblioitemnumber) = $sth->fetchrow;
-	  $biblioitemnumber++;
-
-	  print "<PRE>Next biblio item is $biblioitemnumber</PRE>\n" if $debug;
-  
-	  $sth=$dbh->prepare("insert into biblioitems (
-	    biblioitemnumber,
-	    biblionumber,
-	    volume,
-	    number,
-	    itemtype,
-	    isbn,
-	    issn,
-	    dewey,
-	    subclass,
-	    publicationyear,
-	    publishercode,
-	    volumedate,
-	    volumeddesc,
-	    illus,
-	    pages,
-	    notes,
-	    size,
-	    place,
-	    lccn,
-	    marc)
-	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
-
-	  $sth->execute(
-	    $biblioitemnumber,
-	    $biblionumber,
-	    $biblioitem->{volume},
-	    $biblioitem->{number},
-	    $biblioitem->{itemtype},
-	    $biblioitem->{isbn},
-	    $biblioitem->{issn},
-	    $biblioitem->{dewey},
-	    $biblioitem->{subclass},
-	    $biblioitem->{publicationyear},
-	    $biblioitem->{publishercode},
-	    $biblioitem->{volumedate},
-	    $biblioitem->{volumeddesc},
-	    $biblioitem->{illus},
-	    $biblioitem->{pages},
-	    $biblioitem->{notes},
-	    $biblioitem->{size},
-	    $biblioitem->{place},
-	    $biblioitem->{lccn},
-	    $biblioitem->{marc} ) or  $error.=$sth->errstr ;
-
-	  $sth=$dbh->prepare("insert into bibliosubject 
-		(biblionumber,subject)
-		values (?, ? )" );
-	  foreach $subjectheading (@{$subjects} ) {
-	      $sth->execute($biblionumber, $subjectheading) 
-			or $error.=$sth->errstr ;
-	
-	  } # foreach subject
-
-	  $sth=$dbh->prepare("insert into additionalauthors 
-		(biblionumber,author)
-		values (?, ? )");
-	  foreach $additionalauthor (@{$addlauthors} ) {
-	    $sth->execute($biblionumber, $additionalauthor) 
-			or $error.=$sth->errstr ;
-	  } # foreach author
-
-	} else {
-	  # couldn't get biblio
-	  $biblionumber='';
-	  $biblioitemnumber='';
-
-	} # if no biblio error
-
-	return ( $biblionumber, $biblioitemnumber, $error);
-
-} # sub NewBiblioItem
 
 #---------------------------------------
-# Find a biblio entry, or create a new one if it doesn't exist.
-sub GetOrAddBiblio {
-	use strict;		# in here until rest cleaned up
-	# input params
-	my (
-	  $dbh,		# db handle
-	  $biblio,	# hash ref to fields
-	)=@_;
-
-	# return
-	my $biblionumber;
-
-	my $debug=1;
-	my $sth;
-	my $error;
-	
-	#-----
-	print "<PRE>Looking for biblio </PRE>\n" if $debug;
-	$sth=$dbh->prepare("select biblionumber 
-		from biblio 
-		where title=? and author=? 
-		  and copyrightdate=? and seriestitle=?");
-	$sth->execute(
-		$biblio->{title}, $biblio->{author}, 
-		$biblio->{copyright}, $biblio->{seriestitle} );
-	if ($sth->rows) {
-	    ($biblionumber) = $sth->fetchrow;
-	    print "<PRE>Biblio exists with number $biblionumber</PRE>\n" if $debug;
-	} else {
-	    # Doesn't exist.  Add new one.
-	    print "<PRE>Adding biblio</PRE>\n" if $debug;
-	    ($biblionumber,$error)=&newbiblio($biblio);
-	    if ( $biblionumber ) {
-	      print "<PRE>Added with biblio number=$biblionumber</PRE>\n" if $debug;
-	      if ( $biblio->{subtitle} ) {
-	    	&newsubtitle($biblionumber,$biblio->{subtitle} );
-	      } # if subtitle
-	    } else {
-		print "<PRE>Couldn't add biblio: $error</PRE>\n" if $debug;
-	    } # if added
-	}
-
-	return $biblionumber;
-
-} # sub GetOrAddBiblio
-#---------------------------------------
-
+# Add item copy
 if ($input->param('newitem')) {
     use strict;
     my $error;
@@ -562,8 +338,9 @@ if ($input->param('newitem')) {
 		print "<font color=red>Error: $error </font><p>\n";
 	    } else {
 
-		print "<font color=green size=+1>Item added with barcode $barcode
-			</font><P>\n";
+		print "<table border=1><tr><td bgcolor=yellow>
+			Item added with barcode $barcode
+			</td></tr></table>\n";
             } # if error
     } # if barcode exists
 }
@@ -1443,3 +1220,241 @@ sub GetKeyTableSelectOptions {
 	}
 	return $selectclause;
 } # sub GetKeyTableSelectOptions
+
+#---------------------------------
+# Add a biblioitem and related data
+sub newcompletebiblioitem {
+	use strict;
+
+	my ( $dbh,		# DBI handle
+	  $biblio,		# hash ref to biblio record
+	  $biblioitem,		# hash ref to biblioitem record
+	  $subjects,		# list ref of subjects
+	  $addlauthors,		# list ref of additional authors
+	)=@_ ;
+
+	my ( $biblionumber, $biblioitemnumber, $error);		# return values
+
+	my $debug=1;
+	my $sth;
+	my $subjectheading;
+	my $additionalauthor;
+
+	#--------
+
+	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
+		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
+
+	# Make sure master biblio entry exists
+	($biblionumber,$error)=getoraddbiblio($dbh, $biblio);
+
+        if ( ! $error ) { 
+	  # Get next biblioitemnumber
+	  $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
+	  $sth->execute;
+	  ($biblioitemnumber) = $sth->fetchrow;
+	  $biblioitemnumber++;
+
+	  print "<PRE>Next biblio item is $biblioitemnumber</PRE>\n" if $debug;
+  
+	  $sth=$dbh->prepare("insert into biblioitems (
+	    biblioitemnumber,
+	    biblionumber,
+	    volume,
+	    number,
+	    itemtype,
+	    isbn,
+	    issn,
+	    dewey,
+	    subclass,
+	    publicationyear,
+	    publishercode,
+	    volumedate,
+	    volumeddesc,
+	    illus,
+	    pages,
+	    notes,
+	    size,
+	    place,
+	    lccn,
+	    marc)
+	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
+
+	  $sth->execute(
+	    $biblioitemnumber,
+	    $biblionumber,
+	    $biblioitem->{volume},
+	    $biblioitem->{number},
+	    $biblioitem->{itemtype},
+	    $biblioitem->{isbn},
+	    $biblioitem->{issn},
+	    $biblioitem->{dewey},
+	    $biblioitem->{subclass},
+	    $biblioitem->{publicationyear},
+	    $biblioitem->{publishercode},
+	    $biblioitem->{volumedate},
+	    $biblioitem->{volumeddesc},
+	    $biblioitem->{illus},
+	    $biblioitem->{pages},
+	    $biblioitem->{notes},
+	    $biblioitem->{size},
+	    $biblioitem->{place},
+	    $biblioitem->{lccn},
+	    $biblioitem->{marc} ) or  $error.=$sth->errstr ;
+
+	  $sth=$dbh->prepare("insert into bibliosubject 
+		(biblionumber,subject)
+		values (?, ? )" );
+	  foreach $subjectheading (@{$subjects} ) {
+	      $sth->execute($biblionumber, $subjectheading) 
+			or $error.=$sth->errstr ;
+	
+	  } # foreach subject
+
+	  $sth=$dbh->prepare("insert into additionalauthors 
+		(biblionumber,author)
+		values (?, ? )");
+	  foreach $additionalauthor (@{$addlauthors} ) {
+	    $sth->execute($biblionumber, $additionalauthor) 
+			or $error.=$sth->errstr ;
+	  } # foreach author
+
+	} else {
+	  # couldn't get biblio
+	  $biblionumber='';
+	  $biblioitemnumber='';
+
+	} # if no biblio error
+
+	return ( $biblionumber, $biblioitemnumber, $error);
+
+} # sub newcompletebiblioitem
+#---------------------------------------
+# Find a biblio entry, or create a new one if it doesn't exist.
+sub getoraddbiblio {
+	use strict;		# in here until rest cleaned up
+	# input params
+	my (
+	  $dbh,		# db handle
+	  $biblio,	# hash ref to fields
+	)=@_;
+
+	# return
+	my $biblionumber;
+
+	my $debug=1;
+	my $sth;
+	my $error;
+	
+	#-----
+	print "<PRE>Looking for biblio </PRE>\n" if $debug;
+	$sth=$dbh->prepare("select biblionumber 
+		from biblio 
+		where title=? and author=? 
+		  and copyrightdate=? and seriestitle=?");
+	$sth->execute(
+		$biblio->{title}, $biblio->{author}, 
+		$biblio->{copyright}, $biblio->{seriestitle} );
+	if ($sth->rows) {
+	    ($biblionumber) = $sth->fetchrow;
+	    print "<PRE>Biblio exists with number $biblionumber</PRE>\n" if $debug;
+	} else {
+	    # Doesn't exist.  Add new one.
+	    print "<PRE>Adding biblio</PRE>\n" if $debug;
+	    ($biblionumber,$error)=&newbiblio($biblio);
+	    if ( $biblionumber ) {
+	      print "<PRE>Added with biblio number=$biblionumber</PRE>\n" if $debug;
+	      if ( $biblio->{subtitle} ) {
+	    	&newsubtitle($biblionumber,$biblio->{subtitle} );
+	      } # if subtitle
+	    } else {
+		print "<PRE>Couldn't add biblio: $error</PRE>\n" if $debug;
+	    } # if added
+	}
+
+	return $biblionumber,$error;
+
+} # sub getoraddbiblio
+#---------------------------------------
+sub addz3950queue {
+    use strict;
+    my (
+	$dbh,		# DBI handle
+	$query,		# value to look up
+	$type,		# type of value ("isbn", "lccn", etc).
+	$requestid,
+	@z3950list,	# list of z3950 servers to query
+    )=@_;
+
+    my (
+	@serverlist,
+	$server,
+	$failed,
+    );
+
+	# list of servers: entry can be a fully qualified URL-type entry
+        #   or simply just a server ID number.
+
+        my $sth=$dbh->prepare("select host,port,db,userid,password 
+	  from z3950servers 
+	  where id=? ");
+        foreach $server (@z3950list) {
+	    if ($server =~ /:/ ) {
+		push @serverlist, $server;
+	    } else {
+		$sth->execute($server);
+		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
+		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
+	    }
+	}
+
+	my $serverlist='';
+	foreach (@serverlist) {
+	    $serverlist.="$_ ";
+    }
+	chop $serverlist;
+
+	# Don't allow reinsertion of the same request number.
+	my $sth=$dbh->prepare("select identifier from z3950queue 
+		where identifier=?");
+	$sth->execute($requestid);
+	unless ($sth->rows) {
+	    $sth=$dbh->prepare("insert into z3950queue 
+		(term,type,servers, identifier) 
+		values (?, ?, ?, ?)");
+	    $sth->execute($query, $type, $serverlist, $requestid);
+	}
+} # sub
+
+#--------------------------------------
+sub checkvalidisbn {
+	my ($q)=@_ ;
+
+	my $isbngood = 0;
+
+	$q=~s/[^X\d]//g;
+	$q=~s/X.//g;
+	if (length($q)==10) {
+	    my $checksum=substr($q,9,1);
+	    my $isbn=substr($q,0,9);
+	    my $i;
+	    my $c=0;
+	    for ($i=0; $i<9; $i++) {
+		my $digit=substr($q,$i,1);
+		$c+=$digit*(10-$i);
+	    }
+	    $c=int(11-($c/11-int($c/11))*11+.1);
+	    ($c==10) && ($c='X');
+	    if ($c eq $checksum) {
+		$isbngood=1;
+	    } else {
+		$isbngood=0;
+	    }
+	} else {
+	    $isbngood=0;
+}
+
+	return $isbngood;
+
+} # sub checkvalidisbn
+
