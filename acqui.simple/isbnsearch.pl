@@ -72,10 +72,9 @@ else {
     my $toggle;
     for ( my $i = $offset ; $i < $total ; $i++ ) {
         if ( $i % 2 ) {
-            $toggle = "#ffffcc";
-        }
-        else {
-            $toggle = "white";
+            $toggle = 0;
+        } else {
+            $toggle = 1;
         }
         my %row_data;    # get a fresh hash for the row data
         $row_data{toggle}        = $toggle;
@@ -83,6 +82,7 @@ else {
         $row_data{title}         = $results[$i]->{'title'};
         $row_data{author}        = $results[$i]->{'author'};
         $row_data{copyrightdate} = $results[$i]->{'copyrightdate'};
+		$row_data{classification} = $results[$i]->{'classification'};
         $row_data{NOTMARC}       = !$marc_p;	
         push ( @loop_data, \%row_data );
     }
@@ -135,10 +135,10 @@ else {
     for ( my $i = 0 ; $i <= $#results ; $i++ ) {
         my %row_data;
         if ( $i % 2 ) {
-            $toggle = "#ffffcc";
+            $toggle = 0;
         }
         else {
-            $toggle = "white";
+            $toggle = 1;
         }
         $row_data{toggle} = $toggle;
         $row_data{id}     = $results[$i]->{'id'};
