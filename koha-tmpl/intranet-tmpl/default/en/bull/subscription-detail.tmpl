@@ -6,7 +6,9 @@
 <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Issues</a>
 <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Biblio</a>
 <!-- TMPL_UNLESS name="totalissues" -->
-	<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del" class="button bull">Delete subscription</a>
+		<a href="javascript:confirm_deletion()" class="button bull">
+			delete
+		</a>
 <!-- /TMPL_UNLESS -->
 <form method="post" name="f">
 <div id="bloc25">
@@ -176,5 +178,13 @@
 	</table>
 </div>
 </div>
-
+<script>
+function _(s) { return s } // dummy function for gettext
+function confirm_deletion() {
+	var is_confirmed = confirm(_('Are you sure you want to delete this subscription?'));
+	if (is_confirmed) {
+		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
+	}
+}
+</script>
 <!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
