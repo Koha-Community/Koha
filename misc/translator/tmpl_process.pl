@@ -18,10 +18,8 @@ GetOptions(
 	'type=s' => \$type,
 	'exclude=s' => \@excludes,
 	'sep=s' => \$split_char,
-	'help'	=> \$help,
+	'help'	=> sub { help() },
 ) || (usage(), exit(-1));
-
-help() if $help;
 
 # utiliser glob() pour tous les fichiers d'un repertoire
 
@@ -427,7 +425,7 @@ options can be :
      Specify the output directory to use when generating the translated
      input files.
 
-  -r or --recursive=
+  -r or --recursive
      Use the recursive mode to process every entry in subdirectories.
      Note: Symbolic links used to link directories are not supported.
 
