@@ -271,35 +271,6 @@ Press <ENTER> to exit the installer: |;
 $messages->{'UpgradeCompleted'}->{en} = heading('UPGRADE COMPLETE') . qq|
 Congratulations ... your Koha upgrade is finished!
 
-If you are upgrading from a version of Koha
-prior to 1.2.1, it is likely that you will have to modify your Apache
-configuration to point it to the new files.
-
-In your INTRANET VirtualHost section you should have:
-  DocumentRoot %s/htdocs
-  ScriptAlias /cgi-bin/koha/ %s/cgi-bin/
-  SetEnv PERL5LIB %s/modules
-
-In the OPAC VirtualHost section you should have:
-  DocumentRoot %s/htdocs
-  ScriptAlias /cgi-bin/koha/ %s/cgi-bin/
-  SetEnv PERL5LIB %s/modules
-
-You may also need to uncomment a "LoadModules env_module ... " line and restart
-Apache.
-If you're upgrading from 1.2.x version of Koha note that the MARC DB is NOT populated.
-To populate it :
-* launch Koha
-* Go to Parameters >> Marc structure option and Koha-MARC links option.
-* Modify default MARC structure to fit your needs.
-* open a console
-* type:
-cd /path/to/koha/misc
-export PERL5LIB=/path/to/koha
-./koha2marc.pl
-the old DB is "copied" in the new MARC one.
-Koha 2.0.0 is ready :-)
-
 Please report any problems you encounter through http://bugs.koha.org/
 
 Press <ENTER> to exit the installer: |;
@@ -858,11 +829,16 @@ sub checkperlmodules {
 	unless (eval {require Date::Manip})      { push @missing,"Date::Manip" };
 	unless (eval {require DBD::mysql})       { push @missing,"DBD::mysql" };
 	unless (eval {require HTML::Template})   { push @missing,"HTML::Template" };
-#    unless (eval {require Set::Scalar})      { push @missing,"Set::Scalar" };
 	unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
 	unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
 	unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
-	unless (eval {require Net::LDAP})   { push @missing,"Net::LDAP" };
+	unless (eval {require PDF::API2})   { push @missing,"PDF::API2" };
+# The following modules are not mandatory, depends on how the library want to use Koha
+	unless (eval {require Net::LDAP})       {
+		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing, "Net::LDAP";
+			}
+    }
 	unless (eval {require Event})       {
 		if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
 				push @missing, "Event";
@@ -1834,6 +1810,8 @@ nothing will be added, and you must create them all yourself.
 Only choose N if you want to use a MARC format not listed here,
 such as DANMARC.  We would like to hear from you if you do.
 
+UPDATE : If you UPDATE your version from a previous 2.x.x, the right choice here is N (None) to preserve your local MARC setup.
+
 Choose MARC definition [1]: |;
 
 $messages->{'Language'}->{en} = heading('CHOOSE LANGUAGE') . qq|
@@ -2100,7 +2078,8 @@ Does this look right? ([Y]/N): |;
 
 #FIXME: rewrite to use Install.pm
 sub backupkoha {
-my $backupdir=$ENV{'prefix'}.'/backups';
+if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
+my $backupdir=$ENV{prefix}.'/backups';
 
 my $answer = showmessage(getmessage('BackupDir',[$backupdir]),'free',$backupdir);
 
