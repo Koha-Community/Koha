@@ -174,8 +174,21 @@ sub install_strhash
 		{
 			foreach my $text (sort  {uc($b) cmp uc($a) || length($b) <=> length($a)} keys %{$strhash})
 			{
-#   			$text =~ s/\'/\\\'/g;
-#   			$text =~ s/\./\\\./g;
+			# escaping \|()[{}^$*+?.
+			$text =~ s/\\/\\\\/g;
+			$text =~ s/\|/\\\|/g;
+			$text =~ s/\(/\\\(/g;
+			$text =~ s/\)/\\\)/g;
+			$text =~ s/\[/\\\[/g;
+			$text =~ s/\]/\\\]/g;
+			$text =~ s/\{/\\\{/g;
+			$text =~ s/\}/\\\}/g;
+			$text =~ s/\^/\\\^/g;
+			$text =~ s/\$/\\\$/g;
+			$text =~ s/\*/\\\*/g;
+			$text =~ s/\+/\\\+/g;
+			$text =~ s/\?/\\\?/g;
+			$text =~ s/\?/\\\?/g;
 				# Test if the key has been translated
 				if( %{$strhash}->{$text} != 1 )
 				{
