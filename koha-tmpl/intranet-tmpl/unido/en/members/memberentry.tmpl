@@ -1,0 +1,173 @@
+<html><TMPL_INCLUDE NAME="members-top.inc">
+
+
+
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href=/cgi-bin/koha/members-home.pl">Patrons</a> > Patron Details</div>
+
+<h1><TMPL_VAR NAME=header></h1><br>
+
+<form action=/cgi-bin/koha/newmember.pl method=post>
+	<input type=hidden name=joining value="<TMPL_VAR NAME=dateenrolled>">
+	<input type=hidden name=expiry value="<TMPL_VAR NAME=expiry>">
+	<input type=hidden name=type value="borrowers">
+	<input type=hidden name=borrowernumber value="<TMPL_VAR NAME=member>">
+	<input type=hidden name=updtype value="<TMPL_VAR NAME=updtype>">
+
+	<table border=1 cellspacing=0 cellpadding=5 >
+
+	<tr valign=top>
+		<td COLSPAN=2><input type=reset value="Clear all Fields"></td>
+		<td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>Patron# <TMPL_VAR NAME=member>, UNIDO ID Card Number* <input type=text name=cardnumber size=10 value="<TMPL_VAR NAME=cardnumber>"><br>
+
+Expirey Date <input type=text name=expiry value="<TMPL_VAR NAME=expiry>" size="10">
+</td>
+	</tr>
+
+	<tr valign=top bgcolor="99cc33">
+		<td COLSPAN=3><B>PERSONAL DETAILS</b></td>
+		<td COLSPAN=2>
+		</td>
+	</tr>
+
+	<tr valign=top bgcolor=white>
+		<td><FONT SIZE=2>Title</FONT></td>
+		<td><FONT SIZE=2>Initials</FONT></td>
+		<td><FONT SIZE=2><b>Given Names*</b></FONT></td>
+		<td><FONT SIZE=2><b>Surname*</b></FONT></td>
+		<td><FONT SIZE=2>Prefered Name</FONT></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td><TMPL_VAR name="Mr">
+		<SELECT NAME="title">
+			<option<TMPL_VAR name="title_selected_ "> value=" ">No Title</option>
+			<option value="Miss"<TMPL_VAR name="title_Miss">>Miss</option>
+			<option value="Mrs"<TMPL_VAR name="title_Mrs">>Mrs</option>
+			<option value="Ms"<TMPL_VAR name="title_Ms">>Ms</option>
+			<option <TMPL_VAR name="title_Mr"> value="Mr" >Mr</option>
+			<option value="Dr" <TMPL_VAR name="title_Dr">>Dr</option>
+			<option value="Sir" <TMPL_VAR name="title_Sir">>Sir</option>
+		</SELECT>
+		</td>
+		<td><input type=text name=initials size=5 value="<TMPL_VAR NAME=initials>"></td>
+		<td><input type=text name=firstname size=20 value="<TMPL_VAR NAME=firstname>"></td>
+		<td><input type=text name=surname size=20 value="<TMPL_VAR NAME=surname>"></td>
+		<td><input type=text name=othernames size=20 value="<TMPL_VAR NAME=othernames>"></td>
+	</tr>
+
+
+	<tr valign=top bgcolor=white>
+		
+		<td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>
+		
+		<td><FONT SIZE=2><b>Membership Category*</b></FONT></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td colspan=2>
+			
+			</td>
+			
+			<td colspan=2>&nbsp;</td>
+			
+		<td><TMPL_VAR NAME=catcodepopup></td>
+	</tr>
+
+
+	<tr valign=top bgcolor="99cc33" >
+		<td COLSPAN=5 ><B>CONTACT DETAILS</b></td>
+	</tr>
+
+	<tr valign=top bgcolor=white>
+		<td  COLSPAN=3><FONT SIZE=2><b>Department (or Organisation)*</b></FONT></td>
+		<td><FONT SIZE=2><b>Room</b></FONT></td>
+		<td><FONT SIZE=2>Joining Branch</FONT></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=address>"></td>
+		<td>	
+			<input type=text name="suburb" size=20 value="<TMPL_VAR NAME="suburb">">
+			
+		</td>
+		<td>
+			<TMPL_VAR name="CGIbranch">
+		</td>
+	</tr>
+
+
+
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=2 ><FONT SIZE=2>Phone</td>
+		<td><FONT SIZE=2>Phone (Home)</td>
+		<td><FONT SIZE=2>Email</td>
+		<td><FONT SIZE=2>Mobile</td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phone>"></td>
+		<td><input type=text name=faxnumber size=20 value="<TMPL_VAR NAME=phoneday>"></td>
+		<td><input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>"></td>
+		<td><input type=text name=textmessaging size=20 value="<TMPL_VAR NAME=textmessaging>"></td>
+	</tr>
+
+
+
+
+
+	<tr valign=top bgcolor="99cc33">
+		<td  COLSPAN=5><B>ALTERNATECONTACT DETAILS</b></td>
+	</tr>
+
+	<tr valign=top bgcolor=white>
+		<td   COLSPAN=3 ><FONT SIZE=2><b>Name</b></td>
+		<td><FONT SIZE=2>Phone</td>
+		<td><FONT SIZE=2><b>Relationship</b></td>
+	</tr>
+	<tr valign=top bgcolor=white>
+		<td COLSPAN=3 ><input type=text name=contactname size=20 value="<TMPL_VAR NAME=contactname>"></td>
+		<td><input type=text name=altphone size=20 value="<TMPL_VAR NAME=altphone>"></td>
+		<td>
+		<select name=altrelationship size=1>
+		<TMPL_LOOP NAME=relshiploop>
+			<OPTION <TMPL_VAR NAME=selected>><TMPL_VAR NAME=relationship>
+		</TMPL_LOOP>
+		</select>
+		</td>
+	</tr>
+
+	<tr valign=top bgcolor=white>
+		<td><FONT SIZE=2>Notes</font></td>
+		<td COLSPAN=4><textarea name=altnotes wrap=physical cols=40 rows=3><TMPL_VAR NAME=altnotes></textarea></td>
+	</tr>
+
+
+	<tr valign=top bgcolor="99cc33">
+		<td  COLSPAN=5 ><B>LIBRARY USE</B></td>
+	</tr>
+
+	<tr valign=top >
+		<td><FONT SIZE=2>Notes</font></td>
+		<td COLSPAN=4><textarea name=borrowernotes wrap=physical cols=40 rows=3><TMPL_VAR NAME=borrowernotes></textarea></td>
+	</tr>
+
+	<TMPL_IF NAME=modify>
+		<tr><td COLSPAN=5><Font size=2>FLAGS</font></td></tr>
+		<TMPL_LOOP NAME=flagloop>
+		<tr>
+			<td COLSPAN=2><TMPL_VAR NAME=html></td>
+			<td COLSPAN=3><input type=radio name="<TMPL_VAR NAME=name>" value="1" <TMPL_VAR NAME=yes>>Yes
+			<input type=radio name="<TMPL_VAR NAME=name>" value="0" <TMPL_VAR NAME=no>>No
+			</td>
+		</tr>
+		</TMPL_LOOP>
+	</TMPL_IF>
+
+
+	<tr>
+		<td></td>
+		<td>
+			<input type="submit" value="save" class="go">
+		</td>
+	</tr>
+	</table>
+</form>
+
+<TMPL_INCLUDE NAME="members-bottom.inc">
+
