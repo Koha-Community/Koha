@@ -1,0 +1,51 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<h1>syst&egrave;me d'importation de notices MARC</h1>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Importer dans le r&eacute;voir</font></td>
+	</tr>
+</table>
+
+<TMPL_IF name="uploadmarc">
+<p>R&eacute;sultats de l'importation :</p>
+<ul>
+	<p><TMPL_VAR name="imported"> notices import&eacute;es</p>
+	<p><TMPL_VAR name="alreadyindb"> pas import&eacute; : d&eacute;j&agrave; dans la base</p>
+	<p><TMPL_VAR name="alreadyinfarm"> pas import&eacute; : d&eacute;j&agrave;dans le r&eacute;servoir</p>
+	<p><TMPL_VAR name="notmarcrecord"> pas import&eacute; : ne semble pas au format MARC (ou ISBN/ISSN manquent) !</p>
+	<p><TMPL_VAR name="total">  notices trait&eacute;es</p>
+	<p><a href="addbooks.pl">Retour au catalogage</a>
+</ul>
+<TMPL_ELSE>
+<ul>S&eacute;lectionnez un fichier &agrave; importer dans le r&eacute;servoir. Il sera trait&eacute;, et pour chaque ISBN trouv&eacute;, une nouvelle notice sera cr&eacute;e dans le r&eacute;servoir. Si un ISBN existe d&eacute;j&agrave; dans le r&eacute;servoir, vous pouvez choisir ou bien d'ignorer la nouvelle notice, ou bien d'&eacute;craser l'ancienne.<br/>
+Vous pouvez nommer cette importation. Cela peut &ecirc;tre utile, lorsque vous cre nouvel ISez une notice, de se souvenir de l'origine des donne nouvel ISes MARC propos&eacute;es !<br/>
+Bien s&ucirc;r, si l'ISBN existe d&eacute;j&agrave; dans la base de donn&eacute;es active, la notice sera ignor&eacute;e.<br/></ul>
+<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
+<table cellpadding="3" border=0>
+	<tr valign="top">
+		<td>S&eacute;lectionnez le fichier &agrave; importer :</td>
+		<td>
+			<input type="file" name="uploadmarc"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Nom de cette importation :</td>
+		<td>
+			<input type="text" name="filename"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Si l'ISBN existe d&eacute;j&agrave; dans le r&eacute;servoir : </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorer celui-ci, conserver celui qui existe d&eacute;j&agrave;<br/>
+			<input type="radio" name="overwrite_biblio" value="1">Ecraser celui qui existe d&eacute;j&agrave; par celui-ci</td>
+	</tr>
+	<tr valign="top">
+		<td>&nbsp; </td>
+		<td><input type="submit" value="import"></td>
+	</tr>
+
+</table>
+</form>
+</TMPL_IF>
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">

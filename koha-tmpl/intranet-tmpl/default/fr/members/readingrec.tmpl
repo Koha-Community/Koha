@@ -1,0 +1,39 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+<TR VALIGN=TOP>
+	<TD bgcolor="white" colspan=4 >
+		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Full output</a>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD  bgcolor="white"> <a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TITRE</b></a> 
+    </TD>
+	<TD  bgcolor="white"> <a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>AUTEUR</b></a> 
+    </TD>
+	<TD  bgcolor="white">
+		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=<TMPL_VAR name="limit">"><b>DATE</b></a>
+	</TD>
+	<TD  bgcolor="white">
+		<b>Volume</b>
+	</TD>
+</TR>
+<TMPL_LOOP name="loop_reading">
+<TR VALIGN=TOP>
+	<TD  bgcolor="white">
+ 		<TMPL_VAR name="title">
+	</TD>
+	<TD  bgcolor="white">
+ 		<TMPL_VAR name="author">
+	</TD>
+	<TD  bgcolor="white">
+		<TMPL_VAR name="returndate">
+	</TD>
+	<TD  bgcolor="white">
+		<TMPL_VAR name="volumeddesc">
+	</TD>
+</TMPL_LOOP>
+</TABLE>
+<TMPL_INCLUDE NAME="members-bottom.inc">
+
+

@@ -1,0 +1,90 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+	<p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> à Koha</p>
+</TMPL_IF>
+
+<font size="5"><em>Import et saisie de notices</em></font>
+<TMPL_IF name="noitemsfound">
+	<p />
+	<font color="red" size="4">Pas d'exemplaires</font>
+</TMPL_IF>
+<TMPL_IF name="websiteadded">
+	<p />
+	<font color="red" size="4">Site web ajouté</font>
+</TMPL_IF>
+
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Pour ajouter une nouvelle notice, scanner le code barre ou saisir l'ISBN/ISSN/titre de l'ouvrage</font></td>
+	</tr>
+</table>
+<form action="isbnsearch.pl">
+	<table cellpadding="3" border=0 width="100%">
+		<tr valign="top">
+			<td width="5%">ISBN:</td>
+			<td width="20%"><input type="text" name="isbn" /></td>
+			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
+			<td rowspan=2>Si l'ouvrage est trouvé dans la table des notices actives, il sera rappelé et pourra être modifié.<br />
+			Si l'ouvrage est trouvé dans le réservoir, il pourra être appelé pour la saisie d'une nouvelle notice active.<br />
+			Sinon, il est possible de créer une notice à partir de 0</td>
+		</tr>
+			<td width="5%">Titre</td>
+			<td width="20%"><input type="text" name="title" /></td>
+		</tr>
+		<tr><td>&nbsp;</td>
+			<td colspan=2><a href=addbiblio.pl>Créer une notice sans ISBN/ISSN</a></td></tr>
+	</table>
+</form>
+
+<p />
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><font size="4">Outil pour imoprter des notices MARC dans le réservoir.</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+		<td width="5%">&nbsp;</td>
+		<td width="20%"><li><a href=marcimport.pl>Décharger des notices MARC</a></li></td>
+		<td width="10%">&nbsp;</td>
+		<td>Le réservoir est une table ou sont stockées des notices inactives.<br/>
+			Unenotice MARC est stockée dans le réservoir tant qu'il n'y pas d'exemplaire correspondant. Si vous entrez l'ISBN ou le titre d'un ouvrage, il est recherché dans le réservoir.
+			S'il est trouvé, une notice active sera créée.
+		</td>
+
+
+<table bgcolor="#ffcc00" width="80%" cellpadding"5">
+	<tr>
+		<td><font size="4">Outils z39.50</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+		<td width="5%">&nbsp;</td>
+		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Outil de recherche z39.50</a></li></td>
+		<td width="10%">&nbsp;</td>
+		<td>NE FONCTIONNE PAS</td>
+	</tr>
+</table>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><FONT SIZE=4>Ajout d'un site web</font></td>
+	</tr>
+</table>
+<form action="websitesearch.pl" method="post">
+	<table>
+	<tr>
+		<td>Keyword:</td>
+		<td><input type="text" name="keyword" /></td>
+		<td><input type="submit" value="Go" /></td>
+	</tr>
+	</table>
+</FORM>
+<p />
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
