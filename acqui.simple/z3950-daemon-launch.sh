@@ -35,12 +35,16 @@ then
 	exit 1
 fi
 
-su -s /bin/sh -c '$KohaZ3950Shell &' - $RunAsUser &
+su -s /bin/sh -c $KohaZ3950Shell - $RunAsUser &
 
 exit
 
 #--------------
 # $Log$
+# Revision 1.1.2.3  2002/06/26 19:56:57  tonnesen
+# Bug fix.  Single quotes were causing $KohaZ3950Shell variable to not get
+# expanded
+#
 # Revision 1.1.2.2  2002/06/26 16:25:51  amillar
 # Make directory variable name more explanatory
 #
