@@ -22,11 +22,6 @@ it might be better to create a customized scanner
 to scan the template files for tokens.
 This module is a simple-minded attempt at such a scanner.
 
-=head1 HISTORY
-
-This tokenizer is mostly based
-on Ambrose's hideous Perl script known as subst.pl.
-
 =cut
 
 ###############################################################################
@@ -96,6 +91,8 @@ sub LINENUM_START	() {'lc_0'}
 sub LINENUM		() {'lc'}
 sub CDATA_MODE_P	() {'cdata-mode-p'}
 sub CDATA_CLOSE		() {'cdata-close'}
+
+sub ALLOW_CFORMAT_P	() {'allow-cformat-p'}
 
 sub new {
     my $this = shift;
@@ -170,6 +167,11 @@ sub cdata_close {
     return $this->{+CDATA_CLOSE};
 }
 
+sub allow_cformat_p {
+    my $this = shift;
+    return $this->{+ALLOW_CFORMAT_P};
+}
+
 # Simple setters
 
 sub _set_fatal {
@@ -228,6 +230,12 @@ sub _set_cdata_mode {
 sub _set_cdata_close {
     my $this = shift;
     $this->{+CDATA_CLOSE} = $_[0];
+    return $this;
+}
+
+sub set_allow_cformat {
+    my $this = shift;
+    $this->{+ALLOW_CFORMAT_P} = $_[0];
     return $this;
 }
 
@@ -305,7 +313,7 @@ sub _next_token_internal {
 	($kind, $it) = (TmplTokenType::TEXT, $&);
 	$this->_set_readahead( $' );
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
-    } elsif ($this->_peek_readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
+    } elsif ($this->_peek_readahead =~ /^(?:[^<]|<[<\s])*(?:[^<\s])/s) {	# non-space normal text
 	($kind, $it) = (TmplTokenType::TEXT, $&);
 	$this->_set_readahead( $' );
 	warn_normal "Unescaped < in $it\n", $this->line_number_start
@@ -323,10 +331,17 @@ sub _next_token_internal {
 		    $ok_p = 1;
 		}
 	    } elsif ($this->_peek_readahead =~ /^$re_tag_compat/os) {
-		($kind, $it) = (TmplTokenType::TAG, "$1>");
-		$this->_set_readahead( $3 );
-		$ok_p = 1;
-		warn_normal "SGML \"closed start tag\" notation: $1<\n", $this->line_number_start if $2 eq '';
+		# If we detect a "closed start tag" but we know that the
+		# following token looks like a TMPL_VAR, don't stop
+		my($head, $tail, $post) = ($1, $2, $3);
+		if ($tail eq '' && $post =~ $re_tmpl_var) {
+		    warn_normal "Possible SGML \"closed start tag\" notation: $head<\n", $this->line_number;
+		} else {
+		    ($kind, $it) = (TmplTokenType::TAG, "$head>");
+		    $this->_set_readahead( $post );
+		    $ok_p = 1;
+		    warn_normal "SGML \"closed start tag\" notation: $head<\n", $this->line_number if $tail eq '';
+		}
 	    } elsif ($this->_peek_readahead =~ /^<!--(?:(?!-->).)*-->/s) {
 		($kind, $it) = (TmplTokenType::COMMENT, $&);
 		$this->_set_readahead( $' );
@@ -347,7 +362,7 @@ sub _next_token_internal {
 	    $kind = TmplTokenType::DECL;
 	    $kind = TmplTokenType::COMMENT if $it =~ /^<!--(?:(?!-->).)*-->/;
 	    if ($kind == TmplTokenType::COMMENT && $it =~ /^<!--\s*#include/s) {
-		warn_normal "Apache #include directive found instead of HTML::Template directive <TMPL_INCLUDE>", $this->line_number_start;
+		warn_normal "Apache #include directive found instead of HTML::Template <TMPL_INCLUDE> directive", $this->line_number_start;
 	    }
 	} elsif ($it =~ /^<\?/) {
 	    $kind = TmplTokenType::PI;
@@ -362,17 +377,17 @@ sub _next_token_internal {
 	}
     }
     warn_normal "Unrecognizable token found: $it\n", $this->line_number_start
-	    if $kind eq TmplTokenType::UNKNOWN;
+	    if $kind == TmplTokenType::UNKNOWN;
     return defined $it? (ref $it? $it: TmplToken->new($it, $kind, $this->line_number, $this->filename)): undef;
 }
 
-sub next_token {
+sub _next_token_intermediate {
     my $this = shift;
     my $h = $this->_handle;
     my $it;
     if (!$this->cdata_mode_p) {
 	$it = $this->_next_token_internal($h);
-	if (defined $it && $it->type eq TmplTokenType::TAG) {
+	if (defined $it && $it->type == TmplTokenType::TAG) {
 	    if ($it->string =~ /^<(script|style|textarea)\b/i) {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
@@ -396,9 +411,101 @@ sub next_token {
     return $it;
 }
 
+sub _token_groupable_p ($) { # groupable into a TEXT_PARAMETRIZED token
+    my($t) = @_;
+    return $t->type == TmplTokenType::TEXT
+	|| ($t->type == TmplTokenType::DIRECTIVE
+		&& $t->string =~ /^(?:$re_tmpl_var)$/os)
+	|| ($t->type == TmplTokenType::TAG
+		&& ($t->string =~ /^<\/?(?:b|em|h[123456]|i|u)\b/is
+		|| ($t->string =~ /^<input/i
+		    && $t->attributes->{'type'} =~ /^(?:text)$/i)))
+}
+
+sub _quote_cformat ($) {
+    my($s) = @_;
+    $s =~ s/%/%%/g;
+    return $s;
+}
+
+sub _formalize ($) {
+    my($t) = @_;
+    return $t->type == TmplTokenType::DIRECTIVE? '%s': _quote_cformat($t->string);
+}
+
+sub next_token {
+    my $this = shift;
+    my $h = $this->_handle;
+    my $it;
+    $this->{_queue} = [] unless defined $this->{_queue};
+    if (@{$this->{_queue}}) {
+	$it = pop @{$this->{_queue}};
+    } else {
+	$it = $this->_next_token_intermediate($h);
+	if ($this->allow_cformat_p && defined $it
+	    && ($it->type == TmplTokenType::TEXT?
+		!blank_p( $it->string ): _token_groupable_p( $it ))) {
+	    my @structure = ( $it );
+	    my($n_trailing_spaces, $next) = (0, undef);
+	    my($nonblank_text_p, $parametrized_p, $next) = (0, 0);
+	    if ($it->type == TmplTokenType::TEXT) {
+		$nonblank_text_p = 1 if !blank_p( $it->string );
+	    } elsif ($it->type == TmplTokenType::DIRECTIVE) {
+		$parametrized_p = 1;
+	    }
+	    for (my $i = 1, $n_trailing_spaces = 0;; $i += 1) {
+		$next = $this->_next_token_intermediate($h);
+		push @structure, $next; # for consistency (with initialization)
+	    last unless defined $next && _token_groupable_p( $next );
+		if ($next->type == TmplTokenType::TEXT) {
+		    if (blank_p( $next->string )) {
+			$n_trailing_spaces += 1;
+		    } else {
+			($n_trailing_spaces, $nonblank_text_p) = (0, 1);
+		    }
+		} elsif ($next->type == TmplTokenType::DIRECTIVE) {
+		    $n_trailing_spaces = 0;
+		    $parametrized_p = 1;
+		} else {
+		    $n_trailing_spaces = 0;
+		}
+	    }
+	    # Undo the last token
+	    push @{$this->{_queue}}, pop @structure;
+	    # Undo trailing blank tokens
+	    for (my $i = 0; $i < $n_trailing_spaces; $i += 1) {
+		push @{$this->{_queue}}, pop @structure;
+	    }
+	    if (@structure < 2) {
+		# Nothing to do
+		;
+	    } elsif ($nonblank_text_p && $parametrized_p) {
+		# Create the corresponding c-format string
+		my $string = join('', map { $_->string } @structure);
+		my $form = join('', map { _formalize $_ } @structure);
+		$it = TmplToken->new($string, TmplTokenType::TEXT_PARAMETRIZED, $it->line_number, $it->pathname);
+		$it->set_form( $form );
+		$it->set_children( @structure );
+#	    } elsif ($nonblank_text_p) {
+#		# Combine the strings
+#		my $string = join('', map { $_->string } @structure);
+#		;
+	    } else {
+		# Requeue the tokens thus seen for re-emitting
+		for (;;) {
+		    push @{$this->{_queue}}, pop @structure;
+		last if !@structure;
+		}
+		$it = pop @{$this->{_queue}};
+	    }
+	}
+    }
+    return $it;
+}
+
 ###############################################################################
 
-# Other easy functions
+# Other simple functions (These are not methods)
 
 sub blank_p ($) {
     my($s) = @_;
@@ -414,26 +521,91 @@ sub trim ($) {
     return wantarray? (substr($s0, 0, $l1), $s, substr($s0, $l0 - $l2)): $s;
 }
 
+sub quote_po ($) {
+    my($s) = @_;
+    # Locale::PO->quote is buggy, it doesn't quote newlines :-/
+    $s =~ s/([\\"])/\\\1/gs;
+    $s =~ s/\n/\\n/g;
+    return "\"$s\"";
+}
+
+# Complication function that shouldn't be here
+sub parametrize ($@) {
+    my($fmt, @params) = @_;
+    my $it = '';
+    for (my $n = 0; length $fmt;) {
+	if ($fmt =~ /^[^%]+/) {
+	    $fmt = $';
+	    $it .= $&;
+	} elsif ($fmt =~ /^%%/) {
+	    $fmt = $';
+	    $it .= '%';
+	} elsif ($fmt =~ /^%(?:(\d+)\$)?s/) {
+	    $n += 1;
+	    my $i = (defined $1? $1: $n) - 1;
+	    $fmt = $';
+	    $it .= $params[$i]
+	} elsif ($fmt =~ /^%[^%a-zA-Z]*[a-zA-Z]/) {
+	    $fmt = $';
+	    $it .= $&;
+	    die "Unknown or unsupported format specification: $&\n"; #XXX
+	} else {
+	    die "Completely confused parametrizing: $fmt\n";#XXX
+	}
+    }
+    return $it;
+}
+
 ###############################################################################
 
-=head1 FUTURE PLANS
+=pod
 
-Code could be written to detect template variables and
-construct gettext-c-format-string-like meta-strings (e.g., "Results %s
-through %s of %s records" that will be more likely to be translatable
-to languages where word order is very unlike English word order.
-This will be relatively major rework, requiring corresponding
-rework in tmpl_process.pl
+In addition to the basic scanning, this class will also perform
+the following:
 
-Gettext-style line number references would also be very helpful in
-disambiguating the strings. Ultimately, we should generate and work
-with gettext-style po files, so that translators are able to use
-tools designed for gettext.
+=over
 
-An example of a string untranslatable to Chinese is "Accounts for";
-"Accounts for %s", however, would be translatable. Short words like
-"in" would also be untranslatable, not only to Chinese, but also to
-languages requiring declension of nouns.
+=item -
+
+Emulation of c-format strings (see below)
+
+=item -
+
+Display of warnings for certain things that affects either the
+ability of this class to yield correct output, or things that
+are known to cause the original template to cause trouble.
+
+=item -
+
+Automatic correction of some of the things warned about
+(e.g., SGML "closed start tag" notation).
+
+=back
+
+=head2 c-format strings emulation
+
+Because English word order is not universal, a simple extraction
+of translatable strings may yield some strings like "Accounts for"
+or ambiguous strings like "in". This makes the resulting strings
+difficult to translate, but does not affect all languages alike.
+For example, Chinese (with a somewhat different word order) would
+be hit harder, but French would be relatively unaffected.
+
+To overcome this problem, the scanner can be configured to detect
+patterns with <TMPL_VAR> directives (as well as certain HTML tags),
+and try to construct a larger pattern that will appear in the PO
+file as c-format strings with %s placeholders. This additional
+step allows the translator to deal with cases where word order
+is different (replacing %s with %1$s, %2$s, etc.), or when certain
+words will require certain inflectional suffixes in sentences.
+
+Because this is an incompatible change, this mode must be explicitly
+turned on using the set_cformat(1) method call.
+
+=head1 HISTORY
+
+This tokenizer is mostly based
+on Ambrose's hideous Perl script known as subst.pl.
 
 =cut
 

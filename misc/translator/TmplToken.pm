@@ -67,6 +67,39 @@ sub set_attributes {
     return $this;
 }
 
+# only meaningful for TEXT_PARAMETRIZED tokens
+sub children {
+    my $this = shift;
+    return $this->{'_kids'};
+}
+
+# only meaningful for TEXT_PARAMETRIZED tokens
+sub set_children {
+    my $this = shift;
+    $this->{'_kids'} = ref $_[0] eq 'ARRAY'? $_[0]: \@_;
+    return $this;
+}
+
+# only meaningful for TEXT_PARAMETRIZED tokens
+# FIXME: DIRECTIVE is not necessarily TMPL_VAR !!
+sub parameters {
+    my $this = shift;
+    return map { $_->type == TmplTokenType::DIRECTIVE? $_: ()} @{$this->{'_kids'}};
+}
+
+# only meaningful for TEXT_PARAMETRIZED tokens
+sub form {
+    my $this = shift;
+    return $this->{'_form'};
+}
+
+# only meaningful for TEXT_PARAMETRIZED tokens
+sub set_form {
+    my $this = shift;
+    $this->{'_form'} = $_[0];
+    return $this;
+}
+
 ###############################################################################
 
 1;

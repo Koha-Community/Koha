@@ -22,8 +22,14 @@ use strict;
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );
 use vars qw( $pedantic_p );
+use vars qw( $allow_cformat_p ); # FOR TESTING PURPOSES ONLY!!
 
 ###############################################################################
+
+sub underline ($) { # for testing only
+    my($s) = @_;
+    join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $s));
+}
 
 sub debug_dump ($) { # for testing only
     my($h) = @_;
@@ -34,15 +40,24 @@ sub debug_dump ($) { # for testing only
 	printf "%s\n", ('-' x 79);
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
 	printf "%s [line %d]:\n", $kind->to_string, $s->line_number;
-	printf "%4dH%s\n", length($t),
-		join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $t));
-	if ($kind eq TmplTokenType::TAG && %$attr) {
+	printf "%4dH%s\n", length($t), underline($t);
+	if ($kind == TmplTokenType::TAG && %$attr) {
 	    printf "Attributes:\n";
 	    for my $a (keys %$attr) {
 		my($key, $val, $val_orig, $order) = @{$attr->{$a}};
-		printf "%s = %dH%s -- %s\n", $a, length $val,
-		join('', map {/[\0-\37]/? $_: "$_\b$_"} split(//, $val)),
+		printf "%s = %dH%s -- %s\n", $a, length $val, underline $val,
 		$val_orig;
+	    }
+	}
+	if ($kind == TmplTokenType::TEXT_PARAMETRIZED) {
+	    printf "Form (c-format string):\n";
+	    printf "%dH%s\n", length $s->form, underline $s->form;
+	    printf "Parameters:\n";
+	    my $i = 1;
+	    for my $a ($s->parameters) {
+		my $t = $a->string;
+		printf "%%%d\$s = %dH%s\n", $i, length $t, underline $t;
+		$i += 1;
 	    }
 	}
     }
@@ -57,10 +72,10 @@ sub text_extract ($) {
 	my $s = TmplTokenizer::next_token $h;
     last unless defined $s;
 	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
-	if ($kind eq TmplTokenType::TEXT) {
+	if ($kind == TmplTokenType::TEXT) {
 	    $t = TmplTokenizer::trim $t;
 	    $text{$t} = 1 if $t =~ /\S/s;
-	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
+	} elsif ($kind == TmplTokenType::TAG && %$attr) {
 	    # value [tag=input], meta
 	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
 	    for my $a ('alt', 'content', 'title', 'value') {
@@ -112,6 +127,7 @@ sub usage_error (;$) {
 ###############################################################################
 
 GetOptions(
+    'enable-cformat'	=> \$allow_cformat_p,
     'f|file=s'		=> \$input,
     'debug-dump-only'	=> \$debug_dump_only_p,
     'pedantic-warnings'	=> sub { $pedantic_p = 1 },
@@ -125,6 +141,7 @@ VerboseWarnings::set_pedantic_mode $pedantic_p;
 usage_error('Missing mandatory option -f') unless defined $input;
 
 my $h = TmplTokenizer->new( $input );
+$h->set_allow_cformat( 1 ) if $allow_cformat_p;
 if ($debug_dump_only_p) {
     debug_dump( $h );
 } else {
