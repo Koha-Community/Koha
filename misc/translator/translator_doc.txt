@@ -33,6 +33,7 @@ WEAKNESSES
 I've found some weaknesses (some solvable probably, but maybe some unsolvable)
 - HTML::Templates pb :
  if there is only a <TMPL* > tag between 2 strings, text-extract sometimes merges both strings, and so can't replace them in the translated template. I've solved all those cases with a <br/> or another HTML statement.
+  The text-extract2.pl filter attempts to address this problem; it seems that the new filter is now working correctly.
 
 - SHORT STATEMENTS
  short statements (like "in") can be replaced stupidly (like in cgi-bin => gives cgi-bdans in french). the workaround has been to replace only complete words (
@@ -65,6 +66,9 @@ For instance, it extracts :
 - standard text
 - text in alt="SOMETEXT"
 - meta html encoding (8859-1) to enable non european translations.
+
+- DIFFERENT WORD ORDER
+Some languages have different word order than English in sentences, or even in dates. For these languages, it is impossible to make a good translation at the moment.
 
 COPYRIGHT
 ======
