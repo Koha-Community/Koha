@@ -1,7 +1,4 @@
-package C4::Search; #asummes C4/Search
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
+package C4::Search; #assumes C4/Search
 
 use strict;
 require Exporter;
@@ -22,39 +19,6 @@ $VERSION = 0.02;
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
 &findguarantor &getwebsites &getwebbiblioitems &catalogsearch itemcount2);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
 # make all your functions, whether exported or not;
 sub findguarantees{         
   my ($bornum)=@_;         
@@ -123,7 +87,7 @@ sub catalogsearch {
 #    $search->{$key}=$dbh->quote($search->{$key});
 #  }
   my ($count,@results);
-  print STDERR "Doing a search \n";
+#  print STDERR "Doing a search \n";
   if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
         print STDERR "Doing a precise search\n";
     ($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
@@ -185,7 +149,7 @@ sub KeywordSearch {
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  my $i=0;
+  $i=0;
   while (my @res=$sth->fetchrow_array){
     $results[$i]=$res[0];
     $i++;
@@ -342,6 +306,156 @@ sub KeywordSearch {
   return($count,@res2);
 }
 
+sub KeywordSearch2 {
+  my ($env,$type,$search,$num,$offset)=@_;
+  my $dbh = &C4Connect;
+  $search->{'keyword'}=~ s/ +$//;
+  $search->{'keyword'}=~ s/'/\\'/;
+  my @key=split(' ',$search->{'keyword'});
+  my $count=@key;
+  my $i=1;
+  my @results;
+  my $query ="Select * from biblio,bibliosubtitle,biblioitems where
+  biblio.biblionumber=biblioitems.biblionumber and
+  biblio.biblionumber=bibliosubtitle.biblionumber and
+  (((title like '$key[0]%' or title like '% $key[0]%')";
+  while ($i < $count){
+    $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
+    $i++;
+  }
+  $query.= ") or ((subtitle like '$key[0]%' or subtitle like '% $key[0]%')";
+  for ($i=1;$i<$count;$i++){
+    $query.= " and (subtitle like '$key[$i]%' or subtitle like '% $key[$i]%')";
+  }
+  $query.= ") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%')";
+  for ($i=1;$i<$count;$i++){
+    $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
+  }
+  $query.= ") or ((biblio.notes like '$key[0]%' or biblio.notes like '% $key[0]%')";
+  for ($i=1;$i<$count;$i++){
+    $query.=" and (biblio.notes like '$key[$i]%' or biblio.notes like '% $key[$i]%')";
+  }
+  $query.= ") or ((biblioitems.notes like '$key[0]%' or biblioitems.notes like '% $key[0]%')";
+  for ($i=1;$i<$count;$i++){
+    $query.=" and (biblioitems.notes like '$key[$i]%' or biblioitems.notes like '% $key[$i]%')";
+  }
+  if ($search->{'keyword'} =~ /new zealand/i){
+    $query.= "or (title like 'nz%' or title like '% nz %' or title like '% nz' or subtitle like 'nz%'
+    or subtitle like '% nz %' or subtitle like '% nz' or author like 'nz %' 
+    or author like '% nz %' or author like '% nz')"
+  }
+  if ($search->{'keyword'} eq  'nz' || $search->{'keyword'} eq 'NZ' ||
+  $search->{'keyword'} =~ /nz /i || $search->{'keyword'} =~ / nz /i ||
+  $search->{'keyword'} =~ / nz/i){
+    $query.= "or (title like 'new zealand%' or title like '% new zealand %'
+    or title like '% new zealand' or subtitle like 'new zealand%' or
+    subtitle like '% new zealand %'
+    or subtitle like '% new zealand' or author like 'new zealand%' 
+    or author like '% new zealand %' or author like '% new zealand' or 
+    seriestitle like 'new zealand%' or seriestitle like '% new zealand %'
+    or seriestitle like '% new zealand')"
+  }
+  $query=$query."))";
+  if ($search->{'class'} ne ''){
+    my @temp=split(/\|/,$search->{'class'});
+    my $count=@temp;
+    $query.= "and ( itemtype='$temp[0]'";
+    for (my $i=1;$i<$count;$i++){
+      $query.=" or itemtype='$temp[$i]'";
+     }
+  $query.=")"; 
+  }
+  if ($search->{'dewey'} ne ''){
+    $query.= "and (dewey like '$search->{'dewey'}%') ";
+  }
+   $query.="group by biblio.biblionumber";
+   #$query.=" order by author,title";
+#  print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+#    my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}
+#    ");
+#    $sti->execute;
+#    my ($dewey, $subclass) = $sti->fetchrow;
+    my $dewey=$data->{'dewey'};
+    my $subclass=$data->{'subclass'};
+    $dewey=~s/\.*0*$//;
+    ($dewey == 0) && ($dewey='');
+    ($dewey) && ($dewey.=" $subclass");
+#    $sti->finish;
+    $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey";
+#      print $results[$i];
+    $i++;
+  }
+  $sth->finish;
+  $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
+  like '%$search->{'keyword'}%' group by biblionumber");
+  $sth->execute;
+  while (my $data=$sth->fetchrow_hashref){
+    $query="Select * from biblio,biblioitems where
+    biblio.biblionumber=$data->{'biblionumber'} and
+    biblio.biblionumber=biblioitems.biblionumber ";
+    if ($search->{'class'} ne ''){
+      my @temp=split(/\|/,$search->{'class'});
+      my $count=@temp;
+      $query.= " and ( itemtype='$temp[0]'";
+      for (my $i=1;$i<$count;$i++){
+        $query.=" or itemtype='$temp[$i]'";
+      }
+      $query.=")"; 
+      
+    }
+    if ($search->{'dewey'} ne ''){
+      $query.= "and (dewey like '$search->{'dewey'}%') ";
+    }
+    my $sth2=$dbh->prepare($query);
+    $sth2->execute;
+#    print $query;
+    while (my $data2=$sth2->fetchrow_hashref){
+      my $dewey= $data2->{'dewey'};
+      my $subclass=$data2->{'subclass'};
+      $dewey=~s/\.*0*$//;          
+      ($dewey == 0) && ($dewey='');              
+      ($dewey) && ($dewey.=" $subclass") ;                  
+#      $sti->finish;              
+       $results[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
+#      print $results[$i];
+      $i++;   
+    }
+    $sth2->finish;
+  }    
+  my $i2=1;
+  @results=sort @results;
+  my @res;
+  $count=@results;
+  $i=1;
+  if ($count > 0){
+    $res[0]=$results[0];
+  }
+  while ($i2 < $count){
+    if ($results[$i2] ne $res[$i-1]){
+      $res[$i]=$results[$i2];
+      $i++;
+    }
+    $i2++;
+  }
+  $i2=0;
+  my @res2;
+  $count=@res;
+  while ($i2 < $num && $i2 < $count){
+    $res2[$i2]=$res[$i2+$offset];
+#    print $res2[$i2];
+    $i2++;
+  }
+  $sth->finish;
+  $dbh->disconnect;
+#  $i--;
+#  $i++;
+  return($i,@res2);
+}
+
 sub CatSearch  {
   my ($env,$type,$search,$num,$offset)=@_;
   my $dbh = &C4Connect;
@@ -478,8 +592,6 @@ sub CatSearch  {
 	  } elsif ($search->{'abstract'} ne ''){
 	    $query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
 	  }
-	 	 
-	
           $query .=" group by biblio.biblionumber";	 
       }
   } 
@@ -517,7 +629,7 @@ sub CatSearch  {
         my $search2=uc $search->{'isbn'};
         my $query1 = "select * from biblioitems where isbn='$search2'";
 	my $sth1=$dbh->prepare($query1);
-	print STDERR "$query1\n";
+#	print STDERR "$query1\n";
 	$sth1->execute;
         my $i2=0;
 	while (my $data=$sth1->fetchrow_hashref) {
@@ -552,7 +664,7 @@ if ($type ne 'precise' && $type ne 'subject'){
       $query=$query." order by subject";
   }
 }
-print STDERR "$query\n";
+#print STDERR "$query\n";
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $count=1;
@@ -578,7 +690,7 @@ while (my $data=$sth->fetchrow_hashref){
 	    if ($search->{'publisher'} ne ''){
 	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
 	    }
-print STDERR "$query\n";
+#print STDERR "$query\n";
   my $sti=$dbh->prepare($query);
   $sti->execute;
   my $dewey;
