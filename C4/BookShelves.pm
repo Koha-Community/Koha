@@ -53,10 +53,11 @@ items to and from bookshelves.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList &GetShelfContents &GetShelf
-				&AddToShelf &AddToShelfFromBiblio
-				&RemoveFromShelf &AddShelf &RemoveShelf
-				&ShelfPossibleAction);
+@EXPORT = qw(&GetShelfList		&GetShelfContents		&GetShelf
+			&AddToShelf			&AddToShelfFromBiblio
+			&RemoveFromShelf	&AddShelf				&ModifShelf 
+			&RemoveShelf		&ShelfPossibleAction
+				);
 
 my $dbh = C4::Context->dbh;
 
@@ -115,7 +116,7 @@ sub GetShelfList {
 	my ($owner,$mincategory) = @_;
 	# mincategory : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
 	# bookshelves of the owner are always selected, whatever the category
-	my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname,
+	my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname,category,
 							count(shelfcontents.itemnumber) as count
 								FROM		bookshelf
 								LEFT JOIN	shelfcontents
@@ -125,9 +126,10 @@ sub GetShelfList {
 								GROUP BY	bookshelf.shelfnumber order by shelfname");
     $sth->execute($owner,$mincategory);
     my %shelflist;
-    while (my ($shelfnumber, $shelfname,$owner,$surname,$firstname,$count) = $sth->fetchrow) {
+    while (my ($shelfnumber, $shelfname,$owner,$surname,$firstname,$category,$count) = $sth->fetchrow) {
 	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
 	$shelflist{$shelfnumber}->{'count'}=$count;
+	$shelflist{$shelfnumber}->{'category'}=$category;
 	$shelflist{$shelfnumber}->{'owner'}=$owner;
 	$shelflist{$shelfnumber}->{surname} = $surname;
 	$shelflist{$shelfnumber}->{firstname} = $firstname;
@@ -238,11 +240,9 @@ success, or an error message giving the reason for failure.
 C<$env> is ignored.
 
 =cut
-#'
-# FIXME - Perhaps this could/should return the number of the new bookshelf
-# as well?
+
 sub AddShelf {
-    my ($env, $shelfname,$owner,$category) = @_;
+    my ($env, $shelfname, $owner, $category) = @_;
     my $sth=$dbh->prepare("select * from bookshelf where shelfname=?");
 	$sth->execute($shelfname);
     if ($sth->rows) {
@@ -253,6 +253,12 @@ sub AddShelf {
 		my $shelfnumber = $dbh->{'mysql_insertid'};
 		return (0, "Done",$shelfnumber);
     }
+}
+
+sub ModifShelf {
+	my ($shelfnumber, $shelfname, $owner, $category) = @_;
+	my $sth = $dbh->prepare("update bookshelf set shelfname=?,owner=?,category=? where shelfnumber=?");
+	$sth->execute($shelfname,$owner,$category,$shelfnumber);
 }
 
 =item RemoveShelf
@@ -290,6 +296,11 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.15  2004/12/16 11:30:58  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf name & status
+#
 # Revision 1.14  2004/12/15 17:28:23  tipaul
 # adding bookshelf features :
 # * create bookshelf on the fly

@@ -109,6 +109,7 @@
 			<table class="small">
 				<tr>
 					<th class="catalogue">Shelf name</th>
+					<th class="catalogue">Category</th>
 					<th class="catalogue">Content size</th>
 					<th class="catalogue">Modify</th>
 				</tr>
@@ -120,10 +121,24 @@
 						</a>
 					</td>
 					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+						<!-- TMPL_IF NAME="category1" -->
+							Private
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category2" -->
+							Public
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category3" -->
+							Free
+						<!-- /TMPL_IF -->
+					</td>
+					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
 						<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
 					</td>
 					<!-- TMPL_IF name="mine" -->
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><a href="shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Modify</a></td>
+						<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+							<a href="shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button catalogue">Modify</a>
+							<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
+						</td>
 					<!-- /TMPL_IF -->
 				</tr>
 				<!-- /TMPL_LOOP -->
@@ -141,7 +156,7 @@
 			<input type="hidden" name="op" value="modifsave">
 			<h2 class="catalogue">Modify shelf</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
-			<p><label>Name</label><input type="text" name="addshelf" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
+			<p><label>Name</label><input type="text" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
 			<p><label>Owner</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
 			<p><label>Category</label>
 				<select name="category">

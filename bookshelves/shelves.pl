@@ -66,9 +66,27 @@ $template->param({	loggedinuser => $loggedinuser,
 					headerbackgroundcolor => $headerbackgroundcolor,
 					circbackgroundcolor => $circbackgroundcolor });
 SWITCH: {
-	if ($query->param('op') eq 'modif') {  editshelf($query->param('shelf')); last SWITCH;}
-	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
-	if ($query->param('shelves')) {  shelves(); last SWITCH;}
+	if ($query->param('op') eq 'modifsave') {
+		ModifShelf($query->param('shelfnumber'),$query->param('shelfname'),$loggedinuser,$query->param('category'));
+		last SWITCH;
+	}
+	if ($query->param('op') eq 'modif') {
+		my ($shelfnumber,$shelfname,$owner,$category) = GetShelf($query->param('shelf'));
+		$template->param(edit => 1,
+						shelfnumber => $shelfnumber,
+						shelfname => $shelfname,
+						"category$category" => 1);
+# 		editshelf($query->param('shelf'));
+		last SWITCH;
+	}
+	if ($query->param('viewshelf')) {
+		viewshelf($query->param('viewshelf'));
+		last SWITCH;
+	}
+	if ($query->param('shelves')) {
+		shelves();
+		last SWITCH;
+	}
 }
 
 ($shelflist) = GetShelfList($loggedinuser,2); # rebuild shelflist in case a shelf has been added
@@ -81,9 +99,12 @@ foreach my $element (sort keys %$shelflist) {
 		$line{'color'}= $color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+		$line{"category".$shelflist->{$element}->{'category'}} = 1;
 		$line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'};
 		$line{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
+		$line{'firstname'}=$shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+		$line{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
 ;
 		push (@shelvesloop, \%line);
 }
@@ -91,14 +112,14 @@ $template->param(shelvesloop => \@shelvesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
-sub editshelf {
-	my ($shelfnumber) = @_;
-	my ($shelfnumber,$shelfname,$owner,$category) = GetShelf($shelfnumber);
-	warn "($shelfnumber,$shelfname,$owner,$category)";
-	$template->param(edit => 1,
-					shelfname => $shelfname,
-					"category$category" => 1);
-}
+# sub editshelf {
+# 	my ($shelfnumber) = @_;
+# 	my ($shelfnumber,$shelfname,$owner,$category) = GetShelf($shelfnumber);
+# 	$template->param(edit => 1,
+# 					shelfnumber => $shelfnumber,
+# 					shelfname => $shelfname,
+# 					"category$category" => 1);
+# }
 sub shelves {
 	if (my $newshelf=$query->param('addshelf')) {
 		my ($status, $string) = AddShelf($env,$newshelf,$query->param('owner'),$query->param('category'));
@@ -167,6 +188,11 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.5  2004/12/16 11:30:57  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf name & status
+#
 # Revision 1.4  2004/12/15 17:28:23  tipaul
 # adding bookshelf features :
 # * create bookshelf on the fly
