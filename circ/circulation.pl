@@ -218,6 +218,7 @@ if ($borrower) {
 	} else {
 	    push @previousissues, $issueslist->{$it};
 	}
+    }
 	my $tcolor = '';
 	my $pcolor = '';
 	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
@@ -233,8 +234,8 @@ if ($borrower) {
 		$book->{'tcolor'}=$tcolor;
 		push @realtodayissues,$book;
 	}
+    
 
-}
     # FIXME - For small and private libraries, it'd be nice if this
     # table included a "Return" link next to each book, so that you
     # don't have to remember the book's bar code and type it in on the
@@ -258,19 +259,6 @@ if ($borrower) {
 	push @realprevissues,$book
    }
 }
-# actually print the page!
-#if ($branchcookie && $printercookie) {
-#    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
-#} else {
-#    print $query->header(-cookie=>[$sessioncookie]);
-#}
-
-#if ($query->param('barcode') eq '' && $query->param('charges') eq 'yes'){
-#    my $count=@inp;
-#     for (my $i=0;$i<$count;$i++){
-#	 $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\",700,600\)\;window1.focus\(\)/;
-#     }
-#}
 
 my @values;
 my %labels;
