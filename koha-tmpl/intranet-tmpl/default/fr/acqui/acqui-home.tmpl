@@ -2,14 +2,14 @@
 
 <FONT SIZE=6><em>Acquisitions</em></FONT><br>
 
-<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
+<TABLE width="50%" cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
 		<b>Débuter, réceptionner, modifier une commande</b>
 	</TD>
 </TR>
 <TR VALIGN=TOP>
-	<TD>Id ou nom du vendeur</TD>
+	<TD>N° ou nom du vendeur</TD>
 	<TD>
 		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
 		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
@@ -18,32 +18,8 @@
 </TR>
 </table>
 <br />
-
-<!-- currencies-->
-<TABLE align="left" cellspacing=0 cellpadding=5 border=1 >
-	<FORM ACTION="/cgi-bin/koha/currency.pl">
-	<input type=hidden name=type value=change>
-	<TR VALIGN=TOP>
-		<TD  bgcolor="ffdf61" colspan=2><b>Taux de change</b></TD>
-	</TR>
-	<TMPL_LOOP name="loop_currency">
-		<TR VALIGN=TOP>
-			<TD>
-				<TMPL_VAR name="currency">
-			</td>
-			<td>
-				<INPUT TYPE="text"  SIZE="10"   NAME="<TMPL_VAR name="currency">" value=<TMPL_VAR name="rate">>
-			</td>
-		</TR>
-	</TMPL_LOOP>
-	<tr>
-		<td colspan=2 align="center"><input type=submit value="Save"></TD>
-	</tr>
-	</form>
-</table>
-
 <!-- showbudget-->
-<TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
+<TABLE  align="left" width="40%"  cellspacing=0 cellpadding=5 border=1 >
 <FORM ACTION="/cgi-bin/koha/search.pl">
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2><b>Budgets</b></TD>
@@ -80,6 +56,28 @@
 	</TD>
 </TR>
 </form>
+</table>
+<!-- currencies-->
+<TABLE cellspacing=0 cellpadding=5 border=1 >
+	<FORM ACTION="/cgi-bin/koha/currency.pl">
+	<input type=hidden name=type value=change>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="ffdf61" colspan=2><b>Taux de change</b></TD>
+	</TR>
+	<TMPL_LOOP name="loop_currency">
+		<TR VALIGN=TOP>
+			<TD>
+				<TMPL_VAR name="currency">
+			</td>
+			<td>
+				<INPUT TYPE="text"  SIZE="10"   NAME="<TMPL_VAR name="currency">" value=<TMPL_VAR name="rate">>
+			</td>
+		</TR>
+	</TMPL_LOOP>
+	<tr>
+		<td colspan=2 align="center"><input type=submit value="Save"></TD>
+	</tr>
+	</form>
 </table>
 
 <br />
