@@ -732,24 +732,6 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
-            variable            => 'ldapserver',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '',
-            explanation => 'your ldap server',
-	    type		=> 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'ldapinfos',
-	    forceupdate		=> { 'explanation' => 1,
-	    			     'type' => 1 },
-            value               => '',
-            explanation => 'ldap info. The ldap will be used in dn : uid=xxx, <ldapinfos>',
-	    type		=> 'free'
-        },
-        {
-            uniquefieldrequired => 'variable',
             variable            => 'printcirculationslips',
 	    forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1 },
@@ -1369,6 +1351,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.96  2004/11/16 13:03:45  tipaul
+# removing ldap systempref, it's now in C4/Auth_with_ldap.pm separate package
+#
 # Revision 1.95  2004/11/08 19:57:32  tipaul
 # bugfix
 #
