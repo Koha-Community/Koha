@@ -49,8 +49,50 @@ C4::Members - Perl Module containing convenience functions for member handling
 @EXPORT = qw();
 
 @EXPORT = qw(
-	&fixup_cardnumber &findguarantees &modmember &newmember &changepassword
+	&getmember &fixup_cardnumber &findguarantees &modmember &newmember &changepassword
     );
+
+	
+=item getmember
+
+  $borrower = &getmember($cardnumber, $borrowernumber);
+
+Looks up information about a patron (borrower) by either card number
+or borrower number. If $borrowernumber is specified, C<&borrdata>
+searches by borrower number; otherwise, it searches by card number.
+
+C<&getmember> returns a reference-to-hash whose keys are the fields of
+the C<borrowers> table in the Koha database.
+
+=cut
+#'
+sub getmember {
+  my ($cardnumber,$bornum)=@_;
+  $cardnumber = uc $cardnumber;
+  my $dbh = C4::Context->dbh;
+  my $sth;
+  if ($bornum eq ''){
+    $sth=$dbh->prepare("Select * from borrowers where cardnumber=?");
+    $sth->execute($cardnumber);
+  } else {
+    $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($bornum);
+  }
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  if ($data) {
+  	return($data);
+	} else { # try with firstname
+		if ($cardnumber) {
+			my $sth=$dbh->prepare("select * from borrowers where firstname=?");
+			$sth->execute($cardnumber);
+			my $data=$sth->fetchrow_hashref;
+			$sth->finish;
+			return($data);
+		}
+	}
+	return undef;
+}
 
 
 sub modmember {
