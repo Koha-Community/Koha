@@ -56,9 +56,9 @@
         </SCRIPT>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		<h1>修改貨幣匯率</h1>
+		<h1>修改貨幣</h1>
 	<!-- TMPL_ELSE -->
-		<h1>新增貨幣匯率</h1>
+		<h1>新增貨幣</h1>
 	<!-- /TMPL_IF -->
 
         <form action='<!-- TMPL_VAR NAME=script_name -->' name=Aform method=post>
@@ -160,7 +160,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-	<h2>貨幣匯率設定</h2>
+	<h2>貨幣匯率</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
                 <input type=reset name=reset value="清空">
