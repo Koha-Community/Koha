@@ -1,42 +1,41 @@
-<html>
 <TMPL_INCLUDE NAME="cat-top.inc">
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
 <center>
-<FONT SIZE=6><em>Strona administratora systemu Koha</em></FONT><br>
+<FONT SIZE=6><em>Koha admin page</em></FONT><br>
 <table width=100% cellspacing=0 cellpadding=5 border=1>
 <tr background="/images/background-mem.gif">
-	<th>Parametry</th>
+	<th>Parameters </th>
 </tr>
 </table>
 <table cellspacing=0 cellpadding=1 width=80%>
-<th colspan=2>Dotycz±ce ksi±¿ek</th>
+<th colspan=2>Biblio related</th>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Item types</a></td>
-	<td>W³a¶ciwo¶ci pozycji ksi±¿kowych.</td>
+	<td>the supports of an item.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>budget</a></td>
-	<td>budget na wydatki ksi±zkowe.</td>
+	<td>the budgets allowed to differents book funds.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
-	<td>Ró¿ne wydatki ksi±zkowe.</td>
+	<td>the differents book funds.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>warto¶ci autoryzowane</a></td>
-	<td>Tutaj definiuj kategorie oraz autoryzowane dla nich warto¶ci.
-			W formularzach MARC warto¶ci autoryzowane s³u¿a do tego, by ograniczyæ/wspomóc edycjê opisów bibliograficznych MARC</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>authorised values</a></td>
+	<td>Define here categories and authorised values for them.
+			Authorised values are used in MARC form to limit/help editing MARC biblios</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Tezaurus</a></td>
-	<td>Zarz±dzanie tezaurusem. Mo¿na definiowaæ dowoln± ilo¶æ tezaurusów wybieraj±c "kategoriê" definicji tezaurusów</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thesaurus</a></td>
+	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
 </tr>
 
-<th colspan=2>Dotycz±ce standardu MARC</th>
+<th colspan=2>MARC related</th>
 <tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>MARC tag structure</a></td><td>MARC structure : tag then subfields</td></tr>
 <tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Links koha - MARC DB</a></td><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
 
@@ -85,4 +84,3 @@
 </table>
 </center>
 <TMPL_INCLUDE NAME="cat-bottom.inc">
-</html>
