@@ -19,6 +19,7 @@ my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
 my $branch=$query->param('branch');
 my $printer=$query->param('printer');
+#print $query->header;
 ($branch) || ($branch=$query->cookie('branch'));
 ($printer) || ($printer=$query->cookie('printer'));
 my ($oldbranch, $oldprinter);
@@ -427,7 +428,7 @@ sub issues {
       $query->param('barcode','');
       $barcode='';
     }
-    if ($print eq 'yes'){
+    if ($print eq 'yes' && $borrowernumber ne ''){
       my ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
       $env{'todaysissues'}=1;
       my ($borrowerissues) = currentissues(\%env, $borrower);
@@ -439,10 +440,20 @@ sub issues {
       my @issues;
       foreach (sort keys %$borrowerissues) {
         $issues[$i]=$borrowerissues->{$_};
+	my $dd=$issues[$i]->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable	
+	my @tempdate=split(/-/,$dd);
+	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
 	$i++;
       }
       foreach (sort keys %$borroweriss2) {
         $issues[$i]=$borroweriss2->{$_};
+	my $dd=$issues[$i]->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable	
+	my @tempdate=split(/-/,$dd);
+	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
 	$i++;
       }
       remoteprint(\%env,\@issues,$borrower);
@@ -729,13 +740,14 @@ EOF
 	
 EOF
 ;
-  my $amountold=$flags->{'CHARGES'}->{'message'};
-  my @temp=split(/\$/,$amountold);
-  $amountold=$temp[1];
-  print "<input type=hidden name=oldamount value=$amountold>";
+
   if ($flags->{'CHARGES'}){
             print "<input type=hidden name=charges value=yes>";
   }
+    my $amountold=$flags->{'CHARGES'}->{'message'};
+  my @temp=split(/\$/,$amountold);
+  $amountold=$temp[1];
+  print "<input type=hidden name=oldamount value=$amountold>";
 print <<EOF
 </form>
 	</td>
