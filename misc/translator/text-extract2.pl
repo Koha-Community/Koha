@@ -9,6 +9,14 @@
 
 # FIXME: Strings like "<< Prev" or "Next >>" may confuse *this* filter
 # TODO: Need to detect unclosed tags, empty tags, and other such stuff.
+# (Why? Because Mozilla apparently knows what SGML unclosed tags are :-/ )
+
+# A grander plan: Code could be written to detect template variables and
+# construct gettext-c-format-string-like meta-strings (e.g., "Results %s
+# through %s of %s records" that will be more likely to be translatable
+# to languages where word order is very unlike English word order.
+# --> This will be relatively major rework, and requires corresponding
+# rework in tmpl_process.pl
 
 use Getopt::Long;
 use strict;
@@ -22,7 +30,7 @@ use vars qw( $debug_dump_only_p );
 use vars qw( $re_directive );
 BEGIN {
     # $re_directive must not do any backreferences
-    $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)\b(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s*(?:--)?)>};
+    $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
 }
 
 # Hideous stuff from subst.pl, slightly modified to use the above hideous stuff
