@@ -6,70 +6,70 @@ use strict;
 use C4::Acquisitions;
 use C4::Output;
 
-my $input= new CGI;
-#print $input->header;
-#print $input->dump;
+my $input       = new CGI;
+my $bibnum      = checkinp($input->param('biblionumber'));
+my $biblio = {
+    biblionumber => $bibnum,
+    title        => $input->param('title')?$input->param('title'):"",
+    author       => $input->param('author')?$input->param('author'):"",
+    abstract     => $input->param('abstract')?$input->param('abstract'):"",
+    copyright    => $input->param('copyrightdate')?$input->param('copyrightdate'):"",
+    seriestitle  => $input->param('seriestitle')?$input->param('seriestitle'):"",
+    serial       => $input->param('serial')?$input->param('serial'):"",
+    unititle     => $input->param('unititle')?$input->param('unititle'):"",
+    notes        => $input->param('notes')?$input->param('notes'):"",
+}; # my $biblio
+my $subtitle    = checkinp($input->param('subtitle'));
+my $subject     = checkinp($input->param('subject'));
+my $addauthor   = checkinp($input->param('additionalauthor'));
+my $force       = $input->param('Force');
+my %data;
+my @sub;
+my @subs;
+my @names;
+my $count;
+my $error;
 
+&modbiblio($biblio);
+&modsubtitle($bibnum, $subtitle);
+&modaddauthor($bibnum, $addauthor);
 
-my $title=checkinp($input->param('Title'));
-my $author=checkinp($input->param('Author'));
-my $bibnum=checkinp($input->param('bibnum'));
-my $copyright=checkinp($input->param('Copyright'));
-my $seriestitle=checkinp($input->param('Series'));
-my $serial=checkinp($input->param('Serial'));
-my $unititle=checkinp($input->param('Unititle'));
-my $notes=checkinp($input->param('Notes'));
+$subject = uc($subject);
+@sub     = split(/\|/, $subject);
+$count   = @sub;
 
-modbiblio($bibnum,$title,$author,$copyright,$seriestitle,$serial,$unititle,$notes);
+for (my $i = 0; $i < $count; $i++) {
+    $sub[$i] =~ s/ +$//;
+} # for
 
-my $subtitle=checkinp($input->param('Subtitle'));
-modsubtitle($bibnum,$subtitle);
-
-my $subject=checkinp($input->param('Subject'));
-$subject=uc $subject;
-my @sub=split(/\|/,$subject);
-#print @sub;
-#
-
-my $addauthor=checkinp($input->param('Additional'));
-modaddauthor($bibnum,$addauthor);
-my $count1=@sub;
-
-for (my $i=0; $i<$count1; $i++){
-  $sub[$i]=~ s/ +$//;
-}
-
-#print $input->header;
-my $force=$input->param('Force');
-my $error=modsubject($bibnum,$force,@sub);
+$error = &modsubject($bibnum,$force,@sub);
 
 if ($error ne ''){
-  print $input->header;
-  print startpage();
-  print startmenu();
-  print $error;
-  my @subs=split('\n',$error);
-  print "<p> Click submit to force the subject";
-  my @names=$input->param;
-  my %data;
-  my $count=@names;
-  for (my $i=0;$i<$count;$i++){
-    if ($names[$i] ne 'Force'){
-      my $value=$input->param("$names[$i]");
-      $data{$names[$i]}="hidden\t$value\t$i";
-    }
-  }
-  $data{"Force"}="hidden\t$subs[0]\t$count";
-  print mkform3('updatebiblio.pl',%data);
-  print endmenu();
-  print endpage();
+    print $input->header;
+    print startpage();
+    print startmenu();
+    print $error;
+    @subs = split('\n',$error);
+    print "<p> Click submit to force the subject";
+    @names = $input->param;
+    $count = @names;
+    for (my $i = 0; $i < $count; $i++) {
+	if ($names[$i] ne 'Force') {
+	    my $value = $input->param("$names[$i]");
+	    $data{$names[$i]} = "hidden\t$value\t$i";
+	} # if
+    } # for
+    $data{"Force"} = "hidden\t$subs[0]\t$count";
+    print mkform3('updatebiblio.pl', %data);
+    print endmenu();
+    print endpage();
 } else {
-  print $input->redirect("detail.pl?type=intra&bib=$bibnum");
-}
+    print $input->redirect("detail.pl?type=intra&bib=$bibnum");
+} # else
 
 sub checkinp{
   my ($inp)=@_;
-  $inp=~ s/\'/\\\'/g;
-  $inp=~ s/\"/\\\"/g;
+  $inp =~ s/\'/\\\'/g;
+  $inp =~ s/\"/\\\"/g;
   return($inp);
 }

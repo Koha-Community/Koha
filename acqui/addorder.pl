@@ -7,13 +7,8 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;
-#use Date::Manip;
 
 my $input = new CGI;
-#print $input->header;
-#print startpage();
-#print startmenu('acquisitions');
-#print $input->dump;
 my $existing=$input->param('existing');
 my $title=$input->param('title');
 $title=~ s/\'/\\\'/g;
@@ -39,7 +34,6 @@ my $bibitemnum;
 my $rrp=$input->param('rrp');
 my $ecost=$input->param('ecost');
 my $gst=$input->param('GST');
-#check to see if orderexists
 my $orderexists=$input->param('orderexists');
 
 #check to see if biblio exists
@@ -47,14 +41,18 @@ if ($quantity ne '0'){
 
   if ($existing eq 'no'){
     #if it doesnt create it
-    $bibnum = &newbiblio({ title     => $title,
-	                   author    =>$author,
-	                   copyright => $copyright });
+    $bibnum = &newbiblio({ title     => $title?$title:"",
+	                   author    => $author?$author:"",
+	                   copyright => $copyright?$copyright:"" });
     $bibitemnum = &newbiblioitem({ biblionumber => $bibnum,
- 	                           itemtype     => $itemtype,
-	                           isben        => $isbn });
+ 	                           itemtype     => $itemtype?$itemtype:"",
+	                           isben        => $isbn?$isbn:"" });
     newsubtitle($bibnum);
-    modbiblio($bibnum,$title,$author,$copyright,$series);
+    modbiblio({ biblionumber  => $bibnum,
+	        title         => $title?$title:"",
+	        author        => $author?$author:"",
+	        copyrightdate => $copyright?$copyright:"",
+	        series        => $series?$series:"" });
   } else {
     $bibnum=$input->param('biblio');
     $bibitemnum=$input->param('bibitemnum');
@@ -62,21 +60,20 @@ if ($quantity ne '0'){
     if ($bibitemnum eq '' || $itemtype ne $oldtype){
       $bibitemnum=newbiblioitem($bibnum,$itemtype,$isbn);
     }
-    modbiblio($bibnum,$title,$author,$copyright,$series);
+    modbiblio({ biblionumber  => $bibnum,
+	        title         => $title?$title:"",
+	        author        => $author?$author:"",
+	        copyrightdate => $copyright?$copyright:"",
+	        series        => $series?$series:"" });
   }
-  if ($orderexists ne ''){
+  if ($orderexists ne '') {
     modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst);
   }else {
     neworder($bibnum,$title,$ordnum,$basketno,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst);
   }
 } else {
-  #print $input->header;
-  #print "del";
   $bibnum=$input->param('biblio');
   delorder($bibnum,$ordnum);
 }
 
 print $input->redirect("newbasket.pl?id=$supplier&basket=$basketno");
-#print $input->dump;
-#print endmenu('acquisitions');
-#print endpage();
