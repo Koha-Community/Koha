@@ -182,6 +182,7 @@ sub new
 	return undef if !defined($self->{"config"});
 
 	$self->{"dbh"} = undef;		# Database handle
+	$self->{"stopwords"} = undef; # stopwords list
 
 	bless $self, $class;
 	return $self;
@@ -420,6 +421,54 @@ sub restore_dbh
 
 	# FIXME - If it is determined that restore_context should
 	# return something, then this function should, too.
+}
+
+=item stopwords
+
+  $dbh = C4::Context->stopwords;
+
+Returns a hash with stopwords.
+
+This hash is cached for future use: if you call
+C<C4::Context-E<gt>stopwords> twice, you will get the same hash without real DB access
+
+=cut
+#'
+sub stopwords
+{
+	my $retval = {};
+
+	# If the hash already exists, return it.
+	return $context->{"stopwords"} if defined($context->{"stopwords"});
+
+	# No hash. Create one.
+	$context->{"stopwords"} = &_new_stopwords();
+
+	return $context->{"stopwords"};
+}
+
+# _new_stopwords
+# Internal helper function (not a method!). This creates a new
+# hash with stopwords
+sub _new_stopwords
+{
+	my $dbh = &dbh;
+	my $stopwordlist;
+	my $sth = $dbh->prepare("select word from stopwords");
+	$sth->execute;
+	while (my $stopword = $sth->fetchrow_array) {
+	my $retval = {};
+	$stopwordlist->{$stopword} = uc($stopword);
+	}
+	return $stopwordlist;
+#	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
+#	my $db_name   = $context->{"config"}{"database"};
+#	my $db_host   = $context->{"config"}{"hostname"};
+#	my $db_user   = $context->{"config"}{"user"};
+#	my $db_passwd = $context->{"config"}{"pass"};
+
+#	return DBI->connect("DBI:$db_driver:$db_name:$db_host",
+#			    $db_user, $db_passwd);
 }
 
 1;

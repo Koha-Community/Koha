@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.14  2002/10/03 11:28:18  tipaul
+# Extending Context.pm to add stopword management and using it in MARC-API.
+# First benchmarks show a medium speed improvement, which  is nice as this part is heavily called.
+#
 # Revision 1.13  2002/10/02 16:26:44  tipaul
 # road to 1.3.1
 #
@@ -798,13 +802,14 @@ sub MARCaddword {
     $sentence =~ s/(\.|\?|\:|\!|\'|,|\-)/ /g;
     my @words = split / /,$sentence;
 # build stopword list
-    my $sth2 =$dbh->prepare("select word from stopwords");
-    $sth2->execute;
-    my $stopwords;
-    my $stopword;
-    while(($stopword) = $sth2->fetchrow_array)  {
-	$stopwords->{$stopword} = $stopword;
-    }
+#    my $sth2 =$dbh->prepare("select word from stopwords");
+#    $sth2->execute;
+#    my $stopwords;
+#    my $stopword;
+#    while(($stopword) = $sth2->fetchrow_array)  {
+#	$stopwords->{$stopword} = $stopword;
+#    }
+    my $stopwords= C4::Context->stopwords;
     my $sth=$dbh->prepare("insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word)
 			values (?,?,?,?,?,?,soundex(?))");
     foreach my $word (@words) {
