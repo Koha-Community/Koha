@@ -199,7 +199,7 @@ sub checkauth {
 
 	my $dbh = C4::Context->dbh;
 	my $timeout = C4::Context->preference('timeout');
-	$timeout = 120 unless $timeout;
+	$timeout = 600 unless $timeout;
 
 	my $template_name;
 	if ($type eq 'opac') {
