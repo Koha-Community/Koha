@@ -115,24 +115,24 @@
 	
 	<!-- TMPL_IF NAME="delete_confirm" -->
 	
-	<table border="0" cellspacing="0" cellpadding="2">
-		<tr valign="top" bgcolor="#99cc33">
-			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Variable</b></td>
-			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
+<div class="data">	<table>
+		<caption>Confirm Deletion of <em>Test</em></caption>
+		<tr>
+			<th>Variable Name:</th>
+			<td><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
 		</tr>
-		<tr><td>Value</td><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr>
-		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-		<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
-		<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="submit" value="NO"></form></td></tr>
-	</table>
+		<tr><th>Value: </th><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr></table>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+		<input type="submit" class="cancel" value="Yes, Delete"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="submit" value="No, Do not Delete"></form>
+	</div>
 	
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="delete_confirmed" -->
 	
-		Data deleted
+		<div class="details"><h3>Data deleted</h3></div>
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="submit" value="OK" />
+		<input type="submit" class="submit" value="Back to System Preferences" />
 		</form>
 	<!-- /TMPL_IF -->
 	
@@ -150,7 +150,7 @@
 		<th colspan="3">Explanation</th>
 	</tr>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<tr class="<!-- TMPL_VAR NAME="bgcolor" -->">
+	<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
 		<td><!-- TMPL_VAR NAME="variable" --></td>
 		<td><!-- TMPL_VAR NAME="value" --></td>
 		<td><!-- TMPL_VAR NAME="explanation" --></td>
