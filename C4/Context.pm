@@ -329,8 +329,8 @@ EOT
 sub boolean_preference ($) {
 	my $self = shift;
 	my $var = shift;		# The system preference to return
-	my $it = preference($var);
-	return defined($it)? C4::Boolean::is_true($it): undef;
+	my $it = preference($self, $var);
+	return defined($it)? C4::Boolean::true_p($it): undef;
 }
 
 # AUTOLOAD
