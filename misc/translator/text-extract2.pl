@@ -52,9 +52,11 @@ use vars qw( $re_tag_strict $re_tag_compat @re_tag );
 sub re_tag ($) {
    my($compat) = @_;
    my $etag = $compat? '>': '<>\/';
-   # See the file "subst.pl.test1" for how the following mess is derived
-   # Unfortunately, inserting $re_directive's has made this even messier
-   q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:} . $re_directive . q{|[^-"'} . $etag . q{]|-[^-]))+))([} . $etag . q{])(.*)};
+   # This is no longer similar to the original regexp in subst.pl :-(
+   # Note that we don't want <> in compat mode; Mozilla knows about <
+   q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:}
+   . $re_directive
+   . q{|(?!--)[^"'<>} . $etag . q{]))+))([} . $etag . q{])(.*)};
 }
 BEGIN {
     $re_comment = '(?:--(?:[^-]|-[^-])*--)';
@@ -97,7 +99,7 @@ sub extract_attributes ($;$) {
     $s = $1 if $s =~ /^<\S+(.*)\/\S$/s	# XML-style self-closing tags
 	    || $s =~ /^<\S+(.*)\S$/s;	# SGML-style tags
 
-    for (my $i = 0; $s =~ /^\s+(?:([a-zA-Z][-a-zA-Z0-9]*)\s*=\s*)?('((?:$re_directive|[^'])*)'|"((?:$re_directive|[^"])*)"|(($re_directive|[^\s<>])+))/os;) {
+    for (my $i = 0; $s =~ /^\s+(?:([a-zA-Z][-a-zA-Z0-9]*)\s*=\s*)?('((?:$re_directive|[^'])*)'|"((?:$re_directive|[^"])*)"|((?:$re_directive|[^\s<>])+))/os;) {
 	my($key, $val, $val_orig, $rest)
 		= ($1, (defined $3? $3: defined $4? $4: $5), $2, $');
 	$i += 1;
