@@ -149,19 +149,19 @@
 		<h2 class="problem">Issuing impossible</h2>
 			<!-- TMPL_IF NAME="INVALID_DATE" -->
 				<p class="problem">The due date is invalid</p>
-			<!-- /TMPL_IF -->	
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
 				<p class="problem">The barcode is unknown</p>
-			<!-- /TMPL_IF -->	
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
 				<p class="problem">Item not for loan</p>
-			<!-- /TMPL_IF -->	
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="WTHDRAWN" -->
 				<p class="problem">Item withdrawn</p>
-			<!-- /TMPL_IF -->	
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="GNA" -->
 				<p class="problem">Borrower is gone with no address</p>
-			<!-- /TMPL_IF -->	
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="CARD_LOST" -->
 				<p class="problem">Borrower's card is lost</p>
 			<!-- /TMPL_IF -->
@@ -176,7 +176,7 @@
 		<!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 		<h2 class="problem">I need confirmation before issuing</h2>
 			<!-- TMPL_IF NAME="DEBT" -->
-				<p>The borrower has debts</p>
+				<p>The borrower has a debt of <!-- TMPL_VAR name="DEBT" --></p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="RENEW_ISSUE" -->
 				<p>Not an issue but a renewal</p>
@@ -188,7 +188,7 @@
 				<p>Item issued to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Return &amp; issue?</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="TOO_MANY" -->
-				<p class="problem">Too many issues!</p>
+				<p class="problem">Too many issues (already issued / max : <!-- TMPL_VAR name="TOO_MANY" -->)</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
 			<form method="post">

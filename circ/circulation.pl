@@ -73,7 +73,7 @@ if ($query->param('setcookies')) {
 	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 }
 
-my %env; # env is used as an "environment" variable. Could be dropped probably...
+my %env; # FIXME env is used as an "environment" variable. Could be dropped probably...
 $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
 $env{'queue'}=$printer;
@@ -106,9 +106,8 @@ if ($findborrower) {
 # get the borrower information.....
 my $borrower;
 if ($borrowernumber) {
-    $borrower = getpatroninformation(\%env,$borrowernumber,0);
-	
-		my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
+	$borrower = getpatroninformation(\%env,$borrowernumber,0);
+	my ($od,$issue,$fines)=borrdata2(\%env,$borrowernumber);
 	$template->param(overduecount => $od,
 							issuecount => $issue,
 							finetotal => $fines);
@@ -134,10 +133,8 @@ if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
 	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
 	if ($issueconfirmed) {
-			warn "CONFIRMED";
 			issuebook(\%env, $borrower, $barcode, $datedue);
 	} else {
-	#	unless ($invalidduedate) {
 		my ($error, $question) = canbookbeissued(\%env, $borrower, $barcode, $year, $month, $day);
 		my $noerror=1;
 		my $noquestion = 1;
@@ -152,12 +149,9 @@ if ($barcode) {
 			$noquestion = 0;
 		}
 		if ($noerror && ($noquestion || $issueconfirmed)) {
-			warn "NO ERROR";
 			issuebook(\%env, $borrower, $barcode, $datedue);
 		}
 	}
-
-#	}
 }
 
 # reload the borrower info for the sake of reseting the flags.....
@@ -263,7 +257,6 @@ if ($borrowerslist) {
 }
 #title
 
-my ($patrontable, $flaginfotable) = patrontable($borrower);
 my $amountold=$borrower->{flags}->{'CHARGES'}->{'message'};
 my @temp=split(/\$/,$amountold);
 $amountold=$temp[1];
@@ -275,8 +268,6 @@ $template->param(
 		printer => $printer,
 		branchname => $branches->{$branch}->{'branchname'},
 		printername => $printers->{$printer}->{'printername'},
-# 		title => $iteminformation->{'title'},
-# 		author => $iteminformation->{'author'},
 		firstname => $borrower->{'firstname'},
 		surname => $borrower->{'surname'},
 		categorycode => $borrower->{'categorycode'},
@@ -323,96 +314,6 @@ sub cuecatbarcodedecode {
     } else {
 	return $barcode;
     }
-}
-
-
-sub patrontable {
-    my ($borrower) = @_;
-    my $flags = $borrower->{'flags'};
-    my $flaginfotable='';
-    my $flaginfotext;
-    #my $flaginfotext='';
-    my $flag;
-    my $color='';
-    foreach $flag (sort keys %$flags) {
-	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
-	if ($flags->{$flag}->{'noissues'}) {
-		$template->param(
-			noissues => 'true',
-			color => $color,
-			 );
-		if ($flag eq 'GNA'){
-			$template->param(
-				gna => 'true'
-				);
-			}
-		if ($flag eq 'LOST'){
-			$template->param(
-				lost => 'true'
-			);
-			}
-		if ($flag eq 'DBARRED'){
-			$template->param(
-				dbarred => 'true'
-			);
-			}
-		if ($flag eq 'CHARGES') {
-			$template->param(
-				charges => 'true',
-				chargesmsg => $flags->{'CHARGES'}->{'message'}
-				 );
-		}
-	} else {
-		 if ($flag eq 'CHARGES') {
-			$template->param(
-				charges => 'true',
-				chargesmsg => $flags->{'CHARGES'}->{'message'}
-			 );
-		}
-	    	if ($flag eq 'WAITING') {
-			my $items=$flags->{$flag}->{'itemlist'};
-		        my @itemswaiting;
-			foreach my $item (@$items) {
-			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-			$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
-			push @itemswaiting, $iteminformation;
-			}
-			$template->param(
-				waiting => 'true',
-				waitingmsg => $flags->{'WAITING'}->{'message'},
-				itemswaiting => \@itemswaiting,
-				 );
-		}
-		if ($flag eq 'ODUES') {
-			$template->param(
-				odues => 'true',
-				oduesmsg => $flags->{'ODUES'}->{'message'}
-				 );
-
-			my $items=$flags->{$flag}->{'itemlist'};
-			my $currentcolor=$color;
-			{
-			my $color=$currentcolor;
-			    my @itemswaiting;
-			foreach my $item (@$items) {
-# 				($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-				push @itemswaiting, $iteminformation;
-			}
-			}
-			if ($query->param('module') ne 'returns'){
-				$template->param( nonreturns => 'true' );
-			}
-		}
-		if ($flag eq 'NOTES') {
-			$template->param(
-				notes => 'true',
-				notesmsg => $flags->{'NOTES'}->{'message'}
-				 );
-		}
-	}
-    }
-    return($patrontable, $flaginfotext);
 }
 
 # Local Variables:

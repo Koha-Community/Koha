@@ -308,14 +308,6 @@ yet. The date is in YYYY-MM-DD format.
 
 =back
 
-=head3 loanlength
-
-=over 4
-
-The length of time for which the item can be borrowed, in days.
-
-=back
-
 =head3 notforloan
 
 =over 4
@@ -357,7 +349,6 @@ sub getiteminformation {
 		$sth=$dbh->prepare("select * from itemtypes where itemtype=?");
 		$sth->execute($iteminformation->{'itemtype'});
 		my $itemtype=$sth->fetchrow_hashref;
-		$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
 		# if specific item notforloan, don't use itemtype notforloan field.
 		# otherwise, use itemtype notforloan value to see if item can be issued.
 		$iteminformation->{'notforloan'}=$itemtype->{'notforloan'} unless $iteminformation->{'notforloan'};
@@ -599,92 +590,91 @@ if the borrower borrows to much things
 # returns an array with errors if any
 
 sub TooMany ($$){
-    my $borrower = shift;
-    my $iteminformation = shift;
-    my $cat_borrower = $borrower->{'categorycode'};
-    my $branch_borrower = $borrower->{'branchcode'};
-    my $dbh = C4::Context->dbh;
-    
+	my $borrower = shift;
+	my $iteminformation = shift;
+	my $cat_borrower = $borrower->{'categorycode'};
+	my $branch_borrower = $borrower->{'branchcode'};
+	my $dbh = C4::Context->dbh;
+	
 
-    my $sth = $dbh->prepare('select itemtype from biblioitems where biblionumber = ?');
-    $sth->execute($iteminformation->{'biblionumber'});
-    my $type = $sth->fetchrow;
+	my $sth = $dbh->prepare('select itemtype from biblioitems where biblionumber = ?');
+	$sth->execute($iteminformation->{'biblionumber'});
+	my $type = $sth->fetchrow;
+	warn "checking $branch_borrower / $cat_borrower / $type";
+	$sth = $dbh->prepare('select * from issuingrules where categorycode = ? and itemtype = ? and branchcode = ?');
+	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
+	my $sth3 = $dbh->prepare('select COUNT(*) from issues where borrowernumber = ? and returndate is null');
+	my $alreadyissued;
+	$sth->execute($cat_borrower, $type, $branch_borrower);
+	my $result = $sth->fetchrow_hashref;
+	warn "==>".$result->{maxissueqty};
+	if (defined($result)) {
+		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
+		my $alreadyissued = $sth2->fetchrow;
+		return ("A $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth = $dbh->prepare('select * from issuingrules where categorycode = ? and itemtype = ? and branchcode = ?');
-    my $sth2 = $dbh->prepare("select COUNT(i.borrowernumber) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
-    my $sth3 = $dbh->prepare('select COUNT(borrowernumber) from issues where borrowernumber = ? and returndate is null');
-    
-    $sth->execute($cat_borrower, $type, $branch_borrower);
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
-	return (0) if ($result->{'maxissueqty'} <= $sth2->fetchrow);
-    }
+	$sth->execute($cat_borrower, $type, "*");
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
+		my $alreadyissued = $sth2->fetchrow;
+		return ("B $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth->execute($cat_borrower, $type, "*");
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
-	return (0) if ($result->{'maxissueqty'} <= $sth2->fetchrow);
-    }
+	$sth->execute($cat_borrower, "*", $branch_borrower);
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth3->execute($borrower->{'borrowernumber'});
+		my $alreadyissued = $sth2->fetchrow;
+		return ("C $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth->execute($cat_borrower, "*", $branch_borrower);
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth3->execute($borrower->{'borrowernumber'});
-	return (0) if ($result->{'maxissueqty'} <= $sth3->fetchrow);
-    }
+	$sth->execute("*", $type, $branch_borrower);
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
+		my $alreadyissued = $sth2->fetchrow;
+		return ("D $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth->execute("*", $type, $branch_borrower);
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
-	return (0) if ($result->{'maxissueqty'} <= $sth2->fetchrow);
-    }
+	$sth->execute("*", "*", $branch_borrower);
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth3->execute($borrower->{'borrowernumber'});
+		my $alreadyissued = $sth2->fetchrow;
+		return ("E $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth->execute("*", "*", $branch_borrower);
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth3->execute($borrower->{'borrowernumber'});
-	return (0) if ($result->{'maxissueqty'} <= $sth3->fetchrow);
-    }
+	$sth->execute("*", $type, "*");
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
+		my $alreadyissued = $sth2->fetchrow;
+		return ("F $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth->execute("*", $type, "*");
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
-	return (0) if ($result->{'maxissueqty'} <= $sth2->fetchrow);
-    }
+	$sth->execute($cat_borrower, "*", "*");
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
+		my $alreadyissued = $sth2->fetchrow;
+		return ("G $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
 
-    $sth->execute($cat_borrower, "*", "*");
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
-	return (0) if ($result->{'maxissueqty'} <= $sth2->fetchrow);
-    }
-
-    $sth->execute("*", "*", "*");
-    my $result = $sth->fetchrow_hashref;
-    if (defined($result))
-    {
-	$sth3->execute($borrower->{'borrowernumber'});
-	return (0) if ($result->{'maxissueqty'} <= $sth3->fetchrow);
-    }
-
-    return (1);
+	$sth->execute("*", "*", "*");
+	my $result = $sth->fetchrow_hashref;
+	if (defined($result)) {
+		$sth3->execute($borrower->{'borrowernumber'});
+		my $alreadyissued = $sth2->fetchrow;
+		return ("H $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+	}
+	return;
 }
 
 
 sub canbookbeissued {
 	my ($env,$borrower,$barcode,$year,$month,$day) = @_;
-	warn "CHECKING CANBEISSUED for $borrower->{'borrowernumber'}, $barcode";
 	my %needsconfirmation; # filled with problems that needs confirmations
 	my %issuingimpossible; # filled with problems that causes the issue to be IMPOSSIBLE
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -698,13 +688,13 @@ sub canbookbeissued {
 #
 # BORROWER STATUS
 #
-	if ($borrower->{flags}->{'gonenoaddress'}) {
+	if ($borrower->{flags}->{GNA}) {
 		$issuingimpossible{GNA} = 1;
 	}
-	if ($borrower->{flags}->{'lost'}) {
+	if ($borrower->{flags}->{'LOST'}) {
 		$issuingimpossible{CARD_LOST} = 1;
 	}
-	if ($borrower->{flags}->{'debarred'}) {
+	if ($borrower->{flags}->{'DBARRED'}) {
 		$issuingimpossible{DEBARRED} = 1;
 	}
 #
@@ -721,10 +711,8 @@ sub canbookbeissued {
 #
 # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
 #
-	
-	$needsconfirmation{TOO_MANY} = 1 
-	    if (!TooMany($borrower, $iteminformation));
-
+	my $toomany = TooMany($borrower, $iteminformation);
+	$needsconfirmation{TOO_MANY} =  $toomany if $toomany;
 
 #
 # ITEM CHECKING
@@ -745,7 +733,7 @@ sub canbookbeissued {
 		$issuingimpossible{RESTRICTED} = 1;
 	}
 
-	    
+
 
 #
 # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
