@@ -31,7 +31,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab, authorised_value from marc_subfield_structure where (tagfield like \"$searchstring%\") order by tagfield";
+	my $query="Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like \"$searchstring%\") order by tagfield";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -50,7 +50,7 @@ my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
 my $pkfield="tagfield";
-my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value from marc_subfield_structure where tagfield='$tagfield'";
+my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield'";
 my $reqdel="delete from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
@@ -75,8 +75,7 @@ $template->param(script_name => $script_name,
 if ($op eq 'add_form') {
 	my $data;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
-	$sth->execute;
+	my $more_subfields = $input->param("more_subfields")+1;
 	# builds kohafield tables
 	my @kohafields;
 	push @kohafields, "";
@@ -95,7 +94,7 @@ if ($op eq 'add_form') {
 	while ((my $field) = $sth2->fetchrow_array) {
 		push @kohafields, "items.".$field;
 	}
-	# buiild authorised value list
+	# build authorised value list
 	$sth2->finish;
 	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	$sth2->execute;
@@ -104,9 +103,29 @@ if ($op eq 'add_form') {
 	while ((my $category) = $sth2->fetchrow_array) {
 		push @authorised_values, $category;
 	}
-	$template->param(action => "Edit subfields",
-							tagfield => "<input type=hidden name=tagfield value='$tagfield'>$tagfield",
-							);
+	# build thesaurus categories list
+	$sth2->finish;
+	$sth2 = $dbh->prepare("select distinct category from bibliothesaurus");
+	$sth2->execute;
+	my @thesaurus_category;
+	push @thesaurus_category,"";
+	while ((my $category) = $sth2->fetchrow_array) {
+		push @thesaurus_category, $category;
+	}
+	# build value_builder list
+	my @value_builder=('');
+	opendir(DIR, "../value_builder") || die "can't opendir ../value_builder: $!";
+	while (my $line = readdir(DIR)) {
+		if ($line =~ /\.pl$/) {
+			push (@value_builder,$line);
+		}
+	}
+	closedir DIR;
+
+	warn "$value_builder[0] § $value_builder[1]";
+	# build values list
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
+	$sth->execute;
 	my @loop_data = ();
 	my $toggle="white";
 	my $i=0;
@@ -129,8 +148,8 @@ if ($op eq 'add_form') {
 					-multiple=>0,
 					);
 		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield' value='".$data->{'tagsubfield'}."'>";
-		$row_data{liblibrarian} = $data->{'liblibrarian'};
-		$row_data{libopac} = $data->{'libopac'};
+		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
+		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{kohafield}= CGI::scrolling_list( -name=>"kohafield",
 					-values=> \@kohafields,
 					-default=> "$data->{'kohafield'}",
@@ -143,6 +162,18 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
+		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
+					-values=> \@value_builder,
+					-default=>$data->{'thesaurus_category'},
+					-size=>1,
+					-multiple=>0,
+					);
+		$row_data{thesaurus_category}  = CGI::scrolling_list(-name=>'thesaurus_category',
+					-values=> \@thesaurus_category,
+					-default=>$data->{'thesaurus_category'},
+					-size=>1,
+					-multiple=>0,
+					);
 #		$row_data{kohafield} = $data->{'kohafield'};
 		$row_data{repeatable} = CGI::checkbox("repeatable$i",$data->{'repeatable'}?'checked':'',1,'');
 		$row_data{mandatory} = CGI::checkbox("mandatory$i",$data->{'mandatory'}?'checked':'',1,'');
@@ -150,7 +181,8 @@ if ($op eq 'add_form') {
 		push(@loop_data, \%row_data);
 		$i++;
 	}
-	# add an empty line for add if needed
+	# add more_subfields empty lines for add if needed
+	for (my $i=1;$i<=$more_subfields;$i++) {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-values=>['-1','0','1','2','3','4','5','6','7','8','9','10'],
@@ -179,25 +211,36 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
+		$row_data{thesaurus_category}  = CGI::scrolling_list(-name=>'thesaurus_category',
+					-values=> \@thesaurus_category,
+					-size=>1,
+					-multiple=>0,
+					);
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
+	}
+	$template->param(action => "Edit subfields",
+							tagfield => "<input type=hidden name=tagfield value='$tagfield'>$tagfield",
+							loop => \@loop_data,
+							more_subfields => $more_subfields,
+							more_tag => $tagfield);
 
-	$template->param(loop => \@loop_data);
-
-													# END $OP eq ADD_FORM
+												# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value)
-									values (?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder)
+									values (?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
 	my @kohafield		= $input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @authorised_values	= $input->param('authorised_value');
+	my @thesaurus_category	= $input->param('thesaurus_category');
+	my @value_builder	=$input->param('value_builder');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
@@ -208,6 +251,8 @@ if ($op eq 'add_form') {
 		my $kohafield		=$kohafield[$i];
 		my $tab				=$tab[$i];
 		my $authorised_value		=$authorised_values[$i];
+		my $thesaurus_category		=$thesaurus_category[$i];
+		my $value_builder=$value_builder[$i];
 		if ($tagsubfield) {
 			$sth->execute ($tagfield,
 								$tagsubfield,
@@ -217,7 +262,9 @@ if ($op eq 'add_form') {
 								$mandatory,
 								$kohafield,
 								$tab,
-								$authorised_value);
+								$authorised_value,
+								$thesaurus_category,
+								$value_builder);
 		}
 	}
 	$sth->finish;
@@ -272,6 +319,8 @@ if ($op eq 'add_form') {
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{tab} = $results->[$i]{'tab'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
+		$row_data{thesaurus_category}	= $results->[$i]{'thesaurus_category'};
+		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{delete} = "$script_name?op=delete_confirm&tagfield=$tagfield&tagsubfield=".$results->[$i]{'tagsubfield'};
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);

@@ -2,6 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
+use HTML::Template;
 
 use C4::Output;       # gettemplate
 use C4::Auth;         # checkauth

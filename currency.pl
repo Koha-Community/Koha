@@ -28,7 +28,7 @@
 # to be used. Is it obsolete?
 
 use CGI;
-use C4::Acquisitions;
+use C4::Catalogue;
 use C4::Biblio;
 
 my $input=new CGI;

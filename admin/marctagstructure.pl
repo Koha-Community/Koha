@@ -32,7 +32,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select tagfield,liblibrarian,libopac,repeatable,mandatory from marc_tag_structure where (tagfield like \"$data[0]%\") order by tagfield";
+	my $query="Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield like \"$data[0]%\") order by tagfield";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -49,9 +49,11 @@ sub StringSearch  {
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $pkfield="tagfield";
-my $reqsel="select tagfield,liblibrarian,libopac,repeatable,mandatory from marc_tag_structure where $pkfield='$searchfield'";
+my $reqsel="select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
+
+my $dbh = C4::Context->dbh;
 
 my $template = gettemplate("parameters/marctagstructure.tmpl",0);
 my $pagesize=20;
@@ -72,12 +74,25 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory from marc_tag_structure where $pkfield='$searchfield'");
+		my $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where $pkfield='$searchfield'");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
+	my $sth = $dbh->prepare("select distinct category from authorised_values");
+	$sth->execute;
+	my @authorised_values;
+	push @authorised_values,"";
+	while ((my $category) = $sth->fetchrow_array) {
+		push @authorised_values, $category;
+	}
+	my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
+			-values=> \@authorised_values,
+			-size=>1,
+			-multiple=>0,
+			-default => $data->{'authorised_value'},
+			);
+
 	if ($searchfield) {
 		$template->param(action => "Modify tag",
 								searchfield => "<input type=hidden name=tagfield value='$searchfield'>$searchfield");
@@ -89,25 +104,30 @@ if ($op eq 'add_form') {
 							libopac => $data->{'libopac'},
 							repeatable => CGI::checkbox('repeatable',$data->{'repeatable'}?'checked':'',1,''),
 							mandatory => CGI::checkbox('mandatory',$data->{'mandatory'}?'checked':'',1,''),
+							authorised_value => $authorised_value,
 							);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory) values (?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value) values (?,?,?,?,?,?)");
 	my $tagfield       =$input->param('tagfield');
 	my $liblibrarian  = $input->param('liblibrarian');
 	my $libopac       =$input->param('libopac');
 	my $repeatable =$input->param('repeatable');
 	my $mandatory =$input->param('mandatory');
+	my $authorised_value =$input->param('authorised_value');
 	$sth->execute($tagfield,
 						$liblibrarian,
 						$libopac,
 						$repeatable?1:0,
 						$mandatory?1:0,
+						$authorised_value
 						);
 	$sth->finish;
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl\"></html>";
+	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
@@ -148,6 +168,7 @@ if ($op eq 'add_form') {
 		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
+		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'};
 		$row_data{edit} = "$script_name?op=add_form&searchfield=".$results->[$i]{'tagfield'};
 		$row_data{delete} = "$script_name?op=delete_confirm&searchfield=".$results->[$i]{'tagfield'};
