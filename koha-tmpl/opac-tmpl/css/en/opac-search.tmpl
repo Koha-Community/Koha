@@ -5,7 +5,7 @@
 
 <form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
 	
-	<div>
+	<div id="bloc20">
 		<h2 class="catalogue">Search on</h2>
 		<p>
 			<input type="hidden" name="op" value="do_search" />
@@ -33,35 +33,11 @@
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
-				<label class="label20">Barcode</label>
-				<input type="hidden" name="marclist" value="items.barcode" />
-				<input type="hidden" name="and_or" value="and" />
-				<input type="hidden" name="excluding" value="" />
-				<input type="hidden" name="operator" value="contains" />
-				<input type="text" name="value" onchange="sql_update()" /> 
-		</p>
-		<p>
-			<label class="label20">Illustrator</label>
-			<input type="hidden" name="marclist" value="biblioitems.illus" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
-		</p>
-		<p>
-			<label class="label20">Dewey</label>
-			<input type="hidden" name="marclist" value="biblioitems.dewey" />
-			<input type="hidden" name="and_or" value="and" />
-			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
-		</p>
-		<p>
 			<label class="label20">Subject</label>
 			<input type="hidden" name="marclist" value="bibliosubject.subject" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="=" />  
+			<input type="hidden" name="operator" value="contains" />  
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
@@ -80,15 +56,52 @@
 				<input type="hidden" name="operator" value="=" />  
 				<!-- TMPL_VAR name="CGIbranch" -->
 		</p>
+		<p>
+			<input type="submit" value="Start search" class="button catalogue" />
+		</p>
 	</div>
-	<div>
+	<div id="bloc20">
+		<h2>Other options</h2>
+		<p>
+				<label class="label20">Item barcode</label>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				<input type="text" name="value" onchange="sql_update()" /> 
+		</p>
+		<p>
+			<label class="label20">Call Number</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">ISBN</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Publisher</label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
 		<p>Results per page :
 			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
 			</select>
-		Ordered by
+		</p>
+		<p>Ordered by
 			<select name="orderby" size="1">
 				<option value="biblio.title">Title</option>
 				<option value="biblio.author">Author</option>
@@ -97,9 +110,8 @@
 				<option value="biblioitems.publishercode">Publisher</option>
 			</select>
 		</p>
-		<p>
-			<input type="submit" value="Start search" class="button catalogue" />
-		</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
 	</div>
 </form>
 

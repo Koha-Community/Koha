@@ -6,26 +6,23 @@
 <a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">
 	<img src="/images/requests.gif" width=120 height=42 border=0 align=right border=0>
 </a>
-<FONT SIZE=6><em><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intra"><!-- TMPL_VAR NAME="title" -->
-(<!-- TMPL_VAR NAME="author" -->)</a></em></FONT><P>
+<h1><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intra"><!-- TMPL_VAR NAME="title" -->
+(<!-- TMPL_VAR NAME="author" -->)</a></h1>
 <p>
 <form action="/cgi-bin/koha/modbibitem.pl">
-<input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
-<input type=hidden name=biblio value=<!-- TMPL_VAR NAME="biblionumber" -->>
-<!-------------------BIBLIO ITEM------------>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align="left">
-<TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"
-><B><!-- TMPL_VAR NAME="biblioitemnumber" --> GROUP - <!-- TMPL_VAR NAME="description" --> </b> </TD>
-</TR>
-<tr VALIGN=TOP  >
-<TD width=210 >
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
-BORDER=0 src="/images/modify-mem.gif">
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
-BORDER=0 src="/images/delete-mem.gif">
+<input type=hidden name=bibitem value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+<input type=hidden name=biblio value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<table>
+<tr>
+<td><b><!-- TMPL_VAR NAME="biblioitemnumber" --> GROUP - <!-- TMPL_VAR NAME="description" --> </b> </td>
+</tr>
+<tr>
+<td width=210 >
+<input TYPE="image" name="submit"  value="modify" height=42  WIDTH=93
+border=0 src="/images/modify-mem.gif">
+<input TYPE="image" name="delete"  value="delete" height=42  WIDTH=93
+border=0 src="/images/delete-mem.gif">
 <br>
-<FONT SIZE=2  face="arial, helvetica">
 <b>Biblionumber:</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
 <b>Item Type:</b> <!-- TMPL_VAR NAME="itemtype" --><br>
 <b>URL:</b> <!-- TMPL_VAR NAME="url" --><br>
@@ -42,31 +39,29 @@ BORDER=0 src="/images/delete-mem.gif">
 <b>Size:</b> <!-- TMPL_VAR NAME="size" --><br>
 <b>Notes:</b> <!-- TMPL_VAR NAME="bnotes" --><br>
 <b>No. of Items:</b> <!-- TMPL_VAR NAME="count" -->
-</font>
-</TD>
+</td>
 </tr>
 </table>
 </form>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_LOOP NAME="ITEM_DATA" -->
 <img src="/images/holder.gif" width=16 height=300 align=left>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
-<TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>BARCODE
-<!-- TMPL_VAR NAME="barcode" --></b></TD>
-</TR>
-<tr VALIGN=TOP>
-<TD width=220>
-<form action=/cgi-bin/koha/moditem.pl method=post>
+<TABLE>
+<tr>
+<td><b>BARCODE
+<!-- TMPL_VAR NAME="barcode" --></b></td>
+</tr>
+<tr>
+<td>
+<form action="/cgi-bin/koha/moditem.pl" method=post>
 <input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblionumber" -->>
 <input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
 <input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
-BORDER=0 src="/images/modify-mem.gif">
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
-BORDER=0 src="/images/delete-mem.gif">
+<input TYPE="image" name="submit"  value="modify" height=42  width=93
+border=0 src="/images/modify-mem.gif">
+<input type="image" name="delete"  value="delete" height=42  width=93
+border=0 src="/images/delete-mem.gif">
 <br>
-<FONT SIZE=2  face="arial, helvetica">
 <b>Home Branch:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
 <b>Last seen:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
 <b>Last borrowed:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
@@ -89,10 +84,7 @@ Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
 <b>Group Number:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
 <b>Biblio number:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
 
-
-
-</font>
-</TD>
+</td>
 </tr>
 </table>
 </form>
