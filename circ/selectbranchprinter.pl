@@ -62,8 +62,8 @@ my $printer=$query->param('printer');
 my $oldbranch = $branch;
 my $oldprinter = $printer;
 
-$branch='';
-$printer='';
+#$branch='';
+#$printer='';
 
 
 $env{'branchcode'}=$branch;
@@ -102,12 +102,12 @@ my $branchname;
 my $oneprinter=($printercount==1) ;
 my $onebranch=($branchcount==1) ;
 if ($printercount==1) {
-    ($printer)=keys %$printers;
-	$printername=$printers->{$printer}->{printername};
+    my ($tmpprinter)=keys %$printers;
+	$printername=$printers->{$tmpprinter}->{printername};
 }
 if ($branchcount==1) {
-    ($branch)=keys %$branches;
-	$branchname=$branches->{$branch}->{branchname};
+    my ($tmpbranch)=keys %$branches;
+	$branchname=$branches->{$tmpbranch}->{branchname};
 }
 
 
