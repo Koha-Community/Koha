@@ -590,10 +590,11 @@ following keys:
 =cut
 #'
 sub ordersearch {
-	my ($search,$biblio,$catview) = @_;
+	my ($search,$id,$biblio,$catview) = @_;
 	my $dbh   = C4::Context->dbh;
 	my $query = "Select *,biblio.title from aqorders,biblioitems,biblio
 							where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
+									and aqorders.booksellerid = '$id'
 									and biblio.biblionumber=aqorders.biblionumber
 									and ((datecancellationprinted is NULL)
 									or (datecancellationprinted = '0000-00-00'))
@@ -615,23 +616,23 @@ sub ordersearch {
 	$sth->execute;
 	my $i=0;
 	my @results;
+	my $sth2=$dbh->prepare("Select * from biblio where biblionumber=?");
+	my $sth3=$dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
 	while (my $data=$sth->fetchrow_hashref){
-		my $sth2=$dbh->prepare("Select * from biblio where biblionumber=?");
 		$sth2->execute($data->{'biblionumber'});
 		my $data2=$sth2->fetchrow_hashref;
-		$sth2->finish;
 		$data->{'author'}=$data2->{'author'};
 		$data->{'seriestitle'}=$data2->{'seriestitle'};
-		$sth2=$dbh->prepare("Select * from aqorderbreakdown where ordernumber=?");
-		$sth2->execute($data->{'ordernumber'});
-		$data2=$sth2->fetchrow_hashref;
-		$sth2->finish;
-		$data->{'branchcode'}=$data2->{'branchcode'};
-		$data->{'bookfundid'}=$data2->{'bookfundid'};
+		$sth3->execute($data->{'ordernumber'});
+		my $data3=$sth3->fetchrow_hashref;
+		$data->{'branchcode'}=$data3->{'branchcode'};
+		$data->{'bookfundid'}=$data3->{'bookfundid'};
 		$results[$i]=$data;
 		$i++;
 	}
 	$sth->finish;
+	$sth2->finish;
+	$sth3->finish;
 	return($i,@results);
 }
 
