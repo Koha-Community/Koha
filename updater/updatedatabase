@@ -201,9 +201,9 @@ while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
 unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
     print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
     my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
-    $sth->execute;
-    $sth=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
-    $sth->execute;
+    $sti->execute;
+    $sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
+    $sti->execute;
 }
 
 unless ($branchcategories{'branchcode'} eq 'varchar(4)') {
