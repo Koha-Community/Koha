@@ -44,6 +44,7 @@
 		</div>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
+		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="joining" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->">
 		<input type="hidden" name="type" value="borrowers">
