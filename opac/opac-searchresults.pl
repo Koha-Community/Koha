@@ -30,8 +30,6 @@ if ($subject) {
 # we assume that C4::Search will validate these values for us
 my @fields = ('keyword', 'subject', 'author', 'illustrator', 'itemnumber', 'isbn', 'date-before', 'date-after', 'class', 'dewey', 'branch', 'title', 'abstract', 'publisher');
 
-
-
 # collect all the fields ...
 my %search;
 
@@ -91,7 +89,7 @@ foreach my $res (@results) {
 
 
 my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
+($startfrom) || ($startfrom=1);
 
 my $resultsarray=\@results;
 ($resultsarray) || (@$resultsarray=());
@@ -102,7 +100,7 @@ $template->param(startfrom => $startfrom+1);
 ($startfrom+$num<=$count) ? ($template->param(endat => $startfrom+$num)) : ($template->param(endat => $count));
 $template->param(numrecords => $count);
 my $nextstartfrom=($startfrom+$num<$count) ? ($startfrom+$num) : (-1);
-my $prevstartfrom=($startfrom-$num>=0) ? ($startfrom-$num) : (-1);
+my $prevstartfrom=($startfrom-$num>=0) ? ($startfrom-$number_of_results) : (-1);
 $template->param(nextstartfrom => $nextstartfrom);
 my $displaynext=($nextstartfrom==-1) ? 0 : 1;
 my $displayprev=($prevstartfrom==-1) ? 0 : 1;
@@ -115,12 +113,12 @@ $template->param(SEARCH_RESULTS => $resultsarray);
 
 my $numbers;
 @$numbers = ();
-if ($count>10) {
-    for (my $i=1; $i<$count/10+1; $i++) {
+if ($count>$number_of_results) {
+    for (my $i=1; $i<$count/$number_of_results+1; $i++) {
 	my $highlight=0;
 	my $themelang = $template->param('themelang');
-	($startfrom==($i-1)*10) && ($highlight=1);
-	push @$numbers, { number => $i, highlight => $highlight , startfrom => ($i-1)*10 };
+	($startfrom==($i-1)*$number_of_results+1) && ($highlight=1);
+	push @$numbers, { number => $i, highlight => $highlight , startfrom => ($i-1)*$number_of_results+1 };
     }
 }
 
