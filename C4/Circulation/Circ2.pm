@@ -1024,7 +1024,7 @@ sub returnbook {
 # find reserves.....
     my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
     if ($resfound) {
-	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
+#	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
 	$resrec->{'ResFound'} = $resfound;
 	$messages->{'ResFound'} = $resrec;
     }
@@ -1721,7 +1721,7 @@ sub calc_charges {
     }
     $sth1->finish;
 #    close FILE;
-    return ($charge, $itemtype);
+    return ($charge, $item_type);
 }
 
 # FIXME - A virtually identical function appears in
