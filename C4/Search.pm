@@ -674,10 +674,11 @@ sub CatSearch  {
 	    my @key=split(' ',$search->{'title'});
 	    my $count=@key;
 	    my $i=1;
-            $query="select * from biblio,bibliosubtitle,biblioitems
+            $query="select * from biblio,biblioitems
+	    left join bibliosubtitle on
+	    biblio.biblionumber=bibliosubtitle.biblionumber
 	    where
-            (biblio.biblionumber=bibliosubtitle.biblionumber and
-            biblioitems.biblionumber=biblio.biblionumber) and
+            biblioitems.biblionumber=biblio.biblionumber and
 	    (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
 	    while ($i<$count){
 	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
@@ -795,7 +796,7 @@ sub CatSearch  {
 	$sth1->finish;
       }
   }
-#print $query;
+print $query;
 if ($type ne 'precise' && $type ne 'subject'){
   if ($search->{'author'} ne ''){   
       $query=$query." order by biblio.author,title";
