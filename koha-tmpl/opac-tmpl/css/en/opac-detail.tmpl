@@ -22,7 +22,15 @@
 				<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br />
 				<!-- TMPL_IF name="isbn" --><b>ISBN:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="isbn" --><br />
 				<!-- TMPL_IF name="seriestitle" --><b>Collection:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="seriestitle" --><br />
-				<!-- TMPL_IF name="subject" --><b>Subject:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subject" --><br />
+<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_IF NAME="subjects" -->	
+		<b>Subject(s):</b> <!-- TMPL_LOOP NAME="SUBJECTS" -->
+	: <a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="SUBJECTS" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=SUBJECTS --></a>  
+	<!-- /TMPL_LOOP --><br />
+		<!-- /TMPL_IF -->				
+
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->		
 				<!-- TMPL_IF name="copyrightdate" --><b>Year :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="copyrightdate" --><br />
 				<!-- TMPL_IF name="notes" --><b>Notes:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="notes" --><br />
 				<!-- TMPL_IF name="unititle" --><b>Unititle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="unititle" --><br />

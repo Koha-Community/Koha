@@ -58,13 +58,13 @@ R
   <tr>
     <td VALIGN="TOP"><B>Copyright:</B> </TD>
     <TD VALIGN="TOP"><TMPL_VAR NAME="copyrightdate"></td>
-  </tr>
-  <TMPL_IF NAME="subjects">
-  <tr>
-    <td VALIGN="TOP"><B>Subject:</B> </TD>
-    <TD VALIGN="TOP"><TMPL_LOOP NAME="subjects"><a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<TMPL_VAR NAME="subject" ESCAPE="URL">"><TMPL_VAR NAME="subject"> </a>|</TMPL_LOOP></td>
-  </tr>
-  </TMPL_IF>
+  </tr></TMPL_LOOP>
+		<!-- TMPL_IF NAME="subjects" -->	
+		<tr><td valign="top"><b>Subject(s):</b></td><td valign="top"> <!-- TMPL_LOOP NAME="SUBJECTS" -->
+	: <a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="SUBJECTS" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=SUBJECTS --></a>  
+	<!-- /TMPL_LOOP --></td></tr>
+		<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->	
   <tr>
     <td VALIGN="TOP"><B>Biblio Record:</B> </TD>
     <TD VALIGN="TOP"><TMPL_VAR NAME="biblionumber"></td>
