@@ -1,26 +1,26 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
-<FONT SIZE=6><em>Lecteurs</em></FONT> 
+<FONT SIZE=6><em>Lecteurs</em></FONT>
 <P>
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
+<table border=1 cellspacing=0 cellpadding=5 width="100%">
 <tr VALIGN=TOP  >
 <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post>
-        <p><FONT SIZE=4> <b>Chercher un lecteur</b></FONT> 
+        <FONT SIZE=4> <b>Chercher un lecteur</b></FONT>
           <INPUT TYPE="text" size=50 name=member >
           <BR>
-          Pour renouveler un utilisateur, voir, ajouter, modifier ou effacer des 
+          Pour renouveler un utilisateur, voir, ajouter, modifier ou effacer des
           enregistrements :<BR>
-          Entrez le nom d'un emprunteur ou une partie du nom ou bien son N&deg; 
+          Entrez le nom d'un emprunteur ou une partie du nom ou bien son N&deg;
           dans le champ ci dessus et tapez Entr&eacute;e </p>
         </form></td><tr>
 </table>
- 
+
 <P>
 
 
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
+<table border=1 cellspacing=0 cellpadding=5 width="100%">
 <tr VALIGN=TOP  >
-    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FONT SIZE=4> 
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FONT SIZE=4>
       <b>Parcourir la liste des lecteurs</B></FONT> </td>
   <tr>
 <TR VALIGN=TOP>
@@ -54,6 +54,20 @@
 
 </B>
 </center></TD></TR></TABLE>
-
-<P>
+<br>
+<table border=1 cellspacing=0 cellpadding=5 width="100%">
+<tr VALIGN=TOP  >
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FONT SIZE=4>
+      <b>Ajouter un lecteur</B></FONT> </td>
+  <tr>
+<TR VALIGN=TOP>
+<TD>
+<form action=/cgi-bin/koha/simpleredirect.pl method=post>
+<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png"  ALT="Ajout de lecteur" BORDER=0 ></a>
+<INPUT TYPE="radio" name="chooseform" value="adult" checked>
+  Particulier
+  <INPUT TYPE="radio" name="chooseform" value="organization" >
+  Organisme/Entreprise
+</form>
+</td></tr></table>
 <TMPL_INCLUDE NAME="members-bottom.inc">

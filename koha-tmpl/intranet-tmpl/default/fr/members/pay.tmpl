@@ -1,6 +1,6 @@
 <TMPL_INCLUDE NAME="members-top.inc">
-<FONT SIZE=6><em>Amendes &agrave; r&eacute;gler
-pour<TMPL_VAR name="firstname"> <TMPL_VAR name="surname"></em></FONT> 
+<FONT SIZE=6><em>Dettes &agrave; r&eacute;gler
+pour <TMPL_VAR name="firstname"> <TMPL_VAR name="surname"></em></FONT>
 <P>
 <center>
 <p>
@@ -19,7 +19,7 @@ pour<TMPL_VAR name="firstname"> <TMPL_VAR name="surname"></em></FONT>
           " value="oui" checked>A payer 
           <input type=radio name="payfine<TMPL_VAR name="i">
           " value="oui">Pay&eacute; 
-          <input type=radio name="payfine<TMPL_VAR name="i">" value="wo">Writeoff
+          <input type=radio name="payfine<TMPL_VAR name="i">" value="wo">Abandonner
 	<input type=hidden name="itemnumber<TMPL_VAR name="i">" value="<TMPL_VAR name="itemnumber">">
 	<input type=hidden name="accounttype<TMPL_VAR name="i">" value="<TMPL_VAR name="accounttype">">
 	<input type=hidden name="amount<TMPL_VAR name="i">" value="<TMPL_VAR name="amount'}">">
@@ -34,7 +34,7 @@ pour<TMPL_VAR name="firstname"> <TMPL_VAR name="surname"></em></FONT>
 </tr>
 </TMPL_LOOP>
 <tr VALIGN=TOP  >
-	<TD></td>
+	<TD>&nbsp;</td>
 	    <TD colspan=2><b>Montant total</b></td>
 	<TD><b><TMPL_VAR name="total"></b></td>
 	</tr>

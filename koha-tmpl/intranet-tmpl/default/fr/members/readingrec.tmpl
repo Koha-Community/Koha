@@ -3,11 +3,12 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
 	<TD bgcolor="white" colspan=4 >
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Full output</a>
+		[<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Liste complète</a>]
+		[<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">">Emprunts récents</a>]
 	</TD>
 </TR>
 <TR VALIGN=TOP>
-	<TD  bgcolor="white"> <a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TITRE</b></a> 
+	<TD  bgcolor="white"> <a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TITRE</b></a>
     </TD>
 	<TD  bgcolor="white"> <a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>AUTEUR</b></a> 
     </TD>
@@ -21,16 +22,16 @@
 <TMPL_LOOP name="loop_reading">
 <TR VALIGN=TOP>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="title">
+ 		<TMPL_VAR name="title">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="author">
+ 		<TMPL_VAR name="author">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="returndate">
+		<TMPL_VAR name="returndate">&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="volumeddesc">
+		<TMPL_VAR name="volumeddesc">&nbsp;
 	</TD>
 </TMPL_LOOP>
 </TABLE>
