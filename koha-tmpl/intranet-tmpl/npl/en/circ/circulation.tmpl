@@ -26,13 +26,13 @@
 				<li>The due date is invalid</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
-				<li>The barcode is not found</li>
+				<li>The barcode was not found</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
 				<li>Item not for loan</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="WTHDRAWN" -->
-				<li>Item withdrawn</li>
+				<li>Item is cancelled</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="GNA" -->
 				<li>Patron's address is in doubt</li>
@@ -59,24 +59,32 @@
 				<p>Item is currently issued to this patron.  Renew?</p>
 			<!-- /TMPL_IF -->	
 			<!-- TMPL_IF NAME="RESERVE_WAITING" -->
-				<p>Reserve waiting</p>
-			<!-- /TMPL_IF -->	
+				<p>Item is consigned for <!-- TMPL_VAR NAME="RESERVE_WAITING" --></p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="RESERVED" -->
+				<p>Item is on reserve for <!-- TMPL_VAR NAME="RESERVED" --></p>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
-				<p>Item issued to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Return &amp; issue?</p>
+				<p>Item issued to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Return and issue?</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="TOO_MANY" -->
 				<p>Too many issues (already issued / max : <!-- TMPL_VAR name="TOO_MANY" -->)</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
-			<form method="post">
+			<div class="action"><form class="inline" method="post" action="/cgi-bin/koha/circ/circulation.pl">
+				<!-- TMPL_IF NAME="RESERVED" -->
+					<p><input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" /><label for="cancelreserve">Cancel Reserve</label></p>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+					<p><input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" /><label for="cancelreserve">Cancel Reserve</label></p>
+				<!-- /TMPL_IF -->
 				<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
-				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber">" />
+				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 				<input type="hidden" name="issueconfirmed" value="1" />
 				<input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" />
 				<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" />
 				<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" />
-				<input type="submit" value="Confirm issue" class="submit" />
-			</form>
+				<input type="submit" value="Confirm Issue" class="submit" /></form><form class="inline" method="get" action="/cgi-bin/koha/circ/circulation.pl"><input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="submit" class="cancel" value="Don't Issue" /></form></div>
 			</div>
 			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
