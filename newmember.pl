@@ -61,6 +61,9 @@ my ($template, $borrowernumber, $cookie)
                              flagsrequired => {parameters => 1},
                          });
 
+#Get the database handle
+my $dbh = C4::Context->dbh;
+
 # Check that all compulsary fields are entered
 # If everything is ok, set $ok = 0
 # Otherwise set $ok = 1 and $string to the error message to display.
@@ -134,8 +137,19 @@ if ($ok == 0) {
 	$data{'joining'}=format_date($data{'joining'});
     }
     if ($data{'expiry'} eq ''){
-	$data{'expiry'}=ParseDate('in 1 year');
-	$data{'expiry'}=format_date($data{'expiry'});
+    	my $get_enrolmentperiod = $dbh->prepare(q{SELECT enrolmentperiod FROM categories WHERE categorycode = ?});
+	$get_enrolmentperiod->execute($data{'categorycode'});
+	my ( $period ) = $get_enrolmentperiod->fetchrow;
+	if ( ($period)  && ($period != 1))
+	{
+		$data{'expiry'}=ParseDate("in $period years");
+		$data{'expiry'}=format_date($data{'expiry'});
+	}
+	else
+	{
+		$data{'expiry'}=ParseDate('in 1 year');
+		$data{'expiry'}=format_date($data{'expiry'});
+	}
     }
     my $ethnic=$data{'ethnicity'}." ".$data{'ethnicnotes'};
     my $postal=$data{'address'}."<br>".$data{'city'};
@@ -155,7 +169,6 @@ if ($ok == 0) {
     }
 
     #Get the fee
-    my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode = ?");
     $sth->execute($data{'categorycode'});
     my ($fee) = $sth->fetchrow;
