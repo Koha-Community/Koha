@@ -10,7 +10,7 @@
 
     <!-- Row of numbers corresponding to search result pages -->
     <TMPL_IF NAME=displayprev>
-	<a href=search.pl?startfrom=<TMPL_VAR NAME="prevstartfrom">&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>><img src=/images/numbers/prev.gif border=0></a>
+	<a href=search.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=/images/numbers/prev.gif border=0></a>
     <TMPL_ELSE>
 	<img src=/images/numbers/placeholder.gif border=0>
     </TMPL_IF>
@@ -18,11 +18,11 @@
 	<TMPL_IF NAME=highlight>
 	    <img src=/images/numbers/<TMPL_VAR NAME=number>-highlight.gif> 
 	<TMPL_ELSE>
-	    <a href=search.pl?startfrom=<TMPL_VAR NAME=startfrom>&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>><img src=/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
+	    <a href=search.pl?startfrom=<TMPL_VAR NAME=startfrom><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
 	</TMPL_IF>
     </TMPL_LOOP>
     <TMPL_IF NAME=displaynext>
-	<a href=search.pl?startfrom=<TMPL_VAR NAME="nextstartfrom">&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>><img src=/images/numbers/next.gif border=0></a>
+	<a href=search.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=/images/numbers/next.gif border=0></a>
     <TMPL_ELSE>
 	<img src=/images/numbers/placeholder.gif border=0>
     </TMPL_IF>
@@ -42,7 +42,7 @@
     <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr><td align=left>
     <TMPL_IF NAME=displayprev>
-	    <a href=search.pl?startfrom=<TMPL_VAR NAME="prevstartfrom">&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>>Previous Records</a>
+	    <a href=search.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>>Previous Records</a>
 	<TMPL_ELSE>
 	    &nbsp;
 	</TMPL_IF>
@@ -50,7 +50,7 @@
     </td><td align=right>
 
 	<TMPL_IF NAME=displaynext>
-	    <a href=search.pl?startfrom=<TMPL_VAR NAME="nextstartfrom">&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=line>&</TMPL_LOOP>>Next Records</a>
+	    <a href=search.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>>Next Records</a>
 	<TMPL_ELSE>
 	    &nbsp;
 	</TMPL_IF>
