@@ -29,6 +29,9 @@ use strict;
 use integer;
 use vars qw( $VERSION $ERROR );
 
+# FIXME - Fix the POD to conform to Perl style. In particular,
+# functions get an =item, not a =head2.
+
 =head1 VERSION
 
 Version 0.93

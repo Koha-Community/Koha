@@ -20,6 +20,11 @@ use DBI;
 
 # Koha modules
 use C4::Context;
+	# FIXME - /etc/koha.conf might not exist, so shouldn't use
+	# C4::Context.
+
+# FIXME - The user might be installing a new database, so can't rely
+# on /etc/koha.conf anyway.
 
 my $debug=0;
 
@@ -407,6 +412,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.20  2002/10/10 04:49:41  arensb
+# Added some FIXME comments.
+#
 # Revision 1.19  2002/10/05 10:17:17  arensb
 # Merged with arensb-context branch: use C4::Context->dbh instead of
 # &C4Connect, and generally prefer C4::Context over C4::Database.

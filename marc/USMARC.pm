@@ -18,6 +18,9 @@ package MARC::File::USMARC;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - Fix the POD to conform to Perl style. In particular,
+# functions get an =item, not a =head2.
+
 =head1 NAME
 
 MARC::File::USMARC - USMARC-specific file handling
