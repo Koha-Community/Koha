@@ -33,7 +33,7 @@ my $frbranchcd='';
 # set up the branchselect options....
 my $tobranchoptions;
 foreach my $br (keys %$branches) {
-    (next) if $branches->{$br}->{'PE'};
+    (next) unless $branches->{$br}->{'CU'};
     my $selected='';
     ($selected='selected') if ($br eq $tobranchcd);
     $tobranchoptions.="<option value=$br $selected>$branches->{$br}->{'branchname'}\n";
