@@ -87,7 +87,7 @@ sub itemseen {
 sub listitemsforinventory {
 	my ($minlocation,$maxlocation,$datelastseen,$offset,$size) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select itemnumber,barcode,bulk,title,author from items,biblio where items.biblionumber=biblio.biblionumber and bulk>= ? and bulk <=? and (datelastseen< ? or datelastseen is null) order by bulk,title");
+	my $sth = $dbh->prepare("select itemnumber,barcode,itemcallnumber,title,author from items,biblio where items.biblionumber=biblio.biblionumber and itemcallnumber>= ? and itemcallnumber <=? and (datelastseen< ? or datelastseen is null) order by itemcallnumber,title");
 	$sth->execute($minlocation,$maxlocation,$datelastseen);
 	my @results;
 	while (my $row = $sth->fetchrow_hashref) {

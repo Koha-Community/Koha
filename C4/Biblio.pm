@@ -765,7 +765,7 @@ sub MARCkoha2marcItem {
 #	print STDERR "prepare $biblionumber,$itemnumber\n";
 	my $sth2=$dbh->prepare("SELECT itemnumber,biblionumber,multivolumepart,biblioitemnumber,barcode,dateaccessioned,
 						booksellerid,homebranch,price,replacementprice,replacementpricedate,datelastborrowed,
-						datelastseen,multivolume,stack,notforloan,itemlost,wthdrawn,bulk,issues,renewals,
+						datelastseen,multivolume,stack,notforloan,itemlost,wthdrawn,itemcallnumber,issues,renewals,
 					reserves,restricted,binding,itemnotes,holdingbranch,timestamp
 					FROM items
 					WHERE itemnumber=?");
@@ -1436,14 +1436,14 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							bulk	=?, 							notforloan = ?
+							itemcallnumber	=?, 							notforloan = ?
 							");
 		$sth->execute($itemnumber,	$item->{'biblionumber'},
 								$item->{'biblioitemnumber'},$barcode,
 								$item->{'booksellerid'},$item->{'dateaccessioned'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'bulk'},$item->{'notforloan'});
+								$item->{'itemnotes'},$item->{'itemcallnumber'},$item->{'notforloan'});
 	} else {
 		$sth=$dbh->prepare("Insert into items set
 							itemnumber           = ?,				biblionumber         = ?,
@@ -1452,14 +1452,14 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							bulk = ? , notforloan = ?
+							itemcallnumber = ? , notforloan = ?
 							");
 		$sth->execute($itemnumber,	$item->{'biblionumber'},
 								$item->{'biblioitemnumber'},$barcode,
 								$item->{'booksellerid'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'bulk'},$item->{'notforloan'});
+								$item->{'itemnotes'},$item->{'itemcallnumber'},$item->{'notforloan'});
 	}
 	if (defined $sth->errstr) {
 		$error .= $sth->errstr;
@@ -1473,8 +1473,8 @@ sub OLDmoditem {
 #  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
 #  my $dbh=C4Connect;
 $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
-  my $query="update items set  barcode=?,itemnotes=?,bulk=?,notforloan=? where itemnumber=?";
-  my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
+  my $query="update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=? where itemnumber=?";
+  my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'itemcallnumber'},$item->{'notforloan'},$item->{'itemnum'});
   if ($item->{'barcode'} eq ''){
   	$item->{'notforloan'}=0 unless $item->{'notforloan'};
     $query="update items set notforloan=? where itemnumber=?";
@@ -1487,10 +1487,10 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
                              homebranch=?,
                              itemlost=?,
                              wthdrawn=?,
-			     bulk=?,
-			     notforloan=?
+			     itemcallnumber=?,
+			     notforloan=?,
                           where itemnumber=?";
-    @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
+    @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'itemcallnumber'},$item->{'notforloan'},$item->{'itemnum'});
   }
   if ($item->{'replacement'} ne ''){
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
@@ -2194,6 +2194,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.85  2004/04/02 14:55:48  tipaul
+# renaming items.bulk field to items.itemcallnumber.
+# Will be used to store call number for libraries that don't use dewey classification.
+# Note it's related to ITEMS, not biblio.
+#
 # Revision 1.84  2004/03/24 17:18:30  joshferraro
 # Fixes bug 749 by removing the comma on line 1488.
 #
