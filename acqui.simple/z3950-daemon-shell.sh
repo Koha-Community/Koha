@@ -37,10 +37,14 @@ fi
 PERL5LIB=$KohaModuleDir
 export PERL5LIB
 
-exec $KohaZ3950Script >>$LOGFILE 2>&1
+exec $KohaZ3950Script $LogDir >>$LOGFILE 2>&1
 
 #-------------------
 # $Log$
+# Revision 1.1.2.3  2002/06/28 17:45:39  tonnesen
+# z3950queue now listens for a -HUP signal before processing the queue.  Z3950.pm
+# sends the -HUP signal when queries are added to the queue.
+#
 # Revision 1.1.2.2  2002/06/26 16:25:51  amillar
 # Make directory variable name more explanatory
 #

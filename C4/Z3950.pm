@@ -148,11 +148,18 @@ sub addz3950queue {
 		(term,type,servers, identifier) 
 		values (?, ?, ?, ?)");
 	    $sth->execute($query, $type, $serverlist, $requestid);
+	    my $pid=`cat /var/log/koha/processz3950queue.pid`;
+	    chomp $pid;
+	    kill 1, $pid;
 	}
 } # sub addz3950queue
 
 #--------------------------------------
 # $Log$
+# Revision 1.1.2.3  2002/06/28 17:45:39  tonnesen
+# z3950queue now listens for a -HUP signal before processing the queue.  Z3950.pm
+# sends the -HUP signal when queries are added to the queue.
+#
 # Revision 1.1.2.2  2002/06/26 20:54:31  tonnesen
 # use warnings breaks on perl 5.005...
 #
