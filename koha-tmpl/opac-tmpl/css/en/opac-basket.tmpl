@@ -110,10 +110,24 @@
 				<td> <!-- TMPL_VAR NAME="url" --></td>
 			</tr>
 		<!-- /TMPL_IF -->
+				<tr>
+					<th>location</th>
+					<th>barcode</th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+					<tr>
+						<td>
+							<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<div width="100%" style="margin-top:0px;margin-bottom:0px;padding-top:10px;padding-bottom:10px;">
 	<table cellspacing="0" style="border:0;width:100%;">
@@ -127,7 +141,7 @@
 			<table cellspacing="0">
 				<!-- BIBLIO RECORD TABLE -->
 				<tr>
-					<th>
+					<th colspan="2">
 						<a onClick="javascript:openBiblio(<!-- TMPL_VAR name="biblionumber" -->)"><!-- TMPL_VAR NAME="title" --></a>
 					</th>
 				</tr>
@@ -153,13 +167,26 @@
 						<!-- TMPL_IF name="url" --><b>URL:</b> <!-- TMPL_VAR NAME="url" --><br><!-- /TMPL_IF -->
 					</td>
 				</tr>
+				<tr>
+					<th>location</th>
+					<th>barcode</th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+					<tr>
+						<td>
+							<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
 			</table>
-			</td>
-		</tr>
+		</td></tr>
 	</table>
-	</div>
+</div>
 	<!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 </div>
-
 <!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->
