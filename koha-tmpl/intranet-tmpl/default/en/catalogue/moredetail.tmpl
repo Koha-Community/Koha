@@ -3,7 +3,13 @@
 <center>
 <br>
 <TMPL_LOOP NAME="BIBITEM_DATA">
-<a class="button" href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">Requests</a>
+<table border=0 cellpadding=10 align=right>
+<tr>
+	<td>
+		<a class="button" href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">>Requests</a>
+	</td>
+</tr>
+</table>
 <h1><a
 href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
 (<TMPL_VAR NAME="author">)</a></h1><P>
