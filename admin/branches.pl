@@ -25,12 +25,13 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Output;
+use HTML::Template;
 
 # Fixed variables
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
-my $script_name="/cgi-bin/koha/admin/branches.pl";
+my $script_name="/cgi-bin/koha/admin/newbranches.pl";
 my $pagesize=20;
 
 
@@ -41,22 +42,25 @@ my $input = new CGI;
 my $branchcode=$input->param('branchcode');
 my $op = $input->param('op');
 
-# header
-print $input->header;
-
-# start the page and read in includes
-print startpage();
-print startmenu('admin');
+my $template = gettemplate("parameters/branches.tmpl",0);
+if ($op) {
+$template->param(script_name => $script_name,
+						$op              => 1); # we show only the TMPL_VAR names $op
+} else {
+$template->param(script_name => $script_name,
+						else              => 1); # we show only the TMPL_VAR names $op
+}
+$template->param(action => $script_name);
 
 if ($op eq 'add') {
-# If the user has pressed the "add new branch" button.
-    print heading("Branches: Add Branch");
-    print editbranchform();
-
+# If the user has pressed the "add new branch" button. 
+    heading("Branches: Add Branch");
+    editbranchform();
 } elsif ($op eq 'edit') {
 # if the user has pressed the "edit branch settings" button.
-    print heading("Branches: Edit Branch");
-    print editbranchform($branchcode);
+    heading("Branches: Edit Branch");
+    $template->param(add => 1);
+    editbranchform($branchcode);
 
 } elsif ($op eq 'add_validate') {
 # confirm settings change...
@@ -65,6 +69,7 @@ if ($op eq 'add') {
 	default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
     } else {
 	setbranchinfo($params);
+	$template->param(else => 1);
 	default ("Branch record changed for branch: $params->{'branchname'}");
     }
 
@@ -72,14 +77,18 @@ if ($op eq 'add') {
 # if the user has pressed the "delete branch" button.
     my $message = checkdatabasefor($branchcode);
     if ($message) {
+	$template->param(else => 1);
 	default($message);
     } else {
-	print deleteconfirm($branchcode);
+	deleteconfirm($branchcode);
+        $template->param(delete_confirm => 1);
+	$template->param(branchcode => $branchcode);
     }
 
 } elsif ($op eq 'delete_confirmed') {
 # actually delete branch and return to the main screen....
     deletebranch($branchcode);
+    $template->param(else => 1);
     default("The branch with code $branchcode has been deleted.");
 
 } else {
@@ -88,8 +97,6 @@ if ($op eq 'add') {
 }
 
 
-print endmenu('admin');
-print endpage();
 
 ######################################################################################################
 #
@@ -97,16 +104,17 @@ print endpage();
 
 sub default {
     my ($message) = @_;
-    print heading("Branches");
-    print "<font color='red'>$message</font>";
-    print "<form action='$script_name' method=post><input type='hidden' name='op' value='add'><input type=submit value='Add New Branch'></form>";
-    print branchinfotable();
-    print branchcategoriestable();
+    heading("Branches");
+    $template->param(message => $message);
+    $template->param(action => $script_name);
+    branchinfotable();
+    
+    
 }
 
 sub heading {
     my ($head) = @_;
-    return "<FONT SIZE=6><em>$head</em></FONT><br>";
+    $template->param(head => $head);
 }
 
 sub editbranchform {
@@ -116,6 +124,14 @@ sub editbranchform {
     if ($branchcode) {
 	$data = getbranchinfo($branchcode);
 	$data = $data->[0];
+	$template->param(branchcode => $data->{'branchcode'});
+        $template->param(branchname => $data->{'branchname'});
+        $template->param(branchaddress1 => $data->{'branchaddress1'});
+        $template->param(branchaddress2 => $data->{'branchaddress2'});
+        $template->param(branchaddress3 => $data->{'branchaddress3'});
+        $template->param(branchphone => $data->{'branchphone'});
+        $template->param(branchfax => $data->{'branchfax'});
+        $template->param(branchemail => $data->{'branchemail'});
     }
 # make the checkboxs.....
     my $catinfo = getcategoryinfo();
@@ -125,6 +141,14 @@ sub editbranchform {
 	my $tmp = $cat->{'categorycode'};
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
 	    $checked = "CHECKED";
+<<<<<<< branches.pl
+		}
+    $template->param(categoryname => $cat->{'categoryname'});
+    $template->param(categorycode => $cat->{'categorycode'});
+    $template->param(codedescription => $checked>$cat->{'codedescription'});    
+    }
+   
+=======
 	}
 	$catcheckbox .= <<EOF;
 <tr><td>$cat->{'categoryname'}</td>
@@ -149,11 +173,14 @@ $catcheckbox
 </form>
 EOF
     return $form;
+>>>>>>> 1.5
 }
 
 sub deleteconfirm {
 # message to print if the
     my ($branchcode) = @_;
+<<<<<<< branches.pl
+=======
     my $output = <<EOF;
 Confirm delete:
 <form action='$script_name' method=post><input type='hidden' name='op' value='delete_confirmed'>
@@ -163,6 +190,7 @@ Confirm delete:
 <input type=submit value=NO></form>
 EOF
     return $output;
+>>>>>>> 1.5
 }
 
 
@@ -176,6 +204,8 @@ sub branchinfotable {
     } else {
 	$branchinfo = getbranchinfo();
     }
+<<<<<<< branches.pl
+=======
     my $table = <<EOF;
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
@@ -189,6 +219,7 @@ sub branchinfotable {
 </tr>
 EOF
 
+>>>>>>> 1.5
     my $color;
     foreach my $branch (@$branchinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
@@ -206,6 +237,14 @@ EOF
 	    $categories .= $catinfo->{'categoryname'}."<br>";
 	}
 	$categories = '(no categories set)' unless ($categories);
+<<<<<<< branches.pl
+$template->param(color => $color);
+$template->param(branch_name => $branch->{'branchname'});
+$template->param(adress => $address);
+$template->param(categories => $categories);
+$template->param(branch_code => $branch->{'branchcode'});
+$template->param(value => $branch->{'branchcode'});
+=======
 	$table .= <<EOF;
 <tr bgcolor='$color'>
     <td align='left' valign='top'>$branch->{'branchname'}</td>
@@ -224,15 +263,17 @@ EOF
 </form></td>
 </tr>
 EOF
+>>>>>>> 1.5
     }
-    $table .= "</table><br>";
-    return $table;
+
 }
 
 sub branchcategoriestable {
 #Needs to be implemented...
 
     my $categoryinfo = getcategoryinfo();
+<<<<<<< branches.pl
+=======
     my $table = <<EOF;
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
@@ -243,19 +284,15 @@ sub branchcategoriestable {
 <td width='200'><b>Description</b></td>
 </tr>
 EOF
+>>>>>>> 1.5
 my $color;
     foreach my $cat (@$categoryinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-	$table .= <<EOF;
-<tr bgcolor='$color'>
-    <td align='left' valign='top'>$cat->{'categoryname'}</td>
-    <td align='left' valign='top'>$cat->{'categorycode'}</td>
-    <td align='left' valign='top'>$cat->{'codedescription'}</td>
-</tr>
-EOF
+$template->param(color => $color);
+$template->param(categoryname => $cat->{'categoryname'});
+$template->param(categorycode => $cat->{'categorycode'});
+$template->param(codedescription => $cat->{'codedescription'});
     }
-    $table .= "</table>";
-    return $table;
 }
 
 ######################################################################################################
@@ -397,4 +434,4 @@ sub checkdatabasefor {
     return $message;
 }
 
-
+print "Content-Type: text/html\n\n", $template->output;
