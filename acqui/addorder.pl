@@ -47,9 +47,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $existing=$input->param('existing');
 my $title=$input->param('title');
-$title=~ s/\'/\\\'/g;
 my $author=$input->param('author');
-$author=~ s/\'/\\\'/g;
 my $copyright=$input->param('copyright');
 my $isbn=$input->param('ISBN');
 my $itemtype=$input->param('format');
