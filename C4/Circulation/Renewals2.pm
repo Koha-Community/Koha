@@ -221,13 +221,9 @@ sub renewbook {
   if ($charge > 0){
     my $accountno=getnextacctno($env,$bornum,$dbh);
     my $item=getiteminformation($env, $itemno);
-    my $account="Insert into accountlines
-    (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-    values
-    (?,?,now(),?,?,?,?,?)";
-    $sth=$dbh->prepare($account);
-    $sth->execute($bornum,$accountno,$charge,"Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
-    'Rent',$charge,$itemno)";
+    $sth=$dbh->prepare("Insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+						values (?,?,now(),?,?,?,?,?)");
+    $sth->execute($bornum,$accountno,$charge,"Renewal of Rental Item $item->{'title'} $item->{'barcode'}",'Rent',$charge,$itemno);
     $sth->finish;
 #     print $account;
   }
@@ -266,13 +262,11 @@ sub calc_charges {
   my $item_type;
 
   # Get the book's item type and rental charge (via its biblioitem).
-  my $q1 = "select itemtypes.itemtype,rentalcharge from
-  items,biblioitems,itemtypes
-  where (items.itemnumber ='$itemno')
-  and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-  and (biblioitems.itemtype = itemtypes.itemtype)";
-  my $sth1= $dbh->prepare($q1);
-  $sth1->execute;
+  my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
+  						 where (items.itemnumber =?)
+						 		and (biblioitems.biblioitemnumber = items.biblioitemnumber)
+								and (biblioitems.itemtype = itemtypes.itemtype)");
+  $sth1->execute($itemno);
   # FIXME - Why not just use fetchrow_array?
   if (my $data1=$sth1->fetchrow_hashref) {
     $item_type = $data1->{'itemtype'};
