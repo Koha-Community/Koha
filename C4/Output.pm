@@ -43,7 +43,7 @@ $VERSION = 0.01;
 	     &mkform &mkform2 &bold
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
-	     &picktemplate
+	     &picktemplate &themelanguage
 );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -102,8 +102,51 @@ sub picktemplate {
   } else {
     return 'default';
   }
-  
 }
+
+sub themelanguage {
+  my ($htdocs, $tmpl) = @_;
+
+# language preferences....
+  my $dbh=C4Connect;
+  my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opaclanguages'");
+  $sth->execute;
+  my ($lang) = $sth->fetchrow;
+  $sth->finish;
+  my @languages = split " ", $lang;
+  warn "Lang = @languages\n";
+
+# theme preferences....
+  my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opacthemes'");
+  $sth->execute;
+  my ($theme) = $sth->fetchrow;
+  $sth->finish;
+  my @themes = split " ", $theme;
+  warn "Theme = @themes \n";
+
+  $dbh->disconnect;
+
+  my ($theme, $lang);
+# searches through the themes and languages. First template it find it returns.
+# Priority is for getting the theme right.
+  THEME: 
+  foreach my $th (@themes) {
+    foreach my $la (@languages) {
+	warn "File = $htdocs/$th/$la/$tmpl\n";
+	if (-e "$htdocs/$th/$la/$tmpl") {
+	    $theme = $th;
+	    $lang = $la;
+	    last THEME;
+	}
+    }
+  }
+  if ($theme and $lang) {
+    return ($theme, $lang);
+  } else {
+    return ('default', 'en');
+  }  
+}
+
  
 sub startpage() {
   return("<html>\n");
