@@ -78,8 +78,7 @@ for (my $i=0;$i<$count;$i++){
 	push @loop_currency, \%line;
 }
 
-my $query="Select itemtype,description from itemtypes order by description";
-my $sth=$dbh->prepare($query);
+my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
 $sth->execute;
 my  @itemtype;
 my %itemtypes;

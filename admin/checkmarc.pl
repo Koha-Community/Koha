@@ -82,8 +82,8 @@ while (($res,$res2,$field) = $sth->fetchrow) {
 		$subtotal++;
 	}
 }
-$sth = $dbh->prepare("select kohafield from marc_subfield_structure where tagfield=$tagfield");
-$sth->execute;
+$sth = $dbh->prepare("select kohafield from marc_subfield_structure where tagfield=?");
+$sth->execute($tagfield);
 while (($res2) = $sth->fetchrow) {
 	if (!$res2 || $res2 =~ /^items/) {
 	} else {
