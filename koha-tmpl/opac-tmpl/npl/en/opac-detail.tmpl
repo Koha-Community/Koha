@@ -28,46 +28,33 @@
 	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="pages" -->
-	<tr><th>Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="notes" -->
+<tr><th>Notes:</th><td><div class="notes"><!-- TMPL_VAR NAME="notes" --></div></td></tr>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	
+<!-- TMPL_UNLESS NAME="MARCSUBJCTS" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<!-- TMPL_IF name="subjects" --><tr><th>Subject(s):</th><td><!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP --></td></tr><!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-<!-- TMPL_IF NAME="marcnotes" -->
-<tr><th>Notes:</th><td><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnotes" --></li><!-- /TMPL_LOOP --></ul></td></tr>
-	<!-- /TMPL_IF -->
-<!-- TMPL_IF name="subjects" -->
-		<!-- TMPL_LOOP name="subjects" -->
-		<tr><th>Subject(s):</th><td><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a></td></tr><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
-<!-- <tr><th>Biblio Record:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> -->
-</table>
+<!-- /TMPL_UNLESS -->
 
-	<table border="1">
-	<!-- TMPL_IF NAME="MARCNOTES" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+ <tr><th>Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="MARCNOTES" -->
 		<tr>
-			<th><i>Detailed notes:</i></th>
-			<td>
-				<ul>
-					<!-- TMPL_LOOP NAME="MARCNOTES" -->
-						<i>- <!-- TMPL_VAR NAME="marcnote" --></i><br>
-					<!-- /TMPL_LOOP -->
-				</ul>
-			</td>
-		</tr>
+			<th>Detailed notes:</th>
+			<td><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnote" --></li><!-- /TMPL_LOOP --></ul></td></tr>
 	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="MARCSUBJCTS" -->
+		<!-- TMPL_IF NAME="MARCSUBJCTS" -->
 		<tr>
 			<th>Related links:</th>
-			<td>
-				<ul>
-					<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-						- <a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="marcsubjct" ESCAPE="URL"-->">
-							<!-- TMPL_VAR NAME="marcsubjct" -->
-						</a><br>
-					<!-- /TMPL_LOOP -->
-				</ul>
-			</td>
-		</tr>
+			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" --><li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
 	<!-- /TMPL_IF -->
-	</table>
+</table>
 
 <!-- TMPL_UNLESS NAME="norequests" -->
     <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
@@ -101,7 +88,7 @@
 <!--INFORMATION ROWS-->
 <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
-<td><!-- TMPL_VAR NAME="class" --></td>
+<td><!-- TMPL_VAR NAME="classification" --></td>
 <td><!-- TMPL_VAR NAME="branchname" --></td>
 <td><!-- TMPL_VAR NAME="datedue" --></td>
 <td><!-- TMPL_VAR NAME="datelastseen" --></td>
