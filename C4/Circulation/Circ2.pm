@@ -1028,20 +1028,20 @@ sub returnbook {
     my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
     if ($doreturn) {
 	doreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
-	$messages->{'WasReturned'};	# FIXME - This does nothing
+	$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
     }
     ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 # transfer book to the current branch
     my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
-    if ($transfered) {	# FIXME - perl -wc complains about this line.
-	$messages->{'WasTransfered'};	# FIXME - This does nothing
+    if ($transfered) {
+	$messages->{'WasTransfered'} = 1; # FIXME is the "= 1" right?
     }
 # fix up the accounts.....
     if ($iteminformation->{'itemlost'}) {
 	# Mark the item as not being lost.
 	updateitemlost($iteminformation->{'itemnumber'});
 	fixaccountforlostandreturned($iteminformation, $borrower);
-	$messages->{'WasLost'};		# FIXME - This does nothing
+	$messages->{'WasLost'} = 1; # FIXME is the "= 1" right?
     }
 # fix up the overdues in accounts...
     fixoverduesonreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
