@@ -4,15 +4,9 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
 	<a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">MARC</a>
-	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
-		ISBD
-	</a>
-	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
-		Add to shelf
-	</a>
-	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
-		Print
-	</a>
+	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">ISBD</a>
+	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">Add to shelf</a>
+	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">Print</a>
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
 		<a class="button catalogue" href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Requests</a>
@@ -20,24 +14,24 @@
 	<div id="bloc25">
 		<h2 class="catalogue">BIBLIO RECORD <!-- TMPL_VAR NAME="biblionumber" --></h2>
 		<p>
-			<!-- TMPL_IF NAME="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="subtitle" --><b>Subtitle:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="author" --><b>Author:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="publishercode" --><b>Published by :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="publicationyear" --><b>in </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR NAME="pages" -->
-			<!-- TMPL_IF NAME="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR NAME="size" --><br>
-			<!-- TMPL_IF NAME="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="subject" --><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="copyrightdate" --><b>Year :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
-			<!-- TMPL_IF NAME="serial" --><b>Serial:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&amp;dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="dewey" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="classification" --><b>Classification:</b> <!-- TMPL_VAR NAME="classification" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="lccn" --><b>LCCN:</b> <!-- TMPL_VAR NAME="lccn" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF NAME="url" --><b>URL:</b> <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="isbn" --><b>ISBN:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subtitle" --><b>Subtitle:</b> <!-- TMPL_VAR NAME="subtitle" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="author" --><b>Author:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="additional" --><b>Additional Author:</b> <!-- TMPL_VAR NAME="additional" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="publishercode" --><b>Published by:</b> <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="publicationyear" --><b>in </b> <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="pages" -->, <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="size" -->, <!-- TMPL_VAR NAME="size" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subject" --><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="copyrightdate" --><b>Year:</b> <!-- TMPL_VAR NAME="copyrightdate" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><br><!-- /TMPL_IF --> 
+			<!-- TMPL_IF NAME="serial" --><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&amp;dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="dewey" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="classification" --><b>Classification:</b> <!-- TMPL_VAR NAME="classification" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="lccn" --><b>LCCN:</b> <!-- TMPL_VAR NAME="lccn" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="url" --><b>URL:</b> <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a><br><!-- /TMPL_IF -->
 			<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
 	</div>
 <!-- /TMPL_LOOP -->
