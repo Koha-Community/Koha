@@ -1,6 +1,8 @@
-package C4::Circulation::Main; #assumes C4/Circulation/Main
+package C4::Circulation::Main;
 
-#package to deal with circulation 
+# $Id$
+
+#package to deal with circulation
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -41,49 +43,38 @@ use C4::Search;
 use C4::InterfaceCDK;
 use C4::Security;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-  
+use vars qw($VERSION @ISA @EXPORT);
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
-@EXPORT = qw(&pastitems &checkoverdues &previousissue 
+@EXPORT = qw(&pastitems &checkoverdues &previousissue
 &checkreserve &checkwaiting &scanbook &scanborrower &getbranch &getprinter);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+=head1 NAME
 
+C4::Circulation::Main - Koha circulation desk functions
 
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
+=head1 SYNOPSIS
 
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
+  use C4::Circulation::Main;
 
+=head1 DESCRIPTION
+
+This module provides functions useful to the circulation desk,
+primarily for checking reserves and overdue items.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
+# FIXME - This is only used in C4::Circmain and telnet/startint.pl,
+# which look obsolete. Presumably this means this function is obsolete
+# as well.
+# Otherwise, it needs a POD.
 sub getbranch {
   my ($env) = @_;
   my $dbh = C4::Context->dbh;
@@ -100,7 +91,7 @@ sub getbranch {
       my $data = $sth->fetchrow_hashref;
       $env->{'branchcode'}=$data->{'branchcode'};
   }
-  my $query = "select * from branches  
+  my $query = "select * from branches
     where branchcode = '$env->{'branchcode'}'";
   $sth = $dbh->prepare($query);
   $sth->execute;
@@ -110,6 +101,10 @@ sub getbranch {
   $sth->finish;
 }
 
+# FIXME - This is only used in C4::Circmain and telnet/startint.pl,
+# which look obsolete. Presumably this means this function is obsolete
+# as well.
+# Otherwise, it needs a POD.
 sub getprinter {
   my ($env) = @_;
   my $dbh = C4::Context->dbh;
@@ -129,9 +124,13 @@ sub getprinter {
   }
   $sth->finish;
 }
-		      
+
 # FIXME - This is not the same as &C4::Circulation::pastitems, though
 # the two appear to share some code.
+# FIXME - This function is called in &C4::Circulation::Issues::Issue
+# and in telnet/borrwraper.pl, both of which look obsolete. Presumably
+# this means this function is obsolete as well.
+# Otherwise, it needs a POD.
 sub pastitems{
   #Get list of all items borrower has currently on issue
   my ($env,$bornum,$dbh)=@_;
@@ -154,11 +153,30 @@ sub pastitems{
   return(\@items,\@items2);
 }
 
+=item checkoverdues
+
+  $num_items = &checkoverdues($env, $borrowernumber, $dbh);
+
+Returns the number of overdue books a patron has.
+
+C<$env> is ignored.
+
+C<$borrowernumber> is the patron's borrower number.
+
+C<$dbh> is a DBI handle to the Koha database.
+
+=cut
+#'
 sub checkoverdues{
   #checks whether a borrower has overdue items
+  # FIXME - Use C4::Context->dbh instead of getting $dbh as an argument
   my ($env,$bornum,$dbh)=@_;
+  # FIXME - This is what POSIX::strftime is for.
   my @datearr = localtime;
   my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
+  # FIXME - MySQL can figure out what today is, so there's no need
+  # to calculate that separately. Just use
+  #	... date_due < curdate()
   my $query = "Select count(*) from issues where borrowernumber=$bornum and
         returndate is NULL and date_due < '$today'";
   my $sth=$dbh->prepare($query);
@@ -169,13 +187,15 @@ sub checkoverdues{
 }
 
 # FIXME - This is quite similar to &C4::Circulation::previousissue
+# FIXME - Never used. Obsolete, presumably.
+# Otherwise, it needs a POD.
 sub previousissue {
   my ($env,$itemnum,$dbh,$bornum)=@_;
-  my $sth=$dbh->prepare("Select 
+  my $sth=$dbh->prepare("Select
      firstname,surname,issues.borrowernumber,cardnumber,returndate
-     from issues,borrowers where 
+     from issues,borrowers where
      issues.itemnumber='$itemnum' and
-     issues.borrowernumber=borrowers.borrowernumber 
+     issues.borrowernumber=borrowers.borrowernumber
      and issues.returndate is NULL");
   $sth->execute;
   my $borrower=$sth->fetchrow_hashref;
@@ -207,9 +227,9 @@ sub previousissue {
         } else {
           $canissue = "N";
         }
-      }    
+      }
     } else {
-      my $text="Issued to $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'})";    
+      my $text="Issued to $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'})";
       my $resp = C4::InterfaceCDK::msg_yn($env,$text,"Mark as returned?");
       if ( $resp eq "Y") {
         &returnrecord($env,$dbh,$borrower->{'borrowernumber'},$itemnum);
@@ -217,21 +237,47 @@ sub previousissue {
         $canissue = "N";
       }
     }
-  } 
+  }
   return($borrower->{'borrowernumber'},$canissue,$newdate);
 }
 
+=item checkreserve
 
+  ($borrowernumber, $reserve) = &checkreserve($env, $dbh, $itemnumber);
+
+C<$env> is ignored.
+
+C<$dbh> is a DBI handle to the Koha database.
+
+C<$itemnumber> is the number of the item to find.
+
+C<&checkreserve> returns two values:
+
+C<$borrowernumber> is the borrower number of the patron for whom the
+book is reserved, or the empty string. I can't tell when it returns a
+number and when it returns a string, nor what it means.
+
+C<$reserve> describes the reserved item. It is a reference-to-hash
+whose keys are the fields of the reserves and items tables of the Koha
+database.
+
+=cut
+#'
 sub checkreserve{
-  # Check for reserves for biblio 
+  # Check for reserves for biblio
+  # FIXME - Use C4::Context->dbh to get $dbh, instead of passing it
+  # on the argument list.
   my ($env,$dbh,$itemnum)=@_;
   my $resbor = "";
-  my $query = "select * from reserves,items 
+  # Find this item in the reserves.
+  # Apparently reserves.found=='W' means "Waiting".
+  # FIXME - Is it necessary to get every field from both tables?
+  my $query = "select * from reserves,items
     where (items.itemnumber = '$itemnum')
     and (reserves.cancellationdate is NULL)
     and (items.biblionumber = reserves.biblionumber)
     and ((reserves.found = 'W')
-    or (reserves.found is null)) 
+    or (reserves.found is null))
     order by priority";
   my $sth = $dbh->prepare($query);
   $sth->execute();
@@ -239,31 +285,34 @@ sub checkreserve{
   if (my $data=$sth->fetchrow_hashref) {
     $resrec=$data;
     my $const = $data->{'constrainttype'};
-    if ($const eq "a") {
-      $resbor = $data->{'borrowernumber'}; 
+    if ($const eq "a") {		# FIXME - What does 'a' mean?
+      $resbor = $data->{'borrowernumber'};
     } else {
       my $found = 0;
-      my $cquery = "select * from reserveconstraints,items 
-         where (borrowernumber='$data->{'borrowernumber'}') 
+      my $cquery = "select * from reserveconstraints,items
+         where (borrowernumber='$data->{'borrowernumber'}')
          and reservedate='$data->{'reservedate'}'
 	 and reserveconstraints.biblionumber='$data->{'biblionumber'}'
-	 and (items.itemnumber=$itemnum and 
+	 and (items.itemnumber=$itemnum and
 	 items.biblioitemnumber = reserveconstraints.biblioitemnumber)";
       my $csth = $dbh->prepare($cquery);
       $csth->execute;
       if (my $cdata=$csth->fetchrow_hashref) {$found = 1;}
-      if ($const eq 'o') {
+      if ($const eq 'o') {		# FIXME - What does 'o' mean?
         if ($found eq 1) {$resbor = $data->{'borrowernumber'};}
       } else {
-        if ($found eq 0) {$resbor = $data->{'borrowernumber'};} 
+        if ($found eq 0) {$resbor = $data->{'borrowernumber'};}
       }
       $csth->finish();
-    }     
+    }
   }
   $sth->finish;
   return ($resbor,$resrec);
 }
 
+# FIXME - This is only used in C4::Circulation::Borrower, which
+# appears to be obsolete. Presumably this function is obsolete as
+# well. Otherwise, it needs a POD.
 sub checkwaiting{
   # check for reserves waiting
   my ($env,$dbh,$bornum)=@_;
@@ -283,6 +332,9 @@ sub checkwaiting{
 }
 
 # FIXME - This is identical to &C4::Circulation::scanbook
+# FIXME - This function is only used in tkperl/tkcirc, if anywhere
+# (it's hard to tell). Presumably it's obsolete.
+# Otherwise, it needs a POD.
 sub scanbook {
   my ($env,$interface)=@_;
   #scan barcode
@@ -292,14 +344,26 @@ sub scanbook {
 }
 
 # FIXME - This is very similar to &C4::Circulation::scanborrower
+# FIXME - This is only used in C4::Circulation::Borrower, which
+# appears to be obsolete. Presumably this function is obsolete as
+# well.
+# Otherwise, it needs a POD.
 sub scanborrower {
   my ($env,$interface)=@_;
   #scan barcode
   my ($number,$reason,$book)=C4::InterfaceCDK::borrower_dialog($env); #C4::InterfaceCDK
-  $number= $number;
+  $number= $number;		# FIXME - WTF?
   $book=uc $book;
   return ($number,$reason,$book);
 }
 
+1;
+__END__
 
-END { }       # module clean-up code here (global destructor)
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut

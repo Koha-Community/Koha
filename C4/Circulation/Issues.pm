@@ -1,8 +1,9 @@
-package C4::Circulation::Issues; #asummes C4/Circulation/Issues
+package C4::Circulation::Issues;
+
+# $Id$
 
 #package to deal with Issues
 #written 3/11/99 by chris@katipo.co.nz
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -21,6 +22,9 @@ package C4::Circulation::Issues; #asummes C4/Circulation/Issues
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - AFAICT the only function here that's still being used is
+# &formatitem, and I'm not convinced that it's really being used.
+
 use strict;
 require Exporter;
 use DBI;
@@ -38,49 +42,37 @@ use C4::Stats;
 use C4::Print;
 use C4::Format;
 use C4::Input;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
   
 # set the version for version checking
 $VERSION = 0.01;
-    
+
+=head1 NAME
+
+C4::Circulation::Issues - Miscellaneous functions related to Koha issues
+
+=head1 SYNOPSIS
+
+  use C4::Circulation::Issues;
+
+=head1 DESCRIPTION
+
+This module provides a function for pretty-printing an item being
+issued.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+#'
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&Issue &formatitem);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
-
-
+# FIXME - This is only used in C4::Circmain and C4::Circulation, both
+# of which look obsolete. Is this function obsolete as well?
+# If not, this needs a POD.
 sub Issue  {
    my ($env) = @_;
    my $dbh = C4::Context->dbh;
@@ -121,7 +113,8 @@ sub Issue  {
    return ($done);
 }    
 
-
+# FIXME - Not exported, but called by "telnet/borrwraper.pl".
+# Presumably this function is obsolete.
 sub processitems {
   #process a users items
    my ($env,$bornum,$borrower,$items,$items2,$it2p,$amountdue,$itemsdet,$odues)=@_;
@@ -171,23 +164,53 @@ sub processitems {
    return @done;
 }
 
+=item formatitem
+
+  $line = &formatitem($env, $item, $datedue, $charge);
+
+Pretty-prints a description of an item being issued, and returns the
+pretty-printed string.
+
+C<$env> is effectively ignored.
+
+C<$item> is a reference-to-hash whose keys are fields from the items
+table in the Koha database.
+
+C<$datedue> is a string that will be prepended to the output.
+
+C<$charge> is a number that will be appended to the output.
+
+The return value C<$line> is a string of the form
+
+I<$datedue $barcode $title: $author $type$dewey$subclass $charge>
+
+where those values that are not passed in as arguments are obtained
+from C<$item>.
+
+=cut
+#'
 sub formatitem {
    my ($env,$item,$datedue,$charge) = @_;
    my $line = $datedue." ".$item->{'barcode'}." ".$item->{'title'}.": ".$item->{'author'};
+	# FIXME - Use string interpolation or sprintf()
    my $iclass =  $item->{'itemtype'};
+   # FIXME - The Dewey code is a string, not a number.
    if ($item->{'dewey'} > 0) {
      my $dewey = $item->{'dewey'};
      $dewey =~ s/0*$//;
      $dewey =~ s/\.$//;
-     $iclass = $iclass.$dewey.$item->{'subclass'};
+     $iclass = $iclass.$dewey.$item->{'subclass'};	# FIXME - .=
    };
    my $llen = 65 - length($iclass);
    my $line = fmtstr($env,$line,"L".$llen);
-   my $line = $line." $iclass ";
-   my $line = $line.fmtdec($env,$charge,"22");
+		# FIXME - Use sprintf() instead of &fmtstr.
+   my $line = $line." $iclass ";		# FIXME - .=
+   my $line = $line.fmtdec($env,$charge,"22");	# FIXME - .=
    return $line;
 }   
-	 
+
+# Only used internally
+# FIXME - Only used by &processitems, which appears to be obsolete.
 sub issueitem{
    my ($env,$dbh,$itemnum,$bornum,$items)=@_;
    $itemnum=uc $itemnum;
@@ -262,6 +285,7 @@ sub issueitem{
 	 my $resborrower = $btsh->fetchrow_hashref;
 	 my $msgtxt = chr(7)."Res for $resborrower->{'cardnumber'},";
          $msgtxt = $msgtxt." $resborrower->{'initials'} $resborrower->{'surname'}";
+		# FIXME - .=
          my $ans = msg_ny($env,$msgtxt,"Allow issue?");
 	 if ($ans eq "N") {
 	    # print a docket;
@@ -317,6 +341,8 @@ sub issueitem{
    return($item,$charge,$datedue);
 }
 
+# FIXME - A virtually identical function appears in
+# C4::Circulation::Circ2. Pick one and stick with it.
 sub createcharge {
   my ($env,$dbh,$itemno,$bornum,$charge) = @_;
   my $nextaccntno = getnextacctno($env,$bornum,$dbh);
@@ -330,7 +356,7 @@ sub createcharge {
 }
 
 
-
+# Only used internally
 sub updateissues{
   # issue the book
   my ($env,$itemno,$bitno,$dbh,$bornum)=@_;
@@ -379,6 +405,8 @@ sub updateissues{
 # &C4::Circulation::Renewals2::calc_charges and
 # &C4::Circulation::Circ2::calc_charges.
 # Pick one and stick with it.
+
+# Only used internally
 sub calc_charges {
   # calculate charges due
   my ($env, $dbh, $itemno, $bornum)=@_;
@@ -409,4 +437,13 @@ sub calc_charges {
   return ($charge);
 }
 
-END { }       # module clean-up code here (global destructor)
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut
