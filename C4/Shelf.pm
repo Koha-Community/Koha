@@ -317,12 +317,12 @@ sub addtoshelf {
     my $clearcache=0;
     foreach (@$add) {
 	my ($biblionumber,$biblioitemnumber,$itemnumber) = @$_;
-	$sth=$dbh->prepare("select count(*) from bookshelfcontents where bookshelfid=$bookshelfid and itemnumber=$itemnumber and biblioitemnumber=$biblioitemnumber and biblionumber=$biblionumber");
-	$sth->execute;
+	$sth=$dbh->prepare("select count(*) from bookshelfcontents where bookshelfid=? and itemnumber=? and biblioitemnumber=? and biblionumber=?");
+	$sth->execute($bookshelfid,$itemnumber,$biblioitemnumber,$biblionumber);
 	my $rows=$sth->fetchrow();
 	if ($rows==0) {
-	    $sth=$dbh->prepare("insert into bookshelfcontents (bookshelfid,biblionumber,biblioitemnumber,itemnumber) values ($bookshelfid,$biblionumber,$biblioitemnumber,$itemnumber)");
-	    $sth->execute;
+	    $sth=$dbh->prepare("insert into bookshelfcontents (bookshelfid,biblionumber,biblioitemnumber,itemnumber) values (?,?,?,?)");
+	    $sth->execute($bookshelfid,$biblionumber,$biblioitemnumber,$itemnumber);
 	    $clearcache=1;
 	}
     }
@@ -442,13 +442,13 @@ sub loadcontents {
     my $biblionumbers;
     my $biblioitemnumbers;
     if ($orderby eq 'author') {
-	$sth=$dbh->prepare("select itemnumber,BSC.biblionumber,BSC.biblioitemnumber from bookshelfcontents BSC, biblio B where BSC.biblionumber=B.biblionumber and bookshelfid=$bookshelfid order by B.author $limit");
+	$sth=$dbh->prepare("select itemnumber,BSC.biblionumber,BSC.biblioitemnumber from bookshelfcontents BSC, biblio B where BSC.biblionumber=B.biblionumber and bookshelfid=? order by B.author $limit");
     } elsif ($orderby eq 'title') {
-	$sth=$dbh->prepare("select itemnumber,BSC.biblionumber,BSC.biblioitemnumber from bookshelfcontents BSC, biblio B where BSC.biblionumber=B.biblionumber and bookshelfid=$bookshelfid order by B.title $limit");
+	$sth=$dbh->prepare("select itemnumber,BSC.biblionumber,BSC.biblioitemnumber from bookshelfcontents BSC, biblio B where BSC.biblionumber=B.biblionumber and bookshelfid=? order by B.title $limit");
     } else {
-	$sth=$dbh->prepare("select itemnumber,biblionumber,biblioitemnumber from bookshelfcontents where bookshelfid=$bookshelfid $limit");
+	$sth=$dbh->prepare("select itemnumber,biblionumber,biblioitemnumber from bookshelfcontents where bookshelfid=? $limit");
     }
-    $sth->execute;
+    $sth->execute($bookshelfid);
     my @results;
     my @biblioresults;
     my @biblioitemresults;
