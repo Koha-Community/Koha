@@ -35,6 +35,7 @@ use C4::Search;
 use C4::Members;
 use C4::Koha;
 use HTML::Template;
+use Date::Manip;
 
 my $input = new CGI;
 
