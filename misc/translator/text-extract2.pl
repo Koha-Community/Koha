@@ -292,10 +292,11 @@ sub text_extract (*) {
 	    }
 	}
     }
-    # Emit all extracted strings. Don't emit pure whitespace or pure numbers.
+    # Emit all extracted strings.
+    # Don't emit pure whitespace, pure numbers, or TMPL_VAR's.
     for my $t (keys %text) {
 	printf "%s\n", $t
-	    unless $t =~ /^(?:\s|\&nbsp$re_end_entity)*$/os || $t =~ /^\d+$/;
+	    unless $t =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var)*$/os || $t =~ /^\d+$/;
     }
 }
 
