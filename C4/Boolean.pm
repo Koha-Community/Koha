@@ -90,7 +90,6 @@ exception is thrown.
 
 =cut
 
-require '/u/acli/lib/cvs.pl';
 sub true_p ($) {
     my($x) = @_;
     my $it;
