@@ -452,7 +452,7 @@ sub CheckWaiting {
                            AND reserves.found = 'W'
                            AND cancellationdate is NULL");
     $sth->execute($borr);
-    if (my $data=$sth->fetchrow_hashref) {
+    while (my $data=$sth->fetchrow_hashref) {
 	  push(@itemswaiting,$data);
     }
     $sth->finish;
