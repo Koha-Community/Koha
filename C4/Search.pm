@@ -21,7 +21,7 @@ $VERSION = 0.02;
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
-&findguarantor &getwebsites &getwebbiblioitems &catalogsearch);
+&findguarantor &getwebsites &getwebbiblioitems &catalogsearch itemcount2);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -123,25 +123,35 @@ sub catalogsearch {
 #    $search->{$key}=$dbh->quote($search->{$key});
 #  }
   my ($count,@results);
+  print STDERR "Doing a search \n";
   if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
+        print STDERR "Doing a precise search\n";
     ($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+
   } else {
     if ($search->{'subject'} ne ''){
       ($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
     } else {
       if ($search->{'keyword'} ne ''){
          ($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
-      } elsif ($search->{'title'} ne '' || $search->{'author'} ne '' ||
-               $search->{'illustrator'} ne '' || $search->{'dewey'} ne '' ||
-	       $search->{'class'} ne ''){
+       } else {
 	($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
+
       }
     }
   }
   if ($env->{itemcount}) {
     foreach my $data (@results){
-      my ($count, $lcount, $nacount, $fcount, $scount, $lostcount, $mending, $transit, $ocount) = itemcount($env, $data->{'biblionumber'}, 'intra');
-      $data->{'itemcount'}=$count;
+      my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
+      my $subject2=$data->{'subject'};
+      $subject2=~ s/ /%20/g;
+      $data->{'itemcount'}=$counts->{'total'};
+      foreach my $key (keys %$counts){
+        if ($key ne 'total'){
+          $data->{'location'}.="$key $counts->{$key} ";
+         }
+      }
+      $data->{'subject2'}=$subject2;
     }
   }
   return ($count,@results);
@@ -389,7 +399,11 @@ sub CatSearch  {
 	   #$query=$query. " and (title like '%$search->{'title'}%' 
 	   #or seriestitle like '%$search->{'title'}%')";
 	 }
-	 	 
+	 if ($search->{'abstract'} ne ''){
+	    $query.= " and (abstract like '%$search->{'abstract'}%')";
+	 }
+	 
+
 	 $query.=" group by biblio.biblionumber";
       } else {
           if ($search->{'title'} ne '') {
@@ -432,6 +446,9 @@ sub CatSearch  {
 	    }
 	    $query=$query."))";
 	   }
+	   if ($search->{'abstract'} ne ''){
+	    $query.= " and (abstract like '%$search->{'abstract'}%')";
+	   }
 	  } elsif ($search->{'class'} ne ''){
 	     $query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
 	     my @temp=split(/\|/,$search->{'class'});
@@ -452,12 +469,17 @@ sub CatSearch  {
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.dewey like '$search->{'dewey'}%'";
 	  } elsif ($search->{'illustrator'} ne '') {
-	  if ($search->{'illustrator'} ne ''){
-	     $query="select * from biblioitems,biblio 
+      	     $query="select * from biblioitems,biblio 
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.illus like '%".$search->{'illustrator'}."%'";
+	  } elsif ($search->{'publisher'} ne ''){
+	    $query.= "Select * from biblio,biblioitems where biblio.biblionumber
+	    =biblioitems.biblionumber and (publishercode like '%$search->{'publisher'}%')";
+	  } elsif ($search->{'abstract'} ne ''){
+	    $query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
 	  }
-	}
+	 	 
+	
           $query .=" group by biblio.biblionumber";	 
       }
   } 
@@ -483,8 +505,9 @@ sub CatSearch  {
     }  
   }
   if ($type eq 'precise'){
-      $query="select * from items,biblio ";
+      
       if ($search->{'item'} ne ''){
+        $query="select * from items,biblio ";
         my $search2=uc $search->{'item'};
         $query=$query." where 
         items.biblionumber=biblio.biblionumber 
@@ -494,7 +517,7 @@ sub CatSearch  {
         my $search2=uc $search->{'isbn'};
         my $query1 = "select * from biblioitems where isbn='$search2'";
 	my $sth1=$dbh->prepare($query1);
-#	print $query1;
+	print STDERR "$query1\n";
 	$sth1->execute;
         my $i2=0;
 	while (my $data=$sth1->fetchrow_hashref) {
@@ -529,7 +552,7 @@ if ($type ne 'precise' && $type ne 'subject'){
       $query=$query." order by subject";
   }
 }
-#print $query;
+print STDERR "$query\n";
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $count=1;
@@ -552,7 +575,10 @@ while (my $data=$sth->fetchrow_hashref){
 	    if ($search->{'illustrator'} ne ''){
 	      $query.=" and illus like '%".$search->{'illustrator'}."%' ";
 	    }
-#print $query;
+	    if ($search->{'publisher'} ne ''){
+	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
+	    }
+print STDERR "$query\n";
   my $sti=$dbh->prepare($query);
   $sti->execute;
   my $dewey;
@@ -648,6 +674,7 @@ and branches.branchcode = items.holdingbranch";
       $datedue="Cancelled";
     }
     if ($datedue eq ''){
+       $datedue="Available";
        my ($rescount,$reserves)=Findgroupreserve($data->{'biblioitemnumber'},$biblionumber);
 
        if ($rescount >0){                                
@@ -672,8 +699,10 @@ and branches.branchcode = items.holdingbranch";
  #   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
     my @temp=split('-',$data->{'datelastseen'});
     my $date="$temp[2]/$temp[1]/$temp[0]";
-    $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$class\t$data->{'itemnumber'}\t$data->{'itemtype'}\t$date\t$data->{'biblioitemnumber'}\t$data->{'volumeddesc'}";
-#    print "$results[$i] <br>";
+    $data->{'datelastseen'}=$date;
+    $data->{'datedue'}=$datedue;
+    $data->{'class'}=$class;
+    $results[$i]=$data;
     $i++;
   }
  $sth->finish;
@@ -685,7 +714,9 @@ and branches.branchcode = items.holdingbranch";
   if ($data=$sth2->fetchrow_hashref){                   
     $ocount=$data->{'quantity'} - $data->{'quantityreceived'};                                                  
     if ($ocount > 0){
-      $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$ocount\tOn Order\t\t$data->{'itemnumber'}\t$data->{'itemtype'}\t\t$data->{'biblioitemnumber'}\t$data->{'volumeddesc'}";
+      $data->{'ocount'}=$ocount;
+      $data->{'order'}="One Order";
+      $results[$i]=$data;
     }
   } 
   $sth2->finish;
@@ -1087,6 +1118,7 @@ borrowernumber=$params->{'borrowernumber'} order by date desc,timestamp desc";
    return ($numlines,\@acctlines,$total);
 }
 
+
 sub itemcount { 
   my ($env,$bibnum,$type)=@_; 
   my $dbh=C4Connect;   
@@ -1158,6 +1190,52 @@ sub itemcount {
   $dbh->disconnect;                   
   return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount); 
 }
+
+
+sub itemcount2 { 
+  my ($env,$bibnum,$type)=@_; 
+  my $dbh=C4Connect;   
+  my $query="Select * from items,branches where     
+  biblionumber=$bibnum and items.holdingbranch=branches.branchcode";
+  if ($type ne 'intra'){
+    $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
+    (wthdrawn <> 1 or wthdrawn is NULL)";      
+  }
+  my $sth=$dbh->prepare($query);         
+  #  print $query;           
+  $sth->execute;           
+  my %counts;
+  $counts{'total'}=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $counts{'total'}++;                     
+    my $query2="select * from issues,items where issues.itemnumber=                          
+    '$data->{'itemnumber'}' and returndate is NULL
+    and items.itemnumber=issues.itemnumber and ((items.itemlost <>1 and
+    items.itemlost <> 2) or items.itemlost is NULL) 
+    and (wthdrawn <> 1 or wthdrawn is NULL)"; 
+    
+    my $sth2=$dbh->prepare($query2);     
+    $sth2->execute;         
+    if (my $data2=$sth2->fetchrow_hashref){         
+       $counts{'notavailable'}++;         
+    } else {         
+       $counts{$data->{'branchname'}}++;
+    }                             
+    $sth2->finish;     
+  } 
+  my $query2="Select * from aqorders where biblionumber=$bibnum and
+  datecancellationprinted is NULL and quantity > quantityreceived";
+  my $sth2=$dbh->prepare($query2);
+  $sth2->execute;
+  if (my $data=$sth2->fetchrow_hashref){
+      $counts{'order'}=$data->{'quantity'} - $data->{'quantityreceived'};
+  }
+  $sth2->finish;
+  $sth->finish; 
+  $dbh->disconnect;                   
+  return (\%counts); 
+}
+
 
 sub ItemType {
   my ($type)=@_;
@@ -1231,6 +1309,7 @@ sub getwebsites {
 
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
+        $data->{'url'} =~ s/^http:\/\///;
         $results[$count] = $data;
     	$count++;
     } # while
@@ -1252,6 +1331,7 @@ and itemtype = 'WEB'";
     
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
+        $data->{'url'} =~ s/^http:\/\///;
         $results[$count] = $data;
         $count++;
     } # while
