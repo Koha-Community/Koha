@@ -313,7 +313,7 @@ sub ListFileRecords {
 		     $startdate,$enddate,$serverstring) = $sth->fetchrow ) {
 		my ($srvid, $server, $database, $auth) = split(/\//, $serverstring, 4);
 		if ( $server ) {
-			my $srvname=&z3950servername($dbh,$srvid,"$server/$database");
+			my $srvname=&z3950servername($srvid,"$server/$database");
 			$template->param(srvid => $srvid);
 			$template->param(srvname => $srvname);
 		} # if $server
@@ -806,6 +806,10 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.31  2003/02/19 01:01:07  wolfpac444
+# Removed the unecessary $dbh argument from being passed.
+# Resolved a few minor FIXMEs.
+#
 # Revision 1.30  2003/02/02 07:18:38  acli
 # Moved C4/Charset.pm to C4/Interface/CGI/Output.pm
 #

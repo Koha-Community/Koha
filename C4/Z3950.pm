@@ -85,10 +85,10 @@ C<$dbh> is ignored.
 
 =cut
 #'
+
 sub z3950servername {
     # inputs
     my (
-	$dbh,		# FIXME - Unused argument
 	$srvid,		# server id number
 	$default,
     )=@_;
@@ -98,17 +98,18 @@ sub z3950servername {
 
     $dbh = C4::Context->dbh;
 
-	# FIXME - Fix indentation
-	my $sti=$dbh->prepare("select name
-		from z3950servers
-		where id=?");
-	$sti->execute($srvid);
-	if ( ! $sti->err ) {
-	    ($longname)=$sti->fetchrow;
-	}
-	if (! $longname) {
-	    $longname="$default";
-	}
+    my $sti=$dbh->prepare("
+        select name 
+	from z3950servers 
+	where id=?");
+	
+    $sti->execute($srvid);
+    if ( ! $sti->err ) {
+        ($longname)=$sti->fetchrow;
+    }
+    if (! $longname) {
+        $longname="$default";
+    }
 	return $longname;
 } # sub z3950servername
 
@@ -150,8 +151,6 @@ sub addz3950queue {
     use strict;
     # input
     my (
-	$dbh,		# DBI handle
-			# FIXME - Unused argument
 	$query,		# value to look up
 	$type,		# type of value ("isbn", "lccn", etc).
 			# FIXME - What other values are legal?
@@ -204,10 +203,8 @@ sub addz3950queue {
 	}
 
 	my $serverlist='';
-	# FIXME - $serverlist = join(" ", @serverlist);
-	foreach (@serverlist) {
-	    $serverlist.="$_ ";
-    	} # foreach
+	
+	$severlist = join(" ", @serverlist);
 	chop $serverlist;
 
 	# FIXME - Is this test supposed to test whether @serverlist is
@@ -274,6 +271,10 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
+# Revision 1.7  2003/02/19 01:01:06  wolfpac444
+# Removed the unecessary $dbh argument from being passed.
+# Resolved a few minor FIXMEs.
+#
 # Revision 1.6  2002/10/13 08:30:53  arensb
 # Deleted unused variables.
 # Removed trailing whitespace.

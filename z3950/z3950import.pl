@@ -281,7 +281,7 @@ sub ListFileRecords {
 		     $startdate,$enddate,$serverstring) = $sth->fetchrow ) {
 		my ($srvid, $server, $database, $auth) = split(/\//, $serverstring, 4);
 		if ( $server ) {
-			my $srvname=&z3950servername($dbh,$srvid,"$server/$database");
+			my $srvname=&z3950servername($srvid,"$server/$database");
 			$template->param(srvid => $srvid);
 			$template->param(srvname => $srvname);
 		} # if $server
@@ -651,7 +651,7 @@ sub AcceptZ3950Queue {
           }
         }
 
-	$error=addz3950queue($dbh,$input->param('query'), $input->param('type'),
+	$error=addz3950queue($input->param('query'), $input->param('type'),
 		$input->param('rand'), @serverlist);
 	if ( $error ) {
 	    print qq|
@@ -996,6 +996,10 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.2  2003/02/19 01:01:11  wolfpac444
+# Removed the unecessary $dbh argument from being passed.
+# Resolved a few minor FIXMEs.
+#
 # Revision 1.1  2002/11/22 10:15:22  tipaul
 # moving z3950 related scripts to specific dir
 #
