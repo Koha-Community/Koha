@@ -56,7 +56,7 @@ Confirm delete:
     <td align='left' valign='top'><TMPL_VAR name=branch_code escape="HTML"></td>
     <td align='left' valign='top'>
 <TMPL_IF name=address-empty-p>
-(nothing entered)
+(沒有輸入地址)
 <TMPL_ELSE>
 <TMPL_IF name=branchaddress1>
 <TMPL_VAR name=branchaddress1 escape="HTML"></TMPL_IF>
@@ -65,16 +65,16 @@ Confirm delete:
 <TMPL_IF name=branchaddress3>
 <br><TMPL_VAR name=branchaddress3 escape="HTML"></TMPL_IF>
 <TMPL_IF name=branchphone>
-<br>Ph: <TMPL_VAR name=branchphone escape="HTML"></TMPL_IF>
+<br>電話：<TMPL_VAR name=branchphone escape="HTML"></TMPL_IF>
 <TMPL_IF name=branchfax>
-<br>Fax: <TMPL_VAR name=branchfax escape="HTML"></TMPL_IF>
+<br>傳真：<TMPL_VAR name=branchfax escape="HTML"></TMPL_IF>
 <TMPL_IF name=branchemail>
-<br>Email: <TMPL_VAR name=branchemail escape="HTML"></TMPL_IF>
+<br>電郵：<TMPL_VAR name=branchemail escape="HTML"></TMPL_IF>
 </TMPL_IF>
     </td>
     <td align='left' valign='top'>
 <TMPL_IF name=no-categories-p>
-(no categories set)
+(沒有設定類別)
 <TMPL_ELSE>
 <TMPL_LOOP name=category_list>
 <TMPL_VAR name=categoryname><br>
