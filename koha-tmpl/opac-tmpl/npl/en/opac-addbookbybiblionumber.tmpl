@@ -1,22 +1,31 @@
-<!-- TMPL_INCLUDE Name="popup-top.inc" -->
-<div id="mainbloc">
-<h1>Add book to bookshelf</h1> 
-<p><label>Title</label><!-- TMPL_VAR NAME="title" --></p>
-<p><label>Author</label><!-- TMPL_VAR NAME="author" --></p>
-<h2>Select bookshelf</h2>
-<form>
-	<p><label>Add to virtual shelf</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
-</form>
-<form>
-<h2>or add to a new bookshelf</h2>
-	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
-	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-		<select name="category">
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Add to Virtual Shelf<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="window">
+<div class="details">
+<table>
+<caption>Add Item to Virtual Shelf</caption>
+<tr><th>Title</th><td><!-- TMPL_VAR NAME="title" --></td></tr>
+<!-- TMPL_IF NAME="author" --><tr><th>Author</th><td><!-- TMPL_VAR NAME="author" --></td></tr><!-- /TMPL_IF -->
+</table>
+
+<form action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="post">
+<table>
+<caption>Select Virtual Shelf:</caption>
+<tr><th><label for="shelfnumber">Add to virtual shelf</label></th><td><!-- TMPL_VAR NAME="CGIbookshelves" --></td></tr>
+</table>
+
+<table>
+<caption>...or add to a new bookshelf:</caption>
+<tr><th><label for="newbookshelf">Shelf Name:</label> </th><td><input type="text" id="newbookshelf" name="newbookshelf" maxlength="40" size="40">
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td></tr>
+<tr><th><label for="category">Shelf Type: </label></th><td><select id="category" name="category">
 			<option value="1">Private</option>
 			<option value="2">Public</option>
 			<option value="3">Free</option>
-		</select>
-	</p>
-	<input type="submit" value="Add to virtual shelf" class="button catalogue">
+		</select></td></tr>
+</table>
+	<p><input type="submit" value="Add to Virtual Shelf" class="submit"></p>
 </form>
-<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->
+</div>
+</div>
+</body>
+</html>
