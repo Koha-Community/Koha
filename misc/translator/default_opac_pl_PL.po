@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default_opac_pl_PL\n"
-"POT-Creation-Date: 2004-03-07 11:37+0100\n"
-"PO-Revision-Date: 2004-03-07 11:58+0100\n"
+"POT-Creation-Date: 2004-03-08 17:01+0100\n"
+"PO-Revision-Date: 2004-03-08 17:02+0100\n"
 "Last-Translator: Benedict P. Barszcz <kb2qzv@localhost.localdomain>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,6 +29,13 @@ msgstr "%pZwykłe%pDokładne"
 #, c-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
+
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:10
+#, c-format
+msgid "%s (%s)"
+msgstr "%s (%s)"
 
 #. %1$s: TMPL_VAR name=phone
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:13
@@ -86,6 +93,12 @@ msgstr "&copy;"
 msgid ": <a1>%s</a>"
 msgstr ": <a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=dateaccessioned
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
+#, c-format
+msgid "<a1> Accession</a> Date:%s"
+msgstr "<a1> Nabyto</a> Dnia:%s"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
 #, c-format
 msgid "<a1>Log In</a> to Koha"
@@ -97,12 +110,6 @@ msgstr "<a1>Zaloguj</a> do Koha"
 #, c-format
 msgid "<b>%s</b> ( record %s )"
 msgstr "<b>%s</b> ( rekord %s )"
-
-#. %1$s: TMPL_VAR name=dateaccessioned
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
-#, c-format
-msgid "<b><a1> Accession</a> Date:%s"
-msgstr "<b><a1> Nabyto</a> Dnia:%s"
 
 #. %1$s: TMPL_VAR name=issues
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:87
@@ -133,12 +140,6 @@ msgstr "<b>Numer Biblio:</b> %s"
 #, c-format
 msgid "<b>Biblionumber:</b> %s"
 msgstr "<b>Numerbiblio:</b> %s"
-
-#. %1$s: TMPL_VAR name=wthdrawn
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:86
-#, c-format
-msgid "<b>Cancelled: %s"
-msgstr "<b>Anulowano: %s"
 
 #. %1$s: TMPL_VAR name=classification
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:44
@@ -379,20 +380,6 @@ msgstr "<b>Rok :</b> %s"
 msgid "<b>in </b>%s"
 msgstr "<b>w </b>%s"
 
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:9
-#, c-format
-msgid "<em><a1>%s (%s)</a></em>"
-msgstr "<em><a1>%s (%s)</a></em>"
-
-#. %1$s: TMPL_VAR name=firstname
-#. %2$s: TMPL_VAR name=surname
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:4
-#, c-format
-msgid "<em>Account for %s %s</em>"
-msgstr "<em>Rachunek dla %s %s</em>"
-
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:10
 msgid "AMOUNT"
 msgstr "KWOTA"
@@ -400,6 +387,13 @@ msgstr "KWOTA"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:7
 msgid "ARE OUR RECORDS CORRECT?"
 msgstr "CZY NASZE DANE SĄ POPRAWNE?"
+
+#. %1$s: TMPL_VAR name=firstname
+#. %2$s: TMPL_VAR name=surname
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:4
+#, c-format
+msgid "Account for %s %s"
+msgstr "Rachunek dla %s %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:90
 msgid "Advanced Search, More Options"
@@ -445,6 +439,12 @@ msgstr "KOD PASKOWY %s"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:53
 msgid "Barcode"
 msgstr "Kod paskowy"
+
+#. %1$s: TMPL_VAR name=wthdrawn
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:86
+#, c-format
+msgid "Cancelled: %s"
+msgstr "Anulowano: %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:36
 msgid "Cannot be Reserved"
@@ -1060,6 +1060,9 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:6
 msgid "text/html; charset=iso-8859-1"
 msgstr "text/html; charset=utf-8"
+
+#~ msgid "<em><a1>%s (%s)</a></em>"
+#~ msgstr "<em><a1>%s (%s)</a></em>"
 
 #~ msgid "Exact"
 #~ msgstr "Dokładne"

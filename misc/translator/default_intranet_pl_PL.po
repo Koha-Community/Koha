@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default_intranet_pl_PL\n"
-"POT-Creation-Date: 2004-03-07 11:03+0100\n"
-"PO-Revision-Date: 2004-03-08 01:09+0100\n"
+"POT-Creation-Date: 2004-03-08 16:32+0100\n"
+"PO-Revision-Date: 2004-03-08 16:59+0100\n"
 "Last-Translator: Benedict P. Barszcz <kb2qzv@localhost.localdomain>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:6
 #, c-format
 msgid "\"<a1>%s\"</a>"
-msgstr ""
+msgstr "\"<a1>%s\"</a>"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:14
 msgid "$ rrp"
@@ -60,7 +60,7 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:380
 #, c-format
 msgid "%S - %s <a1>+</a>"
-msgstr ""
+msgstr "%S - %s <a1>+</a>"
 
 #. %1$S: type=text name=pagesize
 #. %2$S: type=text name=offset
@@ -81,13 +81,6 @@ msgstr "%S i %S"
 #, c-format
 msgid "%S meaningful only if not for loan is not set"
 msgstr "%S ma znaczenie tylko wtedy gdy &quot;nie na wynos&quot; jest puste"
-
-#. %1$S: type=text name=start_bib
-#. %2$S: type=text name=end_bib
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/export/marc.tmpl:7
-#, c-format
-msgid "%S to biblio number : %S"
-msgstr "%S do opisu numer : %S"
 
 #. %1$p: type=radio name=existing value=YES
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:9
@@ -175,6 +168,15 @@ msgstr "%pNiezapłacono %pPłać %pOdpisz"
 msgid "%pYes %pNo"
 msgstr "%pTak %pNie"
 
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=othernames
+#. %3$s: TMPL_VAR name=surname
+#. %4$s: TMPL_VAR name=firstname
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/member-password.tmpl:9
+#, c-format
+msgid "%s %s %s, %s"
+msgstr "%s %s %s, %s"
+
 #. %1$s: TMPL_VAR name=shelfname
 #. %2$s: TMPL_VAR name=shelfbookcount
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:80
@@ -182,12 +184,28 @@ msgstr "%pTak %pNie"
 msgid "%s (%s books)"
 msgstr "%s (%s książek)"
 
-#. %1$s: TMPL_VAR name=bookfundid
-#. %2$s: TMPL_VAR name=bookfundname
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/bookcount.tmpl:5
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:2
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/moditem.tmpl:3
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:14
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:13
 #, c-format
 msgid "%s (%s)"
-msgstr ""
+msgstr "%s (%s)"
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
+#. %3$s: TMPL_VAR name=class
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:5
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:14
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:4
+#, c-format
+msgid "%s (%s) %s"
+msgstr "%s (%s) %s"
 
 #. %1$s: TMPL_VAR name=authorised_value
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:65
@@ -215,7 +233,13 @@ msgstr "%s - %s"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:33
 #, c-format
 msgid "%s - %s : <b>%s</b>"
-msgstr ""
+msgstr "%s - %s : <b>%s</b>"
+
+#. %1$s: TMPL_VAR name=ordernumber
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:27
+#, c-format
+msgid "%s - Receive Order"
+msgstr "%s - Przyjmij Zamówienie"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=biblioitemnumber
@@ -277,6 +301,12 @@ msgstr "%s nie zaimportowano, gdyż brakuje cech formatu MARC (albo brak ISBN/IS
 msgid "%s records parsed"
 msgstr "przeanalizowano %s rekordów"
 
+#. %1$s: TMPL_VAR name=type
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/reports.tmpl:3
+#, c-format
+msgid "%s reports"
+msgstr "%s raporty"
+
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=count
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:6
@@ -303,10 +333,11 @@ msgstr "%s(%s ksiązek)"
 #. %2$s: TMPL_VAR name=address2
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:6
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:7
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/member-flags.tmpl:3
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detailprint.tmpl:39
 #, c-format
 msgid "%s, %s"
-msgstr ""
+msgstr "%s, %s"
 
 #. %1$s: TMPL_VAR name=year
 #. %2$s: TMPL_VAR name=month
@@ -314,7 +345,7 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:211
 #, c-format
 msgid "%s/%s/%s"
-msgstr ""
+msgstr "%s/%s/%s"
 
 #. %1$s: TMPL_VAR name=dig
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:127
@@ -344,12 +375,12 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:38
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:41
 msgid "&copy;"
-msgstr ""
+msgstr "&copy;"
 
 #. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:106
 msgid "&gt;&gt;&gt;"
-msgstr ""
+msgstr "&gt;&gt;&gt;"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:72
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:110
@@ -361,7 +392,7 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:332
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:369
 msgid "&gt;&gt;&gt;&gt;"
-msgstr ""
+msgstr "&gt;&gt;&gt;&gt;"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/currency.tmpl:194
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/printers.tmpl:187
@@ -373,7 +404,7 @@ msgstr "&lt;&lt; Wstecz"
 #. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:94
 msgid "&lt;&lt;&lt;"
-msgstr ""
+msgstr "&lt;&lt;&lt;"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:105
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:142
@@ -385,7 +416,7 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:364
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:400
 msgid "&lt;&lt;&lt;&lt;"
-msgstr ""
+msgstr "&lt;&lt;&lt;&lt;"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:38
 msgid "&nbsp No results found."
@@ -741,14 +772,14 @@ msgstr "&nbsp; &nbsp; LUB"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/jmemberentry.tmpl:75
 #, c-format
 msgid "(%s)*"
-msgstr ""
+msgstr "(%s)*"
 
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=initials
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:16
 #, c-format
 msgid "(%s, %s)"
-msgstr ""
+msgstr "(%s, %s)"
 
 #. %1$s: TMPL_VAR name=entrydate
 #. %2$s: TMPL_VAR name=basket
@@ -791,7 +822,7 @@ msgstr "(nic nie wpisano)"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:412
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem.tmpl:59
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. %1$p: type=radio name=sex value=F
 #. %2$p: type=radio name=sex value=M
@@ -916,22 +947,16 @@ msgid ""
 "items, tick the appropriate ones and a new group record will be created "
 "automatically for them."
 msgstr ""
-"<B>POMOC</B> <b>Należy</b> kliknąć na odpowiedni guzik (w zielonym prostokącie) i "
-"wybrać albo przypisanie do istniejącej grupy albo modyfikację rekordu. Jeśli "
-"zmiany mają dotyczyć tylko niektórych rekordów, należy zaznaczyć je "
-"odpowiednio; stworzy to automatycznie nowy grupowy rekord."
+"<B>POMOC</B> <b>Należy</b> kliknąć na odpowiedni guzik (w zielonym "
+"prostokącie) i wybrać albo przypisanie do istniejącej grupy albo modyfikację "
+"rekordu. Jeśli zmiany mają dotyczyć tylko niektórych rekordów, należy "
+"zaznaczyć je odpowiednio; stworzy to automatycznie nowy grupowy rekord."
 
-#. %1$s: TMPL_VAR name=type
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/reports.tmpl:3
+#. %1$s: TMPL_VAR name=dateaccessioned
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:85
 #, c-format
-msgid "<H1> %s reports </H1>"
-msgstr "<H1> %s reportów </H1>"
-
-#. %1$s: TMPL_VAR name=bookselname
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:3
-#, c-format
-msgid "<H1>Shopping Basket For: %s</H1>"
-msgstr "<H1>Koszyk Zakupów dla: %s</H1>"
+msgid "<a1> Accession</a> Date:%s"
+msgstr "<a1> Nabyto</a> Dnia:%s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:4
 #, c-format
@@ -940,8 +965,8 @@ msgstr "<a1>Wypożyczenia</a>&nbsp; <a2> Transfery</a>"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/branchtransfers.tmpl:4
 #, c-format
-msgid "<a1> Next Borrower</a> <a2> Returns"
-msgstr "<a1> Następny Czytelnik</a> <a2> Zwroty"
+msgid "<a1> Next Borrower</a> <a2> Returns</a>"
+msgstr "<a1> Następny Czytelnik</a> <a2> Zwroty</a>"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:7
 #, c-format
@@ -964,7 +989,7 @@ msgstr "<a1> Przejrzyj Rachunek </a> <a2> Opłata Kar </a>"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:258
 #, c-format
 msgid "<a1>%s</a> %s (%s)"
-msgstr ""
+msgstr "<a1>%s</a> %s (%s)"
 
 #. %1$s: TMPL_VAR name=riborcnum
 #. %2$s: TMPL_VAR name=riborsurname
@@ -973,7 +998,7 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:161
 #, c-format
 msgid "<a1>%s</a> %s, %s %s"
-msgstr ""
+msgstr "<a1>%s</a> %s, %s %s"
 
 #. %1$s: TMPL_VAR name=barcode
 #. %2$s: TMPL_VAR name=title
@@ -981,13 +1006,13 @@ msgstr ""
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:175
 #, c-format
 msgid "<a1>%s</a>%s(%s)"
-msgstr ""
+msgstr "<a1>%s</a>%s(%s)"
 
 #. %1$s: TMPL_VAR name=srvname
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/ListFileRecords.tmpl:29
 #, c-format
 msgid "<a1></a> \" %s"
-msgstr ""
+msgstr "<a1></a> \" %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/boraccount.tmpl:6
 #, c-format
@@ -1029,17 +1054,23 @@ msgstr "<a1>Do punktu wyrównania:</a> Raport dzienny (wczoraj)"
 msgid "<a1>View Basket</a> <h1>%s - Order Details </h1>"
 msgstr "<a1>Przejrzyj Koszyk</a> <h1>%s - Szczegóły Zamówienia </h1>"
 
+#. %1$S: type=text name=search
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:55
+#, c-format
+msgid "<b> Add order : enter keyword or title: </b>%S"
+msgstr "<b> Dodaj zamówienie: wprowadź hasło lub tytuł: </b> %S"
+
+#. %1$S: type=text name=search
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:12
+#, c-format
+msgid "<b> Search Keyword or Title: </b>%S"
+msgstr "<b> Szukaj wg. Słowa Kluczowego lub Tytułu: </b>%S"
+
 #. %1$s: TMPL_VAR name=msg
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:170
 #, c-format
 msgid "<b>%s</b><a1>Payment</a>"
 msgstr "<b>%s</b><a1>Płatność</a>"
-
-#. %1$s: TMPL_VAR name=dateaccessioned
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:85
-#, c-format
-msgid "<b><a1> Accession</a> Date:%s"
-msgstr "<b><a1> Nabyto</a> dnia:%s"
 
 #. %1$s: TMPL_VAR name=issues
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:89
@@ -1112,12 +1143,6 @@ msgstr "<b>Oddział:</b> %s &nbsp <b>Drukarka:</b> %s"
 #, c-format
 msgid "<b>Branch:</b> %s &nbsp; <b>Printer:</b> %s"
 msgstr "<b>Oddział:</b> %s &nbsp; <b>Drukarka:</b> %s"
-
-#. %1$s: TMPL_VAR name=wthdrawn
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:88
-#, c-format
-msgid "<b>Cancelled: %s"
-msgstr "<b>Anulowano: %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=classification
@@ -1298,6 +1323,12 @@ msgstr "<b>Ostatnio rejestrowana:</b> %s"
 msgid "<b>Loan length:</b> %s"
 msgstr "<b>Okres wypożyczenia:</b> %s"
 
+#. %1$S: type=text name=search
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:18
+#, c-format
+msgid "<b>New Search: </b>%S"
+msgstr "<b>Nowe Zapytanie: </b>%S"
+
 #. %1$s: TMPL_VAR name=count
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:47
 #, c-format
@@ -1393,6 +1424,12 @@ msgstr "<b>Cena Wymiany:</b> %s"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/catalogue-home.tmpl:29
 msgid "<b>Search :</b>Using more fields for your search will slow it down."
 msgstr "<b>Szukaj :</b>Stosowanie wielu pól w zapytaniu spowalnia wyszukiwanie."
+
+#. %1$S: type=text name=recieve
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:17
+#, c-format
+msgid "<b>Search ISBN or Title:</b> %S"
+msgstr "<b>Szukaj wg. ISBN lub Tytułu: </b> %S"
 
 #. %1$s: TMPL_VAR name=serial
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:30
@@ -1496,157 +1533,11 @@ msgstr "<b>Rok :</b> %s"
 msgid "<b>in </b>%s"
 msgstr "<b>w </b>%s"
 
-#. For the first occurrence,
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#. %3$s: TMPL_VAR name=class
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:5
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:14
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:4
-#, c-format
-msgid "<em>%s (%s) %s</em>"
-msgstr ""
-
-#. %1$s: TMPL_VAR name=tagfield
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:157
-#, c-format
-msgid "<em>MARC links%s</em>"
-msgstr "<em>Łącza MARC%s</em>"
-
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/bookcount.tmpl:4
-#, c-format
-msgid "<h1> <a1> %s (%s)</a></h1>"
-msgstr ""
-
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/moditem.tmpl:3
-#, c-format
-msgid "<h1>%s (%s)</h1>"
-msgstr "<h1>%s (%s)</h1>"
-
-#. %1$s: TMPL_VAR name=ordernumber
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:27
-#, c-format
-msgid "<h1>%s - Receive Order</h1>"
-msgstr "<h1>%s - Przyjmij Zamówienie</h1>"
-
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:2
-#, c-format
-msgid "<h1><a1>%s (%s)</a>"
-msgstr ""
-
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:13
-#, c-format
-msgid "<h1><a1>%s (%s)</a></h1>"
-msgstr ""
-
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptMarcUpload.tmpl:2
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/uploadmarc.tmpl:2
-#, c-format
-msgid "<h1><a1>Main Menu</a></h1>"
-msgstr "<h1><a1>Menu Główne</a></h1>"
-
-#. %1$s: TMPL_VAR name=firstname
-#. %2$s: TMPL_VAR name=surname
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/boraccount.tmpl:5
-#, c-format
-msgid "<h1>Account for <a1>%s %s</a></h1>"
-msgstr "<h1>Rachunek dla <a1>%s %s</a></h1>"
-
-#. %1$s: TMPL_VAR name=todaysdate
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/overdue.tmpl:4
-#, c-format
-msgid "<h1>Items Overdue as of %s</h1>"
-msgstr "<h1>Zaległe pozycje do dnia %s</h1>"
-
-#. %1$s: TMPL_VAR name=tagfield
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:70
-#, c-format
-msgid "<h1>MARC subfield structure admin for %s</h1>"
-msgstr "<h1>Admin struktury podpól MARC dla %s</h1>"
-
-#. %1$s: TMPL_VAR name=firstname
-#. %2$s: TMPL_VAR name=surname
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/pay.tmpl:3
-#, c-format
-msgid "<h1>Pay Fines for %s %s</h1>"
-msgstr "<h1>Opłata Kar dla %s %s</h1>"
-
-#. %1$s: TMPL_VAR name=name
-#. %2$s: TMPL_VAR name=invoice
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:8
-#, c-format
-msgid "<h1>Receipt Summary for : <i>%s</i> Invoice <i>%s</i></h1>"
-msgstr "<h1>Receipt Summary for : <i>%s</i> Faktura <i>%s</i></h1>"
-
-#. %1$s: TMPL_VAR name=name
-#. %2$s: TMPL_VAR name=invoice
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:8
-#, c-format
-msgid "<h1>Receipt Summary for: <i>%s</i> Invoice <i>%s</i></h1>"
-msgstr "<h1>Receipt Summary for: <i>%s</i> Faktura <i>%s</i></h1>"
-
-#. %1$s: TMPL_VAR name=name
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/recieveorder.tmpl:3
-#, c-format
-msgid "<h1>Receive Orders From Supplier <a1>%s</a></h1>"
-msgstr "<h1>Przyjmij Zamówienia od Dostawcy <a1>%s</a></h1>"
-
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/request.tmpl:7
-#, c-format
-msgid "<h1>Requesting: <a1>%s</a> %s</h1>"
-msgstr "<h1>Zamówienie: <a1>%s</a> %s</h1>"
-
-#. %1$s: TMPL_VAR name=basket
-#. %2$s: TMPL_VAR name=name
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:3
-#, c-format
-msgid "<h1>Shopping Basket %s for %s</h1>"
-msgstr "<h1>Koszyk Zakupów %s dla %s</h1>"
-
-#. %1$s: TMPL_VAR name=basket
-#. %2$s: TMPL_VAR name=name
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:3
-#, c-format
-msgid "<h1>Shopping Basket <b>%s </b>for <a1></a> %s</h1>"
-msgstr "<h1>Koszyk Zakupów <b>%s </b>dla <a1></a> %s</h1>"
-
-#. %1$s: TMPL_VAR name=name
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:8
-#, c-format
-msgid "<h1>Update: %s</h1>"
-msgstr "<h1>Update: %s</h1>"
-
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=othernames
-#. %3$s: TMPL_VAR name=surname
-#. %4$s: TMPL_VAR name=firstname
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/member-password.tmpl:9
-#, c-format
-msgid "<h2>%s %s %s, %s</h2>"
-msgstr ""
-
-#. %1$s: TMPL_VAR name=surname
-#. %2$s: TMPL_VAR name=firstname
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/member-flags.tmpl:3
-#, c-format
-msgid "<h2>%s, %s</h2>"
-msgstr ""
-
 #. %1$s: TMPL_VAR name=barcode
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/returns.tmpl:219
 #, c-format
 msgid "> <a1>%s</a>"
-msgstr ""
+msgstr "> <a1>%s</a>"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:38
 msgid ""
@@ -1740,6 +1631,13 @@ msgstr "Streszczenie:"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:12
 msgid "Account Management Fee"
 msgstr "Opłata za prowadzenie rachunku"
+
+#. %1$s: TMPL_VAR name=firstname
+#. %2$s: TMPL_VAR name=surname
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/boraccount.tmpl:5
+#, c-format
+msgid "Account for <a1>%s %s</a>"
+msgstr "Rachunek dla <a1>%s %s</a>"
 
 #. IMG name=reports
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/intranet-main.tmpl:139
@@ -1976,10 +1874,6 @@ msgstr "Dodaj lub Usuń Półki Wirtualne"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:26
 msgid "Add order"
 msgstr "Dodaj zamówienie"
-
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:55
-msgid "Add order : enter keyword or title:"
-msgstr "Dodaj zamówienie: wprowadź hasło lub tytuł:"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/includes/members-top.inc:79
 msgid "Add organisation"
@@ -2590,6 +2484,12 @@ msgstr "Anuluj rezerwację a następnie spróbuj transferu:"
 msgid "Cancelled"
 msgstr "Anulowano"
 
+#. %1$s: TMPL_VAR name=wthdrawn
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:88
+#, c-format
+msgid "Cancelled: %s"
+msgstr "Anulowano: %s"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/request.tmpl:58
 msgid "Cannot be selected"
 msgstr "Nie może być wybrana"
@@ -2934,9 +2834,11 @@ msgstr "Zasadnicza drużyna"
 msgid "Create Empty biblio"
 msgstr "Wprowadź od podstaw"
 
+#. %1$S: type=text name=insert
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_60X.tmpl:105
-msgid "Create a new authority/thesaurus entry :"
-msgstr "Utwórz nowy wpis HW/tezaurusa:"
+#, c-format
+msgid "Create a new authority/thesaurus entry : %S"
+msgstr "Utwórz nowy wpis HW/tezaurusa: %S"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/mancredit.tmpl:10
 msgid "Credit"
@@ -3233,7 +3135,9 @@ msgstr "KURSY WYMIANY"
 msgid ""
 "Each box needs to be filled in with fine,time to start charging,charging "
 "cycle"
-msgstr "Każda kratka musi być wypełniona karą, początkiem naliczania, cyklem naliczania"
+msgstr ""
+"Każda kratka musi być wypełniona karą, początkiem naliczania, cyklem "
+"naliczania"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/includes/cat-class-list.inc:5
 msgid "Easy / Picture Books"
@@ -3929,9 +3833,11 @@ msgstr "Ilość pozycji"
 msgid "Item Location (items.bulk) between"
 msgstr "Lokalizacja pozycji (items.bulk) pomiędzy"
 
+#. %1$S: type=text name=item
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:82
-msgid "Item Number"
-msgstr "Numer pozycji"
+#, c-format
+msgid "Item Number %S"
+msgstr "Numer pozycji %S"
 
 #. %1$s: TMPL_VAR name=barcode
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptItemCopy.tmpl:12
@@ -4028,13 +3934,21 @@ msgstr "Numer pozycji"
 msgid "Items"
 msgstr "Pozycje"
 
+#. %1$s: TMPL_VAR name=todaysdate
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/overdue.tmpl:4
+#, c-format
+msgid "Items Overdue as of %s"
+msgstr "Zaległe pozycje do dnia %s"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:141
 msgid "Itemtype"
 msgstr "Rodzaj pozycji"
 
+#. %1$S: type=text name=itemtype
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:58
-msgid "Itemtype:"
-msgstr "Rodzaj pozycji:"
+#, c-format
+msgid "Itemtype:%S"
+msgstr "Rodzaj pozycji: %S"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/about.tmpl:49
 msgid "Jo Ransom"
@@ -4098,7 +4012,7 @@ msgstr "KOHA"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:39
 #, c-format
 msgid "KOHA: <a1>HDL INTRANET</A>"
-msgstr ""
+msgstr "KOHA: <a1>HDL INTRANET</A>"
 
 #. IMG
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/includes/opac-top.inc:32
@@ -4331,6 +4245,12 @@ msgstr "Export Opisu MARC"
 msgid "MARC biblio management"
 msgstr "Zarządzanie Opisem MARC"
 
+#. %1$s: TMPL_VAR name=tagfield
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:157
+#, c-format
+msgid "MARC links%s"
+msgstr "Łącza MARC%s"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:90
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:7
 msgid "MARC search"
@@ -4343,6 +4263,12 @@ msgstr "Wyniki szukania MARC"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:50
 msgid "MARC structure: tags then subfields."
 msgstr "Struktura etykiet MARC: Etykiety następnie podpola."
+
+#. %1$s: TMPL_VAR name=tagfield
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:70
+#, c-format
+msgid "MARC subfield structure admin for %s"
+msgstr "Struktura podpól MARC dla %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:49
 msgid "MARC tag structure"
@@ -4400,8 +4326,10 @@ msgid "Main Library"
 msgstr "Biblioteka Główna"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptItemCopy.tmpl:16
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptMarcUpload.tmpl:2
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/ListFileRecords.tmpl:2
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/mainmenu.tmpl:2
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/uploadmarc.tmpl:2
 msgid "Main Menu"
 msgstr "Menu główne"
 
@@ -4691,8 +4619,8 @@ msgid ""
 "NOTE : if you change something in this table, ask your administrator to run "
 "misc/rebuildnonmarc.pl script."
 msgstr ""
-"UWAGA: jeśli zmienisz co w tej tablicy, poproś administratora, aby "
-"uruchomił skrypt misc/rebuildnomarc.pl."
+"UWAGA: jeśli zmienisz co w tej tablicy, poproś administratora, aby uruchomił "
+"skrypt misc/rebuildnomarc.pl."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:158
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:96
@@ -4700,8 +4628,8 @@ msgid ""
 "NOTE : if you change the link between a MARC subfield and a non-MARC field, "
 "ask your administrator to run misc/rebuildnonmarc.pl script."
 msgstr ""
-"UWAGA: jeśli zmienisz łącze pomiedzy podpolem MARC oraz nie-MARC "
-"poproś administratora by uruchomił skrypt misc/rebuildnonmarc.pl."
+"UWAGA: jeśli zmienisz łącze pomiedzy podpolem MARC oraz nie-MARC poproś "
+"administratora by uruchomił skrypt misc/rebuildnonmarc.pl."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:158
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:210
@@ -4760,10 +4688,6 @@ msgstr "Nowe Hasło:"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:10
 msgid "New Record"
 msgstr "Nowy Rekord"
-
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:18
-msgid "New Search:"
-msgstr "Nowe Zapytanie:"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/member-password.tmpl:15
 msgid "New UserID:"
@@ -5090,7 +5014,7 @@ msgstr "Jedno hasło tematyczne na wiersz"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:59
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:88
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:9
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:18
@@ -5208,6 +5132,13 @@ msgstr "Paul Poulain, menedżer wersji 2.0 (programista MARC)"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/about.tmpl:90
 msgid "Pawel Skuza (Polish for 1.2)"
 msgstr "Pawel Skuza (Polski dla 1.2)"
+
+#. %1$s: TMPL_VAR name=firstname
+#. %2$s: TMPL_VAR name=surname
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/pay.tmpl:3
+#, c-format
+msgid "Pay Fines for %s %s"
+msgstr "Opłata Kar dla %s %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:245
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:251
@@ -5514,9 +5445,29 @@ msgstr "Kurs"
 msgid "Reading Record"
 msgstr "Historia Wypożyczeń"
 
+#. %1$s: TMPL_VAR name=name
+#. %2$s: TMPL_VAR name=invoice
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:8
+#, c-format
+msgid "Receipt Summary for : <i>%s</i> Invoice <i>%s</i>"
+msgstr "Podsumowanie dla : <i>%s</i> Faktura <i>%s</i>"
+
+#. %1$s: TMPL_VAR name=name
+#. %2$s: TMPL_VAR name=invoice
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:8
+#, c-format
+msgid "Receipt Summary for: <i>%s</i> Invoice <i>%s</i>"
+msgstr "Receipt Summary for: <i>%s</i> Faktura <i>%s</i>"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/order.tmpl:8
 msgid "Receive"
 msgstr "Przyjmij"
+
+#. %1$s: TMPL_VAR name=name
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/recieveorder.tmpl:3
+#, c-format
+msgid "Receive Orders From Supplier <a1>%s</a>"
+msgstr "Przyjmij Zamówienia Od Dostawcy <a1>%s</a>"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:149
 msgid "Received"
@@ -5669,6 +5620,13 @@ msgstr "Zamów"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:187
 msgid "Requested"
 msgstr "Zamówiona"
+
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/request.tmpl:7
+#, c-format
+msgid "Requesting: <a1>%s</a> %s"
+msgstr "Zamówienie: <a1>%s</a> %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:9
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:9
@@ -5856,14 +5814,6 @@ msgstr "Szkoła"
 msgid "Search"
 msgstr "Szukaj"
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:17
-msgid "Search ISBN or Title:"
-msgstr "Szukaj wg. ISBN lub Tytułu:"
-
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:12
-msgid "Search Keyword or Title:"
-msgstr "Szukaj wg. Słowa Kluczowego lub Tytułu:"
-
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/cmsdsearchresults.tmpl:2
 msgid "Search Results"
 msgstr "Wyniki Szukania"
@@ -5997,9 +5947,9 @@ msgid ""
 "purchased locally or gifted. In this case the quantity \"ordered\" will also "
 "be entered into the database as the quantity received."
 msgstr ""
-"Zacienione pola mogą być uzyte do \"szybkiego\" przyjęcia, gdy pozycje "
-"były nabyte lokalnie lub ofiarowane. W tym wypadku ilość \"zamówiona\" "
-"bedzie również wpisana do bazy jako ilość otrzymana."
+"Zacienione pola mogą być uzyte do \"szybkiego\" przyjęcia, gdy pozycje były "
+"nabyte lokalnie lub ofiarowane. W tym wypadku ilość \"zamówiona\" bedzie "
+"również wpisana do bazy jako ilość otrzymana."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:118
 msgid "Shelf List"
@@ -6010,9 +5960,24 @@ msgstr "Lista Półek"
 msgid "Shelf list"
 msgstr "Lista półek"
 
+#. %1$s: TMPL_VAR name=basket
+#. %2$s: TMPL_VAR name=name
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:3
+#, c-format
+msgid "Shopping Basket %s for %s"
+msgstr "Koszyk zakupów  %s dla %s"
+
+#. %1$s: TMPL_VAR name=basket
+#. %2$s: TMPL_VAR name=name
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:3
+#, c-format
+msgid "Shopping Basket <b>%s </b>for <a1></a> %s"
+msgstr "Koszyk Zakupów <b>%s </b>dla <a1></a> %s"
+
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=name
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:28
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:3
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:71
 #, c-format
 msgid "Shopping Basket For: %s"
@@ -6025,14 +5990,19 @@ msgstr "Koszyk zakupów dla: %s"
 msgid "Show"
 msgstr "Pokaż"
 
+#. For the first occurrence,
+#. %1$S: type=text name=title
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:81
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:89
-msgid "Show all Titles beginning with"
-msgstr "Pokaż tytuły zaczynające się na"
+#, c-format
+msgid "Show all Titles beginning with %S"
+msgstr "Pokaż tytuły zaczynające się na %S"
 
+#. %1$S: type=text name=sub
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:74
-msgid "Show all subjects beginning with"
-msgstr "Pokaż hasła przedmiotowe zaczynajace się na"
+#, c-format
+msgid "Show all subjects beginning with %S"
+msgstr "Pokaż hasła  tematyczne zaczynajace się na %S"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:54
 msgid "Sir"
@@ -6152,9 +6122,11 @@ msgstr "Hasła Tematyczne:"
 msgid "Subject Maintenance"
 msgstr "Hasło tematyczne - Zarządzanie"
 
+#. %1$S: type=text name=sub
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:13
-msgid "Subject:"
-msgstr "Temat:"
+#, c-format
+msgid "Subject:%S"
+msgstr "Temat: %S"
 
 #. INPUT type=submit name=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:226
@@ -6225,9 +6197,7 @@ msgstr "Składnia"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/z3950servers.tmpl:140
 msgid "Syntax (z3950 can send records in various format. Choose one)"
-msgstr ""
-"Składnia (z3950 może przesyłać rekordy w rozmaitych formatach. "
-"Wybierz jeden)"
+msgstr "Składnia (z3950 może przesyłać rekordy w rozmaitych formatach. Wybierz jeden)"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:6
 msgid "System parameters"
@@ -6250,8 +6220,8 @@ msgid ""
 "Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement "
 "reportée dans la zone 700 $8 qui suit."
 msgstr ""
-"Wybierz wartość dla pola 700 $4. Elle sera automatiquement "
-"reportée dans la zone 700 $8 qui suit."
+"Wybierz wartość dla pola 700 $4. Elle sera automatiquement reportée dans la "
+"zone 700 $8 qui suit."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:146
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:36
@@ -6352,9 +6322,9 @@ msgid ""
 "Koha interface easily."
 msgstr ""
 "Kolumna <b>pole Koha</b> pokazuje, że podpole jest skorelowane z polem Koha. "
-"System potrafi zarządzać interfejsem MARC lub interfejsem Koha. Łącze to zapewnia "
-"spójność pomiedzy dwoma bazami. W efekcie można dość łatwo przechodzić z jednego "
-"interfejsu do drugiego."
+"System potrafi zarządzać interfejsem MARC lub interfejsem Koha. Łącze to "
+"zapewnia spójność pomiedzy dwoma bazami. W efekcie można dość łatwo "
+"przechodzić z jednego interfejsu do drugiego."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:13
 msgid "The correspounding subfield MUST be in with -1 (ignore) tab"
@@ -6381,16 +6351,16 @@ msgid ""
 "The total at the bottom of the page should be within a few cents of the "
 "total for the invoice."
 msgstr ""
-"Kwota łączna na dole strony powinna być różna o kilka groszy od "
-"kwoty łącznej na fakturze."
+"Kwota łączna na dole strony powinna być różna o kilka groszy od kwoty "
+"łącznej na fakturze."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:108
 msgid ""
 "Then select a previous shopping basket or create a new one. Note the basket "
 "will be attached to the user you've logged to"
 msgstr ""
-"potem wybierz poprzedni koszyk zakupów lub utwórz nowy. Uwaga, "
-"koszyk zostanie skojarzony z nazwą uzytkownika z jaką się zalogowałeś "
+"potem wybierz poprzedni koszyk zakupów lub utwórz nowy. Uwaga, koszyk "
+"zostanie skojarzony z nazwą uzytkownika z jaką się zalogowałeś "
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/includes/parameters-top.inc:79
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:45
@@ -6441,16 +6411,16 @@ msgid ""
 "This screen shows the subfields associated with the selected tag. You can "
 "edit subfields or add a new one by clicking on edit."
 msgstr ""
-"Ten ekran pokazuje podpola skojarzone z wybraną etykietą. Można dokonać edycji "
-"podpól lub dodawać nowe naciskając edytuj."
+"Ten ekran pokazuje podpola skojarzone z wybraną etykietą. Można dokonać "
+"edycji podpól lub dodawać nowe naciskając edytuj."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:52
 msgid ""
 "This table is used in MARC definition. You can define as many categories as "
 "you want, and as many authorised values as you want in each category."
 msgstr ""
-"Tablica ta jest używana w definiowaniu MARC. Można definiować dowolną ilość kategorii "
-"oraz dowolną ilość wartości autoryzowanych w każdej kategorii."
+"Tablica ta jest używana w definiowaniu MARC. Można definiować dowolną ilość "
+"kategorii oraz dowolną ilość wartości autoryzowanych w każdej kategorii."
 
 #. %1$s: TMPL_VAR name=volumeddesc
 #. %2$s: TMPL_VAR name=itemtype
@@ -6464,8 +6434,8 @@ msgid ""
 "This will change the subject headings on all the biblios this subject is "
 "applied to."
 msgstr ""
-"Nastąpi zmiana haseł tematycznych na wszystkich opisach, do których "
-"odnosi się ten temat."
+"Nastąpi zmiana haseł tematycznych na wszystkich opisach, do których odnosi "
+"się ten temat."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:71
 msgid ""
@@ -6544,8 +6514,8 @@ msgid ""
 "To change any of the catalogue or accounting information attached to an "
 "order, click on the title."
 msgstr ""
-"Aby zmienić dane katalogowe lub rachunkowe dołączone do zamówienia, "
-"kliknij na tytuł."
+"Aby zmienić dane katalogowe lub rachunkowe dołączone do zamówienia, kliknij "
+"na tytuł."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:110
 msgid ""
@@ -6560,9 +6530,9 @@ msgid ""
 "To order an item you need to establish whether a biblio already exists for "
 "it, and either add an item, or set up a new biblio then add the item."
 msgstr ""
-"Aby dokonać zamówienia dokumentu trzeba najpierw ustalić czy istnieje "
-"już dla niego opis, oraz albo dodać egzemplarz albo utworzyć nowy dla niego "
-"opis i dodać egzemplarz."
+"Aby dokonać zamówienia dokumentu trzeba najpierw ustalić czy istnieje już "
+"dla niego opis, oraz albo dodać egzemplarz albo utworzyć nowy dla niego opis "
+"i dodać egzemplarz."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:107
 msgid ""
@@ -6684,6 +6654,12 @@ msgstr "Aktualizuj Dane Czytelnika"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/modwebsites.tmpl:25
 msgid "Update this Website Link"
 msgstr "Aktualizuj ten link witryny"
+
+#. %1$s: TMPL_VAR name=name
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:8
+#, c-format
+msgid "Update: %s"
+msgstr "Aktualizuj: %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:65
 msgid "Updated successfully"
@@ -6957,8 +6933,8 @@ msgid ""
 "You can enter a name for this import. It may be useful, when creating a "
 "biblio, to remember where the suggested MARC data comes from!"
 msgstr ""
-"Mozna nazwać ten import. Może się przydać przy tworzeniu opisu dla zapamietania "
-"skąd dane MARC pochodzą!"
+"Mozna nazwać ten import. Może się przydać przy tworzeniu opisu dla "
+"zapamietania skąd dane MARC pochodzą!"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:12
 msgid "You did not specify any seach criteria"
@@ -7075,7 +7051,7 @@ msgstr "{Przeglądanie od %s do %s z %s rekordów] %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptMarcUpload.tmpl:3
 msgid "\\n"
-msgstr ""
+msgstr "\\n"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:39
 msgid "and"
@@ -7204,9 +7180,12 @@ msgstr "dla %s (<a1>%s</a>) do odebrania w <b>%s</b>."
 msgid "for reserve pickups"
 msgstr ""
 
+#. %1$S: type=text name=start_bib
+#. %2$S: type=text name=end_bib
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/export/marc.tmpl:7
-msgid "from biblio number :"
-msgstr "od opisu numer:"
+#, c-format
+msgid "from biblio number : %S to biblio number : %S"
+msgstr "od opisu numer : %S do opisu numer : %S"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:90
 msgid "holdingbranch NOT mapped"
@@ -7230,7 +7209,7 @@ msgstr "oddział właściwy zdefiniowany"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl:92
 #, c-format
 msgid "http://%s"
-msgstr ""
+msgstr "http://%s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:89
 msgid ""
@@ -7245,10 +7224,13 @@ msgstr ""
 msgid "illustrateur"
 msgstr "Ilustrator"
 
+#. For the first occurrence,
+#. %1$S: type=text name=insert
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/thesaurus_popup.tmpl:34
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_700_701_702.tmpl:33
-msgid "insert a new authority :"
-msgstr "Wprowadź nowe HW :"
+#, c-format
+msgid "insert a new authority : %S"
+msgstr "Wprowadź nowe HW : %S"
 
 #. %1$s: TMPL_VAR name=branchname
 #. %2$s: TMPL_VAR name=name
@@ -7563,6 +7545,12 @@ msgstr "Wyszukiwanie z3950"
 #~ msgid "<B>%s GROUP - %s </b>"
 #~ msgstr "<B>%s GRUPA - %s </b>"
 
+#~ msgid "<H1> %s reports </H1>"
+#~ msgstr "<H1> %s reportów </H1>"
+
+#~ msgid "<H1>Shopping Basket For: %s</H1>"
+#~ msgstr "<H1>Koszyk Zakupów dla: %s</H1>"
+
 #~ msgid "<b>%s GROUP - %s </b>"
 #~ msgstr "<b>%s GRUPA - %s </b>"
 
@@ -7571,6 +7559,15 @@ msgstr "Wyszukiwanie z3950"
 
 #~ msgid "<b>MARC biblio : %s</b>"
 #~ msgstr "<b>Opis MARC : %s</b>"
+
+#~ msgid "<h1>%s (%s)</h1>"
+#~ msgstr "<h1>%s (%s)</h1>"
+
+#~ msgid "<h1><a1>Main Menu</a></h1>"
+#~ msgstr "<h1><a1>Menu Główne</a></h1>"
+
+#~ msgid "<h1>Shopping Basket %s for %s</h1>"
+#~ msgstr "<h1>Koszyk Zakupów %s dla %s</h1>"
 
 #~ msgid "<i>Branch:</i> %s <i>Printer:</i> %s <a1>Change Settings</a>"
 #~ msgstr "<i>Oddział:</i> %s <i>Drukarka:</i> %s <a1>Zmień Ustawienia</a>"
@@ -7598,4 +7595,7 @@ msgstr "Wyszukiwanie z3950"
 
 #~ msgid "View Account"
 #~ msgstr "Obejrzyj Rachunek"
+
+#~ msgid "from biblio number :"
+#~ msgstr "od opisu numer:"
 
