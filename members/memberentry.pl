@@ -170,7 +170,7 @@ if ($delete){
 					-default=>$data->{'categorycode'},
 					-labels=>$labels);
 
-	my @relationships = ('workplace', 'relative','friend', 'neighbour');
+	my @relationships = ('','workplace', 'relative','friend', 'neighbour');
 	my @relshipdata;
 	while (@relationships) {
 		my $relship = shift @relationships;
