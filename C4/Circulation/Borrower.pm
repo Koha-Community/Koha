@@ -79,11 +79,10 @@ sub findborrower  {
         ($bornum,$borrower) = findoneborrower($env,$dbh,$borcode);
         $env->{'IssuesAllowed'} = 1;
       } elsif ($book ne "") {
-        my $query = "select * from issues,items where (barcode = '$book')
+        my $iss_sth=$dbh->prepare("select * from issues,items where (barcode = ?)
           and (items.itemnumber = issues.itemnumber)
-          and (issues.returndate is null)";
-        my $iss_sth=$dbh->prepare($query);
-        $iss_sth->execute;
+          and (issues.returndate is null)");
+        $iss_sth->execute($book);
         if (my $issdata  = $iss_sth->fetchrow_hashref) {
            $bornum=$issdata->{'borrowernumber'};
 	   $sth = $dbh->prepare("Select * from borrowers
@@ -119,8 +118,8 @@ sub findoneborrower {
   my $borrower;
   my $ucborcode = uc $borcode;
   my $lcborcode = lc $borcode;
-  my $sth=$dbh->prepare("Select * from borrowers where cardnumber=\"$ucborcode\"");
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from borrowers where cardnumber=?");
+  $sth->execute($ucborcode);
   if ($borrower=$sth->fetchrow_hashref) {
     $bornum=$borrower->{'borrowernumber'};
     $sth->finish;
@@ -129,10 +128,8 @@ sub findoneborrower {
     # my $borquery = "Select * from borrowers
     # where surname ~* '$borcode' order by surname";
 
-    my $borquery = "Select * from borrowers
-      where lower(surname) like \"$lcborcode%\" order by surname,firstname";
-    my $sthb =$dbh->prepare($borquery);
-    $sthb->execute;
+    my $sthb =$dbh->prepare("Select * from borrowers where lower(surname) like ? order by surname,firstname");
+    $sthb->execute("$lcborcode%");
     my $cntbor = 0;
     my @borrows;
     my @bornums;
@@ -152,9 +149,8 @@ sub findoneborrower {
       $sth->finish;
     } elsif ($cntbor > 0) {
       my ($cardnum) = C4::InterfaceCDK::selborrower($env,$dbh,\@borrows,\@bornums);
-      my $query = "select * from borrowers where cardnumber = '$cardnum'";
-      $sth = $dbh->prepare($query);
-      $sth->execute;
+      $sth = $dbh->prepare("select * from borrowers where cardnumber = ?");
+      $sth->execute($cardnum);
       $borrower =$sth->fetchrow_hashref;
       $sth->finish;
       $bornum=$borrower->{'borrowernumber'};
@@ -251,11 +247,9 @@ sub process_traps {
     } elsif  ($trapact eq "NOTES") {
       my $notes = trapsnotes($env,$bornum,$borrower,$amount);
       if ($notes ne $borrower->{'borrowernotes'}) {
-        my $query = "update borrowers set borrowernotes = '$notes'
-	   where borrowernumber = $bornum";
-        my $sth = $dbh->prepare($query);
-	$sth->execute();
-	$sth->finish();
+        my $sth = $dbh->prepare("update borrowers set borrowernotes = ? where borrowernumber = ?");
+		$sth->execute($notes,$bornum);
+		$sth->finish();
         $borrower->{'borrowernotes'} = $notes;
       }
       if ($notes eq "") {
@@ -326,11 +320,10 @@ sub reserveslist {
   my $dbh = C4::Context->dbh;
   my @items;
   my $x=0;
-  my $query="Select * from reserves where
-  borrowernumber='$borrower->{'borrowernumber'}' and found='W' and
-  cancellationdate is null order by timestamp";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from reserves where
+  borrowernumber=? and found='W' and
+  cancellationdate is null order by timestamp");
+  $sth->execute($borrower->{'borrowernumber'});
   while (my $data=$sth->fetchrow_hashref){
     my $itemdata = itemnodata($env,$dbh,$data->{'itemnumber'});
     if ($itemdata){
@@ -375,10 +368,9 @@ sub NewBorrowerNumber {
 sub findguarantees{
   my ($bornum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="select cardnumber,borrowernumber from borrowers where
-  guarantor='$bornum'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("select cardnumber,borrowernumber from borrowers where
+  guarantor=?");
+  $sth->execute($bornum);
   my @dat;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
