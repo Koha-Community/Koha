@@ -1,0 +1,175 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+<h1>Adding to Periodical:  <TMPL_VAR NAME="TITLE"></h1>
+
+<TMPL_IF NAME="NOBARCODE">
+<font size="5" color="red">You must give the item a barcode</font>
+<p>
+</TMPL_IF>
+<TMPL_IF NAME="NOBIBLIOITEM">
+<font size="5" color="red">You must create a new group for your item to be
+added to</font>
+<p>
+</TMPL_IF>
+<TMPL_IF NAME="BARCODEINUSE">
+<font size="5" color="red">Sorry, that barcode is already in use</font>
+<p>
+</TMPL_IF>
+
+<h4>BIBLIO RECORD <TMPL_VAR NAME="BIBNUM"></h4>
+<TMPL_IF NAME="AUTHOR">
+<b>Author:</b> <TMPL_VAR NAME="AUTHOR"><br></TMPL_IF>
+
+<TMPL_IF NAME="COPYRIGHT">
+<b>Copyright:</b> <TMPL_VAR NAME="COPYRIGHT"><br>
+</TMPL_IF>
+<TMPL_IF NAME="SERIES">
+<b>Series Title:</b> <TMPL_VAR NAME="SERIES"><br>
+</TMPL_IF>
+<TMPL_IF NAME="NOTES">
+<b>Notes:</b> <TMPL_VAR NAME="NOTES"></TMPL_IF>
+
+
+
+
+<form action="saveitem.pl" method="post">
+<input type="hidden" name="biblionumber" value="<TMPL_VAR NAME="BIBNUM">">
+<table border="0" cellspacing="0" cellpadding="5">
+<tr valign="top" >
+<td colspan="2"><h2>ADD NEW
+ITEM</h2>
+</td>
+</tr>
+<tr valign="top">
+<td>Item Barcode:</td>
+<td><input type="text" name="barcode" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Branch:</td>
+<td><select name="homebranch">
+<TMPL_LOOP NAME="BRANCHES">
+<option value="<TMPL_VAR NAME="branchcode">"><TMPL_VAR NAME="branchname"></option>
+</TMPL_LOOP>
+</select></td>
+</tr>
+
+<tr valign="top">
+<td>Notes:</td>
+<td><textarea name="itemnotes" cols="30" rows="1"></textarea></td>
+</tr>
+
+
+
+<tr valign="top">
+<td colspan="2" ><h2>Add  a new
+Issue/Volume</h2></td>
+</tr>
+<tr valign="top">
+<td>Item Type:</td>
+<td><select name="itemtype">
+<TMPL_LOOP NAME="ITEMTYPES">
+<option value="<TMPL_VAR NAME="itemtype">"><TMPL_VAR NAME="description"></option>
+</TMPL_LOOP>
+</select></td>
+</tr>
+
+<tr valign="top">
+<td>Volume:</td>
+<td><input name="volume" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Number:</td>
+<td><input name="number" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Volume Description:</td>
+<td><input name="volumeddesc" size="40"></td>
+</tr>
+
+<tr valign="top">
+<td>ISSN:</td>
+<td><input name="issn" size="40"></td>
+</tr>
+<tr valign="top">
+<td>LCCN:</td>
+<td><input name="lccn" size="40"</td>
+</tr>
+<tr valign="top">
+<td>Dewey/UDC:</td>
+<td><INPUT name="dewey" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Dewey Subclass:</td>
+<td><input name="subclass" size="40"></td>
+</tr>
+
+<tr valign="top">
+<td>Publisher:</td>
+<td><input name="publishercode" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Publication Year:</td>
+<td><input name="publicationyear" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Place of Publication:</td>
+<td><input name="place" size="40"></td>
+</tr>
+
+
+
+
+<tr valign="top">
+<td>Pages:</td>
+<td><input name="pages" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Size:</td>
+<td><input name="size" size="40"></td>
+</tr>
+<tr valign="top">
+<td>Notes:</td>
+<td><textarea name="notes" cols="30" rows="6"></textarea></td>
+</tr>
+<tr valign="top">
+<td colspan="2" align="center"><input type="submit" name="newgroup"
+value="Save"></td>
+</tr>
+
+
+<tr valign="top">
+<td colspan="2" ><h2>Add a copy to existing group</h2></td>
+</tr>
+<tr valign="top">
+<td>Group:</td>
+<td><select name="biblioitemnumber">
+
+<TMPL_LOOP NAME="BIBITEMS">
+<TMPL_IF NAME="WEB">
+<TMPL_ELSE>
+    <option value="<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="itemtype"> - <TMPL_VAR NAME="volumeddesc"></option>
+
+</TMPL_IF>
+
+</TMPL_LOOP>
+</select></td>
+</tr>
+<tr valign="top">
+<td colspan="2" align="center"><input type="submit" name="existinggroup"
+value="Save"></td>
+</tr>
+
+</table>
+
+<h4>Holdings</h4>
+<b><TMPL_VAR NAME="biblioitemnumber"> Volume: </b>
+ <TMPL_VAR NAME="volumeddesc"> <TMPL_IF NAME="publicationyear">, <TMPL_VAR NAME="publicationyear"></TMPL_IF> 
+<TMPL_IF NAME="hombranch">, <TMPL_VAR NAME="hombranch"></TMPL_IF> 
+
+
+
+</TMPL_LOOP>
+
+</form>
+</center>
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
