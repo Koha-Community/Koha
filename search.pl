@@ -1,9 +1,5 @@
 #!/usr/bin/perl
 
-use HTML::Template;
-
-
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -23,8 +19,8 @@ use HTML::Template;
 
 use strict;
 require Exporter;
-
 use CGI;
+use HTML::Template;
 use C4::Context;
 use C4::Search;
 use C4::Auth;
