@@ -184,8 +184,8 @@ sub create_input () {
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" DISABLE READONLY size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	# it's an hidden field
-	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" size=50 maxlength=255>";
+	} elsif  ($tag eq '' or $tagslib->{$tag}->{$subfield}->{'hidden'}) {
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255 DISABLE READONLY>";
 	# it's a standard field
 	} else {
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>"; #"

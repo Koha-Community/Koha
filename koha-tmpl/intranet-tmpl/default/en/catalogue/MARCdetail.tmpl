@@ -20,7 +20,14 @@
 	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
 		Print
 	</a>
-
+	<!-- TMPL_IF name="subscriptionid" -->
+	<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue">
+		Subscription
+	</a>
+	<a href="bull/serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
+		Issues
+	</a>
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
 		<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Request</a>
