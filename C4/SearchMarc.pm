@@ -165,7 +165,7 @@ $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrievi
 =cut
 
 sub catalogsearch {
-	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby) = @_;
+	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby,$desc_or_asc) = @_;
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
