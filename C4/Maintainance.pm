@@ -112,8 +112,6 @@ bibliosubject table of the Koha database.
 sub updatesub{
   my ($sub,$oldsub)=@_;
   my $dbh = C4::Context->dbh;
-  $sub=$dbh->quote($sub);
-  $oldsub=$dbh->quote($oldsub);
   my $sth=$dbh->prepare("update bibliosubject set subject=? where subject=?");
   $sth->execute($sub,$oldsub);
   $sth->finish;
