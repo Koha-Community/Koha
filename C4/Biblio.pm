@@ -241,13 +241,13 @@ sub MARCgettagslib {
     $frameworkcode = "" unless ( $total > 0 );
     $sth =
       $dbh->prepare(
-"select tagfield,$libfield as lib,mandatory,repeatable from marc_tag_structure where frameworkcode=? order by tagfield"
+"select tagfield,liblibrarian,libopac,mandatory,repeatable from marc_tag_structure where frameworkcode=? order by tagfield"
     );
     $sth->execute($frameworkcode);
-    my ( $lib, $tag, $res, $tab, $mandatory, $repeatable );
+    my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable );
 
-    while ( ( $tag, $lib, $mandatory, $repeatable ) = $sth->fetchrow ) {
-        $res->{$tag}->{lib}        = $lib;
+    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
+        $res->{$tag}->{lib}        = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
         $res->{$tab}->{tab}        = "";            # XXX
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
@@ -255,7 +255,7 @@ sub MARCgettagslib {
 
     $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
+"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
     );
     $sth->execute($frameworkcode);
 
@@ -270,14 +270,14 @@ sub MARCgettagslib {
 	my $link;
 
     while (
-        ( $tag,         $subfield,   $lib,              $tab,
+        ( $tag,         $subfield,   $liblibrarian,   , $libopac,      $tab,
         $mandatory,     $repeatable, $authorised_value, $authtypecode,
         $value_builder, $kohafield,  $seealso,          $hidden,
         $isurl,			$link )
         = $sth->fetchrow
       )
     {
-        $res->{$tag}->{$subfield}->{lib}              = $lib;
+        $res->{$tag}->{$subfield}->{lib}              = ($forlibrarian or !$libopac)?$liblibrarian:$libopac;
         $res->{$tag}->{$subfield}->{tab}              = $tab;
         $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
         $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
@@ -2618,6 +2618,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.7  2005/03/10 15:52:28  tipaul
+# * adding glass to opac marc detail.
+# * changing glasses behaviour : It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
+# * fixing bug with libopac
+#
 # Revision 1.115.2.6  2005/03/09 15:56:01  tipaul
 # Changing MARCmoditem to be like MARCmodbiblio : a modif is a delete & create.
 # Longer, but solves problems with repeated subfields.

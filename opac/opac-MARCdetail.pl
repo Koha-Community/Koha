@@ -67,7 +67,7 @@ my $bibid = $query->param('bibid');
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
 my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
-my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
+my $tagslib = &MARCgettagslib($dbh,0,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
 # open template
@@ -87,42 +87,54 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 # loop through each tag
 	my @fields = $record->fields();
 	my @loop_data =();
-	foreach my $field (@fields) {
-			my @subfields_data;
+# 	foreach my $field (@fields) {
+	my @subfields_data;
+	for (my $x_i=0;$x_i<=$#fields;$x_i++) {
+# 		warn "$tabloop => $x_i";
 		# if tag <10, there's no subfield, use the "@" trick
-		if ($field->tag()<10) {
-			next if ($tagslib->{$field->tag()}->{'@'}->{tab}  ne $tabloop);
-			next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
+		if ($fields[$x_i]->tag()<10) {
+			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{tab}  ne $tabloop);
+			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{hidden});
 			my %subfield_data;
-			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
-			$subfield_data{marc_value}=$field->data();
+			$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{'@'}->{lib};
+			$subfield_data{marc_value}=$fields[$x_i]->data();
 			$subfield_data{marc_subfield}='@';
-			$subfield_data{marc_tag}=$field->tag();
+			$subfield_data{marc_tag}=$fields[$x_i]->tag();
 			push(@subfields_data, \%subfield_data);
 		} else {
-			my @subf=$field->subfields;
+			my @subf=$fields[$x_i]->subfields;
 	# loop through each subfield
 			for my $i (0..$#subf) {
 				$subf[$i][0] = "@" unless $subf[$i][0];
-				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
-				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
+				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
+				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden});
 				my %subfield_data;
-				$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-				if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
+				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
+				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
+				if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
 				} else {
-					$subfield_data{marc_value}=get_authorised_value_desc($field->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
+					if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{authtypecode}) {
+						$subfield_data{authority}=$fields[$x_i]->subfield(9);
+					}
+					$subfield_data{marc_value}=get_authorised_value_desc($fields[$x_i]->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
 				}
 				$subfield_data{marc_subfield}=$subf[$i][0];
-				$subfield_data{marc_tag}=$field->tag();
+				$subfield_data{marc_tag}=$fields[$x_i]->tag();
 				push(@subfields_data, \%subfield_data);
 			}
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
-			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
-			$tag_data{subfield} = \@subfields_data;
+			if ($fields[$x_i]->tag() eq $fields[$x_i-1]->tag()) {
+				$tag_data{tag}="";
+			} else {
+				$tag_data{tag}=$fields[$x_i]->tag().' -'. $tagslib->{$fields[$x_i]->tag()}->{lib};
+			}
+			my @tmp = @subfields_data;
+			$tag_data{subfield} = \@tmp;
 			push (@loop_data, \%tag_data);
+			undef @subfields_data;
 		}
 	}
 	$template->param($tabloop."XX" =>\@loop_data);
