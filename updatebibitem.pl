@@ -84,7 +84,11 @@ if ($existing eq 'YES'){
     my $temp="check_group_".$items[$i]->{'barcode'};
     my $barcode=$input->param($temp);
     if ($barcode ne ''){
-      moditem($items[$i]->{'notforloan'},$items[$i]->{'itemnumber'},$group);
+      moditem({ biblionumber => $bibnum,
+		notforloan   => $items[$i]->{'notforloan'},
+		itemnumber   => $items[$i]->{'itemnumber'},
+		group        => $group
+		    });
 #      print "modify $items[$i]->{'itemnumber'} $group";
     }
   }
@@ -126,13 +130,18 @@ if ($existing eq 'YES'){
       }
       for (my $i=0;$i<$count;$i++){
         if ($barcodes[$i] ne ''){
-	  moditem($loan,$items[$i]->{'itemnumber'},$bibitemnum);
+	  moditem({ biblionumber => $bibnum,
+		    loan         => $loan,
+		    itemnumber   => $items[$i]->{'itemnumber'},
+		    bibitemnum   => $bibitemnum
+		    });
 	}
       }
       
    } elsif ($flag2 eq 'leastone') {
       &modbibitem({
 	  biblioitemnumber => $bibitemnum,
+	  biblionumber     => $bibnum,
 	  itemtype         => $itemtype?$itemtype:"",
 	  url              => $url?$url:"",
 	  isbn             => $isbn?$isbn:"",
@@ -154,7 +163,11 @@ if ($existing eq 'YES'){
       }
 	for (my $i=0;$i<$count;$i++){                                             
 	  if ($barcodes[$i] ne ''){                                               
-	    moditem($loan,$items[$i]->{'itemnumber'},$bibitemnum);                
+	    moditem( {biblionumber => $bibnum,
+		      loan         => $loan,
+		      itemnumber   => $items[$i]->{'itemnumber'},
+		      bibitemnum   => $bibitemnum
+		      });
 	  }                                                                       
 	}
       

@@ -60,9 +60,9 @@ my $ecost=$input->param('ecost');
 my $gst=$input->param('GST');
 my $orderexists=$input->param('orderexists');
 
+print STDERR "quantity = $quantity // existing = $existing\n";
 #check to see if biblio exists
 if ($quantity ne '0'){
-
   if ($existing eq 'no'){
     #if it doesnt create it
     $bibnum = &newbiblio({ title     => $title?$title:"",
@@ -84,14 +84,18 @@ if ($quantity ne '0'){
 #	        copyrightdate => $copyright?$copyright:"",
 #	        series        => $series?$series:"" });
   } else {
+print STDERR "inside loop\n";
     $bibnum=$input->param('biblio');
     $bibitemnum=$input->param('bibitemnum');
     my $oldtype=$input->param('oldtype');
+print STDERR  "bibitemnum : $bibitemnum itemtype:$itemtype oldtype:$oldtype\n";
     if ($bibitemnum eq '' || $itemtype ne $oldtype){
       $bibitemnum= &newbiblioitem({ biblionumber => $bibnum,
 	 						 itemtype => $itemtype?$itemtype:"",
 							 isbn => $isbn?$isbn:"" });
+      print STDERR "newbiblioitem\n";
     }
+print STDERR "modbiblio\n";
     &modbiblio({
         biblionumber  => $bibnum,
 	title         => $title?$title:"",

@@ -76,7 +76,16 @@ my $pages=checkinp($input->param('Pages'));
 my $volumeddesc=checkinp($input->param('Volume'));
 
 if ($wthdrawn == 0 && $override ne 'yes'){
-  moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn);
+  moditem( { biblionumber => $bibnum,
+	     loan         =>'loan',
+	     itemnum      => $itemnum,
+	     bibitemnum   => $bibitemnum,
+	     barcode      => $barcode,
+	     notes        => $notes,
+	     homebranch   => $homebranch,
+	     lost         => $lost,
+	     wthdranw     => $wthdrawn
+	     });
   if ($lost ==1){
     my $dbh=C4Connect;
     my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
@@ -129,7 +138,16 @@ if ($wthdrawn == 0 && $override ne 'yes'){
     $url.="&override=yes";
     print "<p> <a href=$url>Cancel Anyway</a> &nbsp; or <a href=\"\">Back</a>";
   }else {
-    moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn);
+    moditem({ biblionumber => $bibnum,
+	      loan         => 'loan',
+	      itemnum      => $itemnum,
+	      bibitemnum   => $bibitemnum,
+	      barcode      => $barcode,
+	      notes        => $notes,
+	      homebranch   => $homebranch,
+	      lost         => $lost,
+	      wthdrawn     => $wthdrawn
+	      });
     print $input->redirect("moredetail.pl?type=intra&bib=$bibnum&bi=$bibitemnum");
   }
 }

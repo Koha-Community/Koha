@@ -93,6 +93,7 @@ if ($quantity != 0){
   modbiblio($biblio);
   &modbibitem({
       biblioitemnumber => $bibitemno,
+      biblionumber     => $biblionumber,
       itemtype         => $itemtype?$itemtype:"",
       isbn             => $isbn?$isbn:"",
       publisher        => $publisher?$publisher:"",
@@ -118,6 +119,7 @@ if ($quantity != 0){
   #  print @barcodes;
   #  print $barcode;
   }
+#  print STDERR "************ biblionumber => $biblionumber\n";
   my ($error) = newitems({ biblioitemnumber => $bibitemno,
 	                   biblionumber     => $biblionumber,
 	                   replacementprice => $replacement,
