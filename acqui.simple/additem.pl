@@ -85,7 +85,6 @@ if ($op eq "additem") {
 	if ($exists) {
 		$nextop = "additem";
 		$itemrecord = $record;
-		warn "==>".$record->as_formatted;
 	} else {
 		$nextop = "additem";
 	}
