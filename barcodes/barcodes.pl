@@ -82,7 +82,7 @@ my $input = new CGI;
 my @labelTable = C4::Barcodes::PrinterConfig::labelsPage($labelConfig{'rows'}, $labelConfig{'columns'});
 
 # It creates a list of posible intervals to choose codes to generate
-my %list = ('continuous' => 'Continuous Range', 'individuals' => 'Individual Codes');
+my %list = ('continuous' => 'Continuous Range of items', 'individuals' => 'Individual Codes', 'continuous2' => 'Continuous range (from - to)');
 my @listValues = keys(%list);
 my $rangeType = CGI::scrolling_list(-name => 'rangeType',
                               		-values => \@listValues,

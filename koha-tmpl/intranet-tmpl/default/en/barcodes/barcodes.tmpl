@@ -63,7 +63,7 @@
 			<!-- TMPL_IF NAME="ERROR" -->
 			<tr align="center">
 				<td colspan="2" >
-					<p style="font-size:13pt;color:red">Can´t find inventary codes on that range. Please try again.</p>
+					<p style="font-size:13pt;color:red">Can't find inventary codes on that range. Please try again.</p>
 				</td>
 			</tr>
 			<!-- /TMPL_IF -->
@@ -145,7 +145,13 @@
 						</tr>
 					</table>
 				</td>
-			</tr>	
+			</tr>
+			<tr> 
+				<td align="right" style="padding-left:20px">Text under label</td>
+				<td>
+					<input type="text" name="text_under_label" size="40" value="<!-- TMPL_VAR name="text_under_label -->"> If this field is empty, author and title will be put instead
+				</td>
+			</tr>
   			<tr valign="top">
   			    <td colspan="2" align="center">
 			    	<table style='width:50%'>

@@ -102,7 +102,7 @@ function emptyField (field) {
 
 function checkFields (aForm) {
   var option = document.getElementById('rangeType').value;
-  if (option == 'continuous') {
+  if (option == 'continuous' || option == 'continuous2') {
 	if (emptyField(aForm.from.value) || emptyField(aForm.to.value)) {
 		alert("Please, complete all fields");
 	    return false;

@@ -85,9 +85,11 @@ my $cgi = new CGI;
 my $from = $cgi->param('from');
 my $to = $cgi->param('to');
 my $individualCodes = $cgi->param('individualCodes');
+my $rangeType = $cgi->param('rangeType');
 my $pageType = $cgi->param('pages');
 my $label = $cgi->param('label');
 my $numbersystem = $cgi->param('numbersystem');
+my $text_under_label = $cgi->param('text_under_label');
 
 # Generate the checksum from an inventary code
 sub checksum {
@@ -135,86 +137,150 @@ sub assingFilename {
 # Takes inventary codes from database and if they are between
 # the interval specify by parameters, it generates the correspond barcodes
 sub barcodesGenerator {
-  my ($from, $to, $individualCodes) = @_;
-  # Returns a database handler
-  my $dbh = C4::Context->dbh;
-  # Create the query to database
-  my $rangeCondition;
-  if ($individualCodes ne "") {
-    $rangeCondition = "AND (I.barcode IN " . $individualCodes . ")";
-  } else {
-    $rangeCondition =  "AND (I.barcode >= " . $from . " AND I.barcode <="  . $to . " )";
-  }
-	 
-  my $query = "SELECT CONCAT('$numbersystem',REPEAT('0',((12 - LENGTH('$numbersystem')) - LENGTH(I.barcode))), I.barcode) AS Codigo, B.title, B.author FROM biblio B, items I WHERE (I.biblionumber = B.biblioNumber ) " .$rangeCondition. " AND (I.barcode <> 'FALTA') ORDER BY Codigo";
-  
-  # Prepare the query
-  my $sth = $dbh->prepare($query);
-  # Executes the query
-  $sth->execute;
-  if ($sth->rows) { # There are inventary codes
-	# Set the temp directory for pdf´s files
-	if (!defined($ENV{'TEMP'})) {
-		$ENV{'TEMP'} = '/tmp/';
-	}	
+	my ($from, $to, $rangeType, $individualCodes,$text_under_label) = @_;
+	# Returns a database handler
+	my $dbh = C4::Context->dbh;
+	# Create the query to database
 	# Assigns a temporary filename for the pdf file
-  	my $tmpFileName = &assingFilename($from, $to);
-	$tmpFileName = $ENV{'TEMP'}.$tmpFileName;
-    # Creates a PDF object
-    my $pdf = PDF::API2->new(-file => $tmpFileName);
-    # Set the positions where barcodes are going to be placed
-	C4::Barcodes::PrinterConfig::setPositionsForX($labelConfig{'marginLeft'}, $labelConfig{'labelWidth'}, $labelConfig{'columns'}, $labelConfig{'pageType'});
-	C4::Barcodes::PrinterConfig::setPositionsForY($labelConfig{'marginBottom'}, $labelConfig{'labelHeigth'}, $labelConfig{'rows'}, $labelConfig{'pageType'});
-    # Creates a font object
-    my $tr = $pdf->corefont('Helvetica-Bold');
-    # Barcode position
-	my ($page, $gfx, $text);
-    while (my ($code,$title,$author) = $sth->fetchrow_array) {
-      # Generetase checksum
-      $code = &checksum($code);
-      # Generate the corresponde barcode to $code
-      my $barcode = $pdf->barcode(-font => $tr,	# The font object to use
-                     		      -type => 'ean13',	# Standard of codification
-                      		      -code => $code, # Text to codify
-                      		      -extn	=> '012345',	# Barcode extension (if it is aplicable)
-                    		      -umzn => 10,		# Top limit of the finished bar
-                        	      -lmzn => 10,		# Bottom limit of the finished bar
-                      		      -zone => 15,		# Bars size
-  		                          -quzn => 0,		# Space destinated for legend
-                        	      -ofwt => 0.01,	# Bars width
-  		                          -fnsz => 8,		# Font size
-  		                          -text => ''
-  	                             );
-	
-	  (my $x, my $y, $pdf, $page, $gfx, $text, $tr, $label) = C4::Barcodes::PrinterConfig::getLabelPosition(
-																				$label, 
-																                $pdf, 
-																				$page,
-																				$gfx,
-																				$text,
-																				$tr,
-																				$pageType);	
-      # Assigns a barcodes to $gfx
-	  $gfx->barcode($barcode, $x, $y , (72/$labelConfig{'systemDpi'}));
-      # Assigns the additional information to the barcode (Legend)
-	  $text->translate($x - 48, $y - 22);
-      $text->text(substr $title, 0, 30);
-      $text->translate($x - 48, $y - 29);
-      $text->text(substr $author, 0, 30);
-    }
-    # Writes the objects added in $gfx to $page
-    $pdf->finishobjects($page,$gfx, $text);
-    # Save changes to the PDF
-    $pdf->saveas;
-    # Close the conection with the PDF file
-    $pdf->end;
-    # Show the PDF file
-    print $cgi->redirect("/cgi-bin/koha/barcodes/pdfViewer.pl?tmpFileName=$tmpFileName");
-  } else {
-	# Rollback and shows the error legend
-    print $cgi->redirect("/cgi-bin/koha/barcodes/barcodes.pl?error=1");
-  }
-  $sth->finish;
+	my $tmpFileName = &assingFilename($from, $to);
+	if ($rangeType eq 'continuous2') {
+		# Set the temp directory for pdf´s files
+		if (!defined($ENV{'TEMP'})) {
+			$ENV{'TEMP'} = '/tmp/';
+		}	
+		$tmpFileName = $ENV{'TEMP'}.$tmpFileName;
+		# Creates a PDF object
+		my $pdf = PDF::API2->new(-file => $tmpFileName);
+		# Set the positions where barcodes are going to be placed
+		C4::Barcodes::PrinterConfig::setPositionsForX($labelConfig{'marginLeft'}, $labelConfig{'labelWidth'}, $labelConfig{'columns'}, $labelConfig{'pageType'});
+		C4::Barcodes::PrinterConfig::setPositionsForY($labelConfig{'marginBottom'}, $labelConfig{'labelHeigth'}, $labelConfig{'rows'}, $labelConfig{'pageType'});
+		# Creates a font object
+		my $tr = $pdf->corefont('Helvetica-Bold');
+		# Barcode position
+		my ($page, $gfx, $text);
+		for (my $code=$from; $code<=$to; $code++) {
+			# Generetase checksum
+			my $codeC = &checksum($code);
+			# Generate the corresponde barcode to $code
+			my $barcode = $pdf->barcode(-font => $tr,	# The font object to use
+										-type => 'ean13',	# Standard of codification
+										-code => $codeC, # Text to codify
+										-extn	=> '012345',	# Barcode extension (if it is aplicable)
+										-umzn => 10,		# Top limit of the finished bar
+										-lmzn => 10,		# Bottom limit of the finished bar
+										-zone => 15,		# Bars size
+										-quzn => 0,		# Space destinated for legend
+										-ofwt => 0.01,	# Bars width
+										-fnsz => 8,		# Font size
+										-text => ''
+										);
+			
+			(my $x, my $y, $pdf, $page, $gfx, $text, $tr, $label) = C4::Barcodes::PrinterConfig::getLabelPosition(
+																						$label, 
+																						$pdf, 
+																						$page,
+																						$gfx,
+																						$text,
+																						$tr,
+																						$pageType);	
+			# Assigns a barcodes to $gfx
+			$gfx->barcode($barcode, $x, $y , (72/$labelConfig{'systemDpi'}));
+			# Assigns the additional information to the barcode (Legend)
+			$text->translate($x - 48, $y - 22);
+			if ($text_under_label) {
+				$text->text($text_under_label);
+			}
+		}
+		# Writes the objects added in $gfx to $page
+		$pdf->finishobjects($page,$gfx, $text);
+		# Save changes to the PDF
+		$pdf->saveas;
+		# Close the conection with the PDF file
+		$pdf->end;
+		# Show the PDF file
+		print $cgi->redirect("/cgi-bin/koha/barcodes/pdfViewer.pl?tmpFileName=$tmpFileName");
+	} else {
+		my $rangeCondition;
+		if ($individualCodes ne "") {
+			$rangeCondition = "AND (I.barcode IN " . $individualCodes . ")";
+		} else {
+			$rangeCondition =  "AND (I.barcode >= " . $from . " AND I.barcode <="  . $to . " )";
+		}
+			
+		my $query = "SELECT CONCAT('$numbersystem',REPEAT('0',((12 - LENGTH('$numbersystem')) - LENGTH(I.barcode))), I.barcode) AS Codigo, B.title, B.author FROM biblio B, items I WHERE (I.biblionumber = B.biblioNumber ) " .$rangeCondition. " AND (I.barcode <> 'FALTA') ORDER BY Codigo";
+		
+		# Prepare the query
+		my $sth = $dbh->prepare($query);
+		# Executes the query
+		$sth->execute;
+		if ($sth->rows) { # There are inventary codes
+			# Set the temp directory for pdf´s files
+			if (!defined($ENV{'TEMP'})) {
+				$ENV{'TEMP'} = '/tmp/';
+			}	
+			# Assigns a temporary filename for the pdf file
+			my $tmpFileName = &assingFilename($from, $to);
+			$tmpFileName = $ENV{'TEMP'}.$tmpFileName;
+			# Creates a PDF object
+			my $pdf = PDF::API2->new(-file => $tmpFileName);
+			# Set the positions where barcodes are going to be placed
+			C4::Barcodes::PrinterConfig::setPositionsForX($labelConfig{'marginLeft'}, $labelConfig{'labelWidth'}, $labelConfig{'columns'}, $labelConfig{'pageType'});
+			C4::Barcodes::PrinterConfig::setPositionsForY($labelConfig{'marginBottom'}, $labelConfig{'labelHeigth'}, $labelConfig{'rows'}, $labelConfig{'pageType'});
+			# Creates a font object
+			my $tr = $pdf->corefont('Helvetica-Bold');
+			# Barcode position
+			my ($page, $gfx, $text);
+			while (my ($code,$title,$author) = $sth->fetchrow_array) {
+				# Generetase checksum
+				$code = &checksum($code);
+				# Generate the corresponde barcode to $code
+				my $barcode = $pdf->barcode(-font => $tr,	# The font object to use
+											-type => 'ean13',	# Standard of codification
+											-code => $code, # Text to codify
+											-extn	=> '012345',	# Barcode extension (if it is aplicable)
+											-umzn => 10,		# Top limit of the finished bar
+											-lmzn => 10,		# Bottom limit of the finished bar
+											-zone => 15,		# Bars size
+											-quzn => 0,		# Space destinated for legend
+											-ofwt => 0.01,	# Bars width
+											-fnsz => 8,		# Font size
+											-text => ''
+											);
+				
+				(my $x, my $y, $pdf, $page, $gfx, $text, $tr, $label) = C4::Barcodes::PrinterConfig::getLabelPosition(
+																							$label, 
+																							$pdf, 
+																							$page,
+																							$gfx,
+																							$text,
+																							$tr,
+																							$pageType);	
+				# Assigns a barcodes to $gfx
+				$gfx->barcode($barcode, $x, $y , (72/$labelConfig{'systemDpi'}));
+				# Assigns the additional information to the barcode (Legend)
+				$text->translate($x - 48, $y - 22);
+				if ($text_under_label) {
+					$text->text($text_under_label);
+				} else {
+					$text->text(substr $title, 0, 30);
+					$text->translate($x - 48, $y - 29);
+					$text->text(substr $author, 0, 30);
+				}
+			}
+			# Writes the objects added in $gfx to $page
+			$pdf->finishobjects($page,$gfx, $text);
+			# Save changes to the PDF
+			$pdf->saveas;
+			# Close the conection with the PDF file
+			$pdf->end;
+			# Show the PDF file
+			print $cgi->redirect("/cgi-bin/koha/barcodes/pdfViewer.pl?tmpFileName=$tmpFileName");
+		} else {
+			# Rollback and shows the error legend
+			print $cgi->redirect("/cgi-bin/koha/barcodes/barcodes.pl?error=1");
+		}
+	$sth->finish;
+	}
 }
 
-barcodesGenerator($from, $to, $individualCodes);
+barcodesGenerator($from, $to, $rangeType, $individualCodes,$text_under_label);
