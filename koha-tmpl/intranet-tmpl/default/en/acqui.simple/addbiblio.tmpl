@@ -439,6 +439,7 @@
 
 
 <script LANGUAGE="JavaScript">
+function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
 	for (i=0; i < 10 ; i++ ) {
@@ -500,10 +501,10 @@ function Check(f) {
 	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
 	var alertString2;
 	if (total_errors!=0) {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
-		alertString2 += "------------------------------------------------------------------------------------\n\n";
-		alertString2 += "- "+ total_missing_mandatory_tags +" mandatory tags empty\n";
-		alertString2 += "- "+ total_missing_mandatory_subfields +" mandatory fields empty (see bold subfields)";
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
+		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
 		alert(alertString2);
 	} else {
 		document.forms[0].submit();

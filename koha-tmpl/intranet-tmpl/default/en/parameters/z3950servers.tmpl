@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,31 +40,31 @@
                 var _alertString="";
                 var alertString2;
                 if (f.searchfield.value.length==0) {
-                        _alertString += "- site name missing\n";
+                        _alertString += "\n- " + _("site name missing");
                 }
                 if (f.host.value.length==0) {
-                        _alertString += "- host missing\n";
+                        _alertString += "\n- " + _("host missing");
                 }
                 if (f.port.value.length==0) {
-                        _alertString += "- port missing\n";
+                        _alertString += "\n- " + _("port missing");
                 }
                 if (f.db.value.length==0) {
-                        _alertString += "- database missing\n";
+                        _alertString += "\n- " + _("database missing");
                 }
                 if (isNaN(f.port.value)) {
-                        _alertString += "- port must be a number\n";
+                        _alertString += "\n- " + _("port must be a number");
                 }
                 if (isNaN(f.rank.value)) {
-                        _alertString += "- rank must be a number\n";
+                        _alertString += "\n- " + _("rank must be a number");
                 }
                 if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-                        _alertString += "- checked must be 0 or 1\n";
+                        _alertString += "\n- " + _("checked must be 0 or 1");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("Form not submitted because of the following problem(s)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }

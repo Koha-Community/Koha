@@ -80,6 +80,7 @@
 </center>
 </form>
 <script LANGUAGE="JavaScript">
+function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
 	for (i=10; i < 11 ; i++ ) {
@@ -112,9 +113,9 @@ function Check(f) {
 	if (total_errors==0) {
 		document.f.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
-		alertString2 += "------------------------------------------------------------------------------------\n\n";
-		alertString2 += "- "+ total_errors+" mandatory fields empty (see bold subfields)";
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
 		alert(alertString2);
 	}
 }
@@ -123,7 +124,7 @@ function Dopop(link,i) {
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 function confirm_deletion(bibid,itemnum) {
-	var is_confirmed = confirm('Do you confirm item deletion ?');
+	var is_confirmed = confirm(_('Do you confirm item deletion?'));
 	if (is_confirmed) {
 	window.location = "additem.pl?op=delitem&bibid="+bibid+"&itemnum="+itemnum;
 	}

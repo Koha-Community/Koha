@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
+ 	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -38,16 +39,16 @@
 		var _alertString="";
 		var alertString2;
 		if (f.variable.value.length==0) {
-			_alertString += "- variable missing\n";
+			_alertString += "\n- " + _("variable missing");
 		}
 		if (f.value.value.length==0) {
-			_alertString += "- value missing\n";
+			_alertString += "\n- " + _("value missing");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Form not submitted because of the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}

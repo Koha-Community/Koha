@@ -48,6 +48,7 @@
 
 <!-- TMPL_IF name="add_form" -->
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -85,16 +86,16 @@
 		var _alertString="";
 		var alertString2;
 		if (f.bookfundid.value.length==0) {
-			_alertString += "- bookfundid missing\n";
+			_alertString += "\n- " + _("bookfundid missing";
 		}
 		if (f.bookfundname.value.length==0) {
-			_alertString += "- bookfundname missing\n";
+			_alertString += "\n- " + _("bookfundname missing");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2  = _("Form not submitted because of the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
