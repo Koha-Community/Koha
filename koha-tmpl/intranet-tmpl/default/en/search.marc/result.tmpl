@@ -57,7 +57,16 @@
 				</td>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_LOOP NAME="CN" -->
-						<!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF -->
+						<p>
+							<!-- TMPL_VAR NAME="holdingbranch" -->
+							<!-- TMPL_IF name="date_due" -->
+								On Loan until <!-- TMPL_VAR NAME="date_due" -->
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF NAME="itemcallnumber" -->
+									(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+						</p>
 					<!-- /TMPL_LOOP -->
 				</td>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
