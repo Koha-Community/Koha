@@ -1,3 +1,4 @@
+
 <TMPL_IF NAME="nopermission">
 <!-- This is what is displayed if user doesnt have permission -->
 <h2>Przepraszamy, system KOHA uwa¿a, ¿e nie masz uprawnieñ do tej strony.<h2>
@@ -28,9 +29,9 @@
 <TMPL_LOOP NAME="INPUTS">
   <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
 </TMPL_LOOP>
-
 <table border="0" cellpadding="10" cellspacing="0" width="60%">
     <tr><td align="center" valign="top">
+
     <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
     <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha - Wstêp</font></th></tr>
     <tr><td>NumerKarty:</td><td><input name="userid"></td></tr>
@@ -38,8 +39,11 @@
     <tr><td colspan="2" align="center"><input type="submit" value="login"></td></tr>
     </table>
     </td><td align="center" valign="top">
+
+
     </td></tr>
 </table>
-
 </form>
+
+
 </TMPL_IF>
