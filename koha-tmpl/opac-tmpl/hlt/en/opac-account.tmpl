@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--designed by rebecca@katipo.co.nz-->
+<!--updated by richard@katipo.co.nz 12/06/02-->
+<html>
+<head>
+<title>My Account</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/main.css" type="text/css" />
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/koha.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+<meta name="description" content=""><meta name="keywords" content=""></head>
+<body background="<TMPL_VAR NAME='themelang'>/images/styles/background.gif" marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="membership-start.inc">
+<!--TOP NAVIGATION-->
+<TMPL_INCLUDE name="top-navigation.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="membership-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="crumb-start.inc">	
+<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/cgi-bin/koha/opac-account.pl'>My Account</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="crumb-end.inc">
+<!--CONTENT-->
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+<h1>Account for <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></h1>
+</TMPL_LOOP>
+<p>
+
+<table border=0 cellspacing=0 cellpadding=0>
+<tr bgcolor="#D7AB7A">
+<td colspan="5" class="dk-brown"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/brown-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr class="table-heading"><td colspan="2"><b>Fines & Charges</b></td>
+<td><b>Amount</b></td>
+<td>&nbsp</td>
+<td><b>Still Owing</b></td>
+<tr><td colspan="5" class="dk-brown"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/brown-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+
+<TMPL_LOOP NAME="ACCOUNT_LINES">
+
+<tr valign=top class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"pink"</TMPL_IF>>
+<td class="padded"><TMPL_VAR NAME="date"></td>
+<td class="padded"><TMPL_VAR NAME="description">
+<TMPL_IF NAME="print_title"><TMPL_VAR NAME="title"></TMPL_IF></td>
+<td class="padded">$<TMPL_VAR NAME="amount"></td>
+<td>&nbsp</td>
+<td class="padded"><TMPL_IF NAME="amountoutstanding">$<TMPL_VAR NAME="amountoutstanding"><TMPL_ELSE>&nbsp</TMPL_IF></td></tr>
+</TMPL_LOOP>
+
+<tr><td colspan="5" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+<tr VALIGN=TOP >
+<TD>&nbsp</td>
+<TD colspan=3><b>Total Due</b></td>
+<TD><b><TMPL_IF NAME="total">$<TMPL_VAR NAME="total"><TMPL_ELSE>&nbsp</TMPL_IF></b></td>
+</tr>
+<tr><td colspan="5" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+</table>
+
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="end-main.inc">
+</body>
+</html>
