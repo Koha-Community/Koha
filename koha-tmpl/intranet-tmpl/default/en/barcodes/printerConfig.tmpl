@@ -1,0 +1,104 @@
+<!-- TMPL_INCLUDE NAME="barcodes-top.inc" -->
+<div id="mainbloc">
+	<h1>Printer Configuration</h1>
+	<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+		<tr valign="center">
+			<td><font size="4">Set de printer configuration corresponding to your environment</font></td>
+		</tr>
+	</table>
+	<ul>
+		<li>Set width and heigth of the label that you are going to work with.</li>
+		<li>Set your system dpi by default.</li>
+		<li>Set the page type.</li>
+		<li>Select how many columns and rows are in your page type.</li>
+		<li>Set margin left and margin bottom of the page that you are going to use. This parameters will
+		    help to center the barcodes into the labels.</li>
+	</ul>
+	<br>
+	<form id="formulario" method="POST" action='<!-- TMPL_VAR NAME="SCRIPT_NAME" -->' name="form1">
+		<input type="hidden" name="saveSettings" value="1">
+		<table cellpadding="3" border=0 class="myTable">
+			<tr>
+				<td>
+					Label width (Expressed in mm)
+				</td>
+				<td>
+					Label heigth (Expressed in mm)
+				</td>
+				<td>
+					System dpi
+				</td>
+				<td>
+					Page Type
+				</td>
+				<td>
+					Columns
+				</td>
+				<td>
+					Rows
+				</td>
+				<td>
+					Margin Bottom (Expressed in mm)
+				</td>
+				<td>
+					Margin Left (Expressed in mm)
+				</td>
+			<tr>
+  			<tr valign="top">
+				<td align="left"> 
+					<input id="labelWidth" type="text" name="labelWidth" size="5"
+					       value="<!-- TMPL_VAR NAME="LABEL_WIDTH" -->">
+				</td>
+				<td align="left"> 
+					<input id="labelHeigth" type="text" name="labelHeigth" size="5"
+					       value="<!-- TMPL_VAR NAME="LABEL_HEIGTH" -->">
+				</td>
+				<td align="left">
+					<input id="systemDpi" type="text" name="systemDpi" size="5"
+					       value="<!-- TMPL_VAR NAME="SYSTEM_DPI" -->">
+				</td>
+				<td align="left">
+					<select name="pageType" id="pageType" size="1">
+						<!-- TMPL_IF name="A4" -->
+							<option value="A4" selected>A4</option>
+				        <!-- TMPL_ELSE -->
+							<option value="A4">A4</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Letter" -->
+							<option value="Letter" selected>Letter</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Letter">Letter</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Legal" -->
+							<option value="Legal" selected>Legal</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Legal">Legal</option>
+						<!-- /TMPL_IF -->
+		            </select>
+				</td>
+  			    <td align="left">
+					<input id="columns" type="text" name="columns" size="5"
+					       value="<!-- TMPL_VAR NAME="COLUMNS" -->">
+				</td>
+  			    <td align="left">
+					<input id="rows" type="text" name="rows" size="5"
+					       value="<!-- TMPL_VAR NAME="ROWS" -->">
+				</td>
+  			    <td align="left">
+					<input id="marginBottom" type="text" name="marginBottom" size="5"
+					       value="<!-- TMPL_VAR NAME="MARGIN_TOP" -->">
+				</td>
+  			    <td align="left">
+					<input id="marginLeft" type="text" name="marginLeft" size="5"
+					       value="<!-- TMPL_VAR NAME="MARGIN_LEFT" -->">
+				</td>
+  			</tr>
+  			<tr valign="top">
+  			    <td colspan="8" align="center">
+					<input type="submit" value="Save Settings">
+				</td>
+  			</tr>
+		</table>		
+	</form>
+</div>
+<!-- TMPL_INCLUDE NAME="barcodes-bottom.inc" -->
