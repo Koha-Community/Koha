@@ -174,6 +174,11 @@ if ($delete){
     $template->param( modify => 1 );
   }
 
+  #Convert dateofbirth to correct format
+  $data->{'dateofbirth'}=ParseDate($data->{'dateofbirth'});
+  $data->{'dateofbirth'}=UnixDate($data->{'dateofbirth'},'%d/%m/%Y');
+
+
   $template->param( 
   			member          => $member,
   			firstname       => $data->{'firstname'},
