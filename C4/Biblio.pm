@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.46  2003/05/19 13:45:18  tipaul
+# support for subtitles, additional authors, subject.
+# This supports is only for MARC <-> OLD-DB link. It worked previously, but values entered as MARC were not reported to OLD-DB, neither values entered as OLD-DB were reported to MARC.
+# Note that some OLD-DB subs are strange (dummy ?) see OLDmodsubject, OLDmodsubtitle, OLDmodaddiauthor in C4/Biblio.pm
+# For example it seems impossible to have more that 1 addi author and 1 subtitle. In MARC it's not the case. So, if you enter more than one, I'm afraid only the LAST will be stored.
+#
 # Revision 1.45  2003/04/29 16:50:49  tipaul
 # really proud of this commit :-)
 # z3950 search and import seems to works fine.
@@ -412,10 +418,8 @@ Returns a MARC::Record for the biblio $bibid.
 =item &MARCmodbiblio($dbh,$bibid,$record,$delete);
 
 MARCmodbiblio changes a biblio for a biblio,MARC::Record passed as parameter
-if $delete == 1, every field/subfield not found is deleted in the biblio
-otherwise, only data passed to MARCmodbiblio is managed.
-thus, you can change only a small part of a biblio (like an item, or a subtitle, or a additionalauthor...)
-
+It 1st delete the biblio, then recreates it.
+WARNING : the $delete parameter is not used anymore (too much unsolvable cases).
 =item ($subfieldid,$subfieldvalue) = &MARCmodsubfield($dbh,$subfieldid,$subfieldvalue);
 
 MARCmodsubfield changes the value of a given subfield
@@ -934,8 +938,23 @@ sub MARCkoha2marcBiblio {
 	    }
 	}
     }
+	# other fields => additional authors, subjects, subtitles
+	my $sth2=$dbh->prepare(" SELECT author FROM additionalauthors WHERE biblionumber=?");
+	$sth2->execute($biblionumber);
+	while (my $row=$sth2->fetchrow_hashref) {
+			&MARCkoha2marcOnefield($sth,$record,"additionalauthors.author",$row->{'author'});
+		}
+	my $sth2=$dbh->prepare(" SELECT subject FROM bibliosubject WHERE biblionumber=?");
+	$sth2->execute($biblionumber);
+	while (my $row=$sth2->fetchrow_hashref) {
+			&MARCkoha2marcOnefield($sth,$record,"bibliosubject.subject",$row->{'subject'});
+		}
+	my $sth2=$dbh->prepare(" SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
+	$sth2->execute($biblionumber);
+	while (my $row=$sth2->fetchrow_hashref) {
+			&MARCkoha2marcOnefield($sth,$record,"bibliosubtitle.title",$row->{'subtitle'});
+		}
     return $record;
-# TODO : retrieve notes, additionalauthors
 }
 
 sub MARCkoha2marcItem {
@@ -963,7 +982,6 @@ sub MARCkoha2marcItem {
 	}
     }
     return $record;
-# TODO : retrieve notes, additionalauthors
 }
 
 sub MARCkoha2marcSubtitle {
@@ -1034,7 +1052,7 @@ sub MARChtml2marc {
 	}
 	# the last has not been included inside the loop... do it now !
 	$record->add_fields($field);
-	warn $record->as_formatted;
+# 	warn $record->as_formatted;
 	return $record;
 }
 
@@ -1134,60 +1152,114 @@ adds an item in the db.
 =cut
 
 sub NEWnewbiblio {
-    my ($dbh, $record, $oldbiblio, $oldbiblioitem) = @_;
-# note $oldbiblio and $oldbiblioitem are not mandatory.
-# if not present, they will be builded from $record with MARCmarc2koha function
-    if (($oldbiblio) and not($oldbiblioitem)) {
-	print STDERR "NEWnewbiblio : missing parameter\n";
-	print "NEWnewbiblio : missing parameter : contact koha development  team\n";
-	die;
-    }
-    my $oldbibnum;
-    my $oldbibitemnum;
-    if ($oldbiblio) {
-	$oldbibnum = OLDnewbiblio($dbh,$oldbiblio);
-	$oldbiblioitem->{'biblionumber'} = $oldbibnum;
-	$oldbibitemnum = OLDnewbiblioitem($dbh,$oldbiblioitem);
-    } else {
-	my $olddata = MARCmarc2koha($dbh,$record);
-	$oldbibnum = OLDnewbiblio($dbh,$olddata);
-	$olddata->{'biblionumber'} = $oldbibnum;
-	$oldbibitemnum = OLDnewbiblioitem($dbh,$olddata);
-    }
-# we must add bibnum and bibitemnum in MARC::Record...
-# we build the new field with biblionumber and biblioitemnumber
-# we drop the original field
-# we add the new builded field.
-# NOTE : Works only if the field is ONLY for biblionumber and biblioitemnumber
-# (steve and paul : thinks 090 is a good choice)
-    my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
-    $sth->execute("biblio.biblionumber");
-    (my $tagfield1, my $tagsubfield1) = $sth->fetchrow;
-    $sth->execute("biblioitems.biblioitemnumber");
-    (my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
-    if ($tagfield1 != $tagfield2) {
-	warn "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
- 	print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
-	die;
-    }
-    my $newfield = MARC::Field->new( $tagfield1,'','',
-				     "$tagsubfield1" => $oldbibnum,
-				     "$tagsubfield2" => $oldbibitemnum);
-# drop old field and create new one...
-    my $old_field = $record->field($tagfield1);
-    $record->delete_field($old_field);
-    $record->add_fields($newfield);
-    my $bibid = MARCaddbiblio($dbh,$record,$oldbibnum);
-    return ($bibid,$oldbibnum,$oldbibitemnum );
+	my ($dbh, $record, $oldbiblio, $oldbiblioitem) = @_;
+	# note $oldbiblio and $oldbiblioitem are not mandatory.
+	# if not present, they will be builded from $record with MARCmarc2koha function
+	if (($oldbiblio) and not($oldbiblioitem)) {
+		print STDERR "NEWnewbiblio : missing parameter\n";
+		print "NEWnewbiblio : missing parameter : contact koha development  team\n";
+		die;
+	}
+	my $oldbibnum;
+	my $oldbibitemnum;
+	if ($oldbiblio) {
+		$oldbibnum = OLDnewbiblio($dbh,$oldbiblio);
+		$oldbiblioitem->{'biblionumber'} = $oldbibnum;
+		$oldbibitemnum = OLDnewbiblioitem($dbh,$oldbiblioitem);
+	} else {
+		my $olddata = MARCmarc2koha($dbh,$record);
+		$oldbibnum = OLDnewbiblio($dbh,$olddata);
+		$olddata->{'biblionumber'} = $oldbibnum;
+		$oldbibitemnum = OLDnewbiblioitem($dbh,$olddata);
+	}
+	# search subtiles, addiauthors and subjects
+	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author");
+	my @addiauthfields = $record->field($tagfield);
+	foreach my $addiauthfield (@addiauthfields) {
+		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#addiauthsubfields) {
+			OLDmodaddauthor($dbh,$oldbibnum,$addiauthsubfields[$subfieldcount]);
+		}
+	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle");
+	my @subtitlefields = $record->field($tagfield);
+	foreach my $subtitlefield (@subtitlefields) {
+		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#subtitlesubfields) {
+			OLDnewsubtitle($dbh,$oldbibnum,$subtitlesubfields[$subfieldcount]);
+		}
+	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
+	my @subj = $record->field($tagfield);
+	foreach my $subject (@subj) {
+		my @subjsubfield = $subject->subfield($tagsubfield);
+		my @subjects;
+		foreach my $subfieldcount (0..$#subjsubfield) {
+			push @subjects,$subjsubfield[$subfieldcount];
+		}
+		OLDmodsubject($dbh,$oldbibnum,1,@subjects);
+	}
+	# we must add bibnum and bibitemnum in MARC::Record...
+	# we build the new field with biblionumber and biblioitemnumber
+	# we drop the original field
+	# we add the new builded field.
+	# NOTE : Works only if the field is ONLY for biblionumber and biblioitemnumber
+	# (steve and paul : thinks 090 is a good choice)
+	my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
+	$sth->execute("biblio.biblionumber");
+	(my $tagfield1, my $tagsubfield1) = $sth->fetchrow;
+	$sth->execute("biblioitems.biblioitemnumber");
+	(my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
+	if ($tagfield1 != $tagfield2) {
+		warn "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
+		print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
+		die;
+	}
+	my $newfield = MARC::Field->new( $tagfield1,'','',
+						"$tagsubfield1" => $oldbibnum,
+						"$tagsubfield2" => $oldbibitemnum);
+	# drop old field and create new one...
+	my $old_field = $record->field($tagfield1);
+	$record->delete_field($old_field);
+	$record->add_fields($newfield);
+	my $bibid = MARCaddbiblio($dbh,$record,$oldbibnum);
+	return ($bibid,$oldbibnum,$oldbibitemnum );
 }
 
 sub NEWmodbiblio {
-my ($dbh,$record,$bibid) =@_;
-&MARCmodbiblio($dbh,$bibid,$record,0);
-my $oldbiblio = MARCmarc2koha($dbh,$record);
-my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
-OLDmodbibitem($dbh,$oldbiblio);
-return 1;
+	my ($dbh,$record,$bibid) =@_;
+	&MARCmodbiblio($dbh,$bibid,$record,0);
+	my $oldbiblio = MARCmarc2koha($dbh,$record);
+	my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
+	OLDmodbibitem($dbh,$oldbiblio);
+	# now, modify addi authors, subject, addititles.
+	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author");
+	my @addiauthfields = $record->field($tagfield);
+	foreach my $addiauthfield (@addiauthfields) {
+		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#addiauthsubfields) {
+			OLDmodaddauthor($dbh,$oldbiblionumber,$addiauthsubfields[$subfieldcount]);
+		}
+	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubtitle.subtitle");
+	my @subtitlefields = $record->field($tagfield);
+	foreach my $subtitlefield (@subtitlefields) {
+		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
+		foreach my $subfieldcount (0..$#subtitlesubfields) {
+			OLDmodsubtitle($dbh,$oldbiblionumber,$subtitlesubfields[$subfieldcount]);
+		}
+	}
+	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
+	my @subj = $record->field($tagfield);
+	foreach my $subject (@subj) {
+		my @subjsubfield = $subject->subfield($tagsubfield);
+		my @subjects;
+		foreach my $subfieldcount (0..$#subjsubfield) {
+			push @subjects,$subjsubfield[$subfieldcount];
+		}
+		OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
+	}
+	return 1;
 }
 
 
@@ -1355,65 +1427,55 @@ sub OLDmodaddauthor {
 
 
 sub OLDmodsubject {
-    my ($dbh,$bibnum, $force, @subject) = @_;
-#  my $dbh   = C4Connect;
-    my $count = @subject;
-    my $error;
-    for (my $i = 0; $i < $count; $i++) {
-	$subject[$i] =~ s/^ //g;
-	$subject[$i] =~ s/ $//g;
-	my $query = "select * from catalogueentry
-			where entrytype = 's'
-				and catalogueentry = '$subject[$i]'";
-	my $sth   = $dbh->prepare($query);
-	$sth->execute;
+	my ($dbh,$bibnum, $force, @subject) = @_;
+	#  my $dbh   = C4Connect;
+	my $count = @subject;
+	my $error;
+	for (my $i = 0; $i < $count; $i++) {
+		$subject[$i] =~ s/^ //g;
+		$subject[$i] =~ s/ $//g;
+		my $query = "select * from catalogueentry where entrytype = 's' and catalogueentry = '$subject[$i]'";
+		my $sth   = $dbh->prepare($query);
+		$sth->execute;
 
-	if (my $data = $sth->fetchrow_hashref) {
-	} else {
-	    if ($force eq $subject[$i]) {
-		# subject not in aut, chosen to force anway
-		# so insert into cataloguentry so its in auth file
-		$query = "Insert into catalogueentry
-				(entrytype,catalogueentry)
-			    values ('s','$subject[$i]')";
-	 my $sth2 = $dbh->prepare($query);
+		if (my $data = $sth->fetchrow_hashref) {
+		} else {
+			if ($force eq $subject[$i]) {
+				# subject not in aut, chosen to force anway
+				# so insert into cataloguentry so its in auth file
+				$query = "Insert into catalogueentry (entrytype,catalogueentry) values ('s','$subject[$i]')";
+				my $sth2 = $dbh->prepare($query);
 
-	 $sth2->execute;
-	 $sth2->finish;
-      } else {
-        $error = "$subject[$i]\n does not exist in the subject authority file";
-        $query = "Select * from catalogueentry
-			    where entrytype = 's'
-			    and (catalogueentry like '$subject[$i] %'
-				 or catalogueentry like '% $subject[$i] %'
-				 or catalogueentry like '% $subject[$i]')";
-        my $sth2 = $dbh->prepare($query);
+				$sth2->execute;
+				$sth2->finish;
+			} else {
+				$error = "$subject[$i]\n does not exist in the subject authority file";
+				$query = "Select * from catalogueentry where entrytype = 's' and (catalogueentry like '$subject[$i] %'
+									or catalogueentry like '% $subject[$i] %' or catalogueentry like '% $subject[$i]')";
+				my $sth2 = $dbh->prepare($query);
+				$sth2->execute;
+				while (my $data = $sth2->fetchrow_hashref) {
+					$error .= "<br>$data->{'catalogueentry'}";
+				} # while
+				$sth2->finish;
+			} # else
+		} # else
+		$sth->finish;
+	} # else
+	if ($error eq '') {
+		my $query = "Delete from bibliosubject where biblionumber = $bibnum";
+		my $sth   = $dbh->prepare($query);
+		$sth->execute;
+		$sth->finish;
+		for (my $i = 0; $i < $count; $i++) {
+			$sth = $dbh->prepare("Insert into bibliosubject values ('$subject[$i]', $bibnum)");
+			$sth->execute;
+			$sth->finish;
+		} # for
+	} # if
 
-        $sth2->execute;
-        while (my $data = $sth2->fetchrow_hashref) {
-          $error .= "<br>$data->{'catalogueentry'}";
-        } # while
-        $sth2->finish;
-      } # else
-    } # else
-    $sth->finish;
-  } # else
-  if ($error eq '') {
-    my $query = "Delete from bibliosubject where biblionumber = $bibnum";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute;
-    $sth->finish;
-    for (my $i = 0; $i < $count; $i++) {
-      $sth = $dbh->prepare("Insert into bibliosubject
-			    values ('$subject[$i]', $bibnum)");
-
-      $sth->execute;
-      $sth->finish;
-    } # for
-  } # if
-
-#  $dbh->disconnect;
-  return($error);
+	#  $dbh->disconnect;
+	return($error);
 } # sub modsubject
 
 sub OLDmodbibitem {
@@ -1513,28 +1575,18 @@ sub OLDnewbiblioitem {
 
 sub OLDnewsubject {
   my ($dbh,$bibnum)=@_;
-#  my $dbh=C4Connect;
-  my $query="insert into bibliosubject (biblionumber) values
-  ($bibnum)";
+  my $query="insert into bibliosubject (biblionumber) values ($bibnum)";
   my $sth=$dbh->prepare($query);
-#  print $query;
   $sth->execute;
   $sth->finish;
-#  $dbh->disconnect;
 }
 
 sub OLDnewsubtitle {
     my ($dbh,$bibnum, $subtitle) = @_;
-#  my $dbh   = C4Connect;
-    my $query = "insert into bibliosubtitle set
-                            biblionumber = ?,
-                            subtitle = ?";
+    my $query = "insert into bibliosubtitle set biblionumber = ?, subtitle = ?";
     my $sth   = $dbh->prepare($query);
-
     $sth->execute($bibnum,$subtitle);
-
     $sth->finish;
-#  $dbh->disconnect;
 }
 
 
@@ -1778,9 +1830,13 @@ sub getsingleorder {
 }
 
 sub newbiblio {
-  my ($biblio) = @_;
-  my $dbh    = C4::Context->dbh;
-  my $bibnum=OLDnewbiblio($dbh,$biblio);
+	my ($biblio) = @_;
+	my $dbh    = C4::Context->dbh;
+	my $bibnum=OLDnewbiblio($dbh,$biblio);
+	# finds new (MARC bibid
+	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
+	my $record = &MARCkoha2marcBiblio($dbh,$bibnum);
+	MARCaddbiblio($dbh,$record,$bibnum);
 # FIXME : MARC add
   return($bibnum);
 }
@@ -1804,11 +1860,14 @@ successful or not.
 =cut
 
 sub modbiblio {
-  my ($biblio) = @_;
-  my $dbh  = C4::Context->dbh;
-  my $biblionumber=OLDmodbiblio($dbh,$biblio);
-  return($biblionumber);
-# FIXME : MARC mod
+	my ($biblio) = @_;
+	my $dbh  = C4::Context->dbh;
+	my $biblionumber=OLDmodbiblio($dbh,$biblio);
+	my $record = MARCkoha2marcBiblio($dbh,$biblionumber);
+	# finds new (MARC bibid
+	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
+	MARCmodbiblio($dbh,$bibid,$record,0);
+	return($biblionumber);
 } # sub modbiblio
 
 =item modsubtitle
