@@ -1,2 +1,2 @@
 <h1>Koha Intranet<!-- TMPL_IF NAME="branchname" -->: <!-- TMPL_VAR name="branchname" --><!-- /TMPL_IF --></h1>
-<div id="help"><a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">[ ? ]</a></div>
+<div id="help"><span class="loggedin"><!-- TMPL_IF NAME="loggedinusername" -->Logged in as: <span class="loggedinusername"><!-- TMPL_VAR NAME="loggedinusername" --></span> | <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a> | <!-- TMPL_ELSE -->You are not logged in | <!-- /TMPL_IF --></span><a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">[ ? ]</a></div>
