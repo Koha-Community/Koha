@@ -4,6 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Output;
+use C4::Charset;
 use C4::Context;
 use HTML::Template;
 
@@ -17,4 +18,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-print $query->header(-cookie => $cookie),$template->output;
+print $query->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;
