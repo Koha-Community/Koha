@@ -2,6 +2,7 @@
 
 <!-- TMPL_IF NAME=add_form -->
         <script>
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,16 +40,16 @@
                 var _alertString="";
                 var alertString2;
                 if (f.printername.value.length==0) {
-                        _alertString += "- printer name missing\n";
+                        _alertString += "\n- " + _("printer name missing");
                 }
                 if (f.printqueue.value.length==0) {
-                        _alertString += "- Queue missing\n";
+                        _alertString += "\n- " + _("Queue missing");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("Form not submitted because of the following problem(s)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }

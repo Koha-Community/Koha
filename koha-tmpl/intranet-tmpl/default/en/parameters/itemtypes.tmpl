@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
+function _(s) { return s } // dummy function for gettext
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function isNotNull(f,noalert) {
 	if (f.value.length ==0) {
@@ -38,22 +39,22 @@ function Check(f) {
 	var _alertString="";
 	var alertString2;
 	if (f.itemtype.value.length==0) {
-		_alertString += "- Itemtype missing\n";
+		_alertString += "\n- " + _("Itemtype missing");
 	}
 	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "- Description missing\n";
+		_alertString += "\n- " + _("Description missing");
 	}
 	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "- Loan length is not a number\n";
+		_alertString += "\n- " + _("Loan length is not a number");
 	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "- Rental charge is not a number\n";
+		_alertString += "\n- " + _("Rental charge is not a number");
 	}
 	if (_alertString.length==0) {
 		document.Aform.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
-		alertString2 += "------------------------------------------------------------------------------------\n\n";
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
 		alertString2 += _alertString;
 		alert(alertString2);
 	}
