@@ -195,7 +195,7 @@ sub ProcessFile {
     my $qlccn=$input->param('lccn');
     my $qcontrolnumber=$input->param('controlnumber');
 
-    # See if a particular result record was specified
+    # See if a particular result item was specified
     if ($qisbn || $qissn || $qlccn || $qcontrolnumber) {
 	print "<a href=$ENV{'SCRIPT_NAME'}>New File</a><hr>\n";
 	#open (F, "$file");
@@ -344,51 +344,51 @@ RECORD:
 	    <h1>New Record</h1>
 	    Full MARC Record available at bottom
 	    <form method=post>
-	    <table border=1>
-	    <tr><td>Title</td><td>$titleinput</td></tr>
-	    <tr><td>Subtitle</td><td>$subtitleinput</td></tr>
-	    <tr><td>Author</td><td>$authorinput</td></tr>
-	    <tr><td>Additional Authors</td><td>$additionalauthorsinput</td></tr>
-	    <tr><td>Illustrator</td><td>$illustratorinput</td></tr>
-	    <tr><td>Copyright</td><td>$copyrightinput</td></tr>
-	    <tr><td>Series Title</td><td>$seriestitleinput</td></tr>
-	    <tr><td>Volume</td><td>$volumeinput</td></tr>
-	    <tr><td>Number</td><td>$numberinput</td></tr>
-	    <tr><td>Volume Date</td><td>$volumedateinput</td></tr>
-	    <tr><td>Volume Description</td><td>$volumeddescinput</td></tr>
-	    <tr><td>Subject</td><td>$subjectinput</td></tr>
-	    <tr><td>Notes</td><td>$noteinput</td></tr>
-	    <tr><td>Item Type</td><td><select name=itemtype>$itemtypeselect</select></td></tr>
-	    <tr><td>ISBN</td><td>$isbninput</td></tr>
-	    <tr><td>ISSN</td><td>$issninput</td></tr>
-	    <tr><td>LCCN</td><td>$lccninput</td></tr>
-	    <tr><td>Dewey</td><td>$deweyinput</td></tr>
-	    <tr><td>Subclass</td><td>$subclassinput</td></tr>
-	    <tr><td>Publication Year</td><td>$pubyearinput</td></tr>
-	    <tr><td>Publisher</td><td>$publisherinput</td></tr>
-	    <tr><td>Place</td><td>$placeinput</td></tr>
-	    <tr><td>Pages</td><td>$pagesinput</td></tr>
-	    <tr><td>Size</td><td>$sizeinput</td></tr>
-	    </table>
-	    <input type=submit>
-	    <input type=hidden name=insertnewrecord value=1>
-	    $fileinput
-	    $marcinput
-	    $origisbn
-	    $origissn
-	    $origlccn
-	    $origcontrolnumber
+	      <table border=1>
+	        <tr><td>Title</td><td>$titleinput</td></tr>
+	        <tr><td>Subtitle</td><td>$subtitleinput</td></tr>
+	        <tr><td>Author</td><td>$authorinput</td></tr>
+	        <tr><td>Additional Authors</td><td>$additionalauthorsinput</td></tr>
+	        <tr><td>Illustrator</td><td>$illustratorinput</td></tr>
+	        <tr><td>Copyright</td><td>$copyrightinput</td></tr>
+	        <tr><td>Series Title</td><td>$seriestitleinput</td></tr>
+	        <tr><td>Volume</td><td>$volumeinput</td></tr>
+	        <tr><td>Number</td><td>$numberinput</td></tr>
+	        <tr><td>Volume Date</td><td>$volumedateinput</td></tr>
+	        <tr><td>Volume Description</td><td>$volumeddescinput</td></tr>
+	        <tr><td>Subject</td><td>$subjectinput</td></tr>
+	        <tr><td>Notes</td><td>$noteinput</td></tr>
+	        <tr><td>Item Type</td><td><select name=itemtype>$itemtypeselect</select></td></tr>
+	        <tr><td>ISBN</td><td>$isbninput</td></tr>
+	        <tr><td>ISSN</td><td>$issninput</td></tr>
+	        <tr><td>LCCN</td><td>$lccninput</td></tr>
+	        <tr><td>Dewey</td><td>$deweyinput</td></tr>
+	        <tr><td>Subclass</td><td>$subclassinput</td></tr>
+	        <tr><td>Publication Year</td><td>$pubyearinput</td></tr>
+	        <tr><td>Publisher</td><td>$publisherinput</td></tr>
+	        <tr><td>Place</td><td>$placeinput</td></tr>
+	        <tr><td>Pages</td><td>$pagesinput</td></tr>
+	        <tr><td>Size</td><td>$sizeinput</td></tr>
+	      </table>
+	      <input type=submit>
+	      <input type=hidden name=insertnewrecord value=1>
+	      $fileinput
+	      $marcinput
+	      $origisbn
+	      $origissn
+	      $origlccn
+	      $origcontrolnumber
 	    </form>
 	    $marctext
 EOF
 	} # foreach record
     } else {
-        # No result file specified, list results
-	ListSearchResults($dbh,$input);
+        # No result item specified, list results
+	ListFileRecords($dbh,$input);
     } # if
 } # sub ProcessFile
 
-sub ListSearchResults {
+sub ListFileRecords {
     use strict;
 
     # Input parameters
@@ -398,17 +398,21 @@ sub ListSearchResults {
     )=@_;
 
     my (
+	$sth, $sti,
 	$field,
+	$data,		# records in MARC file format
+	$name,
+	$srvid,
+	%servernames,
+	$serverdb,
     );
 
-	my $data;
-	my $name;
 	my $z3950=0;
 	my $recordsource;
 	my $record;
 	my ($numrecords,$resultsid,$data,$startdate,$enddate);
 
-	# File can be results of z3950 search or uploaded MARC data
+	# File can be z3950 search query or uploaded MARC data
 
 	# if z3950 results
 	if ($file=~/Z-(\d+)/) {
@@ -416,7 +420,7 @@ sub ListSearchResults {
 	    $recordsource='';
 	} else {
 	    # This is a Marc upload
-	    my $sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
+	    $sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
 	    $sth->execute;
 	    ($data, $name) = $sth->fetchrow;
 	    $recordsource="from $name";
@@ -437,44 +441,36 @@ EOF
 	if ($file=~/Z-(\d+)/) {
 	    # This is a z3950 search 
 
-	    my $id=$1;		# search results id number
-	    my $sth=$dbh->prepare("select servers from z3950queue where id=$id");
-	    $sth->execute;
-	    my ($servers) = $sth->fetchrow;
+	    my $id=$1;		# search query id number
 	    my $serverstring;
 	    my $starttimer=time();
 
-	    # loop through all servers in search request
-	    foreach $serverstring (split(/\s+/, $servers)) {
-		my ($name, $server, $database, $auth) = split(/\//, $serverstring, 4);
-		if ($name eq 'MAN') {
-		    print "$server/$database<br>\n";
-		} else {
-		    my $sti=$dbh->prepare("select name from
-		    z3950servers where id=$name");
-		    $sti->execute;
-		    my ($longname)=$sti->fetchrow;
-		    print "<a name=SERVER-$name></a>\n";
-		    if ($longname) {
-			print "$longname \n";
-		    } else {
-			print "$server/$database \n";
-		    }
-		}
-		my $q_server=$dbh->quote($serverstring);
-		my $startrecord=$input->param("ST-$name");
+	    $sth=$dbh->prepare("
+		select z3950results.numrecords,z3950results.id,z3950results.results,
+			z3950results.startdate,z3950results.enddate,server 
+		from z3950queue left outer join z3950results 
+		     on z3950queue.id=z3950results.queryid 
+		where z3950queue.id=?
+		order by server  
+	    ");
+	    $sth->execute($id);
+	    if ( $sth->rows ) {
+	      # loop through all servers in search results
+	      while ( ($numrecords,$resultsid,$data,
+			$startdate,$enddate,$serverstring) = $sth->fetchrow ) {
+		my ($srvid, $server, $database, $auth) = split(/\//, $serverstring, 4);
+		#print "server=$serverstring\n";
+		if ( $server ) {
+	            print "<a name=SERVER-$srvid></a> " .
+			&z3950servername($dbh,$srvid,"$server/$database") . "\n";
+		} # if $server
+		my $startrecord=$input->param("ST-$srvid");
 		($startrecord) || ($startrecord='0');
-		my $sti=$dbh->prepare("
-		    select numrecords,id,results,startdate,enddate 
-			from z3950results 
-			where queryid=$id and server=$q_server");
-		$sti->execute;
-		($numrecords,$resultsid,$data,$startdate,$enddate) = $sti->fetchrow;
 		my $serverplaceholder='';
 		foreach ($input->param) {
 		    (next) unless (/ST-(.+)/);
 		    my $serverid=$1;
-		    (next) if ($serverid eq $name);
+		    (next) if ($serverid eq $srvid);
 		    my $place=$input->param("ST-$serverid");
 		    $serverplaceholder.="\&ST-$serverid=$place";
 		}
@@ -482,25 +478,25 @@ EOF
 		    my $previous='';
 		    my $next='';
 		    if ($startrecord>0) {
-			$previous="<a href=".$ENV{'SCRIPT_NAME'}."?file=Z-$id&menu=z3950$serverplaceholder\&ST-$name=".($startrecord-10)."#SERVER-$name>Previous</a>";
+			$previous="<a href=".$ENV{'SCRIPT_NAME'}."?file=Z-$id&menu=z3950$serverplaceholder\&ST-$srvid=".($startrecord-10)."#SERVER-$srvid>Previous</a>";
 		    }
 		    my $highest;
 		    $highest=$startrecord+10;
 		    ($highest>$numrecords) && ($highest=$numrecords);
 		    if ($numrecords>$startrecord+10) {
-			$next="<a href=".$ENV{'SCRIPT_NAME'}."?file=Z-$id&menu=z3950$serverplaceholder\&ST-$name=$highest#SERVER-$name>Next</a>";
+			$next="<a href=".$ENV{'SCRIPT_NAME'}."?file=Z-$id&menu=z3950$serverplaceholder\&ST-$srvid=$highest#SERVER-$srvid>Next</a>";
 		    }
 		    print "<font size=-1>[Viewing ".($startrecord+1)." to ".$highest." of $numrecords records]  $previous | $next </font><br>\n";
+		    my $stj=$dbh->prepare("update z3950results 
+			set highestseen=? where id=?");
+		    $stj->execute($startrecord+10,$resultsid);
 		} else {
 		    print "<br>\n";
 		}
 		print "<ul>\n";
-		my $stj=$dbh->prepare("update z3950results 
-			set highestseen=? where id=?");
-		$stj->execute($startrecord+10,$resultsid);
 
-		if ($sti->rows == 0) {
-		    print "pending...";
+		if (! $server ) {
+		    print "<font color=red>Search still pending...</font>";
 		} elsif ($enddate == 0) {
 		    my $now=time();
 		    my $elapsed=$now-$startdate;
@@ -512,28 +508,24 @@ EOF
 		    }
 		    print "<font color=red>processing... ($elapsedtime)</font>";
 		} elsif ($numrecords) {
-		    my $splitchar=chr(29);
-		    my @records=split(/$splitchar/, $data);
-		    $data='';
+		    my @records=parsemarcfileformat($data);
 		    my $i;
 		    for ($i=$startrecord; $i<$startrecord+10; $i++) {
-			$data.=$records[$i].$splitchar;
-		    }
-		    @records=parsemarcfileformat($data);
-		    my $counter=0;
-		    foreach $record (@records) {
-
-			&PrintResultRecordLink($record,$resultsid);
-			
-		    } # foreach record
+			if ( $records[$i] ) {
+			  &PrintResultRecordLink($records[$i],$resultsid);
+			} # if record
+		    } # for records
 		    print "<p>\n";
 		} else {
 		    print "No records returned.<p>\n";
 		}
 		print "</ul>\n";
-	    }
+	    } # foreach server
 	    my $elapsed=time()-$starttimer;
 	    print "<hr>It took $elapsed seconds to process this page.\n";
+	    } else {
+		print "<b>No results found for query $id</b>/n";
+	    } # if rows
 	} else {
 	    # This is an uploaded Marc record   
 
@@ -545,7 +537,32 @@ EOF
 	    } # foreach record
 	} # if z3950 or marc upload
 	print "</td></tr></table>\n";
-} # sub ListSearchResults
+} # sub ListFileRecords
+
+#--------------
+sub z3950servername {
+    # inputs
+    my (
+	$dbh,
+	$srvid,		# server id number 
+	$default,
+    )=@_;
+    # return
+    my $longname;
+    #----
+
+	my $sti=$dbh->prepare("select name 
+		from z3950servers 
+		where id=?");
+	$sti->execute($srvid);
+	if ( ! $sti->err ) {
+	    ($longname)=$sti->fetchrow;
+	}
+	if (! $longname) {
+	    $longname="$default";
+	}
+	return $longname;
+} # sub z3950servername
 
 sub PrintResultRecordLink {
     use strict;
@@ -636,7 +653,7 @@ sub extractmarcfields {
 	    	if ( $fieldname=$tagmap{ $field->{'tag'} }->{$subfield}->{name} ) {
 		    # Yes, so keep the value
 		    if ( ref($field->{'subfields'}->{$subfield} ) eq 'ARRAY' ) {
-		    # if it was an array, just keep first element.
+		        # if it was an array, just keep first element.
 		        $bib->{$fieldname}=$field->{'subfields'}->{$subfield}[0];
 		    } else {
 		        $bib->{$fieldname}=$field->{'subfields'}->{$subfield};
@@ -769,7 +786,7 @@ sub z3950menu {
     	$elapsed,
     	$elapsedtime,
 	$resultstatus, $statuscolor,
-	$id, $term, $type, $done, $numrecords, $length, 
+	$id, $term, $type, $done, 
 	$startdate, $enddate, $servers,
 	$record,$bib,$title,
     );
@@ -782,12 +799,12 @@ sub z3950menu {
 
     # Check queued queries
     $sth=$dbh->prepare("select id,term,type,done,
-		numrecords,length(results),startdate,enddate,servers 
+		startdate,enddate,servers 
 	from z3950queue 
 	order by id desc 
 	limit 20 ");
     $sth->execute;
-    while ( ($id, $term, $type, $done, $numrecords, $length, 
+    while ( ($id, $term, $type, $done, 
 		$startdate, $enddate, $servers) = $sth->fetchrow) {
 	$type=uc($type);
 	$term=~s/</&lt;/g;
