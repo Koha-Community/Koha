@@ -2,8 +2,10 @@
 
 <font size="6"><em>Rezultaty wyszukiwania opisu</em></font><br />
 <CENTER>
-Szukano <b>ISBN <TMPL_VAR name="isbn">,</b> <TMPL_VAR name="count"> znaleziono <br />
+Szukano <b>ISBN <TMPL_VAR name="isbn"></b><br />
+<TMPL_IF name="total">
 Trafienia od <TMPL_VAR name="showoffset"> do <TMPL_VAR name="total"> wy¶wietlono
+</TMPL_IF>
 <div align="right">
 <h2><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Dodaj nowy opis</a></h2>
 </div>

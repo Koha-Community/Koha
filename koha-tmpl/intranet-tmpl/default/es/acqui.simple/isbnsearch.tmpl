@@ -2,8 +2,10 @@
 
 <font size="6"><em>Resultados de la Búsqueda en Biblio</em></font><br />
 <CENTER>
-Ha buscado sobre el <b>ISBN <TMPL_VAR name="isbn">,</b> <TMPL_VAR name="count"> resultados encontrados <br />
+Ha buscado sobre el <b>ISBN <TMPL_VAR name="isbn"></b><br />
+<TMPL_IF name="total">
 Resultados desde el <TMPL_VAR name="showoffset"> hasta el <TMPL_VAR name="total"> visualizados
+</TMPL_IF>
 <div align="right">
 <h2><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Añadir un Nuevo Biblio</a></h2>
 </div>
@@ -22,11 +24,7 @@ Resultados desde el <TMPL_VAR name="showoffset"> hasta el <TMPL_VAR name="total"
 	<td><TMPL_VAR name="title"></a>
 	<td><TMPL_VAR name="author"></td>
 	<td><TMPL_VAR name="copyrightdate"></td>
-<<<<<<< isbnsearch.tmpl
-	<td><a href="additem.pl?biblionumber=<TMPL_VAR name="biblionumber">">Editar...</a></td>
-=======
-	<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
->>>>>>> 1.2
+	<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Editar...</a></td>
 	</tr>
 </TMPL_LOOP>
 </table>
