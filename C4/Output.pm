@@ -356,6 +356,8 @@ sub startmenu($) {
     open (FILE,"$path/reports-top.inc") || die "could not find : $path/reports-top.inc";
   } elsif ($type eq 'circulation') {
     open (FILE,"$path/circulation-top.inc") || die "could not find : $path/circulation-top.inc";
+  } elsif ($type eq 'admin') {
+    open (FILE,"$path/parameters-top.inc") || die "could not find : $path/parameters-top.inc";
   } else {
     open (FILE,"$path/cat-top.inc") || die "could not find : $path/cat-top.inc";
   }
@@ -397,6 +399,8 @@ sub endmenu {
     open (FILE,"<$path/reports-bottom.inc") || die;
   } elsif ($type eq 'circulation') {
     open (FILE,"<$path/circulation-bottom.inc") || die;
+  } elsif ($type eq 'admin') {
+    open (FILE,"<$path/parameters-bottom.inc") || die;
   } else {
     open (FILE,"<$path/cat-bottom.inc") || die;
   }
