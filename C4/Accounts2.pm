@@ -37,7 +37,7 @@ C4::Accounts - Functions for dealing with Koha accounts
 
 =head1 SYNOPSIS
 
-  use C4::Accounts;
+  use C4::Accounts2;
 
 =head1 DESCRIPTION
 
