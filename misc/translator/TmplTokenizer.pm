@@ -323,11 +323,11 @@ sub _next_token_internal {
 	for (my $cdata_close = $this->cdata_close;;) {
 	    if ($this->cdata_mode_p) {
 		my $next = $this->_pop_readahead;
-		if ($next =~ /^$cdata_close/) {
+		if ($next =~ /^$cdata_close/is) {
 		    ($kind, $it) = (TmplTokenType::TAG, $&);
 		    $this->_push_readahead( $' );
 		    $ok_p = 1;
-		} elsif ($next =~ /^((?:(?!$cdata_close).)+)($cdata_close)/) {
+		} elsif ($next =~ /^((?:(?!$cdata_close).)+)($cdata_close)/is) {
 		    ($kind, $it) = (TmplTokenType::TEXT, $1);
 		    $this->_push_readahead( "$2$'" );
 		    $ok_p = 1;
@@ -397,7 +397,7 @@ sub _next_token_intermediate {
     if (!$this->cdata_mode_p) {
 	$it = $this->_next_token_internal($h);
 	if (defined $it && $it->type == TmplTokenType::TAG) {
-	    if ($it->string =~ /^<(script|style|textarea)\b/i) {
+	    if ($it->string =~ /^<(script|style|textarea)\b/is) {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
 	    }
@@ -407,7 +407,7 @@ sub _next_token_intermediate {
 	for ($it = '', my $cdata_close = $this->cdata_close;;) {
 	    my $next = $this->_next_token_internal($h);
 	last if !defined $next;
-	    if (defined $next && $next->string =~ /$cdata_close/i) {
+	    if (defined $next && $next->string =~ /$cdata_close/is) {
 		$this->_push_readahead( $next ); # push entire TmplToken object
 		$this->_set_cdata_mode( 0 );
 	    }
@@ -422,24 +422,25 @@ sub _next_token_intermediate {
 
 sub _token_groupable1_p ($) { # as first token, groupable into TEXT_PARAMETRIZED
     my($t) = @_;
-    return ($t->type == TmplTokenType::TEXT && $t->string !~ /^[,\.:\|\s]+$/s)
+    return ($t->type == TmplTokenType::TEXT && $t->string !~ /^[,\.:\|\s]+$/is)
 	|| ($t->type == TmplTokenType::DIRECTIVE
 		&& $t->string =~ /^(?:$re_tmpl_var)$/os)
 	|| ($t->type == TmplTokenType::TAG
 		&& ($t->string =~ /^<(?:b|em|h[123456]|i|u)\b/is
-		|| ($t->string =~ /^<input/i
-		    && $t->attributes->{'type'} =~ /^(?:text)$/i)))
+#		|| ($t->string =~ /^<input\b/is
+#		    && $t->attributes->{'type'}->[1] =~ /^(?:radio|text)$/is)
+		    ))
 }
 
 sub _token_groupable2_p ($) { # as other token, groupable into TEXT_PARAMETRIZED
     my($t) = @_;
-    return ($t->type == TmplTokenType::TEXT && ($t->string =~ /^\s*$/s || $t->string !~ /^[\|\s]+$/s))
+    return ($t->type == TmplTokenType::TEXT && ($t->string =~ /^\s*$/s || $t->string !~ /^[\|\s]+$/is))
 	|| ($t->type == TmplTokenType::DIRECTIVE
 		&& $t->string =~ /^(?:$re_tmpl_var)$/os)
 	|| ($t->type == TmplTokenType::TAG
 		&& ($t->string =~ /^<\/?(?:a|b|em|h[123456]|i|u)\b/is
-		|| ($t->string =~ /^<input/i
-		    && $t->attributes->{'type'} =~ /^(?:text)$/i)))
+		|| ($t->string =~ /^<input\b/is
+		    && $t->attributes->{'type'} =~ /^(?:radio|text)$/is)))
 }
 
 sub _quote_cformat ($) {
@@ -468,7 +469,9 @@ sub _formalize ($) {
 	   $t->type == TmplTokenType::TEXT?
 		   _formalize_string_cformat($t->string):
 	   $t->type == TmplTokenType::TAG?
-		   ($t->string =~ /^<a\b/is? '<a>': _quote_cformat($t->string)):
+		   ($t->string =~ /^<a\b/is? '<a>':
+		    $t->string =~ /^<input\b/is? '<input>':
+		    _quote_cformat($t->string)):
 	       _quote_cformat($t->string);
 }
 
@@ -514,9 +517,11 @@ sub looks_plausibly_like_groupable_text_p (@) {
     my $error_p = 0;
     for (my $i = 0; $i <= $#structure; $i += 1) {
 	if ($structure[$i]->type == TmplTokenType::TAG) {
-	    if ($structure[$i]->string =~ /^<([A-Z0-9]+)/i) {
-		push @tags, lc($1);
-	    } elsif ($structure[$i]->string =~ /^<\/([A-Z0-9]+)/i) {
+	    if ($structure[$i]->string =~ /^<([A-Z0-9]+)/is) {
+		my $tag = lc($1);
+		push @tags, $tag unless $tag =~ /^<(?:input)/is
+			|| $tag =~ /\/>$/is;
+	    } elsif ($structure[$i]->string =~ /^<\/([A-Z0-9]+)/is) {
 		if (@tags && lc($1) eq $tags[$#tags]) {
 		    pop @tags;
 		} else {
@@ -549,7 +554,7 @@ sub next_token {
 	    my @structure = ( $it );
 	    my @tags = ();
 	    my $next = undef;
-	    my($nonblank_text_p, $parametrized_p, $with_anchor_p) = (0, 0, 0);
+	    my($nonblank_text_p, $parametrized_p, $with_anchor_p, $with_input_p) = (0, 0, 0, 0);
 	    if ($it->type == TmplTokenType::TEXT) {
 		$nonblank_text_p = 1 if !blank_p( $it->string );
 	    } elsif ($it->type == TmplTokenType::DIRECTIVE) {
@@ -557,6 +562,7 @@ sub next_token {
 	    } elsif ($it->type == TmplTokenType::TAG && $it->string =~ /^<([A-Z0-9]+)/is) {
 		push @tags, lc($1);
 		$with_anchor_p = 1 if lc($1) eq 'a';
+		$with_input_p = 1 if lc($1) eq 'input';
 	    }
 	    # We hate | and || in msgid strings, so we try to avoid them
 	    for (my $i = 1, my $quit_p = 0, my $quit_next_p = ($it->type == TmplTokenType::TEXT && $it->string =~ /^\|+$/s);; $i += 1) {
@@ -573,6 +579,7 @@ sub next_token {
 		    if ($next->string =~ /^<([A-Z0-9]+)/is) {
 			push @tags, lc($1);
 			$with_anchor_p = 1 if lc($1) eq 'a';
+			$with_input_p = 1 if lc($1) eq 'input';
 		    } elsif ($next->string =~ /^<\/([A-Z0-9]+)/is) {
 			my $close = lc($1);
 			$quit_p = 1 unless @tags && $close eq $tags[$#tags];
@@ -589,21 +596,24 @@ sub next_token {
 	    if (@structure < 2) {
 		# Nothing to do
 		;
-	    } elsif ($nonblank_text_p && ($parametrized_p || $with_anchor_p)) {
+	    } elsif ($nonblank_text_p && ($parametrized_p || $with_anchor_p || $with_input_p)) {
 		# Create the corresponding c-format string
 		my $string = join('', map { $_->string } @structure);
 		my $form = join('', map { _formalize $_ } @structure);
-		my $a_counter = 0;
+		my($a_counter, $input_counter) = (0, 0);
 		$form =~ s/<a>/ $a_counter += 1, "<a$a_counter>" /egs;
-		$it = TmplToken->new($string, TmplTokenType::TEXT_PARAMETRIZED, $it->line_number, $it->pathname);
+		$form =~ s/<input>/ $input_counter += 1, "<input$input_counter>" /egs;
+		$it = TmplToken->new($string, TmplTokenType::TEXT_PARAMETRIZED,
+			$it->line_number, $it->pathname);
 		$it->set_form( $form );
 		$it->set_children( @structure );
 	    } elsif ($nonblank_text_p
-	    && looks_plausibly_like_groupable_text_p( @structure )
-	    && $structure[$#structure]->type == TmplTokenType::TEXT) {
+		    && looks_plausibly_like_groupable_text_p( @structure )
+		    && $structure[$#structure]->type == TmplTokenType::TEXT) {
 		# Combine the strings
 		my $string = join('', map { $_->string } @structure);
-		$it = TmplToken->new($string, TmplTokenType::TEXT, $it->line_number, $it->pathname);;
+		$it = TmplToken->new($string, TmplTokenType::TEXT,
+			$it->line_number, $it->pathname);;
 	    } else {
 		# Requeue the tokens thus seen for re-emitting
 		for (;;) {
