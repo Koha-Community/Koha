@@ -19,6 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.35  2004/04/07 22:43:04  rangi
+# Fix for bug 217
+#
 # Revision 1.34  2004/02/11 08:35:31  tipaul
 # synch'ing 2.0.0 branch and head
 #
@@ -222,6 +225,14 @@ if (C4::Context->boolean_preference('marc') eq '1') {
 	$template->param(script => "detail.pl");
 }
 
-# Print the page
-output_html_with_http_headers $query, $cookie, $template->output;
-
+if ($search{"itemnumber"} && $count == 1){
+    # if its a barcode search by definition we will only have one result.
+    # And if we have a result
+    # lets jump straight to the detail.pl page
+    print $query->redirect("/cgi-bin/koha/detail.pl?type=intra&bib=$results[0]->{'biblionumber'}");
+}
+else {
+    # otherwise
+    # Print the page
+    output_html_with_http_headers $query, $cookie, $template->output;
+}
