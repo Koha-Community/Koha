@@ -133,6 +133,7 @@ sub themelanguage {
   my @languages = split " ", $lang;
 
 # theme preferences....
+  # FIXME - There's already a $sth in this scope
   my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opacthemes'");
   $sth->execute;
   my ($theme) = $sth->fetchrow;
@@ -140,6 +141,7 @@ sub themelanguage {
   my @themes = split " ", $theme;
 
   my ($theme, $lang);
+  # FIXME - There are already $theme and $lang in this scope
 # searches through the themes and languages. First template it find it returns.
 # Priority is for getting the theme right.
   THEME:
