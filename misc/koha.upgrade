@@ -33,11 +33,11 @@ if ($answer eq "Y" || $answer eq "y") {
 
 Install::setkohaversion($::newversion);
 checkperlmodules();
+backupmycnf();
 backupkoha();
 getapacheinfo();
 installfiles();
 # custom templates warning added to installfiles();
-backupmycnf();
 updatedatabase();
 restoremycnf();
 finalizeconfigfile();

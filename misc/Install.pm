@@ -2152,7 +2152,8 @@ $month++;
 $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
-open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$hostname $database|");
+setmysqlclipass($pass); 
+open (MD, "$mysqldir/bin/mysqldump --user=$user --host=$hostname $database|");
 
 (open BF, ">$backupdir/Koha.backup_$date") || (die "Error opening up backup file $backupdir/Koha.backup_$date: $!\n");
 
