@@ -40,9 +40,8 @@ print startmenu('catalog');
 if ($type eq 'change'){
   my $biblionumber=$input->param('biblionumber');
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblio where biblionumber=$biblionumber";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from biblio where biblionumber=?");
+  $sth->execute($biblionumber);
   my $data=$sth->fetchrow_hashref;
   print "Shifting group $bi to biblio $biblionumber<br>
   Title:$data->{'title'}<br>
