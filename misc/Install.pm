@@ -1131,7 +1131,7 @@ sub updateapacheconf {
     my $logfiledir=`grep ^ErrorLog "$realhttpdconf"`;
     chomp $logfiledir;
     
-    my $httpdconf = $etcdir."/httpd.conf";
+    my $httpdconf = $etcdir."/koha-httpd.conf";
 
     if ($logfiledir) {
 	$logfiledir=~m#ErrorLog (.*)/[^/]*$#
@@ -1260,6 +1260,7 @@ $messages->{'BasicAuthPasswordWasBlank'}->{en}="\nYou cannot use a blank passwor
 sub basicauthentication {
     my $message=getmessage('IntranetAuthenticationQuestion');
     my $answer=showmessage($message, 'yn', 'y');
+    my $httpdconf = $etcdir."/koha-httpd.conf";
 
     my $apacheauthusername='librarian';
     my $apacheauthpassword='';
@@ -1278,7 +1279,7 @@ sub basicauthentication {
 	$salt.=substr($chars, int(rand(length($chars))),1);
 	print AUTH $apacheauthusername.":".crypt($apacheauthpassword, $salt)."\n";
 	close AUTH;
-	open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
+	open(SITE,">>$httpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
 	print SITE <<EOP
 
 <Directory $intranetdir>
