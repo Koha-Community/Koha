@@ -133,31 +133,31 @@ foreach my $result (@results) {
 my $search="num=20";
 my $searchdesc='';
 if ($keyword){
-    $search=$search."&keyword=$keyword";		# FIXME - .=
+    $search .= "&keyword=$keyword";
     $searchdesc.="keyword $keyword, ";
 }
 if (my $subjectitems=$query->param('subjectitems')){
-    $search=$search."&subjectitems=$subjectitems";	# FIXME - .=
+    $search .= "&subjectitems=$subjectitems";
     $searchdesc.="subject $subjectitems, ";
 }
 if ($subject){
-    $search=$search."&subject=$subject";		# FIXME - .=
+    $search .= "&subject=$subject";
     $searchdesc.="subject $subject, ";
 }
 if ($author){
-    $search=$search."&author=$author";			# FIXME - .=
+    $search .= "&author=$author";
     $searchdesc.="author $author, ";
 }
 if ($class){
-    $search=$search."&class=$class";			# FIXME - .=
+    $search .= "&class=$class";
     $searchdesc.="class $class, ";
 }
 if ($title){
-    $search=$search."&title=$title";			# FIXME - .=
+    $search .= "&title=$title";
     $searchdesc.="title $title, ";
 }
 if ($dewey){
-    $search=$search."&dewey=$dewey";			# FIXME - .=
+    $search .= "&dewey=$dewey";
     $searchdesc.="dewey $dewey, ";
 }
 $search.="&ttype=$ttype";

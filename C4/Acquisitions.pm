@@ -822,7 +822,7 @@ or catalogueentry like '% $subject[$i]')";
 
         $sth2->execute;
         while (my $data = $sth2->fetchrow_hashref) {
-          $error = $error."<br>$data->{'catalogueentry'}";	# FIXME - .=
+          $error .= "<br>$data->{'catalogueentry'}";
         } # while
         $sth2->finish;
       } # else
@@ -1266,7 +1266,7 @@ sub curconvert {
   if ($cur==0){
     $cur=1;
   }
-  $price=$price / $cur;		# FIXME - /=
+  $price /= $cur;
   return($price);
 }
 
@@ -1578,7 +1578,7 @@ sub delitem{
   $sth->finish;
   $query="Insert into deleteditems values (";
   foreach my $temp (@data){
-    $query=$query."'$temp',";		# FIXME - .=
+    $query .= "'$temp',";
   }
   $query=~ s/\,$/\)/;
 #  print $query;
@@ -1665,7 +1665,7 @@ sub delbiblio{
     $query="Insert into deletedbiblio values (";
     foreach my $temp (@data){
       $temp=~ s/\'/\\\'/g;
-      $query=$query."'$temp',";		# FIXME - .=
+      $query .= "'$temp',";
     }
     $query=~ s/\,$/\)/;
 #   print $query;

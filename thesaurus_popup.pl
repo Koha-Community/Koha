@@ -42,7 +42,7 @@ my $dbh = C4::Context->dbh;
 # make the page ...
 print $input->header;
 if ($op eq "select") {
-	$subject = $subject."|$freelib_text";		# FIXME - .=
+	$subject .= "|$freelib_text";
 }
 print <<"EOF";
 	<html>

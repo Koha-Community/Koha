@@ -459,7 +459,7 @@ sub mktablerow {
       }
       $i++;
   }
-  $string=$string."</tr>\n";		# FIXME - .=
+  $string .= "</tr>\n";
   return($string);
 }
 
@@ -481,7 +481,7 @@ sub mktableft() {
 sub mkform{
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
-  $string=$string.mktablehdr();		# FIXME - .=
+  $string .= mktablehdr();
   my $key;
   my @keys=sort keys %inputs;
 
@@ -492,8 +492,7 @@ sub mkform{
     my @data=split('\t',$value);
     #my $posn = shift(@data);
     if ($data[0] eq 'hidden'){
-      $string=$string."<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
-					# FIXME - .=
+      $string .= "<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
     } else {
       my $text;
       if ($data[0] eq 'radio') {
@@ -511,22 +510,20 @@ sub mkform{
 	my $i=1;
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
-      	  $text = $text."<option value=$data[$i]>$val";		# FIXME - .=
-	  $i = $i+2;		# FIXME - +=
+      	  $text .= "<option value=$data[$i]>$val";
+      	  $i += 2;
 	}
-	$text=$text."</select>";
-				# FIXME - .=
+	$text .= "</select>";
       }
-      $string=$string.mktablerow(2,'white',$keys[$i2],$text);	# FIXME - .=
+      $string .= mktablerow(2,'white',$keys[$i2],$text);
       #@order[$posn] =mktablerow(2,'white',$keys[$i2],$text);
     }
     $i2++;
   }
   #$string=$string.join("\n",@order);
-  $string=$string.mktablerow(2,'white','<input type=submit>','<input type=reset>');
-				# FIXME - .=
-  $string=$string.mktableft;	# FIXME - .=
-  $string=$string."</form>";	# FIXME - .=
+  $string .= mktablerow(2,'white','<input type=submit>','<input type=reset>');
+  $string .= mktableft;
+  $string .= "</form>";
 }
 
 =item mkform3
@@ -633,10 +630,10 @@ sub mkform3 {
 	my $i=1;
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
-      	  $text = $text."<option value=$data[$i]>$val";		# FIXME - .=
-	  $i = $i+2;		# FIXME - Use $i += 2.
+      	  $text .= "<option value=$data[$i]>$val";
+      	  $i += 2;
 	}
-	$text=$text."</select>";	# FIXME - .=
+	$text .= "</select>";
       }
 #      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
       $order[$posn]=mktablerow(2,'white',$keys[$i2],$text);
@@ -644,10 +641,10 @@ sub mkform3 {
     $i2++;
   }
   my $temp=join("\n",@order);
-  $string=$string.$temp;					# FIXME - .=
-  $string=$string.mktablerow(1,'white','<input type=submit>');	# FIXME - .=
-  $string=$string.mktableft;					# FIXME - .=
-  $string=$string."</form>";					# FIXME - .=
+  $string .= $temp;
+  $string .= mktablerow(1,'white','<input type=submit>');
+  $string .= mktableft;
+  $string .= "</form>";
   # FIXME - A return statement, while not strictly necessary, would be nice.
 }
 
@@ -718,31 +715,25 @@ sub mkformnotable{
   my $count=@inputs;
   for (my $i=0; $i<$count; $i++){
     if ($inputs[$i][0] eq 'hidden'){
-      $string=$string."<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
-				# FIXME - .=
+      $string .= "<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
     }
     if ($inputs[$i][0] eq 'radio') {
-      $string.="<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
-				# FIXME - .=
+      $string .= "<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
     }
     if ($inputs[$i][0] eq 'text') {
-      $string.="<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-				# FIXME - .=
+      $string .= "<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
     }
     if ($inputs[$i][0] eq 'textarea') {
-        $string.="<textarea name=$inputs[$i][1] wrap=physical cols=40 rows=4>$inputs[$i][2]</textarea>";
-				# FIXME - .=
+        $string .= "<textarea name=$inputs[$i][1] wrap=physical cols=40 rows=4>$inputs[$i][2]</textarea>";
     }
     if ($inputs[$i][0] eq 'reset'){
-      $string.="<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-				# FIXME - .=
+      $string .= "<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
     }
     if ($inputs[$i][0] eq 'submit'){
-      $string.="<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
-				# FIXME - .=
+      $string .= "<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
     }
   }
-  $string=$string."</form>";	# FIXME - .=
+  $string .= "</form>";
 }
 
 =item mkform2
@@ -829,7 +820,7 @@ sub mkform2{
     #   functions
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
-  $string=$string.mktablehdr();		# FIXME - .=
+  $string .= mktablehdr();
   my $key;
   my @order;
   while ( my ($key, $value) = each %inputs) {
@@ -838,8 +829,7 @@ sub mkform2{
     my $reqd = shift(@data);
     my $ltext = shift(@data);
     if ($data[0] eq 'hidden'){
-      $string=$string."<input type=hidden name=$key value=\"$data[1]\">\n";
-					# FIXME - .=
+      $string .= "<input type=hidden name=$key value=\"$data[1]\">\n";
     } else {
       my $text;
       if ($data[0] eq 'radio') {
@@ -864,26 +854,25 @@ sub mkform2{
 	my $i=2;
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
-       	  $text = $text."<option value=\"$data[$i]\"";	# FIXME - .=
+       	  $text .= "<option value=\"$data[$i]\"";
 	  if ($data[$i] eq $sel) {
-	     $text = $text." selected";			# FIXME - .=
+	     $text .= " selected";
 	  }
-          $text = $text.">$val";			# FIXME - .=
-	  $i = $i+2;					# FIXME - +=
+          $text .= ">$val";
+          $i += 2;
 	}
-	$text=$text."</select>";			# FIXME - .=
+	$text .= "</select>";
       }
       if ($reqd eq "R") {
-        $ltext = $ltext." (Req)";			# FIXME - .=
+        $ltext .= " (Req)";
 	}
       $order[$posn] =mktablerow(2,'white',$ltext,$text);
     }
   }
-  $string=$string.join("\n",@order);			# FIXME - .=
-  $string=$string.mktablerow(2,'white','<input type=submit>','<input type=reset>');
-							# FIXME - .=
-  $string=$string.mktableft;				# FIXME - .=
-  $string=$string."</form>";				# FIXME - .=
+  $string .= join("\n",@order);
+  $string .= mktablerow(2,'white','<input type=submit>','<input type=reset>');
+  $string .= mktableft;
+  $string .= "</form>";
 }
 
 =item endpage

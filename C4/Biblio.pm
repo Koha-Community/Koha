@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.21  2002/10/13 11:34:14  arensb
+# Replaced expressions of the form "$x = $x <op> $y" with "$x <op>= $y".
+# Thus, $x = $x+2 becomes $x += 2, and so forth.
+#
 # Revision 1.20  2002/10/13 08:28:32  arensb
 # Deleted unused variables.
 # Removed trailing whitespace.
@@ -1202,7 +1206,7 @@ sub OLDmodsubject {
 
         $sth2->execute;
         while (my $data = $sth2->fetchrow_hashref) {
-          $error = $error."<br>$data->{'catalogueentry'}";	# FIXME - .=
+          $error .= "<br>$data->{'catalogueentry'}";
         } # while
         $sth2->finish;
       } # else
@@ -1466,7 +1470,7 @@ sub OLDdelitem{
   $sth->finish;
   $query="Insert into deleteditems values (";
   foreach my $temp (@data){
-    $query=$query."'$temp',";		# FIXME - .=
+    $query .= "'$temp',";
   }
   $query=~ s/\,$/\)/;
 #  print $query;
@@ -1535,7 +1539,7 @@ sub OLDdelbiblio{
     $query="Insert into deletedbiblio values (";
     foreach my $temp (@data){
       $temp=~ s/\'/\\\'/g;
-      $query=$query."'$temp',";		# FIXME - .=
+      $query .= "'$temp',";
     }
     $query=~ s/\,$/\)/;
 #   print $query;

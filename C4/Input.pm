@@ -136,15 +136,10 @@ sub checkvalidisbn {
                 my $digit=substr($q,$i,1);
                 $c+=$digit*(10-$i);
             }
-	    $c=$c%11;  # % is the modulus function
-			# FIXME - %=
+	    $c %= 11;
             ($c==10) && ($c='X');
             # FIXME - $isbngood = $c eq $checksum;
-            if ($c eq $checksum) {
-                $isbngood=1;
-            } else {
-                $isbngood=0;
-            }
+            $isbngood = $c eq $checksum;
         } else {
             # FIXME - Put "return 0 if $length($q) != 10" near the
             # top, so we don't have to indent the rest of the function

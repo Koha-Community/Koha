@@ -287,8 +287,7 @@ sub calc_charges {
     $sth2->execute;
     if (my$data2=$sth2->fetchrow_hashref) {
       my $discount = $data2->{'rentaldiscount'};
-      # FIXME - *=
-      $charge = ($charge *(100 - $discount)) / 100;
+      $charge *= (100 - $discount) / 100;
     }
     $sth2->finish;
   }

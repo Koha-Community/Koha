@@ -1107,8 +1107,7 @@ sub fixaccountforlostandreturned {
 	    while (($accdata=$msth->fetchrow_hashref) and ($amountleft>0)){
 		if ($accdata->{'amountoutstanding'} < $amountleft) {
 		    $newamtos = 0;
-		    # FIXME - -=
-		    $amountleft = $amountleft - $accdata->{'amountoutstanding'};
+		    $amountleft -= $accdata->{'amountoutstanding'};
 		}  else {
 		    $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 		    $amountleft = 0;
@@ -1569,8 +1568,7 @@ sub checkaccount  {
   $sth->execute;
   my $total=0;
   while (my $data=$sth->fetchrow_hashref){
-    # FIXME = +=
-    $total=$total+$data->{'sum(amountoutstanding)'};
+    $total += $data->{'sum(amountoutstanding)'};
   }
   $sth->finish;
   # output(1,2,"borrower owes $total");

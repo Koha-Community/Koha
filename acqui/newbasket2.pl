@@ -164,51 +164,51 @@ while ($i < $count2){
       my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
       $itemcount=$count;
       if ($nacount > 0){
-        $location=$location."On Loan";		# FIXME - .=
+        $location .= "On Loan";
 	if ($nacount >1 ){
-	  $location=$location." ($nacount)";	# FIXME - .=
+	  $location .= " ($nacount)";
          }
 	 $location.=" ";
       }
       if ($lcount > 0){
-         $location=$location."Levin";		# FIXME - .=
+         $location .= "Levin";
          if ($lcount >1 ){
-	  $location=$location." ($lcount)";	# FIXME - .=
+	  $location .= " ($lcount)";
          }
 	 $location.=" ";
       }
       if ($fcount > 0){
-        $location=$location."Foxton";		# FIXME - .=
+        $location .= "Foxton";
          if ($fcount >1 ){
-	  $location=$location." ($fcount)";	# FIXME - .=
+	  $location .= " ($fcount)";
          }
 	 $location.=" ";
       }
       if ($scount > 0){
-        $location=$location."Shannon";		# FIXME - .=
+        $location .= "Shannon";
          if ($scount >1 ){
-	  $location=$location." ($scount)";	# FIXME - .=
+	  $location .= " ($scount)";
          }
 	 $location.=" ";
       }
       if ($lostcount > 0){
-        $location=$location."Lost";		# FIXME - .=
+        $location .= "Lost";
          if ($lostcount >1 ){
-	  $location=$location." ($lostcount)";	# FIXME - .=
+	  $location .= " ($lostcount)";
          }
 	 $location.=" ";
       }
       if ($mending > 0){
-        $location=$location."Mending";		# FIXME - .=
+        $location .= "Mending";
          if ($mending >1 ){
-	  $location=$location." ($mending)";	# FIXME - .=
+	  $location .= " ($mending)";
          }
 	 $location.=" ";
       }
       if ($transit > 0){
-        $location=$location."In Transiit";	# FIXME - .=
+        $location .= "In Transit";
          if ($transit >1 ){
-	  $location=$location." ($transit)";	# FIXME - .=
+	  $location .= " ($transit)";
          }
 	 $location.=" ";
       }

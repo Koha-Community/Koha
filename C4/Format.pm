@@ -213,11 +213,11 @@ sub fmtdec {
   }
   # Right-pad the decimal part to the given number of digits.
   if ($right > 0) {
-     $tempdec = $tempdec.("0"x$right);	# FIXME - .=
+     $tempdec .= "0"x$right;
      $tempdec = substr($tempdec,0,$right);
-     $fnumb = $fnumb.".".$tempdec;	# FIXME - .=
+     $fnumb .= ".".$tempdec;
   }
-  return ($fnumb);	# FIXME - Shouldn't return a list.
+  return $fnumb;	# FIXME - Shouldn't return a list.
 }
 
 1;

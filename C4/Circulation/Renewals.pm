@@ -202,19 +202,17 @@ sub bulkrenew {
      my ($resbor,$resrec) = C4::Circulation::Main::checkreserve($env,
         $dbh,$issrec->{'itemnumber'});
      if ($resbor ne "") {
-       $line = $line."R";		# FIXME - .=
+       $line .= "R";
        $rstatuses[$x] ="R";
      } elsif ($renewstatus == 0) {
-       $line = $line."N";		# FIXME - .=
+       $line .= "N";
        $rstatuses[$x] = "N";
      } else {
-       $line = $line."Y";		# FIXME - .=
+       $line .= "Y";
        $rstatuses[$x] = "Y";
      }
-     $line = $line.fmtdec($env,$issrec->{'renewals'},"20")." ";
-					# FIXME - .=
-     $line = $line.$itemdata->{'barcode'}." ".$itemdata->{'itemtype'}." ".$itemdata->{'title'};
-					# FIXME - .=
+     $line .= fmtdec($env,$issrec->{'renewals'},"20")." ";
+     $line .= $itemdata->{'barcode'}." ".$itemdata->{'itemtype'}." ".$itemdata->{'title'};
      $items[$x] = $line;
      #debug_msg($env,$line);
      $issues[$x] = $issrec;

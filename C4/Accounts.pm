@@ -132,8 +132,7 @@ sub reconcileaccount {
     $line= $data->{'accountno'}." ".$data->{'date'}." ".$data->{'accounttype'}." ";
     my $title = $itemdata->{'title'};
     if (length($title) > 15 ) {$title = substr($title,0,15);}
-    $line= $line.$itemdata->{'barcode'}." $title ".$data->{'description'};
-				# FIXME - .=
+    $line .= $itemdata->{'barcode'}." $title ".$data->{'description'};
     $line = fmtstr($env,$line,"L65")." ".fmtdec($env,$amount,"52");
     push @accountlines,$line;
     $i++;
@@ -173,8 +172,7 @@ sub recordpayment{
   while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
      if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
-	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
-				# FIXME - -=
+	$amountleft -= $accdata->{'amountoutstanding'};
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;

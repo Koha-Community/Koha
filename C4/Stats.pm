@@ -165,7 +165,7 @@ sub TotalOwing{
   my $dbh = C4::Context->dbh;
   my $query="Select sum(amountoutstanding) from accountlines";
   if ($type eq 'fine'){
-    $query=$query." where accounttype='F' or accounttype='FN'";	# FIXME - .=
+    $query .= " where accounttype='F' or accounttype='FN'";
   }
   my $sth=$dbh->prepare($query);
 #  print $query;
@@ -184,7 +184,7 @@ sub TotalPaid {
 or accounttype ='W')
   and accountlines.borrowernumber = borrowers.borrowernumber";
   if ($time eq 'today'){
-    $query=$query." and date = now()";				# FIXME - .=
+    $query .= " and date = now()";
   } else {
     $query.=" and date='$time'";
   }

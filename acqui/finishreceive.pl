@@ -66,7 +66,7 @@ my $biblio = {
 }; # my $biblio
 
 if ($quantrec != 0){
-  $cost=$cost / $quantrec;		# FIXME - /=
+  $cost /= $quantrec;
 }
 
 my $gst=$input->param('gst');

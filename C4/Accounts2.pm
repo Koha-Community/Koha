@@ -98,8 +98,7 @@ sub recordpayment{
   while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
      if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
-	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
-				# FIXME - -=
+	$amountleft -= $accdata->{'amountoutstanding'};
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
@@ -375,8 +374,7 @@ sub fixcredit{
     $sth->finish;
     if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
-	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
-				# FIXME - -=
+	$amountleft -= $accdata->{'amountoutstanding'};
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
@@ -407,8 +405,7 @@ sub fixcredit{
   while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
      if ($accdata->{'amountoutstanding'} < $amountleft) {
         $newamtos = 0;
-	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
-				# FIXME - -=
+	$amountleft -= $accdata->{'amountoutstanding'};
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;
@@ -460,8 +457,7 @@ sub refund{
   while (($accdata=$sth->fetchrow_hashref) and ($amountleft<0)){
      if ($accdata->{'amountoutstanding'} > $amountleft) {
         $newamtos = 0;
-	$amountleft = $amountleft - $accdata->{'amountoutstanding'};
-				# FIXME - -=
+	$amountleft -= $accdata->{'amountoutstanding'};
      }  else {
         $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
 	$amountleft = 0;

@@ -196,7 +196,7 @@ while (1) {
 						$result.=$marcdata;
 					    }
 					    my $scantimerend=time();
-					    ($numresults<$numrecords+40) ? ($numrecords=$numresults) : ($numrecords=$numrecords+40); # FIXME - +=
+					    ($numresults<$numrecords+40) ? ($numrecords=$numresults) : ($numrecords += 40);
 					    my $elapsed=$scantimerend-$scantimerstart;
 					    if ($elapsed) {
 						my $speed=int($numresults/$elapsed*100)/100;

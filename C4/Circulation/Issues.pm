@@ -199,13 +199,13 @@ sub formatitem {
      my $dewey = $item->{'dewey'};
      $dewey =~ s/0*$//;
      $dewey =~ s/\.$//;
-     $iclass = $iclass.$dewey.$item->{'subclass'};	# FIXME - .=
+     $iclass .= $dewey.$item->{'subclass'};
    };
    my $llen = 65 - length($iclass);
    my $line = fmtstr($env,$line,"L".$llen);
 		# FIXME - Use sprintf() instead of &fmtstr.
-   my $line = $line." $iclass ";		# FIXME - .=
-   my $line = $line.fmtdec($env,$charge,"22");	# FIXME - .=
+   my $line .= " $iclass ";
+   my $line .= fmtdec($env,$charge,"22");
    return $line;
 }
 
@@ -284,8 +284,7 @@ sub issueitem{
 	 $btsh->execute;
 	 my $resborrower = $btsh->fetchrow_hashref;
 	 my $msgtxt = chr(7)."Res for $resborrower->{'cardnumber'},";
-         $msgtxt = $msgtxt." $resborrower->{'initials'} $resborrower->{'surname'}";
-		# FIXME - .=
+         $msgtxt .= " $resborrower->{'initials'} $resborrower->{'surname'}";
          my $ans = msg_ny($env,$msgtxt,"Allow issue?");
 	 if ($ans eq "N") {
 	    # print a docket;

@@ -567,8 +567,7 @@ sub KeywordSearch2 {
   biblio.biblionumber=bibliosubtitle.biblionumber and
   (((title like '$key[0]%' or title like '% $key[0]%')";
   while ($i < $count){
-    $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
-				# FIXME - .=
+    $query .= " and (title like '$key[$i]%' or title like '% $key[$i]%')";
     $i++;
   }
   $query.= ") or ((subtitle like '$key[0]%' or subtitle like '% $key[0]%')";
@@ -603,7 +602,7 @@ sub KeywordSearch2 {
     seriestitle like 'new zealand%' or seriestitle like '% new zealand %'
     or seriestitle like '% new zealand')"
   }
-  $query=$query."))";		# FIXME - .=
+  $query .= "))";
   if ($search->{'class'} ne ''){
     my @temp=split(/\|/,$search->{'class'});
     my $count=@temp;
@@ -886,22 +885,20 @@ sub CatSearch  {
 	 like '% $key[0]%'
 	 	 )";
 	 while ($i < $count){
-           $query=$query." and (
+           $query .= " and (
 	   biblio.author like '$key[$i]%' or biblio.author like '% $key[$i]%' or
 	   additionalauthors.author like '$key[$i]%' or additionalauthors.author like '% $key[$i]%'
 	   )";
-				# FIXME - .= <<EOT
            $i++;
 	 }
-	 $query=$query.")";	# FIXME - .=
+	 $query .= ")";
          if ($search->{'title'} ne ''){
 	   my @key=split(' ',$search->{'title'});
 	   my $count=@key;
            my $i=0;
 	   $query.= " and (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
             while ($i<$count){
-	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
-				# FIXME - .=
+	      $query .= " and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
               $i++;
 	    }
 #	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0] %' or subtitle like '% $key[0]')";
@@ -916,7 +913,7 @@ sub CatSearch  {
             for ($i=1;$i<$count;$i++){
 	        $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
             }
-	    $query=$query."))";		# FIXME - .=
+	    $query .= "))";
 	   #$query=$query. " and (title like '%$search->{'title'}%'
 	   #or seriestitle like '%$search->{'title'}%')";
 	 }
@@ -952,8 +949,7 @@ sub CatSearch  {
 	    where
 	    (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
 	    while ($i<$count){
-	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
-					# FIXME - .=
+	      $query .= " and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
 	      $i++;
 	    }
 	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0]%' or subtitle like '% $key[0]')";
@@ -968,7 +964,7 @@ sub CatSearch  {
 	    for ($i=1;$i<$count;$i++){
 	      $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
 	    }
-	    $query=$query."))";		# FIXME - .=
+	    $query .= "))";
 	   }
 	   if ($search->{'abstract'} ne ''){
 	    $query.= " and (abstract like '%$search->{'abstract'}%')";
@@ -1092,13 +1088,13 @@ sub CatSearch  {
 #print $query;
 if ($type ne 'precise' && $type ne 'subject'){
   if ($search->{'author'} ne ''){
-      $query=$query." order by biblio.author,title";	# FIXME - .=
+      $query .= " order by biblio.author,title";
   } else {
-      $query=$query." order by title";			# FIXME - .=
+      $query .= " order by title";
   }
 } else {
   if ($type eq 'subject'){
-      $query=$query." order by subject";		# FIXME - .=
+      $query .= " order by subject";
   }
 }
 #print STDERR "$query\n";
@@ -1324,9 +1320,9 @@ sub ItemInfo {
       $dewey='';
     }
     $dewey=~ s/\.$//;
-    $class = $class.$dewey;			# FIXME - .=
+    $class .= $dewey;
     if ($dewey ne ''){
-      $class = $class.$data->{'subclass'};	# FIXME - .=
+      $class .= $data->{'subclass'};
     }
  #   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
     # FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
@@ -1395,20 +1391,20 @@ sub GetItems {
       my $dewey = $data->{'dewey'};
       $dewey =~ s/0+$//;
       my $line = $data->{'biblioitemnumber'}."\t".$data->{'itemtype'};
-      $line = $line."\t$data->{'classification'}\t$dewey";	# FIXME - .=
-      $line = $line."\t$data->{'subclass'}\t$data->{isbn}";	# FIXME - .=
-      $line = $line."\t$data->{'volume'}\t$data->{number}";	# FIXME - .=
+      $line .= "\t$data->{'classification'}\t$dewey";
+      $line .= "\t$data->{'subclass'}\t$data->{isbn}";
+      $line .= "\t$data->{'volume'}\t$data->{number}";
       my $isth= $dbh->prepare("select * from items where biblioitemnumber = $data->{'biblioitemnumber'}");
       $isth->execute;
       while (my $idata = $isth->fetchrow_hashref) {
         my $iline = $idata->{'barcode'}."[".$idata->{'holdingbranch'}."[";
 	if ($idata->{'notforloan'} == 1) {
-	  $iline = $iline."NFL ";				# FIXME - .=
+	  $iline .= "NFL ";
 	}
 	if ($idata->{'itemlost'} == 1) {
-	  $iline = $iline."LOST ";				# FIXME - .=
+	  $iline .= "LOST ";
 	}
-        $line = $line."\t$iline";				# FIXME - .=
+        $line .= "\t$iline";
       }
       $isth->finish;
       $results[$i] = $line;
@@ -1996,7 +1992,7 @@ borrowernumber=$params->{'borrowernumber'} order by date desc,timestamp desc";
  #     }
       $acctlines[$numlines] = $data;
       $numlines++;
-      $total = $total+ $data->{'amountoutstanding'};	# FIXME - +=
+      $total += $data->{'amountoutstanding'};
    }
    $sth->finish;
    return ($numlines,\@acctlines,$total);
