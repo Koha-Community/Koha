@@ -142,6 +142,7 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 	$reserve{'biblionumber'}=$res->{'biblionumber'};
 	$reserve{'bornum'}=$res->{'borrowernumber'};
 	$reserve{'firstname'}=$res->{'firstname'};
+	$reserve{'surname'}=$res->{'surname'};
 	$reserve{'bornum'}=$res->{'borrowernumber'};
 	$reserve{'notes'}=$res->{'reservenotes'};
 	$reserve{'wait'}=($res->{'found'} eq 'W');
