@@ -28,6 +28,7 @@ require Exporter;
 use C4::Context;
 use C4::Database;
 use C4::Search; #for getting the systempreferences
+	# FIXME - Get rid of this, and use C4::Context->preference
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -228,6 +229,8 @@ document.
 
 =cut
 #'
+# FIXME - Fix POD: it doesn't look in the directory given by the
+# 'includes' option in /etc/koha.conf.
 sub pathtotemplate {
   my %params = @_;
   my $template = $params{'template'};
@@ -255,15 +258,12 @@ sub pathtotemplate {
   unshift (@tmpldirs, C4::Context->config('templatedirectory')) if C4::Context->config('templatedirectory');
   unshift (@tmpldirs, $params{'path'}) if $params{'path'};
 
-  my ($edir, $etheme, $elanguage, $epath);
+  my ($etheme, $elanguage, $epath);
 
-  # FIXME - Use 'foreach my $var (...)'
-  CHECK: foreach (@tmpldirs) {
-    $edir= $_;
-    foreach ($theme, 'all', 'default') {
-      $etheme=$_;
-      foreach ($language, @languageorder, 'all','en') {  # 'en' is the fallback-language
-        $elanguage = $_;
+  CHECK: foreach my $edir (@tmpldirs) {
+    foreach $etheme ($theme, 'all', 'default') {
+      foreach $elanguage ($language, @languageorder, 'all','en') {
+				# 'en' is the fallback-language
       	if (-e "$edir/$type$etheme/$elanguage/$template") {
       	  $epath = "$edir/$type$etheme/$elanguage/$template";
       	  last CHECK;
@@ -312,9 +312,9 @@ sub getlanguageorder () {
   my %prefs = systemprefs();
 
   if ($ENV{'HTTP_ACCEPT_LANGUAGE'}) {
-    @languageorder = split (/,/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
+    @languageorder = split (/\s*,\s*/ ,lc($ENV{'HTTP_ACCEPT_LANGUAGE'}));
   } elsif ($prefs{'languageorder'}) {
-    @languageorder = split (/,/ ,lc($prefs{'languageorder'}));
+    @languageorder = split (/\s*,\s*/ ,lc($prefs{'languageorder'}));
   } else { # here should be another elsif checking for apache's languageorder
     @languageorder = ('en');
   }
