@@ -68,7 +68,6 @@ if ($op eq 'add_form') {
 		my @marcarray;
 		push @marcarray," ";
 		while (my ($field, $tagsubfield, $liblibrarian) = $sth2->fetchrow_array) {
-	#		warn "$field$tagsubfield - $liblibrarian";
 			push @marcarray, "$field $tagsubfield - $liblibrarian";
 		}
 		my $marclist = CGI::scrolling_list(-name=>"marc",
