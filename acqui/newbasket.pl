@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -52,7 +54,7 @@ $date
 <FONT SIZE=6><em>Shopping Basket For: <a href=/cgi-bin/koha/acqui/supplier.pl?id=$booksellers[0]->{'id'}>
 $booksellers[0]->{'name'}</a></em></FONT><br>
 Ph: $booksellers[0]->{'phone'}, Fax: $booksellers[0]->{'fax'},
-$booksellers[0]->{'address1'}, $booksellers[0]->{'address2'}, 
+$booksellers[0]->{'address1'}, $booksellers[0]->{'address2'},
 $booksellers[0]->{'address3'}, $booksellers[0]->{'address4'}
 
 
@@ -60,7 +62,7 @@ $booksellers[0]->{'address3'}, $booksellers[0]->{'address4'}
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
 <input type=hidden name=id value="$id">
 <input type=hidden name=basket value="$basket">
-<b> Search Keyword or Title: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"> 
+<b> Search Keyword or Title: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
 
 </form>
 

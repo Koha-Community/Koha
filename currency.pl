@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written by chris@katipo.co.nz
 #9/10/2000
 #script to display and update currency rates
@@ -40,7 +42,7 @@ if ($type ne 'change'){
   <input type=hidden name=type value=change>
   <TR VALIGN=TOP>
   <TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b>EXCHANGE RATES </b></TD></TR>
-  <TR VALIGN=TOP>                                                                 
+  <TR VALIGN=TOP>
   <TD>
 printend
 ;
@@ -52,12 +54,12 @@ printend
 #    print $rates->[$i]->{'currency'};
   }
   print <<printend
-    <p>                                                                             
+    <p>
   <input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42>
-  
-  </TD></TR>                                                                      
-  </form>                                                                         
-  </table>                                                
+
+  </TD></TR>
+  </form>
+  </table>
 printend
 ;
 } else {

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written 14/1/2000
 #script to display reports
 
@@ -60,11 +62,11 @@ $date=UnixDate($date,'%Y-%m-%d');
 $date2=UnixDate($date2,'%Y-%m-%d');
 
 my $dbh = C4::Context->dbh;
-my $query="select * 
+my $query="select *
 from accountlines,accountoffsets,borrowers where
 accountlines.borrowernumber=accountoffsets.borrowernumber and
 (accountlines.accountno=accountoffsets.accountno or accountlines.accountno
-=accountoffsets.offsetaccount) and accountlines.timestamp >=20000621000000 
+=accountoffsets.offsetaccount) and accountlines.timestamp >=20000621000000
 and borrowers.borrowernumber=accountlines.borrowernumber
 group by accountlines.borrowernumber,accountlines.accountno";
 my $sth=$dbh->prepare($query);

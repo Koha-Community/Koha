@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written 14/1/2000
 #script to display reports
 
@@ -132,7 +134,7 @@ EOF
 </tr></table>
 </td></tr></table>
 <p>
-Printer: 
+Printer:
 <select name=printer>
 $printeroptions
 </select>

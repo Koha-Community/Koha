@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -29,7 +30,7 @@ my $type=$input->param('type');
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
 my %tmpldata = pathtotemplate ( template => 'overdue.tmpl', theme => $theme);
-my $template = HTML::Template->new( filename => $tmpldata{'path'}, 
+my $template = HTML::Template->new( filename => $tmpldata{'path'},
 				    die_on_bad_params => 0);
 my $duedate;
 my $bornum;
@@ -57,7 +58,7 @@ while (my $data=$sth->fetchrow_hashref) {
   $duedate=$data->{'date_due'};
   $bornum=$data->{'borrowernumber'};
   $itemnum=$data->{'itemnumber'};
-  
+
   my $query="select concat(firstname,' ',surname),phone,emailaddress from borrowers where borrowernumber='$bornum'";
   my $sth1=$dbh->prepare($query);
   $sth1->execute;
@@ -101,5 +102,5 @@ $template->param( startmenureport => join ('', startmenu('report')),
 		endmenureport     => join ('', endmenu('report')),
 		todaysdate        => $todaysdate,
 		overdueloop       => \@overduedata );
-			
+
 print "Content-Type: text/html\n\n", $template->output;

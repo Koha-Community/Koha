@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to print confirmation screen, then if accepted calls itself to insert data
 
 
@@ -35,9 +37,9 @@ print $input->header;
 #get rest of data
 my %data;
 my @names=$input->param;
-foreach my $key (@names){                                                                                    
-  $data{$key}=$input->param($key);                                                                           
-}  
+foreach my $key (@names){
+  $data{$key}=$input->param($key);
+}
 my $ok=0;
 
 my $string="The following compulsary fields have been left blank. Please push the back button
@@ -72,16 +74,16 @@ if ($ok ==1){
   if ($valid != 1){
     print "Invalid cardnumber";
   } else {
-    
+
      my @inputs;
      my $i=0;
      while (my ($key, $value) = each %data) {
        $value=~ s/\"/%22/g;
        $inputs[$i]=["hidden","$key","$value"];
-       $i++;                                  
-     }                                        
+       $i++;
+     }
      $inputs[$i]=["submit","submit","submit"];
-     print mkformnotable("/cgi-bin/koha/insertidata.pl",@inputs);   
+     print mkformnotable("/cgi-bin/koha/insertidata.pl",@inputs);
   }
 }
 print endmenu('member');

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -49,7 +51,7 @@ Our Reference: $basket<br>
 Authorised By: $results[0]->{'authorisedby'}<br>
 $results[0]->{'entrydate'};
 </div>
-<FONT SIZE=6><em>Shopping Basket For: <a href=supplier.pl?id=$results[0]->{'booksellerid'}></a> $booksellers[0]->{'name'}</em></FONT>  
+<FONT SIZE=6><em>Shopping Basket For: <a href=supplier.pl?id=$results[0]->{'booksellerid'}></a> $booksellers[0]->{'name'}</em></FONT>
 <a href=newbasket.pl?id=$results[0]->{'booksellerid'}&basket=$basket>Add more orders</a>
 <CENTER>
 <FORM ACTION="/cgi-bin/koha/search.pl" method=post>
@@ -87,7 +89,7 @@ $sub_total+=$line_total;
 $gist=sprintf("%.2f",$sub_total*0.125);
 $grand_total=$sub_total+$gist;
 
-print <<EOP      
+print <<EOP
 <tr valign=top bgcolor=#ffffcc>
   <td>$results[$i]->{'ordernumber'}</td>
   <td>$results[$i]->{'isbn'}</td>
@@ -98,12 +100,12 @@ print <<EOP
   <td><input type=text name=quantity$i size=6 value=$results[$i]->{'quantity'} onchange='update(this.form)'></td>
   <td>\$<input type=text name=total$i size=10 value=$line_total></td>
   <input type=hidden name=ordnum$i value=$results[$i]->{'ordernumber'}>
-  <input type=hidden name=bibnum$i value=$results[$i]->{'biblionumber'}> 
+  <input type=hidden name=bibnum$i value=$results[$i]->{'biblionumber'}>
 </tr>
 EOP
 ;
 }
-# 
+#
 print "<input type=hidden name=number value=$count>
 <input type=hidden name=basketno value=\"$basket\">";
 print <<EOP
@@ -111,7 +113,7 @@ print <<EOP
   <b>HELP</b><br>
   To cancel an order, just change the quantity to 0 and click "save changes".<br>
   To change any of the catalogue or accounting information attached to an order,  click on the title.<br>
-  To add new orders to this supplier, start with a search. </td> 
+  To add new orders to this supplier, start with a search. </td>
   <td><b>SubTotal</b></td>
   <td>\$<input type=text name=subtotal size=10 value=$sub_total></td></tr>
 <tr valign=top bgcolor=white>
@@ -128,7 +130,7 @@ print <<EOP
   <td></td>
   <td colspan=3><input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right></td></tr>
 </table>
-</CENTER>  
+</CENTER>
 EOP
   ;
 

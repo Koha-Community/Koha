@@ -84,7 +84,7 @@ my $menu = $input->param('menu');
 #
 if ($input->param('z3950queue')) {
 	AcceptZ3950Queue($dbh,$input);
-} 
+}
 
 if ($input->param('uploadmarc')) {
 	AcceptMarcUpload($dbh,$input)
@@ -157,7 +157,7 @@ sub ProcessRecord {
 	$record,
 	$data,
     );
-	
+
     if ($file=~/Z-(\d+)/) {
 	my $id=$1;
 	my $resultsid=$input->param('resultsid');
@@ -169,7 +169,7 @@ sub ProcessRecord {
 	$sth->execute;
 	($data) = $sth->fetchrow;
     }
-    
+
     my $file=MARC::File::USMARC->indata ($data);
     my $oldkoha;
     # FIXME - This "==" should be "=", right?
@@ -216,7 +216,7 @@ sub ProcessRecord {
     $template->param(numrecord => $numrecord);
     $template->param(file => $data);
     print "Content-Type: text/html\n\n", $template->output;
-}    
+}
 
 # lists all records from the MARC file
 sub ListFileRecords {
@@ -243,13 +243,13 @@ sub ListFileRecords {
     my $record;
     my ($numrecords,$resultsid,$data,$startdate,$enddate);
 		# FIXME - there's already a $data a few lines above.
-    
+
     $dbh = C4::Context->dbh;
 
     my $template=gettemplate('marcimport/ListFileRecords.tmpl');
 
     # File can be z3950 search query or uploaded MARC data
-    
+
     # if z3950 results
     if (not $file=~/Z-(\d+)/) {
 	# This is a Marc upload
@@ -261,19 +261,19 @@ sub ListFileRecords {
     }
 
     if ($file=~/Z-(\d+)/) {
-	# This is a z3950 search 
+	# This is a z3950 search
 	$template->param(IS_Z3950 =>1);
 	my $id=$1;		# search query id number
 	my $serverstring;
 	my $starttimer=time();
-	
+
 	$sth=$dbh->prepare("
 		select z3950results.numrecords,z3950results.id,z3950results.results,
-			z3950results.startdate,z3950results.enddate,server 
-		from z3950queue left outer join z3950results 
-		     on z3950queue.id=z3950results.queryid 
+			z3950results.startdate,z3950results.enddate,server
+		from z3950queue left outer join z3950results
+		     on z3950queue.id=z3950results.queryid
 		where z3950queue.id=?
-		order by server  
+		order by server
 	    ");
 	$sth->execute($id);
 	if ( $sth->rows ) {
@@ -314,7 +314,7 @@ sub ListFileRecords {
 		    $template->param(numrecords => $numrecords);
 		    $template->param(previous => $previous);
 		    $template->param(next => $next);
-		    my $stj=$dbh->prepare("update z3950results 
+		    my $stj=$dbh->prepare("update z3950results
 			set highestseen=? where id=?");
 		    $stj->execute($startrecord+10,$resultsid);
 		}
@@ -353,7 +353,7 @@ sub ListFileRecords {
 
 	} else {
 #
-# This is an uploaded Marc record   
+# This is an uploaded Marc record
 #
 	    my @loop = ();
 	    my $MARCfile = MARC::File::USMARC->indata($data);
@@ -388,8 +388,8 @@ sub ResultRecordLink {
 
 #    $bib=extractmarcfields($record);
 
-    $sth=$dbh->prepare("select * 
-	  from biblioitems 
+    $sth=$dbh->prepare("select *
+	  from biblioitems
 	  where (isbn=? and isbn!='')  or (issn=? and issn!='')  or (lccn=? and lccn!='') ");
     $sth->execute($oldkoha->{isbn},$oldkoha->{issn},$oldkoha->{lccn});
     if ($sth->rows) {
@@ -398,7 +398,7 @@ sub ResultRecordLink {
 	$donetext="";
     }
     ($oldkoha->{author}) && ($oldkoha->{author}="by $oldkoha->{author}");
-    
+
     $searchfield="";
     foreach $fieldname ( "controlnumber", "lccn", "issn", "isbn") {
 	if ( defined $oldkoha->{$fieldname} && $oldkoha->{$fieldname} ) {
@@ -439,7 +439,7 @@ sub z3950menu {
     	$elapsed,
     	$elapsedtime,
 	$resultstatus, $statuscolor,
-	$id, $term, $type, $done, 
+	$id, $term, $type, $done,
 	$startdate, $enddate, $servers,
 	$record,$bib,$title,
     );
@@ -464,12 +464,12 @@ EOT
 
     # Check queued queries
     $sth=$dbh->prepare("select id,term,type,done,
-		startdate,enddate,servers 
-	from z3950queue 
-	order by id desc 
+		startdate,enddate,servers
+	from z3950queue
+	order by id desc
 	limit 20 ");
     $sth->execute;
-    while ( ($id, $term, $type, $done, 
+    while ( ($id, $term, $type, $done,
 		$startdate, $enddate, $servers) = $sth->fetchrow) {
 	$type=uc($type);
 	$term=~s/</&lt;/g;
@@ -478,14 +478,14 @@ EOT
 	$title="";
 	# See if query produced results
 	$sti=$dbh->prepare("select id,server,startdate,enddate,numrecords,results
-		from z3950results 
+		from z3950results
 		where queryid=?");
 	$sti->execute($id);
 	if ($sti->rows) {
 	    $processing=0;
 	    $realenddate=0;
 	    $totalrecords=0;
-	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords,$r_marcdata) 
+	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords,$r_marcdata)
 		= $sti->fetchrow) {
 		if ($r_enddate==0) {
 		    # It hasn't finished yet
@@ -542,8 +542,8 @@ EOT
     # Search input form
     print "<td valign=top width=30%>\n";
 
-    my $sth=$dbh->prepare("select id,name,checked 
-	from z3950servers 
+    my $sth=$dbh->prepare("select id,name,checked
+	from z3950servers
 	order by rank");
 		# FIXME - There's already a $sth in this function.
     $sth->execute;
@@ -553,7 +553,7 @@ EOT
 	$serverlist.="<input type=checkbox name=S-$id $checked> $name<br>\n";
     }
     $serverlist.="<input type=checkbox name=S-MAN> <input name=manualz3950server size=25 value=otherserver:210/DATABASE>\n";
-    
+
     my $rand=rand(1000000000);
 print << "EOF";
     <form action=$ENV{'SCRIPT_NAME'} method=GET>
@@ -566,10 +566,10 @@ print << "EOF";
 	    <tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records</th></tr>
     <tr><td>Query Term</td><td><input name=query></td></tr>
     <tr><td colspan=2 align=center>
-		<input type=radio name=type value=isbn checked>&nbsp;ISBN 
+		<input type=radio name=type value=isbn checked>&nbsp;ISBN
 		<input type=radio name=type value=lccn        >&nbsp;LCCN<br>
-		<input type=radio name=type value=author      >&nbsp;Author 
-		<input type=radio name=type value=title       >&nbsp;Title 
+		<input type=radio name=type value=author      >&nbsp;Author
+		<input type=radio name=type value=title       >&nbsp;Title
 		<input type=radio name=type value=keyword     >&nbsp;Keyword</td></tr>
             <tr><td colspan=2> $serverlist </td></tr>
             <tr><td colspan=2 align=center> <input type=submit> </td></tr>
@@ -652,7 +652,7 @@ sub AcceptZ3950Queue {
           }
         }
 
-	$error=addz3950queue($dbh,$input->param('query'), $input->param('type'), 
+	$error=addz3950queue($dbh,$input->param('query'), $input->param('type'),
 		$input->param('rand'), @serverlist);
 	if ( $error ) {
 	    print qq|
@@ -669,7 +669,7 @@ script should be run as root, and it will start up the program running with the<
 privileges of your apache user.  Ideally, this script should be started from a<br>
 system init directory so that is running after the machine starts up.
 |;
-	
+
 	    } # if daemon
 	    print qq|
 </td></tr>
@@ -708,8 +708,8 @@ sub AcceptMarcUpload {
     }
     my $q_marcrecord=$dbh->quote($marcrecord);
     my $q_name=$dbh->quote($name);
-    my $sth=$dbh->prepare("insert into uploadedmarc 
-		(marc,name) 
+    my $sth=$dbh->prepare("insert into uploadedmarc
+		(marc,name)
 	values ($q_marcrecord, $q_name)");
     $sth->execute;
 } # sub AcceptMarcUpload
@@ -757,8 +757,8 @@ sub AcceptBiblioitem {
     my $oldkoha = MARCmarc2koha($dbh,$record);
     # See if it already exists
     # FIXME - There's already a $sth in this context.
-    my $sth=$dbh->prepare("select biblionumber,biblioitemnumber 
-	from biblioitems 
+    my $sth=$dbh->prepare("select biblionumber,biblioitemnumber
+	from biblioitems
 	where isbn=? or issn=? or lccn=?");
     $sth->execute($oldkoha->{isbn},$oldkoha->{issn},$oldkoha->{lccn});
     if ($sth->rows) {
@@ -776,14 +776,14 @@ sub AcceptBiblioitem {
   	my $error;
   	my %biblio;
   	my %biblioitem;
-  
+
   	# convert to upper case and split on lines
   	my $subjectheadings=$input->param('subject');
   	my @subjectheadings=split(/[\r\n]+/,$subjectheadings);
-  
+
   	my $additionalauthors=$input->param('additionalauthors');
   	my @additionalauthors=split(/[\r\n]+|\|/,uc($additionalauthors));
-  
+
   	# Use individual assignments to hash buckets, in case
   	#  any of the input parameters are empty or don't exist
   	$biblio{title}		=$input->param('title');
@@ -793,7 +793,7 @@ sub AcceptBiblioitem {
   	$biblio{notes}		=$input->param('notes');
   	$biblio{abstract}	=$input->param('abstract');
   	$biblio{subtitle}	=$input->param('subtitle');
-  
+
  	$biblioitem{volume}		=$input->param('volume');
   	$biblioitem{number}		=$input->param('number');
  	$biblioitem{itemtype}		=$input->param('itemtype');
@@ -823,10 +823,10 @@ sub AcceptBiblioitem {
 # 		\@subjectheadings,
 # 		\@additionalauthors
 # 	);
-  
+
  	if ( $error ) {
 	    print "<H2>Error adding biblio item</H2> $error\n";
-	} else { 
+	} else {
 	    $template->param(title => $title);
 	    $template->param(biblionumber => $biblionumber);
 	    $template->param(biblioitemnumber => $biblioitemnumber);
@@ -867,8 +867,8 @@ sub AcceptItemCopy {
     my $barcode=$input->param('barcode');
     my $replacementprice=($input->param('replacementprice') || 0);
 
-    my $sth=$dbh->prepare("select barcode 
-	from items 
+    my $sth=$dbh->prepare("select barcode
+	from items
 	where barcode=?");
     $sth->execute($barcode);
     if ($sth->rows) {
@@ -998,6 +998,10 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.17  2002/10/13 07:39:26  arensb
+# Added magic RCS comment.
+# Removed trailing whitespace.
+#
 # Revision 1.16  2002/10/11 12:45:10  arensb
 # Replaced &requireDBI with C4::Context->dbh, thus making the "use
 # Fixed muffed quotes in &gettemplate calls.

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -30,7 +32,7 @@ use strict;
 my $input=new CGI;
 print $input->header();
 my $id=$input->param('id');
-my ($count,@booksellers)=bookseller($id); 
+my ($count,@booksellers)=bookseller($id);
 print startpage;
 
 print startmenu('acquisitions');
@@ -47,7 +49,7 @@ print <<EOP
 <tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif" colspan=2><B>SUPPLIER INVOICE INFORMATION</B></td></tr>
 <TR VALIGN=TOP >
 <TD>Supplier Invoice Number</td>
-<td><input type=text size=20 name=invoice>        
+<td><input type=text size=20 name=invoice>
 </td>
 </tr>
 <TR VALIGN=TOP>

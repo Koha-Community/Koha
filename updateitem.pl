@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -111,11 +112,11 @@ if ($wthdrawn == 0 && $override ne 'yes'){
   }
   print $input->redirect("moredetail.pl?type=intra&bib=$bibnum&bi=$bibitemnum");
 } else {
-  
+
 #  print "marking cancelled";
   #need to check if it is on reserve or issued
   my $dbh = C4::Context->dbh;
-  my $flag=0; 
+  my $flag=0;
   my ($resbor,$resrec)=C4::Circulation::Circ2::checkreserve($env,$dbh,$itemnum);
  # print $resbor;
   if ($resbor){
@@ -123,7 +124,7 @@ if ($wthdrawn == 0 && $override ne 'yes'){
     print "The biblio or biblioitem this item belongs to has a reserve on it";
     $flag=1;
   }
-  my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)"); 
+  my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   if ($data->{'borrowernumber'} ne '') {
@@ -160,4 +161,3 @@ sub checkinp{
 }
 
 #sub checkissue{
-  

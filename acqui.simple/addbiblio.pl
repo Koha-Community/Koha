@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #
 # TODO
 #
@@ -38,7 +40,7 @@ print startmenu('acquisitions');
 
 print << "EOF";
 <FONT SIZE=6><em>Adding a new Biblio</em></FONT><br>
-  
+
 <table bgcolor="#ffcc00" width="80%" cellpadding="5">
 <tr>
 <td><FONT SIZE=5>Section One: Copyright Information </font></td>

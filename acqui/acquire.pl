@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to recieve orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -44,7 +46,7 @@ my $biblio=$input->param('biblio');
 my $catview=$input->param('catview');
 my $gst=$input->param('gst');
 my ($count,@results)=ordersearch($search,$biblio,$catview);
-my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'}); 
+my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
 #print $count;
 my @date=split('-',$results[0]->{'entrydate'});
 my $date="$date[2]/$date[1]/$date[0]";
@@ -151,14 +153,14 @@ print <<EOP
 <td><select name=branch size=1>
 EOP
 ;
-my ($count2,@branches)=branches();                                                                         
-for (my $i=0;$i<$count2;$i++){                                                                           
-  print "<option value=$branches[$i]->{'branchcode'}";                                                   
-  if ($results[0]->{'branchcode'} == $branches[$i]->{'branchcode'}){                                           
-  print " Selected";                                                                                   
-  }                                                                                                      
-  print ">$branches[$i]->{'branchname'}";                                                                
-}   
+my ($count2,@branches)=branches();
+for (my $i=0;$i<$count2;$i++){
+  print "<option value=$branches[$i]->{'branchcode'}";
+  if ($results[0]->{'branchcode'} == $branches[$i]->{'branchcode'}){
+  print " Selected";
+  }
+  print ">$branches[$i]->{'branchname'}";
+}
 print <<EOP
 </select>
 </td>
@@ -210,14 +212,14 @@ print <<EOP
 EOP
 ;
 my @bookfund;
-($count2,@bookfund)=bookfunds();                                                    
-for (my $i=0;$i<$count2;$i++){                                                       
+($count2,@bookfund)=bookfunds();
+for (my $i=0;$i<$count2;$i++){
   print "<option value=$bookfund[$i]->{'bookfundid'}";
   if ($bookfund[$i]->{'bookfundid'}==$results[0]->{'bookfundid'}){
     print " Selected";
   }
   print ">$bookfund[$i]->{'bookfundname'}";
-}      
+}
 
 my $rrp=$results[0]->{'rrp'};
 if ($results[0]->{'quantityreceived'} == 0){
@@ -269,7 +271,7 @@ Budgeted Cost </td>
 </table>
 </form>
 </center>
-<br clear=all>		
+<br clear=all>
 <p> &nbsp; </p>
 
 EOP
@@ -277,11 +279,11 @@ EOP
 } else {
 print "<center><table>";
 print <<EOP
-<tr valign=top bgcolor=#99cc33>                                                                
+<tr valign=top bgcolor=#99cc33>
 
-<td background="/images/background-mem.gif"><b>ISBN</b></td>                                   
-<td background="/images/background-mem.gif"><b>TITLE</b></td>                                  
-<td background="/images/background-mem.gif"><b>AUTHOR</b></td>                                 
+<td background="/images/background-mem.gif"><b>ISBN</b></td>
+<td background="/images/background-mem.gif"><b>TITLE</b></td>
+<td background="/images/background-mem.gif"><b>AUTHOR</b></td>
 </tr>
 EOP
 ;

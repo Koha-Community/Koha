@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to place reserves/requests
 #writen 2/1/00 by chris@katipo.oc.nz
 
@@ -89,7 +91,7 @@ foreach my $dat (sort {$b->{'dateaccessioned'} cmp $a->{'dateaccessioned'}} @dat
     $dat->{'dewey'}=~ s/00$//;
     my $class="$dat->{'classification'}$dat->{'dewey'}$dat->{'subclass'}";
     my $select;
-    if (($dat->{'notforloan'}) 
+    if (($dat->{'notforloan'})
 	|| ($dat->{'itemlost'} == 1))  {
 	$select = "Cannot be reserved.";
     } else {
@@ -215,7 +217,7 @@ print <<printend
 <input type=hidden name=type value=str8>
 <input type=hidden name=title value="$dat->{'title'}">
 <FONT SIZE=6><em>Requesting: <br>
-<a href=/cgi-bin/koha/detail.pl?bib=$bib>$dat->{'title'}</a> 
+<a href=/cgi-bin/koha/detail.pl?bib=$bib>$dat->{'title'}</a>
 ($dat->{'author'})</em></FONT><P>
 <p>
 
@@ -242,7 +244,7 @@ $priorityoptions
 <td><select name=pickup>
 $branchoptions
 </select></td>
-<td><input type=checkbox name=request value=any>Next Available, 
+<td><input type=checkbox name=request value=any>Next Available,
 <br>(or choose from list below)</td>
 </tr></table>
 

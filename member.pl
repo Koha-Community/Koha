@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to do a borrower enquiery/brin up borrower details etc
 #written 20/12/99 by chris@katipo.co.nz
 
@@ -33,7 +35,7 @@ my $theme = $input->param('theme') || "default";
 			# only used if allowthemeoverride is set
 my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
 	# FIXME - Error-checking
-my $template = HTML::Template->new( filename => $tmpldata{'path'}, 
+my $template = HTML::Template->new( filename => $tmpldata{'path'},
 				    die_on_bad_params => 0,
 				    loop_context_vars => 1 );
 
@@ -66,5 +68,5 @@ $template->param( startmenumember => join ('', startmenu('member')),
 			endmenumember   => join ('', endmenu('member')),
 			member          => $member,
 			resultsloop     => \@resultsdata );
-			
+
 print "Content-Type: text/html\n\n", $template->output;

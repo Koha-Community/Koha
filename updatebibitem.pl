@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -69,7 +70,7 @@ if ($class =~/[0-9]+/) {
 } # else
 
 my (@items) = &itemissues($bibitemnum);
-#print @items;           
+#print @items;
 my $count   = @items;
 #print $count;
 my @barcodes;
@@ -136,7 +137,7 @@ if ($existing eq 'YES'){
 		    });
 	}
       }
-      
+
    } elsif ($flag2 eq 'leastone') {
       &modbibitem({
 	  biblioitemnumber => $bibitemnum,
@@ -160,16 +161,16 @@ if ($existing eq 'YES'){
       } else {
         $loan=0;
       }
-	for (my $i=0;$i<$count;$i++){                                             
-	  if ($barcodes[$i] ne ''){                                               
+	for (my $i=0;$i<$count;$i++){
+	  if ($barcodes[$i] ne ''){
 	    moditem( {biblionumber => $bibnum,
 		      loan         => $loan,
 		      itemnumber   => $items[$i]->{'itemnumber'},
 		      bibitemnum   => $bibitemnum
 		      });
-	  }                                                                       
+	  }
 	}
-      
+
    } else {
      &modbibitem({
          biblioitemnumber => $bibitemnum,

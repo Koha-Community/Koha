@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #
 # Modified saas@users.sf.net 12:00 01 April 2001
 # The biblioitemnumber was not correctly initialised
 # The max(barcode) value was broken - koha 'barcode' is a string value!
-# - If left blank, barcode value now defaults to max(biblionumber) 
+# - If left blank, barcode value now defaults to max(biblionumber)
 
 #
 # TODO
@@ -345,13 +347,13 @@ EOF
 <input type=hidden name=biblionumber value=$biblionumber>
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <table>
-<!-- tr><td>BARCODE</td><td><input name=barcode size=10 value=\$maxbarcode --> 
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$biblionumber> 
+<!-- tr><td>BARCODE</td><td><input name=barcode size=10 value=\$maxbarcode -->
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$biblionumber>
 Home Branch: <select name=homebranch>
 EOF
-my $branches=getbranches();                                                                                
-	foreach my $key (sort(keys %$branches)) {                                                                  
-	    print "<option value=\"$key\">$branches->{$key}->{'branchname'}</option>";                            
+my $branches=getbranches();
+	foreach my $key (sort(keys %$branches)) {
+	    print "<option value=\"$key\">$branches->{$key}->{'branchname'}</option>";
 	}
 print << "EOF";
 	</select></td></tr>

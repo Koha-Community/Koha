@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w # please develop with -w
 
+# $Id$
+
 #use diagnostics;
 
 # Copyright 2000-2002 Katipo Communications
@@ -102,7 +104,7 @@ basic information about your desired setup, then install Koha according to
 your specifications.  To accept the default value for any question, simply hit
 Enter at the prompt.
 
-Please be sure to read the documentation, or visit the Koha website at 
+Please be sure to read the documentation, or visit the Koha website at
 http://www.koha.org for more information.
 
 Are you ready to begin the installation? (Y/[N]):
@@ -115,10 +117,10 @@ if ($answer eq "Y" || $answer eq "y") {
 	print "Great! continuing setup... \n";
     } else {
     print qq|
-This installer currently does not support a completely automated 
+This installer currently does not support a completely automated
 setup.
 
-Please be sure to read the documentation, or visit the Koha website 
+Please be sure to read the documentation, or visit the Koha website
 at http://www.koha.org for more information.
 |;
     exit;
@@ -145,7 +147,7 @@ my @missing = ();
 unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
-unless (eval {require Net::Z3950})        { 
+unless (eval {require Net::Z3950})        {
     print qq|
 
 The Net::Z3950 module is missing.  This module is necessary if you want to use
@@ -209,8 +211,8 @@ Usually $opacdir
 
 INTRANET/LIBRARIANS DIRECTORY
 =============================
-Please supply the directory you want Koha to store its Intranet/Librarians files 
-in.  Leave off the trailing slash.  This directory will be auto-created for you if 
+Please supply the directory you want Koha to store its Intranet/Librarians files
+in.  Leave off the trailing slash.  This directory will be auto-created for you if
 it doesn't exist.
 
 |;
@@ -278,7 +280,7 @@ if ($input) {
 #Get the hostname for the database
 print qq|
 
-Please provide the hostname for mysql.  Unless the database is located on another 
+Please provide the hostname for mysql.  Unless the database is located on another
 machine this will be "localhost".
 |;
 
@@ -650,7 +652,7 @@ if ($input) {
 }
 
 unless (-e "$kohalogdir") {
-    my $result = mkdir 0770, "$kohalogdir"; 
+    my $result = mkdir 0770, "$kohalogdir";
     if ($result==0) {
         my @dirs = split(m#/#, $kohalogdir);
 	my $checkdir='';
@@ -800,7 +802,7 @@ if (!$mysqldir){
     $mysqldir='/usr';
 }
 print qq|
-To allow us to create the koha database please supply the 
+To allow us to create the koha database please supply the
 mysql\'s root users password
 |;
 
@@ -999,7 +1001,7 @@ and the OPAC interface at :
    http://$servername\:$opacport/
 
 
-Be sure to read the INSTALL, and Hints files. 
+Be sure to read the INSTALL, and Hints files.
 
 For more information visit http://www.koha.org
 

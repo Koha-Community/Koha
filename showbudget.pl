@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to show list of budgets and bookfunds
 #written 4/2/00 by chris@katipo.co.nz
 #called as an include by the acquisitions index page
@@ -53,7 +55,7 @@ for (my $i=0;$i<$count;$i++){
   my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
   print  <<EOP
 <tr><td>
-$results[$i]->{'bookfundname'} </TD> 
+$results[$i]->{'bookfundname'} </TD>
 <TD>$results[$i]->{'budgetamount'}</TD> <TD>
 EOP
 ;

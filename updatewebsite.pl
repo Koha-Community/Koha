@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -39,7 +40,7 @@ if ($input->param('delete')) {
 
 } elsif (! $biblionumber) {
     print $input->redirect("/catalogue/");
-    
+
 } elsif (! $websitenumber) {
     print $input->redirect("modwebsites.pl?biblionumber=$biblionumber");
 

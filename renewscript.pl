@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written 18/1/2000 by chris@katipo.co.nz
 #script to renew items from the web
 
@@ -53,6 +55,6 @@ while ( my ($key, $value) = each %data) {
        renewbook(\%env,$bornum,$key);
      }
    }
-}	
+}
 
 print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");

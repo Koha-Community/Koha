@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+
+# $Id$
+
 #
 # written 31/5/00 by chris@katipo.co.nz to make a way to fix account mistakes
 #
@@ -37,13 +40,13 @@ my @name=$input->param;
 foreach my $key (@name){
   if ($key ne 'bornum'){
     my $temp=$input->param($key);
-    
+
 #    print $temp,$key;
     if ($temp ne ''){
       fixaccounts($bornum,$key,$temp);
-   
+
     }
   }
 }
-    
+
 print $input->redirect("boraccount.pl?bornum=$bornum");

@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+# $Id$
+
 #use diagnostics;
 use strict; # please develop with the strict pragma
 
@@ -85,7 +87,7 @@ You are attempting to upgrade from Koha $kohaversion to $newversion.
 We recommend that you do a complete backup of all your files before upgrading.
 This upgrade script will make a backup copy of your files for you.
 
-Would you like to proceed?  ([Y]/N):  
+Would you like to proceed?  ([Y]/N):
 |;
 
 my $answer = <STDIN>;
@@ -121,7 +123,7 @@ my @missing = ();
 unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
-unless (eval {require Net::Z3950})        { 
+unless (eval {require Net::Z3950})        {
     print qq|
 
 The Net::Z3950 module is missing.  This module is necessary if you want to use
@@ -154,7 +156,7 @@ if (@missing > 0) {
 
 
 my $backupdir='/usr/local/koha/backups';
-print "Please specify a backup directory [$backupdir]: ";  
+print "Please specify a backup directory [$backupdir]: ";
 
 $answer = <STDIN>;
 chomp $answer;
@@ -285,7 +287,7 @@ if (!$opacdir || !$intranetdir) {
     $intranetdir='';
     $opacdir='';
     while (!$intranetdir) {
-	print "Please specify the location of your INTRANET files: ";  
+	print "Please specify the location of your INTRANET files: ";
 
 	$answer = <STDIN>;
 	chomp $answer;
@@ -299,7 +301,7 @@ if (!$opacdir || !$intranetdir) {
 	}
     }
     while (!$opacdir) {
-	print "Please specify the location of your OPAC files: ";  
+	print "Please specify the location of your OPAC files: ";
 
 	$answer = <STDIN>;
 	chomp $answer;
@@ -440,7 +442,7 @@ unless ($kohalogdir && -e $kohalogdir) {
 }
 
 unless (-e "$kohalogdir") {
-    my $result = mkdir 0770, "$kohalogdir"; 
+    my $result = mkdir 0770, "$kohalogdir";
     if ($result==0) {
         my @dirs = split(m#/#, $kohalogdir);
 	my $checkdir='';

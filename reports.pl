@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to display reports
 #written 8/11/99
 
@@ -34,7 +36,7 @@ print startpage();
 print startmenu('issue');
 my @data;
 if ($type eq 'search'){
- @data=statsreport('search','something');  
+ @data=statsreport('search','something');
 }
 if ($type eq 'issue'){
  @data=statsreport('issue','today');

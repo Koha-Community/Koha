@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to modify/delete biblios
 #written 8/11/99
 # modified 11/11/99 by chris@katipo.co.nz
@@ -39,7 +41,7 @@ my $sub        = $subject->[0]->{'subject'};
 my $additional = $addauthor->[0]->{'author'};
 my %inputs;
 my $dewey;
-my $submit=$input->param('submit.x');                                                                                              
+my $submit=$input->param('submit.x');
 if ($submit eq '') {
   print $input->redirect("/cgi-bin/koha/delbiblio.pl?biblio=$bibnum");
 } # if

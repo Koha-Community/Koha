@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to set up screen for modification of borrower details
 #written 20/12/99 by chris@katipo.co.nz
 
@@ -40,7 +42,7 @@ if ($member eq ''){
   $member=NewBorrowerNumber();
 }
 my $type=$input->param('type') || '';
-my $modify=$input->param('modify.x'); 
+my $modify=$input->param('modify.x');
 my $delete=$input->param('delete.x');
 if ($delete){
   print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
@@ -51,15 +53,15 @@ if ($delete){
   } else {
     $template->param( header => 'Add New Member');
   }
-  
+
   my $data=borrdata('',$member);
-  
+
   if ($type eq 'Add'){
     $template->param( updtype => 'I');
   } else {
     $template->param( updtype => 'M');
   }
-  
+
   my $cardnumber=$data->{'cardnumber'};
   my $autonumber_members = C4::Context->preference("autoMemberNum") || 0;
 		# Find out whether member numbers should be generated
@@ -88,7 +90,7 @@ if ($delete){
     } else {
       $cardnumber = $cardnumber + 1;		# FIXME - $cardnumber++;
     }
-  
+
     while ($i <8) {			# step from char 1 to 7.
       my $temp1 = $weightings[$i];	# read weightings, left to right, 1 char at a time
       my $temp2 = substr($cardnumber,$i,1);	# sequence left to right, 1 char at a time
@@ -100,16 +102,16 @@ if ($delete){
     my $rem = ($sum%11);			# remainder of sum/11 (eg. 9999999/11, remainder=2)
     if ($rem == 10) {			# if remainder is 10, use X instead
       $rem = "X";
-    }  
+    }
     $cardnumber="V$cardnumber$rem";
   } else {
     $cardnumber=$data->{'cardnumber'};
   }
-  
+
   if ($data->{'sex'} eq 'F'){
     $template->param(female => 1);
-  } 
-  
+  }
+
   my @titles = ('Miss', 'Mrs', 'Ms', 'Mr', 'Dr', 'Sir');
 	# FIXME - Assumes English. This ought to be made part of i18n.
   my @titledata;
@@ -124,7 +126,7 @@ if ($delete){
     }
     push(@titledata, \%row);
   }
-  
+
   my ($categories,$labels)=ethnicitycategories();
   my $ethnicitycategoriescount=$#{$categories};
   my $ethcatpopup;
@@ -135,13 +137,13 @@ if ($delete){
   			        -labels=>$labels);
   	$template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
   }
-  
+
   ($categories,$labels)=borrowercategories();
   my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
   			        -values=>$categories,
   			        -default=>$data->{'categorycode'},
   			        -labels=>$labels);
-  
+
   my @areas = ('L','F','S','H','K','O','X','Z','V');
   my %arealabels = ('L' => 'Levin',
   		  'F' => 'Foxton',
@@ -152,7 +154,7 @@ if ($delete){
   		  'X' => 'Temporary Visitor',
   		  'Z' => 'Interloan Libraries',
   		  'V' => 'Village');
-  		  
+
   my @areadata;
   while (@areas) {
     my %row;
@@ -166,8 +168,8 @@ if ($delete){
     $row{'area'}=$arealabels{$shortcut};
     push(@areadata, \%row);
   }
-  
-  
+
+
   my @relationships = ('workplace', 'relative','friend', 'neighbour');
   my @relshipdata;
   while (@relationships) {
@@ -180,12 +182,12 @@ if ($delete){
     }
     push(@relshipdata, \%row);
   }
-  
+
   # %flags: keys=$data-keys, datas=[formname, HTML-explanation]
   my %flags = ('gonenoaddress' => ['gna', 'Gone no address'],
                'lost'          => ['lost', 'Lost'],
                'debarred'      => ['debarred', 'Debarred']);
-  
+
   my @flagdata;
   foreach (keys(%flags)) {
     my $key = $_;
@@ -205,7 +207,7 @@ if ($delete){
   if ($modify){
     $template->param( modify => 1 );
   }
-  
+
   $template->param( startmenumember => join ('', startmenu('member')),
   			endmenumember   => join ('', endmenu('member')),
   			member          => $member,
@@ -234,8 +236,8 @@ if ($delete){
   			expiry		=> $data->{'expiry'},
   			cardnumber	=> $cardnumber,
   			dateofbirth	=> $data->{'dateofbirth'});
-  			
+
   print "Content-Type: text/html\n\n", $template->output;
-  
+
 
 }

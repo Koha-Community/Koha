@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to modify/delete biblios
 #written 8/11/99
 # modified 11/11/99 by chris@katipo.co.nz
@@ -56,14 +58,14 @@ my %inputs;
 #the value is a tab separated list, the first item being the input type
 #$inputs{'Author'}="text\t$data->{'author'}\t0";
 #$inputs{'Title'}="text\t$data->{'title'}\t1";
-my $dewey = $data->{'dewey'};                                                      
-$dewey =~ s/0+$//;                                                                 
-if ($dewey eq "000.") { $dewey = "";};                                             
-if ($dewey < 10){$dewey='00'.$dewey;}                                              
-if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}                               
-if ($dewey <= 0){                                                                  
-  $dewey='';                                                                       
-} 
+my $dewey = $data->{'dewey'};
+$dewey =~ s/0+$//;
+if ($dewey eq "000.") { $dewey = "";};
+if ($dewey < 10){$dewey='00'.$dewey;}
+if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
+if ($dewey <= 0){
+  $dewey='';
+}
 $dewey=~ s/\.$//;
 $inputs{'Barcode'}="text\t$item->{'barcode'}\t0";
 $inputs{'Class'}="hidden\t$data->{'classification'}$dewey$data->{'subclass'}\t2";
@@ -140,17 +142,17 @@ if ($item->{'wthdrawn'} ==0){
 }
 print <<printend
 >No</td></tr>
-<input type=hidden name=bibnum value="$data->{'biblionumber'}">	
+<input type=hidden name=bibnum value="$data->{'biblionumber'}">
 <input type=hidden name=bibitemnum value="$data->{'biblioitemnumber'}">
 <input type=hidden name=itemnumber value="$itemnum">
 <tr valign=top bgcolor=white><td></td><td>
 
-<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 
+<input type=image  name=submit src=/images/save-changes.gif border=0 width=187
 height=42></td></tr>
 </table>
 </form></td></tr>
 </table>
-	
+
 printend
 ;
 

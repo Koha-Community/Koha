@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #
 # Modified saas@users.sf.net 12:00 01 April 2001
 # The biblioitemnumber was not correctly initialised
 # The max(barcode) value was broken - koha 'barcode' is a string value!
-# - If left blank, barcode value now defaults to max(biblionumber) 
+# - If left blank, barcode value now defaults to max(biblionumber)
 
 #
 # TODO
@@ -126,14 +128,14 @@ EOF
 <tr valign="center">
 <td><FONT SIZE=5>Help</font></td>
 </tr>
-</table> 
+</table>
 <FONT SIZE=5>Koha stores data in three sections</font>
 <p />
 <h2>Biblio</h2>
 The first section records bibliographic data such as title, author and copyright for a particular work.
 <p />
-<h2>Group</h2>      
-The second records bibliographic data for a particular publication of that work, such as ISBN number, physical description, publisher information, etc      
+<h2>Group</h2>
+The second records bibliographic data for a particular publication of that work, such as ISBN number, physical description, publisher information, etc
 <p />
 <h2>Item</h2>
 The third section holds specific item information, such as the bar code number

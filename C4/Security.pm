@@ -1,5 +1,6 @@
-package C4::Security; #assumes C4/Security
+package C4::Security;
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -43,7 +44,7 @@ sub Login {
   my $sth=$dbh->prepare($query);
   $sth->execute;
   while (my $branchrec=$sth->fetchrow_hashref) {
-    my $branchdet = 
+    my $branchdet =
      fmtstr($env,$branchrec->{'branchcode'},"L2")." ".$branchrec->{'branchname'};
     push @branches,$branchdet;
   }
@@ -67,7 +68,7 @@ sub Login {
         $env->{'usercode'} = $username;
         $env->{'branchcode'} = $branch;
       }
-     
+
     } else {
       debug_msg("","not found");
     }
@@ -76,10 +77,7 @@ sub Login {
   }
   &endint();
 }
-  
+
 sub CheckAccess {
   my ($env)=@_;
   }
-    
-END { }       # module clean-up code here (global destructor)
-    

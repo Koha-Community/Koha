@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to modify/delete groups
 
 #written 8/11/99
@@ -36,7 +38,7 @@ my $bibitemnum=$input->param('bibitem');
 my $data=bibitemdata($bibitemnum);
 my $biblio=$input->param('biblio');
 my $submit=$input->param('submit.x');
-if ($submit eq ''){                                                                                                      
+if ($submit eq ''){
   print $input->redirect("deletebiblioitem.pl?biblioitemnumber=$bibitemnum&biblionumber=$biblio");
 }
 print $input->header;
@@ -54,14 +56,14 @@ my %inputs;
 #the value is a tab separated list, the first item being the input type
 #$inputs{'Author'}="text\t$data->{'author'}\t0";
 #$inputs{'Title'}="text\t$data->{'title'}\t1";
-my $dewey = $data->{'dewey'};                                                      
-$dewey =~ s/0+$//;                                                                 
-if ($dewey eq "000.") { $dewey = "";};                                             
-if ($dewey < 10){$dewey='00'.$dewey;}                                              
-if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}                               
-if ($dewey <= 0){                                                                  
-  $dewey='';                                                                       
-} 
+my $dewey = $data->{'dewey'};
+$dewey =~ s/0+$//;
+if ($dewey eq "000.") { $dewey = "";};
+if ($dewey < 10){$dewey='00'.$dewey;}
+if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
+if ($dewey <= 0){
+  $dewey='';
+}
 $dewey=~ s/\.$//;
 $inputs{'Class'}="text\t$data->{'classification'}$dewey$data->{'subclass'}\t2";
 $inputs{'Item Type'}="text\t$data->{'itemtype'}\t3";
@@ -89,7 +91,7 @@ print <<printend
 
 <BLOCKQUOTE><FONT SIZE=6>
 <em><a href=/cgi-bin/koha/detail.pl?bib=$data->{'biblionumber'}&type=intra>$data->{'title'} ($data->{'author'})</a><br>
-Modify Group - $data->{'description'}</em></FONT><br>             
+Modify Group - $data->{'description'}</em></FONT><br>
 <form action=updatebibitem.pl method=post>
 <table border=0 cellspacing=0 cellpadding=5 align=left>
 
@@ -172,11 +174,11 @@ Tick ALL barcodes that changes are to apply too. Those left un-ticked will keep 
 
 printend
 ;
-my (@items)=itemissues($data->{'biblioitemnumber'});                                                                        
-#print @items;                                                                                      
-my $count=@items;           
+my (@items)=itemissues($data->{'biblioitemnumber'});
+#print @items;
+my $count=@items;
 for (my $i=0;$i<$count;$i++){
-  $items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});                                                      
+  $items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});
   print <<printend
 <tr valign=top gcolor=#ffffcc>
 <td><input type=checkbox name="check_group_$items[$i]->{'barcode'}"></td>
@@ -203,10 +205,10 @@ print <<printend
 <B>HELP:</B> You <b>must</b> click on the appropriate radio button (in the green boxes), and choose to either re-assign the item/s to a record already in the system, or modify this record.  IF your changes only apply to some
  items, tick the appropriate ones and a new group record will be created automatically for them.
  <br clear=all>
- 
+
  <p> &nbsp; </p>
- 
- 
+
+
 printend
 ;
 

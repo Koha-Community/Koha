@@ -1,5 +1,7 @@
 package C4::Groups;
 
+# $Id$
+
 #package to deal with Returns
 #written 3/11/99 by olwen@katipo.co.nz
 
@@ -39,10 +41,10 @@ use C4::Stats;
 #use C4::Print;
 
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&getgroups &groupmembers);
 

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to recieve orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -132,7 +134,7 @@ print <<EOP
 <br>
 The total at the bottom of the page should be within a few cents of the total for the invoice.<p>
 When you have finished this invoice save the changes.
-</td>																												                
+</td>
 <td colspan=2 align=right><b>GST</b></td>
 <td>\$$gst</td>
 </tr>

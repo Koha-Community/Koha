@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to delete items
 #written 2/5/00
 #by chris@katipo.co.nz
@@ -50,9 +52,9 @@ my $sth=$dbh->prepare($query);
 $sth->execute;
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-      
 
-if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){ 
+
+if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
   print $input->header;
   print "<table border=1>";
   if ($i > 0){

@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+
+# $Id$
+
 use C4::Context;
 use DBI;
 #use strict;
@@ -9,22 +12,22 @@ use Net::Z3950;
 
 
 if ($< == 0) {
-    # Running as root, switch privs 
+    # Running as root, switch privs
     if (-d "/var/run") {
 	open PID, ">/var/run/processz3950queue.pid";
 	print PID $$."\n";
 	close PID;
     }
     # Get real apacheuser from koha.conf or reparsing httpd.conf
-    my $apacheuser='www-data';  
+    my $apacheuser='www-data';
     my $uid=0;
-    unless ($uid = (getpwnam($apacheuser))[2]) { 
+    unless ($uid = (getpwnam($apacheuser))[2]) {
 	die "Attempt to run daemon as non-existent or superuser\n";
     }
     $>=$uid;
     $<=$uid;
 }
-    
+
 
 my $dbh = C4::Context->dbh;
 

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to show suppliers and orders
 #written by chris@katipo.co.nz 23/2/2000
 
@@ -64,7 +66,7 @@ for (my $i=0; $i<$count; $i++) {
     if ($orders->[0]->{'basketno'}>0) {
 	print <<printend
 	    <tr valign=top bgcolor=$colour>
-	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a> 
+	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a>
 	    <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
 	    <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
 	    <td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[0]->{'basketno'}">HLT-$orders->[0]->{'basketno'}</a></td>
@@ -76,7 +78,7 @@ printend
     } else {
 	print <<printend
 	    <tr valign=top bgcolor=$colour>
-	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a> 
+	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a>
 	    <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
 	    <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
 	    <td>&nbsp;</a></td>
@@ -95,7 +97,7 @@ printend
 		<td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[$i2]->{'basketno'}">HLT-$orders->[$i2]->{'basketno'}</a></td>
 		<td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
 		<td>$orders->[$i2]->{'entrydate'}</td></tr>
-		
+
 printend
 ;
 	} else {
@@ -106,7 +108,7 @@ printend
 		<td> &nbsp;</td>
 		<td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
 		<td>$orders->[$i2]->{'entrydate'}</td></tr>
-		
+
 printend
 ;
 	}

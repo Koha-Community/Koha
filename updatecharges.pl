@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to update charges for overdue in database
 #updates categoryitem
 # is called by charges.pl
@@ -39,14 +41,14 @@ my $dbh = C4::Context->dbh;
 my @names=$input->param();
 
 foreach my $key (@names){
-  
+
   my $bor=substr($key,0,1);
   my $cat=$key;
   $cat =~ s/[A-Z]//i;
   my $data=$input->param($key);
   my @dat=split(',',$data);
 #  print "$bor $cat $dat[0] $dat[1] $dat[2] <br> ";
-  my $sth=$dbh->prepare("Update categoryitem set fine=$dat[0],startcharge=$dat[1],chargeperiod=$dat[2] where 
+  my $sth=$dbh->prepare("Update categoryitem set fine=$dat[0],startcharge=$dat[1],chargeperiod=$dat[2] where
   categorycode='$bor' and itemtype='$cat'");
   $sth->execute;
   $sth->finish;

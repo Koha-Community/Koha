@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #writen 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details
 
@@ -39,8 +41,8 @@ my $data=borrdata('',$bornum);
 
 #get account details
 my %bor;
-$bor{'borrowernumber'}=$bornum;                            
-my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);   
+$bor{'borrowernumber'}=$bornum;
+my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 
 my @accountrows; # this is for the tmpl-loop
 
@@ -66,6 +68,6 @@ $template->param( startmenumember => startmenu('member'),
 			surname         => $data->{'surname'},
 			bornum          => $bornum,
 			total           => $total,
-			accounts        => \@accountrows ); 
+			accounts        => \@accountrows );
 
 print "Content-Type: text/html\n\n", $template->output;

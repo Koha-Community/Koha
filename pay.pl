@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
-#wrriten 11/1/2000 by chris@katipo.oc.nz
+# $Id$
+
+#written 11/1/2000 by chris@katipo.oc.nz
 #part of the koha library system, script to facilitate paying off fines
 
 
@@ -42,7 +44,7 @@ my $user=$input->remote_user;
 
 #get account details
 my %bor;
-$bor{'borrowernumber'}=$bornum;                            
+$bor{'borrowernumber'}=$bornum;
 
 
 my @names=$input->param;
@@ -77,7 +79,7 @@ if ($check ==0){
   if ($total ne ''){
     recordpayment(\%env,$bornum,$total);
   }
-  my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);     
+  my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 
   print startpage();
   print startmenu('member');
@@ -143,7 +145,7 @@ printend
 } else {
 #  my $quety=$input->query_string;
 #  print $input->redirect("/cgi-bin/koha/sec/writeoff.pl?$quety");
-    my%inp;    
+    my%inp;
     my @name=$input->param;
     for (my $i=0;$i<@name;$i++){
 	my $test=$input->param($name[$i]);

@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 
+# $Id$
+
 # script to do a borrower enquiry/bring up borrower details etc
 # Displays all the details about a borrower
 # written 20/12/99 by chris@katipo.co.nz
 # last modified 21/1/2000 by chris@katipo.co.nz
-# modified 31/1/2001 by chris@katipo.co.nz 
+# modified 31/1/2001 by chris@katipo.co.nz
 #   to not allow items on request to be renewed
 #
 # needs html removed and to use the C4::Output more, but its tricky
@@ -88,7 +90,7 @@ if ($data->{'categorycode'} ne 'C'){
     			   cardnumber => $guarantees->[$i]->{'cardnumber'}});
   }
   $template->param(guaranteeloop => \@guaranteedata);
-  
+
 } else {
   my ($guarantor)=findguarantor($data->{'borrowernumber'});
   unless ($guarantor->{'borrowernumber'} == 0){
@@ -100,8 +102,8 @@ my %bor;
 $bor{'borrowernumber'}=$bornum;
 
 # FIXME
-# it looks like $numaccts is a temp variable and that the 
-# for (my $i;$i<$numaccts;$i+++) 
+# it looks like $numaccts is a temp variable and that the
+# for (my $i;$i<$numaccts;$i++)
 # can be turned into a foreach loop instead
 #
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
@@ -114,7 +116,7 @@ for (my$i=0;$i<$numaccts;$i++){
   my $amount2= $accts->[$i]{'amountoutstanding'} + 0.00;
   my %row = %$accts->[$i];
   if ($amount2 != 0){
-    my $item=" &nbsp; ";  
+    my $item=" &nbsp; ";
     $row{'date'} = slashifyDate($accts->[$i]{'date'});
 
     if ($accts->[$i]{'accounttype'} ne 'Res'){
@@ -142,7 +144,7 @@ for (my $i=0;$i<$count;$i++){
   my $datedue=ParseDate($issue->[$i]{'date_due'});
   $issue->[$i]{'date_due'} = slashifyDate($issue->[$i]{'date_due'});
   my %row = %{$issue->[$i]};
-  if ($datedue < $today){  
+  if ($datedue < $today){
     $row{'red'}=1; #print "<font color=red>";
   }
   #find the charge for an item
@@ -172,8 +174,8 @@ for (my $i=0;$i<$count;$i++){
 my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
 
 # FIXME
-# does it make sense to turn this into a foreach my $i (0..$rescount) 
-# kind of loop? 
+# does it make sense to turn this into a foreach my $i (0..$rescount)
+# kind of loop?
 #
 my @reservedata;
 for (my $i=0;$i<$rescount;$i++){

@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w # please develop with -w
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -28,16 +29,16 @@ print qq|
 *******************************************
 
 This installer will guide you through the process of installing Koha.
-It is not a completely automated installation, but a guide for further 
+It is not a completely automated installation, but a guide for further
 information please read the documentation or visit the Koha website at
 http://www.koha.org
 
 To successfully use Koha you need some additional software:
 
 * A webserver (It was built to work with Apache, but there is no reason
-it should not work with any other webserver). 
- 
-* Mysql (You could intead use postgres, or another sql based database) 
+it should not work with any other webserver).
+
+* Mysql (You could intead use postgres, or another sql based database)
 
 * Perl
 
@@ -98,10 +99,10 @@ print "\n";
 #
 print qq|
 Koha uses a small configuration file that is usually placed in your
-/etc/ files directory (note: if you wish to place the koha.conf in 
+/etc/ files directory (note: if you wish to place the koha.conf in
 another location you will need to manually edit additional files).
 
-We will help you to now create your koha.conf file, once this file 
+We will help you to now create your koha.conf file, once this file
 has been created, please copy it to your destination folder
 (note: this may need to be done by your systems administrator).
 |;
@@ -115,7 +116,7 @@ my $inc_path;
 print "\n";
 print "\n";
 print qq|
-Please provide the name of the mysql database that you wish to use 
+Please provide the name of the mysql database that you wish to use
 for koha. This is normally "Koha".
 |;
 
@@ -129,7 +130,7 @@ do {
 print "\n";
 print "\n";
 print qq|
-Please provide the hostname for mysql.  Unless the database is located 
+Please provide the hostname for mysql.  Unless the database is located
 on another machine this is likely to be "localhost".
 |;
 
@@ -143,7 +144,7 @@ do {
 print "\n";
 print "\n";
 print qq|
-Please provide the name of the mysql user, who will have full administrative 
+Please provide the name of the mysql user, who will have full administrative
 rights to the $dbname database, when authenicating from $hostname.
 It is recommended that you do not use your "root" user.
 |;
@@ -182,7 +183,7 @@ do {
 
 
 #Create the configuration file
-open(SITES,">koha.conf") or die "Couldn't create file.  
+open(SITES,">koha.conf") or die "Couldn't create file.
 Must have write capability.\n";
 print SITES <<EOP
 database=$dbname
@@ -243,7 +244,7 @@ do {
 #
 # Update Apache Conf File.
 #
-open(SITES,">>koha-apache.conf") or die "Couldn't write to file.  
+open(SITES,">>koha-apache.conf") or die "Couldn't write to file.
 Must have write capability.\n";
 print SITES <<EOP
 
@@ -293,7 +294,7 @@ do {
 #
 # Update Apache Conf File.
 #
-open(SITES,">>koha-apache.conf") or die "Couldn't write to file.  
+open(SITES,">>koha-apache.conf") or die "Couldn't write to file.
 Must have write capability.\n";
 print SITES <<EOP
 
@@ -318,19 +319,19 @@ print qq|
 * Koha Installation Guide - Continued     *
 *******************************************
 
-In order to finish the installation of Koha, there is still a couple 
+In order to finish the installation of Koha, there is still a couple
 of steps that you will need to complete.
 
   * Setup mysql
 	1. Create a new mysql database called for example Koha
-	   From command line: mysqladmin -uroot -ppassword create Koha 
+	   From command line: mysqladmin -uroot -ppassword create Koha
 
 	2. Set up a koha user and password in mysql
-           Log in to mysql: mysql -uroot -ppassword 
+           Log in to mysql: mysql -uroot -ppassword
 
-	   To create a user called "koha" who has full administrative 
-	   rights to the "Koha" database when authenticating from 
-	   "localhost", enter the following on mysql command line: 
+	   To create a user called "koha" who has full administrative
+	   rights to the "Koha" database when authenticating from
+	   "localhost", enter the following on mysql command line:
 
 	    grant all privileges on Koha.* to koha\@localhost identified by 'kohapassword'\;
 
@@ -338,10 +339,10 @@ of steps that you will need to complete.
 
 
 	3. Use the mysql script to create the tables
-	   mysql -uusername -ppassword Koha < koha.mysql 
+	   mysql -uusername -ppassword Koha < koha.mysql
 
 	4. Update your database tables
-	   perl updatedatabase -I /pathtoC4 
+	   perl updatedatabase -I /pathtoC4
 
 	5. Update your database to use MARC
 	   perl marc/fill_usmarc.pl -I /pathtoC4 to put MARC21 - english datas in parameter table
@@ -349,7 +350,7 @@ of steps that you will need to complete.
 
   * Koha.conf
 	1. Copy Koha.conf to /etc/
-	   If you wish to locate the file in another location please read 
+	   If you wish to locate the file in another location please read
 	   the INSTALL and Hints files.
 
 

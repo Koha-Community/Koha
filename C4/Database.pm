@@ -1,5 +1,7 @@
 package C4::Database;
 
+# $Id$
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,9 +23,9 @@ use strict;
 require Exporter;
 use DBI;
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw( );
 

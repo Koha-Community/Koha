@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -75,7 +76,7 @@ if (! $biblionumber) {
 } elsif ((! $newgroup) && (! $biblioitemnumber)) {
     print $input->redirect("additem.pl?biblionumber=$biblionumber&error=nobiblioitem");
 } else {
-    
+
     if ($website) {
 	&newbiblioitem($biblioitem);
     } elsif (&checkitems(1,$barcode)) {

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -25,7 +27,7 @@ use CGI;
 use C4::Search;
 use C4::Acquisitions;
 use C4::Output; # contains gettemplate
-  
+
 my $query=new CGI;
 
 my $includes = C4::Context->config('includes') ||
@@ -35,7 +37,7 @@ my $startfrom=$query->param('startfrom') || 0;
 
 my $template = gettemplate("catalogue/moredetail.tmpl");
 
-# get variables 
+# get variables
 
 my $biblionumber=$query->param('bib');
 my $title=$query->param('title');
@@ -87,7 +89,6 @@ foreach my $item (@items){
     } else {
 	$item->{'issue'}="<b>Currently on issue to:</b> <a href=/cgi-bin/koha/moremember.pl?bornum=$item->{'borrower0'}>$item->{'card'}</a><br>";
     }
-	  
 }
 
 $template->param(includesdir => $includes);

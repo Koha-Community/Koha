@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #script to show display basket of orders
 #written by chris@katipo.co.nz 24/2/2000
 
@@ -30,7 +32,7 @@ use strict;
 my $input=new CGI;
 print $input->header();
 my $id=$input->param('id');
-my ($count,@booksellers)=bookseller($id); 
+my ($count,@booksellers)=bookseller($id);
 print startpage;
 
 print startmenu('acquisitions');
@@ -210,7 +212,7 @@ EOP
 if ($booksellers[0]->{'gstreg'}==1){
   print " checked";
 }
-print ">Yes 
+print ">Yes
 <input type=radio name=gst value=0";
 if ($booksellers[0]->{'gstreg'}==0){
   print " checked";
@@ -227,7 +229,7 @@ EOP
 if ($booksellers[0]->{'listincgst'}==1){
   print " checked";
 }
-print ">Yes 
+print ">Yes
 <input type=radio name=list_gst value=0";
 if ($booksellers[0]->{'listincgst'}==0){
   print " checked";
@@ -244,7 +246,7 @@ EOP
 if ($booksellers[0]->{'invoiceincgst'}==1){
   print " checked";
 }
-print ">Yes 
+print ">Yes
 <input type=radio name=invoice_gst value=0";
 if ($booksellers[0]->{'invoiceincgst'}==0){
   print " checked";
@@ -253,7 +255,7 @@ print <<EOP
 >No
 </td>
 </tr>
-<TR VALIGN=TOP>				
+<TR VALIGN=TOP>
 <TD>Discount</td>
 <td><input type=text size=3 name=discount value=$booksellers[0]->{'discount'}> %
 </tr>

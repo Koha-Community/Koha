@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -55,11 +56,11 @@ if (! $biblionumber) {
 	($biblioitemcount, @biblioitems) = &getbiblioitembybiblionumber($biblionumber);
         ($branchcount, @branches)        = &branches;
 	($itemtypecount, @itemtypes)     = &getitemtypes;
-	
+
 	for (my $i = 0; $i < $itemtypecount; $i++) {
 	    $itemtypedescriptions{$itemtypes[$i]->{'itemtype'}} = $itemtypes[$i]->{'description'};
 	} # for
-	
+
 	for (my $i = 0; $i < $branchcount; $i++) {
 	    $branchnames{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
 	} # for
@@ -104,7 +105,7 @@ EOF
 
 	for (my $i = 0; $i < $biblioitemcount; $i++) {
 	    if ($biblioitems[$i]->{'itemtype'} eq "WEB") {
-		
+
 		print << "EOF";
 <tr valign="top" bgcolor="#CCCC99">
 <td background="/images/background-mem.gif"><b>$biblioitems[$i]->{'biblioitemnumber'} GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written 14/1/2000
 #script to display reports
 
@@ -80,7 +82,7 @@ while ($i<$count){
   my $temptotalr=0;
   my $temptotalres=0;
   my $temptotalren=0;
-  my $temptotalw=0;   
+  my $temptotalw=0;
   for (my $i2=0;$i2<$count;$i2++){
      $charge+=$charges[$i2]->{'amount'};
       print mktablerow(6,'red',$charges[$i2]->{'description'},$charges[$i2]->{'accounttype'},$charges[$i2]->{'timestamp'},
@@ -98,7 +100,7 @@ while ($i<$count){
         if ($charges[$i2]->{'accounttype'} eq 'R'){
          $temptotalren+=$charges[$i2]->{'amount'}-$charges[$i2]->{'amountoutstanding'};
         }
-     }   
+     }
   }
 
 #  my $branch=
@@ -134,7 +136,7 @@ while ($i<$count){
      my $time="$hour:$min:$sec";
          my $time2="$payments[$i]{'date'}";
      my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
-    
+
     if ($payments[$i]{'accounttype'} eq 'W'){
       $totalw+=$payments[$i]{'amount'};
     } else {
@@ -153,7 +155,7 @@ while ($i<$count){
     }
 #    my $time2="$payments[$i]{'date'} $time";
 
-  
+
     print mktablerow(6,'white',"$payments[$i]{'firstname'} <b>$payments[$i]{'surname'}</b>",
     ,$payments[$i]{'accounttype'},"$payments[$i]{'date'} $time",$payments[$i]{'amount'}
     ,$branch);
@@ -161,7 +163,7 @@ while ($i<$count){
     $oldtime=$payments[$i]{'timestamp'};
     $bornum=$payments[$i]{'borrowernumber'};
     $i++;
-  
+
   }
   print mktablerow('6','white','','','','','','');
 }

@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written 7/3/2002 by Finlay
 #script to display reports
 
@@ -58,7 +60,7 @@ if (not $lastmove) {
 }
 
 
-# make the page ... 
+# make the page ...
 print $input->header;
 
 
@@ -133,7 +135,7 @@ sub lastmove {
       $sth->execute;
       my ($date) = $sth->fetchrow_array;
       return(0, "Item has no branch transfers record") if not $date;
-      my $var2 = $dbh->quote($date);      
+      my $var2 = $dbh->quote($date);
       $sth=$dbh->prepare("Select * from branchtransfers where branchtransfers.itemnumber=$var1 and branchtransfers.datearrived=$var2");
       $sth->execute;
       my ($data) = $sth->fetchrow_hashref;
