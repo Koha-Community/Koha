@@ -526,6 +526,7 @@ sub quote_po ($) {
     # Locale::PO->quote is buggy, it doesn't quote newlines :-/
     $s =~ s/([\\"])/\\\1/gs;
     $s =~ s/\n/\\n/g;
+    $s =~ s/[\177-\377]/ sprintf("\\%03o", ord($&)) /egs;
     return "\"$s\"";
 }
 
