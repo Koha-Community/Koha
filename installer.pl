@@ -457,7 +457,7 @@ system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into use
 system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv) values ('%','$dbname','$user','Y','Y','Y','Y');");
 system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
 
-system ("perl scripts/updater/updatedatabase -I $kohadir/modules");
+system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
 
 
 #RESTART APACHE
