@@ -23,9 +23,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use C4::Context;
-use C4::Acquisitions;
-use C4::Biblio;
-use C4::Search;
 use CGI;
 my $input=new CGI;
 
