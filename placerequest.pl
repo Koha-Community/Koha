@@ -54,7 +54,7 @@ for (my $i=1;$i<$count;$i++){
 	$i2++;
     }
 }
-#print $input->dump;
+
 my $env;
 
 my $const;
@@ -73,5 +73,5 @@ print $input->redirect("request.pl?bib=$biblio");
 } elsif ($bornum eq ''){
   print $input->header();
   print "Invalid card number please try again";
-  print $input->dump;
+  print $input->Dump;
 }
