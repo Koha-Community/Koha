@@ -57,14 +57,20 @@ my $function_name= "210c".(int(rand(100000))+1);
 #---- build editors list.
 #---- the editor list is built from the "EDITORS" thesaurus
 #---- this thesaurus category must be filled as follow :
-#---- isbn_identifier authorityseparator editor authorityseparator collection
-#---- sample : 2224 -- Cerf -- Sources chrétiennes
-my $sth = $dbh->prepare("select father,stdlib from bibliothesaurus where category='EDITORS' and level=2");
+#---- 200$a for isbn
+#---- 200$b for editor
+#---- 200$c (repeated) for collections
+my $sth = $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
+						left join auth_header on auth_subfield_table.authid=auth_header.authid 
+						where authtypecode='EDITORS' and tag='200' and subfieldcode='a'");
+my $sth2 = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='b' and authid=?");
 $sth->execute;
 my @editors;
 my $authoritysep = C4::Context->preference("authoritysep");
-while (my ($father,$stdlib) = $sth->fetchrow) {
-	push(@editors,"$father $stdlib");
+while (my ($authid,$isbn) = $sth->fetchrow) {
+	$sth2->execute($authid);
+	my ($editor) = $sth2->fetchrow;
+	push(@editors,"$isbn $authoritysep $editor");
 }
 my $res  = "
 <script>
@@ -97,7 +103,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(subfield_managed) {
 	defaultvalue=escape(document.forms[0].field_value[subfield_managed].value);
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value builder\",'width=500,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../authorities/authorities-home.pl\",\"value builder\",'width=500,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>

@@ -119,13 +119,18 @@ my ($input) = @_;
 	# if there is an isbn, complete search
 		my @collections;
 	if ($isbn_found) {
-		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father=? and category='EDITORS' order by stdlib");
+		my $sth = $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
+						left join auth_header on auth_subfield_table.authid=auth_header.authid 
+						where authtypecode='EDITORS' and tag='200' and subfieldcode='a' and subfieldvalue=?");
+		my $sth2 = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='c' and authid=?");
 		my @splited = split //, $isbn_found;
 		my $isbn_rebuild='';
 		foreach my $x (@splited) {
 			$isbn_rebuild.=$x;
-			$sth->execute("$isbn_rebuild $authoritysep $editor_found $authoritysep");
-			while (my ($line)= $sth->fetchrow) {
+			$sth->execute($isbn_rebuild);
+			my ($authid) = $sth->fetchrow;
+			$sth2->execute($authid);
+			while (my ($line)= $sth2->fetchrow) {
 				push @collections,$line;
 			}
 		}
