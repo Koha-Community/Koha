@@ -1,0 +1,1 @@
+<p class="botnav">Main Navigation: | <a href="/about-us/" >About Us</a> | <a href="/membership/">Members</a> | <a href="/cgi-bin/koha/opac-search.pl">Searching</a> | <a href="/maori/">Maori Resources</a> | <a href="/kids-space/">Kid Space</a> | <a href="/teens-zone/">Teens Zone</a> | <a href="/news">What's New</a> 
