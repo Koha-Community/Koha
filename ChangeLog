@@ -1,3 +1,69 @@
+2002-10-11  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	* C4/Search.pm: Added a FIXME comment.
+
+	* C4/Database.pm: Gutted. Every function in this module is now
+	obsolete. Removed just about everything. The name "Database" might
+	still be reused, though the next time something gets added, it
+	should probably be called v2.0.
+
+	* opac/opac-logout.pl: Replaced &requireDBI with C4::Context->dbh,
+	thus making the "use Database" statement unnecessary. Replaced a
+	prepare()/execute() with a do().
+
+	* Added FIXME comments for broken links.
+
+	* koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptItemCopy.tmpl:
+	Added FIXME comments for broken links.
+
+	* koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptBiblioitem.tmpl:
+	Added FIXME comments for broken links.
+
+	* acqui.simple/marcimport.pl: Replaced &requireDBI with
+	C4::Context->dbh, thus making the "use Fixed muffed quotes in
+	&gettemplate calls. Added a temporary print statement in
+	&z3950menu, so it'll print something instead of giving a browser
+	error.
+
+	* C4/Circulation/Circ2.pm: Removed bogus unused variables at the
+	top. Prettified @EXPORT list.
+	(bug fix): Added missing semicolon.
+
+	* C4/Output.pm: Replaced &requireDBI with C4::Context->dbh, thus
+	making the "use Database" statement unnecessary. Fixed POD up a
+	bit.
+	* C4/Koha.pm: Removed trailing whitespace that was messing up the
+	POD.
+
+	* C4/Interface/ReserveentCDK.pm: Added FIXME comment. This file is
+	obsolete, right?
+
+	* C4/Interface/RenewalsCDK.pm: Added FIXME comment. This file is
+	obsolete, right?
+
+	* C4/Interface/FlagsCDK.pm: Added FIXME comment. This file is
+	obsolete, right?
+
+	* C4/Interface/BorrowerCDK.pm: Added FIXME comment. This file is
+	obsolete, right?
+
+	* C4/Interface/AccountsCDK.pm: Added FIXME comment. This file is
+	obsolete, right?
+
+	* C4/Circulation/Borrower.pm: Added FIXME comment. This file is
+	obsolete, right?
+
+	* C4/InterfaceCDK.pm: Added FIXME comment. This file is obsolete,
+	right?
+
+	* C4/Circulation.pm: Added FIXME comment. This file is obsolete,
+	right?
+
+	* C4/Circmain.pm: Updated FIXME comment. This file is obsolete,
+	right?
+
+	* C4/Z3950.pm: Replaced &requireDBI with C4::Context->dbh
+	* C4/Biblio.pm: Replaced &requireDBI with C4::Context->dbh
 2002-10-10  Andrew Arensburger  <arensb@baa.ooblick.com>
 
 	* C4/Circulation/Circ2.pm: Cleaned things up a bit.
