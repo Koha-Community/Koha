@@ -599,7 +599,7 @@ sub ordersearch {
 sub histsearch {
 	my ($title,$author,$name)=@_;
 	my $dbh= C4::Context->dbh;
-	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity
+	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity, aqorders.ecost
 							from aqorders,aqbasket,aqbooksellers,biblio 
 							where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and
 							biblio.biblionumber=aqorders.biblionumber";

@@ -10,6 +10,8 @@
 			<th class="acquisition">Placed on</th>
 			<th class="acquisition">Recieved on</th>
 			<th class="acquisition">Quantity ordered</th>
+			<th class="acquisition">Unit cost</th>
+			<th class="acquisition">&nbsp;</th>
 		</tr>
 		<tr>
 			<form>
@@ -24,6 +26,9 @@
 				</th>
 				<th class="acquisition">
 					<input type="text" name="name" value="<!-- TMPL_VAR name="name" -->">
+				</th>
+				<th class="acquisition">
+					&nbsp;
 				</th>
 				<th class="acquisition">
 					&nbsp;
@@ -61,6 +66,9 @@
 				</td>
 				<td>
 					<!-- TMPL_VAR name="quantity" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="ecost" -->
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
