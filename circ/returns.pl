@@ -188,6 +188,13 @@ if ($messages->{'ResFound'}) {
     if ($res->{'ResFound'} eq "Waiting") {
 		$template->param(	found => 1,
 										name => $name,
+										borfirstname => $borr->{'firstname'},
+										borsurname => $borr->{'surname'},
+										bortitle => $borr->{'title'},
+										borphone => $borr->{'phone'},
+										borstraddress => $borr->{'streetaddress'},
+										borcity => $borr->{'city'},
+										borzip => $borr->{'zipcode'},
 										bornum => $res->{'borrowernumber'},
 										borcnum => $borr->{'cardnumber'},
 										branchname => $branches->{$res->{'branchcode'}}->{'branchname'},
@@ -217,7 +224,8 @@ if ($messages->{'ResFound'}) {
 										borphone => $borr->{'phone'},
 										borstraddress => $borr->{'streetaddress'},
 										borsub => $borr->{'suburb'},
-										bortown => $borr->{'town'},
+										borcity => $borr->{'city'},
+										borzip => $borr->{'zipcode'},
 										boremail => $borr->{'emailadress'},
 										barcode => $barcode
 										);
