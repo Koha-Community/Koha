@@ -132,7 +132,9 @@ if ($op eq 'add_form') {
 	}
 	# build value_builder list
 	my @value_builder=('');
-	opendir(DIR, "../value_builder") || die "can't opendir ../value_builder: $!";
+
+	my $cgidir = C4::Context->intranetdir . "/cgi-bin";
+	opendir(DIR, "$cgidir/value_builder") || die "can't opendir $cgidir/value_builder: $!";
 	while (my $line = readdir(DIR)) {
 		if ($line =~ /\.pl$/) {
 			push (@value_builder,$line);

@@ -19,6 +19,8 @@
 # Revision History:
 # 2004-08-11 A. Tarallo: Added the function db_escheme2dbi, tested my bugfixes,
 # further  details about them in the code.
+# 2004-11-23 A. Tarallo, E. Silva: Bugfixes for running in a mod_perl environment.
+# Clean up of previous bugfixes, better documentation of what was done. 
 
 package C4::Context;
 use strict;
@@ -105,13 +107,13 @@ $context = undef;		# Initially, no context is set
 # Returns undef in case of error.
 #
 # Revision History:
-# 2004-08-10 A. Tarallo: Added code that checks if a variable was already
+# 2004-08-10 A. Tarallo: Added code that checks if a variable is already
 # assigned and prints a message, otherwise create a new entry in the hash to
 # be returned. 
 # Also added code that complaints if finds a line that isn't a variable 
 # assignmet and skips the line.
-# Added a quick hack that makes the trasnlation between the db_schema
-# and the DBI driver for that eschema.
+# Added a quick hack that makes the translation between the db_schema
+# and the DBI driver for that schema.
 #
 sub read_config_file
 {
@@ -151,8 +153,7 @@ sub read_config_file
 			}else {
 				$value = $2;
 			}
-			$var = $1;
-                        $retval->{$var} = $value;
+                        $retval->{$1} = $value;
 		}
 	}
 	close CONF;
@@ -168,9 +169,10 @@ sub db_scheme2dbi
 	my $name = shift;
 
 	for ($name) {
-		if (/MySQL|mysql/) { return("mysql"); }
+# FIXME - Should have other databases. 
+		if (/mysql/i) { return("mysql"); }
 		if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
-		if (/Oracle|oracle|ORACLE/) { return("Oracle"); }
+		if (/oracle/i) { return("Oracle"); }
 	}
 	return undef; 		# Just in case
 }
@@ -212,14 +214,13 @@ sub new
 
 	# check that the specified config file exists and is not empty
 	undef $conf_fname unless 
-		(defined $conf_fname && -e $conf_fname && -s $conf_fname);
+	    (defined $conf_fname && -e $conf_fname && -s $conf_fname);
 	# Figure out a good config file to load if none was specified.
 	if (!defined($conf_fname))
 	{
 		# If the $KOHA_CONF environment variable is set, use
 		# that. Otherwise, use the built-in default.
-		$conf_fname = $ENV{"KOHA_CONF"} ||
-				CONFIG_FNAME;
+		$conf_fname = $ENV{"KOHA_CONF"} || CONFIG_FNAME;
 	}
 	$self->{"config_file"} = $conf_fname;
 
@@ -399,9 +400,6 @@ sub AUTOLOAD
 sub _new_dbh
 {
 	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
-		# FIXME - It should be possible to use "MySQL" instead
-		# of "mysql", "PostgreSQL" instead of "Pg", and so
-		# forth.
 	my $db_name   = $context->{"config"}{"database"};
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"user"};
@@ -428,11 +426,16 @@ possibly C<&set_dbh>.
 sub dbh
 {
 	my $self = shift;
+	my $sth;
 
-	# If there's already a database handle, return it.
-	return $context->{"dbh"} if defined($context->{"dbh"});
+	if (defined($context->{"dbh"})) {
+	    $sth=$context->{"dbh"}->prepare("select 1");
+	    return $context->{"dbh"} if (defined($sth->execute));
+	}
 
-	# No database handle yet. Create one.
+	warn "Database died";
+
+	# No database handle or it died . Create one.
 	$context->{"dbh"} = &_new_dbh();
 
 	return $context->{"dbh"};
