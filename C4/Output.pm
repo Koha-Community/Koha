@@ -110,8 +110,10 @@ sub gettemplate {
     my $htdocs;
     if ($opac) {
 	$htdocs = $configfile->{'opachtdocs'};
+	($htdocs) || ($htdocs=$configfile->{opacdir}."/htdocs");
     } else {
 	$htdocs = $configfile->{'intrahtdocs'};
+	($htdocs) || ($htdocs=$configfile->{intranetdir}."/htdocs");
     }
 
     my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
