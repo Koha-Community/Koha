@@ -791,6 +791,7 @@ my $mysqlpass = '';
 
 foreach my $mysql (qw(/usr/local/mysql
                       /opt/mysql
+		      /usr
 		      )) {
    if ( -d $mysql ) {
             $mysqldir=$mysql;
