@@ -62,7 +62,7 @@
 
 <!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-	<p>Please confirm that you wish to request an item of these types:<p>
+	<p>Please confirm that you wish to request an item of these types:</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="place_reserve" value="1" />
@@ -71,8 +71,7 @@
 		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME="expires_date" -->" />
 		<ul>
 			<!-- TMPL_LOOP NAME="TYPES" -->
-					<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" /></td>
-					<li><!-- TMPL_VAR NAME="description" --></li>
+			<li><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_VAR NAME="description" --></li>
 			<!-- /TMPL_LOOP -->
 		</ul>
 		Which is to be picked up from
