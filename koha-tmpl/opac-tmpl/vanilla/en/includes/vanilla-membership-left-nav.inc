@@ -45,6 +45,7 @@
 </div>
 
 <form action="/cgi-bin/koha/opac-main.pl" method="post">
+  <input type="hidden" name="logout.x" value="1">
   <input type="submit" name="logout" value="logout" class="submit" />
 </form>
 
