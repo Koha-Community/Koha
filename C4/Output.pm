@@ -97,6 +97,7 @@ my $path = C4::Context->config('includes') ||
 	"/usr/local/www/hdl/htdocs/includes";
 
 #---------------------------------------------------------------------------------------------------------
+# FIXME - POD
 sub gettemplate {
     my ($tmplbase, $opac) = @_;
 
@@ -119,11 +120,12 @@ sub gettemplate {
 }
 
 #---------------------------------------------------------------------------------------------------------
+# FIXME - POD
 sub themelanguage {
   my ($htdocs, $tmpl) = @_;
 
 # language preferences....
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opaclanguages'");
   $sth->execute;
   my ($lang) = $sth->fetchrow;
@@ -136,8 +138,6 @@ sub themelanguage {
   my ($theme) = $sth->fetchrow;
   $sth->finish;
   my @themes = split " ", $theme;
-
-  $dbh->disconnect;
 
   my ($theme, $lang);
 # searches through the themes and languages. First template it find it returns.
