@@ -54,31 +54,27 @@ sub remoteprint {
 }
 
 sub printreserve {
-  my($env,$resrec,$rbordata,$itemdata)=@_;
+  my($env, $branchname, $bordata, $itemdata)=@_;
   my $file=time;
-  my $queue = $env->{'queue'};
-  #if ($queue eq "") {
+  my $printer = $env->{'printer'};
+  if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">/tmp/kohares");
-  #} else {
-  #  open (PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$!\n";
-  #}  
-  print PRINTER "Collect at $resrec->{'branchcode'}\r\n\r\n";
-  print PRINTER "$rbordata->{'surname'}; $rbordata->{'firstname'}\r\n";
-  print PRINTER "$rbordata->{'cardnumber'}\r\n";
-  print PRINTER "Phone: $rbordata->{'phone'}\r\n";
-  print PRINTER "$rbordata->{'streetaddress'}\r\n";
-  print PRINTER "$rbordata->{'suburb'}\r\n";
-  print PRINTER "$rbordata->{'town'}\r\n";   
-  print PRINTER "$rbordata->{'emailaddress'}\r\n\r\n";
+  } else {
+    open (PRINTER, "| lpr -P $printer") or die "Couldn't write to queue:$!\n";
+  }  
+  print PRINTER "Collect at $branchname \r\n\r\n";
+  print PRINTER "$bordata->{'surname'}; $bordata->{'firstname'}\r\n";
+  print PRINTER "$bordata->{'cardnumber'}\r\n";
+  print PRINTER "Phone: $bordata->{'phone'}\r\n";
+  print PRINTER "$bordata->{'streetaddress'}\r\n";
+  print PRINTER "$bordata->{'suburb'}\r\n";
+  print PRINTER "$bordata->{'town'}\r\n";   
+  print PRINTER "$bordata->{'emailaddress'}\r\n\r\n";
   print PRINTER "$itemdata->{'barcode'}\r\n";
   print PRINTER "$itemdata->{'title'}\r\n";
   print PRINTER "$itemdata->{'author'}";
   print PRINTER "\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
-  if ($env->{'printtype'} eq "docket"){ 
-    #print chr(27).char(105);
-  }  
   close PRINTER;
-  #system("lpr /tmp/$file"); 
 }
 END { }       # module clean-up code here (global destructor)
   
