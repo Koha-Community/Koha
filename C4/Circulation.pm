@@ -1,4 +1,6 @@
-package C4::Circulation; #assumes C4/Circulation
+package C4::Circulation;
+
+# $Id$
 
 #package to deal with circulation 
 
@@ -125,6 +127,7 @@ sub checkoverdues{
 }
 
 # FIXME - This is quite similar to &C4::Circulation::Main::previousissue
+# FIXME - Never used. Obsolete, presumably.
 sub previousissue {
   my ($env,$itemnum,$dbh,$bornum)=@_;
   my $sth=$dbh->prepare("Select firstname,surname,issues.borrowernumber,cardnumber,returndate
@@ -208,10 +211,7 @@ sub scanborrower {
   my ($env,$interface)=@_;
   #scan barcode
   my ($number,$reason,$book)=&borrower_dialog($env); #C4::Interface
-  $number= $number;
+  $number= $number;		# FIXME - WTF?
   $book=uc $book;
   return ($number,$reason,$book);
 }
-
-
-END { }       # module clean-up code here (global destructor)

@@ -1,5 +1,6 @@
-package C4::Format; #assumes C4/Format
+package C4::Format;
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -121,6 +122,8 @@ value.
 If C<$format> has a comma after the optional dollar sign, the integer
 part will be split into three-digit groups separated by commas.
 
+C<$env> is effectively ignored.
+
 =cut
 #'
 # FIXME - This is all terribly provincial, not at all
@@ -210,14 +213,12 @@ sub fmtdec {
   }
   # Right-pad the decimal part to the given number of digits.
   if ($right > 0) {
-     $tempdec = $tempdec.("0"x$right);
+     $tempdec = $tempdec.("0"x$right);	# FIXME - .=
      $tempdec = substr($tempdec,0,$right);
-     $fnumb = $fnumb.".".$tempdec;
+     $fnumb = $fnumb.".".$tempdec;	# FIXME - .=
   }
   return ($fnumb);	# FIXME - Shouldn't return a list.
 }
-
-END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
