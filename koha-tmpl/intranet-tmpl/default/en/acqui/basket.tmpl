@@ -22,16 +22,16 @@
 	<!-- TMPL_IF name="books_loop" -->
 		<table>
 			<tr valign="top" bgcolor="#ffdf61">
-				<th class="doNotPrint">Order</th>
+				<th class="acquisition doNotPrint">Order</th>
 				<th class="acquisition">Publisher<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="doNotPrint">[order]</a></th>
 				<th class="acquisition">Isbn</th>
 				<th class="acquisition">Title</th>
 				<th class="acquisition">Author</th>
 				<th class="acquisition">rrp</th>
-				<th class="doNotPrint">est</th>
+				<th class="acquisition doNotPrint">est</th>
 				<th class="acquisition">Qty</th>
 				<th class="acquisition">Total</th>
-				<th class="doNotPrint">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
+				<th class="acquisition doNotPrint">Fund <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[order]</a></th>
 				<!-- TMPL_UNLESS name="closedate" -->
 					<th class="doNotPrint">Remove</th>
 				<!-- /TMPL_UNLESS -->
