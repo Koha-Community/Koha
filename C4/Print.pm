@@ -70,6 +70,7 @@ C<$items> is a reference-to-list, where each element is a
 reference-to-hash describing a borrowed item. C<$items> may be gotten
 from C<&currentissues>.
 
+=cut
 #'
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
