@@ -7,22 +7,19 @@ use Install;
 $::language='en';
 
 if ($<) {
-    print "\n\nYou must run koha.upgrade as root.\n\n";
-    exit;
+	print "\n\nYou must run koha.upgrade as root.\n\n";
+	exit;
 }
 
 my $input;
-
-
 loadconfigfile();
-
 
 
 ($::kohaversion) || ($::kohaversion='unknown version');
 $::newversion=`cat koha.version`;
 chomp $::newversion;
 if ($::newversion =~ /RC/) {
-    releasecandidatewarning();
+	releasecandidatewarning();
 }
 
 print qq|
@@ -36,50 +33,46 @@ You are attempting to upgrade from Koha $::kohaversion to $::newversion.
 We recommend that you do a complete backup of all your files before upgrading.
 This upgrade script will make a backup copy of your files for you.
 
-Would you like to proceed?  ([Y]/N):  
+Would you like to proceed?  (Y/[N]):
 |;
 
 my $answer = <STDIN>;
 chomp $answer;
 
-if ($answer =~/n/i) {
-    print qq|
+unless ($answer =~/y/i) {
+	print qq|
 
 Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
 |;
-    exit;
+	exit;
 } else {
-    print "Great! continuing upgrade... \n";
+	print "Great! continuing upgrade... \n";
 };
-
-
 
 checkperlmodules();
 
-
-
 my $backupdir='/usr/local/koha/backups';
-print "Please specify a backup directory [$backupdir]: ";  
+print "Please specify a backup directory [$backupdir]: ";
 
 $answer = <STDIN>;
 chomp $answer;
 
 if ($answer) {
-    $backupdir=$answer;
+	$backupdir=$answer;
 }
 
 if (! -e $backupdir) {
-   my $result=mkdir ($backupdir, oct(770));
-   if ($result==0) {
-       my @dirs = split(m#/#, $backupdir);
-	my $checkdir='';
-	foreach (@dirs) {
-	    $checkdir.="$_/";
-	    unless (-e "$checkdir") {
-		mkdir($checkdir, 0775);
-	    }
+	my $result=mkdir ($backupdir, oct(770));
+	if ($result==0) {
+		my @dirs = split(m#/#, $backupdir);
+		my $checkdir='';
+		foreach (@dirs) {
+			$checkdir.="$_/";
+			unless (-e "$checkdir") {
+				mkdir($checkdir, 0775);
+			}
+		}
 	}
-   }
 }
 
 chmod 0770, $backupdir;
@@ -91,17 +84,33 @@ my $mysql;
 my $mysqldir;
 
 foreach my $mysql (qw(/usr/local/mysql
-                      /opt/mysql
-		    )) {
-    if ( -d $mysql ) {
-	    $mysqldir=$mysql;
-    }
+					/opt/mysql
+					/usr
+			)) {
+	if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
+		$mysqldir=$mysql;
+	}
 }
 if (!$mysqldir){
-    $mysqldir='/usr';
+	print "I don't see mysql in the usual places.\n";
+	for (;;) {
+		print "Where have you installed mysql? ";
+		chomp($mysqldir = <STDIN>);
+		last if -f "$mysqldir/bin/mysqladmin";
+	print <<EOP;
+
+I can't find it there either. If you compiled mysql yourself,
+please give the value of --prefix when you ran configure.
+
+The file mysqladmin should be in bin/mysqladmin under the directory that you
+provide here.
+
+EOP
+#'
+	}
+} else {
+print "Doing backup\n";
 }
-
-
 
 my ($sec, $min, $hr, $day, $month, $year) = (localtime(time))[0,1,2,3,4,5];
 $month++;
@@ -118,16 +127,15 @@ my $biblioitemcounter=0;
 my $membercounter=0;
 
 while (<MD>) {
-    (/insert into items /i) && ($itemcounter++);
-    (/insert into biblioitems /i) && ($biblioitemcounter++);
-    (/insert into biblio /i) && ($bibliocounter++);
-    (/insert into borrowers /i) && ($membercounter++);
-    print BF $_;
+	(/insert into items /i) && ($itemcounter++);
+	(/insert into biblioitems /i) && ($biblioitemcounter++);
+	(/insert into biblio /i) && ($bibliocounter++);
+	(/insert into borrowers /i) && ($membercounter++);
+	print BF $_;
 }
 
 close BF;
 close MD;
-
 
 my $filels=`ls -hl $backupdir/Koha.backup_$date`;
 chomp $filels;
@@ -193,7 +201,7 @@ if (!$::opacdir || !$::intranetdir) {
     $::intranetdir='';
     $::opacdir='';
     while (!$::intranetdir) {
-	print "Please specify the location of your INTRANET files: ";  
+	print "Please specify the location of your INTRANET files: ";
 
 	$answer = <STDIN>;
 	chomp $answer;
@@ -271,6 +279,7 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
                       /etc/apache/conf/apache.conf
                       /etc/apache-ssl/conf/apache.conf
                       /etc/httpd/conf/httpd.conf
+                      /etc/httpd/conf/commonhttpd.conf
                       /etc/httpd/httpd.conf)) {
    if ( -f $httpdconf ) {
             $realhttpdconf=$httpdconf;
@@ -361,7 +370,7 @@ unless ($::kohalogdir && -e $::kohalogdir) {
 }
 
 unless (-e "$::kohalogdir") {
-    my $result = mkdir 0770, "$::kohalogdir"; 
+    my $result = mkdir 0770, "$::kohalogdir";
     if ($result==0) {
         my @dirs = split(m#/#, $::kohalogdir);
 	my $checkdir='';
@@ -381,8 +390,8 @@ chown(0, (getpwnam($httpduser)) [3], "$::intranetdir/scripts/z3950daemon/z3950-d
 chown(0, (getpwnam($httpduser)) [3], "$::intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $::intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 
-open (KC, "/etc/koha.conf");
-my $kccontents='';
+
+my $kccontents='';open (KC, "/etc/koha.conf");
 my $kc;
 while (<KC>) {
     if (/^\s*includes\s*=/) {
@@ -454,9 +463,6 @@ using basic authentication on your intranet, you will be required to log in to
 access some of the features of the intranet.  You can log in using the userid
 and password from the /etc/koha.conf configuration file at any time.  Use the
 "Members" module to add passwords for other accounts and set their permissions.
-
-[NOTE PERMISSIONS ARE NOT COMPLETED AS OF 1.2.3RC1.  Do not give passwords to
- any patrons unless you want them to have full access to your intranet.]
 |;
 print "Press the <ENTER> key to continue: ";
 <STDIN>;
@@ -468,7 +474,8 @@ print qq|
 ==========================
 = Koha Upgrade Completed =
 ==========================
-The Koha Upgrade is finished.  If you are upgrading from a version of Koha
+The Koha Upgrade is finished.
+If you are upgrading from a version of Koha
 prior to 1.2.1, it is likely that you will have to modify your Apache
 configuration to point it to the new files.
 

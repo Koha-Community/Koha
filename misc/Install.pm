@@ -1771,7 +1771,7 @@ the file is silently ignored.
 sub loadconfigfile {
     my %configfile;
 
-    open (KC, "<$etcdir/koha.conf");
+    open (KC, "</etc/koha.conf");
     while (<KC>) {
      chomp;
      (next) if (/^\s*#/);
@@ -1787,14 +1787,14 @@ sub loadconfigfile {
      }
     }
 
-    $intranetdir=$configfile{'intranetdir'};
-    $opacdir=$configfile{'opacdir'};
-    $kohaversion=$configfile{'kohaversion'};
-    $kohalogdir=$configfile{'kohalogdir'};
-    $database=$configfile{'database'};
-    $hostname=$configfile{'hostname'};
-    $user=$configfile{'user'};
-    $pass=$configfile{'pass'};
+    $::intranetdir=$configfile{'intranetdir'};
+    $::opacdir=$configfile{'opacdir'};
+    $::kohaversion=$configfile{'kohaversion'};
+    $::kohalogdir=$configfile{'kohalogdir'};
+    $::database=$configfile{'database'};
+    $::hostname=$configfile{'hostname'};
+    $::user=$configfile{'user'};
+    $::pass=$configfile{'pass'};
 }
 
 END { }       # module clean-up code here (global destructor)
