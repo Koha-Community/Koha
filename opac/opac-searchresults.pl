@@ -103,10 +103,8 @@ $template->param(numrecords => $count);
 my $nextstartfrom=($startfrom+$num<$count) ? ($startfrom+$num) : (-1);
 my $prevstartfrom=($startfrom-$num>=0) ? ($startfrom-$num) : (-1);
 $template->param(nextstartfrom => $nextstartfrom);
-my $displaynext=1;
-my $displayprev=0;
-($nextstartfrom==-1) ? ($displaynext=0) : ($displaynext=1);
-($prevstartfrom==-1) ? ($displayprev=0) : ($displayprev=1);
+my $displaynext=($nextstartfrom==-1) ? 0 : 1;
+my $displayprev=($prevstartfrom==-1) ? 0 : 1;
 $template->param(displaynext => $displaynext);
 $template->param(displayprev => $displayprev);
 $template->param(prevstartfrom => $prevstartfrom);
@@ -128,4 +126,3 @@ if ($count>10) {
 $template->param(numbers => $numbers);
 
 output_html_with_http_headers $query, $cookie, $template->output;
-

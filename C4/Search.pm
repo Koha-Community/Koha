@@ -200,21 +200,16 @@ sub catalogsearch {
 	#  }
 	my ($count,@results);
 	#  print STDERR "Doing a search \n";
-	# FIXME - Use "elsif" to avoid this sort of deep nesting
 	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
 		print STDERR "Doing a precise search\n";
 		($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+	} elsif ($search->{'subject'} ne ''){
+		($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
+	} elsif ($search->{'keyword'} ne ''){
+		($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
 	} else {
-		if ($search->{'subject'} ne ''){
-			($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
-		} else {
-			if ($search->{'keyword'} ne ''){
-				($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
-			} else {
-				($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
+		($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
 
-			}
-		}
 	}
 	if ($env->{itemcount} eq '1') {
 		foreach my $data (@results){
@@ -863,12 +858,9 @@ sub CatSearch  {
 	my $dbh = C4::Context->dbh;
 	my $query = '';
 	my @results;
-	# FIXME - Why not just
-	#	$search->{'title'} = quotemeta($search->{'title'})
-	# to escape all questionable characters, not just single-quotes?
-	$search->{'title'}=~ s/'/\\'/g;
-	$search->{'author'}=~ s/'/\\'/g;
-	$search->{'illustrator'}=~ s/'/\\'/g;
+	for my $field ('title', 'author', 'illustrator') {
+	    $search->{$field} = quotemeta($search->{$field});
+	}
 	my $title = lc($search->{'title'});
 	if ($type eq 'loose') {
 		if ($search->{'author'} ne ''){
@@ -1028,9 +1020,7 @@ sub CatSearch  {
 		# "New Zealand", "SF" a synonym for both "Science fiction" and
 		# "Fantastic fiction", etc.
 
-		# FIXME - This can be rewritten as
-		#	if (lc($search->{"subject"}) eq "nz") {
-		if ($search->{'subject'} eq 'NZ' || $search->{'subject'} eq 'nz'){
+		if (lc($search->{'subject'}) eq 'nz'){
 			$query.= " or (subject like 'NEW ZEALAND %' or subject like '% NEW ZEALAND %'
 			or subject like '% NEW ZEALAND' or subject like '%(NEW ZEALAND)%' ) ";
 		} elsif ( $search->{'subject'} =~ /^nz /i || $search->{'subject'} =~ / nz /i || $search->{'subject'} =~ / nz$/i){
