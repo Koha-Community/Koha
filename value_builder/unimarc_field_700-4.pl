@@ -43,33 +43,28 @@ This plug-in deals with unimarc field 700-4 (
 
 =cut
 
-sub plugin_parameters {
-my ($dbh,$record,$tagslib,$morethan,$begin_tabloop) = @_;
-my $index2; # the resulting index
-my $i;		# counter
-# loop to find 700$a subfield. We look for the 1st after $i
-for (my $tabloop = $begin_tabloop; $tabloop<=9;$tabloop++) {
-	my @loop_data =();
-	foreach my $tag (keys %{$tagslib}) {
-# loop through each subfield
-		foreach my $subfield (keys %{$tagslib->{$tag}}) {
-			next if ($subfield eq 'lib'); # skip lib and tabs, which are koha internal
-			next if ($subfield eq 'tab');
-			next if ($tagslib->{$tag}->{$subfield}->{tab}  ne $tabloop);
-			if ($tag eq '700' && $subfield eq 'a' && $i>$morethan) {
-				$index2 = $i;
-			}
-			$i++;
-		}
-	}
-}
-#	my $index2=6;
-	return "&index2=$index2";
+sub plugin_javascript {
+my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+my $function_name= "7004".(int(rand(100000))+1);
+my $res  = "
+<script>
+function Focus$function_name(index) {
+	return 1;
 }
 
-sub plugin_javascript {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return ("","");
+function Blur$function_name(subfield_managed) {
+	return 1;
+}
+
+function Clic$function_name(subfield_managed) {
+	defaultvalue=document.forms[0].field_value[1].value;
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_700-4.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value builder\",'width=500,height=400,toolbar=false,scrollbars=yes');
+
+}
+</script>
+";
+
+return ($function_name,$res);
 }
 
 sub plugin {

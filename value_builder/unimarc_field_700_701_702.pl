@@ -28,12 +28,8 @@ use C4::Search;
 use C4::Output;
 use C4::Authorities;
 
-sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
-}
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= "100".(int(rand(100000))+1);
 my $res="
 <script>
