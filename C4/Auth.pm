@@ -320,26 +320,33 @@ sub checkauth {
 
 sub checkpw {
 
-# This should be modified to allow a select of authentication schemes (ie LDAP)
-# as well as local authentication through the borrowers tables passwd field
+# This should be modified to allow a selection of authentication schemes
+# (e.g. LDAP), as well as local authentication through the borrowers
+# tables passwd field
 #
 
     my ($dbh, $userid, $password) = @_;
-    my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
-    $sth->execute($userid);
-    if ($sth->rows) {
+    {
+      my $sth=$dbh->prepare
+	  ("select password,cardnumber from borrowers where userid=?");
+      $sth->execute($userid);
+      if ($sth->rows) {
 	my ($md5password,$cardnumber) = $sth->fetchrow;
 	if (md5_base64($password) eq $md5password) {
 	    return 1,$cardnumber;
 	}
+      }
     }
-    my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
-    $sth->execute($userid);
-    if ($sth->rows) {
+    {
+      my $sth=$dbh->prepare
+	  ("select password from borrowers where cardnumber=?");
+      $sth->execute($userid);
+      if ($sth->rows) {
 	my ($md5password) = $sth->fetchrow;
 	if (md5_base64($password) eq $md5password) {
 	    return 1,$userid;
 	}
+      }
     }
     if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
         # Koha superuser account
@@ -389,17 +396,14 @@ sub haspermission {
 sub getborrowernumber {
     my ($userid) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select borrowernumber from borrowers where userid=?");
-    $sth->execute($userid);
-    if ($sth->rows) {
+    for my $field ('userid', 'cardnumber') {
+      my $sth=$dbh->prepare
+	  ("select borrowernumber from borrowers where $field=?");
+      $sth->execute($userid);
+      if ($sth->rows) {
 	my ($bnumber) = $sth->fetchrow;
 	return $bnumber;
-    }
-    my $sth=$dbh->prepare("select borrowernumber from borrowers where cardnumber=?");
-    $sth->execute($userid);
-    if ($sth->rows) {
-	my ($bnumber) = $sth->fetchrow;
-	return $bnumber;
+      }
     }
     return 0;
 }
