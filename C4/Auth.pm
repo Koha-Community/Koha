@@ -359,9 +359,9 @@ sub checkpw {
 	if ($ldapserver) {
 		my $ldapinfos = C4::Context->preferences('ldapinfos');
 		my %bindargs;
-		my $nom  = "uid=$userid, $ldapinfos";
+		my $name  = "uid=$userid, $ldapinfos";
 		my $db = Net::LDAP->new( $ldapserver );
-		$bindargs{dn}=$nom;
+		$bindargs{dn}=$name;
 		$bindargs{password}=$password;
 		my $res =$db->bind(%bindargs);
 		if($res->code) {
@@ -375,6 +375,36 @@ sub checkpw {
 				my $cardnumber = $sth->fetchrow;
 				#we have the cardnumber
 				return 1,$cardnumber;
+			} else {
+				# retrieve the LDAP informations & create the user
+				my $borrower = $db->search(base => %bindargs,
+							filter => "(sn=$userid)",
+							);
+				 my $href = $borrower->as_struct;
+				# get an array of the DN names
+				my @arrayOfDNs  = keys %$href;        # use DN hashes
+				# process each DN using it as a key
+				my %borrower;
+				foreach ( @arrayOfDNs ) {
+					print $_, "\n";
+					my $valref = $$href{$_};
+					# get an array of the attribute names
+					# passed for this one DN.
+					my @arrayOfAttrs = sort keys %$valref; #use Attr hashes
+					my $attrName;        
+					foreach $attrName (@arrayOfAttrs) {
+						# skip any binary data: yuck!
+						next if ( $attrName =~ /;binary$/ );
+						# get the attribute value (pointer) using the
+						# attribute name as the hash
+						my $attrVal =  @$valref{$attrName};
+						print "\t $attrName: @$attrVal \n";
+						$borrower{$attrName}= @$attrVal;
+					}
+				}
+				# create the user in Koha DB
+				newmember(%borrower);
+				
 			}
 			if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
 				# Koha superuser account
