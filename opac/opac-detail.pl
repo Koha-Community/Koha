@@ -49,7 +49,7 @@ $template->param(norequests => $norequests);
   ## get notes and subjects from MARC record
 my $marc = C4::Context->preference("marc");
 if ($marc eq "yes") {
-        my $dbh = C4::Context->dbh;
+	my $dbh = C4::Context->dbh;
 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 	my $marcflavour = C4::Context->preference("marcflavour");
 	my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);

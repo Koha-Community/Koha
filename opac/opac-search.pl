@@ -11,7 +11,7 @@ use HTML::Template;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Biblio;
-use C4::Search;
+# use C4::Search;
 
 my $classlist='';
 
@@ -48,7 +48,7 @@ if ($op eq "do_search") {
 
 	foreach my $marc (@marclist) {
 		if ($marc) {
-			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
+			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc,'');
 			if ($tag) {
 				push @tags,$dbh->quote("$tag$subfield");
 			} else {

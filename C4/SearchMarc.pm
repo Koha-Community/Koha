@@ -464,7 +464,6 @@ sub getMARCsubjects {
 		$mintag = "600";
 		$maxtag = "619";
 	}
-
 	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder");
 
 	$sth->execute($bibid,$mintag,$maxtag);
@@ -478,7 +477,7 @@ sub getMARCsubjects {
 		my $value = $data->[0];
 		my $subfield = $data->[1];
 		if ($subfield eq "a" && $value ne $subjct) {
-		        $marcsubjct = {MARCSUBJCTS => $value,};
+		        $marcsubjct = {MARCSUBJCT => $value,};
 			push @marcsubjcts, $marcsubjct;
 			$subjct = $value;
 		}

@@ -62,6 +62,34 @@
 			</td>
 		</tr>
 	</table>
+	<table>
+	<!-- TMPL_IF name="MARCNOTES" -->
+		<tr>
+			<th><i>Detailed notes:</i></th>
+			<td>
+				<ul>
+					<!-- TMPL_LOOP NAME="MARCNOTES" -->
+						<i>- <!-- TMPL_VAR NAME="marcnote" --></i><br>
+					<!-- /TMPL_LOOP -->
+				</ul>
+			</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="MARCSUBJCTS" -->
+		<tr>
+			<th>Related links:</th>
+			<td>
+				<ul>
+					<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+						- <a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="marcsubjct" ESCAPE="URL"-->">
+							<!-- TMPL_VAR NAME="marcsubjct" -->
+						</a><br>
+					<!-- /TMPL_LOOP -->
+				</ul>
+			</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	</table>
 	</div>
 	<!-- /TMPL_LOOP -->
 
