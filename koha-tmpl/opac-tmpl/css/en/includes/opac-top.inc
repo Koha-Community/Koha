@@ -3,7 +3,11 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
 	<title><!--TMPL_VAR name="LibraryName"--></title>
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script language="JavaScript" type="text/javascript">
@@ -19,7 +23,7 @@
 	var MSG_NO_RECORD_SELECTED = _("No biblio selected");
 	var MSG_NO_RECORD_ADDED = _("No biblio added");
 	function Dopop(link) {
-		newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+		newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 	}
 	</script>
 </head>
