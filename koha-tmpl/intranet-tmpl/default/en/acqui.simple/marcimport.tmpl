@@ -3,7 +3,7 @@
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Import into the breeding farm</font></td>
+	<td><font size="4">Import into the reservoir</font></td>
 	</tr>
 </table>
 
@@ -19,8 +19,8 @@
 </ul>
 <!-- TMPL_ELSE -->
 <ul>
-	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
-	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
+	<li>Select a file to import into the reservoir. It will be parsed, and for each ISBN found, a new baby will be created in the reservoir.</li>
+	<li>If an ISBN already exists in the reservoir, you can choose whether to ignore the new one or overwrite the old one.</li>
 	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
 	<li>Of course, if the ISBN already exists in the active DB, the biblio will be ignored.</li>
 </ul>
@@ -45,7 +45,7 @@
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>If ISBN already in breeding farm: </td>
+		<td>If ISBN is already in the reservoir: </td>
 		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignore this one, keep the existing one<br/>
 			<input type="radio" name="overwrite_biblio" value="1">Overwrite the existing one with this</td>
 	</tr>
