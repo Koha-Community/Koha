@@ -246,7 +246,7 @@ if ($op eq 'add_form') {
 		}
 	} else {
 		unless (C4::Context->config('demo') eq 1) {
-			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?)");
+			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
 			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
 			$sth->finish;
 		}

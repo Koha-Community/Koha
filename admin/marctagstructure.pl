@@ -286,9 +286,9 @@ sub duplicate_framework {
 		$sth_insert->execute($tagfield,$liblibrarian,$libopac,$repeatable,$mandatory,$authorised_value,$newframeworkcode);
 	}
 
-	$sth = $dbh->prepare("select frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder,seealso from marc_subfield_structure where frameworkcode=?");
+	$sth = $dbh->prepare("select frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,authtypecode,value_builder,seealso from marc_subfield_structure where frameworkcode=?");
 	$sth->execute($oldframeworkcode);
-	$sth_insert = $dbh->prepare("insert into marc_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	$sth_insert = $dbh->prepare("insert into marc_subfield_structure (frameworkcode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,authtypecode,value_builder,seealso) values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	while ( my ($frameworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso) = $sth->fetchrow) {
 		$sth_insert->execute($newframeworkcode, $tagfield, $tagsubfield, $liblibrarian, $libopac, $repeatable, $mandatory, $kohafield, $tab, $authorised_value, $thesaurus_category, $value_builder, $seealso);
 	}
