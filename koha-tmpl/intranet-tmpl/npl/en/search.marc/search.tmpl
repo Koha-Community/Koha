@@ -14,36 +14,36 @@
 <table>
 <caption>Quick Search</caption>
 					<tr>
-			<th><label for="keyword">Any word</label></th>
+			<th><label for="keyword_main">Any <span class="accesskey" title="Access Key w">w</span>ord</label></th>
 			<td><input type="hidden" name="marclist" value="" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="keyword" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="keyword_main" name="value" onchange="sql_update()" size="35" accesskey="w" /></td>
 		</tr>
 		<tr>
-			<th><label for="title">Title</label></th>
+			<th><label for="title"><span class="accesskey" title="Access Key t">T</span>itle</label></th>
 			<td><input type="hidden" name="marclist" value="biblio.title" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="title" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="title" name="value" onchange="sql_update()" size="35" accesskey="t" /></td>
 		</tr>
 		<tr>
-			<th><label for="author">Author</label></th>
+			<th><label for="author"><span class="accesskey" title="Access Key a">A</span>uthor</label></th>
 			<td><input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="author" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="author" name="value" onchange="sql_update()" size="35" accesskey="a" /></td>
 		</tr>
 		<tr>
-			<th><label for="subject">Subject</label></th>
+			<th><label for="subject"><span class="accesskey" title="Access Key s">S</span>ubject</label></th>
 			<td><input type="hidden" name="marclist" value="bibliosubject.subject" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" /></td>
+			<input type="text" id="subject" name="value" onchange="sql_update()" size="35" accesskey="s" /></td>
 		</tr>
 		<tr>
 			<th><label for="itemtype">Item Type</label></th>
@@ -62,36 +62,36 @@
 				<!-- TMPL_VAR name="CGIbranch" --></td>
 		</tr>
 		<tr>
-				<th><label for="barcode">Item barcode</label></th>
+				<th><label for="barcode">Item <span class="accesskey" title="Access Key b">b</span>arcode</label></th>
 				<td><input type="hidden" name="marclist" value="items.barcode" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="contains" />
-				<input type="text" id="barcode" name="value" onchange="sql_update()" size="14" maxlength="14" /></td> 
+				<input type="text" id="barcode" name="value" onchange="sql_update()" size="14" maxlength="14" accesskey="b" /></td> 
 		</tr>
 		<tr>
-			<th><label for="callno">Call Number</label></th>
+			<th><label for="callno"><span class="accesskey" title="Access Key c">C</span>all Number</label></th>
 			<td><input type="hidden" name="marclist" value="items.itemcallnumber" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="callno" name="value" onchange="sql_update()" /></td>
+			<input type="text" id="callno" name="value" onchange="sql_update()" size="35"  accesskey="c" /></td>
 		</tr>
 		<tr>
-			<th><label for="isbn">ISBN</label></th>
+			<th><label for="isbn">ISB<span class="accesskey" title="Access Key n">N</span></label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.isbn" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<input type="text" id="isbn" name="value" onchange="sql_update()" /></td>
+			<input type="text" id="isbn" name="value" onchange="sql_update()" size="35"  accesskey="n" /></td>
 		</tr>
 		<tr>
-			<th><label for="publisher">Publisher</label></th>
+			<th><label for="publisher"><span class="accesskey" title="Access Key p">P</span>ublisher</label></th>
 			<td><input type="hidden" name="marclist" value="biblioitems.publishercode" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" id="publisher" name="value" onchange="sql_update()" /></td>
+			<input type="text" id="publisher" name="value" onchange="sql_update()" size="35"  accesskey="p" /></td>
 		</tr>
 		</table>
 
