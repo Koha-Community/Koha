@@ -232,8 +232,9 @@ sub text_extract (*) {
 	    }
 	}
     }
+    # Emit all extracted strings. Don't emit pure whitespace or pure numbers.
     for my $t (keys %text) {
-	printf "%s\n", $t unless $t =~ /^(?:\s|\&nbsp;)*$/s;
+	printf "%s\n", $t unless $t =~ /^(?:\s|\&nbsp;)*$/s || $t =~ /^\d+$/;
     }
 }
 
