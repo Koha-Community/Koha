@@ -30,6 +30,7 @@ while ( my ($key, $value) = each %data) {
      #means we want to renew this item
      #check its status
      my $status=renewstatus(\%env,$bornum,$key);
+#     print $status;
      if ($status == 1){
        renewbook(\%env,$bornum,$key);
      }
