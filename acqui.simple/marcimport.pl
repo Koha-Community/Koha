@@ -36,7 +36,7 @@ use DBI;
 # Koha modules used
 use C4::Context;
 #use C4::Database;
-use C4::Acquisitions;
+#use C4::Acquisitions;
 use C4::Output;
 use C4::Input;
 use C4::Biblio;
@@ -117,6 +117,9 @@ if ($uploadmarc && length($uploadmarc)>0) {
 						($breedingresult) = $searchbreeding->fetchrow;
 					}
 					if (!$breedingresult || $overwrite_biblio) {
+						if ($oldbiblio->{isbn} eq '0025003402') {
+							warn "IMPORT => $marcarray[$i]\x1D')";
+						}
 						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$marcarray[$i]."\x1D')");
 						$imported++;
 					} else {
@@ -793,6 +796,16 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.21  2002/10/22 15:50:23  tipaul
+# road to 1.3.2 : adding a biblio in MARC format.
+# seems to work a few.
+# still to do :
+# * manage html checks (mandatory subfields...)
+# * add list of acceptable values (authorities)
+# * manage ## in MARC format
+# * manage correctly repeatable fields
+# and probably a LOT of bugfixes
+#
 # Revision 1.20  2002/10/16 12:46:19  arensb
 # Added a FIXME comment.
 #
