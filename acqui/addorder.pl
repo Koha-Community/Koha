@@ -47,7 +47,9 @@ if ($quantity ne '0'){
     $bibitemnum = &newbiblioitem({ biblionumber => $bibnum,
  	                           itemtype     => $itemtype?$itemtype:"",
 	                           isben        => $isbn?$isbn:"" });
-    newsubtitle($bibnum);
+	if ($title) {
+    		newsubtitle($bibnum,$title);
+	}
     modbiblio({ biblionumber  => $bibnum,
 	        title         => $title?$title:"",
 	        author        => $author?$author:"",
@@ -58,10 +60,9 @@ if ($quantity ne '0'){
     $bibitemnum=$input->param('bibitemnum');
     my $oldtype=$input->param('oldtype');
     if ($bibitemnum eq '' || $itemtype ne $oldtype){
-      $bibitemnum = &newbiblioitem({
-	  biblionumber => $bibnum,
-	  itemtype     => $itemtype?$itemtype:"",
-	  isbn         => $isbn?$isbn:"" });
+      $bibitemnum= &newbiblioitem({ biblionumber => $bibnum,
+	 						 itemtype => $itemtype?$itemtype:"",
+							 isben => $isbn?$isbn:"" });
     }
     &modbiblio({
         biblionumber  => $bibnum,
