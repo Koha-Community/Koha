@@ -158,6 +158,7 @@ foreach my $field (@fields) {
 # loop through each subfield
 	for my $i (0..$#subf) {
 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
+		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
 		$this_row{$subf[$i][0]} =$subf[$i][1];
 	}
