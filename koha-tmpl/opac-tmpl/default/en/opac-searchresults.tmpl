@@ -65,7 +65,7 @@
 
     <table border=0 cellspacing=0 cellpadding=2 width=90%>
     <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-	    <th align=left>Title</th><th align=left>Author</th><th>&copy;</th><th>Item Count</th><th>Location</th>
+	    <th align=left>Title</th><th align=left>Author</th><th>&copy;</th><th>Item Count</th><th>Location</th><th>&nbsp</th>
     </tr>
 
 
@@ -79,6 +79,12 @@
       <td align=center> <TMPL_VAR NAME="copyrightdate"> </td>
       <td align=center> <TMPL_VAR NAME="itemcount"> </td>
       <td> <TMPL_VAR NAME="location"> </td>
+      <td>
+<TMPL_UNLESS NAME="norequests"><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Request</a>
+<TMPL_ELSE>
+Not Reservable
+</TMPL_UNLESS>
+</td> 
       </tr>
     </TMPL_LOOP>
 
