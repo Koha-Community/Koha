@@ -30,7 +30,7 @@ a.parameters:hover {
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr height="65">
 	<td valign="bottom" align="left">
-		<table bgcolor="dddddd" width="100%" cellpadding=0 cellspacing=0>
+		<table width="100%" cellpadding=0 cellspacing=0 height=60>
 		<tr>
 			<td>
 			<div id="menubar">
@@ -64,8 +64,7 @@ a.parameters:hover {
 				</TR>
 			</TABLE>
 			</div>
-			<div id="submenu" style="border-left:0px;">
-			<table cellpadding=0 cellspacing=0  border=0 height=20>
+			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr>
 					<td width="100"></td>
 					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
@@ -73,28 +72,19 @@ a.parameters:hover {
 						<a href="/cgi-bin/koha/admin/aqbookfund.pl" class="submenu">Funds</a>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu">Auth value</a>
-						</div>
+						<a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu2">Auth value</a>
 					</td>
 					<td>
-						<div id="submenu">
 						<a href="/cgi-bin/koha/admin/thesaurus.pl" class="submenu">Thesaurus</a>
-						</div>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/admin/currency.pl" class="submenu">Currencies</a>
-						</div>
+						<a href="/cgi-bin/koha/admin/currency.pl" class="submenu2">Currencies</a>
 					</td>
 					<td>
-						<div id="submenu">
 						<a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Printers</a>
-						</div>
 					</td>
 				</tr>
 			</table>
-			</div>
 		</td></tr></table>
 	</TD>
 </tr>

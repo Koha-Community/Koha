@@ -30,7 +30,7 @@ a.members:hover {
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr height="65">
 	<td valign="bottom" align="left">
-		<table bgcolor="dddddd" width="100%" cellpadding=0 cellspacing=0>
+		<table width="100%" cellpadding=0 cellspacing=0>
 		<tr>
 			<td>
 			<div id="menubar">
@@ -64,8 +64,7 @@ a.members:hover {
 				</TR>
 			</TABLE>
 			</div>
-			<div id="submenu" style="border-left:0px;">
-			<table cellpadding=0 cellspacing=0  border=0 height=20>
+			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr>
 					<td width="100"></td>
 					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
@@ -73,18 +72,13 @@ a.members:hover {
 						<a href="/cgi-bin/koha/members-home.pl" class="submenu">Member home</a>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=adult" class="submenu">Add member</a>
-						</div>
+						<a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=adult" class="submenu2">Add member</a>
 					</td>
 					<td>
-						<div id="submenu">
 						<a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=organisation" class="submenu">Add organisation</a>
-						</div>
 					</td>
 				</tr>
 			</table>
-			</div>
 		</td></tr></table>
 	</TD>
 </tr>

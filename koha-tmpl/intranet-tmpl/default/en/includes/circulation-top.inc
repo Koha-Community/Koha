@@ -39,7 +39,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr height="65">
 	<td valign="bottom" align="left">
-		<table bgcolor="dddddd" width="100%" cellpadding=0 cellspacing=0>
+		<table width="100%" cellpadding=0 cellspacing=0>
 		<tr>
 			<td>
 			<div id="menubar">
@@ -73,8 +73,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 				</TR>
 			</TABLE>
 			</div>
-			<div id="submenu" style="border-left:0px;">
-			<table cellpadding=0 cellspacing=0  border=0 height=20>
+			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr>
 					<td width="100"></td>
 					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
@@ -82,14 +81,10 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu">Issues</a>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/circ/returns.pl" class="submenu">Returns</a>
-						</div>
+						<a href="/cgi-bin/koha/circ/returns.pl" class="submenu2">Returns</a>
 					</td>
 					<td>
-						<div id="submenu">
 						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Branch transfers</a>
-						</div>
 					</td>
 				</tr>
 			</table>

@@ -44,7 +44,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr height="65">
 	<td valign="bottom" align="left">
-		<table width="100%" cellpadding=0 cellspacing=0>
+		<table width="100%" cellpadding=0 cellspacing=0 height=60>
 		<tr>
 			<td>
 			<div id="menubar">
@@ -78,8 +78,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 				</TR>
 			</TABLE>
 			</div>
-			<div id="submenu" style="border-left:0px;">
-			<table cellpadding=0 cellspacing=0  border=0 height=20>
+			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr>
 					<td width="100"></td>
 					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
@@ -87,23 +86,16 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Quick search</a>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu">MARC search</a>
-						</div>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">MARC search</a>
 					</td>
 					<td>
-						<div id="submenu">
 						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu">Add biblio</a>
-						</div>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Cat maintenance</a>
-						</div>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu2">Cat maintenance</a>
 					</td>
 				</tr>
 			</table>
-			</div>
 		</td></tr></table>
 	</TD>
 </tr>
