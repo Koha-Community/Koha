@@ -2033,7 +2033,7 @@ sub newbiblio {
     # finds new (MARC bibid
     # 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
     my $record = &MARCkoha2marcBiblio( $dbh, $bibnum );
-    MARCaddbiblio( $dbh, $record, $bibnum );
+    MARCaddbiblio( $dbh, $record, $bibnum,'' );
     return ($bibnum);
 }
 
@@ -2589,6 +2589,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.97  2004/07/02 15:53:53  tipaul
+# bugfix (due to frameworkcode field)
+#
 # Revision 1.96  2004/06/29 16:07:10  tipaul
 # last sync for 2.1.0 release
 #
