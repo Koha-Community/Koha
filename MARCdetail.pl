@@ -32,7 +32,7 @@ my $query=new CGI;
 
 my $dbh=C4::Context->dbh;
 
-my $biblionumber=$query->param('biblionumber');
+my $biblionumber=$query->param('bib');
 my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 
 my $tagslib = &MARCgettagslib($dbh,1);
@@ -59,12 +59,12 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
 			$subfield_data{marc_value}=$subf[$i][1];
-			$subfield_data{marc_tag}=$field->tag().$subf[$i][0];
+			$subfield_data{marc_tag}=$subf[$i][0];
 			push(@subfields_data, \%subfield_data);
 		}
 		if ($#subfields_data>=0) {
 			my %tag_data;
-			$tag_data{tag}=$field->tag().' '. $tagslib->{$field->tag()}->{lib};
+			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
 			$tag_data{subfield} = \@subfields_data;
 			push (@loop_data, \%tag_data);
 		}
