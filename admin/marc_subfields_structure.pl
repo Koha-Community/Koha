@@ -1,0 +1,247 @@
+#!/usr/bin/perl
+
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use strict;
+use C4::Output;
+use CGI;
+use C4::Search;
+use C4::Context;
+use HTML::Template;
+
+sub StringSearch  {
+	my ($env,$searchstring,$type)=@_;
+	my $dbh = C4::Context->dbh;
+	$searchstring=~ s/\'/\\\'/g;
+	my @data=split(' ',$searchstring);
+	my $count=@data;
+	my $query="Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab from marc_subfield_structure where (tagfield like \"$searchstring%\") order by tagfield";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my @results;
+	my $cnt=0;
+	while (my $data=$sth->fetchrow_hashref){
+	push(@results,$data);
+	$cnt ++;
+	}
+	#  $sth->execute;
+	$sth->finish;
+	$dbh->disconnect;
+	return ($cnt,\@results);
+}
+
+my $input = new CGI;
+my $tagfield=$input->param('tagfield');
+my $tagsubfield=$input->param('tagsubfield');
+my $pkfield="tagfield";
+my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab from marc_subfield_structure where tagfield='$tagfield'";
+my $reqdel="delete from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
+my $offset=$input->param('offset');
+my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
+
+my $template = gettemplate("parameters/marc_subfields_structure.tmpl",0);
+my $pagesize=30;
+my $op = $input->param('op');
+$tagfield=~ s/\,//g;
+
+if ($op) {
+$template->param(script_name => $script_name,
+						tagfield =>$tagfield,
+						$op              => 1); # we show only the TMPL_VAR names $op
+} else {
+$template->param(script_name => $script_name,
+						tagfield =>$tagfield,
+						else              => 1); # we show only the TMPL_VAR names $op
+}
+
+################## ADD_FORM ##################################
+# called by default. Used to create form to add or  modify a record
+if ($op eq 'add_form') {
+	my $data;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
+	$sth->execute;
+	# builds kohafield tables
+	my @kohafields;
+	push @kohafields, "";
+	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
+	$sth2->execute;
+	while ((my $field) = $sth2->fetchrow_array) {
+		push @kohafields, "biblio.".$field;
+	}
+	my $sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
+	$sth2->execute;
+	while ((my $field) = $sth2->fetchrow_array) {
+		push @kohafields, "biblioitems.".$field;
+	}
+	my $sth2=$dbh->prepare("SHOW COLUMNS from items");
+	$sth2->execute;
+	while ((my $field) = $sth2->fetchrow_array) {
+		push @kohafields, "items.".$field;
+	}
+	$template->param(action => "Edit subfields",
+							tagfield => "<input type=hidden name=tagfield value='$tagfield'>$tagfield",
+							);
+	my @loop_data = ();
+	my $toggle="white";
+	while ($data =$sth->fetchrow_hashref) {
+		my %row_data;  # get a fresh hash for the row data
+		if ($toggle eq 'white'){
+			$toggle="#ffffcc";
+	  	} else {
+			$toggle="white";
+	  	}
+		$row_data{tab} = CGI::scrolling_list(-name=>'tab[]',
+					-values=>['','0','1','2','3','4','5','6','7','8','9','items'],
+					-default=>$data->{'tab'},
+					-size=>1,
+					-multiple=>0,
+					);
+		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield[]' value='".$data->{'tagsubfield'}."'>";
+		$row_data{liblibrarian} = $data->{'liblibrarian'};
+		$row_data{libopac} = $data->{'libopac'};
+		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield[]',
+					-values=> \@kohafields,
+					-default=> "$data->{'kohafield'}",
+					-size=>1,
+					-multiple=>0,
+					);
+#		$row_data{kohafield} = $data->{'kohafield'};
+		$row_data{repeatable} = CGI::checkbox('repeatable[]',$data->{'repeatable'}?'checked':'',1,'');
+		$row_data{mandatory} = CGI::checkbox('mandatory[]',$data->{'mandatory'}?'checked':'',1,'');
+		$row_data{bgcolor} = $toggle;
+		push(@loop_data, \%row_data);
+	}
+	# add an empty line for add if needed
+		my %row_data;  # get a fresh hash for the row data
+		$row_data{tab} = CGI::scrolling_list(-name=>'tab[]',
+					-values=>['','0','1','2','3','4','5','6','7','8','9','items'],
+					-default=>"",
+					-size=>1,
+					-multiple=>0,
+					);
+		$row_data{tagsubfield} = "<input type='text' name='tagsubfield[]' value='".$data->{'tagsubfield'}."' size=3 maxlength=1>";
+		$row_data{liblibrarian} = "";
+		$row_data{libopac} = "";
+		$row_data{repeatable} = CGI::checkbox('repeatable[]','',1,'');
+		$row_data{mandatory} = CGI::checkbox('mandatory[]','',1,'');
+		$row_data{kohafield} = '';
+		$row_data{bgcolor} = $toggle;
+		push(@loop_data, \%row_data);
+
+	$template->param(loop => \@loop_data);
+
+													# END $OP eq ADD_FORM
+################## ADD_VALIDATE ##################################
+# called by add_form, used to insert/modify data in DB
+} elsif ($op eq 'add_validate') {
+	my $dbh = C4::Context->dbh;
+	$template->param(tagfield => "$input->param('tagfield')");
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab)
+									values (?,?,?,?,?,?,?,?)");
+	my @tagsubfield	= $input->param('tagsubfield[]');
+	my @liblibrarian	= $input->param('liblibrarian[]');
+	my @libopac		= $input->param('libopac[]');
+	my @repeatable 	= $input->param('repeatable[]');
+	my @mandatory	= $input->param('mandatory[]');
+	my @kohafield		= $input->param('kohafield[]');
+	my @tab				= $input->param('tab[]');
+	warn "taille : $#tagsubfield";
+	for (my $i=0; $i<= $#tagsubfield ; $i++) {
+		my $tagfield			=$input->param('tagfield');
+		my $tagsubfield		=$tagsubfield[$i];
+		my $liblibrarian		=$liblibrarian[$i];
+		my $libopac			=$libopac[$i];
+		my $repeatable		=$repeatable[$i]?1:0;
+		my $mandatory		=$mandatory[$i]?1:0;
+		my $kohafield		=$kohafield[$i];
+		my $tab				=$tab[$i];
+		if ($tagsubfield) {
+			$sth->execute ($tagfield,
+								$tagsubfield,
+								$liblibrarian,
+								$libopac,
+								$repeatable,
+								$mandatory,
+								$kohafield,
+								$tab);
+		}
+	}
+	$sth->finish;
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl\"></html>";
+	exit;
+
+													# END $OP eq ADD_VALIDATE
+################## DELETE_CONFIRM ##################################
+# called by default form, used to confirm deletion of data in DB
+} elsif ($op eq 'delete_confirm') {
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare($reqsel);
+	$sth->execute;
+	my $data=$sth->fetchrow_hashref;
+	$sth->finish;
+	$template->param(liblibrarian => $data->{'liblibrarian'},
+							tagsubfield => $tagsubfield,
+							);
+													# END $OP eq DELETE_CONFIRM
+################## DELETE_CONFIRMED ##################################
+# called by delete_confirm, used to effectively confirm deletion of data in DB
+} elsif ($op eq 'delete_confirmed') {
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare($reqdel);
+	$sth->execute;
+	$sth->finish;
+													# END $OP eq DELETE_CONFIRMED
+################## DEFAULT ##################################
+} else { # DEFAULT
+	my $env;
+	my ($count,$results)=StringSearch($env,$tagfield,'web');
+	my $toggle="white";
+	my @loop_data = ();
+	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+	  	if ($toggle eq 'white'){
+			$toggle="#ffffcc";
+	  	} else {
+			$toggle="white";
+	  	}
+		my %row_data;  # get a fresh hash for the row data
+		$row_data{tagfield} = $results->[$i]{'tagfield'};
+		$row_data{tagsubfield} = $results->[$i]{'tagsubfield'};
+		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
+		$row_data{kohafield} = $results->[$i]{'kohafield'};
+		$row_data{repeatable} = $results->[$i]{'repeatable'};
+		$row_data{mandatory} = $results->[$i]{'mandatory'};
+		$row_data{tab} = $results->[$i]{'tab'};
+		$row_data{delete} = "$script_name?op=delete_confirm&tagfield=$tagfield&tagsubfield=".$results->[$i]{'tagfield'};
+		$row_data{bgcolor} = $toggle;
+		push(@loop_data, \%row_data);
+	}
+	$template->param(loop => \@loop_data);
+	$template->param(edit => "<a href='$script_name?op=add_form&tagfield=$tagfield'>Edit</a>");
+	if ($offset>0) {
+		my $prevpage = $offset-$pagesize;
+		$template->param(prev =>"<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
+	}
+	if ($offset+$pagesize<$count) {
+		my $nextpage =$offset+$pagesize;
+		$template->param(next => "a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
+	}
+} #---- END $OP eq DEFAULT
+
+print "Content-Type: text/html\n\n", $template->output;

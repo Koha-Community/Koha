@@ -50,7 +50,6 @@ my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $pkfield="tagfield";
 my $reqsel="select tagfield,liblibrarian,libopac,repeatable,mandatory from marc_tag_structure where $pkfield='$searchfield'";
-my $reqdel="delete from marc_tag_structure where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
 
@@ -88,8 +87,8 @@ if ($op eq 'add_form') {
 	}
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							libopac => $data->{'libopac'},
-							repeatable => $data->{'repeatable'},
-							mandatory => $data->{'mandatory'},
+							repeatable => CGI::checkbox('repeatable',$data->{'repeatable'}?'checked':'',1,''),
+							mandatory => CGI::checkbox('mandatory',$data->{'mandatory'}?'checked':'',1,''),
 							);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -105,8 +104,8 @@ if ($op eq 'add_form') {
 	$sth->execute($tagfield,
 						$liblibrarian,
 						$libopac,
-						$repeatable,
-						$mandatory
+						$repeatable?1:0,
+						$mandatory?1:0,
 						);
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
@@ -126,9 +125,8 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
-	$sth->finish;
+	$dbh->do("delete from marc_tag_structure where $pkfield='$searchfield'");
+	$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield'");
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
@@ -148,6 +146,8 @@ if ($op eq 'add_form') {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
 		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
+		$row_data{repeatable} = $results->[$i]{'repeatable'};
+		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'};
 		$row_data{edit} = "$script_name?op=add_form&searchfield=".$results->[$i]{'tagfield'};
 		$row_data{delete} = "$script_name?op=delete_confirm&searchfield=".$results->[$i]{'tagfield'};
