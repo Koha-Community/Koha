@@ -5,11 +5,15 @@
 use strict;
 use C4::Output;
 use C4::Input;
+use C4::Auth;
 use CGI;
 use Date::Manip;
 
 my %env;
 my $input = new CGI;
+my $flagsrequired;
+$flagsrequired->{borrower}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 #get varibale that tells us whether to show confirmation page
 #or insert data
 my $insert=$input->param('insert');

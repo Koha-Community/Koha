@@ -9,8 +9,13 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
+use C4::Auth;
 
 my $input = new CGI;
+
+my $flagsrequired;
+$flagsrequired->{editcatalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 my $bibnum=$input->param('bibnum');
 my $data=bibdata($bibnum);

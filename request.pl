@@ -11,9 +11,14 @@ use C4::Reserves2;
 use C4::Acquisitions;
 use C4::Biblio;
 use C4::Koha;
+use C4::Auth;
 
 use CGI;
 my $input = new CGI;
+my $flagsrequired;
+$flagsrequired->{reserveforothers}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 print $input->header;
 
 

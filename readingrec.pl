@@ -8,7 +8,12 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
+use C4::Auth;
 my $input=new CGI;
+my $flagsrequired;
+$flagsrequired->{borrowers}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 
 
 my $bornum=$input->param('bornum');

@@ -7,9 +7,13 @@ use CGI;
 use C4::Search;
 use C4::Acquisitions;
 use C4::Output; # contains picktemplate
+use C4::Auth;
   
 my $query=new CGI;
 
+my $flagsrequired;
+$flagsrequired->{catalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
 
 my $language='french';
 
@@ -98,5 +102,6 @@ foreach my $item (@items){
 $template->param(includesdir => $includes);
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);
+$template->param(loggedinuser => $loggedinuser);
 print "Content-Type: text/html\n\n", $template->output;
 
