@@ -37,12 +37,18 @@
 		<input type="submit" value="OK" class="button" />
 		</p>
 	</form>
-	<h2>Virtual shelves</h2>
-	<form action="/cgi-bin/koha/opac-shelves.pl">
-		<p>
-		Look <!-- TMPL_VAR name="CGIshelves" --><input type="submit" value="OK" class="button" />
-		</p>
-	</form>
+	<!-- TMPL_IF name="CGIshelves" -->
+		<h2>Virtual shelves</h2>
+		<form action="/cgi-bin/koha/opac-shelves.pl">
+			<p>
+			Look <!-- TMPL_VAR name="CGIshelves" --><input type="submit" value="OK" class="button" />
+			</p>
+		</form>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="suggestion" -->
+		<h2>Suggestions</h2>
+		<a href="opac-suggestions.pl">View & manage suggestions</a>
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="loggedinusername" -->
 		<h2>Logged in as <!-- TMPL_VAR NAME="loggedinusername" --></h2>
 		<p><a href="/cgi-bin/koha/opac-user.pl">Members Home</a> || <a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a></p>

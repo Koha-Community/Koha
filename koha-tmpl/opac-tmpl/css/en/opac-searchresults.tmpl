@@ -35,11 +35,9 @@
 	</div>
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
-	<table cellspacing="0">
+	<table>
 		<tr>
-			<th>Title</th>
-			<th>Author</th>
-			<th>&copy;</th>
+			<th>Summary</th>
 			<th>Item Count</th>
 			<th>Location</th>
 			<th>&nbsp;</th>
@@ -48,13 +46,12 @@
 		<!-- TMPL_LOOP NAME="results" -->
 			<tr>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
-				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<a class="transparent" href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE=URL -->"><!-- TMPL_VAR NAME="author" --></a>
-				</td>
-				<td align="center"<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR NAME="copyrightdate" -->
+					<p>
+						<b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+						- <!-- TMPL_VAR NAME="author" -->
+						/ <!-- TMPL_VAR name="publishercode" -->
+						: <!-- TMPL_VAR name="pages" -->
+					</p>
 				</td>
 				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="totitem" -->
@@ -81,7 +78,7 @@
 					&nbsp;
 				<!-- /TMPL_IF -->
 			</th>
-			<th colspan="3">&nbsp;</th>
+			<th colspan="1">&nbsp;</th>
 			<th colspan="2" align="right">
 				<!-- TMPL_IF NAME="displaynext" -->
 					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next &gt;&gt;&gt;</a>
