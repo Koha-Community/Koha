@@ -42,6 +42,9 @@ use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Search;
+use HTML::Template;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -75,15 +78,25 @@ my $script_name="/cgi-bin/koha/admin/printers.pl";
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
-print $input->header;
+
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "parameters/printers.tmpl",
+                             query => $input,
+                             type => "intranet",
+                             authnotrequired => 0,
+                             debug => 1,
+                             });
+
+
+$template->param(searchfield => $searchfield,
+		 script_name => $script_name);
 
 #start the page and read in includes
-print startpage();
-print startmenu('admin');
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
+	$template->param(add_form => 1);
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
@@ -93,85 +106,14 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	print <<printend
-	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.printername.value.length==0) {
-			_alertString += "- printer name missing\\n";
-		}
-		if (f.printqueue.value.length==0) {
-			_alertString += "- Queue missing\\n";
-		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-	</SCRIPT>
-printend
-;#/
-	if ($searchfield) {
-		print "<h1>Modify printer</h1>";
-	} else {
-		print "<h1>Add printer</h1>";
-	}
-	print "<form action='$script_name' name=Aform method=post>";
-	print "<input type=hidden name=op value='add_validate'>";
-	print "<table>";
-	if ($searchfield) {
-		print "<tr><td>Printer</td><td><input type=hidden name=printername value='$searchfield'>$searchfield</td></tr>";
-	} else {
-		print "<tr><td>Printer</td><td><input type=text name=printername size=50 maxlength=50></td></tr>";
-	}
-	print "<tr><td>Queue</td><td><input type=text name=printqueue size=50 maxlength=50 value='$data->{'printqueue'}'>&nbsp;</td></tr>";
-	print "<tr><td>Type</td><td><input type=text name=printtype size=50 maxlength=50 value='$data->{'printtype'}'>&nbsp;</td></tr>";
-	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
-	print "</table>";
-	print "</form>";
-;
+
+	$template->param(printqueue => $data->{'printqueue'},
+			 printtype => $data->{'printtype'});
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
+	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
 	my $query = "replace printers (printername,printqueue,printtype) values (";
 	$query.= $dbh->quote($input->param('printername')).",";
@@ -180,83 +122,58 @@ printend
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data recorded";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
+	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare($reqsel);
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Printer'),bold("$searchfield"),'/images/background-mem.gif');
-	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='$searchfield'>";
-	print "<tr><td>Queue</td><td>$data->{'printqueue'}</td></tr>";
-	print "<tr><td>Type</td><td>$data->{'printtype'}</td></tr>";
-	print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
-	print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
+	$template->param(printqueue => $data->{'printqueue'},
+			 printtype  => $data->{'printtype'});
+	
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
+	$template->param(delete_confirmed => 1);
+
 	my $dbh = C4::Context->dbh;
-#	my $searchfield=$input->param('branchcode');
 	my $sth=$dbh->prepare($reqdel);
 	$sth->execute;
 	$sth->finish;
-	print "data deleted";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my @inputs=(["text","searchfield",$searchfield],
-		["reset","reset","clr"]);
-	print mkheadr(2,'Printer admin');
-	print mkformnotable("$script_name",@inputs);
-	print <<printend
+	$template->param(else => 1);
 
-printend
-	;
-	if  ($searchfield ne '') {
-		print "You Searched for <b>$searchfield<b><p>";
-	}
-	print mktablehdr;
-	print mktablerow(5,'#99cc33',bold('Name'),bold('Queue'),bold('Type'),
-	'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
+	my @loop;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-	    		$toggle="#ffffcc";
-	  	} else {
-	    		$toggle="white";
-	  	}
-		print mktablerow(5,$toggle,$results->[$i]{'printername'},$results->[$i]{'printqueue'},$results->[$i]{'printtype'},
-		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'printername'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'printername'},'Delete'));
+		my %row = ( printername => $results->[$i]{'printername'},
+			    printqueue  => $results->[$i]{'printqueue'},
+			    printtype   => $results->[$i]{'printtype'});
+		push @loop, \%row;
 	}
-	print mktableft;
-	print "<form action='$script_name' method=post>";
-	print "<input type=hidden name=op value=add_form>";
+	
+	$template->param(loop => \@loop);
+	
 	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		print mklink("$script_name?offset=".$prevpage,'&lt;&lt; Prev');
+		$template->param(offsetgtzero => 1,
+				 prevpage => $offset-$pagesize);
 	}
 	print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		print mklink("$script_name?offset=".$nextpage,'Next &gt;&gt;');
+		$template->param(ltcount => 1,
+				 nextpage => $offset+$pagesize);
 	}
-	print "<br><input type=image src=\"/images/button-add-new.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";
-	print "</form>";
+
 } #---- END $OP eq DEFAULT
-print endmenu('admin');
-print endpage();
+
+output_html_with_http_headers $input, $cookie, $template->output;
+
