@@ -1,0 +1,33 @@
+<TMPL_INCLUDE NAME="reports-top.inc">
+
+<CENTER>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'><b>Nazwa</b></td>
+			<td background='/images/background-mem.gif'><b>Typ</b></td>
+			<td background='/images/background-mem.gif'><b>Data/czas</b></td>
+			<td background='/images/background-mem.gif'><b>Kwota</b></td>
+			<td background='/images/background-mem.gif'><b>Odzia³</b></td>
+		<tr>
+		<TMPL_LOOP name=loop1>
+		<tr>
+			<td><TMPL_VAR NAME=name></td>
+			<td><TMPL_VAR NAME=type></td>
+			<td><TMPL_VAR NAME=time></td>
+			<td><TMPL_VAR NAME=amount></td>
+			<td><TMPL_VAR NAME=branch></td>
+		</tr>
+		</TMPL_LOOP>
+	</table>
+</CENTER>
+
+
+<p>
+	<b>Zap³acono w sumie: <TMPL_VAR NAME=total></b>
+	<br>
+	<b>Odpisano w sumie: <TMPL_VAR NAME=totalw></b>
+</p>
+
+<TMPL_INCLUDE NAME="reports-bottom.inc">
+</BODY>
+</HTML>
