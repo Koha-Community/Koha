@@ -1,132 +1,115 @@
 <!-- TMPL_INCLUDE name="members-top.inc" -->
-<BLOCKQUOTE>
-
+<div id="mainbloc">
 <!-- TMPL_IF name="surname" -->
-	<h1>Edit Institution</h1><br>
+	<h1>Edit Institution</h1>
 <!-- TMPL_ELSE -->
-	<h1>Add new Institution</h1><br>
+	<h1>Add new Institution</h1>
 <!-- /TMPL_IF -->
-<form action=/cgi-bin/koha/members/newimember.pl method=post>
-  <input type=hidden name=joining value="">
-  <input type=hidden name=expiry value="">
-  <input type=hidden name=type value="borrowers">
-  <input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
-  <input type=hidden name=updtype value=I>
+<form action="/cgi-bin/koha/members/newimember.pl" method="post">
+  <input type="hidden" name="joining" value="">
+  <input type="hidden" name="expiry" value="">
+  <input type="hidden" name="type" value="borrowers">
+  <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
+  <input type="hidden" name="updtype" value="I">
 
-  <table border=0 cellspacing=0 cellpadding=5>
+  <table border="0" cellspacing="0" cellpadding="5">
 
-    <tr valign=top>
-      <td ><input type=reset value="Clear all Fields"></td>
+    <tr valign="top">
+      <td colspan="3"><input type="reset" value="Clear all Fields"></td>
     </tr>
 
-    <tr align=right>
-      <td COLSPAN=2 ALIGN=RIGHT><font size=3 face='arial,helvetica'>
-        <STRONG>Member# <!-- TMPL_VAR NAME="member" -->, Card number*</STRONG>
-      </TD>
-      <TD align=right><input type=text name=cardnumber_institution size=20 value=<!-- TMPL_VAR NAME=cardnumber_institution -->><br></td>
-    </TR>
+    <tr align="right">
+      <td colspan="2" align="right">
+        <strong>Member# <!-- TMPL_VAR NAME="member" -->, Card number*</strong>
+      </td>
+      <td align="right"><input type="text" name="cardnumber_institution" size="20" value="<!-- TMPL_VAR NAME=cardnumber_institution -->"></td>
+    </tr>
 
-    <tr><td>&nbsp;</TD></TR>
-
-    <tr valign=top bgcolor="99cc33" >
-      <td  COLSPAN=5 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+    <tr valign="top" bgcolor="#99cc33">
+      <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
         <B>INSTITUTION DETAILS</b>
       </td>
-      <td  COLSPAN=2  ALIGN=RIGHT background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-      </td>
+      <td colspan="2" align="right" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">&nbsp;</td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-      <td><FONT SIZE=2>Institution Name</FONT></td>
+    <tr>
+      <td colspan="3">Institution Name</td>
     </tr>
-    <tr valign=top bgcolor=white>
-      <td colspan=3><input type=text name=institution_name size=50 value="<!-- TMPL_VAR name="surname" -->"></td>
+    <tr>
+      <td colspan="3"><input type="text" name="institution_name" size="50" value="<!-- TMPL_VAR name="surname" -->"></td>
     </tr>
-    <tr><td>&nbsp;</TD></TR>
 
-    <tr valign=top bgcolor="99cc33" >
-      <td  COLSPAN=5 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+    <tr valign="top" bgcolor="99cc33" >
+      <td  colspan="3" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 	  <B>INSTITUTION ADDRESS</b>
       </td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-	<td ><FONT SIZE=2>Postal Address*</FONT></td>
-	<td><FONT SIZE=2>Zipcode / Town*</FONT></td>
-	<td><FONT SIZE=2>Area</FONT></td>
+    <tr>
+	<td >Postal Address*</td>
+	<td>Zipcode / Town*</td>
+	<td>Area</td>
     </tr>
-    <tr valign=top bgcolor=white>
-	<td><input type=text name=address size=40 value="<!-- TMPL_VAR name="streetaddress" -->"></td>
-	<td><input type=text name=zipcode size=20 value="<!-- TMPL_VAR name="zipcode" -->"> <br/><input type=text name=city size=20 value="<!-- TMPL_VAR name="city" -->"></td>
+    <tr>
+	<td><input type="text" name="address" size="40" value="<!-- TMPL_VAR name="streetaddress" -->"></td>
+	<td><input type="text" name="zipcode" size="20" value="<!-- TMPL_VAR name="zipcode" -->"> <br> <input type="text" name="city" size="20" value="<!-- TMPL_VAR name="city" -->"></td>
 	<td>
       	<!-- TMPL_VAR name="CGIbranch" -->
 	 </td>
     </tr>
-    <tr><td>&nbsp;</TD></TR>
 
-    <tr valign=top bgcolor="99cc33">
-      <td COLSPAN=5 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+    <tr valign="top" bgcolor="#99cc33">
+      <td colspan="3" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 	  <B>CONTACT DETAILS</b>
       </td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-	<td COLSPAN=3><FONT SIZE=2>Contact Name*</td>
+    <tr>
+	<td colspan="3">Contact Name*</td>
     </tr>
-    <tr valign=top bgcolor=white>
-	<td COLSPAN=3><input type=text name=contactname size=40 value="<!-- TMPL_VAR name="contactname" -->"></td>
-    </tr>
-
-
-    <tr valign=top bgcolor=white>
-	<td><FONT SIZE=2>Phone (day)</td>
-	<td><FONT SIZE=2>Fax</td>
-	<td><FONT SIZE=2>Email</td>
-    </tr>
-    <tr valign=top bgcolor=white>
-	<td ><input type=text name=phoneday size=20 value="<!-- TMPL_VAR name="phoneday" -->"></td>
-	<td><input type=text name=faxnumber size=20 value="<!-- TMPL_VAR name="faxnumber" -->"></td>
-	<td ><input type=text name=emailaddress size=20 value="<!-- TMPL_VAR name="emailaddress" -->"></td>
+    <tr>
+	<td colspan="3"><input type="text" name="contactname" size="40" value="<!-- TMPL_VAR name="contactname" -->"></td>
     </tr>
 
-    <tr><td>&nbsp;</TD></TR>
 
-    <tr valign=top bgcolor=white>
-	<td><FONT SIZE=2>Notes</font></td>
+    <tr>
+	<td>Phone (day)</td>
+	<td>Fax</td>
+	<td>Email</td>
     </tr>
-    <tr valign=top bgcolor=white>
-	<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><!-- TMPL_VAR name="altnotes" --></textarea></td>
-    </tr>
-
-    <tr><td>&nbsp;</TD></TR>
-
-    <tr valign=top bgcolor="99cc33"  >
-	<td  COLSPAN=5  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>LIBRARY USE</B></td>
+    <tr>
+	<td ><input type="text" name="phoneday" size="20" value="<!-- TMPL_VAR name="phoneday" -->"></td>
+	<td><input type="text" name="faxnumber" size="20" value="<!-- TMPL_VAR name="faxnumber" -->"></td>
+	<td ><input type="text" name="emailaddress" size="20" value="<!-- TMPL_VAR name="emailaddress" -->"></td>
     </tr>
 
-    <tr valign=top bgcolor=white>
-	<td ><FONT SIZE=2>Notes</font></td>
+    <tr>
+	<td>Notes</td>
     </tr>
-    <tr valign=top >
-	<td  COLSPAN=5><textarea name=borrowernotes wrap=physical cols=70 rows=3><!-- TMPL_VAR name="borrowernotes" --></textarea></td>
+    <tr>
+	<td colspan="3"><textarea name="altnotes" cols="70" rows="3"><!-- TMPL_VAR name="altnotes" --></textarea></td>
     </tr>
 
-    <tr><td>&nbsp;</TD></TR>
+    <tr valign="top" bgcolor="#99cc33"  >
+	<td  colspan="3"  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>LIBRARY USE</B></td>
+    </tr>
 
-    <tr valign=top bgcolor=white>
-	<td  COLSPAN=5 align=right >
-	  <input type=submit class="button" value="Save Changes" ALT="Add New Member" border=0 >
+    <tr>
+	<td colspan="3">Notes</td>
+    </tr>
+    <tr valign="top" >
+	<td colspan="3"><textarea name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR name="borrowernotes" --></textarea></td>
+    </tr>
+
+    <tr>
+	<td  colspan="3" align=right >
+	  <input type="submit" class="button" value="Save Changes">
       </td>
     </tr>
-  </TABLE>
+  </table>
 </form>
-
-</BLOCKQUOTE>
-
-<br clear=all>
-<p> &nbsp; </p>
-
+</div>
 <!-- TMPL_VAR NAME=endmenumember -->
 
 </body>
-</HTML>
+</html>

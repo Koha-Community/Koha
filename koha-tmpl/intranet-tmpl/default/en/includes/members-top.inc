@@ -44,10 +44,10 @@ a.members:hover {
 	<a class="catalogue" href="javascript:Help()">Help</a>
 </div>
 <div id="submenu">
-	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</b></span>
+	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
 	<a href="/cgi-bin/koha/members/members-home.pl" class="submenu">Member home</a>
 	<a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add" class="submenu2">Add member</a>
-	<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&actionType=Add" class="submenu">Add organisation</a>
+	<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&amp;actionType=Add" class="submenu">Add organisation</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
