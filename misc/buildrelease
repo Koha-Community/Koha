@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
-sub guess_kohahtmldir ($;$);
+#sub guess_kohahtmldir ($;$);
 #----------------------------------------------------------
 # DIRECTORIES where source code is located
 #----------------------------------------------------------
 my $kohadir=`pwd`;
 chomp $kohadir;
-my $kohahtmldir=guess_kohahtmldir($kohadir, "/koha/koha/koha-html/");
+#my $kohahtmldir=guess_kohahtmldir($kohadir, "/koha/koha/koha-html/");
 my $roothomedir=(getpwuid(0))[7];	# ~root is traditionally just /
 $roothomedir='/root' unless defined $roothomedir;
 
@@ -19,9 +19,9 @@ if (-e "$roothomedir/.kohaautobuild.conf") {
 	if (/kohadir=(.*)/) {
 	    $kohadir=$1;
 	}
-	if (/kohahtmldir=(.*)/) {
-	    $kohahtmldir=$1;
-	}
+#	if (/kohahtmldir=(.*)/) {
+#	    $kohahtmldir=$1;
+#	}
     }
     $has_kohaautobuild_conf = 1;
 }
@@ -44,22 +44,22 @@ print "\nWhere is the 'koha' cvs module located [$kohadir]: ";
 chomp($input = <STDIN>);
 if ($input) {
     $kohadir=$input;
-    unless ($has_kohaautobuild_conf) {
-	$kohahtmldir=guess_kohahtmldir($kohadir, $kohahtmldir);
-    }
+#    unless ($has_kohaautobuild_conf) {
+#	$kohahtmldir=guess_kohahtmldir($kohadir, $kohahtmldir);
+#    }
 }
 
 
-print "\nWhere is the 'koha-html' cvs module located [$kohahtmldir]: ";
-chomp($input = <STDIN>);
-if ($input) {
-    $kohahtmldir=$input;
-}
+#print "\nWhere is the 'koha-html' cvs module located [$kohahtmldir]: ";
+#chomp($input = <STDIN>);
+#if ($input) {
+#    $kohahtmldir=$input;
+#}
 
 open (C, ">$roothomedir/.kohaautobuild.conf");
 print C qq|
 kohadir=$kohadir
-kohahtmldir=$kohahtmldir
+#kohahtmldir=$kohahtmldir
 |;
 
 #----------------------------------------------------------
@@ -226,20 +226,20 @@ Tagging koha with tag R_$tagname
 |;
     system("cvs tag -F R_$tagname");
 }
-print qq|
-Updating your checked-out copy of the 'koha-html' CVS files.
-You may need to enter your SourceForge password.
-Using $kohahtmldir.
-|;
-chdir($kohahtmldir) || die "$kohahtmldir: $!\n";
-system("cvs update");
+#print qq|
+#Updating your checked-out copy of the 'koha-html' CVS files.
+#You may need to enter your SourceForge password.
+#Using $kohahtmldir.
+#|;
+#chdir($kohahtmldir) || die "$kohahtmldir: $!\n";
+#system("cvs update");
 
-if ($cvstag) {
-    print qq|
-Tagging koha-html with tag R_$tagname
-|;
-    system("cvs tag -F R_$tagname");
-}
+#if ($cvstag) {
+#    print qq|
+#Tagging koha-html with tag R_$tagname
+#|;
+#    system("cvs tag -F R_$tagname");
+#}
 
 #----------------------------------------------------------
 # MOVE files to /tmp and build tar.gz
@@ -304,7 +304,7 @@ system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/marc $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/misc/bulkmarcimport.pl $rootdir/scripts/z3950daemon/");
+#system("mv $rootdir/intranet-cgi/misc/bulkmarcimport.pl $rootdir/scripts/z3950daemon/");
 system("mv $rootdir/intranet-cgi/z3950/* $rootdir/scripts/z3950daemon/");
 
 
@@ -312,21 +312,14 @@ system("mv $rootdir/intranet-cgi/z3950/* $rootdir/scripts/z3950daemon/");
 system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
 system("rm -f $rootdir/intranet-cgi/SendMessages");
 system("rm -f $rootdir/intranet-cgi/buildrelease");
-#system("rm -f $rootdir/intranet-cgi/database.mysql");
-#system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
-# FIXME: The following two lines look suspicious
-#system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
-#system("rm -f $rootdir/intranet-cgi/rel-1-2");
-#system("rm -f $rootdir/intranet-cgi/testKoha.pl");
-#system("rm -rf $rootdir/intranet-cgi/html-template");
 system("rm -rf $rootdir/intranet-cgi/t");
 
 # Set all .pl scripts executable
 system("find $rootdir/intranet-cgi -name '*.pl' -exec chmod a+x \\{\\} \\;");
 # Copy all CVS files to intranet-html and opac-html
 # FIXME: "cp -a" is GNU-ism. It is not portable.
-system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
-system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
+#system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
+#system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
 
 # Copy koha-tmpl files
 # FIXME: "cp -a" is GNU-ism. It is not portable.
@@ -335,30 +328,19 @@ system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/intranet-tmpl", "$rootdir/in
 system('rm', '-rf', "$rootdir/intranet-cgi/koha-tmpl");
 
 # Remove extraneous files from opac-html
-system("rm -f $rootdir/opac-html/koha.mo");
-system("rm -f $rootdir/opac-html/koha.pot");
-system("rm -f $rootdir/opac-html/test");
+#system("rm -f $rootdir/opac-html/koha.mo");
+#system("rm -f $rootdir/opac-html/koha.pot");
+#system("rm -f $rootdir/opac-html/test");
 
 # Remove extraneous files from intranet-html
-system("rm -f $rootdir/intranet-html/koha.pot");
-system("rm -f $rootdir/intranet-html/results.html");
-system("rm -f $rootdir/intranet-html/test");
+#system("rm -f $rootdir/intranet-html/koha.pot");
+#system("rm -f $rootdir/intranet-html/results.html");
+#system("rm -f $rootdir/intranet-html/test");
 
 # Remove junk from directory
 system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
-
-
-# FIXME: Why do we copy from $roothomedir? What is supposed to be there?
-if (-e "$roothomedir/docs") {
-    print "Copying docs folder from $roothomedir/docs...";
-    system("cp -r $roothomedir/docs/* $rootdir/docs/");
-} else {
-    print "I would have copied the docs from from $roothomedir/docs, but I couldn't find it.\n";
-    print "Press <ENTER> to continue...\n";
-    <STDIN>;
-}
 
 chdir("/tmp");
 system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
@@ -389,16 +371,16 @@ sub versioncompare {
     return 0;
 }
 
-sub guess_kohahtmldir ($;$) {
-    my($kohadir, $default) = @_;
-    my $kohahtmldir;
+#sub guess_kohahtmldir ($;$) {
+#    my($kohadir, $default) = @_;
+#    my $kohahtmldir;
     # It probably makes sense to assume that the 'koha' and 'koha-html'
     # modules are checked out within the same parent directory
-    if (-d $kohadir && $kohadir =~ /^(.*)\/[^\/]+$/) {
-	$kohahtmldir = "$1/koha-html"
-    } else {
-	$kohahtmldir = $default;
-    }
-    return $kohahtmldir;
-}
+#    if (-d $kohadir && $kohadir =~ /^(.*)\/[^\/]+$/) {
+#	$kohahtmldir = "$1/koha-html"
+#    } else {
+#	$kohahtmldir = $default;
+#    }
+#    return $kohahtmldir;
+#}
 
