@@ -1,231 +1,231 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<!-- TMPL_IF name="add" -->
+<!-- TMPL_IF NAME="add" -->
 
-<h1><!-- TMPL_VAR name=head --></h1><br>
-<form action='<!-- TMPL_VAR name=action -->' name=Aform method=post>
-<input type=hidden name=op value='add_validate'>
+<h1><!-- TMPL_VAR NAME="head" --></h1><br>
+<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
+<input type="hidden" name="op" value="add_validate">
 <table>
 	<tr>
 		<td>分館編號</td>
 		<td>
-			<!-- TMPL_IF name="branchcode" -->
-				<input type=hidden name=branchcode value='<!-- TMPL_VAR name=branchcode escape="HTML" -->'>
-				<!-- TMPL_VAR name="branchcode" -->
+			<!-- TMPL_IF NAME="branchcode" -->
+				<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
+				<!-- TMPL_VAR NAME="branchcode" -->
 			<!-- TMPL_ELSE -->
-				<input type=text name=branchcode size=5 maxlength=5 value='<!-- TMPL_VAR name=branchcode escape="HTML" -->'>
+				<input type="text" name="branchcode" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
 			<!-- /TMPL_IF -->
 		</td>
 	</tr>
 	<tr>
 		<td>名稱</td>
-		<td><input type=text name=branchname size=40 maxlength=80 value="<!-- TMPL_VAR name=branchname escape="HTML" -->">&nbsp;</td>
+		<td><input type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">&nbsp;</td>
 	</tr>
 
 	<tr>
-		<td><!-- TMPL_LOOP name="categoryloop" -->
+		<td><!-- TMPL_LOOP NAME="categoryloop" -->
 					<tr>
-						<td><!-- TMPL_VAR name=categoryname --></td>
-						<td><INPUT TYPE="checkbox" NAME="<!-- TMPL_VAR name=categorycode -->" <!-- TMPL_VAR name=checked -->><!-- TMPL_VAR name=codedescription --></td>
+						<td><!-- TMPL_VAR NAME="categoryname" --></td>
+						<td><INPUT TYPE="checkbox" NAME="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_VAR NAME="checked" -->><!-- TMPL_VAR NAME="codedescription" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 		</td>
 	</tr>
 	<tr>
 		<td>地址</td>
-		<td><input type=text name=branchaddress1 value='<!-- TMPL_VAR name=branchaddress1 escape="HTML" -->'></td>
+		<td><input type="text" name="branchaddress1" value="<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" -->"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type=text name=branchaddress2 value='<!-- TMPL_VAR name=branchaddress2 escape="HTML" -->'></td>
+		<td><input type="text" name="branchaddress2" value="<!-- TMPL_VAR NAME="branchaddress2" escape="HTML" -->"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type=text name=branchaddress3 value='<!-- TMPL_VAR name=branchaddress3 escape="HTML" -->'></td>
+		<td><input type="text" name="branchaddress3" value="<!-- TMPL_VAR NAME="branchaddress3" escape="HTML" -->"></td>
 	</tr>
 	<tr>
 		<td>電話</td>
-		<td><input type=text name=branchphone value='<!-- TMPL_VAR name=branchphone escape="HTML" -->'></td>
+		<td><input type="text" name="branchphone" value="<!-- TMPL_VAR NAME="branchphone" escape="HTML" -->"></td>
 	</tr>
 	<tr>
 		<td>傳真</td>
-		<td><input type=text name=branchfax value='<!-- TMPL_VAR name=branchfax escape="HTML" -->'></td>
+		<td><input type="text" name="branchfax" value="<!-- TMPL_VAR NAME="branchfax" escape="HTML" -->"></td>
 	</tr>
 	<tr>
 		<td>電郵</td>
-		<td><input type=text name=branchemail value='<!-- TMPL_VAR name=branchemail escape="HTML" -->'></td>
+		<td><input type="text" name="branchemail" value="<!-- TMPL_VAR NAME="branchemail" escape="HTML" -->"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type=submit value="儲存" class="button"></td>
+		<td><input type="submit" value="儲存" class="button"></td>
 	</tr>
 </table>
 </form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="delete_confirm" -->
+<!-- TMPL_IF NAME="delete_confirm" -->
 	請確認移除：
-	<form action='<!-- TMPL_VAR name=action -->' method=post>
-		<input type='hidden' name='op' value='delete_confirmed'>
-		<input type='hidden' name='branchcode' value=<!-- TMPL_VAR name=branchcode escape="HTML" -->>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="branchcode" value=<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->>
 		<input type="submit" value="是" class="button">
 	</form>
-	<form action='<!-- TMPL_VAR name=action -->' method=post><input type='hidden' name='op' value=''>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="否" class="button">
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="else" -->
-	<h1><!-- TMPL_VAR name=head --></h1><br>
-	<font color='red'><!-- TMPL_VAR name="message" --></font>
-	<table border='1' cellpadding='5' cellspacing='0'>
+<!-- TMPL_IF NAME="else" -->
+	<h1><!-- TMPL_VAR NAME="head" --></h1><br>
+	<font color="red"><!-- TMPL_VAR NAME="message" --></font>
+	<table border="1" cellpadding="5" cellspacing="0">
 		<tr>
-			<th colspan='6' align='left' bgcolor='#99cc33'>
-				<font size='5'><b>分館</b></font>
+			<th colspan="6" align="left" bgcolor="#99cc33">
+				<font size="5"><b>分館</b></font>
 			</th>
 		</tr>
-		<tr bgcolor='#889999'>
-			<td width='175'><b>名稱</b></td>
-			<td width='25'><b>編碼</b></td>
-			<td width='175'><b>地址</b></td>
-			<td width='175'><b>類別</b></td>
-			<td width='50'><b>&nbsp;</b></td>
-			<td width='50'><b>&nbsp;</b></td>
+		<tr bgcolor="#889999">
+			<td width="175"><b>名稱</b></td>
+			<td width="25"><b>編碼</b></td>
+			<td width="175"><b>地址</b></td>
+			<td width="175"><b>類別</b></td>
+			<td width="50"><b>&nbsp;</b></td>
+			<td width="50"><b>&nbsp;</b></td>
 		</tr>
-		<!-- TMPL_LOOP name="branches" -->
-			<tr bgcolor='<!-- TMPL_VAR name=color -->'>
-				<td align='left' valign='top'><!-- TMPL_VAR name=branch_name escape="HTML" --></td>
-				<td align='left' valign='top'><!-- TMPL_VAR name=branch_code escape="HTML" --></td>
-				<td align='left' valign='top'>
-					<!-- TMPL_IF name=address-empty-p -->
+		<!-- TMPL_LOOP NAME="branches" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<td align="left" valign="top"><!-- TMPL_VAR NAME="branch_name" escape="HTML" --></td>
+				<td align="left" valign="top"><!-- TMPL_VAR NAME="branch_code" escape="HTML" --></td>
+				<td align="left" valign="top">
+					<!-- TMPL_IF NAME="address-empty-p" -->
 						(沒有輸入)
 					<!-- TMPL_ELSE -->
-						<!-- TMPL_IF name=branchaddress1 -->
-							<!-- TMPL_VAR name=branchaddress1 escape="HTML" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name=branchaddress2 -->
-							<br><!-- TMPL_VAR name=branchaddress2 escape="HTML" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name=branchaddress3 -->
-							<br><!-- TMPL_VAR name=branchaddress3 escape="HTML" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name=branchphone -->
-							<br>電話：<!-- TMPL_VAR name=branchphone escape="HTML" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name=branchfax -->
-							<br>傳真：<!-- TMPL_VAR name=branchfax escape="HTML" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name=branchemail -->
-							<br>電郵：<!-- TMPL_VAR name=branchemail escape="HTML" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="branchaddress1" -->
+							<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="branchaddress2" -->
+							<br><!-- TMPL_VAR NAME="branchaddress2" escape="HTML" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="branchaddress3" -->
+							<br><!-- TMPL_VAR NAME="branchaddress3" escape="HTML" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="branchphone" -->
+							<br>電話：<!-- TMPL_VAR NAME="branchphone" escape="HTML" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="branchfax" -->
+							<br>傳真：<!-- TMPL_VAR NAME="branchfax" escape="HTML" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="branchemail" -->
+							<br>電郵：<!-- TMPL_VAR NAME="branchemail" escape="HTML" --><!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				</td>
-				<td align='left' valign='top'>
-					<!-- TMPL_IF name=no-categories-p -->
+				<td align="left" valign="top">
+					<!-- TMPL_IF NAME="no-categories-p" -->
 						(沒有設定類別)
 					<!-- TMPL_ELSE -->
-						<!-- TMPL_LOOP name=category_list -->
-							<!-- TMPL_VAR name=categoryname --><br>
+						<!-- TMPL_LOOP NAME="category_list" -->
+							<!-- TMPL_VAR NAME="categoryname" --><br>
 						<!-- /TMPL_LOOP -->
 					<!-- /TMPL_IF -->
 				</td>
-				<td align='left' valign='top'>
-					<form action='<!-- TMPL_VAR name=action -->' method=post>
-					<input type='hidden' name='op' value='edit'>
-					<input type='hidden' name='branchcode' value='<!-- TMPL_VAR name=value escape="HTML" -->'>
-					<input type=submit value="修改" class="button">
+				<td align="left" valign="top">
+					<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+					<input type="hidden" name="op" value="edit">
+					<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
+					<input type="submit" value="修改" class="button">
 					</form>
 				</td>
-				<td align='left' valign='top'>
-					<form action='<!-- TMPL_VAR name=action -->' method=post>
-					<input type='hidden' name='branchcode' value='<!-- TMPL_VAR name=value escape="HTML" -->'>
-					<input type='hidden' name='op' value='delete'><input type=submit value="移除" class="button">
+				<td align="left" valign="top">
+					<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+					<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
+					<input type="hidden" name="op" value="delete"><input type="submit" value="移除" class="button">
 					</form>
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 	<br>
-	<form action=<!-- TMPL_VAR name=action --> method=post>
-		<input type='hidden' name='op' value='add'>
-		<input type=submit class="button" value="新增分館">
+	<form action=<!-- TMPL_VAR NAME="action" --> method="post">
+		<input type="hidden" name="op" value="add">
+		<input type="submit" class="button" value="新增分館">
 	</form>
 
 	<br>
-	<table border='1' cellpadding='5' cellspacing='0'>
+	<table border="1" cellpadding="5" cellspacing="0">
 	<tr>
-		<th colspan='5' align='left' bgcolor='#99cc33'>
-			<font size='5'><b>分館類別</b></font>
+		<th colspan="5" align="left" bgcolor="#99cc33">
+			<font size="5"><b>分館類別</b></font>
 		</th>
 	</tr>
-	<tr bgcolor='#889999'>
-		<td width='175'><b>名稱</b></td>
-		<td width='25'><b>編碼</b></td>
-		<td width='200'><b>說明</b></td>
+	<tr bgcolor="#889999">
+		<td width="175"><b>名稱</b></td>
+		<td width="25"><b>編碼</b></td>
+		<td width="200"><b>說明</b></td>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 	</tr>
-	<!-- TMPL_LOOP name="branchcategories" -->
-		<tr bgcolor='<!-- TMPL_VAR name="color" -->'>
-		<td align='left' valign='top'><!-- TMPL_VAR name=categoryname --></td>
-		<td align='left' valign='top'><!-- TMPL_VAR name=categorycode --></td>
-		<td align='left' valign='top'><!-- TMPL_VAR name=codedescription --></td>
-		<td align='left' valign='top'>
-			<form action='<!-- TMPL_VAR name=action -->' method=post>
-			<input type='hidden' name='op' value='editcategory'>
-			<input type='hidden' name='categorycode' value='<!-- TMPL_VAR name=categorycode escape="HTML" -->'>
+	<!-- TMPL_LOOP NAME="branchcategories" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+		<td align="left" valign="top"><!-- TMPL_VAR NAME="categoryname" --></td>
+		<td align="left" valign="top"><!-- TMPL_VAR NAME="categorycode" --></td>
+		<td align="left" valign="top"><!-- TMPL_VAR NAME="codedescription" --></td>
+		<td align="left" valign="top">
+			<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+			<input type="hidden" name="op" value="editcategory">
+			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
 			<input type="submit" value="修改" class="button">
 			</form>
 		</td>
-		<td align='left' valign='top'>
-			<form action='<!-- TMPL_VAR name=action -->' method=post>
-			<input type='hidden' name='categorycode' value='<!-- TMPL_VAR name=categorycode escape="HTML" -->'>
-			<input type='hidden' name='op' value='delete_category'><input type="submit" value="移除" class="button">
+		<td align="left" valign="top">
+			<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+			<input type="hidden" name="op" value="delete_category"><input type="submit" value="移除" class="button">
 			</form>
 		</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
 	<br />
-	<form action=<!-- TMPL_VAR name=action --> method=post>
-		<input type='hidden' name='op' value='editcategory'>
-		<input type=submit class="button" value="新增類別">
+	<form action=<!-- TMPL_VAR NAME="action" --> method="post">
+		<input type="hidden" name="op" value="editcategory">
+		<input type="submit" class="button" value="新增類別">
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="editcategory" -->
-	<h1><!-- TMPL_VAR name=head --></h1><br>
-	<form action='<!-- TMPL_VAR name=action -->' name=Aform method=post>
-	<input type=hidden name=op value='addcategory_validate'>
+<!-- TMPL_IF NAME="editcategory" -->
+	<h1><!-- TMPL_VAR NAME="head" --></h1><br>
+	<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="addcategory_validate">
 	<table>
 		<tr>
 			<td>類別編號</td>
 			<td>
-				<!-- TMPL_IF name="categorycode" -->
-					<input type=hidden name=categorycode value='<!-- TMPL_VAR name=categorycode escape="HTML" -->'>
-					<!-- TMPL_VAR name="categorycode" -->
+				<!-- TMPL_IF NAME="categorycode" -->
+					<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+					<!-- TMPL_VAR NAME="categorycode" -->
 				<!-- TMPL_ELSE -->
-					<input type=text name=categorycode size=5 maxlength=5 value='<!-- TMPL_VAR name=categorycode escape="HTML" -->'>
+					<input type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
 				<!-- /TMPL_IF -->
 			</td>
 		</tr>
 		<tr>
 			<td>名稱</td>
-			<td><input type=text name=categoryname size=40 maxlength=80 value="<!-- TMPL_VAR name=categoryname escape="HTML" -->">&nbsp;</td>
+			<td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="categoryname" escape="HTML" -->">&nbsp;</td>
 		</tr>
 		<tr>
 			<td>說明</td>
-			<td><input type="text" name="codedescription" size=40 maxlength=80 value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->">&nbsp;</td>
+			<td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="codedescription" escape="HTML" -->">&nbsp;</td>
 		</tr>
 		<tr>
-			<td colspan=2 align="center"><input type="submit" value="好！" class="button"></td>
+			<td colspan="2" align="center"><input type="submit" value="好！" class="button"></td>
 		</tr>
 	</table>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="delete_category" -->
+<!-- TMPL_IF NAME="delete_category" -->
 	請確認移除：
-	<form action='<!-- TMPL_VAR name=action -->' method=post>
-		<input type='hidden' name='op' value='categorydelete_confirmed'>
-		<input type='hidden' name='categorycode' value='<!-- TMPL_VAR name=categorycode escape="HTML" -->'>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+		<input type="hidden" name="op" value="categorydelete_confirmed">
+		<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
 		<input type="submit" value="是" class="button">
 	</form>
-	<form action='<!-- TMPL_VAR name=action -->' method=post><input type='hidden' name='op' value=''>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="否" class="button">
 	</form>
 <!-- /TMPL_IF -->

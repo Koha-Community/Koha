@@ -15,7 +15,7 @@
 		<td><input type=text name="authorised_value" value='<!-- TMPL_VAR name="authorised_value" escape=HTML -->'></td>
 	</tr>
 	<tr>
-		<td>Lib</td>
+		<td>說明</td>
 		<td><input type=text name="lib" value='<!-- TMPL_VAR name="lib" -->'></td>
 	</tr>
 	<tr>
@@ -33,7 +33,7 @@
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>變數</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>說明</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
 	<tr><td>值</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
@@ -49,17 +49,17 @@
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>容許值管理</h1>
-<p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
+<p>這個表是機讀格式定義的一部分。您可以設定數量不限的類別，每個類別亦可設定數量不限的容許值。</p>
 <p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds or modifies a biblio, the subfield is not entered through a free field, but though a list of authorised values.</p>
 <form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
-	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="好！">   <a href="authorised_values.pl?op=add_form">新類別...</a>
+	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="好！">   <a href="authorised_values.pl?op=add_form">新增類別...</a>
 </form>
 <!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>類別</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>容許值</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>說明</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>修改</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>移除</b></td>
 <!-- TMPL_LOOP name="loop" -->

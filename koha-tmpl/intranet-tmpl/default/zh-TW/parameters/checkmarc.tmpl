@@ -9,8 +9,8 @@
 <!-- TMPL_IF name="itemnum" -->
 	<tr>
 		<td><b>圖書資料號碼</b></td>
-		<td><li>The field itemnum MUST be mapped </li>
-			<li>The correspounding subfield MUST be in with -1 (ignore) tab</td>
+		<td><li>圖書資料號碼 (itemnum) 欄位必須連結至一個合適的機讀格式分欄 </li>
+			<li>對應的分欄必須在第 -1 格 (即「忽略」)</td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
@@ -29,7 +29,7 @@
 <!-- TMPL_ELSE -->
 	<tr>
 		<td>好！</td>
-		<td><i>All item fields are in the same tag and in item tab</i></td>
+		<td><i>圖書資料 (item) 表的各欄位均連結至同一機讀格式欄，並在「圖書資料」格顯示</i></td>
 	</tr>
 <!-- /TMPL_IF -->
 <!------------------------------------------------------------------------------------------------------------>
@@ -122,7 +122,7 @@
 <!-- TMPL_ELSE -->
 	<tr>
 		<td>&nbsp;</td>
-		<td><b>Configuration OK, you don't have errors in your MARC parameters table</b></td>
+		<td><b>設定無誤──在您的機讀格式設定內找不到錯誤</b></td>
 	</tr>
 <!-- /TMPL_IF -->
 </table>

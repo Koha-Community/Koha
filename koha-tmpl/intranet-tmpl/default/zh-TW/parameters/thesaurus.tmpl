@@ -11,7 +11,7 @@
 	<br/><br/>
 	<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Other forms</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>其他形式</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
 	<!-- TMPL_LOOP name="loop" -->
@@ -47,7 +47,7 @@
 		<td><!-- TMPL_VAR name="category" --></td>
 	</tr>
 	<tr>
-		<td>Authority lib</td>
+		<td>權威說明</td>
 		<!-- TMPL_IF name="id" -->
 			<td><!-- TMPL_VAR name="father" --><!-- TMPL_VAR name="stdlib" --><input type="hidden" name="stdlib" value="<!-- TMPL_VAR name="stdlib" -->" ></td>
 		<!-- TMPL_ELSE -->
@@ -55,7 +55,7 @@
 		<!-- /TMPL_IF -->
 	</tr>
 	<tr>
-		<td>Other lib</td>
+		<td>其他說明</td>
 		<td><!-- TMPL_VAR name="father" --><input type="text" name="freelib" value="<!-- TMPL_VAR name="freelib" escape=HTML -->" maxlength="80" size="80"></td>
 	</tr>
 	<tr>
@@ -77,7 +77,7 @@
 <!---------------------------------------------------------------------------->
 	<table border=0 cellspacing=0 cellpadding=2>
 		<tr valign=top bgcolor=#99cc33>
-			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>lib</b></td>
+			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>說明</b></td>
 			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="search_category" --></b></td>
 		</tr>
 		<tr><td>值</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
@@ -99,13 +99,13 @@
 	<p>同義字典及權威檔案的管理<br />
 	<ul>
 		<b>Dig</b>: see data depending of this one<br />
-		<b>Related</b>: see other forms of this authority entry</p>
+		<b>相關</b>：參閱這項權威條目的相關形式</p>
 	</ul>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<!-- TMPL_VAR name="tab_list" -->
 		<input type="text" name="searchstring" value="<!-- TMPL_VAR name="searchstring" -->">
 		<input type="submit" value="好！">
-		<a href="thesaurus.pl?op=add_form">新類別...</a>
+		<a href="thesaurus.pl?op=add_form">新增類別...</a>
 	</form>
 	<!-- TMPL_LOOP name="hierarchy_loop" -->
 		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />

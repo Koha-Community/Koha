@@ -3,7 +3,7 @@
 <!-- TMPL_IF name="add_form" -->
 <!---------------------------------------------------------------------------->
 	<H1><!-- TMPL_VAR name="action" --></H1>
-	<p>Choose and validate 1 of the following for <b><!-- TMPL_VAR name="tablename" -->.<!-- TMPL_VAR name="kohafield" --></b></p>
+	<p>為<b><!-- TMPL_VAR name="tablename" -->.<!-- TMPL_VAR name="kohafield" --></b>選取及查核以下其中一項</p>
 	<table>
 	<tr>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=put>
@@ -145,7 +145,7 @@
 				<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->">
 				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->">
 				<input type="hidden" name="choice" value="">
-				<INPUT type=submit value='HERE'>
+				<input type=submit value="此處">
 			</form>
 		</td>
 	</tr>
@@ -155,7 +155,7 @@
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <font SIZE=6><em>機讀格式之連結 <!-- TMPL_VAR name="tagfield" --></em></font>
-<p><b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
+<p><b>注意：如果你修改任何一個機讀格式欄與非機讀格式欄位之間的連結，請要求你的系統管理員執行misc/rebuildnonmarc.pl。</b>
 </p>
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 <!-- TMPL_VAR name="tablename" --> <input type="submit" value="好！">
@@ -166,7 +166,7 @@
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Koha欄位</b> <span style="font-size:8;color:red" title="鏈結至此分欄的 Koha 資料庫欄位">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>欄</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>分欄</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=42%><b>Lib</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=42%><b>說明</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%>
 <!-- TMPL_LOOP name="loop" -->
 <tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
