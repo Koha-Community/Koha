@@ -43,10 +43,39 @@ if ($type eq 'allsub'){
   print "Successfully modified $oldsub is now $sub";
   print "<p><a href=/cgi-bin/koha/catmaintain.pl target=window0 onclick=\"window0.focus()\">Back to catalogue maintenance</a><br>";
   print "<a href=nowhere onclick=\"self.close()\">Close this window</a>";
+} elsif ($type eq 'undel'){
+  my $title=$input->param('title');
+  my ($count,$results)=deletedbib($title);
+  print "<table border=0>";
+  print "<tr><td><b>Title</b></td><td><b>Author</b></td><td><b>Undelete</b></td></tr>";
+  for (my $i=0;$i<$count;$i++){
+    print "<tr><td>$results->[$i]->{'title'}</td><td>$results->[$i]->{'author'}</td><td><a href=/cgi-bin/koha/catmaintain.pl?type=finun&bib=$results->[$i]->{'biblionumber'}>Undelete</a></td>\n";
+  }
+  print "</table>";
+} elsif ($type eq 'finun'){
+  my $bib=$input->param('bib');
+  undeletebib($bib);
+  print "Succesfully undeleted";
+  print "<p><a href=/cgi-bin/koha/catmaintain.pl>Back to Catalogue Maintenance</a>";
 } else {
+  print "<B>Subject Maintenance</b><br>";
   print "<form action=/cgi-bin/koha/catmaintain.pl method=post>";
   print "<input type=hidden name=type value=allsub>";
   print "Show all subjects beginning with <input type=text name=sub><br>";
+  print "<input type=submit value=Show>";
+  print "</form>";
+  print "<p>";
+  print "<B>Group Maintenance</b></br>";
+  print "<form action=/cgi-bin/koha/search.pl method=post>";
+  print "<input type=hidden name=type value=catmain>";
+  print "Show all Titles beginning with <input type=text name=title><br>";
+  print "<input type=submit value=Show>";
+  print "</form>";
+  print "<p>";
+  print "<B>Undelete Biblio</b></br>";
+  print "<form action=/cgi-bin/koha/catmaintain.pl method=post>";
+  print "<input type=hidden name=type value=undel>";
+  print "Show all Titles beginning with <input type=text name=title><br>";
   print "<input type=submit value=Show>";
   print "</form>";
 }
