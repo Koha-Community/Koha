@@ -71,23 +71,62 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $ISBD = C4::Context->preference('ISBD');
-my @fields = $record->fields();
-foreach my $field (@fields) {
-	my $tag = $field->tag();
-	if ($tag<10) {
-	} else {
-		my @subf = $field->subfields;
-		for my $i (0..$#subf) {
-			my $subfieldcode = $subf[$i][0];
-			my $subfieldvalue = $subf[$i][1];
-			my $tagsubf = $tag.$subfieldcode;
-			$ISBD =~ s/\[(.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue\[$1$tagsubf$2]$2$3/g;
+# my @blocs = split /\@/,$ISBD;
+# my @fields = $record->fields();
+my $res;
+# foreach my $bloc (@blocs) {
+# 	$bloc =~ s/\n//g;
+	my $bloc = $ISBD;
+	my $blocres;
+	foreach my $isbdfield (split /#/,$bloc) {
+	warn "ISBDFIELD : $isbdfield";
+# 		$isbdfield= /(.?.?.?)/;
+		$isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
+		my $fieldvalue=$1;
+		my $textbefore=$2;
+		my $analysestring=$3;
+		my $textafter=$4;
+# 		warn "==> $1 / $2 / $3 / $4";
+# 		my $fieldvalue=substr($isbdfield,0,3);
+		if ($fieldvalue>0) {
+	# 		warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
+# 			warn "FV : $fieldvalue";
+			my $hasputtextbefore=0;
+			foreach my $field ($record->field($fieldvalue)) {
+				my $calculated = $analysestring;
+				my $tag = $field->tag();
+				if ($tag<10) {
+				} else {
+					my @subf = $field->subfields;
+					for my $i (0..$#subf) {
+						my $subfieldcode = $subf[$i][0];
+						my $subfieldvalue = $subf[$i][1];
+						my $tagsubf = $tag.$subfieldcode;
+						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
+					}
+					# field builded, store the result
+					if ($calculated && !$hasputtextbefore) { # put textbefore if not done
+						$blocres .=$textbefore;
+						$hasputtextbefore=1
+					}
+					# remove punctuation at start
+					$calculated =~ s/^( |;|:|\.|-)*//g;
+					$blocres.=$calculated;
+				}
+			}
+			$blocres .=$textafter if $hasputtextbefore;
+		} else {
+			$blocres.=$isbdfield;
 		}
 	}
-}
-$ISBD =~ s/\[(.*?)]//g;
-$ISBD =~ s/\n/<br>/g;
-$template->param(ISBD => $ISBD,
+	$res.=$blocres;
+# }
+$res =~ s/\{(.*?)\}//g;
+$res =~ s/\\n/\n/g;
+$res =~ s/\n/<br\/>/g;
+# remove empty ()
+$res =~ s/\(\)//g;
+$template->param(ISBD => $res,
 				biblionumber => $biblionumber);
 
 output_html_with_http_headers $query, $cookie, $template->output;
