@@ -68,26 +68,29 @@ sub catalogsearch {
 	my $sql_tables; # will contain marc_subfield_table as m1,...
 	my $sql_where1; # will contain the "true" where
 	my $sql_where2; # will contain m1.bibid=m2.bibid
-	my $nb=1;
+	my $nb_active=0; # will contain the number of "active" entries. and entry is active is a value is provided.
+	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
+
 	for(my $i=0; $i<=@$value;$i++) {
 		if (@$value[$i]) {
-			if ($nb==1) {
+			$nb_active++;
+			if ($nb_active==1) {
 				if (@$operator[$i] eq "start") {
-					$sql_tables .= "marc_subfield_table as m$nb,";
+					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue like '@$value[$i]%'";
 					if (@$tags[$i]) {
 						$sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]'";
 					}
 					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {
-					$sql_tables .= "marc_word as m$nb,";
-					$sql_where1 .= "@$excluding[$i](m1.word ='@$value[$i]'";
+					$sql_tables .= "marc_word as m$nb_table,";
+					$sql_where1 .= "@$excluding[$i](m1.word  like '@$value[$i]%'";
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldid='@$subfields[$i]'";
 					}
 					$sql_where1.=")";
 				} else {
-					$sql_tables .= "marc_subfield_table as m$nb,";
+					$sql_tables .= "marc_subfield_table as m$nb_table,";
 					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue @$operator[$i] '@$value[$i]' ";
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]'";
@@ -96,32 +99,43 @@ sub catalogsearch {
 				}
 			} else {
 				if (@$operator[$i] eq "start") {
-					$sql_tables .= "marc_subfield_table as m$nb,";
-					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue like '@$value[$i]%'";
+					$nb_table++;
+					$sql_tables .= "marc_subfield_table as m$nb_table,";
+					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb_table.subfieldvalue like '@$value[$i]%'";
 					if (@$tags[$i]) {
-						 $sql_where1 .=" and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i])";
+						 $sql_where1 .=" and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldcode='@$subfields[$i])";
 					}
 					$sql_where1.=")";
-					$sql_where2 .= "m1.bibid=m$nb.bibid";
+					$sql_where2 .= "m1.bibid=m$nb_table.bibid";
 				} elsif (@$operator[$i] eq "contains") {
-					$sql_tables .= "marc_word as m$nb,";
-					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.word='@$value[$i]'";
-					if (@$tags[$i]) {
-						 $sql_where1 .="  and m$nb.tag=@$tags[$i] and m$nb.subfieldid='@$subfields[$i]'";
+					if (@$and_or[$i] eq 'and') {
+						$nb_table++;
+						$sql_tables .= "marc_word as m$nb_table,";
+						$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb_table.word like '@$value[$i]%'";
+						if (@$tags[$i]) {
+							$sql_where1 .="  and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldid='@$subfields[$i]'";
+						}
+						$sql_where1.=")";
+						$sql_where2 .= "m1.bibid=m$nb_table.bibid";
+					} else {
+						$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb_table.word like '@$value[$i]%'";
+						if (@$tags[$i]) {
+							$sql_where1 .="  and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldid='@$subfields[$i]'";
+						}
+						$sql_where1.=")";
+						$sql_where2 .= "m1.bibid=m$nb_table.bibid";
 					}
-					$sql_where1.=")";
-					$sql_where2 .= "m1.bibid=m$nb.bibid";
 				} else {
-					$sql_tables .= "marc_subfield_table as m$nb,";
-					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue @$operator[$i] '@$value[$i]'";
+					$nb_table++;
+					$sql_tables .= "marc_subfield_table as m$nb_table,";
+					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb_table.subfieldvalue @$operator[$i] '@$value[$i]'";
 					if (@$tags[$i]) {
-						 $sql_where1 .="  and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i]'";
+						 $sql_where1 .="  and m$nb_table.tag=@$tags[$i] and m$nb_table.subfieldcode='@$subfields[$i]'";
 					}
-					$sql_where2 .= "m1.bibid=m$nb.bibid";
+					$sql_where2 .= "m1.bibid=m$nb_table.bibid";
 					$sql_where1.=")";
 				}
 			}
-			$nb++;
 		}
 	}
 	chop $sql_tables;
