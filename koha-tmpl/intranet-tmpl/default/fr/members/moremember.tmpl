@@ -4,20 +4,22 @@
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=270>
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>FICHE DE
-      LECTEUR</b></TD>
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>FICHE DE LECTEUR</b></TD>
   </TR>
 
-  <tr VALIGN=TOP  >	
+  <tr VALIGN=TOP  >
     <TD>
-      <p align=right>
-      <form action=/cgi-bin/koha/jmemberentry.pl method=post>
-        <INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
-        <input type=hidden name=type value=Add>
-        <input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
-      </form>
-      <p></P><br>
-      <FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)
+	<TMPL_IF name="IS_ADULT">
+		<p align=right>
+		<form action=/cgi-bin/koha/jmemberentry.pl method=post>
+			<INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
+			<input type=hidden name=type value=Add>
+			<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
+		</form>
+		</p>
+	 </TMPL_IF>
+	 <br>
+      <FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF>
       <p> N&deg; de carte: <TMPL_VAR NAME="cardnumber"><BR>
         Adresse postale: <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><BR>
         Adresse personnelle : <TMPL_VAR NAME="physstreet">, <TMPL_VAR NAME="streetcity"><BR>
