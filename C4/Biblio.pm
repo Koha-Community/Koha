@@ -1793,6 +1793,11 @@ sub newbiblioitem {
 	my ($biblioitem) = @_;
 	my $dbh   = C4::Context->dbh;
 	my $bibitemnum = &OLDnewbiblioitem($dbh,$biblioitem);
+    ################################################################
+    ## Fix template and shift this to newbiblio
+        my @subjects=split(/\n/,$biblioitem->{'subjectheadings'});
+        modsubject($biblioitem->{'biblionumber'},1,@subjects);
+    ################################################################
 	my $MARCbiblio= MARCkoha2marcBiblio($dbh,0,$bibitemnum); # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblioitem->{biblionumber});
 	&MARCaddbiblio($dbh,$MARCbiblio,$biblioitem->{biblionumber},$bibid);
@@ -2194,6 +2199,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.89  2004/05/27 21:47:21  rangi
+# Fix for bug 787
+#
 # Revision 1.88  2004/05/18 15:23:49  tipaul
 # framework management : 1 MARC framework for each itemtype
 #
