@@ -45,9 +45,8 @@ foreach my $key (@names){
 my $dbh = C4::Context->dbh;
 my $query;
 for (my $i=0;$i<1;$i++){
-	my $x = "cardnumber_child_$i";
 	my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-	$sth->execute($x);
+	$sth->execute($data{'bornumber_child_$i'});
 	if (my $data=$sth->fetchrow_hashref){
 		$query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
 		cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',

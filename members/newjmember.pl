@@ -2,7 +2,7 @@
 
 # $Id$
 
-#script to print confirmation screen, then if accepted calls itself to insert data
+# script to print confirmation screen, then if accepted calls itself to insert data
 # FIXME - Yes, but what does it _do_?
 # 2002/12/18 hdl@ifrance.comTemplating
 
@@ -95,7 +95,7 @@ for (my $i=0;$i<3;$i++){
     } else {
 	$nounique = 1;
     }
-    my $valid=checkdigit(\%env,$data{'cardnumber'}, $nounique);
+    my $valid=checkdigit(\%env,$number, $nounique);
     if ($valid != 1){
       $string.=" Invalid Cardnumber $number<br>";
       $missing=1;
