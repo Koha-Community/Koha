@@ -47,6 +47,27 @@
 
 <P>Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.</p>
 
+<!-- If we have a subject table -->
+    <TMPL_IF NAME="subjectsearch">
+    <table border=0 cellspacing=0 cellpadding=2>
+    <tr bgcolor="#D7AB7A">
+<tr><td class="dk-brown"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/brown-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+	    <td class="table-heading"><!--+Katipo+start name="title-text" -->Subject<!--+Katipo+end--> </td>	    
+    </tr>
+<tr><td class="dk-brown"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/brown-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+
+       <TMPL_LOOP NAME=SEARCH_RESULTS>
+       <tr class=<TMPL_IF NAME="odd">"plain"<TMPL_ELSE>"pink"</TMPL_IF>>
+       <td><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL> class="padded"><TMPL_VAR NAME=subject></a></td>
+       </tr>
+       </TMPL_LOOP>
+    <tr><td colspan=5 class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+    </table>
+    
+<!-- Else we have a list of items -->    
+    <TMPL_ELSE>
+
+
  <table border=0 cellspacing=0 cellpadding=0>
 
     <tr bgcolor="#D7AB7A">
@@ -68,6 +89,7 @@
 
     <tr><td colspan=5 class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
 	</table>
+</TMPL_IF>
    <P>
 
 <span>
