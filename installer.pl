@@ -9,8 +9,6 @@ print <<EOM;
 **********************************
 
 
-
-
 This installer will prompt you with a series of questions.
 It assumes you (or your system administrator) has installed:
   * Apache (http://httpd.apache.org/)
@@ -56,8 +54,41 @@ chomp $answer;
 # tar on solaris may not work properly, etc.
 system("tar -x $answer"); #unpack fill out
 
+#
+# Test for Perl - Do we need to explicity check versions?
+#
+print "\nChecking perl modules ...\n";
+    unless (eval "require 5.004") {
+    die "Sorry, you need at least Perl 5.004\n";
+}
+	
 
-#test for Perl and Apache?
+#
+# Test for Perl Dependancies
+#
+my @missing = ();
+unless (eval require DBI)               { push @missing,"DBI" };
+unless (eval require Date::Manip)       { push @missing,"Datr::Manip" }
+unless (eval require DBD::mysql)        { push @missing,"DBD::mysql" }
+unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" }
+
+#
+# Print out a list of any missing modules
+#
+
+if (@missing > 0) {
+    print "\n\n";
+    print "You are missing some Perl modules which are required by Koha.\n";
+    print "They can be installed by running (as root) the following:\n";
+    foreach my $module (@missing) {
+    print "   perl -MCPAN -e 'install \"$module\"'\n";
+    }
+    print "\n";
+    exit;
+}
+
+
+#test for MySQL?
 print "Are you using MySql?(Y/[N]): ";
 $answer = $_;                      
 chomp $answer
