@@ -1,4 +1,4 @@
-package C4::BookShelves; #asummes C4/BookShelves
+package C4::BookShelves; #assumes C4/BookShelves
 
 #
 # $Header$
@@ -43,7 +43,9 @@ C4::BookShelves - Functions for manipulating Koha virtual bookshelves
 
 =head1 DESCRIPTION
 
-FIXME
+This module provides functions for manipulating virtual bookshelves,
+including creating and deleting bookshelves, and adding and removing
+items to and from bookshelves.
 
 =head1 FUNCTIONS
 
@@ -278,6 +280,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.6  2002/09/23 13:50:30  arensb
+# Fixed missing bit in POD.
+#
 # Revision 1.5  2002/09/22 17:29:17  arensb
 # Added POD.
 # Added some FIXME comments.
