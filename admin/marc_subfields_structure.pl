@@ -133,8 +133,15 @@ if ($op eq 'add_form') {
 	# build value_builder list
 	my @value_builder=('');
 
-	my $cgidir = C4::Context->intranetdir . "/cgi-bin";
-	opendir(DIR, "$cgidir/value_builder") || die "can't opendir $cgidir/value_builder: $!";
+	# read value_builder directory.
+	# 2 cases here : on CVS install, $cgidir does not need a /cgi-bin
+	# on a standard install, /cgi-bin need to be added. 
+	# test one, then the other
+	my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+	unless (opendir(DIR, "$cgidir/value_builder")) {
+		$cgidir = C4::Context->intranetdir;
+		opendir(DIR, "$cgidir/value_builder") || die "can't opendir $cgidir/value_builder: $!";
+	} 
 	while (my $line = readdir(DIR)) {
 		if ($line =~ /\.pl$/) {
 			push (@value_builder,$line);
