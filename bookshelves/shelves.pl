@@ -144,6 +144,7 @@ sub viewshelf {
 		$line{'barcode'}=$item->{'barcode'};
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
+		$line{biblionumber} = $item->{biblionumber};
 		push(@itemsloop, \%line);
 	}
 	$template->param(	itemsloop => \@itemsloop,
@@ -156,6 +157,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3  2004/12/02 16:38:50  tipaul
+# improvement in book shelves
+#
 # Revision 1.2  2004/11/19 16:31:30  tipaul
 # bugfix for bookshelves not in official CVS
 #
