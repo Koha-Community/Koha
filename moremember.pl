@@ -240,6 +240,7 @@ for (my $i=0;$i<$count;$i++){
   $issue->[$i]{'barcode'}</a></td>
   <TD>$issue->[$i]{'date_due'}</td>";
   #find the charge for an item
+  warn "calling calc_charges\n";
   my ($charge,$itemtype)=calc_charges(undef,undef,$issue->[$i]{'itemnumber'},$bornum);
   print "<TD>$itemtype</td>";
   print "<TD>$charge</td>";
@@ -250,7 +251,7 @@ for (my $i=0;$i<$count;$i++){
 #    print "<td> &nbsp; </td>";
 #  }
   #check item is not reserved
-  my ($rescount,$reserves)=Findgroupreserve($issue->[$i]{'biblioitemnumber'},$issue->[$i]{'biblionumber'});
+  my ($rescount,$reserves)=CheckReserves($issue->[$i]{'itemnumber'});
   if ($rescount >0){
     print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
 #  } elsif ($issue->[$i]->{'renewals'} > 0) {
