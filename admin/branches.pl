@@ -282,7 +282,9 @@ sub branchinfotable {
 		for my $field ('branchaddress1', 'branchaddress2', 'branchaddress3',
 			'branchphone', 'branchfax', 'branchemail') {
 			$row{$field} = $branch->{$field};
-			$address_empty_p = 0;
+			if ( $branch->{$field} ) {
+				$address_empty_p = 0;
+			}
 		}
 		$row{'address-empty-p'} = $address_empty_p;
 		# {{{ Leave this here until bug 180 is completely resolved in templates
