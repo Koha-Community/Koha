@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.37  2003/02/12 11:03:03  tipaul
+# Support for 000 -> 010 fields.
+# Those fields doesn't have subfields.
+# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
+# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
+#
 # Revision 1.36  2003/02/12 11:01:01  tipaul
 # Support for 000 -> 010 fields.
 # Those fields doesn't have subfields.
@@ -591,7 +597,6 @@ sub MARCgetbiblio {
 			$previndicator.="  ";
 			my $field;
 			if ($prevtag <10) {
-				warn "add < $prevtag";
 				$record->add_fields((sprintf "%03s",$prevtag),%subfieldlist->{'@'});
 			} else {
 				$field = MARC::Field->new( (sprintf "%03s",$prevtag), substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
@@ -742,9 +747,6 @@ sub MARCmoditem {
 					my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
 #					warn "changing : $subfieldid, $bibid,".$field->tag(),",$tagorder,@$subfield[0],@$subfield[1],$subfieldorder";
 					&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
-				} else {
-#FIXME ???
-					warn "nothing to change : ".$oldfield->subfield(@$subfield[0]);
 				}
 			}
 		}
@@ -953,7 +955,6 @@ sub MARCkoha2marcOnefield {
 sub MARChtml2marc {
 	my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
 	my $prevtag = @$rtags[0];
-	warn "prev : $prevtag";
 	my $record = MARC::Record->new();
 	my %subfieldlist={};
 	for (my $i=0; $i< @$rtags; $i++) {

@@ -254,6 +254,7 @@ if ($op eq 'add_form') {
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
+		$tagsubfield="@" unless $tagsubfield;
 		my $liblibrarian		=$liblibrarian[$i];
 		my $libopac			=$libopac[$i];
 		my $repeatable		=$input->param("repeatable$i")?1:0;
@@ -263,7 +264,7 @@ if ($op eq 'add_form') {
 		my $authorised_value		=$authorised_values[$i];
 		my $thesaurus_category		=$thesaurus_category[$i];
 		my $value_builder=$value_builder[$i];
-		if ($tagsubfield) {
+		if ($liblibrarian) {
 			$sth->execute ($tagfield,
 								$tagsubfield,
 								$liblibrarian,
