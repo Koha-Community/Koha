@@ -31,11 +31,16 @@ if ($op eq 'modsubscriptionhistory') {
 }
 # change status except, if subscription has expired, for the "waited" issue.
 if ($op eq 'serialchangestatus') {
-	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
+	my $sth = $dbh->prepare("select status from serial where serialid=?");
 	for (my $i=0;$i<=$#serialids;$i++) {
 		$sth->execute($serialids[$i]);
-		my ($x,$oldstatus) = $sth->fetchrow;
-		serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+		my ($oldstatus) = $sth->fetchrow;
+		if ($serialids[$i]) {
+			serialchangestatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),$status[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
+		} else {
+			my $subscription=getsubscription($subscriptionid);
+			newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
+		}
 	}
 }
 my $subs = &getsubscription($subscriptionid);
