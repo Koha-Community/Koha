@@ -221,10 +221,6 @@ Cancel the order with the given order and biblio numbers. It does not
 delete any entries in the aqorders table, it merely marks them as
 cancelled.
 
-If there are no items remaining with the given biblionumber,
-C<&delorder> also deletes them from the marc_subfield_table and
-marc_biblio tables of the Koha database.
-
 =cut
 #'
 sub delorder {
@@ -234,10 +230,6 @@ sub delorder {
   where biblionumber=? and ordernumber=?");
   $sth->execute($bibnum,$ordnum);
   $sth->finish;
-  my $count=itemcount($bibnum);
-  if ($count == 0){
-    delbiblio($bibnum);
-  }
 }
 
 =item modorder
@@ -317,17 +309,13 @@ Also updates the book fund ID in the aqorderbreakdown table.
 =cut
 #'
 sub receiveorder {
-  my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
-  my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
-  										biblioitemnumber=?,unitprice=?,freight=?,rrp=?
-  						where biblionumber=? and ordernumber=?");
-  $sth->execute($quantrec,$invoiceno,$bibitemno,$cost,$freight,$rrp,$biblio,$ordnum);
-  $sth->finish;
-  $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
-  ordernumber=?");
-  $sth->execute($bookfund,$ordnum);
-  $sth->finish;
+	my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$freight,$rrp)=@_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("update aqorders set quantityreceived=?,datereceived=now(),booksellerinvoicenumber=?,
+											unitprice=?,freight=?,rrp=?
+							where biblionumber=? and ordernumber=?");
+	$sth->execute($quantrec,$invoiceno,$cost,$freight,$rrp,$biblio,$ordnum);
+	$sth->finish;
 }
 
 =item updaterecorder
@@ -566,9 +554,10 @@ sub ordersearch {
 	my @searchterms = ($id);
 	map { push(@searchterms,"$_%","% $_%") } @data;
 	push(@searchterms,$search,$search,$biblio);
-	my $sth=$dbh->prepare("Select *,biblio.title from aqorders,biblioitems,biblio
-		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
-		and aqorders.booksellerid = ?
+	my $sth=$dbh->prepare("Select *,biblio.title from aqorders,biblioitems,biblio,aqbasket
+		where aqorders.biblioitemnumber = biblioitems.biblioitemnumber and
+		aqorders.basketno = aqbasket.basketno
+		and aqbasket.booksellerid = ?
 		and biblio.biblionumber=aqorders.biblionumber
 		and ((datecancellationprinted is NULL)
 		or (datecancellationprinted = '0000-00-00'))

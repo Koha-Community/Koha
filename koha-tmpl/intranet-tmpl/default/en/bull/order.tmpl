@@ -1,39 +1,53 @@
 <!-- TMPL_INCLUDE name="popup-top.inc" -->
 <div id="mainbloc">
-<h1 class="bull">Supplier Search Results</h1>
+<h1 class="acquisition">Supplier Search Results</h1>
 <div id="bloc100">
-<h2 class="bull">You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
+<h2 class="acquisition">You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
 <table>
 <tr>
-	<th class="acquisition">Supplier</th>
-	<th class="acquisition">Select</th>
+	<th class="acquisition">Company</th>
+	<th class="acquisition">
+		<table class="noborder">
+			<tr>
+				<th class="acquisition">Basket</th>
+				<th class="acquisition">&nbsp;</th>
+			</tr>
+		</table>
+	</td>
 </tr>
+
 <!-- TMPL_LOOP name="loop_suppliers" -->
-	<tr bgcolor=<!-- TMPL_VAR name="color" -->>
+	<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
+		<td><!-- TMPL_VAR name="name" --></td>
 		<td>
-			<!-- TMPL_VAR name="name" -->
-		</td>
-		<td>
-			<a href="#" onClick="GetIdInOpener('<!-- TMPL_VAR name=id -->','<!-- TMPL_VAR name="name" -->')">
-				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/arrow.gif" title="select this supplier" BORDER=0 height=40 width=40>
-			</a>
-		</td>
-	</tr>
-<!-- /TMPL_LOOP -->
-</table>
-</CENTER>
-<br>
-<a class="button bull" href="supplier.pl?id=0">Add supplier</a>
-
-
-<script  language="javascript">
-
-function GetIdInOpener(value,name)
-{
-  opener.document.f.aqbooksellerid.value = value;
-  opener.document.f.aqbooksellername.value= name;
-  self.close();
-}
-	
-</script>
+			<table width="100%" cellspacing=0 cellpadding=5 border=0>
+					<tr>
+						<th class="acquisition">Basket</th>
+						<th class="acquisition">Items</th>
+						<th class="acquisition">Created by</th>
+						<th class="acquisition">Date</th>
+						<th class="acquisition">&nbsp;</th>
+					</tr>
+					<!-- TMPL_LOOP NAME="loop_basket" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><TMPL_VAR NAME="total"></td>
+							<td><!-- TMPL_VAR NAME="authorisedby" --></td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
+							<td>
+								<!-- TMPL_IF name="closedate" -->
+									closed on <!-- TMPL_VAR NAME="closedate" -->
+								<!-- TMPL_ELSE -->
+									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">...</a>
+								<!-- /TMPL_IF -->
+							</td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+				</table>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	</div>
+	<a class="button acquisition" href="supplier.pl?supplerid=0">Add supplier</a>
+</div>
 <!-- TMPL_INCLUDE name="popup-bottom.inc" -->

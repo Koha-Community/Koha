@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+
 use strict;
 use CGI;
 use C4::Koha;
@@ -21,7 +22,7 @@ my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$
 	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
 	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
 	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-	$numberingmethod, $arrivalplanified, $status, $biblionumber, 
+	$numberingmethod, $status, $biblionumber, 
 	$bibliotitle, $notes);
 
 	my @budgets;
@@ -67,7 +68,6 @@ if ($op eq 'mod') {
 	$setto3 = $subs->{'setto3'};
 	$lastvalue3 = $subs->{'lastvalue3'};
 	$numberingmethod = $subs->{'numberingmethod'};
-	$arrivalplanified = $subs->{'arrivalplanified'};
 	$status = $subs->{status};
 	$biblionumber = $subs->{'biblionumber'};
 	$bibliotitle = $subs->{'bibliotitle'},
@@ -103,7 +103,6 @@ if ($op eq 'mod') {
 		setto3 => $setto3,
 		lastvalue3 => $lastvalue3,
 		numberingmethod => $numberingmethod,
-		arrivalplanified => format_date($arrivalplanified),
 		status => $status,
 		biblionumber => $biblionumber,
 		bibliotitle => $bibliotitle,
@@ -151,18 +150,17 @@ if ($op eq 'addsubscription') {
 	my $setto3 = $query->param('setto3');
 	my $lastvalue3 = $query->param('lastvalue3');
 	my $numberingmethod = $query->param('numberingmethod');
-	my $arrivalplanified = $query->param('arrivalplanified');
 	my $status = 1;
 	my $biblionumber = $query->param('biblionumber');
 	my $notes = $query->param('notes');
-	newsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
+	my $subscriptionid = newsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
-					$numberingmethod, $arrivalplanified, $status, $notes
+					$numberingmethod, $status, $notes
 				);
-	
+	print $query->redirect("/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=$subscriptionid");
+} else {
+	output_html_with_http_headers $query, $cookie, $template->output;
 }
-
-output_html_with_http_headers $query, $cookie, $template->output;

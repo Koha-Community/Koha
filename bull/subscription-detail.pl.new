@@ -1,0 +1,177 @@
+#!/usr/bin/perl
+
+use strict;
+use CGI;
+use C4::Auth;
+use C4::Bull;
+use C4::Output;
+use C4::Interface::CGI::Output;
+use C4::Context;
+use HTML::Template;
+
+my $query = new CGI;
+my $op = $query->param('op');
+my $dbh = C4::Context->dbh;
+my $sth;
+my $id;
+my ($template, $loggedinuser, $cookie, $subs);
+
+if ($op eq 'modsubscription') {
+	&modsubscription($query->param('suscr'),$query->param('user'),$query->param('cost'),
+						$query->param('supplier'),$query->param('budget'),$query->param('begin'),
+						$query->param('frequency'),$query->param('arrival'),$query->param('numberlength'),
+						$query->param('weeklength'),$query->param('monthlength'),
+						$query->param('X'),$query->param('Xstate'),$query->param('Xfreq'),$query->param('Xstep'),
+						$query->param('Y'),$query->param('Ystate'),$query->param('Yfreq'),$query->param('Ystep'),
+						$query->param('Z'),$query->param('Zstate'),$query->param('Zfreq'),$query->param('Zstep'),
+						$query->param('sequence'),$query->param('arrivalplanified'),1,
+						$query->param('biblioid'),$query->param('notes')
+					);
+		
+	($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "bull/subscription-detail.tmpl",
+					query => $query,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {catalogue => 1},
+					debug => 1,
+					});
+	
+		my ($user, $cookie, $sessionID, $flags) = checkauth($query, 0, {catalogue => 1}, "intranet");
+		warn "user =>".$query->param('user'),
+			"librarian =>".$query->param('user'),
+			"aqbooksellerid =>". $query->param('supplier'),
+			"cost =>". $query->param('cost'),
+			"aqbudgetid =>". $query->param('budget'),
+			"startdate =>". $query->param('begin'),
+			"frequency =>". $query->param('frequency'),
+			"arrival =>". $query->param('dow'),
+			"numberlength =>". $query->param('numberlength'),
+			"weeklength =>". $query->param('weeklength'),
+			"monthlength =>". $query->param('monthlength'),
+			"seqnum1 =>". $query->param('X'),
+			"startseqnum1 =>". $query->param('X'),
+			"seqtype1 =>". $query->param('Xstate'),
+			"freq1 =>". $query->param('Xfreq'),
+			"step1 =>". $query->param('Xstep'),
+			"seqnum2 =>". $query->param('Y'),
+			"startseqnum2 =>". $query->param('Y'),
+			"seqtype2 =>". $query->param('Ystate'),
+			"freq2 =>". $query->param('Yfreq'),
+			"step2 =>". $query->param('Ystep'),
+			"seqnum3 =>". $query->param('Z'),
+			"startseqnum3 =>". $query->param('Z'),
+			"seqtype3 =>". $query->param('Zstate'),
+			"freq3 =>". $query->param('Zfreq'),
+			"step3 =>". $query->param('Zstep'),
+			"sequence =>". $query->param('sequence'),
+			"arrivalplanified =>". $query->param('arrivalplanified'),
+			"status =>". $query->param('status'),
+			"biblioid =>". $query->param('perioid'),
+			"notes =>". $query->param('notes'),
+			"suscr =>". $query->param('id');
+		$template->param(
+			user => $query->param('user'),
+			librarian => $query->param('user'),
+			aqbooksellerid => $query->param('supplier'),
+			cost => $query->param('cost'),
+			aqbudgetid => $query->param('budget'),
+			startdate => $query->param('begin'),
+			frequency => $query->param('frequency'),
+			arrival => $query->param('dow'),
+			numberlength => $query->param('numberlength'),
+			weeklength => $query->param('weeklength'),
+			monthlength => $query->param('monthlength'),
+			seqnum1 => $query->param('X'),
+			startseqnum1 => $query->param('X'),
+			seqtype1 => $query->param('Xstate'),
+			freq1 => $query->param('Xfreq'),
+			step1 => $query->param('Xstep'),
+			seqnum2 => $query->param('Y'),
+			startseqnum2 => $query->param('Y'),
+			seqtype2 => $query->param('Ystate'),
+			freq2 => $query->param('Yfreq'),
+			step2 => $query->param('Ystep'),
+			seqnum3 => $query->param('Z'),
+			startseqnum3 => $query->param('Z'),
+			seqtype3 => $query->param('Zstate'),
+			freq3 => $query->param('Zfreq'),
+			step3 => $query->param('Zstep'),
+			sequence => $query->param('sequence'),
+			arrivalplanified => $query->param('arrivalplanified'),
+			status => $query->param('status'),
+			biblioid => $query->param('perioid'),
+			notes => $query->param('notes'),
+			suscr => $query->param('id'));
+	
+	
+		$template->param(
+				"frequency$query->param('frequency')" => 1,
+				"Xstate".$query->param('Xstate') => 1,
+				"Ystate".$query->param('Ystate') => 1,
+				"Zstate".$query->param('Zstate') => 1,
+				"arrival".query->param('$dow') => 1,
+				);
+	
+ } else {
+	$sth = $dbh->prepare('select * from subscription where subscriptionid = ?');
+	$id = $query->param('suscr');
+	$sth->execute($id);
+	$subs = $sth->fetchrow_hashref;
+	$sth->finish;
+	
+	($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "bull/subscription-detail.tmpl",
+					query => $query,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {catalogue => 1},
+					debug => 1,
+					});
+	
+		my ($user, $cookie, $sessionID, $flags) = checkauth($query, 0, {catalogue => 1}, "intranet");
+		$template->param(user => $user);
+		$template->param(librarian => $subs->{'librarian'},
+							aqbooksellerid => $subs->{'aqbooksellerid'},
+							cost => $subs->{'cost'},
+							aqbudgetid => $subs->{'aqbudgetid'},
+							startdate => $subs->{'startdate'},
+							frequency => $subs->{'periodicity'},
+							arrival => $subs->{'dow'},
+							numberlength => $subs->{'numberlength'},
+							weeklength => $subs->{'weeklength'},
+							monthlength => $subs->{'monthlength'},
+							seqnum1 => $subs->{'seqnum1'},
+							startseqnum1 => $subs->{'startseqnum1'},
+							seqtype1 => $subs->{'seqtype1'},
+							freq1 => $subs->{'freq1'},
+							step1 => $subs->{'step1'},
+							seqnum2 => $subs->{'seqnum2'},
+							startseqnum2 => $subs->{'startseqnum2'},
+							seqtype2 => $subs->{'seqtype2'},
+							freq2 => $subs->{'freq2'},
+							step2 => $subs->{'step2'},
+							seqnum3 => $subs->{'seqnum3'},
+							startseqnum3 => $subs->{'startseqnum3'},
+							seqtype3 => $subs->{'seqtype3'},
+							freq3 => $subs->{'freq3'},
+							step3 => $subs->{'step3'},
+							sequence => $subs->{'numberingmethod'},
+							arrivalplanified => $subs->{'arrivalplanified'},
+							status => $subs->{'status'},
+							biblioid => $subs->{'perioid'},
+							notes => $subs->{'notes'},
+							suscr => $id,		   
+		);
+	
+	$template->param(
+				"frequency$subs->{'periodicity'}" => 1,
+				"Xstate$subs->{'seqtype1'}" => 1,
+				"Ystate$subs->{'seqtype2'}" => 1,
+				"Zstate$subs->{'seqtype3'}" => 1,
+				"arrival$subs->{'dow'}" => 1,
+				);
+	
+}
+
+output_html_with_http_headers $query, $cookie, $template->output;

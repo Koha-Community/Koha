@@ -15,85 +15,74 @@
 		<input type="hidden" name="op" value="addsubscription">
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
 		<p>Librarian</td><td> <!-- TMPL_VAR name="user" --></p>
-		<p><label>Supplier (*):</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid"-->" size=4> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>) <a href="#" OnClick="FindAcqui()">...</a></p>
-		<p><label>Cost</label><input type="text" name="cost" value="<!-- TMPL_VAR name="cost" -->" size=4></label></p>
-		<p><label>Budget</label>
-			<select name="aqbudgetid">
-				<!-- TMPL_LOOP name="budgets" -->
-					<!-- TMPL_IF name="selected" -->
-						<option value="<!-- TMPL_VAR name="aqbudgetid" -->" selected>
-					<!-- TMPL_ELSE -->
-						<option value="<!-- TMPL_VAR name="aqbudgetid" -->">
-					<!-- /TMPL_IF -->
-						<!-- TMPL_VAR name="bookfundname" --> (<!-- TMPL_VAR name="startdate" --> - <!-- TMPL_VAR name="enddate" -->)
-					</option>
-				<!-- /TMPL_LOOP -->
-			</select>
-			</p>
-	<p><label>Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="title" -->" disabled readonly>)<a href="#" onClick="Plugin(f)">...</a></p>
-	<p><label>Notes</label><TEXTAREA NAME="notes" COLS=30 ROWS=2><!-- TMPL_VAR name="notes" --></TEXTAREA></p>
+		<p><label>Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="title" -->" disabled readonly>)<a href="#" onClick="Plugin(f)">...</a></p>
+		<p><label>Notes</label><TEXTAREA NAME="notes" COLS=30 ROWS=2><!-- TMPL_VAR name="notes" --></TEXTAREA></p>
+		<p class="problem">warning</p>
+		<ul>
+			<li>remember you <b>must</b> have created a biblio <b>before</b> creating a subscription</li>
+			<li>a suggestion is sent to the librarian. The suggestion will be changed to an order</li>
+		</ul>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Planning</h2>
 	<p><label class="label100">Beginnning date:</label> <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size=13 maxlength=10></p>
-	<p><label class="label100">Next issue (expected)</label><input type="text" name="arrivalplanified" value="<!-- TMPL_VAR name="arrivalplanified" -->" size=13 maxlength=10></p>
 	<p><label class="label100">Frequency (*)</label>
 			<select name="periodicity" size="1">
-				<option value="" selected>None</option>
+				<option value="" selected>Unknown</option>
 				<!-- TMPL_IF name="periodicity1" -->
 					<option value="1" selected>1/day</option>
 				<!-- TMPL_ELSE -->
 					<option value="1">1/day</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity2" -->
-					<option value="2" selected>1 week</option>
+					<option value="2" selected>1/week</option>
 				<!-- TMPL_ELSE -->
-					<option value="2">1 week</option>
+					<option value="2">1/week</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity3" -->
-					<option value="3" selected>2 weeks</option>
+					<option value="3" selected>1/2 weeks</option>
 				<!-- TMPL_ELSE -->
-					<option value="3">2 weeks</option>
+					<option value="3">1/2 weeks</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity4" -->
-					<option value="4" selected>3 weeks</option>
+					<option value="4" selected>1/3 weeks</option>
 				<!-- TMPL_ELSE -->
-					<option value="4">3 weeks</option>
+					<option value="4">1/3 weeks</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity5" -->
-					<option value="5" selected>1 month</option>
+					<option value="5" selected>1/month</option>
 				<!-- TMPL_ELSE -->
-					<option value="5">1 month</option>
+					<option value="5">1/month</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity6" -->
-					<option value="6" selected>2 months</option>
+					<option value="6" selected>1/2 months</option>
 				<!-- TMPL_ELSE -->
-					<option value="6">2 months</option>
+					<option value="6">1/2 months</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity7" -->
-					<option value="7" selected>3 months</option>
+					<option value="7" selected>1/3 months</option>
 				<!-- TMPL_ELSE -->
-					<option value="7">3 months</option>
+					<option value="7">1/3 months</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity8" -->
-					<option value="8" selected>1 quarter</option>
+					<option value="8" selected>1/quarter</option>
 				<!-- TMPL_ELSE -->
-					<option value="8">1 quarter</option>
+					<option value="8">1/quarter</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity9" -->
-					<option value="9" selected>2 quarters</option>
+					<option value="9" selected>1/2 quarters</option>
 				<!-- TMPL_ELSE -->
-					<option value="9">2 quarters</option>
+					<option value="9">1/2 quarters</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity10" -->
-					<option value="10" selected>1 year</option>
+					<option value="10" selected>1/year</option>
 				<!-- TMPL_ELSE -->
-					<option value="10">1 year</option>
+					<option value="10">1/year</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="periodicity11" -->
-					<option value="11" selected>2 years</option>
+					<option value="11" selected>1/2 years</option>
 				<!-- TMPL_ELSE -->
-					<option value="11">2 years</option>
+					<option value="11">1/2 years</option>
 				<!-- /TMPL_IF -->
 			</select>
 	</p>
@@ -225,9 +214,8 @@ function FindAcqui(f)
 
 function Check(f)
 {
-  if (f.aqbooksellerid.value.length != 0 && f.dow.value.length != 0
-	&& f.startdate.value.length != 0 && f.dow.value.length != 0
-	&& f.periodicity.value.length != 0)
+  if (f.dow.value.length != 0
+	&& f.startdate.value.length != 0 && f.dow.value.length != 0)
 	{
 // 		alert('subscription ok');
 		document.f.submit();
@@ -238,149 +226,4 @@ else
 }
 	return false;
 }
-
-function select(reponse, type)
-{
- if (type == 'X')
-     {
-	if (reponse == 0)
-	{
-	   document.f.step1.style.backgroundColor="#DCDCDC";	
-	   document.f.step1.value = "";
-	   document.f.step1.disabled = true;
-	   document.f.freq1.style.backgroundColor="#DCDCDC";	
-	   document.f.freq1.value = "";
-	   document.f.freq1.disabled = true;
-	   document.f.seqnum1.style.backgroundColor="#DCDCDC";	
-	   document.f.seqnum1.value = "";
-	   document.f.seqnum1.disabled = true;
-	   
-        }
-	if (reponse == 1)
-	{
-	   document.f.step1.style.backgroundColor="#FFFFFF";	
-	   document.f.step1.disabled = false;
-	   document.f.freq1.style.backgroundColor="#DCDCDC";	
-	   document.f.freq1.value = "";
-	   document.f.freq1.disabled = true;
-	   document.f.seqnum1.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum1.disabled = false;
-        }	
-	if (reponse == 2)
-	{
-	   document.f.step1.style.backgroundColor="#FFFFFF";	
-	   document.f.step1.disabled = false;
-	   document.f.freq1.style.backgroundColor="#FFFFFF";	
-	   document.f.freq1.disabled = false;
-	   document.f.seqnum1.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum1.disabled = false;
-        }
-	if (reponse == 3)
-	{
-	   document.f.step1.style.backgroundColor="#DCDCDC";	
-	   document.f.step1.value = "";
-	   document.f.step1.disabled = true;
-	   document.f.freq1.style.backgroundColor="#DCDCDC";	
-	   document.f.freq1.value = "";
-	   document.f.freq1.disabled = true;
-	   document.f.seqnum1.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum1.disabled = false;
-        }
-     }
- if (type == 'Y')
-     {
-	if (reponse == 0)
-	{
-	   document.f.step2.style.backgroundColor="#DCDCDC";	
-	   document.f.step2.value = "";
-	   document.f.step2.disabled = true;
-	   document.f.freq2.style.backgroundColor="#DCDCDC";	
-	   document.f.freq2.value = "";
-	   document.f.freq2.disabled = true;
-	   document.f.seqnum2.style.backgroundColor="#DCDCDC";	
-	   document.f.seqnum2.value = "";
-	   document.f.seqnum2.disabled = true;
-	   
-        }
-	if (reponse == 1)
-	{
-	   document.f.step2.style.backgroundColor="#FFFFFF";	
-	   document.f.step2.disabled = false;
-	   document.f.freq2.style.backgroundColor="#DCDCDC";	
-	   document.f.freq2.value = "";
-	   document.f.freq2.disabled = true;
-	   document.f.seqnum2.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum2.disabled = false;
-        }	
-	if (reponse == 2)
-	{
-	   document.f.step2.style.backgroundColor="#FFFFFF";	
-	   document.f.step2.disabled = false;
-	   document.f.freq2.style.backgroundColor="#FFFFFF";	
-	   document.f.freq2.disabled = false;
-	   document.f.seqnum2.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum2.disabled = false;
-        }
-	if (reponse == 3)
-	{
-	   document.f.step2.style.backgroundColor="#DCDCDC";	
-	   document.f.step2.value = "";
-	   document.f.step2.disabled = true;
-	   document.f.freq2.style.backgroundColor="#DCDCDC";	
-	   document.f.freq2.value = "";
-	   document.f.freq2.disabled = true;
-	   document.f.Y.style.backgroundColor="#FFFFFF";	
-	   document.f.Y.disabled = false;
-        }
-
-     }
- if (type == 'Z')
-     {
-	if (reponse == 0)
-	{
-	   document.f.step3.style.backgroundColor="#DCDCDC";	
-	   document.f.step3.value = "";
-	   document.f.step3.disabled = true;
-	   document.f.freq3.style.backgroundColor="#DCDCDC";	
-	   document.f.freq3.value = "";
-	   document.f.freq3.disabled = true;
-	   document.f.seqnum3.style.backgroundColor="#DCDCDC";	
-	   document.f.seqnum3.value = "";
-	   document.f.seqnum3.disabled = true;
-	   
-        }
-	if (reponse == 1)
-	{
-	   document.f.step3.style.backgroundColor="#FFFFFF";	
-	   document.f.step3.disabled = false;
-	   document.f.freq3.style.backgroundColor="#DCDCDC";	
-	   document.f.freq3.value = "";
-	   document.f.freq3.disabled = true;
-	   document.f.seqnum3.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum3.disabled = false;
-        }	
-	if (reponse == 2)
-	{
-	   document.f.step3.style.backgroundColor="#FFFFFF";	
-	   document.f.step3.disabled = false;
-	   document.f.freq3.style.backgroundColor="#FFFFFF";	
-	   document.f.freq3.disabled = false;
-	   document.f.seqnum3.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum3.disabled = false;
-        }
-	if (reponse == 3)
-	{
-	   document.f.step3.style.backgroundColor="#DCDCDC";	
-	   document.f.step3.value = "";
-	   document.f.step3.disabled = true;
-	   document.f.freq3.style.backgroundColor="#DCDCDC";	
-	   document.f.freq3.value = "";
-	   document.f.freq3.disabled = true;
-	   document.f.seqnum3.style.backgroundColor="#FFFFFF";	
-	   document.f.seqnum3.disabled = false;
-        }
-
-     }
-}
-
 </script>
