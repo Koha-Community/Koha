@@ -213,7 +213,7 @@ and the OPAC interface at :
 
    http://%s\:%s/
 
-Be sure to read the INSTALL, and Hints files.
+Be sure to read the Hints file.
 
 For more information visit http://www.koha.org
 
@@ -1502,6 +1502,12 @@ MARC tables.
 
 The MARC tables are also populated in addition to being created.
 
+Because updatedatabase calls scripts/updater/updatedatabase to
+do the actual update, and that script uses C4::Context,
+$etcdir/koha.conf must exist at this point. We use a symlink to
+do this and to also at the same time faciliate detection of
+ahorted installs. (See checkabortedinstall.)
+
 =cut
 
 $messages->{'UpdateMarcTables'}->{en} =
@@ -1510,7 +1516,7 @@ You can import marc parameters for :
 
   1 MARC21
   2 UNIMARC
-  3 none
+  N none
 
 Please choose which parameter you want to install. Note if you choose 3,
 nothing will be added, and it can be a BIG job to manually create those tables
@@ -1519,30 +1525,34 @@ Choose MARC definition [1]: |;
 
 $messages->{'Language'}->{en} = heading('CHOOSE LANGUAGES') . qq|
 This version of koha supports a few languages.
-Enter you languages preferences : either en, fr, es or pl.
+Enter your language preference : either en, fr, es or pl.
+
 Note that the en is always choosen when the system does not finds the
 language you choose in a specific screen.
-fr : opac is translated (except pictures)
+
+fr : OPAC is translated (except pictures)
 es : a few intranet is translated (including pictures)
-pl : opac is translated (UNTESTED in this release)
-|;
+pl : OPAC is translated (UNTESTED in this release)
+
+Whether you specify a language here, you can always go to the
+intranet interface and change it from the system preferences.
+
+Which language do you choose? |;
 
 sub updatedatabase {
     # At this point, $etcdir/koha.conf must exist, for C4::Context
-    # We must somehow temporarily enable $etcdir/koha.conf. A symlink can
-    # do this & at the same time facilitate detection of aborted installs.
 	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 	if ($result) {
 		print "Problem updating database...\n";
 		exit;
 	}
 
-	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 123', '1');
+	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
 
-	if ($response == 1) {
+	if ($response eq '1') {
 		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
 	}
-	if ($response == 2) {
+	if ($response eq '2') {
 		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
 		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
 	}
