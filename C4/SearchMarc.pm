@@ -259,6 +259,7 @@ sub catalogsearch {
 	# Finds the basic results without the NOT requests
 	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
 
+	$sql_where1 .= "and TO_DAYS( NOW( ) ) - TO_DAYS( biblio.timestamp ) <30" if $orderby =~ "biblio.timestamp";
 	my $sth;
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby");
