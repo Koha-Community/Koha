@@ -30,7 +30,7 @@
 			<!-- TMPL_IF NAME="ERROR_surname" -->
 				Surname<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="aERROR_ddress" -->
+			<!-- TMPL_IF NAME="ERROR_address" -->
 				Postal Street Address<br>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_city" -->
@@ -42,7 +42,7 @@
 		<input type="hidden" name="joining" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
 		<input type="hidden" name="expiry" value="<!-- TMPL_VAR NAME="expiry" -->">
 		<input type="hidden" name="type" value="borrowers">
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
 		<input type="hidden" name="actionType" value="<!-- TMPL_VAR NAME="actionType" -->">
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
@@ -153,7 +153,7 @@
 				<td>Joining Branch</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="text" name="address" size="40" value="<!-- TMPL_VAR NAME="address" -->"></td>
+				<td colspan="2"><input type="text" name="streetaddress" size="40" value="<!-- TMPL_VAR NAME="address" -->"></td>
 				<td>
 					<input type="text" name="zipcode" size="10" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->">
 				</td>
@@ -172,7 +172,7 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="text" name="streetaddress" size="40" value="<!-- TMPL_VAR NAME="streetaddress" -->"></td>
+				<td colspan="2"><input type="text" name="physstreet" size="40" value="<!-- TMPL_VAR NAME="physstreet" -->"></td>
 				<td>
 					<input type="text" name="homezipcode" size="10" maxlength="20" value="<!-- TMPL_VAR NAME="homezipcode" -->">
 				</td>
@@ -245,7 +245,6 @@
 				<td>Circulation note (appears during issue/return)</td>
 				<td colspan="4"><textarea name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td>
 			</tr>
-			<!-- TMPL_IF NAME="modify" -->
 				<tr><td colspan="5">FLAGS</td></tr>
 				<!-- TMPL_LOOP NAME="flagloop" -->
 				<tr>
@@ -255,7 +254,6 @@
 					</td>
 				</tr>
 				<!-- /TMPL_LOOP -->
-			<!-- /TMPL_IF -->
 
 			<tr>
 				<td colspan="5">The 2 following fields are available for your own usage. They can be useful for stat purposes</td>
