@@ -65,8 +65,8 @@ sub groupmembers {
     my @members;
     my $dbh = C4::Context->dbh;
     my $q_group=$dbh->quote($group);
-    my $sth=$dbh->prepare("select borrowernumber from borrowergroups where groupshortname=$q_group");
-    $sth->execute;
+    my $sth=$dbh->prepare("select borrowernumber from borrowergroups where groupshortname=?");
+    $sth->execute($q_group);
     while (my ($borrowernumber) = $sth->fetchrow) {
 	my ($patron, $flags) = getpatroninformation($env, $borrowernumber);
 	my $currentissues=currentissues($env, $patron);
