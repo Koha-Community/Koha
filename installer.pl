@@ -518,6 +518,10 @@ unless ( -d "$kohadir/modules" ) {
    print "Creating $kohadir/modules...\n";
    mkdir ("$kohadir/modules", oct(750));
 }
+unless ( -d "$kohadir/scripts" ) {
+   print "Creating $kohadir/scripts...\n";
+   mkdir ("$kohadir/scripts", oct(750));
+}
 unless ( -d $opacdir ) {
    print "Creating $opacdir...\n";
    my $result=mkdir ($opacdir, oct(770));
@@ -551,7 +555,9 @@ print "Copying internet-html files to $kohadir/htdocs...\n";
 system("cp -R intranet-html/* $kohadir/htdocs/");
 print "Copying intranet-cgi files to $kohadir/cgi-bin...\n";
 system("cp -R intranet-cgi/* $kohadir/cgi-bin/");
-print "Copying script files to $kohadir/modules...\n";
+print "Copying script files to $kohadir/scripts...\n";
+system("cp -R scripts/* $kohadir/scripts/");
+print "Copying module files to $kohadir/modules...\n";
 system("cp -R modules/* $kohadir/modules/");
 print "Copying opac-html files to $opacdir/htdocs...\n";
 system("cp -R opac-html/* $opacdir/htdocs/");
@@ -704,7 +710,7 @@ SETTING UP Z39.50 DAEMON
 ========================
 |;
 
-my $kohalog='/var/log/koha';
+my $kohalogdir='/var/log/koha';
 print "Directory for logging by Z39.50 daemon [$kohalogdir]: ";
 chomp($input = <STDIN>);
 if ($input) {
@@ -728,31 +734,34 @@ chmod 0770, $kohalogdir;
 chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
 
 # LAUNCH SCRIPT
+print "Modifying Z39.50 daemon launch script...\n";
 my $newfile='';
-open (L, "scripts/z3950-daemon-launch.sh");
+open (L, "$kohadir/scripts/z3950daemon/z3950-daemon-launch.sh");
 while (<L>) {
     if (/^RunAsUser=/) {
 	$newfile.="RunAsUser=$httpduser\n";
     } elsif (/^KohaZ3950Dir=/) {
-	$newfile.="KohaZ3950Dir=$kohadir/scripts/\n";
+	$newfile.="KohaZ3950Dir=$kohadir/scripts/z3950daemon\n";
     } else {
 	$newfile.=$_;
     }
 }
 close L;
-system("mv scripts/z3950-daemon-launch.sh z3950-daemon-launch.sh.orig");
-open L, ">scripts/z3950-daemon-launch.sh";
+system("mv $kohadir/scripts/z3950daemon/z3950-daemon-launch.sh $kohadir/scripts/z3950daemon/z3950-daemon-launch.sh.orig");
+open L, ">$kohadir/scripts/z3950daemon/z3950-daemon-launch.sh";
 print L $newfile;
 close L;
 
+
 # SHELL SCRIPT
+print "Modifying Z39.50 daemon wrapper script...\n";
 $newfile='';
-open (S, "scripts/z3950-daemon-shell.sh");
+open (S, "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh");
 while (<S>) {
     if (/^KohaModuleDir=/) {
 	$newfile.="KohaModuleDir=$kohadir/modules\n";
     } elsif (/^KohaZ3950Dir=/) {
-	$newfile.="KohaZ3950Dir=$kohadir/scripts\n";
+	$newfile.="KohaZ3950Dir=$kohadir/scripts/z3950daemon\n";
     } elsif (/^LogDir=/) {
 	$newfile.="LogDir=$kohalogdir\n";
     } else {
@@ -761,10 +770,15 @@ while (<S>) {
 }
 close S;
 
-system("mv scripts/z3950-daemon-shell.sh z3950-daemon-shell.sh.orig");
-open S, ">scripts/z3950-daemon-shell.sh";
+system("mv $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh.orig");
+open S, ">$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh";
 print S $newfile;
 close S;
+chmod 0750, "$kohadir/scripts/z3950daemon/z3950-daemon-launch.sh";
+chmod 0750, "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh";
+chmod 0750, "$kohadir/scripts/z3950daemon/processz3950queue";
+chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/processz3950queue") or warn "can't chown $kohadir/scripts/z3950daemon/processz3950queue: $!";
 
 
 #RESTART APACHE

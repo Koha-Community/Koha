@@ -179,6 +179,7 @@ mkdir("intranet-html", 0755);
 mkdir("opac-cgi", 0755);
 mkdir("opac-html", 0755);
 mkdir("scripts", 0755);
+mkdir("scripts/z3950daemon", 0755);
 mkdir("modules", 0755);
 mkdir("docs", 0755);
 
@@ -215,9 +216,9 @@ system("mv $rootdir/intranet-cgi/tkperl $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/acqui.simple/processz3950queue $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-launch.sh $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-shell.sh $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/acqui.simple/processz3950queue $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-launch.sh $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-shell.sh $rootdir/scripts/z3950daemon/");
 
 
 # Remove extraneous files from intranet-cgi
