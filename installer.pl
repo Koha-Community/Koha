@@ -308,7 +308,23 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
       close(HTTPDCONF);
    }
 }
-$httpduser ||= 'Undetermined';
+unless ($httpduser) {
+    print qq|
+
+I was not able to determine the user that Apache is running as.  This
+information is necessary in order to set the access privileges correctly on
+/etc/koha.conf.  This user should be set in one of the Apache configuration
+files using the "User" directive.
+|;
+    print "What is your Apache user? ";
+    chomp($input = <STDIN>);
+
+    if ($input) {
+	$httpduser = $input;
+    } else {
+	$httpduser='Undetermined';
+    }
+}
 
 #
 # Set ownership of the koha.conf file for security
