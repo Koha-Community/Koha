@@ -19,8 +19,8 @@
 #
 #-----------------------------------
 # Script Name: zed-koha-server.pl
-# Script Version: 1.3
-# Date:  2004/04/14
+# Script Version: 1.4
+# Date:  2004/06/02
 # Author:  Joshua Ferraro [jmf at kados dot org]
 # Description: A very basic Z3950 Server 
 # Usage: zed-koha-server.pl
@@ -35,7 +35,11 @@
 #    			 Fixed the substitution bug (e.g., 4=100 before 4=1);
 #    			 Added support for the truncation attribute (5=1 and
 #    			 5=100; thanks to Tomasz M. Wolniewicz for pointing
-#    			 out these improvements) 
+#    			 out these improvements)
+#    1.4.0 2004/06/02:  Changed sql queries to account for the difference 
+#    			 between bibid and biblionumber.  Thanks again to 
+#    			 Tomasz M. Wolniewicz for suggesting a great solution
+#    			 to this problem.
 #-----------------------------------
 # Note: After installing SimpleServer (indexdata.dk/simpleserver) and 
 # changing the leader information in Koha's MARCgetbiblio subroutine in
@@ -69,7 +73,7 @@ sub init_handler {
 	
 	# FIXME: I should force use of my database name 
         $args->{IMP_NAME} = "Zed-Koha";
-        $args->{IMP_VER} = "0.02";
+        $args->{IMP_VER} = "1.40";
         $args->{ERR_CODE} = 0;
         $args->{HANDLE} = $session;
         if (defined($args->{PASS}) && defined($args->{USER})) {
@@ -140,7 +144,7 @@ sub search_handler {
 		print "$term\n";        
 		print "The query was:\n";        
 		print "$query\n";
-		my $sql_query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
+		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblio ON marc_biblio.biblionumber = biblio.biblionumber WHERE biblio.isbn LIKE ?";
 		&run_query($sql_query, $query, $args);
 
 	} 
@@ -169,7 +173,7 @@ sub search_handler {
         	$query =~ s| |%|g;
 		$query .= "\%";		## Add the wildcard to search term
 		print "$query\n";
-		my $sql_query = "SELECT biblionumber FROM biblio WHERE author LIKE ?";
+		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblio ON marc_biblio.biblionumber = biblio.biblionumber WHERE biblio.author LIKE ?";
                 &run_query($sql_query, $query, $args);
 ## used for debugging--works!
 ##              print "@bib_list\n";
@@ -203,7 +207,7 @@ sub search_handler {
                 print "$term\n";
                 print "The query was:\n";
                 print "$query\n";
-		my $sql_query = "SELECT biblionumber FROM biblio WHERE title LIKE ?";
+		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblio ON marc_biblio.biblionumber = biblio.biblionumber WHERE biblio.title LIKE ?";
         	&run_query($sql_query, $query, $args);
 	}
 	elsif (/1=21/) {         ## subject 
@@ -228,7 +232,7 @@ sub search_handler {
 		
 		$query .= "\%";         ## Add the wildcard to search term
                 print "$query\n";
-		my $sql_query = "SELECT biblionumber FROM bibliosubject WHERE subject LIKE ?";
+		my $sql_query = "SELECT marc_biblio.bibid FROM marc_biblio RIGHT JOIN biblio ON marc_biblio.biblionumber = biblio.biblionumber WHERE biblio.subject LIKE ?";
                 &run_query($sql_query, $query, $args);
         }
 	elsif (/1=1016/) {       ## any 
