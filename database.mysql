@@ -804,3 +804,18 @@ CREATE TABLE users (
   level smallint(6)
 );
 
+
+CREATE TABLE uploadedmarc (
+  id int(11) NOT NULL auto_increment,
+  marc longblob,
+  hidden smallint(6) default NULL,
+  name varchar(255) default NULL,
+  PRIMARY KEY  (id)
+);
+					
+
+CREATE TABLE marcrecorddone (
+  isbn char(40) default NULL,
+  issn char(40) default NULL,
+  lccn char(40) default NULL
+);
