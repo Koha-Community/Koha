@@ -133,8 +133,14 @@ if ($input->param('z3950queue')) {
 	}
 	chop $serverlist;
 	my $q_serverlist=$dbh->quote($serverlist);
-	my $sth=$dbh->prepare("insert into z3950queue (term,type,servers) values ($q_term, '$type', $q_serverlist)");
+	my $rand=$input->param('rand');
+	my $sth=$dbh->prepare("select identifier from z3950queue where
+	identifier=$rand");
 	$sth->execute;
+	unless ($sth->rows) {
+	    $sth=$dbh->prepare("insert into z3950queue (term,type,servers, identifier) values ($q_term, '$type', $q_serverlist, '$rand')");
+	    $sth->execute;
+	}
     }
 }
 
@@ -695,26 +701,56 @@ EOF
 	    $sth->execute;
 	    my ($servers) = $sth->fetchrow;
 	    my $serverstring;
+	    my $starttimer=time();
 	    foreach $serverstring (split(/\s+/, $servers)) {
 		my ($name, $server, $database, $auth) = split(/\//, $serverstring, 4);
 		if ($name eq 'MAN') {
 		    print "$server/$database<br>\n";
-		} elsif ($name eq 'LOC') {
-		    print "Library of Congress<br>\n";
-		} elsif ($name eq 'NLC') {
-		    print "National Library of Canada<br>\n";
 		} else {
 		    my $sti=$dbh->prepare("select name from
 		    z3950servers where id=$name");
 		    $sti->execute;
 		    my ($longname)=$sti->fetchrow;
-		    print "$longname<br>\n";
+		    print "<a name=SERVER-$name></a>\n";
+		    if ($longname) {
+			print "$longname \n";
+		    } else {
+			print "$server/$database \n";
+		    }
 		}
-		print "<ul>\n";
 		my $q_server=$dbh->quote($serverstring);
+		my $startrecord=$input->param("ST-$name");
+		($startrecord) || ($startrecord='0');
 		my $sti=$dbh->prepare("select numrecords,id,results,startdate,enddate from z3950results where queryid=$id and server=$q_server");
 		$sti->execute;
 		($numrecords,$resultsid,$data,$startdate,$enddate) = $sti->fetchrow;
+		my $serverplaceholder='';
+		foreach ($input->param) {
+		    (next) unless (/ST-(.+)/);
+		    my $serverid=$1;
+		    (next) if ($serverid eq $name);
+		    my $place=$input->param("ST-$serverid");
+		    $serverplaceholder.="\&ST-$serverid=$place";
+		}
+		if ($numrecords) {
+		    my $previous='';
+		    my $next='';
+		    if ($startrecord>0) {
+			$previous="<a href=".$ENV{'SCRIPT_NAME'}."?file=Z-$id&menu=z3950$serverplaceholder\&ST-$name=".($startrecord-10)."#SERVER-$name>Previous</a>";
+		    }
+		    my $highest;
+		    $highest=$startrecord+10;
+		    ($highest>$numrecords) && ($highest=$numrecords);
+		    if ($numrecords>$startrecord+10) {
+			$next="<a href=".$ENV{'SCRIPT_NAME'}."?file=Z-$id&menu=z3950$serverplaceholder\&ST-$name=$highest#SERVER-$name>Next</a>";
+		    }
+		    print "<font size=-1>[Viewing ".($startrecord+1)." to ".$highest." of $numrecords records]  $previous | $next </font><br>\n";
+		} else {
+		    print "<br>\n";
+		}
+		print "<ul>\n";
+		my $stj=$dbh->prepare("update z3950results set highestseen=".($startrecord+10)." where id=$resultsid");
+		$stj->execute;
 		if ($sti->rows == 0) {
 		    print "pending...";
 		} elsif ($enddate == 0) {
@@ -728,8 +764,17 @@ EOF
 		    }
 		    print "<font color=red>processing... ($elapsedtime)</font>";
 		} elsif ($numrecords) {
-		    my @records=parsemarcdata($data);
+		    my $splitchar=chr(29);
+		    my @records=split(/$splitchar/, $data);
+		    $data='';
+		    for ($i=$startrecord; $i<$startrecord+10; $i++) {
+			$data.=$records[$i].$splitchar;
+		    }
+		    @records=parsemarcdata($data);
+		    my $counter=0;
 		    foreach $record (@records) {
+			$counter++;
+			#(next) unless ($counter>=$startrecord && $counter<=$startrecord+10);
 			my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $note, $controlnumber);
 			foreach $field (@$record) {
 			    if ($field->{'tag'} eq '001') {
@@ -800,6 +845,8 @@ EOF
 		}
 		print "</ul>\n";
 	    }
+	    my $elapsed=time()-$starttimer;
+	    print "<hr>It took $elapsed seconds to process this page.\n";
 	} else {
 	    my $sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
 	    $sth->execute;
@@ -907,30 +954,54 @@ sub z3950 {
 	$type=uc($type);
 	$term=~s/</&lt;/g;
 	$term=~s/>/&gt;/g;
-	if ($done == 1) {
-	    my $elapsed=$enddate-$startdate;
-	    my $elapsedtime='';
-	    if ($elapsed>60) {
-		$elapsedtime=sprintf "%d minutes",($elapsed/60);
-	    } else {
-		$elapsedtime=sprintf "%d seconds",$elapsed;
+	my $sti=$dbh->prepare("select id,server,startdate,enddate,numrecords from z3950results where queryid=$id");
+	$sti->execute;
+	if ($sti->rows) {
+	    my $processing=0;
+	    my $realenddate=0;
+	    my $totalrecords=0;
+	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords) = $sti->fetchrow) {
+		if ($r_enddate==0) {
+		    $processing=1;
+		} else {
+		    if ($r_enddate>$realenddate) {
+			$realenddate=$r_enddate;
+		    }
+		}
+
+		$totalrecords+=$r_numrecords;
 	    }
-	    if ($numrecords) {
-		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1>Done. $numrecords records found in $elapsedtime.</font><br>\n";
+	    if ($processing) {
+		my $elapsed=time()-$startdate;
+		my $elapsedtime='';
+		if ($elapsed>60) {
+		    $elapsedtime=sprintf "%d minutes",($elapsed/60);
+		} else {
+		    $elapsedtime=sprintf "%d seconds",$elapsed;
+		}
+		if ($totalrecords) {
+		    $totalrecords="$totalrecords found.";
+		} else {
+		    $totalrecords='';
+		}
+		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1 color=red>Processing... $totalrecords ($elapsedtime)</font><br>\n";
 	    } else {
-		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1>Done.  No records found.  Search took $elapsedtime.</font><br>\n";
+		my $elapsed=$realenddate-$startdate;
+		my $elapsedtime='';
+		if ($elapsed>60) {
+		    $elapsedtime=sprintf "%d minutes",($elapsed/60);
+		} else {
+		    $elapsedtime=sprintf "%d seconds",$elapsed;
+		}
+		if ($totalrecords) {
+		    $totalrecords="$totalrecords found.";
+		} else {
+		    $totalrecords='';
+		}
+		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1>Done. $totalrecords ($elapsedtime)</font><br>\n";
 	    }
-	} elsif ($done == -1) {
-	    my $elapsed=time()-$startdate;
-	    my $elapsedtime='';
-	    if ($elapsed>60) {
-		$elapsedtime=sprintf "%d minutes",($elapsed/60);
-	    } else {
-		$elapsedtime=sprintf "%d seconds",$elapsed;
-	    }
-	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font color=red size=-1>Processing ($elapsedtime)</font><br>\n";
 	} else {
-	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> $done <font size=-1>Pending</font><br>\n";
+	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1>Pending</font><br>\n";
 	}
     }
     print "</ul>\n";
@@ -944,15 +1015,17 @@ sub z3950 {
     }
     $serverlist.="<input type=checkbox name=S-MAN> <input name=manualz3950server size=25 value=otherserver:210/DATABASE>\n";
     
+    my $rand=rand(1000000000);
 print << "EOF";
     <form action=$ENV{'SCRIPT_NAME'} method=GET>
     <input type=hidden name=z3950queue value=1>
     <input type=hidden name=menu value=$menu>
     <p>
     <input type=hidden name=test value=testvalue>
+    <input type=hidden name=rand value=$rand>
     <table border=1 bgcolor=#dddddd><tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records</th></tr>
     <tr><td>Query Term</td><td><input name=query></td></tr>
-    <tr><td colspan=2 align=center><input type=radio name=type value=isbn checked> ISBN <input type=radio name=type value=lccn> LCCN <input type=radio name=type value=title> Title</td></tr>
+    <tr><td colspan=2 align=center><input type=radio name=type value=isbn checked>&nbsp;ISBN <input type=radio name=type value=lccn>&nbsp;LCCN<br><input type=radio name=type value=author>&nbsp;Author <input type=radio name=type value=title>&nbsp;Title <input type=radio name=type value=keyword>&nbsp;Keyword</td></tr>
     <tr><td colspan=2>
     $serverlist
     </td></tr>
