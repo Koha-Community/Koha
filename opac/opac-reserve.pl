@@ -224,7 +224,7 @@ if ($query->param('item_types_selected')) {
 	if ($query->param('all')) {
 		CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'a', undef, $rank,'',$title);
 	}
-	print $query->redirect("/cgi-bin/koha/opac-user.pl");
+	print $query->redirect("/cgi-bin/koha/opac-search.pl");
 } else {
 	# Here we check that the borrower can actually make reserves Stage 1.
 	my $noreserves = 0;
