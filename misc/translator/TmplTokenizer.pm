@@ -84,7 +84,7 @@ BEGIN {
 
 # End of the hideous stuff
 
-use vars qw( $readahead $lc_0 $lc $syntaxerror_p );
+use vars qw( @readahead $lc_0 $lc $syntaxerror_p );
 use vars qw( $cdata_mode_p $cdata_close );
 
 ###############################################################################
@@ -151,41 +151,46 @@ sub next_token_internal (*) {
     my($h) = @_;
     my($it, $kind);
     my $eof_p = 0;
-    if (!defined $readahead || !length $readahead) {
+    pop @readahead if @readahead && !ref $readahead[$#readahead]
+	    && !length $readahead[$#readahead];
+    if (!@readahead) {
 	my $next = scalar <$h>;
 	$eof_p = !defined $next;
 	if (!$eof_p) {
 	    $lc += 1;
-	    $readahead .= $next;
+	    push @readahead, $next;
 	}
     }
     $lc_0 = $lc;			# remember line number of first line
-    if ($eof_p && !length $readahead) {	# nothing left to do
+    if (@readahead && ref $readahead[$#readahead]) {	# TmplToken object
+	my $t = pop @readahead;
+	($it, $kind, local $lc) = ($t->string, $t->type, $t->line_number);
+    } elsif ($eof_p && !@readahead) {	# nothing left to do
 	;
-    } elsif ($readahead =~ /^\s+/s) {	# whitespace
-	($kind, $it, $readahead) = (TmplTokenType::TEXT, $&, $');
+    } elsif ($readahead[$#readahead] =~ /^\s+/s) {	# whitespace
+	($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TEXT, $&, $');
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
-    } elsif ($readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
-	($kind, $it, $readahead) = (TmplTokenType::TEXT, $&, $');
+    } elsif ($readahead[$#readahead] =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
+	($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TEXT, $&, $');
 	warn_normal "Unescaped < in $it\n", $lc_0
 		if !$cdata_mode_p && $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
 	for (;;) {
 	    if ($cdata_mode_p) {
-		if ($readahead =~ /^$cdata_close/) {
-		    ($kind, $it, $readahead) = (TmplTokenType::TAG, $&, $');
+		if ($readahead[$#readahead] =~ /^$cdata_close/) {
+		    ($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TAG, $&, $');
 		    $ok_p = 1;
 		} else {
-		    ($kind, $it, $readahead) = (TmplTokenType::TEXT, $readahead, undef);
+		    ($kind, $it) = (TmplTokenType::TEXT, pop @readahead);
 		    $ok_p = 1;
 		}
-	    } elsif ($readahead =~ /^$re_tag_compat/os) {
-		($kind, $it, $readahead) = (TmplTokenType::TAG, "$1>", $3);
+	    } elsif ($readahead[$#readahead] =~ /^$re_tag_compat/os) {
+		($kind, $it, $readahead[$#readahead]) = (TmplTokenType::TAG, "$1>", $3);
 		$ok_p = 1;
 		warn_normal "SGML \"closed start tag\" notation: $1<\n", $lc_0 if $2 eq '';
-	    } elsif ($readahead =~ /^<!--(?:(?!-->).)*-->/s) {
-		($kind, $it, $readahead) = (TmplTokenType::COMMENT, $&, $');
+	    } elsif ($readahead[$#readahead] =~ /^<!--(?:(?!-->).)*-->/s) {
+		($kind, $it, $readahead[$#readahead]) = (TmplTokenType::COMMENT, $&, $');
 		$ok_p = 1;
 		warn_normal "Syntax error in comment: $&\n", $lc_0;
 		$syntaxerror_p = 1;
@@ -195,7 +200,7 @@ sub next_token_internal (*) {
 	    $eof_p = !defined $next;
 	last if $eof_p;
 	    $lc += 1;
-	    $readahead .= $next;
+	    $readahead[$#readahead] .= $next;
 	}
 	if ($kind ne TmplTokenType::TAG) {
 	    ;
@@ -209,7 +214,7 @@ sub next_token_internal (*) {
 	    $kind = TmplTokenType::DIRECTIVE;
 	}
 	if (!$ok_p && $eof_p) {
-	    ($kind, $it, $readahead) = (TmplTokenType::UNKNOWN, $readahead, undef);
+	    ($kind, $it, $readahead[$#readahead]) = (TmplTokenType::UNKNOWN, $readahead[$#readahead], undef);
 	    $syntaxerror_p = 1;
 	}
     }
@@ -234,7 +239,8 @@ sub next_token (*) {
 	    my $next = next_token_internal($h);
 	last if !defined $next;
 	    if (defined $next && $next->string =~ /$cdata_close/i) {
-		($lc, $readahead) = ($lc_prev, $next->string . $readahead);
+		push @readahead, $next; # push the entire TmplToken object
+		#$lc = $lc_prev; XXX
 		$cdata_mode_p = 0;
 	    }
 	last unless $cdata_mode_p;
