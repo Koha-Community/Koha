@@ -23,6 +23,7 @@ use CGI;
 use strict;
 use C4::Auth;
 use C4::Output;
+use C4::Charset;
 use C4::Biblio;
 use C4::Context;
 use HTML::Template;
@@ -250,4 +251,7 @@ $template->param(item_loop => \@item_value_loop,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,
 						opisadd => ($nextop eq "saveitem")?0:1);
-print $input->header(-cookie => $cookie),$template->output;
+print $input->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;

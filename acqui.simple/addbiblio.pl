@@ -23,6 +23,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Output;
+use C4::Charset;
 use C4::Biblio;
 use C4::Context;
 use HTML::Template;
@@ -305,4 +306,7 @@ if ($op eq "addbiblio") {
 							oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
 							oldbiblioitemnumber => $oldbiblioitemnumber);
 }
-print $input->header(-cookie => $cookie),$template->output;
+print $input->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;

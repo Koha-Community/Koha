@@ -36,6 +36,7 @@ use DBI;
 # Koha modules used
 use C4::Context;
 use C4::Output;
+use C4::Charset;
 use C4::Input;
 use C4::Biblio;
 use MARC::File::USMARC;
@@ -150,7 +151,10 @@ if ($uploadmarc && length($uploadmarc)>0) {
 
 }
 
-print "Content-Type: text/html\n\n",$template->output;
+print $input->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;
 my $menu;
 my $file;
 
@@ -806,6 +810,9 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.27  2003/01/26 23:21:49  acli
+# Handle non-latin1 charsets
+#
 # Revision 1.26  2003/01/23 12:26:41  tipaul
 # upgrading import in breeding farm (you can now search on ISBN or on title) AND character encoding.
 #
