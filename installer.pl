@@ -375,12 +375,6 @@ files using the "User" directive.
 
 
 #
-# Set ownership of the koha.conf file for security
-#
-chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf") or warn "can't chown koha.conf: $!";
-chmod 0440, "$etcdir/koha.conf";
-
-#
 #SETUP opac
 #
 my $svr_admin = "webmaster\@$domainname";
@@ -759,6 +753,13 @@ httpduser=$httpduser
 EOP
 ;
 close(SITES);
+
+#
+# Set ownership of the koha.conf file for security
+#
+chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf") or warn "can't chown koha.conf: $!";
+chmod 0440, "$etcdir/koha.conf";
+
 
 
 print qq|
