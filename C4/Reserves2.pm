@@ -47,6 +47,7 @@ sub FindReserves {
                     (found <> 'F' or found is NULL)";
   }
   $query.=" order by priority";
+  warn $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
@@ -80,6 +81,7 @@ sub FindReserves {
 
 sub CheckReserves {
     my ($item) = @_;
+    warn "In CheckReserves";
     my $dbh=C4Connect;
     my $qitem=$dbh->quote($item);
 # get the biblionumber...
@@ -103,7 +105,12 @@ sub CheckReserves {
 		}
 	    }
 	}
+	warn "highest = $highest";
 	$highest->{'itemnumber'} = $item;
+	foreach my $key (keys %$highest) {
+	    warn "$key : $highest->{$key}\n";
+	}
+
 	return ("Reserved", $highest);
     } else {
 	return (0, 0);
@@ -353,24 +360,24 @@ sub CalcReserveFee {
   #check for issues;    
   my $dbh = &C4Connect;           
   my $const = lc substr($constraint,0,1); 
-  my $query = "select * from borrowers,categories 
-  where (borrowernumber = '$borrnum')         
-  and (borrowers.categorycode = categories.categorycode)";   
+  my $query = "SELECT * FROM borrowers,categories 
+                WHERE (borrowernumber = ?)         
+                  AND (borrowers.categorycode = categories.categorycode)";   
   my $sth = $dbh->prepare($query);                       
-  $sth->execute;                                    
+  $sth->execute($borrnum);                                    
   my $data = $sth->fetchrow_hashref;                  
-  $sth->finish();       
-  my $fee = $data->{'reservefee'};         
+  $sth->finish();
+  my $fee = $data->{'reservefee'};       
   my $cntitems = @->$bibitems;   
   if ($fee > 0) {                         
     # check for items on issue      
     # first find biblioitem records       
     my @biblioitems;    
-    my $query1 = "select * from biblio,biblioitems                           
-    where (biblio.biblionumber = '$biblionumber')     
-    and (biblio.biblionumber = biblioitems.biblionumber)";
+    my $query1 = "SELECT * FROM biblio,biblioitems                           
+                   WHERE (biblio.biblionumber = ?)     
+                     AND (biblio.biblionumber = biblioitems.biblionumber)";
     my $sth1 = $dbh->prepare($query1);                   
-    $sth1->execute();                                     
+    $sth1->execute($biblionumber);                                     
     while (my $data1=$sth1->fetchrow_hashref) { 
       if ($const eq "a") {    
         push @biblioitems,$data1;       
@@ -401,17 +408,17 @@ sub CalcReserveFee {
     my $allissued = 1; 
     while ($x < $cntitemsfound) { 
       my $bitdata = $biblioitems[$x];                                       
-      my $query2 = "select * from items                   
-      where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'";     
+      my $query2 = "SELECT * FROM items                   
+                     WHERE biblioitemnumber = ?";     
       my $sth2 = $dbh->prepare($query2);                       
-      $sth2->execute;   
+      $sth2->execute($bitdata->{'biblioitemnumber'});   
       while (my $itdata=$sth2->fetchrow_hashref) { 
-        my $query3 = "select * from issues
-        where itemnumber = '$itdata->{'itemnumber'}' and
-        returndate is null";
+        my $query3 = "SELECT * FROM issues
+                       WHERE itemnumber = ? 
+                         AND returndate IS NULL";
 	
         my $sth3 = $dbh->prepare($query3);                      
-        $sth3->execute();                     
+        $sth3->execute($itdata->{'itemnumber'});                     
         if (my $isdata=$sth3->fetchrow_hashref) {
 	} else {
 	  $allissued = 0; 
@@ -420,10 +427,9 @@ sub CalcReserveFee {
       $x++;   
     }         
     if ($allissued == 0) { 
-      my $rquery = "select * from reserves           
-      where biblionumber = '$biblionumber'"; 
+      my $rquery = "SELECT * FROM reserves WHERE biblionumber = ?"; 
       my $rsth = $dbh->prepare($rquery);   
-      $rsth->execute();   
+      $rsth->execute($biblionumber);   
       if (my $rdata = $rsth->fetchrow_hashref) { 
       } else {                                     
         $fee = 0;                                                           
