@@ -824,13 +824,10 @@ sub CatSearch  {
   my ($env,$type,$search,$num,$offset)=@_;
   my $dbh = &C4Connect;
   my $query = '';
-    my @results;
-  # FIXME - Why not just
-  #	$search->{'title'} = quotemeta($search->{'title'})
-  # to escape all questionable characters, not just single-quotes?
-  $search->{'title'}=~ s/'/\\'/g;
-  $search->{'author'}=~ s/'/\\'/g;
-  $search->{'illustrator'}=~ s/'/\\'/g;
+  my @results;
+  $search->{'title'} = quotemeta($search->{'title'});
+  $search->{'author'} = quotemeta($search->{'author'});
+  $search->{'illustrator'} = quotemeta($search->{'illustrator'});
   my $title = lc($search->{'title'}); 
   
   if ($type eq 'loose') {
@@ -959,7 +956,7 @@ sub CatSearch  {
 	  } elsif ($search->{'abstract'} ne ''){
 	    $query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
 	  }
-          $query .=" group by biblio.biblionumber";	 
+          ($query) && ($query .=" group by biblio.biblionumber");
       }
   } 
   if ($type eq 'subject'){
@@ -1037,7 +1034,7 @@ if ($type ne 'precise' && $type ne 'subject'){
   if ($search->{'author'} ne ''){   
       $query=$query." order by biblio.author,title";
   } else {
-      $query=$query." order by title";
+      ($query) && ($query.=" order by title");
   }
 } else {
   if ($type eq 'subject'){
@@ -1045,6 +1042,8 @@ if ($type ne 'precise' && $type ne 'subject'){
   }
 }
 #print STDERR "$query\n";
+
+($query) || (return);
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $count=1;
@@ -1244,7 +1243,7 @@ sub ItemInfo {
     or items.itemlost is NULL)
     and (wthdrawn <> 1 or wthdrawn is NULL)";
   }
-  $query .= " order by items.dateaccessioned desc";
+  ($query) && ($query .= " order by items.dateaccessioned desc");
     #warn $query;
   my $sth=$dbh->prepare($query);
   $sth->execute($biblionumber);
@@ -1695,7 +1694,8 @@ order by returndate desc, timestamp desc";
         $sth2->execute
           || die $sth2->errstr;
 
-        for (my $i2 = 0; $i2 < 2; $i2++) {
+
+        for (my $i2 = 0; $i2 < (($sth2->rows<2) ? ($sth2->rows) : (2)); $i2++) {
             if (my $data2 = $sth2->fetchrow_hashref) {
                 $data->{"timestamp$i2"} = $data2->{'timestamp'};
                 $data->{"card$i2"}      = $data2->{'cardnumber'};

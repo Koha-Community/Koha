@@ -51,5 +51,5 @@ if ($count > 0){
   ";
 } else {
 	delbiblio($biblio);
-	print $input->redirect("/catalogue/");
+	print $input->redirect("/cgi-bin/koha/catalogue-home.pl");
 }
