@@ -116,8 +116,27 @@ sub install_strhash
 	my $fh_in; my $fh_out; # handles for input and output files
 	my $tmp_dir; # temporary directory name (used to create destination dir)
 
-	$out_dir =~ s/\/$//; # chops the trailing / if any.
+	my $starttime = time();
 
+	$out_dir =~ s/\/$//; # chops the trailing / if any.
+	foreach my $text (keys %{$strhash})
+		{
+			# escaping \|()[{}^$*+?.
+			%{$strhash}->{$text} =~ s/\\/\\\\/g;
+			%{$strhash}->{$text} =~ s/\|/\\\|/g;
+			%{$strhash}->{$text} =~ s/\(/\\\(/g;
+			%{$strhash}->{$text} =~ s/\)/\\\)/g;
+			%{$strhash}->{$text} =~ s/\[/\\\[/g;
+			%{$strhash}->{$text} =~ s/\]/\\\]/g;
+			%{$strhash}->{$text} =~ s/\{/\\\{/g;
+			%{$strhash}->{$text} =~ s/\}/\\\}/g;
+			%{$strhash}->{$text} =~ s/\^/\\\^/g;
+			%{$strhash}->{$text} =~ s/\$/\\\$/g;
+			%{$strhash}->{$text} =~ s/\*/\\\*/g;
+			%{$strhash}->{$text} =~ s/\+/\\\+/g;
+			%{$strhash}->{$text} =~ s/\?/\\\?/g;
+#			%{$strhash}->{$text} =~ s/\./\\\./g;
+		}
 	# Processes every entry found.
 	foreach my $file (@{$in_files})
 	{
@@ -129,6 +148,7 @@ sub install_strhash
 
 		# generates the name of the output file
 		my $out_file = $file;
+		my $out_file_tmp = $file.".tmp"; # used to check if file has changed or not.
 
 		if(!defined $in_dir)
 		{
@@ -161,55 +181,89 @@ sub install_strhash
 		}
 
 		# opens handle for output
-		if( !open($fh_out, "> $out_file") )
+		if( !open($fh_out, "> $out_file_tmp") )
 		{
 			warn "Can't write $out_file : $!\n";
 			close($fh_in);
 			next;
 		}
-
-		print "Generating $out_file...\n";
-
+		my $lines;
 		while(my $line = <$fh_in>)
 		{
-			foreach my $text (sort  {uc($b) cmp uc($a) || length($b) <=> length($a)} keys %{$strhash})
+			$lines.=$line;
+		}
+		foreach my $text (sort  {length($b) <=> length($a) || uc($b) cmp uc($a) } keys %{$strhash})
+		{
+		# Test if the key has been translated
+		if( %{$strhash}->{$text} != 1)
 			{
-			# escaping \|()[{}^$*+?.
-			$text =~ s/\\/\\\\/g;
-			$text =~ s/\|/\\\|/g;
-			$text =~ s/\(/\\\(/g;
-			$text =~ s/\)/\\\)/g;
-			$text =~ s/\[/\\\[/g;
-			$text =~ s/\]/\\\]/g;
-			$text =~ s/\{/\\\{/g;
-			$text =~ s/\}/\\\}/g;
-			$text =~ s/\^/\\\^/g;
-			$text =~ s/\$/\\\$/g;
-			$text =~ s/\*/\\\*/g;
-			$text =~ s/\+/\\\+/g;
-			$text =~ s/\?/\\\?/g;
-			$text =~ s/\?/\\\?/g;
-				# Test if the key has been translated
-				if( %{$strhash}->{$text} != 1 )
+				# Does the file contains text that needs to be changed ?
+				if( $lines =~ /$text/ && %{$strhash}->{$text} ne "IGNORE" )
 				{
-					# Does the line contains text that needs to be changed ?
-					if( $line =~ /$text/ && %{$strhash}->{$text} ne "IGNORE")
+					if (%{$strhash}->{$text} =~ "LIMITED")
 					{
 						# changing text
 						my $subst = %{$strhash}->{$text};
-						$line =~ s/(\W)$text(\W)/$1$subst$2/g;
+						# escaping \|()[{}^$*+?.
+						$text =~ s/\\/\\\\/g;
+						$text =~ s/\|/\\\|/g;
+						$text =~ s/\(/\\\(/g;
+						$text =~ s/\)/\\\)/g;
+						$text =~ s/\[/\\\[/g;
+						$text =~ s/\]/\\\]/g;
+						$text =~ s/\{/\\\{/g;
+						$text =~ s/\}/\\\}/g;
+						$text =~ s/\^/\\\^/g;
+						$text =~ s/\$/\\\$/g;
+						$text =~ s/\*/\\\*/g;
+						$text =~ s/\+/\\\+/g;
+						$text =~ s/\?/\\\?/g;
+						$subst =~ s/^LIMITED;//g;
+						$lines =~ s/(.*)>$text/$1>$subst/g;
+						$lines =~ s/(.*) title="$text/$1 title="$subst/g;
+						$lines =~ s/(.*) alt="$text/$1 alt="$subst/g;
+					} else {
+						# changing text
+						my $subst = %{$strhash}->{$text};
+						# escaping \|()[{}^$*+?.
+						$text =~ s/\\/\\\\/g;
+						$text =~ s/\|/\\\|/g;
+						$text =~ s/\(/\\\(/g;
+						$text =~ s/\)/\\\)/g;
+						$text =~ s/\[/\\\[/g;
+						$text =~ s/\]/\\\]/g;
+						$text =~ s/\{/\\\{/g;
+						$text =~ s/\}/\\\}/g;
+						$text =~ s/\^/\\\^/g;
+						$text =~ s/\$/\\\$/g;
+						$text =~ s/\*/\\\*/g;
+						$text =~ s/\+/\\\+/g;
+						$text =~ s/\?/\\\?/g;
+						$lines =~ s/(\W)$text(\W)/$1$subst$2/g;
 					}
 				}
 			}
-			$line =~ s/\<TMPL_(.*?)\>/\<\!-- TMPL_$1 --\>/g;
-			$line =~ s/\<\/TMPL_(.*?)\>/\<\!-- \/TMPL_$1 --\>/g;
-			# Writing the modified (or not) line to output
-			printf($fh_out "%s", $line);
 		}
-
+		$lines =~ s/\<TMPL_(.*?)\>/\<\!-- TMPL_$1 --\>/g;
+		$lines =~ s/\<\/TMPL_(.*?)\>/\<\!-- \/TMPL_$1 --\>/g;
+		# Writing the modified (or not) file to output
+		printf($fh_out "%s", $lines);
 		close($fh_in);
 		close($fh_out);
+		# check if fh_out and previous fh_out has changed or not.
+		my $diff = `diff $out_file $out_file_tmp`;
+		if ($diff) {
+			print "WRITING : $out_file\n";
+			unlink $out_file;
+			system("mv $out_file_tmp $out_file");
+		} else {
+			print "no changes in $out_file\n";
+			unlink $out_file_tmp;
+		}
 	}
+	my $timeneeded = time() - $starttime;
+	print "done in $timeneeded seconds\n";
+
 }
 
 ########################################################
@@ -238,7 +292,7 @@ sub update_strhash
 		{
 			$str =~ s/[\n\r\f]+$//; # chomps the trailing \n (or <cr><lf> if file was edited with Windows)
 			$str =~ s/^\s+//; # remove trailing blanks, ':' or '*'
-			$str =~ s/\s*\**:*\s*$//;
+			$str =~ s/[\s\*:\[*\(|\.,]*$//;
 
 			# the line begins with letter(s) followed by optional words and/or spaces
 			if($str =~ /^[ ]*[\w]+[ \w]*/)
@@ -329,7 +383,7 @@ sub write_strhash
 		}
 		else
 		{
-			printf($fh "%s%s%s\n", $str, $split_char,"*****") unless ($str >0);
+			printf($fh "%s%s%s\n", $str, $split_char,"*****") unless ($str >0 || length($str) eq 1);
 		}
 	}
 
