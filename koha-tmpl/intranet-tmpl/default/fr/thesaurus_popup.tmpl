@@ -1,16 +1,18 @@
-	<html>
-	<head>
+<html>
+<head>
 	<title>Saisie des entr&eacute;es du th&eacute;saurus</title>
-	</head>
-	<body>
+</head>
+<body>
 	<form name="f_pop" action="thesaurus_popup.pl" method="post">
-	<textarea name="result" rows=10 cols=60><TMPL_VAR name="result"></textarea>
-	<p><input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
-	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
-	<input type="hidden" name="op" value="search">
-	<input type="submit" value="Rechercher">
-  </p>
+		<textarea name="result" rows=10 cols=50><TMPL_VAR name="result"></textarea>
+		<br/><input type="button" value="OK" onClick="javascript:report()">
+		<p>
+			<input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
+			<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+			<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+			<input type="hidden" name="op" value="search">
+			<input type="submit" value="Rechercher">
+		</p>
 	</form>
 <TMPL_IF name="search_string">
 	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
@@ -19,21 +21,22 @@
 	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
 	<input type="hidden" name="op" value="select">
 	<input type="hidden" name="result" value="<TMPL_VAR name="result">">
-	
-  <input type="submit" name="OK" value="Envoyer">
+	<input type="submit" name="OK" value="Sélectionner">
 	</form>
 </TMPL_IF>
-		<form name="f3_pop" onSubmit="javascript:report()">
-		<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-		
-  <input type="submit" value="Quitter">
-		</form>
-		<script>
+<form name="f3_pop"  action="thesaurus_popup.pl" method="post">
+	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+	<input type="hidden" name="op" value="add">
+	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+	Insérer une nouvelle autorité : <input type="text" name="insert" value="<TMPL_VAR name="search_string">">
+	<input type="submit" name="NEW" value="Ajouter">
+	</form>
+	<script>
 		function report() {
 			opener.document.f.field_value[<TMPL_VAR name="index">].value= document.f_pop.result.value;
 			self.close();
 			return false;
 		}
-		</script>
-		</body>
-		</html>
+	</script>
+</body>
+</html>
