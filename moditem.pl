@@ -96,9 +96,12 @@ print <<printend
 <tr valign=top bgcolor=white><td>ItemNotes</td><td><textarea name=ItemNotes cols=40 rows=4>$item->{'itemnotes'}</textarea></td></tr>
 <input type=hidden name=Volume value="$data->{'volumeddesc'}">
 <tr valign=top bgcolor=white><td>Home Branch</td><td><input type=text name=Home Branch value="$item->{'homebranch'}" size=40></td></tr>
+<tr valign=top bgcolor=white><td>Replacement Price</td><td><input type=text name=replacementprice value="$item->{replacementprice}" size=6></td></tr>
 <tr valign=top bgcolor=white><td>Lost</td><td><input type=radio name=Lost value=1
 printend
 ;
+
+
 if ($item->{'itemlost'} ==1){
   print " checked ";
 }

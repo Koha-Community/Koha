@@ -36,6 +36,7 @@ my $publishercode=checkinp($input->param('Publisher'));
 my $publicationdate=checkinp($input->param('Publication'));
 my $class=checkinp($input->param('Class'));
 my $homebranch=checkinp($input->param('Home'));
+my $replacementprice=$input->param('replacementprice');
 my $lost=$input->param('Lost');
 my $wthdrawn=$input->param('withdrawn');
 my $classification;
@@ -64,7 +65,7 @@ my $pages=checkinp($input->param('Pages'));
 my $volumeddesc=checkinp($input->param('Volume'));
 
 if ($wthdrawn == 0 && $override ne 'yes'){
-  moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn);
+  moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacementprice);
   if ($lost ==1){
     my $dbh=C4Connect;
     my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
