@@ -183,6 +183,12 @@ mkdir("scripts/z3950daemon", 0755);
 mkdir("modules", 0755);
 mkdir("docs", 0755);
 
+# Create koha.versin file
+
+open (KV, ">$rootdir/koha.version");
+print KV "$releaseversion\n";
+close KV;
+
 # Copy all CVS files to intranet-cgi
 system("cp -a $kohadir/* $rootdir/intranet-cgi");
 
@@ -199,6 +205,7 @@ system("mv $rootdir/intranet-cgi/README $rootdir");
 system("mv $rootdir/intranet-cgi/TODO $rootdir");
 system("mv $rootdir/intranet-cgi/databaseinstall.sh $rootdir");
 system("mv $rootdir/intranet-cgi/installer.pl $rootdir"); 
+chmod 0770, "$rootdir/installer.pl";
 system("mv $rootdir/intranet-cgi/koha.conf $rootdir");
 system("mv $rootdir/intranet-cgi/koha.mysql $rootdir");
 system("mv $rootdir/intranet-cgi/sampledata-1.2 $rootdir");

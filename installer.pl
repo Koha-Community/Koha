@@ -8,6 +8,35 @@ unless ($< == 0) {
     exit 1;
 }
 
+my $kohaversion=`cat koha.version`;
+chomp $kohaversion;
+
+if (-e "/etc/koha.conf") {
+    my $installedversion=`grep kohaversion= /etc/koha.conf`;
+    chomp $installedversion;
+    $installedversion=~m/kohaversion=(.*)/;
+    $installedversion=$1;
+    if ($installedversion) {
+	$installedversion="You currently have Koha $installedversion on your system.\n";
+    } else {
+	$installedversion="I am not able to determine what version of Koha is installed now.\n";
+    }
+
+    print qq|
+			==========================
+			= Koha already installed =
+			==========================
+
+It looks like Koha is already installed on your system (/etc/koha.conf exists
+already).  If you would like to upgrade your system to $kohaversion, please use
+the koha.upgrade script in this directory.
+
+$installedversion
+
+|;
+    exit;
+}
+
 system('clear');
 print qq|
 **********************************
@@ -162,18 +191,18 @@ print qq|
 
 KOHA.CONF
 =========
-Koha uses a small configuration file that is usually placed in your /etc/ files 
-directory. The configuration file, will be created in this directory
+Koha uses a small configuration file that is placed in your /etc/ files
+directory. The configuration file, will be created in this directory.
 
 |;
 
 #Get the path to the koha.conf directory
-print "Enter the path to your configuration directory [$etcdir]: ";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $etcdir = $input;
-}
+#print "Enter the path to your configuration directory [$etcdir]: ";
+#chomp($input = <STDIN>);
+#
+#if ($input) {
+#  $etcdir = $input;
+#}
 
 
 #Get the database name
@@ -247,6 +276,9 @@ hostname=$hostname
 user=$user
 pass=$pass
 includes=$kohadir/htdocs/includes
+intranetdir=$kohadir
+opacdir=$opacdir
+version=$kohaversion
 EOP
 ;
 close(SITES);
@@ -425,7 +457,7 @@ configuration.
     my $includesdirectives='';
     if ($includesmodule) {
 	$includesdirectives.="Options +Includes\n";
-	$includesdirectives.="AddHandler server-parsed .html\n";
+	$includesdirectives.="   AddHandler server-parsed .html\n";
     }
     open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
     print SITE <<EOP
