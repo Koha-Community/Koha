@@ -1,49 +1,68 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<TMPL_INCLUDE NAME="parameters-top.inc">
 
 <TMPL_IF name="add">
-<form action='<TMPL_VAR name=action>' name=Aform method=post>
-<input type=hidden name=op value='add_validate'>
-<table>
-<tr>
-      <td>Code annexe</td>
-      <td>
-		<TMPL_IF name="branchcode">
-			<input type=hidden name=branchcode value='<TMPL_VAR name=branchcode escape="HTML">'>
-			<TMPL_VAR name="branchcode">
-		<TMPL_ELSE>
-			<input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'>
-		</TMPL_IF>
-	</td>
-</tr>
-<tr>
-      <td>Nom</td>
-      <td><input type=text name=branchname size=40 maxlength=80 value='<TMPL_VAR name=branchname>'}'>&nbsp;</td></tr>
-<FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
-<tr><td><TMPL_VAR name=categoryname></td>
-<td><INPUT TYPE="checkbox" NAME="<TMPL_VAR name=categorycode>" VALUE="1" ><TMPL_VAR name=codedescription></td></tr>
-<tr>
-      <td>Adresse</td>
-      <td><input type=text name=branchaddress1 value='<TMPL_VAR name=branchaddress1>'></td></tr>
-<tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='<TMPL_VAR name=branchaddress2>'></td></tr>
-<tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='<TMPL_VAR name=branchaddress3>'></td></tr>
-<tr>
-      <td>T&eacute;l&eacute;phone</td>
-      <td><input type=text name=branchphone value='<TMPL_VAR name=branchphone>'></td></tr>
-<tr><td>Fax</td><td><input type=text name=branchfax value='<TMPL_VAR name=branchfax>'></td></tr>
-<tr><td>E-mail</td><td><input type=text name=branchemail value='<TMPL_VAR name=branchemail>'></td></tr>
-<tr><td>&nbsp;</td><td>
-        <input type=submit value='Envoyer'>
-      </td></tr> 
-</table>
-</form>
-</TMPL_IF> <TMPL_IF name="delete_confirm"> Confirmez la suppression : 
-<form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value='delete_confirmed'>
-<input type='hidden' name='branchcode' value=><TMPL_VAR name=branchcode>>
-  <input type=submit value=OUI>
-</form>
-<form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value=''>
-  <input type=submit value=NON>
-</form>
+	<form action='<TMPL_VAR name=action>' name=Aform method=post>
+		<input type=hidden name=op value='add_validate'>
+		<table>
+			<tr>
+				<td>Code annexe</td>
+				<td>
+					<TMPL_IF name="branchcode">
+						<input type=hidden name=branchcode value='<TMPL_VAR name=branchcode escape="HTML">'>
+						<TMPL_VAR name="branchcode">
+					<TMPL_ELSE>
+						<input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'>
+					</TMPL_IF>
+				</td>
+			</tr>
+			<tr>
+				<td>Nom</td>
+				<td><input type=text name=branchname size=40 maxlength=80 value='<TMPL_VAR name=branchname>'}'>&nbsp;</td>
+			</tr>
+			<FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
+			<tr>
+				<td><TMPL_VAR name=categoryname></td>
+				<td><INPUT TYPE="checkbox" NAME="<TMPL_VAR name=categorycode>" VALUE="1" ><TMPL_VAR name=codedescription></td>
+			</tr>
+			<tr>
+				<td>Adresse</td>
+				<td><input type=text name=branchaddress1 value='<TMPL_VAR name=branchaddress1>'></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td><td><input type=text name=branchaddress2 value='<TMPL_VAR name=branchaddress2>'></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td><td><input type=text name=branchaddress3 value='<TMPL_VAR name=branchaddress3>'></td>
+			</tr>
+			<tr>
+				<td>T&eacute;l&eacute;phone</td>
+				<td><input type=text name=branchphone value='<TMPL_VAR name=branchphone>'></td>
+			</tr>
+			<tr>
+				<td>Fax</td>
+				<td><input type=text name=branchfax value='<TMPL_VAR name=branchfax>'></td>
+			</tr>
+			<tr>
+				<td>E-mail</td>
+				<td><input type=text name=branchemail value='<TMPL_VAR name=branchemail>'></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type=submit value='Envoyer'></td>
+			</tr>
+		</table>
+	</form>
+</TMPL_IF>
+<TMPL_IF name="delete_confirm"> Confirmez la suppression :
+	<form action='<TMPL_VAR name=action>' method=post>
+		<input type='hidden' name='op' value='delete_confirmed'>
+		<input type='hidden' name='branchcode' value="<TMPL_VAR name=branchcode>">
+		<TMPL_VAR name=branchcode>
+		<input type=submit value=OUI>
+	</form>
+	<form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value=''>
+		<input type=submit value=NON>
+	</form>
 </TMPL_IF>
 
 <TMPL_IF name="else">
@@ -53,7 +72,7 @@
   <input type=submit value='Ajouter une nouvelle annexe'>
 </form>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
-<tr> 
+<tr>
     <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage> 
       <font size='5'><b>Annexes</b></font></th>
   </tr> 
@@ -112,7 +131,7 @@
 <br>
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> 
-    <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage> 
+    <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
       <font size='5'><b>Cat&eacute;gories d'annexes</b></font></th>
   </tr> 
 <tr bgcolor='#889999'> 
