@@ -52,7 +52,18 @@ my ($template, $loggedinuser, $cookie)
 my $member=$input->param('member');
 
 my $env;
-my ($count,$results)=BornameSearch($env,$member,'web');
+
+my ($count,$results);
+
+if(length($member) == 1)
+{
+	($count,$results)=BornameSearch($env,$member,"simple");
+}
+else
+{
+	($count,$results)=BornameSearch($env,$member,"advanced");
+}
+
 
 my @resultsdata;
 for (my $i=0; $i < $count; $i++){
