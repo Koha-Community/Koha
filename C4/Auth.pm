@@ -77,9 +77,6 @@ sub getuserflags {
 	    $userflags->{$flag}=1;
 	}
     }
-    foreach my $key (keys %$userflags) {
-	warn "$key \n";
-    }
     return $userflags;
 }
 
