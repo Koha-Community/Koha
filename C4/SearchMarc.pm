@@ -140,13 +140,10 @@ sub catalogsearch {
 	}
 	chop $sql_tables;
 	my $sth;
-	warn "HERE";
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
-		warn("-->select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
 	} else {
 		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where1");
-		warn("==>select m1.bibid from $sql_tables where $sql_where1");
 	}
 	$sth->execute;
 	my @result;
