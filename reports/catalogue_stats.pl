@@ -117,7 +117,7 @@ if ($do_it) {
 		push @select, $value;
 	}
 	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'dewey',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -135,7 +135,7 @@ if ($do_it) {
 		push @select, $value;
 	}
 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'lccn',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -153,7 +153,7 @@ if ($do_it) {
 		push @select, $value;
 	}
 	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'cote',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -182,7 +182,7 @@ if ($do_it) {
 		push @select, $value;
 	}
 	my $CGIitemtype=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'itemtype',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -195,7 +195,7 @@ if ($do_it) {
 		push @select, $value;
 	}
 	my $CGIpublisher=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'publisher',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -210,7 +210,7 @@ if ($do_it) {
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'branch',
 				-values   => \@select,
 				-labels   => \%select_branches,
 				-size     => 1,
@@ -221,7 +221,7 @@ if ($do_it) {
 	undef @select;
 	push @select,"";
 	my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'location',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
