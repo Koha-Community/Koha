@@ -1,3 +1,10 @@
+body {
+	font-family:verdana,arial,helvetica;
+	font-size:12pt;
+	margin:0px;
+	padding:0px
+}
+
 .button {
 	text-align: center;
 	font: 1.2em sans-serif;
@@ -28,10 +35,9 @@ table.noborder {
 /* header */
 th {
 	background-color: #99cccc;
-	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	background-image:url("/opac-tmpl/default/en/images/background-mem.gif");
 	font-weight:bold;
 	text-align:center;
-	font-size:10pt;
 	border-left:1px solid #000000;
 	border-bottom:1px solid #000000;
 	border-top:1px solid #000000;
@@ -39,10 +45,8 @@ th {
 }
 /* standard cell */
 td {
-	font-size:10pt;
 	border-left:0px;
 }
-
 /* hilighted cell */
 td.hilighted {
 	font-size:10pt;
@@ -51,16 +55,24 @@ td.hilighted {
 }
 
 h1 {
-	color:#666666;
+	color:#000000;
 	background-color:#DDDDDD;
-	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	background-image:url("/opac-tmpl/default/en/images/background-mem.gif");
 	font-size: 150%;
 	text-align:center;
-	padding: 2px;
+	padding: 4px;
 	border: 4px inset #666666;
-	width:95%;
 }
 
+#bloctitle{
+	background-image:url("/opac-tmpl/default/en/images/background-mem.gif");
+	color:#000000;
+	font-size: 125%;
+	text-align:center;
+	padding:5px;
+	margin-bottom:10px;
+	border-bottom: 1px solid #666666;
+}
 #problem {
 	color: red;
 	font-weight:bold;
@@ -69,13 +81,12 @@ h1 {
 	border-top:1px solid #666666;
 	font: 1em sans-serif;
 	background-color:#DDDDDD;
-	padding-bottom:5px;
+	padding-bottom:10px;
 }
 #submenu {
 	font: 0.8em sans-serif;
 	background-color:#EEEEEE;
 	border-left:1px solid #000000;
-	padding-top:5px;
 }
 
 #mainbloc {
@@ -94,13 +105,16 @@ h1 {
 #bloc25 {
 	float:left;
 	width=25%;
-	border:1;
+	border:1px solid #000000;
+	margin:10px;
+	padding:0px;
 }
 #bloc100 {
 	float:left;
 	position:relative;
-	width=90%;
-	border:1;
+	width=100%;
+	border:1px solid #000000;
+	margin:10px;
 }
 
 a {
@@ -115,33 +129,50 @@ a.submenu {
 	cursor: hand;
 	color:#777777;
 	background-color:#EEEEEE;
-	padding:4px;
 	font-weight: bold;
 	margin:0;
 }
+a.submenu:hover {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	color:#777777;
+	background-color:#EEEEEE;
+	font-weight: bold;
+	margin:0;
+	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
+}
+
 a.submenu2 {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	background-color:#CCCCCC;
-	padding:4px;
 	font-weight: bold;
 	margin:0;
 }
+a.submenu2:hover {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	color:#777777;
+	background-color:#CCCCCC;
+	font-weight: bold;
+	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
+	margin:0;
+}
+
 .koha {
 	text-align:center;
 	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
-	padding-left:10px;
-	padding-right:10px;
-	}
+}
 
 a.home {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.home:hover {
@@ -157,7 +188,6 @@ a.catalogue {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	margin:0;
 	}
@@ -175,7 +205,6 @@ a.members {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.members:hover {
@@ -190,7 +219,6 @@ a.acquisition {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.acquisition:hover {
@@ -205,7 +233,6 @@ a.reports {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.reports:hover {
@@ -220,7 +247,6 @@ a.circulation {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.circulation:hover {
@@ -235,7 +261,6 @@ a.parameters {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.parameters:hover {
@@ -249,7 +274,6 @@ a.about {
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
-	padding:4px;
 	font-weight: bold;
 	}
 a.about:hover {

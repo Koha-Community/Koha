@@ -22,7 +22,6 @@ a.catalogue {
 	cursor: hand;
 	background-color:#ad11ad;
 	color:#FFFFFF;
-	padding:4px;
 	font-weight: bold;
 	margin:0;
 	}
@@ -36,8 +35,7 @@ a.catalogue:hover {
 	}
 </style>
 </head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
+<body>
 
 
 
@@ -46,7 +44,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	<span class="koha">KOHA</span>
 	<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>
 	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
-	<a class="members" href="/cgi-bin/koha/members-home.pl">Members</a>
+	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
 	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
@@ -54,13 +52,13 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
 </div>
 <div id="submenu">
-<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
+	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Quick search</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">MARC search</a>
 	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Add biblio</a>
 	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
-
+</div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
 <!-- TMPL_ELSE -->

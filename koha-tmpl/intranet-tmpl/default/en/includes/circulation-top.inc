@@ -25,7 +25,6 @@ a.circulation {
 	background-color: #be6170;
 	cursor: hand;
 	color:#FFFFFF;
-	padding:4px;
 	font-weight: bold;
 	}
 a.circulation:hover {
@@ -57,7 +56,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
 					</td>
 					<td>
-						<a class="members" href="/cgi-bin/koha/members-home.pl">Members</a>
+						<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
 					</td>
 					<td>
 						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>

@@ -18,7 +18,6 @@ a.about {
 	text-decoration: none;
 	cursor: hand;
 	color: #FFFFFF;
-	padding:4px;
 	font-weight: bold;
 	}
 a.about:hover {
