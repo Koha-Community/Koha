@@ -262,8 +262,8 @@ my %tabledata=(
     ],
     systempreferences => [
     	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
-    	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple', explanation => 'normal or simple : will use acquisition system found in directory acqui.simple or acquisition' },
-    	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'metric', explanation => 'metric or us' },
+    	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple', explanation => 'normal or simple : whether to use "acqui" or "acqui.simple" acquisition system' },
+    	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'metric', explanation => 'metric, us, or iso' },
     	{ uniquefieldrequired => 'variable', variable => 'template', value => 'default', explanation => 'template default name' },
     	{ uniquefieldrequired => 'variable', variable => 'autoBarcode', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
     	{ uniquefieldrequired => 'variable', variable => 'insecure', value => 'NO', explanation => 'if YES, no auth at all is needed. Be careful if you set this to yes !' },
@@ -538,6 +538,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.35  2003/01/27 03:12:49  acli
+# Reworded the description for "acquisitions" to make it fit on the screen
+#
+# Added "iso" to dateformat, since dateformat is not yet being used anyway
+#
 # Revision 1.34  2003/01/23 12:30:02  tipaul
 # introducint marcflavour in systempref file : used for character decoding
 #
