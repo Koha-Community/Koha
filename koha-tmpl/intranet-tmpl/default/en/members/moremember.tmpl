@@ -63,6 +63,9 @@
 		<form action=/cgi-bin/koha/memberentry.pl method=post>
 			<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
 			<INPUT TYPE=submit class="button" value="Modify">
+		</form>
+		<form action=/cgi-bin/koha/deletemem.pl method=post>
+                        <input type=hidden name=member value="<TMPL_VAR NAME="bornum">">
 			<INPUT TYPE=submit class="button" value="Delete">
 		</form>
 		<form action=/cgi-bin/koha/member-password.pl method=post>
