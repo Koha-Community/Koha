@@ -42,6 +42,9 @@ use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Search;
+use HTML::Template;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
@@ -69,14 +72,25 @@ my $script_name="/cgi-bin/koha/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
-print $input->header;
-#start the page and read in includes
-print startpage();
-print startmenu('admin');
+
+my ($template, $loggedinuser, $cookie) 
+    = get_template_and_user({template_name => "parameters/categoryitem.tmpl",
+                             query => $input,
+                             type => "intranet",
+                             authnotrequired => 0,
+                             debug => 1,
+                             });
+
+
+$template->param(script_name => $script_name,
+                 categorycode => $categorycode,
+		 searchfield => $searchfield);
+
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
+	$template->param(add_form => 1);
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($categorycode) {
@@ -86,98 +100,25 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	print <<printend
-	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.categorycode.value.length==0) {
-			_alertString += "- categorycode missing\\n";
-		}
-//		alert(window.document.Aform.description.value);
-		if (!(isNotNull(window.document.Aform.description,1))) {
-			_alertString += "- description missing\\n";
-		}
-		if (!isNum(f.upperagelimit,0)) {
-			_alertString += "- upperagelimit is not a number\\n";
-		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-	</SCRIPT>
-printend
-;#/
-	if ($categorycode) {
-		print "<h1>Modify category</h1>";
-	} else {
-		print "<h1>Add category</h1>";
-	}
-	print "<form action='$script_name' name=Aform method=post>";
-	print "<input type=hidden name=op value='add_validate'>";
-	print "<input type=hidden name=checked value=0>";
-	print "<table>";
-	if ($categorycode) {
-		print "<tr><td>Category code</td><td><input type=hidden name=categorycode value=$categorycode>$categorycode</td></tr>";
-	} else {
-		print "<tr><td>Category code</td><td><input type=text name=categorycode size=3 maxlength=2 onBlur=toUC(this)></td></tr>";
-	}
-	print "<tr><td>Description</td><td><input type=text name=description size=40 maxlength=80 value='$data->{'description'}'>&nbsp;</td></tr>";
-	print "<tr><td>Enrolment period</td><td><input type=text name=enrolmentperiod value='$data->{'enrolmentperiod'}'></td></tr>";
-	print "<tr><td>Upperage limit</td><td><input type=text name=upperagelimit value='$data->{'upperagelimit'}'></td></tr>";
-	print "<tr><td>Age Required</td><td><input type=text name=dateofbirthrequired value='$data->{'dateofbirthrequired'}'></td></tr>";
-	print "<tr><td>Fine type</td><td><input type=text name=finetype size=30 maxlength=30 value='$data->{'finetype'}'></td></tr>";
-	print "<tr><td>Bulk</td><td><input type=text name=bulk value='$data->{'bulk'}'></td></tr>";
-	print "<tr><td>Enrolment fee</td><td><input type=text name=enrolmentfee value='$data->{'enrolmentfee'}'></td></tr>";
-	print "<tr><td>Overdue notice required</td><td><input type=text name=overduenoticerequired value='$data->{'overduenoticerequired'}'></td></tr>";
-	print "<tr><td>Issue limit</td><td><input type=text name=issuelimit value='$data->{'issuelimit'}'></td></tr>";
-	print "<tr><td>Reserve fee</td><td><input type=text name=reservefee value='$data->{'reservefee'}'></td></tr>";
-	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
-print "</table>";
-	print "</form>";
+
+        $template->param(description             => $data->{'description'},
+                                enrolmentperiod         => $data->{'enrolmentperiod'},
+                                upperagelimit           => $data->{'upperagelimit'},
+                                dateofbirthrequired     => $data->{'dateofbirthrequired'},
+                                finetype                => $data->{'finetype'},
+                                bulk                    => $data->{'bulk'},
+                                enrolmentfee            => $data->{'enrolmentfee'},
+                                overduenoticerequired   => $data->{'overduenoticerequired'},
+                                issuelimit              => $data->{'issuelimit'},
+                                reservefee              => $data->{'reservefee'});
+
+
 ;
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
+	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
 	my $query = "replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (";
 	$query.= $dbh->quote($input->param('categorycode')).",";
@@ -202,93 +143,66 @@ print "</table>";
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
+	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from categoryitem where categorycode='$categorycode'");
 	$sth->execute;
 	my $total = $sth->fetchrow_hashref;
 	print "TOTAL : $categorycode : $total->{'total'}<br>";
 	$sth->finish;
-	# FIXME - There's already a $sth in this scope.
-	my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
-	$sth->execute;
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
-	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Category code'),bold("$categorycode"),'/images/background-mem.gif');
-	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=categorycode value='$categorycode'>";
-	print "<tr><td>Description</td><td>$data->{'description'}</td></tr>";
-	print "<tr><td>Enrolment period</td><td>$data->{'enrolmentperiod'}</td></tr>";
-	print "<tr><td>Upperage limit</td><td>$data->{'upperagelimit'}</td></tr>";
-	print "<tr><td>Age Required</td><td>$data->{'dateofbirthrequired'}</td></tr>";
-	print "<tr><td>Fine type</td><td>$data->{'finetype'}</td></tr>";
-	print "<tr><td>Bulk</td><td>$data->{'bulk'}</td></tr>";
-	print "<tr><td>Enrolment fee</td><td>$data->{'enrolmentfee'}</td></tr>";
-	print "<tr><td>Overdue notice required</td><td>$data->{'overduenoticerequired'}</td></tr>";
-	print "<tr><td>Issue limit</td><td>$data->{'issuelimit'}</td></tr>";
-	print "<tr><td>Reserve fee</td><td>$data->{'reservefee'}</td></tr>";
-	if ($total->{'total'} >0) {
-		print "<tr><td colspan=2 align=center><b>This record is used $total->{'total'} times. Deletion not possible</b></td></tr>";
-		print "<tr><td colspan=2></form><form action='$script_name' method=post><input type=submit value=OK></form></td></tr>";
-	} else {
-		print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
-		print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
-	}
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
+	$sth2->execute;
+	my $data=$sth2->fetchrow_hashref;
+	$sth2->finish;
+
+        $template->param(description             => $data->{'description'},
+                                enrolmentperiod         => $data->{'enrolmentperiod'},
+                                upperagelimit           => $data->{'upperagelimit'},
+                                dateofbirthrequired     => $data->{'dateofbirthrequired'},
+                                finetype                => $data->{'finetype'},
+                                bulk                    => $data->{'bulk'},
+                                enrolmentfee            => $data->{'enrolmentfee'},
+                                overduenoticerequired   => $data->{'overduenoticerequired'},
+                                issuelimit              => $data->{'issuelimit'},
+                                reservefee              => $data->{'reservefee'});
+
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
+	$template->param(delete_confirmed => 1);
 	my $dbh = C4::Context->dbh;
 	my $categorycode=uc($input->param('categorycode'));
 	my $query = "delete from categories where categorycode='$categorycode'";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data deleted";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
 													# END $OP eq DELETE_CONFIRMED
 } else { # DEFAULT
-	my @inputs=(["text","description",$searchfield],
-		["reset","reset","clr"]);
-	print mkheadr(2,'Category admin');
-	print mkformnotable("$script_name",@inputs);
-	print <<printend
+        $template->param(else => 1);
+        my $env;
+        my @loop;
+        my ($count,$results)=StringSearch($env,$searchfield,'web');
+        for (my $i=0; $i < $count; $i++){
+                my %row = (categorycode => $results->[$i]{'categorycode'},
+                                description => $results->[$i]{'description'},
+                                enrolmentperiod => $results->[$i]{'enrolmentperiod'},
+                                upperagelimit => $results->[$i]{'upperagelimit'},
+                                dateofbirthrequired => $results->[$i]{'dateofbirthrequired'},
+                                finetype => $results->[$i]{'finetype'},
+                                bulk => $results->[$i]{'bulk'},
+                                enrolmentfee => $results->[$i]{'enrolmentfee'},
+                                overduenoticerequired => $results->[$i]{'overduenoticerequired'},
+                                issuelimit => $results->[$i]{'issuelimit'},
+                                reservefee => $results->[$i]{'reservefee'} );
+                push @loop, \%row;
+        }
+        $template->param(loop => \@loop);
 
-printend
-	;
-	if  ($searchfield ne '') {
-		print "You Searched for $searchfield<p>";
-	}
-	print mktablehdr;
-	print mktablerow(13,'#99cc33',bold('Category'),bold('Description'),bold('Enrolment'),bold('age max')
-	,bold('birth needed'),bold('Fine'),bold('Bulk'),bold('fee'),bold('overdue'),bold('Issue limit'),bold('Reserve'),'&nbsp;','&nbsp;','/images/background-mem.gif');
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle="white";
-	for (my $i=0; $i < $count; $i++){
-		#find out stats
-	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
-	#  	$fines=$fines+0;
-	  	if ($toggle eq 'white'){
-	    		$toggle="#ffffcc";
-	  	} else {
-	    		$toggle="white";
-	  	}
-		print mktablerow(13,$toggle,$results->[$i]{'categorycode'},
-		$results->[$i]{'description'},$results->[$i]{'enrolmentperiod'},
-		$results->[$i]{'upperagelimit'},$results->[$i]{'dateofbirthrequired'},$results->[$i]{'finetype'},
-		$results->[$i]{'bulk'},$results->[$i]{'enrolmentfee'},$results->[$i]{'overduenoticerequired'},$results->[$i]{'issuelimit'},$results->[$i]{'reservefee'},mklink("$script_name?op=add_form&categorycode=".$results->[$i]{'categorycode'},'Edit'),
-		mklink("$script_name?op=delete_confirm&categorycode=".$results->[$i]{'categorycode'},'Delete'));
-	}
-	print mktableft;
-print <<printend
-	<form action='$script_name' method=post>
-	<input type=hidden name=op value=add_form>
-	<input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add Category" BORDER=0 ></a><br>
-	</form>
-printend
-	;
+
 } #---- END $OP eq DEFAULT
-print endmenu('categorie');
-print endpage();
+
+output_html_with_http_headers $input, $cookie, $template->output;
+
+
+
