@@ -3,25 +3,25 @@
 use diagnostics;
 use strict; # please develop with the strict pragma
 
+unless ($< == 0) {
+    print "You must be root to run this script.\n";
+    exit 1;
+}
+
 system('clear');
 print qq|
 **********************************
 * Welcome to the Koha Installer  *
 **********************************
+Welcome to the Koha install script!  This script will prompt you for some
+basic information about your desired setup, then install Koha according to
+your specifications.  To accept the default value for any question, simply hit
+Enter at the prompt.
 
-This installer will prompt you with a series of questions.
-It assumes you (or your system administrator) has installed:
-  * Apache (http://httpd.apache.org/)
-  * Perl (http://www.perl.org)
+Please be sure to read the documentation, or visit the Koha website at 
+http://www.koha.org for more information.
 
-and one of the following database applications:
-  * MySql (http://www.mysql.org)
-
-on some type of Unix or Unix-like operating system
-
-
-Are Apache, Perl, and a database from the list above installed 
-on this system? (Y/[N]):
+Are you ready to begin the installation? (Y/[N]):
 |;
 
 my $answer = <STDIN>;
@@ -42,23 +42,26 @@ at http://www.koha.org for more information.
 
 print "\n";
 
+#
+# Test for Perl and Modules
+#
+print qq|
 
-#
-# Test for Perl - Do we need to explicity check versions?
-#
+PERL & MODULES
+==============
+
+|;
+
 print "\nChecking perl modules ...\n";
     unless (eval "require 5.004") {
     die "Sorry, you need at least Perl 5.004\n";
 }
 
-#
-# Test for Perl Dependancies
-#
 my @missing = ();
-unless (eval require DBI)               { push @missing,"DBI" };
-unless (eval require Date::Manip)       { push @missing,"Date::Manip" };
-unless (eval require DBD::mysql)        { push @missing,"DBD::mysql" };
-unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" };
+unless (eval {require DBI})               { push @missing,"DBI" };
+unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
+unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
+unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
 
 #
 # Print out a list of any missing modules
@@ -66,7 +69,7 @@ unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" };
 if (@missing > 0) {
     print "\n\n";
     print "You are missing some Perl modules which are required by Koha.\n";
-    print "Once these modules have been installed, rerun this installery.\n";
+    print "Once these modules have been installed, rerun this installer.\n";
     print "They can be installed by running (as root) the following:\n";
     foreach my $module (@missing) {
 	print "   perl -MCPAN -e 'install \"$module\"'\n";
@@ -77,268 +80,396 @@ if (@missing > 0) {
 
 
 print "\n";
-print "Testing for mysql - still to be done\n";
-#test for MySQL?
-#print "Are you using MySql?(Y/[N]): ";
-#$answer = $_;                      
-#chomp $answer
-#if ($answer eq "Y" || $answer eq "y") {
-    # FIXME
-    # there is no $password or $KohaDBNAME yet
-#    system("mysqladmin -uroot -p$password create $KohaDBNAME ");
-#    system("mysql -u$root -p$password ");
-    #need to get to mysql prompt  HOW DO I DO THIS?
-    
-    # FIXME 
-    # you could pipe this into mysql in the shell that system generates
-    # can this be done from dbi?
-#    system("grant all privileges on Koha.* to koha@localhost identified by 'kohapassword'; ");
-#} else {
-#    print qq|
-#You will need to use the MySQL database system for your application.
-#The installer currently does not support an automated setup with this database.
-#|;
-#  };
+my $input;
+my $domainname = 'hostname -d';
+my $opacdir = '/usr/local/www/opac';
+my $kohadir = '/usr/local/www/koha';
+print qq|
 
-print "\n";
-#
-# FIXME
-# there is no updatedatabase program yet
-#
-#system ("perl updatedatabase -I /pathtoC4 ");
+OPAC DIRECTORY
+==============
+Please supply the directory you want Koha to store its OPAC files in.  Leave off
+the trailing slash.  This directory will be auto-created for you if it doesn't
+exist.
+
+Usually $opacdir
+|;
+
+print "Enter directory: ";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $opacdir = $input;
+}
+
+
+print qq|
+
+INTRANET/LIBRARIANS DIRECTORY
+=============================
+Please supply the directory you want Koha to store its Intranet/Librarians files 
+in.  Leave off the trailing slash.  This directory will be auto-created for you if 
+it doesn't exist.
+
+Usually $kohadir
+|;
+
+print "Enter directory: ";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $kohadir = $input;
+}
 
 #
 #KOHA conf
 #
-print qq|
-Koha uses a small configuration file that is usually placed in your
-/etc/ files directory (although you can technically place
-it anywhere you wish).
+my $etcdir = '/etc';
+my $dbname = 'koha';
+my $hostname = 'localhost';
+my $user = 'kohaadmin';
+my $pass = '';
 
-Please enter the full path to your configuration files
-directory (the default Koha conf file is "koha.conf").
-The path is usually something like /etc/ by default.  The
-configuration file, will be created here.
+print qq|
+
+KOHA.CONF
+=========
+Koha uses a small configuration file that is usually placed in your /etc/ files 
+directory. The configuration file, will be created in this directory
+
 |;
 
 #Get the path to the koha.conf directory
-my $conf_path;
-my $dbname;
-my $hostname;
-my $user;
-my $pass;
-my $inc_path;
-do {
-	print "Enter path:";
-	chomp($conf_path = <STDIN>);
-	print "$conf_path is not a directory.\n" if !-d $conf_path;
-} until -d $conf_path;
+print "Enter the path to your [$etcdir]: ";
+chomp($input = <STDIN>);
 
+if ($input) {
+  $etcdir = $input;
+}
 
-print "\n";
-print "\n";
-print qq|
-Please provide the name of the mysql database for koha. 
-This is normally "Koha".
-|;
 
 #Get the database name
-do {
-	print "Enter database name:";
-	chomp($dbname = <STDIN>);
-};
-
-
-print "\n";
-print "\n";
 print qq|
-Please provide the hostname for mysql.  Unless the database is located 
-on another machine this is likely to be "localhost".
+
+Please provide the name of the mysql database for your koha installation.
+This is normally "$dbname".
+
 |;
+
+print "Enter database name:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $dbname = $input;
+}
+
 
 #Get the hostname for the database
-do {
-	print "Enter hostname:";
-	chomp($hostname = <STDIN>);
-};
-
-
-print "\n";
-print "\n";
 print qq|
-Please provide the name of the user, who has full administrative 
-rights to the $dbname database, when authenicating from $hostname.
+
+Please provide the hostname for mysql.  Unless the database is located on another 
+machine this will be "localhost".
 |;
+
+print "Enter hostname:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $hostname = $input;
+}
 
 #Get the username for the database
-do {
-	print "Enter username:";
-	chomp($user = <STDIN>);
-};
-
-
-print "\n";
-print "\n";
 print qq|
-Please provide the password for the user $user.
+
+Please provide the name of the user, who will full administrative rights to the 
+$dbname database, when authenticating from $hostname.
+
+If no user is entered it will default to $user.
 |;
+
+print "Enter username:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $user = $input;
+}
 
 #Get the password for the database user
-do {
-	print "Enter password:";
-	chomp($pass = <STDIN>);
-};
-
-
-print "\n";
-print "\n";
 print qq|
-Please provide the full path to your Koha OPAC installation.
-Usually /usr/local/www/koha/htdocs
+
+Please provide a good password for the user $user.
 |;
 
-#Get the installation path for OPAC
-do {
-	print "Enter installation path:";
-	chomp($inc_path = <STDIN>);
-};
+print "Enter password:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $pass = $input;
+}
+
+print "\n";
 
 
 #Create the configuration file
-# FIXME
-# maybe this should warn instead of dieing, and write to stdout if 
-# the config file can't be opened for writing
-# 
-open(SITES,">$conf_path/koha.conf") or die "Couldn't create file
-at $conf_path.  Must have write capability.\n";
+open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
+at $etcdir.  Must have write capability.\n";
 print SITES <<EOP
 database=$dbname
 hostname=$hostname
 user=$user
 password=$pass
-includes=$inc_path/includes
+includes=$kohadir/htdocs/includes
 EOP
 ;
 close(SITES);
 
 print "Successfully created the Koha configuration file.\n";
 
-print "\n";
-print "\n";
-my $apache_owner;
-print qq|
-The permissions on the koha.conf file should also be strict, 
-since they contain the database password.
-Please supply the username that your apache webserver runs under. 
-|;
-do {
-	print "Enter apache user:";
-	chomp($apache_owner = <STDIN>);
-};
+my $httpduser;
+my $realhttpdconf;
 
+foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
+                      /usr/local/etc/apache/httpd.conf
+                      /usr/local/etc/apache/apache.conf
+                      /var/www/conf/httpd.conf
+                      /etc/apache/conf/httpd.conf
+                      /etc/apache/conf/apache.conf
+                      /etc/httpd/conf/httpd.conf
+                      /etc/httpd/httpd.conf)) {
+   if ( -f $httpdconf ) {
+            $realhttpdconf=$httpdconf;
+            open (HTTPDCONF, $httpdconf) or warn "Insufficient privileges to open $httpdconf for reading.\n";
+      while (<HTTPDCONF>) {
+         if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+            $httpduser = $1;
+         }
+      }
+      close(HTTPDCONF);
+   }
+}
+$httpduser ||= 'Undetermined';
 
 #
 # Set ownership of the koha.conf file for security
-# FIXME - this will only work if run as root.
 #
-
-chown((getpwnam($apache_owner)) [2,3], "$conf_path/koha.conf") or die "can't chown koha.conf: $!";
-
-print "\n";
-print "\n";
+chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf") or warn "can't chown koha.conf: $!";
 
 #
 #SETUP opac
 #
-my $apache_conf_path;
-my $svr_admin;
-my $docu_root;
-my $svr_name;
+my $svr_admin = 'webmaster@$domainname';
+my $opac_svr_name = 'opac.$domainname';
+my $koha_svr_name = 'koha.$domainname';
 
 print qq|
+
+OPAC and KOHA/LIBRARIAN CONFIGURATION
+=====================================
 Koha needs to setup your Apache configuration file for the
 OPAC virtual host.
 
-Please enter the filename and path to your Apache Configuration file 
-usually located in \"/usr/local/apache/conf/httpd.conf\".
-|;
-do {
-	print "Enter path:";
-	chomp($apache_conf_path = <STDIN>);
-	print "$conf_path is not a valid file.\n" if !-f $apache_conf_path;
-} until -f $apache_conf_path;
-
-
-print qq|
-Please enter the servername for your OPAC.
-Usually opac.your.domain
-|;
-do {
-	print "Enter servername address:";
-	chomp($svr_name = <STDIN>);
-};
-
-
-print qq|
 Please enter the e-mail address for your webserver admin.
-Usually webmaster\@your.domain
+Usually $svr_admin
 |;
-do {
-	print "Enter e-mail address:";
-	chomp($svr_admin = <STDIN>);
-};
+
+print "Enter e-mail address:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $svr_admin = $input;
+}
 
 
 print qq|
-Please enter the full path to your OPAC\'s document root.
-usually something like \"/usr/local/www/opac/htdocs\".
+
+Please enter the servername for your OPAC interface.
+Usually $opac_svr_name
 |;
-do {
-	print "Enter Document Roots Path:";
-	chomp($docu_root = <STDIN>);
-};
+print "Enter servername address:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $opac_svr_name = $input;
+}
+
+print qq|
+
+Please enter the servername for your Intranet/Librarian interface.
+Usually $koha_svr_name
+|;
+print "Enter servername address:";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $koha_svr_name = $input;
+}
 
 
 #
 # Update Apache Conf File.
 #
-# FIXME
-# maybe this should warn instead of dieing, and write to stdout if 
-# the config file can't be opened for writing
-# 
-open(SITES,">>$apache_conf_path") or die "Couldn't write to file 
-$conf_path.  Must have write capability.\n";
-print SITES <<EOP
+print qq|
 
-<VirtualHost $svr_name>
-    ServerAdmin $svr_admin
-    DocumentRoot $docu_root
-    ServerName $svr_name
-    ErrorLog logs/opac-error_log
-    TransferLog logs/opac-access_log common
+UPDATING APACHE.CONF
+====================
+
+|;
+open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
+print SITE <<EOP
+
+<VirtualHost $opac_svr_name>
+   ServerAdmin $svr_admin
+   DocumentRoot $opacdir/htdocs
+   ServerName $opac_svr_name
+   ScriptAlias /cgi-bin/ $opacdir/cgi-bin
+   ErrorLog logs/opac-error_log
+   TransferLog logs/opac-access_log common
+   SetEnv PERL5LIB "$kohadir/modules"
+</VirtualHost>
+
+<VirtualHost $koha_svr_name>
+   ServerAdmin $svr_admin
+   DocumentRoot $kohadir/htdocs
+   ServerName $koha_svr_name
+   ScriptAlias /cgi-bin/ "$kohadir/cgi-bin"
+   ErrorLog logs/koha-error_log
+   TransferLog logs/koha-access_log common
+   SetEnv PERL5LIB "$kohadir/modules"
 </VirtualHost>
 
 EOP
 ;
-close(SITES);
-
+close(SITE);
 print "Successfully updated Apache Configuration file.\n";
 
 
+#
+# Setup the modules directory
+#
+print qq|
 
-###RESTART APACHE
-# FIXME
-# this is a pretty rude thing to do on a system ...
-# perhaps asking the user first would be better.
-#
-#system('/etc/rc.d/init.d/httpd restart');
+CREATING REQUIRED DIRECTORIES
+=============================
 
-#
-# It is completed
-#
+|;
+
+unless ( -d $kohadir ) {
+   print "Creating $kohadir...\n";
+   mkdir ($kohadir, oct(770));
+   chown (oct(0), (getgrnam($httpduser))[2], "$kohadir");
+   chmod (oct(770), "$kohadir");
+}
+unless ( -d "$kohadir/htdocs" ) {
+   print "Creating $kohadir/htdocs...\n";
+   mkdir ("$kohadir/htdocs", oct(750));
+}
+unless ( -d "$kohadir/cgi-bin" ) {
+   print "Creating $kohadir/cgi-bin...\n";
+   mkdir ("$kohadir/cgi-bin", oct(750));
+}
+unless ( -d "$kohadir/modules" ) {
+   print "Creating $kohadir/modules...\n";
+   mkdir ("$kohadir/modules", oct(750));
+}
+unless ( -d $opacdir ) {
+   print "Creating $opacdir...\n";
+   mkdir ($opacdir, oct(770));
+   chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
+   chmod (oct(770), "$opacdir");
+}
+unless ( -d "$opacdir/htdocs" ) {
+   print "Creating $opacdir/htdocs...\n";
+   mkdir ("$opacdir/htdocs", oct(750));
+}
+unless ( -d "$opacdir/cgi-bin" ) {
+   print "Creating $opacdir/cgi-bin...\n";
+   mkdir ("$opacdir/cgi-bin", oct(750));
+}
+
+
+
+print "\n\nINSTALLING KOHA...\n";
+print "\n\n==================\n";
+print "Copying internet-html files to $kohadir/htdocs...\n";
+system("cp -R intranet-html/* $kohadir/htdocs/");
+print "Copying intranet-cgi files to $kohadir/cgi-bin...\n";
+system("cp -R intranet-cgi/* $kohadir/cgi-bin/");
+print "Copying script files to $kohadir/modules...\n";
+system("cp -R modules/* $kohadir/modules/");
+print "Copying opac-html files to $opacdir/htdocs...\n";
+system("cp -R opac-html/* $opacdir/htdocs/");
+print "Copying opac-cgi files to $opacdir/cgi-bin...\n";
+system("cp -R opac-cgi/* $opacdir/cgi-bin/");
+
+print qq|
+
+MYSQL CONFIGURATION
+===================
+|;
+my $mysql;
+my $mysqldir;
+my $mysqluser = 'root';
+my $mysqlpass = '';
+
+foreach my $mysql (qw(/usr/local/mysql
+                      /opt/mysql)) {
+   if ( -d $mysql ) {
+            $mysql=$mysqldir;
+   }
+}
+
+print qq|
+To allow us to create the koha database please supply the 
+mysql\'s root users password
+|;
+
+print "Enter mysql\'s root users password: ";
+chomp($input = <STDIN>);
+
+if ($input) {
+  $mysqlpass = $input;
+}
+
+
+print qq|
+
+CREATING DATABASE
+=================
+|;
+system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass create $dbname");
+system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname < koha.mysql");
+system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname < koha.mysql");
+system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
+system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv) values ('%','$dbname','$user','Y','Y','Y','Y');");
+system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
+
+system ("perl scripts/updater/updatedatabase -I $kohadir/modules");
+
+
+#RESTART APACHE
+system('clear');
+print qq|
+COMPLETED
+=========
+Congratulations ... your Koha installation is almost complete!
+The final step is to restart your webserver.
+
+Be sure to read the INSTALL, and Hints files. 
+
+For more information visit http://www.koha.org
+
+Would you like to restart your webserver now? (Y/[N]):
+|;
+
+my $restart = <STDIN>;
+chomp $restart;
+
+if ($answer eq "Y" || $answer eq "y") {
+	system('/etc/rc.d/init.d/httpd restart');
+    } else {
+    print qq|
 print "\nCongratulations ... your Koha installation is complete!\n";
 print "\nYou will need to restart your webserver before using Koha!\n";
-
-
-
-
+|;
+    exit;
+};
