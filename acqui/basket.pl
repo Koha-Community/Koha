@@ -26,7 +26,6 @@
 use strict;
 use C4::Auth;
 use C4::Koha;
-# use C4::Biblio;
 use C4::Output;
 use CGI;
 use C4::Interface::CGI::Output;
@@ -37,7 +36,7 @@ use C4::Date;
 
 my $query =new CGI;
 my $basketno = $query ->param('basket');
-my $supplierid = $query->param('id');
+my $booksellerid = $query->param('supplierid');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basket.tmpl",
 			     query => $query,
@@ -48,9 +47,13 @@ my ($template, $loggedinuser, $cookie)
 			     });
 my ($count,@results);
 
-my ($count2,@booksellers)=bookseller($supplierid);
-
 my $basket = getbasket($basketno);
+# FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
+# if no booksellerid in parameter, get it from basket
+warn "=>".$basket->{booksellerid};
+$booksellerid = $basket->{booksellerid} unless $booksellerid;
+my ($count2,@booksellers)=bookseller($booksellerid);
+
 # if new basket, pre-fill infos
 $basket->{creationdate} = "" unless ($basket->{creationdate});
 $basket->{authorisedby} = $loggedinuser unless ($basket->{authorisedby});

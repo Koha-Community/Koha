@@ -11,7 +11,7 @@
 	
 	<div id="bloc25">
 		<form action="/cgi-bin/koha/acqui/acquire.pl">
-			<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+			<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
 			<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
 			<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
 			<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
@@ -37,7 +37,7 @@
 			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
 				<td><!-- TMPL_VAR NAME="basketno" --></td>
 				<td><!-- TMPL_VAR NAME="isbn" --></td>
-				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="author" --></td>
 				<td>$<!-- TMPL_VAR NAME="unitprice" --></td>
 				<td></td>

@@ -6,41 +6,24 @@
 <table>
 <tr>
 	<th class="acquisition">Order</th>
-	<th class="acquisition">View gapped numbers</th>
 	<th class="acquisition">Receive</th>
 	<th class="acquisition">Company</th>
-	<th class="acquisition">
-		<table class="noborder">
-			<tr>
-				<th class="acquisition">Basket</th>
-				<th class="acquisition">Items</th>
-				<th class="acquisition">Staff</th>
-				<th class="acquisition">Date</th>
-			</tr>
-		</table>
-	</td>
+	<th class="acquisition">&nbsp;</th>
 </tr>
 
 <!-- TMPL_LOOP name="loop_suppliers" -->
 	<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
 		<td>
 			<!-- TMPL_IF name="active" -->
-				<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
 			<!-- TMPL_ELSE -->
 				Inactive
 			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<!-- TMPL_IF name="active" -->
-<div align="center">				<a href="select-late.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a></div>
-			<!-- TMPL_ELSE -->
-				Inactive
-			<!-- /TMPL_IF -->
+			<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
 		</td>
-		<td>
-			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
-		</td>
-		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=id -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=5 border=0>
 					<tr>
@@ -70,6 +53,6 @@
 	<!-- /TMPL_LOOP -->
 	</table>
 	</div>
-	<a class="button acquisition" href="supplier.pl?supplerid=0">Add supplier</a>
+	<a class="button acquisition" href="supplier.pl?supplierid=0">Add supplier</a>
 </div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

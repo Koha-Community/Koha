@@ -54,7 +54,7 @@ if ($op eq 'close') {
 	closebasket($basket);
 }
 
-#build reult page
+#build result page
 my $toggle=0;
 my @loop_suppliers;
 for (my $i=0; $i<$count; $i++) {

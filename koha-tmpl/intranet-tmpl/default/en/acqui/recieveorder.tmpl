@@ -1,10 +1,10 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+	<h1 class="acquisition">Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 	<div id="bloc25">
 		<form method="get" action="receive.pl">
 		<p>
-			<input type="hidden" name="id" value=<!-- TMPL_VAR NAME="id" -->>
+			<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
 			<h2 class="acquisition">Supplier invoice information</h2>
 		<p>
 			<label>Supplier Invoice Number</label>

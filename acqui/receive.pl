@@ -34,8 +34,8 @@ use HTML::Template;
 use strict;
 
 my $input=new CGI;
-my $id=$input->param('id');
-my ($count,@booksellers)=bookseller($id);
+my $supplierid=$input->param('supplierid');
+my ($count,@booksellers)=bookseller($supplierid);
 my $invoice=$input->param('invoice');
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
@@ -53,7 +53,7 @@ my ($template, $loggedinuser, $cookie)
 my @results;
 ($count,@results)=invoice($invoice);
 if ($invoice eq ''){
-	($count,@results)=getallorders($id);
+	($count,@results)=getallorders($supplierid);
 }
 my $totalprice=0;
 my $totalfreight=0;
@@ -84,7 +84,7 @@ for (my$i=0;$i<$count;$i++){
 	$line{unitprice} = $results[$i]->{'unitprice'};
 	$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
 	$line{total} = $total;
-	$line{id} = $id;
+	$line{supplierid} = $supplierid;
 	push @loop_orders, \%line;
 	$totalprice+=$results[$i]->{'unitprice'};
 	$totalfreight+=$results[$i]->{'freight'};
@@ -98,7 +98,7 @@ $tototal=$tototal+$freight;
 $template->param(invoice => $invoice,
 						date => $date,
 						name => $booksellers[0]->{'name'},
-						id => $id,
+						supplierid => $supplierid,
 						gst => $gst,
 						freight => $freight,
 						invoice => $invoice,

@@ -107,18 +107,18 @@ if ($quantity ne '0'){
 	} else {
 		$bibnum=$input->param('biblio');
 		$bibitemnum=$input->param('bibitemnum');
-		my $oldtype=$input->param('oldtype');
-		&modbibitem({biblioitemnumber => $bibitemnum,
-						isbn            => $isbn,
-						publishercode   => $publishercode,
-		});
-		&modbiblio({
-			biblionumber  => $bibnum,
-			title         => $title?$title:"",
-			author        => $author?$author:"",
-			copyrightdate => $copyrightdate?$copyrightdate:"",
-			series        => $series?$series:"" },
-			);
+# 		my $oldtype=$input->param('oldtype');
+# 		&modbibitem({biblioitemnumber => $bibitemnum,
+# 						isbn            => $isbn,
+# 						publishercode   => $publishercode,
+# 		});
+# 		&modbiblio({
+# 			biblionumber  => $bibnum,
+# 			title         => $title?$title:"",
+# 			author        => $author?$author:"",
+# 			copyrightdate => $copyrightdate?$copyrightdate:"",
+# 			series        => $series?$series:"" },
+# 			);
 	}
 	if ($ordnum) {
 		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);

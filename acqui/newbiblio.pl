@@ -49,11 +49,17 @@ my $dbh = C4::Context->dbh;
 if ($ordnum eq ''){ # create order
 	$new='yes';
 # 	$ordnum=newordernum;
-	if ($biblio) {
+	if ($biblio && !$suggestionid) {
 			$data=bibdata($biblio);
 	}
-	if ($suggestionid) { # get suggestion fields if applicable.
-		$data = getsuggestion($suggestionid);
+	# get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
+	# otherwise, retrieve suggestion information.
+	if ($suggestionid) {
+		if ($biblio) {
+			$data=bibdata($biblio);
+		} else {
+			$data = getsuggestion($suggestionid);
+		}
 	}
 	if ($data->{'title'} eq ''){
 		$data->{'title'}=$title;

@@ -49,7 +49,11 @@
 					<!-- TMPL_VAR NAME="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<a href="newbiblio.pl?id=<!-- TMPL_VAR NAME="supplierid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Order</a>
+					<!-- TMPL_IF name="biblionumber" -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Order</a>
+					<!-- TMPL_ELSE -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Order</a>
+					<!-- /TMPL_IF -->
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->

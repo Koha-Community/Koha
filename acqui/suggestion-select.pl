@@ -11,7 +11,7 @@ use C4::Suggestions;
 my $input = new CGI;
 
 my $basketid = $input->param('basket');
-my $supplierid = $input->param('id');
+my $supplierid = $input->param('booksellerid');
 
 my $title = $input->param('title');
 my $author = $input->param('author');

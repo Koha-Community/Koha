@@ -34,7 +34,7 @@ use HTML::Template;
 use strict;
 
 my $query=new CGI;
-my $id=$query->param('id');
+my $id=$query->param('supplierid');
 my ($count,@booksellers)=bookseller($id);
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/supplier.tmpl",

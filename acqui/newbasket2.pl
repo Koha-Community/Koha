@@ -61,15 +61,11 @@ my $num=$input->param('num');
 if ($num eq ''){
   $num=10;
 }
-my $id=$input->param('id');
+my $booksellerid=$input->param('booksellerid');
 my $basket=$input->param('basket');
 my $sub=$input->param('sub');
-my $donation;
-if ($id == 72){
-  $donation='yes';
-}
 #print $sub;
-my ($count,@booksellers)=bookseller($id);
+my ($count,@booksellers)=bookseller($booksellerid);
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/newbasket2.tmpl",
 			     query => $input,
@@ -83,7 +79,6 @@ my ($template, $loggedinuser, $cookie)
 #print startpage();
 #print startmenu('acquisitions');
 
-my $testdonation = ($donation ne 'yes'); #tests if donation = true
 if ($keyword ne ''){
 	($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
 } elsif ($search{'front'} ne '') {
@@ -221,7 +216,7 @@ while ($i < $count2){
 	$lineres{author2}=$author2;
 	$lineres{title2}=$title2;
 	$lineres{copyright}=$result->{'copyrightdate'};
-	$lineres{id}=$id;
+	$lineres{booksellerid}=$booksellerid;
 	$lineres{basket}=$basket;
 	$lineres{sub}=$sub;
 	$lineres{biblionumber}=$result->{biblionumber};
@@ -237,10 +232,9 @@ while ($i < $count2){
 
 $offset=$num+$offset;
 $template->param(	bookselname => $booksellers[0]->{'name'},
-								id => $id,
+								booksellerid => $booksellerid,
 								basket => $basket,
 								parsub => $sub,
-								testdonation => $testdonation,
 								count => $count,
 								offset2 =>$offset2,
 								dispnum => $dispnum,
@@ -248,7 +242,6 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								num => $num,
 								offset => $offset,
 								type =>  $type,
-								id => $id,
 								basket => $basket,
 								title => $title,
 								author => $author,

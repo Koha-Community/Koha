@@ -36,7 +36,7 @@ use HTML::Template;
 use C4::Date;
 
 my $input=new CGI;
-my $id=$input->param('id');
+my $supplierid=$input->param('supplierid');
 my $dbh = C4::Context->dbh;
 
 my $search=$input->param('recieve');
@@ -45,7 +45,8 @@ my $freight=$input->param('freight');
 my $biblio=$input->param('biblio');
 my $catview=$input->param('catview');
 my $gst=$input->param('gst');
-my ($count,@results)=ordersearch($search,$id,$biblio,$catview);
+my ($count,@results)=ordersearch($search,$supplierid,$biblio,$catview);
+warn "C:$count for ordersearch($search,$supplierid,$biblio,$catview);";
 my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
 my $date = $results[0]->{'entrydate'};
 
@@ -60,24 +61,25 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param($count);
 if ($count == 1){
-	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
-	$sth->execute;
-	my  @itemtype;
-	my %itemtypes;
-	push @itemtype, "";
-	$itemtypes{''} = "Please choose";
-	while (my ($value,$lib) = $sth->fetchrow_array) {
-		push @itemtype, $value;
-		$itemtypes{$value}=$lib;
-	}
-
-	my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
-				-values   => \@itemtype,
-				-default  => $results[0]->{'itemtype'},
-				-labels   => \%itemtypes,
-				-size     => 1,
-				-multiple => 0 );
-	$sth->finish;
+	my $sth;
+# 	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
+# 	$sth->execute;
+# 	my  @itemtype;
+# 	my %itemtypes;
+# 	push @itemtype, "";
+# 	$itemtypes{''} = "Please choose";
+# 	while (my ($value,$lib) = $sth->fetchrow_array) {
+# 		push @itemtype, $value;
+# 		$itemtypes{$value}=$lib;
+# 	}
+# 
+# 	my $CGIitemtype=CGI::scrolling_list( -name     => 'format',
+# 				-values   => \@itemtype,
+# 				-default  => $results[0]->{'itemtype'},
+# 				-labels   => \%itemtypes,
+# 				-size     => 1,
+# 				-multiple => 0 );
+# 	$sth->finish;
 
 	my @branches;
 	my @select_branch;
@@ -93,7 +95,6 @@ if ($count == 1){
 				-labels   => \%select_branches,
 				-size     => 1,
 				-multiple => 0 );
-	$sth->finish;
 
 	my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
 		# See whether barcodes should be automatically allocated.
@@ -107,22 +108,21 @@ if ($count == 1){
 		$sth->finish;
 	}
 
-	my @bookfund;
-	my @select_bookfund;
-	my %select_bookfunds;
-	($count2,@bookfund)=bookfunds();
-	for (my $i=0;$i<$count2;$i++){
-		push @select_bookfund, $bookfund[$i]->{'bookfundid'};
-		$select_bookfunds{$bookfund[$i]->{'bookfundid'}} = $bookfund[$i]->{'bookfundname'}
-	}
-	my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
-				-values   => \@select_bookfund,
-				-default  => $results[0]->{'bookfundid'},
-				-labels   => \%select_bookfunds,
-				-size     => 1,
-				-multiple => 0 );
+# 	my @bookfund;
+# 	my @select_bookfund;
+# 	my %select_bookfunds;
+# 	($count2,@bookfund)=bookfunds();
+# 	for (my $i=0;$i<$count2;$i++){
+# 		push @select_bookfund, $bookfund[$i]->{'bookfundid'};
+# 		$select_bookfunds{$bookfund[$i]->{'bookfundid'}} = $bookfund[$i]->{'bookfundname'}
+# 	}
+# 	my $CGIbookfund=CGI::scrolling_list( -name     => 'bookfund',
+# 				-values   => \@select_bookfund,
+# 				-default  => $results[0]->{'bookfundid'},
+# 				-labels   => \%select_bookfunds,
+# 				-size     => 1,
+# 				-multiple => 0 );
 
-	my $rrp=$results[0]->{'rrp'};
 	if ($results[0]->{'quantityreceived'} == 0){
 	$results[0]->{'quantityreceived'}='';
 	}
@@ -134,7 +134,7 @@ if ($count == 1){
 		biblionumber => $results[0]->{'biblionumber'},
 		ordernumber => $results[0]->{'ordernumber'},
 		biblioitemnumber => $results[0]->{'biblioitemnumber'},
-		booksellerid => $results[0]->{'booksellerid'},
+		supplierid => $results[0]->{'booksellerid'},
 		freight => $freight,
 		gst => $gst,
 		catview => ($catview ne 'yes'?1:0),
@@ -143,15 +143,15 @@ if ($count == 1){
 		title => $results[0]->{'title'},
 		author => $results[0]->{'author'},
 		copyrightdate => format_date($results[0]->{'copyrightdate'}),
-		CGIitemtype => $CGIitemtype,
+		itemtype => $results[0]->{'itemtype'},
 		CGIbranch => $CGIbranch,
 		isbn => $results[0]->{'isbn'},
 		seriestitle => $results[0]->{'seriestitle'},
 		barcode => $barcode,
-		CGIbookfund => $CGIbookfund,
+		bookfund => $results[0]->{'bookfundid'},
 		quantity => $results[0]->{'quantity'},
 		quantityreceived => $results[0]->{'quantityreceived'},
-		rrp => $rrp,
+		rrp => $results[0]->{'rrp'},
 		ecost => $results[0]->{'ecost'},
 		unitprice => $results[0]->{'unitprice'},
 		invoice => $invoice,
@@ -172,13 +172,13 @@ if ($count == 1){
 		$line{gst} = $gst;
 		$line{title} = $results[$i]->{'title'};
 		$line{author} = $results[$i]->{'author'};
-		$line{id} = $id;
+		$line{supplierid} = $supplierid;
 		push @loop,\%line;
 	}
 	$template->param( loop => \@loop,
 						date => format_date($date),
 						name => $booksellers[0]->{'name'},
-						id => $id,
+						supplierid => $supplierid,
 						invoice => $invoice,
 );
 

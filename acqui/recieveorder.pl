@@ -32,8 +32,8 @@ use HTML::Template;
 use C4::Acquisition;
 
 my $input=new CGI;
-my $id=$input->param('id');
-my ($count,@booksellers)=bookseller($id);
+my $supplierid=$input->param('supplierid');
+my ($count,@booksellers)=bookseller($supplierid);
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/recieveorder.tmpl",
@@ -46,7 +46,7 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param(
 		name => $booksellers[0]->{'name'},
-		id => $id,
+		supplierid => $supplierid,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
