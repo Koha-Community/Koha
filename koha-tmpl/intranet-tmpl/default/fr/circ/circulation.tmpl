@@ -162,12 +162,9 @@
      </TMPL_IF>
 </TMPL_IF>
 <TMPL_IF name="borrowernumber">
-        
-	<TMPL_VAR name="patrontable">
-	<TMPL_VAR name="flaginfotable">
-</TMPL_IF>
-
-<TMPL_IF name="borrowernumber">
+<table border="1" width="100%">
+<tr>
+<td>
 <form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5>
 	<tr>
@@ -220,18 +217,58 @@
 	</tr>
 </table>
 </form>
+</td>
+<td>
+<table border=1 cellpadding=5 cellspacing=0 align=right>
+    <tr><td colspan=2><font color=black><b>Informations lecteur</b></font></td></tr>
+    <tr><td colspan=2>
+    <a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR name="borrowernumber">" onClick="openWindow(this,'Member', 480, 640)">
+		<TMPL_VAR name="firstname"> <TMPL_VAR name="surname">
+    </a> <br> Catégorie: <TMPL_VAR name="categorycode">
+    </td></tr>
+<TMPL_IF name="noissues">
+	<TMPL_IF name="charges">
+		<tr><td valign=top><font color=red>Frais</font></td><td bgcolor=<TMPL_VAR name=color>><a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR name="borrowernumber"> onClick=\"openWindow(this, 'Payment', 480,640)\">Paiement</a></td></tr>
+	<TMPL_ELSE>
+		<tr><td valign=top><font color=red><TMPL_VAR name="flag"></font></td><td bgcolor=<TMPL_VAR name="color"><TMPL_VAR name="message"></td></tr>
+	</TMPL_IF>
+<TMPL_ELSE>
+		<TMPL_IF name="charges">
+			<tr><td valign=top>Frais</td><td><a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR name="borrowernumber"> onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>
+		</TMPL_IF>
+		<TMPL_IF name="waiting">
+			<tr>
+			<td valign=top>En attente</td>
+			<td>
+			<TMPL_LOOP name="itemswaiting">
+				<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR name="biblionumber">&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\"><TMPL_VAR name="barcode">}</a><TMPL_VAR name="title"> (<TMPL_VAR name="branchname">)<br>
+			</TMPL_LOOP>
+			</td>
+			</tr>
+		</TMPL_IF>
+			<TMPL_IF name="odues">
+				<TMPL_IF name="nonreturns">
+					<tr><td valign=top>Retards</td><td>Oui, voir ci-dessous</td></tr>
+				</TMPL_IF>
+			</TMPL_IF>
+			<TMPL_IF name="notes">
+					<tr><td valign=top>Notes</td><td><TMPL_VAR name="notesmsg"></td></tr>
+			</TMPL_IF>
 </TMPL_IF>
+</table>
+</TMPL_IF>
+</table>
 <p clear=all><br><br>
 <TMPL_IF name="todayissues">
 <table border=1 cellpadding=5 cellspacing=0 width=80%>
 	<tr>
 		<th colspan=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 			<font color=black>
-			<b>Todays Issues</b></font>
+			<b>Emprunts du jour</b></font>
 		</th>
 	</tr>
 	<tr>
-		<th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th>
+		<th>Retour pour le</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Classe</th>
 	</tr>
 	<TMPL_LOOP name="todayissues">
 	    <tr><td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dd"></td>
