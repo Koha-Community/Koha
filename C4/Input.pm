@@ -68,7 +68,7 @@ number or ISBN is valid.
 
 =item checkdigit
 
-  $valid = &checkdigit($env, $cardnumber);
+  $valid = &checkdigit($env, $cardnumber $nounique);
 
 Takes a card number, computes its check digit, and compares it to the
 checkdigit at the end of C<$cardnumber>. Returns a true value iff
@@ -90,9 +90,6 @@ sub checkdigit {
 	#different from the one where the checkdigit on the number is
 	#not correct
 
-	if (C4::Context->preference("checkdigit") eq "none") {
-		return 1;
-	}
 	unless ( $nounique )
 	{
 		my $dbh=C4::Context->dbh;
@@ -104,6 +101,9 @@ sub checkdigit {
 		{
 			return 0;
 		}
+	}
+	if (C4::Context->preference("checkdigit") eq "none") {
+		return 1;
 	}
 
 	my @weightings = (8,4,6,3,5,2,1);
