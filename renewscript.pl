@@ -24,7 +24,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Circulation::Renewals2;
+# use C4::Circulation::Renewals2;
+use C4::Circulation::Circ2;
 #get input
 my $input= new CGI;
 #print $input->header;
@@ -44,17 +45,17 @@ for (my $i=0;$i<$count;$i++){
 }
 my %env;
 my $bornum=$input->param("bornum");
-while ( my ($key, $value) = each %data) {
- #  print "$key = $value\n";
+while ( my ($itemno, $value) = each %data) {
+#    warn "$itemno = $value\n";
    if ($value eq 'y'){
      #means we want to renew this item
      #check its status
-     my $status=renewstatus(\%env,$bornum,$key);
-#     print $status;
+     my $status=renewstatus(\%env,$bornum,$itemno);
+# 	 warn "STATUS : $status";
      if ($status == 1){
-       renewbook(\%env,$bornum,$key);
+       renewbook(\%env,$bornum,$itemno);
      }
    }
 }
 
-print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");
+print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
