@@ -254,11 +254,11 @@ sub modorder {
   my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("update aqorders set title=?,
   quantity=?,listprice=?,basketno=?,
-  rrp=?,ecost=?,unitprice=?,
-  sort1=?, sort2=?
+  rrp=?,ecost=?,unitprice=?,booksellerinvoicenumber=?,
+  notes=?,sort1=?, sort2=?
   where
   ordernumber=? and biblionumber=?");
-  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$sort1,$sort2,$ordnum,$bibnum);
+  $sth->execute($title,$quantity,$listprice,$basketno,$rrp,$ecost,$cost,$invoice,$notes,$sort1,$sort2,$ordnum,$bibnum);
   $sth->finish;
   $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
   ordernumber=?");
