@@ -396,6 +396,7 @@ EOT
 
   # Again, we build a list of clauses from the keywords.
   @clauses = ();
+  @bind = ();
   $query = "SELECT biblionumber FROM bibliosubtitle WHERE ";
   foreach my $keyword (@key)
   {
