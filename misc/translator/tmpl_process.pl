@@ -184,7 +184,7 @@ sub install_strhash
 		# opens handle for output
 		if( !open($fh_out, "> $out_file_tmp") )
 		{
-			warn "Can't write $out_file : $!\n";
+			warn "Can''t write $out_file : $!\n";
 			close($fh_in);
 			next;
 		}
@@ -205,6 +205,7 @@ sub install_strhash
 					{
 						# changing text
 						my $subst = %{$strhash}->{$text};
+						$subst =~ s/UNUSED;//;
 						# escaping \|()[{}^$*+?.
 						$text =~ s/\\/\\\\/g;
 						$text =~ s/\//\\\//g;
@@ -228,6 +229,7 @@ sub install_strhash
 					} else {
 						# changing text
 						my $subst = %{$strhash}->{$text};
+						$subst =~ s/UNUSED;//;
 						# escaping \|()[{}^$*+?.
 						$text =~ s/\\/\\\\/g;
 						$text =~ s/\//\\\//g;
