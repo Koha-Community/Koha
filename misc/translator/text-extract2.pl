@@ -23,18 +23,21 @@ use strict;
 
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );
-use vars qw( $pedantic_p );
+use vars qw( $pedantic_p $pedantic_error_occurred_in_nonpedantic_mode_p );
 use vars qw( $fatal_p );
 
 ###############################################################################
 
 # Hideous stuff
-use vars qw( $re_directive $re_directive_ref );
+use vars qw( $re_directive $re_tmpl_var $re_tmpl_var_escaped $re_tmpl_include );
 BEGIN {
     # $re_directive must not do any backreferences
     $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     # As above but only TMPL_VAR and TMPL_INCLUDE (those that can emit a value)
-    $re_directive_ref = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    $re_tmpl_var = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    $re_tmpl_include = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    # TMPL_VAR ESCAPE=1/HTML/URL
+    $re_tmpl_var_escaped = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s+ESCAPE=(?:1|HTML|URL)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
 }
 
 # Hideous stuff from subst.pl, slightly modified to use the above hideous stuff
@@ -82,12 +85,26 @@ sub extract_attributes ($;$) {
 	$i += 1;
 	$attr{+lc($key)} = [$key, $val, $val_orig, $i];
 	$s = $rest;
-	warn "Warning: Attribute probably should be quoted"
-		. (defined $lc? " near line $lc": '') . ": $val_orig\n"
-		if $val_orig !~ /^['"]/ && (
-			($pedantic_p && $val =~ /[^-\.A-Za-z0-9]/s)
-			|| $val =~ /$re_directive_ref/s
-		    )
+	if ($val =~ /$re_tmpl_include/os) {
+	    warn "Warning: TMPL_INCLUDE in attribute"
+		. (defined $lc? " near line $lc": '') . ": $val_orig\n";
+	} elsif ($val_orig !~ /^['"]/) {
+	    if ($val =~ /$re_tmpl_var/os && $val !~ /$re_tmpl_var_escaped/os) {
+		warn "Warning: TMPL_VAR without ESCAPE in unquoted attribute"
+		    . (defined $lc? " near line $lc": '') . ": $val_orig\n";
+	    } elsif ($val =~ /[^-\.A-Za-z0-9]/s) {
+		if ($pedantic_p) {
+		    warn "Warning: Unquoted attribute containing character(s) that must be quoted"
+			. (defined $lc? " near line $lc": '') . ": $val_orig\n";
+		} else {
+		    warn "Warning: Negligible minor syntax error in token detected"
+			. (defined $lc? " near line $lc": '')
+			. ", use --pedantic to show\n"
+			unless $pedantic_error_occurred_in_nonpedantic_mode_p;
+		    $pedantic_error_occurred_in_nonpedantic_mode_p = 1;
+		}
+	    }
+	}
     }
     if ($s =~ /\S/s) { # should never happen
 	if ($s =~ /^([^\n]*)\n/s) { # this is even worse
