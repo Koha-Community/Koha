@@ -417,7 +417,7 @@ sub returnbook {
 	   #printreserve($env,$resrec,$resborrower,$itemrec);
 	   my ($branches) = getbranches();
 	   my $branchname=$branches->{$resrec->{'branchcode'}}->{'branchname'};
-	   push (@$messages, "Reserved for collection by $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'}) at $branchname");
+	   push (@$messages, "<b><font color=red>RESERVED</font></b> for collection by $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'}) at $branchname");
 	}
 	UpdateStats($env,'branch','return','0','',$iteminformation->{'itemnumber'});
     }
@@ -539,7 +539,8 @@ sub checkreserve {
   my $sth = $dbh->prepare($query);
   $sth->execute();
   my $resrec;
-  if (my $data=$sth->fetchrow_hashref) {
+  my $data=$sth->fetchrow_hashref;
+  while ($data && $resbor eq '') {
     $resrec=$data;
     my $const = $data->{'constrainttype'};
     if ($const eq "a") {
@@ -562,6 +563,7 @@ sub checkreserve {
       }
       $csth->finish();
     }
+    $data=$sth->fetchrow_hashref;
   }
   $sth->finish;
   return ($resbor,$resrec);
@@ -776,7 +778,9 @@ sub find_reserves {
 # Stolen from Returns.pm
   my ($env,$dbh,$itemno) = @_;
   my ($itemdata) = getiteminformation($env,$itemno,0);
-  my $query = "select * from reserves where found is null 
+  my $query = "select * from reserves where 
+  ((reserves.found = 'W')                                   
+  or (reserves.found is null)) 
   and biblionumber = $itemdata->{'biblionumber'} and cancellationdate is NULL
   order by priority,reservedate ";
   my $sth = $dbh->prepare($query);
@@ -790,7 +794,8 @@ sub find_reserves {
       if ($resrec->{'itemnumber'} eq $itemno) {
         $resfound = "y";
       }
-    } elsif ($resrec->{'constrainttype'} eq "a") {
+    } 
+    if ($resrec->{'constrainttype'} eq "a") {
       $resfound = "y";
     } else {
       my $conquery = "select * from reserveconstraints where borrowernumber
