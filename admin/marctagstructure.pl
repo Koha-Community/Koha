@@ -209,7 +209,7 @@ printend
 	  	}
 		print mktablerow(5,$toggle,$results->[$i]{'tagfield'},$results->[$i]{'liblibrarian'},mklink('','subfields_not_done'),
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'tagfield'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'tagfield'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'tagfield'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";
