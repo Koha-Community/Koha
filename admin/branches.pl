@@ -57,7 +57,6 @@ my $pagesize=20;
 
 #######################################################################################
 # Main loop....
-
 my $input = new CGI;
 my $branchcode=$input->param('branchcode');
 my $op = $input->param('op');
@@ -352,7 +351,7 @@ sub getcategoryinfo {
     my $sth = $dbh->prepare($query);
     $sth->execute(@query_args);
     my @results;
-    while (my $data = $sth->fetchrow_hashref) { 
+    while (my $data = $sth->fetchrow_hashref) {
 	push(@results, $data);
     }
     $sth->finish;
@@ -367,7 +366,7 @@ sub setbranchinfo {
     my $dbh = C4::Context->dbh;
     my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)";
     my $sth=$dbh->prepare($query);
-    $sth->execute($data->{'branchcode'}, $data->{'branchname'},
+    $sth->execute(uc($data->{'branchcode'}), $data->{'branchname'},
 	    $data->{'branchaddress1'}, $data->{'branchaddress2'},
 	    $data->{'branchaddress3'}, $data->{'branchphone'},
 	    $data->{'branchfax'}, $data->{'branchemail'});
@@ -382,7 +381,7 @@ sub setbranchinfo {
 	    push(@checkedcats, $code);
 	}
     }
-    my $branchcode = $data->{'branchcode'};
+    my $branchcode =uc($data->{'branchcode'});
     my $branch = getbranchinfo($branchcode);
     $branch = $branch->[0];
     my $branchcats = $branch->{'categories'};
@@ -397,7 +396,7 @@ sub setbranchinfo {
 	unless (grep {/^$ccat$/} @$branchcats) {
 	    push(@addcats, $ccat);
 	}
-    }	
+    }
     # FIXME - There's already a $dbh in this scope.
     my $dbh = C4::Context->dbh;
     foreach my $cat (@addcats) {
