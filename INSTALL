@@ -70,7 +70,7 @@ as www-data u will need to make sure apache is running
 as www-data)
 
 6. Update your database tables
-perl scripts/updater/updatedatabase -I /pathtoC4 
+perl -I modules/ scripts/updater/updatedatabase
 
 7. Create directories for scripts and html documents.
 Here you need to decide where your scripts and html are going to live.
@@ -111,7 +111,7 @@ Your virtual host should be set up to use these dirs, some thing like this:
    <VirtualHost opac.your.site>                         
    ServerAdmin webmaster@your.site                            
    DocumentRoot /usr/local/www/opac/htdocs                     
-   ScriptAlias  /cgi-bin/ /usr/local/www/opac/cgi-bin/
+   ScriptAlias  /cgi-bin/koha/ /usr/local/www/opac/cgi-bin/
    ServerName opac.your.site                      
    ErrorLog logs/opac-error_log       
    TransferLog logs/opac-access_log               

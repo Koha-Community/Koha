@@ -125,7 +125,7 @@ if ($input) {
 #KOHA conf
 #
 my $etcdir = '/etc';
-my $dbname = 'koha';
+my $dbname = 'Koha';
 my $hostname = 'localhost';
 my $user = 'kohaadmin';
 my $pass = '';
@@ -321,7 +321,7 @@ print SITE <<EOP
    ServerAdmin $svr_admin
    DocumentRoot $opacdir/htdocs
    ServerName $opac_svr_name
-   ScriptAlias /cgi-bin/ $opacdir/cgi-bin
+   ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
    ErrorLog logs/opac-error_log
    TransferLog logs/opac-access_log common
    SetEnv PERL5LIB "$kohadir/modules"
@@ -331,7 +331,7 @@ print SITE <<EOP
    ServerAdmin $svr_admin
    DocumentRoot $kohadir/htdocs
    ServerName $koha_svr_name
-   ScriptAlias /cgi-bin/ "$kohadir/cgi-bin"
+   ScriptAlias /cgi-bin/koha/ "$kohadir/cgi-bin"
    ErrorLog logs/koha-error_log
    TransferLog logs/koha-access_log common
    SetEnv PERL5LIB "$kohadir/modules"
