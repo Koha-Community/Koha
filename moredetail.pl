@@ -79,11 +79,7 @@ $env->{itemcount}=1;
 $results[0]=$data;
 
 foreach my $item (@items){
-    $item->{'itemlost'}=~ s/0/No/;
-    $item->{'itemlost'}=~ s/1/Yes/;
-    $item->{'withdrawn'}=~ s/0/No/;
-    $item->{'withdrawn'}=~ s/1/Yes/;
-    $item->{'replacementprice'}+=0.00;
+    $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
     $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
     $item->{'datelastseen'} = format_date($item->{'datelastseen'});
