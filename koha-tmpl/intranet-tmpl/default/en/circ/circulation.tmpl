@@ -119,7 +119,7 @@
 <!-- TMPL_IF name="message" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">Messages</th></tr>
-		<tr><td><!-- TMPL_VAR name="message" --></td></tr>
+		<tr><td>No borrower matched  <!-- TMPL_VAR name="message" --></td></tr>
 	</table>
 <!-- /TMPL_IF -->
 
@@ -304,7 +304,7 @@
 			<th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th>
 		</tr>
 	<!-- TMPL_LOOP name="previssues" -->
-	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dd" --></td>
+	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_IF NAME="od" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></font><!-- /TMPL_IF --></td>
 	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->">
 	    <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
 	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="title" --></td>
