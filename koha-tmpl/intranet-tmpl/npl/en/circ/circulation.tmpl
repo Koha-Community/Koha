@@ -122,6 +122,7 @@
 	<ul>
 	<li><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></li>
 	<li><!-- TMPL_VAR NAME="phone" --></li>
+	<!-- TMPL_IF NAME="emailaddress" --><li><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a></li><!-- /TMPL_IF -->
 	<li>Category: <!-- TMPL_VAR name="categorycode" --></li>
 	<li>(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->">details</a> / <a href="/cgi-bin/koha/members/memberentry.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit">edit</a>)</li>
 	</ul>
@@ -160,7 +161,7 @@
 		<!-- /TMPL_IF -->
 
 		<!-- TMPL_IF name="notes" -->
-					<dt>Notes:</dt> <dd><!-- TMPL_VAR name="notesmsg" --></dd>
+					<dt>Notes:</dt> <dd class="error"><!-- TMPL_VAR name="notesmsg" --></dd>
 				<!-- /TMPL_IF -->
 </dl>
 	<!-- TMPL_ELSE -->
@@ -262,7 +263,7 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 <div class="table"><form class="inline" action="/cgi-bin/koha/renewscript.pl" method="post"><input type="hidden" value="circ" name="destination" /><input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 	<table>
-		<caption>Issues <!-- Display for NPL --><span class="print"><a href="/cgi-bin/koha/moremember-print.pl?bornum=<TMPL_VAR NAME="borrowernumber">">(Print Page)</a> <a href="/cgi-bin/koha/moremember-receipt.pl?bornum=<TMPL_VAR NAME="borrowernumber">">(Print Slip)</a></span><!-- /Display for NPL --></caption>
+		<caption>Issues <span class="print"><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">(Print Page)</a> <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">(Print Slip)</a></span></caption>
 		<tr>
 			<th>Due Date</th>
 			<th>Title</th>
