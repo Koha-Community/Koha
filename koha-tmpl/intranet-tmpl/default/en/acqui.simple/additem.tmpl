@@ -6,7 +6,7 @@
 	font-size:10pt;}
 </STYLE>
 
-<form method="post" action="additem.pl">
+<form method="post" action="additem.pl" name="f">
 <table width=100% cellspacing=0 cellpadding=5 border=1>
 <tr background="/images/background-mem.gif">
 	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
@@ -69,21 +69,65 @@
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
 			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
 		</td>
 	</tr>
 	</tmpl_loop>
 </table>
 <input type="hidden" name="itemnum" value="<TMPL_VAR name="itemnum">">
 <TMPL_IF name="opisadd">
-<input type="submit" value="Add item">
+<input type="button" value="Add item" onClick='Check(this.form)' accesskey="w">
 <TMPL_ELSE>
 <input type="hidden" name="tag" value="<TMPL_VAR name="itemtagfield">">
 <input type="hidden" name="subfield" value="<TMPL_VAR name="itemtagsubfield">">
 <input type="hidden" name="field_value" value="<TMPL_VAR name="itemnum">">
-<input type="submit" value="Modify item">
+<input type="button" value="Modify item" onClick='Check(this.form)' accesskey="w">
 </TMPL_IF>
 </center>
 </form>
-
+<script LANGUAGE="JavaScript">
+function active(numlayer)
+{
+	for (i=0; i < 10 ; i++ ) {
+		ong = i+"XX";
+			link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+			document.getElementById(link).style.backgroundColor="#11AA11";
+			document.getElementById(link).style.backgroundImage="url(/images/background-mem.gif)";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+			document.getElementById(link).style.backgroundColor="#FFFFFF";
+			document.getElementById(link).style.backgroundImage="";
+		}
+	}
+}
+function Check(f) {
+	var total_errors=0;
+//	alert(f.field_value.length);
+	for (i=0 ; i<f.field_value.length ; i++) {
+//	alert (f.field_value[i].value);
+		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+			document.getElementById("error"+i).style.backgroundColor="#FF0000";
+			total_errors++;
+		} else {
+			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+		}
+	}
+	var alertString2;
+	if (total_errors==0) {
+		document.f.submit();
+	} else {
+		alertString2 = "Form not submitted because of the following problem(s)\n";
+		alertString2 += "------------------------------------------------------------------------------------\n\n";
+		alertString2 += "- "+ total_errors+" mandatory fields empty (see bold subfields)";
+		alert(alertString2);
+	}
+}
+function Dopop(link,i) {
+	defaultvalue=document.forms[0].field_value[i].value;
+	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
 </body>
 </html>
