@@ -85,6 +85,16 @@ my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf (
 
 # my $message;
 
+# check and see if we should print
+ if ($barcode eq ''  && $print eq 'maybe'){
+ 	$print = 'yes';
+ }
+ if ($print eq 'yes' && $borrowernumber ne ''){
+ 	printslip(\%env,$borrowernumber);
+ 	$query->param('borrnumber','');
+ 	$borrowernumber='';
+ }
+
 #
 # STEP 2 : FIND BORROWER
 # if there is a list of find borrowers....
@@ -120,15 +130,7 @@ if ($borrowernumber) {
 #
 #
 
-# check and see if we should print
-# if ($barcode eq ''  && $print eq 'maybe'){
-# 	$print = 'yes';
-# }
-# if ($print eq 'yes' && $borrowernumber ne ''){
-# 	printslip(\%env,$borrowernumber);
-# 	$query->param('borrnumber','');
-# 	$borrowernumber='';
-# }
+
 
 if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
