@@ -58,8 +58,6 @@ foreach my $key (@names){
 }
 my $missing=0;
 
-my $string="The following compulsary fields have been left blank. Please push the back button
-and try again<p>";
 for (my $i=0;$i<3;$i++){
   my $number=$data{"cardnumber_child_$i"};
   my $firstname=$data{"firstname_child_$i"};
@@ -68,37 +66,54 @@ for (my $i=0;$i<3;$i++){
   my $sex=$data{"sex_child_$i"};
   if ($number eq ''){
     if ($i == 0){
-      $string.=" Cardnumber<br>";
-      $missing=1;
+		$template->param(cardnumber_missing => 1);
+		$missing=1;
+		    if ($firstname eq ''){
+		$template->param(firstname_missing => 1);
+		$missing=1;
+    }
+    if ($surname eq ''){
+		$template->param(surname_missing => 1);
+		$missing=1;
+    }
+    if ($dob eq ''){
+		$template->param(dob_missing => 1);
+		$missing=1;
+    }
+    if ($sex eq ''){
+		$template->param(gender_missing => 1);
+		$missing=1;
+    }
     }
   } else {
     if ($firstname eq ''){
-      $string.=" Given Names<br>";
-      $missing=1;
+		$template->param(firstname_missing => 1);
+		$missing=1;
     }
     if ($surname eq ''){
-      $string.=" Surname<br>";
-      $missing=1;
+		$template->param(surname_missing => 1);
+		$missing=1;
     }
     if ($dob eq ''){
-      $string.=" Date Of Birth<br>";
-      $missing=1;
+		$template->param(dob_missing => 1);
+		$missing=1;
     }
     if ($sex eq ''){
-      $string.=" Gender <br>";
-      $missing=1;
+		$template->param(gender_missing => 1);
+		$missing=1;
     }
     #check cardnumber is valid
     my $nounique;
     if ( $data{'type'} ne "Add" )    {
-	$nounique = 0;
+		$nounique = 0;
     } else {
-	$nounique = 1;
+		$nounique = 1;
     }
     my $valid=checkdigit(\%env,$number, $nounique);
     if ($valid != 1){
-      $string.=" Invalid Cardnumber $number<br>";
-      $missing=1;
+		$template->param(missing =>1);
+		$template->param(invalid_cardnumber => 1);
+		$missing=1;
     }
   }
 }
@@ -107,7 +122,7 @@ for (my $i=0;$i<3;$i++){
 		my %ident;
 #		$ident{'main'}=$main;
 #		$ident{'image'}=$image;
-		$ident{'cardchild'}=($data{"cardnumber_child_$i"} ne '');
+		$ident{'cardchild'}=$data{"cardnumber_child_$i"};
 		if ($data{"cardnumber_child_$i"} ne ''){
 			my $name=$data{"firstname_child_$i"} . " " . $data{"surname_child_$i"};
 			$ident{'name'}=$name;
@@ -132,6 +147,6 @@ for (my $i=0;$i<3;$i++){
 $template->param( 	NOK => ($missing==1),
 								identsloop => \@identsloop,
 								inputsloop => \@inputsloop,
-								string => $string);
+								);
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -1,7 +1,14 @@
 <!-- TMPL_INCLUDE Name="members-top.inc" -->
 <div id="mainbloc">
 	<!-- TMPL_IF Name="NOK" -->
-		<!-- TMPL_VAR NAME="string" -->
+	<h3>The following fields were entered incorrectly.  Please go back and correct them.</h3>
+	<ul>
+		<!-- TMPL_IF NAME="cardnumber_missing" --><li>Please enter a library card number.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="firstname_missing" --><li>Please enter the patron's first name.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="surname_missing" --><li>Please enter the patron's last name.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="dob_missing" --><li>Please enter the patron's date of birth.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="gender_missing" --><li>Please enter the patron's gender.</li><!-- /TMPL_IF -->
+	</ul>
 	<!-- TMPL_ELSE -->
 		<h1> Confirm Record </h1>
 		<!-- TMPL_LOOP Name="identsloop" -->
@@ -39,6 +46,14 @@
 						<!-- TMPL_VAR NAME="bornum" -->
 						</td>
 					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Barcode Number</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="cardchild" -->
+						</td>
+					</tr>					
 					<tr valign="top" bgcolor="white" >
 						<td>
 						<b>Date of birth</b>
