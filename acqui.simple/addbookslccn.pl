@@ -1,10 +1,17 @@
 #!/usr/bin/perl
 
 #
+# Modified saas@users.sf.net 12:00 01 April 2001
+# The biblioitemnumber was not correctly initialised
+# The max(barcode) value was broken - koha 'barcode' is a string value!
+# - If left blank, barcode value now defaults to max(biblionumber) 
+
+#
 # TODO
 #
-# Add info on biblioitems and items already entered as you enter new ones
+# Error checking for pre-existing barcodes, biblionumbers and maybe others
 #
+# Add info on biblioitems and items already entered as you enter new ones
 
 use C4::Database;
 use CGI;
@@ -15,7 +22,6 @@ use C4::Circulation::Circ2;
 
 my $input = new CGI;
 my $dbh=C4Connect;
-
 
 my $lccn=$input->param('lccn');
 my $q_lccn=$dbh->quote($lccn);
@@ -196,6 +202,7 @@ sub newbiblioitem {
     $sth->execute;
     ($biblioitemnumber) = $sth->fetchrow;
     $biblioitemnumber++;
+#    print STDERR "NEW BiblioItemNumber: $biblioitemnumber \n";
     ($q_lccn='') if ($q_lccn eq 'NULL');
     $sth=$dbh->prepare("insert into biblioitems (biblioitemnumber,
     biblionumber, volume, number, classification, itemtype, isbn, issn, lccn, dewey, subclass,
@@ -266,6 +273,14 @@ sub newitem {
 if ($lccn) {
     my $sth;
     if ($lccn eq 'NULL') {
+        # set biblioitemnumber if not already initialised...
+	if ($biblioitemnumber eq '') {
+	   $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
+	   $sth->execute;
+	   ($biblioitemnumber) = $sth->fetchrow;
+	   $biblioitemnumber++;
+#           print STDERR "BiblioItemNumber was missing: $biblioitemnumber \n";
+	   }
 	$sth=$dbh->prepare("select biblionumber,biblioitemnumber from
 	biblioitems where biblioitemnumber=$biblioitemnumber");
     } else {
@@ -298,10 +313,11 @@ if ($lccn) {
 
 EOF
 	}
-	my $sth=$dbh->prepare("select max(barcode) from items");
-	$sth->execute;
-	my ($maxbarcode) = $sth->fetchrow;
-	$maxbarcode++;
+#	my $sth=$dbh->prepare("select max(barcode) from items");
+#	$sth->execute;
+#	my ($maxbarcode) = $sth->fetchrow;
+#	$maxbarcode++;
+#        print STDERR "MaxBarCode: $maxbarcode";
 	print << "EOF";
 <center>
 <h2>Section Three: Specific Item Information</h2>
@@ -310,7 +326,9 @@ EOF
 <input type=hidden name=biblionumber value=$biblionumber>
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <table>
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> Home Branch: <select name=homebranch>
+<!-- tr><td>BARCODE</td><td><input name=barcode size=10 value=\$maxbarcode --> 
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$biblionumber> 
+Home Branch: <select name=homebranch>
 EOF
 my $branches=getbranches();                                                                                
 	foreach my $key (sort(keys %$branches)) {                                                                  

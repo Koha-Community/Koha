@@ -1,10 +1,17 @@
 #!/usr/bin/perl
 
 #
+# Modified saas@users.sf.net 12:00 01 April 2001
+# The biblioitemnumber was not correctly initialised
+# The max(barcode) value was broken - koha 'barcode' is a string value!
+# - If left blank, barcode value now defaults to max(biblionumber) 
+
+#
 # TODO
 #
-# Add info on biblioitems and items already entered as you enter new ones
+# Error checking for pre-existing barcodes, biblionumbers and maybe others
 #
+# Add info on biblioitems and items already entered as you enter new ones
 
 use C4::Database;
 use CGI;
@@ -15,7 +22,6 @@ use C4::Circulation::Circ2;
 
 my $input = new CGI;
 my $dbh=C4Connect;
-
 
 my $isbn=$input->param('isbn');
 my $q_isbn=$dbh->quote($isbn);
@@ -138,8 +144,6 @@ EOF
 <tr><td align=right>Notes</td><td colspan=3><textarea name=notes rows=4 cols=50
     wrap=physical></textarea></td></tr>
 
-
-
 </table>
 <input type=submit value="Add New Bibliography Item">
 </center>
@@ -198,6 +202,7 @@ sub newbiblioitem {
     $sth->execute;
     ($biblioitemnumber) = $sth->fetchrow;
     $biblioitemnumber++;
+#    print STDERR "NEW BiblioItemNumber: $biblioitemnumber \n";
     ($q_isbn='') if ($q_isbn eq 'NULL');
     my $query="insert into biblioitems (biblioitemnumber,
     biblionumber, volume, number, classification, itemtype, isbn, issn, lccn, dewey, subclass,
@@ -272,10 +277,18 @@ sub newitem {
 if ($isbn) {
     my $sth;
     if ($isbn eq 'NULL') {
+        # set biblioitemnumber if not already initialised...
+	if ($biblioitemnumber eq '') {
+	   $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
+	   $sth->execute;
+	   ($biblioitemnumber) = $sth->fetchrow;
+	   $biblioitemnumber++;
+#           print STDERR "BiblioItemNumber was missing: $biblioitemnumber \n";
+	   }
 	$sth=$dbh->prepare("select biblionumber,biblioitemnumber from
 	biblioitems where biblioitemnumber=$biblioitemnumber");
     } else {
-	$sth=$dbh->prepare("select biblionumber,biblioitemnumber from
+	$sth=$dbh->prepare("select biblionumber, biblioitemnumber from
 	biblioitems where isbn=$q_isbn");
     }
     $sth->execute;
@@ -288,6 +301,7 @@ if ($isbn) {
 	    $itemdata.="<tr><td align=center>$barcode</td><td><u>$title</u></td><td>$author</td><td>$itemnotes</td></tr>\n";
 
 	}
+
 	if ($itemdata) {
 	    print << "EOF";
     <center>
@@ -304,10 +318,11 @@ if ($isbn) {
 
 EOF
 	}
-	my $sth=$dbh->prepare("select max(barcode) from items");
-	$sth->execute;
-	my ($maxbarcode) = $sth->fetchrow;
-	$maxbarcode++;
+#	my $sth=$dbh->prepare("select max(barcode) from items");
+#	$sth->execute;
+#	my ($maxbarcode) = $sth->fetchrow;
+#	$maxbarcode++;
+#       print STDERR "MaxBarcode: $maxbarcode \n";
 	print << "EOF";
 <center>
 <h2>Section Three: Specific Item Information</h2>
@@ -316,7 +331,8 @@ EOF
 <input type=hidden name=biblionumber value=$biblionumber>
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <table>
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> 
+<!-- tr><td>BARCODE</td><td><input name=barcode size=10 value=\$maxbarcode --> 
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$biblionumber> 
 Home Branch: <select name=homebranch>
 EOF
 	  
@@ -380,9 +396,6 @@ EOF
 }
 print endmenu();
 print endpage();
-
-
-
 
 
 sub sectioninfo {
