@@ -38,6 +38,7 @@ C4::Context - Maintain and manipulate the context of a Koha script
 
   $config_value = C4::Context->config("config_variable");
   $db_handle = C4::Context->dbh;
+  $stopwordhash = C4::Context->stopwords;
 
 =head1 DESCRIPTION
 
