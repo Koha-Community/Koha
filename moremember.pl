@@ -5,7 +5,8 @@
 #Displays all the detailas about a borrower
 #needs html removed and to use the C4::Output more, but its tricky
 #last modified 21/1/2000 by chris@katipo.co.nz
-
+#modifiecd 31/1/2001 by chris@katipo.co.nz to not allow items on request
+#to be renewed
 use strict;
 use C4::Output;
 use CGI;
@@ -194,15 +195,15 @@ for (my $i=0;$i<$count;$i++){
   #check item is not reserved
   my ($rescount,$reserves)=FindReserves($issue->[$i]{'biblionumber'},'');
   if ($rescount >0){
-    print "<TD>On Request";
+    print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
   } else {
     print "<TD>";
-  }
+  
     print "<input type=radio name=\"renew_item_$issue->[$i]{'itemnumber'}\" value=y>Y
     <input type=radio name=\"renew_item_$issue->[$i]{'itemnumber'}\" value=n>N</td>
     </tr>
     ";
-  
+  }
 }
 print <<printend
 
