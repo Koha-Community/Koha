@@ -66,6 +66,10 @@ if ($data->{'categorycode'} eq 'C'){
     $data->{'phone'}=$data2->{'phone'};
     $data->{'phoneday'}=$data2->{'phoneday'};
 }
+my $ethnicityline='';
+if ($data->{'ethnicity'} || $data->{'ethnotes'}) {
+	$ethnicityline="Ethnicity: $data->{'ethnicity'}, $data->{'ethnotes'}<br>";
+}
 print <<printend
 Postal Address: $data->{'streetaddress'}, $data->{'city'}<BR>
 Home Address: $data->{'physstreet'}, $data->{'streetcity'}<BR>
@@ -80,7 +84,7 @@ Area: $data->{'area'}<BR>
 Fee:$30/year, Paid<BR>
 Joined: $data->{'dateenrolled'},  Expires: $data->{'expiry'} <BR>
 Joining Branch: $data->{'homebranch'}<P>
-Ethnicity: $data->{'ethnicity'}, $data->{'ethnotes'}<BR>
+$ethnicityline
 DoB: $data->{'dateofbirth'}<BR>
 Sex: $data->{'sex'}<P>
 
