@@ -69,7 +69,6 @@ $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $bi
 my $tagslib = &MARCgettagslib($dbh,1);
 
 my $record =MARCgetbiblio($dbh,$bibid);
-warn $record->as_formatted();
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
