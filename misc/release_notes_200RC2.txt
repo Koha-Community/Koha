@@ -2,7 +2,11 @@ RELEASE NOTES
 =============
 This version of Koha is the second in the 2.0 "stable" series.
 It does not mean that it has no bugs, but least five libraries are using it and don't encounter impossible problems.
-If you want to adopt Koha, please do, but you're warned that this release candidate version may still have some bugs and missing features. If you test it and let us know about any we haven't seen yet, it will help us to fix them.
+If you want to adopt Koha, please do, but you're warned that this release candidate version may still have some bugs and missing features.
+If you test it and let us know about any we haven't seen yet, it will help us to fix them.
+
+The 2.0.x series version is "feature freezed". Only bugs or minor changes will be made in this branch.
+The koha team is already working on the 2.2.x version. In CVS (HEAD branch), developpers can already get 1st draft of a working z3950 server.
 
 
 INSTALLATION
@@ -75,6 +79,7 @@ IMPROVEMENTS:
 * new OPAC theme. it's called "css". It's a XHTML1.0 strict OPAC. In librarian interface, just change systempref opactheme to css to get it. Will be the default opac in 2.2
 * publisher added in acquisition process (the one with basket & supplier) Basket now ordered by publisher.
 * notforloan field management added in itemtype administration screen
+* new migration script : misc/rebuildthesaurus.pl => this script can rebuild thesaurus/authority file after importing records with misc/bulkmarcimport.pl
 
 DB change :
 *index added into z3950results table UNIQUE KEY query_server (queryid,server)  (added by installer & updater)
