@@ -498,7 +498,8 @@ CREATING DATABASE
 |;
 my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass create $dbname");
 if ($result) {
-    print "\nCouldn't connect to the MySQL server for the reason given above.";
+    print "\nCouldn't connect to the MySQL server for the reason given above.\n";
+    print "This is a serious problem, the database will not get installed.\n";
     print "Press <ENTER> to continue...";
     <STDIN>;
     print "\n";
@@ -509,6 +510,54 @@ if ($result) {
     system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
 
     system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
+
+
+
+
+    print "\n\nWould you like to add a branch and printer? [Y]/N: ";
+    chomp($input = <STDIN>);
+
+
+    unless ($input =~/^n/i) {
+	my $branch='Main Library';
+	print "Enter a name for the library branch [$branch]: ";
+	chomp($input = <STDIN>);
+	if ($input) {
+	    $branch=$input;
+	}
+	$branch=~s/[^A-Za-z0-9\s]//g;
+	my $branchcode=$branch;
+	$branchcode=~s/[^A-Za-z0-9]//g;
+	$branchcode=uc($branchcode);
+	$branchcode=substr($branchcode,0,4);
+	print "Enter a four letter code for your branch [$branchcode]: ";
+	chomp($input = <STDIN>);
+	if ($input) {
+	    $branchcode=$input;
+	}
+	$branchcode=~s/[^A-Z]//g;
+	$branchcode=uc($branchcode);
+	$branchcode=substr($branchcode,0,4);
+	print "Adding branch '$branch' with code '$branchcode'.\n";
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass Koha -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+	my $printername='Library Printer';
+	print "Enter a name for the printer [$printername]: ";
+	chomp($input = <STDIN>);
+	if ($input) {
+	    $printername=$input;
+	}
+	$printername=~s/[^A-Za-z0-9\s]//g;
+	my $printerqueue='lp';
+	print "Enter the queue for the printer [$printerqueue]: ";
+	chomp($input = <STDIN>);
+	if ($input) {
+	    $printerqueue=$input;
+	}
+	$printerqueue=~s/[^A-Za-z0-9]//g;
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass Koha -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+    }
+
+
 }
 
 
