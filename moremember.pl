@@ -263,8 +263,8 @@ for (my $i=0;$i<$count;$i++){
 #    print "<td> &nbsp; </td>";
 #  }
   #check item is not reserved
-  my ($rescount,$reserves)=Findgroupreserve($issue->[$i]{'biblioitemnumber'},$issue->[$i]{'biblionumber'});
-  if ($rescount >0){
+  my ($restype,$reserves)=CheckReserves($issue->[$i]{'itemnumber'});
+  if ($restype){
     print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
 #  } elsif ($issue->[$i]->{'renewals'} > 0) {
 #      print "<TD>Previously Renewed - no renewals</td></tr>";
