@@ -73,8 +73,8 @@
 <!-------------------------------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>tag</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>tag</b></td>
+		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><TMPL_VAR name="liblibrarian"></td></tr>
 	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
@@ -100,14 +100,14 @@
 <TMPL_VAR name="searchfield">
 <table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif"><b>Tag</b></td>
-	<td background="/images/background-mem.gif"><b>Lib</b></td>
-	<td background="/images/background-mem.gif"><b>Repeatable</b></td>
-	<td background="/images/background-mem.gif"><b>Mandatory</b></td>
-	<td background="/images/background-mem.gif"><b>Authorised<br />value</b></td>
-	<td background="/images/background-mem.gif"><b>Subfields</b></td>
-	<td background="/images/background-mem.gif">Edit</td>
-	<td background="/images/background-mem.gif">Delete</td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Tag</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Lib</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Repeatable</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Mandatory</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Authorised<br />value</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Subfields</b></td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif">Edit</td>
+	<td background="<TMPL_VAR name="themelang">/images/background-mem.gif">Delete</td>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td><b><TMPL_VAR name="tagfield"></b></td>
@@ -128,10 +128,10 @@
 <table width=40%>
 	<tr>
 		<td width="33%">
-			<input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 >
+			<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 >
 		</td>
-		<td width=33%><TMPL_IF name="previous"><input type=image src="/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a></TMPL_IF></td>
-		<td width=33%><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
+		<td width=33%><TMPL_IF name="previous"><TMPL_VAR name="previous"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a></TMPL_IF></td>
+		<td width=33%><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
 	</tr>
 </table>
 </form>
