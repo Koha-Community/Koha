@@ -14,22 +14,21 @@ Install::setetcdir($ENV{etcdir}||'/etc');
 my $input;
 loadconfigfile();
 
-my $kohaversion=`cat koha.version`;
-chomp $kohaversion;
-Install::setkohaversion $kohaversion;
+$::newversion=`cat koha.version`;
+chomp $::newversion;
+Install::setkohaversion $::newversion;
 
 
-if ($kohaversion =~ /RC/) {
+if ($::newversion =~ /RC/) {
     releasecandidatewarning();
 }
 
-my $answer = showmessage(getmessage('WelcomeToUpgrader',[$kohaversion,$::newversion]),'yn');
-
-unless ($answer =~/y/i) {
+my $answer = showmessage(getmessage('WelcomeToUpgrader',[$::newversion]),'yn','n');
+if ($answer eq "Y" || $answer eq "y") {
+	print "Great! continuing upgrade... \n";
+} else {
 	showmessage(getmessage('AbortingInstall'),'none');
 	exit;
-} else {
-	print "Great! continuing upgrade... \n";
 };
 
 Install::setkohaversion($::newversion);

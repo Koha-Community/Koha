@@ -218,7 +218,7 @@ You may need to enter your SourceForge password.
 Using $kohadir.
 |;
 chdir($kohadir) || die "$kohadir: $!\n";
-system("cvs update -P");
+# system("cvs update -P");
 if ($cvstag) {
     print qq|
 Tagging koha with tag R_$tagname

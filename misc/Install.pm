@@ -148,7 +148,7 @@ Are you ready to begin the installation? ([Y]/N): |;
 
 $messages->{'WelcomeToUpgrader'}->{en} =
    heading('Welcome to the Koha Upgrader') . qq|
-You are attempting to upgrade from Koha %s to %s.
+You are attempting to upgrade to Koha %s.
 
 We recommend that you do a complete backup of all your files before upgrading.
 This upgrade script will make a backup copy of your files for you.
@@ -1818,7 +1818,8 @@ nothing will be added, and you must create them all yourself.
 Only choose N if you want to use a MARC format not listed here,
 such as DANMARC.  We would like to hear from you if you do.
 
-UPGRADE : If you UPGRADE your version from a previous 2.x.x, the right choice here is N (None) to preserve your local MARC setup.
+*** UPGRADE ***
+If you UPGRADE your version from a previous 2.x.x, the right choice here is N (None) to preserve your local MARC setup.
 
 Choose MARC definition [1]: |;
 
@@ -1826,9 +1827,8 @@ $messages->{'Language'}->{en} = heading('CHOOSE LANGUAGE') . qq|
 This version of koha supports a few languages.
 
   en : default language, all pages available
-  fr : complete translation (except pictures)
-  es : partial librarian site translation (including pictures)
-  pl : complete OPAC and partial librarian translation
+  fr : complete translation
+  es : partial librarian site translation
   zh_TW : partial translation
 
 en is used when a screen is not available in your language
