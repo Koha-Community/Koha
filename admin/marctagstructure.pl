@@ -118,6 +118,7 @@ if ($op eq 'add_form') {
 	my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
 			-values=> \@authorised_values,
 			-size=>1,
+			-id=>"authorised_value",
 			-multiple=>0,
 			-default => $data->{'authorised_value'},
 			);
@@ -133,12 +134,20 @@ if ($op eq 'add_form') {
 	}
 	$template->param('use-heading-flags-p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
-							libopac => $data->{'libopac'},
-							repeatable => CGI::checkbox('repeatable',$data->{'repeatable'}?'checked':'',1,''),
-							mandatory => CGI::checkbox('mandatory',$data->{'mandatory'}?'checked':'',1,''),
-							authorised_value => $authorised_value,
-							frameworkcode => $frameworkcode,
-							);
+			libopac => $data->{'libopac'},
+			repeatable => CGI::checkbox(-name=>'repeatable',
+						-checked=> $data->{'repeatable'}?'checked':'',
+						-value=> 1,
+						-label => '',
+						-id=> 'repeatable'),
+			mandatory => CGI::checkbox(-name => 'mandatory',
+						-checked => $data->{'mandatory'}?'checked':'',
+						-value => 1,
+						-label => '',
+						-id => 'mandatory'),
+			authorised_value => $authorised_value,
+			frameworkcode => $frameworkcode,
+			);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -210,13 +219,13 @@ if ($op eq 'add_form') {
 	}
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,$frameworkcode);
-	my $toggle="white";
+	my $toggle=0;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-			$toggle="#ffffcc";
+	  	if ($toggle eq 0){
+			$toggle=1;
 	  	} else {
-			$toggle="white";
+			$toggle=0;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
@@ -227,7 +236,7 @@ if ($op eq 'add_form') {
 		$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
 		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-		$row_data{bgcolor} = $toggle;
+		$row_data{toggle} = $toggle;
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
