@@ -15,7 +15,13 @@
 </TMPL_IF>
 <h1>Main Menu</h1>
 <ul>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
 <li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Z39.50 Search</a>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
 <li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Upload MARC Records</a>
 </ul>
 <TMPL_INCLUDE NAME="cat-bottom.inc">
