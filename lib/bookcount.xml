@@ -1,0 +1,62 @@
+
+ <?xml version="1.0" encoding="ISO-8859-1"?>
+ <!DOCTYPE phrasebook [
+ <!ELEMENT phrasebook (dictionary)*>
+ <!ELEMENT dictionary (phrase)*>
+ <!ATTLIST dictionary name CDATA #REQUIRED>
+ <!ELEMENT phrase (#PCDATA)>
+ <!ATTLIST phrase name CDATA #REQUIRED>
+ ]>
+
+
+ <phrasebook>
+  <dictionary name="MySQL">
+   <phrase name="SELECT_ITEMS_BY_ITEMNUBER">
+    "select * from items where itemnumber = $itm";
+   </phrase>
+   <phrase name="SELECT_LAST_BRANCHTRANSFERS_BY_ITEMNUMBER">
+    "select max(branchtransfers.datearrived) from branchtransfers where branchtransfers.itemnumber=$var1"
+   </phrase>
+   <phrase name="SELECT_ALL_BRANCTRANSFERS_BY_ITEMNUMBER_DATEARRIVED">
+    "Select * from branchtransfers where branchtransfers.itemnumber=$var1 and branchtransfers.datearrived=$var2"
+   </phrase>
+   <phrase name="SELECT_COUNT_ISSUES_BY_ITEMNUMBER_TIMESTAMP">
+    "Select count(*) from issues where issues.itemnumber=$itm and issues.timestamp > $dat"
+   </phrase>
+   <phrase name="SELECT_COUNT_ISSUES_BY_ITEMNUMBER_BRANCHCODE">
+    "Select count(*) from issues where itemnumber=$itm and branchcode = $brc"
+   </phrase>
+   <phrase name="SELECT_MAX_ISSUES_BY_ITEMNUMBER_BRANCHCODE">
+    "Select max(timestamp) from issues where itemnumber=$itm and branchcode = $brc";
+   </phrase>
+   <phrase name="SELECT_LAST_BRANCHTRANSFER_BY_ITEMNUMBER_AND_TOBRANCH">
+    "Select max(datearrived) from branchtransfers where itemnumber=$itm and tobranch = $brc";
+   </phrase>
+  </dictionary>
+
+  <dictionary name="PostgreSQL">
+   <phrase name="SELECT_ITEMS_BY_ITEMNUBER">
+    "select * from items where itemnumber = $itm";
+   </phrase>
+   <phrase name="SELECT_LAST_BRANCHTRANSFERS_BY_ITEMNUMBER">
+    "select max(branchtransfers.datearrived) from branchtransfers where branchtransfers.itemnumber=$var1"
+   </phrase>
+   <phrase name="SELECT_ALL_BRANCTRANSFERS_BY_ITEMNUMBER_DATEARRIVED">
+    "Select * from branchtransfers where branchtransfers.itemnumber=$var1 and branchtransfers.datearrived=$var2"
+   </phrase>
+   <phrase name="SELECT_COUNT_ISSUES_BY_ITEMNUMBER_TIMESTAMP">
+    "Select count(*) from issues where issues.itemnumber=$itm and issues.timestamp > $dat"
+   </phrase>
+   <phrase name="SELECT_COUNT_ISSUES_BY_ITEMNUMBER_BRANCHCODE">
+    "Select count(*) from issues where itemnumber=$itm and branchcode = $brc"
+   </phrase>
+   <phrase name="SELECT_MAX_ISSUES_BY_ITEMNUMBER_BRANCHCODE">
+    "Select max(timestamp) from issues where itemnumber=$itm and branchcode = $brc";
+   </phrase>
+   <phrase name="SELECT_LAST_BRANCHTRANSFER_BY_ITEMNUMBER_AND_TOBRANCH">
+    "Select max(datearrived) from branchtransfers where itemnumber=$itm and tobranch = $brc";
+   </phrase>
+  </dictionary> 
+ </phrasebook>
+
+
