@@ -1,10 +1,15 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF name="else" -->Book Funds<!-- /TMPL_IF -->
+<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="header" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="add_validate" -->Data Recorded<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Fund '<!-- TMPL_VAR name="bookfundname" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main"><!-- TMPL_IF name="else" -->
-<h1>Bookfund Administration</h1>
+<h1>Book Fund Administration</h1>
 <!-- TMPL_IF NAME="bookfund" --><form action="<!-- TMPL_VAR name=scriptname -->" method="post">
 <input type="text" name="searchfield" value="" /> <input type="submit" name="search" value="Search" class="submit" /></form>
 <!-- TMPL_IF name="search" -->
@@ -13,7 +18,7 @@
 
 <table>
 <tr>
-	<th>Book fund</th>
+	<th>Book Fund</th>
 	<th>Name</th>
 	<th>Edit</th>
 	<th>Delete</th>
@@ -22,13 +27,13 @@
 	<tr>
 		<td><a href="<!-- TMPL_VAR name="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" --> "><!-- TMPL_VAR name="bookfundid" --></a></td>
 		<td><!-- TMPL_VAR name="bookfundname" --></td>
-		<td><a href="<!-- TMPL_VAR name="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" --> ">Edit</a></td>
-		<td><a href="<!-- TMPL_VAR name="action" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Delete</a></td>
+		<td><a class="edit" href="<!-- TMPL_VAR name="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" --> ">Edit</a></td>
+		<td><a class="delete" href="<!-- TMPL_VAR name="action" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Delete</a></td>
 	</tr>
 		<tr>
 		<td>&nbsp;</td>
 		<td><b>Budget</b></td>
-		<td><a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Add Budget</a></td>
+		<td><a class="edit" href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Add Budget</a></td>
 		<td></td>
 	</tr>
 	<!-- TMPL_LOOP name="budget" -->
@@ -37,8 +42,8 @@
 			<td>
 				<!-- TMPL_VAR name="startdate" --> - <!-- TMPL_VAR name="enddate" --> : <b><!-- TMPL_VAR name="budgetamount" --></b>
 			</td>
-			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->">Edit</a></td>
-			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->">Delete</a></td>
+			<td><a class="edit" href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->">Edit</a></td>
+			<td><a class="delete" href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->">Delete</a></td>
 
 		</tr>
 	<!-- /TMPL_LOOP -->

@@ -1,12 +1,14 @@
-<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
-<div id="mainbloc">
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+<div id="main">
 <!-- TMPL_IF name="do_it" -->
 <!-- TMPL_LOOP name="mainloop" -->
-	<h1>Koha : Reports on itemtypes <!--TMPL_IF name="branch" --> for branch = <!-- TMPL_VAR name="branch" --><!-- /TMPL_IF --></h1>
-	<table>
+	<div class="table"><table>
+	<caption>Item counts <!--TMPL_IF name="branch" --> for <!-- TMPL_VAR name="branch" --><!-- /TMPL_IF --></caption>
 		<tr>
-			<th>Item type</th>
-			<th>count</th>
+			<th>Item Type</th>
+			<th>Item Count</th>
 		</tr>
 			<!-- TMPL_LOOP name="loopitemtype" -->
 				<tr>
@@ -17,16 +19,19 @@
 			<tr>
 				<th>TOTAL</th>
 				<th><!-- TMPL_VAR name="total" --></th>
-	</table>
+	</table></div>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>View catalogue group by itemtypes</h1>
+	<h1>Item Type Report</h1>
+	<div class="form">
+	<h3>View a count of items with each item type</h3>
 	<form method="post">
-		Select a branch (or don't if you want the report for all branches) <!-- TMPL_VAR name="CGIbranch" -->
-		<input type="submit" value="OK" class="button">
-		<input type="hidden" name="report_name" value="<!--TMPL_VAR name="report_name" -->">
-		<input type="hidden" name="do_it" value="1">
+		Select a branch (leave blank to show all branches) <!-- TMPL_VAR name="CGIbranch" -->
+		<input type="submit" value="Submit" class="submit" />
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR name="report_name" -->" />
+		<input type="hidden" name="do_it" value="1" />
 	</form>
 <!-- /TMPL_IF -->
 </div>
-<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,4 +1,9 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF name="add_form" --><!-- TMPL_IF name="itemtype" -->Modify item type '<!-- TMPL_VAR name="itemtype" -->'<!-- TMPL_ELSE -->Add item type<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --><!-- TMPL_IF name="total" -->Cannot Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'<!-- TMPL_ELSE -->Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Item Types Administration<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="itemtypes.js" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
@@ -18,50 +23,51 @@
 		Add item type
 	<!-- /TMPL_IF --></caption>
 			<!-- TMPL_IF name="itemtype" -->
-				<tr><td>Item type</td><td><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_VAR name="itemtype" --></td></tr>
+				<tr><td><label for="">Item type</label></td><td><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_VAR name="itemtype" --></td></tr>
 			<!-- TMPL_ELSE -->
-				<tr><td>Item type</td><td><input type="text" name="itemtype" size="6" maxlength="4" onblur="toUC(this)" /></td></tr>
+				<tr><td><label for="">Item type</label></td><td><input type="text" name="itemtype" size="6" maxlength="4" onblur="toUC(this)" /></td></tr>
 			<!-- /TMPL_IF -->
 			<tr>
-				<td>Description</td>
-				<td><input type="text" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />&nbsp;</td>
+				<td><label for="description">Description</label></td>
+				<td><input type="text" id="description" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />&nbsp;</td>
 			</tr>
 			<tr>
-				<td>Not for loan</td>
-				<td><input type="checkbox" name="notforloan"<!-- TMPL_IF name="notforloan" --> checked="checked"<!-- /TMPL_IF --> value="1"> (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)</td>
+				<td><label for="notforloan">Not for loan</label></td>
+				<td><input type="checkbox" id="notforloan" name="notforloan"<!-- TMPL_IF name="notforloan" --> checked="checked"<!-- /TMPL_IF --> value="1"> (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)</td>
 			</tr>
 			<tr>
-				<td>Loan length</td>
-				<td><input type="text" name="loanlength" size="10" value="<!-- TMPL_VAR name="loanlength" -->"> (meaningful only if not for loan is not set)</td>
+				<td><label for="loanlength">Loan length</label></td>
+				<td><input type="text" id="loanlength" name="loanlength" size="10" value="<!-- TMPL_VAR name="loanlength" -->"> (meaningful only if not for loan is not set)</td>
 			</tr>
 			<tr>
 			<tr>
-				<td>Renewals allowed?</td>
-				<td><input type="checkbox" name="renewalsallowed" <!-- TMPL_IF name="renewalsallowed" -->checked="checked"<!-- /TMPL_IF --> value="1" /></td>
+				<td><label for="renewalsallowed">Renewals</label></td>
+				<td><input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_IF name="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --><!-- /TMPL_IF -->" value="1" /></td>
 			</tr>
 			<tr>
-				<td>Rental charge</td>
-				<td><input type="text" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" /></td>
+				<td><label for="rentalcharge">Rental charge</label></td>
+				<td><input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" /></td>
 			</tr>
 		</table><input type="button" value="OK" onclick="Check(this.form)" class="submit" /> <input type="button" class="cancel" value="Cancel" onclick="history.back();" />
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-	<table>
+<!-- TMPL_IF name="total" --><div class="error">This record is used <!-- TMPL_VAR name="total" --> times. Deletion is not possible.</div><!-- /TMPL_IF -->
+<div class="table details">	<table>
 	<caption><!-- TMPL_IF name="total" -->Cannot Delete Item Type<!-- TMPL_ELSE -->Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?<!-- /TMPL_IF --></caption>
 		<tr>
-			<td>Item type</td>
+			<th>Item type</th>
 			<td><!-- TMPL_VAR name="itemtype" --></td>
 		</tr>
 
-	<tr><td>Description</td><td><!-- TMPL_VAR name="description" --></td></tr>
-	<tr><td>Loan length</td><td><!-- TMPL_VAR name="loanlength" --></td></tr>
-	<tr><td>Renewals</td><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
-<!-- 	<tr><td>Rental charge</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr> --></table>
+	<tr><th>Description</th><td><!-- TMPL_VAR name="description" --></td></tr>
+	<tr><th>Loan length</th><td><!-- TMPL_VAR name="loanlength" --></td></tr>
+	<tr><th>Renewals</th><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
+<tr><th>Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr></table></div>
 		<div class="tabitem"><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_IF name="total" -->
-		<div class="error">This record is used <!-- TMPL_VAR name="total" --> times. Deletion is not possible.</div></form><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="OK" class="submit" /></form>
+		</form><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="OK" class="submit" /></form>
 	<!-- TMPL_ELSE -->
 		<input type="submit" value="Delete this Item Type" class="cancel" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do Not Delete" class="submit" /></form>
 	<!-- /TMPL_IF --></div>
@@ -88,8 +94,8 @@
 			<td><!-- TMPL_VAR name="loanlength" --></td>
 			<td><!-- TMPL_IF name="renewalsallowed" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 			<!-- <td><!-- TMPL_VAR name="rentalcharge" --></td> -->
-			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Edit</a></td>
-			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Delete</a></td>
+			<td><a class="edit" href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Edit</a></td>
+			<td><a class="delete" href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">Delete</a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>

@@ -1,4 +1,10 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF NAME="else" -->Stop Words Administration<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Stop Word<!-- TMPL_ELSE -->Add Stop Word<!-- /TMPL_IF --><!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="add_validate" -->Stop Word Added<!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Stop Word '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="delete_confirmed" -->Stop Word Deleted<!-- /TMPL_IF --> 
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -107,14 +113,13 @@
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 <h3>Stop Word Deleted</h3>
-<table>
 <div class="form"><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                 <input type="submit" value="OK" class="submit" />
 </form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
- <h3>Stop Words Admin</h3>
+ <h3>Stop Words Administration</h3>
         <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                 <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
                 <input type="submit" name="submit" value="Search" class="submit" />

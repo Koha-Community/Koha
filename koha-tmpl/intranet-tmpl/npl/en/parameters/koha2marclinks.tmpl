@@ -1,4 +1,7 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->MARC links <!-- TMPL_VAR name="tagfield" --><!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -111,7 +114,7 @@
 <!-- -->
 <!-- TMPL_IF name="else" -->
 
-<h1>MARC links<!-- TMPL_VAR name="tagfield" --></h1>
+<h1>MARC links <!-- TMPL_VAR name="tagfield" --></h1>
 <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 <p><!-- TMPL_VAR name="tablename" --> <input type="submit" value="OK" class="submit" /></p>
 </form>
@@ -121,6 +124,7 @@
 	<th>Tag</th>
 	<th>Subfield</th>
 	<th>Lib</th>
+	<th>&nbsp;</th>
 </tr>
 <!-- TMPL_LOOP name="loop" -->
 <tr>

@@ -1,4 +1,9 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF NAME=add_form --><!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- TMPL_ELSE -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Data recorded<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Patron Categories<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -107,8 +112,8 @@
 <!-- TMPL_IF NAME="delete_confirm" -->
 	
         	
-	<h2>Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --></h2><div class="form">
-	<p>Patrons with Category '<!-- TMPL_VAR NAME="categorycode" -->': <!-- TMPL_VAR NAME="total" --></p>
+	<h2>Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --></h2>
+<!-- TMPL_IF NAME="totalgtzero" --><p><span class="alert">This category is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span></p><!-- /TMPL_IF -->
 	<div class="form"><table>
 	<tr><th>Category code</th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
 	<tr><th>Description</th><td><!-- TMPL_VAR NAME="description" --></td></tr>
@@ -121,7 +126,6 @@
 	<tr><th>Overdue notice required</th><td><!-- TMPL_VAR NAME="overduenoticerequired" --></td></tr>
 	<tr><th>Issue limit</th><td><!-- TMPL_VAR NAME="issuelimit" --></td></tr>
 	<tr><th>Reserve fee</th><td><!-- TMPL_VAR NAME="reservefee" --></td></tr>
-	<tr><th></th><td></td></tr>
 </table></div>
 		<!-- TMPL_IF NAME="totalgtzero" -->
 <p><span class="alert">This category is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span></p>
@@ -135,7 +139,6 @@
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /> <input type="submit" value="Delete this Category" class="cancel" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="submit" value="Do Not Delete" /></form></div>
 		<!-- /TMPL_IF -->
-		</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
@@ -183,8 +186,8 @@
                         <td><!-- TMPL_VAR NAME="overduenoticerequired" --></td>
                         <td><!-- TMPL_VAR NAME="issuelimit" --></td>
 <!--                         <td><!-- TMPL_VAR NAME="reservefee" --></td> -->
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td>
+                        <td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
+                        <td><a class="delete" href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table></div><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">

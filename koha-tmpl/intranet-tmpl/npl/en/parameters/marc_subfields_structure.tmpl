@@ -1,4 +1,9 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Subfield '<!-- TMPL_VAR name="tagsubfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->MARC Subfield Structure for '<!-- TMPL_VAR name="tagfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -46,22 +51,22 @@
 
 <!-- TMPL_IF name="delete_confirm" -->
 <!-- -->
-<div class="table"><table>
-<tr><td colspan="2">Confirm Deletion of Subfield <em><!-- TMPL_VAR name="tagsubfield" --></em></td></tr>
+<div class="table details"><table>
+<caption>Confirm Deletion of Subfield <em><!-- TMPL_VAR name="tagsubfield" --></em></caption>
 	<tr>
-		<td>Subfield</td>
+		<th>Subfield</th>
 		<td><!-- TMPL_VAR name="tagsubfield" --></td>
 	</tr>
-	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
-
-	<tr><td>	<form action="<!-- TMPL_VAR name="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" />
+	<tr><th>&nbsp;</th><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
+</table></div>
+	<div class="tabitem">	<form action="<!-- TMPL_VAR name="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" />
 	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->" />
-	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR name="tagsubfield" -->" /><input type="submit" class="cancel"  value="Delete this Subfield" /></form></td><td><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->" /><input type="submit" class="submit" value="Do not Delete" /></form></td></tr></table></div>
+	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR name="tagsubfield" -->" /><input type="submit" class="cancel"  value="Delete this Subfield" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->" /><input type="submit" class="submit" value="Do not Delete" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
 <!-- -->
-	data deleted
+	Data deleted
 	<form action="<!-- TMPL_VAR name="script_name" --> method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->" />
 	<input type="submit" class="submit"  value="OK" />
 	</form>

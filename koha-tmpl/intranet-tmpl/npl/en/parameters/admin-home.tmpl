@@ -1,9 +1,9 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<h1>Koha Admin Page</h1>
+<h1>Koha Administration</h1>
 
 <h3>Parameters</h3>
 <div class="menu"><table>
@@ -11,6 +11,10 @@
 <tr>
 	<th><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></th>
 	<td>the supports of an item.</td>
+</tr>
+<tr>
+	<th><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></th>
+	<td>Currencies of booksellers.</td>
 </tr>
 <tr>
 	<th><a href="/cgi-bin/koha/admin/aqbudget.pl">Budget</a></th>
@@ -34,7 +38,7 @@
 <caption>MARC related</caption>
 <tr><th><a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC tag structure</a></th><td>MARC structure : tag then subfields</td></tr>
 <tr><th><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links koha - MARC DB</a></th><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
-<tr><th><a href="/cgi-bin/koha/admin/checkmarc.pl">Checks MARC</a></th><td>Checks the MARC structure. USE IT before working with real datas. It will show mistakes that BREAKS koha database!</td></tr>
+<tr><th><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></th><td>Checks the MARC structure. USE IT before working with real data. It will warn you of mistakes that would BREAK the Koha database!</td></tr>
 </table></div>
 <div class="menu"><table>
 <caption>Various parameters</caption>
@@ -43,13 +47,10 @@
 	<td>the differents branches you manage with this Koha server</td>
 </tr>
 <tr>
-	<th><a href="/cgi-bin/koha/admin/categorie.pl">Borrower Categories</a></th>
-	<td>the differents types of borrowers.</td>
+	<th><a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a></th>
+	<td>the differents types of patrons.</td>
 </tr>
-<tr>
-	<th><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></th>
-	<td>Currencies of booksellers.</td>
-</tr>
+<tr><th><a href="/cgi-bin/koha/admin/charges.pl">Fines</a></th><td>Overdue fine amounts for item type-patron type combinations.</td></tr>
 <tr>
 	<th><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></th>
 	<td>Printers (UNIX paths).</td>

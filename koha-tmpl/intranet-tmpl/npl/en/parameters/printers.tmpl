@@ -1,10 +1,16 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF NAME=add_form --><!-- TMPL_IF NAME="searchfield" -->Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Printer Added<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Printer Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Printers<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main"><!-- TMPL_IF NAME=add_form -->
-        <script>
+        <script language="JavaScript" type="text/javascript">
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -56,7 +62,7 @@
                         alert(alertString2);
                 }
         }
-        </SCRIPT>
+        </script>
 
 
         

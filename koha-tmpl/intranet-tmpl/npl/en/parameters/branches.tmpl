@@ -1,4 +1,8 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF name="add" --><!-- TMPL_VAR name="head" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" --><!-- TMPL_VAR name="head" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_category" -->Confirm deletion of category<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -15,7 +19,7 @@
 				<input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
 				<!-- TMPL_VAR name="branchcode" -->
 			<!-- TMPL_ELSE -->
-				<input type="text" name="branchcode" size="4" maxlength="4" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
+				<input type="text" name="branchcode" size="5" maxlength="5" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
 			<!-- /TMPL_IF -->
 		</td>
 	</tr>
@@ -58,7 +62,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-	<h3>Confirm of Branch <!-- TMPL_VAR NAME="branchcode" -->:</h3>
+	<h3>Confirm Deletion of Branch <!-- TMPL_VAR NAME="branchcode" -->:</h3>
 	<div class="tabitem"><span class="form"><form action="<!-- TMPL_VAR name="action" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
 		<input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
@@ -71,7 +75,7 @@
 
 <!-- TMPL_IF name="else" -->
 	
-	<!-- TMPL_VAR name="message" -->
+	<div class="error"><!-- TMPL_VAR name="message" --></div>
 	<table>
 	<caption><!-- TMPL_VAR name="head" --></caption>
 		<tr>

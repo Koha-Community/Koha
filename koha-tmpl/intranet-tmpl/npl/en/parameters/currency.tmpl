@@ -1,4 +1,10 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: 
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify currency '<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Add currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -102,20 +108,20 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-	<table><caption>Confirm Deletion of Currency <em><!-- TMPL_VAR NAME="searchfield" --></em></caption>
+<div class="table details">	<table><caption>Confirm Deletion of Currency <em><!-- TMPL_VAR NAME="searchfield" --></em></caption>
 
 		<tr>
-			<td>Currency</td>
+			<th>Currency</th>
 			<td><!-- TMPL_VAR NAME="searchfield" --></td>
 		</tr>
 
 
         
         	<tr>
-			<td>Rate</td>
+			<th>Rate</th>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
 		</tr>
-		</table>
+		</table></div>
 		<!-- TMPL_IF NAME="totalgtzero" -->
 
 				<span class="alert">This currency is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span>
@@ -161,8 +167,8 @@
 		<tr>
 			<td><!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
+			<td><a class="edit"  href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
+                        <td><a class="delete" href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table></div>

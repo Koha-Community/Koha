@@ -1,23 +1,25 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: Fines
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
-<h3>Calculating Fines</h3>
+<h2>Calculating Fines</h2>
 <p>Each box needs to be filled in with fine,time to start charging,charging cycle</p>
 <p>eg 1,7,7 = $1 fine, after 7 days, every 7 days</p>
-<p>Note : fines are calculated by the fines2.pl script, located in misc directory. Ask your administrator to put this script in crontab (after midnight) to have fines calculated every night</p>
+<p>Note : fines are calculated by the <span class="ex">fines2.pl</span> script, located in <span class="ex">misc</span> directory. Ask your administrator to put this script in crontab (after midnight) to have fines calculated every night</p>
 <form action="/cgi-bin/koha/admin/updatecharges.pl" method="post">
 <div class="table"><table>
 <tr>
-	<th>&nbsp;</th><!-- TMPL_LOOP name="title" --><th><!-- TMPL_VAR name="in_title" --></th><!-- /TMPL_LOOP -->
-</TR>
-<!-- TMPL_LOOP name="row" -->
+	<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th><!-- TMPL_VAR NAME="in_title" --></th><!-- /TMPL_LOOP -->
+</tr>
+<!-- TMPL_LOOP NAME="row" -->
 	<tr>
 		<th>
-			<!-- TMPL_VAR name="categorycode" -->
+			<!-- TMPL_VAR NAME="categorycode" -->
 		</th>
-		<!-- TMPL_LOOP name="cell" -->
+		<!-- TMPL_LOOP NAME="cell" -->
 			<td bgcolor="<!-- TMPL_VAR name="toggle" -->">
 				<input name="<!-- TMPL_VAR name="inputname" -->" value="<!-- TMPL_VAR name="inputvalue" -->" size="6" maxlength="10">
 			</td>
