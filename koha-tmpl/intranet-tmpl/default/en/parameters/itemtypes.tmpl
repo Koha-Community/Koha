@@ -72,7 +72,7 @@ function Check(f) {
 			<TMPL_IF name="itemtype">
 				<tr><td>Item type</td><td><input type=hidden name=itemtype value=<TMPL_VAR name="itemtype">><TMPL_VAR name="itemtype"></td></tr>
 			<TMPL_ELSE>
-				<tr><td>Item type</td><td><input type=text name=itemtype size=5 maxlength=3 onBlur="toUC(this)"></td></tr>
+				<tr><td>Item type</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
 			</TMPL_IF>
 			<tr>
 				<td>Description</td>
@@ -80,7 +80,7 @@ function Check(f) {
 			</tr>
 			<tr>
 				<td>Loan length</td>
-				<td><input type=text name=loanlength value='<TMPL_VAR name="loanlength">'></td>
+				<td><input type=text name=loanlength size=10 value='<TMPL_VAR name="loanlength">'></td>
 			</tr>
 			<tr>
 				<td>Renewals allowed</td>
@@ -88,7 +88,7 @@ function Check(f) {
 			</tr>
 			<tr>
 				<td>Rental charge</td>
-				<td><input type=text name=rentalcharge value='<TMPL_VAR name="rentalcharge">'></td>
+				<td><input type=text name=rentalcharge size=10 value='<TMPL_VAR name="rentalcharge">'></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
