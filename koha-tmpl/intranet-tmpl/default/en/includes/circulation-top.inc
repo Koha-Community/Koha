@@ -79,7 +79,7 @@ a.circulation:hover {
 					</td>
 					<td>
 						<div id="submenu">
-						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Branch transfert</a>
+						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Branch transfers</a>
 						</div>
 					</td>
 				</tr>
