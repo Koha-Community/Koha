@@ -95,7 +95,8 @@ $template->param(startfrom => $startfrom+1,
 						WEB_RESULTS => $webarray,
 						SITE_RESULTS => $sitearray,
 						loggedinuser => $loggedinuser,
-						biblionumber => $biblionumber);
+						biblionumber => $biblionumber,
+						);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
