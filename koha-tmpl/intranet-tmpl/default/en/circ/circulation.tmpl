@@ -241,7 +241,7 @@
 	<!-- TMPL_IF name="charges" -->
 		<tr><td valign="top"><font color="red">CHARGES</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 	<!-- TMPL_ELSE -->
-		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" --><!-- TMPL_VAR name="message" --></td></tr>
+		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><!-- TMPL_VAR name="message" --></td></tr>
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 		<!-- TMPL_IF name="charges" -->
