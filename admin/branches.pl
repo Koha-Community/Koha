@@ -353,20 +353,17 @@ sub getbranchinfo {
 
     my ($branchcode) = @_;
     my $dbh = C4::Context->dbh;
-    my ($query, @query_args);
+    my $sth;
     if ($branchcode) {
-	$query = "Select * from branches where branchcode = ?";
-	@query_args = ($branchcode);
+		$sth = $dbh->prepare("Select * from branches where branchcode = ? order by branchcode");
+		$sth->execute($branchcode);
     } else {
-	$query = "Select * from branches";
+		$sth = $dbh->prepare("Select * from branches order by branchcode");
+		$sth->execute();
     }
-    $query.=" order by branchcode";
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@query_args);
     my @results;
     while (my $data = $sth->fetchrow_hashref) {
-	$query = "select categorycode from branchrelations where branchcode = ?";
-	my $nsth = $dbh->prepare($query);
+	my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
 	$nsth->execute($data->{'branchcode'});;
 	my @cats = ();
 	while (my ($cat) = $nsth->fetchrow_array) {
@@ -385,17 +382,15 @@ sub getcategoryinfo {
 # returns a reference to an array of hashes containing branches,
 	my ($catcode) = @_;
 	my $dbh = C4::Context->dbh;
-	my ($query, @query_args);
+	my $sth;
 	#    print DEBUG "getcategoryinfo: entry: catcode=".cvs($catcode)."\n";
 	if ($catcode) {
-		$query = "select * from branchcategories where categorycode = ?";
-		@query_args = ($catcode);
+		$sth = $dbh->prepare("select * from branchcategories where categorycode = ?");
+		$sth->execute($catcode);
 	} else {
-		$query = "Select * from branchcategories";
+		$sth = $dbh->prepare("Select * from branchcategories");
+		$sth->execute();
 	}
-	#    print DEBUG "getcategoryinfo: query=".cvs($query)."\n";
-	my $sth = $dbh->prepare($query);
-	$sth->execute(@query_args);
 	my @results;
 	while (my $data = $sth->fetchrow_hashref) {
 		push(@results, $data);
@@ -410,8 +405,7 @@ sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
 	my ($data) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)");
 	$sth->execute(uc($data->{'branchcode'}), $data->{'branchname'},
 		$data->{'branchaddress1'}, $data->{'branchaddress2'},
 		$data->{'branchaddress3'}, $data->{'branchphone'},
@@ -443,17 +437,13 @@ sub setbranchinfo {
 			push(@addcats, $ccat);
 		}
 	}
-	# FIXME - There's already a $dbh in this scope.
-	my $dbh = C4::Context->dbh;
 	foreach my $cat (@addcats) {
-		my $query = "insert into branchrelations (branchcode, categorycode) values(?, ?)";
-		my $sth = $dbh->prepare($query);
+		my $sth = $dbh->prepare("insert into branchrelations (branchcode, categorycode) values(?, ?)");
 		$sth->execute($branchcode, $cat);
 		$sth->finish;
 	}
 	foreach my $cat (@removecats) {
-		my $query = "delete from branchrelations where branchcode=? and categorycode=?";
-		my $sth = $dbh->prepare($query);
+		my $sth = $dbh->prepare("delete from branchrelations where branchcode=? and categorycode=?");
 		$sth->execute($branchcode, $cat);
 		$sth->finish;
 	}
@@ -462,9 +452,8 @@ sub setbranchinfo {
 sub deletebranch {
 # delete branch...
     my ($branchcode) = @_;
-    my $query = "delete from branches where branchcode = ?";
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare($query);
+    my $sth=$dbh->prepare("delete from branches where branchcode = ?");
     $sth->execute($branchcode);
     $sth->finish;
 }
@@ -473,8 +462,7 @@ sub setcategoryinfo {
 # sets the data from the editbranch form, and writes to the database...
 	my ($data) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = "replace branchcategories (categorycode,categoryname,codedescription) values (?,?,?)";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("replace branchcategories (categorycode,categoryname,codedescription) values (?,?,?)");
 	$sth->execute(uc($data->{'categorycode'}), $data->{'categoryname'},$data->{'codedescription'});
 
 	$sth->finish;
@@ -482,9 +470,8 @@ sub setcategoryinfo {
 sub deletecategory {
 # delete branch...
     my ($categorycode) = @_;
-    my $query = "delete from branchcategories where categorycode = ?";
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare($query);
+    my $sth=$dbh->prepare("delete from branchcategories where categorycode = ?");
     $sth->execute($categorycode);
     $sth->finish;
 }
