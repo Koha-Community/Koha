@@ -42,6 +42,7 @@ use C4::Input;
 use C4::Biblio;
 use C4::SimpleMarc;
 use C4::Z3950;
+use C4::Breeding;
 use MARC::File::USMARC;
 use HTML::Template;
 
@@ -996,6 +997,10 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.3  2003/04/22 12:22:53  tipaul
+# 1st draft for z3950 client import.
+# moving Breeding farm script to a perl package C4/Breeding.pm
+#
 # Revision 1.2  2003/02/19 01:01:11  wolfpac444
 # Removed the unecessary $dbh argument from being passed.
 # Resolved a few minor FIXMEs.
