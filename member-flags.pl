@@ -10,7 +10,7 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Auth;
-use C4::Database;
+use C4::Context;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
 
@@ -32,7 +32,7 @@ foreach (sort keys %$issues) {
     $i++;
 }
 if ($input->param('newflags')) {
-    my $dbh=C4Connect();
+    my $dbh=C4::Context->dbh();
     my $flags=0;
     foreach ($input->param) {
 	if (/flag-(\d+)/) {
@@ -46,7 +46,7 @@ if ($input->param('newflags')) {
 } else {
     my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
 
-    my $dbh=C4Connect();
+    my $dbh=C4::Context->dbh();
     my $sth=$dbh->prepare("select bit,flag,flagdesc from userflags order by bit");
     $sth->execute;
     my $flagtext='';
