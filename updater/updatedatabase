@@ -782,6 +782,17 @@ my %tabledata = (
             explanation => 'The MARC field/subfield that is used to calculate the itemcallnumber (in UNIMARC : 676a for Dewey, 680a for Loc)',
 	    type		=> 'free'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'BiblioDefaultView',
+            value               => 'normal',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default view of a biblio. Can be either normal, marc or isbd',
+	    type		=> 'Choice',
+	    options		=> 'normal|marc|isbd'
+        },
     ],
 
 );
@@ -1367,6 +1378,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100  2004/12/10 16:11:32  tipaul
+# Improvement : adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
+#
 # Revision 1.99  2004/12/02 17:17:00  tipaul
 # adding acquisition permission
 #

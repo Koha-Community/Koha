@@ -125,6 +125,7 @@ if ($op eq "do_search") {
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
+	my $defaultview = 'BiblioDefaultView'.C4::Context->preference('BiblioDefaultView');
 	$template->param(results => $results,
 							startfrom=> $startfrom,
 							displaynext=> $displaynext,
@@ -139,6 +140,7 @@ if ($op eq "do_search") {
 							to=>$to,
 							numbers=>\@numbers,
 							searchdesc=> $searchdesc,
+							$defaultview => 1,
 							);
 
 } else {
