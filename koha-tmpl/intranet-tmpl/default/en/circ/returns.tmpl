@@ -66,7 +66,7 @@ to be picked up by <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?b
 				<input type=hidden name=bn-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="bornum">>
 			</TMPL_LOOP>
 			<input type=hidden name=itemnumber value=<TMPL_VAR Name="itemnumber">>
-			<input type=hidden name=borrowernumber value=<TMPL_VAR Name="borrowernumber">>
+			<input type=hidden name=borrowernumber value=<TMPL_VAR Name="bornum">>
 			<input type=hidden name=resbarcode value=<TMPL_VAR Name="barcode">>
 			<input type=hidden name=resslip value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Date: <TMPL_VAR Name="today">
@@ -167,7 +167,7 @@ Phone: <TMPL_VAR Name="borphone">
 			<TMPL_LOOP Name="flagloop">
 				<tr><td valign=top><TMPL_IF Name="redfont"><font color="red"></TMPL_IF><TMPL_VAR Name="flag"><TMPL_IF Name="redfont"></font></TMPL_IF></td>
 				<TMPL_IF Name="charges">
-					<td bgcolor=<TMPL_VAR Name="color">><b><TMPL_VAR Name="msg"></b><a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR Name="borrowernumber"> onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+					<td bgcolor=<TMPL_VAR Name="color">><b><TMPL_VAR Name="msg"></b><a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR Name="bornum"> onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 				</TMPL_IF>
 				<TMPL_IF Name="waiting">
 					<td bgcolor=<TMPL_VAR Name="color">>

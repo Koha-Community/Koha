@@ -449,6 +449,13 @@ my %tabledata = (
         },
         {
             uniquefieldrequired => 'variable',
+            variable            => 'noissuescharge',
+            value               => '5',
+            explanation         =>
+            'maximum amount withstanding to be able to check out an item '
+        },
+        {
+            uniquefieldrequired => 'variable',
             variable            => 'KohaAdminEmailAddress',
             value               => 'your.mail@here',
             explanation => 'the email adress where borrowers modifs are sent'
@@ -771,6 +778,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.46  2003/05/08 12:48:24  wolfpac444
+# Added "noissuescharge" parameter
+#
 # Revision 1.45  2003/05/08 12:26:16  wolfpac444
 # Bug fixes
 #

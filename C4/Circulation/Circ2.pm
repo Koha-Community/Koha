@@ -1133,8 +1133,9 @@ sub patronflags {
 	my $amount = checkaccount($env, $patroninformation->{'borrowernumber'}, $dbh);
 	if ($amount > 0) {
 		my %flaginfo;
+		my $noissuescharge = C4::Context->preference("noissuescharge");
 		$flaginfo{'message'}= sprintf "Patron owes \$%.02f", $amount;
-		if ($amount > 5) {
+		if ($amount > $noissuescharge) {
 		$flaginfo{'noissues'} = 1;
 		}
 		$flags{'CHARGES'} = \%flaginfo;
