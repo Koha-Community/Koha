@@ -1,0 +1,30 @@
+# Make.conf			-*- Makefile -*-
+
+# This file is generated automatically from Make.conf.in by
+# safe-installer.
+
+# $Id$
+
+# Useful utilities
+PERL =		@prog_perl@
+MYSQL =		@prog_mysql@
+MYSQLADMIN =	@prog_mysqladmin@
+MYSQLDUMP =	@prog_mysqldump@
+
+# MySQL administration
+DBA_USER =	@dba_user@
+
+# Koha database administration
+DB_NAME =	@db_name@
+DB_HOST =	@db_host@
+DB_USER =	@db_user@
+
+# Path to koha.conf file, one for the intranet, the other for the OPAC
+# site.
+KOHA_CONF_INTRA =	@koha_conf_intra@
+KOHA_CONF_OPAC =	@koha_conf_opac@
+
+OPAC_HOST =		@opac_host@
+OPAC_REALHOSTS =	@opac_realhosts@
+INTRA_HOST =		@intra_host@
+INTRA_REALHOSTS =	@intra_realhosts@
