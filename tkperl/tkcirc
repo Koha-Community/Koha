@@ -1,23 +1,13 @@
 #!/usr/bin/perl
-use C4::Format;
-use C4::Database;
 use Tk;
 require Tk::Dialog;
-require Tk::ROText;
-use C4::Accounts;
-use C4::Circulation::Borrissues;
-use C4::Circulation::Renewals;
-use C4::Stats;
-use C4::Search;
+use C4::Circulation::Circ2;
 
 require Exporter;
 use DBI;
 
 
 my %env;
-$env->{'bornum'}=2;
-$env->{'bcard'}=42;
-my $dbh=&C4Connect;
 
 my $issuebut, $returnbut, $mainholder;
 my $borrnumber, $borrower, $borrowerlist;
@@ -29,24 +19,19 @@ $MW->fontCreate('C_normal',-family => 'courier', -size => -12);
 my $titlebar=$MW->Frame(-height => 100, -width => 600, -relief => 'ridge', -borderwidth => '4');
 my $frametop=$MW->Frame(-height => 100, -width => 600, -relief => 'ridge', -borderwidth => '2');
 my $framebot=$MW->Frame(-height => 430, -width => 600, -relief => 'ridge', -borderwidth => '2');
-#$framebot->gridPropagate(0);
 my $kohalabel=$titlebar->Label(-text => 'Koha');
 my $menulabel=$titlebar->Label(-text => 'Main Menu');
 my $branchlabel=$titlebar->Label(-text => 'Stewart Elementary-lp');
 $kohalabel->pack(qw/-side left -padx 10/);
 $branchlabel->pack(qw/-side left -padx 10 -fill x -expand 1/);
 $menulabel->pack(qw/-side left -padx 10/);
-my $issuesbut=$frametop->Button(-text => 'Issues', -command => sub { $data='Issues'; getborrnumber(); });
+my $issuesbut=$frametop->Button(-text => 'Issues', -underline => 0, -command => sub { $data='Issues'; getborrnumber(); });
 $issuesbut->pack(qw/-side left -padx 2 -pady 2 -expand 1 -fill x/);
-my $returnsbut=$frametop->Button(-text => 'Returns', -command => sub { $data='Returns'; returns(); });
+my $returnsbut=$frametop->Button(-text => 'Returns', -underline => 0, -command => sub { $data='Returns'; returns(); });
 $returnsbut->pack(qw/-side right -padx 2 -pady 2 -expand 1 -fill x/);
-#$titlebar->pack(qw/-fill x -side top/);
-#$frametop->pack(qw/-fill x/);
-#$framebot->pack(-fill => both, -expand => 1);
 Tk::grid($titlebar, -col => 0, -row => 0, -sticky => 'nsew');
 Tk::grid($frametop, -col => 0, -row => 1, -sticky => 'nsew');
 Tk::grid($framebot, -col => 0, -row => 2, -sticky => 'nsew');
-#$MW->gridPropagate(0);
 
 MainLoop;
 
@@ -71,71 +56,43 @@ sub getborrnumber {
 
 
 sub checkborrower {
-    $borrnumber=$borrentry->get();
-    my $sth=$dbh->prepare("Select * from borrowers where cardnumber=\"$borrnumber\"");
-    $sth->execute;
-    if ($borrower=$sth->fetchrow_hashref) {
-	$sth->finish;
-	$borrnumber=$borrower->{'borrowernumber'};
+    $key=$borrentry->get();
+    my ($borrowers, $flags) = findborrower($env, $key);
+    my @borrowers=@$borrowers;
+    if ($#borrowers==0) {
+	$borrnumber=$borrowers[0]->{'borrowernumber'};
 	issues();
-    } else {
-	$sth->finish;
-	$borrnumber=lc($borrnumber);
-	my $borquery = "Select * from borrowers 
-	where lower(surname) like \"$borrnumber%\" order by surname,firstname";
-	my $sthb =$dbh->prepare($borquery);
-	$sthb->execute;
-	my $cntbor = 0;
-	my @borrows;
-	my @bornums;
-	if ($sthb->rows == 1)  {
-	    $borrower= $sthb->fetchrow_hashref;
-	    $borrnumber=$borrower->{'borrowernumber'};
-	    issues();
-	} elsif ($sthb->rows > 0) {
-	    # Select a borrower
-	    ($mainholder) && ($mainholder->destroy);
-	    $mainholder=$framebot->Frame(-height => 500, -width => 500);
-	    Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'nsew');
-	    my $frame=$mainholder->Frame(-height => 500, -width => 500, -relief => 'ridge', -borderwidth => '5');
-	    Tk::grid($frame, -col=>0, -row=>0, -sticky => 'nsew');
-	    $frame->pack(-ipadx=>10, -ipady=>10);
-	    my $label=$frame->Label(-text => 'Pick a Patron', -justify => 'center', -relief => 'ridge', -borderwidth => 3);
-	    Tk::grid($label, -col => 0, -row => 0, -sticky => 'nsew');
-	    $borrowerlist=$frame->Scrolled(Listbox, -width => '50', -height => '10', -setgrid => '1', -scrollbars => 'se', -font => 'C_normal');
-	    $borrowerlist->bind('<Double-1>' => \&pickborrower);
-	    $borrowerlist->bind('<Return>' => \&pickborrower);
-	    #$borrowerlist->bind('<ESC>' => \&issues);
-	    Tk::grid($borrowerlist, -col => 0, -row => 1, -sticky => 'n', -pady => 10);
-	    my $buttonframe=$frame->Frame(-height=>40, -width =>500);
-	    Tk::grid($buttonframe, -col => 0, -row => 2);
-	    my $okbutton=$buttonframe->Button(-text => 'OK', -command => \&pickborrower);
-	    $okbutton->pack(-side => 'left', -padx => 10, -pady => 10);
-	    my $cancelbutton=$buttonframe->Button(-text => 'Cancel', -command => \&getborrnumber);
-	    $cancelbutton->pack(-side => 'left', -padx => 10, -pady => 10);
-	    my @borrowerlist;
-	    while ($borrower= $sthb->fetchrow_hashref) {
-		my $cardnumber=$borrower->{'cardnumber'};
-		my $categorycode=$borrower->{'categorycode'};
-		my $name=$borrower->{'surname'}.", ".$borrower->{'firstname'};
-		my $line = sprintf "%10s %4s %-25s", $cardnumber, $categorycode, $name;
-		push (@borrowerlist, $line);
-	    }
-	    $borrowerlist->insert(0,@borrowerlist);
-	    $borrowerlist->activate(0);
-	    $borrowerlist->focus();
-	    #Tk::grid($borrowerlist, -col => 0, -row => 0, -sticky => 'n');
-	    #my ($cardnum) = C4::InterfaceCDK::selborrower($env,$dbh,\@borrows,\@bornums);
-	    my $query = "select * from borrowers where cardnumber = '$cardnum'";   
-	    $sth = $dbh->prepare($query);                          
-	    $sth->execute;                          
-	    $borrower =$sth->fetchrow_hashref;
-	    $sth->finish;
-	    $bornum=$borrower->{'borrowernumber'};
-	    if ($bornum eq '') {
-		#error_msg($env,"Borrower not found");
-	    }
-	}  
+    } elsif ($#borrowers>0) {
+	($mainholder) && ($mainholder->destroy);
+	$mainholder=$framebot->Frame(-height => 500, -width => 500);
+	Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'nsew');
+	my $frame=$mainholder->Frame(-height => 500, -width => 500, -relief => 'ridge', -borderwidth => '5');
+	Tk::grid($frame, -col=>0, -row=>0, -sticky => 'nsew');
+	$frame->pack(-ipadx=>10, -ipady=>10);
+	my $label=$frame->Label(-text => 'Pick a Patron', -justify => 'center', -relief => 'ridge', -borderwidth => 3);
+	Tk::grid($label, -col => 0, -row => 0, -sticky => 'nsew');
+	$borrowerlist=$frame->Scrolled(Listbox, -width => '50', -height => '10', -setgrid => '1', -scrollbars => 'se', -font => 'C_normal');
+	$borrowerlist->bind('<Double-1>' => \&pickborrower);
+	$borrowerlist->bind('<Return>' => \&pickborrower);
+	Tk::grid($borrowerlist, -col => 0, -row => 1, -sticky => 'n', -pady => 10);
+	my $buttonframe=$frame->Frame(-height=>40, -width =>500);
+	Tk::grid($buttonframe, -col => 0, -row => 2);
+	my $okbutton=$buttonframe->Button(-text => 'OK', -command => \&pickborrower);
+	$okbutton->pack(-side => 'left', -padx => 10, -pady => 10);
+	my $cancelbutton=$buttonframe->Button(-text => 'Cancel', -command => \&getborrnumber);
+	$cancelbutton->pack(-side => 'left', -padx => 10, -pady => 10);
+	my @borrowerlist;
+	my $borrower;
+	foreach $borrower (@borrowers) {
+	    my $cardnumber=$borrower->{'cardnumber'};
+	    my $categorycode=$borrower->{'categorycode'};
+	    my $name=$borrower->{'surname'}.", ".$borrower->{'firstname'};
+	    my $line = sprintf "%10s %4s %-25s", $cardnumber, $categorycode, $name;
+	    push (@borrowerlist, $line);
+	}
+	$borrowerlist->insert(0,@borrowerlist);
+	$borrowerlist->activate(0);
+	$borrowerlist->focus();
     }
 }
 
@@ -143,24 +100,21 @@ sub pickborrower {
     my $line=$borrowerlist->get('active');
     $line=~s/^\s*//;
     my $borcardnumber=(split(/\s+/, $line))[0];
-    my $sth=$dbh->prepare("select borrowernumber from borrowers where cardnumber='$borcardnumber'");
-    $sth->execute;
-    ($borrnumber) = $sth->fetchrow;
+    my ($borrower,$flags)=getpatroninformation($env, 0, $borcardnumber);
+    $borrnumber = $borrower->{'borrowernumber'};
     issues();
 }
 
 sub issues {
-    my $query = "select * from borrowers where borrowernumber = '$borrnumber'";      
-    $sth = $dbh->prepare($query);
-    $sth->execute;
-    $borrower =$sth->fetchrow_hashref;
-    $sth->finish;                                              
-    my ($items,$items2) = C4::Circulation::Main::pastitems($env, $borrower->{'borrowernumber'}, $dbh);
-    my $previssues='';
-    foreach (@$items) {
-	$previssues.="$_\n";
-    }
-    $sth->finish;
+    my ($borrower, $flags) = getpatroninformation($env,$borrnumber,0);
+    my ($items) = currentissues($env, $borrower);
+    #my $previssues='';
+    #open O, ">>/root/tkcirc.out";
+    #foreach (sort {$items->{$a} cmp $items->{$b}} keys %$items) {
+#	$previssues.="$_->{'title'} $_->{'author'} $_->{'barcode'}\n";
+#    }
+#    print O "PREVISSUES\n$previssues\n";
+#    close O;
     $mainholder->destroy;
     $mainholder=$framebot->Frame();
     Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'n');
@@ -174,13 +128,14 @@ sub issues {
     $barcodelabel=$barcodeduedate->Label(-text => 'Item Barcode:', -justify => right, -anchor => e);
     Tk::grid($barcodelabel, -col => 0, -row => 0, -sticky => 'e');
     $barcodeentry=$barcodeduedate->Entry(-width => 15);
-    $barcodeentry->bind('<Return>' => \&issuebook);
+    $barcodeentry->bind('<Return>' => \&issuebk);
+    $barcodeentry->bind('<Escape>' => \&getborrnumber);
     $barcodeentry->grid(-col => 1, -row => 0);
     $barcodeentry->focus;
     $duedatelabel=$barcodeduedate->Label(-text => 'Due Date:', -justify => right, -anchor => e);
     Tk::grid($duedatelabel, -col => 0, -row => 1, -sticky => 'e');
     $duedateentry=$barcodeduedate->Entry(-width => 15);
-    $duedateentry->bind('<Return>' => \&issuebook);
+    $duedateentry->bind('<Return>' => \&issuebk);
     $duedateentry->grid(-col => 1, -row => 1);
     $middle=$topline->Frame(-width => 40);
     Tk::grid($middle, -col => 1, -sticky => 'ew');
@@ -200,29 +155,75 @@ sub issues {
     $borrowerinfo->pack;
     my $ciframe=$mainholder->LabFrame(-label=>'Current Issues', -labelside=>acrosstop);
     $ciframe->pack;
-    $currentissues=$ciframe->Scrolled(Text, -height=>10, -width=>80, -relief => 'flat', -scrollbars => 'e');
-    $currentissues->insert('0.0','');
-    $currentissues->configure(-state => 'disabled');
-    $currentissues->pack(-side => top);
+
+
+
+
+    $currentissues=$ciframe->Table(-rows=>10, -columns=>5, -scrollbars=>'e', -fixedrows=>1, -takefocus=>1);
+    $currentissues->pack();
+    $currentissues->put(0,0,$currentissues->Label(-text=>"Due Date", -relief => 'groove', borderwidth=>'3'));
+    $currentissues->put(0,1,$currentissues->Label(-text=>"Bar Code", -relief => 'groove', borderwidth=>'3'));
+    $currentissues->put(0,2,$currentissues->Label(-text=>"Title", -relief => 'groove', borderwidth=>'3', -width=>35));
+    $currentissues->put(0,3,$currentissues->Label(-text=>"Author", -relief => 'groove', borderwidth=>'3', -width=>20));
+    $currentissues->put(0,4,$currentissues->Label(-text=>"Class", -relief => 'groove', borderwidth=>'3'));
+    $currentissues->see(0,0);
+    $currentissues->see(0,1);
+    $currentissues->see(0,2);
+    $currentissues->see(0,3);
+    $currentissues->see(0,4);
+    $currentissues->see(0,5);
+
     my $piframe=$mainholder->LabFrame(-label=>'Previous Issues', -labelside=>acrosstop);
     $piframe->pack;
-    $previousissues=$piframe->Scrolled(Text, -height=>10, -width=>80, -relief => 'flat', -setgrid => '1', -scrollbars => 'e');
-    $previousissues->insert('0.0',$previssues);
-    $previousissues->pack(-side => top, -fill => both, -expand => 1);
-    $previousissues->configure(-state => 'disabled');
+    $previousissues=$piframe->Table(-rows=>10, -columns=>5, -scrollbars=>'e', -fixedrows=>1, -takefocus=>1);
+    $previousissues->pack();
+    $previousissues->put(0,0,$previousissues->Label(-text=>"Due Date", -relief => 'groove', borderwidth=>'3'));
+    $previousissues->put(0,1,$previousissues->Label(-text=>"Bar Code", -relief => 'groove', borderwidth=>'3'));
+    $previousissues->put(0,2,$previousissues->Label(-text=>"Title", -relief => 'groove', borderwidth=>'3', -width=>35));
+    $previousissues->put(0,3,$previousissues->Label(-text=>"Author", -relief => 'groove', borderwidth=>'3', -width=>20));
+    $previousissues->put(0,4,$previousissues->Label(-text=>"Class", -relief => 'groove', borderwidth=>'3'));
+    $previousissues->see(0,0);
+    $previousissues->see(0,1);
+    $previousissues->see(0,2);
+    $previousissues->see(0,3);
+    $previousissues->see(0,4);
+
+    my ($borrowerissues) = currentissues($env, $borrower);
+    my $counter=1;
+    #foreach (sort {$items->{$a} cmp $items->{$b}} keys %$items) {
+    foreach (sort keys %$borrowerissues) {
+	my $bookissue=$borrowerissues->{$_};
+	$previousissues->put($counter,0,$previousissues->Label(-text=>$bookissue->{'duedate'}, -relief=>'groove', -borderwidth=>'2'));
+	$previousissues->put($counter,1,$previousissues->Label(-text=>$bookissue->{'barcode'}, -relief=>'groove', -borderwidth=>'2'));
+	$previousissues->put($counter,2,$previousissues->Label(-text=>$bookissue->{'title'}, -relief=>'groove', -borderwidth=>'2'));
+	$previousissues->put($counter,3,$previousissues->Label(-text=>$bookissue->{'author'}, -relief=>'groove', -borderwidth=>'2'));
+	$previousissues->put($counter,4,$previousissues->Label(-text=>$bookissue->{'dewey'}.$bookissue->{'subclass'}, -relief=>'groove', -borderwidth=>'2'));
+	$previousissues->see($counter,0);
+	$previousissues->see($counter,1);
+	$previousissues->see($counter,2);
+	$previousissues->see($counter,3);
+	$previousissues->see($counter,4);
+	$counter++;
+
+    }
 }
 
 sub error_msg {
     my ($env, $message) = @_;
+    $MW->bell();
+    $MW->bell();
+    $MW->bell();
     my $button = $MW->messageBox(-type => 'OK', -title => 'Error Message', -message => "$message");
 }
 
 sub info_msg {
+    $MW->bell();
     my ($env, $message) = @_;
     my $button = $MW->messageBox(-type => 'OK', -title => 'Informational Message', -message => "$message");
 }
 
 sub msg_yn {
+    $MW->bell();
     my ($env, $message1, $message2, $message3) =@_;
     my $message = $message1;
     ($message2) && ($message.="\n$message2");
@@ -234,6 +235,7 @@ sub msg_yn {
 
 
 sub msg_ny {
+    $MW->bell();
     my ($env, $message1, $message2, $message3) =@_;
     my $message = $message1;
     ($message2) && ($message.="\n$message2");
@@ -257,8 +259,6 @@ sub updateissues {
     $loanlength = $data->{'loanlength'}
   }
   $sth->finish;	        
-  open O, ">/root/tkcirc.out";
-  print O "env->loanlength: ".$env->{'loanlength'}."\n";
   my $dateduef;
   if ($env->{'loanlength'} eq "") {
     my $ti = time;
@@ -271,8 +271,6 @@ sub updateissues {
     my @datearr = localtime($datedue);
     $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   }  
-  print O "dateduef: $dateduef\n";
-  close O;
   $query = "Insert into issues (borrowernumber,itemnumber, date_due,branchcode)
   values ($bornum,$itemno,'$dateduef','$env->{'branchcode'}')";
   my $sth=$dbh->prepare($query);
@@ -288,10 +286,8 @@ sub updateissues {
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  #my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($datedue);
   my @datearr = split('-',$dateduef);
   my $dateret = join('-',$datearr[2],$datearr[1],$datearr[0]);
-#  debug_msg($env,"query $query");
   return($dateret);
 }
 
@@ -301,28 +297,19 @@ sub returnrecord {
   #my $amt_owing = calc_odues($env,$dbh,$bornum,$itemno);
   my @datearr = localtime(time);
   my $dateret = (1900+$datearr[5])."-".$datearr[4]."-".$datearr[3];
-  my $query = "update issues set returndate = now(), branchcode ='$env->{'branchcode'}' where 
-    (borrowernumber = '$bornum') and (itemnumber = '$itemno') 
-    and (returndate is null)";  
+  my $query = "update issues set returndate = now(), branchcode ='$env->{'branchcode'}' where (borrowernumber = '$bornum') and (itemnumber = '$itemno') and (returndate is null)";  
   my $sth = $dbh->prepare($query);
   $sth->execute;
   $sth->finish;
   updatelastseen($env,$dbh,$itemno);
   # check for overdue fine
   my $oduecharge;
-  my $query = "select * from accountlines
-    where (borrowernumber = '$bornum')
-    and (itemnumber = '$itemno')
-    and (accounttype = 'FU' or accounttype='O')";
+  my $query = "select * from accountlines where (borrowernumber = '$bornum') and (itemnumber = '$itemno') and (accounttype = 'FU' or accounttype='O')";
   my $sth = $dbh->prepare($query);
     $sth->execute;
     if (my $data = $sth->fetchrow_hashref) {
        # alter fine to show that the book has been returned.
-       my $uquery = "update accountlines
-         set accounttype = 'F'
-         where (borrowernumber = '$bornum')
-         and (itemnumber = '$itemno')
-         and (accountno = '$data->{'accountno'}') ";
+       my $uquery = "update accountlines set accounttype = 'F' where (borrowernumber = '$bornum') and (itemnumber = '$itemno') and (accountno = '$data->{'accountno'}') ";
        my $usth = $dbh->prepare($uquery);
        $usth->execute();
        $usth->finish();
@@ -514,14 +501,58 @@ sub scanbook {
 }
 
 
-sub issuebook {
+sub issuebk {
+    my %responses,@issueditems;
+    $env->{'loanlength'}=14;
+    $env->{'branchcode'}='STWE';
+    $barcode=$barcodeentry->get();
+    $barcodeentry->delete('0.0','end');
+    my ($patroninformation, $flags) = getpatroninformation($env,$borrnumber,0);
+    my $continue=1;
+    my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
+    while ($continue) {
+	($iteminformation, $duedate, $rejected, $question, $questionnumber,
+	    $defaultanswer) = issuebook($env, $patroninformation, $barcode,
+	    \%responses);
+	if ($rejected) {
+	    if ($rejected == -1) {
+		last;
+	    } else {
+		error_msg($env, $rejected);
+		last;
+	    }
+	}
+	if ($question) {
+	    my $response = msg_yn($env, "$question");
+	    $responses{$questionnumber}=$response;
+	} else {
+	    $continue=0;
+	}
+    }
+    unless ($rejected) {
+	$iteminformation->{'duedate'}=$duedate;
+	push (@issueditems, $iteminformation);
+	my $counter=$#issueditems+1;
+	$currentissues->put($counter,0,$currentissues->Label(-text=>$iteminformation->{'duedate'}, -relief=>'groove', -borderwidth=>'2'));
+	$currentissues->put($counter,1,$currentissues->Label(-text=>$iteminformation->{'barcode'}, -relief=>'groove', -borderwidth=>'2'));
+	$currentissues->put($counter,2,$currentissues->Label(-text=>$iteminformation->{'title'}, -relief=>'groove', -borderwidth=>'2'));
+	$currentissues->put($counter,3,$currentissues->Label(-text=>$iteminformation->{'author'}, -relief=>'groove', -borderwidth=>'2'));
+	$currentissues->put($counter,4,$currentissues->Label(-text=>$iteminformation->{'dewey'}.$iteminformation->{'subclass'}, -relief=>'groove', -borderwidth=>'2'));
+	$currentissues->see($counter,0);
+	$currentissues->see($counter,1);
+	$currentissues->see($counter,2);
+	$currentissues->see($counter,3);
+	$currentissues->see($counter,4);
+    }
+}
+
+
+sub issuebook2 {
     my $bornum=$borrnumber;
     $barcode=$barcodeentry->get();
     $barcodeentry->delete('0.0', 'end');
     my $itemnum=$barcode;
     #my ($env,$dbh,$itemnum,$bornum,$items)=@_;
-    $env->{'loanlength'}=14;
-    $env->{'branchcode'}='STWE';
     $itemnum=uc $itemnum;
     my $canissue = 1;
 ##  my ($itemnum,$reason)=&scanbook();
@@ -552,7 +583,7 @@ sub issuebook {
      #check if item is on issue already
     if ($canissue == 1) {
 	my ($currbor,$issuestat,$newdate) = 
-	&previousissue($env,$item->{'itemnumber'},$dbh,$bornum);
+	    &previousissue($env,$item->{'itemnumber'},$dbh,$bornum);
 	if ($issuestat eq "N") { 
 	    $canissue = 0;
 	} elsif ($issuestat eq "R") {
@@ -663,10 +694,10 @@ sub formatitem {
    return $line;
 }   
 
-sub returnbook {
+sub returnbk {
     my $item = $barcodeentry->get();
     $barcodeentry->delete('0.0', 'end');
-    my ($resp, $bornum, $borrower, $itemno, $itemrec, $amt_owing) = checkissue($env, $dbh, $item);
+    my ($iteminformation,$borrower,$messages,$overduecharge) = returnbook($env, $item);
     my $line = "$borrower->{'cardnumber'} ";
     $line .= "$borrower->{'surname'}, ";
     $line .= "$borrower->{'title'} $borrower->{'firstname'}\n";
@@ -676,32 +707,29 @@ sub returnbook {
     $borrowerinfo->delete('0.0', 'end');
     $borrowerinfo->insert('0.0',$line);
     $borrowerinfo->configure(-state => 'disabled');
-    if ($bornum ne "") {                                                                                                           
-	($issues,$odues,$amt_owing) = borrdata2($env,$bornum);                                                                      
-    } else {                                                                                                                       
-	$issues = "";                                                                                                                
-	$odues = "";                                                                                                                 
-	$amt_owing = "";                                                                                                             
-    }                                                                                                                              
-    if ($resp ne "") {                                                                                                             
-	if ($itemno ne "" ) {                                                                                                        
-	    my $item = itemnodata($env,$dbh,$itemno);                                                                                  
-	    my $fmtitem = C4::Circulation::Issues::formatitem($env,$item,"",$amt_owing);                                               
-	    $item->{'borrower'}=$borrower->{'cardnumber'};
-	    unshift @items,$item;
-	    if ($items[20] > "") {                                                                                                     
-		#pop @items;                                                                                                              
-	    }                                                                                                                          
-	}                                                                                                                            
-    }                                                                                                                              
+    #if ($bornum ne "") {
+#	($issues,$odues,$amt_owing) = borrdata2($env,$bornum);
+#    } else {
+#	$issues = "";
+#	$odues = "";
+#	$amt_owing = "";
+#    }
+    if ($iteminformation->{'itemnumber'} ne "" ) {
+	$iteminformation->{'borrower'}=$borrower->{'cardnumber'};
+	unshift @items,$iteminformation;
+	$iteminformation->{'dewey'}=~s/0*$//;
+	if ($items[20] > "") {
+	    #pop @items;
+	}
+    }
     displayitemsreturned();
 }
 
 sub displayitemsreturned {
     my $counter=0;
     $itemsreturned->put($counter,0,$itemsreturned->Label(-text=>"Bar Code", -relief => 'groove', borderwidth=>'3'));
-    $itemsreturned->put($counter,1,$itemsreturned->Label(-text=>"Title", -relief => 'groove', borderwidth=>'3'));
-    $itemsreturned->put($counter,2,$itemsreturned->Label(-text=>"Author", -relief => 'groove', borderwidth=>'3'));
+    $itemsreturned->put($counter,1,$itemsreturned->Label(-text=>"Title", -relief => 'groove', borderwidth=>'3', -width=>35));
+    $itemsreturned->put($counter,2,$itemsreturned->Label(-text=>"Author", -relief => 'groove', borderwidth=>'3', -width=>20));
     $itemsreturned->put($counter,3,$itemsreturned->Label(-text=>"Class", -relief => 'groove', borderwidth=>'3'));
     $itemsreturned->put($counter,4,$itemsreturned->Label(-text=>"Borrower", -relief => 'groove', borderwidth=>'3'));
     $itemsreturned->see($counter,0);
@@ -711,7 +739,7 @@ sub displayitemsreturned {
     $itemsreturned->see($counter,4);
     $counter++;
     my $itemno;
-    foreach $itemno (reverse @items) {
+    foreach $itemno (@items) {
 	$itemno->{'dewey'}=~s/0*$//;
 	$itemsreturned->put($counter,0,$itemsreturned->Label(-text=>$itemno->{'barcode'}, -relief => 'groove', borderwidth=>'2'));
 	$itemsreturned->put($counter,1,$itemsreturned->Label(-text=>$itemno->{'title'}, -relief => 'groove', borderwidth=>'2'));
@@ -723,6 +751,7 @@ sub displayitemsreturned {
 	$itemsreturned->see($counter,2);
 	$itemsreturned->see($counter,3);
 	$itemsreturned->see($counter,4);
+	$itemsreturned->see(1,0);
 	$counter++;
     }
 }
@@ -740,7 +769,7 @@ sub returns {
     my $barcodeframe=$topline->LabFrame(-label=>'Item Barcode', -height=>80, -width=>100, -labelside=>acrosstop);
     Tk::grid($barcodeframe, -col => 0, -row => 0, -sticky => 'n');
     $barcodeentry=$barcodeframe->Entry(-width => 15);
-    $barcodeentry->bind('<Return>' => \&returnbook);
+    $barcodeentry->bind('<Return>' => \&returnbk);
     $barcodeentry->grid(-col => 1, -row => 0, -sticky=>'e', -padx=>10, -pady=>10);
     $barcodeentry->focus;
 
@@ -753,7 +782,7 @@ sub returns {
 
     $returnedframe=$mainholder->LabFrame(-label=>'Items Returned', -labelside=>acrosstop);
     $returnedframe->pack;
-    $itemsreturned=$returnedframe->Table(-rows=>10, -columns => 5, -scrollbars=>e, -fixedrows => 1);
+    $itemsreturned=$returnedframe->Table(-rows=>10, -columns => 5, -scrollbars=>e, -fixedrows => 1, -takefocus => 1);
     $itemsreturned->pack(-side => top);
     displayitemsreturned();
     #$itemsreturned=$returnedframe->Scrolled(Text, -height=>20, -width=>80, -relief => 'flat', -scrollbars => 'e');
