@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Advanced MARC Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -10,12 +10,78 @@
 <input type="hidden" name="type" value="intranet" />
 <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
 <div class="table">
+<div class="form">
+<table>
+<caption>Quick Search</caption>
+		<tr>
+			<th>Keyword</th>
+			<td>
+				<input type="hidden" name="marclist" value="">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value=""><input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+			<th>Illustrator</th>
+			<td><input type="hidden" name="marclist" value="biblioitems.illus">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value=""><input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()"></td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td><input type="hidden" name="marclist" value="biblio.title">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value=""><input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()"></td>
+			<th>Dewey</th>
+			<td><input type="hidden" name="marclist" value="biblioitems.dewey">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value=""><input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()"></td>
+		</tr>
+		<tr>
+			<th>
+				Author <input type="hidden" name="marclist" value="biblio.author">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+			</th>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+			<th>
+				Item Type <input type="hidden" name="marclist" value="items.itemtype">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+			</th>
+			<td>
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+			</td>
+		</tr>
+		<tr>
+			<th>
+				Barcode
+			</th>
+			<td>
+				<input type="hidden" name="marclist" value="items.barcode">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value">
+			</td>
+			<td>&nbsp;</td><td>&nbsp;</td>
+		</tr>
+	</table>
+</div>
+</div>
+<div class="table">
 <table>
 		<tr>
 			<td colspan="2"><h5>Help:</h5>
 					<p>Build your request using MARC fields and subfields. Add criteria lets you add another criteria to your search.	Search commits the request and displays the results.</p>
 				<div id="sql">
-				<textarea name="sql" rows="5" cols="60" disabled="disabled" readonly="readonly"></textarea>
+				<textarea name="sql" rows="5" cols="60"></textarea>
 				</div>
 			</td>
 		</tr>
@@ -47,12 +113,20 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 			<tr>
-	<td colspan="2"><input type="button" value="Add criteria" onclick="AddStatement(); return false;" class="submit" /> <input type="submit" class="submit" value="Search" /> Results per page :
+	<td colspan="2"><input type="button" value="Add criteria" onclick="AddStatement(); return false;" class="submit" /> Results per page :
 		<select name="resultsperpage" size="1">
 			<option value="20">20</option>
 			<option value="50">50</option>
 			<option value="100">100</option>
-		</select></td></tr></table></div>
+		</select>	Ordered by
+		<select name="orderby" size="1">
+			<option value="biblio.title">Title</option>
+			<option value="biblio.author">Author</option>
+			<option value="biblioitems.dewey">Dewey</option>
+			<option value="biblioitems.publicationyear">Publication Year</option>
+			<option value="biblioitems.publishercode">Publisher</option>
+		</select>
+	<input type="submit" value="Start search" class="submit"></td></tr></table></div>
 </form>
 </div>
 
