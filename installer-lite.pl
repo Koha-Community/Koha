@@ -344,6 +344,9 @@ of steps that you will need to complete.
 	4. Update your database tables
 	   perl updatedatabase -I /pathtoC4 
 
+	5. Update your database to use MARC
+	   perl marc/fill_usmarc.pl -I /pathtoC4 to put MARC21 - english datas in parameter table
+	   perl marc/updatedb2marc.pl -I /pathtoC4 to update biblios from old-DB to MARC-DB (!!! it may be long : 30 biblios/second)
 
   * Koha.conf
 	1. Copy Koha.conf to /etc/
