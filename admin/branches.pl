@@ -56,6 +56,7 @@ if ($op eq 'add') {
 # If the user has pressed the "add new branch" button. 
     heading("Branches: Add Branch");
     editbranchform();
+
 } elsif ($op eq 'edit') {
 # if the user has pressed the "edit branch settings" button.
     heading("Branches: Edit Branch");
@@ -141,56 +142,17 @@ sub editbranchform {
 	my $tmp = $cat->{'categorycode'};
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
 	    $checked = "CHECKED";
-<<<<<<< branches.pl
 		}
     $template->param(categoryname => $cat->{'categoryname'});
     $template->param(categorycode => $cat->{'categorycode'});
     $template->param(codedescription => $checked>$cat->{'codedescription'});    
     }
    
-=======
-	}
-	$catcheckbox .= <<EOF;
-<tr><td>$cat->{'categoryname'}</td>
-<td><INPUT TYPE="checkbox" NAME="$cat->{'categorycode'}" VALUE="1" $checked>$cat->{'codedescription'}</td></tr>
-EOF
-    }
-    my $form = <<EOF;
-<form action='$script_name' name=Aform method=post>
-<input type=hidden name=op value='add_validate'>
-<table>
-<tr><td>Branch code</td><td><input type=text name=branchcode size=5 maxlength=5 value='$data->{'branchcode'}'></td></tr>
-<tr><td>Name</td><td><input type=text name=branchname size=40 maxlength=80 value='$data->{'branchname'}'>&nbsp;</td></tr>
-$catcheckbox
-<tr><td>Address</td><td><input type=text name=branchaddress1 value='$data->{'branchaddress1'}'></td></tr>
-<tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='$data->{'branchaddress2'}'></td></tr>
-<tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='$data->{'branchaddress3'}'></td></tr>
-<tr><td>Phone</td><td><input type=text name=branchphone value='$data->{'branchphone'}'></td></tr>
-<tr><td>Fax</td><td><input type=text name=branchfax value='$data->{'branchfax'}'></td></tr>
-<tr><td>E-mail</td><td><input type=text name=branchemail value='$data->{'branchemail'}'></td></tr>
-<tr><td>&nbsp;</td><td><input type=submit value='Submit'></td></tr>
-</table>
-</form>
-EOF
-    return $form;
->>>>>>> 1.5
 }
 
 sub deleteconfirm {
-# message to print if the
+# message to print if the 
     my ($branchcode) = @_;
-<<<<<<< branches.pl
-=======
-    my $output = <<EOF;
-Confirm delete:
-<form action='$script_name' method=post><input type='hidden' name='op' value='delete_confirmed'>
-<input type='hidden' name='branchcode' value=$branchcode>
-<input type=submit value=YES></form>
-<form action='$script_name' method=post><input type='hidden' name='op' value=''>
-<input type=submit value=NO></form>
-EOF
-    return $output;
->>>>>>> 1.5
 }
 
 
@@ -204,22 +166,6 @@ sub branchinfotable {
     } else {
 	$branchinfo = getbranchinfo();
     }
-<<<<<<< branches.pl
-=======
-    my $table = <<EOF;
-<table border='1' cellpadding='5' cellspacing='0' width='550'>
-<tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Branches</b></font></th> </tr>
-<tr bgcolor='#889999'>
-<td width='175'><b>Name</b></td>
-<td width='25'><b>Code</b></td>
-<td width='175'><b>Address</b></td>
-<td width='175'><b>Categories</b></td>
-<td width='50'><b>&nbsp;</b></td>
-</tr>
-EOF
-
->>>>>>> 1.5
     my $color;
     foreach my $branch (@$branchinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
@@ -237,33 +183,12 @@ EOF
 	    $categories .= $catinfo->{'categoryname'}."<br>";
 	}
 	$categories = '(no categories set)' unless ($categories);
-<<<<<<< branches.pl
 $template->param(color => $color);
 $template->param(branch_name => $branch->{'branchname'});
 $template->param(adress => $address);
 $template->param(categories => $categories);
 $template->param(branch_code => $branch->{'branchcode'});
 $template->param(value => $branch->{'branchcode'});
-=======
-	$table .= <<EOF;
-<tr bgcolor='$color'>
-    <td align='left' valign='top'>$branch->{'branchname'}</td>
-    <td align='left' valign='top'>$branch->{'branchcode'}</td>
-    <td align='left' valign='top'>$address</td>
-    <td align='left' valign='top'>$categories</td>
-    <td align='left' valign='top'>
-<form action='$script_name' method=post>
-<input type='hidden' name='op' value='edit'>
-<input type='hidden' name='branchcode' value='$branch->{'branchcode'}'>
-<input type=submit value=Edit>
-</form>
-<form action='$script_name' method=post>
-<input type='hidden' name='branchcode' value='$branch->{'branchcode'}'>
-<input type='hidden' name='op' value='delete'><input type=submit value=Delete>
-</form></td>
-</tr>
-EOF
->>>>>>> 1.5
     }
 
 }
@@ -272,19 +197,6 @@ sub branchcategoriestable {
 #Needs to be implemented...
 
     my $categoryinfo = getcategoryinfo();
-<<<<<<< branches.pl
-=======
-    my $table = <<EOF;
-<table border='1' cellpadding='5' cellspacing='0'>
-<tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Branches Categories</b></font></th> </tr>
-<tr bgcolor='#889999'>
-<td width='175'><b>Name</b></td>
-<td width='25'><b>Code</b></td>
-<td width='200'><b>Description</b></td>
-</tr>
-EOF
->>>>>>> 1.5
 my $color;
     foreach my $cat (@$categoryinfo) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
@@ -313,7 +225,7 @@ sub getbranchinfo {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my @results;
-    while (my $data = $sth->fetchrow_hashref) {
+    while (my $data = $sth->fetchrow_hashref) { 
 	my $tmp = $data->{'branchcode'}; my $brc = $dbh->quote($tmp);
 	$query = "select categorycode from branchrelations where branchcode = $brc";
 	my $nsth = $dbh->prepare($query);
@@ -344,7 +256,7 @@ sub getcategoryinfo {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my @results;
-    while (my $data = $sth->fetchrow_hashref) {
+    while (my $data = $sth->fetchrow_hashref) { 
 	push(@results, $data);
     }
     $sth->finish;
@@ -392,7 +304,7 @@ sub setbranchinfo {
 	unless (grep {/^$ccat$/} @$branchcats) {
 	    push(@addcats, $ccat);
 	}
-    }
+    }	
     # FIXME - There's already a $dbh in this scope.
     my $dbh = C4::Context->dbh;
     foreach my $cat (@addcats) {
@@ -430,7 +342,7 @@ sub checkdatabasefor {
     my $message;
     if ($total) {
 	$message = "Branch cannot be deleted because there are $total items using that branch.";
-    }
+    } 
     return $message;
 }
 
