@@ -2,8 +2,9 @@
 #script to provide intranet (librarian) advanced search facility
 #modified 9/11/1999 by chris@katipo.co.nz
 #adding an extra comment to play with CVS (Si, 19/11/99)
-#modified 29/12/99 by chris@katipo.co.nz to be usavle by opac as well
+#modified 29/12/99 by chris@katipo.co.nz to be usable by opac as well
 #modified by chris 10/11/00 to fix dewey search
+#modified by chris@katipo.co.nz 3/2/01 to fix glitch with " in titles
 
 use strict;
 use C4::Search;
@@ -136,6 +137,7 @@ while ($i < $count2){
     $stuff[1]=~ s/\`/\\\'/g;
     my $title2=$stuff[1];
     $title2=~ s/ /%20/g;
+    $title2=~ s/\W//g;
     if ($subject eq ''){
 #      print $stuff[0];
       $stuff[1]=mklink("/cgi-bin/koha/detail.pl?type=$type&bib=$stuff[2]&title=$title2",$stuff[1]);
