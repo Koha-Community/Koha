@@ -19,12 +19,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $classlist='';
-#open C, "$intranetdir/htdocs/includes/cat-class-list.inc";
-#while (<C>) {
-#   $classlist.=$_;
-#}
-$template->param(loggedinuser => $loggedinuser,
-						classlist => $classlist,
+$template->param(classlist => $classlist,
 						type => 'intranet',);
 
 output_html_with_http_headers $query, $cookie, $template->output;

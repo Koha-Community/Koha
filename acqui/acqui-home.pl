@@ -51,8 +51,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{rate} = $rates->[$i]->{'rate'};
 	push @loop_currency, \%line;
 }
-$template->param(loggedinuser => $loggedinuser,
-						classlist => $classlist,
+$template->param(classlist => $classlist,
 						type => 'intranet',
 						loop_budget => \@loop_budget,
 						loop_currency => \@loop_currency,

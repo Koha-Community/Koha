@@ -17,6 +17,5 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
-$template->param(loggeninuser => $loggedinuser);
 
 output_html_with_http_headers $query, $cookie, $template->output;

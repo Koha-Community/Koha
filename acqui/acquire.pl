@@ -177,7 +177,6 @@ if ($count == 1){
 		push @loop,\%line;
 	}
 	$template->param( loop => \@loop,
-						user => $loggedinuser,
 						date => $date,
 						name => $booksellers[0]->{'name'},
 						id => $id,

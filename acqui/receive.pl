@@ -97,7 +97,6 @@ $totalfreight=$freight;
 $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
-						user => $loggedinuser,
 						date => $date,
 						name => $booksellers[0]->{'name'},
 						id => $id,

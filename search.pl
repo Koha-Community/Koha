@@ -86,7 +86,8 @@ foreach my $term (qw(keyword subject author illustrator itemnumber
 	next unless defined $value && $value ne "";
 				# Skip blank search terms
 	$search{$term} = $value;
-	push @forminputs, { line => "$term=$value" };
+	push @forminputs, {	term => $term,
+							value =>$value };
 }
 
 $template->param(FORMINPUTS => \@forminputs);
