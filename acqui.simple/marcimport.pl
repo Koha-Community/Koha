@@ -590,7 +590,7 @@ sub PrintResultRecordLink {
 
 	$sth=$dbh->prepare("select * 
 	  from biblioitems 
-	  where isbn=?  or issn=?  or lccn=? ");
+	  where (isbn=? and isbn!='')  or (issn=? and issn!='')  or (lccn=? and lccn!='') ");
 	$sth->execute($bib->{isbn},$bib->{issn},$bib->{lccn});
 	if ($sth->rows) {
 	    $donetext="DONE";
