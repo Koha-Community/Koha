@@ -251,7 +251,7 @@ my %requirefields = (
     marc_subfield_structure =>{'seealso'  => 'char(255)'},
     bookshelf => {'owner' => 'char(80)',
     					'category' => 'char(1)',
-				}
+				},
 );
 
 my %dropable_table = (
@@ -713,6 +713,11 @@ unless ( $existingtables{'z3950servers'} ) {
     );
     $sti->execute;
 }
+unless ( $existingtables{'issuingrules'} ) {
+	$dbh->do("alter table categoryitem rename issuingrules");
+	print "renaming categoryitem\n";
+}
+
 
 #---------------------------------
 # Columns
@@ -995,6 +1000,22 @@ if ($items{'bulk'} eq "varchar(30)") {
     $sti->execute;
 }
 
+#
+# creating  index in issuingrules if needed
+#
+$sth = $dbh->prepare("show index from issuingrules");
+$sth->execute;
+my $exists=0;
+while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+{
+	if ($key_name eq 'PRIMARY') {
+		$exists=1;
+	}
+}
+print "Creating  index on z3950results\n" unless $exists;
+$dbh->do('ALTER TABLE issuingrules ADD PRIMARY KEY ( branchcode, categorycode, itemtype )') unless $exists;
+
+
 # Populate tables with required data
 
 foreach my $table ( keys %tabledata ) {
@@ -1046,6 +1067,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.77  2004/05/06 14:56:51  tipaul
+# adding table issuingrules (previously called categoryitem
+#
 # Revision 1.76  2004/05/03 09:32:25  tipaul
 # adding printcirculationsplit parameter (already existed, but was not in systempref by defaul)
 #
