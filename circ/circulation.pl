@@ -101,7 +101,7 @@ if ($print eq 'yes' && $borrowernumber ne ''){
     
 
 
-# get the currently issued books......
+# get the borrower information.....
 my $borrower;
 my $flags;
 if ($borrowernumber) {
@@ -120,14 +120,14 @@ if (my $qnumber = $query->param('questionnumber')) {
 }
 
 
-# if the barcode is set
+
 my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
 
 my $year=$query->param('year');
 my $month=$query->param('month');
 my $day=$query->param('day');
 
-
+# if the barcode is set
 if ($barcode) {
     $barcode = cuecatbarcodedecode($barcode);
     my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
@@ -139,6 +139,11 @@ if ($barcode) {
 	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) 
                      = issuebook(\%env, $borrower, $barcode, \%responses, $date);
     }
+}
+
+# reload the borrower info for the sake of reseting the flags.....
+if ($borrowernumber) {
+    ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
 }
 
 
