@@ -10,8 +10,8 @@
 		<td><font size="2" face="arial, helvetica, sans-serif">Karta Biblioteczna: <!-- TMPL_VAR NAME="cardnumber" --> <br>
 			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) <br>
 			<!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --><br>
-			<!-- TMPL_VAR NAME="phone" --> (hm)<br>
-			<!-- TMPL_VAR NAME="faxnumber" --> (wk)<br>
+			<!-- TMPL_VAR NAME="phone" --> (dom)<br>
+			<!-- TMPL_VAR NAME="faxnumber" --> (praca)<br>
 			<!-- TMPL_VAR NAME="emailaddress" --><br>
 			<br>Coś się zmieniło?<br><br>
 			<a href="/cgi-bin/koha/opac-userupdate.pl">Aktualizuj Wpis</a>
@@ -25,7 +25,7 @@
 	<table cellpadding="5" cellspacing="0" border="1">
 		<tr bgcolor="#fecc99">
 			<td>
-				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>Zaległe opłaty i kary w wys. <!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
+				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>Posiadasz zaległe opłaty i kary na <!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
 			</td>
 		</tr>
 	</table>
@@ -36,7 +36,7 @@
 		<tr bgcolor="#fecc99">
 			<td>
 				<font face="arial, helvetica, sans-serif" size="+2">
-					<b>Zaległe opłaty i kary w wys. <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+					<b>Posiadasz zaległe opłaty i kary na <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
@@ -48,7 +48,7 @@
 		<tr bgcolor="#fecc99">
 			<td>
 				<font face="arial, helvetica, sans-serif" size="+2">
-					<b>Kredyt w wys. <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+					<b>Posiadasz kredyt na <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
@@ -95,7 +95,7 @@
 			<th>Do Zwrotu</th>
 			<th>typpozycji</th>
 			<th>Opłaty</th>
-			<th>Current Loan</th>
+			<th>Bieżące wypożyczenie</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ISSUES" -->
 			<tr valign="top">
