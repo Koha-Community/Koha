@@ -1,12 +1,15 @@
 #!/usr/bin/perl
 
-#script to do a borrower enquiery/brin up borrower details etc
-#written 20/12/99 by chris@katipo.co.nz
-#Displays all the detailas about a borrower
-#needs html removed and to use the C4::Output more, but its tricky
-#last modified 21/1/2000 by chris@katipo.co.nz
-#modifiecd 31/1/2001 by chris@katipo.co.nz to not allow items on request
-#to be renewed
+# script to do a borrower enquiry/bring up borrower details etc
+# Displays all the details about a borrower
+# written 20/12/99 by chris@katipo.co.nz
+# last modified 21/1/2000 by chris@katipo.co.nz
+# modified 31/1/2001 by chris@katipo.co.nz 
+#   to not allow items on request to be renewed
+#
+# needs html removed and to use the C4::Output more, but its tricky
+#
+
 use strict;
 use C4::Output;
 use CGI;
@@ -21,12 +24,8 @@ my $input = new CGI;
 my $bornum=$input->param('bornum');
 
 
-# FIXME
-# this hash is never assigned, though it is used (as a placeholder?)
-#
-my %env;
-
 print $input->header;
+
 #start the page and read in includes
 print startpage();
 print startmenu('member');
@@ -37,34 +36,7 @@ $data->{'dateenrolled'} = slashifyDate($data->{'dateenrolled'});
 $data->{'expiry'} = slashifyDate($data->{'expiry'});
 $data->{'dateofbirth'} = slashifyDate($data->{'dateofbirth'});
 
-# FIXME
-# turn the ethnicity into a function and make it generalizable
-# check these files to see if one convention or the other makes sense
-#   boraccount.pl
-#   imemberentry.pl
-#   jmemberentry.pl
-#   mancredit.pl
-#   maninvoice.pl
-#   member.pl
-#   memberentry.pl
-#   moremember.pl
-#   moremember.pl
-#   pay.pl
-#   placerequest.pl
-#   readingrec.pl
-#
-if ($data->{'ethnicity'} eq 'maori'){
-  $data->{'ethnicity'} = 'Maori';
-}
-if ($data->{'ethnicity'}eq 'european'){
-  $data->{'ethnicity'} = 'European/Pakeha';
-}
-if ($data->{'ethnicity'}eq 'pi'){
-  $data->{'ethnicity'} = 'Pacific Islander';
-}
-if ($data->{'ethnicity'}eq 'asian'){
-  $data->{'ethnicity'} = 'Asian';
-}
+$data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 
 print <<printend
 <FONT SIZE=6><em>$data->{'firstname'} $data->{'surname'}</em></FONT><P>
