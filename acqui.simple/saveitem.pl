@@ -32,6 +32,7 @@ my $item             = {
     biblionumber     => $biblionumber,
     biblioitemnumber => $biblioitemnumber?$biblioitemnumber:"",
     homebranch       => $input->param('homebranch'),
+    holdingbranch       => $input->param('homebranch'),
     replacementprice => $input->param('replacementprice')?$input->param('replacementprice'):"",
     itemnotes        => $input->param('notes')?$input->param('notes'):""
 }; # my $item
@@ -43,8 +44,6 @@ my $biblioitem       = {
     publicationyear   => $input->param('publicationyear')?$input->param('publicationyear'):"",
     place             => $input->param('place')?$input->param('place'):"",
     illus             => $input->param('illus')?$input->param('illus'):"",
-    additionalauthors => $input->param('additionalauthors')?$input->param('additionalauthors'):"",
-    subjectheadings   => $input->param('subjectheadings')?$input->param('subjectheadings'):"",
     url               => $input->param('url')?$input->param('url'):"",
     dewey             => $input->param('dewey')?$input->param('dewey'):"",
     subclass          => $input->param('subclass')?$input->param('subclass'):"",
@@ -79,6 +78,7 @@ if (! $biblionumber) {
 
     if ($website) {
 	&newbiblioitem($biblioitem);
+		print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber");
     } elsif (&checkitems(1,$barcode)) {
 	print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber&error=barcodeinuse");
     } else {
