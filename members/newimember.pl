@@ -43,7 +43,7 @@ my $input = new CGI;
 my $insert=$input->param('insert');
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name => "newimember.tmpl",
+	template_name => "members/newimember.tmpl",
 	query => $input,
 	type => "intranet",
 	authnotrequired => 0,
