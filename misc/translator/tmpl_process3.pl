@@ -221,6 +221,8 @@ $href = Locale::PO->load_file_ashash($str_file);
 
 # guess the charsets. HTML::Templates defaults to iso-8859-1
 if (defined $href) {
+    die "$str_file: PO file is corrupted, or not a PO file\n"
+	    unless defined $href->{'""'};
     $charset_out = TmplTokenizer::charset_canon $2
 	    if $href->{'""'}->msgstr =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/;
     for my $msgid (keys %$href) {
@@ -241,7 +243,11 @@ my $xgettext = './xgettext.pl';	# actual text extractor script
 
 if ($action eq 'create')  {
     # updates the list. As the list is empty, every entry will be added
-    die "$str_file: Output file already exists" if -f $str_file;
+    if (!-s $str_file) {
+	warn "Removing empty file $str_file\n";
+	unlink $str_file || die "$str_file: $!\n";
+    }
+    die "$str_file: Output file already exists\n" if -f $str_file;
     my($tmph, $tmpfile) = tmpnam();
     # Generate the temporary file that acts as <MODULE>/POTFILES.in
     for my $input (@in_files) {

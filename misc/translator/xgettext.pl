@@ -291,10 +291,11 @@ if (defined $files_from) {
     open(INPUT, "<$files_from") || die "$files_from: $!\n";
     while (<INPUT>) {
 	chomp;
-	my $h = TmplTokenizer->new( "$directory/$_" );
+	my $input = /^\//? $_: "$directory/$_";
+	my $h = TmplTokenizer->new( $input );
 	$h->set_allow_cformat( 1 );
-	VerboseWarnings::set_input_file_name "$directory/$_";
-	print STDERR "$0: Processing file \"$directory/$_\"\n" if $verbose_p;
+	VerboseWarnings::set_input_file_name $input;
+	print STDERR "$0: Processing file \"$input\"\n" if $verbose_p;
 	text_extract( $h );
     }
     close INPUT;
