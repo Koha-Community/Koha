@@ -8,7 +8,6 @@
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
-<TMPL_INCLUDE NAME="common-style.css">
 #menubar {
 	border-top:1px solid #666;
 }
@@ -20,7 +19,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	padding:4px;
 	font-weight: bold;
 	text-align:center;
-	background-image:url("<TMPL_VAR name="themelang">/images/background-mem.gif");
+	background-image:url("/images/background-mem.gif");
 	}
 
 a.home {
@@ -113,31 +112,31 @@ a.circulation:hover {
 	font-weight: bold;
 	}
 a.parameters {
-	background-color: #86c268;
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color: #FFFFFF;
+	color:#777777;
 	padding:4px;
 	font-weight: bold;
 	}
 a.parameters:hover {
 	background-color: #86c268;
-	color: #FFFFFF;
+	color: #000000;
 	text-decoration: normal;
 	font-weight: bold;
 	}
 a.about {
+	background-color: #86c268;
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
-	color: #777777;
+	color:#FFFFFFF;
 	padding:4px;
 	font-weight: bold;
 	}
 a.about:hover {
 	background-color: #86c268;
-	color: #000000;
+	color: #FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
 	}
@@ -179,7 +178,7 @@ a.about:hover {
 						<a class="parameters" href="/cgi-bin/koha/admin-home.pl" alt="Paramètres">Paramètres</a>
 					</td>
 					<td>
-						<a class="about" href="/cgi-bin/koha/about.pl">A propos</a>
+						<a class="parameters" href="/cgi-bin/koha/about.pl">A propos</a>
 					</td>
 				</TR>
 			</TABLE>

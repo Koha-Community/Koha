@@ -1,10 +1,9 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<TMPL_INCLUDE NAME="parameters-top.inc">
 
 <TMPL_IF name="add_form">
 <!-------------------------------------------------------------------------------------------------->
 	<H1><TMPL_VAR name="action"></H1>
-	
-<p>Choisir et valider 1 parmi les suivants :<b><TMPL_VAR name="kohafield"></b></p>
+	<p>Choisir et valider 1 parmi les suivants :<b><TMPL_VAR name="tablename">.<TMPL_VAR name="kohafield"></b></p>
 	<table>
 	<tr>
 	<form action='<TMPL_VAR name="script_name">'method=put>
@@ -138,7 +137,7 @@
 	</tr>
 	<tr>
 		<td>
-			<p align="right">To "unmap", click ==></p>
+			<p align="right">Pour d&eacute;connecter cliquer  ==></p>
 		</td>
 		<td>
 			<form action='<TMPL_VAR name="script_name">' name=Aform method=put>
@@ -146,39 +145,38 @@
 				<input type="hidden" name="tablename" value="<TMPL_VAR name="tablename">">
 				<input type="hidden" name="kohafield" value="<TMPL_VAR name="kohafield">">
 				<input type="hidden" name="choice" value="">
-				
-        <INPUT type=submit value='ICI'>
+				<INPUT type=submit value='HERE'>
 			</form>
 		</td>
 	</tr>
 	</table>
-<font SIZE=6><em>Liens MARC</em></font> 
+</TMPL_IF>
+
+<!-------------------------------------------------------------------------------------------------->
+<TMPL_IF name="else">
+<font SIZE=6><em>Liens MARC<TMPL_VAR name="tagfield"></em></font>
 <p></p>
 <form action='<TMPL_VAR name="script_name">' method=post>
 <TMPL_VAR name="tablename"> <input type="submit" value="OK">
 </form>
 
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif" width=10%><b>Champ koha</b><span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
-	<td background="/images/background-mem.gif" width=5%><b>Balise</b></td>
-	<td background="/images/background-mem.gif" width=5%><b>Sous champ</b></td>
-	<td background="/images/background-mem.gif" width=42%><b>Biblioth&egrave;que</b></td>
-	<td background="/images/background-mem.gif" width=8%>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=10%><b>Champ Koha</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=5%><b>Champ</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=5%><b>Sous-champ</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=42%><b>Lib</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif" width=8%>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td><b><TMPL_VAR name="kohafield"></b></td>
 	<td><TMPL_VAR name="tagfield"></td>
 	<td><TMPL_VAR name="tagsubfield"></td>
 	<td><TMPL_VAR name="liblibrarian"></td>
-	<td><a href="<TMPL_VAR name="edit">">Modifier</a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
 </TMPL_LOOP>
 </table>
 </TMPL_IF>
 
-<!-------------------------------------------------------------------------------------------------->
-<TMPL_IF name="else">
-</TMPL_IF>
-
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<TMPL_INCLUDE NAME="parameters-bottom.inc">
