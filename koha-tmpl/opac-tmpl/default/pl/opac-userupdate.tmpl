@@ -1,56 +1,47 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj siê</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
+<p><i>Prosimy wprowadziÄ‡ konieczne zmiany. Biblioteka otrzyma powiadomienie listem elektronicznym.<br>
+Zmiany ukaÅ¼Ä… siÄ™ dopiero po uwierzytelnieniu ich przez BibliotekÄ™.</i></p>
 
-<i>Proszê nanie¶æ potrzebne zmiany. Biblioteka otrzyma wiadomo¶æ e-mailem.<br/>
-Zmiany te nie uka¿± siê dopóki biblioteka ich nie zatwierdzi..<i><br/><br/>
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 
-<TMPL_LOOP NAME="BORROWER_INFO">
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+<table align="center">
 
-<CENTER>
-<FORM ACTION="/cgi-bin/koha/opac-userupdate.pl" method=get>
-<TABLE >
+<tr>
+<td>Nazwisko</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="surname" -->"  name="surname"></td></tr>
 
-<TR VALIGN=TOP>
-<TD>Nazwisko</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='surname'>"  NAME="surname"></TD></TR>
+<tr> 
+<td>TytuÅ‚</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="title" -->"  name="title"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Tytu³</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='title'>"  NAME="title"></TD></TR>
+<tr> 
+<td>ImiÄ™</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="firstname" -->"  name="firstname"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Imiê</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
+<tr> 
+<td>Adres</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="streetaddress" -->"  name="streetaddress"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Ulica</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
-
-<TR VALIGN=TOP> 
-<TD>Miasto</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='city'>"  NAME="city"></TD></TR>
+<tr> 
+<td>Miasto</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="city" -->"  name="city"></td></tr>
 
 
-<TR VALIGN=TOP> 
-<TD>Tel. domowy</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
+<tr> 
+<td>Tel. domowy</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="phone" -->"  name="phone"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Tel./Fax w pracy</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
+<tr> 
+<td>Tel/fax praca</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="faxnumber" -->"  name="faxnumber"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Email</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
+<tr> 
+<td>Email</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="emailaddress" -->"  name="emailaddress"></td></tr>
 
 
 
-<TR VALIGN=TOP>
-<td><font size=4 face="arial,helvetica"><INPUT type="submit" value="Prze¶lij"></font></td>
-<TD><font size=4 face="arial,helvetica">
-</font></td></tr>
+<tr>
+<td colspan="2"><input type="submit" value="PrzeÅ›lij"></td>
+</tr>
 
-</TABLE>
-</FORM>
-</CENTER>
+</table>
+</form>
 
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
