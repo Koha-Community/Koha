@@ -1,15 +1,10 @@
 #!/usr/bin/perl
 
-# TODO
-# add subtitle entry to marcimport (for stewelm)
-# swap illustrator and additional authors for marcimport.pl
-# fix replacement price entry (always coming up as zero)
-# Check serial title when determining if biblio already exists
 
 
-my $lc1='#dddddd';
-my $lc2='#ddaaaa';
-
+#  CAREFUL!!!!
+# This next line deletes _ALL_ of the existing MARC data from the
+# MySQL tables!!!  It is only in here during development!!!!
 
 system("mysql Koha -ptestpass < deletemarc");
 
