@@ -42,7 +42,7 @@ sub create_marclist {
 	my $widest_menu_item_width = 0;
 	for (my $pass = 1; $pass <= 2; $pass += 1)
 	{
-		for (my $tabloop = 0; $tabloop<=9;$tabloop++)
+		for (my $tabloop = 0; $tabloop<=10;$tabloop++)
 		{
 			my $separator_inserted_p = 0; # FIXME... should not use!!
 			foreach my $tag (sort(keys (%{$tagslib})))
