@@ -130,7 +130,7 @@ if ($op eq 'add_form') {
 
 	# Check both categoryitem and biblioitems, see Bug 199
 	my $total = 0;
-	for my $table ('issuingrules', 'biblioitems') {
+	for my $table ('biblioitems') {
 	   my $sth=$dbh->prepare("select count(*) as total from $table where itemtype=?");
 	   $sth->execute($itemtype);
 	   $total += $sth->fetchrow_hashref->{total};
@@ -155,6 +155,8 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
 	my $itemtype=uc($input->param('itemtype'));
 	my $sth=$dbh->prepare("delete from itemtypes where itemtype=?");
+	$sth->execute($itemtype);
+	$sth = $dbh->prepare("delete from issuingrules where itemtype=?");
 	$sth->execute($itemtype);
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
