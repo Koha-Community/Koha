@@ -105,9 +105,9 @@ sub catalogsearch {
 #    $search->{$key}=$dbh->quote($search->{$key});
 #  }
   my ($count,@results);
-#  print STDERR "Doing a search \n";
+#  print STDERR "Doing a search $search->{'itemnumber'} $search->{'isbn'}\n";
   if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
-        print STDERR "Doing a precise search\n";
+#        print STDERR "Doing a precise search $search->{'itemnumber'}\n";
     ($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
 
   } else {
@@ -662,9 +662,9 @@ sub CatSearch  {
   }
   if ($type eq 'precise'){
       
-      if ($search->{'item'} ne ''){
+      if ($search->{'itemnumber'} ne ''){
         $query="select * from items,biblio ";
-        my $search2=uc $search->{'item'};
+        my $search2=uc $search->{'itemnumber'};
         $query=$query." where 
         items.biblionumber=biblio.biblionumber 
 	and barcode='$search2'";
@@ -696,7 +696,7 @@ sub CatSearch  {
 	$sth1->finish;
       }
   }
-#print $query;
+#print STDERR $query;
 if ($type ne 'precise' && $type ne 'subject'){
   if ($search->{'author'} ne ''){   
       $query=$query." order by biblio.author,title";
