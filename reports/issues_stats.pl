@@ -19,6 +19,31 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;
+use C4::Auth;
+use CGI;
+use C4::Context;
+use HTML::Template;
+use C4::Search;
+use C4::Output;
+use C4::Koha;
+use C4::Interface::CGI::Output;
+use C4::Circulation::Circ2;
+use Date::Manip;
+
+=head1 NAME
+
+plugin that shows a stats on borrowers
+
+=head1 DESCRIPTION
+
+
+=over2
+
+=cut
+
+
+
 my $input = new CGI;
 my $do_it=$input->param('do_it');
 my $fullreportname = "reports/issues_stats.tmpl";
