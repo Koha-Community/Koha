@@ -57,18 +57,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-# get itemtype list
-my $itemtypes = getitemtypes;
-my @itemtypesloop;
-foreach my $thisitemtype (keys %$itemtypes) {
-	my %row =(value => $thisitemtype,
-				description => $itemtypes->{$thisitemtype}->{'description'},
+# get framework list
+my $frameworks = getframeworks;
+my @frameworkcodeloop;
+foreach my $thisframeworkcode (keys %$frameworks) {
+	my %row =(value => $thisframeworkcode,
+				frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
 			);
-	push @itemtypesloop, \%row;
+	push @frameworkcodeloop, \%row;
 }
 
 my $marc_p = C4::Context->boolean_preference("marc");
 $template->param( NOTMARC => !$marc_p,
-				itemtypeloop => \@itemtypesloop );
+				frameworkcodeloop => \@frameworkcodeloop );
 
 output_html_with_http_headers $query, $cookie, $template->output;

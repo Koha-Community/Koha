@@ -50,7 +50,7 @@ $VERSION = 0.01;
 	&MARCfind_MARCbibid_from_oldbiblionumber
 	&MARCfind_marc_from_kohafield
 	&MARCfindsubfield
-	&MARCfind_itemtype
+	&MARCfind_frameworkcode
 	&MARCgettagslib
 
 	&NEWnewbiblio &NEWnewitem
@@ -221,26 +221,27 @@ used to manage MARC_word table and should not be useful elsewhere
 =cut
 
 sub MARCgettagslib {
-	my ($dbh,$forlibrarian,$itemtype)= @_;
-	$itemtype="" unless $itemtype;
+	my ($dbh,$forlibrarian,$frameworkcode)= @_;
+	$frameworkcode="" unless $frameworkcode;
 	my $sth;
 	my $libfield = ($forlibrarian eq 1)? 'liblibrarian' : 'libopac';
-	# check that itemtype framework exists
-	$sth=$dbh->prepare("select count(*) from marc_tag_structure where itemtype=? order by ?");
-	$sth->execute($itemtype,$itemtype);
+	# check that framework exists
+	$sth=$dbh->prepare("select count(*) from marc_tag_structure where frameworkcode=?");
+	$sth->execute($frameworkcode);
 	my ($total) = $sth->fetchrow;
-	$itemtype="" unless ($total >0);
-	$sth=$dbh->prepare("select tagfield,$libfield as lib,mandatory from marc_tag_structure where itemtype=? order by tagfield");
-	$sth->execute($itemtype);
+	$frameworkcode="" unless ($total >0);
+	$sth=$dbh->prepare("select tagfield,$libfield as lib,mandatory,repeatable from marc_tag_structure where frameworkcode=? order by tagfield");
+	$sth->execute($frameworkcode);
 	my ($lib,$tag,$res,$tab,$mandatory,$repeatable);
-	while ( ($tag,$lib,$mandatory) = $sth->fetchrow) {
+	while ( ($tag,$lib,$mandatory,$repeatable) = $sth->fetchrow) {
 		$res->{$tag}->{lib}=$lib;
 		$res->{$tab}->{tab}=""; # XXX
 		$res->{$tag}->{mandatory}=$mandatory;
+		$res->{$tag}->{repeatable}=$repeatable;
 	}
 
-	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso,hidden,isurl from marc_subfield_structure where itemtype=? order by tagfield,tagsubfield");
-	$sth->execute($itemtype);
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso,hidden,isurl from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield");
+	$sth->execute($frameworkcode);
 
 	my $subfield;
 	my $authorised_value;
@@ -293,7 +294,7 @@ sub MARCfind_MARCbibid_from_oldbiblionumber {
 
 sub MARCaddbiblio {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
-	my ($dbh,$record,$biblionumber,$bibid) = @_;
+	my ($dbh,$record,$biblionumber,$frameworkcode,$bibid) = @_;
 	my @fields=$record->fields();
 # 	warn "IN MARCaddbiblio $bibid => ".$record->as_formatted;
 # my $bibid;
@@ -302,8 +303,8 @@ sub MARCaddbiblio {
 # if bibid empty => true add, find a new bibid number
 	unless ($bibid) {
 		$dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
-		my $sth=$dbh->prepare("insert into marc_biblio (datecreated,biblionumber) values (now(),?)");
-		$sth->execute($biblionumber);
+		my $sth=$dbh->prepare("insert into marc_biblio (datecreated,biblionumber,frameworkcode) values (now(),?,?)");
+		$sth->execute($biblionumber,$frameworkcode);
 		$sth=$dbh->prepare("select max(bibid) from marc_biblio");
 		$sth->execute;
 		($bibid)=$sth->fetchrow;
@@ -703,13 +704,12 @@ sub MARCfindsubfieldid {
     return $res;
 }
 
-sub MARCfind_itemtype {
+sub MARCfind_frameworkcode {
 	my ($dbh,$bibid) = @_;
-	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.itemtype");
-	my $sth = $dbh->prepare("select subfieldvalue from marc_subfield_table where bibid=? and tag=? and subfieldcode=?");
-	$sth->execute($bibid,$tagfield,$tagsubfield);
-	my ($subfieldvalue) = $sth->fetchrow;
-	return $subfieldvalue;
+	my $sth = $dbh->prepare("select frameworkcode from marc_biblio where bibid=?");
+	$sth->execute($bibid);
+	my ($frameworkcode) = $sth->fetchrow;
+	return $frameworkcode;
 }
 sub MARCdelsubfield {
 # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
@@ -989,26 +989,13 @@ adds an item in the db.
 =cut
 
 sub NEWnewbiblio {
-	my ($dbh, $record, $oldbiblio, $oldbiblioitem) = @_;
-	# note $oldbiblio and $oldbiblioitem are not mandatory.
-	# if not present, they will be builded from $record with MARCmarc2koha function
-	if (($oldbiblio) and not($oldbiblioitem)) {
-		print STDERR "NEWnewbiblio : missing parameter\n";
-		print "NEWnewbiblio : missing parameter : contact koha development  team\n";
-		die;
-	}
+	my ($dbh, $record, $frameworkcode) = @_;
 	my $oldbibnum;
 	my $oldbibitemnum;
-	if ($oldbiblio) {
-		$oldbibnum = OLDnewbiblio($dbh,$oldbiblio);
-		$oldbiblioitem->{'biblionumber'} = $oldbibnum;
-		$oldbibitemnum = OLDnewbiblioitem($dbh,$oldbiblioitem);
-	} else {
-		my $olddata = MARCmarc2koha($dbh,$record);
-		$oldbibnum = OLDnewbiblio($dbh,$olddata);
-		$olddata->{'biblionumber'} = $oldbibnum;
-		$oldbibitemnum = OLDnewbiblioitem($dbh,$olddata);
-	}
+	my $olddata = MARCmarc2koha($dbh,$record);
+	$oldbibnum = OLDnewbiblio($dbh,$olddata);
+	$olddata->{'biblionumber'} = $oldbibnum;
+	$oldbibitemnum = OLDnewbiblioitem($dbh,$olddata);
 	# search subtiles, addiauthors and subjects
 	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author");
 	my @addiauthfields = $record->field($tagfield);
@@ -1059,12 +1046,13 @@ sub NEWnewbiblio {
 	my $old_field = $record->field($tagfield1);
 	$record->delete_field($old_field);
 	$record->add_fields($newfield);
-	my $bibid = MARCaddbiblio($dbh,$record,$oldbibnum);
+	my $bibid = MARCaddbiblio($dbh,$record,$oldbibnum,$frameworkcode);
 	return ($bibid,$oldbibnum,$oldbibitemnum );
 }
 
 sub NEWmodbiblio {
-	my ($dbh,$record,$bibid) =@_;
+	my ($dbh,$record,$bibid,$frameworkcode) =@_;
+	$frameworkcode="" unless $frameworkcode;
 	&MARCmodbiblio($dbh,$bibid,$record,0);
 	my $oldbiblio = MARCmarc2koha($dbh,$record);
 	my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
@@ -2203,6 +2191,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.91  2004/06/03 10:03:01  tipaul
+# * frameworks and itemtypes are independant
+# * in the MARC editor, showing the + to duplicate a tag only if the tag is repeatable
+#
 # Revision 1.90  2004/05/28 08:25:53  tipaul
 # hidding hidden & isurl constraints into MARC subfield structure
 #

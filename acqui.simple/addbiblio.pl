@@ -165,7 +165,7 @@ sub create_input () {
 	my %subfield_data;
 	$subfield_data{tag}=$tag;
 	$subfield_data{subfield}=$subfield;
-	$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
+	$subfield_data{marc_lib}="<span id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 	$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 	$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
@@ -240,6 +240,7 @@ sub build_tabs ($$$$) {
 						my %tag_data;
 						$tag_data{tag} = $tag;
 						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
+						$tag_data{repeatable} = $tagslib->{$tag}->{repeatable};
 						$tag_data{indicator} = $record->field($tag)->indicator(1). $record->field($tag)->indicator(2) if ($tag>=10);
 						$tag_data{subfield_loop} = \@subfields_data;
 						push (@loop_data, \%tag_data);
@@ -295,6 +296,7 @@ sub build_hidden_data () {
 	    next if ($subfield eq 'lib');
 	    next if ($subfield eq 'tab');
 	    next if ($subfield eq 'mandatory');
+		next if ($subfield eq 'repeatable');
 	    next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "-1");
 	    my %subfield_data;
 	    $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
@@ -307,22 +309,26 @@ sub build_hidden_data () {
     }
 }
 
+
+# ======================== 
+#          MAIN 
+#=========================
 my $input = new CGI;
 my $error = $input->param('error');
 my $oldbiblionumber=$input->param('oldbiblionumber'); # if bib exists, it's a modif, not a new biblio.
 my $breedingid = $input->param('breedingid');
 my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
-$itemtype = $input->param('itemtype');
+my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
 my $bibid;
 if ($oldbiblionumber) {
 	$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
-	# find itemtype
-	$itemtype = &MARCfind_itemtype($dbh,$bibid) if $bibid;
+	# find framework type
+	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if $bibid;
 }else {
 	$bibid = $input->param('bibid');
-	$itemtype = &MARCfind_itemtype($dbh,$bibid) if $bibid;
+	$frameworkcode = &MARCfind_frameworkcode($dbh,$bibid) if $bibid;
 }
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
@@ -333,7 +339,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-$tagslib = &MARCgettagslib($dbh,1,$itemtype);
+$tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
 my $record=-1;
 my $encoding="";
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
@@ -372,13 +378,12 @@ if ($op eq "addbiblio") {
 	my $oldbibnum;
 	my $oldbibitemnum;
 	if ($is_a_modif) {
-		 NEWmodbiblio($dbh,$record,$bibid);
+		 NEWmodbiblio($dbh,$record,$bibid,$frameworkcode);
 	} else {
-		($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
+		($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record,$frameworkcode);
 	}
 # now, redirect to additem page
-	print $input->redirect("additem.pl?bibid=$bibid&itemtype=$itemtype");
-	warn "redirect : $itemtype";
+	print $input->redirect("additem.pl?bibid=$bibid&frameworkcode=$frameworkcode");
 	exit;
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
@@ -456,6 +461,7 @@ if ($op eq "addbiblio") {
 		oldbiblioitemnumber         => $oldbiblioitemnumber );
 }
 $template->param(
-		itemtype => $itemtype
+		frameworkcode => $frameworkcode,
+		itemtype => $frameworkcode # HINT: if the library has itemtype = framework, itemtype is auto filled !
 		);
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -56,7 +56,7 @@ my $op = $input->param('op');
 my $itemnum = $input->param('itemnum');
 
 # find itemtype
-my $itemtype = &MARCfind_itemtype($dbh,$bibid);
+my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record = MARCgetbiblio($dbh,$bibid);

@@ -58,6 +58,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getbranches &getbranch
 			&getprinters &getprinter
 			&getitemtypes &getitemtypeinfo
+			&getframeworks &getframeworkinfo
 			&getauthtypes
 			$DEBUG);
 
@@ -319,6 +320,72 @@ sub getauthtypes {
 			$authtypes{$IT->{'authtypecode'}}=$IT;
 	}
 	return (\%authtypes);
+}
+
+=head2 getframework
+
+  $frameworks = &getframework();
+
+Returns information about existing frameworks
+
+build a HTML select with the following code :
+
+=head3 in PERL SCRIPT
+
+my $frameworks = frameworks();
+my @frameworkloop;
+foreach my $thisframework (keys %$frameworks) {
+	my $selected = 1 if $thisframework eq $frameworkcode;
+	my %row =(value => $thisframework,
+				selected => $selected,
+				description => $frameworks->{$thisframework}->{'frameworktext'},
+			);
+	push @frameworksloop, \%row;
+}
+$template->param(frameworkloop => \@frameworksloop);
+
+=head3 in TEMPLATE
+
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<select name="frameworkcode">
+		<option value="">Default</option>
+	<!-- TMPL_LOOP name="frameworkloop" -->
+		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="frameworktext" --></option>
+	<!-- /TMPL_LOOP -->
+	</select>
+	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+	<input type="submit" value="OK" class="button">
+</form>
+
+
+=cut
+
+sub getframeworks {
+# returns a reference to a hash of references to branches...
+	my %itemtypes;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from biblio_framework");
+	$sth->execute;
+	while (my $IT=$sth->fetchrow_hashref) {
+			$itemtypes{$IT->{'frameworkcode'}}=$IT;
+	}
+	return (\%itemtypes);
+}
+=head2 getframeworkinfo
+
+  $frameworkinfo = &getframeworkinfo($frameworkcode);
+
+Returns information about an frameworkcode.
+
+=cut
+
+sub getframeworkinfo {
+	my ($frameworkcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+	$sth->execute($frameworkcode);
+	my $res = $sth->fetchrow_hashref;
+	return $res;
 }
 
 
