@@ -1,0 +1,225 @@
+<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+<div id="mainbloc" >
+
+<!-- TMPL_IF NAME="do_it" -->
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1 class="reports">Koha : Issues statistics </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>Filtered on</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<br>
+		<table>
+			<tr >
+				<th class="reports"><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+				<th class="reports">TOTAL</th>
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+								<!-- TMPL_VAR NAME="value" -->
+							</td>
+						<!-- /TMPL_LOOP -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="totalrow" -->
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+				<tr >
+					<th class="reports">TOTAL</th>
+					<!-- TMPL_LOOP NAME="loopfooter" -->
+						<th class="reports">
+							<!-- TMPL_VAR NAME="totalcol" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+					<th class="reports"><!-- TMPL_VAR NAME="total" --></th>
+				</tr>
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1 class = "reports">Koha : Issues statistics </h1>
+	<form method="post">
+	<table>
+		<thead>
+			<tr>
+			<th class="reports"><div class="label100">Title</div></th>
+			<th class="reports">Row</th>
+			<th class="reports">Column</th>
+			<th class="reports">Filter</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="hilighted">
+				<td>Period</td>
+				<td align="center"><input type="radio" name="Line" value="datetime"></td>
+				<td align="center"><input type="radio" name="Column" value="datetime"></td>
+				<td > From <input type="text" readonly="readonly" size="10" id="from" name="Filter" >
+							<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+								<script language="JavaScript" type="text/javascript">
+									function validate1(date) {
+										var day = date.getDate();
+										var month = date.getMonth() + 1;
+										var year = date.getFullYear();
+										var weekDay = date.getDay();
+										var dayMonth = month + '-' + day;
+										var dateString = year + '-' + month + '-' + day;
+										var dateTo = document.getElementById('to').value.split("-");
+										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+										if (date > limitDate) {
+											return true;
+										} else {
+											return false;
+										}
+									}
+					
+									Calendar.setup(
+										{
+											inputField : "from",
+											ifFormat : "%Y-%m-%d",
+											button : "openCalendarFrom",
+											disableFunc : validate1,
+											dateStatusFunc : validate1
+										}
+									);
+								</script>
+					To <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+							<script type="text/javascript">
+								function validate2(date) {
+									var day = date.getDate();
+									var month = date.getMonth() + 1;
+									var year = date.getFullYear();
+									var weekDay = date.getDay();
+									var dayMonth = month + '-' + day;
+									var dateString = year + '-' + month + '-' + day;
+									var dateFrom = document.getElementById('from').value.split("-");
+									var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+									if (limitDate > date) {
+										return true;
+									} else {
+										return false;
+									}
+								}
+		
+								Calendar.setup(
+									{
+										inputField : "to",
+										ifFormat : "%Y-%m-%d",
+										button : "openCalendarTo",
+										disableFunc : validate2,
+										dateStatusFunc : validate2
+									}
+								);
+							</script>
+				</td>
+			</tr>
+			<tr class="hilighted"> 
+				<td>Type :<select name="PeriodTypeSel">
+					<option value ="issue">Issue</option>
+					<option value ="return">Return</option>
+					</select></td>
+				<td align="center" colspan="2">by <select name="DisplayBy">
+					<option value=""> </option>
+					<option value ="1">Day</option>
+					<option value ="2">Month</option>
+					<option value ="3">Year</option>
+					</select>
+					
+				</td>
+				<td>
+					Select Day : <select name="PeriodDaySel">
+					<option value =""></option>
+					<option value ="Monday">Monday</option>
+					<option value ="Tuesday">Tuesday</option>
+					<option value ="Wednesday">Wednesday</option>
+					<option value ="Thursday">Thursday</option>
+					<option value ="Friday">Friday</option>
+					<option value ="Saturday">Saturday</option>
+					<option value ="Sunday">Sunday</option>
+					</select>
+					Select Month : <select name="PeriodMonthSel">
+					<option value =""></option>
+					<option value ="January">January</option>
+					<option value ="February">February</option>
+					<option value ="March">March</option>
+					<option value ="April">April</option>
+					<option value ="May">May</option>
+					<option value ="June">June</option>
+					<option value ="July">July</option>
+					<option value ="August">August</option>
+					<option value ="September">September</option>
+					<option value ="October">October</option>
+					<option value ="November">November</option>
+					<option value ="December">December</option>
+					</select>
+				</td>
+			</tr>
+			<tr >
+				<td>Borrower Category</td>
+				<td align="center"><input type="radio" name="Line" value="borrowers.categorycode"></td>
+				<td align="center"><input type="radio" name="Column" value="borrowers.categorycode"></td>
+				<td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
+			</tr>
+			<tr class="hilighted">
+				<td>Document Type</td>
+				<td align="center"><input type="radio" name="Line" value="itemtype"></td>
+				<td align="center"><input type="radio" name="Column" value="itemtype"></td>
+				<td ><!-- TMPL_VAR NAME="CGIItemType" --></td>
+			</tr>
+			<tr>
+				<td>Branch</td>
+				<td align="center"><input type="radio" name="Line" value="branch"></td>
+				<td align="center"><input type="radio" name="Column" value="branch"></td>
+				<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
+			</tr>
+			<!-- TMPL_IF Name="hassort1" -->
+				<tr class="hilighted"> 
+					<td>Sort1</td>
+					<td align="center"><input type="radio" name="Line" value="borrowers.sort1"></td>
+					<td align="center"><input type="radio" name="Column" value="borrowers.sort1"></td>
+					<td><!-- TMPL_VAR NAME="CGISort1" --> </td>
+				</tr>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="hassort2" -->
+				<!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF --> 
+					<td>Sort2</td>
+					<td align="center"><input type="radio" name="Line" value="borrowers.sort2"></td>
+					<td align="center"><input type="radio" name="Column" value="borrowers.sort2"></td>
+					<td><!-- TMPL_VAR NAME="CGISort2" --> </td>
+				</tr>
+			<!-- /TMPL_IF -->
+			<tr></tr>
+		</tbody>
+	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Cell value </h3>
+			<p><input type="radio" name="Cellvalue" value="1"> Count issues </p>
+<!--			<p><input type="radio" name="Cellvalue" value="2"> Average issuing time / Average loan period<p>-->
+			<p><input type="radio" name="Cellvalue" value="3"> Circulation rate </p>
+	</div>
+	<div id="bloc25">
+		<h3 class="reports"> Output </h3>
+		<input type="radio" checked name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</p>
+	</div>
+	<p>
+	<input TYPE="submit" value="OK" class="button reports">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
