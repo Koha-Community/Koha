@@ -2414,6 +2414,7 @@ sub breedingsearch {
 			$query .= "isbn like \"$isbn%\"";
 		}
 	}
+	warn "Q : $query";
 	$sth   = $dbh->prepare($query);
 	$sth->execute;
 	while (my $data = $sth->fetchrow_hashref) {

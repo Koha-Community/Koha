@@ -1,6 +1,11 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.49  2003/06/17 11:21:13  tipaul
+# improvments/fixes for z3950 support.
+# * Works now even on ADD, not only on MODIFY
+# * able to search on ISBN, author, title
+#
 # Revision 1.48  2003/06/16 09:22:53  rangi
 # Just added an order clause to getitemtypes
 #
@@ -478,14 +483,15 @@ sub MARCgettagslib {
 		$res->{$tag}->{mandatory}=$mandatory;
 	}
 
-	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure order by tagfield,tagsubfield");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield from marc_subfield_structure order by tagfield,tagsubfield");
 	$sth->execute;
 
 	my $subfield;
 	my $authorised_value;
 	my $thesaurus_category;
 	my $value_builder;
-	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder) = $sth->fetchrow) {
+	my $kohafield;
+	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder,$kohafield) = $sth->fetchrow) {
 		$res->{$tag}->{$subfield}->{lib}=$lib;
 		$res->{$tag}->{$subfield}->{tab}=$tab;
 		$res->{$tag}->{$subfield}->{mandatory}=$mandatory;
@@ -493,6 +499,7 @@ sub MARCgettagslib {
 		$res->{$tag}->{$subfield}->{authorised_value}=$authorised_value;
 		$res->{$tag}->{$subfield}->{thesaurus_category}=$thesaurus_category;
 		$res->{$tag}->{$subfield}->{value_builder}=$value_builder;
+		$res->{$tag}->{$subfield}->{kohafield}=$kohafield;
 	}
 	return $res;
 }

@@ -190,6 +190,7 @@ sub build_tabs ($$$$) {
 					$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 					$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 					$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+					$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 					$value=char_decode($value) unless ($is_a_modif);
 					$indicator = $x if $x; #XXX
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
@@ -220,6 +221,7 @@ sub build_tabs ($$$$) {
 					$subfield_data{tag_mandatory}=$tagslib->{$tag}->{mandatory};
 					$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 					$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+					$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh, $authorised_values_sth);
 					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
