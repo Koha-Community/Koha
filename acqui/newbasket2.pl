@@ -30,16 +30,16 @@ use C4::Biblio;
 my $env;
 my $input = new CGI;
 print $input->header;
-#whether it is called from the opac of the intranet                                                            
-my $type=$input->param('type');                                                  
+#whether it is called from the opac of the intranet
+my $type=$input->param('type');
 if ($type eq ''){
   $type = 'intra';
 }
-#setup colours                                                                                                 
-my $main;                                                                                                      
-my $secondary;                                                                                                 
-  $main='#cccc99';                                                                                             
-  $secondary='#ffffcc';                                                                                        
+#setup colours
+my $main;
+my $secondary;
+  $main='#cccc99';
+  $secondary='#ffffcc';
 
 
 #print $input->dump;
@@ -108,11 +108,11 @@ print center();
     }
 
 print "You searched on ";
-while ( my ($key, $value) = each %search) {                                 
+while ( my ($key, $value) = each %search) {
   if ($value ne ''){
     $value=~ s/\\//g;
     print bold("$key $value,");
-  }                          
+  }
 }
 print " $count results found";
 my $offset2=$num+$offset;
@@ -152,7 +152,7 @@ while ($i < $count2){
       $result->{'title'}=mklink("/cgi-bin/koha/acqui/newdonation.pl?author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$result->{'biblionumber'}&title=$title2",$result->{'title'});
     } else {
       $result->{'title'}=mklink("/cgi-bin/koha/acqui/newbiblio.pl?sub=$sub&author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$result->{'biblionumber'}&title=$title2",$result->{'title'});
-    }  
+    }
     my $word=$result->{'author'};
       $word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
       $word=~ s/  //g;
@@ -164,55 +164,55 @@ while ($i < $count2){
       my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
       $itemcount=$count;
       if ($nacount > 0){
-        $location=$location."On Loan";
-	if ($nacount >1 ){                                                                                                         
-	  $location=$location." ($nacount)";                                                                                            
-         }                                                                                                                         
+        $location=$location."On Loan";		# FIXME - .=
+	if ($nacount >1 ){
+	  $location=$location." ($nacount)";	# FIXME - .=
+         }
 	 $location.=" ";
       }
       if ($lcount > 0){
-         $location=$location."Levin";
-         if ($lcount >1 ){                                                                                                         
-	  $location=$location." ($lcount)";                                                                                            
-         }                                                                                                                         
+         $location=$location."Levin";		# FIXME - .=
+         if ($lcount >1 ){
+	  $location=$location." ($lcount)";	# FIXME - .=
+         }
 	 $location.=" ";
       }
       if ($fcount > 0){
-        $location=$location."Foxton";
-         if ($fcount >1 ){                                                                                                         
-	  $location=$location." ($fcount)";                                                                                            
-         }                                                                                                                         
-	 $location.=" ";	
+        $location=$location."Foxton";		# FIXME - .=
+         if ($fcount >1 ){
+	  $location=$location." ($fcount)";	# FIXME - .=
+         }
+	 $location.=" ";
       }
       if ($scount > 0){
-        $location=$location."Shannon";
-         if ($scount >1 ){                                                                                                         
-	  $location=$location." ($scount)";                                                                                            
-         }                                                                                                                         
-	 $location.=" ";	
+        $location=$location."Shannon";		# FIXME - .=
+         if ($scount >1 ){
+	  $location=$location." ($scount)";	# FIXME - .=
+         }
+	 $location.=" ";
       }
       if ($lostcount > 0){
-        $location=$location."Lost";
-         if ($lostcount >1 ){                                                                                                         
-	  $location=$location." ($lostcount)";                                                                                            
-         }                                                                                                                         
-	 $location.=" ";	
+        $location=$location."Lost";		# FIXME - .=
+         if ($lostcount >1 ){
+	  $location=$location." ($lostcount)";	# FIXME - .=
+         }
+	 $location.=" ";
       }
       if ($mending > 0){
-        $location=$location."Mending";
-         if ($mending >1 ){                                                                                                         
-	  $location=$location." ($mending)";                                                                                            
-         }                                                                                                                         
-	 $location.=" ";	
+        $location=$location."Mending";		# FIXME - .=
+         if ($mending >1 ){
+	  $location=$location." ($mending)";	# FIXME - .=
+         }
+	 $location.=" ";
       }
       if ($transit > 0){
-        $location=$location."In Transiit";
-         if ($transit >1 ){                                                                                                         
-	  $location=$location." ($transit)";                                                                                            
-         }                                                                                                                         
-	 $location.=" ";	
+        $location=$location."In Transiit";	# FIXME - .=
+         if ($transit >1 ){
+	  $location=$location." ($transit)";	# FIXME - .=
+         }
+	 $location.=" ";
       }
-      
+
     if ($colour == 1){
       print mktablerow(6,$secondary,$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
       $colour=0;
