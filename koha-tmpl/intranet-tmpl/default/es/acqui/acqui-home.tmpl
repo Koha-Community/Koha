@@ -1,0 +1,114 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+
+<FONT SIZE=6><em>Acquisitions</em></FONT><br>
+
+<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2>
+		<b>START, RECEIVE, MODIFY ANY ORDER</b>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>Supplier ID or Name</TD>
+	<TD>
+		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
+		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
+		</form>
+	</TD>
+</TR>
+</table>
+<TABLE width="40%" cellspacing=0 cellpadding=5 border=1 >
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2>
+		<b>RECEIVE OR MODIFY PERIODICAL ORDER</b>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>Title Search</TD>
+	<TD>
+		<FORM ACTION="/cgi-bin/koha/acqui/acquire.pl" method=post>
+		<INPUT TYPE="text"  SIZE="25"   NAME="recieve">
+		</form>
+	</TD>
+</TR>
+</table>
+
+<br />
+
+<!-- currencies-->
+<TABLE align="left" cellspacing=0 cellpadding=5 border=1 >
+	<FORM ACTION="/cgi-bin/koha/currency.pl">
+	<input type=hidden name=type value=change>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="ffdf61" colspan=2><b>EXCHANGE RATES </b></TD>
+	</TR>
+	<TMPL_LOOP name="loop_currency">
+		<TR VALIGN=TOP>
+			<TD>
+				<TMPL_VAR name="currency">
+			</td>
+			<td>
+				<INPUT TYPE="text"  SIZE="10"   NAME="<TMPL_VAR name="currency">" value=<TMPL_VAR name="rate">>
+			</td>
+		</TR>
+	</TMPL_LOOP>
+	<tr>
+		<td colspan=2 align="center"><input type=submit value="Save"></TD>
+	</tr>
+	</form>
+</table>
+
+<!-- showbudget-->
+<TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
+<FORM ACTION="/cgi-bin/koha/search.pl">
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2><b>BUDGETS AND BOOKFUNDS</b></TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD colspan=2>
+		<table cellspacing=0 cellpadding=2 border=1>
+			<tr>
+				<td><b>Budgets</B></TD>
+				<TD><b>Total</B></TD>
+				<TD><b>Spent</B></TD>
+				<TD><b>Comtd</B></TD>
+				<TD><b>Avail</B></TD>
+			</TR>
+			<TMPL_LOOP name="loop_budget">
+				<tr>
+					<td><TMPL_VAR name="bookfundname"></TD>
+					<TD><TMPL_VAR name="budgetamount"></TD>
+					<TD><TMPL_VAR name="spent"></TD>
+					<TD><TMPL_VAR name="comtd"></TD>
+					<TD><TMPL_VAR name="avail"></TD>
+				</TR>
+			</TMPL_LOOP>
+			<tr>
+				<td><b>Total</b></TD>
+				<TD><b><TMPL_VAR name="total"></b></TD>
+				<TD><b><TMPL_VAR name="totspent"></b></TD>
+				<TD><b><TMPL_VAR name="totcomtd"></b></TD>
+				<TD><b><TMPL_VAR name="totavail"></b></TD>
+			</TR>
+		</table><br>
+		Use your reload button [ctrl + r] to get the most recent figures.
+		Committed figures are approximate only, as exchange rates will affect the amount actually paid.
+	</TD>
+</TR>
+</form>
+</table>
+
+<br />
+<TABLE cellspacing=0 cellpadding=5 border=1 >
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2>
+		<b>HELP</b><br>
+		<b>Ordering:</b> <p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, you will be asked to check their details, and enter your name which  will set up a "shopping basket" for you. (Why is this you might ask... well because we want to know that it's really you ordering things - not just your computer).</p>
+		<p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </p>
+		<p>To start a new shopping basket with a new supplier return to this page and just start a new supplier search.</p>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and the click on "confirm basket".</p>
+	</td>
+</TR>
+</table>
+
+<TMPL_INCLUDE name="acquisitions-bottom.inc">
