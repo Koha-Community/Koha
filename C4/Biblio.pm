@@ -950,8 +950,8 @@ sub MARCaddword {
     my $sth=$dbh->prepare("insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word)
 			values (?,?,?,?,?,?,soundex(?))");
     foreach my $word (@words) {
-# we record only words longer than 2 car and not in stopwords hash
-	if (length($word)>2 and !($stopwords->{uc($word)})) {
+# we record only words one char long and not in stopwords hash
+	if (length($word)>=1 and !($stopwords->{uc($word)})) {
 	    $sth->execute($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,$word);
 	    if ($sth->err()) {
 		warn "ERROR ==> insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word) values ($bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$word,soundex($word))\n";
@@ -2191,6 +2191,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.93  2004/06/11 15:38:06  joshferraro
+# Changes MARCaddword to index words >= 1 char ... needed for more accurate
+# searches using SearchMarc routines.
+#
 # Revision 1.92  2004/06/10 08:29:01  tipaul
 # MARC authority management (continued)
 #
