@@ -6,10 +6,14 @@
 	<title>OPAC Basket</title>
 	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang">/includes/opac.css">
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
+	<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+	</script>
 	<SCRIPT language='javascript'>
-		var MSG_NO_RECORD_SELECTED = "No biblio selected";
-		var MSG_NO_RECORD_ADDED = "No biblio added";
-		var MSG_CONFIRM_DEL_BASKET = "Do you want to empty the basket ?"
-		var MSG_CONFIRM_DEL_RECORDS = "Do you want to remove selected biblios ?";
+		var MSG_NO_RECORD_SELECTED = _("No biblio selected");
+		var MSG_NO_RECORD_ADDED = _("No biblio added");
+		var MSG_CONFIRM_DEL_BASKET = _("Do you want to empty the basket ?");
+		var MSG_CONFIRM_DEL_RECORDS = _("Do you want to remove selected biblios ?");
 	</SCRIPT>
 </head>

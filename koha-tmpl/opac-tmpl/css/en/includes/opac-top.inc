@@ -6,14 +6,21 @@
 	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
 	<title><!--TMPL_VAR name="LibraryName"--></title>
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
+	<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+	</script>
 	<script type="text/javascript" language="javascript">
-	var MSG_BASKET_EMPTY = "No biblio !";
-	var MSG_RECORD_IN_BASKET = "This biblio is already in the basket";
-	var MSG_RECORD_ADDED = "Biblio added to the basket";
-	var MSG_NRECORDS_ADDED = " Biblio(s) added";
-	var MSG_NRECORDS_IN_BASKET = "already in the basket";
-	var MSG_NO_RECORD_SELECTED = "No biblio selected";
-	var MSG_NO_RECORD_ADDED = "No biblio added";
+	var MSG_BASKET_EMPTY = _("Basket is empty");
+	var MSG_RECORD_IN_BASKET = _("This biblio is already in the basket");
+	var MSG_RECORD_ADDED = _("Biblio added to the basket");
+	var MSG_NRECORDS_ADDED = _(" Biblio(s) added");
+	var MSG_NRECORDS_IN_BASKET = _("already in the basket");
+	var MSG_NO_RECORD_SELECTED = _("No biblio selected");
+	var MSG_NO_RECORD_ADDED = _("No biblio added");
+	function Dopop(link) {
+		newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+	}
 	</script>
 </head>
 <body>
@@ -27,7 +34,7 @@
 		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Advanced search">Advanced search</a>
 		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Member Home page" >Members</a>
+		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Member Home page" >Personal page</a>
 		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="javascript:openBasket()" title="Biblio basket">Biblio basket <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
 	</div>
