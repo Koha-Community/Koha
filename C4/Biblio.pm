@@ -1485,7 +1485,7 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
                              itemlost=?,
                              wthdrawn=?,
 			     bulk=?,
-			     notforloan=?,
+			     notforloan=?
                           where itemnumber=?";
     @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
   }
@@ -2191,6 +2191,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.78.2.7  2004/03/24 17:30:35  joshferraro
+# Fixes bug 749 by deleting the comma on line 1488 in Biblio.pm
+#
 # Revision 1.78.2.6  2004/03/19 14:36:07  tipaul
 # fixing bug in char handling again... need help to fix it definetly, probably...
 #
