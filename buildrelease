@@ -88,20 +88,24 @@ print "Current release tag is $currentversion.\n";
 print "Would you like to bump that up to $releaseversion?  [Y]/N: ";
 chomp($input = <STDIN>);
 if ($input =~ /^n/i) {
-    $releaseversion=$currentversion;
-    print "Do not do this if you have released the tarball to anybody, as it will\n";
-    print "overwrite the tag marking the files that were in the tarball.\n\n";
-    print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
+    print "Would you like to rebuild the $currentversion tarball?  Y/[N]: ";
     chomp($input = <STDIN>);
-    if ($input =~ /^n/i || $input eq '') {
-	print "\nOkay, please re-run buildrelease now.\n";
-	exit;
-    }
-} else {
-    print "New release version [$releaseversion]: ";
-    chomp($input = <STDIN>);
-    if ($input) {
-	$releaseversion=$input;
+    if ($input =~ /^y/i) {
+	$releaseversion=$currentversion;
+	print "Do not do this if you have released the tarball to anybody, as it will\n";
+	print "overwrite the tag marking the files that were in the tarball.\n\n";
+	print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
+	chomp($input = <STDIN>);
+	if ($input =~ /^n/i || $input eq '') {
+	    print "\nStopping.  Please re-run buildrelease now.\n";
+	    exit;
+	}
+    } else {
+	print "What should the new version be? [$releaseversion]: ";
+	chomp ($input=<STDIN>);
+	if ($input) {
+	    $releaseversion=$input;
+	}
     }
 }
 
@@ -177,6 +181,8 @@ system("mv $rootdir/intranet-cgi/databaseinstall.sh $rootdir");
 system("mv $rootdir/intranet-cgi/installer.pl $rootdir"); 
 system("mv $rootdir/intranet-cgi/koha.conf $rootdir");
 system("mv $rootdir/intranet-cgi/koha.mysql $rootdir");
+system("mv $rootdir/intranet-cgi/sampledata-1.2 $rootdir");
+system("gzip -9 $rootdir/sampledata-1.2");
 
 # Copy files from intranet-cgi to opac-cgi
 system("cp $rootdir/intranet-cgi/detail.pl $rootdir/opac-cgi");
