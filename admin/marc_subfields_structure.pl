@@ -33,7 +33,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like ? and itemtype=?) order by tagfield");
+	my $sth=$dbh->prepare("Select * from marc_subfield_structure where (tagfield like ? and itemtype=?) order by tagfield");
 	$sth->execute("$searchstring%",$itemtype);
 	my @results;
 	my $cnt=0;
@@ -139,7 +139,7 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=? and itemtype=?"); # and tagsubfield='$tagsubfield'");
+	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and itemtype=?"); # and tagsubfield='$tagsubfield'");
 	$sth->execute($tagfield,$itemtype);
 	my @loop_data = ();
 	my $toggle="white";
@@ -192,6 +192,8 @@ if ($op eq 'add_form') {
 					);
 		$row_data{repeatable} = CGI::checkbox("repeatable$i",$data->{'repeatable'}?'checked':'',1,'');
 		$row_data{mandatory} = CGI::checkbox("mandatory$i",$data->{'mandatory'}?'checked':'',1,'');
+		$row_data{hidden} = CGI::checkbox("hidden$i",$data->{'hidden'}?'checked':'',1,'');
+		$row_data{isurl} = CGI::checkbox("isurl$i",$data->{'isurl'}?'checked':'',1,'');
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 		$i++;
@@ -216,6 +218,8 @@ if ($op eq 'add_form') {
 		$row_data{seealso} = "";
 		$row_data{repeatable} = CGI::checkbox('repeatable','',1,'');
 		$row_data{mandatory} = CGI::checkbox('mandatory','',1,'');
+		$row_data{hidden} = CGI::checkbox('hidden','',1,'');
+		$row_data{isurl} = CGI::checkbox('isurl','',1,'');
 		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
 					-values=> \@kohafields,
 					-default=> "",
@@ -249,8 +253,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder,itemtype)
-									values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder,hidden,isurl,itemtype)
+									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
@@ -274,6 +278,8 @@ if ($op eq 'add_form') {
 		my $authorised_value		=$authorised_values[$i];
 		my $thesaurus_category		=$thesaurus_category[$i];
 		my $value_builder=$value_builder[$i];
+		my $hidden = $input->param("hidden$i")?1:0;
+		my $isurl = $input->param("isurl$i")?1:0;
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
 				$sth->execute ($tagfield,
@@ -287,7 +293,11 @@ if ($op eq 'add_form') {
 									$seealso,
 									$authorised_value,
 									$thesaurus_category,
-									$value_builder,$itemtype);
+									$value_builder,
+									$hidden,
+									$isurl,
+									$itemtype,
+									);
 			}
 		}
 	}
@@ -300,7 +310,7 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
+	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
 	$sth->execute($tagfield,$tagsubfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -349,8 +359,14 @@ if ($op eq 'add_form') {
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{thesaurus_category}	= $results->[$i]{'thesaurus_category'};
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
+		$row_data{hidden}	= $results->[$i]{'hidden'};
+		$row_data{isurl}	= $results->[$i]{'isurl'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&itemtype=$itemtype";
 		$row_data{bgcolor} = $toggle;
+		if ($row_data{tab} eq -1) {
+			$row_data{subfield_ignored} = 1;
+		}
+
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);

@@ -239,7 +239,7 @@ sub MARCgettagslib {
 		$res->{$tag}->{mandatory}=$mandatory;
 	}
 
-	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso from marc_subfield_structure where itemtype=? order by tagfield,tagsubfield");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso,hidden,isurl from marc_subfield_structure where itemtype=? order by tagfield,tagsubfield");
 	$sth->execute($itemtype);
 
 	my $subfield;
@@ -248,7 +248,9 @@ sub MARCgettagslib {
 	my $value_builder;
 	my $kohafield;
 	my $seealso;
-	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder,$kohafield,$seealso) = $sth->fetchrow) {
+	my $hidden;
+	my $isurl;
+	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder,$kohafield,$seealso,$hidden,$isurl) = $sth->fetchrow) {
 		$res->{$tag}->{$subfield}->{lib}=$lib;
 		$res->{$tag}->{$subfield}->{tab}=$tab;
 		$res->{$tag}->{$subfield}->{mandatory}=$mandatory;
@@ -258,6 +260,8 @@ sub MARCgettagslib {
 		$res->{$tag}->{$subfield}->{value_builder}=$value_builder;
 		$res->{$tag}->{$subfield}->{kohafield}=$kohafield;
 		$res->{$tag}->{$subfield}->{seealso}=$seealso;
+		$res->{$tag}->{$subfield}->{hidden}=$hidden;
+		$res->{$tag}->{$subfield}->{isurl}=$isurl;
 	}
 	return $res;
 }
@@ -2199,6 +2203,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.90  2004/05/28 08:25:53  tipaul
+# hidding hidden & isurl constraints into MARC subfield structure
+#
 # Revision 1.89  2004/05/27 21:47:21  rangi
 # Fix for bug 787
 #

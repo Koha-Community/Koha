@@ -219,58 +219,62 @@ sub catalogsearch {
 
 	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
 	my $counter = $offset;
-	$sth = $dbh->prepare("SELECT biblio.biblionumber,author, title, items.holdingbranch, items.itemcallnumber, bibid
-							FROM biblio, marc_biblio left join items on items.biblionumber = biblio.biblionumber
+	$sth = $dbh->prepare("SELECT biblio.*, biblioitems.*, items.*
+							FROM biblio, marc_biblio 
+							LEFT JOIN items on items.biblionumber = biblio.biblionumber
+							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
 							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?
 							GROUP BY items.biblionumber, items.holdingbranch, items.itemcallnumber");
 	my @finalresult = ();
 	my @CNresults=();
 	my $oldbiblionumber=0;
 	my $totalitems=0;
-	my ($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid);
+	my $oldline;
+# 	my ($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid);
 	my ($oldbibid, $oldauthor, $oldtitle,$oldbiblionumber);
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
 		$sth->execute($result[$counter]);
-		while (($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid) = $sth->fetchrow) {
-# 			warn "bibid : $oldbiblionumber ($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid)";
+		while (my $line = $sth->fetchrow_hashref) {
 			# parse the result, putting holdingbranch & itemcallnumber in separate array
-			# then author, title & 1st array in main array
-			if ($oldbiblionumber && ($oldbiblionumber ne $biblionumber)) {
-				my %line;
-				$line{bibid}=$oldbibid;
-				$line{author}=$oldauthor;
-				$line{title}=$oldtitle;
-				$line{totitem} = $totalitems;
-				$line{biblionumber} = $oldbiblionumber;
+			# then all other fields in the main array
+			if ($oldbiblionumber && ($oldbiblionumber ne $line->{biblionumber})) {
+				my %newline;
+				%newline = %$oldline;
+				$newline{totitem} = $totalitems;
+				$newline{biblionumber} = $oldbiblionumber;
 				my @CNresults2= @CNresults;
-				$line{CN} = \@CNresults2;
+				$newline{CN} = \@CNresults2;
+			    $newline{'even'} = 1 if $counter % 2 == 0;
+				$newline{'odd'} = 1 if $counter % 2 == 1;
 				@CNresults = ();
-				push @finalresult, \%line;
+				push @finalresult, \%newline;
 				$totalitems=0;
 			}
-			$oldbibid = $bibid;
-			$oldauthor = $author;
-			$oldtitle = $title;
-			$oldbiblionumber = $biblionumber;
-			$totalitems++ if ($holdingbranch);
+			$oldbiblionumber = $line->{biblionumber};
+			$totalitems++ if ($line->{holdingbranch});
+			$oldline = $line;
+			# item callnumber & branch
 			my %lineCN;
-			$lineCN{holdingbranch} = $holdingbranch;
-			$lineCN{itemcallnumber} = $itemcallnumber;
+			$lineCN{holdingbranch} = $line->{holdingbranch};
+			$lineCN{itemcallnumber} = $line->{itemcallnumber};
 			push @CNresults,\%lineCN;
 		}
 		$counter++;
 	}
 # add the last line, that is not reached byt the loop / if ($oldbiblionumber...)
-	my %line;
-	$line{bibid}=$oldbibid;
-	$line{author}=$oldauthor;
-	$line{title}=$oldtitle;
-	$line{totitem} = $totalitems;
-	$line{biblionumber} = $oldbiblionumber;
+	my %newline;
+	%newline = %$oldline;
+	$newline{totitem} = $totalitems;
+	$newline{biblionumber} = $oldbiblionumber;
 	my @CNresults2= @CNresults;
-	$line{CN} = \@CNresults2;
+	$newline{CN} = \@CNresults2;
+	$newline{'even'} = 1 if $counter % 2 == 0;
+	$newline{'odd'} = 1 if $counter % 2 == 1;
 	@CNresults = ();
-	push @finalresult, \%line;
+	my @CNresults2= @CNresults;
+	$newline{CN} = \@CNresults2;
+	@CNresults = ();
+	push @finalresult, \%newline;
 	my $nbresults = $#result + 1;
 	return (\@finalresult, $nbresults);
 }
