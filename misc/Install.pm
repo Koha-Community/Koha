@@ -1024,6 +1024,8 @@ opacdir=$::opacdir
 kohalogdir=$::kohalogdir
 kohaversion=$::kohaversion
 httpduser=$::httpduser
+intrahtdocs=$::intranetdir/htdocs/includes/templates
+opachtdocs=$::opacdir/htdocs/includes/templates
 |;
     close(SITES);
     umask($old_umask);
@@ -1224,27 +1226,30 @@ es : a few intranet is translated (including pictures)
 |;
 
 sub updatedatabase {
-    my $result=system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
-    if ($result) {
-	print "Problem updating database...\n";
-	exit;
-    }
+	my $result=system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
+	if ($result) {
+		print "Problem updating database...\n";
+		exit;
+	}
 
-    my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 123', '1');
+	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 123', '1');
 
-    if ($response == 1) {
-	system("cat script/misc/marc_datas/marc21_en/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
-    }
-    if ($response == 2) {
-	system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
-	system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
-    }
+	if ($response == 1) {
+		system("cat script/misc/marc_datas/marc21_en/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+	}
+	if ($response == 2) {
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+	}
 
-    system ("perl -I $::kohadir/modules scripts/marc/updatedb2marc.pl");
+	my $result=system ("perl -I $::intranetdir/modules scripts/marc/updatedb2marc.pl");
+	if ($result) {
+		print "Problem updating database to MARC...\n";
+		exit;
+	}
 
-
-    print "\n\nFinished updating database. Press <ENTER> to continue...";
-    <STDIN>;
+	print "\n\nFinished updating database. Press <ENTER> to continue...";
+	<STDIN>;
 }
 
 sub populatedatabase {

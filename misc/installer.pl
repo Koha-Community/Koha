@@ -94,7 +94,7 @@ databasesetup();
 
 updatedatabase();
 
-updatemarc();
+#updatemarc();
 
 populatedatabase();
 
