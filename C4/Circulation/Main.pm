@@ -125,6 +125,8 @@ sub getprinter {
   $dbh->disconnect;
   }
 		      
+# FIXME - This is not the same as &C4::Circulation::pastitems, though
+# the two appear to share some code.
 sub pastitems{
   #Get list of all items borrower has currently on issue
   my ($env,$bornum,$dbh)=@_;
@@ -161,6 +163,7 @@ sub checkoverdues{
   return $data->{'count(*)'};
 }
 
+# FIXME - This is quite similar to &C4::Circulation::previousissue
 sub previousissue {
   my ($env,$itemnum,$dbh,$bornum)=@_;
   my $sth=$dbh->prepare("Select 
@@ -274,6 +277,7 @@ sub checkwaiting{
   return ($cnt,\@itemswaiting);
 }
 
+# FIXME - This is identical to &C4::Circulation::scanbook
 sub scanbook {
   my ($env,$interface)=@_;
   #scan barcode
@@ -282,6 +286,7 @@ sub scanbook {
   return ($number,$reason);
 }
 
+# FIXME - This is very similar to &C4::Circulation::scanborrower
 sub scanborrower {
   my ($env,$interface)=@_;
   #scan barcode

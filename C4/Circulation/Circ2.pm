@@ -944,7 +944,7 @@ sub checkwaiting {
   return ($cnt,\@itemswaiting);
 }
 
-
+# FIXME - This is nearly-identical to &C4::Accounts::checkaccount
 sub checkaccount  {
 # Stolen from Accounts.pm
   #take borrower number

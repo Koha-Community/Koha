@@ -306,6 +306,7 @@ table are also updated to the new book fund ID.
 
 =cut
 #'
+# FIXME - This function appears in C4::Acquisitions
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh=C4Connect;
@@ -884,7 +885,8 @@ sub updatecurrencies {
   $dbh->disconnect;
 }
 
-# FIXME - Never used
+# FIXME - Identical to &C4::Acquisitions::updatecost. Neither one is
+# used
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
   my $dbh=C4Connect;

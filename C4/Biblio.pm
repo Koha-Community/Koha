@@ -1,6 +1,9 @@
 package C4::Biblio; 
 # $Id$
 # $Log$
+# Revision 1.12  2002/10/01 11:48:51  arensb
+# Added some FIXME comments, mostly marking duplicate functions.
+#
 # Revision 1.11  2002/09/24 13:49:26  tipaul
 # long WAS the road to 1.3.0...
 # coming VERY SOON NOW...
@@ -1426,6 +1429,8 @@ sub OLDmoditem {
 #  $dbh->disconnect;
 }
 
+# FIXME - A nearly-identical function, &delitem, appears in
+# C4::Acquisitions
 sub OLDdelitem{
   my ($dbh,$itemnum)=@_;
 #  my $dbh=C4Connect;
@@ -1527,6 +1532,8 @@ sub OLDdelbiblio{
 #
 #
 
+# FIXME - This is the same as &C4::Acquisitions::itemcount, but not
+# the same as &C4::Search::itemcount
 sub itemcount{
   my ($biblio)=@_;
   my $dbh=C4Connect;
@@ -1556,6 +1563,8 @@ sub getorder{
   return ($order,$ordnum->{'ordernumber'});
 }
 
+# FIXME - This is practically the same function as
+# &C4::Acquisitions::getsingleorder and &C4::Catalogue::getsingleorder
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh=C4Connect;
@@ -1597,6 +1606,8 @@ sub modsubtitle {
 } # sub modsubtitle
 
 
+# FIXME - This is functionally identical to
+# &C4::Acquisitions::modaddauthor
 sub modaddauthor {
     my ($bibnum, $author) = @_;
     my $dbh   = C4Connect;
@@ -1628,6 +1639,8 @@ sub modnote {
   $dbh->disconnect;
 }
 
+# FIXME - This is quite similar in effect to &C4::newbiblioitem,
+# except for the MARC stuff.
 sub newbiblioitem {
   my ($biblioitem) = @_;
   my $dbh   = C4Connect;
@@ -1646,6 +1659,8 @@ sub newsubject {
   $dbh->disconnect;
 }
 
+# FIXME - This is just a wrapper around &OLDnewsubtitle
+# FIXME - This is in effect the same as &C4::Acquisitions::newsubtitle
 sub newsubtitle {
     my ($bibnum, $subtitle) = @_;
     my $dbh   = C4Connect;
@@ -1717,6 +1732,8 @@ sub countitems{
   return($data->{'count(*)'});
 }
 
+# FIXME - This is just a wrapper around &OLDdelitem, and acts
+# identically to &C4::Acquisitions::delitem
 sub delitem{
   my ($itemnum)=@_;
   my $dbh=C4Connect;
