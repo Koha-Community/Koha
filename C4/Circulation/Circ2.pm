@@ -894,7 +894,7 @@ sub returnbook {
 	if ($resfound) {
 	#	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
 		$resrec->{'ResFound'} = $resfound;
-	# 	$messages->{'ResFound'} = $resrec;
+	 	$messages->{'ResFound'} = $resrec;
 	}
 	# update stats?
 	# Record the fact that this book was returned.
