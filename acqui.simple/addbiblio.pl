@@ -85,6 +85,7 @@ my ($template, $loggedinuser, $cookie)
 my $tagslib = &MARCgettagslib($dbh,1);
 my $record=-1;
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
+#warn "1= ".$record->as_formatted;
 $record = MARCfindbreeding($dbh,$isbn) if ($isbn);
 my $is_a_modif=0;
 my ($oldbiblionumtagfield,$oldbiblionumtagsubfield);
@@ -98,9 +99,6 @@ if ($bibid) {
 	my $sth=$dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
 	$sth->execute($oldbiblionumber);
 	($oldbiblioitemnumber) = $sth->fetchrow;
-	warn "==>$oldbiblionumtagfield,$oldbiblionumtagsubfield";
-	warn "==>$oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield => $oldbiblioitemnumber";
-
 }
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "addbiblio") {
