@@ -120,6 +120,8 @@ sub catalogsearch {
 	
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
+		# replace * by %
+		@$value[$i] =~ s/\*/%/g;
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
@@ -127,6 +129,9 @@ sub catalogsearch {
 			{
 				foreach my $word (split(/ /, @$value[$i]))	# if operator is contains, splits the words in separate requests
 				{
+					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
+					warn "word : $word";
+					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @not_tags, @$tags[$i];
 						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
@@ -149,6 +154,9 @@ sub catalogsearch {
 			{
 				foreach my $word (split(/ /, @$value[$i]))
 				{
+					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
+					warn "word : $word";
+					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						my $tag = substr(@$tags[$i],0,3);
 						my $subf = substr(@$tags[$i],3,1);
@@ -300,7 +308,7 @@ sub create_request {
 	my $sql_tables; # will contain marc_subfield_table as m1,...
 	my $sql_where1; # will contain the "true" where
 	my $sql_where2 = "("; # will contain m1.bibid=m2.bibid
-	my $nb_active=0; # will contain the number of "active" entries. and entry is active is a value is provided.
+	my $nb_active=0; # will contain the number of "active" entries. an entry is active if a value is provided.
 	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
 
 	for(my $i=0; $i<=@$value;$i++) {
@@ -309,14 +317,14 @@ sub create_request {
 			if ($nb_active==1) {
 				if (@$operator[$i] eq "start") {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
+					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 						$sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
 					}
 					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {
 					$sql_tables .= "marc_word as m$nb_table,";
-					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
+					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 						 $sql_where1 .=" and m1.tagsubfield in (@$tags[$i])";
 					}
@@ -333,7 +341,7 @@ sub create_request {
 				if (@$operator[$i] eq "start") {
 					$nb_table++;
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]");
 					if (@$tags[$i]) {
 					 	$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
 					}
@@ -343,14 +351,14 @@ sub create_request {
 					if (@$and_or[$i] eq 'and') {
 						$nb_table++;
 						$sql_tables .= "marc_word as m$nb_table,";
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
 						if (@$tags[$i]) {
 							$sql_where1 .=" and m$nb_table.tagsubfield in(@$tags[$i])";
 						}
 						$sql_where1.=")";
 						$sql_where2 .= "m1.bibid=m$nb_table.bibid and ";
 					} else {
-						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]");
 						if (@$tags[$i]) {
 							$sql_where1 .="  and m$nb_table.tagsubfield in (@$tags[$i])";
 						}
