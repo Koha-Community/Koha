@@ -295,7 +295,9 @@ sub getiteminformation {
 		$sth->execute($iteminformation->{'itemtype'});
 		my $itemtype=$sth->fetchrow_hashref;
 		$iteminformation->{'loanlength'}=$itemtype->{'loanlength'};
-		$iteminformation->{'notforloan'}=$itemtype->{'notforloan'};
+		# if specific item notforloan, don't use itemtype notforloan field.
+		# otherwise, use itemtype notforloan value to see if item can be issued.
+		$iteminformation->{'notforloan'}=$itemtype->{'notforloan'} unless $iteminformation->{'notforloan'};
 		$sth->finish;
 	}
 	return($iteminformation);
