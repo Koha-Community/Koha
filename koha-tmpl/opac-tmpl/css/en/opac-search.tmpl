@@ -3,77 +3,80 @@
 
 <h1 class="catalogue">Catalogue search</h1>
 
-<form name="f" method="post">
-	<input type="hidden" name="op" value="do_search">
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-	<div id="bloc25">
+<form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
+	
+	<div>
 		<h2 class="catalogue">Search on</h2>
 		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
 			<label class="label20">Keyword</label>
-			<input type="hidden" name="marclist" value="">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
 			<label class="label20">Title</label>
-			<input type="hidden" name="marclist" value="biblio.title">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="hidden" name="marclist" value="biblio.title" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
-			<label class="label20">author</label> <input type="hidden" name="marclist" value="biblio.author">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<label class="label20">Author</label> <input type="hidden" name="marclist" value="biblio.author" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
-				<label class="label20">barcode</label>
-				<input type="hidden" name="marclist" value="items.barcode">
-				<input type="hidden" name="and_or" value="and">
-				<input type="hidden" name="excluding" value="">
-				<input type="hidden" name="operator" value="contains">
-				<input type="text" name="value" onchange="sql_update()">
+				<label class="label20">Barcode</label>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				<input type="text" name="value" onchange="sql_update()" /> 
 		</p>
 		<p>
 			<label class="label20">Illustrator</label>
-			<input type="hidden" name="marclist" value="biblioitems.illus">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="hidden" name="marclist" value="biblioitems.illus" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
-			<label class="label20">Dewey</label><input type="hidden" name="marclist" value="biblioitems.dewey">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<label class="label20">Dewey</label>
+			<input type="hidden" name="marclist" value="biblioitems.dewey" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
-			<label class="label20">Item Type</label> <input type="hidden" name="marclist" value="biblioitems.itemtype">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="=">
+			<label class="label20">Item Type</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
 			<!-- TMPL_VAR name="CGIitemtype" -->
 		</p>
 		<p>
-				<label class="label20">branch</label>
-				<input type="hidden" name="marclist" value="items.holdingbranch">
-				<input type="hidden" name="and_or" value="and">
-				<input type="hidden" name="excluding" value="">
-				<input type="hidden" name="operator" value="=">
+				<label class="label20">Branch</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
 				<!-- TMPL_VAR name="CGIbranch" -->
 		</p>
 
 	</div>
-	<div id="bloc25">
+	<div>
 		<p>Results per page :
-			<select align="right" name="resultsperpage" size="1">
+			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
@@ -88,12 +91,12 @@
 			</select>
 		</p>
 		<p>
-			<input type="submit" value="Start search" class="button catalogue">
+			<input type="submit" value="Start search" class="button catalogue" />
 		</p>
 	</div>
 </form>
 
-<script>
+<script type="text/javascript">
 function sql_update() {
 document.f.sql.value="";
 	for (i=0 ; i<document.f.marclist.length ; i++) {
