@@ -279,6 +279,9 @@ sub issuebook {
 	my $datedue=time+($loanlength)*86400;
 	my @datearr = localtime($datedue);
 	$dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+	if ($env->{'datedue'}) {
+	    $dateduef=$env->{'datedue'};
+	}
 	my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values ($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, '$dateduef', '$env->{'branchcode'}')");
 	$sth->execute;
 	$sth->finish;
