@@ -244,7 +244,7 @@ while ($i < $count2){
 	 $stuff[5].=" ";	
       }
       if ($transit > 0){
-        $stuff[5]=$stuff[5]."In Transiit";
+        $stuff[5]=$stuff[5]."In Transit";
          if ($count >1 ){                                                                                                         
 	  $stuff[5]=$stuff[5]." ($transit)";                                                                                            
          }                                                                                                                         
