@@ -7,39 +7,39 @@
 	font-size:10pt;}
 </STYLE>
 
-<table width="100%" cellspacing=0 cellpadding=5>
+<table width="100%" cellspacing="0" cellpadding="5">
 <tr>
 	<td width="80%">
-		<table width=100% cellspacing=0 cellpadding=5 border=1>
+		<table width="100%" cellspacing="0" cellpadding="5" border="1">
 		<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<td>
-			<table width="100%" border=0 cellpadding=0 cellspacing=0>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td width=8%><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"></td>
-					<td width=8%><a href="javascript:confirm_deletion()"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png"></td>
-					<td width=8%><a href="detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">一般</a></td>
-					<td width=8%><a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')">列印</a></td>
-					<td width=8%><a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->')">新增至虛擬書架</a></td>
+					<td width="8%"><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"></td>
+					<td width="8%"><a href="javascript:confirm_deletion()"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png"></td>
+					<td width="8%"><a href="detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">一般</a></td>
+					<td width="8%"><a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')">列印</a></td>
+					<td width="8%"><a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->')">新增至虛擬書架</a></td>
 					<td align="center"><b>機讀格式書目：<!-- TMPL_VAR name="bibid" --></b></td>
 				</tr>
 			</table>
 			</td>
 		</tr>
 		<tr>
-			<td colspan=3>
-			<table width=100% border=0 colspacing=0 cellpadding=0>
+			<td colspan="3">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td width=9% align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(1)" ><div id="link1">1</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(2)"><div  id="link2">2</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(3)"><div  id="link3">3</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(4)"><div  id="link4">4</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(5)"><div  id="link5">5</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(6)"><div  id="link6">6</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(7)"><div  id="link7">7</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(8)"><div  id="link8">8</div></a></td>
-				<td width=9% align="center"><a href="javascript:active(9)"><div  id="link9">9</div></a></td>
-				<td width=10% align="center"><a href="javascript:active(10)"><div  id="link10">圖書資料</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(1)" ><div id="link1">1</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(2)"><div  id="link2">2</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(3)"><div  id="link3">3</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(4)"><div  id="link4">4</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(5)"><div  id="link5">5</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(6)"><div  id="link6">6</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(7)"><div  id="link7">7</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(8)"><div  id="link8">8</div></a></td>
+				<td width="9%" align="center"><a href="javascript:active(9)"><div  id="link9">9</div></a></td>
+				<td width="10%" align="center"><a href="javascript:active(10)"><div  id="link10">圖書資料</div></a></td>
 			</tr>
 			</table>
 			</td>
@@ -49,16 +49,16 @@
 	<td>
 		<!-- TMPL_IF NAME="norequests" -->
 		<!-- TMPL_ELSE -->
-			<a href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" --> class="button">預約</a>
+			<a href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button">預約</a>
 		<!-- /TMPL_IF -->
 	</td>
 </tr>
 </table>
 
    <DIV name="0XX" id="0XX" style="position:absolute;visibility:visible;width:90%">
-    <table width=100%  cellspacing=0 cellpadding=5 border=0>
+    <table width="100%" cellspacing="0" cellpadding="5" border="0">
 	<!-- TMPL_LOOP name="0XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -73,9 +73,9 @@
      </DIV>
 
     <DIV name="1XX" id="1XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100%  cellspacing=0 cellpadding=5 border=0>
+    <table width="100%"  cellspacing="0" cellpadding="5" border="0">
 	<!-- TMPL_LOOP name="1XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -90,9 +90,9 @@
      </DIV>
 
     <DIV name="2XX" id="2XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100% cellspacing=0 cellpadding=5  border=0>
+    <table width="100%" cellspacing="0" cellpadding="5"  border="0">
 	<!-- TMPL_LOOP name="2XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -107,9 +107,9 @@
      </DIV>
 
     <DIV name="3XX" id="3XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100% cellspacing=0 cellpadding=5  border=0>
+    <table width="100%" cellspacing="0" cellpadding="5"  border="0">
 	<!-- TMPL_LOOP name="3XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -124,9 +124,9 @@
      </DIV>
 
     <DIV name="4XX" id="4XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100%  cellspacing=0 cellpadding=5 border=0>
+    <table width="100%"  cellspacing="0" cellpadding="5" border="0">
 	<!-- TMPL_LOOP name="4XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -141,9 +141,9 @@
      </DIV>
 
     <DIV name="5XX" id="5XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100% cellspacing=0 cellpadding=5  border=0>
+    <table width="100%" cellspacing="0" cellpadding="5"  border="0">
 	<!-- TMPL_LOOP name="5XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -158,9 +158,9 @@
      </DIV>
 
 	<DIV name="6XX" id="6XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=90% cellspacing=0 cellpadding=5  border=0>
+    <table width="90%" cellspacing="0" cellpadding="5"  border="0">
 	<!-- TMPL_LOOP name="6XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -175,9 +175,9 @@
      </DIV>
 
     <DIV name="7XX" id="7XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100%  cellspacing=0 cellpadding=5 border=0>
+    <table width="100%"  cellspacing="0" cellpadding="5" border="0">
 	<!-- TMPL_LOOP name="7XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -192,9 +192,9 @@
      </DIV>
 
     <DIV name="8XX" id="8XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=100% cellspacing=0 cellpadding=5  border=0>
+    <table width="100%" cellspacing="0" cellpadding="5"  border="0">
 	<!-- TMPL_LOOP name="8XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -209,9 +209,9 @@
      </DIV>
 
     <DIV name="9XX" id="9XX" style="position:absolute;visibility:hidden;width:90%">
-    <table width=90% cellspacing=0 cellpadding=5  border=0>
+    <table width="90%" cellspacing="0" cellpadding="5"  border="0">
 	<!-- TMPL_LOOP name="9XX" -->
-	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan="5"><b><tmpl_var name="tag"></td></tr>
 	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
@@ -226,7 +226,7 @@
      </DIV>
 
     <DIV name="10XX" id="10XX" style="position:absolute;visibility:hidden;width:90%">
-    <table border=1 cellspacing=0 cellpadding=5>
+    <table border="1" cellspacing="0" cellpadding="5">
 		<tr  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<!-- TMPL_LOOP name="item_header_loop" --><th><tmpl_var name="header_value"></th><!-- /TMPL_LOOP -->
 		</tr>
@@ -238,7 +238,7 @@
      </table>
      </DIV>
 
-<script LANGUAGE="JavaScript">
+<script language="JavaScript" type="text/javascript">
 function active(numlayer)
 {
 for (i=0; i <= 10 ; i++ ) {
@@ -256,7 +256,7 @@ for (i=0; i <= 10 ; i++ ) {
 }
 }
 function confirm_deletion() {
-	var is_confirmed = confirm('Confirmez vous la suppression ?');
+	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
 	if (is_confirmed) {
 		window.location="acqui.simple/addbiblio.pl?op=delete&bibid=<!-- TMPL_VAR name="bibid" -->";
 	}

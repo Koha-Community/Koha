@@ -84,7 +84,7 @@ input {
 				<form action="/cgi-bin/koha/opac-searchresults.pl" name="catsearch" id="catsearch">
 					<input type="hidden" name="type" value="opac">
 					<input type="text" name="keyword" size="27"><br>
-					<b>在空格輸入後，再按回車鍵即可。</b><br>
+					<b>在空格輸入後，再按輸入鍵即可。</b><br>
 					<a href="/cgi-bin/koha/opac-search.pl">
 						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow-small.gif" alt="-" width="20" height="16" hspace="0" vspace="0" border="0" align="middle">
 						進階查詢（更多選項）
@@ -102,7 +102,7 @@ input {
 						新書
 				</font><br>
 					<form action="/cgi-bin/koha/opac-new.pl" name="new">
-						<!-- TMPL_VAR name="CGIitemtype" --> <b>acquired in the last <input type="text" name="duration" value="30" size=3> 日</b>
+						<b>最近<input type="text" name="duration" value="30" size=3>日內新到的</b><!-- TMPL_VAR name="CGIitemtype" -->
 						<input type="submit" value="好!">
 					</form>
 			</td>

@@ -60,7 +60,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 						<a class="members" href="/cgi-bin/koha/members-home.pl">讀者</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">購置</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">採購</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">流通</a>
@@ -88,7 +88,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 						<a href="/cgi-bin/koha/circ/returns.pl" class="submenu2">還書</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Branch transfers</a>
+						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">移交</a>
 					</td>
 				</tr>
 			</table>
@@ -101,5 +101,5 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinusername" --> 【<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>】</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a> Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a>Koh</p>
 <!-- /TMPL_IF -->

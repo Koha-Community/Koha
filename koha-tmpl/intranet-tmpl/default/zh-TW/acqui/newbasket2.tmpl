@@ -15,7 +15,7 @@
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
 <input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 <input type=hidden name=basket value=<!-- TMPL_VAR name="basket" -->>
-<b>新查詢： </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
+<b>新的搜尋： </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
 <br clear=all>
 
 <CENTER>
@@ -27,7 +27,7 @@
 <!-- /TMPL_LOOP -->
 </B>
 <BR>
-找到 <!-- TMPL_VAR name="count" --> 筆結果。
+找到 <!-- TMPL_VAR name="count" --> 個結果。
 
 <br> 在顯示第<b><!-- TMPL_VAR name="dispnum" --></b>至<b><!-- TMPL_VAR name="offset2" --></b>項結果。
 
@@ -35,9 +35,9 @@
 	<TR  VALIGN=TOP bgcolor="#ffdf61">
 		<TD><b>題名</b></TD>
 		<TD><b>著者</b></TD>
-		<TD><b>&copy;</b></TD>
+		<TD><b>著作年份</b></TD>
 		<TD><b>數量</b></TD>
-		<TD><b>LOCATION</b></TD>
+		<TD><b>存放地點</b></TD>
 	</TR>
 
 <!-- TMPL_LOOP name="loopresult" -->

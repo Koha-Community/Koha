@@ -66,14 +66,13 @@ win.document.write("</font></body></html>");
 	<input type=hidden name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->">
 <!-- /TMPL_LOOP -->
 <!-- TMPL_IF name="orderexists" --><input type=hidden name=orderexists value=yes><!-- /TMPL_IF -->
-<a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button">查看購物籃</a>
-<H1><!-- TMPL_VAR name="ordnum" --> - 訂單細節</H1><br>
+<a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button">查看購物籃</a> <h1><!-- TMPL_VAR name="ordnum" --> - 訂單詳情</h1><br>
 <!-- TMPL_VAR name="name" --> 的購物藍
 <P>
 <CENTER>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
 	<tr valign=top bgcolor=#99cc33>
-		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>目錄細節</B></td>
+		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>目錄詳情</B></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD><b>題名 *</b></td>
@@ -97,7 +96,7 @@ win.document.write("</font></body></html>");
 		<td><!-- TMPL_VAR name="CGIitemtype" --></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>ISBN</td>
+		<TD>國際標準書號</td>
 		<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
@@ -111,13 +110,13 @@ win.document.write("</font></body></html>");
 </table>
 <img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=32 height=250 align=left>
 <table border=1 cellspacing=0 cellpadding=5 width="40%">
-	<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>會計細節</B></td></tr>
+	<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>會計詳情</B></td></tr>
 	<TR VALIGN=TOP>
 		<TD>數量</td>
 		<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='update(this.form)' ></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>書籍購置資金</td>
+		<TD>書籍採購資金</td>
 		<td><!-- TMPL_VAR name="CGIbookfund" --></td>
 	</tr>
 	<TR VALIGN=TOP>
@@ -161,7 +160,7 @@ win.document.write("</font></body></html>");
 <table>
 <tr><td bgcolor=#cccc99  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>說明</B><br>
 <UL>
-<LI>Bold fields must be filled in to create a new bibilo and item.<p>
+<LI>新增書目記錄及圖書資料，必須輸入所有粗體欄位。<p>
 <LI>Shaded fields can be used to do a "quick" receive, when items have been purchased locally or gifted. In this case the quantity "ordered" will also be entered into the database as the quantity received.
 </UL>
 </td></tr></table>

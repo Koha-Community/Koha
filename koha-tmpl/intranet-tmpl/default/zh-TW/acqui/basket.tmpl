@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <H1><a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a><!-- TMPL_VAR name="name" --> 的購物籃 <!-- TMPL_VAR name="basket" --></H1><br />
-Our Reference: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name="basket" --></b> authorised by <b><!-- TMPL_VAR name="loggedinusername" --></b><br />
+檔號：<!-- TMPL_VAR name="entrydate" -->, #<!-- TMPL_VAR name="basket" -->，負責人：<!-- TMPL_VAR name="loggedinusername" --><br />
 <CENTER>
 <p>
 <table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor="#ffdf61">
 		<td width="5%"><b>訂單</b></td>
 		<td width="10%"><b> 出版者</b></td>
-		<td width="10%"><b>ISBN</b></td>
+		<td width="10%"><b>國際標準書號</b></td>
 		<td width="30%"><b>題名</b></td>
 		<td width="20%"><b>著者</b></td>
-		<td width="5%"><b>$ rrp</b></td>
-		<td width="7%"><b>$est</b></td>
+		<td width="5%"><b>預算成本連稅</b></td>
+		<td width="7%"><b>預算成本</b></td>
 		<td width="7%"><b>數量</b></td>
 		<td width="7%"><b> 總計</b></td>
 	</tr>
@@ -52,7 +52,7 @@ Our Reference: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name
 			<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
 				<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
 				<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
-				<b> 新增訂單：請輸入關鍵字或題名 </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+				<b> 新增訂單：請輸入關鍵詞或題名 </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
 			</form>
 		</td>
 	</tr>

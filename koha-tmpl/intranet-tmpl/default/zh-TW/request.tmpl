@@ -10,11 +10,11 @@
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Rank</b></TD>
+		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>優先次序</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>讀者號碼</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>備註</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>日期</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Pickup</b></TD>
+		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>取書分館</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>預約</b></TD>
 	</TR>
 	<tr VALIGN=TOP  >
@@ -33,7 +33,7 @@
 		<td><!-- TMPL_VAR Name=date --></td>
 		<td><!-- TMPL_VAR name="CGIbranch" --></td>
 		<td>
-			<input type=checkbox name=request value="任何">Next Available, or choose from list below
+			<input type=checkbox name=request value="任何">下一個可使用的，或從下列中選擇
 		</td>
 	</tr>
 </table>
@@ -91,11 +91,11 @@
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=7><B>修改目前的預約 </b></TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Rank</b></TD>
+		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>優先次序</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>讀者</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>備註</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>日期</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Pickup</b></TD>
+		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>取書分館</b></TD>
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>預約</b></TD>
 	</TR>
 	<!--$existingreserves-->
@@ -121,7 +121,7 @@
 			<td><!-- TMPL_VAR Name="notes" --></td>
 			<TD><!-- TMPL_VAR Name="date" --></td>
 			<TD><!-- TMPL_IF Name="wait" -->
-				Item waiting at <b> <!-- TMPL_VAR Name="wbrname" --></b> <input type=hidden name=pickup value=<!-- TMPL_VAR Name="wbrcd" -->>
+				分館 <b><!-- TMPL_VAR Name="wbrname" --></b> 正在等候此項圖書資料 <input type=hidden name=pickup value=<!-- TMPL_VAR Name="wbrcd" -->>
 				<!-- TMPL_ELSE -->
 					<select name=pickup>
 						<!-- TMPL_LOOP Name="branchloop" -->
@@ -152,7 +152,7 @@
 	<!-- /TMPL_LOOP -->
 	<tr VALIGN=TOP>
 	<TD colspan=6 align=right>
-		取消預約，在Rank List選擇「移除」即可。
+		取消預約，將優先次序修改為「移除」即可。
 		<input type="image" name="submit" value="預約" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png">
 	</td>
 	</tr>

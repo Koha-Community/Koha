@@ -63,7 +63,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>過期日</B>
+				<B>有效日期至</B>
 			</td>
 			<td>
 				<!-- TMPL_VAR Name="expdate" -->
@@ -170,7 +170,7 @@
 		</tr>
 		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
 			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B>ALTERNATIVE CONTACT DETAIL</B>
+				<B>緊急聯絡人詳情</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -223,11 +223,11 @@
 			<!-- TMPL_LOOP NAME=inputsloop -->
 				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
 			<!-- /TMPL_LOOP -->
-			<input type=submit name=submit value=Submit>
+			<input type=submit name=submit value="遞交">
 		</form>
 <!-- TMPL_ELSE -->
 	<h1>錯誤</H1>
-	<p>The following fields have a forbidden value. Please push the back button and try again : </p>
+	<p>下列的欄位含不容許的值。請您按瀏覽器的「往後」(Back) 按鈕，然後重試： </p>
 	<!-- TMPL_IF name="cardnumber" -->
 		借書證號碼<br/>
 	<!-- /TMPL_IF -->

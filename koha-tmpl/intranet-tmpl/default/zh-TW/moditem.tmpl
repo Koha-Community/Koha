@@ -18,18 +18,12 @@
 
 <td>遺失</td>
 <td>
-<input type=radio name=Lost value=1 <!-- TMPL_IF Name="itemlost" -->  checked <!-- /TMPL_IF --> >
-是
-<input type=radio name=Lost value=0 <!-- TMPL_UNLESS Name="itemlost" --> checked <!-- /TMPL_UNLESS --> >
-否
+<input type=radio name=Lost value=1 <!-- TMPL_IF Name="itemlost" -->  checked <!-- /TMPL_IF --> >是 <input type=radio name=Lost value=0 <!-- TMPL_UNLESS Name="itemlost" --> checked <!-- /TMPL_UNLESS --> >否
 </td>
 </tr>
 <tr valign=top bgcolor=white>
 <td>已取消</td>
-<td><input type=radio name=withdrawn value=1 <!-- TMPL_IF Name="withdrawn" --> checked <!-- /TMPL_IF --> >
-是
-<input type=radio name=withdrawn value=0 <!-- TMPL_UNLESS Name="withdrawn" --> checked <!-- /TMPL_UNLESS --> >
-否
+<td><input type=radio name=withdrawn value=1 <!-- TMPL_IF Name="withdrawn" --> checked <!-- /TMPL_IF --> >是 <input type=radio name=withdrawn value=0 <!-- TMPL_UNLESS Name="withdrawn" --> checked <!-- /TMPL_UNLESS --> >否
 </td>
 </tr>
 <input type=hidden name=bibnum value="<!-- TMPL_VAR Name="biblionumber" -->">

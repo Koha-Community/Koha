@@ -12,7 +12,7 @@
 	您沒有指定查詢條件<br>
 <!-- /TMPL_IF -->
 
-找到 <!-- TMPL_VAR NAME=numrecords --> 筆結果
+找到 <!-- TMPL_VAR NAME=numrecords --> 個結果
 <p>
 <!-- Row of numbers corresponding to search result pages -->
 <!-- TMPL_IF NAME=displayprev -->
@@ -38,7 +38,7 @@
 <!-- TMPL_IF NAME=numrecords -->
 <table border=0 cellspacing=0 cellpadding=2 width=90%>
 <tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE --> background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
-	<th align=left>題名</th><th align=left>著者</th><th>&copy;</th><th>數量</th><th>館藏地</th>
+	<th align=left>題名</th><th align=left>著者</th><th>著作年份</th><th>數量</th><th>存放地點</th>
 	<!-- TMPL_IF NAME="opac" -->
 	<!-- TMPL_ELSE -->
 	<th>&nbsp;</th>
@@ -88,7 +88,7 @@
 </table>
 
 <br>
-共<b><!-- TMPL_VAR NAME="numrecords" --></b>筆記錄中的第<b><!-- TMPL_VAR NAME="startfrom" --></b>至<b><!-- TMPL_VAR NAME="endat" --></b>項。
+共<b><!-- TMPL_VAR NAME="numrecords" --></b>項記錄中的第<b><!-- TMPL_VAR NAME="startfrom" --></b>至<b><!-- TMPL_VAR NAME="endat" --></b>項。
 <hr>
 
 請以別的條件重試<a href=/cgi-bin/koha/catalogue-home.pl>查詢</a>

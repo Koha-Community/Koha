@@ -4,37 +4,29 @@
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a class="button" href="circulation.pl?branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
-				下一個讀者</a>&nbsp;
-				<a class="button" href="returns.pl">
-				還書</a>&nbsp;
-				<a class="button" href="branchtransfers.pl">
-				Transfers</a>
+				<a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">下個讀者</a>　<a class="button" href="returns.pl">還書</a>　<a class="button" href="branchtransfers.pl">移交</a>
 			</td>
 		</tr>
 	</table>
-	<h1>流通：借出</h1>
-	<i>館別：</i><!-- TMPL_VAR name="branchname" --> <i>打印機：</i><!-- TMPL_VAR name="printername" --> <a href="selectbranchprinter.pl" class="button">修改設定</a>
+	<h1>流通：借出</h1><br>
+	<b>館別：</b><!-- TMPL_VAR name="branchname" --><br>
+	<b>打印機：</b><!-- TMPL_VAR name="printername" --><br>
+	<a href="selectbranchprinter.pl">設定</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+	<p>&nbsp;</p>
 <!-- TMPL_ELSE -->
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a href="returns.pl" class="button">
-					還書
-				</a>
-				&nbsp;
-				<a href="branchtransfers.pl" class="button">
-					Transfers
-				</a>
+				<a href="returns.pl" class="button">下個讀者</a>　<a href="branchtransfers.pl" class="button">移交</a>
 			</td>
 		</tr>
 	</table>
 	<h1>流通：借出</h1><br>
 	<b>館別：</b><!-- TMPL_VAR name="branchname" --> <br>
 	<b>打印機：</b><!-- TMPL_VAR name="printername" --><br>
-	<a href="selectbranchprinter.pl" class="button">設定</a>
+	<a href="selectbranchprinter.pl">設定</a>
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<p>&nbsp;</p>
@@ -44,7 +36,7 @@
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr>
 			<th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<font size="+2" color="red"><b>Issuing Question</b></font>
+				<font size="+2" color="red"><b>問題</b></font>
 			</th>
 		</tr>
 		<tr>
@@ -52,7 +44,7 @@
 				<table border="0" cellpadding="10">
 					<tr>
 						<td>
-							Attempting to issue <!-- TMPL_VAR name="title" -->  by <!-- TMPL_VAR name="author" --> to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.
+							嘗試借出 <!-- TMPL_VAR name="author" --> 著的《<!-- TMPL_VAR name="title" -->》給 <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
 							<p><!-- TMPL_VAR name="question" -->
 						</td>
 					</tr>
@@ -118,7 +110,7 @@
 <!-- TMPL_IF name="message" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">訊息</th></tr>
-		<tr><td><!-- TMPL_VAR name="message" --></td></tr>
+		<tr><td>找不到讀者乎合 <!-- TMPL_VAR name="message" --></td></tr>
 	</table>
 <!-- /TMPL_IF -->
 
@@ -136,7 +128,7 @@
 			<td align="center">
 				<!-- TMPL_VAR name="CGIselectborrower" -->
 				<br>
-				<input type="submit" value="好！" class="button">
+				<input type="submit">
 			</td>
 		</tr>
 	</table>
@@ -148,7 +140,7 @@
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr>
 			<th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<font color="black"><b>輸入借書人的借書證號碼<br> 或姓氏 (或其部分)</b></font>
+				<font color="black"><b>輸入讀者的借書證號碼<br> 或姓氏 (或其部分)</b></font>
 			</th>
 		</tr>
 		<tr>
@@ -167,7 +159,7 @@
 <tr>
 <td>
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<table border="1" cellpadding="2">
+<table border="1" cellpadding="5">
 	<tr>
 	<td align="center" valign="top">
 		<table border="0" cellspacing="0" cellpadding="5">
@@ -182,7 +174,7 @@
 						<tr>
 							<td>圖書資料之條碼：</td>
 							<td><input name="barcode" size="10"></td>
-							<td><input type="submit" value="借出" class="button"></td>
+							<td><input type="submit" value="借出"></td>
 						</tr>
 						<tr>
 							<td colspan="3" align="center">
@@ -220,7 +212,7 @@
 </form>
 </td>
 <td>
-<table border="1" cellpadding="2" cellspacing="0" align="right">
+<table border="1" cellpadding="5" cellspacing="0" align="right">
     <tr><td colspan="2"><font color="black"><b>讀者資料</b></font></td></tr>
     <tr><td colspan="2">
     <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this,'Member', 480, 640)">
@@ -235,16 +227,16 @@
 <tr><td valign="top"><font color="red">已遺失</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>讀者遺失借書證</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<tr><td valign="top"><font color="red">DBARRED</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>禁止此讀者</td></tr>
+<tr><td valign="top"><font color="red">被禁</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>禁止此讀者</td></tr>
 <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
-		<tr><td valign="top"><font color="red">費用</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+		<tr><td valign="top"><font color="red">欠款</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 	<!-- TMPL_ELSE -->
 		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><!-- TMPL_VAR name="message" --></td></tr>
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 		<!-- TMPL_IF name="charges" -->
-			<tr><td valign=top>費用</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+			<tr><td valign=top>欠款</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="waiting" -->
 			<tr>
@@ -258,7 +250,7 @@
 		<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="odues" -->
 				<!-- TMPL_IF name="nonreturns" -->
-					<tr><td valign="top"><font color="red">過期</font></td><td><font color="red">有 (下列)</font></td></tr>
+					<tr><td valign="top">過期</td><td>有 (下列)</td></tr>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" -->
@@ -268,9 +260,9 @@
 </table>
 <!-- /TMPL_IF -->
 </table>
-<br/>
+<p clear="all"><br><br></p>
 <!-- TMPL_IF name="todayissues" -->
-<table border="1" cellpadding="5" cellspacing="0" width="100%">
+<table border="1" cellpadding="5" cellspacing="0" width="80%">
 	<tr>
 		<th colspan="5" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<font color="black">
@@ -278,7 +270,7 @@
 		</th>
 	</tr>
 	<tr>
-		<th>到期日</th><th>條碼</th><th>題名</th><th>著者</th><th>類別</th>
+		<th>應歸還日期</th><th>條碼</th><th>題名</th><th>著者</th><th>類別</th>
 	</tr>
 	<!-- TMPL_LOOP name="todayissues" -->
 	    <tr><td align="center" bgcolor=<!-- TMPL_VAR NAME="tcolor" -->><!-- TMPL_VAR NAME="dd" --></td>
@@ -300,10 +292,10 @@
 			</th>
 		</tr>
 		<tr>
-			<th>到期日</th><th>條碼</th><th>題名</th><th>著者</th><th>類別</th>
+			<th>應歸還日期</th><th>條碼</th><th>題名</th><th>著者</th><th>類別</th>
 		</tr>
 	<!-- TMPL_LOOP name="previssues" -->
-	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dd" --></td>
+	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_IF NAME="od" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></font><!-- /TMPL_IF --></td>
 	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->">
 	    <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
 	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="title" --></td>

@@ -28,7 +28,8 @@
 <!-- TMPL_IF NAME="WEB" -->
 <tr valign="top" bgcolor="#CCCC99">
 <td
-background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber" --> 群組 - <!-- TMPL_VAR NAME="itemtype" --> </b></td>
+background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber" --> 群組 - <!-- TMPL_VAR NAME="itemtype" -->
+</b></td>
 </tr>
 <tr valign="top">
 <td><b>網址：</b><!-- TMPL_VAR NAME="url" --><br>
@@ -38,11 +39,11 @@ background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber"
 <!-- TMPL_ELSE -->
 <tr valign="top" bgcolor="#CCCC99">
 <td
-background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber" --> 群組 - <!-- TMPL_VAR NAME="itemtype" --></b></td>
+background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber" --> 群組 - <!-- TMPL_VAR NAME="itemtype" --></b></td>
 </tr>
 <tr valign="top">
-<td><b>ISBN：</b><!-- TMPL_VAR NAME="isbn" --><br>
-<b>杜威：</b><!-- TMPL_VAR NAME="dewey" --><br>
+<td><b>國際標準書號：</b><!-- TMPL_VAR NAME="isbn" --><br>
+<b>杜威分類號：</b><!-- TMPL_VAR NAME="dewey" --><br>
 <b>出版者：</b><!-- TMPL_VAR NAME="publishercode" --><br>
 <b>出版地：</b><!-- TMPL_VAR NAME="place" --><br>
 <b>日期：</b><!-- TMPL_VAR NAME="publicationyear" --></td>
@@ -65,8 +66,7 @@ background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber"
 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
 <table border="1" cellspacing="0" cellpadding="5">
 <tr valign="top" bgcolor="#CCCC99">
-<td background="/images/background-mem.gif" colspan="2"><b>新增
-圖書資料：</b><br>
+<td background="/images/background-mem.gif" colspan="2"><b>新增圖書資料：</b><br>
 <small><i>若是網站，只需填寫群組即可</i></small></td>
 </tr>
 <tr valign="top">
@@ -90,7 +90,7 @@ background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><textarea name="itemnotes" cols="30" rows="6"></textarea></td>
 </tr>
 <tr valign="top" bgcolor="#CCCC99">
-<td colspan="2" background="/images/background-mem.gif"><b>新增至既有群組：</b></td>
+<td colspan="2" background="/images/background-mem.gif"><b>新增至已有群組：</b></td>
 </tr>
 <tr valign="top">
 <td>群組：</td>
@@ -107,11 +107,10 @@ background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber"
 </select></td>
 </tr>
 <tr valign="top">
-<td colspan="2" align="center"><input type="submit" name="existinggroup" value="新增圖書資料至既有之群組"></td>
+<td colspan="2" align="center"><input type="submit" name="existinggroup" value="新增圖書資料至已有之群組"></td>
 </tr>
 <tr valign="top" bgcolor="#CCCC99">
-<td colspan="2" background="/images/background-mem.gif"><b>OR Add to a new
-群組：</b></td>
+<td colspan="2" background="/images/background-mem.gif"><b>或新增至新群組：</b></td>
 </tr>
 <tr valign="top">
 <td>格式：</td>
@@ -146,7 +145,7 @@ background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><textarea name="additionalauthors" cols="30" rows="6"></textarea></td>
 </tr>
 <tr valign="top">
-<td>Subject Headings:<br><i>每行一個主題</i></td>
+<td>主題標目：<br><i>每行一個主題</i></td>
 <td><textarea name="subjectheadings" cols="30" rows="6"></textarea></td>
 </tr>
 <tr valign="top">
@@ -154,11 +153,11 @@ background="/images/background-mem.gif"><B><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><INPUT name="url" size="40"></td>
 </tr>
 <tr valign="top">
-<td>杜威：</td>
+<td>杜威分類號：</td>
 <td><INPUT name="dewey" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Dewey Subclass:</td>
+<td>杜威子類別</td>
 <td><input name="subclass" size="40"></td>
 </tr>
 <tr valign="top">
