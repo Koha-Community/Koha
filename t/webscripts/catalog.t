@@ -134,7 +134,6 @@ if ($title eq 'The Historical Supply Catalogue') {
     print "not ok ".$testnumber++." title is now $title\n";
 }
 
-$test='Delete Biblio with items - biblio #163';
 $script="$intranetdir/cgi-bin/delbiblio.pl 'biblio=163'";
 contains($script, $test, ['delete them before deleting this biblio']);
 
@@ -148,6 +147,10 @@ if ($sth->rows) {
 
 $test='Delete Biblio with no items - biblio #57';
 $script="$intranetdir/cgi-bin/delbiblio.pl 'biblio=57'";
+contains($script, $test, ['delete the biblio and all of its subgroups']);
+
+$test='Delete Biblio with no items, confirmed - biblio #57';
+$script="$intranetdir/cgi-bin/delbiblio.pl 'biblio=57&confirmed=1'";
 contains($script, $test, ['location:', 'catalogue-home.pl']);
 
 $sth=$dbh->prepare("select * from biblio where biblionumber=57");
@@ -232,6 +235,7 @@ sub contains {
     foreach my $string (@$contains) {
 	unless ($result=~/$string/) {
 	    print "not ok ".$testnumber++." $test (couldn't find '$string')\n";
+	    warn "\nTestnumber $testnumber ($test) failed.  Couldn't find '$string' in output.\n";
 	    return;
 	}
     }
