@@ -69,9 +69,6 @@ $date2=UnixDate($date2,'%Y-%m-%d');
 my @payments=TotalPaid($date);
 my $count=@payments;
 my $total=0;
-my %levin;
-my %foxton;
-my %shannon;
 my $oldtime;
 my $totalw=0;
 my @loop;
@@ -120,22 +117,6 @@ while ($i<$count){
   my $time="$hour:$min:$sec";
   my $time2="$payments[$i]{'date'}";
   my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
-  if ($branch eq 'C'){
-    $levin{'totalf'}+=$temptotalf;
-    $levin{'totalres'}+=$temptotalres;
-    $levin{'totalren'}+=$temptotalren;
-    $levin{'totalr'}+=$temptotalr;
-  } elsif ($branch eq 'F'){
-    $foxton{'totalf'}+=$temptotalf;
-    $foxton{'totalres'}+=$temptotalres;
-    $foxton{'totalren'}+=$temptotalren;
-    $foxton{'totalr'}+=$temptotalr;
-  } elsif ($branch eq 'S'){
-    $shannon{'totalf'}+=$temptotalf;
-    $shannon{'totalres'}+=$temptotalres;
-    $shannon{'totalren'}+=$temptotalren;
-    $shannon{'totalr'}+=$temptotalr;
-  }
   my $bornum=$payments[$i]{'borrowernumber'};
   my $oldtime=$payments[$i]{'timestamp'};
   my $oldtype=$payments[$i]{'accounttype'};
@@ -152,16 +133,6 @@ while ($i<$count){
     } else {
       $payments[$i]{'amount'}=$payments[$i]{'amount'}*-1;
       $total+=$payments[$i]{'amount'};
-      if ($branch eq 'C'){
-        $levin{'total'}+=$payments[$i]{'amount'};
-      }
-      if ($branch eq 'F'){
-        $foxton{'total'}+=$payments[$i]{'amount'};
-      }
-      if ($branch eq 'S'){
-        $shannon{'total'}+=$payments[$i]{'amount'};
-      }
-
     }
 
    %row = ( name   => $payments[$i]{'firstname'} . " <b>" . $payments[$i]{'surname'} . "</b>",
