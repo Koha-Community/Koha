@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 package C4::test;
 
 # Copyright 2000-2002 Katipo Communications
@@ -21,6 +22,9 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Catalogue;
+use C4::Biblio;
+use MARC::Record;
+use MARC::File::USMARC;
 
 our $dbh = C4::Context->dbh;
 $dbh->do("delete from marc_subfield_table");
@@ -52,11 +56,20 @@ my $record2=MARCkoha2marc("123456","author","title","unititle","notes","abstract
 	"size","place","lccn");
 &MARCaddMarcBiblio($record2);
 # parse all subfields 
-my @fields = $record->fields();
-foreach my $field (@fields) {
-    my @subf=$field->subfields;
-    for my $i (0..$#subf) {
+#my @fields = $record->fields();
+#foreach my $field (@fields) {
+#    my @subf=$field->subfields;
+#    for my $i (0..$#subf) {
 #    print $field->tag(), " ", $field->indicator(1),$field->indicator(2), "subf: ", $subf[$i][0]," =",$subf[$i][1]," <-- \n";
-}
-}
+#}
+#}
 #print $record->as_formatted();
+#my $file = MARC::File::USMARC->in("/home/paul/courriers/koha/exemples_unimarc/env179.1.txt");
+## get a marc record from the MARC::File object
+## $record will be a MARC::Record object
+#while (my $record = $file->next()) {
+## print the title contained in the record
+#    print $record->as_formatted(),"\n";
+#}
+## we're done so close the file
+#    $file->close();

@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.16  2002/10/07 14:04:26  tipaul
+# road to 1.3.1 : viewing MARC biblio
+#
 # Revision 1.15  2002/10/05 09:49:25  arensb
 # Merged with arensb-context branch: use C4::Context->dbh instead of
 # &C4Connect, and generally prefer C4::Context over C4::Database.
@@ -280,21 +283,24 @@ sub MARCgettagslib {
 	$sth=$dbh->prepare("select tagfield,libopac as lib from marc_tag_structure");
     }
     $sth->execute;
-    my ($lib,$tag,$res);
-    while ( ($tag,$lib) = $sth->fetchrow) {
+    my ($lib,$tag,$res,$tab);
+    while ( ($tag,$lib,$tab) = $sth->fetchrow) {
 	$res->{$tag}->{lib}=$lib;
+	$res->{$tab}->{tab}="";
     }
 
     if ($forlibrarian eq 1) {
-	$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib from marc_subfield_structure");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,tab as lib from marc_subfield_structure");
     } else {
-	$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib from marc_subfield_structure");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,libopac,tab as lib from marc_subfield_structure");
     }
     $sth->execute;
 
     my $subfield;
-    while ( ($tag,$subfield,$lib) = $sth->fetchrow) {
-	$res->{$tag}->{$subfield}=$lib;
+    while ( ($tag,$subfield,$lib,$tab) = $sth->fetchrow) {
+	$res->{$tag}->{$subfield}->{lib}=$lib;
+	$res->{$tag}->{$subfield}->{tab}=$tab;
+
     }
     return $res;
 }
