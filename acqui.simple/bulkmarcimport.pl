@@ -11,9 +11,9 @@
 
 
 
-$filename=$ARGV[0];
+$file=$ARGV[0];
 
-unless ($filename) {
+unless ($file) {
     print "USAGE: ./bulkmarcimport.pl filename\n";
     exit;
 }
