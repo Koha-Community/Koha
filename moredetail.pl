@@ -34,7 +34,7 @@ my $bi=$input->param('bi');
 my $data=bibitemdata($bi);
 
 my (@items)=itemissues($bi);
-my ($order)=getorder($bi,$bib);
+my ($order,$ordernum)=getorder($bi,$bib);
 #print @items;
 my $count=@items;
 
@@ -88,8 +88,9 @@ print <<printend
 <b>Pages:</b> $data->{'pages'}<br>
 <b>Illus:</b> $data->{'illus'}<br>
 <b>Size:</b> $data->{'size'}<br>
-<b>Notes:</b> $data->{'notes'}<br>
+<b>Notes:</b> $data->{'bnotes'}<br>
 <b>No. of Items:</b> $count
+
 printend
 ;
 if ($type eq 'catmain'){
@@ -97,6 +98,7 @@ if ($type eq 'catmain'){
  
 }
 print <<printend
+
 </font>
 </TD>
 </tr>
@@ -117,6 +119,7 @@ print <<printend
 <form action=/cgi-bin/koha/moditem.pl method=post>
 <input type=hidden name=bibitem value=$bi>
 <input type=hidden name=item value=$items[$i]->{'itemnumber'}>
+<input type=hidden name=type value=$type>
 <INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif"> 
 <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
 <br>
@@ -153,10 +156,10 @@ print <<printend
 <b>Current Branch:</b> $items[$i]->{'holdingbranch'}<br>
 <b>Replacement Price:</b> $items[$i]->{'replacementprice'}<br>
 <b>Item lost:</b> $items[$i]->{'itemlost'}<br>
-<b>paid by:</b><br>
+<b>Paid for:</b> $items[$i]->{'paidfor'}<br>
 <b>Notes:</b> $items[$i]->{'itemnotes'}<br>
 <b>Renewals:</b> $items[$i]->{'renewals'}<br>
-<b><a href=/cgi-bin/koha/acqui/acquire.pl?recieve=$order->{'ordernumber'}&biblio=$bib&invoice=$order->{'booksellerinvoicenumber'}&catview=yes>Accession</a> Date: $items[$i]->{'dateaccessioned'}<br>
+<b><a href=/cgi-bin/koha/acqui/acquire.pl?recieve=$ordernum&biblio=$bib&invoice=$order->{'booksellerinvoicenumber'}&catview=yes>Accession</a> Date: $items[$i]->{'dateaccessioned'}<br>
 printend
 ;
 if ($items[$i]->{'wthdrawn'} eq '1'){

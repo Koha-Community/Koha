@@ -19,7 +19,8 @@ $VERSION = 0.01;
 &itemdata &bibdata &GetItems &borrdata &getacctlist &itemnodata &itemcount
 &OpacSearch &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &FrontSearch &subject &subtitle
-&addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs); 
+&addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
+&findguarantor); 
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -70,6 +71,24 @@ sub findguarantees{
   $sth->finish; 
   $dbh->disconnect;         
   return($i,\@dat);             
+}
+
+sub findguarantor{         
+  my ($bornum)=@_;         
+  my $dbh=C4Connect;           
+  my $query="select guarantor from borrowers where    
+  borrowernumber='$bornum'";               
+  my $sth=$dbh->prepare($query);                 
+  $sth->execute;                   
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish; 
+  $query="Select * from borrowers where borrowernumber='$data->{'guarantor'}'";
+  $sth=$dbh->prepare($query);                 
+  $sth->execute;                   
+  $data=$sth->fetchrow_hashref;
+  $sth->finish; 
+  $dbh->disconnect;         
+  return($data);             
 }
 
 sub NewBorrowerNumber {           
@@ -214,9 +233,12 @@ sub KeywordSearch {
   my $count=@key;
   my $i=1;
   my @results;
-  my $query ="Select * from biblio,bibliosubtitle,biblioitems where
-  biblio.biblionumber=bibliosubtitle.biblionumber and
-  biblioitems.biblionumber=biblio.biblionumber and
+  my $query ="Select * from biblio
+  left join bibliosubtitle on
+  bibliosubtitle.biblionumber=biblio.biblionumber
+  left join biblioitems on 
+  biblioitems.biblionumber=biblio.biblionumber
+  where
   (((title like '$key[0]%' or title like '% $key[0]%')";
   while ($i < $count){
     $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
@@ -344,11 +366,11 @@ sub CatSearch  {
 	my $count=@key;
 	my $i=1;
         $query="select *,biblio.author,biblio.biblionumber from
-         biblioitems,biblio
+         biblio
 	 left join additionalauthors
 	 on additionalauthors.biblionumber =biblio.biblionumber
-         where biblioitems.biblionumber=biblio.biblionumber 
-	 and
+	 left join biblioitems on biblioitems.biblionumber=biblio.biblionumber
+	 where
          ((biblio.author like '$key[0]%' or biblio.author like '% $key[0]%' or
 	 additionalauthors.author like '$key[0]%' or additionalauthors.author 
 	 like '% $key[0]%'
@@ -396,10 +418,11 @@ sub CatSearch  {
 	    my @key=split(' ',$search->{'title'});
 	    my $count=@key;
 	    my $i=1;
-            $query="select * from biblio,bibliosubtitle,biblioitems
+            $query="select * from biblio
+	    left join bibliosubtitle on
+	    bibliosubtitle.biblionumber=biblio.biblionumber
+	    left join biblioitems on biblioitems.biblionumber=biblio.biblionumber
 	    where
-            (biblio.biblionumber=bibliosubtitle.biblionumber and
-            biblioitems.biblionumber=biblio.biblionumber) and
 	    (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
 	    while ($i<$count){
 	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
@@ -713,7 +736,8 @@ sub bibdata {
 sub bibitemdata {
   my ($bibitem)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from biblio,biblioitems,itemtypes where biblio.biblionumber=
+  my $query="Select *, biblioitems.notes as bnotes
+  from biblio,biblioitems,itemtypes where biblio.biblionumber=
   biblioitems.biblionumber and biblioitemnumber=$bibitem and
   biblioitems.itemtype=itemtypes.itemtype";
 #  print $query;
@@ -1042,8 +1066,8 @@ sub itemcount {
   my $query="Select * from items where     
   biblionumber=$bibnum ";
   if ($type eq 'opac'){
-    $query.=" and (itemlost <>1 or itemlost is NULL) and
-    (wthdrawn <> 1 or wthdrawn is NULL)";      
+    $query.=" and (itemlost =0 or itemlost is NULL) and
+    (wthdrawn = 0 or wthdrawn is NULL)";      
   }
   my $sth=$dbh->prepare($query);         
   #  print $query;           
@@ -1077,7 +1101,7 @@ sub itemcount {
       if ($data->{'holdingbranch'} eq 'S' || $data->{'holdingbranch'} eq 'SP'){         
         $scount++;               
       }                       
-      if ($data->{'itemlost'} eq '1'){
+      if ($data->{'itemlost'} eq '1' || $data->{'itemlost'} eq '2'){
         $lostcount++;
       }
       if ($data->{'holdingbranch'} eq 'FM'){
