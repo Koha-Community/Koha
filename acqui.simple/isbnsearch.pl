@@ -54,7 +54,7 @@ if (! $isbn && !$title) {
 		$showoffset = 1;
 	};
 	if (! $num) { $num = 10 };
-	($count, @results) = isbnsearch($isbn);
+	($count, @results) = isbnsearch($isbn,$title);
 
 	if ($count < ($offset + $num)) {
 		$total = $count;

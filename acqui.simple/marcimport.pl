@@ -131,9 +131,9 @@ if ($uploadmarc && length($uploadmarc)>0) {
 					my $recoded;
 					$recoded = $marcrecord->as_usmarc();
 						if ($breedingid) {
-							$replacesql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$oldbiblio->{title},$oldbiblio->{author},$recoded,$breedingid);
+							$replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded,$breedingid);
 						} else {
-							$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$oldbiblio->{title},$oldbiblio->{author},$recoded);
+							$insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,10),$oldbiblio->{title},$oldbiblio->{author},$recoded);
 						}
 					$imported++;
 				} else {
@@ -810,6 +810,9 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.28  2003/01/28 15:00:31  tipaul
+# user can now search in breeding farm with isbn/issn or title. Title/name are stored in breeding farm and showed when a search is done
+#
 # Revision 1.27  2003/01/26 23:21:49  acli
 # Handle non-latin1 charsets
 #
