@@ -193,12 +193,13 @@ do {
 print "\n";
 print "\n";
 print qq|
-Please provide the path to your Koha includes folder.
+Please provide the full path to your Koha OPAC installation.
+Usually /usr/local/www/koha/htdocs
 |;
 
 #Get the password for the database user
 do {
-	print "Enter path to includes:";
+	print "Enter installation path:";
 	chomp($inc_path = <STDIN>);
 };
 
@@ -211,7 +212,7 @@ database=$dbname
 hostname=$hostname
 user=$user
 password=$pass
-includes=$inc_path
+includes=$inc_path/includes
 EOP
 ;
 close(SITES);
