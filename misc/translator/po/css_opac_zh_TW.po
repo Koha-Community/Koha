@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha OPAC 2.1cvs\n"
-"POT-Creation-Date: 2004-12-30 01:55-0500\n"
+"POT-Creation-Date: 2004-12-30 02:06-0500\n"
 "PO-Revision-Date: 2004-02-18 02:40-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -17,142 +17,301 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. %1$p: type=radio name=ttype value=normal
-#. %2$p: type=radio name=ttype value=exact
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
-#, c-format
-msgid "%pNormal%pExact"
-msgstr "%p一般%p完全吻合"
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+msgid " Biblio(s) added"
+msgstr ""
 
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
 #. %3$s: TMPL_VAR name=title
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:11
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:7
 #, c-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
+#. %1$s: TMPL_VAR name=shelfname
+#. %2$s: TMPL_VAR name=shelfbookcount
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:90
+#, c-format
+msgid "%s (%s books)"
+msgstr "%s (%s本書)"
+
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:9
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
 #. %1$s: TMPL_VAR name=phone
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:9
 #, c-format
 msgid "%s (hm)"
 msgstr "%s (住宅)"
 
+# TODO 要覆查譯文
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=biblionumber
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:23
+#, c-format
+msgid "%s (record %s)"
+msgstr "%s (第 %s 個記錄)"
+
 # NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=faxnumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:10
 #, c-format
 msgid "%s (wk)"
 msgstr "%s (辦公室)"
 
-#. %1$s: TMPL_VAR name=CGIitemtype
-#. %2$S: type=text name=duration
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:105
-#, c-format
-msgid "%s <b>acquired in the last %S days</b>"
-msgstr "<b>最近%2$S日內新到的</b>%1$s"
-
 #. %1$s: TMPL_VAR name=biblioitemnumber
 #. %2$s: TMPL_VAR name=description
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:17
 #, c-format
 msgid "%s GROUP - %s"
 msgstr "%s 群組 - %s"
 
 #. %1$s: TMPL_VAR name=itemtype
 #. %2$s: TMPL_VAR name=duration
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:9
+#. %3$s: TMPL_VAR name=total
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:7
 #, c-format
-msgid "%s acquired in the last <i>%s</i> days"
-msgstr "最近<b>%2$s</b>日內新到的%1$s"
+msgid "%s acquired in the last <i>%s</i> days. %s results found"
+msgstr "最近<b>%2$s</b>日內新到的%1$s。找到%3$s個結果"
 
-#. %1$s: TMPL_VAR name=numrecords
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:15
+#. %1$s: TMPL_VAR name=CGIitemtype
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:41
 #, c-format
-msgid "%s results found"
-msgstr "找到%s個結果"
+msgid "%s acquired recently (the most recent being first)"
+msgstr ""
 
+#. %1$s: TMPL_VAR name=numberlength
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:70
+#, c-format
+msgid "%s issues"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=monthlength
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:72
+#, c-format
+msgid "%s months"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=weeklength
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:71
+#, c-format
+msgid "%s weeks"
+msgstr "%s 個星期"
+
+#. %1$s: TMPL_VAR name=shelfname
+#. %2$s: TMPL_VAR name=shelfbookcount
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:148
+#, c-format
+msgid "%s(%s books)"
+msgstr "%s(%s本書)"
+
+#. %1$s: TMPL_VAR name=author
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:3
+#, c-format
+msgid "%s,"
+msgstr "%s,"
+
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=streetaddress
 #. %2$s: TMPL_VAR name=city
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:8
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:39
 #, c-format
 msgid "%s, %s"
 msgstr "%s, %s"
 
+#. %1$s: TMPL_VAR name=btitle
+#. %2$s: TMPL_VAR name=branch
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:42
+#, c-format
+msgid "%s, pick up at: <b>%s</b>"
+msgstr "%s，取書處：<b>%s</b>"
+
 #  NOTE 見intranet模組譯文的備註
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:29
 msgid "&copy;"
 msgstr "出版年"
 
-#. %1$s: TMPL_VAR name=marcnotes
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:105
+msgid "&lt;&lt;&lt;Previous"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:127
+msgid "&lt;&lt;Previous"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:34
+msgid "&nbsp; No results found."
+msgstr "　什麼也找不到"
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=itemcallnumber
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:86
+#, c-format
+msgid "(%s)"
+msgstr "(%s)"
+
+#. %1$s: TMPL_VAR name=date_due
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:83
+#, c-format
+msgid "(On Loan until %s)"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=timestamp
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:73
+#, c-format
+msgid "(modified on %s)"
+msgstr ""
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=marcnote
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:70
 #, c-format
 msgid "- %s"
 msgstr "- %s"
 
-#. %1$s: TMPL_VAR name=marcsubjcts
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:77
+#. %1$s: TMPL_VAR name=marcsubjct
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:84
 #, c-format
-msgid "- <a1>%s</a>"
+msgid "- <a1> %s </a>"
 msgstr "- <a1>%s</a>"
 
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:27
+msgid "2 months"
+msgstr "兩個月"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:36
+msgid "2 quarters"
+msgstr "兩季"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:18
+msgid "2 weeks"
+msgstr "兩週"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:42
+msgid "2 years"
+msgstr "兩年"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:30
+msgid "3 months"
+msgstr "三個月"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:21
+msgid "3 weeks"
+msgstr "三週"
+
+#. %1$s: TMPL_VAR name=notes
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:71
+#, c-format
+msgid ": %s"
+msgstr ": %s"
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=place
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:72
+#, c-format
+msgid "; %s"
+msgstr "; %s"
+
+#. %1$s: TMPL_VAR name=loggedinusername
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:60
+#, fuzzy, c-format
+msgid "<a1> %s home </a> <a2> Log Out </a>"
+msgstr "目前身份：%s 【<a1>個人主頁</a>】【<a2>登出</a>】"
+
 #. %1$s: TMPL_VAR name=dateaccessioned
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:77
 #, c-format
 msgid "<a1> Accession</a> Date:%s"
 msgstr "<a1>登錄</a>日期：%s"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:5
+#, c-format
+msgid "<a1> ISBD </a> <a2> MARC </a> <a3> Print </a>"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-MARCdetail.tmpl:4
+#, c-format
+msgid "<a1> Normal </a> <a2> ISBD </a> <a3> Print </a>"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-ISBDdetail.tmpl:4
+#, c-format
+msgid "<a1> Normal </a> <a2> MARC </a> <a3> Print </a>"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=subject
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:53
+#, fuzzy, c-format
+msgid "<a1>%s</a>,"
+msgstr "- <a1>%s</a>"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-bottom.inc:9
 #, c-format
 msgid "<a1>Log In</a> to Koha"
 msgstr "<a1>登入</a>Koha"
 
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:15
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:72
 #, c-format
-msgid "<b>%s</b> ( record %s )"
-msgstr "<b>%s</b> (書目記錄號碼 %s)"
+msgid "<a1>Log in to Koha</a> to have personal options."
+msgstr ""
 
 #. %1$s: TMPL_VAR name=issues
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:87
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:81
 #, c-format
 msgid "<b><a1>Total Issues:</a></b> %s"
 msgstr "<b><a1>借書次數：</a></b> %s"
 
 #. %1$s: TMPL_VAR name=additional
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:44
 #, c-format
 msgid "<b>Additional Author:</b>%s"
 msgstr "<b>其他著者：</b>%s"
 
+#. %1$s: TMPL_VAR name=additional
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:31
+#, fuzzy, c-format
+msgid "<b>Additional authors:</b>%s"
+msgstr "<b>其他著者：</b>%s"
+
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:23
-#, c-format
-msgid "<b>Author:</b> <a1>%s</a>"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:30
+#, fuzzy, c-format
+msgid "<b>Author:</b> %s"
 msgstr "<b>著者：</b><a1>%s</a>"
 
 #. %1$s: TMPL_VAR name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:85
 #, c-format
 msgid "<b>Biblio number:</b> %s"
 msgstr "<b>書目記錄號碼：</b>%s"
 
 #. %1$s: TMPL_VAR name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:30
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:26
 #, c-format
 msgid "<b>Biblionumber:</b> %s"
 msgstr "<b>書目記錄號碼：</b>%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=classification
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:25
 #, c-format
 msgid "<b>Classification:</b> %s"
 msgstr "<b>分類：</b>%s"
@@ -161,134 +320,159 @@ msgstr "<b>分類：</b>%s"
 #. %1$s: TMPL_VAR name=classification
 #. %2$s: TMPL_VAR name=dewey
 #. %3$s: TMPL_VAR name=subclass
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:31
 #, c-format
 msgid "<b>Classification:</b> %s%s%s"
 msgstr "<b>索書號：</b>%s%s%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=seriestitle
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:19
 #, c-format
 msgid "<b>Collection:</b> %s"
 msgstr "<b>館藏：</b>%s"
 
+#. %1$s: TMPL_VAR name=copyrightdate
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:38
+#, fuzzy, c-format
+msgid "<b>Copyright year:</b> %s"
+msgstr "<b>備註：</b>%s"
+
 # NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=holdingbranch
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:71
 #, c-format
 msgid "<b>Current Branch:</b> %s"
 msgstr "<b>目前分館：</b>%s"
 
 #. %1$s: TMPL_VAR name=publicationyear
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:35
 #, c-format
 msgid "<b>Date:</b> %s"
 msgstr "<b>日期：</b>%s"
 
 #. %1$s: TMPL_VAR name=dewey
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:24
 #, c-format
 msgid "<b>Dewey:</b> <a1>%s</a>"
 msgstr "<b>杜威分類號：</b><a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=dewey
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:42
+#, fuzzy, c-format
+msgid "<b>Dewey:</b>%s"
+msgstr "<b>日期：</b>%s"
+
 #. %1$s: TMPL_VAR name=biblioitemnumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:84
 #, c-format
 msgid "<b>Group Number:</b> %s"
 msgstr "<b>群組號碼：</b>%s"
 
 # XXX tentative
 #. %1$s: TMPL_VAR name=homebranch
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:65
 #, c-format
 msgid "<b>Home Branch:</b> %s"
 msgstr "<b>您的分館：</b>%s"
 
 #. %1$s: TMPL_VAR name=isbn
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:32
 #, c-format
 msgid "<b>ISBN:</b> %s"
 msgstr "<b>國際標準書號：</b>%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=ISBN
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:21
-#, c-format
-msgid "<b>ISBN:</b><a1>%s</a>"
-msgstr "<b>國際標準書號：</b><a1>%s</a>"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:28
+#, fuzzy, c-format
+msgid "<b>ISBN:</b>%s"
+msgstr "<b>國際標準書號：</b>%s"
 
 #. %1$s: TMPL_VAR name=illus
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:38
 #, c-format
 msgid "<b>Illus:</b> %s"
 msgstr "<b>繪圖：</b>%s"
 
 #. %1$s: TMPL_VAR name=itemtype
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:27
 #, c-format
 msgid "<b>Item Type:</b> %s"
 msgstr "<b>圖書資料類別：</b>%s"
 
 #. %1$s: TMPL_VAR name=itemlost
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:73
 #, c-format
 msgid "<b>Item lost:</b> %s"
 msgstr "<b>遺失圖書資料：</b>%s"
 
+#. %1$s: TMPL_VAR name=itemtype
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:60
+#, fuzzy, c-format
+msgid "<b>Item type : </b>%s"
+msgstr "<b>圖書資料類別：</b>%s"
+
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=lccn
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:26
 #, c-format
 msgid "<b>LCCN:</b> %s"
 msgstr "<b>LCCN：</b>%s"
 
 # NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=card0
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:75
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:69
 #, c-format
 msgid "<b>Last Borrower 1:</b> %s"
 msgstr "<b>最近借閱者1：</b>%s"
 
 # NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=card1
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:70
 #, c-format
 msgid "<b>Last Borrower 2:</b> %s"
 msgstr "<b>最近借閱者2：</b>%s"
 
 #. %1$s: TMPL_VAR name=timestamp0
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:67
 #, c-format
 msgid "<b>Last borrowed:</b> %s"
 msgstr "<b>最近借出：</b>%s"
 
 #. %1$s: TMPL_VAR name=datelastseen
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:66
 #, c-format
 msgid "<b>Last seen:</b> %s"
 msgstr "<b>最近出現：</b>%s"
 
 #. %1$s: TMPL_VAR name=loanlength
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:29
 #, c-format
 msgid "<b>Loan Length:</b> %s"
 msgstr "<b>借閱期限：</b>%s"
 
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:45
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:41
 #, c-format
 msgid "<b>No. of Items:</b> %s"
 msgstr "<b>數量：</b>%s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=bnotes
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:44
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:81
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:32
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:40
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:75
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:22
 #, c-format
 msgid "<b>Notes:</b> %s"
 msgstr "<b>備註：</b>%s"
 
 #. %1$s: TMPL_VAR name=pages
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:41
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:37
 #, c-format
 msgid "<b>Pages:</b> %s"
 msgstr "<b>頁數：</b>%s"
@@ -297,518 +481,820 @@ msgstr "<b>頁數：</b>%s"
 # NOTE in sub returnlost (and/or read <URL:http://www.koha.org/download/files/ChangeLog>).
 # NOTE This is a "theoretically free form" field storing strings like "Paid for by $bor $date"
 #. %1$s: TMPL_VAR name=paidfor
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:74
 #, c-format
 msgid "<b>Paid for:</b> %s"
 msgstr "<b>賠償：</b>%s"
 
 #. %1$s: TMPL_VAR name=place
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:34
 #, c-format
 msgid "<b>Place:</b> %s"
 msgstr "<b>出版地：</b>%s"
 
 #. %1$s: TMPL_VAR name=publishercode
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:15
 #, c-format
 msgid "<b>Published by :</b>%s"
 msgstr "<b>出版者：</b>%s"
 
 #. %1$s: TMPL_VAR name=publishercode
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:33
 #, c-format
 msgid "<b>Publisher:</b> %s"
 msgstr "<b>出版者：</b>%s"
 
 #. %1$s: TMPL_VAR name=renewals
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:82
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:76
 #, c-format
 msgid "<b>Renewals:</b> %s"
 msgstr "<b>續借次數：</b>%s"
 
 #. %1$s: TMPL_VAR name=rentalcharge
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:30
 #, c-format
 msgid "<b>Rental Charge:</b> %s"
 msgstr "<b>借書費用：</b>%s"
 
 #. %1$s: TMPL_VAR name=replacementprice
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:72
 #, c-format
 msgid "<b>Replacement Price:</b> %s"
 msgstr "<b>書價：</b>%s"
 
 #. %1$s: TMPL_VAR name=serial
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:41
 #, c-format
 msgid "<b>Serial:</b>%s"
 msgstr "<b>期刊：</b>%s"
 
 #. %1$s: TMPL_VAR name=size
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:39
 #, c-format
 msgid "<b>Size:</b> %s"
 msgstr "<b>大小：</b>%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=subject
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:30
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:20
 #, c-format
 msgid "<b>Subject:</b> %s"
 msgstr "<b>主題：</b>%s"
 
-#. %1$s: TMPL_VAR name=subtitle
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:22
-#, c-format
-msgid "<b>Subtitle:</b>%s"
-msgstr "<b>副題：</b>%s"
-
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:61
 #, c-format
 msgid "<b>Total Number of Items:</b> %s"
 msgstr "<b>項目總數：</b>%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=url
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:32
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:45
 #, c-format
 msgid "<b>URL:</b> %s"
 msgstr "<b>網址：</b>%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=url
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:27
 #, c-format
 msgid "<b>URL:</b> <a1>%s</a>"
 msgstr "<b>網址：</b><a1>%s</a>"
 
 #. %1$s: TMPL_VAR name=unititle
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:40
+#, fuzzy, c-format
+msgid "<b>Uniform title:</b> %s"
+msgstr "<b>劃一題名：</b>%s"
+
+#. %1$s: TMPL_VAR name=unititle
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:23
 #, c-format
 msgid "<b>Unititle:</b> %s"
 msgstr "<b>劃一題名：</b>%s"
 
 #. %1$s: TMPL_VAR name=volumeddesc
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:40
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:36
 #, c-format
 msgid "<b>Volume:</b> %s"
 msgstr "<b>集叢號：</b>%s"
 
 #. %1$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:21
 #, c-format
 msgid "<b>Year :</b> %s"
 msgstr "<b>年份：</b>%s"
 
 # XXX This (in the English template) is problematic
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:26
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:16
 #, c-format
 msgid "<b>in </b>%s"
 msgstr "　<b>於</b>%s"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:10
-msgid "AMOUNT"
-msgstr "金額"
+#. %1$s: TMPL_VAR name=publishercode
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:32
+#, fuzzy, c-format
+msgid "<b>published by :</b>%s"
+msgstr "<b>出版者：</b>%s"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:7
-msgid "ARE OUR RECORDS CORRECT?"
-msgstr "紀錄正確嗎？"
+#. %1$s: TMPL_VAR name=subtitle
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:29
+#, fuzzy, c-format
+msgid "<b>subtitle:</b>%s"
+msgstr "<b>副題：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:121
+msgid "A free can be managed by any user."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:120
+msgid "A public can be seen by everybody, but managed only by you."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:127
+msgid ""
+"A search is done on every words you enter. Empty words are ignored. If you "
+"enter, for example \"the two towers\" in the title, the result list will "
+"contain all the books containing two AND tower in the title. The \"the\" "
+"will be discarded."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:64
+msgid "Accepted"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:118
+msgid "Accepted, will be ordered soon"
+msgstr ""
 
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-account.tmpl:5
 #, c-format
 msgid "Account for %s %s"
 msgstr "%s %s 的帳戶"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:111
+msgid "Acquisition date"
+msgstr ""
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:41
+msgid "Add Checked Items to Biblio Basket"
+msgstr ""
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:126
+msgid "Add New Shelf"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:106
+msgid "Add Shelf"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=shelfname
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:44
+#, c-format
+msgid "Add a book by barcode in %s:"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:155
+msgid "Add or Remove Book Shelves"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:24
+msgid "Add to basket"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=additional
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:20
+#, fuzzy, c-format
+msgid "Additional authors: %s"
+msgstr "<b>其他著者：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:34
 msgid "Advanced Search, More Options"
 msgstr "進階查詢（更多選項）"
 
+#. A
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:35
+#, fuzzy
+msgid "Advanced search"
+msgstr "進階查詢（更多選項）"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-account.tmpl:10
+#, fuzzy
+msgid "Amount"
+msgstr "數量"
+
 # NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/kohaerror.tmpl:6
-msgid "An error has occurred"
+#: ../../koha-tmpl/opac-tmpl/css/en/kohaerror.tmpl:8
+#, fuzzy
+msgid "An Error has Occurred"
 msgstr "發生錯誤"
 
 # NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:55
 msgid "Any"
 msgstr "任何"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Apr"
-msgstr "四月"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:13
+#, fuzzy
+msgid "Any word"
+msgstr "關鍵詞"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Aug"
-msgstr "八月"
+# NOTE 譯文更動 by Arthur
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:86
+#, fuzzy
+msgid "Anybody"
+msgstr "任何"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:31
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:72
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:94
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:5
+msgid "Are our records correct?"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:117
+msgid "Asked"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:28
 msgid "Author"
 msgstr "著者"
 
+#. %1$s: TMPL_VAR name=author
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:19
+#, fuzzy, c-format
+msgid "Author: %s"
+msgstr "著者"
+
 # NOTE See disambiguation notes for "Online"
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:120
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:79
 msgid "Available"
 msgstr "在館內"
 
 #. %1$s: TMPL_VAR name=barcode
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:51
 #, c-format
 msgid "BARCODE %s"
 msgstr "條碼 %s"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:53
+#. %1$s: TMPL_VAR name=biblionumber
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:7
+#, fuzzy, c-format
+msgid "BIBLIO RECORD %s"
+msgstr "條碼 %s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:5
+msgid "Back to biblio"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:57
 msgid "Barcode"
 msgstr "條碼"
 
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+msgid "Basket is empty"
+msgstr ""
+
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+msgid "Biblio added to the basket"
+msgstr ""
+
+#. A
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:39
+msgid "Biblio basket"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:67
+msgid "Bookshelves"
+msgstr ""
+
+# NOTE 譯文更動 by Arthur
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:52
+#, fuzzy
+msgid "Branch"
+msgstr "取書分館"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:124
+msgid "Branches"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:74
+#, fuzzy
+msgid "Call Number"
+msgstr "借書證號碼："
+
 #. %1$s: TMPL_VAR name=wthdrawn
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:86
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:80
 #, c-format
 msgid "Cancelled: %s"
 msgstr "已註銷：%s"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:37
 msgid "Cannot be Reserved"
 msgstr "無法預約"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:33
-msgid "Cardnumber:"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:28
+#, fuzzy
+msgid "Cardnumber"
 msgstr "借書證號碼："
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-bottom.inc:8
-msgid "Catalogue Search"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:4
+#, fuzzy
+msgid "Catalogue search"
 msgstr "館藏查詢"
 
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:113
+msgid "Category :"
+msgstr ""
+
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:57
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:80
 msgid "Change Language"
 msgstr "選擇語文"
 
 # FIXME poor translation
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:58
 msgid "Charges"
 msgstr "費用"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:14
 msgid "City"
 msgstr "市"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:41
-msgid "Class"
-msgstr "類別"
+#. %1$s: TMPL_VAR name=classification
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:29
+#, fuzzy, c-format
+msgid "Classification: %s"
+msgstr "<b>分類：</b>%s"
 
 #. INPUT type=reset
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:59
-msgid "Clear All Fields"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:41
+#, fuzzy
+msgid "Clear All"
 msgstr "全部清空"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:14
-msgid "Compact Disc"
-msgstr "光碟"
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-menu.inc:12
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:21
+#, fuzzy
+msgid "Close"
+msgstr "類別"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:50
+#, fuzzy
+msgid "Collection:"
+msgstr "<b>館藏：</b>%s"
+
+#. %1$s: TMPL_VAR name=seriestitle
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:22
+#, fuzzy, c-format
+msgid "Collection: %s"
+msgstr "<b>館藏：</b>%s"
+
+#. %1$s: TMPL_VAR name=shelfname
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:8
+#, c-format
+msgid "Contents of %s"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:30
 msgid "Copies"
 msgstr "數量"
 
-# FIXME variable name is "status", but...
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:98
-msgid "Current Loan"
-msgstr "目前狀態"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:11
+msgid "Copyright date"
+msgstr ""
 
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:49
-msgid "Date Due"
-msgstr "歸還日期"
+#. %1$s: TMPL_VAR name=copyrightdate
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:24
+#, c-format
+msgid "Copyright year: %s"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:66
-msgid "Day"
-msgstr "日"
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:136
+#, fuzzy
+msgid "Delete"
+msgstr "移除"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Dec"
-msgstr "十二月"
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:97
+msgid "Delete Shelves"
+msgstr ""
 
 # TODO 要覆查譯文
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:68
 msgid "Detailed notes:"
 msgstr "備注詳情："
 
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:108
+msgid "Dewey"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:58
+msgid "Dewey:"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=dewey
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:28
+#, c-format
+msgid "Dewey: %s"
+msgstr ""
+
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-top.inc:18
+msgid "Do you want to empty the basket ?"
+msgstr ""
+
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-top.inc:18
+msgid "Do you want to remove selected biblios ?"
+msgstr ""
+
 # NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:55
 msgid "Due date"
 msgstr "歸還日期"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:5
-msgid "Easy / Picture Books"
-msgstr "淺易/圖畫書"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:14
+msgid "E-mail address"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:6
-msgid "Easy Reader"
-msgstr "淺易讀本"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:17
 msgid "Email"
 msgstr "電郵"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:64
-msgid "End reserve on this date:"
-msgstr "在此日期停止預約："
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-menu.inc:4
+msgid "Empty"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:9
-msgid "FINES &amp; CHARGES"
-msgstr "罰款及費用"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:151
+msgid "Enter a new suggestion"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Feb"
-msgstr "二月"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:5
+msgid ""
+"Fill this form to suggest the library a new acquisition. You will be mailed "
+"when the library treats you suggestion"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:12
-msgid "Fiction"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:39
+#, fuzzy
+msgid "Filter on"
 msgstr "小說"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:18
-msgid "Firstname"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-account.tmpl:9
+msgid "Fines & charges"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:12
+#, fuzzy
+msgid "First name"
 msgstr "名"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-bottom.inc:9
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:33
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:116
+msgid "Free"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:60
+#, fuzzy
+msgid "Friday"
+msgstr "日"
+
+#. %1$s: TMPL_VAR name=email_sender
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:6
+#, c-format
+msgid "Hi, Here is the biblio basket sent by %s"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:118
+msgid "Hints"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:33
 msgid "Home"
 msgstr "返回首頁"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:15
 msgid "Home phone"
 msgstr "住宅電話"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:36
-msgid "Illustrator"
-msgstr "繪圖"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:82
+msgid "ISBN"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:16
+msgid "ISBN/ISSN"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:49
+msgid "ISBN:"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=ISBN
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:17
+#, fuzzy, c-format
+msgid "ISBN: %s"
+msgstr "<b>國際標準書號：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:128
+msgid ""
+"If you want to enter a partial word, add a * or a % at the end of the word. "
+"For example \"two tower*\" will retrieve \"the two towers\", \"two white "
+"towers\", \"a tower and two cities\""
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:5
+msgid "Impossible to set reserve because"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:21
+msgid "Issues"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:4
+msgid "Issues for a subscription"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:77
+msgid "Issues summary"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=startdate
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:9
+#, c-format
+msgid "It began on <b>%s</b> and is issued every <b>"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:99
+#, fuzzy
+msgid "Item"
+msgstr "圖書資料類別"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:45
 msgid "Item Count"
 msgstr "數量"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:47
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:44
 msgid "Item Type"
 msgstr "圖書資料類別"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:66
+#, fuzzy
+msgid "Item barcode"
+msgstr "條碼"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-MARCdetail.tmpl:226
+#, fuzzy
+msgid "Items"
+msgstr "圖書資料類別"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:56
 msgid "Itemtype"
 msgstr "圖書資料類別"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Jan"
-msgstr "一月"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:29
-msgid "Join"
-msgstr "讀者登記"
-
-#. A
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:28
-msgid "Join the library"
-msgstr "辦理讀者登記手續"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Jul"
-msgstr "七月"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Jun"
-msgstr "六月"
-
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:8
-msgid "Junior Fiction"
-msgstr "學童/初級小說"
-
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:7
-msgid "Junior Non-Fiction"
-msgstr "學童/初級非小說"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:20
-msgid "KOHA"
-msgstr "KOHA"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:5
-msgid "KOHA: OPAC Catalogue Search"
-msgstr "KOHA：查詢館藏"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:8
-msgid "Keywords"
-msgstr "關鍵詞"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:32
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:27
 msgid "Koha Login"
 msgstr "登入Koha"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:50
-msgid "Last Seen"
-msgstr "最近出現"
+#. A
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:33
+#, fuzzy
+msgid "Koha home page"
+msgstr "返回首頁"
+
+#. %1$s: TMPL_VAR name=lccn
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:30
+#, fuzzy, c-format
+msgid "LCCN: %s"
+msgstr "<b>LCCN：</b>%s"
 
 #. %1$s: TMPL_VAR name=cardnumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:6
 #, c-format
 msgid "Library Card: %s"
 msgstr "借書證：%s"
 
 #  NOTE 存放地點 used by HKPL; libraries in Taiwan seems to always write 館藏地
 #  NOTE The HKPL term seems to be more understandable
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:46
 msgid "Location"
 msgstr "存放地點"
 
-#. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:35
-msgid "Log In"
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-bottom.inc:5
+#, fuzzy
+msgid "Log Out"
 msgstr "登入"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:119
-msgid "Log In to Koha"
-msgstr "登入Koha"
-
-#. For the first occurrence,
 #. %1$s: TMPL_VAR name=loggedinusername
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:44
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:117
-#, c-format
-msgid "Logged in as: %s [<a1>Members Home</a>][<a2>Log Out</a>]"
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-bottom.inc:4
+#, fuzzy, c-format
+msgid "Logged in as <b>%s</b> <a1>Members Home</a>"
 msgstr "目前身份：%s 【<a1>個人主頁</a>】【<a2>登出</a>】"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Mar"
-msgstr "三月"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:33
+msgid "Managed by"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "May"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:85
+msgid "Me"
+msgstr ""
+
+#. A
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:37
+#, fuzzy
+msgid "Member Home page"
+msgstr "返回首頁"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:4
+msgid "Member information change"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:68
+#, fuzzy
+msgid "Message from the library"
+msgstr "辦理讀者登記手續"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:48
+#, fuzzy
+msgid "Monday"
 msgstr "五月"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Month"
-msgstr "月"
+#. %1$s: TMPL_VAR name=biblionumber
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:3
+#, c-format
+msgid "N&#176;%s)"
+msgstr ""
 
-#. IMG
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/default/en/subject.tmpl:30
-msgid "Next Page"
-msgstr "下一頁"
+#. %1$S: type=text name=addshelf
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:111
+#, c-format
+msgid "Name : %S"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:109
-msgid "Next Records"
-msgstr "下一筆"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:135
+msgid "Next &gt;&gt;"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:106
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:112
+msgid "Next &gt;&gt;&gt;"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:69
 msgid "No"
 msgstr "否"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:13
-msgid "Non-Fiction"
-msgstr "非小說"
+#. For the first occurrence,
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-top.inc:18
+msgid "No biblio added"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:89
+#. For the first occurrence,
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-top.inc:18
+msgid "No biblio selected"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:6
+msgid ""
+"No fields are mandatory. Fill whatever you know. The \"Note\" field can be "
+"used for whatever you want"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:96
 msgid "Not Reservable"
 msgstr "不可預約"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:63
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:34
+#, fuzzy
+msgid "Note"
+msgstr "否"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:153
 msgid ""
-"Note that if you enter a value in Keyword and a value somewhere else, only "
-"keyword will be used"
+"Note : if you ask suggestion done by anybody, the result will contain only "
+"new suggestions. Suggestions treated by a librarian will not be shown."
 msgstr ""
-"注意：一旦輸入了「關鍵詞」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵"
-"字。"
 
 #. %1$s: TMPL_VAR name=fee
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:72
 #, c-format
 msgid "Note there will be a reserve charge of <b>$%s</b>"
 msgstr "注意：預約須繳交手續費<b>$%s</b>"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Nov"
-msgstr "十一月"
+#. %1$s: TMPL_VAR name=notes
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:25
+#, fuzzy, c-format
+msgid "Notes : %s"
+msgstr "<b>備註：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:56
+msgid "Notes:"
+msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:49
 msgid "OK"
 msgstr "好!"
 
-#. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:58
-msgid "OK Start Search"
-msgstr "開始查詢"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:13
-msgid "OR :"
-msgstr "或："
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:21
-msgid "OR one or more from :"
-msgstr "或下列最少一項："
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Oct"
-msgstr "十月"
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-top.inc:6
+msgid "OPAC Basket"
+msgstr ""
 
 # NOTE 譯文更動 by Arthur
 # NOTE From Chris Cormack's example, the context of "Online" is actually like this:
 # NOTE    Item Type  Class    Location  Date Due   Last Seen  Barcode
 # NOTE    WEB        Website  Online    Available             www.useit.com
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:119
 msgid "Online"
 msgstr "網上"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:34
-msgid "Password:"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:69
+msgid "Ordered"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:104
+msgid "Ordered by"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:119
+#, fuzzy
+msgid "Ordered by the library"
+msgstr "辦理讀者登記手續"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:64
+msgid "Other options"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:112
+msgid "Owner :"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:126
+#, fuzzy
+msgid "Partial search"
+msgstr "館藏查詢"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:29
+#, fuzzy
+msgid "Password"
 msgstr "密碼："
 
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:74
-msgid "Pick Up Branch"
-msgstr "取書分館"
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:37
+msgid "Personal page"
+msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:74
 msgid "Place Reserve"
 msgstr "預約"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:3
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:5
 msgid "Please change what's needed. An email will be sent to the library."
 msgstr "請按需要更新，閣下所作之修改將以電郵方式寄至圖書館。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:52
 msgid "Please confirm that you wish to request an item of these types:"
 msgstr "請確定您要預約下列種類的圖書資料："
 
 # NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=CGIbranch
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:44
 #, c-format
 msgid "Please select the branch from which you want to collect the item: %s"
 msgstr "請指定您希望在哪間分館取書《%s》"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:21
 msgid ""
 "Please select which item types are ok for you. The first of these item that "
 "matches one of these types that becomes available will be set kept for you."
@@ -816,334 +1302,840 @@ msgstr ""
 "請您選擇有那幾類的圖書資料適合您。一有同類的圖書資料可借，該項圖書資料會隨即"
 "預留給您。"
 
-#. IMG
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:21
-#: ../../koha-tmpl/opac-tmpl/default/en/subject.tmpl:18
-msgid "Previous Page"
-msgstr "上一頁"
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-menu.inc:10
+msgid "Print"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:102
-msgid "Previous Records"
-msgstr "上一筆"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:114
+msgid "Private"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:9
+msgid "Problem sending the basket..."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:115
+msgid "Public"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:109
+msgid "Publication Year"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:15
+msgid "Publication place"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:14
+msgid "Publication year"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:45
+#, fuzzy
+msgid "Published by :"
+msgstr "<b>出版者：</b>%s"
+
+#. %1$s: TMPL_VAR name=publishercode
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:21
+#, fuzzy, c-format
+msgid "Published by: %s"
+msgstr "<b>出版者：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:30
+#, fuzzy
+msgid "Publisher"
+msgstr "<b>出版者：</b>%s"
+
+#. %1$S: type=text name=value
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:31
+#, c-format
+msgid "Quick search : %S"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:38
 msgid "Recent acquisitions"
 msgstr "新書"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:11
-msgid "Reference Books"
-msgstr "參考書"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:121
+#, fuzzy
+msgid "Recieved by the library"
+msgstr "辦理讀者登記手續"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:74
+msgid "Rejected"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:80
 msgid "Related links:"
 msgstr "相關網頁："
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:4
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:87
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:123
+msgid ""
+"Remember that a title can concern a physical author (Victor Hugo) or a "
+"company, group, collective author (CNRS, Library of Congress)"
+msgstr ""
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:33
+msgid "Remove Selected Items"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-menu.inc:6
+msgid "Remove selection"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:59
+#, fuzzy
+msgid "Renewable"
+msgstr "不可預約"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-ISBDdetail.tmpl:15
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-MARCdetail.tmpl:16
 msgid "Request"
 msgstr "預約"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:73
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:122
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:85
 msgid "Reserve date"
 msgstr "預約日期"
 
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:49
-msgid "Reserve on this date:"
-msgstr "由這日開始預約："
-
 #. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#. %3$s: TMPL_VAR name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:18
-#, c-format
-msgid "Reserve page for item: <b>%s (%s %s)</b>"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:3
+#, fuzzy, c-format
+msgid "Reserve page for <i>%s</i>"
 msgstr "圖書資料《<b>%s (%s %s)</b>》之預約頁"
 
 # NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=startfrom
 #. %2$s: TMPL_VAR name=endat
 #. %3$s: TMPL_VAR name=numrecords
-#: ../../koha-tmpl/opac-tmpl/default/en/subject.tmpl:15
+#: ../../koha-tmpl/opac-tmpl/css/en/subject.tmpl:17
 #, c-format
 msgid "Results %s through %s of %s records."
 msgstr "共%3$s項結果中的第%1$s至%2$s項結果"
 
 # NOTE 譯文更動 by Arthur
-#. %1$s: TMPL_VAR name=startfrom
-#. %2$s: TMPL_VAR name=endat
-#. %3$s: TMPL_VAR name=numrecords
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:122
-#, c-format
-msgid "Results <i>%s</i> through <i>%s</i> of <i>%s</i> records."
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=from
+#. %2$s: TMPL_VAR name=to
+#. %3$s: TMPL_VAR name=total
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:121
+#, fuzzy, c-format
+msgid "Results <b><i>%s</i> through <i>%s</i> of <i>%s</i></b>"
 msgstr "共<i>%3$s</i>項結果中的第<i>%1$s</i>至<i>%2$s</i>項結果"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:11
-msgid "STILL OWING"
-msgstr "尚欠"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:97
+msgid "Results per page :"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:15
-msgid "Salutation"
-msgstr "稱號"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:63
+msgid "Saturday"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:24
-msgid "Search"
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:50
+msgid "Save"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:9
+#, fuzzy
+msgid "Search on"
 msgstr "查詢"
 
-#. A
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:23
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:82
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:22
 msgid "Search the catalogue"
 msgstr "查詢館藏"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
-msgid "Sep"
-msgstr "九月"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:82
+msgid "Select Shelves to Delete"
+msgstr ""
 
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:16
-msgid "Something new ?"
-msgstr "有沒有更新？"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:125
+msgid ""
+"Select a branch if you want to limit your search to items in a specific "
+"branch. By default the search is done on every branches of the library"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-basket-menu.inc:8
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:15
+msgid "Send"
+msgstr ""
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:18
+msgid "Send suggestion to the library staff"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:4
+msgid "Sending the basket"
+msgstr ""
+
+#. A
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:20
+msgid "Serial issues"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=serial
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:27
+#, fuzzy, c-format
+msgid "Serial: %s"
+msgstr "<b>期刊：</b>%s"
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:93
+msgid "Set Filter"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:137
+msgid "Shelf List"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:73
+msgid "Shelf list"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:5
 msgid "Sorry, KOHA doesnt think you have permission for this page."
 msgstr "對不起，KOHA認為您沒有權限來這一頁。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:127
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:141
 msgid "Sorry, there were no results"
 msgstr "對不起，什麼也找不到"
 
-#. %1$s: TMPL_VAR name=too_many_reserves
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:10
-#, c-format
-msgid "Sorry, you cannot make more than %s reserves."
-msgstr "對不起，您不可預約超過%s項資料。"
-
-#. %1$s: TMPL_VAR name=too_much_oweing
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:9
-#, c-format
-msgid "Sorry, you cannot make reserves because you owe %s."
-msgstr "對不起，您尚欠%s，所以不可預約。"
-
 # FIXME
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:9
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:10
 msgid "Sorry, your session has timed out, please login again."
 msgstr "對不起，您的登入已逾時，請重新登入。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:21
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:60
+#, fuzzy
+msgid "Start search"
+msgstr "開始查詢"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:31
+msgid "Status"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-account.tmpl:11
+msgid "Still owing"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:13
 msgid "Street address"
 msgstr "地址"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/default/en/subject.tmpl:5
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/css/en/subject.tmpl:7
 msgid "Subject"
+msgstr "主題"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:51
+#, fuzzy
+msgid "Subject(s):"
+msgstr "主題"
+
+#. %1$s: TMPL_VAR name=subject
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:23
+#, fuzzy, c-format
+msgid "Subject: %s"
 msgstr "主題"
 
 # FIXME 譯文更動 by Arthur
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:79
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:18
 msgid "Submit"
 msgstr "遞交"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:12
+#. %1$s: TMPL_VAR name=bibliotitle
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:8
+#, c-format
+msgid "Subscription information for %s"
+msgstr ""
+
+# FIXME 譯文更動 by Arthur
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:42
+#, fuzzy
+msgid "Subtitle:"
+msgstr "遞交"
+
+#. %1$s: TMPL_VAR name=subtitle
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:18
+#, fuzzy, c-format
+msgid "Subtitle: %s"
+msgstr "<b>副題：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:32
+msgid "Suggested by"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:120
+msgid "Suggestion rejected : won't be buy"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:23
+msgid "Suggestions"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:44
+msgid "Summary"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:66
+#, fuzzy
+msgid "Sunday"
+msgstr "姓"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:10
 msgid "Surname"
 msgstr "姓"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:9
-msgid "Teacher Reference"
-msgstr "教師參考書"
+#. %1$s: TMPL_VAR name=email_add
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:7
+#, c-format
+msgid "The basket was sent to: %s"
+msgstr ""
 
 #. %1$s: TMPL_VAR name=reservecount
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:19
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:20
 #, c-format
 msgid "There are <b>%s</b> reserves already on this item."
 msgstr "已有<b>%s</b>人預約了這項資料。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:68
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:25
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:71
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:93
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:120
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:83
+#, c-format
+msgid ""
+"This Library is powered by <a1>Koha</a> free software ILS, and compliant "
+"with web standards <a2>"
+msgstr ""
+
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+msgid "This biblio is already in the basket"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:13
+msgid ""
+"This card has been declared lost. Reserve impossible. Please contact the "
+"library"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:128
+#, c-format
+msgid ""
+"This is a serial subscription. You can see which <a1> Issues </a> we have "
+"and don't have"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:57
+msgid "Thursday"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:21
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:11
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:53
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:83
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:9
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:27
 msgid "Title"
 msgstr "題名"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-account.tmpl:34
 msgid "Total Due"
 msgstr "共欠"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:130
-#, c-format
-msgid "Try another <a1>search</a>"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:145
+#, fuzzy, c-format
+msgid "Try another <a1>Advanced search</a>"
 msgstr "請以別的條件重試<a1>查詢</a>"
 
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:87
-msgid "Type in the box and press the enter key."
-msgstr "在空格輸入後，再按輸入鍵即可。"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:51
+msgid "Tuesday"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:17
+#. %1$s: TMPL_VAR name=url
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:31
+#, fuzzy, c-format
+msgid "URL : %s"
+msgstr "<b>網址：</b>%s"
+
+#. %1$s: TMPL_VAR name=unititle
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:26
+#, fuzzy, c-format
+msgid "Unified title: %s"
+msgstr "<b>劃一題名：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:57
+#, fuzzy
+msgid "Unititle:"
+msgstr "<b>劃一題名：</b>%s"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:12
 msgid "Update Record"
 msgstr "更新紀錄"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:57
+#. IMG
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:85
+msgid "Valid XHTML 1.0!"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:58
+msgid "View & manage suggestions"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:31
 msgid "View Accounts"
 msgstr "查看帳戶"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:5
-msgid "WELCOME TO THE KOHA OPAC"
-msgstr "KOHA線上目錄歡迎您"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:55
+msgid "Virtual shelves"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:13
+#, fuzzy
+msgid "Volume"
+msgstr "返回首頁"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:118
 msgid "Website"
 msgstr "網站"
 
-#. %1$s: TMPL_VAR name=branchname
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:102
-#, c-format
-msgid "Which is to be picked up from <b>%s</b>."
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:54
+msgid "Wednesday"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:64
+#, fuzzy
+msgid "Which is to be picked up from"
 msgstr "上列圖書資料之取書處為<b>%s</b>。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:16
 msgid "Work/Fax phone"
 msgstr "辦公電話/傳真"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:59
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:74
-msgid "Year"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:55
+#, fuzzy
+msgid "Year :"
 msgstr "年"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:106
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:69
 msgid "Yes"
 msgstr "是"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:11
-msgid "You already have a reserve placed on this item."
-msgstr "您已預約了這項資料。"
-
 # FIXME
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:15
 msgid "You are accessing koha from a different ip address! please login again."
 msgstr "您的IP位址改變了！請重新登入。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:11
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:12
+msgid ""
+"You are gone without address. Reservation is forbidden. Please contact the "
+"library"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:120
+msgid ""
+"You can enter a complete or a part of a title. The search will also be done "
+"in subtitles and other title related fields"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:122
+msgid ""
+"You can enter a name or a surname. The search will also be done in "
+"additional authors and other author related fields (translator, "
+"illustrator...)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:9
 msgid "You did not specify any search criteria"
 msgstr "您沒有指定任何查詢條件。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:19
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:20
 msgid "You entered an incorrect username or password, please try again."
 msgstr "您輸入錯了使用者名稱或密碼，請重試。"
 
 #. %1$s: TMPL_VAR name=issues_count
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:90
-#, c-format
-msgid "You have %s items currently issued."
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:50
+#, fuzzy, c-format
+msgid "You have <b>%s</b> items currently issued."
 msgstr "您目前借了 %s 項圖書資料。"
 
 #. %1$s: TMPL_VAR name=reserves_count
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:117
-#, c-format
-msgid "You have %s items currently reserved."
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:80
+#, fuzzy, c-format
+msgid "You have <b>%s</b> items currently reserved."
 msgstr "您目前預約了 %s 項圖書資料。"
 
 #. %1$s: TMPL_VAR name=amountoutstanding
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:51
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:30
 #, c-format
 msgid "You have a credit of %s"
 msgstr "您有 %s 結餘"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:74
 msgid "You have no items on issue."
 msgstr "您沒有借出任何圖書資料。"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=amountoutstanding
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:23
 #, c-format
 msgid "You have outstanding charges and fines of %s"
 msgstr "您尚欠款項 %s"
 
 # FIXME 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:39
 msgid "You have reserved items waiting:"
 msgstr "您可取書的預約圖書資料："
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:13
-msgid "You must select a branch for pickup!"
-msgstr "您一定要撰擇在哪間分館取書！"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:12
-msgid "You must select at least one item type!"
-msgstr "您一定要撰擇至少一種圖書資料的類別！"
-
 #. %1$s: TMPL_VAR name=searchdesc
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:6
-#, c-format
-msgid "You searched on <b>%s</b>"
+#. %2$s: TMPL_VAR name=total
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:4
+#, fuzzy, c-format
+msgid "You searched on <b>%s</b>. %s results found"
 msgstr "您查詢<b>%s</b>"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:10
-msgid "Young Adult Fiction"
-msgstr "青年小說類"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:14
+msgid "Your account is temporarily suspended. Please contact the library"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:2
+msgid "Your biblio basket"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:6
 msgid "Your changes won't appear until the library has validated them."
 msgstr "圖書館核實您的作的修改後，修改才會生效。"
 
-#. INPUT type=image name=delete
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:27
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:68
-msgid "delete"
-msgstr "移除"
-
-#. A
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:33
-msgid "home page"
-msgstr "返回首頁"
-
-#. INPUT type=image name=submit
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:25
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:66
-msgid "modify"
-msgstr "修改"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:74
-msgid "on issue bit"
-msgstr "借出"
-
-#. META http-equiv=Content-Type
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:6
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:4
-msgid "text/html; charset=iso-8859-1"
-msgstr "text/html; charset=UTF-8"
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:119
+msgid "a private bookshelf is managed by you & can be seen only by you."
+msgstr ""
 
 # NOTE This refers to new books acquired in the last so-and-so days
 # NOTE This is essentially the same string as the next, but different
 # NOTE due to technical difficulties (in creating an msgid from the HTML)
 # FIXME This string as it is is nearly untranslatable. The scanner need to be fixed.
-#~ msgid "%s <b>acquired in the last"
-#~ msgstr "最近新到的 %s 圖書資料：最近"
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:24
+#, fuzzy
+msgid "already in the basket"
+msgstr "最近新到的 %s 圖書資料：最近"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:105
+#, fuzzy
+msgid "barcode"
+msgstr "條碼"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:11
+msgid "basket.txt"
+msgstr ""
+
+# NOTE 譯文更動 by Arthur
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:103
+#, fuzzy
+msgid "date Due"
+msgstr "歸還日期"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:12
+#, fuzzy
+msgid "day"
+msgstr "日"
+
+#. INPUT type=image name=delete
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:63
+msgid "delete"
+msgstr "移除"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:69
+msgid "for"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:21
+#, fuzzy
+msgid "in"
+msgstr "讀者登記"
+
+#. IMG
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:17
+msgid "koha"
+msgstr ""
+
+#. IMG
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:29
+#, fuzzy
+msgid "koha logo"
+msgstr "登入Koha"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:104
+#, fuzzy
+msgid "last Seen"
+msgstr "最近出現"
+
+#  NOTE 存放地點 used by HKPL; libraries in Taiwan seems to always write 館藏地
+#  NOTE The HKPL term seems to be more understandable
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:102
+#, fuzzy
+msgid "location"
+msgstr "存放地點"
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-auth.tmpl:33
+#, fuzzy
+msgid "login"
+msgstr "讀者登記"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasketform.tmpl:13
+msgid "mail sent by"
+msgstr ""
+
+#. INPUT type=image name=submit
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:22
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:61
+msgid "modify"
+msgstr "修改"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:24
+#, fuzzy
+msgid "month"
+msgstr "月"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:45
+#, fuzzy
+msgid "on"
+msgstr "讀者登記"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:68
+msgid "on issue bit"
+msgstr "借出"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:33
+msgid "quarter"
+msgstr ""
+
+#. %1$s: TMPl_VAR name=startdate
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:74
+#, fuzzy, c-format
+msgid "since <b>%s</b>"
+msgstr "您查詢<b>%s</b>"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:15
+msgid "week"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:39
+#, fuzzy
+msgid "year"
+msgstr "年"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:9
+#, fuzzy
+msgid "you already have a reserve placed on this item."
+msgstr "您已預約了這項資料。"
+
+#. %1$s: TMPL_VAR name=too_many_reserves
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:8
+#, fuzzy, c-format
+msgid "you cannot make more than %s reserves."
+msgstr "對不起，您不可預約超過%s項資料。"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:11
+#, fuzzy
+msgid "you must select a branch for pickup!"
+msgstr "您一定要撰擇在哪間分館取書！"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:10
+#, fuzzy
+msgid "you must select at least on item type!"
+msgstr "您一定要撰擇至少一種圖書資料的類別！"
+
+#. %1$s: TMPL_VAR name=too_much_oweing
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:7
+#, c-format
+msgid "you owe %s"
+msgstr ""
+
+#~ msgid "%pNormal%pExact"
+#~ msgstr "%p一般%p完全吻合"
+
+#~ msgid "%s <b>acquired in the last %S days</b>"
+#~ msgstr "<b>最近%2$S日內新到的</b>%1$s"
+
+#~ msgid "<b>ISBN:</b><a1>%s</a>"
+#~ msgstr "<b>國際標準書號：</b><a1>%s</a>"
 
 #~ msgid "<em><a1>%s (%s)</a></em>"
 #~ msgstr "<em><a1>%s (%s)</a></em>"
+
+#~ msgid "AMOUNT"
+#~ msgstr "金額"
+
+#~ msgid "ARE OUR RECORDS CORRECT?"
+#~ msgstr "紀錄正確嗎？"
+
+#~ msgid "Apr"
+#~ msgstr "四月"
+
+#~ msgid "Aug"
+#~ msgstr "八月"
+
+#~ msgid "Compact Disc"
+#~ msgstr "光碟"
+
+# FIXME variable name is "status", but...
+#~ msgid "Current Loan"
+#~ msgstr "目前狀態"
+
+#~ msgid "Day"
+#~ msgstr "日"
+
+#~ msgid "Dec"
+#~ msgstr "十二月"
+
+#~ msgid "Easy / Picture Books"
+#~ msgstr "淺易/圖畫書"
+
+#~ msgid "Easy Reader"
+#~ msgstr "淺易讀本"
+
+#~ msgid "End reserve on this date:"
+#~ msgstr "在此日期停止預約："
 
 # TODO:舊譯「這是整個書名」
 # NOTE 譯文更動 by Arthur
 #~ msgid "Exact"
 #~ msgstr "完全吻合"
 
+#~ msgid "FINES &amp; CHARGES"
+#~ msgstr "罰款及費用"
+
+#~ msgid "Feb"
+#~ msgstr "二月"
+
+#~ msgid "Illustrator"
+#~ msgstr "繪圖"
+
+#~ msgid "Jan"
+#~ msgstr "一月"
+
+#~ msgid "Jul"
+#~ msgstr "七月"
+
+#~ msgid "Jun"
+#~ msgstr "六月"
+
+# NOTE 譯文更動 by Arthur
+#~ msgid "Junior Fiction"
+#~ msgstr "學童/初級小說"
+
+# NOTE 譯文更動 by Arthur
+#~ msgid "Junior Non-Fiction"
+#~ msgstr "學童/初級非小說"
+
+#~ msgid "KOHA"
+#~ msgstr "KOHA"
+
+#~ msgid "KOHA: OPAC Catalogue Search"
+#~ msgstr "KOHA：查詢館藏"
+
+#~ msgid "Log In to Koha"
+#~ msgstr "登入Koha"
+
+#~ msgid "Mar"
+#~ msgstr "三月"
+
+#~ msgid "Next Page"
+#~ msgstr "下一頁"
+
+#~ msgid "Next Records"
+#~ msgstr "下一筆"
+
+#~ msgid "Non-Fiction"
+#~ msgstr "非小說"
+
 # TODO 舊譯「書名中有這些字眼即可」
 #~ msgid "Normal"
 #~ msgstr "一般"
 
-#~ msgid "days"
-#~ msgstr "日"
+#~ msgid ""
+#~ "Note that if you enter a value in Keyword and a value somewhere else, "
+#~ "only keyword will be used"
+#~ msgstr ""
+#~ "注意：一旦輸入了「關鍵詞」，即使在其他欄位輸入了其他查詢條件，也只會使用關"
+#~ "鍵字。"
+
+#~ msgid "Nov"
+#~ msgstr "十一月"
+
+#~ msgid "OR :"
+#~ msgstr "或："
+
+#~ msgid "OR one or more from :"
+#~ msgstr "或下列最少一項："
+
+#~ msgid "Oct"
+#~ msgstr "十月"
+
+#~ msgid "Previous Page"
+#~ msgstr "上一頁"
+
+#~ msgid "Previous Records"
+#~ msgstr "上一筆"
+
+#~ msgid "Reference Books"
+#~ msgstr "參考書"
+
+# NOTE 譯文更動 by Arthur
+#~ msgid "Reserve on this date:"
+#~ msgstr "由這日開始預約："
+
+#~ msgid "STILL OWING"
+#~ msgstr "尚欠"
+
+#~ msgid "Salutation"
+#~ msgstr "稱號"
+
+#~ msgid "Sep"
+#~ msgstr "九月"
+
+# NOTE 譯文更動 by Arthur
+#~ msgid "Something new ?"
+#~ msgstr "有沒有更新？"
+
+#~ msgid "Sorry, you cannot make reserves because you owe %s."
+#~ msgstr "對不起，您尚欠%s，所以不可預約。"
+
+#~ msgid "Teacher Reference"
+#~ msgstr "教師參考書"
+
+# NOTE 譯文更動 by Arthur
+#~ msgid "Type in the box and press the enter key."
+#~ msgstr "在空格輸入後，再按輸入鍵即可。"
+
+#~ msgid "WELCOME TO THE KOHA OPAC"
+#~ msgstr "KOHA線上目錄歡迎您"
+
+#~ msgid "Young Adult Fiction"
+#~ msgstr "青年小說類"
+
+#~ msgid "text/html; charset=iso-8859-1"
+#~ msgstr "text/html; charset=UTF-8"
 
 #~ msgid "to Koha"
 #~ msgstr "Koha"

@@ -1,7 +1,7 @@
 # Koha OPAC module, traditional Chinese translation
-# Copyright (C) 2000-2004 Katipo Communications
+# Copyright (C) 2000-2005 Katipo Communications
 # This file is distributed under the same license as the Koha package.
-# Copyright 2004 Ambrose Li
+# Copyright 2004-2005 Ambrose Li
 # Copyright 2004 Arthur
 #
 # $Id$
@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha OPAC 2.1cvs\n"
-"POT-Creation-Date: 2004-03-28 03:13-0500\n"
+"POT-Creation-Date: 2004-12-30 01:55-0500\n"
 "PO-Revision-Date: 2004-02-18 02:40-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -90,6 +90,18 @@ msgstr "%s, %s"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:70
 msgid "&copy;"
 msgstr "出版年"
+
+#. %1$s: TMPL_VAR name=marcnotes
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:76
+#, c-format
+msgid "- %s"
+msgstr "- %s"
+
+#. %1$s: TMPL_VAR name=marcsubjcts
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:77
+#, c-format
+msgid "- <a1>%s</a>"
+msgstr "- <a1>%s</a>"
 
 #. %1$s: TMPL_VAR name=dateaccessioned
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
@@ -267,10 +279,10 @@ msgid "<b>No. of Items:</b> %s"
 msgstr "<b>數量：</b>%s"
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=notes
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:32
+#. %1$s: TMPL_VAR name=bnotes
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:44
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:32
 #, c-format
 msgid "<b>Notes:</b> %s"
 msgstr "<b>備註：</b>%s"
@@ -432,8 +444,8 @@ msgstr "四月"
 msgid "Aug"
 msgstr "八月"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:72
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:94
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:121
@@ -473,6 +485,11 @@ msgstr "借書證號碼："
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-bottom.inc:8
 msgid "Catalogue Search"
 msgstr "館藏查詢"
+
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:57
+msgid "Change Language"
+msgstr "選擇語文"
 
 # FIXME poor translation
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:97
@@ -519,6 +536,11 @@ msgstr "日"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:70
 msgid "Dec"
 msgstr "十二月"
+
+# TODO 要覆查譯文
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:76
+msgid "Detailed notes:"
+msgstr "備注詳情："
 
 # NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:95
@@ -662,9 +684,9 @@ msgid "Log In to Koha"
 msgstr "登入Koha"
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=loggedinuser
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:117
+#. %1$s: TMPL_VAR name=loggedinusername
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:44
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:117
 #, c-format
 msgid "Logged in as: %s [<a1>Members Home</a>][<a2>Log Out</a>]"
 msgstr "目前身份：%s 【<a1>個人主頁</a>】【<a2>登出</a>】"
@@ -812,9 +834,13 @@ msgstr "新書"
 msgid "Reference Books"
 msgstr "參考書"
 
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:77
+msgid "Related links:"
+msgstr "相關網頁："
+
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:4
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:87
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:27
 msgid "Request"
 msgstr "預約"
 
@@ -866,8 +892,9 @@ msgstr "稱號"
 msgid "Search"
 msgstr "查詢"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:82
+#. A
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:23
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:82
 msgid "Search the catalogue"
 msgstr "查詢館藏"
 
@@ -910,8 +937,8 @@ msgstr "對不起，您的登入已逾時，請重新登入。"
 msgid "Street address"
 msgstr "地址"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:16
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:16
 #: ../../koha-tmpl/opac-tmpl/default/en/subject.tmpl:5
 msgid "Subject"
 msgstr "主題"
@@ -937,8 +964,8 @@ msgstr "教師參考書"
 msgid "There are <b>%s</b> reserves already on this item."
 msgstr "已有<b>%s</b>人預約了這項資料。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:25
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:25
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:93
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:120
@@ -1091,8 +1118,8 @@ msgid "on issue bit"
 msgstr "借出"
 
 #. META http-equiv=Content-Type
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:4
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:6
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:4
 msgid "text/html; charset=iso-8859-1"
 msgstr "text/html; charset=UTF-8"
 
