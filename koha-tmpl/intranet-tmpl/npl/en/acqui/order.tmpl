@@ -6,17 +6,17 @@
 <table>
 <caption>Supplier Search Results</caption>
 <tr>
-	<th>Order</th>
-	<th>Receive</th>
+	<th colspan="2">Action</th>
 	<th>Company</th>
 	<th>
 		<table>
-			<tr>
-				<th>Basket</th>
-				<th>Items</th>
-				<th>Staff</th>
-				<th>Date</th>
-			</tr>
+					<tr>
+						<th>Basket</th>
+						<th>Items</th>
+						<th>Created by</th>
+						<th>Date</th>
+						<th>&nbsp;</th>
+					</tr>
 		</table>
 	</th>
 </tr>
@@ -24,23 +24,34 @@
 <!-- TMPL_LOOP name="loop_suppliers" -->
 	<tr>
 		<td>
-			<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" border="0" ></a>
+			<a href="basket.pl?id=<!-- TMPL_VAR name=supplierid -->">Add</a>
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" ALT="Add" border="0" ></a>
+			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=supplierid -->">Receive</a>
 		</td>
-		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=id -->"><!-- TMPL_VAR name="name" --></a></td>
+		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
-			<table>
-				<!-- TMPL_LOOP name="loop_basket" -->
-					<tr>
-						<td><a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a></td>
-						<td><TMPl_VAR name="total"></td>
-						<td><!-- TMPL_VAR name="authorisedby" --></td>
-						<td><!-- TMPL_VAR name="entrydate" --></td>
-					</tr>
-				<!-- /TMPL_LOOP -->
-			</table>
+<table>
+					<!-- TMPL_LOOP NAME="loop_basket" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><TMPL_VAR NAME="total"></td>
+							<td>
+								<!-- TMPL_VAR name="firstname" -->
+									<!-- TMPL_VAR name="surname" -->
+							</td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
+							<td>
+								<!-- TMPL_IF name="closedate" -->
+									closed on <!-- TMPL_VAR NAME="closedate" -->
+									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">View</a>
+								<!-- TMPL_ELSE -->
+									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">Modify</a>
+								<!-- /TMPL_IF -->
+							</td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+				</table>
 	</tr>
 <!-- /TMPL_LOOP -->
 </table>

@@ -10,11 +10,7 @@
 <caption>Start, Recieve, or Modify Any Order</caption>
 <tr>
 	<th><label for="supplier">Supplier ID or Name</label></th>
-	<td>
-		
-		<input type="text" size="25" name="supplier" id="supplier" />
-		
-	</td>
+	<td><input type="text" size="25" name="supplier" id="supplier" /></td>
 </tr>
 </table>
 <input type="submit" class="submit" value="Search" /></form>
@@ -58,6 +54,16 @@
         </form><!-- /TMPL_IF -->
 </div>
 
+<!-- suggestions -->
+<div class="details">
+	<h3>Pending Suggestions</h3>
+		<!-- TMPL_IF name="suggestion" -->
+			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Manage Suggestions</a>
+		<!-- TMPL_ELSE -->
+			No suggestions waiting
+		<!-- /TMPL_IF -->
+</div>
+
 <!-- showbudget-->
 	<div class="table"><table>
 		<caption>Budgets and Bookfunds</caption>
@@ -78,11 +84,13 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<td><b>Total</b></td>
-				<td><b><!-- TMPL_VAR name="total" --></b></td>
-				<td><b><!-- TMPL_VAR name="totspent" --></b></td>
-				<td><b><!-- TMPL_VAR name="totcomtd" --></b></td>
-				<td><b><!-- TMPL_VAR name="totavail" --></b></td>
+				<tfoot>
+				<td>Total</td>
+				<td><!-- TMPL_VAR name="total" --></td>
+				<td><!-- TMPL_VAR name="totspent" --></td>
+				<td><!-- TMPL_VAR name="totcomtd" --></td>
+				<td><!-- TMPL_VAR name="totavail" --></td>
+				</tfoot>
 			</tr>
 		</table></div>
 <p>		Use your reload button [ctrl + r] to get the most recent figures.
