@@ -37,8 +37,8 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 print $input->header;
 my $type=$input->param('type');
-print startpage();
-print startmenu('issue');
+# print startpage();
+# print startmenu('issue');
 print "Each box needs to be filled in with fine,time to start charging,charging cycle<br>
 eg 1,7,7 = $1 fine, after 7 days, every 7 days";
 
@@ -72,7 +72,7 @@ while (my $data=$sth->fetchrow_hashref){
     my $dat=$sth2->fetchrow_hashref;
     $sth2->finish;
     my $fine=$dat->{'fine'}+0;
-    $trow2[$i]="<input type=text name=\"$trow3[$i]$data->{'itemtype'}\" value=\"$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}\" size=6>";
+    $trow2[$i]="<input type=text name=\"$trow3[$i].$data->{'itemtype'}\" value=\"$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}\" size=6>";
   }
   print mktablerow(11,'white',$data->{'description'},@trow2);
 }
