@@ -28,6 +28,7 @@ use C4::Search;
 use C4::Output;
 use C4::Print;
 use C4::Reserves2;
+use C4::Auth;
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -38,6 +39,7 @@ my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
 
 my $query=new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
 my $branches = getbranches();
 my $printers = getprinters(\%env);
 
@@ -432,7 +434,7 @@ $returneditemstable .= "</table>\n";
 
 
 # actually print the page!
-print $query->header();
+print $query->header(-cookie => $sessioncookie);
 print startpage();
 print startmenu('circulation');
 

@@ -26,6 +26,7 @@ use CGI;
 use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Reserves2;
+use C4::Auth;
 
 ###############################################
 # constants
@@ -46,6 +47,7 @@ my $printers = getprinters(\%env);
 #  Getting state
 
 my $query=new CGI;
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
 
 
 my $branch = $query->param("branch");
@@ -293,7 +295,7 @@ EOF
 #######################################################################################
 # Make the page .....
 
-print $query->header;
+print $query->header(-cookie=>$sessioncookie);
 print startpage;
 #print startmenu('circulation');
 my @inp=startmenu('circulation');

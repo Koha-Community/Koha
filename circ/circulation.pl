@@ -480,9 +480,9 @@ EOF
 
 
 if ($branchcookie && $printercookie) {
-    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
 } else {
-    print $query->header();
+    print $query->header(-cookie=>[$sessioncookie]);
 }
 
 print startpage();
