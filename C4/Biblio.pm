@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.53  2003/07/10 12:24:20  tipaul
+# typo fix
+#
 # Revision 1.52  2003/07/10 10:37:19  tipaul
 # fix for copyrightdate problem, #514
 #
@@ -1104,7 +1107,7 @@ sub MARCmarc2koha {
 	if ($1>0) {
 		$result->{'copyrightdate'} = $1;
 	} else { # if no cYYYY, get the 1st date.
-		$x =~ m/(\d\d\d\d)/;
+		$temp =~ m/(\d\d\d\d)/;
 		$result->{'copyrightdate'} = $1;
 	}
 	return $result;
