@@ -13,15 +13,15 @@ input{font-size:16px}
 <!--
 if (document.images){
 search=new Image;
-search.src ="/images/front-mouseover-search.gif"
+search.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif"
 members=new Image;
-members.src ="/images/front-mouseover-member.gif"
+members.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif"
 acquisitions=new Image;
-acquisitions.src ="/images/front-mouseover-acquisitions.gif"
+acquisitions.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-acquisitions.gif"
 reports=new Image;
-reports.src ="/images/front-mouseover-reports.gif"
+reports.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-reports.gif"
 circulation=new Image;
-circulation.src ="/images/front-mouseover-circulation.gif"
+circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation.gif"
 }
 //-->
 </script>
@@ -76,7 +76,7 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 			<td background="" colspan=5><img src="/images/holder.gif"
 			width=1 height=1 hspace=0 vspace=0></td>
 
-			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='/images/front-mouseover-search.gif'" 		onMouseOut="if(document.images)document.search.src='/images/front-search.gif'"><img src="/images/front-search.gif" width=320 	height=37 name="search"
+			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif'" 		onMouseOut="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-search.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-search.gif" width=320 	height=37 name="search"
 			hspace=0 vspace=0 border=0></a></td>
 		</tr>
 		<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
@@ -95,7 +95,7 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 			<font size=1 face="arial,helvetica" ><b>Type in the box and press the enter key.</b><br>
 			<a href="/cgi-bin/koha/catalogue-home.pl">
 			<font size=2 face="arial narrow,arial,helvetica">
-			<img src="/images/front-arrow-purple.gif" width=27 height=22
+			<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow-purple.gif" width=27 height=22
 			alt="-" hspace=0 vspace=0 border=0 align=middle >Advanced Search (More Options)</a><br>
 
 			<img src="/images/holder.gif" width=1 height=8
@@ -110,8 +110,8 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 			<td></td>
 			<form action="/cgi-bin/koha/member.pl" method=post >
 			<td background=""  colspan=4>
-				<a href="/cgi-bin/koha/members-home.pl" onMouseOver="if(document.images)document.member.src='/images/front-mouseover-member.gif'" 		onMouseOut="if(document.images)document.member.src='/images/front-member.gif'">
-				<img src="/images/front-member.gif" width=304		height=37 name="member"
+				<a href="/cgi-bin/koha/members-home.pl" onMouseOver="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif'" 		onMouseOut="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-member.gif'">
+				<img src="<TMPL_VAR NAME='themelang'>/images/front-member.gif" width=304		height=37 name="member"
 				hspace=0 vspace=0 border=0>
 			</td>
 
@@ -137,7 +137,7 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 			<td></td>
 			<td></td>
 			<td></td>
-			<td background="" colspan=5><A href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.acquisitions.src='/images/front-mouseover-acquisitions.gif'" 		onMouseOut="if(document.images)document.acquisitions.src='/images/front-acquisitions.gif'"><img src="/images/front-acquisitions.gif" width=320 		height=36 name="acquisitions"
+			<td background="" colspan=5><A href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.acquisitions.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-acquisitions.gif'" 		onMouseOut="if(document.images)document.acquisitions.src='<TMPL_VAR NAME='themelang'>/images/front-acquisitions.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-acquisitions.gif" width=320 		height=36 name="acquisitions"
 			hspace=0 vspace=0 border=0></a><br>
 			<img src="/images/holder.gif" width=1 height=12
 			alt=" " hspace=0 vspace=0 ></td>
@@ -152,7 +152,7 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 			<td></td>
 			<td></td>
 			<td></td>
-			<td background="" colspan=6> <A href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.reports.src='/images/front-mouseover-reports.gif'" 		onMouseOut="if(document.images)document.reports.src='/images/front-reports.gif'"><img src="/images/front-reports.gif" width=346 		height=37 name="reports"
+			<td background="" colspan=6> <A href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.reports.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-reports.gif'" 		onMouseOut="if(document.images)document.reports.src='<TMPL_VAR NAME='themelang'>/images/front-reports.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-reports.gif" width=346 		height=37 name="reports"
 			hspace=0 vspace=0 border=0></a><br>
 			<img src="/images/holder.gif" width=1 height=12
 			alt=" " hspace=0 vspace=0 ></td>
@@ -164,7 +164,7 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 			<td></td>
 			<td></td>
 			<td></td>
-			<td background="" colspan=7> <A href="/cgi-bin/koha/admin-home.pl" onMouseOver="if(document.images)document.admin.src='/images/front-mouseover-admin.gif'" 		onMouseOut="if(document.images)document.admin.src='/images/front-admin.gif'"><img src="/images/front-admin.gif" width=346 		height=37 name="admin"
+			<td background="" colspan=7> <A href="/cgi-bin/koha/admin-home.pl" onMouseOver="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-admin.gif'" 		onMouseOut="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-admin.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-admin.gif" width=346 		height=37 name="admin"
 			hspace=0 vspace=0 border=0></a><br>
 			<img src="/images/holder.gif" width=1 height=12
 			alt=" " hspace=0 vspace=0 ></td>
@@ -176,7 +176,7 @@ circulation.src ="/images/front-mouseover-circulation.gif"
 		<tr valign=top >
 
 			<td></td>
-			<td background="" colspan=9> <A href="/cgi-bin/koha/circ/circulation.pl" onMouseOver="if(document.images)document.circulation.src='/images/front-mouseover-circulation.gif'" 		onMouseOut="if(document.images)document.circulation.src='/images/front-circulation.gif'"><img src="/images/front-circulation.gif" width=346 		height=37 name="circulation"
+			<td background="" colspan=9> <A href="/cgi-bin/koha/circ/circulation.pl" onMouseOver="if(document.images)document.circulation.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation.gif'" 		onMouseOut="if(document.images)document.circulation.src='<TMPL_VAR NAME='themelang'>/images/front-circulation.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-circulation.gif" width=346 		height=37 name="circulation"
 			hspace=0 vspace=0 border=0></a>
 			</td>
 		</tr>
