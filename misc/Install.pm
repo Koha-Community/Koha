@@ -506,7 +506,7 @@ sub showmessage {
 	my $response='\0';
 	my $options=$1;
 	until ($options=~/$response/) {
-	    ($defaultresponse) || ($defaultresponse=substr($options,0,1));
+	    (defined($defaultresponse)) || ($defaultresponse=substr($options,0,1));
 	    $response=<STDIN>;
 	    chomp $response;
 	    (length($response)) || ($response=$defaultresponse);
