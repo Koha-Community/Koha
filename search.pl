@@ -19,6 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.33  2003/12/19 17:28:03  tipaul
+# fix for #683
+#
 # Revision 1.32  2003/06/11 18:37:55  tonnesen
 # Using boolean_preference instead of preference for 'marc' setting
 #
@@ -155,6 +158,14 @@ if ($search{"title"}){
 if ($search{"dewey"}){
     $search .= "&dewey=$search{dewey}";
     $searchdesc.="dewey $search{dewey}, ";
+}
+if ($search{"illustrator"}){
+    $search .= "&illustrator=$search{illustrator}";
+    $searchdesc.="illustrator $search{illustrator}, ";
+}
+if ($search{"itemnumber"}){
+    $search .= "&itemnumber=$search{itemnumber}";
+    $searchdesc.="barcode $search{itemnumber}, ";
 }
 $search.="&ttype=$search{ttype}";
 
