@@ -1,0 +1,134 @@
+<HTML>
+<TITLE>WELCOME TO THE UBIDO KOHA INTRANET </TITLE>
+
+
+<style type="text/css">
+<!--
+
+@import url(<TMPL_VAR NAME='themelang'>/includes/css/home-modern.css);
+
+input{font-size:16px}
+
+.search-heading {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+
+
+h1 {
+  font-family: ocean sans, garamond, times, serif;
+  font-size: 48px;
+  font-weight: normal;
+  font-style: italic;
+
+  }
+  
+.menu {
+  background: #CCE699;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  margin-top: 24px;
+  padding: 10px;
+  border: 1px;
+  border-color: #000000;
+  border-style: solid;
+  }
+  
+a {    font-weight: bold;}
+  
+  .credit {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 9px;
+  font-weight: bold;
+  margin-left: 0px;
+  margin-top: 0px;
+  }
+-->
+
+</style>
+
+</HEAD>
+
+<BODY
+	BGCOLOR="#99cc33"
+	text="black"
+
+text="black" 
+link="#0066FF" 
+vlink="#0066FF" 
+alink="#000000" 
+leftmargin=0 
+topmargin=0
+marginheight=0
+marginwidth=0 >
+	 >
+
+	 
+	 <table cellspacing=0 cellpadding=0 border=0 align="center">
+<tr valign=top >
+<td>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
+</td>
+
+<td colspan="3">
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
+</td>
+<td>
+
+<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=198 height=44  alt=" " hspace=0 vspace=0>
+</td>
+</tr>
+
+<tr valign=top >
+<td width=198 height=136 align="right">
+<img src="<TMPL_VAR NAME='themelang'>/images/intranet-logo.gif" width=72 height=67 
+alt="UNIDO Logo " hspace=0 vspace=0>
+</td>
+<td colspan="3"><h1>
+ UNIDO Library<br>
+ Intranet</h1>
+ </td></tr>
+ 
+ 
+ <tr>
+<td align="right" rowspan="2"  valign=bottom ><img src="<TMPL_VAR NAME='themelang'>/images/unido-intranet-photos.jpg" width="198" height="198" border="0" alt="Photos of Wellington">
+<td>
+ <FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
+				<input type="hidden" name="module" value="search">
+				<input type="hidden" name="type" value="intranet">
+<span class="search-heading">Search</span></td>
+
+<td><input type=text size="24" name="keyword"> <input type="submit" value="OK" class="ok"></td>
+
+
+</form>
+</tr>
+<tr><TD></TD>
+<td>
+<div class="menu"><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue:</a> View and edit records  <p>
+<a href="/cgi-bin/koha/members-home.pl">Patrons:</a> Add new patrons, view and edit records, set passwords<p>
+<A href="/cgi-bin/koha/circ/circulation.pl">Circulation:</a>  Issue and return items<p>
+<A href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Add new items:</a> Add all new itmes here<p>
+<A href="/cgi-bin/koha/admin-home.pl" >Administration: </a>Koha settings, about Koha<p>
+<A href="/cgi-bin/koha/reports-home.pl">Reports:</a> A few reports
+ </div>
+<p> &nbsp; </p>
+<div class="credit">
+For more information on the koha libary system<br> 
+vist  <b><a href="http://www.koha.org">www.koha.org</a></b></center>
+</div>
+</td>
+
+</tr>
+
+
+</tr>
+
+</table>
+
+
+</html>
