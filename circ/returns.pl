@@ -408,7 +408,7 @@ foreach (sort {$a <=> $b} keys %returneditems) {
         my $borrowerinfo;
         if ($borrowernumber) {
 	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
-            my $borrowerinfo = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}";
+            $borrowerinfo = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}";
         } else {
 	    $borrowerinfo = "Not on loan.";
 	}
