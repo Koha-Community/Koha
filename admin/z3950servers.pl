@@ -124,6 +124,15 @@ if ($op eq 'add_form') {
 		if (f.db.value.length==0) {
 			_alertString += "- database missing\\n";
 		}
+		if (isNaN(f.port.value)) {
+			_alertString += "- port must be a number\\n";
+		}
+		if (isNaN(f.rank.value)) {
+			_alertString += "- rank must be a number\\n";
+		}
+		if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
+			_alertString += "- checked must be 0 or 1\\n";
+		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
@@ -147,15 +156,15 @@ printend
 	if ($searchfield) {
 		print "<tr><td>Z39.50 Server</td><td><input type=hidden name=searchfield value=\"$searchfield\">$searchfield</td></tr>\n";
 	} else {
-		print "<tr><td>Z39.50 Server</td><td><input type=text name=searchfield size=5 maxlength=5></td></tr>\n";
+		print "<tr><td>Z39.50 Server</td><td><input type=text name=searchfield size=40></td></tr>\n";
 	}
-	print "<tr><td>Hostname</td><td><input type=text name=host size=40 maxlength=80 value='$data->{'host'}'></td></tr>\n";
-	print "<tr><td>Port</td><td><input type=text name=port value='$data->{'port'}' onBlur=isNum(this)></td></tr>\n";
+	print "<tr><td>Hostname</td><td><input type=text name=host size=30 value='$data->{'host'}'></td></tr>\n";
+	print "<tr><td>Port</td><td><input type=text name=port size=5 value='$data->{'port'}' onBlur=isNum(this)></td></tr>\n";
 	print "<tr><td>Database</td><td><input type=text name=db value='$data->{'db'}'></td></tr>\n";
 	print "<tr><td>Userid</td><td><input type=text name=userid value='$data->{'userid'}'></td></tr>\n";
 	print "<tr><td>Password</td><td><input type=text name=password value='$data->{'password'}'></td></tr>\n";
-	print "<tr><td>Checked (searched by default)</td><td><input type=text name=checked value='$data->{'checked'}' onBlur=isNum(this)></td></tr>";
-	print "<tr><td>Rank (display order)</td><td><input type=text name=rank value='$data->{'rank'}' onBlur=isNum(this)></td></tr>";
+	print "<tr><td>Checked (searched by default)</td><td><input type=text size=1 name=checked value='$data->{'checked'}' onBlur=isNum(this)></td></tr>";
+	print "<tr><td>Rank (display order)</td><td><input type=text name=rank size=4 value='$data->{'rank'}' onBlur=isNum(this)></td></tr>";
 	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
 	print "</table>";
 	print "</form>";
