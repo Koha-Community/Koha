@@ -302,7 +302,7 @@ system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/marc $rootdir/scripts");
 
 # move only batch & daemon. pl script stay here
-system("mv $rootdir/intranet-cgi/z3950/*. $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/z3950/processz3950queue $rootdir/scripts/z3950daemon/");
 system("mv $rootdir/intranet-cgi/z3950/*.sh $rootdir/scripts/z3950daemon/");
 
 # Remove extraneous files from intranet-cgi
