@@ -36,7 +36,7 @@ use vars qw( $is_a_modif );
 
 =item find_value
 
-    ($indicators, $value) = find_value($tag, $subfield, $record);
+    ($indicators, $value) = find_value($tag, $subfield, $record,$encoding);
 
 Find the given $subfield in the given $tag in the given
 MARC::Record $record.  If the subfield is found, returns
@@ -46,7 +46,8 @@ returned.
 =cut
 
 sub find_value {
-	my ($tagfield,$insubfield,$record) = @_;
+	my ($tagfield,$insubfield,$record,$encoding) = @_;
+	warn "FIND_VALUE : $encoding /";
 	my @result;
 	my $indicator;
 	if ($tagfield <10) {
@@ -60,7 +61,8 @@ sub find_value {
 			my @subfields = $field->subfields();
 			foreach my $subfield (@subfields) {
 				if (@$subfield[0] eq $insubfield) {
-					push @result,@$subfield[1];
+					warn "@$subfield[1]==> ".char_decode(@$subfield[1],$encoding);
+					push @result,char_decode(@$subfield[1],$encoding);
 					$indicator = $field->indicator(1).$field->indicator(2);
 				}
 			}
@@ -77,20 +79,21 @@ sub find_value {
 Look up the breeding farm with database handle $dbh, for the
 record with id $breedingid.  If found, returns the decoded
 MARC::Record; otherwise, -1 is returned (FIXME).
+Returns as second parameter the character encoding.
 
 =cut
 
 sub MARCfindbreeding {
 	my ($dbh,$id) = @_;
-	my $sth = $dbh->prepare("select file,marc from marc_breeding where id=?");
+	my $sth = $dbh->prepare("select file,marc,encoding from marc_breeding where id=?");
 	$sth->execute($id);
-	my ($file,$marc) = $sth->fetchrow;
+	my ($file,$marc,$encoding) = $sth->fetchrow;
 	if ($marc) {
 		my $record = MARC::File::USMARC::decode($marc);
 		if (ref($record) eq undef) {
 			return -1;
 		} else {
-			return $record;
+			return $record,$encoding;
 		}
 	}
 	return -1;
@@ -154,8 +157,8 @@ sub build_authorized_values_list ($$$$$) {
 				-multiple => 0 );
 }
 
-sub build_tabs ($$$) {
-    my($template, $record, $dbh) = @_;
+sub build_tabs ($$$$) {
+    my($template, $record, $dbh,$encoding) = @_;
 
     # fill arrays
     my @loop_data =();
@@ -180,7 +183,7 @@ sub build_tabs ($$$) {
 			next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 			# if breeding is not empty
 			if ($record ne -1) {
-				my ($x,@value) = find_value($tag,$subfield,$record);
+				my ($x,@value) = find_value($tag,$subfield,$record,$encoding);
 				push (@value,"") if ($#value eq -1);
 				foreach my $value (@value) {
 					my %subfield_data;
@@ -211,8 +214,8 @@ sub build_tabs ($$$) {
 		# if breeding is empty
 			} else {
 				my ($x,$value);
-				($x,$value) = find_value($tag,$subfield,$record) if ($record ne -1);
-				$value=char_decode($value) unless ($is_a_modif);
+				($x,$value) = find_value($tag,$subfield,$record,$encoding) if ($record ne -1);
+# 				$value=char_decode($value) unless ($is_a_modif);
 					my %subfield_data;
 					$subfield_data{tag}=$tag;
 					$subfield_data{subfield}=$subfield;
@@ -277,11 +280,11 @@ sub build_hidden_data () {
     }
 }
 
-
 my $input = new CGI;
 my $error = $input->param('error');
 my $oldbiblionumber=$input->param('oldbiblionumber'); # if bib exists, it's a modif, not a new biblio.
 my $breedingid = $input->param('breedingid');
+my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
 my $dbh = C4::Context->dbh;
 my $bibid;
@@ -301,8 +304,10 @@ my ($template, $loggedinuser, $cookie)
 
 $tagslib = &MARCgettagslib($dbh,1);
 my $record=-1;
+my $encoding="";
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
-$record = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
+($record,$encoding) = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
+
 $is_a_modif=0;
 my ($oldbiblionumtagfield,$oldbiblionumtagsubfield);
 my ($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield,$bibitem,$oldbiblioitemnumber);
@@ -330,9 +335,7 @@ if ($op eq "addbiblio") {
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
-	warn "MARChtml";
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-	warn "MARChtml2";
 # MARC::Record built => now, record in DB
 	my $oldbibnum;
 	my $oldbibitemnum;
@@ -347,7 +350,7 @@ if ($op eq "addbiblio") {
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
-	build_tabs ($template, $record, $dbh);
+	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
 		oldbiblionumber             => $oldbiblionumber,

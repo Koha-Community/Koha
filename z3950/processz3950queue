@@ -50,11 +50,12 @@ my $lastrun=0;
 while (1) {
 	if ((time-$lastrun)>5) {
 		print "starting loop\n";
+		$checkqueue = 1; # FIXME during testing, this line forces the loop. REMOVE it to use SIG{HUP} when "daemonized" !
 		if ($checkqueue) { # everytime a SIG{HUP} is recieved
 			$checkqueue=0;
-			my $sth=$dbh->prepare("select id,term,type,servers from z3950queue order by id");
+			my $sth=$dbh->prepare("select id,term,type,servers,identifier from z3950queue order by id");
 			$sth->execute;
-			while (my ($id, $term, $type, $servers) = $sth->fetchrow) {
+			while (my ($id, $term, $type, $servers,$random) = $sth->fetchrow) {
 				if ($forkcounter<12) {
 					my $now=time();
 					my $stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=$id");
@@ -93,6 +94,8 @@ while (1) {
 					my $serverinfo;
 					my $stillprocessing=0;
 					my $globalname;
+					my $globalsyntax;
+					my $globalencoding;
 					foreach $serverinfo (split(/\s+/, $servers)) {
 						(next) if ($serverdone{$serverinfo} == 1);
 						my $stillprocessing=1;
@@ -100,12 +103,13 @@ while (1) {
 							$forkcounter++;
 						} else {
 							my $dbi = C4::Context->dbh;
-							my ($name, $server, $database, $user, $password) = split(/\//, $serverinfo, 5);
+							my ($name, $server, $database, $user, $password,$syntax) = split(/\//, $serverinfo, 6);
 							$globalname=$name;
+							$globalsyntax = $syntax;
 							$server=~/(.*)\:(\d+)/;
 							my $servername=$1;
 							my $port=$2;
-							print "Processing $type=$term at $name $server $database (".($forkcounter+1)." forks)\n";
+							print "Processing $type=$term at $name $server $database $syntax (".($forkcounter+1)." forks)\n";
 							$now=time();
 							my $q_serverinfo=$dbi->quote($serverinfo);
 							my $resultsid;
@@ -149,26 +153,43 @@ while (1) {
 							if ($noconnection || $error) {
 								warn "no connection at $globalname ";
 							} else {
- 								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);};
+								warn "$globalname ==> $globalsyntax";
+ 								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "USMARC");
+ 								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::UNIMARC);} if ($globalsyntax eq "UNIMARC");
  								if ($@) {
  									print "$globalname ERROR: $@\n";
  								} else {
- 									print "Q: $query\n";
+#  									print "Q: $query\n";
 									my $rs=$conn->search($query);
  									pe();
 									my $numresults=$rs->size();
+									if ($numresults eq 0) {
+										warn "$globalname ==> answered : no records found";
+									} else {
+										warn "$globalname ==> answered : $numresults found";
+									}
  									pe();
 									my $i;
 									my $result='';
 									my $scantimerstart=time();
 									for ($i=1; $i<=(($numresults<80) ? ($numresults) : (80)); $i++) {
 										my $rec=$rs->record($i);
-										my $marcdata=$rec->render();
-										my $marcrecord = MARC::File::USMARC::decode($rec->render());
-										warn "$globalname ==> ".$marcrecord->as_formatted();
-										$result.=$marcdata;
-										my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcdata,1,"Z3950-$globalname");
+ 										my $marcdata;
+										# use render() or rawdata() depending on the type of the returned record
+										my $marcrecord;
+										if (ref($rec) eq "Net::Z3950::Record::USMARC") {
+											$marcdata = $rec->rawdata();
+											$marcrecord = MARC::File::USMARC::decode($rec->rawdata())
+										}
+										if (ref($rec) eq "Net::Z3950::Record::UNIMARC") {
+											$marcdata = $rec->render();
+											$marcrecord = MARC::File::USMARC::decode($rec->render())
+										}
+										$globalencoding = ref($rec);
+ 										$result.=$marcdata;
 									}
+									my @x=split /::/,$globalencoding;
+									my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($result,-1,"Z3950-$globalname",$x[3],$random);
 									my $scantimerend=time();
 									my $numrecords;
 									($numresults<80) ? ($numrecords=$numresults) : ($numrecords=80);
@@ -230,7 +251,7 @@ while (1) {
 							print "    $server done.\n";
 							exit;
 sub pe {
-#   	return 0;
+   	return 0;
 	my $code=$conn->errcode();
 	my $msg=$conn->errmsg();
 	my $ai=$conn->addinfo();

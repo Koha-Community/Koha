@@ -29,6 +29,7 @@
 		<td width=10% align="center"><input type="hidden" name="op" value="addbiblio">
 												<input type="hidden" name="oldbiblionumber" value="<TMPL_VAR name="oldbiblionumber">">
 												<input type="button" value="Add biblio" onClick='Check(this.form)' accesskey="w">
+												<a href="javascript:PopupZ3950()">z3950 search</a>
 		</td>
 	</tr>
 	</table>
@@ -361,6 +362,10 @@ function Check(f) {
 function Dopop(link,i) {
 	defaultvalue=document.forms[0].field_value[i].value;
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function PopupZ3950(link,i) {
+	newin=window.open("../z3950/search.pl?bibid=<TMPL_VAR name="bibid">","z3950 search",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 
 </script>

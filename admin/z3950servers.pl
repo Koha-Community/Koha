@@ -35,7 +35,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name like \"$data[0]\%\") order by rank,name";
+	my $query="Select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name like \"$data[0]\%\") order by rank,name";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -52,7 +52,7 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $reqsel="select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name = '$searchfield') order by rank,name";
+my $reqsel="select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = '$searchfield') order by rank,name";
 my $reqdel="delete from z3950servers where name='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/z3950servers.pl";
@@ -82,7 +82,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name = '$searchfield') order by rank,name");
+		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = '$searchfield') order by rank,name");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -104,7 +104,7 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("select * from z3950servers where name=?");
 	$sth->execute($input->param('searchfield'));
 	if ($sth->rows) {
-		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=? where name=?");
+		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=? where name=?");
 		$sth->execute($input->param('host'),
 		      $input->param('port'),
 		      $input->param('db'),
@@ -113,10 +113,11 @@ if ($op eq 'add_form') {
 		      $input->param('searchfield'),
 		      $input->param('checked'),
 		      $input->param('rank'),
-		      $input->param('searchfield')
+			 $input->param('syntax'),
+		      $input->param('searchfield'),
 		      );
 	} else {
-		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank) values (?, ?, ?, ?, ?, ?, ?, ?)");
+		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank,syntax) values (?, ?, ?, ?, ?, ?, ?, ?,?)");
 		$sth->execute($input->param('host'),
 		      $input->param('port'),
 		      $input->param('db'),
@@ -125,6 +126,7 @@ if ($op eq 'add_form') {
 		      $input->param('searchfield'),
 		      $input->param('checked'),
 		      $input->param('rank'),
+			 $input->param('syntax'),
 		      );
 	}
 	$sth->finish;
@@ -178,6 +180,7 @@ if ($op eq 'add_form') {
 			password => ($results->[$i]{'password'}) ? ('#######') : ('&nbsp;'),
 			checked => $results->[$i]{'checked'},
 			rank => $results->[$i]{'rank'},
+			syntax => $results->[$i]{'syntax'},
 			toggle => $toggle);
 		push @loop, \%row;
 

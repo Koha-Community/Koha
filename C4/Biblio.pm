@@ -1,6 +1,21 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.45  2003/04/29 16:50:49  tipaul
+# really proud of this commit :-)
+# z3950 search and import seems to works fine.
+# Let me explain how :
+# * a "search z3950" button is added in the addbiblio template.
+# * when clicked, a popup appears and z3950/search.pl is called
+# * z3950/search.pl calls addz3950search in the DB
+# * the z3950 daemon retrieve the records and stores them in z3950results AND in marc_breeding table.
+# * as long as there as searches pending, the popup auto refresh every 2 seconds, and says how many searches are pending.
+# * when the user clicks on a z3950 result => the parent popup is called with the requested biblio, and auto-filled
+#
+# Note :
+# * character encoding support : (It's a nightmare...) In the z3950servers table, a "encoding" column has been added. You can put "UNIMARC" or "USMARC" in this column. Depending on this, the char_decode in C4::Biblio.pm replaces marc-char-encode by an iso 8859-1 encoding. Note that in the breeding import this value has been added too, for a better support.
+# * the marc_breeding and z3950* tables have been modified : they have an encoding column and the random z3950 number is stored too for convenience => it's the key I use to list only requested biblios in the popup.
+#
 # Revision 1.44  2003/04/28 13:07:14  tipaul
 # Those fixes solves the "internal server error" with MARC::Record 1.12.
 # It was due to an illegal contruction in Koha : we tried to retrive subfields from <10 tags.
@@ -2137,9 +2152,10 @@ sub getoraddbiblio {
 sub char_decode {
 	# converts ISO 5426 coded string to ISO 8859-1
 	# sloppy code : should be improved in next issue
-	my ($string) = @_ ;
+	my ($string,$encoding) = @_ ;
 	$_ = $string ;
-	if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+# 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
+	if ($encoding eq "UNIMARC") {
 		s/\xe1/Æ/gm ;
 		s/\xe2/Ð/gm ;
 		s/\xe9/Ø/gm ;
@@ -2201,7 +2217,9 @@ sub char_decode {
 		s/\xca\x61/å/gm ;
 		s/\xd0\x43/Ç/gm ;
 		s/\xd0\x63/ç/gm ;
-	} else {
+		# this handles non-sorting blocks (if implementation requires this)
+		$string = nsb_clean($_) ;
+	} elsif ($encoding eq "USMARC") {
 		if(/[\xc1-\xff]/) {
 			s/\xe1\x61/à/gm ;
 			s/\xe1\x65/è/gm ;
@@ -2254,10 +2272,10 @@ sub char_decode {
 			s/\xe9\x75/ü/gm ;
 			s/\xea\x41/Å/gm ;
 			s/\xea\x61/å/gm ;
+			# this handles non-sorting blocks (if implementation requires this)
+			$string = nsb_clean($_) ;
 		}
 	}
-	# this handles non-sorting blocks (if implementation requires this)
-	$string = nsb_clean($_) ;
 	return($string) ;
 }
 

@@ -69,6 +69,7 @@ entering Z39.50 lookup requests.
 	&getz3950servers
 	&z3950servername
 	&addz3950queue
+	&checkz3950searchdone
 );
 
 #------------------------------------------------
@@ -198,23 +199,23 @@ sub addz3950queue {
 		if ($server =~ /:/ ) {
 			push @serverlist, $server;
 		} elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
-			$sth=$dbh->prepare("select host,port,db,userid,password ,name from z3950servers where checked <> 0 ");
+			$sth=$dbh->prepare("select host,port,db,userid,password ,name,syntax from z3950servers where checked <> 0 ");
 			$sth->execute;
-			while ( my ($host, $port, $db, $userid, $password,$servername) = $sth->fetchrow ) {
-				push @serverlist, "$servername/$host\:$port/$db/$userid/$password";
+			while ( my ($host, $port, $db, $userid, $password,$servername,$syntax) = $sth->fetchrow ) {
+				push @serverlist, "$servername/$host\:$port/$db/$userid/$password/$syntax";
 			} # while
 		} else {
-			$sth=$dbh->prepare("select host,port,db,userid,password from z3950servers where id=? ");
+			$sth=$dbh->prepare("select host,port,db,userid,password,syntax from z3950servers where id=? ");
 			$sth->execute($server);
-			my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
-			push @serverlist, "$server/$host\:$port/$db/$userid/$password";
+			my ($host, $port, $db, $userid, $password,$syntax) = $sth->fetchrow;
+			push @serverlist, "$server/$host\:$port/$db/$userid/$password/$syntax";
 		}
 	}
 
 	my $serverlist='';
 
 	$serverlist = join(" ", @serverlist);
-	chop $serverlist;
+# 	chop $serverlist;
 
 	# FIXME - Is this test supposed to test whether @serverlist is
 	# empty? If so, then a) there are better ways to do that in
@@ -266,6 +267,32 @@ sub addz3950queue {
 
 } # sub addz3950queue
 
+=item &checkz3950searchdone
+
+  $numberpending= &	&checkz3950searchdone($random);
+
+Returns the number of pending z3950 requests
+
+C<$random> is the random z3950 query number.
+
+=cut
+sub checkz3950searchdone {
+	my ($z3950random) = @_;
+	my $dbh = C4::Context->dbh;
+	# first, check that the deamon already created the requests...
+	my $sth = $dbh->prepare("select count(*) from z3950queue,z3950results where z3950queue.id = z3950results.queryid and z3950queue.identifier=?");
+	$sth->execute($z3950random);
+	my ($result) = $sth->fetchrow;
+	if ($result eq 0) { # search not yet begun => should be searches to do !
+		return "??";
+	}
+	# second, count pending requests
+	$sth = $dbh->prepare("select count(*) from z3950queue,z3950results where z3950queue.id = z3950results.queryid and z3950results.enddate is null and z3950queue.identifier=?");
+	$sth->execute($z3950random);
+	($result) = $sth->fetchrow;
+	return $result;
+}
+
 1;
 __END__
 
@@ -279,6 +306,21 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
+# Revision 1.9  2003/04/29 16:50:51  tipaul
+# really proud of this commit :-)
+# z3950 search and import seems to works fine.
+# Let me explain how :
+# * a "search z3950" button is added in the addbiblio template.
+# * when clicked, a popup appears and z3950/search.pl is called
+# * z3950/search.pl calls addz3950search in the DB
+# * the z3950 daemon retrieve the records and stores them in z3950results AND in marc_breeding table.
+# * as long as there as searches pending, the popup auto refresh every 2 seconds, and says how many searches are pending.
+# * when the user clicks on a z3950 result => the parent popup is called with the requested biblio, and auto-filled
+#
+# Note :
+# * character encoding support : (It's a nightmare...) In the z3950servers table, a "encoding" column has been added. You can put "UNIMARC" or "USMARC" in this column. Depending on this, the char_decode in C4::Biblio.pm replaces marc-char-encode by an iso 8859-1 encoding. Note that in the breeding import this value has been added too, for a better support.
+# * the marc_breeding and z3950* tables have been modified : they have an encoding column and the random z3950 number is stored too for convenience => it's the key I use to list only requested biblios in the popup.
+#
 # Revision 1.8  2003/04/29 08:09:45  tipaul
 # z3950 support is coming...
 # * adding a syntax column in z3950 table = this column will say wether the z3950 must be called with PerferedRecordsyntax => USMARC or PerferedRecordsyntax => UNIMARC. I tried some french UNIMARC z3950 servers, and some only send USMARC, some only UNIMARC, some can answer with both.

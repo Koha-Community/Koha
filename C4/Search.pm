@@ -2380,16 +2380,18 @@ and itemtype = 'WEB'";
 
 =item breedingsearch
 
-  ($count, @results) = &breedingsearch($title);
+  ($count, @results) = &breedingsearch($title,$isbn,$random);
+C<$title> contains the title,
+C<$isbn> contains isbn or issn,
+C<$random> contains the random seed from a z3950 search.
 
 C<$count> is the number of items in C<@results>. C<@results> is an
-array of references-to-hash; the keys are the items from the
-C<marc_breeding> table of the Koha database.
+array of references-to-hash; the keys are the items from the C<marc_breeding> table of the Koha database.
 
 =cut
 
 sub breedingsearch {
-	my ($title,$isbn) = @_;
+	my ($title,$isbn,$z3950random) = @_;
 	my $dbh   = C4::Context->dbh;
 	my $count = 0;
 	my $query;
@@ -2397,14 +2399,18 @@ sub breedingsearch {
 	my @results;
 
 	$query = "Select id,file,isbn,title,author from marc_breeding where ";
-	if ($title) {
-		$query .= "title like \"$title%\"";
-	}
-	if ($title && $isbn) {
-		$query .= " and ";
-	}
-	if ($isbn) {
-		$query .= "isbn like \"$isbn%\"";
+	if ($z3950random) {
+		$query .= "z3950random = \"$z3950random\"";
+	} else {
+		if ($title) {
+			$query .= "title like \"$title%\"";
+		}
+		if ($title && $isbn) {
+			$query .= " and ";
+		}
+		if ($isbn) {
+			$query .= "isbn like \"$isbn%\"";
+		}
 	}
 	$sth   = $dbh->prepare($query);
 	$sth->execute;

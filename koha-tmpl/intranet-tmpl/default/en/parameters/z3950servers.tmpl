@@ -137,6 +137,15 @@
 			</td>
 		</tr>
 		<tr>
+			<td>Syntax (z3950 can send records in various format. Choose one)</td>
+			<td>
+				<select name="syntax">
+					<option value="USMARC">USMARC</option>
+					<option value="UNIMARC">UNIMARC</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td> </td>
 			<td>
 				<INPUT type=button value='OK' onClick='Check(this.form)'>
@@ -234,7 +243,8 @@
                         <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Userid</b></td>
                         <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Password</b></td>
                         <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Checked</b></td>
-                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Rank</b></td>       
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Rank</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Syntax</b></td>
                         <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
                         <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
                 </tr>
@@ -248,8 +258,9 @@
                         <td><TMPL_VAR NAME=password></td>
                         <td><TMPL_VAR NAME=checked></td>
                         <td><TMPL_VAR NAME=rank></td>
+                        <td><TMPL_VAR NAME=syntax></td>
                         <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" ALT="Edit" title="edit" BORDER=0 ></a></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" ALT="Delete" title="delete" BORDER=0 ></a></td>                
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" ALT="Delete" title="delete" BORDER=0 ></a></td>
 			</tr>
                 </TMPL_LOOP>
 	</table>
@@ -262,7 +273,7 @@
         </TMPL_IF>
         
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                
+
         <TMPL_IF NAME=ltcount>
                 <a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=nextpage>">Next >></a>
         </TMPL_iF>
