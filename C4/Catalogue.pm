@@ -270,7 +270,11 @@ sub modorder {
   $query="update aqorderbreakdown set bookfundid=? where
   ordernumber=?";
   $sth=$dbh->prepare($query);
-  $sth->execute($bookfund,$ordnum);
+  if ($sth->execute($bookfund,$ordnum) == 0) { # zero rows affected [Bug 734]
+    $query="insert into aqorderbreakdown (ordernumber,bookfundid) values (?,?)";
+    $sth=$dbh->prepare($query);
+    $sth->execute($ordnum,$bookfund);
+  }
   $sth->finish;
 }
 
