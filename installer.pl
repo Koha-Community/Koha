@@ -182,8 +182,8 @@ if ($input) {
 #Get the username for the database
 print qq|
 
-Please provide the name of the user, who will full administrative rights to the 
-$dbname database, when authenticating from $hostname.
+Please provide the name of the user, who will have full administrative rights
+to the $dbname database, when authenticating from $hostname.
 
 If no user is entered it will default to $user.
 |;
@@ -362,9 +362,6 @@ CREATING REQUIRED DIRECTORIES
 
 |;
 
-# Still need to check that all parent directories of $kohadir and $opacdir
-# exist
-
 
 unless ( -d $kohadir ) {
    print "Creating $kohadir...\n";
@@ -448,9 +445,10 @@ my $mysqluser = 'root';
 my $mysqlpass = '';
 
 foreach my $mysql (qw(/usr/local/mysql
-                      /opt/mysql)) {
+                      /opt/mysql
+		      )) {
    if ( -d $mysql ) {
-            $mysql=$mysqldir;
+            $mysqldir=$mysql;
    }
 }
 if (!$mysqldir){
@@ -474,13 +472,20 @@ print qq|
 CREATING DATABASE
 =================
 |;
-system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass create $dbname");
-system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname < koha.mysql");
-system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
-system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv) values ('%','$dbname','$user','Y','Y','Y','Y');");
-system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
+my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass create $dbname");
+if ($result) {
+    print "\nCouldn't connect to the MySQL server for the reason given above.";
+    print "Press <ENTER> to continue...";
+    <STDIN>;
+    print "\n";
+} else {
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname < koha.mysql");
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y');");
+    system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
 
-system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
+    system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
+}
 
 
 #RESTART APACHE
