@@ -34,10 +34,16 @@ fi
 PERL5LIB=$KohaModuleDir
 export PERL5LIB
 
+KOHA_CONF=$KohaConf
+export KOHA_CONF
+
 exec $KohaZ3950Script $LogDir >>$LOGFILE 2>&1
 
 #-------------------
 # $Log$
+# Revision 1.4  2003/10/20 19:16:50  slef
+# Work on install bugs (see bug 632)
+#
 # Revision 1.3  2003/10/06 09:10:39  slef
 # Removing config info from z3950*sh and using C4::Context in processz3950queue (Fixed bug 39)
 #

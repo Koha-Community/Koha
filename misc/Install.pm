@@ -957,10 +957,11 @@ The file %s does not exist.
 Please press <ENTER> to continue: |;
 
 $messages->{'EnterApacheUser'}->{en} = heading('NEED APACHE USER') . qq|
-I was not able to determine the user that Apache is running as.  This
-information is necessary in order to set the access privileges correctly on
+The installer could not find the user that Apache is running as.  
+This is used to set up access permissions of
 %s/koha.conf.  This user should be set in one of the Apache configuration
-files using the "User" directive.
+files with the "User" line.
+Please try to find it and enter the user name below.
 
 Enter the Apache userid: |;
 
@@ -977,7 +978,7 @@ sub getapacheinfo {
 			  /usr/local/etc/apache/apache.conf
 			  /var/www/conf/httpd.conf
 			  /etc/apache2/httpd.conf
-			  /etc/apache2/apache.conf
+			  /etc/apache2/apache2.conf
 			  /etc/apache/conf/httpd.conf
 			  /etc/apache/conf/apache.conf
 			  /etc/apache-ssl/conf/apache.conf
@@ -1067,7 +1068,7 @@ and the installer will leave comments in
 what these other options are.
 
 NOTE: You will need to add lines to your main httpd.conf to
-  Include %s/koha-httpd.conf
+include %s/koha-httpd.conf
 and to make sure it is listening on the right ports
 (using the Listen directive).
 
@@ -1191,7 +1192,7 @@ sub updateapacheconf {
     }
 
 	startsysout;
-    if (`grep -q 'VirtualHost $servername' "$httpdconf"`) {
+    if (`grep -q 'VirtualHost $servername' "$httpdconf" 2>/dev/null`) {
 	showmessage(getmessage('ApacheAlreadyConfigured', [$httpdconf, $httpdconf]), 'PressEnter');
 	return;
     } else {
@@ -1417,7 +1418,7 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 
 	#MJR: generate our own settings, to remove the /home/paul hardwired links
     open(FILE,">$intranetdir/scripts/z3950daemon/z3950-daemon-options");
-    print FILE "RunAsUser=apache\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\n";
+    print FILE "RunAsUser=apache\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\nKohaConf=$etcdir/koha.conf";
     close(FILE);
 
 	if ($> == 0) {
@@ -1771,7 +1772,8 @@ the file is silently ignored.
 sub loadconfigfile {
     my %configfile;
 
-    open (KC, "</etc/koha.conf");
+	#MJR: reverted to r1.53.  Please call setetcdir().  Do NOT hardcode this.
+    open (KC, "<$etcdir/koha.conf");
     while (<KC>) {
      chomp;
      (next) if (/^\s*#/);
