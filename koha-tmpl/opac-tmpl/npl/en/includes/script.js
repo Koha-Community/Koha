@@ -60,3 +60,7 @@ function confirmDelete(message) {
 		return false;
 	}
 }
+
+function Dopop(link) {
+	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+	}
