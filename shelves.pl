@@ -69,11 +69,11 @@ if ($query->param('modifyshelfcontents')) {
 }
 
 SWITCH: {
-	$template->param(	loggedinuser => $loggedinuser,
-									viewshelf => $query->param('viewshelf'),
-									shelves => $query->param('shelves'),
-									headerbackgroundcolor => $headerbackgroundcolor,
-									circbackgroundcolor => $circbackgroundcolor);
+	$template->param({	loggedinuser => $loggedinuser,
+						viewshelf => $query->param('viewshelf'),
+						shelves => $query->param('shelves'),
+						headerbackgroundcolor => $headerbackgroundcolor,
+						circbackgroundcolor => $circbackgroundcolor });
     if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
     if ($query->param('shelves')) {  shelves(); last SWITCH;}
 	my $color='';
@@ -158,6 +158,10 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.12  2003/02/05 10:04:14  acli
+# Worked around weirdness with HTML::Template; without the {}, it complains
+# of being passed an odd number of arguments even though we are not
+#
 # Revision 1.11  2003/02/05 09:23:03  acli
 # Fixed a few minor errors to make it run
 # Noted correct tab size
