@@ -21,7 +21,7 @@
 	</table>
 	<form action='/cgi-bin/koha/admin/aqbudget.pl' method=post>
 	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add budget" ALT="Add" BORDER=0 ><br>
+	<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add budget" ALT="Add" BORDER=0 ><br>
 	</form><br clear=all>
 </TMPL_IF>
 
@@ -84,13 +84,16 @@
 <input type=hidden name=op value=add_validate>
 <input type=hidden name=checked value=0>
 <table>
+
 <TMPL_IF name="modify">
-<tr><td>Book fund</td><td><input type=hidden name=bookfundid value=<TMPL_VAR name=bookfundid>><TMPL_VAR name="bookfundid"></td></tr>
-<tr><td>Book fund name</td><td><TMPL_VAR name="bookfundname"></td></tr>
+	<tr><td>Book fund</td><td><input type=hidden name=bookfundid value=<TMPL_VAR name=bookfundid>><TMPL_VAR name="bookfundid"></td></tr>
+	<tr><td>Book fund name</td><td><TMPL_VAR name="bookfundname"></td></tr>
 </TMPL_IF>
+
 <TMPL_IF name="adding">
-<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
+	<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
 </TMPL_IF>
+
 <tr><td>Start date (<TMPL_VAR NAME=dateformat>)</td><td><input type=text name=startdate size=11 value='<TMPL_VAR name="startdate">'>&nbsp;</td></tr>
 <tr><td>End date (<TMPL_VAR NAME=dateformat>)</td><td><input type=text name=enddate size=11 value='<TMPL_VAR name="enddate">'></td></tr>
 <tr><td>Budget amount</td><td><input type=text name=budgetamount value='<TMPL_VAR name="budgetamount">'></td></tr>
@@ -110,13 +113,32 @@ Data recorded
 
 <TMPL_IF name="delete_confirm">
 <table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Book fund</b></td><td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
-<form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<TMPL_VAR name="bookfundid">'>
-<tr><td>Start date</td><td><TMPL_VAR name="startdate"></td></tr>
-<tr><td>End date</td><td><TMPL_VAR name="enddate"></td></tr>
-<tr><td>budgetamount</td><td><TMPL_VAR name="budgetamount"></td></tr>
-<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="action">' method=post><input type=submit value=NO></form></td></tr>"
+	<tr valign=top bgcolor=#99cc33>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">
+			<b>Book fund</b>
+		</td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">
+			<b><TMPL_VAR name="bookfundid"></b>
+		</td>
+	</tr>
+
+	<form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<TMPL_VAR name="bookfundid">'>
+	<tr>
+		<td>Start date</td>
+		<td><TMPL_VAR name="startdate"></td>
+	</tr>
+	<tr>
+		<td>End date</td><td><TMPL_VAR name="enddate"></td>
+	</tr>
+	<tr>
+		<td>budgetamount</td><td><TMPL_VAR name="budgetamount"></td>
+	</tr>
+	<tr>
+		<td colspan=2 align=center>CONFIRM DELETION</td>
+	</tr>
+	<tr>
+		<td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="action">' method=post><input type=submit value=NO></form></td>
+	</tr>
 </TMPL_IF>
 
 <TMPL_IF name="delete_confirmed">
