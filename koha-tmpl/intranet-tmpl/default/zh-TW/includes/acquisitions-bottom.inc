@@ -1,26 +1,22 @@
-<!-- saas@users.sf.net 21-APR-2002 renamed "aquisitions" to "acquisitions" -->
-
 <br clear=all>
 <p> &nbsp; </p>
 
-</BLOCKQUOTE>
 
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
-<TR VALIGN=TOP BGCOLOR="000000"><TD  COLSPAN=6><img src="/images/blackdot.gif"  WIDTH=1  HEIGHT=2  HSPACE=0 vspace=0></TD></TR></TABLE>
+</BLOCKQUOTE>
 
 <CENTER>
 <FONT SIZE=2  face="arial, helvetica">
-<A HREF="/cgi-bin/koha/mainpage.pl">ªð¦^¥D­¶</a> ||
-<A HREF="/cgi-bin/koha/circ/circulation.pl">¬y³qªA°È</a> ||
-<A HREF="/cgi-bin/koha/catalogue-home.pl">À]ÂÃ¬d¸ß</a> ||
-<A HREF="/cgi-bin/koha/members-home.pl">ÅªªÌ±b¤á</a> ||
-<A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">®ÑÂÇÁÊ¸m</a> ||
-<A HREF="/reports/">³øªí¦C¦L</a> ||
-<A HREF="/cgi-bin/koha/admin-home.pl">¨t²Î³]©w</a> ||
-<A HREF="/help/">¨Ï¥Î»¡©ú</a>
+<A HREF="/cgi-bin/koha/mainpage.pl">ä¸»é </a> ||
+<A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">ç›®éŒ„</a> ||
+<A HREF="/cgi-bin/koha/members-home.pl">è®€è€…</a> ||
+<A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">è³¼ç½®</a> ||
+<A HREF="/cgi-bin/koha/circ/circulation.pl">æµé€š</a> ||
+<A HREF="/cgi-bin/koha/reports-home.pl">å ±è¡¨</a> ||
+<A HREF="/cgi-bin/koha/admin-home.pl">è¨­å®š</a> ||
+<A HREF="/cgi-bin/koha/about.pl">é—œæ–¼</a> || 
+ç·šä¸Šèªªæ˜Ž
 </FONT>
 </CENTER>
 </BODY>
 
 </HTML>
-

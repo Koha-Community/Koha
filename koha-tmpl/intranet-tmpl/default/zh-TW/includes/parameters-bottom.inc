@@ -6,15 +6,15 @@
 
 <CENTER>
 <FONT SIZE=2  face="arial, helvetica">
-<A HREF="/cgi-bin/koha/mainpage.pl">ªð¦^¥D­¶</a> ||
-<A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">À]ÂÃ¬d¸ß</a> ||
-<A HREF="/cgi-bin/koha/members-home.pl">ÅªªÌ±b¤á</a> ||
-<A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">®ÑÂÇÁÊ¸m</a> ||
-<A HREF="/cgi-bin/koha/circ/circulation.pl">¬y³qªA°È</a> ||
-<A HREF="/cgi-bin/koha/reports-home.pl">³øªí¦C¦L</a> ||
-<A HREF="/cgi-bin/koha/admin-home.pl">¨t²Î°Ñ¼Æ</a> ||
-<A HREF="/cgi-bin/koha/about.pl">Ãö©ó<span lang=mi>Koha</span></a> || 
-½u¤W»¡©ú
+<A HREF="/cgi-bin/koha/mainpage.pl">ä¸»é </a> ||
+<A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">ç›®éŒ„</a> ||
+<A HREF="/cgi-bin/koha/members-home.pl">è®€è€…</a> ||
+<A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">è³¼ç½®</a> ||
+<A HREF="/cgi-bin/koha/circ/circulation.pl">æµé€š</a> ||
+<A HREF="/cgi-bin/koha/reports-home.pl">å ±è¡¨</a> ||
+<A HREF="/cgi-bin/koha/admin-home.pl">è¨­å®š</a> ||
+<A HREF="/cgi-bin/koha/about.pl">é—œæ–¼</a> || 
+ç·šä¸Šèªªæ˜Ž
 </FONT>
 </CENTER>
 </BODY>

@@ -1,18 +1,180 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<TMPL_IF NAME="missingloop">
-	<TMPL_VAR Name="string">
-<TMPL_ELSE>
-	<TMPL_IF NAME=invalid>
-		Invalid cardnumber.<p>
-	<TMPL_ELSE>
+<!-- TMPL_IF NAME="missingloop" -->
+	<!-- TMPL_VAR Name="string" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF NAME=invalid -->
+		借書證號碼無效。<p>
+	<!-- TMPL_ELSE -->
+	<H1> 請核對記錄 </H1>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> 新增讀者 </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>名稱</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="institution_name" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> 讀者細節 </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>讀者號碼</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornum" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>借書證號碼</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="cardnumber_institution" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>登記之館別</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="branchcode" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>讀者地址</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>郵址</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="postal" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>住宅地址</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="home" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>讀者聯絡資料細節</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>電話 (住宅)</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>電話 (日間)</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phoneday" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>傳真</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>電郵</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>短訊</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME=textmessaging -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>ALTERNATIVE CONTACT DETAIL</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>名稱</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="contactname" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>電話</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altphone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>關係</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>備註</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altnotes" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>備註</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>一般備註</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornotes" -->
+			</td>
+		</tr>
+		</TABLE><p>
+		輸入的值有效。請按「好！」以確定您要新增這位讀者
 		<form action="/cgi-bin/koha/insertidata.pl" method=post>
-			<TMPL_LOOP NAME=inputsloop>
-				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
-			</TMPL_LOOP>
-			<input type=submit name=submit value=submit>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type=submit name=submit value="好！">
 		</form>
-	</TMPL_IF>
-</TMPL_IF>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

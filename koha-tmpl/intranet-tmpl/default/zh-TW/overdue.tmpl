@@ -1,39 +1,32 @@
-<HTML>
-
-<!-- startmenu -->
-<TMPL_VAR NAME="startmenureport">
-
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <!-- the site -->
 
-<FONT SIZE=6><em>Items Overdue as of <TMPL_VAR NAME="todaysdate"></em></FONT><br><P>
+<H1><!-- TMPL_VAR NAME="todaysdate" --> 過期未還之圖書資料</H1><br><P>
 
 <TABLE  cellspacing=0 cellpadding=5 border=1 align=center>
   <TR VALIGN=TOP>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Due Date</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Patron</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Phone</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Title</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Author</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>到期日</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>讀者</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>電話</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>題名</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>著者</b></td>
   </tr>
 
-  <TMPL_LOOP NAME=overdueloop>
+  <!-- TMPL_LOOP NAME=overdueloop -->
     <tr>
-      <td><TMPL_VAR NAME="duedate"></td>
-    <TMPL_IF NAME=email>
-      <td><a href="mailto:<TMPL_VAR NAME="email">?subject=Overdue: <TMPL_VAR NAME="title">"><TMPL_VAR NAME="name"></a></td>
-    <TMPL_ELSE>
-      <td><TMPL_VAR NAME="name"></td>
-    </TMPL_IF>
-      <td><TMPL_VAR NAME="phone"></td>
-      <td><TMPL_VAR NAME="title"></td>
-      <td><TMPL_VAR NAME="author"></td>
+      <td><!-- TMPL_VAR NAME="duedate" --></td>
+    <!-- TMPL_IF NAME=email -->
+      <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+    <!-- TMPL_ELSE -->
+      <td><!-- TMPL_VAR NAME="name" --></td>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME="phone" --></td>
+      <td><!-- TMPL_VAR NAME="title" --></td>
+      <td><!-- TMPL_VAR NAME="author" --></td>
     </tr>
-  </TMPL_LOOP>
+  <!-- /TMPL_LOOP -->
 </table>
 
 
 <!-- endmenu -->
-<TMPL_VAR NAME="endmenureport">
-
-</body>
-</HTML>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

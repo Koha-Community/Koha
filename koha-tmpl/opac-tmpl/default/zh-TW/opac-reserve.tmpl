@@ -1,130 +1,112 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<center>
+<div align="center">
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>�n�J</a> <span lang=mi>Koha</span></p>
-</TMPL_IF>
+<!-- TMPL_IF NAME="message" -->
+	<table  cellpadding="5" cellspacing="0" border="1">
+	<tr bgcolor="#fecc99" >
+	<td><font face="arial, helvetica, sans-serif" color="red" size="+1"><b>
+	<!-- TMPL_IF NAME="too_much_oweing" -->對不起，您尚欠<!-- TMPL_VAR NAME="too_much_oweing" -->，所以不可預約。  <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="too_many_reserves" -->對不起，您不可預約超過<!-- TMPL_VAR NAME="too_many_reserves" -->項資料。 <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="already_reserved" -->您已預約了這項資料。<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_items_selected" -->您一定要撰擇至少一種圖書資料的類別！<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_branch_selected" -->您一定要撰擇在哪間分館取書！<br><!-- /TMPL_IF -->
+	</b></font></td></tr></table>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p>圖書資料《<b><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR name="biblionumber" -->)</b>》之預約頁</p>
+	<p> 已有<b><!-- TMPL_VAR NAME="reservecount" --></b>人預約了這項資料。 </p>
+	<p>請您選擇有那幾類的圖書資料適合您。一有同類的圖書資料可借，該項圖書資料會隨即預留給您。</p>
 
-<TMPL_IF NAME="message">
-<table  cellpadding=5 cellspacing=0 border=1 >
-<tr bgcolor="#fecc99" >
-<td><font face="arial,helvetica" color="red" size=+1><B>
-<TMPL_IF NAME="too_much_oweing">�藍�_�I�z�ثe�|�� <TMPL_VAR NAME="too_much_oweing">�A����w���C</TMPL_IF>
-<TMPL_IF NAME="too_many_reserves">�藍�_�I�z�u�i�̦h�w�� <TMPL_VAR NAME="too_many_reserves"> �󶵥ءC</TMPL_IF>
-<TMPL_IF NAME="already_reserved">�z�w�g�w���F�o�󶵥ءI</TMPL_IF>
-<TMPL_IF NAME="no_items_selected">You must select at least on item type!</TMPL_IF>
-</B></font><P></td></tr></table>
-</TMPL_IF>
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="item_types_selected" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
+		<table border="1">
+			<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+				<th>預約</th>
+				<th>圖書資料類別</th>
+				<th>數量</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+				<tr>
+					<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->"></td>
+					<!-- TMPL_ELSE -->
+						<td>無法預約</td>
+					<!-- /TMPL_UNLESS -->
+					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><!-- TMPL_VAR NAME="copies" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<p>
+		請指定您希望在哪間圖書館取書《<!-- TMPL_VAR NAME="CGIbranch" -->》
+		</p>
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>預約在這一日終止：</td>
+				<td>
+					<select name="required-day"><option value="0">日</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+</select>
+				</td>
+				<td>
+					<select name="required-month"><option value="0">月</option><option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option><option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option><option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>
+</select>
+				</td>
+				<td>
+					<select name="required-year"><option value="0">年</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
+</select>
+				</td>
+			</tr>
+			<tr>
+				<td>在此日期停止預約：</td>
+				<td>
+					<select name="expires-day"><option value="0">日</option><option value="1" >1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+</select>
+				</td>
+				<td>
+					<select name="expires-month"><option value="0">月</option><option value="1">一月</option><option value="2">二月</option><option value="3">三月</option><option value="4">四月</option><option value="5">五月</option><option value="6">六月</option><option value="7">七月</option><option value="8">八月</option><option value="9">九月</option><option value="10">十月</option><option value="11">十一月</option><option value="12">十二月</option>
+</select>
+				</td>
+				<td>
+					<select name="expires-year"><option value="0">年</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
+</select>
+				</td>
+			</tr>
+		</table>
+		<p><input type="submit" value="Submit"></p>
+	</form>
+<!-- /TMPL_IF -->
 
-
-<TMPL_IF NAME="select_item_types">
-<!-- The first time round you select which bibitems you want -->
-
-<p>
-Reserve page for item: <b><TMPL_VAR NAME="title"> ( <TMPL_VAR NAME="author"> )</b>
-</p>
-<p> There are <b><TMPL_VAR NAME="rank"></b> reserves already on this item. </p>
-<p>
-Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you.
-<p>
-
-<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
-<input type="hidden" name="item_types_selected" value="1">
-<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
-<TABLE border=1>
-<tr bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'><th>�w��</th><th>���O</th><th>Copies</th></tr>
-
-<TMPL_LOOP NAME="TYPES">
-
-  <tr>
-  <TMPL_UNLESS NAME="notforloan">
-    <td><input type="checkbox" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
-  <TMPL_ELSE>
-    <td>���i�w��</td>
-  </TMPL_UNLESS>
-  <td><TMPL_VAR NAME="description"></td>
-  <td><TMPL_VAR NAME="copies"></td>
-
-  </tr>
-
-</TMPL_LOOP>
-
-</table>
-<p>
-Please select the branch from which you want to collect the item:
-<select name="branch"><TMPL_VAR NAME="branchoptions"></select><br>
-
-<p>
-<table border=0 cellpadding=0 cellspacing=0>
-<tr><td>Reserve on this date:</td><td nowrap>
-<select name=required-year><option value=0>?<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
-�~
-</td><td nowrap>
-<select name=required-month><option value=0>?<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12</select>
-��
-</td><td nowrap>
-<select name=required-day><option value=0>?<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
-��
-</td></tr>
-<tr><td>End reserve on this date:</td><td>
-<select name=expires-year><option value=0>?<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
-�~
-</td><td>
-<select name=expires-month><option value=0>?<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12</select>
-��
-</td><td>
-<select name=expires-day><option value=0>?<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
-��
-</td></tr>
-</table>
-
-<p>
-
-<font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
-
-</FORM>
-
-</TMPL_IF>
-
+<!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-<TMPL_IF NAME="item_types_selected">
+	<p>請確定您要預約下列種類的圖書資料：</p>
 
-<p>
-Please confirm that you wish to request an item of these types:
-<p>
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="place_reserve" value="1">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME="required_date" -->">
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME="expires_date" -->">
+		<table border="1">
+			<tr>
+				<th bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">圖書資料類別</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+				<tr>
+					<td><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="'itemtype" -->"><!-- TMPL_VAR NAME="description" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		上列圖書資料之取書處為<b><!-- TMPL_VAR NAME="branchname" --></b>。<br>
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<!-- TMPL_IF NAME="fee" -->
+			<p>注意：預約須繳交手續費<b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<input type="submit" value="預約">
+	</form>
+<!-- /TMPL_IF -->
 
-<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
-<input type="hidden" name="place_reserve" value="1">
-<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
-<input type="hidden" name="required_date" value="<TMPL_VAR NAME='required_date'>">
-<input type="hidden" name="expires_date" value="<TMPL_VAR NAME='expires_date'>">
-<TABLE border=1>
-<tr><th bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>Item Type</th></tr>
+</div>
 
-<TMPL_LOOP NAME="TYPES">
-
-  <tr>
-  <input type="hidden" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
-  <td><TMPL_VAR NAME="description"></td>
-  </tr>
-
-</TMPL_LOOP>
-
-</table>
-
-Which is to be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br>
-<input type="hidden" name="branch" value="<TMPL_VAR NAME='branch'>">
-
-<TMPL_IF NAME="fee">
-<br>Note there will be a reserve charge of <b>$<TMPL_VAR NAME="fee"></b><br>
-</TMPL_IF>
-
-<font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve"></font>
-
-</FORM>
-
-</TMPL_IF>
-
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -1,5 +1,5 @@
 <HTML>
-<TITLE>WELCOME TO THE  KOHA OPAC </TITLE>
+<TITLE>KOHA 線上目錄歡迎您 </TITLE>
 
 
 <style type="text/css">
@@ -48,11 +48,9 @@ cellspacing=0 cellpadding=0 border=0 >
 	<td background=" " rowspan=2 align="right" colspan=2><img src="/images/holder.gif"
  	width=1 height=30
 	alt=" " hspace=0 vspace=0><br>
-	<img src="/images/koha.gif" width=200 height=128
-	alt="Koha: Horowhenua Library Trust Catalogue and Member Services" hspace=0 vspace=0></td>
+	<img src="/images/koha.gif" width=200 height=128 alt="Koha：Horowhenua圖書館信托之線上目錄及讀者服務" hspace=0 vspace=0></td>
 
-	<td background=" "  colspan=3><font size=+2><a href="/cgi-bin/koha/catalogue-home.pl"><img src="/images/heading-search.gif" width=272 	height=38
-	alt="Search the Catalogue" hspace=0 vspace=0 border=0></a></font></td>
+	<td background=" "  colspan=3><font size=+2><a href="/cgi-bin/koha/catalogue-home.pl"><img src="/images/heading-search.gif" width=272 height=38 alt="查詢目錄" hspace=0 vspace=0 border=0></a></font></td>
 
   </tr>
 
@@ -65,20 +63,20 @@ cellspacing=0 cellpadding=0 border=0 >
 
 	<input type=text size="27" name="keyword"><br>
 	</font>
-	<b>Type in the box and press the enter 			key.</b><br>
+	<b>在空格輸入後，再按回車鍵即可。</b><br>
 	<a href="/cgi-bin/koha/catalogue-home.pl">
       
 	<img src="/images/front-arrow.gif" width=27 height=22
-	alt="-" hspace=0 vspace=0 border=0 align=middle >Advanced Search (More Options)</a><br>
+	alt="-" hspace=0 vspace=0 border=0 align=middle >進階查詢（更多選項）</a><br>
 
 	<img src="/images/holder.gif" width=1 height=8
 	alt=" " hspace=0 vspace=0>
 	<p>
-	<TMPL_IF NAME="loggedinuser">
-	    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
-	<TMPL_ELSE>
-	    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
-	</TMPL_IF>
+	<!-- TMPL_IF NAME="loggedinuser" -->
+	    <p align=left>目前身份：<!-- TMPL_VAR NAME="loggedinuser" --> 【<a href=/cgi-bin/koha/logout.pl>登出</a>】</p>
+	<!-- TMPL_ELSE -->
+	    <p align=left><a href=/cgi-bin/koha/userpage.pl>登入</a> Koha</p>
+	<!-- /TMPL_IF -->
 	</td>
 	</form>
   </tr>
@@ -96,7 +94,7 @@ cellspacing=0 cellpadding=0 border=0 >
         <td></td>
 	<form action="/cgi-bin/member.pl" method=get >
 	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">Card Number &nbsp;</font></td>
+	<font size=3 face="arial narrow,arial,helvetica">Card number &nbsp;</font></td>
 	<td background=" " ><input type=text size="12" name="card"></td>
 
   </tr>

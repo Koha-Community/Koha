@@ -1,135 +1,128 @@
-<HTML>
-<TITLE>WELCOME TO THE  KOHA OPAC </TITLE>
-<meta http-equiv="Content-Type" content="text/html; charset=big5">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>KOHAç·šä¸Šç›®éŒ„æ­¡è¿Žæ‚¨</title>
 
 <style type="text/css">
 <!--
-input{font-size:16px}
--->
+a:link {
+	text-decoration: none;
+	cursor: hand;
+	color : #FFFFFF;
+	text-decoration : none;
+	padding: 4px;
+	font-weight: bold;
+}
 
+a:visited {
+	text-decoration: none;
+	cursor: hand;
+	color : #FFFFFF;
+	text-decoration : none;
+	padding: 4px;
+	font-weight: bold;
+}
+
+a:hover {
+	text-decoration: none;
+	cursor: hand;
+	color : #FFFFCC;
+	text-decoration : none;
+	padding: 4px;
+	font-weight: bold;
+}
+
+a:active {
+	text-decoration: none;
+	cursor: hand;
+	color : #FFFFCC;
+	text-decoration : none;
+	padding: 4px;
+	font-weight: bold;
+}
+
+body {
+	background-color : #339999;
+	color : #000000;
+	margin : 0px;
+	padding : 0px;
+}
+
+input {
+	font-size: 16px;
+	}
+-->
 </style>
+</head>
 
+<body onload="document.catsearch.keyword.focus();">
 
-</HEAD>
+<table border="0" cellspacing="0" cellpadding="0" align="center">
+<tr>
+	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/front-background-med.gif">
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="1" height="440" hspace="0" vspace="0" border="0" align="left">
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="260" height="88" hspace="0" vspace="0" border="0"></td>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="30" height="88" hspace="0" vspace="0" border="0"></td>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="350" height="88" hspace="0" vspace="0" border="0"></td>
+		</tr>
 
-<BODY   onload="document.catsearch.keyword.focus()"
-	BGCOLOR="#339999" 
-	text="black" 
-	link="white" 
-	vlink="white" 
-	alink="#663366" 
-	leftmargin=0 
-	topmargin=0
-	marginheight=0
-	marginwidth=0 >
-
-<center>
-<table cellspacing=0 cellpadding=0 border=0 >
-	
-  <tr valign=top >
-	<td background="<TMPL_VAR NAME='themelang'>/images/front-background-med.gif"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" 
-	width=1 height=440 align=left alt=" " hspace=0 vspace=0><table
-cellspacing=0 cellpadding=0 border=0 >
-	
-  <tr valign=top >
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=228 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=57 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=47 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=88 
-	alt=" " hspace=0 vspace=0></td>
-	<td background=" "><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=88 
-	alt=" " hspace=0 vspace=0></td>
-  </tr>
-
-  <tr valign=top >
-	<td background=" " rowspan=2 align="right" colspan=2><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
- 	width=1 height=30
-	alt=" " hspace=0 vspace=0><br>
-	<img src="<TMPL_VAR NAME='themelang'>/images/koha.gif" width=200 height=128
-	alt="Koha: Horowhenua Library Trust Catalogue and Member Services" hspace=0 vspace=0></td>
-
-	<td background=" "  colspan=3><font size=+2><a href="/cgi-bin/koha/opac-search.pl"><img src="<TMPL_VAR NAME='themelang'>/images/heading-search.gif" width=272 	height=38
-	alt="¬d¸ßÀ]ÂÃ" hspace=0 vspace=0 border=0></a></font></td>
-
-  </tr>
-
-
-<tr valign=top >
-	<td>&nbsp; &nbsp; </td>
-	<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" name=catsearch>
-	<input type=hidden name=type value=opac>
-	<td background=" " >
-
-	<input type=text size="27" name="keyword"><br>
-	</font>
-	<b>¦b¤W­±ªºªÅ®æ¤º¿é¤JÃöÁä¦r«á¡A«ö¦^¨®Áä§Y¥i¡C</b><br>
-	<a href="/cgi-bin/koha/opac-search.pl">
-      
-	<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow.gif" width=27 height=22
-	alt="-" hspace=0 vspace=0 border=0 align=middle >¶i¶¥·j´M (§ó¦h¿ï¶µ)</a><br>
-
-	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
-	alt=" " hspace=0 vspace=0>
-	<p>
-	<TMPL_IF NAME="loggedinuser">
-	    <p align=left>±z²{¦bµn¤J¤Fªº¨­¥÷¬° <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>ÅªªÌ±M°Ï¥D­¶</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">µn¥X</a>]</p>
-	<TMPL_ELSE>
-	    <p align=left><a href="/cgi-bin/koha/opac-user.pl">µn¤J</a> <span lang=mi>Koha</span></p>
-	</TMPL_IF>
+		<tr>
+			<td align="right">
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" alt="" width="1" height="30" hspace="0" vspace="0" border="0">
+					<TMPL_VAR name="LibraryName">
+			</td>
+			<td valign="top">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow.gif" alt="" border="0" width="27" height="22">
+			</td>
+			<td>
+				<font size="+2">
+						æŸ¥è©¢é¤¨è—
+				</font>
+				<form action="/cgi-bin/koha/opac-searchresults.pl" name="catsearch" id="catsearch">
+					<input type="hidden" name="type" value="opac">
+					<input type="text" name="keyword" size="27"><br>
+					<b>åœ¨ç©ºæ ¼è¼¸å…¥å¾Œï¼Œå†æŒ‰å›žè»Šéµå³å¯ã€‚</b><br>
+					<a href="/cgi-bin/koha/opac-search.pl">
+						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow-small.gif" alt="-" width="20" height="16" hspace="0" vspace="0" border="0" align="middle">
+						é€²éšŽæŸ¥è©¢ï¼ˆæ›´å¤šé¸é …ï¼‰
+					</a>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td valign="top">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="<!-- TMPL_VAR NAME="themelang"  -->/images/front-arrow.gif" alt="" width="27" height="22" border="0">
+			</td>
+			<td>
+				<font size="+2">
+						æ–°æ›¸
+				</font><br>
+					<form action="/cgi-bin/koha/opac-new.pl" name="new">
+						<!-- TMPL_VAR name="CGIitemtype" --> <b>acquired in the last <input type="text" name="duration" value="30" size=3> æ—¥</b>
+						<input type="submit" value="å¥½!">
+					</form>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/front-arrow.gif" alt="" width="27" height="22" border="0">
+			</td>
+			<td>
+					<!-- TMPL_IF NAME="loggedinuser" -->
+					<p align="left">ç›®å‰èº«ä»½ï¼š<!-- TMPL_VAR NAME="loggedinuser" --> ã€<a href=/cgi-bin/koha/opac-user.pl>å€‹äººä¸»é </a>ã€‘ã€<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">ç™»å‡º</a>ã€‘</p>
+					<!-- TMPL_ELSE -->
+					<p align="left"><a href="/cgi-bin/koha/opac-user.pl">ç™»å…¥Koha</a></p>
+					<!-- /TMPL_IF -->
+			</td>
+		</tr>
+	</table>
 	</td>
-	</form>
-  </tr>
-
-
- 
-
-<!--
-  <tr valign=top ><form action="/cgi-bin/koha/member.pl" method=get >
-	<td background=" "  colspan=3><img src="<TMPL_VAR NAME='themelang'>/images/heading-login.gif" width=279 		height=38
-	alt="ÅªªÌµn¤J" hspace=0 vspace=0 border=0></td>
-
-  </tr>
-<tr valign=top >
-        <td></td>
-	<form action="/cgi-bin/koha/member.pl" method=get >
-	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">¹Ï®ÑÃÒ¸¹½X</font></td>
-	<td background=" " ><input type=text size="12" name="card"></td>
-
-  </tr>
-
-  <tr valign=top><td></td>
-	<td></td>
-	<td></td>
-	<td background=" " >
-	<font size=3 face="arial narrow,arial,helvetica">±K¡@¡@¡@½X</font></td>
-	<td background=" " ><input type=password size="12" name="password"><br>
-	<input type=submit value="OK"><br>
-
-	<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=8
-	alt=" " hspace=0 vspace=0></td>
-	</font>
- </tr>
-
-  <tr valign=top >
-	<td></td>
-	<td background=" " colspan=4><A href="/cgi-bin/koha/join.html"><img src="<TMPL_VAR NAME='themelang'>/images/heading-member.gif" width=331 		height=38
-	alt="ÅªªÌµn°O" hspace=0 vspace=0 border=0></a>
-	</td>
-	<td>
-	</td>
-
-  </tr>
-
--->
+</tr>
 </table>
-
-</td>
-  </tr>
-</table>
-<p>
-</center>
+</body>
+</html>

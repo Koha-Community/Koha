@@ -1,68 +1,71 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>�z�{�b�n�J�F�������� <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Ū�̱M�ϥD��</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>�n�X</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>�n�J</a> <span lang=mi>Koha</span></p>
-</TMPL_IF>
+<form action="/cgi-bin/koha/opac-searchresults.pl" method=get>
+<table border="0" align="center">
 
 
-<CENTER>
-<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
-<TABLE >
-
-<tr valign=top>
-<TD></td><td></td><td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="�n�I�}�l�d��" width=164 height=44 border=0 >
-</td></tr>
-
-<TR VALIGN=TOP>
-<TD>����r</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-</TD></TR>
-
-<TR VALIGN=TOP>
-<TD>�ѦW</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
-<td><input type=radio name=ttype value=normal checked>�ѦW�����o�Ǧr���Y�i<input
-type=radio name=ttype value=exact>�o�O��ӮѦW</td>
-</TR>
-
-<TR VALIGN=TOP> 
-<TD>�۪�</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
-
-<TR VALIGN=TOP> 
-<TD>ø��</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
-
-<TR VALIGN=TOP>
-<TD>�D�D</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
-
-<td>���O</td>
-  <td>
-    <select size="1"  name="class">
-    <option value="">�L�ҿ�
-    <!-- fetch class list -->
-    <TMPL_VAR name="classlist">
-    <!--#include virtual="/includes/cat-class-list.inc" -->
-    </select>
- </td>
+<tr>
+	<td>關鍵字</td>
+	<td colspan="2"><input type="text"  size="25"   name="keyword"></td>
 </tr>
 
-<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
--->
-<TR VALIGN=TOP>
-<TD>���X</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD></TR>
+<tr>
+	<td colspan="3"><b>或：</b></td>
+</tr>
+<tr>
+	<td>主題</td>
+	<td colspan="2"><input type="text"  size="25"   name="subject"></td>
+</tr>
 
-<!-- <TR VALIGN=TOP>
-<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
--->
-</TR>
+<tr>
+	<td colspan="3"><b>或下列最少一項：</b></td>
+</tr>
 
-<TR VALIGN=TOP>
-<td></td>
-<TD><font size=4 face="arial,helvetica">
-<INPUT TYPE="reset"  value="�����M��"></font></td></tr>
+<tr>
+	<td>題名</td>
+	<td><input type="text"  size="25"   name="title"></td>
+	<td><input type="radio" name="ttype" value="normal" checked="checked">一般<input type="radio" name="ttype" value="exact">Exact</td>
+</tr>
 
-</TABLE>
-</FORM>
-</CENTER>
+<tr>
+	<td>著者</td>
+	<td colspan="2"><input type="text" size="25" name="author"></td>
+</tr>
+
+<tr>
+	<td>繪圖</td>
+	<td colspan="2"><input type="text" size="25" name="illustrator"></td>
+</tr>
+
+<tr>
+<td>類別</td>
+	<td colspan="2">
+	<select size="1"  name="class">
+	<option value="">無所謂</option>
+	<!-- fetch class list -->
+	<!-- TMPL_VAR name="classlist" -->
+	<!--#include virtual="/includes/cat-class-list.inc" -->
+	</select>
+	</td>
+</tr>
+
+<tr>
+	<td>條碼</td>
+	<td colspan="2"><input type="text"  size="25"   name="itemnumber"></td>
+</tr>
+
+<tr>
+	<td><input type="submit" value="開始查詢"></td>
+	<td colspan="2"><input type="reset" value="清空"></td>
+</tr>
+
+<tr>
+	<td colspan="3">注意：一旦輸入了「關鍵字」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵字。</td>
+</tr>
+
+</table>
+
+</form>
 
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

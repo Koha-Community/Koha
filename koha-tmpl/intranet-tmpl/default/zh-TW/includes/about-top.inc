@@ -1,37 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 
 <html>
 <head>
-<title>KOHA: INTRANET: Parameters</title>
-<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>KOHAï¼šINTRANETï¼šè¨­å®š</title>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+</head>
+<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" Alink="#cc3300"
+marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
 
-td.about {
-	padding:4px;
-	}
-td.about a {
+a.about {
 	background-color: #86c268;
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color: #FFFFFF;
+	padding:4px;
 	font-weight: bold;
 	}
-td.about a:hover {
+a.about:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
 	}
 </style>
-
-
-</head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
-
 
 <!------------------------MENUS-------------------------------->
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
@@ -41,32 +37,32 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 		<tr>
 			<td>
 			<div id="menubar">
-			<table cellpadding=0 cellspacing=0  border=0 height=29 width="70%">
+			<table cellpadding=0 cellspacing=0  border=0 height=29 width=70%>
 				<tr>
-					<td class="koha"><b lang=mi>KOHA</b></td>
-					<td class=home>
-						<a href="/cgi-bin/koha/mainpage.pl">ªğ¦^¥D­¶</a>
+					<td class="koha"><b>KOHA</b></td>
+					<td>
+						<a class="home" href="/cgi-bin/koha/mainpage.pl">ä¸»é </a>
 					</td>
-					<td class=catalogue>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">À]ÂÃ¬d¸ß</a>
+					<td>
+						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">ç›®éŒ„</a>
 					</td>
-					<td class=members>
-						<a href="/cgi-bin/koha/members-home.pl">ÅªªÌ±b¤á</a>
+					<td>
+						<a class="members" href="/cgi-bin/koha/members-home.pl">è®€è€…</a>
 					</td>
-					<td class=acquisition>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">®ÑÂÇÁÊ¸m</a>
+					<td>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">è³¼ç½®</a>
 					</td>
-					<td class=circulation>
-						<a  href="/cgi-bin/koha/circ/circulation.pl">¬y³qªA°È</a>
+					<td>
+						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">æµé€š</a>
 					</td>
-					<td class=reports>
-						<a href="/cgi-bin/koha/reports-home.pl">³øªí¦C¦L</a>
+					<td>
+						<a class="reports" href="/cgi-bin/koha/reports-home.pl">å ±è¡¨</a>
 					</td>
-					<td class=parameters>
-						<a href="/cgi-bin/koha/admin-home.pl">¨t²Î³]©w</a>
+					<td>
+						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">è¨­å®š</a>
 					</td>
-					<td class=about>
-						<a href="/cgi-bin/koha/about.pl">Ãö©ó<span lang=mi>Koha</span></a>
+					<td>
+						<a class="about" href="/cgi-bin/koha/about.pl">é—œæ–¼</a>
 					</td>
 				</TR>
 			</TABLE>
@@ -77,7 +73,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 </table>
 <BLOCKQUOTE>
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align=left>¨Ï¥ÎªÌ¨­¤À¡G<span class=en><!-- TMPL_VAR NAME="loggedinusername" --></span> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>µn¥X</a>]</p>
+    <p align=left>ç›®å‰èº«ä»½ï¼š<!-- TMPL_VAR NAME="loggedinusername" --> ã€<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>ç™»å‡º</a>ã€‘</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>µn¤J</a><span lang=mi>Koha</span></p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>ç™»å…¥</a> Koha</p>
 <!-- /TMPL_IF -->

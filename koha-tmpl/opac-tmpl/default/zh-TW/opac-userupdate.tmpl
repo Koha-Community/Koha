@@ -1,54 +1,47 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<p><i>請按需要更新，閣下所作之修改將以電郵方式寄至圖書館。<br>
+圖書館核實您的作的修改後，修改才會生效。</i></p>
 
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 
-<TMPL_LOOP NAME="BORROWER_INFO">
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+<table align="center">
 
-<CENTER>
-<FORM ACTION="/cgi-bin/koha/opac-userupdate.pl" method=get>
-<TABLE >
+<tr>
+<td>姓</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="surname" -->"  name="surname"></td></tr>
 
-<TR VALIGN=TOP>
-<TD>Surname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='surname'>"  NAME="surname"></TD></TR>
+<tr> 
+<td>題名</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="title" -->"  name="title"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='title'>"  NAME="title"></TD></TR>
+<tr> 
+<td>名</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="firstname" -->"  name="firstname"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Firstname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
+<tr> 
+<td>地址</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="streetaddress" -->"  name="streetaddress"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Street address</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
-
-<TR VALIGN=TOP> 
-<TD>City</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='city'>"  NAME="city"></TD></TR>
+<tr> 
+<td>市</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="city" -->"  name="city"></td></tr>
 
 
-<TR VALIGN=TOP> 
-<TD>Home phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
+<tr> 
+<td>住宅電話</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="phone" -->"  name="phone"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Work/Fax phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
+<tr> 
+<td>辦公電話/傳真</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="faxnumber" -->"  name="faxnumber"></td></tr>
 
-<TR VALIGN=TOP> 
-<TD>Email</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
+<tr> 
+<td>電郵</td> <td><input type="text"  size="25" value="<!-- TMPL_VAR NAME="emailaddress" -->"  name="emailaddress"></td></tr>
 
 
 
-<TR VALIGN=TOP>
-<td><font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font></td>
-<TD><font size=4 face="arial,helvetica">
-</font></td></tr>
+<tr>
+<td colspan="2"><input type="submit" value="Submit"></td>
+</tr>
 
-</TABLE>
-</FORM>
-</CENTER>
+</table>
+</form>
 
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

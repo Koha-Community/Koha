@@ -1,0 +1,33 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+
+<CENTER>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'><b>名稱</b></td>
+			<td background='/images/background-mem.gif'><b>類別</b></td>
+			<td background='/images/background-mem.gif'><b>日期/時間</b></td>
+			<td background='/images/background-mem.gif'><b>金額</b></td>
+			<td background='/images/background-mem.gif'><b>分館</b></td>
+		<tr>
+		<!-- TMPL_LOOP name=loop1 -->
+		<tr>
+			<td><!-- TMPL_VAR NAME=name --></td>
+			<td><!-- TMPL_VAR NAME=type --></td>
+			<td><!-- TMPL_VAR NAME=time --></td>
+			<td><!-- TMPL_VAR NAME=amount --></td>
+			<td><!-- TMPL_VAR NAME=branch --></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</CENTER>
+
+
+<p>
+	<b>共付款：<!-- TMPL_VAR NAME=total --></b>
+	<br>
+	<b>共註銷：<!-- TMPL_VAR NAME=totalw --></b>
+</p>
+
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</BODY>
+</HTML>

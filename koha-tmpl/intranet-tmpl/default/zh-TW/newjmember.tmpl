@@ -1,85 +1,85 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<TMPL_IF Name="NOK">
-	<TMPL_VAR Name="string">
-<TMPL_ELSE>
-	<H1> 'Confirm Record' </H1>
-	<TMPL_LOOP Name="identloop">
-		<TMPL_IF Name="cardchild">
+<!-- TMPL_IF Name="NOK" -->
+	<!-- TMPL_VAR Name="string" -->
+<!-- TMPL_ELSE -->
+	<H1> 請核對記錄 </H1>
+	<!-- TMPL_LOOP Name="identsloop" -->
+		<!-- TMPL_IF Name="cardchild" -->
 			<table border=0 cellspacing=0 cellpadding=5>
-				<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-					<td background="<TMPL_VAR Name="image">">
-					<B> NEW MEMBER </B>
+				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+					<td background="<!-- TMPL_VAR Name="image" -->">
+					<B> 新增讀者 </B>
 					</td>
 					<td>
-					&nbpsq;
+					&nbsp;
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>Name</B>
+					<B>名稱</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="name">
+					<!-- TMPL_VAR Name="name" -->
 					</td>
 				</tr>
-				<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-					<td background="<TMPL_VAR Name="image">">
-					<B> MEMBERSHIP DETAILS </B>
+				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+					<td background="<!-- TMPL_VAR Name="image" -->">
+					<B> 讀者細節 </B>
 					</td>
 					<td>
-					&nbpsq;
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Membership Number</B>
-					</td>
-					<td>
-					<TMPL_VAR Name="bornum">
+					&nbsp;
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>Date Of Birth</B>
+					<B>讀者號碼</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="dob">
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Sex</B>
-					</td>
-					<td>
-					<TMPL_VAR Name="sex">
+					<!-- TMPL_VAR Name="bornum" -->
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>School</B>
+					<B>出生日期</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="school">
+					<!-- TMPL_VAR Name="dob" -->
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>General Notes</B>
+					<B>性別</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="notes">
+					<!-- TMPL_VAR Name="sex" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>就讀學校</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="school" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>一般備註</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="notes" -->
 					</td>
 				</tr>
 			</TABLE><p>
-		</TMPL_IF>
-  </TMPL_LOOP>
+		<!-- /TMPL_IF -->
+  <!-- /TMPL_LOOP -->
 	<form action="/cgi-bin/koha/insertjdata.pl" method=post>
-		<TMPL_LOOP NAME=inputsloop>
-			<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
-		</TMPL_LOOP>
+		<!-- TMPL_LOOP NAME=inputsloop -->
+			<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+		<!-- /TMPL_LOOP -->
 		<input type=submit name=submit value=submit>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->
