@@ -130,6 +130,8 @@
 	<h3><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
 <h4> &nbsp; &nbsp; <!-- TMPL_VAR NAME="issuecount" --> out<!-- TMPL_IF NAME="overduecount" -->, <span class="error"><!-- TMPL_VAR name="overduecount" --> overdue</span><!-- /TMPL_IF --></h4><br clear="right" />
 
+<!-- TMPL_IF NAME="flagged" -->
+</div><div class="details">
 <ul>
 <!-- TMPL_IF NAME="gna" -->
 <li><span class="error">Address:</span> Patron's address in doubt</li>
@@ -164,6 +166,7 @@
 					<dt>Notes:</dt> <dd class="error"><!-- TMPL_VAR name="notesmsg" --></dd>
 				<!-- /TMPL_IF -->
 </dl>
+<!-- /TMPL_IF -->
 	<!-- TMPL_ELSE -->
 	<!-- No card entered yet -->
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform" id="mainform">
