@@ -108,17 +108,23 @@ if ($op eq "do_search") {
 
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
+	my $orderby = $query->param('orderby');
 
 	# builds tag and subfield arrays
 	my @tags;
 
 	foreach my $marc (@marclist) {
-		push @tags, $dbh->quote(substr($marc,0,4));
+		my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
+		if ($tag) {
+			push @tags,$dbh->quote("$tag$subfield");
+		} else {
+			push @tags, $dbh->quote(substr($marc,0,4));
+		}
 	}
 	findseealso($dbh,\@tags);
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
-										$startfrom*$resultsperpage, $resultsperpage);
+										$startfrom*$resultsperpage, $resultsperpage,$orderby);
 
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",
