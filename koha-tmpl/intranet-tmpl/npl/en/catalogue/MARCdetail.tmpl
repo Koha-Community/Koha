@@ -3,12 +3,15 @@
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
+<h2>MARC Record for <em><!-- TMPL_VAR NAME="biblio_title" --><!-- TMPL_IF NAME="biblio_subtitle" -->: <!-- TMPL_VAR NAME="biblio_subtitle" --><!-- /TMPL_IF --></em></h2>
 <div class="tabitem"><form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" value="intra" name="type" /><input type="submit" class="submit" value="Brief Display" /></form><!-- TMPL_IF NAME="norequests" -->&nbsp;<!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /> <input type="submit" class="submit" value="Place Reserve" /></form>
-		<!-- /TMPL_IF --><form action="/cgi-bin/koha/detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Simple Print View" /></form></div>
+		<!-- /TMPL_IF --><form action="/cgi-bin/koha/detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Simple Print View" /></form> <!-- TMPL_IF name="subscriptionid" --><form action="/cgi-bin/koha/bull/subscription-detail.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" /><input type="submit" value="Subscription" class="submit" /></form>
+<form action="/cgi-bin/koha/bull/serial-issues.pl" method="get"><input type="hidden" name="subscriptionid" value="!-- TMPL_VAR NAME="subscriptionid" -->" /><input type="submit" value="Serial Issues" class="submit" /></form><!-- /TMPL_IF -->  <form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Edit MARC" /></form> <form action="/cgi-bin/koha/acqui.simple/additem.pl" method="get"><input type="hidden" name="bibid" value="<!-- TMPL_VAR name="bibid"-->" /><input type="submit" class="submit" value="Edit Items" /></form> <form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="op" value="delete" /><input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->" /><input type="submit" class="cancel" value="Delete Record" onclick="confirm_deletion(); return false;" /></form></div>
 
+<!-- TMPL_IF NAME="0XX" -->
 <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="0XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -17,13 +20,15 @@
 		<td class="data"><!-- TMPL_VAR NAME="marc_value" --></td>
 		<td><a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D;&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a></td>
 	</tr>
-	</tmpl_loop>
-	</tmpl_loop>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table></div>
+<!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="1XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="1XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -35,10 +40,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
-
+	 <!-- /TMPL_IF -->
+	 
+<!-- TMPL_IF NAME="2XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="2XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -50,10 +57,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
-
+	 <!-- /TMPL_IF -->
+	 
+<!-- TMPL_IF NAME="3XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="3XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -65,11 +74,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+	 <!-- /TMPL_IF -->
 
-
+<!-- TMPL_IF NAME="4XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="4XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -81,10 +91,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+	 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="5XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="5XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -96,10 +108,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+	 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="6XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="6XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -111,10 +125,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+	 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="7XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="7XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -126,10 +142,13 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+	 <!-- /TMPL_IF -->
 
+	 
+<!-- TMPL_IF NAME="8XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="8XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -141,10 +160,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+<!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="9XX" -->
     <div class="table"><table class="marc">
 	<!-- TMPL_LOOP NAME="9XX" -->
-	<tr><th colspan="5"><tmpl_VAR NAME="tag"></th></tr>
+	<tr><th colspan="5"><!-- TMPL_VAR NAME="tag" --></th></tr>
 	<!-- TMPL_LOOP NAME="subfield" -->
 	<tr>
          <td>&nbsp;</td>
@@ -156,10 +177,12 @@
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
      </table></div>
+<!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="item_header_loop -->
     <div class="table"><table>
 		<tr>
-			<!-- TMPL_LOOP NAME="item_header_loop" --><th><tmpl_VAR NAME="header_value"></th><!-- /TMPL_LOOP -->
+			<!-- TMPL_LOOP NAME="item_header_loop" --><th><!-- TMPL_VAR NAME="header_value" --></th><!-- /TMPL_LOOP -->
 		</tr>
 		<!-- TMPL_LOOP NAME="item_loop" -->
 			<tr>
@@ -167,12 +190,13 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
      </table></div>
+<!-- /TMPL_IF -->
 	 </div>
 	<script language="JavaScript" type="text/javascript">
 function confirm_deletion() {
-	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+	var is_confirmed = confirm('Are you sure you want to delete this record and all the attached items?');
 	if (is_confirmed) {
-		window.location="acqui.simple/addbiblio.pl?op=delete&bibid=<!-- TMPL_VAR NAME="bibid" -->";
+		window.location="acqui.simple/addbiblio.pl?op=delete&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->";
 	}
 }
 </script>
