@@ -81,7 +81,7 @@ sub delmember{
   $sth->finish;
   $query="Insert into deletedborrowers values (";
   foreach my $temp (@data){
-    $query=$query."'$temp',";
+    $query=$query."'$temp',";		# FIXME - .=
   }
   $query=~ s/\,$/\)/;
   #  print $query;

@@ -37,7 +37,7 @@ if ($add){
   my $itemnum=$input->param('itemnum');
   my $desc=$input->param('desc');
   my $amount=$input->param('amount');
-  $amount=$amount*-1;
+  $amount=$amount*-1;			# FIXME - $amount = -$amount;
   my $type=$input->param('type');
   manualinvoice($bornum,$itemnum,$desc,$type,$amount);
   print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");
