@@ -86,7 +86,6 @@ my $bibitemnum;
 if ($quantity ne '0'){
 	#check to see if biblio exists
 	if ($existing eq 'no'){
-	warn "ADDING";
 		#if it doesnt create it
 		$bibnum = &newbiblio({ title     => $title?$title:"",
 						author    => $author?$author:"",
@@ -106,26 +105,26 @@ if ($quantity ne '0'){
 			changestatus($suggestionid,'ORDERED');
 		}
 	} else {
-	warn "MODIFYING";
 		$bibnum=$input->param('biblio');
 		$bibitemnum=$input->param('bibitemnum');
-# 		my $oldtype=$input->param('oldtype');
+		my $oldtype=$input->param('oldtype');
 # 		&modbibitem({biblioitemnumber => $bibitemnum,
 # 						isbn            => $isbn,
 # 						publishercode   => $publishercode,
 # 		});
- 		&modbiblio({
- 			biblionumber  => $bibnum,
- 			title         => $title?$title:"",
- 			author        => $author?$author:"",
- 			copyrightdate => $copyrightdate?$copyrightdate:"",
- 			series        => $series?$series:"" },
- 			);
+#  		&modbiblio({
+#  			biblionumber  => $bibnum,
+#  			title         => $title?$title:"",
+#  			author        => $author?$author:"",
+#  			copyrightdate => $copyrightdate?$copyrightdate:"",
+#  			series        => $series?$series:"" },
+#  			);
 	}
 	if ($ordnum) {
-		warn "MODORDER $title / $ordnum / $quantity / $bookfund";
+# 		warn "MODORDER $title / $ordnum / $quantity / $bookfund";
 		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice,$sort1,$sort2);
 	}else {
+# 	warn "new order : ";
 		$basketno=neworder($basketno,$bibnum,$title,$quantity,$listprice,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
 	}
 } else {

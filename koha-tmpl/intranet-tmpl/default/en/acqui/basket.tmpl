@@ -38,7 +38,11 @@
 					<td><!-- TMPL_VAR NAME="ordernumber" --></td>
 					<td><!-- TMPL_VAR NAME="publishercode" --></td>
 					<td><!-- TMPL_VAR NAME="isbn" --></td>
-					<td><a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+					<!-- TMPL_IF name="closedate" -->
+						<td><!-- TMPL_VAR NAME="title" --></td>
+					<!-- TMPL_ELSE -->
+						<td><a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+					<!-- /TMPL_IF -->
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="rrp" --></td>
 					<td><!-- TMPL_VAR NAME="ecost" --></td>

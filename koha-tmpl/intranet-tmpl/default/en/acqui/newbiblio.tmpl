@@ -81,19 +81,35 @@ win.document.write("</font></body></html>");
 		<h2 class="acquisition">catalogue details</h2>
 		<p>
 			<label class="label100"><b>Title *</b></label>
-			<input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="title" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Author</label>
-			<input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" >
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100"> Publisher</label>
-			<input type="text" size="30" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" >
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->"><!-- TMPL_VAR NAME="publishercode" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Copyright Date</label>
-			<input type="text" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->"><!-- TMPL_VAR NAME="copyrightdate" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Format</label>
@@ -101,11 +117,19 @@ win.document.write("</font></body></html>");
 		</p>
 		<p>
 			<label class="label100">ISBN</label>
-			<input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Series</label>
-			<input type="text" size="20" name="Series" value="<!-- TMPL_VAR NAME="seriestitle" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->"><!-- TMPL_VAR NAME="seriestitle" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Branch</label>

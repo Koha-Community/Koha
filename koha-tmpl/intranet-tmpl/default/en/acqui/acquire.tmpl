@@ -69,7 +69,7 @@
 			</p>
 			<p>
 				<label class="label100">Actual Cost *</label>
-				<input type="text" size="20" name="cost" value="<!-- TMPL_VAR NAME="unitprice" -->">
+				<input type="text" size="20" name="cost" value="<!-- TMPL_IF name="unitprice"--><!-- TMPL_VAR NAME="unitprice" --><!-- TMPL_ELSE --><!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF -->">
 			</p>
 			<p>
 				<label class="label100">Invoice Number</label>
