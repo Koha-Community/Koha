@@ -249,7 +249,7 @@ $borr->{'emailaddress'}
 EOF
 
 	$reservetext = <<"EOF";
-<font color='red' size='+2'>Reserve found:</font> Item: $iteminfo->{'title'} ($iteminfo->{'author'}) <br>
+<font color='red' size='+2'>Reserve found:</font> Item: $iteminfo->{'title'} ($iteminfo->{'author'}) <a href=/cgi-bin/koha/detail.pl?bib=$iteminfo->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a> <br>
 for $name ($number) to be collected at <b>$branchname</b>.
 <table cellpadding=5 cellspacing=0>
 <tr><td valign="top">Change status to waiting and print 
