@@ -104,7 +104,12 @@ if ($< == 0) {
     $>=$uid;
     $<=$uid;
 }
-my $dbh = C4::Context->dbh;
+my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
+my $db_name   = $context->{"config"}{"database"};
+my $db_host   = $context->{"config"}{"hostname"};
+my $db_user   = $context->{"config"}{"user"};
+my $db_passwd = $context->{"config"}{"pass"};
+my $dbh = DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
 
 # we begin the script, so "unactive" every pending request : they will never give anything, the script died :-(
 my $sth=$dbh->prepare("update z3950results set active=0 where active<>-1");
@@ -179,7 +184,12 @@ while (1) {
 						} else {
 # and connect to z3950 server
 #FIXME: why do we need $dbi ? can't we use $dbh ?
-							my $dbi = C4::Context->dbh;
+							my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
+							my $db_name   = $context->{"config"}{"database"};
+							my $db_host   = $context->{"config"}{"hostname"};
+							my $db_user   = $context->{"config"}{"user"};
+							my $db_passwd = $context->{"config"}{"pass"};
+							my $dbi = DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
 							my ($name, $server, $database, $user, $password,$syntax) = split(/\//, $serverinfo, 6);
 							$globalname=$name;
 							$globalsyntax = $syntax;
