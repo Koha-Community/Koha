@@ -22,6 +22,7 @@ $VERSION = 0.01;
 		&installfiles
 		&databasesetup
 		&restartapache
+		&loadconfigfile
 		);
 
 
@@ -162,7 +163,7 @@ and password from the /etc/koha.conf configuration file at any time.  Use the
 [NOTE PERMISSIONS ARE NOT COMPLETED AS OF THIS RELEASE.  Do not give passwords
 to any patrons unless you want them to have full access to your intranet.]
 
-print "Press the <ENTER> key to continue: |;
+Press the <ENTER> key to continue: |;
 
 $messages->{'Completed'}->{en}=qq|
 ==============================
@@ -1166,6 +1167,35 @@ sub restartapache {
 	}
     }
 
+}
+
+sub loadconfigfile {
+    my %configfile;
+
+    open (KC, "/etc/koha.conf");
+    while (<KC>) {
+     chomp;
+     (next) if (/^\s*#/);
+     if (/(.*)\s*=\s*(.*)/) {
+       my $variable=$1;
+       my $value=$2;
+       # Clean up white space at beginning and end
+       $variable=~s/^\s*//g;
+       $variable=~s/\s*$//g;
+       $value=~s/^\s*//g;
+       $value=~s/\s*$//g;
+       $configfile{$variable}=$value;
+     }
+    }
+
+    $::intranetdir=$configfile{'intranetdir'};
+    $::opacdir=$configfile{'opacdir'};
+    $::kohaversion=$configfile{'kohaversion'};
+    $::kohalogdir=$configfile{'kohalogdir'};
+    $::database=$configfile{'database'};
+    $::hostname=$configfile{'hostname'};
+    $::user=$configfile{'user'};
+    $::pass=$configfile{'pass'};
 }
 
 END { }       # module clean-up code here (global destructor)
