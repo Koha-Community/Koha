@@ -15,7 +15,7 @@ use HTML::Template;
 use C4::Date;
 use C4::Context;
 
-my $MAXIMUM_NUMBER_OF_RESERVES = C$::Context->preference("maxreserves");
+my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie)
