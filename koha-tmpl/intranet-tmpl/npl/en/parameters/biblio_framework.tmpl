@@ -1,0 +1,132 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Biblio Framework<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<script language="javascript" type="text/javascript">
+function _(s) { return s } // dummy function for gettext
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNum(v,maybenull) {
+var n = new Number(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isDate(f) {
+	var t = Date.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.frameworkcode.value.length==0) {
+		_alertString += "\n- " + _("Framework code missing");
+	}
+	if (!(isNotNull(window.document.Aform.frameworktext,1))) {
+		_alertString += "\n- " + _("Description missing");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		alert(alertString2);
+	}
+}
+</script>
+<div id="main">
+<!-- TMPL_IF NAME="add_form" -->
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate" />
+		<input type="hidden" name="checked" value="0" />
+	<table>
+	<caption><!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --></caption>
+	<tr>
+			<!-- TMPL_IF NAME="frameworkcode" -->
+				<td><label for="frameworkcode">Framework Code<label></td><td><input type="hidden" id="frameworkcode" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><!-- TMPL_VAR NAME="frameworkcode" --></td>
+			<!-- TMPL_ELSE -->
+				<td><label for="frameworkcode">Framework Code<label></td><td><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></td>
+			<!-- /TMPL_IF -->
+			</tr>
+			<tr>
+				<td><label for="description">Description</label></td><td>
+				<input type="text" name="frameworktext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" escape=HTML -->" /></td>
+</tr></table>
+			<p>	<input type="button" value="Submit"class="submit" onclick="Check(this.form)" /></p>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+<h3>Delete ramework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
+	<!-- TMPL_IF NAME="total" -->
+		<div class="error">This framework is used <!-- TMPL_VAR NAME="total" --> times</div>
+	<!-- /TMPL_IF -->
+	<p>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="Yes, Delete this Framework!" class="cancel" />
+		</form>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete!" class="submit" /></form>
+	</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="else" -->
+<h1>Biblio framework</h1>
+<p>Framework name, then go to MARC biblio to set MARC editor parameters</p>
+<table>
+	<tr>
+		<th>Code</th>
+		<th>Description</th>
+		<th>&nbsp;</th>
+		<th>Edit</th>
+		<th>Delete</th>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>Default framework</td>
+		<td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">MARC structure</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr>
+			<td><!-- TMPL_VAR name="frameworkcode" --></td>
+			<td><!-- TMPL_VAR name="frameworktext" --></td>
+			<td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->" >MARC structure</a></td>
+			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;frameworkcode=<!-- TMPL_VAR name="frameworkcode" escape="HTML" -->">Edit</a></td>
+			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;frameworkcode=<!-- TMPL_VAR name="frameworkcode" escape="HTML" -->">Delete</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form" />
+	<input type="submit" class="submit" value="Add framework" />
+	<td><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --></td>
+	<td><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF --></td>
+</form>
+</div>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
