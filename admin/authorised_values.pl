@@ -110,7 +110,10 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
-	$sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'),$input->param('lib'));
+	my $lib = $input->param('lib');
+	undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
+	
+	$sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'), $lib);
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
 	exit;
