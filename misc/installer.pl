@@ -147,6 +147,8 @@ my @missing = ();
 unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
+unless (eval {require MARC::Record}) { push @missing, "MARC::Record"};
+
 unless (eval {require Net::Z3950})        {
     print qq|
 
@@ -941,7 +943,7 @@ Please choose which parameter you want to install. Note if you choose 3, nothing
 	chomp $answer;
 }
 if ($answer eq "1") {
-system("cat misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+system("cat script/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
 }
 if ($answer eq "2") {
 system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
