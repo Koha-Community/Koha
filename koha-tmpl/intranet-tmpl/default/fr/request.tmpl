@@ -1,13 +1,12 @@
 <TMPL_INCLUDE Name="cat-top.inc">
 
 <form action="placerequest.pl" method=post>
-<INPUT TYPE="image" name="submit"  VALUE="request" height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/place-request.gif" align=right >
 <input type=hidden name=biblio value="<TMPL_VAR Name="bib">">
 <input type=hidden name=type value=str8>
 <input type=hidden name=title value="<TMPL_VAR Name="title">">
 <FONT SIZE=6><em>Réserver :
 <a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="bib">><TMPL_VAR Name="title"></a>
-<TMPL_VAR Name="author">)</em></FONT><P>
+<TMPL_VAR Name="author">)</em></FONT>
 <p>
 
 
@@ -40,6 +39,7 @@
 		</td>
 	</tr>
 </table>
+<p><INPUT TYPE="submit" name="submit"  VALUE="R&eacute;server" class="button"></p>
 
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
@@ -83,7 +83,6 @@
 </TMPL_LOOP>
 
 </table>
-
 </form>
 <p>&nbsp;</p>
 
