@@ -18,7 +18,7 @@
 				<th class="catalogue">&nbsp;</th>
 				<!-- TMPL_UNLESS NAME="NOTMARC" -->
 					<th class="catalogue">&nbsp;</th>
-				<!-- /TMPL_IF -->
+				<!-- /TMPL_UNLESS -->
 			</tr>
 			<!-- TMPL_IF name="loop" -->
 			<!-- TMPL_LOOP NAME="loop" -->
@@ -33,7 +33,7 @@
 					<!-- /TMPL_IF -->
 					<!-- TMPL_UNLESS NAME="NOTMARC" -->
 					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue">Duplicate</a></td>
-					<!-- /TMPL_IF -->
+					<!-- /TMPL_UNLESS -->
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_ELSE -->
