@@ -3,6 +3,7 @@
 <HTML>
 
 
+
 	<TMPL_INCLUDE NAME="general-top.inc">
 
 	<TMPL_INCLUDE NAME="cat-top.inc">
@@ -10,16 +11,16 @@
 	<TMPL_INCLUDE NAME="general-first-column-divider.inc">
 
 	
-<div class="chumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a> > Details</div>
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a> > Details</div>
 
 
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
 	<TMPL_IF NAME="norequests">
 	<TMPL_ELSE>
-		<div classs="view-requests">
-				<a class="button" href=request.pl?bib=<TMPL_VAR NAME="biblionumber">> View Requests</a>
-		</div>
+		<table align="right"><tr><td>
+				<a class="button" href=request.pl?bib=<TMPL_VAR NAME="biblionumber">>Requests</a>
+		</td></tr></table>
 	</TMPL_IF>
 	<h1><TMPL_VAR NAME="title"><br>
 	 (<TMPL_VAR NAME="author">)</h1>
@@ -139,7 +140,7 @@
 <h2>Holidings Information (<TMPL_VAR NAME="count"> items)</h2>
 
 </TMPL_LOOP>
-<table class="data">
+<table class="data" cellspacing=0 cellpadding=0>
 	
 	<tr class="data-header">
 	<td class="column-first">Item Type</td>
@@ -192,11 +193,12 @@
 	</TMPL_LOOP>
 </table>
 
+<p> &nbsp</p>
 
-	<div class="tip-wide">
-	<Spam class="tip-big">tip</span>
+	<div class="tip">
+	<Span class="tip-big">tip</span>
 	<span class="tip-text"> to <b>view or edit</b> the rest of the record for an item, 
-	click on <b>More ></b>. You will see the group and item information together.
+	click on <b>More </b>. You will see the group and item information together.
 	<br>
 			<b>Editing the biblio</b>  will update
 			the record for <b>all</b> the items. <br>
@@ -208,8 +210,8 @@
 			from this biblio.</span></div>
 
 
-	<TMPL_INCLUDE NAME="2-column-end.inc">
-	<TMPL_INCLUDE NAME="cat-bottom.inc">
+	<TMPL_INCLUDE NAME="general-end.inc">
+	
 
 </BODY>
 
