@@ -7,8 +7,8 @@ print "ok 1\n";
 #
 # test that &slashifyDate returns correct (non-US) date
 #
-$date = "01/01/2002";
-$newdate = &slashifyDate("2002-01-01");
+$date = "02/01/2002";
+$newdate = &slashifyDate("2002-01-02");
 
 if ($date eq $newdate) {
     print "ok 2\n";
