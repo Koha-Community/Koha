@@ -54,20 +54,22 @@ a.submenu2 {
 	}
 
 /*
- * We can't use a.home, etc. for Chinese.
+ * We shouldn't use a.home, etc. for Chinese.
  * Otherwise the screen will be extremely ugly because of the padding
+ * This problem, however, does not seem to be present when the translations
+ * are short enough (like 2 characters instead of 4).
  */
 td.home {
 	padding:4px;
 	}
-td.home a {
+td.home a, a.home {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.home a:hover {
+td.home a:hover, a.home:hover {
 	background-color: #339933;
 	color: #000000;
 	text-decoration: none;
@@ -78,7 +80,7 @@ td.home a:hover {
 td.catalogue {
 	padding:4px;
 	}
-td.catalogue a {
+td.catalogue a, a.catalogue {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
@@ -86,7 +88,7 @@ td.catalogue a {
 	font-weight: bold;
 	margin:0;
 	}
-td.catalogue a:hover {
+td.catalogue a:hover, a.catalogue:hover {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
@@ -98,14 +100,14 @@ td.catalogue a:hover {
 td.members {
 	padding:4px;
 	}
-td.members a {
+td.members a, a.members {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.members a:hover {
+td.members a:hover, a.members:hover {
 	background-color: #86c268;
 	color: #000000;
 	text-decoration: none;
@@ -115,14 +117,14 @@ td.members a:hover {
 td.acquisition {
 	padding:4px;
 	}
-td.acquisition a {
+td.acquisition a, a.acquisition {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.acquisition a:hover {
+td.acquisition a:hover, a.acquisition:hover {
 	background-color: #ffdf61;
 	color: #000000;
 	text-decoration: normal;
@@ -132,14 +134,14 @@ td.acquisition a:hover {
 td.reports {
 	padding:4px;
 	}
-td.reports a {
+td.reports a, a.reports {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.reports a:hover {
+td.reports a:hover, a.reports:hover {
 	background-color: #6b7cbe;
 	color: #000000;
 	text-decoration: normal;
@@ -149,14 +151,14 @@ td.reports a:hover {
 td.circulation {
 	padding:4px;
 	}
-td.circulation a {
+td.circulation a, a.circulation {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.circulation a:hover {
+td.circulation a:hover, a.circulation:hover {
 	background-color: #be6170;
 	color: #000000;
 	text-decoration: normal;
@@ -166,14 +168,14 @@ td.circulation a:hover {
 td.parameters {
 	padding:4px;
 	}
-td.parameters a {
+td.parameters a, a.parameters {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.parameters a:hover {
+td.parameters a:hover, a.parameters:hover {
 	background-color: #86c268;
 	color: #000000;
 	text-decoration: normal;
@@ -183,14 +185,14 @@ td.parameters a:hover {
 td.about {
 	padding:4px;
 	}
-td.about a {
+td.about a, a.about {
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color:#777777;
 	font-weight: bold;
 	}
-td.about a:hover {
+td.about a:hover, a.about:hover {
 	background-color: #86c268;
 	color: #000000;
 	text-decoration: normal;
