@@ -1,4 +1,6 @@
-package C4::Output; #asummes C4/Output
+package C4::Output;
+
+# $Id$
 
 #package to deal with marking up output
 #You will need to edit parts of this pm
@@ -7,15 +9,23 @@ package C4::Output; #asummes C4/Output
 use strict;
 require Exporter;
 
+use C4::Database;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&startpage &endpage &mktablehdr &mktableft &mktablerow &mklink
-&startmenu &endmenu &mkheadr &center &endcenter &mkform &mkform2 &bold
-&gotopage &mkformnotable &mkform3);
+@EXPORT = qw(
+	&startpage &endpage 
+	&mktablehdr &mktableft &mktablerow &mklink
+	&startmenu &endmenu &mkheadr 
+	&center &endcenter 
+	&mkform &mkform2 &bold
+	&gotopage &mkformnotable &mkform3
+	&getkeytableselectoptions
+);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -455,7 +465,48 @@ sub bold($) {
   return("<b>$text</b>");
 }
 
+#---------------------------------------------
+# Create an HTML option list for a <SELECT> form tag by using
+#    values from a DB file
+sub getkeytableselectoptions {
+	use strict;
+	# inputs
+	my (
+		$dbh,		# DBI handle
+		$tablename,	# name of table containing list of choices
+		$keyfieldname,	# column name of code to use in option list
+		$descfieldname,	# column name of descriptive field
+		$showkey,	# flag to show key in description
+	)=@_;
+	my $selectclause;	# return value
+
+	my (
+		$sth, $query, 
+		$key, $desc, $orderfieldname,
+	);
+	my $debug=0;
+
+    	requireDBI($dbh,"getkeytableselectoptions");
+
+	if ( $showkey ) {
+		$orderfieldname=$keyfieldname;
+	} else {
+		$orderfieldname=$descfieldname;
+	}
+	$query= "select $keyfieldname,$descfieldname
+		from $tablename
+		order by $orderfieldname ";
+	print "<PRE>Query=$query </PRE>\n" if $debug; 
+	$sth=$dbh->prepare($query);
+	$sth->execute;
+	while ( ($key, $desc) = $sth->fetchrow) {
+	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
+	    $selectclause.="<option value='$key'>$desc\n";
+	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
+	}
+	return $selectclause;
+} # sub getkeytableselectoptions
+
+#---------------------------------
+
 END { }       # module clean-up code here (global destructor)
-    
-
-
