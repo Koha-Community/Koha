@@ -2,7 +2,13 @@
 
 <!-- TMPL_IF name="add_form" -->
 <!---------------------------------------------------------------------------->
-	<H1><!-- TMPL_VAR name="action" --></H1>
+	<H1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modify-authorized-value-p" -->Modify authorised value<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-new-category-p" -->Add new category<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-authorized-value-p" -->Add authorised value<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	</H1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
