@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# written 10/5/2002 by Paul
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,6 +27,7 @@ use C4::Search;
 use C4::Output;
 
 my $input = new CGI;
+my $plugin_name=$input->param("plugin_name");
 my $plugin_name="value_builder/".$input->param("plugin_name");
 require $plugin_name;
 &plugin($input);

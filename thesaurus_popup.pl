@@ -26,10 +26,8 @@ use CGI;
 use C4::Context;
 use HTML::Template;
 use C4::Search;
-#use C4::Circulation::Circ2;
 use C4::Output;
-#use C4::Biblio;
-
+use C4::Authorities;
 # get all the data ....
 my %env;
 
@@ -40,6 +38,7 @@ my $op = $input->param('op');
 my $id = $input->param('id');
 my $category = $input->param('category');
 my $index= $input->param('index');
+my $insert = $input->param('insert');
 
 my $dbh = C4::Context->dbh;
 
@@ -55,6 +54,10 @@ if ($op eq "select") {
 		$result = $freelib_text;
 	}
 }
+if ($op eq "add") {
+	newauthority($dbh,$category,$insert,$insert,'',1,'');
+	$search_string=$insert;
+}
 
 my $template = gettemplate("thesaurus_popup.tmpl",0);
 # /search thesaurus terms starting by search_string
@@ -62,8 +65,9 @@ my @freelib;
 my %stdlib;
 my $select_list;
 if ($search_string) {
-	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where freelib like '".$search_string."%' and category ='$category'");
-	$sti->execute;
+#	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where freelib like '".$search_string."%' and category ='$category'");
+	my $sti=$dbh->prepare("select id,freelib from bibliothesaurus where match (category,freelib) AGAINST ('$search_string') and category ='$category'");
+		$sti->execute;
 	while (my $line=$sti->fetchrow_hashref) {
 		$stdlib{$line->{'id'}} = "$line->{'freelib'}";
 		push(@freelib,$line->{'id'});

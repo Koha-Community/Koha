@@ -12,4 +12,4 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 
 my $template = gettemplate("intranet-main.tmpl");
 
-print "Content-Type: text/html\n\n", $template->output;
+print  $query->header(-cookie => $cookie), $template->output;
