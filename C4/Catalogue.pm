@@ -11,7 +11,7 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&newBiblio &newBiblioItem &newItem &updateBiblio &updateBiblioItem
-	     &updateItem);
+	     &updateItem &changeSubfield);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -51,6 +51,8 @@ my $priv_func = sub {
 
 
 sub newBiblio {
+# This subroutine makes no modifications to the MARC tables.  MARC records are
+# only created when new biblioitems are added.
     my ($env, $biblio) = @_;
     my $title=$biblio->{'title'};
     my $author=$biblio->{'author'};
@@ -63,6 +65,40 @@ sub newBiblio {
     my $notes=$biblio->{'notes'};
 }
 
+
+sub changeSubfield {
+# Subroutine changes a subfield value given a Record_ID, Tag, and Subfield_Mark.
+# Routine should be made more robust.  It currently checks to make sure that
+# the existing Subfield_Value is the same as the one passed in.  What if no
+# subfield matches this Subfield_OldValue?  Create a new Subfield?  Maybe check
+# to make sure that the mark is repeatable first and that no other subfield
+# with that mark already exists?  Ability to return errors and status?
+# 
+# Also, currently, if more than one subfield matches the Record_ID, Tag,
+# Subfield_Mark, and Subfield_OldValue, only the first one will be modified.
+#
+# Might be nice to be able to pass a Subfield_ID directly to this routine to
+# remove ambiguity, if possible.
+
+    my $Record_ID=shift;
+    my $tag=shift;
+    my $firstdigit=substr($tag, 0, 1);
+    my $Subfield_Mark=shift;
+    my $Subfield_OldValue=shift;
+    my $Subfield_Value=shift;
+    my $dbh=&C4Connect;  
+    my $sth=$dbh->prepare("select S.Subfield_ID, S.Subfield_Value from Bib_Table B, $firstdigit\XX_Tag_Table T, $firstdigit\XX_Subfield_Table S where B.Record_ID=$Record_ID and B.Tag_$firstdigit\XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and S.Subfield_Mark='$Subfield_Mark'");
+    $sth->execute;
+    while (my ($ID, $Value) = $sth->fetchrow) {
+	if ($Value eq $Subfield_OldValue) {
+	    my $q_Subfield_Value=$dbh->quote($Subfield_Value);
+	    my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_ID=$ID");
+	    $sti->execute;
+	    last;
+	}
+    }
+}
+
 sub updateBiblio {
 # Update the biblio with biblionumber $biblio->{'biblionumber'}
 # I guess this routine should search through all marc records for a record that
@@ -72,11 +108,88 @@ sub updateBiblio {
 # Also, this subroutine should search through the $biblio object and compare it
 # to the existing record and _LOG ALL CHANGES MADE_ in some way.  I'd like for
 # this logging feature to be usable to undo changes easily.
+#
+# Need to add support for bibliosubject, additionalauthors, bibliosubtitle tables
+
     my ($env, $biblio) = @_;
+    my $biblionumber=$biblio->{'biblionumber'};
+    my $dbh=&C4Connect;  
+    my $sth=$dbh->prepare("select * from biblio where biblionumber=$biblionumber");
+    $sth->execute;
+    my $origbiblio=$sth->fetchrow_hashref;
+
+    
+# Obtain a list of MARC Record_ID's that are tied to this biblio
+    $sth=$dbh->prepare("select B.Record_ID from Bib_Table B, 0XX_Tag_Table T, 0XX_Subfield_Table S where B.Tag_0XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and T.Tag='090' and S.Subfield_Value=$biblionumber and S.Subfield_Mark='c'");
+    $sth->execute;
+    my @marcrecords;
+    while (my ($Record_ID) = $sth->fetchrow) {
+	push(@marcrecords, $Record_ID);
+    }
+
+
+
+    if ($biblio->{'author'} ne $origbiblio->{'author'}) {
+	my $q_author=$dbh->quote($biblio->{'author'});
+	logchange('kohadb', 'biblio', 'author', $origbiblio->{'author'}, $biblio->{'author'});
+	my $sti=$dbh->prepare("update biblio set author=$q_author where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+	logchange('marc', '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
+	foreach (@marcrecords) {
+	    changeSubfield($_, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
+	}
+    }
+    if ($biblio->{'title'} ne $origbiblio->{'title'}) {
+	my $q_title=$dbh->quote($biblio->{'title'});
+	logchange('kohadb', 'biblio', 'title', $origbiblio->{'title'}, $biblio->{'title'});
+	my $sti=$dbh->prepare("update biblio set title=$q_title where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+    }
+    if ($biblio->{'unititle'} ne $origbiblio->{'unititle'}) {
+	my $q_unititle=$dbh->quote($biblio->{'unititle'});
+	logchange('kohadb', 'biblio', 'unititle', $origbiblio->{'unititle'}, $biblio->{'unititle'});
+	my $sti=$dbh->prepare("update biblio set unititle=$q_unititle where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+    }
+    if ($biblio->{'notes'} ne $origbiblio->{'notes'}) {
+	my $q_notes=$dbh->quote($biblio->{'notes'});
+	logchange('kohadb', 'biblio', 'notes', $origbiblio->{'notes'}, $biblio->{'notes'});
+	my $sti=$dbh->prepare("update biblio set notes=$q_notes where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+    }
+    if ($biblio->{'serial'} ne $origbiblio->{'serial'}) {
+	my $q_serial=$dbh->quote($biblio->{'serial'});
+	logchange('kohadb', 'biblio', 'serial', $origbiblio->{'serial'}, $biblio->{'serial'});
+	my $sti=$dbh->prepare("update biblio set serial=$q_serial where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+    }
+    if ($biblio->{'seriestitle'} ne $origbiblio->{'seriestitle'}) {
+	my $q_seriestitle=$dbh->quote($biblio->{'seriestitle'});
+	logchange('kohadb', 'biblio', 'seriestitle', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
+	my $sti=$dbh->prepare("update biblio set seriestitle=$q_seriestitle where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+    }
+    if ($biblio->{'copyrightdate'} ne $origbiblio->{'copyrightdate'}) {
+	my $q_copyrightdate=$dbh->quote($biblio->{'copyrightdate'});
+	logchange('kohadb', 'biblio', 'copyrightdate', $origbiblio->{'copyrightdate'}, $biblio->{'copyrightdate'});
+	my $sti=$dbh->prepare("update biblio set copyrightdate=$q_copyrightdate where biblionumber=$biblio->{'biblionumber'}");
+	$sti->execute;
+    }
 }
 
+sub logchange {
+# Subroutine to log changes to databases
+    my $database=shift;
+    my $section=shift;
+    my $item=shift;
+    my $original=shift;
+    my $new=shift;
+}
 
 sub addTag {
+# Subroutine to add a tag to an existing MARC Record.  If a new linkage id is
+# desired, set $env->{'linkage'} to 1.  If an existing linkage id should be
+# set, set $env->{'linkid'} to the link number.
     my ($env, $Record_ID, $tag, $Indicator1, $Indicator2, $subfields) = @_;
     my $dbh=&C4Connect;  
     ($Indicator1) || ($Indicator1=' ');
@@ -126,6 +239,7 @@ sub newBiblioItem {
     my ($env, $biblioitem) = @_;
     my $dbh=&C4Connect;  
     my $biblionumber=$biblioitem->{'biblionumber'};
+    my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
     my $volume=$biblioitem->{'volume'};
     my $number=$biblioitem->{'number'};
     my $classification=$biblioitem->{'classification'};
@@ -290,6 +404,10 @@ sub newBiblioItem {
 	$subfields->{1}->{'Subfield_Value'}=$itemtype;
 	$subfields->{2}->{'Subfield_Mark'}='b';
 	$subfields->{2}->{'Subfield_Value'}=$subclass;
+	$subfields->{3}->{'Subfield_Mark'}='c';
+	$subfields->{3}->{'Subfield_Value'}=$biblionumber;
+	$subfields->{4}->{'Subfield_Mark'}='d';
+	$subfields->{4}->{'Subfield_Value'}=$biblioitemnumber;
 	my $tag='090';
 	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
     }
@@ -433,7 +551,7 @@ sub updateItem {
 # This routine should also check to see which fields are actually being
 # modified, and log all changes.
 
-    my ($env, $biblio) = @_;
+    my ($env, $item) = @_;
 }
 
 END { }       # module clean-up code here (global destructor)
