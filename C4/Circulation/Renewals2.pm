@@ -12,6 +12,9 @@ require Exporter;
 use DBI;
 use C4::Database;
 use C4::Stats;
+use C4::Accounts2;
+use C4::Circulation::Circ2;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
 # set the version for version checking
@@ -129,7 +132,21 @@ sub renewbook {
   $sth->execute;
   $sth->finish;
   UpdateStats($env,$env->{'branchcode'},'renew','','',$itemno);
+  my ($charge,$type)=calc_charges($env, $itemno, $bornum);  
+  if ($charge > 0){
+    my $accountno=getnextacctno($env,$bornum,$dbh);
+    my $item=getiteminformation($env, $itemno);
+    my $account="Insert into accountlines
+    (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+    values 
+    ('$bornum','$accountno',now(),$charge,'Renewal of Rental Item $item->{'title'} $item->{'barcode'}','Rent',$charge,'$itemno')";
+    $sth=$dbh->prepare($account);
+    $sth->execute;
+    $sth->finish;
+#     print $account;
+  }
   $dbh->disconnect;
+ 
 #  return();
 }
 
