@@ -52,7 +52,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundid like \"$data[0]%\") order by bookfundid";
+	my $query="select bookfundid,bookfundname,bookfundgroup from aqbookfund where (bookfundname like \"%$data[0]%\") order by bookfundid";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
