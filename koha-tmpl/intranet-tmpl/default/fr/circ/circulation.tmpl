@@ -1,20 +1,22 @@
 <TMPL_INCLUDE NAME="circulation-top.inc">
 
 <TMPL_IF name="borrowernumber">
-	<table align="right">
+	<table align="right" cellpadding=10>
 		<tr>
 			<td>
 				<a class="button" href=circulation.pl?borrnumber=<TMPL_VAR name="borrowernumber">&branch=<TMPL_VAR name="branch">&printer=<TMPL_VAR name="printer">&print=yes>
-				Next Borrower</a> &nbsp;
-				<a class="button" href=returns.pl>Returns</a>
-				&nbsp;<a class="button" href=branchtransfers.pl>Transfers</a>
+				Suivant</a>&nbsp;
+				<a class="button" href=returns.pl>
+				Retours</a>&nbsp;
+				<a class="button" href=branchtransfers.pl>
+				Transferts</a>
 			</td>
 		</tr>
 	</table>
-	<FONT SIZE=6><em>Circulation: Retours</em></FONT><br>
-	<b>Site:</b> <TMPL_VAR name="branchname">&nbsp;
+	<h1>Circulation: Retours</h1><br>
+	<b>Annexe:</b> <TMPL_VAR name="branchname"><br>
 	<b>Imprimante:</b> <TMPL_VAR name="printername"><br>
-	<a href=selectbranchprinter.pl>Modification paramètres</a></td>
+	<a href=selectbranchprinter.pl>Modification param&egrave;tres</a></td>
 	<input type=hidden name=branch value=<TMPL_VAR name="branch">>
 	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
 	<p>
@@ -22,15 +24,20 @@
 	<table align="right" cellpadding=10>
 		<tr>
 			<td>
-				<a class="button" href=returns.pl>Retour</a>
-				<a class="button" href=branchtransfers.pl>Transfers</a>
+				<a href=returns.pl class="button">
+					Retours
+				</a>
+				&nbsp;
+				<a href=branchtransfers.pl class="button">
+					Transferts
+				</a>
 			</td>
 		</tr>
 	</table>
-	<FONT SIZE=6><em>Circulation: Emprunts</em></FONT><br>
-	<b>Branch:</b> <TMPL_VAR name="branchname"> &nbsp;
-	<b>Printer:</b> <TMPL_VAR name="printername"><br>
-	<a href=selectbranchprinter.pl>Modification paramètres</a></td>
+	<h1>Circulation: Emprunts</h1><br>
+	<b>Annexe:</b> <TMPL_VAR name="branchname"> <br>
+	<b>Imprimante:</b> <TMPL_VAR name="printername"><br>
+	<a href=selectbranchprinter.pl>Modification param&egrave;tres</a></td>
 	<input type=hidden name=branch value=<TMPL_VAR name="branch">>
 	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
 	<p>
@@ -48,7 +55,7 @@
 				<table border=0 cellpadding=10>
 					<tr>
 						<td>
-							tentative d'emprunt de <TMPL_VAR name="title">
+							Demande d'emprunt de <TMPL_VAR name="title">
 							par <TMPL_VAR name="author"> to <TMPL_VAR name="firstname"> <TMPL_VAR name="surname">.
 							<p><TMPL_VAR name="question">
 						</td>
@@ -134,6 +141,9 @@
 		</tr>
 	</table>
 <TMPL_ELSE>
+    <TMPL_IF NAME="borrowernumber">
+    
+    <TMPL_ELSE>
 	<form method=post action=/cgi-bin/koha/circ/circulation.pl>
 	<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
 		<tr>
@@ -150,8 +160,10 @@
 		</tr>
 	</table>
 	</form>
+     </TMPL_IF>
 </TMPL_IF>
 <TMPL_IF name="borrowernumber">
+        
 	<TMPL_VAR name="patrontable">
 	<TMPL_VAR name="flaginfotable">
 </TMPL_IF>
@@ -180,13 +192,13 @@
 								<table border=0 cellpadding=0 cellspacing=0>
 									<tr>
 										<td>
-											<select name=day><option value=0>Day<TMPL_VAR name="dayoptions"></select>
+											<select name=day><option value=0>Jour<TMPL_VAR name="dayoptions"></select>
 										</td>
 										<td>
-											<select name=month><option value=0>Month<TMPL_VAR name="monthoptions"></select>
+											<select name=month><option value=0>Mois<TMPL_VAR name="monthoptions"></select>
 										</td>
 										<td>
-											<select name=year><option value=0>Year<TMPL_VAR name="yearoptions"></select>
+											<select name=year><option value=0>Année<TMPL_VAR name="yearoptions"></select>
 										</td>
 									</tr>
 								</table>
@@ -216,13 +228,20 @@
 	<tr>
 		<th colspan=5 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 			<font color=black>
-			<b>Emprunts du jour</b></font>
+			<b>Todays Issues</b></font>
 		</th>
 	</tr>
 	<tr>
-		<th>retour pour le</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Class</th>
+		<th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th>
 	</tr>
-	<TMPL_VAR name="todayissues">
+	<TMPL_LOOP name="todayissues">
+	    <tr><td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dd"></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center>
+	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra" onClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR NAME="barcode"></a></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="title"></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="author"></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dewey"> <TMPL_VAR NAME="subclass"></td></tr>
+	</TMPL_LOOP>
 </table>
 </TMPL_IF>
 
@@ -235,9 +254,18 @@
 			</th>
 		</tr>
 		<tr>
-			<th>Retour pour le</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Class</th>
+			<th>Retour pour le</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Classe</th>
 		</tr>
-		<TMPL_VAR name="previssues">
+	<TMPL_LOOP name="previssues">
+	    <tr><td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dd"></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center>
+	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra" onClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR NAME="barcode"></a></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="title"></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="author"></td>
+	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dewey"> <TMPL_VAR NAME="subclass"></td></tr>
+	</TMPL_LOOP>
+
 	</table>
 </TMPL_IF>
 
+<TMPL_INCLUDE name="circulation-bottom.inc">
