@@ -175,7 +175,9 @@ HTML.
 sub catalogsearch {
   my ($env,$type,$search,$num,$offset)=@_;
   my $dbh = C4Connect();
-  foreach my $key (%$search){
+  foreach my $key (keys %$search){
+      (next) if ($key eq 'class');  # Don't worry about classes less than 3 characters
+      (next) if ($key eq 'branch'); # Don't worry about branches less than 3 characters
     if (length($search->{$key}) < 3){
        undef ($search->{$key});
     }
