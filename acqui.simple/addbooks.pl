@@ -354,7 +354,13 @@ ISBN: <input name=isbn>
 <p>
 <a href=addbooks.pl?isbn=NULL>Enter book with no ISBN</a>
 <hr>
-Or use the <a href=marcimport.pl>MARC Importing tool</a>
+<p>
+<h2>Tools for importing MARC records into Koha</h2>
+<ul>
+<li><a href=marcimport.pl?menu=z3950>Z39.50 Search Tool</a>
+<li><a href=marcimport.pl?menu=uploadmarc>Upload MARC records</a>
+</ul>
+
 EOF
 }
 print endmenu();
