@@ -38,8 +38,8 @@ $VERSION = 0.01;
 sub FindReserves {
   my ($bib,$bor)=@_;
   my $dbh=C4Connect;
-  my $query="SELECT *,reserves.branchcode,biblio.title AS btitle
-                      FROM reserves,borrowers,biblio ";
+  my $query="SELECT *,reserves.branchcode AS branchcode, biblio.title AS btitle
+                      FROM borrowers,reserves,biblio ";
   if ($bib){
       $bib = $dbh->quote($bib);
       if ($bor ne ''){
@@ -461,13 +461,14 @@ sub getreservetitle {
     my ($biblio,$bor,$date,$timestamp)=@_;
     my $dbh=C4Connect;
     my $query = "SELECT biblioitems.volumeddesc AS volumeddesc,
-                        biblioitems.itemtype AS itemtype 
-                   FROM reserveconstraints,biblioitems 
+                        itemtypes.description    AS itemtype,
+                        itemtypes.publictype    AS publictype
+                   FROM reserveconstraints,biblioitems,itemtypes 
                   WHERE reserveconstraints.biblioitemnumber = biblioitems.biblioitemnumber
+                    AND biblioitems.itemtype                = itemtypes.itemtype
                     AND reserveconstraints.biblionumber     = $biblio 
                     AND reserveconstraints.borrowernumber   = $bor 
-                    AND reserveconstraints.reservedate      = '$date' 
-                    AND reserveconstraints.timestamp        = $timestamp";
+                    AND reserveconstraints.reservedate      = '$date'";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     my $data=$sth->fetchrow_hashref;

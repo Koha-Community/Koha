@@ -30,7 +30,7 @@ require Exporter;
 use HTML::Template;
 use C4::Database;
 use C4::Koha;
-use C4::Auth;         # checkauth, getborrowernumber.
+
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -119,10 +119,11 @@ sub gettemplate {
 
     my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
 
-    my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase", 
-				   die_on_bad_params => 0,
-				   global_vars       => 1,
-				   path              => ["$htdocs/$theme/$lang/includes"]);
+    my $template = HTML::Template->new(filename          => "$htdocs/$theme/$lang/$tmplbase", 
+				       die_on_bad_params => 0,
+				       global_vars       => 1,
+				       debug             => 0,
+				       path              => ["$htdocs/$theme/$lang/includes"]);
 
     $template->param(themelang => "/$theme/$lang");
     return $template;
