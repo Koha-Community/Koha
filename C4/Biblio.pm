@@ -1,6 +1,11 @@
 package C4::Biblio; 
 # $Id$
 # $Log$
+# Revision 1.11  2002/09/24 13:49:26  tipaul
+# long WAS the road to 1.3.0...
+# coming VERY SOON NOW...
+# modifying installer and buildrelease to update the DB
+#
 # Revision 1.10  2002/09/22 16:50:08  arensb
 # Added some FIXME comments.
 #
@@ -707,7 +712,7 @@ sub MARCkoha2marcItem {
 	my $sth2=$dbh->prepare("SELECT itemnumber,biblionumber,multivolumepart,biblioitemnumber,barcode,dateaccessioned,
 						booksellerid,homebranch,price,replacementprice,replacementpricedate,datelastborrowed,
 						datelastseen,multivolume,stack,notforloan,itemlost,wthdrawn,bulk,issues,renewals,
-					reserves,restricted,binding,itemnotes,holdingbranch,interim,timestamp 
+					reserves,restricted,binding,itemnotes,holdingbranch,timestamp 
 					FROM items
 					WHERE itemnumber=?");
 	$sth2->execute($itemnumber);

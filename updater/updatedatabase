@@ -188,6 +188,7 @@ my %requirefields=(
     aqorders=>{'budgetdate' => 'date'},
 #added so that reference items are not available for reserves...
     itemtypes=>{'notforloan' => 'smallint(6)'},
+    systempreferences =>{'explanation' => 'char(80)'},
 );
 
 my %dropable_table=(
@@ -203,9 +204,10 @@ my %dropable_table=(
 
 # Default system preferences
 my %defaultprefs=(
-    'autoMemberNum'=> '1',
-    'acquisitions'=> 'simple',
-);
+		  'autoMemberNum'=> ['1','1 or else. If 1, Barcode is auto-calculated'],
+		  'acquisitions'=> ['simple','normal or simple : will use acquisition system found in directory acqui.simple or acquisition'],
+		  'template' => ['default','template default name']
+		  );
 
 #-------------------
 # Initialize
@@ -388,11 +390,11 @@ foreach $prefitem ( keys %defaultprefs ) {
     $sth->execute($prefitem);
     unless ($sth->rows) {
 	print "Adding system preference item $prefitem with value " .
-        	$defaultprefs{$prefitem} ."\n";
+        	$defaultprefs{$prefitem}[0] ."\n";
         $sti=$dbh->prepare("
-	  insert into systempreferences (variable, value) 
-	  values (?,?)");
-        $sti->execute($prefitem,$defaultprefs{$prefitem});
+	  insert into systempreferences (variable, value,explanation) 
+	  values (?,?,?)");
+        $sti->execute($prefitem,$defaultprefs{$prefitem}[0],$defaultprefs{$prefitem}[1]);
     } # unless
 } # foreach
 
@@ -403,6 +405,11 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.18  2002/09/24 13:50:55  tipaul
+# long WAS the road to 1.3.0...
+# coming VERY SOON NOW...
+# modifying installer and buildrelease to update the DB
+#
 # Revision 1.17  2002/09/24 12:57:35  tipaul
 # long WAS the road to 1.3.0...
 # coming VERY SOON NOW...
