@@ -510,11 +510,18 @@ sub showmessage {
 	    $response=<STDIN>;
 	    chomp $response;
 	    (length($response)) || ($response=$defaultresponse);
-	    unless ($options=~/$response/) {
-		($noclear) || (system('clear'));
-		print "Invalid Response.  Choose from [$options].\n\n";
-		print $message;
-	    }
+            if ( $response=~/.*[\:\(\)\^\$\*\!\\].*/ ) {
+                ($noclear) || (system('clear'));
+                print "Response contains invalid characters.  Choose from [$options].\n\n";
+                print $message;
+                $response='\0';
+            } else {
+                unless ($options=~/$response/) {
+                    ($noclear) || (system('clear'));
+                    print "Invalid Response.  Choose from [$options].\n\n";
+                    print $message;
+                }
+            }
 	}
 	return $response;
     } elsif ($responsetype =~/^free$/i) {
