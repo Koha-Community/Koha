@@ -137,6 +137,15 @@ sub getpatroninformation {
     $sth->execute;
     my $borrower = $sth->fetchrow_hashref;
     my $flags = patronflags($env, $borrower, $dbh);
+    my $accessflagshash;
+
+    $sth=$dbh->prepare("select bit,flag from userflags");
+    $sth->execute;
+    while (my ($bit, $flag) = $sth->fetchrow) {
+	if ($flags & 2**$bit) {
+	    $accessflagshash->{$flag}=1;
+	}
+    }
     $sth->finish;
     $dbh->disconnect;
     $borrower->{'flags'}=$flags;
