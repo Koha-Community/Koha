@@ -1557,7 +1557,6 @@ where biblioitemnumber = ?");
 			push(@bind,$data->{$temp});
 		}
 		$query =~ s/\,$//;
-		warn "Q 1560 : $query";
 		my $sth2=$dbh->prepare($query);
 		$sth2->execute(@bind);
 	} # while
@@ -1582,7 +1581,6 @@ sub OLDdelbiblio{
 		}
 		#replacing the last , by ",?)"
 		$query=~ s/\,$//;
-		warn "Q olddelbiblio : $query";
 		$sth=$dbh->prepare($query);
 		$sth->execute(@bind);
 		$sth->finish;
@@ -2193,6 +2191,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.78.2.3  2004/02/10 13:15:46  tipaul
+# removing 2 warnings
+#
 # Revision 1.78.2.2  2004/01/26 10:38:06  tipaul
 # dealing correctly "bulk" field
 #
