@@ -15,7 +15,7 @@
 <A HREF="/catalogue/">Catalogue</a> ||
 <A HREF="/members/">Members</a> ||
 <A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> ||
-<A HREF="/reports/">Reports</a> ||
+<A HREF="/cgi-bin/koha/reports-home.pl">Reports</a> ||
 <A HREF="/cgi-bin/koha/admin-home.pl">System Parameters</a> ||
 <A HREF="/help/">Help</a>
 </FONT>

@@ -148,7 +148,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <area shape="rect" coords="154,9,212,29" alt="Acquisitions"   href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.menu.src='/images/acq-acq.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
 
-<area  shape="rect"alt="Reports"  coords="217,7,289,27"href="/reports/" onMouseOver="if(document.images)document.menu.src='/images/acq-rep.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
+<area  shape="rect"alt="Reports"  coords="217,7,289,27"href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.menu.src='/images/acq-rep.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
 
 <area shape="rect" coords="306,8,352,27" href="/cgi-bin/koha/circ/circulation.pl" alt="Circulation" onMouseOver="if(document.images)document.menu.src='/images/acq-crc.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
 
