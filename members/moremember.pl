@@ -127,10 +127,13 @@ my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 my ($count,$issue)=borrissues($bornum);
 my $today=ParseDate('today');
 my @issuedata;
+my $totalprice = 0;
 for (my $i=0;$i<$count;$i++){
 	my $datedue=ParseDate($issue->[$i]{'date_due'});
 	$issue->[$i]{'date_due'} = format_date($issue->[$i]{'date_due'});
 	my %row = %{$issue->[$i]};
+	$totalprice += $issue->[$i]{'replacementprice'};
+	$row{'replacementprice'}=$issue->[$i]{'replacementprice'};
 	if ($datedue < $today){
 		$row{'red'}=1; #print "<font color=red>";
 	}
@@ -176,6 +179,7 @@ foreach my $reserveline (@$reserves) {
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
+		 totalprice =>$totalprice,
 		 totaldue =>$total,
 		 issueloop       => \@issuedata,
 		 reserveloop     => \@reservedata);
