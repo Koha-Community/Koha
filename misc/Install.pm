@@ -1218,11 +1218,12 @@ $messages->{'Language'}->{en}=qq|
 = CHOOSE LANGUAGES  =
 ====================
 This version of koha supports a few languages.
-Enter you languages preferences : either en, fr or es.
+Enter you languages preferences : either en, fr, es or pl.
 Note that the en is always choosen when the system does not finds the
 language you choose in a specific screen.
 fr : opac is translated (except pictures)
 es : a few intranet is translated (including pictures)
+pl : opac is translated (UNTESTED in this release)
 |;
 
 sub updatedatabase {
