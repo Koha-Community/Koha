@@ -68,6 +68,7 @@ if ($res && $res2 && ($res eq $res2) && $tab==-1 && $tab2==-1) {
 }
 
 # checks all item fields are in the same tag and in tab 10
+
 $sth = $dbh->prepare("select tagfield,tab,kohafield from marc_subfield_structure where kohafield like \"items.%\"");
 $sth->execute;
 my $field;
@@ -81,6 +82,14 @@ while (($res,$res2,$field) = $sth->fetchrow) {
 		$subtotal++;
 	}
 }
+$sth = $dbh->prepare("select kohafield from marc_subfield_structure where tagfield=$tagfield");
+$sth->execute;
+while (($res2) = $sth->fetchrow) {
+	if (!$res2 || $res2 =~ /^items/) {
+	} else {
+		$subtotal++;
+	}
+}
 if ($subtotal eq 0) {
 	$template->param(itemfields => 0);
 } else {
@@ -91,7 +100,6 @@ if ($subtotal eq 0) {
 $sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"biblioitems.itemtype\"");
 $sth->execute;
 ($res,$res2,$field) = $sth->fetchrow;
-warn "==> $res / $res2 / $field";
 if ($res && $res2>=0 && $field eq "itemtypes") {
 	$template->param(itemtype => 0);
 } else {
