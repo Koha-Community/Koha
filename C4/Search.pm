@@ -242,7 +242,10 @@ sub KeywordSearch {
 	  }
 #	  print $i4;
 	  if ($i4 <=$end && $i4 > $offset){
-	    $res2[$i3]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";	
+	    $data2->{'dewey'}=$dewey;
+	    $res2[$i3]=$data2;
+	    
+#	    $res2[$i3]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";	
             $i3++;
             $i4++;
 #	    print "in here $i3<br>";
@@ -282,8 +285,10 @@ sub KeywordSearch {
 	$dewey=~s/\.*0*$//;     
         ($dewey == 0) && ($dewey='');               
         ($dewey) && ($dewey.=" $subclass") ;                      
-        $sth->finish;                                                        
-	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
+        $sth->finish;                                             
+	$data2->{'dewey'}=$dewey;
+	$res2[$i]=$data2;
+#	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
         $i++;
     }
     $i2++;
@@ -472,7 +477,9 @@ sub CatSearch  {
 	   $dewey=~s/\.*0*$//;
 	   ($dewey == 0) && ($dewey='');
 	   ($dewey) && ($dewey.=" $subclass");
-           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
+	   $data->{'dewey'}=$dewey;
+	   $results[$i2]=$data;
+#           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
            $i2++; 
 	   $sth->finish;
 	}
@@ -526,16 +533,18 @@ while (my $data=$sth->fetchrow_hashref){
   $dewey=~s/\.*0*$//;
   ($dewey == 0) && ($dewey='');
   ($dewey) && ($dewey.=" $subclass");
+  $data->{'dewey'}=$dewey;
   $sti->finish;
   if ($true == 1){
   if ($count > $offset && $count <= $limit){
-    if ($type ne 'subject' && $type ne 'precise'){
-       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-    } elsif ($search->{'isbn'} ne '' || $search->{'item'} ne ''){
-       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-    } else {  
-     $results[$i]="$data->{'author'}\t$data->{'subject'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-    }
+#    if ($type ne 'subject' && $type ne 'precise'){
+#       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
+#    } elsif ($search->{'isbn'} ne '' || $search->{'item'} ne ''){
+#       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
+#    } else {  
+#     $results[$i]="$data->{'author'}\t$data->{'subject'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
+#    }
+    $results[$i]=$data;
     $i++;
   }
   $count++;
