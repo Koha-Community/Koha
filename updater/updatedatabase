@@ -148,6 +148,7 @@ my %tabledata=(
     systempreferences => [
     	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1' },
     	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple' },
+    	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'metric' },
     ],
 
 );
@@ -399,6 +400,10 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.22  2002/10/25 17:34:33  tonnesen
+# Initialize the dateformat systempreference variable to 'metric' if it doesn't
+# exist.
+#
 # Revision 1.4.2.21  2002/09/17 22:01:36  tonnesen
 # Added a routine to check the definitions of individual fields in a table.
 #
