@@ -27,8 +27,27 @@ use C4::Search;
 use C4::Output;
 
 sub plugin_parameters {
-my ($dbh,$record,$tagslib) = @_;
-return "";
+my ($dbh,$record,$tagslib,$morethan,$begin_tabloop) = @_;
+my $index2; # the resulting index
+my $i;		# counter
+# loop to find 700$a subfield. We look for the 1st after $i
+for (my $tabloop = $begin_tabloop; $tabloop<=9;$tabloop++) {
+	my @loop_data =();
+	foreach my $tag (keys %{$tagslib}) {
+# loop through each subfield
+		foreach my $subfield (keys %{$tagslib->{$tag}}) {
+			next if ($subfield eq 'lib'); # skip lib and tabs, which are koha internal
+			next if ($subfield eq 'tab');
+			next if ($tagslib->{$tag}->{$subfield}->{tab}  ne $tabloop);
+			if ($tag eq '700' && $subfield eq 'a' && $i>$morethan) {
+				$index2 = $i;
+			}
+			$i++;
+		}
+	}
+}
+#	my $index2=6;
+	return "&index2=$index2";
 }
 
 sub plugin {
@@ -37,22 +56,18 @@ my ($input) = @_;
 
 #	my $input = new CGI;
 	my $index= $input->param('index');
+	my $index2= $input->param('index2');
+	$index2=-1 unless($index2);
 	my $result= $input->param('result');
 
 
 	my $dbh = C4::Context->dbh;
 
-	my $template = gettemplate("value_builder/unimarc_field_100.tmpl",0);
-	my $f1 = substr($result,0,8);
-	my $f2 = substr($result,8,1);
-	my $f3 = substr($result,9,4);
-	my $f4 = substr($result,13,4);
-	warn "f2 : $f2";
+	my $template = gettemplate("value_builder/unimarc_field_700-4.tmpl",0);
 	$template->param(index => $index,
-							f1 => $f1,
-							f3 => $f3,
-							"f2$f2" => $f2,
-							f4 => $f4);
+							index2 => $index2,
+							"f1_$result" => "f1_".$result,
+							);
 	print "Content-Type: text/html\n\n", $template->output;
 }
 
