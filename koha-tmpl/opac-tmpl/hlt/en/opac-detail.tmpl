@@ -20,7 +20,7 @@
 <TMPL_INCLUDE name="cat-search.inc">
 <!--END LEFT NAV, START CRUMBS-->
 <TMPL_INCLUDE name="crumb-start.inc">	
-<!--breadcrumbs--><!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/search/'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">'>Details</a>
+<!--breadcrumbs--><!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a href='/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber">'>Details</a>
 <!--END CRUMBS-->
 <TMPL_INCLUDE name="crumb-end.inc">
 <!--CONTENT--><P>
@@ -28,8 +28,8 @@
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
 <table border="0" cellspacing="0" cellpadding="3"><tr><td valign="top">
 <table border="0" cellspacing="0" cellpadding="3"><tr>
-<td valign="top" class="head1bold" colspan=2><TMPL_VAR NAME="title"></td>
-<td valign="top" class="head1"> (<TMPL_VAR NAME="author">)</td>
+<td valign="top" class="head1bold" colspan=2><TMPL_VAR NAME="title"><br/>
+ (<TMPL_VAR NAME="author">)</td>
 </tr>
 </table>
 <P><table border="0" cellspacing="0" cellpadding="2">
@@ -55,11 +55,9 @@
 </td>
 <TMPL_UNLESS NAME="norequests">
 <TD valign="top">
-    <form action="placerequest.pl" method=post>
+    <form action="/cgi-bin/koha/opac-reserve.pl" method=post>
     <INPUT TYPE="image" name="submit"  VALUE="Place Reserve" height=83  WIDTH=120 BORDER=0 src="<TMPL_VAR NAME='themelang'>/images/place-reserve.gif" align=right >
-    <input type=hidden name=biblio value=52677>
-    <input type=hidden name=type value=str8>
-    <input type=hidden name=title value="I am a Fish">
+    <input type=hidden name=bib value=<TMPL_VAR NAME="biblionumber">>
     </form>
 </TD>
 </TMPL_UNLESS>
