@@ -4,9 +4,28 @@
 <CENTER>
 You searched on <b><TMPL_IF name="isbn">ISBN <TMPL_VAR name="isbn"></TMPL_IF><TMPL_IF name="title">title <TMPL_VAR name="title"></TMPL_IF></b><br />
 <TMPL_IF name="total">
+<TMPL_VAR NAME=total> results found<br />
 Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 </TMPL_IF>
 <p />
+<!-- Row of numbers corresponding to search result pages -->
+<TMPL_IF NAME=displayprev>
+	<a href=isbnsearch.pl?offset=<TMPL_VAR NAME="prevstartfrom">&<TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>><img src=<TMPL_VAR name="themelang">/images/numbers/prev.gif border=0></a>
+<TMPL_ELSE>
+	<img src=<TMPL_VAR name="themelang">/images/numbers/placeholder.gif border=0>
+</TMPL_IF>
+<TMPL_LOOP NAME=numbers>
+	<TMPL_IF NAME=highlight>
+	<img src=<TMPL_VAR name="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif>
+	<TMPL_ELSE>
+	<a href=isbnsearch.pl?offset=<TMPL_VAR NAME=startfrom>&<TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>><img src=<TMPL_VAR name="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a>
+	</TMPL_IF>
+</TMPL_LOOP>
+<TMPL_IF NAME=displaynext>
+	<a href=isbnsearch.pl?offset=<TMPL_VAR NAME="nextstartfrom">&<TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>><img src=<TMPL_VAR name="themelang">/images/numbers/next.gif border=0></a>
+<TMPL_ELSE>
+	<img src=<TMPL_VAR name="themelang">/images/numbers/placeholder.gif border=0>
+</TMPL_IF>
 
 <table width="80%" cellpadding="3">
 	<tr valign="center">
@@ -71,16 +90,4 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 </table>
 
 <br />
-<TMPL_LOOP name="loop_links">
-	<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="newoffset">&num=<TMPL_VAR name="num">"><TMPL_VAR name="shownumber"></a>
-</TMPL_LOOP>
-<p />
-Results per page:
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=5">5</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=10">10</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=20">20</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=50">50</a>
-</CENTER>
-<br clear="all" />
-<p>&nbsp;</p>
 <TMPL_INCLUDE NAME="acquisitions-bottom.inc">

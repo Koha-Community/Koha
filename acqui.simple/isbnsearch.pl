@@ -37,17 +37,17 @@ my $showoffset = $offset + 1;
 my $total;
 my $count;
 my @results;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/isbnsearch.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
 if (! $isbn && !$title) {
 	print $input->redirect('addbooks.pl');
 } else {
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "acqui.simple/isbnsearch.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {catalogue => 1},
+					debug => 1,
+					});
 	# fill with books in ACTIVE DB (biblio)
 	if (! $offset) {
 		$offset     = 0;
@@ -78,19 +78,48 @@ if (! $isbn && !$title) {
 		$row_data{copyrightdate} = $results[$i]->{'copyrightdate'};
 		push(@loop_data, \%row_data);
 	}
-	my @loop_links = ();
-	for (my $i = 0; ($i * $num) < $count; $i++) {
-		my %row_data;
-		$row_data{newoffset} = $i * $num;
-		$row_data{shownumber} = $i + 1;
-		$row_data{num} = $num;
-		push (@loop_links,\%row_data);
-	} # for
+	$template->param(startfrom => $offset+1);
+	($offset+$num<=$count) ? ($template->param(endat => $offset+$num)) : ($template->param(endat => $count));
+	$template->param(numrecords => $count);
+	my $nextstartfrom=($offset+$num<$count) ? ($offset+$num) : (-1);
+	my $prevstartfrom=($offset-$num>=0) ? ($offset-$num) : (-1);
+	$template->param(nextstartfrom => $nextstartfrom);
+	my $displaynext=1;
+	my $displayprev=0;
+	($nextstartfrom==-1) ? ($displaynext=0) : ($displaynext=1);
+	($prevstartfrom==-1) ? ($displayprev=0) : ($displayprev=1);
+	$template->param(displaynext => $displaynext);
+	$template->param(displayprev => $displayprev);
+	my @numbers = ();
+	my $term;
+	my $value;
+	if ($isbn) {
+		$term = "isbn";
+		$value=$isbn;
+	} else {
+		$term ="title";
+		$value=$title;
+	}
+	if ($count>10) {
+		for (my $i=1; $i<$count/10+1; $i++) {
+			if ($i<16) {
+				my $highlight=0;
+				($offset==($i-1)*10) && ($highlight=1);
+				push @numbers, { number => $i, highlight => $highlight , term => $term, value => $value, startfrom => ($i-1)*10};
+			}
+		}
+	}
 	# fill with books in breeding farm
 	($count, @results) = breedingsearch($title,$isbn);
 	my @breeding_loop = ();
 	for (my $i=0; $i <= $#results; $i++) {
 		my %row_data;
+		if ($i % 2) {
+			$toggle="#ffffcc";
+	  	} else {
+			$toggle="white";
+	  	}
+		$row_data{toggle} = $toggle;
 		$row_data{id} = $results[$i]->{'id'};
 		$row_data{isbn} = $results[$i]->{'isbn'};
 		$row_data{file} = $results[$i]->{'file'};
@@ -99,12 +128,16 @@ if (! $isbn && !$title) {
 		push (@breeding_loop, \%row_data);
 	}
 	$template->param(isbn => $isbn,
+							title => $title,
 							showoffset => $showoffset,
 							total => $total,
 							offset => $offset,
 							loop => \@loop_data,
 							breeding_loop => \@breeding_loop,
-							loop_links => \@loop_links);
+							numbers => \@numbers,
+							term => $term,
+							value => $value,
+							);
 
 	print $input->header(
 	    -type => guesstype($template->output),
