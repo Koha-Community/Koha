@@ -5,6 +5,9 @@
 <a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Edit</a>
 <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Issues</a>
 <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Biblio</a>
+<!-- TMPL_UNLESS name="totalissues" -->
+	<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del" class="button bull">Delete subscription</a>
+<!-- /TMPL_UNLESS -->
 <form method="post" name="f">
 <div id="bloc25">
 	<h2 class="bull">Subscription information</h2>

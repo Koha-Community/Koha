@@ -12,7 +12,8 @@ use HTML::Template;
 my $query = new CGI;
 my $title = $query->param('title');
 my $ISSN = $query->param('ISSN');
-my @subscriptions = getsubscriptions($title,$ISSN);
+my $biblionumber = $query->param('biblionumber');
+my @subscriptions = getsubscriptions($title,$ISSN,$biblionumber);
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/bull-home.tmpl",
 				query => $query,

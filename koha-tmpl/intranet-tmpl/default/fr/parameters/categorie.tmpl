@@ -96,7 +96,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td>Période d'inscription</td>
+				<td>Durée d'inscription</td>
 				<td>
 					<input type="text" name="enrolmentperiod" size="3" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->"> ans
 				</td>
@@ -120,7 +120,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td>Avis de retard demandé</td>
+				<td>Note de retard demandée</td>
 				<td>
 					<select name="overduenoticerequired">
 						<option<!-- TMPL_UNLESS name="overduenoticerequired" --> selected<!-- /TMPL_UNLESS --> value="0">Non</option>
@@ -172,7 +172,7 @@
 				<td><!-- TMPL_VAR NAME="description" --></td>
 			</tr>
 			<tr>
-				<td>Période d'inscription</td>
+				<td>Durée d'inscription</td>
 				<td><!-- TMPL_VAR NAME="enrolmentperiod" --> année(s)</td>
 			</tr>
 			<tr>
@@ -188,7 +188,7 @@
 				<td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
 			</tr>
 			<tr>
-				<td>Avis de retard demandé</td>
+				<td>Note de retard demandée</td>
 				<td><!-- TMPL_IF NAME="overduenoticerequired" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
 			</tr>
 			<tr>
@@ -219,7 +219,7 @@
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="delete_confirmed" -->
-		Donnée détruite
+		Donnée supprimée
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="submit" value="OK">
 		</form>
@@ -233,12 +233,12 @@
 		<!-- /TMPL_IF -->
 		<!-- TMPL_UNLESS name="categoryChild" -->
 			<div id="problem">
-				ATTENTION : vous devez créer un code de catégorie = E pour les enfants
+				ATTENTION : pour les enfants vous devez utiliser le code de catégorie = C 
 			</div>
 		<!-- /TMPL_UNLESS -->
 		<!-- TMPL_UNLESS name="categoryInstitution" -->
 			<div id="problem">
-				ATTENTION : vous devez créer un code de catégorie = C pour les Collectivités
+				ATTENTION : pour les collectivités vous devez utiliser le code de catégorie = I
 			</div>
 		<!-- /TMPL_UNLESS -->
 		<form action="<TMPL_VAR NAME="script_name">" method="post">
@@ -250,33 +250,29 @@
 			<tr bgcolor="#99cc33">
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Catégorie</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Description</b></td>
-				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Période d'inscription</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Durée d'inscription</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Frais d'inscription</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Limite d'âge supérieure</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Age requis</b></td>
-				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Amende</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Retard</b></td>
-				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Prêts maximum</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Réservation</b></td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"> </td>
 				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"> </td>
 			</tr>
 			<!-- TMPL_LOOP NAME="loop" -->
-			<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+			<tr<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPl_IF -->>
 				<td><!-- TMPL_VAR NAME="categorycode" --></td>
 				<td><!-- TMPL_VAR NAME="description" --></td>
 				<td><!-- TMPL_VAR NAME="enrolmentperiod" --></td>
 				<td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
 				<td><!-- TMPL_VAR NAME="upperagelimit" --></td>
 				<td><!-- TMPL_VAR NAME="dateofbirthrequired" --></td>
-				<td><!-- TMPL_VAR NAME="finetype" --></td>
 				<td><!-- TMPL_IF NAME="overduenoticerequired" -->
 						<i>Oui</i>
 					<!-- TMPL_ELSE -->
 						<i>Non</i>
 					<!-- /TMPL_IF -->
 				</td>
-				<td><!-- TMPL_VAR NAME="issuelimit" --></td>
 				<td><!-- TMPL_VAR NAME="reservefee" --></td>
 				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
 				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>

@@ -29,13 +29,13 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
-my $subscriptionid = getsubscriptionfrombiblionumber($biblionumber);
+my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
 
 $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {
-        $dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
+        $dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
 } # for
 
 my $norequests = 1;
@@ -70,7 +70,7 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				ITEM_RESULTS => $itemsarray,
 				WEB_RESULTS => $webarray,
 				SITE_RESULTS => $sitearray,
-				subscriptionid => $subscriptionid,
+				subscriptionsnumber => $subscriptionsnumber,
 );
   ## Amazon.com stuff
 =head
@@ -103,3 +103,4 @@ $template->param( REVIEWS => \@reviews );
   ## End of Amazon Stuff
 =cut
 output_html_with_http_headers $query, $cookie, $template->output;
+

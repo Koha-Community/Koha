@@ -2,11 +2,12 @@
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
 <h1 class="catalogue">Bulletins</h1>
-<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Retour à la bibliothèque</a>
+<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Retour à la notice</a>
 <form method="post" name="f">
-<div id="bloc25">
-	<h2 class="catalogue">Information de souscription pour <!-- TMPL_VAR name="bibliotitle" --></h2>
-		<p>Débutant le <b><!-- TMPL_VAR name="startdate" --></b> et un numéro chaque<b>
+<!-- TMPL_LOOP name="subscription_LOOP" -->
+<div id="bloc60">
+	<h2 class="catalogue">Information d'abonnement pour<!-- TMPL_VAR name="bibliotitle" --></h2>
+		<p>Débutant le <b><!-- TMPL_VAR name="startdate" --></b> et paraissant chaque<b>
 		<!--TMPL_IF name="periodicity1" -->
 				jour
 		<!-- /TMPL_IF -->
@@ -73,12 +74,14 @@
 		depuis <b><!-- TMPl_VAR name="startdate" --></b>
 		</p>
 		<p><!-- TMPL_VAR name="notes" --></p>
-	<h2 class="catalogue">Bulletins</h2>
-	<p>
-		<!-- TMPL_VAR name="opacnote" -->
-	</p>
+	<!-- TMPL_IF name="opacnotes" -->
+		<h2 class="catalogue">Abrégé des numéros</h2>
+		<p>
+			<!-- TMPL_VAR name="opacnote" -->
+		</p>
+	<!-- /TMPL_IF -->
 </div>
-
+<!-- /TMPL_LOOP -->
 </div>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

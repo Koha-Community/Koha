@@ -5,6 +5,9 @@
 function update(f){
   //collect values
   quantity=f.quantity.value
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+  }
   discount=f.discount.value
   listinc=parseInt(f.listinc.value)
   currency=f.currency.value
@@ -32,20 +35,34 @@ function update(f){
   f.ecost.value=ecost;
   f.GST.value=GST;
   f.total.value=total;
-
+  return true;
 }
 
 
 
 function messenger(X,Y,etc){
-win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
-win.focus();
-win.document.close();
-win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
-win.document.write(etc);
-win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
-win.document.write("</font></body></html>");
+	win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+	win.focus();
+	win.document.close();
+	win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
+	win.document.write(etc);
+	win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
+	win.document.write("</font></body></html>");
 }
+
+function check(f) {
+  quantity=f.quantity.value
+  if (title == "") {
+  	alert("Title can't be empty");
+	return false;
+  }
+  if (quantity ==0) {
+  	alert("Quantity must be >0");
+	return false;
+  }
+	document.frusin.submit();
+}
+
 //-->
 
 </script>
@@ -187,7 +204,7 @@ win.document.write("</font></body></html>");
 			<input type="text" size="20" name=sort2 value="<!-- TMPL_VAR NAME="sort2" -->">
 		</p>
 		<p>
-			<input type="submit" value="OK" class="button acquisition">
+			<input type="button" value="OK" class="button acquisition" onClick="check(this.form)">
 		</p>
 	</form>
 	</div>

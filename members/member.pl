@@ -63,19 +63,21 @@ my $theme = $input->param('theme') || "default";
 
 
 my $member=$input->param('member');
+my $orderby=$input->param('orderby');
+$orderby = "surname,firstname" unless $orderby;
 $member =~ s/,//g;   #remove any commas from search string
-
+$member =~ s/\*/%/g;
 my $env;
 
 my ($count,$results);
 
 if(length($member) == 1)
 {
-	($count,$results)=BornameSearch($env,$member,"simple");
+	($count,$results)=BornameSearch($env,$member,$orderby,"simple");
 }
 else
 {
-	($count,$results)=BornameSearch($env,$member,"advanced");
+	($count,$results)=BornameSearch($env,$member,$orderby,"advanced");
 }
 
 

@@ -36,6 +36,7 @@
 				<!-- TMPL_ELSE -->
 					<th class="acquisition">Remove</th>
 				<!-- /TMPL_IF -->
+
 			</tr>
 			<!-- TMPL_LOOP NAME="books_loop" -->
 				<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="color" -->">
@@ -55,10 +56,11 @@
 					<td><!-- TMPL_VAR NAME="bookfundid" --></td>
 					<!-- TMPL_IF name="closedate" -->
 					<!-- TMPL_ELSE -->
-						<td><a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
-						<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
-					</a>
-						</a></td>
+						<td>
+							<a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+								<img src="/intranet-tmpl/default/images/edittrash.png" alt="Remove from basket" title="Remove from basket" width="32" hspace="0" vspace="0" border="0">
+							</a>
+						</td>
 					<!-- /TMPL_IF -->
 				</tr>
 			<!-- /TMPL_LOOP -->

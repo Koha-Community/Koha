@@ -104,7 +104,7 @@ my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf (
 #
 my $borrowerslist;
 if ($findborrower) {
-	my ($count,$borrowers)=BornameSearch(\%env,$findborrower,'web');
+	my ($count,$borrowers)=BornameSearch(\%env,$findborrower,'cardnumber','web');
 	my @borrowers=@$borrowers;
 	if ($#borrowers == -1) {
 		$query->param('findborrower', '');

@@ -11,7 +11,7 @@
 		<p><label>Date copyright</label><input type="text" name="copyrightdate" size="5" maxlength="4"></p>
 		<p><label>Editeur</label><input type="text" name="publishercode" size="60" maxlength="80"></p>
 		<p><label>Volume</label><input type="text" name="volumedesc" size="60" maxlength="80"></p>
-		<p><label>année de Publication</label><input type="text" name="publicationyear" size="5" maxlength="4"></p>
+		<p><label>Année de Publication</label><input type="text" name="publicationyear" size="5" maxlength="4"></p>
 		<p><label>Lieu de Publication</label><input type="text" name="place" size="60" maxlength="80"></p>
 		<p><label>ISBN/ISSN</label><input type="text" name="isbn" size="14" maxlength="10"></p>
 		<p><label>Remarque</label><textarea name="note" rows="10" cols="60"></textarea></p>
@@ -20,7 +20,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="op_else" -->
-	<h1>Suggestions</h1>
+	<h1>Suggestions d'achat</h1>
 	<table>
 		<tr>
 			<th>&nbsp;</th>
@@ -36,7 +36,7 @@
 		<tr>
 			<form>
 				<th>
-					Filter sur
+					Filtrer sur
 				</th>
 				<th>
 					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
@@ -99,7 +99,7 @@
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
 			<tr>
 				<td>
-					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionnumber" -->">
+					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->">
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR NAME="title" -->
@@ -118,7 +118,7 @@
 					<!-- TMPL_IF name="ACCEPTED" -->Accepté, sera commandé rapidement<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ORDERED" -->Commandé par la bibliothèque<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="REJECTED" -->Suggestion rejetée : ne sera pas acheté<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="AVAILABLE" -->Commandé par la bibliothèque<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Reçu par la bibliothèque<!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->

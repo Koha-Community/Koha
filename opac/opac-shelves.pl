@@ -37,7 +37,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
 							type => "opac",
-							authnotrequired => 0,
+							authnotrequired => 1,
 						});
 
 if ($query->param('modifyshelfcontents')) {
@@ -57,8 +57,7 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
-					headerbackgroundcolor => $headerbackgroundcolor,
-					circbackgroundcolor => $circbackgroundcolor });
+				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
 		ModifShelf($query->param('shelfnumber'),$query->param('shelfname'),$loggedinuser,$query->param('category'));
@@ -184,6 +183,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.6  2005/03/01 13:41:32  tipaul
+# merging 2.2 branch with head. Sorry for not making it before, many many commits done here
+#
 # Revision 1.5  2005/01/27 17:27:11  oleonard
 # Taking table cell background color information out of the script and moving it into the template (requires update to opac-shelves.tmpl)
 #

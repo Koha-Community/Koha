@@ -73,7 +73,7 @@ a.authority:hover {
 		<!-- /TMPL_LOOP -->
 	</select>
 	<a href="javascript:addauthority()" class="submenu2">
-		Ajouter une autorité
+		Ajouter autorité
 	</a>
 </div>
 </form>

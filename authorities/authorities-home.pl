@@ -65,7 +65,7 @@ if ($op eq "do_search") {
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	my @tags;
-	my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
+	my ($results,$total) = authoritysearch($dbh, \@marclist,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
 	($template, $loggedinuser, $cookie)

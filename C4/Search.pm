@@ -1317,9 +1317,11 @@ sub ItemInfo {
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
 		my $datedue = '';
-		my $isth=$dbh->prepare("Select * from issues where itemnumber = ? and returndate is null");
+		my $isth=$dbh->prepare("Select issues.*,borrowers.cardnumber from issues,borrowers where itemnumber = ? and returndate is null and issues.borrowernumber=borrowers.borrowernumber");
 		$isth->execute($data->{'itemnumber'});
 		if (my $idata=$isth->fetchrow_hashref){
+		$data->{borrowernumber} = $idata->{borrowernumber};
+		$data->{cardnumber} = $idata->{cardnumber};
 		$datedue = format_date($idata->{'date_due'});
 		}
 		if ($data->{'itemlost'} eq '2'){
@@ -1345,13 +1347,19 @@ sub ItemInfo {
 		if (my $bdata=$bsth->fetchrow_hashref){
 			$data->{'branchname'} = $bdata->{'branchname'};
 		}
-	#   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
-		# FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
-		# to leave it empty, rather than convert it to "//".
-		# Also ideally this should use the local format for displaying dates.
 		my $date=format_date($data->{'datelastseen'});
 		$data->{'datelastseen'}=$date;
 		$data->{'datedue'}=$datedue;
+	# get notforloan complete status if applicable
+		my $sthnflstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
+		$sthnflstatus->execute;
+		my ($authorised_valuecode) = $sthnflstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$sthnflstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
+			$sthnflstatus->execute($authorised_valuecode,$data->{itemnotforloan});
+			my ($lib) = $sthnflstatus->fetchrow;
+			$data->{notforloan} = $lib;
+		}
 		$results[$i]=$data;
 		$i++;
 	}
@@ -1480,11 +1488,23 @@ sub bibdata {
 								from biblio, biblioitems
 								left join bibliosubtitle on
 								biblio.biblionumber = bibliosubtitle.biblionumber
+								left join itemtypes on biblioitems.itemtype=itemtypes.itemtype
 								where biblio.biblionumber = ?
 								and biblioitems.biblionumber = biblio.biblionumber");
 	$sth->execute($bibnum);
 	my $data;
 	$data  = $sth->fetchrow_hashref;
+	$sth->finish;
+	# handle management of repeated subtitle
+	$sth   = $dbh->prepare("Select * from bibliosubtitle where biblionumber = ?");
+	$sth->execute($bibnum);
+	my @subtitles;
+	while (my $dat = $sth->fetchrow_hashref){
+		my %line;
+		$line{subtitle} = $dat->{subtitle};
+		push @subtitles, \%line;
+	} # while
+	$data->{subtitles} = \@subtitles;
 	$sth->finish;
 	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
 	$sth->execute($bibnum);
@@ -1781,14 +1801,14 @@ C<$count> is the number of elements in C<$borrowers>.
 #used by member enquiries from the intranet
 #called by member.pl
 sub BornameSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($env,$searchstring,$orderby,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	my $query = ""; my $count; my @data;
 	my @bind=();
 
 	if($type eq "simple")	# simple search for one letter only
 	{
-		$query="Select * from borrowers where surname like ? order by surname,firstname";
+		$query="Select * from borrowers where surname like ? order by $orderby";
 		@bind=("$searchstring%");
 	}
 	else	# advanced search looking in surname, firstname and othernames
@@ -1809,13 +1829,14 @@ sub BornameSearch  {
 		        push(@bind,"$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%","$data[$i]%","% $data[$i]%");
 					# FIXME - .= <<EOT;
 		}
-		$query=$query.") or cardnumber = ?
-		order by surname,firstname";
+		$query=$query.") or cardnumber like ?
+		order by $orderby";
 		push(@bind,$searchstring);
 					# FIXME - .= <<EOT;
 	}
 
 	my $sth=$dbh->prepare($query);
+	warn "Q $orderby : $query";
 	$sth->execute(@bind);
 	my @results;
 	my $cnt=$sth->rows;

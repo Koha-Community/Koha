@@ -77,7 +77,7 @@ if ($op eq 'add' or $op eq 'modify') {
 	} else {
 		#check cardnumber is valid
 		my $nounique;
-		if ( $data{'actionType'} eq "Add" )    {
+		if ( $op eq "add" )    {
 			$nounique = 0;
 		} else {
 			$nounique = 1;

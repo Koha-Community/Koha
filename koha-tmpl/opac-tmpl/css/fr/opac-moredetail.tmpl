@@ -23,19 +23,19 @@
 <b>Numéro de notice :</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
 <b>Type de document : </b><!-- TMPL_VAR NAME="itemtype" --><br>
 <b>URL:</b> <!-- TMPL_VAR NAME="url" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="loanlength" --><br>
-<b>Auteur :</b> <!-- TMPL_VAR NAME="rentalcharge" --><br>
+<b>Durée du prêt:</b> <!-- TMPL_VAR NAME="loanlength" --><br>
+<b>Frais de location:</b> <!-- TMPL_VAR NAME="rentalcharge" --><br>
 <b>Cote:</b><!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --><br>
 <b>ISBN:</b><!-- TMPL_VAR NAME="isbn" --><br>
-<b>publié par :</b><!-- TMPL_VAR NAME="publishercode" --> <br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="place" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="publicationyear" --><br>
+<b>Editeur:</b> <!-- TMPL_VAR NAME="publishercode" --> <br>
+<b>Emplacement:</b> <!-- TMPL_VAR NAME="place" --><br>
+<b>Date de publication :</b> <!-- TMPL_VAR NAME="publicationyear" --><br>
 <b>Remarques:</b> <!-- TMPL_VAR NAME="volumeddesc" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="pages" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="illus" --><br>
+<b>Pages:</b> <!-- TMPL_VAR NAME="pages" --><br>
+<b>Illus:</b> <!-- TMPL_VAR NAME="illus" --><br>
 <b>Taille :</b> <!-- TMPL_VAR NAME="size" --><br>
 <b>Remarques:</b> <!-- TMPL_VAR NAME="bnotes" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="count" -->
+</b> <!-- TMPL_VAR NAME="count" -->'><b>Nbre. d'exemplaires:</b> 
 </td>
 </tr>
 </table>
@@ -45,7 +45,7 @@
 <img src="/images/holder.gif" width=16 height=300 align=left>
 <TABLE>
 <tr>
-<td><b>code barre <!-- TMPL_VAR NAME="barcode" --></b></td>
+<td><b>CODE A BARRES <!-- TMPL_VAR NAME="barcode" --></b></td>
 </tr>
 <tr>
 <td>
@@ -56,21 +56,21 @@
 <input type="image" name="submit" value="modifier" height=42 width=93 border=0 src="/images/modify-mem.gif">
 <input type="image" name="delete" value="Supprimer" height=42 width=93 border=0 src="/images/delete-mem.gif">
 <br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
-<b>Auteur :</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
+</b> <!-- TMPL_VAR NAME="homebranch" -->'><b>Site d'origine:</b> <br>
+<b>Vu le :</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
+<b>Dernier emprunteur :</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
 Indicateur de prêt <!-- FIXME - What's this, then? -->
-<b>Auteur :</b> <!-- TMPL_VAR NAME="card0" --><br>
-<b>Auteur :</b> <!-- TMPL_VAR NAME="card1" --><br>
-<b>Auteur :</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
-<b>Collection:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
-<b>Type de document : </b><!-- TMPL_VAR NAME="itemlost" --><br>
-<b>Auteur :</b> <!-- TMPL_VAR NAME="paidfor" --><br>
+<b>Dernier emprunteur 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
+<b>Dernier emprunteur 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
+<b>Site actuel :</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
+<b>Prix de Remplacement :</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
+<b> Document perdu :</b> <!-- TMPL_VAR NAME="itemlost" --><br>
+<b>Payé pour:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 <b>Remarques:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="renewals" --><br>
+<b>Renouvellements:</b> <!-- TMPL_VAR NAME="renewals" --><br>
 <b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">vu le</a>:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
 <b>Annulé <!-- TMPL_VAR NAME="wthdrawn" --><br>
-<b>Remarques:</b> <!-- TMPL_VAR NAME="issues" --><br>
+<b>Total des prêts:</b> <!-- TMPL_VAR NAME="issues" --><br>
 <b>Nombre Total de documents <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
 <b>Numéro de notice :</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
 

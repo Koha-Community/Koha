@@ -201,7 +201,7 @@ if ($query->param('item_types_selected')) {
 	}
 	if ($proceed && $branch) {
 		$fee = sprintf "%.02f", $fee;
-		$template->param(fee => $fee);
+		$template->param(fee => $fee,istherefee => $fee>0?1:0);
 		$template->param(item_types_selected => 1);
 	} else {
 		$template->param(message => 1);
@@ -224,11 +224,12 @@ if ($query->param('item_types_selected')) {
 	if ($query->param('all')) {
 		CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'a', undef, $rank,'',$title);
 	}
-	print $query->redirect("/cgi-bin/koha/opac-search.pl");
+	print $query->redirect("/cgi-bin/koha/opac-user.pl");
 } else {
 	# Here we check that the borrower can actually make reserves Stage 1.
 	my $noreserves = 0;
 	my $maxoutstanding = C4::Context->preference("maxoustanding");
+	$template->param(noreserve => 1) unless $maxoutstanding;
 	if ($borr->{'amountoutstanding'} > $maxoutstanding) {
 		my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
 		$template->param(message => 1);

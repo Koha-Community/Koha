@@ -1,5 +1,61 @@
 #!/usr/bin/perl
+# This script uses standard 8-space tabs with 4-space indents
+# vi users can :set sw=4 ai sm
 
+use Getopt::Long;
+use vars qw( $verbose_p );
+
+GetOptions(
+    'verbose|v' => \$verbose_p,
+) || exit(1);
+
+print <<EOM;
+***************************************
+* Welcome to the Koha Release Builder *
+***************************************
+EOM
+
+#----------------------------------------------------------
+# To guess the version, we need to first guess where this
+# script itself is Otherwise we will have different results
+# depending on whether the script is called as ./buildrelease
+# or misc/buildrelease. If we run the script from misc, we
+# will also get errors from "cvs update" later, so this is
+# rather important information
+#----------------------------------------------------------
+print STDERR "Perl reports that buildrelease is $0\n" if $verbose_p;
+my $self_path;
+if ($0 =~ /^(\.\/)*buildrelease$/) {
+    $self_path = 'buildrelease';
+} elsif ($0 =~ /^(?:(\.\/)*\/)?misc\/buildrelease$/) {
+    $self_path = 'misc/buildrelease';
+} else {
+    print <<EOM;
+
+WARNING: Unable to determine where the buildrelease script is located.
+         The version number guessed by the next step might be wrong.
+EOM
+    $self_path = (-f 'buildrelease')? 'buildrelease': 'misc/buildrelease';
+}
+print STDERR "Assuming buildrelease is $self_path\n" if $verbose_p;
+
+#----------------------------------------------------------
+# Fixup the current directory
+#----------------------------------------------------------
+if ($self_path eq 'buildrelease') {
+    print <<EOM;
+
+WARNING: You should run the buildrelease script from the top of the koha
+         CVS module.  I will try to change to the correct directory, but
+         it is better if you had ran this script there in the first place.
+EOM
+    chdir ".." || die "..: chdir: $!\n";
+    $self_path = 'misc/buildrelease';
+}
+
+#----------------------------------------------------------
+# Start the release builder
+#----------------------------------------------------------
 #sub guess_kohahtmldir ($;$);
 #----------------------------------------------------------
 # DIRECTORIES where source code is located
@@ -13,6 +69,7 @@ $roothomedir='/root' unless defined $roothomedir;
 my $has_kohaautobuild_conf = 0;
 
 if (-e "$roothomedir/.kohaautobuild.conf") {
+    print STDERR "$roothomedir/.kohaautobuild.conf found\n" if $verbose_p;
     open C, "<$roothomedir/.kohaautobuild.conf";
     while (<C>) {
 	chomp;
@@ -29,18 +86,13 @@ if (-e "$roothomedir/.kohaautobuild.conf") {
 my $input;
 
 print qq |
-***************************************
-* Welcome to the Koha Release Builder *
-***************************************
-
 This script will automatically build a release tarball.
 
 The script assumes that you already have the koha and koha-html modules checked
 out for the release that you want to build, although it will update the modules
 before building.
-
 |;
-print "\nWhere is the 'koha' cvs module located [$kohadir]: ";
+print "\nWhere is the 'koha' cvs module located? [$kohadir]: ";
 chomp($input = <STDIN>);
 if ($input) {
     $kohadir=$input;
@@ -61,13 +113,17 @@ print C qq|
 kohadir=$kohadir
 #kohahtmldir=$kohahtmldir
 |;
+print STDERR "$roothomedir/.kohaautobuild.conf written\n" if $verbose_p;
 
 #----------------------------------------------------------
 # which VERSION are we building ?
 #----------------------------------------------------------
-print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
+print <<EOM;
+
+Guessing the next release version. You may need to enter your SourceForge password.
+EOM
 chdir $kohadir;
-open (CVSLOG, "cvs log misc/buildrelease|");
+open (CVSLOG, "cvs log $self_path|");
 my $symbolicnamessection=0;
 my $symbolicnames;
 my $highestversion;
@@ -78,41 +134,48 @@ my $majorversionrc;
 while (<CVSLOG>) {
     if (/^symbolic names:/) {
 	$symbolicnamessection=1;
+	print STDERR "Scanning symbolic names from cvs output\n" if $verbose_p;
     }
     if ($symbolicnamessection && (/^\s+([^:]*):/)) {
 	my $tag=$1;
-	if ($tag=~/R_(.*)/) {
+	if ($tag=~/(?:R|rel)_(.*)/) {
 	    my $version='';
 	    my $rc=0;
 	    my $id=$1;
-	    $id=~s/-/\./g;
+	    $id =~ s/[-_]/\./g;
+	    print STDERR "Found a tag for release $id\n" if $verbose_p;
 	    if ($id =~/(.*)RC(.*)/) {
 		$version=$1;
 		$rc=$2;
-		$version=~m#(\d+\.\d+)\.#;
+		$version =~ /^(\d+\.\d+)(?:\.|[RC]|$)/;
 		if (versioncompare($version, $majorversion->{$1})) {
 		    $majorversion->{$1}=$version;
 		    $majorversionrc->{$1}=$rc;
+		    print STDERR "Setting major version for $1 to $version $rc\n" if $verbose_p;
 		}
 		if (versioncompare($version, $highestversion)) {
 		    $highestversion=$version;
 		    $released=0;
 		    $highestrc=$rc;
+		    print STDERR "Setting highest version to $highestversion $highestrc\n" if $verbose_p;
 		}
 	    } else {
 		$version=$id;
-		$version=~m#(\d+\.\d+)\.#;
+		$version =~ /^(\d+\.\d+)(?:\.|[RC]|$)/;
 		if (versioncompare($version, $majorversion->{$1})) {
 		    $majorversion->{$1}=$version;
 		    $majorversionrc->{$1}=0;
+		    print STDERR "Setting major version for $1 to $version $rc\n" if $verbose_p;
 		}
 		if (versioncompare($version, $highestversion)) {
 		    $highestversion=$version;
 		    $released=1;
 		    $highestrc=0;
+		    print STDERR "Setting highest version to $highestversion $highestrc\n" if $verbose_p;
 		}
 	    }
 	    $symbolicnames->{$version}->{$rc}=1;
+	    print STDERR "Setting symbolic name mapping for version $version $rc to 1\n" if $verbose_p;
 	}
     }
 }
@@ -120,25 +183,38 @@ while (<CVSLOG>) {
 my $releaseversion='';
 my $currentversion='';
 
-my $branchdata=`grep buildrelease CVS/Entries`;
+my $cvs_entries_path = $self_path;
+$cvs_entries_path =~ s/[^\/]+$/CVS\/Entries/;
+print STDERR "Assuming CVS/Entries is $cvs_entries_path\n" if $verbose_p;
+
+my $branchdata=`grep buildrelease $cvs_entries_path`;
 chomp $branchdata;
 my $branch=(split(m#/#, $branchdata))[5];
+$branch =~ s/^T//;
+$branch =~ s/^(?:R|rel)_//;
+$branch =~ s/[-_]/./g;
+print STDERR "Detected branch $branch\n" if $verbose_p;
 
-if ($branch eq 'Trel-1-2') {
-    $highestversion=$majorversion->{'1.2'};
-    $highestrc=$majorversionrc->{'1.2'};
+if ($branch =~ /\S/ && defined $majorversion->{$branch}) {
+    $highestversion=$majorversion->{$branch};
+    $highestrc=$majorversionrc->{$branch};
     ($highestrc) ? ($released=0) : ($released=1);
+    print STDERR "Using highest version for branch $branch\n" if $verbose_p;
 }
 
 if ($released) {
     my @components=split(/\./, $highestversion);
-    $components[$#components]++;
-    $nexthighestversion=join '.', @components;
-    my $minornumber=(split(/\./, $highestversion))[1];
-    if ($minornumber/2 == int($minornumber/2)) {
-	$releaseversion=$nexthighestversion."RC1";
+    if (@components < 3) { # if it's something like just 2.2 or 2.4
+	$releaseversion = $highestversion.".1RC1";
     } else {
-	$releaseversion=$nexthighestversion;
+	$components[$#components]++;
+	$nexthighestversion=join '.', @components;
+	my $minornumber=(split(/\./, $highestversion))[1];
+	if ($minornumber/2 == int($minornumber/2)) {
+	    $releaseversion=$nexthighestversion."RC1";
+	} else {
+	    $releaseversion=$nexthighestversion;
+	}
     }
     $currentversion=$highestversion;
 } else {
@@ -154,7 +230,6 @@ my $tagging_needs_confirmation = 0;
 if ($input =~ /^n/i) {
     print "\nWould you like to rebuild the $currentversion tarball?  Y/[N]: ";
     chomp($input = <STDIN>);
-    print STDERR "releaseversion=($releaseversion), currentversion=($currentversion)\n";#XXXZZZ
     if ($input =~ /^y/i) {
 	$releaseversion=$currentversion;
 	$tagging_needs_confirmation = 1;
@@ -177,10 +252,10 @@ if ($input =~ /^n/i) {
 print "\nWould you like to tag the CVS repository?\n(answer yes if releasing tarball)  Y/[N]: ";
 chomp ($input=<STDIN>);
 my $cvstag=0;
-# FIXME: This means anything other than n will tag; too dangerous?
 if ($input=~/^y/i) {
     $cvstag=1;
 }
+print "The CVS repository ",($cvstag?"WILL BE TAGGED\n":"will not be tagged\n");
 
 
 if ($cvstag && $tagging_needs_confirmation) {
@@ -328,6 +403,7 @@ Your new tarball is located in /tmp/koha-$releaseversion.tar.gz
 |;
 
 
+# Given two version numbers (v1, v2), returns 0 if v1 <= v2, or 1 if v1 > v2
 sub versioncompare {
     my $v1=shift;
     my $v2=shift;

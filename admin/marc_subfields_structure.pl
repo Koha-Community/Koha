@@ -109,7 +109,7 @@ if ($op eq 'add_form') {
 	# other subfields
 	push @kohafields, "additionalauthors.author";
 	push @kohafields, "bibliosubject.subject";
-	push @kohafields, "bibliosubtitle.title";
+	push @kohafields, "bibliosubtitle.subtitle";
 	# build authorised value list
 	$sth2->finish;
 	$sth2 = $dbh->prepare("select distinct category from authorised_values");
@@ -324,7 +324,7 @@ if ($op eq 'add_form') {
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
-		$tagsubfield="@" unless $tagsubfield;
+		$tagsubfield="@" unless $tagsubfield ne '';
 		my $liblibrarian		=$liblibrarian[$i];
 		my $libopac			=$libopac[$i];
 		my $repeatable		=$input->param("repeatable$i")?1:0;
@@ -434,7 +434,7 @@ if ($op eq 'add_form') {
 	$template->param(loop => \@loop_data);
 	$template->param(edit_tagfield => $tagfield,
 		edit_frameworkcode => $frameworkcode);
-		
+	
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param(prev =>"<a href=\"$script_name?offset=$prevpage\">");

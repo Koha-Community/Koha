@@ -95,6 +95,7 @@ sub localNEWmodbiblio {
 	# now, modify addi authors, subject, addititles.
 	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"additionalauthors.author",$frameworkcode);
 	my @addiauthfields = $record->field($tagfield);
+	$dbh->do("delete from bibliosubtitle where biblionumber=$oldbiblionumber");
 	foreach my $addiauthfield (@addiauthfields) {
 		my @addiauthsubfields = $addiauthfield->subfield($tagsubfield);
 		foreach my $subfieldcount (0..$#addiauthsubfields) {

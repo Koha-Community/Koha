@@ -5,40 +5,39 @@
 	<div class="bloc25">
 		<h2 class="members">Membership record</h2>
 		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
-		<p>Card number: <!-- TMPL_VAR NAME="cardnumber" --><br>
-		Postal Address: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
-		<!-- TMPL_UNLESS name="I" -->Home Address: <!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><br>
-		Phone home: <!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
-		Phone daytime: <!-- TMPL_VAR NAME="phoneday" --><br>
-		Fax: <!-- TMPL_VAR NAME="faxnumber" --><br>
-		E-mail: <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
-		Text messaging: <!-- TMPL_VAR NAME="textmessaging" --><br>
-		Membership Number: <!-- TMPL_VAR NAME="borrowernumber" --><br>
-		Membership Category: <!-- TMPL_VAR NAME="categorycode" --><br>
-		Fee: $30/year, Paid<br>
-		Joined: <!-- TMPL_VAR NAME="dateenrolled" -->,  Expires: <!-- TMPL_VAR NAME="expiry" --><br>
-		Joining branch: <!-- TMPL_VAR NAME="branchcode" -->
+		<p><label class="label100">Card number: </label><!-- TMPL_VAR NAME="cardnumber" --><br>
+		<label class="label100">Postal Address: </label><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
+		<!-- TMPL_UNLESS name="I" --><label class="label100">Home Address: </label><!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><br>
+		<label class="label100">Phone home: </label><!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
+		<label class="label100">Phone daytime: </label><!-- TMPL_VAR NAME="phoneday" --><br>
+		<label class="label100">Fax: </label><!-- TMPL_VAR NAME="faxnumber" --><br>
+		<label class="label100">E-mail: </label><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
+		<label class="label100">Text messaging: </label><!-- TMPL_VAR NAME="textmessaging" --><br>
+		<label class="label100">Membership Number: </label><!-- TMPL_VAR NAME="borrowernumber" --><br>
+		<label class="label100">Membership Category: </label><!-- TMPL_VAR NAME="categorycode" --><br>
+		<label class="label100">Joined: </label><!-- TMPL_VAR NAME="dateenrolled" -->,  Expires: <!-- TMPL_VAR NAME="expiry" --><br>
+		<label class="label100">Joining branch: </label><!-- TMPL_VAR NAME="branchcode" -->
 		</p>
 		<p>
 		<!-- TMPL_IF NAME="printethnicityline" -->
-			Ethnicity: <!-- TMPL_VAR NAME="ethnicity" -->, <!-- TMPL_VAR NAME="ethnotes" --><br>
+			<label class="label100">Ethnicity: </label><!-- TMPL_VAR NAME="ethnicity" -->, <!-- TMPL_VAR NAME="ethnotes" --><br>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_UNLESS name="I" -->
-			DoB: <!-- TMPL_VAR NAME="dateofbirth" --><br>
-			Sex: <!-- TMPL_VAR NAME="sex" --><br>
+			<label class="label100">DoB: </label><!-- TMPL_VAR NAME="dateofbirth" --><br>
+			<label class="label100">Sex: </label><!-- TMPL_VAR NAME="sex" --><br>
 			Alternative
 		<!-- /TMPL_UNLESS -->
-		Contact: <!-- TMPL_VAR NAME="contactname" --><br>
-		Phone: <!-- TMPL_VAR NAME="altphone" --><br>
+		<label class="label100">Contact: </label><!-- TMPL_VAR NAME="contactname" --><br>
+		<label class="label100">Phone: </label><!-- TMPL_VAR NAME="altphone" --><br>
 		<!-- TMPL_UNLESS name="I" -->
-			Relationship: <!-- TMPL_VAR NAME="altrelationship" --><br>
+			<label class="label100">Relationship: </label><!-- TMPL_VAR NAME="altrelationship" --><br>
 		<!-- /TMPL_UNLESS -->
-		Notes: <!-- TMPL_VAR NAME="altnotes" -->
+		<label class="label100">Notes: </label><!-- TMPL_VAR NAME="altnotes" -->
 		<!-- TMPL_IF NAME="sort1" -->
-			<p>Sort field 1 : <!-- TMPL_VAR NAME="sort1" --></p>
+			<p><label class="label100">Sort field 1 : </label><!-- TMPL_VAR NAME="sort1" --></p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="sort2" -->
-			<p>Sort field 2 : <!-- TMPL_VAR NAME="sort2" --></p>
+			<p><label class="label100">Sort field 2 : </label><!-- TMPL_VAR NAME="sort2" --></p>
 		<!-- /TMPL_IF -->
 		</p>
 		<p>
@@ -56,42 +55,31 @@
 		<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
-			General Notes: <!--<a href="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
-			<!-- TMPL_VAR NAME="borrowernotes" --><!--</a>-->
+			<label class="label100">General Notes: </label>
+			<!-- TMPL_VAR NAME="borrowernotes" -->
 		</p>
-
-		<!-- TMPL_IF NAME="IS_ADULT" -->
-			
-			<form action="/cgi-bin/koha/members/jmemberentry.pl" method="post">
-				<input type="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
-				<input type="hidden" name="type" value="Add">
-				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
-			</form>
-			
-		<!-- /TMPL_IF -->
+		<p>
+			 <label class="label100">OPAC login : </label><!-- TMPL_VAR name="userid" -->
+			 <!-- TMPL_IF name="password" -->(password defined)<!-- TMPL_ELSE -->(no password)<!-- /TMPL_IF -->
+		</p>
+		<p>
 		<!-- TMPL_IF NAME="I" -->
-			<form action="/cgi-bin/koha/members/imemberentry.pl" method="post">
-				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
-				<input type="submit" class="button" value="Modify">
-			</form>
+			<a href="/cgi-bin/koha/members/imemberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
 		<!-- TMPL_ELSE -->
-			<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
-				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
-				<input type="submit" class="button" name="modify" value="Modify">
-			</form>
+			<a href="/cgi-bin/koha/members/memberentry.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify</a>
 		<!-- /TMPL_IF -->
-		<form action="javascript:confirm_deletion()">
-			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->">
-			<input type="submit" class="button" value="Delete">
-		</form>
-		<form action="/cgi-bin/koha/members/member-password.pl" method="post">
-			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->">
-			<input type="submit" class="button" value="Change Password">
-		</form>
-		<form action="/cgi-bin/koha/members/member-flags.pl" method="post">
-			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->">
-			<input type="submit" class="button" value="Modify User Flags">
-		</form>
+		<a href="javascript:confirm_deletion()" class="button">Delete</a>
+		<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" class="button">Issue books</a>
+		<a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Change Password</a>
+		</p>
+		<br/>
+		<p>
+		<!-- TMPL_IF NAME="IS_ADULT" -->
+			<a href="/cgi-bin/koha/members/jmemberentry.pl?type=Add&bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button">Add Child</a>
+		<!-- /TMPL_IF -->
+		<a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="bornum" -->" class="button">Modify User Flags</a>
+		<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" class="button">Print Page</a> <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" class="button">Print Slip</a>
+		</p>
 	</div>
 	
 <!-- TMPL_IF NAME="flagged" -->	<div class="bloc25">
@@ -167,7 +155,7 @@
 		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Reading Record</a>
 	</div>
 
-	<div id="bloc25">
+	<div class="bloc25">
 		<h2 class="members">Items currently on issue</h2>
 		<!-- TMPL_IF NAME="issueloop" -->
 			<form action="../renewscript.pl" method="post">

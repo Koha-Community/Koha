@@ -5,7 +5,12 @@
 <div id="bloc25">
 	<div class="bloctitle">Member Search</div>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-		<input type="text" size="50" name="member" >
+		<p><input type="text" size="30" name="member" >
+		order by 
+		<select name="orderby">
+			<option value="surname,firstname">Surname</option>
+			<option value="cardnumber">Cardnumber</option>
+		</select>
 		<input type="submit" class="button" value="OK">
 		<p>Renew Items, view add, modify and delete records, all by starting with this search.</p>
 		<p>Type a borrower name, part of a name, or number in the field above and hit the enter key to activate search</p>

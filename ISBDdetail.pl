@@ -99,7 +99,7 @@ my $res;
 					my @subf = $field->subfields;
 					for my $i (0..$#subf) {
 						my $subfieldcode = $subf[$i][0];
-						my $subfieldvalue = $subf[$i][1];
+						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $subf[$i][1], '', $dbh);;
 						my $tagsubf = $tag.$subfieldcode;
 						$calculated =~ s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
 					}
@@ -130,3 +130,28 @@ $template->param(ISBD => $res,
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
+sub get_authorised_value_desc ($$$$$) {
+   my($tag, $subfield, $value, $framework, $dbh) = @_;
+
+   #---- branch
+    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+       return getbranchname($value);
+    }
+
+   #---- itemtypes
+   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+       return ItemType($value);
+    }
+
+   #---- "true" authorized value
+   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+
+   if ($category ne "") {
+       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
+       $sth->execute($category, $value);
+       my $data = $sth->fetchrow_hashref;
+       return $data->{'lib'};
+   } else {
+       return $value; # if nothing is found return the original value
+   }
+}

@@ -66,6 +66,7 @@ $VERSION = 0.01;
   &MARCkoha2marcItem &MARChtml2marc
   &MARCgetbiblio &MARCgetitem
   &MARCaddword &MARCdelword
+  &MARCdelsubfield
   &char_decode
   
   &FindDuplicate
@@ -201,6 +202,7 @@ MARCfindsubfieldid find a subfieldid for a bibid/tag/tagorder/subfield/subfieldo
 =item &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder);
 
 MARCdelsubfield delete a subfield for a bibid/tag/tagorder/subfield/subfieldorder
+If $subfieldorder is not set, delete all the $tag$subfield subfields 
 
 =item &MARCdelbiblio($dbh,$bibid);
 
@@ -878,11 +880,26 @@ sub MARCdelsubfield {
 
     # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
     my ( $dbh, $bibid, $tag, $tagorder, $subfield, $subfieldorder ) = @_;
-    $dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
-			tag='$tag' and tagorder='$tagorder'
-			and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
-			"
-    );
+	if ($subfieldorder) {
+		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
+				tag='$tag' and tagorder='$tagorder'
+				and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
+				"
+		);
+		$dbh->do( "delete from marc_word where bibid='$bibid' and
+				tagsubfield='$tag$subfield' and tagorder='$tagorder'
+				and subfieldorder='$subfieldorder'
+				"
+		);
+	} else {
+		$dbh->do( "delete from marc_subfield_table where bibid='$bibid' and
+				tag='$tag' and tagorder='$tagorder'
+				and subfieldcode='$subfield'"
+		);
+		$dbh->do( "delete from marc_word where bibid='$bibid' and
+				tagsubfield='$tag$subfield' and tagorder='$tagorder'"
+		);
+	}
 }
 
 sub MARCkoha2marcBiblio {
@@ -956,7 +973,7 @@ sub MARCkoha2marcBiblio {
         " SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.title",
+        &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
             $row->{'subtitle'},'' );
     }
     return $record;
@@ -1136,13 +1153,18 @@ sub MARCmarc2kohaOneField {
     my $subfield;
     ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
     foreach my $field ( $record->field($tagfield) ) {
-        if ( $field->subfield($subfield) ) {
-            if ( $result->{$kohafield} ) {
-                $result->{$kohafield} .= " | " . $field->subfield($subfield);
-            }
-            else {
-                $result->{$kohafield} = $field->subfield($subfield);
-            }
+        if ( $field->subfields ) {
+            my @subfields = $field->subfields();
+            foreach my $subfieldcount ( 0 .. $#subfields ) {
+				if ($subfields[$subfieldcount][0] eq $subfield) {
+					if ( $result->{$kohafield} ) {
+						$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
+					}
+					else {
+						$result->{$kohafield} = $subfields[$subfieldcount][1];
+					}
+				}
+			}
         }
     }
 # 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
@@ -1229,7 +1251,7 @@ sub NEWnewbiblio {
         }
     }
     ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.title",$frameworkcode );
+      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.subtitle",$frameworkcode );
     my @subtitlefields = $record->field($tagfield);
     foreach my $subtitlefield (@subtitlefields) {
         my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
@@ -1304,8 +1326,13 @@ sub NEWmodbiblio {
 	my @subtitlefields = $record->field($tagfield);
 	foreach my $subtitlefield (@subtitlefields) {
 		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
+		# delete & create subtitle again because OLDmodsubtitle can't handle new subtitles
+		# between 2 modifs
+		$dbh->do("delete from bibliosubtitle where biblionumber=$oldbiblionumber");
 		foreach my $subfieldcount (0..$#subtitlesubfields) {
-			OLDmodsubtitle($dbh,$oldbiblionumber,$subtitlesubfields[$subfieldcount]);
+			foreach my $subtit(split /\||#/,$subtitlesubfields[$subfieldcount]) {
+				OLDnewsubtitle($dbh,$oldbiblionumber,$subtit);
+			}
 		}
 	}
 	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject",$frameworkcode);
@@ -1601,13 +1628,12 @@ sub OLDmodsubject {
 
 sub OLDmodbibitem {
     my ( $dbh, $biblioitem ) = @_;
-
-    #    my $dbh   = C4Connect;
     my $query;
 
     $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
     $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
     $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
+    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
     $biblioitem->{'publishercode'} =
       $dbh->quote( $biblioitem->{'publishercode'} );
     $biblioitem->{'publicationyear'} =
@@ -1627,6 +1653,7 @@ sub OLDmodbibitem {
 itemtype        = $biblioitem->{'itemtype'},
 url             = $biblioitem->{'url'},
 isbn            = $biblioitem->{'isbn'},
+issn            = $biblioitem->{'issn'},
 publishercode   = $biblioitem->{'publishercode'},
 publicationyear = $biblioitem->{'publicationyear'},
 classification  = $biblioitem->{'classification'},
@@ -1644,8 +1671,6 @@ where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
     if ( $dbh->errstr ) {
         warn "$query";
     }
-
-    #    $dbh->disconnect;
 }    # sub modbibitem
 
 sub OLDmodnote {
@@ -1720,7 +1745,7 @@ sub OLDnewsubtitle {
     my $sth =
       $dbh->prepare(
         "insert into bibliosubtitle set biblionumber = ?, subtitle = ?");
-    $sth->execute( $bibnum, $subtitle );
+    $sth->execute( $bibnum, $subtitle ) if $subtitle;
     $sth->finish;
 }
 
@@ -1807,11 +1832,6 @@ sub OLDmoditem {
         $item->{'itemcallnumber'}, $item->{'notforloan'},
         $item->{'location'},	   $item->{'itemnum'}
     );
-    if ( $item->{'barcode'} eq '' ) {
-        $item->{'notforloan'} = 0 unless $item->{'notforloan'};
-        $query = "update items set notforloan=? where itemnumber=?";
-        @bind = ( $item->{'notforloan'}, $item->{'itemnum'} );
-    }
     if ( $item->{'lost'} ne '' ) {
         $query = "update items set biblioitemnumber=?,
                              barcode=?,
@@ -2633,6 +2653,25 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.116  2005/03/01 13:40:48  tipaul
+# merging 2.2 branch with head. Sorry for not making it before, many many commits done here
+#
+# Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
+# exporting MARCdelsubfield sub. It's used in authority merging.
+# Modifying it too to enable deletion of all subfields from a given tag/subfield or just one.
+#
+# Revision 1.115.2.4  2005/02/17 12:44:25  tipaul
+# bug in acquisition : the title was also stored as subtitle.
+#
+# Revision 1.115.2.3  2005/02/10 13:14:36  tipaul
+# * multiple main authors are now correctly handled in simple (non-MARC) view
+#
+# Revision 1.115.2.2  2005/01/11 16:02:35  tipaul
+# in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
+#
+# Revision 1.115.2.1  2005/01/11 14:45:37  tipaul
+# bugfix : issn were not stored correctly in non-MARC DB on biblio modification
+#
 # Revision 1.115  2005/01/06 14:32:17  tipaul
 # improvement of speed for bulkmarcimport.
 # A sub had been forgotten to use the C4::Context->marcfromkohafield array, that caches DB datas.

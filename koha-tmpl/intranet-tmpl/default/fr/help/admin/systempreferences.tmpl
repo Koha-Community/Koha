@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE name="help-top.inc" -->
 <h1>Gestion des préférences système</h1>
-<p>This page allows you to set the system preferences that control much of the basic behavior of Koha. These parameters should be set before any other parameters.</p>
+<p>Cette page vous permet de choisir les préférences système qui contrôlent la plupart des aspects de Koha.Ces paramètres devraient être fixés avant tous les autres.</p>
 <ul>
-<li><b>acquisitions --</b> Les choix sont "normal" ou "simple." "Normal"règle le système pour suivre les commandes et mettre à jour les informations sur les budgets et les fournisseurs lorsque vous ajoutez des exemplaires à votre collection."Simple"dit à Koha que vous allez ajouter des exemplaires à  votre collections sans suivi des commandes.</li>
+<li><b>acquisitions --</b> Les choix sont "normal" ou "simple." "Normal "règle le système pour suivre les commandes et mettre à jour les informations sur les budgets et les fournisseurs lorsque vous ajoutez des exemplaires à votre collection."Simple"dit à Koha que vous allez ajouter des exemplaires à  votre collections sans suivi des commandes.</li>
 
-<li><b>authoritysep --</b>Le séparateur utilisé dans le thésaurus des autorités.Habituellement "--".A éviter et inutile dans Koha 2.2</li>
+<li><b>authoritysep --</b>Le séparateur utilisé dans le thésaurus des autorités. Habituellement "--".A éviter et inutile dans Koha 2.2</li>
 
-<li><b>autoBarcode --</b> Le numéro de code à barres à affecter aux exemplaires est automatiquement défini (séquentiellement)par Koha si le choix est "oui" ("1"="oui").</li>
+<li><b>autoBarcode --</b> Le numéro de code à barres à affecter aux exemplaires est automatiquement défini (séquentiellement)par Koha si le choix est "oui " ("1"="oui").</li>
 
 <li><b>autoMemberNum --</b> Le numéro de lecteur (numéro de carte de lecteur) attribué au nouvel usager de la bibliothèque est automatiquement calculé par Koha si vous choisissez le "yes"("1"="yes")</li>
 
 <li><b>checkdigit --</b> Contrôles de validité sur le numéro de lecteur (Numéro de la carte d'emprunteur):rien ou contrôle de type"Katipo".Dans la plupart des cas vous choisirez "none"parce que vous utiliserez des codes à barres pré-imprimés</li>
 
-<li><b>dateformat --</b> Choisir le format de date "metric," "us," ou "iso"(us=mm/jj/aaaa, metric=jj/mm/aaaa, ISO=aaaa/mm/jj).Cela contrôle comment les dates sont affichées, mais pas comment elles sont stockées dans la base de données.</li>
+<li><b>dateformat --</b> Choisir le format de date "metric," "us," ou "iso "(us=mm/jj/aaaa, metric=jj/mm/aaaa, ISO=aaaa/mm/jj).Cela contrôle comment les dates sont affichées, mais pas comment elles sont stockées dans la base de données.</li>
 
 <li><b>tva --</b> "tva"est le taux de tva.Si vos lois sur les taxes exigent que vous payiez une taxe sur vos achats chez vos fournisseurs, entrez le taux de la taxe ici.Choisissez "0"si vous ne devez pas payé de taxe.</li>
 
@@ -20,27 +20,26 @@
 
 <li>
 	<p><b>ISBD --</b> Koha peut afficher les notices au format International Standard Bibliographic Description.La syntaxe de ce champ est franchement complexe : </p>
-	<p>it's divided into blocks, that can contain a text before, X fields, each having -or not- a string before, a string after, and a text after :</p>
-	<p><b>#995|<br>Items :|{\\n 995b}{ - 995j}{/995k}|</b></p>
-	<p>means the "block" 995 has &lt;br&gt;Items : BEFORE, then fields 995b, 995j and 995k, repeated for each item (995 is an UNIMARC standard), then nothing after the block.</p>
+	<p>c'est divisé en blocs, qui peuvent contenir un texte avant,  X champs,ayant- ou pas- une chaîne avant, une chaîne après, et un texte après :</p>
+	<p><b>#995|&lt;br&gt;Items :|{\\n995b}{ - 995j}{/995k}|</b></p>
+	<p>Signifie que le "bloc"995 a <br>Items :AVANT, les champs 995b, 995j, 995k, répétés pour chaque exemplaire, puis rien après le bloc.</p>
 	<p> Le # signifie "début d'un bloc", le | est le séparateur de chaque partie, les {} utilisées pour chaque sous-champ.Un champ peut avoir jusqu'à 3 indicateurs AVANT et jusqu'à 3 indicateurs APRES chaque sous-champ</p>
 	<p>La défintion UNIMARC (partielle) pour l'ISBD est </p><i>
-	<p>#700|<label>traducteur</label>|{700a}{701a}{702a}| ;
-		#200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br/>
+	<p>#700|<label>traducteur</label>|{700a}{701a}{702a}| ; #200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br/>
 		#230||{ ; 230a}|<br/>
 		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br/>
 		#210|<br/><label>Editeur</label>|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br/>
 		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br/>
-		#215|<br/><label> </label>|{ ; 215a}{ : 215c}{ ; 215d} { + 215e}|<br/>
+		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d}{ + 215e}|<br/>
 		#225|<br/><label>Description</label>|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br/>
-		#606|<br/><label>Sujets</label>|{ 606a - }|<br/>< br/><br/>
-		#995|<br>Exemplaires :|{\\n 995b}{ - 995j}{/995k}|<br/>
+		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt;br/&gt;<br/>
+		#995|&lt;br&gt;Exemplaires :|{\\n995b}{ - 995j}{/995k}|<br/>
 	</i></p>
 </li>
 
 <li><b>KohaAdminEmailAddress --</b>L'adresse électronique à laquelle les lecteurs enverront leurs demandes de modification de leurs documents enregistrés.</li>
 
-<li><b>ldapserver and ldapinfos --</b> Koha 2.0 sait utiliser un annuaire LDAP (Lightweight Directory Access Protocol,voir http://search.cpan.org/~gbarr/perl-ldap- 0.3202/lib/Net/LDAP.pod)pour gérer les accès des utilisateurs et leurs droits.Pour obtenir un paquetage Perl utilisable en bibliothèque sans ldap, tout ce qui est relié au LDAP a été déplacé dans KohaInstall/modules/C4/Auth_with_ldap.pm.Demandez à votre administrateur système de régler le LDAP avec Auth_with_ldap.pm (perldoc Auth_with_ldap. pm for help).Ces 2 paramétrages seront inutiles dans la 2.2 et ne devraient plus apparaïtre pour une nouvelle installation.</li>
+<li><b>ldapserver and ldapinfos --</b> Koha 2.0 sait utiliser un annuaire LDAP (Lightweight Directory Access Protocol,voir http://search.cpan.org/~gbarr/ perl-ldap- 0.3202/lib/Net/LDAP.pod)pour gérer les accès des utilisateurs et leurs droits.Pour obtenir un paquetage Perl utilisable en bibliothèque sans ldap, tout ce qui est relié au LDAP a été déplacé dans KohaInstall/modules/ C4/Auth_with_ldap.pm.Demandez à votre administrateur système de régler le LDAP avec Auth_with_ldap.pm (perldoc Auth_with_ldap. pm for help).Ces 2 paramétrages seront inutiles dans la 2.2 et ne devraient plus apparaïtre pour une nouvelle installation.</li>
 
 <li><b>Bibliothèque</b> Le nom de la bibliothèque ou le message qui s'affichera sur la page d'accueil de l'OPAC.Exemple : Bienvenu à <i>Koha<br/>SIGB sous licence libre</i></li>
 
@@ -56,7 +55,7 @@
 
 <li><b>opaclanguages --</b> Choisissez votre préférence de langue.(En dépit du nom, ce choix contrôle la langue utilisée pour tous les écrans de Koha, pas seulement pour l'OPAC).La langue au début de votre liste sera essayée d'abord</li>
 
-<li><b>opacthemes --</b> Règle l'ordre préféré pour les thèmes.Le premier thème sera essayé d'abord. </li>
+<li><b>opacthemes --</b> Règle l'ordre préféré pour les thèmes.Le premier thème sera essayé d'abord.</li>
 
 <li><b>printcirculationslips --</b> Des "bordereaux" de prêt sont imprimés sur votre imprimante de réception. Si 0 est choisi, les bordereaux ne sont pas imprimés.</li>
 
@@ -64,7 +63,7 @@
 
 <li><b>template --</b> Ordre de préférence des modèles d'écran.Koha propose plusieurs options différentes pour les modèles d'écran qui contrôlent l'aspect et la convivialité des écrans Koha, mais vous pouvez aussi écrire vos propres modèles.</li>
 
-<li><b>timeout --</b> </li>
+<li><b>timeout --</b></li>
 
 <li><b>virtualshelves --</b></li>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

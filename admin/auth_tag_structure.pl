@@ -173,14 +173,15 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							searchfield => $searchfield,
+							authtypecode => $authtypecode,
 							);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	unless (C4::Context->config('demo') eq 1) {
-		$dbh->do("delete from auth_tag_structure where tagfield='$searchfield'");
-		$dbh->do("delete from auth_subfield_structure where tagfield='$searchfield'");
+		$dbh->do("delete from auth_tag_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
+		$dbh->do("delete from auth_subfield_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
 	}
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################

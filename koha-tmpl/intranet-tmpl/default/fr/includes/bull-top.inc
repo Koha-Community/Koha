@@ -36,7 +36,7 @@ a.bull:hover {
 </div>
 <div id="submenu">
 	<span class="koha">options >></span>
-	<a href="/cgi-bin/koha/bull-home.pl" class="submenu"> Abonnement </a> <a href="/cgi-bin/koha/bull/lateissues.pl" class="submenu2"> Numéros </a>
+	<a href="/cgi-bin/koha/bull-home.pl" class="submenu"> Recherche Abonnement </a> <a href="/cgi-bin/koha/bull/lateissues.pl" class="submenu2"> Numéros en retard </a>
 </div>
 
 <!-- TMPL_IF NAME="loggedinusername" -->

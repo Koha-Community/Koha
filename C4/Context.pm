@@ -226,6 +226,7 @@ sub new
 
 	# Load the desired config file.
 	$self->{"config"} = &read_config_file($conf_fname);
+	warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
 	return undef if !defined($self->{"config"});
 
 	$self->{"dbh"} = undef;		# Database handle

@@ -97,9 +97,6 @@ if ($quantity ne '0'){
 								isbn        => $isbn?$isbn:"",
 								publishercode => $publishercode?$publishercode:"",
 								});
-			if ($title) {
-				newsubtitle($bibnum,$title);
-			}
 		# change suggestion status if applicable
 		if ($suggestionid) {
 			changestatus($suggestionid,'ORDERED');

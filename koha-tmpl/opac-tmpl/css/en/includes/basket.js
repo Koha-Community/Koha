@@ -358,3 +358,8 @@ document.getElementById == "undefined") {
         target.all['basket'].innerHTML = " ("+updated_value+")";
     }
 }
+
+function openBiblio(biblionumber) {
+	openerURL="opac-detail.pl?bib="+biblionumber;
+	opener.document.location = openerURL;
+}

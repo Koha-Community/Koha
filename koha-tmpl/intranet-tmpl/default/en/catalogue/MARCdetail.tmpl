@@ -25,12 +25,9 @@
 		<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
 			Print
 		</a>
-		<!-- TMPL_IF name="subscriptionid" -->
-		<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue">
-			Subscription
-		</a>
-		<a href="bull/serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
-			Issues
+		<!-- TMPL_IF name="subscriptionsnumber" -->
+		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
+			Subscription(s)
 		</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="norequests" -->

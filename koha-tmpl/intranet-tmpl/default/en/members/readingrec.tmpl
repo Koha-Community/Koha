@@ -28,8 +28,13 @@
 		</th>
 	</tr>
 	<!-- TMPL_LOOP NAME="loop_reading" -->
-	<tr>
-		<td><!-- TMPL_VAR NAME="biblionumber" -->
+	<!-- TMPL_IF NAME="toggle" -->
+		<tr class="hilighted">
+	<!-- TMPL_ELSE -->
+		<tr>
+	<!-- /TMPL_IF -->
+		<td>
+			<!-- TMPL_VAR NAME="biblionumber" -->
 			<!-- TMPL_VAR NAME="title" -->&nbsp;
 		</td>
 		<td>

@@ -166,7 +166,6 @@ $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrievi
 
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby) = @_;
-	warn "@$tags[0], @$and_or[0], @$excluding[0], @$operator[0], @$value[0], $offset,$length,$orderby";
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
@@ -196,7 +195,21 @@ sub catalogsearch {
 # 		$_=~ s/\'/ /g;
 # 		$_=~ s/\,/ /g;
 # 	}
-	
+
+# the item.notforloan contains an integer. Every value <>0 means "book unavailable for loan".
+# but each library can have it's own table of meaning for each value. Get them
+# 1st search if there is a list of authorised values connected to items.notforloan
+	my $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
+	$sth->execute;
+	my %notforloanstatus;
+	my ($authorised_valuecode) = $sth->fetchrow;
+	if ($authorised_valuecode) {
+		$sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=?");
+		$sth->execute($authorised_valuecode);
+		while (my ($authorised_value,$lib) = $sth->fetchrow) {
+			$notforloanstatus{$authorised_value} = $lib?$lib:$authorised_value;
+		}
+	}
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
 		# replace * by %
@@ -240,8 +253,6 @@ sub catalogsearch {
 # 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
-						my $tag = substr(@$tags[$i],0,3);
-						my $subf = substr(@$tags[$i],3,1);
 						push @normal_tags, @$tags[$i];
 						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
 						push @normal_operator, @$operator[$i];
@@ -273,6 +284,7 @@ sub catalogsearch {
 	}
 	$sth->execute();
 	my @result = ();
+        my $subtitle; # Added by JF for Subtitles
 
 	# Processes the NOT if any and there are results
 	my ($not_sql_tables, $not_sql_where1, $not_sql_where2);
@@ -328,6 +340,7 @@ sub catalogsearch {
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
 							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
 							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?");
+        my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
 	my @finalresult = ();
 	my @CNresults=();
 	my $totalitems=0;
@@ -342,6 +355,16 @@ sub catalogsearch {
 		my $continue=1;
 		my $line = $sth->fetchrow_hashref;
 		my $biblionumber=$line->{bn};
+        # Return subtitles first ADDED BY JF
+                $sth_subtitle->execute($biblionumber);
+                my $subtitle_here.= $sth_subtitle->fetchrow." ";
+                chop $subtitle_here;
+                $subtitle = $subtitle_here;
+#               warn "Here's the Biblionumber ".$biblionumber;
+#                warn "and here's the subtitle: ".$subtitle_here;
+
+        # /ADDED BY JF
+
 # 		$continue=0 unless $line->{bn};
 # 		my $lastitemnumber;
 		$sth_itemCN->execute($biblionumber);
@@ -365,6 +388,7 @@ sub catalogsearch {
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
 			$lineCN{date_due} = format_date($date_due);
+			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan});
 			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
 			push @CNresults,\%lineCN;
 			$totalitems++;
@@ -373,10 +397,19 @@ sub catalogsearch {
 		my %newline;
 		%newline = %$line;
 		$newline{totitem} = $totalitems;
+		# if $totalitems == 0, check if it's being ordered.
+		if ($totalitems == 0) {
+			my $sth = $dbh->prepare("select count(*) from aqorders where biblionumber=?");
+			$sth->execute($biblionumber);
+			my ($ordered) = $sth->fetchrow;
+			$newline{onorder} = 1 if $ordered;
+		}
 		$newline{biblionumber} = $biblionumber;
 		$newline{norequests} = 0;
 		$newline{norequests} = 1 if ($line->{notforloan}); # itemtype not issuable
 		$newline{norequests} = 1 if (!$line->{notforloan} && $notforloan); # itemtype issuable but all items not issuable for instance
+                $newline{subtitle} = $subtitle;  # put the subtitle in ADDED BY JF
+
 		my @CNresults2= @CNresults;
 		$newline{CN} = \@CNresults2;
 		$newline{'even'} = 1 if $#finalresult % 2 == 0;

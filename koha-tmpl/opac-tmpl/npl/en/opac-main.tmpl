@@ -11,7 +11,7 @@
 <!-- TMPL_ELSE --><div id="sidebar">
 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
 <h3>Log in to Check Your Account</h3>
-<p><label for="userid">Card Number:</label> <input type="text" id="userid" size="10" name="userid" onblur="ValidateCode();" /></p>
+<p><label for="userid">Card Number:</label> <input type="text" id="userid" size="10" name="userid" /></p>
 <p><label for="password">Password:</label> <input type="password" id="password" size="10" name="password" /></p>
 <p><input type="submit" value="Log In" class="submit" /></p>
 </form></div>
@@ -62,7 +62,7 @@
 <!-- /TMPL_LOOP --></p>
 <p><a href="/cgi-bin/koha/opac-user.pl">your library home</a> |   
 	<a href="/cgi-bin/koha/opac-account.pl">your account</a> |
-	<a href="/cgi-bin/koha/opac-userdetails.pl">your personal details</a>		<!-- TMPL_IF name="virtualshelves" -->| <a href="/cgi-bin/koha/opac-shelves.pl" class="button">virtual shelves</a><!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="opac-suggestions.pl" class="button">view &amp; manage suggestions</a><!-- /TMPL_IF --></p>
+	<a href="/cgi-bin/koha/opac-userdetails.pl">your personal details</a>		<!-- TMPL_IF name="virtualshelves" -->| <a href="/cgi-bin/koha/opac-shelves.pl" class="button">virtual shelves</a><!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">view &amp; manage suggestions</a><!-- /TMPL_IF --></p>
 		<!-- TMPL_IF name="textmessaging"-->
 			<h2>Message from the library</h2>
 			<p><!-- TMPL_VAR name="textmessaging" --></p>

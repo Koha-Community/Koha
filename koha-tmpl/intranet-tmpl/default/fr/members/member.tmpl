@@ -5,7 +5,11 @@
 <div class="bloc100">
 	<div class="bloctitle">Rechercher sur</div>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->">
+		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->">  order by 
+		<select name="orderby">
+			<option value="surname,firstname">Nom de famille</option>
+			<option value="cardnumber">Cardnumber</option>
+		</select>
 		<input type="submit" class="button" value="OK">
 	</form>
 </div>

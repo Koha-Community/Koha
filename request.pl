@@ -142,7 +142,8 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 			$reserve{'atdestination'} = 1;
 		}
     }
-    $reserve{'date'} = format_date($res->{'reservedate'});
+	
+   $reserve{'date'} = format_date($res->{'reservedate'});
 	$reserve{'borrowernumber'}=$res->{'borrowernumber'};
 	$reserve{'biblionumber'}=$res->{'biblionumber'};
 	$reserve{'bornum'}=$res->{'borrowernumber'};

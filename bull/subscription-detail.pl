@@ -69,8 +69,16 @@ if ($op eq 'modsubscription') {
 					$numberingmethod, $status, $biblionumber, $notes, $subscriptionid);
 }
 
+if ($op eq 'del') {
+	&delsubscription($subscriptionid);
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=../bull-home.pl\"></html>";
+	exit;
+
+}
 my $subs = &getsubscription($subscriptionid);
-my @serialslist = getserials($subscriptionid);
+my ($totalissues,@serialslist) = getserials($subscriptionid);
+$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
+# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/subscription-detail.tmpl",
@@ -123,6 +131,7 @@ $template->param(
 	notes => $subs->{notes},
 	subscriptionid => $subs->{subscriptionid},
 	serialslist => \@serialslist,
+	totalissues => $totalissues,
 	);
 $template->param(
 			"periodicity$subs->{periodicity}" => 1,

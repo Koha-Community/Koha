@@ -3,6 +3,9 @@
 <div id="mainbloc">
 <h1 class="bull">Abonnement</h1>
 <a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Editer</a> <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Numéros</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Notice</a>
+<!-- TMPL_UNLESS name="totalissues" -->
+	<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del" class="button bull">Supprimer l'abonnement</a>
+<!-- /TMPL_UNLESS -->
 <form method="post" name="f">
 <div id="bloc25">
 	<h2 class="bull">Information d'abonnement</h2>

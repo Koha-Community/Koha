@@ -56,7 +56,7 @@ use C4::Search;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
-use C4::Bull; #uses getsubscriptionfrom biblionumber
+use C4::Bull; #uses getsubscriptionsfrombiblionumber
 use HTML::Template;
 
 my $query=new CGI;
@@ -121,7 +121,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 					if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{authtypecode}) {
 						$subfield_data{authority}=$fields[$x_i]->subfield(9);
 					}
-					$subfield_data{marc_value}=$subf[$i][1];
+					$subfield_data{marc_value}=get_authorised_value_desc($fields[$x_i]->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
 				}
 				$subfield_data{marc_subfield}=$subf[$i][0];
 				$subfield_data{marc_tag}=$fields[$x_i]->tag();
@@ -158,6 +158,7 @@ foreach my $field (@fields) {
 # loop through each subfield
 	for my $i (0..$#subf) {
 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
+		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
 		$this_row{$subf[$i][0]} =$subf[$i][1];
 	}
@@ -189,14 +190,39 @@ foreach my $subfield_code (keys(%witness)) {
 	push(@header_value_loop, \%header_value);
 }
 
-my $subscriptionid = getsubscriptionfrombiblionumber($biblionumber);
+my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
 						bibid => $bibid,
 						biblionumber => $biblionumber,
-						subscriptionid => $subscriptionid,
+						subscriptionsnumber => $subscriptionsnumber,
 						popup => $popup,
 						);
 output_html_with_http_headers $query, $cookie, $template->output;
 
+sub get_authorised_value_desc ($$$$$) {
+   my($tag, $subfield, $value, $framework, $dbh) = @_;
+
+   #---- branch
+    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+       return getbranchname($value);
+    }
+
+   #---- itemtypes
+   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+       return ItemType($value);
+    }
+
+   #---- "true" authorized value
+   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+
+   if ($category ne "") {
+       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
+       $sth->execute($category, $value);
+       my $data = $sth->fetchrow_hashref;
+       return $data->{'lib'};
+   } else {
+       return $value; # if nothing is found return the original value
+   }
+}

@@ -37,7 +37,7 @@ my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $index = $query->param('index');
-my $category = $query->param('category');
+# my $category = $query->param('category');
 my $resultstring = $query->param('result');
 my $dbh = C4::Context->dbh;
 
@@ -68,10 +68,7 @@ if ($op eq "do_search") {
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 
-	# builds tag and subfield arrays
-	my @tags;
-
-	my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
+	my ($results,$total) = authoritysearch($dbh, \@marclist,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
 
@@ -127,7 +124,7 @@ if ($op eq "do_search") {
 		$to = (($startfrom+1)*$resultsperpage);
 	}
 	$template->param(result => $results) if $results;
-	$template->param(index => $query->param('index'));
+	$template->param(index => $query->param('index')."");
 	$template->param(startfrom=> $startfrom,
 							displaynext=> $displaynext,
 							displayprev=> $displayprev,
@@ -154,12 +151,13 @@ if ($op eq "do_search") {
 				});
 
 	$template->param(index => $index,
-					resultstring => $resultstring
+					resultstring => $resultstring,
 					);
 }
 
-$template->param(authtypesloop => \@authtypesloop);
-$template->param(category => $category);
+$template->param(authtypesloop => \@authtypesloop,
+				authtypecode => $authtypecode);
+warn "CAT : $authtypecode";
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -31,8 +31,8 @@
 		<!-- TMPL_IF NAME="borrowernumber" -->
 			<h2 class="circulation">Borrower information</h2>
 			<p>
-				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" onclick="openWindow(this,'Member', 480, 640)">
-					<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" --> " onclick="openWindow(this,'Member', 480, 640)">
+					<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR name="cardnumber" -->)
 				</a>
 			</p>
 			<p>
@@ -44,7 +44,16 @@
 			<p>Category: <!-- TMPL_VAR NAME="categorycode" --></p>
 			<p><!-- TMPL_VAR NAME="issuecount" --> Issues<!-- TMPL_IF NAME="overduecount" -->, <!-- TMPL_VAR NAME="overduecount" --> Overdue<!-- /TMPL_IF --></p>
 			<p><b><!-- TMPL_VAR NAME="borrowernotes" --></b></p>
-
+  			<!-- TMPL_IF NAME="dbarred" -->
+				<span class="error">Debarred:</span> Patron is debarred 
+				<form action="/cgi-bin/koha/members/setdebar.pl" method="post">
+					<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+					<input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+					<input type="hidden" value="circ" name="destination" />
+					<input type="hidden" name="status" value="0" />
+					<input type="submit" class="button circulation" value="Lift Debarment" />
+				</form>
+			<!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
 				<h2 class="circulation">
 					Enter borrower card number or partial last name

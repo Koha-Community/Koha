@@ -44,6 +44,7 @@
 		<input type="hidden" name="type" value="borrowers">
 		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
 		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
+		<input type="hidden" name="actionType" value="<!-- TMPL_VAR NAME="actionType" -->">
 		<!-- TMPL_IF NAME="addAction" -->
 			<input type="hidden" name="op" value="add">
 		<!-- TMPL_ELSE -->
@@ -51,7 +52,7 @@
 		<!-- /TMPL_IF -->
 		<table>
 			<tr>
-				<td colspan="5">Member# <!-- TMPL_VAR NAME="member" -->, Card number* <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
+				<td colspan="5"><b>Member# <!-- TMPL_VAR NAME="member" -->, Card number*</b> <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
 			</tr>
 			<tr>
 				<th colspan="5">MEMBER <!-- TMPL_UNLESS name="institution" -->PERSONAL<!-- /TMPL_UNLESS --> DETAILS</th>
@@ -146,7 +147,7 @@
 
 			<tr>
 				<td  colspan="2"><b>Postal Address*</b></td>
-				<td><b>Zipcode</b></td>
+				<td>Zipcode</td>
 				<td><b> Town*</b></td>
 				<td>Joining Branch</td>
 			</tr>
