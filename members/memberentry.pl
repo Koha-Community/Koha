@@ -37,8 +37,11 @@ use C4::Koha;
 use HTML::Template;
 use Date::Manip;
 use C4::Date;
+use C4::Input;
 
 my $input = new CGI;
+
+my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/memberentry.tmpl",
@@ -50,23 +53,147 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $member=$input->param('bornum');
-# if ($member eq ''){
-#	$member=NewBorrowerNumber();
-# }
-my $type=$input->param('type') || '';
+my $actionType=$input->param('actionType') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
+my $op=$input->param('op');
+my $categorycode=$input->param('categorycode');
+
+my $nok;
+# if a add or modify is requested => check validity of data.
+if ($op eq 'add' or $op eq 'modify') {
+	my %data;
+	my @names=$input->param;
+	foreach my $key (@names){
+		$data{$key}=$input->param($key);
+		$data{$key}=~ s/\'/\\\'/g;
+		$data{$key}=~ s/\"/\\\"/g;
+	}
+	my @errors;
+	if ($data{'cardnumber'} eq ''){
+		push @errors,"ERROR_cardnumber";
+		$nok=1;
+	} else {
+		#check cardnumber is valid
+		my $nounique;
+		if ( $data{'actionType'} eq "Add" )    {
+			$nounique = 0;
+		} else {
+			$nounique = 1;
+		}
+		my $valid=checkdigit('',$data{'cardnumber'}, $nounique);
+		if ($valid != 1){
+			$nok=1;
+			push @errors, "ERROR_invalid_cardnumber";
+		}
+	}
+	if ($data{'sex'} eq '' && $categorycode ne "I"){
+		push @errors, "ERROR_gender";
+		$nok=1;
+	}
+	if ($data{'firstname'} eq '' && $categorycode ne "I"){
+		push @errors,"ERROR_firstname";
+		$nok=1;
+	}
+	if ($data{'surname'} eq ''){
+		push @errors,"ERROR_surname";
+		$nok=1;
+	}
+	if ($data{'address'} eq ''){
+		push @errors, "ERROR_address";
+		$nok=1;
+	}
+	if ($data{'city'} eq ''){
+		push @errors, "ERROR_city";
+		$nok=1;
+	}
+	if ($nok) {
+		foreach my $error (@errors) {
+			$template->param( $error => 1);
+		}
+		$template->param(nok => 1);
+	} else {
+		my $query="Select * from borrowers where borrowernumber=?";
+		my $sth=$dbh->prepare($query);
+		$sth->execute($data{'borrowernumber'});
+		if (my $data2=$sth->fetchrow_hashref){
+			$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+			$data{'joining'}=format_date_in_iso($data{'joining'});
+			$data{'expiry'}=format_date_in_iso($data{'expiry'});
+			$query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
+			cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
+			streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
+			altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
+			emailaddress='$data{'emailaddress'}',dateenrolled='$data{'joining'}',streetcity='$data{'streetcity'}',
+			altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
+			categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
+			borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
+			initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
+			gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',
+			textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
+			zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}'
+			where borrowernumber=$data{'borrowernumber'}";
+		}else{
+			$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+			$data{'joining'}=format_date_in_iso($data{'joining'});
+			$data{'expiry'}=format_date_in_iso($data{'expiry'});
+			$data{'borrowernumber'}=NewBorrowerNumber();
+			$query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+			firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+			altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+			initials,ethnicity,physstreet,branchcode,zipcode,homezipcode) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
+			'$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
+			'$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
+			'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
+			'$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
+			'$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
+			'$data{'ethnicity'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
+		}
+		# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
+		# so when we update information for an adult we should check for guarantees and update the relevant part
+		# of their records, ie addresses and phone numbers
+		if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
+			# is adult check guarantees;
+			my ($count,$guarantees)=findguarantees($data{'borrowernumber'});
+			for (my $i=0;$i<$count;$i++){
+				# FIXME
+				# It looks like the $i is only being returned to handle walking through
+				# the array, which is probably better done as a foreach loop.
+				#
+				my $guaquery="update borrowers set streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',
+				streetcity='$data{'streetcity'}',phoneday='$data{'phoneday'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}'
+				,streetaddress='$data{'address'}'
+				where borrowernumber='$guarantees->[$i]->{'borrowernumber'}'";
+				my $sth3=$dbh->prepare($guaquery);
+				$sth3->execute;
+				$sth3->finish;
+			}
+		}
+		my $sth2=$dbh->prepare($query);
+		$sth2->execute;
+		$sth2->finish;
+		$sth->finish;
+		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$data{'borrowernumber'}");	}
+}
 if ($delete){
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
 } else {  # this else goes down the whole script
-	if ($type eq 'Add'){
+	if ($actionType eq 'Add'){
 		$template->param( addAction => 1);
 	} else {
 		$template->param( addAction =>0);
 	}
-
-	my $data=borrdata('',$member);
-	if ($type eq 'Add'){
+	# retrieve previous values : either in DB or in CGI, in case of errors in values
+	my $data;
+	if ($nok) {
+		my @names=$input->param;
+		foreach my $key (@names){
+			$data->{$key}=$input->param($key);
+		}
+	} else {
+		$data=borrdata('',$member);
+	}
+	if ($actionType eq 'Add'){
 		$template->param( updtype => 'I');
 	} else {
 		$template->param( updtype => 'M');
@@ -151,7 +278,7 @@ if ($delete){
 				-size     => 1,
 				-multiple => 0 );
 
-	$template->param(	type 		=> $type,
+	$template->param(	actionType 		=> $actionType,
 				member          => $member,
 				address         => $data->{'streetaddress'},
 				firstname       => $data->{'firstname'},
@@ -184,6 +311,7 @@ if ($delete){
 				dateformat      => display_date_format(),
 			        modify          => $modify,
 				CGIbranch => $CGIbranch);
+	$template->param(Institution => 1) if ($categorycode eq "I");
 	output_html_with_http_headers $input, $cookie, $template->output;
 
 

@@ -69,10 +69,10 @@ if ( $newpassword ) {
     } else {
 		#Everything is good so we can update the information.
 		my $sth=$dbh->prepare("update borrowers set userid=?, password=? where borrowernumber=?");
-    	$sth->execute($uid, $digest, $member);
+    		$sth->execute($uid, $digest, $member);
 		$template->param(newpassword => $newpassword);
+		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
 	}
-
 } else {
     my $userid = $bor->{'userid'};
 
