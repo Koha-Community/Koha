@@ -1,0 +1,55 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Acquisitions: Suggestions<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+	
+	<form action="/cgi-bin/koha/acqui/suggestion-select.pl" method="post">
+<div class="data">	<table>
+	<caption>Filter Suggestion Results</caption>
+	<tr><th><label for="title">Title:</label></th><td><input type="text" name="title" id="title" value="<!-- TMPL_VAR NAME="title"-->" /></td></tr>
+	<tr><th><label for="author">Author:</label> </th><td><input type="text" id="author" name="author" value="<!-- TMPL_VAR NAME="author" -->" /></td></tr>
+	<tr><th><label for="publishercode">Publisher:</label></th><td><input type="text" id="publishercode" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->" /></td></tr>
+	</table></div>
+<p><input type="submit" class="submit" value="Set Filter" /></p></form>
+<div class="table searchresults">
+	<table>
+		<caption>Suggestions</caption>
+		<tr>
+			<th>Suggestion</th>
+			<th>Suggested by</th>
+			<th>Accepted by</th>
+			<th>&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
+				<td>
+					<p><!-- TMPL_VAR NAME="title" --> - <!-- TMPL_VAR NAME="author" --></p>
+					<p>
+						<!-- TMPL_IF name="copyrightdate" -->copy. year:<!-- TMPL_VAR NAME="copyrightdate" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR NAME="volumedesc" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="isbn" -->ISBN :<i><!-- TMPL_VAR NAME="isbn" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" --><br/>published by:<!-- TMPL_VAR NAME="publishercode" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR NAME="publicationyear" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> at <i><!-- TMPL_VAR NAME="place" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR NAME="note" -->)</i></p> <!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamesuggestedby" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="biblionumber" -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->">Order</a>
+					<!-- TMPL_ELSE -->
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->">Order</a>
+					<!-- /TMPL_IF -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

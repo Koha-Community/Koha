@@ -1,0 +1,43 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Acquisitions: Order Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+	<h1>Order search</h3>
+	<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post"><table>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th>Supplier</th>
+			<th>Placed on</th>
+			<th>Recieved on</th>
+			<th>Quantity ordered</th>
+			<th>&nbsp;</th>
+		</tr>
+		<tr>
+			
+				<th>Filter By:</th>
+				<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /></th>
+				<th><input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
+				<th><input type="text" name="name" value="<!-- TMPL_VAR name="name" -->" /></th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<th><input type="submit" class="submit" value="Set Filter" /></th>
+		</tr>
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td>&nbsp;</td>
+				<td><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><!-- TMPL_VAR NAME="author" --></td>
+				<td><!-- TMPL_VAR NAME="name" --></td>
+				<td><!-- TMPL_VAR name="creationdate" --></td>
+				<td><!-- TMPL_VAR name="datereceived" --></td>
+				<td><!-- TMPL_VAR name="quantity" --></td>
+				<td>&nbsp;</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table></form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
