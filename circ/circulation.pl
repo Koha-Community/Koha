@@ -282,6 +282,7 @@ $template->param(
 		surname => $borrower->{'surname'},
 		categorycode => $borrower->{'categorycode'},
 		streetaddress => $borrower->{'streetaddress'},
+		emailaddress => $borrower->{'emailaddress'},
 		borrowernotes => $borrower->{'borrowernotes'},
 		city => $borrower->{'city'},
 		phone => $borrower->{'phone'},
