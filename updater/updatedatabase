@@ -3,12 +3,12 @@
 # $Id$
 
 # Database Updater
-# This script checks for required updates to the database.  
+# This script checks for required updates to the database.
 
 # Part of the Koha Library Software www.koha.org
 # Licensed under the GPL.
 
-# Bugs/ToDo: 
+# Bugs/ToDo:
 # - Would also be a good idea to offer to do a backup at this time...
 
 # NOTE:  If you do something more than once in here, make it table driven.
@@ -39,163 +39,170 @@ my (
 	$prefitem,		# preference item in systempreferences table
 );
 
+my $dbh = C4::Context->dbh;
+
 #-------------------
 # Defines
 
 # Tables to add if they don't exist
 my %requiretables=(
-    shelfcontents=>"( shelfnumber int not null, 
-	itemnumber int not null, 
-	flags int)",
-    bookshelf=>"( shelfnumber int auto_increment primary key, 
-	shelfname char(255))",
-    z3950queue=>"( id int auto_increment primary key, 
-	term text, 
-	type char(10), 
-	startdate int, 
-	enddate int,
-	done smallint, 
-	results longblob, 
-	numrecords int, 
-	servers text, 
-	identifier char(30))",
-    z3950results=>"( id int auto_increment primary key, 
-	queryid int, 
-	server char(255), 
-	startdate int, 
-	enddate int, 
-	results longblob, 
-	numrecords int, 
-	numdownloaded int, 
-	highestseen int, 
-	active smallint)",
-    branchrelations=>"( branchcode varchar(4), 
-	categorycode varchar(4))",
-    websites=>"( websitenumber int(11) NOT NULL auto_increment,
-  	biblionumber int(11) NOT NULL default '0',
-  	title text,
-  	description text,
-  	url varchar(255),
-  	PRIMARY KEY (websitenumber) )",
-    marcrecorddone=>"( isbn char(40),
-		      issn char(40),
-		      lccn char(40),
-		      controlnumber char(40))",
+    shelfcontents=>"( shelfnumber int not null,
+							itemnumber int not null,
+							flags int)",
+    bookshelf=>"( shelfnumber int auto_increment primary key,
+						shelfname char(255))",
+    z3950queue=>"( id int auto_increment primary key,
+						term text,
+						type char(10),
+						startdate int,
+						enddate int,
+						done smallint,
+						results longblob,
+						numrecords int,
+						servers text,
+						identifier char(30))",
+	z3950results=>"( id int auto_increment primary key,
+						queryid int,
+						server char(255),
+						startdate int,
+						enddate int,
+						results longblob,
+						numrecords int,
+						numdownloaded int,
+						highestseen int,
+						active smallint)",
+	branchrelations=>"( branchcode varchar(4),
+							categorycode varchar(4))",
+	websites=>"( websitenumber int(11) NOT NULL auto_increment,
+						biblionumber int(11) NOT NULL default '0',
+						title text,
+						description text,
+						url varchar(255),
+						PRIMARY KEY (websitenumber) )",
+	marcrecorddone=>"( isbn char(40),
+								issn char(40),
+								lccn char(40),
+								controlnumber char(40))",
     uploadedmarc=>"( id int(11) NOT NULL auto_increment PRIMARY KEY,
-		    marc longblob,
-		    hidden smallint(6) default NULL,
-		    name varchar(255) default NULL)",
-    ethnicity=>"( code varchar(10) NOT NULL default '',
-  		name varchar(255) default NULL,
-  		PRIMARY KEY  (code)   )",
-    sessions=>"( sessionID varchar(255) NOT NULL default '',
-  		userid varchar(255) default NULL,
-  		ip varchar(16) default NULL,
-		lasttime int,
-		PRIMARY KEY (sessionID)   )",
+							marc longblob,
+							hidden smallint(6) default NULL,
+							name varchar(255) default NULL)",
+	ethnicity=>"( code varchar(10) NOT NULL default '',
+					name varchar(255) default NULL,
+					PRIMARY KEY  (code)   )",
+	sessions=>"( sessionID varchar(255) NOT NULL default '',
+						userid varchar(255) default NULL,
+						ip varchar(16) default NULL,
+						lasttime int,
+						PRIMARY KEY (sessionID)   )",
     sessionqueries=>"( sessionID varchar(255) NOT NULL default '',
-    		       userid char(100) NOT NULL default '',
-    		       ip char(18) NOT NULL default '',
-		       url text NOT NULL default ''  )",
-    bibliothesaurus=> "( code BIGINT not null AUTO_INCREMENT, 
-                         freelib CHAR (255) not null , 
-                         stdlib CHAR (255) not null , 
-                         type CHAR (80) not null , 
-                         PRIMARY KEY (code), 
-                         INDEX (freelib),index(stdlib),index(type) )",
-    marc_biblio => "(
-                         bibid bigint(20) unsigned NOT NULL auto_increment,
-                         biblionumber int(11) NOT NULL default '0',
-                         datecreated date NOT NULL default '0000-00-00',
-                         datemodified date default NULL,
-                         origincode char(20) default NULL,
-                         PRIMARY KEY  (bibid),
-                         KEY origincode (origincode),
-                         KEY biblionumber (biblionumber)
-                         ) ",
-     marc_blob_subfield => "(
-                             blobidlink bigint(20) NOT NULL auto_increment,
-                             subfieldvalue longtext NOT NULL,
-                             PRIMARY KEY  (blobidlink)
-                            ) ",
-     marc_subfield_structure => "(
-                                  tagfield char(3) NOT NULL default '',
-                                  tagsubfield char(1) NOT NULL default '',
-                                  liblibrarian char(255) NOT NULL default '',
-                                  libopac char(255) NOT NULL default '',
-                                  repeatable tinyint(4) NOT NULL default '0',
-                                  mandatory tinyint(4) NOT NULL default '0',
-                                  kohafield char(40) NOT NULL default '',
-                                  tab tinyint(1),
-                                  PRIMARY KEY  (tagfield,tagsubfield),
-                                  KEY kohafield (kohafield),
-                                  KEY tab (tab)
-                                 )",
-     marc_subfield_table => "(
-                              subfieldid bigint(20) unsigned NOT NULL auto_increment,
-                              bibid bigint(20) unsigned NOT NULL default '0',
-                              tag char(3) NOT NULL default '',
-                              tagorder tinyint(4) NOT NULL default '1',
-                              tag_indicator char(2) NOT NULL default '',
-                              subfieldcode char(1) NOT NULL default '',
-                              subfieldorder tinyint(4) NOT NULL default '1',
-                              subfieldvalue varchar(255) default NULL,
-                              valuebloblink bigint(20) default NULL,
-                              PRIMARY KEY  (subfieldid),
-                              KEY bibid (bibid),
-                              KEY tag (tag),
-                              KEY tag_indicator (tag_indicator),
-                              KEY subfieldorder (subfieldorder),
-                              KEY subfieldcode (subfieldcode),
-                              KEY subfieldvalue (subfieldvalue),
-                              KEY tagorder (tagorder)
-                            )",
-     marc_tag_structure => "(
-                             tagfield char(3) NOT NULL default '',
-                             liblibrarian char(255) NOT NULL default '',
-                             libopac char(255) NOT NULL default '',
-                             repeatable tinyint(4) NOT NULL default '0',
-                             mandatory tinyint(4) NOT NULL default '0',
-                             PRIMARY KEY  (tagfield)
-                            )",
-     marc_word => "(
-                    bibid bigint(20) NOT NULL default '0',
-                    tag char(3) NOT NULL default '',
-                    tagorder tinyint(4) NOT NULL default '1',
-                    subfieldid char(1) NOT NULL default '',
-                    subfieldorder tinyint(4) NOT NULL default '1',
-                    word varchar(255) NOT NULL default '',
-                    sndx_word varchar(255) NOT NULL default '',
-                    KEY bibid (bibid),
-                    KEY tag (tag),
-                    KEY tagorder (tagorder),
-                    KEY subfieldid (subfieldid),
-                    KEY subfieldorder (subfieldorder),
-                    KEY word (word),
-                    KEY sndx_word (sndx_word)
-                   )",
-);
+								userid char(100) NOT NULL default '',
+								ip char(18) NOT NULL default '',
+								url text NOT NULL default ''  )",
+	bibliothesaurus=> "( code BIGINT not null AUTO_INCREMENT,
+						freelib CHAR (255) not null ,
+						stdlib CHAR (255) not null ,
+						type CHAR (80) not null ,
+						PRIMARY KEY (code),
+						INDEX (freelib),index(stdlib),index(type) )",
+	marc_biblio => "(
+						bibid bigint(20) unsigned NOT NULL auto_increment,
+						biblionumber int(11) NOT NULL default '0',
+						datecreated date NOT NULL default '0000-00-00',
+						datemodified date default NULL,
+						origincode char(20) default NULL,
+						PRIMARY KEY  (bibid),
+						KEY origincode (origincode),
+						KEY biblionumber (biblionumber)
+						) ",
+	marc_blob_subfield => "(
+					blobidlink bigint(20) NOT NULL auto_increment,
+					subfieldvalue longtext NOT NULL,
+					PRIMARY KEY  (blobidlink)
+					) ",
+	marc_subfield_structure => "(
+						tagfield char(3) NOT NULL default '',
+						tagsubfield char(1) NOT NULL default '',
+						liblibrarian char(255) NOT NULL default '',
+						libopac char(255) NOT NULL default '',
+						repeatable tinyint(4) NOT NULL default '0',
+						mandatory tinyint(4) NOT NULL default '0',
+						kohafield char(40) NOT NULL default '',
+						tab tinyint(1),
+						PRIMARY KEY  (tagfield,tagsubfield),
+						KEY kohafield (kohafield),
+						KEY tab (tab)
+						)",
+	marc_subfield_table => "(
+						subfieldid bigint(20) unsigned NOT NULL auto_increment,
+						bibid bigint(20) unsigned NOT NULL default '0',
+						tag char(3) NOT NULL default '',
+						tagorder tinyint(4) NOT NULL default '1',
+						tag_indicator char(2) NOT NULL default '',
+						subfieldcode char(1) NOT NULL default '',
+						subfieldorder tinyint(4) NOT NULL default '1',
+						subfieldvalue varchar(255) default NULL,
+						valuebloblink bigint(20) default NULL,
+						PRIMARY KEY  (subfieldid),
+						KEY bibid (bibid),
+						KEY tag (tag),
+						KEY tag_indicator (tag_indicator),
+						KEY subfieldorder (subfieldorder),
+						KEY subfieldcode (subfieldcode),
+						KEY subfieldvalue (subfieldvalue),
+						KEY tagorder (tagorder)
+					)",
+	marc_tag_structure => "(
+					tagfield char(3) NOT NULL default '',
+					liblibrarian char(255) NOT NULL default '',
+					libopac char(255) NOT NULL default '',
+					repeatable tinyint(4) NOT NULL default '0',
+					mandatory tinyint(4) NOT NULL default '0',
+					PRIMARY KEY  (tagfield)
+					)",
+	marc_word => "(
+				bibid bigint(20) NOT NULL default '0',
+				tag char(3) NOT NULL default '',
+				tagorder tinyint(4) NOT NULL default '1',
+				subfieldid char(1) NOT NULL default '',
+				subfieldorder tinyint(4) NOT NULL default '1',
+				word varchar(255) NOT NULL default '',
+				sndx_word varchar(255) NOT NULL default '',
+				KEY bibid (bibid),
+				KEY tag (tag),
+				KEY tagorder (tagorder),
+				KEY subfieldid (subfieldid),
+				KEY subfieldorder (subfieldorder),
+				KEY word (word),
+				KEY sndx_word (sndx_word)
+			)",
+	marc_breeding =>"( file varchar(80) NOT NULL default '',
+								isbn varchar(10) NOT NULL default '',
+								marc text NOT NULL,
+								PRIMARY KEY  (isbn)
+								)",
+	);
 
 
 my %requirefields=(
-    biblio=>{ 'abstract' => 'text' },
-    deletedbiblio=>{ 'abstract' => 'text' },
-    biblioitems=>{ 'lccn' => 'char(25)',
-		'url' => 'varchar(255)',
-		'marc' => 'text' },
-    deletedbiblioitems=>{ 'lccn' => 'char(25)',
-		'url' => 'varchar(255)',
-		'marc' => 'text' },
-    branchtransfers=>{ 'datearrived' => 'datetime' },
-    statistics=>{'borrowernumber' =>'int(11)'},
-    aqbooksellers=>{'invoicedisc' =>'float(6,4)',
-    		     'nocalc' => 'int(11)'},
-    borrowers=>{'userid' => 'char(30)',
-    		'password' => 'char(30)',},
-    aqorders=>{'budgetdate' => 'date'},
-#added so that reference items are not available for reserves...
-    itemtypes=>{'notforloan' => 'smallint(6)'},
-    systempreferences =>{'explanation' => 'char(80)'},
+	biblio=>{ 'abstract' => 'text' },
+	deletedbiblio=>{ 'abstract' => 'text' },
+	biblioitems=>{ 'lccn' => 'char(25)',
+						'url' => 'varchar(255)',
+						'marc' => 'text' },
+	deletedbiblioitems=>{ 'lccn' => 'char(25)',
+								'url' => 'varchar(255)',
+								'marc' => 'text' },
+	branchtransfers=>{ 'datearrived' => 'datetime' },
+	statistics=>{'borrowernumber' =>'int(11)'},
+	aqbooksellers=>{'invoicedisc' =>'float(6,4)',
+						'nocalc' => 'int(11)'},
+	borrowers=>{'userid' => 'char(30)',
+					'password' => 'char(30)',},
+	aqorders=>{'budgetdate' => 'date'},
+	#added so that reference items are not available for reserves...
+	itemtypes=>{'notforloan' => 'smallint(6)'},
+	systempreferences =>{'explanation' => 'char(80)'},
 );
 
 my %dropable_table=(
@@ -211,14 +218,13 @@ my %dropable_table=(
 
 # Default system preferences
 my %defaultprefs=(
-		  'autoMemberNum'=> ['1','1 or else. If 1, Barcode is auto-calculated'],
-		  'acquisitions'=> ['simple','normal or simple : will use acquisition system found in directory acqui.simple or acquisition'],
-		  'template' => ['default','template default name']
+		'autoMemberNum'=> ['1','1 or else. If 1, Barcode is auto-calculated'],
+		'acquisitions'=> ['simple','normal or simple : will use acquisition system found in directory acqui.simple or acquisition'],
+		'template' => ['default','template default name'],
+		'autoBarcode' => ['0','1 or else. If 1, Barcode is auto-calculated'],
+		'insecure' => ['no','if YES, no auth at all is needed. Be careful if you set this to yes !']
 		  );
 
-#-------------------
-# Initialize
-my $dbh = C4::Context->dbh;
 
 # Start checking
 
@@ -227,7 +233,7 @@ my $mysqlversion=`mysqld --version`;
 $mysqlversion=~/Ver (\S*) /;
 $mysqlversion=$1;
 if ($mysqlversion ge '3.23') {
-    print "Could convert to MyISAM database tables...\n";
+	print "Could convert to MyISAM database tables...\n";
 }
 
 #---------------------------------
@@ -242,107 +248,105 @@ while (my ($table) = $sth->fetchrow) {
 
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
-    print "Checking $table table...\n" if $debug;
-    unless ($existingtables{$table} ) {
-	print "Adding $table table...\n";
-	my $sth=$dbh->prepare(
-		"create table $table $requiretables{$table}" );
-	$sth->execute;
-        if ($sth->err) {
-                print "Error : $sth->errstr \n";
-                $sth->finish;
-        } # if error
-    } # unless exists
+	print "Checking $table table...\n" if $debug;
+	unless ($existingtables{$table} ) {
+		print "Adding $table table...\n";
+		my $sth=$dbh->prepare(
+			"create table $table $requiretables{$table}" );
+		$sth->execute;
+		if ($sth->err) {
+				print "Error : $sth->errstr \n";
+				$sth->finish;
+		} # if error
+	} # unless exists
 } # foreach
 
 # now drop useless tables
 foreach $table ( keys %dropable_table) {
-    print "Dropping unused tables...\n" if $debug;
-    if ($existingtables{$table} ) {
-	$dbh->do("drop table $table");
-	if ($dbh->err) {
-	    print "Error : $dbh->errstr \n";
+	print "Dropping unused tables...\n" if $debug;
+	if ($existingtables{$table} ) {
+		$dbh->do("drop table $table");
+		if ($dbh->err) {
+		print "Error : $dbh->errstr \n";
+		}
 	}
-    }
 }
 unless ($existingtables{'z3950servers'}) {
-    print "Adding z3950servers table...\n";
-    my $sti=$dbh->prepare("create table z3950servers (
-	host char(255), 
-	port int, 
-	db char(255), 
-	userid char(255), 
-	password char(255), 
-	name text, 
-	id int, 
-	checked smallint, 
-	rank int)");
-    $sti->execute;
-    $sti=$dbh->prepare("insert into z3950servers 
-	values ('z3950.loc.gov', 
-	7090, 
-	'voyager', 
-	'', '', 
-	'Library of Congress', 
-	1, 1, 1)");
-    $sti->execute;
+	print "Adding z3950servers table...\n";
+	my $sti=$dbh->prepare("create table z3950servers (
+										host char(255),
+										port int,
+										db char(255),
+										userid char(255),
+										password char(255),
+										name text,
+										id int,
+										checked smallint,
+										rank int)");
+	$sti->execute;
+	$sti=$dbh->prepare("insert into z3950servers
+								values ('z3950.loc.gov',
+								7090,
+								'voyager',
+								'', '',
+								'Library of Congress',
+								1, 1, 1)");
+	$sti->execute;
 }
 
 #---------------------------------
 # Columns
 
 foreach $table ( keys %requirefields ) {
-    print "Check table $table\n" if $debug;
-    $sth=$dbh->prepare("show columns from $table");
-    $sth->execute();
-    undef %types;
-    while ( ($column, $type, $null, $key, $default, $extra) 
-		= $sth->fetchrow) {
-        $types{$column}=$type;
-    } # while 
-    foreach $column ( keys %{ $requirefields{$table} } )  {
-	print "  Check column $column\n" if $debug;
-	if ( ! $types{$column} ) {
-	    # column doesn't exist
-	    print "Adding $column field to $table table...\n";
-    	    $query="alter table $table
-		add column $column " . $requirefields{$table}->{$column} ;
-	    print "Execute: $query\n" if $debug;
-    	    my $sti=$dbh->prepare($query);
-    	    $sti->execute;
-            if ($sti->err) {
-                    print "**Error : $sti->errstr \n";
-                    $sti->finish;
-            } # if error
-	} # if column
-    } # foreach column
+	print "Check table $table\n" if $debug;
+	$sth=$dbh->prepare("show columns from $table");
+	$sth->execute();
+	undef %types;
+	while ( ($column, $type, $null, $key, $default, $extra)
+			= $sth->fetchrow) {
+		$types{$column}=$type;
+	} # while
+	foreach $column ( keys %{ $requirefields{$table} } )  {
+		print "  Check column $column\n" if $debug;
+		if ( ! $types{$column} ) {
+		# column doesn't exist
+		print "Adding $column field to $table table...\n";
+		$query="alter table $table
+			add column $column " . $requirefields{$table}->{$column} ;
+		print "Execute: $query\n" if $debug;
+		my $sti=$dbh->prepare($query);
+		$sti->execute;
+			if ($sti->err) {
+					print "**Error : $sti->errstr \n";
+					$sti->finish;
+			} # if error
+		} # if column
+	} # foreach column
 } # foreach table
 
 # Get list of columns from items table
 my %itemtypes;
 
-# FIXME - There's already a $sth in this scope.
-my $sth=$dbh->prepare("show columns from items");
+$sth=$dbh->prepare("show columns from items");
 $sth->execute;
 while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-    $itemtypes{$column}=$type;
+	$itemtypes{$column}=$type;
 }
 
 unless ($itemtypes{'barcode'} eq 'varchar(20)') {
-    $itemtypes{'barcode'}=~/varchar\((\d+)\)/;
-    my $oldlength=$1;
-    if ($oldlength<20) {
-	print "Setting maximum barcode length to 20 (was $oldlength).\n";
-	my $sti=$dbh->prepare("alter table items change barcode barcode varchar(20) not null");
-	$sti->execute;
-    }
+	$itemtypes{'barcode'}=~/varchar\((\d+)\)/;
+	my $oldlength=$1;
+	if ($oldlength<20) {
+		print "Setting maximum barcode length to 20 (was $oldlength).\n";
+		my $sti=$dbh->prepare("alter table items change barcode barcode varchar(20) not null");
+		$sti->execute;
+	}
 }
 
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
 
-# FIXME - There's already a $sth in this scope.
-my $sth=$dbh->prepare("show columns from branchtransfers");
+$sth=$dbh->prepare("show columns from branchtransfers");
 $sth->execute;
 while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
     $branchtransfers{$column}=$type;
@@ -363,49 +367,45 @@ unless ($branchtransfers{'datearrived'} eq 'datetime') {
 # changing the branchcategories table around...
 my %branchcategories;
 
-# FIXME - There's already a $sth in this scope.
-my $sth=$dbh->prepare("show columns from branchcategories");
+$sth=$dbh->prepare("show columns from branchcategories");
 $sth->execute;
 while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-    $branchcategories{$column}=$type;
+	$branchcategories{$column}=$type;
 }
 
 unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
-    print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
-    my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
-    $sti->execute;
-    $sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
-    $sti->execute;
+	print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
+	my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
+	$sti->execute;
+	$sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
+	$sti->execute;
 }
 
 unless ($branchcategories{'categoryname'} eq 'text') {
-    print "Changing branchcode in branchcategories to categoryname text.\n";
-    my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
-    $sth->execute;
+	print "Changing branchcode in branchcategories to categoryname text.\n";
+	my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
+	$sth->execute;
 }
 
 unless ($branchcategories{'codedescription'} eq 'text') {
-    print "Replacing branchholding in branchcategories with codedescription text.\n";
-    my $sth=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
-    $sth->execute;
+	print "Replacing branchholding in branchcategories with codedescription text.\n";
+	my $sth=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
+	$sth->execute;
 }
 
 
 # Populate systempreferences if it is empty
 
 foreach $prefitem ( keys %defaultprefs ) {
-    $sth=$dbh->prepare("select value 
-	from systempreferences 
-	where variable=?");
-    $sth->execute($prefitem);
-    unless ($sth->rows) {
-	print "Adding system preference item $prefitem with value " .
-        	$defaultprefs{$prefitem}[0] ."\n";
-        $sti=$dbh->prepare("
-	  insert into systempreferences (variable, value,explanation) 
-	  values (?,?,?)");
-        $sti->execute($prefitem,$defaultprefs{$prefitem}[0],$defaultprefs{$prefitem}[1]);
-    } # unless
+	$sth=$dbh->prepare("select value
+								from systempreferences
+								where variable=?");
+	$sth->execute($prefitem);
+	unless ($sth->rows) {
+		print "Adding system preference item $prefitem with value " .$defaultprefs{$prefitem}[0] ."\n";
+		$sti=$dbh->prepare("insert into systempreferences (variable, value,explanation) values (?,?,?)");
+		$sti->execute($prefitem,$defaultprefs{$prefitem}[0],$defaultprefs{$prefitem}[1]);
+	} # unless
 } # foreach
 
 
@@ -414,6 +414,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.22  2002/10/15 10:08:19  tipaul
+# fixme corrected, re-indent and adding the marc_breeding table (see commit of marcimport.pl for more explanations about breeding)
+#
 # Revision 1.21  2002/10/14 11:48:59  tipaul
 # bugfix
 #
