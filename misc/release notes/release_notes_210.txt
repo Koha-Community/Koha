@@ -1,0 +1,170 @@
+RELEASE NOTES
+=============
+(HELP NEEDED chapter at the end of document)
+
+ROADMAP : 
+A roadmap for Koha 2.2 is available here :
+http://www.saas.nsw.edu.au/koha_wiki/index.php?page=KohaRoadmap
+
+
+This is the 1st UNSTABLE VERSION of the future Koha 2.2.
+Please install this version only if you want to test and give some help to the team that develops this software.
+NEVER, NEVER, NEVER use it on a production machine.
+
+WARNING : 
+* This version is ONLY available in ENGLISH. biblio frameworks are only available in UNIMARC - french.
+* This version is tested only with mozilla. Should work (partially) with IE.
+* NO waranty is given that the updater will work from 2.1.0 to 2.1.1 or later version. Only stable release can be updated.
+
+INSTALLATION
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* Follow the instructions
+
+
+UPGRADE from previous 2.0.0preX or RCx version
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+
+UPGRADE from previous 1.2.x version :
+UPGRADE TO A 2.0.0 version before upgrading to 2.1.0
+This will be mandatory for the 2.2 official release.
+
+DEVELOPPERS :
+* Paul POULAIN (2.2 release manager)
+* Jean BARON
+* Owen LEONARD
+* Chris CORMACK
+
+============
+WHAT'S NEW
+============
+1 Auto installer
+****************
+If you install koha with ./install -i /path/to/auto_install_file, then Koha will be installed almost without question.
+A very usefull feature for developpers that want to install/uninstall Koha quite often.
+A sample of auto_install_file is provided in misc/auto_install_file.
+
+2 Uninstaller
+*************
+run misc/uninstall.pl, provide the mysql root password.
+that's all. Koha is completely deleted and can be reinstalled.
+With the previous feature, it's a very nice solution for test platform.
+BE CAREFUL : 
+1- This script does not ask for confirmation after mysql root password.
+2- This script uses /etc/koha.conf. If you have more than 1 koha on your server, use /etc/koha.conf for a "deletable-test" one.
+
+3 biblio frameworks
+*******************
+You didn't know it, but Koha 2.0 had already 1 framework for cataloguing biblios...
+
+It mean you could completly define the look of the MARC editor : which fields, where, and what they did (fields constraints)
+In Koha 2.2 you will be able to have as many framework as wanted : 1 for simple monography, 1 for complete monography, 1 for multimedia document... you could even have "1 used by Mary, 1 used by John", even if this seems silly.
+
+In this release, biblio frameworks works fine. pls test them.
+In the installer, you will have the possibility to add frameworks for french UNIMARC : monographies, cdroms, old-text, serial, cartography.
+
+4 MARC authorities
+******************
+Authorities in 2.0 where really poor. In 2.2, Koha will provide a complete MARC support for authorities.
+In 2.1.0 authorities are only in "alpha" state. You can define authority types, the structure of the authority, exactly like for biblios frameworks.
+You can also add authorities, do some searches.
+However, you still can't connect an authority to a biblio. Will be in 2.1.1
+
+5 Call number
+*************
+A lot of american people requested this feature ;-)
+Call number is now stored in the item.
+There is also a new parameter in the systempref parameters, called "itemcallnumber".
+you can enter here a field/subfield that will automatically be reported into the call number field of the item.
+If you enter the dewey field, the call number will be dewey
+If you enter the LoC field, the call number will be LoC
+If you enter something else, the call number will be something else.
+If you enter nothing, the call number will be empty.
+Better, you alway can modify the default call number.
+
+6 suggestions
+*************
+Suggestions are defined in the wiki : 
+http://www.saas.nsw.edu.au/koha_wiki/index.php?page=SuggestionFeatures
+In 2.1.0, a partial suggestion module is available in OPAC. Nothing yet in librarian interface.
+
+7 circulation
+*************
+Circulation has been heavily rewritten...
+* a new circulation rules table has been created : issuingrules. Issuingrules can be defined for each itemtype/borrowertype/borrowerbranch. Issuingrules define issuing length, issuing quantity and reservation constraints. You can define rules with *, meaning "anything". For example itemtype=*, borrowertype=student,borrowerbranch=A 10,10 means " a student can issue up to 10 any-item for up to 10 days". Such rules must be validated with more precise rule.
+You can define rules like : "up to 2 CDROM, up to 10 books, max 10 items".
+* circulation works now like this (internally) :
+- get borrower cardnumber & item number
+- check "can book be issued". This sub (canbookbeissued) checks everything. For each problem, 2 arrays can be set up : MUSTCONFIRM and IMPOSSIBLE. MUSTCONFIRM entries needs a librarian confirmation before effective issuing. IMPOSSIBLE entries makes the issue impossible. It's now very easy to alter issuing rules for a given library (with a developper), as every test is heavily documented & in  a single sub.
+- if >=1 IMPOSSIBLE entry : issuing is impossible, show why.
+- if >=1 MUSTCONFIRM : show problems, and ask for confirmation.
+- if both are empty : issue.
+
+8 online help
+*************
+An Online Help will be provided in 2.2 it will be available by clicking on "Help" button anywhere in Koha.
+The problem is... to write help screen... help needed here, see below.
+
+9 various views in OPAC & librarian interface
+*********************************************
+3 views are available in OPAC and in librarian interface.
+* MARC view as in 2.0 (was not in OPAC). The view has been improved, with tabs on the left. Only tabs with something in will are shown.
+* standard view, as in 2.0.
+* ISBD view : the ISBD view is defined in the systempref parameters (field ISBD) The syntax of this view is the following :
+
+Tag/subfields are enclosed by [] and can have up to 3 digits BEFORE, and up to 3 digits AFTER the subfield. For example [200a / ]["200f"]
+You can add anything you want outside []. It will be let as it.
+Note repeatable fields/subfields are poorly handled and this syntax could change in 2.1.1
+
+10 new look in librarian interface
+**********************************
+Librarian interface is almost completly css'ed. Some minor improvements to get more valid & clean HTML.
+
+11 code cleaning
+****************
+Many useless things have been removed. This will continue as long as needed.
+
+12 UNIMARC plugin for every 1xx fields
+**************************************
+ESNMP have developped all the plugins for UNIMARC fields 1xx. Those fields are coded fields.
+Should be used for MARC21 with some work. We need volunteers here.
+
+==============
+HELP NEEDED
+==============
+We alway accept new developpers wanting to code or test features of the Roadmap.
+We still can accept features not in the RoadMap if :
+- strongly supported/coded by someone.
+- compatible with other features.
+- can be planned for end of 2004Q3.
+
+IF YOU VOLUNTEER, PLEASE :
+- subscribe koha-dev mailing list.
+- announce in the list you are volunteer, and what you are volunteer for.
+
+* writing online help
+*********************
+Writing online help can be done from Koha 2.0 and with the help of the wiki.
+- When you surf on a page named : my.koha.server.org/cgi-bin/koha/path/to/script.pl?anyparameters=X&otherparameter=Y
+- a help page must be written for path/to/script.pl
+- That's as simple as this. The same page is used for every action on the same page. The page does not need HTML tags, they are automatically added. so, you can write simple text on the wiki : http://www.saas.nsw.edu.au/koha_wiki/index.php?page=OnlineHelp
+See the ItemTypes sample in http://www.saas.nsw.edu.au/koha_wiki/index.php?page=AdminHelp.
+
+volunteers : Nelsonville (USA) & Irma Birchall (AUS)
+Once written, they will be translated.
+
+* provide MARC21 frameworks.
+Frameworks have to be defined to be choosable at installation stage. The idea being to have as many frameworks as possible to give the newbie a Koha as nice as possible with as little work as possible.
+
+* provide MARC21 authority file.
+Same as for MARC21 frameworks. Except we don't have authority structure for MARC21 (we have for UNIMARC in french, thanks to ENSMP)
+
+* provide ISBD for MARC21 
+(ISBD for UNIMARC is being done, thanks to doXulting)
