@@ -1,0 +1,85 @@
+<TMPL_INCLUDE Name="members-top.inc">
+
+<TMPL_IF Name="NOK">
+	<TMPL_VAR Name="string">
+<TMPL_ELSE>
+	<H1> 'Confirm Record' </H1>
+	<TMPL_LOOP Name="identloop">
+		<TMPL_IF Name="cardchild">
+			<table border=0 cellspacing=0 cellpadding=5>
+				<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+					<td background="<TMPL_VAR Name="image">">
+					<BOLD> NEW MEMBER </BOLD>
+					</td>
+					<td>
+					&nbpsq;
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<BOLD>Name</BOLD>
+					</td>
+					<td>
+					<TMPL_VAR Name="name">
+					</td>
+				</tr>
+				<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+					<td background="<TMPL_VAR Name="image">">
+					<BOLD> MEMBERSHIP DETAILS </BOLD>
+					</td>
+					<td>
+					&nbpsq;
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<BOLD>Membership Number</BOLD>
+					</td>
+					<td>
+					<TMPL_VAR Name="bornum">
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<BOLD>Date Of Birth</BOLD>
+					</td>
+					<td>
+					<TMPL_VAR Name="dob">
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<BOLD>Sex</BOLD>
+					</td>
+					<td>
+					<TMPL_VAR Name="sex">
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<BOLD>School</BOLD>
+					</td>
+					<td>
+					<TMPL_VAR Name="school">
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<BOLD>General Notes</BOLD>
+					</td>
+					<td>
+					<TMPL_VAR Name="notes">
+					</td>
+				</tr>
+			</TABLE><p>
+		</TMPL_IF>
+  </TMPL_LOOP>
+	<form action="/cgi-bin/koha/insertjdata.pl" method=post>
+		<TMPL_LOOP NAME=inputsloop>
+			<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
+		</TMPL_LOOP>
+		<input type=submit name=submit value=submit>
+	</form>
+</TMPL_IF>
+
+<TMPL_INCLUDE Name="members-bottom.inc">

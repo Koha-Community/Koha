@@ -4,6 +4,7 @@
 
 #script to print confirmation screen, then if accepted calls itself to insert data
 # FIXME - Yes, but what does it _do_?
+# 2002/12/18 hdl@ifrance.comTemplating
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,13 +28,17 @@ use C4::Output;
 use C4::Input;
 use CGI;
 use Date::Manip;
+use HTML::Template;
 
 my %env;
 my $input = new CGI;
 #get varibale that tells us whether to show confirmation page
 #or insert data
 my $insert=$input->param('insert');
-print $input->header;
+
+#print $input->header;
+my $template = gettemplate("newjmember.tmpl");
+
 #get rest of data
 my %data;
 my @names=$input->param;
@@ -79,52 +84,38 @@ for (my $i=0;$i<3;$i++){
     }
   }
 }
+	my @identsloop;
+	for (my $i=0;$i<3;$i++){
+		my %ident;
+#		$ident{'main'}=$main;
+#		$ident{'image'}=$image;
+		$ident{'cardchlid')=($data{"cardnumber_child_$i"} ne '');
+		if ($data{"cardnumber_child_$i"} ne ''){
+			my $name=$data{"firstname_child_$i"}.$data{"surname_child_$i"};
+			$ident{'name'}=$name;
+			$ident{'bornum'}=$data{"bornumber_child_$i"};
+			$ident{'dob'}=$data{"dateofbirth_child_$i"};
+			($data{"sex_child_$i"} eq 'M') ? ($ident{'sex'}="Male") : ($ident{'sex'}="Female") ;
+			$ident{'school'}=$data{"school_child_$i"};
+			$ident{'notes'}=$data{"altnotes_child_$i"}
+			push(@identsloop, \%ident);
+		}
+	}
+	my @inputsloop;
+	while (my ($key, $value) = each %data) {
+		$value=~ s/\"/%22/g;
+		my %line;
+		$line{'key'}=$key;
+		$line{'value'}=$value;
+		push(@inputsloop, \%line);
+	}
 
-print startpage();
-print startmenu('member');
+# FIXME IF main and image are not fetched by HTML::TEMPLATE get them into identsloop
+$template->param( 	NOK => (ok==1),
+								main => $main,
+								image => $image,
+								identsloop => \@identsloop,
+								inputsloop => \@inputsloop,
+								string => $string);
 
-if ($ok == 0){
-  print mkheadr(1,'Confirm Record');
-  my $main="#99cc33";
-  my $image="/images/background-mem.gif";
-  for (my $i=0;$i<3;$i++){
-    if ($data{"cardnumber_child_$i"} ne ''){
-      print mktablehdr;
-      print mktablerow(2,$main,bold('NEW MEMBER'),"",$image);
-      my $name=$data{"firstname_child_$i"}.$data{"surname_child_$i"};
-      print mktablerow(2,'white',bold('Name'),$name);
-      print mktablerow(2,$main,bold('MEMBERSHIP DETAILS'),"",$image);
-      print mktablerow(2,'white',bold('Membership Number'),$data{"bornumber_child_$i"});
-      print mktablerow(2,'white',bold('Date of Birth'),$data{"dateofbirth_child_$i"});
-      my $sex;
-      if ($data{"sex_child_$i"} eq 'M'){
-         $sex="Male";
-      } else {
-         $sex="Female";
-      }
-      print mktablerow(2,'white',bold('Sex'),$sex);
-      print mktablerow(2,'white',bold('School'),$data{"school_child_$i"});
-      print mktablerow(2,'white',bold('General Notes'),$data{"altnotes_child_$i"});
-
-      print mktableft;
-      print "<p>";
-    }
-  }
-  my $i=0;
-  my @inputs;
-  while (my ($key, $value) = each %data) {
-    $value=~ s/\"/%22/g;
-    $inputs[$i]=["hidden","$key","$value"];
-    $i++;
-  }
-  $inputs[$i]=["submit","submit","submit"];
-  print mkformnotable("/cgi-bin/koha/insertjdata.pl",@inputs);
-
-} else {
-
-
-#print $input->dump;
-print $string;
-}
-print endmenu('member');
-print endpage();
+print "Content-Type:Text/html\n\n",$template->output;
