@@ -583,9 +583,9 @@ sub calculate {
 	my $emptycol; 
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
 #		warn "filling table $row / $col / $value ";
-		$row = "zzEMPTY" if ($row eq undef);
-		$col = "zzEMPTY" if ($col eq undef);
 		$emptycol = 1 if ($col eq undef);
+		$col = "zzEMPTY" if ($col eq undef);
+		$row = "zzEMPTY" if ($row eq undef);
 		
 		$table{$row}->{$col}+=$value;
 		$table{$row}->{totalrow}+=$value;
@@ -597,18 +597,19 @@ sub calculate {
 # 	undef %cell;
 # 	my %cell;
 # 	%cell = {coltitle => "zzEMPTY"};
- 	push @loopcol,{coltitle => "zzEMPTY"} if ($emptycol);
+ 	push @loopcol,{coltitle => "NULL"} if ($emptycol);
 	
 	foreach my $row ( sort keys %table ) {
 		my @loopcell;
 		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		foreach my $col ( @loopcol ) {
-			push @loopcell, {value => $table{$row}->{$col->{coltitle}}} ;
+			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+			push @loopcell, {value => ($value)?$value:""  } ;
 		}
-		push @looprow,{ 'rowtitle' => $row,
+		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
 						'loopcell' => \@loopcell,
-						'hilighted' => 1 ,
+						'hilighted' => ($hilighted >0),
 						'totalrow' => $table{$row}->{totalrow}
 					};
 		$hilighted = -$hilighted;
@@ -618,7 +619,7 @@ sub calculate {
 	foreach my $col ( @loopcol ) {
 		my $total=0;
 		foreach my $row ( @looprow ) {
-			$total += $table{$row->{rowtitle}}->{$col->{coltitle}};
+			$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
 #			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
 		}
 #		warn "summ for column ".$col->{coltitle}."  = ".$total;
