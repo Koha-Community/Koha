@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<!-- TMPL_INCLUDE NAME="auth-search-top.inc" -->
 <div id="mainbloc">
 	<h1 class="authority">Authority search results</h1>
 	<div id="resultnumber">
@@ -14,8 +14,7 @@
 				<!-- TMPL_ELSE -->
 					<a href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->.gif" border=0></a>
 				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-			<!-- TMPL_IF NAME=displaynext -->
+			<!-- /TMPL_LOOP -->			<!-- TMPL_IF NAME=displaynext -->
 				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/next.gif" border=0></a>
 				<!-- /TMPL_IF -->
 		</p>
@@ -34,26 +33,31 @@
 				<th class="authority">Used</th>
 				<th class="authority">View</th>
 				<th class="authority">Delete</th>
+				<th class="authority">Get It!</th>
 			</tr>
 			<!-- TMPL_LOOP name="result" -->
 				<tr>
 					<td><!-- TMPL_VAR name="summary" --></td>
 					<td><!-- TMPL_VAR name="used" --> <a href="../search.marc/search.pl?type=intranet&op=do_search&marclist=<!-- TMPL_VAR name="biblio_fields" -->&operator==&value=<!-- TMPL_VAR name="authid" -->&and_or=&excluding=">...</a></td>
 					<td>
-						<a href="detail.pl?authid=<!-- TMPL_VAR name="authid" -->">
+						<a href="javascript:jumpfull('detail-biblio-search.pl?authid=<!-- TMPL_VAR name="authid" -->&index=<!-- TMPL_VAR name="index" -->')">
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority number <!-- TMPL_VAR name="authid" -->" title="Authority number<!-- TMPL_VAR name="authid" -->">
 						</a>
 					</td>
 					<td>
 						<!-- TMPL_UNLESS name="used" -->
-						<a href="javascript:do_delete('authorities-home.pl?op=delete&authid=<!-- TMPL_VAR name="authid" -->')">
+						<a href="authorities-home.pl?op=delete&authid=<!-- TMPL_VAR name="authid" -->">
 							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
 						</a>
 						<!-- /TMPL_UNLESS -->
 					</td>
+					<td>
+			<a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR name="authid" -->&index=<!-- TMPL_VAR name="index" -->')"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/arrow.gif" width="32" hspace="0" vspace="0" border="0"></a>
+					</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
+
 	</div>
 	<div id="resultnumber">
 		<p>
@@ -73,12 +77,13 @@
 		</p>
 	</div>	
 </div>
-<!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
 
 
-<script language="JavaScript" type="text/javascript" >
-function do_delete(page)
-{
-window.location = page;
+<script language="JavaScript" type="text/javascript">
+
+function jumpfull(page)
+{	
+	window.open(page,'','fullscreen,scrollbars');
 }
 </script>
+
