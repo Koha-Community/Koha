@@ -73,7 +73,7 @@
 				<input type="hidden" name="excluding" value="">
 			</td>
 			<td>
-				<input type="hidden" name="operator" value="contains">
+				<input type="hidden" name="operator" value="=">
 				<input type="text" name="value" onchange="sql_update()">
 			</td>
 		</tr>
@@ -133,13 +133,14 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 		<tr>
-			<td align="left" width="15%"><input type="button" value="Add criteria" onClick="AddStatement()" class="button"></td>
+			<td align="left" colspan=2><input type="button" value="Add criteria" onClick="AddStatement()" class="button"></td>
+			<td colspan=3>Warning : the "contains" statement does NOT work if you enter 2 or less letters</td>
 		</tr>
 
 		<tr align="center">
 			<td colspan="5">
 				<div name="sql">
-				<textarea name="sql" rows=3 cols=60 disabled readonly></textarea>
+				<textarea name="sql" rows=3 cols=70 disabled readonly></textarea>
 				</div>
 			</td>
 		</tr>
