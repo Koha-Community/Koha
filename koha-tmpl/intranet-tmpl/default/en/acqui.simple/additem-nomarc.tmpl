@@ -30,7 +30,8 @@ added to</font>
 <tr valign="top" bgcolor="#CCCC99">
 <td
 background="/images/background-mem.gif"><b><TMPL_VAR NAME="biblioitemnumber"> GROUP -
-$itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
+<TMPL_VAR NAME="itemtype">
+</b></td>
 </tr>
 <tr valign="top">
 <td><b>URL:</b> <TMPL_VAR NAME="url"><br>
@@ -41,7 +42,8 @@ $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
 <tr valign="top" bgcolor="#CCCC99">
 <td
 background="/images/background-mem.gif"><b><TMPL_VAR NAME="biblioitemnumber">
-GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
+
+GROUP - <TMPL_VAR NAME="itemtype"></b></td>
 </tr>
 <tr valign="top">
 <td><b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
@@ -107,15 +109,6 @@ ITEM:</b><br>
 </TMPL_IF>
 
 </TMPL_LOOP>
-<!-- for (my $i = 0; $i < $biblioitemcount; $i++) {
-            if ($biblioitems[$i]->{'itemtype'} ne "WEB") {
-	                    print << "EOF";
-			    <option
-value="$biblioitems[$i]->{'biblioitemnumber'}">$itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</option>
-EOF
-            } # if
-	            } # for
--->
 </select></td>
 </tr>
 <tr valign="top">
