@@ -35,7 +35,7 @@ my $includes=$configfile{'includes'};
 my $templatebase="catalogue/searchresults.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
-($templatename) || ($templatename=picktemplate($templatebase));
+my $theme=picktemplate($includes, $templatebase);
 
 
 my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
@@ -108,7 +108,6 @@ my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
 my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
 $template->param(nextstartfrom => $nextstartfrom);
 $template->param(prevstartfrom => $prevstartfrom);
-$template->param(template => $templatename);
 $template->param(search => $search);
 $template->param(SEARCH_RESULTS => $resultsarray);
 $template->param(includesdir => $includes);
