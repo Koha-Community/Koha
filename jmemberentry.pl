@@ -29,6 +29,7 @@ use C4::Search;
 use HTML::Template;
 use C4::Interface::CGI::Output;
 use C4::Date;
+use C4::Members;
 
 my $input = new CGI;
 
@@ -66,7 +67,7 @@ while (@titles) {
 # get the data for children
 my $cmember1=NewBorrowerNumber();
 my @cmemdata;
-for (my $i=0;$i<3;$i++){
+for (my $i=0;$i<1;$i++){
   my %row;
   $row{'cmember'}=$cmember1+$i;
   $row{'i'}=$i;
@@ -74,11 +75,13 @@ for (my $i=0;$i<3;$i++){
   push(@cmemdata, \%row);
 }
 
+my $jcardnumber=C4::Members::fixup_cardnumber("");
 
 $template->param( member => $member,
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
 			cardnumber      => $data->{'cardnumber'},
+			jcardnumber	=> $jcardnumber,
 			area            => $data->{'area'},
 			city            => $data->{'city'},
 			physstreet         => $data->{'physstreet'},

@@ -44,7 +44,7 @@ foreach my $key (@names){
 }
 my $dbh = C4::Context->dbh;
 my $query;
-for (my $i=0;$i<3;$i++){
+for (my $i=0;$i<1;$i++){
 	my $x = "cardnumber_child_$i";
 	my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
 	$sth->execute($x);
