@@ -1,32 +1,29 @@
-<html>
 <TMPL_INCLUDE NAME="acquisitions-top.inc">
 <h1>System akwizycji MARC</h1>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Importuj do farmy hodowlanej</font></td>
+	<td><font size="4">Importuj do hurtowni opisów</font></td>
 	</tr>
 </table>
 
 <TMPL_IF name="uploadmarc">
-<p>Importuj wyniki :</p>
+<p>Import wyniki :</p>
 <ul>
 	<p><TMPL_VAR name="imported"> rekordy importowano</p>
 	<p><TMPL_VAR name="alreadyindb"> nie importowano poniewa¿ ju¿ s± w bazie</p>
-	<p><TMPL_VAR name="alreadyinfarm"> nie importowano poniewa¿ ju¿ s± w farmie</p>
+	<p><TMPL_VAR name="alreadyinfarm"> nie importowano poniewa¿ ju¿ s± w hurtowni</p>
 	<p><TMPL_VAR name="notmarcrecord"> nie importowano poniewa¿ nie wygl±daj± na bêd±ce w formacie MARC (lub brakuje ISBN/ISSN) !</p>
 	<p><TMPL_VAR name="total">  rekordów przeczytanych</p>
 	<p><a href="addbooks.pl">Powrót do akwizycji</a>
 </ul>
 <TMPL_ELSE>
 <ul>
-Wybierz plik, by importowaæ go do farmy hodowlanej. Bêdzie przeczytany i dla ka¿dego znalezionego numeru ISBN
-utworzone zostanie nowe "ciel±tko" w farmie. Je¶li ISBN ju¿ w farmie istnieje mo¿na zdecydowaæ czy nowe
-powinno byæ zignorowane czy te¿ stare nadpisane nowym.<br>
-Mo¿na nadaæ nazwê dla tego importu. Mo¿e siê przydaæ przy tworzeniu opisu bibliograficznego wskazuj±c
-pochodzenie sugerowanych danych MARC !<br>
-Oczywi¶cie opis bêdzie ignorowany je¶li numer ISBN istnieje ju¿ w aktywnej bazie Koha.
-<br/></ul>
+	<li>Wybierz plik, by importowaæ go do hurtowni opisów. Bêdzie przeczytany i dla ka¿dego znalezionego numeru ISBN utworzone zostanie nowe "ciel±tko" w hurtowni.</li>
+	<li>Je¶li ISBN ju¿ w hurtowni istnieje mo¿na zdecydowaæ czy nowe powinno byæ zignorowane czy te¿ stare nadpisane nowym.</li>
+	<li>Mo¿na nadaæ nazwê dla tego importu. Mo¿e siê przydaæ przy tworzeniu opisu bibliograficznego wskazuj±c pochodzenie sugerowanych danych MARC !</li>
+	<li>Oczywi¶cie opis bêdzie ignorowany je¶li numer ISBN istnieje ju¿ w aktywnej bazie Koha.</li>
+</ul>
 <form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
 <table cellpadding="3" border=0>
 	<tr valign="top">
@@ -42,7 +39,7 @@ Oczywi¶cie opis bêdzie ignorowany je¶li numer ISBN istnieje ju¿ w aktywnej bazie
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Je¶li ISBN ju¿ jest w farmie : </td>
+		<td>Je¶li ISBN ju¿ jest w hurtowni : </td>
 		<td><input type="radio" name="overwrite_biblio" value="0" checked>Odrzuæ ten, zatrzymaj istniej±cy<br/>
 			<input type="radio" name="overwrite_biblio" value="1">Zast±p istniej±cy nowym</td>
 	</tr>

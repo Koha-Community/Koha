@@ -1,44 +1,104 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
-
+  <TMPL_INCLUDE NAME="acquisitions-top.inc">
 <font size="6"><em>Rezultaty wyszukiwania opisu</em></font><br />
 <CENTER>
-Szukano <b>ISBN <TMPL_VAR name="isbn"></b><br />
+Szuka³e¶ <b><TMPL_IF name="isbn">ISBN <TMPL_VAR name="isbn"></TMPL_IF><TMPL_IF name="title">tytu³ <TMPL_VAR name="title"></TMPL_IF></b><br />
 <TMPL_IF name="total">
-Trafienia od <TMPL_VAR name="showoffset"> do <TMPL_VAR name="total"> wy¶wietlono
+<TMPL_VAR NAME=total> znaleziono<br />
+Trafienia <TMPL_VAR name="showoffset"> z <TMPL_VAR name="total"> wy¶wietlono
 </TMPL_IF>
-<div align="right">
-<h2><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Dodaj nowy opis</a></h2>
-</div>
 <p />
-<table border="0" cellspacing="0" cellpadding="5">
-<tr valign=top bgcolor=#ffcc00>
-<td><b>TYTU£</b></td>
-<td><b>AUTOR</b></td>
-<td><b>&copy;</b></td>
-<td><b>Pozycje</b></td>
+<!-- Row of numbers corresponding to search result pages -->
+<TMPL_IF NAME=displayprev>
+	<a href=isbnsearch.pl?offset=<TMPL_VAR NAME="prevstartfrom">&<TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>><img src=<TMPL_VAR name="themelang">/images/numbers/prev.gif border=0></a>
+<TMPL_ELSE>
+	<img src=<TMPL_VAR name="themelang">/images/numbers/placeholder.gif border=0>
+</TMPL_IF>
+<TMPL_LOOP NAME=numbers>
+	<TMPL_IF NAME=highlight>
+	<img src=<TMPL_VAR name="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif>
+	<TMPL_ELSE>
+	<a href=isbnsearch.pl?offset=<TMPL_VAR NAME=startfrom>&<TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>><img src=<TMPL_VAR name="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a>
+	</TMPL_IF>
+</TMPL_LOOP>
+<TMPL_IF NAME=displaynext>
+	<a href=isbnsearch.pl?offset=<TMPL_VAR NAME="nextstartfrom">&<TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>><img src=<TMPL_VAR name="themelang">/images/numbers/next.gif border=0></a>
+<TMPL_ELSE>
+	<img src=<TMPL_VAR name="themelang">/images/numbers/placeholder.gif border=0>
+</TMPL_IF>
 
-</tr>
-
-<TMPL_LOOP name="loop">
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Opisy w koha</font></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>Tytu³</b></td>
+		<td><b>Autor</b></td>
+		<td><b>&copy;</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<TMPL_IF name="loop">
+	<TMPL_LOOP name="loop">
 	<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
 	<td><TMPL_VAR name="title"></a>
 	<td><TMPL_VAR name="author"></td>
 	<td><TMPL_VAR name="copyrightdate"></td>
-	<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edycja...</a></td>
-	</tr>
-</TMPL_LOOP>
+			<TMPL_IF NAME="NOTMARC">
+			  <td><a href="additem-nomarc.pl?biblionumber=<TMPL_VAR name="biblionumber">">Dodaj pozycjê</a></td>
+			<TMPL_ELSE>
+			  <td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edytuj...</a></td>
+			</TMPL_IF>
+		</tr>
+	</TMPL_LOOP>
+	<TMPL_ELSE>
+	<tr><td colspan=4>Nic nie znaleziono</td></tr>
+	</TMPL_IF>
 </table>
 <br />
-<TMPL_LOOP name="loop_links">
-	<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="newoffset">&num=<TMPL_VAR name="num">"><TMPL_VAR name="shownumber"></a>
-</TMPL_LOOP>
-<p />
-Trafienia wed³ug stron:
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=5">5</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=10">10</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=20">20</a>
-<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=50">50</a>
-</CENTER>
-<br clear="all" />
-<p>&nbsp;</p>
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Opisy w hurtowni opisów</font></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>Tytu³</b></td>
+		<td><b>Autor</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>pochodz±cy z</b></td>
+		<td><b>&nbsp;</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<TMPL_IF name="breeding_loop">
+	<TMPL_LOOP name="breeding_loop">
+		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
+			<td><TMPL_VAR name="title"></a>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="isbn"></td>
+			<td><TMPL_VAR name="file"></td>
+			<TMPL_IF NAME="NOTMARC">
+			
+			<TMPL_ELSE>
+			<td><a href="addbiblio.pl?breedingid=<TMPL_VAR name="id">">Dodaj opis</a></td>
+			</TMPL_IF>
+		</tr>
+	</TMPL_LOOP>
+	<TMPL_ELSE>
+	<tr><td colspan=6>Nic nie znaleziono</td></tr>
+	</TMPL_IF>
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<TMPL_IF NAME="NOTMARC">
+		<td><a href="addbiblio-nomarc.pl?isbn=<TMPL_VAR name="isbn">">Dodaj nowy opis</a></td>
+		<TMPL_ELSE>
+		<td><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Dodaj nowy opis</a></td>
+		</TMPL_IF>
+	</tr>
+</table>
+
+<br />
 <TMPL_INCLUDE NAME="acquisitions-bottom.inc">
