@@ -411,6 +411,7 @@ sub MARCaddsubfield {
         $tagorder, $subfieldcode, $subfieldorder, $subfieldvalues
       )
       = @_;
+	  return unless $subfieldvalues;
 # warn "$tagid / $subfieldcode / $subfieldvalues";
     # if not value, end of job, we do nothing
 #     if ( length($subfieldvalues) == 0 ) {
@@ -2514,11 +2515,15 @@ sub FindDuplicate {
 	my ($record)=@_;
 	my $dbh = C4::Context->dbh;
 	my $result = MARCmarc2koha($dbh,$record,'');
+	my $sth;
+	my ($biblionumber,$bibid,$title);
 	# search duplicate on ISBN, easy and fast...
-	my $sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
-	$sth->execute($result->{'isbn'});
-	my ($biblionumber,$bibid,$title) = $sth->fetchrow;
-	return $biblionumber,$bibid,$title if ($biblionumber);
+	if ($result->{isbn}) {
+		$sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
+		$sth->execute($result->{'isbn'});
+		($biblionumber,$bibid,$title) = $sth->fetchrow;
+		return $biblionumber,$bibid,$title if ($biblionumber);
+	}
 	# a more complex search : build a request for SearchMarc::catalogsearch()
 	my (@tags, @and_or, @excluding, @operator, @value, $offset,$length);
 	# search on biblio.title
@@ -2618,6 +2623,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.8  2005/03/25 16:23:49  tipaul
+# some improvements :
+# * return immediatly when a subfield is empty
+# * search duplicate on isbn must be done only when there is an isbn ;-)
+#
 # Revision 1.115.2.7  2005/03/10 15:52:28  tipaul
 # * adding glass to opac marc detail.
 # * changing glasses behaviour : It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
