@@ -14,47 +14,25 @@ use VerboseWarnings;
 
 use vars qw( $convert_from );
 use vars qw( $files_from $directory $output $sort );
+use vars qw( $extract_all_p );
 use vars qw( $pedantic_p );
 use vars qw( %text %translation );
 use vars qw( $charset_in $charset_out );
 
 ###############################################################################
 
-use vars qw( @latin1_utf8 );
-@latin1_utf8 = (
-    "\302\200", "\302\201", "\302\202", "\302\203", "\302\204", "\302\205",
-    "\302\206", "\302\207", "\302\210", "\302\211", "\302\212", "\302\213",
-    "\302\214", "\302\215",   undef,      undef,    "\302\220", "\302\221",
-    "\302\222", "\302\223", "\302\224", "\302\225", "\302\226", "\302\227",
-    "\302\230", "\302\231", "\302\232", "\302\233", "\302\234", "\302\235",
-    "\302\236", "\302\237", "\302\240", "\302\241", "\302\242", "\302\243",
-    "\302\244", "\302\245", "\302\246", "\302\247", "\302\250", "\302\251",
-    "\302\252", "\302\253", "\302\254", "\302\255", "\302\256", "\302\257",
-    "\302\260", "\302\261", "\302\262", "\302\263", "\302\264", "\302\265",
-    "\302\266", "\302\267", "\302\270", "\302\271", "\302\272", "\302\273",
-    "\302\274", "\302\275", "\302\276", "\302\277", "\303\200", "\303\201",
-    "\303\202", "\303\203", "\303\204", "\303\205", "\303\206", "\303\207",
-    "\303\210", "\303\211", "\303\212", "\303\213", "\303\214", "\303\215",
-    "\303\216", "\303\217", "\303\220", "\303\221", "\303\222", "\303\223",
-    "\303\224", "\303\225", "\303\226", "\303\227", "\303\230", "\303\231",
-    "\303\232", "\303\233", "\303\234", "\303\235", "\303\236", "\303\237",
-    "\303\240", "\303\241", "\303\242", "\303\243", "\303\244", "\303\245",
-    "\303\246", "\303\247", "\303\250", "\303\251", "\303\252", "\303\253",
-    "\303\254", "\303\255", "\303\256", "\303\257", "\303\260", "\303\261",
-    "\303\262", "\303\263", "\303\264", "\303\265", "\303\266", "\303\267",
-    "\303\270", "\303\271", "\303\272", "\303\273", "\303\274", "\303\275",
-    "\303\276", "\303\277" );
-
-sub charset_convert ($) {
-    my($s) = @_;
-    if ($s !~ /[\200-\377]/s) { # FIXME: don't worry about iso2022 for now
-	;
-    } elsif ($charset_in eq 'ISO-8859-1' && $charset_out eq 'UTF-8') {
-	$s =~ s/[\200-\377]/ $latin1_utf8[ord($&) - 128] /egs;
-    } elsif ($charset_in ne $charset_out) {
-	VerboseWarnings::warn_normal "conversion from $charset_in to $charset_out is not supported\n", undef;
-    }
-    return $s;
+sub negligible_p ($) {
+    my($t) = @_;				# a string
+    # Don't emit pure whitespace, pure numbers, pure punctuation,
+    # single letters, or TMPL_VAR's.
+    # Punctuation should arguably be translated. But without context
+    # they are untranslatable.
+    return !$extract_all_p && (
+    	       TmplTokenizer::blank_p($t)		# blank or TMPL_VAR
+	    || $t =~ /^\d+$/			# purely digits
+	    || $t =~ /^[-\.,:;'"%\(\)\[\]\|]+$/	# pure punctuation w/o context
+	    || $t =~ /^[A-Za-z]$/		# single letters
+	);
 }
 
 ###############################################################################
@@ -117,10 +95,8 @@ sub text_extract (*) {
 
 sub generate_strings_list () {
     # Emit all extracted strings.
-    # Don't emit pure whitespace, pure numbers, or TMPL_VAR's.
     for my $t (string_list) {
-	printf OUTPUT "%s\n", $t
-	    unless TmplTokenizer::blank_p($t) || $t =~ /^\d+$/;
+	printf OUTPUT "%s\n", $t unless negligible_p($t);
     }
 }
 
@@ -151,7 +127,7 @@ msgstr ""
 EOF
     my $directory_re = quotemeta("$directory/");
     for my $t (string_list) {
-	next if TmplTokenizer::blank_p($t) || $t =~ /^\d+$/;
+	next if negligible_p($t);
 	my $cformat_p;
 	for my $token (@{$text{$t}}) {
 	    my $pathname = $token->pathname;
@@ -161,7 +137,8 @@ EOF
 	    $cformat_p = 1 if $token->type == TmplTokenType::TEXT_PARAMETRIZED;
 	}
 	printf OUTPUT "#, c-format\n" if $cformat_p;
-	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po( charset_convert $t );
+	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po
+		TmplTokenizer::charset_convert $t, $charset_in, $charset_out;
 	printf OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
 		TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
     }
@@ -200,6 +177,7 @@ sub convert_translation_file () {
 	    $charset_out = $candidate;
 	}
     }
+    # The following assumption is correct; that's what HTML::Template assumes
     if (!defined $charset_in) {
 	$charset_in = $charset_out = TmplTokenizer::charset_canon 'iso8859-1';
 	warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
@@ -223,6 +201,7 @@ Output file location:
   -o, --output=FILE              Write output to specified file
 
 HTML::Template options:
+  -a, --extract-all              Extract all strings
       --pedantic-warnings        Issue warnings even for detected problems
 			         which are likely to be harmless
 
@@ -248,6 +227,7 @@ sub usage_error (;$) {
 
 Getopt::Long::config qw( bundling no_auto_abbrev );
 GetOptions(
+    'a|extract-all'			=> \$extract_all_p,
     'charset=s'	=> sub { $charset_in = $charset_out = $_[1] },	# INTERNAL
     'convert-from=s'			=> \$convert_from,
     'D|directory=s'			=> \$directory,
