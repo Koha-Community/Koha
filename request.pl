@@ -81,8 +81,6 @@ EOF
 
 my $existingreserves = "";
 foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
-    #my $bor=$reserves->[$i]{'firstname'}."%20".$reserves->[$i]{'surname'};
-    #$bor=~ s/ /%20/g;
     my $prioropt = priorityoptions($count, $res->{'priority'});
     my $bropt = branchoptions($res->{'branchcode'});
     warn $res->{'branchcode'};
