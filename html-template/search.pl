@@ -16,7 +16,6 @@ my $startfrom=$query->param('startfrom');
 my $dbh=&C4Connect;  
 
 
-print STDERR "SF: $startfrom\n";
 my $template = HTML::Template->new(filename => $templatename, die_on_bad_params => 0);
 
 my @results;
@@ -28,8 +27,9 @@ while (my $data=$sth->fetchrow_hashref){
 
 
 
-$startfrom+=20;
 $template->param(startfrom => $startfrom);
+$startfrom+=20;
+$template->param(nextstartfrom => $startfrom);
 $template->param(template => $templatename);
 $template->param(SEARCH_RESULTS => \@results);
 
