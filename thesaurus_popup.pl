@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+
+# written 10/5/2002 by Paul
+# build Subject field using bibliothesaurus table
+
+use strict;
+use CGI;
+use C4::Database;
+use C4::Search;
+use C4::Circulation::Circ2;
+use C4::Output;
+
+# get all the data ....
+my %env;
+
+my $input = new CGI;
+my $subject = $input->param('subject');
+my $search_string= $input->param('search_string');
+my $op = $input->param('op');
+my $freelib_text = $input->param('freelib_text');
+
+my $dbh=C4Connect;
+
+# make the page ...
+print $input->header;
+if ($op eq "select") {
+	$subject = $subject."|$freelib_text";
+}
+print <<"EOF";
+	<html>
+	<head>
+	<title>Subject builder</title>
+	</head>
+	<body>
+	<form name="f_pop" action="thesaurus_popup.pl" method="post">
+	<textarea name="subject" rows=10 cols=60>$subject </textarea></br>
+	<p><input type="text" name="search_string" value="$search_string">
+	<input type="hidden" name="op" value="search">
+	<input type="submit" value="Search"></p>
+	</form>
+EOF
+# /search thesaurus terms starting by search_string
+	if ($search_string) {
+		print '<form name="f2_pop" action="thesaurus_popup.pl" method="post">';
+		print '<select name="freelib_text">';
+		my $sti=$dbh->prepare("select freelib,stdlib from bibliothesaurus where freelib like '".$search_string."%'");
+		$sti->execute;
+		while (my $line=$sti->fetchrow_hashref) {
+			print "<option value='$line->{'stdlib'}'>$line->{freelib}</option>";
+		}
+	print <<"EOF";
+		</select>
+		<input type="hidden" name="op" value="select">
+		<input type="hidden" name="subject" value="$subject">
+		<input type="submit" name="OK" value="OK">
+		</form>
+EOF
+	}
+	print <<"EOF";
+		<form name="f3_pop" onSubmit="javascript:report()">
+		<input type="submit" value="END">
+		</form>
+		<script>
+		function report() {
+			alert("REPORT");
+			opener.document.f.subject.value= document.f_pop.subject.value;
+			self.close();
+			return false;
+		}
+		</script>
+		</body>
+		</html>
+EOF

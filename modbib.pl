@@ -63,7 +63,7 @@ $data->{'title'} = &tidyhtml($data->{'title'});
 
 print << "EOF";
 <a href="modwebsites.pl?biblionumber=$data->{'biblionumber'}">Modify Website Links</a>
-<form action="updatebiblio.pl" method="post">
+<form action="updatebiblio.pl" method="post" name="f">
 <input type="hidden" name="biblionumber" value="$data->{'biblionumber'}">
 <input type="hidden" name="biblioitemnumber" value="$data=>{'biblioitemnumber'}">
 <table border="0" cellspacing="0" cellpadding="5">
@@ -81,7 +81,9 @@ print << "EOF";
 </tr>
 <tr valign="top">
 <td>Subject</td>
-<td><textarea name="subject" cols="40" rows="4">$sub</textarea></td>
+<td><textarea name="subject" cols="40" rows="4">$sub</textarea>
+<a href="javascript:Dopop()">...</a>
+</td>
 </tr>
 <tr valign="top">
 <td>Copyright Date</td>
@@ -123,6 +125,11 @@ print << "EOF";
 <br>
 <input type="submit" name="submit" value="Save Changes">
 </form>
+<script>
+function Dopop() {
+        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
 EOF
 
 print endmenu();
