@@ -217,6 +217,7 @@ Congratulations ... your Koha installation is complete!
 You will be able to connect to your Librarian interface at:
 
    http://%s\:%s/
+   use mysql login and password to connect to this interface. Then, go to admin page, and create whatever fits your needs.
 
 and the OPAC interface at :
 
