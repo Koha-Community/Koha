@@ -20,10 +20,16 @@
 		<td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 		<td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 	</tr>
+	<tr valign=top bgcolor=#99cc33>
+		<td bgcolor="#FFFFFF">&nbsp;</td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Budget</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><a href="aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" ALT="Add budget" border=0></a></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"></td>
+	</tr>
 	<TMPL_LOOP name="budget">
 		<tr valign=top>
 			<td>&nbsp;</td>
-			<td align="right">
+			<td>
 				<TMPL_VAR name="startdate"> - <TMPL_VAR name="enddate"> : <b><TMPL_VAR name="budgetamount"></b>
 			</td>
 			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&aqbudgetid=<TMPL_VAR name="aqbudgetid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>

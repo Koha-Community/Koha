@@ -10,22 +10,37 @@
 	Votre recherche :<b><TMPL_VAR name=searchfield><b>
 	<p><br>
 </TMPL_IF>
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Fonds documentaire</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Nom</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Groupe</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Budget</b></td><td background="<TMPL_VAR name="themelang">/images/background-mem.gif">&nbsp;</td><td background="<TMPL_VAR name="themelang">/images/background-mem.gif">&nbsp;  </td><td background="<TMPL_VAR name="themelang">/images/background-mem.gif">&nbsp;  </td></tr>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Fonds documentaire</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Nom</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Modif</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Suppr</b></td>
+	</tr>
 <TMPL_LOOP name="bookfund">
-<tr valign=top bgcolor="<TMPL_VAR name="toggle">">
-	<td><TMPL_VAR name="bookfundid"></td>
-	<td><TMPL_VAR name="bookfundname"></td>
-	<td><TMPL_VAR name="bookfundgroup"> &nbsp;</td>
-	<td><a href="aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> ">Budget</a></td>
-	<td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" border="0"></a></td>
-	<td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" border="0"></a></td>
-	<td>&nbsp;  </td>
-</tr>
+	<tr valign=top bgcolor="ffffcc">
+		<td><TMPL_VAR name="bookfundid"></td>
+		<td><TMPL_VAR name="bookfundname"></td>
+		<td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+	</tr>
+	<tr valign=top bgcolor=#99cc33>
+		<td bgcolor="#FFFFFF">&nbsp;</td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Budget</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><a href="aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" ALT="Add budget" border=0></a></td>
+	</tr>
+	<TMPL_LOOP name="budget">
+		<tr valign=top>
+			<td>&nbsp;</td>
+			<td>
+				<TMPL_VAR name="startdate"> - <TMPL_VAR name="enddate"> : <b><TMPL_VAR name="budgetamount"></b>
+			</td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&aqbudgetid=<TMPL_VAR name="aqbudgetid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&aqbudgetid=<TMPL_VAR name="aqbudgetid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+
+		</tr>
+	</TMPL_LOOP>
 </TMPL_LOOP>
 </table>
 <form action='<TMPL_VAR name=scriptname>' method=post><input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" ALT="Add budget" BORDER=0 ><br></form><br clear=all>

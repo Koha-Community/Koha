@@ -122,7 +122,8 @@ if ($op eq 'add_form') {
 	    $template->param(bookfundid => $dataaqbudget->{bookfundid});
 	    $template->param(bookfundname => $dataaqbudget->{bookfundname});
 	} else {
-	    $template->param(adding => 1);
+	    $template->param(bookfundid => $bookfundid,
+	    							adding => 1);
 	}
 	$template->param(dateformat => display_date_format(),
 							aqbudgetid => $dataaqbudget->{'aqbudgetid'},
@@ -143,7 +144,9 @@ if ($op eq 'add_form') {
 						$input->param('budgetamount')
 						);
 	$sth->finish;
-													# END $OP eq ADD_VALIDATE
+	 print $input->redirect("aqbookfund.pl");
+	 exit;
+# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {

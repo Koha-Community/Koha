@@ -20,12 +20,12 @@
 		</tr>
 		<TMPL_LOOP name="budget">
 		<tr valign=top bgcolor="<TMPL_VAR name="toggle">">
-			<td><TMPL_VAR name="bookfundid"> (<TMPL_VAR name="bookfundname">)</td>
+			<td><TMPL_VAR name="aqbudgetid"> (<TMPL_VAR name="bookfundname">)</td>
 			<td><TMPL_VAR name="startdate"></td>
 			<td><TMPL_VAR name="enddate"></td>
 			<td><TMPL_VAR name="budgetamount"></td>
-			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" border="0"></a></td>
-			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" border="0"></a></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&aqbudgetdid=<TMPL_VAR name="aqbudgetid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" border="0"></a></td>
+			<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&aqbudgetid=<TMPL_VAR name="aqbudgetid">"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" border="0"></a></td>
 		</tr>
 		</TMPL_LOOP>
 	</table>
@@ -70,8 +70,8 @@
 		var ok=1;
 		var _alertString="";
 		var alertString2;
-		if (f.bookfundid.value.length==0) {
-			_alertString += "- bookfundid missing\n";
+		if (f.aqbudgetid.value.length==0) {
+			_alertString += "- aqbudgetid missing\n";
 		}
 		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
 			_alertString += "- Budget missing\n";
@@ -94,25 +94,24 @@
 <TMPL_IF name="modify">
 <tr>
       <td>Fonds documentaire</td>
-      <td><input type=hidden name=bookfundid value=<TMPL_VAR name=bookfundid>><TMPL_VAR name="bookfundid"></td></tr>
+      <td><input type=hidden name=bookfundid value=<TMPL_VAR name=bookfundid>><TMPL_VAR name="aqbudgetid"></td>
+</tr>
 <tr>
       <td>Fonds documentaire</td>
       <td><TMPL_VAR name="bookfundname"></td></tr>
 </TMPL_IF>
 <TMPL_IF name="adding">
-<tr>
-      <td>Fonds documentaire</td>
-      <td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
+	<tr><td>fonds</td><td><input type=hidden name=bookfundid size=5 maxlength=5 value="<TMPL_VAR name="bookfundid">"><TMPL_VAR name="bookfundid"></td></tr>
 </TMPL_IF>
 <tr>
-      <td>Date de d&eacute;but</td>
-      <td><input type=text name=startdate size=40 maxlength=80 value='<TMPL_VAR name="startdate">'>&nbsp;</td></tr>
+      <td>Date de d&eacute;but (<TMPL_VAR NAME=dateformat>)</td>
+      <td><input type=text name=startdate size=20 maxlength=14 value='<TMPL_VAR name="startdate">'>&nbsp;</td></tr>
 <tr>
-      <td>Date de fin</td>
-      <td><input type=text name=enddate value='<TMPL_VAR name="enddate">'></td></tr>
+      <td>Date de fin (<TMPL_VAR NAME=dateformat>)</td>
+      <td><input type=text name=enddate size=20 maxlength=14 value='<TMPL_VAR name="enddate">'></td></tr>
 <tr>
       <td>Montant du budget</td>
-      <td><input type=text name=budgetamount value='<TMPL_VAR name="budgetamount">'></td></tr>
+      <td><input type="hidden" name="aqbudgetid" value="<TMPL_VAR name="aqbudgetid">"><input type=text name=budgetamount value='<TMPL_VAR name="budgetamount">'></td></tr>
 <tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>
@@ -127,11 +126,11 @@
 <TMPL_IF name="delete_confirm">
 <table border=0 cellspacing=0 cellpadding=5>
 <tr valign=top bgcolor=#99cc33>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Fonds documentaire</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Budget</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b><TMPL_VAR name="aqbudgetid"></b></td></tr>
 <form action='<TMPL_VAR name="action">' method=post>
 	<input type="hidden" name="op" value="delete_confirmed">
-	<input type="hidden" name="bookfundid" value='<TMPL_VAR name="bookfundid">'>
+	<input type="hidden" name="aqbudgetid" value='<TMPL_VAR name="aqbudgetid">'>
 <tr>
       <td>Date de d&eacute;but</td>
       <td><TMPL_VAR name="startdate"></td></tr>

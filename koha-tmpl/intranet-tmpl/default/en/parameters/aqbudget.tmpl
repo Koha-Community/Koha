@@ -91,7 +91,7 @@
 </TMPL_IF>
 
 <TMPL_IF name="adding">
-	<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
+	<tr><td>Bookfund</td><td><input type=hidden name=bookfundid size=5 maxlength=5 value="<TMPL_VAR name="bookfundid">"><TMPL_VAR name="bookfundid"></td></tr>
 </TMPL_IF>
 
 <tr><td>Start date (<TMPL_VAR NAME=dateformat>)</td><td><input type=text name=startdate size=11 value='<TMPL_VAR name="startdate">'>&nbsp;</td></tr>
