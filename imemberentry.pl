@@ -30,6 +30,7 @@ use C4::Search;
 use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
+use C4::Members;
 
 my $input = new CGI;
 
@@ -51,6 +52,8 @@ my $type=$input->param('type');
 
 my $data=borrdata('',$member);
 
+my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
+
 my @branches;
 my @select_branch;
 my %select_branches;
@@ -67,7 +70,8 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-multiple => 0 );
 
 $template->param(member => $member,
-						CGIbranch => $CGIbranch);
+				cardnumber_institution => $cardnumber,	
+				CGIbranch => $CGIbranch);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -19,7 +19,7 @@
       <td COLSPAN=2 ALIGN=RIGHT><font size=3 face='arial,helvetica'>
         <STRONG>Member# <TMPL_VAR NAME="member">, Card Number*</STRONG>
       </TD>
-      <TD align=right><input type=text name=cardnumber_institution size=20 value=" "><br></td>
+      <TD align=right><input type=text name=cardnumber_institution size=20 value=<TMPL_VAR NAME=cardnumber_institution>><br></td>
     </TR>
 
     <tr><td>&nbsp;</TD></TR>
@@ -111,7 +111,7 @@
 
     <tr valign=top bgcolor=white>
 	<td  COLSPAN=5 align=right >
-	  <input type=image src="<TMPL_VAR name="themelang">/images/save-changes.gif" WIDTH=188 HEIGHT=44 ALT="Add New Member" border=0 >
+	  <input type=submit class="button" value="Save Changes" ALT="Add New Member" border=0 >
       </td>
     </tr>
   </TABLE>
