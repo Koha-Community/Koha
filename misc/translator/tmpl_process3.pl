@@ -333,8 +333,7 @@ if ($action eq 'create')  {
 }
 
 if ($st == 0) {
-    printf "The %s seems to be successful, with %d warning(s).\n",
-	    $action, VerboseWarnings::warned;
+    printf "The %s seems to be successful.\n", $action;
 } else {
     printf "%s FAILED.\n", "\u$action";
 }
