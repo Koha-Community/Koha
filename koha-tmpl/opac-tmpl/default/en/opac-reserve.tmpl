@@ -1,0 +1,91 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<center>
+
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+</TMPL_IF>
+
+<p>
+Reserve page for item: <b><TMPL_VAR NAME="title"> ( <TMPL_VAR NAME="author"> )</b>
+</p>
+<!-- The first time round you select which bibitems you want -->
+<TMPL_IF NAME="selectbibitems">
+
+<p>
+Please select the biblioitems you want to reserve.
+<p>
+
+<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+<input type="hidden" name="bibitemsselected" value="1">
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+<TABLE border=1>
+<tr><th>Request</th><th>Item Type</th><th>Classification</th><th>Volume</th><th>Pubdate</th><th>Copies</th></tr>
+
+<TMPL_LOOP NAME="BIBLIOITEMS">
+
+  <tr>
+  <TMPL_UNLESS NAME="notforloan">
+    <td><input type="checkbox" name="reqbib" value="<TMPL_VAR NAME='biblioitemnumber'>"></td>
+  <TMPL_ELSE>
+    <td>Cannot be Reserved</td>
+  </TMPL_UNLESS>
+  <td><TMPL_VAR NAME="description"></td>
+  <td><TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"></td>
+  <td><TMPL_VAR NAME="volumedesc"></td>
+  <td><TMPL_VAR NAME="publicationyear"></td>
+  <td><TMPL_VAR NAME="copies"></td>
+
+  </tr>
+
+</TMPL_LOOP>
+
+</table>
+Please select which branch you want to pick the item up from:
+<select name="branch"><TMPL_VAR NAME="branchoptions"></select>
+
+
+<font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
+
+</FORM>
+
+</TMPL_IF>
+
+<!-- if the bibitems have already been selected -->
+<TMPL_IF NAME="bibitemsselected">
+
+<p>
+Place reserve on the following items:
+<p>
+
+<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+<input type="hidden" name="placereserve" value="1">
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+<TABLE>
+<tr><th>Item Type</th><th>Classification</th><th>Volume</th><th>Pubdate</th></tr>
+
+<TMPL_LOOP NAME="BIBLIOITEMS">
+
+  <tr>
+  <input type="hidden" name="reqbib" value="<TMPL_VAR NAME='biblioitemnumber'>"></td>
+  <td><TMPL_VAR NAME="description"></td>
+  <td><TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"></td>
+  <td><TMPL_VAR NAME="volumedesc"></td>
+  <td><TMPL_VAR NAME="publicationyear"></td>
+  </tr>
+
+</TMPL_LOOP>
+
+</table>
+
+To be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br>
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='branch'>">
+
+<font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve"></font>
+
+</FORM>
+
+</TMPL_IF>
+
