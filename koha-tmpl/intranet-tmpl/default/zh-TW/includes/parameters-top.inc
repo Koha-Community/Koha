@@ -6,26 +6,29 @@
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
 <link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
 </head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
-a.parameters {
+td.parameters {
+	padding:4px;
+	}
+td.parameters a {
 	background-color: #86c268;
 	font-weight: normal;
 	text-decoration: none;
 	cursor: hand;
 	color: #FFFFFF;
-	padding:4px;
 	font-weight: bold;
 	}
-a.parameters:hover {
+td.parameters a:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
 	}
 </style>
+
+<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
+marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <!------------------------MENUS-------------------------------->
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
@@ -86,7 +89,7 @@ a.parameters:hover {
 </table>
 <BLOCKQUOTE>
 <TMPL_IF NAME="loggedinusername">
-    <p align=left>使用者身分：<TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>]</p>
+    <p align=left>使用者身分：<span class=en><TMPL_VAR NAME="loggedinusername"></span> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a><span lang=mi>Koha</span></p>
 </TMPL_IF>
