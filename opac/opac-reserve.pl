@@ -225,4 +225,4 @@ if ($query->param('item_types_selected')) {
 $template->param(BIBLIOITEMS => \@data);
 
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;

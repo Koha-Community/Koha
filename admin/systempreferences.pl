@@ -42,7 +42,7 @@ use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use C4::Search;
 use HTML::Template;
 use C4::Context;
@@ -185,7 +185,4 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-print $input->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-), $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

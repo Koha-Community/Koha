@@ -282,7 +282,7 @@ $template->param(	genbrname => $genbrname,
 								branchoptionloop => \@branchoptionloop,
 								errmsgloop => \@errmsgloop
 							);
-print $query->header(-cookie=>$sessioncookie), $template->output;
+output_html_with_http_headers $query, $sessioncookie, $template->output;
 
 
 sub name {

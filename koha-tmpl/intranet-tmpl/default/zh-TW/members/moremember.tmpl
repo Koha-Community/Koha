@@ -39,7 +39,8 @@
         族裔：<TMPL_VAR NAME="ethnicity">, <TMPL_VAR NAME="ethnotes"><br>
       </TMPL_IF>
       出生日期：<TMPL_VAR NAME="dateofbirth"><BR>
-      姓別：<TMPL_VAR NAME="sex"><P>
+      姓別：<TMPL_IF NAME="sex_M_p">男<TMPL_ELSE><TMPL_IF NAME="sex_F_p">女<TMPL_ELSE><TMPL_VAR NAME="sex"></TMPL_IF></TMPL_IF>
+      <P>
       Alternative Contact: <TMPL_VAR NAME="contactname"><BR>
       Phone: <TMPL_VAR NAME="altphone"><BR>
       Relationship: <TMPL_VAR NAME="altrelationship"><BR>

@@ -36,7 +36,7 @@ use DBI;
 # Koha modules used
 use C4::Context;
 use C4::Output;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use C4::Input;
 use C4::Biblio;
 use MARC::File::USMARC;
@@ -150,10 +150,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
 
 }
 
-print $input->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-),$template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
 my $menu;
 my $file;
 
@@ -809,6 +806,20 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.30  2003/02/02 07:18:38  acli
+# Moved C4/Charset.pm to C4/Interface/CGI/Output.pm
+#
+# Create output_html_with_http_headers function to contain the "print $query
+# ->header(-type => guesstype...),..." call. This is in preparation for
+# non-HTML output (e.g., text/xml) and charset conversion before output in
+# the future.
+#
+# Created C4/Interface/CGI/Template.pm to hold convenience functions specific
+# to the CGI interface using HTML::Template
+#
+# Modified moremembers.pl to make the "sex" field localizable for languages
+# where M and F doesn't make sense
+#
 # Revision 1.29  2003/01/28 15:28:31  tipaul
 # removing use MARC::Charset
 # Was a buggy test

@@ -15,4 +15,4 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			 });
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;

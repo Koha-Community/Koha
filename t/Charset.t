@@ -1,5 +1,5 @@
 use strict;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 
 use vars qw( @tests );
 use vars qw( $loaded );
@@ -8,84 +8,84 @@ BEGIN {
    @tests = (
    [
       'Normal HTML without meta tag',
-      sub { C4::Charset::guesscharset($_[0]) },
+      sub { guesscharset($_[0]) },
       undef,
       <<EOF
 <title>control case</title>
 EOF
    ], [
       'Result of guesscharset with normal HTML with irrelevant meta tag',
-      sub { C4::Charset::guesscharset($_[0]) },
+      sub { guesscharset($_[0]) },
       undef,
       <<EOF
 <meta http-equiv="Content-Language" content="zh-TW">
 EOF
    ], [
-      'Result of guesscharset with normal HTML with irrelevant meta tag',
-      sub { C4::Charset::guesstype($_[0]) },
-      undef,
+      'Result of guesstype with normal HTML with irrelevant meta tag',
+      sub { guesstype($_[0]) },
+      'text/html',
       <<EOF
 <meta http-equiv="Content-Language" content="zh-TW">
 EOF
    ], [
       'Result of guesscharset with normal HTML with relevant meta tag',
-      sub { C4::Charset::guesscharset($_[0]) },
+      sub { guesscharset($_[0]) },
       'big5',
       <<EOF
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
 EOF
    ], [
       'Result of guesstype with normal HTML with relevant meta tag',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=big5',
       <<EOF
 <meta http-equiv="Content-Type" content="text/html; charset=big5">
 EOF
    ], [
       'Variant 1 using single quotes',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=iso-2022-jp',
       <<EOF
 <meta http-equiv="Content-Type" content='text/html; charset=iso-2022-jp'>
 EOF
    ], [
       'Variant 2 using single quotes',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=utf-8',
       <<EOF
 <meta http-equiv='Content-Type' content="text/html; charset=utf-8">
 EOF
    ], [
       'Unquoted Content-Type',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=big5',
       <<EOF
 <meta http-equiv=Content-Type content="text/html; charset=big5">
 EOF
    ], [
       'XML syntax',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=iso-8859-2',
       <<EOF
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-2" />
 EOF
    ], [
       'Expected attributes in reverse order',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=big5',
       <<EOF
 <meta content="text/html; charset=big5" http-equiv="Content-Type">
 EOF
    ], [
       'Extra whitespace at end',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=big5',
       <<EOF
 <meta http-equiv="Content-Type" content="text/html; charset=big5"   >
 EOF
    ], [
       'Multiple lines',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=big5',
       <<EOF
 <meta
@@ -94,8 +94,9 @@ content="text/html; charset=big5"
 >
 EOF
    ], [
+      # FIXME - THIS IS NOT A WELL-WRITTEN TEST CASE!!!
       'With surrounding HTML',
-      sub { C4::Charset::guesstype($_[0]) },
+      sub { guesstype($_[0]) },
       'text/html; charset=us-ascii',
       <<EOF
 <html>
@@ -131,13 +132,13 @@ for (my $i = 1; $i <= scalar @tests; $i += 1) {
 	 (!defined $output && !defined $expected)
       || (defined $output && defined $expected && $output eq $expected)
    ) {
-      print "ok $i ($title)\n";
+      print "ok $i - $title\n";
    } else {
-      print "not ok $i ($title: got ",
+      print "not ok $i - $title: got ",
 	    (defined $output? "\"$output\"": 'undef'),
 	    ', expected ',
 	    (defined $expected? "\"$expected\"": 'undef'),
-	    ")\n";
+	    "\n";
    }
 }
 

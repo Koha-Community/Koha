@@ -25,7 +25,7 @@ use C4::Catalogue;
 use C4::Biblio;
 use C4::Search;
 use C4::Output;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 my $input      = new CGI;

@@ -68,4 +68,4 @@ $bordat[0] = $borr;
 
 $template->param(BORROWER_INFO => \@bordat);
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;

@@ -20,7 +20,7 @@
 
 use strict;
 use C4::Output;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use C4::Auth;
 use CGI;
 use C4::Search;
@@ -121,7 +121,4 @@ if ($res && $res2 eq 10 && $field eq "branches") {
 }
 
 $template->param(total => $total);
-print $input->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-), $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

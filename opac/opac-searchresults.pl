@@ -4,7 +4,7 @@ require Exporter;
 use CGI;
 use C4::Search;
 use C4::Auth;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 my $query=new CGI;
@@ -127,8 +127,5 @@ if ($count>10) {
 
 $template->param(numbers => $numbers);
 
-print $query->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 

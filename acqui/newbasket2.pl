@@ -28,7 +28,7 @@ use C4::Catalogue;
 use C4::Biblio;
 use HTML::Template;
 use C4::Auth;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 
 my $env;
 my $input = new CGI;
@@ -246,7 +246,4 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								loopsearch =>\@loopsearch,
 								loopresult =>\@loopresult);
 
-print $input->header(
--type => guesstype($template->output),
--cookie => $cookie
-),$template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

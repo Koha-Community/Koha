@@ -93,5 +93,5 @@ $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SITE_RESULTS => $sitearray);
 $template->param(loggedinuser => $loggedinuser);
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 

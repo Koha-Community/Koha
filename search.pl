@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Search;
 use C4::Auth;
 use C4::Output;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 
 my $query=new CGI;
 my $type=$query->param('type');
@@ -200,8 +200,5 @@ if (C4::Context->preference('acquisitions') eq 'simple') {
 }
 
 # Print the page
-print $query->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -93,6 +93,6 @@ $template->param(select_list => $select_list,
 						category => $category,
 						index => $index
 						);
-print $input->header(-cookie => $cookie),$template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
 
 

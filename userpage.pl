@@ -38,4 +38,4 @@ my ($template, $loggedinuser, $cookie)
 
 warn "userloggedin : $loggedinuser (".$query->param('userid')." et ".$query->param('password');
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;

@@ -38,7 +38,7 @@
 use strict;
 use C4::Auth;
 use C4::Input;
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use CGI;
 use Date::Manip;
 use HTML::Template;
@@ -180,9 +180,6 @@ if ($ok == 0) {
     ;
 }
 
-print $input->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-), $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
 
 

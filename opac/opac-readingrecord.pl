@@ -51,5 +51,5 @@ $template->param(count => $count);
 $template->param(READING_RECORD => $issues);
 
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -83,7 +83,7 @@ SWITCH: {
 	$template->param(shelvesloop => \@shelvesloop);
 }
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 
 
 sub shelves {
@@ -151,6 +151,20 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.10  2003/02/02 07:18:37  acli
+# Moved C4/Charset.pm to C4/Interface/CGI/Output.pm
+#
+# Create output_html_with_http_headers function to contain the "print $query
+# ->header(-type => guesstype...),..." call. This is in preparation for
+# non-HTML output (e.g., text/xml) and charset conversion before output in
+# the future.
+#
+# Created C4/Interface/CGI/Template.pm to hold convenience functions specific
+# to the CGI interface using HTML::Template
+#
+# Modified moremembers.pl to make the "sex" field localizable for languages
+# where M and F doesn't make sense
+#
 # Revision 1.9  2002/12/19 18:55:40  hdl
 # Templating reservereport et shelves.
 #

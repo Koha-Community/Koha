@@ -34,7 +34,8 @@ use strict;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Charset;
+use C4::Interface::CGI::Output;
+use C4::Interface::CGI::Template;
 use CGI;
 use C4::Search;
 use Date::Manip;
@@ -68,6 +69,8 @@ $data->{'expiry'} = slashifyDate($data->{'expiry'});
 $data->{'dateofbirth'} = slashifyDate($data->{'dateofbirth'});
 
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
+
+$data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 
 if ($data->{'categorycode'} eq 'C'){
     my $data2=borrdata('',$data->{'guarantor'});
@@ -203,7 +206,4 @@ $template->param(
 		 issueloop       => \@issuedata,
 		 reserveloop     => \@reservedata);
 
-print $input->header(
-    -type => guesstype($template->output),
-    -cookie => $cookie
-),$template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

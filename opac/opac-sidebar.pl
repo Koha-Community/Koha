@@ -28,4 +28,4 @@ $template->param(INPUTS => \@inputs);
 my $self_url = $query->url(-absolute => 1);
 $template->param(url => $self_url);
 
-print $query->header(-cookie => $cookie), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
