@@ -143,7 +143,11 @@ sub calculate {
 		}
 		my %line;
 		$line{loopitemtype} = \@loopitemtype;
-		$line{itemtype} = $itemtypes{$itemtype}->{description};
+		if ($itemtypes{$itemtype}->{description}) {
+			$line{itemtype} = $itemtypes{$itemtype}->{description};
+		} else {
+			$line{itemtype} = "$itemtype (no entry in itemtype table)";
+		}
 		$line{hilighted} = 1 if $hilighted eq 1;
 		$line{totalitemtype} = $itemtypes{$itemtype}->{total};
 		$hilighted = -$hilighted;
