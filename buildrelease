@@ -59,13 +59,14 @@ kohahtmldir=$kohahtmldir
 |;
 
 print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
-chdir $kohadir || die "$kohadir: $!\n";
 open (CVSLOG, "cvs log buildrelease|");
 my $symbolicnamessection=0;
 my $symbolicnames;
 my $highestversion;
 my $highestrc;
 my $released;
+my $majorversion;
+my $majorversionrc;
 while (<CVSLOG>) {
     if (/^symbolic names:/) {
 	$symbolicnamessection=1;
@@ -80,6 +81,11 @@ while (<CVSLOG>) {
 	    if ($id =~/(.*)RC(.*)/) {
 		$version=$1;
 		$rc=$2;
+		$version=~m#(\d+\.\d+)\.#;
+		if (versioncompare($version, $majorversion->{$1})) {
+		    $majorversion->{$1}=$version;
+		    $majorversionrc->{$1}=$rc;
+		}
 		if (versioncompare($version, $highestversion)) {
 		    $highestversion=$version;
 		    $released=0;
@@ -87,6 +93,11 @@ while (<CVSLOG>) {
 		}
 	    } else {
 		$version=$id;
+		$version=~m#(\d+\.\d+)\.#;
+		if (versioncompare($version, $majorversion->{$1})) {
+		    $majorversion->{$1}=$version;
+		    $majorversionrc->{$1}=0;
+		}
 		if (versioncompare($version, $highestversion)) {
 		    $highestversion=$version;
 		    $released=1;
@@ -102,17 +113,32 @@ while (<CVSLOG>) {
 my $releaseversion='';
 my $currentversion='';
 
+my $branchdata=`grep buildrelease CVS/Entries`;
+chomp $branchdata;
+my $branch=(split(m#/#, $branchdata))[5];
+
+if ($branch eq 'Trel-1-2') {
+    $highestversion=$majorversion->{'1.2'};
+    $highestrc=$majorversionrc->{'1.2'};
+    ($highestrc) ? ($released=0) : ($released=1);
+}
 
 if ($released) {
     my @components=split(/\./, $highestversion);
     $components[$#components]++;
     $nexthighestversion=join '.', @components;
-    $releaseversion=$nexthighestversion."RC1";
+    my $minornumber=(split(/\./, $highestversion))[1];
+    if ($minornumber/2 == int($minornumber/2)) {
+	$releaseversion=$nexthighestversion."RC1";
+    } else {
+	$releaseversion=$nexthighestversion;
+    }
     $currentversion=$highestversion;
 } else {
     $releaseversion=$highestversion."RC".($highestrc+1);
     $currentversion=$highestversion."RC$highestrc";
 }
+
 
 print "Current release tag is $currentversion.\n";
 print "\nWould you like to bump that up to $releaseversion (or manually enter version)?  [Y]/N: ";
@@ -271,6 +297,7 @@ system("mv $rootdir/intranet-cgi/tkperl $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/marc $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/acqui.simple/bulkmarcimport.pl $rootdir/scripts/z3950daemon/");
 system("mv $rootdir/intranet-cgi/acqui.simple/processz3950queue $rootdir/scripts/z3950daemon/");
 system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-launch.sh $rootdir/scripts/z3950daemon/");

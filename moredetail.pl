@@ -90,7 +90,7 @@ foreach my $item (@items){
     }
 }
 
-$template->param(includesdir => $includes);
+#$template->param(includesdir => $includes);
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);
 $template->param(loggedinuser => $loggedinuser);
