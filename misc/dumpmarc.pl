@@ -39,3 +39,4 @@ while ( my $record = $batch->next() ) {
 	print "\n".$record->as_formatted() if ($i eq $number || $number eq 0);
 	$i++;
 }
+print "\n==================\n$i record parsed\n";
