@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- About Koha
-<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
@@ -7,7 +7,7 @@
 <h1>About Koha</h1>
 <p>Data about the current version of Koha for bug reports (or general 
 interest).</p>
-<div class="table"><div class="items"><table>
+<div class="table items"><table>
   <tr>
       <th>Koha version:</th>
       <td><!-- TMPL_VAR ESCAPE="html" NAME="kohaVersion" --></td>
@@ -32,62 +32,66 @@ interest).</p>
 
  <table>
  <caption>Credits</caption>
+	<tr><th>Special thanks to the following funders</th></tr>
+			<tr><td><ul><li><b>Horowhenua Library Trust</b> and Rosalie Blake, Head of Libraries, (Koha 1.0)</li>
+		<li>The <b>Nelsonville Public Library</b>, USA, Ohio (MARC support funding)</li>
+		<li><b>EMN (Ecole des Mines de Nantes)</b>, France (Suggestion, stats modules and improved ldap support funding)</li>
+		<li><b>ENSMP (Ecole Nationale Supérieure des Mines de Paris)</b>, France (biblio frameworks, MARC authorities, OPAC basket, Serials support funding)</li></ul></td></tr>
   	<tr>
-	<th>Core Team</th></tr>
+	<th>Core Team for 2.2</th></tr>
 	<tr><td>
 <ul>
-	<li>Pat Eyler, Kaitiaki</li>
-	<li>Paul Poulain, 2.0 release manager (MARC developper)</li>
-	<li>Joshua Ferraro &amp; the Nelsonville Public Library (MARC features funders)</li>
-	<li>Steve Tonnesen (early MARC work, Virtual Bookshelves concept, KohaCD)</li>
-	<li>Nicholas Rosasco, (Documentation Compiler)</li>
-	<li>Mike Hansen</li>
-	<li>MJ Ray and Turo Technology LLP, England (quality control, installer &amp; updater)</li>
-	<li>Nicolas Morin, French Translation</li>
-<li><b>Horowhenua Library Trust</b>
-Rosalie Blake, Head of Libraries
-Jo Ransom</li>
-<li><b>Katipo Communications</b>
-Rachel Hamilton-Williams, General Manager (Webmistress)
-Chris Cormack, 1.2 release manager
-and Simon Blake, Amanda Atkins, Operations Manager, Olwen Williams, Finlay Thompson, Gynn Lomax,
-						Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine</li></ul>
+	<li><b>Rachel Hamilton-Williams</b>, Kaitiaki</li>
+		<li><b>Paul Poulain</b>, 2.2 release manager (MARC developer)</li>
+		<li>Stephen Hedges, Owen Leonard, Joshua Ferraro (<b>Nelsonville Public Library</b>)</li>
+		<li><b>Katipo Communications</b> (Koha 1.0 developers)</li>
+		<ul>
+			<li>Rachel Hamilton-Williams, General Manager (Webmistress)</li>
+			<li>Chris Cormack, 1.2 release manager</li>
+			<li>and Simon Blake, Amanda Atkins, Operations Manager, Olwen Williams, Finlay Thompson, Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine</li></ul>
+		<li>Emiliano Marmonti, Matías Veleda &amp; Sebastian Catañeda <b>La Plata University, Argentina</b> (barcode printing)</li>
+		<li>MJ Ray and <b>Turo Technology LLP</b>, (quality control, installer &amp; updater, 2.0 release maintainer)</li>
+		<li>Nicholas Rosasco, (Documentation Compiler)</li>
+		<li>Mike Hansen</li>
+		<li><b>Pate Eyler</b> (Kaitiaki from 2002 to 2004)</li>
 					</td>
 				</tr>
 <tr><th>Thanks to</th></tr>
 				<tr>
 					<td>
 <ul>
-	<li>Adam Thick</li>
-	<li>Andrew Hooper</li>
-	<li>Al Banks</li>
-	<li>Ambrose Li</li>
-	<li>Andrew Arensburger</li>
-	<li>Benedykt P. Barszcz (Polish for 2.0)</li>
-	<li>Brig C. McCoy</li>
-	<li>Daniel Holth</li>
-	<li>David Strainchamps</li>
-	<li>Dorian Meid</li>
-	<li>Ed Summers</li>
-	<li>Florian Bischof</li>
-	<li>Francisco M. Marzoa Alonso</li>
-	<li>Glen Stewart</li>
-	<li>Henri-Damien Laurent</li>
-	<li>Jérome Vizcaino (Esiee School)</li>
-	<li>Kip DeGraaf</li>
-	<li>Marco Gaiarin</li>
-	<li>Md. Aftabuddin</li>
-	<li>Michaes Herman</li>
-	<li>Michel Lerenard (Esiee School)</li>
-	<li>Mike Johnson</li>
-	<li>Mike Mylonas</li>
-	<li>Pierre Cauchois (Esiee School)</li>
-	<li>Pawel Skuza (Polish for 1.2)</li>
-	<li>Regula Sebastiao</li>
-	<li>Roger Buck</li>
-	<li>Ron Wickersham</li>
-	<li>Sebastiaan Durand</li>
-</ul>					</td>
+					<li>Adam Thick</li>
+					<li>Andrew Hooper</li>
+					<li>Al Banks</li>
+					<li>Ambrose Li (chinese translation and translation tool)</li>
+					<li>Andrew Arensburger (the small and great C4::Context module)</li>
+					<li>Benedykt P. Barszcz (Polish for 2.0)</li>
+					<li>Brig C. McCoy</li>
+					<li>Daniel Holth</li>
+					<li>David Strainchamps</li>
+					<li>Dorian Meid (German translation)</li>
+					<li>doXulting (Matthieu Branlat) OPAC basket</li>
+					<li>Ed Summers (Some code and Perl packages like MARC::Record)</li>
+					<li>Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)</li>
+					<li>Florian Bischof</li>
+					<li>Francisco M. Marzoa Alonso</li>
+					<li>Glen Stewart</li>
+					<li>Henri-Damien Laurent</li>
+					<li>Jo Ransom</li>
+					<li>Kip DeGraaf</li>
+					<li>Marco Gaiarin</li>
+					<li>Md. Aftabuddin</li>
+					<li>Michaes Herman</li>
+					<li>Mike Johnson</li>
+					<li>Mike Mylonas</li>
+					<li>Nicolas Morin (French Translation in 2.0)</li>
+					<li>Pawel Skuza (Polish for 1.2)</li>
+					<li>Regula Sebastiao</li>
+					<li>Roger Buck</li>
+					<li>Ron Wickersham</li>
+					<li>Sebastiaan Durand</li>
+					<li>Steve Tonnesen (early MARC work, Virtual Bookshelves concept, KohaCD)</li>
+					<li>Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)</li></ul>					</td>
 				</tr>
 			</table>
 </div>
