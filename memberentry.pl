@@ -7,7 +7,7 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
-
+use C4::Database;
 
 my $input = new CGI;
 my $member=$input->param('bornum');
@@ -15,11 +15,11 @@ if ($member eq ''){
   $member=NewBorrowerNumber();
 }
 my $type=$input->param('type');
-my $modify=$input->param('modify.x');
+my $modify=$input->param('modify.x'); 
 print $input->header;
 print startpage();
 print startmenu('member');
-#print $modify;
+
 if ($type ne 'Add'){
   print mkheadr(1,'Update Member Details');
 } else {
@@ -39,13 +39,53 @@ if ($type eq 'Add'){
 } else {
   print "<input type=hidden name=updtype value=M>";
 }
+
+my $cardnumber=$data->{'cardnumber'};
+my %systemprefs=systemprefs();
+if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
+  my $dbh=C4Connect;
+  my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $cardnumber=$data->{'max(substring(borrowers.cardnumber,2,7))'};
+  $sth->finish;
+  $dbh->disconnect;
+  # purpose: generate checksum'd member numbers.
+  # We'll assume we just got the max value of digits 2-8 of member #'s from the database and our job is to
+  # increment that by one, determine the 1st and 9th digits and return the full string.
+  my @weightings = (8,4,6,3,5,2,1);
+  my $sum;
+  my $i = 0;
+  if (! $cardnumber) { 			# If DB has no values, start at 1000000
+    $cardnumber = 1000000;
+  } else {
+    $cardnumber = $cardnumber + 1;
+  }
+
+  while ($i <8) {			# step from char 1 to 7.
+    my $temp1 = $weightings[$i];	# read weightings, left to right, 1 char at a time
+    my $temp2 = substr($cardnumber,$i,1);	# sequence left to right, 1 char at a time
+#print "$temp2<br>";
+    $sum = $sum + ($temp1*$temp2);	# mult each char 1-7 by its corresponding weighting
+    $i++;				# increment counter
+  }
+  my $rem = ($sum%11);			# remainder of sum/11 (eg. 9999999/11, remainder=2)
+  if ($rem == 10) {			# if remainder is 10, use X instead
+    $rem = "X";
+  }  
+  $cardnumber="V$cardnumber$rem";
+} else {
+  $cardnumber=$data->{'cardnumber'};
+}
+
 print <<printend
 
 <table border=0 cellspacing=0 cellpadding=5 >
 
 
 <tr valign=top><td  COLSPAN=2><input type=reset value="Clear all Fields"></td><td  COLSPAN=3   ALIGN=RIGHT ><font size=4 face='arial,helvetica'>
-Member# $member,   Card Number* <input type=text name=cardnumber size=10 value="$data->{'cardnumber'}"><br>
+Member# $member,   Card Number* <input type=text name=cardnumber size=10 value="$cardnumber"><br>
 </td></tr>
 
 
@@ -224,9 +264,16 @@ print <<printend
 <td><input type=text name=city size=20 value="$data->{'city'}"></td>
 <td>
 <SELECT NAME="area" SIZE="1">
-<OPTION value=L
 printend
 ;
+
+
+print "<OPTION value=EEBF";
+if ($data->{'area'} eq 'EEBF'){
+  print " Selected";
+}
+print ">EEBF - Delphi-E Flint
+<OPTION value=L";
 if ($data->{'area'} eq 'L'){
   print " Selected";
 }
@@ -371,57 +418,57 @@ print <<printend
 <td><FONT SIZE=2>Notes</font></td>
 <td  COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3>$data->{'borrowernotes'}</textarea></td></tr>
 <tr><td>&nbsp; </TD></TR>
+<tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
+printend
+;
+if ($modify){                                                                                                                                      
+  print <<printend                                                                                                                                 
+  <tr><td><Font size=2>FLAGS</font></td></tr>                                                                                                        
+  <tr><td>Gone No Address</td>                                                                                                                       
+  <td><input type=radio name=gna value=1                                                                                                             
+printend
+;
+  if ($data->{'gonenoaddress'} eq '1'){                                                                                                            
+    print " checked";                                                                                                                              
+  }                                                                                                                                                
+  print ">Yes <input type=radio name=gna value=0";                                                                                                   
+  if ($data->{'gonenoaddress'} eq '0'){                                                                                                            
+    print " checked";                                                                                                                              
+  }                                                                                                                                                
+  print ">No</td></tr>\n";                                                                                                                         
+  print "<tr><td>Lost</td><td><input type=radio name=lost value=1";                                                                                
+  if ($data->{'lost'} eq '1'){                                                                                                                     
+    print " checked";                                                                                                                              
+  }                                                                                                                                                
+  print ">Yes<input type=radio name=lost value=0";                                                                                                 
+  if ($data->{'lost'} eq '0'){                                                                                                                     
+    print " checked";                                                                                                                              
+  }                                                                                                                                                
+  print ">No</td></tr>\n";                                                                                                                         
+  print "<tr><td>Debarred</td><td><input type=radio name=debarred value=1";                                                                        
+  if ($data->{'debarred'} eq '1'){                                                                                                                 
+    print " checked";                                                                                                                              
+  }                                                                                                                                                
+  print ">Yes<input type=radio name=debarred value=0";                                                                                             
+  if ($data->{'debarred'} eq '0'){                                                                                                                 
+    print " checked";                                                                                                                              
+  }                                                                                                                                                
+  print ">No</td></tr>\n";                                                                                                                         
+}                 
 
-printend
-;
-if ($modify){
+if ($type ne 'modify'){
   print <<printend
-<tr><td><Font size=2>FLAGS</font></td></tr>
-<tr><td>Gone No Address</td>
-<td><input type=radio name=gna value=1
-printend
-;
-  if ($data->{'gonenoaddress'} eq '1'){
-    print " checked";
-  }
-print ">Yes <input type=radio name=gna value=0";
-  if ($data->{'gonenoaddress'} eq '0'){
-    print " checked";
-  }
-  print ">No</td></tr>\n";
-  print "<tr><td>Lost</td><td><input type=radio name=lost value=1";
-  if ($data->{'lost'} eq '1'){
-    print " checked";
-  }
-  print ">Yes<input type=radio name=lost value=0";
-  if ($data->{'lost'} eq '0'){
-    print " checked";
-  }
-  print ">No</td></tr>\n";
-  print "<tr><td>Debarred</td><td><input type=radio name=debarred value=1";
-  if ($data->{'debarred'} eq '1'){
-    print " checked";
-  }
-  print ">Yes<input type=radio name=debarred value=0";
-  if ($data->{'debarred'} eq '0'){
-    print " checked";
-  }
-  print ">No</td></tr>\n";
-}
-if ($type eq 'Add'){
-  print <<printend
-  <tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
-<input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
+<tr><td></td><td><input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
 printend
 ;
 } else {
 print <<printend
-<tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
-<input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
+<td><td></td><td><input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
 printend
 ;
 }
 print <<printend
+</form>
 </tr>
 </TABLE>
 </table>
