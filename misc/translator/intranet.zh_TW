@@ -24,7 +24,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha INTRANET 2.1cvs\n"
-"POT-Creation-Date: 2004-03-16 01:03-0500\n"
+"POT-Creation-Date: 2004-03-20 05:17-0500\n"
 "PO-Revision-Date: 2004-02-23 17:20-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -211,8 +211,10 @@ msgstr "%p是 %p否"
 msgid "%s %s %s, %s"
 msgstr "%s %s %s, %s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=shelfname
 #. %2$s: TMPL_VAR name=shelfbookcount
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:85
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:80
 #, c-format
 msgid "%s (%s books)"
@@ -249,14 +251,15 @@ msgstr "%s (%s) %s"
 msgid ""
 "%s (if you select a value here, the indicators will be limited to the "
 "authorised value list)"
-msgstr "%s (如果在這裏輸入了容許值的名稱，指標的數值將會被限制在相應的容許值內)"
+msgstr ""
+"%s (如果在這裏輸入了容許值的名稱，指標的數值將會被限制在相應的容許值內)"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=description
 #. %2$s: TMPL_VAR name=isbn
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:44
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:23
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:24
 #, c-format
 msgid "%s - %s"
 msgstr "%s - %s"
@@ -367,8 +370,10 @@ msgstr "找到 %s 個結果"
 msgid "%s results found."
 msgstr "找到 %s 個結果。"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=shelfname
 #. %2$s: TMPL_VAR name=shelfbookcount
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:145
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:128
 #, c-format
 msgid "%s(%s books)"
@@ -380,7 +385,7 @@ msgstr "%s (%s本書)"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:6
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detailprint.tmpl:39
-#: ../../koha-tmpl/intranet-tmpl/default/en/member-flags.tmpl:3
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/member-flags.tmpl:3
 #, c-format
 msgid "%s, %s"
 msgstr "%s, %s"
@@ -1100,9 +1105,18 @@ msgstr "<a1></a> \" %s"
 msgid "<a1>Create Manual Invoice</a> &nbsp; <a2>Create Manual Credit</a>"
 msgstr "<a1>人手建立發票</a>　　<a2>Create Manual Credit</a>"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:47
+#, c-format
+msgid ""
+"<a1>Home</a> <a2>Catalogue</a> <a3>Members</a> <a4>Acquisitions</a> "
+"<a5>Circulation</a> <a6>Reports</a> <a7>Parameters</a> <a8>About</a>"
+msgstr ""
+"<a1>主頁</a> <a2>目錄</a> <a3>讀者</a> <a4>採購</a> "
+"<a5>流通</a> <a6>報表</a> <a7>設定</a> <a8>關於</a>"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/opac-main.tmpl:80
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:76
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:111
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:67
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:104
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:332
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/members-top.inc:91
@@ -1112,6 +1126,15 @@ msgstr "<a1>人手建立發票</a>　　<a2>Create Manual Credit</a>"
 #, c-format
 msgid "<a1>Log In</a> to Koha"
 msgstr "<a1>登入</a>Koha"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:58
+#, c-format
+msgid ""
+"<a1>Quick search</a> <a2>MARC search</a> <a3>Virtual shelves</a> <a4>Add "
+"biblio</a> <a5>Cat maintenance</a>"
+msgstr ""
+"<a1>快速查詢</a> <a2>機讀格式查詢</a> <a3>虛擬書架</a> <a4>新增書目"
+"</a> <a5>目錄維護</a>"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/pay.tmpl:45
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/readingrec.tmpl:51
@@ -1644,7 +1667,7 @@ msgid "<i>Branch:</i> %s <i>Printer:</i> %s <a1>Change Settings</a>"
 msgstr "<i>館別：</i>%s <i>印表機：</i>%s <a1>修改設定</a>"
 
 #  NOTE There is no "admin table". It refers to the "Thesaurus" screen in "Admin" (設定)
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:38
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:40
 msgid ""
 "A \"thesaurus category\": it refers to a thesaurus category. See the "
 "corresponding admin table."
@@ -1654,15 +1677,25 @@ msgstr ""
 
 #  NOTE There is no "admin table". It refers to the "Thesaurus" screen in "Admin" (設定)
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:39
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:41
 msgid ""
 "A \"value builder\": values builders are perl programs that help you select "
 "the value of the field. They are MARC-flavor dependant and sometimes fill "
 "another subfield automatically."
 msgstr ""
-"「數值建立程序」：「數值建立程序」是一些簡短的Perl程式，幫助您選擇某欄的數值。不同"
-"版本的機讀格式須用不用的「數值建立程序」。某些「數值建立程序」會自動替您填寫另一"
-"個相關分欄的數值。"
+"「數值建立程序」：「數值建立程序」是一些簡短的Perl程式，幫助您選擇某欄的數"
+"值。不同版本的機讀格式須用不用的「數值建立程序」。某些「數值建立程序」會自動"
+"替您填寫另一個相關分欄的數值。"
+
+#  XXX 暫譯
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:116
+msgid "A free can be managed by any user."
+msgstr "「公有」的虛擬書架可由任何使用者任意修改。"
+
+#  XXX 暫譯
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:115
+msgid "A public can be seen by everybody, but managed only by you."
+msgstr "「公開」的虛擬書架任何人都可以看，但只有您才有權修改。"
 
 #  NOTE 譯文更動 by Arthur
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:114
@@ -1692,8 +1725,8 @@ msgid "ALTERNATE CONTACT DETAILS"
 msgstr "緊急聯絡人詳情"
 
 #  XXX 暫譯
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:121
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:173
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:121
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:173
 msgid "ALTERNATIVE CONTACT DETAIL"
 msgstr "緊急聯絡人詳情"
 
@@ -1715,7 +1748,6 @@ msgstr "著者"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:63
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:16
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:77
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:75
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:16
@@ -1763,7 +1795,6 @@ msgstr "報表"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:12
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:51
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:12
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:65
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:12
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:63
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:12
@@ -1866,6 +1897,7 @@ msgid "Add New Member"
 msgstr "新增讀者"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:121
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:104
 msgid "Add New Shelf"
 msgstr "新增虛擬書架"
@@ -1874,6 +1906,7 @@ msgstr "新增虛擬書架"
 msgid "Add New Website"
 msgstr "新增網站"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:101
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:95
 msgid "Add Shelf"
 msgstr "新增虛擬書架"
@@ -1885,7 +1918,7 @@ msgid "Add Stop word"
 msgstr "新增忽略字"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:148
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:147
 msgid "Add System preference"
 msgstr "新增系統偏好"
 
@@ -1910,7 +1943,9 @@ msgstr "新增Z39.50伺服器"
 msgid "Add a New Item for %s"
 msgstr "給 %s 新增圖書資料"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=shelfname
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:35
 #, c-format
 msgid "Add a book by barcode in %s:"
@@ -1936,7 +1971,6 @@ msgstr "新增容許值"
 #. INPUT type=button
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:35
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:83
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:96
 msgid "Add biblio"
 msgstr "新增書目"
 
@@ -1957,7 +1991,7 @@ msgid "Add category"
 msgstr "新增類別"
 
 #. INPUT type=button
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:72
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:135
 msgid "Add criteria"
 msgstr "新增查詢條件"
 
@@ -1994,6 +2028,7 @@ msgstr "新增機構"
 msgid "Add new category"
 msgstr "新增類別"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:152
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:135
 msgid "Add or Remove Book Shelves"
 msgstr "新增或移除虛擬書架"
@@ -2124,7 +2159,7 @@ msgstr "金額"
 
 #  NOTE There is no "admin table". It refers to the "Thesaurus" screen in "Admin" (設定)
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:37
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:39
 msgid ""
 "An \"authorised value\": it refers to a list of authorised values for this "
 "subfield. See the corresponding admin table."
@@ -2173,7 +2208,7 @@ msgid "Attempting to issue %s by %s to %s %s."
 msgstr "嘗試借出 %2$s 著的《%1$s》給 %3$s %4$s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/parameters-top.inc:76
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:82
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:85
 msgid "Auth value"
 msgstr "容許值"
 
@@ -2196,6 +2231,7 @@ msgstr "容許值"
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:282
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:304
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:160
 #: ../../koha-tmpl/intranet-tmpl/default/en/z3950/searchresult.tmpl:16
 #: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:35
 msgid "Author"
@@ -2216,7 +2252,7 @@ msgstr "容許"
 msgid "Authorised value"
 msgstr "容許值"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:18
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:19
 msgid "Authorised value or"
 msgstr "容許值或"
 
@@ -2407,6 +2443,7 @@ msgstr "書籍採購資金 *"
 msgid "Bookfund admin"
 msgstr "書籍採購資金管理"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:61
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:57
 msgid "Bookshelves"
 msgstr "虛擬書架"
@@ -2504,7 +2541,7 @@ msgstr "分館：修改分館類別"
 msgid "Brig C. McCoy"
 msgstr "Brig C. McCoy"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/members-home.tmpl:21
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/members-home.tmpl:22
 msgid "Browse Members"
 msgstr "瀏覽讀者"
 
@@ -2539,15 +2576,6 @@ msgstr "預算貨勞稅"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:71
 msgid "Budgets"
 msgstr "預算案"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:28
-msgid ""
-"Build your request using MARC fields and subfields. Add criteria lets you "
-"add another criteria to your search. Search commits the request and displays "
-"the results."
-msgstr ""
-"查詢的要求請以機讀格式的欄及分欄逐步建立。「新增查詢條件」讓您新增另一查詢的"
-"條件到您的查詢；按「開始查詢」即開始查詢，並顯示查詢的結果。"
 
 #  NOTE 毋須翻譯，這個是沒用的欄位，感謝Chris Cormack及Paul Poulain解釋
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categoryitem.tmpl:120
@@ -2591,7 +2619,7 @@ msgstr "公司詳情"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:139
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:135
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:50
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:56
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:58
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:87
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:97
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:132
@@ -2654,9 +2682,9 @@ msgstr "不能選取"
 msgid "Card"
 msgstr "借書證"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:39
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:34
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:232
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:39
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:34
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:232
 msgid "Card number"
 msgstr "借書證號碼"
 
@@ -2680,10 +2708,6 @@ msgstr "借書證號碼：%s"
 msgid "Cash Refund"
 msgstr "現金退款"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:99
-msgid "Cat maintenance"
-msgstr "目錄維護"
-
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:51
 msgid "Cataline Library"
 msgstr "Cataline 圖書館"
@@ -2691,7 +2715,6 @@ msgstr "Cataline 圖書館"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:45
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:10
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:59
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:10
@@ -2713,6 +2736,11 @@ msgstr "目錄"
 msgid "Catalogue Search"
 msgstr "館藏查詢"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:7
+#, fuzzy
+msgid "Catalogue search"
+msgstr "館藏查詢"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:107
 msgid "Categories"
 msgstr "類別"
@@ -2725,6 +2753,10 @@ msgstr "類別"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categoryitem.tmpl:263
 msgid "Category"
 msgstr "類別"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:108
+msgid "Category :"
+msgstr "類別："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categorie.tmpl:244
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categoryitem.tmpl:251
@@ -2828,7 +2860,6 @@ msgstr "Chris Cormack (1.2版出版主任)"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:13
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:54
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:13
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:68
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:13
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:66
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:13
@@ -2919,6 +2950,11 @@ msgstr "公司"
 msgid "Company Name"
 msgstr "公司名稱"
 
+#  TODO「Complete」很難譯，暫時不理
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:96
+msgid "Complete (MARC) search"
+msgstr "以機讀格式查詢"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:74
 msgid "Comtd"
 msgstr "已承擔"
@@ -2932,9 +2968,9 @@ msgstr "設定無誤──在您的機讀格式設定內找不到錯誤"
 msgid "Confirm Password"
 msgstr "確認密碼"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:9
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:6
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:4
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:9
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:6
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:4
 msgid "Confirm Record"
 msgstr "請核對記錄"
 
@@ -2957,11 +2993,13 @@ msgstr "聯絡人姓名*"
 msgid "Contact: %s"
 msgstr "聯絡人：%s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:55
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:120
 msgid "Contains"
 msgstr "包含"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=shelfname
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:9
 #, c-format
 msgid "Contents of %s"
@@ -3050,7 +3088,7 @@ msgstr "有關這個Koha版本的資料 (報告錯誤用的資訊以及其他一
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:145
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:144
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:62
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:64
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:93
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:105
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categorie.tmpl:236
@@ -3101,8 +3139,8 @@ msgstr "登記日期"
 msgid "Date of Birth"
 msgstr "出生日期"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:44
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:87
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:44
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:87
 msgid "Date of birth"
 msgstr "出生日期"
 
@@ -3161,9 +3199,9 @@ msgstr "移除"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:193
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:70
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:85
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:88
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:117
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:132
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:131
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:21
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:121
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:149
@@ -3176,6 +3214,7 @@ msgid "Delete"
 msgstr "移除"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:92
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:86
 msgid "Delete Shelves"
 msgstr "移除虛擬書架"
@@ -3225,6 +3264,8 @@ msgstr "目的分館："
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/catalogue-home.tmpl:59
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/cmsdsearchresults.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:31
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:161
 msgid "Dewey"
 msgstr "杜威分類號"
 
@@ -3278,8 +3319,8 @@ msgid "Due Date"
 msgstr "應歸還日期"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:78
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:105
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:157
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:105
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:157
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:63
 msgid "E-mail"
 msgstr "電郵"
@@ -3299,7 +3340,7 @@ msgstr "電郵：<a1>%s</a>"
 msgid "END"
 msgstr "完"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:229
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:229
 msgid "ERROR"
 msgstr "錯誤"
 
@@ -3340,7 +3381,7 @@ msgstr "Ed Summers"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:13
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:69
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:116
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:131
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:130
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:20
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:120
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:148
@@ -3451,12 +3492,12 @@ msgstr "族裔：%s, %s"
 msgid "Existing items"
 msgstr "現有圖書資料"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:66
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:66
 msgid "Expiry Date"
 msgstr "有效日期至"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:74
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:123
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:122
 msgid "Explanation"
 msgstr "說明"
 
@@ -3481,16 +3522,16 @@ msgid "FINES & CHARGES"
 msgstr "罰款及費用"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:189
-#: ../../koha-tmpl/intranet-tmpl/default/en/member-flags.tmpl:8
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/member-flags.tmpl:8
 msgid "FLAGS"
 msgstr "旗標"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:41
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:73
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:97
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:149
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/imemberentry.tmpl:83
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:126
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:97
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:149
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:59
 msgid "Fax"
 msgstr "傳真"
@@ -3503,7 +3544,7 @@ msgstr "傳真"
 msgid "Fax: %s"
 msgstr "傳真：%s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categoryitem.tmpl:270
 msgid "Fee"
 msgstr "費用"
@@ -3512,7 +3553,7 @@ msgstr "費用"
 msgid "Fee:$30/year, Paid"
 msgstr "費用：每年$30，已付"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:101
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:101
 msgid "Female"
 msgstr "女"
 
@@ -3593,6 +3634,11 @@ msgstr "格式："
 msgid "Francisco M. Marzoa Alonso"
 msgstr "Francisco M. Marzoa Alonso"
 
+#  XXX 暫譯
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:111
+msgid "Free"
+msgstr "公有"
+
 # FIXME poor translation
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:116
 msgid "Free form"
@@ -3638,13 +3684,13 @@ msgstr "貨勞稅"
 msgid "GST Registered"
 msgstr "已登記貨勞稅號碼"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:238
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:238
 msgid "Gender"
 msgstr "性別"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:163
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:68
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:215
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:163
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:68
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:215
 msgid "General Notes"
 msgstr "一般備註"
 
@@ -3660,7 +3706,7 @@ msgstr "德文"
 msgid "Given Name*"
 msgstr "名*"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:241
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:241
 msgid "Given Names"
 msgstr "名"
 
@@ -3702,10 +3748,6 @@ msgstr "擔保人："
 msgid "HELP"
 msgstr "說明"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:27
-msgid "HELP :"
-msgstr "說明："
-
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:106
 msgid "HELP Ordering:"
 msgstr "採購說明："
@@ -3734,7 +3776,6 @@ msgstr "Henri-Damien Laurent"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:42
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:9
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:56
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:54
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:9
@@ -3751,8 +3792,8 @@ msgstr "Henri-Damien Laurent"
 msgid "Home"
 msgstr "主頁"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:68
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:120
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:68
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:120
 msgid "Home Address"
 msgstr "住宅地址"
 
@@ -3884,6 +3925,7 @@ msgstr "插圖"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/catalogue-home.tmpl:55
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:18
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:30
 msgid "Illustrator"
 msgstr "繪圖"
 
@@ -3922,19 +3964,18 @@ msgid "Inactive"
 msgstr "非使用中"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:40
-#, fuzzy
 msgid "Initials"
-msgstr "劃一題名"
+msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/imemberentry.tmpl:40
 msgid "Institution Name"
 msgstr "機構名稱"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:235
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:235
 msgid "Invalid cardnumber"
 msgstr "借書證號碼無效"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:7
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:7
 msgid "Invalid cardnumber."
 msgstr "借書證號碼無效。"
 
@@ -3968,23 +4009,23 @@ msgstr "發票上之價錢為"
 msgid "Invoice: %s"
 msgstr "發票：%s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:56
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:121
 msgid "Is equal to"
 msgstr "等於"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:59
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:124
 msgid "Is greater or equal to"
 msgstr "大於或等於"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:58
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:123
 msgid "Is greater than"
 msgstr "大於"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:61
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:126
 msgid "Is lower or equal to"
 msgstr "小於或等於"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:60
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:125
 msgid "Is lower than"
 msgstr "小於"
 
@@ -4063,6 +4104,10 @@ msgstr "遺失"
 #, c-format
 msgid "Item Number %S"
 msgstr "圖書資料號碼 %S"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:70
+msgid "Item Type"
+msgstr "圖書資料類別"
 
 #. %1$s: TMPL_VAR name=barcode
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptItemCopy.tmpl:12
@@ -4200,9 +4245,9 @@ msgstr "讀者登記"
 msgid "Joined: %s, Expires: %s"
 msgstr "登記日期：%s，期滿：%s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:47
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:74
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:99
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:47
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:74
 msgid "Joining Branch"
 msgstr "登記之館別"
 
@@ -4212,7 +4257,7 @@ msgstr "登記之館別"
 msgid "Joining Branch: %s"
 msgstr "登記之館別：%s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:58
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:58
 msgid "Joining Date"
 msgstr "登記日期"
 
@@ -4233,7 +4278,7 @@ msgid "Jérome Vizcaino (Esiee School)"
 msgstr "J&eacute;rome Vizcaino (ESIEE學院)"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:40
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:54
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:52
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/members-top.inc:40
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/opac-top.inc:65
@@ -4295,6 +4340,10 @@ msgstr "Katipo Communications"
 msgid "Keep a record of books I have read"
 msgstr "記錄我已閱讀書藉"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:21
+msgid "Keyword"
+msgstr "關鍵詞"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbooks.tmpl:52
 msgid "Keyword:"
 msgstr "關鍵詞："
@@ -4313,7 +4362,7 @@ msgstr "登入Koha"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:166
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:16
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:78
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:80
 msgid "Koha field"
 msgstr "Koha欄位"
 
@@ -4371,7 +4420,7 @@ msgstr "最近出現在分館"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:42
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:68
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:169
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:77
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:79
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:111
 msgid "Lib"
 msgstr "說明"
@@ -4429,7 +4478,7 @@ msgstr "存放地點"
 #. %1$s: TMPL_VAR name=loggedinuser
 #: ../../koha-tmpl/intranet-tmpl/default/en/opac-main.tmpl:78
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:74
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:109
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:65
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:102
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-top.inc:330
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/members-top.inc:89
@@ -4497,11 +4546,6 @@ msgstr "機讀格式書目管理"
 msgid "MARC links%s"
 msgstr "機讀格式之連結 %s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:90
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:7
-msgid "MARC search"
-msgstr "以機讀格式查詢"
-
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:7
 msgid "MARC search results"
 msgstr "機讀格式查詢結果"
@@ -4511,7 +4555,7 @@ msgid "MARC structure: tags then subfields."
 msgstr "設定機讀格式的欄位結構 (欄及分欄)"
 
 #. %1$s: TMPL_VAR name=tagfield
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:70
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:72
 #, c-format
 msgid "MARC subfield structure admin for %s"
 msgstr "%s 之機讀格式分欄結構管理"
@@ -4530,14 +4574,14 @@ msgstr "機讀格式欄位結構管理"
 msgid "MARC21"
 msgstr "MARC21"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:55
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:107
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:93
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:55
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:107
 msgid "MEMBER ADDRESS"
 msgstr "讀者地址"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:76
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:128
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:76
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:128
 msgid "MEMBER CONTACT DETAIL"
 msgstr "讀者聯絡資料細節"
 
@@ -4545,9 +4589,9 @@ msgstr "讀者聯絡資料細節"
 msgid "MEMBER PERSONAL DETAILS"
 msgstr "讀者個人資料"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:26
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:28
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:21
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:28
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:21
 msgid "MEMBERSHIP DETAILS"
 msgstr "讀者細節"
 
@@ -4577,7 +4621,7 @@ msgstr "總館"
 msgid "Main Menu"
 msgstr "主清單"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:99
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:99
 msgid "Male"
 msgstr "男"
 
@@ -4591,7 +4635,7 @@ msgid "Manages thesaurus and authorities files."
 msgstr "同義字典及權威檔案的管理"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:15
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:80
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:82
 msgid "Mand"
 msgstr "必備"
 
@@ -4640,7 +4684,7 @@ msgstr "讀者號碼：%s"
 #. IMG name=member
 #: ../../koha-tmpl/intranet-tmpl/default/en/intranet-main.tmpl:102
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member.tmpl:5
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/members-home.tmpl:9
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/members-home.tmpl:10
 msgid "Member Search"
 msgstr "讀者搜尋"
 
@@ -4670,7 +4714,6 @@ msgstr "讀者號碼 %s，借書證號碼* %S"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:11
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:48
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:11
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:62
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:11
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:11
@@ -4686,7 +4729,7 @@ msgstr "讀者號碼 %s，借書證號碼* %S"
 msgid "Members"
 msgstr "讀者"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:42
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:42
 msgid "Membership Category"
 msgstr "讀者類別"
 
@@ -4704,9 +4747,9 @@ msgstr "讀者類別：%s"
 msgid "Membership No."
 msgstr "讀者號碼"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:31
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:36
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:31
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:36
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:26
 msgid "Membership Number"
 msgstr "讀者號碼"
 
@@ -4853,9 +4896,9 @@ msgstr "MySQL版本："
 msgid "NEW"
 msgstr "新增"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:13
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:12
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:8
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:13
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:12
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:8
 msgid "NEW MEMBER"
 msgstr "新增讀者"
 
@@ -4865,7 +4908,7 @@ msgstr "新增讀者"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:140
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:138
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:52
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:57
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:59
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:88
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:98
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:92
@@ -4898,17 +4941,17 @@ msgstr ""
 "注意：如果您修改任何一個機讀格式欄與非機讀格式欄位之間的連結，請要求您的系統"
 "管理員執行misc/rebuildnonmarc.pl。"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:158
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:210
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:158
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:210
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:266
 msgid "NOTES"
 msgstr "備註"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:18
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:126
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:20
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:13
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:178
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:18
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:126
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:20
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:13
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:178
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:29
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:104
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:172
@@ -4920,6 +4963,12 @@ msgstr "備註"
 #: ../../koha-tmpl/intranet-tmpl/default/en/stats.tmpl:6
 msgid "Name"
 msgstr "名稱"
+
+#. %1$S: type=text name=addshelf
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:106
+#, c-format
+msgid "Name : %S"
+msgstr "名稱：%S"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/marcimport.tmpl:36
 #: ../../koha-tmpl/intranet-tmpl/default/en/import/breeding.tmpl:36
@@ -5003,8 +5052,8 @@ msgid "Nicolas Morin, French Translation"
 msgstr "Nicolas Morin (法文翻譯)"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:206
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:91
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:92
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:94
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:95
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:122
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:123
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:156
@@ -5097,7 +5146,7 @@ msgid "Note : the items are NOT exported by this tool"
 msgstr "注意：這個工具不會匯出罰款數據"
 
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:36
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:38
 msgid "Note: in the last column, you can choose:"
 msgstr "注意：在最後一欄，您可以選擇："
 
@@ -5109,8 +5158,6 @@ msgstr "注意：在最後一欄，您可以選擇："
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:131
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbib.tmpl:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:51
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:150
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:202
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/AcceptBiblioitem.tmpl:50
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:26
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/imemberentry.tmpl:95
@@ -5119,6 +5166,8 @@ msgstr "注意：在最後一欄，您可以選擇："
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:174
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:184
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:150
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:202
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:98
 msgid "Notes"
@@ -5173,9 +5222,9 @@ msgstr "過期未還"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:156
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:175
 #: ../../koha-tmpl/intranet-tmpl/default/en/thesaurus_popup.tmpl:8
 #: ../../koha-tmpl/intranet-tmpl/default/en/thesaurus_popup.tmpl:26
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:175
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:239
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:122
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:130
@@ -5196,8 +5245,8 @@ msgstr "過期未還"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:121
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:134
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:161
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:35
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:64
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:37
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:66
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:72
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:95
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:75
@@ -5316,6 +5365,10 @@ msgstr "訂單"
 msgid "Order placed: %s"
 msgstr "訂單日期：%s"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:157
+msgid "Ordered by"
+msgstr "排序"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:14
 msgid "Other forms"
 msgstr "其他形式"
@@ -5355,6 +5408,10 @@ msgstr "過期圖書資料"
 msgid "Overdue notice required"
 msgstr "需要過期通知"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:107
+msgid "Owner :"
+msgstr "管理人："
+
 #  NOTE 即「Post and Packaging」（北美稱「Shipping and Handling」，S&H）
 #  NOTE 字義係由Simon Blake在#koha提供
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:29
@@ -5365,7 +5422,7 @@ msgstr "運費"
 msgid "PARENT OR GUARDIAN"
 msgstr "家長或監護人"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:82
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:82
 msgid "PERSONAL DETAILS"
 msgstr "個人資料"
 
@@ -5383,7 +5440,6 @@ msgstr "頁數："
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:15
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:15
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:74
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:15
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:72
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:15
@@ -5447,12 +5503,6 @@ msgstr "Perl版本："
 msgid "Personal Authorities builder"
 msgstr ""
 
-#. %1$s: TMPL_VAR name=branchphone
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:126
-#, c-format
-msgid "Ph: %s"
-msgstr "電話：%s"
-
 #. %1$s: TMPL_VAR name=phone
 #. %2$s: TMPL_VAR name=fax
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:5
@@ -5462,19 +5512,19 @@ msgstr "電話：%s，傳真：%s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:36
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:63
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:134
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:186
 #: ../../koha-tmpl/intranet-tmpl/default/en/overdue.tmpl:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:158
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:134
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:186
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:55
 msgid "Phone"
 msgstr "電話"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:89
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:89
 msgid "Phone (Daytime)"
 msgstr "電話 (日間)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:81
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:81
 msgid "Phone (Home)"
 msgstr "電話 (住宅)"
 
@@ -5482,8 +5532,8 @@ msgstr "電話 (住宅)"
 msgid "Phone (day)"
 msgstr "電話 (日間)"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:141
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:139
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:141
 msgid "Phone daytime"
 msgstr "電話 (日間)"
 
@@ -5493,8 +5543,8 @@ msgstr "電話 (日間)"
 msgid "Phone daytime: %s"
 msgstr "電話 (日間)：%s"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:133
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/memberentry.tmpl:125
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:133
 msgid "Phone home"
 msgstr "電話 (住宅)"
 
@@ -5504,8 +5554,10 @@ msgstr "電話 (住宅)"
 msgid "Phone home: %s"
 msgstr "電話 (住宅)：%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=altphone
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:37
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:126
 #, c-format
 msgid "Phone: %s"
 msgstr "電話：%s"
@@ -5568,8 +5620,8 @@ msgid "Position"
 msgstr "職位"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:25
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:60
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:112
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:60
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:112
 msgid "Postal Address"
 msgstr "郵址"
 
@@ -5588,12 +5640,12 @@ msgid "Postal Address: %s, %s %s"
 msgstr "郵址：%s, %s %s"
 
 #  XXX 這個很麻煩，中文沒人說這個的……
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:247
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:247
 msgid "Postal Street Address"
 msgstr "郵址 (街道門牌)"
 
 #  XXX 這個很麻煩，中文沒人說這個的……
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:250
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:250
 msgid "Postal city"
 msgstr "郵址 (市鎮名稱)"
 
@@ -5656,14 +5708,25 @@ msgstr "印表機"
 msgid "Printers (UNIX paths)."
 msgstr "印表機 (UNIX路徑）"
 
+#  XXX 暫譯
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:109
+msgid "Private"
+msgstr "私有"
+
 #  NOTE「出版年」為正確譯法，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:50
 msgid "Pubdate"
 msgstr "出版年"
 
+#  XXX 暫譯
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:110
+msgid "Public"
+msgstr "公開"
+
 #  NOTE「出版年」為正確譯法，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:43
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:33
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:162
 msgid "Publication Year"
 msgstr "出版年"
 
@@ -5676,6 +5739,7 @@ msgstr "出版年："
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:10
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:37
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:34
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:163
 msgid "Publisher"
 msgstr "出版者"
 
@@ -5720,7 +5784,7 @@ msgstr "佇列"
 msgid "Queue missing"
 msgstr "沒有填寫佇列名稱"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:87
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:16
 msgid "Quick search"
 msgstr "快速查詢"
 
@@ -5829,8 +5893,8 @@ msgstr "Regula Sebastiao"
 msgid "Related"
 msgstr "相關"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:142
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:194
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:142
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:194
 msgid "Relationship"
 msgstr "關係"
 
@@ -5849,6 +5913,7 @@ msgid "Remove"
 msgstr "移除"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:27
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:26
 msgid "Remove Selected Items"
 msgstr "移除點選的圖書資料"
@@ -5863,7 +5928,7 @@ msgid "Renew Items"
 msgstr "續借"
 
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/members/members-home.tmpl:12
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/members-home.tmpl:13
 msgid ""
 "Renew Items, view add, modify and delete records, all by starting with this "
 "search. Type a borrower name, part of a name, or number in the field above "
@@ -5894,7 +5959,7 @@ msgstr "借書費用"
 msgid "Rental charge is not a number"
 msgstr "您填寫的借書費用並非數字"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:79
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:81
 msgid "Rep"
 msgstr "可重覆"
 
@@ -5929,7 +5994,6 @@ msgstr "報表列印"
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-bottom.inc:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/acquisitions-top.inc:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-bottom.inc:14
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:71
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-bottom.inc:14
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:69
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/issues-bottom.inc:14
@@ -6062,7 +6126,7 @@ msgstr "在顯示第<b>%s</b>至<b>%s</b>項結果"
 msgid "Results <i>%s</i> to <i>%s</i> displayed."
 msgstr "在顯示第<b>%1$s</b>至<b>%2$s</b>項結果。"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:74
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:150
 msgid "Results per page :"
 msgstr "每頁顯示結果項數："
 
@@ -6131,6 +6195,7 @@ msgstr "稱號"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:56
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:44
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:41
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:33
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:68
@@ -6143,8 +6208,8 @@ msgstr "儲存"
 msgid "Save Changes"
 msgstr "儲存"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:60
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/jmemberentry.tmpl:77
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:60
 msgid "School"
 msgstr "就讀學校"
 
@@ -6183,6 +6248,15 @@ msgstr "第一步：填寫出版項"
 msgid "Sedgewick Library"
 msgstr "Sedgewick圖書館"
 
+#  NOTE「See」中文譯「見」，「See also」中文譯「參見」，請勿改動
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:84
+msgid "See also"
+msgstr "參見"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:18
+msgid "See also (in searches)"
+msgstr "參見 (查詢館藏時)"
+
 # TODO check context
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:54
 msgid "Seen"
@@ -6192,6 +6266,7 @@ msgstr "出現過"
 msgid "Select Branch"
 msgstr "選擇分館"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:77
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:73
 msgid "Select Shelves to Delete"
 msgstr "選擇要移除的虛擬書架"
@@ -6264,7 +6339,7 @@ msgid "Servers to query for MARC data."
 msgstr "查詢機讀格式數據時所用的伺服器"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/member-flags.tmpl:25
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/member-flags.tmpl:25
 msgid "Set Flags"
 msgstr "設定旗標"
 
@@ -6279,8 +6354,8 @@ msgstr "設定偏好"
 msgid "Set reserve to waiting and transfer book to <b>%s </b>:"
 msgstr "設定預約狀態為「等候中」，然後把圖書資料移交至 <b>%s </b>："
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:52
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:95
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:52
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:95
 msgid "Sex"
 msgstr "性別"
 
@@ -6300,10 +6375,13 @@ msgstr ""
 "如有已購買或獲贈之圖書資料，可用有底色之欄位做個「快速」採購，資料庫內的「訂"
 "購」數量將被設成跟所收數量相同。"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:135
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:118
 msgid "Shelf List"
 msgstr "虛擬書架一覽"
 
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:22
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:67
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:22
 #: ../../koha-tmpl/intranet-tmpl/default/en/shelves.tmpl:63
 msgid "Shelf list"
@@ -6408,11 +6486,11 @@ msgstr "開始日期 <i>(%s)</i>"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/catalogue-home.tmpl:93
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:73
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:165
 msgid "Start search"
 msgstr "開始查詢"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:57
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:122
 msgid "Starts with"
 msgstr "起首字詞為"
 
@@ -6454,8 +6532,8 @@ msgid "Subclass"
 msgstr "作者號"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:168
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:49
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:76
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:51
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:78
 msgid "Subfield"
 msgstr "分欄"
 
@@ -6486,9 +6564,9 @@ msgid "Subject:%S"
 msgstr "主題：%S"
 
 # NOTE 譯文更動 by Arthur
-#. INPUT type=submit name=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:226
+#. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio-nomarc.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:226
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/selectbranchprinter.tmpl:36
 msgid "Submit"
 msgstr "遞交"
@@ -6541,8 +6619,8 @@ msgstr "供應商為"
 msgid "Suppliers List Price"
 msgstr "供應商標價"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:244
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/member.tmpl:16
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:244
 msgid "Surname"
 msgstr "姓"
 
@@ -6569,7 +6647,7 @@ msgstr "系統參數"
 msgid "System preferences"
 msgstr "系統偏好"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:113
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:112
 msgid "System preferences admin"
 msgstr "系統偏好管理"
 
@@ -6609,7 +6687,7 @@ msgid "TOTAL : %s : %s"
 msgstr "總計：%s：%s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:17
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:81
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:83
 msgid "Tab"
 msgstr "在第幾格顯示"
 
@@ -6632,8 +6710,8 @@ msgstr "測試"
 msgid "Text Messaging"
 msgstr "短訊"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:113
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:165
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:113
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:165
 msgid "Text messaging"
 msgstr "短訊"
 
@@ -6678,7 +6756,7 @@ msgstr ""
 "新增至Koha正式的資料庫內，並由Breeding Farm內移除。"
 
 #  NOTE The original English desc is is not entirely accurate!
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:72
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:74
 msgid ""
 "The column <b>Koha field</b> shows that the subfield is linked with a Koha "
 "field. Koha can manage a MARC interface, or a Koha interface. This link "
@@ -6702,11 +6780,12 @@ msgid "The field itemnum MUST be mapped"
 msgstr "圖書資料號碼 (itemnum) 欄位必須連結至一個合適的機讀格式分欄"
 
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/newmember.tmpl:230
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newmember.tmpl:230
 msgid ""
 "The following fields have a forbidden value. Please push the back button and "
 "try again :"
-msgstr "下列的欄位含不容許的數值。請您按瀏覽器的「往後」(Back) 按鈕，然後重試："
+msgstr ""
+"下列的欄位含不容許的數值。請您按瀏覽器的「往後」(Back) 按鈕，然後重試："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/recieve.tmpl:64
 msgid ""
@@ -6725,17 +6804,17 @@ msgstr ""
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/parameters-top.inc:79
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:49
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:86
 msgid "Thesaurus"
 msgstr "同義字典"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:19
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:20
 msgid "Thesaurus category"
 msgstr "同義字類別"
 
 #  NOTE 譯文更動 by Arthur
 #. SPAN
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:83
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:86
 msgid "Thesaurus linked to this subfield"
 msgstr "連結至此分欄的同義字典"
 
@@ -6768,7 +6847,7 @@ msgstr "這頁只是樣本"
 msgid "This record is used %s times. Deletion not possible"
 msgstr "這個記錄目前用了 %s 次，不可移除"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:71
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:73
 msgid ""
 "This screen shows the subfields associated with the selected tag. You can "
 "edit subfields or add a new one by clicking on edit."
@@ -6827,6 +6906,8 @@ msgstr "請點選需要修改的圖書資料的條碼。不被點選者將維持
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:282
 #: ../../koha-tmpl/intranet-tmpl/default/en/circ/circulation.tmpl:304
 #: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/result.tmpl:51
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:41
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:159
 #: ../../koha-tmpl/intranet-tmpl/default/en/z3950/searchresult.tmpl:15
 #: ../../koha-tmpl/intranet-tmpl/default/en/maint/catmaintain.tmpl:35
 msgid "Title"
@@ -7076,12 +7157,12 @@ msgstr "使用者ID"
 
 #  NOTE This is the correct translation. If you think it's wrong please read the source.
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:84
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:87
 msgid "Val build"
 msgstr "建立數值"
 
 #  NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/intranet-tmpl/default/en/newimember.tmpl:170
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newimember.tmpl:170
 msgid "Valid values. click OK to confirm this new borrower"
 msgstr "輸入的數值有效。請按「好！」以確定您要新增這位讀者"
 
@@ -7089,14 +7170,14 @@ msgstr "輸入的數值有效。請按「好！」以確定您要新增這位讀
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:45
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:73
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:95
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:122
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:121
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:83
 msgid "Value"
 msgstr "數值"
 
 #  NOTE 譯文更動 by Arthur
 #. SPAN
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:84
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:87
 msgid "Value builder"
 msgstr "數值建立程序"
 
@@ -7112,7 +7193,7 @@ msgstr "與 %s (%s) 相關的數值"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:69
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:71
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:92
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:121
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:120
 msgid "Variable"
 msgstr "變數"
 
@@ -7127,10 +7208,6 @@ msgstr "查看購物籃"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/catalogue-home.tmpl:99
 msgid "Virtual Bookshelves"
-msgstr "虛擬書架"
-
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:93
-msgid "Virtual shelves"
 msgstr "虛擬書架"
 
 #  NOTE MARC21 的 440$v, "Volume number/sequential designation (NR)", 例如 "v.1" 等
@@ -7246,7 +7323,7 @@ msgstr "已以工作抵償"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:140
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:138
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:51
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:57
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:59
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:88
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:98
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/thesaurus.tmpl:91
@@ -7268,8 +7345,8 @@ msgid "Year%s"
 msgstr "年%0.0s"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:207
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:91
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:92
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:94
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:95
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:122
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:123
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:156
@@ -7437,7 +7514,11 @@ msgstr "【顯示共%3$s個記錄中的第%1$s至%2$s個記錄】%4$s"
 msgid "\\n"
 msgstr ""
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:41
+#: ../../koha-tmpl/intranet-tmpl/default/en/bookshelves/shelves.tmpl:114
+msgid "a private bookshelf is managed by you & can be seen only by you."
+msgstr "「私人」的虛擬書架只有您看得見，並且只有您才有權修改。"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:106
 msgid "and"
 msgstr "及"
 
@@ -7462,6 +7543,14 @@ msgstr "而且它們必須全部在第 10 格 (「圖書資料」格)"
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:38
 msgid "any"
 msgstr "任何"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:61
+msgid "author"
+msgstr "著者"
+
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:81
+msgid "barcode"
+msgstr "條碼"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:108
 msgid "be in tab -1"
@@ -7536,7 +7625,7 @@ msgstr "「預設使用」只可填 0 或者 1"
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:5
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:5
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:105
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:116
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/systempreferences.tmpl:115
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/categoryitem.tmpl:258
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/currency.tmpl:167
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/printers.tmpl:158
@@ -7647,6 +7736,16 @@ msgstr ""
 "選擇「不可借出」，這類圖書資料將全部都不可借出；如果不選，這類圖書資料將全部"
 "可以借出，但個別圖書資料可以分別設定成不可借出。"
 
+#  FIXME 譯文有待改進，但原文有點難明 :-/
+#. SPAN
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:84
+msgid ""
+"if subfields entered here, searches on this field will also be done on "
+"seealso subfields (syntax 200a,300e)"
+msgstr ""
+"如果在這裏輸入「參見」的分欄，查詢這個欄時會一併查詢這些「參見」的分欄"
+" (格式舉例：200a,300e)"
+
 #: ../../koha-tmpl/intranet-tmpl/default/en/value_builder/unimarc_field_700-4.tmpl:13
 msgid "illustrateur"
 msgstr "繪圖"
@@ -7725,7 +7824,7 @@ msgstr "須移交至 <b>%s</b>"
 
 #. INPUT type=image
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:96
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:106
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:110
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:150
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:172
 msgid "next"
@@ -7735,7 +7834,7 @@ msgstr "下一頁"
 msgid "no guarantor"
 msgstr "無擔保人"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:50
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:115
 msgid "not"
 msgstr "非"
 
@@ -7744,21 +7843,21 @@ msgstr "非"
 msgid "not seen since"
 msgstr "右列日期起未出現過"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:85
+#: ../../koha-tmpl/intranet-tmpl/default/en/includes/cat-top.inc:57
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/circulation-top.inc:83
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/members-top.inc:71
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/parameters-top.inc:71
 msgid "options &gt;&gt;&nbsp;&nbsp;"
 msgstr "選項 &gt;&gt;　"
 
-#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:42
+#: ../../koha-tmpl/intranet-tmpl/default/en/search.marc/search.tmpl:107
 msgid "or"
 msgstr "或"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=thesaurus_category
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:31
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:32
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:33
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:34
 #, c-format
 msgid "or %s"
 msgstr "或 %s"
@@ -7789,7 +7888,7 @@ msgstr "書後語"
 
 #. INPUT type=image
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/authorised_values.tmpl:89
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:105
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:109
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marctagstructure.tmpl:143
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/itemtypes.tmpl:171
 msgid "previous"
@@ -7874,17 +7973,17 @@ msgid "site name missing"
 msgstr "沒有填寫Z39.50伺服器名稱"
 
 #. SPAN
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:80
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:82
 msgid "subfield is mandatory (1=yes, 0=no)"
 msgstr "分欄是否必備 (1=必備，0=自由使用)"
 
 #. SPAN
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:81
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:83
 msgid "subfield is shown in which tab (0-9 or item)"
 msgstr "分欄在那一格顯示 (0-9號，抑或「圖書資料」格)"
 
 #. SPAN
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:79
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:81
 msgid "subfield may be repeated (1=yes, 0=no)"
 msgstr "分欄是否可重覆 (1=可重覆，0=不可重覆)"
 
@@ -7894,7 +7993,7 @@ msgstr "分欄"
 
 # NOTE 譯文更動 by Arthur
 #. INPUT type=submit name=submit
-#: ../../koha-tmpl/intranet-tmpl/default/en/newjmember.tmpl:81
+#: ../../koha-tmpl/intranet-tmpl/default/en/members/newjmember.tmpl:81
 msgid "submit"
 msgstr "遞交"
 
@@ -7960,7 +8059,7 @@ msgstr "itemtypes table是空白的，它必須有至少一個數值"
 
 #. SPAN
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/koha2marclinks.tmpl:166
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:78
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:80
 msgid "the koha-DB field linked to this subfield"
 msgstr "鏈結至此分欄的 Koha 資料庫欄位"
 
@@ -8006,7 +8105,7 @@ msgstr "沒有填寫數值"
 
 #  NOTE 譯文更動 by Arthur
 #. SPAN
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:82
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/marc_subfields_structure.tmpl:85
 msgid "values authorised for this subfield"
 msgstr "在此分欄容許使用之數值"
 
@@ -8059,6 +8158,26 @@ msgstr "z3950查詢"
 
 #~ msgid "<h2>%s, %s</h2>"
 #~ msgstr "<h2>%s, %s</h2>"
+
+#~ msgid ""
+#~ "Build your request using MARC fields and subfields. Add criteria lets you "
+#~ "add another criteria to your search. Search commits the request and "
+#~ "displays the results."
+#~ msgstr ""
+#~ "查詢的要求請以機讀格式的欄及分欄逐步建立。「新增查詢條件」讓您新增另一查詢"
+#~ "的條件到您的查詢；按「開始查詢」即開始查詢，並顯示查詢的結果。"
+
+#~ msgid "Cat maintenance"
+#~ msgstr "目錄維護"
+
+#~ msgid "HELP :"
+#~ msgstr "說明："
+
+#~ msgid "Ph: %s"
+#~ msgstr "電話：%s"
+
+#~ msgid "Virtual shelves"
+#~ msgstr "虛擬書架"
 
 #~ msgid "from biblio number :"
 #~ msgstr "由書目記錄號碼"
