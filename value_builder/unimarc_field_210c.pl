@@ -69,7 +69,7 @@ while (my ($father,$stdlib) = $sth->fetchrow) {
 my $res  = "
 <script>
 function Focus$function_name(index) {
-var isbn_array = [";
+var isbn_array = [ ";
 foreach my $editor (@editors) {
 	my @arr = split (/ $authoritysep /,$editor);
 	$res .='["'.$arr[0].'","'.$arr[1].'","'.$arr[2].'"],';
