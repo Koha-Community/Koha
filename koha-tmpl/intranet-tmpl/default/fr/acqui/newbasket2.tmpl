@@ -4,14 +4,14 @@
 
 <TMPL_IF name ="testdonation">
 	<a href="newbiblio.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Ajouter Notice"></a>
+	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" align=right alt="Ajouter Notice"></a>
 <TMPL_ELSE>
 	<a href="newdonation.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Ajouter Notice"></a>
+	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" border=0 align=right alt="Ajouter Notice"></a>
 </TMPL_IF>
 
 <a href="basket.pl?basket=<TMPL_VAR name="basket">">
-<img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="Voir Panier"></a>
+<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" border=0 align=right alt="Voir Panier"></a>
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
 <input type=hidden name=id value=<TMPL_VAR name="id">>
 <input type=hidden name=basket value=<TMPL_VAR name="basket">>
@@ -31,7 +31,7 @@ Votre recherche:
 
 <br> Affichage des r&eacute;sultats <TMPL_VAR name="dispnum"> &agrave; <TMPL_VAR name="offset2">.
 
-<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 background="/images/background-mem.gif" Color="<TMPL_VAR name="main">">
+<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 background="<TMPL_VAR name="themelang">/images/background-mem.gif" Color="<TMPL_VAR name="main">">
 	<TR  VALIGN=TOP>
 		<TD><b>TITRE</b></TD>
 		<TD><b>AUTEUR</b></TD>

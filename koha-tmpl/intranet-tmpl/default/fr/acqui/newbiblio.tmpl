@@ -1,0 +1,178 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+<script language="javascript" type="text/javascript">
+
+<!--
+function update(f){
+  //collect values
+  quantity=f.quantity.value
+  discount=f.discount.value
+  listinc=parseInt(f.listinc.value)
+  currency=f.currency.value
+  applygst=parseInt(f.applygst.value)
+  listprice=f.list_price.value
+  //  rrp=f.rrp.value
+  //  ecost=f.ecost.value  //budgetted cost
+  //  GST=f.GST.value
+  //  total=f.total.value
+  //make useful constants out of the above
+  exchangerate=f.elements[currency].value      //get exchange rate
+  gst_on=(!listinc && applygst);
+  //do real stuff
+  rrp=listprice*exchangerate;
+  ecost=rrp*(100-discount)/100
+  GST=0;
+  if (gst_on){
+    rrp=rrp*1.125;
+    GST=ecost*0.125
+  }
+
+  total=(ecost+GST)*quantity
+
+
+  f.rrp.value=display(rrp)
+  f.ecost.value=display(ecost)
+  f.GST.value=display(GST)
+  f.total.value=display(total)
+
+}
+
+
+
+function messenger(X,Y,etc){
+win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
+win.focus();
+win.document.close();
+win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size=2><p><br>");
+win.document.write(etc);
+win.document.write("<center><form><input type=button onclick='self.close()' value=Close></form></center>");
+win.document.write("</font></body></html>");
+}
+//-->
+
+</script>
+<form action=/cgi-bin/koha/acqui/addorder.pl method=post name=frusin>
+<TMPL_UNLESS name="existing"><input type=hidden name=existing value=no></TMPL_UNLESS>
+<!-- <TMPL_VAR name="title"> -->
+<input type=hidden name=ordnum value="<TMPL_VAR name="ordnum">">
+<input type=hidden name=basket value="<TMPL_VAR name="basket">">
+<input type=hidden name=supplier value="<TMPL_VAR name="id">">
+<input type=hidden name=biblio value="<TMPL_VAR name="biblio">">
+<input type=hidden name=bibitemnum value="<TMPL_VAR name="biblioitemnumber">">
+<input type=hidden name=oldtype value="<TMPL_VAR name="itemtype">">
+<input type=hidden name=discount value="<TMPL_VAR name="discount">">
+<input type=hidden name=listinc value="<TMPL_VAR name="listincgst">">
+<input type=hidden name=currency value="<TMPL_VAR name="listprice">">
+<input type=hidden name=applygst value="<TMPL_VAR name"gstreg">">
+<TMPL_LOOP name="loop_currencies">
+	<input type=hidden name="<TMPL_VAR name="currency">" value="<TMPL_VAR name="rate">">
+</TMPL_LOOP>
+<TMPL_IF name="orderexists"><input type=hidden name=orderexists value=yes></TMPL_IF>
+<table width="80%">
+<tr><td>
+	<FONT SIZE=6><em><TMPL_VAR name="ordnum"> - Détail commande</em></FONT><br>
+	Panier pour : <TMPL_VAR name="name">
+</td><td>
+	<a href=basket.pl?basket=<TMPL_VAR name="basket">>
+		<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1uparrow.png" border=0 alt="View Basket">
+	</a>
+</td></tr></table>
+<P>
+<CENTER>
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
+	<tr valign=top bgcolor=#99cc33>
+		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>DETAIL CATALOGUE </B></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD><b>Titre *</b></td>
+		<td><input type=text size=20 name=title value="<TMPL_VAR name="title">"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Auteur</td>
+		<td><input type=text size=20 name=author value="<TMPL_VAR name="author">" ></td>
+	</tr>
+	<TR VALIGN=TOP>
+	<TD>Date copyright</td>
+	<td><input type=text size=20 name=copyright value="<TMPL_VAR name="copyrightdate">">
+	</td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Format</td>
+		<td><TMPL_VAR name="CGIitemtype"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>ISBN</td>
+		<td><input type=text size=20 name=ISBN value="<TMPL_VAR name="isbn">"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Périodiques</td>
+		<td><input type=text size=20 name=Series value="<TMPL_VAR name="seriestitle">"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Site</td>
+		<td><TMPL_VAR name="CGIbranch"></td>
+	</tr>
+	<TR VALIGN=TOP  bgcolor=#ffffcc>
+		<TD >Code barre exemplaire</td>
+		<td><input type=text size=20 name=barcode value="<TMPL_VAR name="barcode">"></td>
+	</tr>
+</table>
+<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=32 height=250 align=left>
+<table border=1 cellspacing=0 cellpadding=5 width="40%">
+	<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>DETAILS FINANCIERS</B></td></tr>
+	<TR VALIGN=TOP>
+		<TD>Quantité</td>
+		<td><input type=text size=20 name=quantity value="<TMPL_VAR name="quantity">" onchange='update(this.form)' ></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Fonds</td>
+		<td><TMPL_VAR name="CGIbookfund"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Prix fournisseur</td>
+		<td><input type=text size=20 name=list_price value="<TMPL_VAR name="listprice">" onchange='update(this.form)'></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Coût remplacement <br><FONT SIZE=2></td>
+		<td><input type=text size=20 name=rrp value="<TMPL_VAR name="rrp">" onchange='update(this.form)'>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Cout budgété<BR><FONT SIZE=2></FONT> </td>
+		<td><input type=text size=20 name=ecost value="<TMPL_VAR name="ecost">" onchange='update(this.form)'></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD>Port budgété</td>
+		<td><input type=text size=20 name=GST value="" onchange='update(this.form)'></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD><B>TOTAL BUDGETE</B></td>
+		<td><input type=text size=20 name=total value="" onchange='update(this.form)'></td>
+	</tr>
+	<TR VALIGN=TOP  bgcolor=#ffffcc>
+		<TD>Coût effectif</td>
+		<td><input type=text size=20 name=cost></td>
+	</tr>
+	<TR VALIGN=TOP  bgcolor=#ffffcc>
+		<TD>N° facture *</td>
+		<td><input type=text size=20 name=invoice ></td>
+	<TR VALIGN=TOP>
+		<TD>Notes</td>
+		<td><input type=text size=20 name=notes value="<TMPL_VAR name="notes">"></td>
+	</tr>
+	<TR VALIGN=TOP>
+		<TD colspan=2><input type=image  name=submit src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" border=0 align=right>	</td>
+	</tr>
+</table>
+</form>
+</center>
+<table>
+<tr><td bgcolor=#cccc99  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>HELP</B><br>
+<UL>
+<LI>Si vous commandez plus d'un exemplaire, vous pourrez choisir des fonds supplémentaires, et ajouter des codes barres dans l'écrans suivant</li>
+<LI>les champs en <B>GRAS</B> doivent être remplis pour créer une nouvelle notice et un exemplaire</li>
+<LI>Les champs en italique peuvent être utilisés pour faire une "réception rapide" lorsque les exemplaires seront réceptionnés</li>
+</UL>
+</td></tr></table>
+<p> &nbsp; </p>
+<TMPL_INCLUDE name="acquisitions-bottom.inc">
+
+
