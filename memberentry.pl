@@ -36,6 +36,7 @@ use C4::Members;
 use C4::Koha;
 use HTML::Template;
 use Date::Manip;
+use C4::Date;
 
 my $input = new CGI;
 
@@ -176,9 +177,7 @@ if ($delete){
   }
 
   #Convert dateofbirth to correct format
-  $data->{'dateofbirth'}=ParseDate($data->{'dateofbirth'});
-  $data->{'dateofbirth'}=UnixDate($data->{'dateofbirth'},'%d/%m/%Y');
-
+  $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
 
   $template->param( 
   			member          => $member,
@@ -208,7 +207,8 @@ if ($delete){
   			dateenrolled	=> $data->{'dateenrolled'},
   			expiry		=> $data->{'expiry'},
   			cardnumber	=> $cardnumber,
-  			dateofbirth	=> $data->{'dateofbirth'});
+  			dateofbirth	=> $data->{'dateofbirth'},
+			dateformat      => display_date_format());
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
