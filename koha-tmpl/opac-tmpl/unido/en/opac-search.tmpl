@@ -48,39 +48,42 @@ OpenWin = this.open(page,
 <h1>Search the Catalogue</h1>
 <form action="/cgi-bin/koha/opac-searchresults.pl" method="post">
 <table cellpadding="0" cellspacing="5" border="0">
-<tr valign="top"><td><a href="javascript:Start('/help/title.html')">Title</a></td>
+<tr valign="top"><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/title.html')">Title</a></td>
     <td><input type="text" size="25" name="title"></td>
-    <td><input type="radio" name="ttype" value="normal" checked><a href="javascript:Start('/help/normal-exact.html')">Normal</a><input type="radio" name="ttype" value="exact"><a href="javascript:Start('/help/normal-exact.html')">Exact</a></td></tr>
-<tr valign="top"><td><a href="javascript:Start('/help/author.html')">Author</a></td>
+    <td><input type="radio" name="ttype" value="normal" checked><a
+href="javascript:Start('<TMPL_VAR NAME="site">/help/normal-exact.html')">Normal</a><input
+type="radio" name="ttype" value="exact"><a href="javascript:Start('<TMPL_VAR
+NAME="site">/help/normal-exact.html')">Exact</a></td></tr>
+<tr valign="top"><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/author.html')">Author</a></td>
     <td><input type="text" size="25" name="author"></td></tr>
-<tr valign="top"><td><a href="javascript:Start('/help/keywords.html')">Keywords</a></td>
+<tr valign="top"><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/keywords.html')">Keywords</a></td>
     <td><input type="text" size="25" name="keyword"></td></tr>
-<tr valign="top"><td><a href="javascript:Start('/help/typeofitem.html')">Type of Item</a></td>
+<tr valign="top"><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/typeofitem.html')">Type of Item</a></td>
     <td><select size="1" name="class">
     <option value="">Any
     <!-- fetch class list -->
     <TMPL_VAR name="classlist">
 </select></td></tr>
-<tr><td><a href="javascript:Start('/help/language.html')">Language</a></td><td>
+<tr><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/language.html')">Language</a></td><td>
     <select name="language">
     <option value="" selected>Any</option>
     </select></td></tr>
-<tr><td><a href="javascript:Start('/help/published.html')">Published After (Year)</a></td>
+<tr><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/published.html')">Published After (Year)</a></td>
     <td><input type="text" name="date-after"></td></tr>
-<tr><td><a href="javascript:Start('/help/published.html')">Published Before (Year)</a></td>
+<tr><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/published.html')">Published Before (Year)</a></td>
     <td><input type="text" name="date-before"></td></tr>
-<tr><td><a href="javascript:Start('/help/dewey.html')">Dewey/UDC number</a></td>
+<tr><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/dewey.html')">Dewey/UDC number</a></td>
     <td><input type="text" name="dewey"></td></tr>
 <tr valign="top"><td></td>
     <td><input type="submit" value="OK Start Search" size="15" class="submit"></td></tr>
 <tr valign="top"><td colspan="3"><img src="<TMPL_VAR name='themelang'>/images/holder.gif" width="10" height="5" border="0" alt=""></td></tr>
 <tr valign="top"><td colspan="3"><h3>Search by List of Subjects</h3></td></tr>
-<tr valign="top"><td><a href="javascript:Start('/help/subject.html')">Subject</a></td>
+<tr valign="top"><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/subject.html')">Subject</a></td>
     <td><input type="text" size="25" name="subject"></td>
     <td><input type="submit" value="OK" size="2" class="submit"><img src="<TMPL_VAR name='themelang'>/images/holder.gif" width="10" height="5" border="0" align="right" alt=""></td></tr>
 <tr valign="top"><td colspan="3"><img src="<TMPL_VAR name='themelang'>/images/holder.gif" width="10" height="5" border="0" alt=""></td></tr>
 <tr valign="top"><td><h3>Search for ISBN / ISSN</h3></td></tr>
-<tr valign="top"><td><a href="javascript:Start('/help/isbn.html')">ISBN/ISSN</a></td>
+<tr valign="top"><td><a href="javascript:Start('<TMPL_VAR NAME="site">/help/isbn.html')">ISBN/ISSN</a></td>
     <td><input type="text" size="25" name="isbn"></td>
     <td><input type="submit" value="OK" size="2" class="green-box"><img src="<TMPL_VAR name='themelang'>/images/holder.gif" width="10" height="5" border="0" align="right" alt=""></td></tr>
 <tr valign="top"><td></td>
