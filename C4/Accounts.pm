@@ -61,10 +61,6 @@ patron.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&checkaccount &reconcileaccount &getnextacctno);
-# FIXME - This is never used
-sub displayaccounts{
-  my ($env)=@_;
-}
 
 =item checkaccount
 
@@ -189,11 +185,11 @@ sub recordpayment{
      my $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
+     
      $updquery = "insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     # FIXME - There's already a $usth in this scope.
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
 #     print $updquery
      $usth->execute;
      $usth->finish;
@@ -207,15 +203,10 @@ sub recordpayment{
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
   values ($bornumber,$nextaccntno,now(),0-$data,'Payment,thanks',
   'Pay',0-$amountleft)";
-  my $usth = $dbh->prepare($updquery);
+  $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
   UpdateStats($env,'branch','payment',$data)
-#  $sth->finish;
-#  $query = "commit";
-#  $sth = $dbh->prepare;
-#  $sth->execute;
-#  $sth-finish;
 }
 
 =item getnextacctno
@@ -234,18 +225,15 @@ C<$env> is ignored.
 sub getnextacctno {
   my ($env,$bornumber,$dbh)=@_;
   my $nextaccntno = 1;
-  # FIXME - This could just be
-  #	SELECT max(accountno)+1 from accountlines;
-  my $query = "select * from accountlines
-  where (borrowernumber = '$bornumber')
-  order by accountno desc";
+  
+  my $query = "select max(accountno)+1 from accountlines";
   my $sth = $dbh->prepare($query);
   $sth->execute;
   if (my $accdata=$sth->fetchrow_hashref){
     $nextaccntno = $accdata->{'accountno'} + 1;
   }
   $sth->finish;
-  return($nextaccntno);
+  return$nextaccntno;
 }
 
 END { }       # module clean-up code here (global destructor)
