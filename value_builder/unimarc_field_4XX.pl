@@ -28,9 +28,11 @@ use C4::Auth;
 use C4::Output;
 use C4::Database;
 use C4::Biblio;
+#use C4::SimpleMarc;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Koha;
+use MARC::Record;
 
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
@@ -77,7 +79,135 @@ sub plugin {
 	my $resultsperpage;
 	my $searchdesc;
 	
-	if ($op eq "do_search") {
+	if ($op eq "fillinput"){
+		my $bibnum = $query->param('bibnum');
+		my $index = $query->param('index');
+		my $marcrecord;
+# open template
+		($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "value_builder/unimarc_field_4XX.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			    });
+		#get bibid
+		my $bibid;
+		my $req= $dbh->prepare("SELECT distinctrow bibid,biblionumber FROM `marc_biblio` WHERE biblionumber= ?");
+		$req->execute($bibnum);
+		($bibid,$bibnum) = $req->fetchrow;
+		warn "bibid :".$bibid;
+		#get marc record
+		$marcrecord = MARCgetbiblio($dbh,$bibid);
+		warn "record : ".$marcrecord->as_formatted;
+# 		my @loop_data =();
+# 		my $tag;
+# 		my @loop_data =();
+# 		my @subfields_data;
+		
+		my $subfield_value_9=$bibid;
+		my $subfield_value_0=$marcrecord->field('001');
+		my $subfield_value_a;
+		if ($marcrecord->field('200')){
+			$subfield_value_a=$marcrecord->field('200')->subfield("f");
+		} elsif ($marcrecord->field('700')){
+			$subfield_value_a=$marcrecord->field('700')->subfield("a");
+		} elsif ($marcrecord->field('701')){
+			$subfield_value_a=$marcrecord->field('701')->subfield("a");
+		}
+		my $subfield_value_c = $marcrecord->field('210')->subfield("d") if ($marcrecord->field('210'));
+		my $subfield_value_d;
+		if ($marcrecord->field('100')){
+			my $publicationdate;
+			warn "date de publication 1".substr($marcrecord->field('100')->subfield("a"),9,4)."   date de publication 2 ".substr($marcrecord->field('100')->subfield("a"),12,4);
+			$publicationdate = substr($marcrecord->field('100')->subfield("a"),9,4);
+			if (substr($marcrecord->field('100')->subfield("a"),12,4)>$publicationdate){
+			$publicationdate=substr($marcrecord->field('100')->subfield("a"),12,4);
+			}
+			$subfield_value_d=$publicationdate;
+		}
+		my $subfield_value_e= $marcrecord->field('205')->subfield("a") if ($marcrecord->field('205'));
+		
+		my $subfield_value_h; 
+		if (($marcrecord->field('200')) && ($marcrecord->field('200')->subfield("h"))){
+			$subfield_value_h = $marcrecord->field('200')->subfield("h") ;
+		} elsif (($marcrecord->field('225')) && ($marcrecord->field('225')->subfield("h"))) {
+			$subfield_value_h = $marcrecord->field('225')->subfield("h") ;
+		} elsif (($marcrecord->field('500')) && ($marcrecord->field('500')->subfield("h"))) {
+			$subfield_value_h = $marcrecord->field('500')->subfield("h") ;
+		}
+		
+		my $subfield_value_i;
+		if (($marcrecord->field('200')) && ($marcrecord->field('200')->subfield("i"))){
+			$subfield_value_i = $marcrecord->field('200')->subfield("i") ;
+		} elsif (($marcrecord->field('225')) && ($marcrecord->field('225')->subfield("i"))) {
+			$subfield_value_i = $marcrecord->field('225')->subfield("i") ;
+		} elsif (($marcrecord->field('500')) && ($marcrecord->field('500')->subfield("i"))) {
+			$subfield_value_i = $marcrecord->field('500')->subfield("i") ;
+		}
+
+		my $subfield_value_p = $marcrecord->field('215')->subfield("a") if ($marcrecord->field('215'));
+		
+		my $subfield_value_t;
+		if (($marcrecord->field('200')) && ($marcrecord->field('200')->subfield("a"))){
+			$subfield_value_t = $marcrecord->field('200')->subfield("a") ;
+		} elsif (($marcrecord->field('225')) && ($marcrecord->field('225')->subfield("a"))) {
+			$subfield_value_t = $marcrecord->field('225')->subfield("a") ;
+		} elsif (($marcrecord->field('500')) && ($marcrecord->field('500')->subfield("a"))) {
+			$subfield_value_t = $marcrecord->field('500')->subfield("a") ;
+		}
+		
+		my $subfield_value_u = $marcrecord->field('856')->subfield("p") if ($marcrecord->field('856'));
+		
+		my $subfield_value_v;
+		if (($marcrecord->field('225')) && ($marcrecord->field('225')->subfield("v"))){
+			$subfield_value_v = $marcrecord->field('225')->subfield("v") ;
+		} elsif (($marcrecord->field('200')) && ($marcrecord->field('200')->subfield("h"))) {
+			$subfield_value_v = $marcrecord->field('200')->subfield("h") ;
+		}
+		my $subfield_value_x = $marcrecord->field('011')->subfield("a") if ($marcrecord->field('011') and not (($marcrecord->field('011')->subfield("y")) or ($marcrecord->field('011')->subfield("z"))));
+		my $subfield_value_y = $marcrecord->field('013')->subfield("a") if ($marcrecord->field('013'));
+		if ($marcrecord->field('010')){
+			my $subfield_value_y = $marcrecord->field('010')->subfield("a");
+		}
+# 		my @subf;
+# 		#=(a,c,d,e,h,i,p,t,u,v,x,y,0,9);
+# 			# loop through each subfield
+# 		for my $i (0..$#subf) {
+# 			$subf[$i][0] = "@" unless $subf[$i][0];
+# 			my %subfield_data;
+# 			$subfield_data{marc_value}=$subf[$i][1];
+# 			$subfield_data{marc_subfield}=$subf[$i][0];
+# 			$subfield_data{marc_tag}="";#$field->tag();
+# 			push(@subfields_data, \%subfield_data);
+# 		}
+# 		if ($#subfields_data>=0) {
+# 			my %tag_data;
+# 			$tag_data{tag}="";#$field->tag().' -'. "";
+# 			$tag_data{subfield} = \@subfields_data;
+# 			push (@loop_data, \%tag_data);
+# 		}
+#		$template->param("0XX" =>\@loop_data);
+		$template->param(fillinput => 1,
+						index => $query->param('index')."",
+						bibid=>$bibid?$bibid:"",
+						subfield_value_9=>$subfield_value_9,
+						subfield_value_0=>$subfield_value_0,
+						subfield_value_a=>$subfield_value_a,
+						subfield_value_c=>$subfield_value_c,
+						subfield_value_d=>$subfield_value_d,
+						subfield_value_e=>$subfield_value_e,
+						subfield_value_h=>$subfield_value_h,
+						subfield_value_i=>$subfield_value_i,
+						subfield_value_p=>$subfield_value_p,
+						subfield_value_t=>$subfield_value_t,
+						subfield_value_u=>$subfield_value_u,
+						subfield_value_v=>$subfield_value_v,
+						subfield_value_x=>$subfield_value_x,
+						subfield_value_y=>$subfield_value_y,
+						);
+###############################################################	
+	}elsif ($op eq "do_search") {
 		my @marclist = $query->param('marclist');
 		my @and_or = $query->param('and_or');
 		my @excluding = $query->param('excluding');
@@ -114,8 +244,7 @@ sub plugin {
 		my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 											\@excluding, \@operator, \@value,
 											$startfrom*$resultsperpage, $resultsperpage,$orderby, $desc_or_asc);
-		warn " biblio count : ".$total;
-		warn " biblio count : ".$total;
+#		warn " biblio count : ".$total;
 		
 		($template, $loggedinuser, $cookie)
 			= get_template_and_user({template_name => "value_builder/unimarc_field_4XX.tmpl",
@@ -259,6 +388,7 @@ sub plugin {
 						CGIitemtype => $CGIitemtype,
 						CGIbranch => $CGIbranch,
 						CGIPublisher => $CGIpublisher,
+						index=>$query->param('index'),
 						Search =>1,
 		);
 	}	
