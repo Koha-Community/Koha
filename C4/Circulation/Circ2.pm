@@ -52,6 +52,7 @@ C4::Circulation::Circ2 - Koha circulation module
 
 The functions in this module deal with circulation, issues, and
 returns, as well as general information about the library.
+Also deals with stocktaking.
 
 =head1 FUNCTIONS
 
@@ -63,10 +64,41 @@ returns, as well as general information about the library.
 @EXPORT = qw(&getpatroninformation
 	&currentissues &getissues &getiteminformation
 	&issuebook &returnbook &find_reserves &transferbook &decode
-	&calc_charges);
+	&calc_charges &listitemsforinventory &itemseen);
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
+=item itemseen
+&itemseen($itemnum)
+Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking
+C<$itemnum> is the item number
+
+=back
+
+=cut
+sub itemseen {
+	my ($itemnum) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("update items set datelastseen  = now() where items.itemnumber = ?");
+	$sth->execute($itemnum);
+	return;
+}
+
+sub listitemsforinventory {
+	my ($minlocation,$maxlocation,$datelastseen,$offset,$size) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select itemnumber,barcode,bulk,title,author from items,biblio where items.biblionumber=biblio.biblionumber and bulk>= ? and bulk <=? and (datelastseen< ? or datelastseen is null) order by bulk,title");
+	$sth->execute($minlocation,$maxlocation,$datelastseen);
+	my @results;
+	while (my $row = $sth->fetchrow_hashref) {
+		$offset-- if ($offset);
+		if ((!$offset) && $size) {
+			push @results,$row;
+			$size--;
+		}
+	}
+	return \@results;
+}
 =item getpatroninformation
 
   ($borrower, $flags) = &getpatroninformation($env, $borrowernumber,
@@ -444,7 +476,8 @@ sub dotransfer {
 	$dbh->do("INSERT INTO	branchtransfers (itemnumber, frombranch, datearrived, tobranch)
 					VALUES ($itm, $fbr, now(), $tbr)");
 	#update holdingbranch in items .....
-	$dbh->do("UPDATE items SET	datelastseen  = now(), holdingbranch = $tbr WHERE	items.itemnumber = $itm");
+	$dbh->do("UPDATE items holdingbranch = $tbr WHERE	items.itemnumber = $itm");
+	&itemseen($itm);
 	return;
 }
 
@@ -756,9 +789,10 @@ sub issuebook {
 		$sth->execute($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
 		$sth->finish;
 		$iteminformation->{'issues'}++;
-		$sth=$dbh->prepare("update items set issues=?,datelastseen=now() where itemnumber=?");
+		$sth=$dbh->prepare("update items set issues=? where itemnumber=?");
 		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
 		$sth->finish;
+		&itemseen($iteminformation->{'itemnumber'});
 		# If it costs to borrow this book, charge it to the patron's account.
 		my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
 		if ($charge > 0) {
@@ -918,9 +952,7 @@ sub doreturn {
 		and (itemnumber = ?) and (returndate is null)");
 	$sth->execute($brn,$itm);
 	$sth->finish;
-	$sth=$dbh->prepare("update items set datelastseen=now() where itemnumber=?");
-	$sth->execute($itm);
-	$sth->finish;
+	&itemseen($itm);
 	return;
 }
 
