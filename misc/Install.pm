@@ -1415,6 +1415,11 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 	#MJR: does this contain any passwords?
     chmod 0755, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh", "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh", "$intranetdir/scripts/z3950daemon/processz3950queue";
 
+	#MJR: generate our own settings, to remove the /home/paul hardwired links
+    open(FILE,">$intranetdir/scripts/z3950daemon/z3950-daemon-options");
+    print FILE "RunAsUser=apache\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\n";
+    close(FILE);
+
 	if ($> == 0) {
 	    chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
     	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";

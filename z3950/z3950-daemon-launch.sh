@@ -14,10 +14,7 @@
 #   Needs SysV-type start/stop options
 
 #----------------------------
-# User ID to run the daemon as.  Don't use "root"
-RunAsUser=apache
-
-KohaZ3950Dir=/home/paul/koha.dev/koha/z3950
+. z3950-daemon-options
 export KohaZ3950Dir
 
 #----------------------------
@@ -41,6 +38,9 @@ exit
 
 #--------------
 # $Log$
+# Revision 1.3  2003/10/06 09:10:39  slef
+# Removing config info from z3950*sh and using C4::Context in processz3950queue (Fixed bug 39)
+#
 # Revision 1.2  2003/04/29 16:48:25  tipaul
 # really proud of this commit :-)
 # z3950 search and import seems to works fine.

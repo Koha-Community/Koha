@@ -12,10 +12,7 @@
 #    Call  z3950-daemon-launch.sh  instead
 
 #----------------------------
-
-KohaZ3950Dir=/home/paul/koha.dev/koha/z3950
-KohaModuleDir=/home/paul/koha.dev/koha
-LogDir=/tmp
+. z3950-daemon-options
 
 #----------------------------
 LOGFILE=$LogDir/z3950-daemon-`date +%Y%m%d-%H%M`.log
@@ -41,6 +38,9 @@ exec $KohaZ3950Script $LogDir >>$LOGFILE 2>&1
 
 #-------------------
 # $Log$
+# Revision 1.3  2003/10/06 09:10:39  slef
+# Removing config info from z3950*sh and using C4::Context in processz3950queue (Fixed bug 39)
+#
 # Revision 1.2  2003/04/29 16:48:25  tipaul
 # really proud of this commit :-)
 # z3950 search and import seems to works fine.

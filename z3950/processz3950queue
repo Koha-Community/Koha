@@ -19,7 +19,7 @@ if ($< == 0) {
 	close PID;
     }
     # Get real apacheuser from koha.conf or reparsing httpd.conf
-    my $apacheuser='paul';
+    my $apacheuser=C4::Context->config("httpduser");
     my $uid=0;
     unless ($uid = (getpwnam($apacheuser))[2]) {
 	die "Attempt to run daemon as non-existent or superuser\n";

@@ -84,7 +84,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
 	while (<$uploadmarc>) {
 		$marcrecord.=$_;
 	}
-	my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcrecord,$overwrite_biblio,$filename,$syntax);
+	my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcrecord,$overwrite_biblio,$filename,$syntax,int(rand(99999)));
 
 	$template->param(imported => $imported,
 							alreadyindb => $alreadyindb,
@@ -103,6 +103,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.2  2003/10/06 09:10:38  slef
+# Removing config info from z3950*sh and using C4::Context in processz3950queue (Fixed bug 39)
+#
 # Revision 1.1  2003/06/04 13:46:25  tipaul
 # moving breeding farm import to parameters page (GUI) and to new import/ directory (code structure)
 #
