@@ -77,7 +77,7 @@ $search{'date-before'}=$datebefore;
 my $class=$query->param('class');
 $search{'class'}=$class;
 my $dewey=$query->param('dewey');
-$search{'dewey'};
+$search{'dewey'}=$dewey;
 my $branch=$query->param('branch');
 $search{'branch'}=$branch;
 my $title=$query->param('title');
