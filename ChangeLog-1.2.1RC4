@@ -1,0 +1,162 @@
+2002-06-26 15:29  tonnesen
+
+	* acqui.simple/processz3950queue: Missing wait() call caused a lot
+	of zombie processes to be left lying around.
+
+2002-06-26 15:14  tonnesen
+
+	* installer.pl: Wrong capitilization on branchcode "MAIN".
+
+2002-06-26 15:13  tonnesen
+
+	* C4/Biblio.pm: Fix to allow non-numeric barcodes.
+
+2002-06-26 14:58  tonnesen
+
+	* acqui.simple/addbooks.pl: Okay, so I added the $barcode parameter
+	to a comment.  So, sue me.  :)
+
+2002-06-26 13:59  tonnesen
+
+	* buildrelease: buildrelease will check for docs subdirectory in
+	/root/docs/ and copy that to the tarball.
+
+2002-06-26 13:54  tonnesen
+
+	* C4/: Z3950.pm, SimpleMarc.pm: use warnings breaks on perl
+	5.005...
+
+2002-06-26 13:46  tonnesen
+
+	* C4/BookShelves.pm: Inserting some changes I made locally a while
+	ago.
+
+2002-06-26 13:42  tonnesen
+
+	* sampledata-1.2: Had some biblioitemnumbers that didn't exist.
+
+2002-06-26 13:34  tonnesen
+
+	* sampledata-1.2: Added some sample data for the virtual bookshelf
+	function
+
+2002-06-26 13:28  tonnesen
+
+	* shelves.pl: Some udpates that I made here locally a while ago. 
+	Still won't be useful, but should be functional
+
+2002-06-26 13:25  tonnesen
+
+	* installer.pl: added Debian's /etc/apache-ssl/ config directory
+
+2002-06-26 13:12  tonnesen
+
+	* HOWTO-testing: Added notification text.
+
+2002-06-26 13:00  tonnesen
+
+	* buildrelease, installer.pl: moved z3950 scripts to z3950daemon
+	subdir within scripts dir in tarball
+
+2002-06-26 12:56  tonnesen
+
+	* acqui.simple/z3950-daemon-launch.sh: Bug fix.  Single quotes were
+	causing $KohaZ3950Shell variable to not get expanded
+
+2002-06-26 11:57  tonnesen
+
+	* buildrelease, installer.pl: Fixed hard coded directories in z3950
+	shell scripts, and moved z3950 scripts to scripts directory in
+	tarball.
+
+2002-06-26 11:19  tonnesen
+
+	* updater/updatedatabase: Missing two fields for aqbooksellers.
+
+2002-06-26 11:19  tonnesen
+
+	* installer.pl: Added blurb pointing to new HOWTO-testing document,
+	and asking that bugs be submitted to http://bugs.koha.org/ or
+	koha-devel.
+
+2002-06-26 11:18  tonnesen
+
+	* search.pl, C4/Search.pm: Fixed bug where location wouldn't show
+	up in search results.  Should still be compatible with HLT
+	configuration.
+
+2002-06-26 10:27  pate
+
+	* HOWTO-testing: first cut at a release testing howto
+
+2002-06-26 10:27  pate
+
+	* HOWTO-testing: file HOWTO-testing was initially added on branch
+	rel-1-2.
+
+2002-06-26 09:25  amillar
+
+	* acqui.simple/: z3950-daemon-launch.sh, z3950-daemon-shell.sh:
+	Make directory variable name more explanatory
+
+2002-06-26 08:52  amillar
+
+	* C4/SimpleMarc.pm, acqui.simple/marcimport.pl: Fix display of marc
+	tag labels and indicators
+
+2002-06-26 07:28  amillar
+
+	* acqui.simple/marcimport.pl: Removed subroutines now existing in
+	modules: extractmarcfields,  parsemarcfileformat, addz3950queue,
+	getkeytableselectoptions
+
+2002-06-26 06:29  tonnesen
+
+	* installer.pl: Installer creates a backup of httpd.conf
+
+2002-06-26 00:27  amillar
+
+	* C4/SimpleMarc.pm: Moved acqui.simple MARC handling to new module
+	SimpleMarc.pm
+
+2002-06-26 00:27  amillar
+
+	* C4/SimpleMarc.pm: file SimpleMarc.pm was initially added on
+	branch rel-1-2.
+
+2002-06-26 00:26  amillar
+
+	* C4/Z3950.pm: New module for Z39.50 searching
+
+2002-06-26 00:26  amillar
+
+	* C4/Z3950.pm: file Z3950.pm was initially added on branch rel-1-2.
+
+2002-06-26 00:24  amillar
+
+	* C4/Biblio.pm: New subs to streamline biblio additions:
+	addcompletebiblioitem and getoraddbiblio
+
+2002-06-26 00:21  amillar
+
+	* C4/Output.pm: Subroutine for pull-down list from key table
+
+2002-06-25 23:04  amillar
+
+	* updater/updatedatabase: Clean up systempreferences code to be
+	table-driven
+
+2002-06-25 22:01  dragon28
+
+	* installer.pl: sample data not installed as first mysql directive
+	did not include the path to the mysql binary
+
+2002-06-25 16:31  tonnesen
+
+	* acqui.simple/addbooks.pl: Barcodes aren't necessarily numeric
+
+2002-06-25 16:06  tonnesen
+
+	* admin/aqbudget.pl: Replaced text box with drop down showing list
+	of bookfunds.
+
