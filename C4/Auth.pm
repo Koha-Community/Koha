@@ -23,7 +23,7 @@ use Digest::MD5 qw(md5_base64);
 require Exporter;
 use C4::Context;
 use C4::Output;              # to get the template
-use C4::Charset;
+use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
