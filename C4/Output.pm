@@ -10,6 +10,7 @@ use strict;
 require Exporter;
 
 use C4::Database;
+use C4::Koha;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
