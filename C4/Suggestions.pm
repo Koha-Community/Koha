@@ -118,7 +118,7 @@ sub searchsuggestion  {
 	my @results;
 	my $even=1; # the even variable is used to set even / odd lines, for highlighting
 	while (my $data=$sth->fetchrow_hashref){
-			$data->{$data->{status}} = 1;
+			$data->{$data->{STATUS}} = 1;
 			if ($even) {
 				$even=0;
 				$data->{even}=1;
