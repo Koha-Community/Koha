@@ -102,7 +102,7 @@ for (my $i=0;$i<3;$i++){
 #		$ident{'image'}=$image;
 		$ident{'cardchild'}=($data{"cardnumber_child_$i"} ne '');
 		if ($data{"cardnumber_child_$i"} ne ''){
-			my $name=$data{"firstname_child_$i"}.$data{"surname_child_$i"};
+			my $name=$data{"firstname_child_$i"} . " " . $data{"surname_child_$i"};
 			$ident{'name'}=$name;
 			$ident{'bornum'}=$data{"bornumber_child_$i"};
 			$ident{'dob'}=$data{"dateofbirth_child_$i"};
