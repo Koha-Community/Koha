@@ -1,4 +1,4 @@
-package C4::Accounts2; #assummes C4/Accounts2
+package C4::Accounts2; #assumes C4/Accounts2
 
 use strict;
 use warnings;
