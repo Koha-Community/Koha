@@ -417,7 +417,9 @@ foreach my $mysql (qw(/usr/local/mysql
             $mysql=$mysqldir;
    }
 }
-
+if (!$mysqldir){
+    $mysqldir='/usr';
+}
 print qq|
 To allow us to create the koha database please supply the 
 mysql\'s root users password
