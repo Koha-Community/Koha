@@ -1,0 +1,76 @@
+RELEASE NOTES
+=============
+this version of Koha is the last one of the 2.0.0 series in the "unstable" tree.
+5 libraries are using it, so it's quite useable.
+2 last problems have to be solved before 2.0.0RC1 :
+* biblio deletion : at the moment, biblio deletion is buggy (does not work in MARC, delete only non-marc data)
+* upgrader is provided for the 1st time, so it's probably buggy.
+
+If you want to use Koha, you're welcomed, but you're warned that this version still has some bugs and missing features.
+
+INSTALLATION
+==========
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* follow the instructions.
+
+NOTE: You will need to add lines to your main httpd.conf to include
+/etc/koha-httpd.conf and to make sure it is listening on the right ports
+(using the Listen directive). Previous versions updated the httpd.conf file,
+some users thought it was bad/poor decision.
+
+
+UPGRADE from previous 2.0.0preX version
+=======
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* follow the instructions.
+
+UPGRADE from previous 1.2.x version
+=======
+This upgrade is possible with this release for the 1st time.
+EXPECT IT TO HAVE SOME BUGS SOMEWHERE.
+USE IT ONLY IF YOU KNOW HOW TO GO BACK TO PREVIOUS SITUATION.
+Otherwise, WAIT for next version or so.
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* follow the instructions.
+* launch Koha
+* Go to Parameters >> Marc structure option and Koha-MARC links option.
+* Modify default MARC structure to fit your needs.
+* open a console/term
+* Enter :
+cd /path/to/koha/misc
+export PERL5LIB=/path/to/koha
+./koha2marc.pl
+the old DB is "copied" in the new MARC one.
+Koha 2.0.0 is ready.
+
+BUGFIXES/IMPROVEMENTS
+=======
+BUGS FIXED :
++++++++++
+619 : Visiting selectbranchprinter.pl automatically resets branch
+618 : Add member process does not check for duplicate barcode
+532 : Can't assign new password without changing UserID
+599 : edited items are stored incorrectly in old Koha DB (aka : barcode non mandatory bug)
+616 : MARCgetbiblio doesn't create leader
+500 : [INTRANET]Only 21 items are displayed in the search result
+595 : 'Add field' link in /acqui.simple/addbiblio.pl adds incorrect field.
+622 : processz3950queue fails
+576 : add install locale test
+39 : Update Dirs in z3950 scripts
+536 : bulkmarcimport.pl generates subtitle error
+436 : circulation.pl only partially templated (this bug is partially fixed)
+
+IMPROVEMENTS
++++++++++
+* Polish version of Koha (courtesy of Benedykt)
+* some useful tools in misc directory to manage the DB
+* adding "fines" entry in parameters section : to manage fees when a book is returned too late

@@ -1,0 +1,77 @@
+RELEASE NOTES
+=============
+* koha does NOT work with MARC::Record 1.12. It works fine with MARC::Record 0.93, and maybe with other versions.
+* In the MARC search, the "not" flag does not work : the result of the query is very strange !
+* en and fr are the only languages well supported in this version. Other translator teams are waiting for more stable templates.
+* see interim.txt, which contains install notes
+
+BUG FIXED (see bugs.koha.org for more infos)
+=========
+XXX Error in biblio modification
+248 French page titles in English language Koha - Members
+227 Confirm newmember lists items you can't enter
+254 Next link goes to the wrong page
+230 Wrong DOB entry information given in add member
+234 The buildrelease script or the installer script does not kno
+263 HLT isms still on Add Member page
+278 Internal Server Error on Categories
+249 Addl. French titles in English language Koha
+228 Modifying member info scrambles DOB
+255 Form fields too small for text
+231 z3950servers.pl mistitled branches admin
+260 Error during install - the sample data doesn't load,
+235 Koha login link listed twice and I'm already logged in
+266 HLT isms on member details page.
+244 stats.pl needs to be templated
+226 Bookfund admin page - rows not lining up under heading
+250 Parameters titled Catalogue
+229 Members birth years 1913 and earlier are changed to 2000's
+257 Fields named wrong on modify budget page
+233 OPAC - User update doesn't work.
+262 Ethnicity select list still in add a member page
+240 Search results page - has Log In to Koha link - already log
+277 Internal Server Error in Add Institution and Add Child
+291 Joining date dateformat not consistent
+241 Extra td in html creates an extra little rectangle.
+259 Enter stopwords field too long
+290 Missing image seen briefly on log-in page.
+
+IMPROVEMENTS
+=============
+* An About page has been added, showing versions of Koha, Apache, MySQL, Perl
+* repetable subfields now correctly stored : enter a repeted subfield in the form, separated by | and watch the result in the catalogue.
+
+Bugs still opens in bugs.koha.org
+=======================
+196 user input not checked for HTML tags
+293 Error Issuing Book - 1
+191 View Account cannot see charges
+264 Day phone not output on confirm record.
+208 Confirmation screen for addition of institutional member is
+236 Reserve book on future date doesn't work or copy is wrong
+242 Current loan output is blank
+193 Multiple search criteria in OPAC gives misleading feedback
+267 Day phone not displayed on update details
+237 Can request to reserve a book with an end reserve date in t
+130 Branch data entry form has unlabelled check box
+258 Budget treats a comma as a period.
+223 Editing budget creates additinal budget for same book fund.
+239 Issue limit doesn't work - able to check out more items than
+251 Wrong title for image
+276 Tables overlap when there are a lot of patron notes.
+297 Images missing on View Account page
+252 Add category page titled add authorised value
+245 No mechanism provided for changing the Locations
+275 Wrong size text boxes in admin/itemtypes
+300 Reading record - full output same as regular reading record
+292 missing image is seen when mousing to the left of search.
+298 In circulation Acquistion & MARC links are blue not grey
+217 querying with barcode to modify biblio
+
+TODO
+=====
+* script for migration from koha 1.2.x -> 2.0.0
+* script to upload MARC datas and items in active DB
+* script to upload CSV biblio and items in active DB
+* z3950 client
+

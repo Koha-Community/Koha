@@ -1,0 +1,76 @@
+RELEASE NOTES
+=============
+This release add a lot of bugfixes, a 1st z3950 support, and a script for migration from previous ILS.
+
+FEATURE FREEZE !
+---------
+This version is the last version with new features before 2.0.
+Please, report bugs on bugs.koha.org, and feel free to fix them (through patch or cvs commit)
+
+
+PACKAGE NEEDED :
+---------
+Update your MARC::Record to get the latest version (1.26).
+Koha won't work with old versions, and bulkmarcimport.pl need MARC::Batch.pm, whichi is recent.
+MARC::Record 1.25 works to, but reports hundred of warnings in error_log. pls upgrage to 1.26 !
+
+
+DB modifications :
+---------
+* the marc_breeding table has been modified. A row "encoding" varchar(40) has been added. It's used to manage character encoding.
+* the z3950_servers table has been modified. A row "syntax" varchar(40) has been added. It's used to manage character encoding.
+
+z3950 :
+---------
+* the z3950 script in admin part of Koha has been fixed and can be used and translated.
+* z3950 cataloguing : when you reach the MARC-cataloguing screen, a new link appear : z3950 search.
+* If you click on this link, a popup appears, and the search begins. The window is refreshed every 2 seconds, until all servers answered.
+* The avaible records are shown in the popup. Click on the one you want, and... the popup closes and the biblio is copied in the cataloguing screen.
+
+This works ONLY IF the z3950 daemon is launched. It's located at $kohadir/scripts/z3950daemon/
+* MODIFY the scripts to fit you directory structure.
+* Warning : due to a small bug, processqueue is in $kohadir/cgi-bin/z3950/ directory, not in the script one.
+* Start daemon in a non-X shell, or launch processqueue in a shell, and KEEP IT OPEN.
+
+iso2709 file import :
+---------
+This tools is very important and was waiting by libraries that plans to migrate from a previous ILS.
+VERY IMPORTANT :
+BEFORE using this script, take care of your MARC parameters, and check them twice. If they are wrong, you will get wrong results...
+
+It's located (in CVS tree) at $koharoot/misc/bulkmarcimport.pl
+
+It loads an iso2709 file into the ACTIVE Database. My 1st tests on sample files shows it works quite fine.
+Feel free to try it.
+How it works ? enter ./bulkmarcimport in a console, and look.
+
+KNOWN LIMIT : If the barcode of an item does not exists, the scripts report an SQL error, and continue. BUT the corresponding item is not in the non-marc db, so it can't be requested or loaned.
+
+sample file :
+---------
+The sample file has been removed from this release, as it's buggy (no MARC datas, making it quite useless)
+
+Templates & translations :
+---------
+* Most images have been dropped from templates (all -except bugs- in french templates
+* english is uptodate, and french should be too.
+
+BUG FIXED (see bugs.koha.org for more infos)
+=========
+A lot... (around 35).
+Thanks to Mike that fixed a lot,
+Steve that fixes some,
+MJ Ray that upgraded the installer for non-root install,
+and Chris that fixed some and begins backport of non-marc stuff from 1.2
+
+Bugs still open in bugs.koha.org
+=======================
+A lot... (around 60. some being really trivial to fix, some being more important)
+
+TODO
+=====
+* some GUI reordering, as planned with Rachel from Katipo and others (paul & others)
+* finishing backport of non-marc cataloguing & non-marc simple acquisition from 1.2 version (chris)
+* bug fixes (everybody)
+* cleaning z3950 old searches (more than 1 hour/day old ?) (paul)
+

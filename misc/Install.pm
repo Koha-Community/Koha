@@ -377,7 +377,7 @@ Gets the Koha version as known by the previous config file.
 
 =cut
 
-sub getkohaversion ($) {
+sub getkohaversion () {
     return($kohaversion);
 }
 
@@ -989,6 +989,7 @@ MySQL installation directory: |;
 sub getmysqldir {
     foreach my $mysql (qw(/usr/local/mysql
 			  /opt/mysql
+			  /usr/local
 			  /usr
 			  )) {
        if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
@@ -1148,6 +1149,7 @@ sub getapacheinfo {
 			  /etc/apache2/apache2.conf
 			  /etc/apache/conf/httpd.conf
 			  /etc/apache/conf/apache.conf
+			  /etc/apache/httpd.conf
 			  /etc/apache-ssl/conf/apache.conf
 			  /etc/apache-ssl/httpd.conf
 			  /etc/httpd/conf/httpd.conf

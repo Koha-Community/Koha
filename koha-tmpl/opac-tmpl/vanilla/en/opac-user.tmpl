@@ -138,8 +138,12 @@ R
 <td valign="top" ><div class="padded"><TMPL_VAR NAME="charges"></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top" >
-<TMPL_IF NAME="renewable">
+<TMPL_IF NAME="status">
+<TMPL_IF NAME="reserved">
+Not renewable
+<TMPL_ELSE>
 <A HREF='/cgi-bin/koha/opac-renew.pl?from=opac_user&item=<TMPL_VAR NAME="itemnumber">&bornum=<TMPL_VAR NAME="borrowernumber">' class="padded">Renew</A>
+</TMPL_IF>
 <TMPL_ELSE>
 Not renewable
 </TMPL_IF>
@@ -226,7 +230,7 @@ Not renewable
 <td valign="top"  colspan="3"><div class="padded"><TMPL_VAR NAME="date_due"></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top" >
-<TMPL_IF NAME="renewable">
+<TMPL_IF NAME="status">
 <A HREF='/cgi-bin/koha/opac-renew.pl?from=opac_user&item=<TMPL_VAR NAME="itemnumber">&bornum=<TMPL_VAR NAME="borrowernumber">' class="padded">Renew</A>
 <TMPL_ELSE>
 Not renewable

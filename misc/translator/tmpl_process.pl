@@ -73,7 +73,7 @@ if( $action eq "create" )
 elsif( $action eq "update" )
 {
 	# restores the string list from file
-	%strhash = &restore_strhash(\%strhash, $str_file, $split_char);
+	%strhash = &restore_strhash(\%strhash, $str_file, $split_char,1);
 	# updates the list, adding new entries if any
 	%strhash = &update_strhash(\%strhash, \@in_files, $exclude_regex, $filter);
 	# saves the list to the file
@@ -93,7 +93,7 @@ elsif( $action eq "install" )
 	}
 
 	# restores the string list from file
-	%strhash = &restore_strhash(\%strhash, $str_file, $split_char);
+	%strhash = &restore_strhash(\%strhash, $str_file, $split_char,0);
 	# creates the new tmpl file using the new translation
 	&install_strhash(\%strhash, \@in_files, $in_dir, $out_dir);
 }
@@ -115,8 +115,9 @@ sub install_strhash
 	my $fh_in; my $fh_out; # handles for input and output files
 	my $tmp_dir; # temporary directory name (used to create destination dir)
 
-	$out_dir =~ s/\/$//; # chops the trailing / if any.
+	my $starttime = time();
 
+	$out_dir =~ s/\/$//; # chops the trailing / if any.
 	# Processes every entry found.
 	foreach my $file (@{$in_files})
 	{
@@ -128,6 +129,7 @@ sub install_strhash
 
 		# generates the name of the output file
 		my $out_file = $file;
+		my $out_file_tmp = $file.".tmp"; # used to check if file has changed or not.
 
 		if(!defined $in_dir)
 		{
@@ -158,42 +160,85 @@ sub install_strhash
 			close($fh_in);
 			exit(1);
 		}
-		
+
 		# opens handle for output
-		if( !open($fh_out, "> $out_file") )
+		if( !open($fh_out, "> $out_file_tmp") )
 		{
-			warn "Can't write $out_file : $!\n";
+			warn "Can''t write $out_file : $!\n";
 			close($fh_in);
 			next;
 		}
-
-		print "Generating $out_file...\n";
-
+		my $lines;
 		while(my $line = <$fh_in>)
 		{
-			foreach my $text (sort  {length($b) <=> length($a)} keys %{$strhash})
+			$lines.=$line;
+		}
+		foreach my $text (sort  {length($b) <=> length($a) || uc($b) cmp uc($a) } keys %{$strhash})
+		{
+		# Test if the key has been translated
+		if( %{$strhash}->{$text} != 1)
 			{
-				# Test if the key has been translated
-				if( %{$strhash}->{$text} != 1 )
+				# Does the file contains text that needs to be changed ?
+				# escaping \|()[{}^$*+?.
+				my $subst = %{$strhash}->{$text};
+				$text =~ s/\\/\\\\/g;
+				$text =~ s/\//\\\//g;
+				$text =~ s/\|/\\\|/g;
+				$text =~ s/\(/\\\(/g;
+				$text =~ s/\)/\\\)/g;
+				$text =~ s/\[/\\\[/g;
+				$text =~ s/\]/\\\]/g;
+				$text =~ s/\{/\\\{/g;
+				$text =~ s/\}/\\\}/g;
+				$text =~ s/\^/\\\^/g;
+				$text =~ s/\$/\\\$/g;
+				$text =~ s/\*/\\\*/g;
+				$text =~ s/\+/\\\+/g;
+				$text =~ s/\?/\\\?/g;
+				$text =~ s/\./\\\./g;
+				if(%{$strhash}->{$text} ne "IGNORE" )
 				{
-					# Does the line contains text that needs to be changed ?
-					if( $line =~ /$text/ && %{$strhash}->{$text} ne "IGNORE")
+					if (%{$strhash}->{$text} =~ "LIMITED")
 					{
 						# changing text
-						my $subst = %{$strhash}->{$text};
-						$line =~ s/(\W)$text(\W)/$1$subst$2/g;
+						$subst =~ s/UNUSED;//;
+						$subst =~ s/^LIMITED;//g;
+						$lines =~ s/(.*)>$text(\W)/$1>$subst$2/g;
+						$lines =~ s/(.*) title="$text/$1 title="$subst/g;
+						$lines =~ s/(.*) alt="$text/$1 alt="$subst/g;
+					} else {
+						# changing text
+						$subst =~ s/UNUSED;//;
+						$lines =~ s/(\W)$text(\W)/$1$subst$2/g;
 					}
 				}
 			}
-			$line =~ s/\<TMPL_(.*?)\>/\<\!-- TMPL_$1 --\>/g;
-			$line =~ s/\<\/TMPL_(.*?)\>/\<\!-- \/TMPL_$1 --\>/g;
-			# Writing the modified (or not) line to output
-			printf($fh_out "%s", $line);
 		}
-
+		$lines =~ s/\<TMPL_(.*?)\>/\<\!-- TMPL_$1 --\>/g;
+		$lines =~ s/\<\/TMPL_(.*?)\>/\<\!-- \/TMPL_$1 --\>/g;
+		# Writing the modified (or not) file to output
+		printf($fh_out "%s", $lines);
 		close($fh_in);
 		close($fh_out);
+		# check if fh_out and previous fh_out has changed or not.
+		my $diff;
+		if(-f $out_file)  {
+			$diff = `diff $out_file $out_file_tmp`;
+		} else {
+			$diff = "write it, it's new";
+		}
+		if ($diff) {
+			print "WRITING : $out_file\n";
+			unlink $out_file;
+			system("mv $out_file_tmp $out_file");
+		} else {
+			print "no changes in $out_file\n";
+			unlink $out_file_tmp;
+		}
 	}
+	my $timeneeded = time() - $starttime;
+	print "done in $timeneeded seconds\n";
+
 }
 
 ########################################################
@@ -212,7 +257,7 @@ sub update_strhash
 
 		print "Processing $in...\n";
 
-		# Creates a filehandle containing all the strings returned by
+		# 'Creates a filehandle containing all the strings returned by
 		# the plain text program extractor
 		open($fh, "$filter $in |") or print "$filter $in : $!";
 		next $in if !defined $fh;
@@ -221,8 +266,8 @@ sub update_strhash
 		while(my $str = <$fh>)
 		{
 			$str =~ s/[\n\r\f]+$//; # chomps the trailing \n (or <cr><lf> if file was edited with Windows)
-			$str =~ s/^\s+//; # remove trailing blanks, ':' or '*'
-			$str =~ s/\s*\**:*\s*$//;
+			$str =~ s/^[\s+:\(]*//; # remove useless characters
+			$str =~ s/[\s\*:\[*\(|\.,\)]*$//;
 
 			# the line begins with letter(s) followed by optional words and/or spaces
 			if($str =~ /^[ ]*[\w]+[ \w]*/)
@@ -234,6 +279,9 @@ sub update_strhash
 					{
 						# the line is not already in the list so add it
 						%{$strhash}->{$str}=1;
+					} else {
+						# remove UNUSED;
+						%{$strhash}->{$str} =~ s/^UNUSED;//;
 					}
 				}
 			}
@@ -251,14 +299,14 @@ sub update_strhash
 
 sub restore_strhash
 {
-	my($strhash, $str_file, $split_char) = @_;
-	
+	my($strhash, $str_file, $split_char, $detect_unused) = @_;
+
 	my $fh;
 	
 	open($fh, "< $str_file") or die "$str_file : $!";
 	
 	print "Restoring string list from $str_file...\n";
-	
+
 	while( my $line = <$fh> )
 	{
 		chomp $line;
@@ -275,6 +323,9 @@ sub restore_strhash
 		{
 			# the key exist but has no translation.
 			%{$strhash}->{$original} = 1;
+		}
+		if ($detect_unused) {
+			%{$strhash}->{$original} = "UNUSED;".%{$strhash}->{$original} unless %{$strhash}->{$original}=~ /^UNUSED;/;
 		}
 
 	}
@@ -299,15 +350,15 @@ sub write_strhash
 
 	print "Writing string list to $str_file...\n";
 
-	foreach my $str(sort {uc($a) cmp uc($b) || length($a) <=> length($b)} keys %{$strhash})
+	foreach my $str(sort {uc($a) cmp uc($b) || length($b) <=> length($a)} keys %{$strhash})
 	{
-		if(%{$strhash}->{$str} != 1)
+		if(%{$strhash}->{$str}!=1)
 		{
 			printf($fh "%s%s%s\n", $str, $split_char, %{$strhash}->{$str});
 		}
 		else
 		{
-			printf($fh "%s%s%s\n", $str, $split_char,"*****") unless ($str >0);
+			printf($fh "%s%s%s\n", $str, $split_char,"*****") unless ($str >0 || length($str) eq 1);
 		}
 	}
 
@@ -456,3 +507,4 @@ options can be :
 EOF
 	exit(0);
 }
+

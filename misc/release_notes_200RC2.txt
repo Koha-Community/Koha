@@ -1,0 +1,90 @@
+RELEASE NOTES
+=============
+This version of Koha is the second in the 2.0 "stable" series.
+It does not mean that it has no bugs, but many libraries are using it and don't encounter unsolvable problems.
+If you want to adopt Koha, please do, but you're warned that this release candidate version may still have some bugs and missing features.
+If you test it and let us know about any we haven't seen yet, it will help us to fix them.
+
+The 2.0.x series version is "feature freezed". Only bugs or minor changes will be made in this branch.
+The koha team is already working on the 2.2.x version. In CVS (HEAD branch), developpers can already get 1st draft of a working z3950 server.
+
+
+INSTALLATION
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* Follow the instructions
+
+
+UPGRADE from previous 2.0.0preX version
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+
+UPGRADE from previous 1.2.x version
+
+This is the second koha 2 version that contains this upgrade. Nobody reported a problem during update with 2.0.0RC1.
+It may have bugs. Please take backups and be sure that you can go back to your previous version if needed.
+Otherwise, WAIT for 2.0.0RC3 or later.
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+* Open a browser to Koha
+* Go to Parameters >> Marc structure option and Koha-MARC links option.
+* Modify default MARC structure to fit your needs
+* Open a command-line on the koha server
+* Enter :
+cd /path/to/koha/misc
+export PERL5LIB=/path/to/koha/modules
+./koha2marc.pl
+This "copies" the old DB to the new MARC one.
+Now Koha 2.0.0RC2 is ready for you to test.
+
+
+BUGFIXES/IMPROVEMENTS
+
+BUGS FIXED:
+* 318 : allow or not a book to be loan
+* 537 : in borrower screen, the "fine & debts" now shows only amount due if >0, "nothing due" if borrower has no debts.
+* 557 : spelling error in message for no search criteria entered
+* 564 : Member card number not checked unique
+* 586 : additem.tmpl displays incorrect biblio number
+* 605 : circulation.pl only shows one waiting item (1 small problem remaining, see bugs.koha.org)
+* 614 : opac-user.pl doesn't show which items are waiting
+* 625 : dateformat under system prefs is confusing
+* 646 : Member flag must be either 'parameters' or 'superlibrarian' to log in (now, any flag enable login)
+* 662 : poor SQL calls, that could be used for SQL injection (security problem)
+* 671 : Add institutional member confirmation screen has no details
+* 672 : readingrec can not be reordered
+* 675 : "logged in" info missing
+* 683 : Search for barcode or illustrator says ' You did not specify any seach criteria'
+* minor HTML modifs & tweaks
+* minor improvements/bugfixes in installer
+* biblio & item deletion bugs fixed.
+* bug fixed in MARC editor, that appeared on specific MARC configuration & makes biblio adding impossible.
+
+
+IMPROVEMENTS:
+* z3950 client daemon improved a lot : many deadlock situations solved, improved problem reporting, ignoring invalid z3950 servers (or server not responding)
+* new french translation. Note that only english and french are up to date. Other won't work, probably. Note also that a tool for translator is now ready, and should ease a lot translating and maintaining translations.
+* new OPAC theme. it's called "css". It's a XHTML1.0 strict OPAC. In librarian interface, just change systempref opactheme to css to get it. Will be the default opac in 2.2
+* publisher added in acquisition process (the one with basket & supplier) Basket now ordered by publisher.
+* notforloan field management added in itemtype administration screen
+* new migration script : misc/rebuildthesaurus.pl => this script can rebuild thesaurus/authority file after importing records with misc/bulkmarcimport.pl
+
+DB change :
+*index added into z3950results table UNIQUE KEY query_server (queryid,server)  (added by installer & updater)
+
+KNOWN BUGS :
+* MARC upload fails silently (in breeding farm) if the file provided is not iso2709 (works fine with a valid file)
+* autobarcode not calculated even if autobarcode system parameter is set and MARC=on.
+* the MARC21 english default parameter setup is working, but some librarians reports that some choices are poor. If you use MARC21, tweak some setups to fit your needs.

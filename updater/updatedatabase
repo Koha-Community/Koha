@@ -856,6 +856,21 @@ while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Colla
 print "Creating fulltext index on bibliothesaurus\n" unless $exists;
 $dbh->do('create fulltext index category_2 on bibliothesaurus (category,freelib)') unless $exists;
 
+#
+# creating  index in z3950results if needed
+#
+$sth = $dbh->prepare("show index from z3950results");
+$sth->execute;
+my $exists=0;
+while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+{
+	if ($key_name eq 'query_server') {
+		$exists=1;
+	}
+}
+print "Creating  index on z3950results\n" unless $exists;
+$dbh->do('create unique index query_server on z3950results (queryid,server)') unless $exists;
+
 # changing z3950daemon field to NULL in marc_breeding
 $dbh->do("ALTER TABLE `marc_breeding` CHANGE `z3950random` `z3950random` VARCHAR( 40 )");
 
@@ -981,7 +996,13 @@ $sth->finish;
 exit;
 
 # $Log$
-# Revision 1.71  2003/12/18 17:23:22  tipaul
+# Revision 1.72  2004/02/11 08:44:29  tipaul
+# synch'ing 2.0.0 branch (RC4 tag) and head
+#
+# Revision 1.70.2.2  2004/01/20 09:46:53  tipaul
+# new index in z3950results table
+#
+# Revision 1.70.2.1  2003/12/18 17:22:24  tipaul
 # fix for 625
 #
 # Revision 1.70  2003/12/15 14:40:09  tipaul

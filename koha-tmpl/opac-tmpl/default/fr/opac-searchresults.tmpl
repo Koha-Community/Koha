@@ -1,80 +1,72 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
-
-<center>
-
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Connecté en tant que: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
-</TMPL_IF>
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 
-<TMPL_IF NAME="searchdesc">
-    Recherche effectuée sur <b><TMPL_VAR NAME="searchdesc"></b>
-<TMPL_ELSE>
-	<TMPL_IF name="searchnew">
-		<TMPL_VAR name=itemtype> acquis dans les derniers <i><TMPL_VAR name="duration"></i> jours<br/>
-	<TMPL_ELSE>
+
+<div align="center"><!-- TMPL_IF NAME="searchdesc" -->
+    Recherche effectuée sur <b><!-- TMPL_VAR NAME="searchdesc" --></b>
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF name="searchnew" -->
+		<!-- TMPL_VAR name="itemtype" --> acquis dans les derniers <i><!-- TMPL_VAR name="duration" --></i> jours<br>
+	<!-- TMPL_ELSE -->
 		Vous n'avez pas spécifié de critère<br>
-	</TMPL_IF>
-</TMPL_IF>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
-<TMPL_VAR NAME="numrecords"> Réponses trouvées
-<p>
+<!-- TMPL_VAR NAME="numrecords" --> Réponses trouvées</div>
+<br>
 
 
-    <!-- Row de numbers corresponding to search result pages -->
-    <TMPL_IF NAME="displayprev">
-	<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='prevstartfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME='themelang'>/images/numbers/prev.gif border=0></a>
-    <TMPL_ELSE>
-	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
-    </TMPL_IF>
-    <TMPL_LOOP NAME="numbers">
-	<TMPL_IF NAME="highlight">
-	    <img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif>
-	<TMPL_ELSE>
-	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="startfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a>
-	</TMPL_IF>
-    </TMPL_LOOP>
-    <TMPL_IF NAME="displaynext">
-	<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/next.gif border=0></a>
-    <TMPL_ELSE>
-	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
-    </TMPL_IF>
-
-    <p>
+<div align="center">    <!-- Row de numbers corresponding to search result pages -->
+    <!-- TMPL_IF NAME="displayprev" -->
+	<a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="Previous Page" height="14" width="15"></a>
+    <!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" height="14" width="15" alt="" border="0">
+    <!-- /TMPL_IF -->
+    <!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	    <img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif" alt="<!-- TMPL_VAR NAME="number" -->" height="14" width="15" border="0">
+	<!-- TMPL_ELSE -->
+	    <a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->.gif" border="0" alt="<!-- TMPL_VAR NAME=number -->" height="14" width="15"></a>
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+    <!-- TMPL_IF NAME="displaynext" -->
+	<a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="Next Page"></a>
+    <!-- TMPL_ELSE -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0" width="14" height="14" alt="">
+    <!-- /TMPL_IF --></div>
+<br>
 
 
 
 <!-- Search Résultats Table -->
-<TMPL_IF NAME="numrecords">
+<!-- TMPL_IF NAME="numrecords" -->
 
 	<!-- If we have a subject table -->
-		<TMPL_IF NAME="subjectsearch">
-		<table border=0 cellspacing=0 cellpadding=2>
-			<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
+		<!-- TMPL_IF NAME="subjectsearch" -->
+		<table border="0" cellspacing="0" cellpadding="2" align="center">
+			<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 				<th>Sujet</th>
 			</tr>
-			<TMPL_LOOP NAME=SEARCH_RESULTS>
+			<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
 				<tr>
-					<td><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL>><TMPL_VAR NAME=subject></a></td>
+					<td><a href="/cgi-bin/koha/opac-searchresults.pl?&amp;subjectitems=<!-- TMPL_VAR NAME=subject ESCAPE="URL" -->"><!-- TMPL_VAR NAME=subject --></a></td>
 				</tr>
-			</TMPL_LOOP>
-			<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-				<td colspan=4>
+			<!-- /TMPL_LOOP -->
+			<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+				<td colspan="4">
 					&nbsp;
 				</td>
 			</tr>
 		</table>
 
 	<!-- Else we have a list de items -->
-	<TMPL_ELSE>
+	<!-- TMPL_ELSE -->
 
 
-	<table border=0 cellspacing=0 cellpadding=2 width=90%>
-	<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-		<th align=left>Titre</th>
-		<th align=left>Auteur</th>
+	<table border="0" cellspacing="0" cellpadding="2" width="80%" align="center">
+	<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+		<th align="left">Titre</th>
+		<th align="left">Auteur</th>
 		<th>&copy;</th>
 		<th>Nombre d'ouvrages</th>
 		<th>Localisation</th>
@@ -83,57 +75,58 @@
 
 
 	<!-- Actual Search Résultats -->
-		<TMPL_LOOP NAME="SEARCH_RESULTS">
+		<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 			<tr>
-				<td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>><TMPL_VAR NAME="title"></a></td>
-				<td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td>
-				<td  <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF> align=center> <TMPL_VAR NAME="copyrightdate"> </td>
-				<td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF> align=center> <TMPL_VAR NAME="itemcount"> </td>
-				<td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>> <TMPL_VAR NAME="location"> </td>
-				<td <TMPL_IF name="even">bgcolor='#ffffcc'</TMPL_IF>>
-					<TMPL_UNLESS NAME="norequests">
-						<a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Reserver</a>
-					<TMPL_ELSE>
+				<td <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a></td>
+				<td align="center" <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->> <!-- TMPL_VAR NAME="copyrightdate" --> </td>
+				<td align="center" <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->> <!-- TMPL_VAR NAME="itemcount" --> </td>
+				<td <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->> <!-- TMPL_VAR NAME="location" --> </td>
+				<td <!-- TMPL_IF name="even" -->bgcolor="#ffffcc"<!-- /TMPL_IF -->>
+					<!-- TMPL_UNLESS NAME="norequests" -->
+						<a href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Reserver</a>
+					<!-- TMPL_ELSE -->
 						Non réservable
-					</TMPL_UNLESS>
+					<!-- /TMPL_UNLESS -->
 				</td>
 			</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 
 
-		<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-			<td colspan=6>
-			<table border=0 cellpadding=0 cellspacing=0 width=100%>
-				<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-					<td align=left>
-						<TMPL_IF NAME="displayprev">
-							<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Précédents</a>
-						<TMPL_ELSE>
+		<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+			<td colspan="6">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+					<td align="left">
+						<!-- TMPL_IF NAME="displayprev" -->
+							<a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">Previous Records</a>
+						<!-- TMPL_ELSE -->
 							&nbsp;
-						</TMPL_IF>
+						<!-- /TMPL_IF -->
 					</td>
-					<td align=right>
-						<TMPL_IF NAME="displaynext">
-							<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Enregistrement suivant</a>
-						<TMPL_ELSE>
+					<td align="right">
+						<!-- TMPL_IF NAME="displaynext" -->
+							<a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME="FORMINPUTS" -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">Next Records</a>
+						<!-- TMPL_ELSE -->
 							&nbsp;
-						</TMPL_IF>
+						<!-- /TMPL_IF -->
 					</td>
 				</tr>
 			</table>
 			</td>
 		</tr>
 		</table>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 
-	<br>
-	Résultats <i><TMPL_VAR NAME="startfrom"></i> à <i><TMPL_VAR NAME="endat"></i> de <i><TMPL_VAR NAME="numrecords"></i> réponses
+<br>
+<div align="center">	Résultats <i><!-- TMPL_VAR NAME="startfrom" --></i> à <i><!-- TMPL_VAR NAME="endat" --></i> de <i><!-- TMPL_VAR NAME="numrecords" --></i> réponses.</div>
 	<hr>
 
 
-<TMPL_ELSE>
-	Désolé, aucun résultat ! <br>
-</TMPL_IF>
+<!-- TMPL_ELSE -->
+	<div align="center">Désolé, aucun résultat ! <br></div>
+<!-- /TMPL_IF -->
 
-Try another <a href=/cgi-bin/koha/opac-search.pl>search</a>
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<div align="center">Essayez une autre <a href="/cgi-bin/koha/opac-search.pl">recherche</a></div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

@@ -1,135 +1,135 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_LOOP NAME="BORROWER_INFO">
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 
-<table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
-	<tr   bgcolor="#fecc99" >
-		<td><b>Est-ce correct?</B></td>
+<table align="right" cellpadding="5" cellspacing="0" border="1" width="200">
+	<tr bgcolor="#fecc99" >
+		<td><b>Est-ce correct</b></td>
 	</tr>
 	<tr>
-		<td><font size=2 face="arial,helvetica">Carte lecteur: <TMPL_VAR NAME="cardnumber"> <br/>
-			<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
-			<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
-			<TMPL_VAR NAME="phone"> (hm)<br>
-			<TMPL_VAR NAME="faxnumber"> (wk)<br>
-			<TMPL_VAR NAME="emailaddress"><br/>
-			<p>quelque chose à modifier ??</p>
+		<td><font size="2" face="arial, helvetica, sans-serif">Carte lecteur: <!-- TMPL_VAR NAME="cardnumber" --> <br>
+			<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) <br>
+			<!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --><br>
+			<!-- TMPL_VAR NAME="phone" --> (hm)<br>
+			<!-- TMPL_VAR NAME="faxnumber" --> (wk)<br>
+			<!-- TMPL_VAR NAME="emailaddress" --><br>
+			<br>quelque chose à modifier \?<br><br>
 			<a href="/cgi-bin/koha/opac-userupdate.pl">Mettre à jour</a>
+			</font>
 		</td>
 	</tr>
 </table>
 
 
-
-<font size=6><em>Bonjour, <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font>
-[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Déconnecter</a>]<p>
-
-
-<TMPL_IF NAME="amountoverfive">
-	<table cellpadding=5 cellspacing=0 border=1>
+<!-- TMPL_IF NAME="amountoverfive" -->
+	<table cellpadding="5" cellspacing="0" border="1">
 		<tr bgcolor="#fecc99">
 			<td>
-				<font face="arial,helvetica" color="red" size=+2><B>Vous avez des dettes de <TMPL_VAR NAME="amountoutstanding"></B></font>
+				<font face="arial, helvetica, sans-serif" color="red" size="+2"><b>Vous avez des dettes de <!-- TMPL_VAR NAME="amountoutstanding" --></b></font>
 			</td>
 		</tr>
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="amountoverzero">
-	<table cellpadding=5 cellspacing=0 border=1>
+<!-- TMPL_IF NAME="amountoverzero" -->
+	<table cellpadding="5" cellspacing="0" border="1">
 		<tr bgcolor="#fecc99">
 			<td>
-				<font face="arial,helvetica" size=+2>
-					<B>Vous avez des dettes de <TMPL_VAR NAME="amountoutstanding"></B>
+				<font face="arial, helvetica, sans-serif" size="+2">
+					<b>Vous avez des dettes de <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME"amountlessthanzero">
-	<table cellpadding=5 cellspacing=0 border=1>
+<!-- TMPL_IF NAME"amountlessthanzero" -->
+	<table border="1" cellspacing="0" cellpadding="5">
 		<tr bgcolor="#fecc99">
 			<td>
-				<font face="arial,helvetica" size=+2>
-					<B>Vous avez un crédit de <TMPL_VAR NAME="amountoutstanding"></B>
+				<font face="arial, helvetica, sans-serif" size="+2">
+					<b>Vous avez un crédit de <!-- TMPL_VAR NAME="amountoutstanding" --></b>
 				</font>
 			</td>
 		</tr>
 	</table>
-</TMPL_IF>
-<a href='/cgi-bin/koha/opac-account.pl'>Voir compte</a>
+<!-- /TMPL_IF -->
+<p><a href="/cgi-bin/koha/opac-account.pl">Voir compte</a></p>
 
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 
-<TMPL_IF NAME="waiting_count">
-	<table  cellpadding=5 cellspacing=0 border=0>
+<!-- TMPL_IF NAME="waiting_count" -->
+	<table  cellpadding="5" cellspacing="0" border="1">
 		<tr bgcolor="#fecc99" >
-			<td colspan=2>
-				<font color="red" face="arial,helvetica" size=+2>
-					<B>	Vous avez des réservations en attente:</B>
+			<td colspan="4">
+				<font color="red" face="arial, helvetica, sans-serif" size="+2">
+					<b>	Vous avez des réservations en attente:</b>
 				</font>
-				<P>
 			</td>
 		</tr>
-		<TMPL_LOOP NAME="WAITING">
+		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+			<th>Titre</th>
+			<th>Auteur</th>
+			<th>Date réservation</th>
+			<th>Annexe de retrait</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="WAITING" -->
 			<tr>
 				<td>
-					<b><TMPL_VAR NAME="btitle"></b></td><td>Prendre à :: <b><TMPL_VAR NAME="branch"></b>
+					<b><a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a></b></td><td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td><td><!-- TMPL_VAR NAME="reservedate" --></td><td><b><!-- TMPL_VAR NAME="branch" --></b>
 				</td>
 			</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
+	</table><p>&nbsp;</p>
+<!-- /TMPL_IF -->
+
+
+
+<!-- TMPL_IF NAME="issues_count" -->
+
+<p>	You have <!-- TMPL_VAR NAME="issues_count" --> Ouvrage en prêt actuellement.</p>
+	<table border="1" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+			<th>Titre</th>
+			<th>Auteur</th>
+			<th>Date retour</th>
+			<th>Type d'ouvrage</th>
+			<th>Charges</th>
+			<th>Prêt</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="ISSUES" -->
+			<tr valign="top">
+				<td><a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR NAME="date_due" --></td>
+				<td><!-- TMPL_VAR NAME="itemtype" --></td>
+				<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
 	</table>
-</TMPL_IF>
+<!-- TMPL_ELSE -->
+<p>Vous n'avez pas d'exemplaire en prêt.</p>
+<!-- /TMPL_IF -->
 
-<p>
 
-<TMPL_IF NAME="issues_count">
-
-	Vous avez <TMPL_VAR NAME="issues_count"> Ouvrage en prêt actuellement<br>
-	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-		<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-			<TD><B>Titre</B></TD>
-			<TD><B>Auteur</B></TD>
-			<TD><B>Date retour</B></TD>
-			<TD><B>Type d'ouvrage</B></TD>
-			<TD><B>Charges</B></TD>
-			<TD><B>Prêt</B></TD>
-		</TR>
-		<TMPL_LOOP NAME="ISSUES">
-			<TR VALIGN=TOP>
-				<TD><TMPL_VAR NAME="title"></TD>
-				<TD><TMPL_VAR NAME="author"></TD>
-				<TD><TMPL_VAR NAME="date_due"></TD>
-				<TD><TMPL_VAR NAME="itemtype"></TD>
-				<TD><TMPL_IF NAME="charges">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
-				<TD><TMPL_IF NAME="status">Oui<TMPL_ELSE>Non</TMPL_IF></TD>
-			</TR>
-		</TMPL_LOOP>
+<!-- TMPL_IF NAME="reserves_count" -->
+<p>	You have <!-- TMPL_VAR NAME="reserves_count" --> Ouvrages réservés actuellement.</p>
+	<table border="1" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
+			<th>Titre</th>
+			<th>Auteur</th>
+			<th>Date réservation</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="RESERVES" -->
+			<tr valign="top">
+			<td><a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a></td>
+			<td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="reservedate" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
 	</table>
-<TMPL_ELSE>
-<p>Vous n'avez pas d'exemplaire en prêt</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<p>
-
-<TMPL_IF NAME="reserves_count">
-	Vous avez <TMPL_VAR NAME="reserves_count"> Ouvrages réservés actuellement<br>
-	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-		<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-			<TD><B>Titre</B></TD>
-			<TD><B>Auteur</B></TD>
-			<TD><B>Date réservation</B></TD>
-		</TR>
-		<TMPL_LOOP NAME="RESERVES">
-			<TR VALIGN=TOP>
-			<TD><TMPL_VAR NAME="btitle"></TD>
-			<TD><TMPL_VAR NAME="author"></TD>
-			<TD><TMPL_VAR NAME="reservedate"></TD>
-			</TR>
-		</TMPL_LOOP>
-	</table>
-</TMPL_IF>
-
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
 

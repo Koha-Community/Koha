@@ -1,0 +1,70 @@
+RELEASE NOTES
+=============
+This version of Koha is the 4rd in the 2.0 "stable" series.
+It does not mean that it has no bugs, but many libraries are using it and don't encounter unsolvable problems.
+If you want to adopt Koha, please do, but you're warned that this release candidate version may still have some bugs and missing features.
+If you test it and let us know about any we haven't seen yet, it will help us to fix them.
+
+INSTALLATION
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./installer.pl
+* Follow the instructions
+
+
+UPGRADE from previous 2.0.0preX or RCx version
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+
+
+UPGRADE from previous 1.2.x version
+
+This is the second koha 2 version that contains this upgrade. Nobody reported a problem during update with 2.0.0RC1.
+It may have bugs. Please take backups and be sure that you can go back to your previous version if needed.
+Otherwise, wait for next version.
+
+* Download the package
+* tar xvfz koha-version.tar.gz
+* cd koha-version
+* ./koha.upgrade
+* Follow the instructions
+* Open a browser to Koha
+* Go to Parameters >> Marc structure option and Koha-MARC links option.
+* Modify default MARC structure to fit your needs
+* Open a command-line on the koha server
+* Enter :
+cd /path/to/koha/misc
+export PERL5LIB=/path/to/koha/modules
+./koha2marc.pl
+This "copies" the old DB to the new MARC one.
+Now Koha 2.0.0RC4 is ready for you to test.
+
+BUGFIXES/IMPROVEMENTS:
+
+BUGS FIXED:
+major :
+* #293 : Error Issuing Book  - 1 (a very old one...)
+* #605 : circulation.pl only shows one waiting item
+* #661 : Set three variables for the circ template: gna, lost, and dbarred
+* biblio deletion : in some cases, the biblio deletion was done on another biblio than the one asked.
+* indicators where stored but not displayed in MARC editor/viewer.
+* book shelves work again (note bookshelves are not avaible in OPAC. they will be added in 2.2.0)
+minor :
+* it's now impossible to create a basket for an inactive supplier (it's of course possible to change supplier datas and recieve a past order)
+* removing "bulk", useless field, in admin/categorie.pl list (NOT in DB, in case someone uses the field)
+* removing forced order in admin/thesaurus.pl => mySQL returns datas ordered by relevance in fulltext index if you don't force an order.
+* Next borrower didn't work in circulation.pl (didn't return to borrower form)
+* in circulation.pl, removing <br> to have all informations without sidebar on a 1024x768 screen.
+* in circulation.pl, ODUES are in red in borrower header
+* quoting correctly titles with a " inside, in MARC editor
+
+IMPROVEMENTS:
+* Minor translation & HTML fixes.
+* Adding >>> in biblio editor to change tab.
+* Adding a "print" link in MARCbiblio : popup a small windows, print the biblio, and closes. Nice for libraries still having a paper catalog.

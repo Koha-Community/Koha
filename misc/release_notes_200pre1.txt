@@ -1,0 +1,72 @@
+RELEASE NOTES
+=============
+This release add many bugfixes, and some improvment in z3950 and repetable fields management.
+It has been placed in the "unstable tree" because there are still some bugs.
+But it's fully usable, and should not be modified a lot until a stable version is released.
+
+PACKAGE NEEDED :
+---------
+Nothing new. Note MARC::Record has new releases, but older one (1.26) works fine.
+
+DB modifications :
+---------
+* added field in aqbudget, primary key :
+	aqbudgetid tinyint(4) NOT NULL auto_increment
+  PRIMARY KEY  (aqbudgetid)
+* added field in systempref :
+	options text
+* bibliothesaurus
+	field father changed to char(80) (was bigint)
+	added full text index : FULLTEXT KEY category_2 (category,freelib)
+
+
+z3950 :
+---------
+* works on biblio adding & modifying
+* works on ISBN, author, title, the 1st found being the one used.
+
+various :
+----------
+* added subject and subtitle to MARC subfields mapped to Koha old-DB.
+* reordered bookfunds/budget admin tools.
+
+languages/languages :
+-------------
+DEFAULT template :
+* english works.
+* french should work, mostly. If you experiment some problems, test with english templates, and report the problem as general of french specific
+NEW template :
+a "unido" template is in this release. It's uncomplete, and based on vanilla template.
+
+GUI reordering
+------------------
+* Some unused links have been dropped.
+* a "submenu" shows some operation below main menu.
+* the MARC link disappeared. It's managed by the MARC=ON/OFF systempref. (the breeding import is now in Parameters section)
+* acquisition and cataloguing are now separated. acquisition=simple/normal in systempref and cataloguing is MARC/nonMARC depending on MARC=ON/OFF systempref.
+
+Should be easier to understand.
+
+Bugs still open in bugs.koha.org
+=======================
+always some, but less than in 1.9.3 (40 at this time. more than 20 of them are minor : spellcheck, image missing...)
+Some of them (for more details, see http://bugs.koha.org) :
+* 426 Reserving a book (with a reserve fee) results in a hostile message
+* 452 Payment due flags not showing up for children
+* 185 Barcode not auto-calculated when autobarcode is on
+* 425 Add new website feature doesn't work
+* 318 allow or not a book to be loan
+* 236 Reserve book on future date doesn't work or copy is wrong
+*
+bugs not reported here are either unconfirmed, not understood, minor, or partially fixed.
+
+
+
+
+Feel free to ask for bugfixes and new features in bugs.koha.org.
+NOTE that NEW FEATURES or IMPROVEMENTS will only be for 2.0.1 unless it's a very trivial or blocking one.
+
+TODO
+=====
+* bug fixes (everybody)
+* cleaning z3950 old searches (more than 1 hour/day old ?) (paul)

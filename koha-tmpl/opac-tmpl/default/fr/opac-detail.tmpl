@@ -1,81 +1,75 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinusername">
-    <p align="left">Connecté en tant que: <TMPL_VAR NAME="loggedinuser"> [<a href="/cgi-bin/koha/opac-user.pl">Accueil lecteur</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Déconnecter</a>]</p>
-<TMPL_ELSE>
-    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">S'identifier</a> à Koha</p>
-</TMPL_IF>
+<!-- TMPL_UNLESS NAME="norequests" -->
+<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">Reserver</a></p>
+<!-- /TMPL_UNLESS -->
 
-<TMPL_UNLESS NAME="norequests">
-<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>">Reserver</a></p>
-</TMPL_UNLESS>
-
-<TMPL_LOOP NAME="BIBLIO_RESULTS">
-<p><font size="6"><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font></p>
-
-<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
-	<!-- Notice bibliographique TABLE -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<p><font size="6"><em><!-- TMPL_VAR NAME="title" -->
+<!-- TMPL_VAR NAME="class" --></em></font></p>
+<p>
+<table cellspacing="0" cellpadding="5" border="1" align="left" width="30%">
+	<!-- BIBLIO RECORD TABLE -->
 	<tr valign="top">
 		<td bgcolor="#99cccc">
-			<b>Notice bibliographique</b>
-			<TMPL_VAR NAME="biblionumber">
+			<b><!-- TMPL_VAR NAME="title" --></b>  ( Enr. <!-- TMPL_VAR NAME="biblionumber" --> )
 		</td>
 	</tr>
 	<tr valign="top">
 		<td>
-			<FONT size="2"  face="arial,helvetica,sans-serif">
-				<TMPL_IF name="subtitle"><b>Sous-titre:</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
-				<TMPL_IF name="author"><b>Auteur:</b> <a href="/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>"><TMPL_VAR NAME="author"></a></TMPL_IF><br>
-				<TMPL_IF name="additional"><b>Autres auteurs:</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
-				<TMPL_IF name="publishercode"><b>Publié par :</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
-				<TMPL_IF name="publicationyear"><b>dans </b></TMPL_IF><TMPL_VAR NAME="publicationyear">
-				<TMPL_IF name="pages">, </TMPL_IF><TMPL_VAR name="pages">
-				<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br>
-				<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br>
-				<TMPL_IF name="subject"><b>Sujet:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br>
-				<TMPL_IF name="copyrightdate"><b>Année :</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br>
-				<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br>
-				<TMPL_IF name="unititle"><b>Titre unifié:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br>
-				<TMPL_IF name="serial"><b>Périodique:</b><TMPL_VAR NAME="serial"></TMPL_IF><br>
-				<TMPL_IF name="dewey"><b>Dewey:</b></TMPL_IF><TMPL_VAR name="dewey"><br>
-				<TMPL_IF name="url"><b>URL:</b> <a href="<TMPL_VAR name="url">"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
-				<b>Nombre total d'exemplaires:</b> <TMPL_VAR NAME="count">
+			<font size="2" face="arial,helvetica,sans-serif">
+			<!-- TMPL_IF name="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subtitle" --><b>Sous-titre:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="author" --><b>Auteur:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="additional" --><b>Autres auteurs:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="publishercode" --><b>Publié par :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="publicationyear" --><b>en </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
+			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br>
+			<!-- TMPL_IF name="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subject" --><b>Sujet:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="copyrightdate" --><b>Année :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="unititle" --><b>Titre unifié:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
+			<!-- TMPL_IF name="serial" --><b>Périodique:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="classification" --><b>Classification:</b> <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
+			<b>Nombre total d'exemplaires:</b> <!-- TMPL_VAR NAME="count" -->
 			</font>
 		</td>
 	</tr>
 </table>
-</TMPL_LOOP>
-<table border="0" cellspacing="2" cellpadding="2" align="center">
+<!-- /TMPL_LOOP -->
+<table border="0" cellspacing="0" cellpadding="2" width="60%">
 	<tr bgcolor="#99cccc">
-		<td>Type d'ouvrage :</td>
-		<td>Classe</td>
-		<td>Localisation</td>
-		<td>Date retour</td>
-		<td>Vu</td>
-		<td>Code barre</td>
+		<th>Type d'ouvrage</th>
+		<th>Localisation</th>
+		<th>Date retour</th>
+		<th>Vu</th>
+		<th>Code barre</th>
 	</tr>
-	<TMPL_LOOP NAME="ITEM_RESULTS">
+	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
-			<td><TMPL_VAR NAME="itemtype"></td>
-			<td><TMPL_VAR NAME="class"></td>
-			<td><TMPL_VAR NAME="branchname"></td>
-			<td><TMPL_VAR NAME="datedue"></td>
-			<td><TMPL_VAR NAME="datelastseen"></td>
-			<td><TMPL_VAR NAME="barcode"></td>
+			<td><!-- TMPL_VAR NAME="description" --></td>
+			<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="bulk" --> <!-- TMPL_VAR NAME="bulk" --><!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="datedue" --></td>
+			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+			<td><!-- TMPL_VAR NAME="barcode" --></td>
 		</tr>
-	</TMPL_LOOP>
-	<TMPL_LOOP NAME="WEB_RESULTS">
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
 		<tr>
-			<td><TMPL_VAR NAME="itemtype"></td>
+			<td><!-- TMPL_VAR NAME="itemtype" --></td>
 			<td>Site web</td>
 			<td>En ligne</td>
 			<td>Disponible</td>
 			<td>&nbsp;</td>
-			<td><TMPL_VAR NAME="url"></td>
+			<td><!-- TMPL_VAR NAME="url" --></td>
 		</tr>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 </table>
-<p>
+</p>
 <p><br clear="all"></p>
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
