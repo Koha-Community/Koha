@@ -127,10 +127,10 @@
 			
 	</TMPL_IF>	
 	
-	
-	<TMPL_LOOP NAME="SITE_RESULTS">
-<tr>
-<td class="label">Website Links<td><td class="result"><a href="http://<TMPL_VAR name="url">"><TMPL_VAR name="title"></a><br>
+</TMPL_LOOP>	
+<TMPL_LOOP NAME="SITE_RESULTS">
+<tr valign="top">
+<td class="label">Additional Web Links<td><td class="result"><a href="http://<TMPL_VAR name="url">"><TMPL_VAR name="title"></a><br>
 <TMPL_VAR name="description"><br>
 <b>URL:</b><a href="http://<TMPL_VAR name="url">">http://<TMPL_VAR name="url"></a><p>
 </td>
@@ -152,7 +152,7 @@
 
 <h2>Holdings Information (<TMPL_VAR NAME="count"> items)</h2>
 
-</TMPL_LOOP>
+
 <table class="data" cellspacing=0 cellpadding=0>
 	
 	<tr class="data-header" valign="top">
