@@ -10,24 +10,37 @@ $record->{tags}=$tags
 
 $tags is a hash reference
 
-$tags->{1}=$tag
-$tags->{2}=$tag
-$tags->{3}=$tag
+$tags->{$tag}
+$tags->{$tag}->{$tagorder}
+$tags->{$tag}->{$tagorder}->{indicator}='04'
+$tags->{$tag}->{$tagorder}->{tagid}=573498
+$tags->{$tag}->{$tagorder}->{subfields}=$subfields
 
-$tag->{tag}=110
-$tag->{indicator}='04'
-$tag->{tagid}=573498
-$tag->{subfields}=$subfields
+$subfields is a hash reference
 
+$subfields->{$mark}
+$subfields->{$mark}->{$subfieldorder}
+$subfields->{$mark}->{$subfieldorder}='MacDonald, John A.'
 
-$subfields->{1}=$subfield
-$subfields->{2}=$subfield
-$subfields->{3}=$subfield
+Sample :
+bibid=58973,
+110 ## $afirst text $asecond text $bthird text
+120 ## $alast text ??
+120 01 $nno, another text
 
-$subfield is a hash reference
+in perlmarcstructure, it can be writen :
+$record->{bibid}=58973
+$record->{tags}->{110}->{1}->{indicator}='##';
+$record->{tags}->{110}->{1}->->{a}->{1}='first text';
+$record->{tags}->{110}->{1}->{a}->{2}='second text';
+$record->{tags}->{110}->{1}->{b}->{1}='third text';
 
-$subfield->{mark}='a'
-$subfield->{value}='MacDonald, John A.'
+$record->{tags}->{120}->{1}->{indicator}='##';
+$record->{tags}->{120}->{1}->{a}->{1}='last text ??';
+
+$record->{tags}->{120}->{2}->{indicator}='01';
+$record->{tags}->{120}->{2}->{n}->{1}='no, another text';
+
 
 This takes care of possible repeating tags and subfields as well as ordering of
 tags and subfields, but it makes it difficult to look up specific tags and
