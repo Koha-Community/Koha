@@ -5,7 +5,7 @@
 
 <form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
 	
-	<div id="bloc20">
+	<div id="bloc60">
 		<h2 class="catalogue">Search on</h2>
 		<p>
 			<input type="hidden" name="op" value="do_search" />
@@ -39,6 +39,14 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
 			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">Series title</label>
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35"/>
 		</p>
 		<p>
 			<label class="label20">Item Type</label>
@@ -94,6 +102,20 @@
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
+		<p>
+			<label class="label20">Published between</label>
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value=">=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+			and
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="<=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+		</p>
 		<p>Results per page :
 			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
@@ -111,8 +133,6 @@
 				<option value="biblio.timestamp desc">Acquisition date</option>
 			</select>
 		</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
 	</div>
 	<div id="bloc60">
 		<h2>Hints</h2>
