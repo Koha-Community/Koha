@@ -202,7 +202,11 @@ my $todaysissues='';
 my $previssues='';
 my @realtodayissues;
 my @realprevissues;
+my $allowborrow;
+my $hash;
 if ($borrower) {
+    ($borrower, $flags,$hash) = getpatroninformation(\%env,$borrowernumber,0);
+    $allowborrow= $hash->{'borrow'};
     my @todaysissues;
     my @previousissues;
     my $issueslist = getissues($borrower);
@@ -229,15 +233,15 @@ if ($borrower) {
 	$book->{'dd'}=$dd;
 	$book->{'tcolor'}=$tcolor;
 	push @realtodayissues,$book
-    }
+}
     # FIXME - For small and private libraries, it'd be nice if this
     # table included a "Return" link next to each book, so that you
     # don't have to remember the book's bar code and type it in on the
     # "Returns" page.
-    
+
     # This is in the template now, so its possible for a small library to make that link in their
     # template
-    
+
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
@@ -295,6 +299,7 @@ $template->param(
 		printer => $printer,
 		branchname => $branches->{$branch}->{'branchname'},
 		printername => $printers->{$printer}->{'printername'},
+		allowborrow =>$allowborrow,
 
 		#question form
 		question => $question,
