@@ -39,7 +39,7 @@ if ($op eq 'serialchangestatus') {
 	}
 }
 my $subs = &getsubscription($subscriptionid);
-my @serialslist = getserials($subscriptionid);
+my ($totalissues,@serialslist) = getserials($subscriptionid);
 
 my $sth=$dbh->prepare("select * from subscriptionhistory where subscriptionid = ?");
 $sth->execute($subscriptionid);
