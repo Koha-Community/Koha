@@ -141,9 +141,13 @@ sub next_token_internal (*) {
 	if ($it =~ /^$re_directive/ios && !$cdata_mode_p) {
 	    $kind = KIND_DIRECTIVE;
 	}
-	($kind, $it) = (KIND_UNKNOWN, $readahead)
-		if !$ok_p && $eof_p && !length $readahead;
+	if (!$ok_p && $eof_p) {
+	    ($kind, $it, $readahead) = (KIND_UNKNOWN, $readahead, undef);
+	    $syntaxerror_p = 1;
+	}
     }
+    warn "Warning: Unrecognizable token found in line $lc_0: $it\n"
+	    if $kind eq KIND_UNKNOWN;
     return defined $it? (wantarray? ($kind, $it):
 				    [$kind, $it]): undef;
 }
