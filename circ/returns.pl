@@ -8,7 +8,7 @@ use CGI;
 use C4::Circulation::Circ2;
 use C4::Search;
 use C4::Output;
-
+use C4::Reserves2;
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -28,11 +28,13 @@ my $printer = $query->param("printer");
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
 
+my $request=$query->param('request');
 
 
 #
 # Some code to handle the error if there is no branch or printer setting.....
 #
+
 
 $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
@@ -61,12 +63,41 @@ foreach ($query->param) {
     $ritext.="<input type=hidden name=bn-$counter value=$borrowernumber>\n";
 }
 
+# Collect a few messages here...
+my $messagetext='';
+
+############
+# Deal with the requests....
+if ($request eq "KillWaiting") {
+    my $item = $query->param('itemnumber');
+    my $borrnum = $query->param('borrowernumber');
+    CancelReserve(0, $item, $borrnum);
+    $messagetext .= "Reserve Cancelled<br>";
+}
+if ($request eq "SetWaiting") {
+    my $item = $query->param('itemnumber');
+    my $borrnum = $query->param('borrowernumber');
+    my $barcode2 = $query->param('barcode2');
+    my $tobranchcd = ReserveWaiting($item, $borrnum);
+    my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $barcode2, 1);
+    $messagetext .= "Item should now be waiting at branch: <b>$branches->{$tobranchcd}->{'branchname'}</b><br>";
+}
+if ($request eq 'KillReserved'){
+    my $biblio = $query->param('biblionumber');
+    my $borrnum = $query->param('borrowernumber');
+    CancelReserve($biblio, 0, $borrnum);
+    $messagetext .= "Reserve Cancelled<br>";
+}
+
+
+
 my $iteminformation;
 my $borrower;
 my $returned = 0;
 my $messages;
+my $barcode = $query->param('barcode');
 # actually return book (SQL CALL) and prepare item table.....
-if (my $barcode = $query->param('barcode')) {
+if ($barcode) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
     ($returned, $messages, $iteminformation, $borrower) = returnbook($barcode, $branch);
@@ -91,7 +122,7 @@ my $title = <<"EOF";
 <b>Printer:</b> $printers->{$printer}->{'printername'}<br>
 <a href=selectbranchprinter.pl>Change Settings</a>
 </td>
-<td align="right">
+<td align="right" valign="top">
 <FONT SIZE=2  face="arial, helvetica">
 <a href=circulation.pl>Next Borrower</a> || 
 <a href=returns.pl>Returns</a> || 
@@ -130,29 +161,90 @@ my $barcodeentrytext = << "EOF";
 <font color=black><b>Enter Book Barcode</b></font></td></tr>
 <tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
 </table>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
 $ritext
 </form>
+<img src="/images/holder.gif" width=24 height=50 align=left>
 EOF
+
 
 my $reservefoundtext;
 if ($messages->{'ResFound'}) {
-    my $resrec = $messages->{'ResFound'};
-    my ($borr) = getpatroninformation(\%env, $resrec->{'borrowernumber'}, 0);
+    my $res = $messages->{'ResFound'};
+    my $reservetext;
+    my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+    my ($borr) = getpatroninformation(\%env, $res->{'borrowernumber'}, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
     my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
-    my $branch = $branches->{$resrec->{'branchcode'}}->{'branchname'};
-    my $reservetext = "<font size='+2' color='red'>RESERVED</font><font size='+2'> for collection by <br>$name ($number) at $branch </font>";
+    if ($res->{'ResFound'} eq "Waiting") {
+	$reservetext = <<"EOF";
+<font color='red' size='+2'>Item marked Waiting:</font><br>
+    Item is marked waiting at <b>$branchname</b> for $name ($number).<br>
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><td>Cancel reservation: </td>
+<td>
+<form method=post action='returns.pl'>
+$ritext
+<input type=hidden name=itemnumber value=$res->{'itemnumber'}>
+<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
+<input type=hidden name=request value='KillWaiting'>
+<input type=hidden name=barcode value=0>
+<input type=submit value="Cancel">
+</form>
+</td></tr>
+<tr><td>Back to returns: </td>
+<td>
+<form method=post action='returns.pl'>
+$ritext
+<input type=hidden name=barcode value=0>
+<input type=submit value="OK">
+</form>
+</td></tr></table>
+EOF
+    } 
+    if ($res->{'ResFound'} eq "Reserved") {
+	$reservetext = <<"EOF";
+<font color='red' size='+2'>Reserved:</font> reserve found for $name ($number).
+<table border=1 cellpadding=5 cellspacing=0>
+<tr><td>Set reserve to waiting and transfer book to <b>$branchname </b>: </td>
+<td>
+<form method=post action='returns.pl'>
+$ritext
+<input type=hidden name=itemnumber value=$res->{'itemnumber'}>
+<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
+<input type=hidden name=barcode2 value=$barcode>
+<input type=hidden name=request value='SetWaiting'>
+<input type=submit value="Waiting">
+</form>
+</td></tr>
+<tr><td>Cancel reservation: </td>
+<td>
+<form method=post action='returns.pl'>
+$ritext
+<input type=hidden name=biblionumber value=$res->{'biblionumber'}>
+<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
+<input type=hidden name=barcode value=0>
+<input type=hidden name=request value='KillReserved'>
+<input type=submit value="Cancel">
+</form>
+</td></tr><tr><td>Back to returns: </td>
+<td>
+<form method=post action='returns.pl'>
+<input type=hidden name=barcode value=0>
+$ritext
+<input type=submit value="OK">
+</form>
+</td></tr></table>
+EOF
+    }
     $reservefoundtext = <<"EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Reserve Found</font></th></tr>
 <tr><td> $reservetext </td></tr></table>
+<img src="/images/holder.gif" width=24 height=24>
 EOF
 }
 
 # collect the messages and put into message table....
-my $messagetext='';
 foreach my $code (keys %$messages) {
     if ($code eq 'BadBarcode'){
 	$messagetext .= "<font color='red' size='+2'> No Item with barcode: $messages->{'BadBarcode'} </font> <br>";
@@ -319,12 +411,13 @@ print startmenu('circulation');
 
 print $title;
 
-print $reservefoundtext;
-
-print $barcodeentrytext;
+if ($reservefoundtext) {
+    print $reservefoundtext;
+} else {
+    print $barcodeentrytext;
+}
 
 print $messagetable;
-
 
 if ($returned) {
     print $itemtable;
