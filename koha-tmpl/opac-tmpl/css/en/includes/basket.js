@@ -295,14 +295,6 @@ function delBasket() {
 
 
 function quit() {
-	if (document.myform.records.value) {
-		var rep = false;
-		rep = confirm(MSG_CONFIRM_DEL_RECORDS);
-		if (rep) {
-			delSelRecords();
-		}
-	}
-	updateBasket(arrayRecords.length-1,top.opener.document);
 	window.close();
 }
 
