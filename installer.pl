@@ -633,6 +633,22 @@ data, you probably don't want this sample data installed.
 	system("gzip -9 sampledata-1.2");
 	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('Main', 'Main Library', 1)\"");
 	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+	print qq|
+
+Sample data has been installed.  For some suggestions on testing Koha, please
+read the file doc/HOWTO-Testing.  If you find any bugs, please submit them at
+http://bugs.koha.org/.  If you need help with testing Koha, you can post a
+question through the koha-devel mailing list, or you can check for a developer
+online at +irc.katipo.co.nz:6667 channel #koha.
+
+You can find instructions for subscribing to the Koha mailing lists at:
+
+    http://www.koha.org
+
+
+Press <ENTER> to continue...
+|;
+	<STDIN>;
     } else {
 	print "\n\nWould you like to add a branch and printer? [Y]/N: ";
 	chomp($input = <STDIN>);
