@@ -15,77 +15,87 @@
 <FONT SIZE=6><em>Recherche Catalogue</em></FONT>
 
 <div align=right>
-<input type="hidden" name="type" value="intra">
-<INPUT TYPE="image"  alt="Start Search" src="/images/ok-start-search.gif"  WIDTH=187  HEIGHT=42 BORDER=0 > 
+	<input type="hidden" name="type" value="intra">
+	<INPUT TYPE="image"  alt="Start Search" src="/images/ok-start-search.gif"  WIDTH=187  HEIGHT=42 BORDER=0 >
 </div>
 <CENTER>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
+	<TR VALIGN=TOP>
+		<TD>Nbre d'exemplaires</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
+		<td> <b> &nbsp; &nbsp; OU</b></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD colspan=2 > &nbsp;</td>
+	</TR>
 
-<TR VALIGN=TOP>
-<TD>Nbre d'exemplaires</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td><td> <b> &nbsp; &nbsp; OU</b></TD></TR>
-<!-- <TR VALIGN=TOP>
-<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
- -->
-<TR VALIGN=TOP>
-<TD colspan=2 > &nbsp;</td></TR>
-
-
-<TR VALIGN=TOP>
-<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><b>HELP</b><br>
-<b>Rechercher :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-cl&eacute;s + auteur + cote) ralentira la recherche.<p>
-<b><a href=/cgi-bin/koha/maint/catmaintain.pl target=window0>
-Maintenance du Catalogue:</a></b> Pour ajouter une <b>nouvelle</b> notice ou un <b>nouvel</b> exemplaire allez &agrave; la page
-<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>.<p>
-Pour <b>commander, modifie ou effacer</b> une notice ou un exemplaire, cherchez-le d'abord ici.
-   </TR>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
+			<span style="color:#FFFFFF;">
+				<b>Rechercher :</b>Utiliser un plus grand nombre de champs pour votre recherche (par ex. Mots-cl&eacute;s + auteur + cote) ralentira la recherche.<p>
+			</span>
+		</td>
+	</TR>
 </table>
 
 
 
 <TABLE >
-<TR VALIGN=TOP>
-<TD>Mots-cl&eacute;s</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD></TR>
-<TR VALIGN=TOP>
-<TD>Titre</TD> <TD><INPUT TYPE="text"  SIZE="25"
-NAME="title"></TD><td><input type=radio name=ttype value=normal checked>Normal<input
-type=radio name=ttype value=exact>Exacte</td></TR>
-<TR VALIGN=TOP> 
-<TD>Auteur</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
-<TR VALIGN=TOP> 
-<TD>Illustrateur</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+	<TR VALIGN=TOP>
+		<TD>Mots-cl&eacute;s</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Titre</TD>
+		<TD>
+			<INPUT TYPE="text"  SIZE="25" NAME="title"></TD><td><input type=radio name=ttype value=normal checked>Normal
+			<input type=radio name=ttype value=exact>Exacte
+		</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Auteur</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Illustrateur</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
+	</TR>
 
-<TR VALIGN=TOP> 
-<TD>Dewey</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD></TR>
+	<TR VALIGN=TOP>
+		<TD>Dewey</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
+	</TR>
 
-<TR VALIGN=TOP>
-<TD>Cote</TD>
-  <td>
-  <select name="class" size="1">
-  <option value="">Toute
-  <TMPL_VAR name="classlist">
-  </select>
-  </td>
-</tr>
-<!-- <TR VALIGN=TOP>
-<td>Localisation</td><td><select name=branch>
-<option value="F">Foxton
-</select>
-</td></tr> -->
+	<TR VALIGN=TOP>
+		<TD>Cote</TD>
+		<td>
+			<select name="class" size="1">
+				<option value="">Toute
+				<TMPL_VAR name="classlist">
+			</select>
+		</td>
+	</tr>
+	<!-- <TR VALIGN=TOP>
+	<td>Localisation</td><td><select name=branch>
+	<option value="F">Foxton
+	</select>
+	</td></tr> -->
 
-<!-- <TD>Date de publication (avant)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (apr&egrave;s) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
- -->
-<TR VALIGN=TOP>
-<TD><b>OU</b></TD></TR>
-
-
-<TR VALIGN=TOP>
-<TD>Sujet</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
-<TD></TD> <TD><INPUT TYPE="reset"  VALUE= "Clear Fields">
+	<!-- <TD>Date de publication (avant)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (apr&egrave;s) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+	-->
+	<TR VALIGN=TOP>
+		<TD><b>OU</b></TD>
+	</TR>
 
 
-
-</TD></TR></TABLE>
+	<TR VALIGN=TOP>
+		<TD>Sujet</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+	</TR>
+	<tr>
+		<TD></TD>
+		<TD><INPUT TYPE="reset"  VALUE= "Clear Fields"></TD>
+	</TR>
+</TABLE>
 </FORM>
 <p>
 <a href=/cgi-bin/koha/shelves.pl>Etag&egrave;res virtuelles</a>
