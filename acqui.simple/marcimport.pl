@@ -1017,55 +1017,86 @@ sub FormatMarcText {
 	$fields,	# list ref to MARC fields
     )=@_;
     # Return
+    my $marctext;
 
     my (
-        $marctext,
 	$color,
 	$field,
 	$tag,
 	$label,
+	$indicator,
 	$subfieldcode,$subfieldvalue,
 	@values, $value
     );
+    my $debug=0;
 
-	#return "MARC text here";
+    #-----------------------------------------
 
-    $marctext="<table border=0 cellspacing=0>
-    	<tr><th colspan=3 bgcolor=black>
+    $marctext="<table border=0 cellspacing=1>
+    	<tr><th colspan=4 bgcolor=black>
 		<font color=white>MARC RECORD</font>
 	</th></tr>\n";
 
     foreach $field ( @$fields ) {
+
+	# Swap colors on alternating lines
 	($color eq $lc1) ? ($color=$lc2) : ($color=$lc1);
+
 	$tag=$field->{'tag'};
-	$label=$tagtext{$tag};
-	if ( $tag eq 'Leader' ) {
+	$label=taglabel($tag);
+
+	if ( $tag eq 'LDR' ) {
 		$tag='';
 		$label="Leader:";
 	}
+	print "<pre>Format tag=$tag label=$label</pre>\n" if $debug;
+
 	$marctext.="<tr><td bgcolor=$color valign=top>$label</td> \n" .
 		"<td bgcolor=$color valign=top>$tag</td> \n";
-	if ( ! $field->{'subfields'} )  {
-	    $marctext.="<td bgcolor=$color valign=top>$field->{'indicator'}</td>";
+
+	$indicator=$field->{'indicator'};
+	$indicator=~s/ +$//;	# drop trailing blanks
+
+	# Third table column has indicator if it is short.
+	# Fourth column has embedded table of subfields, and indicator
+	#  if it is long (leader or fixed-position fields)
+
+	print "<pre>Format indicator=$indicator" .
+		" length=" . length( $indicator ) .  "</pre>\n" if $debug;
+	if ( length( $indicator <= 3 ) ) {
+	    $marctext.="<td bgcolor=$color valign=top><pre>" .
+		"$indicator</pre></td>" .
+		"<td bgcolor=$color valign=top>" ;
 	} else {
+	    $marctext.="<td bgcolor=$color valign=top></td>" .
+	    	"<td bgcolor=$color valign=top>" .
+		"$indicator ";
+	} # if length
+
+	# Subfields
+	if ( $field->{'subfields'} )  {
 	    # start another table for subfields
-	    $marctext.="<td bgcolor=$color valign=top>\n " .
-		"  <table border=0 cellspacing=0>\n";
+	    $marctext.= "<table border=0 cellspacing=2>\n";
 	    foreach $subfieldcode ( sort( keys %{ $field->{'subfields'} }   )) {
 	        $subfieldvalue=$field->{'subfields'}->{$subfieldcode};
 		if (ref($subfieldvalue) eq 'ARRAY' ) {
-		    # if it's a pointer to array, get the values
+		    # if it's a pointer to array, get all the values
 		    @values=@{$subfieldvalue};
 		} else {
+		    # otherwise get the one value
 		    @values=( $subfieldvalue );
 		} # if subfield array
 		foreach $value ( @values ) {
-	          $marctext.="<tr><td>$subfieldcode </td>" .
+	          $marctext.="<tr><td><strong>$subfieldcode</strong></td>" .
 		    "<td>$value</td></tr>\n";
 		} # foreach value
 	    } # foreach subfield
-	    $marctext.="</table></td>\n";
+	    $marctext.="</table>\n";
 	} # if subfields
+	# End of indicator and subfields column
+	$marctext.="</td>\n";
+
+	# End of columns
 	$marctext.="</tr>\n";
 
     } # foreach field
@@ -1079,6 +1110,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.27  2002/06/26 15:52:55  amillar
+# Fix display of marc tag labels and indicators
+#
 # Revision 1.6.2.26  2002/06/26 14:28:35  amillar
 # Removed subroutines now existing in modules: extractmarcfields,
 #  parsemarcfileformat, addz3950queue, getkeytableselectoptions

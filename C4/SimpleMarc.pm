@@ -30,6 +30,7 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	&extractmarcfields 
 	&parsemarcfileformat 
+	&taglabel
 	%tagtext
 	%tagmap
 );
@@ -75,6 +76,7 @@ my $priv_func = sub {
 # Constants
 
 my %tagtext = (
+    'LDR' => 'Leader',
     '001' => 'Control number',
     '003' => 'Control number identifier',
     '005' => 'Date and time of latest transaction',
@@ -82,14 +84,18 @@ my %tagtext = (
     '007' => 'Physical description fixed field',
     '008' => 'Fixed length data elements',
     '010' => 'LCCN',
-    '015' => 'LCCN Cdn',
+    '015' => 'National library CN',
     '020' => 'ISBN',
     '022' => 'ISSN',
+    '024' => 'Other standard ID',
+    '035' => 'System control number',
     '037' => 'Source of acquisition',
     '040' => 'Cataloging source',
     '041' => 'Language code',
     '043' => 'Geographic area code',
+    '043' => 'Publishing country code',
     '050' => 'Library of Congress call number',
+    '055' => 'Canadian classification number',
     '060' => 'National Library of Medicine call number',
     '082' => 'Dewey decimal call number',
     '100' => 'Main entry -- Personal name',
@@ -352,9 +358,9 @@ sub parsemarcfileformat {
 	my $field;
 
 	my $leader=substr($record,0,24);
-	print "<tr><td>Leader:</td><td>$leader</td></tr>\n" if $debug;
+	print "<pre>parse Leader:$leader</pre>\n" if $debug;
 	push (@record, {
-		'tag' => 'Leader',
+		'tag' => 'LDR',
 		'indicator' => $leader ,
 	} );
 
@@ -364,6 +370,7 @@ sub parsemarcfileformat {
 	    my $tag;
 	    my $indicator;
 	    unless ($directory) {
+		# If we didn't already find a directory, extract one.
 		$directory=$field;
 		my $itemcounter=1;
 		my $counter2=0;
@@ -371,9 +378,12 @@ sub parsemarcfileformat {
 		my $length;
 		my $start;
 		while ($item=substr($directory,0,12)) {
+		    # Pull out location of first field
 		    $tag=substr($directory,0,3);
 		    $length=substr($directory,3,4);
 		    $start=substr($directory,7,6);
+
+		    # Bump to next directory entry
 		    $directory=substr($directory,12);
 		    $tag{$counter2}=$tag;
 		    $counter2++;
@@ -387,6 +397,7 @@ sub parsemarcfileformat {
 	    my @subfields=split(/$splitchar3/, $field);
 	    $indicator=$subfields[0];
 	    $field{'indicator'}=$indicator;
+	    print "<pre>parse indicator:$indicator</pre>\n" if $debug;
 	    my $firstline=1;
 	    unless ($#subfields==0) {
 		my %subfields;
@@ -427,8 +438,19 @@ sub parsemarcfileformat {
     return @records;
 } # sub parsemarcfileformat
 
+#----------------------------------------------
+sub taglabel {
+    my ($tag)=@_;
+
+    return $tagtext{$tag};
+
+} # sub taglabel
+
 #---------------------------------------------
 # $Log$
+# Revision 1.1.2.2  2002/06/26 15:52:55  amillar
+# Fix display of marc tag labels and indicators
+#
 # Revision 1.1.2.1  2002/06/26 07:27:35  amillar
 # Moved acqui.simple MARC handling to new module SimpleMarc.pm
 #
