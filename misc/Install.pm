@@ -369,6 +369,18 @@ sub setetcdir ($) {
     ($etcdir) = @_;
 }
 
+=item getkohaversion
+
+    getkohaversion();
+
+Gets the Koha version as known by the previous config file.
+
+=cut
+
+sub getkohaversion ($) {
+    return($kohaversion);
+}
+
 =item setkohaversion
 
     setkohaversion('1.3.3RC26');
@@ -1581,14 +1593,17 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
 
 	#MJR: generate our own settings, to remove the /home/paul hardwired links
     open(FILE,">$intranetdir/scripts/z3950daemon/z3950-daemon-options");
-    print FILE "RunAsUser=apache\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\nKohaConf=$etcdir/koha.conf";
+    print FILE "RunAsUser=$httpduser\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\nKohaConf=$etcdir/koha.conf";
     close(FILE);
 
 	if ($> == 0) {
 	    chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
     	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
     	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
-	} #MJR: FIXME: Should report that we haven't chown()d.
+	} #MJR: report that we haven't chown()d.
+	else {
+		print "Please check permissions in $intranetdir/scripts/z3950daemon\n";
+	}
 
     showmessage(getmessage('OldFiles'),'PressEnter');
 }

@@ -14,7 +14,7 @@ Install::setetcdir($ENV{etcdir}||'/etc');
 my $input;
 loadconfigfile();
 
-($::kohaversion) || ($::kohaversion='unknown version');
+($::kohaversion = Install::getkohaversion() ) || ($::kohaversion='unknown version');
 $::newversion=`cat koha.version`;
 chomp $::newversion;
 if ($::newversion =~ /RC/) {
