@@ -1,5 +1,8 @@
-<TMPL_INCLUDE NAME="marc-top.inc">
-
+<TMPL_IF NAME="NOTMARC">
+  <TMPL_INCLUDE NAME="acquisitions-top.inc">
+<TMPL_ELSE>
+  <TMPL_INCLUDE NAME="marc-top.inc">
+</TMPL_IF>
 
 <font size="5"><em>MARC import and BIBLIO management</em></font>
 <TMPL_IF name="noitemsfound">
@@ -31,7 +34,11 @@
 			<td width="20%"><input type="text" name="title" /></td>
 		</tr>
 		<tr><td>&nbsp;</td>
+		<TMPL_IF NAME="NOTMARC">
+			<td colspan=2><a href=addbiblio-nomarc.pl>Add biblio without ISBN/ISSN</a></td></tr>
+		<TMPL_ELSE>
 			<td colspan=2><a href=addbiblio.pl>Add biblio without ISBN/ISSN</a></td></tr>
+		</TMPL_IF>
 	</table>
 </form>
 
