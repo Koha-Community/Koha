@@ -79,7 +79,14 @@ if ($quantity != 0){
   #  print @barcodes;
   #  print $barcode;
   }
-  my ($error)=makeitems($quantrec,$bibitemno,$biblio,$replacement,$cost,$bookseller,$branch,$loan,@barcodes);
+  my ($error) = newitems({ biblioitemnumber => $bibitemno,
+	                   biblionumber     => $biblio,
+	                   replacementprice => $replacement,
+	                   price            => $cost,
+	                   booksellerid     => $bookseller,
+	                   homebranch       => $branch,
+	                   loan             => $loan },
+			 @barcodes);
   if ($error eq ''){
     if ($itemtype ne 'PER'){
       print $input->redirect("/cgi-bin/koha/acqui/receive.pl?invoice=$invoiceno&id=$id&freight=$freight&gst=$gst");
