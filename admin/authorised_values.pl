@@ -90,6 +90,8 @@ if ($op eq 'add_form') {
 	}
 	if ($searchfield) {
 		$template->param(action => "Modify authorised value");
+	} elsif ( ! $data->{'category'} ) {
+		$template->param(action => "Add new category");
 	} else {
 		$template->param(action => "Add authorised value");
 	}
