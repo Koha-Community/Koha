@@ -3,41 +3,41 @@
 <div id="mainbloc">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
-	<a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">MARC</a>
-	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+	<a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">MARC</a>
+	<a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 		ISBD
 	</a>
-	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+	<a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
 		Add to shelf
 	</a>
-	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
 		Print
 	</a>
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
-		<a class="button catalogue" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
+		<a class="button catalogue" href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Requests</a>
 	<!-- /TMPL_IF -->
 	<div id="bloc25">
 		<h2 class="catalogue">BIBLIO RECORD <!-- TMPL_VAR NAME="biblionumber" --></h2>
 		<p>
-			<!-- TMPL_IF name="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="author" --><b>Author:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="publishercode" --><b>Published by :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="publicationyear" --><b>in </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
-			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br>
-			<!-- TMPL_IF name="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="subject" --><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="copyrightdate" --><b>Year :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
-			<!-- TMPL_IF name="serial" --><b>Serial:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="classification" --><b>Classification:</b> <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="subtitle" --><b>Subtitle:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="author" --><b>Author:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="publishercode" --><b>Published by :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="publicationyear" --><b>in </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR NAME="pages" -->
+			<!-- TMPL_IF NAME="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR NAME="size" --><br>
+			<!-- TMPL_IF NAME="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="subject" --><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="copyrightdate" --><b>Year :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
+			<!-- TMPL_IF NAME="serial" --><b>Serial:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&amp;dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="dewey" --></a><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="classification" --><b>Classification:</b> <!-- TMPL_VAR NAME="classification" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="lccn" --><b>LCCN:</b> <!-- TMPL_VAR NAME="lccn" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF NAME="url" --><b>URL:</b> <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
 			<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
 	</div>
 <!-- /TMPL_LOOP -->
@@ -55,14 +55,14 @@
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 			<tr>
 				<td><!-- TMPL_VAR NAME="description" --></td>
-				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
-				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
 				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 				<!-- TMPL_IF NAME="type" -->
 					<td>
-						<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&item=<!-- TMPL_VAR NAME="itemtype" -->>Fix Itemtype</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
 					</td>
 				<!-- /TMPL_IF -->
 			</tr>
@@ -75,13 +75,13 @@
 				<td>Available</td>
 				<td></td>
 				<td>
-					<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">http://<!-- TMPL_VAR NAME="url" --></a>
+					<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">http://<!-- TMPL_VAR NAME="url" --></a>
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 </div>
-<script>
+<script language="javascript" type="text/javascript">
 function Dopop(link) {
 	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }

@@ -1,110 +1,110 @@
-<!-- TMPL_IF name="opac" -->
+<!-- TMPL_IF NAME="opac" -->
 	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <!-- TMPL_ELSE -->
 	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <!-- /TMPL_IF -->
 
 <!------------------------ MAIN BODY OF PAGE ---------------------------->
-<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
+<form action="/cgi-bin/koha/search.pl" method="post">
 
 <h1>Catalogue Search</h1>
 
-<CENTER>
+<center>
 
-<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
-	<TR VALIGN=TOP>
-		<TD>Barcode</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
-		<td><b> &nbsp; &nbsp; OR</b></TD></TR>
-	<!-- <TR VALIGN=TOP>
-	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+<table align="left" width="40%" cellspacing="0" cellpadding="5" border="0" >
+	<tr valign="top">
+		<td>Barcode</td>
+		<td><input type="text"  size="25"   name="itemnumber"></td>
+		<td><b> &nbsp; &nbsp; OR</b></td></tr>
+	<!-- <tr valign="top">
+	<td>ISBN</td> <td><input type="text"  size="25"   name="isbn"></td></tr>
 	-->
-	<TR VALIGN=TOP>
-		<TD colspan=2 > &nbsp;</td>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD  bgcolor="#ad11ad" colspan=2>
+	<tr valign="top">
+		<td colspan="2" > &nbsp;</td>
+	</tr>
+	<tr valign="top">
+		<td  bgcolor="#ad11ad" colspan="2">
 			<span style="color:#FFFFFF;">
 				<b>HELP</b><br>
 				<b>Search :</b>Using more fields for your search will slow it down.<p>
 			</span>
 		</td>
-	</TR>
+	</tr>
 </table>
 
 
 
-<TABLE border=0>
-	<TR VALIGN=TOP>
-		<TD>Keywords</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD>Title</TD>
-		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
+<table border="0">
+	<tr valign="top">
+		<td>Keywords</td>
+		<td><input type="text"  size="25"   name="keyword"></td>
+	</tr>
+	<tr valign="top">
+		<td>Title</td>
+		<td><input type="text"  size="25" name="title"></td>
 		<td>
-			<input type=radio name=ttype value=normal checked>Normal
-			<input type=radio name=ttype value=exact>Exact
+			<input type="radio" name="ttype" value="normal" checked>Normal
+			<input type="radio" name="ttype" value="exact">Exact
 		</td>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD>Author</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD>Illustrator</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
-	</TR>
-		<TR VALIGN=TOP>
-		<TD>Dewey</TD><TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
-	</TR>
+	</tr>
+	<tr valign="top">
+		<td>Author</td>
+		<td><input type="text"  size="25"   name="author"></td>
+	</tr>
+	<tr valign="top">
+		<td>Illustrator</td>
+		<td><input type="text"  size="25"   name="illustrator"></td>
+	</tr>
+		<tr valign="top">
+		<td>Dewey</td><td><input type="text"  size="25"   name="dewey"></td>
+	</tr>
 
-	<TR VALIGN=TOP>
-	<TD>Class</TD>
+	<tr valign="top">
+	<td>Class</td>
 		<td>
 			<select name="class" size="1">
 			<option value=""> Any
-			<!-- TMPL_VAR name="classlist" -->
+			<!-- TMPL_VAR NAME="classlist" -->
 			</select>
 		</td>
 	</tr>
-	<!-- <TR VALIGN=TOP>
-	<td>Branch</td><td><select name=branch>
+	<!-- <tr valign="top">
+	<td>Branch</td><td><select name="branch">
 	<option value="F">Foxton
 	</select>
 	</td></tr> -->
 
-	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+	<!-- <td>Pub Date (before)</td> <td><input type="text"  size="8"   name="date-before"> &nbsp; &nbsp; (after) <input type="text"  size="8"   name="date-after"></td></tr>
 	-->
-	<TR VALIGN=TOP>
-	<TD><b>OR</b></TD>
-	</TR>
+	<tr valign="top">
+	<td><b>OR</b></td>
+	</tr>
 
-	<TR VALIGN=TOP>
-		<TD>Subject</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
-	</TR>
+	<tr valign="top">
+		<td>Subject</td>
+		<td><input type="text"  size="25"   name="subject"></td>
+	</tr>
 	<tr>
-		<TD colspan=3>
-			<table width="100%" cellpadding=0 cellspacing=0>
+		<td colspan="3">
+			<table width="100%" cellpadding="0" cellspacing="0">
 				<tr align="center">
 					<td>
 						<input type="hidden" name="type" value="intra">
 						<input type="submit" class="button" value="Start search">
 					</td>
 					<td>
-						<INPUT TYPE="reset"  VALUE= "Clear" class="button">
+						<input type="reset"  value= "Clear" class="button">
 					</td>
 					<td>
 						<a href="/cgi-bin/koha/shelves.pl" class="button">Virtual Bookshelves</a>
 					</td>
 				</tr>
 			</table>
-		</TD>
-	</TR>
-</TABLE>
-	</FORM>
+		</td>
+	</tr>
+</table>
+	</form>
 	<p>
-	</CENTER>
-<!--#include virtual="/includes/cat-bottom.inc" -->
+	</center>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
 

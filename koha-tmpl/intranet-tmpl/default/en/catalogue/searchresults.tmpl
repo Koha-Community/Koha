@@ -6,51 +6,51 @@
 <center>
 
 
-<!-- TMPL_IF NAME=searchdesc -->
-	You searched on <b><!-- TMPL_VAR NAME=searchdesc --></b>
+<!-- TMPL_IF NAME="searchdesc" -->
+	You searched on <b><!-- TMPL_VAR NAME="searchdesc" --></b>
 <!-- TMPL_ELSE -->
 	You did not specify any seach criteria<br>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_VAR NAME=numrecords --> results found
+<!-- TMPL_VAR NAME="numrecords" --> results found
 <p>
 <!-- Row of numbers corresponding to search result pages -->
-<!-- TMPL_IF NAME=displayprev -->
-	<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/prev.gif border=0></a>
+<!-- TMPL_IF NAME="displayprev" -->
+	<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0"></a>
 <!-- TMPL_ELSE -->
-	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/placeholder.gif border=0>
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
 <!-- /TMPL_IF -->
-<!-- TMPL_LOOP NAME=numbers -->
-	<!-- TMPL_IF NAME=highlight -->
-	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif>
+<!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" -->
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
 	<!-- TMPL_ELSE -->
-	<a href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->.gif border=0></a>
+	<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0"></a>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-<!-- TMPL_IF NAME=displaynext -->
-	<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0></a>
+<!-- TMPL_IF NAME="displaynext" -->
+	<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0"></a>
 <!-- TMPL_ELSE -->
-	<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/placeholder.gif border=0>
+	<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
 <!-- /TMPL_IF -->
 
 <p>
 <!-- Search Results Table -->
-<!-- TMPL_IF NAME=numrecords -->
-<table border=0 cellspacing=0 cellpadding=2 width=90%>
-<tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE --> background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
-	<th align=left>Title</th><th align=left>Author</th><th>&copy;</th><th>Item Count</th><th>Location</th>
+<!-- TMPL_IF NAME="numrecords" -->
+<table border="0" cellspacing="0" cellpadding="2" width="90%">
+<tr <!-- TMPL_IF NAME="opac" -->bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE --> background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->">
+	<th align="left">Title</th><th align="left">Author</th><th>&copy;</th><th>Item Count</th><th>Location</th>
 	<!-- TMPL_IF NAME="opac" -->
 	<!-- TMPL_ELSE -->
 	<th>&nbsp;</th>
 	<!-- /TMPL_IF -->
 </tr>
 <!-- Actual Search Results -->
-<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 	<tr>
-		<td><a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title --></a></td>
-		<td><a href=/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME=authorhtmlescaped -->&type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><!-- TMPL_VAR NAME=author --></a></td>
-		<td align=center> <!-- TMPL_VAR NAME=copyrightdate --> </td>
-		<td align=center> <!-- TMPL_VAR NAME=itemcount --> </td>
+		<td><a href="/cgi-bin/koha/<!-- TMPL_VAR NAME="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->><!-- TMPL_VAR NAME="title" --></a></td>
+		<td><a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME="authorhtmlescaped" -->&amp;type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="author" --></a></td>
+		<td align="center"> <!-- TMPL_VAR NAME="copyrightdate" --> </td>
+		<td align="center"> <!-- TMPL_VAR NAME="itemcount" --> </td>
 		<td>
 		<!-- TMPL_IF NAME=use-location-flags-p -->
 		<!-- TMPL_IF NAME=location-only --><!-- TMPL_VAR NAME=location-only --><br><!-- /TMPL_IF -->
@@ -59,13 +59,13 @@
 		<!-- TMPL_IF NAME=withdrawn-p -->Withdrawn<!-- TMPL_IF NAME=withdrawn-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME=on-loan-p -->On Loan<!-- TMPL_IF NAME=on-loan-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
-		<!-- TMPL_VAR NAME=location -->
+		<!-- TMPL_VAR NAME="location" -->
 		<!-- /TMPL_IF -->
 		</td>
 		<!-- TMPL_IF NAME="opac" -->
 		<!-- TMPL_ELSE -->
-			<!-- TMPL_UNLESS NAME="norequests" -->
-				<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Request</a></td>
+			<!-- TMPL_UNLESS name="norequests" -->
+				<td> <a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Request</a></td>
 			<!-- TMPL_ELSE -->
 				<td>Not Reservable</td>
 			<!-- /TMPL_UNLESS -->
@@ -73,20 +73,20 @@
 	</tr>
 <!-- /TMPL_LOOP -->
 
-<tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor=#ccccff background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
-	<td colspan=6>
-		<table border=0 cellpadding=0 cellspacing=0 width="100%">
-			<tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor=#ccccff background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
-			<td align=left>
-				<!-- TMPL_IF NAME=displayprev -->
-				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Previous Records</a>
+<tr <!-- TMPL_IF NAME="opac" -->bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor="#CCCCFF" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
+	<td colspan="6">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr <!-- TMPL_IF NAME="opac" -->bgcolor="#99CCCC" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor="#CCCCFF" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
+			<td align="left">
+				<!-- TMPL_IF NAME="displayprev" -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Previous Records</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->
 			</td>
-			<td align=right>
-				<!-- TMPL_IF NAME=displaynext -->
-				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Next Records</a>
+			<td align="right">
+				<!-- TMPL_IF NAME="displaynext" -->
+				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Next Records</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->
@@ -101,10 +101,10 @@
 Results <b><!-- TMPL_VAR NAME="startfrom" --></b> through <b><!-- TMPL_VAR NAME="endat" --></b> of <b><!-- TMPL_VAR NAME="numrecords" --></b> records.
 <hr>
 
-Try another <a href=/cgi-bin/koha/catalogue-home.pl>search</a>
+Try another <a href="/cgi-bin/koha/catalogue-home.pl">search</a>
 
 <!-- TMPL_ELSE -->
-    Try another <a href=/cgi-bin/koha/catalogue-home.pl>search</a>
+    Try another <a href="/cgi-bin/koha/catalogue-home.pl">search</a>
 <!-- /TMPL_IF -->
 
 

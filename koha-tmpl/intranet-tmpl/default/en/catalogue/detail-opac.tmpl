@@ -2,11 +2,11 @@
 
 
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+<font size="6"><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
 <!-- TMPL_VAR NAME="class" --></em></font><p>
 <!-- FIXME - "callpadding" should be "cellpadding", right? -->
 <table cellspacing="0" callpadding="5" border="1" align="left" width="220">
-<!-----------------BIBLIO RECORD TABLE--------->
+<!-- ---------------BIBLIO RECORD TABLE------- -->
 <tr valign="top">
 
 <td bgcolor="#99cccc">
@@ -18,7 +18,7 @@
 <tr valign="top">
 <td>
 <br>
-<FONT SIZE=2  face="arial, helvetica">
+<font size="2"  face="arial, helvetica">
 <b>Subtitle:</b> <!-- TMPL_VAR NAME="subtitle" --><br>
 <b>Author:</b> <!-- TMPL_VAR NAME="author" --><br>
 <b>Additional Author:</b> <!-- TMPL_VAR NAME="additional" --><br>
@@ -35,7 +35,7 @@
 </table>
 <!-- /TMPL_LOOP -->
 <center>
-<table border=0 cellspacing=0 cellpadding=2>
+<table border="0" cellspacing="0" cellpadding="2">
 <tr bgcolor="#99cccc">
 <td>Item type</td>
 <td>Class</td>
@@ -60,14 +60,14 @@
 <td>Available</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber">&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
+name="itemnumber">&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<TMPL_VAR
+name="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
 <p>
 </center>
-<br clear=all>
+<br clear="all">
 <p />
 <p />
 

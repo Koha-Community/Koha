@@ -4,9 +4,7 @@
 	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <!-- /TMPL_IF -->
 
-<center>
-
-<table border=0 cellspacing=0 cellpadding=2>
+<table border="0" cellspacing="0" cellpadding="2" align="center">
 <!-- TMPL_IF NAME="opac" -->
 	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
 <!-- TMPL_ELSE -->
@@ -14,10 +12,10 @@
 <!-- /TMPL_IF -->
 		<th>Subject</th>
 	</tr>
-<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 	<tr>
 		<td>
-			<a href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject2 ESCAPE=HTML -->"><!-- TMPL_VAR NAME=subject --></a>
+			<a href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;subjectitems=<!-- TMPL_VAR NAME=subject2 ESCAPE=HTML -->"><!-- TMPL_VAR NAME="subject" --></a>
 		</td>
 	</tr>
 <!-- /TMPL_LOOP -->
@@ -26,14 +24,14 @@
 <!-- TMPL_ELSE -->
 	<tr background="/images/background-mem.gif">
 <!-- /TMPL_IF -->
-		<td colspan=4>
-			<table border=0 cellpadding=0 cellspacing=0 width=100%>
+		<td colspan="4">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td align=left>
-					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Previous Records</a>
+				<td align="left">
+					<a href="search.pl?<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="line" -->&amp;<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Previous Records</a>
 				</td>
-				<td align=right>
-					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">Next Records</a>
+				<td align="right">
+					<a href="search.pl?<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="line" -->&amp;<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">Next Records</a>
 				</td>
 			</tr>
 			</table>
