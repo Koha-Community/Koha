@@ -181,6 +181,8 @@ sub branchoptions {
     my $out = "";
     foreach my $br (keys %$branches) {
 	(next) unless $branches->{$br}->{'IS'};
+			# Only branches with the 'IS' branchrelation
+			# can issue books
 	my $selected = "";
 	if ($br eq $selbr) {
 	    $selected = "selected";
