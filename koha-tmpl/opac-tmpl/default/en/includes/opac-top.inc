@@ -46,3 +46,13 @@
     <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 <!-- /TMPL_IF -->
 
+<p>
+<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+<select name="language">
+<TMPL_LOOP NAME="languages">
+<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+</TMPL_LOOP>
+</select>
+<br>
+<input type=submit value="Change Language">
+</form>

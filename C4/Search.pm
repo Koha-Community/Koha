@@ -2570,8 +2570,8 @@ sub breedingsearch {
 
 =item getalllanguages
 
-  (@languages) = &getalllanguages();
-  (@languages) = &getalllanguages($theme);
+  (@languages) = &getalllanguages($type);
+  (@languages) = &getalllanguages($type,$theme);
 
 Returns an array of all available languages.
 

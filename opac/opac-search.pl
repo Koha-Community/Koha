@@ -11,6 +11,7 @@ use HTML::Template;
 use C4::SearchMarc;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Search;
 
 my $classlist='';
 
@@ -174,10 +175,20 @@ if ($op eq "do_search") {
 				-size     => 1,
 				-multiple => 0 );
 	$sth->finish;
-	
+        my @options;
+    my $counter=0;
+        foreach my $language (getalllanguages()) {
+                            next if $language eq 'images';
+                            my $selected='0';
+#                            next if $currently_selected_languages->{$language};
+                            push @options, { language => $language, counter => $counter };
+                            $counter++;
+                    }
+    
 	$template->param(classlist => $classlist,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
+	                                languages => \@options,
 	);
 }
 
