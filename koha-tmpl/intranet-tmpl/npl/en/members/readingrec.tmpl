@@ -5,10 +5,10 @@
 
 <div id="main"><div class="table">
 <table>
-<caption>Reading Record for <a href="moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></caption>
+<caption>Reading Record for <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></caption>
 <!-- TMPL_IF NAME="showfulllink" -->
-<tr><td colspan="4"><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show Last 50 Items Only</a></td></tr><!-- TMPL_ELSE -->
-<tr><td colspan="4"><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show All Items</a></td></tr>
+<tr><td colspan="4">Showing All Items | <a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show Last 50 Items Only</a></td></tr><!-- TMPL_ELSE -->
+<tr><td colspan="4">Showing Last 50 Items | <a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show All Items</a></td></tr>
 <!-- /TMPL_IF --><tr>
 	<th>
 		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
@@ -16,19 +16,21 @@
 	<th>
 		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
 	</th>
+	<th>Call No.</th>
 	<th>
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=returndate DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
 	</th>
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
-<tr<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="highlight"<!-- /TMPL_IF -->>
-	<td>
+<tr<!-- TMPL_IF NAME="toggle" --><!-- TMPL_ELSE --> class="highlight"<!-- /TMPL_IF -->>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
  		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>&nbsp;
 	</td>
-	<td>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
  		<!-- TMPL_VAR name="author" -->&nbsp;
 	</td>
-	<td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="classification" --></td>
+	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
 	</td>
 <!-- /TMPL_LOOP -->
 </table>
