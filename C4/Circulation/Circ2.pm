@@ -327,10 +327,10 @@ sub issuebook {
 	}
 	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
 	if ($amount > 5 && $patroninformation->{'categorycode'} ne 'L' &&
-                         $patroninformation->{'categorycode'} ne 'W' &&
-                         $patroninformation->{'categorycode'} ne 'I' && 
-                         $patroninformation->{'categorycode'} ne 'B' &&
-                         $patroninformation->{'categorycode'} ne 'P') {
+                           $patroninformation->{'categorycode'} ne 'W' &&
+                           $patroninformation->{'categorycode'} ne 'I' && 
+                           $patroninformation->{'categorycode'} ne 'B' &&
+                           $patroninformation->{'categorycode'} ne 'P') {
 	    $rejected = sprintf "Patron owes \$%.02f.", $amount;
 	    last SWITCH;
 	}
@@ -407,7 +407,7 @@ sub issuebook {
 		my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
 		if ($responses->{2} eq '') {
 		    $questionnumber=2;
-		    $question="Waiting for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
+		    $question="<font color=red>Waiting</font> for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
 		    $defaultanswer='N';
 		    last SWITCH;
 		} elsif ($responses->{2} eq 'N') {
