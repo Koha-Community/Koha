@@ -1,16 +1,28 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <!-- ------------------------MAIN BODY OF PAGE------------------------ -->
 <div id="mainbloc">
-<h1>Reports</h1>
-<ul>
-	<li><a href="/cgi-bin/koha/stats.pl?time=yesterday">Till Reconciliation:</a> Daily Report (yesterday)</li>
-	<li><a href="/cgi-bin/koha/stats.pl?time=today">Till Reconciliation:</a> Daily Report (today)</li>
-	<li><a href="/cgi-bin/koha/overdue.pl">Overdue items</a></li>
-	<li><a href="/cgi-bin/koha/reports/inventory.pl">Inventory/Stocktaking</a></li>
-	<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
-	<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Issues by borrower category</a></li>
-	
-</ul>
+<h1 class="reports">Reports</h1>
+<div id="bloc25">
+	<h2 class="reports">Stats borrowers</h2>
+	<ul>
+	</ul>
+	<h2 class="reports">Stats on catalogue</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/inventory.pl">Inventory/Stocktaking</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
+	</ul>
+	<h2 class="reports">Stats on issues</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/stats.pl?time=yesterday">Till Reconciliation:</a> Daily Report (yesterday)</li>
+		<li><a href="/cgi-bin/koha/stats.pl?time=today">Till Reconciliation:</a> Daily Report (today)</li>
+		<li><a href="/cgi-bin/koha/overdue.pl">Overdue items</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Issues by borrower category</a></li>
+	</ul>
+</div>
+<div id="bloc25">
+	<h2 class="reports">data exports</h2>
+		<li>blabla</li>
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
 
