@@ -33,11 +33,7 @@ use HTML::Template;
 
 my $env;
 my $query = new CGI;
-my $headerbackgroundcolor='#663266';
-my $circbackgroundcolor='#555555';
-my $circbackgroundcolor='#550000';
-my $linecolor1='#bbbbbb';
-my $linecolor2='#dddddd';
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
@@ -62,8 +58,7 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
-					headerbackgroundcolor => $headerbackgroundcolor,
-					circbackgroundcolor => $circbackgroundcolor });
+				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
 		ModifShelf($query->param('shelfnumber'),$query->param('shelfname'),$loggedinuser,$query->param('category'));
@@ -94,7 +89,7 @@ my $color='';
 my @shelvesloop;
 foreach my $element (sort keys %$shelflist) {
 		my %line;
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		($color eq 0) ? ($color=1) : ($color=0);
 		$line{'color'}= $color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
@@ -146,7 +141,7 @@ sub shelves {
 	my @shelvesloop;
 	foreach my $element (sort keys %$shelflist) {
 		my %line;
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		($color eq 0) ? ($color=1) : ($color=0);
 		$line{'color'}=$color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'} ;
@@ -168,7 +163,7 @@ sub viewshelf {
 	my @itemsloop;
 	foreach $item (sort {$a->{'barcode'} cmp $b->{'barcode'}} @$itemlist) {
 		my %line;
-		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		($color eq 0) ? ($color=1) : ($color=0);
 		$line{'color'}=$color;
 		$line{'itemnumber'}=$item->{'itemnumber'};
 		$line{'barcode'}=$item->{'barcode'};
@@ -189,6 +184,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.3  2005/01/27 17:18:28  oleonard
+# Taking table cell background color information out of the script and moving it into the template (requires update to opac-shelves.tmpl)
+#
 # Revision 1.3.2.2  2005/01/11 20:18:29  oleonard
 # Adding call number and item type to list of returned variables
 #
