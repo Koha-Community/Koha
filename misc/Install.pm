@@ -77,7 +77,7 @@ $VERSION = 0.01;
 		&restoremycnf
 		);
 
-use vars qw( $kohaversion );			# set in installer.pl
+use vars qw( $kohaversion $newversion );			# set in loadconfigfile and installer.pl
 use vars qw( $language );			# set in installer.pl
 use vars qw( $domainname );			# set in installer.pl
 
@@ -89,8 +89,6 @@ use vars qw( $mysqldir );
 use vars qw( $database $mysqluser );
 use vars qw( $mysqlpass );			# normally should not be used
 use vars qw( $dbname $hostname $user $pass );	# virtual hosting
-
-use vars qw( $newversion );			# XXX this seems to be unused
 
 =item heading
 
@@ -380,7 +378,7 @@ Sets the Koha version as known by the installer.
 =cut
 
 sub setkohaversion ($) {
-    ($kohaversion) = @_;
+    ($newversion) = @_;
 }
 
 =item getservername
@@ -1471,6 +1469,16 @@ Copying files to installation directories:
 
 |;
 
+$messages->{'OldFiles'}->{en} = heading('OLD FILES') . qq|
+Any files from the previous edition of Koha have been
+copied to a dated backup directory alongside the new
+installation. You should move any custom files that you
+want to keep (such as your site templates) into the new
+directories and then move the backup off of the live
+server.
+
+Press ENTER to continue:|;
+
 
 $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 
@@ -1526,7 +1534,7 @@ includes=$opacdir/htdocs/includes
 intranetdir=$intranetdir
 opacdir=$opacdir
 kohalogdir=$kohalogdir
-kohaversion=$kohaversion
+kohaversion=$newversion
 httpduser=$httpduser
 intrahtdocs=$intranetdir/htdocs/intranet-tmpl
 opachtdocs=$opacdir/htdocs/opac-tmpl
@@ -1551,6 +1559,8 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
     	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
     	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 	} #MJR: FIXME: Should report that we haven't chown()d.
+
+    showmessage(getmessage('OldFiles'),'PressEnter');
 }
 
 
@@ -1729,18 +1739,19 @@ sub updatedatabase {
 		exit;
 	}
 
-	#FIXME: do not ask if we are upgrading from a MARC-ready system
-	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
+	if ($kohaversion =~ /^1\.[012]\./) {
+		my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
 
-	startsysout();
-	if ($response eq '1') {
-		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
+		startsysout();
+		if ($response eq '1') {
+			system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
+		}
+		if ($response eq '2') {
+			system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
+			system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $dbname");
+		}
+		delete($ENV{"KOHA_CONF"});
 	}
-	if ($response eq '2') {
-		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
-		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $dbname");
-	}
-	delete($ENV{"KOHA_CONF"});
 
 	print RESET."\n\nFinished updating of database. Press <ENTER> to continue...";
 	<STDIN>;

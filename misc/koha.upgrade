@@ -31,36 +31,12 @@ unless ($answer =~/y/i) {
 	print "Great! continuing upgrade... \n";
 };
 
+setkohaversion($::newversion);
 checkperlmodules();
 backupkoha();
 getapacheinfo();
 installfiles();
-
-#FIXME: Copy custom templates and reports back in, or warn
-
-#opendir D, "$backupdir/kohafiles-$date/intranet/htdocs/";
-#my @dirlist=readdir D;
-#foreach (@dirlist) {
-#    (next) if (/^\./);
-#    (next) if ($_ eq 'default');
-#    (next) if ($_ eq 'doc');
-#    (next) if ($_=~/^koha-/);
-#    (next) if (-e "$::intranetdir/htdocs/$_");
-#    print "Restoring custom intranet templates $_...\n";
-#    system("cp -a $backupdir/kohafiles-$date/intranet/htdocs/$_ $::intranetdir/htdocs/");
-#}
-#
-#opendir D, "$backupdir/kohafiles-$date/opac/htdocs/";
-#@dirlist=readdir D;
-#foreach (@dirlist) {
-#    (next) if (/^\./);
-#    (next) if ($_ eq 'default');
-#    (next) if ($_ eq 'doc');
-#    (next) if ($_=~/^koha-/);
-#    (next) if (-e "$::opacdir/htdocs/$_");
-#    print "Restoring custom opac template $_...\n";
-#    system("cp -a $backupdir/kohafiles-$date/opac/htdocs/$_ $::opacdir/htdocs/");
-#}
+# custom templates warning added to installfiles();
 updatedatabase();
 finalizeconfigfile();
 
