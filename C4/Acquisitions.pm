@@ -127,7 +127,7 @@ sub invoice {
   my ($invoice)=@_;
   my $dbh=C4Connect;
   my $query="Select * from aqorders,biblio,biblioitems where
-  booksellerinvoicenumber='$invoice' 
+  booksellerinvoicenumber='$invoice'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
   aqorders.biblioitemnumber group by aqorders.ordernumber,aqorders.biblioitemnumber";
   my $i=0;
@@ -149,9 +149,10 @@ sub getallorders {
   my $dbh=C4Connect;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
-  aqorders.biblioitemnumber 
-  group by aqorders.biblioitemnumber 
+  and (quantityreceived < quantity or quantityreceived is NULL)
+  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
+  aqorders.biblioitemnumber
+  group by aqorders.biblioitemnumber
   order by
   biblio.title";
   my $i=0;
@@ -200,7 +201,7 @@ sub ordersearch {
 where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
 and biblio.biblionumber=aqorders.biblionumber
 and ((datecancellationprinted is NULL)
-or (datecancellationprinted = '0000-00-00')
+or (datecancellationprinted = '0000-00-00'))
 and ((";
   my @data  = split(' ',$search);
   my $count = @data;
@@ -208,14 +209,13 @@ and ((";
     $query .= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
   }
   $query=~ s/ and $//;
-  $query.=" ) or biblioitems.isbn='$search' 
+  $query.=" ) or biblioitems.isbn='$search'
   or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
   if ($catview ne 'yes'){
     $query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
   }
   $query.=" group by aqorders.ordernumber";
   my $sth=$dbh->prepare($query);
-#  print $query;
   $sth->execute;
   my $i=0;
   my @results;
@@ -622,6 +622,7 @@ sub newbiblioitem {
   my $sth   = $dbh->prepare($query);
   my $data;
   my $bibitemnum;
+
   $biblioitem->{'volume'}          = $dbh->quote($biblioitem->{'volume'});
   $biblioitem->{'number'} 	   = $dbh->quote($biblioitem->{'number'});
   $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
