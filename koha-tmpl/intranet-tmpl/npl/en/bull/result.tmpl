@@ -39,7 +39,7 @@
 						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
 					</p>
 				</td>
-				<td><form action="#" method="post"><input type="submit" class="submit" value="Choose" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR name="title" -->'); return false;" /></form></td>
+				<td><form action="#" method="post"><input type="submit" class="submit" value="Choose" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR name="title" ESCAPE="url" -->'); return false;" /></form></td>
 			</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
