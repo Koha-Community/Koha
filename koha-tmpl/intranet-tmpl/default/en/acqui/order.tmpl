@@ -1,20 +1,20 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <div id="mainbloc">
-<h1>Supplier Search Results</h1>
+<h1 class="acquisition">Supplier Search Results</h1>
 <div id="bloc100">
-<div id="bloctitle">You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</div>
+<h2 class="acquisition">You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
 <table>
 <tr>
-	<td><b>Order</b></td>
-	<td><b>Receive<b></td>
-	<td><b>Company</b></td>
-	<td>
-		<table>
+	<th class="acquisition">Order</th>
+	<th class="acquisition">Receive</th>
+	<th class="acquisition">Company</th>
+	<th class="acquisition">
+		<table class="noborder">
 			<tr>
-				<td><b>Basket</b></td>
-				<td><b>Items</b></td>
-				<td><b>Staff</b></td>
-				<td><b>Date</b></td>
+				<th class="acquisition">Basket</th>
+				<th class="acquisition">Items</th>
+				<th class="acquisition">Staff</th>
+				<th class="acquisition">Date</th>
 			</tr>
 		</table>
 	</td>
@@ -49,5 +49,5 @@
 </table>
 </CENTER>
 <br>
-<a class="button" href="supplier.pl?id=0">Add supplier</a>
+<a class="button acquisition" href="supplier.pl?id=0">Add supplier</a>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

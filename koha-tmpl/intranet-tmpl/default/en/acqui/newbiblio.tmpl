@@ -49,123 +49,109 @@ win.document.write("</font></body></html>");
 //-->
 
 </script>
-<form action=/cgi-bin/koha/acqui/addorder.pl method=post name=frusin>
-<!-- TMPL_UNLESS name="existing" --><input type=hidden name=existing value=no><!-- /TMPL_UNLESS -->
-<!-- <!-- TMPL_VAR name="title" --> -->
-<input type=hidden name=ordnum value="<!-- TMPL_VAR name="ordnum" -->">
-<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
-<input type=hidden name=supplier value="<!-- TMPL_VAR name="id" -->">
-<input type=hidden name=biblio value="<!-- TMPL_VAR name="biblio" -->">
-<input type=hidden name=bibitemnum value="<!-- TMPL_VAR name="biblioitemnumber" -->">
-<input type=hidden name=oldtype value="<!-- TMPL_VAR name="itemtype" -->">
-<input type=hidden name=discount value="<!-- TMPL_VAR name="discount" -->">
-<input type=hidden name=listinc value="<!-- TMPL_VAR name="listincgst" -->">
-<input type=hidden name=currency value="<!-- TMPL_VAR name="currency" -->">
-<input type=hidden name=applygst value="<!-- TMPL_VAR name="gstreg" -->">
-<!-- TMPL_LOOP name="loop_currencies" -->
-	<input type=hidden name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->">
-<!-- /TMPL_LOOP -->
-<!-- TMPL_IF name="orderexists" --><input type=hidden name=orderexists value=yes><!-- /TMPL_IF -->
-<a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button">View Basket</a>
-<h1><!-- TMPL_VAR name="ordnum" --> - Order Details </h1><br>
-Shopping Basket For: <!-- TMPL_VAR name="name" -->
-<P>
-<CENTER>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
-	<tr valign=top bgcolor=#99cc33>
-		<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>CATALOGUE DETAILS</B></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD><b>Title *</b></td>
-		<td><input type=text size=20 name=title value="<!-- TMPL_VAR name="title" -->"></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Author</td>
-		<td><input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" ></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD> Publisher</td>
-		<td><input type=text size=30 name=publishercode value="<!-- TMPL_VAR name="publishercode" -->" ></td>
-	</tr>
-	<TR VALIGN=TOP>
-	<TD>Copyright Date</td>
-	<td><input type=text size=20 name=copyrightdate value="<!-- TMPL_VAR name="copyrightdate" -->">
-	</td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Format</td>
-		<td><!-- TMPL_VAR name="CGIitemtype" --></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>ISBN</td>
-		<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Series</td>
-		<td><input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->"></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Branch</td>
-		<td><!-- TMPL_VAR name="CGIbranch" --></td>
-	</tr>
-</table>
-<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=32 height=250 align=left>
-<table border=1 cellspacing=0 cellpadding=5 width="40%">
-	<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>ACCOUNTING DETAILS</B></td></tr>
-	<TR VALIGN=TOP>
-		<TD>Quantity</td>
-		<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='update(this.form)' ></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Bookfund</td>
-		<td><!-- TMPL_VAR name="CGIbookfund" --></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Suppliers List Price</td>
-		<td><input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='update(this.form)'></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Replacement Cost <br><FONT SIZE=2></td>
-		<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='update(this.form)'>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Budgeted Cost<BR><FONT SIZE=2>(ex GST, inc discount)</FONT> </td>
-		<td><input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='update(this.form)'></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>Budgeted GST</td>
-		<td><input type=text size=20 name=GST value="" onchange='update(this.form)'></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD><B>BUDGETED TOTAL</B></td>
-		<td><input type=text size=20 name=total value="" onchange='update(this.form)'></td>
-	</tr>
-	<TR VALIGN=TOP  bgcolor=#ffffcc>
-		<TD>Actual Cost</td>
-		<td><input type=text size=20 name=cost></td>
-	</tr>
-	<TR VALIGN=TOP  bgcolor=#ffffcc>
-		<TD>Invoice Number *</td>
-		<td><input type=text size=20 name=invoice ></td>
-	<TR VALIGN=TOP>
-		<TD>Notes</td>
-		<td><input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->"></td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD colspan=2>
-		<input type="submit" value="OK" class="button">
-	</tr>
-</table>
-</form>
-</center>
-<table>
-<tr><td bgcolor=#cccc99  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>HELP</B><br>
-<UL>
-<LI>Bold fields must be filled in to create a new bibilo and item.<p>
-<LI>Shaded fields can be used to do a "quick" receive, when items have been purchased locally or gifted. In this case the quantity "ordered" will also be entered into the database as the quantity received.
-</UL>
-</td></tr></table>
-<p> &nbsp; </p>
+<div id="mainbloc">
+	<form action="/cgi-bin/koha/acqui/addorder.pl" method=post name=frusin>
+	<!-- TMPL_UNLESS name="existing" --><input type=hidden name=existing value=no><!-- /TMPL_UNLESS -->
+	<!-- <!-- TMPL_VAR name="title" --> -->
+	<input type=hidden name=ordnum value="<!-- TMPL_VAR name="ordnum" -->">
+	<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
+	<input type=hidden name=supplier value="<!-- TMPL_VAR name="id" -->">
+	<input type=hidden name=biblio value="<!-- TMPL_VAR name="biblio" -->">
+	<input type=hidden name=bibitemnum value="<!-- TMPL_VAR name="biblioitemnumber" -->">
+	<input type=hidden name=oldtype value="<!-- TMPL_VAR name="itemtype" -->">
+	<input type=hidden name=discount value="<!-- TMPL_VAR name="discount" -->">
+	<input type=hidden name=listinc value="<!-- TMPL_VAR name="listincgst" -->">
+	<input type=hidden name=currency value="<!-- TMPL_VAR name="currency" -->">
+	<input type=hidden name=applygst value="<!-- TMPL_VAR name="gstreg" -->">
+	<!-- TMPL_LOOP name="loop_currencies" -->
+		<input type=hidden name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->">
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_IF name="orderexists" --><input type=hidden name=orderexists value=yes><!-- /TMPL_IF -->
+	<a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button acquisition">View Basket</a>
+	<h1 class="acquisition"><!-- TMPL_VAR name="ordnum" --> - Order Details </h1>
+	Shopping Basket For <!-- TMPL_VAR name="name" -->
+	<div id="bloc25">
+		<h2 class="acquisition">catalogue details</h2>
+		<p>
+			<label><b>Title *</b></label>
+			<input type=text size=20 name=title value="<!-- TMPL_VAR name="title" -->">
+		</p>
+		<p>
+			<label>Author</label>
+			<input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" >
+		</p>
+		<p>
+			<label> Publisher</label>
+			<input type=text size=30 name=publishercode value="<!-- TMPL_VAR name="publishercode" -->" >
+		</p>
+		<p>
+			<label>Copyright Date</label>
+			<input type=text size=20 name=copyrightdate value="<!-- TMPL_VAR name="copyrightdate" -->">
+		</p>
+		<p>
+			<label>Format</label>
+			<!-- TMPL_VAR name="CGIitemtype" -->
+		</p>
+		<p>
+			<label>ISBN</label>
+			<input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->">
+		</p>
+		<p>
+			<label>Series</label>
+			<input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->">
+		</p>
+		<p>
+			<label>Branch</label>
+			<!-- TMPL_VAR name="CGIbranch" -->
+		</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="acquisition">Accounting details</h2>
+		<p>
+			<label>Quantity</label>
+			<input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='update(this.form)' >
+		</p>
+		<p>
+			<label>Bookfund</label>
+			<!-- TMPL_VAR name="CGIbookfund" -->
+		</p>
+		<p>
+			<label>Suppliers List Price</label>
+			<input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='update(this.form)'>
+		</p>
+		<p>
+			<label>Replacement Cost </label>
+			<input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='update(this.form)'>
+		</p>
+		<p>
+			<label>Budgeted Cost</label>
+			<input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->" onchange='update(this.form)'>
+		</p>
+		<p>
+			<label>Budgeted GST</label>
+			<input type=text size=20 name=GST value="" onchange='update(this.form)'>
+		</p>
+		<p>
+			<label><B>BUDGETED TOTAL</B></label>
+			<input type=text size=20 name=total value="" onchange='update(this.form)'>
+		</p>
+		<p>
+			<label>Actual Cost</label>
+			<input type=text size=20 name=cost>
+		</p>
+		<p>
+			<label>Invoice Number *</label>
+			<input type=text size=20 name=invoice >
+		<p>
+			<label>Notes</label>
+			<input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->">
+		</p>
+		<p>
+			<input type="submit" value="OK" class="button acquisition">
+		</p>
+	</form>
+	</div>
+</div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
 
 
