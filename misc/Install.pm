@@ -294,10 +294,10 @@ aborted, by checking whether $::etcidr/koha.conf is a symlink or not.
 If an aborted installation is detected, gives the user a chance to
 abort, before trying to recover the aborted installation.
 
-Assuming that Koha will be installed on a modern Unix with symlinks,
+(Assuming that Koha will be installed on a modern Unix with symlinks,
 it is possible to code the installer so that aborted installs can be
 detected. In case of such an event we can do our best to "roll back"
-the aborted install.
+the aborted install.)
 
 FIXME: The "roll back" is not complete!
 
@@ -461,12 +461,31 @@ are mandatory.  The message must be the actual string to
 display. The caller is responsible for calling getmessage if
 required.
 
-If a response type other than 'none' is specified, a third
-argument, specifying the default value, is optional.
+The response type must be one of "none", "yn", "free",
+"numerical", "email", "PressEnter", or a string consisting
+of "restrictchar " followed by a list of allowed characters
+(space can be specified). (Case is not significant, but case is
+significant in the list of allowed characters.) If a response
+type other than the above-listed is specified, the result is
+undefined.
+
+If a response type other than "none" or "PressEnter" is
+specified, a third argument, specifying the default value, can
+be specified:  If this default response is not specified, the
+default response is the first allowed character if the response
+type is "restrictchar", otherwise the default response is the
+empty string. This default response is used when the user does
+not specify a value (i.e., presses Enter without typing in
+anything), showmessage will assume that the default response is
+the user's response.
 
 The screen is normally cleared before the message is displayed;
 if a fourth argument is specified and is nonzero, this
 screen-clearing is not done.
+
+FIXME: A default response of "0" cannot be specified. This is
+wrong; the default response should be checked for undef, not
+for 0.
 
 FIXME: If $noclear is not specified or specified as undef, we
 just test it for a non-zero value without testing it for being
