@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.59  2003/09/04 10:17:07  tipaul
+# fix for 583 (values in marc_word table should have quotation marks, etc, stripped)
+#
 # Revision 1.58  2003/08/06 12:54:52  tipaul
 # fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
 # (note that copyrightdate still extracted to get numeric format)
@@ -641,7 +644,7 @@ sub MARCaddsubfield {
 	my @subfieldvalues = split /\|/,$subfieldvalues;
 	foreach my $subfieldvalue (@subfieldvalues) {
 		if (length($subfieldvalue)>255) {
-		#	$dbh->do("lock tables marc_blob_subfield WRITE, marc_subfield_table WRITE");
+			$dbh->do("lock tables marc_blob_subfield WRITE, marc_subfield_table WRITE");
 			my $sth=$dbh->prepare("insert into marc_blob_subfield (subfieldvalue) values (?)");
 			$sth->execute($subfieldvalue);
 			$sth=$dbh->prepare("select max(blobidlink)from marc_blob_subfield");
@@ -652,7 +655,7 @@ sub MARCaddsubfield {
 			if ($sth->errstr) {
 				warn "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
 			}
-	#	$dbh->do("unlock tables");
+		$dbh->do("unlock tables");
 		} else {
 			my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
 			$sth->execute($bibid,(sprintf "%03s",$tagid),$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
@@ -1161,7 +1164,7 @@ sub MARCaddword {
 # split a subfield string and adds it into the word table.
 # removes stopwords
     my ($dbh,$bibid,$tag,$tagorder,$subfieldid,$subfieldorder,$sentence) =@_;
-    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-)/ /g;
+    $sentence =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
     my @words = split / /,$sentence;
     my $stopwords= C4::Context->stopwords;
     my $sth=$dbh->prepare("insert into marc_word (bibid, tag, tagorder, subfieldid, subfieldorder, word, sndx_word)
