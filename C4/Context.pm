@@ -16,6 +16,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Id$
+# Revision History:
+# 2004-08-11 A. Tarallo: Added the function db_escheme2dbi, tested my bugfixes,
+# further  details about them in the code.
 
 package C4::Context;
 use strict;
@@ -100,6 +103,16 @@ $context = undef;		# Initially, no context is set
 # whose keys are the configuration variables, and whose values are the
 # configuration values (duh).
 # Returns undef in case of error.
+#
+# Revision History:
+# 2004-08-10 A. Tarallo: Added code that checks if a variable was already
+# assigned and prints a message, otherwise create a new entry in the hash to
+# be returned. 
+# Also added code that complaints if finds a line that isn't a variable 
+# assignmet and skips the line.
+# Added a quick hack that makes the trasnlation between the db_schema
+# and the DBI driver for that eschema.
+#
 sub read_config_file
 {
 	my $fname = shift;	# Config file to read
@@ -121,20 +134,45 @@ sub read_config_file
 		#	var = value
 		if (!/^\s*(\w+)\s*=\s*(.*?)\s*$/)
 		{
-			# FIXME - Complain about bogus line
+			print STDERR 
+				"$_ isn't a variable assignment, skipping it";
 			next;
 		}
 
 		# Found a variable assignment
-		# FIXME - Ought to complain is this line sets a
-		# variable that was already set.
-		$var = $1;
-		$value = $2;
-		$retval->{$var} = $value;
+		if ( exists $retval->{$1} )
+		{
+			print STDERR "$var was already defined, ignoring\n";
+		}else{
+		# Quick hack for allowing databases name in full text
+			if ( $1 eq "db_scheme" )
+			{
+				$value = db_scheme2dbi($2);
+			}else {
+				$value = $2;
+			}
+			$var = $1;
+                        $retval->{$var} = $value;
+		}
 	}
 	close CONF;
 
 	return $retval;
+}
+
+# db_scheme2dbi
+# Translates the full text name of a database into de appropiate dbi name
+# 
+sub db_scheme2dbi
+{
+	my $name = shift;
+
+	for ($name) {
+		if (/MySQL|mysql/) { return("mysql"); }
+		if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
+		if (/Oracle|oracle|ORACLE/) { return("Oracle"); }
+	}
+	return undef; 		# Just in case
 }
 
 sub import
@@ -164,14 +202,17 @@ that, use C<&set_context>.
 
 =cut
 #'
+# Revision History:
+# 2004-08-10 A. Tarallo: Added check if the conf file is not empty
 sub new
 {
 	my $class = shift;
 	my $conf_fname = shift;		# Config file to load
 	my $self = {};
 
-	# check that the specified config file exists
-	undef $conf_fname unless (defined $conf_fname && -e $conf_fname);
+	# check that the specified config file exists and is not empty
+	undef $conf_fname unless 
+		(defined $conf_fname && -e $conf_fname && -s $conf_fname);
 	# Figure out a good config file to load if none was specified.
 	if (!defined($conf_fname))
 	{
