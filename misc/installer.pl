@@ -948,7 +948,7 @@ system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin
 system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
 }
 
-system ("perl -I $kohadir/modules scripts/marc/fill_usmarc.pl");
+#system ("perl -I $kohadir/modules scripts/marc/fill_usmarc.pl");
 system ("perl -I $kohadir/modules scripts/marc/updatedb2marc.pl");
 
 chmod 0770, $kohalogdir;
