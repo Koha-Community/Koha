@@ -6,6 +6,13 @@ use C4::Output;
 
 my $query=new CGI;
 
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
+
+
 my $sessionID=$query->cookie('sessionID');
 
 

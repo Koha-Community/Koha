@@ -10,6 +10,13 @@ use CGI;
 use C4::Output;
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 print $input->header;
 my $type=$input->param('type');
 (-e "opac") && ($type='opac');

@@ -12,6 +12,13 @@ use DBI;
 use C4::Database;
 
 my $input=new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $time=$input->param('time');
 print $input->header;
 

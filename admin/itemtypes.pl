@@ -47,6 +47,13 @@ sub StringSearch  {
 }
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $searchfield=$input->param('description');
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/itemtypes.pl";

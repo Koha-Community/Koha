@@ -10,6 +10,13 @@ use C4::Search;
 use C4::Accounts2;
 my $input=new CGI;
 
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
+
 
 my $bornum=$input->param('bornum');
 #get borrower details

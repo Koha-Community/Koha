@@ -36,6 +36,13 @@ my $main='#cccc99';
 my $secondary='#ffffcc';
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $itm = $input->param('itm');
 my $bi = $input->param('bi');
 my $bib = $input->param('bib');

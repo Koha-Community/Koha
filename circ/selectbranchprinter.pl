@@ -41,6 +41,13 @@ my $backgroundimage="/images/background-mem.gif";
 # try to get the branch and printer settings from the http....
 my %env;
 my $query=new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
+
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
 my $branch=$query->param('branch');

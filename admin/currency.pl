@@ -47,6 +47,13 @@ sub StringSearch  {
 }
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $searchfield=$input->param('searchfield');
 my $pkfield="currency";
 my $reqsel="select currency,rate from currency where $pkfield='$searchfield'";

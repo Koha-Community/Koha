@@ -10,6 +10,13 @@ use C4::Search;
 
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $member=$input->param('bornum');
 if ($member eq ''){
   $member=NewBorrowerNumber();

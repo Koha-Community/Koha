@@ -47,6 +47,13 @@ sub StringSearch  {
 }
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $searchfield=$input->param('searchfield');
 my $pkfield="branchcode";
 my $reqsel="select branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing from branches where branchcode='$searchfield'";

@@ -8,6 +8,13 @@ use C4::Acquisitions;
 use C4::Biblio;
 #use CGI;
 #my $inp=new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($inp, 0, $flagsrequired);
+
 #print $inp->header;
 my ($count,@results)=bookfunds;
 

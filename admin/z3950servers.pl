@@ -47,6 +47,13 @@ sub StringSearch  {
 }
 
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $searchfield=$input->param('searchfield');
 my $reqsel="select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name = '$searchfield') order by rank,name";
 my $reqdel="delete from z3950servers where name='$searchfield'";

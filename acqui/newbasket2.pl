@@ -11,6 +11,13 @@ use C4::Biblio;
 
 my $env;
 my $input = new CGI;
+
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 print $input->header;
 #whether it is called from the opac of the intranet                                                            
 my $type=$input->param('type');                                                  

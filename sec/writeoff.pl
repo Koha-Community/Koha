@@ -9,6 +9,13 @@ use C4::Database;
 use C4::Stats;
 my $input=new CGI;
 
+# Authentication script added, superlibrarian set as default requirement
+
+my $flagsrequired;
+$flagsrequired->{superlibrarian}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
+
 #print $input->header;
 #print $input->dump;
 
