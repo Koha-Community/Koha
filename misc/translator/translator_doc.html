@@ -24,19 +24,23 @@ perldoc tmpl_process3.pl.
 <br>=====================</h2>
 
 <ol>
-<li>Create your translation file:
+<li>Create your translation file
+    (assuming your current directory is this directory, i.e., misc/translator):
     <blockquote>
-./tmpl_process.pl create -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -s css_opac_fr_FR.po -r
+./tmpl_process.pl create -i ../../koha-tmpl/opac-tmpl/default/en/ -s css_opac_fr_FR.po -r
     </blockquote>
     <p>(In the above example,
-    /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/
+    ../../koha-tmpl/opac-tmpl/default/en/
     contains the English templates in the "default" theme,
-    and po/css_opac_fr_FR.po is where you want the generated PO file to appear.)
+    and po/css_opac_fr_FR.po is where you want the generated PO file to appear.
+    The use of relative paths for the English templates is recommended
+    but is not necessary;
+    it makes the resulting PO files somewhat easier to read.)
 <li>Translate your css_opac_fr_FR.po file
     using a text editor or a PO file translation tool.
 <li>Create your translated templates:
     <blockquote>
-./tmpl_process.pl install -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s css_opac_fr_FR.po -r
+./tmpl_process.pl install -i ../../koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s css_opac_fr_FR.po -r
     </blockquote>
     <p>
     (In the above example,
