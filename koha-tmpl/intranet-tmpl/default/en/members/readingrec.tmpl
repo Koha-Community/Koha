@@ -5,6 +5,7 @@
 	<p>Card number: <!-- TMPL_VAR NAME="cardnumber" --></p>
 	
 	<!-- TMPL_IF NAME="showfulllink" -->
+	<p><a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;limit=50">Show Last 50 Only</a></p><!-- TMPL_ELSE -->
 	<p><a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;limit=full">Full output</a></p>
 	<!-- /TMPL_IF -->
 	
