@@ -1134,8 +1134,7 @@ sub MARCmarc2kohaOneField {
     my $res = "";
     my $tagfield;
     my $subfield;
-    $sth->execute($frameworkcode, $kohatable . "." . $kohafield );
-    ( $tagfield, $subfield ) = $sth->fetchrow;
+    ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->subfield($subfield) ) {
             if ( $result->{$kohafield} ) {
@@ -2634,6 +2633,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115  2005/01/06 14:32:17  tipaul
+# improvement of speed for bulkmarcimport.
+# A sub had been forgotten to use the C4::Context->marcfromkohafield array, that caches DB datas.
+# this is only a little improvement for normal DB modif, but almost x2 the speed of bulkmarcimport... from 6records/seconds to more than 10.
+#
 # Revision 1.114  2005/01/03 10:48:33  tipaul
 # * bugfix for the search on a MARC detail, when you clic on the magnifying glass (caused an internal server error)
 # * partial support of the "linkage" MARC feature : if you enter a "link" on a MARC subfield, the magnifying glass won't search on the field, but on the linked field. I agree it's a partial support. Will be improved, but I need to investigate MARC21 & UNIMARC diffs on this topic.
