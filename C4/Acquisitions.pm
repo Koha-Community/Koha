@@ -214,6 +214,10 @@ and ((";
     $query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
   }
   $query.=" group by aqorders.ordernumber";
+  my $input=new CGI;
+print $input->header();
+print $query;
+die;
   my $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
@@ -289,7 +293,7 @@ sub basket {
   '0000-00-00')";
   if ($supplier ne ''){
     $query.=" and aqorders.booksellerid='$supplier'";
-  } 
+  }
   $query.=" group by aqorders.ordernumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -321,8 +325,7 @@ sub newbasket {
 sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-  =aqbudget.bookfundid 
-  and aqbudget.startdate='2001=07-01' 
+  =aqbudget.bookfundid
   group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -360,9 +363,7 @@ sub bookfundbreakdown {
   my $dbh=C4Connect;
   my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
   from aqorders,aqorderbreakdown where bookfundid='$id' and 
-  aqorders.ordernumber=aqorderbreakdown.ordernumber and ((budgetdate >=
-  '2001-07-01' and budgetdate <'2002-07-01') or
-  (datereceived >= '2001-07-01' and datereceived < '2002-07-01'))
+  aqorders.ordernumber=aqorderbreakdown.ordernumber
   and (datecancellationprinted is NULL or
   datecancellationprinted='0000-00-00')";
   my $sth=$dbh->prepare($query);
@@ -625,7 +626,6 @@ sub newbiblioitem {
   my $sth   = $dbh->prepare($query);
   my $data;
   my $bibitemnum;
-  
   $biblioitem->{'volume'}          = $dbh->quote($biblioitem->{'volume'});
   $biblioitem->{'number'} 	   = $dbh->quote($biblioitem->{'number'});
   $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
@@ -723,11 +723,11 @@ sub neworder {
   my $dbh=C4Connect;
   my $query="insert into aqorders (biblionumber,title,basketno,
   quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
-  biblioitemnumber,rrp,ecost,gst,budgetdate,unitprice,subscription,booksellerinvoicenumber)
+  biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber)
 
   values
   ($bibnum,'$title',$basket,$quantity,$listprice,'$supplier',now(),
-  '$who','$who','$notes',$bibitemnum,'$rrp','$ecost','$gst',$budget,'$cost',
+  '$who','$who','$notes',$bibitemnum,'$rrp','$ecost','$gst','$cost',
   '$sub','$invoice')";
   my $sth=$dbh->prepare($query);
 #  print $query;
