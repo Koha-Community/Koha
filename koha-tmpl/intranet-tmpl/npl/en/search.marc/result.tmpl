@@ -1,5 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: MARC Search Results<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="search-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
@@ -27,7 +28,7 @@
 	<tr>
 	<th>Title</th>
 	<th>Call No.</th>
-	<th>Item Count</th>
+	<th>Copies</th>
 	<th>Location</th>
 	</tr>
 <tbody>
@@ -43,9 +44,7 @@
 					</p></td>
 					<td><!-- TMPL_VAR NAME="classification" --></td>
 			<td><!-- TMPL_VAR NAME="totitem" --></td>
-<td><!-- TMPL_LOOP NAME="CN" -->
-						<!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF -->
-					<!-- /TMPL_LOOP --></td>
+<td><!-- TMPL_LOOP NAME="CN" --><!-- TMPL_VAR NAME="holdingbranch" --><!-- TMPL_IF name="date_due" --> (due <!-- TMPL_VAR NAME="date_due" -->)	<!-- TMPL_ELSE --><!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table></div>
