@@ -247,7 +247,7 @@ while (1) {
 #######
 								print "$$/$id : connected to $globalname\n";
  								eval {$conn->option(elementSetName => 'F')};
-								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "USMARC");
+								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "MARC21");
  								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::UNIMARC);} if ($globalsyntax eq "UNIMARC");
  								if ($@) {
  									print "$$/$id : $globalname ERROR: $@ for $resultsid\n";
@@ -272,14 +272,11 @@ while (1) {
 										my $rec=$rs->record($i);
  										my $marcdata;
 										# use render() or rawdata() depending on the type of the returned record
-										my $marcrecord;
 										if (ref($rec) eq "Net::Z3950::Record::USMARC") {
 											$marcdata = $rec->rawdata();
-											$marcrecord = MARC::File::USMARC::decode($rec->rawdata())
 										}
 										if (ref($rec) eq "Net::Z3950::Record::UNIMARC") {
-											$marcdata = $rec->render();
-											$marcrecord = MARC::File::USMARC::decode($rec->render())
+											$marcdata = $rec->rawdata();
 										}
 										$globalencoding = ref($rec);
  										$result.=$marcdata;
