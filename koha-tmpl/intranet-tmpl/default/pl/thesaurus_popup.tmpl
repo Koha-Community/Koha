@@ -1,17 +1,19 @@
-	<html>
-	<head>
+<html>
+<head>
 	<title>Kreator wartości Tezaurusa dla kategorii <TMPL_VAR name="category"></title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
-	</head>
-	<body>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
+</head>
+<body>
 	<form name="f_pop" action="thesaurus_popup.pl" method="post">
 	<textarea name="result" rows=10 cols=60><TMPL_VAR name="result"></textarea></br>
-	<p><input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
-	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
-	<input type="hidden" name="op" value="search">
-	<input type="submit" value="Szukaj">
-	<input type="button" value="Koniec" onClick="javascript:report()">
+	<br/><input type="button" value="OK" onClick="javascript:report()">
+		<p>
+			<input type="text" name="search_string" value="<TMPL_VAR name="search_string">">
+			<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+			<input type="hidden" name="index" value="<TMPL_VAR name="index">">
+			<input type="hidden" name="op" value="search">
+			<input type="submit" value="Szukaj">
+		</p>
 	</form>
 <TMPL_IF name="search_string">
 	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
@@ -23,12 +25,12 @@
 	<input type="submit" name="OK" value="OK">
 	</form>
 </TMPL_IF>
-	<form name="f3_pop"  action="thesaurus_popup.pl" method="post">
+<form name="f3_pop"  action="thesaurus_popup.pl" method="post">
 	<input type="hidden" name="index" value="<TMPL_VAR name="index">">
 	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
 	<input type="hidden" name="op" value="add">
 	wprowadź nową authority : <input type="text" name="insert">
-	<input type="submit" name="NEW" value="Nowa">
+	<input type="submit" name="NEW" value="NOWA">
 	</form>
 		<script>
 		function report() {
@@ -37,5 +39,5 @@
 			return false;
 		}
 		</script>
-		</body>
-		</html>
+</body>
+</html>

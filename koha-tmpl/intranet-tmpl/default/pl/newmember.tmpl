@@ -1,14 +1,11 @@
 <TMPL_INCLUDE Name="members-top.inc">
 
-<H1> Potwierd¼ Wpis </H1>
 <TMPL_IF Name="OK">
+<H1> Potwierd¼ Wpis </H1>
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B> NOWY CZYTELNIK </B>
-			</td>
-			<td>
-				&nbsp;
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B> NOWY CZ£ONEK </B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -20,11 +17,8 @@
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 				<B> SZCZEGÓ£Y CZ£ONKOWSKIE </B>
-			</td>
-			<td>
-				&nbsp;
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -48,15 +42,7 @@
 				<B>Kategoria cz³onkowstwa</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="membercat">
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Area </B>
-			</td>
-			<td>
-				<TMPL_VAR Name="area">
+				<TMPL_VAR Name="memcat">
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -69,7 +55,7 @@
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Data Zapisu</B>
+				<B>Data zapisu</B>
 			</td>
 			<td>
 				<TMPL_VAR Name="joindate">
@@ -88,23 +74,12 @@
 				<B>Oddzia³ zapisu</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="joinbranch">
+				<TMPL_VAR Name="branchcode">
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 				<B>DANE PERSONALNE</B>
-			</td>
-			<td>
-				&nbsp;
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Etniczno¶æ</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="ethnic">
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -124,11 +99,8 @@
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 				<B>ADRES CZYTELNIKA</B>
-			</td>
-			<td>
-				&nbsp;
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -148,11 +120,8 @@
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 				<B>DANE OSOBY KONTAKTOWEJ</B>
-			</td>
-			<td>
-				&nbsp;
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -187,12 +156,17 @@
 				<TMPL_VAR Name="emailaddress">
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
-				<B>ALTERNATYWNE DANE OSOBY KONTAKTOWEJ</B>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>Text messaging</B>
 			</td>
 			<td>
-				&nbsp;
+				<TMPL_VAR NAME=textmessaging>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>ALTERNATYWNE DANE OSOBY KONTAKTOWEJ</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -228,11 +202,8 @@
 			</td>
 		</tr>
 		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td background="<TMPL_VAR Name="image">">
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 				<B>NOTATKI</B>
-			</td>
-			<td>
-				&nbsp;
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -251,7 +222,29 @@
 			<input type=submit name=submit value=Prze¶lij>
 		</form>
 <TMPL_ELSE>
-	<TMPL_VAR Name="string">
+	<h1>B£¡D</H1>
+	<p>Nastêpuj±ce pola s± ¼le wype³nione. Wróæ do poprzedniej strony i spróbuj raz jeszcze: </p>
+	<TMPL_IF name="cardnumber">
+		Cardnumber<br/>
+	</TMPL_IF>
+	<TMPL_IF name="invalid_cardnumber">
+		Invalid_cardnumber<br/>
+	</TMPL_IF>
+	<TMPL_IF name="gender">
+		Gender<br/>
+	</TMPL_IF>
+	<TMPL_IF name="firstname">
+		Given Names<br/>
+	</TMPL_IF>
+	<TMPL_IF name="surname">
+		Surname<br/>
+	</TMPL_IF>
+	<TMPL_IF name="address">
+		Postal Street Address<br/>
+	</TMPL_IF>
+	<TMPL_IF name="city">
+		Postal city<br/>
+	</TMPL_IF>
 </TMPL_IF>
 
 

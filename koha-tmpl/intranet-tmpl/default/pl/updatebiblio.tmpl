@@ -2,9 +2,9 @@
 
 
 <TMPL_VAR Name="error">
-<p> Kliknij "Wy¶lij", by wymusiæ has³o przedmiotowe
+<p> Kliknij "Prze¶lij..", by wymusiæ przedmiot
 <br>
-
+<form action="/cgi-bin/koha/updatebiblio.pl" method=post>
 <table border=0 cellspacing=0 cellpadding=5>
 <TMPL_LOOP Name="dataloop">
 	<input type=hidden name="<TMPL_VAR NAME="name">" value="<TMPL_VAR NAME="value">">
@@ -16,4 +16,3 @@
 
 
 <TMPL_INCLUDE Name="cat-bottom.inc">
-</html>
