@@ -33,7 +33,7 @@ parameters :
 \tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
 \tn : the number of the record to import. If missing, all the file is imported
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
-\tc : the char encoding. At the moment, only USMARC and UNIMARC supported. USMARC by default.
+\tc : the char encoding. At the moment, only MARC21 and UNIMARC supported. MARC21 by default.
 \d : delete EVERYTHING related to biblio in koha-DB before import  :tables :
 \t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
 \t\tadditionalauthors, \tbibliosubtitles, \tmarc_biblio,
@@ -65,7 +65,7 @@ if ($delete) {
 if ($test_parameter) {
 	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
-$char_encoding = 'USMARC' unless ($char_encoding);
+$char_encoding = 'MARC21' unless ($char_encoding);
 print "CHAR : $char_encoding\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );

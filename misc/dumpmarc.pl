@@ -14,10 +14,11 @@ my ( $input_marc_file,$number) = ('',0);
 my $version;
 GetOptions(
     'file:s'    => \$input_marc_file,
-    'n' => \$number,
+    'n:s' => \$number,
     'v' => \$version
 );
 
+warn "NUM : $number\n";
 if ($version || ($input_marc_file eq '')) {
 	print <<EOF
 small script to dump an iso2709 file.
@@ -36,7 +37,7 @@ $batch->warnings_off();
 $batch->strict_off();
 my $i=1;
 while ( my $record = $batch->next() ) {
-	print "\n".$record->as_formatted() if ($i eq $number || $number eq 0);
+	print "\nNUMBER $i =>\n".$record->as_formatted() if ($i eq $number || $number eq 0);
 	$i++;
 }
 print "\n==================\n$i record parsed\n";
