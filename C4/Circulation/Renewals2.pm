@@ -14,6 +14,7 @@ use C4::Database;
 use C4::Stats;
 use C4::Accounts2;
 use C4::Circulation::Circ2;
+use warnings;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
@@ -128,7 +129,7 @@ sub renewbook {
     set date_due = '$datedue', renewals = '$renews'
     where borrowernumber='$bornum' and
     itemnumber='$itemno' and returndate is null";
-  my $sth=$dbh->prepare($updquery);
+  $sth=$dbh->prepare($updquery);
   $sth->execute;
   $sth->finish;
   UpdateStats($env,$env->{'branchcode'},'renew','','',$itemno);
@@ -178,7 +179,7 @@ sub calc_charges {
       my $discount = $data2->{'rentaldiscount'};         
       $charge = ($charge *(100 - $discount)) / 100;                 
     }                         
-    $sth2->{'finish'};                              
+    $sth2->finish;                              
   }                                   
   $sth1->finish;  
   $dbh->disconnect;

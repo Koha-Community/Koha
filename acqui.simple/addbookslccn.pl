@@ -17,6 +17,7 @@ use C4::Database;
 use CGI;
 use strict;
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 use C4::Circulation::Circ2;
 

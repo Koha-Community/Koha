@@ -7,6 +7,7 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;
+use C4::Biblio;
 #use Date::Manip;
 
 my $input = new CGI;
