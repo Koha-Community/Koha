@@ -797,7 +797,7 @@ Please provide a good password for the user %s.
 
 This password will also be used to access Koha's INTRANET interface.
 
-Database Password: |;
+Password for database user %s: |;
 
 $messages->{'BlankPassword'}->{en} = heading('BLANK PASSWORD') . qq|
 You must not use a blank password for your MySQL user!
@@ -830,7 +830,7 @@ sub getdatabaseinfo {
 #Get the password for the database user
 
     while ($pass eq '') {
-	my $message=getmessage('DatabasePassword', [$user]);
+	my $message=getmessage('DatabasePassword', [$user, $user]);
 	$pass=showmessage($message, 'free', $pass);
 	if ($pass eq '') {
 	    my $message=getmessage('BlankPassword');
@@ -1036,6 +1036,30 @@ sub getapachevhostinfo {
 
 }
 
+
+=item updateapacheconf
+
+    updateapacheconf;
+
+Updates the Apache config file according to parameters previously
+specified by the user.
+
+It will append fully-commented directives at the end of the original
+Apache config file.  The old config file is renamed with an extension
+of .prekoha.
+
+If you need to uninstall Koha for any reason, the lines between
+
+    # Ports to listen to for Koha
+
+and the block of comments beginning with
+
+    # If you want to use name based Virtual Hosting:
+
+must be removed.
+
+=cut
+
 $messages->{'StartUpdateApache'}->{en} =
    heading('UPDATING APACHE CONFIGURATION') . qq|
 Checking for modules that need to be loaded...
@@ -1186,6 +1210,19 @@ EOP
     }
 }
 
+
+=item basicauthentication
+
+    basicauthentication;
+
+Asks the user whether HTTP basic authentication is wanted, and,
+if so, the user name and password for the basic authentication.
+
+These pieces of information are saved to global variables; the
+function does not return any values.
+
+=cut
+
 $messages->{'IntranetAuthenticationQuestion'}->{en} =
    heading('INTRANET AUTHENTICATION') . qq|
 I can set it up so that the Intranet/Librarian site is password protected using
@@ -1235,6 +1272,20 @@ EOP
     }
     close(SITE);
 }
+
+
+=item installfiles
+
+    installfiles
+
+Install the Koha files to the specified OPAC and INTRANET
+directories (usually in /usr/local/koha).
+
+The koha.conf file is created, but as koha.conf.tmp. The
+caller is responsible for calling finalizeconfigfile when
+installation is completed, to rename it back to koha.conf.
+
+=cut
 
 $messages->{'InstallFiles'}->{en} = heading('INSTALLING FILES') . qq|
 Copying files to installation directories:
@@ -1298,6 +1349,16 @@ opachtdocs=$opacdir/htdocs/opac-tmpl
     chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 }
+
+
+=item databasesetup
+
+    databasesetup;
+
+Finds out where the MySQL utitlities are located in the system,
+then create the Koha database structure and MySQL permissions.
+
+=cut
 
 $messages->{'MysqlRootPassword'}->{en} =
    heading('MYSQL ROOT USER PASSWORD') . qq|
@@ -1416,7 +1477,7 @@ EOP
     if ($result) {
 	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
     } else {
-	# Populate the Koha database
+	# Create the database structure
 	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname < koha.mysql");
 	# Set up permissions
 	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
@@ -1430,6 +1491,18 @@ EOP
     }
 
 }
+
+
+=item updatedatabase
+
+    updatedatabase;
+
+Updates the Koha database structure, including the addition of
+MARC tables.
+
+The MARC tables are also populated in addition to being created.
+
+=cut
 
 $messages->{'UpdateMarcTables'}->{en} =
    heading('UPDATING MARC FIELD DEFINITION TABLES') . qq|
@@ -1484,6 +1557,16 @@ sub updatedatabase {
 	<STDIN>;
 }
 
+
+=item populatedatabase
+
+    populatedatabase;
+
+Populate the non-MARC tables. If the user wants to install the
+sample data, install them.
+
+=cut
+
 sub populatedatabase {
 	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
 	if ($response =~/^y/i) {
@@ -1529,6 +1612,20 @@ sub populatedatabase {
 	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
 }
+
+
+=item restartapache
+
+    restartapache;
+
+Asks the user whether to restart Apache, and restart it if the user
+wants so.
+
+FIXME: If the installer does not know how to restart the Apache
+server (e.g., if the user is not actually using Apache), it still
+asks the question.
+
+=cut
 
 $messages->{'RestartApache'}->{en} = heading('RESTART APACHE') . qq|
 Apache needs to be restarted to load the new configuration for Koha.
