@@ -642,6 +642,8 @@ sub newbiblioitem {
   $biblioitem->{'notes'}           = $dbh->quote($biblioitem->{'notes'});
   $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
   $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
+  $biblioitem->{'lccn'}            = $dbh->quote($biblioitem->{'lccn'});
+  $biblioitem->{'marc'}            = $dbh->quote($biblioitem->{'marc'});
   
   $sth->execute;
   $data       = $sth->fetchrow_arrayref;
@@ -669,6 +671,8 @@ illus		 = $biblioitem->{'illus'},
 pages		 = $biblioitem->{'pages'},
 notes		 = $biblioitem->{'notes'},
 size		 = $biblioitem->{'size'},
+lccn		 = $biblioitem->{'lccn'},
+marc		 = $biblioitem->{'marc'},
 place		 = $biblioitem->{'place'}";
 
   $sth = $dbh->prepare($query);
