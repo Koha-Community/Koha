@@ -43,7 +43,9 @@ $env{'printer'}=$printer;
 $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
-my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", $datearr[3]);
+my $tday = localtime(time());
+warn "today: $tday \n";
+my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
 #warn $todaysdate;
 
 
@@ -366,17 +368,23 @@ EOF
 my $todaysissues='';
 my $previssues='';
 if ($borrower) {
+    my @todaysissues;
+    my @previousissues;
     my $issueslist = getissues($borrower);
-    my $tcolor = '';
-    my $pcolor = '';
-    foreach my $it (sort keys %$issueslist) {
-	my $dd = $issueslist->{$it}->{'date_due'};
+    foreach my $it (keys %$issueslist) {
 	my $issuedate = $issueslist->{$it}->{'timestamp'};
 	$issuedate = substr($issuedate, 0, 8);
-
-	my $bookissue = $issueslist->{$it};
-	my $bgcolor='';
-	my $datedue = $bookissue->{'date_due'};
+	if ($todaysdate == $issuedate) {
+	    push @todaysissues, $issueslist->{$it};
+	} else {
+	    push @previousissues, $issueslist->{$it};
+	}
+    }
+    my $tcolor = '';
+    my $pcolor = '';
+    foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
+	my $dd = $book->{'date_due'};
+	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
 	#this should be set with some kinda config variable	    
 	my @tempdate=split(/-/,$dd);
@@ -385,27 +393,36 @@ if ($borrower) {
 	if ($datedue < $todaysdate) {
 	    $dd="<font color=red>$dd</font>\n";
 	}
-	if ($todaysdate == $issuedate) {
-	    ($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
-	    $todaysissues .=<< "EOF";
+	($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
+	$todaysissues .=<< "EOF";
 <tr><td bgcolor=$tcolor align=center>$dd</td>
 <td bgcolor=$tcolor align=center>
-<a href=/cgi-bin/koha/detail.pl?bib=$bookissue->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$bookissue->{'barcode'}</a></td>
-<td bgcolor=$tcolor>$bookissue->{'title'}</td>
-<td bgcolor=$tcolor>$bookissue->{'author'}</td>
-<td bgcolor=$tcolor align=center>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>
+<a href=/cgi-bin/koha/detail.pl?bib=$book->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$book->{'barcode'}</a></td>
+<td bgcolor=$tcolor>$book->{'title'}</td>
+<td bgcolor=$tcolor>$book->{'author'}</td>
+<td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
-        } else {
-	    ($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
-	    $previssues .= << "EOF";
+    } 
+    foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @previousissues){
+	my $dd = $book->{'date_due'};
+	my $datedue = $book->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable	    
+	my @tempdate=split(/-/,$dd);
+	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+     	$datedue=~s/-//g;
+	if ($datedue < $todaysdate) {
+	    $dd="<font color=red>$dd</font>\n";
+	}
+	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
+	$previssues .= << "EOF";
 <tr><td bgcolor=$pcolor align=center>$dd</td>
 <td bgcolor=$pcolor align=center>
-<a href=/cgi-bin/koha/detail.pl?bib=$bookissue->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$bookissue->{'barcode'}</a></td>
-<td bgcolor=$pcolor>$bookissue->{'title'}</td>
-<td bgcolor=$pcolor>$bookissue->{'author'}</td>
-<td bgcolor=$pcolor align=center>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>
+<a href=/cgi-bin/koha/detail.pl?bib=$book->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$book->{'barcode'}</a></td>
+<td bgcolor=$pcolor>$book->{'title'}</td>
+<td bgcolor=$pcolor>$book->{'author'}</td>
+<td bgcolor=$pcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
-	}
     }
 }
 
