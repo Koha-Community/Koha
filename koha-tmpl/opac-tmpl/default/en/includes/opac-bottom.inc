@@ -5,11 +5,11 @@
 <center>
 
 
-<A HREF="./opacsearch.pl">Catalogue Search</a> || 
+<A HREF="/cgi-bin/koha/opac-search.pl">Catalogue Search</a> || 
 <!--<A HREF="/members/">Member Login</a> || 
 -->
-<A HREF="./join.html">Become a Member</a> || 
-<A HREF="./opacmain.pl">Home</a> 
+<A HREF="/cgi-bin/koha/join.html">Become a Member</a> || 
+<A HREF="/cgi-bin/koha/opac-main.pl">Home</a> 
 
 </font>
 </center>

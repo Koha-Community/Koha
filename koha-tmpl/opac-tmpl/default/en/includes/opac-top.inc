@@ -32,7 +32,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
       
-        <td align=right><a href="./opacsearch.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img 
+        <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img 
 	src="<TMPL_VAR NAME='themelang'>/images/menu-search.gif" 
 	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
 	
@@ -40,11 +40,11 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-login.gif" 
 	width=111 height=30 alt="Member Login" hspace=0 vspace=0 border=0 name="menu-login"></a>
 -->
-	<a href="/join.html"
+	<a href="/cgi-bin/koha/join.html"
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-join.gif" 
 	width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
 
-	<a href="/" 
+	<a href="/cgi-bin/koha/opac-main.pl" 
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-home.gif" 
 	width=60 height=30 alt="Home" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
         
