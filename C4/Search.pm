@@ -965,9 +965,11 @@ sub CatSearch  {
     my @key=split(' ',$search->{'subject'});
     my $count=@key;
     my $i=1;
+    $key[0]=~s/'/\\'/g;
     $query="select distinct(subject) from bibliosubject where( subject like
     '$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject like '%($key[0])%')";
     while ($i<$count){
+      $key[$i]=~s/'/\\'/g;
       $query.=" and (subject like '$key[$i]%' or subject like '% $key[$i]%'
       or subject like '% $key[$i]'
       or subject like '%($key[$i])%')";
