@@ -1472,11 +1472,11 @@ sub OLDmoditem {
 $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
   my $query="update items set  barcode=?,itemnotes=?,bulk=?,notforloan=? where itemnumber=?";
   my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
-  if ($item->{'barcode'} eq ''){
-  	$item->{'notforloan'}=0 unless $item->{'notforloan'};
-    $query="update items set notforloan=? where itemnumber=?";
-    @bind = ($item->{'notforloan'},$item->{'itemnum'});
-  }
+#  if ($item->{'barcode'} eq ''){
+#  	$item->{'notforloan'}=0 unless $item->{'notforloan'};
+#    $query="update items set notforloan=? where itemnumber=?";
+#    @bind = ($item->{'notforloan'},$item->{'itemnum'});
+#  }
   if ($item->{'lost'} ne ''){
     $query="update items set biblioitemnumber=?,
                              barcode=?,
@@ -1492,6 +1492,7 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
   if ($item->{'replacement'} ne ''){
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
   }
+  warn "Q : $query";
   my $sth=$dbh->prepare($query);
   $sth->execute(@bind);
   $sth->finish;
@@ -2162,6 +2163,8 @@ sub char_decode {
 			$string = nsb_clean($_) ;
 		}
 	}
+	# also remove |
+	$string =~ s/\|//g;
 	return($string) ;
 }
 
@@ -2191,6 +2194,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.78.2.8  2004/03/25 13:22:06  tipaul
+# * removing | in MARC datas (| should never be sent. In BNF z3950 server, the | is added at the beginning of almost every title. It's an historic feature that means nothing now but has not been deleted)
+# * bugfix in MARC editor when a library has no barcode, the items table modifs did not work (adding worked)
+#
 # Revision 1.78.2.7  2004/03/24 17:30:35  joshferraro
 # Fixes bug 749 by deleting the comma on line 1488 in Biblio.pm
 #
