@@ -329,6 +329,7 @@ sub patrontable {
 	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {
 		$template->param(
+			flagged => 1,
 			noissues => 'true',
 			 );
 		if ($flag eq 'GNA'){
@@ -356,6 +357,7 @@ sub patrontable {
 		 if ($flag eq 'CHARGES') {
 			$template->param(
 				charges => 'true',
+				flagged => 1,
 				chargesmsg => $flags->{'CHARGES'}->{'message'}
 			 );
 		}
@@ -368,6 +370,7 @@ sub patrontable {
 			push @itemswaiting, $iteminformation;
 			}
 			$template->param(
+				flagged => 1,
 				waiting => 'true',
 				waitingmsg => $flags->{'WAITING'}->{'message'},
 				itemswaiting => \@itemswaiting,
@@ -376,6 +379,7 @@ sub patrontable {
 		if ($flag eq 'ODUES') {
 			$template->param(
 				odues => 'true',
+				flagged => 1,
 				oduesmsg => $flags->{'ODUES'}->{'message'}
 				 );
 
@@ -394,6 +398,7 @@ sub patrontable {
 		if ($flag eq 'NOTES') {
 			$template->param(
 				notes => 'true',
+				flagged => 1,
 				notesmsg => $flags->{'NOTES'}->{'message'}
 				 );
 		}
