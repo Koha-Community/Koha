@@ -31,7 +31,7 @@ if ($answer eq "Y" || $answer eq "y") {
 	print "Great! continuing setup... \n";
     } else {
     print qq|
-This installer currently does not support an completely automated 
+This installer currently does not support a completely automated 
 setup.
 
 Please be sure to read the documentation, or visit the Koha website 
