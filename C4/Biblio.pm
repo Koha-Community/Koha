@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.40  2003/03/11 15:14:03  tipaul
+# pod updating
+#
 # Revision 1.39  2003/03/07 16:35:42  tipaul
 # * moving generic functions to Koha.pm
 # * improvement of SearchMarc.pm
@@ -1088,9 +1091,9 @@ sub MARCdelword {
 creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
 are builded from the MARC::Record. If they are passed, they are used.
 
-=item NEWnewitem($dbh,$olditem);
+=item NEWnewitem($dbh, $record,$bibid);
 
-adds an item in the db. $olditem is a old-db hash.
+adds an item in the db.
 
 =cut
 
