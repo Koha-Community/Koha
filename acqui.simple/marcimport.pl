@@ -189,6 +189,8 @@ sub ProcessFile {
     my $debug=0;
     my $splitchar=chr(29);
 
+    requireDBI($dbh,"ProcessFile");
+
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $qisbn=$input->param('isbn');
     my $qissn=$input->param('issn');
@@ -412,6 +414,8 @@ sub ListFileRecords {
 	my $record;
 	my ($numrecords,$resultsid,$data,$startdate,$enddate);
 
+    requireDBI($dbh,"ListFileRecords");
+
 	# File can be z3950 search query or uploaded MARC data
 
 	# if z3950 results
@@ -512,7 +516,7 @@ EOF
 		    my $i;
 		    for ($i=$startrecord; $i<$startrecord+10; $i++) {
 			if ( $records[$i] ) {
-			  &PrintResultRecordLink($records[$i],$resultsid);
+			  &PrintResultRecordLink($dbh,$records[$i],$resultsid);
 			} # if record
 		    } # for records
 		    print "<p>\n";
@@ -532,7 +536,7 @@ EOF
 	    my @records=parsemarcfileformat($data);
 	    foreach $record (@records) {
 
-		&PrintResultRecordLink($record,'');
+		&PrintResultRecordLink($dbh,$record,'');
 
 	    } # foreach record
 	} # if z3950 or marc upload
@@ -551,6 +555,8 @@ sub z3950servername {
     my $longname;
     #----
 
+    requireDBI($dbh,"z3950servername");
+
 	my $sti=$dbh->prepare("select name 
 		from z3950servers 
 		where id=?");
@@ -566,7 +572,7 @@ sub z3950servername {
 
 sub PrintResultRecordLink {
     use strict;
-    my ($record,$resultsid)=@_; 	# input
+    my ($dbh,$record,$resultsid)=@_; 	# input
 
     my (
 	$sth,
@@ -576,6 +582,7 @@ sub PrintResultRecordLink {
 	$fieldname,
     );
 	
+    requireDBI($dbh,"PrintResultRecordLink");
 
 	$bib=extractmarcfields($record);
 
@@ -791,6 +798,8 @@ sub z3950menu {
 	$record,$bib,$title,
     );
 
+    requireDBI($dbh,"z3950menu");
+
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     print "<table border=0><tr><td valign=top>\n";
     print "<h2>Results of Z39.50 searches</h2>\n";
@@ -917,6 +926,10 @@ EOF
 
 sub uploadmarc {
     use strict;
+    my ($dbh)=@_;
+
+    requireDBI($dbh,"uploadmarc");
+
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
     $sth->execute;
@@ -1071,6 +1084,8 @@ sub AcceptZ3950Queue {
 
     my @serverlist;
 
+    requireDBI($dbh,"AcceptZ3950Queue");
+
     my $query=$input->param('query');
 
     my $isbngood=1;
@@ -1106,6 +1121,8 @@ sub AcceptMarcUpload {
 	$input,		# CGI parms
     )=@_;
 
+    requireDBI($dbh,"AcceptMarcUpload");
+
     my $name=$input->param('name');
     my $data=$input->param('uploadmarc');
     my $marcrecord='';
@@ -1134,8 +1151,10 @@ sub AcceptBiblioitem {
 
     my $biblionumber=0;
     my $biblioitemnumber=0;
-
     my $sth;
+
+    requireDBI($dbh,"AcceptBiblioitem");
+
     my $isbn=$input->param('isbn');
     my $issn=$input->param('issn');
     my $lccn=$input->param('lccn');
@@ -1257,6 +1276,7 @@ sub ItemCopyForm {
 
     my $sth;
     my $barcode;
+    requireDBI($dbh,"ItemCopyForm");
 
     my $title=$input->param('title');
     my $file=$input->param('file');
@@ -1310,6 +1330,9 @@ sub AcceptItemCopy {
     my ( $dbh, $input )=@_;
 
     my $error;
+
+    requireDBI($dbh,"AcceptItemCopy");
+
     my $barcode=$input->param('barcode');
     my $replacementprice=($input->param('replacementprice') || 0);
 
@@ -1363,6 +1386,8 @@ sub getkeytableselectoptions {
 	);
 	my $debug=0;
 
+    	requireDBI($dbh,"getkeytableselectoptions");
+
 	if ( $showkey ) {
 		$orderfieldname=$keyfieldname;
 	} else {
@@ -1402,6 +1427,7 @@ sub newcompletebiblioitem {
 	my $additionalauthor;
 
 	#--------
+    	requireDBI($dbh,"newcompletebiblioitem");
 
 	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
 		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
@@ -1459,6 +1485,8 @@ sub getoraddbiblio {
 	my $error;
 	
 	#-----
+    	requireDBI($dbh,"getoraddbiblio");
+
 	print "<PRE>Looking for biblio </PRE>\n" if $debug;
 	$sth=$dbh->prepare("select biblionumber 
 		from biblio 
@@ -1504,6 +1532,8 @@ sub addz3950queue {
 	$server,
 	$failed,
     );
+    
+    requireDBI($dbh,"addz3950queue");
 
 	# list of servers: entry can be a fully qualified URL-type entry
         #   or simply just a server ID number.
