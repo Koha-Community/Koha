@@ -361,8 +361,14 @@ sub _next_token_internal {
 		my($head, $tail, $post) = ($1, $2, $3);
 		if ($tail eq '' && $post =~ $re_tmpl_var) {
 		    # Don't bother to show the warning if we're too confused
+		    # FIXME. There's no method for _closed_start_tag_warning
+		    if (!defined $this->{'_closed_start_tag_warning'}
+			|| ($this->{'_closed_start_tag_warning'}->[0] eq $head
+			&& $this->{'_closed_start_tag_warning'}->[1] != $this->line_number - 1)) {
 		    warn_normal "Possible SGML \"closed start tag\" notation: $head<\n", $this->line_number
 			    if split(/\n/, $head) < 10;
+		    }
+		    $this->{'_closed_start_tag_warning'} = [$head, $this->line_number];
 		} else {
 		    ($kind, $it) = (TmplTokenType::TAG, "$head>");
 		    $this->_set_readahead( $post );
