@@ -2199,11 +2199,12 @@ sub itemcount2 {
   } 
   if ($bibnum) {
       my $query2="Select * from aqorders where biblionumber=$bibnum and
-      (datecancellationprinted is NULL or datecancellationprinted ='')";
+      (datecancellationprinted is NULL or datecancellationprinted ='' or datecancellationprinted = '0000-00-00' )";
       my $sth2=$dbh->prepare($query2);
       $sth2->execute;
       if (my $data=$sth2->fetchrow_hashref){
-	  $counts{'order'}=$data->{'quantity'} - $data->{'quantityreceived'};
+	  my $ordered = $data->{'quantity'} - $data->{'quantityreceived'};
+	  $counts{'On order'}=$ordered if $ordered > 0;
       }
       $sth2->finish;
   }
