@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.17  2002/10/10 14:48:25  tipaul
+# bugfixes
+#
 # Revision 1.16  2002/10/07 14:04:26  tipaul
 # road to 1.3.1 : viewing MARC biblio
 #
@@ -290,9 +293,9 @@ sub MARCgettagslib {
     }
 
     if ($forlibrarian eq 1) {
-	$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,tab as lib from marc_subfield_structure");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure");
     } else {
-	$sth=$dbh->prepare("select tagfield,tagsubfield,libopac,tab as lib from marc_subfield_structure");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib,tab from marc_subfield_structure");
     }
     $sth->execute;
 
@@ -300,7 +303,6 @@ sub MARCgettagslib {
     while ( ($tag,$subfield,$lib,$tab) = $sth->fetchrow) {
 	$res->{$tag}->{$subfield}->{lib}=$lib;
 	$res->{$tag}->{$subfield}->{tab}=$tab;
-
     }
     return $res;
 }
@@ -434,42 +436,38 @@ sub MARCgetbiblio {
     my ($dbh,$bibid)=@_;
     my $record = MARC::Record->new();
 #---- TODO : the leader is missing
-    my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink 
-		 		 from marc_subfield_table 
+    my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
+		 		 from marc_subfield_table
 		 		 where bibid=? order by tagorder,subfieldorder
 		 	 ");
     my $sth2=$dbh->prepare("select subfieldvalue from marc_blob_subfield where blobidlink=?");
     $sth->execute($bibid);
+    my $prevtagorder=1;
+    my $prevtag;
+    my %subfieldlist={};
     while (my $row=$sth->fetchrow_hashref) {
-	if ($row->{'valuebloblink'}) { #---- search blob if there is one
-	    $sth2->execute($row->{'valuebloblink'});
-	    my $row2=$sth2->fetchrow_hashref;
-	    $sth2->finish;
-	    $row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
+		if ($row->{'valuebloblink'}) { #---- search blob if there is one
+			$sth2->execute($row->{'valuebloblink'});
+			my $row2=$sth2->fetchrow_hashref;
+			$sth2->finish;
+			$row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
+		}
+		if ($row->{tagorder} ne $prevtagorder) {
+			my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+			$record->add_fields($field);
+			$prevtagorder=$row->{tagorder};
+			$prevtag = $row->{tag};
+			%subfieldlist={};
+			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
+		} else {
+			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
+			$prevtag= $row->{tag};
+		}
 	}
-	if ($record->field($row->{'tag'})) {
-	    my $field;
-#--- this test must stay as this, because of strange behaviour of mySQL/Perl DBI with char var containing a number...
-#--- sometimes, eliminates 0 at beginning, sometimes no ;-\\\
-	    if (length($row->{'tag'}) <3) {
-		$row->{'tag'} = "0".$row->{'tag'};
-	    }
-	    $field =$record->field($row->{'tag'});
-	    if ($field) {
-		my $x = $field->add_subfields($row->{'subfieldcode'},$row->{'subfieldvalue'});
-		$record->delete_field($field);
-		$record->add_fields($field);
-	    }
-	} else {
-	    if (length($row->{'tag'}) < 3) {
-		$row->{'tag'} = "0".$row->{'tag'};
-	    }
-	    my $temp = MARC::Field->new($row->{'tag'}," "," ", $row->{'subfieldcode'} => $row->{'subfieldvalue'});
-	    $record->add_fields($temp);
-	}
-
-    }
-    return $record;
+	# the last has not been included inside the loop... do it now !
+	my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
+	$record->add_fields($field);
+	return $record;
 }
 sub MARCgetitem {
 # Returns MARC::Record of the biblio passed in parameter.
