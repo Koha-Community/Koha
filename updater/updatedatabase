@@ -24,7 +24,7 @@ use C4::Context;
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
-my $debug = 0;
+my $debug = 1;
 
 my (
     $sth, $sti,
@@ -240,7 +240,9 @@ my %requirefields = (
 
     #added so that reference items are not available for reserves...
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
-    systempreferences => { 'explanation' => 'char(80)' },
+    systempreferences => { 'explanation' => 'char(80)',
+    		 	   'type' => 'char(20)',
+			   'options' => 'text' },
     z3950servers      => { 'syntax'      => 'char(80)' },
 );
 
@@ -259,7 +261,9 @@ my %dropable_table = (
 # The uniquefieldrequired hash entry is used to determine which (if any) fields
 # must not exist in the table for this row to be inserted.  If the
 # uniquefieldrequired entry is already in the table, the existing data is not
-# modified.
+# modified, unless the forceupdate hash entry is also set.  Fields in the
+# anonymous "forceupdate" hash will be forced to be updated to the default
+# values given in the %tabledata hash.
 
 my %tabledata = (
     userflags => [
@@ -344,120 +348,177 @@ my %tabledata = (
     systempreferences => [
         {
             uniquefieldrequired => 'variable',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             variable            => 'autoMemberNum',
             value               => '1',
-            explanation         => '1 or 0. If 1, Member number is auto-calculated'
+            explanation         => 'Member number is auto-calculated',
+	    type		=> 'YesNo'
+
         },
         {
             uniquefieldrequired => 'variable',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1 },
             variable            => 'acquisitions',
             value               => 'simple',
             explanation         =>
-'normal or simple : whether to use "acqui" or "acqui.simple" acquisition system'
+'Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions',
+	    type		=> 'Choice',
+	    options 		=> 'simple|normal'
         },
         {
             uniquefieldrequired => 'variable',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1 },
             variable            => 'dateformat',
             value               => 'metric',
-            explanation         => 'metric, us, or iso'
+            explanation         =>
+            'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)',
+	    type		=> 'Choice',
+	    options 		=> 'metric|us|iso'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'template',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => 'default',
-            explanation         => 'template default name'
+            explanation         => 'Preference order for intranet interface templates',
+	    type		=> 'Themes'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'autoBarcode',
-            value               => '1',
-            explanation         => '1 or 0. If 1, Barcode is auto-calculated'
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => 'yes',
+            explanation         => 'Barcode is auto-calculated',
+	    type		=> 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'insecure',
-            value               => 'NO',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => 'no',
             explanation         =>
-'if YES, no auth at all is needed. Be careful if you set this to yes !'
+'If YES, no auth at all is needed. Be careful if you set this to yes!',
+	    type		=> 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'authoritysep',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1 },
             value               => '--',
             explanation         =>
-            'the separator used in authority/thesaurus. Usually --'
+            'the separator used in authority/thesaurus. Usually --',
+	    type		=> 'free',
+	    options		=> '10'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opaclanguages',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => 'en',
-            explanation         => 'languages'
+            explanation         => 'Set the preferred order for translations.  The top language will be tried first.',
+	    type		=> 'Languages'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'opacthemes',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => 'default',
-            explanation         => 'theme'
+            explanation         => 'Set the preferred order for themes.  The top theme will be tried first.',
+	    type		=> 'Themes'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'timeout',
-            value               => '12000000',
-            explanation         => 'login timeout'
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '1200',
+            explanation         => 'Inactivity timeout for cookies authentication (in seconds)',
+	    type		=> 'Integer'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'marc',
-            value               => 'ON',
-            explanation         => 'MARC support (ON or OFF)'
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => 'yes',
+            explanation         => 'Turn on MARC support',
+	    type		=> 'YesNo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'marcflavour',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
             value               => 'MARC21',
             explanation         =>
-            'your MARC flavor (MARC21 or UNIMARC) used for character encoding'
+            'your MARC flavor (MARC21 or UNIMARC) used for character encoding',
+	    type		=> 'Choice',
+	    options		=> 'MARC21|UNIMARC'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'checkdigit',
-            value               => 'katipo',
-            explanation         =>
-            'none= no check on member cardnumber. katipo= katipo check'
-        },
-        {
-            uniquefieldrequired => 'variable',
-            variable            => 'dateformat',
-            value               => 'ISO',
-            explanation         =>
-            'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd) '
+            value               => 'none',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Validity checks on membership number: none or "Katipo" style checks',
+	    type		=> 'Choice',
+	    options		=> 'none|katipo'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'maxoutstanding',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => '5',
             explanation         =>
-            'maximum amount withstanding to be able make reserves '
+            'maximum amount withstanding to be able make reserves ',
+	    type		=> 'Integer'
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'maxreserves',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => '5',
             explanation         =>
-            'maximum number of reserves a member can make '
+            'maximum number of reserves a member can make',
+	    type		=> 'Integer'
+
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'noissuescharge',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => '5',
             explanation         =>
-            'maximum amount withstanding to be able to check out an item '
+            'maximum amount withstanding to be able to check out an item',
+	    type		=> 'Integer'
+
         },
         {
             uniquefieldrequired => 'variable',
             variable            => 'KohaAdminEmailAddress',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             value               => 'your.mail@here',
-            explanation => 'the email adress where borrowers modifs are sent'
+            explanation => 'the email adress where borrowers modifs are sent',
+	    type		=> 'free'
         },
     ],
 
@@ -579,7 +640,7 @@ foreach $table ( keys %requirefields ) {
         $types{$column} = $type;
     }    # while
     foreach $column ( keys %{ $requirefields{$table} } ) {
-        print "  Check column $column\n" if $debug;
+        print "  Check column $column  [$types{$column}]\n" if $debug;
         if ( !$types{$column} ) {
 
             # column doesn't exist
@@ -743,18 +804,27 @@ foreach my $table ( keys %tabledata ) {
     foreach my $row (@$tablerows) {
         my $uniquefieldrequired = $row->{uniquefieldrequired};
         my $uniquevalue         = $row->{$uniquefieldrequired};
+        my $forceupdate         = $row->{forceupdate};
         my $sth                 =
           $dbh->prepare(
 "select $uniquefieldrequired from $table where $uniquefieldrequired=?"
         );
         $sth->execute($uniquevalue);
-        unless ( $sth->rows ) {
+	if ($sth->rows) {
+	    foreach my $field (keys %$forceupdate) {
+		if ($forceupdate->{$field}) {
+		    my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
+		    $sth->execute($row->{$field}, $uniquevalue);
+		}
+	    }
+	} else {
             print "Adding row to $table: ";
             my @values;
             my $fieldlist;
             my $placeholders;
             foreach my $field ( keys %$row ) {
-                (next) if ( $field eq 'uniquefieldrequired' );
+                next if $field eq 'uniquefieldrequired';
+		next if $field eq 'forceupdate';
                 my $value = $row->{$field};
                 push @values, $value;
                 print "  $field => $value";
@@ -777,6 +847,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.50  2003/06/11 21:28:22  tonnesen
+# Added modifications required to the systempreferences table by the new
+# systempreferences.pl script.  The systempreferences.pl script will not work
+# properly until this table is updated.
+#
 # Revision 1.49  2003/05/26 10:41:53  tipaul
 # bugfix : borrowers modifs overwritten by stupid hash entry existing twice.
 #
