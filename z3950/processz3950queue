@@ -183,7 +183,7 @@ while (1) {
 							$forkcounter++;
 						} else {
 # and connect to z3950 server
-#FIXME: why do we need $dbi ? can't we use $dbh ?
+# new connection required ($dbi) because we might have forked (thanks Harry Jackson)
 							my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
 							my $db_name   = $context->{"config"}{"database"};
 							my $db_host   = $context->{"config"}{"hostname"};
