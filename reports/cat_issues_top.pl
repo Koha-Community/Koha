@@ -67,7 +67,8 @@ if ($do_it) {
 	my $results = calculate($limit, $column, \@filters);
 	if ($output eq "screen"){
 # Printing results to screen
-		$template->param(mainloop => $results);
+		$template->param(mainloop => $results,
+						limit => $limit);
 		output_html_with_http_headers $input, $cookie, $template->output;
 		exit(1);
 	} else {
@@ -325,15 +326,15 @@ sub calculate {
 		my ($row, $rank, $col )=@data;
 #		warn "filling table $row / $col / $issuedate / $returndate /$weight";
 		$col = "zzEMPTY" if ($col eq undef);
-		$table[$i]->{$col}=$row;
-		warn " ".$i." ".$col. " ".$row;
-		$i++;
 		$i=1 if (($previous_col) and not($col eq $previous_col));
+		$table[$i]->{$col}=$row;
+#		warn " ".$i." ".$col. " ".$row;
+		$i++;
 		$previous_col=$col;
 #		$table{$row}->{totalrow}+=$weight*$loanlength;
 	}
 	
-	push @loopcol,{coltitle => "Global"};
+	push @loopcol,{coltitle => "Global"} if not ($column);
 	
 	for ($i=1; $i<=$line;$i++) {
 		warn " ".$i;

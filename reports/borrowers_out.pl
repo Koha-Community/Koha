@@ -44,7 +44,7 @@ plugin that shows a stats on borrowers
 
 my $input = new CGI;
 my $do_it=$input->param('do_it');
-my $fullreportname = "reports/bor_issues_top.tmpl";
+my $fullreportname = "reports/borrowers_out.tmpl";
 my $limit = $input->param("Limit");
 my $column = $input->param("Criteria");
 my @filters = $input->param("Filter");
@@ -67,7 +67,7 @@ if ($do_it) {
 	my $results = calculate($limit, $column, \@filters);
 	if ($output eq "screen"){
 # Printing results to screen
-		$template->param(mainloop => $results, limit=>$limit);
+		$template->param(mainloop => $results);
 		output_html_with_http_headers $input, $cookie, $template->output;
 		exit(1);
 	} else {
@@ -80,7 +80,7 @@ if ($do_it) {
 		my $sep;
 		$sep =C4::Context->preference("delimiter");
 # header top-right
-		print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
+		print "num /". @$results[0]->{column} .$sep;
 # Other header
 		foreach my $col ( @$cols ) {
 			print $col->{coltitle}.$sep;
@@ -166,71 +166,26 @@ sub calculate {
 				$cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
 			}
 			$cell{filter} .= @$filters[$i];
-			$cell{crit} .="Issue From" if ($i==0);
-			$cell{crit} .="Issue To" if ($i==1);
-			$cell{crit} .="Return From" if ($i==2);
-			$cell{crit} .="Return To" if ($i==3);
-			$cell{crit} .="Branch" if ($i==4);
-			$cell{crit} .="Doc Type" if ($i==5);
-			$cell{crit} .="Bor Cat" if ($i==6);
-			$cell{crit} .="Day" if ($i==7);
-			$cell{crit} .="Month" if ($i==8);
-			$cell{crit} .="Year" if ($i==9);
+			$cell{crit} .="Bor Cat" if ($i==0);
 			push @loopfilter, \%cell;
 		}
 	}
 	my $colfield;
 	my $colorder;
 	if ($column){
-		$column = "issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
-		$column = "biblioitems.".$column if $column=~/itemtype/;
 		$column = "borrowers.".$column if $column=~/categorycode/;
 		my @colfilter ;
-		$colfilter[0] = @$filters[0] if ($column =~ /timestamp/ )  ;
-		$colfilter[1] = @$filters[1] if ($column =~ /timestamp/ )  ;
-		$colfilter[0] = @$filters[2] if ($column =~ /returndate/ )  ;
-		$colfilter[1] = @$filters[3] if ($column =~ /returndate/ )  ;
-		$colfilter[0] = @$filters[4] if ($column =~ /branch/ )  ;
-		$colfilter[0] = @$filters[5] if ($column =~ /itemtype/ )  ;
-		$colfilter[0] = @$filters[6] if ($column =~ /category/ )  ;
+		$colfilter[0] = @$filters[0] if ($column =~ /category/ )  ;
 	# 	$colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
-		$colfilter[0] = @$filters[7] if ($column =~ /timestamp/ ) ;
-		$colfilter[0] = @$filters[8] if ($column =~ /timestamp/ ) ;
-		$colfilter[0] = @$filters[9] if ($column =~ /timestamp/ ) ;
 	#warn "filtre col ".$colfilter[0]." ".$colfilter[1];
 												
 	# loop cols.
-		if ($column eq "Day") {
-			#Display by day
-			$column = "issues.timestamp";
-			$colfield .="dayname($column)";  
-			$colorder .="weekday($column)";
-		} elsif ($column eq "Month") {
-			#Display by Month
-			$column = "issues.timestamp";
-			$colfield .="monthname($column)";  
-			$colorder .="month($column)";  
-		} elsif ($column eq "Year") {
-			#Display by Year
-			$column = "issues.timestamp";
-			$colfield .="Year($column)";
-			$colorder .= $column;
-		} else {
-			$colfield .= $column;
-			$colorder .= $column;
-		}  
+		$colfield .= $column;
+		$colorder .= $column;
 		
 		my $strsth2;
-		$strsth2 .= "select distinctrow $colfield FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
-		if (($column=~/timestamp/) or ($column=~/returndate/)){
-			if ($colfilter[1] and ($colfilter[0])){
-				$strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
-			} elsif ($colfilter[1]) {
-					$strsth2 .= " and $column < '$colfilter[1]' " ;
-			} elsif ($colfilter[0]) {
-				$strsth2 .= " and $column > '$colfilter[0]' " ;
-			}
-		} elsif ($colfilter[0]) {
+		$strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `issues` ON issues.borrowernumber=borrowers.borrowernumber";
+		if ($colfilter[0]) {
 			$colfilter[0] =~ s/\*/%/g;
 			$strsth2 .= " and $column LIKE '$colfilter[0]' " ;
 		}
@@ -239,13 +194,8 @@ sub calculate {
 		warn "". $strsth2;
 		
 		my $sth2 = $dbh->prepare( $strsth2 );
-		if (( @colfilter ) and ($colfilter[1])){
-			$sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
-		} elsif ($colfilter[0]) {
-			$sth2->execute($colfilter[0]);
-		} else {
-			$sth2->execute;
-		}
+		$sth2->execute;
+
 		
 	
 		while (my ($celvalue) = $sth2->fetchrow) {
@@ -270,7 +220,7 @@ sub calculate {
 	for (my $i=1;$i<=$line;$i++) {
 		foreach my $col ( @loopcol ) {
 #			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"total"}=0;
+			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"Global"}=0;
 		}
 	}
 
@@ -279,41 +229,20 @@ sub calculate {
 	my $strcalc ;
 	
 # Processing average loanperiods
-	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber) , COUNT(*) AS RANK";
+	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
-
- 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
- 	$strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
- 	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
- 	$strcalc .= " AND issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
-	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
-	$strcalc .= " AND issues.returndate > '" . @$filters[2] ."'" if ( @$filters[2] );
-	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
-	$strcalc .= " AND issues.returndate < '" . @$filters[3] ."'" if ( @$filters[3] );
-	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
-	$strcalc .= " AND issues.branchcode like '" . @$filters[4] ."'" if ( @$filters[4] );
-	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
-	$strcalc .= " AND biblioitems.itemtype like '" . @$filters[5] ."'" if ( @$filters[5] );
-	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
-	$strcalc .= " AND borrowers.categorycode like '" . @$filters[6] ."'" if ( @$filters[6] );
-	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
-	$strcalc .= " AND dayname(issues.timestamp) like '" . @$filters[7]."'" if (@$filters[7]);
-	@$filters[8]=~ s/\*/%/g if (@$filters[8]);
-	$strcalc .= " AND monthname(issues.timestamp) like '" . @$filters[8]."'" if (@$filters[8]);
-	@$filters[9]=~ s/\*/%/g if (@$filters[9]);
-	$strcalc .= " AND year(issues.timestamp) like '" . @$filters[9] ."'" if ( @$filters[9] );
+	$strcalc .= " FROM borrowers LEFT JOIN issues ON  issues.borrowernumber=borrowers.borrowernumber WHERE issues.borrowernumber is null";
+	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
+	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
 	
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
-	$strcalc .= " order by ";
-	$strcalc .= "$colfield, " if ($colfield);
-	$strcalc .= "RANK DESC ";
+	$strcalc .= " order by $colfield " if ($colfield);
 	my $max;
 	if (@loopcol) {
 		$max = $line*@loopcol;
 	} else { $max=$line;}
-	$strcalc .= " LIMIT 0,$max";
+	$strcalc .= " LIMIT 0,$max" if ($line);
 	warn "SQL :". $strcalc;
 	
 	my $dbcalc = $dbh->prepare($strcalc);
@@ -322,30 +251,30 @@ sub calculate {
 	my $previous_col;
 	my $i=1;
 	while (my  @data = $dbcalc->fetchrow) {
-		my ($row, $rank, $col )=@data;
+		my ($row, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
 		$i=1 if (($previous_col) and not($col eq $previous_col));
 		$table[$i]->{$col}=$row;
-		warn " ".$i." ".$col. " ".$row;
+#		warn " ".$i." ".$col. " ".$row;
 		$i++;
 		$previous_col=$col;
 	}
 	
 	push @loopcol,{coltitle => "Global"} if not($column);
 	
-	for ($i=1; $i<=$line;$i++) {
-		warn " ".$i;
-		my @loopcell;
-		#@loopcol ensures the order for columns is common with column titles
-		# and the number matches the number of columns
-		my $colcount=0;
-		foreach my $col ( @loopcol ) {
-			my $value;
-			if (@loopcol){
-				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
-			} else {
-				$value =$table[$i]->{"zzEMPTY"};
-			}
+	my $max =(($line)?$line:@table);
+ 	for ($i=1; $i<=$max;$i++) {
+ 		my @loopcell;
+ 		#@loopcol ensures the order for columns is common with column titles
+ 		# and the number matches the number of columns
+ 		my $colcount=0;
+ 		foreach my $col ( @loopcol ) {
+ 			my $value;
+ 			if (@loopcol){
+ 				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
+ 			} else {
+ 				$value =$table[$i]->{"zzEMPTY"};
+ 			}
 			push @loopcell, {value => $value} ;
 		}
 		push @looprow,{ 'rowtitle' => $i ,
@@ -354,7 +283,7 @@ sub calculate {
 					};
 		$hilighted = -$hilighted;
 	}
-# 	
+	
 			
 
 	# the header of the table

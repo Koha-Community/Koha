@@ -1,0 +1,99 @@
+<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+<div id="mainbloc" >
+
+<!-- TMPL_IF NAME="do_it" -->
+	<!-- TMPL_LOOP NAME="mainloop" -->
+		<h1 class="reports">Koha : Items with no Issues </h1>
+		<!-- TMPL_IF NAME="loopfilter"-->
+			<p>Filtered on</p>
+			<!-- TMPL_LOOP NAME="loopfilter" -->
+					<p><!-- TMPL_IF NAME="err" --> <font color="red"> <b><!--/TMPL_IF --><label class="label100"> <!-- TMPL_VAR NAME="crit"--> =</label><!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" --> </font> </b><!--/TMPL_IF --></p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF NAME="loopfilter"-->
+		<br>
+		<table>
+			<tr >
+				<th class="reports">Num/Items</th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+			</tr>
+				<!-- TMPL_LOOP NAME="looprow" -->
+					<tr>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+							</td>
+						<!-- /TMPL_LOOP -->
+					</tr>
+				<!-- /TMPL_LOOP NAME="looprow" -->
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1 class = "reports">Koha : Items with no Issues </h1>
+	<form method="post">
+	
+	<table>
+		<thead>
+			<tr>
+			<th class="reports">Limit to </th>
+			<th class="reports">By </th>
+			<th class="reports" colspan="2">Filters</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<select name="Limit">
+						<option value ="" checked>None</option>
+						<option value ="5"> 5</option>
+						<option value ="10">10</option>
+						<option value ="15">15</option>
+						<option value ="20">20</option>
+						<option value ="25">25</option>
+						<option value ="40">40</option>
+						<option value ="50">50</option>
+						<option value ="100">100</option>
+					</select>
+				</td>
+				<td>
+					<select name="Criteria">
+						<option value ="" checked>None</option>
+						<option value ="homebranch">Branch</option>
+						<option value ="itemtype">Itemtype</option>
+					</select>
+				</td>
+			</tr>
+			<tr class="hilighted">
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Branch</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>Document Type</td>
+				<td><input type="text" name="Filter" value=""></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div id="bloc25">
+		<h3 class="reports"> Output </h3>
+		<input type="radio" checked name="output" value="screen" > To screen into the browser
+		<br>
+		<input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export"> into an application  
+		<!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</div>
+	<p>
+	<input TYPE="submit" value="OK" class="button reports">
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
