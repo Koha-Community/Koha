@@ -199,7 +199,7 @@ if ($op eq 'add_form') {
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
-		$tagsubfield="@" unless $tagsubfield;
+		$tagsubfield="@" unless $tagsubfield ne '';
 		my $liblibrarian		=$liblibrarian[$i];
 		my $libopac			=$libopac[$i];
 		my $repeatable		=$input->param("repeatable$i")?1:0;
