@@ -265,25 +265,18 @@ my %requiretables = (
 						PRIMARY KEY  (subfieldid),
 						KEY authid (authid),
 						KEY tag (tag),
-						KEY tag_indicator (tag_indicator),
-						KEY subfieldorder (subfieldorder),
 						KEY subfieldcode (subfieldcode),
-						KEY subfieldvalue (subfieldvalue),
-						KEY tagorder (tagorder)
+						KEY subfieldvalue (subfieldvalue)
 					)",
     auth_word => "(
 				authid bigint(20) NOT NULL default '0',
-				tag char(3) NOT NULL default '',
+				tagsubfield char(4) NOT NULL default '',
 				tagorder tinyint(4) NOT NULL default '1',
-				subfieldid char(1) NOT NULL default '',
 				subfieldorder tinyint(4) NOT NULL default '1',
 				word varchar(255) NOT NULL default '',
 				sndx_word varchar(255) NOT NULL default '',
 				KEY authid (authid),
-				KEY tag (tag),
-				KEY tagorder (tagorder),
-				KEY subfieldid (subfieldid),
-				KEY subfieldorder (subfieldorder),
+				KEY marc_search (tagsubfield,word),
 				KEY word (word),
 				KEY sndx_word (sndx_word)
 			)",
@@ -680,6 +673,15 @@ my %tabledata = (
             value               => 'Fill with appropriate value...',
             explanation => 'ISBD',
 	    type		=> 'free'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'virtualshelves',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '0',
+            explanation => 'Set virtual shelves management ON or OFF',
+	    type		=> 'YesNo'
         },
     ],
 
@@ -1149,6 +1151,24 @@ $dbh->do('ALTER TABLE marc_tag_structure ADD PRIMARY KEY ( frameworkcode, tagfie
 $dbh->do('ALTER TABLE marc_subfield_structure drop primary key');
 $dbh->do('ALTER TABLE marc_subfield_structure ADD PRIMARY KEY ( frameworkcode, tagfield, tagsubfield )');
 
+# Get list of columns from marc_word table
+my %marc_word;
+my %nullenabled;
+$sth = $dbh->prepare("show columns from marc_word");
+$sth->execute;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $marc_word{$column} = $type;
+    $nullenabled{$column} = $null;
+}
+if ($marc_word{subfieldid}) {
+	#create field tagsubfield, copy tag+subfieldid, then drop tag and subfieldid
+	print "Modifying marc_word (concat on tag and subfield for better perfs)\n";
+	$dbh->do("ALTER TABLE `marc_word` ADD `tagsubfield` CHAR( 4 ) NOT NULL AFTER `bibid`");
+	$dbh->do("update marc_word set tagsubfield=concat(tag,subfieldid)");
+	$dbh->do("alter table marc_word drop tag");
+	$dbh->do("alter table marc_word drop subfieldid");
+}
 # Populate tables with required data
 
 foreach my $table ( keys %tabledata ) {
@@ -1200,6 +1220,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.84  2004/06/17 08:25:21  tipaul
+# DB modifs : merging tag & subfield in marc_word table
+#
 # Revision 1.83  2004/06/10 08:32:02  tipaul
 # MARC authority management (continued)
 #
