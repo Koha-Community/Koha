@@ -5,12 +5,13 @@ require Exporter;
 use C4::Database;
 use CGI;
 use C4::Search;
- 
+use C4::Output; # no contains picktemplate
+  
 my $query=new CGI;
 
 
 my $language='french';
-my $dbh=&C4Connect;  
+
 
 my %configfile;
 open (KC, "/etc/koha.conf");
@@ -37,6 +38,9 @@ my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 my $theme=picktemplate($includes, $templatebase);
 
+my $subject=$query->param('subject');
+# if its a subject we need to use the subject.tmpl
+$templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
 
 my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
 
@@ -48,7 +52,7 @@ $env->{itemcount}=1;
 my %search;
 my $keyword=$query->param('keyword');
 $search{'keyword'}=$keyword;
-my $subject=$query->param('subject');
+
 $search{'subject'}=$subject;
 my $author=$query->param('author');
 $search{'author'}=$author;
@@ -115,25 +119,3 @@ $template->param(includesdir => $includes);
 
 print "Content-Type: text/html\n\n", $template->output;
 
-
-sub picktemplate {
-    my ($includes, $base) = @_;
-    my $templates;
-    opendir (D, "$includes/templates");
-    my @dirlist=readdir D;
-    foreach (@dirlist) {
-	(next) if (/^\./);
-	#(next) unless (/\.tmpl$/);
-	(next) unless (-e "$includes/templates/$_/$base");
-	$templates->{$_}=1;
-    }
-    my $sth=$dbh->prepare("select value from systempreferences where variable='template'");
-    $sth->execute;
-    my ($preftemplate) = $sth->fetchrow;
-    if ($templates->{$preftemplate}) {
-	return $preftemplate;
-    } else {
-	return 'default';
-    }
-    
-}
