@@ -585,7 +585,7 @@ sub returnbook2 {
 # get information on item
     my ($iteminformation) = getiteminformation($env, 0, $barcode);
     if (not $iteminformation) {
-	push(@messages, "<font color='red' size='+2'> There is no book with barcode: $barcode </font>");
+	push(@messages, "<font color='red' size='+2'> No item with barcode: $barcode </font>");
 	return (0, \@messages, 0 ,0);
     }
 #    updatelastseen($env, $dbh, $iteminformation->{'itemnumber'});
@@ -609,9 +609,6 @@ sub returnbook2 {
 
     my $tbr = $env->{'branchcode'};
     my ($transfered, $message, $item) = transferbook($tbr, $barcode);
-    if ($transfered) {
-	push(@messages, "Book: as been transfered.");
-     }
 
     if ($iteminformation->{'itemlost'}) {
 	updateitemlost($dbh, $iteminformation->{'itemnumber'});
