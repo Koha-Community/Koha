@@ -191,7 +191,7 @@ printend
 } else { # DEFAULT
 	my @inputs=(["text","searchfield",$searchfield],
 		["reset","reset","clr"]);
-	print mkheadr(2,'Currencies admin');
+	print mkheadr(2,'Stopwords admin');
 	print mkformnotable("$script_name",@inputs);
 	print <<printend
 
