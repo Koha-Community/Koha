@@ -311,7 +311,7 @@ CREATE TABLE `borrowers` (
   `preferredcont` char(1) default NULL,
   `physstreet` varchar(100) default NULL,
   KEY `borrowernumber` (`borrowernumber`),
-  KEY `cardnumber` (`cardnumber`) UNIQUE
+  UNIQUE KEY `cardnumber` (`cardnumber`) 
 );
 
 #
