@@ -1656,11 +1656,11 @@ aqorderbreakdown tables of the Koha database.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  my $sth=$dbh->prepare("Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
+  on aqorders.ordernumber=aqorderbreakdown.ordernumber
   where aqorders.ordernumber=?
-  and biblio.biblionumber=aqorders.biblionumber and
-  biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber");
+  and biblio.biblionumber=aqorders.biblionumber
+  and biblioitems.biblioitemnumber=aqorders.biblioitemnumber");
   $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
@@ -2191,6 +2191,16 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.78.2.5  2004/03/06 20:30:51  acli
+# This should fix bug 727
+#
+# If aqorderbreakdown is blank (i.e., the user ordered something before
+# they defined a bookfund), the "left join" allows existing data to still
+# be returned.
+#
+# The data now display correctly. But the bookfund data still can't be
+# updated. I think that would count as a separate bug.
+#
 # Revision 1.78.2.4  2004/02/12 13:41:56  tipaul
 # deleting duplicated subs (by buggy copy/paste probably)
 #

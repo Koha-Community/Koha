@@ -470,11 +470,11 @@ aqorderbreakdown tables of the Koha database.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  my $query="Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
+  on aqorders.ordernumber=aqorderbreakdown.ordernumber
   where aqorders.ordernumber='$ordnum'
   and biblio.biblionumber=aqorders.biblionumber and
-  biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
-  aqorders.ordernumber=aqorderbreakdown.ordernumber";
+  biblioitems.biblioitemnumber=aqorders.biblioitemnumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
