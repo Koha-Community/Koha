@@ -263,7 +263,8 @@ sub ReserveWaiting {
 # get priority and biblionumber....
     my $query = "SELECT reserves.priority     as priority, 
                         reserves.biblionumber as biblionumber,
-                        reserves.branchcode   as branchcode 
+                        reserves.branchcode   as branchcode, 
+                        reserves.timestamp     as timestamp
                       FROM reserves,items 
                      WHERE reserves.biblionumber   = items.biblionumber 
                        AND items.itemnumber        = $item 
@@ -277,12 +278,14 @@ sub ReserveWaiting {
     my $biblio = $data->{'biblionumber'};
     my $timestamp = $data->{'timestamp'};
     my $q_biblio = $dbh->quote($biblio);
-    my $q_timestamp = $dbh->quote($biblio);
+    my $q_timestamp = $dbh->quote($timestamp);
+    warn "Timestamp: ".$timestamp."\n";
 # update reserves record....
     $query = "UPDATE reserves SET priority = 0, found = 'W', itemnumber = $item 
                             WHERE borrowernumber = $borr 
                               AND biblionumber = $q_biblio 
                               AND timestamp = $q_timestamp";
+    warn "Query: ".$query."\n";
     $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
