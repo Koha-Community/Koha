@@ -218,7 +218,7 @@ sub searchauthority  {
 	my ($cnt) = $sth->fetchrow;
 	$cnt = $pagesize+1 if ($cnt>$pagesize);
 	$sth->finish();
-	return ($cnt,\@results);
+	return ($#results,\@results);
 }
 
 =item SearchDeeper
