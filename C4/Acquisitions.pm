@@ -27,7 +27,7 @@ use strict;
 require Exporter;
 use C4::Context;
  #use C4::Biblio;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -58,52 +58,13 @@ orders, converting money to different currencies, and so forth.
 &ordersearch &newbiblio &newbiblioitem &newsubject &newsubtitle &neworder
 &newordernum &modbiblio &modorder &getsingleorder &invoice &receiveorder
 &bookfundbreakdown &curconvert &updatesup &insertsup &newitems &modbibitem
-&getcurrencies &modsubtitle &modsubject &modaddauthor &moditem &countitems 
+&getcurrencies &modsubtitle &modsubject &modaddauthor &moditem &countitems
 &findall &needsmod &delitem &deletebiblioitem &delbiblio &delorder &branches
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
 &updatecost &checkitems &modnote &getitemtypes &getbiblio
 &getbiblioitembybiblionumber
 &getbiblioitem &getitemsbybiblioitem &isbnsearch
 &websitesearch &addwebsite &updatewebsite &deletewebsite);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Never used
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);		# FIXME - Never used
-
-# initalize package globals, first exported ones
-# FIXME - Never used
-my $Var1   = '';
-my %Hashit = ();
-
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-# FIXME - Never used
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-# FIXME - Never used
-my $priv_var    = '';
-my %secret_hash = ();
-
-# FIXME - Never used
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-  };
-  
-# make all your functions, whether exported or not;
 
 =item getorders
 
@@ -142,7 +103,7 @@ Results are ordered from most to least recent.
 sub getorders {
   my ($supplierid)=@_;
   my $dbh = C4::Context->dbh;
-  my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where 
+  my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where
   booksellerid='$supplierid' and (quantity > quantityreceived or
   quantityreceived is NULL)
   and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')";
@@ -194,8 +155,8 @@ tables of the Koha database.
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select ordernumber 
- 	from aqorders 
+  my $query="Select ordernumber
+ 	from aqorders
  	where biblionumber=? and biblioitemnumber=?";
   my $sth=$dbh->prepare($query);
   $sth->execute($bib,$bi);
@@ -223,8 +184,8 @@ aqorderbreakdown tables of the Koha database.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
-  where aqorders.ordernumber=? 
+  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  where aqorders.ordernumber=?
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
   aqorders.ordernumber=aqorderbreakdown.ordernumber";
@@ -291,9 +252,9 @@ sub getallorders {
   my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
-  aqorders.biblioitemnumber 
-  group by aqorders.biblioitemnumber 
+  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
+  aqorders.biblioitemnumber
+  group by aqorders.biblioitemnumber
   order by
   biblio.title";
   my $i=0;
@@ -316,11 +277,11 @@ sub getrecorders {
   my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
+  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
   aqorders.biblioitemnumber and
   aqorders.quantityreceived>0
   and aqorders.datereceived >=now()
-  group by aqorders.biblioitemnumber 
+  group by aqorders.biblioitemnumber
   order by
   biblio.title";
   my $i=0;
@@ -386,7 +347,7 @@ sub ordersearch {
     $query.= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
   }
   $query=~ s/ and $//;
-  $query.=" ) or biblioitems.isbn='$search' 
+  $query.=" ) or biblioitems.isbn='$search'
   or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
   if ($catview ne 'yes'){
     $query.=" and (quantityreceived < quantity or quantityreceived is NULL)";
@@ -499,15 +460,15 @@ number of elements in C<@orders>.
 sub basket {
   my ($basketno,$supplier)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select *,biblio.title from aqorders,biblio,biblioitems 
+  my $query="Select *,biblio.title from aqorders,biblio,biblioitems
   where basketno='$basketno'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
-  =aqorders.biblioitemnumber 
+  =aqorders.biblioitemnumber
   and (datecancellationprinted is NULL or datecancellationprinted =
   '0000-00-00')";
   if (defined $supplier && $supplier ne ''){
     $query.=" and aqorders.booksellerid='$supplier'";
-  } 
+  }
   $query.=" group by aqorders.ordernumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -571,7 +532,7 @@ alphabetically by book fund name.
 sub bookfunds {
   my $dbh = C4::Context->dbh;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-  =aqbudget.bookfundid 
+  =aqbudget.bookfundid
    and aqbudget.startdate='2001-07-01'
   group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
@@ -622,7 +583,7 @@ sub bookfundbreakdown {
   my ($id)=@_;
   my $dbh = C4::Context->dbh;
   my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
-  from aqorders,aqorderbreakdown where bookfundid='$id' and 
+  from aqorders,aqorderbreakdown where bookfundid='$id' and
    aqorders.ordernumber=aqorderbreakdown.ordernumber and ((budgetdate >=
    '2001-07-01' and budgetdate <'2002-07-01') or
    (datereceived >= '2001-07-01' and datereceived < '2002-07-01'))
@@ -710,7 +671,7 @@ sub modbiblio {
   my $dbh   = C4::Context->dbh;
   my $query;
   my $sth;
-  
+
   $biblio->{'title'}         = $dbh->quote($biblio->{'title'});
   $biblio->{'author'}        = $dbh->quote($biblio->{'author'});
   $biblio->{'abstract'}      = $dbh->quote($biblio->{'abstract'});
@@ -980,7 +941,7 @@ sub newbiblioitem {
   $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
   $biblioitem->{'lccn'}            = $dbh->quote($biblioitem->{'lccn'});
   $biblioitem->{'marc'}            = $dbh->quote($biblioitem->{'marc'});
-  
+
   $sth->execute;
   $data       = $sth->fetchrow_arrayref;
   $bibitemnum = $$data[0] + 1;
@@ -1166,7 +1127,7 @@ sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh = C4::Context->dbh;
   my $query="update aqorders set title='$title',
-  quantity='$quantity',listprice='$listprice',basketno='$basketno', 
+  quantity='$quantity',listprice='$listprice',basketno='$basketno',
   rrp='$rrp',ecost='$ecost',unitprice='$cost',
   booksellerinvoicenumber='$invoice'
   where
@@ -1242,7 +1203,7 @@ sub receiveorder {
   $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
-  $sth->finish;  
+  $sth->finish;
 }
 
 =item updaterecorder
@@ -1276,7 +1237,7 @@ sub updaterecorder{
   $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
-  $sth->finish;  
+  $sth->finish;
 }
 
 =item curconvert
@@ -1335,7 +1296,7 @@ sub getcurrencies {
   }
   $sth->finish;
   return($i,\@results);
-} 
+}
 
 # FIXME - This function appears in C4::Catalogue. Neither one is used.
 sub getcurrency {
@@ -1348,7 +1309,7 @@ sub getcurrency {
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   return($data);
-} 
+}
 
 =item updatecurrencies
 
@@ -1366,7 +1327,7 @@ sub updatecurrencies {
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-} 
+}
 
 =item updatesup
 
@@ -1454,7 +1415,7 @@ sub newitems {
   $data       = $sth->fetchrow_hashref;
   $itemnumber = $data->{'max(itemnumber)'} + 1;
   $sth->finish;
-  
+
   $item->{'booksellerid'}     = $dbh->quote($item->{'booksellerid'});
   $item->{'homebranch'}       = $dbh->quote($item->{'homebranch'});
   $item->{'price'}            = $dbh->quote($item->{'price'});
@@ -1571,8 +1532,8 @@ sub countitems{
 sub findall {
   my ($biblionumber)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblioitems,items,itemtypes where 
-  biblioitems.biblionumber=$biblionumber 
+  my $query="Select * from biblioitems,items,itemtypes where
+  biblioitems.biblionumber=$biblionumber
   and biblioitems.biblioitemnumber=items.biblioitemnumber and
   itemtypes.itemtype=biblioitems.itemtype
   order by items.biblioitemnumber";
@@ -1642,7 +1603,7 @@ where biblioitemnumber = $biblioitemnumber";
     my @results;
 
     $sth->execute;
-  
+
     if (@results = $sth->fetchrow_array) {
 
         $query = "Insert into deletedbiblioitems values (";
@@ -1687,7 +1648,7 @@ EOT
 	DELETE FROM	items
 	WHERE		biblioitemnumber = $biblioitemnumber
 EOT
-    
+
 } # sub deletebiblioitem
 
 # FIXME - This is functionally identical to &C4::Biblio::delbiblio.
@@ -1730,14 +1691,14 @@ sub getitemtypes {
     # || die "Cannot prepare $query" . $dbh->errstr;
   my $count = 0;
   my @results;
-  
+
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
     $results[$count] = $data;
     $count++;
   } # while
-  
+
   $sth->finish;
   return($count, @results);
 } # sub getitemtypes
@@ -1753,14 +1714,14 @@ sub getbiblio {
       # || die "Cannot prepare $query\n" . $dbh->errstr;
     my $count = 0;
     my @results;
-    
+
     $sth->execute;
       # || die "Cannot execute $query\n" . $sth->errstr;
     while (my $data = $sth->fetchrow_hashref) {
       $results[$count] = $data;
       $count++;
     } # while
-    
+
     $sth->finish;
     return($count, @results);
 } # sub getbiblio
@@ -1825,14 +1786,14 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
       # || die "Cannot prepare $query\n" . $dbh->errstr;
     my $count = 0;
     my @results;
-    
+
     $sth->execute;
       # || die "Cannot execute $query\n" . $sth->errstr;
     while (my $data = $sth->fetchrow_hashref) {
       $results[$count] = $data;
       $count++;
     } # while
-    
+
     $sth->finish;
     return($count, @results);
 } # sub getitemsbybiblioitem
@@ -1847,13 +1808,13 @@ sub isbnsearch {
     my $query;
     my $sth;
     my @results;
-    
+
     $isbn  = $dbh->quote($isbn);
     $query = "Select biblio.* from biblio, biblioitems where
 biblio.biblionumber = biblioitems.biblionumber
 and isbn = $isbn";
     $sth   = $dbh->prepare($query);
-    
+
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
         $results[$count] = $data;
@@ -1933,12 +1894,12 @@ are mandatory.
 sub addwebsite {
     my ($website) = @_;
     my $dbh = C4::Context->dbh;
-    
+
     $website->{'biblionumber'} = $dbh->quote($website->{'biblionumber'});
     $website->{'title'}        = $dbh->quote($website->{'title'});
     $website->{'description'}  = $dbh->quote($website->{'description'});
     $website->{'url'}          = $dbh->quote($website->{'url'});
-    
+
     $dbh->do(<<EOT);
 	INSERT INTO	websites
 	SET		biblionumber = $website->{'biblionumber'},
@@ -1963,11 +1924,11 @@ the entry to update.
 sub updatewebsite {
     my ($website) = @_;
     my $dbh = C4::Context->dbh;
-    
+
     $website->{'title'}      = $dbh->quote($website->{'title'});
     $website->{'description'} = $dbh->quote($website->{'description'});
     $website->{'url'}        = $dbh->quote($website->{'url'});
-    
+
     $dbh->do(<<EOT);
 	UPDATE	websites
 	SET	title       = $website->{'title'},

@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.20  2002/10/13 08:28:32  arensb
+# Deleted unused variables.
+# Removed trailing whitespace.
+#
 # Revision 1.19  2002/10/13 05:56:10  arensb
 # Added some FIXME comments.
 #
@@ -99,7 +103,7 @@ package C4::Biblio;
 #
 
 
-# move from 1.2 to 1.4 version : 
+# move from 1.2 to 1.4 version :
 # 1.2 and previous version uses a specific API to manage biblios. This API uses old-DB style parameters.
 # In the 1.4 version, we want to do 2 differents things :
 #  - keep populating the old-DB, that has a LOT less datas than MARC
@@ -149,7 +153,7 @@ use C4::Context;
 use C4::Database;
 use MARC::Record;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -160,13 +164,13 @@ $VERSION = 0.01;
 # as the old-style API and the ALL one are the only public functions.
 #
 @EXPORT = qw(
-	     &updateBiblio &updateBiblioItem &updateItem 
-	     &itemcount &newbiblio &newbiblioitem 
+	     &updateBiblio &updateBiblioItem &updateItem
+	     &itemcount &newbiblio &newbiblioitem
 	     &modnote &newsubject &newsubtitle
 	     &modbiblio &checkitems
 	     &newitems &modbibitem
-	     &modsubtitle &modsubject &modaddauthor &moditem &countitems 
-	     &delitem &deletebiblioitem &delbiblio  
+	     &modsubtitle &modsubject &modaddauthor &moditem &countitems
+	     &delitem &deletebiblioitem &delbiblio
 	     &getitemtypes &getbiblio
 	     &getbiblioitembybiblionumber
 	     &getbiblioitem &getitemsbybiblioitem &isbnsearch
@@ -180,20 +184,13 @@ $VERSION = 0.01;
 
 	     &MARCgettagslib
 	     &MARCaddbiblio &MARCadditem
-	     &MARCmodsubfield &MARCaddsubfield 
+	     &MARCmodsubfield &MARCaddsubfield
 	     &MARCmodbiblio &MARCmoditem
-	     &MARCfindsubfield 
+	     &MARCfindsubfield
 	     &MARCkoha2marcBiblio &MARCmarc2koha &MARCkoha2marcItem
 	     &MARCgetbiblio &MARCgetitem
 	     &MARCaddword &MARCdelword
  );
-
-%EXPORT_TAGS = ( );
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - These are never used
 
 #
 #
@@ -231,7 +228,7 @@ $VERSION = 0.01;
 
 =head2 &MARCaddsubfield($dbh,$bibid,$tagid,$indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
       adds a subfield in a biblio (in the MARC tables only).
-     
+
 =head2 $MARCRecord = &MARCgetbiblio($dbh,$bibid);
       Returns a MARC::Record for the biblio $bibid.
 
@@ -485,8 +482,8 @@ sub MARCgetitem {
     $sth2->execute($bibid,$itemnumber);
     my ($tagorder) = $sth2->fetchrow_array();
 #---- TODO : the leader is missing
-    my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink 
-		 		 from marc_subfield_table 
+    my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
+		 		 from marc_subfield_table
 		 		 where bibid=? and tagorder=? order by subfieldorder
 		 	 ");
     # FIXME - There's already a $sth2 in this scope.
@@ -565,7 +562,7 @@ sub MARCmoditem {
     }
 # otherwise, skip through each subfield...
     my @fields = $record->fields();
-# search old MARC item 
+# search old MARC item
     my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
     $sth2->execute($bibid,$itemnumber);
     my ($tagorder) = $sth2->fetchrow_array();
@@ -667,7 +664,7 @@ sub MARCfindsubfield {
 sub MARCfindsubfieldid {
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
     my $sth=$dbh->prepare("select subfieldid from marc_subfield_table
-			where bibid=? and tag=? and tagorder=? 
+			where bibid=? and tag=? and tagorder=?
 				and subfieldcode=? and subfieldorder=?");
     $sth->execute($bibid,$tag,$tagorder,$subfield,$subfieldorder);
     my ($res) = $sth->fetchrow;
@@ -678,7 +675,7 @@ sub MARCdelsubfield {
 # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
     $dbh->do("delete from marc_subfield_table where bibid='$bibid' and
-			tag='$tag' and tagorder='$tagorder' 
+			tag='$tag' and tagorder='$tagorder'
 			and subfieldcode='$subfield' and subfieldorder='$subfieldorder
 			");
 }
@@ -697,8 +694,8 @@ sub MARCkoha2marcBiblio {
     my $record = MARC::Record->new();
 #--- if bibid, then retrieve old-style koha data
     if ($biblionumber>0) {
-	my $sth2=$dbh->prepare("select biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp 
-		from biblio where biblionumber=?");		
+	my $sth2=$dbh->prepare("select biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp
+		from biblio where biblionumber=?");
 	$sth2->execute($biblionumber);
 	my $row=$sth2->fetchrow_hashref;
 	my $code;
@@ -712,10 +709,10 @@ sub MARCkoha2marcBiblio {
     if ($biblioitemnumber>0) {
 	my $sth2=$dbh->prepare(" SELECT biblioitemnumber,biblionumber,volume,number,classification,
 						itemtype,url,isbn,issn,dewey,subclass,publicationyear,publishercode,
-						volumedate,volumeddesc,timestamp,illus,pages,notes,size,place 
+						volumedate,volumeddesc,timestamp,illus,pages,notes,size,place
 					FROM biblioitems
 					WHERE biblionumber=? and biblioitemnumber=?
-					");		
+					");
 	$sth2->execute($biblionumber,$biblioitemnumber);
 	my $row=$sth2->fetchrow_hashref;
 	my $code;
@@ -741,7 +738,7 @@ sub MARCkoha2marcItem {
 	my $sth2=$dbh->prepare("SELECT itemnumber,biblionumber,multivolumepart,biblioitemnumber,barcode,dateaccessioned,
 						booksellerid,homebranch,price,replacementprice,replacementpricedate,datelastborrowed,
 						datelastseen,multivolume,stack,notforloan,itemlost,wthdrawn,bulk,issues,renewals,
-					reserves,restricted,binding,itemnotes,holdingbranch,timestamp 
+					reserves,restricted,binding,itemnotes,holdingbranch,timestamp
 					FROM items
 					WHERE itemnumber=?");
 	$sth2->execute($itemnumber);
@@ -813,7 +810,7 @@ sub MARCmarc2koha {
     while (($field)=$sth2->fetchrow) {
 	$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
     }
-# additional authors : specific 
+# additional authors : specific
     $result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
     return $result;
 }
@@ -875,7 +872,7 @@ sub MARCdelword {
 
 #
 #
-# ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL 
+# ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL ALL
 #
 #
 # all the following subs are useful to manage MARC-DB with complete MARC records.
@@ -939,7 +936,7 @@ sub ALLnewbiblio {
  	print "Error in ALLnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
 	die;
     }
-    my $newfield = MARC::Field->new( $tagfield1,'','', 
+    my $newfield = MARC::Field->new( $tagfield1,'','',
 				     "$tagsubfield1" => $oldbibnum,
 				     "$tagsubfield2" => $oldbibitemnum);
 # drop old field and create new one...
@@ -955,7 +952,7 @@ sub ALLnewitem {
     my $itemnumber;
     my $error;
     ($itemnumber,$error) = &OLDnewitems($dbh,$item,$item->{'barcode'});
-# search MARC biblionumber 
+# search MARC biblionumber
     my $bibid=&MARCfind_MARCbibid_from_oldbiblionumber($dbh,$item->{'biblionumber'});
 # calculate tagorder
     my $sth = $dbh->prepare("select max(tagorder) from marc_subfield_table where bibid=?");
@@ -1003,7 +1000,7 @@ sub ALLnewitem {
   They all are the exact copy of 1.0/1.2 version of the sub
   without the OLD. The OLDxxx is called by the original xxx sub.
   the 1.4 xxx sub also builds MARC::Record an calls the MARCxxx
- 
+
   WARNING : there is 1 difference between initialxxx and OLDxxx :
   the db header $dbh is always passed as parameter
   to avoid over-DB connexion
@@ -1052,7 +1049,7 @@ sub ALLnewitem {
 =head2 OLDdeletebiblioitem($dbh,$biblioitemnumber);
   deletes a biblioitem
   NOTE : not standard sub name. Should be OLDdelbiblioitem()
- 
+
 =head2 OLDdelbiblio($dbh,$biblio);
   delete a biblio
 
@@ -1104,7 +1101,7 @@ sub OLDmodbiblio {
 #  my $dbh   = C4Connect;
     my $query;
     my $sth;
-    
+
     $biblio->{'title'}         = $dbh->quote($biblio->{'title'});
     $biblio->{'author'}        = $dbh->quote($biblio->{'author'});
     $biblio->{'abstract'}      = $dbh->quote($biblio->{'abstract'});
@@ -1113,7 +1110,7 @@ sub OLDmodbiblio {
     $biblio->{'serial'}        = $dbh->quote($biblio->{'serial'});
     $biblio->{'unititle'}      = $dbh->quote($biblio->{'unititle'});
     $biblio->{'notes'}         = $dbh->quote($biblio->{'notes'});
-    
+
     $query = "Update biblio set
 title         = $biblio->{'title'},
 author        = $biblio->{'author'},
@@ -1125,9 +1122,9 @@ unititle      = $biblio->{'unititle'},
 notes         = $biblio->{'notes'}
 where biblionumber = $biblio->{'biblionumber'}";
     $sth   = $dbh->prepare($query);
-    
+
     $sth->execute;
-    
+
     $sth->finish;
     return($biblio->{'biblionumber'});
 } # sub modbiblio
@@ -1181,7 +1178,7 @@ sub OLDmodsubject {
 				and catalogueentry = '$subject[$i]'";
 	my $sth   = $dbh->prepare($query);
 	$sth->execute;
-	
+
 	if (my $data = $sth->fetchrow_hashref) {
 	} else {
 	    if ($force eq $subject[$i]) {
@@ -1290,7 +1287,7 @@ sub OLDnewbiblioitem {
     my $sth   = $dbh->prepare($query);
     my $data;
     my $bibitemnum;
-    
+
     $biblioitem->{'volume'}          = $dbh->quote($biblioitem->{'volume'});
     $biblioitem->{'number'} 	   = $dbh->quote($biblioitem->{'number'});
     $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
@@ -1311,7 +1308,7 @@ sub OLDnewbiblioitem {
     $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
     $biblioitem->{'lccn'}            = $dbh->quote($biblioitem->{'lccn'});
     $biblioitem->{'marc'}            = $dbh->quote($biblioitem->{'marc'});
-  
+
     $sth->execute;
     $data       = $sth->fetchrow_arrayref;
     $bibitemnum = $$data[0] + 1;
@@ -1390,7 +1387,7 @@ sub OLDnewitems {
   $data       = $sth->fetchrow_hashref;
   $itemnumber = $data->{'max(itemnumber)'} + 1;
   $sth->finish;
-  
+
   $item->{'booksellerid'}     = $dbh->quote($item->{'booksellerid'});
   $item->{'homebranch'}       = $dbh->quote($item->{'homebranch'});
   $item->{'price'}            = $dbh->quote($item->{'price'});
@@ -1444,7 +1441,7 @@ sub OLDmoditem {
                              itemnotes='$item->{'notes'}',
                              homebranch='$item->{'homebranch'}',
                              itemlost='$item->{'lost'}',
-                             wthdrawn='$item->{'wthdrawn'}' 
+                             wthdrawn='$item->{'wthdrawn'}'
                           where itemnumber=$item->{'itemnum'}";
   }
   if ($item->{'replacement'} ne ''){
@@ -1492,7 +1489,7 @@ where biblioitemnumber = $biblioitemnumber";
     my @results;
 
     $sth->execute;
-  
+
     if (@results = $sth->fetchrow_array) {
         $query = "Insert into deletedbiblioitems values (";
         foreach my $value (@results) {
@@ -1578,8 +1575,8 @@ sub itemcount{
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select ordernumber 
- 	from aqorders 
+  my $query="Select ordernumber
+ 	from aqorders
  	where biblionumber=? and biblioitemnumber=?";
   my $sth=$dbh->prepare($query);
   $sth->execute($bib,$bi);
@@ -1595,8 +1592,8 @@ sub getorder{
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
-  where aqorders.ordernumber=? 
+  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  where aqorders.ordernumber=?
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
   aqorders.ordernumber=aqorderbreakdown.ordernumber";
@@ -1810,14 +1807,14 @@ sub getitemtypes {
     # || die "Cannot prepare $query" . $dbh->errstr;
   my $count = 0;
   my @results;
-  
+
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
     $results[$count] = $data;
     $count++;
   } # while
-  
+
   $sth->finish;
   return($count, @results);
 } # sub getitemtypes
@@ -1830,14 +1827,14 @@ sub getbiblio {
       # || die "Cannot prepare $query\n" . $dbh->errstr;
     my $count = 0;
     my @results;
-    
+
     $sth->execute;
       # || die "Cannot execute $query\n" . $sth->errstr;
     while (my $data = $sth->fetchrow_hashref) {
       $results[$count] = $data;
       $count++;
     } # while
-    
+
     $sth->finish;
     return($count, @results);
 } # sub getbiblio
@@ -1900,14 +1897,14 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
       # || die "Cannot prepare $query\n" . $dbh->errstr;
     my $count = 0;
     my @results;
-    
+
     $sth->execute;
       # || die "Cannot execute $query\n" . $sth->errstr;
     while (my $data = $sth->fetchrow_hashref) {
       $results[$count] = $data;
       $count++;
     } # while
-    
+
     $sth->finish;
     return($count, @results);
 } # sub getitemsbybiblioitem
@@ -1921,13 +1918,13 @@ sub isbnsearch {
     my $query;
     my $sth;
     my @results;
-    
+
     $isbn  = $dbh->quote($isbn);
     $query = "Select biblio.* from biblio, biblioitems where
 biblio.biblionumber = biblioitems.biblionumber
 and isbn = $isbn";
     $sth   = $dbh->prepare($query);
-    
+
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
         $results[$count] = $data;
@@ -1942,7 +1939,7 @@ and isbn = $isbn";
 # At the moment this is just a straight copy of the subject code.  Needs heavy
 # modification to work for additional authors, obviously.
 # Check for additional author changes
-    
+
 #    my $newadditionalauthor='';
 #    my $additionalauthors;
 #    foreach $newadditionalauthor (@{$biblio->{'additionalauthor'}}) {
@@ -2030,7 +2027,7 @@ sub getoraddbiblio {
 	print "<PRE>Looking for biblio </PRE>\n" if $debug;
 	$sth=$dbh->prepare("select biblionumber
 		from biblio
-		where title=? and author=? 
+		where title=? and author=?
 		  and copyrightdate=? and seriestitle=?");
 	$sth->execute(
 		$biblio->{title}, $biblio->{author},
@@ -2449,7 +2446,7 @@ sub OLD_MAYBE_DELETED_updateBiblio {
 	$origsubjects->{$subject}=1;
     }
 
-    
+
 # Obtain a list of MARC Record_ID's that are tied to this biblio
     $sth=$dbh->prepare("select bibid from marc_subfield_table where tag='090' and subfieldvalue=$biblionumber and subfieldcode='c'");
     $sth->execute;
@@ -2533,7 +2530,7 @@ sub OLD_MAYBE_DELETED_updateBiblio {
     }
 
 # Check for subject heading changes
-    
+
     my $newsubject='';
     my $subjects;
     foreach $newsubject (@{$biblio->{'subject'}}) {
@@ -2740,7 +2737,7 @@ sub OLD_MAYBE_DELETED_updateItem {
     $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_Value=$link and !(Subfield_ID=$Subfield876_ID)");
     $sth->execute;
     my ($Subfield852_ID) = $sth->fetchrow;
-    
+
     if ($item->{'barcode'} ne $olditem->{'barcode'}) {
 	logchange('kohadb', 'change', 'items', 'barcode', $olditem->{'barcode'}, $item->{'barcode'});
 	my $q_barcode=$dbh->quote($item->{'barcode'});

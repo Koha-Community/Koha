@@ -1,5 +1,7 @@
 package C4::Reserves;
 
+# $Id$
+
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -31,52 +33,18 @@ use C4::Interface::ReserveentCDK;
 use C4::Circulation::Main;
 use C4::Circulation::Borrower;
 use C4::Search;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-  
+use vars qw($VERSION @ISA @EXPORT);
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&EnterReserves CalcReserveFee CreateReserve );
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
 
 # FIXME - This doesn't appear to ever be used, except in modules that
 # appear to be obsolete.
 sub EnterReserves{
-  my ($env)=@_;  
+  my ($env)=@_;
   my $titlepanel = titlepanel($env,"Reserves","Enter Selection");
   my @flds = ("No of entries","Barcode","ISBN","Title","Keywords","Author","Subject");
   my @fldlens = ("5","15","15","50","50","50","50");
@@ -85,7 +53,7 @@ sub EnterReserves{
   my $donext ="Circ";
   if ($reason ne "") {
     $donext = $reason;
-  } else {  
+  } else {
     my %search;
     $search{'title'}= $title;
     $search{'keyword'}=$keyword;
@@ -108,7 +76,7 @@ sub EnterReserves{
       } else {
         if ($keyword ne ''){
           ($count,@results)=&KeywordSearch($env,'intra',\%search,$num,$offset);
-        } else { 
+        } else {
           ($count,@results)=&CatSearch($env,'loose',\%search,$num,$offset);
         }
       }
@@ -118,8 +86,8 @@ sub EnterReserves{
     if ($no_ents > 0) {
       if ($no_ents == 1) {
         my @ents = split("\t",@results[0]);
-        $biblionumber  = @ents[2];       
-      } else {  
+        $biblionumber  = @ents[2];
+      } else {
         my %biblio_xref;
         my @bibtitles;
         my $i = 0;
@@ -129,7 +97,7 @@ sub EnterReserves{
           $line = fmtstr($env,@ents[1],"L70");
 	  my $auth = substr(@ents[0],0,30);
 	  substr($line,(70-length($auth)-2),length($auth)+2) = "  ".$auth;
-          @bibtitles[$i]=$line;	 
+          @bibtitles[$i]=$line;
           $biblio_xref{$line}=@ents[2];
           $i++;
         }
@@ -138,12 +106,12 @@ sub EnterReserves{
         if ($results eq "") {
        	  $biblionumber = $biblio_xref{$bibres};
         } else {
-	  $donext = $results;	    
+	  $donext = $results;
 	}
       }
-      
+
       if ($biblionumber eq "") {
-        error_msg($env,"No items found");   
+        error_msg($env,"No items found");
       } else {
         my @items = GetItems($env,$biblionumber);
       	my $cnt_it = @items;
@@ -168,25 +136,25 @@ sub EnterReserves{
           my $title = titlepanel($env,"Reserves","Create Reserve");
        	  my ($reason,$borcode,$branch,$constraint,$bibitems) =
             MakeReserveScreen($env, $data, \@items, \@branches);
-      	  if ($borcode ne "") { 
+      	  if ($borcode ne "") {
    	    my ($borrnum,$borrower) = findoneborrower($env,$dbh,$borcode);
-       	    if ($reason eq "") { 
+       	    if ($reason eq "") {
        	      if ($borrnum ne "") {
 	        my $fee =
                   CalcReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
                   CreateReserve($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$fee);
                 $donext = "Circ"
               }
-	      
+
             } else {
        	      $donext = $reason;
 	    }
-	  } else { $donext = "Circ" }  
-	} 
+	  } else { $donext = "Circ" }
+	}
       }
     }
   }
-  return ($donext);  
+  return ($donext);
 }
 
 # FIXME - A functionally identical version of this function appears in
@@ -196,8 +164,8 @@ sub CalcReserveFee {
   #check for issues;
   my $dbh = C4::Context->dbh;
   my $const = lc substr($constraint,0,1);
-  my $query = "select * from borrowers,categories 
-    where (borrowernumber = '$borrnum') 
+  my $query = "select * from borrowers,categories
+    where (borrowernumber = '$borrnum')
     and (borrowers.categorycode = categories.categorycode)";
   my $sth = $dbh->prepare($query);
   $sth->execute;
@@ -209,7 +177,7 @@ sub CalcReserveFee {
     # check for items on issue
     # first find biblioitem records
     my @biblioitems;
-    my $query1 = "select * from biblio,biblioitems 
+    my $query1 = "select * from biblio,biblioitems
        where (biblio.biblionumber = '$biblionumber')
        and (biblio.biblionumber = biblioitems.biblionumber)";
     my $sth1 = $dbh->prepare($query1);
@@ -225,7 +193,7 @@ sub CalcReserveFee {
 	    $found = 1;
 	  }
 	  $x++;
-        } 
+        }
 	if ($const eq 'o') {if ($found == 1) {push @biblioitems,$data;}
 	} else {if ($found == 0) {push @biblioitems,$data;} }
       }
@@ -236,13 +204,13 @@ sub CalcReserveFee {
     my $x = 0;
     my $allissued = 1;
     while ($x < $cntitemsfound) {
-      my $bitdata = @biblioitems[$x]; 
-      my $query2 = "select * from items 
-        where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'"; 
+      my $bitdata = @biblioitems[$x];
+      my $query2 = "select * from items
+        where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'";
       my $sth2 = $dbh->prepare($query2);
       $sth2->execute;
-      while (my $itdata=$sth2->fetchrow_hashref) { 
-        my $query3 = "select * from issues 
+      while (my $itdata=$sth2->fetchrow_hashref) {
+        my $query3 = "select * from issues
            where itemnumber = '$itdata->{'itemnumber'}' and returndate is null";
         my $sth3 = $dbh->prepare($query3);
 	$sth3->execute();
@@ -257,7 +225,7 @@ sub CalcReserveFee {
       $rsth->execute();
       if (my $rdata = $rsth->fetchrow_hashref) { } else {
         $fee = 0;
-      }	
+      }
     }
   }
   return $fee;
@@ -273,7 +241,7 @@ sub CreateReserve {
   my $const = lc substr($constraint,0,1);
   my @datearr = localtime(time);
   my $resdate = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-  #eval {     
+  #eval {
     # updates take place here
     if ($fee > 0) {
       my $nextacctno = &getnextacctno($env,$borrnum,$dbh);
@@ -306,13 +274,8 @@ sub CreateReserve {
   #if (@_) {
   #  # update failed
   #  my $temp = @_;
-  #  #  error_msg($env,"Update failed");    
-  #  $dbh->rollback(); 
+  #  #  error_msg($env,"Update failed");
+  #  $dbh->rollback();
   #}
   return();
-} # end CreateReserve    
-    
-
-
-			
-END { }       # module clean-up code here (global destructor)
+} # end CreateReserve

@@ -29,57 +29,25 @@ use Cdk;
 
 require Exporter;
 use DBI;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-  
+use vars qw($VERSION @ISA @EXPORT);
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&FindBiblioScreen &SelectBiblio &MakeReserveScreen);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
 
 sub FindBiblioScreen {
   my ($env,$title,$numflds,$flds,$fldlns)=@_;
   my $titlepanel = titlepanel($env,"Reserves","Find a title");
   #my @coltitles=("a","b");
   my @rowtitles;
-  my $nflds =@$flds; 
+  my $nflds =@$flds;
   my $ow = 0;
   while ($ow < $nflds) {
     @rowtitles[$ow]=@$flds[$ow];
     $ow++;
-  }  
+  }
   my @coltitles = ("");
   my @coltypes  = ("UMIXED");
   my @colwidths = (40);
@@ -104,21 +72,21 @@ sub FindBiblioScreen {
      while ($i < $numflds) {
         $responses[$i] =$info->[$i][0];
 	$i++;
-     }     
-  } 
+     }
+  }
   return($reason,@responses);
 }
 
 sub SelectBiblio {
   my ($env,$count,$entries) = @_;
-  my $titlepanel = titlepanel($env,"Reserves","Select title");  
+  my $titlepanel = titlepanel($env,"Reserves","Select title");
   my $biblist = new Cdk::Alphalist('Title'=>"Select a Title",
      'List'=>\@$entries,'Height' => 22,'Width' => 76,
      'Ypos'=>1);
   my $selection = $biblist->activate();
   my $reason;
   my $result;
-  if (!defined $selection) { 
+  if (!defined $selection) {
      $reason="Circ";
   } else {
      $result=$selection;
@@ -138,8 +106,8 @@ sub MakeReserveScreen {
   } else {
      my $split = int(($testlen-72)*0.7);
      $line = substr($line,0,72+$split-$authlen)." ".$bibliorec->{'author'};
-     $line = fmtstr($env,$line,"L72");   
-  } 
+     $line = fmtstr($env,$line,"L72");
+  }
   my @book = ($line);
   my $bookpanel = new Cdk::Label ('Message' =>\@book,
       'Ypos'=>"2");
@@ -147,7 +115,7 @@ sub MakeReserveScreen {
   my $branchlist =  new Cdk::Radio('Title'=>"Collection Branch",
      'List'=>\@$branches,
      'Xpos'=>"20",'Ypos'=>"5",'Width'=>"18",'Height'=>"6");
-  $branchlist->draw();	    
+  $branchlist->draw();
   my $i = 0;
   my $brcnt = @$branches;
   my $brdef = 0;
@@ -156,11 +124,11 @@ sub MakeReserveScreen {
     my $brtest = fmtstr($env,$env->{'branchcode'},"L2");
     if ($brcode eq $brtest) {
       $brdef = 1
-    } else {  
+    } else {
       $branchlist->inject('Input'=>"KEY_DOWN");
       $i++;
-    }  
-  }  
+    }
+  }
   $branchlist->inject('Input'=>" ");
   my @constraintlist = ("Any item","Only Selected","Except Selected");
   my $constrainttype = new Cdk::Radio('Title'=>"Reserve Constraints",
@@ -193,17 +161,17 @@ sub MakeReserveScreen {
      'Xpos'=>"2",'Ypos'=>"5",
      'Type'=>"UMIXED");
   borrbind($env,$borrowerentry);
-  # $borrowentry->bind('Key'=>"KEY_TAB",'Function'=>sub {$x = act($scroll1);});  
+  # $borrowentry->bind('Key'=>"KEY_TAB",'Function'=>sub {$x = act($scroll1);});
   my $complete = 0;
   my $reason = "";
   my @answers;
   while ($complete == 0) {
-    my $borrowercode = $borrowerentry->activate();  
+    my $borrowercode = $borrowerentry->activate();
     if (!defined $borrowercode) {
       $reason="Circ";
       $complete = 1;
       @answers[0] = ""
-    } else { 
+    } else {
       @answers[0] = $borrowercode;
       if ($borrowercode ne "") { $complete = 1; };
       while ($complete == 1) {
@@ -213,7 +181,7 @@ sub MakeReserveScreen {
           @answers[1] = "";
         } else {
           my @brline = split(" ",@$branches[$x]);
-          @answers[1] = @brline[0]; 
+          @answers[1] = @brline[0];
           $complete = 2;
 	  $answers[2] = "a";
 	  $answers[3] = "";
@@ -227,7 +195,7 @@ sub MakeReserveScreen {
 	        @answers[2] = $constarr[$constans];
 		$complete = 3;
 		if ($answers[2] ne "a") {
-		  while ($complete == 3) {		   
+		  while ($complete == 3) {
 		    my @itemans = $itemlist->activate();
 		    if (!defined @itemans) {
 		      $complete = 2; # go back a step
@@ -244,22 +212,22 @@ sub MakeReserveScreen {
 			  my @blarr = split("\t",$bitline);
 			  @items[$j] = @blarr[0];
                           $j++;
-	             	}  
+	             	}
                         $i++;
                       }
                       @answers[3] = \@items;
 	            }
 		  }
 		}
-	      }	  
+	      }
             } else {
 	      $complete = 3;
-	    }  
+	    }
 	  }
 	}
-      }	 
+      }
     }
-  }  
+  }
   return ($reason,@answers);
 }
 END { }       # module clean-up code here (global destructor)

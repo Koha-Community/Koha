@@ -1,5 +1,7 @@
 package C4::Output;
 
+# $Id$
+
 #package to deal with marking up output
 #You will need to edit parts of this pm
 #set the value of path to be where your html lives
@@ -22,13 +24,16 @@ package C4::Output;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# NOTE: I'm pretty sure this module is deprecated in favor of
+# templates.
+
 use strict;
 require Exporter;
 
 use C4::Context;
 use C4::Database;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -66,31 +71,6 @@ printable string.
 	     &pathtotemplate
 		&themelanguage &gettemplate
 	     );
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - These are never used
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);		# FIXME - These are never used
-
-# initalize package globals, first exported ones
-
-# FIXME - These are never used
-my $Var1   = '';
-my %Hashit = ();
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-# FIXME - These are never used
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
 
 my $path = C4::Context->config('includes') ||
 	"/usr/local/www/hdl/htdocs/includes";

@@ -43,7 +43,7 @@ use C4::Print;
 use C4::Format;
 use C4::Input;
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 # set the version for version checking
 $VERSION = 0.01;
 
@@ -85,7 +85,7 @@ sub Issue  {
    $env->{'sysarea'} = "Issues";
    $done = "Issues";
    while ($done eq "Issues") {
-     my ($bornum,$issuesallowed,$borrower,$reason,$amountdue) = &findborrower($env,$dbh);      
+     my ($bornum,$issuesallowed,$borrower,$reason,$amountdue) = &findborrower($env,$dbh);
      #C4::Circulation::Borrowers
      $env->{'loanlength'}="";
      if ($reason ne "") {
@@ -96,7 +96,7 @@ sub Issue  {
        $env->{'bornum'} = $bornum;
        $env->{'bcard'}  = $borrower->{'cardnumber'};
        #deal with alternative loans
-       #now check items 
+       #now check items
        ($items,$items2)=
        C4::Circulation::Main::pastitems($env,$bornum,$dbh); #from Circulation.pm
        $done = "No";
@@ -108,10 +108,10 @@ sub Issue  {
        }
      #&endint($env);
      }
-   }   
+   }
    Cdk::refreshCdkScreen();
    return ($done);
-}    
+}
 
 # FIXME - Not exported, but called by "telnet/borrwraper.pl".
 # Presumably this function is obsolete.
@@ -120,7 +120,7 @@ sub processitems {
    my ($env,$bornum,$borrower,$items,$items2,$it2p,$amountdue,$itemsdet,$odues)=@_;
    my $dbh = C4::Context->dbh;
    $env->{'newborrower'} = "";
-   my ($itemnum,$reason) = 
+   my ($itemnum,$reason) =
      issuewindow($env,'Issues',$dbh,$items,$items2,$borrower,fmtdec($env,$amountdue,"32"));
    if ($itemnum eq ""){
      $reason = "Finished user";
@@ -136,31 +136,31 @@ sub processitems {
        $it2p++;
        $amountdue += $charge;
      }
-   }   
+   }
    #check to see if more books to process for this user
    my @done;
-   if ($env->{'newborrower'} ne "") {$reason = "Finished user";} 
+   if ($env->{'newborrower'} ne "") {$reason = "Finished user";}
    if ($reason eq 'Finished user'){
      if (@$items2[0] ne "") {
        remoteprint($env,$itemsdet,$borrower);
        if ($amountdue > 0) {
          &reconcileaccount($env,$dbh,$borrower->{'borrowernumber'},$amountdue);
        }
-     }  
+     }
      @done = ("Issues");
    } elsif ($reason eq "Print"){
      remoteprint($env,$itemsdet,$borrower);
      @done = ("No",$items2,$it2p);
    } else {
      if ($reason ne 'Finished issues'){
-       #return No to let them know that we wish to 
+       #return No to let them know that we wish to
        # process more Items for borrower
        @done = ("No",$items2,$it2p,$amountdue,$itemsdet);
      } else  {
        @done = ("Circ");
      }
    }
-   #debug_msg($env, "return from issues $done[0]"); 
+   #debug_msg($env, "return from issues $done[0]");
    return @done;
 }
 
@@ -207,7 +207,7 @@ sub formatitem {
    my $line = $line." $iclass ";		# FIXME - .=
    my $line = $line.fmtdec($env,$charge,"22");	# FIXME - .=
    return $line;
-}   
+}
 
 # Only used internally
 # FIXME - Only used by &processitems, which appears to be obsolete.
@@ -222,7 +222,7 @@ sub issueitem{
    my $item;
    my $charge;
    my $datedue = $env->{'loanlength'};
-   my $sth=$dbh->prepare($query);  
+   my $sth=$dbh->prepare($query);
    $sth->execute;
    if ($item=$sth->fetchrow_hashref) {
      $sth->finish;
@@ -234,7 +234,7 @@ sub issueitem{
        error_msg($env,"Item Withdrawn");
        $canissue = 0;
 #     } elsif ($item->{'itemlost'} == 1) {
-#       error_msg($env,"Item Lost");      
+#       error_msg($env,"Item Lost");
 #       $canissue = 0;
      } elsif ($item->{'restricted'} == 1 ){
        error_msg($env,"Restricted Item");
@@ -250,9 +250,9 @@ sub issueitem{
      }
      #check if item is on issue already
      if ($canissue == 1) {
-       my ($currbor,$issuestat,$newdate) = 
+       my ($currbor,$issuestat,$newdate) =
          &C4::Circulation::Main::previousissue($env,$item->{'itemnumber'},$dbh,$bornum);
-       if ($issuestat eq "N") { 
+       if ($issuestat eq "N") {
          $canissue = 0;
        } elsif ($issuestat eq "R") {
          $canissue = -1;
@@ -262,14 +262,14 @@ sub issueitem{
            createcharge($env,$dbh,$item->{'itemnumber'},$bornum,$charge);
 	 }
          &UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$item->{'itemnumber'},$item->{'itemtype'});
-       }  
-     } 
+       }
+     }
      if ($canissue == 1) {
        #check reserve
-       my ($resbor,$resrec) =  &C4::Circulation::Main::checkreserve($env,$dbh,$item->{'itemnumber'});    
+       my ($resbor,$resrec) =  &C4::Circulation::Main::checkreserve($env,$dbh,$item->{'itemnumber'});
        #debug_msg($env,$resbor);
-       if ($resbor eq $bornum) { 
-         my $rquery = "update reserves 
+       if ($resbor eq $bornum) {
+         my $rquery = "update reserves
 	   set found = 'F'
 	   where reservedate = '$resrec->{'reservedate'}'
 	   and borrowernumber = '$resrec->{'borrowernumber'}'
@@ -278,7 +278,7 @@ sub issueitem{
 	 $rsth->execute;
 	 $rsth->finish;
        } elsif ($resbor ne "") {
-         my $bquery = "select * from borrowers 
+         my $bquery = "select * from borrowers
 	    where borrowernumber = '$resbor'";
 	 my $btsh = $dbh->prepare($bquery);
 	 $btsh->execute;
@@ -294,7 +294,7 @@ sub issueitem{
 	 } else {
 	   my $ans = msg_ny($env,"Cancel reserve?");
 	   if ($ans eq "Y") {
-	     my $rquery = "update reserves 
+	     my $rquery = "update reserves
 	       set found = 'F'
 	       where reservedate = '$resrec->{'reservedate'}'
 	       and borrowernumber = '$resrec->{'borrowernumber'}'
@@ -308,7 +308,7 @@ sub issueitem{
        };
      }
      #if charge deal with it
-        
+
      if ($canissue == 1) {
        $charge = calc_charges($env,$dbh,$item->{'itemnumber'},$bornum);
      }
@@ -319,22 +319,22 @@ sub issueitem{
        &UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$item->{'itemnumber'},$item->{'itemtype'});
        if ($charge > 0) {
          createcharge($env,$dbh,$item->{'itemnumber'},$bornum,$charge);
-       }	  
+       }
      } elsif ($canissue == 0) {
        info_msg($env,"Can't issue $item->{'cardnumber'}");
-     }  
+     }
    } else {
      my $valid = checkdigit($env,$itemnum);
      if ($valid ==1) {
        if (substr($itemnum,0,1) = "V") {
          #this is a borrower
 	 $env->{'newborrower'} = $itemnum;
-       } else {	  
+       } else {
          error_msg($env,"$itemnum not found - rescan");
        }
      } else {
        error_msg($env,"Invalid Number");
-     }  
+     }
    }
    $sth->finish;
    #debug_msg($env,"date $datedue");
@@ -362,14 +362,14 @@ sub updateissues{
   my ($env,$itemno,$bitno,$dbh,$bornum)=@_;
   my $loanlength=21;
   my $query="Select *  from biblioitems,itemtypes
-  where (biblioitems.biblioitemnumber='$bitno') 
+  where (biblioitems.biblioitemnumber='$bitno')
   and (biblioitems.itemtype = itemtypes.itemtype)";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   if (my $data=$sth->fetchrow_hashref) {
     $loanlength = $data->{'loanlength'}
   }
-  $sth->finish;	        
+  $sth->finish;
   my $dateduef;
   if ($env->{'loanlength'} eq "") {
     my $ti = time;
@@ -378,7 +378,7 @@ sub updateissues{
     $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   } else {
     $dateduef = $env->{'loanlength'};
-  }  
+  }
   $query = "Insert into issues (borrowernumber,itemnumber, date_due,branchcode)
   values ($bornum,$itemno,'$dateduef','$env->{'branchcode'}')";
   my $sth=$dbh->prepare($query);
@@ -421,8 +421,8 @@ sub calc_charges {
   if (my $data1=$sth1->fetchrow_hashref) {
      $item_type = $data1->{'itemtype'};
      $charge = $data1->{'rentalcharge'};
-     my $q2 = "select rentaldiscount from borrowers,categoryitem 
-        where (borrowers.borrowernumber = '$bornum') 
+     my $q2 = "select rentaldiscount from borrowers,categoryitem
+        where (borrowers.borrowernumber = '$bornum')
         and (borrowers.categorycode = categoryitem.categorycode)
         and (categoryitem.itemtype = '$item_type')";
      my $sth2=$dbh->prepare($q2);
@@ -432,7 +432,7 @@ sub calc_charges {
 	$charge = ($charge *(100 - $discount)) / 100;
      }
      $sth2->{'finish'};	# FIXME - Was this supposed to be $sth2->finish ?
-  }   
+  }
   $sth1->finish;
   return ($charge);
 }

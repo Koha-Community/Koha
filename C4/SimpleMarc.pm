@@ -1,8 +1,6 @@
-#!/usr/bin/perl
+package C4::SimpleMarc;
 
 # $Id$
-
-package C4::SimpleMarc;
 
 # Routines for handling import of MARC data into Koha db
 
@@ -29,15 +27,9 @@ package C4::SimpleMarc;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-
-# standard or CPAN modules used
 use DBI;
-
-# Koha modules used
-
 require Exporter;
-
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -62,16 +54,12 @@ This module provides functions for parsing MARC records and files.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&extractmarcfields 
-	&parsemarcfileformat 
+	&extractmarcfields
+	&parsemarcfileformat
 	&taglabel
 	%tagtext
 	%tagmap
 );
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
 
 # FIXME - %tagtext and %tagmap are in both @EXPORT and @EXPORT_OK.
 # They should be in one or the other, but not both (though preferably,
@@ -81,32 +69,6 @@ This module provides functions for parsing MARC records and files.
 	%tagmap
 );
 
-# non-exported package globals go here
-use vars qw(@more $stuff);
-
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-  };
-  
-# make all your functions, whether exported or not;
 #------------------------------------------------
 
 #------------------
@@ -246,7 +208,7 @@ sub extractmarcfields {
 			# 	$record->[0]->{'subfields'}->{'a'} = subfieldvalue
     )=@_;
 
-    # return 
+    # return
     my $bib;		# pointer to hash of named output fields
 			# Example: $bib->{'author'} = "Twain, Mark";
 
@@ -254,16 +216,16 @@ sub extractmarcfields {
 
     my (
 	$field, 	# hash ref
-	$value, 
+	$value,
 	$subfield,	# Marc subfield [a-z]
 	$fieldname,	# name of field "author", "title", etc.
 	$strip,		# chars to remove from end of field
 	$stripregex,	# reg exp pattern
     );
-    my ($lccn, $isbn, $issn,    
+    my ($lccn, $isbn, $issn,
 	$publicationyear, @subjects, $subject,
-	$controlnumber, 
-	$notes, $additionalauthors, $illustrator, $copyrightdate, 
+	$controlnumber,
+	$notes, $additionalauthors, $illustrator, $copyrightdate,
 	$s, $subdivision, $subjectsubfield,
     );
 
@@ -343,7 +305,7 @@ sub extractmarcfields {
 		}
 		if ($field->{'tag'} eq '700') {
 		    my $name=$field->{'subfields'}->{'a'};
-		    if ( defined($field->{'subfields'}->{'e'}) 
+		    if ( defined($field->{'subfields'}->{'e'})
 		        and  $field->{'subfields'}->{'e'}=~/ill/) {
 			$illustrator=$name;
 		    } else {
@@ -412,7 +374,7 @@ sub extractmarcfields {
 	    $bib->{isbn}=~s/[^\d]*//g;	# drop non-digits
 			# FIXME - "[^\d]" can be rewritten as "\D"
 			# FIXME - Does this include the check digit? If so,
-			# it might be "X".			
+			# it might be "X".
 	};
 
 	if ( $bib->{issn} ) {
@@ -604,6 +566,10 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.7  2002/10/13 08:30:38  arensb
+# Deleted unused variables.
+# Removed trailing whitespace.
+#
 # Revision 1.6  2002/10/10 04:44:28  arensb
 # Added whitespace to make the POD work.
 #

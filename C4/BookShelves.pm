@@ -1,10 +1,6 @@
-package C4::BookShelves; #assumes C4/BookShelves
+package C4::BookShelves;
 
-#
-# $Header$
-#
-#requires DBI.pm to be installed
-
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -28,7 +24,7 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Circulation::Circ2;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -55,43 +51,6 @@ items to and from bookshelves.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &RemoveFromShelf &AddShelf &RemoveShelf);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Never used
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);		# FIXME - Never used
-
-# initalize package globals, first exported ones
-# FIXME - Never used
-my $Var1   = '';
-my %Hashit = ();
-
-# then the others (which are still accessible as $Some::Module::stuff)
-# FIXME - Never used
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-# FIXME - Never used
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-# FIXME - Never used
-my $priv_func = sub {
-  # stuff goes here.
-};
-
-# make all your functions, whether exported or not;
 
 my $dbh = C4::Context->dbh;
 
@@ -280,6 +239,10 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.9  2002/10/13 08:29:18  arensb
+# Deleted unused variables.
+# Removed trailing whitespace.
+#
 # Revision 1.8  2002/10/10 04:32:44  arensb
 # Simplified references.
 #

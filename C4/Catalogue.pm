@@ -1,4 +1,4 @@
-package C4::Catalogue; #assumes C4/Acquisitions.pm
+package C4::Catalogue;
 
 # Continue working on updateItem!!!!!!
 #
@@ -6,8 +6,6 @@ package C4::Catalogue; #assumes C4/Acquisitions.pm
 # functions
 #
 # Trying to track down $dbh's that aren't disconnected....
-#
-
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -33,7 +31,7 @@ use C4::Context;
 use MARC::Record;
 use C4::Biblio;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -74,45 +72,6 @@ orders, converting money to different currencies, and so forth.
 	     &bookseller &breakdown &checkitems
 	     &websitesearch &addwebsite &updatewebsite &deletewebsite
 );
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Unused
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);		# FIXME - Unused
-
-# initalize package globals, first exported ones
-# FIXME - Unused
-my $Var1   = '';
-my %Hashit = ();
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-# FIXME - Unused
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-# FIXME - Unused
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-# FIXME - Unused
-my $priv_func = sub {
-  # stuff goes here.
-  };
-
-# make all your functions, whether exported or not;
-
 
 #
 #

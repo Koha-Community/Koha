@@ -1,4 +1,4 @@
-package C4::Z3950; 
+package C4::Z3950;
 
 # $Id$
 
@@ -66,8 +66,8 @@ entering Z39.50 lookup requests.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	 &z3950servername 
-	 &addz3950queue 
+	 &z3950servername
+	 &addz3950queue
 );
 
 #------------------------------------------------
@@ -89,7 +89,7 @@ sub z3950servername {
     # inputs
     my (
 	$dbh,		# FIXME - Unused argument
-	$srvid,		# server id number 
+	$srvid,		# server id number
 	$default,
     )=@_;
     # return
@@ -99,8 +99,8 @@ sub z3950servername {
     $dbh = C4::Context->dbh;
 
 	# FIXME - Fix indentation
-	my $sti=$dbh->prepare("select name 
-		from z3950servers 
+	my $sti=$dbh->prepare("select name
+		from z3950servers
 		where id=?");
 	$sti->execute($srvid);
 	if ( ! $sti->err ) {
@@ -171,7 +171,7 @@ sub addz3950queue {
 
     # FIXME - Should be configurable, probably in /etc/koha.conf.
     my $pidfile='/var/log/koha/processz3950queue.pid';
-    
+
     $error="";
 
     $dbh = C4::Context->dbh;
@@ -186,16 +186,16 @@ sub addz3950queue {
 		push @serverlist, $server;
 	    } elsif ($server eq 'DEFAULT' || $server eq 'CHECKED' ) {
                 $sth=$dbh->prepare("select host,port,db,userid,password ,name
-	          from z3950servers 
+	          from z3950servers
 	          where checked <> 0 ");
 		$sth->execute;
-		while ( my ($host, $port, $db, $userid, $password,$servername) 
+		while ( my ($host, $port, $db, $userid, $password,$servername)
 			= $sth->fetchrow ) {
 		    push @serverlist, "$servername/$host\:$port/$db/$userid/$password";
 		} # while
 	    } else {
                 $sth=$dbh->prepare("select host,port,db,userid,password
-	          from z3950servers 
+	          from z3950servers
 	          where id=? ");
 		$sth->execute($server);
 		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
@@ -218,15 +218,15 @@ sub addz3950queue {
 	# when there are 0 or 1 elements in @serverlist.
 	if ( $serverlist !~ /^ +$/ ) {
 	    # Don't allow reinsertion of the same request identifier.
-	    $sth=$dbh->prepare("select identifier from z3950queue 
+	    $sth=$dbh->prepare("select identifier from z3950queue
 		where identifier=?");
 	    $sth->execute($requestid);
 	    if ( ! $sth->rows) {
-	        $sth=$dbh->prepare("insert into z3950queue 
-		    (term,type,servers, identifier) 
+	        $sth=$dbh->prepare("insert into z3950queue
+		    (term,type,servers, identifier)
 		    values (?, ?, ?, ?)");
 	        $sth->execute($query, $type, $serverlist, $requestid);
-		if ( -r $pidfile ) { 
+		if ( -r $pidfile ) {
 		    # FIXME - Perl is good at opening files. No need to
 		    # spawn a separate 'cat' process.
 	            my $pid=`cat $pidfile`;
@@ -256,7 +256,7 @@ sub addz3950queue {
 	    # server list is empty
 	    $error.="No Z39.50 search servers specified. ";
 	} # if serverlist empty
-	
+
 	return $error;
 
 } # sub addz3950queue
@@ -274,6 +274,10 @@ Koha Developement team <info@koha.org>
 
 #--------------------------------------
 # $Log$
+# Revision 1.6  2002/10/13 08:30:53  arensb
+# Deleted unused variables.
+# Removed trailing whitespace.
+#
 # Revision 1.5  2002/10/13 06:13:23  arensb
 # Removed bogus #! line (this isn't a script!)
 # Removed unused global variables.

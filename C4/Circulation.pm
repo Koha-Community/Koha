@@ -2,7 +2,7 @@ package C4::Circulation;
 
 # $Id$
 
-#package to deal with circulation 
+#package to deal with circulation
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -36,10 +36,10 @@ use C4::Reserves;
 use C4::Security;
 
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&Start_circ &scanborrower);
 
@@ -53,14 +53,14 @@ sub Start_circ{
   my $data;
   while ($donext ne 'Quit') {
     if ($donext  eq "Circ") {
-      clearscreen();        
-      ($reason,$data) = menu($env,'console','Circulation', 
+      clearscreen();
+      ($reason,$data) = menu($env,'console','Circulation',
         ('Issues','Returns','Borrower Enquiries','Reserves','Log In'));
       #debug_msg($env,"data = $data");
     } else {
       $data = $donext;
     }
-    if ($data eq 'Issues') {  
+    if ($data eq 'Issues') {
       $donext=Issue($env); #C4::Circulation::Issues
       #debug_msg("","do next $donext");
     } elsif ($data eq 'Returns') {
@@ -73,12 +73,12 @@ sub Start_circ{
       &endint($env);
       &Login($env);   #C4::Security
       &startint($env,'Circulation');
-    } elsif ($data eq 'Quit') { 
+    } elsif ($data eq 'Quit') {
       $donext = $data;
     }
     #debug_msg($env,"donext -  $donext");
   }
-  &endint($env)  
+  &endint($env)
 }
 
 # Not exported.
@@ -131,7 +131,7 @@ sub checkoverdues{
 sub previousissue {
   my ($env,$itemnum,$dbh,$bornum)=@_;
   my $sth=$dbh->prepare("Select firstname,surname,issues.borrowernumber,cardnumber,returndate
-  from issues,borrowers where 
+  from issues,borrowers where
   issues.itemnumber='$itemnum' and
   issues.borrowernumber=borrowers.borrowernumber and issues.returndate is
 NULL");
@@ -145,37 +145,37 @@ NULL");
       my $resp = &msg_yn("Book is issued to this borrower", "Renew?");
       if ($resp == "y") {
         &renewbook($env,$dbh,$bornum,$itemnum);
-      }	 
-      
+      }
+
     } else {
-      my $text="Issued to $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'})";    
+      my $text="Issued to $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'})";
       my $resp = &msg_yn($text,"Mark as returned?");
       if ($resp == "y") {
         &returnrecord($env,$dbh,$borrower->{'borrowernumber'},$itemnum);
 	# can issue
       } else {
         # can't issue
-      }	
+      }
     }
-  } 
+  }
   return($borrower->{'borrowernumber'});
   $sth->finish;
 }
 
 
 sub checkreserve{
-  # Check for reserves for biblio 
+  # Check for reserves for biblio
   # does not look at constraints yet
   my ($env,$dbh,$itemnum)=@_;
   my $resbor = "";
-  my $query = "select * from reserves,items 
+  my $query = "select * from reserves,items
   where (items.itemnumber = '$itemnum')
   and (items.biblionumber = reserves.biblionumber)
   and (reserves.found is null) order by priority";
   my $sth = $dbh->prepare($query);
   $sth->execute();
   if (my $data=$sth->fetchrow_hashref) {
-    $resbor = $data->{'borrowernumber'}; 
+    $resbor = $data->{'borrowernumber'};
   }
   return ($resbor);
   $sth->finish;
@@ -191,7 +191,7 @@ sub checkwaiting{
   my $sth = $dbh->prepare($query);
   $sth->execute();
   if (my $data=$sth->fetchrow_hashref) {
-    push @itemswaiting,$data->{'itemnumber'}; 
+    push @itemswaiting,$data->{'itemnumber'};
   }
   return (\@itemswaiting);
   $sth->finish;

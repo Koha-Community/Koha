@@ -41,47 +41,13 @@ use C4::Stats;
 use C4::Search;
 use C4::Print;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-  
+use vars qw($VERSION @ISA @EXPORT);
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&returnrecord &calc_odues &Returns);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
 
 # FIXME - This is only used in C4::Circmain and C4::Circulation, both
 # of which appear to be obsolete. Presumably this function is obsolete
@@ -89,7 +55,7 @@ my $priv_func = sub {
 # Otherwise, it needs a POD.
 sub Returns {
   my ($env)=@_;
-  my $dbh = C4::Context->dbh;  
+  my $dbh = C4::Context->dbh;
   my @items;
   @items[0]=" "x50;
   my $reason;
@@ -105,14 +71,14 @@ sub Returns {
   my $resp;
 # until (($reason eq "Circ") || ($reason eq "Quit")) {
   until ($reason ne "") {
-    ($reason,$item) =  
+    ($reason,$item) =
       returnwindow($env,"Enter Returns",
       $item,\@items,$borrower,$amt_owing,$odues,$dbh,$resp); #C4::Circulation
     #debug_msg($env,"item = $item");
     #if (($reason ne "Circ") && ($reason ne "Quit")) {
     if ($reason eq "")  {
       $resp = "";
-      ($resp,$bornum,$borrower,$itemno,$itemrec,$amt_owing) = 
+      ($resp,$bornum,$borrower,$itemno,$itemrec,$amt_owing) =
          checkissue($env,$dbh,$item);
       if ($bornum ne "") {
          ($issues,$odues,$amt_owing) = borrdata2($env,$bornum);
@@ -120,7 +86,7 @@ sub Returns {
         $issues = "";
 	$odues = "";
 	$amt_owing = "";
-      }	
+      }
       if ($resp ne "") {
         #if ($resp eq "Returned") {
 	if ($itemno ne "" ) {
@@ -131,14 +97,14 @@ sub Returns {
           unshift @items,$fmtitem;
 	  if ($items[20] > "") {
 	    pop @items;
-	  }  
+	  }
 	}
   	#} elsif ($resp ne "") {
 	#  error_msg($env,"$resp");
 	#}
 	#if ($resp ne "Returned") {
 	#  error_msg($env,"$resp");
-	#  $bornum = ""; 
+	#  $bornum = "";
 	#}
       }
     }
@@ -159,10 +125,10 @@ sub checkissue {
   my $itemrec;
   my $amt_owing;
   $item = uc $item;
-  my $query = "select * from items,biblio 
+  my $query = "select * from items,biblio
     where barcode = '$item'
     and (biblio.biblionumber=items.biblionumber)";
-  my $sth=$dbh->prepare($query); 
+  my $sth=$dbh->prepare($query);
   $sth->execute;
   if ($itemrec=$sth->fetchrow_hashref) {
      $sth->finish;
@@ -182,8 +148,8 @@ sub checkissue {
        $borrower = $sth->fetchrow_hashref;
        $bornum = $issuerec->{'borrowernumber'};
        $itemno = $issuerec->{'itemnumber'};
-       $amt_owing = returnrecord($env,$dbh,$bornum,$itemno);     
-       $reason = "Returned";    
+       $amt_owing = returnrecord($env,$dbh,$bornum,$itemno);
+       $reason = "Returned";
      } else {
        $sth->finish;
        updatelastseen($env,$dbh,$itemrec->{'itemnumber'});
@@ -191,20 +157,20 @@ sub checkissue {
      }
      my ($resfound,$resrec) = find_reserves($env,$dbh,$itemrec->{'itemnumber'});
      if ($resfound eq "y") {
-       my $bquery = "select * from borrowers 
+       my $bquery = "select * from borrowers
           where borrowernumber = '$resrec->{'borrowernumber'}'";
        my $btsh = $dbh->prepare($bquery);
-       $btsh->execute;                   
+       $btsh->execute;
        my $resborrower = $btsh->fetchrow_hashref;
        #printreserve($env,$resrec,$resborrower,$itemrec);
-       my $mess = "Reserved for collection at branch $resrec->{'branchcode'}"; 
+       my $mess = "Reserved for collection at branch $resrec->{'branchcode'}";
        C4::InterfaceCDK::error_msg($env,$mess);
        $btsh->finish;
-     }  
+     }
    } else {
      $sth->finish;
      $reason = "Item not found";
-  }   
+  }
   return ($reason,$bornum,$borrower,$itemno,$itemrec,$amt_owing);
   # end checkissue
   }
@@ -219,9 +185,9 @@ sub returnrecord {
   #my $amt_owing = calc_odues($env,$dbh,$bornum,$itemno);
   my @datearr = localtime(time);
   my $dateret = (1900+$datearr[5])."-".$datearr[4]."-".$datearr[3];
-  my $query = "update issues set returndate = now(), branchcode ='$env->{'branchcode'}' where 
-    (borrowernumber = '$bornum') and (itemnumber = '$itemno') 
-    and (returndate is null)";  
+  my $query = "update issues set returndate = now(), branchcode ='$env->{'branchcode'}' where
+    (borrowernumber = '$bornum') and (itemnumber = '$itemno')
+    and (returndate is null)";
   my $sth = $dbh->prepare($query);
   $sth->execute;
   $sth->finish;
@@ -248,14 +214,14 @@ sub returnrecord {
     }
     $sth->finish;
   # check for charge made for lost book
-  my $query = "select * from accountlines 
-    where (borrowernumber = '$bornum') 
+  my $query = "select * from accountlines
+    where (borrowernumber = '$bornum')
     and (itemnumber = '$itemno')
     and (accounttype = 'L')";
   my $sth = $dbh->prepare($query);
   $sth->execute;
   if (my $data = $sth->fetchrow_hashref) {
-    # writeoff this amount 
+    # writeoff this amount
     my $offset;
     my $amount = $data->{'amount'};
     my $acctno = $data->{'accountno'};
@@ -289,7 +255,7 @@ sub returnrecord {
     $usth = $dbh->prepare($uquery);
     $usth->execute;
     $usth->finish;
-  } 
+  }
   $sth->finish;
   UpdateStats($env,'branch','return','0','',$itemno);
   return($oduecharge);
@@ -303,7 +269,7 @@ sub calc_odues {
   my ($env,$dbh,$bornum,$itemno)=@_;
   my $amt_owing;
   return($amt_owing);
-}  
+}
 
 # This function is only used in &checkissue and &returnrecord, both of
 # which appear to be obsolete. So presumably this function is obsolete
@@ -312,13 +278,13 @@ sub calc_odues {
 sub updatelastseen {
   my ($env,$dbh,$itemnumber)= @_;
   my $br = $env->{'branchcode'};
-  my $query = "update items 
+  my $query = "update items
     set datelastseen = now(), holdingbranch = '$br'
     where (itemnumber = '$itemnumber')";
   my $sth = $dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-     
+
 }
 
 
@@ -329,7 +295,7 @@ sub updatelastseen {
 sub find_reserves {
   my ($env,$dbh,$itemno) = @_;
   my $itemdata = itemnodata($env,$dbh,$itemno);
-  my $query = "select * from reserves where found is null 
+  my $query = "select * from reserves where found is null
   and biblionumber = $itemdata->{'biblionumber'} and cancellationdate is NULL
   order by priority,reservedate ";
   my $sth = $dbh->prepare($query);
@@ -360,7 +326,7 @@ sub find_reserves {
       $consth->finish;
     }
     if ($resfound eq "y") {
-      my $updquery = "update reserves 
+      my $updquery = "update reserves
         set found = 'W',itemnumber='$itemno'
         where borrowernumber = $resrec->{'borrowernumber'}
         and reservedate = '$resrec->{'reservedate'}'
@@ -376,9 +342,9 @@ sub find_reserves {
         my $updsth = $dbh->prepare($updquery);
         $updsth->execute;
         $updsth->finish;
-      }	
+      }
     }
   }
   $sth->finish;
-  return ($resfound,$resrec);   
+  return ($resfound,$resrec);
 }

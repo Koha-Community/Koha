@@ -80,7 +80,7 @@ sub Getoverdues{
   $sth->finish;
 #  print @results;
   # FIXME - Bogus API.
-  return($i,\@results);  
+  return($i,\@results);
 }
 
 =item CalcFine
@@ -252,7 +252,7 @@ sub UpdateFine {
     # an existing fine.
 #    print "in accounts ...";
     if ($data->{'amount'} != $amount){
-      
+
 #      print "updating";
       my $diff=$amount - $data->{'amount'};
       my $out=$data->{'amountoutstanding'}+$diff;
@@ -263,7 +263,7 @@ sub UpdateFine {
       and (accounttype='FU' or accounttype='O') and description like '%$due%'";
       my $sth2=$dbh->prepare($query2);
       $sth2->execute;
-      $sth2->finish;      
+      $sth2->finish;
     } else {
 #      print "no update needed $data->{'amount'}"
     }
@@ -316,7 +316,7 @@ category he or she belongs to.
 sub BorType {
   my ($borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from borrowers,categories where 
+  my $query="Select * from borrowers,categories where
   borrowernumber=$borrowernumber and
 borrowers.categorycode=categories.categorycode";
   my $sth=$dbh->prepare($query);
