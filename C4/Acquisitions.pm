@@ -18,6 +18,7 @@ $VERSION = 0.01;
 &findall &needsmod &delitem &delbibitem &delbiblio &delorder &branches
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
 &updatecost &checkitems &modnote &getitemtypes &getbiblio);
+
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -419,8 +420,6 @@ notes         = $biblio->{'notes'}";
 sub modbiblio {
   my ($bibnum,$title,$author,$copyright,$seriestitle,$serial,$unititle,$notes)=@_;
   my $dbh=C4Connect;
-  #$title=~ s/\'/\\\'/g;
-  #$author=~ s/\'/\\\'/g;
   my $query="update biblio set title='$title',
   author='$author',copyrightdate='$copyright',
   seriestitle='$seriestitle',serial='$serial',unititle='$unititle',notes='$notes'
@@ -449,11 +448,13 @@ sub modaddauthor {
   my $query="Delete from additionalauthors where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
-    $query="insert into additionalauthors (author,biblionumber) values ('$author','$bibnum')";
   $sth->finish;
-  $sth=$dbh->prepare($query);
-  $sth->execute;
-  $sth->finish;
+  if ($author ne ''){
+      $query="insert into additionalauthors (author,biblionumber) values ('$author','$bibnum')";
+    $sth=$dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+  }
   $dbh->disconnect;
 } 
 
