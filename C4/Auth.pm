@@ -180,6 +180,7 @@ sub checkauth {
 	    my @inputs;
 	    my $self_url = $query->self_url();
 	    foreach my $name (param $query) {
+		(next) if ($name eq 'userid' || $name eq 'password');
 		my $value = $query->param($name);
 		push @inputs, {name => $name , value => $value};
 	    }
@@ -190,7 +191,13 @@ sub checkauth {
 				      -expires => '+1y');
 
 	    $template->param(loginprompt => 1);
-	    $template->param(url => $query->self_url());
+
+	    # Strip userid and password parameters off the self_url variable
+
+	    $self_url=~s/\?*userid=[^;]*;*//g;
+	    $self_url=~s/\?*password=[^;]*;*//g;
+
+	    $template->param(url => $self_url);
 	    print $query->header(-cookie=>$cookie), $template->output;
 	    exit;
 	}
