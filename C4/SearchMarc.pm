@@ -272,6 +272,7 @@ sub catalogsearch {
 	}
 	$sth->execute();
 	my @result = ();
+        my $subtitle; # Added by JF for Subtitles
 
 	# Processes the NOT if any and there are results
 	my ($not_sql_tables, $not_sql_where1, $not_sql_where2);
@@ -327,6 +328,7 @@ sub catalogsearch {
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
 							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
 							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?");
+        my $sth_subtitle = $dbh->prepare("SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?"); # Added BY JF for Subtitles
 	my @finalresult = ();
 	my @CNresults=();
 	my $totalitems=0;
@@ -341,6 +343,16 @@ sub catalogsearch {
 		my $continue=1;
 		my $line = $sth->fetchrow_hashref;
 		my $biblionumber=$line->{bn};
+        # Return subtitles first ADDED BY JF
+                $sth_subtitle->execute($biblionumber);
+                my $subtitle_here.= $sth_subtitle->fetchrow." ";
+                chop $subtitle_here;
+                $subtitle = $subtitle_here;
+#               warn "Here's the Biblionumber ".$biblionumber;
+#                warn "and here's the subtitle: ".$subtitle_here;
+
+        # /ADDED BY JF
+
 # 		$continue=0 unless $line->{bn};
 # 		my $lastitemnumber;
 		$sth_itemCN->execute($biblionumber);
@@ -376,6 +388,8 @@ sub catalogsearch {
 		$newline{norequests} = 0;
 		$newline{norequests} = 1 if ($line->{notforloan}); # itemtype not issuable
 		$newline{norequests} = 1 if (!$line->{notforloan} && $notforloan); # itemtype issuable but all items not issuable for instance
+                $newline{subtitle} = $subtitle;  # put the subtitle in ADDED BY JF
+
 		my @CNresults2= @CNresults;
 		$newline{CN} = \@CNresults2;
 		$newline{'even'} = 1 if $#finalresult % 2 == 0;
