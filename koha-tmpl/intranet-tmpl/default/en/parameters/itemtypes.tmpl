@@ -124,13 +124,13 @@ function Check(f) {
 <TMPL_IF name="else">
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 	<tr>
-		<td background="/images/background-mem.gif"><b>Code</b></th>
-		<td background="/images/background-mem.gif"><b>Description</b></td>
-		<td background="/images/background-mem.gif"><b>loan length</b></td>
-		<td background="/images/background-mem.gif"><b>Renewable</b></td>
-		<td background="/images/background-mem.gif"><b>charge</b></td>
-		<td background="/images/background-mem.gif">Edit</td>
-		<td background="/images/background-mem.gif">Delete</td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Code</b></th>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Description</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>loan length</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Renewable</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>charge</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Edit</td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Delete</td>
 	</tr>
 	<TMPL_LOOP name="loop">
 		<tr>
@@ -139,14 +139,14 @@ function Check(f) {
 			<td><TMPL_VAR name="loanlength"></td>
 			<td><TMPL_IF name="renewalsallowed">Yes<TMPL_ELSE>No</TMPL_IF></td>
 			<td><TMPL_VAR name="rentalcharge"></td>
-			<td><a href="<TMPL_VAR name="script_name">?op=add_form&itemtype=<TMPL_VAR name="itemtype" escape="HTML">"><img src="/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-			<td><a href="<TMPL_VAR name="script_name">?op=delete_confirm&itemtype=<TMPL_VAR name="itemtype" escape="HTML">"><img src="/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="<TMPL_VAR name="script_name">?op=add_form&itemtype=<TMPL_VAR name="itemtype" escape="HTML">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="<TMPL_VAR name="script_name">?op=delete_confirm&itemtype=<TMPL_VAR name="itemtype" escape="HTML">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 		</tr>
 	</TMPL_LOOP>
 </table>
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type=hidden name=op value=add_form>
-<br><input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add itemtype" ALT="Add" BORDER=0 ><br>
+<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add itemtype" ALT="Add" BORDER=0 ><br>
 </form>
 </TMPL_IF>
 <TMPL_INCLUDE NAME="parameters-bottom.inc">

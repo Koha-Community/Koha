@@ -13,27 +13,27 @@
 </TMPL_IF>
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif"><b>Book fund</b></td>
-	<td background="/images/background-mem.gif"><b>Name</b></td>
-	<td background="/images/background-mem.gif"><b>Group</b></td>
-	<td background="/images/background-mem.gif"><b>Budget</b></td>
-	<td background="/images/background-mem.gif">Edit</td>
-	<td background="/images/background-mem.gif">Delete</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Book fund</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Name</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Group</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Budget</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Edit</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Delete</td>
 	</tr>
 <TMPL_LOOP name="bookfund">
 	<tr valign=top bgcolor="<TMPL_VAR name="toggle">"
 		<td><TMPL_VAR name="bookfundid"></td>
 		<td><TMPL_VAR name="bookfundname"></td>
 		<td><TMPL_VAR name="bookfundgroup"> &nbsp;</td>
-		<td><a href="aqbudget.pl?bookfundid=<TMPL_VAR name="bookfundid"> "><img src="/<TMPL_VAR name="theme">/images/filefind.png" width=32 hspace=0 vspace=0 border=0 title="budget"></a></td>
-		<td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> "><img src="/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-		<td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+		<td><a href="aqbudget.pl?bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filefind.png" width=32 hspace=0 vspace=0 border=0 title="budget"></a></td>
+		<td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> "><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 	</tr>
 </TMPL_LOOP>
 </table>
 <form action='<TMPL_VAR name=scriptname>' method=post>
 	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<br><input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 ><br>
+	<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 ><br>
 	<br></form><br clear=all>
 <p> &nbsp; </p>
 </TMPL_IF>
@@ -118,7 +118,7 @@ data recorded
 
 <TMPL_IF name="delete_confirm">
 <table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
+<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Book fund</b></td><td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
 <form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<TMPL_VAR name="bookfundid">'>
 <tr><td>Name</td><td><TMPL_VAR name="bookfundname"></td></tr><tr><td>Group</td><td><TMPL_VAR name="bookfundgroup"></td></tr>
 <tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>

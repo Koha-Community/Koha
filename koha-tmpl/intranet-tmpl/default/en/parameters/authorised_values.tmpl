@@ -37,9 +37,9 @@
 <!-------------------------------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>Variable</b></td>
-		<td background="/images/background-mem.gif"><b>Lib</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Variable</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Lib</b></td>
+		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
 	</tr>
 	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
 	<form action='<TMPL_VAR name="script_name">' method=post>
@@ -63,18 +63,18 @@ the subfield is not entered through a free field, but though a list of authorise
 <TMPL_VAR name="searchfield">
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif"><b>Category</b></td>
-	<td background="/images/background-mem.gif"><b>Authorised value</b></td>
-	<td background="/images/background-mem.gif"><b>Lib</b></td>
-	<td background="/images/background-mem.gif">Edit</td>
-	<td background="/images/background-mem.gif">Delete</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Category</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Authorised value</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Lib</b></td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Edit</td>
+	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">Delete</td>
 <TMPL_LOOP name="loop">
 </tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td><TMPL_VAR name="category"></td>
 	<td><TMPL_VAR name="authorised_value"></td>
 	<td><TMPL_VAR name="lib"></td>
-	<td><a href="<TMPL_VAR name="edit">"><img src="/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-	<td><a href="<TMPL_VAR name="delete">"><img src="/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
 </TMPL_LOOP>
 <form action='<TMPL_VAR name="script_name">' method=post>
@@ -89,7 +89,7 @@ the subfield is not entered through a free field, but though a list of authorise
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type="hidden" name="op" value="add_form">
 <input type="hidden" name="category" value="<TMPL_VAR name="category">">
-<br><input type=image src="/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 ><br>
+<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add bookfund" ALT="Add" BORDER=0 ><br>
 </form>
 </TMPL_IF>
 
