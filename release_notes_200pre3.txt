@@ -1,0 +1,79 @@
+RELEASE NOTES
+=============
+
+This version of Koha is still in the "unstable" directory, because some bugs are still reported. But it's fully useable and used in (at least) 3 libraries in "real world" :
+* Nelsonville Public Library, Ohio, USA
+* Esiee, high school, France
+* Dombes Abbey, France
+
+The next version should/might be the 2.0.0RC1.
+The only missing features are :
+* a migration tool for libraries already using Koha1.2.x
+* an automated upgrading tool for future version. It's possible to upgrade manually.
+
+IMPROVEMENTS :
+---------
+* adding a demo setup : if you set "demo=1" in /etc/koha.conf, Koha is in "demo mode". In this mode, user can connect with "demo/demo", even if this user is not in members table.
+He can do everything, except that any modif/add/delete done in systempref or marc structure is NOT saved in the DB. This avoid demo user breaking the demo config.
+* adding javascript function to focus on 1st field for issues / returns. Thus, librarian don't need manual mouse focus & can scan barcode immediatly.
+* authories/thesaurus management : adding the possibility to add an authority directly.
+
+UPGRADING :
+---------
+People using a previous 2.0.0preX version can upgrade code and use the same DB, there's no DB change.
+To upgrade mannually :
+- mv /etc/koha.conf /etc/koha.conf_previous
+- install in a new directory /var/www/html/koha_200pre3 for example.
+- delete the 2.0.0pre3 DB
+- modify /etc/koha.conf to point to 2.0.0pre3 DB
+- modify httpd.conf to have Koha root directory pointing to 200pre3 install instead of 200pre2
+- restart Apache.
+
+Note : you can use the 2.0.0pre2 login/password.
+If you do, mySQL may complaint about "already existing DB user". It's not a problem.
+
+Note : you can also use "CVS symlink installation" of Koha if you prefer. See http://www.saas.nsw.edu.au/wiki/index.php?page=CVSSymLinkInstallation
+
+BUGFIXES :
+---------
+(the bug number refers to bugzilla number. See bugs.koha.org)
+512 : bibliosubject table is not being populated
+564 : Member card number not checked unique
+567 : classlist not filled in when using catalogue-home.pl
+593 : data duplication in MARC-DB
+562 : Returns not showing 'on reserve' message for holds
+565 : item barcode not checked unique
+516 : biblioitems.itemtype does not load
+556 : OPAC subject search with class specified returns error
+103 : Need additional Perl module checks in installer.pl
+570 : Subject search returns duplicate results
+493 : add member error
+563 : Keyword search does not search author names
+583 : values in marc_word table should have quotation marks, etc,
+499 : Members display by letter
+561 : Javascript link doesn't work
+164 : Editing member details loses postal address
+233 : OPAC - User update doesn't work.
+525 : If itemtype is not set, we get a broken more detail page, We
+129 : Choosing to install MARC tables gave errors
+152 : Install.pm missing from main branch
+363 : Searching on contains works only with full names.
+553 : broken html (neither valid nor well-formed)
+582 : Move error message contents out of newmember.pl
+153 : opachtdocs and intrahtdocs in koha.conf not initialized
+474 : Alternate contact should not be required
+558 : Member search results table doesn't show alternating colors
+542 : Move HTML out of itemtypes.pl
+490 : Poor display
+558 : Member search results table doesn't show alternating colors
+548 : Spelling of Catalog/Catalogue
+547/546 : some improvements in koha docs (located at docs/kohadoc.sgml)
+540 : Missing requests.gif or equivalent
+XXX : Many french translation improvements.
+XXX : some installer improvments.
+XXX : fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
+XXX : fixing font size bug, & minor change in submenu look.
+XXX : modifying MARC21 default setup : using Nelsonville setup, that is working. User just need to define  itemtypes.
+XXX : fixing small bug : escaping twice the ' in title & author.
+
+(XXX : bugfixes not in bugs.koha.org)
