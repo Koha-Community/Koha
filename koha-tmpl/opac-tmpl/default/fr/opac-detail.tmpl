@@ -2,7 +2,7 @@
 
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">) <TMPL_VAR NAME="class"></em></font>
+<font SIZE=6><em><TMPL_VAR NAME="title"> <TMPL_VAR NAME="class"></em></font>
 <TMPL_UNLESS NAME="norequests"><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>R&eacute;servation</a>
 <TMPL_ELSE>
 Non r&eacute;servable
@@ -18,20 +18,22 @@ Non r&eacute;servable
 <tr valign="top">
 	<td>
 		<FONT SIZE=2  face="arial, helvetica">
-		<TMPL_IF NAME="subtitle"><b>Sous-titre:</b> </TMPL_IF><TMPL_VAR NAME="subtitle"><br>
-		<TMPL_IF name="additionalauthors"><b>Autres auteurs:</b> </TMPL_IF><TMPL_VAR NAME="additionalauthors"><br>
-		<TMPL_IF name="publishercode"><b>Editeur</b> </TMPL_IF><TMPL_VAR name="publishercode"><br>
-		<TMPL_IF name="copyrightdate"><b>Ann&eacute;e:</b> <TMPL_VAR NAME="copyrightdate"></TMPL_IF><br>
-		<TMPL_IF name="serial"><b>P&eacute;riodique:</b><TMPL_VAR NAME="serial"></TMPL_IF><br>
-		<TMPL_IF name="url"><b>URL :</b> <a hre="<TMPL_VAR name="url"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
-		<br>
-		<TMPL_IF name="notes"><b>Résumé:</b> </TMPL_IF><TMPL_VAR NAME="Notes"><br>
-		<br>
-		<TMPL_IF name="subject"><b>Sujet:</b> </TMPL_IF><TMPL_VAR NAME="subject"><br>
-		<br>
-		<b>Nombre d'exemplaires:</b> <TMPL_VAR NAME="count">
-		<p>
-		</font>
+			<TMPL_IF name="subtitle"><b>Sous-titre:</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
+			<TMPL_IF name="author"><b>Auteur:</b><TMPL_VAR NAME="author"></TMPL_IF><br>
+			<TMPL_IF name="additional"><b>Autre Auteur:</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
+			<TMPL_IF name="publishercode"><b>Publié par :</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
+			<TMPL_IF name="publicationyear"><b>en </b></TMPL_IF><TMPL_VAR NAME="publicationyear">
+			<TMPL_IF name="pages">, </TMPL_IF><TMPL_VAR name="pages">
+			<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br/>
+			<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br/>
+			<TMPL_IF name="subject"><b>Sujet:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br/>
+			<TMPL_IF name="copyrightdate"><b>Ann&eacute;e:</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br/>
+			<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br/>
+			<TMPL_IF name="unititle"><b>Titre uniforme:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br/>
+			<TMPL_IF name="serial"><b>P&eacute;riodique:</b><TMPL_VAR NAME="serial"></TMPL_IF><br/>
+			<TMPL_IF name="dewey"><b>Côte dewey :</b></TMPL_IF><TMPL_VAR name="dewey"><br/>
+			<TMPL_IF name="url"><b>URL :</b> <a hre="<TMPL_VAR name="url"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
+			<b>Nbre d'exemplaires:</b> <TMPL_VAR NAME="count">
 	</td>
 </tr>
 </table>
