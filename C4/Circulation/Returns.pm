@@ -1,4 +1,6 @@
-package C4::Circulation::Returns; #assumes C4/Circulation/Returns
+package C4::Circulation::Returns;
+
+# $Id$
 
 #package to deal with Returns
 #written 3/11/99 by olwen@katipo.co.nz
@@ -20,6 +22,10 @@ package C4::Circulation::Returns; #assumes C4/Circulation/Returns
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+# FIXME - None of the functions (certainly none of the exported
+# functions) are used anywhere anymore. Presumably this module is
+# obsolete.
 
 use strict;
 require Exporter;
@@ -77,6 +83,10 @@ my $priv_func = sub {
 						    
 # make all your functions, whether exported or not;
 
+# FIXME - This is only used in C4::Circmain and C4::Circulation, both
+# of which appear to be obsolete. Presumably this function is obsolete
+# as well.
+# Otherwise, it needs a POD.
 sub Returns {
   my ($env)=@_;
   my $dbh = C4::Context->dbh;  
@@ -115,6 +125,8 @@ sub Returns {
         #if ($resp eq "Returned") {
 	if ($itemno ne "" ) {
 	  my $item = itemnodata($env,$dbh,$itemno);
+	  # FIXME - This relies on C4::Circulation::Main to have a
+	  # "use C4::Circulation::Issues;" line, which is bogus.
 	  my $fmtitem = C4::Circulation::Issues::formatitem($env,$item,"",$amt_owing);
           unshift @items,$fmtitem;
 	  if ($items[20] > "") {
@@ -134,7 +146,10 @@ sub Returns {
 #  clearscreen;
   return($reason);
   }
-  
+
+# FIXME - Only used in &Returns and in telnet/doreturns.pl, both of
+# which appear obsolete. Presumably this function is obsolete as well.
+# Otherwise, it needs a POD.
 sub checkissue {
   my ($env,$dbh, $item) = @_;
   my $reason='Circ';
@@ -193,7 +208,11 @@ sub checkissue {
   return ($reason,$bornum,$borrower,$itemno,$itemrec,$amt_owing);
   # end checkissue
   }
-  
+
+# FIXME - Only used in &C4::Circulation::Main::previousissue,
+# &checkissue, C4/Circulation.pm, and tkperl/tkcirc, all of which
+# appear to be obsolete. Presumably this function is obsolete as well.
+# Otherwise, it needs a POD.
 sub returnrecord {
   # mark items as returned
   my ($env,$dbh,$bornum,$itemno)=@_;
@@ -276,6 +295,9 @@ sub returnrecord {
   return($oduecharge);
 }
 
+# FIXME - Only used in tkperl/tkcirc. Presumably this function is
+# obsolete.
+# Otherwise, it needs a POD.
 sub calc_odues {
   # calculate overdue fees
   my ($env,$dbh,$bornum,$itemno)=@_;
@@ -283,6 +305,10 @@ sub calc_odues {
   return($amt_owing);
 }  
 
+# This function is only used in &checkissue and &returnrecord, both of
+# which appear to be obsolete. So presumably this function is obsolete
+# too.
+# Otherwise, it needs a POD.
 sub updatelastseen {
   my ($env,$dbh,$itemnumber)= @_;
   my $br = $env->{'branchcode'};
@@ -294,6 +320,12 @@ sub updatelastseen {
   $sth->finish;
      
 }
+
+
+# FIXME - There's also a &C4::Circulation::Circ2::find_reserves, but
+# that one looks rather different.
+# FIXME - This is only used in &checkissue, which appears to be
+# obsolete. So presumably this function is obsolete too.
 sub find_reserves {
   my ($env,$dbh,$itemno) = @_;
   my $itemdata = itemnodata($env,$dbh,$itemno);
@@ -350,4 +382,3 @@ sub find_reserves {
   $sth->finish;
   return ($resfound,$resrec);   
 }
-END { }       # module clean-up code here (global destructor)
