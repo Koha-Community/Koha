@@ -545,11 +545,17 @@ sub parametrize ($@) {
 	} elsif ($fmt =~ /^%%/) {
 	    $fmt = $';
 	    $it .= '%';
-	} elsif ($fmt =~ /^%(?:(\d+)\$)?s/) {
+	} elsif ($fmt =~ /^%(?:(\d+)\$)?(?:(\d+)(?:\.(\d+))?)?s/) {
 	    $n += 1;
-	    my $i = (defined $1? $1: $n) - 1;
+	    my($i, $width, $prec) = ((defined $1? $1: $n), $2, $3);
 	    $fmt = $';
-	    $it .= $params[$i]
+	    if (!defined $width && !defined $prec) {
+		$it .= $params[$i]
+	    } elsif (defined $width && defined $prec && !$width && !$prec) {
+		;
+	    } else {
+		die "Unsupported precision specification in format: $&\n"; #XXX
+	    }
 	} elsif ($fmt =~ /^%[^%a-zA-Z]*[a-zA-Z]/) {
 	    $fmt = $';
 	    $it .= $&;
