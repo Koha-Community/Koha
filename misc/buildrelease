@@ -322,8 +322,8 @@ system("find $rootdir/intranet-cgi -name '*.pl' -exec chmod a+x \\{\\} \\;");
 system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/opac-tmpl", "$rootdir/opac-html");
 system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/intranet-tmpl", "$rootdir/intranet-html");
 #copy index files (they are just redirections to main.pl)
-system("cp $rootdir/intranet-cgi/koha-tmpl/opac.html","$rootdir/opac-html/index.html");
-system("cp $rootdir/intranet-cgi/koha-tmpl/intranet.html","$rootdir/intranet-html/index.html");
+system("cp $rootdir/intranet-cgi/koha-tmpl/opac.html $rootdir/opac-html/index.html");
+system("cp $rootdir/intranet-cgi/koha-tmpl/intranet.html $rootdir/intranet-html/index.html");
 system('rm', '-rf', "$rootdir/intranet-cgi/koha-tmpl");
 
 # Remove extraneous files from opac-html
