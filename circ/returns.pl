@@ -156,8 +156,7 @@ my $links = <<"EOF";
 <table align="right"><tr><td>
 <a href=circulation.pl>
 <img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Issues"></a>
-&nbsp<a href=branchtransfers.pl>
-<img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Issues"></a>
+&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Issues"></a>
 </td></tr></table>
 EOF
 

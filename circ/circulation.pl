@@ -200,9 +200,7 @@ my $title = <<"EOF";
 <img src="/images/button-next-borrower.gif" width="171" height="42" border="0" alt="Next Borrower"></a> &nbsp
 <a href=returns.pl>
 <img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
-&nbsp<a href=branchtransfers.pl>
-<img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers">
-</a>
+&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
 <b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
@@ -217,9 +215,7 @@ my $titlenoborrower = <<"EOF";
 <table align="right"><tr><td>
 <a href=returns.pl>
 <img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
-&nbsp<a href=branchtransfers.pl>
-<img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers">
-</a>
+&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
 <b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
