@@ -415,11 +415,11 @@ if ($op eq "addbiblio") {
 	my $end=0;
 	my $started;
 	for (my $i=$#tags;$i>0;$i--) {
-		$start=$i if ($start eq 0 && $tags[$i] == $addedfield);
-		$end=$i if ($start>0 && $tags[$i] eq $addedfield);
-		last if ($start>0 && $tags[$i] ne $addedfield);
+		$end=$i if ($end eq 0 && $tags[$i] == $addedfield);
+		$start=$i if ($end>0 && $tags[$i] eq $addedfield);
+		last if ($end>0 && $tags[$i] ne $addedfield);
 	}
-# 	warn "ST : $addedfield => $start / $end";
+	warn "ST : $addedfield => $start / $end";
 	# add an empty line in all arrays. This forces a new field in MARC::Record.
 	splice(@tags,$end+1,0,'');
 	splice(@subfields,$end+1,0,'');
@@ -438,6 +438,7 @@ if ($op eq "addbiblio") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	warn "R=>".$record->as_formatted;
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
