@@ -11,4 +11,6 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($query ,1);
 
 my $template = gettemplate("opac-search.tmpl", "opac");
 
+$template->param(loggedinuser => $loggedinuser);
+
 print "Content-Type: text/html\n\n", $template->output;

@@ -65,4 +65,6 @@ $bordat[0] = $borr;
 $template->param(BORROWER_INFO => \@bordat);
 
 
+$template->param(loggedinuser => $loggedinuser);
+
 print "Content-Type: text/html\n\n", $template->output; 

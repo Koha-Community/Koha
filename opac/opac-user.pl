@@ -85,4 +85,5 @@ foreach my $res (@$reserves) {
 $template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount);
 
+$template->param(loggedinuser => $loggedinuser);
 print "Content-Type: text/html\n\n", $template->output; 

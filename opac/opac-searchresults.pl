@@ -105,6 +105,7 @@ if ($count>10) {
 
 $template->param(numbers => $numbers);
 
+$template->param(loggedinuser => $loggedinuser);
 
 print $query->header(-cookie => $cookie), $template->output;
 

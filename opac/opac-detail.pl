@@ -12,6 +12,8 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
 
 my $template = gettemplate ("opac-detail.tmpl", "opac");
 
+$template->param(loggedinuser => $loggedinuser);
+
 my $biblionumber=$query->param('bib');
 
 
