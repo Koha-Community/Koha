@@ -109,6 +109,7 @@
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
 <font SIZE=6><em>Gestion de la structure de balisage MARC</em></font>
+<p><b>NOTE : si vous modifiez un lien entre un sous champ MARC et une zone non-MARC, demandez à votre administrateur d'exécuter le script misc/rebuildnonmarc.pl</b></p>
 <form action='<TMPL_VAR name="script_name">' method=post>
 	<input type=text name=searchfield value="">
 	<input type=reset name=reset value="clr">
@@ -158,6 +159,5 @@
 </table>
 </form>
 </TMPL_IF>
-
 <TMPL_INCLUDE NAME="parameters-bottom.inc">
 </table>

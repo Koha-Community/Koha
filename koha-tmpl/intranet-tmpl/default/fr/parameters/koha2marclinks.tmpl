@@ -155,7 +155,8 @@
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
 <font SIZE=6><em>Liens MARC<TMPL_VAR name="tagfield"></em></font>
-<p></p>
+<p><b>NOTE : si vous modifiez un lien entre un sous champ MARC et une zone non-MARC, demandez à votre administrateur d'exécuter le script misc/rebuildnonmarc.pl</b>
+</p>
 <form action='<TMPL_VAR name="script_name">' method=post>
 <TMPL_VAR name="tablename"> <input type="submit" value="OK">
 </form>

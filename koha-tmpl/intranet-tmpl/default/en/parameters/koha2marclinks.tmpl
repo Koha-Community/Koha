@@ -155,7 +155,8 @@
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
 <font SIZE=6><em>MARC links<TMPL_VAR name="tagfield"></em></font>
-<p></p>
+<p><b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
+</p>
 <form action='<TMPL_VAR name="script_name">' method=post>
 <TMPL_VAR name="tablename"> <input type="submit" value="OK">
 </form>

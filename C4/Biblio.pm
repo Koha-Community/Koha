@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.65  2003/10/14 09:45:29  tipaul
+# adding rebuildnonmarc.pl script : run this script when you change a link between marc and non MARC DB. It rebuilds the non-MARC DB (long operation)
+#
 # Revision 1.64  2003/10/06 15:20:51  tipaul
 # fix for 536 (subtitle error)
 #
@@ -1590,8 +1593,10 @@ size		= $biblioitem->{'size'},
 place		= $biblioitem->{'place'}
 where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
 
-    $dbh->do($query);
-
+$dbh->do($query);
+if ($dbh->errstr) {
+	warn "$query";
+}
 #    $dbh->disconnect;
 } # sub modbibitem
 

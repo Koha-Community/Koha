@@ -93,6 +93,7 @@
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
 <h1>MARC tag structure admin</h1>
+<b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
 <form action='<TMPL_VAR name="script_name">' method=post>
 	<input type=text name=searchfield value="">
 	<input type=reset name=reset value="clr">
@@ -136,5 +137,4 @@
 </table>
 </form>
 </TMPL_IF>
-
 <TMPL_INCLUDE NAME="parameters-bottom.inc">
