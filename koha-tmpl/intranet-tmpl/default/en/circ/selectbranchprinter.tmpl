@@ -7,24 +7,24 @@
 <p>
 <!--branchselection-->
 <!-- TMPL_IF Name="onebranch" -->
-<b>Branch:</b> <!-- TMPL_VAR Name="branchname" -->
+<b>Branch:</b> <!-- TMPL_VAR NAME="branchname" -->
 <!-- TMPL_ELSE -->
 <b>Please Set Branch:</b>
 	<select name="branch">
 	<!-- TMPL_LOOP Name="branchloop" -->
-		<option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" --></option>
+		<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
 	<!-- /TMPL_LOOP -->
 	</select>
 <!-- /TMPL_IF --></p>
 
 <p><!-- printerselection -->
 <!-- TMPL_IF Name="oneprinter" -->
-<b>Printer:</b> <!-- TMPL_VAR Name="printername" -->
+<b>Printer:</b> <!-- TMPL_VAR NAME="printername" -->
 <!-- TMPL_ELSE -->
 <b>Please Set Printer:</b>
 	<select name="printer">
 	<!-- TMPL_LOOP Name="printerloop" -->
-		<option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" --></option>
+		<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
 	<!-- /TMPL_LOOP -->
 	</select>
 <!-- /TMPL_IF --></p>

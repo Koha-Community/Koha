@@ -3,8 +3,8 @@
 <div id="mainbloc">
 	<h1 class="circulation">Circulation: Returns</h1>
 	<p>
-		<b>Branch:</b> <!-- TMPL_VAR name="branchname" -->, 
-		<b>Printer:</b> <!-- TMPL_VAR name="printername" --> 
+		<b>Branch:</b> <!-- TMPL_VAR NAME="branchname" -->, 
+		<b>Printer:</b> <!-- TMPL_VAR NAME="printername" --> 
 		<a href="selectbranchprinter.pl" class="button circulation">Change Settings</a>
 	</p>
 	
@@ -13,95 +13,95 @@
 			<h2 class="circulation">Reserve Found</h2>
 			<!-- TMPL_IF Name="waiting" -->
 				<h2 class="circulation">Item marked Waiting:</h2>
-			<p>Item <!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)
-		is marked waiting at <b><!-- TMPL_VAR Name="branchname" --></b> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
-					<form method=post action='returns.pl'>
+			<p>Item <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
+		is marked waiting at <b><!-- TMPL_VAR NAME="branchname" --></b> for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow("/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->", "Member"); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
+					<form method="post" action="returns.pl">
 					<!-- TMPL_LOOP Name="inputloop" -->
-						<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-						<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
-						<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
+						<input type="hidden" name=dd-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="duedate" -->>
+						<input type="hidden" name=bn-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="bornum" -->>
 					<!-- /TMPL_LOOP -->
-					<input type=hidden name=barcode value=0>
-					<input type=submit value="OK" class="button circulation">
+					<input type="hidden" name="barcode" value=0>
+					<input type="submit" value="OK" class="button circulation">
 					</form>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="diffbranch" -->
 				<h2 class="circulation">Item marked Waiting:</h2>
 				<p>
-					Item: <!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)
-					needs to be transfered to <b><!-- TMPL_VAR Name="branchname" --></b>
+					Item: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
+					needs to be transfered to <b><!-- TMPL_VAR NAME="branchname" --></b>
 					to be picked up by 
-					<!-- TMPL_VAR Name="name" --> 
-					(<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
+					<!-- TMPL_VAR NAME="name" --> 
+					(<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 				</p>
 				<center>
-				<form method=post action='returns.pl'>
+				<form method="post" action="returns.pl">
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<!-- TMPL_UNLESS Name="first" -->
-						<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-						<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
-						<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
+						<input type="hidden" name=dd-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="duedate" -->>
+						<input type="hidden" name=bn-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="bornum" -->>
 					<!-- /TMPL_UNLESS -->
 				<!-- /TMPL_LOOP -->
-				<input type=hidden name=barcode value=0>
-				<input type=submit value="OK" class="button circulation">
+				<input type="hidden" name="barcode" value=0>
+				<input type="submit" value="OK" class="button circulation">
 				</form>
 				</center>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="reserved" -->
 				<h2 class="circulation">Reserve found:</h2>
-				<p>Item: <!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->) 
-				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Item'); return false;">
-					<!-- TMPL_VAR Name="itembarcode" -->
+				<p>Item: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) 
+				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;">
+					<!-- TMPL_VAR NAME="itembarcode" -->
 				</a>
-				for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Member'); return false"><!-- TMPL_VAR Name="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR Name="branchname" --></b>.
+				for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR NAME="branchname" --></b>.
 				</p>
 				<p>
-				Change status to waiting and print<a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </p>
+				Change status to waiting and print<a href="" onClick="alert(document.forms[0].resslip.value); return false">slip</a>?: </p>
 				<p>
-				<form method=post action='returns.pl'>
+				<form method="post" action="returns.pl">
 				<!-- TMPL_LOOP Name="inputloop" -->
-					<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-					<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
-					<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+					<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+					<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
+					<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
 				<!-- /TMPL_LOOP -->
-				<input type=hidden name=itemnumber value=<!-- TMPL_VAR Name="itemnumber" -->>
-				<input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="bornum" -->>
-				<input type=hidden name=resbarcode value=<!-- TMPL_VAR Name="barcode" -->>
-				<input type=hidden name=resslip value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	Date: <!-- TMPL_VAR Name="today" -->
+				<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
+				<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
+				<input type="hidden" name="resbarcode" value="<!-- TMPL_VAR NAME="barcode" -->">
+				<input type="hidden" name="resslip" value="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Date: <!-- TMPL_VAR NAME="today" -->
 	
-	ITEM RESERVED:<!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)
-	barcode: <!-- TMPL_VAR Name="itembarcode" -->
-	itemtype: <!-- TMPL_VAR Name="itemtype" -->
-	COLLECT AT: <!-- TMPL_VAR Name="branchname" -->
+	ITEM RESERVED:<!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
+	barcode: <!-- TMPL_VAR NAME="itembarcode" -->
+	itemtype: <!-- TMPL_VAR NAME="itemtype" -->
+	COLLECT AT: <!-- TMPL_VAR NAME="branchname" -->
 	
 	BORROWER:
-	<!-- TMPL_VAR Name="bortitle" --> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
-	card number: <!-- TMPL_VAR Name="borcnum" -->
-	Phone: <!-- TMPL_VAR Name="borphone" -->
-	<!-- TMPL_VAR Name="borstraddress" -->
-	<!-- TMPL_VAR Name="borsub" -->
-	<!-- TMPL_VAR Name="bortown" -->
-	<!-- TMPL_VAR Name="boremail" -->
+	<!-- TMPL_VAR NAME="bortitle" --> <!-- TMPL_VAR NAME="borfirstname" --> <!-- TMPL_VAR NAME="borsurname" -->
+	card number: <!-- TMPL_VAR NAME="borcnum" -->
+	Phone: <!-- TMPL_VAR NAME="borphone" -->
+	<!-- TMPL_VAR NAME="borstraddress" -->
+	<!-- TMPL_VAR NAME="borsub" -->
+	<!-- TMPL_VAR NAME="bortown" -->
+	<!-- TMPL_VAR NAME="boremail" -->
 	
 	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	">
-				<input type=submit value="Print" class="button circulation">
+				<input type="submit" value="Print" class="button circulation">
 				</form>
 			<!-- /TMPL_IF -->
 		</div>
 	<!-- TMPL_ELSE -->
 		<div id="bloc25">
-			<form method=post action=/cgi-bin/koha/circ/returns.pl>
+			<form method="post" action="/cgi-bin/koha/circ/returns.pl">
 				<h2 class="circulation">Enter Book Barcode</h2>
-				<label class="label20">Item Barcode:</label><input name=barcode size=10>
+				<label class="label20">Item Barcode:</label><input name="barcode" size="10">
 				</table>
 				<!-- TMPL_LOOP Name="inputloop" -->
-					<input type=hidden name=ri-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-					<input type=hidden name=dd-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="duedate" -->>
-					<input type=hidden name=bn-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="bornum" -->>
+					<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+					<input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->">
+					<input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
 				<!-- /TMPL_LOOP -->
 			</form>
 		</div>
@@ -111,10 +111,10 @@
 				<!-- TMPL_LOOP Name="errmsgloop" -->
 					<span id="problem">
 					<!-- TMPL_IF Name="badbarcode" -->
-						No Item with barcode: <!-- TMPL_VAR Name="msg" -->
+						No Item with barcode: <!-- TMPL_VAR NAME="msg" -->
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="ispermanent" -->
-						Please return to  <!-- TMPL_VAR Name="msg" -->
+						Please return to  <!-- TMPL_VAR NAME="msg" -->
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="notissued" -->
 						Not On Issue.
@@ -131,46 +131,46 @@
 	<!-- TMPL_IF Name="returned" -->
 		<div id="bloc25">
 			<h2 class="circulation">Returned Item Information</h2>
-			<p>Title: <!-- TMPL_VAR Name="itemtitle" --></p>
+			<p>Title: <!-- TMPL_VAR NAME="itemtitle" --></p>
 			<h2 class="circulation">Borrower Information</h2>
 			<p>
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="ribornum" -->','Member'); return false;">
-				<!-- TMPL_VAR Name="riborcnum" -->
+			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="ribornum" -->','Member'); return false;">
+				<!-- TMPL_VAR NAME="riborcnum" -->
 			</a>
-			<!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" --></p>
+			<!-- TMPL_VAR NAME="riborsurname" -->, <!-- TMPL_VAR NAME="ribortitle" --> <!-- TMPL_VAR NAME="riborfirstname" --></p>
 			<!-- TMPL_IF Name="flagset" -->
 				<h2 class="circulation">Flags</h2>
 				<!-- TMPL_LOOP Name="flagloop" -->
 					<p>
 						<!-- TMPL_IF Name="redfont" --><div class="problem"><!-- /TMPL_IF -->
-						<!-- TMPL_VAR Name="flag" --><!-- TMPL_IF Name="redfont" --></div><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="flag" --><!-- TMPL_IF Name="redfont" --></div><!-- /TMPL_IF -->
 					</p>
 					<!-- TMPL_IF Name="charges" -->
 					<p>
-						<a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Payment'); return false;">Payment</a>
+						<a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Payment'); return false;">Payment</a>
 					</p>
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="waiting" -->
 						<!-- TMPL_LOOP Name="itemloop" -->
 							<p>
-								<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra','Item'); return false;">
-									<!-- TMPL_VAR Name="barcode" -->
-								</a> <!-- TMPL_VAR Name="title" -->(<!-- TMPL_VAR Name="brname" -->)
+								<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionum" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionum" -->&amp;type=intra','Item'); return false;">
+									<!-- TMPL_VAR NAME="barcode" -->
+								</a> <!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="brname" -->)
 							</p>
 						<!-- /TMPL_LOOP -->
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="overdue" -->
 						<!-- TMPL_LOOP Name="itemloop" -->
-						<p><!-- TMPL_VAR Name="duedate" -->
-							<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionum" -->&type=intra', 'Item'); return false;">
-								<!-- TMPL_VAR Name="barcode" -->
+						<p><!-- TMPL_VAR NAME="duedate" -->
+							<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionum" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionum" -->&amp;type=intra', 'Item'); return false;">
+								<!-- TMPL_VAR NAME="barcode" -->
 							</a>
-							<!-- TMPL_VAR Name="title" -->
+							<!-- TMPL_VAR NAME="title" -->
 						</p>
 						<!-- /TMPL_LOOP -->
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="other" -->
-						<p><b><!-- TMPL_VAR Name="msg" --></b></p>
+						<p><b><!-- TMPL_VAR NAME="msg" --></b></p>
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_LOOP -->
 			<!-- /TMPL_IF -->
@@ -190,12 +190,12 @@
 			</tr>
 			<!-- TMPL_LOOP Name="riloop" -->
 				<tr>
-					<td bgcolor=<!-- TMPL_VAR Name="color" -->>
+					<td bgcolor=<!-- TMPL_VAR NAME="color" -->>
 						<!-- TMPL_IF Name="duedate" -->
 							<!-- TMPL_IF Name="early" -->
-								<font color=red>
+								<font color="red">
 							<!-- /TMPL_IF -->
-								<!-- TMPL_VAR Name="year" -->/<!-- TMPL_VAR Name="month" -->/<!-- TMPL_VAR Name="day" -->
+								<!-- TMPL_VAR NAME="year" -->/<!-- TMPL_VAR NAME="month" -->/<!-- TMPL_VAR NAME="day" -->
 							<!-- TMPL_IF Name="early" -->
 								</font>
 							<!-- /TMPL_IF -->
@@ -204,20 +204,20 @@
 						<!-- /TMPL_IF -->
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="itembiblionumber" -->&type=intra', 'Item'); return false;">
-							<!-- TMPL_VAR Name="barcode" -->
+						<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;">
+							<!-- TMPL_VAR NAME="barcode" -->
 						</a>
 					</td>
-					<td><!-- TMPL_VAR Name="itemtitle" --></td>
-					<td><!-- TMPL_VAR Name="itemauthor" --></td>
-					<td><!-- TMPL_VAR Name="itemtype" --></td>
+					<td><!-- TMPL_VAR NAME="itemtitle" --></td>
+					<td><!-- TMPL_VAR NAME="itemauthor" --></td>
+					<td><!-- TMPL_VAR NAME="itemtype" --></td>
 					<td>
 					<!-- TMPL_IF Name="duedate" -->
-						<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->','Member'); return false;">
-							<!-- TMPL_VAR Name="borcnum" -->
-						</a> <!-- TMPL_VAR Name="borfirstname" --> <!-- TMPL_VAR Name="borsurname" -->
+						<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->','Member'); return false;">
+							<!-- TMPL_VAR NAME="borcnum" -->
+						</a> <!-- TMPL_VAR NAME="borfirstname" --> <!-- TMPL_VAR NAME="borsurname" -->
 					<!-- TMPL_ELSE -->
-						<!-- TMPL_VAR Name="bornum" -->
+						<!-- TMPL_VAR NAME="bornum" -->
 					<!-- /TMPL_IF -->
 					</td>
 				</tr>

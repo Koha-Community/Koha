@@ -10,47 +10,47 @@
 	<div id="bloc25">
 		<h2 class="circulation">Parameters</h2>
 		<p>
-			<b>Branch:</b> <!-- TMPL_VAR name="branchname" -->, 
-			<b>Printer:</b> <!-- TMPL_VAR name="printername" --> 
+			<b>Branch:</b> <!-- TMPL_VAR NAME="branchname" -->, 
+			<b>Printer:</b> <!-- TMPL_VAR NAME="printername" --> 
 			<a href="selectbranchprinter.pl" class="button circulation">Change Settings</a>
 		</p>
 	
-	<!-- TMPL_IF name="message" -->
+	<!-- TMPL_IF NAME="message" -->
 		<h2 class="circulation">Messages</h2>
-			<p>No borrower matched  <!-- TMPL_VAR name="message" --></p>
+			<p>No borrower matched  <!-- TMPL_VAR NAME="message" --></p>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="CGIselectborrower" -->
+	<!-- TMPL_IF NAME="CGIselectborrower" -->
 		<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-		<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-		<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
 		<h2 class="circulation">Select a borrower</h2>
-		<!-- TMPL_VAR name="CGIselectborrower" -->
+		<!-- TMPL_VAR NAME="CGIselectborrower" -->
 		<input type="submit" value="OK" class="button circulation">
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
 			<h2 class="circulation">Borrower information</h2>
 			<p>
-				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onclick="openWindow(this,'Member', 480, 640)">
-					<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+				<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" onclick="openWindow(this,'Member', 480, 640)">
+					<!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 				</a>
 			</p>
 			<p>
-				<!-- TMPL_VAR name="streetaddress" --> <!-- TMPL_VAR name="city" -->
+				<!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->
 			</p>
 			<p>
-				<!-- TMPL_VAR name="phone" -->
+				<!-- TMPL_VAR NAME="phone" -->
 			</p>
-			<p>Category: <!-- TMPL_VAR name="categorycode" --></p>
-			<p><!-- TMPL_VAR NAME="issuecount" --> Issues<!-- TMPL_IF NAME="overduecount" -->, <!-- TMPL_VAR name="overduecount" --> Overdue<!-- /TMPL_IF --></p>
+			<p>Category: <!-- TMPL_VAR NAME="categorycode" --></p>
+			<p><!-- TMPL_VAR NAME="issuecount" --> Issues<!-- TMPL_IF NAME="overduecount" -->, <!-- TMPL_VAR NAME="overduecount" --> Overdue<!-- /TMPL_IF --></p>
 		<!-- TMPL_ELSE -->
 				<h2 class="circulation">
 					Enter borrower card number or partial last name
 				</h2>
 				<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
 					<input name="findborrower">
-					<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-					<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+					<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+					<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
 					<input type="submit" value="OK" class="button circulation">
 				</form>
 		<!-- /TMPL_IF -->
@@ -61,7 +61,7 @@
 	BARCODE ENTRY
 -->
 
-<!-- TMPL_IF name="borrowernumber" -->
+<!-- TMPL_IF NAME="borrowernumber" -->
 	<div id="bloc25">
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
 		<h2 class="circulation">Enter Book Barcode</h2>
@@ -69,71 +69,71 @@
 		<p>
 			<select name="day">
 				<option value="0">Day</option>
-				<option value="1"<!-- TMPL_IF name="day1" --> selected="selected"<!-- /TMPL_IF -->>1</option>
-				<option value="2"<!-- TMPL_IF name="day2" --> selected="selected"<!-- /TMPL_IF -->>2</option>
-				<option value="3"<!-- TMPL_IF name="day3" --> selected="selected"<!-- /TMPL_IF -->>3</option>
-				<option value="4"<!-- TMPL_IF name="day4" --> selected="selected"<!-- /TMPL_IF -->>4</option>
-				<option value="5"<!-- TMPL_IF name="day5" --> selected="selected"<!-- /TMPL_IF -->>5</option>
-				<option value="6"<!-- TMPL_IF name="day6" --> selected="selected"<!-- /TMPL_IF -->>6</option>
-				<option value="7"<!-- TMPL_IF name="day7" --> selected="selected"<!-- /TMPL_IF -->>7</option>
-				<option value="8"<!-- TMPL_IF name="day8" --> selected="selected"<!-- /TMPL_IF -->>8</option>
-				<option value="9"<!-- TMPL_IF name="day9" --> selected="selected"<!-- /TMPL_IF -->>9</option>
-				<option value="10"<!-- TMPL_IF name="day10" --> selected="selected"<!-- /TMPL_IF -->>10</option>
-				<option value="11"<!-- TMPL_IF name="day11" --> selected="selected"<!-- /TMPL_IF -->>11</option>
-				<option value="12"<!-- TMPL_IF name="day12" --> selected="selected"<!-- /TMPL_IF -->>12</option>
-				<option value="13"<!-- TMPL_IF name="day13" --> selected="selected"<!-- /TMPL_IF -->>13</option>
-				<option value="14"<!-- TMPL_IF name="day14" --> selected="selected"<!-- /TMPL_IF -->>14</option>
-				<option value="15"<!-- TMPL_IF name="day15" --> selected="selected"<!-- /TMPL_IF -->>15</option>
-				<option value="16"<!-- TMPL_IF name="day16" --> selected="selected"<!-- /TMPL_IF -->>16</option>
-				<option value="17"<!-- TMPL_IF name="day17" --> selected="selected"<!-- /TMPL_IF -->>17</option>
-				<option value="18"<!-- TMPL_IF name="day18" --> selected="selected"<!-- /TMPL_IF -->>18</option>
-				<option value="19"<!-- TMPL_IF name="day19" --> selected="selected"<!-- /TMPL_IF -->>19</option>
-				<option value="20"<!-- TMPL_IF name="day20" --> selected="selected"<!-- /TMPL_IF -->>20</option>
-				<option value="21"<!-- TMPL_IF name="day21" --> selected="selected"<!-- /TMPL_IF -->>21</option>
-				<option value="22"<!-- TMPL_IF name="day22" --> selected="selected"<!-- /TMPL_IF -->>22</option>
-				<option value="23"<!-- TMPL_IF name="day23" --> selected="selected"<!-- /TMPL_IF -->>23</option>
-				<option value="24"<!-- TMPL_IF name="day24" --> selected="selected"<!-- /TMPL_IF -->>24</option>
-				<option value="25"<!-- TMPL_IF name="day25" --> selected="selected"<!-- /TMPL_IF -->>25</option>
-				<option value="26"<!-- TMPL_IF name="day26" --> selected="selected"<!-- /TMPL_IF -->>26</option>
-				<option value="27"<!-- TMPL_IF name="day27" --> selected="selected"<!-- /TMPL_IF -->>27</option>
-				<option value="28"<!-- TMPL_IF name="day28" --> selected="selected"<!-- /TMPL_IF -->>28</option>
-				<option value="29"<!-- TMPL_IF name="day29" --> selected="selected"<!-- /TMPL_IF -->>29</option>
-				<option value="30"<!-- TMPL_IF name="day30" --> selected="selected"<!-- /TMPL_IF -->>30</option>
-				<option value="31"<!-- TMPL_IF name="day31" --> selected="selected"<!-- /TMPL_IF -->>31</option>
+				<option value="1"<!-- TMPL_IF NAME="day1" --> selected="selected"<!-- /TMPL_IF -->>1</option>
+				<option value="2"<!-- TMPL_IF NAME="day2" --> selected="selected"<!-- /TMPL_IF -->>2</option>
+				<option value="3"<!-- TMPL_IF NAME="day3" --> selected="selected"<!-- /TMPL_IF -->>3</option>
+				<option value="4"<!-- TMPL_IF NAME="day4" --> selected="selected"<!-- /TMPL_IF -->>4</option>
+				<option value="5"<!-- TMPL_IF NAME="day5" --> selected="selected"<!-- /TMPL_IF -->>5</option>
+				<option value="6"<!-- TMPL_IF NAME="day6" --> selected="selected"<!-- /TMPL_IF -->>6</option>
+				<option value="7"<!-- TMPL_IF NAME="day7" --> selected="selected"<!-- /TMPL_IF -->>7</option>
+				<option value="8"<!-- TMPL_IF NAME="day8" --> selected="selected"<!-- /TMPL_IF -->>8</option>
+				<option value="9"<!-- TMPL_IF NAME="day9" --> selected="selected"<!-- /TMPL_IF -->>9</option>
+				<option value="10"<!-- TMPL_IF NAME="day10" --> selected="selected"<!-- /TMPL_IF -->>10</option>
+				<option value="11"<!-- TMPL_IF NAME="day11" --> selected="selected"<!-- /TMPL_IF -->>11</option>
+				<option value="12"<!-- TMPL_IF NAME="day12" --> selected="selected"<!-- /TMPL_IF -->>12</option>
+				<option value="13"<!-- TMPL_IF NAME="day13" --> selected="selected"<!-- /TMPL_IF -->>13</option>
+				<option value="14"<!-- TMPL_IF NAME="day14" --> selected="selected"<!-- /TMPL_IF -->>14</option>
+				<option value="15"<!-- TMPL_IF NAME="day15" --> selected="selected"<!-- /TMPL_IF -->>15</option>
+				<option value="16"<!-- TMPL_IF NAME="day16" --> selected="selected"<!-- /TMPL_IF -->>16</option>
+				<option value="17"<!-- TMPL_IF NAME="day17" --> selected="selected"<!-- /TMPL_IF -->>17</option>
+				<option value="18"<!-- TMPL_IF NAME="day18" --> selected="selected"<!-- /TMPL_IF -->>18</option>
+				<option value="19"<!-- TMPL_IF NAME="day19" --> selected="selected"<!-- /TMPL_IF -->>19</option>
+				<option value="20"<!-- TMPL_IF NAME="day20" --> selected="selected"<!-- /TMPL_IF -->>20</option>
+				<option value="21"<!-- TMPL_IF NAME="day21" --> selected="selected"<!-- /TMPL_IF -->>21</option>
+				<option value="22"<!-- TMPL_IF NAME="day22" --> selected="selected"<!-- /TMPL_IF -->>22</option>
+				<option value="23"<!-- TMPL_IF NAME="day23" --> selected="selected"<!-- /TMPL_IF -->>23</option>
+				<option value="24"<!-- TMPL_IF NAME="day24" --> selected="selected"<!-- /TMPL_IF -->>24</option>
+				<option value="25"<!-- TMPL_IF NAME="day25" --> selected="selected"<!-- /TMPL_IF -->>25</option>
+				<option value="26"<!-- TMPL_IF NAME="day26" --> selected="selected"<!-- /TMPL_IF -->>26</option>
+				<option value="27"<!-- TMPL_IF NAME="day27" --> selected="selected"<!-- /TMPL_IF -->>27</option>
+				<option value="28"<!-- TMPL_IF NAME="day28" --> selected="selected"<!-- /TMPL_IF -->>28</option>
+				<option value="29"<!-- TMPL_IF NAME="day29" --> selected="selected"<!-- /TMPL_IF -->>29</option>
+				<option value="30"<!-- TMPL_IF NAME="day30" --> selected="selected"<!-- /TMPL_IF -->>30</option>
+				<option value="31"<!-- TMPL_IF NAME="day31" --> selected="selected"<!-- /TMPL_IF -->>31</option>
 			</select>
 			<select name="month">
 				<option value="0">Month</option>
-				<option value="1"<!-- TMPL_IF name="month1" --> selected="selected"<!-- /TMPL_IF -->>Jan</option>
-				<option value="2"<!-- TMPL_IF name="month2" --> selected="selected"<!-- /TMPL_IF -->>Feb</option>
-				<option value="3"<!-- TMPL_IF name="month3" --> selected="selected"<!-- /TMPL_IF -->>Mar</option>
-				<option value="4"<!-- TMPL_IF name="month4" --> selected="selected"<!-- /TMPL_IF -->>Apr</option>
-				<option value="5"<!-- TMPL_IF name="month5" --> selected="selected"<!-- /TMPL_IF -->>May</option>
-				<option value="6"<!-- TMPL_IF name="month6" --> selected="selected"<!-- /TMPL_IF -->>Jun</option>
-				<option value="7"<!-- TMPL_IF name="month7" --> selected="selected"<!-- /TMPL_IF -->>Jul</option>
-				<option value="8"<!-- TMPL_IF name="month8" --> selected="selected"<!-- /TMPL_IF -->>Aug</option>
-				<option value="9"<!-- TMPL_IF name="month9" --> selected="selected"<!-- /TMPL_IF -->>Sep</option>
-				<option value="10"<!-- TMPL_IF name="month10" --> selected="selected"<!-- /TMPL_IF -->>Oct</option>
-				<option value="11"<!-- TMPL_IF name="month11" --> selected="selected"<!-- /TMPL_IF -->>Nov</option>
-				<option value="12"<!-- TMPL_IF name="month12" --> selected="selected"<!-- /TMPL_IF -->>Dec</option>
+				<option value="1"<!-- TMPL_IF NAME="month1" --> selected="selected"<!-- /TMPL_IF -->>Jan</option>
+				<option value="2"<!-- TMPL_IF NAME="month2" --> selected="selected"<!-- /TMPL_IF -->>Feb</option>
+				<option value="3"<!-- TMPL_IF NAME="month3" --> selected="selected"<!-- /TMPL_IF -->>Mar</option>
+				<option value="4"<!-- TMPL_IF NAME="month4" --> selected="selected"<!-- /TMPL_IF -->>Apr</option>
+				<option value="5"<!-- TMPL_IF NAME="month5" --> selected="selected"<!-- /TMPL_IF -->>May</option>
+				<option value="6"<!-- TMPL_IF NAME="month6" --> selected="selected"<!-- /TMPL_IF -->>Jun</option>
+				<option value="7"<!-- TMPL_IF NAME="month7" --> selected="selected"<!-- /TMPL_IF -->>Jul</option>
+				<option value="8"<!-- TMPL_IF NAME="month8" --> selected="selected"<!-- /TMPL_IF -->>Aug</option>
+				<option value="9"<!-- TMPL_IF NAME="month9" --> selected="selected"<!-- /TMPL_IF -->>Sep</option>
+				<option value="10"<!-- TMPL_IF NAME="month10" --> selected="selected"<!-- /TMPL_IF -->>Oct</option>
+				<option value="11"<!-- TMPL_IF NAME="month11" --> selected="selected"<!-- /TMPL_IF -->>Nov</option>
+				<option value="12"<!-- TMPL_IF NAME="month12" --> selected="selected"<!-- /TMPL_IF -->>Dec</option>
 			</select>
 			<select name="year">
 				<option value="0">Year</option>
-				<option value="2004"<!-- TMPL_IF name="year2004" --> selected="selected"<!-- /TMPL_IF -->>2004</option>
-				<option value="2005"<!-- TMPL_IF name="year2005" --> selected="selected"<!-- /TMPL_IF -->>2005</option>
-				<option value="2006"<!-- TMPL_IF name="year2006" --> selected="selected"<!-- /TMPL_IF -->>2006</option>
-				<option value="2007"<!-- TMPL_IF name="year2007" --> selected="selected"<!-- /TMPL_IF -->>2007</option>
-				<option value="2008"<!-- TMPL_IF name="year2008" --> selected="selected"<!-- /TMPL_IF -->>2008</option>
+				<option value="2004"<!-- TMPL_IF NAME="year2004" --> selected="selected"<!-- /TMPL_IF -->>2004</option>
+				<option value="2005"<!-- TMPL_IF NAME="year2005" --> selected="selected"<!-- /TMPL_IF -->>2005</option>
+				<option value="2006"<!-- TMPL_IF NAME="year2006" --> selected="selected"<!-- /TMPL_IF -->>2006</option>
+				<option value="2007"<!-- TMPL_IF NAME="year2007" --> selected="selected"<!-- /TMPL_IF -->>2007</option>
+				<option value="2008"<!-- TMPL_IF NAME="year2008" --> selected="selected"<!-- /TMPL_IF -->>2008</option>
 			</select>
 		</p>
 		<p>
-		<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR name="selected" -->> Sticky Due Date
-		<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
-		<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-		<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+		<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR NAME="selected" -->> Sticky Due Date
+		<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+		<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
 		<input type="hidden" name="print" value="maybe">
-		<!-- TMPL_IF name="CHARGES" -->
+		<!-- TMPL_IF NAME="CHARGES" -->
 			<input type="hidden" name="charges" value="yes">
-			<input type="hidden" name="oldamount" value="<!-- TMPL_VAR name="amountold" -->">
+			<input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->">
 		<!-- /TMPL_IF -->
 		</p>
 	</form>
@@ -145,21 +145,21 @@
 	RESULT OF ISSUING REQUEST
 -->
 	<div id="bloc25">
-		<!-- TMPL_IF name="IMPOSSIBLE" -->
+		<!-- TMPL_IF NAME="IMPOSSIBLE" -->
 		<h2 class="problem">Issuing impossible</h2>
-			<!-- TMPL_IF name="INVALID_DATE" -->
+			<!-- TMPL_IF NAME="INVALID_DATE" -->
 				<p class="problem">The due date is invalid</p>
 			<!-- /TMPL_IF -->	
-			<!-- TMPL_IF name="UNKNOWN_BARCODE" -->
+			<!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
 				<p class="problem">The barcode is unknown</p>
 			<!-- /TMPL_IF -->	
-			<!-- TMPL_IF name="NOT_FOR_LOAN" -->
+			<!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
 				<p class="problem">Item not for loan</p>
 			<!-- /TMPL_IF -->	
-			<!-- TMPL_IF name="WTHDRAWN" -->
+			<!-- TMPL_IF NAME="WTHDRAWN" -->
 				<p class="problem">Item withdrawn</p>
 			<!-- /TMPL_IF -->	
-			<!-- TMPL_IF name="GNA" -->
+			<!-- TMPL_IF NAME="GNA" -->
 				<p class="problem">Borrower is gone with no address</p>
 			<!-- /TMPL_IF -->	
 			<!-- TMPL_IF NAME="CARD_LOST" -->
@@ -168,38 +168,38 @@
 			<!-- TMPL_IF NAME="DEBARRED" -->
 				<p class="problem">Borrower is debarred</p>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="NO_MORE_RENEWALS" -->
+			<!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
 				<p class="problem">No more renewals possible</p>
 			<!-- /TMPL_IF -->
 			<br/>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="NEEDSCONFIRMATION" -->
+		<!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 		<h2 class="problem">I need confirmation before issuing</h2>
-			<!-- TMPL_IF name="DEBT" -->
+			<!-- TMPL_IF NAME="DEBT" -->
 				<p>The borrower has debts</p>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="RENEW_ISSUE" -->
+			<!-- TMPL_IF NAME="RENEW_ISSUE" -->
 				<p>Not an issue but a renewal</p>
 			<!-- /TMPL_IF -->	
-			<!-- TMPL_IF name="RESERVE_WAITING" -->
+			<!-- TMPL_IF NAME="RESERVE_WAITING" -->
 				<p>Reserve waiting</p>
 			<!-- /TMPL_IF -->	
-			<!-- TMPL_IF name="ISSUED_TO_ANOTHER" -->
-				<p>Item issued to <!-- TMPL_VAR name="ISSUED_TO_ANOTHER" -->. Return &amp; issue?</p>
+			<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
+				<p>Item issued to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Return &amp; issue?</p>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="TOO_MANY" -->
+			<!-- TMPL_IF NAME="TOO_MANY" -->
 				<p class="problem">Too many issues!</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
 			<form method="post">
-				<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
-				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber">">
+				<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
+				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber">">
 				<input type="hidden" name="issueconfirmed" value="1">
 				<input type="submit" value="Confirm issue" class="button circulation">
 			</form>
 			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="issued" -->
+		<!-- TMPL_IF NAME="issued" -->
 			<p>Item issued</p>
 		<!-- /TMPL_IF -->
 	</div>
@@ -211,7 +211,7 @@
 SUMMARY : TODAY & PREVIOUS ISSUES
 -->
 
-<!-- TMPL_IF name="todayissues" -->
+<!-- TMPL_IF NAME="todayissues" -->
 <div id="bloc25">
 	<h2 class="circulation">Todays Issues</h2>
 	<table>
@@ -222,7 +222,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Author</th>
 			<th class="circulation">Class</th>
 		</tr>
-		<!-- TMPL_LOOP name="todayissues" -->
+		<!-- TMPL_LOOP NAME="todayissues" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="dd" --></td>
 			<td>
@@ -243,7 +243,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 </div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="previssues" -->
+<!-- TMPL_IF NAME="previssues" -->
 <div id="bloc25">
 	<h2 class="circulation">Previous Issues</h2>
 	<table>
@@ -254,7 +254,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 			<th class="circulation">Author</th>
 			<th class="circulation">Class</th>
 		</tr>
-		<!-- TMPL_LOOP name="previssues" -->
+		<!-- TMPL_LOOP NAME="previssues" -->
 			<tr>
 				<!-- TMPL_IF NAME="od" -->
 					<td class="problem">
@@ -283,5 +283,5 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 </div>
 <!-- /TMPL_IF -->
 </div>
-<!-- TMPL_INCLUDE name="circulation-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="circulation-bottom.inc" -->
 
