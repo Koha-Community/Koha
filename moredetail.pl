@@ -24,7 +24,7 @@ use C4::Koha;
 use CGI;
 use C4::Search;
 use C4::Acquisitions;
-use C4::Output; # contains picktemplate
+use C4::Output; # contains gettemplate
   
 my $query=new CGI;
 

@@ -21,7 +21,7 @@ use HTML::Template;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Output;  # contains picktemplate
+use C4::Output;
 use CGI;
 use C4::Search;
 use C4::Auth;

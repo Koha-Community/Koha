@@ -4,7 +4,7 @@ require Exporter;
 use CGI;
 use C4::Search;
 use C4::Auth;
-use C4::Output; # now contains picktemplate
+use C4::Output; # now contains gettemplate
   
 my $query=new CGI;
 

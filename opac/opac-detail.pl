@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-use C4::Output;  # contains picktemplate
+use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Search;
 use C4::Auth;

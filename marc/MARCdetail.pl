@@ -21,7 +21,7 @@ use strict;
 use HTML::Template;
 require Exporter;	# FIXME - Is this really necessary?
 use C4::Context;
-use C4::Output;  # contains picktemplate
+use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Search;
 use MARC::Record;
@@ -35,11 +35,7 @@ my $tag=$query->param('tag');
 if (! defined $tag) { $tag='2XX';}
 #print STDERR "BIB : $biblionumber // TAG : $tag\n";
 if (! defined $biblionumber) {
-    my $includes = C4::Context->config('includes') ||
-	"/usr/local/www/hdl/htdocs/includes";
-    my $templatebase="MARCdetailbiblioselect.tmpl";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template = gettemplate("MARCdetailbiblioselect.tmpl");
     print "Content-Type: text/html\n\n", $template->output;
 
 } else {
@@ -52,11 +48,7 @@ sub showmarcrecord {
     my $sth=$dbh->prepare("select liblibrarian from marc_subfield_structure where tagfield=? and tagsubfield=?");
     my $record =MARCgetbiblio($dbh,$biblionumber);
 # open template
-    my $templatebase="catalogue/MARCdetail.tmpl";
-    my $includes = C4::Context->config('includes') ||
-	"/usr/local/www/hdl/htdocs/includes";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template = gettemplate("MARCdetail.tmpl");
 # fill arrays
     my @loop_data =();
     my @fields = $record->field($tag);

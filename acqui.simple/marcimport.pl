@@ -178,9 +178,7 @@ sub ProcessRecord {
     if ($record) {
 	$oldkoha=MARCmarc2koha($dbh,$record);
     }
-    my $templatebase="marcimport/marcimportdetail.tmpl";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template=gettemplate('marcimport/marcimportdetail.tmpl";
     $oldkoha->{additionalauthors} =~ s/ \| /\n/g;
     $oldkoha =~ s/\|/\n/g;
     $template->param($oldkoha);
@@ -247,9 +245,7 @@ sub ListFileRecords {
     
     requireDBI($dbh,"ListFileRecords");
 
-    my $templatebase="marcimport/ListFileRecords.tmpl";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template=gettemplate('marcimport/ListFileRecords.tmpl";
 
     # File can be z3950 search query or uploaded MARC data
     
@@ -578,9 +574,7 @@ sub uploadmarc {
 
     requireDBI($dbh,"uploadmarc");
 
-    my $templatebase="marcimport/uploadmarc.tmpl";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template=gettemplate('marcimport/uploadmarc.tmpl";
     $template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'});
 #    print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
@@ -604,9 +598,7 @@ sub manual {
 
 
 sub mainmenu {
-	my $templatebase="marcimport/mainmenu.tmpl";
-	my $theme=picktemplate($includes, $templatebase);
-	my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+	my $template=gettemplate('marcimport/mainmenu.tmpl";
 	$template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'});
 	print "Content-Type: text/html\n\n", $template->output;
 } # sub mainmenu
@@ -745,9 +737,7 @@ sub AcceptBiblioitem {
 	print STDERR "Error in marcimport.pl/Acceptbiblioitem : numrecord not defined\n";
 	print "Error in marcimport.pl/Acceptbiblioitem : numrecord not defined : contact administrator\n";
     }
-    my $templatebase="marcimport/AcceptBiblioitem.tmpl";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template=gettemplate('marcimport/AcceptBiblioitem.tmpl";
 
     my $oldkoha = MARCmarc2koha($dbh,$record);
     # See if it already exists
@@ -851,9 +841,7 @@ sub AcceptItemCopy {
     use strict;
     my ( $dbh, $input )=@_;
 
-    my $templatebase="marcimport/AcceptItemCopy.tmpl";
-    my $theme=picktemplate($includes, $templatebase);
-    my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+    my $template=gettemplate('marcimport/AcceptItemCopy.tmpl";
 
     my $error;
 
@@ -993,6 +981,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.15  2002/10/09 18:09:16  tonnesen
+# switched from picktemplate() to gettemplate()
+#
 # Revision 1.14  2002/10/05 09:56:14  arensb
 # Merged with arensb-context branch: use C4::Context->dbh instead of
 # &C4Connect, and generally prefer C4::Context over C4::Database.
