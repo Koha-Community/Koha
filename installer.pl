@@ -81,7 +81,8 @@ if (@missing > 0) {
 
 print "\n";
 my $input;
-my $domainname = 'hostname -d';
+my $domainname = `hostname -d`;
+chomp $domainname;
 my $opacdir = '/usr/local/www/opac';
 my $kohadir = '/usr/local/www/koha';
 print qq|
@@ -95,7 +96,7 @@ exist.
 Usually $opacdir
 |;
 
-print "Enter directory: ";
+print "Enter directory [$opacdir]: ";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -114,7 +115,7 @@ it doesn't exist.
 Usually $kohadir
 |;
 
-print "Enter directory: ";
+print "Enter directory [$kohadir]: ";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -140,7 +141,7 @@ directory. The configuration file, will be created in this directory
 |;
 
 #Get the path to the koha.conf directory
-print "Enter the path to your [$etcdir]: ";
+print "Enter the path to your configuration directory [$etcdir]: ";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -156,7 +157,7 @@ This is normally "$dbname".
 
 |;
 
-print "Enter database name:";
+print "Enter database name [$dbname]: ";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -171,7 +172,7 @@ Please provide the hostname for mysql.  Unless the database is located on anothe
 machine this will be "localhost".
 |;
 
-print "Enter hostname:";
+print "Enter hostname [$hostname]: ";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -187,7 +188,7 @@ $dbname database, when authenticating from $hostname.
 If no user is entered it will default to $user.
 |;
 
-print "Enter username:";
+print "Enter username [$user]:";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -253,13 +254,14 @@ $httpduser ||= 'Undetermined';
 # Set ownership of the koha.conf file for security
 #
 chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf") or warn "can't chown koha.conf: $!";
+chmod 0440, "$etcdir/koha.conf";
 
 #
 #SETUP opac
 #
-my $svr_admin = 'webmaster@$domainname';
-my $opac_svr_name = 'opac.$domainname';
-my $koha_svr_name = 'koha.$domainname';
+my $svr_admin = "webmaster\@$domainname";
+my $opac_svr_name = "opac.$domainname";
+my $koha_svr_name = "koha.$domainname";
 
 print qq|
 
@@ -272,7 +274,7 @@ Please enter the e-mail address for your webserver admin.
 Usually $svr_admin
 |;
 
-print "Enter e-mail address:";
+print "Enter e-mail address [$svr_admin]:";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -285,7 +287,7 @@ print qq|
 Please enter the servername for your OPAC interface.
 Usually $opac_svr_name
 |;
-print "Enter servername address:";
+print "Enter servername address [$opac_svr_name]:";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -297,7 +299,7 @@ print qq|
 Please enter the servername for your Intranet/Librarian interface.
 Usually $koha_svr_name
 |;
-print "Enter servername address:";
+print "Enter servername address [$koha_svr_name]:";
 chomp($input = <STDIN>);
 
 if ($input) {
@@ -314,8 +316,14 @@ UPDATING APACHE.CONF
 ====================
 
 |;
-open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
-print SITE <<EOP
+if (`grep 'VirtualHost $opac_svr_name' $realhttpdconf`) {
+    warn "$realhttpdconf appears to already have an entry for Koha\nVirtual Hosts.\n";
+    print "Press <ENTER> to continue...";
+    <STDIN>;
+    print "\n";
+} else {
+    open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
+    print SITE <<EOP
 
 <VirtualHost $opac_svr_name>
    ServerAdmin $svr_admin
@@ -339,9 +347,10 @@ print SITE <<EOP
 
 EOP
 ;
-close(SITE);
-print "Successfully updated Apache Configuration file.\n";
+    close(SITE);
+    print "Successfully updated Apache Configuration file.\n";
 
+}
 
 #
 # Setup the modules directory
@@ -352,6 +361,10 @@ CREATING REQUIRED DIRECTORIES
 =============================
 
 |;
+
+# Still need to check that all parent directories of $kohadir and $opacdir
+# exist
+
 
 unless ( -d $kohadir ) {
    print "Creating $kohadir...\n";
@@ -448,7 +461,8 @@ system ("perl scripts/updater/updatedatabase -I $kohadir/modules");
 
 
 #RESTART APACHE
-system('clear');
+#system('clear');
+print "\n\n";
 print qq|
 COMPLETED
 =========
@@ -466,6 +480,7 @@ my $restart = <STDIN>;
 chomp $restart;
 
 if ($answer eq "Y" || $answer eq "y") {
+	# Need to support other init structures here?
 	system('/etc/rc.d/init.d/httpd restart');
     } else {
     print qq|
