@@ -30,7 +30,7 @@
 <TMPL_IF NAME="too_much_oweing">Sorry, you cannot make reserves because you owe <TMPL_VAR NAME="too_much_oweing">.  </TMPL_IF>
 <TMPL_IF NAME="too_many_reserves">Sorry, you cannot make more than <TMPL_VAR NAME="too_many_reserves"> reserves. </TMPL_IF>
 <TMPL_IF NAME="already_reserved">You already have a reserve placed on this item.</TMPL_IF>
-<TMPL_IF NAME="no_items_selected">You must select at least on item type!</TMPL_IF>
+<TMPL_IF NAME="no_items_selected">Please select at least on item type!</TMPL_IF>
 </h3>
 </TMPL_IF>
 
@@ -84,7 +84,7 @@
 <TMPL_IF NAME="onlyone">
 <!-- If there is only one types -->
 <input type="reset" class="brown-box" value="Clear">&nbsp&nbsp<input type="submit" class="green-box" value="Submit">
-<input type="hidden" name="all">
+<input type="hidden" name="all" value="1">
 </form>
 
 <TMPL_ELSE>
