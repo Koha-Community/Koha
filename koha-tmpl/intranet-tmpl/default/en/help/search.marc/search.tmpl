@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Search</h1>
+	<p>The search id divided in 2 differents parts :</p>
+	<h2>Usual fields</h2>
+	<p>The usual fields are in the top part of the screen. They contains :</p>
+		<ul>
+			<li>Keyword : search on anything</li>
+			<li>Title</li>
+			<li>Author</li>
+			<li>Barcode : the library barcode of the book</li>
+			<li>Illustrator</li>
+			<li>Dewey</li>
+			<li>Item type : select here an item type. If none is selected, the search is done on every item type</li>
+			<li>Branch : select here a specific branch. If none selected, the search is done on every branch</li>
+		</ul>
+	<p>Search method</p>
+		<ul>
+			<li>If you enter values in more than 1 field, the search is "and-ed" (biblios that contains <b>title</b> AND <b>author</b>)</li>
+			<li>A biblio is selected if it's field <b>contains</b> the term you entered</li>
+			<li>If you enter a * (or a %) at the end of a term, Koha search for words starting with your term (entering <b>lower*</b> means : find biblio that have a <b>title containing a word starting by lower</b></li>
+		</ul>
+	<h2 class="catalogue">Complete MARC search</h2>
+	<p>In the lower part of the search screen, the <b>More fields</b> box let you enter whatever you want : and, or, exclusions (not), search on any MARC field/subfield</p>
+	
+	<p><b>IMPORTANT NOTE : </b>for performance reasons, the * is valid only if you enter a word more than 3 letters long. for words of 3 letters or less, the * is <b>ignored</b></p>
+	<br/>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->
