@@ -109,16 +109,37 @@ sub changeSubfield {
 # Subroutine changes a subfield value given a subfieldid.
     my ( $subfieldid, $subfieldvalue )=@_;
 
-    my $firstdigit="?";
-
     my $dbh=&c4connect;  
-    my $sth=$dbh->prepare("update marc_$firstdigit\XX_subfield_table set subfieldvalue=? where subfieldid=?");
+    my $sth=$dbh->prepare("update marc_subfield_table set subfieldvalue=? where subfieldid=?");
     $sth->execute($subfieldvalue, $subfieldid);
 
     $dbh->disconnect;
     return($Subfield_ID, $Subfield_Key);
 }
 
+sub findSubfield {
+# find a subfieldid given bibid, tag, subfieldcode, subfieldvalue this is
+# inherently dangerous.  There could be multiple subfields that match the given
+# parameters.  What then?  What if no subfields match?  That one's easy, just
+# return 0
+    my ($bibid,$tag,$subfieldcode,$subfieldvalue) = @_;
+    my $resultcounter=0;
+    my $subfieldid=0;
+    my $dbh=&c4connect;
+    my $sth=$dbh->prepare("select tagid from marc_$firstdigit\XX_tag_table where bibid=$bibid");
+    $sth->execute;
+    my $sti=$dbh->prepare("select subfieldid from marc_subfield_table where tag=? and subfieldcode=? and subfieldvalue=?");
+    $sti->execute($tag, $subfieldcode,$subfieldvalue);
+    while (($subfieldid) = $sti->fetchrow) {
+	$resultcounter++;
+    }
+    if ($resultcounter>1) {
+	# Error condition.  Values given did not resolve into a unique record.  Don't know what to edit
+	return -1;
+    } else {
+	return $subfieldid;
+    }
+}
 
 sub addSubfield {
 # Add a new subfield to a tag.
@@ -127,11 +148,10 @@ sub addSubfield {
     my $subfieldcode=shift;
     my $subfieldvalue=shift;
     my $subfieldorder=shift;
-    my $firstdigit="?";
 
     my $dbh=&c4connect;  
     unless ($subfieldorder) {
-	my $sth=$dbh->prepare("select max(subfieldorder) from marc_$firstdigit\XX_subfield_table where tagid=$tagid");
+	my $sth=$dbh->prepare("select max(subfieldorder) from marc_subfield_table where tagid=$tagid");
 	$sth->execute;
 	if ($sth->rows) {
 	    ($subfieldorder) = $sth->fetchrow;
@@ -140,7 +160,7 @@ sub addSubfield {
 	    $subfieldorder=1;
 	}
     }
-    my $sth=$dbh->prepare("insert into marc_$firstdigit\XX_subfield_table (tagid,bibid,subfieldorder,subfieldcode,subfieldvalue) values (?,?,?,?,?)");
+    my $sth=$dbh->prepare("insert into marc_subfield_table (tagid,bibid,subfieldorder,subfieldcode,subfieldvalue) values (?,?,?,?,?)");
     $sth->execute($tagid,$bibid,$subfieldorder,$subfieldcode,$subfieldvalue);
 }
 
@@ -183,7 +203,7 @@ sub updateBiblio {
 
     
 # Obtain a list of MARC Record_ID's that are tied to this biblio
-    $sth=$dbh->prepare("select T.bibid from marc_0XX_tag_table T, marc_0XX_subfield_table S where T.tagid=S.tagid and T.tagnumber='090' and S.subfieldvalue=$biblionumber and S.subfieldcode='c'");
+    $sth=$dbh->prepare("select bibid from marc_subfield_table where tag='090' and subfieldvalue=$biblionumber and subfieldcode='c'");
     $sth->execute;
     my @marcrecords;
     while (my ($bibid) = $sth->fetchrow) {
@@ -343,6 +363,8 @@ sub skip {
 
 sub logchange {
 # Subroutine to log changes to databases
+# Eventually, this subroutine will be used to create a log of all changes made,
+# with the possibility of "undo"ing some changes
     my $database=shift;
     if ($database eq 'kohadb') {
 	my $type=shift;
