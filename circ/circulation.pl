@@ -138,7 +138,6 @@ my $day=$query->param('day');
 if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
 	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
-
 	unless ($invalidduedate) {
 		$env{'datedue'}=$datedue;
 		my @time=localtime(time);
@@ -361,7 +360,7 @@ sub fixdate {
 	    } elsif (($month == 2) && ($day > 28) && (($year%4) && ((!($year%100) || ($year%400))))) {
 		$invalidduedate="Invalid Due Date Specified. Book was not issued.  $year is not a leap year.<p>\n";
 	    } else {
-		$date=format_date("$year-$month-$day");
+		$date="$year-$month-$day";
 	    }
 	}
     }
