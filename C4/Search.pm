@@ -1649,6 +1649,7 @@ and issues.borrowernumber = borrowers.borrowernumber";
         if (my $data2 = $sth2->fetchrow_hashref) {
             $data->{'date_due'} = $data2->{'date_due'};
             $data->{'card'}     = $data2->{'cardnumber'};
+	    $data->{'borrower'}     = $data2->{'borrowernumber'};
         } else {
             if ($data->{'wthdrawn'} eq '1') {
                 $data->{'date_due'} = 'Cancelled';

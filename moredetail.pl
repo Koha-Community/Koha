@@ -97,7 +97,7 @@ foreach my $item (@items){
     if ($item->{'date_due'} eq 'Available'){
 	$item->{'issue'}="<b>Available</b><br>";
     } else {
-	$item->{'issue'}="<b>Currently on issue to:</b> <a href=/cgi-bin/koha/moremember.pl?bornum=$item->{'borrower0'}>$item->{'card'}</a><br>";
+	$item->{'issue'}="<b>Currently on issue to:</b> <a href=/cgi-bin/koha/moremember.pl?bornum=$item->{'borrower'}>$item->{'card'}</a><br>";
     }
 }
 
