@@ -19,10 +19,10 @@ function update(f){
   gst_on=(!listinc && applygst);
   //do real stuff
   rrp=listprice*exchangerate;
-  ecost=rrp*(100-discount)/100
+  ecost=Math.round(rrp*(100-discount))/100;
   GST=0;
   if (gst_on){
-    rrp=rrp*(1+<TMPL_VAR name="gstrate">);
+    rrp= Math.round(rrp*(1+<TMPL_VAR name="gstrate">)*100)/100;
     GST=ecost*<TMPL_VAR name="gstrate">;
   }
 
@@ -96,7 +96,7 @@ win.document.write("</font></body></html>");
 	</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Format</td>
+		<TD>Catégorie</td>
 		<td><TMPL_VAR name="CGIitemtype"></td>
 	</tr>
 	<TR VALIGN=TOP>

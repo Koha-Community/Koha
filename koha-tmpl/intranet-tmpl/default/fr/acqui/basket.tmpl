@@ -1,6 +1,6 @@
 <TMPL_INCLUDE name="acquisitions-top.inc">
 
-<FONT SIZE=6><em>Panier <TMPL_VAR name="basket"> for <a href=supplier.pl?id=<TMPL_VAR name="booksellerid">></a> <TMPL_VAR name="name"></em></FONT><br />
+<FONT SIZE=6><em>Panier <TMPL_VAR name="basket"> pour <a href=supplier.pl?id=<TMPL_VAR name="booksellerid">></a> <TMPL_VAR name="name"></em></FONT><br />
 (Référence: <TMPL_VAR name="entrydate">, #<TMPL_VAR name="basket">, passée par : <TMPL_VAR name="authorisedby">)<br />
 <CENTER>
 <p>
@@ -13,6 +13,7 @@
 		<td width="6%"><b>Px rempl</b></td>
 		<td width="8%"><b>Px est</b></td>
 		<td width="8%"><b>Qté</b></td>
+		<td width="8%"><b>Recu</b></td>
 		<td width="8%"><b>Total</b></td>
 	</tr>
 	<TMPL_LOOP name="books_loop">
@@ -24,6 +25,7 @@
 			<td><TMPL_VAR name="rrp"></td>
 			<td><TMPL_VAR name="ecost"></td>
 			<td><TMPL_VAR name="quantity"></td>
+			<td><TMPL_VAR name="quantityrecieved"></td>
 			<td><TMPL_VAR name="line_total"></td>
 		</tr>
 	</TMPL_LOOP>

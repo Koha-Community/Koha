@@ -12,7 +12,7 @@ vous avez cherché le <b>fournisseur <TMPL_VAR name="supplier">,</b> <TMPL_VAR na
 			<tr>
 				<td width="15%"><b>Panier</b></td>
 				<td width="15%"><b>Exemplaire</b></td>
-				<td width="40%"><b>Staff</b></td>
+				<td width="40%"><b>Saisi par</b></td>
 				<td width="30%"><b>Date</b></td>
 			</tr>
 		</table>
@@ -22,10 +22,10 @@ vous avez cherché le <b>fournisseur <TMPL_VAR name="supplier">,</b> <TMPL_VAR na
 <TMPL_LOOP name="loop_suppliers">
 	<tr valign=top bgcolor=<TMPL_VAR name="color">>
 		<td>
-			<a href="basket.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<a href="basket.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Passer commande" ALT="Add" BORDER=0 ></a>
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="recieve" ALT="Add" BORDER=0 ></a>
+			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="Livraison" ALT="Add" BORDER=0 ></a>
 		</td>
 		<td><a href="supplier.pl?id=<TMPL_VAR name="id">"><TMPL_VAR name="name"></a></td>
 		<td>
