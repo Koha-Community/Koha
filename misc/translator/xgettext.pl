@@ -461,8 +461,9 @@ xgettext(1)'s sort option. This will result in translation
 strings inside the generated PO file spuriously moving about
 when tmpl_process3.pl calls msgmerge(1) to update the PO file.
 
-It sometimes generates strings with spurious leading spaces,
+If a Javascript string has leading spaces, it will
+generate strings with spurious leading spaces,
 leading to failure to match the strings when actually generating
-translated files.  The cause of this is not yet known.
+translated files.
 
 =cut
