@@ -175,7 +175,7 @@ print $input->header;
 
 #setup colours
 print startpage();
-print startmenu();
+print startmenu('catalogue');
 
 
 
