@@ -3,10 +3,14 @@
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
 	<TMPL_IF NAME="norequests">
 	<TMPL_ELSE>
-		<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber">><img height=42  WIDTH=120 BORDER="0"
-		src="<TMPL_VAR name="themelang">/images/requests.gif" align="right" border="0"></a>
+		<table border=0 cellpadding=10 align=right>
+		<tr>
+			<td>
+				<a class="button" href=request.pl?bib=<TMPL_VAR NAME="biblionumber">>Requests</a>
+			</td>
+		</tr>
+		</table>
 	</TMPL_IF>
-
 	<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
 	<TMPL_VAR NAME="class"></em></font><p>
 	<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
