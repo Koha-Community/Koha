@@ -172,8 +172,8 @@ sub create_input () {
 	$subfield_data{kohafield}=$tagslib->{$tag}->{$subfield}->{kohafield};
 	if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 		$subfield_data{marc_value}= build_authorized_values_list($tag, $subfield, $value, $dbh,$authorised_values_sth);
-	} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+	} elsif ($tagslib->{$tag}->{$subfield}->{authtypecode}) {
+		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../authorities/auth_finder.pl?category=$tagslib->{$tag}->{$subfield}->{authtypecode}&index=$i',$i)\">...</a>";
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
 		require $plugin;
@@ -181,7 +181,7 @@ sub create_input () {
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" DISABLE READONLY size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 	} elsif  ($tag eq '') {
-		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" size=50 maxlength=255>"; #"
+		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" size=50 maxlength=255>";
 	} else {
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>"; #"
 	}
