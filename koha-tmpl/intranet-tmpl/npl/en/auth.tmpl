@@ -1,25 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- <!-- TMPL_IF NAME="nopermission" -->Access Denied<!-- /TMPL_IF --><!-- TMPL_IF NAME="timed_out" -->Session Timed Out --<!-- /TMPL_IF --><!-- TMPL_IF NAME="different_ip" -->IP Change -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid Username or Password -- <!-- /TMPL_IF --><!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
-<div id="main">
+<div id="auth">
 
 <!-- TMPL_IF NAME="nopermission" -->
-<!-- This is what is displayed if user doesn"t have permission -->
-<h2>Sorry, Koha doesn"t think you have permission for this page.</h2>
+<div class="error"><!-- This is what is displayed if user doesn"t have permission --><h3>Login Error</h3>
+Sorry, Koha doesn"t think you have permission for this page.</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
-<!-- This is what is displayed if login has timed out -->
-<h2>Sorry, your session has timed out.  Please login again.</h2>
+<div class="error"><!-- This is what is displayed if login has timed out -->
+<h3>Login Error</h3>Sorry, your session has timed out.  Please login again.</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
-<!-- This is what is displayed if user"s IP has changed -->
-<h2>You are accessing Koha from a different ip address! Please login again.</h2>
+<div class="error"><!-- This is what is displayed if user"s IP has changed -->
+<h3>Login Error</h3>You are accessing Koha from a different ip address! Please login again.</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
-<!-- This is what is displayed if the username or password doesn"t work -->
-<h2>You entered an incorrect username or password.  Please try again.</h2>
+<div class="error"><!-- This is what is displayed if the username or password doesn"t work -->
+<h3>Login Error</h3>You entered an incorrect username or password.  Please try again.</div>
 <!-- /TMPL_IF -->
 
 
@@ -32,11 +32,11 @@
 <!-- /TMPL_LOOP -->
 
 <div class="details">    <table>
-	<caption>Koha Login</caption>
+	<caption>Log In to Koha</caption>
     <tr><th><label for="userid">Cardnumber:</label></th><td><input name="userid" id="userid" /></td></tr>
-    <tr><th><label for="password">Password:</label></h><td><input type="password" name="password" id="password" /></td></tr>
-    </table></div>
-<input type="submit" value="Log In" class="submit" />
+    <tr><th><label for="password">Password:</label></th><td><input type="password" name="password" id="password" /></td></tr>
+    </table>
+<p><input type="submit" value="Submit" class="submit" /></p></div>
 </form>
 
 
