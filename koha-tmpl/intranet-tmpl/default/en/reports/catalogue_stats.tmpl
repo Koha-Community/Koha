@@ -64,7 +64,7 @@
 					<td>Dewey Classification</td>
 					<td align="center"><input type="radio" name="Line" value="dewey"></td>
 					<td align="center"><input type="radio" name="Column" value="dewey"></td>
-					<td > From <!-- TMPL_VAR NAME="CGIFromDeweyClass" --> To <!-- TMPL_VAR NAME="CGIToDeweyClass" --></td>
+					<td > From <input type="text" name="Filter" > To <input type="text" name="Filter" ></td>
 				</tr>
 				<tr class="hilighted">
 					<td>&nbsp;</td>
@@ -88,7 +88,7 @@
 					<td>LoC Classification</td>
 					<td align="center"><input type="radio" name="Line" value="lccn"></td>
 					<td align="center"><input type="radio" name="Column" value="lccn"></td>
-					<td > From <!-- TMPL_VAR NAME="CGIFromLoCClass" --> To <!-- TMPL_VAR NAME="CGIToLoCClass" --></td>
+					<td > From <input type="text" name="Filter" > To <input type="text" name="Filter" ></td>
 				</tr>
 				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 					<td>&nbsp;</td>
@@ -112,7 +112,7 @@
 					<td>Callnumber</td>
 					<td align="center"><input type="radio" name="Line" value="items.itemcallnumber"></td>
 					<td align="center"><input type="radio" name="Column" value="items.itemcallnumber"></td>
-					<td>From <!-- TMPL_VAR NAME="CGIFromCoteClass" --> To <!-- TMPL_VAR NAME="CGIToCoteClass" --></td>
+					<td>From <input type="text" name="Filter" > To <input type="text" name="Filter" ></td>
 				</tr>
 				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 					<td>&nbsp;</td>
@@ -141,7 +141,7 @@
 				<td>Publisher</td>
 				<td align="center"><input type="radio" name="Line" value="publishercode"></td>
 				<td align="center"><input type="radio" name="Column" value="publishercode"></td>
-				<td><!-- TMPL_VAR NAME="CGIPublisher" --></td>
+				<td><input type="text" name="Filter" ></td>
 			</tr>
 			<!--TMPL_IF Name="hglghtPY"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Publication Year</td>

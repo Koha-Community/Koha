@@ -106,57 +106,57 @@ if ($do_it) {
 	my %labels;
 	my $count=0;
 	my $req;
-	$req = $dbh->prepare("select distinctrow left(dewey,3) from biblioitems order by dewey");
+	$req = $dbh->prepare("select count(dewey) from biblioitems ");
 	$req->execute;
 	my $hasdewey;
 	my @select;
-	push @select,"";
+# 	push @select,"";
 	while (my ($value) =$req->fetchrow) {
-		$hasdewey =1 if (($value) and (! $hasdewey));
-		$count++ if (($value) and (! $hasdewey));
-		push @select, $value;
+		$hasdewey =1 if (($value>2) and (! $hasdewey));
+		$count++ if (($value>2) and (! $hasdewey));
+#		push @select, $value;
 	}
-	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select,
-				-size     => 1,
-				-multiple => 0 );
+# 	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
+# 				-id => 'Filter',
+# 				-values   => \@select,
+# 				-size     => 1,
+# 				-multiple => 0 );
 	
-	$req = $dbh->prepare( "select distinctrow left(lccn,3) from biblioitems order by lccn");
+	$req = $dbh->prepare( "select count(lccn) from biblioitems ");
 	$req->execute;
-	undef @select;
-	push @select,"";
+# 	undef @select;
+# 	push @select,"";
 	my $haslccn;
 	my $hlghtlccn;
 	while (my ($value) =$req->fetchrow) {
 		$hlghtlccn = !($hasdewey);
-		$haslccn =1 if (($value) and (! $haslccn));
+		$haslccn =1 if (($value>2) and (! $haslccn));
 		$count++ if (($value) and (! $haslccn));
-		push @select, $value;
+#		push @select, $value;
 	}
-	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select,
-				-size     => 1,
-				-multiple => 0 );
+# 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
+# 				-id => 'Filter',
+# 				-values   => \@select,
+# 				-size     => 1,
+# 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow left(itemcallnumber,5) from items order by itemcallnumber");
+	$req = $dbh->prepare("select count(itemcallnumber) from items");
 	$req->execute;
-	undef @select;
-	push @select,"";
+#	undef @select;
+#	push @select,"";
 	my $hascote;
 	my $hlghtcote;
 	while (my ($value) =$req->fetchrow) {
-		$hascote =1 if (($value) and (! $hascote));
+		$hascote =1 if (($value>2) and (! $hascote));
 		$count++ if (($value) and (! $hascote));
 		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
-		push @select, $value;
+#		push @select, $value;
 	}
-	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select,
-				-size     => 1,
-				-multiple => 0 );
+# 	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
+# 				-id => 'Filter',
+# 				-values   => \@select,
+# 				-size     => 1,
+# 				-multiple => 0 );
 	$count++;
 	my $hglghtDT =$count % 2;
 #	warn "highlightDT ".$hglghtDT;
@@ -187,18 +187,18 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow left(publishercode,75) from biblioitems order by publishercode");
-	$req->execute;
-	undef @select;
-	push @select,"";
-	while (my ($value) =$req->fetchrow) {
-		push @select, $value;
-	}
-	my $CGIpublisher=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select,
-				-size     => 1,
-				-multiple => 0 );
+# 	$req = $dbh->prepare("select distinctrow left(publishercode,75) from biblioitems order by publishercode");
+# 	$req->execute;
+# 	undef @select;
+# 	push @select,"";
+# 	while (my ($value) =$req->fetchrow) {
+# 		push @select, $value;
+# 	}
+# 	my $CGIpublisher=CGI::scrolling_list( -name     => 'Filter',
+# 				-id => 'Filter',
+# 				-values   => \@select,
+# 				-size     => 1,
+# 				-multiple => 0 );
 
 	undef @select;
 	push @select,"";
@@ -247,12 +247,12 @@ if ($do_it) {
 				-multiple => 0 );
 	
 	$template->param(hasdewey=>$hasdewey,
-					CGIFromDeweyClass => $CGIdewey,
-					CGIToDeweyClass => $CGIdewey,
+#					CGIFromDeweyClass => $CGIdewey,
+#					CGIToDeweyClass => $CGIdewey,
 					haslccn=> $haslccn,
 					hlghtlccn => $hlghtlccn,
-					CGIFromLoCClass => $CGIlccn,
-					CGIToLoCClass => $CGIlccn,
+#					CGIFromLoCClass => $CGIlccn,
+#					CGIToLoCClass => $CGIlccn,
 					hascote=> $hascote,
 					hlghtcote => $hlghtcote,
 					hglghtDT => $hglghtDT,
@@ -260,12 +260,12 @@ if ($do_it) {
 					hglghtPY => $hglghtPY,
 					hglghtHB => $hglghtHB,
 					hglghtLOC => $hglghtLOC,
-					CGIFromCoteClass => $CGIcote,
-					CGIToCoteClass => $CGIcote,
+#					CGIFromCoteClass => $CGIcote,
+#					CGIToCoteClass => $CGIcote,
 					CGIItemType => $CGIitemtype,
 # 					CGIFromPublicationYear => $CGIpublicationyear,
 # 					CGIToPublicationYear => $CGIpublicationyear,
-					CGIPublisher => $CGIpublisher,
+#					CGIPublisher => $CGIpublisher,
 					CGIBranch => $CGIbranch,
 					CGILocation => $CGIlocation,
 					CGIextChoice => $CGIextChoice,
