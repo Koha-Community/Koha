@@ -250,14 +250,14 @@ foreach my $code (keys %$messages) {
     }
     if ($code eq 'NotIssued'){
 	my $braname = $branches->{$messages->{'IsPermanent'}}->{'branchname'};
-	$messagetext .= "<font color='red' size='+2'> Item is not Issued, cannot be returned. </font> <br>";
+	$messagetext .= "<font color='red' size='+2'> Item not on issue. </font> <br>";
     }
     if ($code eq 'WasLost'){
 	$messagetext .= "<font color='red' size='+2'> Item was lost, now found. </font> <br>";
     }
     if (($code eq 'IsPermanent') && (not $messages->{'ResFound'})) {
 	if ($messages->{'IsPermanent'} ne $branch) {
-	    $messagetext .= "<font color='red' size='+2'> Item is part of permanent collection, please return to $branches->{$messages->{'IsPermanent'}}->{'branchname'} </font> <br>";
+	    $messagetext .= "<font color='red' size='+2'> Please return to $branches->{$messages->{'IsPermanent'}}->{'branchname'} </font> <br>";
 	}
     }
 }
