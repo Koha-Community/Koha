@@ -1,8 +1,6 @@
 <TMPL_INCLUDE Name="cat-top.inc">
-
-<BLOCKQUOTE><FONT SIZE=6>
-<em><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
-Modyfikuj Grupê - <TMPL_VAR Name="description"></em></FONT><br>
+<h1><a href=/cgi-bin/koha/detail.pl?bib="<TMPL_VAR Name="biblionumber">"&type=intra><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a><br>
+Modyfikuj Grupê - <TMPL_VAR Name="description"></h1><br>
 
 <form action=updatebibitem.pl method=post>
 	<table border=0 cellspacing=0 cellpadding=5 align=left>
@@ -69,8 +67,8 @@ Modyfikuj Grupê - <TMPL_VAR Name="description"></em></FONT><br>
 	<TABLE  cellspacing=0 cellpadding=5 border=0 >
 
 		<TR VALIGN=TOP  bgcolor="99cc33">
-			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5 ><b>ZMIANY DOTYCZ¡CE TYCH KODÓW KRESKOWYCH<br>
-			Zaznacz te kody kreskowe, których zmiany maj± dotyczyæ. Te nie-zaznaczone zachowaj± swoj± oryginaln± grupê.</td>
+			<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5 ><b>ZMIANY MAJ¡CE DOTYCZYÆ TYCH KODÓW KRESKOWYCH<br>
+			Zaznacz TE kody kreskowe, których zmiany maj± dotyczyæ. Wszystkie nie-zaznaczone zachowaj± swoj± oryginaln± grupê.</td>
 		</tr>
 
 		<tr valign=top bgcolor=99cc33>
@@ -100,11 +98,9 @@ Modyfikuj Grupê - <TMPL_VAR Name="description"></em></FONT><br>
 <p>
 
 
-<B>POMOC:</B><b> Musisz</b> klikn±æ w ¿adane kó³ko wyboru (na zielonym tle), i albo przypisaæ pozycjê/e do istniej±cego ju¿ w systemie rekordu,
-albo zmodyfikowaæ ten rekord. JE¦LI zmiany maj± dotyczyæ jedynie niektórych pozycji, zaznacz je odpowiednio, wówczas utworzony zostanie dla nich
-automatycznie osobny rekord grupowy.
+<B>POMOC:</B><b> Musisz</b> klikn±æ w ¿±dane kó³ko wyboru (na zielonym tle), nastêpnie albo przypisaæ pozycjê/e do istniej±cego ju¿ w systemie rekordu,
+albo zmodyfikowaæ ten rekord. JE¦LI zmiany maj± dotyczyæ jedynie niektórych pozycji, zaznacz je odpowiednio, wówczas utworzony zostanie dla nich automatycznie osobny rekord grupowy.
  <br clear=all>
  <p> &nbsp; </p>
 
 <TMPL_INCLUDE Name="cat-bottom.inc">
-</html>
