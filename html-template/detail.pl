@@ -31,10 +31,13 @@ while (<KC>) {
 }
 
 my $biblionumber=$query->param('bib');
-my $type='intra';
+my $type=$query->param('type');
 
 # change back when ive fixed request.pl
 my @items = ItemInfo(undef, $biblionumber, $type);
+foreach my $dat (@items){
+    $dat->{'type'}=$type;
+}
 my $dat=bibdata($biblionumber);
 my ($authorcount, $addauthor)= &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
