@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# NOTE: This file uses standard 8-character tabs
+
 use strict;
 require Exporter;
 use CGI;
@@ -8,6 +10,7 @@ use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Reserves2;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = 5;
@@ -226,3 +229,7 @@ $template->param(BIBLIOITEMS => \@data);
 
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+# Local Variables:
+# tab-width: 8
+# End:
