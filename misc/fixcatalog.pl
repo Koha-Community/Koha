@@ -18,10 +18,10 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Database;
+use C4::Context;
 use strict;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my $sth=$dbh->prepare("Select biblio.biblionumber,biblio.title from biblio,catalogueentry where catalogueentry.entrytype
 ='t' and catalogueentry.catalogueentry=biblio.title limit 500");
@@ -34,6 +34,3 @@ while (my $data=$sth->fetchrow_hashref){
   $sth2->finish;
 }
 $sth->finish;
-
-
-$dbh->disconnect;

@@ -22,37 +22,14 @@ use HTML::Template;
 
 use strict;
 require Exporter;
-use C4::Database;
 use CGI;
 use C4::Search;
 use C4::Output; # no contains picktemplate
   
 my $query=new CGI;
 
-
-my $language='french';
-
-
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
-#print $query->header;
-
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
 my $templatebase="catalogue/searchresults.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
@@ -72,6 +49,10 @@ $env->{itemcount}=1;
 
 # get all the search variables
 # we assume that C4::Search will validate these values for us
+# FIXME - This whole section, up to the &catalogsearch call, is crying
+# out for
+#	foreach $search_term (qw(keyword subject author ...))
+#	{ ... }
 my %search;
 my $keyword=$query->param('keyword');
 $search{'keyword'}=$keyword;
@@ -90,7 +71,7 @@ $search{'date-before'}=$datebefore;
 my $class=$query->param('class');
 $search{'class'}=$class;
 my $dewey=$query->param('dewey');
-$search{'dewey'};
+$search{'dewey'};		# FIXME - This should be $search{'dewey'} = $dewey, right?
 my $branch=$query->param('branch');
 $search{'branch'}=$branch;
 my $title=$query->param('title');

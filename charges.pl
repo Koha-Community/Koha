@@ -23,8 +23,8 @@
 
 use strict;
 use CGI;
+use C4::Context;
 use C4::Output;
-use C4::Database;
 
 my $input = new CGI;
 print $input->header;
@@ -34,7 +34,7 @@ print startmenu('issue');
 print "Each box needs to be filled in with fine,time to start charging,charging cycle<br>
 eg 1,7,7 = $1 fine, after 7 days, every 7 days";
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $query="Select description,categorycode from categories";
 my $sth=$dbh->prepare($query);
 $sth->execute;

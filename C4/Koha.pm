@@ -20,7 +20,7 @@ package C4::Koha;
 
 use strict;
 require Exporter;
-use C4::Database;
+use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT);
   
@@ -91,12 +91,11 @@ Koha database ("European" or "Pacific Islander").
 sub fixEthnicity($) { 
 
     my $ethnicity = shift;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Select name from ethnicity where code = ?");
     $sth->execute($ethnicity);
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
-    $dbh->disconnect;
     return $data->{'name'};
 }
 
@@ -113,7 +112,7 @@ to category descriptions.
 #'
 
 sub borrowercategories {
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Select categorycode,description from categories order by description");
     $sth->execute;
     my %labels;
@@ -123,7 +122,6 @@ sub borrowercategories {
       $labels{$data->{'categorycode'}}=$data->{'description'};
     }
     $sth->finish;
-    $dbh->disconnect;
     return(\@codes,\%labels);
 }
 
@@ -140,7 +138,7 @@ descriptions.
 #'
 
 sub ethnicitycategories {
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Select code,name from ethnicity order by name");
     $sth->execute;
     my %labels;
@@ -150,7 +148,6 @@ sub ethnicitycategories {
       $labels{$data->{'code'}}=$data->{'name'};
     }
     $sth->finish;
-    $dbh->disconnect;
     return(\@codes,\%labels);
 }
 

@@ -1,3 +1,191 @@
+2002-10-05  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	* C4/Output.pm, C4/Context.pm, C4/Biblio.pm: Merged in changes
+	from main branch.
+	
+	* marc/viewmarc.pl: Added a FIXME comment.
+
+	* marc/viewmarc.pl: Oops! Stupid bug fix.
+
+	* marc/koha2marc: Removed a useless statement.
+
+	* moredetail.pl: Removed some obsolete commented-out code.
+
+	* updater/updatedatabase2.pl, updater/updatedatabase,
+	updater/thesaurus_create.pl, misc/fixborrower.pl, marc/test,
+	maint/shiftbib.pl, html-template/search.pl,
+	html-template/Search.pm, circ/circulation.pl, admin/itemtypes.pl,
+	admin/currency.pl, admin/categoryitem.pl, admin/categorie.pl,
+	admin/branches.pl, admin/aqbudget.pl,
+	acqui.simple/processz3950queue, acqui.simple/bulkmarcimport.pl,
+	acqui.simple/addbookslccn.pl, C4/Circulation/Returns.pm,
+	C4/Circulation/Renewals2.pm, C4/Circulation/Renewals.pm,
+	C4/Circulation/Main.pm, C4/Circulation/Issues.pm,
+	C4/Circulation/Fines.pm, C4/Circulation/Circ2.pm,
+	C4/Circulation/Borrower.pm, C4/Circulation/Borrissues.pm,
+	C4/test.pl, C4/Search.pm, C4/Reserves2.pm, C4/Print.pm,
+	C4/InterfaceCDK.pm, C4/Circmain.pm, C4/Biblio.pm, C4/Auth.pm,
+	C4/Acquisitions.pm, C4/Accounts.pm, stats2.pl, search.pl,
+	overdue.pl, bookcount.pl: Added a whole mess of FIXME comments.
+	
+	* C4/Acquisitions.pm: Oops! Forgot to add "use C4::Context;"
+
+	* C4/Biblio.pm: Added some missing semicolons.
+
+2002-10-03  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	* telnet/doreturns.pl, telnet/borrwraper.pl: Use C4::Connect
+	instead of C4::Database, C4::Connect->dbh instead C4Connect.
+	Removed trailing whitespace, 'cos it was bugging me.
+	
+	* C4/Database.pm: Added a FIXME comment.
+
+	* C4/Context.pm: A couple of bug fixes so it'll actually load.
+
+	* misc/tidyaccounts.pl, maint/catmaintain.pl: Removed useless "use
+	C4::Database;" line.
+	
+	* acqui.simple/addbooks.pl, C4/Circulation/Renewals.pm,
+	C4/SimpleMarc.pm, C4/Circulation.pm, C4/Circmain.pm,
+	updatebiblio.pl, updatebibitem.pl, tidyaccounts.pl: Removed
+	useless "use C4::Database;" line.
+	
+	* marc/MARCdetail.pl, html-template/search.pl,
+	html-template/moredetail.pl, html-template/detail.pl,
+	acqui.simple/marcimport.pl, C4/Output.pm, userpage.pl, search.pl,
+	moredetail.pl, detail.pl: Use C4::Connect instead of C4::Database,
+	C4::Connect->dbh instead C4Connect. Removed old code for reading
+	/etc/koha.conf.
+	
+	* updater/updatedatabase2.pl, updater/updatedatabase,
+	updater/thesaurus_create.pl, sec/writeoff.pl, misc/makeformats.pl,
+	misc/makebaskets.pl, misc/fixrefs.pl, misc/fixorders.pl,
+	misc/fixcatalog.pl, misc/fixborrower.pl, misc/fines2.pl,
+	marc/viewmarc.pl, marc/updatedb2marc.pl, marc/test,
+	marc/koha2marc, marc/fill_usmarc.pl, maint/shiftbib.pl,
+	html-template/Search.pm, admin/systempreferences.pl,
+	admin/stopwords.pl, admin/printers.pl, admin/marctagstructure.pl,
+	admin/itemtypes.pl, admin/currency.pl, admin/categoryitem.pl,
+	admin/categorie.pl, admin/branches.pl, admin/aqbudget.pl,
+	admin/aqbookfund.pl, acqui.simple/viewmarc.pl,
+	acqui.simple/processz3950queue, acqui.simple/bulkmarcimport.pl,
+	acqui.simple/addbookslccn.pl, acqui/newbiblio.pl,
+	acqui/acquire.pl, C4/Circulation/Returns.pm,
+	C4/Circulation/Renewals2.pm, C4/Circulation/Main.pm,
+	C4/Circulation/Issues.pm, C4/Circulation/Fines.pm,
+	C4/Circulation/Circ2.pm, C4/Circulation/Borrower.pm,
+	C4/Circulation/Borrissues.pm, C4/test.pl, C4/Stock.pm,
+	C4/Stats.pm, C4/Security.pm, C4/Search.pm, C4/Reserves2.pm,
+	C4/Reserves.pm, C4/Maintainance.pm, C4/Koha.pm, C4/Groups.pm,
+	C4/Catalogue.pm, C4/BookShelves.pm, C4/Biblio.pm, C4/Auth.pm,
+	C4/Acquisitions.pm, C4/Accounts2.pm, C4/Accounts.pm,
+	updateitem.pl, updatecharges.pl, thesaurus_popup.pl, stats2.pl,
+	pay.pl, overdue.pl, moremember.pl, memberentry.pl, logout.pl,
+	insertjdata.pl, insertidata.pl, insertdata.pl, fixBranches.pl,
+	deletemem.pl, charges.pl, bookcount.pl: Use C4::Connect instead of
+	C4::Database, C4::Connect->dbh instead C4Connect.
+
+2002-10-05  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	arensb-context branch:
+
+	* marc/fill_usmarc.pl,
+	koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc,
+	koha-tmpl/opac-tmpl/default/en/includes/opac-bottom.inc,
+	koha-tmpl/opac-tmpl/default/en/includes/members-top.inc,
+	koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl,
+	koha-tmpl/opac-tmpl/default/en/opac-search.tmpl,
+	koha-tmpl/opac-tmpl/default/en/opac-main.tmpl,
+	koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl, C4/Search.pm,
+	overdue.pl, moremember.pl, installer-lite.pl: Merged with head.
+	
+	* C4/Output.pm, C4/Context.pm, C4/Biblio.pm: Merged in changes
+	from main branch.
+	
+	* marc/viewmarc.pl: Added a FIXME comment.
+
+	* marc/viewmarc.pl: Oops! Stupid bug fix.
+
+	* marc/koha2marc: Removed a useless statement.
+
+	* moredetail.pl: Removed some obsolete commented-out code.
+
+	* updater/updatedatabase2.pl, updater/updatedatabase,
+	updater/thesaurus_create.pl, misc/fixborrower.pl, marc/test,
+	maint/shiftbib.pl, html-template/search.pl,
+	html-template/Search.pm, circ/circulation.pl, admin/itemtypes.pl,
+	admin/currency.pl, admin/categoryitem.pl, admin/categorie.pl,
+	admin/branches.pl, admin/aqbudget.pl,
+	acqui.simple/processz3950queue, acqui.simple/bulkmarcimport.pl,
+	acqui.simple/addbookslccn.pl, C4/Circulation/Returns.pm,
+	C4/Circulation/Renewals2.pm, C4/Circulation/Renewals.pm,
+	C4/Circulation/Main.pm, C4/Circulation/Issues.pm,
+	C4/Circulation/Fines.pm, C4/Circulation/Circ2.pm,
+	C4/Circulation/Borrower.pm, C4/Circulation/Borrissues.pm,
+	C4/test.pl, C4/Search.pm, C4/Reserves2.pm, C4/Print.pm,
+	C4/InterfaceCDK.pm, C4/Circmain.pm, C4/Biblio.pm, C4/Auth.pm,
+	C4/Acquisitions.pm, C4/Accounts.pm, stats2.pl, search.pl,
+	overdue.pl, bookcount.pl: Added a whole mess of FIXME comments.
+	
+	* C4/Acquisitions.pm: Oops! Forgot to add "use C4::Context;"
+
+	* C4/Biblio.pm: Added some missing semicolons.
+
+2002-10-03  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	arensb-context branch:
+
+	* telnet/doreturns.pl, telnet/borrwraper.pl: Use C4::Connect
+	instead of C4::Database, C4::Connect->dbh instead C4Connect.
+	Removed trailing whitespace, 'cos it was bugging me.
+	
+	* C4/Database.pm: Added a FIXME comment.
+
+	* C4/Context.pm: A couple of bug fixes so it'll actually load.
+
+	* misc/tidyaccounts.pl, maint/catmaintain.pl: Removed useless "use
+	C4::Database;" line.
+	
+	* acqui.simple/addbooks.pl, C4/Circulation/Renewals.pm,
+	C4/SimpleMarc.pm, C4/Circulation.pm, C4/Circmain.pm,
+	updatebiblio.pl, updatebibitem.pl, tidyaccounts.pl: Removed
+	useless "use C4::Database;" line.
+	
+	* marc/MARCdetail.pl, html-template/search.pl,
+	html-template/moredetail.pl, html-template/detail.pl,
+	acqui.simple/marcimport.pl, C4/Output.pm, userpage.pl, search.pl,
+	moredetail.pl, detail.pl: Use C4::Connect instead of C4::Database,
+	C4::Connect->dbh instead C4Connect. Removed old code for reading
+	/etc/koha.conf.
+	
+	* updater/updatedatabase2.pl, updater/updatedatabase,
+	updater/thesaurus_create.pl, sec/writeoff.pl, misc/makeformats.pl,
+	misc/makebaskets.pl, misc/fixrefs.pl, misc/fixorders.pl,
+	misc/fixcatalog.pl, misc/fixborrower.pl, misc/fines2.pl,
+	marc/viewmarc.pl, marc/updatedb2marc.pl, marc/test,
+	marc/koha2marc, marc/fill_usmarc.pl, maint/shiftbib.pl,
+	html-template/Search.pm, admin/systempreferences.pl,
+	admin/stopwords.pl, admin/printers.pl, admin/marctagstructure.pl,
+	admin/itemtypes.pl, admin/currency.pl, admin/categoryitem.pl,
+	admin/categorie.pl, admin/branches.pl, admin/aqbudget.pl,
+	admin/aqbookfund.pl, acqui.simple/viewmarc.pl,
+	acqui.simple/processz3950queue, acqui.simple/bulkmarcimport.pl,
+	acqui.simple/addbookslccn.pl, acqui/newbiblio.pl,
+	acqui/acquire.pl, C4/Circulation/Returns.pm,
+	C4/Circulation/Renewals2.pm, C4/Circulation/Main.pm,
+	C4/Circulation/Issues.pm, C4/Circulation/Fines.pm,
+	C4/Circulation/Circ2.pm, C4/Circulation/Borrower.pm,
+	C4/Circulation/Borrissues.pm, C4/test.pl, C4/Stock.pm,
+	C4/Stats.pm, C4/Security.pm, C4/Search.pm, C4/Reserves2.pm,
+	C4/Reserves.pm, C4/Maintainance.pm, C4/Koha.pm, C4/Groups.pm,
+	C4/Catalogue.pm, C4/BookShelves.pm, C4/Biblio.pm, C4/Auth.pm,
+	C4/Acquisitions.pm, C4/Accounts2.pm, C4/Accounts.pm,
+	updateitem.pl, updatecharges.pl, thesaurus_popup.pl, stats2.pl,
+	pay.pl, overdue.pl, moremember.pl, memberentry.pl, logout.pl,
+	insertjdata.pl, insertidata.pl, insertdata.pl, fixBranches.pl,
+	deletemem.pl, charges.pl, bookcount.pl: Use C4::Connect instead of
+	C4::Database, C4::Connect->dbh instead C4Connect.
+
 2002-10-02  Andrew Arensburger  <arensb@nerafo.umd.edu>
 
 	* C4/Context.pm (added) Module for reading the config file and

@@ -22,13 +22,13 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Context;
 use C4::Output;
 use CGI;
 use C4::Search;
 use C4::Accounts2;
-
-use C4::Database;
 use C4::Stats;
+
 my $input=new CGI;
 
 #print $input->header;
@@ -178,7 +178,7 @@ sub writeoff{
     $user=~ s/Levin/C/;
     $user=~ s/Foxton/F/;
     $user=~ s/Shannon/S/;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $env;
     my $query="Update accountlines set amountoutstanding=0 where ";
     if ($accounttype eq 'Res'){
@@ -202,6 +202,5 @@ sub writeoff{
     $sth->execute;
     $sth->finish;
 #  print $query;
-    $dbh->disconnect;
     UpdateStats($env,$user,'writeoff',$amount,'','','',$bornum);
 }

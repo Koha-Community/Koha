@@ -38,14 +38,14 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Output;
 use CGI;
+use C4::Context;
+use C4::Output;
 use C4::Search;
-use C4::Database;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
-	my $dbh = &C4Connect;
+	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
@@ -60,7 +60,6 @@ sub StringSearch  {
 	}
 	#  $sth->execute;
 	$sth->finish;
-	$dbh->disconnect;
 	return ($cnt,\@results);
 }
 
@@ -81,7 +80,7 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($categorycode) {
-		my $dbh = &C4Connect;
+		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
@@ -179,7 +178,7 @@ print "</table>";
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh=C4Connect;
+	my $dbh = C4::Context->dbh;
 	my $query = "replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (";
 	$query.= $dbh->quote($input->param('categorycode')).",";
 	$query.= $dbh->quote($input->param('description')).",";
@@ -203,12 +202,13 @@ print "</table>";
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = &C4Connect;
+	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from categoryitem where categorycode='$categorycode'");
 	$sth->execute;
 	my $total = $sth->fetchrow_hashref;
 	print "TOTAL : $categorycode : $total->{'total'}<br>";
 	$sth->finish;
+	# FIXME - There's already a $sth in this scope.
 	my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
@@ -237,7 +237,7 @@ print "</table>";
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh=C4Connect;
+	my $dbh = C4::Context->dbh;
 	my $categorycode=uc($input->param('categorycode'));
 	my $query = "delete from categories where categorycode='$categorycode'";
 	my $sth=$dbh->prepare($query);

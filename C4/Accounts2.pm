@@ -21,7 +21,7 @@ package C4::Accounts2; #assumes C4/Accounts2
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Stats;
 use C4::Search;
 use C4::Circulation::Circ2;
@@ -80,7 +80,7 @@ will be credited to the next one.
 sub recordpayment{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$data)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $updquery = "";
   my $newamtos = 0;
   my $accdata = "";
@@ -126,7 +126,6 @@ sub recordpayment{
   $usth->finish;
   UpdateStats($env,$branch,'payment',$data,'','','',$bornumber);
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item makepayment
@@ -152,7 +151,7 @@ sub makepayment{
   # from their card, and put a note on the item record
   my ($bornumber,$accountno,$amount,$user)=@_;
   my $env;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   my $newamtos=0;
@@ -188,7 +187,6 @@ sub makepayment{
   # branch code.
   UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
   $sth->finish;
-  $dbh->disconnect;
   #check to see what accounttype
   if ($data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L'){
     returnlost($bornumber,$data->{'itemnumber'});
@@ -233,7 +231,7 @@ sub getnextacctno {
 # FIXME - I don't understand what this function does.
 sub fixaccounts {
   my ($borrowernumber,$accountno,$amount)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from accountlines where borrowernumber=$borrowernumber
      and accountno=$accountno";
   my $sth=$dbh->prepare($query);
@@ -243,19 +241,19 @@ sub fixaccounts {
   my $diff=$amount-$data->{'amount'};
   my $outstanding=$data->{'amountoutstanding'}+$diff;
   $sth->finish;
+  # FIXME - Use $dbh->do();
   $query="Update accountlines set amount='$amount',amountoutstanding='$outstanding' where
           borrowernumber=$borrowernumber and accountno=$accountno";
    $sth=$dbh->prepare($query);
 #   print $query;
    $sth->execute;
    $sth->finish;
-   $dbh->disconnect;
  }
 
 # FIXME - Never used, but not exported, either.
 sub returnlost{
   my ($borrnum,$itemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $borrower=borrdata('',$borrnum); #from C4::Search;
   my $upiss="Update issues set returndate=now() where
   borrowernumber='$borrnum' and itemnumber='$itemnum' and returndate is null";
@@ -265,11 +263,11 @@ sub returnlost{
   my @datearr = localtime(time);
   my $date = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   my $bor="$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
+  # FIXME - Use $dbh->do();
   my $upitem="Update items set paidfor='Paid for by $bor $date' where itemnumber='$itemnum'";
   $sth=$dbh->prepare($upitem);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item manualinvoice
@@ -289,7 +287,7 @@ should be the empty string.
 # FIXME - Okay, so what does this function do, really?
 sub manualinvoice{
   my ($bornum,$itemnum,$desc,$type,$amount,$user)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $insert;
   $itemnum=~ s/ //g;
   my %env;
@@ -317,10 +315,12 @@ sub manualinvoice{
     $sth->finish;
     $desc.=" ".$itemnum;
     $desc=$dbh->quote($desc);
+    # FIXME - Use $dbh->do();
     $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
     values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft','$data->{'itemnumber'}')";
   } else {
       $desc=$dbh->quote($desc);
+    # FIXME - Use $dbh->do();
     $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
     values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft')";
   }
@@ -328,8 +328,6 @@ sub manualinvoice{
   my $sth=$dbh->prepare($insert);
   $sth->execute;
   $sth->finish;
-
-  $dbh->disconnect;
 }
 
 # fixcredit
@@ -340,7 +338,7 @@ sub manualinvoice{
 sub fixcredit{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$data,$barcode,$type,$user)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $updquery = "";
   my $newamtos = 0;
   my $accdata = "";
@@ -415,7 +413,6 @@ sub fixcredit{
      $usth->finish;
   }
   $sth->finish;
-  $dbh->disconnect;
   $env->{'branch'}=$user;
   $type="Credit ".$type;
   UpdateStats($env,$user,$type,$data,$user,'','',$bornumber);
@@ -428,7 +425,7 @@ sub fixcredit{
 sub refund{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$data)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $updquery = "";
   my $newamtos = 0;
   my $accdata = "";
@@ -469,7 +466,6 @@ sub refund{
      $usth->finish;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($amountleft);
 }
 

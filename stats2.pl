@@ -21,13 +21,13 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Stats;
 use strict;
+use C4::Context;
+use C4::Stats;
 use Date::Manip;
 use CGI;
 use C4::Output;
 use DBI;
-use C4::Database;
 
 my $input=new CGI;
 my $time=$input->param('time');
@@ -59,7 +59,7 @@ if ($time=~ /\//){
 $date=UnixDate($date,'%Y-%m-%d');
 $date2=UnixDate($date2,'%Y-%m-%d');
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $query="select * 
 from accountlines,accountoffsets,borrowers where
 accountlines.borrowernumber=accountoffsets.borrowernumber and
@@ -76,7 +76,7 @@ print mktablehdr;
 while (my $data=$sth->fetchrow_hashref){
   print "<TR><Td>$data->{'surname'}</td><td>$data->{'description'}</td><td>$data->{'amount'}
   </td>";
-  if ($data->{'accountype'}='Pay'){
+  if ($data->{'accountype'}='Pay'){	# FIXME - This should be "==", not "=", right?
     my $branch=Getpaidbranch($data->{'timestamp'});
     print "<td>$branch</td>";
   }
@@ -94,4 +94,3 @@ print endcenter;
 print endmenu('report');
 print endpage;
 $sth->finish;
-$dbh->disconnect;

@@ -24,10 +24,12 @@ package C4::Circulation::Returns; #assumes C4/Circulation/Returns
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Accounts;
 use C4::InterfaceCDK;
 use C4::Circulation::Main;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Returns
+	# use each other, so functions get redefined.
 use C4::Format;
 use C4::Scan;
 use C4::Stats;
@@ -78,7 +80,7 @@ my $priv_func = sub {
 
 sub Returns {
   my ($env)=@_;
-  my $dbh=&C4Connect;  
+  my $dbh = C4::Context->dbh;  
   my @items;
   @items[0]=" "x50;
   my $reason;
@@ -131,7 +133,6 @@ sub Returns {
     }
   }
 #  clearscreen;
-  $dbh->disconnect;
   return($reason);
   }
   

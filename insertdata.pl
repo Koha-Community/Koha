@@ -23,7 +23,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Database;
+use C4::Context;
 use C4::Input;
 use C4::Search;
 use Date::Manip;
@@ -45,7 +45,7 @@ foreach my $key (@names){
   $data{$key}=~ s/\'/\\\'/g;
   $data{$key}=~ s/\"/\\\"/g;
 }
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $query="Select * from borrowers where borrowernumber=$data{'borrowernumber'}";
 my $sth=$dbh->prepare($query);
 $sth->execute;
@@ -106,5 +106,4 @@ if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
   $sth2->execute;
   $sth2->finish;
 $sth->finish;
-$dbh->disconnect;
 print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");

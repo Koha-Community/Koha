@@ -17,43 +17,23 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - This file is nearly identical to "../search.pl". One of them
+# should be nuked.
+
 use HTML::Template;
 use strict;
-require Exporter;
-use C4::Database;
+require Exporter;	# FIXME - Is this really needed?
+use C4::Context;
 use CGI;
 use C4::Search;
 use C4::Output; # no contains picktemplate
   
 my $query=new CGI;
 
-
-my $language='french';
-
-
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
-#print $query->header;
-
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
 my $templatebase="catalogue/searchresults.tmpl";
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
+my $startfrom=$query->param('startfrom') || 0;
 my $theme=picktemplate($includes, $templatebase);
 
 my $subject=$query->param('subject');
@@ -70,6 +50,9 @@ $env->{itemcount}=1;
 
 # get all the search variables
 # we assume that C4::Search will validate these values for us
+# FIXME - This looks like it could go inside a
+#	foreach my $term (qw(keyword subject author ...))
+# loop.
 my %search;
 my $keyword=$query->param('keyword');
 $search{'keyword'}=$keyword;
@@ -88,7 +71,7 @@ $search{'date-before'}=$datebefore;
 my $class=$query->param('class');
 $search{'class'}=$class;
 my $dewey=$query->param('dewey');
-$search{'dewey'};
+$search{'dewey'};	# FIXME - Was this supposed to be $search{'dewey'} = $dewey ?
 my $branch=$query->param('branch');
 $search{'branch'}=$branch;
 my $title=$query->param('title');

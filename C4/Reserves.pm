@@ -24,7 +24,7 @@ package C4::Reserves; #asummes C4/Reserves
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Format;
 use C4::Accounts;
 use C4::Stats;
@@ -147,7 +147,7 @@ sub EnterReserves{
       } else {
         my @items = GetItems($env,$biblionumber);
       	my $cnt_it = @items;
-	my $dbh = &C4Connect;
+	my $dbh = C4::Context->dbh;
         my $query = "Select * from biblio where biblionumber = $biblionumber";
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
@@ -183,7 +183,6 @@ sub EnterReserves{
 	    }
 	  } else { $donext = "Circ" }  
 	} 
-	$dbh->disconnect;
       }
     }
   }
@@ -193,7 +192,7 @@ sub EnterReserves{
 sub CalcReserveFee {
   my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;
   #check for issues;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   my $const = lc substr($constraint,0,1);
   my $query = "select * from borrowers,categories 
     where (borrowernumber = '$borrnum') 
@@ -259,13 +258,12 @@ sub CalcReserveFee {
       }	
     }
   }
-  $dbh->disconnect();
   return $fee;
 } # end CalcReserveFee
 
 sub CreateReserve {
   my ($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$fee) = @_;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   #$dbh->{RaiseError} = 1;
   #$dbh->{AutoCommit} = 0;
   my $const = lc substr($constraint,0,1);
@@ -307,7 +305,6 @@ sub CreateReserve {
   #  #  error_msg($env,"Update failed");    
   #  $dbh->rollback(); 
   #}
-  $dbh->disconnect();
   return();
 } # end CreateReserve    
     

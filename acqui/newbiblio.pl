@@ -21,13 +21,13 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;
+use CGI;
+use C4::Context;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use C4::Search;
-use C4::Database;
-use CGI;
-use strict;
 
 my $input=new CGI;
 print $input->header();
@@ -176,7 +176,7 @@ Shopping Basket For: $booksellers[0]->{'name'}
 printend
 ;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $query="Select itemtype,description from itemtypes order by description";
 my $sth=$dbh->prepare($query);
 $sth->execute;
@@ -189,7 +189,6 @@ while (my $data2=$sth->fetchrow_hashref){
 	}
 }
 $sth->finish;
-$dbh->disconnect;
 
 print <<printend
 </select>
@@ -234,14 +233,13 @@ printend
 
 my %systemprefs=systemprefs();
 if ($systemprefs{'autoBarcode'} eq '1') {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select barcode from items order by barcode desc";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   print $data->{'barcode'}+1;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 print <<printend

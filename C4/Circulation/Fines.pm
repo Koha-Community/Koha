@@ -24,7 +24,7 @@ package C4::Circulation::Fines; #asummes C4/Circulation/Fines
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -70,7 +70,7 @@ my $priv_func = sub {
 
 
 sub Getoverdues{
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from issues where date_due < now() and returndate is
   NULL order by borrowernumber";
   my $sth=$dbh->prepare($query);
@@ -82,14 +82,13 @@ sub Getoverdues{
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
 #  print @results;
   return($i,\@results);  
 }
 
 sub CalcFine {
   my ($itemnumber,$bortype,$difference)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from items,biblioitems,itemtypes,categoryitem where items.itemnumber=$itemnumber
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
@@ -115,13 +114,12 @@ sub CalcFine {
     $amount=5;
     $printout="Final Notice";
   }
-  $dbh->disconnect;
   return($amount,$data->{'chargename'},$printout);
 }
 
 sub UpdateFine {
   my ($itemnum,$bornum,$amount,$type,$due)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from accountlines where itemnumber=$itemnum and
   borrowernumber=$bornum and (accounttype='FU' or accounttype='O' or
   accounttype='F' or accounttype='M') and description like '%$due%'";
@@ -154,6 +152,7 @@ sub UpdateFine {
     my $title=$sth4->fetchrow_hashref;
     $sth4->finish;
  #   print "not in account";
+    # FIXME - There's already a $query2 in this scope.
     my $query2="Select max(accountno) from accountlines";
     my $sth3=$dbh->prepare($query2);
     $sth3->execute;
@@ -171,12 +170,11 @@ sub UpdateFine {
     $sth2->finish;
   }
   $sth->finish;
-  $dbh->disconnect;
 }
 
 sub BorType {
   my ($borrowernumber)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from borrowers,categories where 
   borrowernumber=$borrowernumber and
 borrowers.categorycode=categories.categorycode";
@@ -184,19 +182,17 @@ borrowers.categorycode=categories.categorycode";
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
 sub ReplacementCost{
   my ($itemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select replacementprice from items where itemnumber='$itemnum'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data->{'replacementprice'});
 }
 

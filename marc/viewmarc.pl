@@ -26,16 +26,16 @@
 
 my $starttime=gettime();
 
-use C4::Database;
-use CGI;
 use strict;
+use CGI;
+use C4::Context;
 use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
 
 
 my $input = new CGI;
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $fields;
 marcdefs();
 
@@ -445,6 +445,16 @@ sub codewise {
     return $a cmp $b;
 }
 
+# FIXME - 9800-line functions are bogus. Presumably these fields and
+# such were generated from a data file. Perl is good at reading files,
+# so just read that file. If you don't want to use a separate file,
+# use the __DATA__ pseudofile. Failing that, this could be redone as a
+# single giant assignment:
+#	$fields = {
+#		"010" => {
+#			"name" => "LIBRARY OF CONGRESS CONTROL NUMBER",
+#			"description" => "..."
+#	...
 sub marcdefs {
     $fields->{'010'}->{"name"}="LIBRARY OF CONGRESS CONTROL NUMBER";
     $fields->{'010'}->{"description"}='A unique number assigned to a MARC record by the Library of Congress. Valid MARC prefixes for LC control numbers are published in "MARC 21 Format for Bibliographic Data." ';

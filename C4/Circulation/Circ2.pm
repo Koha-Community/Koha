@@ -25,7 +25,7 @@ use strict;
 # use warnings;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 #use C4::Accounts;
 #use C4::InterfaceCDK;
 #use C4::Circulation::Main;
@@ -84,7 +84,7 @@ my $priv_func = sub {
 sub getbranches {
 # returns a reference to a hash of references to branches...
     my %branches;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select * from branches");
     $sth->execute;
     while (my $branch=$sth->fetchrow_hashref) {
@@ -98,7 +98,6 @@ sub getbranches {
 	$nsth->finish;
 	$branches{$branch->{'branchcode'}}=$branch;
     }
-    $dbh->disconnect;
     return (\%branches);
 }
 
@@ -106,13 +105,12 @@ sub getbranches {
 sub getprinters {
     my ($env) = @_;
     my %printers;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select * from printers");
     $sth->execute;
     while (my $printer=$sth->fetchrow_hashref) {
 	$printers{$printer->{'printqueue'}}=$printer;
     }
-    $dbh->disconnect;
     return (\%printers);
 }
 
@@ -121,7 +119,7 @@ sub getprinters {
 sub getpatroninformation {
 # returns 
     my ($env, $borrowernumber,$cardnumber) = @_;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $query;
     my $sth;
     if ($borrowernumber) {
@@ -138,7 +136,6 @@ sub getpatroninformation {
     my $borrower = $sth->fetchrow_hashref;
     my $flags = patronflags($env, $borrower, $dbh);
     $sth->finish;
-    $dbh->disconnect;
     $borrower->{'flags'}=$flags;
     return($borrower, $flags);
 }
@@ -177,7 +174,7 @@ sub decode {
 sub getiteminformation {
 # returns a hash of item information given either the itemnumber or the barcode
     my ($env, $itemnumber, $barcode) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth;
     if ($itemnumber) {
 	$sth=$dbh->prepare("select * from biblio,items,biblioitems where items.itemnumber=$itemnumber and biblio.biblionumber=items.biblionumber and biblioitems.biblioitemnumber = items.biblioitemnumber");
@@ -207,7 +204,6 @@ sub getiteminformation {
 	$iteminformation->{'notforloan'}=$itemtype->{'notforloan'};
 	$sth->finish;
     }
-    $dbh->disconnect;
     return($iteminformation);
 }
 
@@ -215,7 +211,7 @@ sub findborrower {
 # returns an array of borrower hash references, given a cardnumber or a partial
 # surname 
     my ($env, $key) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my @borrowers;
     my $q_key=$dbh->quote($key);
     my $sth=$dbh->prepare("select * from borrowers where cardnumber=$q_key");
@@ -233,7 +229,6 @@ sub findborrower {
 	}
     }
     $sth->finish;
-    $dbh->disconnect;
     return(\@borrowers);
 }
 
@@ -286,7 +281,7 @@ sub transferbook {
 
 sub dotransfer {
     my ($itm, $fbr, $tbr) = @_;
-    my $dbh = &C4Connect;
+    my $dbh = C4::Context->dbh;
     $itm = $dbh->quote($itm);
     $fbr = $dbh->quote($fbr);
     $tbr = $dbh->quote($tbr);
@@ -297,18 +292,18 @@ sub dotransfer {
     $sth->execute; 
     $sth->finish;
     #update holdingbranch in items .....
+    # FIXME - Use $dbh->do()
     $query = "update items set datelastseen = now(), holdingbranch=$tbr where items.itemnumber=$itm";
     $sth = $dbh->prepare($query);
     $sth->execute; 
     $sth->finish;
-    $dbh->disconnect;
     return;
 }
 
 
 sub issuebook {
     my ($env, $patroninformation, $barcode, $responses, $date) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $iteminformation = getiteminformation($env, 0, $barcode);
     my ($datedue);
     my ($rejected,$question,$defaultanswer,$questionnumber, $noissue);
@@ -485,7 +480,6 @@ sub issuebook {
     if ($iteminformation->{'charge'}) {
 	$message=sprintf "Rental charge of \$%.02f applies.", $iteminformation->{'charge'};
     }
-    $dbh->disconnect;
     return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
 }
 
@@ -521,18 +515,18 @@ sub returnbook {
     }
 # update issues, thereby returning book (should push this out into another subroutine
     my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
-    if ($doreturn) {
+    if ($doreturn) {	# FIXME - perl -wc complains about this line.
 	doreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 	$messages->{'WasReturned'};
     }
     ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 # transfer book
     my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
-    if ($transfered) {
+    if ($transfered) {	# FIXME - perl -wc complains about this line.
 	$messages->{'WasTransfered'};
     }
 # fix up the accounts.....
-    if ($iteminformation->{'itemlost'}) {
+    if ($iteminformation->{'itemlost'}) {	# FIXME - perl -wc complains about this line.
 	updateitemlost($iteminformation->{'itemnumber'});
 	fixaccountforlostandreturned($iteminformation, $borrower);
 	$messages->{'WasLost'};
@@ -553,7 +547,7 @@ sub returnbook {
 
 sub doreturn {
     my ($brn, $itm) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     $brn = $dbh->quote($brn);
     $itm = $dbh->quote($itm);
     my $query = "update issues set returndate = now() where (borrowernumber = $brn) 
@@ -565,13 +559,13 @@ sub doreturn {
     $sth=$dbh->prepare($query);
     $sth->execute;
     $sth->finish;
-    $dbh->disconnect;
     return;
 }
 
 sub updateitemlost{
   my ($itemno)=@_;
-  my $dbh=&C4Connect;
+  my $dbh = C4::Context->dbh;
+  # FIXME - Use $dbh->do();
   my $query="update items set itemlost=0 where itemnumber=$itemno";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -581,7 +575,7 @@ sub updateitemlost{
 sub fixaccountforlostandreturned {
     my ($iteminfo, $borrower) = @_;
     my %env;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $itm = $dbh->quote($iteminfo->{'itemnumber'});
 # check for charge made for lost book
     my $query = "select * from accountlines where (itemnumber = $itm) 
@@ -673,7 +667,7 @@ sub fixaccountforlostandreturned {
 
 sub fixoverduesonreturn {
     my ($brn, $itm) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     $itm = $dbh->quote($itm);
     $brn = $dbh->quote($brn);
 # check for overdue fine
@@ -785,7 +779,7 @@ sub checkoverdues {
 sub currentborrower {
 # Original subroutine for Circ2.pm
     my ($itemnumber) = @_;
-    my $dbh = &C4Connect;
+    my $dbh = C4::Context->dbh;
     my $q_itemnumber = $dbh->quote($itemnumber);
     my $sth=$dbh->prepare("select borrowers.borrowernumber from
     issues,borrowers where issues.itemnumber=$q_itemnumber and
@@ -844,7 +838,7 @@ sub checkreserve {
 sub currentissues {
 # New subroutine for Circ2.pm
     my ($env, $borrower) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my %currentissues;
     my $counter=1;
     my $borrowernumber = $borrower->{'borrowernumber'};
@@ -883,13 +877,13 @@ sub currentissues {
 	$counter++;
     }
     $sth->finish;
-    $dbh->disconnect;
     return(\%currentissues);
 }
+
 sub getissues {
 # New subroutine for Circ2.pm
     my ($borrower) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $borrowernumber = $borrower->{'borrowernumber'};
     my $brn =$dbh->quote($borrowernumber);
     my %currentissues;
@@ -921,7 +915,6 @@ sub getissues {
 	$counter++;
     }
     $sth->finish;
-    $dbh->disconnect;
     return(\%currentissues);
 }
 
@@ -1047,6 +1040,10 @@ sub renewbook {
   return($odatedue);
 }
 
+# FIXME - This is almost, but not quite, identical to
+# &C4::Circulation::Issues::calc_charges and
+# &C4::Circulation::Renewals2::calc_charges.
+# Pick one and stick with it.
 sub calc_charges {
 # Stolen from Issues.pm
 # calculate charges due
@@ -1119,7 +1116,7 @@ sub find_reserves {
 # Stolen from Returns.pm
     my ($itemno) = @_;
     my %env;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my ($itemdata) = getiteminformation(\%env, $itemno,0);
     my $bibno = $dbh->quote($itemdata->{'biblionumber'});
     my $bibitm = $dbh->quote($itemdata->{'biblioitemnumber'});

@@ -19,9 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Database;
+use C4::Context;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $count=0;
 my $basket='HLT-';
 for (my $i=1;$i<59;$i++){
@@ -41,5 +41,3 @@ for (my $i=1;$i<59;$i++){
   }
   $sth->finish;
 }
-
-$dbh->disconnect;

@@ -26,7 +26,7 @@ package C4::BookShelves; #assumes C4/BookShelves
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -93,7 +93,7 @@ my $priv_func = sub {
 
 # make all your functions, whether exported or not;
 
-my $dbh=C4Connect();
+my $dbh = C4::Context->dbh;
 
 =item GetShelfList
 
@@ -280,6 +280,14 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.7  2002/10/05 09:50:10  arensb
+# Merged with arensb-context branch: use C4::Context->dbh instead of
+# &C4Connect, and generally prefer C4::Context over C4::Database.
+#
+# Revision 1.6.2.1  2002/10/04 02:24:43  arensb
+# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
+# C4Connect.
+#
 # Revision 1.6  2002/09/23 13:50:30  arensb
 # Fixed missing bit in POD.
 #

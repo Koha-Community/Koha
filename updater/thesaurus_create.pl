@@ -22,13 +22,13 @@ use strict;
 # This script generates and fill the thesaurus table
 # with the data in bibliothesaurus
 
-use C4::Database;
+use C4::Context;
 use C4::Catalogue;
 use DBI;
 use C4::Acquisitions;
 use C4::Output;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 sub dosql {
 	my ($dbh,$sql_cmd)=@_;
@@ -53,6 +53,7 @@ dosql($dbh,"CREATE TABLE bibliothesaurus (code BIGINT not null AUTO_INCREMENT, f
 	my $sti=$dbh->prepare("select count(*) as tot from bibliosubject");
 	$sti->execute;
 	my $total = $sti->fetchrow_hashref;
+	# FIXME - There's already a $sti in this scope.
 	my $sti=$dbh->prepare("select subject from bibliosubject");
 	$sti->execute;
 	my $i;

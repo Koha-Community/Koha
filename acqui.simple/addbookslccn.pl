@@ -31,16 +31,16 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Database;
-use CGI;
 use strict;
+use CGI;
+use C4::Context;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use C4::Circulation::Circ2;
 
 my $input = new CGI;
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my $lccn=$input->param('lccn');
 my $q_lccn=$dbh->quote($lccn);
@@ -178,7 +178,7 @@ EOF
     exit;
 }
 
-
+# FIXME - There's already a &C4::Biblio::newbiblioitem.
 sub newbiblioitem {
     my $biblionumber=$input->param('biblionumber');
     my $volume=$input->param('volume');

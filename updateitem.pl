@@ -18,9 +18,9 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Database;
-use CGI;
 use strict;
+use CGI;
+use C4::Context;
 use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
@@ -87,7 +87,7 @@ if ($wthdrawn == 0 && $override ne 'yes'){
 	     wthdranw     => $wthdrawn
 	     });
   if ($lost ==1){
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
     $sth->execute;
     my $data=$sth->fetchrow_hashref;
@@ -114,7 +114,7 @@ if ($wthdrawn == 0 && $override ne 'yes'){
   
 #  print "marking cancelled";
   #need to check if it is on reserve or issued
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $flag=0; 
   my ($resbor,$resrec)=C4::Circulation::Circ2::checkreserve($env,$dbh,$itemnum);
  # print $resbor;
@@ -132,7 +132,6 @@ if ($wthdrawn == 0 && $override ne 'yes'){
     $flag=1;
   }
   $sth->finish;
-  $dbh->disconnect;
   if ($flag == 1){
     my $url=$input->self_url;
     $url.="&override=yes";

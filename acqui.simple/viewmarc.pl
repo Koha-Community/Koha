@@ -26,16 +26,16 @@
 
 my $starttime=gettime();
 
-use C4::Database;
-use CGI;
 use strict;
+use CGI;
+use C4::Context;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 
 
 my $input = new CGI;
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $fields;
 marcdefs();
 

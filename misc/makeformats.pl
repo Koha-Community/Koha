@@ -19,9 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Database;
+use C4::Context;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $count=0;
 my $query="Select biblionumber from aqorders where datereceived = '0000-00-00'";
 my $sth=$dbh->prepare($query);
@@ -48,6 +48,3 @@ while (my $data=$sth->fetchrow_hashref){
   
 }
 $sth->finish;
-
-
-$dbh->disconnect;

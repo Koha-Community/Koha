@@ -19,14 +19,15 @@ package C4::test;
 
 use strict;
 require Exporter;
-use C4::Database;
+use C4::Context;
 use C4::Catalogue;
 
-our $dbh=&C4Connect;
+our $dbh = C4::Context->dbh;
 $dbh->do("delete from marc_subfield_table");
 $dbh->do("delete from marc_blob_subfield");
 &MARCaddSubfield(1,'001',1,'##','a',1,'1 - This is a value');
 &MARCaddSubfield(1,'001',1,'##','b',1,'2 - This is another value');
+# FIXME - Just use "a"x1024 to generate very long strings.
 &MARCaddSubfield(1,'001',1,'##','c',1,"3 - This is a value very very long. I try to make it longer than 255 char. I need to add something else. will it be long enough now... I'm not sure. That's why i continue to add a few word to this very important sentence. Now I hope it will be enough... Oh, not it need some more characters. So i add stupid strings : xxxxxxxxxxxxxxx dddddddddddddddddddd eeeeeeeeeeeeeeeeeeeeeee rrrrrrrrrrrrrrrrrrr ffffffffffffffffff");
 &MARCaddSubfield(1,'001',1,'##','d',1,"4 - This is another value very very long. I try to make it longer than 255 char. I need to add something else. will it be long enough now... I'm not sure. That's why i continue to add a few word to this very important sentence. Now I hope it will be enough... Oh, not it need some more characters. So i add stupid strings : xxxxxxxxxxxxxxx dddddddddddddddddddd eeeeeeeeeeeeeeeeeeeeeee rrrrrrrrrrrrrrrrrrr ffffffffffffffffff");
 print "change 1\n";

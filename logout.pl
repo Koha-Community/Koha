@@ -19,7 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Database;
+use C4::Context;
 
 my $query=new CGI;
 
@@ -41,7 +41,7 @@ foreach (keys %$sessions) {
     print S "$_:$userid:$lasttime\n";
 }
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 # Check that this is the ip that created the session before deleting it
 

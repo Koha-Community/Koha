@@ -24,13 +24,14 @@ package C4::Circulation::Renewals; #assumes C4/Circulation/Renewals
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
 use C4::Format;
 use C4::Accounts;
 use C4::InterfaceCDK;
 use C4::Interface::RenewalsCDK;
 use C4::Circulation::Issues;
 use C4::Circulation::Main;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Renewals
+	# use each other, so functions get redefined.
 
 use C4::Search;
 use C4::Scan;

@@ -28,32 +28,10 @@ use C4::Output; # contains picktemplate
   
 my $query=new CGI;
 
-
-my $language='french';
-
-
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
-
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
 my $templatebase="catalogue/moredetail.tmpl";
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
+my $startfrom=$query->param('startfrom') || 0;
 my $theme=picktemplate($includes, $templatebase);
 
 my $subject=$query->param('subject');
@@ -109,6 +87,7 @@ foreach my $item (@items){
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
+    # FIXME - This should be "==", not "=", right?
     if ($item->{'date_due'} = 'Available'){
 	$item->{'issue'}="<b>Available</b><br>";
     } else {

@@ -20,33 +20,12 @@
 use HTML::Template;
 use strict;
 require Exporter;
-use C4::Database;
+use C4::Context;
 use C4::Output;  # contains picktemplate
 use CGI;
 use C4::Search;
  
 my $query=new CGI;
-
-
-my $language='french';
-
-
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
-}
-}	
 
 my $biblionumber=$query->param('bib');
 my $type='intra';
@@ -86,8 +65,8 @@ my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
 
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
 my $templatebase="catalogue/detail.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);

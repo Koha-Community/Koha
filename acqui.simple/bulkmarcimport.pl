@@ -45,14 +45,14 @@ my $lc1='#dddddd';
 my $lc2='#ddaaaa';
 
 
-use C4::Database;
+use C4::Context;
 use CGI;
 use DBI;
 #use strict;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $userid=$ENV{'REMOTE_USER'};
 %tagtext = (
     '001' => 'Control number',
@@ -113,7 +113,6 @@ my $userid=$ENV{'REMOTE_USER'};
 );
 
 
-my $dbh=C4Connect;
 if ($file) {
     open (F, "$file");
     my $data=<F>;
@@ -143,10 +142,10 @@ RECORD:
 		$directory=$field;
 		my $itemcounter=1;
 		$counter=0;
-		while ($item=substr($directory,0,12)) {
+		while ($item=substr($directory,0,12)) {	# FIXME - $item never used
 		    $tag=substr($directory,0,3);
-		    $length=substr($directory,3,4);
-		    $start=substr($directory,7,6);
+		    $length=substr($directory,3,4);	# FIXME - Unused
+		    $start=substr($directory,7,6);	# FIXME - Unused
 		    $directory=substr($directory,12);
 		    $tag{$counter}=$tag;
 		    $counter++;
@@ -454,9 +453,9 @@ RECORD:
 	    $subclass=uc(substr($cleanauthor,0,3));
 	    my $q_subclass=$dbh->quote($subclass);
 	    my $q_publicationyear=$dbh->quote($publicationyear);
-	    my $q_publishercode=$dbh->quote($publishercode);
-	    my $q_volumedate=$dbh->quote($volumedate);
-	    my $q_volumeddesc=$dbh->quote($volumeddesc);
+	    my $q_publishercode=$dbh->quote($publishercode);	# FIXME - $publishercode undefined
+	    my $q_volumedate=$dbh->quote($volumedate);	# FIXME - $volumedate undefined
+	    my $q_volumeddesc=$dbh->quote($volumeddesc);	# FIXME - $volumeddesc undefined
 	    my $q_illus=$dbh->quote($illustrator);
 	    my $q_pages=$dbh->quote($pages);
 	    my $q_notes=$dbh->quote($note);
@@ -495,6 +494,7 @@ RECORD:
 	my $q_homebranch="'$branchname'";
 	my $q_notes="''";
 	#my $replacementprice=0;
+	# FIXME - There's already a $sth in this scope.
 	my $sth=$dbh->prepare("select max(itemnumber) from items");
 	$sth->execute;
 	my ($itemnumber) = $sth->fetchrow;
@@ -520,4 +520,3 @@ BARCODE:
 	}
     }
 }
-$dbh->disconnect;

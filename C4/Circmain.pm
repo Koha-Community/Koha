@@ -20,10 +20,11 @@ package C4::Circmain; #assumes C4/Circulation
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - This module doesn't compile!
+
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
 use C4::Circulation::Main;
 use C4::Circulation::Issues;
 use C4::Circulation::Returns;

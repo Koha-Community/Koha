@@ -26,7 +26,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Database;
+use C4::Context;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Circulation::Fines;
@@ -105,13 +105,12 @@ for (my $i=0;$i<$numOverdueItems;$i++){
 	                                         # this should be a
                                                  # separate function
                                                  #
-	 my $dbh=C4Connect;
+	 my $dbh = C4::Context->dbh;
 	 my $query="Select * from borrowers where borrowernumber='$borrower->{'guarantor'}'";
 	 my $sth=$dbh->prepare($query);
 	 $sth->execute;
 	 my $tdata=$sth->fetchrow_hashref;
 	 $sth->finish;
-	 $dbh->disconnect;
 	 $borrower->{'phone'}=$tdata->{'phone'};
        }
        print "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'firstname'}\t$borrower->{'surname'}\t$data->[$i]->{'date_due'}\t$type\t$difference\t$borrower->{'emailaddress'}\t$borrower->{'phone'}\t$borrower->{'streetaddress'}\t$borrower->{'city'}\t$amount\n";
@@ -127,7 +126,7 @@ for (my $i=0;$i<$numOverdueItems;$i++){
       my $borrower=BorType($data->[$i]->{'borrowernumber'});
       if ($borrower->{'cardnumber'} ne ''){
         my $cost=ReplacementCost($data->[$i]->{'itemnumber'});	
-	my $dbh=C4Connect;
+	my $dbh = C4::Context->dbh;
 	my $env;
 	my $accountno=C4::Circulation::Circ2::getnextacctno($env,$data->[$i]->{'borrowernumber'},$dbh);
 	my $item=itemnodata($env,$dbh,$data->[$i]->{'itemnumber'});
@@ -152,7 +151,6 @@ for (my $i=0;$i<$numOverdueItems;$i++){
 	         # this should be deleted
                  #
 	}
-	$dbh->disconnect;
       }
     }
 

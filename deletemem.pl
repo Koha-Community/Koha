@@ -24,10 +24,10 @@
 
 use strict;
 
-use C4::Search;
 use CGI;
+use C4::Context;
+use C4::Search;
 use C4::Output;
-use C4::Database;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
 
@@ -44,13 +44,12 @@ $env{'nottodayissues'}=1;
   $i++;
  }
   my ($bor,$flags)=getpatroninformation(\%env, $member,'');
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $query="Select * from borrowers where guarantor='$member'";
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-$dbh->disconnect;
       
 
 if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){ 
@@ -74,7 +73,7 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 
 sub delmember{
   my ($member)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from borrowers where borrowernumber='$member'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -86,16 +85,18 @@ sub delmember{
   }
   $query=~ s/\,$/\)/;
   #  print $query;
+  # FIXME - Use $dbh->do()
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
+  # FIXME - Use $dbh->do()
   $query = "Delete from borrowers where borrowernumber='$member'";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
+  # FIXME - Use $dbh->do()
   $query="Delete from reserves where borrowernumber='$member'";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }

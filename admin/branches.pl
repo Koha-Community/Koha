@@ -23,8 +23,8 @@
 
 use strict;
 use CGI;
+use C4::Context;
 use C4::Output;
-use C4::Database;
 
 # Fixed variables
 my $linecolor1='#ffffcc';
@@ -266,7 +266,7 @@ sub getbranchinfo {
 # returns a reference to an array of hashes containing branches,
 
     my ($branchcode) = @_;
-    my $dbh = &C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query;
     if ($branchcode) {
 	my $bc = $dbh->quote($branchcode);
@@ -290,14 +290,13 @@ sub getbranchinfo {
 	push(@results, $data);
     }
     $sth->finish;
-    $dbh->disconnect;
     return \@results;
 }
 
 sub getcategoryinfo {
 # returns a reference to an array of hashes containing branches,
     my ($catcode) = @_;
-    my $dbh = &C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query;
     if ($catcode) {
 	my $cc = $dbh->quote($catcode);
@@ -312,14 +311,13 @@ sub getcategoryinfo {
 	push(@results, $data);
     }
     $sth->finish;
-    $dbh->disconnect;
     return \@results;
 }
 
 sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
     my ($data) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (";
     my $tmp;
     $tmp = $data->{'branchcode'}; $query.= $dbh->quote($tmp).",";
@@ -333,7 +331,6 @@ sub setbranchinfo {
     my $sth=$dbh->prepare($query);
     $sth->execute;
     $sth->finish;
-    $dbh->disconnect;
 # sort out the categories....
     my @checkedcats;
     my $cats = getcategoryinfo();
@@ -359,7 +356,8 @@ sub setbranchinfo {
 	    push(@addcats, $ccat);
 	}
     }	
-    my $dbh=&C4Connect;
+    # FIXME - There's already a $dbh in this scope.
+    my $dbh = C4::Context->dbh;
     foreach my $cat (@addcats) {
 	my $query = "insert into branchrelations (branchcode, categorycode) values('$branchcode', '$cat')";
 	my $sth = $dbh->prepare($query);
@@ -372,29 +370,26 @@ sub setbranchinfo {
 	$sth->execute;
 	$sth->finish;
     }
-    $dbh->disconnect;
 }
 
 sub deletebranch {
 # delete branch...
     my ($branchcode) = @_;
     my $query = "delete from branches where branchcode = '$branchcode'";
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare($query);
     $sth->execute;
     $sth->finish;
-    $dbh->disconnect;
 }
 
 sub checkdatabasefor {
 # check to see if the branchcode is being used in the database somewhere....
     my ($branchcode) = @_;
-    my $dbh = &C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select count(*) from items where holdingbranch='$branchcode' or homebranch='$branchcode'");
     $sth->execute;
     my ($total) = $sth->fetchrow_array;
     $sth->finish;
-    $dbh->disconnect;
     my $message;
     if ($total) {
 	$message = "Branch cannot be deleted because there are $total items using that branch.";

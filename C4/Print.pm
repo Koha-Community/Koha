@@ -138,6 +138,7 @@ will print to the file F</tmp/kohares>.
 
 =cut
 #'
+# FIXME - There's also a &printslip in circ/circulation.pl
 sub printslip {
   my($env, $slip)=@_;
   my $printer = $env->{'printer'};

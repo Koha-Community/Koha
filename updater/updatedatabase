@@ -19,7 +19,7 @@ use strict;
 use DBI;
 
 # Koha modules
-use C4::Database;
+use C4::Context;
 
 my $debug=0;
 
@@ -211,7 +211,7 @@ my %defaultprefs=(
 
 #-------------------
 # Initialize
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 # Start checking
 
@@ -314,6 +314,7 @@ foreach $table ( keys %requirefields ) {
 # Get list of columns from items table
 my %itemtypes;
 
+# FIXME - There's already a $sth in this scope.
 my $sth=$dbh->prepare("show columns from items");
 $sth->execute;
 while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
@@ -333,6 +334,7 @@ unless ($itemtypes{'barcode'} eq 'varchar(20)') {
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
 
+# FIXME - There's already a $sth in this scope.
 my $sth=$dbh->prepare("show columns from branchtransfers");
 $sth->execute;
 while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
@@ -354,6 +356,7 @@ unless ($branchtransfers{'datearrived'} eq 'datetime') {
 # changing the branchcategories table around...
 my %branchcategories;
 
+# FIXME - There's already a $sth in this scope.
 my $sth=$dbh->prepare("show columns from branchcategories");
 $sth->execute;
 while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
@@ -400,11 +403,21 @@ foreach $prefitem ( keys %defaultprefs ) {
 
 
 $sth->finish;
-$dbh->disconnect;
 
 exit;
 
 # $Log$
+# Revision 1.19  2002/10/05 10:17:17  arensb
+# Merged with arensb-context branch: use C4::Context->dbh instead of
+# &C4Connect, and generally prefer C4::Context over C4::Database.
+#
+# Revision 1.18.2.2  2002/10/05 06:18:43  arensb
+# Added a whole mess of FIXME comments.
+#
+# Revision 1.18.2.1  2002/10/04 02:46:00  arensb
+# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
+# C4Connect.
+#
 # Revision 1.18  2002/09/24 13:50:55  tipaul
 # long WAS the road to 1.3.0...
 # coming VERY SOON NOW...

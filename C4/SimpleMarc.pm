@@ -34,7 +34,6 @@ use strict;
 use DBI;
 
 # Koha modules used
-use C4::Database;
 
 require Exporter;
 
@@ -465,6 +464,13 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.4  2002/10/05 09:53:11  arensb
+# Merged with arensb-context branch: use C4::Context->dbh instead of
+# &C4Connect, and generally prefer C4::Context over C4::Database.
+#
+# Revision 1.3.2.1  2002/10/04 02:57:38  arensb
+# Removed useless "use C4::Database;" line.
+#
 # Revision 1.3  2002/08/14 18:12:52  tonnesen
 # Added copyright statement to all .pl and .pm files
 #

@@ -22,10 +22,10 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Context;
 use C4::Output;
 use CGI;
 use C4::Search;
-use C4::Database;
 use C4::Koha;
 use HTML::Template;
 
@@ -67,14 +67,13 @@ if ($delete){
   # Not tonight though.
   #
   if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     my $data=$sth->fetchrow_hashref;
     $cardnumber=$data->{'max(substring(borrowers.cardnumber,2,7))'};
     $sth->finish;
-    $dbh->disconnect;
     # purpose: generate checksum'd member numbers.
     # We'll assume we just got the max value of digits 2-8 of member #'s from the database and our job is to
     # increment that by one, determine the 1st and 9th digits and return the full string.

@@ -21,7 +21,7 @@ package C4::Security; #assumes C4/Security
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Format;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -33,7 +33,7 @@ $VERSION = 0.01;
 
 sub Login {
   my ($env)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my @branches;
   my $query = "select * from branches order by branchname";
   my $sth=$dbh->prepare($query);
@@ -70,7 +70,6 @@ sub Login {
     }
     $sth->finish;
   }
-  $dbh->disconnect;
   &endint();
 }
   

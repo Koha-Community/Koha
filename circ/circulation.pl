@@ -31,7 +31,7 @@ use C4::Print;
 my %env;
 my $headerbackgroundcolor='#99cc33';
 my $circbackgroundcolor='#ffffcc';
-my $circbackgroundcolor='white';
+my $circbackgroundcolor='white';	# FIXME - Duplicate
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
@@ -643,7 +643,7 @@ EOF
 }
 
 
-
+# FIXME - This clashes with &C4::Print::printslip
 sub printslip {
     my ($env,$borrowernumber)=@_;
     my ($borrower, $flags) = getpatroninformation($env,$borrowernumber,0);

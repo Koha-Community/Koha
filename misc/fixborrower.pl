@@ -22,10 +22,10 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Database;
+use C4::Context;
 use strict;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my $query = "Select * from categories where (categorycode like 'L%' or categorycode like 'F%'
 or categorycode like 'S%' or categorycode like 'O%' or categorycode like 'H%') and (categorycode <>'HR' 
@@ -60,7 +60,7 @@ while (my $data=$sth->fetchrow_hashref){
 $query = "Select * from categories where (categorycode like 'V%') and (categorycode <>'HR' 
 and categorycode <> 'ST')";
 
-my $sth=$dbh->prepare($query);
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 
 while (my $data=$sth->fetchrow_hashref){
@@ -85,8 +85,8 @@ while (my $data=$sth->fetchrow_hashref){
 
 }
 
-my $query = "Select * from categories where categorycode = 'ST'";
-my $sth=$dbh->prepare($query);
+my $query = "Select * from categories where categorycode = 'ST'";	# FIXME - There's already a $query in this scope
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 
 while (my $data=$sth->fetchrow_hashref){
@@ -109,8 +109,8 @@ while (my $data=$sth->fetchrow_hashref){
 
 }
 
-my $query = "Select * from categories where categorycode = 'BR' or categorycode='CO' or categorycode='IS'";
-my $sth=$dbh->prepare($query);
+my $query = "Select * from categories where categorycode = 'BR' or categorycode='CO' or categorycode='IS'";	# FIXME - There's already a $query in this scope
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 
 while (my $data=$sth->fetchrow_hashref){
@@ -133,8 +133,8 @@ while (my $data=$sth->fetchrow_hashref){
 
 }
 
-my $query = "Select * from categories where categorycode = 'TD'  or categorycode='TR'";
-my $sth=$dbh->prepare($query);
+my $query = "Select * from categories where categorycode = 'TD'  or categorycode='TR'";	# FIXME - There's already a $query in this scope
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 
 while (my $data=$sth->fetchrow_hashref){
@@ -157,8 +157,8 @@ while (my $data=$sth->fetchrow_hashref){
 
 }
 
-my $query = "Select * from categories where categorycode = 'HR'";
-my $sth=$dbh->prepare($query);
+my $query = "Select * from categories where categorycode = 'HR'";	# FIXME - There's already a $query in this scope
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 
 while (my $data=$sth->fetchrow_hashref){
@@ -181,8 +181,8 @@ while (my $data=$sth->fetchrow_hashref){
 
 }
 
-my $query = "Select * from categories where categorycode = 'IL'";
-my $sth=$dbh->prepare($query);
+my $query = "Select * from categories where categorycode = 'IL'";	# FIXME - There's already a $query in this scope
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 
 while (my $data=$sth->fetchrow_hashref){
@@ -205,8 +205,8 @@ while (my $data=$sth->fetchrow_hashref){
 
 }
 
-my $query = "Select * from categories where categorycode = 'TB'";
-my $sth=$dbh->prepare($query);
+my $query = "Select * from categories where categorycode = 'TB'";	# FIXME - There's already a $query in this scope
+my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
 $sth->execute;
 while (my $data=$sth->fetchrow_hashref){
   #update borrowers corresponding
@@ -248,5 +248,3 @@ foreach $query (@queryValues) {
     $sth->execute;
     $sth->finish;
 }
-
-$dbh->disconnect;

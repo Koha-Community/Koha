@@ -34,6 +34,7 @@ use CGI;
 use DBI;
 
 # Koha modules used
+use C4::Context;
 use C4::Database;
 use C4::Acquisitions;
 use C4::Output;
@@ -47,24 +48,8 @@ use HTML::Template;
 #------------------
 # Constants
 
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
 
 # HTML colors for alternating lines
 my $lc1='#dddddd';
@@ -77,7 +62,7 @@ my $lc2='#ddaaaa';
 my $userid=$ENV{'REMOTE_USER'};
 
 my $input = new CGI;
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 #-------------
 # Display output
@@ -258,6 +243,7 @@ sub ListFileRecords {
     my $recordsource;
     my $record;
     my ($numrecords,$resultsid,$data,$startdate,$enddate);
+		# FIXME - there's already a $data a few lines above.
     
     requireDBI($dbh,"ListFileRecords");
 
@@ -550,6 +536,7 @@ sub z3950menu {
     my $sth=$dbh->prepare("select id,name,checked 
 	from z3950servers 
 	order by rank");
+		# FIXME - There's already a $sth in this function.
     $sth->execute;
     my $serverlist='';
     while (my ($id, $name, $checked) = $sth->fetchrow) {
@@ -751,6 +738,7 @@ sub AcceptBiblioitem {
     my $numrecord = $input->param('numrecord');
     if ($numrecord) {
 	for (my $i==1;$i<$numrecord;$i++) {
+		# FIXME - This "==" was supposed to be a "=", right?
 	    $record=$file->next;
 	}
     } else {
@@ -1005,6 +993,15 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.14  2002/10/05 09:56:14  arensb
+# Merged with arensb-context branch: use C4::Context->dbh instead of
+# &C4Connect, and generally prefer C4::Context over C4::Database.
+#
+# Revision 1.13.2.1  2002/10/04 02:52:50  arensb
+# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
+# C4Connect.
+# Removed old code for reading /etc/koha.conf.
+#
 # Revision 1.13  2002/08/14 18:12:52  tonnesen
 # Added copyright statement to all .pl and .pm files
 #

@@ -24,8 +24,8 @@
 
 use strict;
 use CGI;
+use C4::Context;
 use C4::Output;
-use C4::Database;
 use C4::Maintainance;
 
 my $input = new CGI;
@@ -33,13 +33,13 @@ print $input->header;
 my $type=$input->param('type');
 my $bi=$input->param('bi');
 my $bib=$input->param('bib');
-my $type=$input->param('type');
+my $type=$input->param('type');	# FIXME - Redundant
 print startpage();
 print startmenu('catalog');
 
 if ($type eq 'change'){
   my $biblionumber=$input->param('biblionumber');
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblio where biblionumber=$biblionumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;

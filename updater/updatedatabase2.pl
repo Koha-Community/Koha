@@ -31,7 +31,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Database;
+use C4::Context;
 use C4::Catalogue;
 use DBI;
 use C4::Acquisitions;
@@ -39,7 +39,7 @@ use C4::Output;
 
 sub droptable {
 	my ($dbh,$tablename)=@_;
-	if ($tables{$tablename}) {
+	if ($tables{$tablename}) {	# FIXME - $tables undefined
 		print "     - $tablename...\n";
 		my $sti=$dbh->prepare("DROP TABLE $tablename");
 		$sti->execute;
@@ -58,7 +58,7 @@ sub dosql {
 }
 
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my %tables;
 my $sth=$dbh->prepare("show tables");
@@ -79,6 +79,7 @@ dosql($dbh,"CREATE TABLE bibliothesaurus (code BIGINT not null AUTO_INCREMENT, f
 		$sti2->execute;
 		if ($sti2->err) {
 			print "error : ".$sti2->errstr." \n tried to execute : $sql_cmd\n";
+			# FIXME - $sql_cmd undefined
 			die;
 		}
 		$line2=$sti2->fetchrow_hashref;

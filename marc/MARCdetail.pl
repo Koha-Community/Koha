@@ -17,10 +17,10 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use HTML::Template;
 use strict;
-require Exporter;
-use C4::Database;
+use HTML::Template;
+require Exporter;	# FIXME - Is this really necessary?
+use C4::Context;
 use C4::Output;  # contains picktemplate
 use CGI;
 use C4::Search;
@@ -29,37 +29,14 @@ use C4::Biblio;
 use C4::Catalogue;
  
 my $query=new CGI;
-
-
-my $language='french';
-
-
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
-    chomp;
-    (next) if (/^\s*#/
-	    );
-    if (/(.*)\s*=\s*(.*)/) {
-	my $variable=$1;
-	my $value=$2;
-	# Clean up white space at beginning and end
-	$variable=~s/^\s*//g;
-	$variable=~s/\s*$//g;
-	$value=~s/^\s*//g;
-	$value=~s/\s*$//g;
-	$configfile{$variable}=$value;
-    }
-}
-
     
 my $biblionumber=$query->param('bib');
 my $tag=$query->param('tag');
 if (! defined $tag) { $tag='2XX';}
 #print STDERR "BIB : $biblionumber // TAG : $tag\n";
 if (! defined $biblionumber) {
-    my $includes=$configfile{'includes'};
-    ($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+    my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
     my $templatebase="MARCdetailbiblioselect.tmpl";
     my $theme=picktemplate($includes, $templatebase);
     my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
@@ -71,13 +48,13 @@ if (! defined $biblionumber) {
 
 sub showmarcrecord {
     my ($biblionumber,$tag) = @_;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select liblibrarian from marc_subfield_structure where tagfield=? and tagsubfield=?");
     my $record =MARCgetbiblio($dbh,$biblionumber);
 # open template
     my $templatebase="catalogue/MARCdetail.tmpl";
-    my $includes=$configfile{'includes'};
-    ($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
+    my $includes = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
     my $theme=picktemplate($includes, $templatebase);
     my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
 # fill arrays

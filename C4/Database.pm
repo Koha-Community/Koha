@@ -20,6 +20,15 @@ package C4::Database; #assumes C4/Database
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# NOTE:
+# C4::Database::C4Connect has been superseded by C4::Context->dbh;
+
+# FIXME
+# If C4::Biblio::OLD_MAY_BE_DELETED_newcompletebiblioitem can, in
+# fact, be deleted, then it should be. Then C4::Biblio::getoraddbiblio
+# won't be used anywhere, and it can be deleted too. That'll make two
+# fewer functions that use C4::Database::requireDBI.
+
 use strict;
 require Exporter;
 use DBI;
@@ -29,28 +38,8 @@ $VERSION = 0.01;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&C4Connect &requireDBI &configfile
+	&C4Connect &requireDBI
 );
-
-sub configfile {
-    my $configfile;
-    open (KC, "/etc/koha.conf");
-    while (<KC>) {
-	chomp;
-	(next) if (/^\s*#/);
-	if (/(.*)\s*=\s*(.*)/) {
-	    my $variable=$1;
-	    my $value=$2;
-	    # Clean up white space at beginning and end
-	    $variable=~s/^\s*//g;
-	    $variable=~s/\s*$//g;
-	    $value=~s/^\s*//g;
-	    $value=~s/\s*$//g;
-	    $configfile->{$variable}=$value;
-	}
-    }
-    return $configfile;
-}
 
 sub C4Connect  {
   my $dbname="c4";

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use C4::Database;
+use C4::Context;
 use DBI;
 #use strict;
 use C4::Acquisitions;
@@ -26,7 +26,7 @@ if ($< == 0) {
 }
     
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my $sth=$dbh->prepare("update z3950results set active=0");
 $sth->execute;
@@ -99,7 +99,7 @@ while (1) {
 			    #$sth->finish;
 			    #$sti->finish;
 			    #$dbh->disconnect;
-			    my $dbi=C4Connect;
+			    my $dbi = C4::Context->dbh;
 			    my ($name, $server, $database, $user, $password) = split(/\//, $serverinfo, 5);
 			    $server=~/(.*)\:(\d+)/;
 			    my $servername=$1;
@@ -211,10 +211,10 @@ while (1) {
 				    }
 				}
 			    }
+			    # FIXME - There's already a $stj in this scope
 			    my $stj=$dbi->prepare("update z3950results set active=0 where id=$resultsid");
 			    $stj->execute;
 			    eval {$stj->finish};
-			    $dbi->disconnect;
 			    print "    $server done.\n";
 			    exit;
 			    sub pe {

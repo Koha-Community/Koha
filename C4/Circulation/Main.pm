@@ -23,11 +23,19 @@ package C4::Circulation::Main; #asummes C4/Circulation/Main
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Circulation::Issues;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Issues
+	# use each other, so functions get redefined.
 use C4::Circulation::Returns;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Returns
+	# use each other, so functions get redefined.
 use C4::Circulation::Renewals;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Renewals
+	# use each other, so functions get redefined.
 use C4::Circulation::Borrower;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Borrower
+	# use each other, so functions get redefined.
 use C4::Reserves;
 use C4::Search;
 use C4::InterfaceCDK;
@@ -79,7 +87,7 @@ my $priv_func = sub {
 
 sub getbranch {
   my ($env) = @_;
-  my $dbh = C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query = "select * from branches order by branchcode";
   my $sth = $dbh->prepare($query);
   $sth->execute;
@@ -101,12 +109,11 @@ sub getbranch {
   $env->{'brdata'} = $data;
   $env->{'branchname'} = $data->{'branchname'};
   $sth->finish;
-  $dbh->disconnect;
 }
 
 sub getprinter {
   my ($env) = @_;
-  my $dbh = C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query = "select * from printers order by printername";
   my $sth = $dbh->prepare($query);
   $sth->execute;
@@ -122,8 +129,7 @@ sub getprinter {
       $env->{'printtype'}=$data->{'printtype'};
   }
   $sth->finish;
-  $dbh->disconnect;
-  }
+}
 		      
 # FIXME - This is not the same as &C4::Circulation::pastitems, though
 # the two appear to share some code.

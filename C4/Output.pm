@@ -25,6 +25,7 @@ package C4::Output;
 use strict;
 require Exporter;
 
+use C4::Context;
 use C4::Database;
 use C4::Search; #for getting the systempreferences
 
@@ -92,17 +93,8 @@ my @more   = ();
 # all file-scoped lexicals must be created before
 # the functions below that use them.
 
-#
-# Change this value to reflect where you will store your includes
-#
-# FIXME - Since this is used in several places, it ought to be put
-# into a separate file. Better yet, put "use C4::Config;" inside the
-# &import method of any package that requires the config file.
-
-my $configfile=configfile();
-
-my $path=$configfile->{'includes'};
-($path) || ($path="/usr/local/www/hdl/htdocs/includes");
+my $path = C4::Context->config('includes') ||
+	"/usr/local/www/hdl/htdocs/includes";
 
 #---------------------------------------------------------------------------------------------------------
 sub gettemplate {
@@ -258,7 +250,7 @@ sub pathtotemplate {
 
   #where to search for templates
   my @tmpldirs = ("$path/templates", $path);
-  unshift (@tmpldirs, $configfile->{'templatedirectory'}) if $configfile->{'templatedirectory'};
+  unshift (@tmpldirs, C4::Context->config('templatedirectory')) if C4::Context->config('templatedirectory');
   unshift (@tmpldirs, $params{'path'}) if $params{'path'};
 
   my ($edir, $etheme, $elanguage, $epath);

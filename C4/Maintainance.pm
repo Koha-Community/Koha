@@ -21,7 +21,7 @@ package C4::Maintainance; #assumes C4/Maintainance
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Database;
+use C4::Context;
 
 require Exporter;
 
@@ -78,7 +78,7 @@ C<$n> is 0, it will return all matching subjects.
 # just return a list of strings.
 sub listsubjects {
   my ($sub,$num,$offset)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from bibliosubject where subject like '$sub%' group by subject";
   # FIXME - Make $num and $offset optional.
   # If $num was given, make sure $offset was, too.
@@ -95,7 +95,6 @@ sub listsubjects {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
@@ -110,14 +109,14 @@ bibliosubject table of the Koha database.
 #'
 sub updatesub{
   my ($sub,$oldsub)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   $sub=$dbh->quote($sub);
   $oldsub=$dbh->quote($oldsub);
+  # FIXME - Just use $dbh->do();
   my $query="update bibliosubject set subject=$sub where subject=$oldsub";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item shiftgroup
@@ -132,16 +131,17 @@ C<$biblionumber> is the biblionumber to associate it with.
 #'
 sub shiftgroup{
   my ($bib,$bi)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
+  # FIXME - Just use $dbh->do();
   my $query="update biblioitems set biblionumber=$bib where biblioitemnumber=$bi";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
+  # FIXME - Just use $dbh->do();
   $query="update items set biblionumber=$bib where biblioitemnumber=$bi";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item deletedbib
@@ -159,7 +159,7 @@ is the number of elements in C<$results>.
 #'
 sub deletedbib{
   my ($title)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from deletedbiblio where title like '$title%' order by title";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -170,7 +170,6 @@ sub deletedbib{
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
@@ -186,7 +185,7 @@ moves its entry to the biblio table.
 #'
 sub undeletebib{
   my ($bib)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select * from deletedbiblio where biblionumber=$bib";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -209,7 +208,6 @@ sub undeletebib{
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item updatetype
@@ -223,12 +221,11 @@ C<$itemtype>.
 #'
 sub updatetype{
   my ($bi,$type)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   # FIXME - Use $dbh->do(...);
   my $sth=$dbh->prepare("Update biblioitems set itemtype='$type' where biblioitemnumber=$bi");
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 END { }       # module clean-up code here (global destructor)

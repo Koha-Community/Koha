@@ -25,7 +25,6 @@
 use strict;
 use CGI;
 use C4::Output;
-use C4::Database;
 use C4::Maintainance;
 
 my $input = new CGI;

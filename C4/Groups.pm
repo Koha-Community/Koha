@@ -27,7 +27,7 @@ package C4::Groups;
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Circulation::Circ2;
 #use C4::Accounts;
 #use C4::InterfaceCDK;
@@ -50,20 +50,19 @@ $VERSION = 0.01;
 sub getgroups {
     my ($env) = @_;
     my %groups;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select distinct groupshortname,grouplongname from borrowergroups");
     $sth->execute;
     while (my ($short, $long)=$sth->fetchrow) {
 	$groups{$short}=$long;
     }
-    $dbh->disconnect;
     return (\%groups);
 }
 
 sub groupmembers {
     my ($env, $group) = @_;
     my @members;
-    my $dbh=&C4Connect;
+    my $dbh = C4::Context->dbh;
     my $q_group=$dbh->quote($group);
     my $sth=$dbh->prepare("select borrowernumber from borrowergroups where groupshortname=$q_group");
     $sth->execute;

@@ -38,14 +38,14 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Output;
 use CGI;
+use C4::Context;
+use C4::Output;
 use C4::Search;
-use C4::Database;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
-	my $dbh = &C4Connect;
+	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
@@ -60,7 +60,6 @@ sub StringSearch  {
 	}
 	#  $sth->execute;
 	$sth->finish;
-	$dbh->disconnect;
 	return ($cnt,\@results);
 }
 
@@ -88,7 +87,7 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-		my $dbh = &C4Connect;
+		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select currency,rate from currency where currency='$searchfield'");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
@@ -172,7 +171,7 @@ printend
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh=C4Connect;
+	my $dbh = C4::Context->dbh;
 	my $query = "replace currency (currency,rate) values (";
 	$query.= $dbh->quote($input->param('currency')).",";
 	$query.= $dbh->quote($input->param('rate')).")";
@@ -187,11 +186,12 @@ printend
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = &C4Connect;
+	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from aqbooksellers where currency='$searchfield'");
 	$sth->execute;
 	my $total = $sth->fetchrow_hashref;
 	$sth->finish;
+	# FIXME - There's already a $sth in this scope.
 	my $sth=$dbh->prepare($reqsel);
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
@@ -211,7 +211,7 @@ printend
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh=C4Connect;
+	my $dbh = C4::Context->dbh;
 #	my $searchfield=$input->param('branchcode');
 	my $sth=$dbh->prepare($reqdel);
 	$sth->execute;

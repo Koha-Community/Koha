@@ -21,7 +21,7 @@ package C4::Stats; #assumes C4/Stats
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -72,13 +72,13 @@ C<$env-E<gt>{usercode} specifies the value of the C<usercode> field.
 sub UpdateStats {
   #module to insert stats data into stats table
   my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype,$borrowernumber)=@_;
-  my $dbh=C4Connect();
+  my $dbh = C4::Context->dbh;
   if ($branch eq ''){
     $branch=$env->{'branchcode'};
   }
   my $user = $env->{'usercode'};
   print $borrowernumber;
-  # FIXME - Use $dbh->do() instead?
+  # FIXME - Use $dbh->do() instead
   my $sth=$dbh->prepare("Insert into statistics
   (datetime,branch,type,usercode,value,
   other,itemnumber,itemtype,borrowernumber)
@@ -86,7 +86,6 @@ sub UpdateStats {
   '$other','$itemnum','$itemtype','$borrowernumber')");
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 # XXX - POD
@@ -110,7 +109,7 @@ sub statsreport {
 # &statsreport.
 sub circrep {
   my ($time,$type)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from statistics";
   if ($time eq 'today'){
     # FIXME - What is this supposed to do? MySQL 3.23.42 barfs on it.
@@ -127,16 +126,14 @@ sub circrep {
   }
   $sth->finish;
 #  print $query;
-  $dbh->disconnect;
   return(@results);
-
 }
 
 # XXX - POD
 # FIXME - This is only used in stats.pl, which in turn is never used.
 sub Count {
   my ($type,$branch,$time,$time2)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from statistics where type='$type'";
   $query.=" and datetime >= '$time' and datetime< '$time2' and branch='$branch'";
   my $sth=$dbh->prepare($query);
@@ -144,26 +141,24 @@ sub Count {
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
 #  print $query;
-  $dbh->disconnect;
   return($data->{'count(*)'});
 }
 
 # XXX - POD. Doesn't appear to be used
 sub Overdues{
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from issues where date_due >= now()";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $count=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($count->{'count(*)'});
 }
 
 # XXX - POD. Never used
 sub TotalOwing{
   my ($type)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select sum(amountoutstanding) from accountlines";
   if ($type eq 'fine'){
     $query=$query." where accounttype='F' or accounttype='FN'";
@@ -173,14 +168,13 @@ sub TotalOwing{
   $sth->execute;
    my $total=$sth->fetchrow_hashref;
    $sth->finish;
-  $dbh->disconnect;
   return($total->{'sum(amountoutstanding)'});
 }
 
 # XXX - POD. Never used
 sub TotalPaid {
   my ($time)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from accountlines,borrowers where (accounttype = 'Pay'
 or accounttype ='W')
   and accountlines.borrowernumber = borrowers.borrowernumber";
@@ -208,7 +202,6 @@ or accounttype ='W')
     $i++;
   }
    $sth->finish;
-  $dbh->disconnect;
 #  print $query;
   return(@results);
 }
@@ -216,7 +209,7 @@ or accounttype ='W')
 # XXX - POD. Only used in stats.pl, which in turn is never used.
 sub getcharges{
   my($borrowerno,$timestamp)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $timestamp2=$timestamp-1;
   my $query="Select * from accountlines where borrowernumber=$borrowerno
   and timestamp = '$timestamp' and accounttype <> 'Pay' and
@@ -232,7 +225,6 @@ sub getcharges{
       $i++;
 #    }
   }
-  $dbh->disconnect;
   return(@results);
 }
 
@@ -240,7 +232,7 @@ sub getcharges{
 # which is used.
 sub Getpaidbranch{
   my($date,$borrno)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select * from statistics where type='payment' and datetime
   >'$date' and  borrowernumber='$borrno'";
   my $sth=$dbh->prepare($query);
@@ -248,14 +240,13 @@ sub Getpaidbranch{
 #  print $query;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data->{'branch'});
 }
 
 # XXX - POD. This is only used in reservereport.pl and
 # reservereport.xls, neither of which is used.
 sub unfilledreserves {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where found <> 'F' and cancellationdate
 is NULL and biblio.biblionumber=reserves.biblionumber and
 reserves.constrainttype='o'
@@ -286,7 +277,6 @@ biblio.title,reserves.reservedate";
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 

@@ -4,7 +4,7 @@
 
 use strict;
 use DBI;
-use C4::Database;
+use C4::Context;
 
 # This script makes the following substitutions.
 # on homebranch field:
@@ -43,7 +43,7 @@ my %hold = ( 'F'  => 'F' ,
 
 
 # do the substitutions.....
-my $dbh = &C4Connect;           
+my $dbh = C4::Context->dbh;
 
 my $sth = $dbh->prepare("SELECT barcode, holdingbranch, homebranch FROM items");
 $sth->execute();
@@ -71,5 +71,3 @@ while (my $item = $sth->fetchrow_hashref) {
 }
 
 print "\nFinished output from fixbranches.pl\n";
-
-$dbh->disconnect;

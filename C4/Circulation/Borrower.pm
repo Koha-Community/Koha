@@ -24,12 +24,16 @@ package C4::Circulation::Borrower; #assumes C4/Circulation/Borrower
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Accounts;
 use C4::InterfaceCDK;
 use C4::Interface::FlagsCDK;
 use C4::Circulation::Main;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Borrower
+	# use each other, so functions get redefined.
 use C4::Circulation::Issues;
+	# FIXME - C4::Circulation::Issues and C4::Circulation::Borrower
+	# use each other, so functions get redefined.
 use C4::Circulation::Renewals;
 use C4::Scan;
 use C4::Search;
@@ -217,6 +221,7 @@ sub checktraps {
     #check if borrower has any items waiting
     my ($nowaiting,$itemswaiting) = &C4::Circulation::Main::checkwaiting($env,$dbh,$bornum);
     if ($nowaiting > 0) { push (@traps_set,"WAITING"); } 
+    # FIXME - This should be $traps_set[0], right?
     if (@traps_set[0] ne "" ) {
       ($issuesallowed,$traps_done,$amount,$odues) = 
          process_traps($env,$dbh,$bornum,$borrower,
@@ -318,7 +323,7 @@ sub process_traps {
 
 sub Borenq {
   my ($env)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   #get borrower guff
   my $bornum;
   my $issuesallowed;
@@ -337,7 +342,6 @@ sub Borenq {
         $reason = "";
        }
     }
-  $dbh->disconnect;
   }
   return $reason;
 }  
@@ -350,7 +354,7 @@ sub modifyuser {
 
 sub reserveslist {
   my ($env,$borrower,$amount,$odues,$waiting) = @_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my @items;
   my $x=0;
   my $query="Select * from reserves where
@@ -366,23 +370,21 @@ sub reserveslist {
   }
   $sth->finish;
   reservesdisplay($env,$borrower,$amount,$odues,\@items);
-  $dbh->disconnect;
 }
   
 sub NewBorrowerNumber {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   $data->{'max(borrowernumber)'}++;
   return($data->{'max(borrowernumber)'});
-  $dbh->disconnect;
 }
 
 sub findguarantees{
   my ($bornum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select cardnumber,borrowernumber from borrowers where 
   guarantor='$bornum'";
   my $sth=$dbh->prepare($query);
@@ -394,7 +396,6 @@ sub findguarantees{
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@dat);
 }
 END { }       # module clean-up code here (global destructor)

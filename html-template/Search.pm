@@ -21,10 +21,13 @@ package C4::Search; #asummes C4/Search
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - This file is very similar to C4/Search.pm (and they both
+# claim to be package C4::Search). So shouldn't this file be nuked?
+
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Reserves2;
 use Set::Scalar;
 
@@ -76,7 +79,7 @@ my $priv_func = sub {
 # make all your functions, whether exported or not;
 sub findguarantees{         
   my ($bornum)=@_;         
-  my $dbh=C4Connect;           
+  my $dbh = C4::Context->dbh;           
   my $query="select cardnumber,borrowernumber from borrowers where    
   guarantor='$bornum'";               
   my $sth=$dbh->prepare($query);                 
@@ -88,12 +91,11 @@ sub findguarantees{
     $i++;                               
   }                                   
   $sth->finish; 
-  $dbh->disconnect;         
   return($i,\@dat);             
 }
 sub findguarantor{  
   my ($bornum)=@_;  
-  my $dbh=C4Connect;    
+  my $dbh = C4::Context->dbh;    
   my $query="select guarantor from borrowers where      
   borrowernumber='$bornum'";        
   my $sth=$dbh->prepare($query);          
@@ -106,38 +108,35 @@ sub findguarantor{
   $sth->execute;    
   $data=$sth->fetchrow_hashref;      
   $sth->finish;        
-  $dbh->disconnect;          
   return($data);            
 }
 
 sub systemprefs {
     my %systemprefs;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select variable,value from systempreferences");
     $sth->execute;
     while (my ($variable,$value)=$sth->fetchrow) {
 	$systemprefs{$variable}=$value;
     }
     $sth->finish;
-    $dbh->disconnect;
     return(%systemprefs);
 }
 
 sub NewBorrowerNumber {           
-  my $dbh=C4Connect;        
+  my $dbh = C4::Context->dbh;        
   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");     
   $sth->execute;            
   my $data=$sth->fetchrow_hashref;                                  
   $sth->finish;                   
   $data->{'max(borrowernumber)'}++;         
-  $dbh->disconnect;
   return($data->{'max(borrowernumber)'}); 
 }    
 
   
 sub KeywordSearch {
   my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   my $resulthash;
   $search->{'keyword'}=~ s/ +$//;
   $search->{'keyword'}=~ s/'/\\'/;
@@ -306,7 +305,6 @@ sub KeywordSearch {
 	$i2++;
       }
   }
-  $dbh->disconnect;
 
   #$count=$i;
   return($count,$resulthash,@res2);
@@ -314,7 +312,7 @@ sub KeywordSearch {
 
 sub KeywordSearch2 {
   my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   $search->{'keyword'}=~ s/ +$//;
   $search->{'keyword'}=~ s/'/\\'/;
   my @key=split(' ',$search->{'keyword'});
@@ -454,7 +452,6 @@ sub KeywordSearch2 {
     $i2++;
   }
   $sth->finish;
-  $dbh->disconnect;
 #  $i--;
 #  $i++;
   return($i,@res2);
@@ -462,7 +459,7 @@ sub KeywordSearch2 {
 
 sub CatSearch  {
   my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query = '';
     my @results;
   $search->{'title'}=~ s/'/\\'/g;
@@ -716,7 +713,7 @@ sub updatesearchstats{
 
 sub subsearch {
   my ($env,$subject)=@_;
-  my $dbh=C4Connect();
+  my $dbh = C4::Context->dbh;
   $subject=$dbh->quote($subject);
   my $query="Select * from biblio,bibliosubject where
   biblio.biblionumber=bibliosubject.biblionumber and
@@ -731,14 +728,13 @@ sub subsearch {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return(@results);
 }
 
 
 sub ItemInfo {
   my ($env,$biblionumber,$type)=@_;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from items,biblio,biblioitems,branches 
   where (items.biblioitemnumber = biblioitems.biblioitemnumber)
   and biblioitems.biblionumber=biblio.biblionumber
@@ -814,14 +810,13 @@ sub ItemInfo {
   } 
   $sth2->finish;
 
-  $dbh->disconnect;
   return(@results);
 }
 
 sub GetItems {
    my ($env,$biblionumber)=@_;
    #debug_msg($env,"GetItems");
-   my $dbh = &C4Connect;
+   my $dbh = C4::Context->dbh;
    my $query = "Select * from biblioitems where (biblionumber = $biblionumber)";
    #debug_msg($env,$query);
    my $sth=$dbh->prepare($query);
@@ -854,26 +849,24 @@ sub GetItems {
       $i++;      
    }
    $sth->finish;
-   $dbh->disconnect;
    return(@results);
 }	     
   
 sub itemdata {
   my ($barcode)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from items,biblioitems where barcode='$barcode'
   and items.biblioitemnumber=biblioitems.biblioitemnumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
 sub bibdata {
   my ($bibnum,$type)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select *,biblio.notes  
   from biblio,biblioitems 
   left join bibliosubtitle on                                                
@@ -893,13 +886,12 @@ sub bibdata {
 
   }
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
 sub bibitemdata {
   my ($bibitem)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select *,biblioitems.notes as bnotes from biblio,biblioitems,itemtypes where biblio.biblionumber=
   biblioitems.biblionumber and biblioitemnumber=$bibitem and
   biblioitems.itemtype=itemtypes.itemtype";
@@ -907,13 +899,12 @@ sub bibitemdata {
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
 sub subject {
   my ($bibnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from bibliosubject where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -924,13 +915,12 @@ sub subject {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
 sub addauthor {
   my ($bibnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from additionalauthors where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -941,13 +931,12 @@ sub addauthor {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
 sub subtitle {
   my ($bibnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from bibliosubtitle where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -958,7 +947,6 @@ sub subtitle {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
@@ -966,7 +954,7 @@ sub subtitle {
 
 sub itemissues {
   my ($bibitem,$biblio)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from items where 
   items.biblioitemnumber='$bibitem'";
   my $sth=$dbh->prepare($query) || die $dbh->errstr;
@@ -1006,13 +994,12 @@ sub itemissues {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return(@results);
 }
 
 sub itemnodata {
   my ($env,$dbh,$itemnumber) = @_;
-  $dbh=C4Connect;
+  $dbh = C4::Context->dbh;
   my $query="Select * from biblio,items,biblioitems
     where items.itemnumber = '$itemnumber'
     and biblio.biblionumber = items.biblionumber
@@ -1021,7 +1008,6 @@ sub itemnodata {
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;  
-  $dbh->disconnect;
   return($data);	       
 }
 
@@ -1029,7 +1015,7 @@ sub itemnodata {
 #called by member.pl
 sub BornameSearch  {
   my ($env,$searchstring,$type)=@_;
-  my $dbh = &C4Connect;
+  my $dbh = C4::Context->dbh;
   $searchstring=~ s/\'/\\\'/g;
   my @data=split(' ',$searchstring);
   my $count=@data;
@@ -1055,14 +1041,13 @@ sub BornameSearch  {
   }
 #  $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
   return ($cnt,\@results);
 }
 
 sub borrdata {
   my ($cardnumber,$bornum)=@_;
   $cardnumber = uc $cardnumber;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query;
   if ($bornum eq ''){
     $query="Select * from borrowers where cardnumber='$cardnumber'";
@@ -1073,13 +1058,12 @@ sub borrdata {
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
 sub borrissues {
   my ($bornum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query;
   $query="Select * from issues,biblio,items where borrowernumber='$bornum' and
 items.itemnumber=issues.itemnumber and
@@ -1094,13 +1078,12 @@ by date_due";
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@result);
 }
 
 sub allissues { 
   my ($bornum,$order,$limit)=@_; 
-  my $dbh=C4Connect;   
+  my $dbh = C4::Context->dbh;   
   my $query;     
   $query="Select * from issues,biblio,items,biblioitems       
   where borrowernumber='$bornum' and         
@@ -1120,13 +1103,12 @@ sub allissues {
     $i++;     
   }         
   $sth->finish;           
-  $dbh->disconnect;             
   return($i,\@result);               
 }
 
 sub borrdata2 {
   my ($env,$bornum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from issues where borrowernumber='$bornum' and
     returndate is NULL";
   my $sth=$dbh->prepare($query);
@@ -1143,7 +1125,6 @@ sub borrdata2 {
   $sth->execute;
   my $data3=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
 
 return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)'});
 }
@@ -1151,7 +1132,7 @@ return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)
 
 sub getboracctrecord {
    my ($env,$params) = @_;
-   my $dbh=C4Connect;
+   my $dbh = C4::Context->dbh;
    my @acctlines;
    my $numlines=0;
    my $query= "Select * from accountlines where
@@ -1174,13 +1155,12 @@ borrowernumber=$params->{'borrowernumber'} order by date desc,timestamp desc";
       $total = $total+ $data->{'amountoutstanding'};
    }
    $sth->finish;
-   $dbh->disconnect;
    return ($numlines,\@acctlines,$total);
 }
 
 sub itemcount { 
   my ($env,$bibnum,$type)=@_; 
-  my $dbh=C4Connect;   
+  my $dbh = C4::Context->dbh;   
   my $query="Select * from items where     
   biblionumber=$bibnum ";
   if ($type ne 'intra'){
@@ -1240,25 +1220,23 @@ sub itemcount {
 #    $count+=$ocount;
     $sth2->finish;
   $sth->finish; 
-  $dbh->disconnect;                   
   return ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit,$ocount); 
 }
 
 sub ItemType {
   my ($type)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select description from itemtypes where itemtype='$type'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $dat=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return ($dat->{'description'});
 }
 
 sub bibitems {
   my ($bibnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblioitems,itemtypes,items where
   biblioitems.biblionumber='$bibnum' and biblioitems.itemtype=itemtypes.itemtype and
   biblioitems.biblioitemnumber=items.biblioitemnumber group by
@@ -1272,13 +1250,12 @@ sub bibitems {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
 sub barcodes{
   my ($biblioitemnumber)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select barcode from items where
    biblioitemnumber='$biblioitemnumber'";
   my $sth=$dbh->prepare($query);
@@ -1290,7 +1267,6 @@ sub barcodes{
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return(@barcodes);
   
 }

@@ -25,7 +25,7 @@ package C4::Acquisitions; #assumes C4/Acquisitions.pm
 
 use strict;
 require Exporter;
-use C4::Database;
+use C4::Context;
  #use C4::Biblio;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -138,7 +138,7 @@ Results are ordered from most to least recent.
 # FIXME - This exact function already exists in C4::Catalogue
 sub getorders {
   my ($supplierid)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where 
   booksellerid='$supplierid' and (quantity > quantityreceived or
   quantityreceived is NULL)
@@ -154,7 +154,6 @@ sub getorders {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return ($i,\@results);
 }
 
@@ -163,14 +162,13 @@ sub getorders {
 # the same as &C4::Search::itemcount
 sub itemcount{
   my ($biblio)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from items where biblionumber=$biblio";
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data->{'count(*)'});
 }
 
@@ -192,7 +190,7 @@ tables of the Koha database.
 # FIXME - Almost the exact same function is already in C4::Catalogue
 sub getorder{
   my ($bi,$bib)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select ordernumber 
  	from aqorders 
  	where biblionumber=? and biblioitemnumber=?";
@@ -201,7 +199,6 @@ sub getorder{
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
-  $dbh->disconnect;
 #  print $query;
   return ($order,$ordnum->{'ordernumber'});
 }
@@ -222,7 +219,7 @@ aqorderbreakdown tables of the Koha database.
 # &C4::Catalogue::getsingleorder and &C4::Biblio::getsingleorder.
 sub getsingleorder {
   my ($ordnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
   where aqorders.ordernumber=? 
   and biblio.biblionumber=aqorders.biblionumber and
@@ -232,7 +229,6 @@ sub getsingleorder {
   $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
@@ -252,7 +248,7 @@ of the Koha database.
 # FIXME - This exact function is already in C4::Catalogue
 sub invoice {
   my ($invoice)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where
   booksellerinvoicenumber='$invoice'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
@@ -266,7 +262,6 @@ sub invoice {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -290,7 +285,7 @@ C<@results> is sorted alphabetically by book title.
 sub getallorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
@@ -307,7 +302,6 @@ sub getallorders {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -316,7 +310,7 @@ sub getallorders {
 sub getrecorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
@@ -335,7 +329,6 @@ sub getrecorders {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -377,7 +370,7 @@ following keys:
 # FIXME - The same function (modulo whitespace) appears in C4::Catalogue
 sub ordersearch {
   my ($search,$biblio,$catview)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select *,biblio.title from aqorders,biblioitems,biblio
 	where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
 	and biblio.biblionumber=aqorders.biblionumber
@@ -420,7 +413,6 @@ sub ordersearch {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -440,7 +432,7 @@ aqbooksellers table in the Koha database.
 # FIXME - This function appears in C4::Catalogue
 sub bookseller {
   my ($searchstring)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqbooksellers where name like '%$searchstring%' or
   id = '$searchstring'";
   my $sth=$dbh->prepare($query);
@@ -452,7 +444,6 @@ sub bookseller {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -471,7 +462,7 @@ are the fields of the aqorderbreakdown table in the Koha database.
 # FIXME - This function appears in C4::Catalogue.
 sub breakdown {
   my ($id)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorderbreakdown where ordernumber='$id'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -482,7 +473,6 @@ sub breakdown {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
@@ -505,7 +495,7 @@ number of elements in C<@orders>.
 # C4::Catalogue.pm
 sub basket {
   my ($basketno,$supplier)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select *,biblio.title from aqorders,biblio,biblioitems 
   where basketno='$basketno'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
@@ -526,7 +516,6 @@ sub basket {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -550,7 +539,7 @@ database, and returns it.
 # remove out-of-date dummy orders.
 # FIXME - This function appears in C4::Catalogue.pm
 sub newbasket {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select max(basketno) from aqorders";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -558,7 +547,6 @@ sub newbasket {
   my $basket=$$data[0];
   $basket++;
   $sth->finish;
-  $dbh->disconnect;
   return($basket);
 }
 
@@ -578,7 +566,7 @@ alphabetically by book fund name.
 # FIXME - An identical function (without the hardcoded date) appears in
 # C4::Catalogue
 sub bookfunds {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid 
    and aqbudget.startdate='2001-07-01'
@@ -592,7 +580,6 @@ sub bookfunds {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -610,7 +597,7 @@ table of the Koha database.
 #'
 # FIXME - This function (modulo whitespace) appears in C4::Catalogue
 sub branches {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from branches";
   my $sth=$dbh->prepare($query);
   my $i=0;
@@ -623,7 +610,6 @@ sub branches {
     } # while
 
   $sth->finish;
-  $dbh->disconnect;
   return($i, @results);
 } # sub branches
 
@@ -631,7 +617,7 @@ sub branches {
 # FIXME - An almost identical function appears in C4::Catalogue
 sub bookfundbreakdown {
   my ($id)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
   from aqorders,aqorderbreakdown where bookfundid='$id' and 
    aqorders.ordernumber=aqorderbreakdown.ordernumber and ((budgetdate >=
@@ -653,14 +639,15 @@ sub bookfundbreakdown {
     }
   }
   $sth->finish;
-  $dbh->disconnect;
   return($spent,$comtd);
 }
-      
+
+# FIXME - This is in effect identical to &C4::Biblio::newbiblio.
+# Pick one and stick with it.
 # XXX - POD
 sub newbiblio {
   my ($biblio) = @_;
-  my $dbh    = &C4Connect;
+  my $dbh    = C4::Context->dbh;
   my $query  = "Select max(biblionumber) from biblio";
   my $sth    = $dbh->prepare($query);
   $sth->execute;
@@ -677,6 +664,7 @@ sub newbiblio {
   if ($biblio->{'seriestitle'}) { $series = 1 };
 
   $sth->finish;
+  # FIXME - Use $dbh->do();
   $query = "insert into biblio set
 biblionumber  = $bibnum,
 title         = $biblio->{'title'},
@@ -691,14 +679,15 @@ abstract      = $biblio->{'abstract'}";
   $sth->execute;
 
   $sth->finish;
-  $dbh->disconnect;
   return($bibnum);
 }
 
+# FIXME - This is in effect the same as &C4::Biblio::modbiblio.
+# Pick one and stick with it.
 # XXX - POD
 sub modbiblio {
   my ($biblio) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query;
   my $sth;
   
@@ -726,14 +715,15 @@ where biblionumber = $biblio->{'biblionumber'}";
   $sth->execute;
 
   $sth->finish;
-  $dbh->disconnect;
   return($biblio->{'biblionumber'});
 } # sub modbiblio
 
+# FIXME - This is in effect identical to &C4::Biblio::modsubtitle.
+# Pick one and stick with it.
 # XXX - POD
 sub modsubtitle {
   my ($bibnum, $subtitle) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query = "update bibliosubtitle set
 subtitle = '$subtitle'
 where biblionumber = $bibnum";
@@ -741,14 +731,14 @@ where biblionumber = $bibnum";
 
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 } # sub modsubtitle
 
 # XXX - POD
 # FIXME - This is functionally identical to &C4::Biblio::modaddauthor
+# Pick one and stick with it.
 sub modaddauthor {
     my ($bibnum, $author) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Delete from additionalauthors where biblionumber = $bibnum";
     my $sth = $dbh->prepare($query);
 
@@ -765,14 +755,14 @@ biblionumber = '$bibnum'";
 
         $sth->finish;
     } # if
-
-  $dbh->disconnect;
 } # sub modaddauthor
 
+# FIXME - This is in effect identical to &C4::Biblio::modsubject.
+# Pick one and stick with it.
 # XXX - POD
 sub modsubject {
   my ($bibnum, $force, @subject) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $count = @subject;
   my $error;
   for (my $i = 0; $i < $count; $i++) {
@@ -834,14 +824,15 @@ values ('$subject[$i]', $bibnum)");
     } # for
   } # if
 
-  $dbh->disconnect;
   return($error);
 } # sub modsubject
 
+# FIXME - This is very similar to &C4::Biblio::modbibitem.
+# Pick one and stick with it.
 # XXX - POD
 sub modbibitem {
     my ($biblioitem) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query;
 
     # FIXME -
@@ -882,27 +873,27 @@ place		= $biblioitem->{'place'}
 where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
 
     $dbh->do($query);
-
-    $dbh->disconnect;
 } # sub modbibitem
 
+# FIXME - This is in effect identical to &C4::Biblio::modnote.
+# Pick one and stick with it.
 # XXX - POD
 sub modnote {
   my ($bibitemnum,$note)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
+  # FIXME - Use $dbh->do();
   my $query="update biblioitems set notes='$note' where
   biblioitemnumber='$bibitemnum'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 # XXX - POD
 # FIXME - &C4::Biblio::newbiblioitem is quite similar to this
 sub newbiblioitem {
   my ($biblioitem) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query = "Select max(biblioitemnumber) from biblioitems";
   my $sth   = $dbh->prepare($query);
   my $data;
@@ -963,28 +954,29 @@ place		 = $biblioitem->{'place'}";
   $sth->execute;
 
   $sth->finish;
-  $dbh->disconnect;
   return($bibitemnum);
 }
 
+# FIXME - This is in effect identical to &C4::Biblio::newsubject.
+# Pick one and stick with it.
 # XXX - POD
 sub newsubject {
   my ($bibnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="insert into bibliosubject (biblionumber) values
   ($bibnum)";
   my $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 # XXX - POD
 # FIXME - This is in effect the same as &C4::Biblio::newsubtitle
+# Pick one and stick with it.
 sub newsubtitle {
   my ($bibnum, $subtitle) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   $subtitle = $dbh->quote($subtitle);
   my $query = "insert into bibliosubtitle set
 biblionumber = $bibnum,
@@ -994,7 +986,6 @@ subtitle = $subtitle";
   $sth->execute;
 
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item neworder
@@ -1033,7 +1024,7 @@ sub neworder {
   } else {
     $sub=0;
   }
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="insert into aqorders (biblionumber,title,basketno,
   quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
   biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber)
@@ -1059,7 +1050,6 @@ sub neworder {
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item delorder
@@ -1079,7 +1069,7 @@ marc_biblio tables of the Koha database.
 # FIXME - This function appears in C4::Catalogue
 sub delorder {
   my ($bibnum,$ordnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set datecancellationprinted=now()
   where biblionumber='$bibnum' and
   ordernumber='$ordnum'";
@@ -1091,7 +1081,6 @@ sub delorder {
   if ($count == 0){
     delbiblio($bibnum);
   }
-  $dbh->disconnect;
 }
 
 =item modorder
@@ -1114,7 +1103,7 @@ table are also updated to the new book fund ID.
 # FIXME - This function appears in C4::Catalogue
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set title='$title',
   quantity='$quantity',listprice='$listprice',basketno='$basketno', 
   rrp='$rrp',ecost='$ecost',unitprice='$cost',
@@ -1131,7 +1120,6 @@ sub modorder {
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item newordernum
@@ -1146,7 +1134,7 @@ database, and returns it.
 # FIXME - Race condition
 # FIXME - This function appears in C4::Catalogue
 sub newordernum {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select max(ordernumber) from aqorders";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -1154,7 +1142,6 @@ sub newordernum {
   my $ordnum=$$data[0];
   $ordnum++;
   $sth->finish;
-  $dbh->disconnect;
   return($ordnum);
 }
 
@@ -1178,7 +1165,7 @@ Also updates the book fund ID in the aqorderbreakdown table.
 # FIXME - This function appears in C4::Catalogue
 sub receiveorder {
   my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set quantityreceived='$quantrec',
   datereceived=now(),booksellerinvoicenumber='$invoiceno',
   biblioitemnumber=$bibitemno,unitprice='$cost',freight='$freight',
@@ -1195,7 +1182,6 @@ sub receiveorder {
 #  print $query;
   $sth->execute;
   $sth->finish;  
-  $dbh->disconnect;
 }
 
 =item updaterecorder
@@ -1215,7 +1201,7 @@ C<$user> is ignored.
 # FIXME - This function appears in C4::Catalogue
 sub updaterecorder{
   my($biblio,$ordnum,$user,$cost,$bookfund,$rrp)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set
   unitprice='$cost', rrp='$rrp'
   where biblionumber=$biblio and ordernumber=$ordnum
@@ -1230,7 +1216,6 @@ sub updaterecorder{
 #  print $query;
   $sth->execute;
   $sth->finish;  
-  $dbh->disconnect;
 }
 
 =item curconvert
@@ -1249,13 +1234,12 @@ to one.
 # C4::Catalogue
 sub curconvert {
   my ($currency,$price)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select rate from currency where currency='$currency'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   my $cur=$data->{'rate'};
   if ($cur==0){
     $cur=1;
@@ -1278,7 +1262,7 @@ keys are the fields from the currency table in the Koha database.
 #'
 # FIXME - This function appears in C4::Catalogue
 sub getcurrencies {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from currency";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -1289,21 +1273,19 @@ sub getcurrencies {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 } 
 
 # FIXME - This function appears in C4::Catalogue. Neither one is used.
 sub getcurrency {
   my ($cur)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from currency where currency='$cur'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
 
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 } 
 
@@ -1318,12 +1300,11 @@ Sets the exchange rate for C<$currency> to be C<$newrate>.
 # FIXME - This function appears in C4::Catalogue
 sub updatecurrencies {
   my ($currency,$rate)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update currency set rate=$rate where currency='$currency'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 } 
 
 =item updatesup
@@ -1344,7 +1325,7 @@ C<&updatesup> with the result.
 # FIXME - This function appears in C4::Catalogue
 sub updatesup {
    my ($data)=@_;
-   my $dbh=C4Connect;
+   my $dbh = C4::Context->dbh;
    my $query="Update aqbooksellers set
    name='$data->{'name'}',address1='$data->{'address1'}',address2='$data->{'address2'}',
    address3='$data->{'address3'}',address4='$data->{'address4'}',postal='$data->{'postal'}',
@@ -1362,14 +1343,13 @@ sub updatesup {
    my $sth=$dbh->prepare($query);
    $sth->execute;
    $sth->finish;
-   $dbh->disconnect;
 #   print $query;
 }
 
 # XXX - POD
 sub insertsup {
   my ($data)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select max(id) from aqbooksellers");
   $sth->execute;
   my $data2=$sth->fetchrow_hashref;
@@ -1379,7 +1359,6 @@ sub insertsup {
   $sth->execute;
   $sth->finish;
   $data->{'id'}=$data2->{'max(id)'};
-  $dbh->disconnect;
   updatesup($data);
   return($data->{'id'});
 }
@@ -1397,9 +1376,11 @@ Returns the ID of the newly-created bookseller.
 =cut
 #'
 # FIXME - This function appears in C4::Catalogue
+# FIXME - This is different from &C4::Biblio::newitems, though both
+# are exported.
 sub newitems {
   my ($item, @barcodes) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query = "Select max(itemnumber) from items";
   my $sth   = $dbh->prepare($query);
   my $data;
@@ -1448,14 +1429,15 @@ notforloan           = $item->{'loan'}";
     $itemnumber++;
   } # for
 
-  $dbh->disconnect;
   return($error);
 }
 
+# FIXME - This is the same as &C4::Biblio::Checkitems.
+# Pick one and stick with it.
 # XXX - POD
 sub checkitems{
   my ($count,@barcodes)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $error;
   for (my $i=0;$i<$count;$i++){
     $barcodes[$i]=uc $barcodes[$i];
@@ -1467,14 +1449,16 @@ sub checkitems{
     }
     $sth->finish;
   }
-  $dbh->disconnect;
   return($error);
 }
 
+# FIXME - This appears to be functionally equivalent to
+# &C4::Biblio::moditem.
+# Pick one and stick with it.
 # XXX - POD
 sub moditem {
   my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update items set biblioitemnumber=$bibitemnum,
   barcode='$barcode',itemnotes='$notes'
   where itemnumber=$itemnum";
@@ -1493,38 +1477,37 @@ sub moditem {
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 # FIXME - This function appears in C4::Catalogue. Neither one is used
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update items set price='$price',replacementprice='$rrp'
   where itemnumber=$itemnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
+# FIXME - This is identical to &C4::Biblio::countitems.
+# Pick one and stick with it.
 # XXX - POD
 sub countitems{
   my ($bibitemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from items where biblioitemnumber='$bibitemnum'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data->{'count(*)'});
 }
 
 # FIXME - This function appears in C4::Catalogue. Neither one is used.
 sub findall {
   my ($biblionumber)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblioitems,items,itemtypes where 
   biblioitems.biblionumber=$biblionumber 
   and biblioitems.biblioitemnumber=items.biblioitemnumber and
@@ -1539,14 +1522,13 @@ sub findall {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return(@results);
 }
 
 # FIXME - This function appears in C4::Catalogue. Neither one is used
 sub needsmod{
   my ($bibitemnum,$itemtype)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblioitems where biblioitemnumber=$bibitemnum
   and itemtype='$itemtype'";
   my $sth=$dbh->prepare($query);
@@ -1556,15 +1538,15 @@ sub needsmod{
     $result=1;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($result);
 }
 
 # FIXME - A nearly-identical function, appears in C4::Biblio
+# Pick one and stick with it.
 # XXX - POD
 sub delitem{
   my ($itemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select * from items where itemnumber=$itemnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -1583,13 +1565,14 @@ sub delitem{
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
+# FIXME - This is functionally identical to &C4::Biblio::deletebiblioitem.
+# Pick one and stick with it.
 # XXX - POD
 sub deletebiblioitem {
     my ($biblioitemnumber) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblioitems
 where biblioitemnumber = $biblioitemnumber";
     my $sth   = $dbh->prepare($query);
@@ -1639,13 +1622,14 @@ where biblioitemnumber = $biblioitemnumber";
     $query = "Delete from items where biblioitemnumber = $biblioitemnumber";
     $dbh->do($query);
     
-    $dbh->disconnect;
 } # sub deletebiblioitem
 
+# FIXME - This is functionally identical to &C4::Biblio::delbiblio.
+# Pick one and stick with it.
 # XXX - POD
 sub delbiblio{
   my ($biblio)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="select * from biblio where biblionumber=$biblio";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -1668,12 +1652,11 @@ sub delbiblio{
   }
 
   $sth->finish;
-  $dbh->disconnect;
 }
 
 # XXX - POD
 sub getitemtypes {
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query = "select * from itemtypes";
   my $sth   = $dbh->prepare($query);
     # || die "Cannot prepare $query" . $dbh->errstr;
@@ -1688,14 +1671,15 @@ sub getitemtypes {
   } # while
   
   $sth->finish;
-  $dbh->disconnect;
   return($count, @results);
 } # sub getitemtypes
 
+# FIXME - This is identical to &C4::Biblio::getitemtypes.
+# Pick one and stick with it.
 # XXX - POD
 sub getbiblio {
     my ($biblionumber) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblio where biblionumber = $biblionumber";
     my $sth   = $dbh->prepare($query);
       # || die "Cannot prepare $query\n" . $dbh->errstr;
@@ -1710,14 +1694,13 @@ sub getbiblio {
     } # while
     
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub getbiblio
 
 # XXX - POD
 sub getbiblioitem {
     my ($biblioitemnum) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblioitems where
 biblioitemnumber = $biblioitemnum";
     my $sth   = $dbh->prepare($query);
@@ -1732,14 +1715,15 @@ biblioitemnumber = $biblioitemnum";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub getbiblioitem
 
+# FIXME - This is identical to &C4::Biblio::getbiblioitem.
+# Pick one and stick with it.
 # XXX - POD
 sub getbiblioitembybiblionumber {
     my ($biblionumber) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblioitems where biblionumber =
 $biblionumber";
     my $sth   = $dbh->prepare($query);
@@ -1754,14 +1738,16 @@ $biblionumber";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub
 
+# FIXME - This is identical to
+# &C4::Biblio::getbiblioitembybiblionumber.
+# Pick one and stick with it.
 # XXX - POD
 sub getitemsbybiblioitem {
     my ($biblioitemnum) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from items, biblio where
 biblio.biblionumber = items.biblionumber and biblioitemnumber
 = $biblioitemnum";
@@ -1778,14 +1764,15 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     } # while
     
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub getitemsbybiblioitem
 
+# FIXME - This is identical to &C4::Biblio::isbnsearch.
+# Pick one and stick with it.
 # XXX - POD
 sub isbnsearch {
     my ($isbn) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $count = 0;
     my $query;
     my $sth;
@@ -1804,7 +1791,6 @@ and isbn = $isbn";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub isbnsearch
 
@@ -1827,7 +1813,7 @@ and biblioitems tables in the Koha database.
 # FIXME - This function appears in C4::Catalogue
 sub websitesearch {
     my ($keywordlist) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select distinct biblio.* from biblio, biblioitems where
 biblio.biblionumber = biblioitems.biblionumber and (";
     my $count = 0;
@@ -1860,7 +1846,6 @@ biblio.biblionumber = biblioitems.biblionumber and (";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub websitesearch
 
@@ -1877,7 +1862,7 @@ are mandatory.
 # FIXME - This function appears in C4::Catalogue
 sub addwebsite {
     my ($website) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query;
     
     $website->{'biblionumber'} = $dbh->quote($website->{'biblionumber'});
@@ -1892,8 +1877,6 @@ description  = $website->{'description'},
 url          = $website->{'url'}";
     
     $dbh->do($query);
-    
-    $dbh->disconnect;
 } # sub website
 
 =item updatewebsite
@@ -1910,7 +1893,7 @@ the entry to update.
 # FIXME - This function appears in C4::Catalogue
 sub updatewebsite {
     my ($website) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query;
     
     $website->{'title'}      = $dbh->quote($website->{'title'});
@@ -1924,8 +1907,6 @@ url         = $website->{'url'}
 where websitenumber = $website->{'websitenumber'}";
 
     $dbh->do($query);
-    
-    $dbh->disconnect;
 } # sub updatewebsite
 
 =item deletewebsite
@@ -1939,12 +1920,14 @@ Deletes the web site with number C<$websitenumber>.
 # FIXME - This function appears in C4::Catalogue
 sub deletewebsite {
     my ($websitenumber) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
+    # FIXME - $query is unnecessary: just use
+    # $dbh->do(<<EOT);
+    #	DELETE FROM websites where websitenumber=$websitenumber
+    # EOT
     my $query = "Delete from websites where websitenumber = $websitenumber";
     
     $dbh->do($query);
-    
-    $dbh->disconnect;
 } # sub deletewebsite
 
 

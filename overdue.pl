@@ -19,9 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Context;
 use C4::Output;
 use CGI;
-use C4::Database;
 use HTML::Template;
 
 my $input = new CGI;
@@ -46,7 +46,7 @@ my $author;
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my $query="select date_due,borrowernumber,itemnumber from issues where isnull(returndate) && date_due<'$todaysdate' order by date_due,borrowernumber";
 my $sth=$dbh->prepare($query);
@@ -67,6 +67,7 @@ while (my $data=$sth->fetchrow_hashref) {
   $email=$data1->{'emailaddress'};
   $sth1->finish;
 
+  # FIXME - There's already a $query in this scope.
   my $query="select biblionumber from items where itemnumber='$itemnum'";
   my $sth2=$dbh->prepare($query);
   $sth2->execute;
@@ -74,6 +75,7 @@ while (my $data=$sth->fetchrow_hashref) {
   $biblionumber=$data2->{'biblionumber'};
   $sth2->finish;
 
+  # FIXME - There's already a $query in this scope.
   my $query="select title,author from biblio where biblionumber='$biblionumber'";
   my $sth3=$dbh->prepare($query);
   $sth3->execute;
@@ -94,7 +96,6 @@ while (my $data=$sth->fetchrow_hashref) {
 }
 
 $sth->finish;
-$dbh->disconnect;
 
 $template->param( startmenureport => join ('', startmenu('report')),
 		endmenureport     => join ('', endmenu('report')),

@@ -23,7 +23,6 @@ package C4::Circulation; #assumes C4/Circulation
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
 use C4::Circulation::Issues;
 use C4::Circulation::Returns;
 use C4::Circulation::Renewals;

@@ -1,12 +1,39 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.15  2002/10/05 09:49:25  arensb
+# Merged with arensb-context branch: use C4::Context->dbh instead of
+# &C4Connect, and generally prefer C4::Context over C4::Database.
+#
 # Revision 1.14  2002/10/03 11:28:18  tipaul
 # Extending Context.pm to add stopword management and using it in MARC-API.
 # First benchmarks show a medium speed improvement, which  is nice as this part is heavily called.
 #
 # Revision 1.13  2002/10/02 16:26:44  tipaul
 # road to 1.3.1
+#
+# Revision 1.12.2.4  2002/10/05 07:09:31  arensb
+# Merged in changes from main branch.
+#
+# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
+# Added a whole mess of FIXME comments.
+#
+# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
+# Added some missing semicolons.
+#
+# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
+# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
+# C4Connect.
+#
+# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
+# Added a whole mess of FIXME comments.
+#
+# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
+# Added some missing semicolons.
+#
+# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
+# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
+# C4Connect.
 #
 # Revision 1.12  2002/10/01 11:48:51  arensb
 # Added some FIXME comments, mostly marking duplicate functions.
@@ -106,6 +133,7 @@ package C4::Biblio;
 
 use strict;
 require Exporter;
+use C4::Context;
 use C4::Database;
 use MARC::Record;
 
@@ -153,7 +181,7 @@ $VERSION = 0.01;
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - These are never used
 
 #
 #
@@ -240,7 +268,7 @@ $VERSION = 0.01;
 =head1 AUTHOR
 
 Paul POULAIN paul.poulain@free.fr
-/
+
 =cut
 
 sub MARCgettagslib {
@@ -451,6 +479,7 @@ sub MARCgetitem {
 		 		 from marc_subfield_table 
 		 		 where bibid=? and tagorder=? order by subfieldorder
 		 	 ");
+    # FIXME - There's already a $sth2 in this scope.
     my $sth2=$dbh->prepare("select subfieldvalue from marc_blob_subfield where blobidlink=?");
     $sth->execute($bibid,$tagorder);
     while (my $row=$sth->fetchrow_hashref) {
@@ -758,14 +787,18 @@ sub MARCmarc2koha {
     while (($field)=$sth2->fetchrow) {
 	$result=&MARCmarc2kohaOneField($sth,"biblio",$field,$record,$result);
     }
+    # FIXME - There's already a $sth2 in this scope.
     my $sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
     $sth2->execute;
+    # FIXME - There's already a $field in this scope.
     my $field;
     while (($field)=$sth2->fetchrow) {
 	$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result);
     }
+    # FIXME - There's already a $sth2 in this scope.
     my $sth2=$dbh->prepare("SHOW COLUMNS from items");
     $sth2->execute;
+    # FIXME - There's already a $field in this scope.
     my $field;
     while (($field)=$sth2->fetchrow) {
 	$result = &MARCmarc2kohaOneField($sth,"items",$field,$record,$result);
@@ -1086,7 +1119,6 @@ where biblionumber = $biblio->{'biblionumber'}";
     $sth->execute;
     
     $sth->finish;
-    $dbh->disconnect;
     return($biblio->{'biblionumber'});
 } # sub modbiblio
 
@@ -1123,8 +1155,6 @@ sub OLDmodaddauthor {
 
         $sth->finish;
     } # if
-
-  $dbh->disconnect;
 } # sub modaddauthor
 
 
@@ -1522,22 +1552,22 @@ sub OLDdelbiblio{
 
 # FIXME - This is the same as &C4::Acquisitions::itemcount, but not
 # the same as &C4::Search::itemcount
+# Since they're both exported, acqui/acquire.pl doesn't compile with -w.
 sub itemcount{
   my ($biblio)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from items where biblionumber=$biblio";
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data->{'count(*)'});
 }
 
 sub getorder{
   my ($bi,$bib)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select ordernumber 
  	from aqorders 
  	where biblionumber=? and biblioitemnumber=?";
@@ -1546,7 +1576,6 @@ sub getorder{
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
-  $dbh->disconnect;
 #  print $query;
   return ($order,$ordnum->{'ordernumber'});
 }
@@ -1555,7 +1584,7 @@ sub getorder{
 # &C4::Acquisitions::getsingleorder and &C4::Catalogue::getsingleorder
 sub getsingleorder {
   my ($ordnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
   where aqorders.ordernumber=? 
   and biblio.biblionumber=aqorders.biblionumber and
@@ -1565,73 +1594,80 @@ sub getsingleorder {
   $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
+# FIXME - This is in effect identical to &C4::Acquisitions::newbiblio.
+# Pick one and stick with it.
 sub newbiblio {
   my ($biblio) = @_;
-  my $dbh    = &C4Connect;
+  my $dbh    = C4::Context->dbh;
   my $bibnum=OLDnewbiblio($dbh,$biblio);
 # TODO : MARC add
-  $dbh->disconnect;
   return($bibnum);
 }
 
+# FIXME - This is in effect the same as &C4::Acquisitions::modbiblio.
+# Pick one and stick with it.
 sub modbiblio {
   my ($biblio) = @_;
-  my $dbh  = C4Connect;
+  my $dbh  = C4::Context->dbh;
   my $biblionumber=OLDmodbiblio($dbh,$biblio);
-  $dbh->disconnect;
   return($biblionumber);
 } # sub modbiblio
 
+# FIXME - This is in effect identical to &C4::Acquisitions::modsubtitle.
+# Pick one and stick with it.
 sub modsubtitle {
   my ($bibnum, $subtitle) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   &OLDmodsubtitle($dbh,$bibnum,$subtitle);
-  $dbh->disconnect;
 } # sub modsubtitle
 
 
 # FIXME - This is functionally identical to
 # &C4::Acquisitions::modaddauthor
+# Pick one and stick with it.
 sub modaddauthor {
     my ($bibnum, $author) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     &OLDmodaddauthor($dbh,$bibnum,$author);
-    $dbh->disconnect;
 } # sub modaddauthor
 
 
+# FIXME - This is in effect identical to &C4::Acquisitions::modsubject.
+# Pick one and stick with it.
 sub modsubject {
   my ($bibnum, $force, @subject) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $error= &OLDmodsubject($dbh,$bibnum,$force, @subject);
   return($error);
 } # sub modsubject
 
+# FIXME - This is very similar to &C4::Acquisitions::modbibitem.
+# Pick one and stick with it.
 sub modbibitem {
     my ($biblioitem) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     &OLDmodbibitem($dbh,$biblioitem);
     my $MARCbibitem = MARCkoha2marcBiblio($dbh,$biblioitem);
     &MARCmodbiblio($dbh,$biblioitem->{biblionumber},0,$MARCbibitem);
-    $dbh->disconnect;
 } # sub modbibitem
 
+# FIXME - This is in effect identical to &C4::Acquisitions::modnote.
+# Pick one and stick with it.
 sub modnote {
   my ($bibitemnum,$note)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   &OLDmodnote($dbh,$bibitemnum,$note);
-  $dbh->disconnect;
 }
 
 # FIXME - This is quite similar in effect to &C4::newbiblioitem,
-# except for the MARC stuff.
+# except for the MARC stuff. There's also a &newbiblioitem in
+# acqui.simple/addbookslccn.pl
 sub newbiblioitem {
   my ($biblioitem) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $bibitemnum = &OLDnewbiblioitem($dbh,$biblioitem);
 #  print STDERR "bibitemnum : $bibitemnum\n";
   my $MARCbiblio= MARCkoha2marcBiblio($dbh,$biblioitem->{biblionumber},$bibitemnum);
@@ -1640,25 +1676,27 @@ sub newbiblioitem {
   return($bibitemnum);
 }
 
+# FIXME - This is in effect identical to &C4::Acquisitions::newsubject.
+# Pick one and stick with it.
 sub newsubject {
   my ($bibnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   &OLDnewsubject($dbh,$bibnum);
-  $dbh->disconnect;
 }
 
 # FIXME - This is just a wrapper around &OLDnewsubtitle
 # FIXME - This is in effect the same as &C4::Acquisitions::newsubtitle
 sub newsubtitle {
     my ($bibnum, $subtitle) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     &OLDnewsubtitle($dbh,$bibnum,$subtitle);
-  $dbh->disconnect;
 }
 
+# FIXME - This is different from &C4::Acquisitions::newitems, though
+# both are exported.
 sub newitems {
   my ($item, @barcodes) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $errors;
   my $itemnumber;
   my $error;
@@ -1671,14 +1709,16 @@ sub newitems {
       &MARCadditem($dbh,$MARCitem,$item->{biblionumber});
 #      print STDERR "MARCmodbiblio called\n";
   }
-  $dbh->disconnect;
   return($errors);
 }
 
+# FIXME - This appears to be functionally equivalent to
+# &C4::Acquisitions::moditem.
+# Pick one and stick with it.
 sub moditem {
     my ($item) = @_;
 #  my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     &OLDmoditem($dbh,$item);
     warn "biblionumber : $item->{'biblionumber'} / $item->{'itemnum'}\n";
     my $MARCitem = &MARCkoha2marcItem($dbh,$item->{'biblionumber'},$item->{'itemnum'});
@@ -1687,12 +1727,13 @@ sub moditem {
 #      print STDERR "MARCitem ".$MARCitem->as_formatted()."\n";
     my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$item->{biblionumber});
     &MARCmoditem($dbh,$MARCitem,$bibid,$item->{itemnum},0);
-    $dbh->disconnect;
 }
 
+# FIXME - This is the same as &C4::Acquisitions::Checkitems.
+# Pick one and stick with it.
 sub checkitems{
   my ($count,@barcodes)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $error;
   for (my $i=0;$i<$count;$i++){
     $barcodes[$i]=uc $barcodes[$i];
@@ -1704,48 +1745,53 @@ sub checkitems{
     }
     $sth->finish;
   }
-  $dbh->disconnect;
   return($error);
 }
 
+# FIXME - This is identical to &C4::Acquisitions::countitems.
+# Pick one and stick with it.
 sub countitems{
   my ($bibitemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select count(*) from items where biblioitemnumber='$bibitemnum'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data->{'count(*)'});
 }
 
 # FIXME - This is just a wrapper around &OLDdelitem, and acts
 # identically to &C4::Acquisitions::delitem
+# Pick one and stick with it.
 sub delitem{
   my ($itemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   &OLDdelitem($dbh,$itemnum);
-  $dbh->disconnect;
 }
 
+# FIXME - This is functionally identical to
+# &C4::Acquisitions::deletebiblioitem.
+# Pick one and stick with it.
 sub deletebiblioitem {
     my ($biblioitemnumber) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     &OLDdeletebiblioitem($dbh,$biblioitemnumber);
-    $dbh->disconnect;
 } # sub deletebiblioitem
 
 
+# FIXME - This is functionally identical to &C4::Acquisitions::delbiblio.
+# Pick one and stick with it.
 sub delbiblio {
   my ($biblio)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   &OLDdelbiblio($dbh,$biblio);
-  $dbh->disconnect;
 }
 
+# FIXME - This is identical to &C4::Acquisitions::getitemtypes.
+# Pick one and stick with it.
 sub getitemtypes {
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query = "select * from itemtypes";
   my $sth   = $dbh->prepare($query);
     # || die "Cannot prepare $query" . $dbh->errstr;
@@ -1760,13 +1806,12 @@ sub getitemtypes {
   } # while
   
   $sth->finish;
-  $dbh->disconnect;
   return($count, @results);
 } # sub getitemtypes
 
 sub getbiblio {
     my ($biblionumber) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblio where biblionumber = $biblionumber";
     my $sth   = $dbh->prepare($query);
       # || die "Cannot prepare $query\n" . $dbh->errstr;
@@ -1781,13 +1826,14 @@ sub getbiblio {
     } # while
     
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub getbiblio
 
+# FIXME - This is identical to &C4::Acquisitions::getbiblioitem.
+# Pick one and stick with it.
 sub getbiblioitem {
     my ($biblioitemnum) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblioitems where
 biblioitemnumber = $biblioitemnum";
     my $sth   = $dbh->prepare($query);
@@ -1802,13 +1848,15 @@ biblioitemnumber = $biblioitemnum";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub getbiblioitem
 
+# FIXME - This is identical to
+# &C4::Acquisitions::getbiblioitembybiblionumber.
+# Pick one and stick with it.
 sub getbiblioitembybiblionumber {
     my ($biblionumber) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from biblioitems where biblionumber =
 $biblionumber";
     my $sth   = $dbh->prepare($query);
@@ -1823,13 +1871,15 @@ $biblionumber";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub
 
+# FIXME - This is identical to
+# &C4::Acquisitions::getbiblioitembybiblionumber.
+# Pick one and stick with it.
 sub getitemsbybiblioitem {
     my ($biblioitemnum) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from items, biblio where
 biblio.biblionumber = items.biblionumber and biblioitemnumber
 = $biblioitemnum";
@@ -1846,13 +1896,14 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     } # while
     
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub getitemsbybiblioitem
 
+# FIXME - This is identical to &C4::Acquisitions::isbnsearch.
+# Pick one and stick with it.
 sub isbnsearch {
     my ($isbn) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $count = 0;
     my $query;
     my $sth;
@@ -1871,7 +1922,6 @@ and isbn = $isbn";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub isbnsearch
 
@@ -2000,7 +2050,7 @@ sub getoraddbiblio {
 
 sub OLD_MAYBE_DELETED_newBiblioItem {
     my ($env, $biblioitem) = @_;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $biblionumber=$biblioitem->{'biblionumber'};
     my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
     my $volume=$biblioitem->{'volume'};
@@ -2254,13 +2304,12 @@ sub OLD_MAYBE_DELETED_newBiblioItem {
 	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
     }
     $sth->finish;
-    $dbh->disconnect;
     return ($env, $Record_ID);
 }
 
 sub OLD_MAYBE_DELETED_newItem {
     my ($env, $Record_ID, $item) = @_;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $barcode=$item->{'barcode'};
     my $q_barcode=$dbh->quote($barcode);
     my $biblionumber=$item->{'biblionumber'};
@@ -2363,7 +2412,7 @@ sub OLD_MAYBE_DELETED_updateBiblio {
     my ($env, $biblio) = @_;
     my $Record_ID;
     my $biblionumber=$biblio->{'biblionumber'};
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select * from biblio where biblionumber=$biblionumber");
     $sth->execute;
     my $origbiblio=$sth->fetchrow_hashref;
@@ -2511,7 +2560,7 @@ sub OLD_MAYBE_DELETED_updateBiblioItem {
 # modified, and log all changes.
 
     my ($env, $biblioitem) = @_;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
 
     my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
     my $sth=$dbh->prepare("select * from biblioitems where biblioitemnumber=$biblioitemnumber");
@@ -2631,8 +2680,6 @@ sub OLD_MAYBE_DELETED_updateBiblioItem {
 	changeSubfield($Record_ID, '010', 'a', $obi->{'lccn'}, $biblioitem->{'lccn'});
     }
     $sth->finish;
-    $dbh->disconnect;
-
 }
 
 sub OLD_MAYBE_DELETED_updateItem {
@@ -2644,7 +2691,7 @@ sub OLD_MAYBE_DELETED_updateItem {
 # modified, and log all changes.
 
     my ($env, $item) = @_;
-    my $dbh=&C4Connect;  
+    my $dbh = C4::Context->dbh;
     my $itemnumber=$item->{'itemnumber'};
     my $biblionumber=$item->{'biblionumber'};
     my $biblioitemnumber=$item->{'biblioitemnumber'};
@@ -2785,7 +2832,6 @@ sub OLD_MAYBE_DELETED_updateItem {
 	}
     }
     $sth->finish;
-    $dbh->disconnect;
 }
 
 # Add a biblioitem and related data to Koha database

@@ -28,7 +28,6 @@ package C4::Circulation::Renewals2; #assumes C4/Circulation/Renewals2.pm
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
 use C4::Stats;
 use C4::Accounts2;
 use C4::Circulation::Circ2;
@@ -83,7 +82,7 @@ sub Return  {
 sub renewstatus {
   # check renewal status
   my ($env,$bornum,$itemno)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $renews = 1;
   my $renewokay = 0;
   my $q1 = "select * from issues 
@@ -108,7 +107,6 @@ sub renewstatus {
     $sth2->finish;
   }   
   $sth1->finish;
-  $dbh->disconnect;
   return($renewokay);    
 }
 
@@ -116,7 +114,7 @@ sub renewstatus {
 sub renewbook {
   # mark book as renewed
   my ($env,$bornum,$itemno,$datedue)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   if ($datedue eq "" ) {    
     #debug_msg($env, "getting date");
     my $loanlength=21;
@@ -163,17 +161,19 @@ sub renewbook {
     $sth->finish;
 #     print $account;
   }
-  $dbh->disconnect;
  
 #  return();
 }
 
-
+# FIXME - This is very similar to
+# &C4::Circulation::Issues::calc_charges and
+# &C4::Circulation::Circ2::calc_charges.
+# Pick one and stick with it.
 sub calc_charges {         
   # calculate charges due         
   my ($env, $itemno, $bornum)=@_;           
   my $charge=0;   
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $item_type;               
   my $q1 = "select itemtypes.itemtype,rentalcharge from
   items,biblioitems,itemtypes     
@@ -199,7 +199,6 @@ sub calc_charges {
     $sth2->finish;                              
   }                                   
   $sth1->finish;  
-  $dbh->disconnect;
 #  print "item $item_type";
   return ($charge,$item_type);         
 }       

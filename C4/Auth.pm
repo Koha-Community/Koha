@@ -23,7 +23,7 @@ use Digest::MD5 qw(md5_base64);
 
 
 require Exporter;
-use C4::Database;
+use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -51,7 +51,7 @@ sub checkauth {
     my $sessionID=$query->cookie('sessionID');
     my $message='';
 
-    my $dbh=C4Connect();
+    my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
     $sth->execute($sessionID);
     if ($sth->rows) {
@@ -189,6 +189,7 @@ sub checkpw {
 	    return 1;
 	}
     }
+    # FIXME - There's already a $sth in this scope.
     my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
     $sth->execute($userid);
     if ($sth->rows) {

@@ -19,6 +19,8 @@ package C4::InterfaceCDK; #assumes C4/InterfaceCDK
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# FIXME - This module doesn't compile!
+
 use C4::Format;
 use strict;
 use Cdk;
@@ -421,6 +423,7 @@ sub actloanlength {
 sub prebook {
   my ($input,$env,$dbh,$funcmenu,$entryBox,$loanlength,
     $scroll1,$scroll2,$borrower,$amountowing,$odues)= @_;
+  # FIXME - $key_tab is undefined
   if ($input eq $key_tab) {    
     actfmenu ($env,$dbh,$funcmenu,$entryBox,$loanlength,$scroll1,
        $scroll2,$borrower,$amountowing,$odues);
@@ -582,6 +585,7 @@ sub preborr {
   my ($input,$env, $entry) = @_;
   if ($env->{"bcard"} ne "") {
 #     error_msg($env,"hi there");  
+    # FIXME - $lastval is undefined
     if ($input eq $lastval) {
 #        error_msg($env,"its a ctrl-r");  
       borfill($env,$entry);

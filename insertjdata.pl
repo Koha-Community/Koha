@@ -23,7 +23,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Database;
+use C4::Context;
 use C4::Input;
 use Date::Manip;
 use strict;
@@ -42,7 +42,7 @@ my $env;
 foreach my $key (@names){
   $data{$key}=$input->param($key);
 }
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 for (my $i=0;$i<3;$i++){
 my $query="Select * from borrowers where borrowernumber=$data{'bornumber_child_$i'}";
@@ -98,5 +98,4 @@ if (my $data=$sth->fetchrow_hashref){
   $sth2->finish;
 $sth->finish;
 }
-$dbh->disconnect;
 print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");

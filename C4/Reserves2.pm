@@ -21,8 +21,10 @@ package C4::Reserves2; #assumes C4/Reserves2
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Search;
+	# FIXME - C4::Reserves2 uses C4::Search, which uses C4::Reserves2.
+	# So Perl complains that all of the functions here get redefined.
 #use C4::Accounts;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -37,7 +39,7 @@ $VERSION = 0.01;
 
 sub FindReserves {
   my ($bib,$bor)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="SELECT *,reserves.branchcode,biblio.title AS btitle
                       FROM reserves,borrowers,biblio ";
   if ($bib ne ''){
@@ -92,14 +94,13 @@ sub FindReserves {
   }
 #  print $query;
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
 sub CheckReserves {
     my ($item, $barcode) = @_;
 #    warn "In CheckReserves: itemnumber = $item";
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $sth;
     if ($item) {
 	my $qitem=$dbh->quote($item);
@@ -121,7 +122,6 @@ sub CheckReserves {
     $sth->execute;
     my ($biblio, $bibitem, $notforloan) = $sth->fetchrow_array;
     $sth->finish;
-    $dbh->disconnect;
 # if item is not for loan it cannot be reserved either.....
     return (0, 0) if ($notforloan);
 # get the reserves...
@@ -150,7 +150,7 @@ sub CheckReserves {
 
 sub CancelReserve {
     my ($biblio, $item, $borr) = @_;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     #warn "In CancelReserve";
     if (($item and $borr) and (not $biblio)) {
 # removing a waiting reserve record....
@@ -181,6 +181,7 @@ sub CancelReserve {
 	my ($priority) = $sth->fetchrow_array;
 	$sth->finish;
 # update the database, removing the record...
+        # FIXME - There's already a $query in this scope.
         my $query = "update reserves set cancellationdate = now(), 
                                          found            = Null, 
                                          priority         = 0 
@@ -188,19 +189,21 @@ sub CancelReserve {
                                      and borrowernumber   = $borr
                                      and cancellationdate is NULL 
                                      and (found <> 'F' or found is NULL)";
+		# FIXME - There's already a $query in this scope.
+        # FIXME - There's already a $sth in this scope.
 	my $sth = $dbh->prepare($query);
+		# FIXME - There's already a $sth in this scope.
 	$sth->execute;
 	$sth->finish;
 # now fix the priority on the others....
 	fixpriority($priority, $biblio);
     }
-    $dbh->disconnect;
 }
 
 
 sub FillReserve {
     my ($res) = @_;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
 # fillinf a reserve record....
     my $biblio = $res->{'biblionumber'}; my $qbiblio = $dbh->quote($biblio);
     my $borr = $res->{'borrowernumber'}; $borr = $dbh->quote($borr);
@@ -215,24 +218,27 @@ sub FillReserve {
     my ($priority) = $sth->fetchrow_array;
     $sth->finish;
 # update the database...
+    # FIXME - There's already a $query in this scope.
     my $query = "UPDATE reserves SET found            = 'F', 
                                      priority         = 0 
                                WHERE biblionumber     = $qbiblio
                                  AND reservedate      = $resdate
                                  AND borrowernumber   = $borr";
+		# FIXME - There's already a $query in this scope.
+    # FIXME - There's already a $sth in this scope.
     my $sth = $dbh->prepare($query);
+		# FIXME - There's already a $sth in this scope.
     $sth->execute;
     $sth->finish;
 # now fix the priority on the others (if the priority wasnt already sorted!)....
     unless ($priority == 0) {
 	fixpriority($priority, $biblio);
     }
-    $dbh->disconnect;
 }
 
 sub fixpriority {
     my ($priority, $biblio) =  @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     my ($count, $reserves) = FindReserves($biblio);
     foreach my $rec (@$reserves) {
 	if ($rec->{'priority'} > $priority) {
@@ -250,14 +256,13 @@ sub fixpriority {
 	    $sth->finish;
 	} 
     }
-    $dbh->disconnect;
 }
 
 
 
 sub ReserveWaiting {
     my ($item, $borr) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     $item = $dbh->quote($item);
     $borr = $dbh->quote($borr);
 # get priority and biblionumber....
@@ -289,7 +294,6 @@ sub ReserveWaiting {
     $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
-    $dbh->disconnect;
 # now fix up the remaining priorities....
     fixpriority($data->{'priority'}, $biblio);
     my $branchcode = $data->{'branchcode'};
@@ -298,7 +302,7 @@ sub ReserveWaiting {
 
 sub CheckWaiting {
     my ($borr)=@_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     $borr = $dbh->quote($borr);
     my @itemswaiting;
     my $query = "SELECT * FROM reserves
@@ -307,9 +311,10 @@ sub CheckWaiting {
                            AND cancellationdate is NULL";
     my $sth = $dbh->prepare($query);
     $sth->execute();
+    # FIXME - Use 'push'
     my $cnt=0;
     if (my $data=$sth->fetchrow_hashref) {
-	@itemswaiting[$cnt] =$data;
+	$itemswaiting[$cnt] =$data;
 	$cnt ++;
     }
     $sth->finish;
@@ -318,7 +323,7 @@ sub CheckWaiting {
 
 sub Findgroupreserve {
   my ($bibitem,$biblio)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   $bibitem=$dbh->quote($bibitem);
   my $query = "SELECT reserves.biblionumber               AS biblionumber, 
                       reserves.borrowernumber             AS borrowernumber, 
@@ -349,7 +354,6 @@ sub Findgroupreserve {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -357,7 +361,7 @@ sub CreateReserve {
   my
 ($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title)= @_;   
   my $fee=CalcReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
-  my $dbh = &C4Connect;       
+  my $dbh = C4::Context->dbh;
   my $const = lc substr($constraint,0,1);       
   my @datearr = localtime(time);                                
   my $resdate =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];                   
@@ -400,14 +404,13 @@ sub CreateReserve {
     }                                   
   } 
 #  print $query;
-  $dbh->disconnect();         
   return();   
 }             
 
 sub CalcReserveFee {
   my ($env,$borrnum,$biblionumber,$constraint,$bibitems) = @_;        
   #check for issues;    
-  my $dbh = &C4Connect;           
+  my $dbh = C4::Context->dbh;           
   my $const = lc substr($constraint,0,1); 
   my $query = "SELECT * FROM borrowers,categories 
                 WHERE (borrowernumber = ?)         
@@ -486,7 +489,6 @@ sub CalcReserveFee {
     }             
   }                   
 #  print "fee $fee";
-  $dbh->disconnect();   
   return $fee;                                      
 }                   
 
@@ -508,7 +510,7 @@ sub getnextacctno {
 sub updatereserves{
   #subroutine to update a reserve 
   my ($rank,$biblio,$borrower,$del,$branch)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Update reserves ";
   if ($del == 0){
     $query.="set  priority='$rank',branchcode='$branch' where
@@ -540,14 +542,13 @@ sub updatereserves{
   }
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  $sth->finish;  
-  $dbh->disconnect;
+  $sth->finish;
 }
 sub UpdateReserve {
     #subroutine to update a reserve 
     my ($rank,$biblio,$borrower,$branch)=@_;
     return if $rank eq "W";
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     if ($rank eq "del") {
 	my $query = "UPDATE reserves SET cancellationdate=now() 
                                    WHERE biblionumber   = ? 
@@ -567,12 +568,11 @@ sub UpdateReserve {
 	$sth->execute($rank, $branch, $biblio, $borrower);
 	$sth->finish;  
     }
-    $dbh->disconnect;
 }
 
 sub getreservetitle {
  my ($biblio,$bor,$date,$timestamp)=@_;
- my $dbh=C4Connect;
+ my $dbh = C4::Context->dbh;
  my $query="Select * from reserveconstraints,biblioitems where
  reserveconstraints.biblioitemnumber=biblioitems.biblioitemnumber
  and reserveconstraints.biblionumber=$biblio and reserveconstraints.borrowernumber
@@ -582,7 +582,6 @@ sub getreservetitle {
  $sth->execute;
  my $data=$sth->fetchrow_hashref;
  $sth->finish;
- $dbh->disconnect;
 # print $query;
  return($data);
 }

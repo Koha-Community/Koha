@@ -24,11 +24,15 @@ package C4::Circulation::Issues; #asummes C4/Circulation/Issues
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Accounts;
 use C4::InterfaceCDK;
 use C4::Circulation::Main;
+	# FIXME - C4::Circulation::Main and C4::Circulation::Issues
+	# use each other, so functions get redefined.
 use C4::Circulation::Borrower;
+	# FIXME - C4::Circulation::Issues and C4::Circulation::Borrower
+	# use each other, so functions get redefined.
 use C4::Scan;
 use C4::Stats;
 use C4::Print;
@@ -79,7 +83,7 @@ my $priv_func = sub {
 
 sub Issue  {
    my ($env) = @_;
-   my $dbh=&C4Connect;
+   my $dbh = C4::Context->dbh;
    #clear help
    helptext('');
    #clearscreen();
@@ -113,8 +117,7 @@ sub Issue  {
      #&endint($env);
      }
    }   
-   $dbh->disconnect;
-    Cdk::refreshCdkScreen();
+   Cdk::refreshCdkScreen();
    return ($done);
 }    
 
@@ -122,7 +125,7 @@ sub Issue  {
 sub processitems {
   #process a users items
    my ($env,$bornum,$borrower,$items,$items2,$it2p,$amountdue,$itemsdet,$odues)=@_;
-   my $dbh=&C4Connect;  
+   my $dbh = C4::Context->dbh;
    $env->{'newborrower'} = "";
    my ($itemnum,$reason) = 
      issuewindow($env,'Issues',$dbh,$items,$items2,$borrower,fmtdec($env,$amountdue,"32"));
@@ -141,7 +144,6 @@ sub processitems {
        $amountdue += $charge;
      }
    }   
-   $dbh->disconnect;
    #check to see if more books to process for this user
    my @done;
    if ($env->{'newborrower'} ne "") {$reason = "Finished user";} 
@@ -166,7 +168,6 @@ sub processitems {
      }
    }
    #debug_msg($env, "return from issues $done[0]"); 
-   $dbh->disconnect;
    return @done;
 }
 
@@ -374,6 +375,10 @@ sub updateissues{
   return($dateret);
 }
 
+# FIXME - This is very similar to
+# &C4::Circulation::Renewals2::calc_charges and
+# &C4::Circulation::Circ2::calc_charges.
+# Pick one and stick with it.
 sub calc_charges {
   # calculate charges due
   my ($env, $dbh, $itemno, $bornum)=@_;
@@ -398,7 +403,7 @@ sub calc_charges {
         my $discount = $data2->{'rentaldiscount'};
 	$charge = ($charge *(100 - $discount)) / 100;
      }
-     $sth2->{'finish'};
+     $sth2->{'finish'};	# FIXME - Was this supposed to be $sth2->finish ?
   }   
   $sth1->finish;
   return ($charge);

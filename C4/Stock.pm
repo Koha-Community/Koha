@@ -22,7 +22,7 @@ use strict;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-use C4::Database;
+use C4::Context;
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -34,7 +34,7 @@ $VERSION = 0.01;
 # never used. This function (and therefore this module) is probably
 # obsolete.
 sub stockreport {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my @results;
   my $query="Select count(*) from items where homebranch='C'";
   my $sth=$dbh->prepare($query);
@@ -48,7 +48,6 @@ sub stockreport {
   $count=$sth->fetchrow_hashref;
   $results[1]="$count->{'count'}\t Foxton";
   $sth->finish;
-  $dbh->disconnect;
   return(@results);
 }
 

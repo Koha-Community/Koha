@@ -29,7 +29,7 @@ package C4::Catalogue; #assumes C4/Acquisitions.pm
 
 use strict;
 require Exporter;
-use C4::Database;
+use C4::Context;
 use MARC::Record;
 use C4::Biblio;
 
@@ -137,7 +137,7 @@ number of elements in C<@orders>.
 #'
 sub basket {
   my ($basketno,$supplier)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select *,biblio.title from aqorders,biblio,biblioitems
   where basketno='$basketno'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
@@ -158,7 +158,6 @@ sub basket {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -181,7 +180,7 @@ database, and returns it.
 # see which basket number it gets. Then have a cron job periodically
 # remove out-of-date dummy orders.
 sub newbasket {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select max(basketno) from aqorders";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -189,7 +188,6 @@ sub newbasket {
   my $basket=$$data[0];
   $basket++;
   $sth->finish;
-  $dbh->disconnect;
   return($basket);
 }
 
@@ -228,7 +226,7 @@ sub neworder {
   } else {
     $sub=0;
   }
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="insert into aqorders (biblionumber,title,basketno,
   quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
   biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber)
@@ -254,7 +252,6 @@ sub neworder {
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item delorder
@@ -273,7 +270,7 @@ marc_biblio tables of the Koha database.
 #'
 sub delorder {
   my ($bibnum,$ordnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set datecancellationprinted=now()
   where biblionumber='$bibnum' and
   ordernumber='$ordnum'";
@@ -286,7 +283,6 @@ sub delorder {
     delbiblio($bibnum);		# This is C4::Biblio::delbiblio, not
 				# C4::Acquisitions::delbiblio
   }
-  $dbh->disconnect;
 }
 
 =item modorder
@@ -309,7 +305,7 @@ table are also updated to the new book fund ID.
 # FIXME - This function appears in C4::Acquisitions
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set title='$title',
   quantity='$quantity',listprice='$listprice',basketno='$basketno',
   rrp='$rrp',ecost='$ecost',unitprice='$cost',
@@ -326,7 +322,6 @@ sub modorder {
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item newordernum
@@ -340,7 +335,7 @@ database, and returns it.
 #'
 # FIXME - Race condition
 sub newordernum {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select max(ordernumber) from aqorders";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -348,7 +343,6 @@ sub newordernum {
   my $ordnum=$$data[0];
   $ordnum++;
   $sth->finish;
-  $dbh->disconnect;
   return($ordnum);
 }
 
@@ -371,7 +365,7 @@ Also updates the book fund ID in the aqorderbreakdown table.
 #'
 sub receiveorder {
   my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set quantityreceived='$quantrec',
   datereceived=now(),booksellerinvoicenumber='$invoiceno',
   biblioitemnumber=$bibitemno,unitprice='$cost',freight='$freight',
@@ -388,7 +382,6 @@ sub receiveorder {
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 =item updaterecorder
@@ -407,7 +400,7 @@ C<$user> is ignored.
 #'
 sub updaterecorder{
   my($biblio,$ordnum,$user,$cost,$bookfund,$rrp)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update aqorders set
   unitprice='$cost', rrp='$rrp'
   where biblionumber=$biblio and ordernumber=$ordnum
@@ -422,7 +415,6 @@ sub updaterecorder{
 #  print $query;
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 #
@@ -466,7 +458,7 @@ Results are ordered from most to least recent.
 #'
 sub getorders {
   my ($supplierid)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where
   booksellerid='$supplierid' and (quantity > quantityreceived or
   quantityreceived is NULL)
@@ -482,7 +474,6 @@ sub getorders {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return ($i,\@results);
 }
 
@@ -501,7 +492,7 @@ tables of the Koha database.
 #'
 sub getorder{
   my ($bi,$bib)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select ordernumber from aqorders where biblionumber=$bib and
   biblioitemnumber='$bi'";
   my $sth=$dbh->prepare($query);
@@ -511,7 +502,6 @@ sub getorder{
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
-  $dbh->disconnect;
 #  print $query;
   return ($order,$ordnum->{'ordernumber'});
 }
@@ -533,7 +523,7 @@ aqorderbreakdown tables of the Koha database.
 # the other one.
 sub getsingleorder {
   my ($ordnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown
   where aqorders.ordernumber='$ordnum'
   and biblio.biblionumber=aqorders.biblionumber and
@@ -543,7 +533,6 @@ sub getsingleorder {
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
@@ -565,7 +554,7 @@ C<@results> is sorted alphabetically by book title.
 sub getallorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
   and (quantityreceived < quantity or quantityreceived is NULL)
@@ -583,7 +572,6 @@ sub getallorders {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -591,7 +579,7 @@ sub getallorders {
 sub getrecorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
@@ -610,7 +598,6 @@ sub getrecorders {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -651,7 +638,7 @@ following keys:
 #'
 sub ordersearch {
   my ($search,$biblio,$catview) = @_;
-  my $dbh   = C4Connect;
+  my $dbh   = C4::Context->dbh;
   my $query = "Select *,biblio.title from aqorders,biblioitems,biblio
 where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
 and biblio.biblionumber=aqorders.biblionumber
@@ -695,7 +682,6 @@ and ((";
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -719,7 +705,7 @@ of the Koha database.
 #'
 sub invoice {
   my ($invoice)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorders,biblio,biblioitems where
   booksellerinvoicenumber='$invoice'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
@@ -733,7 +719,6 @@ sub invoice {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -751,7 +736,7 @@ alphabetically by book fund name.
 =cut
 #'
 sub bookfunds {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid
   group by aqbookfund.bookfundid order by bookfundname";
@@ -764,7 +749,6 @@ sub bookfunds {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -772,7 +756,7 @@ sub bookfunds {
 # again, I don't think it's being used (anymore).
 sub bookfundbreakdown {
   my ($id)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
   from aqorders,aqorderbreakdown where bookfundid='$id' and
   aqorders.ordernumber=aqorderbreakdown.ordernumber
@@ -792,7 +776,6 @@ sub bookfundbreakdown {
     }
   }
   $sth->finish;
-  $dbh->disconnect;
   return($spent,$comtd);
 }
 
@@ -810,19 +793,17 @@ to one.
 #'
 sub curconvert {
   my ($currency,$price)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select rate from currency where currency='$currency'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   my $cur=$data->{'rate'};
   if ($cur==0){
     $cur=1;
   }
-  my $price=$price / $cur;
-  return($price);
+  return($price / $cur);
 }
 
 =item getcurrencies
@@ -838,7 +819,7 @@ keys are the fields from the currency table in the Koha database.
 =cut
 #'
 sub getcurrencies {
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from currency";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -849,21 +830,19 @@ sub getcurrencies {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
 # FIXME - Never used
 sub getcurrency {
   my ($cur)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from currency where currency='$cur'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
 
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  $dbh->disconnect;
   return($data);
 }
 
@@ -877,25 +856,23 @@ Sets the exchange rate for C<$currency> to be C<$newrate>.
 #'
 sub updatecurrencies {
   my ($currency,$rate)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update currency set rate=$rate where currency='$currency'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 # FIXME - Identical to &C4::Acquisitions::updatecost. Neither one is
 # used
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="update items set price='$price',replacementprice='$rrp'
   where itemnumber=$itemnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }
 
 #
@@ -919,7 +896,7 @@ aqbooksellers table in the Koha database.
 #'
 sub bookseller {
   my ($searchstring)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqbooksellers where name like '%$searchstring%' or
   id = '$searchstring'";
   my $sth=$dbh->prepare($query);
@@ -931,7 +908,6 @@ sub bookseller {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,@results);
 }
 
@@ -949,7 +925,7 @@ are the fields of the aqorderbreakdown table in the Koha database.
 #'
 sub breakdown {
   my ($id)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from aqorderbreakdown where ordernumber='$id'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -960,7 +936,6 @@ sub breakdown {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($i,\@results);
 }
 
@@ -977,7 +952,7 @@ table of the Koha database.
 =cut
 #'
 sub branches {
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select * from branches";
     my $sth   = $dbh->prepare($query);
     my $i     = 0;
@@ -990,14 +965,13 @@ sub branches {
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($i, @results);
 } # sub branches
 
 # FIXME - Never used
 sub findall {
   my ($biblionumber)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblioitems,items,itemtypes where
   biblioitems.biblionumber=$biblionumber
   and biblioitems.biblioitemnumber=items.biblioitemnumber and
@@ -1012,14 +986,13 @@ sub findall {
     $i++;
   }
   $sth->finish;
-  $dbh->disconnect;
   return(@results);
 }
 
 # FIXME - Never used
 sub needsmod{
   my ($bibitemnum,$itemtype)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from biblioitems where biblioitemnumber=$bibitemnum
   and itemtype='$itemtype'";
   my $sth=$dbh->prepare($query);
@@ -1029,7 +1002,6 @@ sub needsmod{
     $result=1;
   }
   $sth->finish;
-  $dbh->disconnect;
   return($result);
 }
 
@@ -1050,7 +1022,7 @@ C<&updatesup> with the result.
 #'
 sub updatesup {
    my ($data)=@_;
-   my $dbh=C4Connect;
+   my $dbh = C4::Context->dbh;
    my $query="Update aqbooksellers set
    name='$data->{'name'}',address1='$data->{'address1'}',address2='$data->{'address2'}',
    address3='$data->{'address3'}',address4='$data->{'address4'}',postal='$data->{'postal'}',
@@ -1068,7 +1040,6 @@ sub updatesup {
    my $sth=$dbh->prepare($query);
    $sth->execute;
    $sth->finish;
-   $dbh->disconnect;
 #   print $query;
 }
 
@@ -1086,7 +1057,7 @@ Returns the ID of the newly-created bookseller.
 #'
 sub insertsup {
   my ($data)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $sth=$dbh->prepare("Select max(id) from aqbooksellers");
   $sth->execute;
   my $data2=$sth->fetchrow_hashref;
@@ -1096,7 +1067,6 @@ sub insertsup {
   $sth->execute;
   $sth->finish;
   $data->{'id'}=$data2->{'max(id)'};
-  $dbh->disconnect;
   updatesup($data);
   return($data->{'id'});
 }
@@ -1119,7 +1089,7 @@ and biblioitems tables in the Koha database.
 #'
 sub websitesearch {
     my ($keywordlist) = @_;
-    my $dbh   = C4Connect;
+    my $dbh   = C4::Context->dbh;
     my $query = "Select distinct biblio.* from biblio, biblioitems where
 biblio.biblionumber = biblioitems.biblionumber and (";
     my $count = 0;
@@ -1156,7 +1126,6 @@ biblio.biblionumber = biblioitems.biblionumber and (";
     } # while
 
     $sth->finish;
-    $dbh->disconnect;
     return($count, @results);
 } # sub websitesearch
 
@@ -1172,7 +1141,7 @@ are mandatory.
 #'
 sub addwebsite {
     my ($website) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query;
 
     # FIXME -
@@ -1194,8 +1163,6 @@ description  = $website->{'description'},
 url          = $website->{'url'}";
 
     $dbh->do($query);
-
-    $dbh->disconnect;
 } # sub website
 
 =item updatewebsite
@@ -1211,7 +1178,7 @@ the entry to update.
 #'
 sub updatewebsite {
     my ($website) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
     my $query;
 
     $website->{'title'}      = $dbh->quote($website->{'title'});
@@ -1225,8 +1192,6 @@ url         = $website->{'url'}
 where websitenumber = $website->{'websitenumber'}";
 
     $dbh->do($query);
-
-    $dbh->disconnect;
 } # sub updatewebsite
 
 =item deletewebsite
@@ -1239,12 +1204,11 @@ Deletes the web site with number C<$websitenumber>.
 #'
 sub deletewebsite {
     my ($websitenumber) = @_;
-    my $dbh = C4Connect;
+    my $dbh = C4::Context->dbh;
+    # FIXME - $query is unneeded
     my $query = "Delete from websites where websitenumber = $websitenumber";
 
     $dbh->do($query);
-
-    $dbh->disconnect;
 } # sub deletewebsite
 
 END { }       # module clean-up code here (global destructor)

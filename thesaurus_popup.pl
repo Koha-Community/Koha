@@ -23,7 +23,7 @@
 
 use strict;
 use CGI;
-use C4::Database;
+use C4::Context;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Output;
@@ -37,7 +37,7 @@ my $search_string= $input->param('search_string');
 my $op = $input->param('op');
 my $freelib_text = $input->param('freelib_text');
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 # make the page ...
 print $input->header;

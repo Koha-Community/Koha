@@ -24,7 +24,7 @@ package C4::Circulation::Borrissues; #assumes C4/Circulation/Borrissues
 use strict;
 require Exporter;
 use DBI;
-use C4::Database;
+use C4::Context;
 use C4::Print;
 use C4::Format;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -73,7 +73,7 @@ my $priv_func = sub {
 sub printallissues {
   my ($env,$borrower)=@_;
   my @issues;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query = "select * from issues,items,biblioitems,biblio
     where borrowernumber = '$borrower->{'borrowernumber'}' 
     and (returndate is null)
@@ -85,11 +85,12 @@ sub printallissues {
   $sth->execute();
   my $x;
   while (my $data = $sth->fetchrow_hashref) {
+    # FIXME - This should be $issues[$x] = $data, right?
+    # Or better yet, push @issues, $data.
     @issues[$x] =$data;
     $x++;
   }
   $sth->finish();
-  $dbh->disconnect();
   remoteprint ($env,\@issues,$borrower);
 }
 END { }       # module clean-up code here (global destructor)

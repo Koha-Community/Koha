@@ -29,6 +29,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Context;
 use C4::Output;
 use CGI;
 use C4::Search;
@@ -37,10 +38,9 @@ use C4::Reserves2;
 use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
 use C4::Koha;
-use C4::Database;
 use HTML::Template;
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
 
@@ -179,8 +179,6 @@ for (my $i=0;$i<$rescount;$i++){
   }
   push (@reservedata, \%row);
 }
-
-$dbh->disconnect;
 
 $template->param($data);
 $template->param(startmenumember => join('', startmenu('member')),

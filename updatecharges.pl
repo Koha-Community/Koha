@@ -25,8 +25,8 @@
 
 use strict;
 use CGI;
+use C4::Context;
 use C4::Output;
-use C4::Database;
 
 my $input = new CGI;
 #print $input->header;
@@ -34,7 +34,7 @@ my $input = new CGI;
 #print startmenu('issue');
 
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 #print $input->dump;
 my @names=$input->param();
 
@@ -51,7 +51,6 @@ foreach my $key (@names){
   $sth->execute;
   $sth->finish;
 }
-$dbh->disconnect;
 print $input->redirect("/cgi-bin/koha/charges.pl");
 #print endmenu('issue');
 #print endpage();
