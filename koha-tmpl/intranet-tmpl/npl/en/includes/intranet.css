@@ -317,9 +317,16 @@ div.error {
 }
 
 div.error .submit {
+	background-color : #669999;
+	font-size: 14px;
+	margin-left : 5%;
+	padding : 2px 15px 2px 15px;
+}
+
+div.error .cancel {
 	background-color : #993300;
 	font-size: 14px;
-	color: #E7E7CA;
+	margin-left : 5%;
 	padding : 2px 15px 2px 15px;
 }
 
@@ -350,13 +357,7 @@ div.flags ul {
 	padding : 0px;
 }
 
-div.form {
-	background-color : #FFFFCC;
-	border : 0px dotted #333333;
-	margin : 0px auto;
-	padding : 5px;
-	position : relative;
-}
+
 
 	div.help {
 		border : 0;
@@ -366,7 +367,6 @@ div.form {
 	}
 	
 	div.help h3 {
-		cursor : pointer;
 		font-size : 100%;
 		background-color : #FFFFCC;
 		border-bottom : #CCCC99;
@@ -659,6 +659,15 @@ table.marc td.data {
 	padding : 2px;
 }
 
+td.credit, td.debit {
+	font-family : "Courier New", Courier, monospace;
+	text-align : right;
+}
+
+td.debit {
+	color : #990000;
+}
+
 .current {
 	background-color : #FFFFFF;
 	color : #3366CC;
@@ -702,8 +711,9 @@ table.marc td.data {
 	padding : 4px;
 }
 
-.help {
-		cursor: help;
+.form-help {
+	font-size : 95%;
+	padding-left : 15px;
 }
 
 .inline {
@@ -740,6 +750,12 @@ input.unfocus {
 	font-size : 12px;
 	font-weight : bold;
 	padding : 2px;
+}
+
+.thumbnail {
+	float : left;
+	margin : 0 5px 10px 0;
+	border : 0px solid #E7E7CA;
 }
 
 .yes {
@@ -1041,11 +1057,19 @@ input.unfocus {
 	font-weight : bold;
 }
 
+.searchresults td {
+	padding : 2px 2px 2px 5px;
+}
+
 .searchresults p {
+	font-size : 1.2em;
+	font-weight : bold;
 	margin : .2em;
 }
 
 .searchresults p+p {
+	font-size : 1em;
+	font-weight : normal;
 	text-indent : 1em;
 }
 
