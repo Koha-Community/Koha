@@ -635,7 +635,14 @@ sub currentissues {
     while (my $data = $sth->fetchrow_hashref) {
 	$data->{'dewey'}=~s/0*$//;
 	($data->{'dewey'} == 0) && ($data->{'dewey'}='');
+	my @datearr = localtime(time());
+	my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]
+	+1)).sprintf ("%0.2d", $datearr[3]);
 	my $datedue=$data->{'date_due'};
+	$datedue=~s/-//g;
+	if ($datedue < $todaysdate) {
+	    $data->{'overdue'}=1;
+	}
 	my $itemnumber=$data->{'itemnumber'};
 	$currentissues{$counter}=$data;
 	$counter++;
