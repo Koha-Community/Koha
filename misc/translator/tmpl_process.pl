@@ -119,25 +119,6 @@ sub install_strhash
 	my $starttime = time();
 
 	$out_dir =~ s/\/$//; # chops the trailing / if any.
-	foreach my $text (keys %{$strhash})
-		{
-			# escaping \|()[{}^$*+?.
-			%{$strhash}->{$text} =~ s/\\/\\\\/g;
-#			%{$strhash}->{$text} =~ s/\//\\\//g;
-			%{$strhash}->{$text} =~ s/\|/\\\|/g;
-			%{$strhash}->{$text} =~ s/\(/\\\(/g;
-			%{$strhash}->{$text} =~ s/\)/\\\)/g;
-			%{$strhash}->{$text} =~ s/\[/\\\[/g;
-			%{$strhash}->{$text} =~ s/\]/\\\]/g;
-			%{$strhash}->{$text} =~ s/\{/\\\{/g;
-			%{$strhash}->{$text} =~ s/\}/\\\}/g;
-			%{$strhash}->{$text} =~ s/\^/\\\^/g;
-			%{$strhash}->{$text} =~ s/\$/\\\$/g;
-			%{$strhash}->{$text} =~ s/\*/\\\*/g;
-			%{$strhash}->{$text} =~ s/\+/\\\+/g;
-			%{$strhash}->{$text} =~ s/\?/\\\?/g;
-#			%{$strhash}->{$text} =~ s/\./\\\./g;
-		}
 	# Processes every entry found.
 	foreach my $file (@{$in_files})
 	{
@@ -199,53 +180,36 @@ sub install_strhash
 		if( %{$strhash}->{$text} != 1)
 			{
 				# Does the file contains text that needs to be changed ?
-				if( $lines =~ /$text/ && %{$strhash}->{$text} ne "IGNORE" )
+				# escaping \|()[{}^$*+?.
+				my $subst = %{$strhash}->{$text};
+				$text =~ s/\\/\\\\/g;
+				$text =~ s/\//\\\//g;
+				$text =~ s/\|/\\\|/g;
+				$text =~ s/\(/\\\(/g;
+				$text =~ s/\)/\\\)/g;
+				$text =~ s/\[/\\\[/g;
+				$text =~ s/\]/\\\]/g;
+				$text =~ s/\{/\\\{/g;
+				$text =~ s/\}/\\\}/g;
+				$text =~ s/\^/\\\^/g;
+				$text =~ s/\$/\\\$/g;
+				$text =~ s/\*/\\\*/g;
+				$text =~ s/\+/\\\+/g;
+				$text =~ s/\?/\\\?/g;
+				$text =~ s/\./\\\./g;
+				if(%{$strhash}->{$text} ne "IGNORE" )
 				{
 					if (%{$strhash}->{$text} =~ "LIMITED")
 					{
 						# changing text
-						my $subst = %{$strhash}->{$text};
 						$subst =~ s/UNUSED;//;
-						# escaping \|()[{}^$*+?.
-						$text =~ s/\\/\\\\/g;
-						$text =~ s/\//\\\//g;
-						$text =~ s/\|/\\\|/g;
-						$text =~ s/\(/\\\(/g;
-						$text =~ s/\)/\\\)/g;
-						$text =~ s/\[/\\\[/g;
-						$text =~ s/\]/\\\]/g;
-						$text =~ s/\{/\\\{/g;
-						$text =~ s/\}/\\\}/g;
-						$text =~ s/\^/\\\^/g;
-						$text =~ s/\$/\\\$/g;
-						$text =~ s/\*/\\\*/g;
-						$text =~ s/\+/\\\+/g;
-						$text =~ s/\?/\\\?/g;
-						$text =~ s/\./\\\./g;
 						$subst =~ s/^LIMITED;//g;
 						$lines =~ s/(.*)>$text(\W)/$1>$subst$2/g;
 						$lines =~ s/(.*) title="$text/$1 title="$subst/g;
 						$lines =~ s/(.*) alt="$text/$1 alt="$subst/g;
 					} else {
 						# changing text
-						my $subst = %{$strhash}->{$text};
 						$subst =~ s/UNUSED;//;
-						# escaping \|()[{}^$*+?.
-						$text =~ s/\\/\\\\/g;
-						$text =~ s/\//\\\//g;
-						$text =~ s/\|/\\\|/g;
-						$text =~ s/\(/\\\(/g;
-						$text =~ s/\)/\\\)/g;
-						$text =~ s/\[/\\\[/g;
-						$text =~ s/\]/\\\]/g;
-						$text =~ s/\{/\\\{/g;
-						$text =~ s/\}/\\\}/g;
-						$text =~ s/\^/\\\^/g;
-						$text =~ s/\$/\\\$/g;
-						$text =~ s/\*/\\\*/g;
-						$text =~ s/\+/\\\+/g;
-						$text =~ s/\?/\\\?/g;
-						$text =~ s/\./\\\./g;
 						$lines =~ s/(\W)$text(\W)/$1$subst$2/g;
 					}
 				}
