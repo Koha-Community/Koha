@@ -127,7 +127,7 @@ sub checkvalidisbn {
         $q=~s/X.//g;
         
 	#return 0 if $q is not ten digits long
-	if ($length($q)!=10) {
+	if (length($q)!=10) {
 		return 0;
 	}
 	
