@@ -23,6 +23,7 @@ use HTML::Template;
 use strict;
 require Exporter;
 use CGI;
+use C4::Context;
 use C4::Search;
 use C4::Output; # no contains picktemplate
   
