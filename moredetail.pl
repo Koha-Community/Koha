@@ -36,16 +36,16 @@ my $includes = C4::Context->config('includes') ||
 my $startfrom=$query->param('startfrom') || 0;
 
 my $subject=$query->param('subject');
+
 # if its a subject we need to use the subject.tmpl
-my $template;
-if ($subject){
-	$template = gettemplate("catalogue/subject.tmpl");
-} else {
-	$template = gettemplate("catalogue/moredetail.tmpl");
-}
-my $flagsrequired;
-$flagsrequired->{catalogue}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	template_name   => ($subject? 'catalogue/subject.tmpl':
+				      'catalogue/moredetail.tmpl'),
+	query           => $query,
+	type            => "intranet",
+	authnotrequired => 0,
+	flagsrequired   => {catalogue => 1},
+    });
 
 # get variables 
 
