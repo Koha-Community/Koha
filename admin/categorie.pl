@@ -51,18 +51,15 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select * from categories where (description like \"$data[0]%\")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select * from categories where (description like ?)");
+	$sth->execute("$data[0]%");
 	my @results;
-	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
-	$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
-	return ($cnt,\@results);
+	return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
@@ -70,7 +67,6 @@ my $searchfield=$input->param('description');
 my $script_name="/cgi-bin/koha/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
-$searchfield=~ s/\,//g;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "parameters/categorie.tmpl",
@@ -96,8 +92,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode=?");
+		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
@@ -116,18 +112,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $query = "replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (";
-	$query.= $dbh->quote($input->param('categorycode')).",";
-	$query.= $dbh->quote($input->param('description')).",";
-	$query.= $dbh->quote($input->param('enrolmentperiod')).",";
-	$query.= $dbh->quote($input->param('upperagelimit')).",";
-	$query.= $dbh->quote($input->param('dateofbirthrequired')).",";
-	$query.= $dbh->quote($input->param('enrolmentfee')).",";
-	$query.= $dbh->quote($input->param('issuelimit')).",";
-	$query.= $dbh->quote($input->param('reservefee')).",";
-	$query.= $dbh->quote($input->param('overduenoticerequired')).")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (?,?,?,?,?,?,?,?,?)");
+	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','issuelimit','reservefee','overduenoticerequired'));
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -136,14 +122,14 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirm => 1);
 
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from categoryitem where categorycode='$categorycode'");
-	$sth->execute;
+	my $sth=$dbh->prepare("select count(*) as total from categoryitem where categorycode=?");
+	$sth->execute($categorycode);
 	my $total = $sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(total => $total->{'total'});
 	
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode='$categorycode'");
-	$sth2->execute;
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode=?");
+	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
 	if ($total->{'total'} >0) {
@@ -167,9 +153,8 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirmed => 1);
 	my $dbh = C4::Context->dbh;
 	my $categorycode=uc($input->param('categorycode'));
-	my $query = "delete from categories where categorycode='$categorycode'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from categories where categorycode=?");
+	$sth->execute($categorycode);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 } else { # DEFAULT
