@@ -31,7 +31,6 @@ for ($bibid=1; $bibid<80000; $bibid++) {
 	my $numsubfields=int(rand(10)+1);
 	my $subfieldsused;
 	my $localsubfieldcounter=0;
-	my $tagvalue='';
 	for ($j=1; $j<=$numsubfields; $j++) {
 	    my $code='';
 	    until ($code) { 
@@ -44,8 +43,7 @@ for ($bibid=1; $bibid<80000; $bibid++) {
 	    $subfieldcounter++;
 	    $localsubfieldcounter++;
 	    my $word=$words[int(rand($#words))];
-	    $tagvalue.="\$$code $word\0";
-	    my $sth=$dbh->prepare("insert into marc_2XX_subfield_table (subfieldid, tagid, tag, bibid, subfieldorder, subfieldcode, subfieldvalue) values (?,?,?,?,?,?,?)");
+	    my $sth=$dbh->prepare("insert into marc_subfield_table (subfieldid, tagid, tag, bibid, subfieldorder, subfieldcode, subfieldvalue) values (?,?,?,?,?,?,?)");
 	    my $error=1;
 	    while ($error) {
 		$sth->execute($subfieldcounter, $tagcounter, $tag, $bibid, $localsubfieldcounter, $code, $word);
@@ -56,18 +54,29 @@ for ($bibid=1; $bibid<80000; $bibid++) {
 		}
 		$sth->finish;
 	    }
-	}
-	$tagvalue=~s/\0$//;
-	my $error=1;
-	my $sth=$dbh->prepare("insert into marc_0XX_tag_table (bibcode, tagnumber, tagorder, tagvalue) values (?, ?, ?, ?)");
-	while ($error) {
-	    $sth->execute($bibid, $tag, $localtagcounter, $tagvalue);
-	    $error=$dbh->err;
-	    if ($error) {
-		sleep 1;
-		print "ERROR: $error\n";
+	    my $error=1;
+	    my $sth=$dbh->prepare("insert into marc_field_table_sergey (bibid, tagid, tag) values (?, ?, ?)");
+	    while ($error) {
+		$sth->execute($bibid, $localtagcounter, $tag);
+		$error=$dbh->err;
+		if ($error) {
+		    sleep 1;
+		    print "ERROR: $error\n";
+		}
+		$fieldid=$dbh->{'mysql_insertid'};
+		$sth->finish;
 	    }
-	    $sth->finish;
+	    $error=1;
+	    $sth=$dbh->prepare("insert into marc_subfield_table_sergey (fieldid, subfieldorder, subfieldcode, subfieldvalue) values (?, ?, ?, ?)");
+	    while ($error) {
+		$sth->execute($fieldid, $localsubfieldcounter, $code, $word);
+		$error=$dbh->err;
+		if ($error) {
+		    sleep 1;
+		    print "ERROR: $error\n";
+		}
+		$sth->finish;
+	    }
 	}
     }
 }
