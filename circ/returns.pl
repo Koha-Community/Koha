@@ -210,6 +210,8 @@ if ($messages->{'ResFound'}) {
     my ($iteminfo) = getiteminformation(\%env, 0, $barcode);
 
     if ($res->{'ResFound'} eq "Waiting") {
+# transfer book
+	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
     Item $iteminfo->{'title'} ($iteminfo->{'author'}) <br>
@@ -279,7 +281,7 @@ EOF
 
 # collect the messages and put into message table....
 foreach my $code (keys %$messages) {
-    warn $code;
+#    warn $code;
     if ($code eq 'BadBarcode'){
 	$messagetext .= "<font color='red' size='+2'> No Item with barcode: $messages->{'BadBarcode'} </font> <br>";
     }
@@ -336,7 +338,7 @@ EOF
 	    $displayflag = "<font color=red>$flag</font>";
 	} else {
 	    $displayflag = $flag;
-	}
+	}  
 	if ($flag eq 'CHARGES') {
 	    $flaginfotext.= <<"EOF";
 <tr><td valign=top>$displayflag</td>
