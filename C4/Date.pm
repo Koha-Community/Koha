@@ -31,7 +31,7 @@ sub get_date_format
 sub display_date_format
 {
 	my $dateformat = get_date_format();
-	
+
 	if ( $dateformat eq "us" )
 	{
 		return "mm/dd/yyyy";
@@ -62,7 +62,7 @@ sub format_date
 	}
 
 	my $dateformat = get_date_format();
-	
+
 	if ( $dateformat eq "us" )
 	{
 		Date_Init("DateFormat=US");
