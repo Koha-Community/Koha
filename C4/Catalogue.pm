@@ -10,7 +10,8 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&newBiblio &newBiblioItem &newItem);
+@EXPORT = qw(&newBiblio &newBiblioItem &newItem &updateBiblio &updateBiblioItem
+	     &updateItem);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -60,6 +61,18 @@ sub newBiblio {
     my $seriestitle=$biblio->{'seriestitle'};
     my $unititle=$biblio->{'unititle'};
     my $notes=$biblio->{'notes'};
+}
+
+sub updateBiblio {
+# Update the biblio with biblionumber $biblio->{'biblionumber'}
+# I guess this routine should search through all marc records for a record that
+# has the same biblionumber stored in it, and modify the MARC record as well as
+# the biblio table.
+#
+# Also, this subroutine should search through the $biblio object and compare it
+# to the existing record and _LOG ALL CHANGES MADE_ in some way.  I'd like for
+# this logging feature to be usable to undo changes easily.
+    my ($env, $biblio) = @_;
 }
 
 
@@ -331,6 +344,17 @@ sub newBiblioItem {
     return ($env, $Record_ID);
 }
 
+sub updateBiblioItem {
+# Update the biblioitem with biblioitemnumber $biblioitem->{'biblioitemnumber'}
+# This routine should also modify the corresponding MARC record data.
+#
+# This routine should also check to see which fields are actually being
+# modified, and log all changes.
+
+    my ($env, $biblioitem) = @_;
+}
+
+
 sub newItem {
     my ($env, $Record_ID, $item) = @_;
     my $barcode=$item->{'barcode'};
@@ -399,6 +423,17 @@ sub newItem {
     $subfields2->{2}->{'Subfield_Value'}=$subclass;
     addTag($env, $Record_ID, $tag, ' ', ' ', $subfields2);
     $env->{'linkid'}='';
+}
+
+sub updateItem {
+# Update the item with itemnumber $item->{'itemnumber'}
+# This routine should also modify the corresponding MARC record data. (852 and
+# 876 tags with 876p tag the same as $item->{'barcode'}
+#
+# This routine should also check to see which fields are actually being
+# modified, and log all changes.
+
+    my ($env, $biblio) = @_;
 }
 
 END { }       # module clean-up code here (global destructor)
