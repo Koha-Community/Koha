@@ -53,10 +53,26 @@
 				<th>
 					<select name="status">
 						<option value="">Any</option>
-						<option value="ASKED" <!-- TMPL_IF name="ASKED" -->selected<!-- /TMPL_IF -->>Asked</option>
-						<option value="ORDERED" <!-- TMPL_IF name="ORDERED" -->selected<!-- /TMPL_IF -->>Ordered</option>
-						<option value="REJECTED"<!-- TMPL_IF name="REJECTED" -->selected<!-- /TMPL_IF -->>Rejected</option>
-						<option value="AVAILABLE"<!-- TMPL_IF name="AVAILABLE" -->selected<!-- /TMPL_IF -->>Available</option>
+						<!-- TMPL_IF name="ASKED" -->
+							<option value="ASKED" selected>Asked</option>
+						<!-- TMPL_ELSE -->
+							<option value="ASKED">Asked</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ORDERED" -->
+							<option value="ORDERED" selected>Ordered</option>
+						<!-- TMPL_ELSE -->
+							<option value="ORDERED">Ordered</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="REJECTED" -->
+							<option value="REJECTED" selected>Rejected</option>
+						<!-- TMPL_ELSE -->
+							<option value="REJECTED">Rejected</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="AVAILABLE" -->
+							<option value="AVAILABLE" selected>Available</option>
+						<!-- TMPL_ELSE -->
+							<option value="AVAILABLE">Available</option>
+						<!-- /TMPL_IF -->
 					</select>
 				</th>
 				<th>

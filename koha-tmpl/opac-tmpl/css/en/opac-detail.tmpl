@@ -16,6 +16,11 @@
 			Request
 		</a>
 	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF name="subscriptionid" -->
+	<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
+		Issues
+	</a>
+	<!-- /TMPL_IF -->
 	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Add to basket</a>
 </div>
 
@@ -89,6 +94,14 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
+	<!-- TMPL_IF name="subscriptionid" -->
+		<p>
+			This is a serial subscription. You can see which 
+				<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
+					Issues
+				</a> we have and don't have
+		</p>
+	<!-- /TMPL_IF -->
 	</div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
