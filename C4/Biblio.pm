@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.50  2003/07/02 13:57:13  tipaul
+# fix for #512 (not sure it's enogh. to be checked by NPL)
+#
 # Revision 1.49  2003/06/17 11:21:13  tipaul
 # improvments/fixes for z3950 support.
 # * Works now even on ADD, not only on MODIFY
@@ -1453,7 +1456,7 @@ sub OLDmodsubject {
 
 		if (my $data = $sth->fetchrow_hashref) {
 		} else {
-			if ($force eq $subject[$i]) {
+			if ($force eq $subject[$i] || $force eq 1) {
 				# subject not in aut, chosen to force anway
 				# so insert into cataloguentry so its in auth file
 				$query = "Insert into catalogueentry (entrytype,catalogueentry) values ('s','$subject[$i]')";
