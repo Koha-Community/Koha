@@ -72,15 +72,15 @@ if ($input->param('newgroup')) {
 if (! $biblionumber) {
     print $input->redirect('addbooks.pl');
 } elsif ((! $barcode) && (! $website)) {
-    print $input->redirect("additem.pl?biblionumber=$biblionumber&error=nobarcode");
+    print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber&error=nobarcode");
 } elsif ((! $newgroup) && (! $biblioitemnumber)) {
-    print $input->redirect("additem.pl?biblionumber=$biblionumber&error=nobiblioitem");
+    print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber&error=nobiblioitem");
 } else {
 
     if ($website) {
 	&newbiblioitem($biblioitem);
     } elsif (&checkitems(1,$barcode)) {
-	print $input->redirect("additem.pl?biblionumber=$biblionumber&error=barcodeinuse");
+	print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber&error=barcodeinuse");
     } else {
 
 	if ($newgroup) {
@@ -90,6 +90,6 @@ if (! $biblionumber) {
 
 	&newitems($item, ($barcode));
 
-	print $input->redirect("additem.pl?biblionumber=$biblionumber");
+	print $input->redirect("additem-nomarc.pl?biblionumber=$biblionumber");
     } # else
 } # else

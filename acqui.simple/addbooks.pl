@@ -15,7 +15,6 @@
 #
 # Add info on biblioitems and items already entered as you enter new ones
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -46,12 +45,17 @@ my $query = new CGI;
 
 my $error   = $query->param('error');
 my $success = $query->param('biblioitem');
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui.simple/addbooks.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
-			     debug => 1,
-			     });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui.simple/addbooks.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
+        debug           => 1,
+    }
+);
+my $marc_p = C4::Context->boolean_preference("marc");
+$template->param( NOTMARC => !$marc_p );
+
 output_html_with_http_headers $query, $cookie, $template->output;
