@@ -1,0 +1,404 @@
+package C4::Catalogue; #asummes C4/Acquisitions.pm
+
+use strict;
+require Exporter;
+use C4::Database;
+
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+# set the version for version checking
+$VERSION = 0.01;
+
+@ISA = qw(Exporter);
+@EXPORT = qw(&newBiblio &newBiblioItem &newItem);
+%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+
+# your exported package globals go here,
+# as well as any optionally exported functions
+
+@EXPORT_OK   = qw($Var1 %Hashit);
+
+
+# non-exported package globals go here
+use vars qw(@more $stuff);
+
+# initalize package globals, first exported ones
+
+my $Var1   = '';
+my %Hashit = ();
+
+
+# then the others (which are still accessible as $Some::Module::stuff)
+my $stuff  = '';
+my @more   = ();
+
+# all file-scoped lexicals must be created before
+# the functions below that use them.
+
+# file-private lexicals go here
+my $priv_var    = '';
+my %secret_hash = ();
+
+# here's a file-private function as a closure,
+# callable as &$priv_func;  it cannot be prototyped.
+my $priv_func = sub {
+  # stuff goes here.
+  };
+  
+# make all your functions, whether exported or not;
+
+
+
+sub newBiblio {
+    my ($env, $biblio) = @_;
+    my $title=$biblio->{'title'};
+    my $author=$biblio->{'author'};
+    my $subtitle=$biblio->{'subtitle'};
+    my $title=$biblio->{'title'};
+    my $copyrightdate=$biblio->{'copyrightdate'};
+    my $serial=$biblio->{'serial'};
+    my $seriestitle=$biblio->{'seriestitle'};
+    my $unititle=$biblio->{'unititle'};
+    my $notes=$biblio->{'notes'};
+}
+
+
+sub addTag {
+    my ($env, $Record_ID, $tag, $Indicator1, $Indicator2, $subfields) = @_;
+    my $dbh=&C4Connect;  
+    ($Indicator1) || ($Indicator1=' ');
+    ($Indicator2) || ($Indicator2=' ');
+    my $firstdigit=substr($tag,0,1);
+    my $Subfield_ID;
+    foreach (sort keys %$subfields) {
+	my $Subfield_Mark=$subfields->{$_}->{'Subfield_Mark'};
+	my $Subfield_Value=$subfields->{$_}->{'Subfield_Value'};
+	my $q_Subfield_Value=$dbh->quote($Subfield_Value);
+	if ($Subfield_ID) {
+	    my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_ID, Subfield_Mark, Subfield_Value) values ($Subfield_ID, '$Subfield_Mark', $q_Subfield_Value)");
+	    $sth->execute;
+	} else {
+	    my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_Mark, Subfield_Value) values ('$Subfield_Mark', $q_Subfield_Value)");
+	    $sth->execute;
+	    my $Subfield_Key=$dbh->{'mysql_insertid'};
+	    $Subfield_ID=$Subfield_Key;
+	    $sth=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_ID=$Subfield_ID where Subfield_Key=$Subfield_Key");
+	    $sth->execute;
+	}
+    }
+    if (my $linkid=$env->{'linkid'}) {
+	$env->{'linkage'}=0;
+	my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_ID, Subfield_Mark, Subfield_Value) values ($Subfield_ID, '8', '$linkid')");
+	$sth->execute;
+    }
+    my $sth=$dbh->prepare("insert into $firstdigit\XX_Tag_Table (Indicator1, Indicator2, Tag, Subfield_ID) values ('$Indicator1', '$Indicator2', '$tag', $Subfield_ID)");
+    $sth->execute;
+    my $Tag_Key=$dbh->{'mysql_insertid'};
+    my $Tag_ID=$Tag_Key;
+    $sth=$dbh->prepare("update $firstdigit\XX_Tag_Table set Tag_ID=$Tag_ID where Tag_Key=$Tag_Key");
+    $sth->execute;
+    $sth=$dbh->prepare("insert into Bib_Table (Record_ID, Tag_$firstdigit\XX_ID) values ($Record_ID, $Tag_ID)");
+    $sth->execute;
+    if ($env->{'linkage'}) {
+	my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_ID, Subfield_Mark, Subfield_Value) values ($Subfield_ID, '8', '$Tag_ID')");
+	$sth->execute;
+	
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return ($env, $Tag_ID);
+}
+
+sub newBiblioItem {
+    my ($env, $biblioitem) = @_;
+    my $dbh=&C4Connect;  
+    my $biblionumber=$biblioitem->{'biblionumber'};
+    my $volume=$biblioitem->{'volume'};
+    my $number=$biblioitem->{'number'};
+    my $classification=$biblioitem->{'classification'};
+    my $itemtype=$biblioitem->{'itemtype'};
+    my $isbn=$biblioitem->{'isbn'};
+    my $issn=$biblioitem->{'issn'};
+    my $dewey=$biblioitem->{'dewey'};
+    $dewey=~s/\.*0*$//;
+    ($dewey == 0) && ($dewey='');
+    my $subclass=$biblioitem->{'subclass'};
+    my $publicationyear=$biblioitem->{'publicationyear'};
+    my $publishercode=$biblioitem->{'publishercode'};
+    my $volumedate=$biblioitem->{'volumedate'};
+    my $illus=$biblioitem->{'illus'};
+    my $pages=$biblioitem->{'pages'};
+    my $notes=$biblioitem->{'notes'};
+    my $size=$biblioitem->{'size'};
+    my $place=$biblioitem->{'place'};
+    my $lccn=$biblioitem->{'lccn'};
+
+# Should we check if there is already a biblioitem/marc with the
+# same isbn/lccn/issn?
+
+    my $sth=$dbh->prepare("select title,unititle,seriestitle,copyrightdate,notes,author from biblio where biblionumber=$biblionumber");
+    $sth->execute;
+    my ($title, $unititle,$seriestitle,$copyrightdate,$biblionotes,$author) = $sth->fetchrow;
+    $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber");
+    $sth->execute;
+    my ($subtitle) = $sth->fetchrow;
+    $sth=$dbh->prepare("select author from additionalauthors where biblionumber=$biblionumber");
+    $sth->execute;
+    my @additionalauthors;
+    while (my ($additionalauthor) = $sth->fetchrow) {
+	push (@additionalauthors, $additionalauthor);
+    }
+    $sth=$dbh->prepare("select subject from bibliosubject where biblionumber=$biblionumber");
+    $sth->execute;
+    my @subjects;
+    while (my ($subject) = $sth->fetchrow) {
+	push (@subjects, $subject);
+    }
+
+# MARC SECTION
+
+    $sth=$dbh->prepare("insert into Resource_Table (Record_ID) values (0)");
+    $sth->execute;
+    my $Resource_ID=$dbh->{'mysql_insertid'};
+    my $Record_ID=$Resource_ID;
+    $sth=$dbh->prepare("update Resource_Table set Record_ID=$Record_ID where Resource_ID=$Resource_ID");
+    $sth->execute;
+
+# Title
+    {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$title;
+	if ($subtitle) {
+	    $subfields->{2}->{'Subfield_Mark'}='b';
+	    $subfields->{2}->{'Subfield_Value'}=$subtitle;
+	}
+	my $tag='245';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+
+# author
+    {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$author;
+	my $tag='100';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Series Title
+    if ($seriestitle) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$seriestitle;
+	my $tag='440';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Biblio Note
+    if ($biblionotes) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$biblionotes;
+	$subfields->{2}->{'Subfield_Mark'}='3';
+	$subfields->{2}->{'Subfield_Value'}='biblio';
+	my $tag='440';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Additional Authors
+    foreach (@additionalauthors) {
+	my $author=$_;
+	(next) unless ($author);
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$author;
+	$subfields->{2}->{'Subfield_Mark'}='e';
+	$subfields->{2}->{'Subfield_Value'}='author';
+	my $tag='700';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Illustrator
+    if ($illus) {
+	(next) unless ($illus);
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$illus;
+	$subfields->{2}->{'Subfield_Mark'}='e';
+	$subfields->{2}->{'Subfield_Value'}='illustrator';
+	my $tag='700';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Subjects
+    foreach (@subjects) {
+	my $subject=$_;
+	(next) unless ($subject);
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$subject;
+	my $tag='650';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+
+
+# ISBN
+    if ($isbn) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$isbn;
+	my $tag='020';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# LCCN
+    if ($lccn) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$lccn;
+	my $tag='010';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# ISSN
+    if ($issn) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$issn;
+	my $tag='022';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# DEWEY
+    if ($dewey) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$dewey;
+	my $tag='082';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# DEWEY subclass and itemtype
+    {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$itemtype;
+	$subfields->{2}->{'Subfield_Mark'}='b';
+	$subfields->{2}->{'Subfield_Value'}=$subclass;
+	my $tag='090';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# PUBLISHER
+    {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$place;
+	$subfields->{2}->{'Subfield_Mark'}='b';
+	$subfields->{2}->{'Subfield_Value'}=$publishercode;
+	$subfields->{3}->{'Subfield_Mark'}='c';
+	$subfields->{3}->{'Subfield_Value'}=$publicationyear;
+	if ($copyrightdate) {
+	    $subfields->{4}->{'Subfield_Mark'}='c';
+	    $subfields->{4}->{'Subfield_Value'}="c$copyrightdate";
+	}
+	my $tag='260';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# PHYSICAL
+    if ($pages || $size) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$pages;
+	$subfields->{2}->{'Subfield_Mark'}='c';
+	$subfields->{2}->{'Subfield_Value'}=$size;
+	my $tag='300';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Volume/Number
+    if ($volume || $number) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='v';
+	$subfields->{1}->{'Subfield_Value'}=$volume;
+	$subfields->{2}->{'Subfield_Mark'}='n';
+	$subfields->{2}->{'Subfield_Value'}=$number;
+	my $tag='440';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+# Biblioitem Note
+    if ($notes) {
+	my $subfields;
+	$subfields->{1}->{'Subfield_Mark'}='a';
+	$subfields->{1}->{'Subfield_Value'}=$notes;
+	$subfields->{2}->{'Subfield_Mark'}='3';
+	$subfields->{2}->{'Subfield_Value'}='biblioitem';
+	my $tag='500';
+	addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return ($env, $Record_ID);
+}
+
+sub newItem {
+    my ($env, $Record_ID, $item) = @_;
+    my $barcode=$item->{'barcode'};
+    my $dateaccessioned=$item->{'dateaccessioned'};
+    my $booksellerid=$item->{'booksellerid'};
+    my $homebranch=$item->{'homebranch'};
+    my $holdingbranch=$item->{'holdingbranch'};
+    my $price=$item->{'price'};
+    my $replacementprice=$item->{'replacementprice'};
+    my $replacementpricedate=$item->{'replacementpricedate'};
+    my $notforloan=$item->{'notforloan'};
+    my $itemlost=$item->{'itemlost'};
+    my $wthdrawn=$item->{'wthdrawn'};
+    my $restricted=$item->{'restricted'};
+    my $itemnotes=$item->{'itemnotes'};
+    my $itemtype=$item->{'itemtype'};
+    my $subclass=$item->{'subclass'};
+    my $subfields;
+    $subfields->{1}->{'Subfield_Mark'}='p';
+    $subfields->{1}->{'Subfield_Value'}=$barcode;
+    $subfields->{2}->{'Subfield_Mark'}='d';
+    $subfields->{2}->{'Subfield_Value'}=$dateaccessioned;
+    $subfields->{3}->{'Subfield_Mark'}='e';
+    $subfields->{3}->{'Subfield_Value'}=$booksellerid;
+    $subfields->{4}->{'Subfield_Mark'}='b';
+    $subfields->{4}->{'Subfield_Value'}=$homebranch;
+    $subfields->{5}->{'Subfield_Mark'}='l';
+    $subfields->{5}->{'Subfield_Value'}=$holdingbranch;
+    $subfields->{6}->{'Subfield_Mark'}='c';
+    $subfields->{6}->{'Subfield_Value'}=$price;
+    $subfields->{7}->{'Subfield_Mark'}='c';
+    $subfields->{7}->{'Subfield_Value'}=$replacementprice;
+    $subfields->{8}->{'Subfield_Mark'}='d';
+    $subfields->{8}->{'Subfield_Value'}=$replacementpricedate;
+    if ($notforloan) {
+	$subfields->{9}->{'Subfield_Mark'}='h';
+	$subfields->{9}->{'Subfield_Value'}='Not for loan';
+    }
+    if ($notforloan) {
+	$subfields->{10}->{'Subfield_Mark'}='j';
+	$subfields->{10}->{'Subfield_Value'}='Item lost';
+    }
+    if ($notforloan) {
+	$subfields->{11}->{'Subfield_Mark'}='j';
+	$subfields->{11}->{'Subfield_Value'}='Item withdrawn';
+    }
+    if ($notforloan) {
+	$subfields->{12}->{'Subfield_Mark'}='z';
+	$subfields->{12}->{'Subfield_Value'}=$itemnotes;
+    }
+    my $tag='876';
+    my $Tag_ID;
+    $env->{'linkage'}=1;
+    ($env, $Tag_ID) = addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+    $env->{'linkage'}=0;
+    $env->{'linkid'}=$Tag_ID;
+    $tag='852';
+    my $subfields2;
+    $subfields2->{1}->{'Subfield_Mark'}='a';
+    $subfields2->{1}->{'Subfield_Value'}='Coast Mountains School District';
+    $subfields2->{1}->{'Subfield_Mark'}='b';
+    $subfields2->{1}->{'Subfield_Value'}=$homebranch;
+    $subfields2->{1}->{'Subfield_Mark'}='c';
+    $subfields2->{1}->{'Subfield_Value'}=$itemtype;
+    $subfields2->{2}->{'Subfield_Mark'}='m';
+    $subfields2->{2}->{'Subfield_Value'}=$subclass;
+    addTag($env, $Record_ID, $tag, ' ', ' ', $subfields2);
+    $env->{'linkid'}='';
+}
+
+END { }       # module clean-up code here (global destructor)
