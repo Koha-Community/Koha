@@ -86,6 +86,7 @@ for (my $i=0;$i<$count;$i++){
 	$line{rrp} = $results[$i]->{'rrp'};
 	$line{ecost} = $results[$i]->{'ecost'};
 	$line{quantity} = $results[$i]->{'quantity'};
+	$line{quantityrecieved} = $results[$i]->{'quantityreceived'};
 	$line{line_total} = $line_total;
 	$line{biblionumber} = $results[$i]->{'biblionumber'};
 	push @books_loop, \%line;
