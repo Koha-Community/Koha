@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: default_opac_pl_PL\n"
-"POT-Creation-Date: 2004-02-25 21:40+0100\n"
-"PO-Revision-Date: 2004-02-26 11:42+0100\n"
+"POT-Creation-Date: 2004-02-28 14:09+0100\n"
+"PO-Revision-Date: 2004-02-28 14:26+0100\n"
 "Last-Translator: Benedict P. Barszcz <kb2qzv@localhost.localdomain>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,36 +15,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.2\n"
 
+#. %1$p: type=radio name=ttype value=normal
+#. %2$p: type=radio name=ttype value=exact
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
+#, c-format
+msgid "%pNormal%pExact"
+msgstr "%pZwykłe%pDokładne"
+
+#. %1$s: TMPL_VAR name=firstname
+#. %2$s: TMPL_VAR name=surname
+#. %3$s: TMPL_VAR name=title
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:11
 #, c-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
+#. %1$s: TMPL_VAR name=phone
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:13
 #, c-format
 msgid "%s (hm)"
-msgstr ""
+msgstr "%s (dom)"
 
+#. %1$s: TMPL_VAR name=faxnumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:14
 #, c-format
 msgid "%s (wk)"
-msgstr ""
+msgstr "%s (praca)"
 
+#. %1$s: TMPL_VAR name=CGIitemtype
+#. %2$S: type=text name=duration
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:105
 #, c-format
-msgid "%s <b>acquired in the last"
-msgstr "%s <b>nabyta w ostatnich"
+msgid "%s <b>acquired in the last %S days</b>"
+msgstr "%s <b>nabyta w ostatnich %S dniach</b>"
 
+#. %1$s: TMPL_VAR name=biblioitemnumber
+#. %2$s: TMPL_VAR name=description
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:20
+#, c-format
+msgid "%s GROUP - %s"
+msgstr "%s GRUPA - %s"
+
+#. %1$s: TMPL_VAR name=itemtype
+#. %2$s: TMPL_VAR name=duration
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:9
 #, c-format
 msgid "%s acquired in the last <i>%s</i> days"
 msgstr "%s nabyta w ostatnich <i>%s</i> dniach"
 
+#. %1$s: TMPL_VAR name=numrecords
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:15
 #, c-format
 msgid "%s results found"
 msgstr "znaleziono %s rekordów"
 
+#. %1$s: TMPL_VAR name=streetaddress
+#. %2$s: TMPL_VAR name=city
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:12
 #, c-format
 msgid "%s, %s"
@@ -54,161 +80,190 @@ msgstr "%s, %s"
 msgid "&copy;"
 msgstr "&copy;"
 
+#. %1$s: TMPL_VAR name=SUBJECTS
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:34
 #, c-format
 msgid ": <a1>%s</a>"
 msgstr ": <a1>%s</a>"
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:20
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
 #, c-format
-msgid "<B>%s GROUP - %s </b>"
-msgstr "<B>%s GRUPA - %s </b>"
+msgid "<a1>Log In</a> to Koha"
+msgstr "<a1>Zaloguj</a> do Koha"
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:56
-#, c-format
-msgid "<B>BARCODE %s</b>"
-msgstr "<B>KOD PASKOWY %s</b>"
-
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=biblionumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:15
 #, c-format
 msgid "<b>%s</b> ( record %s )"
 msgstr "<b>%s</b> ( rekord %s )"
 
+#. %1$s: TMPL_VAR name=dateaccessioned
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
 #, c-format
 msgid "<b><a1> Accession</a> Date:%s"
 msgstr "<b><a1> Nabyto</a> Dnia:%s"
 
+#. %1$s: TMPL_VAR name=issues
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:87
 #, c-format
 msgid "<b><a1>Total Issues:</a></b> %s"
 msgstr "<b><a1>Razem Wypożyczeń:</a></b> %s"
 
+#. %1$s: TMPL_VAR name=additional
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:24
 #, c-format
 msgid "<b>Additional Author:</b>%s"
 msgstr "<b>Dodatkowy Autor:</b>%s"
 
+#. %1$s: TMPL_VAR name=author
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:23
 #, c-format
 msgid "<b>Author:</b> <a1>%s</a>"
 msgstr "<b>Autor:</b> <a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=biblionumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:91
 #, c-format
 msgid "<b>Biblio number:</b> %s"
 msgstr "<b>Numer Biblio:</b> %s"
 
+#. %1$s: TMPL_VAR name=biblionumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:30
 #, c-format
 msgid "<b>Biblionumber:</b> %s"
 msgstr "<b>Numerbiblio:</b> %s"
 
+#. %1$s: TMPL_VAR name=wthdrawn
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:86
 #, c-format
 msgid "<b>Cancelled: %s"
 msgstr "<b>Anulowano: %s"
 
+#. %1$s: TMPL_VAR name=classification
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:44
 #, c-format
 msgid "<b>Classification:</b> %s"
 msgstr "<b>Klasyfikacja:</b> %s"
 
+#. %1$s: TMPL_VAR name=classification
+#. %2$s: TMPL_VAR name=dewey
+#. %3$s: TMPL_VAR name=subclass
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:35
 #, c-format
 msgid "<b>Classification:</b> %s%s%s"
 msgstr "<b>Klasyfikacja:</b> %s%s%s"
 
+#. %1$s: TMPL_VAR name=seriestitle
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:29
 #, c-format
 msgid "<b>Collection:</b> %s"
 msgstr "<b>Kolekcja:</b> %s"
 
+#. %1$s: TMPL_VAR name=holdingbranch
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:77
 #, c-format
 msgid "<b>Current Branch:</b> %s"
 msgstr "<b>Obecny Oddział:</b> %s"
 
+#. %1$s: TMPL_VAR name=publicationyear
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:39
 #, c-format
 msgid "<b>Date:</b> %s"
 msgstr "<b>Data:</b> %s"
 
+#. %1$s: TMPL_VAR name=dewey
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:43
 #, c-format
 msgid "<b>Dewey:</b> <a1>%s</a>"
 msgstr "<b>Dewey:</b> <a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=biblioitemnumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:90
 #, c-format
 msgid "<b>Group Number:</b> %s"
 msgstr "<b>Numer Grupy:</b> %s"
 
+#. %1$s: TMPL_VAR name=homebranch
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:71
 #, c-format
 msgid "<b>Home Branch:</b> %s"
 msgstr "<b>Oddział Właściwy:</b> %s"
 
+#. %1$s: TMPL_VAR name=isbn
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:36
 #, c-format
 msgid "<b>ISBN:</b> %s"
 msgstr "<b>ISBN:</b> %s"
 
+#. %1$s: TMPL_VAR name=ISBN
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:21
 #, c-format
 msgid "<b>ISBN:</b> <a1>%s</a>"
 msgstr "<b>ISBN:</b> <a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=illus
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:42
 #, c-format
 msgid "<b>Illus:</b> %s"
 msgstr "<b>Ilus:</b> %s"
 
+#. %1$s: TMPL_VAR name=itemtype
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:31
 #, c-format
 msgid "<b>Item Type:</b> %s"
 msgstr "<b>Typ Pozycji:</b> %s"
 
+#. %1$s: TMPL_VAR name=itemlost
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:79
 #, c-format
 msgid "<b>Item lost:</b> %s"
 msgstr "<b>Zagubiona:</b> %s"
 
+#. %1$s: TMPL_VAR name=lccn
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:45
 #, c-format
 msgid "<b>LCCN:</b> %s"
 msgstr "<b>LCCN:</b> %s"
 
+#. %1$s: TMPL_VAR name=card0
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:75
 #, c-format
 msgid "<b>Last Borrower 1:</b> %s"
 msgstr "<b>Ostatni Czytelnik 1:</b> %s"
 
+#. %1$s: TMPL_VAR name=card1
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:76
 #, c-format
 msgid "<b>Last Borrower 2:</b> %s"
 msgstr "<b>Ostatni Czytelnik 2:</b> %s"
 
+#. %1$s: TMPL_VAR name=timestamp0
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:73
 #, c-format
 msgid "<b>Last borrowed:</b> %s"
 msgstr "<b>Ostatnio Pożyczono:</b> %s"
 
+#. %1$s: TMPL_VAR name=datelastseen
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:72
 #, c-format
 msgid "<b>Last seen:</b> %s"
 msgstr "<b>Ostatnio oglądano:</b> %s"
 
+#. %1$s: TMPL_VAR name=loanlength
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:33
 #, c-format
 msgid "<b>Loan Length:</b> %s"
 msgstr "<b>Okres Wynajmu:</b> %s"
 
+#. %1$s: TMPL_VAR name=count
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:45
 #, c-format
 msgid "<b>No. of Items:</b> %s"
 msgstr "<b>Liczba Pozycji:</b> %s"
 
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=notes
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:40
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:44
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:81
@@ -216,116 +271,127 @@ msgstr "<b>Liczba Pozycji:</b> %s"
 msgid "<b>Notes:</b> %s"
 msgstr "<b>Uwagi:</b> %s"
 
+#. %1$s: TMPL_VAR name=pages
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:41
 #, c-format
 msgid "<b>Pages:</b> %s"
 msgstr "<b>Strony:</b> %s"
 
+#. %1$s: TMPL_VAR name=paidfor
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:80
 #, c-format
 msgid "<b>Paid for:</b> %s"
 msgstr "<b>Opłacono przez:</b> %s"
 
+#. %1$s: TMPL_VAR name=place
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:38
 #, c-format
 msgid "<b>Place:</b> %s"
 msgstr "<b>Miejsce:</b> %s"
 
+#. %1$s: TMPL_VAR name=publishercode
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:25
 #, c-format
 msgid "<b>Published by :</b>%s"
 msgstr "<b>Wydana przez :</b>%s"
 
+#. %1$s: TMPL_VAR name=publishercode
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:37
 #, c-format
 msgid "<b>Publisher:</b> %s"
 msgstr "<b>Wydawca:</b> %s"
 
+#. %1$s: TMPL_VAR name=renewals
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:82
 #, c-format
 msgid "<b>Renewals:</b> %s"
 msgstr "<b>Przedłużenia:</b> %s"
 
+#. %1$s: TMPL_VAR name=rentalcharge
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:34
 #, c-format
 msgid "<b>Rental Charge:</b> %s"
 msgstr "<b>Opłata Wynajmu:</b> %s"
 
+#. %1$s: TMPL_VAR name=replacementprice
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:78
 #, c-format
 msgid "<b>Replacement Price:</b> %s"
 msgstr "<b>Cena Wymiany:</b> %s"
 
+#. %1$s: TMPL_VAR name=serial
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:42
 #, c-format
 msgid "<b>Serial:</b>%s"
 msgstr "<b>Seria:</b>%s"
 
+#. %1$s: TMPL_VAR name=size
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:43
 #, c-format
 msgid "<b>Size:</b> %s"
 msgstr "<b>Wymiar:</b> %s"
 
+#. %1$s: TMPL_VAR name=subtitle
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:22
 #, c-format
 msgid "<b>Subtitle:</b>%s"
 msgstr "<b>Podtytuł:</b>%s"
 
+#. %1$s: TMPL_VAR name=count
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:47
 #, c-format
 msgid "<b>Total Number of Items:</b> %s"
 msgstr "<b>Pozycji Razem:</b> %s"
 
+#. %1$s: TMPL_VAR name=url
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:32
 #, c-format
 msgid "<b>URL:</b> %s"
 msgstr "<b>URL:</b> %s"
 
+#. %1$s: TMPL_VAR name=url
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:46
 #, c-format
 msgid "<b>URL:</b> <a1>%s</a>"
 msgstr "<b>URL:</b> <a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=unititle
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:41
 #, c-format
 msgid "<b>Unititle:</b> %s"
 msgstr "<b>Tytuł Ujednolic.:</b> %s"
 
+#. %1$s: TMPL_VAR name=volumeddesc
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:40
 #, c-format
 msgid "<b>Volume:</b> %s"
 msgstr "<b>Tom:</b> %s"
 
+#. %1$s: TMPL_VAR name=copyrightdate
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:39
 #, c-format
 msgid "<b>Year :</b> %s"
 msgstr "<b>Rok :</b> %s"
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:51
-#, c-format
-msgid "<b>You have a credit of %s</b>"
-msgstr "<b>Kredyt w wys. %s</b>"
-
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:28
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:39
-#, c-format
-msgid "<b>You have outstanding charges and fines of %s</b>"
-msgstr "<b>Zaległe opłaty i kary w wys. %s</b>"
-
+#. %1$s: TMPL_VAR name=publicationyear
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:26
 #, c-format
 msgid "<b>in </b>%s"
 msgstr "<b>w </b>%s"
 
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:9
 #, c-format
 msgid "<em><a1>%s (%s)</a></em>"
 msgstr "<em><a1>%s (%s)</a></em>"
 
+#. %1$s: TMPL_VAR name=firstname
+#. %2$s: TMPL_VAR name=surname
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:4
 #, c-format
 msgid "<em>Account for %s %s</em>"
-msgstr "<em>Rachunek Dla %s %s</em>"
+msgstr "<em>Rachunek dla %s %s</em>"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:10
 msgid "AMOUNT"
@@ -369,6 +435,12 @@ msgstr "Autor"
 msgid "Available"
 msgstr "Dostępna"
 
+#. %1$s: TMPL_VAR name=barcode
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:56
+#, c-format
+msgid "BARCODE %s"
+msgstr "KOD PASKOWY %s"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:59
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:53
 msgid "Barcode"
@@ -398,6 +470,7 @@ msgstr "Miasto"
 msgid "Class"
 msgstr "Typ"
 
+#. INPUT type=reset
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:59
 msgid "Clear All Fields"
 msgstr "Wyczyść Pola"
@@ -411,8 +484,9 @@ msgid "Copies"
 msgstr "Egzempl"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:98
+#,fuzzy
 msgid "Current Loan"
-msgstr ""
+msgstr "Bieżące wypożyczenie"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:57
 msgid "Date Due"
@@ -447,10 +521,6 @@ msgstr "Email"
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:64
 msgid "End reserve on this date:"
 msgstr "Dzień porzucenia rezerwacji:"
-
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
-msgid "Exact"
-msgstr "Dokładne"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:9
 msgid "FINES &amp; CHARGES"
@@ -505,6 +575,7 @@ msgstr "Sty"
 msgid "Join"
 msgstr "Zapisy"
 
+#. A
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:28
 msgid "Join the library"
 msgstr "Zapisz się do biblioteki"
@@ -547,6 +618,7 @@ msgstr "Wstęp do Systemu"
 msgid "Last Seen"
 msgstr "Ostatnio Oglądane"
 
+#. %1$s: TMPL_VAR name=cardnumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:10
 #, c-format
 msgid "Library Card: %s"
@@ -557,8 +629,8 @@ msgstr "Karta Biblioteczna: %s"
 msgid "Location"
 msgstr "Miejsce"
 
+#. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:35
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
 msgid "Log In"
 msgstr "Zaloguj"
 
@@ -566,6 +638,8 @@ msgstr "Zaloguj"
 msgid "Log In to Koha"
 msgstr "Zaloguj do Koha"
 
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=loggedinuser
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:117
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:44
 #, c-format
@@ -587,6 +661,7 @@ msgstr "Maj"
 msgid "Month"
 msgstr "Miesiąc"
 
+#. IMG
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:33
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/subject.tmpl:30
 msgid "Next Page"
@@ -605,20 +680,19 @@ msgstr "Nie"
 msgid "Non-Fiction"
 msgstr "Nie-Fikcja"
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
-msgid "Normal"
-msgstr "Zwykłe"
-
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:89
 msgid "Not Reservable"
 msgstr "Nierezerwowalne"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:63
-msgid "Note that if you enter a value in Keyword and a value somewhere else, only keyword will be used"
+msgid ""
+"Note that if you enter a value in Keyword and a value somewhere else, only "
+"keyword will be used"
 msgstr ""
-"Uwaga, jeśli wprowadzisz wartość do Słowa-kluczowe oraz inną w pozostałych polach "
-"to użyta zostanie jedynie wartość w Słowa-kluczowe"
+"Uwaga, jeśli wprowadzisz wartość do Słowa-kluczowe oraz inną w pozostałych "
+"polach to użyta zostanie jedynie wartość w Słowa-kluczowe"
 
+#. %1$s: TMPL_VAR name=fee
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:105
 #, c-format
 msgid "Note there will be a reserve charge of <b>$%s</b>"
@@ -629,10 +703,12 @@ msgstr "Uwaga, pobrana zostanie opłata rezerwacyjna w wys. <b>$%s</b>"
 msgid "Nov"
 msgstr "Lis"
 
+#. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:106
 msgid "OK"
 msgstr "OK"
 
+#. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:58
 msgid "OK Start Search"
 msgstr "OK Rozpocznij Szukanie"
@@ -662,6 +738,7 @@ msgstr "Hasło:"
 msgid "Pick Up Branch"
 msgstr "Oddział Odbioru"
 
+#. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:107
 msgid "Place Reserve"
 msgstr "Rezerwuj"
@@ -674,15 +751,21 @@ msgstr "Prosimy nanieść poprawki. Biblioteka otrzyma powiadomienie e-mailem."
 msgid "Please confirm that you wish to request an item of these types:"
 msgstr "Prosimy potwierdzić chęć rezerwacji następujących typów pozycji:"
 
+#. %1$s: TMPL_VAR name=CGIbranch
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:44
 #, c-format
 msgid "Please select the branch from which you want to collect the item: %s"
 msgstr "Prosimy wybrać oddział, gdzie zostanie odebrana pozycja: %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:20
-msgid "Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you."
-msgstr "Wybierz typ pozycji, która Ci odpowiada. Pierwszy z zaznaczonych typów, który stanie sie dostępny zostanie dla Ciebie zatrzymany."
+msgid ""
+"Please select which item types are ok for you. The first of these item that "
+"matches one of these types that becomes available will be set kept for you."
+msgstr ""
+"Wybierz typ pozycji, która Ci odpowiada. Pierwszy z zaznaczonych typów, "
+"który stanie sie dostępny zostanie dla Ciebie zatrzymany."
 
+#. IMG
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:21
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/subject.tmpl:18
 msgid "Previous Page"
@@ -715,16 +798,25 @@ msgstr "Data Rezerwacji"
 msgid "Reserve on this date:"
 msgstr "Dzień złożenie rezerwacji:"
 
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
+#. %3$s: TMPL_VAR name=biblionumber
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:18
 #, c-format
 msgid "Reserve page for item: <b>%s (%s %s)</b>"
 msgstr "Strona rezerwacji dla: <b>%s (%s %s)</b>"
 
+#. %1$s: TMPL_VAR name=startfrom
+#. %2$s: TMPL_VAR name=endat
+#. %3$s: TMPL_VAR name=numrecords
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/subject.tmpl:15
 #, c-format
 msgid "Results %s through %s of %s records."
 msgstr "Wyświetlono od %s do %s z %s rekordów."
 
+#. %1$s: TMPL_VAR name=startfrom
+#. %2$s: TMPL_VAR name=endat
+#. %3$s: TMPL_VAR name=numrecords
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:122
 #, c-format
 msgid "Results <i>%s</i> through <i>%s</i> of <i>%s</i> records."
@@ -760,11 +852,13 @@ msgstr "Niestety, nie masz uprawnień do tej strony."
 msgid "Sorry, there were no results"
 msgstr "Niestety, nic nie znaleziono"
 
+#. %1$s: TMPL_VAR name=too_many_reserves
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:10
 #, c-format
 msgid "Sorry, you cannot make more than %s reserves."
 msgstr "Przepraszamy, nie można mieć więcej jak %s rezerwacji."
 
+#. %1$s: TMPL_VAR name=too_much_oweing
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:9
 #, c-format
 msgid "Sorry, you cannot make reserves because you owe %s."
@@ -788,6 +882,7 @@ msgstr "Przedmiot"
 msgid "Subject(s):"
 msgstr "Przedmiot(y):"
 
+#. INPUT type=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:79
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:39
 msgid "Submit"
@@ -801,10 +896,11 @@ msgstr "Nazwisko"
 msgid "Teacher Reference"
 msgstr ""
 
+#. %1$s: TMPL_VAR name=reservecount
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:19
 #, c-format
 msgid "There are <b>%s</b> reserves already on this item."
-msgstr "Złożono już <b>%s<b> rezerwacje na tę pozycję."
+msgstr "Złożono już <b>%s</b> rezerwacje na tę pozycję."
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:25
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:68
@@ -844,6 +940,7 @@ msgstr "ZAPRASZAMY DO KATALOGU OPAC"
 msgid "Website"
 msgstr "Witryna"
 
+#. %1$s: TMPL_VAR name=branchname
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:102
 #, c-format
 msgid "Which is to be picked up from <b>%s</b>."
@@ -879,19 +976,35 @@ msgstr "Nie podałeś kryteriów wyszukiwania"
 msgid "You entered an incorrect username or password, please try again."
 msgstr "Wprowadziłeś nieprawidłowe hasło lub uzytkownika, spróbuj raz jeszcze."
 
+#. %1$s: TMPL_VAR name=issues_count
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:90
 #, c-format
 msgid "You have %s items currently issued."
 msgstr "Posiadasz %s wypożyczone pozycje."
 
+#. %1$s: TMPL_VAR name=reserves_count
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:117
 #, c-format
 msgid "You have %s items currently reserved."
 msgstr "Masz %s zarezerwowane pozycje."
 
+#. %1$s: TMPL_VAR name=amountoutstanding
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:51
+#, c-format
+msgid "You have a credit of %s"
+msgstr "Posiadasz kredyt na %s"
+
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:112
 msgid "You have no items on issue."
 msgstr "Nie masz wypożyczonych pozycji."
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=amountoutstanding
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:28
+#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:39
+#, c-format
+msgid "You have outstanding charges and fines of %s"
+msgstr "Posiadasz zaległe opłaty i kary na %s"
 
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:66
 msgid "You have reserved items waiting:"
@@ -905,6 +1018,7 @@ msgstr "Musisz wybrać oddział odbioru!"
 msgid "You must select at least one item type!"
 msgstr "Musisz wybrać przynajmniej jeden typ pozycji!"
 
+#. %1$s: TMPL_VAR name=searchdesc
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:6
 #, c-format
 msgid "You searched on <b>%s</b>"
@@ -918,19 +1032,18 @@ msgstr ""
 msgid "Your changes won't appear until the library has validated them."
 msgstr "Zmiany ukażą się po przejrzeniu ich przez bibliotekę."
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:105
-msgid "days"
-msgstr "dniach"
-
+#. INPUT type=image name=delete
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:27
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:68
 msgid "delete"
 msgstr "wymaż"
 
+#. A
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:33
 msgid "home page"
 msgstr "strona domowa"
 
+#. INPUT type=image name=submit
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:25
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:66
 msgid "modify"
@@ -940,12 +1053,21 @@ msgstr "zmień"
 msgid "on issue bit"
 msgstr ""
 
+#. META http-equiv=Content-Type
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:4
 #: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:6
 msgid "text/html; charset=iso-8859-1"
 msgstr "text/html; charset=utf-8"
 
-#: /home/kb2qzv/CVS-Cervisia/koha/koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
-msgid "to Koha"
-msgstr "do Koha"
+#~ msgid "Exact"
+#~ msgstr "Dokładne"
+
+#~ msgid "Normal"
+#~ msgstr "Zwykłe"
+
+#~ msgid "days"
+#~ msgstr "dniach"
+
+#~ msgid "to Koha"
+#~ msgstr "do Koha"
 
