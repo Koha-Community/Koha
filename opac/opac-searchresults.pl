@@ -8,7 +8,10 @@ use C4::Output; # now contains gettemplate
 
 my $query=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1, $flagsrequired);
 
 
 my $template = gettemplate ("opac-searchresults.tmpl", "opac");
@@ -59,8 +62,7 @@ my $count;
 my $startfrom = $query->param('startfrom');
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
-    my $blah;
-    @results = subsearch(\$blah,$subjectitems, $num, $startfrom);
+    @results = subsearch($env,$subjectitems, $num, $startfrom);
     $count = $#results+1;
 } else {
     ($count, @results) = catalogsearch($env,'',\%search,$num,$startfrom);

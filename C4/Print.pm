@@ -22,6 +22,9 @@ use strict;
 require Exporter;
 #use C4::InterfaceCDK;
 
+use C4::Context;
+
+
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -46,7 +49,7 @@ The functions in this module handle sending text to a printer.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&remoteprint &printslip);
+@EXPORT = qw(&remoteprint &printreserve &printslip);
 
 =item remoteprint
 
@@ -71,10 +74,8 @@ from C<&currentissues>.
 # FIXME - It'd be nifty if this could generate pretty PostScript.
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
-  #open (FILE,">/tmp/olwen");
-  #print FILE "queue $env->{'queue'}";
-  #close FILE;
-  #debug_msg($env,"In print");
+
+  (return) unless (C4::Context->preference('printcirculationslips'));
   my $file=time;		# FIXME - Not used
   my $queue = $env->{'queue'};
   # FIXME - If 'queue' is undefined or empty, then presumably it should
@@ -91,7 +92,7 @@ sub remoteprint {
     # This is a reasonable assumption, but only because every other
     # printing package has a wrapper script called 'lpr'. It'd still
     # be better to be able to customize this.
-    open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$queue!\n";
+    open(PRINTER, "| lpr -P $queue > /dev/null") or die "Couldn't write to queue:$queue!\n";
   }
 #  print $queue;
   #open (FILE,">/tmp/$file");
@@ -126,6 +127,47 @@ sub remoteprint {
   #system("lpr /tmp/$file");
 }
 
+sub printreserve {
+  my($env, $branchname, $bordata, $itemdata)=@_;
+  my $file=time;
+  my $printer = $env->{'printer'};
+  (return) unless (C4::Context->preference('printreserveslips'));
+  if ($printer eq "" || $printer eq 'nulllp') {
+    open (PRINTER,">>/tmp/kohares");
+  } else {
+    open (PRINTER, "| lpr -P $printer >/dev/null") or die "Couldn't write to queue:$!\n";
+  }
+  my @da = localtime(time());
+  my $todaysdate = "$da[2]:$da[1]  $da[3]/$da[4]/$da[5]";
+
+#(1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", $datearr[3]);
+  my $slip = <<"EOF";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Date: $todaysdate;
+
+ITEM RESERVED: 
+$itemdata->{'title'} ($itemdata->{'author'})
+barcode: $itemdata->{'barcode'}
+
+COLLECT AT: $branchname
+
+BORROWER:
+$bordata->{'surname'}, $bordata->{'firstname'}
+card number: $bordata->{'cardnumber'}
+Phone: $bordata->{'phone'}
+$bordata->{'streetaddress'}
+$bordata->{'suburb'}
+$bordata->{'town'}
+$bordata->{'emailaddress'}
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+EOF
+    print PRINTER $slip;
+  close PRINTER;
+  return $slip;
+}
+
 =item printslip
 
   &printslip($env, $text)
@@ -142,10 +184,11 @@ will print to the file F</tmp/kohares>.
 sub printslip {
   my($env, $slip)=@_;
   my $printer = $env->{'printer'};
+  (return) unless (C4::Context->preference('printcirculationslips'));
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">/tmp/kohares");
   } else {
-    open (PRINTER, "| lpr -P $printer") or die "Couldn't write to queue:$!\n";
+    open (PRINTER, "| lpr -P $printer >/dev/null") or die "Couldn't write to queue:$!\n";
   }
   print PRINTER $slip;
   close PRINTER;
