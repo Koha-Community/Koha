@@ -27,12 +27,11 @@ while (<KC>) {
  }
 }
 
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
-my $templatebase="opac/opac-main.tmpl";
-my $theme=picktemplate($includes, $templatebase);
+my $htdocs=$configfile{'opachtdocs'};
+my $templatebase="opac-main.tmpl";
+my ($theme, $lang)=themelanguage($htdocs, $templatebase);
 
-my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+my $template = HTML::Template->new(filename => "$htdocs/$theme/$lang/$templatebase", die_on_bad_params => 0, path => ["$htdocs/includes"]);
 
 #$template->param(SITE_RESULTS => $sitearray);
 print "Content-Type: text/html\n\n", $template->output;
