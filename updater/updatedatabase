@@ -1168,6 +1168,7 @@ if ($marc_word{subfieldid}) {
 	$dbh->do("update marc_word set tagsubfield=concat(tag,subfieldid)");
 	$dbh->do("alter table marc_word drop tag");
 	$dbh->do("alter table marc_word drop subfieldid");
+	$dbh->do("create index Search_Marc on marc_word (tagsubfield,word)");
 }
 # Populate tables with required data
 
@@ -1220,6 +1221,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.85  2004/06/17 15:19:44  tipaul
+# missing Marc_Search index on marc_word
+#
 # Revision 1.84  2004/06/17 08:25:21  tipaul
 # DB modifs : merging tag & subfield in marc_word table
 #
