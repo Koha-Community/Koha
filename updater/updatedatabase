@@ -793,6 +793,28 @@ my %tabledata = (
 	    type		=> 'Choice',
 	    options		=> 'normal|marc|isbd'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'MIME',
+            value               => 'OPENOFFICE.ORG',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default application for report exportations into files',
+	    type		=> 'Choice',
+	    options		=> 'EXCEL|OPENOFFICE.ORG'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Delimiter',
+            value               => ';',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1,
+				     'options' => 1},
+            explanation         => 'Define the default separator character for report exportations into files',
+	    type		=> 'Choice',
+	    options		=> ';|tabulation|,|/|\|#'
+        },
     ],
 
 );
@@ -1378,6 +1400,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.101  2005/02/24 11:28:35  hdl
+# Adding MIME and delimiter support to system preferences
+#
 # Revision 1.100  2004/12/10 16:11:32  tipaul
 # Improvement : adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
 #
