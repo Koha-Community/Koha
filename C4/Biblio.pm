@@ -298,13 +298,6 @@ sub MARCfind_marc_from_kohafield {
     return 0, 0 unless $kohafield;
 	my $relations = C4::Context->marcfromkohafield;
 	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
-#     my $sth =
-#       $dbh->prepare(
-# "select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-#     );
-#     $sth->execute($frameworkcode,$kohafield);
-#     my ( $tagfield, $tagsubfield ) = $sth->fetchrow;
-#     return ( $tagfield, $tagsubfield );
 }
 
 sub MARCfind_oldbiblionumber_from_MARCbibid {
@@ -710,37 +703,9 @@ sub MARCdelitem {
 
 sub MARCmoditem {
 	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
-
-	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
-	# if nothing to change, don't waste time...
-	if ($oldrecord eq $record) {
-		return;
-	}
-	# otherwise, skip through each subfield...
-	my @fields = $record->fields();
-	# search old MARC item
-	my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
-	$sth2->execute($bibid,$itemnumber);
-	my ($tagorder) = $sth2->fetchrow_array();
-	foreach my $field (@fields) {
-		my $oldfield = $oldrecord->field($field->tag());
-		my @subfields=$field->subfields();
-		my $subfieldorder=0;
-		foreach my $subfield (@subfields) {
-			$subfieldorder++;
-			if ($oldfield eq 0 or (length($oldfield->subfield(@$subfield[0])) ==0) ) {
-		# just adding datas...
-				&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
-						$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
-			} else {
-		# modify he subfield if it's a different string
-				if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
-					my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-					&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
-				}
-			}
-		}
-	}
+	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	&MARCdelitem($dbh,$bibid,$itemnumber);
+	&MARCadditem($dbh,$record,$biblionumber);
 }
 
 sub MARCmodsubfield {
@@ -2653,6 +2618,12 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.6  2005/03/09 15:56:01  tipaul
+# Changing MARCmoditem to be like MARCmodbiblio : a modif is a delete & create.
+# Longer, but solves problems with repeated subfields.
+#
+# The previous version was not buggy except under certain circumstances (a repeated subfield, that does not exist usually in items)
+#
 # Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
 # exporting MARCdelsubfield sub. It's used in authority merging.
 # Modifying it too to enable deletion of all subfields from a given tag/subfield or just one.
