@@ -100,7 +100,7 @@ sub  ImportBreeding {
 				if ($oldbiblio->{isbn}) {
 					$searchbreeding->execute($oldbiblio->{isbn});
 					($breedingid) = $searchbreeding->fetchrow;
-				} else {
+				} elsif ($oldbiblio->{issn}){
 					$searchbreeding->execute($oldbiblio->{issn});
 					($breedingid) = $searchbreeding->fetchrow;
 				}
