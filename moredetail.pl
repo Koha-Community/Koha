@@ -84,20 +84,19 @@ foreach my $item (@items){
     $item->{'withdrawn'}=~ s/0/No/;
     $item->{'withdrawn'}=~ s/1/Yes/;
     $item->{'replacementprice'}+=0.00;
-    my $year=substr($item->{'timestamp0'},0,4);
-    my $mon=substr($item->{'timestamp0'},4,2);
-    my $day=substr($item->{'timestamp0'},6,2);
-    $item->{'timestamp0'}="$day/$mon/$year";
+    $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
     $item->{'datelastseen'} = format_date($item->{'datelastseen'});
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
-    # FIXME untranslatable strings
     if ($item->{'date_due'} eq 'Available'){
-	$item->{'issue'}="<b>Available</b><br>";
+		$item->{'issue'}= 0;
     } else {
-	$item->{'issue'}="<b>Currently on issue to:</b> <a href=/cgi-bin/koha/moremember.pl?bornum=$item->{'borrower'}>$item->{'card'}</a><br>";
+		$item->{'date_due'} = format_date($item->{'date_due'});
+		$item->{'issue'}= 1;
+		$item->{'borrowernumber'} = $item->{'borrower'};
+		$item->{'cardnumber'} = $item->{'card'};
     }
 }
 
