@@ -117,7 +117,7 @@ if ( $query->param('resbarcode') ) {
     my $name    =
       $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
     my $slip = $query->param('resslip');
-    printslip( \%env, $slip );
+#    printslip( \%env, $slip ); #removed by paul
 
     if ( $tobranchcd ne $branch ) {
         $template->param(

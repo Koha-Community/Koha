@@ -34,6 +34,7 @@ use C4::Context;
 use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
+use C4::Accounts;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -63,19 +64,19 @@ Also deals with stocktaking.
 @ISA = qw(Exporter);
 @EXPORT = qw(&getpatroninformation
 	&currentissues &getissues &getiteminformation
-	&issuebook &returnbook &find_reserves &transferbook &decode
-	&calc_charges &listitemsforinventory &itemseen);
+	&canbookbeissued &issuebook &returnbook &find_reserves &transferbook &decode
+	&calc_charges &listitemsforinventory &itemseen &fixdate);
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
 =item itemseen
+
 &itemseen($itemnum)
 Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking
 C<$itemnum> is the item number
 
-=back
-
 =cut
+
 sub itemseen {
 	my ($itemnum) = @_;
 	my $dbh = C4::Context->dbh;
@@ -99,10 +100,10 @@ sub listitemsforinventory {
 	}
 	return \@results;
 }
+
 =item getpatroninformation
 
-  ($borrower, $flags) = &getpatroninformation($env, $borrowernumber,
-					$cardnumber);
+  ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, $cardnumber);
 
 Looks up a patron and returns information about him or her. If
 C<$borrowernumber> is true (nonzero), C<&getpatroninformation> looks
@@ -113,17 +114,12 @@ C<$env> is effectively ignored, but should be a reference-to-hash.
 
 C<$borrower> is a reference-to-hash whose keys are the fields of the
 borrowers table in the Koha database. In addition,
-C<$borrower-E<gt>{flags}> is the same as C<$flags>.
+C<$borrower-E<gt>{flags}> is a hash giving more detailed information
+about the patron. Its keys act as flags :
 
-C<$flags> is a reference-to-hash giving more detailed information
-about the patron. Its keys act as flags: if they are set, then the key
-is a reference-to-hash that gives further details:
-
-  if (exists($flags->{LOST}))
-  {
-	  # Patron's card was reported lost
-	  print $flags->{LOST}{message}, "\n";
-  }
+	if $borrower->{flags}->{LOST} {
+		# Patron's card was reported lost
+	}
 
 Each flag has a C<message> key, giving a human-readable explanation of
 the flag. If the state of a flag means that the patron should not be
@@ -178,6 +174,7 @@ fields from the reserves table of the Koha database.
 =back
 
 =cut
+
 #'
 sub getpatroninformation {
 # returns
@@ -201,7 +198,7 @@ sub getpatroninformation {
 	$borrower->{'amountoutstanding'} = $amount;
 	my $flags = patronflags($env, $borrower, $dbh);
 	my $accessflagshash;
-
+ 
 	$sth=$dbh->prepare("select bit,flag from userflags");
 	$sth->execute;
 	while (my ($bit, $flag) = $sth->fetchrow) {
@@ -211,7 +208,8 @@ sub getpatroninformation {
 	}
 	$sth->finish;
 	$borrower->{'flags'}=$flags;
-	return ($borrower, $flags, $accessflagshash);
+	$borrower->{'authflags'} = $accessflagshash;
+	return ($borrower); #, $flags, $accessflagshash);
 }
 
 =item decode
@@ -222,6 +220,7 @@ Decodes a segment of a string emitted by a CueCat barcode scanner and
 returns it.
 
 =cut
+
 #'
 # FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
 sub decode {
@@ -284,6 +283,7 @@ True if the item may not be borrowed.
 =back
 
 =cut
+
 #'
 sub getiteminformation {
 # returns a hash of item information given either the itemnumber or the barcode
@@ -399,6 +399,7 @@ succeeded. The value should be ignored.
 =back
 
 =cut
+
 #'
 # FIXME - This function tries to do too much, and its API is clumsy.
 # If it didn't also return books, it could be used to change the home
@@ -481,6 +482,189 @@ sub dotransfer {
 	return;
 }
 
+# check if a book can be issued.
+# returns an array with errors if any
+
+sub canbookbeissued {
+	my ($env,$borrower,$barcode,$year,$month,$day) = @_;
+	warn "CHECKING CANBEISSUED for $borrower->{'borrowernumber'}, $barcode";
+	my %needsconfirmation; # filled with problems that needs confirmations
+	my %issuingimpossible; # filled with problems that causes the issue to be IMPOSSIBLE
+# 	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
+	my $iteminformation = getiteminformation($env, 0, $barcode);
+	my $dbh = C4::Context->dbh;
+#
+# DUE DATE is OK ?
+#
+	my ($duedate, $invalidduedate) = fixdate($year, $month, $day);
+	$issuingimpossible{INVALID_DATE} = 1 if ($invalidduedate);
+
+#
+# BORROWER STATUS
+#
+	if ($borrower->{flags}->{'gonenoaddress'}) {
+		$issuingimpossible{GNA} = 1;
+	}
+	if ($borrower->{flags}->{'lost'}) {
+		$issuingimpossible{CARD_LOST} = 1;
+	}
+	if ($borrower->{flags}->{'debarred'}) {
+		$issuingimpossible{DEBARRED} = 1;
+	}
+#
+# BORROWER STATUS
+#
+
+# DEBTS
+	my $amount = checkaccount($env,$borrower->{'borrowernumber'}, $dbh,$duedate);
+	if ($amount >0) {
+		$needsconfirmation{DEBT} = $amount;
+	}
+
+#
+# ITEM CHECKING
+#
+	unless ($iteminformation) {
+		$issuingimpossible{UNKNOWN_BARCODE} = 1;
+	}
+	if ($iteminformation->{'notforloan'} == 1) {
+		$issuingimpossible{NOT_FOR_LOAN} = 1;
+	}
+	if ($iteminformation->{'itemtype'} eq 'REF') {
+		$issuingimpossible{NOT_FOR_LOAN} = 1;
+	}
+	if ($iteminformation->{'wthdrawn'} == 1) {
+		$issuingimpossible{WTHDRAWN} = 1;
+	}
+	if ($iteminformation->{'restricted'} == 1) {
+		$issuingimpossible{RESTRICTED} = 1;
+	}
+
+#
+# CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
+#
+	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
+warn "current borrower  for $iteminformation->{'itemnumber'} : $currentborrower";
+	if ($currentborrower eq $borrower->{'borrowernumber'}) {
+# Already issued to current borrower. Ask whether the loan should
+# be renewed.
+		my ($renewstatus) = renewstatus($env,$dbh,$borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+		if ($renewstatus == 0) { # no more renewals allowed
+			$issuingimpossible{NO_MORE_RENEWALS} = 1;
+		} else {
+			$needsconfirmation{RENEW_ISSUE} = 1;
+		}
+	} elsif ($currentborrower) {
+# issued to someone else
+		$needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+	}
+# See if the item is on reserve.
+	my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
+	if ($restype) {
+		my $resbor = $res->{'borrowernumber'};
+		if ($resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting") {
+			# The item is on reserve and waiting, but has been
+			# reserved by some other patron.
+			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+			my $branches = getbranches();
+			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+			$needsconfirmation{RESERVE_WAITING} = "$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
+		} elsif ($restype eq "Reserved") {
+			# The item is on reserve for someone else.
+			my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+			my $branches = getbranches();
+			my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+			$needsconfirmation{RESERVED} = "$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
+		}
+	}
+	return(\%issuingimpossible,\%needsconfirmation);
+}
+
+#
+# issuing book. We already have checked it can be issued, so, just issue it !
+#
+sub issuebook {
+	my ($env,$borrower,$barcode,$date) = @_;
+warn "1";
+	my $dbh = C4::Context->dbh;
+#	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
+	my $iteminformation = getiteminformation($env, 0, $barcode);
+		warn "B : ".$borrower->{borrowernumber}." / I : ".$iteminformation->{'itemnumber'};
+#
+# check if we just renew the issue.
+#
+	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
+	if ($currentborrower eq $borrower->{'borrowernumber'}) {
+warn "2";
+		my ($charge,$itemtype) = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
+		if ($charge > 0) {
+			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'}, $charge);
+			$iteminformation->{'charge'} = $charge;
+		}
+		&UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$borrower->{'borrowernumber'});
+		renewbook($env,$dbh, $borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+	} else {
+#
+# NOT a renewal
+#
+		if ($currentborrower ne '') {
+warn "3";
+			# This book is currently on loan, but not to the person
+			# who wants to borrow it now. mark it returned before issuing to the new borrower
+			returnbook($iteminformation->{'barcode'}, $env->{'branchcode'});
+		}
+warn "4";
+		# See if the item is on reserve.
+		my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
+		if ($restype) {
+warn "5";
+			my $resbor = $res->{'borrowernumber'};
+			if ($resbor eq $borrower->{'borrowernumber'}) {
+				# The item is on reserve to the current patron
+				FillReserve($res);
+			} elsif ($restype eq "Waiting") {
+				# The item is on reserve and waiting, but has been
+				# reserved by some other patron.
+				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+				my $branches = getbranches();
+				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+				CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+			} elsif ($restype eq "Reserved") {
+				# The item is on reserve for someone else.
+				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
+				my $branches = getbranches();
+				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
+				my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
+				transferbook($tobrcd,$barcode, 1);
+			}
+		}
+		# Record in the database the fact that the book was issued.
+		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values (?,?,?,?)");
+		my $loanlength = $iteminformation->{loanlength} || 21;
+		my $datedue=time+($loanlength)*86400;
+		my @datearr = localtime($datedue);
+		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+		if ($env->{'datedue'}) {
+			$dateduef=$env->{'datedue'};
+		}
+		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
+		$sth->finish;
+		$iteminformation->{'issues'}++;
+		$sth=$dbh->prepare("update items set issues=? where itemnumber=?");
+		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
+		$sth->finish;
+		&itemseen($iteminformation->{'itemnumber'});
+		# If it costs to borrow this book, charge it to the patron's account.
+		my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
+		if ($charge > 0) {
+			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'}, $charge);
+			$iteminformation->{'charge'}=$charge;
+		}
+		# Record the fact that this book was issued.
+		&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$borrower->{'borrowernumber'});
+	}
+}
+
 =item issuebook
 
   ($iteminformation, $datedue, $rejected, $question, $questionnumber,
@@ -561,6 +745,7 @@ C<$message>, if defined, is an additional information message, e.g., a
 rental fee notice.
 
 =cut
+
 #'
 # FIXME - The business with $responses is absurd. For one thing, these
 # questions should have names, not numbers. For another, it'd be
@@ -584,7 +769,7 @@ rental fee notice.
 # Is it this function's place to decide the default answer to the
 # various questions? Why not document the various problems and allow
 # the caller to decide?
-sub issuebook {
+sub issuebook2 {
 	my ($env, $patroninformation, $barcode, $responses, $date) = @_;
 	my $dbh = C4::Context->dbh;
 	my $iteminformation = getiteminformation($env, 0, $barcode);
@@ -860,6 +1045,7 @@ C<$borrower> is a reference-to-hash, giving information about the
 patron who last borrowed the book.
 
 =cut
+
 #'
 # FIXME - This API is bogus. There's no need to return $borrower and
 # $iteminformation; the caller can ask about those separately, if it
@@ -1271,6 +1457,7 @@ the fields of the biblio, biblioitems, items, and issues fields of the
 Koha database for that particular item.
 
 =cut
+
 #'
 sub currentissues {
 # New subroutine for Circ2.pm
@@ -1441,39 +1628,6 @@ sub checkwaiting {
 	}
 	$sth->finish;
 	return ($cnt,\@itemswaiting);
-}
-
-# Not exported
-# FIXME - This is nearly-identical to &C4::Accounts::checkaccount
-sub checkaccount  {
-# Stolen from Accounts.pm
-  #take borrower number
-  #check accounts and list amounts owing
-	my ($env,$bornumber,$dbh,$date)=@_;
-	my $select="SELECT SUM(amountoutstanding) AS total
-			FROM accountlines
-		WHERE borrowernumber = ?
-			AND amountoutstanding<>0";
-	my @bind = ($bornumber);
-	if ($date ne ''){
-	$select.=" AND date < ?";
-	push(@bind,$date);
-	}
-	#  print $select;
-	my $sth=$dbh->prepare($select);
-	$sth->execute(@bind);
-	my $data=$sth->fetchrow_hashref;
-	my $total = $data->{'total'};
-	$sth->finish;
-	# output(1,2,"borrower owes $total");
-	#if ($total > 0){
-	#  # output(1,2,"borrower owes $total");
-	#  if ($total > 5){
-	#    reconcileaccount($env,$dbh,$bornumber,$total);
-	#  }
-	#}
-	#  pause();
-	return($total);
 }
 
 # FIXME - This is identical to &C4::Circulation::Renewals::renewstatus.
@@ -1700,6 +1854,30 @@ sub find_reserves {
     }
     $sth->finish;
     return ($resfound,$lastrec);
+}
+
+sub fixdate {
+    my ($year, $month, $day) = @_;
+    my $invalidduedate;
+    my $date;
+    if (($year eq 0) && ($month eq 0) && ($year eq 0)) {
+#	$env{'datedue'}='';
+    } else {
+	if (($year eq 0) || ($month eq 0) || ($year eq 0)) {
+	    $invalidduedate=1;
+	} else {
+	    if (($day>30) && (($month==4) || ($month==6) || ($month==9) || ($month==11))) {
+		$invalidduedate = 1;
+	    } elsif (($day > 29) && ($month == 2)) {
+		$invalidduedate=1;
+	    } elsif (($month == 2) && ($day > 28) && (($year%4) && ((!($year%100) || ($year%400))))) {
+		$invalidduedate=1;
+	    } else {
+		$date="$year-$month-$day";
+	    }
+	}
+    }
+    return ($date, $invalidduedate);
 }
 
 1;
