@@ -1645,7 +1645,7 @@ sub installfiles {
 		system("cp -R ".$src." ".$tgt);
 	}
 
-	my ($auto_install) = @_;
+# 	my ($auto_install) = @_;
 	showmessage(getmessage('InstallFiles'),'none') unless ($auto_install->{NoPressEnter});
 
 	neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
@@ -1962,42 +1962,74 @@ sub populatedatabase {
 	}
 	startsysout();	
 	system("$mysqldir/bin/mysql -u$user $database -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
-	# CHECK for any other file to append...
-	my @sql;
-	push @sql,"FINISHED";
+	my @dirs;
 	if (-d "scripts/misc/sql-datas") {
-	    opendir D, "scripts/misc/sql-datas";
-	    foreach my $sql (readdir D) {
-			next unless ($sql =~ /.txt$/);
-			push @sql, $sql;
-	    }
-	}
-	my $loopend=0;
-	while (not $loopend) {
-		print heading("SELECT SQL FILE");
-		print qq|
+		# ask for directory to look for files to append
+		my @directories;
+		push @directories,"FINISHED";
+		if (-d "scripts/misc/sql-datas") {
+			opendir D, "scripts/misc/sql-datas";
+			foreach my $dir (readdir D) {
+ 				next if ($dir =~ /^\./);
+				push @directories, $dir;
+			}
+		}
+		my $loopend=0;
+		while (not $loopend) {
+			print heading("SELECT SQL DIRECTORY");
+			print qq|
+Select a directory. You will see every file included in this directory and be able to choose file(s) to import into Koha
+This is a VERY important feature. By selecting the proper options, you can get a pre-setup Koha, almost ready to be put in production.
+Choose wisely.
+|;
+			for (my $i=0;$i<=$#directories;$i++) {
+				print "$i => ".$directories[$i]."\n";
+			}
+			my $sqluploaddir =<STDIN>;
+			if ($sqluploaddir==0) {
+				$loopend = 1;
+			} else {
+				$sqluploaddir = $directories[$sqluploaddir];
+				# CHECK for any other file to append...
+				my @sql;
+				push @sql,"FINISHED";
+				if (-d "scripts/misc/sql-datas/$sqluploaddir") {
+					opendir D, "scripts/misc/sql-datas/$sqluploaddir";
+					foreach my $sql (readdir D) {
+						next unless ($sql =~ /.txt$/);
+						push @sql, $sql;
+					}
+				}
+				$loopend=0;
+				while (not $loopend) {
+					print heading("SELECT SQL FILE");
+					print qq|
 Select a file to append to the Koha DB.
 enter a number. A detailled explanation of the file will be given
 if you confirm, the file will be added to the DB
 |;
-		for (my $i=0;$i<=$#sql;$i++) {
-			print "$i => ".$sql[$i]."\n";
-		}
-		my $response =<STDIN>;
-		if ($response==0) {
-			$loopend = 1;
-		} else {
-			# show the content of the file
-			my $FileToUpload = $sql[$response];
-			open FILE,"scripts/misc/sql-datas/$FileToUpload";
-			my $content = <FILE>;
-			print heading("INSERT $FileToUpload ?")."$content\n";
-			# ask confirmation
-			$response=showmessage(getmessage('ConfirmFileUpload'), 'yn', 'y');
-			# if confirmed, upload the file in the DB
-			unless ($response =~/^n/i) {
-				$FileToUpload =~ s/\.txt/\.sql/;
-				system("$mysqldir/bin/mysql -u$user $database <scripts/misc/sql-datas/$FileToUpload");
+					for (my $i=0;$i<=$#sql;$i++) {
+						print "$i => ".$sql[$i]."\n";
+					}
+					my $response =<STDIN>;
+					if ($response==0) {
+						$loopend = 1;
+					} else {
+						# show the content of the file
+						my $FileToUpload = $sql[$response];
+						open FILE,"scripts/misc/sql-datas/$sqluploaddir/$FileToUpload";
+						my $content = <FILE>;
+						print heading("INSERT $sqluploaddir/$FileToUpload ?")."$content\n";
+						# ask confirmation
+						$response=showmessage(getmessage('ConfirmFileUpload'), 'yn', 'y');
+						# if confirmed, upload the file in the DB
+						unless ($response =~/^n/i) {
+							$FileToUpload =~ s/\.txt/\.sql/;
+							system("$mysqldir/bin/mysql -u$user $database <scripts/misc/sql-datas/$sqluploaddir/$FileToUpload");
+						}
+					}
+				}
+				$loopend=0;
 			}
 		}
 	}
