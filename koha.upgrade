@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use diagnostics;
+#use diagnostics;
 use strict; # please develop with the strict pragma
 
 
@@ -123,23 +123,21 @@ unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
 unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
-unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
-unless (eval {require HTML::Template})       { push @missing,"HTML::Template" };
-#unless (eval {require Net::Z3950})        { 
-#    print qq|
-#
-#The Net::Z3950 module is missing.  This module is necessary if you want to use
-#Koha's Z39.50 client to download bibliographic records from other libraries.
-#To install this module, you will need the yaz client installed from
-#http://www.indexdata.dk/yaz/ and then you can install the perl module with the
-#command:
-#
-#perl -MCPAN -e 'install Net::Z3950'
-#
-#Press the <ENTER> key to continue:
-#|;
-#    <STDIN>;
-#}
+unless (eval {require Net::Z3950})        { 
+    print qq|
+
+The Net::Z3950 module is missing.  This module is necessary if you want to use
+Koha's Z39.50 client to download bibliographic records from other libraries.
+To install this module, you will need the yaz client installed from
+http://www.indexdata.dk/yaz/ and then you can install the perl module with the
+command:
+
+perl -MCPAN -e 'install Net::Z3950'
+
+Press the <ENTER> key to continue:
+|;
+    <STDIN>;
+}
 
 #
 # Print out a list of any missing modules

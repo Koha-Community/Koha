@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w # please develop with -w
 
-use diagnostics;
+#use diagnostics;
 use strict; # please develop with the strict pragma
 
 if ($<) {
@@ -128,21 +128,21 @@ unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
 unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
-#unless (eval {require Net::Z3950})        { 
-#    print qq|
-#
-#The Net::Z3950 module is missing.  This module is necessary if you want to use
-#Koha's Z39.50 client to download bibliographic records from other libraries.
-#To install this module, you will need the yaz client installed from
-#http://www.indexdata.dk/yaz/ and then you can install the perl module with the
-#command:
-#
-#perl -MCPAN -e 'install Net::Z3950'
-#
-#Press the <ENTER> key to continue:
-#|;
-#    <STDIN>;
-#}
+unless (eval {require Net::Z3950})        { 
+    print qq|
+
+The Net::Z3950 module is missing.  This module is necessary if you want to use
+Koha's Z39.50 client to download bibliographic records from other libraries.
+To install this module, you will need the yaz client installed from
+http://www.indexdata.dk/yaz/ and then you can install the perl module with the
+command:
+
+perl -MCPAN -e 'install Net::Z3950'
+
+Press the <ENTER> key to continue:
+|;
+    <STDIN>;
+}
 
 #
 # Print out a list of any missing modules
@@ -330,6 +330,31 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
       close(HTTPDCONF);
    }
 }
+unless ($realhttpdconf) {
+    print qq|
+
+I was not able to find your apache configuration file.  It is usually
+called httpd.conf or apache.conf.
+|;
+    print "Where is your Apache configuratin file? ";
+    chomp($input = <STDIN>);
+
+    if ($input) {
+	$realhttpdconf = $input;
+    } else {
+	$realhttpdconf='';
+    }
+    if ( -f $realhttpdconf ) {
+	open (HTTPDCONF, $realhttpdconf) or warn "Insufficient privileges to open $realhttpdconf for reading.\n";
+	while (<HTTPDCONF>) {
+	    if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+		$httpduser = $1;
+	    }
+	}
+	close(HTTPDCONF);
+    }
+}
+
 unless ($httpduser) {
     print qq|
 
