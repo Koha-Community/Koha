@@ -41,6 +41,8 @@ $VERSION = 0.01;
 	&AUTHaddsubfield
 	&AUTHgetauthority
 	
+	&AUTHgetauth_type
+	
 	&authoritysearch
 	
 	&MARCmodsubfield
@@ -104,7 +106,6 @@ sub authoritysearch {
 	$sth->execute($authtypecode);
 	my @result = ();
 	while (my ($authid) = $sth->fetchrow) {
-			warn "AUTH: $authid";
 			push @result,$authid;
 		}
 
@@ -317,9 +318,7 @@ sub AUTHfind_authtypecode {
 
 sub AUTHgettagslib {
 	my ($dbh,$forlibrarian,$authtypecode)= @_;
-# 	warn "AUTH : $authtypecode";
 	$authtypecode="" unless $authtypecode;
-# 	warn "AUTH : $authtypecode";
 	my $sth;
 	my $libfield = ($forlibrarian eq 1)? 'liblibrarian' : 'libopac';
 	# check that framework exists
@@ -380,7 +379,6 @@ sub AUTHaddauthority {
 		($authid)=$sth->fetchrow;
 		$sth->finish;
 	}
-	warn "auth : $authid";
 	my $fieldcount=0;
 	# now, add subfields...
 	foreach my $field (@fields) {
@@ -491,6 +489,13 @@ sub AUTHgetauthority {
 	return $record;
 }
 
+sub AUTHgetauth_type {
+	my ($authtypecode) = @_;
+	my $dbh=C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
+	$sth->execute($authtypecode);
+	return $sth->fetchrow_hashref;
+}
 sub AUTHmodauthority {
 	my ($dbh,$authid,$record,$delete)=@_;
 	my $oldrecord=&AUTHgetauthority($dbh,$authid);
@@ -827,6 +832,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.6  2004/08/18 16:00:24  tipaul
+# fixes for authorities management
+#
 # Revision 1.5  2004/07/05 13:37:22  doxulting
 # First step for working authorities
 #
