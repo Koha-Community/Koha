@@ -31,6 +31,7 @@ my $startfrom=$query->param('startfrom');
 $startfrom=0 if(!defined $startfrom);
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
+my $searchdesc;
 
 if ($op eq "do_search") {
 	my @marclist = $query->param('marclist');
@@ -39,6 +40,13 @@ if ($op eq "do_search") {
 	my @operator = $query->param('operator');
 	my @value = $query->param('value');
 
+	for (my $i=0;$i<=$#marclist;$i++) {
+		if ($searchdesc) { # don't put the and_or on the 1st search term
+			$searchdesc .= $and_or[$i]." ".$excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+		} else {
+			$searchdesc = $excluding[$i]." ".($marclist[$i]?$marclist[$i]:"*")." ".$operator[$i]." ".$value[$i]." " if ($value[$i]);
+		}
+	}
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
 	my $orderby = $query->param('orderby');
@@ -130,6 +138,7 @@ if ($op eq "do_search") {
 							from=>$from,
 							to=>$to,
 							numbers=>\@numbers,
+							searchdesc=> $searchdesc,
 							);
 
 } else {

@@ -37,7 +37,7 @@ my $biblionumber = $query->param('bib');
 
 my $bibdata = bibdata($biblionumber);
  $template->param($bibdata);
-#  $template->param(BORROWER_INFO => \@bordat, biblionumber => $biblionumber);
+ $template->param(biblionumber => $biblionumber);
 
 # get the rank number....
 my ($rank,$reserves) = FindReserves($biblionumber,'');
