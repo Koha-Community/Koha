@@ -16,7 +16,7 @@
 <TMPL_IF NAME="too_many_reserves">D&eacute;sol&eacute;, vous ne pouvez pas faire plus de <TMPL_VAR NAME="too_many_reserves"> r&eacute;servations. </TMPL_IF>
 <TMPL_IF NAME="already_reserved">Vous avez d&eacute;j&agrave; une r&eacute;servation en cours pour ce document.</TMPL_IF>
 <TMPL_IF NAME="no_items_selected">Vous devez s&eacute;lectionner au moins un type de document!</TMPL_IF>
-</B></font><P></td></tr></table>
+<TMPL_IF NAME="no_items_selected">Vous devez s&eacute;lectionner une  biblioth&egrave;que où prendre le document!</TMPL_IF></B></font><P></td></tr></table>
 </TMPL_IF>
 
 
@@ -54,8 +54,7 @@ Veuillez s&eacute;lectionner les types de documents qui vous conviennent. Le pre
 
 </table>
 Veuillez s&eacute;lectionner la biblioth&egrave;que dans laquelle vous voulez retirer le document:
-<select name="branch"><TMPL_VAR NAME="branchoptions"></select><br>
-
+<TMPL_VAR NAME="CGIbranch"><br>
 
 <font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
 

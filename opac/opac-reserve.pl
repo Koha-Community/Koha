@@ -16,10 +16,8 @@ use C4::Date;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = 5;
 
-my $MAXIMUM_NUMBER_OF_RESERVES = 10;
-
 my $query = new CGI;
-my ($template, $borrowernumber, $cookie) 
+my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-reserve.tmpl",
 			     query => $query,
 			     type => "opac",
@@ -55,7 +53,6 @@ foreach my $res (@$reserves) {
 $rank++;
 $template->param(rank => $rank);
 
-
 # pass the pickup branch along....
 my $branch = $query->param('branch');
 $template->param(branch => $branch);
@@ -65,19 +62,21 @@ $template->param(branchname => $branches->{$branch}->{'branchname'});
 
 
 # make branch selection options...
-my $branchoptions = '';
+#my $branchoptions = '';
 my @branches;
-foreach my $br (keys %$branches) {
-    #(next) unless $branches->{$br}->{'IS'}; # FIXME disabled to fix bug 202
-    my $selected = "";
-    if ($br eq $branch) {
-	$selected = "selected";
-    }
-    $branchoptions .= "<option value=$br $selected>$branches->{$br}->{'branchname'}</option>\n";
-    push @branches, {branchcode => $br, branchname => $branches->{$br}->{'branchname'}, selected => $selected};
+my @select_branch;
+my %select_branches;
+
+foreach my $branch (keys %$branches) {
+	push @select_branch, $branch;
+	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
-$template->param( branchoptions => $branchoptions);
-$template->param(BRANCHES => \@branches);
+my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+			-values   => \@select_branch,
+			-labels   => \%select_branches,
+			-size     => 1,
+			-multiple => 0 );
+$template->param( CGIbranch => $CGIbranch);
 
 #### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
 # get the itemtype data....
@@ -172,86 +171,86 @@ $width = 2*$width -1;
 $template->param(totalwidth => 2*$width-1);
 
 if ($query->param('item_types_selected')) {
-# this is what happens after the itemtypes have been selected. Stage 2
-    my @itemtypes = $query->param('itemtype');
-    my $fee = 0;
-    my $proceed = 0;
-    if (@itemtypes) {
-	my %newtypes;
-	foreach my $itmtype (@itemtypes) {
-	    $newtypes{$itmtype} = $itemtypes{$itmtype};
-	}
-	my @types = values %newtypes;
-	$template->param(TYPES => \@types);
-	foreach my $type (@itemtypes) {
-	    my @reqbibs;
-	    foreach my $item (@items) {
-		if ($item->{'itemtype'} eq $type) {
-		    push @reqbibs, $item->{'biblioitemnumber'};
+	# this is what happens after the itemtypes have been selected. Stage 2
+	my @itemtypes = $query->param('itemtype');
+	my $fee = 0;
+	my $proceed = 0;
+	if (@itemtypes) {
+		my %newtypes;
+		foreach my $itmtype (@itemtypes) {
+		$newtypes{$itmtype} = $itemtypes{$itmtype};
 		}
-	    }
-	    $fee += CalcReserveFee(undef,$borrowernumber,$biblionumber,'o',\@reqbibs);
+		my @types = values %newtypes;
+		$template->param(TYPES => \@types);
+		foreach my $type (@itemtypes) {
+		my @reqbibs;
+		foreach my $item (@items) {
+			if ($item->{'itemtype'} eq $type) {
+			push @reqbibs, $item->{'biblioitemnumber'};
+			}
+		}
+		$fee += CalcReserveFee(undef,$borrowernumber,$biblionumber,'o',\@reqbibs);
+		}
+		$proceed = 1;
+	} elsif ($query->param('all')) {
+		$template->param(all => 1);
+		$fee = 1;
+		$proceed = 1;
 	}
-	$proceed = 1;
-    } elsif ($query->param('all')) {
-	$template->param(all => 1);
-	$fee = 1;
-	$proceed = 1;
-    }
-    if ($proceed) {
-	$fee = sprintf "%.02f", $fee;
-	$template->param(fee => $fee);
-	$template->param(item_types_selected => 1);
-    } else {
-	$template->param(message => 1);
-	$template->param(no_items_selected => 1);
-    }
-
-
+	warn "branch :$branch:";
+	if ($proceed && $branch) {
+		$fee = sprintf "%.02f", $fee;
+		$template->param(fee => $fee);
+		$template->param(item_types_selected => 1);
+	} else {
+		$template->param(message => 1);
+		$template->param(no_items_selected => 1) unless ($proceed);
+		$template->param(no_branch_selected =>1) unless ($branch);
+	}
 } elsif ($query->param('place_reserve')) {
-# here we actually do the reserveration. Stage 3.
-    my $title = $bibdata->{'title'};
-    my @itemtypes = $query->param('itemtype');
-    foreach my $type (@itemtypes) {
-	my @reqbibs;
-	foreach my $item (@items) {
-	    if ($item->{'itemtype'} eq $type) {
-		push @reqbibs, $item->{'biblioitemnumber'};
-	    }
+	# here we actually do the reserveration. Stage 3.
+	my $title = $bibdata->{'title'};
+	my @itemtypes = $query->param('itemtype');
+	foreach my $type (@itemtypes) {
+		my @reqbibs;
+		foreach my $item (@items) {
+		if ($item->{'itemtype'} eq $type) {
+			push @reqbibs, $item->{'biblioitemnumber'};
+		}
+		}
+		CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title);
 	}
-	CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title);
-    }
-    if ($query->param('all')) {
-	CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'a', undef, $rank,'',$title);
-    }
-    print $query->redirect("/cgi-bin/koha/opac-user.pl");
+	if ($query->param('all')) {
+		CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'a', undef, $rank,'',$title);
+	}
+	print $query->redirect("/cgi-bin/koha/opac-user.pl");
 } else {
-# Here we check that the borrower can actually make reserves Stage 1.
-    my $noreserves = 0;
-    if ($borr->{'amountoutstanding'} > 5) {
-  	my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
-	$template->param(message => 1);
-	$noreserves = 1;
-	$template->param(too_much_oweing => $amount);
-    }
-    my ($resnum, $reserves) = FindReserves('', $borrowernumber);
-    $template->param(RESERVES => $reserves);
-    if ($resnum >= $MAXIMUM_NUMBER_OF_RESERVES) {
-	$template->param(message => 1);
-	$noreserves = 1;
-	$template->param(too_many_reserves => $resnum);
-    }
-    foreach my $res (@$reserves) {
-	if ($res->{'biblionumber'} == $biblionumber) {
-	    $template->param(message => 1);
-	    $noreserves = 1;
-	    $template->param(already_reserved => 1);
+	# Here we check that the borrower can actually make reserves Stage 1.
+	my $noreserves = 0;
+	if ($borr->{'amountoutstanding'} > 5) {
+		my $amount = sprintf "\$%.02f", $borr->{'amountoutstanding'};
+		$template->param(message => 1);
+		$noreserves = 1;
+		$template->param(too_much_oweing => $amount);
 	}
-    }
-    unless ($noreserves) {
-	$template->param(TYPES => \@types_old);
-	$template->param(select_item_types => 1);
-    }
+	my ($resnum, $reserves) = FindReserves('', $borrowernumber);
+	$template->param(RESERVES => $reserves);
+	if ($resnum >= $MAXIMUM_NUMBER_OF_RESERVES) {
+		$template->param(message => 1);
+		$noreserves = 1;
+		$template->param(too_many_reserves => $resnum);
+	}
+	foreach my $res (@$reserves) {
+		if ($res->{'biblionumber'} == $biblionumber) {
+		$template->param(message => 1);
+		$noreserves = 1;
+		$template->param(already_reserved => 1);
+		}
+	}
+	unless ($noreserves) {
+		$template->param(TYPES => \@types_old);
+		$template->param(select_item_types => 1);
+	}
 }
 
 # check that you can actually make the reserve.
