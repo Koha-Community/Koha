@@ -1,23 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Item Details for <!-- TMPL_LOOP NAME="BIBITEM_DATA" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
-
 <div id="main">
 <!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
 
 
 <!-- BIBLIO ITEM  -->
-<h2><!-- TMPL_VAR NAME="title" -->
-<!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></h2>
-<h4>Biblio Number: <!-- TMPL_VAR NAME="biblioitemnumber" --></h4>
-<h4>Category: <!-- TMPL_VAR NAME="description" --></h4>
+<h1><!-- TMPL_VAR NAME="title" -->
+<!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h1>
 <div class="tabitem"><form action="/cgi-bin/koha/request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib" /><input type="submit" class="submit" value="Reserves" /></form> <form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" value="intra" name="type" /><input type="submit" class="submit" value="Return to Brief Display" /></form></div>
-<div class="items"><table>
+<div class="data-main"><table>
 	<caption>Bibliographic Details</caption>
 	<!-- TMPL_IF NAME="biblionumber" --><tr><th>Biblionumber:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="itemtype" --><tr><th>Item Type:</th><td><!-- TMPL_VAR NAME="itemtype" --></td></tr><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="url" --><tr><th>URL:</th><td><!-- <!-- TMPL_VAR NAME="url" --> --></td></tr><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="loanlength" --><tr><th>Loan Length:</th><td><!-- TMPL_VAR NAME="loanlength" --></td></tr><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="loanlength" --><tr><th>Loan Length:</th><td><!-- TMPL_VAR NAME="loanlength" --> days</td></tr><!-- /TMPL_IF -->
 	<!-- <tr><th>Rental Charge:</th><td><!-- TMPL_VAR NAME="rentalcharge" --></td></tr> -->
 	<!-- TMPL_IF NAME="dewey" --><tr><th>Classification:</th><td><!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --></td></tr><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="isbn" --><tr><th>ISBN:</th><td> <!-- TMPL_VAR NAME="isbn" --></td></tr><!-- /TMPL_IF -->
@@ -36,9 +33,9 @@
 <!-- /TMPL_LOOP -->
 
 <!-- TMPL_LOOP NAME="ITEM_DATA" -->
-<a name="<!-- TMPL_VAR NAME="barcode" -->" id="<!-- TMPL_VAR NAME="barcode" -->"><h3>Barcode: <!-- TMPL_VAR NAME="barcode" --></h3></a>
-<div class="items">
+<div class="data">
 <table>
+<caption><a name="<!-- TMPL_VAR NAME="barcode" -->" id="<!-- TMPL_VAR NAME="barcode" -->">Barcode: <!-- TMPL_VAR NAME="barcode" --></a></caption>
 <!-- TMPL_IF NAME="homebranch" --><tr><th>Home Branch:</th><td> <!-- TMPL_VAR NAME="homebranch" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="holdingbranch" --><tr><th>Current Branch:</th><td> <!-- TMPL_VAR NAME="holdingbranch" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="datelastseen" --><tr><th>Last seen:</th><td> <!-- TMPL_VAR NAME="datelastseen" --></td></tr><!-- /TMPL_IF -->
@@ -48,20 +45,22 @@
 <!-- TMPL_IF NAME="card0" --><tr><th>Last Borrower 1:</th><td> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="card0" -->"><!-- TMPL_VAR NAME="card0" --></a></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="card1" --><tr><th>Last Borrower 2:</th><td> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="card1" -->"><!-- TMPL_VAR NAME="card1" --></a></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="replacementprice" --><tr><th>Replacement Price:</th><td> <!-- TMPL_VAR NAME="replacementprice" --></td></tr><!-- /TMPL_IF -->
-<tr><th><a href="/cgi-bin/koha/moditem.pl?bibitem=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Item lost:</a></th><td> <!-- TMPL_VAR NAME="itemlost" --></td></tr>
+<tr><th><a href="/cgi-bin/koha/moditem.pl?bibitem=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Lost Status:</a></th><td><!-- TMPL_IF NAME="itemlost" -->Lost<!-- TMPL_ELSE -->Not Lost<!-- /TMPL_IF -->
+<form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="Barcode" value="<!-- TMPL_VAR Name="barcode" -->" /><input type="hidden" name="Home Branch" value="<!-- TMPL_VAR Name="homebranch" -->" /><input type="hidden" name="bibnum" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" /><!-- TMPL_IF NAME="itemlost" --><input type="hidden" value="0" name="Lost" /><!-- TMPL_ELSE --><input type="hidden" value="1" name="Lost" /><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="wthdrawn" --><input type="hidden" name="withdrawn" value="1" /><!-- TMPL_ELSE --><input type="hidden" name="withdrawn" value="0" /><!-- /TMPL_IF -->
+<input type="submit" name="submit" class="submit" value="<!-- TMPL_IF NAME="itemlost" -->Make Found<!-- TMPL_ELSE -->Make Lost<!-- /TMPL_IF -->" /></form></td></tr>
 <!-- TMPL_IF NAME="paidfor" --><tr><th>Paid for:</th><td> <!-- TMPL_VAR NAME="paidfor" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="itemnotes" --><tr><th>Notes:</th><td> <!-- TMPL_VAR NAME="itemnotes" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="renewals" --><tr><th>Renewals:</th><td> <!-- TMPL_VAR NAME="renewals" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="dateaccessioned" --><tr><th><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&amp;catview=yes">
-Accession</a>
-Date:</th><td><!-- TMPL_VAR NAME="dateaccessioned" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="wthdrawn" --><tr><th>Withdrawn: </th><td>Yes</td></tr><!-- /TMPL_IF -->
-<tr><th><a
-href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total
-Issues:</a></th><td><!-- TMPL_VAR NAME="issues" --></td></tr>
+<!-- TMPL_IF NAME="dateaccessioned" --><tr><th>Accession Date:</th><td><!-- TMPL_VAR NAME="dateaccessioned" --> (<a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&amp;catview=yes">View Receipt Summary</a>)</td></tr><!-- /TMPL_IF -->
+<tr><th><a href="/cgi-bin/koha/moditem.pl?bibitem=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Withdrawn:</a> </th><td><!-- TMPL_IF NAME="wthdrawn" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --> <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="Barcode" value="<!-- TMPL_VAR Name="barcode" -->" /><input type="hidden" name="Home Branch" value="<!-- TMPL_VAR Name="homebranch" -->" /><input type="hidden" name="bibnum" value="<!-- TMPL_VAR Name="biblionumber" -->" /><input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" /><!-- TMPL_IF NAME="itemlost" --><input type="hidden" value="1" name="Lost" /><!-- TMPL_ELSE --><input type="hidden" value="0" name="Lost" /><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="wthdrawn" --><input type="hidden" name="withdrawn" value="0" /><!-- TMPL_ELSE --><input type="hidden" name="withdrawn" value="1" /><!-- /TMPL_IF --><input type="submit" name="submit" class="submit" value="<!-- TMPL_IF NAME="wthdrawn" -->Restore<!-- TMPL_ELSE -->Make Withdrawn<!-- /TMPL_IF -->" /></form></td></tr>
+<tr><th>Total Issues:</th><td><!-- TMPL_VAR NAME="issues" --> (<a href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View Circulation History</a>)</td></tr>
 <tr><th>Group Number:</th><td> <!-- TMPL_VAR NAME="biblioitemnumber" --> </td></tr>
 <tr><th>Biblio number:</th><td> <!-- TMPL_VAR NAME="biblionumber" --> </td></tr>
-</table></form></div>
+</table></div>
 
 <!-- /TMPL_LOOP -->
 
