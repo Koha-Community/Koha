@@ -18,7 +18,8 @@ GetOptions(
 	'type=s' => \$type,
 	'exclude=s' => \@excludes,
 	'sep=s' => \$split_char,
-	'help'	=> \$help);
+	'help'	=> \$help,
+) || (usage(), exit(-1));
 
 help() if $help;
 
@@ -41,7 +42,7 @@ $filter = "./text-extract.pl -f" if !defined($filter);
 # Input is not a file nor a directory
 if( !(-d $in_files[0]) && !(-f $in_files[0]))
 {
-	usage("Unknow input. Input must a file or a directory. (Symbolic links are not supported for the moment).");
+	usage("Unknown input. Input must a file or a directory. (Symbolic links are not supported for the moment.)");
 }
 elsif( -d $in_files[0] )
 {
