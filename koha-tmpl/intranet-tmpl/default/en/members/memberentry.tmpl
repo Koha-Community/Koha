@@ -3,7 +3,7 @@
 <div id="mainbloc">
 	<!-- TMPL_IF NAME="addAction" -->
 	<h1>
-		Add member
+		Add <!-- TMPL_IF NAME="institution" -->Institutional <!-- /TMPL_IF -->Member
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1>
@@ -54,7 +54,7 @@
 				<td colspan="5">Member# <!-- TMPL_VAR NAME="member" -->, Card number* <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
 			</tr>
 			<tr>
-				<th colspan="5">MEMBER PERSONAL DETAILS</th>
+				<th colspan="5">MEMBER <!-- TMPL_UNLESS name="institution" -->PERSONAL<!-- /TMPL_UNLESS --> DETAILS</th>
 			</tr>
 			<tr>
 				<td><!-- TMPL_UNLESS name="institution" -->Salutation<!-- /TMPL_UNLESS --></td>
