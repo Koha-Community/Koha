@@ -1,0 +1,112 @@
+#!/usr/bin/perl -w
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use IO::Socket;
+
+
+
+$host = 'mail.cmsd.bc.ca';
+$EOL = "\015\012";
+$BLANK = $EOL x 2;
+
+
+my $params='';
+
+system("clear");
+
+print qq|
+
+============================
+= Koha Installation Survey =
+============================
+
+Feel free to skip any questions that you do not want to answer,
+
+
+|;
+
+my $param=askquestion('LibraryName', 'What is the name of your library?');
+$params.="&$param";
+$param=askquestion('Location', 'Where is your library located (city, country, etc.)?');
+$params.="&$param";
+$param=askquestion('NumberOfBranches', 'How many branches does your library have?');
+$params.="&$param";
+$param=askquestion('NumberOfItems', 'How many items in your library collection?');
+$params.="&$param";
+$param=askquestion('NumberOfPatrons', 'How many patrons are serviced by your library?');
+$params.="&$param";
+$param=askquestion('ProductionOrTesting', 'Are you using Koha in a production environment or just testing?');
+$params.="&$param";
+$param=askquestion('WhereDidYouHearAboutKoha', 'Where did you hear about Koha?');
+$params.="&$param";
+#$param=askquestion('', '');
+#$params.="&$param";
+#
+#
+
+print "\n\nAdditional Comments: [leave two blank lines to end]\n";
+
+my $additionalcomments='%0D%0D';
+my $lastlineblank=0;
+while (<STDIN>) {
+    chomp;
+    unless ($_) {
+	(last) if ($lastlineblank);
+	$lastlineblank=1;
+	$additionalcomments.="$_%0D";
+	next;
+    }
+    $lastlineblank=0;
+    $additionalcomments.="$_%0D";
+}
+
+$additionalcomments=urlencode($additionalcomments);
+$params.="&AdditionalComments=$additionalcomments";
+
+
+
+$remote = IO::Socket::INET->new( Proto     => "tcp",
+			PeerAddr  => $host,
+			PeerPort  => "http(80)",
+		       );
+unless ($remote) { die "cannot connect to http daemon on $host" }
+$remote->autoflush(1);
+print $remote "GET /cgi-bin/kohareporter?$params HTTP/1.0" . $BLANK;
+while ( <$remote> ) { }
+close $remote;
+ 
+
+sub askquestion {
+    my $name=shift;
+    my $text=shift;
+
+    print $text."  ";
+    my $reply=<STDIN>;
+    chomp $reply;
+    $reply=urlencode($reply);
+    return "$name=$reply";
+}
+
+sub urlencode {
+    my $variable=shift;
+    $variable=~s/ /%20/g;
+    $variable=~s/&/%26/g;
+    $variable=~s/=/%3d/g;
+    return $variable;
+}
