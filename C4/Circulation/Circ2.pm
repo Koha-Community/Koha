@@ -1372,7 +1372,8 @@ sub getissues {
 				biblio.author         AS author,
 				biblioitems.dewey     AS dewey,
 				itemtypes.description AS itemtype,
-				biblioitems.subclass  AS subclass
+				biblioitems.subclass  AS subclass,
+				biblioitems.classification AS classification
 			FROM issues,items,biblioitems,biblio, itemtypes
 			WHERE issues.borrowernumber  = ?
 			AND issues.itemnumber      = items.itemnumber

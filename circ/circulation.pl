@@ -236,6 +236,9 @@ if ($borrower) {
 		($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
 		$book->{'dd'}=$dd;
 		$book->{'tcolor'}=$tcolor;
+	        if ($book->{'author'} eq ''){
+		    $book->{'author'}=' ';
+		}    
 		push @realtodayissues,$book;
 	}
     
@@ -259,7 +262,10 @@ if ($borrower) {
 	}
 	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1); 
 	$book->{'dd'}=$dd; 
-	$book->{'tcolor'}=$pcolor; 
+	$book->{'tcolor'}=$pcolor;
+	if ($book->{'author'} eq ''){
+	    $book->{'author'}=' ';
+	}    
 	push @realprevissues,$book
    }
 }
