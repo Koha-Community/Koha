@@ -1,0 +1,21 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cannot Delete Patron<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+	<div class="error">
+	<h3>Cannot Delete Patron</h3>
+		<!-- TMPL_IF name="ItemsOnIssues" -->
+			<p>Patron has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) checked out.</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="charges -->
+			<p>Patron has <!-- TMPL_VAR name="charges" --> in fines.</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="guarantees" -->
+			<p>Patron's record has child accounts attached.</p>
+		<!-- /TMPL_IF -->
+		<form action="/cgi-bin/koha/members/moremember.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR NAME="bornum" -->" name="bornum" /><input type="submit" class="submit" value="&lt;&lt; Return to Patron Record" /></form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

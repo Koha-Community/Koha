@@ -35,12 +35,9 @@
   <!-- /TMPL_LOOP -->
   <!-- TMPL_ELSE --><td colspan="6">No results found</td><!-- /TMPL_IF -->
 </table></div>
-<div class="tabitem"><form action="/cgi-bin/koha/simpleredirect.pl" method="post">
-<input type="submit" class="submit" value="Add New Patron" />
-<input type="hidden" name="chooseform" value="adult" />
-</form> <form action="/cgi-bin/koha/simpleredirect.pl" method="post">
-<input type="submit" class="submit" value="Add New Institution" />
-<input type="hidden" name="chooseform" value="organisation" />
-</form> </div>
+<div class="tabitem"><form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="categorycode" value="" /><input type="hidden" name="actionType" value="Add" />
+	<input type="submit" class="submit" value="Add New Patron" /></form>
+	<form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="categorycode" value="I" /><input type="hidden" name="actionType" value="Add" /><input type="submit" class="submit" value="Add New Institution" /></form>
+	</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
