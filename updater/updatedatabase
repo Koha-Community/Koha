@@ -92,6 +92,81 @@ my %requiretables=(
     		       userid char(100) NOT NULL default '',
     		       ip char(18) NOT NULL default '',
 		       url text NOT NULL default ''  )",
+    bibliothesaurus=> "( code BIGINT not null AUTO_INCREMENT, 
+                         freelib CHAR (255) not null , 
+                         stdlib CHAR (255) not null , 
+                         type CHAR (80) not null , 
+                         PRIMARY KEY (code), 
+                         INDEX (freelib),index(stdlib),index(type) )",
+    marc_biblio => "(
+                         bibid bigint(20) unsigned NOT NULL auto_increment,
+                         biblionumber int(11) NOT NULL default '0',
+                         datecreated date NOT NULL default '0000-00-00',
+                         datemodified date default NULL,
+                         origincode char(20) default NULL,
+                         PRIMARY KEY  (bibid),
+                         KEY origincode (origincode),
+                         KEY biblionumber (biblionumber)
+                         ) ",
+     marc_blob_subfield => "(
+                             blobidlink bigint(20) NOT NULL auto_increment,
+                             subfieldvalue longtext NOT NULL,
+                             PRIMARY KEY  (blobidlink)
+                            ) ",
+     marc_subfield_structure => "(
+                                  tagfield char(3) NOT NULL default '',
+                                  tagsubfield char(1) NOT NULL default '',
+                                  liblibrarian char(255) NOT NULL default '',
+                                  libopac char(255) NOT NULL default '',
+                                  repeatable tinyint(4) NOT NULL default '0',
+                                  mandatory tinyint(4) NOT NULL default '0',
+                                  kohafield char(40) NOT NULL default '',
+                                  PRIMARY KEY  (tagfield,tagsubfield),
+                                  KEY kohafield (kohafield)
+                                 )",
+     marc_subfield_table => "(
+                              subfieldid bigint(20) unsigned NOT NULL auto_increment,
+                              bibid bigint(20) unsigned NOT NULL default '0',
+                              tag char(3) NOT NULL default '',
+                              tagorder tinyint(4) NOT NULL default '1',
+                              tag_indicator char(2) NOT NULL default '',
+                              subfieldcode char(1) NOT NULL default '',
+                              subfieldorder tinyint(4) NOT NULL default '1',
+                              subfieldvalue varchar(255) default NULL,
+                              valuebloblink bigint(20) default NULL,
+                              PRIMARY KEY  (subfieldid),
+                              KEY bibid (bibid),
+                              KEY tag (tag),
+                              KEY tag_indicator (tag_indicator),
+                              KEY subfieldorder (subfieldorder),
+                              KEY subfieldcode (subfieldcode),
+                              KEY subfieldvalue (subfieldvalue),
+                              KEY tagorder (tagorder)
+                            )",
+     marc_tag_structure => "(
+                             tagfield char(3) NOT NULL default '',
+                             liblibrarian char(255) NOT NULL default '',
+                             libopac char(255) NOT NULL default '',
+                             repeatable tinyint(4) NOT NULL default '0',
+                             mandatory tinyint(4) NOT NULL default '0',
+                             PRIMARY KEY  (tagfield)
+                            )",
+     marc_word => "(
+                    bibid bigint(20) NOT NULL default '0',
+                    tag char(3) NOT NULL default '',
+                    tagorder tinyint(4) NOT NULL default '1',
+                    subfieldid char(1) NOT NULL default '',
+                    subfieldorder tinyint(4) NOT NULL default '1',
+                    word varchar(255) NOT NULL default '',
+                    sndx_word varchar(255) NOT NULL default '',
+                    KEY bibid (bibid),
+                    KEY tag (tag),
+                    KEY tagorder (tagorder),
+                    KEY subfieldid (subfieldid),
+                    KEY subfieldorder (subfieldorder),
+                    KEY word (word),
+                    KEY sndx_word (sndx_word)
+                   )",
 );
 
 
@@ -114,6 +189,17 @@ my %requirefields=(
 #added so that reference items are not available for reserves...
     itemtypes=>{'notforloan' => 'smallint(6)'},
 );
+
+my %dropable_table=(
+		    classification   =>'classification',
+		    multipart        =>'multipart',
+		    multivolume      =>'multivolume',
+		    newitems         =>'newitems',
+		    procedures       =>'procedures',
+		    publisher        =>'publisher',
+		    searchstats      =>'searchstats',
+		    serialissues     =>'serialissues',
+		    );
 
 # Default system preferences
 my %defaultprefs=(
@@ -160,6 +246,16 @@ foreach $table ( keys %requiretables ) {
     } # unless exists
 } # foreach
 
+# now drop useless tables
+foreach $table ( keys %dropable_table) {
+    print "Dropping unused tables...\n" if $debug;
+    if ($existingtables{$table} ) {
+	$dbh->do("drop table $table");
+	if ($dbh->err) {
+	    print "Error : $dbh->errstr \n";
+	}
+    }
+}
 unless ($existingtables{'z3950servers'}) {
     print "Adding z3950servers table...\n";
     my $sti=$dbh->prepare("create table z3950servers (
@@ -307,6 +403,11 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.17  2002/09/24 12:57:35  tipaul
+# long WAS the road to 1.3.0...
+# coming VERY SOON NOW...
+# modifying installer and buildrelease to update the DB
+#
 # Revision 1.16  2002/07/31 02:34:27  finlayt
 #
 # added "notforloan" field to the itemtypes table.

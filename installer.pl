@@ -922,6 +922,14 @@ Press <ENTER> to continue...
 
 }
 
+print qq|
+
+UPDATING DATABASE (MARC TABLES)
+===============================
+|;
+system ("perl -I $kohadir/modules scripts/marc/fill_usmarc.pl");
+system ("perl -I $kohadir/modules scripts/marc/updatedb2marc.pl");
+
 
 chmod 0770, $kohalogdir;
 chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
