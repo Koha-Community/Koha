@@ -105,6 +105,7 @@ my %requiretables=(
 							category char(10) NOT NULL default '',
 							level tinyint(4) NOT NULL default '1',
 							hierarchy char(80) NOT NULL default '',
+							father bigint(20) NOT NULL default '',
 							PRIMARY KEY  (id),
 							KEY freelib (freelib),
 							KEY stdlib (stdlib),
@@ -545,6 +546,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.40  2003/04/22 10:48:27  wolfpac444
+# Added "father" column to bibliothesaurus table
+#
 # Revision 1.39  2003/04/04 08:45:00  tipaul
 # last commits before 1.9.1
 #
