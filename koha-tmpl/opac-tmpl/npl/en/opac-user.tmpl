@@ -7,7 +7,10 @@
 <div id="main">
 <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 <h2>Welcome <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
-
+		<!-- TMPL_IF name="textmessaging"-->
+			<div class="error"><h3>Message from the library</h3>
+			<p><!-- TMPL_VAR name="textmessaging" --></p></div>
+		<!-- /TMPL_IF -->
 <!-- FINES BOX -->
 <!-- TMPL_IF NAME="amountoverfive" -->
 <div class="table"><table>
@@ -46,7 +49,7 @@
 		</tr>
 		<!-- TMPL_LOOP NAME="WAITING" -->
 			<!-- TMPL_IF NAME="atdestination" --><tr>
-			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></td>
 				<td>
 					<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a><span class="item-details">
 <!-- TMPL_VAR NAME="author" --></span></td><td><!-- TMPL_VAR NAME="reservedate" --></td><td><!-- TMPL_IF NAME="atdestination" -->
@@ -65,7 +68,7 @@
 <caption>Overdues <span class="count">(<!-- TMPL_VAR NAME="overdues_count" --> total)</span></caption>
 <!-- OVERDUES TABLE ROWS -->
 <tr>
-<th colspan="2">Title</th>
+<th colspan="2">Title</th><th>Call No.</th>
 <th>Due</th>
 <!-- <th>Fine to Date</th> -->
 <!-- <th>Status</th> --></tr>
@@ -73,8 +76,9 @@
 <!-- TMPL_LOOP NAME="OVERDUES" -->
 <tr>
 <td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
-<td> <a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
+<td><!-- Display for NPL // <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> //Display for NPL --> <a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
 <!-- TMPL_VAR NAME="author" --></span></td>
+<td><!-- TMPL_VAR NAME="classification" --></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
 <!-- <td><!-- TMPL_VAR NAME="charges" --></td> -->
 </tr>
@@ -87,26 +91,20 @@
 <caption>Issues <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> total)</span></caption>
 <!-- ISSUES TABLE ROWS --><tr>
 <th colspan="2">Title</th>
+<th>Call No.</th>
 <th>Due</th>
-<!-- <th>Fines</th> -->
-<!-- <th>Status</th> -->
+<!-- Hide from NPL --><th>Fines</th><!-- /Hide from NPL -->
 </tr>
 
 <!-- TMPL_LOOP NAME="ISSUES" -->
 
 <tr>
 <td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
-<td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
+<td><!-- Display for NPL // <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> //Display for NPL --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
 <!-- TMPL_VAR NAME="author" --></span></td>
-<td><!-- TMPL_VAR NAME="date_due" --></td>
-<!-- <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td> -->
-<!-- <td>
-<!-- TMPL_IF NAME="status" -->
-<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="padded">Renew</a>
-<!-- TMPL_ELSE -->
-Not renewable
-<!-- /TMPL_IF -->
-</td> -->
+<td><!-- TMPL_VAR NAME="classification" --></td>
+<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
+<!-- Hide from NPL --><td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td><!-- /Hide from NPL -->
 </tr>
 <!-- /TMPL_LOOP -->
 </table></div>
@@ -132,7 +130,7 @@ Not renewable
 </tr>
 <!-- TMPL_LOOP NAME="RESERVES" -->
 <tr>
-<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
+<td><!-- TMPL_IF NAME="itemtype" --><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a><span class="item-details">
 <!-- TMPL_VAR NAME="author" --></span></td>
 <td><!-- TMPL_VAR NAME="reservedate" --></td>
@@ -143,7 +141,7 @@ Not renewable
 <!-- /TMPL_LOOP -->
 </table></div>
 
-<p>If you no longer want a reserve, please <a href="mailto:nelpl@athenscounty.lib.oh.us">send us an e-mail</a>, or go to the circulation desk at your library to get it removed.</p>
+<p>If you no longer want a reserve, please send us an e-mail, or go to the circulation desk at your library to get it removed.</p>
 
 <!-- /TMPL_IF -->
 
