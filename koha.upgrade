@@ -1,6 +1,5 @@
 #!/usr/bin/perl -w
 
-
 my %configfile;
 open (KC, "/etc/koha.conf");
 while (<KC>) {
@@ -87,13 +86,28 @@ chmod 0770, $backupdir;
 # Backup MySql database
 #
 #
+my $mysql;
+my $mysqldir;
+
+foreach my $mysql (qw(/usr/local/mysql
+                      /opt/mysql
+		    )) {
+    if ( -d $mysql ) {
+	    $mysqldir=$mysql;
+    }
+}
+if (!$mysqldir){
+    $mysqldir='/usr';
+}
+
+
 
 my ($sec, $min, $hr, $day, $month, $year) = (localtime(time))[0,1,2,3,4,5];
 $month++;
 $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
-open (MD, "mysqldump --user=$user --password=$pass --host=$host $database|");
+open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$host $database|");
 
 open BF, ">$backupdir/Koha.backup_$date";
 
@@ -306,12 +320,12 @@ configuration to point it to the new files.
 
 In your INTRANET VirtualHost section you should have:
   DocumentRoot $intranetdir/htdocs
-  ScriptAlias /cgi-bin/koha/ $intranetroot/cgi-bin/
+  ScriptAlias /cgi-bin/koha/ $intranetdir/cgi-bin/
   SetEnv PERL5LIB $intranetdir/modules
 
 In the OPAC VirtualHost section you should have:
   DocumentRoot $opacdir/htdocs
-  ScriptAlias /cgi-bin/koha/ $opacroot/cgi-bin/
+  ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
   SetEnv PERL5LIB $intranetdir/modules
 
 You may also need to uncomment a "LoadModules env_module ... " line and restart
