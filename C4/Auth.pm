@@ -19,11 +19,28 @@ $VERSION = 0.01;
 );
 
 
+sub getuserflags {
+    my $cardnumber=shift;
+    my $dbh=shift;
+    my $userflags;
+    my $sth=$dbh->prepare("select flags from borrowers where cardnumber=?");
+    $sth->execute($cardnumber);
+    my ($flags) = $sth->fetchrow;
+    $sth=$dbh->prepare("select bit,flag from userflags");
+    $sth->execute;
+    while (my ($bit, $flag) = $sth->fetchrow) {
+	if ($flags & (2**$bit)) {
+	    $userflags->{$flag}=1;
+	}
+    }
+    return $userflags;
+}
 
 sub checkauth {
     my $query=shift;
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired=shift;
+    my $flagsrequired=shift;
     if (my $userid=$ENV{'REMOTE_USER'}) {
 	# Using Basic Authentication, no cookies required
 	my $cookie=$query->cookie(-name => 'sessionID',
@@ -63,7 +80,29 @@ sub checkauth {
 				      -expires => '+1y');
 	    my $sti=$dbh->prepare("update sessions set lasttime=? where sessionID=?");
 	    $sti->execute(time(), $sessionID);
-	    return ($userid, $cookie, $sessionID);
+	    my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
+	    $sth->execute($userid);
+	    my ($cardnumber) = $sth->fetchrow;
+	    my $flags=getuserflags($cardnumber,$dbh);
+	    foreach (keys %$flagsrequired) {
+		warn "Checking required flag $_";
+		unless ($flags->{superlibrarian}) {
+		    unless ($flags->{$_}) {
+			print qq|Content-type: text/html
+
+<html>
+<body>
+REJECTED
+<hr>
+You do not have access to this portion of Koha
+</body>
+</html>
+|;
+			exit;
+		    }
+		}
+	    }
+	    return ($userid, $cookie, $sessionID, $flags);
 	}
     }
 
@@ -78,12 +117,13 @@ sub checkauth {
 	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
 	my $userid=$query->param('userid');
 	my $password=$query->param('password');
-	if (checkpw($dbh, $userid, $password)) {
+	my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
+	if ($return) {
 	    my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
 	    $sti->execute($sessionID, $userid);
 	    $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
-	    $sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
+	    $sti=$dbh->prepare("select url from sessionqueries where sessionID=? and userid=?");
 	    $sti->execute($sessionID, $userid);
 	    if ($sti->rows) {
 		my ($selfurl) = $sti->fetchrow;
@@ -100,7 +140,31 @@ sub checkauth {
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
 				      -expires => '+1y');
-	    return ($userid, $cookie, $sessionID);
+	    my $flags;
+	    if ($return==2) {
+		$flags->{'superlibrarian'}=1;
+	    } else {
+		$flags=getuserflags($cardnumber, $dbh);
+	    }
+	    foreach (keys %$flagsrequired) {
+		warn "Checking required flag $_";
+		unless ($flags->{superlibrarian}) {
+		    unless ($flags->{$_}) {
+			print qq|Content-type: text/html
+
+<html>
+<body>
+REJECTED
+<hr>
+You do not have access to this portion of Koha
+</body>
+</html>
+|;
+			exit;
+		    }
+		}
+	    }
+	    return ($userid, $cookie, $sessionID, $flags);
 	} else {
 	    if ($userid) {
 		$message="Invalid userid or password entered.";
@@ -169,12 +233,12 @@ sub checkpw {
 #
 
     my ($dbh, $userid, $password) = @_;
-    my $sth=$dbh->prepare("select password from borrowers where userid=?");
+    my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
     $sth->execute($userid);
     if ($sth->rows) {
-	my ($md5password) = $sth->fetchrow;
+	my ($md5password,$cardnumber) = $sth->fetchrow;
 	if (md5_base64($password) eq $md5password) {
-	    return 1;
+	    return 1,$cardnumber;
 	}
     }
     my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
@@ -182,13 +246,13 @@ sub checkpw {
     if ($sth->rows) {
 	my ($md5password) = $sth->fetchrow;
 	if (md5_base64($password) eq $md5password) {
-	    return 1;
+	    return 1,$userid;
 	}
     }
     my $configfile=configfile();
     if ($userid eq $configfile->{'user'} && $password eq $configfile->{'pass'}) {
         # Koha superuser account
-	return 1;
+	return 2;
     }
     return 0;
 }

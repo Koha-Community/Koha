@@ -6,7 +6,9 @@ use C4::Auth;
 use C4::Output;
 
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
+my $flagsrequired;
+$flagsrequired->{borrowers}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
 
 print $query->header(-cookie => $cookie);
 

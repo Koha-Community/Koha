@@ -7,12 +7,16 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
+use C4::Auth;
 
 
 my $input = new CGI;
+my $flagsrequired;
+$flagsrequired->{borrowers}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 my $member=$input->param('member');
 $member=~ s/\,//g;
-print $input->header;
+print $input->header(-cookie => $cookie);
 #start the page and read in includes
 print startpage();
 print startmenu('member');

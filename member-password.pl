@@ -10,11 +10,17 @@ use C4::Search;
 use CGI;
 use Digest::MD5 qw(md5_base64);
 use C4::Output;
+use C4::Auth;
 use C4::Database;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
 
 my $input = new CGI;
+
+my $flagsrequired;
+$flagsrequired->{borrowers}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 #print $input->header;
 my $member=$input->param('member');
 my %env;
@@ -54,7 +60,7 @@ if ($input->param('newpassword')) {
     $spellitout=~s/\004/ <b>oh<\/b> /g;
     $spellitout=~s/\005/ <b>zero<\/b> /g;
 
-    print $input->header;
+    print $input->header(-cookie => $cookie);
     print startpage();
     print startmenu('member');
     print qq|

@@ -8,9 +8,14 @@ use C4::Output;
 use CGI;
 use C4::Search;
 use C4::Database;
+use C4::Auth;
 use C4::Koha;
 
 my $input = new CGI;
+my $flagsrequired;
+$flagsrequired->{borrowers}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 my $member=$input->param('bornum');
 if ($member eq ''){
   $member=NewBorrowerNumber();
@@ -24,7 +29,7 @@ if ($delete){
 } elsif ($password) {
   print $input->redirect("/cgi-bin/koha/member-password.pl?member=$member");
 } else {
-print $input->header;
+print $input->header(-cookie => $cookie);
 print startpage();
 print startmenu('member');
 
