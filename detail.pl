@@ -46,7 +46,11 @@ for (my $i=1;$i<$count3;$i++){
   $additional=$additional."|".$addauthor->[$i]->{'author'};                                             
 }  
 my @temp=split('\t',$items[0]);
-print mkheadr(3,"$dat->{'title'} ($dat->{'author'}) $temp[4]");
+if ($dat->{'author'} ne ''){
+  print mkheadr(3,"$dat->{'title'} ($dat->{'author'}) $temp[4]");
+} else {
+  print mkheadr(3,"$dat->{'title'} $temp[4]");
+}
 print <<printend
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="220">
