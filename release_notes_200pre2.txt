@@ -1,0 +1,41 @@
+RELEASE NOTES
+=============
+Bugfixes & some improvements (security & perf only)
+
+DB modifications :
+---------
+None, but check that your systempreferences table is :
+CREATE TABLE systempreferences (
+  variable varchar(50) NOT NULL default '',
+  value varchar(200) default NULL,
+  explanation varchar(200) NOT NULL default '',
+  options text,
+  type varchar(20) default NULL,
+  PRIMARY KEY  (variable)
+) TYPE=ISAM PACK_KEYS=1;
+If you installed a 2.0.0pre1 from scratch, it should be ok.
+If your version was a 1.9.x, it should not be ok.
+
+SYSTEMPREFS :
+---------
+In systempreferences, add a gist field. Used to calculate gst when ordering, in acquisition module. Enter 0.12 for 12% rate.
+
+IMPROVMENTS :
+---------
+* checkmarc.pl : added a check on fields mapped to item marc tag (from Paul).
+* dramaticaly improving the speed of a MARC search in case of a A OR B search. Added possibility to search on more than 3 parameters. (from Esiee & Paul)
+* overdue books backported from 1.2.x (& templated) (by Chris)
+* some additionals check to verify a borrower can borrow a book (by Esiee)
+
+BUGS FIXED :
+---------
+* 2 stupids & majors bug in MARC editor, due to too fast copy/paste. (fixed by Paul)
+* bug 479 : I have problem to assign a Sticky due date, it uses day date as year due date !!! (fixed by ?)
+* bug 471 : missing next / previous in itemtype admin page, in case there is more than 20 itemtypes (fixed by Paul)
+* bug 474 : alternate contact no more required (fixed by Paul)
+* bug 478 : value modification with single quote now works (in parameters section) (fixed by Paul)
+* bug 489 : poor file copying during install (fixed by MJR)
+* bug 526 : gst rate hardcoded. Moved to systempref (see SYSTEMPREFS chapter). (fixed by Paul)
+				If supplier parameters are set to do it, the gst are now auto calculated with javascript.
+* bug 512 : bibliosubject table is not being populated (fixed by Paul)
+* bug 513 : marclinks: default mapping typo (fixed by Paul)
