@@ -691,7 +691,7 @@ sub issuebook {
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				if ($responses->{5} eq '') {
+				if ($responses->{5} eq '' && $responses->{7} eq '') {
 					$questionnumber=5;
 					$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $res->{'reservedate'} \nAllow issue?";
 					$defaultanswer='N';
