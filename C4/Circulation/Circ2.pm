@@ -662,12 +662,12 @@ sub currentissues {
     my $crit='';
     if ($env->{'todaysissues'}) {
 	my @datearr = localtime(time());
-	my $today = (1900+$datearr[5]).sprintf "0%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
+	my $today = (1900+$datearr[5]).sprintf "%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
 	$crit=" and issues.timestamp like '$today%' ";
     }
     if ($env->{'nottodaysissues'}) {
 	my @datearr = localtime(time());
-	my $today = (1900+$datearr[5]).sprintf "0%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
+	my $today = (1900+$datearr[5]).sprintf "%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
 	$crit=" and !(issues.timestamp like '$today%') ";
     }
     my $select="select * from issues,items,biblioitems,biblio where
