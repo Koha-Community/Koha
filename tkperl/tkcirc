@@ -1,0 +1,865 @@
+#!/usr/bin/perl
+use C4::Format;
+use C4::Database;
+use Tk;
+require Tk::Dialog;
+require Tk::ROText;
+use C4::Accounts;
+use C4::Circulation::Borrissues;
+use C4::Circulation::Renewals;
+use C4::Stats;
+use C4::Search;
+
+require Exporter;
+use DBI;
+
+
+my %env;
+$env->{'bornum'}=2;
+$env->{'bcard'}=42;
+my $dbh=&C4Connect;
+
+my $issuebut, $returnbut, $mainholder;
+my $borrnumber, $borrower, $borrowerlist;
+my @items2, $currentissues;
+
+my $MW=MainWindow->new(-height => 500, -width => 600);
+$MW->fontCreate('C_normal',-family => 'courier', -size => -12);
+my $titlebar=$MW->Frame(-height => 100, -width => 600, -relief => 'ridge', -borderwidth => '4');
+my $frametop=$MW->Frame(-height => 100, -width => 600, -relief => 'ridge', -borderwidth => '2');
+my $framebot=$MW->Frame(-height => 430, -width => 600, -relief => 'ridge', -borderwidth => '2');
+$framebot->gridPropagate(0);
+my $kohalabel=$titlebar->Label(-text => 'Koha');
+my $menulabel=$titlebar->Label(-text => 'Main Menu');
+my $branchlabel=$titlebar->Label(-text => 'Stewart Elementary-lp');
+$kohalabel->pack(qw/-side left -padx 10/);
+$branchlabel->pack(qw/-side left -padx 10 -fill x -expand 1/);
+$menulabel->pack(qw/-side left -padx 10/);
+my $issuesbut=$frametop->Button(-text => 'Issues', -command => sub { $data='Issues'; getborrnumber(); });
+$issuesbut->pack(qw/-side left -padx 2 -pady 2 -expand 1 -fill x/);
+my $returnsbut=$frametop->Button(-text => 'Returns', -command => sub { $data='Returns'; returns(); });
+$returnsbut->pack(qw/-side right -padx 2 -pady 2 -expand 1 -fill x/);
+#$titlebar->pack(qw/-fill x -side top/);
+#$frametop->pack(qw/-fill x/);
+#$framebot->pack(-fill => both, -expand => 1);
+Tk::grid($titlebar, -col => 0, -row => 0, -sticky => 'nsew');
+Tk::grid($frametop, -col => 0, -row => 1, -sticky => 'nsew');
+Tk::grid($framebot, -col => 0, -row => 2, -sticky => 'nsew');
+$MW->gridPropagate(0);
+
+MainLoop;
+
+
+
+sub getborrnumber {
+    @items2=();
+    ($mainholder) && ($mainholder->destroy);
+    $mainholder=$framebot->Frame(-height => 500, -width => 600);
+    Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'nsew');
+    $mainholder->gridPropagate(0);
+    my $borrentryframe=$mainholder->Frame(-height => 40, -width => 200, -relief=>'ridge', -borderwidth=>4);
+    $borrentryframe->pack(-ipadx => 10, -ipady => 10);
+    $label=$borrentryframe->Label(-text => 'Borrower CardNumber or Last Name:', -anchor => 'w');
+    Tk::grid($label, -col => 0, -row => 0, -sticky => 'nw');
+    $borrentry=$borrentryframe->Entry(-width => 15);
+    $borrentry->bind('<Return>' => \&checkborrower);
+    Tk::grid($borrentry, -col => 1, -row => 0, -sticky => 'nw');
+    $borrentry->focus;
+#Check for surname entry instead of borrower card number
+}
+
+
+sub checkborrower {
+    $borrnumber=$borrentry->get();
+    my $sth=$dbh->prepare("Select * from borrowers where cardnumber=\"$borrnumber\"");
+    $sth->execute;
+    if ($borrower=$sth->fetchrow_hashref) {
+	$sth->finish;
+	$borrnumber=$borrower->{'borrowernumber'};
+	issues();
+    } else {
+	$sth->finish;
+	$borrnumber=lc($borrnumber);
+	my $borquery = "Select * from borrowers 
+	where lower(surname) like \"$borrnumber%\" order by surname,firstname";
+	my $sthb =$dbh->prepare($borquery);
+	$sthb->execute;
+	my $cntbor = 0;
+	my @borrows;
+	my @bornums;
+	if ($sthb->rows == 1)  {
+	    $borrower= $sthb->fetchrow_hashref;
+	    $borrnumber=$borrower->{'borrowernumber'};
+	    issues();
+	} elsif ($sthb->rows > 0) {
+	    # Select a borrower
+	    ($mainholder) && ($mainholder->destroy);
+	    $mainholder=$framebot->Frame(-height => 500, -width => 500);
+	    Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'nsew');
+	    my $frame=$mainholder->Frame(-height => 500, -width => 500, -relief => 'ridge', -borderwidth => '5');
+	    Tk::grid($frame, -col=>0, -row=>0, -sticky => 'nsew');
+	    $frame->pack(-ipadx=>10, -ipady=>10);
+	    my $label=$frame->Label(-text => 'Pick a Patron', -justify => 'center', -relief => 'ridge', -borderwidth => 3);
+	    Tk::grid($label, -col => 0, -row => 0, -sticky => 'nsew');
+	    $borrowerlist=$frame->Scrolled(Listbox, -width => '50', -height => '10', -setgrid => '1', -scrollbars => 'se', -font => 'C_normal');
+	    $borrowerlist->bind('<Double-1>' => \&pickborrower);
+	    $borrowerlist->bind('<Return>' => \&pickborrower);
+	    #$borrowerlist->bind('<ESC>' => \&issues);
+	    Tk::grid($borrowerlist, -col => 0, -row => 1, -sticky => 'n', -pady => 10);
+	    my $buttonframe=$frame->Frame(-height=>40, -width =>500);
+	    Tk::grid($buttonframe, -col => 0, -row => 2);
+	    my $okbutton=$buttonframe->Button(-text => 'OK', -command => \&pickborrower);
+	    $okbutton->pack(-side => 'left', -padx => 10, -pady => 10);
+	    my $cancelbutton=$buttonframe->Button(-text => 'Cancel', -command => \&getborrnumber);
+	    $cancelbutton->pack(-side => 'left', -padx => 10, -pady => 10);
+	    my @borrowerlist;
+	    while ($borrower= $sthb->fetchrow_hashref) {
+		my $cardnumber=$borrower->{'cardnumber'};
+		my $categorycode=$borrower->{'categorycode'};
+		my $name=$borrower->{'surname'}.", ".$borrower->{'firstname'};
+		my $line = sprintf "%10s %4s %-25s", $cardnumber, $categorycode, $name;
+		push (@borrowerlist, $line);
+	    }
+	    $borrowerlist->insert(0,@borrowerlist);
+	    $borrowerlist->activate(0);
+	    $borrowerlist->focus();
+	    #Tk::grid($borrowerlist, -col => 0, -row => 0, -sticky => 'n');
+	    #my ($cardnum) = C4::InterfaceCDK::selborrower($env,$dbh,\@borrows,\@bornums);
+	    my $query = "select * from borrowers where cardnumber = '$cardnum'";   
+	    $sth = $dbh->prepare($query);                          
+	    $sth->execute;                          
+	    $borrower =$sth->fetchrow_hashref;
+	    $sth->finish;
+	    $bornum=$borrower->{'borrowernumber'};
+	    if ($bornum eq '') {
+		#error_msg($env,"Borrower not found");
+	    }
+	}  
+    }
+}
+
+sub pickborrower {
+    my $line=$borrowerlist->get('active');
+    $line=~s/^\s*//;
+    my $borcardnumber=(split(/\s+/, $line))[0];
+    my $sth=$dbh->prepare("select borrowernumber from borrowers where cardnumber='$borcardnumber'");
+    $sth->execute;
+    ($borrnumber) = $sth->fetchrow;
+    issues();
+}
+
+sub issues {
+    my $query = "select * from borrowers where borrowernumber = '$borrnumber'";      
+    $sth = $dbh->prepare($query);
+    $sth->execute;
+    $borrower =$sth->fetchrow_hashref;
+    $sth->finish;                                              
+    my ($items,$items2) = C4::Circulation::Main::pastitems($env, $borrower->{'borrowernumber'}, $dbh);
+    my $previssues='';
+    foreach (@$items) {
+	$previssues.="$_\n";
+    }
+    $sth->finish;
+    $mainholder->destroy;
+    $mainholder=$framebot->Frame();
+    Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'n');
+    $mainholder->gridPropagate(0);
+    $topline=$mainholder->Frame();
+    $topline->pack(-side => top, -fill => 'x', -expand => '1');
+
+
+    $barcodeduedate=$topline->LabFrame(-label=>'Item Information', -height=>80, -width=>100, -labelside=>acrosstop);
+    Tk::grid($barcodeduedate, -col => 0, -row => 0, -sticky => 'nsew');
+    $barcodelabel=$barcodeduedate->Label(-text => 'Item Barcode:', -justify => right, -anchor => e);
+    Tk::grid($barcodelabel, -col => 0, -row => 0, -sticky => 'e');
+    $barcodeentry=$barcodeduedate->Entry(-width => 15);
+    $barcodeentry->bind('<Return>' => \&issuebook);
+    $barcodeentry->grid(-col => 1, -row => 0);
+    $barcodeentry->focus;
+    $duedatelabel=$barcodeduedate->Label(-text => 'Due Date:', -justify => right, -anchor => e);
+    Tk::grid($duedatelabel, -col => 0, -row => 1, -sticky => 'e');
+    $duedateentry=$barcodeduedate->Entry(-width => 15);
+    $duedateentry->bind('<Return>' => \&issuebook);
+    $duedateentry->grid(-col => 1, -row => 1);
+    $middle=$topline->Frame(-width => 40);
+    Tk::grid($middle, -col => 1, -sticky => 'ew');
+
+    $biframe=$topline->LabFrame(-label=>'Patron Information', -labelside=>acrosstop);
+    Tk::grid($biframe, -col=>2, -row=>0, -sticky=>'nsew');
+    $borrowerinfo=$biframe->Text(-height => 4, -width => 40, -wrap => none, -relief=>flat);
+    my $line = "$borrower->{'cardnumber'} ";
+    $line .= "$borrower->{'surname'}, ";
+    $line .= "$borrower->{'title'} $borrower->{'firstname'}\n";
+    $line .= "$borrower->{'streetaddress'}, $borrower->{'city'}\n";
+    $line .= "$borrower->{'categorycode'}";
+
+
+    $borrowerinfo->insert('0.0',$line);
+    $borrowerinfo->configure(-state => 'disabled');
+    $borrowerinfo->pack;
+    my $ciframe=$mainholder->LabFrame(-label=>'Current Issues', -labelside=>acrosstop);
+    $ciframe->pack;
+    $currentissues=$ciframe->Scrolled(Text, -height=>10, -width=>80, -relief => 'flat', -scrollbars => 'e');
+    $currentissues->insert('0.0','');
+    $currentissues->configure(-state => 'disabled');
+    $currentissues->pack(-side => top);
+    my $piframe=$mainholder->LabFrame(-label=>'Previous Issues', -labelside=>acrosstop);
+    $piframe->pack;
+    $previousissues=$piframe->Scrolled(Text, -height=>10, -width=>80, -relief => 'flat', -setgrid => '1', -scrollbars => 'e');
+    $previousissues->insert('0.0',$previssues);
+    $previousissues->pack(-side => top, -fill => both, -expand => 1);
+    $previousissues->configure(-state => 'disabled');
+}
+
+sub error_msg {
+    my ($env, $message) = @_;
+    my $button = $MW->messageBox(-type => 'OK', -title => 'Error Message', -message => "$message");
+}
+
+sub info_msg {
+    my ($env, $message) = @_;
+    my $button = $MW->messageBox(-type => 'OK', -title => 'Informational Message', -message => "$message");
+}
+
+sub msg_yn {
+    my ($env, $message1, $message2, $message3) =@_;
+    my $message = $message1;
+    ($message2) && ($message.="\n$message2");
+    ($message3) && ($message.="\n$message3");
+    my $button = $MW ->messageBox(-type => 'YesNo', -default => 'Yes', -title => 'Message', -message => "$message");
+    $button=substr($button,0,1);
+    return ($button);
+}
+
+
+sub msg_ny {
+    my ($env, $message1, $message2, $message3) =@_;
+    my $message = $message1;
+    ($message2) && ($message.="\n$message2");
+    ($message3) && ($message.="\n$message3");
+    my $button = $MW ->messageBox(-type => 'YesNo', -default => 'No', -title => 'Message', -message => "$message");
+    $button=substr($button,0,1);
+    return ($button);
+}
+
+
+sub updateissues {
+  # issue the book
+  my ($env,$itemno,$bitno,$dbh,$bornum)=@_;
+  my $loanlength=21;
+  my $query="Select *  from biblioitems,itemtypes
+  where (biblioitems.biblioitemnumber='$bitno') 
+  and (biblioitems.itemtype = itemtypes.itemtype)";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  if (my $data=$sth->fetchrow_hashref) {
+    $loanlength = $data->{'loanlength'}
+  }
+  $sth->finish;	        
+  open O, ">/root/tkcirc.out";
+  print O "env->loanlength: ".$env->{'loanlength'}."\n";
+  my $dateduef;
+  if ($env->{'loanlength'} eq "") {
+    my $ti = time;
+    my $datedue = time + ($loanlength * 86400);
+    my @datearr = localtime($datedue);
+    $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+  } else {
+    my $ti = time;
+    my $datedue = time + ($env->{'loanlength'} * 86400);
+    my @datearr = localtime($datedue);
+    $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+  }  
+  print O "dateduef: $dateduef\n";
+  close O;
+  $query = "Insert into issues (borrowernumber,itemnumber, date_due,branchcode)
+  values ($bornum,$itemno,'$dateduef','$env->{'branchcode'}')";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  $query = "Select * from items where itemnumber=$itemno";
+  $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $item=$sth->fetchrow_hashref;
+  $sth->finish;
+  $item->{'issues'}++;
+  $query="Update items set issues=$item->{'issues'} where itemnumber=$itemno";
+  $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  #my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($datedue);
+  my @datearr = split('-',$dateduef);
+  my $dateret = join('-',$datearr[2],$datearr[1],$datearr[0]);
+#  debug_msg($env,"query $query");
+  return($dateret);
+}
+
+sub returnrecord {
+  # mark items as returned
+  my ($env,$dbh,$bornum,$itemno)=@_;
+  #my $amt_owing = calc_odues($env,$dbh,$bornum,$itemno);
+  my @datearr = localtime(time);
+  my $dateret = (1900+$datearr[5])."-".$datearr[4]."-".$datearr[3];
+  my $query = "update issues set returndate = now(), branchcode ='$env->{'branchcode'}' where 
+    (borrowernumber = '$bornum') and (itemnumber = '$itemno') 
+    and (returndate is null)";  
+  my $sth = $dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  updatelastseen($env,$dbh,$itemno);
+  # check for overdue fine
+  my $oduecharge;
+  my $query = "select * from accountlines
+    where (borrowernumber = '$bornum')
+    and (itemnumber = '$itemno')
+    and (accounttype = 'FU' or accounttype='O')";
+  my $sth = $dbh->prepare($query);
+    $sth->execute;
+    if (my $data = $sth->fetchrow_hashref) {
+       # alter fine to show that the book has been returned.
+       my $uquery = "update accountlines
+         set accounttype = 'F'
+         where (borrowernumber = '$bornum')
+         and (itemnumber = '$itemno')
+         and (accountno = '$data->{'accountno'}') ";
+       my $usth = $dbh->prepare($uquery);
+       $usth->execute();
+       $usth->finish();
+       $oduecharge = $data->{'amountoutstanding'};
+    }
+    $sth->finish;
+  # check for charge made for lost book
+  my $query = "select * from accountlines 
+    where (borrowernumber = '$bornum') 
+    and (itemnumber = '$itemno')
+    and (accounttype = 'L')";
+  my $sth = $dbh->prepare($query);
+  $sth->execute;
+  if (my $data = $sth->fetchrow_hashref) {
+    # writeoff this amount 
+    my $offset;
+    my $amount = $data->{'amount'};
+    my $acctno = $data->{'accountno'};
+    my $amountleft;
+    if ($data->{'amountoutstanding'} == $amount) {
+       $offset = $data->{'amount'};
+       $amountleft = 0;
+    } else {
+       $offset = $amount - $data->{'amountoutstanding'};
+       $amountleft = $data->{'amountoutstanding'} - $amount;
+    }
+    my $uquery = "update accountlines
+      set accounttype = 'LR',amountoutstanding='0'
+      where (borrowernumber = '$bornum')
+      and (itemnumber = '$itemno')
+      and (accountno = '$acctno') ";
+    my $usth = $dbh->prepare($uquery);
+    $usth->execute();
+    $usth->finish;
+    my $nextaccntno = C4::Accounts::getnextacctno($env,$bornum,$dbh);
+    $uquery = "insert into accountlines
+      (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
+      values ($bornum,$nextaccntno,now(),0-$amount,'Book Returned',
+      'CR',$amountleft)";
+    $usth = $dbh->prepare($uquery);
+    $usth->execute;
+    $usth->finish;
+    $uquery = "insert into accountoffsets
+      (borrowernumber, accountno, offsetaccount,  offsetamount)
+      values ($bornum,$data->{'accountno'},$nextaccntno,$offset)";
+    $usth = $dbh->prepare($uquery);
+    $usth->execute;
+    $usth->finish;
+  } 
+  $sth->finish;
+  UpdateStats($env,'branch','return','0','',$itemno);
+  return($oduecharge);
+}
+
+
+
+sub calc_charges {
+  # calculate charges due
+  my ($env, $dbh, $itemno, $bornum)=@_;
+  my $charge=0;
+  my $item_type;
+  my $q1 = "select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
+    where (items.itemnumber ='$itemno')
+    and (biblioitems.biblioitemnumber = items.biblioitemnumber)
+    and (biblioitems.itemtype = itemtypes.itemtype)";
+  my $sth1= $dbh->prepare($q1);
+  $sth1->execute;
+  if (my $data1=$sth1->fetchrow_hashref) {
+     $item_type = $data1->{'itemtype'};
+     $charge = $data1->{'rentalcharge'};
+     my $q2 = "select rentaldiscount from borrowers,categoryitem 
+        where (borrowers.borrowernumber = '$bornum') 
+        and (borrowers.categorycode = categoryitem.categorycode)
+        and (categoryitem.itemtype = '$item_type')";
+     my $sth2=$dbh->prepare($q2);
+     $sth2->execute;
+     if (my $data2=$sth2->fetchrow_hashref) {
+        my $discount = $data2->{'rentaldiscount'};
+	$charge = ($charge *(100 - $discount)) / 100;
+     }
+     $sth2->{'finish'};
+  }   
+  $sth1->finish;
+  return ($charge);
+}
+
+
+
+sub previousissue {
+  my ($env,$itemnum,$dbh,$bornum)=@_;
+  my $sth=$dbh->prepare("Select 
+     firstname,surname,issues.borrowernumber,cardnumber,returndate
+     from issues,borrowers where 
+     issues.itemnumber='$itemnum' and
+     issues.borrowernumber=borrowers.borrowernumber 
+     and issues.returndate is NULL");
+  $sth->execute;
+  my $borrower=$sth->fetchrow_hashref;
+  my $canissue = "Y";
+  $sth->finish;
+  my $newdate;
+  if ($borrower->{'borrowernumber'} ne ''){
+    if ($bornum eq $borrower->{'borrowernumber'}){
+      # no need to issue
+      my ($renewstatus) = C4::Circulation::Renewals::renewstatus($env,$dbh,$bornum,$itemnum);
+      my ($resbor,$resrec) = checkreserve($env,$dbh,$itemnum);
+      if ($renewstatus == "0") {
+        info_msg($env,"</S>Issued to this borrower - No renewals<!S>");
+	$canissue = "N";
+      } elsif ($resbor ne "") {
+        my $resp = msg_ny($env,"Book is issued to this borrower",
+	  "and is reserved - Renew?");
+        if ($resp eq "Y") {
+	  $newdate = C4::Circulation::Renewals::renewbook($env,$dbh,$bornum,$itemnum);
+	  $canissue = "R";
+	} else {
+	  $canissue = "N";
+	}
+      } else {
+        my $resp = msg_yn($env,"Book is issued to this borrower", "Renew?");
+        if ($resp eq "Y") {
+          $newdate = C4::Circulation::Renewals::renewbook($env,$dbh,$bornum,$itemnum);
+     	  $canissue = "R";
+        } else {
+          $canissue = "N";
+        }
+      }    
+    } else {
+      my $text="Issued to $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'})";    
+      my $resp = msg_yn($env,$text,"Mark as returned?");
+      if ( $resp eq "Y") {
+        &returnrecord($env,$dbh,$borrower->{'borrowernumber'},$itemnum);
+      }	else {
+        $canissue = "N";
+      }
+    }
+  } 
+  return($borrower->{'borrowernumber'},$canissue,$newdate);
+}
+sub checkreserve{
+  # Check for reserves for biblio 
+  my ($env,$dbh,$itemnum)=@_;
+  my $resbor = "";
+  my $query = "select * from reserves,items 
+    where (items.itemnumber = '$itemnum')
+    and (reserves.cancellationdate is NULL)
+    and (items.biblionumber = reserves.biblionumber)
+    and ((reserves.found = 'W')
+    or (reserves.found is null)) 
+    order by priority";
+  my $sth = $dbh->prepare($query);
+  $sth->execute();
+  my $resrec;
+  if (my $data=$sth->fetchrow_hashref) {
+    $resrec=$data;
+    my $const = $data->{'constrainttype'};
+    if ($const eq "a") {
+      $resbor = $data->{'borrowernumber'}; 
+    } else {
+      my $found = 0;
+      my $cquery = "select * from reserveconstraints,items 
+         where (borrowernumber='$data->{'borrowernumber'}') 
+         and reservedate='$data->{'reservedate'}'
+	 and reserveconstraints.biblionumber='$data->{'biblionumber'}'
+	 and (items.itemnumber=$itemnum and 
+	 items.biblioitemnumber = reserveconstraints.biblioitemnumber)";
+      my $csth = $dbh->prepare($cquery);
+      $csth->execute;
+      if (my $cdata=$csth->fetchrow_hashref) {$found = 1;}
+      if ($const eq 'o') {
+        if ($found eq 1) {$resbor = $data->{'borrowernumber'};}
+      } else {
+        if ($found eq 0) {$resbor = $data->{'borrowernumber'};} 
+      }
+      $csth->finish();
+    }     
+  }
+  $sth->finish;
+  return ($resbor,$resrec);
+}
+
+
+sub scanbook {
+  my ($env,$interface)=@_;
+  #scan barcode
+  my ($number,$reason)=dialog("Book Barcode:");
+  $number=uc $number;
+  return ($number,$reason);
+}
+
+
+sub issuebook {
+    my $bornum=$borrnumber;
+    $barcode=$barcodeentry->get();
+    $barcodeentry->delete('0.0', 'end');
+    my $itemnum=$barcode;
+    #my ($env,$dbh,$itemnum,$bornum,$items)=@_;
+    $env->{'loanlength'}=14;
+    $env->{'branchcode'}='STWE';
+    $itemnum=uc $itemnum;
+    my $canissue = 1;
+##  my ($itemnum,$reason)=&scanbook();
+    my $query="Select * from items,biblio,biblioitems where (barcode='$itemnum') and
+      (items.biblionumber=biblio.biblionumber) and
+      (items.biblioitemnumber=biblioitems.biblioitemnumber) ";
+    my $item;
+    my $charge;
+    my $datedue = $env->{'loanlength'};
+    my $sth=$dbh->prepare($query);  
+    $sth->execute;
+    if ($item=$sth->fetchrow_hashref) {
+    $sth->finish;
+     #check if item is restricted
+    if ($item->{'notforloan'} == 1) {
+	error_msg($env,"Item Not for Loan");
+	$canissue = 0;
+    } elsif ($item->{'wthdrawn'} == 1) {
+	error_msg($env,"Item Withdrawn");
+	$canissue = 0;
+    } elsif ($item->{'restricted'} == 1 ){
+	error_msg($env,"Restricted Item");
+	$canissue = 0;
+    } elsif ($item->{'itemtype'} eq 'REF'){
+	error_msg($env,"Item Not for Loan");
+	$canissue=0;
+    }
+     #check if item is on issue already
+    if ($canissue == 1) {
+	my ($currbor,$issuestat,$newdate) = 
+	&previousissue($env,$item->{'itemnumber'},$dbh,$bornum);
+	if ($issuestat eq "N") { 
+	    $canissue = 0;
+	} elsif ($issuestat eq "R") {
+	    $canissue = -1;
+	    $datedue = $newdate;
+	    $charge = calc_charges($env,$dbh,$item->{'itemnumber'},$bornum);
+	    if ($charge > 0) {
+		createcharge($env,$dbh,$item->{'itemnumber'},$bornum,$charge);
+	    }
+	    &UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$item->{'itemnumber'},$item->{'itemtype'});
+	}  
+    } 
+    if ($canissue == 1) {
+       #check reserve
+       my ($resbor,$resrec) =  &checkreserve($env,$dbh,$item->{'itemnumber'});    
+       #debug_msg($env,$resbor);
+       if ($resbor eq $bornum) { 
+	    my $rquery = "update reserves set found = 'F' where reservedate = '$resrec->{'reservedate'}' and borrowernumber = '$resrec->{'borrowernumber'}' and biblionumber = '$resrec->{'biblionumber'}'";
+	    my $rsth = $dbh->prepare($rquery);
+	    $rsth->execute;
+	    $rsth->finish;
+       } elsif ($resbor ne "") {
+	    my $bquery = "select * from borrowers 
+	    where borrowernumber = '$resbor'";
+	    my $btsh = $dbh->prepare($bquery);
+	    $btsh->execute;
+	    my $resborrower = $btsh->fetchrow_hashref;
+	    my $msgtxt = chr(7)."Res for $resborrower->{'cardnumber'},";
+	    $msgtxt = $msgtxt." $resborrower->{'initials'} $resborrower->{'surname'}";
+	    my $ans = msg_ny($env,$msgtxt,"Allow issue?");
+	    if ($ans eq "N") {
+# print a docket;
+		printreserve($env,$resrec,$resborrower,$item);
+		$canissue = 0;
+	    } else {
+		my $ans = msg_ny($env,"Cancel reserve?");
+		if ($ans eq "Y") {
+		    my $rquery = "update reserves set found = 'F' where reservedate = '$resrec->{'reservedate'}' and borrowernumber = '$resrec->{'borrowernumber'}' and biblionumber = '$resrec->{'biblionumber'}'";
+		    my $rsth = $dbh->prepare($rquery);
+		    $rsth->execute;
+		    $rsth->finish;
+		}
+	    }
+	    $btsh->finish();
+	}
+    }
+    #if charge deal with it
+	
+    if ($canissue == 1) {
+	$charge = calc_charges($env,$dbh,$item->{'itemnumber'},$bornum);
+    }
+    if ($canissue == 1) {
+	 #now mark as issued
+	$datedue=&updateissues($env,$item->{'itemnumber'},$item->{'biblioitemnumber'},$dbh,$bornum);
+	 #debug_msg("","date $datedue");
+	&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$item->{'itemnumber'},$item->{'itemtype'});
+	if ($charge > 0) {
+	    createcharge($env,$dbh,$item->{'itemnumber'},$bornum,$charge);
+	}	  
+    } elsif ($canissue == 0) {
+	#info_msg($env,"Can't issue $item->{'cardnumber'}");
+    }  
+} else {
+    #my $valid = checkdigit($env,$itemnum);
+    my $valid=1;
+	if ($valid ==1) {
+	    if (substr($itemnum,0,1) = "V") {
+		#this is a borrower
+		$env->{'newborrower'} = $itemnum;
+	    } else {	  
+		error_msg($env,"$itemnum not found - rescan");
+	    }
+	} else {
+	    error_msg($env,"Invalid Number");
+	}  
+    }
+    $sth->finish;
+#debug_msg($env,"date $datedue");
+    if (($datedue ne "") && ($canissue)) {
+	my $line=formatitem($env, $item, $datedue, $charge);
+	unshift @items2, $line;
+    }
+    my $currentissuestext='';
+    foreach (@items2) {
+	$currentissuestext.="$_\n";
+    }
+    $currentissues->configure(-state => 'normal');
+    $currentissues->delete('0.0','end');
+    $currentissues->insert('0.0',$currentissuestext);
+    $currentissues->configure(-state => 'disabled');
+    return($item,$charge,$datedue);
+}
+
+sub formatitem {
+   my ($env,$item,$datedue,$charge) = @_;
+   my $line = $datedue." ".$item->{'barcode'}." ".$item->{'title'}.": ".$item->{'author'};
+   my $iclass =  $item->{'itemtype'};
+   if ($item->{'dewey'} > 0) {
+     my $dewey = $item->{'dewey'};
+     $dewey =~ s/0*$//;
+     $dewey =~ s/\.$//;
+     $iclass = $iclass.$dewey.$item->{'subclass'};
+   };
+   my $llen = 65 - length($iclass);
+   my $line = fmtstr($env,$line,"L".$llen);
+   my $line = $line." $iclass ";
+   my $line = $line.fmtdec($env,$charge,"22");
+   return $line;
+}   
+
+sub returnbook {
+    my $item = $barcodeentry->get();
+    $barcodeentry->delete('0.0', 'end');
+    my ($resp, $bornum, $borrower, $itemno, $itemrec, $amt_owing) = checkissue($env, $dbh, $item);
+    my $line = "$borrower->{'cardnumber'} ";
+    $line .= "$borrower->{'surname'}, ";
+    $line .= "$borrower->{'title'} $borrower->{'firstname'}\n";
+    $line .= "$borrower->{'streetaddress'}, $borrower->{'city'}\n";
+    $line .= "$borrower->{'categorycode'}";
+    $borrowerinfo->configure(-state => 'normal');
+    $borrowerinfo->delete('0.0', 'end');
+    $borrowerinfo->insert('0.0',$line);
+    $borrowerinfo->configure(-state => 'disabled');
+    if ($bornum ne "") {                                                                                                           
+	($issues,$odues,$amt_owing) = borrdata2($env,$bornum);                                                                      
+    } else {                                                                                                                       
+	$issues = "";                                                                                                                
+	$odues = "";                                                                                                                 
+	$amt_owing = "";                                                                                                             
+    }                                                                                                                              
+    if ($resp ne "") {                                                                                                             
+	if ($itemno ne "" ) {                                                                                                        
+	    my $item = itemnodata($env,$dbh,$itemno);                                                                                  
+	    my $fmtitem = C4::Circulation::Issues::formatitem($env,$item,"",$amt_owing);                                               
+	    unshift @items,$fmtitem;                                                                                                   
+	    if ($items[20] > "") {                                                                                                     
+		#pop @items;                                                                                                              
+	    }                                                                                                                          
+	}                                                                                                                            
+    }                                                                                                                              
+    my $itemsreturnedtext='';
+    foreach (@items) {
+	$itemsreturnedtext.="$_\n";
+    }
+    $itemsreturned->configure(-state => 'normal');
+    $itemsreturned->delete('0.0','end');
+    $itemsreturned->insert('0.0',$itemsreturnedtext);
+    $itemsreturned->configure(-state => 'disabled');
+}
+
+sub returns {
+    @items=();
+    ($mainholder) && ($mainholder->destroy);
+    $mainholder=$framebot->Frame(-height => 500, -width => 600);
+    Tk::grid($mainholder, -col => 0, -row => 0, -sticky => 'nsew');
+    $mainholder->gridPropagate(0);
+    $topline=$mainholder->Frame();
+    $topline->pack(-side => top, -fill => 'x', -expand => '1');
+
+
+    my $barcodeframe=$topline->LabFrame(-label=>'Item Barcode', -height=>80, -width=>100, -labelside=>acrosstop);
+    Tk::grid($barcodeframe, -col => 0, -row => 0, -sticky => 'n');
+    $barcodeentry=$barcodeframe->Entry(-width => 15);
+    $barcodeentry->bind('<Return>' => \&returnbook);
+    $barcodeentry->grid(-col => 1, -row => 0, -sticky=>'e', -padx=>10, -pady=>10);
+    $barcodeentry->focus;
+
+    $biframe=$topline->LabFrame(-label=>'Patron Information', -labelside=>acrosstop);
+    Tk::grid($biframe, -col=>2, -row=>0, -sticky=>'nsew');
+    $borrowerinfo=$biframe->Text(-height => 4, -width => 40, -wrap => none, -relief=>flat);
+    $borrowerinfo->configure(-state => 'disabled');
+    $borrowerinfo->grid(-col=>1, -row=>0, -sticky=>'w');
+
+
+    my $returnedframe=$mainholder->LabFrame(-label=>'Items Returned', -labelside=>acrosstop);
+    $returnedframe->pack;
+    $itemsreturned=$returnedframe->Scrolled(Text, -height=>20, -width=>80, -relief => 'flat', -scrollbars => 'e');
+    $itemsreturned->insert('0.0','');
+    $itemsreturned->configure(-state => 'disabled');
+    $itemsreturned->pack(-side => top);
+}
+
+
+sub updatelastseen {
+  my ($env,$dbh,$itemnumber)= @_;
+  my $br = $env->{'branchcode'};
+  my $query = "update items 
+    set datelastseen = now(), holdingbranch = '$br'
+    where (itemnumber = '$itemnumber')";
+  my $sth = $dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+     
+}
+
+
+
+sub checkissue {
+    my ($env,$dbh, $item) = @_;
+    my $reason='Circ';
+    my $bornum;
+    my $borrower;
+    my $itemno;
+    my $itemrec;
+    my $amt_owing;
+    $item = uc $item;
+    my $query = "select * from items,biblio 
+	where barcode = '$item'
+	and (biblio.biblionumber=items.biblionumber)";
+    my $sth=$dbh->prepare($query); 
+    $sth->execute;
+    if ($itemrec=$sth->fetchrow_hashref) {
+	$sth->finish;
+	$itemno = $itemrec->{'itemnumber'};
+	$query = "select * from issues
+	where (itemnumber='$itemrec->{'itemnumber'}')
+	and (returndate is null)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	if (my $issuerec=$sth->fetchrow_hashref) {
+	    $sth->finish;
+	    $query = "select * from borrowers where
+	    (borrowernumber = '$issuerec->{'borrowernumber'}')";
+	    my $sth= $dbh->prepare($query);
+	    $sth->execute;
+	    $env->{'bornum'}=$issuerec->{'borrowernumber'};
+	    $borrower = $sth->fetchrow_hashref;
+	    $bornum = $issuerec->{'borrowernumber'};
+	    $itemno = $issuerec->{'itemnumber'};
+	    $amt_owing = returnrecord($env,$dbh,$bornum,$itemno);     
+	    $reason = "Returned";    
+	} else {
+	    $sth->finish;
+	    updatelastseen($env,$dbh,$itemrec->{'itemnumber'});
+	    $reason = "Item not issued";
+	}
+	my ($resfound,$resrec) = find_reserves($env,$dbh,$itemrec->{'itemnumber'});
+	if ($resfound eq "y") {
+	    my $bquery = "select * from borrowers 
+	    where borrowernumber = '$resrec->{'borrowernumber'}'";
+	    my $btsh = $dbh->prepare($bquery);
+	    $btsh->execute;                   
+	    my $resborrower = $btsh->fetchrow_hashref;
+#printreserve($env,$resrec,$resborrower,$itemrec);
+	    my $mess = "Reserved for collection at branch $resrec->{'branchcode'}"; 
+	    error_msg($env,$mess);
+	    $btsh->finish;
+	}  
+    } else {
+	$sth->finish;
+	$reason = "Item not found";
+    }   
+    return ($reason,$bornum,$borrower,$itemno,$itemrec,$amt_owing);
+}
+  
+sub find_reserves {
+    my ($env,$dbh,$itemno) = @_;
+    my $itemdata = itemnodata($env,$dbh,$itemno);
+    my $query = "select * from reserves where found is null 
+    and biblionumber = $itemdata->{'biblionumber'} and cancellationdate is NULL
+    order by priority,reservedate ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my $resfound = "n";
+    my $resrec;
+    while (($resrec=$sth->fetchrow_hashref) && ($resfound eq "n")) {
+	if ($resrec->{'found'} eq "W") {
+	    if ($resrec->{'itemnumber'} eq $itemno) {
+		$resfound = "y";
+	    }
+	} elsif ($resrec->{'constrainttype'} eq "a") {
+	    $resfound = "y";
+	} else {
+	    my $conquery = "select * from reserveconstraints where borrowernumber
+		= $resrec->{'borrowernumber'} and reservedate = '$resrec->{'reservedate'}' and biblionumber = $resrec->{'biblionumber'} and biblioitemnumber = $itemdata->{'biblioitemnumber'}";
+	    my $consth = $dbh->prepare($conquery);
+	    $consth->execute;
+	    if (my $conrec=$consth->fetchrow_hashref) {
+		if ($resrec->{'constrainttype'} eq "o") {
+		    $resfound = "y";
+		}
+	    } else {
+		if ($resrec->{'constrainttype'} eq "e") {
+		    $resfound = "y";
+		}
+	    }
+	    $consth->finish;
+	}
+	if ($resfound eq "y") {
+	    my $updquery = "update reserves 
+		set found = 'W',itemnumber='$itemno'
+		where borrowernumber = $resrec->{'borrowernumber'}
+		and reservedate = '$resrec->{'reservedate'}'
+		and biblionumber = $resrec->{'biblionumber'}";
+	    my $updsth = $dbh->prepare($updquery);
+	    $updsth->execute;
+	    $updsth->finish;
+	    my $itbr = $resrec->{'branchcode'};
+	    if ($resrec->{'branchcode'} ne $env->{'branchcode'}) {
+		my $updquery = "update items
+		set holdingbranch = 'TR'
+		where itemnumber = $itemno";
+		my $updsth = $dbh->prepare($updquery);
+		$updsth->execute;
+		$updsth->finish;
+	    }	
+	}
+    }
+    $sth->finish;
+    return ($resfound,$resrec);   
+}
