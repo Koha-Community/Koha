@@ -29,55 +29,111 @@ use DBI;
 use C4::Database;
 use C4::Circulation::Circ2;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-  
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
+=head1 NAME
+
+C4::BookShelves - Functions for manipulating Koha virtual bookshelves
+
+=head1 SYNOPSIS
+
+  use C4::BookShelves;
+
+=head1 DESCRIPTION
+
+FIXME
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &RemoveFromShelf &AddShelf &RemoveShelf);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
+
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Never used
 
 
 # non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
+use vars qw(@more $stuff);		# FIXME - Never used
 
+# initalize package globals, first exported ones
+# FIXME - Never used
 my $Var1   = '';
 my %Hashit = ();
-		    
+
 # then the others (which are still accessible as $Some::Module::stuff)
+# FIXME - Never used
 my $stuff  = '';
 my @more   = ();
-	
+
 # all file-scoped lexicals must be created before
 # the functions below that use them.
-		
+
 # file-private lexicals go here
+# FIXME - Never used
 my $priv_var    = '';
 my %secret_hash = ();
-			    
+
 # here's a file-private function as a closure,
 # callable as &$priv_func;  it cannot be prototyped.
+# FIXME - Never used
 my $priv_func = sub {
   # stuff goes here.
 };
-						    
+
 # make all your functions, whether exported or not;
 
 my $dbh=C4Connect();
 
+=item GetShelfList
+
+  $shelflist = &GetShelfList();
+  ($shelfnumber, $shelfhash) = each %{$shelflist};
+
+Looks up the virtual bookshelves, and returns a summary. C<$shelflist>
+is a reference-to-hash. The keys are the bookshelf numbers
+(C<$shelfnumber>, above), and the values (C<$shelfhash>, above) are
+themselves references-to-hash, with the following keys:
+
+=over 4
+
+=item C<$shelfhash-E<gt>{shelfname}>
+
+A string. The name of the shelf.
+
+=item C<$shelfhash-E<gt>{count}>
+
+The number of books on that bookshelf.
+
+=back
+
+=cut
+#'
+# FIXME - Wouldn't it be more intuitive to return a list, rather than
+# a reference-to-hash? The shelf number can be just another key in the
+# hash.
 sub GetShelfList {
+    # FIXME - These two database queries can be combined into one:
+    #	SELECT		bookshelf.shelfnumber, bookshelf.shelfname,
+    #			count(shelfcontents.itemnumber)
+    #	FROM		bookshelf
+    #	LEFT JOIN	shelfcontents
+    #	ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
+    #	GROUP BY	bookshelf.shelfnumber
     my $sth=$dbh->prepare("select shelfnumber,shelfname from bookshelf");
     $sth->execute;
     my %shelflist;
     while (my ($shelfnumber, $shelfname) = $sth->fetchrow) {
 	my $sti=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=$shelfnumber");
+		# FIXME - Should there be an "order by" in here somewhere?
 	$sti->execute;
 	my ($count) = $sti->fetchrow;
 	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
@@ -86,7 +142,20 @@ sub GetShelfList {
     return(\%shelflist);
 }
 
+=item GetShelfContents
 
+  $itemlist = &GetShelfContents($env, $shelfnumber);
+
+Looks up information about the contents of virtual bookshelf number
+C<$shelfnumber>.
+
+Returns a reference-to-array, whose elements are references-to-hash,
+as returned by C<&getiteminformation>.
+
+I don't know what C<$env> is.
+
+=cut
+#'
 sub GetShelfContents {
     my ($env, $shelfnumber) = @_;
     my @itemlist;
@@ -97,8 +166,21 @@ sub GetShelfContents {
 	push (@itemlist, $item);
     }
     return (\@itemlist);
+		# FIXME - Wouldn't it be more intuitive to return a list,
+		# rather than a reference-to-list?
 }
 
+=item AddToShelf
+
+  &AddToShelf($env, $itemnumber, $shelfnumber);
+
+Adds item number C<$itemnumber> to virtual bookshelf number
+C<$shelfnumber>, unless that item is already on that shelf.
+
+C<$env> is ignored.
+
+=cut
+#'
 sub AddToShelf {
     my ($env, $itemnumber, $shelfnumber) = @_;
     my $sth=$dbh->prepare("select * from shelfcontents where shelfnumber=$shelfnumber and itemnumber=$itemnumber");
@@ -107,16 +189,46 @@ sub AddToShelf {
 # already on shelf
     } else {
 	$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values ($shelfnumber, $itemnumber, 0)");
+			# FIXME - The default for 'flags' is NULL.
+			# Why set it to 0?
 	$sth->execute;
     }
 }
 
+=item RemoveFromShelf
+
+  &RemoveFromShelf($env, $itemnumber, $shelfnumber);
+
+Removes item number C<$itemnumber> from virtual bookshelf number
+C<$shelfnumber>. If the item wasn't on that bookshelf to begin with,
+nothing happens.
+
+C<$env> is ignored.
+
+=cut
+#'
 sub RemoveFromShelf {
     my ($env, $itemnumber, $shelfnumber) = @_;
     my $sth=$dbh->prepare("delete from shelfcontents where shelfnumber=$shelfnumber and itemnumber=$itemnumber");
     $sth->execute;
 }
 
+=item AddShelf
+
+  ($status, $msg) = &AddShelf($env, $shelfname);
+
+Creates a new virtual bookshelf with name C<$shelfname>.
+
+Returns a two-element array, where C<$status> is 0 if the operation
+was successful, or non-zero otherwise. C<$msg> is "Done" in case of
+success, or an error message giving the reason for failure.
+
+C<$env> is ignored.
+
+=cut
+#'
+# FIXME - Perhaps this could/should return the number of the new bookshelf
+# as well?
 sub AddShelf {
     my ($env, $shelfname) = @_;
     my $q_shelfname=$dbh->quote($shelfname);
@@ -131,6 +243,21 @@ sub AddShelf {
     }
 }
 
+=item RemoveShelf
+
+  ($status, $msg) = &RemoveShelf($env, $shelfnumber);
+
+Deletes virtual bookshelf number C<$shelfnumber>. The bookshelf must
+be empty.
+
+Returns a two-element array, where C<$status> is 0 if the operation
+was successful, or non-zero otherwise. C<$msg> is "Done" in case of
+success, or an error message giving the reason for failure.
+
+C<$env> is ignored.
+
+=cut
+#'
 sub RemoveShelf {
     my ($env, $shelfnumber) = @_;
     my $sth=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=$shelfnumber");
@@ -145,12 +272,17 @@ sub RemoveShelf {
     }
 }
 
-			
 END { }       # module clean-up code here (global destructor)
 
+1;
 
 #
 # $Log$
+# Revision 1.5  2002/09/22 17:29:17  arensb
+# Added POD.
+# Added some FIXME comments.
+# Removed useless trailing whitespace.
+#
 # Revision 1.4  2002/08/14 18:12:51  tonnesen
 # Added copyright statement to all .pl and .pm files
 #
@@ -161,3 +293,19 @@ END { }       # module clean-up code here (global destructor)
 # Inserting some changes I made locally a while ago.
 #
 #
+
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+L<perl>.
+
+L<C4::Circulation::Circ2(3)>
+
+=cut
