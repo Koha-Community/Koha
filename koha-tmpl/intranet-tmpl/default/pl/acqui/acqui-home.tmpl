@@ -1,15 +1,15 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<h1>Akwizycje</h1><br>
+<h1>Gromadzenie</h1><br>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
-		<b>SK£ADANIE ZAMÓWIENIA, ODBIÓR LUB MODYFIKACJA</b>
+		<b>START, RECEIVE, MODIFY ANY ORDER</b>
 	</TD>
 </TR>
 <TR VALIGN=TOP>
-	<TD>Nazwa dostawcy</TD>
+	<TD>Supplier Name</TD>
 	<TD>
 		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
 		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
@@ -20,11 +20,11 @@
 <TABLE width="40%" cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
-		<b>ODBIÓR LUB MODYFIKACJA ZAMÓWIEÑ REGULARNYCH</b>
+		<b>RECEIVE OR MODIFY PERIODICAL ORDER</b>
 	</TD>
 </TR>
 <TR VALIGN=TOP>
-	<TD>Wyszukiwanie tytu³owe</TD>
+	<TD>Szukaj wg. TytuÅ‚u</TD>
 	<TD>
 		<FORM ACTION="/cgi-bin/koha/acqui/acquire.pl" method=post>
 		<INPUT TYPE="text"  SIZE="25"   NAME="recieve">
@@ -40,18 +40,18 @@
 	<FORM ACTION="/cgi-bin/koha/currency.pl">
 	<input type=hidden name=type value=change>
 	<TR VALIGN=TOP>
-		<TD  bgcolor="ffdf61" colspan=2><b>KURSY WYMIANY </b></TD>
+		<TD  bgcolor="ffdf61" colspan=2><b>EXCHANGE RATES </b></TD>
 	</TR>
-	<TMPL_LOOP name="loop_currency">
+	<!-- TMPL_LOOP name="loop_currency" -->
 		<TR VALIGN=TOP>
 			<TD>
-				<TMPL_VAR name="currency">
+				<!-- TMPL_VAR name="currency" -->
 			</td>
 			<td>
-				<INPUT TYPE="text"  SIZE="10"   NAME="<TMPL_VAR name="currency">" value=<TMPL_VAR name="rate">>
+				<INPUT TYPE="text"  SIZE="10"   NAME="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
 			</td>
 		</TR>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 	<tr>
 		<td colspan=2 align="center"><input type=submit value="Zapisz"></TD>
 	</tr>
@@ -62,37 +62,38 @@
 <TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
 <FORM ACTION="/cgi-bin/koha/search.pl">
 <TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2><b>BUD¯ET ORAZ WYDATKI KSIÊGARSKIE</b></TD>
+	<TD  bgcolor="ffdf61" colspan=2><b>BUDGET I FUNDUSZE</b></TD>
 </TR>
 <TR VALIGN=TOP>
 	<TD colspan=2>
 		<table cellspacing=0 cellpadding=2 border=1>
 			<tr>
-				<td><b>Bud¿et</B></TD>
-				<TD><b>Suma</B></TD>
-				<TD><b>Wydano</B></TD>
-				<TD><b>Alokowano</B></TD>
-				<TD><b>Dostêpne</B></TD>
+				<td><b>Budgets</B></TD>
+				<TD><b> Total</B></TD>
+				<TD><b>Spent</B></TD>
+				<TD><b>Comtd</B></TD>
+				<TD><b>Avail</B></TD>
 			</TR>
-			<TMPL_LOOP name="loop_budget">
+			<!-- TMPL_LOOP name="loop_budget" -->
 				<tr>
-					<td><TMPL_VAR name="bookfundname"></TD>
-					<TD align=right><TMPL_VAR name="budgetamount"></TD>
-					<TD align=right><TMPL_VAR name="spent"></TD>
-					<TD align=right><TMPL_VAR name="comtd"></TD>
-					<TD align=right><TMPL_VAR name="avail"></TD>
+					<td><!-- TMPL_VAR name="bookfundname" --></TD>
+					<TD align=right><!-- TMPL_VAR name="budgetamount" --></TD>
+					<TD align=right><!-- TMPL_VAR name="spent" --></TD>
+					<TD align=right><!-- TMPL_VAR name="comtd" --></TD>
+					<TD align=right><!-- TMPL_VAR name="avail" --></TD>
 				</TR>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 			<tr>
-				<td><b>Total</b></TD>
-				<TD align=right><b><TMPL_VAR name="total"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totspent"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totcomtd"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totavail"></b></TD>
+				<td><b> Total</b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="total" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totspent" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totcomtd" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totavail" --></b></TD>
 			</TR>
-		</table><br>
-		Zastosuj kombinacjê klawiszy [ctrl + r] aby wy¶wietliæ uaktualnione cyfry. 
-		Podane cyfry s± przybli¿one, gdy¿ kurs wymiany wp³ywa na kwotê faktycznie zap³acon±. 
+		</table>
+		<p>
+		Use your reload button to get the most recent figures. Committed figures are approximate only, as exchange rates will affect the amount actually paid.
+		</p>
 	</TD>
 </TR>
 </form>
@@ -102,13 +103,13 @@
 <TABLE cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
-		<p><b>POMOC zamówienia:</b></p>
-		<ul>By rozpocz±æ akwizycjê, niezale¿nie czy jest to zamówienie, zakup w³asny czy darowizna najpierw wyszukaj dostawcê, dodaj go je¶li potrzeba.</ul>
-		<ul>Nastêpnie wybierz poprzedni koszyk lub utwórz nowy. Uwaga, koszyk bêdzie nale¿a³ do nazwy u¿ytkownika z jak± siê zalogowa³e¶/a¶.</ul>
-		<ul>Aby z³ozyæ zamówienie nale¿y ustaliæ czy istnieje ju¿ opis dla pozycji, nastêpnie albo dodaæ pozycjê albo wstawiæ nowy opis i dodaæ pozycjê. </ul>
-		<p>W celu zamkniêcia koszyka kliknij na "zobacz koszyki" lub szukaj powy¿ej, a nastêpnie naci¶nij "zatwierd¼ koszyk". </p>
-	</td
+		<p><b>HELP Ordering:</b></p>
+		<ul>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</ul>
+		<ul>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </ul>
+		<ul>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </ul>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
+	</td>
 </TR>
 </table>
 
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
