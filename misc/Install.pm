@@ -59,7 +59,6 @@ $VERSION = 0.01;
 		&getmessage
 		&showmessage
 		&releasecandidatewarning
-		&setkohaversion
 		&getinstallationdirectories
 		&getdatabaseinfo
 		&getapacheinfo
@@ -89,7 +88,7 @@ use vars qw( $servername $svr_admin $opacport $intranetport );
 use vars qw( $mysqldir );
 use vars qw( $database $mysqluser );
 use vars qw( $mysqlpass );			# normally should not be used
-use vars qw( $dbname $hostname $user $pass );	# virtual hosting
+use vars qw( $hostname $user $pass );	# virtual hosting
 
 =item heading
 
@@ -1043,15 +1042,15 @@ Press <ENTER> to try again:
 
 sub getdatabaseinfo {
 
-    $dbname = 'Koha';
+    $database = 'Koha';
     $hostname = 'localhost';
     $user = 'kohaadmin';
     $pass = '';
 
 #Get the database name
 
-    my $message=getmessage('DatabaseName', [$dbname]);
-    $dbname=showmessage($message, 'free', $dbname);
+    my $message=getmessage('DatabaseName', [$database]);
+    $database=showmessage($message, 'free', $database);
 
 #Get the hostname for the database
     
@@ -1060,7 +1059,7 @@ sub getdatabaseinfo {
 
 #Get the username for the database
 
-    $message=getmessage('DatabaseUser', [$dbname, $hostname, $user]);
+    $message=getmessage('DatabaseUser', [$database, $hostname, $user]);
     $user=showmessage($message, 'free', $user);
 
 #Get the password for the database user
@@ -1527,7 +1526,7 @@ sub installfiles {
 		if (-e $tgt) {
     		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]);
 			startsysout();
-			system("mv ".$tgt." ".$tgt.".old");
+			system("mv ".$tgt." ".$tgt.strftime("%Y%m%d%H%M",localtime()));
 		}
 
     	print getmessage('CopyingFiles', [$desc,$tgt]);
@@ -1557,7 +1556,7 @@ sub installfiles {
     my $old_umask = umask(027); # make sure koha.conf is never world-readable
     open(SITES,">$etcdir/koha.conf.tmp") or warn "Couldn't create file at $etcdir. Must have write capability.\n";
     print SITES qq|
-database=$dbname
+database=$database
 hostname=$hostname
 user=$user
 pass=$pass
@@ -1669,17 +1668,17 @@ sub databasesetup {
 	# Set up permissions
 	startsysout();
 	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
-	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
 	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
 	# Change to admin user login
 	setmysqlclipass($pass);
-	my $result=system("$mysqldir/bin/mysqladmin", "-u$user", "create", "$dbname");
+	my $result=system("$mysqldir/bin/mysqladmin", "-u$user", "create", "$database");
 	if ($result) {
 		showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
 	} else {
 		# Create the database structure
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user $dbname < koha.mysql");
+		system("$mysqldir/bin/mysql -u$user $database < koha.mysql");
 	}
 
 }
@@ -1751,11 +1750,11 @@ sub updatedatabase {
 
 		startsysout();
 		if ($response eq '1') {
-			system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
+			system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
 		}
 		if ($response eq '2') {
-			system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
-			system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $dbname");
+			system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
+			system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $database");
 		}
 		delete($ENV{"KOHA_CONF"});
 	}
@@ -1781,11 +1780,11 @@ sub populatedatabase {
 # FIXME: These calls are now unsafe and should either be removed
 # or updated to use -u$user and no mysqlpass_quoted
 #
-# 		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+# 		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
 # 		showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
 # 	} else {
 		my $input;
@@ -1807,9 +1806,9 @@ sub populatedatabase {
 		$branchcode or $branchcode='DEF';
 
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
 		my $printername='Library Printer';
 		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
@@ -1819,11 +1818,11 @@ sub populatedatabase {
 		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
 		$printerqueue=~s/[^A-Za-z0-9]//g;
 		startsysout();	
-		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+		system("$mysqldir/bin/mysql -u$user $database -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 # 		}
 	my $language=showmessage(getmessage('Language'), 'free', 'en');
 	startsysout();	
-	system("$mysqldir/bin/mysql -u$user $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
+	system("$mysqldir/bin/mysql -u$user $database -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
 }
 

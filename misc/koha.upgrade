@@ -4,7 +4,7 @@
 use strict; # please develop with the strict pragma
 use Install;
 
-setlanguage('en');
+Install::setlanguage('en');
 
 ###############################################
 # SET  THE  etcdir  ENVIRONMENT  VAR  INSTEAD #
@@ -31,7 +31,7 @@ unless ($answer =~/y/i) {
 	print "Great! continuing upgrade... \n";
 };
 
-setkohaversion($::newversion);
+Install::setkohaversion($::newversion);
 checkperlmodules();
 backupkoha();
 getapacheinfo();
@@ -42,7 +42,7 @@ finalizeconfigfile();
 
 showmessage(getmessage('UpgradeCompleted',['FIXME','FIXME','FIXME','FIXME','FIXME','FIXME']),'PressEnter');
 
-my $reply=showmessage('Would you like to complete a survey about your library?', 'yn', 'y');
+my $reply=showmessage('Would you like to complete a survey about your library? [Y]/N: ', 'yn', 'y');
 if ($reply=~/y/i) {
     system("perl kohareporter");
 }
