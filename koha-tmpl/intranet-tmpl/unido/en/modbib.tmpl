@@ -14,11 +14,7 @@ If the field you are looking for isn't here, check the group record.
 
 <table border="0" cellspacing="0" cellpadding="5">
 
-<tr valign="top">
-<td>Website Links</td><td>
 
-
-<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">Modify Website Links</a></td></tr>
 
 
 <tr valign="top">
@@ -84,6 +80,16 @@ If the field you are looking for isn't here, check the group record.
 <td>Notes</td>
 <td><textarea name="notes" cols="40" rows="4"><TMPL_VAR Name="notes" ESCAPE=HTML></textarea></td>
 </tr>
+
+
+<tr valign="top">
+<td>Additional Website Links<br>
+</td><td>
+
+
+<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">Add/Edit Additional Website Links</a><br>
+<i>NOTE: The main website link it is on the group record not here.</i></td></tr>
+
 <!--tr valign="top">
 <td>Serial</td>
 <td><input type="text" name="serial" value="<TMPL_VAR Name="serial" ESCAPE=HTML>"></td>
