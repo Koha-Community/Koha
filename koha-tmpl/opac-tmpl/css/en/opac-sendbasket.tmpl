@@ -4,7 +4,7 @@ Your biblio basket
 
 <HEADER>
 Hi,
-Here is your biblio basket...
+Here is the biblio basket sent by <!-- TMPL_VAR name="email_sender" -->
 <END_HEADER>
 
 <FILENAME>
@@ -13,7 +13,7 @@ basket.txt
 
 <MESSAGE>
 ---------------------------------------------
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" -->(record <!-- TMPL_VAR NAME="biblionumber" -->)<!-- TMPL_IF name="isbn" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF name="isbn" -->
 ISBN:		<!-- TMPL_VAR NAME="ISBN" --><!-- /TMPL_IF --><!-- TMPL_IF name="subtitle" -->
 Subtitle:		<!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="author" -->
 Author:	<!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF name="additional" -->

@@ -23,6 +23,7 @@ my ($template, $borrowernumber, $cookie)
 
 my $bib_list=$query->param('bib_list');
 my $email_add=$query->param('email_add');
+my $email_sender=$query->param('email_sender');
 
 if ($email_add) {
 	my $email_from = C4::Context->preference('KohaAdminEmailAddress');
@@ -58,7 +59,8 @@ if ($email_add) {
 	}
 
 	my $resultsarray=\@results;
-	$template2->param(BIBLIO_RESULTS => $resultsarray);
+	$template2->param(BIBLIO_RESULTS => $resultsarray,
+					email_sender => $email_sender);
 
 	# Getting template result
 	my $template_res = $template2->output();
