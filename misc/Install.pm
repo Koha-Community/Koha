@@ -109,7 +109,7 @@ a line of equal signs as illegal POD directives.
 my $termios = POSIX::Termios->new();
 $termios->getattr();
 my $terminal = Term::Cap->Tgetent({OSPEED=>$termios->getospeed()});
-my $clear_string = "\n\n"; #MJR: was $terminal->Tputs('cl');
+my $clear_string = "\n";
 
 sub heading ($) {
   my $title = shift;
@@ -260,19 +260,12 @@ Press the <ENTER> key to continue: |;
 
 $messages->{'Completed'}->{en} = heading('INSTALLATION COMPLETE') . qq|
 Congratulations ... your Koha installation is complete!
-
 You will be able to connect to your Librarian interface at:
-
    http://%s\:%s/
-
    use the koha admin mysql login and password to connect to this interface.
-
 and the OPAC interface at:
-
    http://%s\:%s/
-
 Please read the Hints file and visit http://www.koha.org
-
 Press <ENTER> to exit the installer: |;
 
 $messages->{'UpgradeCompleted'}->{en} = heading('UPGRADE COMPLETE') . qq|
@@ -356,6 +349,9 @@ sub read_autoinstall_file
 		$retval->{$var} = $value;
 	}
 	close CONF;
+	if ($retval->{MysqlRootPassword} eq "XXX") {
+		print "ERROR : the root password is XXX. It is NOT valid. Edit your auto_install_file\n";
+	}
 	return $retval;
 }
 
@@ -962,14 +958,14 @@ sub getinstallationdirectories {
 	my $message;
 	if ($auto_install->{GetOpacDir}) {
 		$opacdir=$auto_install->{GetOpacDir};
-		print "auto-setting OpacDir to $opacdir\n";
+		print ON_YELLOW.BLACK."auto-setting OpacDir to : $opacdir".RESET."\n";
 	} else {
 		$message=getmessage('GetOpacDir', [$opacdir]);
 		$opacdir=showmessage($message, 'free', $opacdir);
 	}
 	if ($auto_install->{GetIntranetDir}) {
 		$intranetdir=$auto_install->{GetIntranetDir};
-		print "auto-setting IntranetDir to $intranetdir\n";
+		print ON_YELLOW.BLACK."auto-setting IntranetDir to : $intranetdir".RESET."\n";
 	} else {
 		$message=getmessage('GetIntranetDir', [$intranetdir]);
 		$intranetdir=showmessage($message, 'free', $intranetdir);
@@ -988,7 +984,7 @@ You must specify different directories for the OPAC and INTRANET files!
     $kohalogdir=$ENV{prefix}.'/koha/log';
 	if ($auto_install->{GetOpacDir}) {
 		$kohalogdir=$auto_install->{KohaLogDir};
-		print "auto-setting OpacDir to $opacdir\n";
+		print ON_YELLOW.BLACK."auto-setting log dir to : $kohalogdir".RESET."\n";
 	} else {
 	    my $message=getmessage('GetKohaLogDir', [$kohalogdir]);
     	$kohalogdir=showmessage($message, 'free', $kohalogdir);
@@ -1120,7 +1116,7 @@ sub getdatabaseinfo {
 	
 	if ($auto_install->{database}) {
 		$database=$auto_install->{database};
-		print "auto-setting database to $database\n";
+		print ON_YELLOW.BLACK."auto-setting database to : $database".RESET."\n";
 	} else {
 		$message=getmessage('DatabaseName', [$database]);
 		$database=showmessage($message, 'free', $database);
@@ -1129,7 +1125,7 @@ sub getdatabaseinfo {
     
 	if ($auto_install->{DatabaseHost}) {
 		$hostname=$auto_install->{DatabaseHost};
-		print "auto-setting database host to $hostname\n";
+		print ON_YELLOW.BLACK."auto-setting database host to : $hostname".RESET."\n";
 	} else {
 		$message=getmessage('DatabaseHost', [$hostname]);
 		$hostname=showmessage($message, 'free', $hostname);
@@ -1138,7 +1134,7 @@ sub getdatabaseinfo {
 
 	if ($auto_install->{DatabaseUser}) {
 		$user=$auto_install->{DatabaseUser};
-		print "auto-setting DB user to $user\n";
+		print ON_YELLOW.BLACK."auto-setting DB user to : $user".RESET."\n";
 	} else {
 		$message=getmessage('DatabaseUser', [$database, $hostname, $user]);
 		$user=showmessage($message, 'free', $user);
@@ -1149,7 +1145,7 @@ sub getdatabaseinfo {
 		my $message=getmessage('DatabasePassword', [$user, $user]);
 		if ($auto_install->{DatabasePassword}) {
 			$pass=$auto_install->{DatabasePassword};
-			print "auto-setting database password to $pass\n";
+			print ON_YELLOW.BLACK."auto-setting database password to : $pass".RESET."\n";
 		} else {
 				$pass=showmessage($message, 'free', $pass);
 		}
@@ -1277,7 +1273,7 @@ sub getapacheinfo {
 		my $message;
 		if ($auto_install->{EnterApacheUser}) {
 			$message = $auto_install->{EnterApacheUser};
-			print "auto-setting ApacheUser to $message\n";
+			print ON_YELLOW.BLACK."auto-setting Apache User to : $message".RESET."\n";
 		} else {
 			$message=getmessage('EnterApacheUser', [$etcdir]);
 		}
@@ -1367,26 +1363,26 @@ sub getapachevhostinfo {
 
 	if ($auto_install->{GetVirtualHostEmail}) {
 		$svr_admin=$auto_install->{GetVirtualHostEmail};
-		print "auto-setting VirtualHostEmail to $svr_admin\n";
+		print ON_YELLOW.BLACK."auto-setting VirtualHostEmail to : $svr_admin".RESET."\n";
 	} else {
 		showmessage(getmessage('ApacheConfigIntroduction',[$etcdir,$etcdir]), 'PressEnter');
 		$svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$svr_admin]), 'email', $svr_admin);
 	}
 	if ($auto_install->{servername}) {
 		$servername=$auto_install->{servername};
-		print "auto-setting server name to $servername\n";
+		print ON_YELLOW.BLACK."auto-setting server name to : $servername".RESET."\n";
 	} else {
     	$servername=showmessage(getmessage('GetServerName', [$servername]), 'free', $servername);
 	}
 	if ($auto_install->{opacport}) {
 		$opacport=$auto_install->{opacport};
-		print "auto-setting opac port to $opacport\n";
+		print ON_YELLOW.BLACK."auto-setting opac port to : $opacport".RESET."\n";
 	} else {
 	    $opacport=showmessage(getmessage('GetOpacPort', [$opacport]), 'numerical', $opacport);
 	}
 	if ($auto_install->{intranetport}) {
-		$servername=$auto_install->{intranetport};
-		print "auto-setting intranet port to $intranetport\n";
+		$intranetport=$auto_install->{intranetport};
+		print ON_YELLOW.BLACK."auto-setting intranet port to : $intranetport".RESET."\n";
 	} else {
 	    $intranetport=showmessage(getmessage('GetIntranetPort', [$opacport, $intranetport]), 'numerical', $intranetport);
 	}
@@ -1642,35 +1638,34 @@ sub installfiles {
 			startsysout();
 			system("mv ".$tgt." ".$tgt.strftime("%Y%m%d%H%M",localtime()));
 		}
-
-    	print getmessage('CopyingFiles', [$desc,$tgt]);
-    	startsysout;
-	    system("cp -R ".$src." ".$tgt);
+		print getmessage('CopyingFiles', [$desc,$tgt]);
+		startsysout;
+		system("cp -R ".$src." ".$tgt);
 	}
 
 	my ($auto_install) = @_;
-    showmessage(getmessage('InstallFiles'),'none');
+	showmessage(getmessage('InstallFiles'),'none');
 
-    neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
-    neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin");
-    neatcopy("main scripts", 'scripts', "$intranetdir/scripts");
-    neatcopy("perl modules", 'modules', "$intranetdir/modules");
-    neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs");
-    neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin");
+	neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
+	neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin");
+	neatcopy("main scripts", 'scripts', "$intranetdir/scripts");
+	neatcopy("perl modules", 'modules', "$intranetdir/modules");
+	neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs");
+	neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin");
 	startsysout();
-    system("touch $opacdir/cgi-bin/opac");
+	system("touch $opacdir/cgi-bin/opac");
 
 	#MJR: is this necessary?
 	if ($> == 0) {
-	    system("chown -R $httpduser:$httpduser $opacdir $intranetdir");
-    }
+		system("chown -R $httpduser:$httpduser $opacdir $intranetdir");
+	}
 	system("chmod -R a+rx $opacdir $intranetdir");
 
-    # Create /etc/koha.conf
+	# Create /etc/koha.conf
 
-    my $old_umask = umask(027); # make sure koha.conf is never world-readable
-    open(SITES,">$etcdir/koha.conf.tmp") or warn "Couldn't create file at $etcdir. Must have write capability.\n";
-    print SITES qq|
+	my $old_umask = umask(027); # make sure koha.conf is never world-readable
+	open(SITES,">$etcdir/koha.conf.tmp") or warn "Couldn't create file at $etcdir. Must have write capability.\n";
+	print SITES qq|
 database=$database
 hostname=$hostname
 user=$user
@@ -1683,31 +1678,30 @@ httpduser=$httpduser
 intrahtdocs=$intranetdir/htdocs/intranet-tmpl
 opachtdocs=$opacdir/htdocs/opac-tmpl
 |;
-    close(SITES);
-    umask($old_umask);
+	close(SITES);
+	umask($old_umask);
 
 	startsysout();
 	#MJR: can't help but this be broken, can we?
-    chmod 0440, "$etcdir/koha.conf.tmp";
+	chmod 0440, "$etcdir/koha.conf.tmp";
 	
 	#MJR: does this contain any passwords?
-    chmod 0755, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh", "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh", "$intranetdir/scripts/z3950daemon/processz3950queue";
+	chmod 0755, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh", "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh", "$intranetdir/scripts/z3950daemon/processz3950queue";
 
 	#MJR: generate our own settings, to remove the /home/paul hardwired links
-    open(FILE,">$intranetdir/scripts/z3950daemon/z3950-daemon-options");
-    print FILE "RunAsUser=$httpduser\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\nKohaConf=$etcdir/koha.conf";
-    close(FILE);
+	open(FILE,">$intranetdir/scripts/z3950daemon/z3950-daemon-options");
+	print FILE "RunAsUser=$httpduser\nKohaZ3950Dir=$intranetdir/scripts/z3950daemon\nKohaModuleDir=$intranetdir/modules\nLogDir=$kohalogdir\nKohaConf=$etcdir/koha.conf";
+	close(FILE);
 
 	if ($> == 0) {
 	    chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf.tmp") or warn "can't chown koha.conf: $!";
-    	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
-    	chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
+		chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+		chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 	} #MJR: report that we haven't chown()d.
 	else {
 		print "Please check permissions in $intranetdir/scripts/z3950daemon\n";
 	}
-
-    showmessage(getmessage('OldFiles'),'PressEnter') unless $auto_install->{NoPressEnter};
+	showmessage(getmessage('OldFiles'),'PressEnter') unless $auto_install->{NoPressEnter};
 }
 
 
@@ -1856,19 +1850,24 @@ change it from the system preferences screen in the librarian sit.
 Which language do you choose? |;
 
 sub updatedatabase {
+	my ($auto_install) = @_;
     # At this point, $etcdir/koha.conf must exist, for C4::Context
     $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf';
     if (! -e $ENV{"KOHA_CONF"}) { $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf.tmp'; }
 	startsysout();	
-	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
+	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase -s");
 	if ($result) {
 		restoremycnf();
 		print "Problem updating database...\n";
 		exit;
 	}
-
-	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
-
+	my $response;
+	if ($auto_install->{UpdateMarcTables}) {
+		$response=$auto_install->{UpdateMarcTables};
+		print ON_YELLOW.BLACK."auto-setting UpdateMarcTable to : $response".RESET."\n";
+	} else {
+		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
+	}
 	startsysout();
 	if ($response eq '1') {
 		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
@@ -1880,8 +1879,8 @@ sub updatedatabase {
 	}
 	delete($ENV{"KOHA_CONF"});
 
-	print RESET."\n\nFinished updating of database. Press <ENTER> to continue...";
-	<STDIN>;
+	print RESET."\nFinished updating of database. Press <ENTER> to continue..." unless ($auto_install->{NoPressEnter});
+	<STDIN> unless ($auto_install->{NoPressEnter});
 }
 
 
@@ -1895,32 +1894,31 @@ sample data, install them.
 =cut
 
 sub populatedatabase {
-# 	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
-# 	if ($response =~/^y/i) {
-#
-# FIXME: These calls are now unsafe and should either be removed
-# or updated to use -u$user and no mysqlpass_quoted
-#
-# 		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $database -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
-# 		showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
-# 	} else {
-		my $input;
-		my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
-
+	my ($auto_install) = @_;
+	my $input;
+	my $response;
+	my $branch;
+	if ($auto_install->{BranchName}) {
+		$branch=$auto_install->{BranchName};
+		print ON_YELLOW.BLACK."auto-setting a branch : $branch".RESET."\n";
+	} else {
+		$response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
 		unless ($response =~/^n/i) {
-		my $branch='Main Library';
-		$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
-		$branch=~s/[^A-Za-z0-9\s]//g;
-
+			$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
+			$branch=~s/[^A-Za-z0-9\s]//g;
+		}
+	}
+	if ($branch) {
 		my $branchcode=$branch;
 		$branchcode=~s/[^A-Za-z0-9]//g;
 		$branchcode=uc($branchcode);
 		$branchcode=substr($branchcode,0,4);
-		$branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
+		if ($auto_install->{BranchCode}) {
+			$branchcode=$auto_install->{BranchCode};
+			print ON_YELLOW.BLACK."auto-setting branch code : $branchcode".RESET."\n";
+		} else {
+			$branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
+		}
 		$branchcode=~s/[^A-Za-z0-9]//g;
 		$branchcode=uc($branchcode);
 		$branchcode=substr($branchcode,0,4);
@@ -1931,20 +1929,34 @@ sub populatedatabase {
 		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
 		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
-		my $printername='Library Printer';
-		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
-		$printername=~s/[^A-Za-z0-9\s]//g;
-
-		my $printerqueue='lp';
-		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
-		$printerqueue=~s/[^A-Za-z0-9]//g;
+		my $printername;
+		my $printerqueue;
+		if ($auto_install->{PrinterName}) {
+			$printername=$auto_install->{PrinterName};
+			print ON_YELLOW.BLACK."auto-setting a printer : $printername".RESET."\n";
+		} else {
+			$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
+			$printername=~s/[^A-Za-z0-9\s]//g;
+		}
+		if ($auto_install->{PrinterQueue}) {
+			$printerqueue=$auto_install->{PrinterQueue};
+			print ON_YELLOW.BLACK."auto-setting printer queue to : $printerqueue".RESET."\n";
+		} else {
+			$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
+			$printerqueue=~s/[^A-Za-z0-9]//g;
+		}
 		startsysout();	
 		system("$mysqldir/bin/mysql -u$user $database -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
-# 		}
-	my $language=showmessage(getmessage('Language'), 'free', 'en');
+	}
+	my $language;
+	if ($auto_install->{Language}) {
+		$language=$auto_install->{Language};
+		print ON_YELLOW.BLACK."auto-setting language to : $language".RESET."\n";
+	} else {
+		$language=showmessage(getmessage('Language'), 'free', 'en');
+	}
 	startsysout();	
 	system("$mysqldir/bin/mysql -u$user $database -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
-	}
 }
 
 
@@ -1964,21 +1976,22 @@ The installer can do this if you are using Apache and give the root password.
 Would you like to try to restart Apache now?  [Y]/N: |;
 
 sub restartapache {
-
-    my $response=showmessage(getmessage('RestartApache'), 'yn', 'y');
+	my ($auto_install)=@_;
+	my $response;
+    $response=showmessage(getmessage('RestartApache'), 'yn', 'y') unless ($auto_install->{NoPressEnter});
+    $response='y' if ($auto_install->{NoPressEnter});
 
     unless ($response=~/^n/i) {
-	startsysout();
-	# Need to support other init structures here?
-	if (-e "/etc/rc.d/init.d/httpd") {
-	    system('su root -c /etc/rc.d/init.d/httpd restart');
-	} elsif (-e "/etc/init.d/apache") {
-	    system('su root -c /etc/init.d/apache restart');
-	} elsif (-e "/etc/init.d/apache-ssl") {
-	    system('su root -c /etc/init.d/apache-ssl restart');
+		startsysout();
+		# Need to support other init structures here?
+		if (-e "/etc/rc.d/init.d/httpd") {
+			system('su root -c /etc/rc.d/init.d/httpd restart');
+		} elsif (-e "/etc/init.d/apache") {
+			system('su root -c /etc/init.d/apache restart');
+		} elsif (-e "/etc/init.d/apache-ssl") {
+			system('su root -c /etc/init.d/apache-ssl restart');
+		}
 	}
-    }
-
 }
 
 =item backupkoha

@@ -119,26 +119,19 @@ backupmycnf();
 
 databasesetup($auto_install);
 
-updatedatabase();
+updatedatabase($auto_install);
 
-populatedatabase();
+populatedatabase($auto_install);
 
 restoremycnf();
 
 finalizeconfigfile();
 
-restartapache();
+restartapache($auto_install);
 
-
-
-
-showmessage(getmessage('AuthenticationWarning', [$etcdir]), 'PressEnter');
-
+showmessage(getmessage('AuthenticationWarning', [$etcdir]), 'PressEnter') unless ($auto_install->{NoPressEnter});
 
 showmessage(getmessage('Completed', [ Install::getservername(), Install::getintranetport(), Install::getservername(), Install::getopacport()]), 'PressEnter');
-
-
-
 
 if (-f "kohareporter") {
     my $reply=showmessage('Would you like to complete a survey about your library?', 'yn', 'y');

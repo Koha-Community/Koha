@@ -1,0 +1,44 @@
+# set here your mysql root password
+# XXX is the CVS default. It is considered as INVALID, and installer will die if called with such a parameter
+MysqlRootPassword=XXX
+
+# directories & Apache setup
+EnterApacheUser=paul
+GetOpacDir = /home/httpd/html/koha/opac
+GetIntranetDir = /home/httpd/html/koha/intranet
+KohaLogDir = /var/log/httpd
+
+# database parameters
+# name
+database=koha_test
+# host
+DatabaseHost=localhost
+# user
+DatabaseUser=koha_test
+# password
+DatabasePassword=koha_test
+
+# webmaster email
+GetVirtualHostEmail=email@host.com
+
+# server name
+servername=127.0.0.1
+# opac port
+opacport=1000
+# the intranet port
+intranetport=1001
+# intranet will be on 127.0.0.1:1001
+# opac will be on 127.0.0.1:1000
+
+# set this field to ON to answer OK to any question just requiring and <ENTER>
+NoPressEnter=ON
+
+# MARC flavour : 1=MARC21, 2=UNIMARC, N=None
+UpdateMarcTables=2
+BranchName=XXXX
+BranchCode=XXXX
+
+Language=fr
+
+PrinterName=lp
+PrinterQueue=/path/to/lp
