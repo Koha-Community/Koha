@@ -1,3 +1,6 @@
+# -*- tab-width: 8 -*-
+# Please use 8-character tabs for this file (indents are every 4 characters)
+
 package C4::BookShelves;
 
 # $Id$
@@ -144,15 +147,19 @@ C<$env> is ignored.
 #'
 sub AddToShelf {
     my ($env, $itemnumber, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("select * from shelfcontents where shelfnumber=$shelfnumber and itemnumber=$itemnumber");
-    $sth->execute;
+    my $sth=$dbh->prepare("select * from shelfcontents
+	where shelfnumber=? and itemnumber=?");
+
+    $sth->execute($shelfnumber, $itemnumber);
     if ($sth->rows) {
 # already on shelf
     } else {
-	$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values ($shelfnumber, $itemnumber, 0)");
+	$sth=$dbh->prepare("insert into shelfcontents
+		(shelfnumber, itemnumber, flags) values (?, ?, 0)");
+
 			# FIXME - The default for 'flags' is NULL.
 			# Why set it to 0?
-	$sth->execute;
+	$sth->execute($shelfnumber, $itemnumber);
     }
 }
 
@@ -239,6 +246,10 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.10  2003/02/05 10:05:02  acli
+# Converted a few SQL statements to use ? to fix a few strange SQL errors
+# Noted correct tab size
+#
 # Revision 1.9  2002/10/13 08:29:18  arensb
 # Deleted unused variables.
 # Removed trailing whitespace.
