@@ -1,5 +1,4 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
-
 <div class="tabbed">
 	<form method="post" name="f">
 	<h1 class="catalogue">MARC biblio : <!-- TMPL_VAR NAME="bibid" --></h1>
@@ -19,34 +18,34 @@
 
 	<div class="tabs">
 		<!-- TMPL_IF name="0XX" -->
-		<a href="javascript:active(0)">0</a>
+		<a href="javascript:active(0)" id="link0">0</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="1XX" -->
-		<a href="javascript:active(1)">1</a>
+		<a href="javascript:active(1)" id="link1">1</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="2XX" -->
-		<a href="javascript:active(2)">2</a>
+		<a href="javascript:active(2)" id="link2">2</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="3XX" -->
-		<a href="javascript:active(3)">3</a>
+		<a href="javascript:active(3)" id="link3">3</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="4XX" -->
-		<a href="javascript:active(4)">4</a>
+		<a href="javascript:active(4)" id="link4">4</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="5XX" -->
-		<a href="javascript:active(5)">5</a>
+		<a href="javascript:active(5)" id="link5">5</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="6XX" -->
-		<a href="javascript:active(6)">6</a>
+		<a href="javascript:active(6)" id="link6">6</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="7XX" -->
-		<a href="javascript:active(7)">7</a>
+		<a href="javascript:active(7)" id="link7">7</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="8XX" -->
-		<a href="javascript:active(8)">8</a>
+		<a href="javascript:active(8)" id="link8">8</a>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="9XX" -->
-			<a href="javascript:active(9)">9</a>
+			<a href="javascript:active(9)" id="link9">9</a>
 		<!-- /TMPL_IF -->
 	</div>
 	
@@ -402,11 +401,14 @@ function active(numlayer)
 		link = "link"+i;
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
+			document.getElementById(link).style.color="#FFFFFF";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
+			document.getElementById(link).style.color="#000000";
 		}
 	}
 }
+active(0);
 function Check(f) {
 	// Scan for nonempty fields
 	var field_is_nonempty_p = new Array();
@@ -441,6 +443,7 @@ function Check(f) {
 
 			}
 		} else {
+// 			alert("I = "+i);
 			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
 		}
 	}
