@@ -50,7 +50,6 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $member=$input->param('member');
-$member=~ s/\,//g;
 
 my $env;
 my ($count,$results)=BornameSearch($env,$member,'web');

@@ -365,7 +365,6 @@ sub _new_dbh
 	my $db_host   = $context->{"config"}{"hostname"};
 	my $db_user   = $context->{"config"}{"user"};
 	my $db_passwd = $context->{"config"}{"pass"};
-
 	return DBI->connect("DBI:$db_driver:$db_name:$db_host",
 			    $db_user, $db_passwd);
 }

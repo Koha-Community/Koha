@@ -61,7 +61,7 @@ returns, as well as general information about the library.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&getpatroninformation
-	&currentissues &getissues &getiteminformation &findborrower
+	&currentissues &getissues &getiteminformation
 	&issuebook &returnbook &find_reserves &transferbook &decode
 	&calc_charges);
 
@@ -300,54 +300,6 @@ sub getiteminformation {
 	}
 	return($iteminformation);
 }
-
-=item findborrower
-
-  $borrowers = &findborrower($env, $key);
-  print $borrowers->[0]{surname};
-
-Looks up patrons and returns information about them.
-
-C<$env> is ignored.
-
-C<$key> is either a card number or a string. C<&findborrower> tries to
-look it up as a card number first. If that fails, C<&findborrower>
-looks up all patrons whose surname begins with C<$key>.
-
-C<$borrowers> is a reference-to-array. Each element is a
-reference-to-hash whose keys are the fields of the borrowers table in
-the Koha database.
-
-=cut
-#'
-# If you really want to throw a monkey wrench into the works, change
-# your last name to "V10000008" :-)
-
-# FIXME - This is different from &C4::Borrower::findborrower, but I
-# think that one's obsolete.
-sub findborrower {
-# returns an array of borrower hash references, given a cardnumber or a partial
-# surname
-	my ($env, $key) = @_;
-	my $dbh = C4::Context->dbh;
-	my @borrowers;
-	my $sth=$dbh->prepare("select * from borrowers where cardnumber=?");
-	$sth->execute($key);
-	if ($sth->rows) {
-		my ($borrower)=$sth->fetchrow_hashref;
-		push (@borrowers, $borrower);
-	} else {
-		$sth->finish;
-		$sth=$dbh->prepare("select * from borrowers where surname like ?");
-		$sth->execute($key."%");
-		while (my $borrower = $sth->fetchrow_hashref) {
-		push (@borrowers, $borrower);
-		}
-	}
-	$sth->finish;
-	return(\@borrowers);
-}
-
 
 =item transferbook
 

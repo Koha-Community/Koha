@@ -83,7 +83,7 @@ my $borrowerslist;
 # if there is a list of find borrowers....
 my $findborrower = $query->param('findborrower');
 if ($findborrower) {
-	my ($borrowers, $flags) = findborrower(\%env, $findborrower);
+	my ($count,$borrowers)=BornameSearch(\%env,$findborrower,'web');
 	my @borrowers=@$borrowers;
 	if ($#borrowers == -1) {
 		$query->param('findborrower', '');
