@@ -278,7 +278,7 @@ pass=$pass
 includes=$kohadir/htdocs/includes
 intranetdir=$kohadir
 opacdir=$opacdir
-version=$kohaversion
+kohaversion=$kohaversion
 EOP
 ;
 close(SITES);
