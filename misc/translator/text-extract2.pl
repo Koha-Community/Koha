@@ -7,7 +7,8 @@
 
 # This script is meant to be a drop-in replacement of text-extract.pl
 
-# FIXME: Strings like "<< Prev" confuses *this* filter
+# FIXME: Strings like "<< Prev" or "Next >>" may confuse *this* filter
+# TODO: Need to detect unclosed tags, empty tags, and other such stuff.
 
 use Getopt::Long;
 use strict;
@@ -93,7 +94,8 @@ sub next_token_internal (*) {
 	;
     } elsif ($readahead =~ /^\s+/s) {	# whitespace
 	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
-    } elsif ($readahead =~ /^[^<]+/s) {	# non-whitespace normal text
+    # FIXME the following (the [<\s] part) is an unreliable HACK :-(
+    } elsif ($readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
 	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
