@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.52  2003/07/10 10:37:19  tipaul
+# fix for copyrightdate problem, #514
+#
 # Revision 1.51  2003/07/02 14:47:17  tipaul
 # fix for #519 : items.dateaccessioned imports incorrectly
 #
@@ -1095,6 +1098,15 @@ sub MARCmarc2koha {
 	}
 	# additional authors : specific
 	$result = &MARCmarc2kohaOneField($sth,"additionalauthors","additionalauthors",$record,$result);
+# modify copyrightdate to keep only the 1st year found
+	my $temp = $result->{'copyrightdate'};
+	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+	if ($1>0) {
+		$result->{'copyrightdate'} = $1;
+	} else { # if no cYYYY, get the 1st date.
+		$x =~ m/(\d\d\d\d)/;
+		$result->{'copyrightdate'} = $1;
+	}
 	return $result;
 }
 
