@@ -55,14 +55,40 @@ sub newBiblio {
 # only created when new biblioitems are added.
     my ($env, $biblio) = @_;
     my $title=$biblio->{'title'};
-    my $author=$biblio->{'author'};
+    my $q_title=$dbh->quote($title);
     my $subtitle=$biblio->{'subtitle'};
-    my $title=$biblio->{'title'};
+    my $q_subtitle=$dbh->quote($subtitle);
+    ($q_subtitle) || ($q_subtitle="''");
+    my $author=$biblio->{'author'};
+    my $q_author=$dbh->quote($author);
+    my $unititle=$biblio->{'unititle'};
+    my $q_unititle=$dbh->quote($unititle);
     my $copyrightdate=$biblio->{'copyrightdate'};
     my $serial=$biblio->{'serial'};
     my $seriestitle=$biblio->{'seriestitle'};
-    my $unititle=$biblio->{'unititle'};
+    my $q_seriestitle=$dbh->quote($seriestitle);
     my $notes=$biblio->{'notes'};
+    my $q_notes=$dbh->quote($notes);
+    my $subject=$biblio->{'subject'};
+    my $additionalauthors=$biblio->{'additionalauthors'};
+    my $sth=$dbh->prepare("select max(biblionumber) from biblio");
+    $sth->execute;
+    my ($biblionumber) = $sth->fetchrow;
+    $biblionumber++;
+    $sth=$dbh->prepare("insert into biblio (biblionumber,title,author,unititle,copyrightdate,serial,seriestitle,notes) values ($biblionumber,$q_title,$q_author,$q_unititle,$copyrightdate,$serial,$q_seriestitle,$q_notes)");
+    $sth->execute;
+    $sth=$dbh->prepare("insert into bibliosubtitle (biblionumber,subtitle) values ($biblionumber,$q_subtitle)");
+    $sth->execute;
+    foreach (@$subject) {
+	my $q_subject=$dbh->quote($_);
+	my $sth=$dbh->prepare("insert into bibliosubject (biblionumber,subject) values ($biblionumber,$q_subject)");
+	$sth->execute;
+    }
+    foreach (@$additionalauthors) {
+	my $q_additionalauthor=$dbh->quote($_);
+	my $sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values ($biblionumber,$q_additionalauthor)");
+	$sth->execute;
+    }
 }
 
 
@@ -539,6 +565,20 @@ sub newItem {
     my $itemnotes=$item->{'itemnotes'};
     my $itemtype=$item->{'itemtype'};
     my $subclass=$item->{'subclass'};
+
+# KOHADB Section
+
+    unless ($env->{'marconly'}) {
+	my $sth=$dbh->prepare("select max(itemnumber) from items");
+	$sth->execute;
+	my ($itemnumber) =$sth->fetchrow;
+	$itemnumber++;
+	$sth=$dbh->prepare("insert into items (itemnumber,biblionumber,biblioitemnumber,barcode,dateaccessioned,booksellerid,homebranch,price,replacementprice,replacementpricedate,notforloan,itemlost,wthdrawn,restricted,itemnotes) values ($itemnumber,$biblionumber,$biblioitemnumber,$q_barcode,$dateaccessioned,$q_booksellerid,$q_homebranch,$price,$q_replacementpricedate,$notforloan,$itemlost,$wthdrawn,$restricted,$q_itemnotes)");
+	$sth->execute;
+    }
+
+
+# MARC SECTION
     my $subfields;
     $subfields->{1}->{'Subfield_Mark'}='p';
     $subfields->{1}->{'Subfield_Value'}=$barcode;
