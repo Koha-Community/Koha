@@ -13,15 +13,15 @@
 	<h1>Add a subscription</h1>
 	<form method="post" name="f">
 <!-- /TMPL_IF -->
-<div class="details">
+<div class="data">
 	<table>
-	<caption>Subscription information</caption>
+	<caption>Subscription information for <i><!-- TMPL_VAR name="bibliotitle" --></i></caption>
 		<tr><th><input type="hidden" name="op" value="addsubscription">
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
-		Librarian</th><td><!-- TMPL_VAR name="user" --></td></tr>
-		<tr><th><label>Supplier</label></th><td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="4"> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>) <input type="button" class="submit" value="Search..." onclick="FindAcqui(f); return false;" /></td></tr>
-		<tr><th><label>Biblio</label></th><td><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="4"> (<input type="text" name="title" value="<!-- TMPL_VAR name="title" -->" disabled readonly>) <input type="button" class="submit" value="Search..." onclick="Plugin(f); return false;" /></td></tr>
-		<tr><th><label>Notes</label></th><td><textarea name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></td></tr>
+		Librarian: </th><td><!-- TMPL_VAR name="user" --></td></tr>
+		<tr><th><label for="aqbooksellerid">Supplier: </label></th><td><input type="text" id="aqbooksellerid" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="4"> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>) <input type="button" class="submit" value="Search..." onclick="FindAcqui(f); return false;" /></td></tr>
+		<tr><th><label for="biblionumber">Bibliographic Record: </label></th><td><input type="text" id="biblionumber" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="4"> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>) <input type="button" class="submit" value="Search..." onclick="Plugin(f); return false;" /></td></tr>
+		<tr><th><label for="notes-field">Notes</label></th><td><textarea id="notes-field" name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></td></tr>
 </table>
 		Warning!
 		<ul>
@@ -29,11 +29,12 @@
 			<li>You also must have selected a supplier if you want to ask for late issues</li>
 		</ul>
 </div>
-<div class="details">
-	<h2>Planning</h2>
-	<p><label>Beginnning date:</label> <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10"></p>
-	<p><label>Frequency (*)</label>
-			<select name="periodicity" size="1">
+<div class="data">
+	<table>
+	<caption>Planning</caption>
+	<tr><th><label for="startdate">Beginnning date:</label></th><td><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10"></td></tr>
+	<tr><th><label for="periodicity">Frequency (*)</label></th><td>
+			<select name="periodicity" size="1" id="periodicity">
 				<option value="" selected>Unknown</option>
 				<!-- TMPL_IF name="periodicity1" -->
 					<option value="1" selected>1/day</option>
@@ -91,9 +92,9 @@
 					<option value="11">1/2 years</option>
 				<!-- /TMPL_IF -->
 			</select>
-	</p>
-	<p><label>Arrives on</label>
-			<select name="dow" size="1">
+	</td></tr>
+	<tr><th><label for="dow">Arrives on</label></th><td>
+			<select name="dow" id="dow">
 				<option value="">None</option>
 				<!-- TMPL_IF name="dow1" -->
 					<option value="1" selected>Monday</option>
@@ -130,85 +131,83 @@
 				<!-- TMPL_ELSE -->
 					<option value="7">Sunday</option>
 				<!-- /TMPL_IF -->
-			</select>
+			</select></td></tr>
+			</table>
 </div>
-<div class="details">
-	<h2>Subscription length</h2>
-	<p>* fill 1 from :</p>
-	<ul>
-		<p><label>Number of num</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
-		<p><label>Number of weeks</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
-		<p><label>Number of months</label><input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></p>
-	</ul>
+<div class="data">
+	<table>
+	<caption>Subscription Length (choose one)</caption>
+	<tr><th><label for="numberlength">Number of issues: </label></th><td><input type="text" id="numberlength" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></td></tr>
+	<tr><th><label for="weeklength">Number of weeks</label></th><td><input type="text" id="weeklength" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></td></tr>
+	<tr><th><label for="monthlength">Number of months</label></th><td><input type="text" id="monthlength" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></td></tr>
+</table>
 </div>
-<div>
+<div class="data">
 	<h2>Numbering calculation</h2>
 	<p>
-		<p>Numbering formula: <input type="text" name="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->"></p>
-		<table class="small">
+		<p><label for="numberingmethod">Numbering formula:</label> <input type="text" id="numberingmethod" name="numberingmethod" size="45" value="<!-- TMPL_VAR name="numberingmethod" -->" /></p>
+		<table>
+			<colgroup span="4">
+				<col span="1"></col>
+				<col span="1"></col>
+				<col span="1"></col>
+				<col span="1"></col>
+			</colgroup>
 			<tr>
 				<th>&nbsp;</th>
-				<th>X</th>
-				<th>Y</th>
-				<th>Z</th>
+				<th scope="col">X</th>
+				<th scope="col">Y</th>
+				<th scope="col">Z</th>
 			</tr>
 			<tr>
-				<td>Add</td>
-				<td>
-					<input type="text" name="add1" value="<!-- TMPL_VAR name="add1" -->">
-				</td>
-				<td>
-					<input type="text" name="add2" value="<!-- TMPL_VAR name="add2" -->">
-				</td>
-				<td>
-					<input type="text" name="add3" value="<!-- TMPL_VAR name="add3" -->">
-				</td>
+				<th scope="row"><label for="add1">Add:</label></th>
+				<td><input type="text" id="add1" name="add1" value="<!-- TMPL_VAR name="add1" -->" /></td>
+				<td><input type="text" id="add2" name="add2" value="<!-- TMPL_VAR name="add2" -->" /></td>
+				<td><input type="text" id="add3" name="add3" value="<!-- TMPL_VAR name="add3" -->" /></td></tr>
+			<tr>
+				<th scope="row"><label for="every1">...Once every:</label></th>
+				<td><input type="text" id="every1" name="every1" value="<!-- TMPL_VAR name="every1" -->"></td>
+				<td><input type="text" id="every2" name="every2" value="<!-- TMPL_VAR name="every2" -->"></td>
+				<td><input type="text" id="every3" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
 			</tr>
 			<tr>
-				<td>once every</td>
-				<td><input type="text" name="every1" value="<!-- TMPL_VAR name="every1" -->"></td>
-				<td><input type="text" name="every2" value="<!-- TMPL_VAR name="every2" -->"></td>
-				<td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
-			</tr>
-			<tr>
-				<td>When more than</td>
-				<td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
-				<td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
-				<td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
+				<th scope="row"><label for="whenmorethan1">When more than:</label></th>
+				<td><input type="text" id="whenmorethan1" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
+				<td><input type="text" id="whenmorethan2" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
+				<td><input type="text" id="whenmorethan3" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
 			</tr>
 			<!-- TMPL_IF name="mod" -->
 			<tr>
-				<td>The loop is for instance</td>
-				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
-				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
-				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
+				<th scope="row"><label for="innerloop1">The loop is for instance: </label></th>
+				<td><input type="text" id="innerloop1" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
+				<td><input type="text" id="innerloop2" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
+				<td><input type="text" id="innerloop3" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
 			</tr>
 			<!-- /TMPL_IF -->
 			<tr>
-				<td>Set back to</td>
-				<td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>
-				<td><input type="text" name="setto2" value="<!-- TMPL_VAR name="setto2" -->"></td>
-				<td><input type="text" name="setto3" value="<!-- TMPL_VAR name="setto3" -->"></td>
+				<th scope="row"><label for="setto1">...Set back to:</label></th>
+				<td><input type="text" id="setto1"  name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>
+				<td><input type="text" id="setto2" name="setto2" value="<!-- TMPL_VAR name="setto2" -->"></td>
+				<td><input type="text" id="setto3" name="setto3" value="<!-- TMPL_VAR name="setto3" -->"></td>
 			</tr>
 			<tr>
-				<td>
+				<th scope="row"><label for="lastvalue1">
 					<!-- TMPL_IF name="mod" -->
-						Last value
+						Last value:
 					<!-- TMPL_ELSE -->
-						Begins with
+						Begins with:
 					<!-- /TMPL_IF -->
-				</td>
-				<td><input type="text" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->"></td>
-				<td><input type="text" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->"></td>
-				<td><input type="text" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->"></td>
+				</label></th>
+				<td><input type="text" id="lastvalue1" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->"></td>
+				<td><input type="text" id="lastvalue2" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->"></td>
+				<td><input type="text" id="lastvalue3" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->"></td>
 			</tr>
 		</table>
-	</p>
 </div>
 <!-- TMPL_IF name="mod" -->
-	<input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" class="submit">
+	<input type="button" value="Save Subscription" onclick="Check(this.form); return false;" accesskey="w" class="submit">
 <!-- TMPL_ELSE -->
-	<input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w" class="submit">
+	<input type="button" value="Add Subscription" onclick="Check(this.form); return false;" accesskey="w" class="submit">
 <!-- /TMPL_IF -->
 </div>
 

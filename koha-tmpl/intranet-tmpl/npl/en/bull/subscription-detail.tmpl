@@ -1,23 +1,28 @@
-<!-- TMPL_INCLUDE NAME="main-top-blank.inc" -->
-<div>
-<h1>Subscription</h1>
-<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="submit">Edit</a>
-<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="submit">Issues</a>
-<a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="submit">Biblio</a>
-<form method="post" name="f">
-<div>
-	<h2>Subscription information</h2>
-		<p>Librarian identity :</td><td> <!-- TMPL_VAR name="librarian" --></p>
-		<p><label>Supplier </label><!-- TMPL_VAR name="aqbooksellername" --></p>
-		<p><label>Cost</label><!-- TMPL_VAR name="cost" --></p>
-		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
-		<p><label>Biblio</label><!-- TMPL_VAR name="bibliotitle" --></p>
-		<p><label>Notes:</label><!-- TMPL_VAR name="notes" --></p>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription Details for <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Subscription: <!-- TMPL_VAR name="bibliotitle" --></h1>
+<form class="inline" action="subscription-add.pl" method="get"><input type="hidden" name="op" value="mod" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="Edit Subscription" /></form> <form class="inline" action="statecollection.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="View Issues" /></form> <form class="inline" action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="submit" value="View Bibliographic Record" /></form>
+
+<div class="data">
+<table>
+	<caption>Subscription Information</caption>
+		<tr><th>Librarian identity:</th><td> <!-- TMPL_VAR name="librarian" --></td></tr>
+		<tr><th>Supplier: </th><td><!-- TMPL_VAR name="aqbooksellername" --></td></tr>
+		<tr><th>Cost:</th><td><!-- TMPL_VAR name="cost" --></td></tr>
+		<tr><th>Budget:</th><td><!-- TMPL_VAR name="bookfundid" --></td></tr>
+		<tr><th>Title:</th><td><a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="bibliotitle" --></a></td></tr>
+		<tr><th>Notes:</th><td><!-- TMPL_VAR name="notes" --></td></tr>
+</table>
 </div>
-<div>
-	<h2>Planning</h2>
-	<p><label>Beginnning date:</label> <!-- TMPL_VAR name="startdate" --></p>
-	<p><label>Frequency (*):</label>
+<div class="data">
+<table>
+	<caption>Planning</caption>
+	<tr><th>Beginnning date:</th><td><!-- TMPL_VAR name="startdate" --></td></tr>
+	<tr><th>Frequency (*):</th><td>
 		<!--TMPL_IF name="periodicity1" -->
 				1/day
 		<!-- /TMPL_IF -->
@@ -51,8 +56,8 @@
 		<!--TMPL_IF name="periodicity11" -->
 				1/2 years
 		<!-- /TMPL_IF -->
-	</p>
-	<p><label>Arrives on:</label>
+	</td></tr>
+	<tr><th>Arrives on:</th><td>
 		<!--TMPL_IF name="arrival1" -->
 			Monday
 		<!-- /TMPL_IF -->
@@ -74,27 +79,27 @@
 		<!--TMPL_IF name="arrival7" -->
 				Sunday
 		<!-- /TMPL_IF -->
+		</td></tr></table>
 </div>
-<div>
-	<h2>Subscription length</h2>
-	<p><label>Number of num</label><!-- TMPL_VAR name="numberlength" --></p>
-	<p><label>Number of weeks</label><!-- TMPL_VAR name="weeklength" --></p>
-	<p><label>Number of months</label><!-- TMPL_VAR name="monthlength" --></p>
-
+<div class="data">
+	<table>
+	<caption>Subscription length</caption>
+	<tr><th>Number of issues:</th><td><!-- TMPL_VAR name="numberlength" --></td></tr>
+	<tr><th>Number of weeks:</th><td><!-- TMPL_VAR name="weeklength" --></td></tr>
+	<tr><th>Number of months:</th><td><!-- TMPL_VAR name="monthlength" --></td></tr>
+</table>
 </div>
-<div>
-	<h2>Numbering calculation</h2>
-	<p>
-		<p>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></p>
-		<table class="small" width="20%">
+<div class="data"><h2>Numbering calculation</h2>
+	<table>
+	<caption>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></caption>
 			<tr>
 				<th>&nbsp;</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;Y&nbsp;&nbsp;&nbsp;&nbsp;</th>
-				<th>&nbsp;&nbsp;&nbsp;&nbsp;Z&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th scope="col">X</th>
+				<th scope="col">Y</th>
+				<th scope="col">Z</th>
 			</tr>
 			<tr>
-				<td>Add</td>
+				<th scope="row">Add</th>
 				<td>
 					<!-- TMPL_VAR name="add1" -->
 				</td>
@@ -106,13 +111,13 @@
 				</td>
 			</tr>
 			<tr>
-				<td>once every</td>
+				<th scope="row">once every</th>
 				<td><!-- TMPL_VAR name="every1" --></td>
 				<td><!-- TMPL_VAR name="every2" --></td>
 				<td><!-- TMPL_VAR name="every3" --></td>
 			</tr>
 			<tr>
-				<td>When more than</td>
+				<th scope="row">When more than</th>
 				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
 					<i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
@@ -121,28 +126,26 @@
 					<i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
 			</tr>
 			<tr>
-				<td>Set back to</td>
+				<th scope="row">Set back to</th>
 				<td><!-- TMPL_VAR name="setto1" --></td>
 				<td><!-- TMPL_VAR name="setto2" --></td>
 				<td><!-- TMPL_VAR name="setto3" --></td>
 			</tr>
 			<tr>
-				<td>
-						Last value
-				</td>
+				<th scope="row">Last value</th>
 				<td><!-- TMPL_VAR name="lastvalue1" --></td>
 				<td><!-- TMPL_VAR name="lastvalue2" --></td>
 				<td><!-- TMPL_VAR name="lastvalue3" --></td>
 			</tr>
 		</table>
 </div>
-<div>
-	<h2>Issues</h2>
-	<table class="small">
+<div class="data">
+	<table>
+	<caption>Issues</caption>
 	<tr>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Issue number&nbsp;&nbsp;&nbsp;&nbsp;</th>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Planned date&nbsp;&nbsp;&nbsp;&nbsp;</th>
-		<th>&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;</th>
+		<th>Issue number</th>
+		<th>Planned date</th>
+		<th>Status</th>
 	</tr>
 	<!-- TMPL_LOOP name="serialslist" -->
 		<tr>
@@ -165,7 +168,6 @@
 					<!--TMPL_IF name="status4" -->
 						Missing
 					<!-- /TMPL_IF -->
-				</select>
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
