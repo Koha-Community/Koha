@@ -146,8 +146,11 @@ perl -MCPAN -e 'install Net::Z3950'
 
 IMPORTANT NOTE : If you use PERL5.8.0 (RedHat 8.0 or Mandrake 9.x), you MUST install 
 manually the Net::Z3950 and edit Makefile.PL and yazwrap/Makefile.PL to include:
-    'DEFINES' => '-D_GNU_SOURCE',
-
+    'DEFINE' => '-D_GNU_SOURCE',
+Also note that some installations of Perl on Red Hat will generate a lot of
+"'my_perl' undeclared" errors when running make in Net-Z3950.  This is fixed by
+inserting the following line in yazwrap/ywpriv.h :
+   #include "XSUB.h"
 
 Press the <ENTER> key to continue: |;	#'
 
