@@ -107,4 +107,4 @@ if ($query->param('bibitemsselected')) {
 $template->param(BIBLIOITEMS => \@data);
 
 $template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output; 
+print "Content-Type: text/html\n\n", $template->output;

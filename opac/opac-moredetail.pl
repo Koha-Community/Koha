@@ -43,14 +43,14 @@ my $count=@items;
 my $i=0;
 print center();
 
-my $dewey = $data->{'dewey'};                                                  
-$dewey =~ s/0+$//;                                                             
-if ($dewey eq "000.") { $dewey = "";};                                         
-if ($dewey < 10){$dewey='00'.$dewey;}                                          
-if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}                           
+my $dewey = $data->{'dewey'};
+$dewey =~ s/0+$//;
+if ($dewey eq "000.") { $dewey = "";};
+if ($dewey < 10){$dewey='00'.$dewey;}
+if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
 if ($dewey <= 0){
-  $dewey='';                                                                   
-}               
+  $dewey='';
+}
 $dewey=~ s/\.$//;
 print <<printend
 <br>
@@ -73,8 +73,8 @@ print <<printend
 </TR>
 <tr VALIGN=TOP  >
 <TD width=210 >
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif"> 
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
+<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif">
+<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
 <b>Biblionumber:</b> $bib<br>
@@ -97,7 +97,7 @@ printend
 ;
 if ($type eq 'catmain'){
   print "<br><a href=/cgi-bin/koha/maint/shiftbib.pl?bi=$data->{'biblioitemnumber'}&bib=$data->{'biblionumber'}>Shift to another biblio</a>";
- 
+
 }
 print <<printend
 
@@ -112,7 +112,7 @@ printend
 for (my $i=0;$i<$count;$i++){
 print <<printend
 <img src="/images/holder.gif" width=16 height=300 align=left>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >				
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
 <TR VALIGN=TOP>
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>BARCODE $items[$i]->{'barcode'}</b></TD>
 </TR>
@@ -122,8 +122,8 @@ print <<printend
 <input type=hidden name=bibitem value=$bi>
 <input type=hidden name=item value=$items[$i]->{'itemnumber'}>
 <input type=hidden name=type value=$type>
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif"> 
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif"> 
+<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif">
+<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif">
 <br>
 printend
 ;

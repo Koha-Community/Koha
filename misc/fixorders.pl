@@ -28,7 +28,7 @@ $sth->execute;
 my $number;
 my $i=92000;
 while (my $data=$sth->fetchrow_hashref){
-  if ($data->{'ordernumber'} != $number){    
+  if ($data->{'ordernumber'} != $number){
   } else {
     my $query="update aqorders set ordernumber=$i where ordernumber=$data->{'ordernumber'} and biblionumber=$data->{'biblionumber'}";
     my $sth2=$dbh->prepare($query);

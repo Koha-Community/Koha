@@ -2,7 +2,7 @@
 use strict;
 require Exporter;
 
-use C4::Output;  
+use C4::Output;
 use CGI;
 use C4::Auth;
 

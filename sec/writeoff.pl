@@ -88,7 +88,7 @@ sub writeoff{
   values ('$bornum','$account->{'max(accountno)'}','$itemnum',now(),'$amount','Writeoff','W')";
   $sth=$dbh->prepare($query);
   $sth->execute;
-  $sth->finish; 
+  $sth->finish;
 #  print $query;
   UpdateStats($env,$user,'writeoff',$amount,'','','',$bornum);
 }

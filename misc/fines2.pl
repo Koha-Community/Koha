@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #  This script loops through each overdue item, determines the fine,
-#  and updates the total amount of fines due by each user.  It relies on 
+#  and updates the total amount of fines due by each user.  It relies on
 #  the existence of /tmp/fines, which is created by ???
 # Doesnt really rely on it, it relys on being able to write to /tmp/
 # It creates the fines file
@@ -80,7 +80,7 @@ my $maxFine=5;
 #
 for (my $i=0;$i<$numOverdueItems;$i++){
   my @dates=split('-',$data->[$i]->{'date_due'});
-  my $date2=Date_DaysSince1BC($dates[1],$dates[2],$dates[0]);    
+  my $date2=Date_DaysSince1BC($dates[1],$dates[2],$dates[0]);
   my $due="$dates[2]/$dates[1]/$dates[0]";
   my $borrower=BorType($data->[$i]->{'borrowernumber'});
   if ($date2 <= $date){
@@ -89,7 +89,7 @@ for (my $i=0;$i<$numOverdueItems;$i++){
     my ($amount,$type,$printout)=
 	CalcFine($data->[$i]->{'itemnumber'},
 		 $borrower->{'categorycode'},
-		 $difference);      
+		 $difference);
     if ($amount > $maxFine){
       $amount=$maxFine;
     }
@@ -118,8 +118,8 @@ for (my $i=0;$i<$numOverdueItems;$i++){
        }
        print "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'firstname'}\t$borrower->{'surname'}\t$data->[$i]->{'date_due'}\t$type\t$difference\t$borrower->{'emailaddress'}\t$borrower->{'phone'}\t$borrower->{'streetaddress'}\t$borrower->{'city'}\t$amount\n";
     } else { # FIXME
-	     # if this is really useless, the whole else clause should be 
-	     # deleted. 
+	     # if this is really useless, the whole else clause should be
+	     # deleted.
              #
 #      print "$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t0 fine\n";
     }
@@ -128,7 +128,7 @@ for (my $i=0;$i<$numOverdueItems;$i++){
                             #
       my $borrower=BorType($data->[$i]->{'borrowernumber'});
       if ($borrower->{'cardnumber'} ne ''){
-        my $cost=ReplacementCost($data->[$i]->{'itemnumber'});	
+        my $cost=ReplacementCost($data->[$i]->{'itemnumber'});
 	my $dbh = C4::Context->dbh;
 	my $env;
 	my $accountno=C4::Circulation::Circ2::getnextacctno($env,$data->[$i]->{'borrowernumber'},$dbh);

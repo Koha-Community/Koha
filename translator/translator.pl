@@ -74,8 +74,8 @@ if ($tofile){
   @katalog=`ls -R`;
 
   $plik=$ARGV[0];
-  if ($plik eq ''){ 
-    $plik="koha.gettext.c"; 
+  if ($plik eq ''){
+    $plik="koha.gettext.c";
   }
 
 } else {
@@ -91,7 +91,7 @@ $dgettxt{'us_US'}=1;
 
 my $txt =<<TXT;
 <HTML>
-<META http-equiv=Content-Type content="text/thml; 
+<META http-equiv=Content-Type content="text/thml;
     charset=${\(gettext('iso-8859-1'))}">
 TXT
 
@@ -124,21 +124,21 @@ foreach(@katalog){
 
 
   $dane=~s/<html>/$txt/i;
-  
+
   $dane=~s/%/&zamien/ges;		# change %	(specjal symbol)
   $dane=~s/\\\'/&zamien/ges;		# change \'
   $dane=~s/\\\"/&zamien/ges;		# change \"
-  
+
   # take out graphics
   $dane=~s/[\"\']\/?([\w-\/\.]*?\.gif)[\"\']/&zamien($1)/ges;
-  
+
 #  $dane=~s/messenger\s*\((.*?)\)\s*[\}\{;]/&zamien($1)/ges;
 #  $dane=~s/\.write(ln)?\s*\((.*?)\)\s*[\};]/&zamien($2)/ges;
 
   # take out string in field alt
   $dane=~s/alt\s*=\s*[\"]([^\"]*)[\"]/&zamien($1)/iges;
   $dane=~s/alt\s*=\s*[\']([^\']*)[\']/&zamien($1)/iges;
-  
+
   $dane=~s/<!--.*?-->/&zamien/ges;
   $dane=~s/<script.*?<\/script>/&zamien/iges;
 

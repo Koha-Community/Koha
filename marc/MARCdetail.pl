@@ -27,9 +27,9 @@ use C4::Search;
 use MARC::Record;
 use C4::Biblio;
 use C4::Catalogue;
- 
+
 my $query=new CGI;
-    
+
 my $biblionumber=$query->param('bib');
 my $tag=$query->param('tag');
 if (! defined $tag) { $tag='2XX';}
@@ -65,10 +65,10 @@ sub showmarcrecord {
 #	    print $field->tag(), " ", $field->indicator(1),$field->indicator(2), "subf: ", $subf[$i][0]," =",$subf[$i][1]," <-- \n";
 	}
     }
-    
+
 # fill template with arrays
     $template->param(biblionumber => $biblionumber);
     $template->param(marc =>\@loop_data);
     print "Content-Type: text/html\n\n", $template->output;
-    
+
 }

@@ -25,8 +25,8 @@ my $dbh = C4::Context->dbh;
 my $count=0;
 my $basket='HLT-';
 for (my $i=1;$i<59;$i++){
-  my $query = "Select authorisedby,entrydate from aqorders where booksellerid='$i'";            
-  $query.=" group by authorisedby,entrydate order by entrydate"; 
+  my $query = "Select authorisedby,entrydate from aqorders where booksellerid='$i'";
+  $query.=" group by authorisedby,entrydate order by entrydate";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   while (my $data=$sth->fetchrow_hashref){

@@ -20,10 +20,10 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-$done = "Issues";                                                                
+$done = "Issues";
 my $i=0;
 my $bcard;
-while ($done eq "Issues") {                                                      
+while ($done eq "Issues") {
   my @args=('borrwraper.pl',@ARGV,$bcard);
   my $time=localtime(time);
   open (FILE,">>/tmp/$<_$ARGV[6]");
@@ -35,4 +35,4 @@ while ($done eq "Issues") {
     $done=$exit_value;
   }
 
-}                                                                                
+}

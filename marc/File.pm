@@ -47,7 +47,7 @@ our $VERSION = '0.93';
     use MARC::File::USMARC;
 
     my $file = MARC::File::USMARC->in( $filename );
-    
+
     while ( my $marc = $file->next() ) {
 	# Do something
     }
@@ -56,7 +56,7 @@ our $VERSION = '0.93';
 
 =head1 EXPORT
 
-None.  
+None.
 
 =head1 METHODS
 
@@ -191,7 +191,7 @@ We only handle files for input right now.
 
 =head1 LICENSE
 
-This code may be distributed under the same terms as Perl itself. 
+This code may be distributed under the same terms as Perl itself.
 
 Please note that these modules are not products of or supported by the
 employers of the various contributors to the code.

@@ -26,7 +26,7 @@ use C4::Print;
 use DBI;
 
 
-# this is a reorganisation of circulationold.pl 
+# this is a reorganisation of circulationold.pl
 # dividing it up into three scripts......
 # this will be the first one that chooses branch and printer settings....
 
@@ -105,7 +105,7 @@ if ($printercount>1) {
 EOF
 } else {
     my ($printer) = keys %$printers;
-} 
+}
 
 if ($branchcount>1) {
     $branchform=<<"EOF";
@@ -113,7 +113,7 @@ if ($branchcount>1) {
 EOF
 } else {
     my ($branch) = keys %$branches;
-} 
+}
 
 
 

@@ -45,6 +45,6 @@ while (my $data=$sth->fetchrow_hashref){
   $sth2->execute;
   $sth2->finish;
   $bibitemno++
-  
+
 }
 $sth->finish;

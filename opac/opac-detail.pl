@@ -5,7 +5,7 @@ use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Search;
 use C4::Auth;
- 
+
 my $query=new CGI;
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);

@@ -56,7 +56,7 @@ use constant DIRECTORY_ENTRY_LEN    => 12;
     use MARC::File::USMARC;
 
     my $file = MARC::File::USMARC::in( $filename );
-    
+
     while ( my $marc = $file->next() ) {
 	# Do something
     }
@@ -65,7 +65,7 @@ use constant DIRECTORY_ENTRY_LEN    => 12;
 
 =head1 EXPORT
 
-None.  
+None.
 
 =head1 METHODS
 
@@ -146,7 +146,7 @@ sub decode {
     # Shouldn't be any non-digits anywhere in any directory entry
     my @directory = unpack( "A3 A4 A5" x $nfields, $dir );
     my @bad = grep /\D/, @directory;
-    if ( @bad ) { 
+    if ( @bad ) {
 	return $marc->_gripe( "Non-numeric entries in the tag directory: ", join( ", ", map { "\"$_\"" } @bad ) );
     }
 
@@ -200,7 +200,7 @@ sub decode {
 =head2 update_leader()
 
 If any changes get made to the MARC record, the first 5 bytes of the
-leader (the length) will be invalid.  This function updates the 
+leader (the length) will be invalid.  This function updates the
 leader with the correct length of the record as it would be if
 written out to a file.
 
@@ -246,14 +246,14 @@ sub _build_tag_directory {
 		$dataend += $len;
 	}
 
-	my $baseaddress = 
+	my $baseaddress =
 		LEADER_LEN +    # better be 24
 		( @directory * DIRECTORY_ENTRY_LEN ) +
 				# all the directory entries
 		1;           	# end-of-field marker
 
 
-	my $total = 
+	my $total =
 		$baseaddress +	# stuff before first field
 		$dataend + 	# Length of the fields
 		1;		# End-of-record marker
@@ -297,7 +297,7 @@ use DBD::Oracle or DBD::Mysql.
 
 =head1 LICENSE
 
-This code may be distributed under the same terms as Perl itself. 
+This code may be distributed under the same terms as Perl itself.
 
 Please note that these modules are not products of or supported by the
 employers of the various contributors to the code.

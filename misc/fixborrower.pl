@@ -28,7 +28,7 @@ use strict;
 my $dbh = C4::Context->dbh;
 
 my $query = "Select * from categories where (categorycode like 'L%' or categorycode like 'F%'
-or categorycode like 'S%' or categorycode like 'O%' or categorycode like 'H%') and (categorycode <>'HR' 
+or categorycode like 'S%' or categorycode like 'O%' or categorycode like 'H%') and (categorycode <>'HR'
 and categorycode <> 'ST')";
 
 my $sth=$dbh->prepare($query);
@@ -43,9 +43,9 @@ while (my $data=$sth->fetchrow_hashref){
     my $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
- 
+
    $temp=substr($data->{'categorycode'},1,1);
-    $query="update borrowers set categorycode='$temp' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='$temp' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -54,10 +54,10 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
-    
+
 }
 
-$query = "Select * from categories where (categorycode like 'V%') and (categorycode <>'HR' 
+$query = "Select * from categories where (categorycode like 'V%') and (categorycode <>'HR'
 and categorycode <> 'ST')";
 
 my $sth=$dbh->prepare($query);	# FIXME - There's already a $sth in this scope
@@ -73,7 +73,7 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2->finish;
 
     my $temp=substr($data->{'categorycode'},1,1);
-    $query="update borrowers set categorycode='$temp' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='$temp' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -97,7 +97,7 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2->execute;
     $sth2->finish;
 
-    $query="update borrowers set categorycode='W' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='W' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -121,7 +121,7 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2->execute;
     $sth2->finish;
 
-    $query="update borrowers set categorycode='I' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='I' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -145,7 +145,7 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2->execute;
     $sth2->finish;
 
-    $query="update borrowers set categorycode='A' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='A' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -169,7 +169,7 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2->execute;
     $sth2->finish;
 
-    $query="update borrowers set categorycode='A' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='A' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -193,7 +193,7 @@ while (my $data=$sth->fetchrow_hashref){
     $sth2->execute;
     $sth2->finish;
 
-    $query="update borrowers set categorycode='L' where categorycode='$data->{'categorycode'}'"; 
+    $query="update borrowers set categorycode='L' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -216,8 +216,8 @@ while (my $data=$sth->fetchrow_hashref){
     my $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
-    
-    $query="update borrowers set categorycode='P' where categorycode='$data->{'categorycode'}'"; 
+
+    $query="update borrowers set categorycode='P' where categorycode='$data->{'categorycode'}'";
     $sth2=$dbh->prepare($query);
     $sth2->execute;
     $sth2->finish;
@@ -231,7 +231,7 @@ while (my $data=$sth->fetchrow_hashref){
 
 $sth->finish;
 
-my @queryValues = 
+my @queryValues =
     ("insert into categories values ('E','Senior Citizen',5,99,0,'A',0,0,0,99,1)",
      "insert into categories values ('A','Adult',5,99,0,'A',0,0,0,99,1)",
      "insert into categories values ('C','Child',5,16,0,'A',0,0,0,99,0)",
@@ -241,7 +241,7 @@ my @queryValues =
      "insert into categories values ('I','Institution',5,99,0,'A',0,0,0,99,0)",
      "insert into categories values ('P','Privileged',5,99,0,'A',0,0,0,99,0)",
      "insert into categories values ('L','Library',5,99,0,'A',0,0,0,99,0)"
-     );   
+     );
 
 foreach $query (@queryValues) {
     $sth=$dbh->prepare($query);

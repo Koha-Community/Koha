@@ -18,9 +18,9 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-$done = "returns";                                                                
+$done = "returns";
 my $i=0;
-while ($done eq "returns") {                                                      
+while ($done eq "returns") {
   my @args=('doreturns.pl',@ARGV);
   eval{system(@args)};
   $exit_value  = $? >> 8;
@@ -28,4 +28,4 @@ while ($done eq "returns") {
     $done=$exit_value;
   }
 
-}                                                                                
+}

@@ -152,8 +152,7 @@ if ($barcode) {
 # title....
 my $title = <<"EOF";
 <FONT SIZE=6><em>Circulation: Returns</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
-<b>Printer:</b> $printers->{$printer}->{'printername'}<br>
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp<b>Printer:</b> $printers->{$printer}->{'printername'}<br>
 <a href=selectbranchprinter.pl>Change Settings</a>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
@@ -220,19 +219,16 @@ $ritext
 <input type=submit value="OK">
 </form></center>
 EOF
-    } 
-    if ($res->{'ResFound'} eq "Reserved") {
+    }    if ($res->{'ResFound'} eq "Reserved") {
 	my @da = localtime(time());
 	my $todaysdate = sprintf ("%0.2d", ($da[3]+1))."/".sprintf ("%0.2d", ($da[4]+1))."/".($da[5]+1900);
 	my $slip =  <<"EOF";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Date: $todaysdate;
 
-ITEM RESERVED: 
-$iteminfo->{'title'} ($iteminfo->{'author'})
+ITEM RESERVED:$iteminfo->{'title'} ($iteminfo->{'author'})
 barcode: $iteminfo->{'barcode'}
-itemtype: $iteminfo->{'itemtype'} 
-
+itemtype: $iteminfo->{'itemtype'}
 COLLECT AT: $branchname
 
 BORROWER:
@@ -252,8 +248,7 @@ EOF
 <font color='red' size='+2'>Reserve found:</font> Item: $iteminfo->{'title'} ($iteminfo->{'author'}) <a href=/cgi-bin/koha/detail.pl?bib=$iteminfo->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a> <br>
 for $name ($number) to be collected at <b>$branchname</b>.
 <table cellpadding=5 cellspacing=0>
-<tr><td valign="top">Change status to waiting and print 
-<a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
+<tr><td valign="top">Change status to waiting and print<a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
 <td valign="top">
 <form method=post action='returns.pl'>
 $ritext
@@ -321,8 +316,7 @@ if ($borrower) {
 <tr><td colspan=2 bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <font color=black><b>Borrower Information</b></font></td></tr>
 <tr><td colspan=2>
-<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} 
-onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a>
+<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'}onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a>
 $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
 </td></tr>
 EOF
@@ -336,13 +330,10 @@ EOF
 	    $displayflag = "<font color=red>$flag</font>";
 	} else {
 	    $displayflag = $flag;
-	}  
-	if ($flag eq 'CHARGES') {
+	}	if ($flag eq 'CHARGES') {
 	    $flaginfotext.= <<"EOF";
 <tr><td valign=top>$displayflag</td>
-<td bgcolor=$color><b>$flags->{$flag}->{'message'}</b> 
-<a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} 
-onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+<td bgcolor=$color><b>$flags->{$flag}->{'message'}</b><a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'}onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 EOF
 	} elsif ($flag eq 'WAITING') {
 	    my $itemswaiting='';
@@ -350,10 +341,7 @@ EOF
 	    foreach my $item (@$items) {
 		my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
 		$itemswaiting .= <<"EOF";
-<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra 
-onClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a> 
-$iteminformation->{'title'} 
-($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>
+<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intraonClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a>$iteminformation->{'title'}($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>
 EOF
             }
             $flaginfotext.="<tr><td valign=top>$displayflag</td><td>$itemswaiting</td></tr>\n";
@@ -364,9 +352,7 @@ EOF
 		my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
                 $itemsoverdue .=  <<"EOF";
 <font color=red>$item->{'date_due'}</font>
-<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra 
-onClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a> 
-$iteminformation->{'title'}
+<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intraonClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a>$iteminformation->{'title'}
 <br>
 EOF
 	    }
@@ -382,8 +368,7 @@ EOF
 	$borrowertable .= << "EOF";
 <tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2>
 <b>Flags</b></td></tr>
-$flaginfotext 
-EOF
+$flaginfotextEOF
     }
     $borrowertable .= "</table>";
 }
@@ -503,6 +488,4 @@ sub cuecatbarcodedecode {
   	return $results[2];
     } else {
 	return $barcode;
-    } 
-} 
-
+    }}

@@ -86,8 +86,8 @@ if ($findborrower) {
     }
 }
 
-my $borrowernumber = $query->param('borrnumber');    
-my $bornum = $query->param('borrnumber');    
+my $borrowernumber = $query->param('borrnumber');
+my $bornum = $query->param('borrnumber');
 # check and see if we should print
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
@@ -95,11 +95,11 @@ if ($barcode eq ''  && $print eq 'maybe'){
     $print = 'yes';
 }
 if ($print eq 'yes' && $borrowernumber ne ''){
-    printslip(\%env,$borrowernumber);    
+    printslip(\%env,$borrowernumber);
     $query->param('borrnumber','');
     $borrowernumber='';
 }
-    
+
 
 
 # get the borrower information.....
@@ -137,7 +137,7 @@ if ($barcode) {
 	$env{'datedue'}=$datedue;
 	my @time=localtime(time);
 	my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
-	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) 
+	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message)
                      = issuebook(\%env, $borrower, $barcode, \%responses, $date);
     }
 }
@@ -200,7 +200,7 @@ my $title = <<"EOF";
 &nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
 <b>Printer:</b> $printers->{$printer}->{'printername'} <br>
 <a href=selectbranchprinter.pl>Change Settings</a></td>
 <input type=hidden name=branch value=$branch>
@@ -215,7 +215,7 @@ my $titlenoborrower = <<"EOF";
 &nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
 <b>Printer:</b> $printers->{$printer}->{'printername'} <br>
 <a href=selectbranchprinter.pl>Change Settings</a></td>
 <input type=hidden name=branch value=$branch>
@@ -248,8 +248,8 @@ if ($question) {
 <table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <font size=+2 color=red><b>Issuing Question</b></font></th></tr>
-<tr><td><table border=0 cellpadding=10><tr><td> 
-Attempting to issue $iteminformation->{'title'} 
+<tr><td><table border=0 cellpadding=10><tr><td>
+Attempting to issue $iteminformation->{'title'}
 by $iteminformation->{'author'} to $borrower->{'firstname'} $borrower->{'surname'}.
 <p>
 $question
@@ -406,7 +406,7 @@ if ($borrower) {
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
-	#this should be set with some kinda config variable	    
+	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
 	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
      	$datedue=~s/-//g;
@@ -422,7 +422,7 @@ if ($borrower) {
 <td bgcolor=$tcolor>$book->{'author'}</td>
 <td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
-    } 
+    }
     # FIXME - For small and private libraries, it'd be nice if this
     # table included a "Return" link next to each book, so that you
     # don't have to remember the book's bar code and type it in on the
@@ -431,7 +431,7 @@ EOF
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
-	#this should be set with some kinda config variable	    
+	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
 	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
      	$datedue=~s/-//g;
@@ -553,8 +553,8 @@ sub cuecatbarcodedecode {
   	return $results[2];
     } else {
 	return $barcode;
-    } 
-} 
+    }
+}
 
 sub fixdate {
     my ($year, $month, $day) = @_;
@@ -618,13 +618,13 @@ sub patrontable {
 			($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
 			$itemswaiting.="<tr><td><font color=red>$iteminformation->{'date_due'}</font></td><td bgcolor=$color><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a></td><td>$iteminformation->{'title'}</td></tr>\n";
-		    }		    
+		    }
 		}
 		$itemswaiting.="</table>\n";
 		if ($query->param('module') ne 'returns'){
   		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}, See below</td></tr>\n";
 		} else {
-  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n"; 
+  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
 		}
 	    } else {
 		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
