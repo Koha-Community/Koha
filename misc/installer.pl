@@ -927,9 +927,29 @@ print qq|
 UPDATING DATABASE (MARC TABLES)
 ===============================
 |;
+
+$answer="";
+while ($answer ne "1" && $answer ne "2" && $answer ne "3") {
+	print qq|
+You can import marc parameters for :
+1- english marc21 or for
+2- french unimarc.
+3- none.
+Please choose which parameter you want to install. Note if you choose 3, nothing will be added, and it can be a BIG job to manually create those tables
+|;
+	$answer = <STDIN>;
+	chomp $answer;
+}
+if ($answer eq "1") {
+system("cat misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+}
+if ($answer eq "2") {
+system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+}
+
 system ("perl -I $kohadir/modules scripts/marc/fill_usmarc.pl");
 system ("perl -I $kohadir/modules scripts/marc/updatedb2marc.pl");
-
 
 chmod 0770, $kohalogdir;
 chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";

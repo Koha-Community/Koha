@@ -267,22 +267,16 @@ system("cp -a $kohadir/* $rootdir/intranet-cgi");
 system("mv $rootdir/intranet-cgi/C4 $rootdir/modules");
 
 # Move files from intranet-cgi to root of tarball
-system("mv $rootdir/intranet-cgi/INSTALL $rootdir");
-system("mv $rootdir/intranet-cgi/ChangeLog* $rootdir");
-system("mv $rootdir/intranet-cgi/Hints $rootdir");
-system("mv $rootdir/intranet-cgi/LICENSE $rootdir");
-system("mv $rootdir/intranet-cgi/News $rootdir");
-system("mv $rootdir/intranet-cgi/README $rootdir");
-system("mv $rootdir/intranet-cgi/TODO $rootdir");
-system("mv $rootdir/intranet-cgi/installer.pl $rootdir");
-system("mv $rootdir/intranet-cgi/koha.upgrade $rootdir");
-system("mv $rootdir/intranet-cgi/Install.pm $rootdir");
-system("mv $rootdir/intranet-cgi/kohareporter $rootdir");
+system("mv $rootdir/intranet-cgi/misc/info/* $rootdir");
+system("mv $rootdir/intranet-cgi/misc/installer.pl $rootdir");
+system("mv $rootdir/intranet-cgi/misc/koha.upgrade $rootdir");
+#system("mv $rootdir/intranet-cgi/Install.pm $rootdir"); #does not exist ??
+#system("mv $rootdir/intranet-cgi/kohareporter $rootdir"); # does not exist ??
 chmod 0770, "$rootdir/installer.pl";
 chmod 0770, "$rootdir/koha.upgrade";
-system("mv $rootdir/intranet-cgi/koha.conf $rootdir");
-system("mv $rootdir/intranet-cgi/koha.mysql $rootdir");
-system("mv $rootdir/intranet-cgi/sampledata-1.2 $rootdir");
+system("mv $rootdir/intranet-cgi/misc/koha.conf $rootdir");
+system("mv $rootdir/intranet-cgi/misc/koha.mysql $rootdir");
+system("mv $rootdir/intranet-cgi/misc/sampledata-1.2 $rootdir");
 system("gzip -9 $rootdir/sampledata-1.2");
 
 # Copy files from intranet-cgi to opac-cgi
@@ -302,23 +296,21 @@ system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/marc $rootdir/scripts");
-system("mv $rootdir/intranet-cgi/acqui.simple/bulkmarcimport.pl $rootdir/scripts/z3950daemon/");
-system("mv $rootdir/intranet-cgi/acqui.simple/processz3950queue $rootdir/scripts/z3950daemon/");
-system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-launch.sh $rootdir/scripts/z3950daemon/");
-system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-shell.sh $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/misc/bulkmarcimport.pl $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/z3950/* $rootdir/scripts/z3950daemon/");
 
 
 # Remove extraneous files from intranet-cgi
 system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
 system("rm -f $rootdir/intranet-cgi/SendMessages");
 system("rm -f $rootdir/intranet-cgi/buildrelease");
-system("rm -f $rootdir/intranet-cgi/database.mysql");
-system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
+#system("rm -f $rootdir/intranet-cgi/database.mysql");
+#system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
 # FIXME: The following two lines look suspicious
 #system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
 #system("rm -f $rootdir/intranet-cgi/rel-1-2");
-system("rm -f $rootdir/intranet-cgi/testKoha.pl");
-system("rm -rf $rootdir/intranet-cgi/html-template");
+#system("rm -f $rootdir/intranet-cgi/testKoha.pl");
+#system("rm -rf $rootdir/intranet-cgi/html-template");
 system("rm -rf $rootdir/intranet-cgi/t");
 
 # Set all .pl scripts executable
@@ -359,7 +351,7 @@ if (-e "$roothomedir/docs") {
 
 chdir("/tmp");
 system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
-system("rm -rf $rootdir");
+#system("rm -rf $rootdir");
 
 print qq|
 ============
