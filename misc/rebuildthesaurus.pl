@@ -44,7 +44,7 @@ die;
 }
 
 my $dbh = C4::Context->dbh;
-my @subfields = $subfields =~ /(\S)/g;
+my @subf = $subfields =~ /(##\d\d\d##.)/g;
 if ($delete) {
 	print "deleting thesaurus\n";
 	my $sth = $dbh->prepare("delete from bibliothesaurus where category=?");
@@ -53,13 +53,18 @@ if ($delete) {
 if ($test_parameter) {
 	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
+$|=1; # flushes output
 
 my $starttime = gettimeofday;
 my $sth = $dbh->prepare("select bibid from marc_biblio");
 $sth->execute;
-my $i;
+my $i=1;
 while (my ($bibid) = $sth->fetchrow) {
 	my $record = MARCgetbiblio($dbh,$bibid);
+	print ".";
+	my $timeneeded = gettimeofday - $starttime;
+	print "$i in $timeneeded s\n" unless ($i % 50);
+
 #	warn $record->as_formatted;
 	my $resultstring = $subfields;
 	foreach my $fieldwanted ($record->fields) {
@@ -69,15 +74,15 @@ while (my ($bibid) = $sth->fetchrow) {
 #			warn "$fieldvalue ==> #$fieldvalue#$pair->[0]/$pair->[1]";
 			$resultstring =~ s/##$fieldvalue##$pair->[0]/$pair->[1]/g;
 		}
-		# deals empty subfields
-		foreach my $empty (@subfields) {
-			$resultstring =~ s/\$$empty//g;
-		}
-		warn "RRR $resultstring";
-		if ($resultstring ne $subfields && $resultstring &&
-		&newauthority($dbh,$category,$resultstring);
-		$i++;
 	}
+		# deals empty subfields
+		foreach my $empty (@subf) {
+			$resultstring =~ s/$empty//g;
+		}
+		if ($resultstring ne $subfields && $resultstring) {
+			&newauthority($dbh,$category,$resultstring);
+		}
+		$i++;
 }
 my $timeneeded = gettimeofday - $starttime;
-print "$i entries done in $timeneeded seconds\n";
+print "$i entries done in $timeneeded seconds (".($i/$timeneeded)." per second)\n";
