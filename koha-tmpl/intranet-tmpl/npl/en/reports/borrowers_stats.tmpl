@@ -23,14 +23,14 @@
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="highlighted" --><td class="highlighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="highlighted" --><td class="numberhighlighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
 								<!-- TMPL_VAR NAME="value" -->
 							</td>
 						<!-- /TMPL_LOOP -->
-						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="highlighted" --><td class="numberhighlighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
 							<!-- TMPL_VAR NAME="totalrow" -->
 						</td>
 					</tr>
@@ -71,7 +71,7 @@
 			<td></td>
 			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td>
 			</tr>
-			<tr class="hilighted">
+			<tr class="highlighted">
 			<td>
 			Zip Code
 			</td>
@@ -79,7 +79,7 @@
 			<td><input type="radio" name="Column" value="zipcode" /></td>
 			<td><input type="text"  name="Filter" /></td>
 			</tr>
-			<tr class="hilighted">
+			<tr class="highlighted">
 			<td>&nbsp;</td>
 			<td colspan="2"><select name="digits">
 			<option value=""> </option>
@@ -98,18 +98,22 @@
 			</td>
 			<td>&nbsp;</td>
 			</tr>
+			<!-- TMPL_IF name="hassort1" -->
 			<tr>
 			<td>Sort1</td>
 			<td><input type="radio" name="Line" value="sort1" /></td>
 			<td><input type="radio" name="Column" value="sort1" /></td>
 			<td ><!-- TMPL_VAR NAME="CGISort1" --></td>
 			</tr>
-			<tr class="hilighted" >
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="hassort2" -->			
+			<tr class="highlighted" >
 			<td>Sort2</td>
 			<td><input type="radio" name="Line" value="sort2" /></td>
 			<td><input type="radio" name="Column" value="sort2" /></td>
 			<td><!-- TMPL_VAR NAME="CGISort2" --></td>
 			</tr>
+			<!-- /TMPL_IF -->
 		</tbody>
 	</table>
 	
