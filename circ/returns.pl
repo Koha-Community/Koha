@@ -199,8 +199,12 @@ if ($messages->{'ResFound'}) {
 										borcnum => $borr->{'cardnumber'},
 										branchname => $branches->{$res->{'branchcode'}}->{'branchname'},
 										waiting => 1,
+										itemnumber => $res->{'itemnumber'},
 										itemtitle => $iteminfo->{'title'},
-										itemauthor => $iteminfo->{'author'});
+										itemauthor => $iteminfo->{'author'},
+										itembarcode => $iteminfo->{'barcode'},
+										itemtype => $iteminfo->{'itemtype'},
+										itembiblionumber => $iteminfo->{'biblionumber'});
 
     }
 	if ($res->{'ResFound'} eq "Reserved") {
