@@ -29,10 +29,12 @@ use vars qw( $fatal_p );
 ###############################################################################
 
 # Hideous stuff
-use vars qw( $re_directive );
+use vars qw( $re_directive $re_directive_ref );
 BEGIN {
     # $re_directive must not do any backreferences
     $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    # As above but only TMPL_VAR and TMPL_INCLUDE (those that can emit a value)
+    $re_directive_ref = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
 }
 
 # Hideous stuff from subst.pl, slightly modified to use the above hideous stuff
@@ -80,11 +82,11 @@ sub extract_attributes ($;$) {
 	$i += 1;
 	$attr{+lc($key)} = [$key, $val, $val_orig, $i];
 	$s = $rest;
-	warn "Warning: Attribute should be quoted"
+	warn "Warning: Attribute probably should be quoted"
 		. (defined $lc? " near line $lc": '') . ": $val_orig\n"
 		if $val_orig !~ /^['"]/ && (
 			($pedantic_p && $val =~ /[^-\.A-Za-z0-9]/s)
-			|| $val =~ /[<>]/s	# this covers $re_directive, too
+			|| $val =~ /$re_directive_ref/s
 		    )
     }
     if ($s =~ /\S/s) { # should never happen
