@@ -38,16 +38,16 @@
 		var _alertString="";
 		var alertString2;
 		if (f.variable.value.length==0) {
-			_alertString += "- variable missing\\n";
+			_alertString += "- variable missing\n";
 		}
 		if (f.value.value.length==0) {
-			_alertString += "- value missing\\n";
+			_alertString += "- value missing\n";
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}

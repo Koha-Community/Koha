@@ -39,16 +39,16 @@
                 var _alertString="";
                 var alertString2;
                 if (f.printername.value.length==0) {
-                        _alertString += "- printer name missing\\n";
+                        _alertString += "- printer name missing\n";
                 }
                 if (f.printqueue.value.length==0) {
-                        _alertString += "- Queue missing\\n";
+                        _alertString += "- Queue missing\n";
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\\n";
-                        alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 += "------------------------------------------------------------------------------------\n\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }

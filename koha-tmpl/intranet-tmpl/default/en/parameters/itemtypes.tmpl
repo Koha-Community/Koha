@@ -38,22 +38,22 @@ function Check(f) {
 	var _alertString="";
 	var alertString2;
 	if (f.itemtype.value.length==0) {
-		_alertString += "- itemtype missing\\n";
+		_alertString += "- itemtype missing\n";
 	}
 	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "- description missing\\n";
+		_alertString += "- description missing\n";
 	}
 	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "- loan length is not a number\\n";
+		_alertString += "- loan length is not a number\n";
 	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "- rental charge is not a number\\n";
+		_alertString += "- rental charge is not a number\n";
 	}
 	if (_alertString.length==0) {
 		document.Aform.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\\n";
-		alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+		alertString2 = "Form not submitted because of the following problem(s)\n";
+		alertString2 += "------------------------------------------------------------------------------------\n\n";
 		alertString2 += _alertString;
 		alert(alertString2);
 	}

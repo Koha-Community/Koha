@@ -39,31 +39,31 @@
                 var _alertString="";
                 var alertString2;
                 if (f.searchfield.value.length==0) {
-                        _alertString += "- site name missing\\n";
+                        _alertString += "- site name missing\n";
                 }
                 if (f.host.value.length==0) {
-                        _alertString += "- host missing\\n";
+                        _alertString += "- host missing\n";
                 }
                 if (f.port.value.length==0) {
-                        _alertString += "- port missing\\n";
+                        _alertString += "- port missing\n";
                 }
                 if (f.db.value.length==0) {
-                        _alertString += "- database missing\\n";
+                        _alertString += "- database missing\n";
                 }
                 if (isNaN(f.port.value)) {
-                        _alertString += "- port must be a number\\n";
+                        _alertString += "- port must be a number\n";
                 }
                 if (isNaN(f.rank.value)) {
-                        _alertString += "- rank must be a number\\n";
+                        _alertString += "- rank must be a number\n";
                 }
                 if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-                        _alertString += "- checked must be 0 or 1\\n";
+                        _alertString += "- checked must be 0 or 1\n";
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\\n";
-                        alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 += "------------------------------------------------------------------------------------\n\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
