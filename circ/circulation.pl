@@ -382,11 +382,19 @@ EOF
 	<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
 EOF
 	my $color='';
+	#set up so only the lat 8 returned items display (make for faster loading pages)
+	my $count=0;
 	foreach (sort {$a <=> $b} keys %returneditems) {
+	  if ($count < 8){
 	    ($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	    my $barcode=$returneditems{$_};
 	    my $duedate=$riduedate{$_};
 	    my @datearr = localtime(time());
+	    ###
+	    # convert to nz date format
+	    my @tempdate=split(/-/,$duedate);
+	    $duedate="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	    ####
 	    my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 	    my $overduetext="$duedate";
 	    ($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
@@ -395,6 +403,10 @@ EOF
 	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
 	    my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
 	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td><td bgcolor=$color><img src=/koha/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
+	  } else {
+	    last
+	  }
+	  $count++;
 	}
 	print "</table>\n";
     } else {
@@ -634,6 +646,13 @@ EOF
 	    my $bgcolor='';
 	    my $datedue=$bookissue->{'date_due'};
 	    my $dd=$bookissue->{'date_due'};
+	    #convert to nz style dates
+	    #this should be set with some kinda config variable
+	    
+	    my @tempdate=split(/-/,$dd);
+	    $dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	    
+	    #####
 	    $datedue=~s/-//g;
 	    if ($datedue < $todaysdate) {
 		$dd="<font color=red>$dd</font>\n";
