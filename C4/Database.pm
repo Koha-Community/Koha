@@ -5,7 +5,6 @@ package C4::Database; #asummes C4/Database
 use strict;
 require Exporter;
 use DBI;
-use C4::Koha;
 use vars qw($VERSION @ISA @EXPORT);
   
 $VERSION = 0.01;
