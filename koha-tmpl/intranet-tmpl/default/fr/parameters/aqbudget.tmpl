@@ -70,16 +70,14 @@
 		var ok=1;
 		var _alertString="";
 		var alertString2;
-		if (f.aqbudgetid.value.length==0) {
-			_alertString += "- aqbudgetid missing\n";
-		}
+
 		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
-			_alertString += "- Budget missing\n";
+			_alertString += "- Budget absent\n";
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 = "formulaire invalide en raison des erreurs suivante\n";
 			alertString2 += "------------------------------------------------------------------------------------\n\n";
 			alertString2 += _alertString;
 			alert(alertString2);
