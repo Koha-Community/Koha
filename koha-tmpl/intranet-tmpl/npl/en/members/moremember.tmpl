@@ -5,7 +5,7 @@
 
 <!-- main site -->
 <div id="main">
-<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h1>
+<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) <span class="print"><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">(Print Page)</a> <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">(Print Slip)</a></span></h1>
 <div class="tabitem">
 			 <form method="post" action="/cgi-bin/koha/circ/circulation.pl"><input name="findborrower" type="hidden" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /> <input type="submit" class="submit" value="Issue" /></form>
 
@@ -29,7 +29,7 @@
 		<!-- TMPL_IF NAME="gonenoaddress" --><li>Patron's <span class="error">address is in doubt</span>.</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="lost" --><li>Patron's card has been reported <span class="error">lost</span>.</li><!-- /TMPL_IF -->
 	</ul>
-<!-- TMPL_IF name="borrowernotes" --><dl><dt>Notes:</dt> <dd><!-- TMPL_VAR name="borrowernotes" --></dd></dl></div><!-- /TMPL_IF -->
+<!-- TMPL_IF name="borrowernotes" --><dl><dt>Notes:</dt> <dd class="error"><!-- TMPL_VAR name="borrowernotes" --></dd></dl></div><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <div class="compact">
