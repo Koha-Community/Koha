@@ -17,6 +17,12 @@ my $isbn            = checkinp($input->param('ISBN'));
 my $publishercode   = checkinp($input->param('Publisher'));
 my $publicationdate = checkinp($input->param('Publication'));
 my $class           = checkinp($input->param('Class'));
+my $illus           = checkinp($input->param('Illustrations'));
+my $pages           = checkinp($input->param('Pages'));
+my $volumeddesc     = checkinp($input->param('Volume'));
+my $notes           = checkinp($input->param('Notes'));
+my $size            = checkinp($input->param('Size'));
+my $place           = checkinp($input->param('Place'));
 my $classification;
 my $dewey;
 my $subclass;
@@ -42,12 +48,6 @@ if ($class =~/[0-9]+/) {
   $subclass='';
 } # else
 
-my $illus       = checkinp($input->param('Illustrations'));
-my $pages       = checkinp($input->param('Pages'));
-my $volumeddesc = checkinp($input->param('Volume'));
-my $notes       = checkinp($input->param('Notes'));
-my $size        = checkinp($input->param('Size'));
-my $place       = checkinp($input->param('Place'));
 my (@items) = &itemissues($bibitemnum);
 my $count   = @items;
 my @barcodes;
@@ -111,6 +111,7 @@ if ($existing eq 'YES'){
       &modbibitem({
 	  biblioitemnumber => $bibitemnum,
 	  itemtype         => $itemtype?$itemtype:"",
+	  url              => $url?$url:"",
 	  isbn             => $isbn?$isbn:"",
 	  publishercode    => $publishercode?$publishercode:"",
 	  publicationyear  => $publicationdate?$publicationdate:"",
@@ -134,7 +135,24 @@ if ($existing eq 'YES'){
 	  }                                                                       
 	}
       
-   }
+   } else {
+     &modbibitem({
+         biblioitemnumber => $bibitemnum,
+	 itemtype         => $itemtype?$itemtype:"",
+	 url              => $url?$url:"",
+	 isbn             => $isbn?$isbn:"",
+	 publishercode    => $publishercode?$publishercode:"",
+         publicationyear  => $publicationdate?$publicationdate:"",
+         classification   => $classification?$classification:"",
+         dewey            => $dewey?$dewey:"",
+         subclass         => $subclass?$subclass:"",
+         illus            => $illus?$illus:"",
+         pages            => $pages?$pages:"",
+         volumeddesc      => $volumeddesc?$volumeddesc:"",
+         notes            => $notes?$notes:"",
+         size             => $size?$size:"",
+         place            => $place?$place:"" });
+   } # else
 }
 print $input->redirect("moredetail.pl?type=intra&bib=$bibnum&bi=$bibitemnum");
 

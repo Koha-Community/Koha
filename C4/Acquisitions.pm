@@ -570,6 +570,7 @@ sub modbibitem {
     my $query;
 
     $biblioitem->{'itemtype'}        = $dbh->quote($biblioitem->{'itemtype'});
+    $biblioitem->{'url'}             = $dbh->quote($biblioitem->{'url'});
     $biblioitem->{'isbn'}            = $dbh->quote($biblioitem->{'isbn'});
     $biblioitem->{'publishercode'}   = $dbh->quote($biblioitem->{'publishercode'});
     $biblioitem->{'publicationyear'} = $dbh->quote($biblioitem->{'publicationyear'});
@@ -585,6 +586,7 @@ sub modbibitem {
 
     $query = "Update biblioitems set
 itemtype        = $biblioitem->{'itemtype'},
+url             = $biblioitem->{'url'},
 isbn            = $biblioitem->{'isbn'},
 publishercode   = $biblioitem->{'publishercode'},
 publicationyear = $biblioitem->{'publicationyear'},
