@@ -30,23 +30,30 @@ use C4::Output;
 use C4::Print;
 use DBI;
 use C4::Auth;
+use C4::Interface::CGI::Output;
 
 my $query=new CGI;
-my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
+my ($loggedinuser, $sessioncookie, $sessionID) = checkauth
+	($query, 0, { circulate => 1 });
+
+#my ($template, $loggedinuser, $sessioncookie) = get_template_and_user
+#    ({
+#	template_name	=> 'circ/circulation.tmpl',
+#	query		=> $query,
+#	type		=> "intranet",
+#	authnotrequired	=> 0,
+#	flagsrequired	=> { circulate => 1 },
+#    });
 
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
-my $circbackgroundcolor='#ffffcc';	# FIXME - Never used
-my $circbackgroundcolor='white';	# FIXME - Never used
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
 
 my $branches = getbranches();
 my $printers = getprinters(\%env);
-
-my $query = new CGI;
 
 my $branch = getbranch($query, $branches);
 my $printer = getprinter($query, $printers);
@@ -66,8 +73,6 @@ $env{'printer'}=$printer;
 $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
-my $tday = localtime(time());		# FIXME - Unused
-#warn "today: $tday \n";
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
 #warn $todaysdate;

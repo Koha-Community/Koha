@@ -43,7 +43,7 @@ my ($template, $borrowernumber, $cookie)
 							query => $query,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {parameters => 1},
+                            flagsrequired => {circulate => 1},
                          });
 
 #####################

@@ -119,7 +119,7 @@ my ($template, $borrowernumber, $cookie)
 							query => $query,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {parameters => 1},
+                            flagsrequired => {circulate => 1},
                          });
 $template->param(headerbackgroundcolor => $headerbackgroundcolor,
 							backgroundimage => $backgroundimage,
