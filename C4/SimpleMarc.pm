@@ -42,6 +42,24 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 # set the version for version checking
 $VERSION = 0.01;
 
+=head1 NAME
+
+C4::SimpleMarc - Functions for parsing MARC records and files
+
+=head1 SYNOPSIS
+
+  use C4::SimpleMarc;
+
+=head1 DESCRIPTION
+
+This module provides functions for parsing MARC records and files.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	&extractmarcfields 
@@ -55,6 +73,9 @@ $VERSION = 0.01;
 # your exported package globals go here,
 # as well as any optionally exported functions
 
+# FIXME - %tagtext and %tagmap are in both @EXPORT and @EXPORT_OK.
+# They should be in one or the other, but not both (though preferably,
+# things shouldn't get exported in the first place).
 @EXPORT_OK   = qw(
 	%tagtext
 	%tagmap
@@ -91,6 +112,7 @@ my $priv_func = sub {
 #------------------
 # Constants
 
+# %tagtext maps MARC tags to descriptive names.
 my %tagtext = (
     'LDR' => 'Leader',
     '001' => 'Control number',
@@ -155,6 +177,21 @@ my %tagtext = (
 );
 
 # tag, subfield, field name, repeats, striptrailingchars
+# FIXME - What is this? Can it be explained without a semester-long
+# course in MARC?
+
+# XXX - Maps MARC (field, subfield) tuples to Koha database field
+# names (presumably in 'biblioitems'). $tagmap{$field}->{$subfield} is
+# an anonymous hash of the form
+#	{
+#		name	=> "title",	# Name of Koha field
+#		rpt	=> 0,		# I don't know what this is, but
+#					# it's not used.
+#		striptrail => ',:;/-',	# Lists the set of characters that
+#					# should be stripped from the end
+#					# of the MARC field.
+#	}
+
 my %tagmap=(
     '010'=>{'a'=>{name=> 'lccn',	rpt=>0, striptrail=>' ' 	}},
     '015'=>{'a'=>{name=> 'lccn',	rpt=>0	}},
@@ -181,6 +218,25 @@ my %tagmap=(
 
 
 #------------------
+
+=item extractmarcfields
+
+  $biblioitem = &extractmarcfields($marc_record);
+
+C<$marc_record> is a reference-to-array representing a MARC record;
+each element is a reference-to-hash specifying a MARC field (possibly
+with subfields).
+
+C<&extractmarcfields> translates C<$marc_record> into a Koha
+biblioitem. C<$biblioitem> is a reference-to-hash whose keys are named
+after fields in the biblioitems table of the Koha database.
+
+=cut
+#'
+# FIXME - Throughout:
+#	$foo->{bar}->[baz]->{quux}
+# can be rewritten as
+#	$foo->{bar}[baz]{quux}
 sub extractmarcfields {
     use strict;
     # input
@@ -217,8 +273,16 @@ sub extractmarcfields {
         foreach $field (@$record) {
 
 	    # Check each subfield in field
+	    # FIXME - Would this code be more readable with
+	    #	while (($subfieldname, $subfield) = each %{$field->{subfields}})
+	    # ?
 	    foreach $subfield ( keys %{$field->{subfields}} ) {
 		# see if it is defined in our Marc to koha mapping table
+		# FIXME - This if-clause takes up the entire loop.
+		# This would be better rewritten as
+		#	next unless defined($tagmap{...});
+		# Then the body of the loop doesn't have to be
+		# indented as much.
 	    	if ( $fieldname=$tagmap{ $field->{'tag'} }->{$subfield}->{name} ) {
 		    # Yes, so keep the value
 		    if ( ref($field->{'subfields'}->{$subfield} ) eq 'ARRAY' ) {
@@ -230,6 +294,8 @@ sub extractmarcfields {
 		    print "$field->{'tag'} $subfield $fieldname=$bib->{$fieldname}\n" if $debug;
 		    # see if this field should have trailing chars dropped
 	    	    if ($strip=$tagmap{ $field->{'tag'} }->{$subfield}->{striptrail} ) {
+			# FIXME - The next three lines can be rewritten as:
+			#	$bib =~ s/[\Q$strip\E]+$//;
 			$strip=~s//\\/; # backquote each char
 			$stripregex='[ ' . $strip . ']+$';  # remove trailing spaces also
 			$bib->{$fieldname}=~s/$stripregex//;
@@ -242,11 +308,15 @@ sub extractmarcfields {
 
 	    } # foreach subfield
 
-
+	    # Handle special fields and tags
 	    if ($field->{'tag'} eq '001') {
 		$bib->{controlnumber}=$field->{'indicator'};
 	    }
 	    if ($field->{'tag'} eq '015') {
+		# FIXME - I think this can be rewritten as
+		#	$field->{"subfields"}{"a"} =~ /^\s*C?(\S+)/ and
+		#		$bib->{"lccn"} = $1;
+		# This might break with invalid input, though.
 		$bib->{lccn}=$field->{'subfields'}->{'a'};
 		$bib->{lccn}=~s/^\s*//;
 		$bib->{lccn}=~s/^C//;
@@ -254,9 +324,11 @@ sub extractmarcfields {
 	    }
 
 
+		# FIXME - Fix indentation
 		if ($field->{'tag'} eq '260') {
 
 		    $publicationyear=$field->{'subfields'}->{'c'};
+		    # FIXME - "\d\d\d\d" can be rewritten as "\d{4}"
 		    if ($publicationyear=~/c(\d\d\d\d)/) {
 			$copyrightdate=$1;
 		    }
@@ -282,11 +354,16 @@ sub extractmarcfields {
 		    $notes.="$field->{'subfields'}->{'a'}\n";
 		}
 		if ($field->{'tag'} =~/65\d/) {
-		    my $sub;
+		    my $sub;	# FIXME - Never used
 		    my $subject=$field->{'subfields'}->{'a'};
 		    $subject=~s/\.$//;
 		    print "Subject=$subject\n" if $debug;
 		    foreach $subjectsubfield ( 'x','y','z' ) {
+		      # FIXME - $subdivision is only used in this
+		      # loop. Make it 'my' here, rather than in the
+		      # entire function.
+		      # Ditto $subjectsubfield. Make it 'my' in the
+		      # 'foreach' statement.
 		      if ($subdivision=$field->{'subfields'}->{$subjectsubfield}) {
 			if ( ref($subdivision) eq 'ARRAY' ) {
 			    foreach $s (@$subdivision) {
@@ -305,16 +382,26 @@ sub extractmarcfields {
 
 
         } # foreach field
+        # FIXME - Why not do this up in the "Handle special fields and
+        # tags" section?
 	($publicationyear	) && ($bib->{publicationyear}=$publicationyear  );
 	($copyrightdate		) && ($bib->{copyrightdate}=$copyrightdate  );
 	($additionalauthors	) && ($bib->{additionalauthors}=$additionalauthors  );
 	($illustrator		) && ($bib->{illustrator}=$illustrator  );
 	($notes			) && ($bib->{notes}=$notes  );
 	($#subjects		) && ($bib->{subject}=\@subjects  );
+		# FIXME - This doesn't look right: for an array with
+		# one element, $#subjects == 0, which is false. For an
+		# array with 0 elements, $#subjects == -1, which is
+		# true.
 
 	# Misc cleanup
 	if ($bib->{dewey}) {
 	    $bib->{dewey}=~s/\///g;	# drop any slashes
+					# FIXME - Why? Don't the
+					# slashes mean something?
+					# The Dewey code is NOT a number,
+					# it's a string.
 	}
 
 	if ($bib->{lccn}) {
@@ -323,6 +410,9 @@ sub extractmarcfields {
 
 	if ( $bib->{isbn} ) {
 	    $bib->{isbn}=~s/[^\d]*//g;	# drop non-digits
+			# FIXME - "[^\d]" can be rewritten as "\D"
+			# FIXME - Does this include the check digit? If so,
+			# it might be "X".			
 	};
 
 	if ( $bib->{issn} ) {
@@ -341,6 +431,14 @@ sub extractmarcfields {
 	} # if volume-number
 
     } else {
+	# FIXME - Style: this sort of error-checking should really go
+	# closer to the actual test, e.g.:
+	#	if (ref($record) ne "ARRAY")
+	#	{
+	#		die "Not an array!"
+	#	}
+	# then the rest of the code which follows can assume that the
+	# input is good, and you don't have to indent as much.
 	print "Error: extractmarcfields: input ref $record is " .
 		ref($record) . " not ARRAY. Contact sysadmin.\n";
     }
@@ -352,8 +450,27 @@ sub extractmarcfields {
 #---------------------------------
 
 #--------------------------
+
+=item parsemarcfileformat
+
+  @records = &parsemarcfileformat($marc_data);
+
+Parses the contents of a MARC file.
+
+C<$marc_data> is a string, the contents of a MARC file.
+C<&parsemarcfileformat> parses this string into individual MARC
+records and returns them.
+
+C<@records> is an array of references-to-hash. Each element is a MARC
+record; its keys are the MARC tags.
+
+=cut
+#'
 # Parse MARC data in file format with control-character separators
 #   May be multiple records.
+# FIXME - Is the input ever likely to be more than a few Kb? If so, it
+# might be worth changing this function to take a (read-only)
+# reference-to-string, to avoid unnecessary copying.
 sub parsemarcfileformat {
     use strict;
     # Input is one big text string
@@ -361,9 +478,9 @@ sub parsemarcfileformat {
     # Output is list of records.  Each record is list of field hashes
     my @records;
 
-    my $splitchar=chr(29);
-    my $splitchar2=chr(30);
-    my $splitchar3=chr(31);
+    my $splitchar=chr(29);	# \c]
+    my $splitchar2=chr(30);	# \c^
+    my $splitchar3=chr(31);	# \c_
     my $debug=0;
     my $record;
     foreach $record (split(/$splitchar/, $data)) {
@@ -455,6 +572,27 @@ sub parsemarcfileformat {
 } # sub parsemarcfileformat
 
 #----------------------------------------------
+
+=item taglabel
+
+  $label = &taglabel($tag);
+
+Converts a MARC tag (a three-digit number, or "LDR") and returns a
+descriptive label.
+
+Note that although the tag looks like a number, it is treated here as
+a string. Be sure to use
+
+    $label = &taglabel("082");
+
+and not
+
+    $label = &taglabel(082);	# <-- Invalid octal number!
+
+=cut
+#'
+# FIXME - Does this function mean that %tagtext doesn't need to be
+# exported?
 sub taglabel {
     my ($tag)=@_;
 
@@ -462,8 +600,13 @@ sub taglabel {
 
 } # sub taglabel
 
+1;
+
 #---------------------------------------------
 # $Log$
+# Revision 1.5  2002/10/07 00:51:22  arensb
+# Added POD and some comments.
+#
 # Revision 1.4  2002/10/05 09:53:11  arensb
 # Merged with arensb-context branch: use C4::Context->dbh instead of
 # &C4Connect, and generally prefer C4::Context over C4::Database.
@@ -489,3 +632,11 @@ sub taglabel {
 # Revision 1.1.2.1  2002/06/26 07:27:35  amillar
 # Moved acqui.simple MARC handling to new module SimpleMarc.pm
 #
+__END__
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut
