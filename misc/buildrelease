@@ -300,9 +300,10 @@ system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/marc $rootdir/scripts");
-#system("mv $rootdir/intranet-cgi/misc/bulkmarcimport.pl $rootdir/scripts/z3950daemon/");
-system("mv $rootdir/intranet-cgi/z3950/* $rootdir/scripts/z3950daemon/");
 
+# move only batch & daemon. pl script stay here
+system("mv $rootdir/intranet-cgi/z3950/*. $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/z3950/*.sh $rootdir/scripts/z3950daemon/");
 
 # Remove extraneous files from intranet-cgi
 system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
