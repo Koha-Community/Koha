@@ -1,53 +1,53 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
-<h1>Système d'acquisition MARC</h1>
+<h1>Acquisition de données MARC</h1>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Importer vers le réservoir</font></td>
+	<td><font size="4">Importer dans le réservoir</font></td>
 	</tr>
 </table>
 
 <!-- TMPL_IF name="uploadmarc" -->
 <p>Résultats de l'importation :</p>
 <ul>
-	<p><!-- TMPL_VAR name="imported" --> notices importées</p>
-	<p><!-- TMPL_VAR name="alreadyindb" --> pas importé, car déjà existant dans la base de données</p>
-	<p><!-- TMPL_VAR name="alreadyinfarm" --> pas importé, car déjà existant dans le réservoir</p>
-	<p><!-- TMPL_VAR name="notmarcrecord" --> pas importé, car il semble que ce n'est pas un format MARC (ou ISBN/ISSN manquant) !</p>
-	<p><!-- TMPL_VAR name="total" -->  enregistrements étudiés</p>
-	<p><a href="addbooks.pl">Retour vers acquisition</a>
+	<p><!-- TMPL_VAR NAME="imported" --> enregistrements importés</p>
+	<p><!-- TMPL_VAR NAME="alreadyindb" --> non importé parce que déjà dans la base de donnée</p>
+	<p><!-- TMPL_VAR NAME="alreadyinfarm" --> non importé,parce que déjà dans le réservoir</p>
+	<p><!-- TMPL_VAR NAME="notmarcrecord" --> not imported because they seems not to be MARC format (or ISBN/ISSN missing) !</p>
+	<p><!-- TMPL_VAR NAME="total" --> enregistrements traités</p>
+	<p><a href="addbooks.pl">Retour aux acquisitions</a>
 </ul>
 <!-- TMPL_ELSE -->
 <ul>
-	<li>Sélectionner un fichier à importer dans le réservoir. Il sera analysé et pour chaque ISBN trouvé, une entrée enfant sera créée dans le réservoir.</li>
-	<li>Si un ISBN existe déjà dans le réservoir, vous pouvez soit ignorer le nouveau, soit écrire par dessus l'ancien.</li>
-	<li>Vous pouvez nommer ce fichier d'importation. Cela peut servir lors de la création de notice biblio pour se souvenir d'où viennent les données MARC par défaut.</li>
-	<li>Si l'ISBN existe déjà dans la base active, la notice biblio sera ignorée.</li>
+	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
+	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
+	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
+	<li>Of course, if the ISBN already exists in the active DB, the biblio will be ignored.</li>
 </ul>
-<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
-<table cellpadding="3" border=0>
+<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table cellpadding="3" border="0">
 	<tr valign="top">
-		<td>Sélectionner le fichier à importer:</td>
+		<td>Sélectionnez le fichier à importer :</td>
 		<td>
-			<input type="file" name="uploadmarc"/><br/>
+			<input type="file" name="uploadmarc" /><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Nom de ce fichier d'importation:</td>
+		<td>Nom pour cette importation</td>
 		<td>
-			<input type="text" name="filename"/><br/>
+			<input type="text" name="filename" /><br/>
 		</td>
 	</tr>
 	<tr valign="top">
 		<td>Codage des caractères (MARC21 ou UNIMARC)</td>
 		<td>
-			<select name="syntax"/><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
+			<select name="syntax" /><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Si un ISBN existe déjà dans le réservoir: </td>
-		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorer celui-là, conserver l'existant<br/>
-			<input type="radio" name="overwrite_biblio" value="1">Ecrire par dessus l'actuel avec cet</td>
+		<td>Si l'ISBN est déjà dans le réservoir </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorer celui-ci, garder l'existant<br/>
+			<input type="radio" name="overwrite_biblio" value="1">Remplacer la notice existante par celle-ci</td>
 	</tr>
 	<tr valign="top">
 		<td>&nbsp; </td>

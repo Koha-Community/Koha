@@ -1,33 +1,27 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
-
-<h1>Réceptionner commandes d'un fournisseur <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR name="name" --></a></h1>
-<p>
-<CENTER>
-<form method=get action="receive.pl">
-<input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
-<p>
-<table border=1 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor="#ffdf61"><td  colspan=2><B>INFORMATION FACTURE FOURNISSEUR</B></td></tr>
-<TR VALIGN=TOP >
-<TD>N° de facture de fournisseur</td>
-<td><input type=text size=20 name=invoice>
-</td>
-</tr>
-<TR VALIGN=TOP bgcolor="#ffffcc">
-<TD>GST</td>
-<td><input type=text size=20 name=gst>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<TD>Fret</td>
-<td><input type=text size=20 name=freight>
-</td>
-</tr>
-<TR VALIGN=TOP>
-<td colspan=2 align="center"><input type="submit" class="button" value="Enregistrer">
-</td>
-</tr>
-</table>
-</CENTER>
-
+<div id="mainbloc">
+	<h1 class="acquisition">Réception de Commandes Pour le Fournisseur <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+	<div id="bloc25">
+		<form method="get" action="receive.pl">
+		<p>
+			<input type="hidden" name="supplierid" value=<!-- TMPL_VAR NAME="supplierid" -->>
+			<h2 class="acquisition">Information facture fournissseur</h2>
+		<p>
+			<label>Numéro de Facture Fournisseur</label>
+			<input type="text" size="20" name="invoice">
+		</p>
+		<p>
+			<label>TVA</label>
+			<input type="text" size="20" name="gst">
+		</p>
+		<p>
+			<label>Frais de port</label>
+			<input type="text" size="20" name="freight">
+		</p>
+		<p>
+			<input type="submit" class="button acquisition" value="enregistrer">
+		</p>
+		</form>
+	</div>
+</div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

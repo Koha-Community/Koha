@@ -1,0 +1,69 @@
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<div id="mainbloc">
+	<h1 class="acquisition">Ordre des réponses</h1>
+	<table>
+		<tr>
+			<th class="acquisition">&nbsp;</th>
+			<th class="acquisition">Titre</th>
+			<th class="acquisition">Auteur</th>
+			<th class="acquisition">Fournisseur</th>
+			<th class="acquisition">Prévu pour</th>
+			<th class="acquisition">Livré le</th>
+			<th class="acquisition">Quantité Commandée</th>
+		</tr>
+		<tr>
+			<form>
+				<th class="acquisition">
+					Filtrer sur
+				</th>
+				<th class="acquisition">
+					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
+				</th>
+				<th class="acquisition">
+					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
+				</th>
+				<th class="acquisition">
+					<input type="text" name="name" value="<!-- TMPL_VAR name="name" -->">
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					&nbsp;
+				</th>
+				<th class="acquisition">
+					<input type="submit" class="button acquisition" value="Filtrer">
+				</th>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					<a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a>
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="author" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="name" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="creationdate" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="datereceived" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="quantity" -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

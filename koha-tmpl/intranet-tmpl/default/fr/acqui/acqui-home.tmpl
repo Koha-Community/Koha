@@ -1,115 +1,84 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
 
-<h1>Acquisitions</h1><br>
-
-<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2>
-		<b>COMMENCER, RECEVOIR, MODIFIER UNE COMMANDE</b>
-	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD>Nom du fournisseur</TD>
-	<TD>
-		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
-		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
+<h1 class="acquisition">Acquisitions</h1>
+<div id="bloc25">
+	<h2 class="acquisition">Créer, receptionner, modifier une commande</h2>
+		<form action="/cgi-bin/koha/acqui/order.pl" method="post">
+			Nom Fournisseur : <input type="text"  size="25"   name="supplier">
+			<input type="submit" class="button acquisition" value="OK">
 		</form>
-	</TD>
-</TR>
-</table>
-<TABLE width="40%" cellspacing=0 cellpadding=5 border=1 >
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2>
-		<b>RECEPTIONNE OU MODIFIE UNE COMMANDE PERIODIQUE</b>
-	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD>Recherche Titre</TD>
-	<TD>
-		<FORM ACTION="/cgi-bin/koha/acqui/acquire.pl" method=post>
-		<INPUT TYPE="text"  SIZE="25"   NAME="recieve">
-		</form>
-	</TD>
-</TR>
-</table>
-
-<br />
+	<p>ou <a href="histsearch.pl" class="button acquisition">Recherche dans l'historique des commandes</a></p>
+</div>
 
 <!-- currencies-->
-<TABLE align="left" cellspacing=0 cellpadding=5 border=1 >
-	<FORM ACTION="/cgi-bin/koha/currency.pl">
-	<input type=hidden name=type value=change>
-	<TR VALIGN=TOP>
-		<TD  bgcolor="ffdf61" colspan=2><b>TAUX DE CHANGE </b></TD>
-	</TR>
-	<!-- TMPL_LOOP name="loop_currency" -->
-		<TR VALIGN=TOP>
-			<TD>
-				<!-- TMPL_VAR name="currency" -->
-			</td>
-			<td>
-				<INPUT TYPE="text"  SIZE="10"   NAME="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
-			</td>
-		</TR>
+<div id="bloc25">
+	<form action="/cgi-bin/koha/currency.pl">
+	<input type="hidden" name="type" value="change">
+	<h2 class="acquisition">Taux de change</h2>
+	<!-- TMPL_LOOP NAME="loop_currency" -->
+		<p>
+			<label><!-- TMPL_VAR NAME="currency" --></label>
+			<input type="text"  size="10"  name="<!-- TMPL_VAR NAME="currency" -->" value=<!-- TMPL_VAR NAME="rate" -->>
+		</p>
 	<!-- /TMPL_LOOP -->
-	<tr>
-		<td colspan=2 align="center"><input type=submit value="Enregistrer"></TD>
-	</tr>
-	</form>
-</table>
+	<input type="submit" value="Enregistrer" class="button acquisition">
+</div>
+
+<!-- suggestions -->
+<div id="bloc25">
+	<h2 class="acquisition">Suggestions à vérifier</h2>
+		<!-- TMPL_IF name="suggestion" -->
+			<!--TMPL_VAR NAME="suggestion" --> suggestions en attente <a href="/cgi-bin/koha/suggestion/acceptorreject.pl" class="button acquisition">Examiner</a>
+		<!-- TMPL_ELSE -->
+			Pas de suggestions en attente
+		<!-- /TMPL_IF -->
+</div>
 
 <!-- showbudget-->
-<TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
-<FORM ACTION="/cgi-bin/koha/search.pl">
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2><b>BUDGETS ET COMPTES</b></TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD colspan=2>
-		<table cellspacing=0 cellpadding=2 border=1>
+<div id="bloc25">
+	<form action="/cgi-bin/koha/search.pl">
+		<h2 class="acquisition">budgets</h2>
+		<table class="noborder">
 			<tr>
-				<td><b>Budgets</B></TD>
-				<TD><b> Total</B></TD>
-				<TD><b>Dépensé</B></TD>
-				<TD><b>Engagé</B></TD>
-				<TD><b>Disp.</B></TD>
-			</TR>
-			<!-- TMPL_LOOP name="loop_budget" -->
+				<th class="acquisition">Budgets</th>
+				<th class="acquisition">Total</th>
+				<th class="acquisition">Dépensé</th>
+				<th class="acquisition">Engagé</th>
+				<th class="acquisition">Dispo</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="loop_budget" -->
 				<tr>
-					<td><!-- TMPL_VAR name="bookfundname" --></TD>
-					<TD align=right><!-- TMPL_VAR name="budgetamount" --></TD>
-					<TD align=right><!-- TMPL_VAR name="spent" --></TD>
-					<TD align=right><!-- TMPL_VAR name="comtd" --></TD>
-					<TD align=right><!-- TMPL_VAR name="avail" --></TD>
-				</TR>
+					<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="budgetamount" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="spent" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="comtd" --></td>
+					<td align="right"><!-- TMPL_VAR NAME="avail" --></td>
+				</tr>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<td><b> Total</b></TD>
-				<TD align=right><b><!-- TMPL_VAR name="total" --></b></TD>
-				<TD align=right><b><!-- TMPL_VAR name="totspent" --></b></TD>
-				<TD align=right><b><!-- TMPL_VAR name="totcomtd" --></b></TD>
-				<TD align=right><b><!-- TMPL_VAR name="totavail" --></b></TD>
-			</TR>
+				<th class="acquisition" align="right">Total</th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="total" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totspent" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totcomtd" --></th>
+				<th class="acquisition" align="right"><!-- TMPL_VAR NAME="totavail" --></th>
+			</tr>
 		</table>
 		<p>
-		Rafraichissez la page pour avoir les derniers chiffres. Les montants engagés sont approximatifs, car les taux de change peuvent modifier le montant effectivement payé.
+		Use your reload button to get the most recent figures. Committed figures are approximate only, as exchange rates will affect the amount actually paid.
 		</p>
-	</TD>
-</TR>
-</form>
-</table>
+	</form>
+</div>
 
-<br />
-<TABLE cellspacing=0 cellpadding=5 border=1 >
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2>
-		<p><b>AIDE commande:</b></p>
-		<ul>Pour faire une acquisition, soit par commande, par achat direct ou par un don, commencer par rechercher le fournisseur. Ajoutez-en un si nécessaire.</ul>
-		<ul>Sélectionnez ensuite un panier ou créez-en un nouveau. Note: le panier sera rattaché à cet utilisateur </ul>
-		<ul>Pour commander un ouvrage, une notice biblio doit exister pour l'ajouter ou alors il faut d'abord créer une nouvelle notice biblio avant de l'ajouter.  </ul>
-		<p>Pour quittez un panier, cliquez sur "Voir les paniers" ou Recherche ci-dessus, puis cliquez sur "Confirmer le panier".</p>
-	</td>
-</TR>
-</table>
+<div id="bloc25">
+	<h2 class="acquisition">AIDE Commande</h2>
+	<ul>
+		<p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</p>
+		<p>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </p>
+		<p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.</p>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
+	</ul>
+</div>
 
+</div>
 <!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
