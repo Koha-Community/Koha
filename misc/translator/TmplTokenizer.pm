@@ -120,6 +120,11 @@ sub new {
 
 # Simple getters
 
+sub filename {
+    my $this = shift;
+    return $this->{+FILENAME};
+}
+
 sub _handle {
     my $this = shift;
     return $this->{+HANDLE};
@@ -355,7 +360,7 @@ sub _next_token_internal {
     }
     warn_normal "Unrecognizable token found: $it\n", $this->line_number_start
 	    if $kind eq TmplTokenType::UNKNOWN;
-    return defined $it? (ref $it? $it: TmplToken->new($it, $kind, $this->line_number)): undef;
+    return defined $it? (ref $it? $it: TmplToken->new($it, $kind, $this->line_number, $this->filename)): undef;
 }
 
 sub next_token {

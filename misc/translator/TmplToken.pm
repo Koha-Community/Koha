@@ -32,7 +32,7 @@ sub new {
     my $class = ref($this) || $this;
     my $self = {};
     bless $self, $class;
-    ($self->{'_string'}, $self->{'_type'}, $self->{'_lc'}) = @_;
+    ($self->{'_string'}, $self->{'_type'}, $self->{'_lc'}, $self->{'_path'}) = @_;
     return $self;
 }
 
@@ -44,6 +44,11 @@ sub string {
 sub type {
     my $this = shift;
     return $this->{'_type'}
+}
+
+sub pathname {
+    my $this = shift;
+    return $this->{'_path'}
 }
 
 sub line_number {
