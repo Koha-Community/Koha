@@ -54,9 +54,8 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select variable,value,explanation,type,options from systempreferences where (variable like \"$data[0]%\") order by variable";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
+	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -69,9 +68,6 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $pkfield="variable";
-my $reqsel="select variable,value,explanation,type,options from systempreferences where $pkfield='$searchfield'";
-my $reqdel="delete from systempreferences where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
 
@@ -135,15 +131,13 @@ if ($op eq 'update_and_reedit') {
 	$sth->execute($input->param('variable'));
 	if ($sth->rows) {
 		unless (C4::Context->config('demo') eq 1) {
-			my $query = "update systempreferences set value=?,explanation=? where variable=?";
-			my $sth=$dbh->prepare($query);
+			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=? where variable=?");
 			$sth->execute($value, $input->param('explanation'), $input->param('variable'));
 			$sth->finish;
 		}
     } else {
 		unless (C4::Context->config('demo') eq 1) {
-			my $query = "insert into systempreferences (variable,value,explanation) values (?,?,?)";
-			my $sth=$dbh->prepare($query);
+			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?)");
 			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
 			$sth->finish;
 		}
@@ -160,8 +154,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable='$searchfield'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
+		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 		$template->param(modify => 1);
@@ -236,20 +230,17 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query="select * from systempreferences where variable=?";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("select * from systempreferences where variable=?");
 	$sth->execute($input->param('variable'));
 	if ($sth->rows) {
 		unless (C4::Context->config('demo') eq 1) {
-			my $query = "update systempreferences set value=?,explanation=? where variable=?";
-			my $sth=$dbh->prepare($query);
+			my $sth=$dbh->prepare("update systempreferences set value=?,explanation=? where variable=?");
 			$sth->execute($input->param('value'), $input->param('explanation'), $input->param('variable'));
 			$sth->finish;
 		}
 	} else {
 		unless (C4::Context->config('demo') eq 1) {
-			my $query = "insert into systempreferences (variable,value,explanation) values (?,?,?)";
-			my $sth=$dbh->prepare($query);
+			my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?)");
 			$sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'));
 			$sth->finish;
 		}
@@ -259,8 +250,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select variable,value,explanation,type,options from systempreferences where variable=?");
+	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(searchfield => $searchfield,
@@ -272,8 +263,8 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from systempreferences where variable=?");
+	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################

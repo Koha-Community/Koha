@@ -230,7 +230,8 @@ sub build_tabs ($$$$) {
 					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
 						next if subfield_is_koha_internal_p($subfield);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-						next if (defined($record->field($tag)->subfield($subfield)));
+						next if ($tag > 10 && defined($record->field($tag)->subfield($subfield)));
+						next if ($tag < 10 && defined($record->field($tag)->data()));
 						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					}

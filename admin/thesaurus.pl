@@ -38,7 +38,7 @@ my $id = $input->param('id');
 my $offset=$input->param('offset');
 my $father=$input->param('father');
 
-my $reqsel="select category,stdlib,freelib from bibliothesaurus where id='$id'";
+my $reqsel="";
 my $reqdel="delete from bibliothesaurus where id='$id'";
 my $script_name="/cgi-bin/koha/admin/thesaurus.pl";
 my $dbh = C4::Context->dbh;
@@ -73,8 +73,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select id,category,freelib,stdlib from bibliothesaurus where id='$id'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select id,category,freelib,stdlib from bibliothesaurus where id=?");
+		$sth->execute($id);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	} else {
@@ -123,8 +123,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select category,stdlib,freelib from bibliothesaurus where id=?");
+	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(search_category => $search_category,

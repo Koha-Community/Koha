@@ -845,7 +845,7 @@ sub checkperlmodules {
 
     if (@missing > 0) {
 	my $missing='';
-	if (POSIX::setlocale(LC_ALL) != "C") {
+	if (POSIX::setlocale(LC_ALL) ne "C") {
 		$missing.="   export LC_ALL=C\n";  
 	}
 	foreach my $module (@missing) {

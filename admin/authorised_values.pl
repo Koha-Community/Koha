@@ -34,9 +34,8 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select id,category,authorised_value,lib from authorised_values where (category like \"$data[0]%\") order by category,authorised_value";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select id,category,authorised_value,lib from authorised_values where (category like ?) order by category,authorised_value");
+	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -51,8 +50,6 @@ my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 $searchfield=~ s/\,//g;
 my $id = $input->param('id');
-my $reqsel="select category,authorised_value,lib from authorised_values where id='$id'";
-my $reqdel="delete from authorised_values where id='$id'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
@@ -81,8 +78,8 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select id,category,authorised_value,lib from authorised_values where id='$id'");
-		$sth->execute;
+		my $sth=$dbh->prepare("select id,category,authorised_value,lib from authorised_values where id=?");
+		$sth->execute($id);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	} else {
@@ -121,8 +118,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select category,authorised_value,lib from authorised_values where id=?");
+	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(searchfield => $searchfield,
@@ -135,8 +132,8 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
+	my $sth=$dbh->prepare("delete from authorised_values where id=?");
+	$sth->execute($id);
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield\"></html>";
 	exit;

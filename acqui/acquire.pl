@@ -60,8 +60,7 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param($count);
 if ($count == 1){
-	my $query="Select itemtype,description from itemtypes order by description";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
 	$sth->execute;
 	my  @itemtype;
 	my %itemtypes;

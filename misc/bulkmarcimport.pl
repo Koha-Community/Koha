@@ -80,7 +80,6 @@ while ( my $record = $batch->next() ) {
 	$i++;
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 
-#	$record = MARC::File::USMARC::decode(char_decode($record->as_usmarc(),$char_encoding));
     ## create an empty record object to populate
     my $newRecord = MARC::Record->new();
 
@@ -98,8 +97,9 @@ while ( my $record = $batch->next() ) {
 
 	# go through each subfield code/data pair
 	foreach my $pair ( $oldField->subfields() ) { 
-	    # upper case the data portion and store
-	    push( @newSubfields, $pair->[0], char_decode($pair->[1],$char_encoding) );
+		$pair->[1] =~ s/\<//g;
+		$pair->[1] =~ s/\>//g;
+		push( @newSubfields, $pair->[0], char_decode($pair->[1],$char_encoding) );
 	}
 
 	# add the new field to our new record

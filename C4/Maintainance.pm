@@ -135,7 +135,6 @@ sub shiftgroup{
   my $sth=$dbh->prepare("update biblioitems set biblionumber=? where biblioitemnumber=?");
   $sth->execute($bib,$bi);
   $sth->finish;
-  $query="";
   $sth=$dbh->prepare("update items set biblionumber=? where biblioitemnumber=?");
   $sth->execute($bib,$bi);
   $sth->finish;

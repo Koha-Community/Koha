@@ -109,9 +109,8 @@ for (my $i=0;$i<$numOverdueItems;$i++){
                                                  # separate function
                                                  #
 	 my $dbh = C4::Context->dbh;
-	 my $query="Select * from borrowers where borrowernumber='$borrower->{'guarantor'}'";
-	 my $sth=$dbh->prepare($query);
-	 $sth->execute;
+	 my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+	 $sth->execute($borrower->{'guarantor'});
 	 my $tdata=$sth->fetchrow_hashref;
 	 $sth->finish;
 	 $borrower->{'phone'}=$tdata->{'phone'};
@@ -137,22 +136,16 @@ for (my $i=0;$i<$numOverdueItems;$i++){
               # FIXME
               # this should be a separate function
               #
-	  $item->{'title'}=~ s/\'/\\'/g;
-	  my $query="Insert into accountlines
+	  my $sth=$dbh->prepare("Insert into accountlines
 	  (borrowernumber,itemnumber,accountno,date,amount,
 	  description,accounttype,amountoutstanding) values
-	  ($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
-	  '$accountno',now(),'$cost','Lost item $item->{'title'} $item->{'barcode'} $due','L','$cost')";
-	  my $sth=$dbh->prepare($query);
-	  $sth->execute;
+	  (?,?,?,now(),?,?,'L',?)");
+	  $sth->execute($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
+	  $accountno,$cost,"Lost item $item->{'title'} $item->{'barcode'} $due",$cost);
 	  $sth->finish;
-	  $query="update items set itemlost=2 where itemnumber='$data->[$i]->{'itemnumber'}'";
-	  $sth=$dbh->prepare($query);
-	  $sth->execute;
+	  $sth=$dbh->prepare("update items set itemlost=2 where itemnumber=?");
+	  $sth->execute($data->[$i]->{'itemnumber'});
 	  $sth->finish;
-	} else { # FIXME
-	         # this should be deleted
-                 #
 	}
       }
     }
