@@ -3,7 +3,8 @@
 
 <p>
 This transation tool should greatly help Koha translators.
-It's composed of 2&nbsp;scripts:
+It's composed of 2&nbsp;scripts
+(with a number of associated perl module files):
 
 <ul>
 <li>xgettext.pl, that extracts the texts in a template,
@@ -27,7 +28,7 @@ perldoc tmpl_process3.pl.
 <li>Create your translation file
     (assuming your current directory is this directory, i.e., misc/translator):
     <blockquote>
-./tmpl_process.pl create -i ../../koha-tmpl/opac-tmpl/default/en/ -s css_opac_fr_FR.po -r
+./tmpl_process3.pl create -i ../../koha-tmpl/opac-tmpl/default/en/ -s po/css_opac_fr_FR.po -r
     </blockquote>
     <p>(In the above example,
     ../../koha-tmpl/opac-tmpl/default/en/
@@ -40,7 +41,7 @@ perldoc tmpl_process3.pl.
     using a text editor or a PO file translation tool.
 <li>Create your translated templates:
     <blockquote>
-./tmpl_process.pl install -i ../../koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s css_opac_fr_FR.po -r
+./tmpl_process3.pl install -i ../../koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s po/css_opac_fr_FR.po -r
     </blockquote>
     <p>
     (In the above example,
@@ -54,13 +55,13 @@ If something changes in English version:
 <ol>
 <li>Update your translation file:
     <blockquote>
-./tmpl_process.pl update -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -s po/css_opac_fr_FR.po -r
+./tmpl_process3.pl update -i ../../koha-tmpl/opac-tmpl/default/en/ -s po/css_opac_fr_FR.po -r
     </blockquote>
-<li>Translate your new css_opac_fr_FR.po file.
+<li>Translate your newly updated css_opac_fr_FR.po file.
     Look for strings marked as "fuzzy" and strings that are not translated.
 <li>Create your translated templates:
     <blockquote>
-./tmpl_process.pl install -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s po/css_opac_fr_FR.po -r
+./tmpl_process3.pl install -i ../../koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s po/css_opac_fr_FR.po -r
     </blockquote>
 <li>Copy new images/css files in your new directory if needed
 </ol>
