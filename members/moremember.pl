@@ -145,7 +145,7 @@ for (my $i=0;$i<$count;$i++){
 	# But &C4::Circulation::Renewals2::calc_charges doesn't appear to
 	# return the correct item type either (or a properly-formatted
 	# charge, for that matter).
-	my ($charge,$itemtype)=calc_charges(undef,$dbh,$issue->[$i]{'itemnumber'},$bornum);
+	my ($charge,$itemtype)=calc_charges($dbh,$issue->[$i]{'itemnumber'},$bornum);
 	$row{'itemtype'}=&ItemType($itemtype);
 	$row{'charge'}=$charge;
 
