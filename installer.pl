@@ -197,7 +197,7 @@ Please provide the full path to your Koha OPAC installation.
 Usually /usr/local/www/koha/htdocs
 |;
 
-#Get the password for the database user
+#Get the installation path for OPAC
 do {
 	print "Enter installation path:";
 	chomp($inc_path = <STDIN>);
@@ -205,6 +205,10 @@ do {
 
 
 #Create the configuration file
+# FIXME
+# maybe this should warn instead of dieing, and write to stdout if 
+# the config file can't be opened for writing
+# 
 open(SITES,">$conf_path/koha.conf") or die "Couldn't create file
 at $conf_path.  Must have write capability.\n";
 print SITES <<EOP
@@ -235,7 +239,7 @@ do {
 
 #
 # Set ownership of the koha.conf file for security
-# FIXME - this will only work if run as work.
+# FIXME - this will only work if run as root.
 #
 
 chown((getpwnam($apache_owner)) [2,3], "$conf_path/koha.conf") or die "can't chown koha.conf: $!";
@@ -298,6 +302,10 @@ do {
 #
 # Update Apache Conf File.
 #
+# FIXME
+# maybe this should warn instead of dieing, and write to stdout if 
+# the config file can't be opened for writing
+# 
 open(SITES,">>$apache_conf_path") or die "Couldn't write to file 
 $conf_path.  Must have write capability.\n";
 print SITES <<EOP
@@ -330,3 +338,7 @@ print "Successfully updated Apache Configuration file.\n";
 #
 print "\nCongratulations ... your Koha installation is complete!\n";
 print "\nYou will need to restart your webserver before using Koha!\n";
+
+
+
+
