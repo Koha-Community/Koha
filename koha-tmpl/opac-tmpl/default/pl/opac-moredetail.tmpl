@@ -20,20 +20,19 @@ href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intr
 </TR>
 <tr VALIGN=TOP  >
 <TD width=210 >
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
-BORDER=0 src="/images/modify-mem.gif">
+<input type="image" name="submit" value="zmień" height=42 width=93 border=0 src="/images/modify-mem.gif">
 <input type="image" name="delete" value="wymaż" height=42 width=93 border=0 src="/images/delete-mem.gif">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Biblionumber:</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
+<b>Numerbiblio:</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
 <b>Typ Pozycji:</b> <!-- TMPL_VAR NAME="itemtype" --><br>
 <b>URL:</b> <!-- TMPL_VAR NAME="url" --><br>
-<b>Loan Length:</b> <!-- TMPL_VAR NAME="loanlength" --><br>
+<b>Okres Wynajmu:</b> <!-- TMPL_VAR NAME="loanlength" --><br>
 <b>Opłata Wynajmu:</b> <!-- TMPL_VAR NAME="rentalcharge" --><br>
-<b>Classification:</b> <!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --><br>
+<b>Klasyfikacja:</b> <!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --><br>
 <b>ISBN:</b> <!-- TMPL_VAR NAME="isbn" --><br>
 <b>Wydawca:</b> <!-- TMPL_VAR NAME="publishercode" --> <br>
-<b>Place:</b> <!-- TMPL_VAR NAME="place" --><br>
+<b>Miejsce:</b> <!-- TMPL_VAR NAME="place" --><br>
 <b>Data:</b> <!-- TMPL_VAR NAME="publicationyear" --><br>
 <b>Tom:</b> <!-- TMPL_VAR NAME="volumeddesc" --><br>
 <b>Strony:</b> <!-- TMPL_VAR NAME="pages" --><br>
@@ -59,29 +58,28 @@ BORDER=0 src="/images/modify-mem.gif">
 <input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblionumber" -->>
 <input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
 <input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
-BORDER=0 src="/images/modify-mem.gif">
+<input type="image" name="submit" value="zmień" height=42 width=93 border=0 src="/images/modify-mem.gif">
 <input type="image" name="delete" value="wymaż" height=42 width=93 border=0 src="/images/delete-mem.gif">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
 <b>Oddział Właściwy:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
-<b>Last seen:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
-<b>Last borrowed:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
+<b>Ostatnio oglądano:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
+<b>Ostatnio Pożyczono:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
 on issue bit <!-- FIXME - What's this, then? -->
-<b>Last Borrower 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
-<b>Last Borrower 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
+<b>Ostatni Czytelnik 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
+<b>Ostatni Czytelnik 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
 <b>Obecny Oddział:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
 <b>Cena Wymiany:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
 <b>Zagubiona:</b> <!-- TMPL_VAR NAME="itemlost" --><br>
-<b>Paid for:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
+<b>Opłacono przez:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 <b>Uwagi:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 <b>Przedłużenia:</b> <!-- TMPL_VAR NAME="renewals" --><br>
-<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Accession</a> Date:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
-<b>Cancelled: <!-- TMPL_VAR NAME="wthdrawn" --><br>
+<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Nabyto</a> Dnia:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
+<b>Anulowano: <!-- TMPL_VAR NAME="wthdrawn" --><br>
 <b><a
 href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>Razem Wypożyczeń:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
 <b>Numer Grupy:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
-<b>Biblio number:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
+<b>Numer Biblio:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
 
 
 

@@ -30,7 +30,7 @@
 		</a>
 	</td>
 	<td align="left" width="10%">
-		<a href="/cgi-bin/koha/opac-main.pl" title="home page" class="white">Początek</a>
+		<a href="/cgi-bin/koha/opac-main.pl" title="strona domowa" class="white">Początek</a>
 	</td>
 	<td width="60%">
 		&nbsp;
