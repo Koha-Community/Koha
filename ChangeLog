@@ -1,3 +1,46 @@
+2002-10-16  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	* koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl,
+	koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl,
+	koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl,
+	koha-tmpl/intranet-tmpl/default/en/catalogue/detail.tmpl,
+	koha-tmpl/intranet-tmpl/default/en/catalogue/detail-opac.tmpl:
+	Added some FIXME comments.
+
+
+	* acqui.simple/marcimport.pl: Added a FIXME comment.
+
+	* acqui.simple/bulkmarcimport.pl: Added some FIXME comments.
+
+	* C4/Search.pm: Updated a FIXME comment.
+
+	* C4/Catalogue.pm: Added and updated some FIXME comments.
+
+	* C4/Biblio.pm: Added some FIXME comments.
+
+	* search.pl: Added some FIXME comments.
+
+	* moredetail.pl: C4::Acquisitions doesn't exist anymore. Replaced
+	with C4::Catalogue (presumably this is correct, because
+	&C4::Catalogue::getorder is exported, but &C4::Biblio::getorder
+	isn't).
+	Replaced an obviously-bogus assignment with a much more likely
+	string comparison.
+
+	* detail.pl (bug fix): This was always displaying the OPAC results
+	page. Fixed by replacing an assignment with a string comparison.
+
+	* deletebiblioitem.pl: Replaced nonexistent C4::Acquisitions with
+	C4::Biblio, since that's what was apparently intended.
+
+	* delbiblio.pl: Removed reference to nonexistent C4::Acquisitions.
+	Added FIXME comment.
+
+	* currency.pl: Added a FIXME comment.
+
+	* addwebsite.pl: C4::Acquisitions doesn't exist anymore. Changed
+	it to C4::Catalogue, since that's what was apparently intended.
+
 2002-10-15  Andrew Arensburger  <arensb@baa.ooblick.com>
 
 	* installer.pl (bug fix): Arguments to mkdir were in the wrong
