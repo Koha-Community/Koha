@@ -62,45 +62,10 @@ returns, as well as general information about the library.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getissues &getiteminformation &findborrower &issuebook &returnbook &find_reserves &transferbook &decode
-calc_charges);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Unused
-
-
-# non-exported package globals go here
-#use vars qw(@more $stuff);
-
-# initalize package globals, first exported ones
-# FIXME - Unused
-my $Var1   = '';
-my %Hashit = ();
-
-# then the others (which are still accessible as $Some::Module::stuff)
-# FIXME - Unused
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-# FIXME - Unused
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-# FIXME - Unused
-my $priv_func = sub {
-  # stuff goes here.
-};
-
-# make all your functions, whether exported or not;
+@EXPORT = qw(&getbranches &getprinters &getpatroninformation
+	&currentissues &getissues &getiteminformation &findborrower
+	&issuebook &returnbook &find_reserves &transferbook &decode
+	&calc_charges);
 
 =item getbranches
 
@@ -1748,7 +1713,7 @@ sub createcharge {
 			 now(), ?, 'Rental', 'Rent',
 			 ?)
 EOT
-    $sth->execute($bornum, $itemno, $nextaccntno, $charge, $charge)
+    $sth->execute($bornum, $itemno, $nextaccntno, $charge, $charge);
     $sth->finish;
 }
 
