@@ -229,7 +229,7 @@ itemtype: $iteminfo->{'itemtype'}
 COLLECT AT: $branchname
 
 BORROWER:
-$borr->{'title'} $borr->{'surname'}, $borr->{'firstname'}
+$borr->{'title'} $borr->{'firstname'} $borr->{'surname'}
 card number: $borr->{'cardnumber'}
 Phone: $borr->{'phone'}
 $borr->{'streetaddress'}
