@@ -1,4 +1,12 @@
-
+#  $Id$
+#  
+#  $Log$
+#  Revision 1.11  2002/05/31 19:41:29  tonnesen
+#  removed fieldid in favour of tagid, removed _sergey from table names, added
+#  tagorder field to tag table, renamed marc_field_table to marc_tag_table.
+#
+#
+#
 #  These first three tables store the data from a MARC record.
 	
 # marc_biblio contains 1 record for each biblio in the DB
@@ -11,26 +19,25 @@ CREATE TABLE marc_biblio (
 		KEY origincode (origincode)
 		) TYPE=MyISAM;
 
-CREATE TABLE marc_field_table_sergey (
-       fieldid  bigint(20) unsigned NOT NULL auto_increment,    # field identifier
+CREATE TABLE marc_tag_table (
+       tagid    bigint(20) unsigned NOT NULL auto_increment,	# tag identifier
        bibid    bigint(20) NOT NULL default '0',                # biblio identifier
-       tagid    bigint(20) NOT NULL default '0',		# tag identifier
        tag      char(3) NOT NULL default '',			# tag number (eg 110)
-       PRIMARY KEY (fieldid),
+       tagorder tinyint(4) NOT NULL default '0',		# display order of tag within a record
+       PRIMARY KEY (tagid),
        KEY (bibid),
-       KEY (tagid),
        KEY (tag)
 );
 
 CREATE TABLE marc_subfield_table_sergey (
        subfieldid  bigint(20) unsigned NOT NULL auto_increment,	# subfield identifier
-       fieldid bigint(20),					# field identifier
-       subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields
+       tagid bigint(20),					# tag identifier
+       subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields within a tag
        subfieldcode char(1) NOT NULL default '',		# subfield code
        subfieldvalue varchar(255) default NULL,			# the subfields value if not longer than 255 char
        valuebloblink bigint(20) default NULL,			# the link to the blob, if value is longer than 255 char
        PRIMARY KEY (subfieldid),
-       KEY (fieldid)
+       KEY (tagid)
 );
 
 
