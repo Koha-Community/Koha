@@ -610,17 +610,15 @@ if ($result) {
     system ("perl -I $kohadir/modules scripts/updater/updatedatabase");
 
 
-
-
     print qq|
 
-=============================================================================
+SAMPLE DATA
+===========
 If you are installing Koha for evaluation purposes,  I have a batch of sample
 data that you can install now.
 
 If you are installing Koha with the intention of populating it with your own
 data, you probably don't want this sample data installed.
-=============================================================================
 |;
     print "\nWould you like to install the sample data? Y/[N]: ";
     chomp($input = <STDIN>);
@@ -680,9 +678,9 @@ data, you probably don't want this sample data installed.
 
 
 #RESTART APACHE
-#system('clear');
 print "\n\n";
 print qq|
+
 COMPLETED
 =========
 Congratulations ... your Koha installation is almost complete!
@@ -717,9 +715,9 @@ if ($restart=~/^y/i) {
 	    system('/etc/init.d/apache-ssl restart');
 	}
     } else {
-    print qq|
-print "\nCongratulations ... your Koha installation is complete!\n";
-print "\nYou will need to restart your webserver before using Koha!\n";
+	print qq|
+Congratulations ... your Koha installation is complete!
+You will need to restart your webserver before using Koha!
 |;
     exit;
 };
