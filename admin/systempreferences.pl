@@ -246,6 +246,8 @@ if ($op eq 'add_form') {
 		}
 	}
 	$sth->finish;
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=systempreferences.pl\"></html>";
+	exit;
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {

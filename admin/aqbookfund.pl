@@ -133,7 +133,10 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("replace aqbookfund (bookfundid,bookfundname) values (?,?)");
 	$sth->execute($input->param('bookfundid'),$input->param('bookfundname'));
 	$sth->finish;
-													# END $OP eq ADD_VALIDATE
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbookfund.pl\"></html>";
+	exit;
+			
+										# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
