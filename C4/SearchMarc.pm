@@ -201,6 +201,7 @@ sub catalogsearch {
 		@$value[$i] =~ s/\*/%/g;
 		# remove % at the beginning
 		@$value[$i] =~ s/^%//g;
+	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
@@ -405,7 +406,7 @@ sub create_request {
 			if ($nb_active==1) {
 				if (@$operator[$i] eq "start") {
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]");
+					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
 						$sql_where1 .=" and concat(m1.tag,m1.subfieldcode) in (@$tags[$i])";
 					}
@@ -429,7 +430,7 @@ sub create_request {
 				if (@$operator[$i] eq "start") {
 					$nb_table++;
 					$sql_tables .= "marc_subfield_table as m$nb_table,";
-					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]");
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
 					if (@$tags[$i]) {
 					 	$sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) in (@$tags[$i])";
 					}
