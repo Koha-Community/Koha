@@ -31,7 +31,7 @@ use HTML::Template;
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
-my $script_name="/cgi-bin/koha/admin/newbranches.pl";
+my $script_name="/cgi-bin/koha/admin/branches.pl";
 my $pagesize=20;
 
 
