@@ -799,3 +799,15 @@ CREATE TABLE users (
   level smallint(6)
 );
 
+#
+# Table structure for table 'websites'
+#
+
+CREATE TABLE websites (
+  websitenumber int(11) NOT NULL auto_increment,
+  biblionumber int(11) NOT NULL default '0',
+  title text,
+  description text,
+  url varchar(255),
+  PRIMARY KEY (websitenumber)
+) TYPE=ISAM PACK_KEYS=1;

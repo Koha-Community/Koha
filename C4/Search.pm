@@ -21,7 +21,7 @@ $VERSION = 0.02;
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
-&findguarantor); 
+&findguarantor &getwebsites);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -1167,6 +1167,28 @@ sub barcodes{
   return(@barcodes);
   
 }
+
+
+sub getwebsites {
+    my ($biblionumber) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from websites where biblionumber = $biblionumber";
+    my $sth   = $dbh->prepare($query);
+    my $count = 0;
+    my @results;
+
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+    	$count++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub getwebsites
+
+
 END { }       # module clean-up code here (global destructor)
 
 =head1 NAME

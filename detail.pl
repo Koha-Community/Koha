@@ -11,11 +11,11 @@ use C4::Output;
 my $input = new CGI;
 my $type  = $input->param('type');
 my $bib   = $input->param('bib');
-my $title = $input->param('title');
 my @items = &ItemInfo(undef, $bib, $type);
 my @temp  = split('\t', $items[0]);
-my $dat   = &bibdata($bib);
 my $count = @items;
+my $dat   = &bibdata($bib);
+my ($websitecount, @websites) = &getwebsites($bib);
 my ($authorcount, $addauthor) = &addauthor($bib);
 my $additional = $addauthor->[0]->{'author'};
 my $main;
@@ -272,6 +272,27 @@ if ($type ne 'opac') {
 <td>$dat->{'abstract'}</td>
 </tr>
 </table>
+<p />
+<table border="1" cellspacing="0" cellpadding="5" width="90%">
+<tr valign="top">
+<td bgcolor="$main" background="/images/background-mem.gif"><b>Links to Associated Websites<b></td>
+</tr>
+EOF
+
+    for (my $i = 0; $i < $websitecount; $i++) {
+	$websites[$i]->{'url'} =~ s/^http:\/\///;
+	print << "EOF";
+<tr>
+<td><b>Title:</b> $websites[$i]->{'title'}<br>
+<b>Description:</b> $websites[$i]->{'description'}<br>
+<b>URL:</b> http://$websites[$i]->{'url'}<br>
+</td>
+</tr>
+EOF
+    } # for
+
+    print << "EOF";
+</table>
 EOF
 } else {
     if ($dat->{'abstract'} ne '') {
@@ -283,6 +304,31 @@ EOF
 <tr valign="top">
 <td>$dat->{'abstract'}</td>
 </tr>
+</table>
+<p />
+EOF
+    } # if
+    if ($websitecount) {
+	print << "EOF";
+<table border="1" cellspacing="0" cellpadding="5" width="90%">
+<tr valign="top">
+<td bgcolor="$main" background="/images/background-mem.gif"><b>Link to Associated Websites</b></td>
+</tr>
+EOF
+
+	for (my $i = 0; $i < $websitecount; $i++) {
+	    $websites[$i]->{'url'} =~ s/^http:\/\///;
+	    print << "EOF";
+<tr>
+<td><b>Title:</b> $websites[$i]->{'title'}<br>
+<b>Description:</b> $websites[$i]->{'description'}<br>
+<b>URL:</b> http://$websites[$i]->{'url'}<br>
+</td>
+</tr>
+EOF
+	} # for
+	
+	print << "EOF";
 </table>
 EOF
     } # if

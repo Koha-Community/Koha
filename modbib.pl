@@ -62,6 +62,7 @@ $dewey = ~ s/\.$//;
 $data->{'title'} = &tidyhtml($data->{'title'});
 
 print << "EOF";
+<a href="modwebsites.pl?biblionumber=$data->{'biblionumber'}">Modify Website Links</a>
 <form action="updatebiblio.pl" method="post">
 <input type="hidden" name="biblionumber" value="$data->{'biblionumber'}">
 <input type="hidden" name="biblioitemnumber" value="$data=>{'biblioitemnumber'}">
