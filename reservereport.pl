@@ -21,25 +21,35 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use C4::Stats;
 use strict;
+use C4::Stats;
 use Date::Manip;
 use CGI;
 use C4::Output;
+use HTML::Template;
+
 
 my $input=new CGI;
 my $time=$input->param('time');
-print $input->header;
 
-print startpage;
-print startmenu('report');
-print center;
-print mktablehdr();
+#print $input->header;
+#print startpage;
+#print startmenu('report');
+my $template = gettemplate("reservereport.tmpl");
+#print center;
+#print mktablehdr();
 my ($count,$data)=unfilledreserves();
-print $count;
+
+my @dataloop;
 for (my $i=0;$i<$count;$i++){
-  print mktablerow(4,'white',"$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}",$data->[$i]->{'reservedate'},$data->[$i]->{'title'},"$data->[$i]->{'classification'}$data->[$i]->{'dewey'}");
+	my %line;
+	$line{name}="$data->[$i]->{'surname'}\, $data->[$i]->{'firstname'}";
+	$line{'reservedate'}=$data->[$i]->{'reservedate'};
+	$line{'title'}=$data->[$i]->{'title'};
+	$line{'classification'}="$data->[$i]->{'classification'}$data->[$i]->{'dewey'}");
+	push(@dataloop,\%line);
 }
-print mktableft();
-print endmenu('report');
-print endpage;
+
+$template->param(	count => $count,
+								dataloop => \@dataloop);
+print "Content-Type: text/html\n\n", $template->output;
