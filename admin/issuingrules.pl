@@ -161,10 +161,16 @@ foreach my $data (@itemtypes) {
 		my $finesvalue;
 		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine>0;
 		my $issuingvalue;
-		$issuingvalue = "$issuelength,$maxissueqty" if ($maxissueqty>0);
+		if ($maxissueqty>0) {
+		    $issuingvalue = "$issuelength,$maxissueqty" ;
+		}
+		else {		
+		    $issuingvalue = "$issuelength, 5";
+		    $maxissueqty = 5;
+		}
 		my %row = (finesname=> "F-$branch-$trow3[$i].$$data->{'itemtype'}",
 					finesvalue => $finesvalue,
-					issuingname => "I-$branch-$trow3[$1].$$data->{itemtype}",
+					issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
 					issuingvalue => $issuingvalue,
 					toggle => $toggle,
 					);
