@@ -41,18 +41,7 @@ at http://www.koha.org for more information.
 };
 
 print "\n";
-print "Unpack the tarball - still to be done.\n";
-#
-#  Hmm, on further thought, this file came out of the tarball ... so
-#  is it likely to be untarred again?
-#
-#print "I need to unpack the Koha TarFile -- where is it?  ";
-#$answer = $_;
-#chomp $answer;    
 
-# FIXME?  using system is probably not the best way to do this 
-# tar on solaris may not work properly, etc.
-#system("tar -x $answer"); #unpack fill out
 
 #
 # Test for Perl - Do we need to explicity check versions?
@@ -74,7 +63,6 @@ unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" }
 #
 # Print out a list of any missing modules
 #
-
 if (@missing > 0) {
     print "\n\n";
     print "You are missing some Perl modules which are required by Koha.\n";
@@ -213,7 +201,10 @@ EOP
 ;
 close(SITES);
 
-print "Successfully created configuration file.\n";
+print "Successfully created the Koha configuration file.\n";
+
+
+
 
 
 # FIXME
@@ -223,14 +214,79 @@ print "Successfully created configuration file.\n";
 # installer.pl user a chance to edit the file first.)
 #
 
+#
 #SETUP opac
-#   <VirtualHost opac.your.site>                         
-#   ServerAdmin webmaster@your.site                            
-#   DocumentRoot /usr/local/www/opac/htdocs                     
-#   ServerName opac.your.site                      
-#   ErrorLog logs/opac-error_log       
-#   TransferLog logs/opac-access_log               
-#   </VirtualHost>
+#
+my $apache_conf_path;
+my $svr_admin;
+my $docu_root;
+my $svr_name;
+
+print qq|
+Koha needs to setup your Apache configuration file for the
+OPAC virtual host.
+
+Please enter the filename and path to your Apache Configuration file 
+usually located in \"/usr/local/apache/conf/httpd.conf\".
+|;
+do {
+	print "Enter path:";
+	chomp($apache_conf_path = <STDIN>);
+	print "$conf_path is a valid file.\n" if !-f $apache_conf_path;
+} until -f $apache_conf_path;
+
+
+print qq|
+Please enter the servername for your OPAC.
+Usually opac.your.domain
+|;
+do {
+	print "Enter servername address:";
+	chomp($svr_name = <STDIN>);
+};
+
+
+print qq|
+Please enter the e-mail address for your webserver admin.
+Usually webmaster\@your.domain
+|;
+do {
+	print "Enter e-mail address:";
+	chomp($svr_admin = <STDIN>);
+};
+
+
+print qq|
+Please enter the full path to your OPAC\'s document root.
+usually something like \"/usr/local/www/opac/htdocs\".
+|;
+do {
+	print "Enter Document Roots Path:";
+	chomp($docu_root = <STDIN>);
+};
+
+
+#
+# Update Apache Conf File.
+#
+open(SITES,">>$apache_conf_path") or die "Couldn't write to file 
+$conf_path.  Must have write capability.\n";
+print SITES <<EOP
+
+<VirtualHost $svr_name>
+    ServerAdmin $svr_admin
+    DocumentRoot $docu_root
+    ServerName $svr_name
+    ErrorLog logs/opac-error_log
+    TransferLog logs/opac-access_log common
+</VirtualHost>
+
+EOP
+;
+close(SITES);
+
+print "Successfully updated Apache Configuration file.\n";
+
 
 
 ###RESTART APACHE
@@ -241,6 +297,6 @@ print "Successfully created configuration file.\n";
 #system('/etc/rc.d/init.d/httpd restart');
 
 #
-# It is competed
+# It is completed
 #
 print "\nCongratulations ... your Koha installation is complete!\n";
