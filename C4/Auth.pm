@@ -1,3 +1,6 @@
+# -*- tab-width: 8 -*-
+# NOTE: This file uses 8-character tabs; do not change the tab size!
+
 package C4::Auth;
 
 # Copyright 2000-2002 Katipo Communications
@@ -87,9 +90,9 @@ C4::Auth - Authenticates Koha users
 			     flagsrequired   => {borrow => 1},
 			  });
 
-    This call passes the C<query>, C<flagsrequired> and C<authnotrequired> to
-    C<&checkauth> (in this module) to perform authentification. See below
-    for more information on the C<&checkauth> subroutine.
+    This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
+    to C<&checkauth> (in this module) to perform authentification.
+    See C<&checkauth> for an explanation of these parameters.
 
     The C<template_name> is then used to find the correct template for
     the page. The authenticated users details are loaded onto the
@@ -98,7 +101,7 @@ C4::Auth - Authenticates Koha users
     if cookies are disabled. It needs to be put as and input to every
     authenticated page.
 
-    more information on the C<gettemplate> sub can be found in the
+    More information on the C<gettemplate> sub can be found in the
     Output.pm module.
 
 =cut
@@ -130,10 +133,17 @@ sub get_template_and_user {
 
   ($userid, $cookie, $sessionID) = &checkauth($query, $noauth, $flagsrequired, $type);
 
-Verifies that the user is authorized to run this script. Note that
-C<&checkauth> will return if and only if the user is authorized, so it
-should be called early on, before any unfinished operations (i.e., if
-you've opened a file, then C<&checkauth> won't close it for you).
+Verifies that the user is authorized to run this script.  If
+the user is authorized, a (userid, cookie, session-id, flags)
+quadruple is returned.  If the user is not authorized but does
+not have the required privilege (see $flagsrequired below), it
+displays an error page and exits.  Otherwise, it displays the
+login page and exits.
+
+Note that C<&checkauth> will return if and only if the user
+is authorized, so it should be called early on, before any
+unfinished operations (e.g., if you've opened a file, then
+C<&checkauth> won't close it for you).
 
 C<$query> is the CGI object for the script calling C<&checkauth>.
 
@@ -144,7 +154,20 @@ C<&checkauth> fetches user and session information from C<$query> and
 ensures that the user is authorized to run scripts that require
 authorization.
 
-XXXX Some more information about the flagsrequired hash should go in here.
+The C<$flagsrequired> argument specifies the required privileges
+the user must have if the username and password are correct.
+It should be specified as a reference-to-hash; keys in the hash
+should be the "flags" for the user, as specified in the Members
+intranet module. Any key specified must correspond to a "flag"
+in the userflags table. E.g., { circulate => 1 } would specify
+that the user must have the "circulate" privilege in order to
+proceed. To make sure that access control is correct, the
+C<$flagsrequired> parameter must be specified correctly.
+
+The C<$type> argument specifies whether the template should be
+retrieved from the opac or intranet directory tree.  "opac" is
+assumed if it is not specified; however, if C<$type> is specified,
+"intranet" is assumed if it is not "opac".
 
 If C<$query> does not have a valid session ID associated with it
 (i.e., the user has not logged in) or if the session has expired,
