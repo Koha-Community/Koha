@@ -419,7 +419,7 @@ sub returnbook {
 	   my $branchname=$branches->{$resrec->{'branchcode'}}->{'branchname'};
 	   push (@$messages, "<b><font color=red>RESERVED</font></b> for collection by $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'}) at $branchname");
 	}
-	UpdateStats($env,'branch','return','0','',$iteminformation->{'itemnumber'});
+	UpdateStats($env,$env->{'branchcode'},'return','0','',$iteminformation->{'itemnumber'});
     }
     $dbh->disconnect;
     return ($iteminformation, $borrower, $messages, $overduecharge);
