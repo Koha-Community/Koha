@@ -42,35 +42,35 @@ sub dosql {
 
 my $dbh=C4Connect;
 
+my %tables;
 my $sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
     $tables{$table}=1;
-    print "table $table\n";
 }
 
-#print "creating thesaurus...\n";
-#dosql($dbh,"CREATE TABLE bibliothesaurus (code BIGINT not null AUTO_INCREMENT, freelib CHAR (255) not null , stdlib CHAR (255) not null , type CHAR (80) not null , PRIMARY KEY (code), INDEX (freelib),index(stdlib),index(type))");
-#	my $sti=$dbh->prepare("select subject from bibliosubject");
-#	$sti->execute;
-#	$i=0;
-#	while ($line =$sti->fetchrow_hashref) {
-#		$i++;
-#		print "$i $line->{'subject'}\n";
-#		$sti2=$dbh->prepare("select count(*) as t from bibliothesaurus where freelib=".$dbh->quote($line->{'subject'}));
-#		$sti2->execute;
-#		if ($sti2->err) {
-#			print "error : ".$sti2->errstr." \n tried to execute : $sql_cmd\n";
-#			die;
-#		}
-#		$line2=$sti2->fetchrow_hashref;
-#		if ($line2->{'t'} ==0) {
-#			dosql($dbh,"insert into bibliothesaurus (freelib,stdlib) values (".$dbh->quote($line->{'subject'}).",".$dbh->quote($line->{'subject'}).")");
-#		} else {
-#			print "pas ecriture pour : $line->{'subject'}\n";
-#		}
-#
-#	}
+print "creating thesaurus...\n";
+dosql($dbh,"CREATE TABLE bibliothesaurus (code BIGINT not null AUTO_INCREMENT, freelib CHAR (255) not null , stdlib CHAR (255) not null , type CHAR (80) not null , PRIMARY KEY (code), INDEX (freelib),index(stdlib),index(type))");
+	my $sti=$dbh->prepare("select subject from bibliosubject");
+	$sti->execute;
+	$i=0;
+	while ($line =$sti->fetchrow_hashref) {
+		$i++;
+		print "$i $line->{'subject'}\n";
+		$sti2=$dbh->prepare("select count(*) as t from bibliothesaurus where freelib=".$dbh->quote($line->{'subject'}));
+		$sti2->execute;
+		if ($sti2->err) {
+			print "error : ".$sti2->errstr." \n tried to execute : $sql_cmd\n";
+			die;
+		}
+		$line2=$sti2->fetchrow_hashref;
+		if ($line2->{'t'} ==0) {
+			dosql($dbh,"insert into bibliothesaurus (freelib,stdlib) values (".$dbh->quote($line->{'subject'}).",".$dbh->quote($line->{'subject'}).")");
+		} else {
+			print "pas ecriture pour : $line->{'subject'}\n";
+		}
+
+	}
 
 #aqbookfund : the sample db is full of trash data. Delete and recreate
 # <FORPRODDEL>
@@ -125,7 +125,7 @@ while (my ($table) = $sth->fetchrow) {
 	dosql($dbh,"ALTER TABLE aqorders DROP PRIMARY KEY, ADD PRIMARY KEY(ordernumber);");
 	dosql($dbh,"ALTER TABLE biblio DROP PRIMARY KEY, ADD PRIMARY KEY(biblionumber);");
 	dosql($dbh,"ALTER TABLE biblioitems DROP PRIMARY KEY, ADD PRIMARY KEY(biblionumber, biblioitemnumber)");
-#	dosql($dbh,"CREATE INDEX SUBTITLE ON bibliosubtitle (subtitle(80))");
+	dosql($dbh,"CREATE INDEX SUBTITLE ON bibliosubtitle (subtitle(80))");
 	dosql($dbh,"ALTER TABLE borexp CHANGE borrowernumber borrowernumber INT (11) not null");
 	dosql($dbh,"ALTER TABLE borexp CHANGE newexp newexp DATE not null");
 	dosql($dbh,"ALTER TABLE branches DROP PRIMARY KEY, ADD PRIMARY KEY(branchcode)");
