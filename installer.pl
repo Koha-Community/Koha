@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w # please develop with -w
 
-use diagnostics;
+#use diagnostics;
 use strict; # please develop with the strict pragma
 
 if ($<) {
@@ -14,6 +14,39 @@ unless ($< == 0) {
 
 my $kohaversion=`cat koha.version`;
 chomp $kohaversion;
+
+
+if ($kohaversion =~ /RC/) {
+    print qq|
+=====================
+= RELEASE CANDIDATE =
+=====================
+
+WARNING WARNING WARNING WARNING WARNING
+
+You are about to install Koha version $kohaversion.  This version of Koha is a
+release candidate.  It is not intended to be installed on production systems.
+It is being released so that users can test it before we release a final
+version.
+
+|;
+    print "Are you sure you want to install Koha $kohaversion? (Y/[N]): ";
+
+    my $answer = <STDIN>;
+    chomp $answer;
+
+    if ($answer eq "Y" || $answer eq "y") {
+	print "Great! continuing setup... \n";
+    } else {
+	print qq|
+
+Watch for announcements of Koha releases on the Koha mailing list or the Koha
+web site (http://www.koha.org/).
+
+|;
+	exit;
+    };
+}
 
 if (-e "/etc/koha.conf") {
     my $installedversion=`grep kohaversion= /etc/koha.conf`;
@@ -95,21 +128,21 @@ unless (eval {require DBI})               { push @missing,"DBI" };
 unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
 unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
 unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
-#unless (eval {require Net::Z3950})        { 
-#    print qq|
-#
-#The Net::Z3950 module is missing.  This module is necessary if you want to use
-#Koha's Z39.50 client to download bibliographic records from other libraries.
-#To install this module, you will need the yaz client installed from
-#http://www.indexdata.dk/yaz/ and then you can install the perl module with the
-#command:
-#
-#perl -MCPAN -e 'install Net::Z3950'
-#
-#Press the <ENTER> key to continue:
-#|;
-#    <STDIN>;
-#}
+unless (eval {require Net::Z3950})        { 
+    print qq|
+
+The Net::Z3950 module is missing.  This module is necessary if you want to use
+Koha's Z39.50 client to download bibliographic records from other libraries.
+To install this module, you will need the yaz client installed from
+http://www.indexdata.dk/yaz/ and then you can install the perl module with the
+command:
+
+perl -MCPAN -e 'install Net::Z3950'
+
+Press the <ENTER> key to continue:
+|;
+    <STDIN>;
+}
 
 #
 # Print out a list of any missing modules
@@ -297,6 +330,31 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
       close(HTTPDCONF);
    }
 }
+unless ($realhttpdconf) {
+    print qq|
+
+I was not able to find your apache configuration file.  It is usually
+called httpd.conf or apache.conf.
+|;
+    print "Where is your Apache configuratin file? ";
+    chomp($input = <STDIN>);
+
+    if ($input) {
+	$realhttpdconf = $input;
+    } else {
+	$realhttpdconf='';
+    }
+    if ( -f $realhttpdconf ) {
+	open (HTTPDCONF, $realhttpdconf) or warn "Insufficient privileges to open $realhttpdconf for reading.\n";
+	while (<HTTPDCONF>) {
+	    if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+		$httpduser = $1;
+	    }
+	}
+	close(HTTPDCONF);
+    }
+}
+
 unless ($httpduser) {
     print qq|
 
@@ -315,23 +373,6 @@ files using the "User" directive.
     }
 }
 
-
-#Create the configuration file
-open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
-at $etcdir.  Must have write capability.\n";
-print SITES <<EOP
-database=$dbname
-hostname=$hostname
-user=$user
-pass=$pass
-includes=$kohadir/htdocs/includes
-intranetdir=$kohadir
-opacdir=$opacdir
-kohaversion=$kohaversion
-httpduser=$httpduser
-EOP
-;
-close(SITES);
 
 #
 # Set ownership of the koha.conf file for security
@@ -584,6 +625,33 @@ EOP
     print "Successfully updated Apache Configuration file.\n";
 }
 
+print qq|
+
+SETTING UP Z39.50 DAEMON
+========================
+|;
+
+my $kohalogdir='/var/log/koha';
+print "Directory for logging by Z39.50 daemon [$kohalogdir]: ";
+chomp($input = <STDIN>);
+if ($input) {
+    $kohalogdir=$input;
+}
+
+unless (-e "$kohalogdir") {
+    my $result = mkdir 0770, "$kohalogdir"; 
+    if ($result==0) {
+        my @dirs = split(m#/#, $kohalogdir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+    }
+}
+
 #
 # Setup the modules directory
 #
@@ -671,6 +739,27 @@ system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 
 system("chown -R root.$httpduser $opacdir");
 system("chown -R root.$httpduser $kohadir");
+
+
+
+#Create the configuration file
+open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
+at $etcdir.  Must have write capability.\n";
+print SITES <<EOP
+database=$dbname
+hostname=$hostname
+user=$user
+pass=$pass
+includes=$kohadir/htdocs/includes
+intranetdir=$kohadir
+opacdir=$opacdir
+kohalogdir=$kohalogdir
+kohaversion=$kohaversion
+httpduser=$httpduser
+EOP
+;
+close(SITES);
+
 
 print qq|
 
@@ -815,32 +904,6 @@ Press <ENTER> to continue...
 }
 
 
-print qq|
-
-SETTING UP Z39.50 DAEMON
-========================
-|;
-
-my $kohalogdir='/var/log/koha';
-print "Directory for logging by Z39.50 daemon [$kohalogdir]: ";
-chomp($input = <STDIN>);
-if ($input) {
-    $kohalogdir=$input;
-}
-
-unless (-e "$kohalogdir") {
-    my $result = mkdir 0770, "$kohalogdir"; 
-    if ($result==0) {
-        my @dirs = split(m#/#, $kohalogdir);
-	my $checkdir='';
-	foreach (@dirs) {
-	    $checkdir.="$_/";
-	    unless (-e "$checkdir") {
-		mkdir($checkdir, 0775);
-	    }
-	}
-    }
-}
 chmod 0770, $kohalogdir;
 chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
 
