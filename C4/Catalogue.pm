@@ -144,6 +144,10 @@ sub updateBiblio {
 	logchange('kohadb', 'biblio', 'title', $origbiblio->{'title'}, $biblio->{'title'});
 	my $sti=$dbh->prepare("update biblio set title=$q_title where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
+	logchange('marc', '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
+	foreach (@marcrecords) {
+	    changeSubfield($_, '245', 'a', $origbiblio->{'title'}, $biblio->{'title'});
+	}
     }
     if ($biblio->{'unititle'} ne $origbiblio->{'unititle'}) {
 	my $q_unititle=$dbh->quote($biblio->{'unititle'});
@@ -156,6 +160,10 @@ sub updateBiblio {
 	logchange('kohadb', 'biblio', 'notes', $origbiblio->{'notes'}, $biblio->{'notes'});
 	my $sti=$dbh->prepare("update biblio set notes=$q_notes where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
+	logchange('marc', '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
+	foreach (@marcrecords) {
+	    changeSubfield($_, '500', 'a', $origbiblio->{'notes'}, $biblio->{'notes'});
+	}
     }
     if ($biblio->{'serial'} ne $origbiblio->{'serial'}) {
 	my $q_serial=$dbh->quote($biblio->{'serial'});
@@ -168,12 +176,20 @@ sub updateBiblio {
 	logchange('kohadb', 'biblio', 'seriestitle', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
 	my $sti=$dbh->prepare("update biblio set seriestitle=$q_seriestitle where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
+	logchange('marc', '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
+	foreach (@marcrecords) {
+	    changeSubfield($_, '440', 'a', $origbiblio->{'seriestitle'}, $biblio->{'seriestitle'});
+	}
     }
     if ($biblio->{'copyrightdate'} ne $origbiblio->{'copyrightdate'}) {
 	my $q_copyrightdate=$dbh->quote($biblio->{'copyrightdate'});
 	logchange('kohadb', 'biblio', 'copyrightdate', $origbiblio->{'copyrightdate'}, $biblio->{'copyrightdate'});
 	my $sti=$dbh->prepare("update biblio set copyrightdate=$q_copyrightdate where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
+	logchange('marc', '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
+	foreach (@marcrecords) {
+	    changeSubfield($_, '260', 'c', "c$origbiblio->{'notes'}", "c$biblio->{'notes'}");
+	}
     }
 }
 
@@ -241,29 +257,62 @@ sub newBiblioItem {
     my $biblionumber=$biblioitem->{'biblionumber'};
     my $biblioitemnumber=$biblioitem->{'biblioitemnumber'};
     my $volume=$biblioitem->{'volume'};
+    my $q_volume=$dbh->quote($volume);
     my $number=$biblioitem->{'number'};
+    my $q_number=$dbh->quote($number);
     my $classification=$biblioitem->{'classification'};
+    my $q_classification=$dbh->quote($classification);
     my $itemtype=$biblioitem->{'itemtype'};
+    my $q_itemtype=$dbh->quote($itemtype);
     my $isbn=$biblioitem->{'isbn'};
+    my $q_isbn=$dbh->quote($isbn);
     my $issn=$biblioitem->{'issn'};
+    my $q_issn=$dbh->quote($issn);
     my $dewey=$biblioitem->{'dewey'};
     $dewey=~s/\.*0*$//;
     ($dewey == 0) && ($dewey='');
     my $subclass=$biblioitem->{'subclass'};
+    my $q_subclass=$dbh->quote($subclass);
     my $publicationyear=$biblioitem->{'publicationyear'};
     my $publishercode=$biblioitem->{'publishercode'};
+    my $q_publishercode=$dbh->quote($publishercode);
     my $volumedate=$biblioitem->{'volumedate'};
+    my $q_volumedate=$dbh->quote($volumedate);
     my $illus=$biblioitem->{'illus'};
+    my $q_illus=$dbh->quote($illus);
     my $pages=$biblioitem->{'pages'};
+    my $q_pages=$dbh->quote($pages);
     my $notes=$biblioitem->{'notes'};
+    my $q_notes=$dbh->quote($notes);
     my $size=$biblioitem->{'size'};
+    my $q_size=$dbh->quote($size);
     my $place=$biblioitem->{'place'};
+    my $q_place=$dbh->quote($place);
     my $lccn=$biblioitem->{'lccn'};
+    my $q_lccn=$dbh->quote($lccn);
+
+
+# Unless the $env->{'marconly'} flag is set, update the biblioitems table with
+# the new data
+
+    unless ($env->{'marconly'}) {
+	#my $sth=$dbh->prepare("lock tables biblioitems write");
+	#$sth->execute;
+	my $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
+	$sth->execute;
+	my ($biblioitemnumber) =$sth->fetchrow;
+	$biblioitemnumber++;
+	$sth=$dbh->prepare("insert into biblioitems (biblionumber,biblioitemnumber,volume,number,classification,itemtype,isbn,issn,dewey,subclass,publicationyear,publishercode,volumedate,illus,pages,notes,size,place,lccn) values ($biblionumber, $biblioitemnumber, $q_volume, $q_number, $q_classification, $q_itemtype, $q_isbn, $q_issn, $dewey, $q_subclass, $q_publicationyear, $q_publishercode, $q_volumedate, $q_illus, $q_pages,$q_notes, $q_size, $q_place, $q_lccn)");
+	$sth->execute;
+	#my $sth=$dbh->prepare("unlock tables");
+	#$sth->execute;
+    }
+
 
 # Should we check if there is already a biblioitem/marc with the
 # same isbn/lccn/issn?
 
-    my $sth=$dbh->prepare("select title,unititle,seriestitle,copyrightdate,notes,author from biblio where biblionumber=$biblionumber");
+    $sth=$dbh->prepare("select title,unititle,seriestitle,copyrightdate,notes,author from biblio where biblionumber=$biblionumber");
     $sth->execute;
     my ($title, $unititle,$seriestitle,$copyrightdate,$biblionotes,$author) = $sth->fetchrow;
     $sth=$dbh->prepare("select subtitle from bibliosubtitle where biblionumber=$biblionumber");
