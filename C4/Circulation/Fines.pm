@@ -13,7 +13,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&Getoverdues &CalcFine &BorType &UpdateFine);
+@EXPORT = qw(&Getoverdues &CalcFine &BorType &UpdateFine &ReplacementCost);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -76,8 +76,7 @@ sub CalcFine {
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
   categoryitem.itemtype=itemtypes.itemtype and
-  categoryitem.categorycode='$bortype' and (items.itemlost <> 1 or
-items.itemlost is NULL)";
+  categoryitem.categorycode='$bortype' and (items.itemlost <> 1 or items.itemlost is NULL)";
   my $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
@@ -122,7 +121,7 @@ sub UpdateFine {
       my $query2="update accountlines set date=now(), amount=$amount,
       amountoutstanding=$out,accounttype='FU' where
       borrowernumber=$data->{'borrowernumber'} and itemnumber=$data->{'itemnumber'}
-      and (accounttype='FU' or accounttype='O');";
+      and (accounttype='FU' or accounttype='O') and description like '%$due%'";
       my $sth2=$dbh->prepare($query2);
       $sth2->execute;
       $sth2->finish;      
@@ -171,6 +170,17 @@ borrowers.categorycode=categories.categorycode";
   return($data);
 }
 
+sub ReplacementCost{
+  my ($itemnum)=@_;
+  my $dbh=C4Connect;
+  my $query="Select replacementprice from items where itemnumber='$itemnum'";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $dbh->disconnect;
+  return($data->{'replacementprice'});
+}
 
 END { }       # module clean-up code here (global destructor)
   
