@@ -2,10 +2,28 @@
 
 use CGI;
 use C4::Database;
+use C4::Output;
 
 my $query=new CGI;
 
 my $sessionID=$query->cookie('sessionID');
+
+
+if ($ENV{'REMOTE_USER'}) {
+    print $query->header();
+    print startpage();
+    print startmenu('catalogue');
+    print qq|
+<h1>Logout Feature Not Available</h1>
+Your Koha server is configured to use a type of authentication called "Basic
+Authentication" instead of using a cookies-based authentication system.  With
+Basic Authentication, the only way to logout of Koha is by exiting your
+browser.
+|;
+    print endmenu('catalogue');
+    print endpage();
+    exit;
+}
 
 my $sessions;
 open (S, "/tmp/sessions");
