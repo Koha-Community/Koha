@@ -22,17 +22,16 @@ function update(f){
   ecost=rrp*(100-discount)/100
   GST=0;
   if (gst_on){
-    rrp=rrp*1.125;
-    GST=ecost*0.125
+    rrp=rrp*(1+<TMPL_VAR name="gstrate">);
+    GST=ecost*(<TMPL_VAR name="gstrate">);
   }
 
   total=(ecost+GST)*quantity
 
-
-  f.rrp.value=display(rrp)
-  f.ecost.value=display(ecost)
-  f.GST.value=display(GST)
-  f.total.value=display(total)
+  f.rrp.value=rrp;
+  f.ecost.value=ecost;
+  f.GST.value=GST;
+  f.total.value=total;
 
 }
 
@@ -61,8 +60,8 @@ win.document.write("</font></body></html>");
 <input type=hidden name=oldtype value="<TMPL_VAR name="itemtype">">
 <input type=hidden name=discount value="<TMPL_VAR name="discount">">
 <input type=hidden name=listinc value="<TMPL_VAR name="listincgst">">
-<input type=hidden name=currency value="<TMPL_VAR name="listprice">">
-<input type=hidden name=applygst value="<TMPL_VAR name"gstreg">">
+<input type=hidden name=currency value="<TMPL_VAR name="currency">">
+<input type=hidden name=applygst value="<TMPL_VAR name="gstreg">">
 <TMPL_LOOP name="loop_currencies">
 	<input type=hidden name="<TMPL_VAR name="currency">" value="<TMPL_VAR name="rate">">
 </TMPL_LOOP>

@@ -521,6 +521,15 @@ my %tabledata = (
             explanation => 'the email adress where borrowers modifs are sent',
 	    type		=> 'free'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'gist',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '0.125',
+            explanation => 'the gist rate. NOT in %, but in numeric form (0.12 for 12%)',
+	    type		=> 'free'
+        },
     ],
 
 );
@@ -857,6 +866,13 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.53  2003/07/07 14:11:16  tipaul
+# fixing bug #526 : gst rate is now calculated through systempref gist entry.
+# Before this fix :
+# * was harcoded to 12,5%
+# * some bugs in template parameters prevented the javascript to work.
+# * some bugs prevented some calculations to be done properly.
+#
 # Revision 1.52  2003/06/23 15:54:32  tipaul
 # *** empty log message ***
 #

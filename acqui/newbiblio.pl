@@ -29,7 +29,6 @@ use C4::Biblio;
 use C4::Output;
 use C4::Search;
 use C4::Auth;
-use C4::Biblio;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Database;
@@ -49,7 +48,6 @@ my $new;
 my $dbh = C4::Context->dbh;
 if ($ordnum eq ''){
 	$new='yes';
-	warn "NEW : YES";
 	$ordnum=newordernum;
 	if ($biblio) {
 			$data=bibdata($biblio);
@@ -153,10 +151,12 @@ $template->param( existing => $biblio,
 						biblioitemnumber => $data->{'biblioitemnumber'},
 						itemtype => $data->{'itemtype'},
 						discount => $booksellers[0]->{'discount'},
-      					listingcst => $booksellers[0]->{'listincgst'},
+      					listincgst => $booksellers[0]->{'listincgst'},
 						listprice => $booksellers[0]->{'listprice'},
 						gstreg => $booksellers[0]->{'gstreg'},
 						name => $booksellers[0]->{'name'},
+						currency => $booksellers[0]->{'listprice'},
+						gstrate => C4::Context->preference("gist") ,
 						loop_currencies => \@loop_currency,
 						orderexists => ($new eq 'yes')?0:1,
 						title => $data->{'title'},
