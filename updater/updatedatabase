@@ -14,6 +14,14 @@ my $dbh=C4Connect;
 my %tables;
 my %types;
 
+
+my $mysqlversion=`mysqld --version`;
+$mysqlversion=~/Ver (\S*) /;
+$mysqlversion=$1;
+if ($mysqlversion ge '3.23') {
+    print "Could convert to MyISAM database tables...\n";
+}
+
 my $sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
