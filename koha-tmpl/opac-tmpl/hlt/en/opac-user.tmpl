@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--designed by rebecca@katipo.co.nz-->
+<!--updated by richard@katipo.co.nz 12/06/02-->
+<html>
+<head>
+<title>My Account</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/main.css" type="text/css" />
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/koha.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+<meta name="description" content=""><meta name="keywords" content=""></head>
+<body background="<TMPL_VAR NAME='themelang'>/images/styles/background.gif" marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="membership-start.inc">
+<!--TOP NAVIGATION-->
+<TMPL_INCLUDE name="top-navigation.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="membership-left-nav.inc">
+<TMPL_INCLUDE name="personal-details.inc">
+<TMPL_INCLUDE name="logout.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="crumb-start.inc">	
+<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/membership/'>Membership</a> &gt;<a href='/membership/account.html'>My Account</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="crumb-end.inc">
+<!--CONTENT-->
+<h1>Welcome <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></h1>
+
+<!--FINES BOX-->
+<TMPL_IF NAME="amountoverfive">
+
+<table border=0 cellspacing=0 cellpadding=0  bgcolor="#E3A46D" class="fines-box">
+
+<tr><td valign="top" rowspan="5" WIDTH="56"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/fine.gif" WIDTH="56" HEIGHT="55" align="top" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" colspan="2"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="15" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top"  rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td><!--+Katipo+start name="subhead" rows="2" --><h3>Fines and Charges</h3><!--+Katipo+end--></td><td valign="top"  WIDTH="25"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr>
+<tr><td><span class="small"><!--+Katipo+start name="owe"  linkcolour="#99cccc" --><B>You currently owe fines and charges amounting to:&nbsp;</B><!--+Katipo+end--></span></td>
+<td bgcolor="#ffffff" class="white-box"><span class="selected-lge"><TMPL_VAR NAME="amountoutstanding"></span></td></tr>
+
+<tr><td  valign="top"><span class="small"><!--+Katipo+start name="view"  linkcolour="#99cccc"  -->
+<A HREF="/cgi-bin/koha/opac-account.pl">View Details >></A><!--+Katipo+end--></span></td>
+<td valign="top"  WIDTH="30"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td valign="top" colspan="3"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr></table><br />
+
+</TMPL_IF>
+<TMPL_IF NAME="amountoverzero">
+
+
+<table border=0 cellspacing=0 cellpadding=0  bgcolor="#66cc66" class="fines-box">
+
+<tr><td valign="top" rowspan="5" WIDTH="56"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/fine.gif" WIDTH="56" HEIGHT="55" align="top" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top" colspan="2"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="15" hspace=0 vspace=0 BORDER="0"></td>
+<td valign="top"  rowspan="5"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td><!--+Katipo+start name="subhead" rows="2" --><h3>Fines and Charges</h3><!--+Katipo+end--></td><td valign="top"  WIDTH="25"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr>
+<tr><td><span class="small"><!--+Katipo+start name="owe"  linkcolour="#99cccc" --><B>You currently owe fines and charges amounting to:&nbsp;</B><!--+Katipo+end--></span></td>
+<td bgcolor="#ffffff" class="white-box"><span class="selected-lge"><TMPL_VAR NAME="amountoutstanding"></span></td></tr>
+
+<tr><td  valign="top"><span class="small"><!--+Katipo+start name="view"  linkcolour="#99cccc"  -->
+<A HREF="/cgi-bin/koha/opac-account.pl">View Details >></A><!--+Katipo+end--></span></td>
+<td valign="top"  WIDTH="30"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="25" HEIGHT="1"  hspace=0 vspace=0 BORDER="0"></td></tr>
+
+<tr><td valign="top" colspan="3"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="5" HEIGHT="20"  hspace=0 vspace=0 BORDER="0"></td></tr></table><br />
+
+</TMPL_IF>
+
+<table border=0 cellspacing=0 cellpadding=0 width=90%>
+<!--OVERDUES TABLE ROWS--><tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr>
+<tr><td valign="top" colspan="2"><h2><!--+Katipo+start name="overdues" rows="2" -->Overdues<!--+Katipo+end--></h2></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><div class="padded"><B><!--+Katipo+start name="due2" rows="2" -->Due<!--+Katipo+end--></B></div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><div class="padded"><B><!--+Katipo+start name="cost-overdue" rows="2" -->Fine to Date<!--+Katipo+end--></B></div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><div class="padded"><!--+Katipo+start name="renew" rows="2" -->&nbsp;<!--+Katipo+end--></div></td></tr>
+<tr><td colspan="8" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr><td valign="top" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/book.gif" WIDTH="50" HEIGHT="45" BORDER="0" ALT=""></td><td valign="top" ><A HREF="book-title.html" class="padded">A multitude of fishes</A><br /><div class="padded">Creber, Anne (Adult Fiction)</div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><div class="padded">22/9/2002</div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><div class="padded">$1</div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><A HREF="renew.html" class="padded">Renew</A></td></tr>
+<tr><td colspan="8"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="25" BORDER="0" hspace=0 vspace=0 ALT=""></td></tr>
+
+<TMPL_IF NAME="reserves_count">
+
+<!--RESERVES TABLE ROWS--><tr><td valign="top" colspan="2" ><h2><!--+Katipo+start name="reserves" rows="2" -->Reserves<!--+Katipo+end--></h2></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded">
+<B><!--+Katipo+start name="reserve-placed" rows="2" -->Reserve <br />Placed<!--+Katipo+end--></B></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><B><!--+Katipo+start name="pickup" rows="2" -->Pick Up<!--+Katipo+end--></B></div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded"><B><!--+Katipo+start name="status" rows="2" -->Status<!--+Katipo+end--></B></div></td></tr>
+
+<TMPL_LOOP NAME="RESERVES">
+
+<tr><td colspan="8" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<TMPL_IF NAME="">
+<tr><td valign="top" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/book.gif" WIDTH="50" HEIGHT="45" BORDER="0"></td>
+
+<td valign="top" ><A HREF="book-title.html" class="padded">I am a fish</A><br /><div class="padded">Doak, Wade (Adult Fiction)</div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded">1/10/2002</div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="padded">Levin</div></td>
+<td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top" ><div class="selected">Waiting for you</div></td></tr>
+
+</TMPL_LOOP>
+
+<tr><td colspan="8" ><div class="padded">If you no longer want a reserve, please send us <a href="librarian@library.org.nz">an e-mail</a>, or go to the counter at the library to get it removed.</div></td></tr>
+
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="25" BORDER="0" ALT=""></td></tr>
+</TMPL_IF>
+
+
+
+
+<!--ISSUES TABLE ROWS--><tr><td valign="top" colspan="2" class="padded"><h2><!--+Katipo+start name="overdues2" rows="2" -->Issues<!--+Katipo+end--></h2></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top"  colspan="3"><div class="padded"><B><!--+Katipo+start name="due3" rows="2" -->Due<!--+Katipo+end--></B></div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><div class="padded"><!--+Katipo+start name="renew3" rows="2" -->&nbsp; <!--+Katipo+end--></div></td></tr><tr><td colspan="8" class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr><td valign="top" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/book.gif" WIDTH="50" HEIGHT="45" BORDER="0" ALT=""></td><td valign="top" ><A HREF="book-title.html" class="padded">Fishing for dummies</A><br /><div class="padded">Creber, Anne (Adult Fiction)</div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top"  colspan="3"><div class="padded">22/9/2002</div></td><td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td><td valign="top" ><A HREF="renew.html" class="padded">Renew</A></td></tr>
+<tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr></table>
+<TMPL_INCLUDE name="key.inc">
+<br />
+<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
+<input type="submit" value="Reading Record" class="green-box">
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE name="membership-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="end-main.inc">
+</body>
+</html>

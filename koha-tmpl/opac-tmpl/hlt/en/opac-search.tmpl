@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--designed by rebecca@katipo.co.nz-->
+<!--updated by richard@katipo.co.nz 12/06/02-->
+<!--updated by angela@katipo.co.nz 8:30 23/10/02-->
+<html>
+<head>
+<title>Searching</title>
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/main.css" type="text/css" />
+<link rel="stylesheet" href="<TMPL_VAR NAME='themelang'>/includes/koha.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE NAME="script.js">
+</script>
+<meta name="description" content=""><meta name="keywords" content=""></head>
+<body background="<TMPL_VAR NAME='themelang'>/images/styles/background.gif" marginheight="0" marginwidth="0">
+<!--START TOP TABLE-->
+<TMPL_INCLUDE NAME="search-start.inc">
+<!--TOP NAVIGATION-->
+<TMPL_INCLUDE NAME="top-navigation.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE NAME="search-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE NAME="cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE NAME="crumb-start.inc">	
+<!--breadcrumbs--><a href="/">Home</a> &gt;<a href='/cgi-bin/koha/opac-search.pl'>Searching</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE NAME="crumb-end.inc">
+<!--CONTENT-->
+<h1><!--+Katipo+start name="pageheading" lastmod="20 Oct, 2002 at 16:41:17"-->Search the Catalogue<!--+Katipo+end--></h1>
+
+<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=post>
+<TABLE cellpadding=0 cellspacing=5 border=0>
+
+
+
+<TR VALIGN=TOP>
+<TD><!--+Katipo+start name="title" -->Title<!--+Katipo+end--></TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+<td><input type=radio name=ttype value=normal checked>Normal<input
+type=radio name=ttype value=exact>Exact</td>
+</TR>
+<TR VALIGN=TOP> 
+<TD><!--+Katipo+start name="author" -->Author<!--+Katipo+end--></TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
+<TR VALIGN=TOP>
+<TD><!--+Katipo+start name="keywords" -->Keywords<!--+Katipo+end--></TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keywords"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD><!--+Katipo+start name="class" -->Class<!--+Katipo+end--></TD> <TD><select   SIZE="1"   NAME="class">
+	<option value="">Any
+	<!-- fetch class list -->
+	<TMPL_VAR name="classlist">
+</select>
+	
+</TD>
+</TR>
+
+<tr valign=top><td></td>
+<td><input type="submit" value="OK Start Search" SIZE="15" class="green-box">
+</td></tr>
+<tr valign=top>
+<td colspan=3><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" ALT="">
+</td></tr>
+<TR VALIGN=TOP>
+<TD colspan=3><H3><!--+Katipo+start name="subhead1" rows="2" -->Search by List of Subjects<!--+Katipo+end--></H3></TD> </TR>
+
+<TR VALIGN=TOP>
+<TD><!--+Katipo+start name="subject" -->Subject<!--+Katipo+end--></TD>
+<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+<td><input type="submit" value="OK" SIZE="2" class="green-box"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" align="right" ALT=""></td></TR>
+<tr valign=top>
+<td colspan=3><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" ALT="">
+</td></tr>
+<TR VALIGN=TOP>
+<TD><H3><!--+Katipo+start name="subhead2" rows="2" -->Search by Specific Item<!--+Katipo+end--></H3></TD></TR>
+
+<TR VALIGN=TOP>
+<TD><!--+Katipo+start name="item-number" -->Item Number<!--+Katipo+end--></TD>
+<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
+<td><input type="submit" value="OK" SIZE="2"   class="green-box"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="10" HEIGHT="5" BORDER="0" align="right" ALT=""></td></TR>
+
+</TR>
+<TR VALIGN=TOP>
+<td></td>
+<TD><font size=4 face="arial,helvetica">
+<INPUT TYPE="reset"  value="Reset" SIZE="10" class="brown-box"></font></td></tr>
+
+</TABLE>
+</FORM>
+
+<TABLE cellpadding=5 cellspacing=5 border=0>
+
+<TR VALIGN=TOP><td colspan=2>
+<H1><!--+Katipo+start name="subhead3" rows="2" -->Other Collections and Search Links<!--+Katipo+end--></H1></td></tr>
+<TR VALIGN=TOP><td valign="top"><!--+Katipo+start name="link1" --><A HREF="http://horowhenuahistory.library.org.nz/"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/kea/historical.jpg" WIDTH="159" HEIGHT="91" BORDER="0" ALT="Horowhenua Historical Database"></a><!--+Katipo+end--></td><td valign="top">
+<!--+Katipo+start name="link2" --><A HREF="http://horowhenuahistory.library.org.nz/">Horowhenua Historical Database</A><BR>
+A catalogue of the photograph collections<BR>
+owned by Horowhenua Historical Society Inc.<BR>
+and Foxton Historical Society.<P><!--+Katipo+end--></td></tr>
+<TR VALIGN=TOP><td valign="top" colspan=2>
+<!--+Katipo+start name="link3" -->- <A HREF="http://www.library.org.nz/search.htm">Internet Searching Facility</A><!--+Katipo+end-->
+</td></tr>
+
+</TABLE>
+
+
+
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE NAME="botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+<TMPL_INCLUDE NAME="search-botnav.inc">
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE NAME="end-main.inc">
+</body>
+</html>
