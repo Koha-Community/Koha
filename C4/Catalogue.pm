@@ -65,28 +65,26 @@ sub newBiblio {
     my ($env, $biblio) = @_;
     my $dbh=&C4Connect;  
     my $title=$biblio->{'title'};
-    my $q_title=$dbh->quote($title);
     my $subtitle=$biblio->{'subtitle'};
-    my $q_subtitle=$dbh->quote($subtitle);
-    ($q_subtitle) || ($q_subtitle="''");
     my $author=$biblio->{'author'};
-    my $q_author=$dbh->quote($author);
     my $unititle=$biblio->{'unititle'};
-    my $q_unititle=$dbh->quote($unititle);
     my $copyrightdate=$biblio->{'copyrightdate'};
     my $serial=$biblio->{'serial'};
     my $seriestitle=$biblio->{'seriestitle'};
-    my $q_seriestitle=$dbh->quote($seriestitle);
     my $notes=$biblio->{'notes'};
-    my $q_notes=$dbh->quote($notes);
     my $subject=$biblio->{'subject'};
     my $additionalauthors=$biblio->{'additionalauthors'};
+
+# Why am I doing this?  This is a potential race condition.  At the very least,
+# this needs code to ensure that two inserts didn't use the same
+# biblionumber...
+
     my $sth=$dbh->prepare("select max(biblionumber) from biblio");
     $sth->execute;
     my ($biblionumber) = $sth->fetchrow;
     $biblionumber++;
-    $sth=$dbh->prepare("insert into biblio (biblionumber,title,author,unititle,copyrightdate,serial,seriestitle,notes) values ($biblionumber,$q_title,$q_author,$q_unititle,$copyrightdate,$serial,$q_seriestitle,$q_notes)");
-    $sth->execute;
+    $sth=$dbh->prepare("insert into biblio (biblionumber,title,author,unititle,copyrightdate,serial,seriestitle,notes) values (?, ?, ?, ?, ?, ?, ?, ?)");
+    $sth->execute($biblionumber, $title, $author, $unititle, $copyrightdate, $serial, $seriestitle, $notes);
     $sth=$dbh->prepare("insert into bibliosubtitle (biblionumber,subtitle) values ($biblionumber,$q_subtitle)");
     $sth->execute;
     foreach (@$subject) {
@@ -95,9 +93,8 @@ sub newBiblio {
 	$sth->execute;
     }
     foreach (@$additionalauthors) {
-	my $q_additionalauthor=$dbh->quote($_);
-	my $sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values ($biblionumber,$q_additionalauthor)");
-	$sth->execute;
+	my $sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values (?, ?)");
+	$sth->execute($biblionumber, $additionalauthor);
     }
 }
 
