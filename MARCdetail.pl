@@ -17,6 +17,27 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+=head1 NAME
+
+MARCdetail.pl : script to show a biblio in MARC format
+
+=head1 SYNOPSIS
+
+
+=head1 DESCRIPTION
+
+This script needs a biblionumber in bib parameter (bibnumber from koha style DB. Automaticaly maps to marc biblionumber).
+It shows the biblio in a (nice) MARC format depending on MARC parameters tables.
+The template is in <templates_dir>/catalogue/MARCdetail.tmpl. this template must be divided in 11 "tabs".
+The 10 firsts presents the biblio, the 11th one presents the items attached to the biblio
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
+
 use strict;
 require Exporter;
 use C4::Context;
@@ -79,7 +100,6 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
-warn "loop 1";
 foreach my $field (@fields) {
 	my @subf=$field->subfields;
 	my %this_row;
@@ -118,7 +138,6 @@ for (my $i=0;$i<=$#big_array; $i++) {
 foreach my $subfield_code (keys(%witness)) {
 	my %header_value;
 	$header_value{header_value} = $witness{$subfield_code};
-	warn "$subfield_code => ".$witness{$subfield_code};
 	push(@header_value_loop, \%header_value);
 }
 
