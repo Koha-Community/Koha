@@ -28,6 +28,7 @@ use CGI;
 use C4::Search;
 use HTML::Template;
 use C4::Interface::CGI::Output;
+use C4::Date;
 
 my $input = new CGI;
 
@@ -74,10 +75,7 @@ for (my $i=0;$i<3;$i++){
 }
 
 
-$template->param( startmenumember => join('', startmenu('member')),
-			 endmenumember   => join('', endmenu('member')),
-			endmenumember   => endmenu('member'),
-			member         => $member,
+$template->param( member => $member,
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
 			cardnumber      => $data->{'cardnumber'},
@@ -92,7 +90,9 @@ $template->param( startmenumember => join('', startmenu('member')),
 			emailaddress    => $data->{'emailaddress'},
 			contactname     => $data->{'contactname'},
 			altphone        => $data->{'altphone'},
+			dateformat      => display_date_format(),
 			titleloop       => \@titledata,
 			cmemloop        => \@cmemdata );
+
 
 output_html_with_http_headers $input, $cookie, $template->output;
