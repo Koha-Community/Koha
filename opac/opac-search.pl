@@ -12,16 +12,16 @@ use HTML::Template;
 my $classlist='';
 
 my $dbh=C4::Context->dbh;
-my $sth=$dbh->prepare("select groupname,itemtypes from itemtypesearchgroups order by groupname");
+my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
 $sth->execute;
-while (my ($groupname,$itemtypes) = $sth->fetchrow) {
-    $classlist.="<option value=\"$itemtypes\">$groupname\n";
+while (my ($description,$itemtype) = $sth->fetchrow) {
+    $classlist.="<option value=\"$itemtype\">$description\n";
 }
 
 
 my $query = new CGI;
 
-my ($template, $borrowernumber, $cookie) 
+my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-search.tmpl",
 			     query => $query,
 			     type => "opac",
