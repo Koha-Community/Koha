@@ -17,7 +17,7 @@ use strict;
 
 # CPAN modules
 use DBI;
-
+use Getopt::Long;
 # Koha modules
 use C4::Context;
 
@@ -37,8 +37,12 @@ my (
     $prefitem,          # preference item in systempreferences table
 );
 
+my $silent;
+GetOptions(
+	's' =>\$silent
+	);
 my $dbh = C4::Context->dbh;
-print "connected to your DB. Checking & modifying it\n";
+print "connected to your DB. Checking & modifying it\n" unless $silent;
 
 #-------------------
 # Defines
@@ -756,7 +760,7 @@ my $mysqlversion = `mysqld --version`;
 $mysqlversion =~ /Ver (\S*) /;
 $mysqlversion = $1;
 if ( $mysqlversion ge '3.23' ) {
-    print "Could convert to MyISAM database tables...\n";
+    print "Could convert to MyISAM database tables...\n" unless $silent;
 }
 
 #---------------------------------
@@ -773,7 +777,7 @@ while ( my ($table) = $sth->fetchrow ) {
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
     unless ( $existingtables{$table} ) {
-	print "Adding $table table...\n";
+	print "Adding $table table...\n" unless $silent;
         my $sth = $dbh->prepare("create table $table $requiretables{$table}");
         $sth->execute;
         if ( $sth->err ) {
@@ -786,7 +790,7 @@ foreach $table ( keys %requiretables ) {
 # now drop useless tables
 foreach $table ( keys %dropable_table ) {
 	if ( $existingtables{$table} ) {
-		print "Dropping unused table $table\n" if $debug;
+		print "Dropping unused table $table\n" if $debug and not $silent;
 		$dbh->do("drop table $table");
 		if ( $dbh->err ) {
 			print "Error : $dbh->errstr \n";
@@ -795,7 +799,7 @@ foreach $table ( keys %dropable_table ) {
 }
 unless ( $existingtables{'z3950servers'} ) {
 	#MJR: added syntax entries to close bug 624
-    print "Adding z3950servers table...\n";
+    print "Adding z3950servers table...\n" unless $silent;
     my $sti = $dbh->prepare( "create table z3950servers (
 										host char(255),
 										port int,
@@ -821,7 +825,7 @@ unless ( $existingtables{'z3950servers'} ) {
 }
 unless ( $existingtables{'issuingrules'} ) {
 	$dbh->do("alter table categoryitem rename issuingrules");
-	print "renaming categoryitem\n";
+	print "renaming categoryitem\n" unless $silent;
 }
 
 
@@ -829,7 +833,7 @@ unless ( $existingtables{'issuingrules'} ) {
 # Columns
 
 foreach $table ( keys %requirefields ) {
-    print "Check table $table\n" if $debug;
+    print "Check table $table\n" if $debug and not $silent;
     $sth = $dbh->prepare("show columns from $table");
     $sth->execute();
     undef %types;
@@ -838,11 +842,11 @@ foreach $table ( keys %requirefields ) {
         $types{$column} = $type;
     }    # while
     foreach $column ( keys %{ $requirefields{$table} } ) {
-        print "  Check column $column  [$types{$column}]\n" if $debug;
+        print "  Check column $column  [$types{$column}]\n" if $debug and not $silent;
         if ( !$types{$column} ) {
 
             # column doesn't exist
-            print "Adding $column field to $table table...\n";
+            print "Adding $column field to $table table...\n" unless $silent;
             $query = "alter table $table
 			add column $column " . $requirefields{$table}->{$column};
             print "Execute: $query\n" if $debug;
@@ -910,7 +914,7 @@ foreach $table ( keys %fielddefinitions ) {
 				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ?");
 			}
 			$sth->execute($default);
-			print "  Alter $field in $table\n";
+			print "  Alter $field in $table\n" unless $silent;
 		}
 	}
 }
@@ -930,7 +934,7 @@ unless ( $itemtypes{'cardnumber'} eq 'varchar(20)' ) {
     $itemtypes{'cardnumber'} =~ /varchar\((\d+)\)/;
     my $oldlength = $1;
     if ( $oldlength < 16 ) {
-        print "Setting maximum cardnumber length to 16 (was $oldlength) and marking unique.\n";
+        print "Setting maximum cardnumber length to 16 (was $oldlength) and marking unique.\n" unless $silent;
         my $sti =
           $dbh->prepare(
             "alter table borrowers change cardnumber cardnumber varchar(16)");
@@ -962,7 +966,7 @@ unless ( $itemtypes{'barcode'} eq 'varchar(20)' ) {
     $itemtypes{'barcode'} =~ /varchar\((\d+)\)/;
     my $oldlength = $1;
     if ( $oldlength < 20 ) {
-        print "Setting maximum barcode length to 20 (was $oldlength).\n";
+        print "Setting maximum barcode length to 20 (was $oldlength).\n" unless $silent;
         my $sti =
           $dbh->prepare(
             "alter table items change barcode barcode varchar(20)");
@@ -977,7 +981,7 @@ $sth->execute;
 while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
 {
 	if ($key_name eq 'barcode' && $non_unique eq 0) {
-		print "dropping BARCODE index to enable empty barcodes\n";
+		print "dropping BARCODE index to enable empty barcodes\n" unless $silent;
 		$dbh->do("ALTER TABLE `items` DROP INDEX `barcode`");
 	}
 }
@@ -995,7 +999,7 @@ while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Colla
 		$exists=1;
 	}
 }
-print "Creating fulltext index on bibliothesaurus\n" unless $exists;
+print "Creating fulltext index on bibliothesaurus\n" unless $exists or $silent;
 $dbh->do('create fulltext index category_2 on bibliothesaurus (category,freelib)') unless $exists;
 
 #
@@ -1010,7 +1014,7 @@ while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Colla
 		$exists=1;
 	}
 }
-print "Creating  index on z3950results\n" unless $exists;
+print "Creating  index on z3950results\n" unless $exists or $silent;
 $dbh->do('create unique index query_server on z3950results (queryid,server)') unless $exists;
 
 # changing z3950daemon field to NULL in marc_breeding
@@ -1037,7 +1041,7 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 }
 
 unless ( $branchtransfers{'datesent'} eq 'datetime' ) {
-    print "Setting type of datesent in branchtransfers to datetime.\n";
+    print "Setting type of datesent in branchtransfers to datetime.\n" unless $silent;
     my $sti =
       $dbh->prepare(
         "alter table branchtransfers change datesent datesent datetime");
@@ -1045,7 +1049,7 @@ unless ( $branchtransfers{'datesent'} eq 'datetime' ) {
 }
 
 unless ( $branchtransfers{'datearrived'} eq 'datetime' ) {
-    print "Setting type of datearrived in branchtransfers to datetime.\n";
+    print "Setting type of datearrived in branchtransfers to datetime.\n" unless $silent;
     my $sti =
       $dbh->prepare(
         "alter table branchtransfers change datearrived datearrived datetime");
@@ -1064,7 +1068,7 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 
 unless ( $branchcategories{'categorycode'} eq 'varchar(4)' ) {
     print
-"Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
+"Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n" unless $silent;
     my $sti =
       $dbh->prepare(
 "alter table branchcategories change categorycode categorycode varchar(4) not null"
@@ -1077,7 +1081,7 @@ unless ( $branchcategories{'categorycode'} eq 'varchar(4)' ) {
 }
 
 unless ( $branchcategories{'categoryname'} eq 'text' ) {
-    print "Changing branchcode in branchcategories to categoryname text.\n";
+    print "Changing branchcode in branchcategories to categoryname text.\n" unless $silent;
     my $sth =
       $dbh->prepare(
         "alter table branchcategories change branchcode categoryname text");
@@ -1086,7 +1090,7 @@ unless ( $branchcategories{'categoryname'} eq 'text' ) {
 
 unless ( $branchcategories{'codedescription'} eq 'text' ) {
     print
-"Replacing branchholding in branchcategories with codedescription text.\n";
+"Replacing branchholding in branchcategories with codedescription text.\n" unless $silent;
     my $sth =
       $dbh->prepare(
         "alter table branchcategories change branchholding codedescription text"
@@ -1105,7 +1109,7 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 }
 
 if ($items{'bulk'} eq "varchar(30)") {
-    print "  Setting callnumber in items table\n";
+    print "  Setting callnumber in items table\n" unless $silent;
     my $sti =
       $dbh->prepare("ALTER TABLE `items` CHANGE `bulk` `itemcallnumber` VARCHAR( 30 ) DEFAULT NULL");
     $sti->execute;
@@ -1124,7 +1128,7 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 }
 
 if ($marc_subfield_structure{thesaurus_category}) {
-    print "  changing thesaurus_category in marc_subfield_structure table\n";
+    print "  changing thesaurus_category in marc_subfield_structure table\n" unless $silent;
     my $sti =
       $dbh->prepare("ALTER TABLE marc_subfield_structure CHANGE `thesaurus_category` `authtypecode` VARCHAR(10 ) DEFAULT NULL");
     $sti->execute;
@@ -1142,7 +1146,7 @@ while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Colla
 		$exists=1;
 	}
 }
-print "Creating  index on z3950results\n" unless $exists;
+print "Creating  index on issuing rules\n" unless $exists or $silent;
 $dbh->do('ALTER TABLE issuingrules ADD PRIMARY KEY ( branchcode, categorycode, itemtype )') unless $exists;
 
 $dbh->do('ALTER TABLE marc_tag_structure drop primary key');
@@ -1163,7 +1167,7 @@ while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 }
 if ($marc_word{subfieldid}) {
 	#create field tagsubfield, copy tag+subfieldid, then drop tag and subfieldid
-	print "Modifying marc_word (concat on tag and subfield for better perfs)\n";
+	print "Modifying marc_word (concat on tag and subfield for better perfs)\n" unless $silent;
 	$dbh->do("ALTER TABLE `marc_word` ADD `tagsubfield` CHAR( 4 ) NOT NULL AFTER `bibid`");
 	$dbh->do("update marc_word set tagsubfield=concat(tag,subfieldid)");
 	$dbh->do("alter table marc_word drop tag");
@@ -1173,7 +1177,7 @@ if ($marc_word{subfieldid}) {
 # Populate tables with required data
 
 foreach my $table ( keys %tabledata ) {
-    print "Checking for data required in table $table...\n";
+    print "Checking for data required in table $table...\n" unless $silent;
     my $tablerows = $tabledata{$table};
     foreach my $row (@$tablerows) {
         my $uniquefieldrequired = $row->{uniquefieldrequired};
@@ -1192,7 +1196,7 @@ foreach my $table ( keys %tabledata ) {
 		}
 	    }
 	} else {
-            print "Adding row to $table: ";
+            print "Adding row to $table: " unless $silent;
             my @values;
             my $fieldlist;
             my $placeholders;
@@ -1201,11 +1205,11 @@ foreach my $table ( keys %tabledata ) {
 		next if $field eq 'forceupdate';
                 my $value = $row->{$field};
                 push @values, $value;
-                print "  $field => $value";
+                print "  $field => $value" unless $silent;
                 $fieldlist .= "$field,";
                 $placeholders .= "?,";
             }
-            print "\n";
+            print "\n" unless $silent;
             $fieldlist    =~ s/,$//;
             $placeholders =~ s/,$//;
             my $sth =
@@ -1221,6 +1225,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.86  2004/06/22 11:30:57  tipaul
+# adding -s (silent) flag, to have a silent install.
+# only updater will be verbose
+#
 # Revision 1.85  2004/06/17 15:19:44  tipaul
 # missing Marc_Search index on marc_word
 #
