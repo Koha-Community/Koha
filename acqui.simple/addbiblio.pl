@@ -205,14 +205,15 @@ sub build_tabs ($$$$) {
 			my $indicator;
 	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
 	# if MARC::Record is empty => use tab as master loop.
-			if ($record ne -1) {
+			if ($record ne -1 && $record->field($tag)) {
 				my @fields = $record->field($tag);
 				foreach my $field (@fields)  {
 					my @subfields_data;
 					if ($tag<10) {
 						my $value=$field->data();
 						my $subfield="@";
-						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth))
+								unless ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						$i++;
 					} else {
 						my @subfields=$field->subfields();
