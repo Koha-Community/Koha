@@ -66,11 +66,13 @@ else
 
 
 my @resultsdata;
+my $background = 0;
 for (my $i=0; $i < $count; $i++){
   #find out stats
   my ($od,$issue,$fines)=borrdata2($env,$results->[$i]{'borrowernumber'});
 
   my %row = (
+  	background => $background,
         borrowernumber => $results->[$i]{'borrowernumber'},
         cardnumber => $results->[$i]{'cardnumber'},
         surname => $results->[$i]{'surname'},
@@ -81,6 +83,7 @@ for (my $i=0; $i < $count; $i++){
         odissue => "$od/$issue",
         fines => $fines,
         borrowernotes => $results->[$i]{'borrowernotes'});
+  if ( $background ) { $background = 0; } else {$background = 1; }
   push(@resultsdata, \%row);
 }
 
