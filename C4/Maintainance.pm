@@ -79,8 +79,8 @@ C<$n> is 0, it will return all matching subjects.
 sub listsubjects {
   my ($sub,$num,$offset)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from bibliosubject where subject like '?%' group by subject";
-  my @bind = ($sub);
+  my $query="Select * from bibliosubject where subject like ? group by subject";
+  my @bind = ("$sub%");
   # FIXME - Make $num and $offset optional.
   # If $num was given, make sure $offset was, too.
   if ($num != 0){
@@ -156,8 +156,8 @@ is the number of elements in C<$results>.
 sub deletedbib{
   my ($title)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from deletedbiblio where title like '?%' order by title");
-  $sth->execute($title);
+  my $sth=$dbh->prepare("Select * from deletedbiblio where title like ? order by title");
+  $sth->execute("$title%");
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
