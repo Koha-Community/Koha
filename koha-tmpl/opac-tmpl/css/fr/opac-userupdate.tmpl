@@ -1,22 +1,22 @@
-<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_INCLUDE name="opac-top.inc" -->
 
 <div id="mainbloc">
-<h2>Member information change</h2>
-<p><i>Please change what's needed. An email will be sent to the library.<br />
+<h2>Modifier vos informations</h2>
+<p><i> Merci de changer ce qui doit l'être. Un message sera envoyé à  la bibliothèque.<br />
  Vos modifications n'apparaîtront pas avant la validation de la bibliothèque</i></p>
 
-<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+<!-- TMPL_LOOP name="BORROWER_INFO" -->
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
-	<p>Nom : <input type="text"  size="25" value="<!-- TMPL_VAR NAME='surname' -->"  NAME="surname" /></p>
-	<p>Titre: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='title' -->"  NAME="title" /></p>
-	<p>First name: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='firstname' -->"  NAME="firstname" /></p>
-	<p>Adresse postale</p>
-	<p>Ville: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='city' -->"  NAME="city" /></p>
-	<p>Téléphone domicile: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='phone' -->"  NAME="phone" /></p>
-	<p>N° de téléphone/fax bureau</p>
-	<p>E-mail: <input type="text"  size="25" value="<!-- TMPL_VAR NAME='emailaddress' -->"  NAME="emailaddress" /></p>
+	<p><label>Nom</label><input type="text"  size="25" value="<!-- TMPL_VAR name='surname' -->"  name="surname" /></p>
+	<p><label>Titre</label><input type="text"  size="25" value="<!-- TMPL_VAR name='title' -->"  name="title" /></p>
+	<p><label>Prénom</label><input type="text"  size="25" value="<!-- TMPL_VAR name='firstname' -->"  name="firstname" /></p>
+	<p><label>Adresse postale</label><input type="text"  size="25" value="<!-- TMPL_VAR name='streetaddress' -->"  name="streetaddress" /></p>
+	<p><label>Ville</label><input type="text"  size="25" value="<!-- TMPL_VAR name='city' -->"  name="city" /></p>
+	<p><label>Téléphone domicile</label><input type="text"  size="25" value="<!-- TMPL_VAR name='phone' -->"  name="phone" /></p>
+	<p><label>N° de téléphone/fax bureau</label><input type="text"  size="25" value="<!-- TMPL_VAR name='faxnumber' -->"  name="faxnumber" /></p>
+	<p><label>E-mail</label><input type="text"  size="25" value="<!-- TMPL_VAR name='emailaddress' -->"  name="emailaddress" /></p>
 	<p><input type="submit" value="Soumettre" class="button"></p>
 </form>
 </div>
 <!-- /TMPL_LOOP -->
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_INCLUDE name="opac-bottom.inc" -->

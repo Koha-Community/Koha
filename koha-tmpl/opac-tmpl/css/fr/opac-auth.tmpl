@@ -25,12 +25,12 @@
 
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
 	<h1>Identification</h1>
-	<p><label>Numéro de carte</label><input name="userid" /></p>
+	<p><label>Login/identifiant</label><input name="userid" /></p>
 	<p><label>Mot de passe</label><input type="password" name="password" /></p>
 	<!-- TMPL_LOOP NAME="INPUTS" -->
 		<input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->' />
 	<!-- /TMPL_LOOP -->
-	<input type="submit" value="identifiant" class="button">
+	<input type="submit" value="S'identifier" class="button">
 </form>
 
 <!-- /TMPL_IF -->

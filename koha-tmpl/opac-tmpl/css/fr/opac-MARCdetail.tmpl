@@ -1,10 +1,12 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
 <div id="bibliomenu">
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> Normal </a> <a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue"> Imprimer </a>
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> Normal </a> <a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue"> Imprimer </a>
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
-		<a href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" --> class="button catalogue">Requète</a>
+		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+			Réserver
+		</a>
 	<!-- /TMPL_IF -->
 </div>
 
@@ -241,10 +243,6 @@ function active(numlayer)
 			document.getElementById(ong).style.visibility="hidden";
 		}
 	}
-}
-
-function Dopop(link) {
-	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
 </body>

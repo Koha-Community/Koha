@@ -38,7 +38,7 @@
 	<h2>Acquisitions récentes</h2>
 	<form action="/cgi-bin/koha/opac-search.pl">
 		<p>
-			 <!-- TMPL_VAR name="CGIitemtype" --> acquis récemment (les plus récents en premier)
+			<!-- TMPL_VAR name="CGIitemtype" --> acquis récemment (les plus récents en premier)
 			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -59,11 +59,11 @@
 		<!-- /TMPL_IF -->
 		<a href="/cgi-bin/koha/opac-user.pl" class="button"> <!-- TMPL_VAR NAME="loggedinusername" --> accueil </a> <a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button"> Déconnexion </a>
 		<!-- TMPL_IF name="textmessaging"-->
-			<h2>Message from the library</h2>
+			<h2>Commandé par la bibliothèque</h2>
 			<!-- TMPL_VAR name="textmessaging" -->
 		<!-- /TMPL_IF -->
 	<!-- TMPL_ELSE -->
-		<p></a> pour avoir des fonctionnalités personnelles'><a href="/cgi-bin/koha/opac-user.pl">S'identifier</a> pour avoir des fonctionnalités personnelles</p>
+		<p><a href="/cgi-bin/koha/opac-user.pl">S'identifier</a> pour avoir des fonctionnalités personnelles</p>
 	<!-- /TMPL_IF -->
 	<form action="/cgi-bin/koha/changelanguage.pl" method="post">
 		<select name="language">
@@ -74,7 +74,7 @@
 		<input type="submit" value="Changer la langue" class="button">
 	</form>
 	<p class="copyright">
-		Cette bibliothèque est équipée de <a href="http://www.koha.org">Koha</a>, SIGB sous licence libre, respectueuse des standards du web <a href="http://validator.w3.org/check/referer">
+		Cette bibliothèque est équipée de <a href="http://www.koha.org">Koha</a>, SIGB sous licence libre, respectueux des standards du web <a href="http://validator.w3.org/check/referer">
 			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="XHTML 1.0 valide !" height="16" width="44">
 		</a>
 	</p>

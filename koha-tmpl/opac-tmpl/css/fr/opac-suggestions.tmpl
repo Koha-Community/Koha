@@ -3,7 +3,7 @@
 <!-- TMPL_IF name="op_add" -->
 	<h1>Saisir une nouvelle suggestion</h1>
 	<p>Remplissez ce formulaire pour suggérer une nouvelle acquisition. Vous serez prévenu par messagerie lorsque la bibliothèque traitera votre suggestion</p>
-	<p>Aucun champ obligatoire. Remplissez les champs que vous connaissez. Le champ</p>
+	<p>Aucun champ obligatoire. Remplissez les champs que vous connaissez. Le champ "Note" peut être utilisé pour ce que vous voulez</p>
 	<form>
 		<input type="hidden" name="op" value="add_confirm">
 		<p><label>Titre</label><input type="text" name="title" size=60 maxlentgh=80></p>
@@ -118,7 +118,7 @@
 					<!-- TMPL_IF name="ACCEPTED" -->Accepté, sera commandé rapidement<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ORDERED" -->Commandé par la bibliothèque<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="REJECTED" -->Suggestion rejetée : ne sera pas acheté<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="AVAILABLE" -->Recieved by the library<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Commandé par la bibliothèque<!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->

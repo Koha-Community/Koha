@@ -6,11 +6,11 @@
 <form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
 	
 	<div id="bloc20">
-		<h2 class="catalogue">Chercher sur</h2>
+		<h2 class="catalogue">Chercher dans</h2>
 		<p>
 			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-			<label class="label20">Any word</label>
+			<label class="label20">N'importe où</label>
 			<input type="hidden" name="marclist" value="" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -33,7 +33,7 @@
 			<input type="text" name="value" onchange="sql_update()" size="35" />
 		</p>
 		<p>
-			<label class="label20">Sujet</label>
+			<label class="label20">Mot-clef</label>
 			<input type="hidden" name="marclist" value="bibliosubject.subject" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -49,7 +49,7 @@
 			<!-- TMPL_VAR name="CGIitemtype" -->
 		</p>
 		<p>
-				<label class="label20">Site</label>
+				<label class="label20">Annexe</label>
 				<input type="hidden" name="marclist" value="items.holdingbranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
@@ -57,13 +57,13 @@
 				<!-- TMPL_VAR name="CGIbranch" -->
 		</p>
 		<p>
-			<input type="submit" value="Commencer la recherche" class="button catalogue">
+			<input type="submit" value="Lancer la recherche" class="button catalogue">
 		</p>
 	</div>
 	<div id="bloc20">
 		<h2>Autres options</h2>
 		<p>
-				<label class="label20">Item barcode</label>
+				<label class="label20">code barre</label>
 				<input type="hidden" name="marclist" value="items.barcode" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
@@ -71,7 +71,7 @@
 				<input type="text" name="value" onchange="sql_update()" /> 
 		</p>
 		<p>
-			<label class="label20">Call Number</label>
+			<label class="label20">Cote du document</label>
 			<input type="hidden" name="marclist" value="items.itemcallnumber" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -79,7 +79,7 @@
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
-			<label class="label20">ISBN</label>
+			<label class="label20">ISBN :</label>
 			<input type="hidden" name="marclist" value="biblioitems.isbn" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -101,7 +101,7 @@
 				<option value="100">100</option>
 			</select>
 		</p>
-		<p>Commandé par
+		<p>Trié par
 			<select name="orderby" size="1">
 				<option value="biblio.title">Titre</option>
 				<option value="biblio.author">Auteur</option>
@@ -115,17 +115,17 @@
 		<p>&nbsp;</p>
 	</div>
 	<div id="bloc60">
-		<h2>Hints</h2>
+		<h2>Aide</h2>
 		<h3>Titre</h3>
-		<p>You can enter a complete or a part of a title. The search will also be done in subtitles & other title-related fields</p>
+		<p>Vous pouvez entrer un titre complet ou partiel. La recherche sera faite aussi sur les sous titre et les autres champs relatifs au titre</p>
 		<h3>Auteur</h3>
-		<p>You can enter a name or a surname. The search will also be done is additional authors & other author-related fields (translator, illustrator...)</p>
-		<p>Remember that a title can concern a "physical" author (Victor Hugo) or a company, group, collective author (CNRS, Library of Congress)</p>
-		<h3>Branches</h3>
-		<p>Select a branch if you want to limit your search to items in a specific branch. By default the search is done on every branches of the library</p>
-		<h3>Partial search</h3>
-		<p>A search is done on every words you enter. Empty words are ignored. If you enter, for example "the two towers" in the title, the result list will contain all the books containing two AND tower in the title. The "the" will be discarded.</p>
-		<p>If you want to enter a partial word, add a * or a % at the end of the word. For example "two tower*" will retrieve "the two towers", "two white towers", "a tower and two cities"</p>
+		<p>Vous pouvez entrer un nom ou un prénom. La recherche est aussi faite sur les co-auteurs et les autres champs en relation (traducteur, illustrateur...)</p>
+		<p>N'oubliez pas qu'un auteur peut concerner un auteur physique (Victor Hugo) ou moral (CNRS...)</p>
+		<h3>Annexes</h3>
+		<p>Sélectionnez une annexe si vous voulez limiter votre recherche à une annexe spécifique. Par défaut, la recherche sera faite sur toutes les annexes de la bibliothèque</p>
+		<h3>Commencer la recherche</h3>
+		<p>Une recherche est faite sur chaque mot que vous entrez. Les mots vides sont ignorés. Si vous entrez, par exemple "les deux tours" dans le titre, le résultat contiendra tous les mots avec deux ET tours dans le titre. "Les" sera ignoré</p>
+		<p>Si vous voulez entrer une partie de mot, mettez une * ou un % à la fin du mot. Par exemple, "deux tours" retournera "Les deux tours" mais aussi "Une tour et deux maisons"</p>
 	</div>
 </form>
 
