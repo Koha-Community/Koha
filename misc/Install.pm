@@ -118,6 +118,7 @@ sub heading ($) {
 
 my $mycnf = $ENV{HOME}."/.my.cnf";
 my $mytmpcnf = `mktemp my.cnf.koha.XXXXXX`;
+chomp($mytmpcnf);
 
 my $messages;
 $messages->{'continuing'}->{en}="Great!  Continuing setup.\n\n";
@@ -1188,7 +1189,7 @@ sub updateapacheconf {
     }
 
 	startsysout;
-    if (`grep 'VirtualHost $servername' "$httpdconf"`) {
+    if (`grep -q 'VirtualHost $servername' "$httpdconf"`) {
 	showmessage(getmessage('ApacheAlreadyConfigured', [$httpdconf, $httpdconf]), 'PressEnter');
 	return;
     } else {
