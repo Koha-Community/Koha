@@ -4,21 +4,23 @@
 
 				<li><a href="/cgi-bin/koha/mainpage.pl">Koha intranet home</a></li>
 				<li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a><ul><li><a href="/cgi-bin/koha/circ/circulation.pl">Issues</a>	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<label for="findborrower">Issue to:</label>
-				<input id="findborrower" name="findborrower" type="text" size="10" />
+<label for="navfindborrower">Iss<span class="accesskey">u</span>e to:</label>
+				<input id="navfindborrower" name="findborrower" type="text" size="10" accesskey="u" />
 				<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
 				<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
 				<input type="submit" class="submit" value="Submit" />
-	</form></li><li><a href="/cgi-bin/koha/circ/returns.pl">Returns</a>
+	</form></li><li><a accesskey="r" href="/cgi-bin/koha/circ/returns.pl"><span class="accesskey">R</span>eturns</a>
 </li><!-- Display for NPL <li><a href="/reserve_list.php">Reserve List</a></li><li><a href="http://66.213.78.70/secret/reserves/index.cfm">New Title Waiting List</a></li> /Display for NPL --><!-- Hide from NPL --><li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li><!-- /Hide from NPL --></ul></li>
 				<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a><ul><li><form action="/cgi-bin/koha/members/member.pl" method="post">
-	<label for="member">Search:</label><input id="member" type="text" size="10" name="member" />
+	<label for="navmember">Search:</label><input id="member" type="text" size="10" name="navmember" />
 	<input type="submit" value="Search" class="submit" />
 
 	</form></li></ul></li>
-				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a><ul><li><form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="keyword">Quick Search:</label><input type="hidden" name="marclist" value="" /><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="keyword" name="value" size="10" /><input type="submit" value="Start search" class="submit"></form></li><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Advanced Search</a></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li><li><a href="http://live.moreforohio.org:8080/vdx/">MORE Search</a></li> /Display for NPL -->
+				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a><ul><li><form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="navkeyword"><span class="accesskey">Q</span>uick Search:</label><input type="hidden" name="marclist" value="" /><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="navkeyword" name="value" size="10" accesskey="q" /><input type="submit" value="Start search" class="submit"></form></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li><li><a href="http://live.moreforohio.org:8080/vdx/">MORE Search</a></li> /Display for NPL -->
 </ul></li>
-<li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a><ul><!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Add Temp</a> </li> /Display for NPL --><li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li><!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li><!-- /Hide from NPL --></ul></li>
+<li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a><ul><!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Add Temp</a> </li> /Display for NPL --><li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li><!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li>
+<li><a href="/cgi-bin/koha/bull-home.pl">Serials</a></li>
+<li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li><!-- /Hide from NPL --></ul></li>
 <!-- Hide from NPL --><li><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports</a></li>
 <li><a href="/cgi-bin/koha/admin-home.pl">Koha Administration</a>
 <ul><li><a href="/cgi-bin/koha/admin-home.pl">System Administration</a></li>
