@@ -16,6 +16,17 @@ my $input = new CGI;
 
 
 my $biblio=$input->param('biblio');
+#print $input->header;
+#check no items attached
+my $count=C4::Acquisitions::itemcount($biblio);
 
-delbiblio($biblio);
+
+#print $count;
+if ($count > 0){
+  print $input->header;
+  print "This biblio has $count items attached, please delete them before deleting this biblio<p>
+  ";
+} else {
+#delbiblio($biblio);
 print $input->redirect("/catalogue/");
+}
