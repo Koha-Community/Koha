@@ -20,23 +20,24 @@ use DBI;
 
 # Koha modules
 use C4::Context("/etc/koha.conf.tmp");
-	# FIXME - /etc/koha.conf might not exist, so shouldn't use
-	# C4::Context.
+
+# FIXME - /etc/koha.conf might not exist, so shouldn't use
+# C4::Context.
 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
-my $debug=0;
+my $debug = 0;
 
 my (
-	$sth, $sti,
-	$query,
-	%existingtables,	# tables already in database
-	%types,
-	$table,
-	$column,
-    	$type, $null, $key, $default, $extra,
-	$prefitem,		# preference item in systempreferences table
+    $sth, $sti,
+    $query,
+    %existingtables,    # tables already in database
+    %types,
+    $table,
+    $column,
+    $type, $null, $key, $default, $extra,
+    $prefitem,          # preference item in systempreferences table
 );
 
 my $dbh = C4::Context->dbh;
@@ -45,13 +46,13 @@ my $dbh = C4::Context->dbh;
 # Defines
 
 # Tables to add if they don't exist
-my %requiretables=(
-    shelfcontents=>"( shelfnumber int not null,
+my %requiretables = (
+    shelfcontents => "( shelfnumber int not null,
 							itemnumber int not null,
 							flags int)",
-    bookshelf=>"( shelfnumber int auto_increment primary key,
+    bookshelf => "( shelfnumber int auto_increment primary key,
 						shelfname char(255))",
-    z3950queue=>"( id int auto_increment primary key,
+    z3950queue => "( id int auto_increment primary key,
 						term text,
 						type char(10),
 						startdate int,
@@ -61,7 +62,7 @@ my %requiretables=(
 						numrecords int,
 						servers text,
 						identifier char(30))",
-	z3950results=>"( id int auto_increment primary key,
+    z3950results => "( id int auto_increment primary key,
 						queryid int,
 						server char(255),
 						startdate int,
@@ -71,35 +72,35 @@ my %requiretables=(
 						numdownloaded int,
 						highestseen int,
 						active smallint)",
-	branchrelations=>"( branchcode varchar(4),
+    branchrelations => "( branchcode varchar(4),
 							categorycode varchar(4))",
-	websites=>"( websitenumber int(11) NOT NULL auto_increment,
+    websites => "( websitenumber int(11) NOT NULL auto_increment,
 						biblionumber int(11) NOT NULL default '0',
 						title text,
 						description text,
 						url varchar(255),
 						PRIMARY KEY (websitenumber) )",
-	marcrecorddone=>"( isbn char(40),
+    marcrecorddone => "( isbn char(40),
 								issn char(40),
 								lccn char(40),
 								controlnumber char(40))",
-    uploadedmarc=>"( id int(11) NOT NULL auto_increment PRIMARY KEY,
+    uploadedmarc => "( id int(11) NOT NULL auto_increment PRIMARY KEY,
 							marc longblob,
 							hidden smallint(6) default NULL,
 							name varchar(255) default NULL)",
-	ethnicity=>"( code varchar(10) NOT NULL default '',
+    ethnicity => "( code varchar(10) NOT NULL default '',
 					name varchar(255) default NULL,
 					PRIMARY KEY  (code)   )",
-	sessions=>"( sessionID varchar(255) NOT NULL default '',
+    sessions => "( sessionID varchar(255) NOT NULL default '',
 						userid varchar(255) default NULL,
 						ip varchar(16) default NULL,
 						lasttime int,
 						PRIMARY KEY (sessionID)   )",
-    sessionqueries=>"( sessionID varchar(255) NOT NULL default '',
+    sessionqueries => "( sessionID varchar(255) NOT NULL default '',
 								userid char(100) NOT NULL default '',
 								ip char(18) NOT NULL default '',
 								url text NOT NULL default ''  )",
-	bibliothesaurus=> "( id bigint(20) NOT NULL auto_increment,
+    bibliothesaurus => "( id bigint(20) NOT NULL auto_increment,
 							freelib char(255) NOT NULL default '',
 							stdlib char(255) NOT NULL default '',
 							category char(10) NOT NULL default '',
@@ -112,7 +113,7 @@ my %requiretables=(
 							KEY category (category),
 							KEY hierarchy (hierarchy)
 							)",
-	marc_biblio => "(
+    marc_biblio => "(
 						bibid bigint(20) unsigned NOT NULL auto_increment,
 						biblionumber int(11) NOT NULL default '0',
 						datecreated date NOT NULL default '0000-00-00',
@@ -122,12 +123,12 @@ my %requiretables=(
 						KEY origincode (origincode),
 						KEY biblionumber (biblionumber)
 						) ",
-	marc_blob_subfield => "(
+    marc_blob_subfield => "(
 					blobidlink bigint(20) NOT NULL auto_increment,
 					subfieldvalue longtext NOT NULL,
 					PRIMARY KEY  (blobidlink)
 					) ",
-	marc_subfield_structure => "(
+    marc_subfield_structure => "(
 						tagfield char(3) NOT NULL default '',
 						tagsubfield char(1) NOT NULL default '',
 						liblibrarian char(255) NOT NULL default '',
@@ -143,7 +144,7 @@ my %requiretables=(
 						KEY kohafield (kohafield),
 						KEY tab (tab)
 						)",
-	marc_subfield_table => "(
+    marc_subfield_table => "(
 						subfieldid bigint(20) unsigned NOT NULL auto_increment,
 						bibid bigint(20) unsigned NOT NULL default '0',
 						tag char(3) NOT NULL default '',
@@ -162,7 +163,7 @@ my %requiretables=(
 						KEY subfieldvalue (subfieldvalue),
 						KEY tagorder (tagorder)
 					)",
-	marc_tag_structure => "(
+    marc_tag_structure => "(
 					tagfield char(3) NOT NULL default '',
 					liblibrarian char(255) NOT NULL default '',
 					libopac char(255) NOT NULL default '',
@@ -171,7 +172,7 @@ my %requiretables=(
  					authorised_value char(10) default NULL,
 					PRIMARY KEY  (tagfield)
 					)",
-	marc_word => "(
+    marc_word => "(
 				bibid bigint(20) NOT NULL default '0',
 				tag char(3) NOT NULL default '',
 				tagorder tinyint(4) NOT NULL default '1',
@@ -187,7 +188,7 @@ my %requiretables=(
 				KEY word (word),
 				KEY sndx_word (sndx_word)
 			)",
-	marc_breeding =>"(  id bigint(20) NOT NULL auto_increment,
+    marc_breeding => "(  id bigint(20) NOT NULL auto_increment,
 				file varchar(80) NOT NULL default '',
 				isbn varchar(10) NOT NULL default '',
 				title varchar(128) default NULL,
@@ -198,55 +199,62 @@ my %requiretables=(
 				KEY title (title),
 				KEY isbn (isbn)
 			)",
-	authorised_values => "(id int(11) NOT NULL auto_increment,
+    authorised_values => "(id int(11) NOT NULL auto_increment,
 				category char(10) NOT NULL default '',
 				authorised_value char(80) NOT NULL default '',
 				lib char(80) NULL,
 				PRIMARY KEY  (id),
 				KEY name (category)
 			)",
-	userflags =>		"( bit int(11) NOT NULL default '0',
+    userflags => "( bit int(11) NOT NULL default '0',
 				flag char(30), flagdesc char(255),
 				defaulton int(11)
 			)",
 );
 
+my %requirefields = (
+    biblio        => { 'abstract' => 'text' },
+    deletedbiblio => { 'abstract' => 'text' },
+    biblioitems   => {
+        'lccn' => 'char(25)',
+        'url'  => 'varchar(255)',
+        'marc' => 'text'
+    },
+    deletedbiblioitems => {
+        'lccn' => 'char(25)',
+        'url'  => 'varchar(255)',
+        'marc' => 'text'
+    },
+    branchtransfers => { 'datearrived'    => 'datetime' },
+    statistics      => { 'borrowernumber' => 'int(11)' },
+    aqbooksellers   => {
+        'invoicedisc' => 'float(6,4)',
+        'nocalc'      => 'int(11)'
+    },
+    borrowers => {
+        'userid'        => 'char(30)',
+        'password'      => 'char(30)',
+        'flags'         => 'int(11)',
+        'textmessaging' => 'varchar(30)'
+    },
+    aqorders => { 'budgetdate' => 'date' },
 
-
-my %requirefields=(
-	biblio=>{ 'abstract' => 'text' },
-	deletedbiblio=>{ 'abstract' => 'text' },
-	biblioitems=>{ 'lccn' => 'char(25)',
-			'url' => 'varchar(255)',
-			'marc' => 'text' },
-	deletedbiblioitems=>{ 'lccn' => 'char(25)',
-			'url' => 'varchar(255)',
-			'marc' => 'text' },
-	branchtransfers=>{ 'datearrived' => 'datetime' },
-	statistics=>{'borrowernumber' =>'int(11)'},
-	aqbooksellers=>{'invoicedisc' =>'float(6,4)',
-						'nocalc' => 'int(11)'},
-	borrowers=>{'userid' => 'char(30)',
-					'password' => 'char(30)',
-					'flags' => 'int(11)'},
-	aqorders=>{'budgetdate' => 'date'},
-	#added so that reference items are not available for reserves...
-	itemtypes=>{'notforloan' => 'smallint(6)'},
-	systempreferences =>{'explanation' => 'char(80)'},
-	z3950servers =>{'syntax' => 'char(80)'},
+    #added so that reference items are not available for reserves...
+    itemtypes         => { 'notforloan'  => 'smallint(6)' },
+    systempreferences => { 'explanation' => 'char(80)' },
+    z3950servers      => { 'syntax'      => 'char(80)' },
 );
 
-my %dropable_table=(
-		    classification   =>'classification',
-		    multipart        =>'multipart',
-		    multivolume      =>'multivolume',
-		    newitems         =>'newitems',
-		    procedures       =>'procedures',
-		    publisher        =>'publisher',
-		    searchstats      =>'searchstats',
-		    serialissues     =>'serialissues',
-		    );
-
+my %dropable_table = (
+    classification => 'classification',
+    multipart      => 'multipart',
+    multivolume    => 'multivolume',
+    newitems       => 'newitems',
+    procedures     => 'procedures',
+    publisher      => 'publisher',
+    searchstats    => 'searchstats',
+    serialissues   => 'serialissues',
+);
 
 # The tabledata hash contains data that should be in the tables.
 # The uniquefieldrequired hash entry is used to determine which (if any) fields
@@ -254,54 +262,217 @@ my %dropable_table=(
 # uniquefieldrequired entry is already in the table, the existing data is not
 # modified.
 
-my %tabledata=(
+my %tabledata = (
     userflags => [
-    	{ uniquefieldrequired => 'bit', bit => 0, flag => 'superlibrarian', flagdesc => 'Access to all librarian functions', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 1, flag => 'circulate', flagdesc => 'Circulate books', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 2, flag => 'catalogue', flagdesc => 'View Catalogue (Librarian Interface)', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 3, flag => 'parameters', flagdesc => 'Set Koha system paramters', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 4, flag => 'borrowers', flagdesc => 'Add or modify borrowers', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 5, flag => 'permissions', flagdesc => 'Set user permissions', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 6, flag => 'reserveforothers', flagdesc => 'Reserve books for patrons', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 7, flag => 'borrow', flagdesc => 'Borrow books', defaulton => 1 },
-    	{ uniquefieldrequired => 'bit', bit => 8, flag => 'reserveforself', flagdesc => 'Reserve books for self', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 9, flag => 'editcatalogue', flagdesc => 'Edit Catalogue (Modify bibliographic/holdings data)', defaulton => 0 },
-    	{ uniquefieldrequired => 'bit', bit => 10, flag => 'updatecharges', flagdesc => 'Update borrower charges', defaulton => 0 },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 0,
+            flag                => 'superlibrarian',
+            flagdesc            => 'Access to all librarian functions',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 1,
+            flag                => 'circulate',
+            flagdesc            => 'Circulate books',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 2,
+            flag                => 'catalogue',
+            flagdesc            => 'View Catalogue (Librarian Interface)',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 3,
+            flag                => 'parameters',
+            flagdesc            => 'Set Koha system paramters',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 4,
+            flag                => 'borrowers',
+            flagdesc            => 'Add or modify borrowers',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 5,
+            flag                => 'permissions',
+            flagdesc            => 'Set user permissions',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 6,
+            flag                => 'reserveforothers',
+            flagdesc            => 'Reserve books for patrons',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 7,
+            flag                => 'borrow',
+            flagdesc            => 'Borrow books',
+            defaulton           => 1
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 8,
+            flag                => 'reserveforself',
+            flagdesc            => 'Reserve books for self',
+            defaulton           => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 9,
+            flag                => 'editcatalogue',
+            flagdesc  => 'Edit Catalogue (Modify bibliographic/holdings data)',
+            defaulton => 0
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => 10,
+            flag                => 'updatecharges',
+            flagdesc            => 'Update borrower charges',
+            defaulton           => 0
+        },
     ],
     systempreferences => [
-    	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
-    	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple', explanation => 'normal or simple : whether to use "acqui" or "acqui.simple" acquisition system' },
-    	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'metric', explanation => 'metric, us, or iso' },
-    	{ uniquefieldrequired => 'variable', variable => 'template', value => 'default', explanation => 'template default name' },
-    	{ uniquefieldrequired => 'variable', variable => 'autoBarcode', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
-    	{ uniquefieldrequired => 'variable', variable => 'insecure', value => 'NO', explanation => 'if YES, no auth at all is needed. Be careful if you set this to yes !' },
-    	{ uniquefieldrequired => 'variable', variable => 'authoritysep', value => '--', explanation => 'the separator used in authority/thesaurus. Usually --' },
-    	{ uniquefieldrequired => 'variable', variable => 'opaclanguages', value => 'en', explanation => 'languages' },
-    	{ uniquefieldrequired => 'variable', variable => 'opacthemes', value => 'default', explanation => 'theme' },
-    	{ uniquefieldrequired => 'variable', variable => 'timeout', value => '12000000', explanation => 'login timeout' },
-    	{ uniquefieldrequired => 'variable', variable => 'marc', value => 'ON', explanation => 'MARC support (ON or OFF)' },
-    	{ uniquefieldrequired => 'variable', variable => 'marcflavour', value => 'MARC21', explanation => 'your MARC flavor (MARC21 or UNIMARC) used for character encoding' },
-    	{ uniquefieldrequired => 'variable', variable => 'checkdigit', value => 'katipo', explanation => 'none= no check on member cardnumber. katipo= katipo check' },
-    	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'ISO', explanation => 'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd) ' },
-    	{ uniquefieldrequired => 'variable', variable => 'KohaAdminEmailAddress', value => 'your.mail@here', explanation => 'the email adress where borrowers modifs are sent' },
-   ],
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'autoMemberNum',
+            value               => '1',
+            explanation         => '1 or else. If 1, Barcode is auto-calculated'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'acquisitions',
+            value               => 'simple',
+            explanation         =>
+'normal or simple : whether to use "acqui" or "acqui.simple" acquisition system'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'dateformat',
+            value               => 'metric',
+            explanation         => 'metric, us, or iso'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'template',
+            value               => 'default',
+            explanation         => 'template default name'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'autoBarcode',
+            value               => '1',
+            explanation         => '1 or else. If 1, Barcode is auto-calculated'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'insecure',
+            value               => 'NO',
+            explanation         =>
+'if YES, no auth at all is needed. Be careful if you set this to yes !'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'authoritysep',
+            value               => '--',
+            explanation         =>
+            'the separator used in authority/thesaurus. Usually --'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opaclanguages',
+            value               => 'en',
+            explanation         => 'languages'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opacthemes',
+            value               => 'default',
+            explanation         => 'theme'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'timeout',
+            value               => '12000000',
+            explanation         => 'login timeout'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'marc',
+            value               => 'ON',
+            explanation         => 'MARC support (ON or OFF)'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'marcflavour',
+            value               => 'MARC21',
+            explanation         =>
+            'your MARC flavor (MARC21 or UNIMARC) used for character encoding'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'checkdigit',
+            value               => 'katipo',
+            explanation         =>
+            'none= no check on member cardnumber. katipo= katipo check'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'dateformat',
+            value               => 'ISO',
+            explanation         =>
+            'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd) '
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'KohaAdminEmailAddress',
+            value               => 'your.mail@here',
+            explanation => 'the email adress where borrowers modifs are sent'
+        },
+    ],
 
 );
 
-
-my %fielddefinitions=(
-printers => [
-	{ field => 'printername', type => 'char(40)', null => '', key => 'PRI', default => '' },
-	],
-aqbookfund => [
-	{ field => 'bookfundid', type => 'char(5)', null => '', key => 'PRI', default => '' },
-	],
-z3950servers => [
-	{ field => 'id', type => 'int', null => '', key => 'PRI', default => '', extra => 'auto_increment' },
-	],
+my %fielddefinitions = (
+    printers => [
+        {
+            field   => 'printername',
+            type    => 'char(40)',
+            null    => '',
+            key     => 'PRI',
+            default => ''
+        },
+    ],
+    aqbookfund => [
+        {
+            field   => 'bookfundid',
+            type    => 'char(5)',
+            null    => '',
+            key     => 'PRI',
+            default => ''
+        },
+    ],
+    z3950servers => [
+        {
+            field   => 'id',
+            type    => 'int',
+            null    => '',
+            key     => 'PRI',
+            default => '',
+            extra   => 'auto_increment'
+        },
+    ],
 );
-
-
 
 #-------------------
 # Initialize
@@ -309,51 +480,50 @@ z3950servers => [
 # Start checking
 
 # Get version of MySQL database engine.
-my $mysqlversion=`mysqld --version`;
-$mysqlversion=~/Ver (\S*) /;
-$mysqlversion=$1;
-if ($mysqlversion ge '3.23') {
-	print "Could convert to MyISAM database tables...\n";
+my $mysqlversion = `mysqld --version`;
+$mysqlversion =~ /Ver (\S*) /;
+$mysqlversion = $1;
+if ( $mysqlversion ge '3.23' ) {
+    print "Could convert to MyISAM database tables...\n";
 }
 
 #---------------------------------
 # Tables
 
 # Collect all tables into a list
-$sth=$dbh->prepare("show tables");
+$sth = $dbh->prepare("show tables");
 $sth->execute;
-while (my ($table) = $sth->fetchrow) {
-    $existingtables{$table}=1;
+while ( my ($table) = $sth->fetchrow ) {
+    $existingtables{$table} = 1;
 }
 
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
-	print "Checking $table table...\n" if $debug;
-	unless ($existingtables{$table} ) {
-		print "Adding $table table...\n";
-		my $sth=$dbh->prepare(
-			"create table $table $requiretables{$table}" );
-		$sth->execute;
-		if ($sth->err) {
-				print "Error : $sth->errstr \n";
-				$sth->finish;
-		} # if error
-	} # unless exists
-} # foreach
+    print "Checking $table table...\n" if $debug;
+    unless ( $existingtables{$table} ) {
+        print "Adding $table table...\n";
+        my $sth = $dbh->prepare("create table $table $requiretables{$table}");
+        $sth->execute;
+        if ( $sth->err ) {
+            print "Error : $sth->errstr \n";
+            $sth->finish;
+        }    # if error
+    }    # unless exists
+}    # foreach
 
 # now drop useless tables
-foreach $table ( keys %dropable_table) {
-	print "Dropping unused tables...\n" if $debug;
-	if ($existingtables{$table} ) {
-		$dbh->do("drop table $table");
-		if ($dbh->err) {
-		print "Error : $dbh->errstr \n";
-		}
-	}
+foreach $table ( keys %dropable_table ) {
+    print "Dropping unused tables...\n" if $debug;
+    if ( $existingtables{$table} ) {
+        $dbh->do("drop table $table");
+        if ( $dbh->err ) {
+            print "Error : $dbh->errstr \n";
+        }
+    }
 }
-unless ($existingtables{'z3950servers'}) {
-	print "Adding z3950servers table...\n";
-	my $sti=$dbh->prepare("create table z3950servers (
+unless ( $existingtables{'z3950servers'} ) {
+    print "Adding z3950servers table...\n";
+    my $sti = $dbh->prepare( "create table z3950servers (
 										host char(255),
 										port int,
 										db char(255),
@@ -362,185 +532,223 @@ unless ($existingtables{'z3950servers'}) {
 										name text,
 										id int,
 										checked smallint,
-										rank int)");
-	$sti->execute;
-	$sti=$dbh->prepare("insert into z3950servers
+										rank int)"
+    );
+    $sti->execute;
+    $sti = $dbh->prepare( "insert into z3950servers
 								values ('z3950.loc.gov',
 								7090,
 								'voyager',
 								'', '',
 								'Library of Congress',
-								1, 1, 1)");
-	$sti->execute;
+								1, 1, 1)"
+    );
+    $sti->execute;
 }
 
 #---------------------------------
 # Columns
 
 foreach $table ( keys %requirefields ) {
-	print "Check table $table\n" if $debug;
-	$sth=$dbh->prepare("show columns from $table");
-	$sth->execute();
-	undef %types;
-	while ( ($column, $type, $null, $key, $default, $extra)
-			= $sth->fetchrow) {
-		$types{$column}=$type;
-	} # while
-	foreach $column ( keys %{ $requirefields{$table} } )  {
-		print "  Check column $column\n" if $debug;
-		if ( ! $types{$column} ) {
-		# column doesn't exist
-		print "Adding $column field to $table table...\n";
-		$query="alter table $table
-			add column $column " . $requirefields{$table}->{$column} ;
-		print "Execute: $query\n" if $debug;
-		my $sti=$dbh->prepare($query);
-		$sti->execute;
-			if ($sti->err) {
-					print "**Error : $sti->errstr \n";
-					$sti->finish;
-			} # if error
-		} # if column
-	} # foreach column
-} # foreach table
+    print "Check table $table\n" if $debug;
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute();
+    undef %types;
+    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+    {
+        $types{$column} = $type;
+    }    # while
+    foreach $column ( keys %{ $requirefields{$table} } ) {
+        print "  Check column $column\n" if $debug;
+        if ( !$types{$column} ) {
+
+            # column doesn't exist
+            print "Adding $column field to $table table...\n";
+            $query = "alter table $table
+			add column $column " . $requirefields{$table}->{$column};
+            print "Execute: $query\n" if $debug;
+            my $sti = $dbh->prepare($query);
+            $sti->execute;
+            if ( $sti->err ) {
+                print "**Error : $sti->errstr \n";
+                $sti->finish;
+            }    # if error
+        }    # if column
+    }    # foreach column
+}    # foreach table
 
 foreach $table ( keys %fielddefinitions ) {
     print "Check table $table\n" if $debug;
-    $sth=$dbh->prepare("show columns from $table");
+    $sth = $dbh->prepare("show columns from $table");
     $sth->execute();
     my $definitions;
-    while ( ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-	$definitions->{$column}->{type}=$type;
-	$definitions->{$column}->{null}=$null;
-	$definitions->{$column}->{key}=$key;
-	$definitions->{$column}->{default}=$default;
-	$definitions->{$column}->{extra}=$extra;
-    } # while 
-    my $fieldrow=$fielddefinitions{$table};
-    foreach my $row ( @$fieldrow )  {
-	my $field = $row->{field};
-	my $type = $row->{type};
-	my $null = $row->{null};
-	my $key = $row->{key};
-	my $default = $row->{default};
-	my $extra = $row->{extra};
-	my $def=$definitions->{$field};
-	unless ($type eq $def->{type} && $null eq $def->{null} && $key eq $def->{key} && $default eq $def->{default} && $extra eq $def->{extra}) {
-	    if ($null eq '') {
-		$null='NOT NULL';
-	    }
-	    if ($key eq 'PRI') {
-		$key ='PRIMARY KEY';
-	    }
-	    unless ($extra eq 'auto_increment') {
-		$extra='';
-	    }
-	    my $sth=$dbh->prepare("alter table $table change $field $field $type $null $key $extra default ?");
-	    $sth->execute($default);
-	    print "  Alter $field in $table\n";
-	}
+    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+    {
+        $definitions->{$column}->{type}    = $type;
+        $definitions->{$column}->{null}    = $null;
+        $definitions->{$column}->{key}     = $key;
+        $definitions->{$column}->{default} = $default;
+        $definitions->{$column}->{extra}   = $extra;
+    }    # while
+    my $fieldrow = $fielddefinitions{$table};
+    foreach my $row (@$fieldrow) {
+        my $field   = $row->{field};
+        my $type    = $row->{type};
+        my $null    = $row->{null};
+        my $key     = $row->{key};
+        my $default = $row->{default};
+        my $extra   = $row->{extra};
+        my $def     = $definitions->{$field};
+        unless ( $type eq $def->{type}
+            && $null eq $def->{null}
+            && $key eq $def->{key}
+            && $default eq $def->{default}
+            && $extra eq $def->{extra} )
+        {
+
+            if ( $null eq '' ) {
+                $null = 'NOT NULL';
+            }
+            if ( $key eq 'PRI' ) {
+                $key = 'PRIMARY KEY';
+            }
+            unless ( $extra eq 'auto_increment' ) {
+                $extra = '';
+            }
+            my $sth =
+              $dbh->prepare(
+"alter table $table change $field $field $type $null $key $extra default ?"
+            );
+            $sth->execute($default);
+            print "  Alter $field in $table\n";
+        }
     }
 }
 
 # Get list of columns from items table
 my %itemtypes;
 
-$sth=$dbh->prepare("show columns from items");
+$sth = $dbh->prepare("show columns from items");
 $sth->execute;
-while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-	$itemtypes{$column}=$type;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $itemtypes{$column} = $type;
 }
 
-unless ($itemtypes{'barcode'} eq 'varchar(20)') {
-	$itemtypes{'barcode'}=~/varchar\((\d+)\)/;
-	my $oldlength=$1;
-	if ($oldlength<20) {
-		print "Setting maximum barcode length to 20 (was $oldlength).\n";
-		my $sti=$dbh->prepare("alter table items change barcode barcode varchar(20) not null");
-		$sti->execute;
-	}
+unless ( $itemtypes{'barcode'} eq 'varchar(20)' ) {
+    $itemtypes{'barcode'} =~ /varchar\((\d+)\)/;
+    my $oldlength = $1;
+    if ( $oldlength < 20 ) {
+        print "Setting maximum barcode length to 20 (was $oldlength).\n";
+        my $sti =
+          $dbh->prepare(
+            "alter table items change barcode barcode varchar(20) not null");
+        $sti->execute;
+    }
 }
 
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
 
-$sth=$dbh->prepare("show columns from branchtransfers");
+$sth = $dbh->prepare("show columns from branchtransfers");
 $sth->execute;
-while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-    $branchtransfers{$column}=$type;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $branchtransfers{$column} = $type;
 }
 
-unless ($branchtransfers{'datesent'} eq 'datetime') {
+unless ( $branchtransfers{'datesent'} eq 'datetime' ) {
     print "Setting type of datesent in branchtransfers to datetime.\n";
-    my $sti=$dbh->prepare("alter table branchtransfers change datesent datesent datetime");
+    my $sti =
+      $dbh->prepare(
+        "alter table branchtransfers change datesent datesent datetime");
     $sti->execute;
 }
 
-unless ($branchtransfers{'datearrived'} eq 'datetime') {
+unless ( $branchtransfers{'datearrived'} eq 'datetime' ) {
     print "Setting type of datearrived in branchtransfers to datetime.\n";
-    my $sti=$dbh->prepare("alter table branchtransfers change datearrived datearrived datetime");
+    my $sti =
+      $dbh->prepare(
+        "alter table branchtransfers change datearrived datearrived datetime");
     $sti->execute;
 }
 
 # changing the branchcategories table around...
 my %branchcategories;
 
-$sth=$dbh->prepare("show columns from branchcategories");
+$sth = $dbh->prepare("show columns from branchcategories");
 $sth->execute;
-while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-	$branchcategories{$column}=$type;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $branchcategories{$column} = $type;
 }
 
-unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
-	print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
-	my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
-	$sti->execute;
-	$sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
-	$sti->execute;
+unless ( $branchcategories{'categorycode'} eq 'varchar(4)' ) {
+    print
+"Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
+    my $sti =
+      $dbh->prepare(
+"alter table branchcategories change categorycode categorycode varchar(4) not null"
+    );
+    $sti->execute;
+    $sti =
+      $dbh->prepare(
+        "alter table branchcategories add primary key (categorycode)");
+    $sti->execute;
 }
 
-unless ($branchcategories{'categoryname'} eq 'text') {
-	print "Changing branchcode in branchcategories to categoryname text.\n";
-	my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
-	$sth->execute;
+unless ( $branchcategories{'categoryname'} eq 'text' ) {
+    print "Changing branchcode in branchcategories to categoryname text.\n";
+    my $sth =
+      $dbh->prepare(
+        "alter table branchcategories change branchcode categoryname text");
+    $sth->execute;
 }
 
-unless ($branchcategories{'codedescription'} eq 'text') {
-	print "Replacing branchholding in branchcategories with codedescription text.\n";
-	my $sth=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
-	$sth->execute;
+unless ( $branchcategories{'codedescription'} eq 'text' ) {
+    print
+"Replacing branchholding in branchcategories with codedescription text.\n";
+    my $sth =
+      $dbh->prepare(
+        "alter table branchcategories change branchholding codedescription text"
+    );
+    $sth->execute;
 }
-
 
 # Populate tables with required data
- 
-foreach my $table (keys %tabledata) {
+
+foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n";
-    my $tablerows=$tabledata{$table};
+    my $tablerows = $tabledata{$table};
     foreach my $row (@$tablerows) {
-	my $uniquefieldrequired=$row->{uniquefieldrequired};
-	my $uniquevalue=$row->{$uniquefieldrequired};
-	my $sth=$dbh->prepare("select $uniquefieldrequired from $table where $uniquefieldrequired=?");
-	$sth->execute($uniquevalue);
-	unless ($sth->rows) {
-	    print "Adding row to $table: ";
-	    my @values;
-	    my $fieldlist;
-	    my $placeholders;
-	    foreach my $field (keys %$row) {
-		(next) if ($field eq 'uniquefieldrequired');
-		my $value=$row->{$field};
-		push @values, $value;
-		print "  $field => $value";
-		$fieldlist.="$field,";
-		$placeholders.="?,";
-	    }
-	    print "\n";
-	    $fieldlist=~s/,$//;
-	    $placeholders=~s/,$//;
-	    my $sth=$dbh->prepare("insert into $table ($fieldlist) values ($placeholders)");
-	    $sth->execute(@values);
-	}
+        my $uniquefieldrequired = $row->{uniquefieldrequired};
+        my $uniquevalue         = $row->{$uniquefieldrequired};
+        my $sth                 =
+          $dbh->prepare(
+"select $uniquefieldrequired from $table where $uniquefieldrequired=?"
+        );
+        $sth->execute($uniquevalue);
+        unless ( $sth->rows ) {
+            print "Adding row to $table: ";
+            my @values;
+            my $fieldlist;
+            my $placeholders;
+            foreach my $field ( keys %$row ) {
+                (next) if ( $field eq 'uniquefieldrequired' );
+                my $value = $row->{$field};
+                push @values, $value;
+                print "  $field => $value";
+                $fieldlist .= "$field,";
+                $placeholders .= "?,";
+            }
+            print "\n";
+            $fieldlist    =~ s/,$//;
+            $placeholders =~ s/,$//;
+            my $sth =
+              $dbh->prepare(
+                "insert into $table ($fieldlist) values ($placeholders)");
+            $sth->execute(@values);
+        }
     }
 }
 
@@ -549,6 +757,13 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.43  2003/05/02 23:01:09  rangi
+# Adding the textmessaging column to the borrowers table.
+# insertdata.pl is expecting this to exist, and hence modifying/adding
+# borrowers was broken.
+#
+# Also ran they script thru perltidy
+#
 # Revision 1.42  2003/04/29 16:53:25  tipaul
 # really proud of this commit :-)
 # z3950 search and import seems to works fine.
