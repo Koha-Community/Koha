@@ -30,7 +30,7 @@ my %strhash = ();
 
 # Checks for missing input and string list arguments
 
-if( !defined(@in_files) || !defined($str_file) )
+if( !@in_files || !defined($str_file) )
 {
 	usage("You must at least specify input and string list filenames.");
 }
