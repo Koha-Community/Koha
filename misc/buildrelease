@@ -117,7 +117,6 @@ while (<CVSLOG>) {
     }
 }
 
-
 my $releaseversion='';
 my $currentversion='';
 
@@ -245,9 +244,6 @@ Tagging koha with tag R_$tagname
 # MOVE files to /tmp and build tar.gz
 #----------------------------------------------------------
 
-
-
-
 my $rootdir="/tmp/koha-".$releaseversion;
 system("rm -rf $rootdir");
 mkdir ($rootdir, 0700);
@@ -325,6 +321,9 @@ system("find $rootdir/intranet-cgi -name '*.pl' -exec chmod a+x \\{\\} \\;");
 # FIXME: "cp -a" is GNU-ism. It is not portable.
 system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/opac-tmpl", "$rootdir/opac-html");
 system('cp', '-a', "$rootdir/intranet-cgi/koha-tmpl/intranet-tmpl", "$rootdir/intranet-html");
+#copy index files (they are just redirections to main.pl)
+system("cp $rootdir/intranet-cgi/koha-tmpl/opac.html","$rootdir/opac-html/index.html");
+system("cp $rootdir/intranet-cgi/koha-tmpl/intranet.html","$rootdir/intranet-html/index.html");
 system('rm', '-rf', "$rootdir/intranet-cgi/koha-tmpl");
 
 # Remove extraneous files from opac-html
