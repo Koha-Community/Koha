@@ -357,6 +357,37 @@ UPDATING APACHE.CONF
 ====================
 
 |;
+
+
+print "Checking for modules that need to be loaded...\n";
+my $httpdconf='';
+my $envmodule=0;
+my $includesmodule=0;
+open HC, $realhttpdconf;
+while (<HC>) {
+    if (/^\s*#\s*LoadModule env_module /) {
+	s/^\s*#\s*//;
+	print "  Loading env_module in httpd.conf\n";
+	$envmodule=1;
+    }
+    if (/^\s*#\s*LoadModule includes_module /) {
+	s/^\s*#\s*//;
+	print "  Loading includes_module in httpd.conf\n";
+    }
+    if (/\s*LoadModule includes_module ) {
+	$includesmodule=1;
+    }
+    $httpdconf.=$_;
+}
+
+if ($envmodule || $includesmodule) {
+    system("mv -f $realhttpdconf $realhttpdconf\.prekoha");
+    open HC, ">$realhttpdconf";
+    print HC $httpdconf;
+    close HC;
+}
+
+
 if (`grep 'VirtualHost $servername' $realhttpdconf`) {
     print qq|
 $realhttpdconf appears to already have an entry for Koha
@@ -370,6 +401,11 @@ configuration.
     <STDIN>;
     print "\n";
 } else {
+    my $includesdirectives='';
+    if ($includesmodule) {
+	$includesdirectives.="Options +Includes\n";
+	$includesdirectives.="AddHandler server-parsed .html\n";
+    }
     open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
     print SITE <<EOP
 
@@ -391,6 +427,7 @@ Listen $kohaport
    ErrorLog $logfiledir/opac-error_log
    TransferLog $logfiledir/opac-access_log
    SetEnv PERL5LIB "$kohadir/modules"
+   $includesdirectives
 </VirtualHost>
 
 # KOHA's INTRANET Configuration
@@ -402,6 +439,7 @@ Listen $kohaport
    ErrorLog $logfiledir/koha-error_log
    TransferLog $logfiledir/koha-access_log
    SetEnv PERL5LIB "$kohadir/modules"
+   $includesdirectives
 </VirtualHost>
 
 # If you want to use name based Virtual Hosting:
@@ -614,6 +652,15 @@ COMPLETED
 =========
 Congratulations ... your Koha installation is almost complete!
 The final step is to restart your webserver.
+
+You will be able to connect to your Librarian interface at:
+
+   http://$servername\:$kohaport/
+
+and the OPAC interface at :
+
+   http://$servername\:$opacport/
+
 
 Be sure to read the INSTALL, and Hints files. 
 
