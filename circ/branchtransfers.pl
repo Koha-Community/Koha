@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# WARNING: This file uses 4-character tabs!
 
 #written 11/3/2002 by Finlay
 #script to execute branch transfers of books
@@ -27,6 +28,7 @@ use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Reserves2;
 use C4::Auth;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 ###############################################
@@ -289,3 +291,7 @@ sub name {
 	my ($borinfo) = @_;
 	return $borinfo->{'surname'}." ".$borinfo->{'title'}." ".$borinfo->{'firstname'};
 }
+
+# Local Variables:
+# tab-width: 4
+# End:
