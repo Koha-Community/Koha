@@ -201,7 +201,7 @@ sub editbranchform {
 	my $checked = "";
 	my $tmp = quotemeta($cat->{'categorycode'});
 	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
-		$checked = "CHECKED";
+		$checked = "checked=\"checked\"";
 	}
 	push @categoryloop, {
 		categoryname    => $cat->{'categoryname'},
