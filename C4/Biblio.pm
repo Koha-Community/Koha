@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.58  2003/08/06 12:54:52  tipaul
+# fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
+# (note that copyrightdate still extracted to get numeric format)
+#
 # Revision 1.57  2003/07/15 23:09:18  slef
 # change show columns to use biblioitems bnotes too
 #
@@ -1119,6 +1123,15 @@ sub MARCmarc2koha {
 	} else { # if no cYYYY, get the 1st date.
 		$temp =~ m/(\d\d\d\d)/;
 		$result->{'copyrightdate'} = $1;
+	}
+# modify publicationyear to keep only the 1st year found
+	my $temp = $result->{'publicationyear'};
+	$temp =~ m/c(\d\d\d\d)/; # search cYYYY first
+	if ($1>0) {
+		$result->{'publicationyear'} = $1;
+	} else { # if no cYYYY, get the 1st date.
+		$temp =~ m/(\d\d\d\d)/;
+		$result->{'publicationyear'} = $1;
 	}
 	return $result;
 }
