@@ -29,7 +29,7 @@ use C4::Context;
 use C4::Circulation::Issues;
 	# FIXME - C4::Circulation::Main and C4::Circulation::Issues
 	# use each other, so functions get redefined.
-use C4::Circulation::Returns;
+#use C4::Circulation::Returns;
 	# FIXME - C4::Circulation::Main and C4::Circulation::Returns
 	# use each other, so functions get redefined.
 use C4::Circulation::Renewals;
