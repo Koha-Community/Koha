@@ -58,7 +58,8 @@ if ($sth->rows) {
     }
 }
 
-$dbh->do("delete from sessions where sessionID=?", $sessionID);
+my $sth=$dbh->prepare("delete from sessions where sessionID=?");
+$sth->execute($sessionID);
 open L, ">>/tmp/sessionlog";
 my $time=localtime(time());
 printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, $time;
