@@ -490,10 +490,10 @@ sub next_token {
 		$it = TmplToken->new($string, TmplTokenType::TEXT_PARAMETRIZED, $it->line_number, $it->pathname);
 		$it->set_form( $form );
 		$it->set_children( @structure );
-#	    } elsif ($nonblank_text_p) {
-#		# Combine the strings
-#		my $string = join('', map { $_->string } @structure);
-#		;
+	    } elsif ($nonblank_text_p && $structure[0]->type == TmplTokenType::TEXT && $structure[$#structure]->type == TmplTokenType::TEXT) {
+		# Combine the strings
+		my $string = join('', map { $_->string } @structure);
+		$it = TmplToken->new($string, TmplTokenType::TEXT, $it->line_number, $it->pathname);;
 	    } else {
 		# Requeue the tokens thus seen for re-emitting
 		for (;;) {
