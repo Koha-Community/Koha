@@ -1121,7 +1121,7 @@ C<$env> is ignored.
 =cut
 #'
 sub subsearch {
-  my ($env,$subject)=@_;
+  my ($env,$subject, $num, $offset)=@_;
   my $dbh=C4Connect();
   $subject=$dbh->quote($subject);
   my $query="Select * from biblio,biblioitems,bibliosubject where
@@ -1134,6 +1134,7 @@ sub subsearch {
   my @results;
   while (my $data=$sth->fetchrow_hashref){
     #$results[$i]="$data->{'title'}\t$data->{'author'}\t$data->{'biblionumber'}";
+    next unless ($i > $offset || $i < ($num+$offset));
     my $dewey= $data->{'dewey'};                
     my $subclass=$data->{'subclass'};          
     $dewey=~s/\.*0*$//;           
@@ -2280,27 +2281,25 @@ The returned items include very overdue items, but not lost ones.
 =cut
 #'
 sub barcodes{
-  #called from request.pl
-  my ($biblioitemnumber)=@_;
-  my $dbh=C4Connect;
-  my $query="Select barcode from items where
-   biblioitemnumber='$biblioitemnumber'
-   and ((itemlost <> 1 and itemlost <> 2) or itemlost is NULL) and
-   (wthdrawn <> 1 or wthdrawn is NULL)";
-
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @barcodes;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $barcodes[$i]=$data->{'barcode'};
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return(@barcodes);
-  
+    #called from request.pl
+    my ($biblioitemnumber)=@_;
+    my $dbh=C4Connect;
+    my $query="SELECT barcode, itemlost, holdingbranch FROM items
+                           WHERE biblioitemnumber = ?
+                             AND (wthdrawn <> 1 OR wthdrawn IS NULL)";
+    my $sth=$dbh->prepare($query);
+    $sth->execute($biblioitemnumber);
+    my @barcodes;
+    my $i=0;
+    while (my $data=$sth->fetchrow_hashref){
+	$barcodes[$i]=$data;
+	$i++;
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return(@barcodes);
 }
+
 
 =item getwebsites
 
