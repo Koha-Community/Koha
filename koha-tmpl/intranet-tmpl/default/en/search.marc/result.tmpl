@@ -41,15 +41,11 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 			<tr>
-				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<p>
-						<p>
+				<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 							<!-- TMPL_IF name="MARC_ON" -->
-								<b><a class="transparent" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
 							<!-- TMPL_ELSE -->
-								<b><a class="transparent" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
-							<!-- /TMPL_IF -->
-						</p>
+								<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
 						<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
