@@ -410,7 +410,7 @@ to $mode or not. (This is the behaviour of the mkdir -p command.)
 
 =cut
 
-sub mkdir_parents ($;$) {
+sub mkdir_parents {
     my($path, $mode) = @_;
     my $ok = -d($path)? 1: defined $mode? mkdir($path, $mode): mkdir($path);
 
