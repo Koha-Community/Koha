@@ -1,0 +1,86 @@
+<!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/marc-editor.css">
+<div class="tabbed">
+	<h1 class="authority">Authority number : <!-- TMPL_VAR NAME="authid" --></h1>
+	<a href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">
+		<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
+	</a>
+	<a href="javascript:confirm_deletion()">
+		<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
+	</a>
+	<a href="javascript:Dopop('detailprint.pl?authid=<!-- TMPL_VAR NAME="authid" -->&index=<!-- TMPL_VAR NAME="index" -->')" class="button authority">
+		Print
+	</a>
+	<a href="javascript:CopyValues()">	<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/arrow.gif" height="45" width="45" ">
+
+	</a>
+</div>
+<br><br><br>
+<div name="0XX" id="0XX" class="tab" style="visibility:visible">
+	<!-- TMPL_LOOP NAME="0XX" -->
+			<p class="MARCtag">
+				<!-- TMPL_VAR NAME="tag" -->
+			</p>
+		<!-- TMPL_LOOP NAME="subfield" -->
+			<p>
+				<label class="labelsubfield">
+				<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15">
+				</a>
+				<!-- TMPL_VAR NAME="marc_subfield" -->
+				<!-- TMPL_VAR NAME="marc_lib" --></label>
+				<!-- TMPL_VAR NAME="marc_value" -->
+			</p>
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+</div>
+	
+<script language="JavaScript" type="text/javascript">
+
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+	if (is_confirmed) {
+		window.location="acqui.simple/addbiblio.pl?op=delete&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->";
+	}
+}
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+function CopyValues()
+{
+var index_start = <!-- TMPL_VAR NAME="index" -->;
+opener.opener.document.f.field_value[index_start].value = '<!-- TMPL_VAR NAME="authid">';
+var whichfield = opener.opener.document.f.tag[index_start].value;
+for (i=index_start ; i<opener.opener.document.f.field_value.length ; i++) {
+
+if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') 
+	{
+		opener.opener.document.f.field_value[i].value = '<!-- TMPL_VAR NAME="authid">';
+	}
+
+}
+
+
+<!-- TMPL_LOOP NAME="0XX" -->
+   <!-- TMPL_LOOP NAME="subfield" -->
+for (i=index_start ; i<opener.opener.document.f.field_value.length ; i++) {
+
+if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '<!-- TMPL_VAR NAME="marc_subfield" -->') 
+	{
+		opener.opener.document.f.field_value[i].value = '<!-- TMPL_VAR NAME="marc_value" -->';
+	}
+
+}
+	
+   <!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP -->
+	opener.close();
+	self.close();
+	return false;
+	
+}
+
+</script>
+</body>
+</html>

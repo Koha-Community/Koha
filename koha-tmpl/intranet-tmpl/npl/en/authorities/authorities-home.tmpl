@@ -1,0 +1,37 @@
+    <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="authority">Authority search</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div id="bloc25">
+		<h2 class="authority">Search on</h2>
+		<p>
+			<label class="label100">Authority type</label>
+			<select name="authtypecode">
+			<!-- TMPL_LOOP NAME="authtypesloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="authtypetext" -->
+				</option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</p>
+		<p>
+			<label class="label100">Search value</label>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+		</p>
+		<p>
+			<input type="submit" value="Start search" class="button authority">
+		</p>
+	</div>
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
+

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<body>
+<script language="JavaScript" type="text/javascript">
+
+function go()
+{
+var index_start = <!-- TMPL_VAR NAME="index" -->;
+var whichfield = opener.opener.document.f.tag[index_start].value;
+i=index_start
+// go forward, until reaching the end of the field.
+while (i<=opener.opener.document.f.field_value.length) {
+	if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
+		opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="authid">";
+	}
+	<!-- TMPL_LOOP NAME="0XX" -->
+		<!-- TMPL_LOOP NAME="subfield" -->
+			if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '<!-- TMPL_VAR NAME="marc_subfield" -->') 
+			{
+				opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="marc_value" -->";
+			}
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+	if (opener.opener.document.f.tag[i].value != whichfield) {
+		i=opener.opener.document.f.field_value.length;
+	}
+	i++;
+}
+// go backward until the beginning of the field
+i=index_start
+while (i>=0) {
+	if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
+		opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="authid">";
+	}
+	<!-- TMPL_LOOP NAME="0XX" -->
+		<!-- TMPL_LOOP NAME="subfield" -->
+			if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '<!-- TMPL_VAR NAME="marc_subfield" -->') 
+			{
+				opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="marc_value" -->";
+			}
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+	if (opener.opener.document.f.tag[i].value != whichfield) {
+		i=0;
+	}
+	i--;
+}
+	opener.close();
+	self.close();
+	return false;
+
+
+}
+</script>
+<script language="javascript" type="text/javascript">
+window.onload = go();
+</script>
+</body>
+</html>
