@@ -49,18 +49,36 @@ function Dopop(link) {
 
 function CopyValues()
 {
-var val = 0;
+var index_start = <!-- TMPL_VAR name="index" -->;
+opener.opener.document.f.field_value[index_start].value = '<!-- TMPL_VAR name="authid">';
+var whichfield = opener.opener.document.f.tag[index_start].value;
+for (i=index_start ; i<opener.opener.document.f.field_value.length ; i++) {
 
-	opener.opener.document.f.field_value[<!-- TMPL_VAR name="index" --> - 2].value = '<!-- TMPL_VAR name="authid" -->';
-	<!-- TMPL_LOOP name="0XX" -->
-		<!-- TMPL_LOOP name="subfield" -->
-	opener.opener.document.f.field_value[<!-- TMPL_VAR name="index" --> + val].value = '<!-- TMPL_VAR name="marc_value" -->';
-	val += 1;
-		<!-- /TMPL_LOOP -->
-	<!-- /TMPL_LOOP -->
+if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') 
+	{
+		opener.opener.document.f.field_value[i].value = '<!-- TMPL_VAR name="authid">';
+	}
+
+}
+
+
+<!-- TMPL_LOOP name="0XX" -->
+   <!-- TMPL_LOOP name="subfield" -->
+for (i=index_start ; i<opener.opener.document.f.field_value.length ; i++) {
+
+if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '<!-- TMPL_VAR name="marc_subfield" -->') 
+	{
+		opener.opener.document.f.field_value[i].value = '<!-- TMPL_VAR name="marc_value" -->';
+	}
+
+}
+	
+   <!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP -->
 	opener.close();
 	self.close();
 	return false;
+	
 }
 
 </script>

@@ -164,6 +164,7 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
+		warn "ATTENTION ---+--- $data->{'link'}";
 		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield' value='".$data->{'tagsubfield'}."'>";
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});

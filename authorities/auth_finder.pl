@@ -37,6 +37,7 @@ my $query=new CGI;
 my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $index = $query->param('index');
+my $category = $query->param('category');
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
@@ -83,6 +84,7 @@ if ($op eq "do_search") {
 				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
+
 	# multi page display gestion
 	my $displaynext=0;
 	my $displayprev=$startfrom;
@@ -131,7 +133,6 @@ if ($op eq "do_search") {
 	}
 	$template->param(result => $results) if $results;
 	$template->param(index => $query->param('index'));
-	warn "ici query $index  $query->param('resultsperpage')" ;
 	$template->param(startfrom=> $startfrom,
 							displaynext=> $displaynext,
 							displayprev=> $displayprev,
@@ -146,7 +147,6 @@ if ($op eq "do_search") {
 							numbers=>\@numbers,
 							);
 } else {
-	warn "Je suis la de base $index\n";
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/auth_finder.tmpl",
 				query => $query,
@@ -160,6 +160,7 @@ if ($op eq "do_search") {
 }
 
 $template->param(authtypesloop => \@authtypesloop);
+$template->param(category => $category);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
