@@ -1,0 +1,316 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+<STYLE TYPE="text/css" MEDIA=screen>
+	table {	font-family:Arial;
+	font-weight:normal;	
+	text-decoration:none;
+	font-size:12pt;}
+</STYLE>
+
+<form method="post" name="f">
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>MARC biblio : <TMPL_VAR name="bibid"></th>
+</tr>
+<tr>
+	<td>
+	<table width=100% border=0 colspacing=0 cellpadding=0>
+	<tr>
+		<td width=9% align="center"><a href="javascript:active(0)"><div id="link0">0</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(1)"><div id="link1">1</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(2)"><div id="link2">2</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(3)"><div id="link3">3</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(4)"><div id="link4">4</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(5)"><div id="link5">5</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(6)"><div id="link6">6</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(7)"><div id="link7">7</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(8)"><div id="link8">8</div></a></td>
+		<td width=9% align="center"><a href="javascript:active(9)"><div id="link9">9</div></a></td>
+<<<<<<< addbiblio.tmpl
+		<td width=10% align="center"><input type="hidden" name="op" value="addbiblio"><input type="button" value=">>> artículos" onClick='Check(this.form)'></td>
+=======
+		<td width=10% align="center"><input type="hidden" name="op" value="addbiblio">
+												<input type="hidden" name="oldbiblionumber" value="<TMPL_VAR name="oldbiblionumber">">
+												<input type="button" value=">>> items" onClick='Check(this.form)'>
+		</td>
+>>>>>>> 1.4
+	</tr>
+	</table>
+	</td>
+</tr>
+</table>
+   <DIV name="0XX" id="0XX" style="position:absolute;left:40px;top:150px;visibility:visible;width:90%">
+    <table width=100%  cellspacing=0 cellpadding=2 border=0>
+	<TMPL_LOOP name="0XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</tmpl_loop>
+	</tmpl_loop>
+		</table>
+		</DIV>
+
+	<DIV name="1XX" id="1XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100%  cellspacing=0 cellpadding=5 border=0>
+	<TMPL_LOOP name="1XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+     </table>
+     </DIV>
+
+	<DIV name="2XX" id="2XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="2XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+       </tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="3XX" id="3XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="3XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><<TMPL_IF name="mandatory"></b></TMPL_IF>/td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+		</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="4XX" id="4XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100%  cellspacing=0 cellpadding=5 border=0>
+	<TMPL_LOOP name="4XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="5XX" id="5XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="5XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="6XX" id="6XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=90% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="6XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="7XX" id="7XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100%  cellspacing=0 cellpadding=5 border=0>
+	<TMPL_LOOP name="7XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="8XX" id="8XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="8XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="9XX" id="9XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=90% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="9XX">
+	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
+	<TMPL_LOOP name="subfield_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+
+	<DIV name="hidden" id="hidden" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
+	<table width=90% cellspacing=0 cellpadding=5  border=0>
+	<TMPL_LOOP name="hidden_loop">
+	<tr>
+		<td width="3%">&nbsp;</td>
+		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
+		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="40%">
+			<TMPL_VAR name="marc_value">
+			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
+			<input type="hidden" name="subfield" value="<TMPL_VAR name="subfield">">
+			<input type="hidden" name="mandatory" value="<TMPL_VAR name="mandatory">">
+		</td>
+	</tr>
+	</TMPL_LOOP>
+	</table>
+	</DIV>
+</form>
+
+
+<script LANGUAGE="JavaScript">
+function active(numlayer)
+{
+	for (i=0; i < 10 ; i++ ) {
+		ong = i+"XX";
+			link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+			document.getElementById(link).style.backgroundColor="#11AA11";
+			document.getElementById(link).style.backgroundImage="url(/images/background-mem.gif)";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+			document.getElementById(link).style.backgroundColor="#FFFFFF";
+			document.getElementById(link).style.backgroundImage="";
+		}
+	}
+}
+function Check(f) {
+	var total_errors=0;
+//	alert(f.field_value.length);
+	for (i=0 ; i<f.field_value.length ; i++) {
+//	alert (f.field_value[i].value);
+		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+			document.getElementById("error"+i).style.backgroundColor="#FF0000";
+			total_errors++;
+		}
+	}
+	var alertString2;
+	if (total_errors==0) {
+		document.f.submit();
+	} else {
+		alertString2 = "No se envío el formulario por los siguientes problemas\n";
+		alertString2 += "------------------------------------------------------------------------------------\n\n";
+		alertString2 += "- "+ total_errors+" campos vacíos (revise los campos en negrita)";
+		alert(alertString2);
+	}
+}
+function Dopop(link,i) {
+	defaultvalue=document.forms[0].field_value[i].value;
+	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
+</body>
+</html>

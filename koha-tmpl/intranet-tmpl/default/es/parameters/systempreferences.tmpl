@@ -1,0 +1,139 @@
+<TMPL_INCLUDE NAME="cat-top.inc">
+	
+<script>
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=='') {
+		return false;
+	}
+	return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.variable.value.length==0) {
+			_alertString += "- variable missing\\n";
+		}
+		if (f.value.value.length==0) {
+			_alertString += "- value missing\\n";
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = "Form not submitted because of the following problem(s)\\n";
+			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</SCRIPT>
+
+<TMPL_IF name="add_form">
+<!-------------------------------------------------------------------------------------------------->
+	<H1><TMPL_VAR name="action"></H1>
+	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+	<input type=hidden name=op value='add_validate'>
+	<input type=hidden name=explanation value='<TMPL_VAR name="explanation">'>
+	<table>
+	<tr><td>Variable</td><td><TMPL_VAR name="searchfield"></td></tr>
+	<tr><td>Value</td><td><input type=text name=value value='<TMPL_VAR name="value">'></td></tr>
+	<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
+	</table>
+	</form>
+</TMPL_IF>
+
+<TMPL_IF name="add_validate">
+<!-------------------------------------------------------------------------------------------------->
+	data recorded
+	<form action='<TMPL_VAR name="script_name">' method=post>
+	<input type=submit value=OK>
+	</form>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirm">
+<!-------------------------------------------------------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor=#99cc33>
+		<td background="/images/background-mem.gif"><b>Variable</b></td>
+		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+	</tr>
+	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
+	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
+	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
+	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirmed">
+<!-------------------------------------------------------------------------------------------------->
+	data deleted
+	<form action='<TMPL_VAR name="script_name">' method=post>
+	<input type=submit value=OK>
+	</form>
+</TMPL_IF>
+
+<!-------------------------------------------------------------------------------------------------->
+<TMPL_IF name="else">
+<font SIZE=6><em>System preferences admin</em></font>
+<form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
+	<input type=text name=searchfield value="">
+	<input type=reset name=reset value="clr">
+</form>
+<TMPL_VAR name="searchfield">
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top bgcolor=#99cc33>
+	<td background="/images/background-mem.gif"><b>Variable</b></td>
+	<td background="/images/background-mem.gif"><b>Value</b></td>
+	<td background="/images/background-mem.gif"><b>Explanation</b></td>
+	<td background="/images/background-mem.gif">&nbsp;</td>
+	<td background="/images/background-mem.gif">&nbsp;</td>
+<TMPL_LOOP name="loop">
+</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
+	<td><TMPL_VAR name="variable"></td>
+	<td><TMPL_VAR name="value"></td>
+	<td><TMPL_VAR name="explanation"></td>
+	<td><a href="<TMPL_VAR name="edit">">Edit</a></td>
+	<td><a href="<TMPL_VAR name="delete">">Delete</a></td>
+</tr>
+</TMPL_LOOP>
+<form action='<TMPL_VAR name="script_name">' method=post>
+<input type=hidden name=op value=add_form>
+</table>
+	<form action='<TMPL_VAR name="script_name">' method=post>
+	<input type=hidden name=op value=add_form>
+<table width=40%>
+	<tr>
+		<td width=50%><TMPL_VAR name="previous"></td>
+		<td width=50%><TMPL_VAR name="next"></td>
+	</tr>
+</table>
+<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
+</form>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="cat-bottom.inc">

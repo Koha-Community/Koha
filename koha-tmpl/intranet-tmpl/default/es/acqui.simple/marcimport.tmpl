@@ -1,0 +1,52 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<h1>Sistema de Adquisición MARC</h1>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Importar en la breeding farm</font></td>
+	</tr>
+</table>
+
+<TMPL_IF name="uploadmarc">
+<p>Resultados de la Operación :</p>
+<ul>
+	<p><TMPL_VAR name="imported"> registro(s) importado(s)</p>
+	<p><TMPL_VAR name="alreadyindb"> rechazados porque ya existen en la BD</p>
+	<p><TMPL_VAR name="alreadyinfarm"> rechazados porque ya existen en la farm</p>
+	<p><TMPL_VAR name="notmarcrecord"> rechazados porque no parecen estar en formato MARC (o les falta el ISBN/ISSN) !</p>
+	<p><TMPL_VAR name="total">  registros procesados</p>
+	<p><a href="addbooks.pl">Volver a adquisición</a>
+</ul>
+<TMPL_ELSE>
+<ul>Seleccione un archivo para importar en la breeding farm. Será procesado y para cada ISBN encontrado, se creará un nuevo baby en la breeding farm.
+Si un ISBN ya existe en la breeding farm, puede escoger entre ignorar el nuevo o sustituir el antiguo.
+Puede introducir un nombre para esta importación. Podría ser útil, al crear una biblio, recordar de donde vienen los datos marc utilizados !
+Por supuesto, si el ISBN ya existe en la BD activa, la biblio será ignorada.
+<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
+<table cellpadding="3" border=0>
+	<tr valign="top">
+		<td>Seleccionar el archivo para importar :</td>
+		<td>
+			<input type="file" name="uploadmarc"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Nombre de esta importación :</td>
+		<td>
+			<input type="text" name="filename"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Si el ISBN ya está en la breeding farm : </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignorar el importado y mantener el antiguo<br/>
+			<input type="radio" name="overwrite_biblio" value="1">Sustituir el existente por el importado</td>
+	</tr>
+	<tr valign="top">
+		<td>&nbsp; </td>
+		<td><input type="submit" value="import"></td>
+	</tr>
+
+</table>
+</form>
+</TMPL_IF>
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">

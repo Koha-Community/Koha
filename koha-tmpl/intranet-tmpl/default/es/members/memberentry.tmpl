@@ -1,0 +1,207 @@
+<HTML>
+
+<TMPL_VAR NAME=sartmenumember>
+
+<FONT SIZE=6><em><TMPL_VAR NAME=header></em></FONT><br>
+
+<form action=/cgi-bin/koha/newmember.pl method=post>
+  <input type=hidden name=joining value="<TMPL_VAR NAME=dateenrolled>">
+  <input type=hidden name=expiry value="<TMPL_VAR NAME=expiry>">
+  <input type=hidden name=type value="borrowers">
+  <input type=hidden name=borrowernumber value="<TMPL_VAR NAME=member>">
+  <input type=hidden name=updtype value="<TMPL_VAR NAME=updtype>">
+
+  <table border=0 cellspacing=0 cellpadding=5 >
+
+    <tr valign=top>
+      <td COLSPAN=2><input type=reset value="Borrar todos los Campos"></td>
+      <td COLSPAN=3 ALIGN=RIGHT><font size=4 face='arial,helvetica'>Socio# <TMPL_VAR NAME=member>, Número de Tarjeta* <input type=text name=cardnumber size=10 value="<TMPL_VAR NAME=cardnumber>"><br></td>
+    </tr>
+
+    <tr valign=top>
+      <td COLSPAN=3 background="/images/background-mem.gif"><B>DETALLES PERSONALES DEL SOCIO</b></td>
+      <td COLSPAN=2 ALIGN=RIGHT background="/images/background-mem.gif">*
+        <input type="radio" name="sex" value="F"<TMPL_IF NAME=female> checked</TMPL_IF>>F
+        <input type="radio" name="sex" value="M"<TMPL_UNLESS NAME=female> checked</TMPL_UNLESS>>
+        &nbsp; &nbsp;  <B>Fecha de Nacimiento</B> (dd/mm/yy)
+        <input type=text name=dateofbirth size=10 value="<TMPL_VAR NAME=dateofbirth>">
+      </td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td>
+        <SELECT NAME="title" SIZE="1">
+          <OPTION value=" ">Sin Título
+          <TMPL_LOOP NAME=titleloop>
+            <OPTION value="<TMPL_VAR NAME=title>"<TMPL_VAR NAME=selected>><TMPL_VAR NAME=title>
+          </TMPL_LOOP>
+        </SELECT>
+      </td>
+      <td><input type=text name=initials size=5 value="<TMPL_VAR NAME=initials>"></td>
+      <td><input type=text name=firstname size=20 value="<TMPL_VAR NAME=firstname>"></td>
+      <td><input type=text name=surname size=20 value="<TMPL_VAR NAME=surname>"></td>
+      <td><input type=text name=othernames size=20 value="<TMPL_VAR NAME=othernames>"></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td><FONT SIZE=2>Título</FONT></td>
+      <td><FONT SIZE=2>Iniciales</FONT></td>
+      <td><FONT SIZE=2>Nombres Dados*</FONT></td>
+      <td><FONT SIZE=2>Apellidos*</FONT></td>
+      <td><FONT SIZE=2>Nombre Preferido</FONT></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor=white>
+      <td colspan=2>
+        <select name="ethnicity" size=1>
+          <TMPL_LOOP NAME=ethnicityloop>
+            <option value=<TMPL_VAR NAME=value><TMPL_VAR NAME=selected>><TMPL_VAR NAME=label>
+          </TMPL_LOOP>
+        </select>
+      </td>
+      <TMPL_IF NAME=ethcatpopup><TMPL_VAR NAME=ethcatpopup>
+        <td colspan=2><input type=text name=ethnicnotes size=40 ></td>
+      <TMPL_ELSE>
+        <td colspan=2>&nbsp;</td>
+      </TMPL_IF>
+      <td><TMPL_VAR NAME=catcodepopup></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <TMPL_IF NAME=ethcatpopup><TMPL_VAR NAME=ethcatpopup>
+        <td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
+        <td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
+      <TMPL_ELSE>
+        <td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>
+      </TMPL_IF>
+      <td><FONT SIZE=2>Categoría de Membresía*</FONT></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor="99cc33" >
+      <td COLSPAN=5 background="/images/background-mem.gif"><B>DIRECCIÓN DEL SOCIO</b></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
+      <td><input type=text name=city size=20 value="<TMPL_VAR NAME=city>"></td>
+      <td>
+        <SELECT NAME="area" SIZE="1">
+          <TMPL_LOOP NAME=arealoop>
+            <OPTION value="<TMPL_VAR NAME=shortcut>"<TMPL_VAR NAME=selected>><TMPL_VAR NAME=shortcut> - <TMPL_VAR NAME=area>
+          </TMPL_LOOP>
+        </SELECT>
+      </td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td  COLSPAN=3><FONT SIZE=2>Dirección Postal*</FONT></td>
+      <td><FONT SIZE=2>Localidad*</FONT></td>
+      <td><FONT SIZE=2>Provincia</FONT></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
+      <td><input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=3><FONT SIZE=2>Street Address if different</FONT></td>
+      <td><FONT SIZE=2>Localidad</FONT></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor="99cc33">
+      <td COLSPAN=5 background="/images/background-mem.gif"><B>DETALLES DE CONTACTO DEL SOCIO</b></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=2><input type=text name=phone size=20 value="<TMPL_VAR NAME=phone>"></td>
+      <td><input type=text name=phoneday size=20 value="<TMPL_VAR NAME=phoneday>"></td>
+      <td><input type=text name=faxnumber size=20 value="<TMPL_VAR NAME=faxnumber>"></td>
+      <td><input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>"></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=2 ><FONT SIZE=2>Teléfono (Casa)</td>
+      <td><FONT SIZE=2>Teléfono (día)</td>
+      <td><FONT SIZE=2>Fax</td>
+      <td><FONT SIZE=2>Email</td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor="99cc33">
+      <td  COLSPAN=5  background="/images/background-mem.gif"><B>DETALLES DE CONTACTO ALTERNATIVO</b></td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td COLSPAN=3 ><input type=text name=contactname size=40 value="<TMPL_VAR NAME=contactname>"></td>
+      <td><input type=text name=altphone size=20 value="<TMPL_VAR NAME=altphone>"></td>
+      <td>
+        <select name=altrelationship size=1>
+        <TMPL_LOOP NAME=relshiploop>
+          <OPTION <TMPL_VAR NAME=selected>><TMPL_VAR NAME=relationship>
+        </TMPL_LOOP>
+        </select>
+      </td>
+    </tr>
+
+    <tr valign=top bgcolor=white>
+      <td   COLSPAN=3 ><FONT SIZE=2>Nombre*</td>
+      <td><FONT SIZE=2>Teléfono</td>
+      <td><FONT SIZE=2>Relationship*</td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor=white>
+      <td><FONT SIZE=2>Notas</font></td>
+      <td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=altnotes></textarea></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <tr valign=top bgcolor="99cc33">
+      <td  COLSPAN=5  background="/images/background-mem.gif"><B>UTILIZACIÓN DE LA BIBLIOTECA</B></td>
+    </tr>
+
+    <tr valign=top >
+      <td><FONT SIZE=2>Notas</font></td>
+      <td COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3><TMPL_VAR NAME=borrowernotes></textarea></td>
+    </tr>
+
+    <tr><td>&nbsp; </TD></TR>
+
+    <TMPL_IF NAME=modify>
+      <tr><td COLSPAN=5><Font size=2>FLAGS</font></td></tr>
+      <TMPL_LOOP NAME=flagloop>
+        <tr>
+          <td COLSPAN=2><TMPL_VAR NAME=html></td>
+          <td COLSPAN=3><input type=radio name="<TMPL_VAR NAME=name>" value="1" <TMPL_VAR NAME=yes>>Si
+              <input type=radio name="<TMPL_VAR NAME=name>" value="0" <TMPL_VAR NAME=no>>No
+          </td>
+        </tr>
+      </TMPL_LOOP>
+    </TMPL_IF>
+
+    <tr>
+      <TMPL_UNLESS NAME=modify><!-- Don't know what's this unless for -->
+        <td></td><td><input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Añadir Nuevo Socio" border=0 ></td>
+      <TMPL_ELSE>
+        <td></td><td><input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Añadir Nuevo Socio" border=0 ></td>
+      </TMPL_UNLESS>
+    </tr>
+  </table>
+</form>																																																													
+
+<TMPL_VAR NAME=endmenumember>
+
+</body>
+</HTML>

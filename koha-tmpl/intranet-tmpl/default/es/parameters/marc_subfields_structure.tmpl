@@ -1,0 +1,109 @@
+<TMPL_INCLUDE NAME="cat-top.inc">
+	
+<TMPL_IF name="add_form">
+<!-------------------------------------------------------------------------------------------------->
+	<H1><TMPL_VAR name="action"></H1>
+	<form action='<TMPL_VAR name="script_name">' name=Aform method=put>
+	<input type=hidden name=op value='add_validate'>
+	<table>
+	<tr><th>Field</th>
+		<th>Lib for librarians / for opac</th>
+		<th>Repet</th>
+		<th>Mand</th>
+		<th>Koha field</th>
+		<th>Tab</th>
+		<th>Authorised value or<br/>
+				Thesaurus category</th>
+	</tr>
+	<TMPL_LOOP name="loop">
+		<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
+		<td><TMPL_VAR name="tagfield"> - <TMPL_VAR name="tagsubfield"></td>
+		<td><input type=text name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80><br/>
+				<input type=text name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td>
+		<td><TMPL_VAR name="repeatable"></td>
+		<td><TMPL_VAR name="mandatory"></td>
+		<td><TMPL_VAR name="kohafield"></td>
+		<td><TMPL_VAR name="tab"></td>
+		<td><TMPL_VAR name="authorised_value"><br/>
+				or <TMPL_VAR name="thesaurus_category"><br/>
+				or <TMPL_VAR name="value_builder"></td>
+	</TMPL_LOOP>
+	</table>
+	<a href="marc_subfields_structure.pl?op=add_form&tagfield=<TMPL_VAR name="more_tag">&more_subfields=<TMPL_VAR name="more_subfields">">More</a>
+	<INPUT type=submit value='OK'>
+	<p>Note : in the last column, you can choose :
+	<ul><li>An "authorised value" : it refers to a list of authorised value for this subfield. See the corresponding admin table</li>
+	<li>A "thesaurus category" : it refers to a thesaurus category. See the corresponding admin table</li>
+	<li>A "value builder" : values builders are perl programm that helps you select the value of the field. They are MARC-flavor dependant and sometimes fills an other subfield automaticaly</li>
+	</ul>
+	</p>
+	</form>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirm">
+<!-------------------------------------------------------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor=#99cc33>
+		<td background="/images/background-mem.gif"><b>Subfield</b></td>
+		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+	</tr>
+	<tr><td>&nbsp;</td><td><TMPL_VAR name="liblibrarian"></td></tr>
+	<form action='<TMPL_VAR name="delete_link">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
+	<input type=hidden name=tagfield value='<TMPL_VAR name="tagfield">'>
+	<input type=hidden name=tagsubfield value='<TMPL_VAR name="tagsubfield">'>
+	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
+	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="script_name">' method=post><input type="hidden" name="tagfield" value="<TMPL_VAR name="tagfield">"><input type=submit value=NO></form></td></tr>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirmed">
+<!-------------------------------------------------------------------------------------------------->
+	data deleted
+	<form action='<TMPL_VAR name="script_name"> method=post><input type="hidden" name="tagfield" value="<TMPL_VAR name="tagfield">">
+	<input type=submit value=OK>
+	</form>
+</TMPL_IF>
+
+<!-------------------------------------------------------------------------------------------------->
+<TMPL_IF name="else">
+<font SIZE=6><em>MARC subfield structure admin for <TMPL_VAR name="tagfield"></em></font>
+<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on "edit". </p>
+<p>The column <b>koha field</b> shows that the subfield is linked with a "koha field". Koha can manage a marc interface, or a koha interface. This link
+ensure that both DB are synchronized, thus you can change from MARC to KOHA interface easily.</p>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top bgcolor=#99cc33>
+	<td background="/images/background-mem.gif" width=5%><b>Subfield</b></td>
+	<td background="/images/background-mem.gif" width=30%><b>Lib</b></td>
+	<td background="/images/background-mem.gif" width=10%><b>koha field</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
+	<td background="/images/background-mem.gif" width=8%>&nbsp;</td>
+<TMPL_LOOP name="loop">
+<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
+	<td><TMPL_VAR name="tagsubfield"></td>
+	<td><TMPL_VAR name="liblibrarian"></td>
+	<td><TMPL_VAR name="kohafield"></td>
+	<td><TMPL_IF name="repeatable">Yes<TMPL_ELSE>No</TMPL_IF></td>
+	<td><TMPL_IF name="mandatory">Yes<TMPL_ELSE>No</TMPL_IF></td>
+	<td><TMPL_VAR name="tab"></td>
+	<td><TMPL_VAR name="authorised_value"></td>
+	<td><TMPL_VAR name="thesaurus_category"></td>
+	<td><TMPL_VAR name="value_builder"></td>
+	<td><a href="<TMPL_VAR name="delete">">delete</a></td>
+</tr>
+</TMPL_LOOP>
+</table>
+<TMPL_VAR name="edit">
+<table width=60%>
+	<tr>
+		<td width=33%><TMPL_VAR name="previous"></td>
+		<td width=33%><TMPL_VAR name="next"></td>
+		<td width=33%><a href="marctagstructure.pl">Back to Tags</a></td>
+	</tr>
+</table>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="cat-bottom.inc">
