@@ -574,7 +574,7 @@ sub ItemInfo {
   and biblio.biblionumber='$biblionumber' and branches.branchcode=
   items.holdingbranch ";
 #  print $type;
-  if ($type ne 'intra'){
+  if ($type eq 'opac'){
     $query.=" and (items.itemlost<>1 or items.itemlost is NULL)
     and (wthdrawn <> 1 or wthdrawn is NULL)";
   }
@@ -924,13 +924,18 @@ by date_due";
 }
 
 sub allissues {
-  my ($bornum)=@_;
+  my ($bornum,$order,$limit)=@_;
   my $dbh=C4Connect;
   my $query;
-  $query="Select * from issues,biblio,items where borrowernumber='$bornum' and
-items.itemnumber=issues.itemnumber and
-items.biblionumber=biblio.biblionumber order
-by date_due";
+  $query="Select * from issues,biblio,items,biblioitems
+  where borrowernumber='$bornum' and
+  items.biblioitemnumber=biblioitems.biblioitemnumber and
+  items.itemnumber=issues.itemnumber and
+  items.biblionumber=biblio.biblionumber";
+  $query.=" order by $order";
+  if ($limit !=0){
+    $query.=" limit $limit";
+  }
   #print $query;
   my $sth=$dbh->prepare($query);
     $sth->execute;
@@ -1036,7 +1041,7 @@ sub itemcount {
   my $dbh=C4Connect;   
   my $query="Select * from items where     
   biblionumber=$bibnum ";
-  if ($type ne 'intra'){
+  if ($type eq 'opac'){
     $query.=" and (itemlost <>1 or itemlost is NULL) and
     (wthdrawn <> 1 or wthdrawn is NULL)";      
   }
@@ -1085,7 +1090,8 @@ sub itemcount {
     $sth2->finish;     
   } 
 #  if ($count == 0){
-    my $query2="Select * from aqorders where biblionumber=$bibnum";
+    my $query2="Select * from aqorders where biblionumber=$bibnum and
+    datecancellationprinted is NULL";
     my $sth2=$dbh->prepare($query2);
     $sth2->execute;
     if (my $data=$sth2->fetchrow_hashref){
