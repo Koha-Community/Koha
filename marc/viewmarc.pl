@@ -6,6 +6,8 @@
 # Add info on biblioitems and items already entered as you enter new ones
 #
 
+my $starttime=gettime();
+
 use C4::Database;
 use CGI;
 use strict;
@@ -29,7 +31,7 @@ print startmenu('catalogue');
 
 
 my $Record_ID=$input->param('Record_ID');
-($Record_ID) || ($Record_ID=1);
+($Record_ID) || ($Record_ID=24);
 my $tagnames=$input->param('tagnames');
 my $subfieldnames=$tagnames;
 
@@ -203,6 +205,12 @@ EOF
     print "<br></form>\n";
 }
 
+sub gettime {
+    my $t=`cat /proc/uptime`;
+    return (split(/\s+/, $t))[0];
+}
+
+print gettime()."<br>\n";
 
 
 my $color1='#dddddd';
@@ -369,6 +377,9 @@ Add a new field:
 </table>
 </form>
 EOF
+my $endtime=gettime();
+my $diff=$endtime-$starttime;
+print "ELAPSED: $diff seconds.<p>\n";
 
 print endmenu();
 print endpage();
@@ -5645,6 +5656,10 @@ sub marcdefs {
     $fields->{'090'}->{'subfields'}->{"a"}->{'repeating'}=0;
     $fields->{'090'}->{'subfields'}->{"b"}->{'name'}="Dewey Subclass (NR)";
     $fields->{'090'}->{'subfields'}->{"b"}->{'repeating'}=0;
+    $fields->{'090'}->{'subfields'}->{"c"}->{'name'}="biblionumber (NR)";
+    $fields->{'090'}->{'subfields'}->{"c"}->{'repeating'}=0;
+    $fields->{'090'}->{'subfields'}->{"d"}->{'name'}="biblioitemnumber (NR)";
+    $fields->{'090'}->{'subfields'}->{"d"}->{'repeating'}=0;
     $fields->{'091'}->{'name'}="MICROFILM SHELF LOCATION (AM) [OBSOLETE]";
     $fields->{'091'}->{'repeating'}=1;
     $fields->{'091'}->{'firstindicator'}="Undefined";
