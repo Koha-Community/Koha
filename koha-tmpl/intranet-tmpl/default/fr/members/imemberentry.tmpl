@@ -4,11 +4,11 @@
 <!-- TMPL_IF name="surname" -->
 	<h1>Editer Institution</h1><br>
 <!-- TMPL_ELSE -->
-	<h1>Ajouter une nouvelle institution</h1><br>
+	<h1>1 une nouvelle institution</h1><br>
 <!-- /TMPL_IF -->
-<form action=/cgi-bin/koha/newimember.pl method=post>
-  <input type=hidden name=joining value="">
-  <input type=hidden name=expiry value="">
+<form action=/cgi-bin/koha/members/newimember.pl 1
+  <input type=hidden name=joining 1
+  <input type=hidden name=expiry 1
   <input type=hidden name=type value="emprunteurs">
   <input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
   <input type=hidden name=updtype value=I>
@@ -95,7 +95,7 @@
 	<td><FONT SIZE=2>Notes</font></td>
     </tr>
     <tr valign=top bgcolor=white>
-	<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><!-- TMPL_VAR name="altnotes" --></textarea></td>
+	<td COLSPAN=4><textarea name=altnotes 1<!-- TMPL_VAR name="altnotes" --></textarea></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
@@ -108,14 +108,14 @@
 	<td ><FONT SIZE=2>Notes</font></td>
     </tr>
     <tr valign=top >
-	<td  COLSPAN=5><textarea name=borrowernotes wrap=physical cols=70 rows=3><!-- TMPL_VAR name="borrowernotes" --></textarea></td>
+	<td  COLSPAN=5><textarea name=borrowernotes 1<!-- TMPL_VAR name="borrowernotes" --></textarea></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
 
     <tr valign=top bgcolor=white>
 	<td  COLSPAN=5 align=right >
-	  <input type=submit class="button" value="Enregistrer changements" ALT="Ajouter un nouveau lecteur" border=0 >
+	  <input type=submit class="button" value="Enregistrer changements" ALT="1 un nouveau lecteur" border=0 >
       </td>
     </tr>
   </TABLE>

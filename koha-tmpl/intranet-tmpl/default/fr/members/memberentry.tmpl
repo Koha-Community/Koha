@@ -2,7 +2,7 @@
 
 <!-- TMPL_IF NAME=addAction -->
 <h1>
-	Ajouter un lecteur
+	1 un lecteur
 </h1>
 <!-- TMPL_ELSE -->
 <h1>
@@ -11,7 +11,7 @@
 <!-- /TMPL_IF -->
 <br>
 
-<form action=/cgi-bin/koha/newmember.pl method=post>
+<form action=/cgi-bin/koha/members/newmember.pl 1
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">
 	<input type=hidden name=expiry value="<!-- TMPL_VAR NAME=expiry -->">
 	<input type=hidden name=type value="emprunteurs">
@@ -36,7 +36,7 @@
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td><FONT SIZE=2>Titre</FONT></td>
+		<td><FONT SIZE=2>Salutation</FONT></td>
 		<td><FONT SIZE=2>Initiales</FONT></td>
 		<td><FONT SIZE=2><b> Prénoms*</b></FONT></td>
 		<td><FONT SIZE=2><b> Nom*</b></FONT></td>
@@ -45,11 +45,11 @@
 	<tr valign=top bgcolor=white>
 		<td><!-- TMPL_VAR name="Mr" -->
 		<SELECT NAME="title">
-			<option<!-- TMPL_VAR name="title_selected_ " --> value=" ">Pas de Titre</option>
-			<option value="Miss"<!-- TMPL_VAR name="title_Miss" -->>Miss</option>
-			<option value="Mrs"<!-- TMPL_VAR name="title_Mrs" -->>Mrs</option>
-			<option value="Ms"<!-- TMPL_VAR name="title_Ms" -->>Ms</option>
-			<option <!-- TMPL_VAR name="title_Mr" --> value="Mr" >Mr</option>
+			<option <!-- TMPL_VAR name="title_selected_ " --> 1</option>
+			<option value="Miss" <!-- TMPL_VAR name="title_Miss" -->>Miss</option>
+			<option value="Mrs" <!-- TMPL_VAR name="title_Mrs" -->>Mrs</option>
+			<option value="Ms" <!-- TMPL_VAR name="title_Ms" -->>Ms</option>
+			<option <!-- TMPL_VAR name="title_Mr" --> 1</option>
 			<option value="Dr" <!-- TMPL_VAR name="title_Dr" -->>Dr</option>
 			<option value="Sir" <!-- TMPL_VAR name="title_Sir" -->>Sir</option>
 		</SELECT>
@@ -172,7 +172,7 @@
 
 	<tr valign=top bgcolor=white>
 		<td><FONT SIZE=2> Notes</font></td>
-		<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><!-- TMPL_VAR NAME=altnotes --></textarea></td>
+		<td COLSPAN=4><textarea name=altnotes 1<!-- TMPL_VAR NAME=altnotes --></textarea></td>
 	</tr>
 
 
@@ -182,7 +182,7 @@
 
 	<tr valign=top >
 		<td><FONT SIZE=2> Notes</font></td>
-		<td COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3><!-- TMPL_VAR NAME=borrowernotes --></textarea></td>
+		<td COLSPAN=4><textarea name=borrowernotes 1<!-- TMPL_VAR NAME=borrowernotes --></textarea></td>
 	</tr>
 
 	<!-- TMPL_IF NAME=modifier -->

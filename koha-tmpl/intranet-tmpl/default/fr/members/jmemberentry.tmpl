@@ -1,9 +1,9 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<h1>Ajouter un nouvel enfant </h1><br>
-<form action=/cgi-bin/koha/newjmember.pl method=post>
-	<!--<input type=hidden name=joining value="">
-	<input type=hidden name=expiry value="">
+<h1>1 un nouvel enfant </h1><br>
+<form action=/cgi-bin/koha/members/newjmember.pl 1
+	<!--<input type=hidden name=joining 1
+	<input type=hidden name=expiry 1
 	<input type=hidden name=type value="emprunteurs">-->
 	<input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
 	<input type=hidden name=updtype value=I>
@@ -28,9 +28,9 @@
 	<tr valign=top bgcolor=white>
 		<td>
 		<SELECT NAME="title" SIZE="1">
-			<OPTION value=" ">Pas de Titre
+			<OPTION 1
 			<!-- TMPL_LOOP NAME=titleloop -->
-			<OPTION value="<!-- TMPL_VAR NAME=title -->"<!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=title -->
+			<OPTION value="<!-- TMPL_VAR NAME=title -->" <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=title -->
 			<!-- /TMPL_LOOP -->
 		</SELECT>
 		</td>
@@ -39,7 +39,7 @@
 		<td><input type=text name=guardian_number size=20 value="<!-- TMPL_VAR NAME=cardnumber -->"></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td><FONT SIZE=2>Titre</FONT></td>
+		<td><FONT SIZE=2>Salutation</FONT></td>
 		<td><FONT SIZE=2>Prénoms*</FONT></td>
 		<td colspan=2><FONT SIZE=2>Nom*</FONT></td>
 		<td><FONT SIZE=2>N° Lecteur.</FONT></td>
@@ -60,14 +60,14 @@
 		</td>
 	</TR>
 	<tr bgcolor=white>
-		<td><input type=text name=firstname_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
-		<td><input type=text name=surname_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
-		<td><input type=text name=dateofbirth_child_<!-- TMPL_VAR NAME=i --> size=10 value=""></TD>
+		<td><input type=text name=firstname_child_<!-- TMPL_VAR NAME=i --> 1</td>
+		<td><input type=text name=surname_child_<!-- TMPL_VAR NAME=i --> 1</td>
+		<td><input type=text name=dateofbirth_child_<!-- TMPL_VAR NAME=i --> 1</TD>
 		<TD>
 			<input type="radio" name="sex_child_<!-- TMPL_VAR NAME=i -->" value="F"><b>F</b>
 			<input type="radio" name="sex_child_<!-- TMPL_VAR NAME=i -->" value="M"><b>M*</b>
 		</td>
-		<TD align=right><input type=text name=school_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></TD>
+		<TD align=right><input type=text name=school_child_<!-- TMPL_VAR NAME=i --> 1</TD>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td><FONT SIZE=2><b>Prénom*</b></FONT></td>
@@ -77,7 +77,7 @@
 		<td><FONT SIZE=2>Ecole</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td  COLSPAN=5><textarea name=altnotes_child_<!-- TMPL_VAR NAME=i --> wrap=physical cols=70 rows=3></textarea></td>
+		<td  COLSPAN=5><textarea name=altnotes_child_<!-- TMPL_VAR NAME=i --> 1</textarea></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td><FONT SIZE=2>Notes</font></td>
@@ -86,7 +86,7 @@
 	<tr valign=top bgcolor=white>
 		<td colspan=2 align="center"><input type=reset value="Effacer tous les champs"></td>
 		<td  COLSPAN=3 align="center">
-			<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" ALT="Ajouter un nouveau lecteur" border=0>
+			<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" ALT="1 un nouveau lecteur" border=0>
 		</td>
 	</tr>
 

@@ -58,8 +58,8 @@
 		</font>
 		<!-- TMPL_IF name="IS_ADULT" -->
 			<p align=right>
-			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
-				<INPUT TYPE="submit" name="submit" VALUE="Ajouter un enfant" class="button" alt="Ajouter un enfant">
+			<form action=/cgi-bin/koha/members/jmemberentry.pl 1
+				<INPUT TYPE="submit" name="submit" VALUE="1 un enfant" class="button" alt="1 un enfant">
 				<input type=hidden name=type value=Add>
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
 			</form>
@@ -67,12 +67,12 @@
 		<!-- /TMPL_IF -->
 		<br>
 		<!-- TMPL_IF name="I" -->
-			<form action=/cgi-bin/koha/imemberentry.pl method=post>
+			<form action=/cgi-bin/koha/members/imemberentry.pl 1
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
 				<INPUT TYPE=submit class="button" value="Modifier">
 			</form>
 		<!-- TMPL_ELSE -->
-			<form action=/cgi-bin/koha/memberentry.pl method=post>
+			<form action=/cgi-bin/koha/members/memberentry.pl 1
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
 				<INPUT TYPE=submit class="button" name="modifier" value="Modifier">
 			</form>
@@ -81,11 +81,11 @@
                         <input type=hidden name=member value="<!-- TMPL_VAR NAME="bornum" -->">
 			<INPUT TYPE=submit class="button" value="Delete">
 		</form>
-		<form action=/cgi-bin/koha/member-password.pl method=post>
+		<form action=/cgi-bin/koha/members/member-password.pl 1
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 			<input type=submit class="button" value="Changer Mot de passe">
 		</form>
-		<form action=/cgi-bin/koha/member-flags.pl method=post>
+		<form action=/cgi-bin/koha/members/member-flags.pl 1
 			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
 			<input type=submit class="button" value="Modifier habilitations">
 		</form>
@@ -127,7 +127,7 @@
 </table>
 
 <p>
-<form action="renewscript.pl" method=post>
+<form action="renewscript.pl" 1
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
 	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
@@ -136,11 +136,11 @@
 	</TR>
 
 	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Titre</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Dû</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Itemtype</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Frais</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Renouveler</b></TD>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Titre</b></TD>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Dû</b></TD>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Itemtype</b></TD>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Frais</b></TD>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Renouveler</b></TD>
 	</TR>
 
 	<!-- TMPL_LOOP NAME=issueloop -->
@@ -188,7 +188,7 @@
 		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Enlever</b></TD>
 	</TR>
 
-	<form action=/cgi-bin/koha/modrequest.pl method=post>
+	<form action=/cgi-bin/koha/modrequest.pl 1
 	<input type=hidden name=from value=emprunteur>
 
 	<!-- TMPL_LOOP NAME=reserveloop -->
@@ -230,7 +230,7 @@
 function confirm_deletion() {
 	var is_confirmed = confirm('do you confirm deletetion ?');
 	if (is_confirmed) {
-		window.location="/cgi-bin/koha/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
+		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
 	}
 }
 </script>
