@@ -105,9 +105,7 @@ while (my $data=$sth->fetchrow_hashref) {
 
 $sth->finish;
 
-$template->param( startmenureport => join ('', startmenu('report')),
-		endmenureport     => join ('', endmenu('report')),
-		todaysdate        => $todaysdate,
+$template->param(		todaysdate        => $todaysdate,
 		overdueloop       => \@overduedata );
 
 print "Content-Type: text/html\n\n", $template->output;
