@@ -71,45 +71,6 @@ sub remoteprint {
   #system("lpr /tmp/$file");
 }
 
-sub printreserve {
-  my($env, $branchname, $bordata, $itemdata)=@_;
-  my $file=time;
-  my $printer = $env->{'printer'};
-  if ($printer eq "" || $printer eq 'nulllp') {
-    open (PRINTER,">>/tmp/kohares");
-  } else {
-    open (PRINTER, "| lpr -P $printer") or die "Couldn't write to queue:$!\n";
-  }
-  my @da = localtime(time());
-  my $todaysdate = "$da[2]:$da[1]  $da[3]/$da[4]/$da[5]";
-
-#(1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", $datearr[3]);
-  my $slip = <<"EOF";
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Date: $todaysdate;
-
-ITEM RESERVED: 
-$itemdata->{'title'} ($itemdata->{'author'})
-barcode: $itemdata->{'barcode'}
-
-COLLECT AT: $branchname
-
-BORROWER:
-$bordata->{'surname'}, $bordata->{'firstname'}
-card number: $bordata->{'cardnumber'}
-Phone: $bordata->{'phone'}
-$bordata->{'streetaddress'}
-$bordata->{'suburb'}
-$bordata->{'town'}
-$bordata->{'emailaddress'}
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-EOF
-    print PRINTER $slip;
-  close PRINTER;
-  return $slip;
-}
 
 sub printslip {
   my($env, $slip)=@_;
