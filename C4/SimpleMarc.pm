@@ -323,7 +323,7 @@ sub extractmarcfields {
 	}
 
 	if ( $bib->{isbn} ) {
-	    $bib->{isbn}=~s/[^\d]*//g;	# drop non-digits
+	    $bib->{isbn}=~s/[^\d-X]*//g;	# drop non-digits
 	};
 
 	if ( $bib->{issn} ) {
@@ -465,6 +465,9 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.1.2.6  2002/11/01 18:13:46  tonnesen
+# No longer removes - or X characters from ISBNs.
+#
 # Revision 1.1.2.5  2002/08/14 18:30:50  tonnesen
 # Adding copyright statements to all .pl and .pm files in rel-1-2 branch
 #
