@@ -78,7 +78,7 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 
 } else {
          delmember($member);
-         print $input->redirect("/cgi-bin/koha/members-home.pl");
+         print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
 sub delmember{
