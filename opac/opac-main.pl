@@ -33,5 +33,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {borrow => 1},
 			 });
 
-$template->param(CGIitemtype => $CGIitemtype);
+$template->param(CGIitemtype => $CGIitemtype,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 output_html_with_http_headers $input, $cookie, $template->output;

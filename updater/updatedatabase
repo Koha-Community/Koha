@@ -357,6 +357,16 @@ my %tabledata = (
             uniquefieldrequired => 'variable',
 	    forceupdate		=> { 'explanation' => 1,
 	    			     'type' => 1 },
+            variable            => 'LibraryName',
+            value               => '<i><b>Koha<br/>Free Software ILS<br/><br/></b>Koha : a gift, a contribution<br/> in Maori</i>',
+            explanation         => 'Library name as shown on main opac page',
+	    type		=> ''
+
+        },
+        {
+            uniquefieldrequired => 'variable',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
             variable            => 'autoMemberNum',
             value               => '1',
             explanation         => 'Member number is auto-calculated',
@@ -971,6 +981,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.70  2003/12/15 14:40:09  tipaul
+# OPAC now show a systempref variable in main/home screen => easier to change for a library.
+#
 # Revision 1.69  2003/12/04 12:51:41  tipaul
 # setting default acquisition to NORMAL, which is better, imho (it's always possible to add a biblio directly through catalogue menu entry)
 #
