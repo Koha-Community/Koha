@@ -96,7 +96,7 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(subfield_managed) {
-	defaultvalue=document.forms[0].field_value[1].value;
+	defaultvalue=escape(document.forms[0].field_value[subfield_managed].value);
 	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value builder\",'width=500,height=400,toolbar=false,scrollbars=yes');
 
 }
@@ -114,7 +114,8 @@ plugin : the true value_builded. The screen that is open in the popup window.
 sub plugin {
 my ($input) = @_;
 	my $index = $input->param("index");
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus_popup.pl?category=EDITORS&index=$index\"></html>";
+	my $result = $input->param("result");
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus_popup.pl?category=EDITORS&index=$index&result=$result\"></html>";
 	exit;
 }
 

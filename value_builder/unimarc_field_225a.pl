@@ -18,6 +18,28 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+=head1 SYNOPSIS
+
+This plugin is used to map isbn/editor with collection.
+It need :
+  in thesaurus, a category named EDITORS
+  in this category, datas must be entered like following :
+  isbn separator editor separator collection.
+  for example :
+  2204 -- Cerf -- Cogitatio fidei
+  2204 -- Cerf -- Le Magistère de l'Eglise
+  2204 -- Cerf -- Lectio divina
+  2204 -- Cerf -- Lire la Bible
+  2204 -- Cerf -- Pour lire
+  2204 -- Cerf -- Sources chrétiennes
+
+  when the user clic on ... on 225a line, the popup shows the list of collections from the selected editor
+  if the biblio has no isbn, then the search if done on editor only
+  If the biblio ha an isbn, the search is done on isbn and editor. It's faster.
+
+=over 2
+
+=cut
 
 use strict;
 use C4::Auth;
@@ -84,13 +106,23 @@ my ($input) = @_;
 					debug => 1,
 					});
 # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
-	my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father=? and category='EDITORS'");
-	my @splited = split //, $isbn_found;
-	my $isbn_rebuild='';
-	my @collections;
-	foreach my $x (@splited) {
-		$isbn_rebuild.=$x;
-		$sth->execute("$isbn_rebuild $authoritysep $editor_found $authoritysep");
+	# if there is an isbn, complete search
+		my @collections;
+	if ($isbn_found) {
+		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father=? and category='EDITORS'");
+		my @splited = split //, $isbn_found;
+		my $isbn_rebuild='';
+		foreach my $x (@splited) {
+			$isbn_rebuild.=$x;
+			$sth->execute("$isbn_rebuild $authoritysep $editor_found $authoritysep");
+			while (my ($line)= $sth->fetchrow) {
+				push @collections,$line;
+			}
+		}
+	} else {
+	# if there is no isbn, search with %
+		my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father like ? and category='EDITORS'");
+		$sth->execute("\%$authoritysep $editor_found $authoritysep");
 		while (my ($line)= $sth->fetchrow) {
 			push @collections,$line;
 		}
