@@ -148,6 +148,9 @@ function addMultiple(){
 			}
 		}
 		addSelRecords(c_value);
+	} else {
+		c_value = c_value + document.myform.bibid.value + "/";
+		addSelRecords(c_value);
 	}
 }
 
