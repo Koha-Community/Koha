@@ -64,7 +64,8 @@ printable string.
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
 	     &pathtotemplate
-	     &picktemplate);
+		&themelanguage &gettemplate
+	     );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -97,75 +98,76 @@ my @more   = ();
 # FIXME - Since this is used in several places, it ought to be put
 # into a separate file. Better yet, put "use C4::Config;" inside the
 # &import method of any package that requires the config file.
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
-    chomp;
-    (next) if (/^\s*#/);
-    if (/(.*)\s*=\s*(.*)/) {
-        my $variable=$1;
-        my $value=$2;
 
-        $variable =~ s/^\s*//g;
-        $variable =~ s/\s*$//g;
-        $value    =~ s/^\s*//g;
-        $value    =~ s/\s*$//g;
-        $configfile{$variable}=$value;
-    } # if
-} # while
-close(KC);
+my $configfile=configfile();
 
-my $path=$configfile{'includes'};
+my $path=$configfile->{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
-# make all your functions, whether exported or not;
+#---------------------------------------------------------------------------------------------------------
+sub gettemplate {
+    my ($tmplbase, $opac) = @_;
 
-=item picktemplate
+    my $htdocs;
+    if ($opac) {
+	$htdocs = $configfile->{'opachtdocs'};
+    } else {
+	$htdocs = $configfile->{'intrahtdocs'};
+    }
 
-  $template = &picktemplate($includes, $base);
+    my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
 
-Returns the preferred template for a given page. C<$base> is the
-basename of the script that will generate the page (with the C<.pl>
-extension stripped off), and C<$includes> is the directory in which
-HTML include files are located.
+    my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
+				   die_on_bad_params => 0,
+				   global_vars       => 1,
+				   path              => ["$htdocs/$theme/$lang/includes"]);
 
-The preferred template is given by the C<template> entry in the
-C<systempreferences> table in the Koha database. If
-C<$includes>F</templates/preferred-template/>C<$base.tmpl> exists,
-C<&picktemplate> returns the preferred template; otherwise, it returns
-the string C<default>.
-
-=cut
-#'
-sub picktemplate {
-  my ($includes, $base) = @_;
-  my $dbh=C4Connect;
-  my $templates;
-  # FIXME - Instead of generating the list of possible templates, and
-  # then querying the database to see if, by chance, one of them has
-  # been selected, wouldn't it be better to query the database first,
-  # and then see whether the selected template file exists?
-  opendir (D, "$includes/templates");
-  my @dirlist=readdir D;
-  foreach (@dirlist) {
-    (next) if (/^\./);
-    #(next) unless (/\.tmpl$/);
-    (next) unless (-e "$includes/templates/$_/$base");
-    $templates->{$_}=1;
-  }
-  my $sth=$dbh->prepare("select value from systempreferences where
-  variable='template'");
-  $sth->execute;
-  my ($preftemplate) = $sth->fetchrow;
-  $sth->finish;
-  $dbh->disconnect;
-  if ($templates->{$preftemplate}) {
-    return $preftemplate;
-  } else {
-    return 'default';
-  }
-
+    $template->param(themelang => "/$theme/$lang");
+    return $template;
 }
+
+#---------------------------------------------------------------------------------------------------------
+sub themelanguage {
+  my ($htdocs, $tmpl) = @_;
+
+# language preferences....
+  my $dbh=C4Connect;
+  my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opaclanguages'");
+  $sth->execute;
+  my ($lang) = $sth->fetchrow;
+  $sth->finish;
+  my @languages = split " ", $lang;
+
+# theme preferences....
+  my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opacthemes'");
+  $sth->execute;
+  my ($theme) = $sth->fetchrow;
+  $sth->finish;
+  my @themes = split " ", $theme;
+
+  $dbh->disconnect;
+
+  my ($theme, $lang);
+# searches through the themes and languages. First template it find it returns.
+# Priority is for getting the theme right.
+  THEME:
+  foreach my $th (@themes) {
+    foreach my $la (@languages) {
+	warn "File = $htdocs/$th/$la/$tmpl\n";
+	if (-e "$htdocs/$th/$la/$tmpl") {
+	    $theme = $th;
+	    $lang = $la;
+	    last THEME;
+	}
+    }
+  }
+  if ($theme and $lang) {
+    return ($theme, $lang);
+  } else {
+    return ('default', 'en');
+  }
+}
+
 
 =item pathtotemplate
 
@@ -256,7 +258,7 @@ sub pathtotemplate {
 
   #where to search for templates
   my @tmpldirs = ("$path/templates", $path);
-  unshift (@tmpldirs, $configfile{'templatedirectory'}) if $configfile{'templatedirectory'};
+  unshift (@tmpldirs, $configfile->{'templatedirectory'}) if $configfile->{'templatedirectory'};
   unshift (@tmpldirs, $params{'path'}) if $params{'path'};
 
   my ($edir, $etheme, $elanguage, $epath);
