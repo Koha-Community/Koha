@@ -55,6 +55,8 @@ my $branch = getbranch($query, $branches);
 my $printer = getprinter($query, $printers);
 
 my $findborrower = $query->param('findborrower');
+$findborrower =~ s|,| |g;
+$findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrnumber');
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
