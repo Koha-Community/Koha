@@ -78,6 +78,9 @@ Base constructor for the class.
   my $shelf=Shelf->new('Favourite Books', 'sjohnson');
   my $shelf=Shelf->new(-name => 'Favourite Books', -owner => 'sjohnson');
       will load sjohnson's "Favourite Books" bookshelf
+  
+  Any of the last four invocations will create a new shelf with the name and
+  owner given if one doesn't already exist.
 
 
 =cut
@@ -94,11 +97,11 @@ sub new {
     $self->{CACHE}=new Cache::FileCache( { 'namespace' => 'KohaShelves' } );
 
     if (@_) {
+	my $dbh=C4::Context->dbh();
 	shift;
 	if ($#_ == 0) {
 	    $self->{ID}=shift;
 	    # load attributes of shelf #ID
-	    my $dbh=C4::Context->dbh();
 	    my $sth;
 	    $sth=$dbh->prepare("select bookshelfname,bookshelfowner from bookshelves where bookshelfid=?");
 	    $sth->execute($self->{ID});
@@ -108,7 +111,7 @@ sub new {
 	    while (my ($attribute,$value) = $sth->fetchrow) {
 		$self->{ATTRIBUTES}->{$attribute}=$value;
 	    }
-	} else {
+	} elsif ($#_) {
 	    my ($name,$owner,$attributes);
 	    if ($_[0] =~/^-/) {
 		my %params=@_;
@@ -119,6 +122,26 @@ sub new {
 		$name=shift;
 		$owner=shift;
 		$attributes=shift;
+	    }
+	    my $sth=$dbh->prepare("select bookshelfid from bookshelves where bookshelfname=? and bookshelfowner=?");
+	    $sth->execute($name, $owner);
+	    if ($sth->rows) {
+		($self->{ID})=$sth->fetchrow;
+		$sth=$dbh->prepare("select attribute,value from bookshelfattributes where bookshelfid=?");
+		$sth->execute($self->{ID});
+		while (my ($attribute,$value) = $sth->fetchrow) {
+		    $self->{ATTRIBUTES}->{$attribute}=$value;
+		}
+	    } else {
+		$sth=$dbh->prepare("insert into bookshelves (bookshelfname, bookshelfowner) values (?, ?)");
+		$sth->execute($name,$owner);
+		$sth=$dbh->prepare("select bookshelfid from bookshelves where bookshelfname=? and bookshelfowner=?");
+		$sth->execute($name,$owner);
+		($self->{ID})=$sth->fetchrow();
+		foreach my $attribute (keys %$attributes) {
+		    my $value=$attributes->{$attribute};
+		    $self->attribute($attribute,$value);
+		}
 	    }
 	}
     }
@@ -228,7 +251,26 @@ sub shelfcontents {
     my $self=shift;
 }
 
-sub clearshelf {
+
+=head2 C<clearcontents()>
+
+Removes all contents from the shelf.
+
+    $shelf->clearcontents();
+
+=cut
+
+sub clearcontents {
+    my $self=shift;
+    my $dbh=C4::Context->dbh();
+    my $sth=$dbh->prepare("delete from bookshelfcontents where bookshelfid=?");
+    $sth->execute($self->{ID});
+    foreach my $level ('ITEM', 'BIBLIOITEM', 'BIBLIO') {
+	delete $self->{$level."CONTENTS"};
+	$self->{$level."CONTENTS"}={};
+    }
+    $self->clearcache();
+
 }
 
 
@@ -277,15 +319,32 @@ sub removefromshelf {
 
 =head2 C<attribute()>
 
-Returns the value of a given attribute for the shelf.
+Returns or sets the value of a given attribute for the shelf.
 
   my $loanlength=$shelf->attribute('loanlength');
+  $shelf->attribute('loanlength', '21 days');
+
 
 =cut
 
 sub attribute {
     my $self=shift;
-    my $attribute=shift;
+    my ($attribute, $value);
+    $attribute=shift;
+    $value=shift;
+    if ($value) {
+	$self->{ATTRIBUTES}->{$attribute}=$value;
+	my $dbh=C4::Context->dbh();
+	my $sth=$dbh->prepare("select value from bookshelfattributes where bookshelfid=? and attribute=?");
+	$sth->execute($self->{ID}, $attribute);
+	if ($sth->rows) {
+	    my $sti=$dbh->prepare("update bookshelfattributes set value=? where bookshelfid=? and attribute=?");
+	    $sti->execute($value, $self->{ID}, $attribute);
+	} else {
+	    my $sti=$dbh->prepare("inesrt into bookshelfattributes (bookshelfid, attribute, value) values (?, ?, ?)");
+	    $sti->execute($self->{ID}, $attribute, $value);
+	}
+    }
     return $self->{ATTRIBUTES}->{$attribute};
 }
 
