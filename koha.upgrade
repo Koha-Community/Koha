@@ -1,0 +1,116 @@
+#!/usr/bin/perl -w
+
+use C4::Database;
+
+my $dbh=C4Connect();
+
+my %configfile;
+open (KC, "/etc/koha.conf");
+while (<KC>) {
+ chomp;
+ (next) if (/^\s*#/);
+ if (/(.*)\s*=\s*(.*)/) {
+   my $variable=$1;
+   my $value=$2;
+   # Clean up white space at beginning and end
+   $variable=~s/^\s*//g;
+   $variable=~s/\s*$//g;
+   $value=~s/^\s*//g;
+   $value=~s/\s*$//g;
+   $configfile{$variable}=$value;
+ }
+}
+
+my $intranetdir=$configfile{'intranetdir'};
+my $opacdir=$configfile{'opacdir'};
+my $kohaversion=$configfile{'kohaversion'};
+my $database=$configfile{'database'};
+my $host=$configfile{'host'};
+my $user=$configfile{'user'};
+my $pass=$configfile{'pass'};
+
+
+my $newversion=`cat kohaversion`;
+chomp $newversion;
+
+print qq|
+
+================
+= Koha Upgrade =
+================
+
+You are attempting to upgrade from Koha $kohaversion to $newversion.
+
+We recommend that you do a complete backup of all your files before upgrading.
+This upgrade script will make a backup copy of your files for you.
+
+Would you like to proceed?  ([Y]/N):  
+|;
+
+my $answer = <STDIN>;
+chomp $answer;
+
+if ($answer eq "Y" || $answer eq "y") {
+	print "Great! continuing upgrade... \n";
+    } else {
+    print qq|
+
+Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
+|;
+    exit;
+};
+
+
+
+# Backup MySql database
+#
+
+system("mysqldump -u$user -p$pass -h$host $database > Koha.backup");
+open (MD, "mysqldump -u$user -p$pass -h$host $database|");
+open BF, ">Koha.backup";
+
+my $itemcounter=0;
+my $bibliocounter=0;
+my $biblioitemcounter=0;
+my $membercounter=0;
+
+while (<MD>) {
+    (/insert into items /i) && ($itemcounter++);
+    (/insert into biblioitems /i) && ($biblioitemcounter++);
+    (/insert into biblio /i) && ($bibliocounter++);
+    (/insert into borrowers /i) && ($membercounter++);
+    print BF $_;
+}
+
+close BF;
+close MD;
+
+
+printf qq|
+
+Backed up:
+
+%6d biblio entries
+%6d biblioitems entries
+%6d items entries
+%6d borrowers
+
+Does this look right? ([Y]/N):
+|, $bibliocounter, $biblioitemcounter, $itemcounter, $membercounter;
+
+my $answer = <STDIN>;
+chomp $answer;
+
+if ($answer eq "Y" || $answer eq "y") {
+	print "Great! continuing upgrade... \n";
+    } else {
+    print qq|
+
+Aborting.  The database dump is located in the Koha.backup file. 
+|;
+    exit;
+};
+
+
+
+
