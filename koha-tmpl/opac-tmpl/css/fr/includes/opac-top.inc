@@ -5,6 +5,16 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css" />
 	<title><!--TMPL_VAR name="LibraryName"--></title>
+	<script src='/js/basket.js'></script>
+	<SCRIPT language='javascript'>
+	var MSG_BASKET_EMPTY = "Il n'y a aucune notice !";
+	var MSG_RECORD_IN_BASKET = "Cette notice est déjà dans la liste";
+	var MSG_RECORD_ADDED = "Notice ajoutée au panier";
+	var MSG_NRECORDS_ADDED = "notice(s) ajoutée(s)";
+	var MSG_NRECORDS_IN_BASKET = "déjà présente(s) dans le panier";
+	var MSG_NO_RECORD_SELECTED = "Aucune notice sélectionnée";
+	var MSG_NO_RECORD_ADDED = "Aucune notice ajoutée";
+	</SCRIPT>
 </head>
 <body>
 	<!-- MENUS -->
@@ -17,5 +27,7 @@
 		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Recherche avancée">Recherche avancée</a>
 		<span class="spacer">&nbsp;</span>
 		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Accueil lecteur" >Lecteurs</a>
+		<span class="spacer">&nbsp;</span>
+		<a class="menu" href="javascript:openBasket()" title="Panier de notices">Panier de notices</a>
 	</div>
 	<!-- MAIN BODY OF PAGE -->
