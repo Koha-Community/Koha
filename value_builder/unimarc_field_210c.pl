@@ -77,7 +77,7 @@ foreach my $editor (@editors) {
 chop $res;
 $res .= "
 ];
-	// search isbn subfield. it's 010a
+	// search isbn subfield. it''s 010a
 	var isbn_found;
 	for (i=0 ; i<document.f.field_value.length ; i++) {
 		if (document.f.tag[i].value == '010' && document.f.subfield[i].value == 'a') {
@@ -114,8 +114,10 @@ plugin : the true value_builded. The screen that is open in the popup window.
 sub plugin {
 my ($input) = @_;
 	my $index = $input->param("index");
-	my $result = $input->param("result");
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus_popup.pl?category=EDITORS&index=$index&result=$result\"></html>";
+	my $result =  $input->param("result");
+	$result=~s/ /&nbsp;/g;
+	$result=~s/"/&quot;/g;
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus_popup.pl?category=EDITORS&nohierarchy=1&index=$index&result=$result\"></html>";
 	exit;
 }
 
