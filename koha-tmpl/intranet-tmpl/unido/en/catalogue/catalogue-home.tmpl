@@ -55,9 +55,12 @@
 	<TR>
 		<TD class="label">Langage</TD>
 		<TD class="field">
-		<SELECT NAME="language">
+		<SELECT NAME="languages">
 		<OPTION VALUE="" SELECTED>Any</OPTION>
-		/SELECT></td>
+		<TMPL_LOOP NAME="languages">
+		<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+		</TMPL_LOOP>
+		</SELECT></td>
 	</tr>
 					
 					
