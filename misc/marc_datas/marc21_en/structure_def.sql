@@ -254,7 +254,7 @@ INSERT INTO marc_subfield_structure VALUES ('100', '6', 'Linkage "See "', 'Linka
 INSERT INTO marc_subfield_structure VALUES ('100', '8', 'Field link and sequence number "See "', 'Field link and sequence number "See "', 1, 0, '', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('100', 'a', 'Personal name', 'Personal name', 0, 0, 'biblio.author', 1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('100', 'b', 'Numeration', 'Numeration', 0, 0, 'biblio.author', 1, NULL, NULL, '');
-INSERT INTO marc_subfield_structure VALUES ('100', 'c', 'Titles and other words associated with a name', 'Titles and other words associated with a name', 1, 1, 'biblio.author', 1, NULL, NULL, '');
+INSERT INTO marc_subfield_structure VALUES ('100', 'c', 'Titles and other words associated with a name', 'Titles and other words associated with a name', 1, 0, 'biblio.author', 1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('100', 'd', 'Dates associated with a name', 'Dates associated with a name', 0, 0, 'biblio.author', 1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('100', 'e', 'Relator term', 'Relator term', 1, 0, '', -1, NULL, NULL, '');
 INSERT INTO marc_subfield_structure VALUES ('100', 'f', 'Date of a work', 'Date of a work', 0, 0, '', -1, NULL, NULL, '');
