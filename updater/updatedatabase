@@ -766,6 +766,15 @@ my %tabledata = (
             explanation => 'Set virtual shelves management ON or OFF',
 	    type		=> 'YesNo'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'itemcallnumber',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '676a',
+            explanation => 'The MARC field/subfield that is used to calculate the itemcallnumber (in UNIMARC : 676a for Dewey, 680a for Loc)',
+	    type		=> 'free'
+        },
     ],
 
 );
@@ -1351,6 +1360,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.97  2004/11/23 09:11:08  tipaul
+# adding itemcallnumber entry
+#
 # Revision 1.96  2004/11/16 13:03:45  tipaul
 # removing ldap systempref, it's now in C4/Auth_with_ldap.pm separate package
 #
