@@ -70,9 +70,9 @@ my $borrowernumber = $query->param('borrnumber');
 # check and see if we should print
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
-#if ($barcode eq '' ){
-#    $print = 'yes';
-#}
+if ($barcode eq ''  && $print eq 'maybe'){
+    $print = 'yes';
+}
 if ($print eq 'yes' && $borrowernumber ne ''){
     printslip(\%env,$borrowernumber);    
     $query->param('borrnumber','');
@@ -193,7 +193,8 @@ my $cardnumberinput = << "EOF";
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <font color=black><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
 <tr><td><input name=findborrower></td></tr>
-  
+  <input type=hidden name=branch value=$branch>
+<input type=hidden name=printer value=$printer>
 </table>
 </form>
 EOF
@@ -317,7 +318,7 @@ my $barcodeentrytext = <<"EOF";
 <input type=hidden name=borrnumber value=$borrowernumber>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
-<input type=hidden name=print value=yes>
+<input type=hidden name=print value=maybe>
 </td></tr></table>
 </td></tr></table>
 </form>
