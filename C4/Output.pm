@@ -88,7 +88,7 @@ sub gettemplate {
 		$htdocs = C4::Context->config('intrahtdocs');
 	}
 
-	my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
+	my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $opac);
 
 	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
 				   die_on_bad_params => 0,
@@ -106,13 +106,21 @@ sub gettemplate {
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
-  my ($htdocs, $tmpl) = @_;
+  my ($htdocs, $tmpl, $section) = @_;
 
   my $dbh = C4::Context->dbh;
-  my @languages = split " ", C4::Context->preference("opaclanguages");
-			# language preference
-  my @themes = split " ", C4::Context->preference("opacthemes");
-			# theme preferences
+  my @languages;
+  my @themes;
+  if ( $section eq "intranet")
+  {
+    @languages = split " ", C4::Context->preference("opaclanguages");
+    @themes = split " ", C4::Context->preference("template");
+  }
+  else
+  {
+    @languages = split " ", C4::Context->preference("opaclanguages");
+    @themes = split " ", C4::Context->preference("opacthemes");
+  }
 
   my ($theme, $lang);
 # searches through the themes and languages. First template it find it returns.
