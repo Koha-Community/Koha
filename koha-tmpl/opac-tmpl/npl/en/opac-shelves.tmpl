@@ -4,7 +4,7 @@
 
 <div id="main">
 <!-- TMPL_IF Name="viewshelf" -->
-<form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="mainform">
+<form class="inline" action="/cgi-bin/koha/opac-shelves.pl" method="post" name="mainform">
     <table>
 	<caption>Contents of <em><!-- TMPL_VAR Name="shelfname" --></em></caption>
     		<tr>
@@ -22,10 +22,10 @@
 					<td><!-- TMPL_VAR NAME="classification" --></td>
 					<td><!-- TMPL_VAR Name="barcode" --></td>
 		</tr><!-- /TMPL_LOOP --><!-- TMPL_ELSE -->
-		<tr><td colspan="6">This shelf is empty.</td><!-- TMPL_UNLESS NAME="itemsloop" --><td><input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="hidden" name="shelves" value="1" /><input type="submit" class="cancel" value="Delete this Shelf" onclick="return confirmDelete('Are you sure you want to delete this shelf?')" /></td><!-- /TMPL_UNLESS --></tr>
+		<tr><td colspan="6">This shelf is empty.</td><!-- TMPL_UNLESS NAME="itemsloop" --><td><input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="hidden" name="shelves" value="1" /><input type="submit" class="icon delete" value="Delete this Shelf" onclick="return confirmDelete('Are you sure you want to delete this shelf?')" /></td><!-- /TMPL_UNLESS --></tr>
 		<!-- /TMPL_IF -->
 	</table>
-	<!-- TMPL_IF name="manageshelf" --><!-- TMPL_IF NAME="itemsloop" --><input type="submit" value="Remove Selected Items" class="cancel" onclick="return confirmDelete('Are you sure you want to remove these items from the shelf?')" /><!-- /TMPL_IF --><!-- /TMPL_IF --></form><!-- TMPL_IF name="manageshelf" --> <form class="inline" method="get" action="/cgi-bin/koha/opac-shelves.pl"><input type="hidden" name="op" value="modif" /><input type="hidden" value="<!-- TMPL_VAR Name="shelfnumber" -->" name="shelf" /><input type="submit" value="Modify this Shelf" class="submit" /></form>
+	<!-- TMPL_IF name="manageshelf" --><!-- TMPL_IF NAME="itemsloop" --><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete('Are you sure you want to remove these items from the shelf?')" /><!-- /TMPL_IF --><!-- /TMPL_IF --></form><!-- TMPL_IF name="manageshelf" --> <form class="inline" method="get" action="/cgi-bin/koha/opac-shelves.pl"><input type="hidden" name="op" value="modif" /><input type="hidden" value="<!-- TMPL_VAR Name="shelfnumber" -->" name="shelf" /><input type="submit" value="Modify this Shelf" class="icon edit" /></form>
 <br /><br />
 <form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 	<table>
