@@ -113,7 +113,7 @@ if ($wthdrawn == 0 && $override ne 'yes'){
   #need to check if it is on reserve or issued
   my $dbh = C4::Context->dbh;
   my $flag=0;
-  my ($resbor,$resrec)=C4::Circulation::Circ2::checkreserve($env,$dbh,$itemnum);
+  my ($resbor,$resrec)=C4::Reserves2::CheckReserves($env,$dbh,$itemnum);
  # print $resbor;
   if ($resbor){
     print $input->header;
