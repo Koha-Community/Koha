@@ -1246,9 +1246,6 @@ sub restartapache {
 
 }
 
-# Installation is complete.  Rename the koha.conf.tmp file
-
-rename "$::etcdir/koha.conf.tmp", "$::etcdir/koha.conf" || warn "Couldn't rename file at $::etcdir. Must have write capability.\n";
 
 sub loadconfigfile {
     my %configfile;
