@@ -77,7 +77,7 @@ my $tab = $res2;
 my $subtotal=0;
 while (($res,$res2,$field) = $sth->fetchrow) {
 	# (ignore itemnumber, that must be in -1 tab)
-	if (($res ne $tagfield or $res2 ne $tab ) && $field ne "items.itemnumber") {
+	if (($res ne $tagfield or $res2 ne $tab ) && $res2 ne -1) {
 		$subtotal++;
 	}
 }
