@@ -687,7 +687,7 @@ Would you like to restart your webserver now? (Y/[N]):
 my $restart = <STDIN>;
 chomp $restart;
 
-if ($answer=~/^y/i) {
+if ($restart=~/^y/i) {
 	# Need to support other init structures here?
 	if (-e "/etc/rc.d/init.d/httpd") {
 	    system('/etc/rc.d/init.d/httpd restart');
