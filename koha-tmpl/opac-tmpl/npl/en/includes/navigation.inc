@@ -10,6 +10,12 @@
 		<li><a href="/cgi-bin/koha/opac-user.pl">Your Account</a></li>
 		<!-- Display for NPL <li><a href="http://66.213.78.70/upcoming.cfm">Upcoming Releases Waiting List</a></li> /Display for NPL -->
 	</ul>
+	<!-- TMPL_IF NAME="loggedinusername" -->
+	<ul>
+		<li><a href="/cgi-bin/koha/opac-shelves.pl">Virtual Shelves</a></li>
+		<li><a href="/cgi-bin/koha/opac-suggestions.pl">Suggestions</a></li>
+	</ul>
+	<!-- /TMPL_IF -->
   </li>
  <!-- Display for NPL  <li><a href="http://www.athenscounty.lib.oh.us/programs.asp">programs</a></li>
 
