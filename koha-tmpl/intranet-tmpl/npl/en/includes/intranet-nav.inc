@@ -16,11 +16,7 @@
 	<input type="submit" value="Search" class="submit" />
 
 	</form></li></ul></li>
-				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=0&amp;type=intranet">Catalog</a><ul><li><form action="/cgi-bin/koha/search.pl" method="post">
-		<label for="keyword">Quick Search:</label><input id="keyword" type="text"  size="10" name="keyword" />
-		<input type="submit" value="Search" class="submit" />
-		</form></li><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=0&amp;type=intranet">Advanced Search</a></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li> /Display for NPL -->
-<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">MARC Search</a></li><!-- Display for NPL <li><a href="http://live.moreforohio.org:8080/vdx/">MORE Search</a></li> /Display for NPL -->
+				<li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a><ul><li><form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="keyword">Quick Search:</label><input type="hidden" name="marclist" value="" /><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="keyword" name="value" size="10" /><input type="submit" value="Start search" class="submit"></form></li><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Advanced Search</a></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li><li><a href="http://live.moreforohio.org:8080/vdx/">MORE Search</a></li> /Display for NPL -->
 </ul></li>
 <li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a><ul><!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Add Temp</a> </li> /Display for NPL --><li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li><!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li><!-- /Hide from NPL --></ul></li>
 <!-- Hide from NPL --><li><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports</a></li>
