@@ -66,7 +66,9 @@ my $biblionumber=$query->param('bib');
 my $bibid = $query->param('bibid');
 $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
 $biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-my $tagslib = &MARCgettagslib($dbh,1);
+my $itemtype = &MARCfind_itemtype($dbh,$bibid);
+warn "IT : $itemtype";
+my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
 # open template
@@ -91,7 +93,8 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			my @subfields_data;
 		# if tag <10, there's no subfield, use the "@" trick
 		if ($field->tag()<10) {
-  			next if ($tagslib->{$field->tag()}->{'@'}->{tab}  ne $tabloop);
+			next if ($tagslib->{$field->tag()}->{'@'}->{tab}  ne $tabloop);
+			next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
 			$subfield_data{marc_value}=$field->data();
@@ -104,9 +107,14 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			for my $i (0..$#subf) {
 				$subf[$i][0] = "@" unless $subf[$i][0];
 				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
+				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-				$subfield_data{marc_value}=$subf[$i][1];
+				if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
+					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+				} else {
+					$subfield_data{marc_value}=$subf[$i][1];
+				}
 				$subfield_data{marc_subfield}=$subf[$i][0];
 				$subfield_data{marc_tag}=$field->tag();
 				push(@subfields_data, \%subfield_data);
