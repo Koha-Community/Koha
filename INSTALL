@@ -20,7 +20,7 @@ Set::Scalar
 DBD::mysql (or whatever database system you use) 
 AuthenDBI (if you want to use Database based authentication) 
 CDK (for the telnet interface not nessecary if you plan to use the web based circulation module) also requires installation of the C CDK libraries http://www.vexus.ca/CDK.html ( CDKModuleHasProblems ) 
-File::Spec
+File::Spec (Required for HTML::Template)
 HTML::Template
 
 --------------------------------------------------------------------------------
@@ -50,15 +50,37 @@ mysql -uusername -ppassword Koha < koha.mysql
 perl updatedatabase -I /pathtoC4 
 
 4. Edit koha.conf
-Set the database name to what you have called your database, hostname willprobably stay as localhost (unless you are installing the database on a different machine to the webserver) User and password should be changed to reflect the username and password you have chosen above.
+	This file resides on the web server and tells the Koha scripts
+   how to access the database, and where scripts and documents are
+   installed. It is of the form:
+	# This is a comment
+	variable = value
+	foo = bar   # This is also a comment
 
-You can include a line called "includes= " with path to your includes folder instead of entering the path in Output.pm - see example in KohaHints.
+	The following variables are currently supported:
+   database
+	Name of the Koha database that you created in step 1 above.
+   user
+   pass
+	Name and password of the Koha database user that you creted in
+	step 2
+   includes
+	Directory where you plan to install the include files (*.inc)
+	in step 6.
 
+	The "database", "user", and "pass" settings are required.
 
-5. Copy koha.conf to /etc/
-The permissions on this config file should also be strict, since they contain the database password. At a minimum, the apache user needs to be able to read it, as well as any other user that runs circ.
-I would suggest ownership of www-data.libadmins with no access to others.libadmins contain all users that use koha (If you set the owner as www-data u will need to make sure apache is running
-as www-data)
+5. Install koha.conf
+	By default, Koha looks for its configuration file in
+   /etc/koha.conf, though you may override this by setting the
+   $KOHA_CONF environment variable to the path to a different file.
+	If you are using Apache 1.1 or later, with virtual hosts, you
+   can use the SetEnv directive to use a different configuration file
+   for each virtual host.
+
+	Security note: /etc/koha.conf must be readable by the UID
+   under which the web server is running, and any other users running
+   Koha-related scripts or programs. It need not be writable.
 
 6. Create directories for scripts and html documents.
 Here you need to decide where your scripts and html are going to live.
@@ -73,7 +95,7 @@ eg /usr/local/lib/site_perl/i386-linux/
 
 If you do not have sufficient access to copy the files to the default perl folder (maybe you are using your ISPs hosting server) then you can copy the modules to any other location and add a line to apache.conf like:
 
-SetEnv? PERL5LIB "/usr/local/www/koha/modules"
+SetEnv PERL5LIB "/usr/local/www/koha/modules"
 
 Copy the C4 directory into the modules folder (see detailed example in KohaHints)
 
@@ -82,7 +104,7 @@ Copy the C4 directory into the modules folder (see detailed example in KohaHints
 
 Set up a webspace for the OPAC: For example: You might make /usr/local/www/opac ... and set a virtual host in apache to use that dir 
 In your opac dir make a dir called htdocs, and copy everything in opac-html/ to it. 
-Again in ur opac dir make a dir called cgi-bin and copy all the files in scripts/ that have a .pl extension to it, eg copy scripts/*.pl /usr/local/www/opac/cgi-bin/koha/ 
+Again in your opac dir make a dir called cgi-bin and copy all the files in scripts/ that have a .pl extension to it, eg copy scripts/*.pl /usr/local/www/opac/cgi-bin/koha/ 
 Your virtual host should be set up to use these dirs, some thing like this: 
 
 
@@ -92,6 +114,8 @@ Your virtual host should be set up to use these dirs, some thing like this:
    ServerName opac.your.site                      
    ErrorLog logs/opac-error_log       
    TransferLog logs/opac-access_log               
+
+   SetEnv KOHA_CONF /usr/local/etc/koha.conf
    </VirtualHost>
 
 
@@ -107,7 +131,7 @@ For example:
 In the dir you have just created make an htdocs dir and a cgi-bin dir 
 Copy everything in intranet-html/ to the htdocs dir 
 Copy all the .pl files in scripts/ to the cgi-bin/koha dir 
-Make sure ur virtual host is set up to use these dirs 
+Make sure your virtual host is set up to use these dirs 
 Restart apache point your browser at koha.your.site and it should work 
 
 
