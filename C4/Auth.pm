@@ -23,6 +23,7 @@ use Digest::MD5 qw(md5_base64);
 require Exporter;
 use C4::Context;
 use C4::Output;              # to get the template
+use C4::Charset;
 use C4::Circulation::Circ2;  # getpatroninformation
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -49,7 +50,10 @@ C4::Auth - Authenticates Koha users
 			     flagsrequired   => {borrow => 1},
 			  });
 
-  print $query->header(-cookie => $cookie), $template->output;
+  print $query->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+  ), $template->output;
 
 
 =head1 DESCRIPTION
@@ -284,7 +288,6 @@ sub checkauth {
 				   -expires => '+1y');
 	}
 	return ($userid, $cookie, $sessionID, $flags);
-	exit;
     }
     # else we have a problem...
     # get the inputs from the incoming query
@@ -305,7 +308,10 @@ sub checkauth {
     $cookie=$query->cookie(-name => 'sessionID',
 				  -value => $sessionID,
 				  -expires => '+1y');
-    print $query->header(-cookie=>$cookie), $template->output;
+    print $query->header(
+      -type => guesstype($template->output),
+      -cookie => $cookie
+    ), $template->output;
     exit;
 }
 

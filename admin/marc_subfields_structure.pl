@@ -20,6 +20,7 @@
 
 use strict;
 use C4::Output;
+use C4::Charset;
 use C4::Auth;
 use CGI;
 use C4::Search;
@@ -346,4 +347,7 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-print $input->header(-cookie => $cookie), $template->output;
+print $input->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+), $template->output;

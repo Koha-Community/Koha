@@ -39,6 +39,7 @@ use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
+use C4::Charset;
 use HTML::Template;
 
 my $query = new CGI;
@@ -53,4 +54,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {catalogue => 1},
 			     debug => 1,
 			     });
-print $query->header(-cookie => $cookie),$template->output;
+print $query->header(
+    -type => guesstype($template->output),
+    -cookie => $cookie
+),$template->output;

@@ -4,6 +4,7 @@ use strict;
 require Exporter;
 use C4::Database;
 use C4::Output;  # contains gettemplate
+use C4::Charset;
 use CGI;
 use C4::Auth;
 
@@ -17,4 +18,7 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-print  $query->header(-cookie => $cookie), $template->output;
+print  $query->header(
+   -type => guesstype($template->output),
+   -cookie => $cookie
+), $template->output;
