@@ -2,25 +2,27 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Akwizycje</title>
+<title>KOHA: INTRANET: Parametry</title>
 <link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
-a.acquisition {
+
+a.about {
+	background-color: #86c268;
 	font-weight: normal;
 	text-decoration: none;
-	background-color: #ffdf61;
 	cursor: hand;
-	color:#FFFFFF;
+	color: #FFFFFF;
 	padding:4px;
 	font-weight: bold;
 	}
-a.acquisition:hover {
-	background-color: #ffdf61;
-	color: #000000;
+a.about:hover {
+	background-color: #86c268;
+	color: #FFFFFF;
 	text-decoration: normal;
 	font-weight: bold;
 	}
@@ -47,7 +49,7 @@ a.acquisition:hover {
 						<a class="members" href="/cgi-bin/koha/members-home.pl">Cz³onkowie</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Alwizycje</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Akwizycje</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Cyrkulacja</a>
@@ -70,7 +72,7 @@ a.acquisition:hover {
 </table>
 <BLOCKQUOTE>
 <TMPL_IF NAME="loggedinusername">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj siê</a>]</p>
+    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
 </TMPL_IF>

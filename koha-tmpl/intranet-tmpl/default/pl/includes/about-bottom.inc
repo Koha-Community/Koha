@@ -1,4 +1,4 @@
-<br clear=all>
+<html><br clear=all>
 <p> &nbsp; </p>
 
 
@@ -14,7 +14,7 @@
 <A HREF="/cgi-bin/koha/reports-home.pl">Reporty</a> ||
 <A HREF="/cgi-bin/koha/admin-home.pl">Parametry</a> ||
 <A HREF="/cgi-bin/koha/about.pl">About</a> || 
-Pocz±tek
+Pomoc
 </FONT>
 </CENTER>
 </BODY>
