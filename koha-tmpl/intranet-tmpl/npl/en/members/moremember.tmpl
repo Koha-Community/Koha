@@ -9,9 +9,9 @@
 <div class="tabitem">
 			 <form method="post" action="/cgi-bin/koha/circ/circulation.pl"><input name="findborrower" type="hidden" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /> <input type="submit" class="submit" value="Issue" /></form>
 
-<!-- Hide from NPL --><!-- TMPL_IF name="IS_ADULT" --> <form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form><!-- /TMPL_IF --><!-- /Hide from NPL -->
+<!-- Hide from NPL --><!-- TMPL_IF name="IS_ADULT" --> <form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form><!-- /TMPL_IF --><!-- /Hide from NPL -->
 
-<!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Modify" /></form>
+<!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Edit" /></form>
 <!-- TMPL_ELSE --> <form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" name="modify" value="Edit" /></form>
 <!-- /TMPL_IF -->
 
