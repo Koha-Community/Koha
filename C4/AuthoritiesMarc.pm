@@ -75,9 +75,11 @@ sub authoritysearch {
 
 	# "Normal" statements
 	# quote marc fields/subfields
-	for (my $i=0;$i<$#{$tags};$i++) {
+	for (my $i=0;$i<=$#{$tags};$i++) {
+#		warn " $i: ".@$tags[$i];
 		if (@$tags[$i]) {
 			@$tags[$i] = $dbh->quote(@$tags[$i]);
+#			warn " $i After process: ".@$tags[$i];
 		}
 	}
 	my @normal_tags = ();
@@ -196,6 +198,7 @@ sub create_request {
 	for(my $i=0; $i<=@$value;$i++) {
 		if (@$value[$i]) {
 			$nb_active++;
+#			warn " @$tags[$i]";
 			if ($nb_active==1) {
 				if (@$operator[$i] eq "start") {
 					$sql_tables .= "auth_subfield_table as m$nb_table,";
@@ -849,37 +852,59 @@ sub FindDuplicate {
 	my ($record,$authtypecode)=@_;
 	my $dbh = C4::Context->dbh;
 	
-	warn "".$record->as_formatted;
+#	warn "".$record->as_formatted;
 	# search duplicate on ISBN, easy and fast...
-	my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
+	my $sth = $dbh->prepare("select auth_tag_to_report,summary from auth_types where authtypecode=?");
 	$sth->execute($authtypecode);
-	my ($auth_tag_to_report) = $sth->fetchrow;
+	my ($auth_tag_to_report,$taglist) = $sth->fetchrow;
 	$sth->finish;
 	# a more complex search : build a request for authoritysearch
 	my (@tags, @and_or, @excluding, @operator, @value, $offset, $length);
 	# search on biblio.title
-	warn " tag a reporter : $auth_tag_to_report";
+#	warn " tag a reporter : $auth_tag_to_report";
+	warn "taglist ".$taglist;
+	my @subfield = split /\[/,  $taglist;
+	my $max = @subfield;
+	for (my $i=1; $i<$max;$i++){
+		warn " ".$subfield[$i];
+		$subfield[$i]=substr($subfield[$i],3,1);
+		warn " ".$subfield[$i];
+	}
+	
 	if ($record->fields($auth_tag_to_report)) {
-		my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where tagfield=? and authtypecode=? and tab >= 0");
-		$sth->execute($auth_tag_to_report,$authtypecode);
-		warn " Champ $auth_tag_to_report present";
-		while (my ($tag,$subfield) = $sth->fetchrow){
-			if ($record->field($tag)->subfields($subfield)) {
-				warn "tag :".$tag." subfield: $subfield value : $record->field($tag)->subfield($subfield)->as_formatted";
-				push @tags, "'".$tag.$subfield."'";
+		foreach my $subfieldcount (1..$#subfield){
+			if ($record->field($auth_tag_to_report)->subfields($subfield[$subfieldcount])) {
+#				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
+				push @tags, $auth_tag_to_report.$subfield[$subfieldcount];
+#				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
 				push @and_or, "and";
 				push @excluding, "";
 				push @operator, "contains";
-				push @value, $record->field($tag)->subfield($subfield);
+				push @value, $record->field($auth_tag_to_report)->subfield($subfield[$subfieldcount]);
 			}
 		}
+		
+# 		my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where tagfield=? and authtypecode=? and tab >= 0");
+# 		$sth->execute($auth_tag_to_report,$authtypecode);
+# 		warn " field $auth_tag_to_report exists";
+# 		while (my ($tag,$subfield) = $sth->fetchrow){
+# 			if ($record->field($tag)->subfields($subfield)) {
+# #				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
+# 				push @tags, $tag.$subfield;
+# #				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
+# 				push @and_or, "and";
+# 				push @excluding, "";
+# 				push @operator, "contains";
+# 				push @value, $record->field($tag)->subfield($subfield);
+# 			}
+# 		}
 	}
  
 	my ($finalresult,$nbresult) = authoritysearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10,$authtypecode);
 	# there is at least 1 result => return the 1st one
 	if ($nbresult) {
-		warn "$nbresult => ".@$finalresult[0]->{authid},@$finalresult[0]->{summary};
-		return @$finalresult[0]->{authid},@$finalresult[0]->{authid},@$finalresult[0]->{summary};
+		warn "$nbresult => ".@$finalresult[0]->{authid},$record->field($auth_tag_to_report)->subfield('a');
+		return @$finalresult[0]->{authid},@$finalresult[0]->{authid},$record->field($auth_tag_to_report)->subfield('a');
 	}
 	# no result, returns nothing
 	return;
@@ -899,6 +924,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.13  2005/04/05 15:23:41  hdl
+# Searching for double entries when adding a new authority.
+#
 # Revision 1.12  2005/04/05 09:58:48  hdl
 # Adding double authority search before creating a new authority
 #

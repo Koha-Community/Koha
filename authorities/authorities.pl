@@ -160,7 +160,7 @@ sub create_input () {
 
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
-# "=>".$record->as_formatted;
+#	warn "=>".$record->as_formatted if $record;
     # fill arrays
     my @loop_data =();
     my $tag;
@@ -347,16 +347,19 @@ if ($op eq "add") {
 		}
 	# now, redirect to additem page
 		print $input->redirect("detail.pl?authid=$authid");
+ 		build_tabs ($template, $record, $dbh,$encoding);
+ 		build_hidden_data;
 		exit;
 	} else {
 	# it may be a duplicate, warn the user and do nothing
-#		build_tabs ($template, $record, $dbh,$encoding);
-#		build_hidden_data;
 		$template->param(
  			duplicateauthnumber		=> $duplicateauthnumber,
  			duplicateauthid				=> $duplicateauthid,
- 			duplicateauthvalue				=> $duplicateauthvalue,
-			 );
+ 			duplicateauthvalue			=> $duplicateauthvalue,
+			);
+		warn " AUTH : ".$record->as_formatted,
+ 		build_tabs ($template, $record, $dbh,$encoding);
+ 		build_hidden_data;
 	}
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
@@ -415,10 +418,13 @@ if ($op eq "add") {
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
 	&AUTHdelauthority($dbh,$authid);
+} else {
+	build_tabs ($template, $record, $dbh,$encoding);
+	build_hidden_data;
 }
 
-build_tabs ($template, $record, $dbh,$encoding);
-build_hidden_data;
+# build_tabs ($template, $record, $dbh,$encoding);
+# build_hidden_data;
 $template->param(
 	authid                       => $authid,
 # 	oldbiblionumtagfield        => $oldbiblionumtagfield,
