@@ -163,7 +163,7 @@ printend
 	print "<tr><td>Description</td><td><input type=text name=description size=40 maxlength=80 value='$data->{'description'}'>&nbsp;</td></tr>";
 	print "<tr><td>Enrolment period</td><td><input type=text name=enrolmentperiod value='$data->{'enrolmentperiod'}'></td></tr>";
 	print "<tr><td>Upperage limit</td><td><input type=text name=upperagelimit value='$data->{'upperagelimit'}'></td></tr>";
-	print "<tr><td>Date of birth Required</td><td><input type=text name=dateofbirthrequired value='$data->{'dateofbirthrequired'}'> (14/02/2002)</td></tr>";
+	print "<tr><td>Age Required</td><td><input type=text name=dateofbirthrequired value='$data->{'dateofbirthrequired'}'></td></tr>";
 	print "<tr><td>Fine type</td><td><input type=text name=finetype size=30 maxlength=30 value='$data->{'finetype'}'></td></tr>";
 	print "<tr><td>Bulk</td><td><input type=text name=bulk value='$data->{'bulk'}'></td></tr>";
 	print "<tr><td>Enrolment fee</td><td><input type=text name=enrolmentfee value='$data->{'enrolmentfee'}'></td></tr>";
@@ -219,7 +219,7 @@ print "</table>";
 	print "<tr><td>Description</td><td>$data->{'description'}</td></tr>";
 	print "<tr><td>Enrolment period</td><td>$data->{'enrolmentperiod'}</td></tr>";
 	print "<tr><td>Upperage limit</td><td>$data->{'upperagelimit'}</td></tr>";
-	print "<tr><td>Date of birth Required</td><td>$data->{'dateofbirthrequired'}</td></tr>";
+	print "<tr><td>Age Required</td><td>$data->{'dateofbirthrequired'}</td></tr>";
 	print "<tr><td>Fine type</td><td>$data->{'finetype'}</td></tr>";
 	print "<tr><td>Bulk</td><td>$data->{'bulk'}</td></tr>";
 	print "<tr><td>Enrolment fee</td><td>$data->{'enrolmentfee'}</td></tr>";
