@@ -426,15 +426,25 @@ sub _next_token_intermediate {
 	    $it->set_attributes( $this->_extract_attributes($it->string, $it->line_number) );
 	}
     } else {
+	my $eof_p = 0;
 	for ($it = '', my $cdata_close = $this->cdata_close;;) {
 	    my $next = $this->_next_token_internal($h);
-	last if !defined $next;
+	    $eof_p = !defined $next;
+	last if $eof_p;
 	    if (defined $next && $next->string =~ /$cdata_close/is) {
 		$this->_push_readahead( $next ); # push entire TmplToken object
 		$this->_set_cdata_mode( 0 );
 	    }
 	last unless $this->cdata_mode_p;
 	    $it .= $next->string;
+	}
+	if ($eof_p) {
+	    $it = undef;
+	    error_normal "Unexpected end of file while looking for "
+		    . $this->cdata_close
+		    . "\n", $this->line_number_start;
+	    $this->_set_fatal( 1 );
+	    $this->_set_syntaxerror( 1 );
 	}
 	if ($this->pcdata_mode_p) {
 	    my $check = $it;
@@ -443,9 +453,10 @@ sub _next_token_intermediate {
 			    \$pedantic_error_markup_in_pcdata_p
 		    if $check =~ /$re_tag_compat/s;
 	}
-	$it = TmplToken->new( $it, TmplTokenType::CDATA, $this->line_number );
+	$it = TmplToken->new( $it, TmplTokenType::CDATA, $this->line_number )
+		if defined $it;
 	$this->_set_pcdata_mode, 0;
-	$this->_set_cdata_close, undef;
+	$this->_set_cdata_close, undef unless !defined $it;
     }
     return $it;
 }
