@@ -29,15 +29,15 @@ my ($template, $borrowernumber, $cookie)
 
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
-my @bordat;
-$bordat[0] = $borr;
+# my @bordat;
+# $bordat[0] = $borr;
 
 # get biblionumber.....
 my $biblionumber = $query->param('bib');
 
 my $bibdata = bibdata($biblionumber);
  $template->param($bibdata);
- $template->param(BORROWER_INFO => \@bordat, biblionumber => $biblionumber);
+#  $template->param(BORROWER_INFO => \@bordat, biblionumber => $biblionumber);
 
 # get the rank number....
 my ($rank,$reserves) = FindReserves($biblionumber,'');
@@ -58,7 +58,6 @@ $template->param(branch => $branch);
 
 my $branches = getbranches();
 $template->param(branchname => $branches->{$branch}->{'branchname'});
-
 
 # make branch selection options...
 #my $branchoptions = '';
@@ -200,7 +199,6 @@ if ($query->param('item_types_selected')) {
 		$fee = 1;
 		$proceed = 1;
 	}
-	warn "branch :$branch:";
 	if ($proceed && $branch) {
 		$fee = sprintf "%.02f", $fee;
 		$template->param(fee => $fee);
@@ -236,6 +234,21 @@ if ($query->param('item_types_selected')) {
 		$template->param(message => 1);
 		$noreserves = 1;
 		$template->param(too_much_oweing => $amount);
+	}
+	if ($borr->{gonenoaddress} eq 1) {
+		$noreserves = 1;
+		$template->param(message => 1,
+						GNA => 1);
+	}
+	if ($borr->{lost} eq 1) {
+		$noreserves = 1;
+		$template->param(message => 1,
+						lost => 1);
+	}
+	if ($borr->{debarred} eq 1) {
+		$noreserves = 1;
+		$template->param(message => 1,
+						debarred => 1);
 	}
 	my ($resnum, $reserves) = FindReserves('', $borrowernumber);
 	$template->param(RESERVES => $reserves);

@@ -9,6 +9,9 @@
 		<!-- TMPL_IF NAME="already_reserved" --><li>you already have a reserve placed on this item.</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="no_items_selected" --><li>you must select at least on item type!</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="no_branch_selected" --><li>you must select a branch for pickup!</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="GNA" --><li>You are gone without address. Reservation is forbidden. Please contact the library</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="lost" --><li>This card has been declared lost. Reserve impossible. Please contact the library</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="debarred" --><li>Your account is temporarily suspended. Please contact the library</li><!-- /TMPL_IF -->
 	</ul>
 <!-- /TMPL_IF -->
 
