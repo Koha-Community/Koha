@@ -336,7 +336,7 @@ if ($op eq "add") {
 # MARC::Record built => now, record in DB
 	warn "IN ADD : ".$record->as_formatted();
 	if ($is_a_modif) {
-		 AUTHmodauthority($dbh,$record,$authid,$authtypecode);
+		 AUTHmodauthority($dbh,$authid,$record,$authtypecode);
 	} else {
 		($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
 	}
@@ -419,7 +419,6 @@ foreach my $thisauthtype (keys %$authtypes) {
 				selected => $selected,
 				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
 			);
-	warn "X = $authtypes->{$thisauthtype}{'authtypetext'}";
 	push @authtypesloop, \%row;
 }
 

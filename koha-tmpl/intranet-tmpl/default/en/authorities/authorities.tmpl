@@ -8,10 +8,11 @@
 		<input type="hidden" name="op" value="add">
 		<input type="hidden" name="addfield_field">
 		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
+		<input type="hidden" name="authid" value="<!-- TMPL_VAR name="authid" -->">
 		<!-- TMPL_IF name="authid" -->
 			<input type="button" value="Save" onClick='Check(this.form)' accesskey="w" class="button authority">
 		<!-- TMPL_ELSE -->
-			<input type="button" value="Add biblio" onClick='Check(this.form)' accesskey="w" class="button authority">
+			<input type="button" value="Add authority" onClick='Check(this.form)' accesskey="w" class="button authority">
 		<!-- /TMPL_IF -->
 <!--		<a href="javascript:PopupZ3950()" class="button authority">z3950 search</a> -->
 	</p>

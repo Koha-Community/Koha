@@ -30,13 +30,27 @@
 	<div id="resultlist">
 		<table>
 			<tr>
-				<th class="authority">Authority #</th>
-				<th class="authority">Author</th>
+				<th class="authority">Summary</th>
+				<th class="authority">Used</th>
+				<th class="authority">View</th>
+				<th class="authority">Delete</th>
 			</tr>
 			<!-- TMPL_LOOP name="result" -->
 				<tr>
-					<td><a href="detail.pl?authid=<!-- TMPL_VAR name="authid" -->"><!-- TMPL_VAR name="authid" --></a></td>
 					<td><!-- TMPL_VAR name="summary" --></td>
+					<td><!-- TMPL_VAR name="used" --> <a href="../search.marc/search.pl?type=intranet&op=do_search&marclist=<!-- TMPL_VAR name="biblio_fields" -->&operator==&value=<!-- TMPL_VAR name="authid" -->&and_or=&excluding=">...</a></td>
+					<td>
+						<a href="detail.pl?authid=<!-- TMPL_VAR name="authid" -->">
+							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0" alt="Authority number <!-- TMPL_VAR name="authid" -->" title="Authority number<!-- TMPL_VAR name="authid" -->">
+						</a>
+					</td>
+					<td>
+						<!-- TMPL_UNLESS name="used" -->
+						<a href="authorities-home.pl?op=delete&authid=<!-- TMPL_VAR name="authid" -->">
+							<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0">
+						</a>
+						<!-- /TMPL_UNLESS -->
+					</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
