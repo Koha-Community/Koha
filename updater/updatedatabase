@@ -110,6 +110,7 @@ my %requirefields=(
     		     'nocalc' => 'int(11)'},
     borrowers=>{'userid' => 'char(30)',
     		'password' => 'char(30)',},
+    aqorders=>{'budgetdate' => 'date'},		   
 );
 
 # Default system preferences
@@ -304,6 +305,10 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.15  2002/07/20 22:30:06  rangi
+# Making sure fix makes it into the main branch as well
+# Fix for bug 69
+#
 # Revision 1.14  2002/07/08 16:20:26  tonnesen
 # Added sessionqueries table and password/userid fields to borrowers table
 #
