@@ -50,14 +50,15 @@
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="=" />  
 				<!-- TMPL_VAR name="CGIbranch" --></td></tr>
-</table>			
+</table>
+<input type="submit" value="Search" class="submit" />
 <table>
 <caption>Other options:</caption>
 <tr><th><label for="barcode">Barcode</label></th><td>
 				<input type="hidden" name="marclist" value="items.barcode" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
-				<input type="hidden" name="operator" value="=" />
+				<input type="hidden" name="operator" value="start" />
 				<input type="text" id="barcode" name="value" size="14" maxlength="14" /></td></tr>
 <tr><th><label for="dewey">Call Number</label></th><td><input type="hidden" name="marclist" value="biblioitems.dewey" />
 			<input type="hidden" name="and_or" value="and" />
@@ -100,9 +101,7 @@
 				<option value="biblioitems.publishercode">Publisher</option>
 			</select>
 		</p>
-		<p>
-			<input type="submit" value="Search" class="submit" />
-		</p>
+		<p>	<input type="submit" value="Search" class="submit" /></p>
 	</div>
 </form>
 
