@@ -192,9 +192,9 @@ sub searchauthority  {
 		push(@bind,$searchstring);
 		}
 #	$query .= " and freelib like \"$searchstring%\"" if ($searchstring);
-	$query .= " order by category,freelib limit ?,?";
+	$query .= " limit ?,?";
 	push(@bind,$offset,($pagesize*4));
-# 	warn "q : $query";
+	warn "q : $query".@bind;
 	my $sth=$dbh->prepare($query);
 	$sth->execute(@bind);
 	my @results;
