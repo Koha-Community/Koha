@@ -1155,7 +1155,7 @@ EOP
 
     showmessage(getmessage('CreatingDatabase'),'none');
 
-    my $result=system("$::mysqldir/bin/mysqladmin -u$::mysqluser -p$::mysqlpass create $::dbname");
+    my $result=system("$::mysqldir/bin/mysqladmin", "-u$::mysqluser", "-p$::mysqlpass", "create", "$::dbname");
     if ($result) {
 	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
     } else {
@@ -1188,12 +1188,12 @@ sub populatedatabase {
     my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
     if ($response =~/^y/i) {
 	system("gunzip sampledata-1.2.gz");
-	system("cat sampledata-1.2 | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+	system("cat sampledata-1.2 | $::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname");
 	system("gzip -9 sampledata-1.2");
-	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-	system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -\"p$::mysqlpass_quoted\" $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+	system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
 	showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
     } else {
 	my $input;
@@ -1214,9 +1214,9 @@ sub populatedatabase {
 	    $branchcode=uc($branchcode);
 	    $branchcode=substr($branchcode,0,4);
 
-	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
 	    my $printername='Library Printer';
 	    $printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
@@ -1225,7 +1225,7 @@ sub populatedatabase {
 	    my $printerqueue='lp';
 	    $printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
 	    $printerqueue=~s/[^A-Za-z0-9]//g;
-	    system("$::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+	    system("$::mysqldir/bin/mysql -u$::mysqluser -p\"$::mysqlpass_quoted\" $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 
 	}
     }
