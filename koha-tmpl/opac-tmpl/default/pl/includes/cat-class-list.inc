@@ -1,5 +1,5 @@
 <!--
- list of Classes to be included in /catalogue/index.html and cat/index.html
+ list z Classes to be included in /catalogue/index.html and cat/index.html
  This is a qick-fix - These should really be fetched from the database
 -->
 <option value="E">Easy / Picture Books
