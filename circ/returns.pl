@@ -106,13 +106,18 @@ if ($barcode) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
     ($returned, $messages, $iteminformation, $borrower) = returnbook($barcode, $branch);
+    $returneditems{0} = $barcode;
+    $ritext.= "<input type=hidden name=ri-0 value=$barcode>\n";
     if ($returned) {
-	$returneditems{0} = $barcode;
 	$riborrowernumber{0} = $borrower->{'borrowernumber'};
 	$riduedate{0} = $iteminformation->{'date_due'};
-	$ritext.= "<input type=hidden name=ri-0 value=$barcode>\n";
 	$ritext.= "<input type=hidden name=dd-0 value=$iteminformation->{'date_due'}>\n";
 	$ritext.= "<input type=hidden name=bn-0 value=$borrower->{'borrowernumber'}>\n";
+    } else {
+	$riborrowernumber{0} = 0;
+	$riduedate{0} = 0;
+	$ritext.= "<input type=hidden name=dd-0 value=0>\n";
+	$ritext.= "<input type=hidden name=bn-0 value=0>\n";
     }
 }
 
@@ -206,7 +211,7 @@ itemtype: $iteminfo->{'itemtype'}
 COLLECT AT: $branchname
 
 BORROWER:
-$borr->{'surname'}, $borr->{'firstname'}
+$borr->{'title'} $borr->{'surname'}, $borr->{'firstname'}
 card number: $borr->{'cardnumber'}
 Phone: $borr->{'phone'}
 $borr->{'streetaddress'}
@@ -215,11 +220,12 @@ $borr->{'town'}
 $borr->{'emailaddress'}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 EOF
 
 	$reservetext = <<"EOF";
-<font color='red' size='+2'>Reserved found:</font> Item: $iteminfo->{'title'} ($iteminfo->{'author'}) <br>
-for $name ($number).
+<font color='red' size='+2'>Reserve found:</font> Item: $iteminfo->{'title'} ($iteminfo->{'author'}) <br>
+for $name ($number) to be collected at <b>$branchname</b>.
 <table cellpadding=5 cellspacing=0>
 <tr><td valign="top">Change status to waiting and print 
 <a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
@@ -248,6 +254,7 @@ EOF
 
 # collect the messages and put into message table....
 foreach my $code (keys %$messages) {
+    warn $code;
     if ($code eq 'BadBarcode'){
 	$messagetext .= "<font color='red' size='+2'> No Item with barcode: $messages->{'BadBarcode'} </font> <br>";
     }
@@ -257,6 +264,9 @@ foreach my $code (keys %$messages) {
     }
     if ($code eq 'WasLost'){
 	$messagetext .= "<font color='red' size='+2'> Item was lost, now found. </font> <br>";
+    }
+    if ($code eq 'wthdrawm'){
+	$messagetext .= "<font color='red' size='+2'> Item Cancelled. </font> <br>";
     }
     if (($code eq 'IsPermanent') && (not $messages->{'ResFound'})) {
 	if ($messages->{'IsPermanent'} ne $branch) {
@@ -344,9 +354,9 @@ EOF
 <tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2>
 <b>Flags</b></td></tr>
 $flaginfotext 
-</table>
 EOF
     }
+    $borrowertable .= "</table>";
 }
 
 # the returned items.....
@@ -365,19 +375,26 @@ foreach (sort {$a <=> $b} keys %returneditems) {
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	my $barcode = $returneditems{$_};
 	my $duedate = $riduedate{$_};
-	my @datearr = localtime(time());
-	###
-	# convert to nz date format
-	my @tempdate = split(/-/,$duedate);
-	my $duedatenz = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-	####
-	my $todaysdate 
-	    = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
-	my $overduetext = "$duedatenz";
-	($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
-	($duedatenz) || ($overduetext = "<img src=/images/blackdot.gif>");
-	my $borrowernumber = $riborrowernumber{$_};
-	my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
+	my $overduetext;
+	if ($duedate) {
+	    my @tempdate = split ( /-/ , $duedate ) ;
+            my $duedatenz = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
+            my @datearr = localtime(time());
+            my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
+	    $overduetext = "$duedatenz";
+	    ($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
+	    ($duedatenz) || ($overduetext = "<img src=/images/blackdot.gif>");
+        } else {
+            $overduetext = "Not on loan.";
+	}
+        my $borrowernumber = $riborrowernumber{$_};
+        my $borrowerinfo;
+        if ($borrowernumber) {
+	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
+            my $borrowerinfo = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}";
+        } else {
+	    $borrowerinfo = "Not on loan.";
+	}
 	my ($iteminformation) = getiteminformation(\%env, 0, $barcode);;
 	$returneditemstable .= << "EOF";
 <tr><td bgcolor=$color>$overduetext</td>
@@ -387,7 +404,7 @@ foreach (sort {$a <=> $b} keys %returneditems) {
 <td bgcolor=$color>$iteminformation->{'author'}</td>
 <td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td>
 <td bgcolor=$color>
-<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>
+$borrowerinfo</td></tr>
 EOF
     } else {
 	last;
