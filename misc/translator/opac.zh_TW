@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha OPAC 2.0.0RC4\n"
-"POT-Creation-Date: 2004-02-23 23:46-0500\n"
+"POT-Creation-Date: 2004-02-27 01:30-0500\n"
 "PO-Revision-Date: 2004-02-18 02:40-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -16,10 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
+#, c-format
+msgid "%pNormal%pExact"
+msgstr "%p一般 %p完全吻合"
+
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:11
 #, c-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:13
 #, c-format
@@ -33,13 +38,18 @@ msgstr "%s (辦公)"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:105
 #, c-format
-msgid "%s <b>acquired in the last"
-msgstr "最近新到的 %s 圖書資料：最近"
+msgid "%s <b>acquired in the last %S days</b>"
+msgstr "<b>最近%2$s日內新到的</b>%1$s"
+
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:20
+#, c-format
+msgid "%s GROUP - %s"
+msgstr "%s 群組 - %s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:9
 #, c-format
 msgid "%s acquired in the last <i>%s</i> days"
-msgstr "最近<b>%2$s</b>日內新到的%1$s圖書資料"
+msgstr "最近<b>%2$s</b>日內新到的%1$s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:15
 #, c-format
@@ -60,15 +70,10 @@ msgstr "&copy;"
 msgid ": <a1>%s</a>"
 msgstr ": <a1>%s</a>"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
 #, c-format
-msgid "<B>%s GROUP - %s </b>"
-msgstr "<b>%s 群組 - %s</b>"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:56
-#, c-format
-msgid "<B>BARCODE %s</b>"
-msgstr "<B>條碼 %s</b>"
+msgid "<a1>Log In</a> to Koha"
+msgstr "<a1>登入</a>Koha"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:15
 #, c-format
@@ -309,17 +314,6 @@ msgstr "<b>集叢號：</b>%s"
 msgid "<b>Year :</b> %s"
 msgstr "<b>年份：</b>%s"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:51
-#, c-format
-msgid "<b>You have a credit of %s</b>"
-msgstr "<b>您有 %s 結餘</b>"
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:39
-#, c-format
-msgid "<b>You have outstanding charges and fines of %s</b>"
-msgstr "<b>您尚欠罰款或其他費用%s</b>"
-
 # XXX This (in the English template) is problematic
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:26
 #, c-format
@@ -380,6 +374,11 @@ msgstr "著者"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:75
 msgid "Available"
 msgstr "在館內"
+
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:56
+#, c-format
+msgid "BARCODE %s"
+msgstr "條碼 %s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:59
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:53
@@ -461,12 +460,6 @@ msgstr "電郵"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:64
 msgid "End reserve on this date:"
 msgstr "在此日期停止預約："
-
-# TODO:舊譯「這是整個書名」
-# NOTE 譯文更動 by Arthur
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
-msgid "Exact"
-msgstr "完全吻合"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:9
 msgid "FINES &amp; CHARGES"
@@ -555,7 +548,7 @@ msgstr "KOHA：查詢館藏"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:8
 msgid "Keywords"
-msgstr "關鍵字"
+msgstr "關鍵詞"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:32
 msgid "Koha Login"
@@ -570,14 +563,14 @@ msgstr "最近出現"
 msgid "Library Card: %s"
 msgstr "借書證：%s"
 
-# FIXME need to check what real libraries use
+#  NOTE 存放地點 used by HKPL; libraries in Taiwan seems to always write 館藏地
+#  NOTE The HKPL term seems to be more understandable
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:56
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:72
 msgid "Location"
-msgstr "地點"
+msgstr "存放地點"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-auth.tmpl:35
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
 msgid "Log In"
 msgstr "登入"
 
@@ -624,11 +617,6 @@ msgstr "否"
 msgid "Non-Fiction"
 msgstr "非小說"
 
-# TODO 舊譯「書名中有這些字眼即可」
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:27
-msgid "Normal"
-msgstr "一般"
-
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:89
 msgid "Not Reservable"
 msgstr "不可預約"
@@ -638,7 +626,7 @@ msgid ""
 "Note that if you enter a value in Keyword and a value somewhere else, only "
 "keyword will be used"
 msgstr ""
-"注意：一旦輸入了「關鍵字」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵"
+"注意：一旦輸入了「關鍵詞」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵"
 "字。"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:105
@@ -928,9 +916,20 @@ msgstr "您目前借了 %s 項圖書資料。"
 msgid "You have %s items currently reserved."
 msgstr "您目前預約了 %s 項圖書資料。"
 
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:51
+#, c-format
+msgid "You have a credit of %s"
+msgstr "您有 %s 結餘"
+
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:112
 msgid "You have no items on issue."
 msgstr "您沒有借出任何圖書資料。"
+
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:39
+#, c-format
+msgid "You have outstanding charges and fines of %s"
+msgstr "您尚欠款項 %s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:66
 msgid "You have reserved items waiting:"
@@ -957,10 +956,6 @@ msgstr "青年小說類"
 msgid "Your changes won't appear until the library has validated them."
 msgstr "圖書館核實您的作的修改後，修改才會生效。"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:105
-msgid "days"
-msgstr "日"
-
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:68
 msgid "delete"
@@ -984,9 +979,20 @@ msgstr "借出"
 msgid "text/html; charset=iso-8859-1"
 msgstr "text/html; charset=UTF-8"
 
-#: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
-msgid "to Koha"
-msgstr "Koha"
-
 #~ msgid "<b>Subject:</b> %s"
 #~ msgstr "<b>主題：</b>%s"
+
+# TODO:舊譯「這是整個書名」
+# NOTE 譯文更動 by Arthur
+#~ msgid "Exact"
+#~ msgstr "完全吻合"
+
+# TODO 舊譯「書名中有這些字眼即可」
+#~ msgid "Normal"
+#~ msgstr "一般"
+
+#~ msgid "days"
+#~ msgstr "日"
+
+#~ msgid "to Koha"
+#~ msgstr "Koha"
