@@ -1,0 +1,19 @@
+RELEASE NOTES
+* standard acquisition and MARC cataloguing now both useable at the same time.
+* MANY bugfixes.
+* almost everything now templated. A few admin scripts still to template.
+* inclusion of some  pictures to say "add", "modify", "delete" in many places.
+* the koha-html cvs tree is now UNUSED, and no mode included in this release. the koha cvs project contains everything.
+
+TODO
+* z39.50 support. A port from the 1.2.x z39.50 support needs to be done. Should be quick,
+* fixing bugs. If you find a bug in this version, please take the plane and go for a trip to : bugs.koha.org
+
+FEATURE FREEZE
+feature freeze is there... only z39.50 will be added until 2.0RC1, which should be the next release !
+
+KNOWN BUGS *IMPORTANT* :
+* koha does NOT work with MARC::Record 1.12. It works fine with MARC::Record 0.93, and maybe with other versions.
+* repeted subfields in MARC/iso2709 works poorly : only the 1st subfield is stored, other are ignored. At least, the 1st is right ! (in the 1.9.0, the 1st was buggied by other subfields too)
+* In the MARC search, the "not" flag does not work : the result of the query is very strange !
+* en and fr are the only languages well supported in this version. Other translator teams are waiting for more stable templates :-)

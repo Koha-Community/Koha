@@ -1,0 +1,44 @@
+RELEASE NOTES
+=============
+This release add many bugfixes, and some improvment in z3950 and repetable fields management.
+
+
+PACKAGE NEEDED :
+---------
+Nothing new. Note MARC::Record has new releases, but older one (1.26) works fine.
+
+DB modifications :
+---------
+No modif in the DB.
+
+z3950 :
+---------
+* works on biblio adding & modifying
+* works on ISBN, author, title, the 1st found being the one used.
+
+various :
+----------
+* added subject and subtitle to MARC subfields mapped to Koha old-DB.
+* reordered bookfunds/budget admin tools.
+
+GUI reordering
+------------------
+* Some unused links have been dropped.
+* a "submenu" shows some operation below main menu.
+* the MARC link disappeared. It's managed by the MARC=ON/OFF systempref. (the breeding import is now in Parameters section)
+* acquisition and cataloguing are now separated. acquisition=simple/normal in systempref and cataloguing is MARC/nonMARC depending on MARC=ON/OFF systempref.
+
+Should be easier to understand.
+
+Bugs still open in bugs.koha.org
+=======================
+always some, but less than in 1.9.3 (35 at this time)
+Feel free to ask for bugfixes and new features in bugs.koha.org.
+NOTE that NEW FEATURES or IMPROVEMENTS will only be for 2.0.1 unless it's a very trivial or blocking one.
+
+TODO
+=====
+* bug fixes (everybody)
+* cleaning z3950 old searches (more than 1 hour/day old ?) (paul)
+*
+
