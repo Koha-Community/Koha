@@ -196,13 +196,13 @@ Phone: <!-- TMPL_VAR Name="borphone" -->
 	</td>
 	<tr>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF Name="returneditems" -->
+<!-- TMPL_IF Name="riloop" -->
     <tr><td colspan=2>
 		<table border=1 cellpadding=5 cellspacing=0>
 		<tr><th colspan=6 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 		<font color=black>Returned Items</font></th></tr>
 		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
-		<!-- TMPL_LOOP Name="returneditemloop" -->
+		<!-- TMPL_LOOP Name="riloop" -->
 			<tr><td bgcolor=<!-- TMPL_VAR Name="color" -->>
 				<!-- TMPL_IF Name="duedate" -->
 					<!-- TMPL_IF Name="early" -->
