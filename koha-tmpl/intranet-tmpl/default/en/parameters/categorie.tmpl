@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="admin-top.tmpl">
+<TMPL_INCLUDE NAME="parameters-top.inc">
 
 <TMPL_IF NAME=add_form>
 	<script>
@@ -168,12 +168,139 @@
 <TMPL_IF NAME=delete_confirm>
 	TOTAL : <TMPL_VAR NAME=categorycode> : <TMPL_VAR NAME=total><br>
 
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'>
+				<b>Category code</b>
+			</td>
+			<td background='/images/background-mem.gif'>
+				<TMPL_VAR NAME=categorycode>
+			</td>
+		</tr>
+        	<form action='<TMPL_VAR NAME=script_name>' method=post>
+			<input type=hidden name=op value=delete_confirmed>
+			<input type=hidden name=categorycode value=<TMPL_VAR NAME=categorycode>>        
+		<tr>
+			<td>Description</td>
+			<td><TMPL_VAR NAME=description></td>
+		</tr>
+		<tr>
+			<td>Enrolment period</td>
+			<td><TMPL_VAR NAME=enrolmentperiod></td>
+		</tr>
+		<tr>
+			<td>Upperage limit</td>
+			<td><TMPL_VAR NAME=upperagelimit></td>
+		</tr>
+		<tr>
+			<td>Age Required</td>
+			<td><TMPL_VAR NAME=dateofbirthrequired></td>
+		</tr>
+		<tr>
+			<td>Fine type</td>
+			<td><TMPL_VAR NAME=finetype></td>
+		</tr>
+		<tr>
+			<td>Bulk</td>
+			<td><TMPL_VAR NAME=bulk></td>
+		</tr>
+		<tr>
+			<td>Enrolment fee</td>
+			<td><TMPL_VAR NAME=enrolmentfee></td>
+		</tr>
+		<tr>
+			<td>Overdue notice required</td>
+			<td><TMPL_VAR NAME=overduenoticerequired></td>
+		</tr>
+		<tr>
+			<td>Issue limit</td>
+			<td><TMPL_VAR NAME=isssuelimit></td>
+		</tr>
+		<tr>
+			<td>Reserve fee</td>
+			<td><TMPL_VAR NAME=reservefee></td>
+		</tr>
+		<TMPL_IF NAME=totalgtzero>
+                <tr>
+			<td colspan=2 align=center><b>This record is used <TMPL_VAR NAME=total> times. Deletion not possible</b></td>
+		</tr>
+               <tr>
+			<td colspan=2>
+				</form><form action='<TMPL_VAR NAME=script_name>' method=post>
+				<input type=submit value=OK>
+				</form>
+			</td>
+		</tr>
+		<TMPL_ELSE>
+                <tr>
+			<td colspan=2 align=center>CONFIRM DELETION</td>
+		</tr>
+                <tr>
+			<td><INPUT type=submit value='YES'></form></td>
+			<td><form action='<TMPL_VAR NAME=script_name>' method=post><input type=submit value==NO></form></td>
+		</tr>
+		</TMPL_IF>
+
 </TMPL_IF>
 
+<TMPL_IF NAME=delete_confirmed>
+	data deleted
+        <form action='<TMPL_VAR NAME=script_name>' method=post>
+        <input type=submit value=OK>
+        </form>
+
+</TMPL_IF>
+
+<TMPL_IF NAME=else>
+	<h2>Category admin</h2>
+	<TMPL_IF NAME=searchfield>
+		You Searched for <TMPL_VAR NAME=searchfield>
+	</TMPL_IF>
+
+	<form action='<TMP_VAR NAME=script_name>' method=post>
+		<input type=text name=description value=<TMPL_VAR NAME=searchfield>>
+		<input type=reset name=reset value="clr">
+	</form>
+	
+        <table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'><b>Category</b></td>
+			<td background='/images/background-mem.gif'><b>Description</b></td>
+			<td background='/images/background-mem.gif'><b>Enrolment</b></td>
+			<td background='/images/background-mem.gif'><b>Upper Age Limit</b></td>
+			<td background='/images/background-mem.gif'><b>Age Required</b></td>
+			<td background='/images/background-mem.gif'><b>Fine</b></td>
+			<td background='/images/background-mem.gif'><b>Bulk</b></td>
+			<td background='/images/background-mem.gif'><b>Fee</b></td>
+			<td background='/images/background-mem.gif'><b>Overdue</b></td>
+			<td background='/images/background-mem.gif'><b>Issue Limit</b></td>
+			<td background='/images/background-mem.gif'><b>Reserve</b></td>
+			<td background='/images/background-mem.gif'> </td>
+			<td background='/images/background-mem.gif'> </td>
+		</tr>
+		<TMPL_LOOP NAME=loop>
+		<tr bgcolor="white">
+                        <td><TMPL_VAR NAME=categorycode></td>
+                        <td><TMPL_VAR NAME=description></td>
+                        <td><TMPL_VAR NAME=enrolmentperiod></td>
+                        <td><TMPL_VAR NAME=upperagelimit></td>
+                        <td><TMPL_VAR NAME=dateofbirthrequired></td>
+                        <td><TMPL_VAR NAME=finetype></td>
+                        <td><TMPL_VAR NAME=bulk></td>
+                        <td><TMPL_VAR NAME=enrolmentfee></td>
+                        <td><TMPL_VAR NAME=overduenoticerequired></td>
+                        <td><TMPL_VAR NAME=issuelimit></td>
+                        <td><TMPL_VAR NAME=reservefee></td>
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&categorycode=<TMPL_VAR NAME=categorycode>">Edit</a></td>
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&categorycode=<TMPL_VAR NAME=categorycode>">Delete</a></td>
+		</tr>
+		</TMPL_LOOP>
+
 	</table>
-	<form action=<TMPL_VAR NAME=script_name> method=post>
+	<p><form action='<TMPL_VAR NAME=script_name>' method=post>
 		<input type=hidden name=op value=add_form>
 		<input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add Category" BORDER=0 ></a><br>
-	</form>
-</BODY>
-</HTML>
+	</form></p>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="parameters-bottom.inc">
