@@ -286,17 +286,19 @@ sub dotransfer {
     $fbr = $dbh->quote($fbr);
     $tbr = $dbh->quote($tbr);
     #new entry in branchtransfers....
-    my $query = "insert into branchtransfers (itemnumber, frombranch, datearrived, tobranch) 
-                                      values($itm, $fbr, now(), $tbr)";
-    my $sth = $dbh->prepare($query);
-    $sth->execute; 
-    $sth->finish;
+    $dbh->do(<<EOT);
+	INSERT INTO	branchtransfers
+			(itemnumber, frombranch, datearrived, tobranch) 
+	VALUES		($itm, $fbr, now(), $tbr)
+EOT
+
     #update holdingbranch in items .....
-    # FIXME - Use $dbh->do()
-    $query = "update items set datelastseen = now(), holdingbranch=$tbr where items.itemnumber=$itm";
-    $sth = $dbh->prepare($query);
-    $sth->execute; 
-    $sth->finish;
+    $dbh->do(<<EOT);
+	UPDATE	items
+	SET	datelastseen  = now(),
+		holdingbranch = $tbr
+	WHERE	items.itemnumber = $itm
+EOT
     return;
 }
 
@@ -565,11 +567,12 @@ sub doreturn {
 sub updateitemlost{
   my ($itemno)=@_;
   my $dbh = C4::Context->dbh;
-  # FIXME - Use $dbh->do();
-  my $query="update items set itemlost=0 where itemnumber=$itemno";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  $sth->finish;
+
+  $dbh->do(<<EOT);
+	UPDATE	items
+	SET	itemlost = 0
+	WHERE	itemnumber = $itemno
+EOT
 }
 
 sub fixaccountforlostandreturned {

@@ -161,28 +161,32 @@ sub makepayment{
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  # FIXME - This prepare/execute/finish sequence could be done with
-  # $dbh->do(), no?
-  my $updquery="Update accountlines set amountoutstanding=0 where
-  borrowernumber=$bornumber and accountno=$accountno";
-  $sth=$dbh->prepare($updquery);
-  $sth->execute;
-  $sth->finish;
+
+  $dbh->do(<<EOT);
+	UPDATE	accountlines
+	SET	amountoutstanding = 0
+	WHERE	borrowernumber = $bornumber
+	  AND	accountno = $accountno
+EOT
+
 #  print $updquery;
-  $updquery = "insert into accountoffsets
-  (borrowernumber, accountno, offsetaccount,  offsetamount)
-  values ($bornumber,$accountno,$nextaccntno,$newamtos)";
-  my $usth = $dbh->prepare($updquery);
-  $usth->execute;
-  $usth->finish;
+  $dbh->do(<<EOT);
+	INSERT INTO	accountoffsets
+			(borrowernumber, accountno, offsetaccount,
+			 offsetamount)
+	VALUES		($bornumber, $accountno, $nextaccntno, $newamtos)
+EOT
+
   # create new line
   my $payment=0-$amount;
-  $updquery = "insert into accountlines
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
-  values ($bornumber,$nextaccntno,now(),$payment,'Payment,thanks - $user', 'Pay',0)";
-  $usth = $dbh->prepare($updquery);
-  $usth->execute;
-  $usth->finish;
+  $dbh->do(<<EOT);
+	INSERT INTO	accountlines
+			(borrowernumber, accountno, date, amount,
+			 description, accounttype, amountoutstanding)
+	VALUES		($bornumber, $nextaccntno, now(), $payment,
+			'Payment,thanks - $user', 'Pay', 0)
+EOT
+
   # FIXME - The second argument to &UpdateStats is supposed to be the
   # branch code.
   UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
@@ -241,13 +245,14 @@ sub fixaccounts {
   my $diff=$amount-$data->{'amount'};
   my $outstanding=$data->{'amountoutstanding'}+$diff;
   $sth->finish;
-  # FIXME - Use $dbh->do();
-  $query="Update accountlines set amount='$amount',amountoutstanding='$outstanding' where
-          borrowernumber=$borrowernumber and accountno=$accountno";
-   $sth=$dbh->prepare($query);
-#   print $query;
-   $sth->execute;
-   $sth->finish;
+
+  $dbh->do(<<EOT);
+	UPDATE	accountlines
+	SET	amount = '$amount',
+		amountoutstanding = '$outstanding'
+	WHERE	borrowernumber = $borrowernumber
+	  AND	accountno = $accountno
+EOT
  }
 
 # FIXME - Never used, but not exported, either.
@@ -315,19 +320,25 @@ sub manualinvoice{
     $sth->finish;
     $desc.=" ".$itemnum;
     $desc=$dbh->quote($desc);
-    # FIXME - Use $dbh->do();
-    $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-    values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft','$data->{'itemnumber'}')";
+    $dbh->do(<<EOT);
+	INSERT INTO	accountlines
+			(borrowernumber, accountno, date, amount,
+			 description, accounttype, amountoutstanding,
+			 itemnumber)
+	VALUES		($bornum, $accountno, now(), '$amount',
+			 $desc, '$type', '$amountleft',
+			 '$data->{'itemnumber'}')
+EOT
   } else {
-      $desc=$dbh->quote($desc);
-    # FIXME - Use $dbh->do();
-    $insert="insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-    values ($bornum,$accountno,now(),'$amount',$desc,'$type','$amountleft')";
+    $desc=$dbh->quote($desc);
+    $dbh->do(<<EOT);
+	INSERT INTO	accountlines
+			(borrowernumber, accountno, date, amount,
+			 description, accounttype, amountoutstanding)
+	VALUES		($bornum, $accountno, now(), '$amount',
+			 $desc, '$type', '$amountleft')
+EOT
   }
-
-  my $sth=$dbh->prepare($insert);
-  $sth->execute;
-  $sth->finish;
 }
 
 # fixcredit

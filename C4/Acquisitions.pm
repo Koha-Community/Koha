@@ -664,21 +664,19 @@ sub newbiblio {
   if ($biblio->{'seriestitle'}) { $series = 1 };
 
   $sth->finish;
-  # FIXME - Use $dbh->do();
-  $query = "insert into biblio set
-biblionumber  = $bibnum,
-title         = $biblio->{'title'},
-author        = $biblio->{'author'},
-copyrightdate = $biblio->{'copyright'},
-serial        = $series,
-seriestitle   = $biblio->{'seriestitle'},
-notes         = $biblio->{'notes'},
-abstract      = $biblio->{'abstract'}";
 
-  $sth = $dbh->prepare($query);
-  $sth->execute;
+  $dbh->do(<<EOT);
+	INSERT INTO	biblio
+	SET		biblionumber  = $bibnum,
+			title         = $biblio->{'title'},
+			author        = $biblio->{'author'},
+			copyrightdate = $biblio->{'copyright'},
+			serial        = $series,
+			seriestitle   = $biblio->{'seriestitle'},
+			notes         = $biblio->{'notes'},
+			abstract      = $biblio->{'abstract'}
+EOT
 
-  $sth->finish;
   return($bibnum);
 }
 
@@ -833,7 +831,6 @@ values ('$subject[$i]', $bibnum)");
 sub modbibitem {
     my ($biblioitem) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query;
 
     # FIXME -
     #	foreach my $field (qw( ... ))
@@ -855,24 +852,24 @@ sub modbibitem {
     $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
     $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
 
-    $query = "Update biblioitems set
-itemtype        = $biblioitem->{'itemtype'},
-url             = $biblioitem->{'url'},
-isbn            = $biblioitem->{'isbn'},
-publishercode   = $biblioitem->{'publishercode'},
-publicationyear = $biblioitem->{'publicationyear'},
-classification  = $biblioitem->{'classification'},
-dewey           = $biblioitem->{'dewey'},
-subclass        = $biblioitem->{'subclass'},
-illus           = $biblioitem->{'illus'},
-pages           = $biblioitem->{'pages'},
-volumeddesc     = $biblioitem->{'volumeddesc'},
-notes 		= $biblioitem->{'notes'},
-size		= $biblioitem->{'size'},
-place		= $biblioitem->{'place'}
-where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
-
-    $dbh->do($query);
+    $dbh->do(<<EOT);
+	UPDATE	biblioitems
+	SET	itemtype        = $biblioitem->{'itemtype'},
+		url             = $biblioitem->{'url'},
+		isbn            = $biblioitem->{'isbn'},
+		publishercode   = $biblioitem->{'publishercode'},
+		publicationyear = $biblioitem->{'publicationyear'},
+		classification  = $biblioitem->{'classification'},
+		dewey           = $biblioitem->{'dewey'},
+		subclass        = $biblioitem->{'subclass'},
+		illus           = $biblioitem->{'illus'},
+		pages           = $biblioitem->{'pages'},
+		volumeddesc     = $biblioitem->{'volumeddesc'},
+		notes 		= $biblioitem->{'notes'},
+		size		= $biblioitem->{'size'},
+		place		= $biblioitem->{'place'}
+	WHERE	biblioitemnumber = $biblioitem->{'biblioitemnumber'}
+EOT
 } # sub modbibitem
 
 # FIXME - This is in effect identical to &C4::Biblio::modnote.
@@ -881,12 +878,12 @@ where biblioitemnumber = $biblioitem->{'biblioitemnumber'}";
 sub modnote {
   my ($bibitemnum,$note)=@_;
   my $dbh = C4::Context->dbh;
-  # FIXME - Use $dbh->do();
-  my $query="update biblioitems set notes='$note' where
-  biblioitemnumber='$bibitemnum'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  $sth->finish;
+
+  $dbh->do(<<EOT);
+	UPDATE	biblioitems
+	SET	notes = '$note'
+	WHERE	biblioitemnumber = '$bibitemnum'
+EOT
 }
 
 # XXX - POD
@@ -1591,9 +1588,10 @@ where biblioitemnumber = $biblioitemnumber";
         $query =~ s/\,$/\)/;
         $dbh->do($query);
 
-        $query = "Delete from biblioitems
-where biblioitemnumber = $biblioitemnumber";
-        $dbh->do($query);
+        $dbh->do(<<EOT);
+		DELETE FROM	biblioitems
+		WHERE		biblioitemnumber = $biblioitemnumber
+EOT
     } # if
 
     $sth->finish;
@@ -1617,10 +1615,12 @@ where biblioitemnumber = $biblioitemnumber";
 	$dbh->do($query);
     } # while
 
-    $sth->finish;
+    $sth->finish;	# FIXME - This is bogus, isn't it?
 
-    $query = "Delete from items where biblioitemnumber = $biblioitemnumber";
-    $dbh->do($query);
+    $dbh->do(<<EOT);
+	DELETE FROM	items
+	WHERE		biblioitemnumber = $biblioitemnumber
+EOT
     
 } # sub deletebiblioitem
 
@@ -1863,20 +1863,19 @@ are mandatory.
 sub addwebsite {
     my ($website) = @_;
     my $dbh = C4::Context->dbh;
-    my $query;
     
     $website->{'biblionumber'} = $dbh->quote($website->{'biblionumber'});
     $website->{'title'}        = $dbh->quote($website->{'title'});
     $website->{'description'}  = $dbh->quote($website->{'description'});
     $website->{'url'}          = $dbh->quote($website->{'url'});
     
-    $query = "Insert into websites set
-biblionumber = $website->{'biblionumber'},
-title        = $website->{'title'},
-description  = $website->{'description'},
-url          = $website->{'url'}";
-    
-    $dbh->do($query);
+    $dbh->do(<<EOT);
+	INSERT INTO	websites
+	SET		biblionumber = $website->{'biblionumber'},
+			title        = $website->{'title'},
+			description  = $website->{'description'},
+			url          = $website->{'url'}
+EOT
 } # sub website
 
 =item updatewebsite
@@ -1894,19 +1893,18 @@ the entry to update.
 sub updatewebsite {
     my ($website) = @_;
     my $dbh = C4::Context->dbh;
-    my $query;
     
     $website->{'title'}      = $dbh->quote($website->{'title'});
     $website->{'description'} = $dbh->quote($website->{'description'});
     $website->{'url'}        = $dbh->quote($website->{'url'});
     
-    $query = "Update websites set
-title       = $website->{'title'},
-description = $website->{'description'},
-url         = $website->{'url'}
-where websitenumber = $website->{'websitenumber'}";
-
-    $dbh->do($query);
+    $dbh->do(<<EOT);
+	UPDATE	websites
+	SET	title       = $website->{'title'},
+		description = $website->{'description'},
+		url         = $website->{'url'}
+		where websitenumber = $website->{'websitenumber'}
+EOT
 } # sub updatewebsite
 
 =item deletewebsite
@@ -1921,13 +1919,11 @@ Deletes the web site with number C<$websitenumber>.
 sub deletewebsite {
     my ($websitenumber) = @_;
     my $dbh = C4::Context->dbh;
-    # FIXME - $query is unnecessary: just use
-    # $dbh->do(<<EOT);
-    #	DELETE FROM websites where websitenumber=$websitenumber
-    # EOT
-    my $query = "Delete from websites where websitenumber = $websitenumber";
-    
-    $dbh->do($query);
+
+    $dbh->do(<<EOT);
+	DELETE FROM	websites
+	WHERE		websitenumber = $websitenumber
+EOT
 } # sub deletewebsite
 
 
