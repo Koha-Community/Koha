@@ -227,9 +227,11 @@ Koha Log Directory [%s]: |;
 $messages->{'AuthenticationWarning'}->{en} = heading('Authentication') . qq|
 This release of Koha has a new authentication module.  If you are not already
 using basic authentication on your intranet, you will be required to log in to
-access some of the features of the intranet.  You can log in using the userid
-and password from the %s/koha.conf configuration file at any time.  Use the
-"Members" module to add passwords for other accounts and set their permissions.
+access some of the features of the intranet.
+IMPORTANT :
+============
+You can log in using the userid and password from the %s/koha.conf configuration file at any time.
+Use the "Members" module to add passwords for other accounts and set their permissions.
 
 Press the <ENTER> key to continue: |;
 
@@ -870,9 +872,9 @@ Database user [%s]: |;
 
 $messages->{'DatabasePassword'}->{en} = heading('Database Password') . qq|
 Please provide a good password for the user %s.
-
-This password will also be used to access Koha's INTRANET interface.
-
+IMPORTANT :
+============
+You can log in using this userid and password at any time.
 Password for database user %s: |;
 
 $messages->{'BlankPassword'}->{en} = heading('BLANK PASSWORD') . qq|
