@@ -96,7 +96,7 @@ my $borrower;
 my $returned = 0;
 my $messages;
 my $barcode = $query->param('barcode');
-# actually return book (SQL CALL) and prepare item table.....
+# actually return book and prepare item table.....
 if ($barcode) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
@@ -115,23 +115,24 @@ if ($barcode) {
 # HTML code....
 # title....
 my $title = <<"EOF";
-<p>
-<table border=0 cellpadding=5 width=90%><tr>
-<td align="left"><FONT SIZE=6><em>Circulation: Returns</em></FONT><br>
+<FONT SIZE=6><em>Circulation: Returns</em></FONT><br>
 <b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
 <b>Printer:</b> $printers->{$printer}->{'printername'}<br>
 <a href=selectbranchprinter.pl>Change Settings</a>
-</td>
-<td align="right" valign="top">
-<FONT SIZE=2  face="arial, helvetica">
-<a href=circulation.pl>Next Borrower</a> || 
-<a href=returns.pl>Returns</a> || 
-<a href=branchtransfers.pl>Transfers</a></font><p>
-</td></tr></table>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
-</p>
+<p>
 EOF
+
+my $links = <<"EOF";
+<table align="right"><tr><td>
+<a href=circulation.pl>
+<img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Issues"></a>
+&nbsp<a href=branchtransfers.pl>
+<img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Issues"></a>
+</td></tr></table>
+EOF
+
 
 my $itemtable;
 if ($iteminformation) {
@@ -149,21 +150,19 @@ Barcode: <a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}
 Date Due: $iteminformation->{'date_due'}-->
 </td></tr>
 </table>
-<p>
 EOF
 }
 
 # Barcode entry box, with hidden inputs attached....
 my $barcodeentrytext = << "EOF";
 <form method=post action=/cgi-bin/koha/circ/returns.pl>
-<table border=1 cellpadding=5 cellspacing=0 align=left>
+<table border=1 cellpadding=5 cellspacing=0>
 <tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
 <font color=black><b>Enter Book Barcode</b></font></td></tr>
 <tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
 </table>
 $ritext
 </form>
-<img src="/images/holder.gif" width=24 height=50 align=left>
 EOF
 
 
@@ -179,7 +178,7 @@ if ($messages->{'ResFound'}) {
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
     Item is marked waiting at <b>$branchname</b> for $name ($number).<br>
-<table border=1 cellpadding=5 cellspacing=0>
+<table cellpadding=5 cellspacing=0>
 <tr><td>Cancel reservation: </td>
 <td>
 <form method=post action='returns.pl'>
@@ -203,8 +202,8 @@ EOF
     } 
     if ($res->{'ResFound'} eq "Reserved") {
 	$reservetext = <<"EOF";
-<font color='red' size='+2'>Reserved:</font> reserve found for $name ($number).
-<table border=1 cellpadding=5 cellspacing=0>
+<font color='red' size='+2'>Reserved found:</font> for $name ($number).
+<table cellpadding=5 cellspacing=0>
 <tr><td>Set reserve to waiting and transfer book to <b>$branchname </b>: </td>
 <td>
 <form method=post action='returns.pl'>
@@ -240,7 +239,6 @@ EOF
 <table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Reserve Found</font></th></tr>
 <tr><td> $reservetext </td></tr></table>
-<img src="/images/holder.gif" width=24 height=24>
 EOF
 }
 
@@ -276,89 +274,81 @@ EOF
 
 # patrontable ....
 my $borrowertable;
+my $flaginfotable;
 if ($borrower) {
-    my $patrontable = << "EOF";
-<table border=1 cellpadding=5 cellspacing=0 align=right>
+    $borrowertable = << "EOF";
+<table border=1 cellpadding=5 cellspacing=0>
 <tr><td colspan=2 bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<font color=black><b>Patron Information</b></font></td></tr>
+<font color=black><b>Borrower Information</b></font></td></tr>
 <tr><td colspan=2>
 <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} 
 onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a>
 $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
-</td></tr></table>
+</td></tr>
 EOF
     my $flags = $borrower->{'flags'};
     my $flaginfotext='';
-    my $flag;
     my $color = '';
-    foreach $flag (sort keys %$flags) {
+    foreach my $flag (sort keys %$flags) {
+	warn "$flag : $flags->{$flag} \n ";
+
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
-	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {
-	    if ($flag eq 'CHARGES') {
-		$flaginfotext.= <<"EOF";
-<tr><td valign=top><font color=red>$flag</font></td>
+	    $flag = "<font color=red>$flag</font>";
+	}
+	if ($flag eq 'CHARGES') {
+	    $flaginfotext.= <<"EOF";
+<tr><td valign=top>$flag</td>
 <td bgcolor=$color><b>$flags->{$flag}->{'message'}</b> 
 <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} 
-onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>
+onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 EOF
-	    } else {
-		$flaginfotext.= <<"EOF";
-<tr><td valign=top><font color=red>$flag</font></td>
+	} elsif ($flag eq 'WAITING') {
+	    my $itemswaiting='';
+	    my $items = $flags->{$flag}->{'itemlist'};
+	    foreach my $item (@$items) {
+		my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
+		$itemswaiting .= <<"EOF";
+<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra 
+onClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a> 
+$iteminformation->{'title'} 
+($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>
+EOF
+            }
+            $flaginfotext.="<tr><td valign=top>$flag</td><td>$itemswaiting</td></tr>\n";
+	} elsif ($flag eq 'ODUES') {
+	    my $itemsoverdue = '';
+	    my $items = $flags->{$flag}->{'itemlist'};
+            foreach my $item (sort {$a->{'date_due'} cmp $b->{'date_due'}} @$items) {
+                $itemsoverdue .=  <<"EOF";
+<font color=red>$item->{'date_due'}</font>
+<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra 
+onClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a> 
+$iteminformation->{'title'}
+<br>
+EOF
+	    }
+	    $flaginfotext .= "<tr><td valign=top>$flag</td><td>$itemsoverdue</td></tr>\n";
+        } else {
+	    $flaginfotext.= <<"EOF";
+<tr><td valign=top>$flag</td>
 <td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>
 EOF
-	    }
-	} else {
-	    if ($flag eq 'CHARGES') {
-		$flaginfotext .= << "EOF";
-<tr><td valign=top>$flag</td>
-<td> $flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} 
-onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>
-EOF
-	    } elsif ($flag eq 'WAITING') {
-		my $itemswaiting='';
-		my $items = $flags->{$flag}->{'itemlist'};
-		foreach my $item (@$items) {
-		    my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-		    $itemswaiting .= <<"EOF";
-<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra 
-onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a> 
-$iteminformation->{'title'} ($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>
-EOF
-		}
-		$flaginfotext.="<tr><td valign=top>$flag</td><td>$itemswaiting</td></tr>\n";
-	    } elsif ($flag eq 'ODUES') {
-		my $items = $flags->{$flag}->{'itemlist'};
-		$flaginfotext .=  <<"EOF";
-<tr><td bgcolor=$color><font color=red>$flag</font></td>
-<td bgcolor=$color>Patron has Overdue books</td></tr>
-EOF
-	    } else {
-		$flaginfotext .= "<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
-	    }
 	}
     }
     if ($flaginfotext) {
-	$flaginfotext = << "EOF";
-<table border=1 cellpadding=5 cellspacing=0> <tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><b>Flags</b></td></tr>
+	$borrowertable .= << "EOF";
+<tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2>
+<b>Flags</b></td></tr>
 $flaginfotext 
 </table>
 EOF
     }
-    $borrowertable = << "EOF";
-<table border=0 cellpadding=5>
-<tr>
-<td valign=top>$patrontable</td>
-<td valign=top>$flaginfotext</td>
-</tr>
-</table>
-EOF
 }
 
 # the returned items.....
 my $returneditemstable = << "EOF";
-<br><p>
-<table border=1 cellpadding=5 cellspacing=0 align=left>
+<table border=1 cellpadding=5 cellspacing=0>
 <tr><th colspan=6 bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <font color=black>Returned Items</font></th></tr>
 <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
@@ -376,13 +366,13 @@ foreach (sort {$a <=> $b} keys %returneditems) {
 	###
 	# convert to nz date format
 	my @tempdate = split(/-/,$duedate);
-	$duedate = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	my $duedatenz = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
 	####
 	my $todaysdate 
 	    = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
-	my $overduetext = "$duedate";
+	my $overduetext = "$duedatenz";
 	($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
-	($duedate) || ($overduetext = "<img src=/images/blackdot.gif>");
+	($duedatenz) || ($overduetext = "<img src=/images/blackdot.gif>");
 	my $borrowernumber = $riborrowernumber{$_};
 	my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
 	my ($iteminformation) = getiteminformation(\%env, 0, $barcode);;
@@ -409,21 +399,43 @@ print $query->header();
 print startpage();
 print startmenu('circulation');
 
-print $title;
+print <<"EOF";
+$links
+$title
+<table cellpadding=5 cellspacing=0 width=100%>
+EOF
 
 if ($reservefoundtext) {
-    print $reservefoundtext;
+    print <<"EOF";
+<tr>
+<td colspan=2>$reservefoundtext</td>
+</tr>
+<tr>
+<td colspan=2>$messagetable</td>
+</tr>
+
+EOF
 } else {
-    print $barcodeentrytext;
+    print <<"EOF";
+<tr>
+<td valign=top align=left>$barcodeentrytext</td>
+<td valign=top align=left>$messagetable</td>
+</tr>
+EOF
 }
-
-print $messagetable;
-
 if ($returned) {
-    print $itemtable;
-    print $borrowertable;
+    print <<"EOF";
+<tr>
+<td valign=top align=left>$itemtable</td>
+<td valign=top align=left>$borrowertable</td>
+<tr>
+EOF
 }
-(print $returneditemstable) if (%returneditems); 
+if (%returneditems) {
+    print "<tr><td colspan=2>$returneditemstable</td></tr>";
+}
+
+print "</table>";
 
 print endmenu('circulation');
 print endpage();
