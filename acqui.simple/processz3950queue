@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+use C4::Database;
+use DBI;
+#use strict;
+use C4::Acquisitions;
+use C4::Output;
+my $dbh=C4Connect;
+
+
+
+while (1) {
+    my $sth=$dbh->prepare("select id,term,type,servers from z3950queue where
+    isnull(done) || done=-1");
+    $sth->execute;
+    while (my ($id, $term, $type, $servers) = $sth->fetchrow) {
+	my $now=time();
+	my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=$now where id=$id");
+	$sti->execute;
+	my $attr='';
+	if ($type eq 'isbn') {
+	    $attr='1=7';
+	} elsif ($type eq 'title') {
+	    $attr='1=4';
+	} elsif ($type eq 'lccn') {
+	    $attr='1=9';
+	}
+	$term='"'.$term.'"';
+	$query="f \@attr $attr $term";
+	my $totalrecords=0;
+	my $serverinfo;
+	foreach $serverinfo (split(/\s+/, $servers)) {
+	    my ($name, $server, $database, $auth) = split(/\//, $serverinfo, 4);
+	    ($auth eq '/') && ($auth='');
+	    print "Processing $type=$term at $name $server $database $auth\n";
+	    $now=time();
+	    my $q_serverinfo=$dbh->quote($serverinfo);
+	    my $sti=$dbh->prepare("insert into z3950results (server, queryid, startdate) values ($q_serverinfo, $id, $now)");
+	    $sti->execute;
+	    my $resultsid=$dbh->{'mysql_insertid'};
+	    getrecord($server, $database, $query, $auth);
+	    my $result=`cat yaz.mrc`;
+	    unlink ('yaz.mrc');
+	    my $splitchar=chr(29);
+	    my @records=split(/$splitchar/, $result);
+	    my $numrecords=$#records+1;
+	    $totalrecords+=$numrecords;
+	    my $q_result=$dbh->quote($result);
+	    ($q_result) || ($q_result='""');
+	    $now=time();
+	    $sti=$dbh->prepare("update z3950results set numrecords=$numrecords,results=$q_result,enddate=$now where id=$resultsid");
+	    $sti->execute;
+	}
+	$sti=$dbh->prepare("update z3950queue set done=1,numrecords=$totalrecords,enddate=$now where id=$id");
+	$sti->execute;
+    }
+    sleep 15;
+}
+
+sub getrecord {
+    my $server=shift;
+    my $base=shift;
+    my $query=shift;
+    my $auth=shift;
+    open  (M, "|yaz-client -m yaz.mrc >>yaz.out 2>>yaz.err");
+    select M;
+    $|=1;
+    select STDOUT;
+    ($auth) && ($auth="authentication $auth\n");
+    print << "EOF";
+$auth\open $server
+base $base
+$query
+s
+s
+s
+s
+s
+s
+s
+s
+s
+s
+quit
+EOF
+    print M << "EOF";
+$auth\open $server
+base $base
+$query
+s
+s
+s
+s
+s
+s
+s
+s
+s
+s
+quit
+EOF
+    close M;
+}
