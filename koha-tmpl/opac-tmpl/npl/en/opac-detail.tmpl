@@ -6,18 +6,34 @@
 <div id="main">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <div class="details">
-<!-- Display for NPL 			<div style="float: right; padding: 5px;">
-<img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/images2/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" />
+<!-- Display for NPL // <div class="detail-sidebar">
+<!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01.MZZZZZZZ.jpg" alt="Book Cover Image" /><!-- /TMPL_IF -->  //Display for NPL -->
+<div class="operations">
+<ul>
+<!-- TMPL_UNLESS NAME="norequests" --><li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Place Reserve</a></li><!-- /TMPL_UNLESS -->
+<li><a class="detail" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></li>
+<!-- Hide from NPL // <li><a class="isbd" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a></li> //Hide from NPL -->
+<li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Print</a></li>
+<!-- TMPL_IF name="virtualshelves" --><li><a class="shelf" href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to My Book List</a></li><!-- /TMPL_IF -->
+<li><a class="cart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to My Book Bag</a></li>
+</ul>
 </div>
- /Display for NPL --><h2><!-- TMPL_VAR NAME="title" --></h2>
-<!-- TMPL_IF NAME="author" --><h3 class="author">By <!-- TMPL_VAR NAME="author" --></h3><!-- /TMPL_IF --> 
+<div class="further">
+<h4>Search for this title in:</h4>
+<ul><!-- Display for NPL // <li><a href="http://search3.webfeat.org/cgi-bin/webfeat.dll?Command=Search&BypassSessData=yes&noserial=1&Databases=wf_sirsdiscover,wf_elibrary2_e,wf_ebonline,wf_healthsourceconsumer,wf_masterfileprem,wf_newspapersource&wf_cat=0&Client_ID=oplin&wf_all_years=yes&wf_field1=wf_keyword&wf_term1=<!-- TMPL_VAR NAME="title" -->&rurl=http%3A//www.oplin.org/&wut_code=OH0156">Local Databases (OPLIN)</a></li> //Display for NPL -->
+<li><a href="http://www.google.com/search?q=<!-- TMPL_VAR NAME="title" -->%20england+site:worldcatlibraries.org">Other Libraries(WorldCat)</a></li>
+<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" -->">Other Databases (Google Scholar)</a></li></ul></div>
+</div>
+<h2><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h2>
+<!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&and_or=and&excluding=&operator=contains&value=<!-- TMPL_VAR NAME="author" -->.&resultsperpage=20&orderby=biblio.title&op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
 
 <table>
-<!-- TMPL_IF NAME="subtitle" --><tr><th>Subtitle: </th><td><!-- TMPL_VAR NAME="subtitle" --></td></tr><!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="abstract" --><tr><th>Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="copyrightdate" -->
     <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
 <!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seriestitle" --><tr><th>Series Title:</th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&and_or=and&excluding=&operator=contains&value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->.&resultsperpage=20&orderby=biblio.title&op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --><!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="isbn" -->
 	    <tr><th>ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
 <!-- /TMPL_IF -->
@@ -30,10 +46,14 @@
 <!-- TMPL_IF NAME="pages" -->
 	<tr><th>Physical Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
 <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_UNLESS NAME="MARCNOTES" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <!-- TMPL_IF NAME="notes" -->
-<tr><th>Notes:</th><td><div class="notes"><!-- TMPL_VAR NAME="notes" --></div></td></tr>
-	<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP -->
+<tr><th>Notes:</th><td><div class="notes"><!-- TMPL_VAR NAME="notes" --></div></td></tr><!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_UNLESS -->
 	
 <!-- TMPL_UNLESS NAME="MARCSUBJCTS" -->
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
@@ -41,8 +61,8 @@
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_UNLESS -->
 
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
- <tr><th>Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP -->
+<!-- Hide from NPL --> <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+ <tr><th>Record No.:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP --> <!-- Hide from NPL -->
 
 <!-- TMPL_IF NAME="MARCNOTES" -->
 		<tr>
@@ -55,23 +75,7 @@
 			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" --><li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&marclist=bibliosubject.subject&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
 	<!-- /TMPL_IF -->
 </table>
-
-<!-- TMPL_UNLESS NAME="norequests" -->
-    <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
-    <input type="submit" name="submit"  value="Place Reserve" class="icon reserve" />
-    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    </form>
-<!-- /TMPL_UNLESS -->
-
-<form class="inline" action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon detail" value="MARC View" /></form>
-
-<form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon isbd" value="ISBD" /></form>
-
-<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Print" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form>
-
-<form class="inline" action="opac-addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="icon shelf" value="Add to Shelf" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form>
-
-<form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
+<br clear="right" />
 </div>
 
 <!-- TMPL_IF NAME="ITEM_RESULTS" -->
