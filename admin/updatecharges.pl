@@ -31,35 +31,25 @@ use C4::Context;
 use C4::Output;
 
 my $input = new CGI;
-#print $input->header;
-#print startpage();
-#print startmenu('issue');
-
 
 my $dbh = C4::Context->dbh;
-#print $input->dump;
 my @names=$input->param();
 
 foreach my $key (@names){
 	$key =~ /(.*)\.(.*)/;
-  my $bor=$1;
-  my $cat=$2;
-  my $data=$input->param($key);
-  my @dat=split(',',$data);
-#  print "$bor $cat $dat[0] $dat[1] $dat[2] <br> ";
- my $sth_search = $dbh->prepare("select count(*) as total from categoryitem where categorycode=? and itemtype=?");
- my $sth_insert = $dbh->prepare("insert into categoryitem (categorycode,itemtype,fine,firstremind,chargeperiod) values (?,?,?,?,?)");
- my $sth_update=$dbh->prepare("Update categoryitem set fine=?,firstremind=?,chargeperiod=? where categorycode=? and itemtype=?");
-  $sth_search->execute($bor,$cat);
-  my $res = $sth_search->fetchrow_hashref();
-  if ($res->{total}) {
-  	warn "UPDATE";
- 	$sth_update->execute($dat[0],$dat[1],$dat[2],$bor,$cat);
- } else {
- 	warn "INSERT";
-	$sth_insert->execute($bor,$cat,$dat[0],$dat[1],$dat[2]);
+	my $bor=$1;
+	my $cat=$2;
+	my $data=$input->param($key);
+	my @dat=split(',',$data);
+	my $sth_search = $dbh->prepare("select count(*) as total from categoryitem where categorycode=? and itemtype=?");
+	my $sth_insert = $dbh->prepare("insert into categoryitem (categorycode,itemtype,fine,firstremind,chargeperiod) values (?,?,?,?,?)");
+	my $sth_update=$dbh->prepare("Update categoryitem set fine=?,firstremind=?,chargeperiod=? where categorycode=? and itemtype=?");
+	$sth_search->execute($bor,$cat);
+	my $res = $sth_search->fetchrow_hashref();
+	if ($res->{total}) {
+		$sth_update->execute($dat[0],$dat[1],$dat[2],$bor,$cat);
+	} else {
+		$sth_insert->execute($bor,$cat,$dat[0],$dat[1],$dat[2]);
+	}
 }
-}
-print $input->redirect("/cgi-bin/koha/charges.pl");
-#print endmenu('issue');
-#print endpage();
+print $input->redirect("/cgi-bin/koha/admin/charges.pl");
