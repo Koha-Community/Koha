@@ -41,4 +41,4 @@ my $template = HTML::Template->new(filename => "$includes/templates/$theme/$temp
 
 $template->param(loggedinuser => $loggedinuser);
 
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie), $template->output;
