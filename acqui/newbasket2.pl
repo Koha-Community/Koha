@@ -138,6 +138,7 @@ while ($i < $count2){
 
 		my $itemcount;
 	my $location='';
+	my $location_only='';
 	my $word=$result->{'author'};
 	$word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
 	$word=~ s/  //g;
@@ -154,27 +155,37 @@ while ($i < $count2){
 			$location .= " ($nacount)";
 		}
 		$location.=" ";
+		$lineres{'on-loan-p'}=1;
 	}
 	if ($lcount > 0){
 		$location .= "Levin";
+		$location_only .= "Levin";
 		if ($lcount >1 ){
 			$location .= " ($lcount)";
+			$location_only .= " ($lcount)";
 		}
 		$location.=" ";
+		$location_only.=" ";
 	}
 	if ($fcount > 0){
 		$location .= "Foxton";
+		$location_only .= "Foxton";
 		if ($fcount >1 ){
 			$location .= " ($fcount)";
+			$location_only .= " ($fcount)";
 		}
 		$location.=" ";
+		$location_only.=" ";
 	}
 	if ($scount > 0){
 		$location .= "Shannon";
+		$location_only .= "Shannon";
 		if ($scount >1 ){
 			$location .= " ($scount)";
+			$location_only .= " ($scount)";
 		}
 		$location.=" ";
+		$location_only.=" ";
 	}
 	if ($lostcount > 0){
 		$location .= "Lost";
@@ -182,6 +193,7 @@ while ($i < $count2){
 			$location .= " ($lostcount)";
 		}
 		$location.=" ";
+		$lineres{'lost-p'}=1;
 	}
 	if ($mending > 0){
 		$location .= "Mending";
@@ -189,6 +201,7 @@ while ($i < $count2){
 			$location .= " ($mending)";
 		}
 		$location.=" ";
+		$lineres{'mending-p'}=1;
 	}
 	if ($transit > 0){
 		$location .= "In Transit";
@@ -196,6 +209,7 @@ while ($i < $count2){
 			$location .= " ($transit)";
 		}
 		$location.=" ";
+		$lineres{'in-transit-p'}=1;
 	}
 	if ($colour == 1){
 		$toggle='#ffffcc';
@@ -216,6 +230,7 @@ while ($i < $count2){
 	$lineres{toggle}=$toggle;
 	$lineres{itemcount}=$count;
 	$lineres{location}=$location;
+	$lineres{'location-only'}=$location_only;
 	push(@loopresult,\%lineres);
 	$i++;
 }
@@ -238,6 +253,7 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								title => $title,
 								author => $author,
 								loopsearch =>\@loopsearch,
-								loopresult =>\@loopresult);
+								loopresult =>\@loopresult,
+								'use-location-flags-p' => 1);
 
 output_html_with_http_headers $input, $cookie, $template->output;

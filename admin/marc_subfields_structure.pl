@@ -33,7 +33,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like ?) order by tagfield");
+	my $sth=$dbh->prepare("Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like ?) order by tagfield");
 	$sth->execute("$searchstring%");
 	my @results;
 	my $cnt=0;
@@ -137,7 +137,7 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=?"); # and tagsubfield='$tagsubfield'");
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=?"); # and tagsubfield='$tagsubfield'");
 	$sth->execute($tagfield);
 	my @loop_data = ();
 	my $toggle="white";
@@ -163,6 +163,7 @@ if ($op eq 'add_form') {
 		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield' value='".$data->{'tagsubfield'}."'>";
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
+		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
 		$row_data{kohafield}= CGI::scrolling_list( -name=>"kohafield",
 					-values=> \@kohafields,
 					-default=> "$data->{'kohafield'}",
@@ -187,7 +188,6 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-#		$row_data{kohafield} = $data->{'kohafield'};
 		$row_data{repeatable} = CGI::checkbox("repeatable$i",$data->{'repeatable'}?'checked':'',1,'');
 		$row_data{mandatory} = CGI::checkbox("mandatory$i",$data->{'mandatory'}?'checked':'',1,'');
 		$row_data{bgcolor} = $toggle;
@@ -211,6 +211,7 @@ if ($op eq 'add_form') {
 		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"3\" maxlength=\"1\">";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
+		$row_data{seealso} = "";
 		$row_data{repeatable} = CGI::checkbox('repeatable','',1,'');
 		$row_data{mandatory} = CGI::checkbox('mandatory','',1,'');
 		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
@@ -244,13 +245,14 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder)
-									values (?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder)
+									values (?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
 	my @kohafield		= $input->param('kohafield');
 	my @tab				= $input->param('tab');
+	my @seealso		= $input->param('seealso');
 	my @authorised_values	= $input->param('authorised_value');
 	my @thesaurus_category	= $input->param('thesaurus_category');
 	my @value_builder	=$input->param('value_builder');
@@ -264,6 +266,7 @@ if ($op eq 'add_form') {
 		my $mandatory		=$input->param("mandatory$i")?1:0;
 		my $kohafield		=$kohafield[$i];
 		my $tab				=$tab[$i];
+		my $seealso				=$seealso[$i];
 		my $authorised_value		=$authorised_values[$i];
 		my $thesaurus_category		=$thesaurus_category[$i];
 		my $value_builder=$value_builder[$i];
@@ -277,6 +280,7 @@ if ($op eq 'add_form') {
 									$mandatory,
 									$kohafield,
 									$tab,
+									$seealso,
 									$authorised_value,
 									$thesaurus_category,
 									$value_builder);
@@ -336,6 +340,7 @@ if ($op eq 'add_form') {
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{tab} = $results->[$i]{'tab'};
+		$row_data{seealso} = $results->[$i]{'seealso'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{thesaurus_category}	= $results->[$i]{'thesaurus_category'};
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};

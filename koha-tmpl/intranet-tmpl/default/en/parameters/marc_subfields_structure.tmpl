@@ -15,6 +15,7 @@
 		<th>Mand</th>
 		<th>Koha field</th>
 		<th>Tab</th>
+		<th>See also (in searches)</th>
 		<th>Authorised value or<br/>
 				Thesaurus category</th>
 	</tr>
@@ -27,6 +28,7 @@
 		<td><!-- TMPL_VAR name="mandatory" --></td>
 		<td><!-- TMPL_VAR name="kohafield" --></td>
 		<td><!-- TMPL_VAR name="tab" --></td>
+		<td><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20 maxlength=80></td>
 		<td><!-- TMPL_VAR name="authorised_value" --><br/>
 				or <!-- TMPL_VAR name="thesaurus_category" --><br/>
 				or <!-- TMPL_VAR name="value_builder" --></td>
@@ -79,6 +81,7 @@
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>See also</b> <span style="font-size:8;color:red" title="if subfields entered here, searches on this field will also be done on seealso subfields (syntax 200a,300e)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
@@ -91,6 +94,7 @@
 	<td><!-- TMPL_IF name="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_IF name="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_VAR name="tab" --></td>
+	<td><!-- TMPL_VAR name="seealso" --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
 	<td><!-- TMPL_VAR name="thesaurus_category" --></td>
 	<td><!-- TMPL_VAR name="value_builder" --></td>
