@@ -1,48 +1,47 @@
 <HTML>
 
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<FONT SIZE=6><em>Wyszukiwanie czytelnikÛw</em></FONT><br>
+<h1>Wyszukiwanie Czytelnik√≥w</h1><br>
 
 <form action="/cgi-bin/koha/member.pl" method=post>
-  <input type=text name="member" value="<TMPL_VAR NAME=member>">
-  <input type=reset name="reset" value="wyczy∂Ê">
+  <input type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+  <input type=reset name="reset" value="wyczy≈õƒá">
 </form>
 
-Szukano <TMPL_VAR NAME=member><p>
+Szukano <!-- TMPL_VAR NAME=member --><p>
 <table>
   <tr bgcolor="#99cc33">
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Karta</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Nazwisko</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>ImiÍ</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Kategoria</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Adres</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Zaleg≥e pozycje</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Op≥aty</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Uwagi</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Karta</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Nazwisko</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Imiƒô</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Kategoria</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Adres</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Zaleg≈Çe/Wypo≈ºyczone</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Op≈Çaty</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Uwagi</b></td>
   </tr>
   
-  <TMPL_LOOP NAME=resultsloop>
-    <TMPL_IF NAME="background">
+  <!-- TMPL_LOOP NAME=resultsloop -->
+    <!-- TMPL_IF NAME="background" -->
     <TR bgcolor="#ffffcc">
-    <TMPL_ELSE>
+    <!-- TMPL_ELSE -->
     <TR bgcolor=white>
-    </TMPL_IF>
-      <td><TMPL_VAR NAME=cardnumber></td>
-      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=borrowernumber>"><TMPL_VAR NAME=surname></td>
-      <td><TMPL_VAR NAME=firstname></a></td>
-      <td><TMPL_VAR NAME=categorycode></td>
-      <td><TMPL_VAR NAME=streetaddress> <TMPL_VAR NAME=city></td>
-      <td><TMPL_VAR NAME=odissue></td>
-      <td><TMPL_VAR NAME=fines></td>
-      <td><TMPL_VAR NAME=borrowernotes></td>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME=cardnumber --></td>
+      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></td>
+      <td><!-- TMPL_VAR NAME=firstname --></a></td>
+      <td><!-- TMPL_VAR NAME=categorycode --></td>
+      <td><!-- TMPL_VAR NAME=streetaddress --> <!-- TMPL_VAR NAME=city --></td>
+      <td><!-- TMPL_VAR NAME=odissue --></td>
+      <td><!-- TMPL_VAR NAME=fines --></td>
+      <td><!-- TMPL_VAR NAME=borrowernotes --></td>
     </tr>
-  </TMPL_LOOP>
+  <!-- /TMPL_LOOP -->
 </table>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=submit class="button" value="Dodaj czytelnika" title="Add Member" alt="Add Member">
-<INPUT TYPE="radio" name="chooseform" value="adult" checked>Doros≥y
-<INPUT TYPE="radio" name="chooseform" value="organisation" >Organizacja
+<input type=submit class="button" value="Dodaj Czytelnika" title="Dodaj Czytelnika" alt="Dodaj Czytelnika">
+<INPUT TYPE="radio" name="chooseform" value="adult" checked>Doros≈Çy <INPUT TYPE="radio" name="chooseform" value="organisation" >Organizacja
 </form>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

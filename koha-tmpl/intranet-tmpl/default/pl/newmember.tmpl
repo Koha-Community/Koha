@@ -1,56 +1,56 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<TMPL_IF Name="OK">
-<H1> Potwierdº Wpis </H1>
+<!-- TMPL_IF Name="OK" -->
+	<H1> Potwierd≈∫ Wpis </H1>
 	<table border=0 cellspacing=0 cellpadding=5>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-				<B> NOWY CZ£ONEK </B>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> NOWY CZYTELNIK </B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Nazwisko</B>
+				<B>Imiƒô i Nazwisko</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="name">
+				<!-- TMPL_VAR Name="name" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-				<B> SZCZEG”£Y CZ£ONKOWSKIE </B>
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Numer czytelnika</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="bornum">
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> DANE CZ≈ÅONKOWSKIE </B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Numer Karty</B>
+				<B>Numer Cz≈Çonkowski</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="cardnum">
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Kategoria cz≥onkowstwa</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="memcat">
+				<!-- TMPL_VAR Name="bornum" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Op≥ata</B>
+				<B>Numer karty</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="fee">
+				<!-- TMPL_VAR Name="cardnum" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Kategoria Cz≈Çonkowska</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="memcat" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Op≈Çata</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="fee" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -58,28 +58,28 @@
 				<B>Data zapisu</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="joindate">
+				<!-- TMPL_VAR Name="joindate" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Termin wyga∂niÍcia</B>
+				<B>Data wyga≈õniƒôcia</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="expdate">
+				<!-- TMPL_VAR Name="expdate" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Oddzia≥ zapisu</B>
+				<B>Oddzia≈Ç Zapisu</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="branchcode">
+				<!-- TMPL_VAR Name="branchcode" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-				<B>DANE PERSONALNE</B>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>DANE OSOBISTE</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -87,57 +87,61 @@
 				<B>Data urodzenia</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="dob">
+				<!-- TMPL_VAR Name="dob" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>P≥eÊ</B>
+				<B>P≈Çeƒá</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="sex">
+				<!-- TMPL_IF Name="sex" -->
+					Mƒô≈ºczyzna
+				<!-- TMPL_ELSE -->
+					Kobieta
+				<!-- /TMPL_IF -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 				<B>ADRES CZYTELNIKA</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Adres pocztowy</B>
+				<B>Adres Pocztowy</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="postal">
+				<!-- TMPL_VAR Name="postal" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Adres domowy</B>
+				<B>Adres Domowy</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="home">
+				<!-- TMPL_VAR Name="home" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-				<B>DANE OSOBY KONTAKTOWEJ</B>
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Tel. (Domowy)</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="phone">
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>SZCZEG√ì≈ÅY DANYCH KONTAKTOWYCH</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Tel. (W pracy)</B>
+				<B>Tel. domowy</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="phoneday">
+				<!-- TMPL_VAR Name="phone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tel. praca</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phoneday" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -145,7 +149,7 @@
 				<B>Fax</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="faxnumber">
+				<!-- TMPL_VAR Name="faxnumber" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -153,44 +157,44 @@
 				<B>E-mail</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="emailaddress">
+				<!-- TMPL_VAR Name="emailaddress" -->
 			</td>
 		</tr>
                 <tr valign=top bgcolor="white" >
                         <td>
-                                <B>Text messaging</B>
+                                <B>Komunikatory</B>
 			</td>
 			<td>
-				<TMPL_VAR NAME=textmessaging>
+				<!-- TMPL_VAR NAME=textmessaging -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-				<B>ALTERNATYWNE DANE OSOBY KONTAKTOWEJ</B>
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Nazwisko</B>
-			</td>
-			<td>
-				<TMPL_VAR Name="contactname">
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>PO≈öREDNI RODZAJ KONTAKTU</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Tel.</B>
+				<B>Imiƒô i Nazwisko</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="altphone">
+				<!-- TMPL_VAR Name="contactname" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>PokrewieÒstwo</B>
+				<B>Telefon</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="altrelationship">
+				<!-- TMPL_VAR Name="altphone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Relacja</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altrelationship" -->
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
@@ -198,54 +202,54 @@
 				<B>Uwagi</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="altnotes">
+				<!-- TMPL_VAR Name="altnotes" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-				<B>NOTATKI</B>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>UWAGI</B>
 			</td>
 		</tr>
 		<tr valign=top bgcolor="white" >
 			<td>
-				<B>Uwagi ogÛlne</B>
+				<B>Uwagi Og√≥lne</B>
 			</td>
 			<td>
-				<TMPL_VAR Name="bornotes">
+				<!-- TMPL_VAR Name="bornotes" -->
 			</td>
 		</tr>
 		</TABLE><p>
 		<form action="/cgi-bin/koha/insertdata.pl" method=post>
-			<TMPL_LOOP NAME=inputsloop>
-				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
-			</TMPL_LOOP>
-			<input type=submit name=submit value=Prze∂lij>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type=submit name=submit value="Prze≈õlij">
 		</form>
-<TMPL_ELSE>
-	<h1>B£°D</H1>
-	<p>NastÍpuj±ce pola s± ºle wype≥nione. WrÛÊ do poprzedniej strony i sprÛbuj raz jeszcze: </p>
-	<TMPL_IF name="cardnumber">
-		Cardnumber<br/>
-	</TMPL_IF>
-	<TMPL_IF name="invalid_cardnumber">
-		Invalid_cardnumber<br/>
-	</TMPL_IF>
-	<TMPL_IF name="gender">
-		Gender<br/>
-	</TMPL_IF>
-	<TMPL_IF name="firstname">
-		Given Names<br/>
-	</TMPL_IF>
-	<TMPL_IF name="surname">
-		Surname<br/>
-	</TMPL_IF>
-	<TMPL_IF name="address">
-		Postal Street Address<br/>
-	</TMPL_IF>
-	<TMPL_IF name="city">
-		Postal city<br/>
-	</TMPL_IF>
-</TMPL_IF>
+<!-- TMPL_ELSE -->
+	<h1>B≈ÅƒÑD</H1>
+	<p>NastƒôpujƒÖce pola majƒÖ niew≈Ça≈õciwe warto≈õci. Nacisnij przycisk wstecz i popraw: </p>
+	<!-- TMPL_IF name="cardnumber" -->
+		Numer karty<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="invalid_cardnumber" -->
+		Nie prawid≈Çowy numer karty<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="gender" -->
+		P≈Çeƒá<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="firstname" -->
+		Imiona<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="surname" -->
+		Nazwisko<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="address" -->
+		Ulica Adresu Pocztowego<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="city" -->
+		Miasto<br/>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

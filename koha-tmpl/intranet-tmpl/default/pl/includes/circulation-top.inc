@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Cyrkulacja</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <script language="JavaScript">
 <!-- Hide from old browsers
@@ -16,7 +17,7 @@ document.forms[0].elements[0].focus();
 // end hiding -->
 </script>
 
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <style>
 a.circulation {
 	font-weight: normal;
@@ -50,28 +51,28 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 				<tr>
 					<td class="koha"><b>KOHA</b></td>
 					<td>
-						<a class="home" href="/cgi-bin/koha/mainpage.pl">Pocz±tek</a>
+						<a class="home" href="/cgi-bin/koha/mainpage.pl">PoczÄ…tek</a>
 					</td>
 					<td>
 						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Katalog</a>
 					</td>
 					<td>
-						<a class="members" href="/cgi-bin/koha/members-home.pl">Cz³onkowie</a>
+						<a class="members" href="/cgi-bin/koha/members-home.pl">Czytelnicy</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Akwizycje</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Gromadzenie</a>
 					</td>
 					<td>
 						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Cyrkulacja</a>
 					</td>
 					<td>
-						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reporty</a>
+						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Raporty</a>
 					</td>
 					<td>
 						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parametry</a>
 					</td>
 					<td>
-						<a class="about" href="/cgi-bin/koha/about.pl">About</a>
+						<a class="about" href="/cgi-bin/koha/about.pl">O nas</a>
 					</td>
 				</TR>
 			</TABLE>
@@ -81,13 +82,13 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 					<td width="100"></td>
 					<td><b>opcje &gt;&gt;&nbsp;&nbsp;</b></td>
 					<td>
-						<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu">"Wypo¿yczenia</a>
+						<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu">WypoÅ¼yczenia</a>
 					</td>
 					<td>
 						<a href="/cgi-bin/koha/circ/returns.pl" class="submenu2">Zwroty</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Transfery biblioteczne</a>
+						<a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Transfery OddziaÅ‚owe</a>
 					</td>
 				</tr>
 			</table>
@@ -97,8 +98,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 </tr>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj siê</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
+<!-- TMPL_ELSE -->
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+<!-- /TMPL_IF -->

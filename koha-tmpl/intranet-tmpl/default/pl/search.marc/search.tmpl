@@ -1,0 +1,111 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+
+<span style="font-size:2em; text-align:left;">Szukanie MARC</span>
+
+<center>
+<form name="f" method="post">
+
+<input type="hidden" name="op" value="do_search">
+<input type="hidden" name="type" value="intranet">
+<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+
+	<table border=0 cellspacing=0 cellpadding=2 width="100%">
+		<tr align="center">
+			<td>
+				<div name="sql">
+				<textarea name="sql" rows=5 cols=60 disabled readonly></textarea>
+				</div>
+			</td>
+			<td bgcolor="#ad11ad" valign="top" align="left">
+				<span style="color:#FFFFFF;">
+					<b>POMOC :</b><br/>
+					Zbuduj kwerendę stosując pola i podpola MARC. &quot;Dodaj kryteria &quot; pozwala na dodanie innych kryteriów wyszukiwania. &quot;Szukaj&quot; przesyła kwerendę i wyświetla wyniki.
+				</span>
+			</td>
+		</tr>
+	</table>
+	<table border=0 cellspacing=0 cellpadding=2 width="100%">
+		<!-- TMPL_LOOP NAME="statements" -->
+		<tr>
+			<td>
+				<!-- TMPL_IF NAME="first" -->
+					<input type="hidden" name="and_or" value="">&nbsp;
+				<!-- TMPL_ELSE -->
+					<select name="and_or" size="1" onchange="sql_update()">
+						<option value="and">and</option>
+						<option <!-- TMPL_IF NAME="or" -->selected <!-- /TMPL_IF -->value="or">or</option>
+					</select>
+				<!-- /TMPL_IF -->
+			</td>
+			<td><!-- TMPL_VAR name="marclist" --></td>
+			<td>
+				<select name="excluding" size="1" onchange="sql_update()">
+					<option value="0"> </option>
+					<option <!-- TMPL_IF NAME="not" -->selected <!-- /TMPL_IF -->value="1">not</option>
+				</select>
+			</td>
+			<td>
+				<select name="operator" size="1" onchange="sql_update()">
+					<option <!-- TMPL_IF NAME="contains" -->selected<!-- /TMPL_IF --> value="contains">Contains</option>
+					<option <!-- TMPL_IF NAME="eq" -->selected<!-- /TMPL_IF --> value="=">Is equal to</option>
+					<option <!-- TMPL_IF NAME="start" -->selected<!-- /TMPL_IF --> value="start">Starts with</option>
+					<option <!-- TMPL_IF NAME="gt" -->selected<!-- /TMPL_IF --> value=">">Is greater than</option>
+					<option <!-- TMPL_IF NAME="ge" -->selected<!-- /TMPL_IF --> value=">=">Is greater or equal to</option>
+					<option <!-- TMPL_IF NAME="lt" -->selected<!-- /TMPL_IF --> value="<">Is lower than</option>
+					<option <!-- TMPL_IF NAME="le" -->selected<!-- /TMPL_IF --> value="<=">Is lower or equal to</option>
+				</select>
+			</td>
+			<td><input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->value="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF -->></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<br>
+
+	<table width="90%">
+	<tr>
+	<td align="left" width="33%"><input type="button" value="Dodaj kryteria" onclick="AddStatement()" class="button"></td>
+	<td align="middle" width="33%"><input type="submit" value="Szukaj" class="button"></td>
+	<td align="right" width="33%">Liczba wyświetleń na stronę:
+		<select align="right" name="resultsperpage" size="1">
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</td>
+	</tr>
+	</table>
+</form>
+</center>
+
+<script>
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.marclist[i].value != '') {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+</script>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->
+

@@ -1,46 +1,28 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
+<h1>Czytelnicy</h1><P>
 
-<FONT SIZE=6><em>Czytelnicy</em></FONT><P>
-
-
-<img src="/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1" 
-hspace=5 align=left BORDER=0>
 
 <table border=1 cellspacing=0 cellpadding=10 height="100" >
 <tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
-<b>Wyszukiwanie czytelników</B>
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
+<b>Wyszukiwanie CzytelnikÃ³w</B>
 </FONT>
 <INPUT TYPE="text" size=50 name=member >
-<BR>
-Rozpoczynaj±c od wyszukiwania czytelników mo¿na wznawiaæ pozycje, przegl±daæ, dodawaæ, zmieniaæ i wymazywaæ
-wpisy.<br>
-Aby uaktywniæ wyszukiwanie, wpisz nazwisko czytelnika, czê¶æ nazwiska
-lub jego numer i naci¶nij klawisz enter, <br>
+<p>Ekran ten sÅ‚uÅ¼y do przeglÄ…dania, zmian, dodawania i wymazywania pozycji. Aby rozpoczÄ…Ä‡, naleÅ¼y wpisaÄ‡ nazwisko czytelnika lub jego czÄ™Å›Ä‡ albo numer i nacisnÄ…Ä‡ klawisz Enter</p>
 </td></form><tr>
 </table>
- 
+
 <P>
-
-<img src="/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2" 
-hspace=5 align=left BORDER=0>
-
 
 <table border=1 cellspacing=0 cellpadding=10 height="100" >
 <tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FONT SIZE=4>
-<b>Przegl±danie czytelników</B> 
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><FONT SIZE=4>
+<b>PrzeglÄ…daj CzytelnikÃ³w</B> 
 </FONT>
 </td></form><tr>
 <TR VALIGN=TOP>
-<TD><CENTER><B>
-<A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
+<TD><CENTER><B> <A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
 <A HREF="/cgi-bin/koha/member.pl?member=b">B</a> ||
 <A HREF="/cgi-bin/koha/member.pl?member=c">C</a> ||
 <A HREF="/cgi-bin/koha/member.pl?member=d">D</a> ||
@@ -71,4 +53,4 @@ hspace=5 align=left BORDER=0>
 </TD></TR></TABLE>
 
 <P>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

@@ -1,14 +1,14 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<TMPL_IF Name="NOK">
-	<TMPL_VAR Name="string">
-<TMPL_ELSE>
-	<H1> 'Potwierdº Wpis' </H1>
-	<TMPL_LOOP Name="identsloop">
-		<TMPL_IF Name="cardchild">
+<!-- TMPL_IF Name="NOK" -->
+	<!-- TMPL_VAR Name="string" -->
+<!-- TMPL_ELSE -->
+	<H1> Potwierd≈∫ Wpis </H1>
+	<!-- TMPL_LOOP Name="identsloop" -->
+		<!-- TMPL_IF Name="cardchild" -->
 			<table border=0 cellspacing=0 cellpadding=5>
-				<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-					<td background="<TMPL_VAR Name="image">">
+				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+					<td background="<!-- TMPL_VAR Name="image" -->">
 					<B> NOWY CZYTELNIK </B>
 					</td>
 					<td>
@@ -17,15 +17,15 @@
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>NAZWISKO</B>
+					<B>Imiƒô i Nazwisko</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="name">
+					<!-- TMPL_VAR Name="name" -->
 					</td>
 				</tr>
-				<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
-					<td background="<TMPL_VAR Name="image">">
-					<B> SZCZEG”£Y CZ£ONKOWSKIE </B>
+				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+					<td background="<!-- TMPL_VAR Name="image" -->">
+					<B> DANE CZ≈ÅONKOWSKIE </B>
 					</td>
 					<td>
 					&nbsp;
@@ -33,10 +33,10 @@
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>Numer Czytelnika</B>
+					<B>Numer Cz≈Çonkowski</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="bornum">
+					<!-- TMPL_VAR Name="bornum" -->
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
@@ -44,42 +44,42 @@
 					<B>Data urodzenia</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="dob">
+					<!-- TMPL_VAR Name="dob" -->
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>P≥eÊ</B>
+					<B>P≈Çeƒá</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="sex">
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Szko≥a</B>
-					</td>
-					<td>
-					<TMPL_VAR Name="school">
+					<!-- TMPL_VAR Name="sex" -->
 					</td>
 				</tr>
 				<tr valign=top bgcolor="white" >
 					<td>
-					<B>Uwagi ogÛlne</B>
+					<B>Szko≈Ça</B>
 					</td>
 					<td>
-					<TMPL_VAR Name="notes">
+					<!-- TMPL_VAR Name="school" -->
+					</td>
+				</tr>
+				<tr valign=top bgcolor="white" >
+					<td>
+					<B>Uwagi Og√≥lne</B>
+					</td>
+					<td>
+					<!-- TMPL_VAR Name="notes" -->
 					</td>
 				</tr>
 			</TABLE><p>
-		</TMPL_IF>
-  </TMPL_LOOP>
+		<!-- /TMPL_IF -->
+  <!-- /TMPL_LOOP -->
 	<form action="/cgi-bin/koha/insertjdata.pl" method=post>
-		<TMPL_LOOP NAME=inputsloop>
-			<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
-		</TMPL_LOOP>
-		<input type=submit name=submit value=Prze∂lij>
+		<!-- TMPL_LOOP NAME=inputsloop -->
+			<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+		<!-- /TMPL_LOOP -->
+		<input type=submit name=submit value="prze≈õlij">
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->
