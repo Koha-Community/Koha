@@ -41,16 +41,15 @@
 </form>
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Sous-titre:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Auteur:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR
-NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
-<b>Autre Auteur:</b> <TMPL_VAR NAME="additional"><br>
-<b>Collection:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Sujet:</b> <TMPL_VAR NAME="subject"><br>
-<b>Ann&eacute;e:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Notes:</b> <TMPL_VAR NAME="notes"><br>
-<b>Titre unique:</b> <TMPL_VAR NAME="unititle"><br>
-<b>P&eacute;riodique:</b> <TMPL_VAR NAME="serial"><br>
+<TMPL_IF name="subtitle"><b>Sous-titre:</b></TMPL_IF> <TMPL_VAR NAME="subtitle"><br>
+<TMPL_IF name="author"><b>Auteur:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></TMPL_IF><br>
+<TMPL_IF name="additional"><b>Autre Auteur:</b></TMPL_IF> <TMPL_VAR NAME="additional"><br>
+<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br>
+<TMPL_IF name="subject"><b>Sujet:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br>
+<TMPL_IF name="copyrightdate"><b>Ann&eacute;e:</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br>
+<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br>
+<TMPL_IF name="unititle"><b>Titre unique:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br>
+<TMPL_IF name="serial"><b>P&eacute;riodique:</b><TMPL_VAR NAME="serial"></TMPL_IF><br>
 <b>Nbre total d'exemplaires:</b> <TMPL_VAR NAME="count">
 <p>
 </font></td>
@@ -78,7 +77,7 @@ NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a><br>
 </tr>
 <TMPL_LOOP NAME="ITEM_RESULTS">
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
+<td><TMPL_VAR NAME="description"></td>
 <td><a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></td>
 <td><TMPL_VAR NAME="branchname"></td>
 <td><TMPL_VAR NAME="datedue"></td>
