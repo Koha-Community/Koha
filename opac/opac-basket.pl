@@ -26,6 +26,7 @@ if ($print_basket) { $template->param(print_basket => 1); }
 my @bibs = split(/\//, $bib_list);
 my @results;
 
+my $num = 1;
 foreach my $biblionumber (@bibs) {
 	$template->param(biblionumber => $biblionumber);
 
@@ -36,7 +37,10 @@ foreach my $biblionumber (@bibs) {
 	for (my $i = 1; $i < $authorcount; $i++) {
 			$dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
 	} # for
-
+	if($num % 2 == 1){
+		$dat->{'even'} = 1;
+	}
+	$num++;
 	$dat->{'biblionumber'} = $biblionumber;
 	
 	push (@results, $dat);
