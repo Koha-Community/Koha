@@ -1,6 +1,9 @@
 #  $Id$
 #  
 #  $Log$
+#  Revision 1.12  2002/05/31 20:03:17  tonnesen
+#  removed another _sergey
+#
 #  Revision 1.11  2002/05/31 19:41:29  tonnesen
 #  removed fieldid in favour of tagid, removed _sergey from table names, added
 #  tagorder field to tag table, renamed marc_field_table to marc_tag_table.
@@ -29,7 +32,7 @@ CREATE TABLE marc_tag_table (
        KEY (tag)
 );
 
-CREATE TABLE marc_subfield_table_sergey (
+CREATE TABLE marc_subfield_table (
        subfieldid  bigint(20) unsigned NOT NULL auto_increment,	# subfield identifier
        tagid bigint(20),					# tag identifier
        subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields within a tag
