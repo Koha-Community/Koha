@@ -31,6 +31,7 @@ use C4::Search;
 use C4::Output;
 use C4::Koha;
 use CGI;
+use HTML::Template;
 
 
 my $input = new CGI;
@@ -41,15 +42,9 @@ my $submit=$input->param('submit.x');
 if ($submit eq ''){
   print $input->redirect("deletebiblioitem.pl?biblioitemnumber=$bibitemnum&biblionumber=$biblio");
 }
-print $input->header;
-#my ($count,$subject)=subject($data->{'biblionumber'});
-#my ($count2,$subtitle)=subtitle($data->{'biblionumber'});
-#my ($count3,$addauthor)=addauthor($data->{'biblionumber'});
 
-#my ($analytictitle)=analytic($biblionumber,'t');
-#my ($analyticauthor)=analytic($biblionumber,'a');
-print startpage();
-print startmenu('catalogue');
+my $template = gettemplate("modbibitem.tmpl");
+
 my %inputs;
 
 #hash is set up with input name being the key then
@@ -87,131 +82,60 @@ $inputs{'Volume'}="text\t$data->{'volumeddesc'}\t17";
 $inputs{'bibnum'}="hidden\t$data->{'biblionumber'}\t20";
 $inputs{'bibitemnum'}="hidden\t$data->{'biblioitemnumber'}\t21";
 
-print <<printend
+$template->param( biblionumber => $data->{'biblionumber'},
+								title => $data->{'title'},
+								author => $data->{'author'},
+								description => $data->{'description'});
 
-<BLOCKQUOTE><FONT SIZE=6>
-<em><a href=/cgi-bin/koha/detail.pl?bib=$data->{'biblionumber'}&type=intra>$data->{'title'} ($data->{'author'})</a><br>
-Modify Group - $data->{'description'}</em></FONT><br>
-<form action=updatebibitem.pl method=post>
-<table border=0 cellspacing=0 cellpadding=5 align=left>
-
-<TR VALIGN=TOP  bgcolor="99cc33">
-<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=YES > RE-ASSIGN TO EXISTING GROUP</b></td></tr>
-
-printend
-;
 my ($count,@bibitems)=bibitems($data->{'biblionumber'});
-print "<tr valign=top><td colspan=3><select name=existinggroup>\n";
+
+my @bibitemloop;
+
 for (my $i=0;$i<$count;$i++){
-  print "<option value=$bibitems[$i]->{'biblioitemnumber'}>$bibitems[$i]->{'description'} - $bibitems[$i]->{'isbn'}\n";
+	my %line;
+	$line{biblioitemnumber} = $bibitems[$i]->{'biblioitemnumber'};
+	$line{description} = $bibitems[$i]->{'description'};
+	$line{isbn} = $bibitems[$i]->{'isbn'};
+	push(@bibitemloop,\%line);
 }
-print "</select></td></tr>";
-my $notesinput=$input->textfield(-name=>'Notes', -default=>$data->{'bnotes'}, -size=>20);
-
-print <<printend
-<TR VALIGN=TOP  bgcolor="99cc33">
-<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >OR MODIFY DETAILS</b></td></tr>
+$template->param(bibitemloop =>\@bibitemloop);
 
 
+#my $notesinput=$input->textfield(-name=>'Notes', -default=>$data->{'bnotes'}, -size=>20);
+$template->param(bnotes=>$data->{'bnotes'});
 
-<tr valign=top bgcolor=white><td>Item Type</td><td><input type=text name=Item Type value="$data->{'itemtype'}" size=20></td></tr>
+$template->param(itemtype => $data->{'itemtype'});
 
-<tr valign="top" bgcolor="white">
-<td>URL</td>
-<td><input type="text" name="url" value="$data->{'url'}" size="20"></td>
-</tr>
+$template->param(url => $data->{'url'});
+$template->param(classification => $data->{'classification'},
+								dewey => $dewey,
+								subclass => $data->{'subclass'},
+								publishercode => $data->{'publishercode'},
+								place => $data->{'place'},
+								isbn => $data->{'isbn'},
+								publicationyear => $data->{'publicationyear'},
+								pages => $data->{'pages'},
+								illustration => $data->{'illustration'},
+								volumeddesc => $data->{'volumeddesc'},
+								size => $data->{'size'},
+								biblionumber => $data->{'biblionumber'},
+								biblioitemnumber => $data->{'biblioitemnumber'});
 
-<tr valign=top bgcolor=white><td>Class</td><td><input type=text name=Class value="$data->{'classification'}$dewey$data->{'subclass'}" size=20></td></tr>
-
-
-
-<tr valign=top bgcolor=white><td>Publisher</td><td><input type=text name=Publisher value="$data->{'publishercode'}" size=20></td></tr>
-<tr valign=top bgcolor=white><td>Place</td><td><input type=text name=Place value="$data->{'place'}" size=20></td></tr>
-
-
-<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="$data->{'isbn'}" size=20></td></tr>
-
-<tr valign=top bgcolor=white><td>Publication Year</td><td><input type=text name=Publication Year value="$data->{'publicationyear'}" size=20></td></tr>
-
-<tr valign=top bgcolor=white><td>Pages</td><td><input type=text name=Pages value="$data->{'pages'}" size=20></td></tr>
-
-<tr valign=top bgcolor=white><td>Illustrations</td><td><input type=text name=Illustrations value="$data->{'illustration'}" size=20></td></tr>
-
-<tr valign=top bgcolor=white><td>Volume</td>
-<td><input type=text name=Volume value="$data->{'volumeddesc'}" size=20></td></tr>
-<tr valign=top bgcolor=white><td>Notes</td>
-<td>$notesinput</td></tr>
-<tr valign=top bgcolor=white><td>Size</td>
-<td><input type=text name=Size value="$data->{'size'}" size=20></td></tr>
-
-<input type=hidden name=bibnum value="$data->{'biblionumber'}">
-
-<input type=hidden name=bibitemnum value="$data->{'biblioitemnumber'}">
-
-</table>
-
-<img src="/images/holder.gif" width=16 height=500 align=left>
-
-
-
-
-<TABLE  cellspacing=0 cellpadding=5 border=0 >
-printend
-;
-
-
-print <<printend;
-<TR VALIGN=TOP  bgcolor="99cc33">
-<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=5 ><b>CHANGES TO AFFECT THESE BARCODES<br>
-Tick ALL barcodes that changes are to apply too. Those left un-ticked will keep the original group record.</td></tr>
-
-<tr valign=top bgcolor=99cc33>
-<td background="/images/background-mem.gif">&nbsp;</td>
-<td background="/images/background-mem.gif">Barcode</td>
-<td background="/images/background-mem.gif">Location</td>
-<td background="/images/background-mem.gif">Date Due</td>
-<td background="/images/background-mem.gif">Last Seen</td></tr>
-
-printend
-;
 my (@items)=itemissues($data->{'biblioitemnumber'});
 #print @items;
+my @itemloop;
 my $count=@items;
 for (my $i=0;$i<$count;$i++){
-  $items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});
-  print <<printend
-<tr valign=top gcolor=#ffffcc>
-<td><input type=checkbox name="check_group_$items[$i]->{'barcode'}"></td>
-<td><a href="/cgi-bin/koha/moredetail.pl?item=$items[$i]->{'itemnumber'}&bib=$data->{'biblionumber'}&bi=$data->{'biblioitemnumber'}">$items[$i]->{'barcode'}</a></td>
-<td>$items[$i]->{'holdingbranch'}</td>
-<td></td>
-<td>$items[$i]->{'datelastseen'}</td>
-</tr>
-printend
-;
+	my %line;
+  	$items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});
+	$line{barcode}=$items[$i]->{'barcode'};
+	$line{itemnumber}=$items[$i]->{'itemnumber'};
+	$line{biblionumber}=$data->{'biblionumber'};
+	$line{biblioitemnumber}=$data->{'biblioitemnumber'};
+	$line{holdingbranch}=$items[$i]->{'holdingbranch'};
+	$line{datelastseen}=$items[$i]->{'datelastseen'};
+	push(@itemloop,\%line);
 }
-print <<printend
+$template->param(itemloop => \@itemloop);
+print "Content-Type: text/html\n\n", $template->output;
 
-</table>
-<p>
-
-<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42>
-
-
-</form>
-<p>
-
-
-<B>HELP:</B> You <b>must</b> click on the appropriate radio button (in the green boxes), and choose to either re-assign the item/s to a record already in the system, or modify this record.  IF your changes only apply to some
- items, tick the appropriate ones and a new group record will be created automatically for them.
- <br clear=all>
-
- <p> &nbsp; </p>
-
-
-printend
-;
-
-
-print endmenu();
-print endpage();
