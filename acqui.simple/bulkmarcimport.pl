@@ -13,6 +13,8 @@
 
 $file=$ARGV[0];
 
+$branchname='MAIN';
+
 unless ($file) {
     print "USAGE: ./bulkmarcimport.pl filename\n";
     exit;
@@ -471,7 +473,7 @@ RECORD:
 	    }
 	}
 	my $q_barcode=$dbh->quote($barcode);
-	my $q_homebranch="'MAIN'";
+	my $q_homebranch="'$branchname'";
 	my $q_notes="''";
 	#my $replacementprice=0;
 	my $sth=$dbh->prepare("select max(itemnumber) from items");
@@ -492,7 +494,7 @@ BARCODE:
 	    $replacementprice=~s/^p//;
 	    ($replacementprice) || ($replacementprice=0);
 	    $replacementprice=~s/\$//;
-	    $task="insert into items (itemnumber, biblionumber, biblioitemnumber, barcode, itemnotes, homebranch, holdingbranch, dateaccessioned, replacementprice) values ($itemnumber, $biblionumber, $biblioitemnumber, $q_barcode, $q_notes, $q_homebranch, 'MAIN', '$date', $replacementprice)";
+	    $task="insert into items (itemnumber, biblionumber, biblioitemnumber, barcode, itemnotes, homebranch, holdingbranch, dateaccessioned, replacementprice) values ($itemnumber, $biblionumber, $biblioitemnumber, $q_barcode, $q_notes, $q_homebranch, '$branchname', '$date', $replacementprice)";
 	    $sth=$dbh->prepare($task);
 	    print "$task\n";
 	    $sth->execute;
