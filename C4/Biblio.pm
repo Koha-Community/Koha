@@ -1742,7 +1742,8 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							itemcallnumber	=?, 							notforloan = ?
+							itemcallnumber	=?, 							notforloan = ?,
+							location = ?
 							"
         );
         $sth->execute(
@@ -1752,7 +1753,7 @@ sub OLDnewitems {
             $item->{'homebranch'},       $item->{'holdingbranch'},
             $item->{'price'},            $item->{'replacementprice'},
             $item->{'itemnotes'},        $item->{'itemcallnumber'},
-            $item->{'notforloan'}
+            $item->{'notforloan'},		$item->{'location'}
         );
     }
     else {
@@ -1763,7 +1764,8 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							itemcallnumber = ? , notforloan = ?
+							itemcallnumber = ? , notforloan = ?,
+							location = ?
 							"
         );
         $sth->execute(
@@ -1772,7 +1774,8 @@ sub OLDnewitems {
             $item->{'booksellerid'},     $item->{'homebranch'},
             $item->{'holdingbranch'},    $item->{'price'},
             $item->{'replacementprice'}, $item->{'itemnotes'},
-            $item->{'itemcallnumber'},   $item->{'notforloan'}
+            $item->{'itemcallnumber'},   $item->{'notforloan'},
+			$item->{'location'}
         );
     }
     if ( defined $sth->errstr ) {
@@ -1788,8 +1791,7 @@ sub OLDmoditem {
 #  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
     #  my $dbh=C4Connect;
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
-    my $query =
-"update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=? where itemnumber=?";
+    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=? where itemnumber=?";
     my @bind = (
         $item->{'barcode'},        $item->{'notes'},
         $item->{'itemcallnumber'}, $item->{'notforloan'},
@@ -1808,13 +1810,14 @@ sub OLDmoditem {
                              itemlost=?,
                              wthdrawn=?,
 			     itemcallnumber=?,
-			     notforloan=?";
+			     notforloan=?,
+				 location=?";
         @bind = (
             $item->{'bibitemnum'},     $item->{'barcode'},
             $item->{'notes'},          $item->{'homebranch'},
             $item->{'lost'},           $item->{'wthdrawn'},
             $item->{'itemcallnumber'}, $item->{'notforloan'},
-            $item->{'itemnum'}
+            $item->{'location'},		$item->{'itemnum'}
         );
 		if ($item->{homebranch}) {
 			$query.=",homebranch=?";
@@ -2533,6 +2536,17 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.102  2004/09/06 10:00:19  tipaul
+# adding a "location" field to the library.
+# This field is useful when the callnumber contains no information on the room where the item is stored.
+# With this field, we now have 3 levels of informations to find a book :
+# * the branch.
+# * the location.
+# * the callnumber.
+#
+# This should be versatile enough to solve any storing method.
+# This hack is quite simple, due to the nice Biblio.pm API. The MARC => koha db link is automatically managed. Just add the link in the parameters section.
+#
 # Revision 1.101  2004/08/18 16:01:37  tipaul
 # modifs to support frameworkcodes
 #

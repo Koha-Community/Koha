@@ -288,23 +288,23 @@ my %requiretables = (
 	suggestions => "(
 				suggestionid int(8) NOT NULL auto_increment,
 				suggestedby int(11) NOT NULL default '0',
-				managedby int(11) default NULL,
-				status varchar(10) NOT NULL default '',
+				managedby int(11) default NULL ,
+				STATUS varchar(10) NOT NULL default '',
 				note text,
-				author varchar(80) default NULL,
-				title varchar(80) default NULL,
-				copyrightdate smallint(6) default NULL,
-				publishercode varchar(255) default NULL,
-				date timestamp(8) NOT NULL,
-				volumedesc char(255) default NULL,
-				publicationyear smallint(6) default NULL,
-				place char(255) default NULL,
-				isbn char(10) default NULL,
-				mailoverseeing smallint(1) default 0,
-				biblionumber int(11) default NULL,
-				PRIMARY KEY  (suggestionnumber),
-				KEY suggestedby (suggestedby),
-				KEY managedby (managedby)
+				author varchar(80) default NULL ,
+				title varchar(80) default NULL ,
+				copyrightdate smallint(6) default NULL ,
+				publishercode varchar(255) default NULL ,
+				date timestamp(8) NOT NULL ,
+				volumedesc varchar(255) default NULL ,
+				publicationyear smallint(6) default '0',
+				place varchar(255) default NULL ,
+				isbn varchar(10) default NULL ,
+				mailoverseeing smallint(1) default '0',
+				biblionumber int(11) default NULL ,
+				PRIMARY KEY (suggestionid) ,
+				KEY suggestedby(suggestedby) ,
+				KEY managedby(managedby)
 			)",
 	aqbasket => "(basketno int(11) NOT NULL auto_increment,
 				creationdate date,
@@ -404,7 +404,7 @@ my %requirefields = (
 				'sort1' => 'char(80)',
 				'sort2' => 'char(80)', },
     aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key'},
-    items => {'paidfor' => 'text'},
+    items => {'paidfor' => 'text', 'location' => 'char(80)'},
 
     #added so that reference items are not available for reserves...
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
@@ -418,6 +418,7 @@ my %requirefields = (
 							'frameworkcode' => 'char(4) not NULL default \'\'',
 							'hidden' => 'tinyint(1)',
 							'isurl' => 'tinyint(1)',
+							'link' => 'char(80)',
 							},
     bookshelf => {'owner' => 'char(80)',
     					'category' => 'char(1)',
@@ -1368,6 +1369,17 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.94  2004/09/06 10:00:29  tipaul
+# adding a "location" field to the library.
+# This field is useful when the callnumber contains no information on the room where the item is stored.
+# With this field, we now have 3 levels of informations to find a book :
+# * the branch.
+# * the location.
+# * the callnumber.
+#
+# This should be versatile enough to solve any storing method.
+# This hack is quite simple, due to the nice Biblio.pm API. The MARC => koha db link is automatically managed. Just add the link in the parameters section.
+#
 # Revision 1.93  2004/08/12 14:50:50  tipaul
 # bugfixes
 #
