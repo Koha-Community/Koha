@@ -1,0 +1,28 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Patron Quick Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<div id="main-compact">
+
+<div class="table"><table>
+  <tr>
+  	<th>&nbsp;</th>
+    <th>Card</th>
+    <th>Name (Cat.)</th>
+    <th>Address</th>
+  </tr>
+  <!-- TMPL_IF NAME="resultsloop" -->
+  <!-- TMPL_LOOP NAME="resultsloop" -->
+    <!-- TMPL_IF NAME="background" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
+    <tr>
+    <!-- /TMPL_IF -->
+	 <td><form action="member-search-results.pl" method="get"><input type="button" class="submit" value="Choose" title="Choose this Patron" onclick="window.opener.FillForm('<!-- TMPL_VAR NAME="cardnumber" -->','mainform','member'); return false;" /></form></td>
+      <td><!-- TMPL_VAR NAME="cardnumber" --></td>
+      <td><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> (<!-- TMPL_VAR NAME="categorycode" -->)</td>
+      <td><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME=city --></td>
+    </tr>
+  <!-- /TMPL_LOOP -->
+  <!-- TMPL_ELSE --><td colspan="6">No results found</td><!-- /TMPL_IF -->
+</table></div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
