@@ -64,7 +64,10 @@ my $frbranchcd='';
 # set up the branchselect options....
 my $tobranchoptions;
 foreach my $br (keys %$branches) {
-    (next) unless $branches->{$br}->{'CU'};
+# FIXME - Dunno what this line was supposed to do, but "CU" never
+# appears anywhere else, so this was preventing this code from
+# working, by creating an empty <select> block later on.
+#    (next) unless $branches->{$br}->{'CU'};
     my $selected='';
     ($selected='selected') if ($br eq $tobranchcd);
     $tobranchoptions.="<option value=$br $selected>$branches->{$br}->{'branchname'}\n";
