@@ -1,133 +1,81 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
+<div id="mainbloc">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
+	 <a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">MARC</a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD</a><a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Ajouter à l'étagère</a><a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Imprimer</a>
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
-		<table border=0 cellpadding=10 align=right>
-		<tr>
-			<td>
-				<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
-			</td>
-		</tr>
-		</table>
+		<a class="button catalogue" href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Demandes</a>
 	<!-- /TMPL_IF -->
-	<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
-	<!-- TMPL_VAR NAME="class" --></em></font><p>
-	<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
-	<!-----------------Notice bibliographique TABLE--------->
-	<tr valign="top">
-		<td bgcolor="#cccc99" background="/images/background-mem.gif">
-			<b>Notice bibliographique <!-- TMPL_VAR NAME="biblionumber" --></b>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td>
-			<br/><a href="MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">MARC</a><br/><br/>
-			<FONT SIZE=2  face="arial, helvetica">
-			<!-- TMPL_IF name="isbn" --><b>ISBN:</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="subtitle" --><b>Sous-titre:</b><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="author" --><b>Auteur:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="additional" --><b>Auteur supplémentaire:</b><!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="publishercode" --><b>Publié par :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="publicationyear" --><b>en </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
-			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br>
-			<!-- TMPL_IF name="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="subject" --><b>Sujet:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="copyrightdate" --><b>Année :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="unititle" --><b>Titre uniforme:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
-			<!-- TMPL_IF name="serial" --><b>Périodiques:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="classification" --><b>Classification:</b> <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
-			<b>Nombre total d'ouvrages:</b> <!-- TMPL_VAR NAME="count" -->
-			</font>
-		</td>
-	</tr>
-	</table>
+	<div id="bloc25">
+		<h2 class="catalogue">NOTICE <!-- TMPL_VAR NAME="biblionumber" --></h2>
+		<p>
+			<!-- TMPL_IF NAME="isbn" --><b>ISBN :</b><a href="/cgi-bin/koha/opac-searchresults.pl?isbn=<!-- TMPL_VAR NAME="isbn" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="ISBN" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subtitle" --><b>Sous-Titre :</b> <!-- TMPL_VAR NAME="subtitle" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="author" --><b>Auteur:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="additional" --><b>Auteur secondaire:</b> <!-- TMPL_VAR NAME="additional" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="publishercode" --><b>Edité par :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="publicationyear" --><b>en </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="pages" -->, <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="size" -->, <!-- TMPL_VAR NAME="size" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="collection" --><b>Collection :</b> <!-- TMPL_VAR NAME="seriestitle" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subject" --><b>Sujet :</b> <!-- TMPL_VAR NAME="subject" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="copyrightdate" --><b>Année :</b> <!-- TMPL_VAR NAME="copyrightdate" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="notes" --><b>Remarques :</b> <!-- TMPL_VAR NAME="notes" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="unititle" --><b>Titre uniforme:</b> <!-- TMPL_VAR NAME="unititle" --><br><!-- /TMPL_IF --> 
+			<!-- TMPL_IF NAME="serial" --><b>Périodique:</b> <!-- TMPL_VAR NAME="serial" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="dewey" --><b>Dewey :</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&amp;dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="dewey" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="classification" -->Classification : <!-- TMPL_VAR NAME="classification" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="lccn" --><b>LCCN :</b> <!-- TMPL_VAR NAME="lccn" --><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="url" --><b>URL:</b> <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a><br><!-- /TMPL_IF -->
+			<b>Nombre Total d'exemplaires :</b> <!-- TMPL_VAR NAME="count" -->
+	</div>
 <!-- /TMPL_LOOP -->
-<!-- FIXME - The help box overflows on the right. I think this is
-     because it is specified as "width=70%", which the browser
-     interprets as 70% sur the width sur the browser window. However,
-     leaving out the "width=70%" makes the help box abut the "biblio
-     record" box. I think the fix is to put all three boxes in a
-     table, for layout, et make the help box as wide as it wants to
-     be. -->
-
-<center>
-<table border=0 cellspacing=0 cellpadding=2>
-	<tr bgcolor="#cccc99" background="/images/background-mem.gif">
-		<th>Catég ouvrage</th>
-		<th>Localisation</th>
-		<th>Date de retour</th>
-		<th>Vu</th>
-		<th>Code barre</th>
-		<td>Volume</td>
-	</tr>
-	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+<div id="bloc25">
+	<h2 class="catalogue">Exemplaires</h2>
+	<table>
 		<tr>
-			<td><!-- TMPL_VAR NAME="description" --></td>
-			<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="bulk" --> <!-- TMPL_VAR NAME="bulk" --><!-- /TMPL_IF --></td>
-			<td><!-- TMPL_VAR NAME="datedue" --></td>
-			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
-			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
-			<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
-			<!-- TMPL_IF NAME="type" -->
+			<th class="catalogue">Type de document</th>
+			<th class="catalogue">Localisation</th>
+			<th class="catalogue">Date de retour</th>
+			<th class="catalogue">Vue pour la dernière fois</th>
+			<th class="catalogue">Code Barre</th>
+			<th class="catalogue">Volume</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+			<tr>
+				<td><!-- TMPL_VAR NAME="description" --></td>
+				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR NAME="datedue" --></td>
+				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
+				<!-- TMPL_IF NAME="type" -->
+					<td>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Etablir le type de document</a>
+					</td>
+				<!-- /TMPL_IF -->
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
+			<tr>
+				<td><!-- TMPL_VAR NAME="itemtype" --></td>
+				<td>Site Web</td>
+				<td>En ligne</td>
+				<td>Disponible</td>
+				<td></td>
 				<td>
-					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&item=<!-- TMPL_VAR NAME="itemtype" -->>Fix Itemtype</a>
+					<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">http://<!-- TMPL_VAR NAME="url" --></a>
 				</td>
-			<!-- /TMPL_IF -->
-		</tr>
-	<!-- /TMPL_LOOP -->
-	<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
-		<tr>
-			<td><!-- TMPL_VAR NAME="itemtype" --></td>
-			<td>Site Web</td>
-			<td>En ligne</td>
-			<td>Disponible</td>
-			<td></td>
-			<td>
-				<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">http://<!-- TMPL_VAR NAME="url" --></a>
-			</td>
-		</tr>
-	<!-- /TMPL_LOOP -->
-</table>
-<p>
-</center>
-<br clear=all>
-<p />
-
-<!--
-<table border="1" cellspacing="0" cellpadding="5" width="90%">
-<tr valign="top">
-<td bgcolor="$main"
-background="/images/background-mem.gif"><b>Résumé</b></td>
-</tr>
-<tr valign="top">
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-<td><!-- TMPL_VAR NAME="abstract" --></td>
-<!-- /TMPL_LOOP -->
-</tr>
-</table>
-<p />
-<table border="1" cellspacing="0" cellpadding="5" width="90%">
-<tr valign="top">
-<td bgcolor="$main" background="/images/background-mem.gif"><b>Links to
-Associated Websites<b></td>
-</tr>
-<!-- TMPL_LOOP NAME="SITE_RESULTS" -->
-<tr>
-<td><b>Titre:</b> <!-- TMPL_VAR name="title" --><br>
-<b>Description:</b> <!-- TMPL_VAR name="description" --><br>
-<b>URL:</b><a href="http://<!-- TMPL_VAR name="url" -->">http://<TMPL_VAR
-name="url"></a><br>
-</td>
-</tr>
-<!-- /TMPL_LOOP -->
-</table>
-
--->
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<script language="javascript" type="text/javascript">
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
 
 <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

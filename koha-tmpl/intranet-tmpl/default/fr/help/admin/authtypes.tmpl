@@ -1,0 +1,18 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Types d'autorité</h1>
+	<p>Vous pouvez définir autant de types d'Autorités que vous le souhaitez.</p>
+	<ul>
+		<li>with the MARC structure button, you can define the MARC structure of a given authority type</li>
+		<li>The tag reported must contain a MARC tag number. Every subfield in the selected tag will be copied to the "destination tag" in the biblio. for example, in UNIMARC, the tag 200 ot personal authority will be reported to 600, 700, 701, depending on what is cliqued in the biblio MARC editor.</li>
+		<li>The summary contains an "ISBD" like description to explain how the entry must be shown in the result list. The syntax is : 
+		<ul>
+			<li>[xxxFFFSyyy] where xxx are up to 3 digits BEFORE the field, FFF the field number, S the subfield code, yyy up to 3 digits AFTER the field.</li>
+			<li>Les éléments en dehors de []sont pris comme (y compris HTML)</li>
+			<li>les champs répétables sont gérés</li>
+		<ul>
+	</ul>
+	<p>REMARQUE IMPORTANTE :</p>
+	<p>
+		In the biblio framework, the reported tag <b>MUST</b> contain a $9 subfield, activated in the tab where the tag is, and hidden (hidden maybe omitted, but the field has no reason to appear anywhere). The $9 subfield in the biblio will contain the Authority number (the internal Koha number)
+	</p>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

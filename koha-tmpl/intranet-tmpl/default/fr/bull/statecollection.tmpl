@@ -1,0 +1,100 @@
+
+<!-- TMPL_INCLUDE name="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1 class="bull">Abonnement pour</h1>
+<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Abonnement</a>
+
+<div id="bloc25">
+	<h2 class="bull">Résumé d'abonnement</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Bibliothécaire</label><!-- TMPL_VAR name="user" --></p>
+		<p><label>Date de début (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
+		<p><label>Date de fin</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
+		<p>N° Arrivés</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Numéros enregistrés</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Remarque de l'OPAC</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<p>Note interne</p>
+		<p>&nbsp;<textarea name="librariannote" COLS=60 ROWS=5><!-- TMPL_VAR name="librariannote" --></textarea></p>
+		<input type="submit" value="Enregistrer les changements" class="button bull">
+	</form>
+</div>
+
+<div id="bloc25">
+<h2 class="bull">Numéros attendus ou en retard</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="serialchangestatus">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+	<table class="small">
+	<tr>
+		<th class="bull">
+			Numéroté
+		</th>
+		<th class="bull">
+			Prevu pour
+		</th>
+		<th class="bull">
+			Etat
+		</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size=50 maxlength=100>
+			</td>
+			<td>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
+				<select name="status" size="1">
+					<!--TMPL_IF name="status1" -->
+						<option value="1" selected>Attendu</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						<option value="2" selected>Arrivé</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Arrivé</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						<option value="3" selected>En retard</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">En retard</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						<option value="4" selected>Manquant</option>
+					<!-- TMPL_ELSE -->
+						<option value="4">Manquant</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type="submit" value="Enregistrer les changements" accesskey="w" class="button bull">
+	<!-- TMPL_IF name="hassubscriptionexpired" -->
+		<p>Subscription has expired. Waited last issue status can't be changed. <a href="#" onClick="popup()" class="button bull">Renew</a> your subscription</p>
+	<!-- /TMPL_IF -->
+	</form>
+</div>
+
+</form>
+</table>
+<script language="JavaScript" type="text/javascript">
+
+function popup()
+{
+	 window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid">","subscription renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE name="bull-bottom.inc" -->

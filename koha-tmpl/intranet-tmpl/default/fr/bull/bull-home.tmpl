@@ -1,0 +1,40 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="bull">Abonnements Périodiques</h1>
+	<table>
+		<tr>
+			<th class="bull">Titre</th>
+			<th class="bull">ISSN</th>
+			<th class="bull" colspan=2>&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="bull-home.pl" method="post">
+			<td>
+				<input type="text" size=40 maxlength=40 name="title" value="<!-- TMPL_VAR name="title" -->">
+			</td>
+			<td>
+				<input type="text" size=11 maxlength=11 name="ISSN" value="<!-- TMPL_VAR name="ISSN" -->">
+			</td>
+			<td colspan=3>
+				<input type="submit" value="filtre" class="button bull">
+			</td>
+		</tr>
+		<!-- TMPL_LOOP name="subscriptions" -->
+			<tr>
+				<td>
+					<!-- TMPL_VAR name="title" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="ISSN" -->
+				</td>
+				<td>
+					<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Détail</a> <a href="bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Réceptionner</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<a href="/cgi-bin/koha/bull/subscription-add.pl" class="button bull">Ajouter un abonnement</a>
+</div>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+

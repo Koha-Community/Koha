@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Recherche</h1>
+	<p>La recherche est divisée en deux parties différentes :</p>
+	<h2>Champs usuels</h2>
+	<p> Les champs usuels sont dans la partie haute de l'écran. Ils contiennent :</p>
+		<ul>
+			<li>Mot clé :  Recherche sur l'ensemble</li>
+			<li>Titre</li>
+			<li>Auteur</li>
+			<li>Code Barre : le code barre de la biblothèque pour le livre</li>
+			<li>Illustrateur</li>
+			<li>Dewey</li>
+			<li>Item type : select here an item type. If none is selected, the search is done on every item type</li>
+			<li>Branch : select here a specific branch. If none selected, the search is done on every branch</li>
+		</ul>
+	<p>Méthode de Recherche</p>
+		<ul>
+			<li>If you enter values in more than 1 field, the search is "and-ed" (biblios that contains <b>title</b> AND <b>author</b>)</li>
+			<li> Une notice est sélectionnée si son champ <b>contient</b>le terme que vous avez saisi</li>
+			<li>If you enter a * (or a %) at the end of a term, Koha search for words starting with your term (entering <b>inférieur*</b> signifie : trouver les notices qui ont un <b>titre contient un mot commençant par lower</b></li>
+		</ul>
+	<h2 class="catalogue">Recherche MARC</h2>
+	<p>In the lower part of the search screen, the <b>More fields</b> box let you enter whatever you want : and, or, exclusions (not), search on any MARC field/subfield</p>
+	
+	<p><b>REMARQUE IMPORTANTE : </b>for performance reasons, the * is valid only if you enter a word more than 3 letters long. for words of 3 letters or less, the * is <b>ignoré</b></p>
+	<br/>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

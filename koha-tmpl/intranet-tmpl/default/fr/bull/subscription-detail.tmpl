@@ -1,0 +1,175 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1 class="bull">Abonnement</h1>
+<a href="subscription-add.pl?op=mod&subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Editer</a> <a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Numéros</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull">Notice</a>
+<form method="post" name="f">
+<div id="bloc25">
+	<h2 class="bull">Information d'abonnement</h2>
+		<p>Identité Bibliothécaire</td><td> <!-- TMPL_VAR name="librarian" --></p>
+		<p><label>Fournisseur </label><!-- TMPL_VAR name="aqbooksellername" --></p>
+		<p><label>Coût</label><!-- TMPL_VAR name="cost" --></p>
+		<p><label>Budget </label><!-- TMPL_VAR name="bookfundid" --></p>
+		<p><label class="label100">Notice bibliographique</label><!-- TMPL_VAR name="bibliotitle" --></p>
+		<p><label class="label100">Notes :</label><!-- TMPL_VAR name="notes" --></p>
+</div>
+<div id="bloc25">
+	<h2 class="bull">Calendrier</h2>
+	<p><label class="label100">Date de début</label> <!-- TMPL_VAR name="startdate" --></p>
+	<p><label class="label100">Fréquence (*) :</label>
+		<!--TMPL_IF name="periodicity1" -->
+				1/jour
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				1/semaine
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				1/2 semaines
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				1/3 semaines
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				1/Mois
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				1/2 Mois
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				1/3 Mois
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				1/trimestre
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				1/2 trimestre
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				1/an
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				1/2 années
+		<!-- /TMPL_IF -->
+	</p>
+	<p><label class="label100">Arrive le :</label>
+		<!--TMPL_IF name="arrival1" -->
+			Lundi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				Mardi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				Mercredi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				Jeudi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				Vendredi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				Samedi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				Dimanche
+		<!-- /TMPL_IF -->
+</div>
+<div id="bloc25">
+	<h2 class="bull">Duréé d'abonnement</h2>
+	<p><label class="label100">Nombre de bulletins</label><!-- TMPL_VAR name="numberlength" --></p>
+	<p><label class="label100">Nombre de semaines</label><!-- TMPL_VAR name="weeklength" --></p>
+	<p><label class="label100">Nombre de mois</label><!-- TMPL_VAR name="monthlength" --></p>
+
+</div>
+<div id="bloc25">
+	<h2 class="bull">Calcul de la numérotation</h2>
+	<p>
+		<p>Formule de numérotation : <!-- TMPL_VAR name="numberingmethod" --></p>
+		<table class="small" width="20%">
+			<tr>
+				<th class="bull">&nbsp;</th>
+				<th class="bull">X</th>
+				<th class="bull">Y</th>
+				<th class="bull">Z</th>
+			</tr>
+			<tr>
+				<td class="bull">Ajouter</td>
+				<td>
+					<!-- TMPL_VAR name="add1" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add2" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="add3" -->
+				</td>
+			</tr>
+			<tr>
+				<td class="bull">toutes les</td>
+				<td><!-- TMPL_VAR name="every1" --></td>
+				<td><!-- TMPL_VAR name="every2" --></td>
+				<td><!-- TMPL_VAR name="every3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">Quand supérieur à</td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
+					<i>(est <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
+					<i>(est <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
+					<i>(est <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
+			</tr>
+			<tr>
+				<td class="bull">Retourner à</td>
+				<td><!-- TMPL_VAR name="setto1" --></td>
+				<td><!-- TMPL_VAR name="setto2" --></td>
+				<td><!-- TMPL_VAR name="setto3" --></td>
+			</tr>
+			<tr>
+				<td class="bull">
+						Dernière valeur
+				</td>
+				<td><!-- TMPL_VAR name="lastvalue1" --></td>
+				<td><!-- TMPL_VAR name="lastvalue2" --></td>
+				<td><!-- TMPL_VAR name="lastvalue3" --></td>
+			</tr>
+		</table>
+</div>
+<div id="bloc25">
+	<h2 class="bull">N° parus</h2>
+	<table class="small">
+	<tr>
+		<th class="bull">Numéro</th>
+		<th class="bull">Date prévue</th>
+		<th class="bull">Etat</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR name="serialseq" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR name="planneddate" -->
+			</td>
+			<td>
+					<!--TMPL_IF name="status1" -->
+						Attendu
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						Arrivé
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						En retard
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						Manquant
+					<!-- /TMPL_IF -->
+				</select>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->

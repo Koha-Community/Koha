@@ -1,50 +1,50 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
-<h1>Menu principal</h1>
+<h1>Menu Général</h1>
 <ul>
-<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Recherche Z39.50</a>
-<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Charger des notices MARC</a>
+<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=z3950">Recherche Z39.50</a>
+<li><a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?menu=uploadmarc">Importer des enregistrements MARC</a>
 </ul>
 <center>
 <p>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Sélectionner un nouveau fichier</a>
+<a href="$ENV{'SCRIPT_NAME'}?menu=$menu">Selectionner un Nouveau Fichier</a>
 <p>
-<!-- TMPL_IF name="IS_MARC" -->
-	<table border=0 cellpadding=10 cellspacing=0>
+<!-- TMPL_IF NAME="IS_MARC" -->
+	<table border="0" cellpadding="10" cellspacing="0">
 	<tr>
-		<th background=/images/background-acq.gif>
-		 	Sélectionner une notice à importer de <!-- TMPL_VAR name="recordsource" -->
+		<th background="/images/background-acq.gif">
+		 	Sélectionner un Enregistrement à importer de <!-- TMPL_VAR NAME="recordsource" -->
 		</th>
 	</tr>
 	<tr>
-		<td bgcolor=#dddddd>
+		<td bgcolor="#dddddd">
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="IS_Z3950" -->
-<table border=0 cellpadding=10 cellspacing=0>
+<!-- TMPL_IF NAME="IS_Z3950" -->
+<table border="0" cellpadding="10" cellspacing="0">
 <tr>
-		<td bgcolor=#dddddd>
-		<!-- TMPL_IF name="HAS_NUMRECORDS" -->
-	            <a name=SERVER-<!-- TMPL_VAR name="srvid" -->></a> " <!-- TMPL_VAR name="srvname" -->
-		<font size=-1>[Viewing <!-- TMPL_VAR name="startrecord" --> to <!-- TMPL_VAR name="highest" --> sur <!-- TMPL_VAR name="numrecords" --> enregistrements]  <!-- TMPL_VAR name="previous" --> | <!-- TMPL_VAR name="next" --> </font><br>
+		<td bgcolor="#dddddd">
+		<!-- TMPL_IF NAME="HAS_NUMRECORDS" -->
+	            <a name="SERVER-<!-- TMPL_VAR NAME="srvid" -->"></a> " <!-- TMPL_VAR NAME="srvname" -->
+		<font size="-1">[Visualisation de <!-- TMPL_VAR NAME="startrecord" --> à <!-- TMPL_VAR NAME="highest" --> de <!-- TMPL_VAR NAME="numrecords" --> enregistrements] <!-- TMPL_VAR NAME="previous" --> | <!-- TMPL_VAR NAME="next" --> </font><br>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="PENDING" -->
-			<font color=red>Recherche en cours...</font>
+		<!-- TMPL_IF NAME="PENDING" -->
+			<font color="red">Recherche encore en cours...</font>
 		<!-- TMPL_ELSE -->
-			<font color=red>en traitement... <!-- TMPL_VAR name="elapsedtime" --></font>
+			<font color="red">en cours... <!-- TMPL_VAR NAME="elapsedtime" --></font>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="NO_RECORDS" -->
-			<b>Pas de résultat trouvé pour cette demande <!-- TMPL_VAR name="id" --></b>
+		<!-- TMPL_IF NAME="NO_RECORDS" -->
+			<b>Pas de réponse trouvée à la requête <!-- TMPL_VAR NAME="id" --></b>
 		<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-	<!-- TMPL_LOOP name="LINES" -->
-<!--		<a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="file" -->&resultsid=<!-- TMPL_VAR name="resultsid" -->&<!-- TMPL_VAR name="searchfield" -->=<!-- TMPL_VAR name="searchvalue" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->&searchvalue=<!-- TMPL_VAR name="searchvalue" -->> -->
-		<a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="file" -->&numrecord=<!-- TMPL_VAR name="numrecord" -->>
-				<!-- TMPL_VAR name="title" -->
-				<!-- TMPL_VAR name="author" -->
+	<!-- TMPL_LOOP NAME="LINES" -->
+<!--		<a href=<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?file=<!-- TMPL_VAR NAME="file" -->&amp;resultsid=<!-- TMPL_VAR NAME="resultsid" -->&amp;<!-- TMPL_VAR NAME="searchfield" -->=<!-- TMPL_VAR NAME="searchvalue" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;searchvalue=<!-- TMPL_VAR NAME="searchvalue" -->> -->
+		<a href="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->?file=<!-- TMPL_VAR NAME="file" -->&amp;numrecord=<!-- TMPL_VAR NAME="numrecord" -->">
+				<!-- TMPL_VAR NAME="title" -->
+				<!-- TMPL_VAR NAME="author" -->
 		</a>
-		<!-- TMPL_VAR name="donetext" --><br>
+		<!-- TMPL_VAR NAME="donetext" --><br>
 	<!-- /TMPL_LOOP -->
 </td>
 </tr>

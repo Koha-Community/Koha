@@ -1,7 +1,8 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<!-- TMPL_IF NAME=add_form -->
-        <script>
+<!-- TMPL_IF NAME="add_form" -->
+        <script language="javascript" type="text/javascript">
+	function _(s) { return s } // dummy function for gettext
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -39,162 +40,162 @@
                 var _alertString="";
                 var alertString2;
                 if (f.printername.value.length==0) {
-                        _alertString += "- printer name missing\n";
+                        _alertString += "\n- " + _("nom d'imprimante manquant");
                 }
                 if (f.printqueue.value.length==0) {
-                        _alertString += "- Queue missing\n";
+                        _alertString += "\n- " + _("File d'attente absente");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because sur the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                         alert(alertString2);
                 }
         }
-        </SCRIPT>
+        </script>
 
-	<!-- TMPL_IF NAME=searchfield -->
-		<h1>Modifier imprimante</h1>
+	<!-- TMPL_IF NAME="searchfield" -->
+		<h1>Modifier l'imprimante</h1>
 	<!-- TMPL_ELSE -->
 		<h1>Ajouter une imprimante</h1>
 	<!-- /TMPL_IF -->
 
-        <form action='<!-- TMPL_VAR NAME=script_name -->' name=Aform method=post>
-        <input type=hidden name=op value='add_validate'>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+        <input type="hidden" name="op" value="add_validate">
         
 
 	<table>
 
-	<!-- TMPL_IF NAME=searchfield -->
+	<!-- TMPL_IF NAME="searchfield" -->
 		<tr>
-			<td>Nom Imprimante</td>
+			<td>Nom de l'imprimante</td>
 			<td>
-				<input type=hidden name=printername value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
+				<input type="hidden" name="printername" value="<!-- TMPL_VAR NAME="searchfield" -->"><!-- TMPL_VAR NAME="searchfield" -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>Nom Imprimante</td>
+			<td>Nom de l'imprimante</td>
 			<td>
-				<input type=text name=printername size=50 maxlength=50>
+				<input type="text" name="printername" size="50" maxlength="50">
 			</td>
 		</tr>
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>Queue</td>
-			<td><input type=text name=printqueue size=50 maxlength=50 value='<!-- TMPL_VAR NAME=printqueue -->'> </td>
+			<td>En attente</td>
+			<td><input type="text" name="printqueue" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printqueue" -->"> </td>
 		</tr>
         	<tr>
-			<td>Saisir</td>
-			<td><input type=text name=printtype size=50 maxlength=50 value='<!-- TMPL_VAR NAME=printtype -->'> </td>
+			<td>Type</td>
+			<td><input type="text" name="printtype" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printtype" -->"> </td>
 		</tr>
         	<tr>
 			<td> </td>
-			<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
+			<td><input type="button" value="OK" onclick="Check(this.form)"></td>
 		</tr>
         </table>
         </form>
 
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=add_validate -->
+<!-- TMPL_IF NAME="add_validate" -->
 	Donnée enregistrée
-        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-        <input type=submit value=OK>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+        <input type="submit" value="OK">
         </form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=delete_confirm -->
-	<table border=0 cellspacing=0 cellpadding=5>
-		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Imprimante</b></td>
-			<td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
+<!-- TMPL_IF NAME="delete_confirm" -->
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr bgcolor="#99cc33">
+			<td background="/images/background-mem.gif"><b>Imprimante</b></td>
+			<td background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
 		</tr>
 
-        	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-			<input type=hidden name=op value=delete_confirmed>
-			<input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
+        	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed">
+			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
         
 		<tr>
-			<td>Queue</td>
-			<td><!-- TMPL_VAR NAME=printqueue --></td>
+			<td>En attente</td>
+			<td><!-- TMPL_VAR NAME="printqueue" --></td>
 		</tr>
         	<tr>
-			<td>Saisir</td>
-			<td><!-- TMPL_VAR NAME=printtype --></td>
+			<td>Type</td>
+			<td><!-- TMPL_VAR NAME="printtype" --></td>
 		</tr>
         	<tr>
-			<td colspan=2 align=center>CONFIRMER SUPPRESSION</td>
+			<td colspan="2" align="center">CONFIRMEZ SUPPRESSION</td>
 		</tr>
         	<tr>
 			<td>
-				<input type=submit value=OUI>
+				<input type="submit" value="OUI">
 				</form>
 			</td>
 			<td>
-				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-				<input type=submit value=NO>
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="submit" value="NON">
 				</form>
 			</td>
 		</tr>
 	</table>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=delete_confirmed -->
-	Donnée effacée
-	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-		<input type=submit value=OK>
+<!-- TMPL_IF NAME="delete_confirmed" -->
+	Donnée détruite
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="OK">
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=else -->
-	<h2>Admin Imprimante</h2>
-        <form action='<TMP_VAR NAME=script_name>' method=post>
-                <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="effacer">
+<!-- TMPL_IF NAME="else" -->
+	<h2>Gestion Imprimante</h2>
+        <form action="<!-- TMPL_VAR NAME="script_name">" method="post">
+                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->">
+                <input type="reset" name="reset" value="eff">
         </form>
 
-	<!-- TMPL_IF NAME=searchfield -->
-		Votre recherche sur <b><!-- TMPL_VAR NAME=searchfield --></b>
+	<!-- TMPL_IF NAME="searchfield" -->
+		Vous recherchiez <b><!-- TMPL_VAR NAME="searchfield" --></b>
 	<!-- /TMPL_IF -->
 
-	<table border=0 cellspacing=0 cellpadding=5>
-		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Nom</b></td>
-			<td background='/images/background-mem.gif'><b>Queue</b></td>
-			<td background='/images/background-mem.gif'><b>Saisir</b></td>
-			<td background='/images/background-mem.gif'> </td>
-			<td background='/images/background-mem.gif'> </td>
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr bgcolor="#99cc33">
+			<td background="/images/background-mem.gif"><b>Nom</b></td>
+			<td background="/images/background-mem.gif"><b>En attente</b></td>
+			<td background="/images/background-mem.gif"><b>Type</b></td>
+			<td background="/images/background-mem.gif"> </td>
+			<td background="/images/background-mem.gif"> </td>
 		</tr>
-		<!-- TMPL_LOOP NAME=loop -->
-		<tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
-			<td><!-- TMPL_VAR NAME=printername --></td>
-			<td><!-- TMPL_VAR NAME=printqueue --></td>
-			<td><!-- TMPL_VAR NAME=printtype --></td>
-			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=printername -->">Editer</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=printername -->">Supprimer</a></td>
+		<!-- TMPL_LOOP NAME="loop" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+			<td><!-- TMPL_VAR NAME="printername" --></td>
+			<td><!-- TMPL_VAR NAME="printqueue" --></td>
+			<td><!-- TMPL_VAR NAME="printtype" --></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->">Editer</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="printername" -->">Supprimer</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 
-	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-        <input type=hidden name=op value=add_form>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+        <input type="hidden" name="op" value="add_form">
 	
-	<!-- TMPL_IF NAME=offsetgtzero -->
-		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->"><< Prev</a>
+	<!-- TMPL_IF NAME="offsetgtzero" -->
+		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->"><< Préc.</a>
 	<!-- /TMPL_IF -->
 
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-	<!-- TMPL_IF NAME=ltcount -->
-		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Suivant >></a>	
+	<!-- TMPL_IF NAME="ltcount" -->
+		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Suivant >></a>	
 	<!-- /TMPL_iF -->
 
         <br>
-	<input type=submit class="button" value="Ajouter une imprimante" alt="Ajouter une imprimante">
+	<input type="submit" class="button" value="Ajouter une imprimante" alt="Ajouter une imprimante">
 	<br>
         </form>
 

@@ -1,162 +1,138 @@
 <!-- TMPL_INCLUDE Name="circulation-top.inc" -->
+<div id="mainbloc">
+<div class="bloc25">
+<a class="button" href="circulation.pl">Lecteur suivant</a> <a class="button" href="returns.pl"> Retours</a>
+</div>
 
-<table align=right cellpadding=10><tr><td>
-<a class="button" href=circulation.pl>
-Emprunteur suivant</a>
-<a class="button" href=returns.pl>
-Retours
-</td></tr></table>
-
-<h1>Circulation: Transferts</h1><br>
-<b>Annexe:</b> <!-- TMPL_VAR Name="genbrname" --> &nbsp
-<b>Imprimante:</b> <!-- TMPL_VAR Name="genprname" --><br>
-<a href=selectbranchprinter.pl>Changer Paramètres</a>
-<input type=hidden name=branch value=<!-- TMPL_VAR Name="branch" -->>
-<input type=hidden name=printer value=<!-- TMPL_VAR Name="printer" -->>
-<p>
+<h1>Prêt : Transferts</h1>
+<b>Site:</b> <!-- TMPL_VAR NAME="genbrname" -->   <b>Imprimante:</b> <!-- TMPL_VAR NAME="genprname" --> <a href="selectbranchprinter.pl" class="button">Changer Paramètres</a>
+<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
+<input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->">
 
 <!-- TMPL_IF Name="found" -->
-	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-	<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font>Réservation trouvée</font></th></tr>
-	<tr><td> <font color='red' size='+2'>
-		<!-- TMPL_IF Name="reserved" -->Réservé:</font> Réservation trouvée pour <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Lecteur', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).<!-- /TMPL_IF -->
-		<!-- TMPL_IF Name="waiting" --> Ouvrage marqué en attente:</font><br>
-    Ouvrage est marqué en attente à <!-- TMPL_VAR Name="branchname" --> for <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onClick="openWindow(this,'Lecteur', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).<br><!-- /TMPL_IF -->
-		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><td>
-			<!-- TMPL_IF Name="reserved" -->Changer Réserver en "en attente" et transférer le livre vers <b><!-- TMPL_VAR Name="branchname" --> </b>: <!-- /TMPL_IF -->
-			<!-- TMPL_IF Name="waiting" -->Annuler réservation et tenter un transfert: <!-- /TMPL_IF -->
-		</td>
-		<td>
-			<form method=post action='branchtransfers.pl'>
-				<!-- TMPL_LOOP Name="trsfitemloop" -->
-					<input type=hidden name=bc-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-					<input type=hidden name=fb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="frombrcd" -->>
-					<input type=hidden name=tb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="tobrcd" -->>
-				<!-- /TMPL_LOOP -->
-				<input type=hidden name=itemnumber value=<!-- TMPL_VAR Name="itemnumber" -->>
-				<input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="bornum" -->>
-				<!-- TMPL_IF Name="waiting" --><input type=hidden name=barcode value=<!-- TMPL_VAR Name="barcode" -->>
-					<input type=hidden name=request value='KillWaiting'>
-					<input type=submit value="Annuler">
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF Name="reserved" --><input type=hidden name=request value='SetWaiting'>
-					<input type=submit value="En attente"><!-- /TMPL_IF -->
-			</form>
-		</td></tr>
-		<!-- TMPL_IF Name="reserved" --><tr><td>Annuler réservation et tenter un transfert:</td>
-			<td>
-			<form method=post action='branchtransfers.pl'>
-
-			<!-- TMPL_LOOP Name="trsfitemloop" -->
-				<input type=hidden name=bc-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-				<input type=hidden name=fb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="frombrcd" -->>
-				<input type=hidden name=tb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="tobrcd" -->>
-			<!-- /TMPL_LOOP -->
-
-			<input type=hidden name=biblionumber value=<!-- TMPL_VAR Name="biblionumber" -->>
-			<input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="bornum" -->>
-			<input type=hidden name=tobranchcd value=<!-- TMPL_VAR Name="tobranchcd" -->>
-			<input type=hidden name=barcode value=<!-- TMPL_VAR Name="barcode" -->>
-			<input type=hidden name=request value='KillReserved'>
-			<input type=submit value="Annuler">
-			</form>
+	<table>
+	<tr><th>Réservation trouvée</th></tr>
+	<tr><td>
+	<!-- TMPL_IF Name="reserved" -->
+			Réservé : Réservation trouvée pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 		<!-- /TMPL_IF -->
-		</td></tr>
-		<tr><td>Ignorer et retourner aux transferts: </td>
-			<td>
-			<form method=post action='branchtransfers.pl'>
-			<input type=hidden name=tobranchcd value=<!-- TMPL_VAR Name="tobranchcd" -->>
-			<input type=hidden name=barcode value=0>
+		<!-- TMPL_IF Name="waiting" --> Exemplaire marqué 'En attente' :<br>
+    L'exemplaire est marqué en attente à <!-- TMPL_VAR NAME="branchname" --> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).<br><!-- /TMPL_IF -->
+
+<p>			
+
+			<form method="post" action="branchtransfers.pl"><!-- TMPL_IF Name="reserved" -->Mettre la réservation en attente et transférer le livre à <b><!-- TMPL_VAR NAME="branchname" --> </b>: <!-- /TMPL_IF -->
+			<!-- TMPL_IF Name="waiting" --><strong>Annuler la réservation, puis essayer le transfert</strong> <!-- /TMPL_IF -->
+				<!-- TMPL_LOOP Name="trsfitemloop" -->
+					<input type="hidden" name="bc-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+					<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
+					<input type="hidden" name="tb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="tobrcd" -->">
+				<!-- /TMPL_LOOP -->
+				<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
+				<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
+				<!-- TMPL_IF Name="waiting" --><input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
+					<input type="hidden" name="request" value="KillWaiting">
+					<input type="submit" value="Annuler" class="button">
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="reserved" --><input type="hidden" name="request" value="SetWaiting">
+					<input type="submit" value="En attente" class="button"><!-- /TMPL_IF -->
+			</form></p>
+
+		<!-- TMPL_IF Name="reserved" --><p>
+			<form method="post" action="branchtransfers.pl">
+<strong>Annuler la réservation, puis essayer le transfert</strong>
 			<!-- TMPL_LOOP Name="trsfitemloop" -->
-				<input type=hidden name=bc-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-				<input type=hidden name=fb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="frombrcd" -->>
-				<input type=hidden name=tb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="tobrcd" -->>
+				<input type="hidden" name="bc-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+				<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
+				<input type="hidden" name="tb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="tobrcd" -->">
 			<!-- /TMPL_LOOP -->
-			<input type=submit value="Ignorer">
-			</form>
-			</td>
-		</tr></table>
+
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
+			<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR NAME="tobranchcd" -->">
+			<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
+			<input type="hidden" name="request" value="KillReserved">
+			<input type="submit" value="Annuler" class="button">
+			</form></p>
+		<!-- /TMPL_IF -->
+<p>
+			<form method="post" action="branchtransfers.pl"><strong>Ignorer et retourner à transferts :</strong> 
+			<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR NAME="tobranchcd" -->">
+			<input type="hidden" name="barcode" value="0">
+			<!-- TMPL_LOOP Name="trsfitemloop" -->
+				<input type="hidden" name="bc-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+				<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
+				<input type="hidden" name="tb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="tobrcd" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="submit" value="Ignorer" class="button">
+			</form></p>
+
 	</td></tr></table>
 
 <!-- TMPL_ELSE -->
-	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-	<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font>Messages</font></th></tr>
+	<table>
+	<tr><th>Messages</th></tr>
 	<tr><td>
 	<!-- TMPL_IF Name="reqmessage" -->
 		<!-- TMPL_IF Name="cancelled" -->
-			Réservation annulée<br>
+			Echec de la réservation<br>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="setwaiting" -->
-			Ouvrage doit être en attente à l'annexe: <!-- TMPL_VAR Name="reqbrchname" --><br>
+			L'exemplaire devrait être en attente au site : <!-- TMPL_VAR NAME="reqbrchname" --><br>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 	<!-- TMPL_LOOP Name="errmsgloop" -->
-		<font color='red' size='+2'>
-		<!-- TMPL_IF Name="errbadcode" -->
-			No Ouvrage with barcode: <!-- TMPL_VAR Name="msg" -->
+				<!-- TMPL_IF Name="errbadcode" -->
+			Pas d'exemplaire avec code barre : <!-- TMPL_VAR NAME="msg" -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errispermanent" -->
-			Please return item to home branch: <!-- TMPL_VAR Name="msg" -->
+			Merci de retourner l'exemplaire au site d'origine : <!-- TMPL_VAR NAME="msg" -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errdesteqholding" -->
-			Ouvrage is already at destination branch.
+			L'exemplaire est déjà au site de destination.
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF Name="errwasreturned" -->
-			Ouvrage was on loan to <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"
-onClick="openWindow(this,'Lecteur', 480, 640); return false;"><!-- TMPL_VAR Name="borcnum" --></a>
-<!-- TMPL_VAR Name="name" --> et a été retourné.
+			L'exemplaire était emprunté par <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"
+onclick="openWindow(this,'Member', 480, 640); return false;"><!-- TMPL_VAR NAME="borcnum" --></a> <!-- TMPL_VAR NAME="name" --> et a été retourné.
 		<!-- /TMPL_IF -->
-		</font>
-		<BR>
-	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->&nbsp;
 	</td></tr></table>
-	<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=24 height=24>
-	<form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
-	<table border=1 cellpadding=5 cellspacing=0 align=left>
-	<tr><td colspan=2 align=center background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-	<font color=black><b>Sélectionner une annexe</b></font></td></tr>
-	<tr><td>Annexe de destination:</td>
-		<td><select name=tobranchcd>
+
+	<form method="post" action="/cgi-bin/koha/circ/branchtransfers.pl">
+	<p><b>Sélectionner le Site de Destination </b><select name="tobranchcd">
 			<!-- TMPL_LOOP Name="branchoptionloop" -->
-				<option value=<!-- TMPL_VAR Name="code" --> <!-- TMPL_VAR Name="selected" -->><!-- TMPL_VAR Name="name" --> <br>
+				<option value="<!-- TMPL_VAR NAME="code" -->" <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="name" --></option>
 			<!-- /TMPL_LOOP -->
-		</select></td></tr></table>
+		</select></p>
 
-	<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=24 height=50 align=left>
-
-	<table border=1 cellpadding=5 cellspacing=0 ><tr>
-	<td colspan=2 align=center background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-	<font color=black><b>Entrer Code barre du livre</b></font></td></tr>
-	<tr><td>Code barre d'un ouvrage:</td><td><input name=barcode size=10></td></tr>
-	</table>
-	<input type=hidden name=tobranchcd value=<!-- TMPL_VAR Name="tobrancd" -->>
+	<p><b>Entrez le Code Barre du document :</b> Code Barre du document: <input name="barcode" size="10">
+	<input type="hidden" name="tobranchcd" value=<!-- TMPL_VAR NAME="tobrancd" -->>
 
 	<!-- TMPL_LOOP Name="trsfitemloop" -->
-		<input type=hidden name=bc-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="barcode" -->>
-		<input type=hidden name=fb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="frombrcd" -->>
-		<input type=hidden name=tb-<!-- TMPL_VAR Name="counter" --> value=<!-- TMPL_VAR Name="tobrcd" -->>
-	<!-- /TMPL_LOOP -->
+		<input type="hidden" name="bc-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
+		<input type="hidden" name="fb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="frombrcd" -->">
+		<input type="hidden" name="tb-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="tobrcd" -->">
+	<!-- /TMPL_LOOP --></p>
 
 	</form>
 	<!-- TMPL_IF Name="transferred" -->
 		<p>
-		<table border=1 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-		<tr><th colspan=6  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><font color=black>Ouvrages transférés</font></th></tr>
-		<tr><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Saisir</th><th>De</th><th>à</th></tr>
+		<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
+		<tr><th colspan="6">Exemplaires transférés</th></tr>
+		<tr><th>Code Barre</th><th>Titre</th><th>Auteur</th><th>Type</th><th>De</th><th>à</th></tr>
 		<!-- TMPL_LOOP Name="trsfitemloop" -->
-			<tr><td align=center bgcolor=<!-- TMPL_VAR Name="color" -->>
-			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Ouvrage', 480, 640); return false;"><!-- TMPL_VAR Name="barcode" --></a></td>
-			<td bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="title" --></td>
-			<td bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="author" --></td>
-			<td align=center bgcolor=<!-- TMPL_VAR Name="color" --> ><!-- TMPL_VAR Name="itemtype" --></td>
-			<td align=center bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="frbrname" --></td>
-			<td align=center bgcolor=<!-- TMPL_VAR Name="color" -->><!-- TMPL_VAR Name="tobrname" --></td>
+			<tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->">
+			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
+			<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="title" --></td>
+			<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
+			<td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="frbrname" --></td>
+			<td align="center" bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="tobrname" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-
+</div>
 <!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->

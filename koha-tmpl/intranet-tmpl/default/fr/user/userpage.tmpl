@@ -1,38 +1,38 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
 <!-- TMPL_IF NAME="loggedinuser" -->
-	<p align=left>Connecté comme: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Déconnecter</a>]</p>
+	<p align=left>Connecté en tant que : <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="/cgi-bin/koha/logout.pl">Déconnecter</a>]</p>
 	<p>
 	<center>
-	<h3>Cette page est juste une maquette</h3>
+	<h3>Cette page est seulement une maquette</h3>
 
 	<table border=0 cellspacing=15>
 	<tr><td valign=top>
 
 	<table border=1 cellpadding=10>
-	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Réservations</font></th></tr>
+	<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Réservations</font></th></tr>
 	<tr><td>
-	<b>Vous avez les livres suivants en attente:</b>
+	<b>Le(s) livre(s) suivant(s)</b>
 	<ul>
-	<li>The Great Mom Swap by Betsy Hanes at Bibliothèque principale
-	<li>Between Brothers by Irene Morck at Bibliothèque principale
+	<li>The Great Mom Swap by Betsy Hanes at Main Library
+	<li>Between Brothers by Irene Morck at Main Library
 	</ul>
 	<p>
-	<b>Vous avez les demandes suivantes pour des ouvrages en prêt:</b>
+	<b>Vous avez reservé les ouvrages en prêt suivants :</b>
 	<ul>
 	<li>The Amazing Apple Book by Paulette Bourgeois
-	<li>Tracey the Great by Alan Cliburn
-	<li>The biography sur a grizzly by Ernest Thompson Seton
+	<li>Tracey the Great de Alan Cliburn
+	<li>The biography of a grizzly by Ernest Thompson Seton
 	</ul>
 	</td></tr>
 	</table>
 
 	</td><td valign=top>
 
-		<form method=post>
+		<form method="post">
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Préférences utilisateur</font></th></tr>
-		<tr><td align =center>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Préférences utilisateur</font></th></tr>
+		<tr><td align ="center">
 		<table border=0 cellpadding=5>
 			<tr><td>Langue</td><td>
 			<select name=language>
@@ -42,23 +42,23 @@
 			<option value=english>Polonais
 			</select>
 			</td></tr>
-			<tr><td>Adresse Mail</td><td><input name=email size=30 value=<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com></td></tr>
-			<tr><td>Annexe préférée<br>ouvrages réservés</td><td>
+			<tr><td>adresse e-mail</td><td><input name=email size=30 value="<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com"></td></tr>
+			<tr><td>Site préférentiel<br>Pour les documents réservés à transférer</td><td>
 			<select name=pickupbranch>
-			<option value=MAIN>Bibliothèque principale
+			<option value=MAIN>Bibliothèque Principale
 			<option value=SEDGE>Sedgewick Library
 			<option value=HANSEN selected>Rick Hansen Library
-			<option value=CAT>Cataline Library
+			<option value=CAT>Bibliothèque Cataline
 			</select>
 			</td></tr>
 			<tr><td colspan=2>
-			<input name=specialeventsbyemail type=checkbox checked> Avertissez-moi par mail des événements spéciaux<br>
-			<input name=overduesbyemail type=checkbox checked> Avertissez-moi par mail des retards<br>
-			<input name=recordreadingrecord type=checkbox> Conserver une trace des livres que j'ai lu.<br>
-			<input name=recordreadingrecord type=checkbox> Permettre au personnel de la bibliothèque de voir la liste de mes prêts<br>
+			<input name="specialeventsbyemail" type="checkbox" checked> Prévenez moi d'évènements spéciaux par messagerie e-mail)<br>
+			<input name="overduesbyemail" type="checkbox" checked> Prévenez moi de retards par messagerie (e-mail)<br>
+			<input name="recordreadingrecord" type="checkbox"> Garder un enregistrement des livres que j'ai lu<br>
+			<input name="recordreadingrecord" type="checkbox">  Autoriser l'équipe de la bibliothèque à consulter la liste de mes emprunts<br>
 			</td></tr>
 			<tr><td align=center colspan=2>
-			<input type=submit value="Définir des préférences">
+			<input type=submit value="Options Préférences">
 			</td>
 			</tr>
 		</table>
@@ -74,11 +74,11 @@
 	<center>
 	<form method=post>
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>Préférences utilisateur</font></th></tr>
-		<tr><td>Nom:</td><td><input name="userid"></td></tr>
-		<tr><td>Mot de passe:</td><td><input type=password name=password></td></tr>
-		<tr><td align=center colspan=2>
-		    <input type=submit value="Identifiant">
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif" colspan=2><font size=+2>Préférences utilisateur</font></th></tr>
+		<tr><td>Nom :</td><td><input name="userid"></td></tr>
+		<tr><td>Mot de passe :</td><td><input type="password" name="password"></td></tr>
+		<tr><td align="center" colspan=2>
+		    <input type="submit" value="Se connecter">
 		</td>
 		</tr>
 	    </table>

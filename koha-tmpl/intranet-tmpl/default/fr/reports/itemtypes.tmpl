@@ -1,0 +1,32 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="do_it" -->
+<!-- TMPL_LOOP NAME="mainloop" -->
+	<h1>Koha : Statistiques sur les types de document <!--TMPL_IF NAME="branch" --> pour le site = <!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></h1>
+	<table>
+		<tr>
+			<th>Type de document</th>
+			<th>nombre</th>
+		</tr>
+			<!-- TMPL_LOOP NAME="loopitemtype" -->
+				<tr>
+					<td><!-- TMPL_VAR NAME="itemtype" --></td>
+					<td><!-- TMPL_VAR NAME="count" --></td>
+				</tr>
+			<!-- /TMPL_LOOP NAME="loopitemtype" -->
+			<tr>
+				<th>TOTAL</th>
+				<th><!-- TMPL_VAR NAME="total" --></th>
+	</table>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1>Voir le catalogue par type de document</h1>
+	<form method="post">
+		 Sélectionner une annexe (ou rien si vous souhaitez le rapport pour toutes les annexes) <!-- TMPL_VAR NAME="CGIbranch" -->
+		<input type="submit" value="OK" class="button">
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+		<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

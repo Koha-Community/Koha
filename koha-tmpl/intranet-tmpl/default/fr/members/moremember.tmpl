@@ -1,232 +1,203 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<!-- main site -->
-
-
-<h1><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></h1><P>
-<p>
-
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=270>
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>FICHE LECTEUR</TD>
-	</TR>
-
-	<tr VALIGN=TOP  >
-	<TD>
-		<FONT SIZE=2  face="arial, helvetica"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF name="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><p>
-		N° Carte: <!-- TMPL_VAR NAME="cardnumber" --><BR>
-		Adresse postale: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --><BR>
-		<!-- TMPL_UNLESS name="I" -->Adresse privée: <!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR name="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><BR>
-		Téléphone personnel: <!-- TMPL_VAR NAME="phone" --><BR><!-- /TMPL_UNLESS -->
-		Téléphone professionnel: <!-- TMPL_VAR NAME="phoneday" --><BR>
-		Fax: <!-- TMPL_VAR NAME="faxnumber" --><BR>
-		E-mail: <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
-		Ecriture d'un texte: <!-- TMPL_VAR NAME="textmessaging" --><p>
-		N° Lecteur: <!-- TMPL_VAR NAME="borrowernumber" --><BR>
-		Catégorie Lecteur: <!-- TMPL_VAR NAME="categorycode" --><BR>
-		Frais:$30/année, Payé<BR>
-		Joined: <!-- TMPL_VAR NAME="dateenrolled" -->,  Expires: <!-- TMPL_VAR NAME="expiry" --><BR>
-		Annexe d'inscription: <!-- TMPL_VAR NAME="branchcode" --><P>
+<div id="mainbloc">
+	<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+	<div id="bloc25">
+		<h2 class="members">Enregistrement de l'inscription</h2>
+		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
+		<p>Numéro de Carte : <!-- TMPL_VAR NAME="cardnumber" --><br>
+		Adresse Postale: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
+		<!-- TMPL_UNLESS name="I" -->Adresse domicile : <!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" -->: ,  <br>
+		Téléphone Domicile : <!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
+		Téléphone travail : <!-- TMPL_VAR NAME="phoneday" --><br>
+		Fax: <!-- TMPL_VAR NAME="faxnumber" --><br>
+		Mail : <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><br>
+		Texte de messagerie électronique: <!-- TMPL_VAR NAME="textmessaging" --><br>
+		Numéro d'inscription: <!-- TMPL_VAR NAME="borrowernumber" --><br>
+		Catégorie d'inscription: <!-- TMPL_VAR NAME="categorycode" --><br>
+		Droit d'inscription : 30 €/an, payé<br>
+		Inscription : <!-- TMPL_VAR NAME="dateenrolled" -->, Se termine : <!-- TMPL_VAR NAME="expiry" --><br>
+		Site d'inscription : <!-- TMPL_VAR NAME="branchcode" -->
+		</p>
+		<p>
 		<!-- TMPL_IF NAME="printethnicityline" -->
-			Appartenance éthnique: <!-- TMPL_VAR NAME="ethnicity" -->, <!-- TMPL_VAR NAME="ethnotes" --><br>
+			Ethnie : <!-- TMPL_VAR NAME="ethnicity" -->, <!-- TMPL_VAR NAME="ethnotes" --><br>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_UNLESS name="I" -->
-			né le: <!-- TMPL_VAR NAME="dateofbirth" --><BR>
-			Sexe: <!-- TMPL_VAR NAME="sex" --><P>
-			Alternative<!-- /TMPL_UNLESS --> Contact: <!-- TMPL_VAR NAME="contactname" --><BR>
-		Téléphone: <!-- TMPL_VAR NAME="altphone" --><BR>
-		<!-- TMPL_UNLESS name="I" -->
-			Relation: <!-- TMPL_VAR NAME="altrelationship" --><BR>
+			D.nais:<!-- TMPL_VAR NAME="dateofbirth" --><br>
+			Sexe<br>
+			Autre
 		<!-- /TMPL_UNLESS -->
-		Notes: <!-- TMPL_VAR NAME="altnotes" --><P>
+		Contact : <!-- TMPL_VAR NAME="contactname" --><br>
+		Téléphone : <!-- TMPL_VAR NAME="altphone" --><br>
+		<!-- TMPL_UNLESS name="I" -->
+			Relation: <!-- TMPL_VAR NAME="altrelationship" --><br>
+		<!-- /TMPL_UNLESS -->
+		Notes : <!-- TMPL_VAR NAME="altnotes" -->
+		<!-- TMPL_IF NAME="sort1" -->
+			<p>Champ de tri 1 : <!-- TMPL_VAR NAME="sort1" --></p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="sort2" -->
+			<p>Champ de tri 2 : <!-- TMPL_VAR NAME="sort2" --></p>
+		<!-- /TMPL_IF -->
+		</p>
+		<p>
 		<!-- TMPL_UNLESS name="I" -->
 			<!-- TMPL_IF NAME="isguarantee" -->
-				Garanties:<br><!-- TMPL_LOOP NAME="guaranteeloop" --><A HREF="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name --> - <!-- TMPL_VAR NAME="cardnumber" --></a><br><!-- /TMPL_LOOP -->
+				Caution pour<br><!-- TMPL_LOOP NAME="guaranteeloop" --><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" --> - <!-- TMPL_VAR NAME="cardnumber" --></a><br><!-- /TMPL_LOOP -->
 			<!-- TMPL_ELSE -->
-				Garant:
+				Garant
 				<!-- TMPL_IF NAME="guarantorborrowernumber" -->
-					<A HREF="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
+					<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorcardnumber" --></a><br>
 				<!-- TMPL_ELSE -->
-					pas de garant<br>
+					Pas de Garant<br>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_UNLESS -->
-		<P>
-		Notes générales: <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to et delete notes.'); return false">-->
-		<!-- TMPL_VAR NAME="borrowernotes" --><!--</a>-->
-		<p align=right>
-		</font>
-		<!-- TMPL_IF name="IS_ADULT" -->
-			<p align=right>
-			<form action=/cgi-bin/koha/members/jmemberentry.pl 1
-				<INPUT TYPE="submit" name="submit" VALUE="1 un enfant" class="button" alt="1 un enfant">
-				<input type=hidden name=type value=Add>
-				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
+		</p>
+		<p>
+			Remarques Générales : <!--<a href="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
+			<!-- TMPL_VAR NAME="borrowernotes" --><!--</a>-->
+		</p>
+
+		<!-- TMPL_IF NAME="IS_ADULT" -->
+			
+			<form action="/cgi-bin/koha/members/jmemberentry.pl" method="post">
+				<input type="submit" name="submit" value="Ajouter un enfant" class="button" alt="Ajouter un enfant">
+				<input type="hidden" name="type" value="Add">
+				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
 			</form>
-			</P>
+			
 		<!-- /TMPL_IF -->
-		<br>
-		<!-- TMPL_IF name="I" -->
-			<form action=/cgi-bin/koha/members/imemberentry.pl 1
-				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
-				<INPUT TYPE=submit class="button" value="Modifier">
+		<!-- TMPL_IF NAME="I" -->
+			<form action="/cgi-bin/koha/members/imemberentry.pl" method="post">
+				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+				<input type="submit" class="button" value="Modifier">
 			</form>
 		<!-- TMPL_ELSE -->
-			<form action=/cgi-bin/koha/members/memberentry.pl 1
-				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
-				<INPUT TYPE=submit class="button" name="modifier" value="Modifier">
+			<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
+				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+				<input type="submit" class="button" name="modify" value="Modifier">
 			</form>
 		<!-- /TMPL_IF -->
 		<form action="javascript:confirm_deletion()">
-                        <input type=hidden name=member value="<!-- TMPL_VAR NAME="bornum" -->">
-			<INPUT TYPE=submit class="button" value="Delete">
+			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->">
+			<input type="submit" class="button" value="Supprimer">
 		</form>
-		<form action=/cgi-bin/koha/members/member-password.pl 1
-			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
-			<input type=submit class="button" value="Changer Mot de passe">
+		<form action="/cgi-bin/koha/members/member-password.pl" method="post">
+			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->">
+			<input type="submit" class="button" value="Changer de mot de passe">
 		</form>
-		<form action=/cgi-bin/koha/members/member-flags.pl 1
-			<input type=hidden name=member value=<!-- TMPL_VAR NAME=bornum -->>
-			<input type=submit class="button" value="Modifier habilitations">
+		<form action="/cgi-bin/koha/members/member-flags.pl" method="post">
+			<input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->">
+			<input type="submit" class="button" value="Modifier les autorisations d'utilisation">
 		</form>
+	</div>
 
-	</TD>
-	</TR>
-</TABLE>
-
-<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=16 height=800 align=left>
-
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>AMENDES & FRAIS</TD>
-	</TR>
-	<!-- TMPL_IF name="totaldue" -->
-		<tr valign="top">
-			<td>Total dû</td>
-			<td><!-- TMPL_VAR name="totaldue"--></td>
-		</tr>
-	<!-- TMPL_ELSE -->
-		<tr valign="top">
-			<td colspan=2>Pas de dettes</td>
-		</tr>
-	<!-- /TMPL_IF -->
-	<tr VALIGN=TOP  >
-	<TD colspan=2 align=right>
+	<div id="bloc25">
+		<h2 class="members">Dettes & amendes</h2>
+		<!-- TMPL_IF NAME="totaldue" -->
+			Total dû <!-- TMPL_VAR NAME="totaldue"-->
+		<TMPL_ELSE>
+			Pas de dettes
+		</TMPL_IF>
 		<p>
-			<br>
-			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
-				View Account
-			</a>
-			<a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
-				Pay Fines
-			</a>
-			<br><br>
+			<a class="button" href="/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"> Visualiser le compte </a> <a class="button" href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"> Régler des amendes </a>
 		</p>
-	</td>
-	</tr>
-</table>
-
-<p>
-<form action="renewscript.pl" 1
-	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
-	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=6><B>OUVRAGES ACTUELLEMENT EN PRET</b></TD>
-	</TR>
-
-	<TR VALIGN=TOP>
-		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Titre</b></TD>
-		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Dû</b></TD>
-		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Itemtype</b></TD>
-		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Frais</b></TD>
-		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Renouveler</b></TD>
-	</TR>
-
-	<!-- TMPL_LOOP NAME=issueloop -->
-	<tr VALIGN=TOP>
-		<td><!-- TMPL_IF NAME=red --><font color=red><!-- /TMPL_IF -->
-		<!-- TMPL_VAR NAME="title" -->
-		<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
-			<!-- TMPL_VAR NAME="barcode" -->
-		</a>
-		</td>
-		<td><!-- TMPL_VAR NAME="date_due" --></td>
-		<td><!-- TMPL_VAR NAME="itemtype" --></td>
-		<td><!-- TMPL_VAR NAME="charge" --></td>
-		<td>
-		<!-- TMPL_IF NAME=norenew -->
-			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">On Request - no renewals</a>
-		<!-- TMPL_ELSE -->
-			<input type=radio name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value=y>Y
-			<input type=radio name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value=n>N
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME=red --></font><!-- /TMPL_IF -->
-		</td>
-	</tr>
-	<!-- /TMPL_LOOP -->
-
-	<tr VALIGN=TOP  >
-		<TD colspan=5 align=right>
-		<INPUT TYPE=submit class="button" VALUE="Renouveler Ouvrages">
-		</td>
-	</tr>
-
-	</table>
-</form>
-
-<P>
-
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=5><B>OUVRAGES RESERVES</b></TD>
-	</TR>
-
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Titre</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Reservé</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Enlever</b></TD>
-	</TR>
-
-	<form action=/cgi-bin/koha/modrequest.pl 1
-	<input type=hidden name=from value=emprunteur>
-
-	<!-- TMPL_LOOP NAME=reserveloop -->
-	<tr VALIGN=TOP>
-		<td>
-			<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
-			<!-- TMPL_IF NAME=volumeddesc -->
-				<!-- TMPL_VAR NAME="volumeddesc" -->
-				<!-- TMPL_VAR NAME="itemtype" -->
+	</div>
+	<div id="bloc25">
+		<h2 class="members">exemplaires demandés</h2>
+			<!-- TMPL_IF NAME="reserveloop" -->
+			<form action="/cgi-bin/koha/modrequest.pl" method="post">
+			<table>
+				<tr>
+					<th>Titre</th>
+					<th>Réservés</th>
+					<th>Retirer</th>
+				</tr>
+					<!-- TMPL_LOOP NAME="reserveloop" -->
+					<tr>
+						<td><input type="hidden" name="from" value="borrower">
+							<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
+							<!-- TMPL_IF NAME="volumeddesc" -->
+								<!-- TMPL_VAR NAME="volumeddesc" -->
+								<!-- TMPL_VAR NAME="itemtype" -->
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="reservedate2" --></td>
+						<td>
+							<select name="rank-request">
+							<option value="n">Non
+							<option value="del">Oui
+							</select><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+						<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
+						</td>
+						
+					</tr>
+					<!-- /TMPL_LOOP -->
+					<tr>
+						<td colspan="5" align="right">
+						<!-- TMPL_IF NAME="reserveloop" -->
+							<input type="submit" name="submit" value="Mettre à Jour" class="button">
+						<!-- /TMPL_IF -->
+						</td>
+					</tr>
+				</table>
+				</form>
+			<!-- TMPL_ELSE -->
+				Sans
 			<!-- /TMPL_IF -->
-		</td>
-		<td><!-- TMPL_VAR NAME="reservedate2" --></td>
-		<td>
-			<select name="rank-request">
-			<option value=n>Non
-			<option value=del>Oui
-			</select>
-		</td>
-		<input type=hidden name=biblio value="<!-- TMPL_VAR NAME="biblionumber" -->">
-		<input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME="bornum" -->">
-	</tr>
-	<!-- /TMPL_LOOP -->
+	</div>
 
-	<tr VALIGN=TOP  >
-		<td colspan=5 align=right>
-		<!-- TMPL_IF name="reserveloop" -->
-			<INPUT TYPE="image" name="submit" VALUE="mettre à jour" height=42 WIDTH=187 BORDER=0 src="<!-- TMPL_VAR name="themelang" -->/images/cancel-requests.gif">
+	<div id="bloc25">
+		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Liste des lectures</a>
+	</div>
+
+	<div id="bloc25">
+		<h2 class="members">exemplaire actuellement en prêt</h2>
+		<!-- TMPL_IF NAME="issueloop" -->
+			<form action="../renewscript.pl" method="post">
+			<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+
+			<table>
+			<tr>
+				<th>Titre</th>
+				<th>Retour</th>
+				<th>Type de document</th>
+				<th>Droits de prêt</th>
+				<th>Renouvellement</th>
+			</tr>
+
+			<!-- TMPL_LOOP NAME="issueloop" -->
+			<tr>
+				<td><!-- TMPL_IF NAME="red" --><font color="red"><!-- /TMPL_IF -->
+				<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="red" --></font><!-- /TMPL_IF -->
+				<a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+					<!-- TMPL_VAR NAME="barcode" -->
+				</a>
+				</td>
+				<td><!-- TMPL_VAR NAME="date_due" --></td>
+				<td><!-- TMPL_VAR NAME="itemtype" --></td>
+				<td><!-- TMPL_VAR NAME="charge" --></td>
+				<td>
+				<!-- TMPL_IF NAME="norenew" -->
+					<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Réservé-pas de renouvellement</a>
+				<!-- TMPL_ELSE -->
+					<input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y">Y  <input type="radio" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="n">N
+				<!-- /TMPL_IF -->
+				
+				</td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+			<input type="submit" class="button" value="Exemplaires Renouvellés">
+		</form>
+		<!-- TMPL_ELSE -->
+			Sans
 		<!-- /TMPL_IF -->
-		</td>
-	</tr>
-	</form>
-</table>
-<br />
-<br />
-<a class=button href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">
-	Reading Record
-</a>
-<script>
+	</div>
+</div>
+<script language="JavaScript" type="text/javascript">
 function confirm_deletion() {
 	var is_confirmed = confirm('do you confirm deletetion ?');
 	if (is_confirmed) {

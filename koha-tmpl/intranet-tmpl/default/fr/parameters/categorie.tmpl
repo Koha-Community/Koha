@@ -1,297 +1,301 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
-
-<!-- TMPL_IF NAME=add_form -->
-	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
+<div id="mainbloc">
+	<!-- TMPL_IF NAME="add_form" -->
+		<script language="javascript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
 		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
 		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
 			return false;
 		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.categorycode.value.length==0) {
-			_alertString += "- categorycode missing\n";
+		return true;
 		}
-//		alert(window.document.Aform.description.value);
-		if (!(isNotNull(window.document.Aform.description,1))) {
-			_alertString += "- description missing\n";
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
 		}
-		if (!isNum(f.upperagelimit,0)) {
-			_alertString += "- upperagelimit is not a number\n";
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.categorycode.value.length==0) {
+				_alertString += "\n- " + _("code catégorie absent");
+			}
+	//		alert(window.document.Aform.description.value);
+			if (!(isNotNull(window.document.Aform.description,1))) {
+				_alertString += "\n- " + _("description manquante");
+			}
+			if (!isNum(f.upperagelimit,0)) {
+				_alertString += "\n- " + _("L'âge limite supérieur n'est pas un nombre");
+			}
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
 		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because sur the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-	</SCRIPT>
+		</script>
 
-	<!-- TMPL_IF NAME=categorycode -->
-		<h1>Modifier Catégorie</h1>
-	<!-- TMPL_ELSE -->
-		<h1>Ajouter une catégorie</h1>
-	<!-- /TMPL_IF -->
-	
-	<form action=<!-- TMPL_VAR NAME=script_name --> name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
-	<input type=hidden name=checked value=0>
-
-	<table>
-	<!-- TMPL_IF NAME=categorycode -->
-		<tr>
-			<td>Code Catégorie</td>
-			<td>
-				<b><!-- TMPL_VAR NAME=categorycode --></b>
-				<input type=hidden name=categorycode value=<!-- TMPL_VAR NAME=categorycode -->>
-			</td>
-		</tr>
-	<!-- TMPL_ELSE -->
-		<tr>
-			<td>Code Catégorie</td>
-			<td>
-				<input type=text name=categorycode size=3 maxlength=2 onBlur=toUC(this)>
-			</td>
-		</tr>
-	<!-- /TMPL_IF -->
-
-		<tr>
-			<td>Description</td>
-			<td>
-				<input type=text name=description size=40 maxlength=80 value="<!-- TMPL_VAR NAME=description escape=HTML -->">
-				&nbsp;
-			</td>
-		</tr>
-		<tr>
-			<td>Durée inscription</td>
-			<td>
-				<input type=text name=enrolmentperiod size=3 maxlength=2 value="<!-- TMPL_VAR NAME=enrolmentperiod -->">
-			</td>
-		</tr>
-		<tr>
-			<td>Age maxi</td>
-			<td>
-				<input type=text name=upperagelimit size=3 maxlength=3 value="<!-- TMPL_VAR NAME=upperagelimit -->">
-			</td>
-		</tr>
-		<tr>
-			<td>Age mini</td>
-			<td>
-				<input type=text name=dateofbirthrequired value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size=3 maxlength=2>
-			</td>
-		</tr>
-		<tr>
-			<td>Frais d'inscription</td>
-			<td>
-				<input type=text name=enrolmentfee value="<!-- TMPL_VAR NAME=enrolmentfee -->">
-			</td>
-		</tr>
-		<tr>
-			<td>Avis de retard nécessaire</td>
-			<td>
-				<select name="overduenoticerequired">
-					<option <!-- TMPL_UNLESS name="overduenoticerequired" -->selected<!-- /TMPL_UNLESS --> value="0">Non</option>
-					<option <!-- TMPL_IF name="overduenoticerequired" -->selected<!-- /TMPL_IF --> value="1">Oui</option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td>Limite de prêt</td>
-			<td>
-				<input type=text name=issuelimit size=2 maxlength=2 value="<!-- TMPL_VAR NAME=issuelimit -->">
-			</td>
-		</tr>
-		<tr>
-			<td>Frais Réservation</td>
-			<td>
-				<input type=text name=reservefee value="<!-- TMPL_VAR NAME=reservefee -->">
-			</td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td>
-				<INPUT type=button value='OK' onClick='Check(this.form)'>
-			</td>
-		</tr>
-	</table>
-	</form>
-
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME=add_validate -->
-	Donnée enregistrée
-	<form action=<!-- TMPL_VAR NAME=script_name --> method=post>
-		<input type=submit value=OK>
-	</form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME=delete_confirm -->
-	TOTAL : <!-- TMPL_VAR NAME=categorycode --> : <!-- TMPL_VAR NAME=total --><br>
-
-	<table border=0 cellspacing=0 cellpadding=5>
-		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'>
-				<b>Code Catégorie</b>
-			</td>
-			<td background='/images/background-mem.gif'>
-				<!-- TMPL_VAR NAME=categorycode -->
-			</td>
-		</tr>
-        	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-			<input type=hidden name=op value=delete_confirmed>
-			<input type=hidden name=categorycode value=<!-- TMPL_VAR NAME=categorycode -->>        
-		<tr>
-			<td>Description</td>
-			<td><!-- TMPL_VAR NAME=description --></td>
-		</tr>
-		<tr>
-			<td>Durée inscription</td>
-			<td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
-		</tr>
-		<tr>
-			<td>Age maxi</td>
-			<td><!-- TMPL_VAR NAME=upperagelimit --></td>
-		</tr>
-		<tr>
-			<td>Age mini</td>
-			<td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
-		</tr>
-		<tr>
-			<td>Saisir d'amende</td>
-			<td><!-- TMPL_VAR NAME=finetype --></td>
-		</tr>
-		<tr>
-			<td>Frais d'inscription</td>
-			<td><!-- TMPL_VAR NAME=enrolmentfee --></td>
-		</tr>
-		<tr>
-			<td>Avis de retard nécessaire</td>
-			<td><!-- TMPL_IF NAME=overduenoticerequired -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
-		</tr>
-		<tr>
-			<td>Limite de prêt</td>
-			<td><!-- TMPL_VAR NAME=issuelimit --></td>
-		</tr>
-		<tr>
-			<td>Frais Réservation</td>
-			<td><!-- TMPL_VAR NAME=reservefee --></td>
-		</tr>
-		<!-- TMPL_IF NAME=totalgtzero -->
-                <tr>
-			<td colspan=2 align=center><b>This record is used <!-- TMPL_VAR NAME=total --> times. Deletion not possible</b></td>
-		</tr>
-               <tr>
-			<td colspan=2>
-				</form><form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-				<input type=submit value=OK>
-				</form>
-			</td>
-		</tr>
+		<!-- TMPL_IF NAME="categorycode" -->
+			<h1>Modifier une catégorie</h1>
 		<!-- TMPL_ELSE -->
-                <tr>
-			<td colspan=2 align=center>CONFIRMER SUPPRESSION</td>
-		</tr>
-                <tr>
-			<td><INPUT type=submit value='OUI'></form></td>
-			<td><form action='<!-- TMPL_VAR NAME=script_name -->' method=post><input type=submit value=NO></form></td>
-		</tr>
+			<h1>Ajouter une Catégorie</h1>
 		<!-- /TMPL_IF -->
 
-<!-- /TMPL_IF -->
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate">
+		<input type="hidden" name="checked" value="0">
 
-<!-- TMPL_IF NAME=delete_confirmed -->
-	Donnée effacée
-        <form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
-        <input type=submit value=OK>
-        </form>
+		<table>
+		<!-- TMPL_IF NAME="categorycode" -->
+			<tr>
+				<td>Code catégorie</td>
+				<td>
+					<b><!-- TMPL_VAR NAME="categorycode" --></b>
+					<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->">
+				</td>
+			</tr>
+		<!-- TMPL_ELSE -->
+			<tr>
+				<td>Code catégorie</td>
+				<td>
+					<input type="text" name="categorycode" size="3" maxlength="2" onblur="toUC(this)">
+				</td>
+			</tr>
+		<!-- /TMPL_IF -->
 
-<!-- /TMPL_IF -->
+			<tr>
+				<td>Description</td>
+				<td>
+					<input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" escape=HTML -->">
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td>Période d'inscription</td>
+				<td>
+					<input type="text" name="enrolmentperiod" size="3" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->">
+				</td>
+			</tr>
+			<tr>
+				<td>Limite d'âge supérieure</td>
+				<td>
+					<input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->">
+				</td>
+			</tr>
+			<tr>
+				<td>Age requis</td>
+				<td>
+					<input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="2">
+				</td>
+			</tr>
+			<tr>
+				<td>Frais d'inscription</td>
+				<td>
+					<input type="text" name="enrolmentfee" value="<!-- TMPL_VAR NAME="enrolmentfee" -->">
+				</td>
+			</tr>
+			<tr>
+				<td>Notice en retard demandée</td>
+				<td>
+					<select name="overduenoticerequired">
+						<option<!-- TMPL_UNLESS name="overduenoticerequired" --> selected<!-- /TMPL_UNLESS --> value="0">Non</option>
+						<option<!-- TMPL_IF NAME="overduenoticerequired" --> selected<!-- /TMPL_IF --> value="1">Oui</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Droits de réservation</td>
+				<td>
+					<input type="text" name="reservefee" value="<!-- TMPL_VAR NAME="reservefee" -->">
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<input type="button" value="OK" onclick="Check(this.form)">
+				</td>
+			</tr>
+		</table>
+		</form>
 
-<!-- TMPL_IF NAME=else -->
-	<h2>Admin Catégorie</h2>
-	<!-- TMPL_IF NAME=searchfield -->
-		Votre recherche sur <!-- TMPL_VAR name=searchfield -->
 	<!-- /TMPL_IF -->
 
-	<form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
-		<input type=text name=description value=<!-- TMPL_VAR name="searchfield" -->>
-		<input type="submit" name="submit" value="OK" class="button">
-	</form>
+	<!-- TMPL_IF NAME="add_validate" -->
+		Donnée enregistrée
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="OK">
+		</form>
+	<!-- /TMPL_IF -->
 
-        <table border=0 cellspacing=0 cellpadding=5>
-		<tr bgcolor='#99cc33'>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Catégorie</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Description</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Durée inscription</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Frais d'inscription</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Age maxi</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Age mini</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Amende</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Signaler retard</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Limite de prêt</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Réserver</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
-		</tr>
-		<!-- TMPL_LOOP NAME=loop -->
-		<tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
-                        <td><!-- TMPL_VAR NAME=categorycode --></td>
-                        <td><!-- TMPL_VAR NAME=description --></td>
-                        <td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
-                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
-                        <td><!-- TMPL_VAR NAME=upperagelimit --></td>
-                        <td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
-                        <td><!-- TMPL_VAR NAME=finetype --></td>
-                        <td><!-- TMPL_IF NAME=overduenoticerequired -->
-					<i>Oui</i>
-				<!-- TMPL_ELSE -->
-					<i>Non</i>
-				<!-- /TMPL_IF -->
-			</td>
-                        <td><!-- TMPL_VAR NAME=issuelimit --></td>
-                        <td><!-- TMPL_VAR NAME=reservefee --></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&categorycode=<!-- TMPL_VAR NAME=categorycode -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&categorycode=<!-- TMPL_VAR NAME=categorycode -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" border="0"></a></td>
-		</tr>
-		<!-- /TMPL_LOOP -->
+	<!-- TMPL_IF NAME="delete_confirm" -->
+		TOTAL : <!-- TMPL_VAR NAME="categorycode" --> : <!-- TMPL_VAR NAME="total" --><br>
 
-	</table>
-	<p><form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-		<input type=hidden name=op value=add_form>
-		<input type=submit class="button" value="Ajouter une catégorie"  ALT="Ajouter une catégorie"><br>
-	</form></p>
-<!-- /TMPL_IF -->
+		<table border="0" cellspacing="0" cellpadding="5">
+			<tr bgcolor="#99cc33">
+				<td background="/images/background-mem.gif">
+					<b>Code catégorie</b>
+				</td>
+				<td background="/images/background-mem.gif">
+					<!-- TMPL_VAR NAME="categorycode" -->
+				</td>
+			</tr>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="hidden" name="op" value="delete_confirmed">
+				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->">        
+			<tr>
+				<td>Description</td>
+				<td><!-- TMPL_VAR NAME="description" --></td>
+			</tr>
+			<tr>
+				<td>Période d'inscription</td>
+				<td><!-- TMPL_VAR NAME="enrolmentperiod" --></td>
+			</tr>
+			<tr>
+				<td>Limite d'âge supérieure</td>
+				<td><!-- TMPL_VAR NAME="upperagelimit" --></td>
+			</tr>
+			<tr>
+				<td>Age requis</td>
+				<td><!-- TMPL_VAR NAME="dateofbirthrequired" --></td>
+			</tr>
+			<tr>
+				<td>Type d'amende</td>
+				<td><!-- TMPL_VAR NAME="finetype" --></td>
+			</tr>
+			<tr>
+				<td>Frais d'inscription</td>
+				<td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
+			</tr>
+			<tr>
+				<td>Notice en retard demandée</td>
+				<td><!-- TMPL_IF NAME="overduenoticerequired" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
+			</tr>
+			<tr>
+				<td>Prêts maximum</td>
+				<td><!-- TMPL_VAR NAME="issuelimit" --></td>
+			</tr>
+			<tr>
+				<td>Droits de réservation</td>
+				<td><!-- TMPL_VAR NAME="reservefee" --></td>
+			</tr>
+			<!-- TMPL_IF NAME="totalgtzero" -->
+			<tr>
+				<td colspan="2" align="center"><b>Cet enregistrement est utilisé <!-- TMPL_VAR NAME="total" --> fois. Suppression impossible</b></td>
+			</tr>
+		<tr>
+				<td colspan="2">
+					</form><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="OK">
+					</form>
+				</td>
+			</tr>
+			<!-- TMPL_ELSE -->
+			<tr>
+				<td colspan="2" align="center">CONFIRMEZ SUPPRESSION</td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="OUI"></form></td>
+				<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NON"></form></td>
+			</tr>
+			<!-- /TMPL_IF -->
 
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+		Donnée détruite
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="OK">
+		</form>
+
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="else" -->
+		<h2>Gestion des catégories</h2>
+		<!-- TMPL_IF NAME="searchfield" -->
+			Vous cherchiez <!-- TMPL_VAR NAME="searchfield" -->
+		<!-- /TMPL_IF -->
+		<!-- TMPL_UNLESS name="categoryChild" -->
+			<div id="problem">
+				ATTENTION : vous devez créer un code de catégorie = E pour les enfants
+			</div>
+		<!-- /TMPL_UNLESS -->
+		<!-- TMPL_UNLESS name="categoryInstitution" -->
+			<div id="problem">
+				 ATTENTION : vous devez créer un code de catégorie = C pour les Collectivités
+			</div>
+		<!-- /TMPL_UNLESS -->
+		<form action="<TMPL_VAR NAME="script_name">" method="post">
+			<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			<input type="submit" name="submit" value="OK" class="button">
+		</form>
+
+		<table border="0" cellspacing="0" cellpadding="5">
+			<tr bgcolor="#99cc33">
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Catégorie</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Description</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Période d'inscription</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Frais d'inscription</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Limite d'âge supérieure</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Age requis</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Amende</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Retard</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Prêts maximum</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Réservation</b></td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"> </td>
+				<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"> </td>
+			</tr>
+			<!-- TMPL_LOOP NAME="loop" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+				<td><!-- TMPL_VAR NAME="categorycode" --></td>
+				<td><!-- TMPL_VAR NAME="description" --></td>
+				<td><!-- TMPL_VAR NAME="enrolmentperiod" --></td>
+				<td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
+				<td><!-- TMPL_VAR NAME="upperagelimit" --></td>
+				<td><!-- TMPL_VAR NAME="dateofbirthrequired" --></td>
+				<td><!-- TMPL_VAR NAME="finetype" --></td>
+				<td><!-- TMPL_IF NAME="overduenoticerequired" -->
+						<i>Oui</i>
+					<!-- TMPL_ELSE -->
+						<i>Non</i>
+					<!-- /TMPL_IF -->
+				</td>
+				<td><!-- TMPL_VAR NAME="issuelimit" --></td>
+				<td><!-- TMPL_VAR NAME="reservefee" --></td>
+				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+				<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+
+		</table>
+		<p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="add_form">
+			<input type="submit" class="button" value="Ajouter une Catégorie" alt="Ajouter une Catégorie"><br>
+		</form></p>
+	<!-- /TMPL_IF -->
+</div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

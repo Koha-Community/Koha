@@ -1,0 +1,50 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="do_it" -->
+<!-- TMPL_LOOP NAME="mainloop" -->
+	<h1>Koha : Emprunts par catégorie de lecteur <!--TMPL_IF NAME="borrower_category" --> pour la catégorie = <!-- TMPL_VAR NAME="borrower_category" --><!-- /TMPL_IF --></h1>
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<!-- TMPL_LOOP NAME="categorycodeloop" -->
+				<th><!-- TMPL_VAR NAME="categorycode" --></th>
+			<!-- /TMPL_LOOP -->
+			<th>TOTAL</th>
+		</tr>
+			<!-- TMPL_LOOP NAME="loopborrowertype" -->
+				<tr>
+					<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+					<!-- TMPL_VAR NAME="itemtype" --></td>
+					<!-- TMPL_LOOP NAME="loopitemtype" -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="issues" -->
+						</td>
+					<!-- /TMPL_LOOP -->
+					<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="totalitemtype" -->
+					</td>
+				</tr>
+			<!-- /TMPL_LOOP NAME="loopitemtype" -->
+			<tr>
+				<th>TOTAL</th>
+				<!-- TMPL_LOOP NAME="loopborrowertotal" -->
+					<th>
+						<!-- TMPL_VAR NAME="issues" -->
+					</th>
+				<!-- /TMPL_LOOP -->
+				<th>&nbsp;</th>
+			</tr>
+	</table>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1>Prêts par catégories de lecteurs</h1>
+	<form method="post">
+		<p>Select a borrower category (or don't if you want to see global status) <input type="text" name="value"></p>
+		<p>Sélectionnez une annexe : <!-- TMPL_VAR NAME="CGIbranch" --></p>
+		<input type="submit" value="OK" class="button">
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+		<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

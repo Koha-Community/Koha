@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 127</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+<tr>(Completer avec des 0 a gauche)</tr>
+<tr>          <td>Heure:</td>
+                         <td><input type="text" name="f1" maxlength=2
+                         size=3
+                   value="<!-- TMPL_VAR name="f1" -->"></td>
+          <td>Minutes:</td>
+                         <td><input type="text" name="f2" maxlength=2
+                         size=3
+                   value="<!-- TMPL_VAR name="f2" -->"></td>
+          <td>Secondes:</td>
+                         <td><input type="text" name="f3" maxlength=2
+                         size=3
+                   value="<!-- TMPL_VAR name="f3" -->"></td>
+</tr>
+
+
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+document.f_pop.f1.value=document.f_pop.f1.value+'   ';
+document.f_pop.f2.value=document.f_pop.f2.value+'  ';
+document.f_pop.f3.value=document.f_pop.f3.value+'  ';
+
+
+
+document.f_pop.f1.value=document.f_pop.f1.value.substring(0,2);
+document.f_pop.f2.value=document.f_pop.f2.value.substring(0,2);
+document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

@@ -2,46 +2,43 @@
 
 
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
-<!-- TMPL_VAR NAME="class" --></em></font><p>
+<font size="6"><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></em></font><p>
 <!-- FIXME - "callpadding" should be "cellpadding", right? -->
 <table cellspacing="0" callpadding="5" border="1" align="left" width="220">
-<!-----------------Notice bibliographique TABLE--------->
+<!-- ---------------BIBLIO RECORD TABLE------- -->
 <tr valign="top">
 
 <td bgcolor="#99cccc">
-<b>Notice bibliographique</b>
-
-<!-- TMPL_VAR NAME="biblionumber" -->
+NOTICE N°
 </td>
 </tr>
 <tr valign="top">
 <td>
 <br>
-<FONT SIZE=2  face="arial, helvetica">
-<b>Sous-titre:</b> <!-- TMPL_VAR NAME="subtitle" --><br>
+<font size="2"  face="arial, helvetica">
+<b>Sous-Titre :</b> <!-- TMPL_VAR NAME="subtitle" --><br>
 <b>Auteur:</b> <!-- TMPL_VAR NAME="author" --><br>
-<b>Auteur supplémentaire:</b> <!-- TMPL_VAR NAME="additional" --><br>
-<b>Titre Séries:</b> <!-- TMPL_VAR NAME="seriestitle" --><br>
-<b>Sujet:</b> <!-- TMPL_VAR NAME="subject" --><br>
-<b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --><br>
-<b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><br>
+<b>Auteur secondaire:</b> <!-- TMPL_VAR NAME="additional" --><br>
+<b>Titre de collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><br>
+<b>Sujet :</b> <!-- TMPL_VAR NAME="subject" --><br>
+<b>Copyright :</b> <!-- TMPL_VAR NAME="copyrightdate" --><br>
+<b>Remarques :</b> <!-- TMPL_VAR NAME="notes" --><br>
 <b>Titre uniforme:</b> <!-- TMPL_VAR NAME="unititle" --><br>
-<b>Périodiques:</b> <!-- TMPL_VAR NAME="serial" --><br>
-<b>Nombre total d'ouvrages:</b> <!-- TMPL_VAR NAME="count" -->
+<b>Périodique:</b> <!-- TMPL_VAR NAME="serial" --><br>
+<b>Nombre Total d'exemplaires :</b> <!-- TMPL_VAR NAME="count" -->
 <p>
 </font></td>
 </tr>
 </table>
 <!-- /TMPL_LOOP -->
 <center>
-<table border=0 cellspacing=0 cellpadding=2>
+<table border="0" cellspacing="0" cellpadding="2">
 <tr bgcolor="#99cccc">
-<td>Catég ouvrage</td>
-<td>Catégorie</td>
+<td>Type de document</td>
+<td>classification</td>
 <td>Localisation</td>
 <td>Date de retour</td>
-<td>Vu</td>
+<td>Vue pour la dernière fois</td>
 </tr>
 <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr>
@@ -60,14 +57,14 @@
 <td>Disponible</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber>&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
+name="itemnumber">&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<TMPL_VAR
+name="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
 <p>
 </center>
-<br clear=all>
+<br clear="all">
 <p />
 <p />
 

@@ -1,42 +1,37 @@
 <!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
-<h1>Circulation: Sélectionner imprimante et Paramètres de l'annexe</h1><br>
+<div id="mainbloc">
+<h1>Prêt: Choisir une imprimante et un site</h1>
 
-<center>
-<form method=post action=/cgi-bin/koha/circ/circulation.pl>
-<table border=1 cellpadding=5 cellspacing=0>
-<tr><td colspan=2 bgcolor=<!-- TMPL_VAR Name="headerbackgroundcolor" --> align=center background=<!-- TMPL_VAR Name="backgroundimage" -->>
-<font color=black><b>Définissez une annexe et une imprimante</b></font></td></tr>
-<tr><td>
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+<p>
 <!--branchselection-->
 <!-- TMPL_IF Name="onebranch" -->
-Annexe: <!-- TMPL_VAR Name="branchname" --><br>
+<b>Site:</b> <!-- TMPL_VAR NAME="branchname" -->
 <!-- TMPL_ELSE -->
-	<select name=branch>
+<b>Indiquez le site SVP :</b>
+	<select name="branch">
 	<!-- TMPL_LOOP Name="branchloop" -->
-		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+		<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
 	<!-- /TMPL_LOOP -->
 	</select>
-<!-- /TMPL_IF -->
-</td>
-<td>
-<!--printerselection-->
+<!-- /TMPL_IF --></p>
+
+<p><!-- printerselection -->
 <!-- TMPL_IF Name="oneprinter" -->
-Imprimante: <!-- TMPL_VAR Name="printername" --><br>
+<b>Imprimante :</b> <!-- TMPL_VAR NAME="printername" -->
 <!-- TMPL_ELSE -->
-	<select name=printer>
+<b>Indiquez l'imprimante SVP :</b>
+	<select name="printer">
 	<!-- TMPL_LOOP Name="printerloop" -->
-		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+		<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
 	<!-- /TMPL_LOOP -->
 	</select>
-<!-- /TMPL_IF -->
-</td></tr>
-</table>
-<input type="hidden" name="setcookies" value=1>
-<input type="submit" value="Submit" type="changesettings">
+<!-- /TMPL_IF --></p>
+<p><input type="hidden" name="setcookies" value="1">
+<input value="Soumettre" type="changesettings" class="button"></p>
 </form>
-</center>
 
-
+</div>
 <!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->
 

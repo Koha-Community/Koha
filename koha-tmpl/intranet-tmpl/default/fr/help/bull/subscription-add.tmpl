@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Aide de Abonnement Périodiques Ajouter et modifier</h1>
+	<ul>
+		<h2>Bloc d'information d'abonnement</h2>
+		<p>it contains the name of the librarian that created the subscription, the name of the supplier providing the subscription, the cost and the budget affected. It also contains the title of the biblio managed by the subscription.</p>
+		<h2>Bloc d'information sur le calendrier</h2>
+		<p>Contient des informations diverses pour calculer les dates d'arrivée</p>
+		<h2>Duréé d'abonnement</h2>
+		<p>one field in this bloc should be filled : the subscription length can be calculated in weeks, months or number of issues to recieve</p>
+		<h2>Calcul de la numérotation</h2>
+		<p>The numbering of issues recieved can be a complex formulas. The "numbering formula" can be filled with any text and/or numbers. 3 special tokens <b>{X} {Y}</b> and <b>{Z}</b> can be user to define the calculation formula. XYZ values are calculated with the following method:</p>
+			<ul>
+				<li>Ajouter: ce nombre est ajouté à XYZ</li>
+				<li>once every : the number before can be added on every issue or less often</li>
+				<li>Quand supérieur à : si le chiffre calculé est supérieur à la valeur ci</li>
+				<li>Set back to : if the previous condition is valid, the calculated number is set to this one instead</li>
+				<li>Last value / begins with : the last value calculated or the 1st value (when adding a subscription</li>
+			</ul>
+		<h2>Echantillon</h2>
+		Etudier la formule <b>N°{X}/{Y}</b>.
+		<ul>
+			<li> <b>X</b> ajouter <b>1</b> toutes les <b>4</b> fois.Quand supérieur à <b>9999999</b> Retourner à <b>vide</b>. Commence par <b>2004</b></li>
+			<li> <b>Y</b> ajouter <b>1</b> toutes les <b>1</b> fois.Quand supérieur à <b>4</b> Retourner à <b>4</b>. Commence par <b>1</b></li>
+		</ul>
+		Donnera les numéros de parution suivants
+		<p>N°2004/1, N°2004/2, N°2004/3, N°2004/4, N°2005/1, N°2005/2, N°2005/3, N°2005/4, N°2006/1</p>
+		<p>
+			<b>Note:</b> when you add a subscription, Koha consider you already have done the order, or that you will do it soon. So, NO information is sent to the acquisition module. This is not the case when the subscription expires. In this case, a subscription renewal creates a "suggestion" that is sent to the acquisition module.
+		</p>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

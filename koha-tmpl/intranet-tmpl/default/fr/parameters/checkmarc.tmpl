@@ -1,129 +1,132 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<table width="100%" cellpadding=5 cellspacing=5>
-	<tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
-		<td><b>Test</b></td>
-		<td><b>Résultat</b></td>
-	</tr>
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="itemnum" -->
-	<tr>
-		<td><b>itemnum</b></td>
-		<td><li>Le champ itemnumb DOIT être connecté </li>
-			<li>Le sous-champ correspondant DOIT être dans l'onglet -1 (ignore)</td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>Ouvrage : le champ itemnumber est connecté à un sous-champ dans un onglet -1</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="itemfields" -->
-	<tr>
-		<td><b>champ ouvrage</b></td>
-		<td>TOUS les champs ouvrage DOIVENT :<br/>
-			<li>être relié à la même étiquette,</li>
-			<li>et ils doivent tous être dans l'onglet 10 (items)</li></td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>Les étiquettes d'exemplaire sont dans le même champ MARC et dans le même onglet.</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="itemtypes_empty" -->
-	<tr>
-		<td><b>table types d'ouvrage est vide</b></td>
-		<td>La table types d'ouvrage est vide. Elle doit contenir au moins une valeur</td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>table types d'ouvrage remplie avec au moins une valeur</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="itemtype" -->
-	<tr>
-		<td><b>itemtype n'est PAS connecté</b></td>
-		<td>Le champ biblioitems.itemtype DOIT :<br/>
-			<li>être relié à l'étiquette MARC, </li>
-			<li>Le sous-champ correspondant DOIT contenir la valeur autorisée=typeouvrage</li></td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>champ biblioitems.itemtype défini</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="branches_empty" -->
-	<tr>
-		<td><b>Table Annexe vide</b></td>
-		<td>La table Annexe est vide. Elle doit contenir au moins une valeur !</td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>table Annexe remplie avec au moins une valeur</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="branch" -->
-	<tr>
-		<td><b>Annexe propriétaire non reliée</b></td>
-		<td>le champ items.homebranch DOIT :<br/>
-			<li>être relié à l'étiquette MARC,</li>
-			<li>Le sous-champ correspondant DOIT contenir la valeur autorisée=annexes</li></td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>Annexe propriétaire définie</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="holdingbranch" -->
-	<tr>
-		<td><b>Annexe dépositaire non reliée</b></td>
-		<td>le champ items.holdingbranch DOIT :<br/>
-			<li>être relié à l'étiquette MARC, </li>
-			<li>Le sous-champ correspondant DOIT contenir la valeur autorisée=annexes</li></td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>Annexe dépositaire définie</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="biblionumber" -->
-	<tr>
-		<td><b>notice bibliographique et n° biblio</b></td>
-		<td>Les champs biblio.biblionumber et biblioitems.biblioitemnumber DOIVENT :<br/>
-			<li>être relié à l'étiquette MARC,</li>
-			<li>être dans la MEME étiquette (par ex. : 090$a et 090$b)</li>
-			<li>être dans l'onglet -1 (items)</li></td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>OK</td>
-		<td><i>n° biblio et n° d'ouvrage corrects</i></td>
-	</tr>
-<!-- /TMPL_IF -->
-<!----------------------------------------------------------------------------------------------------------->
-<!-- TMPL_IF name="total" -->
-	<tr>
-		<td><b>TOTAL</b></td>
-		<td>Vous avez <b><!-- TMPL_VAR name="total" --></b> erreurs dans votre configuration MARC. Corrigez-les avant d'utiliser Koha</td>
-	</tr>
-<!-- TMPL_ELSE -->
-	<tr>
-		<td>&nbsp;</td>
-		<td><b>Configuration OK. Vous n'avez pas d'erreurs dans la table des paramètres MARC.</b></td>
-	</tr>
-<!-- /TMPL_IF -->
-</table>
+<div id="mainbloc">
+	<h1>Contrôle du paramétrage MARC</h1>
+	<table>
+		<tr>
+			<th>Test</th>
+			<th>Résultat</th>
+		</tr>
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemnum" -->
+		<tr>
+			<td><b>N° exemplaires</b></td>
+			<td><li>Le champ itemnum DOIT être relié à un sous champ MARC </li>
+				<li>Le sous-champ DOIT être dans l'onglet -1 (ignore)</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i> N° exemplaires : le champ numéro d'exemplaire est relié à un champ dans la table -1</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemfields" -->
+		<tr>
+			<td><b>Champs exemplaires</b></td>
+			<td>TOUS les champs des d'exemplaire doivent :<br/>
+				<li>être relié au même champ</li>
+				<li>et il doivent tous être dans la table 10 (Exemplaires)</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i> Tous les champs d'exemplaires sont sous la même étiquette et dans le même onglet</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtypes_empty" -->
+		<tr>
+			<td><b>table type d'ouvrage vide</b></td>
+			<td> la table des types d'ouvrages est vide.Elle doit contenir au moins une valeur</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>table type d'ouvrages remplie avec au moins une valeur</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtype" -->
+		<tr>
+			<td><b>Type d'ouvrage non paramétré</b></td>
+			<td>Le champ biblioitems.itemtype DOIT<br/>
+				<li>être relié à un sous-champ MARC </li>
+				<li>le sous-champ correspondant doit avoir une valeur autorisée=</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>biblioitems.itemtype défini</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="branches_empty" -->
+		<tr>
+			<td><b>table des sites vide</b></td>
+			<td>La table des sites est vide.Elle doit comporter au moins une valeur !</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>table des sites remplie avec au moins une valeur</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="branch" -->
+		<tr>
+			<td><b>Site d'origine (homebranch) non paramétré</b></td>
+			<td>le champ items.homebranch DOIT :<br/>
+				<li>être relié à un sous-champ MARC</li>
+				<li>Le sous-champ correspondant doit avoir une valeur autorisée =</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Site d'origine (homebranch) déterminé</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="holdingbranch" -->
+		<tr>
+			<td><b>Site de conservation (holdingbranch) non paramétré</b></td>
+			<td>Le champ items.holdingbranch DOIT :<br/>
+				<li>être relié à un sous-champ MARC </li>
+				<li>Le sous-champ correspondant doit avoir une valeur autorisée =</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>Site de conservation(holdingbranch)  déterminé</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="biblionumber" -->
+		<tr>
+			<td><b>biblio et biblionumber</b></td>
+			<td> Les champs du biblio.biblionumber et du biblioitems.biblioitemnumber DOIVENT :<br/>
+				<li>être relié à un sous-champ MARC</li>
+				<li>être dans le même champ (par exemple : 090$a et 090 $b)</li>
+				<li>être dans l'onglet-1</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>OK</td>
+			<td><i>biblionumber et biblioitemnumber paramétrés correctement</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="total" -->
+		<tr>
+			<td><b>TOTAL</b></td>
+			<td>You have <b><!-- TMPL_VAR NAME="total" --></b> error(s) in your MARC configuration. Please fix them before using koha</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>&nbsp;</td>
+			<td><b> Configuration OK, il n'y pas d'erreurs dans votre table de paramètres MARC</b></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	</table>
+</div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

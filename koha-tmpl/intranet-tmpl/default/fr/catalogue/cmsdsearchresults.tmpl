@@ -1,29 +1,29 @@
 <html>
-<head><title>Résultats de recherche</title>
+<head><title>Résultats de Recherche</title>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="searchheader.tmpl" -->
-<table border=0 cellspacing=0 cellpadding=0>
-<tr bgcolor=#ccccff><th>Titre</th><th>Auteur</th><th>Dewey</th></tr>
-<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+<table border="0" cellspacing="0" cellpadding="0">
+<tr bgcolor="#ccccff"><th>Titre</th><th>Auteur</th><th>Dewey</th></tr>
+<!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
   <tr>
-  <td><!-- TMPL_VAR NAME=title --></td>
-  <td><!-- TMPL_VAR NAME=author --></td>
-  <td align=right><!-- TMPL_VAR NAME=dewey --></td>
+  <td><!-- TMPL_VAR NAME="title" --></td>
+  <td><!-- TMPL_VAR NAME="author" --></td>
+  <td align="right"><!-- TMPL_VAR NAME="dewey" --></td>
   </tr>
 <!-- /TMPL_LOOP -->
-<tr><td colspan=3 bgcolor=#ccccff>
-    <table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr><td align=left>
-    <a href=search.pl?template=<!-- TMPL_VAR NAME="template" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->>Previous Records</a>
-    </td><td align=right>
-    <a href=search.pl?template=<!-- TMPL_VAR NAME="template" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->>Next Records</a>
+<tr><td colspan="3" bgcolor="#ccccff">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr><td align="left">
+    <a href="search.pl?template=<!-- TMPL_VAR NAME="template" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Enregistrements Précédents</a>
+    </td><td align="right">
+    <a href="search.pl?template=<!-- TMPL_VAR NAME="template" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">Enregistrements Suivants</a>
     </td></tr>
     </table>
 </td></tr>
 </table>
 <br>
-Résultats <i><!-- TMPL_VAR NAME="startfrom" --></i> à <i><!-- TMPL_VAR NAME="endat" --></i> sur <i><!-- TMPL_VAR NAME="numrecords" --></i> enregistrements.
+Réponses <i><!-- TMPL_VAR NAME="startfrom" --></i> à <i><!-- TMPL_VAR NAME="endat" --></i> sur <i><!-- TMPL_VAR NAME="numrecords" --></i> enregistrements.
 <hr>
 </body>
 </html>

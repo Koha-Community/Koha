@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<h1 class="parameters">Définir les règles de prêt pour <!-- TMPL_VAR NAME="branch" --></h1>
+	<div id="bloc25">
+		<h2 class="parameters">Optimisation pour les prêts</h2>
+		<p>Remplir chaque pavé  avec la durée du prêt, le nombre maximum de prêts</p>
+		<p>égal à 21,5 permet 5 prêts pour une durée de 21 jours</p>
+		<h2 class="parameters">Optimisation pour les amendes</h2>
+		<p>Each box needs to be filled in with fine,time to start charging,charging cycle</p>
+		<p> par ex. 1,7,7 = 1Eur d'amende, au bout de 7 jours, par tranche de 7 jours</p>
+		<p>Note : fines are calculated by the fines2.pl script, located in misc directory. </p>
+		<p>Ask your administrator to put this script in crontab, after midnight, to have fines calculated every night</p>
+	</div>
+	<div id="bloc25">
+		<h2 class="parameters">Valeurs par défaut</h2>
+		<p>  Si une cellule n'est pas renseignée, la première des valeurs suivantes est recherchée :</p>
+		<ul>
+			<li>même site et même catégorie de lecteur, type d'ouvrage*</li>
+			<li>Même site, même type d'ouvrage, catégorie de lecteur</li>
+			<li>Même type d'ouvrage, catégorie de lecteur, site</li>
+			<li>partout</li>
+			<li> Si rien n'est défini, la valeur par defaut est 21,5 (figé dans le code)</li>
+		</li>
+	</div>
+	<div id="bloc100">
+		<form method="post">
+		Selectionnez une annexe :
+			<select name="branch">
+				<option value="">Par défaut</option>
+			<!-- TMPL_LOOP NAME="branchloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+			<input type="submit" value="Sélectionner" class="button parameters">
+		</form>
+		<form method="post">
+			<input type="hidden" name="op" value="save">
+			<table>
+			<tr>
+				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th><!-- TMPL_VAR NAME="in_title" --><br/>Prêt/amende</th><!-- /TMPL_LOOP -->
+			</tr>
+			<!-- TMPL_LOOP NAME="row" -->
+				<tr align="center">
+					<th>
+						<!-- TMPL_VAR NAME="categorycode" -->
+					</th>
+					<!-- TMPL_LOOP NAME="cell" -->
+						<td bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10"> /
+							<input name="<!-- TMPL_VAR NAME="finesname" -->" value="<!-- TMPL_VAR NAME="finesvalue" -->" size="6" maxlength="10">
+						</td>
+					<!-- /TMPL_LOOP -->
+				</tr>
+			<!-- /TMPL_LOOP -->
+			</table>
+			<input type="submit" value="Enregistrer" class="button parameters">
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

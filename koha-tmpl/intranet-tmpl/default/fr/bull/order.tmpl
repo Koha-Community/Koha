@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE name="popup-top.inc" -->
+<div id="mainbloc">
+	<h1>Résultat de Recherche Fournisseur</h1>
+	<div id="bloc100">
+		<h2>Vous recherchiez <b>fournisseur <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> resultats trouvés</h2>
+		<table>
+			<tr>
+				<th>Fournisseur</th>
+				<th>Sélectionner</th>
+			</tr>
+			<!-- TMPL_LOOP name="loop_suppliers" -->
+				<tr>
+					<td><!-- TMPL_VAR name="name" --></td>
+					<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR name="aqbooksellerid" -->,'<!-- TMPL_VAR name="name" -->')">Le choisir</td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+</div>
+
+<script language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  self.close();
+}
+</script>
+<!-- TMPL_INCLUDE name="popup-bottom.inc" -->

@@ -1,178 +1,178 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
 <!-- TMPL_IF NAME="missingloop" -->
-	<!-- TMPL_VAR Name="string" -->
+	<!-- TMPL_VAR NAME="string" -->
 <!-- TMPL_ELSE -->
-	<!-- TMPL_IF NAME=invalid -->
-		N° carte invalide.<p>
+	<!-- TMPL_IF NAME="invalid" -->
+		N° de carte invalide.<p>
 	<!-- TMPL_ELSE -->
-	<H1> Confirmer Enregistrement </H1>
-	<table border=0 cellspacing=0 cellpadding=5>
-		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B> NOUVEAU LECTEUR </B>
+	<h1> Confirmer l'enregistrement </h1>
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> NOUVEAU LECTEUR </b>
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Nom</B>
+				<b>Nom</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="institution_name" -->
+				<!-- TMPL_VAR NAME="institution_name" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B> DETAILS LECTEUR </B>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b> DETAILS DES INSCRITS </b>
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>N° Lecteur</B>
+				<b>Numéro d'inscription</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="bornum" -->
+				<!-- TMPL_VAR NAME="bornum" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>N° Carte</B>
+				<b>Numéro de Carte</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="cardnumber_institution" -->
+				<!-- TMPL_VAR NAME="cardnumber_institution" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Annexe d'inscription</B>
+				<b>Site d'inscription</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="branchcode" -->
+				<!-- TMPL_VAR NAME="branchcode" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B>ADRESSE LECTEUR</B>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>ADRESSE DU LECTEUR</b>
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Adresse postale</B>
+				<b>Adresse Postale</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="postal" -->
+				<!-- TMPL_VAR NAME="postal" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Adresse privée</B>
+				<b>Adresse domicile</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="home" -->
+				<!-- TMPL_VAR NAME="home" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B>DETAILS LECTEUR</B>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>DETAIL COORDONNEES LECTEUR</b>
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Téléphone (Accueil)</B>
+				<b>Téléphone (Domicile)</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="phone" -->
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>Téléphone (Daytime)</B>
-			</td>
-			<td>
-				<!-- TMPL_VAR Name="phoneday" -->
+				<!-- TMPL_VAR NAME="phone" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Fax</B>
+				<b>Téléphone (horaire de bureau)</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="faxnumber" -->
-			</td>
-		</tr>
-		<tr valign=top bgcolor="white" >
-			<td>
-				<B>E-mail</B>
-			</td>
-			<td>
-				<!-- TMPL_VAR Name="emailaddress" -->
+				<!-- TMPL_VAR NAME="phoneday" -->
 			</td>
 		</tr>
-                <tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Fax</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign="top" bgcolor="white" >
+			<td>
+				<b>Mail</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign="top" bgcolor="white" >
                         <td>
-                                <B>Ecriture d'un texte</B>
+                                <b>Texte de messagerie électronique</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR NAME=textmessaging -->
+				<!-- TMPL_VAR NAME="textmessaging" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B>DETAIL AUTRE CONTACT</B>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>Détail d'autre contact</b>
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Nom</B>
+				<b>Nom</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="contactname" -->
+				<!-- TMPL_VAR NAME="contactname" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Téléphone</B>
+				<b>Téléphone</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="altphone" -->
+				<!-- TMPL_VAR NAME="altphone" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Relation</B>
+				<b>Relation</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="altrelationship" -->
+				<!-- TMPL_VAR NAME="altrelationship" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Notes</B>
+				<b>Notes</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="altnotes" -->
+				<!-- TMPL_VAR NAME="altnotes" -->
 			</td>
 		</tr>
-		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-				<B>NOTES</B>
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+			<td colspan="2" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>NOTES</b>
 			</td>
 		</tr>
-		<tr valign=top bgcolor="white" >
+		<tr valign="top" bgcolor="white" >
 			<td>
-				<B>Notes générales</B>
+				<b>Remarques Générales</b>
 			</td>
 			<td>
-				<!-- TMPL_VAR Name="bornotes" -->
+				<!-- TMPL_VAR NAME="bornotes" -->
 			</td>
 		</tr>
-		</TABLE><p>
-		Valeurs valides. Cliquez sur OK pour confirmer ce nouveau lecteur
-		<form action="/cgi-bin/koha/members/insertidata.pl" 1
-			<!-- TMPL_LOOP NAME=inputsloop -->
-				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+		</table><p>
+		Saisie validée. Cliquez sur OK pour confirmer ce nouveau lecteur
+		<form action="/cgi-bin/koha/members/insertidata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
 			<!-- /TMPL_LOOP -->
-			<input type=submit name=submit value=OK>
+			<input type="submit" name="submit" value="OK">
 		</form>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

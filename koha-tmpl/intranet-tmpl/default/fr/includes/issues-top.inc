@@ -5,6 +5,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Prêts & Retours</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
@@ -58,7 +59,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 		</TD>
 		<td>
 			<font size=2>
-			<form action=/cgi-bin/simple-redirect.pl method=post>
+			<form action=/cgi-bin/simple-redirect.pl 1
 			<select>
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>PRETS & RETOURS
@@ -90,7 +91,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Signaler retard Books
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Signaler retard Today
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Reçu
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Received
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Today
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Week
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Mois
@@ -239,29 +240,30 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<form name=choose2>
 			<select name=dest size=1 onChange="leapto(this.form)">
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>EMPRUNTEURS
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> New Emprunteur
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Setup
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Check if Expired
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Policy
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=57">EMPRUNTEURS
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> New Emprunteur
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Setup
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Check if Expired
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Policy
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Reports
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Total Borrowers
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - New This Week
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - New This Mois
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - New This Année
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Total Borrowers
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - New This Week
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - New This Mois
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - New This Année
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Emprunteur Enquirey
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - All Books Out
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Overdues
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - History
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Messages
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Reports
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Average Borrowings		<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Total Borrowings
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">->  Emprunteur Enquiry
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - All Books Out
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Overdues
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - History
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Messages
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Average Borrowings
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Total Borrowings
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Advanced Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">->  Advanced Reports
 			</select>
 			</form>
 		</TD>
@@ -270,33 +272,33 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<form name=choose2>
 			<select name=dest size=1 onChange="leapto(this.form)">
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>AUTRE
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> OPAC
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Recherche Catalogue
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=57">AUTRE
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> OPAC
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - 1 Catalogue
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Renouveler Books
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Lecteur Details
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Mettre à jour Details
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Renouveler Books
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Lecteur Details
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - - Mettre à jour Details
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Resources
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Fundview CD
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-> Resources
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Fundview CD
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> ->  Library Site Web
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  Library Site Web
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> ->  End sur Année
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Stocktake
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Set New Budgets
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Audit Reports
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> ->  Help
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Telnet Help
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Intranet Help
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Searching Help
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  End sur Année
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Stocktake
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Set New Budgets
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Audit Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">-----------------------------------
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  Help
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Telnet Help
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Intranet Help
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43">&nbsp; &nbsp; - Searching Help
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43> ->  Advanced Reports
+			<option value="/cgi-bin/tododisplay.pl?user=Rachel&todo=43"> ->  Advanced Reports
 			</select>
 			</form>
 		</td>
@@ -325,7 +327,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 </table>
 <BLOCKQUOTE>
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align=left>Connecté comme: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Déconnecter</a>]</p>
+    <p align=left>Connecté comme: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Déconnecter</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
+    <p align=left><a href="/cgi-bin/koha/opac-user.pl">S'identifier</a> à Koha</p>
 <!-- /TMPL_IF -->
