@@ -76,7 +76,8 @@ sub CalcFine {
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
   categoryitem.itemtype=itemtypes.itemtype and
-  categoryitem.categorycode='$bortype' and items.itemlost <> 1";
+  categoryitem.categorycode='$bortype' and (items.itemlost <> 1 or
+items.itemlost is NULL)";
   my $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
@@ -106,7 +107,7 @@ sub UpdateFine {
   my $dbh=C4Connect;
   my $query="Select * from accountlines where itemnumber=$itemnum and
   borrowernumber=$bornum and (accounttype='FU' or accounttype='O' or
-  accounttype='F' or accounttype='M')";
+  accounttype='F' or accounttype='M') and description like '%$due%'";
   my $sth=$dbh->prepare($query);
 #  print "$query\n";
   $sth->execute;
