@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha OPAC 2.0.0RC4\n"
-"POT-Creation-Date: 2004-02-29 19:08-0500\n"
+"POT-Creation-Date: 2004-03-08 00:17-0500\n"
 "PO-Revision-Date: 2004-02-18 02:40-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -32,6 +32,13 @@ msgstr "%p一般 %p完全吻合"
 #, c-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
+
+#. %1$s: TMPL_VAR name=title
+#. %2$s: TMPL_VAR name=author
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:10
+#, c-format
+msgid "%s (%s)"
+msgstr "%s (%s)"
 
 #. %1$s: TMPL_VAR name=phone
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:13
@@ -89,6 +96,12 @@ msgstr "&copy;"
 msgid ": <a1>%s</a>"
 msgstr ": <a1>%s</a>"
 
+#. %1$s: TMPL_VAR name=dateaccessioned
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
+#, c-format
+msgid "<a1> Accession</a> Date:%s"
+msgstr "<a1>登錄</a>日期：%s"
+
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:46
 #, c-format
 msgid "<a1>Log In</a> to Koha"
@@ -100,12 +113,6 @@ msgstr "<a1>登入</a>Koha"
 #, c-format
 msgid "<b>%s</b> ( record %s )"
 msgstr "<b>%s</b> (書目記錄號碼 %s)"
-
-#. %1$s: TMPL_VAR name=dateaccessioned
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:83
-#, c-format
-msgid "<b><a1> Accession</a> Date:%s"
-msgstr "<b><a1>登錄</a>日期：%s"
 
 #. %1$s: TMPL_VAR name=issues
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:87
@@ -136,12 +143,6 @@ msgstr "<b>書目記錄號碼：</b>%s"
 #, c-format
 msgid "<b>Biblionumber:</b> %s"
 msgstr "<b>書目記錄號碼：</b>%s"
-
-#. %1$s: TMPL_VAR name=wthdrawn
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:86
-#, c-format
-msgid "<b>Cancelled: %s"
-msgstr "<b>已註消：</b>%s"
 
 #. %1$s: TMPL_VAR name=classification
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:44
@@ -390,20 +391,6 @@ msgstr "<b>年份：</b>%s"
 msgid "<b>in </b>%s"
 msgstr "　<b>於</b>%s"
 
-#. %1$s: TMPL_VAR name=title
-#. %2$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:9
-#, c-format
-msgid "<em><a1>%s (%s)</a></em>"
-msgstr "<em><a1>%s (%s)</a></em>"
-
-#. %1$s: TMPL_VAR name=firstname
-#. %2$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:4
-#, c-format
-msgid "<em>Account for %s %s</em>"
-msgstr "<em>%s %s 的帳戶</em>"
-
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:10
 msgid "AMOUNT"
 msgstr "金額"
@@ -411,6 +398,13 @@ msgstr "金額"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:7
 msgid "ARE OUR RECORDS CORRECT?"
 msgstr "紀錄正確嗎？"
+
+#. %1$s: TMPL_VAR name=firstname
+#. %2$s: TMPL_VAR name=surname
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:4
+#, c-format
+msgid "Account for %s %s"
+msgstr "%s %s 的帳戶"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:90
 msgid "Advanced Search, More Options"
@@ -459,6 +453,12 @@ msgstr "條碼 %s"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:53
 msgid "Barcode"
 msgstr "條碼"
+
+#. %1$s: TMPL_VAR name=wthdrawn
+#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:86
+#, c-format
+msgid "Cancelled: %s"
+msgstr "已註消：%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:36
 msgid "Cannot be Reserved"
@@ -1096,6 +1096,9 @@ msgstr "text/html; charset=UTF-8"
 
 #~ msgid "<b>Subject:</b> %s"
 #~ msgstr "<b>主題：</b>%s"
+
+#~ msgid "<em><a1>%s (%s)</a></em>"
+#~ msgstr "<em><a1>%s (%s)</a></em>"
 
 # TODO:舊譯「這是整個書名」
 # NOTE 譯文更動 by Arthur
