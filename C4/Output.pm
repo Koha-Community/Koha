@@ -97,6 +97,8 @@ sub startmenu{
     open (FILE,"$path/aquisitions-top.inc")|| die;
   } elsif ($type eq 'report'){
     open (FILE,"$path/reports-top.inc") || die;
+  } elsif ($type eq 'circulation') {
+    open (FILE,"$path/circulation-top.inc") || die;
   } else {
     open (FILE,"$path/cat-top.inc") || die;
   }
@@ -120,6 +122,8 @@ sub endmenu{
     open (FILE,"$path/aquisitions-bottom.inc") || die;
   } elsif ($type eq 'report') {
     open (FILE,"$path/reports-bottom.inc") || die;
+  } elsif ($type eq 'circulation') {
+    open (FILE,"$path/circulation-bottom.inc") || die;
   } else {
     open (FILE,"$path/cat-bottom.inc") || die;
   }

@@ -7,11 +7,12 @@ use DBI;
 
 
 my %env;
-my $headerbackgroundcolor='#990000';
-my $circbackgroundcolor='#555555';
-my $circbackgroundcolor='#550000';
+my $headerbackgroundcolor='#99cc33';
+#my $circbackgroundcolor='#555555';
+my $circbackgroundcolor='#ffffcc';
 my $linecolor1='#bbbbbb';
 my $linecolor2='#dddddd';
+my $backgroundimage="/images/background-mem.gif";
 my $query=new CGI;
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
@@ -74,20 +75,20 @@ print startmenu('circulation');
 print << "EOF";
 <center>
 <p>
-<table border=0 width=100% cellspacing=0 bgcolor=$headerbackgroundcolor>
+<table border=0 width=100% cellspacing=0 bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <tr>
 <th width=5%></th>
-<th width=30%><font color=white>$branchname</font></th>
+<th width=30%><font color=black>$branchname</font></th>
 <th width=10%>
-	<a href=circulation.pl?module=issues&branch=$branch&printer=$printer><font color=white><img src=/images/issues.gif border=0 height=40></font></a>
+	<a href=circulation.pl?module=issues&branch=$branch&printer=$printer><font color=black><img src=/images/issues.gif border=0 height=40></font></a>
 </th>
 <th width=10%>
-    <a href=circulation.pl?selectnewbranchprinter=1><font color=white>Branch/Printer</font></a>
+    <a href=circulation.pl?selectnewbranchprinter=1><font color=black>Branch/Printer</font></a>
 </th>
 <th width=10%>
-    <a href=circulation.pl?module=returns&branch=$branch&printer=$printer><font color=white><img src=/images/returns.gif border=0 height=40></font></a>
+    <a href=circulation.pl?module=returns&branch=$branch&printer=$printer><font color=black><img src=/images/returns.gif border=0 height=40></font></a>
 </th>
-<th width=30%><font color=white>$printername</font></th>
+<th width=30%><font color=black>$printername</font></th>
 <th width=5%></th>
 </tr>
 </table>
@@ -109,7 +110,7 @@ if ($printer && $branch) {
     if ($printercount>1) {
 	$printerform=<<"EOF";
 <table border=0 cellspacing=0 cellpadding=5>
-<tr><th bgcolor=$headerbackgroundcolor><font color=white>Choose a Printer</font></td></tr>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Choose a Printer</font></td></tr>
 <tr><td>
 <select name=printer>
 $printeroptions
@@ -127,7 +128,7 @@ EOF
     if ($branchcount>1) {
 	$branchform=<<"EOF";
 <table border=0 cellpadding=5 cellspacing=0>
-<tr><th bgcolor=$headerbackgroundcolor><font color=white>Choose a Branch</font></td></tr>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Choose a Branch</font></td></tr>
 <tr><td>
 <select name=branch>
 $branchoptions
@@ -165,7 +166,7 @@ EOF
 sub returns {
     my %returneditems;
     print << "EOF";
-    <table border=0 cellpadding=10 cellspacing=0 bgcolor=$headerbackgroundcolor cellpadding=5><tr><th><font color=white>Circulation - Returns</font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
+    <table border=0 cellpadding=10 cellspacing=0 bgcolor=$headerbackgroundcolor cellpadding=5 background=$backgroundimage><tr><th><font color=black>Circulation - Returns</font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
 EOF
     foreach ($query->param) {
 	(next) unless (/ri-(\d*)/);
@@ -190,7 +191,7 @@ EOF
     my $barcodeentrytext= << "EOF";
     <form method=get>
     <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-	<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center><font color=white><b>Enter Book Barcode</b></font></td></tr>
+	<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage><font color=black><b>Enter Book Barcode</b></font></td></tr>
 	<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
     </table>
     <input type=hidden name=module value=returns>
@@ -210,7 +211,7 @@ EOF
 	my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 	my $itemtable=<<"EOF";
 <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-<tr><th bgcolor=$headerbackgroundcolor><font color=white>Returned Item Information</font></th></tr>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Returned Item Information</font></th></tr>
 <tr><td>
 Title: $iteminformation->{'title'}<br>
 Author: $iteminformation->{'author'}<br>
@@ -226,7 +227,7 @@ EOF
 	    }
 	    print << "EOF";
 <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-<tr><th bgcolor=$headerbackgroundcolor><font color=white>Messages</font></th></tr>
+<tr><th bgcolor=$headerbackgroundcolor $background=$backgroundimage><font color=black>Messages</font></th></tr>
 <tr><td>
 $messagetext
 </td></tr>
@@ -243,7 +244,7 @@ EOF
 	    </td>
 	    <td valign=top>
 	    <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-	    <tr><th bgcolor=$headerbackgroundcolor><font color=white>Error</font></th></tr>
+	    <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Error</font></th></tr>
 	    <tr><td>
 	    <table border=0 cellpadding=5>
 	    <tr><td>
@@ -304,7 +305,7 @@ EOF
 		<td>
 
 		<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-		<tr><th bgcolor=$headerbackgroundcolor><font color=white>Error</font></th></tr>
+		<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Error</font></th></tr>
 		<tr><td>
 		<table border=0 cellpadding=5>
 		<tr><td>
@@ -322,7 +323,7 @@ EOF
 	print << "EOF";
 	<p>
 	<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-	<tr><th colspan=6 bgcolor=$headerbackgroundcolor><font color=white>Returned Items</font></th></tr>
+	<tr><th colspan=6 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Returned Items</font></th></tr>
 	<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th><th>Borrower</th></tr>
 EOF
 	my $color='';
@@ -353,7 +354,7 @@ sub issues {
 
     unless ($noheader) {
 	print << "EOF";
-    <table border=0 bgcolor=$headerbackgroundcolor cellpadding=10 cellspacing=0><tr><th><font color=white>Circulation - Issues</font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
+    <table border=0 bgcolor=$headerbackgroundcolor background=$backgroundimage cellpadding=10 cellspacing=0><tr><th><font color=black>Circulation - Issues</font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
 EOF
     }
     if (my $borrnumber=$query->param('borrnumber')) {
@@ -400,7 +401,7 @@ EOF
 		unless ($iteminformation) {
 		    print << "EOF";
 		    <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-		    <tr><th bgcolor=$headerbackgroundcolor><font color=white>Error</font></th></tr>
+		    <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Error</font></th></tr>
 		    <tr><td>
 		    <table border=0 cellpadding=5>
 		    <tr><td>
@@ -414,7 +415,7 @@ EOF
 		    } else {
 			print << "EOF"
 			<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-			<tr><th bgcolor=$headerbackgroundcolor><font color=white>Error Issuing Book</font></th></tr>
+			<tr><th bgcolor= background=$backgroundimage><font color=black>Error Issuing Book</font></th></tr>
 			<tr><td><font color=red>$rejected</font></td></tr>
 			</table>
 			<br>
@@ -429,7 +430,7 @@ EOF
 		    my $stickyduedate=$query->param('stickyduedate');
 		    print << "EOF";
 		    <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-		    <tr><th bgcolor=$headerbackgroundcolor><font color=white><b>Issuing Question</b></font></td></tr>
+		    <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Issuing Question</b></font></td></tr>
 		    <tr><td>
 		    <table border=0 cellpadding=10>
 		    <tr><td>
@@ -488,7 +489,7 @@ EOF
 		if ($message) {
 		    print << "EOF";
 		    <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-		    <tr><th bgcolor=$headerbackgroundcolor><font color=white>Message</font></th></tr>
+		    <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Message</font></th></tr>
 		    <tr><td>$message</td></tr>
 		    </table>
 		    <p>
@@ -509,13 +510,13 @@ EOF
 	    }
 	    $flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	    if ($flags->{$flag}->{'noissues'}) {
-		$flaginfotext.="<tr><td bgcolor=red valign=top><font color=white><b>$flag</b></font></td><td bgcolor=red><font color=white><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
+		$flaginfotext.="<tr><td bgcolor=red valign=top><font color=black><b>$flag</b></font></td><td bgcolor=red><font color=black><b>$flags->{$flag}->{'message'}</b></font></td></tr>\n";
 	    } else {
 		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
 	    }
 	}
 	if ($flaginfotext) {
-	    $flaginfotext="<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n";
+	    $flaginfotext="<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><font color=black>Patron Flags</font></th></tr>$flaginfotext</table>\n";
 	}
 	$env{'nottodaysissues'}=1;
 	my ($borrowerissues) = currentissues(\%env, $borrower);
@@ -580,7 +581,7 @@ EOF
     <tr>
 	<td align=center valign=top>
 	    <table border=0 cellspacing=0 cellpadding=5 bgcolor=#dddddd width=100%>
-	        <tr><td align=center bgcolor=$headerbackgroundcolor><font color=white><b>Enter Book Barcode</b></font></td></tr>
+	        <tr><td align=center bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Enter Book Barcode</b></font></td></tr>
 		<tr><td align=center>
 		<table border=0 bgcolor=#dddddd>
 		<tr><td>Item Barcode:</td><td><input name=barcode size=10></td><td><input type=submit value=Issue></tr>
@@ -615,7 +616,7 @@ EOF
     <tr>
 	<td colspan=2 align=center>
 	<table border=0 cellpadding=5 cellspacing=0 width=100% bgcolor=#dddddd>
-	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor><font color=white><b>Issues Today</b></font></th></tr>
+	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Issues Today</b></font></th></tr>
 	    <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
 	    $todaysissues
 	</table>
@@ -624,7 +625,7 @@ EOF
     <tr>
 	<td colspan=2 align=center>
 	<table border=0 cellpadding=5 cellspacing=0 width=100% bgcolor=#dddddd>
-	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor><font color=white><b>Previous Issues</b></font></th></tr>
+	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Previous Issues</b></font></th></tr>
 	    <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
 	    $previssues
 	</table>
@@ -654,7 +655,7 @@ EOF
 		print "<input type=hidden name=branch value=$branch>\n";
 		print "<input type=hidden name=printer value=$printer>\n";
 		print "<table border=0 cellspacing=0 cellpadding=5 bgcolor=#dddddd>";
-		print "<tr><th bgcolor=$headerbackgroundcolor><font color=white><b>Select a borrower</b></font></th></tr>\n";
+		print "<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Select a borrower</b></font></th></tr>\n";
 		print "<tr><td align=center>\n";
 		print "<select name=borrnumber size=7>\n";
 		foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowers) {
@@ -669,7 +670,7 @@ EOF
 	    print << "EOF";
 <form method=get>
 <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-<tr><th bgcolor=$headerbackgroundcolor><font color=white><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
 <tr><td><input name=findborrower></td></tr>
 </table>
 <input type=hidden name=module value=issues>
@@ -734,10 +735,10 @@ sub patrontable {
 	    }
 	}
     }
-    ($flaginfotext) && ($flaginfotext="<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor colspan=2><font color=white>Patron Flags</font></th></tr>$flaginfotext</table>\n");
+    ($flaginfotext) && ($flaginfotext="<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><font color=black>Patron Flags</font></th></tr>$flaginfotext</table>\n");
     my $patrontable= << "EOF";
     <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-    <tr><th bgcolor=$headerbackgroundcolor><font color=white><b>Patron Information</b></font></td></tr>
+    <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Patron Information</b></font></td></tr>
     <tr><td>
     <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
     $borrower->{'streetaddress'} $borrower->{'city'}<br>
