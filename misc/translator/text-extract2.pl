@@ -28,7 +28,7 @@ use vars qw( $fatal_p );
 
 # Hideous stuff
 use vars qw( $re_directive $re_tmpl_var $re_tmpl_var_escaped $re_tmpl_include );
-use vars qw( $re_tmpl_endif_endloop );
+use vars qw( $re_directive_control $re_tmpl_endif_endloop );
 BEGIN {
     # $re_directive must not do any backreferences
     $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
@@ -37,6 +37,8 @@ BEGIN {
     $re_tmpl_include = q{<(?:(?i)(?:!--\s*)?TMPL_(?:INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     # TMPL_VAR ESCAPE=1/HTML/URL
     $re_tmpl_var_escaped = q{<(?:(?i)(?:!--\s*)?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s+ESCAPE=(?:1|HTML|URL)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
+    # Any control flow directive
+    $re_directive_control = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:LOOP|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     # /LOOP or /IF or /UNLESS
     $re_tmpl_endif_endloop = q{<(?:(?i)(?:!--\s*)?\/TMPL_(?:LOOP|IF|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
 }
@@ -95,7 +97,7 @@ sub extract_attributes ($;$) {
     $s = $1 if $s =~ /^<\S+(.*)\/\S$/s	# XML-style self-closing tags
 	    || $s =~ /^<\S+(.*)\S$/s;	# SGML-style tags
 
-    for (my $i = 0; $s =~ /^\s+(?:([a-zA-Z][-a-zA-Z0-9]*)\s*=\s*)?('((?:$re_directive|[^'])*)'|"((?:$re_directive|[^"])*)"|((?:$re_directive|[^\s<>])+))/os;) {
+    for (my $i = 0; $s =~ /^(?:$re_directive_control)?\s+(?:$re_directive_control)?(?:([a-zA-Z][-a-zA-Z0-9]*)\s*=\s*)?('((?:$re_directive|[^'])*)'|"((?:$re_directive|[^"])*)"|((?:$re_directive|[^\s<>])+))/os;) {
 	my($key, $val, $val_orig, $rest)
 		= ($1, (defined $3? $3: defined $4? $4: $5), $2, $');
 	$i += 1;
