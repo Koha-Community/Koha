@@ -72,7 +72,6 @@ my %requiretables=(
   	description text,
   	url varchar(255),
   	PRIMARY KEY (websitenumber) )",
-);
     marcrecorddone=>"( isbn char(40),
 		      issn char(40),
 		      lccn char(40),
@@ -84,7 +83,13 @@ my %requiretables=(
     ethnicity=>"( code varchar(10) NOT NULL default '',
   		name varchar(255) default NULL,
   		PRIMARY KEY  (code)   )",
+    sessions=>"( sessionID varchar(255) NOT NULL default '',
+  		userid varchar(255) default NULL,
+  		ip varchar(16) default NULL,
+		lasttime int,
+		PRIMARY KEY (sessionID)   )",
 );
+
 
 my %requirefields=(
     biblio=>{ 'abstract' => 'text' },
@@ -293,6 +298,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.13  2002/07/04 18:05:36  tonnesen
+# bug fix
+#
 # Revision 1.12  2002/07/04 16:41:06  tonnesen
 # Merged changes from rel-1-2.  Abstracted table structure changes by alan.
 #
