@@ -178,29 +178,43 @@ sub searchauthority  {
 	$offset=0 unless ($offset);
 #	warn "==> ($env,$category,$branch,$searchstring,$offset,$pagesize)";
 	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my $query="Select stdlib,freelib,father,id,hierarchy,level from bibliothesaurus where (category =\"$category\")";
-	$query .= " and hierarchy='$branch'" if ($branch);
-	$query .= " and match (category,freelib) AGAINST ('$searchstring')" if ($searchstring);
+	my $query="Select stdlib,freelib,father,id,hierarchy,level from bibliothesaurus where category=?";
+	my @bind=($category);
+	if ($branch) {
+		$query .= " and hierarchy=?";
+		push(@bind,$branch);
+		}
+	if ($searchstring) {
+		$query .= " and match (category,freelib) AGAINST (?)";
+		push(@bind,$searchstring);
+		}
 #	$query .= " and freelib like \"$searchstring%\"" if ($searchstring);
-	$query .= " order by category,freelib limit $offset,".($pagesize*4);
+	$query .= " order by category,freelib limit ?,?";
+	push(@bind,$offset,($pagesize*4));
 # 	warn "q : $query";
 	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	$sth->execute(@bind);
 	my @results;
 	my $old_stdlib="";
 	while (my $data=$sth->fetchrow_hashref){
 			push(@results,$data);
 	}
 	$sth->finish;
-	$query="Select count(*) from bibliothesaurus where (category =\"$category\")";
-	$query .= " and hierarchy='$branch'" if ($branch);
-	$query .= " and stdlib like \"$searchstring%\"" if ($searchstring);
-	$query .= "";
+	$query="Select count(*) from bibliothesaurus where category =?";
+	@bind=($category);
+	if ($branch) {
+		$query .= " and hierarchy=?";
+		push(@bind,$branch);
+		}
+	if ($searchstring) {
+		$query .= " and stdlib like ?";
+		push(@bind,"$searchstring%");
+		}
 	$sth=$dbh->prepare($query);
-	$sth->execute;
+	$sth->execute(@bind);
 	my ($cnt) = $sth->fetchrow;
 	$cnt = $pagesize+1 if ($cnt>$pagesize);
+	$sth->finish();
 	return ($cnt,\@results);
 }
 
@@ -228,8 +242,7 @@ Geography -- Europe -- France and Geography -- Europe -- Germany in the thesauru
 sub SearchDeeper  {
 	my ($category,$father)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="Select distinct level,stdlib,father from bibliothesaurus where category =? and father =? order by category,stdlib";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("Select distinct level,stdlib,father from bibliothesaurus where category =? and father =? order by category,stdlib");
 	$sth->execute($category,"$father --");
 	my @results;
 	while (my ($level,$stdlib,$father)=$sth->fetchrow){
