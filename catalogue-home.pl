@@ -6,6 +6,8 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Database;
+use C4::Catalogue;
+use C4::Biblio;
 use HTML::Template;
 
 my $query = new CGI;
@@ -18,8 +20,13 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $classlist='';
+my ($branchcount,@branches)=branches();
+my ($itemtypecount,@itemtypes)=getitemtypes();
+
+  my $classlist='';
 $template->param(classlist => $classlist,
-						type => 'intranet',);
+						type => 'intranet',
+		 branches=>\@branches,
+		 itemtypes=>\@itemtypes);
 
 output_html_with_http_headers $query, $cookie, $template->output;
