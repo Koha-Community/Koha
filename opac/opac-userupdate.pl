@@ -8,6 +8,7 @@ use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Context;
 use C4::Koha;
 use C4::Circulation::Circ2;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 
@@ -33,21 +34,28 @@ my $update;
 my $updateemailaddress= C4::Context->preference('KohaAdminEmailAddress');
 if ($updateemailaddress eq '') {
     warn "KohaAdminEmailAddress system preference not set.  Couldn't send patron update information for $borr->{'firstname'} $borr->{'surname'} (#$borrowernumber)\n";
-    my $template = gettemplate("kohaerror.tmpl", "opac");
+    my($template) = get_template_and_user({template_name => "kohaerror.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 1,
+			     flagsrequired => {borrow => 1},
+			     debug => 1,
+			     });
 
     $template->param(errormessage => 'KohaAdminEmailAddress system preference
     is not set.  Please visit the library to update your user record');
 
-    print $query->header(), $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
 
 if ($query->{'title'}) {
     # get all the fields:
     my $message = <<"EOF";
-Borrower $borr->{'cardnumber'} http://intradev.katipo.co.nz/cgi-bin/koha/moremember.pl?bornum=$borrowernumber
+Borrower $borr->{'cardnumber'}
 
-has requested to change their personal details. Please check these new details and make the changes:
+has requested to change her/his personal details.
+Please check these new details and make the changes:
 EOF
     foreach my $field (@fields){
 	my $newfield = $query->param($field);
