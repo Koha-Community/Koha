@@ -88,6 +88,8 @@ my %requirefields=(
 		'marc' => 'text' },
     branchtransfers=>{ 'datearrived' => 'datetime' },
     statistics=>{'borrowernumber' =>'int(11)'},
+    aqbooksellsers=>{'invoicedisc' =>'float(6,4)',
+    		     'nocalc' => 'int(11)'},
 );
 
 # Default system preferences
@@ -282,6 +284,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.12  2002/06/26 18:19:53  tonnesen
+# Missing two fields for aqbooksellers.
+#
 # Revision 1.4.2.11  2002/06/26 06:04:46  amillar
 # Clean up systempreferences code to be table-driven
 #
