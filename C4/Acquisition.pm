@@ -53,7 +53,7 @@ orders, converting money to different currencies, and so forth.
 
 		&getorders &getallorders &getrecorders
 		&getorder &neworder &delorder
-		&ordersearch
+		&ordersearch &histsearch
 		&modorder &getsingleorder &invoice &receiveorder
 		&updaterecorder &newordernum
 
@@ -593,6 +593,27 @@ sub ordersearch {
 	$sth2->finish;
 	$sth3->finish;
 	return(scalar(@results),@results);
+}
+
+
+sub histsearch {
+	my ($title,$author,$name)=@_;
+	my $dbh= C4::Context->dbh;
+	my $query = "select biblio.title,aqorders.basketno,name,aqbasket.creationdate,aqorders.datereceived, aqorders.quantity
+							from aqorders,aqbasket,aqbooksellers,biblio 
+							where aqorders.basketno=aqbasket.basketno and aqbasket.booksellerid=aqbooksellers.id and
+							biblio.biblionumber=aqorders.biblionumber";
+	$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
+	$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
+	$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
+	warn "Q : $query";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	my @order_loop;
+	while (my $line = $sth->fetchrow_hashref) {
+		push @order_loop, $line;
+	}
+	return \@order_loop;
 }
 
 #
