@@ -70,6 +70,7 @@ $VERSION = 0.01;
 		&updatedatabase
 		&populatedatabase
 		&restartapache
+		&backupkoha
 		&finalizeconfigfile
 		&loadconfigfile
 		&backupmycnf
@@ -140,6 +141,20 @@ the default value for any question (indicated by []), simply hit Enter
 at the prompt.
 
 Are you ready to begin the installation? ([Y]/N): |;
+
+$messages->{'WelcomeToUpgrader'}->{en} =
+   heading('Welcome to the Koha Upgrader') . qq|
+You are attempting to upgrade from Koha %s to %s.
+
+We recommend that you do a complete backup of all your files before upgrading.
+This upgrade script will make a backup copy of your files for you.
+
+Would you like to proceed?  (Y/[N]):|;
+
+$messages->{'AbortingInstall'}->{en} =
+   heading('ABORTING') . qq|
+Aborting as requested.  Please rerun when you are ready.
+|;
 
 $messages->{'ReleaseCandidateWarning'}->{en} =
    heading('RELEASE CANDIDATE') . qq|
@@ -254,6 +269,42 @@ and the OPAC interface at:
    http://%s\:%s/
 
 Please read the Hints file and visit http://www.koha.org
+
+Press <ENTER> to exit the installer: |;
+
+$messages->{'UpgradeCompleted'}->{en} = heading('UPGRDE COMPLETE') . qq|
+Congratulations ... your Koha upgrade is finished!
+
+If you are upgrading from a version of Koha
+prior to 1.2.1, it is likely that you will have to modify your Apache
+configuration to point it to the new files.
+
+In your INTRANET VirtualHost section you should have:
+  DocumentRoot $::intranetdir/htdocs
+  ScriptAlias /cgi-bin/koha/ $::intranetdir/cgi-bin/
+  SetEnv PERL5LIB $::intranetdir/modules
+
+In the OPAC VirtualHost section you should have:
+  DocumentRoot $::opacdir/htdocs
+  ScriptAlias /cgi-bin/koha/ $::opacdir/cgi-bin/
+  SetEnv PERL5LIB $::intranetdir/modules
+
+You may also need to uncomment a "LoadModules env_module ... " line and restart
+Apache.
+If you're upgrading from 1.2.x version of Koha note that the MARC DB is NOT populated.
+To populate it :
+* launch Koha
+* Go to Parameters >> Marc structure option and Koha-MARC links option.
+* Modify default MARC structure to fit your needs.
+* open a console
+* type:
+cd /path/to/koha/misc
+export PERL5LIB=/path/to/koha
+./koha2marc.pl
+the old DB is "copied" in the new MARC one.
+Koha 2.0.0 is ready :-)
+
+Please report any problems you encounter through http://bugs.koha.org/
 
 Press <ENTER> to exit the installer: |;
 
@@ -667,6 +718,72 @@ database is already created.
     }
 }
 
+=item checkpaths
+
+	checkpaths;
+
+Make sure that we loaded the right dirs from an old koha.conf
+
+=cut
+
+#FIXME: update to use Install.pm
+sub checkpaths {
+if ($opacdir && $intranetdir) {
+    print qq|
+
+I believe that your old files are located in:
+
+  OPAC:      $opacdir
+  LIBRARIAN: $intranetdir
+
+
+Does this look right?  ([Y]/N):
+|;
+    $answer = <STDIN>;
+    chomp $answer;
+
+    if ($answer =~/n/i) {
+	$intranetdir='';
+	$opacdir='';
+    } else {
+	print "Great! continuing upgrade... \n";
+    }
+}
+
+if (!$opacdir || !$intranetdir) {
+    $intranetdir='';
+    $opacdir='';
+    while (!$intranetdir) {
+	print "Please specify the location of your LIBRARIAN files: ";
+
+	$answer = <STDIN>;
+	chomp $answer;
+
+	if ($answer) {
+	    $intranetdir=$answer;
+	}
+	if (! -e "$intranetdir/htdocs") {
+	    print "\nCouldn't find the htdocs directory here.  That doesn't look right.\nPlease enter another location.\n\n";
+	    $intranetdir='';
+	}
+    }
+    while (!$opacdir) {
+	print "Please specify the location of your OPAC files: ";  
+
+	$answer = <STDIN>;
+	chomp $answer;
+
+	if ($answer) {
+	    $opacdir=$answer;
+	}
+	if (! -e "$opacdir/htdocs") {
+	    print "\nCouldn't find the htdocs directory here.  That doesn't look right.\nPlease enter another location.\n\n";
+	    $opacdir='';
+	}
+    }
+}
+
+}
 
 =item checkperlmodules
 
@@ -1362,6 +1479,7 @@ $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 sub installfiles {
 
 	#MJR: preserve old files, just in case
+	#FIXME: use dated backups
 	sub neatcopy {
 		my $desc = shift;
 		my $src = shift;
@@ -1611,6 +1729,7 @@ sub updatedatabase {
 		exit;
 	}
 
+	#FIXME: do not ask if we are upgrading from a MARC-ready system
 	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
 
 	startsysout();
@@ -1730,6 +1849,140 @@ sub restartapache {
 
 }
 
+=item backupkoha
+
+   backupkoha;
+
+This function attempts to back up all koha's details.
+
+=cut
+
+#FIXME: rewrite to use Install.pm
+sub backupkoha {
+my $backupdir=($ENV{prefix}||'/usr/local/koha').'/backups';
+print "Please specify a backup directory [$backupdir]: ";
+
+$answer = <STDIN>;
+chomp $answer;
+
+if ($answer) {
+	$backupdir=$answer;
+}
+
+if (! -e $backupdir) {
+	my $result=mkdir ($backupdir, oct(770));
+	if ($result==0) {
+		my @dirs = split(m#/#, $backupdir);
+		my $checkdir='';
+		foreach (@dirs) {
+			$checkdir.="$_/";
+			unless (-e "$checkdir") {
+				mkdir($checkdir, 0775);
+			}
+		}
+	}
+}
+
+chmod 0770, $backupdir;
+
+# Backup MySql database
+#
+#
+my $mysql;
+my $mysqldir;
+
+foreach my $mysql (qw(/usr/local/mysql
+					/opt/mysql
+					/usr
+			)) {
+	if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
+		$mysqldir=$mysql;
+	}
+}
+if (!$mysqldir){
+	print "I don't see mysql in the usual places.\n";
+	for (;;) {
+		print "Where have you installed mysql? ";
+		chomp($mysqldir = <STDIN>);
+		last if -f "$mysqldir/bin/mysqladmin";
+	print <<EOP;
+
+I can't find it there either. If you compiled mysql yourself,
+please give the value of --prefix when you ran configure.
+
+The file mysqladmin should be in bin/mysqladmin under the directory that you
+provide here.
+
+EOP
+#'
+	}
+} else {
+print "Doing backup\n";
+}
+
+my ($sec, $min, $hr, $day, $month, $year) = (localtime(time))[0,1,2,3,4,5];
+$month++;
+$year+=1900;
+my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
+
+open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$hostname $database|");
+
+(open BF, ">$backupdir/Koha.backup_$date") || (die "Error opening up backup file $backupdir/Koha.backup_$date: $!\n");
+
+my $itemcounter=0;
+my $bibliocounter=0;
+my $biblioitemcounter=0;
+my $membercounter=0;
+
+while (<MD>) {
+	(/insert into items /i) && ($itemcounter++);
+	(/insert into biblioitems /i) && ($biblioitemcounter++);
+	(/insert into biblio /i) && ($bibliocounter++);
+	(/insert into borrowers /i) && ($membercounter++);
+	print BF $_;
+}
+
+close BF;
+close MD;
+
+my $filels=`ls -hl $backupdir/Koha.backup_$date`;
+chomp $filels;
+printf qq|
+
+Backed up:
+
+%6d biblio entries
+%6d biblioitems entries
+%6d items entries
+%6d borrowers
+
+File Listing
+---------------------------------------------------------------------
+$filels
+---------------------------------------------------------------------
+
+Does this look right? ([Y]/N):
+|, $bibliocounter, $biblioitemcounter, $itemcounter, $membercounter;
+
+$answer = <STDIN>;
+chomp $answer;
+
+if ($answer=~/^n/i) {
+    print qq|
+
+Aborting.  The database dump is located in:
+
+	$backupdir/Koha.backup_$date
+
+|;
+    exit;
+} else {
+	print "Great! continuing upgrade... \n";
+};
+
+
+
+}
 
 =item finalizeconfigfile
 
@@ -1774,6 +2027,7 @@ sub loadconfigfile {
     my %configfile;
 
 	#MJR: reverted to r1.53.  Please call setetcdir().  Do NOT hardcode this.
+	#FIXME: make a dated backup
     open (KC, "<$etcdir/koha.conf");
     while (<KC>) {
      chomp;
@@ -1790,14 +2044,15 @@ sub loadconfigfile {
      }
     }
 
-    $::intranetdir=$configfile{'intranetdir'};
-    $::opacdir=$configfile{'opacdir'};
-    $::kohaversion=$configfile{'kohaversion'};
-    $::kohalogdir=$configfile{'kohalogdir'};
-    $::database=$configfile{'database'};
-    $::hostname=$configfile{'hostname'};
-    $::user=$configfile{'user'};
-    $::pass=$configfile{'pass'};
+	#MJR: Reverted this too. You do not mess with my privates. Please ask for new functions if required.
+    $intranetdir=$configfile{'intranetdir'};
+    $opacdir=$configfile{'opacdir'};
+    $kohaversion=$configfile{'kohaversion'};
+    $kohalogdir=$configfile{'kohalogdir'};
+    $database=$configfile{'database'};
+    $hostname=$configfile{'hostname'};
+    $user=$configfile{'user'};
+    $pass=$configfile{'pass'};
 }
 
 END { }       # module clean-up code here (global destructor)
@@ -1845,8 +2100,9 @@ sub restoremycnf {
 
 =head1 SEE ALSO
 
-buildrelease.pl,
+buildrelease.pl
 installer.pl
+koha.upgrade
 
 =cut
 
