@@ -818,8 +818,8 @@ set of words.
 
 =head2 Subject search
 
-If C<$type> is set to C<subject>, the following search criteria may be
-used:
+If C<$type> is set to C<subject>, the following search criterion may
+be used:
 
 =over 4
 
@@ -1245,6 +1245,8 @@ I think this is the number of copies of the book available.
 =item C<$data-E<gt>{order}>
 
 If this is set, it is set to C<One Order>.
+
+=back
 
 =cut
 #'
@@ -2390,9 +2392,5 @@ __END__
 =head1 AUTHOR
 
 Koha Developement team <info@koha.org>
-
-=head1 SEE ALSO
-
-L<perl>.
 
 =cut
