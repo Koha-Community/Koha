@@ -40,6 +40,7 @@ $search{'title'}=$title;
 my $keyword=validate($input->param('keyword'));
 $search{'keyword'}=$keyword;
 $search{'front'}=validate($input->param('front'));
+
 my $author=validate($input->param('author'));
 $search{'author'}=$author;
 my $subject=validate($input->param('subject'));
@@ -85,7 +86,8 @@ if ($itemnumber ne '' || $isbn ne ''){
 #      print "hey";
       ($count,@results)=&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
     } elsif ($search{'front'} ne '') {
-    ($count,@results)&FrontSearch(\$blah,'intra',\%search,$num,$offset);
+     $search{'keyword'}=$search{'front'};
+    ($count,@results)&KeywordSearch(\$blah,'intra',\%search,$num,$offset);
 #    print "hey";
     }elsif ($title ne '' || $author ne '' || $dewey ne '' || $class ne '') {
       ($count,@results)=&CatSearch(\$blah,'loose',\%search,$num,$offset);
