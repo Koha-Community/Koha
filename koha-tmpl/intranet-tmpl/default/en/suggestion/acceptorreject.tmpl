@@ -1,51 +1,43 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
-<div id="mainbloc">
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Suggestion Management
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+<div id="main">
 
 <!-- TMPL_IF name="op_else" -->
-	<h1 class="acquisition">Suggestions</h1>
+	<h1>Suggestions Management</h1>
+	<form method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl">
+	<input type="hidden" name="op" value="aorr_confirm">
 	<table>
 		<tr>
-			<th class="acquisition">Status</th>
-			<th class="acquisition">Suggestion</th>
-			<th class="acquisition">Suggested by</th>
+			<th>Status</th>
+			<th>Suggestion</th>
+			<th>Suggested by</th>
 		</tr>
-		<form method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl">
-			<input type="hidden" name="op" value="aorr_confirm">
 		<!-- TMPL_LOOP NAME="suggestions_loop" -->
-			<tr>
+			<tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
 				<td>
 					<select name="aorr">
-						<option value=""></option>
+						<option value=""> -- Choose Action --</option>
 						<option value="R<!--TMPL_VAR name="suggestionid" -->">Reject</option>
 						<option value="A<!--TMPL_VAR name="suggestionid" -->">Accept</option>
 					</select>
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<p><!-- TMPL_VAR NAME="title" --> - <!-- TMPL_VAR NAME="author" --></p>
-					<p>
-						<!-- TMPL_IF name="copyrightdate" -->copy. year:<!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="isbn" -->ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="publishercode" --><br/>published by:<!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="place" --> at <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR name="copyrightdate" -->)</i></p> <!-- /TMPL_IF -->
+				<td><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br>
+					<!-- TMPL_IF name="copyrightdate" -->&copy <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumedesc" -->; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><br><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
 
 				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+				<td>
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
-		<tr>
-			<td>
-				<input type="submit" class="button acquisition" value="change status">
-			</td>
-			<td> &nbsp; </td>
-			<td> &nbsp; </td>
-		</tr>
-		</form>
-	</table>
+		</table></form>
+		<p><input type="submit" class="submit" value="Change Status"></p>
+
+	
 <!-- /TMPL_IF -->
 </div>
-<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
