@@ -25,25 +25,29 @@ require Exporter;
 use CGI;
 use C4::Context;
 use C4::Search;
-use C4::Output; # no contains picktemplate
-  
+use C4::Output;
+
 my $query=new CGI;
 
 my $includes = C4::Context->config('includes') ||
 	"/usr/local/www/hdl/htdocs/includes";
-my $templatebase="catalogue/searchresults.tmpl";
+#my $templatebase="catalogue/searchresults.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
-my $theme=picktemplate($includes, $templatebase);
+#my $theme=picktemplate($includes, $templatebase);
 
 my $subject=$query->param('subject');
 # if its a subject we need to use the subject.tmpl
+my $template;
 if ($subject) {
-    $templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
-    $theme=picktemplate($includes, $templatebase);
+	$template = gettemplate("catalogue/subject.tmpl")
+#    $templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
+#    $theme=picktemplate($includes, $templatebase);
+} else {
+	$template = gettemplate("catalogue/searchresults.tmpl")
 }
 
-my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
+#my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
 
 my $env;
 $env->{itemcount}=1;
