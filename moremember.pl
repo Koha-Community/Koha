@@ -117,6 +117,12 @@ if ($data->{'categorycode'} ne 'C'){
 my %bor;
 $bor{'borrowernumber'}=$bornum;
 
+# Converts the branchcode to the branch name
+$data->{'branchcode'} = &getbranchname($data->{'branchcode'});
+
+# Converts the categorycode to the description
+$data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
+
 # FIXME
 # it looks like $numaccts is a temp variable and that the
 # for (my $i;$i<$numaccts;$i++)
@@ -172,7 +178,7 @@ for (my $i=0;$i<$count;$i++){
 	# return the correct item type either (or a properly-formatted
 	# charge, for that matter).
 	my ($charge,$itemtype)=calc_charges(undef,$dbh,$issue->[$i]{'itemnumber'},$bornum);
-	$row{'itemtype'}=$itemtype;
+	$row{'itemtype'}=&ItemType($itemtype);
 	$row{'charge'}=$charge;
 
 	#check item is not reserved
