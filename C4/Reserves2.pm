@@ -97,16 +97,27 @@ sub FindReserves {
 }
 
 sub CheckReserves {
-    my ($item) = @_;
-    warn "In CheckReserves: itemnumber = $item";
+    my ($item, $barcode) = @_;
+#    warn "In CheckReserves: itemnumber = $item";
     my $dbh=C4Connect;
-    my $qitem=$dbh->quote($item);
+    my $sth;
+    if ($item) {
+	my $qitem=$dbh->quote($item);
 # get the biblionumber...
-    my $sth=$dbh->prepare("SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+	$sth=$dbh->prepare("SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
                              FROM items, biblioitems, itemtypes 
                             WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
                               AND biblioitems.itemtype = itemtypes.itemtype
                               AND itemnumber=$qitem");
+    } else {
+	my $qbc=$dbh->quote($barcode);
+# get the biblionumber...
+	$sth=$dbh->prepare("SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+                             FROM items, biblioitems, itemtypes 
+                            WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+                              AND biblioitems.itemtype = itemtypes.itemtype
+                              AND barcode=$qbc");
+    }
     $sth->execute;
     my ($biblio, $bibitem, $notforloan) = $sth->fetchrow_array;
     $sth->finish;
