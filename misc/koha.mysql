@@ -924,7 +924,6 @@ CREATE TABLE marc_breeding (
 #
 # Structure de la table `marc_subfield_structure`
 #
-
 CREATE TABLE marc_subfield_structure (
   tagfield char(3) NOT NULL default '',
   tagsubfield char(1) NOT NULL default '',
@@ -944,7 +943,8 @@ CREATE TABLE marc_subfield_structure (
   link varchar(80) default NULL,
   PRIMARY KEY  (frameworkcode,tagfield,tagsubfield),
   KEY tab (frameworkcode,tab),
-  KEY kohafield (frameworkcode,kohafield)
+  KEY kohafield (frameworkcode,kohafield),
+  KEY kohafield_2 (kohafield)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
