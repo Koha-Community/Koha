@@ -1349,11 +1349,10 @@ sub ItemInfo {
 	$data->{'branchname'} = $bdata->{'branchname'};
     }
 
-    my $class = $data->{'classification'};
+    my $class = $data->{'classification'};# FIXME : $class is useless
     my $dewey = $data->{'dewey'};
     $dewey =~ s/0+$//;
-    if ($dewey eq "000.") { $dewey = "";};	# FIXME - "000" is general
-						# books about computer science
+    if ($dewey eq "000.") { $dewey = "";};	# FIXME - "000" is general books about computer science
     if ($dewey < 10){$dewey='00'.$dewey;}
     if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
     if ($dewey <= 0){
