@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.18  2002/10/11 12:34:53  arensb
+# Replaced &requireDBI with C4::Context->dbh
+#
 # Revision 1.17  2002/10/10 14:48:25  tipaul
 # bugfixes
 #
@@ -2004,6 +2007,7 @@ sub getoraddbiblio {
 	# input params
 	my (
 	  $dbh,		# db handle
+			# FIXME - Unused argument
 	  $biblio,	# hash ref to fields
 	)=@_;
 
@@ -2015,7 +2019,7 @@ sub getoraddbiblio {
 	my $error;
 
 	#-----
-    	requireDBI($dbh,"getoraddbiblio");
+    	$dbh = C4::Context->dbh;
 
 	print "<PRE>Looking for biblio </PRE>\n" if $debug;
 	$sth=$dbh->prepare("select biblionumber
@@ -2844,6 +2848,7 @@ sub OLD_MAY_BE_DELETED_newcompletebiblioitem {
 
 	my (
 	  $dbh,			# DBI handle
+				# FIXME - Unused argument
 	  $biblio,		# hash ref to biblio record
 	  $biblioitem,		# hash ref to biblioitem record
 	  $subjects,		# list ref of subjects
@@ -2858,7 +2863,7 @@ sub OLD_MAY_BE_DELETED_newcompletebiblioitem {
 	my $additionalauthor;
 
 	#--------
-    	requireDBI($dbh,"newcompletebiblioitem");
+    	$dbh = C4::Context->dbh;
 
 	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
 		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;

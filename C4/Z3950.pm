@@ -91,7 +91,7 @@ my $priv_func = sub {
 sub z3950servername {
     # inputs
     my (
-	$dbh,
+	$dbh,		# FIXME - Unused argument
 	$srvid,		# server id number 
 	$default,
     )=@_;
@@ -99,8 +99,9 @@ sub z3950servername {
     my $longname;
     #----
 
-    requireDBI($dbh,"z3950servername");
+    $dbh = C4::Context->dbh;
 
+	# FIXME - Fix indentation
 	my $sti=$dbh->prepare("select name 
 		from z3950servers 
 		where id=?");
@@ -120,6 +121,7 @@ sub addz3950queue {
     # input
     my (
 	$dbh,		# DBI handle
+			# FIXME - Unused argument
 	$query,		# value to look up
 	$type,		# type of value ("isbn", "lccn", etc).
 	$requestid,	# Unique value to prevent duplicate searches from multiple HTML form submits
@@ -140,7 +142,9 @@ sub addz3950queue {
     
     $error="";
 
-    requireDBI($dbh,"addz3950queue");
+    $dbh = C4::Context->dbh;
+
+	# FIXME - Fix indentation
 
 	# list of servers: entry can be a fully qualified URL-type entry
         #   or simply just a server ID number.
@@ -207,6 +211,9 @@ sub addz3950queue {
 
 #--------------------------------------
 # $Log$
+# Revision 1.4  2002/10/11 12:35:35  arensb
+# Replaced &requireDBI with C4::Context->dbh
+#
 # Revision 1.3  2002/08/14 18:12:52  tonnesen
 # Added copyright statement to all .pl and .pm files
 #
