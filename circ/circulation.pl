@@ -409,6 +409,21 @@ sub patrontable {
 			noissues => 'true',
 			color => $color,
 			 );
+		if ($flag eq 'GNA'){
+			$template->param(
+				gna => 'true'
+				);
+			}
+		if ($flag eq 'LOST'){
+			$template->param(
+				lost => 'true'
+			);
+			}
+		if ($flag eq 'DBARRED'){
+			$template->param(
+				dbarred => 'true'
+			);
+			}
 		if ($flag eq 'CHARGES') {
 			$template->param(
 				charges => 'true',
