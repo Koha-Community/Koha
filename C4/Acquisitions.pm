@@ -4,7 +4,7 @@ use strict;
 require Exporter;
 use C4::Database;
 use warnings;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -789,6 +789,7 @@ sub updaterecorder{
 
 sub curconvert {
   my ($currency,$price)=@_;
+  my $convertedprice;
   my $dbh=C4Connect;
   my $query="Select rate from currency where currency='$currency'";
   my $sth=$dbh->prepare($query);
@@ -800,8 +801,8 @@ sub curconvert {
   if ($cur==0){
     $cur=1;
   }
-  my $price=$price / $cur;
-  return($price);
+  $convertedprice=$price / $cur;
+  return($convertedprice);
 }
 
 sub getcurrencies {
@@ -914,13 +915,17 @@ biblioitemnumber     = $item->{'biblioitemnumber'},
 barcode              = $barcode,
 booksellerid         = $item->{'booksellerid'},
 dateaccessioned      = NOW(),
-homebranch           = $item->{'branch'},
-holdingbranch        = $item->{'branch'},
+homebranch           = $item->{'homebranch'},
+holdingbranch        = $item->{'homebranch'},
 price                = $item->{'price'},
 replacementprice     = $item->{'replacementprice'},
 replacementpricedate = NOW(),
-notforloan           = $item->{'loan'},
 itemnotes            = $item->{'itemnotes'}";
+
+    if ($item->{'loan'}) {
+      $query .= ",
+notforloan           = $item->{'loan'}";
+    } # if
 
     $sth = $dbh->prepare($query);
     $sth->execute;
@@ -1126,7 +1131,7 @@ sub getitemtypes {
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
-    @results[$count] = $data;
+    $results[$count] = $data;
     $count++;
   } # while
   
