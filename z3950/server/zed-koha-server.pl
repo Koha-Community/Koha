@@ -19,7 +19,7 @@
 #
 #-----------------------------------
 # Script Name: zed-koha-server.pl
-# Script Version: 0.02
+# Script Version: 1.3
 # Date:  2004/04/14
 # Author:  Joshua Ferraro [jmf at kados dot org]
 # Description: A very basic Z3950 Server 
@@ -31,6 +31,11 @@
 #			 Bath compliant to Level 1 in Functional Areas A, B.
 #    0.02  2004/04/14:  Cleaned up documentation, etc. No functional 
 #    			 changes.
+#    1.30  2004/04/22:	Changing version numbers to correspond with CVS;
+#    			 Fixed the substitution bug (e.g., 4=100 before 4=1);
+#    			 Added support for the truncation attribute (5=1 and
+#    			 5=100; thanks to Tomasz M. Wolniewicz for pointing
+#    			 out these improvements) 
 #-----------------------------------
 # Note: After installing SimpleServer (indexdata.dk/simpleserver) and 
 # changing the leader information in Koha's MARCgetbiblio subroutine in
@@ -114,16 +119,17 @@ sub search_handler {
 		## Bib-1 Structure Attributes:
 		$query =~ s|\@attr||g;
 
+		$query =~ s|4=100||g;   ## date (un-normalized)
+		$query =~ s|4=101||g;   ## name (normalized)
+		$query =~ s|4=102||g;   ## sme (un-normalized)
 		$query =~ s|4=1||g;	## Phrase
                 $query =~ s|4=2||g;	## Keyword
                 $query =~ s|4=3||g;	## Key 
                 $query =~ s|4=4||g;	## year 
 		$query =~ s|4=5||g;	## Date (normalized)
 		$query =~ s|4=6||g;	## word list
-		$query =~ s|4=100||g;	## date (un-normalized)
-		$query =~ s|4=101||g;	## name (normalized)	
-		$query =~ s|4=102||g;	## sme (un-normalized)
-        
+       		$query =~ s|5=100||g;	## truncation
+		$query =~ s|5=1||g;	## truncation
 	        $query =~ s|\@and ||g;
 		$query =~ s|2=3||g;
 
@@ -146,16 +152,18 @@ sub search_handler {
                ## Bib-1 Structure Attributes:
                 $query =~ s|\@attr ||g;
 
+	        $query =~ s|4=100||g;  ## date (un-normalized)
+		$query =~ s|4=101||g;  ## name (normalized)
+		$query =~ s|4=102||g;  ## sme (un-normalized)
                 $query =~ s|4=1||g;    ## Phrase
                 $query =~ s|4=2||g;    ## Keyword
                 $query =~ s|4=3||g;    ## Key
                 $query =~ s|4=4||g;    ## year
                 $query =~ s|4=5||g;    ## Date (normalized)
                 $query =~ s|4=6||g;    ## word list
-                $query =~ s|4=100||g;  ## date (un-normalized)
-                $query =~ s|4=101||g;  ## name (normalized)
-                $query =~ s|4=102||g;  ## sme (un-normalized)
-
+		$query =~ s|5=100||g;   ## truncation
+                $query =~ s|5=1||g;     ## truncation
+		
 		$query =~ s|2=3||g;
 		$query =~ s|"||g;
         	$query =~ s| |%|g;
@@ -176,16 +184,18 @@ sub search_handler {
 		## Bib-1 Structure Attributes:
                 $query =~ s|\@attr||g;
 
-                $query =~ s|4=1||g;    ## Phrase
+                $query =~ s|4=100||g;  ## date (un-normalized)
+		$query =~ s|4=101||g;  ## name (normalized)
+		$query =~ s|4=102||g;  ## sme (un-normalized)
+		$query =~ s|4=1||g;    ## Phrase
                 $query =~ s|4=2||g;    ## Keyword
                 $query =~ s|4=3||g;    ## Key
                 $query =~ s|4=4||g;    ## year
                 $query =~ s|4=5||g;    ## Date (normalized)
                 $query =~ s|4=6||g;    ## word list
-                $query =~ s|4=100||g;  ## date (un-normalized)
-                $query =~ s|4=101||g;  ## name (normalized)
-                $query =~ s|4=102||g;  ## sme (un-normalized)
-
+		$query =~ s|5=100||g;   ## truncation
+		$query =~ s|5=1||g;     ## truncation
+		
 		$query =~ s|2=3||g;
 		#$query =~ s|\@and||g;
 		$query .= "\%";         ## Add the wildcard to search term
@@ -203,17 +213,19 @@ sub search_handler {
               
 		## Bib-1 Structure Attributes:
                 $query =~ s|\@attr ||g;
-
+                $query =~ s|4=100||g;  ## date (un-normalized)
+		$query =~ s|4=101||g;  ## name (normalized)
+		$query =~ s|4=102||g;  ## sme (un-normalized)
+						
                 $query =~ s|4=1||g;    ## Phrase
                 $query =~ s|4=2||g;    ## Keyword
                 $query =~ s|4=3||g;    ## Key
                 $query =~ s|4=4||g;    ## year
                 $query =~ s|4=5||g;    ## Date (normalized)
                 $query =~ s|4=6||g;    ## word list
-                $query =~ s|4=100||g;  ## date (un-normalized)
-                $query =~ s|4=101||g;  ## name (normalized)
-                $query =~ s|4=102||g;  ## sme (un-normalized)
-
+		$query =~ s|5=100||g;   ## truncation
+		$query =~ s|5=1||g;     ## truncation
+		
 		$query .= "\%";         ## Add the wildcard to search term
                 print "$query\n";
 		my $sql_query = "SELECT biblionumber FROM bibliosubject WHERE subject LIKE ?";
@@ -227,16 +239,19 @@ sub search_handler {
 		## Bib-1 Structure Attributes:
                 $query =~ s|\@attr||g;
 
+		$query =~ s|4=100||g;  ## date (un-normalized)
+		$query =~ s|4=101||g;  ## name (normalized)
+		$query =~ s|4=102||g;  ## sme (un-normalized)
+						
                 $query =~ s|4=1||g;    ## Phrase
                 $query =~ s|4=2||g;    ## Keyword
                 $query =~ s|4=3||g;    ## Key
                 $query =~ s|4=4||g;    ## year
                 $query =~ s|4=5||g;    ## Date (normalized)
                 $query =~ s|4=6||g;    ## word list
-                $query =~ s|4=100||g;  ## date (un-normalized)
-                $query =~ s|4=101||g;  ## name (normalized)
-                $query =~ s|4=102||g;  ## sme (un-normalized)
-               
+                $query =~ s|5=100||g;   ## truncation
+		$query =~ s|5=1||g;     ## truncation
+		
 		$query .= "\%";         ## Add the wildcard to search term
                 print "$query\n";
 		my $sql_query = "SELECT bibid FROM marc_word WHERE word LIKE?";
