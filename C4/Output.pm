@@ -181,6 +181,7 @@ sub themelanguage {
   my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opaclanguages'");
   $sth->execute;
   my ($lang) = $sth->fetchrow;
+  $lang.=" en";
   $sth->finish;
   my @languages = split " ", $lang;
 
@@ -188,6 +189,7 @@ sub themelanguage {
   my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='opacthemes'");
   $sth->execute;
   my ($theme) = $sth->fetchrow;
+  $theme.=" default";
   $sth->finish;
   my @themes = split " ", $theme;
 
