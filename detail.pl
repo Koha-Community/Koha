@@ -45,14 +45,24 @@ while (<KC>) {
    $value=~s/^\s*//g;
    $value=~s/\s*$//g;
    $configfile{$variable}=$value;
- }
 }
+}	
 
 my $biblionumber=$query->param('bib');
 my $type='intra';
 
+
 # change back when ive fixed request.pl
 my @items = ItemInfo(undef, $biblionumber, $type);
+my $norequests = 1;
+foreach my $itm (@items) {
+     $norequests = 0 unless $itm->{'notforloan'};
+}
+
+warn "Biblionumber: $biblionumber";
+warn "Norequests: $norequests"; 
+
+
 my $dat=bibdata($biblionumber);
 my ($authorcount, $addauthor)= &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
@@ -100,6 +110,7 @@ $template->param(prevstartfrom => $prevstartfrom);
 $template->param(includesdir => $includes);
 $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
+$template->param(norequests => $norequests);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SITE_RESULTS => $sitearray);
 print "Content-Type: text/html\n\n", $template->output;
