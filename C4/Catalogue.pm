@@ -136,7 +136,7 @@ sub changeSubfield {
 	$sth->execute;
     } elsif ($Subfield_ID) {
 	 # Subfield_ID does not make the record unique.  Could be multiple
-	 # records with the same mark.  This is a bad situatoin.
+	 # records with the same mark.  This is a bad situation.
 	my $sth=$dbh->prepare("select Subfield_Key, Subfield_Value from $firstdigit\XX_Subfield_Table where Subfield_Mark='$Subfield_Mark' and Subfield_ID=$Subfield_ID");
 	$sth->execute;
 	while (my ($key, $Value) = $sth->fetchrow) {
@@ -190,7 +190,7 @@ sub updateBiblio {
 	push (@{$origbiblio->{'additionalauthors'}}, $author);
 	$origadditionalauthors->{$author}=1;
     }
-    $sth=$dbh->prepare("select subject from bibliosubjects where biblionumber=$biblionumber");
+    $sth=$dbh->prepare("select subject from bibliosubject where biblionumber=$biblionumber");
     $sth->execute;
     my $origsubjects;
     while (my ($subject) = $sth->fetchrow) {
@@ -293,7 +293,7 @@ sub updateBiblio {
 	    $subjects->{$newsubject}=2;
 	} else {
 	    my $q_newsubject=$dbh->quote($newsubject);
-	    my $sth=$dbh->prepare("insert into bibliosubjects (subject,biblionumber) values ($q_newsubject, $biblionumber)");
+	    my $sth=$dbh->prepare("insert into bibliosubject (subject,biblionumber) values ($q_newsubject, $biblionumber)");
 	    $sth->execute;
 	    logchange('kohadb', 'add', 'biblio', 'subject', $newsubject);
 	    my $subfields;
@@ -312,11 +312,49 @@ sub updateBiblio {
 	if ($subjects->{$origsubject} == 1) {
 	    my $q_origsubject=$dbh->quote($origsubject);
 	    logchange('kohadb', 'delete', 'biblio', '$biblionumber', 'subject', $origsubject);
-	    my $sth=$dbh->prepare("delete from bibliosubjects where biblionumber=$biblionumber and subject=$q_origsubject");
+	    my $sth=$dbh->prepare("delete from bibliosubject where biblionumber=$biblionumber and subject=$q_origsubject");
 	    $sth->execute;
 	}
     }
 
+sub skip {
+# At the moment this is just a straight copy of the subject code.  Needs heavy
+# modification to work for additional authors, obviously.
+# Check for additional author changes
+    
+    my $newadditionalauthor='';
+    my $additionalauthors;
+    foreach $newadditionalauthor (@{$biblio->{'additionalauthor'}}) {
+	$additionalauthors->{$newadditionalauthor}=1;
+	if ($origadditionalauthors->{$newadditionalauthor}) {
+	    $additionalauthors->{$newadditionalauthor}=2;
+	} else {
+	    my $q_newadditionalauthor=$dbh->quote($newadditionalauthor);
+	    my $sth=$dbh->prepare("insert into biblioadditionalauthors (additionalauthor,biblionumber) values ($q_newadditionalauthor, $biblionumber)");
+	    $sth->execute;
+	    logchange('kohadb', 'add', 'biblio', 'additionalauthor', $newadditionalauthor);
+	    my $subfields;
+	    $subfields->{1}->{'Subfield_Mark'}='a';
+	    $subfields->{1}->{'Subfield_Value'}=$newadditionalauthor;
+	    my $tag='650';
+	    my $Record_ID;
+	    foreach $Record_ID (@marcrecords) {
+		addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
+		logchange('marc', 'add', $Record_ID, '650', 'a', $newadditionalauthor);
+	    }
+	}
+    }
+    my $origadditionalauthor;
+    foreach $origadditionalauthor (keys %$origadditionalauthors) {
+	if ($additionalauthors->{$origadditionalauthor} == 1) {
+	    my $q_origadditionalauthor=$dbh->quote($origadditionalauthor);
+	    logchange('kohadb', 'delete', 'biblio', '$biblionumber', 'additionalauthor', $origadditionalauthor);
+	    my $sth=$dbh->prepare("delete from biblioadditionalauthors where biblionumber=$biblionumber and additionalauthor=$q_origadditionalauthor");
+	    $sth->execute;
+	}
+    }
+
+}
     $dbh->disconnect;
 }
 
@@ -329,7 +367,7 @@ sub logchange {
 	my $item=shift;
 	my $original=shift;
 	my $new=shift;
-	print "KOHA: $type $section $item $original $new\n";
+	print STDERR "KOHA: $type $section $item $original $new\n";
     } elsif ($database eq 'marc') {
 	my $type=shift;
 	my $Record_ID=shift;
@@ -338,7 +376,7 @@ sub logchange {
 	my $subfield_ID=shift;
 	my $original=shift;
 	my $new=shift;
-	print "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
+	print STDERR "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
     }
 }
 
