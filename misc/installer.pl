@@ -35,7 +35,7 @@ if ($::kohaversion =~ /RC/) {
     releasecandidatewarning();
 }
 
-#checkabortedinstall();
+checkabortedinstall();
 
 if (-e "$::etcdir/koha.conf") {
     $::installedversion=`grep kohaversion= $::etcdir/koha.conf`;

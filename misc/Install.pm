@@ -28,6 +28,7 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(	&checkperlmodules
+                &checkabortedinstall
 		&getmessage
 		&showmessage
 		&releasecandidatewarning
@@ -134,7 +135,7 @@ $messages->{'KohaAlreadyInstalled'}->{en}=qq|
 = Koha already installed =
 ==========================
 
-It looks like Koha is already installed on your system (/etc/koha.conf exists
+It looks like Koha is already installed on your system (%s/koha.conf exists
 already).  If you would like to upgrade your system to %s, please use
 the koha.upgrade script in this directory.
 
@@ -178,7 +179,7 @@ $messages->{'AuthenticationWarning'}->{en}=qq|
 This release of Koha has a new authentication module.  If you are not already
 using basic authentication on your intranet, you will be required to log in to
 access some of the features of the intranet.  You can log in using the userid
-and password from the /etc/koha.conf configuration file at any time.  Use the
+and password from the %s/koha.conf configuration file at any time.  Use the
 "Members" module to add passwords for other accounts and set their permissions.
 
 Press the <ENTER> key to continue: |;
@@ -217,6 +218,34 @@ sub releasecandidatewarning {
     };
 }
 
+
+#
+# Assuming that Koha will be installed on a modern Unix with symlinks,
+# it is possible to code the installer so that aborted installs can be
+# detected. In case of such an event we can do our best to "roll back"
+# the aborted install.
+#
+# FIXME: The "roll back" is not complete!
+#
+
+sub checkabortedinstall {
+    if (-l("$::etcdir/koha.conf")
+        && readlink("$::etcdir/koha.conf") =~ /\.tmp$/
+    ) {
+        print qq|
+I have detected that you tried to install Koha before, but the installation
+was aborted.  I will try to continue, but there might be problems if the
+database is already created.
+
+|;
+        print "Please press <ENTER> to continue: ";
+        <STDIN>;
+
+        # Remove the symlink after the <STDIN>, so the user can back out
+        unlink "$::etcdir/koha.conf"
+            || die "Failed to remove incomplete $::etcdir/koha.conf: $!\n";
+    }
+}
 
 #
 # Test for Perl and Modules
@@ -507,6 +536,8 @@ $messages->{'DatabaseUser'}->{en}=qq|
 Please provide the name of the user, who will have full administrative rights
 to the %s database, when authenticating from %s.
 
+This user will also be used to access Koha's INTRANET interface.
+
 Database user [%s]: |;
 
 $messages->{'DatabasePassword'}->{en}=qq|
@@ -602,7 +633,7 @@ $messages->{'EnterApacheUser'}->{en}=qq|
 
 I was not able to determine the user that Apache is running as.  This
 information is necessary in order to set the access privileges correctly on
-/etc/koha.conf.  This user should be set in one of the Apache configuration
+%s/koha.conf.  This user should be set in one of the Apache configuration
 files using the "User" directive.
 
 Enter the Apache userid: |;
@@ -637,7 +668,7 @@ sub getapacheinfo {
     if ($#confpossibilities==-1) {
 	my $message=getmessage('NoApacheConfFiles');
 	my $choice='';
-	until (-f $choice) {
+	until (-f $::realhttpdconf) {
 	    $choice=showmessage($message, "free", 1);
 	    if (-f $choice) {
 		$::realhttpdconf=$choice;
@@ -660,7 +691,7 @@ sub getapacheinfo {
     } else {
 	$::realhttpdconf=$confpossibilities[0];
     }
-    unless (open (HTTPDCONF, $::realhttpdconf)) {
+    unless (open (HTTPDCONF, "<$::realhttpdconf")) {
 	warn "Insufficient privileges to open $::realhttpdconf for reading.\n";
 	sleep 4;
     }
@@ -676,7 +707,7 @@ sub getapacheinfo {
 
 
     unless ($::httpduser) {
-	my $message=getmessage('EnterApacheUser');
+	my $message=getmessage('EnterApacheUser', [$::etcdir]);
 	until (length($::httpduser) && getpwnam($::httpduser)) {
 	    $::httpduser=showmessage($message, "free", '');
 	    if (length($::httpduser)>0) {
@@ -807,11 +838,12 @@ configuration.
 Press <ENTER> to continue: |;
 
 sub updateapacheconf {
-    my $logfiledir=`grep ^ErrorLog $::realhttpdconf`;
+    my $logfiledir=`grep ^ErrorLog "$::realhttpdconf"`;
     chomp $logfiledir;
 
     if ($logfiledir) {
-	$logfiledir=~m#ErrorLog (.*)/[^/]*$#;
+	$logfiledir=~m#ErrorLog (.*)/[^/]*$#
+	    or die "Can't parse ErrorLog directive\n";
 	$logfiledir=$1;
     }
 
@@ -824,7 +856,7 @@ sub updateapacheconf {
     my $httpdconf;
     my $envmodule=0;
     my $includesmodule=0;
-    open HC, $::realhttpdconf;
+    open HC, "<$::realhttpdconf";
     while (<HC>) {
 	if (/^\s*#\s*LoadModule env_module /) {
 	    s/^\s*#\s*//;
@@ -856,7 +888,7 @@ sub updateapacheconf {
 
 
     
-    if (`grep 'VirtualHost $::servername' $::realhttpdconf`) {
+    if (`grep 'VirtualHost $::servername' "$::realhttpdconf"`) {
 	showmessage(getmessage('ApacheAlreadyConfigured', [$::realhttpdconf, $::realhttpdconf]), 'PressEnter');
 	return;
     } else {
@@ -933,6 +965,10 @@ $messages->{'IntranetAuthenticationQuestion'}->{en}=qq|
 I can set it up so that the Intranet/Librarian site is password protected using
 Apache's Basic Authorization.
 
+This is going to be phased out very soon. However, setting this up can provide
+an extra layer of security before the new authentication system is completely
+in place.
+
 Would you like to do this ([Y]/N): |;
 
 $messages->{'BasicAuthUsername'}->{en}="Please enter a userid for intranet access [%s]: ";
@@ -954,7 +990,7 @@ sub basicauthentication {
 		($apacheauthpassword) = showmessage(getmessage('BasicAuthPasswordWasBlank'), 'none', '', 1);
 	    }
 	}
-	open AUTH, ">/etc/kohaintranet.pass";
+	open AUTH, ">$::etcdir/kohaintranet.pass";
 	my $chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	my $salt=substr($chars, int(rand(length($chars))),1);
 	$salt.=substr($chars, int(rand(length($chars))),1);
@@ -964,7 +1000,7 @@ sub basicauthentication {
 	print SITE <<EOP
 
 <Directory $::intranetdir>
-    AuthUserFile /etc/kohaintranet.pass
+    AuthUserFile $::etcdir/kohaintranet.pass
     AuthType Basic
     AuthName "Koha Intranet (for librarians only)"
     Require  valid-user
@@ -1006,8 +1042,8 @@ sub installfiles {
     system("cp -R opac-cgi/* $::opacdir/cgi-bin/");
     system("touch $::opacdir/cgi-bin/opac");
 
-    system("chown -R root.$::httpduser $::opacdir");
-    system("chown -R root.$::httpduser $::intranetdir");
+    system("chown -R root:$::httpduser $::opacdir");
+    system("chown -R root:$::httpduser $::intranetdir");
 
     # Create /etc/koha.conf
 
@@ -1018,7 +1054,7 @@ database=$::dbname
 hostname=$::hostname
 user=$::user
 pass=$::pass
-includes=$::intranetdir/htdocs/includes
+includes=$::opacdir/htdocs/includes
 intranetdir=$::intranetdir
 opacdir=$::opacdir
 kohalogdir=$::kohalogdir
@@ -1026,6 +1062,8 @@ kohaversion=$::kohaversion
 httpduser=$::httpduser
 intrahtdocs=$::intranetdir/htdocs/intranet-tmpl
 opachtdocs=$::opacdir/htdocs/opac-tmpl
+#XXX I had: intrahtdocs=$::intranetdir/cgi-bin/koha-tmpl/intranet-tmpl
+#XXX I had: opachtdocs=$::intranetdir/cgi-bin/koha-tmpl/opac-tmpl
 |;
     close(SITES);
     umask($old_umask);
@@ -1049,7 +1087,7 @@ $messages->{'MysqlRootPassword'}->{en}=qq|
 To allow us to create the koha database please supply your
 mysql server's root user password:
 
-Enter MySql root user password: |;
+Enter MySQL root user password: |;
 
 $messages->{'InvalidMysqlRootPassword'}->{en}="Invalid Password.  Please try again.";
 
@@ -1058,7 +1096,7 @@ $messages->{'CreatingDatabase'}->{en}=qq|
 = CREATING DATABASE =
 =====================
 
-Creating the MySql database for Koha...
+Creating the MySQL database for Koha...
 
 |;
 
@@ -1227,6 +1265,9 @@ pl : opac is translated (UNTESTED in this release)
 |;
 
 sub updatedatabase {
+    # At this point, $::etcdir/koha.conf must exist, for C4::Context
+    # We must somehow temporarily enable $::etcdir/koha.conf. A symlink can
+    # do this & at the same time facilitate detection of aborted installs.
 	my $result=system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
 	if ($result) {
 		print "Problem updating database...\n";
@@ -1236,11 +1277,11 @@ sub updatedatabase {
 	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 123', '1');
 
 	if ($response == 1) {
-		system("cat script/misc/marc_datas/marc21_en/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
 	}
 	if ($response == 2) {
-		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
-		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
+		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
 	}
 
 	my $result=system ("perl -I $::intranetdir/modules scripts/marc/updatedb2marc.pl");
@@ -1249,16 +1290,14 @@ sub updatedatabase {
 		exit;
 	}
 
-	print "\n\nFinished updating database. Press <ENTER> to continue...";
+	print "\n\nFinished basic updating of database. Press <ENTER> to continue...";
 	<STDIN>;
 }
 
 sub populatedatabase {
 	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
 	if ($response =~/^y/i) {
-		system("gunzip sampledata-1.2.gz");
-		system("cat sampledata-1.2 | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
-		system("gzip -9 sampledata-1.2");
+		system("gunzip -d < sampledata-1.2.gz | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
 		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
 		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
 		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
@@ -1333,7 +1372,7 @@ sub restartapache {
 sub loadconfigfile {
     my %configfile;
 
-    open (KC, "/etc/koha.conf");
+    open (KC, "<$::etcdir/koha.conf");
     while (<KC>) {
      chomp;
      (next) if (/^\s*#/);
