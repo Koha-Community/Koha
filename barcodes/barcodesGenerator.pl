@@ -163,7 +163,7 @@ sub barcodesGenerator {
 			my $codeC = &checksum($code);
 			# Generate the corresponde barcode to $code
 			my $barcode = $pdf->barcode(-font => $tr,	# The font object to use
-										-type => 'ean13',	# Standard of codification
+										-type => 'ean128',	# Standard of codification
 										-code => $codeC, # Text to codify
 										-extn	=> '012345',	# Barcode extension (if it is aplicable)
 										-umzn => 10,		# Top limit of the finished bar
