@@ -3,129 +3,133 @@
 <TMPL_LOOP NAME="BORROWER_INFO">
 
 <table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
-<tr   bgcolor="#fecc99" >
-<td><b>ARE OUR RECORDS CORRECT?</B></td></tr>
-<tr>
-<td><font size=2 face="arial,helvetica">
-Library Card: <TMPL_VAR NAME="cardnumber"> <p>
-<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
-<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
-<TMPL_VAR NAME="phone"> (hm)<br>
-<TMPL_VAR NAME="faxnumber"> (wk)<br>
-
-<TMPL_VAR NAME="emailaddress"><p>
-
-Are any of our records incorrect? Have you moved recently, got a new phone number or e-mail address?<p>
-
-<a href="/cgi-bin/koha/opac-userupdate.pl">Update Record</a>
-
-</td></tr></table>
+	<tr   bgcolor="#fecc99" >
+		<td><b>ARE OUR RECORDS CORRECT?</B></td>
+	</tr>
+	<tr>
+		<td><font size=2 face="arial,helvetica">Library Card: <TMPL_VAR NAME="cardnumber"> <br/>
+			<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
+			<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
+			<TMPL_VAR NAME="phone"> (hm)<br>
+			<TMPL_VAR NAME="faxnumber"> (wk)<br>
+			<TMPL_VAR NAME="emailaddress"><br/>
+			<p>Something new ?</p>
+			<a href="/cgi-bin/koha/opac-userupdate.pl">Update Record</a>
+		</td>
+	</tr>
+</table>
 
 
 
-<font size=6><em>Hi <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font> 
+<font size=6><em>Hi <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font>
 [<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Logout</a>]<p>
 
 
 <TMPL_IF NAME="amountoverfive">
-<table cellpadding=5 cellspacing=0 border=1>
-<tr bgcolor="#fecc99">
-<td>
-<font face="arial,helvetica" color="red" size=+2><B>You have outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font>
-</td></tr></table>
-
+	<table cellpadding=5 cellspacing=0 border=1>
+		<tr bgcolor="#fecc99">
+			<td>
+				<font face="arial,helvetica" color="red" size=+2><B>You have outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font>
+			</td>
+		</tr>
+	</table>
 </TMPL_IF>
 
 <TMPL_IF NAME="amountoverzero">
-<table cellpadding=5 cellspacing=0 border=1>
-<tr bgcolor="#fecc99">
-<td><font face="arial,helvetica" size=+2><B>You have outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font>
-</td></tr></table>
+	<table cellpadding=5 cellspacing=0 border=1>
+		<tr bgcolor="#fecc99">
+			<td>
+				<font face="arial,helvetica" size=+2>
+					<B>You have outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B>
+				</font>
+			</td>
+		</tr>
+	</table>
 </TMPL_IF>
 
 <TMPL_IF NAME"amountlessthanzero">
-<table cellpadding=5 cellspacing=0 border=1>
-<tr bgcolor="#fecc99">
-<td><font face="arial,helvetica" size=+2><B>You have a credit of <TMPL_VAR NAME="amountoutstanding"></B></font>
-</td></tr></table>
+	<table cellpadding=5 cellspacing=0 border=1>
+		<tr bgcolor="#fecc99">
+			<td>
+				<font face="arial,helvetica" size=+2>
+					<B>You have a credit of <TMPL_VAR NAME="amountoutstanding"></B>
+				</font>
+			</td>
+		</tr>
+	</table>
 </TMPL_IF>
 <a href='/cgi-bin/koha/opac-account.pl'>View Accounts</a>
 
 </TMPL_LOOP>
 
 <TMPL_IF NAME="waiting_count">
-   <table  cellpadding=5 cellspacing=0 border=0><tr bgcolor="#fecc99" >
-   <td colspan=2><font color="red" face="arial,helvetica" size=+2><B>
-   You have reserved items waiting:
-   </B></font><P></td></tr>
-      <TMPL_LOOP NAME="WAITING">
-      <tr><td><b><TMPL_VAR NAME="btitle"></b></td><td>pick up at: <b><TMPL_VAR NAME="branch"></b></td></tr>
-      </TMPL_LOOP>
-   </table>
+	<table  cellpadding=5 cellspacing=0 border=0>
+		<tr bgcolor="#fecc99" >
+			<td colspan=2>
+				<font color="red" face="arial,helvetica" size=+2>
+					<B>	You have reserved items waiting:</B>
+				</font>
+				<P>
+			</td>
+		</tr>
+		<TMPL_LOOP NAME="WAITING">
+			<tr>
+				<td>
+					<b><TMPL_VAR NAME="btitle"></b></td><td>pick up at: <b><TMPL_VAR NAME="branch"></b>
+				</td>
+			</tr>
+		</TMPL_LOOP>
+	</table>
 </TMPL_IF>
 
 <p>
 
 <TMPL_IF NAME="issues_count">
 
-You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
-
-<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-
-<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-<TD><B>Title</B></TD>
-<TD><B>Author</B></TD>
-<TD><B>Due date</B></TD>
-<TD><B>Itemtype</B></TD>
-<TD><B>Charges</B></TD>
-<TD><B>Current Loan</B></TD>
-</TR>
-
-<TMPL_LOOP NAME="ISSUES">
-
-<TR VALIGN=TOP>
-<TD><TMPL_VAR NAME="title"></TD>
-<TD><TMPL_VAR NAME="author"></TD>
-<TD><TMPL_VAR NAME="date_due"></TD>
-<TD><TMPL_VAR NAME="itemtype"></TD>
-<TD><TMPL_IF NAME="charges">Yes<TMPL_ELSE>No</TMPL_IF></TD>
-<TD><TMPL_IF NAME="status">Yes<TMPL_ELSE>No</TMPL_IF></TD>
-</TR>
-
-</TMPL_LOOP>
-</table>
-
+	You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
+	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+		<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+			<TD><B>Title</B></TD>
+			<TD><B>Author</B></TD>
+			<TD><B>Due date</B></TD>
+			<TD><B>Itemtype</B></TD>
+			<TD><B>Charges</B></TD>
+			<TD><B>Current Loan</B></TD>
+		</TR>
+		<TMPL_LOOP NAME="ISSUES">
+			<TR VALIGN=TOP>
+				<TD><TMPL_VAR NAME="title"></TD>
+				<TD><TMPL_VAR NAME="author"></TD>
+				<TD><TMPL_VAR NAME="date_due"></TD>
+				<TD><TMPL_VAR NAME="itemtype"></TD>
+				<TD><TMPL_IF NAME="charges">Yes<TMPL_ELSE>No</TMPL_IF></TD>
+				<TD><TMPL_IF NAME="status">Yes<TMPL_ELSE>No</TMPL_IF></TD>
+			</TR>
+		</TMPL_LOOP>
+	</table>
 <TMPL_ELSE>
-You have no items on issue.
+<p>You have no items on issue.</p>
 </TMPL_IF>
 
 <p>
 
-
 <TMPL_IF NAME="reserves_count">
-
-You have <TMPL_VAR NAME="reserves_count"> items currently reserved.<br>
-
-<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
-
-<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-<TD><B>Title</B></TD>
-<TD><B>Author</B></TD>
-<TD><B>Reserve date</B></TD>
-</TR>
-
-<TMPL_LOOP NAME="RESERVES">
-
-<TR VALIGN=TOP>
-<TD><TMPL_VAR NAME="btitle"></TD>
-<TD><TMPL_VAR NAME="author"></TD>
-<TD><TMPL_VAR NAME="reservedate"></TD>
-</TR>
-
-</TMPL_LOOP>
-</table>
+	You have <TMPL_VAR NAME="reserves_count"> items currently reserved.<br>
+	<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+		<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+			<TD><B>Title</B></TD>
+			<TD><B>Author</B></TD>
+			<TD><B>Reserve date</B></TD>
+		</TR>
+		<TMPL_LOOP NAME="RESERVES">
+			<TR VALIGN=TOP>
+			<TD><TMPL_VAR NAME="btitle"></TD>
+			<TD><TMPL_VAR NAME="author"></TD>
+			<TD><TMPL_VAR NAME="reservedate"></TD>
+			</TR>
+		</TMPL_LOOP>
+	</table>
 </TMPL_IF>
-
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
 
