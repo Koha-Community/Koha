@@ -275,10 +275,14 @@ sub ReserveWaiting {
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
     my $biblio = $data->{'biblionumber'};
+    my $timestamp = $data->{'timestamp'};
     my $q_biblio = $dbh->quote($biblio);
+    my $q_timestamp = $dbh->quote($biblio);
 # update reserves record....
     $query = "UPDATE reserves SET priority = 0, found = 'W', itemnumber = $item 
-                            WHERE borrowernumber = $borr AND biblionumber = $q_biblio";
+                            WHERE borrowernumber = $borr 
+                              AND biblionumber = $q_biblio 
+                              AND timestamp = $q_timestamp";
     $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
