@@ -96,14 +96,13 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($itemtype) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge,notforloan from itemtypes where itemtype=?");
+		my $sth=$dbh->prepare("select itemtype,description,renewalsallowed,rentalcharge,notforloan from itemtypes where itemtype=?");
 		$sth->execute($itemtype);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
 	$template->param(itemtype => $itemtype,
 							description => $data->{'description'},
-							loanlength => $data->{'loanlength'},
 							renewalsallowed => $data->{'renewalsallowed'},
 							rentalcharge => $data->{'rentalcharge'},
 							notforloan => $data->{'notforloan'}
@@ -114,10 +113,9 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace itemtypes (itemtype,description,loanlength,renewalsallowed,rentalcharge,notforloan) values (";
+	my $query = "replace itemtypes (itemtype,description,renewalsallowed,rentalcharge,notforloan) values (";
 	$query.= $dbh->quote($input->param('itemtype')).",";
 	$query.= $dbh->quote($input->param('description')).",";
-	$query.= $dbh->quote($input->param('loanlength')).",";
 	if ($input->param('renewalsallowed') ne 1) {
 		$query.= "0,";
 	} else {
@@ -150,14 +148,13 @@ if ($op eq 'add_form') {
 	   $sth->finish;
 	}
 
-	my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge from itemtypes where itemtype=?");
+	my $sth=$dbh->prepare("select itemtype,description,renewalsallowed,rentalcharge from itemtypes where itemtype=?");
 	$sth->execute($itemtype);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 
 	$template->param(itemtype => $itemtype,
 							description => $data->{'description'},
-							loanlength => $data->{'loanlength'},
 							renewalsallowed => $data->{'renewalsallowed'},
 							rentalcharge => $data->{'rentalcharge'},
 							total => $total);
@@ -189,7 +186,6 @@ if ($op eq 'add_form') {
 		}
 		$row_data{itemtype} = $results->[$i]{'itemtype'};
 		$row_data{description} = $results->[$i]{'description'};
-		$row_data{loanlength} = $results->[$i]{'loanlength'};
 		$row_data{renewalsallowed} = $results->[$i]{'renewalsallowed'};
 		$row_data{rentalcharge} = $results->[$i]{'rentalcharge'};
 		push(@loop_data, \%row_data);

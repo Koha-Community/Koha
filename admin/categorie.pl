@@ -112,8 +112,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (?,?,?,?,?,?,?,?,?)");
-	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','issuelimit','reservefee','overduenoticerequired'));
+	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired) values (?,?,?,?,?,?,?,?)");
+	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired'));
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################

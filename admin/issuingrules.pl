@@ -66,7 +66,7 @@ if ($op eq 'save') {
 			my $cat = $3; # item type
 			my $data=$input->param($key);
 			my ($issuelength,$maxissueqty)=split(',',$data);
-			if ($maxissueqty >0) {
+# 			if ($maxissueqty >0) {
 				$sth_search->execute($br,$bor,$cat);
 				my $res = $sth_search->fetchrow_hashref();
 				if ($res->{total}) {
@@ -74,9 +74,9 @@ if ($op eq 'save') {
 				} else {
 					$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength);
 				}
-			} else {
-				$sth_Idelete->execute($br,$bor,$cat);
-			}
+# 			} else {
+# 				$sth_Idelete->execute($br,$bor,$cat);
+# 			}
 		}
 		# FINES
 		if ($key =~ /F-(.*)-(.*)\.(.*)/) {
@@ -85,7 +85,7 @@ if ($op eq 'save') {
 			my $cat = $3; # item type
 			my $data=$input->param($key);
 			my ($fine,$firstremind,$chargeperiod)=split(',',$data);
-			if ($fine >0) {
+# 			if ($fine >0) {
 				$sth_search->execute($br,$bor,$cat);
 				my $res = $sth_search->fetchrow_hashref();
 				if ($res->{total}) {
@@ -93,9 +93,9 @@ if ($op eq 'save') {
 				} else {
 					$sth_Finsert->execute($br,$bor,$cat,$fine,$firstremind,$chargeperiod);
 				}
-			} else {
-				$sth_Fdelete->execute($br,$bor,$cat);
-			}
+# 			} else {
+# 				$sth_Fdelete->execute($br,$bor,$cat);
+# 			}
 		}
 	}
 
@@ -159,15 +159,15 @@ foreach my $data (@itemtypes) {
 		my $maxissueqty = $dat->{'maxissueqty'}+0;
 		my $issuelength = $dat->{'issuelength'}+0;
 		my $finesvalue;
-		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine>0;
+		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine+$dat->{'firstremind'}+$dat->{'chargeperiod'}>0;
 		my $issuingvalue;
-		if ($maxissueqty>0) {
-		    $issuingvalue = "$issuelength,$maxissueqty" ;
-		}
-		else {		
-		    $issuingvalue = "$issuelength, 5";
-		    $maxissueqty = 5;
-		}
+# 		if ($maxissueqty>0) {
+		    $issuingvalue = "$issuelength,$maxissueqty" if $issuelength+$maxissueqty>0;
+# 		}
+# 		else {		
+# 		    $issuingvalue = "$issuelength, 5";
+# 		    $maxissueqty = 5;
+# 		}
 		my %row = (finesname=> "F-$branch-$trow3[$i].$$data->{'itemtype'}",
 					finesvalue => $finesvalue,
 					issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
