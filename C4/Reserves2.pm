@@ -15,7 +15,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&FindReserves &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
+@EXPORT = qw(&FindReserves &CheckReserves &CancelReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -52,27 +52,33 @@ my $priv_func = sub {
 # make all your functions, whether exported or not;
 
 sub FindReserves {
-  my ($bib,$bor)=@_;
-  my $dbh=C4Connect;
-  my $query="Select *,reserves.branchcode,biblio.title as btitle
-  from reserves,borrowers,biblio ";
+  my ($bib,$bor) = @_;
+  my $dbh = C4Connect;
+  my $query = "Select *,reserves.branchcode,biblio.title as btitle
+                      from reserves,borrowers,biblio ";
   if ($bib ne ''){
-    if ($bor ne ''){
-       $query=$query." where reserves.biblionumber=$bib and
-       reserves.borrowernumber=borrowers.borrowernumber and
-       biblio.biblionumber=$bib and cancellationdate is NULL and 
-       (found <> 'F' or found is NULL)";
-    } else {
-       $query=$query." where reserves.borrowernumber=borrowers.borrowernumber
-       and biblio.biblionumber=$bib and reserves.biblionumber=$bib
-       and cancellationdate is NULL and 
-       (found <> 'F' or found is NULL)";
-    }
+      $bib = $dbh->quote($bib);
+      if ($bor ne ''){
+	  $bor = $dbh->quote($bor);
+          $query .=  " where reserves.biblionumber   = $bib
+                         and borrowers.borrowernumber = $bor 
+                         and reserves.borrowernumber = borrowers.borrowernumber 
+                         and biblio.biblionumber     = $bib 
+                         and cancellationdate is NULL 
+                         and (found <> 'F' or found is NULL)";
+      } else {
+          $query .= " where reserves.borrowernumber = borrowers.borrowernumber
+                        and biblio.biblionumber     = $bib 
+                        and reserves.biblionumber   = $bib
+                        and cancellationdate is NULL 
+                        and (found <> 'F' or found is NULL)";
+      }
   } else {
-    $query=$query." where borrowers.borrowernumber=$bor and
-    reserves.borrowernumber=borrowers.borrowernumber and reserves.biblionumber
-    =biblio.biblionumber and cancellationdate is NULL and 
-    (found <> 'F' or found is NULL)";
+      $query .= " where borrowers.borrowernumber = $bor 
+                    and reserves.borrowernumber  = borrowers.borrowernumber 
+                    and reserves.biblionumber    = biblio.biblionumber 
+                    and cancellationdate is NULL and 
+                    (found <> 'F' or found is NULL)";
   }
   $query.=" order by priority";
   my $sth=$dbh->prepare($query);
@@ -87,6 +93,152 @@ sub FindReserves {
   $sth->finish;
   $dbh->disconnect;
   return($i,\@results);
+}
+
+sub CheckReserves {
+    my ($item) = @_;
+    my $dbh=C4Connect;
+    my $qitem=$dbh->quote($item);
+# get the biblionumber...
+    my $sth=$dbh->prepare("select biblionumber from items where itemnumber=$qitem");
+    $sth->execute;
+    my ($biblio) = $sth->fetchrow_array;
+    $sth->finish;
+    $dbh->disconnect;
+# get the reserves...
+    my ($count, $reserves) = FindReserves($biblio);
+    my $priority = 10000000; 
+    my $highest;
+    if ($count) {
+	foreach my $res (@$reserves) {
+	    if ($res->{'itemnumber'} == $item) {
+		return ("Waiting", $res);
+	    } else {
+		if ($res->{'priority'} < $priority) {
+		    $priority = $res->{'priority'};
+		    $highest = $res;
+		}
+	    }
+	}
+	$highest->{'itemnumber'} = $item;
+	return ("Reserved", $highest);
+    } else {
+	return (0, 0);
+    }
+}
+
+sub CancelReserve {
+    my ($biblio, $item, $borr) = @_;
+    my $dbh=C4Connect;
+    if (($item and $borr) and (not $biblio)) {
+# removing a waiting reserve record....
+	$item = $dbh->quote($item);
+	$borr = $dbh->quote($borr);
+# update the database...
+        my $query = "update reserves set cancellationdate = now(), 
+                                         found            = Null, 
+                                         priority         = 0 
+                                   where itemnumber       = $item 
+                                     and borrowernumber   = $borr";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+    }
+    if (($biblio and $borr) and (not $item)) {
+# removing a reserve record....
+	$biblio = $dbh->quote($biblio);
+	$borr = $dbh->quote($borr);
+# fix up the priorities on the other records....
+	my $query = "select priority from reserves 
+                                    where biblionumber   = $biblio 
+                                      and borrowernumber = $borr
+                                      and cancellationdate is NULL 
+                                      and (found <> 'F' or found is NULL)";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my ($priority) = $sth->fetchrow_array;
+	$sth->finish;
+# update the database, removing the record...
+        my $query = "update reserves set cancellationdate = now(), 
+                                         found            = Null, 
+                                         priority         = 0 
+                                   where biblionumber     = $biblio 
+                                     and borrowernumber   = $borr
+                                     and cancellationdate is NULL 
+                                     and (found <> 'F' or found is NULL)";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+# now fix the priority on the others....
+	my ($count, $reserves) = FindReserves($biblio);
+	foreach my $rec (@$reserves) {
+	    if ($rec->{'priority'} > $priority) {
+		my $newpr = $rec->{'priority'};
+		$newpr = $dbh->quote($newpr - 1);
+                my $query = "update reserves set priority = $newpr 
+                                   where biblionumber     = $rec->{'biblionumber'} 
+                                     and borrowernumber   = $rec->{'borrowernumber'}
+                                     and cancellationdate is NULL 
+                                     and (found <> 'F' or found is NULL)";
+		my $sth = $dbh->prepare($query);
+		$sth->execute;
+		$sth->finish;
+	    }
+	} 
+    }
+    $dbh->disconnect;
+}
+
+sub ReserveWaiting {
+    my ($item, $borr) = @_;
+    my $dbh = C4Connect;
+    $item = $dbh->quote($item);
+    $borr = $dbh->quote($borr);
+# get priority and biblionumber....
+    my $query = "SELECT reserves.priority     as priority, 
+                        reserves.biblionumber as biblionumber,
+                        reserves.branchcode   as branchcode 
+                      FROM reserves,items 
+                     WHERE reserves.biblionumber   = items.biblionumber 
+                       AND items.itemnumber        = $item 
+                       AND reserves.borrowernumber = $borr 
+                       AND reserves.cancellationdate is NULL
+                       AND (reserves.found <> 'F' or reserves.found is NULL)";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish;
+    my $biblio = $data->{'biblionumber'};
+    $biblio = $dbh->quote($biblio);
+# update reserves record....
+    $query = "update reserves set priority = 0, found = 'W', itemnumber = $item 
+                            where borrowernumber = $borr and biblionumber = $biblio";
+    $sth = $dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+# now fix up the remaining priorities....
+    $query = "select priority, borrowernumber from reserves where biblionumber = $biblio
+                                              and cancellationdate is NULL
+                                              and found is NULL
+                                              and priority <> 0 and priority is not NULL";
+    $sth = $dbh->prepare($query);
+    $sth->execute;
+    my $branchcode = $data->{'branchcode'};
+    my $priority = $data->{'priority'};
+    while (my $data = $sth->fetchrow_hashref) {
+	if ($data->{'priority'} > $priority) {
+            my $uquery = "update reserves set priority       = priority - 1 
+                                        where biblionumber   = $biblio 
+                                          and borrowernumber = $borr
+                                          and cancellation  is NULL";
+	    my $usth->$dbh->prepare($query);
+	    $usth->execute;
+	    $usth->finish;
+	}
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return $branchcode;
 }
 
 sub Findgroupreserve {
