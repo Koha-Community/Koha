@@ -60,7 +60,8 @@ sub  ImportBreeding {
 	my $dbh = C4::Context->dbh;
 	my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
 	my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
-	my $searchbreeding = $dbh->prepare("select id from marc_breeding where isbn=?");
+	my $searchbreeding = $dbh->prepare("select id from marc_breeding
+where isbn=? and title=?");
 	my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc,encoding,z3950random) values(?,?,?,?,?,?,?)");
 	my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=?,encoding=?,z3950random=? where id=?");
 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
@@ -99,10 +100,10 @@ sub  ImportBreeding {
 				# search in breeding farm
 				my $breedingid;
 				if ($oldbiblio->{isbn}) {
-					$searchbreeding->execute($oldbiblio->{isbn});
+					$searchbreeding->execute($oldbiblio->{isbn},$oldbiblio->{title});
 					($breedingid) = $searchbreeding->fetchrow;
 				} elsif ($oldbiblio->{issn}){
-					$searchbreeding->execute($oldbiblio->{issn});
+					$searchbreeding->execute($oldbiblio->{issn},$oldbiblio->{title});
 					($breedingid) = $searchbreeding->fetchrow;
 				}
 				if ($breedingid && $overwrite_biblio eq 0) {
