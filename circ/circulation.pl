@@ -66,7 +66,7 @@ if ($findborrower) {
 }
 
 my $borrowernumber = $query->param('borrnumber');    
-
+my $bornum = $query->param('borrnumber');    
 # check and see if we should print
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
@@ -319,6 +319,15 @@ my $barcodeentrytext = <<"EOF";
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
 <input type=hidden name=print value=maybe>
+EOF
+if ($flags->{'CHARGES'}){
+    $barcodeentrytext.="<input type=hidden name=charges value=yes>";
+}
+my $amountold=$flags->{'CHARGES'}->{'message'};
+my @temp=split(/\$/,$amountold);
+$amountold=$temp[1];
+$barcodeentrytext.="<input type=hidden name=oldamount value=$amountold>";
+$barcodeentrytext.=<<"EOF";
 </td></tr></table>
 </td></tr></table>
 </form>
@@ -420,7 +429,28 @@ if ($branchcookie && $printercookie) {
 }
 
 print startpage();
-print startmenu('circulation');
+my @inp=startmenu('circulation');
+if ($query->param('barcode') eq '' && $query->param('charges') eq 'yes'){
+    my $count=@inp;
+     for (my $i=0;$i<$count;$i++){
+	 $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\"\)\;window1.focus\(\)/;
+     }
+}
+
+print @inp;
+print <<EOF
+  <script language="javascript" type="text/javascript">
+  <!--
+  function messenger(url){
+         window1=window.open(url,"window1","height=700,width=600,left=150,top=50,350,screenY=50");
+      }
+//-->
+  </script>
+EOF
+;
+
+
+#print startmenu('circulation');
 
 print $title;
 
