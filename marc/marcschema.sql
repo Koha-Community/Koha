@@ -1,12 +1,15 @@
 #  $Id$
 #  
 #  $Log$
-#  Revision 1.13  2002/06/04 07:56:56  tipaul
+#  Revision 1.14  2002/06/04 08:13:31  tipaul
+#  ouuppsss... forget the 1.13 version, i made a mistake. This version works and should be the last
+#
+#  Revision 1.13/1.14  2002/06/04 07:56:56  tipaul
 #  New and hopefully last version of the MARC-DB. Is the fastest in benchmark, everybody agree ;-) (Sergey, Steve and me, Paul)
 #
 #  Revision 1.13 2002/06/04 Paul
 #  should be the last version... remains only 2 tables : the main table and the subfield one.
-#  benchmark shows this structure is the fastest. I had to add indicator in the subfield table. should be in a tag_table, but as it's the
+#  benchmark shows this structure is the fastest. I had to add indicator in the subfield table. should be in a tag_table, but as it s the
 #  only real information that should be in this table, it has been thrown to subfield table (not a normal form, but an optimized one...)
 #
 #  Revision 1.12  2002/05/31 20:03:17  tonnesen
@@ -31,17 +34,19 @@ CREATE TABLE marc_biblio (
 		) TYPE=MyISAM;
 
 CREATE TABLE marc_subfield_table (
-	subfieldid  bigint(20) unsigned NOT NULL auto_increment,	# subfield identifier
-	tagid bigint(20),					# tag identifier
-	indicator char(2)					# tag indicator
-	subfieldorder tinyint(4) NOT NULL default '0',		# display order for subfields within a tag
+	subfieldid  bigint(20) unsigned NOT NULL auto_increment,# subfield identifier
+	bibid bigint(20) unsigned NOT NULL, 			# link to marc_biblio table
+	tag char(3) NOT NULL,					# tag number
+	tagorder tinyint(4) NOT NULL default '1',		# display order for tags within a biblio when a tag is repeated
+	tag_indicator char(2) NOT NULL,				# tag indicator
 	subfieldcode char(1) NOT NULL default '',		# subfield code
-	subfieldvalue varchar(255) default NULL,			# the subfields value if not longer than 255 char
+	subfieldorder tinyint(4) NOT NULL default '1',		# display order for subfields within a tag when a subfield is repeated
+	subfieldvalue varchar(255) default NULL,		# the subfields value if not longer than 255 char
 	valuebloblink bigint(20) default NULL,			# the link to the blob, if value is longer than 255 char
 	PRIMARY KEY (subfieldid),
-	KEY tagid (tagid),
-	KEY tag (tag),
 	KEY bibid (bibid),
+	KEY tag (tag),
+	KEY tag_indicator (tag_indicator),
 	KEY subfieldorder (subfieldorder),
 	KEY subfieldcode (subfieldcode),
 	KEY subfieldvalue (subfieldvalue)
