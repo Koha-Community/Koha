@@ -49,8 +49,10 @@ my $query="Select * from borrowers where borrowernumber=$data{'borrowernumber'}"
 my $sth=$dbh->prepare($query);
 $sth->execute;
 if (my $data=$sth->fetchrow_hashref){
+<<<<<<< insertdata.pl
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
   $data{'joining'}=format_date_in_iso($data{'joining'});
+  $data{'expiry'}=format_date_in_iso($data{'expiry'});
   $query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
   cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
   streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
@@ -67,6 +69,7 @@ if (my $data=$sth->fetchrow_hashref){
 }else{
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
   $data{'joining'}=format_date_in_iso($data{'joining'});
+  $data{'expiry'}=format_date_in_iso($data{'expiry'}); 
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
   altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
