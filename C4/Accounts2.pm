@@ -484,10 +484,11 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
+
 =back
 
 =head1 SEE ALSO
 
-L<DBI(3)|DBI>
+DBI(3)
 
 =cut

@@ -341,12 +341,13 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
+
 =back
 
 =head1 SEE ALSO
 
-L<CGI(3)|CGI>
+CGI(3)
 
-L<Digest::MD5(3)|Digest::MD5>
+Digest::MD5(3)
 
 =cut

@@ -246,10 +246,11 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
+
 =back
 
 =head1 SEE ALSO
 
-L<DBI(3)|DBI>
+C4::Accounts2(3), DBI(3)
 
 =cut
