@@ -18,24 +18,28 @@
 # Suite 330, Boston, MA  02111-1307 USA
 #
 #-----------------------------------
-# Script Name: npl-search.pl
-# Script Version: 0.01
-# Date:  2003/10/02
-# Author:  Joshua Ferraro (jmf@kados.org)
+# Script Name: zed-koha-server.pl
+# Script Version: 0.02
+# Date:  2004/04/14
+# Author:  Joshua Ferraro [jmf at kados dot org]
 # Description: A very basic Z3950 Server 
 # Usage: zed-koha-server.pl
 # Revision History:
-#    0.00  2003/08/14: 	original version; search works
-#    0.01  2003/10/02: 	first functional version; search and fetch working
-#                      	records returned in USMARC (ISO2709) format     
-#			Bath compliant to Level 1 in Functional Areas A, B 
+#    0.00  2003/08/14: 	Original version; search works.
+#    0.01  2003/10/02: 	First functional version; search and fetch working
+#                      	 records returned in USMARC (ISO2709) format,     
+#			 Bath compliant to Level 1 in Functional Areas A, B.
+#    0.02  2004/04/14:  Cleaned up documentation, etc. No functional 
+#    			 changes.
 #-----------------------------------
 # Note: After installing SimpleServer (indexdata.dk/simpleserver) and 
 # changing the leader information in Koha's MARCgetbiblio subroutine in
 # Biblio.pm you can run this script as root:
+# 
 # ./zed-koha-server.pl
+#
 # and the server will start running on port 9999 and will allow searching
-# and retrieval of records in MARC21
+# and retrieval of records in MARC21 (USMARC; ISO2709) bibliographic format.
 # ----------------------------------
 use DBI;
 use Net::Z3950::OID;
@@ -52,14 +56,15 @@ my $handler = Net::Z3950::SimpleServer->new(INIT => \&init_handler,
 					    SEARCH => \&search_handler,
 					    FETCH => \&fetch_handler);
 
-$handler->launch_server("npl-search.pl", @ARGV);
+$handler->launch_server("zed-koha-server.pl", @ARGV);
 
 sub init_handler {
         my $args = shift;
         my $session = {};
-
-        $args->{IMP_NAME} = "NPLKoha";
-        $args->{IMP_VER} = "0.01";
+	
+	# FIXME: I should force use of my database name 
+        $args->{IMP_NAME} = "Zed-Koha";
+        $args->{IMP_VER} = "0.02";
         $args->{ERR_CODE} = 0;
         $args->{HANDLE} = $session;
         if (defined($args->{PASS}) && defined($args->{USER})) {
@@ -97,8 +102,6 @@ sub search_handler {
 	my $term = $args->{term};
 	$term =~ s| |\%|g;
         $term .= "\%";         ## Add the wildcard to search term
-        $term .= "\%";         ## Add the wildcard to search term
-        $term = "\%" . "$term";
 
 	$_ = "$query";
              	   
