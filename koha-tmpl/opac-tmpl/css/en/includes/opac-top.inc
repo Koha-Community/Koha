@@ -9,7 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
 	<!-- /TMPL_IF -->
 	<title><!--TMPL_VAR name="LibraryName"--></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		function _(s) { return s } // dummy function for gettext
