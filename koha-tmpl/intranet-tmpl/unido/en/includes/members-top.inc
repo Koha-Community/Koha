@@ -95,3 +95,16 @@ a.members:hover {
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
+
+
+
+<p>
+
+
+
+</td>
+
+
+ <td width="32"><img src="<TMPL_VAR name="themelang">/images/holder.gif" width="40" height="1" border="0" alt="" /></td>
+
+<td>

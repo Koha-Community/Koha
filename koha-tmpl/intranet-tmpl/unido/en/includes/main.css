@@ -3,6 +3,7 @@
 body {
   background-color: #FFFFFF;
   font-family: arial,helvetica, san-serif;
+  font-size: 12px;
   margin: 0px;
   padding: 0px;
 }
@@ -33,18 +34,18 @@ a:visited {
 a:hover {
 	background:#D6F96A;
 	color:#000000;
-	padding:4px;
+	
 	
 	}
 
 
 h1,h2,h3,h4 {
   color: #55127B;
-  font-family: arial,helvetica;}
+  font-family: "arial narrow",arial,helvetica;}
 
 
 h1 {
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: 0px;
   padding-bottom: 0px;
   
@@ -83,15 +84,16 @@ table.content {
 table.data {padding:opx;
 	margin:0px;}
 
+	
 .column-first{
 	border-right: 1px;
   	border-color: #55127B;
   	border-style: solid;
-        border-top: 0px;
+    border-top: 0px;
 	border-left: 0px;
 	border-bottom: 0px;
-	padding-right:4px; 
-	line-height: 20px;
+	padding-right:8px; 
+	line-height: 28px;
 	
 
 }
@@ -100,21 +102,29 @@ table.data {padding:opx;
 	border-right: 1px;
   	border-color: #55127B;
   	border-style: solid;
-        border-top: 0px;
+    border-top: 0px;
 	border-left: 0px;
 	border-bottom: 0px;
-	padding-right,:4px; 
-	padding-left:4px; 
-	line-height: 20px;
+	padding-right,:8px; 
+	padding-left:8px; 
+	line-height: 28px;
 }
 
 
-column-last:{
-	padding-right:4px; 
-	padding-left:4px; 
-	line-height: 20px;
-	padding-bottom:0px;
-	margin-bottom:0px;
+
+.column-last{
+	border-right: 0px;
+  	border-color: #55127B;
+  	border-style: solid;
+    border-top: 0px;
+	border-left: 0px;
+	border-bottom: 0px;
+	padding-right,:8px; 
+	padding-left:8px; 
+	line-height: 24px;
+}
+
+
 
 
 
@@ -138,11 +148,25 @@ column-last:{
   color: #000000;
 }
 
-.data-header {
+.data-header td {
 	font-weight: bold;
-
-  	
+	border-bottom: 1px;
+	border-color: #55127B;
+  border-style: solid;
 	}
+
+	.delete{
+  background-color: #e1d9a6;
+  border: 1px;
+  border-color: #000000;
+  border-style: solid;
+  color: #C57619;
+  font-family: arial,hevetica,sans-serif;
+  font-size: small;
+  font-weight: bold;
+  padding: 4px;
+ height : 30px;
+}
 
 
 .go {
@@ -205,16 +229,31 @@ input.checkbox {}
 	font-weight: bold;
 }
 
+.reset {
+  background-color: #A88050;
+  border: 1px;
+  border-color: #000000;
+  border-style: solid;
+  color: #FEEDDB;
+  font-family: verdana,arial,hevetica;
+  font-size: small;
+  font-weight: bold;
+  padding: 4px;
+}
+
 
 td.heading {padding-top: 32px;}
 
 
 .tip { 
-color:#AB89BB;}
+color:#AB89BB;
+line-height:32px; }
 
 .tip-big {
      	font-size: 32pt;
-        font: ocean-sans, times,serif;
+        font-family: ocean-sans, times,serif;
+		font-style: oblique;
+		
 	
 }
 
@@ -263,6 +302,13 @@ a:hover.logo {
 
 
 a.selected {
+	
+	color:#FFFFFF;
+	
+	}
+	
+	
+a:visted.selected {
 	
 	color:#FFFFFF;
 	
@@ -331,6 +377,7 @@ a:hover.selected {
   font-weight: bold;
   padding: 4px;
  height : 30px;
+
 	
 	
 }
