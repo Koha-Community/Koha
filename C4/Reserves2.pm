@@ -106,7 +106,7 @@ sub FindReserves {
 	my ($bib,$bor)=@_;
 	my $dbh = C4::Context->dbh;
 	# Find the desired items in the reserves
-	my $query="SELECT *,reserves.branchcode,biblio.title AS btitle  FROM reserves,borrowers,biblio ";
+	my $query="SELECT *,reserves.branchcode,biblio.title AS btitle, reserves.timestamp as rtimestamp FROM reserves,borrowers,biblio ";
 	# FIXME - These three bits of SQL seem to contain a fair amount of
 	# redundancy. Wouldn't it be better to have a @clauses array, add
 	# one or two clauses as necessary, then join(" AND ", @clauses) ?

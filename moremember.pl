@@ -195,7 +195,7 @@ foreach my $reserveline (@$reserves) {
 	my $restitle;
 	my %row = %$reserveline;
 	if ($reserveline->{'constrainttype'} eq 'o'){
-		$restitle=getreservetitle($reserveline->{'biblionumber'},$reserveline->{'borrowernumber'},$reserveline->{'reservedate'},$reserveline->{'timestamp'});
+		$restitle=getreservetitle($reserveline->{'biblionumber'},$reserveline->{'borrowernumber'},$reserveline->{'reservedate'},$reserveline->{'rtimestamp'});
 		%row =  (%row , %$restitle) if $restitle;
 	}
 	push (@reservedata, \%row);
