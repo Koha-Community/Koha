@@ -1,0 +1,102 @@
+<html>
+
+<TMPL_INCLUDE Name="cat-top.inc">
+
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a> >
+Edit Biblio</div>
+
+<form action="updatebiblio.pl" method="post" name="f">
+<input type="hidden" name="biblionumber" value="<TMPL_VAR Name="biblionumber">">
+<input type="hidden" name="biblioitemnumber" value="<TMPL_VAR Name="biblioitemnumber">">
+
+<h1>Bibliographic Record Number <TMPL_VAR Name="biblionumber"></h1>
+If the field you are looking for isn't here, check the group record.
+
+<table border="0" cellspacing="0" cellpadding="5">
+
+<tr valign="top">
+<td>Website Links</td><td>
+
+
+<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">Modify Website Links</a></td></tr>
+
+
+<tr valign="top">
+<td colspan=2><h2>Edit Record</h2></td>
+
+</tr>
+
+
+<tr valign="top">
+<td>Title</td>
+<td><input type="text" name="title" value="<TMPL_VAR Name="title" ESCAPE=HTML>"></td>
+</tr>
+
+<tr valign="top">
+<td>Subtitle</td>
+<td><input type="text" name="subtitle" value="<TMPL_VAR Name="subtitle" ESCAPE=HTML>"></td>
+</tr>
+
+<tr valign="top">
+<td>Author</td>
+<td><input type="text" name="author" value="<TMPL_VAR Name="author" ESCAPE=HTML>"></td>
+</tr>
+
+<tr valign="top">
+<td>Additional Author <br><i>One Author per line</i></td>
+<td><textarea  name="additionalauthor" cols="40" rows="4"><TMPL_VAR Name="additionalauthor" ESCAPE=HTML>"></textarea></td>
+</tr>
+
+
+<tr valign="top">
+<td>Abstract</td>
+<td><textarea name="abstract" cols="40" rows="4"><TMPL_VAR Name="abstract"></textarea></td>
+</tr>
+<tr valign="top">
+<td>Subject</td>
+<td><textarea name="subject" cols="40" rows="4"><TMPL_VAR Name="subject"></textarea>
+</td>
+</tr>
+<tr valign="top">
+<td>Copyright Date</td>
+<td><input type="text" name="copyrightdate" value="<TMPL_VAR Name="copyrightdate" ESCAPE=HTML>"></td>
+</tr>
+
+<tr valign="top">
+<td>Language</td>
+<td><input type="text" name="language" value="<TMPL_VAR Name="language" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Series Title</td>
+<td><input type="text" name="seriestitle" value="<TMPL_VAR Name="seriestitle" ESCAPE=HTML>"></td>
+</tr>
+
+<tr valign="top">
+<td>Conference Title</td>
+<td><input type="text" name="conference" value="<TMPL_VAR Name="conference" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Unititle</td>
+<td><input type="text" name="unititle" value="<TMPL_VAR Name="unititle" ESCAPE=HTML>"></td>
+</tr>
+
+<tr valign="top">
+<td>Notes</td>
+<td><textarea name="notes" cols="40" rows="4"><TMPL_VAR Name="notes" ESCAPE=HTML></textarea></td>
+</tr>
+<!--tr valign="top">
+<td>Serial</td>
+<td><input type="text" name="serial" value="<TMPL_VAR Name="serial" ESCAPE=HTML>"></td>
+</tr-->
+<TR><TD></td><td><input type="submit" name="submit" value="Save" class="go"></td>
+</table>
+<br>
+
+</form>
+<script>
+function Dopop() {
+        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<TMPL_INCLUDE Name="cat-bottom.inc">
