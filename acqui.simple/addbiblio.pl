@@ -181,8 +181,8 @@ sub create_input () {
 	} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 		# opening plugin. Just check wether we are on a developper computer on a production one
 		# (the cgidir differs)
-		my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-		unless (opendir(DIR, "$cgidir/value_builder")) {
+		my $cgidir = C4::Context->intranetdir ."/cgi-bin/value_builder";
+		unless (opendir(DIR, "$cgidir")) {
 			$cgidir = C4::Context->intranetdir."/value_builder";
 		} 
 		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'}; 
