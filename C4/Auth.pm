@@ -301,9 +301,9 @@ sub checkauth {
 	    }
 	}
     }
-    my $insecure = C4::Context->preference("insecure");
+    my $insecure = C4::Context->boolean_preference('insecure');
     # finished authentification, now respond
-    if ($loggedin || $authnotrequired ||(defined($insecure) && $insecure eq "yes")) {
+    if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
 	# successful login
 	unless ($cookie) {
 	    $cookie=$query->cookie(-name => 'sessionID',

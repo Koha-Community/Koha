@@ -173,7 +173,7 @@ print <<EOP
 EOP
 ;
 
-my $auto_barcode = C4::Context->preference("autoBarcode") || 0;
+my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
 	# See whether barcodes should be automatically allocated.
 	# Defaults to 0, meaning "no".
 if ($auto_barcode eq '1') {

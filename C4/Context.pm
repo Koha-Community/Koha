@@ -20,6 +20,7 @@
 package C4::Context;
 use strict;
 use DBI;
+use C4::Boolean;
 
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
@@ -323,6 +324,13 @@ sub preference
 		LIMIT	1
 EOT
 	return $retval;
+}
+
+sub boolean_preference ($) {
+	my $self = shift;
+	my $var = shift;		# The system preference to return
+	my $it = preference($var);
+	return defined($it)? C4::Boolean::is_true($it): undef;
 }
 
 # AUTOLOAD
