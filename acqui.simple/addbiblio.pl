@@ -29,6 +29,18 @@ use C4::Context;
 use HTML::Template;
 use MARC::File::USMARC;
 
+
+=item find_value
+
+    ($indicators, $value) = find_value($tag, $subfield, $record);
+
+Find the given $subfield in the given $tag in the given
+MARC::Record $record.  If the subfield is found, returns
+the (indicators, value) pair; otherwise, (undef, undef) is
+returned.
+
+=cut
+
 sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
 #	warn "$tagfield / $insubfield // ";
@@ -45,6 +57,17 @@ sub find_value {
 	}
 	return($indicator,$result);
 }
+
+
+=item find_value
+
+    $record = MARCfindbreeding($dbh, $breedingid);
+
+Look up the breeding farm with database handle $dbh, for the
+record with id $breedingid.  If found, returns the decoded
+MARC::Record; otherwise, -1 is returned (FIXME).
+
+=cut
 
 sub MARCfindbreeding {
 	my ($dbh,$id) = @_;
@@ -117,7 +140,7 @@ if ($op eq "addbiblio") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-# MARC::Record builded => now, record in DB
+# MARC::Record built => now, record in DB
 	my $oldbibnum;
 	my $oldbibitemnum;
 	if ($is_a_modif) {
@@ -278,7 +301,7 @@ if ($op eq "addbiblio") {
 		}
 		$template->param($tabloop."XX" =>\@loop_data);
 	}
-	# now, build hidden datas => we store everything, even if we show only requested subfields.
+	# now, build hidden data => we store everything, even if we show only requested subfields.
 	my @loop_data =();
 	my $i=0;
 	foreach my $tag (keys %{$tagslib}) {
