@@ -211,8 +211,8 @@ a.about:hover {
 </tr>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
+<TMPL_IF NAME="loggedinusername">
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>

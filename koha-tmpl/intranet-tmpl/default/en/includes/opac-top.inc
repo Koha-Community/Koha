@@ -39,7 +39,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	onMouseOver="document.mouseover.src='/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-login.gif" 
 	width=111 height=30 alt="Member Login" hspace=0 vspace=0 border=0 name="menu-login"></a>
 -->
-	<TMPL_IF NAME=loggedinuser>
+	<TMPL_IF NAME="loggedinusername">
 	    <a href="/cgi-bin/koha/userpage.pl"
 	    onMouseOver="document.mouseover.src='<TMPL_VAR name="themelang">/images/mouseover-mysettings.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR name="themelang">/images/holder.gif'">
 	    <img src="<TMPL_VAR name="themelang">/images/menu-mysettings.gif"

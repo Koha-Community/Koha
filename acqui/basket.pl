@@ -44,7 +44,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {acquisition => 1},
 			     debug => 1,
 			     });
-
+warn "LOGGED : $loggedinuser";
 my ($count,@results);
 if ($basket eq ''){
 	$basket=newbasket();

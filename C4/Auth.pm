@@ -115,7 +115,7 @@ sub get_template_and_user {
 
 	my $borrowernumber;
 	if ($user) {
-		$template->param(loggedinuser => $user);
+		$template->param(loggedinusername => $user);
 		$template->param(sessionID => $sessionID);
 
 		$borrowernumber = getborrowernumber($user);

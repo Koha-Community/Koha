@@ -10,9 +10,9 @@
 <!-- The manual invoice and credit buttons --> <FONT SIZE=6><em>Compte de<TMPL_VAR NAME=firstname> 
 <TMPL_VAR NAME=surname></em></FONT> 
 <P>
-<a href="/cgi-bin/koha/maninvoice.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=/images/create-man-invoice.gif border=0></a>
+<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=<TMPL_VAR name="themelang">/images/create-man-invoice.gif border=0></a>
 &nbsp;
-<a href="/cgi-bin/koha/mancredit.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=/images/create-man-credit.gif border=0></a>
+<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=<TMPL_VAR name="themelang">/images/create-man-credit.gif border=0></a>
 <center>
 <p>
 
@@ -21,10 +21,10 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
   <TR VALIGN=TOP>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><B>AMENDES 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>AMENDES
 		&amp; FRAIS</b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>MONTANT</b></TD>
-      <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>SOLDE 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=1><B>MONTANT</b></TD>
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=1><B>SOLDE
 		</b></TD>
   </TR>
 

@@ -325,8 +325,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<TMPL_IF NAME="loggedinusername">
+	<p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> à Koha</p>
 </TMPL_IF>
