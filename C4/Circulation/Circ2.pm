@@ -556,6 +556,7 @@ sub returnbook {
 # find reserves.....
     my ($resfound, $resrec) = CheckReserves($iteminformation->{'itemnumber'});
     if ($resfound) {
+	my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
 	$resrec->{'ResFound'} = $resfound;
 	$messages->{'ResFound'} = $resrec;
     }
