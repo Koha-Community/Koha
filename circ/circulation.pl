@@ -9,8 +9,8 @@ use DBI;
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
-#my $circbackgroundcolor='#555555';
 my $circbackgroundcolor='#ffffcc';
+my $circbackgroundcolor='white';
 my $linecolor1='#bbbbbb';
 my $linecolor2='#dddddd';
 my $backgroundimage="/images/background-mem.gif";
@@ -169,7 +169,7 @@ EOF
 sub returns {
     my %returneditems;
     print << "EOF";
-    <table border=0 cellpadding=10 cellspacing=0 bgcolor=$headerbackgroundcolor cellpadding=5 background=$backgroundimage><tr><th><font color=black>Circulation - Returns</font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
+    <table border=0 cellpadding=10 cellspacing=0 cellpadding=5><tr><th background=$backgroundimage>Circulation - Returns</th></tr><tr><td bgcolor=$circbackgroundcolor align=center>
 EOF
     foreach ($query->param) {
 	(next) unless (/ri-(\d*)/);
@@ -376,9 +376,8 @@ sub issues {
     }
     unless ($noheader) {
 	print << "EOF";
-    <table border=0 bgcolor=$headerbackgroundcolor background=$backgroundimage cellpadding=10 cellspacing=0><tr><th><font color=black>Circulation - Issues  
-    
-    </font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
+    <table border=0 cellpadding=10 cellspacing=0><tr><th background=$backgroundimage><font color=black>Circulation - Issues  
+    </td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
 EOF
     }
     if (my $borrnumber=$query->param('borrnumber')) {
@@ -605,7 +604,7 @@ EOF
     <tr>
 	<td align=center valign=top>
 	    <table border=0 cellspacing=0 cellpadding=5 bgcolor=#dddddd width=100%>
-	        <tr><td align=center bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Enter Book Barcode</b></font></td></tr>
+	        <tr><th align=center background=$backgroundimage><font color=black><b>Enter Book Barcode</b></font></th></tr>
 		<tr><td align=center>
 		<table border=0 bgcolor=#dddddd>
 		<tr><td>Item Barcode:</td><td><input name=barcode size=10></td><td><input type=submit value=Issue></tr>
