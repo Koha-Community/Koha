@@ -9,7 +9,7 @@ use C4::Search;
 
 my $input= new CGI;
 #print $input->header;
-#print $input->dump;
+#print $input->Dump;
 
 
 my $bibitemnum=checkinp($input->param('bibitemnum'));
@@ -40,7 +40,7 @@ if ($class =~/[0-9]+/){
 #   print $classification,$dewey,$subclass;
 }else{
   $dewey='';
-  $subclass=$class;
+  $subclass='';
 }
 my $illus=checkinp($input->param('Illustrations'));
 my $pages=checkinp($input->param('Pages'));

@@ -16,7 +16,8 @@ $VERSION = 0.01;
  &bookfundbreakdown &curconvert &updatesup &insertsup &makeitems &modbibitem
 &getcurrencies &modsubtitle &modsubject &modaddauthor &moditem &countitems 
 &findall &needsmod &delitem &delbibitem &delbiblio &delorder &branches
-&getallorders &updatecurrencies &getorder);
+&getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
+&updatecost &checkitems &modnote);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -32,6 +33,7 @@ use vars qw(@more $stuff);
 
 my $Var1   = '';
 my %Hashit = ();
+
 
 
 # then the others (which are still accessible as $Some::Module::stuff)
@@ -57,10 +59,11 @@ sub getorders {
   my ($supplierid)=@_;
   my $dbh=C4Connect;
   my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where 
-  booksellerid='$supplierid' and (datereceived = '0000-00-00' or
-  datereceived is NULL) and (cancelledby is NULL or cancelledby = '')";
-  $query.=" group by basketno order by entrydate";
-#  print $query;
+  booksellerid='$supplierid' and (quantity > quantityreceived or
+  quantityreceived is NULL)
+  and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')";
+  $query.=" group by basketno order by entrydate desc";
+  #print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my @results;
@@ -78,6 +81,7 @@ sub itemcount{
   my ($biblio)=@_;
   my $dbh=C4Connect;
   my $query="Select count(*) from items where biblionumber=$biblio";
+#  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
@@ -98,14 +102,14 @@ sub getorder{
   my $order=getsingleorder($ordnum->{'ordernumber'});
   $dbh->disconnect;
 #  print $query;
-  return ($order);
+  return ($order,$ordnum->{'ordernumber'});
 }
 
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh=C4Connect;
   my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
-  where aqorders.ordernumber=$ordnum 
+  where aqorders.ordernumber='$ordnum' 
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
   aqorders.ordernumber=aqorderbreakdown.ordernumber";
@@ -145,6 +149,32 @@ sub getallorders {
   and (cancelledby is NULL or cancelledby = '')
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
   aqorders.biblioitemnumber 
+  group by aqorders.biblioitemnumber 
+  order by
+  biblio.title";
+  my $i=0;
+  my @results;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  while (my $data=$sth->fetchrow_hashref){
+    $results[$i]=$data;
+    $i++;
+  }
+  $sth->finish;
+  $dbh->disconnect;
+  return($i,@results);
+}
+
+sub getrecorders {
+  #gets all orders from a certain supplier, orders them alphabetically
+  my ($supid)=@_;
+  my $dbh=C4Connect;
+  my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
+  and (cancelledby is NULL or cancelledby = '')
+  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
+  aqorders.biblioitemnumber and
+  aqorders.quantityreceived>0
+  and aqorders.datereceived >=now()
   group by aqorders.biblioitemnumber 
   order by
   biblio.title";
@@ -247,15 +277,18 @@ sub breakdown {
 }
 
 sub basket {
-  my ($basketno)=@_;
+  my ($basketno,$supplier)=@_;
   my $dbh=C4Connect;
   my $query="Select *,biblio.title from aqorders,biblio,biblioitems 
   where basketno='$basketno'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
   =aqorders.biblioitemnumber 
   and (datecancellationprinted is NULL or datecancellationprinted =
-  '0000-00-00')
-  group by aqorders.ordernumber";
+  '0000-00-00')";
+  if ($supplier ne ''){
+    $query.=" and aqorders.booksellerid='$supplier'";
+  } 
+  $query.=" group by aqorders.ordernumber";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my @results;
@@ -286,7 +319,9 @@ sub newbasket {
 sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
-  =aqbudget.bookfundid group by aqbookfund.bookfundid order by bookfundname";
+  =aqbudget.bookfundid 
+  and aqbudget.startdate='2001=07-01' 
+  group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my @results;
@@ -319,19 +354,24 @@ sub branches {
 sub bookfundbreakdown {
   my ($id)=@_;
   my $dbh=C4Connect;
-  my $query="Select quantity,datereceived,freight,unitprice,listprice
+  my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
   from aqorders,aqorderbreakdown where bookfundid='$id' and 
-  aqorders.ordernumber=aqorderbreakdown.ordernumber and entrydate >=
-  '2000-07-01' ";
+  aqorders.ordernumber=aqorderbreakdown.ordernumber and ((budgetdate >=
+  '2001-07-01' and budgetdate <'2002-07-01') or
+  (datereceived >= '2001-07-01' and datereceived < '2002-07-01'))
+  and (datecancellationprinted is NULL or
+  datecancellationprinted='0000-00-00')";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $comtd=0;
   my $spent=0;
   while (my $data=$sth->fetchrow_hashref){
-    if ($data->{'datereceived'} =~ /0000/){
-       $comtd+=($data->{'listprice'}+$data->{'freight'})*$data->{'quantity'};
+    if ($data->{'subscription'} == 1){
+      $spent+=$data->{'quantity'}*$data->{'unitprice'};
     } else {
-       $spent+=($data->{'unitprice'}+$data->{'freight'})*$data->{'quantity'};
+      my $leftover=$data->{'quantity'}-$data->{'quantityreceived'};
+      $comtd+=($data->{'ecost'})*$leftover;
+      $spent+=($data->{'unitprice'})*$data->{'quantityreceived'};
     }
   }
   $sth->finish;
@@ -363,8 +403,8 @@ sub newbiblio {
 sub modbiblio {
   my ($bibnum,$title,$author,$copyright,$seriestitle,$serial,$unititle,$notes)=@_;
   my $dbh=C4Connect;
-#  $title=~ s/\'/\\\'/g;
-#  $author=~ s/\'/\\\'/g;
+  #$title=~ s/\'/\\\'/g;
+  #$author=~ s/\'/\\\'/g;
   my $query="update biblio set title='$title',
   author='$author',copyrightdate='$copyright',
   seriestitle='$seriestitle',serial='$serial',unititle='$unititle',notes='$notes'
@@ -390,14 +430,10 @@ sub modsubtitle {
 sub modaddauthor {
   my ($bibnum,$author)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from additionalauthors where biblionumber=$bibnum";
+  my $query="Delete from additionalauthors where biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  if (my $data=$sth->fetchrow_hashref){
-    $query="update additionalauthors set author='$author' where biblionumber=$bibnum";
-  } else {
     $query="insert into additionalauthors (author,biblionumber) values ('$author','$bibnum')";
-  }
   $sth->finish;
   $sth=$dbh->prepare($query);
   $sth->execute;
@@ -481,6 +517,17 @@ sub modbibitem {
   $dbh->disconnect;
 }
 
+sub modnote {
+  my ($bibitemnum,$note)=@_;
+  my $dbh=C4Connect;
+  my $query="update biblioitems set notes='$note' where
+  biblioitemnumber='$bibitemnum'";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  $dbh->disconnect;
+}
+
 sub newbiblioitem {
   my ($bibnum,$itemtype,$isbn,$volinf,$class)=@_;
   my $dbh=C4Connect;
@@ -528,15 +575,26 @@ sub newsubtitle {
 }
 
 sub neworder {
-  my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,
-  $notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst)=@_;
+  my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice)=@_;
+  if ($budget eq 'now'){
+    $budget="now()";
+  } else {
+    $budget="'2001-07-01'";
+  }
+  if ($sub eq 'yes'){
+    $sub=1;
+  } else {
+    $sub=0;
+  }
   my $dbh=C4Connect;
   my $query="insert into aqorders (biblionumber,title,basketno,
   quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
-  biblioitemnumber,rrp,ecost,gst) 
+  biblioitemnumber,rrp,ecost,gst,budgetdate,unitprice,subscription,booksellerinvoicenumber)
+
   values
   ($bibnum,'$title',$basket,$quantity,$listprice,'$supplier',now(),
-  '$who','$who','$notes',$bibitemnum,'$rrp','$ecost','$gst')";
+  '$who','$who','$notes',$bibitemnum,'$rrp','$ecost','$gst',$budget,'$cost',
+  '$sub','$invoice')";
   my $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
@@ -564,7 +622,7 @@ sub delorder {
   where biblionumber='$bibnum' and
   ordernumber='$ordnum'";
   my $sth=$dbh->prepare($query);
-  print $query;
+  #print $query;
   $sth->execute;
   $sth->finish;
   my $count=itemcount($bibnum);
@@ -575,11 +633,12 @@ sub delorder {
 }
 
 sub modorder {
-  my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst)=@_;
+  my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh=C4Connect;
   my $query="update aqorders set title='$title',
   quantity='$quantity',listprice='$listprice',basketno='$basketno', 
-  rrp='$rrp',ecost='$ecost'
+  rrp='$rrp',ecost='$ecost',unitprice='$cost',
+  booksellerinvoicenumber='$invoice'
   where
   ordernumber=$ordnum and biblionumber=$bibnum";
   my $sth=$dbh->prepare($query);
@@ -609,11 +668,31 @@ sub newordernum {
 }
 
 sub receiveorder {
-  my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund)=@_;
+  my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
   my $dbh=C4Connect;
   my $query="update aqorders set quantityreceived='$quantrec',
   datereceived=now(),booksellerinvoicenumber='$invoiceno',
-  biblioitemnumber=$bibitemno,unitprice='$cost',freight='$freight'
+  biblioitemnumber=$bibitemno,unitprice='$cost',freight='$freight',
+  rrp='$rrp'
+  where biblionumber=$biblio and ordernumber=$ordnum
+  ";
+#  print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  $query="update aqorderbreakdown set bookfundid=$bookfund where
+  ordernumber=$ordnum";
+  $sth=$dbh->prepare($query);
+#  print $query;
+  $sth->execute;
+  $sth->finish;  
+  $dbh->disconnect;
+}
+sub updaterecorder{
+  my($biblio,$ordnum,$user,$cost,$bookfund,$rrp)=@_;
+  my $dbh=C4Connect;
+  my $query="update aqorders set
+  unitprice='$cost', rrp='$rrp'
   where biblionumber=$biblio and ordernumber=$ordnum
   ";
 #  print $query;
@@ -662,6 +741,19 @@ sub getcurrencies {
   return($i,\@results);
 } 
 
+sub getcurrency {
+  my ($cur)=@_;
+  my $dbh=C4Connect;
+  my $query="Select * from currency where currency='$cur'";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
+  $dbh->disconnect;
+  return($data);
+} 
+
 sub updatecurrencies {
   my ($currency,$rate)=@_;
   my $dbh=C4Connect;
@@ -686,7 +778,8 @@ sub updatesup {
    listprice='$data->{'listprice'}', invoiceprice='$data->{'invoiceprice'}',
    gstreg=$data->{'gstreg'}, listincgst=$data->{'listincgst'},
    invoiceincgst=$data->{'invoiceincgst'}, specialty='$data->{'specialty'}',
-   discount='$data->{'discount'}'
+   discount='$data->{'discount'}',invoicedisc='$data->{'invoicedisc'}',
+   nocalc='$data->{'nocalc'}'
    where id='$data->{'id'}'";
    my $sth=$dbh->prepare($query);
    $sth->execute;
@@ -741,8 +834,26 @@ sub makeitems {
   return($error);
 }
 
+sub checkitems{
+  my ($count,@barcodes)=@_;
+  my $dbh=C4Connect;
+  my $error;
+  for (my $i=0;$i<$count;$i++){
+    $barcodes[$i]=uc $barcodes[$i];
+    my $query="Select * from items where barcode='$barcodes[$i]'";
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    if (my $data=$sth->fetchrow_hashref){
+      $error.=" Duplicate Barcode: $barcodes[$i]";
+    }
+    $sth->finish;
+  }
+  $dbh->disconnect;
+  return($error);
+}
+
 sub moditem {
-  my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn)=@_;
+  my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
   my $dbh=C4Connect;
   my $query="update items set biblioitemnumber=$bibitemnum,
   barcode='$barcode',itemnotes='$notes'
@@ -755,6 +866,9 @@ sub moditem {
       barcode='$barcode',itemnotes='$notes',homebranch='$homebranch',
       itemlost='$lost',wthdrawn='$wthdrawn' where itemnumber=$itemnum";
   }
+  if ($replacement ne ''){
+    $query=~ s/ where/,replacementprice='$replacement' where/;
+  }
 
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -762,6 +876,16 @@ sub moditem {
   $dbh->disconnect;
 }
 
+sub updatecost{
+  my($price,$rrp,$itemnum)=@_;
+  my $dbh=C4Connect;
+  my $query="update items set price='$price',replacementprice='$rrp'
+  where itemnumber=$itemnum";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  $dbh->disconnect;
+}
 sub countitems{
   my ($bibitemnum)=@_;
   my $dbh=C4Connect;
