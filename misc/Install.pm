@@ -289,6 +289,11 @@ sub mkdir_parents ($;$) {
 
     checkabortedinstall;
 
+Checks whether a previous installation process has been abnormally
+aborted, by checking whether $::etcidr/koha.conf is a symlink or not.
+If an aborted installation is detected, gives the user a chance to
+abort, before trying to recover the aborted installation.
+
 Assuming that Koha will be installed on a modern Unix with symlinks,
 it is possible to code the installer so that aborted installs can be
 detected. In case of such an event we can do our best to "roll back"
@@ -435,6 +440,7 @@ sub getmessage {
 
 
 =item showmessage
+
     showmessage($message, 'none');
     showmessage($message, 'none', undef, $noclear);
 
@@ -542,6 +548,19 @@ sub showmessage {
     }
 }
 
+
+=item getinstallationdirectories
+
+    getinstallationdirectories;
+
+Get the various installation directories from the user, and then
+create those directories (if they do not already exist).
+
+These pieces of information are saved to global variables; the
+function does not return any values.
+
+=cut
+
 sub getinstallationdirectories {
     $::opacdir = '/usr/local/koha/opac';
     $::intranetdir = '/usr/local/koha/intranet';
@@ -600,6 +619,19 @@ You must specify different directories for the OPAC and INTRANET files!
 }
 
 
+
+=item getdatabaseinfo
+
+    getdatabaseinfo;
+
+Get various pieces of information related to the Koha database:
+the name of the database, the host on which the SQL server is
+running, and the database user name.
+
+These pieces of information are saved to global variables; the
+function does not return any values.
+
+=cut
 
 $messages->{'DatabaseName'}->{en} = heading('Name of MySQL database') . qq|
 Please provide the name of the mysql database for your koha installation.
@@ -666,6 +698,19 @@ sub getdatabaseinfo {
 }
 
 
+
+=item getapacheinfo
+
+    getapacheinfo;
+
+Get various pieces of information related to the Apache server:
+the location of the configuration file and, if needed, the Unix
+user that the Koha CGI will be run under.
+
+These pieces of information are saved to global variables; the
+function does not return any values.
+
+=cut
 
 $messages->{'FoundMultipleApacheConfFiles'}->{en} = 
    heading('MULTIPLE APACHE CONFIG FILES') . qq|
@@ -1386,6 +1431,12 @@ sub loadconfigfile {
 END { }       # module clean-up code here (global destructor)
 
 =back
+
+=head1 BUGS
+
+A lot of variables like $::opacdir. Because Perl does not check
+for strictness when a package name is explicitly specified,
+using such variables defeats the purpose of "use strict".
 
 =head1 SEE ALSO
 
