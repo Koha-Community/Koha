@@ -14,7 +14,7 @@ function mettre à jour(f){
   //  ecost=f.ecost.value  //budgetted cost
   //  GST=f.GST.value
   //  total=f.total.value
-  //make useful constants out of the above
+  //make useful constants out sur the above
   exchangerate=f.elements[currency].value      //get exchange rate
   gst_on=(!listinc && applygst);
   //do real stuff
@@ -50,7 +50,7 @@ win.document.write("</font></body></html>");
 
 </script>
 <form action=/cgi-bin/koha/acqui/addorder.pl method=post name=frusin>
-<!-- TMPL_UNLESS name="existing" --><input type=hidden name=existing value=non><!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS name="existing" --><input type=hidden name=existing value=no><!-- /TMPL_UNLESS -->
 <!-- <!-- TMPL_VAR name="title" --> -->
 <input type=hidden name=ordnum value="<!-- TMPL_VAR name="ordnum" -->">
 <input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
@@ -84,7 +84,7 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" ></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Editereur</td>
+		<TD> Editeur</td>
 		<td><input type=text size=30 name=publishercode value="<!-- TMPL_VAR name="publishercode" -->" ></td>
 	</tr>
 	<TR VALIGN=TOP>
@@ -148,11 +148,12 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 		<TD>N° facture *</td>
 		<td><input type=text size=20 name=invoice ></td>
 	<TR VALIGN=TOP>
-		<TD>Notes</td>
+		<TD>Nontes</td>
 		<td><input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD colspan=2><input type=image  name=submit src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" border=0 align=right>	</td>
+		<TD colspan=2>
+		<input type="submit" value="OK" class="button">
 	</tr>
 </table>
 </form>
@@ -160,8 +161,8 @@ Panier pour: <!-- TMPL_VAR name="name" -->
 <table>
 <tr><td bgcolor=#cccc99  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>AIDE</B><br>
 <UL>
-<LI><B>Gras</B> fields doit be filled dans to create a new bibilo et item.<p>
-<LI>Shaded fields can be used to do a "quick" receive, when items have been purchased locally ou gifted. In this case the quantity "ordered" will also  be entered into the database as the quantity received.
+<LI>Les champs en gras sont obligatoires.<p>
+<LI>Les champs ombrés peuvent être utilisés pour effectuer un retour "rapide", quand les ouvrages ont été acheté localement ou reçus en don. Dans ce cas, la quantité "commandée" sera aussi affectée dans la base de données à la quantité "reçue".
 </UL>
 </td></tr></table>
 <p> &nbsp; </p>

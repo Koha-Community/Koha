@@ -1,20 +1,20 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<h1>Shopping Panier <!-- TMPL_VAR name="basket" --> for <a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a> <!-- TMPL_VAR name="name" --></h1><br />
-(Our Reference: <!-- TMPL_VAR name="entrydate" -->, #<!-- TMPL_VAR name="basket" -->, authorised by: <!-- TMPL_VAR name="loggedinusername" -->)<br />
+<h1>Panier <b><!-- TMPL_VAR name="basket" --> </b>pour <a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a> <!-- TMPL_VAR name="name" --></h1><br />
+(Ref: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name="basket" --></b>, saisi par: <!-- TMPL_VAR name="loggedinusername" -->)<br />
 <CENTER>
 <p>
 <table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor="#ffdf61">
 		<td width="5%"><b>Commande</b></td>
-		<td width="10%"><b>Editereur</b></td>
+		<td width="10%"><b> Editeur</b></td>
 		<td width="10%"><b>Isbn</b></td>
 		<td width="30%"><b>Titre</b></td>
 		<td width="20%"><b>Auteur</b></td>
 		<td width="5%"><b>$ rrp</b></td>
 		<td width="7%"><b>$est</b></td>
 		<td width="7%"><b>Quantité</b></td>
-		<td width="7%"><b>àtal</b></td>
+		<td width="7%"><b> Total</b></td>
 	</tr>
 	<!-- TMPL_LOOP name="books_loop" -->
 		<tr valign=top bgcolor="<!-- TMPL_VAR name="color" -->">
@@ -34,7 +34,7 @@
 	<tr valign=top bgcolor=white>
 		<td colspan=6 rowspan=3  bgcolor="#ffdf61">
   			<b>AIDE</b><br>
-			To changer tout of the catalogue ou accounting information attached to an order,  click on the title.<br>
+			Pour changer n'importe quelle information attachée à cette commande, cliquez sur le titre.<br>
 		</td>
   		<td><b>Sous-total</b></td>
   		<td><!-- TMPL_VAR name="currency" --><!-- TMPL_VAR name="sub_total" --></td>

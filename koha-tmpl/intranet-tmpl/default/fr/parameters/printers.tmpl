@@ -47,7 +47,7 @@
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 = "Form not submitted because sur the following problem(s)\n";
                         alertString2 += "------------------------------------------------------------------------------------\n\n";
                         alertString2 += _alertString;
                         alert(alertString2);
@@ -69,14 +69,14 @@
 
 	<!-- TMPL_IF NAME=searchfield -->
 		<tr>
-			<td>Nom Imprimante</td>
+			<td>Nonm Imprimante</td>
 			<td>
 				<input type=hidden name=printername value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>Nom Imprimante</td>
+			<td>Nonm Imprimante</td>
 			<td>
 				<input type=text name=printername size=50 maxlength=50>
 			</td>
@@ -136,7 +136,7 @@
 			</td>
 			<td>
 				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
-				<input type=submit value=NON>
+				<input type=submit value=NO>
 				</form>
 			</td>
 		</tr>
@@ -163,7 +163,7 @@
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Nom</b></td>
+			<td background='/images/background-mem.gif'><b>Nonm</b></td>
 			<td background='/images/background-mem.gif'><b>Queue</b></td>
 			<td background='/images/background-mem.gif'><b>Saisir</b></td>
 			<td background='/images/background-mem.gif'> </td>
@@ -190,7 +190,7 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 	<!-- TMPL_IF NAME=ltcount -->
-		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Next >></a>	
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Suivant >></a>	
 	<!-- /TMPL_iF -->
 
         <br>

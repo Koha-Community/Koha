@@ -40,7 +40,7 @@
 			<font color='red' size='+2'>Ouvrage marqué en attente:</font><br>
     Ouvrage: <!-- TMPL_VAR Name="itemtitle" --> (<!-- TMPL_VAR Name="itemauthor" -->)<br>
  doit être transféré vers <b><!-- TMPL_VAR Name="branchname" --></b> <br>
-to be picked up by <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Lecteur'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
+pour être retiré à <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Lecteur'); return false;"><!-- TMPL_VAR Name="borcnum" --></a>).
 			<center><form method=post action='returns.pl'>
 			<!-- TMPL_LOOP Name="inputloop" -->
 				<!-- TMPL_UNLESS Name="first" -->
@@ -122,7 +122,7 @@ Téléphone: <!-- TMPL_VAR Name="borphone" -->
 			<!-- TMPL_LOOP Name="errmsgloop" -->
 				<font color='red' size='+2'>
 				<!-- TMPL_IF Name="badbarcode" -->
-					Non Ouvrage with barcode: <!-- TMPL_VAR Name="msg" -->
+					No Ouvrage with barcode: <!-- TMPL_VAR Name="msg" -->
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="ispermanent" -->
 					Please return to  <!-- TMPL_VAR Name="msg" -->
@@ -167,7 +167,7 @@ Téléphone: <!-- TMPL_VAR Name="borphone" -->
 			<!-- TMPL_LOOP Name="flagloop" -->
 				<tr><td valign=top><!-- TMPL_IF Name="redfont" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR Name="flag" --><!-- TMPL_IF Name="redfont" --></font><!-- /TMPL_IF --></td>
 				<!-- TMPL_IF Name="charges" -->
-					<td bgcolor=<!-- TMPL_VAR Name="color" -->><b><!-- TMPL_VAR Name="msg" --></b><a href="/cgi-bin/koha/payer.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/payer.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Payment'); return false;">Payment</a></td></tr>
+					<td bgcolor=<!-- TMPL_VAR Name="color" -->><b><!-- TMPL_VAR Name="msg" --></b><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR Name="bornum" -->" onclick="openWindow('/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR Name="bornum" -->', 'Payment'); return false;">Payment</a></td></tr>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="waiting" -->
 					<td bgcolor=<!-- TMPL_VAR Name="color" -->>

@@ -62,7 +62,7 @@
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 = "Form not submitted because sur the following problem(s)\n";
                         alertString2 += "------------------------------------------------------------------------------------\n\n";
                         alertString2 += _alertString;
                         alert(alertString2);
@@ -97,7 +97,7 @@
         <!-- /TMPL_IF -->
 
 		<tr>
-			<td>Nom de l'hébergeur</td>
+			<td>Nonm de l'hébergeur</td>
 			<td>
 				<input type=text name=host size=30 value='<!-- TMPL_VAR NAME=host -->'>
 			</td>
@@ -137,7 +137,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Syntaxe (z3950 can send records dans various format. Choose one)</td>
+			<td>Syntaxe (z3950 can send enregistrements in various format. Choose one)</td>
 			<td>
 				<select name="syntax">
 					<option value="MARC21">MARC21</option>
@@ -178,7 +178,7 @@
                         <input type=hidden name=op value=delete_confirmed>
                         <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
                 <tr>
-                        <td>Nom de l'hébergeur</td>
+                        <td>Nonm de l'hébergeur</td>
                         <td><!-- TMPL_VAR NAME=host --></td>
                 </tr>
                 <tr>
@@ -210,7 +210,7 @@
                 </tr>
                 <tr>
                         <td><INPUT type=submit value='OUI'></form></td>
-                        <td><form action='<!-- TMPL_VAR NAME=script_name -->' method=post><input type=submit value=NON></form></td>
+                        <td><form action='<!-- TMPL_VAR NAME=script_name -->' method=post><input type=submit value=NO></form></td>
                 </tr>
 	</table>
 
@@ -237,7 +237,7 @@
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Site</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Nom de l'hébergeur</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Nonm de l'hébergeur</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Port</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Base de données</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Identifiant utilisateur</b></td>
@@ -275,7 +275,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         <!-- TMPL_IF NAME=ltcount -->
-                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Next >></a>
+                <a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Suivant >></a>
         <!-- /TMPL_iF -->
                 
         <br>

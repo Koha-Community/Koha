@@ -26,7 +26,7 @@
 		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
 			<span style="color:#FFFFFF;">
 				<b>AIDE</b><br>
-				<b>Recherche en cours:</b>Using more fields for your search (eg Mot-clé + author + class) will slow it down.<p>
+				<b>Chercher :</b>L'utilisation de plusieurs critères pour votre recherche ralentit le système.<p>
 			</span>
 		</td>
 	</TR>
@@ -36,14 +36,14 @@
 
 <TABLE border=0>
 	<TR VALIGN=TOP>
-		<TD>Mots-clé</TD>
+		<TD>Mots-clés</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
 	</TR>
 	<TR VALIGN=TOP>
 		<TD>Titre</TD>
 		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
 		<td>
-			<input type=radio name=ttype value=normal checked>Normal
+			<input type=radio name=ttype value=normal checked>Nonrmal
 			<input type=radio name=ttype value=exact>Exact
 		</td>
 	</TR>
@@ -60,10 +60,10 @@
 	</TR>
 
 	<TR VALIGN=TOP>
-	<TD>Classe</TD>
+	<TD>Catégorie</TD>
 		<td>
 			<select name="class" size="1">
-			<option value="">àut
+			<option value=""> Tout
 			<!-- TMPL_VAR name="classlist" -->
 			</select>
 		</td>
@@ -90,10 +90,10 @@
 				<tr align="center">
 					<td>
 						<input type="hidden" name="type" value="intra">
-						<INPUT TYPE="image"  alt="Commencer la recherche" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" BORDER=0 >
+						<input type="submit" class="button" value="Lancer la recherche">
 					</td>
 					<td>
-						<INPUT TYPE="reset"  VALUE= "Effacer">
+						<INPUT TYPE="reset"  VALUE= "Effacer" class="button">
 					</td>
 					<td>
 						<a href=/cgi-bin/koha/shelves.pl>Rayonnages virtuels</a>

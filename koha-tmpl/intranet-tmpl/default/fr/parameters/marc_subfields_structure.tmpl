@@ -33,7 +33,7 @@
 	<!-- /TMPL_LOOP -->
 	</table>
 	<INPUT type=submit value='OK'>
-	<p>Note: dans la dernière colonne, vous pouvez choisir:
+	<p>Nonte: dans la dernière colonne, vous pouvez choisir:
 	<ul><li>Une "valeur autorisée": se réfère à une liste de valeurs autorisées pour ce sous-champs. Voir la table admin correspondante..</li>
 	<li>Une "catégorie thésaurus": se réfère à une catégorie du thésaurus. Voir la table admin correspondante..</li>
 	<li>Un "constructeur de valeur": les constructeurs de valeurs sont des programmes Perl qui vous aide à sélectionner les entrées d'un champ selon une syntaxe MARC. Ils remplissent aussi parfois automatiquement des sous-champs..</li>
@@ -54,7 +54,7 @@
 	<input type=hidden name=tagfield value='<!-- TMPL_VAR name="tagfield" -->'>
 	<input type=hidden name=tagsubfield value='<!-- TMPL_VAR name="tagsubfield" -->'>
 	<tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
-	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->"><input type=submit value=NON></form></td></tr>
+	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->"><input type=submit value=NO></form></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
@@ -70,16 +70,16 @@
 <font SIZE=6><em>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --></em></font>
 <p>This screen shows the subfields associated with the selected tag. Vous can edit subfields ou ajouter a new one by clicking on "edit". </p>
 <p>The column <b>champ Koha</b> shows that the subfield is linked with a "champ Koha". Koha can manage a MARC interface, ou a Koha interface. This link ensures that 
-both DB are synchronized, thus you can changer from a MARC to a Koha interface easily.</p>
+both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
 
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>Sous-champ</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Lib</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>champ Koha</b> <span style="font-size:8;color:red" title="le champ koha-DB lié à ce sous-champ">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=oui, 0=non)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>obligatoire</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=oui, 0=non)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Onglet</b> <span style="font-size:8;color:red" title="subfield is shown dans which tab (0-9 ou item)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=oui, 0=no)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>obligatoire</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=oui, 0=no)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Onglet</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 ou item)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Valeur autorisée</b> <span style="font-size:8;color:red" title="valeurs autorisées pour ce sous-champ">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Thésaurus</b> <span style="font-size:8;color:red" title="Thésaurus lié à ce sous-champ">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Constructeur de valeur">?</span></td>

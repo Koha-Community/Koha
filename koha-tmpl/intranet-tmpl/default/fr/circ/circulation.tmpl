@@ -100,7 +100,7 @@
 							<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
 							<!-- /TMPL_LOOP -->
 							<input type="hidden" name="answer" value="N">
-							<input type="submit" value="Non">
+							<input type="submit" value="No">
 							</form>
 						</td>
 					</tr>
@@ -233,13 +233,13 @@
     </td></tr>
 <!-- TMPL_IF name="noissues" -->
 	<!-- TMPL_IF name="charges" -->
-		<tr><td valign="top"><font color="red">FRAIS</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/payer.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+		<tr><td valign="top"><font color="red">FRAIS</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 	<!-- TMPL_ELSE -->
 		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" --><!-- TMPL_VAR name="message" --></td></tr>
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 		<!-- TMPL_IF name="charges" -->
-			<tr><td valign=top>FRAIS</td><td><a href="/cgi-bin/koha/payer.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+			<tr><td valign=top>FRAIS</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="waiting" -->
 			<tr>
@@ -257,7 +257,7 @@
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" -->
-					<tr><td valign="top">NOTES</td><td><!-- TMPL_VAR name="notesmsg" --></td></tr>
+					<tr><td valign="top">NONTES</td><td><!-- TMPL_VAR name="notesmsg" --></td></tr>
 			<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 </table>
@@ -273,7 +273,7 @@
 		</th>
 	</tr>
 	<tr>
-		<th>Date de retour</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Classe</th>
+		<th>Date de retour</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Catégorie</th>
 	</tr>
 	<!-- TMPL_LOOP name="todayissues" -->
 	    <tr><td align="center" bgcolor=<!-- TMPL_VAR NAME="tcolor" -->><!-- TMPL_VAR NAME="dd" --></td>
@@ -295,7 +295,7 @@
 			</th>
 		</tr>
 		<tr>
-			<th>Date de retour</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Classe</th>
+			<th>Date de retour</th><th>Code barre</th><th>Titre</th><th>Auteur</th><th>Catégorie</th>
 		</tr>
 	<!-- TMPL_LOOP name="previssues" -->
 	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dd" --></td>

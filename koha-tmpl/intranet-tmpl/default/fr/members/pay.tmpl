@@ -3,7 +3,7 @@
 <h1>Payer une amende pour <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h1><P>
 <center>
 <p>
-	<form action=/cgi-bin/koha/payer.pl method=post>
+	<form action=/cgi-bin/koha/pay.pl method=post>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
 	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=4><B>AMENDES & FRAIS</B></TD>
@@ -12,7 +12,7 @@
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
 <!-- TMPL_LOOP name="loop_pay" -->
 <tr VALIGN=TOP  >
-	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="non" checked>Unpaid
+	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>Unpaid
 	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="oui">Pay
 	<input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">Writeoff
 	<input type=hidden name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->">
@@ -34,7 +34,7 @@
 	</tr>
 	<tr VALIGN=TOP  >
 	<TD colspan=5 align=right>
-	<INPUT TYPE="submit" name="submit"  VALUE="payer" class="button"></td>
+	<INPUT TYPE="submit" name="submit"  VALUE="pay" class="button"></td>
 </tr>
 </table>
 </form>

@@ -43,7 +43,7 @@
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 = "Form not submitted because sur the following problem(s)\n";
 			alertString2 += "------------------------------------------------------------------------------------\n\n";
 			alertString2 += _alertString;
 			alert(alertString2);
@@ -79,7 +79,7 @@
 	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
 	<tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
-	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NON></form></td></tr>
+	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
@@ -93,7 +93,7 @@
 <!-------------------------------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>Admin Structure étiquette MARC</h1>
-<b>Note : si vous changez le lien du sous-champ MARC vers un champ non-MARC, demandez à votre administrateur de lancer le script misc/rebuildnonmarc.pl.</b>
+<b>Nonte : si vous changez le lien du sous-champ MARC vers un champ non-MARC, demandez à votre administrateur de lancer le script misc/rebuildnonmarc.pl.</b>
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=text name=searchfield value="">
 	<input type=reset name=reset value="clr">

@@ -43,7 +43,7 @@
 		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
 	<tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
 	<tr><td><INPUT type=submit value='OUI'></form></td>
-		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NON></form></td></tr>
+		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
 <!-- /TMPL_IF -->
 
 <!-------------------------------------------------------------------------------------------------->
@@ -51,9 +51,9 @@
 <h1>Admin Valeurs autorisées</h1>
 <p>Cette table est utilisée dans les définitions MARC. Vous pouvez définir autant de catégories et autant de valeurs autorisées pour chaque catégorie que vous voulez.</p>
 <p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds ou modifies a biblio,
-the subfield is not entered through a free field, but though a list of authorised values.</p>
+the subfield is not entered à a free field, but though a list sur authorised values.</p>
 <form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
-	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="OK">   <a href="authorised_values.pl?op=add_form">Nouvelle catégorie...</a>
+	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="OK">   <a href="authorised_values.pl?op=add_form">Nonuvelle catégorie...</a>
 </form>
 <!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2 width="80%">

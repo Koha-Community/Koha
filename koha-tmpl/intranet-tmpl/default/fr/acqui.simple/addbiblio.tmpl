@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
 <!--STYLE TYPE="text/css" MEDIA=screen>
 	table {	font-family:Arial;
@@ -10,7 +10,7 @@
 <form method="post" name="f">
 <table width=100% cellspacing=0 cellpadding=5 border=1>
 <tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-	<th>Notice biblio MARC : <!-- TMPL_VAR name="bibid" --></th>
+	<th>Nontice biblio MARC : <!-- TMPL_VAR name="bibid" --></th>
 </tr>
 <tr>
 	<td>
@@ -356,7 +356,7 @@ function Check(f) {
 	for (i=0 ; i<f.field_value.length-2 ; i++) {
 		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
 		    // We should not flag an error unless the tag is also
-		    // mandatory, ou if something else dans the tag is entered
+		    // mandatory, ou if something else in the tag is entered
 
 		    if (f.tag_mandatory[i].value == 1 || field_is_nonempty_p[f.tag[i].value]) {
 			document.getElementById("error"+i).style.backgroundColor="#FF0000";
@@ -384,7 +384,7 @@ function Check(f) {
 	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
 	var alertString2;
 	if (total_errors!=0) {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
+		alertString2 = "Form not submitted because sur the following problem(s)\n";
 		alertString2 += "------------------------------------------------------------------------------------\n\n";
 		alertString2 += "- "+ total_missing_mandatory_tags +" mandatory tags empty\n";
 		alertString2 += "- "+ total_missing_mandatory_subfields +" mandatory fields empty (see bold subfields)";

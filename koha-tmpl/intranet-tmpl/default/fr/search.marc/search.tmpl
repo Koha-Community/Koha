@@ -44,7 +44,7 @@
 			<td>
 				<select name="excluding" size="1" onchange="sql_update()">
 					<option value="0"> </option>
-					<option <!-- TMPL_IF NAME="not" -->sélectionnered <!-- /TMPL_IF -->valeur="1">not</option>
+					<option <!-- TMPL_IF NAME="not" -->sélectionnered <!-- /TMPL_IF -->valeur="1">nont</option>
 				</select>
 			</td>
 			<td>
@@ -66,8 +66,8 @@
 
 	<table width="90%">
 	<tr>
-	<td align="left" width="33%"><input type="button" value="Ajouter un critère" onClick="AddStatement()"></td>
-	<td align="middle" width="33%"><input type="submit" value="Search"></td>
+	<td align="left" width="33%"><input type="button" value="Ajouter un critère" onClick="AddStatement()" class="button"></td>
+	<td align="middle" width="33%"><input type="submit" value="Lancer la recherche" class="button"></td>
 	<td align="right" width="33%">Résultats par page :
 		<select align="right" name="resultsperpage" size="1">
 			<option value="20">20</option>

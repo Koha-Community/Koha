@@ -89,7 +89,7 @@
 		</tr></td>
 		<tr><td colspan=2 align=center>CONFIRMER SUPPRESSION de cette entrée <b>et toutes les entrées dépendantes de celle-ci</b></td></tr>
 		<tr><td><INPUT type=submit value='OUI'></form></td>
-				<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NON></form></td></tr>
+				<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
 	</table>
 <!-- /TMPL_IF -->
 
@@ -99,13 +99,13 @@
 	<p>Gestion du thésaurus et des fichiers autorités.<br />
 	<ul>
 		<b>Extraire</b>: see data dependent one this one<br />
-		<b>Lié</b>: see other forms of this authority entry</p>
+		<b>Lié</b>: see other forms sur this authority entry</p>
 	</ul>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<!-- TMPL_VAR name="tab_list" -->
 		<input type="text" name="searchstring" value="<!-- TMPL_VAR name="searchstring" -->">
 		<input type="submit" value="OK">
-		<a href="thesaurus.pl?op=add_form">Nouvelle catégorie...</a>
+		<a href="thesaurus.pl?op=add_form">Nonuvelle catégorie...</a>
 	</form>
 	<!-- TMPL_LOOP name="hierarchy_loop" -->
 		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />
@@ -133,20 +133,22 @@
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=hidden name=op value=add_form>
 	</table>
-	<table width=40%>
+	<br/>
+	<table width=40% height="80">
 		<tr>
-			<td width=50%><!-- TMPL_VAR name="previous" --></td>
-			<td width=50%><!-- TMPL_VAR name="next" --></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="previous" -->" class="button">Précédents</a></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="next" -->" class="button"> Suivant</a></td>
 		</tr>
 	</table>
-
+	<br/>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type="hidden" name="op" value="add_form">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="father" value="<!-- TMPL_VAR name="father" -->">
-	<br><input type=submit class="button"  value="Ajouter une entrée du thésaurus" title="Ajouter une entrée du thésaurus" ALT="Ajouter une entrée du thésaurus"><br>
+	<br><input type=submit class="button"  value="Ajouter" title="Ajouter une entrée du thésaurus" ALT="Ajouter une entrée du thésaurus"><br>
 	</form>
+
 
 <!-- /TMPL_IF -->
 

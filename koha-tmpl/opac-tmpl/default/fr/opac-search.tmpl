@@ -1,88 +1,71 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Connecté en tant que: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Accueil lecteur</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Déconnecter</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>S'identifier</a> à Koha</p>
-</TMPL_IF>
+<form action="/cgi-bin/koha/opac-searchresults.pl" method=get>
+<table border="0" align="center">
 
 
-<CENTER>
-<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
-<TABLE >
+<tr>
+	<td>Mot-clefs</td>
+	<td colspan="2"><input type="text"  size="25"   name="keyword"></td>
+</tr>
 
+<tr>
+	<td colspan="3"><b>OU :</b></td>
+</tr>
+<tr>
+	<td>Sujet</td>
+	<td colspan="2"><input type="text"  size="25"   name="subject"></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD>Mot-clefs</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-	<td></TD>
-</TR>
+<tr>
+	<td colspan="3"><b>OU un ou plus de : :</b></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD colspan=3><B>OU :</B></TD>
-<td></TD></TR>
-<TR VALIGN=TOP>
-	<TD>Sujet</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td>Titre</td>
+	<td><input type="text"  size="25"   name="title"></td>
+	<td><input type="radio" name="ttype" value="normal" checked="checked">Normal<input type="radio" name="ttype" value="exact">Exact</td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD colspan=3><B>OU un ou plus de : :</B></TD>
-<td></TD></TR>
+<tr>
+	<td>Auteur</td>
+	<td colspan="2"><input type="text" size="25" name="author"></td>
+</tr>
 
-<TR VALIGN=TOP>
-	<TD>Titre</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
-	<td><input type=radio name=ttype value=normal checked>Normal<input type=radio name=ttype value=exact>Exact</td>
-</TR>
-
-<TR VALIGN=TOP>
-	<TD>Auteur</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
-	<td></td>
-</TR>
-
-<TR VALIGN=TOP>
-	<TD>Illustrateur</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td>Illustrateur</td>
+	<td colspan="2"><input type="text" size="25" name="illustrator"></td>
+</tr>
 
 <tr>
 <td>Classe</td>
-	<td>
+	<td colspan="2">
 	<select size="1"  name="class">
-	<option value="">Tout
+	<option value="">Tout</option>
 	<!-- fetch class list -->
-	<TMPL_VAR name="classlist">
+	<!-- TMPL_VAR name="classlist" -->
 	<!--#include virtual="/includes/cat-class-list.inc" -->
 	</select>
 	</td>
-	<td></td>
 </tr>
 
-<TR VALIGN=TOP>
-	<TD>Code barre</TD>
-	<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
-	<td></td>
-</TR>
+<tr>
+	<td>Code barre</td>
+	<td colspan="2"><input type="text"  size="25"   name="itemnumber"></td>
+</tr>
 
-<TR VALIGN=TOP>
-
+<tr>
 	<td><input type="submit" value="Lancer recherche"></td>
-	<TD><font size=4 face="arial,helvetica"><INPUT TYPE="reset"  value="Effacer"></font></td>
-	<td></td>
+	<td colspan="2"><input type="reset"  value="Effacer"></td>
 </tr>
 
-<TR VALIGN=TOP>
-	<TD colspan=3>Notez que le mot clef est prioritaire</TD>
-</TD></TR>
+<tr>
+	<td colspan="3">Notez que le mot clef est prioritaire</td>
+</tr>
 
-</TABLE>
+</table>
 
-</FORM>
-</CENTER>
+</form>
 
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -69,7 +69,7 @@
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 = "Form not submitted because sur the following problem(s)\n";
 			alertString2 += "------------------------------------------------------------------------------------\n\n";
 			alertString2 += _alertString;
 			alert(alertString2);
@@ -84,7 +84,7 @@
 
 <!-- TMPL_IF name="modifier" -->
 	<tr><td>Compte</td><td><input type=hidden name=bookfundid value=<!-- TMPL_VAR name=bookfundid -->><!-- TMPL_VAR name="bookfundid" --></td></tr>
-	<tr><td>Nom de compte</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
+	<tr><td>Nonm de compte</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="adding" -->
@@ -134,7 +134,7 @@ Donnée enregistrée
 		<td colspan=2 align=center>CONFIRMER SUPPRESSION</td>
 	</tr>
 	<tr>
-		<td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NON></form></td>
+		<td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NO></form></td>
 	</tr>
 </table>
 <!-- /TMPL_IF -->
