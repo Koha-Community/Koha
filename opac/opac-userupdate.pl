@@ -13,13 +13,16 @@ use C4::Circulation::Circ2;
 
 my $query = new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-userupdate.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 0,
+			     flagsrequired => {borrow => 1},
+			     debug => 1,
+			     });
 
 # get borrower information ....
-my $borrowernumber = getborrowernumber($loggedinuser);
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
 
@@ -66,8 +69,6 @@ EOF
     }
 }
 
-my $template = gettemplate("opac-userupdate.tmpl", "opac");
-
 
 $borr->{'dateenrolled'} = slashifyDate($borr->{'dateenrolled'});
 $borr->{'expiry'}       = slashifyDate($borr->{'expiry'});
@@ -80,7 +81,4 @@ $bordat[0] = $borr;
 
 $template->param(BORROWER_INFO => \@bordat);
 
-
-$template->param(loggedinuser => $loggedinuser);
-
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie), $template->output;

@@ -68,7 +68,6 @@ foreach my $key (keys %$issues) {
 
     if ($issue->{'overdue'}) {
 	push @overdues, $issue;
-	foreach my $k (keys %$issue) {warn "$k : $issue->{$k}";}
 	$overdues_count++;
 	$issue->{'status'} = "<font color='red'>OVERDUE</font>";
     } else {
