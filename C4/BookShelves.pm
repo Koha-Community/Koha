@@ -53,7 +53,8 @@ items to and from bookshelves.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &RemoveFromShelf &AddShelf &RemoveShelf);
+@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &AddToShelfFromBiblio
+				&RemoveFromShelf &AddShelf &RemoveShelf);
 
 my $dbh = C4::Context->dbh;
 
@@ -85,21 +86,15 @@ The number of books on that bookshelf.
 # a reference-to-hash? The shelf number can be just another key in the
 # hash.
 sub GetShelfList {
-    # FIXME - These two database queries can be combined into one:
-    #	SELECT		bookshelf.shelfnumber, bookshelf.shelfname,
-    #			count(shelfcontents.itemnumber)
-    #	FROM		bookshelf
-    #	LEFT JOIN	shelfcontents
-    #	ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
-    #	GROUP BY	bookshelf.shelfnumber
-    my $sth=$dbh->prepare("select shelfnumber,shelfname from bookshelf");
+    my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,
+							count(shelfcontents.itemnumber) as count
+								FROM		bookshelf
+								LEFT JOIN	shelfcontents
+								ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
+								GROUP BY	bookshelf.shelfnumber order by shelfname");
     $sth->execute;
     my %shelflist;
-    while (my ($shelfnumber, $shelfname) = $sth->fetchrow) {
-	my $sti=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=?");
-		# FIXME - Should there be an "order by" in here somewhere?
-	$sti->execute($shelfnumber);
-	my ($count) = $sti->fetchrow;
+    while (my ($shelfnumber, $shelfname,$count) = $sth->fetchrow) {
 	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
 	$shelflist{$shelfnumber}->{'count'}=$count;
     }
@@ -148,6 +143,21 @@ sub AddToShelf {
 	return unless $itemnumber;
 	my $sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and itemnumber=?");
 
+	$sth->execute($shelfnumber, $itemnumber);
+	if ($sth->rows) {
+# already on shelf
+	} else {
+		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values (?, ?, 0)");
+		$sth->execute($shelfnumber, $itemnumber);
+	}
+}
+sub AddToShelfFromBiblio {
+	my ($env, $biblionumber, $shelfnumber) = @_;
+	return unless $biblionumber;
+	my $sth = $dbh->prepare("select itemnumber from items where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($itemnumber) = $sth->fetchrow;
+	$sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and itemnumber=?");
 	$sth->execute($shelfnumber, $itemnumber);
 	if ($sth->rows) {
 # already on shelf
@@ -239,6 +249,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.11.2.2  2004/02/19 10:15:41  tipaul
+# new feature : adding book to bookshelf from biblio detail screen.
+#
 # Revision 1.11.2.1  2004/02/06 14:16:55  tipaul
 # fixing bugs in bookshelves management.
 #
