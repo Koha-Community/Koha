@@ -59,10 +59,10 @@ my $delete=$input->param('delete');
 if ($delete){
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
 } else {  # this else goes down the whole script
-	if ($type ne 'Add'){
-		$template->param( header => 'Update Member Details'); # bad templating style
+	if ($type eq 'Add'){
+		$template->param( addAction => 1);
 	} else {
-		$template->param( header => 'Add New Member');
+		$template->param( addAction =>0);
 	}
 
 	my $data=borrdata('',$member);

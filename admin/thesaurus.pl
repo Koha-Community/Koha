@@ -257,10 +257,10 @@ if ($op eq 'add_form') {
 							branch => $branch,
 							father => $father);
 	if ($offset>0) {
-		$template->param(previous => "<a href=$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$prevpage>&lt;&lt; Prev</a>");
+		$template->param(previous => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$prevpage");
 	}
 	if ($pagesize<$count) {
-		$template->param(next => "<a href=$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage>Next &gt;&gt;</a>");
+		$template->param(next => "$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage");
 	}
 } #---- END $OP eq DEFAULT
 

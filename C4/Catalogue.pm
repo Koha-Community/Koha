@@ -111,7 +111,12 @@ sub basket {
   } else {
     $sth->execute($basketno);
   }
-  my @results = ();
+  $query.=" order by biblioitems.publishercode";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my @results;
+#  print $query;
+  my $i=0;
   while (my $data=$sth->fetchrow_hashref){
     push(@results,$data);
   }

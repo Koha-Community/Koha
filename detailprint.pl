@@ -70,8 +70,7 @@ my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => ($type eq 'opac'? 'catalogue/detail-opac.tmpl':
-					     'catalogue/detail.tmpl'),
+	template_name   => ('catalogue/detailprint.tmpl'),
 	query           => $query,
 	type            => "intranet",
 	authnotrequired => ($type eq 'opac'),

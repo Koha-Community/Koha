@@ -144,21 +144,17 @@ C<$env> is ignored.
 =cut
 #'
 sub AddToShelf {
-    my ($env, $itemnumber, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("select * from shelfcontents
-	where shelfnumber=? and itemnumber=?");
+	my ($env, $itemnumber, $shelfnumber) = @_;
+	return unless $itemnumber;
+	my $sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and itemnumber=?");
 
-    $sth->execute($shelfnumber, $itemnumber);
-    if ($sth->rows) {
-# already on shelf
-    } else {
-	$sth=$dbh->prepare("insert into shelfcontents
-		(shelfnumber, itemnumber, flags) values (?, ?, 0)");
-
-			# FIXME - The default for 'flags' is NULL.
-			# Why set it to 0?
 	$sth->execute($shelfnumber, $itemnumber);
-    }
+	if ($sth->rows) {
+# already on shelf
+	} else {
+		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values (?, ?, 0)");
+		$sth->execute($shelfnumber, $itemnumber);
+	}
 }
 
 =item RemoveFromShelf
@@ -243,6 +239,12 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.12  2004/02/11 08:40:09  tipaul
+# synch'ing 2.0.0 branch and head
+#
+# Revision 1.11.2.1  2004/02/06 14:16:55  tipaul
+# fixing bugs in bookshelves management.
+#
 # Revision 1.11  2003/12/15 10:57:08  slef
 # DBI call fix for bug 662
 #

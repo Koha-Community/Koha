@@ -106,8 +106,8 @@ if ($op eq 'add_form') {
 		$fields{$kohafield}->{liblibrarian} = $liblibrarian;
 	}
 	#XXX: This might not work. Maybe should use a DBI call instead of SHOW COLUMNS
-	my $sth2=$dbh->prepare("SHOW COLUMNS from ?");
-	$sth2->execute($tablename);
+	my $sth2=$dbh->prepare("SHOW COLUMNS from $tablename");
+	$sth2->execute;
 
 	my $toggle="white";
 	my @loop_data = ();

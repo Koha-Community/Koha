@@ -566,7 +566,6 @@ sub MARCmoditem {
 	if ($oldrecord eq $record) {
 		return;
 	}
-
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();
 	# search old MARC item
@@ -694,7 +693,7 @@ sub MARCdelsubfield {
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
     $dbh->do("delete from marc_subfield_table where bibid='$bibid' and
 			tag='$tag' and tagorder='$tagorder'
-			and subfieldcode='$subfield' and subfieldorder='$subfieldorder
+			and subfieldcode='$subfield' and subfieldorder='$subfieldorder'
 			");
 }
 
@@ -1434,14 +1433,14 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							notforloan = ?
+							bulk	=?, 							notforloan = ?
 							");
 		$sth->execute($itemnumber,	$item->{'biblionumber'},
 								$item->{'biblioitemnumber'},$barcode,
 								$item->{'booksellerid'},$item->{'dateaccessioned'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'notforloan'});
+								$item->{'itemnotes'},$item->{'bulk'},$item->{'notforloan'});
 	} else {
 		$sth=$dbh->prepare("Insert into items set
 							itemnumber           = ?,				biblionumber         = ?,
@@ -1450,14 +1449,14 @@ sub OLDnewitems {
 							homebranch           = ?,				holdingbranch        = ?,
 							price                = ?,						replacementprice     = ?,
 							replacementpricedate = NOW(),	itemnotes            = ?,
-							notforloan = ?
+							bulk = ? , notforloan = ?
 							");
 		$sth->execute($itemnumber,	$item->{'biblionumber'},
 								$item->{'biblioitemnumber'},$barcode,
 								$item->{'booksellerid'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'notforloan'});
+								$item->{'itemnotes'},$item->{'bulk'},$item->{'notforloan'});
 	}
 	if (defined $sth->errstr) {
 		$error .= $sth->errstr;
@@ -1471,8 +1470,8 @@ sub OLDmoditem {
 #  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
 #  my $dbh=C4Connect;
 $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
-  my $query="update items set  barcode=?,itemnotes=? where itemnumber=?";
-  my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'itemnum'});
+  my $query="update items set  barcode=?,itemnotes=?,bulk=?,notforloan=? where itemnumber=?";
+  my @bind = ($item->{'barcode'},$item->{'notes'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
   if ($item->{'barcode'} eq ''){
   	$item->{'notforloan'}=0 unless $item->{'notforloan'};
     $query="update items set notforloan=? where itemnumber=?";
@@ -1484,9 +1483,11 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
                              itemnotes=?,
                              homebranch=?,
                              itemlost=?,
-                             wthdrawn=?
+                             wthdrawn=?,
+			     bulk=?,
+			     notforloan=?,
                           where itemnumber=?";
-    @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'itemnum'});
+    @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
   }
   if ($item->{'replacement'} ne ''){
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
@@ -1556,7 +1557,6 @@ where biblioitemnumber = ?");
 			push(@bind,$data->{$temp});
 		}
 		$query =~ s/\,$//;
-		warn "Q 1560 : $query";
 		my $sth2=$dbh->prepare($query);
 		$sth2->execute(@bind);
 	} # while
@@ -1581,7 +1581,6 @@ sub OLDdelbiblio{
 		}
 		#replacing the last , by ",?)"
 		$query=~ s/\,$//;
-		warn "Q olddelbiblio : $query";
 		$sth=$dbh->prepare($query);
 		$sth->execute(@bind);
 		$sth->finish;
@@ -2192,6 +2191,19 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.79  2004/02/11 08:40:09  tipaul
+# synch'ing 2.0.0 branch and head
+#
+# Revision 1.78.2.3  2004/02/10 13:15:46  tipaul
+# removing 2 warnings
+#
+# Revision 1.78.2.2  2004/01/26 10:38:06  tipaul
+# dealing correctly "bulk" field
+#
+# Revision 1.78.2.1  2004/01/13 17:29:53  tipaul
+# * minor html fixes
+# * adding publisher in acquisition process (& ordering basket by publisher)
+#
 # Revision 1.78  2003/12/09 15:57:28  tipaul
 # rolling back to working char_decode sub
 #

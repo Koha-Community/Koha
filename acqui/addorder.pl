@@ -48,7 +48,7 @@ my ($template, $loggedinuser, $cookie)
 my $existing=$input->param('existing');
 my $title=$input->param('title');
 my $author=$input->param('author');
-my $copyright=$input->param('copyright');
+my $copyrightdate=$input->param('copyrightdate');
 my $isbn=$input->param('ISBN');
 my $itemtype=$input->param('format');
 my $ordnum=$input->param('ordnum');
@@ -71,21 +71,22 @@ my $gst=$input->param('GST');
 my $orderexists=$input->param('orderexists');
 my $budget=$input->param('budget');
 my $cost=$input->param('cost');
-my$sub=$input->param('sub');
+my $sub=$input->param('sub');
 my $invoice=$input->param('invoice');
-
+my $publishercode = $input->param('publishercode');
 if ($quantity ne '0'){
 	#check to see if biblio exists
 	if ($existing eq 'no'){
 		#if it doesnt create it
 		$bibnum = &newbiblio({ title     => $title?$title:"",
 						author    => $author?$author:"",
-						copyright => $copyright?$copyright:"",
+						copyrightdate => $copyrightdate?$copyrightdate:"",
 						series => $series?$series:"",
 							});
 		$bibitemnum = &newbiblioitem({ biblionumber => $bibnum,
 								itemtype     => $itemtype?$itemtype:"",
-								isbn        => $isbn?$isbn:""
+								isbn        => $isbn?$isbn:"",
+								publishercode => $publishercode?$publishercode:"",
 								});
 			if ($title) {
 				newsubtitle($bibnum,$title);
@@ -97,14 +98,22 @@ if ($quantity ne '0'){
 		if ($bibitemnum eq '' || $itemtype ne $oldtype){
 			$bibitemnum= &newbiblioitem({ biblionumber => $bibnum,
 									itemtype => $itemtype?$itemtype:"",
-									isbn => $isbn?$isbn:"" });
+									isbn => $isbn?$isbn:"" ,
+									publishercode => $publishercode?$publishercode:"",
+									});
+		} else {
+			&modbibitem({biblioitemnumber => $bibitemnum,
+							isbn            => $isbn,
+							publishercode   => $publishercode,
+			});
 		}
 		&modbiblio({
 			biblionumber  => $bibnum,
 			title         => $title?$title:"",
 			author        => $author?$author:"",
-			copyrightdate => $copyright?$copyright:"",
-			series        => $series?$series:"" });
+			copyrightdate => $copyrightdate?$copyrightdate:"",
+			series        => $series?$series:"" },
+			);
 	}
 	if ($orderexists ne '') {
 		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice);

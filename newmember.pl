@@ -126,9 +126,9 @@ if ($ok == 0) {
     $name.="$data{'surname'} ( $data{'firstname'}, $data{'initials'})";
     my $sex;
     if ($data{'sex'} eq 'M'){
-	$sex="Male";
+	$sex=1;
     } else {
-	$sex="Female";
+	$sex=0;
     }
     if ($data{'joining'} eq ''){
 	$data{'joining'}=ParseDate('today');

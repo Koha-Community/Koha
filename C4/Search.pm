@@ -1145,7 +1145,7 @@ sub CatSearch  {
 		}
 	} else {
 		if ($type eq 'subject'){
-			$query .= "group by subject order by subject ";
+			$query .= "order by subject group by subject ";
 		}
 	}
 	my $sth=$dbh->prepare($query);
@@ -1349,11 +1349,10 @@ sub ItemInfo {
 	$data->{'branchname'} = $bdata->{'branchname'};
     }
 
-    my $class = $data->{'classification'};
+    my $class = $data->{'classification'};# FIXME : $class is useless
     my $dewey = $data->{'dewey'};
     $dewey =~ s/0+$//;
-    if ($dewey eq "000.") { $dewey = "";};	# FIXME - "000" is general
-						# books about computer science
+    if ($dewey eq "000.") { $dewey = "";};	# FIXME - "000" is general books about computer science
     if ($dewey < 10){$dewey='00'.$dewey;}
     if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
     if ($dewey <= 0){
@@ -1377,7 +1376,7 @@ sub ItemInfo {
   }
  $sth->finish;
   #FIXME: ordering/indentation here looks wrong
-  my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=>");
+  my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
   $sth2->execute($biblionumber);
   my $data;
   my $ocount;
@@ -1948,7 +1947,7 @@ sub allissues {
     $query.=" limit $limit";
   }
   #print $query;
-  my $sth=$dbh->prepare("");
+  my $sth=$dbh->prepare($query);
   $sth->execute($bornum);
   my @result;
   my $i=0;

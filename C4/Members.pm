@@ -66,9 +66,6 @@ sub fixup_cardnumber ($) {
     my($cardnumber) = @_;
     my $autonumber_members = C4::Context->boolean_preference('autoMemberNum');
     $autonumber_members = 0 unless defined $autonumber_members;
-
-    warn "autoMemberNum is $autonumber_members\n";
-
     # Find out whether member numbers should be generated
     # automatically. Should be either "1" or something else.
     # Defaults to "0", which is interpreted as "no".

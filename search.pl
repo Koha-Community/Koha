@@ -19,8 +19,17 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.34  2004/02/11 08:35:31  tipaul
+# synch'ing 2.0.0 branch and head
+#
 # Revision 1.33  2003/12/19 17:28:03  tipaul
 # fix for #683
+#
+# Revision 1.32.2.2  2004/01/13 17:33:39  tipaul
+# removing useless (& buggy here) checkauth
+#
+# Revision 1.32.2.1  2003/12/19 17:28:42  tipaul
+# fix for 683
 #
 # Revision 1.32  2003/06/11 18:37:55  tonnesen
 # Using boolean_preference instead of preference for 'marc' setting
@@ -41,10 +50,6 @@ use C4::Interface::CGI::Output;
 
 my $query=new CGI;
 my $type=$query->param('type');
-
-#(-e "opac") && ($type='opac');
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);

@@ -77,6 +77,7 @@ for (my $i=0;$i<$count;$i++){
 		$toggle=0;
 	}
 	$line{ordernumber} = $results[$i]->{'ordernumber'};
+	$line{publishercode} = $results[$i]->{'publishercode'};
 	$line{isbn} = $results[$i]->{'isbn'};
 	$line{booksellerid} = $results[$i]->{'booksellerid'};
 	$line{basket}=$basket;

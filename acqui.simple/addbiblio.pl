@@ -160,6 +160,7 @@ sub build_authorized_values_list ($$$$$) {
 =cut
 sub create_input () {
 	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
+	$value =~ s/"/&quot;/g;
 	my $dbh = C4::Context->dbh;
 	my %subfield_data;
 	$subfield_data{tag}=$tag;
@@ -196,7 +197,7 @@ sub build_tabs ($$$$) {
     my $i=0;
 	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
 		from authorised_values
-		where category=? order by authorised_value");
+		where category=? order by lib");
 
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
@@ -212,8 +213,8 @@ sub build_tabs ($$$$) {
 					if ($tag<10) {
 						my $value=$field->data();
 						my $subfield="@";
-						push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth))
-								unless ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
+						push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					} else {
 						my @subfields=$field->subfields();
@@ -230,8 +231,8 @@ sub build_tabs ($$$$) {
 					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
 						next if subfield_is_koha_internal_p($subfield);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-						next if ($tag > 10 && defined($record->field($tag)->subfield($subfield)));
-						next if ($tag < 10 && defined($record->field($tag)->data()));
+						next if ($tag<10);
+						next if (defined($record->field($tag)->subfield($subfield)));
 						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					}
@@ -239,7 +240,7 @@ sub build_tabs ($$$$) {
 						my %tag_data;
 						$tag_data{tag} = $tag;
 						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{indicator} = $indicator;
+						$tag_data{indicator} = $record->field($tag)->indicator(1). $record->field($tag)->indicator(2) if ($tag>=10);
 						$tag_data{subfield_loop} = \@subfields_data;
 						push (@loop_data, \%tag_data);
 					}
@@ -324,7 +325,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 

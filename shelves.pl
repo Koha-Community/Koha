@@ -4,8 +4,6 @@
 #
 # $Header$
 #
-
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -35,7 +33,6 @@ use HTML::Template;
 
 my $env;
 my $query = new CGI;
-#print $query->header(-cookie => $cookie);
 my $headerbackgroundcolor='#663266';
 my $circbackgroundcolor='#555555';
 my $circbackgroundcolor='#550000';
@@ -44,41 +41,38 @@ my $linecolor2='#dddddd';
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "shelves.tmpl",
 							query => $query,
-                            type => "intranet",
-                            authnotrequired => 0,
-                            flagsrequired => {parameters => 1},
-                         });
-#print startpage();
-#print startmenu('catalogue');
-#print "<p align=left>Logged in as: $loggedinuser [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>\n";
-
-
-my ($shelflist) = GetShelfList();
+							type => "intranet",
+							authnotrequired => 0,
+							flagsrequired => {catalogue => 1},
+						});
 
 if ($query->param('modifyshelfcontents')) {
-    my $shelfnumber=$query->param('shelfnumber');
-    my $barcode=$query->param('addbarcode');
-    my ($item) = getiteminformation($env, 0, $barcode);
-    AddToShelf($env, $item->{'itemnumber'}, $shelfnumber);
-    foreach ($query->param) {
-	if (/REM-(\d*)/) {
-	    my $itemnumber=$1;
-	    RemoveFromShelf($env, $itemnumber, $shelfnumber);
+	my $shelfnumber=$query->param('shelfnumber');
+	my $barcode=$query->param('addbarcode');
+	my ($item) = getiteminformation($env, 0, $barcode);
+	AddToShelf($env, $item->{'itemnumber'}, $shelfnumber);
+	foreach ($query->param) {
+		if (/REM-(\d*)/) {
+			my $itemnumber=$1;
+			RemoveFromShelf($env, $itemnumber, $shelfnumber);
+		}
 	}
-    }
+}
+my ($shelflist) = GetShelfList();
+
+$template->param({	loggedinuser => $loggedinuser,
+					headerbackgroundcolor => $headerbackgroundcolor,
+					circbackgroundcolor => $circbackgroundcolor });
+SWITCH: {
+	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
+	if ($query->param('shelves')) {  shelves(); last SWITCH;}
 }
 
-SWITCH: {
-	$template->param({	loggedinuser => $loggedinuser,
-						viewshelf => $query->param('viewshelf'),
-						shelves => $query->param('shelves'),
-						headerbackgroundcolor => $headerbackgroundcolor,
-						circbackgroundcolor => $circbackgroundcolor });
-    if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
-    if ($query->param('shelves')) {  shelves(); last SWITCH;}
-	my $color='';
-	my @shelvesloop;
-    foreach my $element (sort keys %$shelflist) {
+($shelflist) = GetShelfList(); # rebuild shelflist in case a shelf has been added
+
+my $color='';
+my @shelvesloop;
+foreach my $element (sort keys %$shelflist) {
 		my %line;
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}= $color;
@@ -86,22 +80,20 @@ SWITCH: {
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'};
 		push (@shelvesloop, \%line);
-    }
-	$template->param(shelvesloop => \@shelvesloop);
 }
+$template->param(shelvesloop => \@shelvesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
-
 sub shelves {
-    if (my $newshelf=$query->param('addshelf')) {
-	my ($status, $string) = AddShelf($env,$newshelf);
-	if ($status) {
-	    $template->param(status1 => $status, string1 => $string);
+	if (my $newshelf=$query->param('addshelf')) {
+		my ($status, $string) = AddShelf($env,$newshelf);
+		if ($status) {
+			$template->param(status1 => $status, string1 => $string);
+		}
 	}
-    }
 	my @paramsloop;
-    foreach ($query->param()) {
+	foreach ($query->param()) {
 		my %line;
 		if (/DEL-(\d+)/) {
 			my $delshelf=$1;
@@ -113,12 +105,12 @@ sub shelves {
 		}
 		#if the shelf is not deleted, %line points on null
 		push(@paramsloop,\%line);
-    }
+	}
 	$template->param(paramsloop => \@paramsloop);
-    my ($shelflist) = GetShelfList();
-    my $color='';
+	my ($shelflist) = GetShelfList();
+	my $color='';
 	my @shelvesloop;
-    foreach my $element (sort keys %$shelflist) {
+	foreach my $element (sort keys %$shelflist) {
 		my %line;
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}=$color;
@@ -126,19 +118,19 @@ sub shelves {
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'} ;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'} ;
 		push(@shelvesloop, \%line);
-    }
-	$template->param(shelvesloop=>\@shelvesloop);
+	}
+	$template->param(shelvesloop=>\@shelvesloop,
+							shelves => 1,
+						);
 }
 
-
-
 sub viewshelf {
-    my $shelfnumber=shift;
-    my ($itemlist) = GetShelfContents($env, $shelfnumber);
-    my $item='';
-    my $color='';
+	my $shelfnumber=shift;
+	my ($itemlist) = GetShelfContents($env, $shelfnumber);
+	my $item='';
+	my $color='';
 	my @itemsloop;
-    foreach $item (sort {$a->{'barcode'} cmp $b->{'barcode'}} @$itemlist) {
+	foreach $item (sort {$a->{'barcode'} cmp $b->{'barcode'}} @$itemlist) {
 		my %line;
 		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 		$line{'color'}=$color;
@@ -147,17 +139,22 @@ sub viewshelf {
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
 		push(@itemsloop, \%line);
-    }
-	$template->param(	itemsloop => \@itemsloop);
-	$template->param(	shelfname => $shelflist->{$shelfnumber}->{'shelfname'});
-	$template->param(	shelfnumber => $shelfnumber);
+	}
+	$template->param(	itemsloop => \@itemsloop,
+						shelfname => $shelflist->{$shelfnumber}->{'shelfname'},
+						shelfnumber => $shelfnumber,
+						viewshelf => $query->param('viewshelf'),
+					);
 }
-
-#print endpage();
-#print endmenu('catalogue');
 
 #
 # $Log$
+# Revision 1.13  2004/02/11 08:35:31  tipaul
+# synch'ing 2.0.0 branch and head
+#
+# Revision 1.12.2.1  2004/02/06 14:22:19  tipaul
+# fixing bugs in bookshelves management.
+#
 # Revision 1.12  2003/02/05 10:04:14  acli
 # Worked around weirdness with HTML::Template; without the {}, it complains
 # of being passed an odd number of arguments even though we are not

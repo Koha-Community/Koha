@@ -75,7 +75,7 @@ printable string.
 
 #FIXME: this is a quick fix to stop rc1 installing broken
 #Still trying to figure out the correct fix.
-my $path = C4::Context->config('intrahtdocs')."/intranet-tmpl/default/en/includes/";
+my $path = C4::Context->config('intrahtdocs')."/default/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD

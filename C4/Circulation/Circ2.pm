@@ -634,7 +634,7 @@ sub issuebook {
 					renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 					$noissue=1;
 				} else {
-					$rejected=-1;
+					$rejected="Item on issue to this borrower, and you have chosen not to renew";
 					last SWITCH;
 				}
 			}
@@ -668,14 +668,14 @@ sub issuebook {
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
 				my $branches = getbranches();
 				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				if ($responses->{2} eq '') {
+				if ($responses->{2} eq '' && $responses->{3} eq '') {
 					$questionnumber=2;
 					# FIXME - Assumes HTML
 					$question="<font color=red>Waiting</font> for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
 					$defaultanswer='N';
 					last SWITCH;
 				} elsif ($responses->{2} eq 'N') {
-					$rejected=-1;
+					$rejected="Issue cancelled";
 					last SWITCH;
 				} else {
 					if ($responses->{3} eq '') {
