@@ -131,10 +131,10 @@ sub searchsuggestion  {
 }
 
 sub newsuggestion {
-	my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn) = @_;
+	my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("insert into suggestions (status,suggestedby,title,author,publishercode,note,copyrightdate,volumedesc,publicationyear,place,isbn) values ('ASKED',?,?,?,?,?,?,?,?,?,?)");
-	$sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn);
+	my $sth = $dbh->prepare("insert into suggestions (status,suggestedby,title,author,publishercode,note,copyrightdate,volumedesc,publicationyear,place,isbn,biblionumber) values ('ASKED',?,?,?,?,?,?,?,?,?,?,?)");
+	$sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber);
 }
 
 sub getsuggestion {
