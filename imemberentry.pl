@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# NOTE: standard 8-space tabs here
 
 #script to set up screen for modification of borrower details
 #written 20/12/99 by chris@katipo.co.nz
@@ -22,14 +23,24 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 
 my $input = new CGI;
 
-my $template = gettemplate("members/imemberentry.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/imemberentry.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
+
 
 my $member=$input->param('bornum');
 if ($member eq ''){
@@ -39,8 +50,12 @@ my $type=$input->param('type');
 
 my $data=borrdata('',$member);
 
-$template->param( startmenumember => startmenu('member'),
+$template->param({ startmenumember => startmenu('member'),
 			endmenumember   => endmenu('member'),
-			member          => $member );
+			member          => $member });
 
-print "Content-Type: text/html\n\n", $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
+
+# Local Variables:
+# tab-width: 8
+# End:
