@@ -295,7 +295,13 @@ sub _extract_attributes ($;$) {
 	    error_normal((scalar(split(/\n/, $s)) - 1) . " more line(s) not shown.", undef);
 	    $this->_set_fatal( 1 );
 	} else {
-	    warn_normal "Strange attribute syntax: $s\n", $lc;
+	    # There's something wrong with the attribute syntax.
+	    # We might be able to deduce a likely cause by looking more.
+	    if ($s =~ /^[a-z0-9]/is && "<foo $s>" =~ /^$re_tag_compat$/s) {
+		warn_normal "Probably missing whitespace before or missing quotation mark near: $s\n", $lc;
+	    } else {
+		warn_normal "Strange attribute syntax: $s\n", $lc;
+	    }
 	}
     }
     return \%attr;
