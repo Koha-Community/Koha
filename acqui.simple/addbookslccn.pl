@@ -11,7 +11,7 @@ use CGI;
 use strict;
 use C4::Acquisitions;
 use C4::Output;
-
+use C4::Circulation::Circ2;
 
 my $input = new CGI;
 my $dbh=C4Connect;
@@ -310,7 +310,14 @@ EOF
 <input type=hidden name=biblionumber value=$biblionumber>
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <table>
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> Home Branch: <select name=homebranch><option value='STWE'>Stewart Elementary<option value='MEZ'>Meziadin Elementary</select></td></tr>
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> Home Branch: <select name=homebranch>
+EOF
+my $branches=getbranches();                                                                                
+	foreach my $key (sort(keys %$branches)) {                                                                  
+	    print "<option value=\"$key\">$branches->{$key}->{'branchname'}</option>";                            
+	}
+print << "EOF";
+	</select></td></tr>
 </tr><td colspan=2>Replacement Price: <input name=replacementprice size=10></td></tr>
 <tr><td>Notes</td><td><textarea name=notes rows=4 cols=40
 wrap=physical></textarea></td></tr>
