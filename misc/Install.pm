@@ -144,6 +144,11 @@ command:
 
 perl -MCPAN -e 'install Net::Z3950'
 
+IMPORTANT NOTE : If you use PERL5.8.0 (RedHat 8.0 or Mandrake 9.x), you MUST install 
+manually the Net::Z3950 and edit Makefile.PL and yazwrap/Makefile.PL to include:
+    'DEFINES' => '-D_GNU_SOURCE',
+
+
 Press the <ENTER> key to continue: |;	#'
 
 $messages->{'CheckingPerlModules'}->{en} = heading('PERL & MODULES') . qq|
@@ -630,7 +635,7 @@ sub checkperlmodules {
     unless (eval {require Date::Manip})      { push @missing,"Date::Manip" };
     unless (eval {require DBD::mysql})       { push @missing,"DBD::mysql" };
     unless (eval {require HTML::Template})   { push @missing,"HTML::Template" };
-    unless (eval {require Set::Scalar})      { push @missing,"Set::Scalar" };
+#    unless (eval {require Set::Scalar})      { push @missing,"Set::Scalar" };
     unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
     unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
     unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
@@ -1315,8 +1320,8 @@ sub installfiles {
     system("cp -R opac-cgi/* $opacdir/cgi-bin/");
     system("touch $opacdir/cgi-bin/opac");
 
-    system("chown -R root:$httpduser $opacdir");
-    system("chown -R root:$httpduser $intranetdir");
+    system("chown -R $httpduser:$httpduser $opacdir");
+    system("chown -R $httpduser:$httpduser $intranetdir");
 
     # Create /etc/koha.conf
 
@@ -1525,14 +1530,15 @@ Choose MARC definition [1]: |;
 
 $messages->{'Language'}->{en} = heading('CHOOSE LANGUAGES') . qq|
 This version of koha supports a few languages.
-Enter your language preference : either en, fr, es or pl.
+Enter your language preference : either en, fr, es, pl or zh_TW
 
 Note that the en is always choosen when the system does not finds the
 language you choose in a specific screen.
 
-fr : OPAC is translated (except pictures)
+fr : all is translated (except pictures)
 es : a few intranet is translated (including pictures)
-pl : OPAC is translated (UNTESTED in this release)
+pl : OPAC and a few intranet is translated
+zh_TW : partial translation
 
 Whether you specify a language here, you can always go to the
 intranet interface and change it from the system preferences.
