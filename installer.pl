@@ -217,7 +217,7 @@ print SITES <<EOP
 database=$dbname
 hostname=$hostname
 user=$user
-password=$pass
+pass=$pass
 includes=$kohadir/htdocs/includes
 EOP
 ;
