@@ -47,20 +47,21 @@ $error = &modsubject($bibnum,$force,@sub);
 if ($error ne ''){
     print $input->header;
     print startpage();
-    print startmenu();
+    print startmenu('catalogue');
     print $error;
-    @subs = split('\n',$error);
+    my @subs=split('\n',$error);
     print "<p> Click submit to force the subject";
-    @names = $input->param;
-    $count = @names;
-    for (my $i = 0; $i < $count; $i++) {
+    my @names=$input->param;
+    my %data;
+    my $count=@names;
+    for (my $i=0;$i<$count;$i++) {
 	if ($names[$i] ne 'Force') {
-	    my $value = $input->param("$names[$i]");
-	    $data{$names[$i]} = "hidden\t$value\t$i";
+	    my $value=$input->param("$names[$i]");
+	    $data{$names[$i]}="hidden\t$value\t$i";
 	} # if
     } # for
-    $data{"Force"} = "hidden\t$subs[0]\t$count";
-    print mkform3('updatebiblio.pl', %data);
+    $data{"Force"}="hidden\t$subs[0]\t$count";
+    print mkform3('updatebiblio.pl',%data);
     print endmenu();
     print endpage();
 } else {
@@ -69,7 +70,7 @@ if ($error ne ''){
 
 sub checkinp{
   my ($inp)=@_;
-  $inp =~ s/\'/\\\'/g;
-  $inp =~ s/\"/\\\"/g;
+  $inp=~ s/\'/\\\'/g;
+  $inp=~ s/\"/\\\"/g;
   return($inp);
 }
