@@ -62,10 +62,6 @@ my $count=@items;
 $data->{'count'}=$count;
 my ($order,$ordernum)=getorder($bi,$biblionumber);
 
-
-my $env;
-$env->{itemcount}=1;
-
 $results[0]=$data;
 
 foreach my $item (@items){
