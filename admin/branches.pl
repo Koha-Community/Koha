@@ -237,7 +237,9 @@ sub branchinfotable {
 	# - branchfax       |
 	# - branchemail    /
 	# - address-empty-p (1 if no address information, 0 otherwise)
-	# - categories (FIXME... need to convert this to a TMPL_LOOP too)
+	# - categories      (containing a static error message)
+	# - category_list   (loop containing "categoryname")
+	# - no-categories-p (1 if no categories set, 0 otherwise)
 	# - value
 	# - action
 	#
@@ -252,17 +254,23 @@ sub branchinfotable {
 	    $address_empty_p = 0;
 	}
 	$row{'address-empty-p'} = $address_empty_p;
+	# {{{ Leave this here until bug 180 is completely resolved in templates
 	$row{'address'} = 'Your template is out of date (see bug 180)';
+	# }}}
 
 	# Handle categories
-	# FIXME. This should be another TMPL_LOOP
-	my $categories = '';
+	my $no_categories_p = 1;
+	my @categories = '';
 	foreach my $cat (@{$branch->{'categories'}}) {
 	    my ($catinfo) = @{getcategoryinfo($cat)};
-	    $categories .= $catinfo->{'categoryname'}."<br>";
+	    push @categories, {'categoryname' => $catinfo->{'categoryname'}};
+	    $no_categories_p = 0;
 	}
-	$categories = '(no categories set)' unless ($categories);
-	$row{'categories'} = $categories; #FIXME
+	# {{{ Leave this here until bug 180 is completely resolved in templates
+	$row{'categories'} = 'Your template is out of date (see bug 180)';
+	# }}}
+	$row{'category_list'} = \@categories;
+	$row{'no-categories-p'} = $no_categories_p;
 
 	# Handle all other fields
 	$row{'branch_name'} = $branch->{'branchname'};
