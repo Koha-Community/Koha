@@ -2,31 +2,101 @@
 
 <TMPL_VAR NAME=about>
 
-<p>Data about the current version of Koha for bug reports (or general 
+<p>Data about the current version of Koha for bug reports (or general
 interest).
 
 <center>
 <table border=1>
-  <tr bgcolor="white">
-      <td width=25%>Koha version:</td>
-      <td><TMPL_VAR ESCAPE=HTML NAME=kohaVersion></td>
-  </tr>
-  <tr bgcolor="white">
-      <td>OS version (from 'uname -a'):</td>
-      <td><TMPL_VAR ESCAPE=HTML NAME=osVersion></td>
-  </tr>
-  <tr bgcolor="white">
-      <td>Perl version:</td>
-      <td><TMPL_VAR ESCAPE=HTML NAME=perlVersion></td>
-  </tr>
-  <tr bgcolor="white">
-      <td>MySQL version:</td>
-      <td><TMPL_VAR ESCAPE=HTML NAME=mysqlVersion></td>
-  </tr>
-  <tr bgcolor="white">
-      <td>Apache version:</td>
-      <td><TMPL_VAR ESCAPE=HTML NAME=apacheVersion></td>
-  </tr>
+	<tr bgcolor="white">
+		<td width=25%>Koha version:</td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=kohaVersion></td>
+	</tr>
+	<tr bgcolor="white">
+		<td>OS version (from 'uname -a'):</td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=osVersion></td>
+	</tr>
+	<tr bgcolor="white">
+		<td>Perl version:</td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=perlVersion></td>
+	</tr>
+	<tr bgcolor="white">
+		<td>MySQL version:</td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=mysqlVersion></td>
+	</tr>
+	<tr bgcolor="white">
+		<td>Apache version:</td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=apacheVersion></td>
+	</tr>
+	<tr>
+ 		<td valign="top">Credits</td>
+		<td>
+			<h3>Core team</h3>
+			<table width=100%>
+				<tr>
+					<td width="50%">
+						Pat Eyler, Kaitiaki<br/>
+						Paul Poulain, 2.0 release manager (MARC developper)<br/>
+						Joshua Ferraro & the Nelsonville Public Library (MARC features funders)<br/>
+						Steve Tonnesen (early MARC work, Virtual Bookshelves concept, KohaCD)<br/>
+						Nicholas Rosasco, (Documentation Compiler)<br/>
+						Mike Hansen<br/>
+						MJ Ray and Turo Technology LLP, england (quality control, installer & updater)<br/>
+						Nicolas Morin, French Translation<br/>
+					</td>
+					<td width="50%" valign="top">
+						<b>Horowhenua Library Trust</b><br/>
+						Rosalie Blake, Head of Libraries<br/>
+						Jo Ransom<br/>
+						<b>Katipo Communications</b><br/>
+						Rachel Hamilton-Williams, General Manager (Webmistress)<br/>
+						Chris Cormack, 1.2 release manager<br/>
+						and Simon Blake, Amanda Atkins, Operations Manager, Olwen Williams, Finlay Thompson, Gynn Lomax,
+						Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine<br/>
+					</td>
+				</tr>
+			</table>
+			<h3>Thanks to</h3>
+			<table width=100%>
+				<tr>
+					<td width="33%">
+						Adam Thick<br/>
+						Andrew Hooper<br/>
+						Al Banks<br/>
+						Ambrose Li<br/>
+						Andrew Arensburger<br/>
+						Benedykt P. Barszcz (polish for 2.0)<br/>
+						Brig C. McCoy<br/>
+						Daniel Holth<br/>
+						David Strainchamps<br/>
+						Dorian Meid<br/>
+					</td>
+					<td width="33%">
+						Ed Summers<br/>
+						Florian Bischof<br/>
+						Francisco M. Marzoa Alonso<br/>
+						Glen Stewart<br/>
+						Henri-Damien Laurent<br/>
+						Jérome Vizcaino (Esiee School)<br/>
+						Kip DeGraaf<br/>
+						Marco Gaiarin<br/>
+						Md. Aftabuddin<br/>
+						Michaes Herman<br/>
+					</td>
+					<td width="33%">
+						Michel Lerenard (Esiee School)<br/>
+						Mike Johnson<br/>
+						Mike Mylonas<br/>
+						Pierre Cauchois (Esiee School)<br/>
+						Pawel Skuza (Polish for 1.2)<br/>
+						Regula Sebastiao<br/>
+						Roger Buck<br/>
+						Ron Wickersham<br/>
+						Sebastiaan Durand<br/>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
 </table>
 </center>
 <TMPL_INCLUDE name="about-bottom.inc">

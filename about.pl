@@ -21,9 +21,9 @@ my ($template, $loggedinuser, $cookie)
 
 my $kohaVersion = C4::Context->config("kohaversion");
 my $osVersion = `uname -a`;
-my $perlVersion = `perl -v`;
+my $perlVersion = $];
 my $mysqlVersion = `mysql -V`;
-my $apacheVersion =  `httpd -V`;
+my $apacheVersion =  `httpd -v`;
 
 $template->param(
 					kohaVersion => $kohaVersion,
