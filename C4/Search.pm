@@ -1475,8 +1475,10 @@ sub bibdata {
     my @sub;
     while (my $dat = $sth->fetchrow_hashref){
         push @sub,$dat;
+	$data->{'subject'}.=$dat->{subject}." | ";
     } # while
     $data->{'subjects'}=\@sub;
+    $data->{subject}=~s/ | $//;
     $sth->finish;
     $dbh->disconnect;
     return($data);
