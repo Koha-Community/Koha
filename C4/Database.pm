@@ -1,7 +1,4 @@
-package C4::Database; #assumes C4/Database
-
-#requires DBI.pm to be installed
-
+package C4::Database;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -20,15 +17,6 @@ package C4::Database; #assumes C4/Database
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# NOTE:
-# C4::Database::C4Connect has been superseded by C4::Context->dbh;
-
-# FIXME
-# If C4::Biblio::OLD_MAY_BE_DELETED_newcompletebiblioitem can, in
-# fact, be deleted, then it should be. Then C4::Biblio::getoraddbiblio
-# won't be used anywhere, and it can be deleted too. That'll make two
-# fewer functions that use C4::Database::requireDBI.
-
 use strict;
 require Exporter;
 use DBI;
@@ -37,77 +25,7 @@ use vars qw($VERSION @ISA @EXPORT);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(
-	&C4Connect &requireDBI
-);
-
-sub C4Connect  {
-  my $dbname="c4";
-   my ($database,$hostname,$user,$pass,%configfile);
-   open (KC, "/etc/koha.conf");
-   while (<KC>) {
-     chomp;
-     (next) if (/^\s*#/);
-     if (/(.*)\s*=\s*(.*)/) {
-       my $variable=$1;
-       my $value=$2;
-       # Clean up white space at beginning and end
-       $variable=~s/^\s*//g;
-       $variable=~s/\s*$//g;
-       $value=~s/^\s*//g;
-       $value=~s/\s*$//g;
-       $configfile{$variable}=$value;
-     }
-   }
-   $database=$configfile{'database'};
-   $hostname=$configfile{'hostname'};
-   $user=$configfile{'user'};
-   $pass=$configfile{'pass'};
-    
-   my $dbh=DBI->connect("DBI:mysql:$database:$hostname",$user,$pass);
-  return $dbh;
-} # sub C4Connect
-
-=item requireDBI
-
-  &requireDBI($dbh, $functionnname);
-
-Verifies that C<$dbh> is a valid DBI::db database handle (presumably
-to the Koha database). If it isn't, the function dies.
-
-C<$functionname> is the name of the calling function, which will be
-used in error messages.
-
-=cut
-#'
-#------------------
-# Helper subroutine to make sure database handle was passed properly
-sub requireDBI {
-    my (
-	$dbh,
-	$subrname,	# name of calling subroutine
-			# FIXME - Ought to get this with 'caller',
-			# instead of requiring developers to always
-			# get it right. Plus, it'd give the line
-			# number.
-    )=@_;
-
-    unless ( ref($dbh) =~ /DBI::db/ ) {
-	print "<pre>\nERROR: Subroutine $subrname called without proper DBI handle.\n" .
-		"Please contact system administrator.\n</pre>\n";
-	die "ERROR: Subroutine $subrname called without proper DBI handle.\n";
-    }
-} # sub requireDBI
-
-
-END { }
+@EXPORT = qw( );
 
 1;
 __END__
-=back
-
-=head1 SEE ALSO
-
-L<DBI(3)|DBI>
-
-=cut
