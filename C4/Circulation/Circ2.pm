@@ -589,7 +589,7 @@ reserved for someone else.
 
 sticky due date is invalid
 
-=head3 TOO_MUCH
+=head3 TOO_MANY
 
 if the borrower borrows to much things
 
@@ -598,41 +598,41 @@ if the borrower borrows to much things
 # check if a book can be issued.
 # returns an array with errors if any
 
-sub HowManyBurrows ($){
+sub HowManyIssues ($){
     my $borrower = shift;
     my $dbh = C4::Context->dbh;
     
-    my $sth = $dbh->prepare('select COUNT(borrowernumber) nombre_livre_emprunte from issues where borrowernumber = ?');
+    my $sth = $dbh->prepare('select COUNT(borrowernumber) from issues where borrowernumber = ?
+			    and returndate is null');
     $sth->execute($borrower->{'borrowernumber'});
     my $data = $sth->fetchrow;
     return $data;
 }
 
-sub NumberBurrowsOk(@)
+sub NumberIssuesOk(@)
 {
-    (my $biblionbr, my $cat) = @_;
+    (my $biblionumber, my $cat) = @_;
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare('select itemtype from biblioitems where biblionumber = ?');
-    $sth->execute($biblionbr);
+    $sth->execute($biblionumber);
     my $data = $sth->fetchrow;
-    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = ? and itemtype = ?');
+    $sth = $dbh->prepare('select * from issuingrules where categorycode = ? and itemtype = ?');
     $sth->execute($cat, $data);
-    my $value = $sth->fetchrow;
-    return $value if (defined($value));
-    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = "*" and itemtype = ?');
-    $sth->execute($data);
-    $value = $sth->fetchrow;
-    return $value if (defined($value));
-    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = ? and itemtype = "*"');
-    $sth->execute($cat);
-    $value = $sth->fetchrow;
-    return $value if (defined($value));
-    $sth = $dbh->prepare('select maxissueqty from issuingrules where categorycode = "*" and itemtype = "*"');
-    $sth->execute();
-    $value = $sth->fetchrow;
-    return $value if (defined($value));
-    return 5; # valeur max par default si la base est endommagee
+    my $value = $sth->fetchrow_hashref;
+    return $value->{'maxissueqty'}, $value->{'issuelength'} 
+    if (defined($value));   
+    $sth->execute("*", $data);
+    $value = $sth->fetchrow_hashref;
+    return $value->{'maxissueqty'}, $value->{'issuelength'}
+    if (defined($value));
+    $sth->execute($cat, "*");
+    $value = $sth->fetchrow_hashref;
+    return $value->{'maxissueqty'}, $value->{'issuelength'}
+    if (defined($value));
+    $sth->execute("*", "*");
+    $value = $sth->fetchrow_hashref;
+    return $value->{'maxissueqty'}, $value->{'issuelength'};
 }
 
 sub canbookbeissued {
@@ -672,12 +672,14 @@ sub canbookbeissued {
 
 
 #
-# JB34 CHECK IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
+# JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
 #
-
-	$needsconfirmation{TOO_MUCH} = 1 
-	if (HowManyBurrows($borrower) > NumberBurrowsOk($iteminformation->{'biblionumber'}, 
-							    $borrower->{'categorycode'}));
+	
+	(my $maxissueqty, my $issuelength) = 
+	    NumberIssuesOk($iteminformation->{'biblionumber'}, 
+			   $borrower->{'categorycode'});
+	$needsconfirmation{TOO_MANY} = 1 
+	    if (HowManyIssues($borrower) > $maxissueqty);
 
 #
 # ITEM CHECKING
