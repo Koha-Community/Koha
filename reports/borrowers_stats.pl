@@ -140,8 +140,12 @@ if ($do_it) {
 	$req->execute;
 	my @select_sort2;
 	push @select_sort2,"";
+	my $hassort2;
 	while (my ($value) =$req->fetchrow) {
-		push @select_sort2, $value;
+		if ($value) {
+			$hassort2 = 1;
+			push @select_sort2, $value;
+		}
 	}
 	my $CGIsort2=CGI::scrolling_list( -name     => 'Filter',
 				-id => 'Filter',
@@ -172,6 +176,7 @@ if ($do_it) {
 					CGISort1 => $CGIsort1,
 					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
+					hassort2 => $hassort2,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice
 					);
