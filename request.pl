@@ -70,20 +70,29 @@ my $date="$mday/$mon/$year";
 my ($count2,@data) = bibitems($bib);
 my $bibitemrows = "";
 for (my $i=0; $i<$count2; $i++) {
-    unless ($data[$i]->{'notforloan'}){
-	my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
-	if ($data[$i]->{'dewey'} == 0){
-	    $data[$i]->{'dewey'}="";
-	}
-	$data[$i]->{'volumeddesc'} = "&nbsp;" unless $data[$i]->{'volumeddesc'};
-	$data[$i]->{'dewey'}=~ s/\.0000$//;
-	$data[$i]->{'dewey'}=~ s/00$//;
-	my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
-	$bibitemrows .= <<"EOF";
+    my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
+    if ($data[$i]->{'dewey'} == 0){
+	$data[$i]->{'dewey'}="";
+    }
+    $data[$i]->{'volumeddesc'} = "&nbsp;" unless $data[$i]->{'volumeddesc'};
+    $data[$i]->{'dewey'}=~ s/\.0000$//;
+    $data[$i]->{'dewey'}=~ s/00$//;
+    my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
+    my $select;
+    if ($data[$i]->{'notforloan'}) {
+	$select = "Reference Item.";
+    } elsif ($data[$i]->{'itemlost'} == 1) {
+	$select = "Item Lost";
+    } elsif ($data[$i]->{'itemlost'} == 2) {
+	$select = "Long Overdue";
+    } elsif ($data[$i]->{'wthdrawn'}) {
+	$select = "Item Cancelled";
+    } else {
+	$select = " <input type=checkbox name=reqbib value=$data[$i]->{'biblioitemnumber'}><input type=hidden name=biblioitem value=$data[$i]->{'biblioitemnumber'}>";
+    }
+    $bibitemrows .= <<"EOF";
 <tr VALIGN=TOP>
-<TD><input type=checkbox name=reqbib value=$data[$i]->{'biblioitemnumber'}>
-<input type=hidden name=biblioitem value=$data[$i]->{'biblioitemnumber'}>
-</td>
+<TD>$select</td>
 <TD>$data[$i]->{'description'}</td>
 <TD>$class</td>
 <td>$data[$i]->{'volumeddesc'}</td>
@@ -93,8 +102,8 @@ for (my $i=0; $i<$count2; $i++) {
 <td>@barcodes</td>
 </tr>
 EOF
-    }
 }
+
 
 
 
