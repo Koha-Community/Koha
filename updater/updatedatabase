@@ -258,7 +258,7 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'autoMemberNum', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
     	{ uniquefieldrequired => 'variable', variable => 'acquisitions', value => 'simple', explanation => 'normal or simple : will use acquisition system found in directory acqui.simple or acquisition' },
     	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'metric', explanation => 'metric or us' },
-    	{ uniquefieldrequired => 'variable', variable => 'template', value => "default', explanation => 'template default name' },
+    	{ uniquefieldrequired => 'variable', variable => 'template', value => 'default', explanation => 'template default name' },
     	{ uniquefieldrequired => 'variable', variable => 'autoBarcode', value => '1', explanation => '1 or else. If 1, Barcode is auto-calculated' },
     	{ uniquefieldrequired => 'variable', variable => 'insecure', value => 'NO', explanation => 'if YES, no auth at all is needed. Be careful if you set this to yes !' },
     	{ uniquefieldrequired => 'variable', variable => 'authoritysep', value => '--', explanation => 'the separator used in authority/thesaurus. Usually --' },
@@ -530,6 +530,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.30  2003/01/06 13:11:45  tipaul
+# bugfix
+#
 # Revision 1.29  2003/01/06 11:14:11  tipaul
 # last bugfixes before 1.3.3 : systempref table correctly filled
 #
