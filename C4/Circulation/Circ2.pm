@@ -1,4 +1,4 @@
-package C4::Circulation::Circ2; #assumes C4/Circulation/Returns
+package C4::Circulation::Circ2;
 
 #package to deal with Returns
 #written 3/11/99 by olwen@katipo.co.nz
@@ -7,15 +7,15 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Database;
-use C4::Accounts;
-use C4::InterfaceCDK;
-use C4::Circulation::Main;
-use C4::Format;
-use C4::Circulation::Renewals;
-use C4::Scan;
+#use C4::Accounts;
+#use C4::InterfaceCDK;
+#use C4::Circulation::Main;
+#use C4::Format;
+#use C4::Circulation::Renewals;
+#use C4::Scan;
 use C4::Stats;
-use C4::Search;
-use C4::Print;
+#use C4::Search;
+#use C4::Print;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
@@ -88,6 +88,7 @@ sub getprinters {
 
 
 sub getpatroninformation {
+# returns 
     my ($env, $borrowernumber,$cardnumber) = @_;
     my $dbh=&C4Connect;  
     my $sth;
@@ -110,82 +111,16 @@ sub getpatroninformation {
     $dbh->disconnect;
     print O "$borrower->{'surname'} <---\n";
     close O;
+    $borrower->{'flags'}=$flags;
     return($borrower, $flags);
 }
 
-sub patronflags {
-    my %flags;
-    my ($env,$patroninformation,$dbh) = @_;
-    my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
-    if ($amount>0) { 
-	my %flaginfo;
-	$flaginfo{'message'}='Patron owes $amount'; 
-	if ($amount>5) {
-	    $flaginfo{'noissues'}=1;
-	}
-	$flags{'CHARGES'}=\%flaginfo;
-    }
-    if ($patroninformation->{'gonenoaddress'} == 1) {
-	my %flaginfo;
-	$flaginfo{'message'}='Borrower has no valid address.'; 
-	$flaginfo{'noissues'}=1;
-	$flags{'GNA'}=\%flaginfo;
-    }
-    if ($patroninformation->{'lost'} == 1) {
-	my %flaginfo;
-	$flaginfo{'message'}='Borrower\'s card reported lost.'; 
-	$flaginfo{'noissues'}=1;
-	$flags{'LOST'}=\%flaginfo;
-    }
-    if ($patroninformation->{'borrowernotes'}) {
-	my %flaginfo;
-	$flaginfo{'message'}="Note: $patroninformation->{'borrowernotes'}";
-	$flags{'NOTES'}=\%flaginfo;
-    }
-    my ($odues) = checkoverdues($env,$patroninformation->{'borrowernumber'},$dbh);
-    if ($odues > 0) {
-	my %flaginfo;
-	$flaginfo{'message'}="Overdue Items";
-	$flags{'ODUES'}=\%flaginfo;
-    }
-    my ($nowaiting,$itemswaiting) = checkwaiting($env,$dbh,$patroninformation->{'borrowernumber'});
-    if ($nowaiting>0) {
-	my %flaginfo;
-	$flaginfo{'message'}="Reserved items available";
-	$flaginfo{'itemlist'}=$itemswaiting;
-	$flaginfo{'itemfields'}=['barcode', 'title', 'author', 'dewey', 'subclass', 'holdingbranch'];
-	$flags{'WAITING'}=\%flaginfo;
-    }
-
-    my $flag;
-    my $key;
-    return(\%flags);
-}
 
 
 
-sub currentissues {
-    my ($env, $borrower) = @_;
-    my $dbh=&C4Connect;
-    my %currentissues;
-    my $counter=1;
-    my $borrowernumber=$borrower->{'borrowernumber'};
-    my $sth=$dbh->prepare("select * from issues,items,biblio where borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and items.biblionumber=biblio.biblionumber and returndate is null order by date_due");
-    $sth->execute;
-    while (my $data = $sth->fetchrow_hashref) {
-	my $datedue=$data->{'date_due'};
-	my $itemnumber=$data->{'itemnumber'};
-	my ($iteminformation) = getiteminformation($env, $itemnumber,0);
-	$iteminformation->{'datedue'}=$datedue;
-	$currentissues{$counter}=$iteminformation;
-	$counter++;
-    }
-    $sth->finish;
-    $dbh->disconnect;
-    return(\%currentissues);
-}
 
 sub getiteminformation {
+# returns a hash of item information given either the itemnumber or the barcode
     my ($env, $itemnumber, $barcode) = @_;
     my $dbh=&C4Connect;
     my $sth;
@@ -208,6 +143,8 @@ sub getiteminformation {
 }
 
 sub findborrower {
+# returns an array of borrower hash references, given a cardnumber or a partial
+# surname 
     my ($env, $key) = @_;
     my $dbh=&C4Connect;
     my @borrowers;
@@ -229,61 +166,6 @@ sub findborrower {
     $sth->finish;
     $dbh->disconnect;
     return(\@borrowers);
-}
-
-sub currentborrower {
-    my ($env, $itemnumber, $dbh) = @_;
-    my $q_itemnumber=$dbh->quote($itemnumber);
-    my $sth=$dbh->prepare("select borrowers.borrowernumber from
-    issues,borrowers where issues.itemnumber=$q_itemnumber and
-    issues.borrowernumber=borrowers.borrowernumber and issues.returndate is
-    NULL");
-    $sth->execute;
-    my ($previousborrower)=$sth->fetchrow;
-    return($previousborrower);
-}
-
-
-sub checkreserve {
-  # Check for reserves for biblio 
-  my ($env,$dbh,$itemnum)=@_;
-  my $resbor = "";
-  my $query = "select * from reserves,items 
-    where (items.itemnumber = '$itemnum')
-    and (reserves.cancellationdate is NULL)
-    and (items.biblionumber = reserves.biblionumber)
-    and ((reserves.found = 'W')
-    or (reserves.found is null)) 
-    order by priority";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
-  my $resrec;
-  if (my $data=$sth->fetchrow_hashref) {
-    $resrec=$data;
-    my $const = $data->{'constrainttype'};
-    if ($const eq "a") {
-      $resbor = $data->{'borrowernumber'};
-    } else {
-      my $found = 0;
-      my $cquery = "select * from reserveconstraints,items 
-         where (borrowernumber='$data->{'borrowernumber'}') 
-         and reservedate='$data->{'reservedate'}'
-         and reserveconstraints.biblionumber='$data->{'biblionumber'}'
-         and (items.itemnumber=$itemnum and 
-         items.biblioitemnumber = reserveconstraints.biblioitemnumber)";
-      my $csth = $dbh->prepare($cquery);
-      $csth->execute;
-      if (my $cdata=$csth->fetchrow_hashref) {$found = 1;}
-      if ($const eq 'o') {
-        if ($found eq 1) {$resbor = $data->{'borrowernumber'};}
-      } else {
-        if ($found eq 0) {$resbor = $data->{'borrowernumber'};}
-      }
-      $csth->finish();
-    }
-  }
-  $sth->finish;
-  return ($resbor,$resrec);
 }
 
 
@@ -410,17 +292,6 @@ sub issuebook {
 }
 
 
-sub updatelastseen {
-    my ($env,$dbh,$itemnumber)= @_;
-    my $br = $env->{'branchcode'};
-    my $query = "update items 
-    set datelastseen = now(), holdingbranch = '$br'
-    where (itemnumber = '$itemnumber')";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    $sth->finish;
-} 
-
 sub returnbook {
     my ($env, $barcode) = @_;
     my ($messages, $overduecharge);
@@ -501,5 +372,295 @@ sub returnbook {
     $dbh->disconnect;
     return ($iteminformation, $borrower, $messages, $overduecharge);
 }
+
+
+sub patronflags {
+# Original subroutine for Circ2.pm
+    my %flags;
+    my ($env,$patroninformation,$dbh) = @_;
+    my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
+    if ($amount>0) { 
+	my %flaginfo;
+	$flaginfo{'message'}='Patron owes $amount'; 
+	if ($amount>5) {
+	    $flaginfo{'noissues'}=1;
+	}
+	$flags{'CHARGES'}=\%flaginfo;
+    }
+    if ($patroninformation->{'gonenoaddress'} == 1) {
+	my %flaginfo;
+	$flaginfo{'message'}='Borrower has no valid address.'; 
+	$flaginfo{'noissues'}=1;
+	$flags{'GNA'}=\%flaginfo;
+    }
+    if ($patroninformation->{'lost'} == 1) {
+	my %flaginfo;
+	$flaginfo{'message'}='Borrower\'s card reported lost.'; 
+	$flaginfo{'noissues'}=1;
+	$flags{'LOST'}=\%flaginfo;
+    }
+    if ($patroninformation->{'borrowernotes'}) {
+	my %flaginfo;
+	$flaginfo{'message'}="Note: $patroninformation->{'borrowernotes'}";
+	$flags{'NOTES'}=\%flaginfo;
+    }
+    my ($odues, $itemsoverdue) = checkoverdues($env,$patroninformation->{'borrowernumber'},$dbh);
+    if ($odues > 0) {
+	my %flaginfo;
+	$flaginfo{'message'}="Overdue Items\n";
+	foreach (sort {$a->{'date_due'} cmp $b->{'date_due'}} @$itemsoverdue) {
+	    $flaginfo{'message'}.="$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";
+	}
+	$flags{'ODUES'}=\%flaginfo;
+    }
+    my ($nowaiting,$itemswaiting) = checkwaiting($env,$dbh,$patroninformation->{'borrowernumber'});
+    if ($nowaiting>0) {
+	my %flaginfo;
+	$flaginfo{'message'}="Reserved items available";
+	$flaginfo{'itemlist'}=$itemswaiting;
+	$flaginfo{'itemfields'}=['barcode', 'title', 'author', 'dewey', 'subclass', 'holdingbranch'];
+	$flags{'WAITING'}=\%flaginfo;
+    }
+    my $flag;
+    my $key;
+    return(\%flags);
+}
+
+
+sub checkoverdues {
+# From Main.pm, modified to return a list of overdueitems, in addition to a count
+  #checks whether a borrower has overdue items
+  my ($env,$bornum,$dbh)=@_;
+  my @datearr = localtime;
+  my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
+  my @overdueitems;
+  my $count=0;
+  my $query = "Select * from issues,biblio,biblioitems,items where items.biblioitemnumber=biblioitems.biblioitemnumber and items.biblionumber=biblio.biblionumber and issues.itemnumber=items.itemnumber and borrowernumber=$bornum and returndate is NULL and date_due < '$today'";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  while (my $data = $sth->fetchrow_hashref) {
+      push (@overdueitems, $data);
+      $count++;
+  }
+  $sth->finish;
+  return ($count, \@overdueitems);
+}
+
+sub updatelastseen {
+# Stolen from Returns.pm
+    my ($env,$dbh,$itemnumber)= @_;
+    my $br = $env->{'branchcode'};
+    my $query = "update items 
+    set datelastseen = now(), holdingbranch = '$br'
+    where (itemnumber = '$itemnumber')";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+} 
+
+sub currentborrower {
+# Original subroutine for Circ2.pm
+    my ($env, $itemnumber, $dbh) = @_;
+    my $q_itemnumber=$dbh->quote($itemnumber);
+    my $sth=$dbh->prepare("select borrowers.borrowernumber from
+    issues,borrowers where issues.itemnumber=$q_itemnumber and
+    issues.borrowernumber=borrowers.borrowernumber and issues.returndate is
+    NULL");
+    $sth->execute;
+    my ($previousborrower)=$sth->fetchrow;
+    return($previousborrower);
+}
+
+sub checkreserve {
+# Stolen from Main.pm
+  # Check for reserves for biblio 
+  my ($env,$dbh,$itemnum)=@_;
+  my $resbor = "";
+  my $query = "select * from reserves,items 
+    where (items.itemnumber = '$itemnum')
+    and (reserves.cancellationdate is NULL)
+    and (items.biblionumber = reserves.biblionumber)
+    and ((reserves.found = 'W')
+    or (reserves.found is null)) 
+    order by priority";
+  my $sth = $dbh->prepare($query);
+  $sth->execute();
+  my $resrec;
+  if (my $data=$sth->fetchrow_hashref) {
+    $resrec=$data;
+    my $const = $data->{'constrainttype'};
+    if ($const eq "a") {
+      $resbor = $data->{'borrowernumber'};
+    } else {
+      my $found = 0;
+      my $cquery = "select * from reserveconstraints,items 
+         where (borrowernumber='$data->{'borrowernumber'}') 
+         and reservedate='$data->{'reservedate'}'
+         and reserveconstraints.biblionumber='$data->{'biblionumber'}'
+         and (items.itemnumber=$itemnum and 
+         items.biblioitemnumber = reserveconstraints.biblioitemnumber)";
+      my $csth = $dbh->prepare($cquery);
+      $csth->execute;
+      if (my $cdata=$csth->fetchrow_hashref) {$found = 1;}
+      if ($const eq 'o') {
+        if ($found eq 1) {$resbor = $data->{'borrowernumber'};}
+      } else {
+        if ($found eq 0) {$resbor = $data->{'borrowernumber'};}
+      }
+      $csth->finish();
+    }
+  }
+  $sth->finish;
+  return ($resbor,$resrec);
+}
+
+sub currentissues {
+# New subroutine for Circ2.pm
+    my ($env, $borrower) = @_;
+    my $dbh=&C4Connect;
+    my %currentissues;
+    my $counter=1;
+    my $borrowernumber=$borrower->{'borrowernumber'};
+    my $crit='';
+    if ($env->{'todaysissues'}) {
+	my @datearr = localtime(time());
+	my $today = (1900+$datearr[5]).sprintf "0%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
+	$crit=" and issues.timestamp like '$today%' ";
+    }
+    if ($env->{'nottodaysissues'}) {
+	my @datearr = localtime(time());
+	my $today = (1900+$datearr[5]).sprintf "0%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
+	$crit=" and !(issues.timestamp like '$today%') ";
+    }
+    my $sth=$dbh->prepare("select * from issues,items,biblioitems,biblio where borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and items.biblionumber=biblio.biblionumber and items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null $crit order by date_due");
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+	$data->{'dewey'}=~s/0*$//;
+	my $datedue=$data->{'date_due'};
+	my $itemnumber=$data->{'itemnumber'};
+	$currentissues{$counter}=$data;
+	$counter++;
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return(\%currentissues);
+}
+
+sub checkwaiting {
+#Stolen from Main.pm
+  # check for reserves waiting
+  my ($env,$dbh,$bornum)=@_;
+  my @itemswaiting;
+  my $query = "select * from reserves
+    where (borrowernumber = '$bornum')
+    and (reserves.found='W') and cancellationdate is NULL";
+  my $sth = $dbh->prepare($query);
+  $sth->execute();
+  my $cnt=0;
+  if (my $data=$sth->fetchrow_hashref) {
+    @itemswaiting[$cnt] =$data;
+    $cnt ++
+  }
+  $sth->finish;
+  return ($cnt,\@itemswaiting);
+}
+
+
+sub checkaccount  {
+# Stolen from Accounts.pm
+  #take borrower number
+  #check accounts and list amounts owing
+  my ($env,$bornumber,$dbh)=@_;
+  my $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
+  borrowernumber=$bornumber and amountoutstanding<>0");
+  $sth->execute;
+  my $total=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $total=$total+$data->{'sum(amountoutstanding)'};
+  }
+  $sth->finish;
+  # output(1,2,"borrower owes $total");
+  #if ($total > 0){
+  #  # output(1,2,"borrower owes $total");
+  #  if ($total > 5){
+  #    reconcileaccount($env,$dbh,$bornumber,$total);
+  #  }
+  #}
+  #  pause();
+  return($total);
+}    
+
+sub renewstatus {
+# Stolen from Renewals.pm
+  # check renewal status
+  my ($env,$dbh,$bornum,$itemno)=@_;
+  my $renews = 1;
+  my $renewokay = 0;
+  my $q1 = "select * from issues 
+    where (borrowernumber = '$bornum')
+    and (itemnumber = '$itemno') 
+    and returndate is null";
+  my $sth1 = $dbh->prepare($q1);
+  $sth1->execute;
+  if (my $data1 = $sth1->fetchrow_hashref) {
+    my $q2 = "select renewalsallowed from items,biblioitems,itemtypes
+       where (items.itemnumber = '$itemno')
+       and (items.biblioitemnumber = biblioitems.biblioitemnumber) 
+       and (biblioitems.itemtype = itemtypes.itemtype)";
+    my $sth2 = $dbh->prepare($q2);
+    $sth2->execute;     
+    if (my $data2=$sth2->fetchrow_hashref) {
+      $renews = $data2->{'renewalsallowed'};
+    }
+    if ($renews > $data1->{'renewals'}) {
+      $renewokay = 1;
+    }
+    $sth2->finish;
+  }   
+  $sth1->finish;
+  return($renewokay);    
+}
+
+sub renewbook {
+# Stolen from Renewals.pm
+  # mark book as renewed
+  my ($env,$dbh,$bornum,$itemno,$datedue)=@_;
+  if ($datedue eq "" ) {    
+    my $loanlength=21;
+    my $query= "Select * from biblioitems,items,itemtypes
+       where (items.itemnumber = '$itemno')
+       and (biblioitems.biblioitemnumber = items.biblioitemnumber)
+       and (biblioitems.itemtype = itemtypes.itemtype)";
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    if (my $data=$sth->fetchrow_hashref) {
+      $loanlength = $data->{'loanlength'}
+    }
+    $sth->finish;
+    my $ti = time;
+    my $datedu = time + ($loanlength * 86400);
+    my @datearr = localtime($datedu);
+    $datedue = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
+  }
+  my @date = split("-",$datedue);
+  my $odatedue = (@date[2]+0)."-".(@date[1]+0)."-".@date[0];
+  my $issquery = "select * from issues where borrowernumber='$bornum' and
+    itemnumber='$itemno' and returndate is null";
+  my $sth=$dbh->prepare($issquery);
+  $sth->execute;
+  my $issuedata=$sth->fetchrow_hashref;
+  $sth->finish;
+  my $renews = $issuedata->{'renewals'} +1;
+  my $updquery = "update issues 
+    set date_due = '$datedue', renewals = '$renews'
+    where borrowernumber='$bornum' and
+    itemnumber='$itemno' and returndate is null";
+  my $sth=$dbh->prepare($updquery);
+  
+  $sth->execute;
+  $sth->finish;
+  return($odatedue);
+}
+
 
 END { }       # module clean-up code here (global destructor)
