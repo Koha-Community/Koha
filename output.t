@@ -1,4 +1,4 @@
-BEGIN { $| = 1; print "1..20\n"; }
+BEGIN { $| = 1; print "1..25\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use C4::Output;
 $loaded = 1;
@@ -171,9 +171,9 @@ if ("<b>foo</b>" eq bold('foo')) {
 @inputHidden = qw(hidden hiddenname hiddenvalue);
 @inputRadio = qw(radio radioname radiovalue);
 @inputText = qw(text textname textvalue);
-#@inputTextarea = qw(textarea testareaname textareavalue);
-#@inputSubmit = qw(submit submitname submitvalue);
-#@inputReset = qw(reset resetname resetvalue);
+@inputTextarea = qw(textarea textareaname textareavalue);
+@inputSubmit = qw(submit submitname submitvalue);
+@inputReset = qw(reset resetname resetvalue);
 
 # 1 input; hidden
 @inputs = (\@inputHidden);
@@ -213,11 +213,70 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 
 
 # 1 input; textarea
+@inputs = (\@inputTextarea);
+$return = "<form action=actionurl method=post>\n";
+$return .= "<textarea name=textareaname wrap=physical cols=40 rows=4>textareavalue</textarea>";
+$return .= "</form>";
 
-# 1 input; reset
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 21\n";
+} else {
+    print "not ok 21\n";
+}
 
 # 1 input; submit
+@inputs = (\@inputSubmit);
+$return = "<form action=actionurl method=post>\n";
+$return .= "<input type=submit name=submitname value=\"submitvalue\">";
+$return .= "</form>";
+
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 22\n";
+} else {
+    print "not ok 22\n";
+}
+
+# 1 input; reset
+@inputs = (\@inputReset);
+$return = "<form action=actionurl method=post>\n";
+$return .= "<input type=reset name=resetname value=\"resetvalue\">";
+$return .= "</form>";
+
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 23\n";
+} else {
+    print "not ok 23\n";
+}
 
 # 2 inputs; hidden and submit
+@inputs = (\@inputHidden, \@inputSubmit);
+$return = "<form action=actionurl method=post>\n";
+$return .= "<input type=hidden name=hiddenname value=\"hiddenvalue\">\n";
+$return .= "<input type=submit name=submitname value=\"submitvalue\">";
+$return .= "</form>";
 
-# 3 inputs; text, reset, and submit
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 24\n";
+} else {
+    print "not ok 24\n";
+}
+
+
+# 3 inputs; text, submit, and reset
+@inputs = (\@inputText, \@inputSubmit, \@inputReset);
+$return = "<form action=actionurl method=post>\n";
+$return .= "<input type=text name=textname value=\"textvalue\">";
+$return .= "<input type=submit name=submitname value=\"submitvalue\">";
+$return .= "<input type=reset name=resetname value=\"resetvalue\">";
+$return .= "</form>";
+
+if ($return eq mkformnotable('actionurl', @inputs)) {
+    print "ok 25\n";
+} else {
+    print "not ok 25\n";
+}
+
+
+
+
+
