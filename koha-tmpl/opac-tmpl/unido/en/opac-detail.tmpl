@@ -45,21 +45,21 @@ R
 <table border="0" cellspacing="0" cellpadding="3"><tr><td valign="top">
 <table border="0" cellspacing="0" cellpadding="3"><tr>
 <td valign="top" class="head1bold" colspan=2><TMPL_VAR NAME="title"><br/>
- (<TMPL_VAR NAME="author">)</td>
+<TMPL_IF NAME="author"> (<TMPL_VAR NAME="author">)</TMPL_IF></td>
 </tr>
 </table>
 <P><table border="0" cellspacing="0" cellpadding="2">
 <TMPL_IF NAME="abstract">
   <tr> 
 
-    <TD VALIGN="TOP"><TMPL_VAR NAME="abstract"></td>
+    <TD VALIGN="TOP" colspan=2><TMPL_VAR NAME="abstract"></td>
     
   </tr>
 </TMPL_IF>  
 <TMPL_IF NAME="url">
   <tr> 
     <td VALIGN="TOP"><B>Website:</B> </TD>
-    <TD VALIGN="TOP"><TMPL_VAR NAME="url"></td>
+    <TD VALIGN="TOP"><a href="<TMPL_VAR NAME="url">"><TMPL_VAR NAME="url"></a</td>
   </tr>
 </TMPL_IF>
 <TMPL_IF NAME="subtitle">
@@ -119,6 +119,13 @@ R
   </tr>
 </TMPL_IF>
 
+<TMPL_IF NAME="holdings">
+  <tr> 
+    <td VALIGN="TOP"><B>Holdings:</B> </TD>
+    <TD VALIGN="TOP"><TMPL_VAR NAME="holdings"></td>
+  </tr>
+</TMPL_IF>
+
 </table>
 </td>
 <TMPL_UNLESS NAME="norequests">
@@ -133,10 +140,10 @@ R
 </TMPL_LOOP>
 <P>
 
-<H2>Holdings Information</H2>
+<H2>Copies Information</H2>
 <table border=0 cellspacing=0 cellpadding=0>
 <!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
-<tr><td colspan="12" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""></td></tr>
+<tr><td colspan="14" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="10" BORDER="0" ALT=""></td></tr>
 <tr><TD>&nbsp;</TD>
 <td valign="top"><div class="padded"><B>Type/Format</B></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
@@ -149,31 +156,39 @@ R
 
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 
-<td valign="top" ><div class="padded"><B>Due Date</B></div></td>
+<td valign="top" ><div class="padded"><B>Availability</B></div></td>
+
+
+
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 
 
-<td valign="top" ><div class="padded"><B>Last Seen</B></div></td>
+<td valign="top" ><div class="padded"><B>ISBN / ISSN</B></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 
+
+<td valign="top" ><div class="padded"><B>Volume</B></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 
 
 <td valign="top" ><div class="padded"><B>Barcode</B></div></td></tr>
 <!--LINE-->
-<tr><td colspan="12" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
+<tr><td colspan="14" class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td></tr>
 
 <TMPL_LOOP NAME="ITEM_RESULTS">
 <!--INFORMATION ROWS-->
 <tr><td valign="top"><TMPL_INCLUDE NAME="itemtype-image.inc"></td>
 <td valign="top"><div class="padded"><TMPL_VAR NAME="description"></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
-<td valign="top"><div class="padded"><TMPL_VAR NAME="class"></div></td>
+<td valign="top"><div class="padded"><a href=/cgi-bin/koha/opac-searchresults.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top"><div class="padded"><TMPL_VAR NAME="branchname"></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top"><div class="padded"><TMPL_VAR NAME="datedue"></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
-<td valign="top"><div class="padded"><TMPL_VAR NAME="datelastseen"></div></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="isbn"><TMPL_VAR NAME="issn"></div></td>
+<td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
+<td valign="top"><div class="padded"><TMPL_VAR NAME="volumeddesc"></div></td>
 <td class="line"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top"><div class="padded"><TMPL_VAR NAME="barcode"></div></td></tr>
 </TMPL_LOOP>
