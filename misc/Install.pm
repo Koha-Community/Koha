@@ -1879,6 +1879,7 @@ sub updatedatabase {
     $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf';
     if (! -e $ENV{"KOHA_CONF"}) { $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf.tmp'; }
 	startsysout();	
+	setmysqlclipass($pass);
 	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase -s");
 	if ($result) {
 		restoremycnf();
