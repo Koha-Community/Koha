@@ -91,7 +91,7 @@ my @tagmaplist=(
 	['022', 'a', 'issn',			0	],
 	['082', 'a', 'dewey',			0	],
 	['100', 'a', 'author',			0	],
-	['245', 'a', 'title',			0	],
+	['245', 'a', 'title',			0, ':;'	],
 	['245', 'b', 'subtitle',		0	],
 	['260', 'a', 'place',			0, ':'	],
 	['260', 'b', 'publisher',		0, ':'	],
@@ -225,8 +225,8 @@ RECORD:
 	    my (
 		$bib,		# hash ref to named fields
 		$fieldlist,	# list ref
-		$lccn, $isbn, $issn, $dewey, $author, 
-		$place, $publisher, $publicationyear, $volume, 
+		$lccn, $isbn, $issn, $dewey, 
+		$publisher, $publicationyear, $volume, 
 		$number, @subjects, $notes, $additionalauthors, 
 		$copyrightdate, $seriestitle,
 		$origisbn, $origissn, $origlccn, $origcontrolnumber,
@@ -273,8 +273,6 @@ RECORD:
 		$lccn			=$bib->{lccn};
 		$isbn			=$bib->{isbn};
 		$issn			=$bib->{issn};
-		$author			=$bib->{author};
-		$place			=$bib->{place};
 		$publisher		=$bib->{publisher};
 		$publicationyear	=$bib->{publicationyear};
 		$copyrightdate		=$bib->{copyrightdate};
@@ -288,7 +286,7 @@ RECORD:
 	    $titleinput=$input->textfield(-name=>'title', -default=>$bib->{title}, -size=>40);
 	    $marcinput=$input->hidden(-name=>'marc', -default=>$marc);
 	    $subtitleinput=$input->textfield(-name=>'subtitle', -default=>$bib->{subtitle}, -size=>40);
-	    $authorinput=$input->textfield(-name=>'author', -default=>$author);
+	    $authorinput=$input->textfield(-name=>'author', -default=>$bib->{author});
 	    $illustratorinput=$input->textfield(-name=>'illustrator', 
 		-default=>$bib->{illustrator});
 	    $additionalauthorsinput=$input->textarea(-name=>'additionalauthors', -default=>$additionalauthors, -rows=>4, -cols=>20);
@@ -314,12 +312,12 @@ RECORD:
 	    $lccninput=$input->textfield(-name=>'lccn', -default=>$lccn);
 	    $isbninput=$input->textfield(-name=>'isbn', -default=>$isbn);
 	    $deweyinput=$input->textfield(-name=>'dewey', -default=>$bib->{dewey});
-	    $cleanauthor=$author;
+	    $cleanauthor=$bib->{author};
 	    $cleanauthor=~s/[^A-Za-z]//g;
 	    $subclassinput=$input->textfield(-name=>'subclass', -default=>uc(substr($cleanauthor,0,3)));
 	    $publisherinput=$input->textfield(-name=>'publishercode', -default=>$publisher);
 	    $pubyearinput=$input->textfield(-name=>'publicationyear', -default=>$publicationyear);
-	    $placeinput=$input->textfield(-name=>'place', -default=>$place);
+	    $placeinput=$input->textfield(-name=>'place', -default=>$bib->{place});
 	    $pagesinput=$input->textfield(-name=>'pages', -default=>$bib->{pages});
 	    $sizeinput=$input->textfield(-name=>'size', -default=>$bib->{size});
 	    $fileinput=$input->hidden(-name=>'file', -default=>$file);
@@ -329,7 +327,7 @@ RECORD:
 	    $origcontrolnumber=$input->hidden(-name=>'origcontrolnumber', -default=>$controlnumber);
 
 	    #print "<PRE>getting itemtypeselect</PRE>\n";
-	    $itemtypeselect=&GetKeyTableSelectOptions(
+	    $itemtypeselect=&getkeytableselectoptions(
 		$dbh, 'itemtypes', 'itemtype', 'description', 1);
 	    #print "<PRE>it=$itemtypeselect</PRE>\n";
 
@@ -417,26 +415,32 @@ sub ListSearchResults {
 
 	# if z3950 results
 	if ($file=~/Z-(\d+)/) {
+	    # This is a z3950 search 
 	    $recordsource='';
 	} else {
+	    # This is a Marc upload
 	    my $sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
 	    $sth->execute;
 	    ($data, $name) = $sth->fetchrow;
 	    $recordsource="from $name";
 	}
-	    print << "EOF";
-	<center>
-	<p>
-	<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
-	<p>
-	<table border=0 cellpadding=10 cellspacing=0>
-	<tr><th bgcolor=black>
-	  <font color=white>Select a Record to Import $recordsource</font>
-	</th></tr>
-	<tr><td bgcolor=#dddddd>
+
+	print << "EOF";
+	  <center>
+	  <p>
+	  <a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
+	  <p>
+	  <table border=0 cellpadding=10 cellspacing=0>
+	  <tr><th bgcolor=black>
+	    <font color=white>Select a Record to Import $recordsource</font>
+	  </th></tr>
+	  <tr><td bgcolor=#dddddd>
 EOF
+
 	if ($file=~/Z-(\d+)/) {
-	    my $id=$1;
+	    # This is a z3950 search 
+
+	    my $id=$1;		# search results id number
 	    my $sth=$dbh->prepare("select servers from z3950queue where id=$id");
 	    $sth->execute;
 	    my ($servers) = $sth->fetchrow;
@@ -494,8 +498,10 @@ EOF
 		    print "<br>\n";
 		}
 		print "<ul>\n";
-		my $stj=$dbh->prepare("update z3950results set highestseen=".($startrecord+10)." where id=$resultsid");
-		$stj->execute;
+		my $stj=$dbh->prepare("update z3950results 
+			set highestseen=? where id=?");
+		$stj->execute($startrecord+10,$resultsid);
+
 		if ($sti->rows == 0) {
 		    print "pending...";
 		} elsif ($enddate == 0) {
@@ -532,7 +538,8 @@ EOF
 	    my $elapsed=time()-$starttimer;
 	    print "<hr>It took $elapsed seconds to process this page.\n";
 	} else {
-	    
+	    # This is an uploaded Marc record   
+
 	    my @records=parsemarcfileformat($data);
 	    foreach $record (@records) {
 
@@ -602,6 +609,7 @@ sub extractmarcfields {
 
     # return 
     my $bib;		# pointer to hash of named output fields
+			# Example: $bib->{'author'} = "Twain, Mark";
 
     my $debug=0;
 
@@ -1261,7 +1269,7 @@ sub ItemCopyForm {
 	$barcode=int(rand()*1000000);
     }
 
-    my $branchselect=GetKeyTableSelectOptions(
+    my $branchselect=getkeytableselectoptions(
 		$dbh, 'branches', 'branchcode', 'branchname', 0);
 
     print << "EOF";
@@ -1336,7 +1344,7 @@ sub AcceptItemCopy {
 #---------------
 # Create an HTML option list for a <SELECT> form tag by using
 #    values from a DB file
-sub GetKeyTableSelectOptions {
+sub getkeytableselectoptions {
 	use strict;
 	# inputs
 	my (
@@ -1371,7 +1379,7 @@ sub GetKeyTableSelectOptions {
 	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
 	}
 	return $selectclause;
-} # sub GetKeyTableSelectOptions
+} # sub getkeytableselectoptions
 
 #---------------------------------
 # Add a biblioitem and related data
@@ -1528,7 +1536,7 @@ sub addz3950queue {
 		values (?, ?, ?, ?)");
 	    $sth->execute($query, $type, $serverlist, $requestid);
 	}
-} # sub
+} # sub addz3950queue
 
 #--------------------------------------
 sub checkvalidisbn {
