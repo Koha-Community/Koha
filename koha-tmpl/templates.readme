@@ -1,10 +1,10 @@
-This is a README-file for all interested in the templating system used
+This is a README file for all interested in the templating system used
 by Koha.  It contains guidelines ans descriptions, please feel free to
 make comments and contributions to this file.
 
 1. Introduction
 
-  The advantage of a templating-system is the separation of code and
+  The advantage of a templating system is the separation of code and
   design.  It is much easier to read the HTML and get an imagination of
   what it will look like without having it shattered by declarations and
   functions.  And it is also nicer being able to alter some functions
@@ -27,7 +27,7 @@ make comments and contributions to this file.
 
   Indeed, there is a little more to know.
 
-  I recomend reading the documentation to the HTML::Template-module.
+  I recomend reading the documentation to the HTML::Template module.
   You can obtain it from http://www.perldoc.com/cpan/HTML/Template.html
 
 3. How is it implemented in Koha
@@ -56,7 +56,7 @@ make comments and contributions to this file.
 
   If you have files (either templates or files in the webspace)
   which are the same for all themes or languages use the
-  "all"-directory. For example the "background.jpg" image, which
+  "all" directory. For example the "background.jpg" image, which
   is the same for all languages within a theme should go in
   koha-html/(intranet|opac)-html/custommade/all/images/background.jpg).
 
@@ -65,7 +65,7 @@ make comments and contributions to this file.
   Simply add an entry to the systempreferences: name=theme,
   value=nameoftheme.
 
-  If you want your users be able to override your theme-settings enter
+  If you want your users be able to override your theme settings enter
   name=allowthemeoverride value=customtheme1,customtheme2,... (names of
   themes you want to be allowed) to the preferences.
 
@@ -83,11 +83,11 @@ make comments and contributions to this file.
 
  5.1 For the templates
 
-  - Use absolute paths; relative paths in html-tags would be relative to
+  - Use absolute paths; relative paths in HTML tags would be relative to
     the script's position and relative paths in <TMPL_INCLUDE> would be
     relative to the template.
 
-  - You don't have to make templates for everything in your custom-theme
+  - You don't have to make templates for everything in your custom theme
     or language. If you omit a template in a language, the template of
     next available language is used. (Languages are tried in the order of
     the user's browser settings.)
@@ -106,7 +106,7 @@ make comments and contributions to this file.
 
  5.2 for the scripts
 
-  - Use meaningfull English (abbreviations) as parameter names
+  - Use meaningful English (abbreviations) as parameter names
 
   - If you fetch a list of data, pass it completely and let the designer
     decide which data to use.
@@ -129,14 +129,14 @@ make comments and contributions to this file.
 
     Takes a hash with the following keys:
 
-    -template: the name of the template-file (e.g. 'mytemplate.tmpl')
+    -template: the name of the template file (e.g. 'mytemplate.tmpl')
 
     -type: 'opac', 'intranet', 'none' or something you specify, decides
-    which directory to lookup, defaults to intranet
+    which directory to lookup; defaults to intranet
 
       -'opac': /somedirs/opac-tmpl/theme/language/template.tmpl
 
-      -'interanet': /somedirs/intranet-tmpl/theme/language/template.tmpl
+      -'intranet': /somedirs/intranet-tmpl/theme/language/template.tmpl
 
       -'none': /somedirs/theme/language/template.tmpl
 
