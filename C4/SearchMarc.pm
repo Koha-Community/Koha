@@ -49,10 +49,20 @@ on what is passed to it, it calls the appropriate search function.
 
 =over 2
 
+=item my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
+
+Returns a reference to an array containing all the notes stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
+
+=item my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
+
+Returns a reference to an array containing all the subjects stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
+
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&catalogsearch &findseealso &findsuggestion);
+@EXPORT = qw(&catalogsearch &findseealso &findsuggestion &getMARCnotes &getMARCsubjects);
 
 # make all your functions, whether exported or not;
 
@@ -394,6 +404,92 @@ sub create_request {
 	return ($sql_tables, $sql_where1, $sql_where2);
 }
 
+sub getMARCnotes {
+        my ($dbh, $bibid, $marcflavour) = @_;
+	my ($mintag, $maxtag);
+	if ($marcflavour eq "MARC21") {
+	        $mintag = "500";
+		$maxtag = "599";
+	} else {           # assume unimarc if not marc21
+		$mintag = "300";
+		$maxtag = "399";
+	}
+
+	my $sth=$dbh->prepare("SELECT subfieldvalue,tag FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder");
+
+	$sth->execute($bibid,$mintag,$maxtag);
+
+	my @marcnotes;
+	my $note = "";
+	my $tag = "";
+	my $marcnote;
+
+	while (my $data=$sth->fetchrow_arrayref) {
+		my $value=$data->[0];
+		my $thistag=$data->[1];
+		if ($value=~/\.$/) {
+		        $value=$value . "  ";
+		}
+		if ($thistag ne $tag && $note ne "") {
+		        $marcnote = {MARCNOTES => $note,};
+			push @marcnotes, $marcnote;
+			$note=$value;
+			$tag=$thistag;
+		}
+		if ($note ne $value) {
+		        $note = $note." ".$value;
+		}
+	}
+
+	if ($note) {
+	        $marcnote = {MARCNOTES => $note};
+		push @marcnotes, $marcnote;   #load last tag into array
+	}
+
+	$sth->finish;
+	$dbh->disconnect;
+
+	my $marcnotesarray=\@marcnotes;
+	return $marcnotesarray;
+}  # end getMARCnotes
+
+
+sub getMARCsubjects {
+    my ($dbh, $bibid, $marcflavour) = @_;
+	my ($mintag, $maxtag);
+	if ($marcflavour eq "MARC21") {
+	        $mintag = "600";
+		$maxtag = "699";
+	} else {           # assume unimarc if not marc21
+		$mintag = "600";
+		$maxtag = "619";
+	}
+
+	my $sth=$dbh->prepare("SELECT subfieldvalue,subfieldcode FROM marc_subfield_table WHERE bibid=? AND tag BETWEEN ? AND ? ORDER BY tagorder");
+
+	$sth->execute($bibid,$mintag,$maxtag);
+
+	my @marcsubjcts;
+	my $subjct = "";
+	my $subfield = "";
+	my $marcsubjct;
+
+	while (my $data=$sth->fetchrow_arrayref) {
+		my $value = $data->[0];
+		my $subfield = $data->[1];
+		if ($subfield eq "a" && $value ne $subjct) {
+		        $marcsubjct = {MARCSUBJCTS => $value,};
+			push @marcsubjcts, $marcsubjct;
+			$subjct = $value;
+		}
+	}
+
+	$sth->finish;
+	$dbh->disconnect;
+
+	my $marcsubjctsarray=\@marcsubjcts;
+        return $marcsubjctsarray;
+}  #end getMARCsubjects
 
 END { }       # module clean-up code here (global destructor)
 
