@@ -275,6 +275,7 @@ $template->param(
 		surname => $borrower->{'surname'},
 		categorycode => $borrower->{'categorycode'},
 		streetaddress => $borrower->{'streetaddress'},
+		borrowernotes => $borrower->{'borrowernotes'},
 		city => $borrower->{'city'},
 		phone => $borrower->{'phone'},
 		cardnumber => $borrower->{'cardnumber'},
