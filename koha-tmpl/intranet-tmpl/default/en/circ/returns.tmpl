@@ -10,7 +10,6 @@
 	
 	<!-- TMPL_IF Name="found" -->
 		<div id="bloc25">
-			<h2 class="circulation">Reserve Found</h2>
 			<!-- TMPL_IF Name="waiting" -->
 				<h2 class="circulation">Item marked Waiting:</h2>
 			<p>Item <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
@@ -49,15 +48,15 @@
 				</center>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="reserved" -->
-				<h2 class="circulation">Reserve found:</h2>
+				<h2 class="circulation">Reserve found</h2>
 				<p>Item: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) 
 				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;">
 					<!-- TMPL_VAR NAME="itembarcode" -->
 				</a>
-				for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR NAME="branchname" --></b>.
+				for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR NAME="branchname" --></b>.
 				</p>
 				<p>
-				Change status to waiting and print<a href="" onClick="alert(document.forms[0].resslip.value); return false">slip</a>?: </p>
+				Change status to waiting and print <a href="" class="circulation" onClick="alert(document.forms[0].resslip.value); return false">slip</a>? </p>
 				<p>
 				<form method="post" action="returns.pl">
 				<!-- TMPL_LOOP Name="inputloop" -->
