@@ -8,11 +8,13 @@ use C4::Context;
 use HTML::Template;
 
 my $query = new CGI;
-my $flagsrequired;
-$flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
-
-my $template = gettemplate("members/members-home.tmpl");
-$template->param(loggedinuser => $loggedinuser);
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/members-home.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 print $query->header(-cookie => $cookie),$template->output;

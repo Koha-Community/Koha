@@ -24,6 +24,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;
@@ -32,8 +33,16 @@ use HTML::Template;
 my $input=new CGI;
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-my %tmpldata = pathtotemplate ( template => 'boraccount.tmpl', theme => $theme );
-my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
+#my %tmpldata = pathtotemplate ( template => 'boraccount.tmpl', theme => $theme );
+#my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "boraccount.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 my $bornum=$input->param('bornum');
 #get borrower details
@@ -62,12 +71,12 @@ for (my $i=0;$i<$numaccts;$i++){
   push(@accountrows, \%row);
 }
 
-$template->param( startmenumember => startmenu('member'),
-			endmenumember   => endmenu('member'),
+$template->param( startmenumember => join('', startmenu('member')),
+			 endmenumember   => join('', endmenu('member')),
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
 			bornum          => $bornum,
 			total           => $total,
 			accounts        => \@accountrows );
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;

@@ -24,6 +24,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 use CGI;
@@ -33,7 +34,14 @@ use HTML::Template;
 
 my $input = new CGI;
 
-my $template = gettemplate("members/memberentry.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/memberentry.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 my $member=$input->param('bornum');
 if ($member eq ''){
@@ -234,7 +242,7 @@ if ($delete){
   			cardnumber	=> $cardnumber,
   			dateofbirth	=> $data->{'dateofbirth'});
 
-  print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;
 
 
 }

@@ -23,6 +23,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;
@@ -46,11 +47,14 @@ if ($limit eq 'full'){
 }
 my ($count,$issues)=allissues($bornum,$order2,$limit);
 
-
-#print $input->header;
-#print startpage();
-#print startmenu('member');
-my $template = gettemplate("members/readingrec.tmpl");
+my ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "members/readingrec.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+				});
 
 my @loop_reading;
 
@@ -68,7 +72,7 @@ $template->param(title => $data->{'title'},
 						bornum => $bornum,
 						limit => $limit,
 						loop_reading => \@loop_reading);
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;
 
 
 

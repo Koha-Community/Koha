@@ -22,6 +22,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;
@@ -29,7 +30,14 @@ use HTML::Template;
 
 my $input = new CGI;
 
-my $template = gettemplate("members/jmemberentry.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/jmemberentry.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 my $member=$input->param('bornum');
 if ($member eq ''){
@@ -65,9 +73,10 @@ for (my $i=0;$i<3;$i++){
 }
 
 
-$template->param( startmenumember => startmenu('member'),
+$template->param( startmenumember => join('', startmenu('member')),
+			 endmenumember   => join('', endmenu('member')),
 			endmenumember   => endmenu('member'),
-			member          => $member,
+			member         => $member,
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
 			cardnumber      => $data->{'cardnumber'},
@@ -85,4 +94,4 @@ $template->param( startmenumember => startmenu('member'),
 			titleloop       => \@titledata,
 			cmemloop        => \@cmemdata );
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;

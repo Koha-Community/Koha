@@ -22,6 +22,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use HTML::Template;
@@ -43,7 +44,15 @@ if ($add){
   manualinvoice($bornum,$itemnum,$desc,$type,$amount);
   print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");
 } else {
-	my $template = gettemplate("mancredit.tmpl");
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "mancredit.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {borrowers => 1},
+					debug => 1,
+					});
 	$template->param( bornum => $bornum);
-	print "Content-Type: text/html\n\n", $template->output;
+	print $input->header(-cookie => $cookie),$template->output;
+
 }

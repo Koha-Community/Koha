@@ -31,6 +31,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 use CGI;
@@ -46,7 +47,14 @@ my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
 
-my $template = gettemplate("members/moremember.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/moremember.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 my $bornum=$input->param('bornum');
 
@@ -195,4 +203,4 @@ $template->param(startmenumember => join('', startmenu('member')),
 		 issueloop       => \@issuedata,
 		 reserveloop     => \@reservedata);
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;

@@ -24,6 +24,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;
@@ -38,7 +39,14 @@ my $theme = $input->param('theme') || "default";
 #my $template = HTML::Template->new( filename => $tmpldata{'path'},
 #				    die_on_bad_params => 0,
 #				    loop_context_vars => 1 );
-my $template = gettemplate("members/member.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/member.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
 
 my $member=$input->param('member');
 $member=~ s/\,//g;
@@ -70,4 +78,4 @@ $template->param( startmenumember => join ('', startmenu('member')),
 			member          => $member,
 			resultsloop     => \@resultsdata );
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;
