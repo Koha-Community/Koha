@@ -164,7 +164,7 @@ a.about:hover {
 						<a class="members" href="/cgi-bin/koha/members-home.pl">Members</a>
 					</td>
 					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisition</a>
+						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 					</td>
 					<td>
 						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=MARC">Marc</a>
