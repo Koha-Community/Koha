@@ -343,7 +343,7 @@ sub bookfunds {
   my ($day,$month,$year)=(localtime(time))[3,4,5];
   $year+=1900;
   $month++;
-  my $today=sprintf "%4d-%02d-%02d", $year, $monthm, $day;
+  my $today=sprintf "%4d-%02d-%02d", $year, $month, $day;
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid 
