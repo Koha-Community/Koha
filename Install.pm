@@ -218,6 +218,8 @@ sub checkperlmodules {
     unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
     unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
     unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
+    unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
+    unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
     unless (eval {require Net::Z3950})        { 
 	my $message = getmessage('NETZ3950Missing');
 	showmessage($message, 'PressEnter', '', 1);
