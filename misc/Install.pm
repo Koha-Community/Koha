@@ -1060,8 +1060,8 @@ opacdir=$::opacdir
 kohalogdir=$::kohalogdir
 kohaversion=$::kohaversion
 httpduser=$::httpduser
-intrahtdocs=$::intranetdir/htdocs
-opachtdocs=$::opacdir/htdocs
+intrahtdocs=$::intranetdir/htdocs/intranet-tmpl
+opachtdocs=$::opacdir/htdocs/opac-tmpl
 |;
     close(SITES);
     umask($old_umask);
