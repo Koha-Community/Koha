@@ -27,7 +27,7 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
-use C4::Acquisitions;
+#use C4::Acquisitions;		# FIXME - Doesn't exist anymore
 use C4::Biblio;
 
 my $input = new CGI;
@@ -37,6 +37,8 @@ my $input = new CGI;
 my $biblio=$input->param('biblio');
 #print $input->header;
 #check no items attached
+# FIXME - C4::Acquisitions no longer exists. Should this be
+# &C4::Search::itemcount, or &C4::Biblio::itemcount?
 my $count=C4::Acquisitions::itemcount($biblio);
 
 
