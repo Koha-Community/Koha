@@ -1,0 +1,46 @@
+<TMPL_INCLUDE name="acquisitions-top.inc">
+<FONT SIZE=6><em>Supplier Search Results</em></FONT>
+<div align=right>
+<a href=supplier.pl?id=0><img  alt="Add New Supplier" src="/images/new-supplier.gif"  WIDTH=187  HEIGHT=42 BORDER=0 border=0></a>
+</div>
+<CENTER>
+You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="count"> results found<p>
+<table border=0 cellspacing=0 cellpadding=5 width="80%">
+<tr valign=top bgcolor=#99cc33>
+	<td background="/images/background-mem.gif" width="20%">&nbsp;</td>
+	<td background="/images/background-mem.gif" width="30%"><b>Company</b></td>
+	<td background="/images/background-mem.gif" width="50%">
+		<table width="100%" border=0 cellspacing=0 cellpadding=5>
+			<tr>
+				<td width="15%"><b>Basket</b></td>
+				<td width="15%"><b>Items</b></td>
+				<td width="40%"><b>Staff</b></td>
+				<td width="30%"><b>Date</b></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+
+<TMPL_LOOP name="loop_suppliers">
+	<tr valign=top bgcolor=<TMPL_VAR name="color">>
+		<td>
+			<a href="newbasket.pl?id=<TMPL_VAR name="id">"><img src="/images/new-basket-short.gif" alt="New Basket" width=70 height=30 border=0 ></a>
+			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><img src="/images/receive-order-short.gif" alt="Receive Order" width=70 height=30 border=0 ></a>
+		</td>
+		<td><a href="supplier.pl?id=<TMPL_VAR name="id">"><TMPL_VAR name="name"></a></td>
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=5 border=0>
+				<TMPL_LOOP name="loop_basket">
+					<tr>
+						<td width="15%"><a href="/cgi-bin/koha/acqui/basket.pl?basket=<TMPL_VAR name="basketno">"><TMPL_VAR name="basketno"></a></td>
+						<td width="15%"><TMPl_VAR name="total"></td>
+						<td width="40%"><TMPL_VAR name="authorisedby"></td>
+						<td width="30%"><TMPL_VAR name="entrydate"></td>
+					</tr>
+				</TMPL_LOOP>
+			</table>
+	</tr>
+</TMPL_LOOP>
+</table>
+</CENTER>
+<TMPL_INCLUDE name="acquisitions-bottom.inc">

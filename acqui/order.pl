@@ -23,105 +23,63 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;
 use C4::Catalogue;
+use C4::Auth;
 use C4::Biblio;
 use C4::Output;
 use CGI;
-use strict;
+use C4::Interface::CGI::Output;
+use C4::Database;
+use HTML::Template;
+use C4::Catalogue;
 
-my $input=new CGI;
-print $input->header();
-my $supplier=$input->param('supplier');
-print startpage;
+my $query=new CGI;
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/order.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {acquisition => 1},
+			     debug => 1,
+			     });
 
-print startmenu('acquisitions');
+my $supplier=$query->param('supplier');
 my ($count,@suppliers)=bookseller($supplier);
 
-print <<printend
-<FONT SIZE=6><em>Supplier Search Results</em></FONT>
-<div align=right>
-<a href=supplier.pl?id=0><img  alt="Add New Supplier" src="/images/new-supplier.gif"  WIDTH=187  HEIGHT=42 BORDER=0 border=0></a>
-</div>
-<CENTER>
-You searched on <b>supplier $supplier,</b> $count results found<p>
-<table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33>
-<td background="/images/background-mem.gif">&nbsp;</td>
-<td background="/images/background-mem.gif"><b>COMPANY</b></td>
-<td background="/images/background-mem.gif"><b>BASKETS</b></td><td background="/images/background-mem.gif"><b>ITEMS</b></td><td background="/images/background-mem.gif"><b>STAFF</b></td><td background="/images/background-mem.gif"><b>DATE</b></td></tr>
-printend
-;
 my $colour='#ffffcc';
 my $toggle=0;
+my @loop_suppliers;
 for (my $i=0; $i<$count; $i++) {
-    if ($toggle==0){
-	$colour='#ffffcc';
-	$toggle=1;
-    } else {
-	$colour='white';
-	$toggle=0;
-    }
-    my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
-# print $ordcount;
-    if ($orders->[0]->{'basketno'}>0) {
-	print <<printend
-	    <tr valign=top bgcolor=$colour>
-	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a>
-	    <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
-	    <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
-	    <td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[0]->{'basketno'}">HLT-$orders->[0]->{'basketno'}</a></td>
-	    <td>$orders->[0]->{'count(*)'}</td>
-	    <td>$orders->[0]->{'authorisedby'}</td>
-	    <td>$orders->[0]->{'entrydate'}</td></tr>
-printend
-;
-    } else {
-	print <<printend
-	    <tr valign=top bgcolor=$colour>
-	    <td><a href="newbasket.pl?id=$suppliers[$i]->{'id'}"><img src="/images/new-basket-short.gif" alt="New Basket" width=77 height=32 border=0 ></a>
-	    <a href="recieveorder.pl?id=$suppliers[$i]->{'id'}"><img src="/images/receive-order-short.gif" alt="Receive Order" width=77 height=32 border=0 ></a></td>
-	    <td><a href="supplier.pl?id=$suppliers[$i]->{'id'}">$suppliers[$i]->{'name'}</a></td>
-	    <td>&nbsp;</a></td>
-	    <td>$orders->[0]->{'count(*)'}</td>
-	    <td>$orders->[0]->{'authorisedby'}</td>
-	    <td>$orders->[0]->{'entrydate'}</td></tr>
-printend
-;
-    }
-    for (my $i2=1;$i2<$ordcount;$i2++){
-	if ($orders->[$i2]->{'basketno'}>=1) {
-	    print <<printend
-		<tr valign=top bgcolor=$colour>
-		<td> &nbsp; </td>
-		<td> &nbsp; </td>
-		<td><a href="/cgi-bin/koha/acqui/basket.pl?basket=$orders->[$i2]->{'basketno'}">HLT-$orders->[$i2]->{'basketno'}</a></td>
-		<td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
-		<td>$orders->[$i2]->{'entrydate'}</td></tr>
-
-printend
-;
+	my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
+	my %line;
+	if ($toggle==0){
+		$line{color}='#ffffcc';
+		$toggle=1;
 	} else {
-	    print <<printend
-		<tr valign=top bgcolor=$colour>
-		<td> &nbsp; </td>
-		<td> &nbsp; </td>
-		<td> &nbsp;</td>
-		<td>$orders->[$i2]->{'count(*)'}</td><td>$orders->[$i2]->{'authorisedby'} &nbsp; </td>
-		<td>$orders->[$i2]->{'entrydate'}</td></tr>
-
-printend
-;
+		$line{color}='white';
+		$toggle=0;
 	}
-    }
+	$line{id} =$suppliers[$i]->{'id'};
+	$line{name} = $suppliers[$i]->{'name'};
+	$line{total} = $orders->[0]->{'count(*)'};
+	$line{authorisedby} = $orders->[0]->{'authorisedby'};
+	$line{entrydate} = $orders->[0]->{'entrydate'};
+	my @loop_basket;
+	for (my $i2=0;$i2<$ordcount;$i2++){
+		my %inner_line;
+	warn "bask : ".$orders->[$i2]->{'basketno'};
+			$inner_line{basketno} =$orders->[$i2]->{'basketno'};
+			$inner_line{total} =$orders->[$i2]->{'count(*)'};
+			$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
+			$inner_line{entrydate} = $orders->[$i2]->{'entrydate'};
+			push @loop_basket, \%inner_line;
+	}
+	$line{loop_basket} = \@loop_basket;
+	push @loop_suppliers, \%line;
 }
+$template->param(loop_suppliers => \@loop_suppliers,
+						supplier => $supplier,
+						count => $count);
 
-print <<printend
-</table>
-
-</CENTER>
-printend
-;
-
-print endmenu('acquisitions');
-
-print endpage;
+output_html_with_http_headers $query, $cookie, $template->output;
