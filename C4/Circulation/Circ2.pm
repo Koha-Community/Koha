@@ -701,7 +701,7 @@ sub issuebook {
     my ($datedue);
     my ($rejected,$question,$defaultanswer,$questionnumber, $noissue);
     my $message;
-
+#    warn "in issue book";
     # See if there's any reason this book shouldn't be issued to this
     # patron.
     SWITCH: {	# FIXME - Yes, we know it's a switch. Tell us what it's for.
@@ -768,7 +768,8 @@ sub issuebook {
 		    $defaultanswer = 'Y';
 		    last SWITCH;
 		} elsif ($responses->{4} eq 'Y') {
-		    my $charge = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+		    my ($charge,$itemtyp1) = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+
 		    if ($charge > 0) {
 			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
 			$iteminformation->{'charge'} = $charge;
@@ -899,7 +900,8 @@ sub issuebook {
 	$sth->execute;
 	$sth->finish;
 	# If it costs to borrow this book, charge it to the patron's account.
-	my $charge=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+	my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
+#	warn "here charge is $charge itemtype $itemtype";
 	if ($charge > 0) {
 	    createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
 	    $iteminformation->{'charge'}=$charge;
@@ -1711,7 +1713,7 @@ sub calc_charges {
     if (my $data1=$sth1->fetchrow_hashref) {
 	$item_type = $data1->{'itemtype'};
 	$charge = $data1->{'rentalcharge'};
-#	print FILE "charge is $charge\n";
+	print FILE "charge is $charge\n";
 	my $q2 = "select rentaldiscount from borrowers,categoryitem
 	where (borrowers.borrowernumber = '$bornum')
 	and (borrowers.categorycode = categoryitem.categorycode)
@@ -1721,16 +1723,18 @@ sub calc_charges {
 	$sth2->execute;
 	if (my $data2=$sth2->fetchrow_hashref) {
 	    my $discount = $data2->{'rentaldiscount'};
-#	    print FILE "discount is $discount";
+
 	    if ($discount eq 'NULL') {
 	      $discount=0;
 	    }
+#	    	    print FILE "discount is $discount\n";
 	    $charge = ($charge *(100 - $discount)) / 100;
 	}
 	$sth2->finish;
     }
     $sth1->finish;
-#    close FILE;
+ #   print FILE "charge is now $charge\n itemtype = $item_type";
+ #   close FILE;
     return ($charge, $item_type);
 }
 
