@@ -121,6 +121,7 @@ if ($op eq "do_search") {
 							displaynext=> $displaynext,
 							displayprev=> $displayprev,
 							resultsperpage => $resultsperpage,
+							orderby => $orderby,
 							startfromnext => $startfrom+1,
 							startfromprev => $startfrom-1,
 							searchdata=>\@field_data,
