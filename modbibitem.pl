@@ -85,6 +85,8 @@ for (my $i=0;$i<$count;$i++){
   print "<option value=$bibitems[$i]->{'biblioitemnumber'}>$bibitems[$i]->{'description'} - $bibitems[$i]->{'isbn'}\n";
 }
 print "</select></td></tr>";
+my $notesinput=$input->textfield(-name=>'Notes', -default=>$data->{'bnotes'}, -size=>20);
+
 print <<printend
 <TR VALIGN=TOP  bgcolor="99cc33">
 <TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b><input type=radio name=existing value=NO checked >OR MODIFY DETAILS</b></td></tr>
@@ -112,7 +114,7 @@ print <<printend
 <tr valign=top bgcolor=white><td>Volume</td>
 <td><input type=text name=Volume value="$data->{'volumeddesc'}" size=20></td></tr>
 <tr valign=top bgcolor=white><td>Notes</td>
-<td><input type=text name=Notes value="$data->{'bnotes'}" size=20></td></tr>
+<td>$notesinput</td></tr>
 <tr valign=top bgcolor=white><td>Size</td>
 <td><input type=text name=Size value="$data->{'size'}" size=20></td></tr>
 
