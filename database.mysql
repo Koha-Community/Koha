@@ -418,6 +418,7 @@ CREATE TABLE deletedbiblio (
   title text,
   unititle text,
   notes text,
+  abstract text,
   serial tinyint(1),
   seriestitle text,
   copyrightdate smallint(6),
@@ -540,6 +541,16 @@ CREATE TABLE deleteditems (
   PRIMARY KEY (itemnumber),
   UNIQUE barcode (barcode)
 );
+
+#
+# Table structure for table 'ethnicity'
+#
+
+CREATE TABLE ethnicity (
+  code varchar(10) NOT NULL default '',
+  name varchar(255) default NULL,
+  PRIMARY KEY  (code)
+);      
 
 #
 # Table structure for table 'issues'
@@ -786,6 +797,7 @@ CREATE TABLE stopwords (
 CREATE TABLE systempreferences (
   variable char(50) DEFAULT '' NOT NULL,
   value char(200),
+  explanation char(200) default '',
   PRIMARY KEY (variable)
 );
 
@@ -811,3 +823,18 @@ CREATE TABLE websites (
   url varchar(255),
   PRIMARY KEY (websitenumber)
 ) TYPE=ISAM PACK_KEYS=1;
+
+CREATE TABLE uploadedmarc (
+  id int(11) NOT NULL auto_increment,
+  marc longblob,
+  hidden smallint(6) default NULL,
+  name varchar(255) default NULL,
+  PRIMARY KEY  (id)
+);
+					
+
+CREATE TABLE marcrecorddone (
+  isbn char(40) default NULL,
+  issn char(40) default NULL,
+  lccn char(40) default NULL
+);
