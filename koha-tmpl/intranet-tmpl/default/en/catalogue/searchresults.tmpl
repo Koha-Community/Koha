@@ -51,10 +51,24 @@
 		<td><a href=/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR NAME=authorhtmlescaped -->&type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->><!-- TMPL_VAR NAME=author --></a></td>
 		<td align=center> <!-- TMPL_VAR NAME=copyrightdate --> </td>
 		<td align=center> <!-- TMPL_VAR NAME=itemcount --> </td>
-		<td> <!-- TMPL_VAR NAME=location --> </td>
+		<td>
+		<!-- TMPL_IF NAME=use-location-flags-p -->
+		<!-- TMPL_IF NAME=location-only --><!-- TMPL_VAR NAME=location-only --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=not-available-p -->Not Available<!-- TMPL_IF NAME=not-available-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=lost-p -->Item Lost<!-- TMPL_IF NAME=lost-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=withdrawn-p -->Withdrawn<!-- TMPL_IF NAME=withdrawn-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME=on-loan-p -->On Loan<!-- TMPL_IF NAME=on-loan-plural-p --> (<!-- TMPL_VAR NAME=not-available-p -->)<!-- /TMPL_IF --><br><!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+		<!-- TMPL_VAR NAME=location -->
+		<!-- /TMPL_IF -->
+		</td>
 		<!-- TMPL_IF NAME="opac" -->
 		<!-- TMPL_ELSE -->
-			<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Request</a></td>
+			<!-- TMPL_UNLESS NAME="norequests" -->
+				<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Request</a></td>
+			<!-- TMPL_ELSE -->
+				<td>Not Reservable</td>
+			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
 	</tr>
 <!-- /TMPL_LOOP -->
@@ -65,14 +79,14 @@
 			<tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor=#ccccff background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
 			<td align=left>
 				<!-- TMPL_IF NAME=displayprev -->
-				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Previous Records</a>
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Previous Records</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->
 			</td>
 			<td align=right>
 				<!-- TMPL_IF NAME=displaynext -->
-				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->">Next Records</a>
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Next Records</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->
