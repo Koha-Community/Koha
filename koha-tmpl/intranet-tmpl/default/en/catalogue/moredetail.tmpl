@@ -54,14 +54,14 @@
 	<b>Last Borrower 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
 	<b>Last Borrower 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
 	<b>Replacement Price:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
-	<b>Item lost:</b> <!-- TMPL_VAR NAME="itemlost" --><br>
+	<b>Item lost:</b> <!-- TMPL_IF NAME="itemlost" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --><br>
 	<b>Paid for:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 	<b>Notes:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 	<b>Renewals:</b> <!-- TMPL_VAR NAME="renewals" --><br>
 	<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">
 	Accession
 	Date:</a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br>
-	<b>Cancelled:</b> <!-- TMPL_VAR NAME="wthdrawn" --><br>
+	<b>Cancelled:</b> <!-- TMPL_IF NAME="wthdrawn" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --><br>
 	<b><a
 	href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total
 	Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
