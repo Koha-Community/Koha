@@ -1,5 +1,4 @@
-
-package C4::InterfaceCDK; #asummes C4/InterfaceCDK
+package C4::InterfaceCDK; #assumes C4/InterfaceCDK
 
 #uses Newt
 use C4::Format;
@@ -13,7 +12,7 @@ use C4::Circulation::Renewals;
 
 require Exporter;
 use DBI;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
   
 # set the version for version checking
 $VERSION = 0.01;
@@ -23,45 +22,9 @@ $VERSION = 0.01;
 &textbox &menu &issuewindow &msg_yn &msg_ny &borrower_dialog &debug_msg &error_msg
 &info_msg &selborrower &returnwindow &logondialog &borrowerwindow &titlepanel
 &borrbind &borrfill &preeborr &borrowerbox &brmenu &prmenu);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that se them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-
-#defining keystrokes used for screens
-my $key_tab  = chr(9);
-my $key_ctlr = chr(18);
-my $lastval = $key_ctlr;
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
 sub suspend_cb {
-
+    # is this planned for something?
 }
       
 sub startint {

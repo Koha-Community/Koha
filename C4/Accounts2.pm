@@ -1,16 +1,14 @@
-package C4::Accounts2; #asummes C4/Accounts2
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
+package C4::Accounts2; #assumes C4/Accounts2
 
 use strict;
+use warnings;
 require Exporter;
 use DBI;
 use C4::Database;
 use C4::Stats;
 use C4::Search;
 use C4::Circulation::Circ2;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
   
 # set the version for version checking
 $VERSION = 0.01;
@@ -18,40 +16,6 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(&recordpayment &fixaccounts &makepayment &manualinvoice
 &getnextacctno);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-						    
-# make all your functions, whether exported or not;
 
 sub displayaccounts{
   my ($env)=@_;
@@ -92,7 +56,7 @@ sub recordpayment{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }
@@ -142,7 +106,7 @@ sub makepayment{
   $updquery = "insert into accountlines 
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)  
   values ($bornumber,$nextaccntno,now(),$payment,'Payment,thanks - $user', 'Pay',0)";
-  my $usth = $dbh->prepare($updquery);
+  $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
   UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
@@ -295,7 +259,7 @@ sub fixcredit{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }
@@ -326,7 +290,7 @@ sub fixcredit{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }
@@ -379,7 +343,7 @@ sub refund{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }

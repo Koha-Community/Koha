@@ -1,7 +1,4 @@
-package C4::Security; #asummes C4/Security
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
+package C4::Security; #assumes C4/Security
 
 use strict;
 require Exporter;
@@ -15,42 +12,7 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&Login &CheckAccess);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-
-
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-# stuff goes here.
-  };
-   
-# make all your functions, whether exported or not;
- 
 sub Login {
   my ($env)=@_;
   my $dbh=C4Connect;
