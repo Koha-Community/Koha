@@ -26,6 +26,7 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
+use HTML::Template;
 my $input=new CGI;
 
 
@@ -46,18 +47,28 @@ if ($limit eq 'full'){
 my ($count,$issues)=allissues($bornum,$order2,$limit);
 
 
-print $input->header;
-print startpage();
-print startmenu('member');
-#print $count;
-print mkheadr(3,"$data->{'title'} $data->{'initials'} $data->{'surname'}");
-print mktablehdr();
-print mktablerow(1,'white',"<a href=/cgi-bin/koha/readingrec.pl?bornum=$bornum&limit=full>Full output</a>");
-print mktablerow(4,'white',"<a href=/cgi-bin/koha/readingrec.pl?bornum=$bornum&order=title&limit=$limit><b>TITLE</b></a>","<a href=/cgi-bin/koha/readingrec.pl?bornum=$bornum&order=author&limit=$limit><b>AUTHOR</b></a>","<a href=/cgi-bin/koha/readingrec.pl?bornum=$bornum&limit=$limit><b>DATE</b></a>","<b>Volume</b>");
+#print $input->header;
+#print startpage();
+#print startmenu('member');
+my $template = gettemplate("members/readingrec.tmpl");
+
+my @loop_reading;
+
 for (my $i=0;$i<$count;$i++){
-  print mktablerow(4,'white',$issues->[$i]->{'title'},$issues->[$i]->{'author'},$issues->[$i]->{'returndate'},$issues->[$i]->{'volumeddesc'});
+ 	my %line;
+	$line{title}=$issues->[$i]->{'title'};
+	$line{author}=$issues->[$i]->{'author'};
+	$line{returndate}=$issues->[$i]->{'returndate'};
+	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
+	push(@loop_reading,\%line);
 }
-print mktableft();
-print endmenu('member');
-print endpage();
+$template->param(title => $data->{'title'},
+						initials => $data->{'initials'},
+						surname => $data->{'surname'},
+						bornum => $bornum,
+						limit => $limit,
+						loop_reading => \@loop_reading);
+print "Content-Type: text/html\n\n", $template->output;
+
+
 
