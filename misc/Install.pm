@@ -997,7 +997,7 @@ sub getmysqldir {
     }
     if (!$mysqldir){
 	for (;;) {
-	    $mysqldir = showmessage(getmessage('WhereisMySQL'),'free');
+	    $mysqldir = showmessage(getmessage('WhereIsMySQL'),'free');
 	    last if -f "$mysqldir/bin/mysqladmin";
 	}
     }
