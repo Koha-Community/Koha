@@ -52,7 +52,6 @@ sub MARCfindbreeding {
 	if ($marc) {
 		my $record = MARC::File::USMARC::decode($marc);
 		if (ref($record) eq undef) {
-			warn "not a MARC record : $marc";
 			return -1;
 		} else {
 			return $record;
@@ -76,7 +75,7 @@ if ($oldbiblionumber) {
 my $template;
 
 my $tagslib = &MARCgettagslib($dbh,1);
-my $record;
+my $record=-1;
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
 $record = MARCfindbreeding($dbh,$isbn) if ($isbn);
 my $is_a_modif=0;
@@ -145,7 +144,6 @@ if ($op eq "addbiblio") {
 						my @authorised_values;
 						# builds list, depending on authorised value...
 						#---- branch
-						warn "==> $tagslib->{$tag}->{$subfield}->{mandatory} / ".$tagslib->{$tag}->{$subfield}->{'authorised_value'};
 						if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
 							my $sth=$dbh->prepare("select branchcode,branchname from branches");
 							$sth->execute;
@@ -193,7 +191,6 @@ if ($op eq "addbiblio") {
 						my @authorised_values;
 						# builds list, depending on authorised value...
 						#---- branch
-						warn "==> $tagslib->{$tag}->{$subfield}->{mandatory} / ".$tagslib->{$tag}->{$subfield}->{'authorised_value'};
 						if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
 							my $sth=$dbh->prepare("select branchcode,branchname from branches");
 							$sth->execute;
