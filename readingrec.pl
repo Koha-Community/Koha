@@ -72,6 +72,8 @@ $template->param(title => $data->{'title'},
 						surname => $data->{'surname'},
 						bornum => $bornum,
 						limit => $limit,
+						firstname => $data->{'firstname'},
+						cardnumber => $data->{'cardnumber'},
 						loop_reading => \@loop_reading);
 output_html_with_http_headers $input, $cookie, $template->output;
 
