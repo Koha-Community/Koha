@@ -63,8 +63,8 @@ if ($op eq 'add_form') {
 	my ($defaulttagfield, $defaulttagsubfield,$defaultliblibrarian) = $sth->fetchrow;
 
 	for (my $i=0;$i<=9;$i++) {
-		my $sth2=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where tagfield like '$i%'");
-		$sth2->execute;
+		my $sth2=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where tagfield like ?");
+		$sth2->execute("$i%");
 		my @marcarray;
 		push @marcarray," ";
 		while (my ($field, $tagsubfield, $liblibrarian) = $sth2->fetchrow_array) {
@@ -105,8 +105,9 @@ if ($op eq 'add_form') {
 		$fields{$kohafield}->{tagsubfield} = $tagsubfield;
 		$fields{$kohafield}->{liblibrarian} = $liblibrarian;
 	}
-	my $sth2=$dbh->prepare("SHOW COLUMNS from $tablename");
-	$sth2->execute;
+	#XXX: This might not work. Maybe should use a DBI call instead of SHOW COLUMNS
+	my $sth2=$dbh->prepare("SHOW COLUMNS from ?");
+	$sth2->execute($tablename);
 
 	my $toggle="white";
 	my @loop_data = ();

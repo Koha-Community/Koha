@@ -43,8 +43,7 @@ my ($template, $loggedinuser, $cookie)
 my $type=$input->param('type');
 
 my $dbh = C4::Context->dbh;
-my $query="Select description,categorycode from categories";
-my $sth=$dbh->prepare($query);
+my $sth=$dbh->prepare("Select description,categorycode from categories");
 $sth->execute;
  my @trow3;
 my @title_loop;
@@ -56,8 +55,7 @@ while (my $data=$sth->fetchrow_hashref){
 	$i++;
 }
 $sth->finish;
-$query="Select description,itemtype from itemtypes";
-$sth=$dbh->prepare($query);
+$sth=$dbh->prepare("Select description,itemtype from itemtypes");
 $sth->execute;
 $i=0;
 my $toggle="white";
@@ -71,8 +69,7 @@ while (my $data=$sth->fetchrow_hashref){
 		$toggle = 'white';
 	}
 	for ($i=0;$i<9;$i++){
-		$query="select * from categoryitem where categorycode=? and itemtype=?";
-		my $sth2=$dbh->prepare($query);
+		my $sth2=$dbh->prepare("select * from categoryitem where categorycode=? and itemtype=?");
 		$sth2->execute($trow3[$i],$data->{'itemtype'});
 		my $dat=$sth2->fetchrow_hashref;
 		$sth2->finish;
