@@ -36,7 +36,7 @@
 				<!-- TMPL_ELSE -->
 					<select name="and_or" size="1" onchange="sql_update()">
 						<option value="et">et</option>
-						<option <!-- TMPL_IF NAME="ou" -->sélectionnered <!-- /TMPL_IF -->valeur="ou">ou</option>
+						<option <!-- TMPL_IF NAME="ou" -->selected <!-- /TMPL_IF -->valeur="ou">ou</option>
 					</select>
 				<!-- /TMPL_IF -->
 			</td>
@@ -44,18 +44,18 @@
 			<td>
 				<select name="excluding" size="1" onchange="sql_update()">
 					<option value="0"> </option>
-					<option <!-- TMPL_IF NAME="not" -->sélectionnered <!-- /TMPL_IF -->valeur="1">nont</option>
+					<option <!-- TMPL_IF NAME="not" -->selected <!-- /TMPL_IF -->valeur="1">not</option>
 				</select>
 			</td>
 			<td>
 				<select name="operator" size="1" onchange="sql_update()">
-					<option <!-- TMPL_IF NAME="contains" -->sélectionnered<!-- /TMPL_IF --> value="contains">Contains</option>
-					<option <!-- TMPL_IF NAME="eq" -->sélectionnered<!-- /TMPL_IF --> value="=">Is equal to</option>
-					<option <!-- TMPL_IF NAME="start" -->sélectionnered<!-- /TMPL_IF --> value="start">Starts with</option>
-					<option <!-- TMPL_IF NAME="gt" -->sélectionnered<!-- /TMPL_IF --> value=">">Is greater than</option>
-					<option <!-- TMPL_IF NAME="ge" -->sélectionnered<!-- /TMPL_IF --> value=">=">Is greater ou equal to</option>
-					<option <!-- TMPL_IF NAME="lt" -->sélectionnered<!-- /TMPL_IF --> value="<">Is lower than</option>
-					<option <!-- TMPL_IF NAME="le" -->sélectionnered<!-- /TMPL_IF --> value="<=">Is lower ou equal to</option>
+					<option <!-- TMPL_IF NAME="contains" -->selected<!-- /TMPL_IF --> value="contains">Contains</option>
+					<option <!-- TMPL_IF NAME="eq" -->selected<!-- /TMPL_IF --> value="=">Is equal to</option>
+					<option <!-- TMPL_IF NAME="start" -->selected<!-- /TMPL_IF --> value="start">Starts with</option>
+					<option <!-- TMPL_IF NAME="gt" -->selected<!-- /TMPL_IF --> value=">">Is greater than</option>
+					<option <!-- TMPL_IF NAME="ge" -->selected<!-- /TMPL_IF --> value=">=">Is greater ou equal to</option>
+					<option <!-- TMPL_IF NAME="lt" -->selected<!-- /TMPL_IF --> value="<">Is lower than</option>
+					<option <!-- TMPL_IF NAME="le" -->selected<!-- /TMPL_IF --> value="<=">Is lower ou equal to</option>
 				</select>
 			</td>
 			<td><input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->valeur="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF -->></td>

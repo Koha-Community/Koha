@@ -6,7 +6,7 @@
 		<table border=0 cellpadding=10 align=right>
 		<tr>
 			<td>
-				<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Réservations</a>
+				<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
 			</td>
 		</tr>
 		</table>
@@ -17,7 +17,7 @@
 	<!-----------------Notice bibliographique TABLE--------->
 	<tr valign="top">
 		<td bgcolor="#cccc99" background="/images/background-mem.gif">
-			<b>Nontice bibliographique <!-- TMPL_VAR NAME="biblionumber" --></b>
+			<b>Notice bibliographique <!-- TMPL_VAR NAME="biblionumber" --></b>
 		</td>
 	</tr>
 	<tr valign="top">
@@ -35,14 +35,14 @@
 			<!-- TMPL_IF name="collection" --><b>Collection:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="subject" --><b>Sujet:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="copyrightdate" --><b>Année :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="notes" --><b>Nontes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="notes" --><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="unititle" --><b>Titre uniforme:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
 			<!-- TMPL_IF name="serial" --><b>Périodiques:</b><!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="dewey" --><b>Dewey:</b> <a href="/cgi-bin/koha/opac-searchresults.pl?type=opac&dewey=<!-- TMPL_VAR NAME="dewey" ESCAPE="URL" -->"><!-- TMPL_VAR name="dewey" --></a><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="classification" --><b>Classification:</b> <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><!-- /TMPL_IF --><br>
-			<b>Nonmbre total d'ouvrages:</b> <!-- TMPL_VAR NAME="count" -->
+			<b>Nombre total d'ouvrages:</b> <!-- TMPL_VAR NAME="count" -->
 			</font>
 		</td>
 	</tr>

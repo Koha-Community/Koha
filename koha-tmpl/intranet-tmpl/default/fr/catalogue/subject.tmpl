@@ -11,7 +11,7 @@
 <th>Sujet</th></tr>
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
   <tr>
-  <td><a href=/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->entra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject2 ESCAPE=HTML -->><!-- TMPL_VAR NAME=subject --></a></td>
+  <td><a href=/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject2 ESCAPE=HTML -->><!-- TMPL_VAR NAME=subject --></a></td>
   </tr>
 <!-- /TMPL_LOOP -->
 <tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=/images/background-opac.gif<!-- TMPL_ELSE --> background="/images/background-mem.gif"<!-- /TMPL_IF -->><td colspan=4>

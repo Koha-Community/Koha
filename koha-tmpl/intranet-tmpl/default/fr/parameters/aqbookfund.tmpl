@@ -9,7 +9,7 @@
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Compte</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Nonm</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Nom</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Editer</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Supprimer</b></td>
 	</tr>
@@ -110,7 +110,7 @@
 <!-- TMPL_ELSE -->
 <tr><td>Compte</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
 <!-- /TMPL_IF -->
-<tr><td>Nonm</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;</td></tr>
+<tr><td>Nom</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>
@@ -127,7 +127,7 @@ Donnée enregistrée
 <table border=0 cellspacing=0 cellpadding=5>
 <tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Compte</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="bookfundid" --></b></td></tr>
 <form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<!-- TMPL_VAR name="bookfundid" -->'>
-<tr><td>Nonm</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
+<tr><td>Nom</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
 <tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
 <tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NO></form></td></tr><br clear=tous>
 <p> &nbsp; </p>
