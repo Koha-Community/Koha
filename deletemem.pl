@@ -1,15 +1,35 @@
 #!/usr/bin/perl
 
-#script to delete borrowers
+# $Id$
+
+#script to delete items
 #written 2/5/00
 #by chris@katipo.co.nz
 
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 use strict;
 
-use C4::Search;
 use CGI;
+use C4::Context;
+use C4::Search;
 use C4::Output;
-use C4::Database;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
 use C4::Auth;
@@ -35,16 +55,15 @@ $env{'nottodayissues'}=1;
   $i++;
  }
   my ($bor,$flags)=getpatroninformation(\%env, $member,'');
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $query="Select * from borrowers where guarantor='$member'";
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-$dbh->disconnect;
-      
 
-if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){ 
+
+if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
   print $input->header;
   print "<table border=1>";
   if ($i > 0){
@@ -65,7 +84,7 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 
 sub delmember{
   my ($member)=@_;
-  my $dbh=C4Connect;
+  my $dbh = C4::Context->dbh;
   my $query="Select * from borrowers where borrowernumber='$member'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -73,20 +92,22 @@ sub delmember{
   $sth->finish;
   $query="Insert into deletedborrowers values (";
   foreach my $temp (@data){
-    $query=$query."'$temp',";
+    $query .= "'$temp',";
   }
   $query=~ s/\,$/\)/;
   #  print $query;
+  # FIXME - Use $dbh->do()
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
+  # FIXME - Use $dbh->do()
   $query = "Delete from borrowers where borrowernumber='$member'";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
+  # FIXME - Use $dbh->do()
   $query="Delete from reserves where borrowernumber='$member'";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $dbh->disconnect;
 }

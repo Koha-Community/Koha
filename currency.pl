@@ -1,8 +1,31 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written by chris@katipo.co.nz
 #9/10/2000
 #script to display and update currency rates
+
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+# FIXME - There's an "admin/currency.pl", and this script never seems
+# to be used. Is it obsolete?
 
 use CGI;
 use C4::Acquisitions;
@@ -22,7 +45,7 @@ if ($type ne 'change'){
   <input type=hidden name=type value=change>
   <TR VALIGN=TOP>
   <TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2 ><b>EXCHANGE RATES </b></TD></TR>
-  <TR VALIGN=TOP>                                                                 
+  <TR VALIGN=TOP>
   <TD>
 printend
 ;
@@ -34,12 +57,12 @@ printend
 #    print $rates->[$i]->{'currency'};
   }
   print <<printend
-    <p>                                                                             
+    <p>
   <input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42>
-  
-  </TD></TR>                                                                      
-  </form>                                                                         
-  </table>                                                
+
+  </TD></TR>
+  </form>
+  </table>
 printend
 ;
 } else {

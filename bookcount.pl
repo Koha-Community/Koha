@@ -1,10 +1,31 @@
 #!/usr/bin/perl
 
+# $Id$
+
 #written 7/3/2002 by Finlay
 #script to display reports
 
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 use strict;
 use CGI;
+use C4::Context;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Output;
@@ -39,7 +60,7 @@ if (not $lastmove) {
 }
 
 
-# make the page ... 
+# make the page ...
 print $input->header;
 
 
@@ -93,55 +114,51 @@ print endpage;
 # This stuff should probably go into C4::Search
 # database includes
 use DBI;
-use C4::Database;
 
 sub itemdatanum {
     my ($itemnumber)=@_;
-    my $dbh=C4Connect;
+    my $dbh = C4::Context->dbh;
     my $itm = $dbh->quote("$itemnumber");
     my $query = "select * from items where itemnumber=$itm";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
-    $dbh->disconnect;
     return($data);
 }
 
 sub lastmove {
       my ($itemnumber)=@_;
-      my $dbh=C4Connect;
+      my $dbh = C4::Context->dbh;
       my $var1 = $dbh->quote($itemnumber);
       my $sth =$dbh->prepare("select max(branchtransfers.datearrived) from branchtransfers where branchtransfers.itemnumber=$var1");
       $sth->execute;
       my ($date) = $sth->fetchrow_array;
       return(0, "Item has no branch transfers record") if not $date;
-      my $var2 = $dbh->quote($date);      
+      my $var2 = $dbh->quote($date);
       $sth=$dbh->prepare("Select * from branchtransfers where branchtransfers.itemnumber=$var1 and branchtransfers.datearrived=$var2");
       $sth->execute;
       my ($data) = $sth->fetchrow_hashref;
       return(0, "Item has no branch transfers record") if not $data;
       $sth->finish;
-      $dbh->disconnect;
       return($data,"");
  }
 
 sub issuessince {
       my ($itemnumber, $date)=@_;
-      my $dbh=C4Connect;
+      my $dbh = C4::Context->dbh;
       my $itm = $dbh->quote($itemnumber);
       my $dat = $dbh->quote($date);
       my $sth=$dbh->prepare("Select count(*) from issues where issues.itemnumber=$itm and issues.timestamp > $dat");
       $sth->execute;
       my $count=$sth->fetchrow_hashref;
       $sth->finish;
-      $dbh->disconnect;
       return($count->{'count(*)'});
 }
 
 sub issuesat {
       my ($itemnumber, $brcd)=@_;
-      my $dbh=C4Connect;
+      my $dbh = C4::Context->dbh;
       my $itm = $dbh->quote($itemnumber);
       my $brc = $dbh->quote($brcd);
       my $query = "Select count(*) from issues where itemnumber=$itm and branchcode = $brc";
@@ -149,13 +166,12 @@ sub issuesat {
       $sth->execute;
       my ($count)=$sth->fetchrow_array;
       $sth->finish;
-      $dbh->disconnect;
       return($count);
 }
 
 sub lastseenat {
       my ($itemnumber, $brcd)=@_;
-      my $dbh=C4Connect;
+      my $dbh = C4::Context->dbh;
       my $itm = $dbh->quote($itemnumber);
       my $brc = $dbh->quote($brcd);
       my $query = "Select max(timestamp) from issues where itemnumber=$itm and branchcode = $brc";
@@ -164,11 +180,11 @@ sub lastseenat {
       my ($date1)=$sth->fetchrow_array;
       $sth->finish;
       $query = "Select max(datearrived) from branchtransfers where itemnumber=$itm and tobranch = $brc";
+      # FIXME - There's already a $sth in this scope.
       my $sth=$dbh->prepare($query);
       $sth->execute;
       my ($date2)=$sth->fetchrow_array;
       $sth->finish;
-      $dbh->disconnect;
       $date2 =~ s/-//g;
       $date2 =~ s/://g;
       $date2 =~ s/ //g;
