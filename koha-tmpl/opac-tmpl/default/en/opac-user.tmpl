@@ -2,11 +2,11 @@
 
 <TMPL_LOOP NAME="BORROWER_INFO">
 
-<table align=right cellpadding=10 cellspacing=0 border=1 width=200 >
+<table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
 <tr   bgcolor="#fecc99" >
 <td><b>ARE OUR RECORDS CORRECT?</B></td></tr>
 <tr>
-<td><font size=1 face="arial,helvetica">
+<td><font size=2 face="arial,helvetica">
 Library Card: <TMPL_VAR NAME="cardnumber"> <p>
 <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
 <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
@@ -17,7 +17,7 @@ Library Card: <TMPL_VAR NAME="cardnumber"> <p>
 
 Are any of our records incorrect? Have you moved recently, got a new phone number or e-mail address?<p>
 
-??? Link goes here to update record page ???
+<a href="/cgi-bin/koha/opac-userupdate.pl">Update Record</a>
 
 </td></tr></table>
 
