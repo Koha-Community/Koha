@@ -55,7 +55,7 @@ if ($quantity ne '0'){
 
   if ($existing eq 'no'){
     #if it doesnt create it
-    $bibnum = &newbiblio({ title     => $title?$title:"",
+    ($bibnum) = &newbiblio({ title     => $title?$title:"",
 	                   author    => $author?$author:"",
 	                   copyright => $copyright?$copyright:"",
 				    series => $series?$series:"",
