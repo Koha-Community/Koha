@@ -4,24 +4,31 @@
 	<TMPL_INCLUDE NAME="cat-top.inc">
 
 	<TMPL_INCLUDE NAME="general-first-column-divider.inc">
+	
+<div class="crumb"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a> > Search Results</div>
 
 
-
+<h1>Search Results</h1>
 
 <TMPL_IF NAME=searchdesc>
-	You searched on <b><TMPL_VAR NAME=searchdesc></b>
+	You searched on <b><TMPL_VAR NAME=searchdesc></b>, 
 <TMPL_ELSE>
-	You did not specify any seach criteria<br>
+	You did not specify any seach criteria, please <a href="/cgi-bin/koha/catalogue-home.pl"> try again</a><br>
 </TMPL_IF>
 
-<TMPL_VAR NAME=numrecords> results found
+<b><TMPL_VAR NAME=numrecords></b>Results found
 <p>
+
+
 <!-- Row of numbers corresponding to search result pages -->
+
 <TMPL_IF NAME=displayprev>
 	<a href=search.pl?startfrom=<TMPL_VAR NAME="prevstartfrom">&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>&</TMPL_LOOP>type=<TMPL_IF NAME="opac">opac<TMPL_ELSE>intra</TMPL_IF>><img src=<TMPL_VAR name="themelang">/images/numbers/prev.gif border=0></a>
 <TMPL_ELSE>
 	<img src=<TMPL_VAR name="themelang">/images/numbers/placeholder.gif border=0>
 </TMPL_IF>
+
+
 <TMPL_LOOP NAME=numbers>
 	<TMPL_IF NAME=highlight>
 	<img src=<TMPL_VAR name="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif>
@@ -29,6 +36,8 @@
 	<a href=search.pl?startfrom=<TMPL_VAR NAME=startfrom>&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>&</TMPL_LOOP>type=<TMPL_IF NAME=opac>opac<TMPL_ELSE>intra</TMPL_IF>><img src=<TMPL_VAR name="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a>
 	</TMPL_IF>
 </TMPL_LOOP>
+
+
 <TMPL_IF NAME=displaynext>
 	<a href=search.pl?startfrom=<TMPL_VAR NAME="nextstartfrom">&<TMPL_LOOP NAME=FORMINPUTS><TMPL_VAR NAME=term>=<TMPL_VAR name="value" ESCAPE=URL>&</TMPL_LOOP>type=<TMPL_IF NAME="opac">opac<TMPL_ELSE>intra</TMPL_IF>><img src=<TMPL_VAR name="themelang">/images/numbers/next.gif border=0></a>
 <TMPL_ELSE>
@@ -36,6 +45,8 @@
 </TMPL_IF>
 
 <p>
+
+
 <!-- Search Results Table -->
 <TMPL_IF NAME=numrecords>
 <table border=0 cellspacing=0 cellpadding=2 width=90%>
@@ -93,7 +104,7 @@ Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR
 
 
 
-
+<TMPL_INCLUDE NAME="cat-end.inc">
 <TMPL_INCLUDE NAME="general-end.inc">
 	
 
