@@ -58,7 +58,7 @@ basic information about your desired setup, then install Koha according to
 your specifications.  To accept the default value for any question, simply hit
 Enter at the prompt.
 
-Please be sure to read the documentation, or visit the Koha website at 
+Please be sure to read the documentation, or visit the Koha website at
 http://www.koha.org for more information.
 
 Are you ready to begin the installation? (Y/[N]): |;
@@ -198,8 +198,7 @@ and the OPAC interface at :
 
    http://%s\:%s/
 
-
-Be sure to read the INSTALL, and Hints files. 
+Be sure to read the INSTALL, and Hints files.
 
 For more information visit http://www.koha.org
 
@@ -226,7 +225,7 @@ sub releasecandidatewarning {
 sub checkperlmodules {
     my $message = getmessage('CheckingPerlModules');
     showmessage($message, 'none');
-    
+
     unless (eval "require 5.006_000") {
 	die getmessage('PerlVersionFailure', ['5.6.0']);
     }
@@ -239,7 +238,7 @@ sub checkperlmodules {
     unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
     unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
     unless (eval {require MARC::Record})       { push @missing,"MARC::Record" };
-    unless (eval {require Net::Z3950})        { 
+    unless (eval {require Net::Z3950})        {
 	my $message = getmessage('NETZ3950Missing');
 	showmessage($message, 'PressEnter', '', 1);
 	if ($#missing>=0) {
@@ -295,7 +294,7 @@ $messages->{'AskLocationOfPerlExecutable'}->{en}=qq|Location of Perl Executable:
 $messages->{'ConfirmPerlExecutableSymlink'}->{en}=qq|
 The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
 
-May I create this symlink? ([Y]/N): 
+May I create this symlink? ([Y]/N):
 : |;
 
 sub getmessage {
@@ -1212,6 +1211,17 @@ nothing will be added, and it can be a BIG job to manually create those tables
 
 Choose MARC definition [1]: |;
 
+$messages->{'Language'}->{en}=qq|
+====================
+= CHOOSE LANGUAGES  =
+====================
+This version of koha supports a few languages.
+Enter you languages preferences : either en, fr or es.
+Note that the en is always choosen when the system does not finds the
+language you choose in a specific screen.
+fr : opac is translated (except pictures)
+es : a few intranet is translated (including pictures)
+|;
 
 sub updatedatabase {
     my $result=system ("perl -I $::intranetdir/modules scripts/updater/updatedatabase");
@@ -1223,65 +1233,66 @@ sub updatedatabase {
     my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 123', '1');
 
     if ($response == 1) {
-	system("cat script/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+	system("cat script/misc/marc_datas/marc21_en/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
     }
     if ($response == 2) {
-	system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
-	system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+	system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
+	system("cat scripts/misc/lang-datas/fr/stopwords.sql | $::mysqldir/bin/mysql -u$::mysqluser -p$::mysqlpass $::dbname");
     }
 
-    system ("perl -I $kohadir/modules scripts/marc/updatedb2marc.pl");
+    system ("perl -I $::kohadir/modules scripts/marc/updatedb2marc.pl");
 
-    
+
     print "\n\nFinished updating database. Press <ENTER> to continue...";
     <STDIN>;
 }
 
 sub populatedatabase {
-    my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
-    if ($response =~/^y/i) {
-	system("gunzip sampledata-1.2.gz");
-	system("cat sampledata-1.2 | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
-	system("gzip -9 sampledata-1.2");
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
-	showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
-    } else {
-	my $input;
-	my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
+	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
+	if ($response =~/^y/i) {
+		system("gunzip sampledata-1.2.gz");
+		system("cat sampledata-1.2 | $::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname");
+		system("gzip -9 sampledata-1.2");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+		showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
+	} else {
+		my $input;
+		my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
 
-	unless ($response =~/^n/i) {
-	    my $branch='Main Library';
-	    $branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
-	    $branch=~s/[^A-Za-z0-9\s]//g;
+		unless ($response =~/^n/i) {
+		my $branch='Main Library';
+		$branch=showmessage(getmessage('BranchName', [$branch]), 'free', $branch, 1);
+		$branch=~s/[^A-Za-z0-9\s]//g;
 
-	    my $branchcode=$branch;
-	    $branchcode=~s/[^A-Za-z0-9]//g;
-	    $branchcode=uc($branchcode);
-	    $branchcode=substr($branchcode,0,4);
-	    $branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
-	    $branchcode=~s/[^A-Za-z0-9]//g;
-	    $branchcode=uc($branchcode);
-	    $branchcode=substr($branchcode,0,4);
-	    $branchcode or $branchcode='DEF';
+		my $branchcode=$branch;
+		$branchcode=~s/[^A-Za-z0-9]//g;
+		$branchcode=uc($branchcode);
+		$branchcode=substr($branchcode,0,4);
+		$branchcode=showmessage(getmessage('BranchCode', [$branchcode]), 'free', $branchcode, 1);
+		$branchcode=~s/[^A-Za-z0-9]//g;
+		$branchcode=uc($branchcode);
+		$branchcode=substr($branchcode,0,4);
+		$branchcode or $branchcode='DEF';
 
-	    system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-	    system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-	    system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
-	    my $printername='Library Printer';
-	    $printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
-	    $printername=~s/[^A-Za-z0-9\s]//g;
+		my $printername='Library Printer';
+		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
+		$printername=~s/[^A-Za-z0-9\s]//g;
 
-	    my $printerqueue='lp';
-	    $printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
-	    $printerqueue=~s/[^A-Za-z0-9]//g;
-	    system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
-
+		my $printerqueue='lp';
+		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
+		$printerqueue=~s/[^A-Za-z0-9]//g;
+		system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+		}
+	my $language=showmessage(getmessage('Language'), 'free', 'en');
+	system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
-    }
 }
 
 $messages->{'RestartApache'}->{en}=qq|
