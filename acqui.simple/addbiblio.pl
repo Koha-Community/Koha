@@ -160,6 +160,7 @@ sub build_authorized_values_list ($$$$$) {
 =cut
 sub create_input () {
 	my ($tag,$subfield,$value,$i,$tabloop,$rec,$authorised_values_sth) = @_;
+	$value =~ s/"/&quot;/g;
 	my $dbh = C4::Context->dbh;
 	my %subfield_data;
 	$subfield_data{tag}=$tag;
