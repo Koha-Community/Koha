@@ -53,5 +53,6 @@
   <br /><input type="password" name="password" size="18" />&nbsp;&nbsp;
   <input type="image" name="Go" src="<TMPL_VAR NAME='themelang'>/images/styles/home-go-button.gif" alt="Go" align="absmiddle" border="0" /></div>
 </form>
+</table>
 
 </TMPL_IF>
