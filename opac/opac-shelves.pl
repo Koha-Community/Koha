@@ -58,6 +58,8 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
+					suggestion => C4::Context->preference("suggestion"),
+					virtualshelves => C4::Context->preference("virtualshelves"),
 				});
 SWITCH: {
 	if ($query->param('op') eq 'modifsave') {
@@ -184,6 +186,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.3.2.4  2005/03/25 17:04:28  tipaul
+# adding virtual shelves & suggestions button to the top
+#
 # Revision 1.3.2.3  2005/01/27 17:18:28  oleonard
 # Taking table cell background color information out of the script and moving it into the template (requires update to opac-shelves.tmpl)
 #

@@ -32,6 +32,8 @@ $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 $template->param($borr);
 $template->param(LibraryName => C4::Context->preference("LibraryName")
+					suggestion => C4::Context->preference("suggestion"),
+					virtualshelves => C4::Context->preference("virtualshelves"),
 	);
 
 output_html_with_http_headers $query, $cookie, $template->output;

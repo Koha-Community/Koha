@@ -78,6 +78,10 @@ my ($template, $loggedinuser, $cookie)
 			     authnotrequired => 1,
 			     debug => 1,
 			     });
+$template->param(LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
+);
 
 # fill arrays
 my @loop_data =();

@@ -70,7 +70,16 @@ if ($op eq "do_search") {
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
-
+	if ($total ==1) {
+	if (C4::Context->preference("BiblioDefaultView") eq "normal") {
+	     print $query->redirect("/cgi-bin/koha/opac-detail.pl?bib=".@$results[0]->{biblionumber});
+	} elsif (C4::Context->preference("BiblioDefaultView") eq "MARC") {
+	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+	} else {
+	     print $query->redirect("/cgi-bin/koha/ISBDdetail.pl?bib=".@$results[0]->{biblionumber});
+	}
+	exit;
+	}
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "opac-searchresults.tmpl",
 				query => $query,
@@ -141,6 +150,8 @@ if ($op eq "do_search") {
 							numbers=>\@numbers,
 							searchdesc=> $searchdesc,
 							$defaultview => 1,
+							suggestion => C4::Context->preference("suggestion"),
+							virtualshelves => C4::Context->preference("virtualshelves"),
 							);
 
 } else {
@@ -190,6 +201,8 @@ if ($op eq "do_search") {
 	$template->param(classlist => $classlist,
 					CGIitemtype => $CGIitemtype,
 					CGIbranch => $CGIbranch,
+					suggestion => C4::Context->preference("suggestion"),
+					virtualshelves => C4::Context->preference("virtualshelves"),
 	);
 }
 

@@ -71,6 +71,9 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				WEB_RESULTS => $webarray,
 				SITE_RESULTS => $sitearray,
 				subscriptionsnumber => $subscriptionsnumber,
+			     LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

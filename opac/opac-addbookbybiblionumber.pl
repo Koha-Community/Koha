@@ -75,11 +75,17 @@ if ($shelfnumber) {
 						title => $biblios[0]->{'title'},
 						author => $biblios[0]->{'author'},
 						CGIbookshelves => $CGIbookshelves,
+						LibraryName => C4::Context->preference("LibraryName"),
+						suggestion => C4::Context->preference("suggestion"),
+						virtualshelves => C4::Context->preference("virtualshelves"),
 						);
 
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.2  2005/03/25 17:04:27  tipaul
+# adding virtual shelves & suggestions button to the top
+#
 # Revision 1.1.2.1  2005/03/10 08:44:43  tipaul
 # bugfix in baskets :
 # * The user does not need to have to have librarian rights to use virtual shelves

@@ -170,6 +170,8 @@ $template->param(TYPE_ROWS => \@typerows);
 $width = 2*$width -1;
 $template->param(totalwidth => 2*$width-1,
 			     LibraryName => C4::Context->preference("LibraryName"),
+				suggestion => C4::Context->preference("suggestion"),
+				virtualshelves => C4::Context->preference("virtualshelves"),
 );
 
 if ($query->param('item_types_selected')) {
