@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 <div id="mainbloc">
 	<div id="bloc25">
-		<div id="bloctitle">FLAGS for <!-- TMPL_VAR NAME=surname -->, <!-- TMPL_VAR NAME=firstname --></div>
-		<form method=post action="/cgi-bin/koha/members/member-flags.pl">
-			<input type=hidden name=member value=<!-- TMPL_VAR NAME=member -->>
-			<input type=hidden name=newflags value=1>
-			<!-- TMPL_LOOP NAME=loop -->
+		<div id="bloctitle">FLAGS for <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></div>
+		<form method="post" action="/cgi-bin/koha/members/member-flags.pl">
+			<input type="hidden" name="member" value=<!-- TMPL_VAR NAME="member" -->>
+			<input type="hidden" name="newflags" value="1">
+			<!-- TMPL_LOOP NAME="loop" -->
 				<p>
-					<input type=checkbox name="flag-<!-- TMPL_VAR NAME=bit -->" <!-- TMPL_VAR NAME=checked -->>
-					<!-- TMPL_VAR NAME=flag -->
-					<!-- TMPL_VAR NAME=flagdesc -->
+					<input type="checkbox" name="flag-<!-- TMPL_VAR NAME="bit" -->" <!-- TMPL_VAR NAME="checked" -->>
+					<!-- TMPL_VAR NAME="flag" -->
+					<!-- TMPL_VAR NAME="flagdesc" -->
 				</p>
 			<!-- /TMPL_LOOP -->
-			<input type=submit value="Set Flags" class="button">
+			<input type="submit" value="Set Flags" class="button">
 		</form>
 	</div>
 </div>

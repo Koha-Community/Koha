@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
 <div id="mainbloc">
-	<!-- TMPL_IF NAME=addAction -->
+	<!-- TMPL_IF NAME="addAction" -->
 	<h1>
 		Add member
 	</h1>
@@ -15,25 +15,25 @@
 		<h1>ERROR</h1>
 		<div id="problem">
 			<p>The following fields have a forbidden value. Correct them and press OK again :</p>
-			<!-- TMPL_IF name="ERROR_cardnumber" -->
+			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
 				Card number<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="ERROR_invalid_cardnumber" -->
+			<!-- TMPL_IF NAME="ERROR_invalid_cardnumber" -->
 				Invalid cardnumber<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="ERROR_gender" -->
+			<!-- TMPL_IF NAME="ERROR_gender" -->
 				Gender<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="ERROR_firstname" -->
+			<!-- TMPL_IF NAME="ERROR_firstname" -->
 				Given Names<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="ERROR_surname" -->
+			<!-- TMPL_IF NAME="ERROR_surname" -->
 				Surname<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="aERROR_ddress" -->
+			<!-- TMPL_IF NAME="aERROR_ddress" -->
 				Postal Street Address<br>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="ERROR_city" -->
+			<!-- TMPL_IF NAME="ERROR_city" -->
 				Postal city<br>
 			<!-- /TMPL_IF -->
 		</div>
@@ -51,7 +51,7 @@
 		<!-- /TMPL_IF -->
 		<table>
 			<tr>
-				<td colspan="5">Member# <!-- TMPL_VAR NAME="member" -->, Card number* <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME=cardnumber -->"></td>
+				<td colspan="5">Member# <!-- TMPL_VAR NAME="member" -->, Card number* <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
 			</tr>
 			<tr>
 				<th colspan="5">MEMBER PERSONAL DETAILS</th>
@@ -60,22 +60,22 @@
 				<td><!-- TMPL_UNLESS name="institution" -->Salutation<!-- /TMPL_UNLESS --></td>
 				<td><!-- TMPL_UNLESS name="institution" -->Initials<!-- /TMPL_UNLESS --></td>
 				<td><!-- TMPL_UNLESS name="institution" --><b> Given Names*</b><!-- /TMPL_UNLESS --></td>
-				<td><!-- TMPL_IF name="institution" --><b>Institution name*</b><!-- TMPL_ELSE --><b> Surname*</b><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_IF NAME="institution" --><b>Institution name*</b><!-- TMPL_ELSE --><b> Surname*</b><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_UNLESS name="institution" -->Prefered Name<!-- /TMPL_UNLESS --></td>
 			</tr>
 			<tr>
 				<td>
 				<!-- TMPL_UNLESS name="institution" -->
-				<!-- TMPL_VAR name="Mr" -->
-				<SELECT NAME="title">
-					<option <!-- TMPL_VAR name="title_selected_ " --> value=" ">No Title</option>
-					<option value="Miss" <!-- TMPL_VAR name="title_Miss" -->>Miss</option>
-					<option value="Mrs" <!-- TMPL_VAR name="title_Mrs" -->>Mrs</option>
-					<option value="Ms" <!-- TMPL_VAR name="title_Ms" -->>Ms</option>
-					<option <!-- TMPL_VAR name="title_Mr" --> value="Mr" >Mr</option>
-					<option value="Dr" <!-- TMPL_VAR name="title_Dr" -->>Dr</option>
-					<option value="Sir" <!-- TMPL_VAR name="title_Sir" -->>Sir</option>
-				</SELECT>
+				<!-- TMPL_VAR NAME="Mr" -->
+				<select name="title">
+					<option <!-- TMPL_VAR NAME="title_selected_ " --> value=" ">No Title</option>
+					<option value="Miss" <!-- TMPL_VAR NAME="title_Miss" -->>Miss</option>
+					<option value="Mrs" <!-- TMPL_VAR NAME="title_Mrs" -->>Mrs</option>
+					<option value="Ms" <!-- TMPL_VAR NAME="title_Ms" -->>Ms</option>
+					<option <!-- TMPL_VAR NAME="title_Mr" --> value="Mr" >Mr</option>
+					<option value="Dr" <!-- TMPL_VAR NAME="title_Dr" -->>Dr</option>
+					<option value="Sir" <!-- TMPL_VAR NAME="title_Sir" -->>Sir</option>
+				</select>
 				<!-- /TMPL_UNLESS -->
 				</td>
 				<td>
@@ -100,31 +100,31 @@
 				<td colspan="2">
 				<!-- TMPL_UNLESS name="institution" -->
 					<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked<!-- /TMPL_IF -->>F
-					<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS NAME="female" --> checked<!-- /TMPL_UNLESS -->> M
+					<input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked<!-- /TMPL_UNLESS -->> M
 				<!-- /TMPL_UNLESS -->
 
 				</td>
 				<td colspan="2">
 					<!-- TMPL_UNLESS name="institution" -->
-					Date of Birth (<!-- TMPL_VAR NAME=dateformat -->)
-					<input type="text" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME=dateofbirth -->">
+					Date of Birth (<!-- TMPL_VAR NAME="dateformat" -->)
+					<input type="text" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
 					<!-- /TMPL_UNLESS -->
 				</td>
 				<td>
-					Category <!-- TMPL_VAR NAME=catcodepopup -->
+					Category <!-- TMPL_VAR NAME="catcodepopup" -->
 				</td>
 			</tr>
-			<!-- TMPL_IF NAME=ethcatpopup -->
+			<!-- TMPL_IF NAME="ethcatpopup" -->
 				<tr valign="top" bgcolor="white">
-					<!-- TMPL_VAR NAME=ethcatpopup -->
+					<!-- TMPL_VAR NAME="ethcatpopup" -->
 					<td colspan="2">Ethnicity</td>
 					<td colspan="2">Ethnicity Notes</td>
 				</tr>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="ethcatpopup" -->
+			<!-- TMPL_IF NAME="ethcatpopup" -->
 				<tr valign="top" bgcolor="white">
 					<td colspan="2">
-						<!-- TMPL_IF name="ethcatpopup" -->
+						<!-- TMPL_IF NAME="ethcatpopup" -->
 							<select name="ethnicity" size="1">
 								<!-- TMPL_LOOP NAME="ethnicityloop" -->
 								<option value=<!-- TMPL_VAR NAME="value" --><!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="label" -->
@@ -153,13 +153,13 @@
 			<tr>
 				<td colspan="2"><input type="text" name="address" size="40" value="<!-- TMPL_VAR NAME="address" -->"></td>
 				<td>
-					<input type="text" name="zipcode" size="10" maxlength=20 value="<!-- TMPL_VAR NAME="zipcode" -->">
+					<input type="text" name="zipcode" size="10" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->">
 				</td>
 				<td>
 					<input type="text" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->">
 				</td>
 				<td>
-					<!-- TMPL_VAR name="CGIbranch" -->
+					<!-- TMPL_VAR NAME="CGIbranch" -->
 				</td>
 			</tr>
 
@@ -243,7 +243,7 @@
 				<td colspan="4"><textarea name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td>
 			</tr>
 			<!-- TMPL_IF NAME="modify" -->
-				<tr><td colspan=5>FLAGS</td></tr>
+				<tr><td colspan="5">FLAGS</td></tr>
 				<!-- TMPL_LOOP NAME="flagloop" -->
 				<tr>
 					<td colspan="2"><!-- TMPL_VAR NAME="html" --></td>
@@ -255,7 +255,7 @@
 			<!-- /TMPL_IF -->
 
 			<tr>
-				<td colspan=5>The 2 following fields are available for your own usage. They can be useful for stat purposes</td>
+				<td colspan="5">The 2 following fields are available for your own usage. They can be useful for stat purposes</td>
 			<tr>
 				<td>Sorting field 1</td>
 				<td colspan="4">

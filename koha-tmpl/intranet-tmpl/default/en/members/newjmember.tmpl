@@ -1,84 +1,84 @@
 <!-- TMPL_INCLUDE Name="members-top.inc" -->
 <div id="mainbloc">
 	<!-- TMPL_IF Name="NOK" -->
-		<!-- TMPL_VAR Name="string" -->
+		<!-- TMPL_VAR NAME="string" -->
 	<!-- TMPL_ELSE -->
-		<H1> Confirm Record </H1>
+		<h1> Confirm Record </h1>
 		<!-- TMPL_LOOP Name="identsloop" -->
 			<!-- TMPL_IF Name="cardchild" -->
-				<table border=0 cellspacing=0 cellpadding=5>
-					<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-						<td background="<!-- TMPL_VAR Name="image" -->">
-						<B> NEW MEMBER </B>
+				<table border="0" cellspacing="0" cellpadding="5">
+					<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+						<td background="<!-- TMPL_VAR NAME="image" -->">
+						<b> NEW MEMBER </b>
 						</td>
 						<td>
 						&nbsp;
 						</td>
 					</tr>
-					<tr valign=top bgcolor="white" >
+					<tr valign="top" bgcolor="white" >
 						<td>
-						<B>Name</B>
+						<b>Name</b>
 						</td>
 						<td>
-						<!-- TMPL_VAR Name="name" -->
+						<!-- TMPL_VAR NAME="name" -->
 						</td>
 					</tr>
-					<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-						<td background="<!-- TMPL_VAR Name="image" -->">
-						<B> MEMBERSHIP DETAILS </B>
+					<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+						<td background="<!-- TMPL_VAR NAME="image" -->">
+						<b> MEMBERSHIP DETAILS </b>
 						</td>
 						<td>
 						&nbsp;
 						</td>
 					</tr>
-					<tr valign=top bgcolor="white" >
+					<tr valign="top" bgcolor="white" >
 						<td>
-						<B>Membership Number</B>
+						<b>Membership Number</b>
 						</td>
 						<td>
-						<!-- TMPL_VAR Name="bornum" -->
-						</td>
-					</tr>
-					<tr valign=top bgcolor="white" >
-						<td>
-						<B>Date of birth</B>
-						</td>
-						<td>
-						<!-- TMPL_VAR Name="dob" -->
+						<!-- TMPL_VAR NAME="bornum" -->
 						</td>
 					</tr>
-					<tr valign=top bgcolor="white" >
+					<tr valign="top" bgcolor="white" >
 						<td>
-						<B>Sex</B>
+						<b>Date of birth</b>
 						</td>
 						<td>
-						<!-- TMPL_VAR Name="sex" -->
-						</td>
-					</tr>
-					<tr valign=top bgcolor="white" >
-						<td>
-						<B>School</B>
-						</td>
-						<td>
-						<!-- TMPL_VAR Name="school" -->
+						<!-- TMPL_VAR NAME="dob" -->
 						</td>
 					</tr>
-					<tr valign=top bgcolor="white" >
+					<tr valign="top" bgcolor="white" >
 						<td>
-						<B>General Notes</B>
+						<b>Sex</b>
 						</td>
 						<td>
-						<!-- TMPL_VAR Name="notes" -->
+						<!-- TMPL_VAR NAME="sex" -->
 						</td>
 					</tr>
-				</TABLE><p>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>School</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="school" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>General Notes</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="notes" -->
+						</td>
+					</tr>
+				</table><p>
 			<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
-		<form action="/cgi-bin/koha/members/insertjdata.pl" method=post>
-			<!-- TMPL_LOOP NAME=inputsloop -->
-				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+		<form action="/cgi-bin/koha/members/insertjdata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
 			<!-- /TMPL_LOOP -->
-			<input type=submit name=submit value="submit" class="button members">
+			<input type="submit" name="submit" value="submit" class="button members">
 		</form>
 	<!-- /TMPL_IF -->
 </div>

@@ -1,81 +1,81 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 <div id="mainbloc">
 	<h1>Add New Junior Member </h1><br>
-	<form action=/cgi-bin/koha/members/newjmember.pl method=post>
-		<!--<input type=hidden name=joining value="">
-		<input type=hidden name=expiry value="">
-		<input type=hidden name=type value="borrowers">-->
-		<input type=hidden name=borrowernumber value="<!-- TMPL_VAR NAME=member -->">
-		<input type=hidden name=updtype value=I>
-		<input type=hidden name=area value="<!-- TMPL_VAR NAME=area -->">
-		<input type=hidden name=city value="<!-- TMPL_VAR NAME=city -->">
-		<input type=hidden name=physstreet value="<!-- TMPL_VAR NAME=physstreet -->">
-		<input type=hidden name=streetaddress value="<!-- TMPL_VAR NAME=streetaddress -->">
-		<input type=hidden name=streetcity value="<!-- TMPL_VAR NAME=streetcity -->">
-		<input type=hidden name=phone value="<!-- TMPL_VAR NAME=phone -->">
-		<input type=hidden name=phoneday value="<!-- TMPL_VAR NAME=phoneday -->">
-		<input type=hidden name=faxnumber value="<!-- TMPL_VAR NAME=faxnumber -->">
-		<input type=hidden name=emailaddress value="<!-- TMPL_VAR NAME=emailaddress -->">
-		<input type=hidden name=contactname value="<!-- TMPL_VAR NAME=contactname -->">
-		<input type=hidden name=altphone value"<!-- TMPL_VAR NAME=altphone -->">
+	<form action="/cgi-bin/koha/members/newjmember.pl" method="post">
+		<!--<input type="hidden" name="joining" value="">
+		<input type="hidden" name="expiry" value="">
+		<input type="hidden" name="type" value="borrowers">-->
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="member" -->">
+		<input type="hidden" name="updtype" value="I">
+		<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+		<input type="hidden" name="city" value="<!-- TMPL_VAR NAME="city" -->">
+		<input type="hidden" name="physstreet" value="<!-- TMPL_VAR NAME="physstreet" -->">
+		<input type="hidden" name="streetaddress" value="<!-- TMPL_VAR NAME="streetaddress" -->">
+		<input type="hidden" name="streetcity" value="<!-- TMPL_VAR NAME="streetcity" -->">
+		<input type="hidden" name="phone" value="<!-- TMPL_VAR NAME="phone" -->">
+		<input type="hidden" name="phoneday" value="<!-- TMPL_VAR NAME="phoneday" -->">
+		<input type="hidden" name="faxnumber" value="<!-- TMPL_VAR NAME="faxnumber" -->">
+		<input type="hidden" name="emailaddress" value="<!-- TMPL_VAR NAME="emailaddress" -->">
+		<input type="hidden" name="contactname" value="<!-- TMPL_VAR NAME="contactname" -->">
+		<input type="hidden" name="altphone" value"<!-- TMPL_VAR NAME="altphone" -->">
 	
-		<table border=0 cellspacing=0 cellpadding=5 >
+		<table border="0" cellspacing="0" cellpadding="5" >
 		<tr>
-			<th  colspan=5>
+			<th  colspan="5">
 				PARENT OR GUARDIAN 
 			</th>
 		</tr>
-		<tr valign=top bgcolor=white>
+		<tr valign="top" bgcolor="white">
 			<td>Salutation</td>
 			<td>Given Names*</td>
-			<td colspan=2>Surname*</td>
+			<td colspan="2">Surname*</td>
 			<td>Membership No.</td>
 		</tr>
 		<tr>
 			<td>
-				<select NAME="title" SIZE="1">
+				<select name="title" size="1">
 					<option value=" ">No Title
-					<!-- TMPL_LOOP NAME=titleloop -->
-					<option value="<!-- TMPL_VAR NAME=title -->" <!-- TMPL_VAR NAME=selected -->><!-- TMPL_VAR NAME=title -->
+					<!-- TMPL_LOOP NAME="titleloop" -->
+					<option value="<!-- TMPL_VAR NAME="title" -->" <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="title" -->
 					<!-- /TMPL_LOOP -->
 				</select>
 			</td>
-			<td><input type=text name=firstname_guardian size=20 value="<!-- TMPL_VAR NAME=firstname -->"></td>
-			<td colspan=2><input type=text name=surname_guardian size=20 value="<!-- TMPL_VAR NAME=surname -->"></td>
-			<td><input type=text name=guardian_number size=20 value="<!-- TMPL_VAR NAME=cardnumber -->"></td>
+			<td><input type="text" name="firstname_guardian" size="20" value="<!-- TMPL_VAR NAME="firstname" -->"></td>
+			<td colspan="2"><input type="text" name="surname_guardian" size="20" value="<!-- TMPL_VAR NAME="surname" -->"></td>
+			<td><input type="text" name="guardian_number" size="20" value="<!-- TMPL_VAR NAME="cardnumber" -->"></td>
 		</tr>
-		<!-- TMPL_LOOP NAME=cmemloop -->
+		<!-- TMPL_LOOP NAME="cmemloop" -->
 		<tr>
-			<tH colspan=5>
-				CHILD <!-- TMPL_VAR NAME=count -->
+			<tH colspan="5">
+				CHILD <!-- TMPL_VAR NAME="count" -->
 			</tH>
-		</TR>
-		<TR>
-			<td colspan=5>
-				Member# <!-- TMPL_VAR NAME=cmember -->, Card number*
-				<input type=text name=cardnumber_child_<!-- TMPL_VAR NAME=i --> size=20 value="<!-- TMPL_VAR NAME=jcardnumber -->"><br>
-				<input type=hidden name=bornumber_child_<!-- TMPL_VAR NAME=i --> value="<!-- TMPL_VAR NAME=cmember -->">
+		</tr>
+		<tr>
+			<td colspan="5">
+				Member# <!-- TMPL_VAR NAME="cmember" -->, Card number*
+				<input type="text" name="cardnumber_child_<!-- TMPL_VAR NAME="i" -->" size="20" value="<!-- TMPL_VAR NAME="jcardnumber" -->"><br>
+				<input type="hidden" name="bornumber_child_<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="cmember" -->">
 			</td>
-		</TR>
+		</tr>
 		<tr>
 			<td>Given Name*</td>
 			<td>Surname*</td>
-			<td>Date of Birth (<!-- TMPL_VAR NAME=dateformat -->)*</td>
+			<td>Date of Birth (<!-- TMPL_VAR NAME="dateformat" -->)*</td>
 			<td>&nbsp;</td>
 			<td>School</td>
 		</tr>
 		<tr>
-			<td><input type=text name=firstname_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
-			<td><input type=text name=surname_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
-			<td><input type=text name=dateofbirth_child_<!-- TMPL_VAR NAME=i --> size=10 value=""></td>
+			<td><input type="text" name="firstname_child_<!-- TMPL_VAR NAME="i" -->" size="20" value=""></td>
+			<td><input type="text" name="surname_child_<!-- TMPL_VAR NAME="i" -->" size="20" value=""></td>
+			<td><input type="text" name="dateofbirth_child_<!-- TMPL_VAR NAME="i" -->" size="10" value=""></td>
 			<td>
-				<input type="radio" name="sex_child_<!-- TMPL_VAR NAME=i -->" value="F"><b>F</b>
-				<input type="radio" name="sex_child_<!-- TMPL_VAR NAME=i -->" value="M"><b>M*</b>
+				<input type="radio" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="F"><b>F</b>
+				<input type="radio" name="sex_child_<!-- TMPL_VAR NAME="i" -->" value="M"><b>M*</b>
 			</td>
-			<td><input type=text name=school_child_<!-- TMPL_VAR NAME=i --> size=20 value=""></td>
+			<td><input type="text" name="school_child_<!-- TMPL_VAR NAME="i" -->" size="20" value=""></td>
 		</tr>
 		<tr>
-			<td colspan=5>The 2 following fields are available for your own usage. They can be useful for stat purposes</td>
+			<td colspan="5">The 2 following fields are available for your own usage. They can be useful for stat purposes</td>
 		<tr>
 			<td>Sorting field 1</td>
 			<td colspan="4">
@@ -92,17 +92,17 @@
 			<td>Notes</td>
 		</tr>
 		<tr>
-			<td colspan=5><textarea name=altnotes_child_<!-- TMPL_VAR NAME=i --> wrap=physical cols=70 rows=3></textarea></td>
+			<td colspan="5"><textarea name="altnotes_child_<!-- TMPL_VAR NAME="i" -->" wrap="physical" cols="70" rows="3"></textarea></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 		<tr>
 			<td>
-				<input type=submit class="button members" value="OK">
+				<input type="submit" class="button members" value="OK">
 			</td>
-			<td><input type=reset class="button members" value="Clear all Fields"></td>
+			<td><input type="reset" class="button members" value="Clear all Fields"></td>
 		</tr>
 	
-		</TABLE>
+		</table>
 	</form>
 </div>
 

@@ -1,35 +1,35 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 <div id="mainbloc">
-<h1>Pay Fines for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h1>
+<h1>Pay Fines for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
 
 	<form action="/cgi-bin/koha/pay.pl" method="post">
 <table cellspacing="0" cellpadding="5" border="1">
 <tr valign="top">
-	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan="4"><B>FINES &amp; CHARGES</b></td>
-	<td bgcolor="#99cc33" background="/images/background-mem.gif" colspan="4"><B>AMOUNT OWING</b></td>
+	<td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan="4"><b>FINES &amp; CHARGES</b></td>
+	<td bgcolor="#99cc33" background="/images/background-mem.gif" colspan="4"><b>AMOUNT OWING</b></td>
 </tr>
 	
-<!-- TMPL_LOOP name="loop_pay" -->
+<!-- TMPL_LOOP NAME="loop_pay" -->
 <tr valign="top">
-	<td><input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->"><input type="radio" name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked="checked">Unpaid
-	<input type="radio" name="payfine<!-- TMPL_VAR name="i" -->" value="yes">Pay
-	<input type="radio" name="payfine<!-- TMPL_VAR name="i" -->" value="wo">Writeoff
-	<input type="hidden" name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->">
-	<input type="hidden" name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->">
-	<input type="hidden" name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount'}" -->">
-	<input type="hidden" name="out<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amountoutstanding" -->">
-	<input type="hidden" name="bornum<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="bornum" -->">
-	<input type="hidden" name="accountno<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accountno" -->">
+	<td><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->"><input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="no" checked="checked">Unpaid
+	<input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="yes">Pay
+	<input type="radio" name="payfine<!-- TMPL_VAR NAME="i" -->" value="wo">Writeoff
+	<input type="hidden" name="itemnumber<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="itemnumber" -->">
+	<input type="hidden" name="accounttype<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="accounttype" -->">
+	<input type="hidden" name="amount<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="amount'}" -->">
+	<input type="hidden" name="out<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="amountoutstanding" -->">
+	<input type="hidden" name="bornum<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="bornum" -->">
+	<input type="hidden" name="accountno<!-- TMPL_VAR NAME="i" -->" value="<!-- TMPL_VAR NAME="accountno" -->">
 	</td>
-	<td><!-- TMPL_VAR name="description" --> <!-- TMPL_VAR name="title" --></td>
-	<td><!-- TMPL_VAR name="accounttype" --></td>
-	<td><!-- TMPL_VAR name="amount" --></td>
-	<td><!-- TMPL_VAR name="amountoutstanding" --></td>
+	<td><!-- TMPL_VAR NAME="description" --> <!-- TMPL_VAR NAME="title" --></td>
+	<td><!-- TMPL_VAR NAME="accounttype" --></td>
+	<td><!-- TMPL_VAR NAME="amount" --></td>
+	<td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
 </tr>
 <!-- /TMPL_LOOP -->
 <tr valign="top">
 	<td colspan="4" align="right"><b>Total Due</b></td>
-	<td><b><!-- TMPL_VAR name="total" --></b></td>
+	<td><b><!-- TMPL_VAR NAME="total" --></b></td>
 	</tr>
 	<tr valign="top">
 	<td colspan="5" align="right">
@@ -38,7 +38,7 @@
 </table>
 </form>
 
-<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">Return</a> to Member Record
+<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Return</a> to Member Record
 </div>
 <!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 

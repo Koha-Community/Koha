@@ -4,8 +4,8 @@
 
 <div class="bloc100">
 	<div class="bloctitle">Search on</div>
-	<form action="/cgi-bin/koha/members/member.pl" method=post>
-		<input type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
+	<form action="/cgi-bin/koha/members/member.pl" method="post">
+		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->">
 		<input type="submit" class="button" value="OK">
 	</form>
 </div>
@@ -41,7 +41,7 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 	<form action="/cgi-bin/koha/members/simpleredirect.pl" method="post">
-	<input type=submit class="button" value="Add member" title="Add member" alt="Add member">
+	<input type="submit" class="button" value="Add member" title="Add member" alt="Add member">
 	<input type="radio" name="chooseform" value="adult" checked>Adult
 	<input type="radio" name="chooseform" value="organisation" >Organisation
 	</form>
