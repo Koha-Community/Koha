@@ -38,3 +38,25 @@ function ValidateCode()
      }
   }
 }
+
+function CheckAll()
+{
+count = document.mainform.elements.length;
+    for (i=0; i < count; i++) 
+	{
+	    if(document.mainform.elements[i].checked == 1){
+			document.mainform.elements[i].checked = 0;
+		} else {
+			document.mainform.elements[i].checked = 1;
+		}
+	}
+}
+
+function confirmDelete(message) {
+	var agree = confirm(message);
+	if(agree) {
+		return true;
+	} else {
+		return false;
+	}
+}
