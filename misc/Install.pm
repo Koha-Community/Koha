@@ -1736,7 +1736,8 @@ Which language do you choose? |;
 
 sub updatedatabase {
     # At this point, $etcdir/koha.conf must exist, for C4::Context
-    $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf.tmp';
+    $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf';
+    if (! -e $ENV{"KOHA_CONF"}) { $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf.tmp'; }
 	startsysout();	
 	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 	if ($result) {
