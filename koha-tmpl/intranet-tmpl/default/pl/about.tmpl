@@ -1,0 +1,32 @@
+<TMPL_INCLUDE name="about-top.inc">
+
+<TMPL_VAR NAME=about>
+
+<p>Dane o bie¿±cej wersji Koha w celu zg³aszania b³êdów 
+(lub dla informacji ogólnej).
+
+<center>
+<table border=1>
+  <tr bgcolor="white">
+      <td width=25%>Wersja Koha:</td>
+      <td><TMPL_VAR ESCAPE=HTML NAME=kohaVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>Wersja OS (przez 'uname -a'):</td>
+      <td><TMPL_VAR ESCAPE=HTML NAME=osVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>Wersja Perl:</td>
+      <td><TMPL_VAR ESCAPE=HTML NAME=perlVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>Wersja MySQL:</td>
+      <td><TMPL_VAR ESCAPE=HTML NAME=mysqlVersion></td>
+  </tr>
+  <tr bgcolor="white">
+      <td>Wersja Apache:</td>
+      <td><TMPL_VAR ESCAPE=HTML NAME=apacheVersion></td>
+  </tr>
+</table>
+</center>
+<TMPL_INCLUDE name="about-bottom.inc">
