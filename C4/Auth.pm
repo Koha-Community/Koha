@@ -101,6 +101,7 @@ sub checkauth {
 	    my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
 	    $sth->execute($userid);
 	    my ($cardnumber) = $sth->fetchrow;
+	    ($cardnumber) || ($cardnumber=$userid);
 	    my $flags=getuserflags($cardnumber,$dbh);
 	    my $configfile=configfile();
 	    if ($userid eq $configfile->{'user'}) {
