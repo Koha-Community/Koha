@@ -1,0 +1,229 @@
+<TMPL_INCLUDE Name="members-top.inc">
+
+<H1> Confirmer l'enregistrement </H1>
+<TMPL_IF Name="OK">
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>NOUVEAU LECTEUR</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nom</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="name">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>D&eacute;tails</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Num&eacute;ro interne</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="bornum">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Num&eacute;ro de carte</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="cardnum">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Cat&eacute;gorie de lecteur</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="memcat">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Frais</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="fee">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Date d'inscription</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="joindate">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Date expiration</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="expdate">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Annexe de rattachement</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="branchcode">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>DETAILS PERSONNELS</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Date de naissance</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="dob">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Sexe</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="sex">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>ADRESSE</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Adresse postale</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="postal">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Adresse</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="home">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>CONTACTS</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>T&eacute;l&eacute;phone (maison)</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="phone">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>T&eacute;l&eacute;phone (bureau)</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="phoneday">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fax</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="faxnumber">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>E-mail</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="emailaddress">
+			</td>
+		</tr>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>Texte</B>
+			</td>
+			<td>
+				<TMPL_VAR NAME=textmessaging>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>AUTRES CONTACTS</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nom</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="contactname">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Téeacute;léeacute;phone</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="altphone">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Relation</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="altrelationship">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Notes</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="altnotes">
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<TMPL_VAR Name="main">" >
+			<td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<B>NOTES</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Notes g&eacute;n&eacute;rales</B>
+			</td>
+			<td>
+				<TMPL_VAR Name="bornotes">
+			</td>
+		</tr>
+		</TABLE><p>
+		<form action="/cgi-bin/koha/insertdata.pl" method=post>
+			<TMPL_LOOP NAME=inputsloop>
+				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
+			</TMPL_LOOP>
+			<input type=submit name=submit value=Submit>
+		</form>
+<TMPL_ELSE>
+	<TMPL_VAR Name="string">
+</TMPL_IF>
+
+
+<TMPL_INCLUDE Name="members-bottom.inc">
