@@ -104,7 +104,6 @@ if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
      }
 }
 
-warn $query;
   my $sth2=$dbh->prepare($query);
   $sth2->execute;
   $sth2->finish;
