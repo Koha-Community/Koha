@@ -3,7 +3,7 @@
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Patron Categories<!-- /TMPL_IF -->
-<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -87,14 +87,11 @@
 	<!-- /TMPL_IF -->
 	<tr><th>Description</th><td><input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME=description -->" /></td></tr>
 	<tr><th>Enrolment period</th><td><input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME=enrolmentperiod -->" /> years</td></tr>
-	<tr><th>Upperage limit</th><td><input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME=upperagelimit -->" /></td></tr>
-	<tr><th>Age Required</th><td><input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size="3" maxlength="3" /></td></tr>
-	<tr><th>Fine type</th><td><input type="text" name="finetype" size="30" maxlength="30" value="<!-- TMPL_VAR NAME=finetype -->" /></td></tr>
-	<tr><th>Bulk</th><td><input type="text" name="bulk" value="<!-- TMPL_VAR NAME=bulk -->" /></td></tr>
-	<tr><th>Enrollment fee</th><td><input type="text" name="enrolmentfee" value="<!-- TMPL_VAR NAME=enrolmentfee -->" /></td></tr>
+	<tr><th>Upperage limit</th><td><input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME=upperagelimit -->" /> years</td></tr>
+	<tr><th>Age Required</th><td><input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size="3" maxlength="3" /> years</td></tr>
+	<tr><th>Enrollment fee</th><td>$<input type="text" name="enrolmentfee" value="<!-- TMPL_VAR NAME=enrolmentfee -->" /></td></tr>
 	<tr><th>Overdue notice required</th><td><input type="text" name="overduenoticerequired" value="<!-- TMPL_VAR NAME="overduenoticerequired" -->" /></td></tr>
-	<tr><th>Issue limit</th><td><input type="text" name="issuelimit" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="issuelimit" -->" /></td></tr>
-	<tr><th>Reserve fee</th><td><input type="text" name="reservefee" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
+	<tr><th>Reserve fee</th><td>$<input type="text" name="reservefee" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
 </table></div>
 	<p>				<input type="button" class="submit" value="<!-- TMPL_IF NAME="categorycode" -->Update Category<!-- TMPL_ELSE -->Add Category<!-- /TMPL_IF -->" onclick="Check(this.form);" /> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" /></p>
 	</form>
@@ -112,28 +109,20 @@
 <!-- TMPL_IF NAME="delete_confirm" -->
 	
         	
-	<h2>Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --></h2>
-<!-- TMPL_IF NAME="totalgtzero" --><p><span class="alert">This category is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span></p><!-- /TMPL_IF -->
-	<div class="form"><table>
+	<!-- TMPL_IF NAME="totalgtzero" --><h3>Cagegory <!-- TMPL_VAR NAME="categorycode" --> is in use.  Deletion not possible!</h3><!-- TMPL_ELSE --><h2>Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --></h2><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="totalgtzero" --><div class="error">This category is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</div><!-- /TMPL_IF -->
+	<div class="compact"><table>
 	<tr><th>Category code</th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
 	<tr><th>Description</th><td><!-- TMPL_VAR NAME="description" --></td></tr>
-	<tr><th>Enrolment period</th><td><!-- TMPL_VAR NAME="enrolmentperiod" --></td></tr>
-	<tr><th>Upperage limit</th><td><!-- TMPL_VAR NAME="upperagelimit" --></td></tr>
-	<tr><th>Age Required</th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --></td></tr>
-	<tr><th>Fine type</th><td><!-- TMPL_VAR NAME="finetype" --></td></tr>
-	<tr><th>Bulk</th><td><!-- TMPL_VAR NAME="bulk" --></td></tr>
-	<tr><th>Enrolment fee</th><td><!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
-	<tr><th>Overdue notice required</th><td><!-- TMPL_VAR NAME="overduenoticerequired" --></td></tr>
-	<tr><th>Issue limit</th><td><!-- TMPL_VAR NAME="issuelimit" --></td></tr>
-	<tr><th>Reserve fee</th><td><!-- TMPL_VAR NAME="reservefee" --></td></tr>
+	<tr><th>Enrolment period</th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> years</td></tr>
+	<tr><th>Upperage limit</th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
+	<tr><th>Age Required</th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
+	<tr><th>Enrolment fee</th><td>$<!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
+	<tr><th>Overdue notice required</th><td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+	<tr><th>Reserve fee</th><td>$<!-- TMPL_VAR NAME="reservefee" --></td></tr>
 </table></div>
 		<!-- TMPL_IF NAME="totalgtzero" -->
-<p><span class="alert">This category is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span></p>
-				<div class="tabitem"><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /> </form><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-				<input type="submit" value="OK" class="submit" />
-				</form></div>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="OK" class="submit" /></form>
 		<!-- TMPL_ELSE -->
 <div class="tabitem"><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
@@ -158,34 +147,32 @@
 		<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 		<input type="submit" name="search" class="submit" value="Find" />
 	</form>	
-        <div class="table"><table>
+        <div class="data"><table>
 		<tr>
-			<th>Category</th>
-			<th>Description</th>
-			<th>Enrollment</th>
-			<th>Upper Age Limit</th>
-			<th>Age Required</th>
-<!-- 			<th>Fine</th> -->
-			<th>Bulk</th>
-<!-- 			<th>Fee</th> -->
-			<th>Overdue</th>
-			<th>Issue Limit</th>
-<!-- 			<th>Reserve</th> -->
-			<th colspan="2">&nbsp; </th>
+			<th scope="col">Category</th>
+			<th scope="col">Description</th>
+			<th scope="col">Enrollment Period</th>
+			<th scope="col">Upper Age Limit</th>
+			<th scope="col">Age Required</th>
+ 			<th scope="col">Fine</th>
+ 			<th scope="col">Enrollment Fee</th>
+			<th scope="col">Overdue</th>
+			<th scope="col">Issue Limit</th>
+ 			<th scope="col">Reservation Fee</th>
+			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr>
+		<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPl_IF -->>
                         <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="categorycode" --></a></td>
                         <td><!-- TMPL_VAR NAME="description" --></td>
-                        <td><!-- TMPL_VAR NAME="enrolmentperiod" --></td>
-                        <td><!-- TMPL_VAR NAME="upperagelimit" --></td>
-                        <td><!-- TMPL_VAR NAME="dateofbirthrequired" --></td>
-<!--                         <td><!-- TMPL_VAR NAME="finetype" --></td> -->
-                        <td><!-- TMPL_VAR NAME="bulk" --></td>
-<!--                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td> -->
+                        <td><!-- TMPL_VAR NAME="enrolmentperiod" --> years</td>
+                        <td><!-- TMPL_VAR NAME="upperagelimit" --> years</td>
+                        <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>
+                        <td><!-- TMPL_VAR NAME="finetype" --></td>
+                        <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
                         <td><!-- TMPL_VAR NAME="overduenoticerequired" --></td>
                         <td><!-- TMPL_VAR NAME="issuelimit" --></td>
-<!--                         <td><!-- TMPL_VAR NAME="reservefee" --></td> -->
+                        <td><!-- TMPL_VAR NAME="reservefee" --></td>
                         <td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
                         <td><a class="delete" href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td>
 		</tr>
