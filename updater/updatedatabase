@@ -248,7 +248,10 @@ my %requirefields = (
     		 	   'type' => 'char(20)',
 			   'options' => 'text' },
     z3950servers      => { 'syntax'      => 'char(80)' },
-    marc_subfield_structure =>{'seealso'  => 'char(255)'},
+	marc_tag_structure =>{
+							'itemtype' => 'char(4) not NULL default \'\''},
+    marc_subfield_structure =>{'seealso'  => 'char(255)',
+							'itemtype' => 'char(4) not NULL default \'\''},
     bookshelf => {'owner' => 'char(80)',
     					'category' => 'char(1)',
 				},
@@ -1015,6 +1018,11 @@ while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Colla
 print "Creating  index on z3950results\n" unless $exists;
 $dbh->do('ALTER TABLE issuingrules ADD PRIMARY KEY ( branchcode, categorycode, itemtype )') unless $exists;
 
+$dbh->do('ALTER TABLE marc_tag_structure drop primary key');
+$dbh->do('ALTER TABLE marc_tag_structure ADD PRIMARY KEY ( itemtype, tagfield )');
+
+$dbh->do('ALTER TABLE marc_subfield_structure drop primary key');
+$dbh->do('ALTER TABLE marc_subfield_structure ADD PRIMARY KEY ( itemtype, tagfield, tagsubfield )');
 
 # Populate tables with required data
 
@@ -1067,6 +1075,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.79  2004/05/18 09:50:07  tipaul
+# *** empty log message ***
+#
 # Revision 1.78  2004/05/10 09:29:33  tipaul
 # css is now the default theme for OPAC.
 # It will be the theme used for improvements and new things in OPAC.
