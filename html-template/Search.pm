@@ -279,6 +279,8 @@ sub KeywordSearch {
 	    ($dewey == 0) && ($dewey='');               
 	    ($dewey) && ($dewey.=" $subclass") ;                      
 	    $sth->finish;                                                        
+	    $data2->{dewey}=~s/[\.0]*$//;
+	    ($data2->{dewey}==0) && ($data2->{dewey}='');
 	    push @$resulthash, $data2;
 	    $res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
 	    $i++;

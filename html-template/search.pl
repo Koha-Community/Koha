@@ -28,7 +28,8 @@ my $template = HTML::Template->new(filename => $templatename, die_on_bad_params 
 
 my $blah;
 my %search;
-$search{'keyword'}='bear';
+my $keyword='bear';
+$search{'keyword'}=$keyword;
 
 my ($count, $resultshash, @results) = &KeywordSearch(\$blah, 'intra', \%search, 20, $startfrom);
 
