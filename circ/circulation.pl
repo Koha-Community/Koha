@@ -382,7 +382,7 @@ sub patrontable {
     my $color='';
     foreach $flag (sort keys %$flags) {
     	warn $flag;
-    	my @itemswaiting='';
+#    	my @itemswaiting='';
 	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {
@@ -405,6 +405,7 @@ sub patrontable {
 		}
 	    	if ($flag eq 'WAITING') {
 			my $items=$flags->{$flag}->{'itemlist'};
+		        my @itemswaiting;
 			foreach my $item (@$items) {
 			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
 			$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
@@ -426,6 +427,7 @@ sub patrontable {
 			my $currentcolor=$color;
 			{
 			my $color=$currentcolor;
+			    my @itemswaiting;
 			foreach my $item (@$items) {
 				($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
