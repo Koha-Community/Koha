@@ -1030,8 +1030,7 @@ tfoot td, tfoot td:last-child {
 	border-bottom : 1px solid #999900;
 }
 
-
-div.data table {
+div.data table, div.data-main table {
 	background-color: #D8DeB8;
 	border-collapse: collapse;
 	margin : auto;
@@ -1042,7 +1041,11 @@ div.data table caption {
 	font-size : 1em;
 }
 
-div.data table td {
+div.data-main table caption {
+	font-size : 1.1em;
+}
+
+div.data table td, div.data-main table td {
 	border-right : 1px solid #CCCC99;
 	border-bottom : 1px solid #CCCC99;
 	background-color: #FFFFCC;
@@ -1052,7 +1055,11 @@ div.data table td {
 	margin : 0 0 0 0;
 }
 
-div.data table th {
+div.data-main table td {
+	background-color : #FFFFE1;
+}
+
+div.data table th, div.data-main table th  {
 	border-left : 1px solid #999933;
 	border-right : 1px solid #CCCC99;
 	border-bottom : 1px solid #CCCC99;
@@ -1065,12 +1072,16 @@ div.data table th {
 	width : 17%;
 }
 
-div.data table th[scope=col] {
+div.data-main table th {
+	background-color : #EFF1D8;
+}
+
+div.data table th[scope=col], div.data-main table th[scope=col] {
 	text-align: center;
 	border-left : 0;
 }
 
-div.data table col {
+div.data table col, div.data-main table col {
 	background-color : #CCCCCC;
 }
 
