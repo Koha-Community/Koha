@@ -2,26 +2,28 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
-<div id="bibliomenu">
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
-		Normal
-	</a>
-	<a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">
-		MARC
-	</a>
-	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
-		Print
-	</a>
-	<!-- TMPL_UNLESS NAME="norequests" -->
-		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
-			Request
-		</a>
-	<!-- /TMPL_UNLESS -->
-</div>
 
-<div id="mainbloc">
-	<p>ISBD : <!-- TMPL_VAR name="ISBD" --></p>
+<div id="main">
+	<div class="details"><h3>ISBD</h3>
+	<p><!-- TMPL_VAR name="ISBD" --></p>
+	
+	<!-- TMPL_UNLESS NAME="norequests" -->
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
+    <input type="submit" name="submit"  value="Place Reserve" class="submit" />
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form>
+<!-- /TMPL_UNLESS -->
+
+<form class="inline" action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon detail" value="MARC View" /></form>
+
+<form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon brief" value="Simple View" /></form>
+
+<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Print" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form>
+
+<form class="inline" action="opac-addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="icon shelf" value="Add to Shelf" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form>
+
+<form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
+</div>
 </div>
 </body>
 </html>
