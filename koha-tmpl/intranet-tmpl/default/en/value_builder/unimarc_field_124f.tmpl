@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 124f</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Nom du satellite pour la teledetection:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aa" -->
+				<option value="aa" SELECTED>Tiros</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Tiros</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ab" -->
+				<option value="ab" SELECTED>ATS</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">ATS</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ac" -->
+				<option value="ac" SELECTED>NOAA</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">NOAA</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ad" -->
+				<option value="ad" SELECTED>Nimbus</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Nimbus</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ae" -->
+				<option value="ae" SELECTED>METEOSAT</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">METEOSAT</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ma" -->
+				<option value="ma" SELECTED>Explorer I</option>
+			<!-- TMPL_ELSE -->
+				<option value="ma">Explorer I</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1mb" -->
+				<option value="mb" SELECTED>Explorer II</option>
+			<!-- TMPL_ELSE -->
+				<option value="mb">Explorer II</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ga" -->
+				<option value="ga" SELECTED>ERTS</option>
+			<!-- TMPL_ELSE -->
+				<option value="ga">ERTS</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gb" -->
+				<option value="gb" SELECTED>Landsat I</option>
+			<!-- TMPL_ELSE -->
+				<option value="gb">Landsat I</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gc" -->
+				<option value="gc" SELECTED>Landsat II</option>
+			<!-- TMPL_ELSE -->
+				<option value="gc">Landsat II</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gd" -->
+				<option value="gd" SELECTED>Landsat III</option>
+			<!-- TMPL_ELSE -->
+				<option value="gd">Landsat III</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ge" -->
+				<option value="ge" SELECTED>Seasat</option>
+			<!-- TMPL_ELSE -->
+				<option value="ge">Seasat</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gf" -->
+				<option value="gf" SELECTED>Skylab</option>
+			<!-- TMPL_ELSE -->
+				<option value="gf">Skylab</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gg" -->
+				<option value="gg" SELECTED>Spacelab</option>
+			<!-- TMPL_ELSE -->
+				<option value="gg">Spacelab</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gk" -->
+				<option value="gk" SELECTED>Spot 1</option>
+			<!-- TMPL_ELSE -->
+				<option value="gk">Spot 1</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gl" -->
+				<option value="gl" SELECTED>Spot 2</option>
+			<!-- TMPL_ELSE -->
+				<option value="gl">Spot 2</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gm" -->
+				<option value="gm" SELECTED>Spot 3</option>
+			<!-- TMPL_ELSE -->
+				<option value="gm">Spot 3</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gz" -->
+				<option value="gz" SELECTED>Autres codes</option>
+			<!-- TMPL_ELSE -->
+				<option value="gz">Autres codes</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

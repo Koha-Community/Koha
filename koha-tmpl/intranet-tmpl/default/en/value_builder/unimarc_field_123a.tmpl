@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 123a</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Type d'echelle:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Echelle lineaire</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Echelle lineaire</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Echelle angulaire</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Echelle angulaire</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autre type d'echelle</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre type d'echelle</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

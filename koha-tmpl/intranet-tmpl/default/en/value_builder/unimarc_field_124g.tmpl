@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 124g</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Technique d'enregistrement pour les images de teledetection:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aa" -->
+				<option value="aa" SELECTED>Enregistrement video</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Enregistrement video</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ab" -->
+				<option value="ab" SELECTED>Photographie en fausse couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Photographie en fausse couleur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ac" -->
+				<option value="ac" SELECTED>Photographie multispectrale</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Photographie multispectrale</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ad" -->
+				<option value="ad" SELECTED>Balayage multispectrale</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Balayage multispectrale</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1av" -->
+				<option value="av" SELECTED>Combinaisons de techniques en faible emission</option>
+			<!-- TMPL_ELSE -->
+				<option value="av">Combinaisons de techiques en faible emission</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1da" -->
+				<option value="da" SELECTED>Balayage par ligne infrarouge</option>
+			<!-- TMPL_ELSE -->
+				<option value="da">Balayage par ligne infrarouge</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1dv" -->
+				<option value="dv" SELECTED>Combinaisons de techniques diverses de detection thermique par infrarouge</option>
+			<!-- TMPL_ELSE -->
+				<option value="dv">Combinaisons de techiques diverses de detection thermique par infrarouge</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ga" -->
+				<option value="ga" SELECTED>Sidelooking Airbone Radar</option>
+			<!-- TMPL_ELSE -->
+				<option value="ga">Sidelooking Airbone Radar</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gb" -->
+				<option value="gb" SELECTED>Synthetic Aperture Radar</option>
+			<!-- TMPL_ELSE -->
+				<option value="gb">Synthetic Aperture Radar</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1gc" -->
+				<option value="gc" SELECTED>Couverture passive par ondes micrometriques</option>
+			<!-- TMPL_ELSE -->
+				<option value="gc">Couverture passive par onde micrometrique</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

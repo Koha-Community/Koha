@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>UNIMARC Field 106 builder</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Texte presentation physique</td>
+		<td>
+			<select name="f1" size="1">
+	                        <!-- TMPL_IF name="f1 " -->
+                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">None</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f1r" -->
+				<option value="r" SELECTED>Impression normale</option>
+			<!-- TMPL_ELSE -->
+				<option value="r">Impression normale</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="d" SELECTED>Impression
+				en gros caractere</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Impression en gros caractere</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1e" -->
+				<option value="e" SELECTED>Journal</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Journal</option>
+	
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f1f" -->
+				<option value="f" SELECTED>Caractere braille et moon</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Caractere braille et moon</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1g" -->
+				<option value="g" SELECTED>Micro-impression</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Micro-impression</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1h" -->
+				<option value="h" SELECTED>Manuscrit</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Manuscrit</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1i" -->
+				<option value="i" SELECTED>Multimedia</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Multimedia</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1j" -->
+				<option value="j" SELECTED>Impression en reduction</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">Impression en reduction</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autres formes de presentation</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autres formes de presentation</option>
+	
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+		opener.document.f.field_value[<!-- TMPL_VAR
+		name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 124c</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Presentation technique dans le cas d'images photographiques ou non photographiques:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aa" -->
+				<option value="aa" SELECTED>Anaglyphique</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Anaglyphique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ab" -->
+				<option value="ab" SELECTED>Polarisee</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Polarisee</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ac" -->
+				<option value="ac" SELECTED>Planimetrique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Planimetrique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ad" -->
+				<option value="ad" SELECTED>Carte diagramme</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Carte diagramme</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ae" -->
+				<option value="ae" SELECTED>Carte par courbes de niveau</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Carte par courbes de niveau</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1af" -->
+				<option value="af" SELECTED>Carte par points</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Carte par points</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ag" -->
+				<option value="ag" SELECTED>Carte diagrammatique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Carte diagrammatique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ah" -->
+				<option value="ah" SELECTED>Choroplethe</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Choroplethe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ai" -->
+				<option value="ai" SELECTED>Chorochromatique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Chorochromatique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aj" -->
+				<option value="aj" SELECTED>Dasymetrique</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Dasymetrique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ak" -->
+				<option value="ak" SELECTED>Isoplethe</option>
+			<!-- TMPL_ELSE -->
+				<option value="ak">Isoplethe</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1am" -->
+				<option value="am" SELECTED>Anamorphique</option>
+			<!-- TMPL_ELSE -->
+				<option value="am">Anamorphique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1an" -->
+				<option value="an" SELECTED>Carte peinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="an">Carte peinte</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ao" -->
+				<option value="ao" SELECTED>Representation des volumes en 2 dimensions</option>
+			<!-- TMPL_ELSE -->
+				<option value="ao">Representation des volumes en 2 dimensions</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ap" -->
+				<option value="ap" SELECTED>Carte mentale ou cognitive</option>
+			<!-- TMPL_ELSE -->
+				<option value="ap">Carte mentale ou cognitive</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1aq" -->
+				<option value="aq" SELECTED>Vues avec horizon</option>
+			<!-- TMPL_ELSE -->
+				<option value="aq">Vues avec horizon</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1ar" -->
+				<option value="ar" SELECTED>Vues sans horizon</option>
+			<!-- TMPL_ELSE -->
+				<option value="ar">Vues sans horizon</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1as" -->
+				<option value="as" SELECTED>Infographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="as">Infographie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1da" -->
+				<option value="da" SELECTED>Pictocarte</option>
+			<!-- TMPL_ELSE -->
+				<option value="da">Pictocarte</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1db" -->
+				<option value="db" SELECTED>Carte par pointille</option>
+			<!-- TMPL_ELSE -->
+				<option value="db">Carte par pointille</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1dc" -->
+				<option value="dc" SELECTED>Tramee</option>
+			<!-- TMPL_ELSE -->
+				<option value="dc">Tramee</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1dd" -->
+				<option value="dd" SELECTED>Non tramee</option>
+			<!-- TMPL_ELSE -->
+				<option value="dd">Non tramee</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 121a</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Dimensions physiques:</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Bi-dimensionnel</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Bi-dimensionnel</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Tri-dimensionnel</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Tri-dimensionnel</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr><tr>
+		<td>Image cartographique originale 1:</td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Manuelle et
+				par releve</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Manuelle et par releve</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>photographique</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Photographique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>Par ordinateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Par ordinateur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Par
+				techique de teledetection active</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Par technique de
+				teledetection active</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2e" -->
+				<option value="e" SELECTED>Par
+				techique de teledetection passive</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Par technique de
+				teledetection passive</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>		<td>Image cartographique originale 2:</td>
+		<td>
+			<select name="f3" size="1">
+			<!-- TMPL_IF name="f3 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3a" -->
+				<option value="a" SELECTED>Manuelle et
+				par releve</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Manuelle et par releve</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3b" -->
+				<option value="b" SELECTED>photographique</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Photographique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3c" -->
+				<option value="c" SELECTED>Par ordinateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Par ordinateur</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3d" -->
+				<option value="d" SELECTED>Par
+				techique de teledetection active</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Par technique de
+				teledetection active</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3e" -->
+				<option value="e" SELECTED>Par
+				techique de teledetection passive</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Par technique de
+				teledetection passive</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr><tr>
+		<td>Support physique:</td>
+		<td>
+			<select name="f4" size="1">
+			<!-- TMPL_IF name="f4  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4aa" -->
+				<option value="aa" SELECTED>Papier</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Papier</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ab" -->
+				<option value="ab" SELECTED>Bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Bois</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ac" -->
+				<option value="ac" SELECTED>Pierre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Pierre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ad" -->
+				<option value="ad" SELECTED>Metal</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Metal</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ae" -->
+				<option value="ae" SELECTED>Materiaux synthetiques</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Materiaux synthetiques</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4af" -->
+				<option value="af" SELECTED>Peau
+				(parchemin, velin...)</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Peau (parchemin, velin...) </option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ag" -->
+				<option value="ag" SELECTED>Textile (y
+				compris les fibres synthetiques)</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Textile (y compris
+				les fibres synthetiques)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ah" -->
+				<option value="ah" SELECTED>Stockage
+				sur support magnetique - informatique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Stockage sur
+				support magnetique - informatique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ai" -->
+				<option value="ai" SELECTED>Stockage
+				sur support magnetique - non informatique</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Stockage sur
+				support magnetique - non informatique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4aj" -->
+				<option value="aj" SELECTED>Papier calque</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Papier calque</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ak" -->
+				<option value="ak" SELECTED>Carton</option>
+			<!-- TMPL_ELSE -->
+				<option value="ak">Carton</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ap" -->
+				<option value="ap" SELECTED>Platre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ap">Platre</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4au" -->
+				<option value="au" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="au">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4az" -->
+				<option value="az" SELECTED>Autre
+				procede non-photographique</option>
+			<!-- TMPL_ELSE -->
+				<option value="az">Autre procede non-photographique</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4ba" -->
+				<option value="ba" SELECTED>Positif
+				sur base flexible</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Positif sur base flexible</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4bb" -->
+				<option value="bb" SELECTED>Negatif
+				sur base flexible</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Negatif sur base flexible</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4bc" -->
+				<option value="bc" SELECTED>Positif
+				sur base rigide</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Positif sur base rigide</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4bd" -->
+				<option value="bd" SELECTED>Negatif
+				sur base rigide</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Negatif sur base rigide</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4bz" -->
+				<option value="bz" SELECTED>Autre
+				procede photographique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bz">Autre procede photographique</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td></tr><tr>
+		<td>Mode de realisation technique:</td>
+		<td>
+			<select name="f5" size="1">
+			<!-- TMPL_IF name="f5 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5a" -->
+				<option value="a" SELECTED>Manuscrit</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Manuscrit</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5b" -->
+				<option value="b" SELECTED>Imprime</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Imprime</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5c" -->
+				<option value="c" SELECTED>Photographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Photographie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5d" -->
+				<option value="d" SELECTED>Microphotographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Microphotographie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5y" -->
+				<option value="y" SELECTED>N'est pas
+				le produit final</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">N'est pas le produit
+				final</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr><tr>
+		<td>Forme de reproduction:</td>
+		<td>
+			<select name="f6" size="1">
+			<!-- TMPL_IF name="f6 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6a" -->
+				<option value="a" SELECTED>Manuscrit</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Manuscrit</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6b" -->
+				<option value="b" SELECTED>Imprime</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Imprime</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6c" -->
+				<option value="c" SELECTED>Photographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Photographie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6d" -->
+				<option value="d" SELECTED>Impression
+				par transfert ligne a ligne</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Impression par
+				transfert ligne a ligne</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6y" -->
+				<option value="y" SELECTED>Ce n'est
+				pas une reproduction</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">Ce n'est pas une reproduction</option>
+			<!-- /TMPL_IF -->
+		</td>
+	</tr><tr>
+		<td>Reperes geodesiques:</td>
+		<td>
+			<select name="f7" size="1">
+			<!-- TMPL_IF name="f7 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7a" -->
+				<option value="a" SELECTED>Pas de repere</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Pas de repere</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7b" -->
+				<option value="b" SELECTED>Repere mais
+				sans systeme de coordonnees</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Repere mais sans
+				systeme de coordonnees</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7c" -->
+				<option value="c" SELECTED>Repere avec
+				systeme de coordonnees</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Repere avec systeme
+				de coordonnees</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+<tr>
+		<td>Forme materielle d'edition:</td>
+		<td>
+			<select name="f8" size="1">
+			<!-- TMPL_IF name="f8 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8a" -->
+				<option value="a" SELECTED>Publication
+				autonome</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Publication autonome</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8b" -->
+				<option value="b" SELECTED>En parties
+				(CAD publie en serie, en periodique...)</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">En parties (CAD
+				publie en serie, en periodique...)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8c" -->
+				<option value="c" SELECTED>Atlas</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Atlas</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8d" -->
+				<option value="d" SELECTED>Supplement
+				separe d'une revue, d'une monographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Supplement separe
+				d'une revue, d'une monographie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8e" -->
+				<option value="e" SELECTED>Reliee dans
+				une revue, une monographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Reliee dans une
+				revue, une monographie</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+
+
+
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

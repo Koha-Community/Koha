@@ -1,0 +1,1592 @@
+<html>
+<head>
+<title>UNIMARC Field 116 builder</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Presentation materielle</td>
+		<td>
+			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1a" -->
+				<option value="a" SELECTED>Collage</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Collage</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1b" -->
+				<option value="b" SELECTED>Dessin</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Dessin</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1c" -->
+				<option value="c" SELECTED>Peinture</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Peinture</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1d" -->
+				<option value="d" SELECTED>Reproduction photomecanique</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Reproduction photomecanique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1e" -->
+				<option value="e" SELECTED>Negatif photo</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Negatif photo</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1f" -->
+				<option value="f" SELECTED>Tirage photographique</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Tirage photographique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1h" -->
+				<option value="h" SELECTED>Image</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Image</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1i" -->
+				<option value="i" SELECTED>Gravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Gravure</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1k" -->
+				<option value="k" SELECTED>Dessin technique</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Dessin technique</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1z" -->
+				<option value="z" SELECTED>Autres types de document graphique non projetable</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autres types de documents graphique non projetable</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Support primaire</td>
+		<td>
+			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Toile</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Toile</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>Carte bristol</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Carte bristol</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>Carton / carte a dessin</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Carton / carte a dessin</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Verre</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Verre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2j" -->
+				<option value="j" SELECTED>Platre</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">Platre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2k" -->
+				<option value="k" SELECTED>Isorel</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Isorel</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2l" -->
+				<option value="l" SELECTED>Porcelaine</option>
+			<!-- TMPL_ELSE -->
+				<option value="l">Porcelaine</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2m" -->
+				<option value="m" SELECTED>Pierre</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">Pierre</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2n" -->
+				<option value="n" SELECTED>Bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="n">Bois</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2v" -->
+				<option value="v" SELECTED>Support composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Support composite</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2e" -->
+				<option value="e" SELECTED>Synthetique (plastique, vinyle...)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Synthetique (plastique, vinyle...)</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2f" -->
+				<option value="f" SELECTED>Peau</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Peau</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2g" -->
+				<option value="g" SELECTED>Textile</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Textile</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2h" -->
+				<option value="h" SELECTED>Metal</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Metal</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2i" -->
+				<option value="i" SELECTED>Papier</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Papier</option>
+	
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2z" -->
+				<option value="z" SELECTED>Autres</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autres</option>
+	
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+	</tr>
+
+
+
+	<tr>
+		<td>Support secondaire</td>
+		<td>
+	<select name="f3" size="1">
+			<!-- TMPL_IF name="f3 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f3 " -->
+				<option value=" " SELECTED>Default</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">Default</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3y" -->
+				<option value="y" SELECTED>Pas de support secondaire</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">Pas de support secondaire</option>
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+	</tr>
+
+
+	<tr>
+		<td>Couleur</td>
+		<td>
+			<select name="f4" size="1">
+			<!-- TMPL_IF name="f4 " -->
+				<option value=" " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value=" ">None</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4a" -->
+				<option value="a" SELECTED>Une couleur, monochrome</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Une couleur, monochrome</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4b" -->
+				<option value="b" SELECTED>Noir et blanc</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Noir et blanc</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4c" -->
+				<option value="c" SELECTED>Multicolore</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Multicolore</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f4d" -->
+				<option value="d" SELECTED>Colorie a la main</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Colorie a la main</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4u" -->
+				<option value="u" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4v" -->
+				<option value="v" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Composite</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4x" -->
+				<option value="x" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4z" -->
+				<option value="z" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Autre</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+	</tr>
+
+
+	<tr>
+		<td>Technique (dessins, peinture) 1</td>
+		<td>
+			<select name="f5" size="1">
+			<!-- TMPL_IF name="f5  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5aa" -->
+				<option value="aa" SELECTED>Crayon</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Crayon</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5ab" -->
+				<option value="ab" SELECTED>Graphite</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Graphite</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5ac" -->
+				<option value="ac" SELECTED>Crayon de couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Crayon de couleur</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5ad" -->
+				<option value="ad" SELECTED>Encre de chine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Encre de chine</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5ae" -->
+				<option value="ae" SELECTED>Lavis</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Lavis</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f5af" -->
+				<option value="af" SELECTED>Charbon</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Charbon</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5ag" -->
+				<option value="ag" SELECTED>Craie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Craie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5ah" -->
+				<option value="ah" SELECTED>Craie noire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Craie nore</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5ai" -->
+				<option value="ai" SELECTED>Sanguine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Sanguine</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5aj" -->
+				<option value="aj" SELECTED>Aquarelle</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Aquarelle</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5ak" -->
+				<option value="ak" SELECTED>Detrempe</option>
+			<!-- TMPL_ELSE -->
+				<option value="ak">Detrempe</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5al" -->
+				<option value="al" SELECTED>Gouache</option>
+			<!-- TMPL_ELSE -->
+				<option value="al">Gouache</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5am" -->
+				<option value="am" SELECTED>Pastel</option>
+			<!-- TMPL_ELSE -->
+				<option value="am">Pastel</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5an" -->
+				<option value="an" SELECTED>Huile</option>
+			<!-- TMPL_ELSE -->
+				<option value="an">Huile</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5ba" -->
+				<option value="ba" SELECTED>Stylo feutre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Stylo feutre</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bb" -->
+				<option value="bb" SELECTED>Tache</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Tache</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bc" -->
+				<option value="bc" SELECTED>Fusain</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Fusain</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bd" -->
+				<option value="bd" SELECTED>Sepia</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Sepia</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5be" -->
+				<option value="be" SELECTED>Encre d'ecriture</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Encre d'ecriture</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bf" -->
+				<option value="bf" SELECTED>Caseine</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Caseine</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bg" -->
+				<option value="bg" SELECTED>Dorure</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Dorure</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bh" -->
+				<option value="bh" SELECTED>Encaustique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Encaustique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bi" -->
+				<option value="bi" SELECTED>Acrylique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Acrylique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bj" -->
+				<option value="bj" SELECTED>Collage</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Collage</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bk" -->
+				<option value="bk" SELECTED>Pointe d'argent</option>
+			<!-- TMPL_ELSE -->
+				<option value="bk">Pointe d'argent</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5bl" -->
+				<option value="bl" SELECTED>Pistolet</option>
+			<!-- TMPL_ELSE -->
+				<option value="bl">Pistolet</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5vv" -->
+				<option value="vv" SELECTED>Melange de techniques</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Melange de techniques</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+	<tr>
+		<td>Technique (dessins, peinture) 2</td>
+		<td>
+			<select name="f6" size="1">
+			<!-- TMPL_IF name="f6  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6aa" -->
+				<option value="aa" SELECTED>Crayon</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Crayon</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6ab" -->
+				<option value="ab" SELECTED>Graphite</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Graphite</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6ac" -->
+				<option value="ac" SELECTED>Crayon de couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Crayon de couleur</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6ad" -->
+				<option value="ad" SELECTED>Encre de chine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Encre de chine</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6ae" -->
+				<option value="ae" SELECTED>Lavis</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Lavis</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f6af" -->
+				<option value="af" SELECTED>Charbon</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Charbon</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6ag" -->
+				<option value="ag" SELECTED>Craie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Craie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6ah" -->
+				<option value="ah" SELECTED>Craie noire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Craie nore</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6ai" -->
+				<option value="ai" SELECTED>Sanguine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Sanguine</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6aj" -->
+				<option value="aj" SELECTED>Aquarelle</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Aquarelle</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6ak" -->
+				<option value="ak" SELECTED>Detrempe</option>
+			<!-- TMPL_ELSE -->
+				<option value="ak">Detrempe</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6al" -->
+				<option value="al" SELECTED>Gouache</option>
+			<!-- TMPL_ELSE -->
+				<option value="al">Gouache</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6am" -->
+				<option value="am" SELECTED>Pastel</option>
+			<!-- TMPL_ELSE -->
+				<option value="am">Pastel</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6an" -->
+				<option value="an" SELECTED>Huile</option>
+			<!-- TMPL_ELSE -->
+				<option value="an">Huile</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6ba" -->
+				<option value="ba" SELECTED>Stylo feutre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Stylo feutre</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bb" -->
+				<option value="bb" SELECTED>Tache</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Tache</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bc" -->
+				<option value="bc" SELECTED>Fusain</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Fusain</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bd" -->
+				<option value="bd" SELECTED>Sepia</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Sepia</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6be" -->
+				<option value="be" SELECTED>Encre d'ecriture</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Encre d'ecriture</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bf" -->
+				<option value="bf" SELECTED>Caseine</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Caseine</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bg" -->
+				<option value="bg" SELECTED>Dorure</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Dorure</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bh" -->
+				<option value="bh" SELECTED>Encaustique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Encaustique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bi" -->
+				<option value="bi" SELECTED>Acrylique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Acrylique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bj" -->
+				<option value="bj" SELECTED>Collage</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Collage</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bk" -->
+				<option value="bk" SELECTED>Pointe d'argent</option>
+			<!-- TMPL_ELSE -->
+				<option value="bk">Pointe d'argent</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6bl" -->
+				<option value="bl" SELECTED>Pistolet</option>
+			<!-- TMPL_ELSE -->
+				<option value="bl">Pistolet</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6vv" -->
+				<option value="vv" SELECTED>Melange de techniques</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Melange de techniques</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+	<tr>
+		<td>Technique (dessins, peinture) 3</td>
+		<td>
+			<select name="f7" size="1">
+			<!-- TMPL_IF name="f7  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7aa" -->
+				<option value="aa" SELECTED>Crayon</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Crayon</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7ab" -->
+				<option value="ab" SELECTED>Graphite</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Graphite</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7ac" -->
+				<option value="ac" SELECTED>Crayon de couleur</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Crayon de couleur</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7ad" -->
+				<option value="ad" SELECTED>Encre de chine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Encre de chine</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7ae" -->
+				<option value="ae" SELECTED>Lavis</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Lavis</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f7af" -->
+				<option value="af" SELECTED>Charbon</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Charbon</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7ag" -->
+				<option value="ag" SELECTED>Craie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Craie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7ah" -->
+				<option value="ah" SELECTED>Craie noire</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Craie nore</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7ai" -->
+				<option value="ai" SELECTED>Sanguine</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Sanguine</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7aj" -->
+				<option value="aj" SELECTED>Aquarelle</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Aquarelle</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7ak" -->
+				<option value="ak" SELECTED>Detrempe</option>
+			<!-- TMPL_ELSE -->
+				<option value="ak">Detrempe</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7al" -->
+				<option value="al" SELECTED>Gouache</option>
+			<!-- TMPL_ELSE -->
+				<option value="al">Gouache</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7am" -->
+				<option value="am" SELECTED>Pastel</option>
+			<!-- TMPL_ELSE -->
+				<option value="am">Pastel</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7an" -->
+				<option value="an" SELECTED>Huile</option>
+			<!-- TMPL_ELSE -->
+				<option value="an">Huile</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7ba" -->
+				<option value="ba" SELECTED>Stylo feutre</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Stylo feutre</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bb" -->
+				<option value="bb" SELECTED>Tache</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Tache</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bc" -->
+				<option value="bc" SELECTED>Fusain</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Fusain</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bd" -->
+				<option value="bd" SELECTED>Sepia</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Sepia</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7be" -->
+				<option value="be" SELECTED>Encre d'ecriture</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Encre d'ecriture</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bf" -->
+				<option value="bf" SELECTED>Caseine</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Caseine</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bg" -->
+				<option value="bg" SELECTED>Dorure</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Dorure</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bh" -->
+				<option value="bh" SELECTED>Encaustique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Encaustique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bi" -->
+				<option value="bi" SELECTED>Acrylique</option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Acrylique</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bj" -->
+				<option value="bj" SELECTED>Collage</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Collage</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bk" -->
+				<option value="bk" SELECTED>Pointe d'argent</option>
+			<!-- TMPL_ELSE -->
+				<option value="bk">Pointe d'argent</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7bl" -->
+				<option value="bl" SELECTED>Pistolet</option>
+			<!-- TMPL_ELSE -->
+				<option value="bl">Pistolet</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7vv" -->
+				<option value="vv" SELECTED>Melange de techniques</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Melange de techniques</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+
+
+
+
+
+
+	<tr>
+		<td>Technique (gravure) 1</td>
+		<td>
+			<select name="f8" size="1">
+			<!-- TMPL_IF name="f8  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8ba" -->
+				<option value="ba" SELECTED>Gravure sur bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Gravure sur bois</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8bb" -->
+				<option value="bb" SELECTED>Gravure sur bois clair-obscur</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Gravure sur bois clair-obscur</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8bc" -->
+				<option value="bc" SELECTED>Gravure sur bois en traits blancs</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Gravure sur bois en traits blancs</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8bd" -->
+				<option value="bd" SELECTED>Camaieu</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Camaieu</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8be" -->
+				<option value="be" SELECTED>Heliogravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Heliogravure</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f8bf" -->
+				<option value="bf" SELECTED>Chromolithographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Chromolithographie</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f8bg" -->
+				<option value="bg" SELECTED>Linoleum</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Linoleum</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bh" -->
+				<option value="bh" SELECTED>Eau-forte</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Eau-forte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bi" -->
+				<option value="bi" SELECTED>Litographie/option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Litographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bj" -->
+				<option value="bj" SELECTED>Photolithographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Photolithographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bk" -->
+				<option value="bk" SELECTED>Zincographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bk">Zincographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bl" -->
+				<option value="bl" SELECTED>Aluminographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bl">Aluminographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bm" -->
+				<option value="bm" SELECTED>Aquatinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="bm">Aquatinte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8bn" -->
+				<option value="bn" SELECTED>Reserve</option>
+			<!-- TMPL_ELSE -->
+				<option value="bn">Reserve</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8ca" -->
+				<option value="ca" SELECTED>Vernis mou</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Vernis mou</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8cb" -->
+				<option value="cb" SELECTED>Gravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="cb">Gravure</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8cc" -->
+				<option value="cc" SELECTED>Gravure a la maniere crayon</option>
+			<!-- TMPL_ELSE -->
+				<option value="cc">Gravure a la maniere crayon</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8cd" -->
+				<option value="cd" SELECTED>Burin</option>
+			<!-- TMPL_ELSE -->
+				<option value="cd">Burin</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8ce" -->
+				<option value="ce" SELECTED>Pointe seche</option>
+			<!-- TMPL_ELSE -->
+				<option value="ce">Pointe seche</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8cf" -->
+				<option value="cf" SELECTED>Mezzotinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="cf">Mezzoteinte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8cg" -->
+				<option value="cg" SELECTED>Monotype</option>
+			<!-- TMPL_ELSE -->
+				<option value="cg">Monotype</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8ch" -->
+				<option value="ch" SELECTED>Serigraphie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ch">Serigraphie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8ci" -->
+				<option value="ci" SELECTED>Gravure sur acier</option>
+			<!-- TMPL_ELSE -->
+				<option value="ci">Gravure sur acier</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8cj" -->
+				<option value="cj" SELECTED>Dessin sur ordinateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="cj">Dessin sur ordinateur</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8ck" -->
+				<option value="ck" SELECTED>Photocopie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ck">Photocopie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+	<tr>
+		<td>Technique (gravure) 2</td>
+		<td>
+			<select name="f9" size="1">
+			<!-- TMPL_IF name="f9  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9ba" -->
+				<option value="ba" SELECTED>Gravure sur bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Gravure sur bois</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9bb" -->
+				<option value="bb" SELECTED>Gravure sur bois clair-obscur</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Gravure sur bois clair-obscur</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9bc" -->
+				<option value="bc" SELECTED>Gravure sur bois en traits blancs</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Gravure sur bois en traits blancs</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9bd" -->
+				<option value="bd" SELECTED>Camaieu</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Camaieu</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f9be" -->
+				<option value="be" SELECTED>Heliogravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Heliogravure</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f9bf" -->
+				<option value="bf" SELECTED>Chromolithographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Chromolithographie</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f9bg" -->
+				<option value="bg" SELECTED>Linoleum</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Linoleum</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bh" -->
+				<option value="bh" SELECTED>Eau-forte</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Eau-forte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bi" -->
+				<option value="bi" SELECTED>Litographie/option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Litographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bj" -->
+				<option value="bj" SELECTED>Photolithographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Photolithographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bk" -->
+				<option value="bk" SELECTED>Zincographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bk">Zincographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bl" -->
+				<option value="bl" SELECTED>Aluminographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bl">Aluminographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bm" -->
+				<option value="bm" SELECTED>Aquatinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="bm">Aquatinte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9bn" -->
+				<option value="bn" SELECTED>Reserve</option>
+			<!-- TMPL_ELSE -->
+				<option value="bn">Reserve</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9ca" -->
+				<option value="ca" SELECTED>Vernis mou</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Vernis mou</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9cb" -->
+				<option value="cb" SELECTED>Gravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="cb">Gravure</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9cc" -->
+				<option value="cc" SELECTED>Gravure a la maniere crayon</option>
+			<!-- TMPL_ELSE -->
+				<option value="cc">Gravure a la maniere crayon</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9cd" -->
+				<option value="cd" SELECTED>Burin</option>
+			<!-- TMPL_ELSE -->
+				<option value="cd">Burin</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9ce" -->
+				<option value="ce" SELECTED>Pointe seche</option>
+			<!-- TMPL_ELSE -->
+				<option value="ce">Pointe seche</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9cf" -->
+				<option value="cf" SELECTED>Mezzotinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="cf">Mezzoteinte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9cg" -->
+				<option value="cg" SELECTED>Monotype</option>
+			<!-- TMPL_ELSE -->
+				<option value="cg">Monotype</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9ch" -->
+				<option value="ch" SELECTED>Serigraphie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ch">Serigraphie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9ci" -->
+				<option value="ci" SELECTED>Gravure sur acier</option>
+			<!-- TMPL_ELSE -->
+				<option value="ci">Gravure sur acier</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9cj" -->
+				<option value="cj" SELECTED>Dessin sur ordinateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="cj">Dessin sur ordinateur</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9ck" -->
+				<option value="ck" SELECTED>Photocopie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ck">Photocopie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+	<tr>
+		<td>Technique (gravure) 3</td>
+		<td>
+			<select name="f10" size="1">
+			<!-- TMPL_IF name="f10  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10ba" -->
+				<option value="ba" SELECTED>Gravure sur bois</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">Gravure sur bois</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f10bb" -->
+				<option value="bb" SELECTED>Gravure sur bois clair-obscur</option>
+			<!-- TMPL_ELSE -->
+				<option value="bb">Gravure sur bois clair-obscur</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f10bc" -->
+				<option value="bc" SELECTED>Gravure sur bois en traits blancs</option>
+			<!-- TMPL_ELSE -->
+				<option value="bc">Gravure sur bois en traits blancs</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f10bd" -->
+				<option value="bd" SELECTED>Camaieu</option>
+			<!-- TMPL_ELSE -->
+				<option value="bd">Camaieu</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f10be" -->
+				<option value="be" SELECTED>Heliogravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="be">Heliogravure</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f10bf" -->
+				<option value="bf" SELECTED>Chromolithographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bf">Chromolithographie</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f10bg" -->
+				<option value="bg" SELECTED>Linoleum</option>
+			<!-- TMPL_ELSE -->
+				<option value="bg">Linoleum</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bh" -->
+				<option value="bh" SELECTED>Eau-forte</option>
+			<!-- TMPL_ELSE -->
+				<option value="bh">Eau-forte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bi" -->
+				<option value="bi" SELECTED>Litographie/option>
+			<!-- TMPL_ELSE -->
+				<option value="bi">Litographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bj" -->
+				<option value="bj" SELECTED>Photolithographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bj">Photolithographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bk" -->
+				<option value="bk" SELECTED>Zincographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bk">Zincographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bl" -->
+				<option value="bl" SELECTED>Aluminographie</option>
+			<!-- TMPL_ELSE -->
+				<option value="bl">Aluminographie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bm" -->
+				<option value="bm" SELECTED>Aquatinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="bm">Aquatinte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10bn" -->
+				<option value="bn" SELECTED>Reserve</option>
+			<!-- TMPL_ELSE -->
+				<option value="bn">Reserve</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10ca" -->
+				<option value="ca" SELECTED>Vernis mou</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">Vernis mou</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10cb" -->
+				<option value="cb" SELECTED>Gravure</option>
+			<!-- TMPL_ELSE -->
+				<option value="cb">Gravure</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10cc" -->
+				<option value="cc" SELECTED>Gravure a la maniere crayon</option>
+			<!-- TMPL_ELSE -->
+				<option value="cc">Gravure a la maniere crayon</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10cd" -->
+				<option value="cd" SELECTED>Burin</option>
+			<!-- TMPL_ELSE -->
+				<option value="cd">Burin</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10ce" -->
+				<option value="ce" SELECTED>Pointe seche</option>
+			<!-- TMPL_ELSE -->
+				<option value="ce">Pointe seche</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10cf" -->
+				<option value="cf" SELECTED>Mezzotinte</option>
+			<!-- TMPL_ELSE -->
+				<option value="cf">Mezzoteinte</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10cg" -->
+				<option value="cg" SELECTED>Monotype</option>
+			<!-- TMPL_ELSE -->
+				<option value="cg">Monotype</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10ch" -->
+				<option value="ch" SELECTED>Serigraphie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ch">Serigraphie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10ci" -->
+				<option value="ci" SELECTED>Gravure sur acier</option>
+			<!-- TMPL_ELSE -->
+				<option value="ci">Gravure sur acier</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10cj" -->
+				<option value="cj" SELECTED>Dessin sur ordinateur</option>
+			<!-- TMPL_ELSE -->
+				<option value="cj">Dessin sur ordinateur</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10ck" -->
+				<option value="ck" SELECTED>Photocopie</option>
+			<!-- TMPL_ELSE -->
+				<option value="ck">Photocopie</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+
+				</select>
+		</td>
+
+        </tr>
+
+
+	<tr>
+		<td>Fonction du document graphique</td>
+		<td>
+			<select name="f11" size="1">
+			<!-- TMPL_IF name="f11  " -->
+				<option value="  " SELECTED>None</option>
+			<!-- TMPL_ELSE -->
+				<option value="  ">None</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11aa" -->
+				<option value="aa" SELECTED>Dessin architectural</option>
+			<!-- TMPL_ELSE -->
+				<option value="aa">Dessin architectural</option>
+	
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f11ab" -->
+				<option value="ab" SELECTED>Couverture d'un document</option>
+			<!-- TMPL_ELSE -->
+				<option value="ab">Couverture d'un document</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f11ac" -->
+				<option value="ac" SELECTED>Adhesif</option>
+			<!-- TMPL_ELSE -->
+				<option value="ac">Adhesif</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f11ad" -->
+				<option value="ad" SELECTED>Affiche</option>
+			<!-- TMPL_ELSE -->
+				<option value="ad">Affiche</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f11ae" -->
+				<option value="ae" SELECTED>Carte postale</option>
+			<!-- TMPL_ELSE -->
+				<option value="ae">Carte postale</option>
+
+			<!-- /TMPL_IF -->
+
+
+
+			<!-- TMPL_IF name="f11af" -->
+				<option value="af" SELECTED>Carte de voeux</option>
+			<!-- TMPL_ELSE -->
+				<option value="af">Carte de voeux</option>
+
+			<!-- /TMPL_IF -->
+
+
+			<!-- TMPL_IF name="f11ag" -->
+				<option value="ag" SELECTED>Diagramme</option>
+			<!-- TMPL_ELSE -->
+				<option value="ag">Diagramme</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11ah" -->
+				<option value="ah" SELECTED>Carte a jouer</option>
+			<!-- TMPL_ELSE -->
+				<option value="ah">Carte a jouer</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11ai" -->
+				<option value="ai" SELECTED>Carte eclair</option>
+			<!-- TMPL_ELSE -->
+				<option value="ai">Carte eclair</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11aj" -->
+				<option value="aj" SELECTED>Ephemera</option>
+			<!-- TMPL_ELSE -->
+				<option value="aj">Ephemera</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11uu" -->
+				<option value="uu" SELECTED>Inconnu</option>
+			<!-- TMPL_ELSE -->
+				<option value="uu">Inconnu</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11vv" -->
+				<option value="vv" SELECTED>Composite</option>
+			<!-- TMPL_ELSE -->
+				<option value="vv">Composite</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11xx" -->
+				<option value="xx" SELECTED>Non applicable</option>
+			<!-- TMPL_ELSE -->
+				<option value="xx">Non applicable</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11zz" -->
+				<option value="zz" SELECTED>Autre</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">Autre</option>
+
+			<!-- /TMPL_IF -->
+				</select>
+		</td>
+
+        </tr>
+	
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>
