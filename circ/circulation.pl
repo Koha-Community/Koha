@@ -44,7 +44,7 @@ $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", $datearr[3]);
-warn $todaysdate;
+#warn $todaysdate;
 
 
 my $message;
