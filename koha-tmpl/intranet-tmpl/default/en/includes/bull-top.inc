@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Reports</title>
+<title>KOHA: INTRANET: Serials management</title>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <script language="JavaScript" type="text/javascript">
@@ -40,18 +40,8 @@ a.bull:hover {
 	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
 	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
-	&nbsp&nbsp&nbsp&nbsp&nbsp
-	&nbsp&nbsp&nbsp&nbsp&nbsp
-	&nbsp&nbsp
-	&nbsp&nbsp&nbsp&nbsp&nbsp
-	&nbsp&nbsp&nbsp&nbsp&nbsp
-	&nbsp&nbsp
-	&nbsp&nbsp&nbsp&nbsp&nbsp
-	&nbsp&nbsp&nbsp&nbsp&nbsp
-
-
-	
-	<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
+	<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>
+	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
 </div>
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
