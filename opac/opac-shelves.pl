@@ -174,6 +174,8 @@ sub viewshelf {
 		$line{'barcode'}=$item->{'barcode'};
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
+		$line{'classification'}=$item->{'classification'};		
+		$line{'itemtype'}=$item->{'itemtype'};				
 		$line{biblionumber} = $item->{biblionumber};
 		push(@itemsloop, \%line);
 	}
@@ -187,6 +189,9 @@ sub viewshelf {
 
 #
 # $Log$
+# Revision 1.4  2005/01/13 20:41:07  oleonard
+# Adding call number and item type to list of returned variables
+#
 # Revision 1.3  2005/01/03 11:09:34  tipaul
 # synch'ing virtual shelves management in opac with the librarian one, that has more features
 #
