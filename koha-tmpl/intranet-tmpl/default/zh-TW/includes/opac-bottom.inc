@@ -7,7 +7,9 @@
 <font size=2  face="arial, helvetica">
 
 <A HREF="/cgi-bin/koha/catalogue-home.pl">查詢館藏</a> ||
-<!--<A HREF="/cgi-bin/koha/members-home.pl">讀者天地</a> || -->
+<TMPL_IF NAME="loggedinuser">
+<A HREF="/cgi-bin/koha/members-home.pl">讀者主頁</a> ||
+</TMPL_IF>
 <A HREF="/join.html">讀者登記</a> ||
 <A HREF="/cgi-bin/koha/mainpage.pl">返回主頁</a>
 

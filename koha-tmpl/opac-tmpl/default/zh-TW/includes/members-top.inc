@@ -29,7 +29,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 <tr BGCOLOR="#339999" >
 
         <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-member.gif" 
-	width=353 height=50 alt="KOHA: 讀者天地" hspace=0 vspace=0 border=0></td>
+	width=353 height=50 alt="KOHA: 讀者專區" hspace=0 vspace=0 border=0></td>
 
         <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 
 	src="<TMPL_VAR NAME='themelang'>/images/menu-search.gif" 
