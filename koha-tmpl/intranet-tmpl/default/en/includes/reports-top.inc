@@ -62,12 +62,12 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	<td valign=top >
 	<table cellpadding=0 cellspacing=0  border=0 height=29>
 	<tr valign=top bgcolor=2f48a4 >
-	<td background="/images/catalogue-spot-1.gif" width="224" 
+	<td background="/images/catalogue-spot-1.gif" width="224"
 	height="29"><font size=1 face="arial"><img src="/images/holder.gif" width=210 height=4 alt=" " hspace=0 vspace=0><br>
-	<img src="/images/holder.gif" 
+	<img src="/images/holder.gif"
 	width=35 height=21 align=left alt=" " hspace=0 vspace=0><font size="+1">KOHA: <a href="/cgi-bin/koha/mainpage.pl">Main Menu</a></font><br>
 	<img src="/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0></FONT></td>
-	
+
 	</TR></TABLE></TD>
 
 
@@ -76,7 +76,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 	<td  valign=bottom align=right>
 	<table cellpadding=0 cellspacing=0  border=0 height=29><tr><td><img src=/images/rep-rep.gif 	border="0" name=menu usemap="#map" HSPACE=0 vspace=0 ></td>
-	
+
 	</TR></TABLE></TD>
 </tr>
 
@@ -86,7 +86,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 
 <map name="map">
-<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/catalogue-home.pl" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/rep-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/rep-rep.gif'">
+<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/rep-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/rep-rep.gif'">
 
 <area shape="rect" coords="94,8,149,28" href="/cgi-bin/koha/members-home.pl" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/rep-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/rep-rep.gif'">
 

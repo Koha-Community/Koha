@@ -132,7 +132,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 
 <map name="map">
-<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/catalogue-home.pl" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/acq-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
+<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/acq-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
 
 <area shape="rect" coords="94,8,149,28" href="/cgi-bin/koha/members-home.pl" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/acq-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/acq-acq.gif'">
 

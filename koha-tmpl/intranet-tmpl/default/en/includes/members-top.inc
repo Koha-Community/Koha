@@ -49,7 +49,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	bright blue links = 0000ff
 	aubergine = 663266 
 	light green/grey = cccc99
-	dark red = 990000 
+	dark red = 990000
 	light red = cc9999 
 	mid green = #339933 
 	ligth green = #CCFF99 
@@ -89,7 +89,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
 <map name="map">
-<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/catalogue-home.pl" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/mem-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
+<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/mem-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 
 <area shape="rect" coords="94,8,149,28" href="/cgi-bin/koha/members-home.pl" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/mem-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 

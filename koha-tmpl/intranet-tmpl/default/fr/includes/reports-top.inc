@@ -145,7 +145,7 @@ a.parameters:hover {
 						<a class="home" href="/cgi-bin/koha/mainpage.pl">Accueil</a>
 					</td>
 					<td>
-						<a class="catalogue" href="/cgi-bin/koha/catalogue-home.pl">Catalogue</a>
+						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
 					</td>
 					<td>
 						<a class="members" href="/cgi-bin/koha/members-home.pl">Lecteurs</a>

@@ -100,7 +100,7 @@ onLoad=focusinput()>
 
 
 <map name="map">
-<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/catalogue-home.pl" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/cat-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
+<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/cat-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
 
 <area shape="rect" coords="94,8,149,28" href="/cgi-bin/koha/members-home.pl" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/cat-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/cat-cat.gif'">
 
