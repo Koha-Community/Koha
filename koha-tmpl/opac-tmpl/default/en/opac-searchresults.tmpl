@@ -21,7 +21,7 @@
 
     <!-- Row of numbers corresponding to search result pages -->
     <TMPL_IF NAME="displayprev">
-	<a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/prev.gif border=0></a>
+	<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME='prevstartfrom'><TMPL_LOOP NAME='FORMINPUTS'>&<TMPL_VAR NAME='field'>=<TMPL_VAR NAME='value' ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME=themelang'>/images/numbers/prev.gif border=0></a>
     <TMPL_ELSE>
 	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
     </TMPL_IF>
@@ -29,11 +29,11 @@
 	<TMPL_IF NAME="highlight">
 	    <img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>-highlight.gif> 
 	<TMPL_ELSE>
-	    <a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="startfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
+	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="startfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/<TMPL_VAR NAME=number>.gif border=0></a> 
 	</TMPL_IF>
     </TMPL_LOOP>
     <TMPL_IF NAME="displaynext">
-	<a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/next.gif border=0></a>
+	<a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/next.gif border=0></a>
     <TMPL_ELSE>
 	<img src=<TMPL_VAR NAME="themelang">/images/numbers/placeholder.gif border=0>
     </TMPL_IF>
@@ -43,8 +43,25 @@
 
 
 <!-- Search Results Table -->
-
 <TMPL_IF NAME="numrecords">
+
+<!-- If we have a subject table -->
+    <TMPL_IF NAME="subjectsearch">
+    <table border=0 cellspacing=0 cellpadding=2>
+    <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
+    <th>Subject</th></tr>
+       <TMPL_LOOP NAME=SEARCH_RESULTS>
+       <tr>
+       <td><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL>><TMPL_VAR NAME=subject></a></td>
+       </tr>
+       </TMPL_LOOP>
+    <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td colspan=4>
+    &nbsp;</td></tr>
+    </table>
+    
+<!-- Else we have a list of items -->    
+    <TMPL_ELSE>
+
 
     <table border=0 cellspacing=0 cellpadding=2 width=90%>
     <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
@@ -57,8 +74,8 @@
 
     <TMPL_LOOP NAME="SEARCH_RESULTS">
       <tr>
-      <td><a href=./detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>><TMPL_VAR NAME="title"></a></td>
-      <td><a href=./dosearch.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td>
+      <td><a href=/cgi-bin/koha/opac-detail.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>><TMPL_VAR NAME="title"></a></td>
+      <td><a href=/cgi-bin/koha/opac-searchresults.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td>
       <td align=center> <TMPL_VAR NAME="copyrightdate"> </td>
       <td align=center> <TMPL_VAR NAME="itemcount"> </td>
       <td> <TMPL_VAR NAME="location"> </td>
@@ -71,7 +88,7 @@
 	<table border=0 cellpadding=0 cellspacing=0 width=100%>
 	<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td align=left>
 	<TMPL_IF NAME="displayprev">
-	    <a href=dosearch.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Previous Records</a>
+	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Previous Records</a>
 	<TMPL_ELSE>
 	    &nbsp;
 	</TMPL_IF>
@@ -79,7 +96,7 @@
 
 	</td><td align=right>
 	<TMPL_IF NAME="displaynext">
-	    <a href=dosearch.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Next Records</a>
+	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Next Records</a>
 	<TMPL_ELSE>
 	    &nbsp;
 	</TMPL_IF>
@@ -87,6 +104,7 @@
 	</table>
     </td></tr>
     </table>
+    </TMPL_IF>
 
     <br>
     Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.
@@ -96,7 +114,7 @@
 <TMPL_ELSE>
 Sorry, there were no results <br>
 </TMPL_IF>
-    Try another <a href=./opacsearch.pl>search</a>
+    Try another <a href=/cgi-bin/koha/opac-search.pl>search</a>
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
