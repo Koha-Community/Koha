@@ -49,7 +49,7 @@ a.catalogue:hover {
 	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
 	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
-	<a class="catalogue" href="javascript:Help()">Help</a>
+	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
 </div>
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
