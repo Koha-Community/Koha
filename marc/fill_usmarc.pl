@@ -9,19 +9,86 @@ my $fields;
 marcdefs();
 my $tag;
 my $subfield;
+$dbh->do("delete from marc_tag_structure");
+$dbh->do("delete from marc_subfield_structure");
 my $reqtag=$dbh->prepare("insert into marc_tag_structure (tagfield,liblibrarian,repeatable) values (?,?,?)");
 my $reqsubfield=$dbh->prepare("insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,repeatable) values (?,?,?,?)");
+my $description;
 foreach $tag (sort keys %$fields) {
 	$reqtag->execute($tag,$fields->{$tag}->{"name"},$fields->{$tag}->{"repeating"});
 	foreach $subfield (sort keys %{$fields->{$tag}->{"subfields"}}) {
-	$reqsubfield->execute(
-				$tag,
-				$subfield,
-				$fields->{$tag}->{"subfields"}->{$subfield}->{"description"}?$fields->{$tag}->{"subfields"}->{$subfield}->{"description"}:"Unknown",
-				$fields->{$tag}->{"subfields"}->{$subfield}->{"repeating"}
-				);
+	    if ($fields->{$tag}->{"subfields"}->{$subfield}->{"description"}) {
+		$description=$fields->{$tag}->{"subfields"}->{$subfield}->{"description"};
+	    } else {
+		$description=$fields->{$tag}->{"subfields"}->{$subfield}->{"name"};
+	    }
+	    $reqsubfield->execute(
+				  $tag,
+				  $subfield,
+				  $description?$description:"Unknown",
+				  $fields->{$tag}->{"subfields"}->{$subfield}->{"repeating"}
+				  );
 	}
 }
+#---- now we populate the tables with the link between koha-DB and MARC-DB
+# items
+$dbh->do("update marc_subfield_structure set kohafield='biblio.title' where tagfield='245' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.subtitle' where tagfield='245' and tagsubfield='b'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.unititle' where tagfield='246' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.seriestitle' where tagfield='440' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.copyrightdate' where tagfield='245' and tagsubfield='f'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.copyrightdate' where tagfield='260' and tagsubfield='c'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.notes' where tagfield='504' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.author' where tagfield='100' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.author' where tagfield='100' and tagsubfield='b'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.author' where tagfield='100' and tagsubfield='c'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.author' where tagfield='100' and tagsubfield='d'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.subject' where tagfield='650' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblio.biblionumber' where tagfield='090' and tagsubfield='c'");
+# biblioitems
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.biblioitemnumber' where tagfield='090' and tagsubfield='d'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.volume' where tagfield='440' and tagsubfield='v'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.number' where tagfield='440' and tagsubfield='n'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.itemtype' where tagfield='852' and tagsubfield='k'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.isbn' where tagfield='020' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.issn' where tagfield='022' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.dewey' where tagfield='082' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.subclass' where tagfield='852' and tagsubfield='m'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.place' where tagfield='260' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.publishercode' where tagfield='260' and tagsubfield='b'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.publicationyear' where tagfield='260' and tagsubfield='c'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.pages' where tagfield='300' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.size' where tagfield='300' and tagsubfield='c'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.notes' where tagfield='500' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='biblioitems.lccn' where tagfield='010' and tagsubfield='a'");
+# items
+$dbh->do("update marc_subfield_structure set kohafield='items.itemnumber' where tagfield='890' and tagsubfield='c'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.multivolumepart' where tagfield='XXX' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='items.barcode' where tagfield='852' and tagsubfield='p'");
+$dbh->do("update marc_subfield_structure set kohafield='items.dateaccessioned' where tagfield='876' and tagsubfield='d'");
+$dbh->do("update marc_subfield_structure set kohafield='items.booksellerid' where tagfield='876' and tagsubfield='e'");
+$dbh->do("update marc_subfield_structure set kohafield='items.homebranch' where tagfield='876' and tagsubfield='b'");
+$dbh->do("update marc_subfield_structure set kohafield='items.replacementprice' where tagfield='876' and tagsubfield='c'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.price' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.replacementpricedate' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.datelastborrowed' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.datelastseen' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.multivolume' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.stack' where tagfield='XXX' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='items.notforloan' where tagfield='876' and tagsubfield='h'");
+$dbh->do("update marc_subfield_structure set kohafield='items.itemlost' where tagfield='876' and tagsubfield='j'");
+$dbh->do("update marc_subfield_structure set kohafield='items.wthdrawn' where tagfield='876' and tagsubfield='k'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.bulk' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.issues' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.renewals' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.reserves' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.restricted' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.binding' where tagfield='XXX' and tagsubfield='a'");
+$dbh->do("update marc_subfield_structure set kohafield='items.itemnotes' where tagfield='876' and tagsubfield='z'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.holdingbranch' where tagfield='XXX' and tagsubfield='a'");
+  #$dbh->do("update marc_subfield_structure set kohafield='items.interim' where tagfield='XXX' and tagsubfield='a'");
+# additional authors
+$dbh->do("update marc_subfield_structure set kohafield='additionalauthors.additionalauthors' where tagfield='700' and tagsubfield='a'");
 
 sub marcdefs {
     $fields->{'010'}->{"name"}="LIBRARY OF CONGRESS CONTROL NUMBER";
@@ -5249,13 +5316,13 @@ sub marcdefs {
     $fields->{'090'}->{'repeating'}=1;
     $fields->{'090'}->{'firstindicator'}="Undefined";
     $fields->{'090'}->{'secondindicator'}="Undefined";
-    $fields->{'090'}->{'subfields'}->{"a"}->{'name'}="Itemtype (NR)";
+    $fields->{'090'}->{'subfields'}->{"a"}->{'name'}="Koha Itemtype (NR)";
     $fields->{'090'}->{'subfields'}->{"a"}->{'repeating'}=0;
-    $fields->{'090'}->{'subfields'}->{"b"}->{'name'}="Dewey Subclass (NR)";
+    $fields->{'090'}->{'subfields'}->{"b"}->{'name'}="Koha Dewey Subclass (NR)";
     $fields->{'090'}->{'subfields'}->{"b"}->{'repeating'}=0;
-    $fields->{'090'}->{'subfields'}->{"c"}->{'name'}="biblionumber (NR)";
+    $fields->{'090'}->{'subfields'}->{"c"}->{'name'}="Koha biblionumber (NR)";
     $fields->{'090'}->{'subfields'}->{"c"}->{'repeating'}=0;
-    $fields->{'090'}->{'subfields'}->{"d"}->{'name'}="biblioitemnumber (NR)";
+    $fields->{'090'}->{'subfields'}->{"d"}->{'name'}="Koha biblioitemnumber (NR)";
     $fields->{'090'}->{'subfields'}->{"d"}->{'repeating'}=0;
     $fields->{'091'}->{'name'}="MICROFILM SHELF LOCATION (AM) [OBSOLETE]";
     $fields->{'091'}->{'repeating'}=1;
@@ -9812,6 +9879,8 @@ sub marcdefs {
     $fields->{'876'}->{'subfields'}->{"l"}->{'repeating'}=1;
     $fields->{'876'}->{'subfields'}->{"p"}->{'name'}="Piece designation (R)";
     $fields->{'876'}->{'subfields'}->{"p"}->{'repeating'}=1;
+    $fields->{'876'}->{'subfields'}->{"z"}->{'name'}="Note  (R)";
+    $fields->{'876'}->{'subfields'}->{"z"}->{'repeating'}=1;
     $fields->{'876'}->{'subfields'}->{"8"}->{'name'}="Field link and sequence number  (R)";
     $fields->{'876'}->{'subfields'}->{"8"}->{'repeating'}=1;
     $fields->{'877'}->{'name'}="ITEM INFORMATION--SUPPLEMENTARY MATERIAL  (R)";
@@ -9841,6 +9910,12 @@ sub marcdefs {
     $fields->{'886'}->{'subfields'}->{"b"}->{'repeating'}=0;
     $fields->{'886'}->{'subfields'}->{"2"}->{'name'}="Source of data (NR) $a-z - Foreign MARC subfield (R) $0-9 - Foreign MARC subfield (R)";
     $fields->{'886'}->{'subfields'}->{"2"}->{'repeating'}=0;
+    $fields->{'890'}->{'name'}="KOHA item number";
+    $fields->{'890'}->{'repeating'}=1;
+    $fields->{'890'}->{'firstindicator'}="Undefined";
+    $fields->{'890'}->{'secondindicator'}="Undefined";
+    $fields->{'890'}->{'subfields'}->{"c"}->{'name'}="Koha biblio number";
+    $fields->{'890'}->{'subfields'}->{"c"}->{'repeating'}=1;
 ;
 
 	

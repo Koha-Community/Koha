@@ -1,6 +1,19 @@
 #  $Id$
 #  
 #  $Log$
+#  Revision 1.15  2002/07/24 15:52:53  tipaul
+#  1st scripts for MARC-DB.
+#
+#  WARNING : YOU MUST DO THE FOLLOWING IF YOU EXPECT THE MAIN-BRANCH TO WORK.
+#
+#  * install MARC::Record package, from cpan or sourceforge
+#  * OVERWRITE File.pm and USMARC.pm. The original misses 1 functionnality we absolutly need in koha (reading a MARC from a variable, not from a file). Thanks to Steve, who modified MARC::Record.
+#  * modify your DB by adding marcschema.sql tables
+#  * populate new tables by launching fill_usmarc.pl
+#
+#  Then, it should work...
+#  What works exactly will come in the next commit, in a few minuts (hitchcock suspens...)
+#
 #  Revision 1.14  2002/06/04 08:13:31  tipaul
 #  ouuppsss... forget the 1.13 version, i made a mistake. This version works and should be the last
 #
@@ -26,11 +39,13 @@
 # marc_biblio contains 1 record for each biblio in the DB
 CREATE TABLE marc_biblio (
 		bibid bigint(20) unsigned NOT NULL auto_increment,
+		biblionumber int(20) unsigned NOT NULL,
 		datecreated date NOT NULL default '0000-00-00',
 		datemodified date default NULL,
 		origincode char(20) default NULL,
 		PRIMARY KEY  (bibid),
-		KEY origincode (origincode)
+		KEY origincode (origincode),
+		KEY biblionumber (biblionumber)
 		) TYPE=MyISAM;
 
 CREATE TABLE marc_subfield_table (
