@@ -400,7 +400,10 @@ sub create_request {
 	my $nb_active=0; # will contain the number of "active" entries. an entry is active if a value is provided.
 	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
 
-	for(my $i=0; $i<=@$value;$i++) {
+	my $maxloop=8; # the maximum number of words to avoid a too complex search.
+	$maxloop = @$value if @$value<$maxloop;
+	
+	for(my $i=0; $i<=$maxloop;$i++) {
 		if (@$value[$i]) {
 			$nb_active++;
 			if ($nb_active==1) {

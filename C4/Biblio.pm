@@ -292,13 +292,15 @@ sub MARCgettagslib {
 sub MARCfind_marc_from_kohafield {
     my ( $dbh, $kohafield,$frameworkcode ) = @_;
     return 0, 0 unless $kohafield;
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
-    );
-    $sth->execute($frameworkcode,$kohafield);
-    my ( $tagfield, $tagsubfield ) = $sth->fetchrow;
-    return ( $tagfield, $tagsubfield );
+	my $relations = C4::Context->marcfromkohafield;
+	return ($relations->{$frameworkcode}->{$kohafield}->[0],$relations->{$frameworkcode}->{$kohafield}->[1]);
+#     my $sth =
+#       $dbh->prepare(
+# "select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
+#     );
+#     $sth->execute($frameworkcode,$kohafield);
+#     my ( $tagfield, $tagsubfield ) = $sth->fetchrow;
+#     return ( $tagfield, $tagsubfield );
 }
 
 sub MARCfind_oldbiblionumber_from_MARCbibid {
@@ -2525,8 +2527,6 @@ sub nsb_clean {
 sub FindDuplicate {
 	my ($record)=@_;
 	my $dbh = C4::Context->dbh;
-	# FIXME  re-activate FindDuplicate
-	return;
 	my $result = MARCmarc2koha($dbh,$record,'');
 	# search duplicate on ISBN, easy and fast...
 	my $sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
@@ -2632,6 +2632,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.113  2004/12/10 16:27:53  tipaul
+# limiting the number of search term to 8. There was no limit before, but 8 words seems to be the upper limit mySQL can deal with (in less than a second. tested on a DB with 13 000 items)
+# In 2.4, a new DB structure will highly speed things and this limit will be removed.
+# FindDuplicate is activated again, the perf problems were due to this problem.
+#
 # Revision 1.112  2004/12/08 10:14:42  tipaul
 # * desactivate FindDuplicate
 # * fix from Genji
