@@ -34,39 +34,28 @@ $VERSION = 0.02;
 
 C4::Search - Functions for searching the Koha MARC catalog
 
-=head1 SYNOPSIS
-
-  use C4::Search;
-
-  my ($count, @results) = catalogsearch();
-
-=head1 DESCRIPTION
-
-This module provides the searching facilities for the Koha MARC catalog
-
-C<&catalogsearch> is a front end to all the other searches. Depending
-on what is passed to it, it calls the appropriate search function.
-
 =head1 FUNCTIONS
 
-=over 2
-
-=item my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
-
-Returns a reference to an array containing all the notes stored in the MARC database for the given bibid.
-$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
-
-=item my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
-
-Returns a reference to an array containing all the subjects stored in the MARC database for the given bibid.
-$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
+This module provides the searching facilities for the Koha MARC catalog
 
 =cut
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&catalogsearch &findseealso &findsuggestion &getMARCnotes &getMARCsubjects);
 
-# make all your functions, whether exported or not;
+=head1 findsuggestion($dbh,$values);
+
+=head2 $dbh is a link to the DB handler.
+
+use C4::Context;
+my $dbh =C4::Context->dbh;
+
+=head2 $values is a word
+
+Searches words with the same soundex, ordered by frequency of use.
+Useful to suggest other searches to the users.
+
+=cut
 
 sub findsuggestion {
 	my ($dbh,$values) = @_;
@@ -86,6 +75,20 @@ sub findsuggestion {
 	}
 	return \@results;
 }
+
+=head1 findseealso($dbh,$fields);
+
+=head2 $dbh is a link to the DB handler.
+
+use C4::Context;
+my $dbh =C4::Context->dbh;
+
+=head2 $fields is a reference to the fields array
+
+This function modify the @$fields array and add related fields to search on.
+
+=cut
+
 sub findseealso {
 	my ($dbh, $fields) = @_;
 	my $tagslib = MARCgettagslib ($dbh,1);
@@ -96,8 +99,70 @@ sub findseealso {
 	}
 }
 
-# marcsearch : search in the MARC biblio table.
-# everything is choosen by the user : what to search, the conditions...
+=head1  my ($count, @results) = catalogsearch($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby);
+
+=head2 $dbh is a link to the DB handler.
+
+use C4::Context;
+my $dbh =C4::Context->dbh;
+
+$tags,$and_or, $excluding, $operator, $value are references to array
+
+=head2 $tags
+
+contains the list of tags+subfields (for example : $@tags[0] = '200a')
+A field can be a list of fields : '200f','700a','700b','701a','701b'
+
+Example
+
+=head2 $and_or
+
+contains  a list of strings containing and or or. The 1st value is useless.
+
+=head2 $excluding
+
+contains 0 or 1. If 1, then the request is negated.
+
+=head2 $operator
+
+contains contains,=,start,>,>=,<,<= the = and start work on the complete subfield. The contains operator works on every word in the subfield.
+
+examples :
+contains home, search home anywhere.
+= home, search a string being home.
+
+=head2 $value
+
+contains the value to search
+If it contains a * or a %, then the search is partial.
+
+=head2 $offset and $length
+
+returns $length results, beginning at $offset
+
+=head2 $orderby
+
+define the field used to order the request. Any field in the biblio/biblioitem tables can be used. DESC is possible too
+
+(for example title, title DESC,...)
+
+=head2 RETURNS
+
+returns an array containing hashes. The hash contains all biblio & biblioitems fields and a reference to an item hash. The "item hash contains one line for each callnumber & the number of items related to the callnumber.
+
+=cut
+
+=head2 my $marcnotesarray = &getMARCnotes($dbh,$bibid,$marcflavour);
+
+Returns a reference to an array containing all the notes stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
+
+=head2 my $marcsubjctsarray = &getMARCsubjects($dbh,$bibid,$marcflavour);
+
+Returns a reference to an array containing all the subjects stored in the MARC database for the given bibid.
+$marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrieving subjects.
+
+=cut
 
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby) = @_;
