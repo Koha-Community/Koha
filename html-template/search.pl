@@ -8,10 +8,14 @@ use C4::Search;
  
 my $query=new CGI;
 
+# temporary variable for testing. Replace from /etc/koha.conf
+
+my $templatedir="/usr/share/koha/intranet/htdocs/includes/templates";
+
 my $templatename=$query->param('template');
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
-($templatename) || ($templatename='searchresults.tmpl');
+($templatename) || ($templatename="$templatedir/searchresults.tmpl");
 
 
 my $dbh=&C4Connect;  
@@ -31,8 +35,8 @@ my %search;
 my $keyword='bear';
 $search{'keyword'}=$keyword;
 
-my ($count, $resultshash, @results) = &KeywordSearch(\$blah, 'intra', \%search, 20, $startfrom);
-
+my ($count, @results) = &KeywordSearch(\$blah, 'intra', \%search, 20, $startfrom);
+my $resultshash=\@results;
 
 
 
