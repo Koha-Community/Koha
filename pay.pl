@@ -101,8 +101,8 @@ if ($check ==0){
 			$line{i}=$i;
 			$line{itemnumber} = $accts->[$i]{'itemnumber'};
 			$line{accounttype} = $accts->[$i]{'accounttype'};
-			$line{amount} = $accts->[$i]{'amount'};
-			$line{amountoutstanding} = $accts->[$i]{'amountoutstanding'};
+			$line{amount} = sprintf("%.2f",$accts->[$i]{'amount'});
+			$line{amountoutstanding} = sprintf("%.2f",$accts->[$i]{'amountoutstanding'});
 			$line{bornum} = $bornum;
 			$line{accountno} = $accts->[$i]{'accountno'};
 			$line{description} = $accts->[$i]{'description'};
@@ -114,7 +114,7 @@ if ($check ==0){
 							surname => $data->{'surname'},
 							bornum => $bornum,
 							loop_pay => \@loop_pay,
-							total => $total);
+							total => sprintf("%.2f",$total));
 	print "Content-Type: text/html\n\n", $template->output;
 
 } else {
