@@ -187,30 +187,24 @@ sub neworder {
     $sub=0;
   }
   my $dbh = C4::Context->dbh;
-  my $query="insert into aqorders (biblionumber,title,basketno,
+  my $sth=$dbh->prepare("insert into aqorders (biblionumber,title,basketno,
   quantity,listprice,booksellerid,entrydate,requisitionedby,authorisedby,notes,
   biblioitemnumber,rrp,ecost,gst,unitprice,subscription,booksellerinvoicenumber)
-
-  values
-  ($bibnum,'$title',$basket,$quantity,$listprice,'$supplier',now(),
-  '$who','$who','$notes',$bibitemnum,'$rrp','$ecost','$gst','$cost',
-  '$sub','$invoice')";
-  my $sth=$dbh->prepare($query);
-#  print $query;
-  $sth->execute;
+  values (?,?,?,?,?,?,now(),?,?,?,?,?,?,?,?,?,?)");
+  $sth->execute($bibnum,$title,$basket,$quantity,$listprice,$supplier,
+  $who,$who,$notes,$bibitemnum,$rrp,$ecost,$gst,$cost,
+  $sub,$invoice);
   $sth->finish;
-  $query="select * from aqorders where
-  biblionumber=$bibnum and basketno=$basket and ordernumber >=$ordnum";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("select * from aqorders where
+  biblionumber=? and basketno=? and ordernumber >=?");
+  $sth->execute($bibnum,$basket,$ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   $ordnum=$data->{'ordernumber'};
-  $query="insert into aqorderbreakdown (ordernumber,bookfundid) values
-  ($ordnum,'$bookfund')";
-  $sth=$dbh->prepare($query);
+  $sth=$dbh->prepare("insert into aqorderbreakdown (ordernumber,bookfundid) values
+  (?,?)");
 #  print $query;
-  $sth->execute;
+  $sth->execute($ordnum,$bookfund);
   $sth->finish;
 }
 
