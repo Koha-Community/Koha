@@ -98,12 +98,11 @@ sub renewstatus {
 
   # FIXME - I think this function could be redone to use only one SQL
   # call.
-  my $q1 = "select * from issues
-    where (borrowernumber = '$bornum')
-    and (itemnumber = '$itemno')
-    and returndate is null";
-  my $sth1 = $dbh->prepare($q1);
-  $sth1->execute;
+  my $sth1 = $dbh->prepare("select * from issues
+    where (borrowernumber = ?)
+    and (itemnumber = ?')
+    and returndate is null");
+  $sth1->execute($bornum,$itemno);
   if (my $data1 = $sth1->fetchrow_hashref) {
     # Found a matching item
 
@@ -111,12 +110,11 @@ sub renewstatus {
     # because it's a bit messy: given the item number, we need to find
     # the biblioitem, which gives us the itemtype, which tells us
     # whether it may be renewed.
-    my $q2 = "select renewalsallowed from items,biblioitems,itemtypes
-       where (items.itemnumber = '$itemno')
+    my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
+       where (items.itemnumber = ?)
        and (items.biblioitemnumber = biblioitems.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth2 = $dbh->prepare($q2);
-    $sth2->execute;
+       and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth2->execute($itemno);
     if (my $data2=$sth2->fetchrow_hashref) {
       $renews = $data2->{'renewalsallowed'};
     }
@@ -174,12 +172,11 @@ sub renewbook {
 				# type or whatever, then that should
 				# be an error
     # Find this item's item type, via its biblioitem.
-    my $query= "Select * from biblioitems,items,itemtypes
-       where (items.itemnumber = '$itemno')
+    my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes
+       where (items.itemnumber = ?)
        and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth=$dbh->prepare($query);
-    $sth->execute;
+       and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth->execute($itemno);
     if (my $data=$sth->fetchrow_hashref) {
       $loanlength = $data->{'loanlength'}
     }
@@ -193,10 +190,9 @@ sub renewbook {
   }
 
   # Find the issues record for this book
-  my $issquery = "select * from issues where borrowernumber='$bornum' and
-    itemnumber='$itemno' and returndate is null";
-  my $sth=$dbh->prepare($issquery);
-  $sth->execute;
+  my $sth=$dbh->prepare("select * from issues where borrowernumber=? and
+    itemnumber=? and returndate is null");
+  $sth->execute($bornum,$itemno);
   my $issuedata=$sth->fetchrow_hashref;
 	# FIXME - Error-checking
   $sth->finish;
@@ -204,13 +200,11 @@ sub renewbook {
   # Update the issues record to have the new due date, and a new count
   # of how many times it has been renewed.
   my $renews = $issuedata->{'renewals'} +1;
-  my $updquery = "update issues
-    set date_due = '$datedue', renewals = '$renews'
-    where borrowernumber='$bornum' and
-    itemnumber='$itemno' and returndate is null";
-		# FIXME - Use $dbh->do()
-  $sth=$dbh->prepare($updquery);
-  $sth->execute;
+  $sth=$dbh->prepare("update issues
+    set date_due = ?, renewals = ?
+    where borrowernumber=? and
+    itemnumber=? and returndate is null");
+  $sth->execute($datedue,$renews,$bornum,$itemno);
   $sth->finish;
 
   # Log the renewal
@@ -273,13 +267,12 @@ sub calc_charges {
     $charge = $data1->{'rentalcharge'};
 
     # Figure out the applicable rental discount
-    my $q2 = "select rentaldiscount from
+    my $sth2=$dbh->prepare("select rentaldiscount from
     borrowers,categoryitem
-    where (borrowers.borrowernumber = '$bornum')
+    where (borrowers.borrowernumber = ?)
     and (borrowers.categorycode = categoryitem.categorycode)
-    and (categoryitem.itemtype = '$item_type')";
-    my $sth2=$dbh->prepare($q2);
-    $sth2->execute;
+    and (categoryitem.itemtype = ?)");
+    $sth2->execute($bornum,$item_type);
     if (my$data2=$sth2->fetchrow_hashref) {
       my $discount = $data2->{'rentaldiscount'};
       $charge *= (100 - $discount) / 100;

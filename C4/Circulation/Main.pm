@@ -78,8 +78,7 @@ primarily for checking reserves and overdue items.
 sub getbranch {
   my ($env) = @_;
   my $dbh = C4::Context->dbh;
-  my $query = "select * from branches order by branchcode";
-  my $sth = $dbh->prepare($query);
+  my $sth = $dbh->prepare("select * from branches order by branchcode");
   $sth->execute;
   if ($sth->rows>1) {
       my @branches;
@@ -91,10 +90,9 @@ sub getbranch {
       my $data = $sth->fetchrow_hashref;
       $env->{'branchcode'}=$data->{'branchcode'};
   }
-  my $query = "select * from branches
-    where branchcode = '$env->{'branchcode'}'";
-  $sth = $dbh->prepare($query);
-  $sth->execute;
+  $sth = $dbh->prepare("select * from branches
+    where branchcode = ?");
+  $sth->execute($env->{'branchcode'});
   my $data = $sth->fetchrow_hashref;
   $env->{'brdata'} = $data;
   $env->{'branchname'} = $data->{'branchname'};
@@ -108,8 +106,7 @@ sub getbranch {
 sub getprinter {
   my ($env) = @_;
   my $dbh = C4::Context->dbh;
-  my $query = "select * from printers order by printername";
-  my $sth = $dbh->prepare($query);
+  my $sth = $dbh->prepare("select * from printers order by printername");
   $sth->execute;
   if ($sth->rows>1) {
       my @printers;
@@ -134,10 +131,9 @@ sub getprinter {
 sub pastitems{
   #Get list of all items borrower has currently on issue
   my ($env,$bornum,$dbh)=@_;
-  my $query1 = "select * from issues  where (borrowernumber=$bornum)
-    and (returndate is null) order by date_due";
-  my $sth=$dbh->prepare($query1);
-  $sth->execute;
+  my $sth=$dbh->prepare("select * from issues  where (borrowernumber=?)
+    and (returndate is null) order by date_due");
+  $sth->execute($bornum);
   my $i=0;
   my @items;
   my @items2;
@@ -171,16 +167,9 @@ sub checkoverdues{
   #checks whether a borrower has overdue items
   # FIXME - Use C4::Context->dbh instead of getting $dbh as an argument
   my ($env,$bornum,$dbh)=@_;
-  # FIXME - This is what POSIX::strftime is for.
-  my @datearr = localtime;
-  my $today = ($datearr[5] + 1900)."-".($datearr[4]+1)."-".$datearr[3];
-  # FIXME - MySQL can figure out what today is, so there's no need
-  # to calculate that separately. Just use
-  #	... date_due < curdate()
-  my $query = "Select count(*) from issues where borrowernumber=$bornum and
-        returndate is NULL and date_due < '$today'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select count(*) from issues where borrowernumber=? and
+        returndate is NULL and date_due < curdate()");
+  $sth->execute($bornum);
   my $data = $sth->fetchrow_hashref;
   $sth->finish;
   return $data->{'count(*)'};
@@ -272,15 +261,14 @@ sub checkreserve{
   # Find this item in the reserves.
   # Apparently reserves.found=='W' means "Waiting".
   # FIXME - Is it necessary to get every field from both tables?
-  my $query = "select * from reserves,items
-    where (items.itemnumber = '$itemnum')
+  my $sth = $dbh->prepare("select * from reserves,items
+    where (items.itemnumber = ?)
     and (reserves.cancellationdate is NULL)
     and (items.biblionumber = reserves.biblionumber)
     and ((reserves.found = 'W')
     or (reserves.found is null))
-    order by priority";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
+    order by priority");
+  $sth->execute($itemnum);
   my $resrec;
   if (my $data=$sth->fetchrow_hashref) {
     $resrec=$data;
@@ -289,14 +277,13 @@ sub checkreserve{
       $resbor = $data->{'borrowernumber'};
     } else {
       my $found = 0;
-      my $cquery = "select * from reserveconstraints,items
-         where (borrowernumber='$data->{'borrowernumber'}')
-         and reservedate='$data->{'reservedate'}'
-	 and reserveconstraints.biblionumber='$data->{'biblionumber'}'
-	 and (items.itemnumber=$itemnum and
-	 items.biblioitemnumber = reserveconstraints.biblioitemnumber)";
-      my $csth = $dbh->prepare($cquery);
-      $csth->execute;
+      my $csth = $dbh->prepare("select * from reserveconstraints,items
+         where (borrowernumber=?)
+         and reservedate=?
+	 and reserveconstraints.biblionumber=?
+	 and (items.itemnumber=? and
+	 items.biblioitemnumber = reserveconstraints.biblioitemnumber)");
+      $csth->execute($data->{'borrowernumber'},$data->{'reservedate'},$data->{'biblionumber'},$itemnum);
       if (my $cdata=$csth->fetchrow_hashref) {$found = 1;}
       if ($const eq 'o') {		# FIXME - What does 'o' mean?
         if ($found eq 1) {$resbor = $data->{'borrowernumber'};}
@@ -317,11 +304,10 @@ sub checkwaiting{
   # check for reserves waiting
   my ($env,$dbh,$bornum)=@_;
   my @itemswaiting;
-  my $query = "select * from reserves
-    where (borrowernumber = '$bornum')
-    and (reserves.found='W') and cancellationdate is NULL";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
+  my $sth = $dbh->prepare("select * from reserves
+    where (borrowernumber = ?)
+    and (reserves.found='W') and cancellationdate is NULL");
+  $sth->execute($bornum);
   my $cnt=0;
   if (my $data=$sth->fetchrow_hashref) {
     @itemswaiting[$cnt] =$data;
