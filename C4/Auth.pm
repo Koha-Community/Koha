@@ -121,11 +121,73 @@ sub get_template_and_user {
 		$template->param(sessionID => $sessionID);
 
 		$borrowernumber = getborrowernumber($user);
-		my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+		my ($borr, $alternativeflags) = getpatroninformation(undef, $borrowernumber);
 		my @bordat;
 		$bordat[0] = $borr;
 		$template->param(USER_INFO => \@bordat,
 		);
+		
+		# We are going to use the $flags returned by checkauth
+		# to create the template's parameters that will indicate
+		# which menus the user can access.
+		if ($flags->{superlibrarian} == 1)
+		{
+			$template->param(CAN_user_circulate => 1);
+			$template->param(CAN_user_catalogue => 1);
+			$template->param(CAN_user_parameters => 1);
+			$template->param(CAN_user_borrowers => 1);
+			$template->param(CAN_user_permission => 1);
+			$template->param(CAN_user_reserveforothers => 1);
+			$template->param(CAN_user_borrow => 1);
+			$template->param(CAN_user_reserveforself => 1);
+			$template->param(CAN_user_editcatalogue => 1);
+			$template->param(CAN_user_updatecharge => 1);
+			$template->param(CAN_user_acquisition => 1);
+			$template->param(CAN_user_management => 1);
+			$template->param(CAN_user_tools => 1); }
+		
+		if ($flags->{circulate} == 1) {
+			$template->param(CAN_user_circulate => 1); }
+
+		if ($flags->{catalogue} == 1) {
+			$template->param(CAN_user_catalogue => 1); }
+		
+		if ($flags->{parameters} == 1) {
+			$template->param(CAN_user_parameters => 1);	
+			$template->param(CAN_user_management => 1);
+			$template->param(CAN_user_tools => 1); }
+		
+		if ($flags->{borrowers} == 1) {
+			$template->param(CAN_user_borrowers => 1); }
+		
+		if ($flags->{permissions} == 1) {
+			$template->param(CAN_user_permission => 1); }
+		
+		if ($flags->{reserveforothers} == 1) {
+			$template->param(CAN_user_reserveforothers => 1); }
+		
+		if ($flags->{borrow} == 1) {
+			$template->param(CAN_user_borrow => 1); }
+		
+		if ($flags->{reserveforself} == 1) {
+			$template->param(CAN_user_reserveforself => 1); }
+		
+		if ($flags->{editcatalogue} == 1) {
+			$template->param(CAN_user_editcatalogue => 1); }
+		
+		if ($flags->{updatecharges} == 1) {
+			$template->param(CAN_user_updatecharge => 1); }
+		
+		if ($flags->{acquisition} == 1) {
+			$template->param(CAN_user_acquisition => 1); }
+		
+		if ($flags->{management} == 1) {
+			$template->param(CAN_user_management => 1);
+			$template->param(CAN_user_tools => 1); }
+		
+		if ($flags->{tools} == 1) {
+			$template->param(CAN_user_tools => 1); }
+		
 	}
 	$template->param(
 			     LibraryName => C4::Context->preference("LibraryName"),
