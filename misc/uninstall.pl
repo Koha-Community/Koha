@@ -22,18 +22,19 @@ sub ReadConfigFile
 
 my $config = ReadConfigFile("/etc/koha.conf");
 # to remove web sites:
-print "\nrm -rf ".$config->{intranetdir};
-print "\nrm -rf ".$config->{opacdir};
+system("rm -rf ".$config->{intranetdir});
+system("\nrm -rf ".$config->{opacdir});
 # remove mySQL stuff
-# DB
-print "\nmysqladmin -f -u".$config->{user}." -p".$config->{pass}." drop ".$config->{database};
 # user
 print "enter mySQL root password, please\n";
 my $response=<STDIN>;
 chomp $response;
-print "\nmysql -uroot -p$response -Dmysql -e\"delete from user where user='".$config->{user}.'"';
+# DB
+system("mysqladmin -f -uroot -p$response drop ".$config->{database});
+system("mysql -uroot -p$response -Dmysql -e\"delete from user where user='".$config->{user}.'\'"');
+system("mysql -uroot -p$response -Dmysql -e\"delete from db where user='".$config->{user}.'\'"');
 # reload mysql
-print "\nmysqladmin -uroot -p$response reload";
-print "\nrm -f /etc/koha-httpd.conf";
-print "\nrm -f /etc/koha.conf";
-print "\nEDIT httpd.conf to remove /etc/koha-httpd.conf\n";
+system("mysqladmin -uroot -p$response reload");
+system("rm -f /etc/koha-httpd.conf");
+system("rm -f /etc/koha.conf");
+print "EDIT httpd.conf to remove /etc/koha-httpd.conf\n";
