@@ -60,14 +60,44 @@ Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
     exit;
 };
 
+my $backupdir='/usr/local/koha/backups';
+print "Please specify a backup directory [$backupdir]: ";  
 
+$answer = <STDIN>;
+chomp $answer;
+
+if ($answer) {
+    $backupdir=$answer;
+}
+
+if (! -e $backupdir) {
+   my $result=mkdir ($backupdir, oct(770));
+   if ($result==0) {
+       my @dirs = split(m#/#, $backupdir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+   }
+}
+
+chmod 0770, $backupdir;
 
 # Backup MySql database
 #
+#
 
-system("mysqldump -u$user -p$pass -h$host $database > Koha.backup");
+my ($sec, $min, $hr, $day, $month, $year) = (localtime(time))[0,1,2,3,4,5];
+$month++;
+$year+=1900;
+my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
+
 open (MD, "mysqldump -u$user -p$pass -h$host $database|");
-open BF, ">Koha.backup";
+
+open BF, ">$backupdir/Koha.backup_$date";
 
 my $itemcounter=0;
 my $bibliocounter=0;
@@ -86,6 +116,8 @@ close BF;
 close MD;
 
 
+my $filels=`ls -hl $backupdir/Koha.backup_$date`;
+chomp $filels;
 printf qq|
 
 Backed up:
@@ -95,22 +127,171 @@ Backed up:
 %6d items entries
 %6d borrowers
 
+$filels
+
 Does this look right? ([Y]/N):
 |, $bibliocounter, $biblioitemcounter, $itemcounter, $membercounter;
 
-my $answer = <STDIN>;
+$answer = <STDIN>;
 chomp $answer;
 
-if ($answer eq "Y" || $answer eq "y") {
-	print "Great! continuing upgrade... \n";
-    } else {
+if ($answer=~/^n/i) {
     print qq|
 
-Aborting.  The database dump is located in the Koha.backup file. 
+Aborting.  The database dump is located in:
+
+	$backupdir/Koha.backup_$date
+
 |;
     exit;
+} else {
+	print "Great! continuing upgrade... \n";
 };
 
 
 
+if ($opacdir && $intranetdir) {
+    print qq|
+
+I believe that your old files are located in:
+
+  OPAC:      $opacdir
+  INTRANET:  $intranetdir
+
+
+Does this look right?  ([Y]/N):
+|;
+    $answer = <STDIN>;
+    chomp $answer;
+
+    if ($answer =~/n/i) {
+	$intranetdir='';
+	$opacdir='';
+    } else {
+	print "Great! continuing upgrade... \n";
+    }
+}
+
+
+if (!$opacdir || !$intranetdir) {
+    $intranetdir='';
+    $opacdir='';
+    while (!$intranetdir) {
+	print "Please specify the location of your INTRANET files: ";  
+
+	$answer = <STDIN>;
+	chomp $answer;
+
+	if ($answer) {
+	    $intranetdir=$answer;
+	}
+	if (! -e "$intranetdir/htdocs") {
+	    print "\nCouldn't find the htdocs directory here.  That doesn't look right.\nPlease enter another location.\n\n";
+	    $intranetdir='';
+	}
+    }
+    while (!$opacdir) {
+	print "Please specify the location of your OPAC files: ";  
+
+	$answer = <STDIN>;
+	chomp $answer;
+
+	if ($answer) {
+	    $opacdir=$answer;
+	}
+	if (! -e "$opacdir/htdocs") {
+	    print "\nCouldn't find the htdocs directory here.  That doesn't look right.\nPlease enter another location.\n\n";
+	    $opacdir='';
+	}
+    }
+}
+
+
+
+print "\n\nBacking up old Koha scripts...\n";
+print     "===============================\n\n";
+
+mkdir "$backupdir/kohafiles-$date", 0770;
+mkdir "$backupdir/kohafiles-$date/intranet", 0770;
+mkdir "$backupdir/kohafiles-$date/opac", 0770;
+
+my $result=system("cp -R $intranetdir/* $backupdir/kohafiles-$date/intranet/");
+if ($result) {
+    print "Error encounted when copying $intranetdir to $backupdir/kohafiles-$date/intranet/\n";
+    exit;
+} else {
+    system("rm -rf $intranetdir/*");
+}
+$result=system("cp -R $opacdir/* $backupdir/kohafiles-$date/opac/");
+if ($result) {
+    print "Error encounted when copying $opacdir to $backupdir/kohafiles-$date/opac/\n";
+    exit;
+} else {
+    system("rm -rf $opacdir/*");
+}
+
+   print "Creating $intranetdir/htdocs...\n";
+   mkdir ("$intranetdir/htdocs", oct(750));
+   print "Creating $intranetdir/cgi-bin...\n";
+   mkdir ("$intranetdir/cgi-bin", oct(750));
+   print "Creating $intranetdir/modules...\n";
+   mkdir ("$intranetdir/modules", oct(750));
+   print "Creating $intranetdir/scripts...\n";
+   mkdir ("$intranetdir/scripts", oct(750));
+   chmod (oct(770), "$opacdir");
+   print "Creating $opacdir/htdocs...\n";
+   mkdir ("$opacdir/htdocs", oct(750));
+   print "Creating $opacdir/cgi-bin...\n";
+   mkdir ("$opacdir/cgi-bin", oct(750));
+
+my $httpduser;
+my $realhttpdconf;
+
+foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
+                      /usr/local/etc/apache/httpd.conf
+                      /usr/local/etc/apache/apache.conf
+                      /var/www/conf/httpd.conf
+                      /etc/apache/conf/httpd.conf
+                      /etc/apache/conf/apache.conf
+                      /etc/apache-ssl/conf/apache.conf
+                      /etc/httpd/conf/httpd.conf
+                      /etc/httpd/httpd.conf)) {
+   if ( -f $httpdconf ) {
+            $realhttpdconf=$httpdconf;
+            open (HTTPDCONF, $httpdconf) or warn "Insufficient privileges to open $httpdconf for reading.\n";
+      while (<HTTPDCONF>) {
+         if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+            $httpduser = $1;
+         }
+      }
+      close(HTTPDCONF);
+   }
+}
+$httpduser ||= 'Undetermined';
+
+print "\n\nINSTALLING KOHA...\n";
+print "\n\n==================\n";
+print "Copying internet-html files to $intranetdir/htdocs...\n";
+system("cp -R intranet-html/* $intranetdir/htdocs/");
+print "Copying intranet-cgi files to $intranetdir/cgi-bin...\n";
+system("cp -R intranet-cgi/* $intranetdir/cgi-bin/");
+print "Copying script files to $intranetdir/scripts...\n";
+system("cp -R scripts/* $intranetdir/scripts/");
+print "Copying module files to $intranetdir/modules...\n";
+system("cp -R modules/* $intranetdir/modules/");
+print "Copying opac-html files to $opacdir/htdocs...\n";
+system("cp -R opac-html/* $opacdir/htdocs/");
+print "Copying opac-cgi files to $opacdir/cgi-bin...\n";
+system("cp -R opac-cgi/* $opacdir/cgi-bin/");
+
+system("chown -R root.$httpduser $opacdir");
+system("chown -R root.$httpduser $intranetdir");
+
+
+print qq|
+
+Upgrading Database
+==================
+|;
+system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 
