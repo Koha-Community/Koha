@@ -8,6 +8,7 @@ require Exporter;
 use DBI;
 use C4::Database;
 use C4::Stats;
+use C4::Search;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
 # set the version for version checking
@@ -108,15 +109,23 @@ sub recordpayment{
 
 sub makepayment{
   #here we update both the accountoffsets and the account lines
+  #updated to check, if they are paying off a lost item, we return the item 
+  # from their card, and put a note on the item record
   my ($bornumber,$accountno,$amount,$user)=@_;
   my $env;
   my $dbh=C4Connect;
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   my $newamtos=0;
+  my $sel="Select * from accountlines where  borrowernumber=$bornumber and
+  accountno=$accountno";
+  my $sth=$dbh->prepare($sel);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  $sth->finish;
   my $updquery="Update accountlines set amountoutstanding=0 where
   borrowernumber=$bornumber and accountno=$accountno";
-  my $sth=$dbh->prepare($updquery);
+  $sth=$dbh->prepare($updquery);
   $sth->execute;
   $sth->finish;
 #  print $updquery;
@@ -137,6 +146,10 @@ sub makepayment{
   UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
   $sth->finish;
   $dbh->disconnect;
+  #check to see what accounttype
+  if ($data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L'){
+    returnlost($bornumber,$data->{'itemnumber'});
+  }
 }
 
 sub getnextacctno {
@@ -173,5 +186,23 @@ sub fixaccounts {
    $sth->finish;
    $dbh->disconnect;
  }
- 
+
+sub returnlost{
+  my ($borrnum,$itemnum)=@_;
+  my $dbh=C4Connect;
+  my $borrower=borrdata('',$borrnum); #from C4::Search;
+  my $upiss="Update issues set returndate=now() where
+  borrowernumber='$borrnum' and itemnumber='$itemnum' and returndate is null";
+  my $sth=$dbh->prepare($upiss);
+  $sth->execute;
+  $sth->finish;
+  my $date='2001-04-18';
+  my $bor="$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
+  my $upitem="Update items set itemnotes='Paid for by $bor $date' where itemnumber='$itemnum'";
+  $sth=$dbh->prepare($upitem);
+  $sth->execute;
+  $sth->finish;
+  $dbh->disconnect;
+}
+
 END { }       # module clean-up code here (global destructor)
