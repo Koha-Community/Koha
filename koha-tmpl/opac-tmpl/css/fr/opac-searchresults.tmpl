@@ -4,7 +4,7 @@
     <p class="center">Recherche effectuée sur <b><!-- TMPL_VAR NAME="searchdesc" --></b></p>
 <!-- TMPL_ELSE -->
 	<!-- TMPL_IF name="searchnew" -->
-		<p><!-- TMPL_VAR name=itemtype --> acquired dans the last <i><!-- TMPL_VAR name="duration" --></i> jours</p>
+		<p><!-- TMPL_VAR name=itemtype --> acquis dans les derniers <i><!-- TMPL_VAR name="duration" --></i> jours</p>
 	<!-- TMPL_ELSE -->
 		<p>Vous n'avez pas spécifié de critère</p>
 	<!-- /TMPL_IF -->
@@ -62,16 +62,16 @@
 		<th>Auteur</th>
 		<th>&copy;</th>
 		<th>Nombre d'ouvrages</th>
-		<th>Localisation</th>
+		<th>LIMITED:Localisation</th>
 		<th>&nbsp;</th>
 	</tr>
 <!-- Actual Search Résultats -->
 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 	<tr>
-		<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+		<td <!-- TMPL_IF name="even" -->classe="hilighted"<!-- /TMPL_IF -->>
 			<a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->"><!-- TMPL_VAR NAME="title" --></a>
 		</td>
-		<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+		<td <!-- TMPL_IF name="even" -->classe="hilighted"<!-- /TMPL_IF -->>
 			<a class="transparent" href="/cgi-bin/koha/opac-searchresults.pl?author=<!-- TMPL_VAR NAME="author" ESCAPE=URL -->"><!-- TMPL_VAR NAME="author" --></a>
 		</td>
 		<td align="center"<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
@@ -80,10 +80,10 @@
 		<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
 			<!-- TMPL_VAR NAME="itemcount" -->
 		</td>
-		<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-			<!-- TMPL_VAR NAME="localisation" -->
+		<td <!-- TMPL_IF name="even" -->classe="hilighted"<!-- /TMPL_IF -->>
+			<!-- TMPL_VAR NAME="location" -->
 		</td>
-		<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+		<td <!-- TMPL_IF name="even" -->classe="hilighted"<!-- /TMPL_IF -->>
 			<!-- TMPL_UNLESS NAME="norequests" -->
 				<a class="transparent" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">Reserver</a>
 			<!-- TMPL_ELSE -->
@@ -144,7 +144,7 @@
 <!-- /TMPL_IF -->
 
 <p class="center">
-	Essayez un autre <a href="/cgi-bin/koha/opac-search.pl">search</a>
+	Essayez une autre <a href="/cgi-bin/koha/opac-search.pl">LIMITED:chercher</a>
 </p>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

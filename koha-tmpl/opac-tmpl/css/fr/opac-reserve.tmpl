@@ -15,7 +15,7 @@
 <!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
 	<p> Il y a <b><!-- TMPL_VAR NAME="reservecount" --></b> Réservations déjà faites sur cet ouvrage </p>
-	<p>Sélectionnez les types d'ouvrages souhaités. Le premier disponible sera gardé pour vous.</p>
+	<p>Sélectionnez les types d'ouvrages souhaités\. Le premier disponible sera gardé pour vous\.</p>
 
 	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
 		<input type="hidden" name="item_types_selected" value="1">
@@ -76,7 +76,7 @@
 		</ul>
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME='branch' -->">
 		<!-- TMPL_IF NAME="fee" -->
-			<p>Note there will be a reserve charge de <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+			<p>Il y aura des frais de réservation de <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
 		<!-- /TMPL_IF -->
 		<INPUT class="button" type="submit" value="Réserver">
 	</FORM>
