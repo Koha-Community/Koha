@@ -655,7 +655,8 @@ unless ( $existingtables{'z3950servers'} ) {
 										name text,
 										id int,
 										checked smallint,
-										rank int)"
+										rank int,
+										syntax char(80))"
     );
     $sti->execute;
     $sti = $dbh->prepare( "insert into z3950servers
@@ -664,7 +665,7 @@ unless ( $existingtables{'z3950servers'} ) {
 								'voyager',
 								'', '',
 								'Library of Congress',
-								1, 1, 1)"
+								1, 1, 1, 'USMARC')"
     );
     $sti->execute;
 }
@@ -917,6 +918,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.62  2003/10/20 16:10:19  slef
+# Adding USMARC to LOC z3950 entry
+#
 # Revision 1.61  2003/10/01 15:03:45  tipaul
 # oups... typo fix in z3950random field definition
 #
