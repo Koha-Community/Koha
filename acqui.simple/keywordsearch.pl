@@ -50,7 +50,7 @@ Results $offset to $total displayed
 </tr>
 EOF
 
-    for (my $i = $offset; $i < $total; $i++) {
+    for (my $i = 0; $i < ($total - $offset); $i++) {
 	if ($i % 2) {
 	    print << "EOF";
 <tr valign="top" bgcolor="#ffffcc">
@@ -62,12 +62,13 @@ EOF
 	} # else
 
 	print << "EOF";
-<td><a href="addbiblioitem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'title'}</a></td>
-<td><a href="addbiblioitem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'author'}</a></td>
+<td><a href="additem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'title'}</a></td>
+<td><a href="additem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'author'}</a></td>
 <td>$results[$i]->{'copyrightdate'}</td>
 </tr>
 EOF
     } # for
+
     print << "EOF";
 <tr valign=top bgcolor=#cccc99>
 <td background="/images/background-mem.gif">&nbsp;</td>
@@ -80,8 +81,9 @@ EOF
 
     for (my $i = 0; ($i * $num) < $count; $i++) {
 	my $newoffset = $i * $num;
+	my $shownumber = $i + 1;
 	print << "EOF";
-<a href="keywordsearch.pl?keyword=$keywords&offset=$newoffset&num=$num">$i</a>
+<a href="keywordsearch.pl?keyword=$keywords&offset=$newoffset&num=$num">$shownumber</a>
 EOF
     } # for
 

@@ -18,7 +18,8 @@ $VERSION = 0.01;
 &findall &needsmod &delitem &deletebiblioitem &delbiblio &delorder &branches
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
 &updatecost &checkitems &modnote &getitemtypes &getbiblio
-&getbiblioitem &getitemsbybiblioitem &isbnsearch &keywordsearch
+&getbiblioitembybiblionumber
+&getbiblioitem &getitemsbybiblioitem &isbnsearch
 &websitesearch &addwebsite &updatewebsite &deletewebsite);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -959,6 +960,7 @@ sub newitems {
 
   foreach my $barcode (@barcodes) {
     $barcode = uc($barcode);
+    $barcode = $dbh->quote($barcode);
     $query   = "Insert into items set
 itemnumber           = $itemnumber,
 biblionumber         = $item->{'biblionumber'},
@@ -1201,6 +1203,7 @@ sub delbiblio{
   $dbh->disconnect;
 }
 
+
 sub getitemtypes {
   my $dbh   = C4Connect;
   my $query = "select * from itemtypes";
@@ -1266,6 +1269,28 @@ biblioitemnumber = $biblioitemnum";
 } # sub getbiblioitem
 
 
+sub getbiblioitembybiblionumber {
+    my ($biblionumber) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from biblioitems where biblionumber =
+$biblionumber";
+    my $sth   = $dbh->prepare($query);
+    my $count = 0;
+    my @results;
+
+    $sth->execute;
+
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+	$count++;
+    } # while
+
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub
+
+
 sub getitemsbybiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4Connect;
@@ -1299,7 +1324,9 @@ sub isbnsearch {
     my @results;
     
     $isbn  = $dbh->quote($isbn);
-    $query = "Select * from biblioitems where isbn = $isbn";
+    $query = "Select biblio.* from biblio, biblioitems where
+biblio.biblionumber = biblioitems.biblionumber
+and isbn = $isbn";
     $sth   = $dbh->prepare($query);
     
     $sth->execute;
@@ -1312,50 +1339,6 @@ sub isbnsearch {
     $dbh->disconnect;
     return($count, @results);
 } # sub isbnsearch
-
-
-sub keywordsearch {
-  my ($keywordlist) = @_;
-  my $dbh   = C4Connect;
-  my $query = "Select * from biblio where";
-  my $count = 0;
-  my $sth;
-  my @results;
-  my @keywords = split(/ +/, $keywordlist);
-  my $keyword = shift(@keywords);
-
-  $keyword =~ s/%/\\%/g;
-  $keyword =~ s/_/\\_/;
-  $keyword = "%" . $keyword . "%";
-  $keyword = $dbh->quote($keyword);
-  $query  .= " (author like $keyword) or
-(title like $keyword) or (unititle like $keyword) or
-(notes like $keyword) or (seriestitle like $keyword) or
-(abstract like $keyword)";
-
-  foreach $keyword (@keywords) {
-    $keyword =~ s/%/\\%/;
-    $keyword =~ s/_/\\_/;
-    $keyword = "%" . $keyword . "%";
-    $keyword = $dbh->quote($keyword);
-    $query  .= " or (author like $keyword) or
-(title like $keyword) or (unititle like $keyword) or 
-(notes like $keyword) or (seriestitle like $keyword) or
-(abstract like $keyword)";
-  } # foreach
-  
-  $sth = $dbh->prepare($query);
-  $sth->execute;
-  
-  while (my $data = $sth->fetchrow_hashref) {
-    $results[$count] = $data;
-    $count++;
-  } # while
-  
-  $sth->finish;
-  $dbh->disconnect;
-  return($count, @results);
-} # sub keywordsearch
 
 
 sub websitesearch {

@@ -60,8 +60,8 @@ EOF
 	} # else
 
 	print << "EOF";
-<td><a href="addbiblioitem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'title'}</a></td>
-<td><a href="addbiblioitem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'author'}</a></td>
+<td><a href="additem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'title'}</a></td>
+<td><a href="additem.pl?biblionumber=$results[$i]->{'biblionumber'}">$results[$i]->{'author'}</a></td>
 <td>$results[$i]->{'copyrightdate'}</td>
 </tr>
 EOF

@@ -23,5 +23,5 @@ if (! $biblio->{'title'}) {
     $biblionumber = &newbiblio($biblio);
     &newsubtitle($biblionumber, $biblio->{'subtitle'});
 
-    print $input->redirect("addbiblioitem.pl?biblionumber=$biblionumber");
+    print $input->redirect("additem.pl?biblionumber=$biblionumber");
 } # else

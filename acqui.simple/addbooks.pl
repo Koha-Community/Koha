@@ -50,16 +50,16 @@ EOF
 
 <table>
 <tr>
-<form action="isbnsearch.pl">
-<td>ISBN:</td>
-<td><input type="text" name="isbn" /></td>
+<form action="keywordsearch.pl">
+<td>Keyword:</td>
+<td><input type="text" name="keyword" /></td>
 <td><input type="submit" value="Go" /></td>
 </form>
 </tr>
 <tr>
-<form action="keywordsearch.pl">
-<td>Keyword:</td>
-<td><input type="text" name="keyword" /></td>
+<form action="isbnsearch.pl">
+<td>ISBN:</td>
+<td><input type="text" name="isbn" /></td>
 <td><input type="submit" value="Go" /></td>
 </form>
 </tr>
