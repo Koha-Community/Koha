@@ -7,7 +7,7 @@
 
 system("mysql Koha -pkohapass < deletemarc");
 
-use C4::Database;
+use C4::Context;
 use C4::Catalogue;
 use CGI;
 use DBI;
@@ -15,12 +15,8 @@ use DBI;
 use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 my $userid=$ENV{'REMOTE_USER'};
-
-
-my $dbh=C4Connect;
-
 
 my $sth=$dbh->prepare("select * from biblio,biblioitems where biblio.biblionumber=biblioitems.biblionumber");
 $sth->execute;

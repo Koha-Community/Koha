@@ -51,7 +51,7 @@ EOF
 # do something if it doesnt work....
         warn "Error sending mail: $Mail::Sendmail::error \n";
     }
-} 
+}
 
 my $template = gettemplate("opac-userupdate.tmpl", "opac");
 
@@ -70,4 +70,4 @@ $template->param(BORROWER_INFO => \@bordat);
 
 $template->param(loggedinuser => $loggedinuser);
 
-print "Content-Type: text/html\n\n", $template->output; 
+print "Content-Type: text/html\n\n", $template->output;

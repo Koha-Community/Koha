@@ -64,13 +64,13 @@ foreach my $key (keys %$issues) {
 	$issue->{'status'} .= " Reserved";
     }
     my ($charges, $itemtype) = calc_charges(undef, undef, $issue->{'itemnumber'}, $borrowernumber);
-    $issue->{'charges'} = $charges; 
+    $issue->{'charges'} = $charges;
     push @issuedat, $issue;
     $count++;
-} 
+}
 
-$template->param(ISSUES => \@issuedat); 
-$template->param(issues_count => $count); 
+$template->param(ISSUES => \@issuedat);
+$template->param(issues_count => $count);
 
 # now the reserved items....
 my ($rcount, $reserves) = FindReserves(undef, $borrowernumber);
@@ -96,4 +96,4 @@ $template->param(WAITING => \@waiting);
 $template->param(waiting_count => $wcount);
 
 $template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output; 
+print "Content-Type: text/html\n\n", $template->output;

@@ -12,5 +12,4 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 
 my $template = gettemplate("intranet-main.tmpl");
 
-#$template->param(SITE_RESULTS => $sitearray);
 print "Content-Type: text/html\n\n", $template->output;

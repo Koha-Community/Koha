@@ -63,7 +63,7 @@ my $branchoptions = '';
 foreach my $br (keys %$branches) {
     (next) unless $branches->{$br}->{'IS'};
     my $selected = "";
-    if ($br eq 'L') {
+    if ($br eq $branch) {
 	$selected = "selected";
     }
     $branchoptions .= "<option value=$br $selected>$branches->{$br}->{'branchname'}</option>\n";
@@ -172,4 +172,4 @@ if ($query->param('item_types_selected')) {
 
 
 $template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output; 
+print "Content-Type: text/html\n\n", $template->output;

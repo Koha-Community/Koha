@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use CGI;
-use C4::Database;
+use C4::Context;
 use C4::Output;
 
 my $query=new CGI;
@@ -27,6 +27,7 @@ browser.
 
 my $sessions;
 open (S, "/tmp/sessions");
+	# FIXME - Come up with a better logging mechanism
 while (my ($sid, $u, $lasttime) = split(/:/, <S>)) {
     chomp $lasttime;
     (next) unless ($sid);
@@ -41,7 +42,7 @@ foreach (keys %$sessions) {
     print S "$_:$userid:$lasttime\n";
 }
 
-my $dbh=C4Connect;
+my $dbh = C4::Context->dbh;
 
 # Check that this is the ip that created the session before deleting it
 
@@ -56,8 +57,7 @@ if ($sth->rows) {
     }
 }
 
-$sth=$dbh->prepare("delete from sessions where sessionID=?");
-$sth->execute($sessionID);
+$dbh->do("delete from sessions where sessionID=?", $sessionID);
 open L, ">>/tmp/sessionlog";
 my $time=localtime(time());
 printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, $time;

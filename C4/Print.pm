@@ -30,33 +30,89 @@ use vars qw($VERSION @ISA @EXPORT);
 # set the version for version checking
 $VERSION = 0.01;
 
+=head1 NAME
+
+C4::Print - Koha module dealing with printing
+
+=head1 SYNOPSIS
+
+  use C4::Print;
+
+=head1 DESCRIPTION
+
+The functions in this module handle sending text to a printer.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&remoteprint &printreserve &printslip);
 
+=item remoteprint
 
+  &remoteprint($env, $items, $borrower);
+
+Prints the list of items in C<$items> to a printer.
+
+C<$env> is a reference-to-hash. C<$env-E<gt>{queue}> specifies the
+queue to print to; if it is empty or has the special value C<nulllp>,
+C<&remoteprint> will print to the file F</tmp/kohaiss>.
+
+C<$borrower> is a reference-to-hash giving information about a patron.
+This may be gotten from C<&getpatroninformation>. The patron's name
+will be printed in the output.
+
+C<$items> is a reference-to-list, where each element is a
+reference-to-hash describing a borrowed item. C<$items> may be gotten
+from C<&currentissues>.
+
+=cut
+#'
+# FIXME - It'd be nifty if this could generate pretty PostScript.
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
 
   (return) unless (C4::Context->preference('printcirculationslips'));
-  my $file=time;
+  my $file=time;		# FIXME - Not used
   my $queue = $env->{'queue'};
+  # FIXME - If 'queue' is undefined or empty, then presumably it should
+  # mean "use the default queue", whatever the default is. Presumably
+  # the default depends on the physical location of the machine.
+  # FIXME - Perhaps "print to file" should be a supported option. Just
+  # set the queue to "file" (or " file", if real queues aren't allowed
+  # to have spaces in them). Or perhaps if $queue eq "" and
+  # $env->{file} ne "", then that should mean "print to $env->{file}".
   if ($queue eq "" || $queue eq 'nulllp') {
     open (PRINTER,">/tmp/kohaiss");
-  } else {  
-    open(PRINTER, "| lpr -P $queue >/dev/null") or die "Couldn't write to queue:$queue!\n";
-  }  
+  } else {
+    # FIXME - This assumes that 'lpr' exists, and works as expected.
+    # This is a reasonable assumption, but only because every other
+    # printing package has a wrapper script called 'lpr'. It'd still
+    # be better to be able to customize this.
+    open(PRINTER, "| lpr -P $queue > /dev/null") or die "Couldn't write to queue:$queue!\n";
+  }
+#  print $queue;
   #open (FILE,">/tmp/$file");
   my $i=0;
-  my $brdata = $env->{'brdata'};
+  my $brdata = $env->{'brdata'};	# FIXME - Not used
+  # FIXME - This is HLT-specific. Put this stuff in a customizable
+  # site-specific file somewhere.
   print PRINTER "Horowhenua Library Trust\r\n";
 #  print PRINTER "$brdata->{'branchname'}\r\n";
-  print PRINTER "Phone: 368-1953\r\n";   
-  print PRINTER "Fax:    367-9218\r\n";   
+  print PRINTER "Phone: 368-1953\r\n";
+  print PRINTER "Fax:    367-9218\r\n";
   print PRINTER "Email:  renewals\@library.org.nz\r\n\r\n\r\n";
   print PRINTER "$borrower->{'cardnumber'}\r\n";
   print PRINTER "$borrower->{'title'} $borrower->{'initials'} $borrower->{'surname'}\r\n";
+  # FIXME - Use   for ($i = 0; $items->[$i]; $i++)
+  # Or better yet,   foreach $item (@{$items})
   while ($items->[$i]){
+#    print $i;
     my $itemdata = $items->[$i];
+    # FIXME - This is just begging for a Perl format.
     print PRINTER "$i $itemdata->{'title'}\r\n";
     print PRINTER "$itemdata->{'barcode'}";
     print PRINTER " "x15;
@@ -66,7 +122,7 @@ sub remoteprint {
   print PRINTER "\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
   if ($env->{'printtype'} eq "docket"){
     #print chr(27).chr(105);
-  } 
+  }
   close PRINTER;
   #system("lpr /tmp/$file");
 }
@@ -112,8 +168,20 @@ EOF
   return $slip;
 }
 
+=item printslip
+
+  &printslip($env, $text)
+
+Prints the string C<$text> to a printer. C<$env-E<gt>{queue}>
+specifies the queue to print to.
+
+If C<$env-E<gt>{queue}> is empty or set to C<nulllp>, C<&printslip>
+will print to the file F</tmp/kohares>.
+
+=cut
+#'
+# FIXME - There's also a &printslip in circ/circulation.pl
 sub printslip {
-	warn "PRINTSLIP\n";
   my($env, $slip)=@_;
   my $printer = $env->{'printer'};
   (return) unless (C4::Context->preference('printcirculationslips'));
@@ -127,5 +195,18 @@ sub printslip {
 }
 
 END { }       # module clean-up code here (global destructor)
-  
-    
+
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+C4::Circulation::Circ2(3)
+
+=cut

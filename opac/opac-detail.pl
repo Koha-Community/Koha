@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-use C4::Output;  # contains picktemplate
+use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Search;
 use C4::Auth;
- 
+
 my $query=new CGI;
 
 
@@ -24,7 +24,7 @@ $template->param(biblionumber => $biblionumber);
 
 
 # change back when ive fixed request.pl
-my @items                                 = &ItemInfo(undef, $biblionumber, 'intra');
+my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
 my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);

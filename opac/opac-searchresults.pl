@@ -4,8 +4,8 @@ require Exporter;
 use CGI;
 use C4::Search;
 use C4::Auth;
-use C4::Output; # now contains picktemplate
-  
+use C4::Output; # now contains gettemplate
+
 my $query=new CGI;
 
 my $flagsrequired;
@@ -55,8 +55,8 @@ $template->param(FORMINPUTS => $forminputs);
 
 # do the searchs ....
 my $env;
-$env->{'itemcount'}=1;
-my $num = 10;
+$env->{itemcount}=1;
+my $num=10;
 my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
@@ -77,12 +77,6 @@ foreach my $res (@results) {
     $res->{'norequests'} = $norequests;
 }
 
-my $debug = "";
-foreach my $res (@results) {
-    $debug .= "title : $res->{'title'} <br>";
-    $debug .= "biblionumber : $res->{'biblionumber'} <br>";
-    $debug .= "location : $res->{'location'} <br><hr><br>x";
-}
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
@@ -125,6 +119,5 @@ $template->param(numbers => $numbers);
 
 $template->param(loggedinuser => $loggedinuser);
 
-#print $query->header(-cookie => $cookie), $debug, $template->output;
-print $query->header(-cookie => $cookie),  $template->output;
+print $query->header(-cookie => $cookie), $template->output;
 
