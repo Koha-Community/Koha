@@ -106,7 +106,27 @@ if ($missing !=1) {
 	    push(@inputs, { 'key'	=> $key,
 			    'value'	=> CGI::escapeHTML($value) });
 	}
-	$template->param(inputsloop => \@inputs);
+    $template->param(institution_name => $data{institution_name},
+		     bornum => $data{'borrowernumber'},
+		     cardnumber_institution => $data{'cardnumber_institution'},
+		     memcat => $data{'categorycode'},
+		     branchcode => $data{'branchcode'},
+		     sex => $data{sex},
+		     postal => $data{postal},
+		     home => $data{home},
+			zipcode => $data{'zipcode'},
+			homezipcode => $data{'homezipcode'},
+		     phone => $data{'phone'},
+		     phoneday => $data{'phoneday'},
+		     faxnumber => $data{'faxnumber'},
+		     emailaddress => $data{'emailaddress'},
+			textmessaging => $data{'textmessaging'},
+		     contactname => $data{'contactname'},
+		     altphone => $data{'altphone'},
+		     altrelationship => $data{'altrelationship'},
+		     altnotes => $data{'altnotes'},
+		     bornotes => $data{'borrowernotes'},
+		     inputsloop => \@inputs);
     }
 }
 output_html_with_http_headers $input, $cookie, $template->output;
