@@ -38,8 +38,6 @@ my $op = $query->param('op');
 
 my $dbh = C4::Context->dbh;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
-
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 my ($template, $loggedinuser, $cookie);
@@ -65,7 +63,8 @@ if ($op eq "do_search") {
 				query => $query,
 				type => $type,
 				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
+				flagsrequired => {borrowers => 1},
+#				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
 	$template->param(result => \@results);
