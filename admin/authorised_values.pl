@@ -184,13 +184,16 @@ if ($op eq 'add_form') {
 	$template->param(loop => \@loop_data,
 							tab_list => $tab_list,
 							category => $searchfield);
+
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param("<a href=$script_name?offset=".$prevpage.'&lt;&lt; Prev</a>');
+		$template->param(previous => "<a href=\"$script_name?offset=".$prevpage.'">');
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param("a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
+		$template->param(next => "<a href=\"$script_name?offset=".$nextpage.'">');
+
+
 	}
 } #---- END $OP eq DEFAULT
 
