@@ -997,7 +997,7 @@ sub getmysqldir {
     }
     if (!$mysqldir){
 	for (;;) {
-	    $mysqldir = showmessage(getmessage('WhereisMySQL'),'free');
+	    $mysqldir = showmessage(getmessage('WhereIsMySQL'),'free');
 	    last if -f "$mysqldir/bin/mysqladmin";
 	}
     }
@@ -2079,10 +2079,10 @@ sub backupmycnf {
 }
 
 sub restoremycnf {
-	if (-e $mycnf) {
+	if (defined $mycnf && -e $mycnf) {
 		unlink($mycnf);
 	}
-	if (-e $mytmpcnf) {
+	if (defined $mytmpcnf && -e $mytmpcnf) {
 		rename $mytmpcnf,$mycnf;
 	}
 }
