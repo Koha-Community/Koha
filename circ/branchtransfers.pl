@@ -37,6 +37,7 @@ foreach (keys %$branches) {
 }
 
 # collect the stack of books already transfered so they can printed...
+my @messages;
 my %transfereditems;
 my $ritext = '';
 my %frbranchcds;
@@ -44,7 +45,6 @@ my %tobranchcds;
 foreach ($query->param){
     (next) unless (/bc-(\d*)/);
     my $counter=$1;
-    (next) if ($counter>20);
     my $barcode=$query->param("bc-$counter");
     my $frbcd=$query->param("fb-$counter");
     my $tobcd=$query->param("tb-$counter");
@@ -59,7 +59,7 @@ foreach ($query->param){
 
 #if the barcode has been entered action that and write a message and onto the top of the stack...
 my $iteminformation;
-my @messages;
+
 my $todaysdate;
 if (my $barcode=$query->param('barcode')) {
     my $iteminformation = getiteminformation(\%env,0, $barcode);
@@ -92,21 +92,19 @@ if (my $barcode=$query->param('barcode')) {
 
 my $entrytext= << "EOF";
 <form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
-<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd >
+<table border=0 cellpadding=5 cellspacing=0 bgcolor='#dddddd' >
 <tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
 <font color=black><b>Select Branch</b></font></td></tr>
-<tr><td>Destination Branch:</td><td>
- <select name=tobranchcd> $tobranchoptions </select>
-</td></tr>
-
-</table><table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd >
-<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
+<tr><td>Destination Branch:</td>
+    <td><select name=tobranchcd> $tobranchoptions </select></td></tr></table>    
+<table border=0 cellpadding=5 cellspacing=0 bgcolor='#dddddd' ><tr>
+<td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
 <font color=black><b>Enter Book Barcode</b></font></td></tr>
 <tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
 </table>
-
 <input type=hidden name=tobranchcd value=$tobranchcd>
 $ritext
+</form>
 EOF
 
 my $messagetable;
@@ -166,31 +164,4 @@ EOF
 
 print endmenu('circulation');
 print endpage;
-
-
-############################################################################
-#
-# this is the database query that will go into C4::Circuation::Circ2
-#
-
-use DBI;
-use C4::Database;
-
-sub transferbook {
-    my ($env, $iteminformation, $barcode) = @_;
-    my $messages;
-    my $dbh=&C4Connect;
-    #new entry in branchtransfers....
-    my $sth = $dbh->prepare("insert into branchtransfers (itemnumber, frombranch, datearrived, tobranch) values($iteminformation->{'itemnumber'}, '$env->{'frbranchcd'}', now(), '$env->{'tobranchcd'}')");
-    $sth->execute || return (0,"database error: $sth->errstr");
-    $sth->finish;
-    #update holdingbranch in items .....
-    $sth = $dbh->prepare("update items set holdingbranch='$env->{'tobranchcd'}' where items.itemnumber=$iteminformation->{'itemnumber'}");
-    $sth->execute || return (0,"database error: $sth->errstr");
-    $sth->execute;
-    $sth->finish;
-    $dbh->disconnect;
-    return (1, $messages);
-}
-
 
