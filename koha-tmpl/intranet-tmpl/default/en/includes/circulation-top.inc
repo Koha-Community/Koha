@@ -25,7 +25,9 @@ function leapto(form) {
 }
 function focusinput() {
     	window.onerror=null;
-    	document.forms[0].elements[0].focus();
+	if (document.forms[0]) {
+	    document.forms[0].elements[0].focus();
+	}
 }
 function messenger(url, x, y){
         window1=window.open(url,"window1","height"+x+",width="+y+",left=150,top=50,350,screenY=50");

@@ -26,7 +26,9 @@ parent.location.href=(form.dest.options[myindex].value);
 
 function focusinput() {
     window.onerror=null;
-    document.forms[0].elements[0].focus();
+    if (document.forms[0]) {
+	document.forms[0].elements[0].focus();
+    }
 }
        
 if (document.images){
