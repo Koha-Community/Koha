@@ -240,8 +240,7 @@ sub delorder {
   $sth->finish;
   my $count=itemcount($bibnum);
   if ($count == 0){
-    delbiblio($bibnum);		# This is C4::Biblio::delbiblio, not
-				# C4::Acquisitions::delbiblio
+    delbiblio($bibnum);
   }
 }
 
@@ -262,7 +261,6 @@ table are also updated to the new book fund ID.
 
 =cut
 #'
-# FIXME - This function appears in C4::Acquisitions
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh = C4::Context->dbh;
@@ -450,6 +448,8 @@ tables of the Koha database.
 
 =cut
 #'
+# FIXME - This is effectively identical to &C4::Biblio::getorder.
+# Pick one and stick with it.
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
@@ -478,9 +478,9 @@ aqorderbreakdown tables of the Koha database.
 
 =cut
 #'
-# FIXME - This is basically the same thing as
-# C4::Acquisitions::getsingleorder. Figure out where it goes and nuke
-# the other one.
+# FIXME - This is effectively identical to
+# &C4::Biblio::getsingleorder.
+# Pick one and stick with it.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -823,8 +823,7 @@ sub updatecurrencies {
   $sth->finish;
 }
 
-# FIXME - Identical to &C4::Acquisitions::updatecost. Neither one is
-# used
+# FIXME - This is never used
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
   my $dbh = C4::Context->dbh;
