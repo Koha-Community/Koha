@@ -66,7 +66,7 @@ $template->param(branchname => $branches->{$branch}->{'branchname'});
 my $branchoptions = '';
 my @branches;
 foreach my $br (keys %$branches) {
-    (next) unless $branches->{$br}->{'IS'};
+    #(next) unless $branches->{$br}->{'IS'}; # FIXME disabled to fix bug 202
     my $selected = "";
     if ($br eq $branch) {
 	$selected = "selected";
@@ -94,6 +94,7 @@ my @duedates;
 foreach my $itm (@items) {
     push @duedates, {date_due => slashifyDate($itm->{'date_due'})} if defined $itm->{'date_due'};
     $itm->{$itm->{'publictype'}} = 1;
+    # FIXME CalcReserveFee is supposed to be internal-use-only
     my $fee  = CalcReserveFee(undef, $borrowernumber, $itm->{'biblionumber'},'a',($itm->{'biblioitemnumber'}));
     $fee = sprintf "%.02f", $fee;
     $itm->{'reservefee'} = $fee;
