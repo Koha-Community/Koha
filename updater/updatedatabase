@@ -135,6 +135,7 @@ my %requirefields=(
 	       'required_date' => 'date',
 	       'expires_date' => 'date'},
     reserveconstraints=>{'reserveid' => 'int'},
+    itemtypes=>{'publictype' => 'char(30)'},
 );
 
 # Default system preferences
@@ -424,6 +425,10 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.30  2002/11/26 04:42:33  finlayt
+#
+# Added the publictype field to the itemtypes table. This is used in the hlt opac to assign images to each of the types.
+#
 # Revision 1.4.2.29  2002/11/12 17:30:35  tonnesen
 # change bookfundid to primary key in aqbookfund
 #
