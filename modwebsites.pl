@@ -26,6 +26,7 @@ use C4::Search;
 use CGI;
 use C4::Output;
 use HTML::Template;
+use C4::Auth;
 
 my $input = new CGI;
 my $biblionumber       = $input->param('biblionumber');
@@ -38,7 +39,14 @@ if ($biblionumber eq '') {
 #print $input->header;
 #print startpage();
 #print startmenu();
-my $template = gettemplate("modwebsites.tmpl");
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+                            template_name   => "modwebsites.tmpl",
+                              query           => $input,
+                              type            => "intranet",
+                              flagsrequired   => {catalogue => 1},
+                      });
+
+
 
 my @websitesloop;
 for (my $i = 0; $i < $count; $i++) {
