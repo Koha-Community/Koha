@@ -22,8 +22,7 @@ use strict;
 require Exporter;
 #use C4::InterfaceCDK;
 
-# Database is only used for configfile, remove this once Context.pm is used
-use C4::Database;
+use C4::Context;
 
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -38,14 +37,13 @@ $VERSION = 0.01;
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
 
-  my $config=configfile();
-  (return) unless ($config->{printcirculationslips});
+  (return) unless (C4::Context->preference('printcirculationslips'));
   my $file=time;
   my $queue = $env->{'queue'};
   if ($queue eq "" || $queue eq 'nulllp') {
     open (PRINTER,">/tmp/kohaiss");
   } else {  
-    open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$queue!\n";
+    open(PRINTER, "| lpr -P $queue >/dev/null") or die "Couldn't write to queue:$queue!\n";
   }  
   #open (FILE,">/tmp/$file");
   my $i=0;
@@ -77,12 +75,11 @@ sub printreserve {
   my($env, $branchname, $bordata, $itemdata)=@_;
   my $file=time;
   my $printer = $env->{'printer'};
-  my $config=configfile();
-  (return) unless ($config->{'printreserveslips'});
+  (return) unless (C4::Context->preference('printreserveslips'));
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">>/tmp/kohares");
   } else {
-    open (PRINTER, "| lpr -P $printer") or die "Couldn't write to queue:$!\n";
+    open (PRINTER, "| lpr -P $printer >/dev/null") or die "Couldn't write to queue:$!\n";
   }
   my @da = localtime(time());
   my $todaysdate = "$da[2]:$da[1]  $da[3]/$da[4]/$da[5]";
@@ -116,14 +113,14 @@ EOF
 }
 
 sub printslip {
+	warn "PRINTSLIP\n";
   my($env, $slip)=@_;
   my $printer = $env->{'printer'};
-  my $config=configfile();
-  (return) unless ($config->{printcirculationslips});
+  (return) unless (C4::Context->preference('printcirculationslips'));
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">/tmp/kohares");
   } else {
-    open (PRINTER, "| lpr -P $printer") or die "Couldn't write to queue:$!\n";
+    open (PRINTER, "| lpr -P $printer >/dev/null") or die "Couldn't write to queue:$!\n";
   }
   print PRINTER $slip;
   close PRINTER;
