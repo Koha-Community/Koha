@@ -96,17 +96,17 @@ sub plugin {
 		my $req= $dbh->prepare("SELECT distinctrow bibid,biblionumber FROM `marc_biblio` WHERE biblionumber= ?");
 		$req->execute($bibnum);
 		($bibid,$bibnum) = $req->fetchrow;
-		warn "bibid :".$bibid;
+#		warn "bibid :".$bibid;
 		#get marc record
 		$marcrecord = MARCgetbiblio($dbh,$bibid);
-		warn "record : ".$marcrecord->as_formatted;
+#		warn "record : ".$marcrecord->as_formatted;
 # 		my @loop_data =();
 # 		my $tag;
 # 		my @loop_data =();
 # 		my @subfields_data;
 		
 		my $subfield_value_9=$bibid;
-		my $subfield_value_0=$marcrecord->field('001');
+		my $subfield_value_0=$marcrecord->field('001')->data;
 		my $subfield_value_a;
 		if ($marcrecord->field('200')){
 			$subfield_value_a=$marcrecord->field('200')->subfield("f");
