@@ -4,6 +4,7 @@ use DBI;
 #use strict;
 use C4::Acquisitions;
 use C4::Biblio;
+use C4::Context;
 use C4::Output;
 use Net::Z3950;
 
@@ -29,7 +30,7 @@ if ($< == 0) {
     $<=$uid;
 }
 
-my $dbh=C4Connect;
+my $dbh=C4::Context->dbh();
 
 my $sth=$dbh->prepare("update z3950results set active=0");
 $sth->execute;
@@ -58,6 +59,7 @@ while (1) {
 	    while (my ($id, $term, $type, $servers) = $sth->fetchrow) {
 		if ($forkcounter<12) {
 		    my $now=time();
+		    my $dbh=C4::Context->dbh();
 		    $stk=$dbh->prepare("select id,server,startdate,enddate,numrecords,active from z3950results where queryid=$id");
 		    ($stk->execute) || (next);
 		    my %serverdone;
@@ -99,10 +101,7 @@ while (1) {
 			if (my $pid=fork()) {
 			    $forkcounter++;
 			} else {
-			    #$sth->finish;
-			    #$sti->finish;
-			    #$dbh->disconnect;
-			    my $dbi=C4Connect;
+			    my $dbi=C4::Context->dbh();
 			    my ($name, $server, $database, $user, $password) = split(/\//, $serverinfo, 5);
 			    $server=~/(.*)\:(\d+)/;
 			    my $servername=$1;
@@ -217,7 +216,6 @@ while (1) {
 			    my $stj=$dbi->prepare("update z3950results set active=0 where id=$resultsid");
 			    $stj->execute;
 			    eval {$stj->finish};
-			    $dbi->disconnect;
 			    print "    $server done.\n";
 			    exit;
 			    sub pe {
