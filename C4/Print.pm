@@ -75,7 +75,7 @@ from C<&currentissues>.
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
 
-  (return) unless (C4::Context->preference('printcirculationslips'));
+  (return) unless (C4::Context->boolean_preference('printcirculationslips'));
   my $file=time;		# FIXME - Not used
   my $queue = $env->{'queue'};
   # FIXME - If 'queue' is undefined or empty, then presumably it should
@@ -131,7 +131,7 @@ sub printreserve {
   my($env, $branchname, $bordata, $itemdata)=@_;
   my $file=time;
   my $printer = $env->{'printer'};
-  (return) unless (C4::Context->preference('printreserveslips'));
+  (return) unless (C4::Context->boolean_preference('printreserveslips'));
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">>/tmp/kohares");
   } else {
@@ -184,7 +184,7 @@ will print to the file F</tmp/kohares>.
 sub printslip {
   my($env, $slip)=@_;
   my $printer = $env->{'printer'};
-  (return) unless (C4::Context->preference('printcirculationslips'));
+  (return) unless (C4::Context->boolean_preference('printcirculationslips'));
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">/tmp/kohares");
   } else {
