@@ -84,6 +84,7 @@ my %requirefields=(
 		'url' => 'varchar(255)',
 		'marc' => 'text' },
     branchtransfers=>{ 'datearrived' => 'datetime' },
+    statistics=>{'borrowernumber' =>'int(11)'},
 );
 
 #-------------------
@@ -254,6 +255,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.7  2002/06/24 22:01:26  rangi
+# Have added missing borrowernumber field to the statistics table
+#
 # Revision 1.4.2.6  2002/06/20 15:07:08  amillar
 # Add table ethnicity
 #
