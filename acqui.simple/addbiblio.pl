@@ -196,7 +196,7 @@ sub build_tabs ($$$$) {
     my $i=0;
 	my $authorised_values_sth = $dbh->prepare("select authorised_value,lib
 		from authorised_values
-		where category=? order by authorised_value");
+		where category=? order by lib");
 
 # loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
@@ -323,7 +323,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {catalogue => 1},
+			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
 
