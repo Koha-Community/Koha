@@ -19,6 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.32  2003/06/11 18:37:55  tonnesen
+# Using boolean_preference instead of preference for 'marc' setting
+#
 # Revision 1.31  2003/05/11 07:31:37  rangi
 # Removing duplicate use C4::Auth
 #
@@ -197,7 +200,7 @@ if ($count>10) {
 }
 
 $template->param(numbers => \@numbers);
-if (C4::Context->preference('marc') eq 'on') {
+if (C4::Context->boolean_preference('marc') eq '1') {
 	$template->param(script => "MARCdetail.pl");
 } else {
 	$template->param(script => "detail.pl");
