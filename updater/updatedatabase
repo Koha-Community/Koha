@@ -243,6 +243,8 @@ my %requirefields = (
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
     systempreferences => { 'explanation' => 'char(80)' },
     z3950servers      => { 'syntax'      => 'char(80)' },
+    borrowers => {'zipcode' => 'varchar(25)',
+    						'homezipcode' => 'varchar(25)'}
 );
 
 my %dropable_table = (
@@ -778,6 +780,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.47  2003/05/15 12:23:33  tipaul
+# adding zipcode and homezipcode into borrowers table (bug #246
+#
 # Revision 1.46  2003/05/08 12:48:24  wolfpac444
 # Added "noissuescharge" parameter
 #
