@@ -283,7 +283,7 @@ Press <ENTER> to exit the installer: |;
 
 #'
 sub releasecandidatewarning {
-    my $message=getmessage('ReleaseCandidateWarning', [$::newversion, $::newversion]);
+    my $message=getmessage('ReleaseCandidateWarning', [$newversion, $newversion]);
     my $answer=showmessage($message, 'yn', 'n');
 
     if ($answer =~ /y/i) {

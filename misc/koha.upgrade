@@ -14,15 +14,16 @@ Install::setetcdir($ENV{etcdir}||'/etc');
 my $input;
 loadconfigfile();
 
-($::kohaversion = Install::getkohaversion() ) || ($::kohaversion='unknown version');
-$::newversion=`cat koha.version`;
-chomp $::newversion;
-if ($::newversion =~ /RC/) {
-	releasecandidatewarning();
+my $kohaversion=`cat koha.version`;
+chomp $kohaversion;
+Install::setkohaversion $kohaversion;
+
+
+if ($kohaversion =~ /RC/) {
+    releasecandidatewarning();
 }
 
-#FIXME: need kohaversion number
-my $answer = showmessage(getmessage('WelcomeToUpgrader',[$::kohaversion,$::newversion]),'yn');
+my $answer = showmessage(getmessage('WelcomeToUpgrader',[$kohaversion,$::newversion]),'yn');
 
 unless ($answer =~/y/i) {
 	showmessage(getmessage('AbortingInstall'),'none');
