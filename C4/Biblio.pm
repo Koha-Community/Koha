@@ -1498,25 +1498,26 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
 }
 
 sub OLDdelitem{
-  my ($dbh,$itemnum)=@_;
-#  my $dbh=C4Connect;
-  my $sth=$dbh->prepare("select * from items where itemnumber=?");
-  $sth->execute($itemnum);
-  my $data=$sth->fetchrow_hashref;
-  $sth->finish;
-  my $query="Insert into deleteditems set ";
-  my @bind = ();
-  foreach my $temp (keys %$data){
-    $query .= "$temp = ?,"
-    push(@bind,$data->{$temp});
-  }
+	my ($dbh,$itemnum)=@_;
+	#  my $dbh=C4Connect;
+	my $sth=$dbh->prepare("select * from items where itemnumber=?");
+	$sth->execute($itemnum);
+	my $data=$sth->fetchrow_hashref;
+	$sth->finish;
+	my $query="Insert into deleteditems set ";
+	my @bind = ();
+	foreach my $temp (keys %$data){
+		$query .= "$temp = ?,";
+		push(@bind,$data->{$temp});
+	}
+	$query =~ s/\,$//;
 #  print $query;
-  $sth=$dbh->prepare($query);
-  $sth->execute(@bind);
-  $sth->finish;
-  $sth=$dbh->prepare("Delete from items where itemnumber=?");
-  $sth->execute($itemnum);
-  $sth->finish;
+	$sth=$dbh->prepare($query);
+	$sth->execute(@bind);
+	$sth->finish;
+	$sth=$dbh->prepare("Delete from items where itemnumber=?");
+	$sth->execute($itemnum);
+	$sth->finish;
 #  $dbh->disconnect;
 }
 
@@ -1544,48 +1545,51 @@ where biblioitemnumber = ?");
     } # if
     $sth->finish;
 # Now delete all the items attached to the biblioitem
-    $sth   = $dbh->prepare("Select * from items where biblioitemnumber = ?");
-    $sth->execute($biblioitemnumber);
-    my @results;
-    while (@results = $sth->fetchrow_array) {
-	my $query = "Insert into deleteditems values (";
-	foreach my $value (@results) {
-	    $query .= "?,";
-	} # foreach
-	$query =~ s/\,$/\)/;
-	my $sth2= $dbh->prepare($query);
-	$sth2->execute(@results);
-	$sth2->finish()
-    } # while
-    $sth->finish;
-    $sth = $dbh->prepare("Delete from items where biblioitemnumber = ?");
-    $sth->execute($biblioitemnumber);
-    $sth->finish();
+	$sth   = $dbh->prepare("Select * from items where biblioitemnumber = ?");
+	$sth->execute($biblioitemnumber);
+	my @results;
+	while (my $data = $sth->fetchrow_hashref) {
+		my $query="Insert into deleteditems set ";
+		my @bind = ();
+		foreach my $temp (keys %$data){
+			$query .= "$temp = ?,";
+			push(@bind,$data->{$temp});
+		}
+		$query =~ s/\,$//;
+		warn "Q 1560 : $query";
+		my $sth2=$dbh->prepare($query);
+		$sth2->execute(@bind);
+	} # while
+	$sth->finish;
+	$sth = $dbh->prepare("Delete from items where biblioitemnumber = ?");
+	$sth->execute($biblioitemnumber);
+	$sth->finish();
 #    $dbh->disconnect;
 } # sub deletebiblioitem
 
 sub OLDdelbiblio{
-  my ($dbh,$biblio)=@_;
-  my $sth=$dbh->prepare("select * from biblio where biblionumber=?");
-  $sth->execute($biblio);
-  if (my @data=$sth->fetchrow_array){
-    $sth->finish;
-# FIXME => replace insert values by insert (field) values ($value)
-    $query="Insert into deletedbiblio values (";
-    foreach my $temp (@data){
-      $temp=~ s/\'/\\\'/g;
-      $query .= "?,";
-    }
-    #replacing the last , by ",?)"
-    $query=~ s/\,$/\,\?\)/;
-    $sth=$dbh->prepare($query);
-    $sth->execute(@data);
-    $sth->finish;
-    $sth=$dbh->prepare("Delete from biblio where biblionumber=?");
-    $sth->execute($biblio);
-    $sth->finish;
-  }
-  $sth->finish;
+	my ($dbh,$biblio)=@_;
+	my $sth=$dbh->prepare("select * from biblio where biblionumber=?");
+	$sth->execute($biblio);
+	if (my $data=$sth->fetchrow_hashref){
+		$sth->finish;
+		my $query="Insert into deletedbiblio set ";
+		my @bind =();
+		foreach my $temp (keys %$data){
+			$query .= "$temp = ?,";
+			push(@bind,$data->{$temp});
+		}
+		#replacing the last , by ",?)"
+		$query=~ s/\,$//;
+		warn "Q olddelbiblio : $query";
+		$sth=$dbh->prepare($query);
+		$sth->execute(@bind);
+		$sth->finish;
+		$sth=$dbh->prepare("Delete from biblio where biblionumber=?");
+		$sth->execute($biblio);
+		$sth->finish;
+	}
+	$sth->finish;
 }
 
 #
@@ -2188,6 +2192,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.77  2003/12/03 17:47:14  tipaul
+# bugfixes for biblio deletion
+#
 # Revision 1.76  2003/12/03 01:43:41  slef
 # conflict markers?
 #
@@ -2521,7 +2528,6 @@ Paul POULAIN paul.poulain@free.fr
 # In Biblio.pm, there are some subs that permits to build a old-style record from a MARC::Record, and the opposite. There is also a sub finding a MARC-bibid from a old-biblionumber and the opposite too.
 # Note we have decided with steve that a old-biblio <=> a MARC-Biblio.
 #
-<<<<<<< Biblio.pm
 
 sub itemcount{
   my ($biblio)=@_;

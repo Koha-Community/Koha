@@ -213,7 +213,7 @@ my %requiretables = (
 my %requirefields = (
     biblio        => { 'abstract' => 'text' },
     deletedbiblio => { 'abstract' => 'text', 'marc' => 'blob' },
-    deleteditems => { 'marc' => 'blob' },
+    deleteditems => { 'marc' => 'blob', 'paidfor' => 'text' },
     biblioitems   => {
         'lccn' => 'char(25)',
         'url'  => 'varchar(255)',
@@ -240,6 +240,7 @@ my %requirefields = (
     },
     aqorders => { 'budgetdate' => 'date' },
     aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment primary key'},
+    items => {'paidfor' => 'text'},
 
     #added so that reference items are not available for reserves...
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
@@ -970,6 +971,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.68  2003/12/03 17:47:14  tipaul
+# bugfixes for biblio deletion
+#
 # Revision 1.67  2003/11/28 10:08:33  tipaul
 # * removing too verbose messages.
 # * creating a fulltext index on bibliothesaurus
