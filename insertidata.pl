@@ -60,29 +60,45 @@ if (my $data2=$sth->fetchrow_hashref){
 	textmessaging=?, branchcode = ?,
 	zipcode = ?,homezipcode=?
 	where borrowernumber=?");
-	$sth2->execute($data{'title'},$data{'expiry'},$data{'cardnumber_institution'},$data{'sex'},$data{'ethnicnotes'},$data{'address'},$data{'faxnumber'},$data{'firstname'},$data{'altnotes'},$data{'dateofbirth'},$data{'contactname'},$data{'emailaddress'},$data{'joining'},$data{'streetcity'},$data{'altrelationship'},$data{'othernames'},$data{'phoneday'},$data{'city'},$data{'area'},$data{'phone'},$data{'borrowernotes'},$data{'altphone'},$data{'institution_name'},$data{'initials'},$data{'streetaddress'},$data{'ethnicity'},$data{'gna'},$data{'lost'},$data{'debarred'},$data{'textmessaging'},$data{'branchcode'},$data{'zipcode'},$data{'homezipcode'},$data{'borrowernumber'});
+	$sth2->execute($data{'title'},$data{'expiry'},
+	$data{'cardnumber_institution'},$data{'sex'},$data{'ethnicnotes'},
+	$data{'address'},$data{'faxnumber'},$data{'firstname'},
+	$data{'altnotes'},$data{'dateofbirth'},$data{'contactname'},
+	$data{'emailaddress'},$data{'joining'},$data{'streetcity'},
+	$data{'altrelationship'},$data{'othernames'},$data{'phoneday'},
+	$data{'city'},$data{'area'},$data{'phone'},
+	$data{'borrowernotes'},$data{'altphone'},$data{'institution_name'},
+	$data{'initials'},$data{'streetaddress'},$data{'ethnicity'},
+	$data{'gna'},$data{'lost'},$data{'debarred'},
+	$data{'textmessaging'},$data{'branchcode'},
+	$data{'zipcode'},$data{'homezipcode'},
+	$data{'borrowernumber'});
 } else {
 	my $surname=$data{'institution_name'};
-	$sth2=$dbh->prepare("insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
-	firstname,altnotes,dateofbirth,contactname,emailaddress,dateenrolled,streetcity,
-	altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-	initials,ethnicity,borrowernumber,guarantor,school,branchcode,zipcode,homezipcode)
-	values ('',?,?,
-	'',?,?,?,
-	?,?,'',?,
-	?,
-	now(),?,?,?,
-	?,'I',?,?,?,
-	?,?,?,
-	?,?,'','',?,?,?)");
-	$sth2->execute($data{'expiry'},$data{'cardnumber_institution'},
-	$data{'ethnotes'},$data{'address'},$data{'faxnumber'},
-	$data{'firstname'},$data{'altnotes'},$data{'contactname'},
-	$data{'emailaddress'},
-	$data{'streetcity'},$data{'altrelationship'},$data{'othernames'},
-	$data{'phoneday'},$data{'city'},$data{'area'},$data{'phone'},
-	$data{'borrowernotes'},$data{'altphone'},$surname,$data{'initials'},
-	$data{'ethnicity'},$data{'borrowernumber'},$data{'branchcode'},$data{'zipcode'},$data{'homezipcode'});
+	# note for code reading : 5 on each line
+	$sth2=$dbh->prepare("insert into borrowers (
+			title,			expiry,		cardnumber,	sex,		ethnotes,
+			streetaddress,	faxnumber,	firstname,		altnotes,	dateofbirth,
+			contactname,	emailaddress,	dateenrolled,	streetcity,	altrelationship,
+			othernames,	phoneday,		categorycode,	city,		area,
+			phone,		borrowernotes,	altphone,		surname,	initials,
+			ethnicity,		borrowernumber,guarantor,		school,	branchcode,
+			zipcode,		homezipcode)
+	values (	?,?,?,?,?,
+			?,?,?,?,?,
+			?,?,now(),?,?,
+			?,?,?,?,?,
+			?,?,?,?,?,
+			?,?,?,?,?,
+			?,?
+			)");
+	$sth2->execute('',				$data{'expiry'},			$data{'cardnumber_institution'},	'',				$data{'ethnotes'},
+				$data{'address'},	$data{'faxnumber'},		$surname,					$data{'altnotes'},	'',
+				$data{'contactname'},$data{'emailaddress'},	$data{'streetcity'},			$data{'altrelationship'}, # only 4 because of now()
+				$data{'othernames'},	$data{'phoneday'},		'I',						$data{'city'},		$data{'area'},
+				''.$data{'phone'},		$data{'borrowernotes'},	$data{'altphone'},			$surname,			''.$data{'initials'},
+				$data{'ethnicity'},	$data{'borrowernumber'},	'',						'',				$data{'branchcode'},
+				$data{'zipcode'},	$data{'homezipcode'});
 }
 
 $sth2->finish;
