@@ -1,0 +1,100 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+	<div class="bloc20">
+		<h2>記錄是否正確？</h2>
+		<p>借書證：<!-- TMPL_VAR NAME="cardnumber" --> </p>
+		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) </p>
+		<p><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p>
+		<p><!-- TMPL_VAR NAME="phone" --> (住宅)</p>
+		<p><!-- TMPL_VAR NAME="faxnumber" --> (辦公室)</p>
+		<p><!-- TMPL_VAR NAME="emailaddress" --></p>
+		<p><a href="/cgi-bin/koha/opac-userupdate.pl" class="button">更新紀錄</a></p>
+	</div>
+	<!-- TMPL_IF NAME="amountoverfive" -->
+	<div class="bloc20">
+		<h2>您尚欠款項 <!-- TMPL_VAR NAME="amountoutstanding" --></b>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">查看帳戶</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="amountoverzero" -->
+	<div class="bloc20">
+		<h2>您尚欠款項 <!-- TMPL_VAR NAME="amountoutstanding" --></h2>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">查看帳戶</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME"amountlessthanzero" -->
+	<div class="bloc20">
+		<p>您有 <!-- TMPL_VAR NAME="amountoutstanding" --> 結餘</p>
+		<a href="/cgi-bin/koha/opac-account.pl" class="button">查看帳戶</a>
+	</div>
+	<!-- /TMPL_IF -->
+
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="waiting_count" -->
+<div class="bloc60">
+	<h2>您可取書的預約圖書資料：</h2>
+	<ul>
+		<!-- TMPL_LOOP NAME="WAITING" -->
+			<li><!-- TMPL_VAR NAME="btitle" -->，取書處：<b><!-- TMPL_VAR NAME="branch" --></b></li>
+		<!-- /TMPL_LOOP -->
+	</ul>
+</div>
+<!-- /TMPL_IF -->
+
+<div class="bloc60">
+	<!-- TMPL_IF NAME="issues_count" -->
+		<h2>您目前借了 <b><!-- TMPL_VAR NAME="issues_count" --></b> 項圖書資料。</h2>
+		<table>
+			<tr>
+				<th>題名</th>
+				<th>著者</th>
+				<th>歸還日期</th>
+				<th>圖書資料類別</th>
+				<th>條碼</th>
+				<th>費用</th>
+				<th>可續借</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="ISSUES" -->
+				<tr>
+					<td><!-- TMPL_VAR NAME="title" --></td>
+					<td><!-- TMPL_VAR NAME="author" --></td>
+					<td><!-- TMPL_VAR NAME="date_due" --></td>
+					<td><!-- TMPL_VAR NAME="itemtype" --></td>
+					<td><!-- TMPL_VAR NAME="barcode" --></td>
+					<td><!-- TMPL_IF NAME="charges" -->是<!-- TMPL_ELSE -->否<!-- /TMPL_IF --></td>
+					<td><!-- TMPL_IF NAME="status" -->是<!-- TMPL_ELSE -->否<!-- /TMPL_IF --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+	<!-- TMPL_ELSE -->
+		<h2>您沒有借出任何圖書資料。</h2>
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_IF NAME="reserves_count" -->
+<div class="bloc60">
+	<h2>您目前預約了 <b><!-- TMPL_VAR NAME="reserves_count" --></b> 項圖書資料。</h2>
+	<table cellspacing="0" align="center">
+		<tr>
+			<th>題名</th>
+			<th>著者</th>
+			<th>預約日期</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="RESERVES" -->
+			<tr valign="top">
+			<td><!-- TMPL_VAR NAME="btitle" --></td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="reservedate" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<br />
+</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title><!--TMPL_VAR name="LibraryName"--></title>
+</head>
+
+<body>
+<div id="leftbloc">
+	<img class="relative" src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="Koha" alt="Koha">
+</div>
+
+<div id="homebloc">
+	<h1 class="LibraryName"><TMPL_VAR name="LibraryName"></h1>
+	<h2>查詢館藏</h2>
+	<form action="/cgi-bin/koha/opac-search.pl">
+		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			快速搜尋：<input type="text" size="27" name="value" tabindex="1" /> <input type="submit" value="好!" class="button"><br />
+		</p>
+		<p>
+			<a href="/cgi-bin/koha/opac-search.pl" class="button">進階查詢（更多選項）	</a>
+		</p>
+	</form>
+
+	<h2>新書</h2>
+	<form action="/cgi-bin/koha/opac-search.pl">
+		<p>
+			近日採購的<!-- TMPL_VAR name="CGIitemtype" -->（由最新至最舊）
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="orderby" value="biblio.timestamp desc">
+			<input type="submit" value="好!" class="button">
+		</p>
+	</form>
+	<h2>其他選項</h2>
+	<!-- TMPL_IF NAME="loggedinusername" -->
+		<!-- TMPL_IF name="virtualshelves" -->
+			<a href="/cgi-bin/koha/opac-shelves.pl" class="button">虛擬書架</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="suggestion" -->
+			<a href="opac-suggestions.pl" class="button">檢示及維護新書建議</a>
+		<!-- /TMPL_IF -->
+		<a href="/cgi-bin/koha/opac-user.pl" class="button"><!-- TMPL_VAR NAME="loggedinusername" --> 之個人主頁</a>　<a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button">登出</a>
+		<!-- TMPL_IF name="textmessaging"-->
+			<h2>圖書館通告</h2>
+			<!-- TMPL_VAR name="textmessaging" -->
+		<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE -->
+		<p>如欲使用個人選項，請先<a href="/cgi-bin/koha/opac-user.pl">登入</a> Koha。</p>
+	<!-- /TMPL_IF -->
+	<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+		<select name="language">
+			<TMPL_LOOP NAME="languages">
+				<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+			</TMPL_LOOP>
+		</select>
+		<input type="submit" value="選擇語文" class="button">
+	</form>
+	<p class="copyright">
+		本館採用 <a href="http://www.koha.org">Koha</a> 整合圖書館系統，一套依隨互聯網標準的自由軟體。<a href="http://validator.w3.org/check/referer">
+			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="有效的 XHTML 1.0!" height="16" width="44">
+		</a>
+	</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+
+<h1 class="catalogue">館藏查詢</h1>
+
+<form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
+	
+	<div id="bloc60">
+		<h2 class="catalogue">查詢條件：</h2>
+		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+			<label class="label20">任何字詞</label>
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">題名</label>
+			<input type="hidden" name="marclist" value="biblio.title" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">著者</label> <input type="hidden" name="marclist" value="biblio.author" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">主題</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />  
+			<input type="text" name="value" onchange="sql_update()" size="35" />
+		</p>
+		<p>
+			<label class="label20">集叢題名</label>
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35"/>
+		</p>
+		<p>
+			<label class="label20">圖書資料類別</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<!-- TMPL_VAR name="CGIitemtype" -->
+		</p>
+		<p>
+				<label class="label20">分館</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+				<!-- TMPL_VAR name="CGIbranch" -->
+		</p>
+	</div>
+	<div id="bloc20">
+		<h2>其他選項</h2>
+		<p>
+				<label class="label20">圖書資料條碼</label>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="start" />
+				<input type="text" name="value" onchange="sql_update()" /> 
+		</p>
+		<p>
+			<label class="label20">索書號</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="start" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">國際標準書號</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">出版者</label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">出版年介於</label>
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value=">=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" /> 及
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="<=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+		</p>
+		<p>每頁顯示筆數：
+			<select name="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		</p>
+		<p>排序方式：
+			<select name="orderby" size="1">
+				<option value="biblio.title">題名</option>
+				<option value="biblio.author">著者</option>
+				<option value="biblioitems.dewey">杜威分類號</option>
+				<option value="biblioitems.publicationyear">出版年</option>
+				<option value="biblioitems.publishercode">出版者</option>
+				<option value="biblio.timestamp desc">採購日期</option>
+			</select>
+		</p>
+	</div>
+	<p>
+		<input type="submit" value="開始查詢" class="button catalogue">
+		<input type="reset" value="Clear all" class="button catalogue" />
+	</p>
+	<div id="bloc60">
+		<h2>提示</h2>
+		<h3>題名</h3>
+		<p>You can enter a complete or a part of a title. The search will also be done in subtitles and other title related fields</p>
+		<h3>著者</h3>
+		<p>您可以輸入著者的姓或名。附加著者及其他有關的欄位（譯者、繪圖等等）也會列入搜尋範圍之內。</p>
+		<p>請注意，圖書資料的題名可能是關於一個著者（例如 Victor Hugo）、一間公司、一個機構、或者一個組織（例如 CNRS、美國國會圖書館）等</p>
+		<h3>分館</h3>
+		<p>假如您只想查詢某一間分館的館藏，請先選擇分館；否則查詢結果會包括所有分館的館藏。</p>
+		<h3>Partial search</h3>
+		<p>查詢時會用您所輸入的所有字詞作出搜尋，但某些不重要的字會被忽略。例如，如果您在題名欄輸入「the two towers」，查詢結果將會包括所有題名有「two」及「tower」二字的圖書資料，而「the」字則會被忽略。</p>
+		<p>假如您只想輸入字詞的部分，在字詞後鍵入「*」號或「%」號即可。例如，「two tower*」會找到「the two towers」、「two white towers」及「a tower and two cities」</p>
+	</div>
+</form>
+
+<script type="text/javascript">
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc">
+<h1>新增圖書資料至虛擬書架</h1> 
+<p><label>題名</label><!-- TMPL_VAR NAME="title" --></p>
+<p><label>著者</label><!-- TMPL_VAR NAME="author" --></p>
+<h2>請選擇虛擬書架</h2>
+<form>
+	<p><label>新增至虛擬書架</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
+</form>
+<form>
+<h2>或新增至新的虛擬書架</h2>
+	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+		<select name="category">
+			<option value="1">私家書架</option>
+			<option value="2">公開的私人書架</option>
+			<option value="3">公家書架</option>
+		</select>
+	</p>
+	<input type="submit" value="新增至虛擬書架" class="button catalogue">
+</form>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->

@@ -1,0 +1,188 @@
+<!-- TMPL_INCLUDE Name="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF Name="viewshelf" -->
+	<form>
+		<h1><!-- TMPL_VAR NAME="shelfname" --></h1>
+
+		<div>
+		<h2>虛擬書架內容</h2>
+			<table class="small">
+				<tr colspan="4">
+					<th>移除</th>
+					<th>條碼</th>
+					<th>題名</th>
+					<th>著者</th>
+				</tr>
+				<!-- TMPL_LOOP Name="itemsloop" -->
+					<tr>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="barcode" --></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><a class="transparent" href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="author" --></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<!-- TMPL_IF name="manageshelf" -->
+				<input type="submit" value="移除點選的圖書資料" class="button">
+			<!-- /TMPL_IF -->
+			<a href="opac-shelves.pl" class="button">虛擬書架一覽</a>
+		</div>
+	</form>
+
+	<!-- TMPL_IF name="manageshelf" -->
+	<div class="bloc20">
+		<form>
+		<h2>按條碼新增圖書資料</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input name="addbarcode">
+			<input type="hidden" name="modifyshelfcontents" value="1">
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+			<input type="submit" value="儲存" class="button">
+		</form>
+	</div>
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF Name="shelves" -->
+		<h1>虛擬書架</h1>
+		<!-- TMPL_IF Name="status1" -->
+			<p class="problem"><!-- TMPL_VAR NAME="string1" --><p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP Name="paramsloop" -->
+			<!-- TMPL_IF Name="status" -->
+				<p class="problem"><!-- TMPL_VAR NAME="string" --><p>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<div class="bloc20">
+					<h2>請選擇要移除的虛擬書架</h2>
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
+						<!-- TMPL_LOOP Name="shelvesloop" -->
+						<!-- TMPL_IF name="canmanage" -->
+						<p>
+							<label>
+								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
+							</label>
+								<a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR name="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a>（<!-- TMPL_VAR NAME="shelfbookcount" --> 項圖書資料）
+						</p>
+						<!-- /TMPL_IF -->
+						<!-- /TMPL_LOOP -->
+					<p>
+						<input type="submit" value="移除虛擬書架" class="button">
+					</p>
+					</form>
+		</div>
+		<div id="bloc60">
+			<form method="post">
+				<input type="hidden" name="shelves" value="1">
+				<h2>新增虛擬書架</h2>
+				<p><label>名稱</label><input type="text" name="addshelf" size="25"></p>
+				<p><label>架主</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+				<p><label>類別</label>
+					<select name="category">
+						<option value="1">私家書架</option>
+						<option value="2">公開的私人書架</option>
+						<option value="3">公家書架</option>
+					</select>
+				</p>
+				<ul> <li>私家書籃由您自己管理，也只有您才看見。</li>
+					<li> 任何人都可以看見公開的私人書架，但只有您有權管理</li>
+					<li> 任何人都有權管理公家書架。</li>
+				</ul>
+				<p>
+					<input type="submit" value="新增虛擬書架" class="button">
+					<a href="opac-shelves.pl" class="button">回虛擬書架一覽</a>
+				</p>
+
+			</form>
+		</div>
+	<!-- TMPL_ELSE -->
+		<div class="bloc60">
+			<h2>虛擬書架一覽</h2>
+			<table class="small">
+				<tr>
+					<th>虛擬書架名稱</th>
+					<th>類別</th>
+					<th>書目數量</th>
+					<th>修改</th>
+				</tr>
+				<!-- TMPL_LOOP Name="shelvesloop" -->
+				<tr>
+					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+						<a class="transparent" href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+							<!-- TMPL_VAR NAME="shelfname" -->
+						</a>
+					</td>
+					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+						<!-- TMPL_IF NAME="category1" -->
+							私家書架
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category2" -->
+							公開的私人書架
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="category3" -->
+							公家書架
+						<!-- /TMPL_IF -->
+					</td>
+					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+						<!-- TMPL_VAR NAME="shelfbookcount" --> 項圖書資料
+					</td>
+					<!-- TMPL_IF name="mine" -->
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+							<a href="opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button">修改</a> <!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
+						</td>
+					<!-- /TMPL_IF -->
+				</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		</div>
+		<div class="bloc20">
+			<a href="opac-shelves.pl?shelves=1" class="button">新增或移除虛擬書架</a>
+		</div>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="edit" -->
+	<div class="bloc20">
+		<form method="post">
+			<input type="hidden" name="op" value="modifsave">
+			<h2>修改虛擬書架</h2>
+			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
+			<p><label>名稱</label><input type="text" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
+			<p><label>架主</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+			<p><label>類別</label>
+				<select name="category">
+					<!-- TMPL_IF name="category1" -->
+						<option value="1" selected>私家書架</option>
+					<!-- TMPL_ELSE -->
+						<option value="1">私家書架</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category2" -->
+						<option value="2" selected>公開的私人書架</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">公開的私人書架</option>
+					<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="category3" -->
+						<option value="3" selected>公家書架</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">公家書架</option>
+					<!-- /TMPL_IF -->
+				</select>
+			</p>
+			<p> <li>私家書籃由您自己管理，也只有您才看見。</li>
+				<li> 任何人都可以看見公開的私人書架，但只有您有權管理</li>
+				<li> 任何人都有權管理公家書架。</li>
+			</p>
+			<p>
+				<input type="submit" value="儲存" class="button">
+			</p>
+
+		</form>
+	</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="opac-bottom.inc" -->

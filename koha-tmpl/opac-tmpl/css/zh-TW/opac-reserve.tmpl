@@ -1,0 +1,79 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<h2>《<b><!-- TMPL_VAR NAME="title" --></b>》之預約頁 (<!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="biblionumber" -->號)</h2>
+<!-- TMPL_IF NAME="message" -->
+	<h2>無法預約，因為 </h2>
+	<ul>
+		<!-- TMPL_IF name="noreserve" --><li>You can't make reserve in this library (feature unactivated)</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="too_much_oweing" --><li>您欠 <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="too_many_reserves" --><li>您不可預約超過 <!-- TMPL_VAR NAME="too_many_reserves" --> 項資料。</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="already_reserved" --><li>您已預約了這項資料。</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_items_selected" --><li>您至少必須選擇圖書資料的類別！</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_branch_selected" --><li>您一定要撰擇在那裏取書！</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="GNA" --><li>您已經搬遷，但地址不詳，因此不可預約。請與圖書館聯絡。</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="lost" --><li>根據館方的紀錄，這張證已經遺失，因此無法預約。請與圖書館聯絡。</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="debarred" --><li>您的借書權利已被暫停。請與圖書館聯絡。</li><!-- /TMPL_IF -->
+	</ul>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="select_item_types" -->
+	<!-- The first time round you select which bibitems you want -->
+	<p> 已有<b><!-- TMPL_VAR NAME="reservecount" --></b>人預約了這項資料。 </p>
+	<p>請您選擇有那幾類的圖書資料適合您。一有同類的圖書資料可借，該項圖書資料會隨即預留給您。</p>
+
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="item_types_selected" value="1" />
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+		<table cellspacing="0">
+			<tr>
+				<th>預約</th>
+				<th>圖書資料類別</th>
+				<th>數量</th>
+			</tr>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+				<tr>
+					<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" checked="checked" /></td>
+					<!-- TMPL_ELSE -->
+						<td>無法預約</td>
+					<!-- /TMPL_UNLESS -->
+					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><!-- TMPL_VAR NAME="copies" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<p>請指定您希望在哪間分館取書《<!-- TMPL_VAR NAME="CGIbranch" -->》</p>
+				
+		<input class="button" type="submit" value="遞交">
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+	<p>請確定您要預約下列種類的圖書資料：</p>
+
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+		<input type="hidden" name="place_reserve" value="1" />
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME="required_date" -->" />
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME="expires_date" -->" />
+		<ul>
+			<!-- TMPL_LOOP NAME="TYPES" -->
+			<li><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_VAR NAME="description" --></li>
+			<!-- /TMPL_LOOP -->
+		</ul>
+		取書處：
+		<ul>
+			<li>
+				<!-- TMPL_VAR NAME="branchname" -->
+			</li>
+		</ul>
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+		<!-- TMPL_IF NAME="istherefee" -->
+			<p>注意：預約須繳交手續費<b>$<!-- TMPL_VAR NAME="fee" --></b></p>
+		<!-- /TMPL_IF -->
+		<input class="button" type="submit" value="預約">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

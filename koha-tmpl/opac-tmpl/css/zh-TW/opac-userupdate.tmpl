@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE name="opac-top.inc" -->
+
+<div id="mainbloc">
+<h2>更新個人資料</h2>
+<p><i>請按需要更新，閣下所作之修改將以電郵方式寄至圖書館。<br />
+圖書館核實您的作的修改後，修改才會生效。</i></p>
+
+<!-- TMPL_LOOP name="BORROWER_INFO" -->
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+	<p><label>姓</label><input type="text"  size="25" value="<!-- TMPL_VAR name='surname' -->"  name="surname" /></p>
+	<p><label>題名</label><input type="text"  size="25" value="<!-- TMPL_VAR name='title' -->"  name="title" /></p>
+	<p><label>名</label><input type="text"  size="25" value="<!-- TMPL_VAR name='firstname' -->"  name="firstname" /></p>
+	<p><label>地址</label><input type="text"  size="25" value="<!-- TMPL_VAR name='streetaddress' -->"  name="streetaddress" /></p>
+	<p><label>市</label><input type="text"  size="25" value="<!-- TMPL_VAR name='city' -->"  name="city" /></p>
+	<p><label>住宅電話</label><input type="text"  size="25" value="<!-- TMPL_VAR name='phone' -->"  name="phone" /></p>
+	<p><label>辦公電話/傳真</label><input type="text"  size="25" value="<!-- TMPL_VAR name='faxnumber' -->"  name="faxnumber" /></p>
+	<p><label>電郵</label><input type="text"  size="25" value="<!-- TMPL_VAR name='emailaddress' -->"  name="emailaddress" /></p>
+	<p><input type="submit" value="遞交" class="button"></p>
+</form>
+</div>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="opac-bottom.inc" -->

@@ -1,0 +1,23 @@
+<!-- TMPL_INCLUDE NAME="opac-basket-top.inc" -->
+
+<div id="mainbloc" style="padding-bottom:20px;margin-top:10px;margin-bottom:10px;">
+<h1>送出書籃中</h1>
+<!-- TMPL_IF NAME="email_add" -->
+	<!-- TMPL_IF NAME="SENT" -->
+	<p>書籃已送給：<!-- TMPL_VAR NAME="email_add" --></p>
+	<!-- TMPL_ELSE -->
+	<p>送出書籃途中出現問題……</p>
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+	<p><label>發件人</label><input name="email_sender" size="25" /></p>
+	<p><label>電郵地址</label><input name="email_add" size="25" /></p>
+	<p><label>&nbsp;</label><input type="submit" value="送出" class="button"></p>
+	<input type='hidden' name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
+</form>
+<!-- /TMPL_IF -->
+</div>
+<div id="bottombloc">
+	<p><a href="javascript:this.close()">關閉</a></p>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->

@@ -1,0 +1,33 @@
+<SUBJECT>
+您的書籃
+<END_SUBJECT>
+
+<HEADER>
+您好！這是 <!-- TMPL_VAR name="email_sender" --> 送來的書籃
+<END_HEADER>
+
+<FILENAME>
+basket.txt
+<END_FILENAME>
+
+<MESSAGE>
+---------------------------------------------
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF name="isbn" -->
+國際標準書號：<!-- TMPL_VAR NAME="ISBN" --><!-- /TMPL_IF --><!-- TMPL_IF name="subtitle" -->
+副題：<!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="author" -->
+著者：<!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF name="additional" -->
+其他著者：<!-- TMPL_VAR NAME="additional" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
+出版者：<!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> 在 <!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" --><!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><!-- TMPL_IF name="collection" -->
+館藏：<!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="subject" -->
+主題：<!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" -->
+著作年份：<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->
+備註：<!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><!-- TMPL_IF name="unititle" -->
+劃一題名：<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF name="serial" -->
+期刊：<!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><!-- TMPL_IF name="dewey" -->
+杜威分類號：<!-- TMPL_VAR name="dewey" --><!-- /TMPL_IF --><!-- TMPL_IF name="classification" -->
+分類：<!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><!-- TMPL_IF name="lccn" -->
+LCCN: <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><!-- TMPL_IF name="url" -->
+網址：<!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
+---------------------------------------------
+<!-- /TMPL_LOOP -->
+<END_MESSAGE>

@@ -1,0 +1,156 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF name="op_add" -->
+	<h1>請輸入您的建議</h1>
+	<p>要建議圖書館採購一項新的圖書資料，使用這份表格即可。當館方處理您的建議時，您將會收到電郵通知。</p>
+	<p>所有資料都不一定要填，但請儘量填寫您知道的資料。「備注」一欄可以用來填寫任何您想填的資料。</p>
+	<form>
+		<input type="hidden" name="op" value="add_confirm">
+		<p><label>題名</label><input type="text" name="title" size=60 maxlentgh=80></p>
+		<p><label>著者</label><input type="text" name="author" size=60 maxlength=80></p>
+		<p><label>著作年份</label><input type="text" name="copyrightdate" size="5" maxlength="4"></p>
+		<p><label>出版者</label><input type="text" name="publishercode" size="60" maxlength="80"></p>
+		<p><label>集叢號/敘述</label><input type="text" name="volumedesc" size="60" maxlength="80"></p>
+		<p><label>出版年</label><input type="text" name="publicationyear" size="5" maxlength="4"></p>
+		<p><label>出版地</label><input type="text" name="place" size="60" maxlength="80"></p>
+		<p><label>國際標準書號/期刊號</label><input type="text" name="isbn" size="14" maxlength="10"></p>
+		<p><label>備注</label><textarea name="note" rows="10" cols="60"></textarea></p>
+		<p><label>&nbsp;</label><input type="submit" value="傳送建議給館方人員" class="button"></p>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="op_else" -->
+	<h1>新書建議</h1>
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<th>題名</th>
+			<th>著者</th>
+			<th>出版年</th>
+			<th>出版者</th>
+			<th>狀態</th>
+			<th>建議者</th>
+			<th>Managed by</th>
+			<th>備注</th>
+		</tr>
+		<tr>
+			<form>
+				<th>
+					過濾條件：
+				</th>
+				<th>
+					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
+				</th>
+				<th>
+					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->">
+				</th>
+				<th>
+					<select name="status">
+						<option value="">任何</option>
+						<!-- TMPL_IF name="ASKED" -->
+							<option value="ASKED" selected>已提出</option>
+						<!-- TMPL_ELSE -->
+							<option value="ASKED">已提出</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ACCEPTED" -->
+							<option value="ACCEPTED" selected>已獲採納</option>
+						<!-- TMPL_ELSE -->
+							<option value="ACCEPTED">已獲採納</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ORDERED" -->
+							<option value="ORDERED" selected>已訂購</option>
+						<!-- TMPL_ELSE -->
+							<option value="ORDERED">已訂購</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="REJECTED" -->
+							<option value="REJECTED" selected>已被拒</option>
+						<!-- TMPL_ELSE -->
+							<option value="REJECTED">已被拒</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="AVAILABLE" -->
+							<option value="AVAILABLE" selected>在館內</option>
+						<!-- TMPL_ELSE -->
+							<option value="AVAILABLE">在館內</option>
+						<!-- /TMPL_IF -->
+					</select>
+				</th>
+				<th>
+					<select name="suggestedbyme">
+						<option value="1" <!-- TMPL_IF name="suggestedbyme" -->selected<!-- /TMPL_IF -->>我</option>
+						<option value="0" <!-- TMPL_UNLESS name="suggestedbyme" -->selected<!-- /TMPL_UNLESS -->>任何人</option>
+					</select>
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					<input type="submit" class="button" value="設定過濾條件">
+				</th>
+			</form>
+		</tr>
+		<form>
+			<input type="hidden" name="op" value="delete_confirm">
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td>
+					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->">
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="title" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="author" -->
+				</td>
+				<td align="center"<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="copyrightdate" -->
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="publishercode" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF name="ASKED" -->已提出<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ACCEPTED" -->已獲採納，不久便會訂購<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ORDERED" -->已由館方訂購<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="REJECTED" -->建議被拒，不會採購<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->館方已收貨<!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="note" -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td>
+				<input type="submit" class="button" value="移除">
+			</td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+		</tr>
+		</form>
+	</table>
+	<form>
+		<input type="hidden" name="op" value="add">
+		<input type="submit" class="button" value="請輸入您的建議">
+	<br />
+	<p>Note : if you ask suggestion done by anybody, the result will contain only new suggestions. Suggestions treated by a librarian will not be shown.</p>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

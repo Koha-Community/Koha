@@ -1,0 +1,148 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF NAME="searchdesc" -->
+    <p class="center">您查詢「<b><!-- TMPL_VAR NAME="searchdesc" --></b>」，找到了 <!-- TMPL_VAR NAME="total" --> 筆結果</p>
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF name="searchnew" -->
+		<p class="center">最近<b><!-- TMPL_VAR name="duration" --></b>日內新到的<!-- TMPL_VAR name=itemtype -->。找到<!-- TMPL_VAR NAME="total" -->個結果</p>
+	<!-- TMPL_ELSE -->
+		<p class="center">您沒有指定任何查詢條件。</p>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- <p class="center"><!-- TMPL_VAR NAME="total" --> results found</p> -->
+	<div id="resultnumber">
+		<p class="center">
+			<!-- TMPL_IF NAME=displayprev -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;上一筆</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">下一筆 &gt;&gt;</a>
+				<!-- /TMPL_IF -->
+		</p>
+		<p class="center">
+			<!-- TMPL_IF name=total -->
+				<p class="center">
+					共<i><!-- TMPL_VAR NAME="total" --></i>項結果中的第<i><!-- TMPL_VAR NAME="from" --></i>至<i><!-- TMPL_VAR NAME="to" --></i>項結果
+				</p>
+			<!-- TMPL_ELSE -->
+				　什麼也找不到
+			<!-- /TMPL_IF -->
+		</p>
+	</div>
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="total" -->
+<form action="opac-searchresults.pl" method="get" name="myform">
+<input type="submit" class="button" value="把點選的項目放至書籃" onclick="addMultiple(); return false;"> <input type="reset" value="全部清空" class="button">
+	<table>
+		<tr>
+			<th colspan="2">摘要</th>
+			<th>數量</th>
+			<th>存放地點</th>
+			<th>&nbsp;</th>
+		</tr>
+		<!-- Actual Search Results -->
+		<!-- TMPL_LOOP NAME="results" -->
+			<tr>
+			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<p>
+						<p>
+							<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+								<b><a class="transparent" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+									<b><a class="transparent" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<!-- TMPL_ELSE -->
+									<b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+						</p>
+						<p><!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="timestamp" --> <i>（更新日期：<!-- TMPL_VAR name="timestamp" -->）</i><!-- /TMPL_IF -->
+					</p>
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="totitem" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_LOOP name="CN" -->
+						<p><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --> 
+						<!-- TMPL_IF name="date_due" -->
+							<i>(借出，直至<!-- TMPL_VAR name="date_due" -->)</i>
+						<!-- TMPL_ELSE -->
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR name="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+						</p>
+					<!-- /TMPL_LOOP -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_UNLESS NAME="norequests" -->
+						<a class="transparent" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">預約</a>
+					<!-- TMPL_ELSE -->
+						不可預約
+					<!-- /TMPL_UNLESS -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<th>&nbsp;</th>
+			<th colspan="2" align="left">
+				<!-- TMPL_IF NAME="displayprev" -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;&lt;上一筆</a>
+				<!-- TMPL_ELSE -->
+					&nbsp;
+				<!-- /TMPL_IF -->
+			</th>
+			<th colspan="2" align="right">
+				<!-- TMPL_IF NAME="displaynext" -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">下一筆 &gt;&gt;&gt;</a>
+				<!-- TMPL_ELSE -->
+					&nbsp;
+				<!-- /TMPL_IF -->
+			</th>
+		</tr>
+	</table>
+</form>
+	<p class="center">
+		共<i><!-- TMPL_VAR NAME="total" --></i>項結果中的第<i><!-- TMPL_VAR NAME="from" --></i>至<i><!-- TMPL_VAR NAME="to" --></i>項結果
+	</p>
+
+	<div id="resultnumber">
+		<p class="center">
+			<!-- TMPL_IF NAME="displayprev" -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;上一筆</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME="displaynext" -->
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">下一筆 &gt;&gt;</a>
+				<!-- /TMPL_IF -->
+		</p>
+	</div>
+
+<!-- TMPL_ELSE -->
+	<p class="center">	對不起，什麼也找不到 </p>
+<!-- /TMPL_IF -->
+
+<p class="center">
+	請重試<a href="/cgi-bin/koha/opac-search.pl" class="button">進階搜尋</a>
+</p>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
