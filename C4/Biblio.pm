@@ -1488,7 +1488,7 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
                              itemlost=?,
                              wthdrawn=?,
 			     bulk=?,
-			     notforloan=?,
+			     notforloan=?
                           where itemnumber=?";
     @bind = ($item->{'bibitemnum'},$item->{'barcode'},$item->{'notes'},$item->{'homebranch'},$item->{'lost'},$item->{'wthdrawn'},$item->{'bulk'},$item->{'notforloan'},$item->{'itemnum'});
   }
@@ -2194,6 +2194,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.84  2004/03/24 17:18:30  joshferraro
+# Fixes bug 749 by removing the comma on line 1488.
+#
 # Revision 1.83  2004/03/15 14:31:50  tipaul
 # adding a minor check
 #
