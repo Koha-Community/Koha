@@ -25,75 +25,35 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Log$
+# Revision 1.2  2003/05/09 23:47:22  rangi
+# This script is now templated
+# 3 more to go i think
+#
+
 use CGI;
 use strict;
 use C4::Output;
+use HTML::Template;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 
 my $input = new CGI;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "acqui.simple/addbiblio-nomarc.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
+        debug           => 1,
+    }
+);
+
 my $error = $input->param('error');
 
-print $input->header;
-print startpage();
-print startmenu('acquisitions');
+$template->param(
+    ERROR => $error,
+);
 
-print << "EOF";
-<FONT SIZE=6><em>Adding a new Biblio</em></FONT><br>
-  
-<table bgcolor="#ffcc00" width="80%" cellpadding="5">
-  <tr>
-  <td><FONT SIZE=5>Section One: Copyright Information </font></td>
-  </tr>
-  </table>
-EOF
-
-if ( $error eq "notitle" ) {
-    print << "EOF";
-    <p />
-      <center>
-      <font color="#FF0000">Please Specify a Title</font>
-      </center>
-EOF
-}    # if
-
-print << "EOF";
-<FORM action="savebiblio.pl" method="post">
-  <table align="center">
-  <tr>
-  <td>Title: *</td>
-  <td><INPUT name="title" size="40" /></td>
-  </tr>
-  <tr>
-  <td>Subtitle:</td>
-  <td><INPUT name="subtitle" size="40" /></td>
-  </tr>
-  <tr>
-  <td>Author:</td>
-  <td><INPUT name="author" size="40" /></td>
-  </tr>
-      <tr valign="top">
-          <td>Series Title:<br />
-          <i>(if applicable)</i></td>
-          <td><INPUT name="seriestitle" size="40" /></td>
-      </tr>
-  <tr>
-  <td>Copyright Date:</td>
-  <td><INPUT name="copyrightdate" size="40" /></td>
-  </tr>
-  <tr valign="top">
-  <td>Abstract:</td>
-  <td><textarea cols="30" rows="6" name="abstract"></textarea></td>
-  </tr>
-      <tr valign="top">
-          <td>Notes:</td>
-          <td><textarea cols="30" rows="6" name="notes"></textarea></td>
-      </tr>
-  <tr valign="top">
-  <td colspan="2"><center><input type="submit" value="Submit"></center></td>
-  </tr>
-  </table>
-  </FORM>
-  * Required
-EOF
-
-print endmenu();
-print endpage();
+output_html_with_http_headers $input, $cookie, $template->output;
