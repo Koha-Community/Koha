@@ -10,13 +10,9 @@
 	<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
-	<TABLE style="border:0;">
-		<TR><TD style="border:0;"><b>adresse e-mail</b></TD>
-		<TD style="border:0;"><input name="email_add" size="25" /></TD></TR>
-		<TR><TD colspan="2" style="border:0;">&nbsp;</TD>
-		<TR><TD style="border:0;"></TD>
-		<TD style="border:0;text-align:right;"><input type="submit" value="Envoyer" class="button"></TD></TR>
-	</TABLE>
+	<p><label>Message envoyé par</label><input name="email_sender" size="25" /></p>
+	<p><label>adresse e-mail</label><input name="email_add" size="25" /></p>
+	<p><label>&nbsp;</label><input type="submit" value="Envoyer" class="button"></p>
 	<input type='hidden' name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
 </form>
 <!-- /TMPL_IF -->

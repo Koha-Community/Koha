@@ -4,6 +4,7 @@
 <!-- TMPL_IF NAME="message" -->
 	<h2>Impossible d'établir la réservation parce que </h2>
 	<ul>
+		<!-- TMPL_IF name="noreserve" --><li>You can't make reserve in this library (feature unactivated)</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_much_oweing" --><li>vous devez <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="too_many_reserves" --><li>vous ne pouvez faire plus de <!-- TMPL_VAR NAME="too_many_reserves" --> réservations</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="already_reserved" --><li>Vous avez déjà une réservation en cours pour ce document</li><!-- /TMPL_IF -->
@@ -26,7 +27,7 @@
 		<table cellspacing="0">
 			<tr>
 				<th>Réserver</th>
-				<th>Type de documents</th>
+				<th>Type de document</th>
 				<th>Exemplaires</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="TYPES" -->
@@ -41,31 +42,15 @@
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		<p> Merci de sélectionner l'annexe où vous souhaitez récupérer le document <!-- TMPL_VAR NAME="CGIbranch" --></p>
-		<p>Réserver à cette date :
-			<select name="required-day">
-<option value="0">Jour</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
-			<select name="required-month">
-<option value="0">Mois</option><option value="1">Janv</option><option value="2">Fév</option><option value="3">Mar</option><option value="4">Avr</option><option value="5">Mai</option><option value="6">Juin</option><option value="7">Juil</option><option value="8">Aoû</option><option value="9">Sept</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Déc</option></select>
-			<select name="required-year">
-<option value="0">Année</option>
-<option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option></select>
-		</p>
-		<p>Annuler la réservation le :
-			<select name="expires-day">
-<option value="0">Jour</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
-			<select name="expires-month">
-<option value="0">Mois</option><option value="1">Janv</option><option value="2">Fév</option><option value="3">Mar</option><option value="4">Avr</option><option value="5">Mai</option><option value="6">Juin</option><option value="7">Juil</option><option value="8">Aoû</option><option value="9">Sept</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Déc</option></select>
-			<select name="expires-year">
-<option value="0">Année</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option></select>
-		</p>
+		<p>Merci de sélectionner l'annexe où vous souhaitez récupérer le document <!-- TMPL_VAR NAME="CGIbranch" --></p>
+				
 		<input class="button" type="submit" value="Soumettre">
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-	<p> Merci de confirmer que vous souhaitez demander un document de ces types</p>
+	<p>Merci de confirmer que vous souhaitez demander un document de ces types</p>
 
 	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="place_reserve" value="1" />
@@ -84,7 +69,7 @@
 			</li>
 		</ul>
 		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-		<!-- TMPL_IF NAME="fee" -->
+		<!-- TMPL_IF NAME="istherefee" -->
 			<p>Notez qu'il y aura un coût de <b>$<!-- TMPL_VAR NAME="fee" --></b> pour la réservation</p>
 		<!-- /TMPL_IF -->
 		<input class="button" type="submit" value="Faire une Réservation">

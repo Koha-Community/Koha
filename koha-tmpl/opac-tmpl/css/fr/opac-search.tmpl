@@ -5,7 +5,7 @@
 
 <form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
 	
-	<div id="bloc20">
+	<div id="bloc60">
 		<h2 class="catalogue">Chercher dans</h2>
 		<p>
 			<input type="hidden" name="op" value="do_search" />
@@ -41,7 +41,15 @@
 			<input type="text" name="value" onchange="sql_update()" size="35" />
 		</p>
 		<p>
-			<label class="label20">Type de documents</label>
+			<label class="label20">Titre périodique/collection</label>
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" size="35"/>
+		</p>
+		<p>
+			<label class="label20">Type de document</label>
 			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
@@ -49,25 +57,22 @@
 			<!-- TMPL_VAR name="CGIitemtype" -->
 		</p>
 		<p>
-				<label class="label20">Annexe</label>
+				<label class="label20">Site</label>
 				<input type="hidden" name="marclist" value="items.holdingbranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="=" />  
 				<!-- TMPL_VAR name="CGIbranch" -->
 		</p>
-		<p>
-			<input type="submit" value="Lancer la recherche" class="button catalogue">
-		</p>
 	</div>
 	<div id="bloc20">
 		<h2>Autres options</h2>
 		<p>
-				<label class="label20">code barre</label>
+				<label class="label20">Code à barres</label>
 				<input type="hidden" name="marclist" value="items.barcode" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
-				<input type="hidden" name="operator" value="contains" />
+				<input type="hidden" name="operator" value="start" />
 				<input type="text" name="value" onchange="sql_update()" /> 
 		</p>
 		<p>
@@ -75,7 +80,7 @@
 			<input type="hidden" name="marclist" value="items.itemcallnumber" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
-			<input type="hidden" name="operator" value="contains" />
+			<input type="hidden" name="operator" value="start" />
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
 		<p>
@@ -94,6 +99,19 @@
 			<input type="hidden" name="operator" value="contains" />
 			<input type="text" name="value" onchange="sql_update()" />
 		</p>
+		<p>
+			<label class="label20">Publié entre</label>
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value=">=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" /> et
+			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="<=" />
+			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+		</p>
 		<p>Réponses par page
 			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
@@ -111,21 +129,23 @@
 				<option value="biblio.timestamp desc">date d'acquisition</option>
 			</select>
 		</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
 	</div>
+	<p>
+		<input type="submit" value="Lancer la recherche" class="button catalogue">
+		<input type="reset" value="Effacer Tout" class="button catalogue">
+	</p>
 	<div id="bloc60">
-		<h2>Aide</h2>
+		<h2>Conseils</h2>
 		<h3>Titre</h3>
 		<p>Vous pouvez entrer un titre complet ou partiel. La recherche sera faite aussi sur les sous titre et les autres champs relatifs au titre</p>
 		<h3>Auteur</h3>
 		<p>Vous pouvez entrer un nom ou un prénom. La recherche est aussi faite sur les co-auteurs et les autres champs en relation (traducteur, illustrateur...)</p>
 		<p>N'oubliez pas qu'un auteur peut concerner un auteur physique (Victor Hugo) ou moral (CNRS...)</p>
-		<h3>Annexes</h3>
-		<p>Sélectionnez une annexe si vous voulez limiter votre recherche à une annexe spécifique. Par défaut, la recherche sera faite sur toutes les annexes de la bibliothèque</p>
+		<h3>Sites</h3>
+		<p>Sélectionnez une annexe si vous voulez limiter votre recherche à un site ne particulier. Par défaut, la recherche sera faite sur tous les sites de la bibliothèque</p>
 		<h3>Commencer la recherche</h3>
 		<p>Une recherche est faite sur chaque mot que vous entrez. Les mots vides sont ignorés. Si vous entrez, par exemple "les deux tours" dans le titre, le résultat contiendra tous les mots avec deux ET tours dans le titre. "Les" sera ignoré</p>
-		<p>Si vous voulez entrer une partie de mot, mettez une * ou un % à la fin du mot. Par exemple, "deux tours" retournera "Les deux tours" mais aussi "Une tour et deux maisons"</p>
+		<p>Si vous voulez entrer une partie de mot, mettez une * ou un % à la fin du mot. Par exemple, "deux tours" donnera "Les deux tours" mais aussi "Une tour et deux maisons"</p>
 	</div>
 </form>
 

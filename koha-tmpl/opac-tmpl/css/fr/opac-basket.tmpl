@@ -6,6 +6,113 @@
 <!-- TMPL_INCLUDE NAME="opac-basket-menu.inc" -->
 <!-- /TMPL_IF -->
 <div id="mainbloc" style="margin-top:10px;margin-bottom:20px;padding-top:10px;padding-bottom:10px;">
+<!-- TMPL_IF NAME="verbose" -->
+	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<h3><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></h3>
+	<table>
+		<!-- TMPL_UNLESS NAME="print_basket" -->
+			<tr><td colspan="2">
+				<form>
+					<label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
+						<input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)"> Sélectionner ce document
+					</label>
+				</form>
+			</td></tr>
+		<!-- /TMPL_UNLESS -->
+		<!-- TMPL_IF name="isbn" -->
+			<tr>
+				<th>ISBN :</th>
+				<td><!-- TMPL_VAR NAME="ISBN" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="author" -->
+			<tr>
+				<th>Auteur:</th>
+				<td> <!-- TMPL_VAR NAME="author" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="additional" -->
+			<tr>
+				<th>Autres auteurs :</th>
+				<td><!-- TMPL_VAR NAME="additional" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="publishercode" -->
+			<tr>
+				<th>Editeur</th>
+				<td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="pages" -->
+			<tr>
+				<th>Détails </th>
+				<td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="collection" -->
+			<tr>
+				<th>Collection :</th>
+				<td> <!-- TMPL_VAR NAME="seriestitle" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="subject" -->
+			<tr>
+				<th>Mot-clef</th>
+				<td> <!-- TMPL_VAR NAME="subject" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="copyrightdate" -->
+			<tr>
+				<th>Date copyright</th>
+				<td> <!-- TMPL_VAR NAME="copyrightdate" --></td>
+				</tr>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="notes" -->
+			<tr>
+				<th>Remarques:</th>
+				<td> <!-- TMPL_VAR NAME="notes" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="unititle" -->
+			<tr>
+				<th>Titre uniforme : </th>
+				<td> <!-- TMPL_VAR NAME="unititle" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="serial" -->
+			<tr>
+				<th>Collection</th>
+				<td><!-- TMPL_VAR NAME="serial" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="dewey" -->
+			<tr>
+				<th>code Dewey :</th>
+				<td><!-- TMPL_VAR name="dewey" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="classification" -->
+			<tr>
+				<th>Cote du document</th>
+				<td> <!-- TMPL_VAR name="classification" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="lccn" -->
+			<tr>
+				<th>LCCN</th>
+				<td> <!-- TMPL_VAR name="lccn" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="url" -->
+			<tr>
+				<th>URL :</th>
+				<td> <!-- TMPL_VAR NAME="url" --></td>
+			</tr>
+		<!-- /TMPL_IF -->
+		</table>
+	<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+
 	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<div width="100%" style="margin-top:0px;margin-bottom:0px;padding-top:10px;padding-bottom:10px;">
 	<table cellspacing="0" style="border:0;width:100%;">
@@ -20,7 +127,7 @@
 				<!-- BIBLIO RECORD TABLE -->
 				<tr>
 					<th>
-						<!-- TMPL_VAR NAME="title" --> (enregistrement <!-- TMPL_VAR NAME="biblionumber" -->)
+						<a onClick="javascript:openBiblio(<!-- TMPL_VAR name="biblionumber" -->)"><!-- TMPL_VAR NAME="title" --></a>
 					</th>
 				</tr>
 				<tr valign="top">
@@ -28,7 +135,7 @@
 						<!-- TMPL_IF name="isbn" --><b>ISBN:</b><!-- TMPL_VAR NAME="ISBN" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="subtitle" --><b>sous-titre:</b><!-- TMPL_VAR NAME="subtitle" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="author" --><b>Auteur :</b> <!-- TMPL_VAR NAME="author" --><br><!-- /TMPL_IF -->
-						<!-- TMPL_IF name="additional" --><b>Autres auteurs :</b><!-- TMPL_VAR NAME="additional" --><br><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="additional" --><b>Auteurs secondaires:</b><!-- TMPL_VAR NAME="additional" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="publishercode" --><b>publié par :</b><!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="publicationyear" --><b>en </b><!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
@@ -38,7 +145,7 @@
 						<!-- TMPL_IF name="copyrightdate" --><b>Tous droits réservés année:</b><!-- TMPL_VAR NAME="copyrightdate" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="notes" --><b>Remarques:</b> <!-- TMPL_VAR NAME="notes" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="unititle" --><b>titre uniforme</b> <!-- TMPL_VAR NAME="unititle" --><br><!-- /TMPL_IF -->
-						<!-- TMPL_IF name="serial" --><b>Serial:</b><!-- TMPL_VAR NAME="serial" --><br><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="serial" --><b>Colection:</b><!-- TMPL_VAR NAME="serial" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="dewey" --><b>Dewey:</b><!-- TMPL_VAR name="dewey" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="classification" --><b>Cote:</b><!-- TMPL_VAR name="classification" --><br><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="lccn" --><b>LCCN:</b> <!-- TMPL_VAR name="lccn" --><br><!-- /TMPL_IF -->
@@ -51,6 +158,7 @@
 	</table>
 	</div>
 	<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_UNLESS NAME="print_basket" -->

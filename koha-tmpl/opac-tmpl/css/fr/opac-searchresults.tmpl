@@ -14,7 +14,7 @@
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME=displayprev -->
-				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><<Prédécent</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Précédent</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
@@ -42,7 +42,7 @@
 	<table>
 		<tr>
 			<th colspan="2">Sommaire</th>
-			<th>Nombre de documents</th>
+			<th>Nombre d'exemplaires</th>
 			<th>Localisation</th>
 			<th>&nbsp;</th>
 		</tr>
@@ -52,7 +52,17 @@
 			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p>
-						<p><b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
+						<p>
+							<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+								<b><a class="transparent" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+									<b><a class="transparent" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<!-- TMPL_ELSE -->
+									<b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+						</p>
 						<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
@@ -89,14 +99,14 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 		<tr>
-			<th align="left">
+			<th>&nbsp;</th>
+			<th colspan="2" align="left">
 				<!-- TMPL_IF NAME="displayprev" -->
 					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><<<Précédent</a>
 				<!-- TMPL_ELSE -->
 					&nbsp;
 				<!-- /TMPL_IF -->
 			</th>
-			<th colspan="1">&nbsp;</th>
 			<th colspan="2" align="right">
 				<!-- TMPL_IF NAME="displaynext" -->
 					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Suivant >>></a>
@@ -114,7 +124,7 @@
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME="displayprev" -->
-				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><<Prédécent</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Précédent</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->

@@ -1,9 +1,9 @@
 <SUBJECT>
-Panier de Bibliothèque
+Votre panier de notices
 <END_SUBJECT>
 
 <HEADER>
-Bonjour, voici votre panier de notices
+Bonjour, voici le panier de notices transmis par <!-- TMPL_VAR name="email_sender" -->
 <END_HEADER>
 
 <FILENAME>
@@ -12,7 +12,7 @@ basket.txt
 
 <MESSAGE>
 ---------------------------------------------
-<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" -->(enregistrement <!-- TMPL_VAR NAME="biblionumber" -->)<!-- TMPL_IF name="isbn" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF name="isbn" -->
 ISBN : <!-- TMPL_VAR NAME="ISBN" --><!-- /TMPL_IF --><!-- TMPL_IF name="subtitle" -->
 Sous-titre: <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="author" -->
 Auteur: <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF name="additional" -->
