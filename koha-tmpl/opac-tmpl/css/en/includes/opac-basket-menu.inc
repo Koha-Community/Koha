@@ -10,4 +10,10 @@
 		<A href='javascript:printBasket()' class="menu">Print</A>
 		<span class="basketspacer">&nbsp;</span>
 		<A href='javascript:quit()' class="menu">Close</A>
+		<!-- TMPL_IF NAME="verbose" -->
+			<a href="javascript:showLess()" class="menu">Brief Display</a>
+		<!-- TMPL_ELSE -->
+			<a href="javascript:showMore()" class="menu">More Details</a>
+		<!-- /TMPL_IF -->
+
 	</div>
