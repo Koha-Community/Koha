@@ -1,0 +1,101 @@
+2002-06-28 11:50  tonnesen
+
+	* acqui.simple/marcimport.pl: Got rid of white text on black,
+	replaced with black on background-acq.gif
+
+2002-06-28 11:07  tonnesen
+
+	* C4/Z3950.pm, acqui.simple/marcimport.pl: marcimport.pl will print
+	an error message if it can not signal the processz3950queue
+	program.  The message contains instructions for starting the
+	daemon.
+
+2002-06-28 10:45  tonnesen
+
+	* C4/Z3950.pm, acqui.simple/processz3950queue,
+	acqui.simple/z3950-daemon-shell.sh: z3950queue now listens for a
+	-HUP signal before processing the queue.  Z3950.pm sends the -HUP
+	signal when queries are added to the queue.
+
+2002-06-28 10:44  tonnesen
+
+	* search.pl: Changed "Circ" to "On Loan" for one branch location
+	output.
+
+2002-06-28 10:04  tonnesen
+
+	* installer.pl: Installer now offers to password protect the
+	Intranet interface.  Uses basic authentication.
+
+2002-06-28 08:56  tonnesen
+
+	* search.pl: Logic error.  Was using homebranch count as the count
+	of circulating copies.
+
+2002-06-28 07:36  amillar
+
+	* C4/SimpleMarc.pm: Fix broken logic on illustrator vs. add'l
+	author
+
+2002-06-28 05:53  tipaul
+
+	* updatebibitem.pl: merging 1.2 and main. Only cosmetic changes
+	(spaces, comments) and move from parameter reading
+
+2002-06-28 05:53  tipaul
+
+	* updatebibitem.pl: merging 1.2 and main branches
+
+2002-06-28 05:20  tipaul
+
+	* updatebiblio.pl: merging 1.2 and main. Only cosmetic changes
+	(comments, spaces...)
+
+2002-06-28 05:19  tipaul
+
+	* updatebiblio.pl: merging 1.2 and main branches
+
+2002-06-28 05:07  tipaul
+
+	* modbib.pl: merge of 1.2 and main branches.
+
+2002-06-28 05:07  tipaul
+
+	* modbib.pl: merging 1.2 and main. Diffs are due to new features.
+
+2002-06-28 01:53  tipaul
+
+	* C4/Search.pm: merging 1-2 and main.
+
+2002-06-28 01:38  tipaul
+
+	* C4/Search.pm: merging 1.2 and main. Only cosmetic
+
+2002-06-27 21:54  tonnesen
+
+	* search.pl: No count after circ or shelf if only one item.
+
+2002-06-27 21:51  tonnesen
+
+	* search.pl: Changes to "Location" column output when there is only
+	one branch in branches table.  Outputs number of items in
+	circulation and on shelf instead of number of items in each branch.
+
+2002-06-27 20:42  tonnesen
+
+	* C4/Output.pm: Introduced an annoying bug that duplicated
+	everything in iteminfo and branch dropdowns today.  This fixes it.
+
+2002-06-27 15:51  tonnesen
+
+	* installer.pl: typo fixed
+
+2002-06-27 15:30  tonnesen
+
+	* ChangeLog-1.2.1RC5: Change log for 1.2.1RC5
+
+2002-06-27 15:30  tonnesen
+
+	* ChangeLog-1.2.1RC5: file ChangeLog-1.2.1RC5 was initially added
+	on branch rel-1-2.
+
