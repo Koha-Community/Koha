@@ -130,7 +130,6 @@ sub picktemplate {
     my $sth=$dbh->prepare("select value from systempreferences where variable='template'");
     $sth->execute;
     my ($preftemplate) = $sth->fetchrow;
-    $preftemplate.='.tmpl';
     if ($templates->{$preftemplate}) {
 	return $preftemplate;
     } else {
