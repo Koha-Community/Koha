@@ -62,10 +62,11 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-	<h3>Confirm Deletion of Branch <!-- TMPL_VAR NAME="branchcode" -->:</h3>
+	<h3>Confirm deletion of <!-- TMPL_VAR NAME="branchname" --> (<!-- TMPL_VAR NAME="branchcode" -->)?</h3>
 	<div class="tabitem"><span class="form"><form action="<!-- TMPL_VAR name="action" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
 		<input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
+			<input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">
 		<input type="submit" value="Delete Branch" class="cancel" />
 	</form> 
 	<form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
@@ -75,7 +76,7 @@
 
 <!-- TMPL_IF name="else" -->
 	
-	<div class="error"><!-- TMPL_VAR name="message" --></div>
+	<!-- TMPL_IF NAME="message" --><div class="error"><!-- TMPL_VAR name="message" --></div><!-- /TMPL_IF -->
 	<table>
 	<caption><!-- TMPL_VAR name="head" --></caption>
 		<tr>
@@ -127,6 +128,7 @@
 				<td>
 					<form action="<!-- TMPL_VAR name=action -->" method="post">
 					<input type="hidden" name="branchcode" value="<!-- TMPL_VAR name=value escape="HTML" -->" />
+<input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->">
 					<input type="hidden" name="op" value="delete" /><input type="submit" value="Delete" class="cancel" />
 					</form>
 				</td>
