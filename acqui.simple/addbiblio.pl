@@ -188,7 +188,7 @@ if ($op eq "addbiblio") {
 				# if breeding is empty
 				} else {
 					my ($x,$value);
-					($x,$value) = find_value($tag,$subfield,$record) if ($record);
+					($x,$value) = find_value($tag,$subfield,$record) if ($record ne -1);
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 						my @authorised_values;
 						# builds list, depending on authorised value...
@@ -231,7 +231,7 @@ if ($op eq "addbiblio") {
 						my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
 						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../plugin_launcher.pl?plugin_name=$tagslib->{$tag}->{$subfield}->{value_builder}&index=$i$extended_param',$i)\">...</a>";
 					} else {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" size=50 maxlength=255>>";
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" size=50 maxlength=255>";
 					}
 				}
 				push(@subfields_data, \%subfield_data);
