@@ -1,789 +1,835 @@
-# MySQL dump 7.1
+# MySQL dump 8.22
 #
-# Host: localhost    Database: c4test
-#--------------------------------------------------------
-# Server version	3.22.32-log
+# Host: localhost    Database: dombes
+#-------------------------------------------------------
+# Server version	3.23.52-log
 
 #
 # Table structure for table 'accountlines'
 #
-CREATE TABLE accountlines (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  accountno smallint(6) DEFAULT '0' NOT NULL,
-  itemnumber int(11),
-  date date,
-  amount decimal(28,6),
-  description text,
-  dispute text,
-  accounttype varchar(5),
-  amountoutstanding decimal(28,6),
-  timestamp timestamp(14),
-  KEY acctsborridx (borrowernumber),
-  KEY timeidx (timestamp)
+
+CREATE TABLE `accountlines` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `accountno` smallint(6) NOT NULL default '0',
+  `itemnumber` int(11) default NULL,
+  `date` date default NULL,
+  `amount` decimal(28,6) default NULL,
+  `description` text,
+  `dispute` text,
+  `accounttype` varchar(5) default NULL,
+  `amountoutstanding` decimal(28,6) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  KEY `acctsborridx` (`borrowernumber`),
+  KEY `timeidx` (`timestamp`)
 );
 
 #
 # Table structure for table 'accountoffsets'
 #
-CREATE TABLE accountoffsets (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  accountno smallint(6) DEFAULT '0' NOT NULL,
-  offsetaccount smallint(6) DEFAULT '0' NOT NULL,
-  offsetamount decimal(28,6),
-  timestamp timestamp(14)
+
+CREATE TABLE `accountoffsets` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `accountno` smallint(6) NOT NULL default '0',
+  `offsetaccount` smallint(6) NOT NULL default '0',
+  `offsetamount` decimal(28,6) default NULL,
+  `timestamp` timestamp(14) NOT NULL
 );
 
 #
 # Table structure for table 'additionalauthors'
 #
-CREATE TABLE additionalauthors (
-  author text NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  KEY bibidx (biblionumber)
+
+CREATE TABLE `additionalauthors` (
+  `author` text NOT NULL,
+  `biblionumber` int(11) NOT NULL default '0',
+  KEY `bibidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'aqbookfund'
 #
-CREATE TABLE aqbookfund (
-  bookfundid varchar(5) DEFAULT '' NOT NULL,
-  bookfundname text,
-  bookfundgroup varchar(5)
+
+CREATE TABLE `aqbookfund` (
+  `bookfundid` varchar(5) NOT NULL default '',
+  `bookfundname` text,
+  `bookfundgroup` varchar(5) default NULL
 );
 
 #
 # Table structure for table 'aqbooksellers'
 #
-CREATE TABLE aqbooksellers (
-  id int(11),
-  name text,
-  address1 text,
-  address2 text,
-  address3 text,
-  address4 text,
-  phone varchar(30),
-  accountnumber text,
-  othersupplier text,
-  currency char(3) DEFAULT '' NOT NULL,
-  deliverydays smallint(6),
-  followupdays smallint(6),
-  followupscancel smallint(6),
-  specialty text,
-  booksellerfax text,
-  notes text,
-  bookselleremail text,
-  booksellerurl text,
-  contact varchar(100),
-  postal text,
-  url varchar(255),
-  contpos varchar(100),
-  contphone varchar(100),
-  contfax varchar(100),
-  contaltphone varchar(100),
-  contemail varchar(100),
-  contnotes text,
-  active tinyint(4),
-  listprice varchar(5),
-  invoiceprice varchar(5),
-  gstreg tinyint(4),
-  listincgst tinyint(4),
-  invoiceincgst tinyint(4),
-  discount float(6,4),
-  fax varchar(50)
+
+CREATE TABLE `aqbooksellers` (
+  `id` int(11) default NULL,
+  `name` text,
+  `address1` text,
+  `address2` text,
+  `address3` text,
+  `address4` text,
+  `phone` varchar(30) default NULL,
+  `accountnumber` text,
+  `othersupplier` text,
+  `currency` char(3) NOT NULL default '',
+  `deliverydays` smallint(6) default NULL,
+  `followupdays` smallint(6) default NULL,
+  `followupscancel` smallint(6) default NULL,
+  `specialty` text,
+  `booksellerfax` text,
+  `notes` text,
+  `bookselleremail` text,
+  `booksellerurl` text,
+  `contact` varchar(100) default NULL,
+  `postal` text,
+  `url` varchar(255) default NULL,
+  `contpos` varchar(100) default NULL,
+  `contphone` varchar(100) default NULL,
+  `contfax` varchar(100) default NULL,
+  `contaltphone` varchar(100) default NULL,
+  `contemail` varchar(100) default NULL,
+  `contnotes` text,
+  `active` tinyint(4) default NULL,
+  `listprice` varchar(5) default NULL,
+  `invoiceprice` varchar(5) default NULL,
+  `gstreg` tinyint(4) default NULL,
+  `listincgst` tinyint(4) default NULL,
+  `invoiceincgst` tinyint(4) default NULL,
+  `discount` float(6,4) default NULL,
+  `fax` varchar(50) default NULL
 );
 
 #
 # Table structure for table 'aqbudget'
 #
-CREATE TABLE aqbudget (
-  bookfundid char(5) DEFAULT '' NOT NULL,
-  startdate date DEFAULT '0000-00-00' NOT NULL,
-  enddate date,
-  budgetamount decimal(13,2)
+
+CREATE TABLE `aqbudget` (
+  `bookfundid` char(5) NOT NULL default '',
+  `startdate` date NOT NULL default '0000-00-00',
+  `enddate` date default NULL,
+  `budgetamount` decimal(13,2) default NULL
 );
 
 #
 # Table structure for table 'aqorderbreakdown'
 #
-CREATE TABLE aqorderbreakdown (
-  ordernumber int(11),
-  linenumber int(11),
-  branchcode char(4),
-  bookfundid char(5) DEFAULT '' NOT NULL,
-  allocation smallint(6)
+
+CREATE TABLE `aqorderbreakdown` (
+  `ordernumber` int(11) default NULL,
+  `linenumber` int(11) default NULL,
+  `branchcode` char(4) default NULL,
+  `bookfundid` char(5) NOT NULL default '',
+  `allocation` smallint(6) default NULL
 );
 
 #
 # Table structure for table 'aqorderdelivery'
 #
-CREATE TABLE aqorderdelivery (
-  ordernumber date DEFAULT '0000-00-00' NOT NULL,
-  deliverynumber smallint(6) DEFAULT '0' NOT NULL,
-  deliverydate varchar(18),
-  qtydelivered smallint(6),
-  deliverycomments text
+
+CREATE TABLE `aqorderdelivery` (
+  `ordernumber` date NOT NULL default '0000-00-00',
+  `deliverynumber` smallint(6) NOT NULL default '0',
+  `deliverydate` varchar(18) default NULL,
+  `qtydelivered` smallint(6) default NULL,
+  `deliverycomments` text
 );
 
 #
 # Table structure for table 'aqorders'
 #
-CREATE TABLE aqorders (
-  ordernumber int(11) DEFAULT '0' NOT NULL auto_increment,
-  biblionumber int(11),
-  title text,
-  requisitionedby varchar(10),
-  authorisedby varchar(10),
-  booksellerid varchar(10) DEFAULT '' NOT NULL,
-  deliverydays smallint(6),
-  followupdays smallint(6),
-  numberfollowupsallowed smallint(6),
-  numberfollowupssent smallint(6),
-  entrydate date,
-  dateprinted date,
-  quantity smallint(6),
-  currency char(3),
-  listprice decimal(28,6),
-  totalamount decimal(28,6),
-  datereceived date,
-  booksellerinvoicenumber text,
-  freight decimal(28,6),
-  unitprice decimal(28,6),
-  quantityreceived smallint(6),
-  sourced text,
-  cancelledby varchar(10),
-  quantityreceiveddamaged smallint(6),
-  datecancellationprinted date,
-  notes text,
-  supplierreference text,
-  purchaseordernumber text,
-  subscription tinyint(1),
-  subscriptionfrom date,
-  subscriptionto date,
-  serialid varchar(30),
-  basketno int(11),
-  biblioitemnumber int(11),
-  timestamp timestamp(14),
-  rrp decimal(13,2),
-  ecost decimal(13,2),
-  gst decimal(13,2),
-  PRIMARY KEY (ordernumber)
+
+CREATE TABLE `aqorders` (
+  `ordernumber` int(11) NOT NULL auto_increment,
+  `biblionumber` int(11) default NULL,
+  `title` text,
+  `requisitionedby` varchar(10) default NULL,
+  `authorisedby` varchar(10) default NULL,
+  `booksellerid` varchar(10) NOT NULL default '',
+  `deliverydays` smallint(6) default NULL,
+  `followupdays` smallint(6) default NULL,
+  `numberfollowupsallowed` smallint(6) default NULL,
+  `numberfollowupssent` smallint(6) default NULL,
+  `entrydate` date default NULL,
+  `dateprinted` date default NULL,
+  `quantity` smallint(6) default NULL,
+  `currency` char(3) default NULL,
+  `listprice` decimal(28,6) default NULL,
+  `totalamount` decimal(28,6) default NULL,
+  `datereceived` date default NULL,
+  `booksellerinvoicenumber` text,
+  `freight` decimal(28,6) default NULL,
+  `unitprice` decimal(28,6) default NULL,
+  `quantityreceived` smallint(6) default NULL,
+  `sourced` text,
+  `cancelledby` varchar(10) default NULL,
+  `quantityreceiveddamaged` smallint(6) default NULL,
+  `datecancellationprinted` date default NULL,
+  `notes` text,
+  `supplierreference` text,
+  `purchaseordernumber` text,
+  `subscription` tinyint(1) default NULL,
+  `subscriptionfrom` date default NULL,
+  `subscriptionto` date default NULL,
+  `serialid` varchar(30) default NULL,
+  `basketno` int(11) default NULL,
+  `biblioitemnumber` int(11) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  `rrp` decimal(13,2) default NULL,
+  `ecost` decimal(13,2) default NULL,
+  `gst` decimal(13,2) default NULL,
+  PRIMARY KEY  (`ordernumber`)
 );
 
 #
 # Table structure for table 'biblio'
 #
-CREATE TABLE biblio (
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  author text,
-  title text,
-  unititle text,
-  notes text,
-  serial tinyint(1),
-  seriestitle text,
-  copyrightdate smallint(6),
-  timestamp timestamp(14),
-  KEY blbnoidx (biblionumber),
-  PRIMARY KEY (biblionumber)
+
+CREATE TABLE `biblio` (
+  `biblionumber` int(11) NOT NULL default '0',
+  `author` text,
+  `title` text,
+  `unititle` text,
+  `notes` text,
+  `serial` tinyint(1) default NULL,
+  `seriestitle` text,
+  `copyrightdate` smallint(6) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  PRIMARY KEY  (`biblionumber`),
+  KEY `blbnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'biblioanalysis'
 #
-CREATE TABLE biblioanalysis (
-  analyticaltitle text,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  analyticalauthor text
+
+CREATE TABLE `biblioanalysis` (
+  `analyticaltitle` text,
+  `biblionumber` int(11) NOT NULL default '0',
+  `analyticalauthor` text
 );
 
 #
 # Table structure for table 'biblioitems'
 #
-CREATE TABLE biblioitems (
-  biblioitemnumber int(11) DEFAULT '0' NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  volume text,
-  number text,
-  classification varchar(25),
-  itemtype varchar(4),
-  isbn varchar(14),
-  issn varchar(9),
-  dewey double(8,6),
-  subclass char(3),
-  publicationyear smallint(6),
-  publishercode varchar(255),
-  volumedate date,
-  volumeddesc varchar(255),
-  timestamp timestamp(14),
-  illus varchar(255),
-  pages varchar(255),
-  notes text,
-  size varchar(255),
-  place varchar(255),
-  KEY bibinoidx (biblioitemnumber),
-  KEY bibnoidx (biblionumber),
-  PRIMARY KEY (biblioitemnumber)
+
+CREATE TABLE `biblioitems` (
+  `biblioitemnumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default '0',
+  `volume` text,
+  `number` text,
+  `classification` varchar(25) default NULL,
+  `itemtype` varchar(4) default NULL,
+  `isbn` varchar(14) default NULL,
+  `issn` varchar(9) default NULL,
+  `dewey` double(8,6) default NULL,
+  `subclass` char(3) default NULL,
+  `publicationyear` smallint(6) default NULL,
+  `publishercode` varchar(255) default NULL,
+  `volumedate` date default NULL,
+  `volumeddesc` varchar(255) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  `illus` varchar(255) default NULL,
+  `pages` varchar(255) default NULL,
+  `notes` text,
+  `size` varchar(255) default NULL,
+  `place` varchar(255) default NULL,
+  PRIMARY KEY  (`biblioitemnumber`),
+  KEY `bibinoidx` (`biblioitemnumber`),
+  KEY `bibnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'bibliosubject'
 #
-CREATE TABLE bibliosubject (
-  subject text NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL
+
+CREATE TABLE `bibliosubject` (
+  `subject` text NOT NULL,
+  `biblionumber` int(11) NOT NULL default '0'
 );
 
 #
 # Table structure for table 'bibliosubtitle'
 #
-CREATE TABLE bibliosubtitle (
-  subtitle text NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  KEY bibsubidx (biblionumber)
+
+CREATE TABLE `bibliosubtitle` (
+  `subtitle` text NOT NULL,
+  `biblionumber` int(11) NOT NULL default '0',
+  KEY `bibsubidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'borexp'
 #
-CREATE TABLE borexp (
-  borrowernumber int(11),
-  newexp date
+
+CREATE TABLE `borexp` (
+  `borrowernumber` int(11) default NULL,
+  `newexp` date default NULL
 );
 
 #
 # Table structure for table 'borrowers'
 #
-CREATE TABLE borrowers (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  cardnumber varchar(9) DEFAULT '' NOT NULL,
-  surname text NOT NULL,
-  firstname text NOT NULL,
-  title text,
-  othernames text,
-  initials text NOT NULL,
-  streetaddress text NOT NULL,
-  suburb text,
-  city text NOT NULL,
-  phone text NOT NULL,
-  emailaddress text,
-  faxnumber text,
-  textmessaging text,
-  altstreetaddress text,
-  altsuburb text,
-  altcity text,
-  altphone text,
-  dateofbirth date,
-  branchcode varchar(4) DEFAULT '' NOT NULL,
-  categorycode char(2),
-  dateenrolled date,
-  gonenoaddress tinyint(1),
-  lost tinyint(1),
-  debarred tinyint(1),
-  studentnumber text,
-  school text,
-  contactname text,
-  borrowernotes text,
-  guarantor int(11),
-  area char(2),
-  ethnicity varchar(50),
-  ethnotes varchar(255),
-  sex char(1),
-  expiry date,
-  altnotes varchar(255),
-  altrelationship varchar(100),
-  streetcity text,
-  phoneday varchar(50),
-  preferredcont char(1),
-  physstreet varchar(100),
-  KEY borrowernumber (borrowernumber),
-  KEY cardnumber (cardnumber)
+
+CREATE TABLE `borrowers` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `cardnumber` varchar(9) NOT NULL default '',
+  `surname` text NOT NULL,
+  `firstname` text NOT NULL,
+  `title` text,
+  `othernames` text,
+  `initials` text NOT NULL,
+  `streetaddress` text NOT NULL,
+  `suburb` text,
+  `city` text NOT NULL,
+  `phone` text NOT NULL,
+  `emailaddress` text,
+  `faxnumber` text,
+  `textmessaging` text,
+  `altstreetaddress` text,
+  `altsuburb` text,
+  `altcity` text,
+  `altphone` text,
+  `dateofbirth` date default NULL,
+  `branchcode` varchar(4) NOT NULL default '',
+  `categorycode` char(2) default NULL,
+  `dateenrolled` date default NULL,
+  `gonenoaddress` tinyint(1) default NULL,
+  `lost` tinyint(1) default NULL,
+  `debarred` tinyint(1) default NULL,
+  `studentnumber` text,
+  `school` text,
+  `contactname` text,
+  `borrowernotes` text,
+  `guarantor` int(11) default NULL,
+  `area` char(2) default NULL,
+  `ethnicity` varchar(50) default NULL,
+  `ethnotes` varchar(255) default NULL,
+  `sex` char(1) default NULL,
+  `expiry` date default NULL,
+  `altnotes` varchar(255) default NULL,
+  `altrelationship` varchar(100) default NULL,
+  `streetcity` text,
+  `phoneday` varchar(50) default NULL,
+  `preferredcont` char(1) default NULL,
+  `physstreet` varchar(100) default NULL,
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `cardnumber` (`cardnumber`)
 );
 
 #
 # Table structure for table 'branchcategories'
 #
-CREATE TABLE branchcategories (
-  categorycode char(2) DEFAULT '' NOT NULL,
-  branchcode char(4) DEFAULT '' NOT NULL,
-  branchholding int(11)
+
+CREATE TABLE `branchcategories` (
+  `categorycode` char(2) NOT NULL default '',
+  `branchcode` char(4) NOT NULL default '',
+  `branchholding` int(11) default NULL
 );
 
 #
 # Table structure for table 'branches'
 #
-CREATE TABLE branches (
-  branchcode varchar(4) DEFAULT '' NOT NULL,
-  branchname text NOT NULL,
-  branchaddress1 text,
-  branchaddress2 text,
-  branchaddress3 text,
-  branchphone text,
-  branchfax text,
-  branchemail text,
-  issuing tinyint(4),
-  UNIQUE branchcode (branchcode)
+
+CREATE TABLE `branches` (
+  `branchcode` varchar(4) NOT NULL default '',
+  `branchname` text NOT NULL,
+  `branchaddress1` text,
+  `branchaddress2` text,
+  `branchaddress3` text,
+  `branchphone` text,
+  `branchfax` text,
+  `branchemail` text,
+  `issuing` tinyint(4) default NULL,
+  UNIQUE KEY `branchcode` (`branchcode`)
 );
 
 #
 # Table structure for table 'branchtransfers'
 #
-CREATE TABLE branchtransfers (
-  itemnumber int(11) DEFAULT '0' NOT NULL,
-  datesent date DEFAULT '0000-00-00' NOT NULL,
-  frombranch varchar(4),
-  datearrived date,
-  tobranch varchar(4),
-  comments text
+
+CREATE TABLE `branchtransfers` (
+  `itemnumber` int(11) NOT NULL default '0',
+  `datesent` date NOT NULL default '0000-00-00',
+  `frombranch` varchar(4) default NULL,
+  `datearrived` date default NULL,
+  `tobranch` varchar(4) default NULL,
+  `comments` text
 );
 
 #
 # Table structure for table 'catalogueentry'
 #
-CREATE TABLE catalogueentry (
-  catalogueentry text NOT NULL,
-  entrytype char(2),
-  see text,
-  seealso text,
-  seeinstead text,
-  biblionumber int(11)
+
+CREATE TABLE `catalogueentry` (
+  `catalogueentry` text NOT NULL,
+  `entrytype` char(2) default NULL,
+  `see` text,
+  `seealso` text,
+  `seeinstead` text,
+  `biblionumber` int(11) default NULL
 );
 
 #
 # Table structure for table 'categories'
 #
-CREATE TABLE categories (
-  categorycode char(2) DEFAULT '' NOT NULL,
-  description text,
-  enrolmentperiod smallint(6),
-  upperagelimit smallint(6),
-  dateofbirthrequired tinyint(1),
-  finetype varchar(30),
-  bulk tinyint(1),
-  enrolmentfee decimal(28,6),
-  overduenoticerequired tinyint(1),
-  issuelimit smallint(6),
-  reservefee decimal(28,6),
-  UNIQUE categorycode (categorycode)
+
+CREATE TABLE `categories` (
+  `categorycode` char(2) NOT NULL default '',
+  `description` text,
+  `enrolmentperiod` smallint(6) default NULL,
+  `upperagelimit` smallint(6) default NULL,
+  `dateofbirthrequired` tinyint(1) default NULL,
+  `finetype` varchar(30) default NULL,
+  `bulk` tinyint(1) default NULL,
+  `enrolmentfee` decimal(28,6) default NULL,
+  `overduenoticerequired` tinyint(1) default NULL,
+  `issuelimit` smallint(6) default NULL,
+  `reservefee` decimal(28,6) default NULL,
+  UNIQUE KEY `categorycode` (`categorycode`)
 );
 
 #
 # Table structure for table 'categoryitem'
 #
-CREATE TABLE categoryitem (
-  categorycode char(2) DEFAULT '' NOT NULL,
-  itemtype varchar(4) DEFAULT '' NOT NULL,
-  restrictedtype tinyint(1),
-  rentaldiscount decimal(28,6),
-  reservecharge decimal(28,6),
-  fine decimal(28,6),
-  firstremind int(11),
-  chargeperiod int(11),
-  accountsent int(11),
-  chargename varchar(100)
+
+CREATE TABLE `categoryitem` (
+  `categorycode` char(2) NOT NULL default '',
+  `itemtype` varchar(4) NOT NULL default '',
+  `restrictedtype` tinyint(1) default NULL,
+  `rentaldiscount` decimal(28,6) default NULL,
+  `reservecharge` decimal(28,6) default NULL,
+  `fine` decimal(28,6) default NULL,
+  `firstremind` int(11) default NULL,
+  `chargeperiod` int(11) default NULL,
+  `accountsent` int(11) default NULL,
+  `chargename` varchar(100) default NULL
 );
 
 #
 # Table structure for table 'classification'
 #
-CREATE TABLE classification (
-  classification varchar(12) DEFAULT '' NOT NULL
+
+CREATE TABLE `classification` (
+  `classification` varchar(12) NOT NULL default ''
 );
 
 #
 # Table structure for table 'currency'
 #
-CREATE TABLE currency (
-  currency varchar(10),
-  rate float(7,5)
+
+CREATE TABLE `currency` (
+  `currency` varchar(10) default NULL,
+  `rate` float(7,5) default NULL
 );
 
 #
 # Table structure for table 'deletedbiblio'
 #
-CREATE TABLE deletedbiblio (
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  author text,
-  title text,
-  unititle text,
-  notes text,
-  serial tinyint(1),
-  seriestitle text,
-  copyrightdate smallint(6),
-  timestamp timestamp(14),
-  KEY blbnoidx (biblionumber),
-  PRIMARY KEY (biblionumber)
+
+CREATE TABLE `deletedbiblio` (
+  `biblionumber` int(11) NOT NULL default '0',
+  `author` text,
+  `title` text,
+  `unititle` text,
+  `notes` text,
+  `serial` tinyint(1) default NULL,
+  `seriestitle` text,
+  `copyrightdate` smallint(6) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  PRIMARY KEY  (`biblionumber`),
+  KEY `blbnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'deletedbiblioitems'
 #
-CREATE TABLE deletedbiblioitems (
-  biblioitemnumber int(11) DEFAULT '0' NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  volume text,
-  number text,
-  classification varchar(25),
-  itemtype varchar(4),
-  isbn varchar(14),
-  issn varchar(9),
-  dewey double(8,6),
-  subclass char(3),
-  publicationyear smallint(6),
-  publishercode varchar(255),
-  volumedate date,
-  volumeddesc varchar(255),
-  timestamp timestamp(14),
-  illus varchar(255),
-  pages varchar(255),
-  notes text,
-  size varchar(255),
-  KEY bibinoidx (biblioitemnumber),
-  KEY bibnoidx (biblionumber),
-  PRIMARY KEY (biblioitemnumber)
+
+CREATE TABLE `deletedbiblioitems` (
+  `biblioitemnumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default '0',
+  `volume` text,
+  `number` text,
+  `classification` varchar(25) default NULL,
+  `itemtype` varchar(4) default NULL,
+  `isbn` varchar(14) default NULL,
+  `issn` varchar(9) default NULL,
+  `dewey` double(8,6) default NULL,
+  `subclass` char(3) default NULL,
+  `publicationyear` smallint(6) default NULL,
+  `publishercode` varchar(255) default NULL,
+  `volumedate` date default NULL,
+  `volumeddesc` varchar(255) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  `illus` varchar(255) default NULL,
+  `pages` varchar(255) default NULL,
+  `notes` text,
+  `size` varchar(255) default NULL,
+  PRIMARY KEY  (`biblioitemnumber`),
+  KEY `bibinoidx` (`biblioitemnumber`),
+  KEY `bibnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'deletedborrowers'
 #
-CREATE TABLE deletedborrowers (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  cardnumber varchar(9) DEFAULT '' NOT NULL,
-  surname text NOT NULL,
-  firstname text NOT NULL,
-  title text,
-  othernames text,
-  initials text NOT NULL,
-  streetaddress text NOT NULL,
-  suburb text,
-  city text NOT NULL,
-  phone text NOT NULL,
-  emailaddress text,
-  faxnumber text,
-  altstreetaddress text,
-  altsuburb text,
-  altcity text,
-  altphone text,
-  dateofbirth date,
-  branchcode varchar(4) DEFAULT '' NOT NULL,
-  categorycode char(2),
-  dateenrolled date,
-  gonenoaddress tinyint(1),
-  lost tinyint(1),
-  debarred tinyint(1),
-  studentnumber text,
-  school text,
-  contactname text,
-  borrowernotes text,
-  guarantor int(11),
-  area char(2),
-  ethnicity varchar(50),
-  ethnotes varchar(255),
-  sex char(1),
-  expiry date,
-  altnotes varchar(255),
-  altrelationship varchar(100),
-  streetcity text,
-  phoneday varchar(50),
-  preferredcont varchar(100),
-  physstreet varchar(100),
-  KEY borrowernumber (borrowernumber),
-  KEY cardnumber (cardnumber)
+
+CREATE TABLE `deletedborrowers` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `cardnumber` varchar(9) NOT NULL default '',
+  `surname` text NOT NULL,
+  `firstname` text NOT NULL,
+  `title` text,
+  `othernames` text,
+  `initials` text NOT NULL,
+  `streetaddress` text NOT NULL,
+  `suburb` text,
+  `city` text NOT NULL,
+  `phone` text NOT NULL,
+  `emailaddress` text,
+  `faxnumber` text,
+  `altstreetaddress` text,
+  `altsuburb` text,
+  `altcity` text,
+  `altphone` text,
+  `dateofbirth` date default NULL,
+  `branchcode` varchar(4) NOT NULL default '',
+  `categorycode` char(2) default NULL,
+  `dateenrolled` date default NULL,
+  `gonenoaddress` tinyint(1) default NULL,
+  `lost` tinyint(1) default NULL,
+  `debarred` tinyint(1) default NULL,
+  `studentnumber` text,
+  `school` text,
+  `contactname` text,
+  `borrowernotes` text,
+  `guarantor` int(11) default NULL,
+  `area` char(2) default NULL,
+  `ethnicity` varchar(50) default NULL,
+  `ethnotes` varchar(255) default NULL,
+  `sex` char(1) default NULL,
+  `expiry` date default NULL,
+  `altnotes` varchar(255) default NULL,
+  `altrelationship` varchar(100) default NULL,
+  `streetcity` text,
+  `phoneday` varchar(50) default NULL,
+  `preferredcont` varchar(100) default NULL,
+  `physstreet` varchar(100) default NULL,
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `cardnumber` (`cardnumber`)
 );
 
 #
 # Table structure for table 'deleteditems'
 #
-CREATE TABLE deleteditems (
-  itemnumber int(11) DEFAULT '0' NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  multivolumepart varchar(30),
-  biblioitemnumber int(11) DEFAULT '0' NOT NULL,
-  barcode varchar(9) DEFAULT '' NOT NULL,
-  dateaccessioned date,
-  booksellerid varchar(10),
-  homebranch varchar(4),
-  price decimal(28,6),
-  replacementprice decimal(28,6),
-  replacementpricedate date,
-  datelastborrowed date,
-  datelastseen date,
-  multivolume tinyint(1),
-  stack tinyint(1),
-  notforloan tinyint(1),
-  itemlost tinyint(1),
-  wthdrawn tinyint(1),
-  bulk varchar(30),
-  issues smallint(6),
-  renewals smallint(6),
-  reserves smallint(6),
-  restricted tinyint(1),
-  binding decimal(28,6),
-  itemnotes text,
-  holdingbranch varchar(4),
-  interim tinyint(1),
-  timestamp timestamp(14),
-  KEY itembarcodeidx (barcode),
-  KEY itembinoidx (biblioitemnumber),
-  KEY itembibnoidx (biblionumber),
-  PRIMARY KEY (itemnumber),
-  UNIQUE barcode (barcode)
+
+CREATE TABLE `deleteditems` (
+  `itemnumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default '0',
+  `multivolumepart` varchar(30) default NULL,
+  `biblioitemnumber` int(11) NOT NULL default '0',
+  `barcode` varchar(9) NOT NULL default '',
+  `dateaccessioned` date default NULL,
+  `booksellerid` varchar(10) default NULL,
+  `homebranch` varchar(4) default NULL,
+  `price` decimal(28,6) default NULL,
+  `replacementprice` decimal(28,6) default NULL,
+  `replacementpricedate` date default NULL,
+  `datelastborrowed` date default NULL,
+  `datelastseen` date default NULL,
+  `multivolume` tinyint(1) default NULL,
+  `stack` tinyint(1) default NULL,
+  `notforloan` tinyint(1) default NULL,
+  `itemlost` tinyint(1) default NULL,
+  `wthdrawn` tinyint(1) default NULL,
+  `bulk` varchar(30) default NULL,
+  `issues` smallint(6) default NULL,
+  `renewals` smallint(6) default NULL,
+  `reserves` smallint(6) default NULL,
+  `restricted` tinyint(1) default NULL,
+  `binding` decimal(28,6) default NULL,
+  `itemnotes` text,
+  `holdingbranch` varchar(4) default NULL,
+  `interim` tinyint(1) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  PRIMARY KEY  (`itemnumber`),
+  UNIQUE KEY `barcode` (`barcode`),
+  KEY `itembarcodeidx` (`barcode`),
+  KEY `itembinoidx` (`biblioitemnumber`),
+  KEY `itembibnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'issues'
 #
-CREATE TABLE issues (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  itemnumber int(11) DEFAULT '0' NOT NULL,
-  date_due date,
-  branchcode char(4),
-  issuingbranch char(18),
-  returndate date,
-  lastreneweddate date,
-  return char(4),
-  renewals tinyint(4),
-  timestamp timestamp(14),
-  KEY issuesborridx (borrowernumber),
-  KEY issuesitemidx (itemnumber),
-  KEY bordate (borrowernumber,timestamp)
+
+CREATE TABLE `issues` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `itemnumber` int(11) NOT NULL default '0',
+  `date_due` date default NULL,
+  `branchcode` char(4) default NULL,
+  `issuingbranch` char(18) default NULL,
+  `returndate` date default NULL,
+  `lastreneweddate` date default NULL,
+  `return` char(4) default NULL,
+  `renewals` tinyint(4) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  KEY `issuesborridx` (`borrowernumber`),
+  KEY `issuesitemidx` (`itemnumber`),
+  KEY `bordate` (`borrowernumber`,`timestamp`)
 );
 
 #
 # Table structure for table 'items'
 #
-CREATE TABLE items (
-  itemnumber int(11) DEFAULT '0' NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  multivolumepart varchar(30),
-  biblioitemnumber int(11) DEFAULT '0' NOT NULL,
-  barcode varchar(9) DEFAULT '' NOT NULL,
-  dateaccessioned date,
-  booksellerid varchar(10),
-  homebranch varchar(4),
-  price decimal(8,2),
-  replacementprice decimal(8,2),
-  replacementpricedate date,
-  datelastborrowed date,
-  datelastseen date,
-  multivolume tinyint(1),
-  stack tinyint(1),
-  notforloan tinyint(1),
-  itemlost tinyint(1),
-  wthdrawn tinyint(1),
-  bulk varchar(30),
-  issues smallint(6),
-  renewals smallint(6),
-  reserves smallint(6),
-  restricted tinyint(1),
-  binding decimal(28,6),
-  itemnotes text,
-  holdingbranch varchar(4),
-  paidfor text,
-  timestamp timestamp(14),
-  KEY itembarcodeidx (barcode),
-  KEY itembinoidx (biblioitemnumber),
-  KEY itembibnoidx (biblionumber),
-  PRIMARY KEY (itemnumber),
-  UNIQUE barcode (barcode)
+
+CREATE TABLE `items` (
+  `itemnumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default '0',
+  `multivolumepart` varchar(30) default NULL,
+  `biblioitemnumber` int(11) NOT NULL default '0',
+  `barcode` varchar(9) NOT NULL default '',
+  `dateaccessioned` date default NULL,
+  `booksellerid` varchar(10) default NULL,
+  `homebranch` varchar(4) default NULL,
+  `price` decimal(8,2) default NULL,
+  `replacementprice` decimal(8,2) default NULL,
+  `replacementpricedate` date default NULL,
+  `datelastborrowed` date default NULL,
+  `datelastseen` date default NULL,
+  `multivolume` tinyint(1) default NULL,
+  `stack` tinyint(1) default NULL,
+  `notforloan` tinyint(1) default NULL,
+  `itemlost` tinyint(1) default NULL,
+  `wthdrawn` tinyint(1) default NULL,
+  `bulk` varchar(30) default NULL,
+  `issues` smallint(6) default NULL,
+  `renewals` smallint(6) default NULL,
+  `reserves` smallint(6) default NULL,
+  `restricted` tinyint(1) default NULL,
+  `binding` decimal(28,6) default NULL,
+  `itemnotes` text,
+  `holdingbranch` varchar(4) default NULL,
+  `paidfor` text,
+  `timestamp` timestamp(14) NOT NULL,
+  PRIMARY KEY  (`itemnumber`),
+  UNIQUE KEY `barcode` (`barcode`),
+  KEY `itembarcodeidx` (`barcode`),
+  KEY `itembinoidx` (`biblioitemnumber`),
+  KEY `itembibnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'itemsprices'
 #
-CREATE TABLE itemsprices (
-  itemnumber int(11),
-  price1 decimal(28,6),
-  price2 decimal(28,6)
+
+CREATE TABLE `itemsprices` (
+  `itemnumber` int(11) default NULL,
+  `price1` decimal(28,6) default NULL,
+  `price2` decimal(28,6) default NULL
 );
 
 #
 # Table structure for table 'itemtypes'
 #
-CREATE TABLE itemtypes (
-  itemtype varchar(4) DEFAULT '' NOT NULL,
-  description text,
-  loanlength smallint(6),
-  renewalsallowed smallint(6),
-  rentalcharge double(16,4),
-  UNIQUE itemtype (itemtype)
+
+CREATE TABLE `itemtypes` (
+  `itemtype` varchar(4) NOT NULL default '',
+  `description` text,
+  `loanlength` smallint(6) default NULL,
+  `renewalsallowed` smallint(6) default NULL,
+  `rentalcharge` double(16,4) default NULL,
+  UNIQUE KEY `itemtype` (`itemtype`)
 );
 
 #
 # Table structure for table 'multipart'
 #
-CREATE TABLE multipart (
-  itemnumber int(11) DEFAULT '0' NOT NULL,
-  other int(11) DEFAULT '0' NOT NULL
+
+CREATE TABLE `multipart` (
+  `itemnumber` int(11) NOT NULL default '0',
+  `other` int(11) NOT NULL default '0'
 );
 
 #
 # Table structure for table 'multivolume'
 #
-CREATE TABLE multivolume (
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  multivolumepart varchar(30) DEFAULT '' NOT NULL
+
+CREATE TABLE `multivolume` (
+  `biblionumber` int(11) NOT NULL default '0',
+  `multivolumepart` varchar(30) NOT NULL default ''
 );
 
 #
 # Table structure for table 'newitems'
 #
-CREATE TABLE newitems (
-  itemnumber int(11) DEFAULT '0' NOT NULL,
-  publishercode varchar(18),
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  multivolumepart varchar(30),
-  barcode varchar(9) DEFAULT '' NOT NULL,
-  dateaccessioned date,
-  booksellerid varchar(10),
-  homebranch varchar(4),
-  price decimal(28,6),
-  replacementprice decimal(28,6),
-  replacementpricedate date,
-  datelastborrowed date,
-  datelastseen date,
-  multivolume tinyint(1),
-  stack tinyint(1),
-  notforloan tinyint(1),
-  itemlost tinyint(1),
-  wthdrawn tinyint(1),
-  bulk varchar(30),
-  issues smallint(6),
-  renewals smallint(6),
-  reserves smallint(6),
-  restricted tinyint(1),
-  binding decimal(28,6),
-  itemnotes text,
-  holdingbranch varchar(4),
-  interim tinyint(1),
-  volume text,
-  number text,
-  classification varchar(12),
-  itemtype varchar(4),
-  isbn varchar(14),
-  issn varchar(9),
-  dewey double(16,4),
-  subclass char(3),
-  publicationyear smallint(6),
-  KEY itembarcodeidx (barcode),
-  KEY itembibnoidx (biblionumber),
-  PRIMARY KEY (itemnumber)
+
+CREATE TABLE `newitems` (
+  `itemnumber` int(11) NOT NULL default '0',
+  `publishercode` varchar(18) default NULL,
+  `biblionumber` int(11) NOT NULL default '0',
+  `multivolumepart` varchar(30) default NULL,
+  `barcode` varchar(9) NOT NULL default '',
+  `dateaccessioned` date default NULL,
+  `booksellerid` varchar(10) default NULL,
+  `homebranch` varchar(4) default NULL,
+  `price` decimal(28,6) default NULL,
+  `replacementprice` decimal(28,6) default NULL,
+  `replacementpricedate` date default NULL,
+  `datelastborrowed` date default NULL,
+  `datelastseen` date default NULL,
+  `multivolume` tinyint(1) default NULL,
+  `stack` tinyint(1) default NULL,
+  `notforloan` tinyint(1) default NULL,
+  `itemlost` tinyint(1) default NULL,
+  `wthdrawn` tinyint(1) default NULL,
+  `bulk` varchar(30) default NULL,
+  `issues` smallint(6) default NULL,
+  `renewals` smallint(6) default NULL,
+  `reserves` smallint(6) default NULL,
+  `restricted` tinyint(1) default NULL,
+  `binding` decimal(28,6) default NULL,
+  `itemnotes` text,
+  `holdingbranch` varchar(4) default NULL,
+  `interim` tinyint(1) default NULL,
+  `volume` text,
+  `number` text,
+  `classification` varchar(12) default NULL,
+  `itemtype` varchar(4) default NULL,
+  `isbn` varchar(14) default NULL,
+  `issn` varchar(9) default NULL,
+  `dewey` double(16,4) default NULL,
+  `subclass` char(3) default NULL,
+  `publicationyear` smallint(6) default NULL,
+  PRIMARY KEY  (`itemnumber`),
+  KEY `itembarcodeidx` (`barcode`),
+  KEY `itembibnoidx` (`biblionumber`)
 );
 
 #
 # Table structure for table 'printers'
 #
-CREATE TABLE printers (
-  printername char(40),
-  printqueue char(20),
-  printtype char(20)
+
+CREATE TABLE `printers` (
+  `printername` char(40) default NULL,
+  `printqueue` char(20) default NULL,
+  `printtype` char(20) default NULL
 );
 
 #
 # Table structure for table 'procedures'
 #
-CREATE TABLE procedures (
-  proccode varchar(4),
-  procdesc text,
-  proclevel smallint(6)
+
+CREATE TABLE `procedures` (
+  `proccode` varchar(4) default NULL,
+  `procdesc` text,
+  `proclevel` smallint(6) default NULL
 );
 
 #
 # Table structure for table 'publisher'
 #
-CREATE TABLE publisher (
-  publishercode varchar(18) DEFAULT '' NOT NULL,
-  publishername text NOT NULL
+
+CREATE TABLE `publisher` (
+  `publishercode` varchar(18) NOT NULL default '',
+  `publishername` text NOT NULL
 );
 
 #
 # Table structure for table 'reserveconstraints'
 #
-CREATE TABLE reserveconstraints (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  reservedate date DEFAULT '0000-00-00' NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  biblioitemnumber int(11),
-  timestamp timestamp(14)
+
+CREATE TABLE `reserveconstraints` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `reservedate` date NOT NULL default '0000-00-00',
+  `biblionumber` int(11) NOT NULL default '0',
+  `biblioitemnumber` int(11) default NULL,
+  `timestamp` timestamp(14) NOT NULL
 );
 
 #
 # Table structure for table 'reserves'
 #
-CREATE TABLE reserves (
-  borrowernumber int(11) DEFAULT '0' NOT NULL,
-  reservedate date DEFAULT '0000-00-00' NOT NULL,
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  constrainttype char(1),
-  branchcode varchar(4),
-  notificationdate date,
-  reminderdate date,
-  cancellationdate date,
-  reservenotes text,
-  priority smallint(6),
-  found char(1),
-  timestamp timestamp(14),
-  itemnumber int(11)
+
+CREATE TABLE `reserves` (
+  `borrowernumber` int(11) NOT NULL default '0',
+  `reservedate` date NOT NULL default '0000-00-00',
+  `biblionumber` int(11) NOT NULL default '0',
+  `constrainttype` char(1) default NULL,
+  `branchcode` varchar(4) default NULL,
+  `notificationdate` date default NULL,
+  `reminderdate` date default NULL,
+  `cancellationdate` date default NULL,
+  `reservenotes` text,
+  `priority` smallint(6) default NULL,
+  `found` char(1) default NULL,
+  `timestamp` timestamp(14) NOT NULL,
+  `itemnumber` int(11) default NULL
 );
 
 #
 # Table structure for table 'searchstats'
 #
-CREATE TABLE searchstats (
-  time datetime,
-  searchstring text
+
+CREATE TABLE `searchstats` (
+  `time` datetime default NULL,
+  `searchstring` text
 );
 
 #
 # Table structure for table 'serialissues'
 #
-CREATE TABLE serialissues (
-  biblionumber int(11) DEFAULT '0' NOT NULL,
-  volume varchar(20) DEFAULT '' NOT NULL,
-  number varchar(20) DEFAULT '' NOT NULL,
-  ordernumber smallint(6),
-  issuedate varchar(20),
-  received varchar(18)
+
+CREATE TABLE `serialissues` (
+  `biblionumber` int(11) NOT NULL default '0',
+  `volume` varchar(20) NOT NULL default '',
+  `number` varchar(20) NOT NULL default '',
+  `ordernumber` smallint(6) default NULL,
+  `issuedate` varchar(20) default NULL,
+  `received` varchar(18) default NULL
 );
 
 #
 # Table structure for table 'statistics'
 #
-CREATE TABLE statistics (
-  datetime datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-  branch varchar(4),
-  proccode varchar(4),
-  value double(16,4),
-  type varchar(16),
-  other text,
-  usercode varchar(10),
-  itemnumber int(11),
-  itemtype varchar(4),
-  borrowernumber int(11) default NULL,
-  KEY timeidx (datetime)
+
+CREATE TABLE `statistics` (
+  `datetime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `branch` varchar(4) default NULL,
+  `proccode` varchar(4) default NULL,
+  `value` double(16,4) default NULL,
+  `type` varchar(16) default NULL,
+  `other` text,
+  `usercode` varchar(10) default NULL,
+  `itemnumber` int(11) default NULL,
+  `itemtype` varchar(4) default NULL,
+  `borrowernumber` int(11) default NULL,
+  KEY `timeidx` (`datetime`)
 );
 
 #
 # Table structure for table 'stopwords'
 #
-CREATE TABLE stopwords (
-  word varchar(255)
+
+CREATE TABLE `stopwords` (
+  `word` varchar(255) default NULL
 );
 
 #
 # Table structure for table 'systempreferences'
 #
-CREATE TABLE systempreferences (
-  variable char(50) DEFAULT '' NOT NULL,
-  value char(200),
-  PRIMARY KEY (variable)
+
+CREATE TABLE `systempreferences` (
+  `variable` char(50) NOT NULL default '',
+  `value` char(200) default NULL,
+  PRIMARY KEY  (`variable`)
 );
 
 #
 # Table structure for table 'users'
 #
-CREATE TABLE users (
-  usercode varchar(10),
-  username text,
-  password text,
-  level smallint(6)
+
+CREATE TABLE `users` (
+  `usercode` varchar(10) default NULL,
+  `username` text,
+  `password` text,
+  `level` smallint(6) default NULL
 );
 
