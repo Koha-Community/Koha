@@ -32,16 +32,14 @@ sub checkauth {
     }
     my $sessionID=$query->cookie('sessionID');
     my $message='';
-    warn "SID: ".$sessionID;
 
     my $dbh=C4Connect();
     my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	if ($lasttime<time()-15 && $userid ne 'tonnesen') {
+	if ($lasttime<time()-45 && $userid ne 'tonnesen') {
 	    # timed logout
-	    warn "$sessionID logged out due to inactivity.";
 	    $message="You have been logged out due to inactivity.";
 	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
 	    $sti->execute($sessionID);
@@ -56,14 +54,12 @@ sub checkauth {
 	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 	    # Different ip than originally logged in from
 	    my $newip=$ENV{'REMOTE_ADDR'};
-	    warn "$sessionID came from a new ip address (authenticated from $ip, this request from $newip).";
 
 	    $message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
 	} else {
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
 				      -expires => '+1y');
-	    warn "$sessionID had a valid cookie.";
 	    my $sti=$dbh->prepare("update sessions set lasttime=? where sessionID=?");
 	    $sti->execute(time(), $sessionID);
 	    return ($userid, $cookie, $sessionID);
@@ -72,7 +68,6 @@ sub checkauth {
 
 
 
-    warn "$sessionID wasn't in sessions table.";
     if ($authnotrequired) {
 	my $cookie=$query->cookie(-name => 'sessionID',
 				  -value => '',
@@ -83,7 +78,9 @@ sub checkauth {
 	my $userid=$query->param('userid');
 	my $password=$query->param('password');
 	if (checkpw($dbh, $userid, $password)) {
-	    my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
+	    my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
+	    $sti->execute($sessionID, $userid);
+	    $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
 	    $sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
 	    $sti->execute($sessionID, $userid);
