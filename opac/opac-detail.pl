@@ -20,6 +20,7 @@ my $template = gettemplate ("opac-detail.tmpl", "opac");
 $template->param(loggedinuser => $loggedinuser);
 
 my $biblionumber=$query->param('bib');
+$template->param(biblionumber => $biblionumber);
 
 
 # change back when ive fixed request.pl
@@ -35,6 +36,15 @@ $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {
         $dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
 } # for
+
+my $norequests = 1;
+foreach my $itm (@items) {
+    $norequests = 0 unless $itm->{'notforloan'};
+}
+
+$template->param(norequests => $norequests);
+
+
 
 my @results;
 
