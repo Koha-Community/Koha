@@ -43,15 +43,14 @@ sub printallissues {
   my ($env,$borrower)=@_;
   my @issues;
   my $dbh = C4::Context->dbh;
-  my $query = "select * from issues,items,biblioitems,biblio
-    where borrowernumber = '$borrower->{'borrowernumber'}'
+  my $sth = $dbh->prepare("select * from issues,items,biblioitems,biblio
+    where borrowernumber = ?
     and (returndate is null)
     and (issues.itemnumber = items.itemnumber)
     and (items.biblioitemnumber = biblioitems.biblioitemnumber)
     and (items.biblionumber = biblio.biblionumber)
-    order by date_due";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
+    order by date_due");
+  $sth->execute($borrower->{'borrowernumber'});
   my $x;
   while (my $data = $sth->fetchrow_hashref) {
     # FIXME - This should be $issues[$x] = $data, right?
