@@ -20,16 +20,17 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $kohaVersion = C4::Context->config("kohaversion");
-my $osVersion = `/bin/uname -a`;
-my $perlVersion = `/usr/bin/perl -v`;
-my $mysqlVersion = "unknown";
-my $apacheVersion =  "unknown";
+my $osVersion = `uname -a`;
+my $perlVersion = `perl -v`;
+my $mysqlVersion = `mysql -V`;
+my $apacheVersion =  `httpd -V`;
 
 $template->param(
-                        osVersion          => $osVersion,
-                        perlVersion        => $perlVersion,
-                        mysqlVersion       => $mysqlVersion,
-                        apacheVersion      => $apacheVersion,
+					kohaVersion => $kohaVersion,
+					osVersion          => $osVersion,
+					perlVersion        => $perlVersion,
+					mysqlVersion       => $mysqlVersion,
+					apacheVersion      => $apacheVersion,
 		);
 
 output_html_with_http_headers $query, $cookie, $template->output;
