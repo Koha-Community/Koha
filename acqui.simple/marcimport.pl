@@ -601,7 +601,7 @@ sub PrintResultRecordLink {
 
 	$searchfield="";
 	foreach $fieldname ( "controlnumber", "lccn", "issn", "isbn") {
-	    if ( defined $bib->{$fieldname} ) {
+	    if ( defined $bib->{$fieldname} && $bib->{$fieldname} ) {
 		$searchfield=$fieldname;
 		$searchvalue=$bib->{$fieldname};
 	    } # if defined fieldname
