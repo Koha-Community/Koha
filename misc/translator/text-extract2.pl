@@ -80,11 +80,35 @@ use vars qw( $cdata_mode_p $cdata_close );
 
 ###############################################################################
 
-sub warn_pedantic ($$) {
-    my($flag, $msg) = @_;
-    warn "Warning$pedantic_tag: $msg\n" if $pedantic_p || !$$flag;
+use vars qw( $appName $input_abbr );
+
+sub construct_warn_prefix ($$) {
+    my($prefix, $lc) = @_;
+    # Construct some short but should-be-still-useful versions
+    # of this script's name and the input file's name
+    my $appName = $& if !defined $appName && $0 =~ /[^\/]+$/;
+    my $input_abbr = $& if !defined $input_abbr && $input =~ /[^\/]+$/;
+    # FIXME: The line number is not accurate, but should be "close enough"
+    # FIXME: This wording is worse than what was there, but it's wrong to
+    # FIXME: hard-code this thing in each warn statement. Need improvement.
+    return "$appName: $prefix: " . (defined $lc? "$input_abbr: line $lc: ": "$input_abbr: ");
+}
+
+sub warn_normal ($$) {
+    my($msg, $lc) = @_;
+    my $prefix = construct_warn_prefix('Warning', $lc);
+    $msg .= "\n" unless $msg =~ /\n$/s;
+    warn "$prefix$msg";
+}
+
+sub warn_pedantic ($$$) {
+    my($msg, $lc, $flag) = @_;
+    my $prefix = construct_warn_prefix("Warning$pedantic_tag", $lc);
+    $msg .= "\n" unless $msg =~ /\n$/s;
+    warn "$prefix$msg" if $pedantic_p || !$$flag;
     if (!$pedantic_p) {
-	warn "Warning$pedantic_tag: Further similar negligible warnings will not be reported, use --pedantic for details\n" unless $$flag;
+	$prefix = construct_warn_prefix("Warning$pedantic_tag", undef);
+	warn $prefix."Further similar negligible warnings will not be reported, use --pedantic for details\n" unless $$flag;
 	$$flag = 1;
     }
 }
@@ -104,35 +128,36 @@ sub extract_attributes ($;$) {
 	$attr{+lc($key)} = [$key, $val, $val_orig, $i];
 	$s = $rest;
 	if ($val =~ /$re_tmpl_include/os) {
-	    warn "Warning: TMPL_INCLUDE in attribute"
-		. (defined $lc? " near line $lc": '') . ": $val_orig\n";
+	    warn_normal "TMPL_INCLUDE in attribute: $val_orig\n", $lc;
 	} elsif ($val =~ /$re_tmpl_var/os && $val !~ /$re_tmpl_var_escaped/os) {
 	    # XXX: we probably should not warn if key is "onclick" etc
 	    # XXX: there's just no reasonable thing to suggest
 	    my $suggest = ($key =~ /^(?:action|archive|background|cite|classid|codebase|data|datasrc|for|href|longdesc|profile|src|usemap)$/i? 'URL': 'HTML');
 	    undef $suggest if $key =~ /^(?:onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onload|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onreset|onselect|onsubmit|onunload)$/i;
-	    warn_pedantic \$pedantic_tmpl_var_use_in_nonpedantic_mode_p,
+	    warn_pedantic
 		    "Suggest ESCAPE=$suggest for TMPL_VAR in attribute \"$key\""
-		    . (defined $lc? " near line $lc": '') . ": $val_orig"
+			. ": $val_orig",
+		    $lc, \$pedantic_tmpl_var_use_in_nonpedantic_mode_p
 		if defined $suggest && ($pedantic_p || !$pedantic_tmpl_var_use_in_nonpedantic_mode_p);
 	} elsif ($val_orig !~ /^['"]/) {
 	    my $t = $val; $t =~ s/$re_directive_control//os;
-	    warn_pedantic \$pedantic_attribute_error_in_nonpedantic_mode_p,
+	    warn_pedantic
 		"Unquoted attribute contains character(s) that should be quoted"
-		. (defined $lc? " near line $lc": '') . ": $val_orig"
+		    . ": $val_orig",
+		$lc, \$pedantic_attribute_error_in_nonpedantic_mode_p
 		if $t =~ /[^-\.A-Za-z0-9]/s;
 	}
     }
     my $s2 = $s; $s2 =~ s/$re_tmpl_endif_endloop//g; # for the next check
     if ($s2 =~ /\S/s) { # should never happen
 	if ($s =~ /^([^\n]*)\n/s) { # this is even worse
-	    warn "Error: Completely confused while extracting attributes"
-		    . (defined $lc? " near line $lc": '') . ": $1\n";
-	    warn "Error: " . (scalar split(/\n/, $s) - 1) . " more line(s) not shown.\n";
+	    my $prefix = construct_warn_prefix('Error: ', $lc);
+	    warn $prefix . "Completely confused while extracting attributes"
+		    . ": $1\n";
+	    warn $prefix . (scalar split(/\n/, $s) - 1) . " more line(s) not shown.\n";
 	    $fatal_p = 1;
 	} else {
-	    warn "Warning: Strange attribute syntax"
-		    . (defined $lc? " near line $lc": '') . ": $s\n";
+	    warn "Strange attribute syntax: $s\n", $lc;
 	}
     }
     return \%attr;
@@ -158,7 +183,7 @@ sub next_token_internal (*) {
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
     } elsif ($readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
 	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
-	warn "Warning: Unescaped < near line $lc_0: $it\n"
+	warn "Warning: Unescaped < $it\n", $lc_0
 		if !$cdata_mode_p && $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
@@ -174,11 +199,11 @@ sub next_token_internal (*) {
 	    } elsif ($readahead =~ /^$re_tag_compat/os) {
 		($kind, $it, $readahead) = (KIND_TAG, "$1>", $3);
 		$ok_p = 1;
-		warn "Warning: SGML \"closed start tag\" notation near line $lc_0: $1<\n" if $2 eq '';
+		warn "SGML \"closed start tag\" notation: $1<\n", $lc_0 if $2 eq '';
 	    } elsif ($readahead =~ /^<!--(?:(?!-->).)*-->/s) {
 		($kind, $it, $readahead) = (KIND_COMMENT, $&, $');
 		$ok_p = 1;
-		warn "Warning: Syntax error in comment at line $lc_0: $&\n";
+		warn "Syntax error in comment: $&\n", $lc_0;
 		$syntaxerror_p = 1;
 	    }
 	last if $ok_p;
@@ -204,7 +229,7 @@ sub next_token_internal (*) {
 	    $syntaxerror_p = 1;
 	}
     }
-    warn "Warning: Unrecognizable token found near line $lc_0: $it\n"
+    warn "Unrecognizable token found: $it\n", $lc_0
 	    if $kind eq KIND_UNKNOWN;
     return defined $it? (wantarray? ($kind, $it):
 				    [$kind, $it]): undef;
@@ -351,7 +376,7 @@ if ($debug_dump_only_p) {
     text_extract(*INPUT);
 }
 
-warn "Warning: This input will not work with Mozilla standards-compliant mode\n"
+warn "This input will not work with Mozilla standards-compliant mode\n", undef
 	if $syntaxerror_p;
 
 close INPUT;
