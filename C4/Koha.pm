@@ -11,6 +11,8 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(&slashifyDate
 	     &fixEthnicity
+	     &borrowercategories
+	     &ethnicitycategories
 	     $DEBUG); 
 
 use vars qw();
@@ -36,6 +38,35 @@ sub fixEthnicity($) {
     return $data->{'name'};
 }
 
+sub borrowercategories {
+    my $dbh=C4Connect;
+    my $sth=$dbh->prepare("Select categorycode,description from categories order by description");
+    $sth->execute;
+    my %labels;
+    my @codes;
+    while (my $data=$sth->fetchrow_hashref){
+      push @codes,$data->{'categorycode'};
+      $labels{$data->{'categorycode'}}=$data->{'description'};
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return(\@codes,\%labels);
+}
+
+sub ethnicitycategories {
+    my $dbh=C4Connect;
+    my $sth=$dbh->prepare("Select code,name from ethnicity order by name");
+    $sth->execute;
+    my %labels;
+    my @codes;
+    while (my $data=$sth->fetchrow_hashref){
+      push @codes,$data->{'code'};
+      $labels{$data->{'code'}}=$data->{'name'};
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return(\@codes,\%labels);
+}
 
 1;
 __END__
@@ -50,8 +81,8 @@ Koha - Perl Module containing convenience functions for Koha scripts
 
 
   $date = slashifyDate("01-01-2002")
-
-
+  $ethnicity=fixEthnicity('asian');
+  ($categories,$labels)=borrowercategories();
 
 =head1 DESCRIPTION
 
