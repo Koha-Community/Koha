@@ -75,7 +75,9 @@ sub listsubjects {
 sub updatesub{
   my ($sub,$oldsub)=@_;
   my $dbh=C4Connect;
-  my $query="update bibliosubject set subject='$sub' where subject='$oldsub'";
+  $sub=$dbh->quote($sub);
+  $oldsub=$dbh->quote($oldsub);
+  my $query="update bibliosubject set subject=$sub where subject=$oldsub";
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;

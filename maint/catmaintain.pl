@@ -24,6 +24,7 @@ if ($type eq 'allsub'){
   for (my $i=0;$i<$count;$i++){
     my $sub2=$results->[$i]->{'subject'};
     $sub2=~ s/ /%20/g;
+      $sub2=~ s/\'/%27/g;
     print "\"<a href=\"/cgi-bin/koha/maint/catmaintain.pl?type=allsub&sub=$sub\" onclick=\'messenger(\"/cgi-bin/koha/maint/catmaintain.pl?type=modsub&sub=$sub2\");window1.focus()\'>$results->[$i]->{'subject'}\"</a><br>\n";
   }
 } elsif ($type eq 'modsub'){
@@ -84,6 +85,7 @@ if ($type eq 'allsub'){
   print "<form action=/cgi-bin/koha/search.pl method=post>";
   print "<input type=hidden name=type value=catmain>";
   print "Show all Titles beginning with <input type=text name=title><br>";
+  print "Item Number <INPUT TYPE=\"text\"  SIZE=\"25\"   NAME=\"item\"><br>";
   print "<input type=submit value=Show>";
   print "</form>";
   print "<p>";
