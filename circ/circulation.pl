@@ -358,6 +358,17 @@ sub issues {
     my ($noheader) = shift;
     my $print=$query->param('print');
     my $borrowernumber=$query->param('borrnumber');    
+    my $barcode=$query->param('barcode');
+#    if (!$barcode){
+#      $barcode=' ';
+#    }
+    if ($barcode eq ''){
+      $print='yes';
+     
+    } elsif ($barcode eq ' '){
+      $query->param('barcode','');
+      $barcode='';
+    }
     if ($print eq 'yes'){
       my ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
       $env{'todaysissues'}=1;
@@ -374,7 +385,7 @@ sub issues {
 #      print $i;
       remoteprint(\%env,\@issues,$borrower);
       $query->param('borrnumber','')
-
+#       $borrowernumber='';
     }
     unless ($noheader) {
 	print << "EOF";
@@ -384,7 +395,6 @@ EOF
     }
     if (my $borrnumber=$query->param('borrnumber')) {
 	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
-#	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
 	my $year=$query->param('year');
 	my $month=$query->param('month');
 	my $day=$query->param('day');
@@ -674,6 +684,7 @@ EOF
 	    }
 	    if ($#borrowers == 0) {
 		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
+		$query->param('barcode',' ');
 		issues(1);
 		return;
 	    } else {
@@ -681,6 +692,7 @@ EOF
 		print "<input type=hidden name=module value=issues>\n";
 		print "<input type=hidden name=branch value=$branch>\n";
 		print "<input type=hidden name=printer value=$printer>\n";
+		print "<input type=hidden name=barcode value=\" \">\n";
 		print "<table border=0 cellspacing=0 cellpadding=5 bgcolor=#dddddd>";
 		print "<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Select a borrower</b></font></th></tr>\n";
 		print "<tr><td align=center>\n";
@@ -703,6 +715,7 @@ EOF
 <input type=hidden name=module value=issues>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
+<input type=hidden name=barcode value=" ">
 </form>
 </td></tr></table>
 EOF
