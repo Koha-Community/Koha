@@ -108,24 +108,24 @@ C4::Auth - Authenticates Koha users
 
 
 sub get_template_and_user {
-    my $in = shift;
-    my $template = gettemplate($in->{'template_name'}, $in->{'type'});
-    my ($user, $cookie, $sessionID, $flags)
-	= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+	my $in = shift;
+	my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+	my ($user, $cookie, $sessionID, $flags)
+		= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
 
-    my $borrowernumber;
-    if ($user) {
-	$template->param(loggedinuser => $user);
-	$template->param(sessionID => $sessionID);
+	my $borrowernumber;
+	if ($user) {
+		$template->param(loggedinuser => $user);
+		$template->param(sessionID => $sessionID);
 
-	$borrowernumber = getborrowernumber($user);
-	my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
-	my @bordat;
-	$bordat[0] = $borr;
+		$borrowernumber = getborrowernumber($user);
+		my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+		my @bordat;
+		$bordat[0] = $borr;
 
-	$template->param(USER_INFO => \@bordat);
-    }
-    return ($template, $borrowernumber, $cookie);
+		$template->param(USER_INFO => \@bordat);
+	}
+	return ($template, $borrowernumber, $cookie);
 }
 
 
@@ -190,152 +190,151 @@ has authenticated.
 
 
 sub checkauth {
-    my $query=shift;
-    # $authnotrequired will be set for scripts which will run without authentication
-    my $authnotrequired = shift;
-    my $flagsrequired = shift;
-    my $type = shift;
-    $type = 'opac' unless $type;
+	my $query=shift;
+	# $authnotrequired will be set for scripts which will run without authentication
+	my $authnotrequired = shift;
+	my $flagsrequired = shift;
+	my $type = shift;
+	$type = 'opac' unless $type;
 
-    my $dbh = C4::Context->dbh;
-    my $timeout = C4::Context->preference('timeout');
-    $timeout = 120 unless $timeout;
+	my $dbh = C4::Context->dbh;
+	my $timeout = C4::Context->preference('timeout');
+	$timeout = 120 unless $timeout;
 
-    my $template_name;
-    if ($type eq 'opac') {
-	$template_name = "opac-auth.tmpl";
-    } else {
-	$template_name = "auth.tmpl";
-    }
-
-    # state variables
-    my $loggedin = 0;
-    my %info;
-    my ($userid, $cookie, $sessionID, $flags);
-    my $logout = $query->param('logout.x');
-    if ($userid = $ENV{'REMOTE_USER'}) {
-	# Using Basic Authentication, no cookies required
-	$cookie=$query->cookie(-name => 'sessionID',
-			       -value => '',
-			       -expires => '');
-	$loggedin = 1;
-    } elsif ($sessionID=$query->cookie('sessionID')) {
-	my ($ip , $lasttime);
-	($userid, $ip, $lasttime) = $dbh->selectrow_array(
-                        "SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
-							  undef, $sessionID);
-	if ($logout) {
-	    warn "In logout!\n";
-	    # voluntary logout the user
-	    $dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-	    $sessionID = undef;
-	    $userid = undef;
-	    open L, ">>/tmp/sessionlog";
-	    my $time=localtime(time());
-	    printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
-	    close L;
-	}
-	if ($userid) {
-	    if ($lasttime<time()-$timeout) {
-		# timed logout
-		$info{'timed_out'} = 1;
-		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-		$userid = undef;
-		$sessionID = undef;
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
-		close L;
-	    } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-		# Different ip than originally logged in from
-		$info{'oldip'} = $ip;
-		$info{'newip'} = $ENV{'REMOTE_ADDR'};
-		$info{'different_ip'} = 1;
-		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
-		$sessionID = undef;
-		$userid = undef;
-		open L, ">>/tmp/sessionlog";
-		my $time=localtime(time());
-		printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
-		close L;
-	    } else {
-		$cookie=$query->cookie(-name => 'sessionID',
-				       -value => $sessionID,
-				       -expires => '');
-		$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
-			 undef, (time(), $sessionID));
-		$flags = haspermission($dbh, $userid, $flagsrequired);
-		if ($flags) {
-		    $loggedin = 1;
-		} else {
-		    $info{'nopermission'} = 1;
-		}
-	    }
-	}
-    }
-    unless ($userid) {
-	$sessionID=int(rand()*100000).'-'.time();
-	$userid=$query->param('userid');
-	my $password=$query->param('password');
-	my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
-	if ($return) {
-	    $dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
-		     undef, ($sessionID, $userid));
-	    $dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-		     undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
-	    open L, ">>/tmp/sessionlog";
-	    my $time=localtime(time());
-	    printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-	    close L;
-	    $cookie=$query->cookie(-name => 'sessionID',
-				   -value => $sessionID,
-				   -expires => '');
-	    if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
-		$loggedin = 1;
-	    } else {
-		$info{'nopermission'} = 1;
-	    }
+	my $template_name;
+	if ($type eq 'opac') {
+		$template_name = "opac-auth.tmpl";
 	} else {
-	    if ($userid) {
-		$info{'invalid_username_or_password'} = 1;
-	    }
+		$template_name = "auth.tmpl";
 	}
-    }
-    my $insecure = C4::Context->boolean_preference('insecure');
-    # finished authentification, now respond
-    if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-	# successful login
-	unless ($cookie) {
-	    $cookie=$query->cookie(-name => 'sessionID',
-				   -value => '',
-				   -expires => '');
+
+	# state variables
+	my $loggedin = 0;
+	my %info;
+	my ($userid, $cookie, $sessionID, $flags);
+	my $logout = $query->param('logout.x');
+	if ($userid = $ENV{'REMOTE_USER'}) {
+		# Using Basic Authentication, no cookies required
+		$cookie=$query->cookie(-name => 'sessionID',
+				-value => '',
+				-expires => '');
+		$loggedin = 1;
+	} elsif ($sessionID=$query->cookie('sessionID')) {
+		my ($ip , $lasttime);
+		($userid, $ip, $lasttime) = $dbh->selectrow_array(
+				"SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
+								undef, $sessionID);
+		if ($logout) {
+		# voluntary logout the user
+		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		$sessionID = undef;
+		$userid = undef;
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
+		close L;
+		}
+		if ($userid) {
+		if ($lasttime<time()-$timeout) {
+			# timed logout
+			$info{'timed_out'} = 1;
+			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+			$userid = undef;
+			$sessionID = undef;
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+			close L;
+		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+			# Different ip than originally logged in from
+			$info{'oldip'} = $ip;
+			$info{'newip'} = $ENV{'REMOTE_ADDR'};
+			$info{'different_ip'} = 1;
+			$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+			$sessionID = undef;
+			$userid = undef;
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
+			close L;
+		} else {
+			$cookie=$query->cookie(-name => 'sessionID',
+					-value => $sessionID,
+					-expires => '');
+			$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+				undef, (time(), $sessionID));
+			$flags = haspermission($dbh, $userid, $flagsrequired);
+			if ($flags) {
+			$loggedin = 1;
+			} else {
+			$info{'nopermission'} = 1;
+			}
+		}
+		}
 	}
-	return ($userid, $cookie, $sessionID, $flags);
-    }
-    # else we have a problem...
-    # get the inputs from the incoming query
-    my @inputs =();
-    foreach my $name (param $query) {
-	(next) if ($name eq 'userid' || $name eq 'password');
-	my $value = $query->param($name);
-	push @inputs, {name => $name , value => $value};
-    }
+	unless ($userid) {
+		$sessionID=int(rand()*100000).'-'.time();
+		$userid=$query->param('userid');
+		my $password=$query->param('password');
+		my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
+		if ($return) {
+		$dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+			undef, ($sessionID, $userid));
+		$dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+			undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+		close L;
+		$cookie=$query->cookie(-name => 'sessionID',
+					-value => $sessionID,
+					-expires => '');
+		if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+			$loggedin = 1;
+		} else {
+			$info{'nopermission'} = 1;
+		}
+		} else {
+		if ($userid) {
+			$info{'invalid_username_or_password'} = 1;
+		}
+		}
+	}
+	my $insecure = C4::Context->boolean_preference('insecure');
+	# finished authentification, now respond
+	if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
+		# successful login
+		unless ($cookie) {
+		$cookie=$query->cookie(-name => 'sessionID',
+					-value => '',
+					-expires => '');
+		}
+		return ($userid, $cookie, $sessionID, $flags);
+	}
+	# else we have a problem...
+	# get the inputs from the incoming query
+	my @inputs =();
+	foreach my $name (param $query) {
+		(next) if ($name eq 'userid' || $name eq 'password');
+		my $value = $query->param($name);
+		push @inputs, {name => $name , value => $value};
+	}
 
-    my $template = gettemplate($template_name, $type);
-    $template->param(INPUTS => \@inputs);
-    $template->param(loginprompt => 1) unless $info{'nopermission'};
+	my $template = gettemplate($template_name, $type);
+	$template->param(INPUTS => \@inputs);
+	$template->param(loginprompt => 1) unless $info{'nopermission'};
 
-    my $self_url = $query->url(-absolute => 1);
-    $template->param(url => $self_url);
-    $template->param(\%info);
-    $cookie=$query->cookie(-name => 'sessionID',
-				  -value => $sessionID,
-				  -expires => '');
-    print $query->header(
-      -type => guesstype($template->output),
-      -cookie => $cookie
-    ), $template->output;
-    exit;
+	my $self_url = $query->url(-absolute => 1);
+	$template->param(url => $self_url);
+	$template->param(\%info);
+	$cookie=$query->cookie(-name => 'sessionID',
+					-value => $sessionID,
+					-expires => '');
+	print $query->header(
+		-type => guesstype($template->output),
+		-cookie => $cookie
+		), $template->output;
+	exit;
 }
 
 
@@ -348,12 +347,10 @@ sub checkpw {
 # tables passwd field
 #
 	my ($dbh, $userid, $password) = @_;
-	warn "$userid / $password";
 	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
 		my ($md5password,$cardnumber) = $sth->fetchrow;
-		warn "==> ".md5_base64($password)." = $md5password";
 		if (md5_base64($password) eq $md5password) {
 			return 1,$cardnumber;
 		}
