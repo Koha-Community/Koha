@@ -67,7 +67,9 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($bookfundid) {
 		my $dbh = &C4Connect;
-		my $sth=$dbh->prepare("select bookfundid,startdate,enddate,budgetamount,bookfundname from aqbudget,aqbookfund where aqbudget.bookfundid=aqbookfund.bookfundid and bookfundid='$bookfundid'");
+	        my $query="select aqbookfund.bookfundid,startdate,enddate,budgetamount,bookfundname from aqbudget,aqbookfund where aqbudget.bookfundid=aqbookfund.bookfundid and aqbookfund.bookfundid='$bookfundid'";
+#	        print $query;
+		my $sth=$dbh->prepare($query);
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -139,6 +141,7 @@ printend
 	print "<table>";
 	if ($bookfundid) {
 		print "<tr><td>Book fund</td><td><input type=hidden name=bookfundid value=$bookfundid>$bookfundid</td></tr>";
+	        print "<tr><td>Book fund</td><td>$data->{'bookfundname'}</td></tr>";
 	} else {
 		print "<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>";
 	}
