@@ -67,7 +67,7 @@ print "CHAR : $char_encoding\n";
 my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
 $batch->strict_off();
-my $i=1;
+my $i=0;
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
 
@@ -75,6 +75,7 @@ while ( my $record = $batch->next() ) {
 	$i++;
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 	$record = MARC::File::USMARC::decode(char_decode($record->as_usmarc(),$char_encoding));
+	warn "==>".$record->as_formatted();
 	my @fields = $record->field($tagfield);
 	print "biblio $i";
 	my @items;
