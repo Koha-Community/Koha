@@ -95,7 +95,8 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
 			$subfield_data{marc_value}=$field->data();
-			$subfield_data{marc_tag}='@';
+			$subfield_data{marc_subfield}='@';
+			$subfield_data{marc_tag}=$field->tag();
 			push(@subfields_data, \%subfield_data);
 		} else {
 			my @subf=$field->subfields;
@@ -105,8 +106,9 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-					$subfield_data{marc_value}=$subf[$i][1];
-				$subfield_data{marc_tag}=$subf[$i][0];
+				$subfield_data{marc_value}=$subf[$i][1];
+				$subfield_data{marc_subfield}=$subf[$i][0];
+				$subfield_data{marc_tag}=$field->tag();
 				push(@subfields_data, \%subfield_data);
 			}
 		}
