@@ -8,6 +8,8 @@ use C4::Output;
 use C4::Search;
 
 my $input= new CGI;
+#print $input->header;
+#print $input->Dump;
 
 my $bibitemnum      = checkinp($input->param('bibitemnum'));
 my $bibnum          = checkinp($input->param('bibnum'));
@@ -32,6 +34,7 @@ if ($itemtype ne 'NF') {
 } # if
 
 if ($class =~/[0-9]+/) {
+#   print $class;
    $dewey= $class;
    $dewey=~ s/[a-z]+//gi;
    my @temp;
@@ -42,14 +45,16 @@ if ($class =~/[0-9]+/) {
    } # else
    $classification=$temp[0];
    $subclass=$temp[1];
-
+#   print $classification,$dewey,$subclass;
 } else {
   $dewey='';
   $subclass='';
 } # else
 
 my (@items) = &itemissues($bibitemnum);
+#print @items;           
 my $count   = @items;
+#print $count;
 my @barcodes;
 
 my $existing=$input->param('existing');
