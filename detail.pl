@@ -28,12 +28,12 @@ use C4::Auth;
 
 my $query=new CGI;
 my $type=$query->param('type');
-(-e "opac") && ($type='opac');
+#(-e "opac") && ($type='opac');
 ($type) || ($type='intra');
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 my $biblionumber=$query->param('bib');
-my $type='intra';	# FIXME - There's already a $type in this scope
+#my $type='intra';	# FIXME - There's already a $type in this scope
 
 
 # change back when ive fixed request.pl

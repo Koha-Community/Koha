@@ -28,12 +28,10 @@ use C4::Output;
 
 my $query=new CGI;
 my $type=$query->param('type');
-warn $type;		# FIXME - What's this for?
 
 #(-e "opac") && ($type='opac');
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
-warn $type;		# FIXME - What's this for?
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);

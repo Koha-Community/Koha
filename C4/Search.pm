@@ -1690,16 +1690,14 @@ and issues.borrowernumber = borrowers.borrowernumber";
 
         # Find the last 3 people who borrowed this item.
         $query2 = "select * from issues, borrowers
-where itemnumber = '$data->{'itemnumber'}'
-and issues.borrowernumber = borrowers.borrowernumber
-and returndate is not NULL
-order by returndate desc,timestamp desc";
-        $sth2 = $dbh->prepare($query2)
-          || die $dbh->errstr;
-        $sth2->execute
-          || die $sth2->errstr;
-
-        for (my $i2 = 0; $i2 < 2; $i2++) {
+						where itemnumber = ?
+									and issues.borrowernumber = borrowers.borrowernumber
+									and returndate is not NULL
+									order by returndate desc,timestamp desc";
+warn "$query2";
+        $sth2 = $dbh->prepare($query2) || die $dbh->errstr;
+        $sth2->execute($data->{'itemnumber'}) || die $sth2->errstr;
+        for (my $i2 = 0; $i2 < 2; $i2++) { # FIXME : error if there is less than 3 pple borrowing this item
             if (my $data2 = $sth2->fetchrow_hashref) {
                 $data->{"timestamp$i2"} = $data2->{'timestamp'};
                 $data->{"card$i2"}      = $data2->{'cardnumber'};

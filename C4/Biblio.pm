@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.27  2002/11/19 12:36:16  tipaul
+# road to 1.3.2
+# various bugfixes, improvments, and migration from acquisition.pm to biblio.pm
+#
 # Revision 1.26  2002/11/12 15:58:43  tipaul
 # road to 1.3.2 :
 # * many bugfixes
@@ -175,14 +179,16 @@ $VERSION = 0.01;
 
 	     &MARCfind_oldbiblionumber_from_MARCbibid
 	     &MARCfind_MARCbibid_from_oldbiblionumber
-
-	     &NEWnewbiblio &NEWnewitem
-
+		&MARCfind_marc_from_kohafield
+	     &MARCfindsubfield
 	     &MARCgettagslib
+
+		&NEWnewbiblio &NEWnewitem
+		&NEWmodbiblio &NEWmoditem
+
 	     &MARCaddbiblio &MARCadditem
 	     &MARCmodsubfield &MARCaddsubfield
 	     &MARCmodbiblio &MARCmoditem
-	     &MARCfindsubfield
 	     &MARCkoha2marcBiblio &MARCmarc2koha
 		&MARCkoha2marcItem &MARChtml2marc
 	     &MARCgetbiblio &MARCgetitem
@@ -256,8 +262,7 @@ the db header $dbh is always passed as parameter to avoid over-DB connexion
 
 last param is 1 for liblibrarian and 0 for libopac
 returns a hash with tag/subfield meaning
-
-=item ($tagfield,$tagsubfield) = &MARCfindmarc_from_kohafield($dbh,$kohafield);
+=item ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,$kohafield);
 
 finds MARC tag and subfield for a given kohafield
 kohafield is "table.field" where table= biblio|biblioitems|items, and field a field of the previous table
@@ -348,9 +353,9 @@ sub MARCgettagslib {
 	my ($dbh,$forlibrarian)= @_;
 	my $sth;
 	if ($forlibrarian eq 1) {
-		$sth=$dbh->prepare("select tagfield,liblibrarian as lib from marc_tag_structure");
+		$sth=$dbh->prepare("select tagfield,liblibrarian as lib from marc_tag_structure order by tagfield");
 	} else {
-		$sth=$dbh->prepare("select tagfield,libopac as lib from marc_tag_structure");
+		$sth=$dbh->prepare("select tagfield,libopac as lib from marc_tag_structure order by tagfield");
 	}
 	$sth->execute;
 	my ($lib,$tag,$res,$tab,$mandatory,$repeatable);
@@ -360,9 +365,9 @@ sub MARCgettagslib {
 	}
 
 	if ($forlibrarian eq 1) {
-		$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure");
+		$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure order by tagfield,tagsubfield");
 	} else {
-		$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure");
+		$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure order by tagfield,tagsubfield");
 	}
 	$sth->execute;
 
@@ -538,13 +543,13 @@ sub MARCgetbiblio {
 			$record->add_fields($field);
 			$prevtagorder=$row->{tagorder};
 			$prevtag = $row->{tag};
-			$previndicator=$row->{tag};
+			$previndicator=$row->{tag_indicator};
 			%subfieldlist={};
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 		} else {
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 			$prevtag= $row->{tag};
-			$previndicator=$row->{indicator};
+			$previndicator=$row->{tag_indicator};
 		}
 	}
 	# the last has not been included inside the loop... do it now !
@@ -604,6 +609,7 @@ sub MARCmodbiblio {
     my $oldrecord=&MARCgetbiblio($dbh,$bibid);
 # if nothing to change, don't waste time...
     if ($oldrecord eq $record) {
+    warn "NOTHING TO CHANGE";
 	return;
     }
 # otherwise, skip through each subfield...
@@ -632,38 +638,44 @@ sub MARCmodbiblio {
     }
 }
 sub MARCmoditem {
-    my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
-    my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
-# if nothing to change, don't waste time...
-    if ($oldrecord eq $record) {
-	return;
-    }
-# otherwise, skip through each subfield...
-    my @fields = $record->fields();
-# search old MARC item
-    my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
-    $sth2->execute($bibid,$itemnumber);
-    my ($tagorder) = $sth2->fetchrow_array();
-    foreach my $field (@fields) {
-	my $oldfield = $oldrecord->field($field->tag());
-	my @subfields=$field->subfields();
-	my $subfieldorder=0;
-	foreach my $subfield (@subfields) {
-	    $subfieldorder++;
-	    if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
-# just adding datas...
-		&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
-				 $tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
-	    } else {
-# modify he subfield if it's a different string
-		if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
-		    my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-		    &MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
-		} else {
-		}
-	    }
+	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
+	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
+	# if nothing to change, don't waste time...
+	if ($oldrecord eq $record) {
+		warn "nothing to change";
+		return;
 	}
-    }
+	warn "MARCmoditem : ".$record->as_formatted;
+	# otherwise, skip through each subfield...
+	my @fields = $record->fields();
+	# search old MARC item
+	my $sth2 = $dbh->prepare("select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?");
+	$sth2->execute($bibid,$itemnumber);
+	my ($tagorder) = $sth2->fetchrow_array();
+	foreach my $field (@fields) {
+		my $oldfield = $oldrecord->field($field->tag());
+		my @subfields=$field->subfields();
+		my $subfieldorder=0;
+		foreach my $subfield (@subfields) {
+		$subfieldorder++;
+		if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
+	# just adding datas...
+		warn "addfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
+			&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
+					$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
+		} else {
+		warn "modfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
+	# modify he subfield if it's a different string
+			if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
+				my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
+				warn "HERE : $subfieldid, $bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder";
+				&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
+			} else {
+				warn "ICI";
+			}
+		}
+		}
+	}
 }
 
 
@@ -1012,9 +1024,9 @@ sub NEWnewbiblio {
     (my $tagfield1, my $tagsubfield1) = $sth->fetchrow;
     $sth->execute("biblioitems.biblioitemnumber");
     (my $tagfield2, my $tagsubfield2) = $sth->fetchrow;
-    if ($tagsubfield1 != $tagsubfield2) {
-	print STDERR "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same subfield number";
- 	print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same subfield number";
+    if ($tagfield1 != $tagfield2) {
+	print STDERR "Error in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
+ 	print "Content-Type: text/html\n\nError in NEWnewbiblio : biblio.biblionumber and biblioitems.biblioitemnumber MUST have the same field number";
 	die;
     }
     my $newfield = MARC::Field->new( $tagfield1,'','',
@@ -1028,9 +1040,15 @@ sub NEWnewbiblio {
     return ($bibid,$oldbibnum,$oldbibitemnum );
 }
 
+sub NEWmodbiblio {
+my ($dbh,$record,$bibid) =@_;
+&MARCmodbiblio($dbh,$record,$bibid);
+return 1;
+}
+
+
 sub NEWnewitem {
 	my ($dbh, $record,$bibid) = @_;
-	warn "add item : ".$record->as_formatted();
 	# add item in old-DB
 	my $item = &MARCmarc2koha($dbh,$record);
 	# needs old biblionumber and biblioitemnumber
@@ -1046,6 +1064,10 @@ sub NEWnewitem {
 	my $bib = &MARCadditem($dbh,$record,$item->{'biblionumber'});
 }
 
+sub NEWmoditem {
+	my ($dbh,$record,$bibid,$itemnumber,$delete) = @_;
+	&MARCmoditem($dbh,$record,$bibid,$itemnumber,$delete);
+}
 
 #
 #
@@ -1422,15 +1444,6 @@ sub OLDnewitems {
 	$itemnumber = $data->{'max(itemnumber)'} + 1;
 	$sth->finish;
 
-	$item->{'booksellerid'}     = $dbh->quote($item->{'booksellerid'});
-	$item->{'homebranch'}       = $dbh->quote($item->{'homebranch'});
-	$item->{'price'}            = $dbh->quote($item->{'price'});
-	$item->{'replacementprice'} = $dbh->quote($item->{'replacementprice'});
-	$item->{'itemnotes'}        = $dbh->quote($item->{'itemnotes'});
-
-	#  foreach my $barcode (@barcodes) {
-	#    $barcode = uc($barcode);
-	$barcode = $dbh->quote($barcode);
 	$sth=$dbh->prepare("Insert into items set
 						itemnumber           = ?,				biblionumber         = ?,
 						biblioitemnumber     = ?,				barcode              = ?,
