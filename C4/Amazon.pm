@@ -22,7 +22,18 @@ package C4::Amazon;
 # as well as an associate's tag to use it.
 # FIXME: need to write up more docs.
 #
-
+# To use this module you need to do three things:
+# 1. get a dev key and associate tag from Amazon
+# 2. uncomment the Amazon stuff in opac-detail.pl
+# 3. add the template variables to opac-detail.tmpl
+#    here's what's available: 
+#    ProductDescription
+#    ImageUrlMedium
+#    ListPrice
+#    url
+#    loop SimilarProducts (Product)
+#    loop Reviews (rating, Summary)
+#
 use strict;
 require Exporter;
 
