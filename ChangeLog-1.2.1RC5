@@ -1,0 +1,89 @@
+2002-06-27 14:16  tonnesen
+
+	* moremember.pl: Merged in optional ethnicity fix from rel-1-2
+
+2002-06-27 14:06  tonnesen
+
+	* moremember.pl: Ethnicity line only shows up if ethnicity data has
+	been entered for the borrower.
+
+2002-06-27 14:03  tonnesen
+
+	* memberentry.pl: Ethnicity fields only show up in memberentry if
+	any ethnic groups are entered into the database.
+
+2002-06-27 13:50  tonnesen
+
+	* koha.upgrade: Functional upgrade script.  This script backs up
+	the Koha database as well as all of the intranet and opac scripts
+	and html documents before installing new scripts and html documents
+	and updating the database.
+
+2002-06-27 13:49  tonnesen
+
+	* buildrelease: Adding koha.upgrade to list of files copied.
+
+2002-06-27 13:48  tonnesen
+
+	* updater/updatedatabase: Fixing bug that reported an error if
+	updatedatabase was run twice.
+
+2002-06-27 12:31  tonnesen
+
+	* koha.upgrade: Beginning of a koha.upgrade script for 1.2.1.  We
+	need this if 1.2.1 is intended for production systems.
+
+2002-06-27 12:31  tonnesen
+
+	* koha.upgrade: file koha.upgrade was initially added on branch
+	rel-1-2.
+
+2002-06-27 12:07  tonnesen
+
+	* buildrelease, installer.pl: Checks if a previous version of Koha
+	is installed and prompts to run koha.upgrade if so.  Removed option
+	to specify the location of koha.conf as the /etc/ location is
+	hardcoded in Database.pm and Output.pm.  Plus, we need to know
+	where it is when upgrading.  Added opacdir, intranetdir, and
+	kohaversion settings to koha.conf
+
+2002-06-27 11:35  tonnesen
+
+	* acqui.simple/marcimport.pl: $deweyinput was always defined (it's
+	an HTML input field).  Check against $bib->{dewey} instead.
+
+2002-06-27 10:41  tonnesen
+
+	* C4/Output.pm, acqui.simple/marcimport.pl: Applying patch from
+	Matt Kraai to pick F or NF based on presense of a dewey number when
+	adding a book via marcimport.pl
+
+2002-06-27 09:26  tonnesen
+
+	* acqui.simple/addbooks.pl: Re-enabling the max(barcode) + 1
+	behaviour.  Checks that the last digit is a number before adding 1.
+	 If the last digit isn't a number, fall back to Roger's behaviour
+	of using biblionumber as barcode.
+
+2002-06-27 06:30  tonnesen
+
+	* updater/updatedatabase: Fixed typo
+
+2002-06-26 22:28  tonnesen
+
+	* installer.pl: Making executable.
+
+2002-06-26 15:53  tonnesen
+
+	* ChangeLog-1.2.1RC4: Changelog for RC4
+
+2002-06-26 15:53  tonnesen
+
+	* ChangeLog-1.2.1RC4: file ChangeLog-1.2.1RC4 was initially added
+	on branch rel-1-2.
+
+2002-06-26 15:37  rangi
+
+	* buildrelease: Just adding a -r to the cp statement for the docs
+	folder
+
