@@ -6,20 +6,20 @@
   <input type=reset name="reset" value="clr">
 </form>
 
-Votre recherche<TMPL_VAR NAME=member> 
+Votre recherche <TMPL_VAR NAME=member>
 <p>
-<table>
+<table cellpadding=0 cellspacing=0 width=100%>
   <tr bgcolor="#99cc33">
-    <td background="/images/background-mem.gif"><b>Carte</b></td>
-    <td background="/images/background-mem.gif"><b>Pr&eacute;nom</b></td>
-    <td background="/images/background-mem.gif"><b>Nom</b></td>
-    <td background="/images/background-mem.gif"><b>Cat&eacute;gorie</b></td>
-    <td background="/images/background-mem.gif"><b>Adresse</b></td>
-    <td background="/images/background-mem.gif"><b>OD/Issues</b></td>
-    <td background="/images/background-mem.gif"><b>Amendes</b></td>
-    <td background="/images/background-mem.gif"><b>Remarques</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Carte</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Pr&eacute;nom</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Nom</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Cat&eacute;gorie</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Adresse</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>OD/Issues</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Amendes</b></td>
+    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Remarques</b></td>
   </tr>
-  
+
   <TMPL_LOOP NAME=resultsloop>
     <TMPL_IF NAME="__ODD__">
     <TR bgcolor="#ffffcc">

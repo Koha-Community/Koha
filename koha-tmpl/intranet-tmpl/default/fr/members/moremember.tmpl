@@ -2,75 +2,70 @@
 <FONT SIZE=6><em><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></em></FONT><P>
 <p>
 
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=270>
-  <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>FICHE DE LECTEUR</b></TD>
-  </TR>
-
-  <tr VALIGN=TOP  >
-    <TD>
-	<TMPL_IF name="IS_ADULT">
-		<p align=right>
-		<form action=/cgi-bin/koha/jmemberentry.pl method=post>
-			<INPUT TYPE="image" name="submit"  VALUE="add-child" height=42  WIDTH=120 BORDER=0 src="<TMPL_VAR name="themelang">/images/add-child.gif">
-			<input type=hidden name=type value=Add>
-			<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
-		</form>
-		</p>
-	 </TMPL_IF>
-	 <br>
-      <FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF>
-      <p> N&deg; de carte: <TMPL_VAR NAME="cardnumber"><BR>
-        Adresse postale: <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><BR>
-        Adresse personnelle : <TMPL_VAR NAME="physstreet">, <TMPL_VAR NAME="streetcity"><BR>
-        T&eacute;l&eacute;phone personnel : <TMPL_VAR NAME="phone"><BR>
-        T&eacute;l&eacute;phone professionnel : <TMPL_VAR NAME="phoneday"><BR>
-      Fax: <TMPL_VAR NAME="faxnumber"><BR>
-      E-mail: <a href="mailto:<TMPL_VAR NAME="emailaddress">"><TMPL_VAR NAME="emailaddress"></a><br>
-        SMS :<TMPL_VAR NAME="textmessaging">
-      <p> N&deg; de lecteur: <TMPL_VAR NAME="borrowernumber"><BR>
-        Inscription : <TMPL_VAR NAME="categorycode"><BR>
-        Zone : <TMPL_VAR NAME="area"><BR>
-        Frais d'inscription :30 &euro;/an, R&eacute;gl&eacute;s<BR>
-        Inscription: <TMPL_VAR NAME="dateenrolled">, Fin d'abonnement: <TMPL_VAR NAME="expiry"><BR>
-        Biblioth&egrave;que de rattachement : <TMPL_VAR NAME="homebranch">
-      <P> <TMPL_IF NAME="printethnicityline"> </TMPL_IF> Date de naissance :<TMPL_VAR NAME="dateofbirth"><BR>
-        Sexe: <TMPL_VAR NAME="sex">
-      <P> Autre contact : <TMPL_VAR NAME="contactname"><BR>
-        T&eacute;l&eacute;phone: <TMPL_VAR NAME="altphone"><BR>
-        Relation avec le lecteur: <TMPL_VAR NAME="altrelationship"><BR>
-        Remarques: <TMPL_VAR NAME="altnotes">
-      <P>
-      <TMPL_IF NAME="isguarantee">
-         Guarantees:<TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME="cardnumber"></a><br>
-        </TMPL_LOOP> <TMPL_ELSE> Caution : <TMPL_IF NAME="guarantorborrowernumber">
-        <A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
-        <TMPL_ELSE> Pas de caution<br>
-                    </TMPL_IF>
-      </TMPL_IF>
-      <P> Remarques g&eacute;n&eacute;rales :
-        <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
-        <TMPL_VAR NAME="borrowernotes">
-        <!--</a>-->
-      <p align=right>
-      <form action=/cgi-bin/koha/memberentry.pl method=post>
-        <input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-          <INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="<TMPL_VAR name="themelang">/images/modify-mem.gif">
-          <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="<TMPL_VAR name="themelang">/images/delete-mem.gif">
-	<a href="member-password.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=124 BORDER=0 src="<TMPL_VAR name="themelang">/images/password-mem.gif" alt="Mot de passe">
-	</p>
-	<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/modify-user-flags.gif" alt="Privilèges"></a>
-
-      </form>
-    </font></TD>
-  </TR>
+<TABLE  CELLSPACING=0  CELLPADDING=10 border=1 align=left width=270>
+	<TR VALIGN=TOP>
+		<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>FICHE DE LECTEUR</b></TD>
+	</TR>
+	<tr VALIGN=TOP>
+		<TD>
+			<FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF>
+			<p> N&deg; de carte: <TMPL_VAR NAME="cardnumber"><BR>
+				Adresse postale: <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><BR>
+				Adresse personnelle : <TMPL_VAR NAME="physstreet">, <TMPL_VAR NAME="streetcity"><BR>
+				T&eacute;l&eacute;phone personnel : <TMPL_VAR NAME="phone"><BR>
+				T&eacute;l&eacute;phone professionnel : <TMPL_VAR NAME="phoneday"><BR>
+			Fax: <TMPL_VAR NAME="faxnumber"><BR>
+			E-mail: <a href="mailto:<TMPL_VAR NAME="emailaddress">"><TMPL_VAR NAME="emailaddress"></a><br>
+				SMS :<TMPL_VAR NAME="textmessaging">
+			<p> N&deg; de lecteur: <TMPL_VAR NAME="borrowernumber"><BR>
+				Inscription : <TMPL_VAR NAME="categorycode"><BR>
+				Zone : <TMPL_VAR NAME="area"><BR>
+				Frais d'inscription :30 &euro;/an, R&eacute;gl&eacute;s<BR>
+				Inscription: <TMPL_VAR NAME="dateenrolled">, Fin d'abonnement: <TMPL_VAR NAME="expiry"><BR>
+				Biblioth&egrave;que de rattachement : <TMPL_VAR NAME="homebranch">
+			<P> <TMPL_IF NAME="printethnicityline"> </TMPL_IF> Date de naissance :<TMPL_VAR NAME="dateofbirth"><BR>
+				Sexe: <TMPL_VAR NAME="sex">
+			<P> Autre contact : <TMPL_VAR NAME="contactname"><BR>
+				T&eacute;l&eacute;phone: <TMPL_VAR NAME="altphone"><BR>
+				Relation avec le lecteur: <TMPL_VAR NAME="altrelationship"><BR>
+				Remarques: <TMPL_VAR NAME="altnotes">
+			<P>
+			<TMPL_IF NAME="isguarantee">
+				Guarantees:<TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME="cardnumber"></a><br>
+				</TMPL_LOOP> <TMPL_ELSE> Caution : <TMPL_IF NAME="guarantorborrowernumber">
+				<A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
+				<TMPL_ELSE> Pas de caution<br>
+					</TMPL_IF>
+			</TMPL_IF>
+			<P> Remarques g&eacute;n&eacute;rales :
+				<!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
+				<TMPL_VAR NAME="borrowernotes"></a>
+				<!--</a>-->
+			</font>
+		</TD>
+	</tr>
+	<tr valign=top>
+		<td>
+			<form action=/cgi-bin/koha/memberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE="image" name="modify"  VALUE="modify" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png">
+				<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png">
+				<TMPL_IF name="IS_ADULT">
+					<a href="/cgi-bin/koha/jmemberentry.pl?bornum=<TMPL_VAR NAME=borrowernumber>" class="button">Ajout enfant</a>
+				</TMPL_IF></p>
+				<br/><br/>
+				<p><a href="member-password.pl?member=<TMPL_VAR NAME="bornum">" class="button">Mot passe</a>
+				<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">" class="button">Privilèges</a></p>
+			</form>
+		</td>
+	</TR>
 </TABLE>
 
 <img src="<TMPL_VAR name="themelang">/images/holder.gif" width=16 height=800 align=left>
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=4><B>AMENDES 
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=4><B>AMENDES
       & FRAIS</b></TD>
   </TR>
 
@@ -92,11 +87,10 @@
   </TMPL_LOOP>
 
   <tr VALIGN=TOP  >
-    <TD colspan=3 align=right>
-      <nobr>
-        <a href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/view-account.gif"></a>
-        <a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum">><img height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/pay-fines.gif"></a>
-      </nobr>
+    <TD colspan=10 align=right>
+    	<br/>
+        <a href=/cgi-bin/koha/boraccount.pl?bornum=<TMPL_VAR NAME="bornum"> class="button">Compte</a>
+        <a href=/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR NAME="bornum"> class="button">Payer</a>
     </td>
   </tr>
 
@@ -104,19 +98,19 @@
 
 <p>
 <form action="renewscript.pl" method=post>
-  <input type=hidden name=bornum value=$bornum>
+  <input type=hidden name=bornum value=<TMPL_VAR name="bornum">>
   <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
     <TR VALIGN=TOP>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=6><B>DOCUMENTS 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=6><B>DOCUMENTS
         EN COURS DE PRET</b></TD>
     </TR>
 
     <TR VALIGN=TOP>
       <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Titre</b></TD>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Retour 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Retour
         le </b></TD>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Type de 
+      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Type de
         document </b></TD>
       <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Frais</b></TD>
       <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>Renouvellement</b></TD>
@@ -125,7 +119,7 @@
     <TMPL_LOOP NAME=issueloop>
     <tr VALIGN=TOP>
       <td><TMPL_IF NAME=red><font color=red></TMPL_IF>
-        <TMPL_VAR NAME="title"> 
+        <TMPL_VAR NAME="title">
         <a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR NAME="itemnumber">&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">
           <TMPL_VAR NAME="barcode">
         </a>
@@ -133,20 +127,21 @@
       <td><TMPL_VAR NAME="date_due"></td>
       <td><TMPL_VAR NAME="itemtype"></td>
       <td><TMPL_VAR NAME="charge"></td>
-      <td> <TMPL_IF NAME=norenew> <a href="/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">">R&eacute;serv&eacute; 
-        - pas de renouvellement</a> <TMPL_ELSE> 
+      <td> <TMPL_IF NAME=norenew> <a href="/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">">R&eacute;serv&eacute;
+        - pas de renouvellement</a> <TMPL_ELSE>
         <input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">
-        " value=y>O 
+        " value=y>O
         <input type=radio name="renew_item_<TMPL_VAR NAME="itemnumber">" value=n>N
         </TMPL_IF>
         <TMPL_IF NAME=red></TMPL_IF>
       </td>
     </tr>
     </TMPL_LOOP>
-    
+
     <tr VALIGN=TOP  >
       <TD colspan=5 align=right>
-        <INPUT TYPE="image" name="submit"  VALUE="update" height=42  WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/update-renewals.gif">
+
+        <INPUT TYPE="submit" name="submit"  VALUE="update" BORDER=0 class="button">
       </td>
     </tr>
 
@@ -158,7 +153,7 @@
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 
   <TR VALIGN=TOP>
-    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=5><B>DOCUMENTS 
+    <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=5><B>DOCUMENTS
       DEMANDES </b></TD>
   </TR>
 
@@ -191,7 +186,7 @@
     <tr VALIGN=TOP  >
       <td colspan=5 align=right>
 		<TMPL_IF name="reserveloop">
-			<INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/cancel-requests.gif">
+			<INPUT TYPE="submit" name="submit" VALUE="Annuler"  BORDER=0 class="button">
 		</tmpl_if>
 	 </td>
     </tr>
@@ -200,14 +195,11 @@
 <table>
 	<tr VALIGN=TOP  >
 		<td colspan=5 align=right>
-			<p align=right>
-			<a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/reading-record.gif"></a>
+			<p align=right><br/>
+			<a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">" class="button">Fiche Lecteur</a>
 			</p>
 		</td>
 	</tr>
 </table>
 
-<p align=right>
-  <a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/reading-record.gif"></a>
-</p>
 <TMPL_INCLUDE NAME="members-bottom.inc">
