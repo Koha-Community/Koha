@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.62  2003/09/17 14:21:13  tipaul
+# fixing bug that makes a MARC biblio disappear when using full acquisition (order => recieve ==> MARC editor).
+# Before this 2 lines fix, the MARC biblio was deleted during recieve, and had to be entirely recreated :-(
+#
 # Revision 1.61  2003/09/17 10:24:39  tipaul
 # notforloan value in itemtype was overwritting notforloan value in a given item.
 # I changed this behaviour :
@@ -788,8 +792,8 @@ sub MARCmodbiblio {
 	}
 # 1st delete the biblio,
 # 2nd recreate it
-	&MARCdelbiblio($dbh,$bibid,1);
 	my $biblionumber = MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
+	&MARCdelbiblio($dbh,$bibid,1);
 	&MARCaddbiblio($dbh,$record,$biblionumber,$bibid);
 }
 
@@ -1732,7 +1736,6 @@ $item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
   }
   my $sth=$dbh->prepare($query);
-  warn "$query";
   $sth->execute;
   $sth->finish;
 #  $dbh->disconnect;
@@ -1946,7 +1949,7 @@ sub modbiblio {
 	my ($biblio) = @_;
 	my $dbh  = C4::Context->dbh;
 	my $biblionumber=OLDmodbiblio($dbh,$biblio);
-	my $record = MARCkoha2marcBiblio($dbh,$biblionumber);
+	my $record = MARCkoha2marcBiblio($dbh,$biblionumber,$biblionumber);
 	# finds new (MARC bibid
 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
 	MARCmodbiblio($dbh,$bibid,$record,0);
@@ -2008,8 +2011,6 @@ sub modbibitem {
     my ($biblioitem) = @_;
     my $dbh   = C4::Context->dbh;
     &OLDmodbibitem($dbh,$biblioitem);
-    my $MARCbibitem = MARCkoha2marcBiblio($dbh,$biblioitem);
-    &MARCmodbiblio($dbh,$biblioitem->{biblionumber},$MARCbibitem,0);
 } # sub modbibitem
 
 sub modnote {
