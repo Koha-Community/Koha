@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 # Database Updater
 # This script checks for required updates to the database.  
 
@@ -67,6 +69,9 @@ my %requiretables=(
 		    marc longblob,
 		    hidden smallint(6) default NULL,
 		    name varchar(255) default NULL)",
+    ethnicity=>"( code varchar(10) NOT NULL default '',
+  		name varchar(255) default NULL,
+  		PRIMARY KEY  (code)   )",
 );
 
 my %requirefields=(
@@ -245,3 +250,10 @@ unless ($branchcategories{'codedescription'} eq 'text') {
 
 $sth->finish;
 $dbh->disconnect;
+
+exit;
+
+# $Log$
+# Revision 1.4.2.6  2002/06/20 15:07:08  amillar
+# Add table ethnicity
+#
