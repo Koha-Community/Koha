@@ -101,9 +101,11 @@ sub NewBorrowerNumber {
 sub catalogsearch {
   my ($env,$type,$search,$num,$offset)=@_;
   my $dbh = C4Connect();
-#  foreach my $key (%$search){
-#    $search->{$key}=$dbh->quote($search->{$key});
-#  }
+  foreach my $key (%$search){
+    if (length($search->{$key}) < 3){
+       undef ($search->{$key});
+    }
+  }
   my ($count,@results);
 #  print STDERR "Doing a search $search->{'itemnumber'} $search->{'isbn'}\n";
   if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
@@ -170,7 +172,7 @@ sub KeywordSearch {
   my ($env,$type,$search,$num,$offset)=@_;
   my $dbh = &C4Connect;
   $search->{'keyword'}=~ s/ +$//;
-  $search->{'keyword'}=~ s/'/\\'/;
+  $search->{'keyword'}=~ s/'/\\'/g;
   my @key=split(' ',$search->{'keyword'});
   my $count=@key;
   my $i=1;
