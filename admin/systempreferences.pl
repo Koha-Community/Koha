@@ -283,18 +283,19 @@ if ($op eq 'add_form') {
 	}
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle="white";
+	my $toggle=0;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-			$toggle="#ffffcc";
+	  	if ($toggle eq 0){
+			$toggle=1;
 	  	} else {
-			$toggle="white";
+			$toggle=0;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{variable} = $results->[$i]{'variable'};
 		$row_data{value} = $results->[$i]{'value'};
 		$row_data{explanation} = $results->[$i]{'explanation'};
+		$row_data{toggle} = $toggle;
 		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'variable'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
 		push(@loop_data, \%row_data);
