@@ -1806,8 +1806,7 @@ sub OLDmoditem {
                              itemlost=?,
                              wthdrawn=?,
 			     itemcallnumber=?,
-			     notforloan=?,
-                          where itemnumber=?";
+			     notforloan=?";
         @bind = (
             $item->{'bibitemnum'},     $item->{'barcode'},
             $item->{'notes'},          $item->{'homebranch'},
@@ -1815,6 +1814,15 @@ sub OLDmoditem {
             $item->{'itemcallnumber'}, $item->{'notforloan'},
             $item->{'itemnum'}
         );
+		if ($item->{homebranch}) {
+			$query.=",homebranch=?";
+			push @bind, $item->{homebranch};
+		}
+		if ($item->{holdingbranch}) {
+			$query.=",holdingbranch=?";
+			push @bind, $item->{holdingbranch};
+		}
+		$query.=" where itemnumber=?";
     }
     if ( $item->{'replacement'} ne '' ) {
         $query =~ s/ where/,replacementprice='$item->{'replacement'}' where/;
@@ -1957,72 +1965,6 @@ sub itemcount {
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
     return ( $data->{'count(*)'} );
-}
-
-=item getorder
-
-  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
-
-Looks up the order with the given biblionumber and biblioitemnumber.
-
-Returns a two-element array. C<$ordernumber> is the order number.
-C<$order> is a reference-to-hash describing the order; its keys are
-fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
-tables of the Koha database.
-
-=cut
-
-#'
-# FIXME - This is effectively identical to &C4::Catalogue::getorder.
-# Pick one and stick with it.
-sub getorder {
-    my ( $bi, $bib ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "Select ordernumber
- 	from aqorders
- 	where biblionumber=? and biblioitemnumber=?"
-    );
-    $sth->execute( $bib, $bi );
-
-    # FIXME - Use fetchrow_array(), since we're only interested in the one
-    # value.
-    my $ordnum = $sth->fetchrow_hashref;
-    $sth->finish;
-    my $order = getsingleorder( $ordnum->{'ordernumber'} );
-    return ( $order, $ordnum->{'ordernumber'} );
-}
-
-=item getsingleorder
-
-  $order = &getsingleorder($ordernumber);
-
-Looks up an order by order number.
-
-Returns a reference-to-hash describing the order. The keys of
-C<$order> are fields from the biblio, biblioitems, aqorders, and
-aqorderbreakdown tables of the Koha database.
-
-=cut
-
-#'
-# FIXME - This is effectively identical to
-# &C4::Catalogue::getsingleorder.
-# Pick one and stick with it.
-sub getsingleorder {
-    my ($ordnum) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "Select * from biblio,biblioitems,aqorders left join aqorderbreakdown
-  on aqorders.ordernumber=aqorderbreakdown.ordernumber
-  where aqorders.ordernumber=?
-  and biblio.biblionumber=aqorders.biblionumber
-  and biblioitems.biblioitemnumber=aqorders.biblioitemnumber"
-    );
-    $sth->execute($ordnum);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
 }
 
 sub newbiblio {
@@ -2589,6 +2531,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.98  2004/07/15 09:48:10  tipaul
+# * removing useless sub
+# * minor bugfix in moditem (managing homebranch & holdingbranch)
+#
 # Revision 1.97  2004/07/02 15:53:53  tipaul
 # bugfix (due to frameworkcode field)
 #
