@@ -262,6 +262,7 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
                       /var/www/conf/httpd.conf
                       /etc/apache/conf/httpd.conf
                       /etc/apache/conf/apache.conf
+                      /etc/apache-ssl/conf/apache.conf
                       /etc/httpd/conf/httpd.conf
                       /etc/httpd/httpd.conf)) {
    if ( -f $httpdconf ) {
