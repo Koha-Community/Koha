@@ -27,6 +27,7 @@ package C4::Output;
 use strict;
 require Exporter;
 
+use HTML::Template;
 use C4::Database;
 use C4::Koha;
 
@@ -43,7 +44,7 @@ $VERSION = 0.01;
 	     &mkform &mkform2 &bold
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
-	     &picktemplate &themelanguage
+	     &picktemplate &themelanguage &gettemplate
 );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -78,6 +79,26 @@ my $path=$configfile->{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
 # make all your functions, whether exported or not;
+
+sub gettemplate {
+    my ($tmplbase, $opac) = @_;
+
+    my $htdocs;
+    if ($opac) {
+	$htdocs = $configfile->{'opachtdocs'};
+    } else {
+	$htdocs = $configfile->{'intrahtdocs'};
+    }
+
+    my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
+
+    my $template = HTML::Template->new(filename          => "$htdocs/$theme/$lang/$tmplbase", 
+				   die_on_bad_params => 0, 
+				   path              => ["$htdocs/$theme/$lang/includes"]);
+
+    $template->param(themelang => "/$theme/$lang");
+    return $template;
+}
 
 sub picktemplate {
   my ($includes, $base) = @_;
