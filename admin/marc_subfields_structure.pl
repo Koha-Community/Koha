@@ -103,6 +103,8 @@ if ($op eq 'add_form') {
 	while ((my $category) = $sth2->fetchrow_array) {
 		push @authorised_values, $category;
 	}
+	push (@authorised_values,"branches");
+	push (@authorised_values,"itemtypes");
 	# build thesaurus categories list
 	$sth2->finish;
 	$sth2 = $dbh->prepare("select distinct category from bibliothesaurus");

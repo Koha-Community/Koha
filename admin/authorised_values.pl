@@ -137,6 +137,7 @@ if ($op eq 'add_form') {
 	while ( my ($category) = $sth->fetchrow_array) {
 		push(@category_list,$category);
 	}
+	# push koha system categories
 	my $tab_list = CGI::scrolling_list(-name=>'searchfield',
 			-values=> \@category_list,
 			-default=>"",

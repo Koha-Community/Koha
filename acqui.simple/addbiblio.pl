@@ -2,13 +2,6 @@
 
 # $Id$
 
-#
-# TODO
-#
-# Add info on biblioitems and items already entered as you enter new ones
-#
-
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -36,6 +29,7 @@ use MARC::File::USMARC;
 
 sub find_value {
 	my ($tagfield,$insubfield,$record) = @_;
+#	warn "$tagfield / $insubfield // ";
 	my $result;
 	my $indicator;
 	foreach my $field ($record->field($tagfield)) {
@@ -69,23 +63,26 @@ sub MARCfindbreeding {
 }
 my $input = new CGI;
 my $error = $input->param('error');
-my $oldbiblionumber=$input->param('bib'); # if bib exists, it's a modif, not a new biblio.
+my $oldbiblionumber=$input->param('oldbiblionumber'); # if bib exists, it's a modif, not a new biblio.
 my $isbn = $input->param('isbn');
 my $op = $input->param('op');
 my $dbh = C4::Context->dbh;
 my $bibid;
-if ($oldbiblionumber) {;
-	$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber)
+if ($oldbiblionumber) {
+	$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
 }else {
 	$bibid = $input->param('bibid');
 }
 my $template;
 
 my $tagslib = &MARCgettagslib($dbh,1);
-
-my $record = MARCgetbiblio($dbh,$bibid) if ($oldbiblionumber);
-my $record = MARCfindbreeding($dbh,$isbn) if ($isbn);
-
+my $record;
+$record = MARCgetbiblio($dbh,$bibid) if ($bibid);
+$record = MARCfindbreeding($dbh,$isbn) if ($isbn);
+my $is_a_modif=0;
+if ($bibid) {
+	$is_a_modif=1;
+}
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "addbiblio") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -101,135 +98,17 @@ if ($op eq "addbiblio") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-#	warn "record ".$record->as_formatted();
 # MARC::Record builded => now, record in DB
-	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
-	my $authorised_values_sth = $dbh->prepare("select authorised_value from authorised_values where category=?");
-# build item screen. There is no item for instance.
-	my @loop_data =();
-	my $i=0;
-	foreach my $tag (keys %{$tagslib}) {
-		my $previous_tag = '';
-	# loop through each subfield
-		foreach my $subfield (keys %{$tagslib->{$tag}}) {
-			next if ($subfield eq 'lib');
-			next if ($subfield eq 'tab');
-			next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
-			$i++;
-			my %subfield_data;
-			$subfield_data{tag}=$tag;
-			$subfield_data{subfield}=$subfield;
-			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
-			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-				$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
-				my @authorised_values;
-				push @authorised_values, "" unless ($subfield_data{mandatory});
-				while ((my $value) = $authorised_values_sth->fetchrow_array) {
-					push @authorised_values, $value;
-				}
-				$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
-																			-values=> \@authorised_values,
-																			-size=>1,
-																			-multiple=>0,
-																			);
-			} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-				$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
-			} else {
-				$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
-			}
-			push(@loop_data, \%subfield_data);
-		}
+	my $oldbibnum;
+	my $oldbibitemnum;
+	if ($is_a_modif) {
+		($bibid,$oldbibnum,$oldbibitemnum) = NEWmodbiblio($dbh,$record,$bibid);
+	} else {
+		($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
 	}
-	$template = gettemplate("acqui.simple/addbiblio2.tmpl");
-	$template->param(bibid => $bibid,
-							item => \@loop_data);
-#------------------------------------------------------------------------------------------------------------------------------
-} elsif ($op eq "additem") {
-#------------------------------------------------------------------------------------------------------------------------------
-	my @tags = $input->param('tag');
-	my @subfields = $input->param('subfield');
-	my @values = $input->param('field_value');
-#	my @ind_tag = $input->param('ind_tag');
-#	my @indicator = $input->param('indicator');
-#	my %indicators;
-#	for (my $i=0;$i<=$#ind_tag;$i++) {
-#		$indicators{$ind_tag[$i]} = $indicator[$i];
-#	}
-	my %indicators;
-	$indicators{995}='  ';
-	warn "REs : $tags[0] - $tags[1] - $subfields[0] - $subfields[1] - $values[0] - $values[1]";
-	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
-	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
-	# now, build existiing item list
-	my $temp = MARCgetbiblio($dbh,$bibid);
-	my @fields = $temp->fields();
-	my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
-	my @big_array;
-	foreach my $field (@fields) {
-		my @subf=$field->subfields;
-		my %this_row;
-	# loop through each subfield
-		for my $i (0..$#subf) {
-			next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
-			$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-			$this_row{$subf[$i][0]} =$subf[$i][1];
-		}
-		if (%this_row) {
-			push(@big_array, \%this_row);
-		}
-	}
-	#fill big_row with missing datas
-	foreach my $subfield_code  (keys(%witness)) {
-		for (my $i=0;$i<=$#big_array;$i++) {
-			$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
-		}
-	}
-	# now, construct template !
-	my @item_value_loop;
-	my @header_value_loop;
-	for (my $i=0;$i<=$#big_array; $i++) {
-		my $items_data;
-		foreach my $subfield_code (keys(%witness)) {
-			$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
-		}
-		my %row_data;
-		$row_data{item_value} = $items_data;
-		push(@item_value_loop,\%row_data);
-	}
-	foreach my $subfield_code (keys(%witness)) {
-		my %header_value;
-		$header_value{header_value} = $witness{$subfield_code};
-		push(@header_value_loop, \%header_value);
-	}
-
-# next item form
-	my @loop_data =();
-	my $i=0;
-	foreach my $tag (keys %{$tagslib}) {
-		my $previous_tag = '';
-	# loop through each subfield
-		foreach my $subfield (keys %{$tagslib->{$tag}}) {
-			next if ($subfield eq 'lib');
-			next if ($subfield eq 'tab');
-			next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
-			my %subfield_data;
-			$subfield_data{tag}=$tag;
-			$subfield_data{subfield}=$subfield;
-			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
-			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
-			push(@loop_data, \%subfield_data);
-			$i++
-		}
-	}
-	$template = gettemplate("acqui.simple/addbiblio2.tmpl");
-	$template->param(item_loop => \@item_value_loop,
-							item_header_loop => \@header_value_loop,
-							bibid => $bibid,
-							item => \@loop_data);
+# now, redirect to additem page
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=additem.pl?bibid=$bibid\"></html>";
+	exit;
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -243,12 +122,12 @@ if ($op eq "addbiblio") {
 	for (my $tabloop = 0; $tabloop<=9;$tabloop++) {
 	#	my @fields = $record->fields();
 		my @loop_data =();
-		foreach my $tag (keys %{$tagslib}) {
+		foreach my $tag (sort(keys (%{$tagslib}))) {
 			my $previous_tag = '';
 			my @subfields_data;
 			my $indicator;
 # loop through each subfield
-			foreach my $subfield (keys %{$tagslib->{$tag}}) {
+			foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
 				next if ($subfield eq 'lib'); # skip lib and tabs, which are koha internal
 				next if ($subfield eq 'tab');
 				next if ($tagslib->{$tag}->{$subfield}->{tab}  ne $tabloop);
@@ -263,11 +142,32 @@ if ($op eq "addbiblio") {
 					my ($x,$value) = find_value($tag,$subfield,$record);
 					$indicator = $x if $x;
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-						$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
 						my @authorised_values;
-						push @authorised_values, "" unless ($subfield_data{mandatory});
-						while ((my $value) = $authorised_values_sth->fetchrow_array) {
-							push @authorised_values, $value;
+						# builds list, depending on authorised value...
+						#---- branch
+						warn "==> $tagslib->{$tag}->{$subfield}->{mandatory} / ".$tagslib->{$tag}->{$subfield}->{'authorised_value'};
+						if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+							my $sth=$dbh->prepare("select branchcode,branchname from branches");
+							$sth->execute;
+							push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+							while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+								push @authorised_values, $branchcode;
+							}
+						#----- itemtypes
+						} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
+							my $sth=$dbh->prepare("select itemtype,description from itemtypes");
+							$sth->execute;
+							push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+							while (my ($itemtype,$description) = $sth->fetchrow_array) {
+								push @authorised_values, $itemtype;
+							}
+						#---- "true" authorised value
+						} else {
+							$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+							push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+							while ((my $value) = $authorised_values_sth->fetchrow_array) {
+								push @authorised_values, $value;
+							}
 						}
 						$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
 																					-values=> \@authorised_values,
@@ -276,32 +176,62 @@ if ($op eq "addbiblio") {
 																					-multiple=>0,
 																					);
 					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
-					} elsif ($tagslib->{$tag}->{$subfield}->{value_builder}) {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../value_builder/$tagslib->{$tag}->{$subfield}->{value_builder}?index=$i',$i)\">...</a>";
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>"; #"
+					} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
+						my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+						require $plugin;
+						my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../plugin_launcher.pl?plugin_name=$tagslib->{$tag}->{$subfield}->{value_builder}&index=$i$extended_param',$i)\">...</a>";
 					} else {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\">";
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
 					}
 				# if breeding is empty
 				} else {
+					my ($x,$value);
+					($x,$value) = find_value($tag,$subfield,$record) if ($record);
 					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-						$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
 						my @authorised_values;
-						push @authorised_values, "" unless ($subfield_data{mandatory});
-						while ((my $value) = $authorised_values_sth->fetchrow_array) {
-							push @authorised_values, $value;
+						# builds list, depending on authorised value...
+						#---- branch
+						warn "==> $tagslib->{$tag}->{$subfield}->{mandatory} / ".$tagslib->{$tag}->{$subfield}->{'authorised_value'};
+						if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+							my $sth=$dbh->prepare("select branchcode,branchname from branches");
+							$sth->execute;
+							push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+							while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+								push @authorised_values, $branchcode;
+							}
+						#----- itemtypes
+						} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
+							my $sth=$dbh->prepare("select itemtype,description from itemtypes");
+							$sth->execute;
+							push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+							while (my ($itemtype,$description) = $sth->fetchrow_array) {
+								push @authorised_values, $itemtype;
+							}
+						#---- "true" authorised value
+						} else {
+							$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+							push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+							while ((my $value) = $authorised_values_sth->fetchrow_array) {
+								push @authorised_values, $value;
+							}
 						}
 						$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
 																					-values=> \@authorised_values,
+																					-default=>"$value",
 																					-size=>1,
 																					-multiple=>0,
 																					);
 					} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
-					} elsif ($tagslib->{$tag}->{$subfield}->{value_builder}) {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" DISABLE READONLY> <a href=\"javascript:Dopop('../value_builder/$tagslib->{$tag}->{$subfield}->{value_builder}?index=$i',$i)\">...</a>";
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+					} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
+						my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+						require $plugin;
+						my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,$tabloop);
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../plugin_launcher.pl?plugin_name=$tagslib->{$tag}->{$subfield}->{value_builder}&index=$i$extended_param',$i)\">...</a>";
 					} else {
-						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" size=50 maxlength=255>>";
 					}
 				}
 				push(@subfields_data, \%subfield_data);
@@ -338,7 +268,7 @@ if ($op eq "addbiblio") {
 		}
 	}
 	$template->param(
-							biblionumber => $oldbiblionumber,
+							oldbiblionumber => $oldbiblionumber,
 							bibid => $bibid);
 }
 print "Content-Type: text/html\n\n", $template->output;

@@ -21,293 +21,211 @@
 
 use CGI;
 use strict;
-use C4::Catalogue;
-use C4::Biblio;
 use C4::Output;
+use C4::Biblio;
+use C4::Context;
+use HTML::Template;
+use MARC::File::USMARC;
 
+sub find_value {
+	my ($tagfield,$insubfield,$record) = @_;
+#	warn "$tagfield / $insubfield // ";
+	my $result;
+	my $indicator;
+	foreach my $field ($record->field($tagfield)) {
+		my @subfields = $field->subfields();
+		foreach my $subfield (@subfields) {
+			if (@$subfield[0] eq $insubfield) {
+				$result .= @$subfield[1];
+				$indicator = $field->indicator(1).$field->indicator(2);
+			}
+		}
+	}
+	return($indicator,$result);
+}
 my $input = new CGI;
-my $biblionumber = $input->param('biblionumber');
-my $error        = $input->param('error');
-my $maxbarcode;
-my $isbn;
-my $bibliocount;
-my @biblios;
-my $biblioitemcount;
-my @biblioitems;
-my $branchcount;
-my @branches;
-my %branchnames;
-my $itemcount;
-my @items;
-my $itemtypecount;
-my @itemtypes;
-my %itemtypedescriptions;
+my $error = $input->param('error');
+my $bibid = $input->param('bibid');
+my $op = $input->param('op');
+my $dbh = C4::Context->dbh;
+my $itemnum = $input->param('itemnum');
 
-if (! $biblionumber) {
-    print $input->redirect('addbooks.pl');
-} else {
+my $tagslib = &MARCgettagslib($dbh,1);
+my $record = MARCgetbiblio($dbh,$bibid);
+my $itemrecord;
+my $nextop="additem";
+#------------------------------------------------------------------------------------------------------------------------------
+if ($op eq "additem") {
+#------------------------------------------------------------------------------------------------------------------------------
+	# rebuild
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+	# build indicator hash.
+	my @ind_tag = $input->param('ind_tag');
+	my @indicator = $input->param('indicator');
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
+	}
+	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+# MARC::Record builded => now, record in DB
+	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
+	$nextop = "additem";
+#------------------------------------------------------------------------------------------------------------------------------
+} elsif ($op eq "edititem") {
+#------------------------------------------------------------------------------------------------------------------------------
+# retrieve item if exist => then, it's a modif
+	$itemrecord = MARCgetitem($dbh,$bibid,$itemnum);
+	$nextop="saveitem";
+#------------------------------------------------------------------------------------------------------------------------------
+} elsif ($op eq "saveitem") {
+#------------------------------------------------------------------------------------------------------------------------------
+	# rebuild
+	my @tags = $input->param('tag');
+	my @subfields = $input->param('subfield');
+	my @values = $input->param('field_value');
+	# build indicator hash.
+	my @ind_tag = $input->param('ind_tag');
+	my @indicator = $input->param('indicator');
+	my %indicators;
+	for (my $i=0;$i<=$#ind_tag;$i++) {
+		$indicators{$ind_tag[$i]} = $indicator[$i];
+	}
+	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+# MARC::Record builded => now, record in DB
+	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
+	$nextop="additem";
+}
 
-    ($bibliocount, @biblios)  = &getbiblio($biblionumber);
+#
+#------------------------------------------------------------------------------------------------------------------------------
+# build screen with existing items. and "new" one
+#------------------------------------------------------------------------------------------------------------------------------
 
-    if (! $bibliocount) {
-	print $input->redirect('addbooks.pl');
-    } else {
+my %indicators;
+$indicators{995}='  ';
+# now, build existiing item list
+my $temp = MARCgetbiblio($dbh,$bibid);
+my @fields = $temp->fields();
+my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
+my @big_array;
+#---- finds where items.itemnumber is stored
+my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
+my @itemnums; # array to store itemnums
+foreach my $field (@fields) {
+	my @subf=$field->subfields;
+	my %this_row;
+# loop through each subfield
+	for my $i (0..$#subf) {
+		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10 && ($field->tag() ne $itemtagfield && $subf[$i][0] ne $itemtagsubfield));
+		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
+		$this_row{$subf[$i][0]} =$subf[$i][1] if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
+		push @itemnums,$this_row{$subf[$i][0]} =$subf[$i][1] if ($field->tag() eq $itemtagfield && $subf[$i][0] eq $itemtagsubfield);
+	}
+	if (%this_row) {
+		push(@big_array, \%this_row);
+	}
+}
+#fill big_row with missing datas
+foreach my $subfield_code  (keys(%witness)) {
+	for (my $i=0;$i<=$#big_array;$i++) {
+		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
+	}
+}
+# now, construct template !
+my @item_value_loop;
+my @header_value_loop;
+for (my $i=0;$i<=$#big_array; $i++) {
+	my $items_data;
+	foreach my $subfield_code (sort keys(%witness)) {
+		$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
+	}
+	my %row_data;
+	$row_data{item_value} = $items_data;
+	$row_data{itemnum} = $itemnums[$i];
+	push(@item_value_loop,\%row_data);
+}
+foreach my $subfield_code (sort keys(%witness)) {
+	my %header_value;
+	$header_value{header_value} = $witness{$subfield_code};
+	push(@header_value_loop, \%header_value);
+}
 
-	($biblioitemcount, @biblioitems) = &getbiblioitembybiblionumber($biblionumber);
-        ($branchcount, @branches)        = &branches;
-	($itemtypecount, @itemtypes)     = &getitemtypes;
+# next item form
+my @loop_data =();
+my $i=0;
+my $authorised_values_sth = $dbh->prepare("select authorised_value from authorised_values where category=?");
 
-	for (my $i = 0; $i < $itemtypecount; $i++) {
-	    $itemtypedescriptions{$itemtypes[$i]->{'itemtype'}} = $itemtypes[$i]->{'description'};
-	} # for
-
-	for (my $i = 0; $i < $branchcount; $i++) {
-	    $branchnames{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
-	} # for
-
-	print $input->header;
-	print startpage();
-	print startmenu('acquisitions');
-
-	print << "EOF";
-<font size="6"><em>$biblios[0]->{'title'}</em></font>
-<p>
-EOF
-
-	if ($error eq "nobarcode") {
-	    print << "EOF";
-<font size="5" color="red">You must give the item a barcode</font>
-<p>
-EOF
-	} elsif ($error eq "nobiblioitem") {
-	    print << "EOF";
-<font size="5" color="red">You must create a new group for your item to be added to</font>
-<p>
-EOF
-	} elsif ($error eq "barcodeinuse") {
-	    print << "EOF";
-<font size="5" color="red">Sorry, that barcode is already in use</font>
-<p>
-EOF
-	} # elsif
-	print << "EOF";
-<table align="left" cellpadding="5" cellspacing="0" border="1" width="220">
-<tr valign="top" bgcolor="#CCCC99">
-<td background="/images/background-mem.gif"><b>BIBLIO RECORD $biblionumber</b></td>
-</tr>
-<tr valign="top">
-<td><b>Author:</b> $biblios[0]->{'author'}<br>
-<b>Copyright:</b> $biblios[0]->{'copyrightdate'}<br>
-<b>Series Title:</b> $biblios[0]->{'seriestitle'}<br>
-<b>Notes:</b> $biblios[0]->{'notes'}</td>
-</tr>
-EOF
-
-	for (my $i = 0; $i < $biblioitemcount; $i++) {
-	    if ($biblioitems[$i]->{'itemtype'} eq "WEB") {
-
-		print << "EOF";
-<tr valign="top" bgcolor="#CCCC99">
-<td background="/images/background-mem.gif"><b>$biblioitems[$i]->{'biblioitemnumber'} GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
-</tr>
-<tr valign="top">
-<td><b>URL:</b> $biblioitems[$i]->{'url'}<br>
-<b>Date:</b> $biblioitems[$i]->{'publicationyear'}<br>
-<b>Notes:</b> $biblioitems[$i]->{'notes'}</td>
-</tr>
-EOF
-
-	    } else {
-		$biblioitems[$i]->{'dewey'} =~ /(\d*\.\d\d)/;
-		$biblioitems[$i]->{'dewey'} = $1;
-
-		print << "EOF";
-<tr valign="top" bgcolor="#CCCC99">
-<td background="/images/background-mem.gif"><b>$biblioitems[$i]->{'biblioitemnumber'} GROUP - $itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</b></td>
-</tr>
-<tr valign="top">
-<td><b>ISBN:</b> $biblioitems[$i]->{'isbn'}<br>
-<b>Dewey:</b> $biblioitems[$i]->{'dewey'}<br>
-<b>Publisher:</b> $biblioitems[$i]->{'publishercode'}<br>
-<b>Place:</b> $biblioitems[$i]->{'place'}<br>
-<b>Date:</b> $biblioitems[$i]->{'publicationyear'}</td>
-</tr>
-EOF
-
-		($itemcount, @items) = &getitemsbybiblioitem($biblioitems[$i]->{'biblioitemnumber'});
-
-		for (my $j = 0; $j < $itemcount; $j++) {
-		    print << "EOF";
-<tr valign="top" bgcolor="#FFFFCC">
-<td><b>Item:</b> $items[$j]->{'barcode'}<br>
-<b>Home Branch:</b> $branchnames{$items[$j]->{'homebranch'}}<br>
-<b>Notes:</b> $items[$j]->{'itemnotes'}</td>
-</tr>
-EOF
-		} # for
-	    } # else
-	} # for
-
-	print << "EOF";
-</table>
-<img src="/images/holder.gif" width="16" height="650" align="left">
-
-<center>
-
-<form action="saveitem.pl" method="post">
-<input type="hidden" name="biblionumber" value="$biblionumber">
-<table border="1" cellspacing="0" cellpadding="5">
-<tr valign="top" bgcolor="#CCCC99">
-<td background="/images/background-mem.gif" colspan="2"><b>ADD NEW ITEM:</b><br>
-<small><i>For a website add the group only</i></small></td>
-</tr>
-<tr valign="top">
-<td>Item Barcode:</td>
-<td><input type="text" name="barcode" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Branch:</td>
-<td><select name="homebranch">
-EOF
-
-	for (my $i = 0; $i < $branchcount; $i++) {
-	    print << "EOF";
-<option value="$branches[$i]->{'branchcode'}">$branches[$i]->{'branchname'}</option>
-EOF
-	} # for
-
-	print << "EOF";
-</select></td>
-</tr>
-<tr valign="top">
-<td>Replacement Price:</td>
-<td><input type="text" name="replacementprice" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Notes:</td>
-<td><textarea name="itemnotes" cols="30" rows="6"></textarea></td>
-</tr>
-<tr valign="top" bgcolor="#CCCC99">
-<td colspan="2" background="/images/background-mem.gif"><b>Add to existing group:</b></td>
-</tr>
-<tr valign="top">
-<td>Group:</td>
-<td><select name="biblioitemnumber">
-EOF
-
-	for (my $i = 0; $i < $biblioitemcount; $i++) {
-	    if ($biblioitems[$i]->{'itemtype'} ne "WEB") {
-		print << "EOF";
-<option value="$biblioitems[$i]->{'biblioitemnumber'}">$itemtypedescriptions{$biblioitems[$i]->{'itemtype'}}</option>
-EOF
-	    } # if
-	} # for
-
-	print << "EOF";
-</select></td>
-</tr>
-<tr valign="top">
-<td colspan="2" align="center"><input type="submit" name="existinggroup" value="Add New Item to Existing Group"></td>
-</tr>
-<tr valign="top" bgcolor="#CCCC99">
-<td colspan="2" background="/images/background-mem.gif"><b>OR Add to a new Group:</b></td>
-</tr>
-<tr valign="top">
-<td>Format:</td>
-<td><select name="itemtype">
-EOF
-
-	for (my $i = 0; $i < $itemtypecount; $i++) {
-	    print << "EOF";
-<option value="$itemtypes[$i]->{'itemtype'}">$itemtypes[$i]->{'description'}</option>
-EOF
-	} # for
-
-	print << "EOF";
-</select></td>
-</tr>
-<tr valign="top">
-<td>ISBN:</td>
-<td><input name="isbn" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Publisher:</td>
-<td><input name="publishercode" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Publication Year:</td>
-<td><input name="publicationyear" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Place of Publication:</td>
-<td><input name="place" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Illustrator:</td>
-<td><INPUT name="illus" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Additional Authors:<br><i>One Author per line</i></td>
-<td><textarea name="additionalauthors" cols="30" rows="6"></textarea></td>
-</tr>
-<tr valign="top">
-<td>Subject Headings:<br><i>One Subject per line</i></td>
-<td><textarea name="subjectheadings" cols="30" rows="6"></textarea></td>
-</tr>
-<tr valign="top">
-<td>Website URL:</td>
-<td><INPUT name="url" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Dewey:</td>
-<td><INPUT name="dewey" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Dewey Subclass:</td>
-<td><input name="subclass" size="40"></td>
-</tr>
-<tr valign="top">
-<td>ISSN:</td>
-<td><input name="issn" size="40"></td>
-</tr>
-<tr valign="top">
-<td>LCCN:</td>
-<td><input name="lccn" size="40"</td>
-</tr>
-<tr valign="top">
-<td>Volume:</td>
-<td><input name="volume" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Number:</td>
-<td><input name="number" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Volume Description:</td>
-<td><input name="volumeddesc" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Pages:</td>
-<td><input name="pages" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Size:</td>
-<td><input name="size" size="40"></td>
-</tr>
-<tr valign="top">
-<td>Notes:</td>
-<td><textarea name="notes" cols="30" rows="6"></textarea></td>
-</tr>
-<tr valign="top">
-<td colspan="2" align="center"><input type="submit" name="newgroup" value="Add New Item to New Group"></td>
-</tr>
-</table>
-
-</form>
-</center>
-EOF
-
-	print endmenu('acquisitions');
-	print endpage();
-    } # if
-} # if
+foreach my $tag (sort keys %{$tagslib}) {
+	my $previous_tag = '';
+# loop through each subfield
+	foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
+		next if ($subfield eq 'lib');
+		next if ($subfield eq 'tab');
+		next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
+		my %subfield_data;
+		$subfield_data{tag}=$tag;
+		$subfield_data{subfield}=$subfield;
+		$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
+		$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
+		$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+		my ($x,$value);
+		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
+		if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+			my @authorised_values;
+			# builds list, depending on authorised value...
+			#---- branch
+			if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+				my $sth=$dbh->prepare("select branchcode,branchname from branches");
+				$sth->execute;
+				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+				while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+					push @authorised_values, $branchcode;
+				}
+			#----- itemtypes
+			} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
+				my $sth=$dbh->prepare("select itemtype,description from itemtypes");
+				$sth->execute;
+				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+				while (my ($itemtype,$description) = $sth->fetchrow_array) {
+					push @authorised_values, $itemtype;
+				}
+			#---- "true" authorised value
+			} else {
+				$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+				while ((my $value) = $authorised_values_sth->fetchrow_array) {
+					push @authorised_values, $value;
+				}
+			}
+			$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
+																		-values=> \@authorised_values,
+																		-default=>"$value",
+																		-size=>1,
+																		-multiple=>0,
+																		);
+		} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+		} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
+			my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+			require $plugin;
+			my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../plugin_launcher.pl?plugin_name=$tagslib->{$tag}->{$subfield}->{value_builder}&index=$i$extended_param',$i)\">...</a>";
+		} else {
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+		}
+#		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+		push(@loop_data, \%subfield_data);
+		$i++
+	}
+}
+my $template = gettemplate("acqui.simple/additem.tmpl");
+# what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
+$template->param(item_loop => \@item_value_loop,
+						item_header_loop => \@header_value_loop,
+						bibid => $bibid,
+						item => \@loop_data,
+						itemnum => $itemnum,
+						op => $nextop);
+print "Content-Type: text/html\n\n", $template->output;
