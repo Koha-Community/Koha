@@ -245,7 +245,7 @@ if ($question) {
     $questionform = <<"EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<font color=black><b>Issuing Question</b></font></th></tr>
+<font size=+2 color=red><b>Issuing Question</b></font></th></tr>
 <tr><td><table border=0 cellpadding=10><tr><td> 
 Attempting to issue $iteminformation->{'title'} 
 by $iteminformation->{'author'} to $borrower->{'firstname'} $borrower->{'surname'}.
