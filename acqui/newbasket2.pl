@@ -26,10 +26,13 @@ use CGI;
 use C4::Output;
 use C4::Catalogue;
 use C4::Biblio;
+use HTML::Template;
 
 my $env;
 my $input = new CGI;
-print $input->header;
+
+#print $input->header;
+
 #whether it is called from the opac of the intranet
 my $type=$input->param('type');
 if ($type eq ''){
@@ -72,56 +75,37 @@ if ($id == 72){
 #print $sub;
 my ($count,@booksellers)=bookseller($id);
 
-print startpage();
-print startmenu('acquisitions');
-print mkheadr(1,"Shopping Basket For: $booksellers[0]->{'name'}");
+my $template = gettemplate("acqui/newbasket2.tmpl");
+#print startpage();
+#print startmenu('acquisitions');
 
-if ($donation ne 'yes'){
-  print "<a href=newbiblio.pl?id=$id&basket=$basket&sub=$sub>";
-} else {
-  print "<a href=newdonation.pl?id=$id&basket=$basket&sub=$sub>";
-}
-print <<printend
-<img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Add New Biblio"></a>
-<a href=basket.pl?basket=$basket><img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a>
-
-<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
-<input type=hidden name=id value="$id">
-<input type=hidden name=basket value="$basket">
-<b>New Search: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
-<br clear=all>
-
-printend
-;
-
-print center();
-
+my $testdonation = ($donation ne 'yes'); #tests if donation = true
 
     if ($keyword ne ''){
-#      print "hey";
       ($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
     } elsif ($search{'front'} ne '') {
     ($count,@results)=FrontSearch(undef,'intra',\%search,$num,$offset);
     }else {
       ($count,@results)=CatSearch(undef,'loose',\%search,$num,$offset);
-#            print "hey";
     }
 
-print "You searched on ";
+my @loopsearch;
+
 while ( my ($key, $value) = each %search) {
   if ($value ne ''){
-    $value=~ s/\\//g;
-    print bold("$key $value,");
+	my %linesearch;
+	$value=~ s/\\//g;
+	$linesearch{key}=$key;
+	$linesearch{value}=$value;
+	push(@loopsearch,\%linesearch);
   }
 }
-print " $count results found";
+
 my $offset2=$num+$offset;
 my $dispnum=$offset+1;
-print "<br> Results $dispnum to $offset2 displayed";
-print mktablehdr;
-
-
-print mktablerow(6,$main,'<b>TITLE</b>','<b>AUTHOR</b>',bold('&copy;'),'<b>COUNT</b>',bold('LOCATION'),'','/images/background-mem.gif');
+if ($offset2>$count) {
+	$offset2=$count
+}
 
 
 my $count2=@results;
@@ -133,36 +117,38 @@ if ($keyword ne '' && $offset > 0){
 }
 #print $count2;
 my $i=0;
-my $colour=1;
+my $colour=0;
+
+my @loopresult;
+
 while ($i < $count2){
 #    print $results[$i]."\n";
 #    my @stuff=split('\t',$results[$i]);
+
+	my %lineres;
+	my $coltab;
+
     my $result=$results[$i];
     $result->{'title'}=~ s/\`/\\\'/g;
     my $title2=$result->{'title'};
     my $author2=$result->{'author'};
-    my $copyright=$result->{'copyrightdate'};
     $author2=~ s/ /%20/g;
     $title2=~ s/ /%20/g;
     $title2=~ s/\#/\&\#x23;/g;
     $title2=~ s/\"/\&quot\;/g;
-    my $itemcount;
+
+	my $itemcount;
     my $location='';
-    if ($donation eq 'yes'){
-      $result->{'title'}=mklink("/cgi-bin/koha/acqui/newdonation.pl?author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$result->{'biblionumber'}&title=$title2",$result->{'title'});
-    } else {
-      $result->{'title'}=mklink("/cgi-bin/koha/acqui/newbiblio.pl?sub=$sub&author=$author2&copyright=$copyright&id=$id&basket=$basket&biblio=$result->{'biblionumber'}&title=$title2",$result->{'title'});
-    }
     my $word=$result->{'author'};
       $word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
       $word=~ s/  //g;
       $word=~ s/ /%20/g;
       $word=~ s/\,/\,%20/g;
       $word=~ s/\n//g;
-      my $url="/cgi-bin/koha/search.pl?author=$word&type=$type";
-      $result->{'author'}=mklink($url,$result->{'author'});
+	  $lineres{word}=$word;
+	  $lineres{type}=$type;
+
       my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
-      $itemcount=$count;
       if ($nacount > 0){
         $location .= "On Loan";
 	if ($nacount >1 ){
@@ -212,27 +198,52 @@ while ($i < $count2){
          }
 	 $location.=" ";
       }
-
-    if ($colour == 1){
-      print mktablerow(6,$secondary,$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
-      $colour=0;
+	if ($colour == 1){
+		$coltab=$secondary;
+		$colour=0;
     } else{
-      print mktablerow(6,'white',$result->{'title'},$result->{'author'},$result->{'copyrightdate'},$itemcount,$location);
-      $colour=1;
+		$coltab=$main;
+		$colour=1;
     }
+    $lineres{author2}=$author2;
+    $lineres{title2}=$title2;
+    $lineres{copyright}=$result->{'copyrightdate'};
+	$lineres{id}=$id;
+	$lineres{basket}=$basket;
+	$lineres{sub}=$sub;
+	$lineres{biblionumber}=$result->{biblionumber};
+	$lineres{title}=$result->{title};
+    $lineres{author}=$result->{author};
+	$lineres{coltab}=$coltab;
+	$lineres{itemcount}=$count;
+	$lineres{location}=$location;
+	push(@loopresult,\%lineres);
     $i++;
 }
+
 $offset=$num+$offset;
 
- print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp;','','','/images/background-mem.gif');
+#print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp;','','','/images/background-mem.gif');
 
-print mktableft();
-if ($offset < $count){
-    my $search="num=$num&offset=$offset&type=$type&id=$id&basket=$basket&search=$title&author=$author";
-    my $stuff=mklink("/cgi-bin/koha/acqui/newbasket2.pl?$search",'Next');
-    print $stuff;
-}
+#print mktableft();
+$template->param(	bookselname => $booksellers[0]->{'name'},
+								id => $id,
+								basket => $basket,
+								parsub => $sub,
+								testdonation => $testdonation,
+								count => $count,
+								offset2 =>$offset2,
+								dispnum => $dispnum,
+								offsetover => ($offset < $count ),
+								num => $num,
+								offset => $offset,
+								type =>  $type,
+								id => $id,
+								basket => $basket,
+								title => $title,
+								author => $author,
+								loopsearch =>\@loopsearch,
+								loopresult =>\@loopresult);
 
-print endcenter();
-print endmenu('acquisitions');
-print endpage();
+
+print "Content-Type: text/html\n\n", $template->output;
