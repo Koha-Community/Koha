@@ -40,6 +40,7 @@ if ($class =~/[0-9]+/){
 #   print $classification,$dewey,$subclass;
 }else{
   $dewey='';
+  $subclass=$class;
 }
 my $illus=checkinp($input->param('Illustrations'));
 my $pages=checkinp($input->param('Pages'));
