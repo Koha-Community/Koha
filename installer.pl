@@ -3,6 +3,10 @@
 use diagnostics;
 use strict; # please develop with the strict pragma
 
+if ($<) {
+    print "\n\nYou must run koha.upgrade as root.\n\n";
+    exit;
+}
 unless ($< == 0) {
     print "You must be root to run this script.\n";
     exit 1;

@@ -1,5 +1,13 @@
 #!/usr/bin/perl -w
 
+use diagnostics;
+use strict; # please develop with the strict pragma
+
+if ($<) {
+    print "\n\nYou must run koha.upgrade as root.\n\n";
+    exit;
+}
+
 my %configfile;
 open (KC, "/etc/koha.conf");
 while (<KC>) {
