@@ -51,9 +51,9 @@
 			</td>
 			<td>
 				<select name="operator" size="1" onchange="sql_update()">
+					<option <TMPL_IF NAME="contains">selected</TMPL_IF> value="contains">Contient</option>
 					<option <TMPL_IF NAME="eq">selected</TMPL_IF> value="=">Egale</option>
 					<option <TMPL_IF NAME="start">selected</TMPL_IF> value="start">Commence par</option>
-					<option <TMPL_IF NAME="contains">selected</TMPL_IF> value="contains">Contient</option>
 					<option <TMPL_IF NAME="gt">selected</TMPL_IF> value=">">Supérieur à</option>
 					<option <TMPL_IF NAME="ge">selected</TMPL_IF> value=">=">Supérieur ou égal à</option>
 					<option <TMPL_IF NAME="lt">selected</TMPL_IF> value="<">Inférieur à</option>

@@ -89,11 +89,13 @@ sub catalogsearch {
 			{
 				foreach my $word (split(/ /, @$value[$i]))	# if operator is contains, splits the words in separate requests
 				{
-					push @not_tags, @$tags[$i];
-					push @not_subfields, @$subfields[$i];
-					push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
-					push @not_operator, @$operator[$i];
-					push @not_value, $word;
+					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
+						push @not_tags, @$tags[$i];
+						push @not_subfields, @$subfields[$i];
+						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
+						push @not_operator, @$operator[$i];
+						push @not_value, $word;
+					}
 				}
 			}
 			else
@@ -111,11 +113,13 @@ sub catalogsearch {
 			{
 				foreach my $word (split(/ /, @$value[$i]))
 				{
-					push @normal_tags, @$tags[$i];
-					push @normal_subfields, @$subfields[$i];
-					push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
-					push @normal_operator, @$operator[$i];
-					push @normal_value, $word;
+					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
+						push @normal_tags, @$tags[$i];
+						push @normal_subfields, @$subfields[$i];
+						push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
+						push @normal_operator, @$operator[$i];
+						push @normal_value, $word;
+					}
 				}
 			}
 			else
