@@ -190,7 +190,10 @@ sub checkauth {
 	# with a valid session ID. Need to start a new session and set a
 	# new cookie.
 
-	if ($authnotrequired) {
+	my $insecure = C4::Context->preference("insecure");
+
+	if ($authnotrequired ||
+	    (defined($insecure) && $insecure eq "yes")) {
 		# This script doesn't require the user to be logged in. Return
 		# just the cookie, without user ID or session ID information.
 		my $cookie=$query->cookie(-name => 'sessionID',
