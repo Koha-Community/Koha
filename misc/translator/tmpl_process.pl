@@ -294,7 +294,7 @@ sub update_strhash
 
 		print "Processing $in...\n";
 
-		# Creates a filehandle containing all the strings returned by
+		# 'Creates a filehandle containing all the strings returned by
 		# the plain text program extractor
 		open($fh, "$filter $in |") or print "$filter $in : $!";
 		next $in if !defined $fh;
@@ -303,8 +303,8 @@ sub update_strhash
 		while(my $str = <$fh>)
 		{
 			$str =~ s/[\n\r\f]+$//; # chomps the trailing \n (or <cr><lf> if file was edited with Windows)
-			$str =~ s/^\s+//; # remove trailing blanks, ':' or '*'
-			$str =~ s/[\s\*:\[*\(|\.,]*$//;
+			$str =~ s/^[\s+:\(]*//; # remove useless characters
+			$str =~ s/[\s\*:\[*\(|\.,\)]*$//;
 
 			# the line begins with letter(s) followed by optional words and/or spaces
 			if($str =~ /^[ ]*[\w]+[ \w]*/)
