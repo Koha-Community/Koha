@@ -194,6 +194,7 @@ my %requiretables=(
 	authorised_values => "(id int(11) NOT NULL auto_increment,
   									category char(10) NOT NULL default '',
   									authorised_value char(80) NOT NULL default '',
+									lib char(80) NULL,
   									PRIMARY KEY  (id),
   									KEY name (category)
 								)",
@@ -531,6 +532,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.33  2003/01/21 09:03:27  tipaul
+# bugfix (NOTE : this bugs makes installation of the 1.3.3 a little fuzzy. Please fix your DB if you installed 1.3.3)
+#
 # Revision 1.32  2003/01/16 10:29:45  tipaul
 # adding a MARC parameter in systempref ( which is ON or OFF)
 # the search will be a marc search if MARC=ON
