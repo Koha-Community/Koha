@@ -1,20 +1,35 @@
 #!/usr/bin/perl
 
-# This script will check for required updates to the database.  Would also be a
-# good idea to offer to do a backup at this time...
+# Database Updater
+# This script checks for required updates to the database.  
 
+# Part of the Koha Library Software www.koha.org
+# Licensed under the GPL.
 
+# Bugs/ToDo: 
+# - Would also be a good idea to offer to do a backup at this time...
+
+use strict;
+
+# CPAN modules
+use DBI;
+
+# Koha modules
 use C4::Database;
 #use C4::Catalogue;
-use DBI;
 use C4::Acquisitions;
 use C4::Output;
-my $dbh=C4Connect;
 
 my %tables;
 my %types;
 
+#-------------------
+# Initialize
+my $dbh=C4Connect;
 
+# Start checking
+
+# Get version of MySQL database engine.
 my $mysqlversion=`mysqld --version`;
 $mysqlversion=~/Ver (\S*) /;
 $mysqlversion=$1;
@@ -22,23 +37,32 @@ if ($mysqlversion ge '3.23') {
     print "Could convert to MyISAM database tables...\n";
 }
 
+#---------------------------------
+# Tables
+
+# Collect all tables into a list
 my $sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
     $tables{$table}=1;
 }
 
+# Now add any missing tables
 
 # Add tables for virtual bookshelf management
-
 unless ($tables{'shelfcontents'}) {
     print "Adding shelfcontents table...\n";
-    my $sti=$dbh->prepare("create table shelfcontents (shelfnumber int not null, itemnumber int not null, flags int)");
+    my $sti=$dbh->prepare("create table shelfcontents (
+	shelfnumber int not null, 
+	itemnumber int not null, 
+	flags int)");
     $sti->execute;
 }
 unless ($tables{'bookshelf'}) {
     print "Adding bookshelf table...\n";
-    my $sti=$dbh->prepare("create table bookshelf (shelfnumber int auto_increment primary key, shelfname char(255))");
+    my $sti=$dbh->prepare("create table bookshelf (
+	shelfnumber int auto_increment primary key, 
+	shelfname char(255))");
     $sti->execute;
 }
 
@@ -46,23 +70,69 @@ unless ($tables{'bookshelf'}) {
 
 unless ($tables{'z3950queue'}) {
     print "Adding z3950queue table...\n";
-    my $sti=$dbh->prepare("create table z3950queue (id int auto_increment primary key, term text, type char(10), startdate int, enddate int, done smallint, results longblob, numrecords int, servers text, identifier char(30))");
+    my $sti=$dbh->prepare("create table z3950queue (
+	id int auto_increment primary key, 
+	term text, 
+	type char(10), 
+	startdate int, 
+	enddate int, 
+	done smallint, 
+	results longblob, 
+	numrecords int, 
+	servers text, 
+	identifier char(30))");
     $sti->execute;
 }
 
 unless ($tables{'z3950results'}) {
     print "Adding z3950results table...\n";
-    my $sti=$dbh->prepare("create table z3950results (id int auto_increment primary key, queryid int, server char(255), startdate int, enddate int, results longblob, numrecords int, numdownloaded int, highestseen int, active smallint)");
+    my $sti=$dbh->prepare("create table z3950results (
+	id int auto_increment primary key, 
+	queryid int, 
+	server char(255), 
+	startdate int, 
+	enddate int, 
+	results longblob, 
+	numrecords int, 
+	numdownloaded int, 
+	highestseen int, 
+	active smallint)");
     $sti->execute;
 }
 unless ($tables{'z3950servers'}) {
     print "Adding z3950servers table...\n";
-    my $sti=$dbh->prepare("create table z3950servers (host char(255), port int, db char(255), userid char(255), password char(255), name text, id int, checked smallint, rank int)");
+    my $sti=$dbh->prepare("create table z3950servers (
+	host char(255), 
+	port int, 
+	db char(255), 
+	userid char(255), 
+	password char(255), 
+	name text, 
+	id int, 
+	checked smallint, 
+	rank int)");
     $sti->execute;
-    $sti=$dbh->prepare("insert into z3950servers values ('z3950.loc.gov', 7090, 'voyager', '', '', 'Library of Congress', 1, 1, 1)");
+    $sti=$dbh->prepare("insert into z3950servers 
+	values ('z3950.loc.gov', 
+	7090, 
+	'voyager', 
+	'', '', 
+	'Library of Congress', 
+	1, 1, 1)");
     $sti->execute;
 }
 
+# Create new branchrelations table if it doesnt already exist....
+unless ($tables{'branchrelations'} ) {
+    print "creating branchrelations table\n";
+    my $sth=$dbh->prepare("create table branchrelations (
+	branchcode varchar(4), 
+	categorycode varchar(4))");
+    $sth->execute;
+}
+
+#---------------------------------
+# Columns
 
 
 # Get list of columns from biblioitems table
@@ -75,13 +145,15 @@ while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
 unless ($types{'lccn'}) {
     # Add LCCN field to biblioitems db
     print "Adding lccn field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems add column lccn char(25)");
+    my $sti=$dbh->prepare("alter table biblioitems 
+	add column lccn char(25)");
     $sti->execute;
 }
 unless ($types{'marc'}) {
     # Add MARC field to biblioitems db (not used anymore)
     print "Adding marc field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems add column marc text");
+    my $sti=$dbh->prepare("alter table biblioitems 
+	add column marc text");
     $sti->execute;
 }
 
@@ -154,22 +226,6 @@ unless ($branchcategories{'codedescription'} eq 'text') {
     $sth->execute;
 }
 
-# Create new branchrelations table if it doesnt already exist....
-my $branchrelationsexists;
-
-my $sth=$dbh->prepare("show tables");
-$sth->execute;
-while (my ($tablename) = $sth->fetchrow) {
-    if ($tablename == "branchrelations") {
-	$branchrelationsexists = 1;
-    }
-}
-
-unless ($branchrelationsexists) {
-    print "creating branchrelations table";
-    my $sth->prepare("create table branchrelations (branchcode varchar(4), categorycode varchar(4))");
-    $sth->execute;
-}
 
 $sth->finish;
 $dbh->disconnect;
