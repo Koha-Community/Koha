@@ -1,0 +1,146 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+<div id="main">
+<form action="placerequest.pl" method="post" id="mainform">
+
+<input type="hidden" name="biblio" value="<!-- TMPL_VAR Name="bib" -->" />
+<input type="hidden" name="type" value="str8" />
+<input type="hidden" name="title" value="<!-- TMPL_VAR Name="title" -->" />
+
+<h3>Add Reserve for
+<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="bib" -->"><!-- TMPL_VAR Name="title" --></a>
+<!-- TMPL_VAR Name="author" --></h3>
+<div class="form">
+	<table>
+		<tr><th>Rank</th><td><select name="rank-request">
+			<!--$priorityoptions-->
+			<!-- TMPL_LOOP Name="optionloop" -->
+				<option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR Name="num" -->
+				</option>
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+
+<!-- 		<tr><th>Notes</th><td><input type="text" size="20" name="notes"></tr> -->
+		<tr><th>Date</th><td><!-- TMPL_VAR name="date" --></td></tr>
+		<tr><th>Pickup</th><td><!-- TMPL_VAR name="CGIbranch" --></td></tr>
+		<!-- <tr><th>Request</th><td><input type="checkbox" name="request" value="any">Next Available, (or choose from list below)</tr> -->
+		<tr><th>Card Number <a href="/cgi-bin/koha/member-search.pl" onclick="PopWin(this, 'newwin', 300, 400); return false;">?</a></th><td><input type="text" size="10" name="member" /></td></tr>
+	</table>
+</div>
+
+	<div class="table"><table>
+<tr>
+	<!-- <th>Reserve</th> -->
+	<th>Item Type</th>
+	<th>Call Number</th>
+	<!-- <th>Volume</th> -->
+	<!-- <th>Pubdate</th> -->
+	<th>Copies</th>
+</tr>
+<!--$bibitemrows-->
+<!-- TMPL_LOOP Name="bibitemloop" -->
+	<tr>
+		<!-- <td>
+			<!-- TMPL_IF Name="itemlost" -->
+				Cannot be selected
+			<!-- TMPL_ELSE -->
+				<input type="checkbox" name="reqbib" value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+				<input type="hidden" name="biblioitem" value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+			<!-- /TMPL_IF -->
+		</td> -->
+		<td>
+			<!-- TMPL_VAR Name="description" -->
+		</td>
+		<td>
+			<!-- TMPL_IF NAME="class" --><!-- TMPL_VAR Name="class" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td>
+<!-- 		<td>
+			<!-- TMPL_IF NAME="volumedesc" --><!-- TMPL_VAR Name="volumeddesc" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td> -->
+<!-- 		<td>
+			<!-- TMPL_IF NAME="publicationyear" --><!-- TMPL_VAR Name="publicationyear" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+		</td> -->
+		<td><ul>
+			<!-- TMPL_LOOP Name="barcodeloop" -->
+				<li><!-- TMPL_VAR Name="barcode" --> <!-- TMPL_VAR Name="message" --></li>
+			<!-- /TMPL_LOOP -->
+			</ul>
+		</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table></div>
+
+<input type="submit" name="submit"  value="Place New Request" class="submit" />
+</form>
+<!-- TMPL_IF NAME="reserveloop" -->
+<form name="T<!-- TMPL_VAR Name="time" -->" action="modrequest.pl" method="post">
+<h3>Modify Existing Requests</h3>
+<div class="table"><table>
+	<tr>
+		<th>Rank</th>
+		<th>Patron</th>
+		<th>Notes</th>
+		<th>Date</th>
+		<th>Pickup Location</th>
+		<!-- <th>Request</th> -->
+	</tr>
+	<!--$existingreserves-->
+	<!-- TMPL_LOOP Name="reserveloop" -->
+		<tr>
+			<td>
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
+			<input type="hidden" name="biblio" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+			<select name="rank-request">
+				<!-- TMPL_IF Name="wait" -->
+					<option value="W" selected="selected">Waiting</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_LOOP Name="optionloop" -->
+					<option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->>
+						<!-- TMPL_VAR Name="num" -->
+					</option>
+				<!-- /TMPL_LOOP -->
+				<option value="del">Del</option>
+			</select></td>
+			<td>
+			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+			</td>
+			<td><!-- TMPL_IF NAME="notes" --><!-- TMPL_VAR Name="notes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR Name="date" --></td>
+			<td><!-- TMPL_IF Name="wait" -->
+				Item waiting at <b> <!-- TMPL_VAR Name="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR Name="wbrcd" -->" />
+				<!-- TMPL_ELSE -->
+					<select name="pickup">
+						<!-- TMPL_LOOP Name="branchloop" -->
+							<option value="<!-- TMPL_VAR Name="branch" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->>
+								<!-- TMPL_VAR Name="branchname" -->
+							</option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- /TMPL_IF -->
+			</td>
+<!-- 			<td>
+				<!-- TMPL_IF Name="wait" -->
+					<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name=''biblionumber" --> &amp;type=intra" onClick="openWindow(this, 'Item', 480, 640)">
+						<!-- TMPL_VAR Name="barcode" -->
+					</a>
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_IF Name="constrainttypea" -->
+						Next Available
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF Name="constrainttypeo" -->
+							This type only : <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_VAR Name="itemtype" -->
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+
+			</td> -->
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<p>Delete a request by selecting "del" from the rank list.</p>
+<p><input type="submit" name="submit"  value="Update List" class="submit" /></p>
+</div></form><!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

@@ -1,0 +1,40 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<!-- The table with the account items -->
+<div id="main">
+<div class="table"><table>
+<caption>Account for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></caption>
+  <tr>
+    <th colspan="2">Fines &amp; Charges</th>
+    <th>Amount</th>
+    <th>Still Owed</th>
+  </tr>
+
+  <!-- TMPL_LOOP NAME="accounts" -->
+
+    <tr>
+      <td><!-- TMPL_VAR NAME="date" --></td>
+      <td><!-- TMPL_VAR NAME="description" --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
+      <td><!-- TMPL_VAR NAME="amount" --></td>
+      <td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
+    </tr>
+
+  <!-- /TMPL_LOOP -->
+
+  <tr>
+    <td colspan="3"><b>Total Due</b></td>
+    <td><b><!-- TMPL_VAR NAME="total" --></b></td>
+  </tr>
+</table></div>
+<!-- The manual invoice and credit buttons -->
+<div class="tabitem">
+<form action="/cgi-bin/koha/maninvoice.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><input type="submit" class="submit" value="Create
+ Manual Invoice" /></form> <form action="/cgi-bin/koha/mancredit.pl" method="get"> <input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" value="Create
+ Manual Credit" /></form> <form action="moremember.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" value="Return to 
+Patron Record" class="submit" /></form>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

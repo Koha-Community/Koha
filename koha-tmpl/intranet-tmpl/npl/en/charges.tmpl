@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<!-- TMPL_VAR NAME="startmenuissue" -->
+
+<p>
+Each box needs to be filled in with fine,time to start charging,charging cycle<br>
+eg 1,7,7 = $1 fine, after 7 days, every 7 days.<p>
+
+<table>
+  <tr bgcolor="white">
+    <!-- TMPL_LOOP name="firstrowloop" -->
+      <td><!-- TMPL_VAR NAME="description" --></td>
+    <!-- /TMPL_LOOP -->
+  </tr>
+  <form action="/cgi-bin/koha/updatecharges.pl"  method="post">
+  <!-- TMPL_LOOP name="tablebodyloop" -->
+    <tr bgcolor="whitw">
+      <td><!-- TMPL_VAR NAME="description" --></td>
+      <!-- TMPL_LOOP name="rowloop" -->
+        <td><input type="text" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" size="6"></td>
+      <!-- /TMPL_LOOP -->
+    </tr>
+  <!-- /TMPL_LOOP -->
+</table>
+
+<input type="submit">
+</form>
+
+<!-- TMPL_VAR NAME="endmenuissue" -->
+
+</body>
+</html>

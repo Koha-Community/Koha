@@ -1,0 +1,32 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><!-- TMPL_VAR NAME="about" -->
+<h1>About Koha</h1>
+<p>Data about the current version of Koha for bug reports (or general 
+interest).</p>
+<div class="table"><table>
+  <tr>
+      <td>Koha version:</td>
+      <td><!-- TMPL_VAR ESCAPE="html" NAME="kohaVersion" --></td>
+  </tr>
+  <tr>
+      <td>OS version (from 'uname -a'):</td>
+      <td><!-- TMPL_VAR ESCAPE="html" NAME="osVersion" --></td>
+  </tr>
+  <tr>
+      <td>Perl version:</td>
+      <td><!-- TMPL_VAR ESCAPE="html" NAME="perlVersion" --></td>
+  </tr>
+  <tr>
+      <td>MySQL version:</td>
+      <td><!-- TMPL_VAR ESCAPE="html" NAME="mysqlVersion" --></td>
+  </tr>
+  <tr>
+      <td>Apache version:</td>
+      <td><!-- TMPL_VAR ESCAPE="html" NAME="apacheVersion" --></td>
+  </tr>
+</table></div>
+</div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

@@ -1,0 +1,58 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+		<div id="main">	
+<!-- TMPL_IF Name="NOK" -->
+	<div class="details"><h3>Error Completing Form</h3>
+	<p><!-- TMPL_VAR Name="string" --></p></div>
+<!-- TMPL_ELSE -->
+	
+	<!-- TMPL_LOOP Name="identsloop" -->
+		<!-- TMPL_IF Name="cardchild" -->
+<div class="form">
+				<table>
+				<caption>Confirm Details for <!-- TMPL_VAR Name="name" --></caption>
+				<tr>
+					<th>Name</th><td><!-- TMPL_VAR Name="name" --></td>
+				</tr>
+				<tr>
+					<th>Membership Number</th>
+					<td><!-- TMPL_VAR Name="bornum" --></td>
+				</tr>
+				<tr>
+					<th>Barcode Number</th>
+					<td><!-- TMPL_VAR NAME="cardnumber" --></td>
+				</tr>
+				<tr>
+					<th>Date Of Birth</th>
+					<td><!-- TMPL_VAR Name="dob" --></td>
+				</tr>
+				<tr>
+					<th>Sex</th>
+					<td><!-- TMPL_VAR Name="sex" --></td>
+				</tr>
+<!-- 				<tr>
+					<th>School</td>
+					<td><!-- TMPL_VAR Name="school" --></td>
+				</tr> -->
+<!-- TMPL_IF NAME="notes" -->
+				<tr>
+					<th>General Notes</th>
+					<td><!-- TMPL_VAR Name="notes" --></td>
+				</tr>
+
+<!-- /TMPL_IF -->
+		</table></div>
+		<!-- /TMPL_IF -->
+  <!-- /TMPL_LOOP -->
+<form action="/cgi-bin/koha/insertjdata.pl" method="post">
+		<p><!-- TMPL_LOOP NAME="inputsloop" -->
+			<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+		<!-- /TMPL_LOOP -->
+		<input type="submit" name="submit" value="Save Changes to Patron Record" class="submit" /></p>
+	</form>
+<!-- /TMPL_IF -->
+			</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<!-- TMPL_IF name="refresh" -->
+	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->">
+<!-- /TMPL_IF -->
+<h3>Z3950 Search Results</h3>
+<table>
+<caption>Bibliographic Records Found</caption>
+	<tr>
+		<th>Title</th>
+		<th>Author</th>
+		<th>ISBN</th>
+		<th>coming from</th>
+		<th>&nbsp;</th>
+		<th>&nbsp;</th>
+	</tr>
+	<!-- TMPL_IF name="breeding_loop" -->
+	<!-- TMPL_LOOP name="breeding_loop" -->
+		<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+			<td><!-- TMPL_VAR NAME="title" --></a>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="isbn" --></td>
+			<td><!-- TMPL_VAR NAME="file" --></td>
+			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="id" -->)">Import this biblio</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+		<tr><td colspan="6">Nothing found</td></tr>
+	<!-- /TMPL_IF -->
+</table>
+<!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</h3><!-- /TMPL_IF -->
+<script language="JavaScript" type="text/javascript">
+	function Import(GetThisOne) {
+		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
+		self.close();
+		return false;
+	}
+</script>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+
+<div id="main">
+<h3>Manual Invoice</h3>
+<div class="form"><form class="inline" action="/cgi-bin/koha/maninvoice.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+	<table>
+	<tr><th>Borrowernumber</th><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+	<tr><th>Type</th><td><select name="type">
+<option value="L">Lost Item</option>
+<option value="F">Fine</option>
+<option value="A">Account Management Fee</option>
+<option value="N">New Card</option>
+<option value="M">Sundry</option>
+<option value="REF">Cash Refund</option>
+</select></td></tr>
+	<tr><th>Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th>Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th>Amount</th><td><input type="text" name="amount" /></td></tr>
+	</table>
+<input type="submit" name="add" value="Add Charge" class="submit" />
+</form><form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" /><input type="submit" class="cancel" value="Cancel" /></form></div>
+
+
+</div>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

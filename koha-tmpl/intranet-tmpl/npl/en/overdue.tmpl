@@ -1,0 +1,34 @@
+<!-- TMPL_INCLUDE NAME="main-top-print.inc" -->
+<div id="main"><!-- the site -->
+
+<h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
+
+<div class="table"><table>
+  <tr>
+    <th>Due Date</th>
+    <th>Patron</th>
+    <th>Phone</th>
+    <th>Title</th>
+    <th>Author</th>
+  </tr>
+
+  <!-- TMPL_LOOP NAME="overdueloop" -->
+    <tr>
+      <td><!-- TMPL_VAR NAME="duedate" --></td>
+    <!-- TMPL_IF NAME="email" -->
+      <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+    <!-- TMPL_ELSE -->
+      <td><!-- TMPL_VAR NAME="name" --></td>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME="phone" --></td>
+      <td><!-- TMPL_VAR NAME="title" --></td>
+      <td><!-- TMPL_VAR NAME="author" --></td>
+    </tr>
+  <!-- /TMPL_LOOP -->
+</table></div>
+
+</div>
+
+
+<!-- endmenu -->
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

@@ -1,0 +1,45 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<div id="main">
+
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is displayed if user doesn"t have permission -->
+<h2>Sorry, Koha doesn"t think you have permission for this page.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is displayed if login has timed out -->
+<h2>Sorry, your session has timed out.  Please login again.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is displayed if user"s IP has changed -->
+<h2>You are accessing Koha from a different ip address! Please login again.</h2>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is displayed if the username or password doesn"t work -->
+<h2>You entered an incorrect username or password.  Please try again.</h2>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- login prompt time-->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+<!-- TMPL_LOOP NAME="INPUTS" -->
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+<!-- /TMPL_LOOP -->
+
+<div class="details">    <table>
+	<caption>Koha Login</caption>
+    <tr><th><label for="userid">Cardnumber:</label></th><td><input name="userid" id="userid" /></td></tr>
+    <tr><th><label for="password">Password:</label></h><td><input type="password" name="password" id="password" /></td></tr>
+    </table></div>
+<input type="submit" value="Log In" class="submit" />
+</form>
+
+
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

@@ -1,0 +1,103 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><h1><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</a><br>
+Modify Group - <!-- TMPL_VAR Name="description" --></h1>
+
+<form action="updatebibitem.pl" method="post">
+	<table>
+
+		<tr>
+			<td><b><input type="radio" name="existing" value="YES" /> RE-ASSIGN TO EXISTING GROUP</b></td>
+		</tr>
+
+		<tr valign="top">
+			<td colspan=3>
+				<select name="existinggroup"><br>
+					<!-- TMPL_LOOP Name="bibitemloop" -->
+						<option value="<!-- TMPL_VAR Name="biblioitemnumber" -->"><!-- TMPL_VAR Name="description" --> - <!-- TMPL_VAR Name="isbn" --></option>
+					<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td><b><input type="radio" name="existing" value="NO" checked="checked" />OR MODIFY DETAILS</b></td>
+		</tr>
+
+		<tr><td>Item Type</td><td><input type="text" name="Item Type" value="<!-- TMPL_VAR Name="itemtype" -->" size="20" /></td></tr>
+
+		<tr>
+			<td>URL</td>
+			<td><input type="text" name="url" value="<!-- TMPL_VAR Name="url" -->" size="20" /></td>
+		</tr>
+
+		<tr><td>Class</td><td><input type="text" name="Class" value="<!-- TMPL_VAR Name="classification" --><!-- TMPL_VAR Name="dewey" --><!-- TMPL_VAR Name="subclass" -->" size="20" /></td></tr>
+
+
+
+		<tr><td>Publisher</td><td><input type="text" name="Publisher" value="<!-- TMPL_VAR Name="publishercode" -->" size="20" /></td></tr>
+		<tr><td>Place</td><td><input type="text" name="Place" value="<!-- TMPL_VAR Name="place" -->" size="20" /></td></tr>
+
+
+		<tr><td>ISBN</td><td><input type="text" name="ISBN" value="<!-- TMPL_VAR Name="isbn" -->" size="20" /></td></tr>
+
+		<tr><td>Publication Year</td><td><input type="text" name="Publication Year" value="<!-- TMPL_VAR Name="publicationyear" -->" size="20" /></td></tr>
+
+		<tr><td>Pages</td><td><input type="text" name="Pages" value="<!-- TMPL_VAR Name="pages" -->" size="20" /></td></tr>
+
+		<tr><td>Illustrations</td><td><input type="text" name="Illustrations" value="<!-- TMPL_VAR Name="illustration" -->" size="20" /></td></tr>
+
+		<tr><td>Volume</td>
+		<td><input type="text" name="Volume" value="<!-- TMPL_VAR Name="volumeddesc" -->" size="20" /></td></tr>
+		<tr><td>Notes</td>
+		<td><input name="Notes" size="20" value="<!-- TMPL_VAR name="bnotes" -->" /></td></tr>
+		<tr><td>Size</td>
+		<td><input type="text" name="Size" value="<!-- TMPL_VAR Name="size" -->" size="20" /></td></tr>
+
+		<input type="hidden" name="bibnum" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+
+		<input type="hidden" name="bibitemnum" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+
+	</table>
+
+	<img src="/images/holder.gif" width="16" height="500" align="left">
+
+
+
+
+	<table>
+
+		<tr>
+			<td colspan="5"><b>CHANGES TO AFFECT THESE BARCODES<br>
+			Tick ALL barcodes that changes are to apply too. Those left un-ticked will keep the original group record.</td>
+		</tr>
+
+		<tr>
+			<td>&nbsp;</td>
+			<td>Barcode</td>
+			<td>Location</td>
+			<td>Date Due</td>
+			<td>Last Seen</td>
+		</tr>
+
+		<!-- TMPL_LOOP Name="itemloop" -->
+			<tr>
+<td><input type="checkbox" name="check_group_<!-- TMPL_VAR Name="barcode" -->" /></td>
+				<td><a href="/cgi-bin/koha/moredetail.pl?item=<!-- TMPL_VAR Name="itemnumber" -->"amp;bib="TMPL_VAR Name="biblionumber">"amp;bi="TMPL_VAR Name="biblioitemnumber">"><!-- TMPL_VAR Name="barcode" --></a></td>
+				<td><!-- TMPL_VAR Name="holdingbranch" --></td>
+				<td></td>
+				<td><!-- TMPL_VAR Name="datelastseen" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<p>
+	<input type="submit" name="submit" value="Submit" class="submit" />
+</p>
+
+</form>
+
+<p><b>HELP:</b> You <b>must</b> click on the appropriate radio button (in the green boxes), and choose to either re-assign the item/s to a record already in the system, or modify this record.  IF your changes only apply to some items, tick the appropriate ones and a new group record will be created automatically for them.</p>
+</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

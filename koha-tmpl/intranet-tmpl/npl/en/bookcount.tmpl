@@ -1,0 +1,37 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>
+<!-- TMPL_VAR Name="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR Name="author" -->)<!-- /TMPL_IF --></a></h1>
+<h2>Barcode <!-- TMPL_VAR Name="barcode" --></h2>
+<div class="tabitem"><form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR Name="bib" -->"><input type="hidden" name="type" value="intra"><input type="submit" class="submit" value="Brief Display"></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->"><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="bib" -->"><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->"> <input type="submit" class="submit" value="Item Details"></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="bib" -->" name="bib"> <input type="submit" value="Place Reserve" class="submit"></form><!-- /TMPL_IF --></div>
+<div class="items">
+<table>
+		<tr><th>Home Branch: </th><td> <!-- TMPL_VAR Name="homebranch" --> </td></tr>
+		<tr><th>Current Branch: </th><td> <!-- TMPL_VAR Name="holdingbranch" --></td></tr>
+		<tr><th>Date arrived at current branch: </th><td> <!-- TMPL_VAR Name="lastdate" --> </td></tr>
+		<tr><th>Number of issues since since the above date :</th><td> <!-- TMPL_VAR Name="count" --> </td></tr>
+</table>
+</div>
+<div class="table">
+		<table>
+			<tr>
+				<th> Branch</th>
+				<th> No. of Issues</th>
+				<th> Last seen at branch</th>
+			</tr>
+			<!-- TMPL_LOOP Name="branchloop" -->
+				<tr>
+					<td class="data"><!-- TMPL_VAR Name="branchname" --> </td>
+					<td class="data"><!-- TMPL_VAR Name="issues" --> </td>
+					<td class="data"><!-- TMPL_VAR Name="seen" --> </td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table></div>
+		</td>
+	</tr>
+</table></div>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

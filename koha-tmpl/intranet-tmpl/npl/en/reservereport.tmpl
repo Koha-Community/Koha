@@ -1,0 +1,28 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<table>
+	<tr><th>Name</th><th>Reserve Date</th><th>Title</th><th>Class</th></tr>
+	<!-- TMPL_LOOP Name="dataloop" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR Name="name" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="reservedate" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="title" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="classification" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<p><!-- TMPL_VAR Name="count" --></p>
+</div>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

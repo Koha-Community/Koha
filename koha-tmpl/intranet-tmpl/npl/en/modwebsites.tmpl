@@ -1,0 +1,54 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Web Sites</h1>
+<form action="detail.pl"><input type="hidden" value="intra" name="type" /><input type="hidden" name="bib" value="<!-- TMPL_VAR Name="biblionumber" -->" /><input type="submit" value="Return to Details Page" class="submit" /></form>
+
+<!-- TMPL_LOOP Name="websitesloop" -->
+
+<form action="updatewebsite.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<input type="hidden" name="websitenumber" value="<!-- TMPL_VAR Name="websitenumber" -->" />
+<table>
+<tr>
+<td>Title</td>
+<td><input type="text" name="title" value="<!-- TMPL_VAR Name="title" -->" /></td>
+</tr>
+<tr>
+<td>Description</td>
+<td><textarea name="description" cols="40" rows="4"><!-- TMPL_VAR Name="description" --></textarea></td>
+</tr>
+<tr>
+<td>URL</td>
+<td><input type="text" name="url" value="<!-- TMPL_VAR Name="url" -->" /></td>
+</tr>
+</table>
+<input type="submit" class="submit" value="Update this Website Link" />   <input type="submit" class="cancel" name="delete" value="Delete this Website link" />
+</form>
+<!-- /TMPL_LOOP -->
+
+
+<h3>Add another Website Link</h3>
+<form action="addwebsite.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<table>
+<tr>
+<td>Title</td>
+<td><input type="text" name="title" /></td>
+</tr>
+<tr>
+<td>Description</td>
+<td><textarea name="description" cols="40" rows="4"></textarea></td>
+</tr>
+<tr>
+<td>URL</td>
+<td><input type="text" name="url" /></td>
+</tr>
+</table>
+<input type="submit" value="Add this Website Link" class="submit" />
+</form>
+
+</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

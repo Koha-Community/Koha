@@ -1,0 +1,28 @@
+<TMPL_INCLUDE name="/usr/share/koha/intranet/htdocs/includes/cat-top.inc">
+<center>
+
+<table border="0" cellspacing="0" cellpadding="2">
+<tr bgcolor="#ccccff" background="/images/background-mem.gif">
+<th>Title</th><th>Author</th><th>Item Count</th><th>Biblionumber</th></tr>
+<TMPL_LOOP name="SEARCH_RESULTS">
+  <tr>
+  <td><a href="/cgi-bin/koha/detail.pl?type=intra&amp;bib=<TMPL_VAR NAME="biblionumber" ESCAPE="html">"><TMPL_VAR NAME="title"></a></td>
+  <td> <TMPL_VAR NAME="author"> </td>
+  <td align="center"> <TMPL_VAR NAME="itemcount"> </td>
+  <td> <TMPL_VAR NAME="biblionumber"> </td>
+  </tr>
+</TMPL_LOOP>
+<tr bgcolor="#ccccff" backgound="/images/background-mem.gif"><td colspan="4">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" background="/images/background-mem.gif">
+    <tr><td align="left">
+    <a href=search.pl?template=<TMPL_VAR NAME="template">&amp;startfrom=<TMPL_VAR NAME="prevstartfrom">>Previous Records</a>
+    </td><td align="right">
+    <a href=search.pl?template=<TMPL_VAR NAME="template">&amp;startfrom=<TMPL_VAR NAME="nextstartfrom">>Next Records</a>
+    </td></tr>
+    </table>
+</td></tr>
+</table>
+<br>
+Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.
+<hr>
+<TMPL_INCLUDE name="/usr/share/koha/intranet/htdocs/includes/cat-bottom.inc">

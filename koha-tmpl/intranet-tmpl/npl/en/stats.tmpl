@@ -1,0 +1,32 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+	<div id="main">
+	<!-- TMPL_IF NAME="loop1" -->
+	<table>
+	<caption>Statistics</caption>
+		<tr>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Date/time</th>
+			<th>Amount</th>
+			<th>Branch</th>
+		<tr>
+		<!-- TMPL_LOOP name="loop1" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<td><!-- TMPL_VAR NAME="type" --></td>
+			<td><!-- TMPL_VAR NAME="time" --></td>
+			<td><!-- TMPL_VAR NAME="amount" --></td>
+			<td><!-- TMPL_VAR NAME="branch" --></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+		<p>Total paid: <!-- TMPL_VAR NAME="total" --><br>Total written off: <!-- TMPL_VAR NAME="totalw" --></p>
+	<!-- TMPL_ELSE -->
+	<h3>No statistics to report</h3>
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,25 @@
+<!-- TMPL_INCLUDE NAME="main-top.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><h3>Manual Credit</h3>
+<div class="form">
+<form class="inline" action="/cgi-bin/koha/mancredit.pl" method="post">
+<input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+<table>
+	<tr><th>Patron Number</th><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+	<tr><th>Credit Type</th><td><select name="type">
+<option value="C">Credit</option>
+<option value="F">Forgiven</option>
+</select></td></tr>
+	<tr><th>Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th>Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th>Amount</th><td><input type="text" name="amount" /></td></tr>
+</table>
+<input type="submit" name="add" class="submit" value="Add Credit" />
+</form> <form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR Name="bornum" -->" name="bornum" /><input type="submit" class="cancel" value="Cancel" /></form>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
