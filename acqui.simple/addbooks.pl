@@ -328,7 +328,6 @@ EOF
 	} else {
 	    $maxbarcode=$biblionumber;
 	}
-	$maxbarcode++;
 #       print STDERR "MaxBarcode: $maxbarcode \n";
 	print << "EOF";
 <center>
