@@ -53,8 +53,33 @@ Potwierd¼ usuniêcie:
 <tr bgcolor='<TMPL_VAR name=color>'>
     <td align='left' valign='top'><TMPL_VAR name=branch_name escape="HTML"></td>
     <td align='left' valign='top'><TMPL_VAR name=branch_code escape="HTML"></td>
-    <td align='left' valign='top'><TMPL_VAR name=address escape="HTML"></td>
-    <td align='left' valign='top'><TMPL_VAR name=categories escape="HTML"></td>
+    <td align='left' valign='top'>
+<TMPL_IF name=address-empty-p>
+(nothing entered)
+<TMPL_ELSE>
+<TMPL_IF name=branchaddress1>
+<TMPL_VAR name=branchaddress1 escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchaddress2>
+<br><TMPL_VAR name=branchaddress2 escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchaddress3>
+<br><TMPL_VAR name=branchaddress3 escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchphone>
+<br>Ph: <TMPL_VAR name=branchphone escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchfax>
+<br>Fax: <TMPL_VAR name=branchfax escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchemail>
+<br>Email: <TMPL_VAR name=branchemail escape="HTML"></TMPL_IF>
+</TMPL_IF>
+    </td>
+    <td align='left' valign='top'>
+<TMPL_IF name=no-categories-p>
+(no categories set)
+<TMPL_ELSE>
+<TMPL_LOOP name=category_list>
+<TMPL_VAR name=categoryname><br>
+</TMPL_LOOP>
+</TMPL_IF>
+    </td>
     <td align='left' valign='top'>
 <form action='<TMPL_VAR name=action>' method=post>
 <input type='hidden' name='op' value='edit'>

@@ -12,8 +12,10 @@
 <tr><td>分館編碼</td><td><input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'</td></tr>
 <tr><td>館名</td><td><input type=text name=branchname size=40 maxlength=80 value="<TMPL_VAR name=branchname escape="HTML">">&nbsp;</td></tr>
 <FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
+<TMPL_LOOP NAME=categoryloop>
 <tr><td><TMPL_VAR name=categoryname></td>
-<td><INPUT TYPE="checkbox" NAME="<TMPL_VAR name=categorycode>" VALUE="1" ><TMPL_VAR name=codedescription></td></tr>
+<td><INPUT TYPE="checkbox" NAME="<TMPL_VAR name=categorycode>" <TMPL_VAR name=checked>><TMPL_VAR name=codedescription></td></tr>
+</TMPL_LOOP>
 <tr><td>地址</td><td><input type=text name=branchaddress1 value='<TMPL_VAR name=branchaddress1 escape="HTML">'></td></tr>
 <tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='<TMPL_VAR name=branchaddress2 escape="HTML">'></td></tr>
 <tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='<TMPL_VAR name=branchaddress3 escape="HTML">'></td></tr>
@@ -52,8 +54,33 @@ Confirm delete:
 <tr bgcolor='<TMPL_VAR name=color>'>
     <td align='left' valign='top'><TMPL_VAR name=branch_name escape="HTML"></td>
     <td align='left' valign='top'><TMPL_VAR name=branch_code escape="HTML"></td>
-    <td align='left' valign='top'><TMPL_VAR name=address escape="HTML"></td>
-    <td align='left' valign='top'><TMPL_VAR name=categories escape="HTML"></td>
+    <td align='left' valign='top'>
+<TMPL_IF name=address-empty-p>
+(nothing entered)
+<TMPL_ELSE>
+<TMPL_IF name=branchaddress1>
+<TMPL_VAR name=branchaddress1 escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchaddress2>
+<br><TMPL_VAR name=branchaddress2 escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchaddress3>
+<br><TMPL_VAR name=branchaddress3 escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchphone>
+<br>Ph: <TMPL_VAR name=branchphone escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchfax>
+<br>Fax: <TMPL_VAR name=branchfax escape="HTML"></TMPL_IF>
+<TMPL_IF name=branchemail>
+<br>Email: <TMPL_VAR name=branchemail escape="HTML"></TMPL_IF>
+</TMPL_IF>
+    </td>
+    <td align='left' valign='top'>
+<TMPL_IF name=no-categories-p>
+(no categories set)
+<TMPL_ELSE>
+<TMPL_LOOP name=category_list>
+<TMPL_VAR name=categoryname><br>
+</TMPL_LOOP>
+</TMPL_IF>
+    </td>
     <td align='left' valign='top'>
 <form action='<TMPL_VAR name=action>' method=post>
 <input type='hidden' name='op' value='edit'>
@@ -68,6 +95,7 @@ Confirm delete:
 </TMPL_LOOP>
 </table>
 <br>
+<form action=<TMPL_VAR name=action> method=post><input type='hidden' name='op' value='add_cat'><input type=submit value='加一類別'></form>
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33'>
 <font size='5'><b>分館類別</b></font></th> </tr> 
