@@ -85,7 +85,15 @@ the subfield is not entered through a free field, but though a list of authorise
 <input type="hidden" name="op" value="add_form">
 <input type="hidden" name="category" value="<TMPL_VAR name="category">">
 <br><input type=submit class="button" value="Add Authorised value" title="Add authorised Value" ALT="Add Authorised value"><br>
+
+<table width=40%>
+	<tr>
+		<td width=50%><TMPL_IF name="previous"><TMPL_VAR name="previous"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a></TMPL_IF></td>
+		<td width=50%><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
+	</tr>
+</table>
 </form>
 </TMPL_IF>
+
 
 <TMPL_INCLUDE NAME="parameters-bottom.inc">
