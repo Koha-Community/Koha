@@ -75,7 +75,15 @@ print startpage();
 print startmenu('circulation');
 
 
-
+print <<EOF
+<script language="javascript" type="text/javascript">
+<!--
+function messenger(url){
+   window1=window.open(url,"window1","height=700,width=600,left=150,top=50,350,screenY=50");
+}
+//-->
+</script>
+EOF
 
 if ($printer && $branch) {
 
