@@ -793,6 +793,24 @@ my %tabledata = (
 	    type		=> 'Choice',
 	    options		=> 'normal|marc|isbd'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'opacstylesheet',
+            value               => '',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'Enter a complete URL to use an alternate stylesheet in OPAC',
+	    type		=> 'free',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'delimiter',
+            value               => ';',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1},
+            explanation         => 'separator for reports exported to spreadsheet',
+	    type		=> 'free',
+        },
     ],
 
 );
@@ -1378,6 +1396,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.1  2005/03/17 17:15:18  tipaul
+# defaulting opacstylesheet to '' instead of 'normal' (that is stupid)
+#
 # Revision 1.100  2004/12/10 16:11:32  tipaul
 # Improvement : adding a systempref to define default view in OPAC (either normal, MARC or ISBD). Created automatically during install or update. Check that you have a Koha >> parameters >> systempreferences >> BiblioDefaultView, Variable type : Choice, Variable options : normal|marc|isbd
 #
