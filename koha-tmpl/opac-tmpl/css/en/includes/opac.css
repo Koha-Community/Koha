@@ -24,6 +24,12 @@ a:hover {
 	text-decoration:none;
 	color:#000000;
 }
+
+label {
+	float:left;
+	width: 10em;
+}
+
 img {
 	border-width:0px;
 	text-align:left;
@@ -39,6 +45,19 @@ h1 {
 	padding: 2px;
 	border: 4px inset #FFD9BF;
 	width:60%;
+}
+
+/* style for library name, on top of menu (defined in LibraryName systempref) */
+.LibraryName {
+	color:#FFD9BF;
+	background-color:transparent;
+	font-weight:bold;
+	font-size: 150%;
+	text-align:center;
+	vertical-align:top;
+	padding: 2px;
+	border: 4px inset #FF6600;
+	width:75%;
 }
 
 h2 {
@@ -59,10 +78,16 @@ p.center {
 	margin:0pt;
 	text-align:center;
 }
+p.copyright {
+	border-top: 1px solid #000000;
+	margin-top:10px;
+	text-align:center;
+}
 
 /* TABLES */
 table {
 	border:1px solid #000000;
+	border-collapse:collapse;
 	width:90%;
 }
 /* header */
@@ -139,13 +164,6 @@ select {
 }
 
 /* span classes */
-/* used to align forms */
-.fixedwidth {
-	background-color:#FFFFFF;
-	position:absolute;
-	margin-left:150px;
-}
-
 /* used to show small 1,2,3, to reach other pages when too much results */
 .smallnumber {
 	background-color:#99cccc;
@@ -251,7 +269,7 @@ select {
 	position:relative;
 }
 
-/* a little spacer */
+/* a little spacer. should not be used */
 .spacer {
 	padding-left:20pt;
 	float:left;

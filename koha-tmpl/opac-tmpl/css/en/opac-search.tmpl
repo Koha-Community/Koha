@@ -4,25 +4,24 @@
 	<h1>Advanced search</h1>
 	<form action="/cgi-bin/koha/opac-searchresults.pl" method="get">
 	<ul>
-		<li><span class="fixedwidth"><input type="text"  size="25"   name="keyword" /></span>keyword</li>
+		<li><label>keyword</label><input type="text"  size="25"   name="keyword" /></li>
 	</ul>
 	<p><b>OR :</b></p>
 	<ul>
-		<li><span class="fixedwidth"><input type="text"  size="25"   name="subject" /></span>subject</li>
+		<li><label>subject</label><input type="text"  size="25"   name="subject" /></li>
 	</ul>
 	<p><b>OR one or more from :</b></p>
 	<ul>
-		<li><span class="fixedwidth"><input type="text"  size="25"   name="title" /></span>Title</li>
-		<li><span class="fixedwidth"><input type="text"  size="25"   name="author" /></span>Author</li>
-		<li><span class="fixedwidth"><input type="text"  size="25"   name="illustrator" /></span>Illustrator</li>
-		<li><span class="fixedwidth">
+		<li><label>Title</label><input type="text"  size="25"   name="title" /></li>
+		<li><label>Author</label><input type="text"  size="25"   name="author" /></li>
+		<li><label>Illustrator</label><input type="text"  size="25"   name="illustrator" /></li>
+		<li><label>Item type</label>
 			<select size="1"  name="class">
 				<option value="">Any</option>
 				<!-- TMPL_VAR name="classlist" -->
 			</select>
-			</span>Item type
 		</li>
-		<li><span class="fixedwidth"><input type="text"  size="25"   name="itemnumber" /></span>Barcode</li>
+		<li><label>Barcode</label><input type="text"  size="25"   name="itemnumber" /></li>
 	</ul>
 		<p>using <input type="radio" name="ttype" value="normal" />Normal or <input type="radio" name="ttype" value="exact" />Exact search</p>
 

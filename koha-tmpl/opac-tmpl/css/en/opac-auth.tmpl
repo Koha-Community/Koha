@@ -25,8 +25,8 @@
 
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
 	<h1>Koha Login</h1>
-	<p><span class="fixedwidth"><input name="userid" /></span>Cardnumber</p>
-	<p><span class="fixedwidth"><input type="password" name="password" /></span>Password</p>
+	<p><label>Cardnumber</label><input name="userid" /></p>
+	<p><label>Password</label><input type="password" name="password" /></p>
 	<!-- TMPL_LOOP NAME="INPUTS" -->
 		<input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->' />
 	<!-- /TMPL_LOOP -->
