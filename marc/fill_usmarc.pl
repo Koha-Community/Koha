@@ -45,7 +45,9 @@ foreach $tag (sort keys %$fields) {
 		$description=$fields->{$tag}->{"subfields"}->{$subfield}->{"name"};
 	    }
 		$description  =~ s/\<a href.*\<\/a\>//g;
-	    $reqsubfield->execute(
+		my @temp = split /\./,$description;
+		$description = $temp[0];
+	 	$reqsubfield->execute(
 				  $tag,
 				  $subfield,
 				  $description?$description:"Unknown",
