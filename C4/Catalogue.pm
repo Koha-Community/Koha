@@ -440,10 +440,9 @@ tables of the Koha database.
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select ordernumber from aqorders where biblionumber=$bib and
-  biblioitemnumber='$bi'";
+  my $query="Select ordernumber from aqorders where biblionumber=? and biblioitemnumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bib,$bi);
   # FIXME - Use fetchrow_array(), since we're only interested in the one
   # value.
   my $ordnum=$sth->fetchrow_hashref;
