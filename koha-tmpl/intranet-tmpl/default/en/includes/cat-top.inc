@@ -63,21 +63,3 @@ a.catalogue:hover {
 <!-- TMPL_ELSE -->
     <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 <!-- /TMPL_IF -->
-<a href="
-javascript:(
-  function(){
-     var newSS;
-     newSS=document.getElementById('codepoetry-debug-stylesheet');
-     if(newSS){
-        newSS.href=null;
-        document.documentElement.childNodes[0].removeChild(newSS);
-      } else {
-        newSS=document.createElement('link');
-        newSS.rel='stylesheet';
-        newSS.type='text/css';
-        newSS.href='http://www.codepoetry.net/stuff/css-debug-2.css';
-        newSS.id='codepoetry-debug-stylesheet';
-        document.documentElement.childNodes[0].appendChild(newSS);
-      }
-   }
-)()">TOGGLE CSS</a>
