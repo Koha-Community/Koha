@@ -326,7 +326,7 @@ sub calculate {
 		my ($row, $rank, $id, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
 		$i=1 if (($previous_col) and not($col eq $previous_col));
-		$table[$i]->{$col}->{'name'}=(($row eq "") or ($row eq undef))?"Title":$row;
+		$table[$i]->{$col}->{'name'}=$row;
 		$table[$i]->{$col}->{'count'}=$rank;
 		$table[$i]->{$col}->{'link'}=$id;
 #		warn " ".$i." ".$col. " ".$row;

@@ -37,7 +37,7 @@ function Dopop(link) {
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../MARCdetail.pl?bib=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- TMPL_ELSE -->Item<!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
 							</td>
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
