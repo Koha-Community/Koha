@@ -78,8 +78,8 @@ We are using 2 and 3 column display tables, and there is a different set of incl
 
 <UL class="sidenav">
 
-<LI> <a href="/cgi-bin/koha/members-home.pl" class="submenu">Member home</a>
-<li> <a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=adult" class="submenu">Add member</a>
+<LI> <a href="/cgi-bin/koha/members-home.pl" class="submenu">Patron home</a>
+<li> <a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=adult" class="submenu">Add patron</a>
 <li> <a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=organisation" class="submenu">Add organisation</a>
 						
 						
