@@ -30,7 +30,7 @@ if ($query->param('selectnewbranchprinter')) {
 }
 $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
-#$env{'queue'}=$printer;
+$env{'queue'}=$printer;
 my $branchcount=0;
 my $printercount=0;
 my $branchoptions;
@@ -329,7 +329,7 @@ EOF
 	<p>
 	<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
 	<tr><th colspan=6 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Returned Items</font></th></tr>
-	<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th><th>Borrower</th></tr>
+	<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
 EOF
 	my $color='';
 	foreach (sort {$a <=> $b} keys %returneditems) {
@@ -344,7 +344,7 @@ EOF
 	    my $borrowernumber=$riborrowernumber{$_};
 	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
 	    my ($iteminformation) = getiteminformation(\%env, 0, $barcode);
-	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'dewey'} $iteminformation->{'subclass'}</td><td bgcolor=$color><img src=/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
+	    print "<tr><td bgcolor=$color>$overduetext</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$barcode</a></td><td bgcolor=$color>$iteminformation->{'title'}</td><td bgcolor=$color>$iteminformation->{'author'}</td><td bgcolor=$color align=center>$iteminformation->{'itemtype'}</td><td bgcolor=$color><img src=/images/blackdot.gif><a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}</td></tr>\n";
 	}
 	print "</table>\n";
     } else {
@@ -359,12 +359,8 @@ sub issues {
     my $print=$query->param('print');
     my $borrowernumber=$query->param('borrnumber');    
     my $barcode=$query->param('barcode');
-#    if (!$barcode){
-#      $barcode=' ';
-#    }
     if ($barcode eq ''){
-      $print='yes';
-     
+      $print='yes';     
     } elsif ($barcode eq ' '){
       $query->param('barcode','');
       $barcode='';
@@ -373,19 +369,22 @@ sub issues {
       my ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
       $env{'todaysissues'}=1;
       my ($borrowerissues) = currentissues(\%env, $borrower);
+      $env{'nottodaysissues'}=1;
+      $env{'todaysissues'}=0;
+      my ($borroweriss2)=currentissues(\%env, $borrower);
+      $env{'nottodaysissues'}=0;
       my $i=0;
       my @issues;
       foreach (sort keys %$borrowerissues) {
         $issues[$i]=$borrowerissues->{$_};
-	#print $issues[$i]->{'date_due'};
 	$i++;
-
-	#print $i;
       }
-#      print $i;
+      foreach (sort keys %$borroweriss2) {
+        $issues[$i]=$borroweriss2->{$_};
+	$i++;
+      }
       remoteprint(\%env,\@issues,$borrower);
       $query->param('borrnumber','')
-#       $borrowernumber='';
     }
     unless ($noheader) {
 	print << "EOF";
