@@ -66,9 +66,8 @@ Koha database.
 #'
 sub Getoverdues{
   my $dbh = C4::Context->dbh;
-  my $query="Select * from issues where date_due < now() and returndate is
-  NULL order by borrowernumber";
-  my $sth=$dbh->prepare($query);
+  my $sth=$dbh->prepare("Select * from issues where date_due < now() and returndate is
+  NULL order by borrowernumber");
   $sth->execute;
   # FIXME - Use push @results
   my $i=0;
@@ -147,15 +146,14 @@ sub CalcFine {
   # all four tables? It looks as if this code only wants
   # firstremind, chargeperiod, accountsent, and chargename from the
   # categoryitem table.
-  my $query="Select * from items,biblioitems,itemtypes,categoryitem where items.itemnumber=$itemnumber
+
+  my $sth=$dbh->prepare("Select * from items,biblioitems,itemtypes,categoryitem where items.itemnumber=?
   and items.biblioitemnumber=biblioitems.biblioitemnumber and
   biblioitems.itemtype=itemtypes.itemtype and
   categoryitem.itemtype=itemtypes.itemtype and
-  categoryitem.categorycode='$bortype' and (items.itemlost <> 1 or items.itemlost is NULL)";
-
-  my $sth=$dbh->prepare($query);
+  categoryitem.categorycode='?' and (items.itemlost <> 1 or items.itemlost is NULL)");
 #  print $query;
-  $sth->execute;
+  $sth->execute($itemnumber,$bortype);
   my $data=$sth->fetchrow_hashref;
 	# FIXME - Error-checking: the item might be lost, or there
 	# might not be an entry in 'categoryitem' for this item type
@@ -240,12 +238,10 @@ sub UpdateFine {
   # account type has one of several values, but what does this _mean_?
   # Does it look up existing fines for this item?
   # FIXME - What are these various account types? ("FU", "O", "F", "M")
-  my $query="Select * from accountlines where itemnumber=$itemnum and
-  borrowernumber=$bornum and (accounttype='FU' or accounttype='O' or
-  accounttype='F' or accounttype='M') and description like '%$due%'";
-  my $sth=$dbh->prepare($query);
-#  print "$query\n";
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from accountlines where itemnumber=? and
+  borrowernumber=? and (accounttype='FU' or accounttype='O' or
+  accounttype='F' or accounttype='M') and description like ?");
+  $sth->execute($itemnum,$bornum,"%$due%");
 
   if (my $data=$sth->fetchrow_hashref){
     # I think this if-clause deals with the case where we're updating
@@ -256,13 +252,11 @@ sub UpdateFine {
 #      print "updating";
       my $diff=$amount - $data->{'amount'};
       my $out=$data->{'amountoutstanding'}+$diff;
-      # FIXME - Use $dbh->do()
-      my $query2="update accountlines set date=now(), amount=$amount,
-      amountoutstanding=$out,accounttype='FU' where
-      borrowernumber=$data->{'borrowernumber'} and itemnumber=$data->{'itemnumber'}
-      and (accounttype='FU' or accounttype='O') and description like '%$due%'";
-      my $sth2=$dbh->prepare($query2);
-      $sth2->execute;
+      my $sth2=$dbh->prepare("update accountlines set date=now(), amount=?,
+      amountoutstanding=?,accounttype='FU' where
+      borrowernumber=? and itemnumber=?
+      and (accounttype='FU' or accounttype='O') and description like ?");
+      $sth2->execute($amount,$out,$data->{'borrowernumber'},$data->{'itemnumber'},"%$due%");
       $sth2->finish;
     } else {
 #      print "no update needed $data->{'amount'}"
@@ -270,31 +264,23 @@ sub UpdateFine {
   } else {
     # I think this else-clause deals with the case where we're adding
     # a new fine.
-    my $query2="select title from biblio,items where items.itemnumber=$itemnum
-    and biblio.biblionumber=items.biblionumber";
-    my $sth4=$dbh->prepare($query2);
-    $sth4->execute;
+    my $sth4=$dbh->prepare("select title from biblio,items where items.itemnumber=?
+    and biblio.biblionumber=items.biblionumber");
+    $sth4->execute($itemnum);
     my $title=$sth4->fetchrow_hashref;
     $sth4->finish;
  #   print "not in account";
-    # FIXME - There's already a $query2 in this scope.
-    my $query2="Select max(accountno) from accountlines";
-    my $sth3=$dbh->prepare($query2);
+    my $sth3=$dbh->prepare("Select max(accountno) from accountlines");
     $sth3->execute;
     # FIXME - Make $accountno a scalar.
     my @accountno=$sth3->fetchrow_array;
     $sth3->finish;
     $accountno[0]++;
-    $title->{'title'}=~ s/\'/\\\'/g;
-		# FIXME - There are probably other characters that need
-		# to be escaped. Use $dbh->quote.
-    $query2="Insert into accountlines
+    my $sth2=$dbh->prepare("Insert into accountlines
     (borrowernumber,itemnumber,date,amount,
     description,accounttype,amountoutstanding,accountno) values
-    ($bornum,$itemnum,now(),$amount,'$type $title->{'title'} $due','FU',
-    $amount,$accountno[0])";
-    my $sth2=$dbh->prepare($query2);
-    $sth2->execute;
+    (?,?,now(),?,?,'FU',?,?)");
+    $sth2->execute($bornum,$itemnum,$amount,"$type $title->{'title'} $due",$amount,$accountno[0]);
     $sth2->finish;
   }
   $sth->finish;
@@ -316,11 +302,10 @@ category he or she belongs to.
 sub BorType {
   my ($borrowernumber)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from borrowers,categories where
-  borrowernumber=$borrowernumber and
-borrowers.categorycode=categories.categorycode";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from borrowers,categories where
+  borrowernumber=? and
+borrowers.categorycode=categories.categorycode");
+  $sth->execute($borrowernumber);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   return($data);
@@ -337,9 +322,8 @@ Returns the replacement cost of the item with the given item number.
 sub ReplacementCost{
   my ($itemnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select replacementprice from items where itemnumber='$itemnum'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select replacementprice from items where itemnumber=?");
+  $sth->execute($itemnum);
   # FIXME - Use fetchrow_array or something.
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
