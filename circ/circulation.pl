@@ -218,16 +218,20 @@ if ($borrower) {
 	} else {
 	    push @previousissues, $issueslist->{$it};
 	}
-    }
-    my $tcolor = '';
-    my $pcolor = '';
-    foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
-	my $dd = $book->{'date_due'};
-	my $datedue = $book->{'date_due'};
-	$dd=format_date($dd);
-	$datedue=~s/-//g;
-	if ($datedue < $todaysdate) {
-	    $dd="<font color=red>$dd</font>\n";
+	my $tcolor = '';
+	my $pcolor = '';
+	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){
+		my $dd = $book->{'date_due'};
+		my $datedue = $book->{'date_due'};
+		$dd=format_date($dd);
+		$datedue=~s/-//g;
+		if ($datedue < $todaysdate) {
+			$dd="<font color=red>$dd</font>\n";
+		}
+		($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
+		$book->{'dd'}=$dd;
+		$book->{'tcolor'}=$tcolor;
+		push @realtodayissues,$book;
 	}
 	($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
 	$book->{'dd'}=$dd;
@@ -250,11 +254,6 @@ if ($borrower) {
 	if ($datedue < $todaysdate) {
 	    $dd="<font color=red>$dd</font>\n";
 	}
-	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1);
-	$book->{'dd'}=$dd;
-	$book->{'tcolor'}=$pcolor;
-	push @realprevissues,$book
-    }
 }
 
 # actually print the page!
@@ -323,8 +322,6 @@ $template->param(
 		flaginfotable => $flaginfotable,
 		CHARGES => $flags->{'CHARGES'},
 		amountold => $amountold,
-		todayissues => \@realtodayissues,
-		previssues => \@realprevissues,
 	);
 
 if ($branchcookie) {
