@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.57  2003/07/15 23:09:18  slef
+# change show columns to use biblioitems bnotes too
+#
 # Revision 1.56  2003/07/15 11:34:52  slef
 # fixes from paul email
 #
@@ -1098,6 +1101,7 @@ sub MARCmarc2koha {
 	$sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
 	$sth2->execute;
 	while (($field)=$sth2->fetchrow) {
+		if ($field eq 'notes') { $field = 'bnotes'; }
 		$result=&MARCmarc2kohaOneField($sth,"biblioitems",$field,$record,$result);
 	}
 	$sth2=$dbh->prepare("SHOW COLUMNS from items");

@@ -96,6 +96,7 @@ if ($op eq 'add_form') {
 	my $sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
 	$sth2->execute;
 	while ((my $field) = $sth2->fetchrow_array) {
+		if ($field eq 'notes') { $field = 'bnotes'; }
 		push @kohafields, "biblioitems.".$field;
 	}
 	my $sth2=$dbh->prepare("SHOW COLUMNS from items");
