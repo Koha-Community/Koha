@@ -1,11 +1,17 @@
 #!/usr/bin/perl
 
+sub guess_kohahtmldir ($;$);
+
 my $kohadir=`pwd`;
 chomp $kohadir;
-my $kohahtmldir="/koha/koha/koha-html/";
+my $kohahtmldir=guess_kohahtmldir($kohadir, "/koha/koha/koha-html/");
+my $roothomedir=(getpwuid(0))[7];	# ~root is traditionally just /
+$roothomedir='/root' unless defined $roothomedir;
 
-if (-e "/root/.kohaautobuild.conf") {
-    open C, "/root/.kohaautobuild.conf";
+my $has_kohaautobuild_conf = 0;
+
+if (-e "$roothomedir/.kohaautobuild.conf") {
+    open C, "<$roothomedir/.kohaautobuild.conf";
     while (<C>) {
 	chomp;
 	if (/kohadir=(.*)/) {
@@ -15,6 +21,7 @@ if (-e "/root/.kohaautobuild.conf") {
 	    $kohahtmldir=$1;
 	}
     }
+    $has_kohaautobuild_conf = 1;
 }
 
 my $input;
@@ -35,6 +42,7 @@ print "\nWhere is the 'koha' cvs module located [$kohadir]: ";
 chomp($input = <STDIN>);
 if ($input) {
     $kohadir=$input;
+    $kohahtmldir=guess_kohahtmldir($kohadir, $kohahtmldir) unless $has_kohaautobuild_conf;
 }
 
 
@@ -44,14 +52,14 @@ if ($input) {
     $kohahtmldir=$input;
 }
 
-open (C, ">/root/.kohaautobuild.conf");
+open (C, ">$roothomedir/.kohaautobuild.conf");
 print C qq|
 kohadir=$kohadir
 kohahtmldir=$kohahtmldir
 |;
 
 print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
-chdir $kohadir;
+chdir $kohadir || die "$kohadir: $!\n";
 open (CVSLOG, "cvs log buildrelease|");
 my $symbolicnamessection=0;
 my $symbolicnames;
@@ -102,27 +110,21 @@ if ($released) {
     $releaseversion=$nexthighestversion."RC1";
     $currentversion=$highestversion;
 } else {
-    $releaseversion="$highestversion\RC".($highestrc+1);
-    $currentversion="$highestversion\RC$highestrc";
+    $releaseversion=$highestversion."RC".($highestrc+1);
+    $currentversion=$highestversion."RC$highestrc";
 }
 
 print "Current release tag is $currentversion.\n";
 print "\nWould you like to bump that up to $releaseversion (or manually enter version)?  [Y]/N: ";
 chomp($input = <STDIN>);
+my $tagging_needs_confirmation = 0;
 if ($input =~ /^n/i) {
     print "\nWould you like to rebuild the $currentversion tarball?  Y/[N]: ";
     chomp($input = <STDIN>);
+    print STDERR "releaseversion=($releaseversion), currentversion=($currentversion)\n";#XXXZZZ
     if ($input =~ /^y/i) {
 	$releaseversion=$currentversion;
-	print "\n\n";
-	print "Do not do this if you have released the tarball to anybody, as it will\n";
-	print "overwrite the tag marking the files that were in the tarball.\n\n";
-	print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
-	chomp($input = <STDIN>);
-	if ($input =~ /^n/i || $input eq '') {
-	    print "\nStopping.  Please re-run buildrelease now.\n";
-	    exit;
-	}
+	$tagging_needs_confirmation = 1;
     } else {
 	print "What should the new version be? [$releaseversion]: ";
 	chomp ($input=<STDIN>);
@@ -142,8 +144,22 @@ if ($input =~ /^n/i) {
 print "\nWould you like to tag the CVS repository?\n(answer yes if releasing tarball)  [Y]/N: ";
 chomp ($input=<STDIN>);
 my $cvstag=1;
+# FIXME: This means anything other than n will tag; too dangerous?
 if ($input=~/^n/i) {
     $cvstag=0;
+}
+
+
+if ($cvstag && $tagging_needs_confirmation) {
+	print "\n\n";
+	print "Do not do this if you have released the tarball to anybody, as it will\n";
+	print "overwrite the tag marking the files that were in the tarball:\n\n";
+	print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
+	chomp($input = <STDIN>);
+	if ($input =~ /^n/i || $input !~ /\S/) {
+	    print "\nStopping.  Please re-run buildrelease now.\n";
+	    exit;
+	}
 }
 
 
@@ -164,25 +180,32 @@ my $tagname=$releaseversion;
 $tagname=~s/\./-/g;
 
 print qq|
-Updating the 'koha' CVS files.  You may need to enter your SourceForge password.
+Updating your checked-out copy of the 'koha' CVS files.
+You may need to enter your SourceForge password.
 Using $kohadir.
 |;
 chdir($kohadir);
 system("cvs update");
-print qq|
+if ($cvstag) {
+    print qq|
 Tagging koha with tag R_$tagname
 |;
-($cvstag) && (system("cvs tag -F R_$tagname"));
+    system("cvs tag -F R_$tagname");
+}
 print qq|
-Updating the 'koha-html' CVS files.  You may need to enter your SourceForge password.
+Updating your checked-out copy of the 'koha-html' CVS files.
+You may need to enter your SourceForge password.
 Using $kohahtmldir.
 |;
-chdir($kohahtmldir);
+chdir($kohahtmldir) || die "$kohahtmldir: $!\n";
 system("cvs update");
-print qq|
+
+if ($cvstag) {
+    print qq|
 Tagging koha-html with tag R_$tagname
 |;
-($cvstag) && (system("cvs tag -F R_$tagname"));
+    system("cvs tag -F R_$tagname");
+}
 
 
 
@@ -190,7 +213,7 @@ Tagging koha-html with tag R_$tagname
 my $rootdir="/tmp/koha-".$releaseversion;
 system("rm -rf $rootdir");
 mkdir ($rootdir, 0700);
-chdir($rootdir);
+chdir($rootdir) || die "$rootdir: $!\n";
 
 mkdir("intranet-cgi", 0755);
 mkdir("intranet-html", 0755);
@@ -255,11 +278,11 @@ system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-shell.sh $rootdir/scr
 
 # Remove extraneous files from intranet-cgi
 system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
-system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
 system("rm -f $rootdir/intranet-cgi/SendMessages");
 system("rm -f $rootdir/intranet-cgi/buildrelease");
 system("rm -f $rootdir/intranet-cgi/database.mysql");
 system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
+# FIXME: The following two lines look suspicious
 system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
 system("rm -f $rootdir/intranet-cgi/rel-1-2");
 system("rm -f $rootdir/intranet-cgi/testKoha.pl");
@@ -287,11 +310,12 @@ system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
 
-if (-e "/root/docs/manual") {
-    print "Copying docs folder from /root/docs...";
-    system("cp -r /root/docs/* $rootdir/docs/");
+  
+if (-e "$roothomedir/docs") {
+    print "Copying docs folder from $roothomedir/docs...";
+    system("cp -r $roothomedir/docs/* $rootdir/docs/");
 } else {
-    print "I would have copied the docs from from /root/docs, but I couldn't find it.\n";
+    print "I would have copied the docs from from $roothomedir/docs, but I couldn't find it.\n";
     print "Press <ENTER> to continue...\n";
     <STDIN>;
 }
@@ -323,4 +347,17 @@ sub versioncompare {
 	}
     }
     return 0;
+}
+
+sub guess_kohahtmldir ($;$) {
+    my($kohadir, $default) = @_;
+    my $kohahtmldir;
+    # It probably makes sense to assume that the 'koha' and 'koha-html'
+    # modules are checked out within the same parent directory
+    if (-d $kohadir && $kohadir =~ /^(.*)\/[^\/]+$/) {
+	$kohahtmldir = "$1/koha-html"
+    } else {
+	$kohahtmldir = $default;
+    }
+    return $kohahtmldir;
 }
