@@ -368,7 +368,8 @@ EOF
 	$borrowertable .= << "EOF";
 <tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2>
 <b>Flags</b></td></tr>
-$flaginfotextEOF
+$flaginfotext
+EOF
     }
     $borrowertable .= "</table>";
 }
