@@ -58,6 +58,7 @@ a.catalogue:hover {
 	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
 	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
+	<a href="/cgi-bin/koha/authorities/authorities-home.pl" class="submenu2" target="_blank">Authorities popup</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>

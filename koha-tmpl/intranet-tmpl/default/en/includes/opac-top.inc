@@ -51,7 +51,6 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	    <img src="<!-- TMPL_VAR name="themelang" -->/images/menu-join.gif"
 	    width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
 	<!-- /TMPL_IF -->
-
 	<a href="/cgi-bin/koha/mainpage.pl"
 	onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/holder.gif'"><img src="<!-- TMPL_VAR name="themelang" -->/images/menu-home.gif"
 	width=60 height=30 alt="Home" hspace=0 vspace=0 border=0 name="menu-home"></a></td>

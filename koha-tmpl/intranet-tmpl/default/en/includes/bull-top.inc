@@ -2,41 +2,33 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Catalogue</title>
+<title>KOHA: INTRANET: Reports</title>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
-<script language="JavaScript">
-<!-- Hide from old browsers
-function openWindow(targeturl, windowname) {
-newwin =
-window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
-}
-// end hiding -->
-</script>
-
 <script language="JavaScript" type="text/javascript">
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <style type="text/css">
-.catalogue {
-	background-color:#ad11ad;
+.bull {
+	background-color: #803010;
 	color:#FFFFFF;
-	background-image:none;
 	text-decoration: normal;
+	font-weight: bold;
+	background-image:none;
 	}
-a.catalogue:hover {
-	background-color: #ad11ad;
+a.bull:hover {
+	background-color: #803010;
 	color: #FFFFFF;
-	text-decoration: none;
+	text-decoration: normal;
+	font-weight: bold;
 	}
 </style>
 </head>
-
 <body>
+
 <!-- MENUS -->
 <div id="menubar">
 	<span class="koha">KOHA</span>
@@ -45,25 +37,28 @@ a.catalogue:hover {
 	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
 	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
 	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
-	<a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
 	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
 	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
 	&nbsp&nbsp&nbsp&nbsp&nbsp
 	&nbsp&nbsp&nbsp&nbsp&nbsp
 	&nbsp&nbsp
+	&nbsp&nbsp&nbsp&nbsp&nbsp
+	&nbsp&nbsp&nbsp&nbsp&nbsp
+	&nbsp&nbsp
+	&nbsp&nbsp&nbsp&nbsp&nbsp
+	&nbsp&nbsp&nbsp&nbsp&nbsp
+
+
 	
-	<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>
-	<a class="help" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
+	<a class="bull" href="/cgi-bin/koha/bull-home.pl">Serial</a>	<a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
 </div>
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">search</a>
-	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
-	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
-	<a href="/cgi-bin/koha/authorities/authorities-home.pl" target="_blank" class="submenu2">Authorities popup</a>
+	<a href="/cgi-bin/koha/bull/subscription.pl?report_name=itemtypes" class="submenu">Subscription</a>
+	<a href="/cgi-bin/koha/bull/receipt.pl?report_name=itemtypes" class="submenu">Receipt</a>
 </div>
+
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
 <!-- TMPL_ELSE -->

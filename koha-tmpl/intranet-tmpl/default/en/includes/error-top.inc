@@ -62,10 +62,27 @@ a.catalogue:hover {
 	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu2">Add biblio</a>
 	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
-	<a href="/cgi-bin/koha/authorities/authorities-home.pl" target="_blank" class="submenu2">Authorities popup</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
 <!-- TMPL_ELSE -->
     <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 <!-- /TMPL_IF -->
+<a href="
+javascript:(
+  function(){
+     var newSS;
+     newSS=document.getElementById('codepoetry-debug-stylesheet');
+     if(newSS){
+        newSS.href=null;
+        document.documentElement.childNodes[0].removeChild(newSS);
+      } else {
+        newSS=document.createElement('link');
+        newSS.rel='stylesheet';
+        newSS.type='text/css';
+        newSS.href='http://www.codepoetry.net/stuff/css-debug-2.css';
+        newSS.id='codepoetry-debug-stylesheet';
+        document.documentElement.childNodes[0].appendChild(newSS);
+      }
+   }
+)()">TOGGLE CSS</a>
