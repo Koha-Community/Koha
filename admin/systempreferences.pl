@@ -174,7 +174,8 @@ if ($op eq 'add_form') {
 		$template->param('type-choice' => 1);
 	} elsif ($data->{'type'} eq 'YesNo') {
 		$template->param('type-yesno' => 1);
-		($data->{'value'} eq 'yes') ? ($template->param('value-yes'=>1)) : ($template->param('value-no'=>1));
+		$data->{'value'}=C4::Context->boolean_preference($data->{'variable'});
+		($data->{'value'} eq '1') ? ($template->param('value-yes'=>1)) : ($template->param('value-no'=>1));
 	} elsif ($data->{'type'} eq 'free') {
 		$template->param('type-free' => 1);
 		$template->param('fieldlength' => $data->{'options'});
