@@ -15,14 +15,14 @@ if ($op eq "export") {
 	my $start_bib = $query->param("start_bib");
 	my $end_bib = $query->param("end_bib");
 	my $dbh=C4::Context->dbh;
-	my $query;
+	my $sth;
 	if ($start_bib && $end_bib) {
-		$query = "select bibid from marc_biblio where bibid >=$start_bib and bibid <=$end_bib order by bibid";
+		$sth=$dbh->prepare("select bibid from marc_biblio where bibid >=? and bibid <=? order by bibid");
+		$sth->execute($start_bib,$end_bib);
 	} else {
-		$query = "select bibid from marc_biblio order by bibid";
+		$sth=$dbh->prepare("select bibid from marc_biblio order by bibid");
+		$sth->execute();
 	}
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
 	while (my ($bibid) = $sth->fetchrow) {
 		my $record = MARCgetbiblio($dbh,$bibid);
 

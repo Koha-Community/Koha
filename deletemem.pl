@@ -56,9 +56,8 @@ $env{'nottodayissues'}=1;
  }
   my ($bor,$flags)=getpatroninformation(\%env, $member,'');
 my $dbh = C4::Context->dbh;
-my $query="Select * from borrowers where guarantor='$member'";
-my $sth=$dbh->prepare($query);
-$sth->execute;
+my $sth=$dbh->prepare("Select * from borrowers where guarantor=?");
+$sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
 
@@ -85,29 +84,17 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 sub delmember{
   my ($member)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from borrowers where borrowernumber='$member'";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+  $sth->execute($member);
   my @data=$sth->fetchrow_array;
   $sth->finish;
-  $query="Insert into deletedborrowers values (";
-  foreach my $temp (@data){
-    $query .= "'$temp',";
-  }
-  $query=~ s/\,$/\)/;
-  #  print $query;
-  # FIXME - Use $dbh->do()
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
+  $sth->execute(@data);
   $sth->finish;
-  # FIXME - Use $dbh->do()
-  $query = "Delete from borrowers where borrowernumber='$member'";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("Delete from borrowers where borrowernumber=?");
+  $sth->execute($member);
   $sth->finish;
-  # FIXME - Use $dbh->do()
-  $query="Delete from reserves where borrowernumber='$member'";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("Delete from reserves where borrowernumber=?");
+  $sth->execute($member);
   $sth->finish;
 }
