@@ -101,24 +101,22 @@ sub renewstatus {
   my $renewokay = 0;
   # Look in the issues table for this item, lent to this borrower,
   # and not yet returned.
-  my $q1 = "select * from issues
+  my $sth1 = $dbh->prepare("select * from issues
     where (borrowernumber = '$bornum')
     and (itemnumber = '$itemno')
-    and returndate is null";
-  my $sth1 = $dbh->prepare($q1);
-  $sth1->execute;
+    and returndate is null");
+  $sth1->execute($bornum,$itemno);
   # Found a matching item
   if (my $data1 = $sth1->fetchrow_hashref) {
     # See if this item may be renewed. This query is convoluted
     # because it's a bit messy: given the item number, we need to find
     # the biblioitem, which gives us the itemtype, which tells us
     # whether it may be renewed.
-    my $q2 = "select renewalsallowed from items,biblioitems,itemtypes
-       where (items.itemnumber = '$itemno')
+    my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
+       where (items.itemnumber = ?)
        and (items.biblioitemnumber = biblioitems.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth2 = $dbh->prepare($q2);
-    $sth2->execute;
+       and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth2->execute($itemno);
     if (my $data2=$sth2->fetchrow_hashref) {
       $renews = $data2->{'renewalsallowed'};
     }
@@ -143,12 +141,11 @@ sub renewbook {
   my ($env,$dbh,$bornum,$itemno,$datedue)=@_;
   if ($datedue eq "" ) {
     my $loanlength=21;
-    my $query= "Select * from biblioitems,items,itemtypes
-       where (items.itemnumber = '$itemno')
+    my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes
+       where (items.itemnumber = ?)
        and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)";
-    my $sth=$dbh->prepare($query);
-    $sth->execute;
+       and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth->execute($itemno);
     if (my $data=$sth->fetchrow_hashref) {
       $loanlength = $data->{'loanlength'}
     }
@@ -160,20 +157,18 @@ sub renewbook {
   }
   my @date = split("-",$datedue);
   my $odatedue = (@date[2]+0)."-".(@date[1]+0)."-".@date[0];
-  my $issquery = "select * from issues where borrowernumber='$bornum' and
-    itemnumber='$itemno' and returndate is null";
-  my $sth=$dbh->prepare($issquery);
-  $sth->execute;
+  my $sth=$dbh->prepare("select * from issues where borrowernumber=? and
+    itemnumber=? and returndate is null");
+  $sth->execute($bornum,$itemno);
   my $issuedata=$sth->fetchrow_hashref;
   $sth->finish;
   my $renews = $issuedata->{'renewals'} +1;
-  my $updquery = "update issues
-    set date_due = '$datedue', renewals = '$renews'
-    where borrowernumber='$bornum' and
-    itemnumber='$itemno' and returndate is null";
-  my $sth=$dbh->prepare($updquery);
+  my $sth=$dbh->prepare("update issues
+    set date_due = ?, renewals = ?
+    where borrowernumber=? and
+    itemnumber=? and returndate is null");
 
-  $sth->execute;
+  $sth->execute($datedue,$renews,$bornum,$itemno);
   $sth->finish;
   return($odatedue);
 }
@@ -183,10 +178,8 @@ sub renewbook {
 # Otherwise, it needs a POD.
 sub bulkrenew {
   my ($env,$dbh,$bornum,$amount,$borrower,$odues) = @_;
-  my $query = "select * from issues
-    where borrowernumber = '$bornum' and returndate is null order by date_due";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
+  my $sth = $dbh->prepare("select * from issues where borrowernumber = ? and returndate is null order by date_due");
+  $sth->execute($bornum);
   my @items;
   my @issues;
   my @renewdef;
