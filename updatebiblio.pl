@@ -23,6 +23,10 @@ use strict;
 use C4::Acquisitions;
 use C4::Output;
 
+# FIXME - This script uses a bunch of functions that appear in both
+# C4::Acquisitions and C4::Biblio. But I gather that the latter are
+# preferred. So should this script "use C4::Biblio;" ?
+
 my $input       = new CGI;
 my $bibnum      = checkinp($input->param('biblionumber'));
 my $biblio = {
