@@ -1,0 +1,107 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+	<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
+</TMPL_IF>
+
+<font size="5"><em>機讀格式之匯入及書目之管理</em></font>
+<TMPL_IF name="noitemsfound">
+	<p />
+	<font color="red" size="4">No items found</font>
+</TMPL_IF>
+<TMPL_IF name="websiteadded">
+	<p />
+	<font color="red" size="4">Website Biblioitem Added</font>
+</TMPL_IF>
+
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">要加一個新書目或項目，scan or type the ISBN/ISSN number:</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+	<form action="isbnsearch.pl">
+		<td width="5%">ISBN:</td>
+		<td width="20%"><input type="text" name="isbn" /></td>
+		<td width="10%"><input type="submit" value="Go" /></td>
+		<td>If the ISBN is found into the biblio table, it will be retrieved and can be modified.<br/>
+				If the ISBN is found into the breeding farm, it will be retrieved. and a biblio added.<br/>
+				Otherwise, a biblio can be added from scratch.</td>
+	</form>
+	</tr>
+	<tr><td>&nbsp;</td>
+		<td colspan=2><a href=addbiblio.pl>加一個沒有 <abbr lang=en>ISBN</abbr> / <abbr lang=en>ISSN</abbr> 的書目</a></td></tr>
+</table>
+
+<p />
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><font size="4">Tools for importing MARC records into breeding farm</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+		<td width="5%">&nbsp;</td>
+		<td width="20%"><li><a href=marcimport.pl>上載 <abbr lang=en>MARC</abbr> 記錄</a></li></td>
+		<td width="10%">&nbsp;</td>
+		<td>The breeding farm is a table where are stored imported MARC records.<br/>
+			A MARC record is stored in the breeding farm as long as you've no item. When you type the ISBN of a biblio, it's searched in the breeding farm.
+			If found, the biblio is added to koha active table, and removed from breeding farm.
+		</td>
+
+
+<table bgcolor="#ffcc00" width="80%" cellpadding"5">
+	<tr>
+		<td><font size="4">Tools for importing MARC from a z3950 server</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+		<td width="5%">&nbsp;</td>
+		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Z39.50 查詢</a></li></td>
+		<td width="10%">&nbsp;</td>
+		<td>暫時無法使用</td>
+	</tr>
+</table>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><FONT SIZE=4>加入一個網站</font></td>
+	</tr>
+</table>
+<form action="websitesearch.pl" method="post">
+	<table>
+	<tr>
+		<td>關鍵字：</td>
+		<td><input type="text" name="keyword" /></td>
+		<td><input type="submit" value="Go" /></td>
+	</tr>
+	</table>
+</FORM>
+
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><FONT SIZE=4>說明</font></td>
+	</tr>
+</table>
+<FONT SIZE=5><span lang=mi>Koha</span> 將一本書的資料分三部分分別儲存：</font>
+<p />
+<h2>書目 (<span lang=en>Biblio</span>)</h2>
+第一個部分記錄一部著作的書目資料，
+即書名、作者、著作年分等。
+<p />
+<h2>著錄 (<span lang=en>Group</span>)</h2>
+第二個部分記錄一部著作的某一版的書目資料，
+即國際書號、頁數、冊數、出版社、出版年分等。
+<p />
+<h2>項目 (<span lang=en>Item</span>)</h2>
+三第部個分記錄一本書的個別資料，
+即條碼編號等。
+<p />
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">

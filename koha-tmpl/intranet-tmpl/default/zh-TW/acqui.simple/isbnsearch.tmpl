@@ -1,0 +1,86 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+<font size="6"><em>書目尋找結果</em></font><br />
+<CENTER>
+您以<b>國際書號</b>查詢 <b><TMPL_VAR name="isbn"></b><br />
+<TMPL_IF name="total">
+現正顯示第 <TMPL_VAR name="showoffset"> 至 <TMPL_VAR name="total"> 個項目
+</TMPL_IF>
+<p />
+
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4"><span lang=mi>Koha</span> 內既有書目</font></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>書名</b></td>
+		<td><b>著者</b></td>
+		<td><b>著作年</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<TMPL_IF name="loop">
+	<TMPL_LOOP name="loop">
+		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
+			<td><TMPL_VAR name="title"></a>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="copyrightdate"></td>
+			<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">更改</a></td>
+		</tr>
+	</TMPL_LOOP>
+	<TMPL_ELSE>
+	<tr><td colspan=4>什麼也找不到</td></tr>
+	</TMPL_IF>
+</table>
+<br />
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">「<span lang=en>Breeding farm</span>」內既有書目</font></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>書名</b></td>
+		<td><b>著者</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>來源</b></td>
+		<td><b>&nbsp;</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<TMPL_IF name="breeding_loop">
+	<TMPL_LOOP name="breeding_loop">
+		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
+			<td><TMPL_VAR name="title"></a>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="isbn"></td>
+			<td><TMPL_VAR name="file"></td>
+			<td><a href="addbiblio.pl?breedingid=<TMPL_VAR name="id">">Add biblio</a></td>
+		</tr>
+	</TMPL_LOOP>
+	<TMPL_ELSE>
+	<tr><td colspan=6>什麼也找不到</td></tr>
+	</TMPL_IF>
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">加一新書目</a></td>
+	</tr>
+</table>
+
+<br />
+<TMPL_LOOP name="loop_links">
+	<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="newoffset">&num=<TMPL_VAR name="num">"><TMPL_VAR name="shownumber"></a>
+</TMPL_LOOP>
+<p />
+每頁顯示
+<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=5">5</a>
+<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=10">10</a>
+<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=20">20</a>
+<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="offset">&num=50">50</a>
+個項目
+</CENTER>
+<br clear="all" />
+<p>&nbsp;</p>
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
