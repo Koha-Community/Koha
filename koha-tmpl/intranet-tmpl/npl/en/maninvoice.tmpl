@@ -5,9 +5,9 @@
 
 
 <div id="main">
-<h3>Manual Invoice</h3>
-<div class="form"><form class="inline" action="/cgi-bin/koha/maninvoice.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
-	<table>
+<form class="inline" action="/cgi-bin/koha/maninvoice.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+	<div class="data"><table>
+	<caption>Manual Invoice</caption>
 	<tr><th>Borrowernumber</th><td><!-- TMPL_VAR Name="bornum" --></td></tr>
 	<tr><th>Type</th><td><select name="type">
 <option value="L">Lost Item</option>
@@ -19,10 +19,10 @@
 </select></td></tr>
 	<tr><th>Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
 	<tr><th>Description</th><td><input type="text" name="desc" size="50" /></td></tr>
-	<tr><th>Amount</th><td><input type="text" name="amount" /></td></tr>
-	</table>
+	<tr><th>Amount</th><td>$<input type="text" name="amount" /></td></tr>
+	</table></div>
 <input type="submit" name="add" value="Add Charge" class="submit" />
-</form><form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" /><input type="submit" class="cancel" value="Cancel" /></form></div>
+</form> <form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" /><input type="submit" class="cancel" value="Cancel" /></form>
 
 
 </div>
