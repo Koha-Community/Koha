@@ -69,7 +69,7 @@ my $overwrite_biblio = $input->param('overwrite_biblio');
 my $filename = $input->param('filename');
 my $syntax = $input->param('syntax');
 my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "acqui.simple/marcimport.tmpl",
+	= get_template_and_user({template_name => "import/breeding.tmpl",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
@@ -103,6 +103,9 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.1  2003/06/04 13:46:25  tipaul
+# moving breeding farm import to parameters page (GUI) and to new import/ directory (code structure)
+#
 # Revision 1.33  2003/04/29 16:48:36  tipaul
 # really proud of this commit :-)
 # z3950 search and import seems to works fine.
