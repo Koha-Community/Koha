@@ -45,8 +45,8 @@ while ($i < $count){
   my @results=split('\t',$items[$i]);
   $results[0]=mklink("/cgi-bin/koha/detail.pl?bib=$results[2]&type=$type",$results[0]);
   my $word=$results[1];
-  $word=~ s/ //g;
-  $word=~ s/\,/\,%20/;
+  $word=~ s/ /%20/g;
+  #$word=~ s/\,/\,%20/;
   $results[1]=mklink("/cgi-bin/koha/search.pl?author=$word&type=$type",$results[1]);
   my ($count,$lcount,$nacount,$fcount,$scount)=itemcount($env,$results[2]);                                                                     
   $results[3]=$count;                                                                                                                           
