@@ -1,88 +1,124 @@
-<html>
 <TMPL_INCLUDE NAME="parameters-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>您目前登入為: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a> <span lang=mi>Koha</span></p>
-</TMPL_IF>
 <center>
-<FONT SIZE=6><em><span lang=mi>Koha</span>的系統設定</em></FONT><br>
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
+<h1>設定</h1>
+<table width="100%" cellspacing=0 cellpadding=5 border=1>
+<tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 	<th>系統參數</th>
 </tr>
 </table>
-<table cellspacing=0 cellpadding=1 width=80%>
-<th colspan=2>書目相關設定</th>
+<table cellspacing=0 cellpadding=1 width="80%">
+<tr>
+<th colspan=2>要<span lang=mi>Koha</span>能正常運作，請您務必依次填妥下列的各項設定</th>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>館別設定</a></td>
+	<td>這個<span lang=mi>Koha</span>伺服器所負責的各館</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl><span lang=en>book fund</span><!--FIXME--></a></td>
+	<td>用以購置書藉的各種資金</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl" >貨幣匯率</a></td>
+	<td>設定匯率</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>館藏類別</a></td>
-	<td>各種館藏的分類</td>
+	<td>設定各種圖書資料的分類</td>
 </tr>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>財政預算</a></td>
-	<td>the budgets allowed to differents book funds.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
-	<td>the differents book funds.</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>容許值</a></td>
-	<td>設定容許值的類別及相關的容許值。
-在機讀格式結構的設定裡，可指定某些分欄只能用某些「容許值」，令輸入書目時可以減少錯誤或更加方便</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thesaurus</a></td>
-	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
-</tr>
-
-<th colspan=2>機讀格式 (<abbr lang=en>MARC</abbr>) 相關設定</th>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>定義機讀格式的結構</a></td><td>機讀格式的結構：欄及分欄</td></tr>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>定義機讀格式和<span lang=mi>koha</span>資料庫間的連結</a></td><td>定義<span lang=mi>Koha</span>資料庫和機讀格式資料庫間的關係。註：使用「定義機讀格式的結構」功能也可做到這點，但用這個工具做連結會快一些。</td></tr>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>核對機讀格式結構</a></td><td>核實機讀格式結構的定義有沒有導致資料庫不能正常操作的嚴重錯誤。處理真正的資料前，務必用這個核一核對！</td></tr>
-
-<th colspan=2>其他參數</th>
-<tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl" >分館設定</a></td>
-	<td>這套 <span lang=mi>Koha</span> 伺服器由哪些圖書館共用</td>
-</tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">讀者類別</a></td>
-	<td>設定不同的讀者類別</td>
+	<td>設定讀者的分類</td>
 </tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl" >幣值設定</a></td>
-	<td>書藉供應商用什麼貨幣</td>
+        <td valign="top" width="25%"><a href=/cgi-bin/koha/admin/charges.pl>罰款設定</a></td>
+        <td>各類讀者借出各類圖書資料的各種罰款</td>
 </tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl" >打印機設定</a></td>
-	<td>打印機 (UNIX 路徑) 設定</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>容許值</a></td>
+	<td>設定容許值的類別及相關的容許值──修改機讀格式的書目時，容許值可以讓修改機讀格式時減少錯誤以及較為方便</td>
 </tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thesaurus</a></td>
+	<td>Management of thesaurus and authorities files.</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>機讀格式欄位結構</a></td>
+	<td>設定機讀格式的欄位結構 (欄及分欄)</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>連結<span lang=mi>Koha</span>及機讀格式資料庫</a></td>
+	<td>定義<span lang=mi>Koha</span>資料庫和機讀格式資料庫間的關係。註：只用「機讀格式欄位結構」功能也可完成這個步驟，但用這個工具做連結會較快。</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>核對機讀格式結構</a></td>
+	<td>核實機讀格式結構的定義有沒有導致資料庫不能正常操作的嚴重錯誤。處理真正的資料前，務必用這個核一核對！</td>
+</tr>
+
+<tr><td>&nbsp;</td></tr>
+<tr>
+<th colspan=2>其他各種參數</th>
+</tr>
+<tr><td>&nbsp;</td></tr>
+
+<tr>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl" >打印機</a></td>
+	<td>設定打印機 (UNIX 路徑)</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>stopword</a></td>
-	<td>查詢時應該省略的字眼</td>
+	<td>設定查詢時忽略哪些字眼</td>
 </tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>Z39.50 伺服器</a></td>
-	<td>用來查詢機讀格式資料的各伺服器</td>
+	<td>設定查詢機讀格式資料時用哪些伺服器</td>
 </tr>
+<tr><td>&nbsp;</td></tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>系統偏好</a></td>
-	<td>其他影響系統運作的偏好設定</td>
+	<td>設定系統偏好</td>
 </tr>
 </table>
 
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
+<table width="100%" cellspacing=0 cellpadding=5 border=1>
+<tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 	<th>相關工具</th>
 </tr>
 </table>
 <table cellspacing=0 cellpadding=1 width=80%>
+<tr>
 <th colspan=2>匯出</th>
+</tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>MARC biblio export</a></td>
 	<td>以機讀格式匯出</td>
 </tr>
+<tr>
+<th colspan=2>匯入</th>
+</tr>
+	<tr valign="top">
+		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">上載機讀格式記錄</a>至「<span lang=en>Breeding Farm</span>」</td>
+		<td>The breeding farm is a table where imported MARC records are
+ stored.<br/>
+			A MARC record is stored in the breeding farm as long as
+you have no item. When you type the ISBN or title of a biblio, it's searched for
+ in the breeding farm.
+			If it is found, the biblio is added to Koha active table
+ and removed from the breeding farm. <br/>
+		</td>
+	</tr>
 </table>
 </center>
 <TMPL_INCLUDE NAME="cat-bottom.inc">
