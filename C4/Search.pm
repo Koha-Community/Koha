@@ -261,9 +261,10 @@ sub KeywordSearch {
   my $i=1;
   my @results;
   my $query ="Select * from biblio,bibliosubtitle,biblioitems where
+  biblio.biblionumber=biblioitems.biblionumber and
   biblio.biblionumber=bibliosubtitle.biblionumber and
-  biblioitems.biblionumber=biblio.biblionumber and
   (((title like '$key[0]%' or title like '% $key[0]%')";
+
   while ($i < $count){
     $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
     $i++;
@@ -310,20 +311,26 @@ sub KeywordSearch {
      }
   $query.=")"; 
   }
-   $query.="group by biblio.biblionumber order by author,title";
+  if ($search->{'dewey'} ne ''){
+    $query.= "and (dewey like '$search->{'dewey'}%') ";
+  }
+   $query.="group by biblio.biblionumber";
+   #$query.=" order by author,title";
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $i=0;
   while (my $data=$sth->fetchrow_hashref){
-    my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}
-    ");
-    $sti->execute;
-    my ($dewey, $subclass) = $sti->fetchrow;
+#    my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}
+#    ");
+#    $sti->execute;
+#    my ($dewey, $subclass) = $sti->fetchrow;
+    my $dewey=$data->{'dewey'};
+    my $subclass=$data->{'subclass'};
     $dewey=~s/\.*0*$//;
     ($dewey == 0) && ($dewey='');
     ($dewey) && ($dewey.=" $subclass");
-    $sti->finish;
+#    $sti->finish;
     $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey";
 #      print $results[$i];
     $i++;
@@ -344,6 +351,10 @@ sub KeywordSearch {
         $query.=" or itemtype='$temp[$i]'";
       }
       $query.=")"; 
+      
+    }
+    if ($search->{'dewey'} ne ''){
+      $query.= "and (dewey like '$search->{'dewey'}%') ";
     }
     my $sth2=$dbh->prepare($query);
     $sth2->execute;
