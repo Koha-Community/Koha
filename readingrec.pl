@@ -63,6 +63,7 @@ for (my $i=0;$i<$count;$i++){
  	my %line;
 	$line{title}=$issues->[$i]->{'title'};
 	$line{author}=$issues->[$i]->{'author'};
+	$line{date_due}=$issues->[$i]->{'date_due'};
 	$line{returndate}=$issues->[$i]->{'returndate'};
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
 	push(@loop_reading,\%line);
