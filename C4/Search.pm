@@ -961,7 +961,7 @@ sub subtitle {
 
 
 sub itemissues {
-  my ($bibitem,$biblio)=@_;
+  my ($bibitem, $biblio)=@_;
   my $dbh=C4Connect;
   my $query="Select * from items where 
   items.biblioitemnumber='$bibitem'";

@@ -137,21 +137,38 @@ while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
 unless ($branchcategories{'categorycode'} eq 'varchar(4)') {
     print "Setting type of categorycode in branchcategories to varchar(4),\n and making the primary key.\n";
     my $sti=$dbh->prepare("alter table branchcategories change categorycode categorycode varchar(4) not null");
-    $sti->execute;
-    $sti=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
-    $sti->execute;
+    $sth->execute;
+    $sth=$dbh->prepare("alter table branchcategories add primary key (categorycode)");
+    $sth->execute;
 }
 
 unless ($branchcategories{'branchcode'} eq 'varchar(4)') {
-    print "Setting type of branchcode in branchcategories to varchar(4).\n";
-    my $sti=$dbh->prepare("alter table branchcategories change branchcode branchcode varchar(4)");
-    $sti->execute;
+    print "Changing branchcode in branchcategories to categoryname text.\n";
+    my $sth=$dbh->prepare("alter table branchcategories change branchcode categoryname text");
+    $sth->execute;
 }
 
 unless ($branchcategories{'codedescription'} eq 'text') {
     print "Replacing branchholding in branchcategories with codedescription text.\n";
-    my $sti=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
-    $sti->execute;
+    my $sth=$dbh->prepare("alter table branchcategories change branchholding codedescription text");
+    $sth->execute;
+}
+
+# Create new branchrelations table if it doesnt already exist....
+my $branchrelationsexists;
+
+my $sth=$dbh->prepare("show tables");
+$sth->execute;
+while (my ($tablename) = $sth->fetchrow) {
+    if ($tablename == "branchrelations") {
+	$branchrelationsexists = 1;
+    }
+}
+
+unless ($branchrelationsexists) {
+    print "creating branchrelations table";
+    my $sth->prepare("create table branchrelations (branchcode varchar(4), categorycode varchar(4))");
+    $sth->execute;
 }
 
 $sth->finish;

@@ -171,7 +171,7 @@ if ($items[$i]->{'wthdrawn'} eq '1'){
 }
 print <<printend
 <b>Cancelled: $items[$i]->{'wthdrawn'}<br>
-<b>Total Issues:</b> $items[$i]->{'issues'}<br>
+<b><a href=/cgi-bin/koha/bookcount.pl?&bib=$bib&bi=$bi&itm=$items[$i]->{'itemnumber'}>Total Issues:</a></b> $items[$i]->{'issues'}<br>
 <b>Group Number:</b> $bi <br>
 <b>Biblio number:</b> $bib <br>
 

@@ -1,280 +1,387 @@
 #!/usr/bin/perl
 
-#script to administer the aqbudget table
-#written 20/02/2002 by paul.poulain@free.fr
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
-
-# ALGO :
-# this script use an $op to know what to do.
-# if $op is empty or none of the above values,
-#	- the default screen is build (with all records, or filtered datas).
-#	- the   user can clic on add, modify or delete record.
-# if $op=add_form
-#	- if primkey exists, this is a modification,so we read the $primkey record
-#	- builds the add/modify form
-# if $op=add_validate
-#	- the user has just send datas, so we create/modify the record
-# if $op=delete_form
-#	- we show the record having primkey=$primkey and ask for deletion validation form
-# if $op=delete_confirm
-#	- we delete the record having primkey=$primkey
+# Finlay working on this file from 26-03-2002
+# Reorganising this branches admin page.....
 
 use strict;
-use C4::Output;
 use CGI;
-use C4::Search;
+use C4::Output;
 use C4::Database;
 
-sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
-	my $dbh = &C4Connect;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $query="Select branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing from branches where (branchcode like \"$data[0]%\") order by branchcode";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	my @results;
-	my $cnt=0;
-	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
-	}
-	#  $sth->execute;
-	$sth->finish;
-	$dbh->disconnect;
-	return ($cnt,\@results);
-}
+# Fixed variables
+my $linecolor1='#ffffcc';
+my $linecolor2='white';
+my $backgroundimage="/images/background-mem.gif";
+my $script_name="/cgi-bin/koha/admin/branches.pl";
+my $pagesize=20;
+
+
+#######################################################################################
+# Main loop....
 
 my $input = new CGI;
-my $searchfield=$input->param('searchfield');
-my $pkfield="branchcode";
-my $reqsel="select branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing from branches where branchcode='$searchfield'";
-my $reqdel="delete from branches where branchcode='$searchfield'";
-#my $branchcode=$input->param('branchcode');
-my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/branches.pl";
-
-my $pagesize=20;
+my $branchcode=$input->param('branchcode');
 my $op = $input->param('op');
-$searchfield=~ s/\,//g;
+
+# header
 print $input->header;
 
-#start the page and read in includes
+# start the page and read in includes
 print startpage();
 print startmenu('admin');
 
-################## ADD_FORM ##################################
-# called by default. Used to create form to add or  modify a record
-if ($op eq 'add_form') {
-	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
-	if ($searchfield) {
-		my $dbh = &C4Connect;
-		my $sth=$dbh->prepare("select branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing  from branches where branchcode='$searchfield'");
-		$sth->execute;
-		$data=$sth->fetchrow_hashref;
-		$sth->finish;
-	}
-	print <<printend
-	<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.searchfield.value.length==0) {
-			_alertString += "- branch code missing\\n";
-		}
-		if (f.branchname.value.length==0) {
-			_alertString += "- branch name missing\\n";
-		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-	</SCRIPT>
-printend
-;#/
-	if ($searchfield) {
-		print "<h1>Modify branch</h1>";
-	} else {
-		print "<h1>Add branch</h1>";
-	}
-	print "<form action='$script_name' name=Aform method=post>";
-	print "<input type=hidden name=op value='add_validate'>";
-	print "<table>";
-	if ($searchfield) {
-		print "<tr><td>Branch code</td><td><input type=hidden name=searchfield value=$searchfield>$searchfield</td></tr>";
-	} else {
-		print "<tr><td>Branch code</td><td><input type=text name=searchfield size=5 maxlength=5 onBlur=toUC(this)></td></tr>";
-	}
-	print "<tr><td>Name</td><td><input type=text name=branchname size=40 maxlength=80 value='$data->{'branchname'}'>&nbsp;</td></tr>";
-	print "<tr><td>Adress</td><td><input type=text name=branchaddress1 value='$data->{'branchaddress1'}'></td></tr>";
-	print "<tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='$data->{'branchaddress2'}'></td></tr>";
-	print "<tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='$data->{'branchaddress3'}'></td></tr>";
-	print "<tr><td>Phone</td><td><input type=text name=branchphone value='$data->{'branchphone'}'></td></tr>";
-	print "<tr><td>Fax</td><td><input type=text name=branchfax value='$data->{'branchfax'}'></td></tr>";
-	print "<tr><td>E-mail</td><td><input type=text name=branchemail value='$data->{'branchemail'}'></td></tr>";
-	print "<tr><td>Issuing</td><td><input type=text name=issuing value='$data->{'issuing'}'></td></tr>";
-	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
-	print "</table>";
-	print "</form>";
-;
-													# END $OP eq ADD_FORM
-################## ADD_VALIDATE ##################################
-# called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
-	my $dbh=C4Connect;
-	my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing) values (";
-	$query.= $dbh->quote($input->param('branchcode')).",";
-	$query.= $dbh->quote($input->param('branchname')).",";
-	$query.= $dbh->quote($input->param('branchaddress1')).",";
-	$query.= $dbh->quote($input->param('branchaddress2')).",";
-	$query.= $dbh->quote($input->param('branchaddress3')).",";
-	$query.= $dbh->quote($input->param('branchphone')).",";
-	$query.= $dbh->quote($input->param('branchfax')).",";
-	$query.= $dbh->quote($input->param('branchemail')).",";
-	$query.= $dbh->quote($input->param('issuing')).")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	$sth->finish;
-	print "data recorded";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
-													# END $OP eq ADD_VALIDATE
-################## DELETE_CONFIRM ##################################
-# called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
-	my $dbh = &C4Connect;
-	my $sth=$dbh->prepare("select count(*) as total from borrowers where branchcode='$searchfield'");
-	$sth->execute;
-	my $total = $sth->fetchrow_hashref;
-	$sth->finish;
-	print "$reqsel";
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
-	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Branch code'),bold("$searchfield"),'/images/background-mem.gif');
-	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='$searchfield'>";
-	print "<tr><td>Branch code</td><td>$data->{'branchcode'}</td></tr>";
-	print "<tr><td>&nbsp; name</td><td>$data->{'branchname'}</td></tr>";
-	print "<tr><td>&nbsp; adress</td><td>$data->{'branchaddress1'}</td></tr>";
-	print "<tr><td>&nbsp;</td><td>$data->{'branchaddress2'}</td></tr>";
-	print "<tr><td>&nbsp;</td><td>$data->{'branchaddress3'}</td></tr>";
-	print "<tr><td>&nbsp;phone</td><td>$data->{'branchphone'}</td></tr>";
-	print "<tr><td>&nbsp; fax</td><td>$data->{'branchfax'}</td></tr>";
-	print "<tr><td>&nbsp; e-mail</td><td>$data->{'branchemail'}</td></tr>";
-	print "<tr><td>&nbsp; issuing</td><td>$data->{'issuing'}</td></tr>";
-	if ($total->{'total'} >0) {
-		print "<tr><td colspan=2 align=center><b>This record is used $total->{'total'} times. Deletion not possible</b></td></tr>";
-		print "<tr><td colspan=2></form><form action='$script_name' method=post><input type=submit value=OK></form></td></tr>";
-	} else {
-		print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
-		print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
-	}
-													# END $OP eq DELETE_CONFIRM
-################## DELETE_CONFIRMED ##################################
-# called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
-	my $dbh=C4Connect;
-#	my $searchfield=$input->param('branchcode');
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
-	$sth->finish;
-	print "data deleted";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
-													# END $OP eq DELETE_CONFIRMED
-################## DEFAULT ##################################
-} else { # DEFAULT
-	my @inputs=(["text","searchfield",$searchfield],
-		["reset","reset","clr"]);
-	print mkheadr(2,'branches admin');
-	print mkformnotable("$script_name",@inputs);
-	print <<printend
+if ($op eq 'add') {
+# If the user has pressed the "add new branch" button. 
+    print heading("Branches: Add Branch");
+    print editbranchform();
 
-printend
-	;
-	if  ($searchfield ne '') {
-		print "You Searched for <b>$searchfield<b><p>";
-	}
-	print mktablehdr;
-	print mktablerow(9,'#99cc33',bold('Branch code'),bold('name'),bold('adress'),
-	bold('phone'),bold('fax'),bold('mail'),bold('issuing'),
-	'&nbsp;','&nbsp;','/images/background-mem.gif');
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle="white";
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		#find out stats
-	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
-	#  	$fines=$fines+0;
-	  	if ($toggle eq 'white'){
-	    		$toggle="#ffffcc";
-	  	} else {
-	    		$toggle="white";
-	  	}
-		print mktablerow(9,$toggle,$results->[$i]{'branchcode'},$results->[$i]{'branchname'},
-		$results->[$i]{'branchaddress1'}.$results->[$i]{'branchaddress2'}.$results->[$i]{'branchaddress3'},
-		$results->[$i]{'branchphone'},,$results->[$i]{'branchfax'},,$results->[$i]{'branchmail'},,$results->[$i]{'issuing'},
-		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'branchcode'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'branchcode'},'Delete',''));
-	}
-	print mktableft;
-	print "<form action='$script_name' method=post>";
-	print "<input type=hidden name=op value=add_form>";
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		print mklink("$script_name?offset=".$prevpage,'&lt;&lt; Prev');
-	}
-	print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		print mklink("$script_name?offset=".$nextpage,'Next &gt;&gt;');
-	}
-	print "<br><input type=image src=\"/images/button-add-member.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";
-	print "</form>";
-} #---- END $OP eq DEFAULT
+} elsif ($op eq 'edit') {
+# if the user has pressed the "edit branch settings" button.
+    print heading("Branches: Edit Branch");
+    print editbranchform($branchcode);
+
+} elsif ($op eq 'add_validate') {
+# confirm settings change...
+    my $params = $input->Vars;
+    unless ($params->{'branchcode'} && $params->{'branchname'}) {
+	default ("Cannot change branch record: You must specify a Branchname and a Branchcode");
+    } else {
+	setbranchinfo($params);
+	default ("Branch record changed for branch: $params->{'branchname'}");
+    }
+
+} elsif ($op eq 'delete') {
+# if the user has pressed the "delete branch" button.
+    my $message = checkdatabasefor($branchcode);
+    if ($message) {
+	default($message);
+    } else {
+	print deleteconfirm($branchcode);
+    }
+
+} elsif ($op eq 'delete_confirmed') {
+# actually delete branch and return to the main screen....
+    deletebranch($branchcode);
+    default("The branch with code $branchcode has been deleted.");
+
+} else {
+# if no operation has been set...
+    default();
+}
+
+
 print endmenu('admin');
 print endpage();
+
+######################################################################################################
+#
+# html output functions....
+
+sub default {
+    my ($message) = @_;
+    print heading("Branches");
+    print "<font color='red'>$message</font>";
+    print "<form action='$script_name' method=post><input type='hidden' name='op' value='add'><input type=submit value='Add New Branch'></form>";
+    print branchinfotable();
+    print branchcategoriestable();
+}
+
+sub heading {
+    my ($head) = @_;
+    return "<FONT SIZE=6><em>$head</em></FONT><br>";
+}
+
+sub editbranchform {
+# prepares the edit form...
+    my ($branchcode) = @_;
+    my $data;
+    if ($branchcode) {
+	$data = getbranchinfo($branchcode);
+	$data = $data->[0];
+    }
+# make the checkboxs.....
+    my $catinfo = getcategoryinfo();
+    my $catcheckbox;
+    foreach my $cat (@$catinfo) {
+	my $checked = "";
+	my $tmp = $cat->{'categorycode'};
+	if (grep {/^$tmp$/} @{$data->{'categories'}}) {
+	    $checked = "CHECKED";
+	}
+	$catcheckbox .= <<EOF;
+<tr><td>$cat->{'categoryname'}</td>
+<td><INPUT TYPE="checkbox" NAME="$cat->{'categorycode'}" VALUE="1" $checked>$cat->{'codedescription'}</td></tr>
+EOF
+    }
+    my $form = <<EOF;
+<form action='$script_name' name=Aform method=post>
+<input type=hidden name=op value='add_validate'>
+<table>
+<tr><td>Branch code</td><td><input type=text name=branchcode size=5 maxlength=5 value='$data->{'branchcode'}'></td></tr>
+<tr><td>Name</td><td><input type=text name=branchname size=40 maxlength=80 value='$data->{'branchname'}'>&nbsp;</td></tr>
+$catcheckbox
+<tr><td>Address</td><td><input type=text name=branchaddress1 value='$data->{'branchaddress1'}'></td></tr>
+<tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='$data->{'branchaddress2'}'></td></tr>
+<tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='$data->{'branchaddress3'}'></td></tr>
+<tr><td>Phone</td><td><input type=text name=branchphone value='$data->{'branchphone'}'></td></tr>
+<tr><td>Fax</td><td><input type=text name=branchfax value='$data->{'branchfax'}'></td></tr>
+<tr><td>E-mail</td><td><input type=text name=branchemail value='$data->{'branchemail'}'></td></tr>
+<tr><td>&nbsp;</td><td><input type=submit value='Submit'></td></tr> 
+</table>
+</form> 
+EOF
+    return $form;
+}
+
+sub deleteconfirm {
+# message to print if the 
+    my ($branchcode) = @_;
+    my $output = <<EOF;
+Confirm delete: 
+<form action='$script_name' method=post><input type='hidden' name='op' value='delete_confirmed'>
+<input type='hidden' name='branchcode' value=$branchcode>
+<input type=submit value=YES></form>
+<form action='$script_name' method=post><input type='hidden' name='op' value=''>
+<input type=submit value=NO></form>
+EOF
+    return $output;
+}
+
+
+sub branchinfotable {
+# makes the html for a table of branch info from reference to an array of hashs.
+
+    my ($branchcode) = @_;
+    my $branchinfo;
+    if ($branchcode) {
+	$branchinfo = getbranchinfo($branchcode);
+    } else {
+	$branchinfo = getbranchinfo();
+    }
+    my $table = <<EOF;
+<table border='1' cellpadding='5' cellspacing='0' width='550'>
+<tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
+<font size='5'><b>Branches</b></font></th> </tr> 
+<tr bgcolor='#889999'> 
+<td width='175'><b>Name</b></td> 
+<td width='25'><b>Code</b></td> 
+<td width='175'><b>Address</b></td>
+<td width='175'><b>Categories</b></td>
+<td width='50'><b>&nbsp;</b></td>
+</tr>
+EOF
+
+    my $color;
+    foreach my $branch (@$branchinfo) {
+	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+	my $address = '';
+	$address .= $branch->{'branchaddress1'}          if ($branch->{'branchaddress1'});
+	$address .= '<br>'.$branch->{'branchaddress2'}   if ($branch->{'branchaddress2'});
+	$address .= '<br>'.$branch->{'branchaddress3'}   if ($branch->{'branchaddress3'});
+	$address .= '<br>ph: '.$branch->{'branchphone'}   if ($branch->{'branchphone'});
+	$address .= '<br>fax: '.$branch->{'branchfax'}    if ($branch->{'branchfax'});
+	$address .= '<br>email: '.$branch->{'branchemail'} if ($branch->{'branchemail'});
+	$address = '(nothing entered)' unless ($address);
+	my $categories = '';
+	foreach my $cat (@{$branch->{'categories'}}) {
+	    my ($catinfo) = @{getcategoryinfo($cat)};
+	    $categories .= $catinfo->{'categoryname'}."<br>";
+	}
+	$categories = '(no categories set)' unless ($categories);
+	$table .= <<EOF;
+<tr bgcolor='$color'>
+    <td align='left' valign='top'>$branch->{'branchname'}</td>
+    <td align='left' valign='top'>$branch->{'branchcode'}</td>
+    <td align='left' valign='top'>$address</td>
+    <td align='left' valign='top'>$categories</td>
+    <td align='left' valign='top'> 
+<form action='$script_name' method=post>
+<input type='hidden' name='op' value='edit'>
+<input type='hidden' name='branchcode' value='$branch->{'branchcode'}'>
+<input type=submit value=Edit>
+</form>
+<form action='$script_name' method=post>
+<input type='hidden' name='branchcode' value='$branch->{'branchcode'}'>
+<input type='hidden' name='op' value='delete'><input type=submit value=Delete>
+</form></td>
+</tr>
+EOF
+    }
+    $table .= "</table><br>";
+    return $table;
+}
+
+sub branchcategoriestable {
+#Needs to be implemented...
+
+    my $categoryinfo = getcategoryinfo();
+    my $table = <<EOF;
+<table border='1' cellpadding='5' cellspacing='0'>
+<tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
+<font size='5'><b>Branches Categories</b></font></th> </tr> 
+<tr bgcolor='#889999'> 
+<td width='175'><b>Name</b></td> 
+<td width='25'><b>Code</b></td> 
+<td width='200'><b>Description</b></td>
+</tr>
+EOF
+my $color;
+    foreach my $cat (@$categoryinfo) {
+	($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+	$table .= <<EOF;
+<tr bgcolor='$color'>
+    <td align='left' valign='top'>$cat->{'categoryname'}</td>
+    <td align='left' valign='top'>$cat->{'categorycode'}</td>
+    <td align='left' valign='top'>$cat->{'codedescription'}</td>
+</tr>
+EOF
+    }
+    $table .= "</table>";
+    return $table;
+}
+
+######################################################################################################
+#
+# Database functions....
+
+sub getbranchinfo {
+# returns a reference to an array of hashes containing branches,
+
+    my ($branchcode) = @_;
+    my $dbh = &C4Connect;
+    my $query;
+    if ($branchcode) {
+	my $bc = $dbh->quote($branchcode);
+	$query = "Select * from branches where branchcode = $bc";
+    }
+    else {$query = "Select * from branches";}
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) { 
+	my $tmp = $data->{'branchcode'}; my $brc = $dbh->quote($tmp);
+	$query = "select categorycode from branchrelations where branchcode = $brc";
+	my $nsth = $dbh->prepare($query);
+	$nsth->execute;
+	my @cats = ();
+	while (my ($cat) = $nsth->fetchrow_array) {
+	    push(@cats, $cat);
+	}
+	$nsth->finish;
+	$data->{'categories'} = \@cats;
+	push(@results, $data);
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return \@results;
+}
+
+sub getcategoryinfo {
+# returns a reference to an array of hashes containing branches,
+    my ($catcode) = @_;
+    my $dbh = &C4Connect;
+    my $query;
+    if ($catcode) {
+	my $cc = $dbh->quote($catcode);
+	$query = "select * from branchcategories where categorycode = $cc";
+    } else {
+	$query = "Select * from branchcategories";
+    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my @results;
+    while (my $data = $sth->fetchrow_hashref) { 
+	push(@results, $data);
+    }
+    $sth->finish;
+    $dbh->disconnect;
+    return \@results;
+}
+
+sub setbranchinfo {
+# sets the data from the editbranch form, and writes to the database...
+    my ($data) = @_;
+    my $dbh=&C4Connect;
+    my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (";
+    my $tmp;
+    $tmp = $data->{'branchcode'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchname'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchaddress1'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchaddress2'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchaddress3'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchphone'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchfax'}; $query.= $dbh->quote($tmp).",";
+    $tmp = $data->{'branchemail'}; $query.= $dbh->quote($tmp).")";
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+    $dbh->disconnect;
+# sort out the categories....
+    my @checkedcats;
+    my $cats = getcategoryinfo();
+    foreach my $cat (@$cats) {
+	my $code = $cat->{'categorycode'};
+	if ($data->{$code}) {
+	    push(@checkedcats, $code);
+	}
+    }
+    my $branchcode = $data->{'branchcode'};
+    my $branch = getbranchinfo($branchcode);
+    $branch = $branch->[0];
+    my $branchcats = $branch->{'categories'};
+    my @addcats;
+    my @removecats;
+    foreach my $bcat (@$branchcats) {
+	unless (grep {/^$bcat$/} @checkedcats) {
+	    push(@removecats, $bcat);
+	}
+    }
+    foreach my $ccat (@checkedcats){
+	unless (grep {/^$ccat$/} @$branchcats) {
+	    push(@addcats, $ccat);
+	}
+    }	
+    my $dbh=&C4Connect;
+    foreach my $cat (@addcats) {
+	my $query = "insert into branchrelations (branchcode, categorycode) values('$branchcode', '$cat')";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+    }
+    foreach my $cat (@removecats) {
+	my $query = "delete from branchrelations where branchcode='$branchcode' and categorycode='$cat'";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+    }
+    $dbh->disconnect;
+}
+
+sub deletebranch {
+# delete branch...
+    my ($branchcode) = @_;
+    my $query = "delete from branches where branchcode = '$branchcode'";
+    my $dbh=&C4Connect;
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+    $dbh->disconnect;
+}
+
+sub checkdatabasefor {
+# check to see if the branchcode is being used in the database somewhere....
+    my ($branchcode) = @_;
+    my $dbh = &C4Connect;
+    my $sth=$dbh->prepare("select count(*) from items where holdingbranch='$branchcode' or homebranch='$branchcode'");
+    $sth->execute;
+    my ($total) = $sth->fetchrow_array;
+    $sth->finish;
+    $dbh->disconnect;
+    my $message;
+    if ($total) {
+	$message = "Branch cannot be deleted because there are $total items using that branch.";
+    } 
+    return $message;
+}
+
+

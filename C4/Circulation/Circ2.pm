@@ -4,6 +4,7 @@ package C4::Circulation::Circ2;
 #written 3/11/99 by olwen@katipo.co.nz
 
 use strict;
+# use warnings;
 require Exporter;
 use DBI;
 use C4::Database;
@@ -23,8 +24,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook
-&find_reserves &transferbook);
+@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook &returnbook2 &find_reserves &transferbook &decode);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -62,13 +62,20 @@ my $priv_func = sub {
 
 
 sub getbranches {
-    my ($env) = @_;
+# returns a reference to a hash of references to branches...
     my %branches;
     my $dbh=&C4Connect;  
     my $sth=$dbh->prepare("select * from branches");
     $sth->execute;
     while (my $branch=$sth->fetchrow_hashref) {
-#	(next) if ($branch->{'branchcode'} eq 'TR');
+	my $tmp = $branch->{'branchcode'}; my $brc = $dbh->quote($tmp);
+	my $query = "select categorycode from branchrelations where branchcode = $brc";
+	my $nsth = $dbh->prepare($query);
+	$nsth->execute;
+	while (my ($cat) = $nsth->fetchrow_array) {
+	    $branch->{$cat} = 1;
+	}
+	$nsth->finish;
 	$branches{$branch->{'branchcode'}}=$branch;
     }
     $dbh->disconnect;
@@ -95,22 +102,23 @@ sub getpatroninformation {
 # returns 
     my ($env, $borrowernumber,$cardnumber) = @_;
     my $dbh=&C4Connect;  
+    my $query;
     my $sth;
     open O, ">>/root/tkcirc.out";
     print O "Looking up patron $borrowernumber / $cardnumber\n";
     if ($borrowernumber) {
-	$sth=$dbh->prepare("select * from borrowers where borrowernumber=$borrowernumber");
+	$query = "select * from borrowers where borrowernumber=$borrowernumber";
     } elsif ($cardnumber) {
-	$sth=$dbh->prepare("select * from borrowers where cardnumber=$cardnumber");
+	$query = "select * from borrowers where cardnumber=$cardnumber";
     } else {
-	 # error condition.  This subroutine must be called with either a
-	 # borrowernumber or a card number.
-	$env->{'apierror'}="invalid borrower information passed to getpatroninformation subroutine";
-	 return();
+	$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
+	return();
     }
+    $env->{'mess'} = $query;
+    $sth = $dbh->prepare($query);
     $sth->execute;
-    my $borrower=$sth->fetchrow_hashref;
-    my $flags=patronflags($env, $borrower, $dbh);
+    my $borrower = $sth->fetchrow_hashref;
+    my $flags = patronflags($env, $borrower, $dbh);
     $sth->finish;
     $dbh->disconnect;
     print O "$borrower->{'surname'} <---\n";
@@ -119,6 +127,33 @@ sub getpatroninformation {
     return($borrower, $flags);
 }
 
+sub decode {
+    my ($encoded) = @_;
+    my $seq = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-';
+    my @s = map { index($seq,$_); } split(//,$encoded);
+    my $l = ($#s+1) % 4;
+    if ($l)
+    {
+	if ($l == 1)
+	{
+	    print "Error!";
+	    return;
+	}
+	$l = 4-$l;
+	$#s += $l;
+    }
+    my $r = '';
+    while ($#s >= 0)
+    {
+	my $n = (($s[0] << 6 | $s[1]) << 6 | $s[2]) << 6 | $s[3];
+	$r .=chr(($n >> 16) ^ 67) .
+	     chr(($n >> 8 & 255) ^ 67) .
+	     chr(($n & 255) ^ 67);
+	@s = @s[4..$#s];
+    }
+    $r = substr($r,0,length($r)-$l);
+    return $r;
+}
 
 
 
@@ -187,20 +222,46 @@ sub findborrower {
 
 
 sub transferbook {
-    my ($env, $iteminformation, $barcode) = @_;
-    my $messages;
+# transfer book code....
+    my ($tbr, $barcode) = @_;
+    my $message = "";
+    my %env;
+    my $branches = getbranches();
+    my $iteminformation = getiteminformation(\%env,0, $barcode);
+    if (not $iteminformation) {
+	$message = "<font color='red' size='+2'>There is no book with barcode: $barcode </font>";
+	return (0, $message, 0);
+    }
+    my $fbr = $iteminformation->{'holdingbranch'};
+    if ($branches->{$fbr}->{'PE'}) {
+	$message = "<font color='red' size='+2'>You cannot transfer a book that is in a permanant branch.</font>";
+	return (0, $message, $iteminformation);
+    }
+    if ($fbr eq $tbr) {
+	$message = "<font color='red' size='+2'>You can't transfer the book to the branch it is already at! </font>";
+	return (0, $message, $iteminformation);
+    }
     my $dbh=&C4Connect;
+    my ($currentborrower) = currentborrower(\%env, $iteminformation->{'itemnumber'}, $dbh);
+    if ($currentborrower) {
+	$message = "<font color='red' size='+2'>Book cannot be transfered bracause it is currently on loan to: $currentborrower . Please return book first.</font>";
+	return (0, $message, $iteminformation);
+    }
+    my $itm = $dbh->quote($iteminformation->{'itemnumber'});
+    $fbr = $dbh->quote($fbr);
+    $tbr = $dbh->quote($tbr);
     #new entry in branchtransfers....
-    my $sth = $dbh->prepare("insert into branchtransfers (itemnumber, frombranch, datearrived, tobranch) values($iteminformation->{'itemnumber'}, '$env->{'frbranchcd'}', now(), '$env->{'tobranchcd'}')");
-    $sth->execute || return (0,"database error: $sth->errstr");
+    my $query = "insert into branchtransfers (itemnumber, frombranch, datearrived, tobranch) values($itm, $fbr, now(), $tbr)";
+    my $sth = $dbh->prepare($query);
+    $sth->execute; 
     $sth->finish;
     #update holdingbranch in items .....
-    $sth = $dbh->prepare("update items set holdingbranch='$env->{'tobranchcd'}' where items.itemnumber=$iteminformation->{'itemnumber'}");
-    $sth->execute || return (0,"database error: $sth->errstr");
-    $sth->execute;
+    $query = "update items set datelastseen = now(), holdingbranch=$tbr where items.itemnumber=$itm";
+    $sth = $dbh->prepare($query);
+    $sth->execute; 
     $sth->finish;
     $dbh->disconnect;
-    return (1, $messages);
+    return (1, $message, $iteminformation);
 }
 
 
@@ -395,7 +456,6 @@ sub returnbook {
 
 	    # check for overdue fine
 
-	    $overduecharge;
 	    $sth=$dbh->prepare("select * from accountlines where (borrowernumber=$borrower->{'borrowernumber'}) and (itemnumber = $iteminformation->{'itemnumber'}) and (accounttype='FU' or accounttype='O')");
 	    $sth->execute;
 	    # alter fine to show that the book has been returned
@@ -406,8 +466,8 @@ sub returnbook {
 		$overduecharge=$data->{'amountoutstanding'};
 	    }
 	    $sth->finish;
-	 }
-	 if ($iteminformation->{'itemlost'} eq '1'){
+	}
+	if ($iteminformation->{'itemlost'} eq '1'){
 	    # check for charge made for lost book
 	    my $query="select * from accountlines where (itemnumber =
 	    $iteminformation->{'itemnumber'}) and (accounttype='L' or accounttype='Rep') 
@@ -517,67 +577,223 @@ sub returnbook {
 }
 
 
+
+sub returnbook2 {
+    my ($env, $barcode) = @_;
+    my @messages;
+    my $dbh=&C4Connect;
+# get information on item
+    my ($iteminformation) = getiteminformation($env, 0, $barcode);
+    if (not $iteminformation) {
+	push(@messages, "<font color='red' size='+2'> There is no book with barcode: $barcode </font>");
+	return (0, \@messages, 0 ,0);
+    }
+#    updatelastseen($env, $dbh, $iteminformation->{'itemnumber'});
+
+# find the borrower
+    my $borrower;
+    my ($currentborrower) = currentborrower($env, $iteminformation->{'itemnumber'}, $dbh);
+    if (not $currentborrower) {
+	push(@messages, "<font color='red' size='+2'>Book: $barcode is not currently issued.</font>");
+	return (0, \@messages, 0,0);
+    }
+# update issues, thereby returning book (should push this out into another subroutine
+    ($borrower) = getpatroninformation($env, $currentborrower, 0);
+    my $query = "update issues set returndate = now()
+        where (borrowernumber = '$borrower->{'borrowernumber'}') 
+        and (itemnumber = '$iteminformation->{'itemnumber'}') and (returndate is null)";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+    push(@messages, "Book has been returned.");
+
+    my $tbr = $env->{'branchcode'};
+    my ($transfered, $message, $item) = transferbook($tbr, $barcode);
+    if ($transfered) {
+	push(@messages, "Book: as been transfered.");
+     }
+
+    if ($iteminformation->{'itemlost'}) {
+	updateitemlost($dbh, $iteminformation->{'itemnumber'});
+# check for charge made for lost book
+	my $query = "select * from accountlines where (itemnumber = '$iteminformation->{'itemnumber'}') 
+            and (accounttype='L' or accounttype='Rep') order by date desc";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	if (my $data = $sth->fetchrow_hashref) {
+# writeoff this amount 
+	    my $offset;
+	    my $amount = $data->{'amount'};
+	    my $acctno = $data->{'accountno'};
+	    my $amountleft;
+	    if ($data->{'amountoutstanding'} == $amount) {
+		$offset = $data->{'amount'};
+		$amountleft = 0;
+	    } else {
+		$offset = $amount - $data->{'amountoutstanding'};
+		$amountleft = $data->{'amountoutstanding'} - $amount;
+	    }
+	    my $uquery = "update accountlines
+		  set accounttype = 'LR',amountoutstanding='0'
+		  where (borrowernumber = '$data->{'borrowernumber'}')
+		  and (itemnumber = '$iteminformation->{'itemnumber'}')
+		  and (accountno = '$acctno') ";
+	    my $usth = $dbh->prepare($uquery);
+	    $usth->execute;
+	    $usth->finish;
+#check if any credit is left if so writeoff other accounts
+	    my $nextaccntno = getnextacctno($env,$data->{'borrowernumber'},$dbh);
+	    if ($amountleft < 0){
+		$amountleft*=-1;
+	    }
+	    if ($amountleft > 0){
+		my $query = "select * from accountlines
+		  where (borrowernumber = '$data->{'borrowernumber'}') and (amountoutstanding >0)
+		  order by date";
+		my $msth = $dbh->prepare($query);
+		$msth->execute;
+		  # offset transactions
+		my $newamtos;
+		my $accdata;
+		while (($accdata=$msth->fetchrow_hashref) and ($amountleft>0)){
+		    if ($accdata->{'amountoutstanding'} < $amountleft) {
+			$newamtos = 0;
+			$amountleft = $amountleft - $accdata->{'amountoutstanding'};
+		    }  else {
+			$newamtos = $accdata->{'amountoutstanding'} - $amountleft;
+			$amountleft = 0;
+		    }
+		    my $thisacct = $accdata->{accountno};
+		    my $updquery = "update accountlines set amountoutstanding= '$newamtos'
+		                where (borrowernumber = '$data->{'borrowernumber'}') and (accountno='$thisacct')";
+		    my $usth = $dbh->prepare($updquery);
+		    $usth->execute;
+		    $usth->finish;
+		    $updquery = "insert into accountoffsets 
+		          (borrowernumber, accountno, offsetaccount,  offsetamount)
+		          values
+		          ('$data->{'borrowernumber'}','$accdata->{'accountno'}','$nextaccntno','$newamtos')";
+		    my $usth = $dbh->prepare($updquery);
+		    $usth->execute;
+		    $usth->finish;
+		}
+		$msth->finish;
+	    }
+	    if ($amountleft > 0){
+		$amountleft*=-1;
+	    }
+	    my $desc="Book Returned ".$iteminformation->{'barcode'};
+	    $uquery = "insert into accountlines
+		  (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
+		  values ('$data->{'borrowernumber'}','$nextaccntno',now(),0-$amount,'$desc',
+		  'CR',$amountleft)";
+	    $usth = $dbh->prepare($uquery);
+
+	    $usth->execute;
+	    $usth->finish;
+	    $uquery = "insert into accountoffsets
+		  (borrowernumber, accountno, offsetaccount,  offsetamount)
+		  values ($borrower->{'borrowernumber'},$data->{'accountno'},$nextaccntno,$offset)";
+	    $usth = $dbh->prepare($uquery);
+	    $usth->execute;
+	    $usth->finish;
+	    $uquery="update items set paidfor='' where itemnumber='$iteminformation->{'itemnumber'}'";
+	    $usth = $dbh->prepare($uquery);
+	    $usth->execute;
+	    $usth->finish;
+	}
+	$sth->finish;
+    }
+
+# check for overdue fine
+    my $query = "select * from accountlines where (borrowernumber='$borrower->{'borrowernumber'}') 
+        and (itemnumber = '$iteminformation->{'itemnumber'}') and (accounttype='FU' or accounttype='O')";
+    $sth = $dbh->prepare($query);
+    $sth->execute;
+# alter fine to show that the book has been returned
+    if (my $data = $sth->fetchrow_hashref) {
+	my $query = "update accountlines set accounttype='F' 
+            where (borrowernumber=$borrower->{'borrowernumber'}) and (itemnumber=$iteminformation->{'itemnumber'}) 
+            and (acccountno='$data->{'accountno'}')";
+	my $usth=$dbh->prepare($query);
+	$usth->execute();
+	$usth->finish();
+    }
+    $sth->finish;
+
+    my ($resfound, $resrec) = find_reserves($env, $dbh, $iteminformation->{'itemnumber'});
+    if ($resfound eq 'y') {
+	my ($borrower) = getpatroninformation($env,$resrec->{'borrowernumber'},0);
+	my ($branches) = getbranches();
+	my $branchname = $branches->{$resrec->{'branchcode'}}->{'branchname'};
+	push(@messages, "<b><font color=red>RESERVED</font></b> for collection by $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'}) at $branchname");
+    }
+    UpdateStats($env,$env->{'branchcode'},'return','0','',$iteminformation->{'itemnumber'});
+    $dbh->disconnect;
+    return (1, \@messages, $iteminformation, $borrower);
+}
+
+
+
 sub patronflags {
 # Original subroutine for Circ2.pm
     my %flags;
-    my ($env,$patroninformation,$dbh) = @_;
-    my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
+    my ($env, $patroninformation, $dbh) = @_;
+    my $amount = checkaccount($env, $patroninformation->{'borrowernumber'}, $dbh);
     if ($amount > 0) { 
 	my %flaginfo;
-	$flaginfo{'message'}=sprintf "Patron owes \$%.02f", $amount; 
-	if ($amount>5) {
-	    $flaginfo{'noissues'}=1;
+	$flaginfo{'message'}= sprintf "Patron owes \$%.02f", $amount; 
+	if ($amount > 5) {
+	    $flaginfo{'noissues'} = 1;
 	}
-	$flags{'CHARGES'}=\%flaginfo;
+	$flags{'CHARGES'} = \%flaginfo;
     } elsif ($amount < 0){
        my %flaginfo;
-       $amount=$amount*-1;
-       $flaginfo{'message'}=sprintf "Patron has credit of \$%.02f", $amount;
-       	$flags{'CHARGES'}=\%flaginfo;
+       $amount = $amount*-1;
+       $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", $amount;
+       	$flags{'CHARGES'} = \%flaginfo;
     }
     if ($patroninformation->{'gonenoaddress'} == 1) {
 	my %flaginfo;
-	$flaginfo{'message'}='Borrower has no valid address.'; 
-	$flaginfo{'noissues'}=1;
-	$flags{'GNA'}=\%flaginfo;
+	$flaginfo{'message'} = 'Borrower has no valid address.'; 
+	$flaginfo{'noissues'} = 1;
+	$flags{'GNA'} = \%flaginfo;
     }
     if ($patroninformation->{'lost'} == 1) {
 	my %flaginfo;
-	$flaginfo{'message'}='Borrower\'s card reported lost.'; 
-	$flaginfo{'noissues'}=1;
-	$flags{'LOST'}=\%flaginfo;
+	$flaginfo{'message'} = 'Borrower\'s card reported lost.'; 
+	$flaginfo{'noissues'} = 1;
+	$flags{'LOST'} = \%flaginfo;
     }
     if ($patroninformation->{'debarred'} == 1) {
 	my %flaginfo;
-	$flaginfo{'message'}='Borrower is Debarred.'; 
-	$flaginfo{'noissues'}=1;
-	$flags{'DBARRED'}=\%flaginfo;
+	$flaginfo{'message'} = 'Borrower is Debarred.'; 
+	$flaginfo{'noissues'} = 1;
+	$flags{'DBARRED'} = \%flaginfo;
     }
     if ($patroninformation->{'borrowernotes'}) {
 	my %flaginfo;
-	$flaginfo{'message'}="$patroninformation->{'borrowernotes'}";
-	$flags{'NOTES'}=\%flaginfo;
+	$flaginfo{'message'} = "$patroninformation->{'borrowernotes'}";
+	$flags{'NOTES'} = \%flaginfo;
     }
-    my ($odues, $itemsoverdue) = checkoverdues($env,$patroninformation->{'borrowernumber'},$dbh);
+    my ($odues, $itemsoverdue) = checkoverdues($env, $patroninformation->{'borrowernumber'}, $dbh);
     if ($odues > 0) {
 	my %flaginfo;
-	$flaginfo{'message'}="Yes";
-	$flaginfo{'itemlist'}=$itemsoverdue;
+	$flaginfo{'message'} = "Yes";
+	$flaginfo{'itemlist'} = $itemsoverdue;
 	foreach (sort {$a->{'date_due'} cmp $b->{'date_due'}} @$itemsoverdue) {
 	    $flaginfo{'itemlisttext'}.="$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";
 	}
-	$flags{'ODUES'}=\%flaginfo;
+	$flags{'ODUES'} = \%flaginfo;
     }
-    my ($nowaiting,$itemswaiting) = checkwaiting($env,$dbh,$patroninformation->{'borrowernumber'});
-    if ($nowaiting>0) {
+    my ($nowaiting, $itemswaiting) = checkwaiting($env, $dbh, $patroninformation->{'borrowernumber'});
+    if ($nowaiting > 0) {
 	my %flaginfo;
-	$flaginfo{'message'}="Reserved items available";
-	$flaginfo{'itemlist'}=$itemswaiting;
-	$flaginfo{'itemfields'}=['barcode', 'title', 'author', 'dewey', 'subclass', 'holdingbranch'];
-	$flags{'WAITING'}=\%flaginfo;
+	$flaginfo{'message'} = "Reserved items available";
+	$flaginfo{'itemlist'} = $itemswaiting;
+	$flaginfo{'itemfields'} = ['barcode', 'title', 'author', 'dewey', 'subclass', 'holdingbranch'];
+	$flags{'WAITING'} = \%flaginfo;
     }
-    my $flag;
-    my $key;
     return(\%flags);
 }
 
@@ -603,11 +819,11 @@ sub checkoverdues {
 
 sub updatelastseen {
 # Stolen from Returns.pm
-    my ($env,$dbh,$itemnumber)= @_;
-    my $br = $env->{'branchcode'};
-    my $query = "update items 
-    set datelastseen = now(), holdingbranch = '$br'
-    where (itemnumber = '$itemnumber')";
+    my ($env, $dbh, $itemnumber) = @_;
+    my $brc = $env->{'branchcode'};
+    $brc = $dbh->quote($brc);
+    my $itm = $dbh->quote($itemnumber);
+    my $query = "update items set datelastseen = now(), holdingbranch = $brc where (itemnumber = $itm)";
     my $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
@@ -616,13 +832,13 @@ sub updatelastseen {
 sub currentborrower {
 # Original subroutine for Circ2.pm
     my ($env, $itemnumber, $dbh) = @_;
-    my $q_itemnumber=$dbh->quote($itemnumber);
+    my $q_itemnumber = $dbh->quote($itemnumber);
     my $sth=$dbh->prepare("select borrowers.borrowernumber from
     issues,borrowers where issues.itemnumber=$q_itemnumber and
     issues.borrowernumber=borrowers.borrowernumber and issues.returndate is
     NULL");
     $sth->execute;
-    my ($previousborrower)=$sth->fetchrow;
+    my ($previousborrower) = $sth->fetchrow;
     return($previousborrower);
 }
 
