@@ -30,15 +30,18 @@
 
 <form action="<!-- TMPL_VAR NAME="url" -->" name="auth" id="auth" method="post">
 <!-- TMPL_LOOP NAME="INPUTS" -->
-  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_LOOP -->
 <div class="form">
 <table>
-<tr><th><label for="userid">Your card number</label></th><td><input type="text"  size="25" id="userid"  name="userid"></td>
-<tr><th><label for="password">Password or PIN</label></th><td><input type="password"  size="25" id="password"  name="password"></td>
+<tr><th><label for="userid">Your card number</label></th><td>
+<!-- Hide from NPL --><input type="text"  size="25" id="userid"  name="userid" /><!-- /Hide from NPL -->
+<!-- Display for NPL // <input type="text"  size="25" id="userid"  name="userid" onblur="ValidateCode();" /> //Display for NPL --></td>
+<tr><th><label for="password">Password or PIN</label></th><td><input type="password"  size="25" id="password"  name="password" /></td>
 </table>
-<input type="submit" value="Log In" class="submit"></div>
-  <p>If you don't have a password yet, next time you're in the library, take your card to the circulation desk and we'll happily set one up for you.</p>
+<input type="submit" value="Log In" class="submit" /></div>
+  <h5>Don't have a password yet?</h5><p> If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
+<h5>Don't have a library card?</h5><p> If you don't have a library card, stop by your local library to sign up.  <!-- Display for NPL // Find out more about <a href="http://www.athenscounty.lib.oh.us/card.html">getting a library card</a>. //Display for NPL --></p>
 </form>
 
 
