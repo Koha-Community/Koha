@@ -62,8 +62,8 @@ while (1) {
 					($stk->execute($id)) || (next);
 					my %serverdone;
 					unless ($stk->rows) {
-						my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=$now where id=?");
-						$sti->execute($id);
+						my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=? where id=?");
+						$sti->execute($now,$id);
 					}
 					while (my ($r_id, $r_server,$r_startdate,$r_enddate,$r_numrecords,$active) = $stk->fetchrow) {
 						if ($r_enddate >0) {
