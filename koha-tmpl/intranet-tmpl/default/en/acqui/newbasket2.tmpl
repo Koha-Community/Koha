@@ -1,14 +1,14 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Shopping Basket For: <!-- TMPL_VAR NAME="bookselname" --></h1>
-		<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;sub=<!-- TMPL_VAR NAME="parsub" -->">
+	<h1 class="acquisition">Shopping basket <!-- TMPL_VAR name="basketno" --> for: <!-- TMPL_VAR NAME="bookselname" --></h1>
+		<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;sub=<!-- TMPL_VAR NAME="parsub" -->">
 		<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filenew.png" border="0" alt="Add New Biblio"></a>
-	<a href="basket.pl?basket=<!-- TMPL_VAR NAME="basket" -->">
+	<a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
 		<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1uparrow.png"  border="0" alt="View Basket">
 	</a>
 	<form action="/cgi-bin/koha/acqui/newbasket2.pl">
 	<input type="hidden" name="booksellerid" value=<!-- TMPL_VAR NAME="booksellerid" -->>
-	<input type="hidden" name="basket" value=<!-- TMPL_VAR NAME="basket" -->>
+	<input type="hidden" name="basketno" value=<!-- TMPL_VAR NAME="basketno" -->>
 	<b>New Search: </b><input="text"  size="25"   name="search">
 	<input type="submit" value="Search" class="button acquisition">
 	</form>
@@ -36,7 +36,7 @@
 	<!-- TMPL_LOOP NAME="loopresult" -->
 		<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
 			<td>
-					<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR NAME="sub" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+					<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR NAME="sub" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
 					<!-- TMPL_VAR NAME="title" -->
 					</a>
 			</td>
@@ -84,7 +84,7 @@
 	</table>
 	
 	<!-- TMPL_IF name="offsetover" -->
-	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="offset" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
+	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="offset" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
 	Next
 	</a>
 	<!-- /TMPL_IF -->

@@ -1,7 +1,5 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 <div id="mainbloc">
-
-<!-- TMPL_IF name="op_else" -->
 	<h1 class="acquisition">Suggestions</h1>
 	<table>
 		<tr>
@@ -50,16 +48,14 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_IF name="biblionumber" -->
-						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Order</a>
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Order</a>
 					<!-- TMPL_ELSE -->
-						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Order</a>
+						<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Order</a>
 					<!-- /TMPL_IF -->
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 	<form>
-
-<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,7 +1,13 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <div id="mainbloc">
-	<h1 class="acquisition">Receipt Summary for : <i><!-- TMPL_VAR NAME="name" --></i> Invoice <i><!-- TMPL_VAR NAME="invoice" --></i></h1>
+	<h1 class="acquisition">
+		<!-- TMPL_IF name="invoice" -->
+			Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> Invoice <i><!-- TMPL_VAR NAME="invoice" --></i>
+		<!-- TMPL_ELSE -->
+			orders not yet recieved for <!-- TMPL_VAR NAME="name" -->
+		<!-- /TMPL_IF -->
+	</h1>
 	
 	<div id="bloc25">
 		Invoice: <!-- TMPL_VAR NAME="invoice" --><br>
