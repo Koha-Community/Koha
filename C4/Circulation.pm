@@ -168,33 +168,29 @@ sub checkreserve{
   # does not look at constraints yet
   my ($env,$dbh,$itemnum)=@_;
   my $resbor = "";
-  my $query = "select * from reserves,items
-  where (items.itemnumber = '$itemnum')
+  my $sth = $dbh->prepare("select * from reserves,items
+  where (items.itemnumber = ?)
   and (items.biblionumber = reserves.biblionumber)
-  and (reserves.found is null) order by priority";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
+  and (reserves.found is null) order by priority");
+  $sth->execute($itemnum);
   if (my $data=$sth->fetchrow_hashref) {
     $resbor = $data->{'borrowernumber'};
   }
-  return ($resbor);
   $sth->finish;
+  return ($resbor);
 }
 
 sub checkwaiting{
   # check for reserves waiting
   my ($env,$dbh,$bornum)=@_;
   my @itemswaiting="";
-  my $query = "select * from reserves
-  where (borrowernumber = '$bornum')
-  and (reserves.found='W')";
-  my $sth = $dbh->prepare($query);
-  $sth->execute();
+  my $sth = $dbh->prepare("select * from reserves where (borrowernumber = ?) and (reserves.found='W')");
+  $sth->execute($bornum);
   if (my $data=$sth->fetchrow_hashref) {
     push @itemswaiting,$data->{'itemnumber'};
   }
-  return (\@itemswaiting);
   $sth->finish;
+  return (\@itemswaiting);
 }
 
 # FIXME - This is identical to &C4::Circulation/Main::scanbook
