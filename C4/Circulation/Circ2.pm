@@ -504,6 +504,7 @@ sub returnbook {
 	doreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 	$messages->{'WasReturned'};
     }
+    ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 # transfer book
     my ($transfered, $mess, $item) = transferbook($branch, $barcode);
     if ($transfered) {

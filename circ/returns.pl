@@ -321,6 +321,7 @@ EOF
 	    my $itemsoverdue = '';
 	    my $items = $flags->{$flag}->{'itemlist'};
             foreach my $item (sort {$a->{'date_due'} cmp $b->{'date_due'}} @$items) {
+		my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
                 $itemsoverdue .=  <<"EOF";
 <font color=red>$item->{'date_due'}</font>
 <a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra 
