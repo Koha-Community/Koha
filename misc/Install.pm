@@ -1060,10 +1060,8 @@ opacdir=$::opacdir
 kohalogdir=$::kohalogdir
 kohaversion=$::kohaversion
 httpduser=$::httpduser
-intrahtdocs=$::intranetdir/htdocs/intranet-tmpl
-opachtdocs=$::opacdir/htdocs/opac-tmpl
-#XXX I had: intrahtdocs=$::intranetdir/cgi-bin/koha-tmpl/intranet-tmpl
-#XXX I had: opachtdocs=$::intranetdir/cgi-bin/koha-tmpl/opac-tmpl
+intrahtdocs=$::intranetdir/htdocs
+opachtdocs=$::opacdir/htdocs
 |;
     close(SITES);
     umask($old_umask);
@@ -1290,7 +1288,7 @@ sub updatedatabase {
 		exit;
 	}
 
-	print "\n\nFinished basic updating of database. Press <ENTER> to continue...";
+	print "\n\nFinished updating of database. Press <ENTER> to continue...";
 	<STDIN>;
 }
 
