@@ -1,17 +1,22 @@
 <TMPL_INCLUDE NAME="reports-top.inc">
-<!-------------------------MAIN BODY OF PAGE-------------------------->
+
+<TMPL_IF NAME="loggedinuser">
+    <p align="left">Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href="/cgi-bin/koha/logout.pl">Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align="left"><a href="/cgi-bin/koha/login.pl">Log in</a> to Koha</p>
+</TMPL_IF>
+
 
 <FONT SIZE=6><em>Reports</em></FONT><br>
 
-
-
-
-<ul><li><a href=/cgi-bin/koha/stats.pl?time=yesterday>Till Reconciliation:</a> Daily Report (yesterday)
-<li><a href=/cgi-bin/koha/stats.pl?time=today>Till Reconciliation:</a> Daily
-Report (today)
-
-
-
+<ul>
+    <li><a href=/cgi-bin/koha/stats.pl?time=yesterday>Till Reconciliation:</a> Daily Report (yesterday)
+    <li><a href=/cgi-bin/koha/stats.pl?time=today>Till Reconciliation:</a> Daily Report (today)
 </ul>
+
+<ul>
+    <li><a href=/cgi-bin/koha/overdue.pl>Items Currently Overdue</a>
+</ul>
+
 <TMPL_INCLUDE NAME="reports-bottom.inc">
 
