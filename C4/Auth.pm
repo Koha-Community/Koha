@@ -102,6 +102,11 @@ sub checkauth {
 	    $sth->execute($userid);
 	    my ($cardnumber) = $sth->fetchrow;
 	    my $flags=getuserflags($cardnumber,$dbh);
+	    my $configfile=configfile();
+	    if ($userid eq $configfile->{'user'}) {
+		# Super User Account from /etc/koha.conf
+		$flags->{'superlibrarian'}=1;
+	    }
 	    foreach (keys %$flagsrequired) {
 		warn "Checking required flag $_";
 		unless ($flags->{superlibrarian}) {
