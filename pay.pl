@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# WARNING: Not enough context to figure out the correct tabstop size
+# WARNING: Assume that this file uses 4-character tabs
 
 # $Id$
 
@@ -25,6 +27,7 @@
 
 use strict;
 use C4::Context;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;
@@ -76,7 +79,14 @@ my %env;
 $env{'branchcode'}=$user;
 my $total=$input->param('total');
 if ($check ==0){
-	my $template = gettemplate("members/pay.tmpl");
+	my($template, $loggedinuser, $cookie)
+		= get_template_and_user ({ template_name => "members/pay.tmpl",
+					   query => $input,
+					   type => "intranet",
+					   authnotrequired => 0,
+					   flagsrequired => {borrowers => 1},
+					   debug => 1,
+					 });
 	if ($total ne ''){
 		recordpayment(\%env,$bornum,$total);
 	}
@@ -171,3 +181,7 @@ sub writeoff{
 	#  print $query;
 	UpdateStats($env,$user,'writeoff',$amount,'','','',$bornum);
 }
+
+# Local Variables:
+# tab-width: 4
+# End:
