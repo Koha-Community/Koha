@@ -3,6 +3,7 @@
 use CGI qw/:standard/;
 use C4::Circulation::Circ2;
 use C4::Output;
+use C4::Print;
 use DBI;
 
 
@@ -68,6 +69,7 @@ my $branchcookie=$query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+
 my $printercookie=$query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 
 print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
+#print $query->dump;
 print startpage();
 print startmenu('circulation');
 
@@ -351,15 +353,35 @@ EOF
 
 sub issues {
     my ($noheader) = shift;
+    my $print=$query->param('print');
+    my $borrowernumber=$query->param('borrnumber');    
+    if ($print eq 'yes'){
+      my ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
+      $env{'todaysissues'}=1;
+      my ($borrowerissues) = currentissues(\%env, $borrower);
+      my $i=0;
+      my @issues;
+      foreach (sort keys %$borrowerissues) {
+        $issues[$i]=$borrowerissues->{$_};
+	#print $issues[$i]->{'date_due'};
+	$i++;
 
+	#print $i;
+      }
+      remoteprint(\%env,$issues,$borrower);
+      $query->param('borrnumber','')
+
+    }
     unless ($noheader) {
 	print << "EOF";
-    <table border=0 bgcolor=$headerbackgroundcolor background=$backgroundimage cellpadding=10 cellspacing=0><tr><th><font color=black>Circulation - Issues</font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
+    <table border=0 bgcolor=$headerbackgroundcolor background=$backgroundimage cellpadding=10 cellspacing=0><tr><th><font color=black>Circulation - Issues  
+    
+    </font></td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
 EOF
     }
     if (my $borrnumber=$query->param('borrnumber')) {
 	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
-	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
+#	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
 	my $year=$query->param('year');
 	my $month=$query->param('month');
 	my $day=$query->param('day');
@@ -609,6 +631,8 @@ EOF
 	</td>
 	<td align=center valign=top>
 	$patrontable
+	<br>
+	<a href=/cgi-bin/koha/circ/circulation.pl?borrnumber=$borrowernumber&module=issues&branch=$branch&printer=$printer&print=yes>Next borrower</a>
 	<br>
 	$flaginfotable
 	</td>

@@ -583,7 +583,9 @@ sub currentissues {
 	my $today = (1900+$datearr[5]).sprintf "0%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
 	$crit=" and !(issues.timestamp like '$today%') ";
     }
-    my $sth=$dbh->prepare("select * from issues,items,biblioitems,biblio where borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and items.biblionumber=biblio.biblionumber and items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null $crit order by date_due");
+    my $select="select * from issues,items,biblioitems,biblio where borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and items.biblionumber=biblio.biblionumber and items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null $crit order by date_due";
+#    print $select;
+    my $sth=$dbh->prepare($select);
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
 	$data->{'dewey'}=~s/0*$//;

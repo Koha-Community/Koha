@@ -1,9 +1,8 @@
-
 package C4::Print; #asummes C4/Print.pm
 
 use strict;
 require Exporter;
-use C4::InterfaceCDK;
+#use C4::InterfaceCDK;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
