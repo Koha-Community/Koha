@@ -1,5 +1,4 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog: Print View for <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_LOOP --><!-- TMPL_INCLUDE NAME="doc-head-close-print.inc" -->
-<!-- TMPL_INCLUDE NAME="main-top-print.inc" -->
 
 <!-- main site -->
 <div id="main">
@@ -29,18 +28,18 @@
 <!-- /TMPL_LOOP -->
 
 <table>
-	<tr><th>Item Type</th><th>Branch</th><th>Barcode</th></tr>
+	<tr><th>Item Type</th><th>Call Number</th><th>Location</th><th>Date Due</th><th>Last Seen</th><th>Barcode</th></tr>
 	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="description" --></td>
+			<td><!-- TMPL_VAR NAME="classification" --></td>
 			<td><!-- TMPL_VAR NAME="branchname" --><!-- TMPL_IF NAME="bulk" -->, <!-- TMPL_VAR NAME="bulk" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="datedue" --></td>
+			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 			<td><!-- TMPL_VAR NAME="barcode" --></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
-<script language="JavaScript" type="text/javascript">
-		function docprint() {
-			window.print();
-			window.close();
-		}
-</script>
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

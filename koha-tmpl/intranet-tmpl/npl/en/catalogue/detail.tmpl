@@ -12,7 +12,7 @@
 <h4>Biblio Record <!-- TMPL_VAR NAME="biblionumber" --></h4>
 	<div class="tabitem"><form action="MARCdetail.pl" method="get">
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
-<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Place Reserve" class="submit" /></form> <form action="acqui.simple/addbiblio.pl"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Edit this Record" class="submit" /></form>
+<input type="submit" class="submit" value="View MARC" /></form> <form action="/cgi-bin/koha/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /><input type="submit" class="submit" value="Item Details" /></form> <form action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="submit" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="bib" /> <input type="submit" value="Place Reserve" class="submit" /></form> <form action="acqui.simple/addbiblio.pl"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" value="Edit this Record" class="submit" /></form>
 </div>
 	<!-- /TMPL_IF -->
 <ul>
@@ -46,7 +46,7 @@
 	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
-			<td><!-- TMPL_IF NAME="class" --><!-- <a href="/cgi-bin/koha/search.pl?class=<!-- TMPL_VAR NAME="class" ESCAPE=URL -->"> --><!-- TMPL_VAR NAME="class" --><!-- </a> --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_IF NAME="classification" --><!-- <a href="/cgi-bin/koha/search.pl?class=<!-- TMPL_VAR NAME="class" ESCAPE=URL -->"> --><!-- TMPL_VAR NAME="classification" --><!-- </a> --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR NAME="branchname" --></td>
 			<td><!-- TMPL_VAR NAME="datedue" --></td>
 			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
@@ -72,27 +72,6 @@
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table></div>
-
-<!-- Hide from NPL --><p>
-<table border="1" cellpadding="0" cellspacing="0" align="center" class="results" width="80%">
-	<tr>
-		<td class="cell">
-			<b>HELP</b><br>
-			<b>Update Biblio for all Items:</b> Click on the <b>Modify</b>
-			button [left] to amend the biblio.  Any changes you make will update
-			the record for <b>all</b> the items listed above. <p>
-			<b>Updating the Biblio for only ONE or SOME Items:</b>
-			If some of the items listed above need a different biblio, or are on the
-			wrong biblio, you must use the
-			<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>
-			process to fix this. You will need to "re-order" the items, and delete them
-			from this biblio.
-		</td>
-	</tr>
-</table>
-</center>
-<br clear=all>
-<p /><!-- /Hide from NPL -->
 
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <!-- TMPL_IF NAME="abstract -->
