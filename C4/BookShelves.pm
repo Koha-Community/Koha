@@ -3,9 +3,6 @@ package C4::BookShelves; #asummes C4/BookShelves
 #
 # $Header$
 #
-#
-# Change log is at the bottom of the file
-#
 #requires DBI.pm to be installed
 
 use strict;
@@ -20,12 +17,6 @@ $VERSION = 0.01;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &RemoveFromShelf &AddShelf &RemoveShelf);
-
-sub AddShelf {
-}
-
-sub RemoveShelf {
-}
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -114,11 +105,11 @@ sub AddShelf {
     my $sth=$dbh->prepare("select * from bookshelf where shelfname=$q_shelfname");
     $sth->execute;
     if ($sth->rows) {
-	return(0, "Shelf \"$shelfname\" already exists");
+	return(1, "Shelf \"$shelfname\" already exists");
     } else {
 	$sth=$dbh->prepare("insert into bookshelf (shelfname) values ($q_shelfname)");
 	$sth->execute;
-	return (1, "Done");
+	return (0, "Done");
     }
 }
 
@@ -128,11 +119,11 @@ sub RemoveShelf {
     $sth->execute;
     my ($count)=$sth->fetchrow;
     if ($count) {
-	return (0, "Shelf has $count items on it");
+	return (1, "Shelf has $count items on it.  Please remove all items before deleting this shelf.");
     } else {
 	$sth=$dbh->prepare("delete from bookshelf where shelfnumber=$shelfnumber");
 	$sth->execute;
-	return (1, "Done");
+	return (0, "Done");
     }
 }
 
@@ -142,10 +133,10 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
-# Revision 1.2  2001/02/07 23:47:43  tonnesen
-# Added header and log substition variables
+# Revision 1.3  2002/07/02 17:48:06  tonnesen
+# Merged in updates from rel-1-2
 #
-# Revision 1.1  2001/02/07 20:27:17  tonnesen
-# Start of code to implement virtual bookshelves in Koha.
+# Revision 1.2.2.1  2002/06/26 20:46:48  tonnesen
+# Inserting some changes I made locally a while ago.
 #
 #
