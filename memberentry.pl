@@ -182,13 +182,14 @@ if ($delete){
 
   $template->param( 
   			member          => $member,
+			address         => $data->{'streetaddress'},
   			firstname       => $data->{'firstname'},
   			surname         => $data->{'surname'},
   			othernames	=> $data->{'othernames'},
   			initials	=> $data->{'initials'},
   			ethcatpopup	=> $ethcatpopup,
   			catcodepopup	=> $catcodepopup,
-  			streetaddress   => $data->{'streetaddress'},
+  			streetaddress   => $data->{'physstreet'},
   			streetcity      => $data->{'streetcity'},
 			city		=> $data->{'city'},
   			phone           => $data->{'phone'},
