@@ -6,8 +6,8 @@
 				<a class="pages" href="subscription-bib-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a> 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
-				<!-- TMPL_IF NAME=highlight --> <span class="current"> <!-- TMPL_VAR NAME="number" --> </span><!-- TMPL_ELSE -->
-					 <a class="pages" href="subscription-bib-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME=number --></a>
+				<!-- TMPL_IF NAME=highlight --><span class="current"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE -->
+					  <a class="pages" href="subscription-bib-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME=number --></a> 
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME=displaynext -->
@@ -39,9 +39,7 @@
 						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
 					</p>
 				</td>
-				<td><!-- TMPL_UNLESS NAME="norequests" -->
-				<form action="#" method="post"><input type="submit" class="submit" value="Choose" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR name="title" -->'); return false;" /></form><!-- TMPL_ELSE -->Not Reservable<!-- /TMPL_UNLESS -->
-				</td>
+				<td><form action="#" method="post"><input type="submit" class="submit" value="Choose" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR name="title" -->'); return false;" /></form></td>
 			</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
