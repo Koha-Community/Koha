@@ -101,10 +101,13 @@ if ($op eq 'add_form') {
 	if ($searchfield) {
 		$template->param(action => "Modify tag",
 								searchfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$searchfield\" />$searchfield");
+		$template->param('heading-modify-tag-p' => 1);
 	} else {
 		$template->param(action => "Add tag",
 								searchfield => "<input type=\"text\" name=\"tagfield\" size=\"5\" maxlength=\"3\" />");
+		$template->param('heading-add-tag-p' => 1);
 	}
+	$template->param('use-heading-flags-p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							libopac => $data->{'libopac'},
 							repeatable => CGI::checkbox('repeatable',$data->{'repeatable'}?'checked':'',1,''),
