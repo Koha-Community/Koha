@@ -36,7 +36,7 @@ sub checkauth {
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	if ($lasttime<time()-20 && $userid ne 'tonnesen') {
+	if ($lasttime<time()-40 && $userid ne 'tonnesen') {
 	    # timed logout
 	    warn "$sessionID logged out due to inactivity.";
 	    $message="You have been logged out due to inactivity.";
@@ -48,8 +48,10 @@ sub checkauth {
 	    close L;
 	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 	    # Different ip than originally logged in from
-	    warn "$sessionID came from a new ip address.";
-	    $message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.";
+	    my $newip=$ENV{'REMOTE_ADDR'};
+	    warn "$sessionID came from a new ip address (authenticated from $ip, this request from $newip).";
+
+	    $message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
 	} else {
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
@@ -73,7 +75,8 @@ sub checkauth {
 	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
 	my $userid=$query->param('userid');
 	my $password=$query->param('password');
-	if (($userid eq 'librarian' || $userid eq 'tonnesen' || $userid eq 'patron') && $password eq 'koha') {
+	if (checkpw($dbh, $userid, $password)) {
+	#if (($userid eq 'librarian' || $userid eq 'tonnesen' || $userid eq 'patron') && $password eq 'koha') {
 	    my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
 	    open L, ">>/tmp/sessionlog";
@@ -100,9 +103,10 @@ sub checkauth {
 <h2>$message</h2>
 
 <form method=post>
-<table border=0 cellpadding=10 width=60%>
+<table border=0 cellpadding=10 cellspacing=0 width=60%>
     <tr><td align=center valign=top>
-    <table border=0 bgcolor=#dddddd cellpadding=10>
+
+    <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
     <tr><th colspan=2 background=/images/background-mem.gif><font size=+2>Koha Login</font></th></tr>
     <tr><td>Name:</td><td><input name=userid></td></tr>
     <tr><td>Password:</td><td><input type=password name=password></td></tr>
@@ -111,10 +115,10 @@ sub checkauth {
     
     </td><td align=center valign=top>
 
-    <table border=0 bgcolor=#dddddd cellpadding=10>
+    <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
     <tr><th background=/images/background-mem.gif><font size=+2>Demo Information</font></th></tr>
     <td>
-    Log in as librarian/koha or patron/koha.  The timeout is set to 20 seconds of
+    Log in as librarian/koha or patron/koha.  The timeout is set to 40 seconds of
     inactivity for the purposes of this demo.  You can navigate to the Circulation
     or Acquisitions modules and you should see an indicator in the upper left of
     the screen saying who you are logged in as.  If you want to try it out with
@@ -132,6 +136,32 @@ sub checkauth {
 	    exit;
 	}
     }
+}
+
+
+sub checkpw {
+
+# This should be modified to allow a select of authentication schemes (ie LDAP)
+# as well as local authentication through the borrowers tables passwd field
+#
+    my ($dbh, $userid, $password) = @_;
+    my $sth=$dbh->prepare("select password from borrowers where userid=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($cryptpassword) = $sth->fetchrow;
+	if (crypt($password, $cryptpassword) eq $cryptpassword) {
+	    return 1;
+	}
+    }
+    my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($cryptpassword) = $sth->fetchrow;
+	if (crypt($password, $cryptpassword) eq $cryptpassword) {
+	    return 1;
+	}
+    }
+    return 0;
 }
 
 
