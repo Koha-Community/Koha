@@ -1,1 +1,1 @@
-<div id="topmenu"><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Cataloging Home</a> | <a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a> | <a href="/cgi-bin/koha/import/breeding.pl">MARC Import</a></div>
+<div id="topmenu"><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Cataloging Home</a> | <a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a> | <a href="/cgi-bin/koha/import/breeding.pl">MARC Import</a> | <a href="/cgi-bin/koha/bull-home.pl">Serials</a></div>
