@@ -1,7 +1,9 @@
 #!/usr/bin/perl
 
-#script to print confirmation screen, then if accepted calls itself to insert data
+# $Id$
 
+#script to print confirmation screen, then if accepted calls itself to insert data
+# FIXME - Yes, but what does it _do_?
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -35,9 +37,9 @@ my $insert=$input->param('insert');
 #get rest of data
 my %data;
 my @names=$input->param;
-foreach my $key (@names){                                                                                    
-  $data{$key}=$input->param($key);                                                                           
-}  
+foreach my $key (@names){
+  $data{$key}=$input->param($key);
+}
 print $input->header;
 print startpage();
 print startmenu('member');
@@ -49,7 +51,7 @@ if ($insert eq ''){
   my $string="The following compulsary fields have been left blank. Please push the back button
   and try again<p>";
   if ($data{'cardnumber'} eq ''){
-   
+
      $string.=" Cardnumber<br>";
     $ok=1;
   } else {
@@ -156,7 +158,7 @@ if ($insert eq ''){
    my @inputs;
    while (my ($key, $value) = each %data) {
      $value=~ s/\"/%22/g;
-     $inputs[$i]=["hidden","$key","$value"];       
+     $inputs[$i]=["hidden","$key","$value"];
      $i++;
    }
    $inputs[$i]=["submit","submit","submit"];
