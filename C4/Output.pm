@@ -180,6 +180,7 @@ sub mktablerow {
       } else { # if there's no background image
 	  $string.="<td>";
       }
+      if (! defined $data[$i]) {$data[$i]="";}
       if ($data[$i] eq "") {
 	  $string.=" &nbsp; </td>";
       } else {

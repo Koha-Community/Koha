@@ -16,7 +16,7 @@ $VERSION = 0.01;
 
 
 sub C4Connect  {
-  my $dbname="c4"; 
+  my $dbname="c4";
    my ($database,$hostname,$user,$pass,%configfile);
    open (KC, "/etc/koha.conf");
    while (<KC>) {
