@@ -29,13 +29,12 @@ $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 if ($borr->{'amountoutstanding'} > 5) {
     $borr->{'amountoverfive'} = 1;
-} else {
-    $borr->{'amountoverfive'} = 0;
 }
-if ($borr->{'amountoutstanding'} > 0) {
+if (5 >= $borr->{'amountoutstanding'} && $borr->{'amountoutstanding'} > 0 ) {
     $borr->{'amountoverzero'} = 1;
-} else {
-    $borr->{'amountoverzero'} = 0;
+}
+if ($borr->{'amountoutstanding'} < 0) {
+    $borr->{'amountlessthanzero'} = 1;
     $borr->{'amountoutstanding'} = -1*($borr->{'amountoutstanding'});
 }
 

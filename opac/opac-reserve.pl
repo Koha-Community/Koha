@@ -108,30 +108,38 @@ if ($query->param('item_types_selected')) {
 	my @types = values %newtypes;
 	$template->param(TYPES => \@types);
 	$template->param(item_types_selected => 1);
+
+	my %reqbibs;
+	foreach my $item (@items) {
+	    foreach my $type (@itemtypes) {
+		if ($item->{'itemtype'} == $type) {
+		    $reqbibs{$item->{'biblioitemnumber'}} = 1;
+		}
+	    }
+	}
+	my @reqbibs = keys %reqbibs;
+	my $fee = CalcReserveFee(undef,$borrowernumber,$biblionumber,'o',\@reqbibs);
+	$fee = sprintf "%.02f", $fee;
+	$template->param(fee => $fee);
     } else {
 	$template->param(message => 1);
 	$template->param(no_items_selected => 1);
     }
 
-
 } elsif ($query->param('place_reserve')) {
 # here we actually do the reserveration. Stage 3.
     my $title = $bibdata->{'title'};
-    my @reqbibs;
+    my %reqbibs;
     my @itemtypes = $query->param('itemtype');
     foreach my $item (@items) {
 	foreach my $type (@itemtypes) {
 	    if ($item->{'itemtype'} == $type) {
-		my $addbibitem = 1;
-		foreach my $bibitemno (@reqbibs) {
-		    $addbibitem = 0 if $bibitemno == $item->{'biblioitemnumber'};
-		}
-		push @reqbibs, $item->{'biblioitemnumber'} if $addbibitem;
+		$reqbibs{$item->{'biblioitemnumber'}} = 1;
 	    }
 	}
     }
+    my @reqbibs = keys %reqbibs;
     CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title);
-    warn "reserve created\n";
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
 } else {
 # Here we check that the borrower can actually make reserves Stage 1.
