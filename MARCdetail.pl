@@ -73,7 +73,6 @@ my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
-warn "".$record->as_formatted."\n";
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
