@@ -217,7 +217,7 @@ while ($i < $count2){
       } else {
 	      my $shelfcount=$count-$nacount-$lostcount-$mending-$transit;
 	      if ($nacount) {
-		      $stuff[5]="Circ ";
+		      $stuff[5]="On Loan ";
 		      if ($count>1) {
 			      $stuff[5].="($nacount) ";
 		      }
