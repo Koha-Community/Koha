@@ -259,7 +259,7 @@ sub newitem {
     my $q_homebranch=$dbh->quote($input->param('homebranch'));
     $sth=$dbh->prepare("insert into items (itemnumber, biblionumber,
     biblioitemnumber,barcode, itemnotes, holdingbranch, homebranch, dateaccessioned, replacementprice) values ($itemnumber,
-    $biblionumber, $biblioitemnumber, $barcode, $q_itemnotes, 'STWE', $q_homebranch, '$date', $replacementprice)");
+    $biblionumber, $biblioitemnumber, $barcode, $q_itemnotes, $q_homebranch, $q_homebranch, '$date', $replacementprice)");
     $sth->execute;
 }
 

@@ -261,10 +261,12 @@ sub newitem {
     my @datearr=localtime(time);
     my $date=(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
     my $q_homebranch=$dbh->quote($input->param('homebranch'));
-    $sth=$dbh->prepare("insert into items (itemnumber, biblionumber,
+    my $query="insert into items (itemnumber, biblionumber,
     biblioitemnumber,barcode, itemnotes, holdingbranch, homebranch, dateaccessioned, replacementprice) values ($itemnumber,
-    $biblionumber, $biblioitemnumber, $barcode, $q_itemnotes, 'STWE', $q_homebranch, '$date', $replacementprice)");
+    $biblionumber, $biblioitemnumber, $barcode, $q_itemnotes, $q_homebranch, $q_homebranch, '$date', $replacementprice)";
+    $sth=$dbh->prepare($query);
     $sth->execute;
+#    print $query;
 }
 
 if ($isbn) {
@@ -321,9 +323,7 @@ EOF
 my $branches=getbranches();
 foreach my $key (sort(keys %$branches)) {
      print "<option value=\"$key\">$branches->{$key}->{'branchname'}</option>";
-#      $key, '=', $branches->{$key}, "\n";
-         }  
-#	  <option value='STWE'>Stewart Elementary<option value='MEZ'>Meziadin Elementary
+}  
 print << "EOF";
 	  </select></td></tr>
 </tr><td colspan=2>Replacement Price: <input name=replacementprice size=10></td></tr>
