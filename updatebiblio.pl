@@ -47,7 +47,7 @@ my $error=modsubject($bibnum,$force,@sub);
 if ($error ne ''){
   print $input->header;
   print startpage();
-  print startmenu();
+  print startmenu('catalogue');
   print $error;
   my @subs=split('\n',$error);
   print "<p> Click submit to force the subject";
