@@ -89,7 +89,7 @@ foreach my $res (@results) {
 
 
 my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=1);
+($startfrom) || ($startfrom=0);
 
 my $resultsarray=\@results;
 ($resultsarray) || (@$resultsarray=());
