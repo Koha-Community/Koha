@@ -313,6 +313,80 @@ my %requiretables = (
 				booksellerinvoicenumber text,
 				PRIMARY KEY (basketno)
 				)",
+	serial => "(serialid int(11) NOT NULL auto_increment,
+				biblionumber varchar(100) NOT NULL default '',
+				subscriptionid varchar(100) NOT NULL default '',
+				serialseq varchar(100) NOT NULL default '',
+				status tinyint(4) NOT NULL default '0',
+				planneddate date NOT NULL default '0000-00-00',
+				PRIMARY KEY  (serialid)
+				)",
+	subscription => "(biblionumber int(11) NOT NULL default '0',
+						subscriptionid int(11) NOT NULL auto_increment,
+						librarian varchar(100) default '',
+						startdate date default '0000-00-00',
+						aqbooksellerid int(11) default '0',
+						cost int(11) default '0',
+						aqbudgetid int(11) default '0',
+						weeklength tinyint(4) default '0',
+						monthlength tinyint(4) default '0',
+						numberlength tinyint(4) default '0',
+						periodicity tinyint(4) default '0',
+						dow varchar(100) default '',
+						numberingmethod varchar(100) default '',
+						notes text,
+						arrivalplanified varchar(100) NOT NULL default '',
+						status varchar(100) NOT NULL default '',
+						add1 int(11) default 0,
+						every1 int(11) default 0,
+						whenmorethan1 int(11) default 0,
+						setto1 int(11),
+						lastvalue1 int(11),
+						add2 int(11) default 0,
+						every2 int(11) default 0,
+						whenmorethan2 int(11) default 0,
+						setto2 int(11),
+						lastvalue2 int(11),
+						add3 int(11) default 0,
+						every3 int(11) default 0,
+						innerloop1 int(11) default 0,
+						innerloop2 int(11) default 0,
+						innerloop3 int(11) default 0,
+						whenmorethan3 int(11) default 0,
+						setto3 int(11),
+						lastvalue3 int(11),
+						PRIMARY KEY  (subscriptionid)
+						)",
+# 						seqnum1 int(11) default '0',
+# 						startseqnum1 int(11) default '0',
+# 						seqtype1 int(11) default '0',
+# 						freq1 int(11) default '0',
+# 						step1 int(11) default '0',
+# 						seqnum2 int(11) default '0',
+# 						step2 int(11) default '0',
+# 						startseqnum2 int(11) default '0',
+# 						freq2 int(11) default '0',
+# 						seqtype2 int(11) default '0',
+# 						seqnum3 int(11) default '0',
+# 						freq3 int(11) default '0',
+# 						notes varchar(100) NOT NULL default '',
+# 						step3 int(11) default '0',
+# 						pos3 int(11) NOT NULL default '0',
+# 						pos2 int(11) NOT NULL default '0',
+# 						pos1 int(11) NOT NULL default '0',
+# 						seqtype3 int(11) default '0',
+
+	subscriptionhistory => "(biblionumber int(11) NOT NULL default '0',
+							subscriptionid int(11) NOT NULL default '0',
+							startdate date NOT NULL default '0000-00-00',
+							enddate date default '0000-00-00',
+							missinglist longtext NOT NULL,
+							recievedlist longtext NOT NULL,
+							opacnote varchar(150) NOT NULL default '',
+							librariannote varchar(150) NOT NULL default '',
+							PRIMARY KEY  (subscriptionid),
+							KEY biblionumber (biblionumber)
+						)",
 );
 
 my %requirefields = (
@@ -1287,16 +1361,23 @@ foreach my $table ( keys %tabledata ) {
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
 	my @fields = split /,/,$uselessfields{$table};
+	my $fields;
+	my $exists;
 	foreach my $fieldtodrop (@fields) {
 		$fieldtodrop =~ s/\t//g;
 		$fieldtodrop =~ s/\n//g;
-		print "deleting $fieldtodrop field in $table...\n" unless $silent;
-		my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+		$exists =0;
+		$sth = $dbh->prepare("show columns from $table");
 		$sth->execute;
-		if ( $sth->err ) {
-			print "Error : $sth->errstr \n";
-			$sth->finish;
-		}    # if error
+		while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+		{
+			$exists =1 if ($column eq $fieldtodrop);
+		}
+		if ($exists) {
+			print "deleting $fieldtodrop field in $table...\n" unless $silent;
+			my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+			$sth->execute;
+		}
 	}
 }    # foreach
 
@@ -1306,6 +1387,12 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.92  2004/08/06 16:38:42  tipaul
+# changing DB structure to calculate next issue number.
+# Seems to work fine.
+#
+# Still misses the date calculation & the test of end of subscription (maybe for monday ?)
+#
 # Revision 1.91  2004/07/15 09:52:28  tipaul
 # Acquisition & Suggestion :
 # * acquisition rewritte : create a aqbasket table to deal with "bookseller order header".

@@ -11,14 +11,18 @@
 		<h2>Numbering calculation</h2>
 		<p>The numbering of items recieved can contain complex formulas. The "numbering formula" can be filled with any text and/or numbers. 3 special tokens <b>{X} {Y}</b> and <b>{Z}</b> can be user to define the calculation formula. XYZ values are calculated with the following method:</p>
 			<ul>
-				<li>Added : a XYZ number "Added" has "step" increase for each new recieve. The "value" contains the next number to recieve (= the 1st one when subscription is created)</li>
-				<li>Reinitialize each : a XYZ number "Reinitialize each" has a "step" increase on each recieve, but the number is reinitialized every "frequency"</li>
-				<li>Constant is a constant number. Should be useless, as a contant number can be set in the formula</li>
+				<li>Add : the number here is added to XYZ</li>
+				<li>once every : the number before can be added on every issue or less often</li>
+				<li>When more than : if the calculated number is more than the value here</li>
+				<li>Set back to : if the previous condition is valid, the calculated number is set to this one instead</li>
+				<li>Last value / begins with : the last value calculated or the 1st value (when adding a subscription</li>
 			</ul>
 		<h2>Sample</h2>
+			Consider the formula <b>N°{X}/{Y}</b>. The following XYZ settings :
+			<li> <b>X</b> add <b>1</b> once every <b>4</b> times. When more than <b>9999999</b> set back to <b>empty</b>. Begins with <b>2004</b></li>
+			<li> <b>Y</b> add <b>1</b> once every <b>1</b> times. When more than <b>4</b> set back to <b>4</b>. Begins with <b>1</b></li>
+			will result in the following issues numbers :
+			<b>N°2004/1,N°2004/2,N°2004/3,N°2004/4,N°2005/1,N°2005/2,N°2005/3,N°2005/4,N°2006/1
 		<p>
-			<li>Added, value=1021, step=1 gives : 1021,1022,1023,1024...</li>
-			<li>Added, value=0, step=4 gives : 0,4,8,12,16,20,...</li>
-			<li>Reinitialize each, value=1, frequency=4, step=1 gives : 1,2,3,4,1,2,3,4...</li>
 		</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

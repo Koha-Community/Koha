@@ -14,7 +14,7 @@
 			<!-- TMPL_VAR name="name" -->
 		</td>
 		<td>
-			<a href="#" onClick="GetIdInOpener('<!-- TMPL_VAR name=id -->')">
+			<a href="#" onClick="GetIdInOpener('<!-- TMPL_VAR name=id -->','<!-- TMPL_VAR name="name" -->')">
 				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/arrow.gif" title="select this supplier" BORDER=0 height=40 width=40>
 			</a>
 		</td>
@@ -28,9 +28,10 @@
 
 <script  language="javascript">
 
-function GetIdInOpener(value)
+function GetIdInOpener(value,name)
 {
   opener.document.f.aqbooksellerid.value = value;
+  opener.document.f.aqbooksellername.value= name;
   self.close();
 }
 	

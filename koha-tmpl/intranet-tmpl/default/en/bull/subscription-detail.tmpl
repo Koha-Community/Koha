@@ -86,68 +86,51 @@
 	<h2 class="bull">Numbering calculation</h2>
 	<p>
 		<p>Numbering formula: <!-- TMPL_VAR name="numberingmethod" --></p>
-		<table class="small">
+		<table class="small" width="20%">
 			<tr>
 				<th class="bull">&nbsp;</th>
-				<th class="bull">X</th>
-				<th class="bull">Y</th>
-				<th class="bull">Z</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Y&nbsp;&nbsp;&nbsp;&nbsp;</th>
+				<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Z&nbsp;&nbsp;&nbsp;&nbsp;</th>
 			</tr>
 			<tr>
-				<td class="bull">Evolution</td>
+				<td class="bull">Add</td>
 				<td>
-					<!-- TMPL_IF NAME="seqtype11" -->	
-						Added
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="seqtype12" -->	
-						Reinitialize each
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="seqtype13"	-->
-						Constant
-					<!-- /TMPL_IF -->
+					<!-- TMPL_VAR name="add1" -->
 				</td>
 				<td>
-					<!-- TMPL_IF NAME="seqtype21" -->	
-						Added
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="seqtype22" -->	
-						Reinitialize each
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="seqtype23"	-->
-						Constant
-					<!-- /TMPL_IF -->
+					<!-- TMPL_VAR name="add2" -->
 				</td>
 				<td>
-					<!-- TMPL_IF NAME="seqtype31" -->	
-						Added
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="seqtype32" -->	
-						Reinitialize each
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="seqtype33"	-->
-						Constant
-					<!-- /TMPL_IF -->
+					<!-- TMPL_VAR name="add3" -->
 				</td>
 			</tr>
 			<tr>
-				<td class="bull">Value</td>
-				<td><!-- TMPL_VAR name="seqnum1" --></td>
-				<td><!-- TMPL_VAR name="seqnum2" --></td>
-				<td><!-- TMPL_VAR name="seqnum3" --></td>
+				<td class="bull">once every</td>
+				<td><!-- TMPL_VAR name="every1" --></td>
+				<td><!-- TMPL_VAR name="every2" --></td>
+				<td><!-- TMPL_VAR name="every3" --></td>
 			</tr>
 			<tr>
-				<td class="bull">Frequency</td>
-				<td><!-- TMPL_VAR name="freq1" --></td>
-				<td><!-- TMPL_VAR name="freq2" --></td>
-				<td><!-- TMPL_VAR name="freq3" --></td>
+				<td class="bull">When more than</td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --></td>
 			</tr>
 			<tr>
-				<td class="bull">Step</td>
-				<td><!-- TMPL_VAR name="step1" --></td>
-				<td><!-- TMPL_VAR name="step2" --></td>
-				<td><!-- TMPL_VAR name="step3" --></td>
+				<td class="bull">Set back to</td>
+				<td><!-- TMPL_VAR name="setto1" --></td>
+				<td><!-- TMPL_VAR name="setto2" --></td>
+				<td><!-- TMPL_VAR name="setto3" --></td>
 			</tr>
-		</table>
+			<tr>
+				<td class="bull">
+						Last value
+				</td>
+				<td><!-- TMPL_VAR name="lastvalue1" --></td>
+				<td><!-- TMPL_VAR name="lastvalue2" --></td>
+				<td><!-- TMPL_VAR name="lastvalue3" --></td>
+			</tr>		</table>
 </div>
 
 </div>

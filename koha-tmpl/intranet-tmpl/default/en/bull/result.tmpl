@@ -1,6 +1,6 @@
     <!-- TMPL_INCLUDE NAME="neutral-top.inc" -->
 <div id="mainbloc">
-	<h1 class="catalogue">MARC search results</h1>
+	<h1 class="catalogue">Search results</h1>
 	<div id="resultnumber">
 		<p>
 			<!-- TMPL_IF NAME=displayprev -->
@@ -31,15 +31,13 @@
 		<table>
 			<tr>
 			<th class="catalogue">Summary</th>
-			<th class="catalogue">Item Count</th>
-			<th class="catalogue">Location</th>
 			<th class="catalogue">&nbsp;</th>
 			</tr>
 			<!-- TMPL_LOOP name="result" -->
 			<tr>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p>
-						<p>							<b><a class="transparent" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
+						<p><b><!-- TMPL_VAR NAME="title" --></b></p>
 						<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
@@ -48,17 +46,9 @@
 						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
 					</p>
 				</td>
-				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR name="totitem" -->
-				</td>
-				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_LOOP name="CN" -->
-						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
-					<!-- /TMPL_LOOP -->
-				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_UNLESS NAME="norequests" -->
-						<a class="transparent" href="#" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->') ">Get it!</a>
+						<a class="transparent" href="#" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR name="title" -->') ">Get it!</a>
 					<!-- TMPL_ELSE -->
 						Not Reservable
 					<!-- /TMPL_UNLESS -->
@@ -89,9 +79,10 @@
 
 <script language="Javascript">
 
-function GetIt(bibno)
+function GetIt(bibno,title)
 {
-  opener.document.f.perioid.value = bibno;
+  opener.document.f.biblionumber.value = bibno;
+  opener.document.f.title.value = title;
   self.close();
 }
 </script>

@@ -4,6 +4,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Koha;
+use C4::Date;
 use C4::Bull;
 use C4::Output;
 use C4::Interface::CGI::Output;
@@ -18,9 +19,9 @@ my $sth;
 my ($template, $loggedinuser, $cookie, $subs);
 my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
 	$dow, $numberlength, $weeklength, $monthlength,
-	$seqnum1,$startseqnum1,$seqtype1,$freq1,$step1,
-	$seqnum2,$startseqnum2,$seqtype2,$freq2,$step2,
-	$seqnum3,$startseqnum3,$seqtype3,$freq3,$step3,
+	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
 	$numberingmethod, $arrivalplanified, $status, $biblionumber, $bibliotitle, $notes);
 
 $subscriptionid = $query->param('subscriptionid');
@@ -38,21 +39,21 @@ if ($op eq 'modsubscription') {
 	$numberlength = $query->param('numberlength');
 	$weeklength = $query->param('weeklength');
 	$monthlength = $query->param('monthlength');
-	$seqnum1 = $query->param('seqnum1');
-	$startseqnum1 = $query->param('startseqnum1');
-	$seqtype1 = $query->param('seqtype1');
-	$freq1 = $query->param('freq1');
-	$step1 = $query->param('step1');
-	$seqnum2 = $query->param('seqnum2');
-	$startseqnum2 = $query->param('startseqnum2');
-	$seqtype2 = $query->param('seqtype2');
-	$freq2 = $query->param('freq2');
-	$step2 = $query->param('step2');
-	$seqnum3 = $query->param('seqnum3');
-	$startseqnum3 = $query->param('startseqnum3');
-	$seqtype3 = $query->param('seqtype3');
-	$freq3 = $query->param('freq3');
-	$step3 = $query->param('step3');
+	$add1 = $query->param('add1');
+	$every1 = $query->param('every1');
+	$whenmorethan1 = $query->param('whenmorethan1');
+	$setto1 = $query->param('setto1');
+	$lastvalue1 = $query->param('lastvalue1');
+	$add2 = $query->param('add2');
+	$every2 = $query->param('every2');
+	$whenmorethan2 = $query->param('whenmorethan2');
+	$setto2 = $query->param('setto2');
+	$lastvalue2 = $query->param('lastvalue2');
+	$add3 = $query->param('add3');
+	$every3 = $query->param('every3');
+	$whenmorethan3 = $query->param('whenmorethan3');
+	$setto3 = $query->param('setto3');
+	$lastvalue3 = $query->param('lastvalue3');
 	$numberingmethod = $query->param('numberingmethod');
 	$arrivalplanified = $query->param('arrivalplanified');
 	$status = 1;
@@ -60,49 +61,46 @@ if ($op eq 'modsubscription') {
     
 	&modsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$seqnum1,$startseqnum1,$seqtype1,$freq1,$step1,
-					$seqnum2,$startseqnum2,$seqtype2,$freq2,$step2,
-					$seqnum3,$startseqnum3,$seqtype3,$freq3,$step3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
 					$numberingmethod, $arrivalplanified, $status, $biblionumber, $notes, $subscriptionid);
-	
- } else {
- 		my $subs = &getsubscription($subscriptionid);
-		$auser = $subs->{'user'};
-		$librarian => $subs->{'librarian'},
-		$cost = $subs->{'cost'};
-		$aqbooksellerid = $subs->{'aqbooksellerid'};
-		$aqbooksellername = $subs->{'aqbooksellername'};
-		$bookfundid = $subs->{'bookfundid'};
-		$aqbudgetid = $subs->{'aqbudgetid'};
-		$startdate = $subs->{'startdate'};
-		$periodicity = $subs->{'periodicity'};
-		$dow = $subs->{'dow'};
-		$numberlength = $subs->{'numberlength'};
-		$weeklength = $subs->{'weeklength'};
-		$monthlength = $subs->{'monthlength'};
-		$seqnum1 = $subs->{'seqnum1'};
-		$startseqnum1 = $subs->{'startseqnum1'};
-		$seqtype1 = $subs->{'seqtype1'};
-		$freq1 = $subs->{'freq1'};
-		$step1 = $subs->{'step1'};
-		$seqnum2 = $subs->{'seqnum2'};
-		$startseqnum2 = $subs->{'startseqnum2'};
-		$seqtype2 = $subs->{'seqtype2'};
-		$freq2 = $subs->{'freq2'};
-		$step2 = $subs->{'step2'};
-		$seqnum3 = $subs->{'seqnum3'};
-		$startseqnum3 = $subs->{'startseqnum3'};
-		$seqtype3 = $subs->{'seqtype3'};
-		$freq3 = $subs->{'freq3'};
-		$step3 = $subs->{'step3'};
-		$numberingmethod = $subs->{'numberingmethod'};
-		$arrivalplanified = $subs->{'arrivalplanified'};
-		$status = $subs->{status};
-		$biblionumber = $subs->{'biblionumber'};
-		$bibliotitle = $subs->{'bibliotitle'},
-		$notes = $subs->{'notes'};
-	
 }
+	my $subs = &getsubscription($subscriptionid);
+	$auser = $subs->{'user'};
+	$librarian => $subs->{'librarian'},
+	$cost = $subs->{'cost'};
+	$aqbooksellerid = $subs->{'aqbooksellerid'};
+	$aqbooksellername = $subs->{'aqbooksellername'};
+	$bookfundid = $subs->{'bookfundid'};
+	$aqbudgetid = $subs->{'aqbudgetid'};
+	$startdate = $subs->{'startdate'};
+	$periodicity = $subs->{'periodicity'};
+	$dow = $subs->{'dow'};
+	$numberlength = $subs->{'numberlength'};
+	$weeklength = $subs->{'weeklength'};
+	$monthlength = $subs->{'monthlength'};
+	$add1 = $subs->{'add1'};
+	$every1 = $subs->{'every1'};
+	$whenmorethan1 = $subs->{'whenmorethan1'};
+	$setto1 = $subs->{'setto1'};
+	$lastvalue1 = $subs->{'lastvalue1'};
+	$add2 = $subs->{'add2'};
+	$every2 = $subs->{'every2'};
+	$whenmorethan2 = $subs->{'whenmorethan2'};
+	$setto2 = $subs->{'setto2'};
+	$lastvalue2 = $subs->{'lastvalue2'};
+	$add3 = $subs->{'add3'};
+	$every3 = $subs->{'every3'};
+	$whenmorethan3 = $subs->{'whenmorethan3'};
+	$setto3 = $subs->{'setto3'};
+	$lastvalue3 = $subs->{'lastvalue3'};
+	$numberingmethod = $subs->{'numberingmethod'};
+	$arrivalplanified = $subs->{'arrivalplanified'};
+	$status = $subs->{status};
+	$biblionumber = $subs->{'biblionumber'};
+	$bibliotitle = $subs->{'bibliotitle'},
+	$notes = $subs->{'notes'};
 
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "bull/subscription-detail.tmpl",
@@ -124,27 +122,27 @@ $template->param(
 	cost => $cost,
 	aqbudgetid => $aqbudgetid,
 	bookfundid => $bookfundid,
-	startdate => $startdate,
+	startdate => format_date($startdate),
 	periodicity => $periodicity,
 	dow => $dow,
 	numberlength => $numberlength,
 	weeklength => $weeklength,
 	monthlength => $monthlength,
-	seqnum1 =>$seqnum1,
-	startseqnum1 =>$startseqnum1,
-	seqtype1 =>$seqtype1,
-	freq1 =>$freq1,
-	step1 =>$step1,
-	seqnum2 => $seqnum2,
-	startseqnum2 => $startseqnum2,
-	seqtype2 => $seqtype2,
-	freq2 => $freq2,
-	step2 => $step2,
-	seqnum3 => $seqnum3,
-	startseqnum3 => $startseqnum3,
-	seqtype3 => $seqtype3,
-	freq3 => $freq3,
-	step3 => $step3,
+	add1 => $add1,
+	every1 => $every1,
+	whenmorethan1 => $whenmorethan1,
+	setto1 => $setto1,
+	lastvalue1 => $lastvalue1,
+	add2 => $add2,
+	every2 => $every2,
+	whenmorethan2 => $whenmorethan2,
+	setto2 => $setto2,
+	lastvalue2 => $lastvalue2,
+	add3 => $add3,
+	every3 => $every3,
+	whenmorethan3 => $whenmorethan3,
+	setto3 => $setto3,
+	lastvalue3 => $lastvalue3,
 	numberingmethod => $numberingmethod,
 	arrivalplanified => $arrivalplanified,
 	status => $status,
@@ -155,11 +153,7 @@ $template->param(
 	);
 $template->param(
 			"periodicity$periodicity" => 1,
-			"seqtype1$seqtype1" => 1,
-			"seqtype2$seqtype2" => 1,
-			"seqtype3$seqtype3" => 1,
 			"arrival$dow" => 1,
 			);
-
 
 output_html_with_http_headers $query, $cookie, $template->output;

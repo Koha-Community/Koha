@@ -19,6 +19,7 @@ package C4::Bull; #assumes C4/Bull.pm
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Date;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -44,22 +45,45 @@ Give all XYZ functions
 @EXPORT = qw(&newsubscription &modsubscription &getsubscriptions &getsubscription
 	&modsubscriptionhistory
 			&getserials &serialchangestatus
-			&Initialize_Sequence &Find_Next_Date, &Get_Next_Seq);
+			&Find_Next_Date, &Get_Next_Seq);
 
 sub newsubscription {
-	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,$seqnum1,$seqnum1,$seqtype1,$freq1, $step1,$seqnum2,$seqnum2,$seqtype2,$freq2, $step2,$seqnum3,$seqnum3,$seqtype3,$freq3, $step3, $numberingmethod, $arrivalplanified, $status, $notes) = @_;
+	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
+		$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
+		$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+		$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+		$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+		$numberingmethod, $arrivalplanified, $status, $notes) = @_;
 	my $dbh = C4::Context->dbh;
 	#save subscription
-	my $sth=$dbh->prepare("insert into subscription (librarian, aqbooksellerid,cost,aqbudgetid,biblionumber,startdate, periodicity,dow,numberlength,weeklength,monthlength,seqnum1,startseqnum1,seqtype1,freq1,step1,seqnum2,startseqnum2,seqtype2,freq2, step2, seqnum3,startseqnum3,seqtype3, freq3, step3,numberingmethod, arrivalplanified, status, notes, pos1, pos2, pos3) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 0, 0, 0)");
-	$sth->execute($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,$seqnum1,$seqnum1,$seqtype1,$freq1, $step1,$seqnum2,$seqnum2,$seqtype2,$freq2, $step2,$seqnum3,$seqnum3,$seqtype3,$freq3, $step3, $numberingmethod, $arrivalplanified, $status, $notes);
+	my $sth=$dbh->prepare("insert into subscription (librarian,aqbooksellerid,cost,aqbudgetid,biblionumber,
+							startdate,periodicity,dow,numberlength,weeklength,monthlength,
+							add1,every1,whenmorethan1,setto1,lastvalue1,
+							add2,every2,whenmorethan2,setto2,lastvalue2,
+							add3,every3,whenmorethan3,setto3,lastvalue3,
+							numberingmethod, arrivalplanified, status, notes) values 
+							(?,?,?,?,?,?,?,?,?,?,
+							 ?,?,?,?,?,?,?,?,?,?,
+							 ?,?,?,?,?,?,?,?,?,?)");
+	$sth->execute($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
+					format_date_in_iso($startdate),$periodicity,$dow,$numberlength,$weeklength,$monthlength,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+	 				$numberingmethod, format_date_in_iso($arrivalplanified), $status, $notes);
 	#then create the 1st waited number
 	my $subscriptionid = $dbh->{'mysql_insertid'};
 	$sth = $dbh->prepare("insert into subscriptionhistory (biblionumber, subscriptionid, startdate, enddate, missinglist, recievedlist, opacnote, librariannote) values (?,?,?,?,?,?,?,?)");
 	$sth->execute($biblionumber, $subscriptionid, $startdate, 0, "", "", 0, $notes);
+	# reread subscription to get a hash (for calculation of the 1st issue number)
+	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+	$sth->execute($subscriptionid);
+	my $val = $sth->fetchrow_hashref;
 	$sth = $dbh->prepare("insert into serial (biblionumber, subscriptionid, serialseq, status, planneddate) values (?,?,?,?,?)");
-	$sth->execute($biblionumber, $subscriptionid, Initialize_Sequence($numberingmethod, $seqnum1, $seqtype1, $freq1, $step1, $seqnum2, $seqtype2, $freq2, $step2, $seqnum3, $seqtype3, $freq3, $step3), $status, C4::Bull::Find_Next_Date());
+	$sth->execute($biblionumber, $subscriptionid,
+					&Get_Next_Seq($val),
+					$status, Find_Next_Date());
 	$sth->finish;  
-
 }
 sub getsubscription {
 	my ($subscriptionid) = @_;
@@ -78,17 +102,22 @@ sub getsubscription {
 sub modsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$seqnum1,$startseqnum1,$seqtype1,$freq1,$step1,
-					$seqnum2,$startseqnum2,$seqtype2,$freq2,$step2,
-					$seqnum3,$startseqnum3,$seqtype3,$freq3,$step3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
 					$numberingmethod, $arrivalplanified, $status, $biblionumber, $notes, $subscriptionid)= @_;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("update subscription set librarian=?, aqbooksellerid=?,cost=?,aqbudgetid=?,startdate=?, periodicity=?,dow=?,numberlength=?,weeklength=?,monthlength=?,seqnum1=?,startseqnum1=?,seqtype1=?,freq1=?,step1=?,seqnum2=?,startseqnum2=?,seqtype2=?,freq2=?, step2=?, seqnum3=?,startseqnum3=?,seqtype3=?, freq3=?, step3=?,numberingmethod=?, arrivalplanified=?, status=?, biblionumber=?, notes=? where subscriptionid = ?");
+	my $sth=$dbh->prepare("update subscription set librarian=?, aqbooksellerid=?,cost=?,aqbudgetid=?,startdate=?,
+						 periodicity=?,dow=?,numberlength=?,weeklength=?,monthlength=?,
+						add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,
+						add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,
+						add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,
+						numberingmethod=?, arrivalplanified=?, status=?, biblionumber=?, notes=? where subscriptionid = ?");
 	$sth->execute($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$seqnum1,$startseqnum1,$seqtype1,$freq1,$step1,
-					$seqnum2,$startseqnum2,$seqtype2,$freq2,$step2,
-					$seqnum3,$startseqnum3,$seqtype3,$freq3,$step3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
 					$numberingmethod, $arrivalplanified, $status, $biblionumber, $notes, $subscriptionid);
 	$sth->finish;
 
@@ -130,8 +159,7 @@ sub getserials {
 
 sub serialchangestatus {
 	my ($serialid,$serialseq,$planneddate,$status)=@_;
-	warn "($serialid,$serialseq,$planneddate,$status)";
-# 	return 1;
+# 	warn "($serialid,$serialseq,$planneddate,$status)";
 	# 1st, get previous status : if we change from "waited" to something else, then we will have to create a new "waited" entry
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("select subscriptionid,status from serial where serialid=?");
@@ -153,154 +181,54 @@ sub serialchangestatus {
 	$sth->execute($recievedlist,$missinglist,$subscriptionid);
 	# create new waited entry if needed (ie : was a "waited" and has changed)
 	if ($oldstatus eq 1 && $status ne 1) {
-	   $sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
-	   $sth->execute($subscriptionid);
-	   my $val = $sth->fetchrow_hashref;
-	   $sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
-	   my ($temp, $X, $Y, $Z, $pos1, $pos2, $pos3) = Get_Next_Seq($val->{'numberingmethod'},$val->{'seqnum1'},$val->{'freq1'}, $val->{'step1'}, $val->{'seqtype1'}, $val->{'seqnum2'}, $val->{'freq2'}, $val->{'step2'}, $val->{'seqtype2'}, $val->{'seqnum3'}, $val->{'freq3'}, $val->{'step3'}, $val->{'seqtype3'}, $val->{'pos1'}, $val->{'pos2'}, $val->{'pos3'});
-	   $sth->execute($temp, $subscriptionid, $val->{'biblionumber'}, 1, 0);
-	   $sth = $dbh->prepare("update subscription set seqnum1=?, seqnum2=?,seqnum3=?,pos1=?,pos2=?,pos3=? where subscriptionid = ?");
-	   $sth->execute($X, $Y, $Z, $pos1, $pos2, $pos3, $subscriptionid);
-
+		$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
+		$sth->execute($subscriptionid);
+		my $val = $sth->fetchrow_hashref;
+		my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
+		$sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
+		$sth->execute($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, 0);
+		$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
+														innerloop1=?,innerloop2=?,innerloop3=?
+														where subscriptionid = ?");
+		$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3,$subscriptionid);
 	}
-}
-sub GetValue(@) {
-    my $seq = shift;
-    my $X = shift;
-    my $Y = shift;
-    my $Z = shift;
-
-    return $X if ($seq eq 'X');
-    return $Y if ($seq eq 'Y');
-    return $Z if ($seq eq 'Z');
-    return "5 Syntax Error in Sequence";
-}
-
-
-sub Initialize_Sequence(@) {
-	my $sequence = shift;
-	my $X = shift;
-	my $seqtype1 = shift;
-	my $freq1 = shift;
-	my $step1 = shift;
-	my $Y = shift;
-	my $seqtype2 = shift;
-	my $freq2 = shift;
-	my $step2 = shift;
-	my $Z = shift;
-	my $seqtype3 = shift;
-	my $freq3 = shift;
-	my $step3 = shift;
-	my $finalstring = "";
-	my @string = split //, $sequence;
-	my $etat = 0;
-	
-	for (my $i = 0; $i < (scalar @string); $i++) {
-		if ($string[$i] ne '{') {
-			if (!$etat) {
-				$finalstring .= $string[$i];
-			} else {
-				return "1 Syntax Error in Sequence";
-			}
-		} else {
-			return "3 Syntax Error in Sequence"
-					if ($string[$i + 1] ne 'X' && $string[$i + 1] ne 'Y' && $string[$i + 1] ne 'Z');  
-			$finalstring .= GetValue($string[$i + 1], $X, $Y, $Z);
-			$i += 2;
-		}
-	}
-	return "$finalstring";
 }
 
 sub Find_Next_Date(@) {
     return "2004-29-03";
 }
 
-sub Step(@) {
-	my $seqnum1 = shift;
-	my $seqtype1 = shift;
-	my $freq1 = shift;
-	my $step1 = shift;
-	my $seqnum2 = shift;
-	my $seqtype2 = shift;
-	my $freq2 = shift;
-	my $step2 = shift;
-	my $seqnum3 = shift;
-	my $seqtype3 = shift;
-	my $freq3 = shift;
-	my $step3 = shift;
-	my $pos1 = shift;
-	my $pos2 = shift;
-	my $pos3 = shift; 
-
-	$seqnum1 += $step1 if ($seqtype1 == 1);
-	if ($seqtype1 == 2) {
-		$pos1 += 1;
-		if ($pos1 >= $freq1) {
-			$pos1 = 0;
-			$seqnum1 += $step1;
-		}
-	}
-
-	$seqnum2 += $step2 if ($seqtype2 == 1);
-	if ($seqtype2 == 2) {
-		$pos2 += 1;
-		if ($pos2 >= $freq2) {
-			$pos2 = 0;
-			$seqnum2 += $step2;
-		}
-	}
-
-	$seqnum3 += $step3 if ($seqtype3 == 1);
-	if ($seqtype3 == 2) {
-		$pos3 += 1;
-		if ($pos3 >= $freq3) {
-			$pos3 = 0;
-			$seqnum3 += $step3;
-		}
-	}
-    
-#    $Y += $step2; if ($seqtype2 == 1);
- #   if ($seqtype2 == 2) { $pos2 += 1; if ($pos2 >= $freq2) {
-	#$pos2 = 0; $Y += $step2; } }
-
-
-   # $Z += $step3; if ($seqtype3 == 1);
-   # if ($seqtype3 == 2) { $pos3 += 1; if ($pos3 >= $freq3) {
-#	$pos3 = 0; $Z += $step3; } }
-
-    return ($seqnum1, $seqnum2, $seqnum3, $pos1, $pos2, $pos3);
-}
-
-sub Get_Next_Seq(@) {
-    my $sequence = shift;
-    my $seqnum1 = shift;
-    my $freq1 = shift;
-    my $step1 = shift;
-    my $seqtype1 = shift;
-    my $seqnum2 = shift;
-    my $freq2 = shift;
-    my $step2 = shift;
-    my $seqtype2 = shift;
-    my $seqnum3 = shift;
-    my $freq3 = shift;
-    my $step3 = shift;
-    my $seqtype3 = shift;
-    my $pos1 = shift;
-    my $pos2 = shift;
-    my $pos3 = shift;
-
-    return ("$sequence", $seqnum1, $seqnum2, $seqnum3)
-	if (!defined($seqnum1) && !defined($seqnum2) && !defined($seqnum3));
+sub Get_Next_Seq {
+	my ($val) =@_;
+#     return ("$sequence", $seqnum1, $seqnum2, $seqnum3)
+# 	if (!defined($seqnum1) && !defined($seqnum2) && !defined($seqnum3));
+	my ($calculated,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3);
+	$calculated = $val->{numberingmethod};
+	# calculate the (expected) value of the next issue recieved.
+	$newlastvalue1 = $val->{lastvalue1};
+	# check if we have to increase the new value.
+	$newinnerloop1 = $val->{innerloop1}+1;
+	$newinnerloop1=0 if ($newinnerloop1 >= $val->{every1});
+	$newlastvalue1 += $val->{add1} if ($newinnerloop1<1); # <1 to be true when 0 or empty.
+	$newlastvalue1=$val->{setto1} if ($newlastvalue1>$val->{whenmorethan1}); # reset counter if needed.
+	$calculated =~ s/\{X\}/$newlastvalue1/g;
 	
-    ($seqnum1, $seqnum2, $seqnum3, $pos1, $pos2, $pos3) = 
-	Step($seqnum1, $seqtype1, $freq1, $step1, $seqnum2, $seqtype2, $freq2, 
-	          $step2, $seqnum3, $seqtype3, $freq3, $step3, $pos1, $pos2, $pos3);
-			  
-    return (Initialize_Sequence($sequence, $seqnum1, $seqtype1,
-				$freq1, $step1, $seqnum2, $seqtype2, $freq2,
-				$step2, $seqnum3, $seqtype3, $freq3, $step3),
-	        $seqnum1, $seqnum2, $seqnum3, $pos1, $pos2, $pos3);
+	$newlastvalue2 = $val->{lastvalue2};
+	# check if we have to increase the new value.
+	$newinnerloop2 = $val->{innerloop2}+1;
+	$newinnerloop2=0 if ($newinnerloop2 >= $val->{every2});
+	$newlastvalue2 += $val->{add2} if ($newinnerloop2<1); # <1 to be true when 0 or empty.
+	$newlastvalue2=$val->{setto2} if ($newlastvalue2>$val->{whenmorethan2}); # reset counter if needed.
+	$calculated =~ s/\{Y\}/$newlastvalue2/g;
+	
+	$newlastvalue3 = $val->{lastvalue3};
+	# check if we have to increase the new value.
+	$newinnerloop3 = $val->{innerloop3}+1;
+	$newinnerloop3=0 if ($newinnerloop3 >= $val->{every3});
+	$newlastvalue3 += $val->{add3} if ($newinnerloop3<1); # <1 to be true when 0 or empty.
+	$newlastvalue3=$val->{setto3} if ($newlastvalue3>$val->{whenmorethan3}); # reset counter if needed.
+	$calculated =~ s/\{Z\}/$newlastvalue3/g;
+	return ($calculated,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3);
 }
 
 END { }       # module clean-up code here (global destructor)

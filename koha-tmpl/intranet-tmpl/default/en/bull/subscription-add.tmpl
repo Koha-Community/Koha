@@ -15,15 +15,28 @@
 		<input type="hidden" name="op" value="addsubscription">
 		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
 		<p>Librarian</td><td> <!-- TMPL_VAR name="user" --></p>
-		<p><label>Supplier (*):</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid"-->"><a href="#" OnClick="FindAcqui()">...</a></p>
-		<p><label>Cost</label><input type="text" name="cost" value="<!-- TMPL_VAR name="cost" -->"></label></p>
-		<p><label>Budget</label><input type="text" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->"></p>
-	<p><label>Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"> <a href="#" onClick="Plugin(f)">...</a></p>
+		<p><label>Supplier (*):</label><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid"-->" size=4> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>) <a href="#" OnClick="FindAcqui()">...</a></p>
+		<p><label>Cost</label><input type="text" name="cost" value="<!-- TMPL_VAR name="cost" -->" size=4></label></p>
+		<p><label>Budget</label>
+			<select name="aqbudgetid">
+				<!-- TMPL_LOOP name="budgets" -->
+					<!-- TMPL_IF name="selected" -->
+						<option value="<!-- TMPL_VAR name="aqbudgetid" -->" selected>
+					<!-- TMPL_ELSE -->
+						<option value="<!-- TMPL_VAR name="aqbudgetid" -->">
+					<!-- /TMPL_IF -->
+						<!-- TMPL_VAR name="bookfundname" --> (<!-- TMPL_VAR name="startdate" --> - <!-- TMPL_VAR name="enddate" -->)
+					</option>
+				<!-- /TMPL_LOOP -->
+			</select>
+			</p>
+	<p><label>Biblio</label><input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size=4> (<input type="text" name="title" value="<!-- TMPL_VAR name="title" -->" disabled readonly>)<a href="#" onClick="Plugin(f)">...</a></p>
 	<p><label>Notes</label><TEXTAREA NAME="notes" COLS=30 ROWS=2><!-- TMPL_VAR name="notes" --></TEXTAREA></p>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Planning</h2>
-	<p><label class="label100">Beginnning date:</label> <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->"></p>
+	<p><label class="label100">Beginnning date:</label> <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size=13 maxlength=10></p>
+	<p><label class="label100">Next issue (expected)</label><input type="text" name="arrivalplanified" value="<!-- TMPL_VAR name="arrivalplanified" -->" size=13 maxlength=10></p>
 	<p><label class="label100">Frequency (*)</label>
 			<select name="periodicity" size="1">
 				<option value="" selected>None</option>
@@ -143,88 +156,49 @@
 				<th class="bull">Z</th>
 			</tr>
 			<tr>
-				<td class="bull">Evolution</td>
+				<td class="bull">Add</td>
 				<td>
-					<select name="seqtype1" size="1" onChange="select(this[this.selectedIndex].value, 'X')">
-						<option value="">None</option>
-						<!-- TMPL_IF name="seqtype11" -->
-							<option value="1" selected>Added each</option>
-						<!-- TMPL_ELSE -->
-							<option value="1">Added each</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="seqtype12" -->
-							<option value="2" selected>Reinitialize each</option>
-						<!-- TMPL_ELSE -->
-							<option value="2">Reinitialize each</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="seqtype13" -->
-							<option value="3" selected>Constant</option>
-						<!-- TMPL_ELSE -->
-							<option value="3">Constant</option>
-						<!-- /TMPL_IF -->
-						</select>
+					<input type="text" name="add1" value="<!-- TMPL_VAR name="add1" -->">
 				</td>
 				<td>
-					<select name="seqtype2" size="1" onChange="select(this[this.selectedIndex].value, 'Y')">
-						<option value="" selected>None</option>
-						<!-- TMPL_IF name="seqtype21" -->
-							<option value="1" selected>Added each</option>
-						<!-- TMPL_ELSE -->
-							<option value="1">Added each</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="seqtype22" -->
-							<option value="2" selected>Reinitialize each</option>
-						<!-- TMPL_ELSE -->
-							<option value="2">Reinitialize each</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="seqtype23" -->
-							<option value="3" selected>Constant</option>
-						<!-- TMPL_ELSE -->
-							<option value="3">Constant</option>
-						<!-- /TMPL_IF -->
-						</select>
+					<input type="text" name="add2" value="<!-- TMPL_VAR name="add2" -->">
 				</td>
 				<td>
-					<select name="seqtype3" size="1" onChange="select(this[this.selectedIndex].value, 'Z')">
-						<option value="" selected>None</option>
-						<!-- TMPL_IF name="seqtype31" -->
-							<option value="1" selected>Added each</option>
-						<!-- TMPL_ELSE -->
-							<option value="1">Added each</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="seqtype32" -->
-							<option value="2" selected>Reinitialize each</option>
-						<!-- TMPL_ELSE -->
-							<option value="2">Reinitialize each</option>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="seqtype33" -->
-							<option value="3" selected>Constant</option>
-						<!-- TMPL_ELSE -->
-							<option value="3">Constant</option>
-						<!-- /TMPL_IF -->
-						</select>
+					<input type="text" name="add3" value="<!-- TMPL_VAR name="add3" -->">
 				</td>
 			</tr>
 			<tr>
-				<td class="bull">Value</td>
-				<td><input type="text" name="seqnum1" value="<!-- TMPL_VAR name="seqnum1" -->"></td>
-				<td><input type="text" name="seqnum2" value="<!-- TMPL_VAR name="seqnum2" -->"></td>
-				<td><input type="text" name="seqnum3" value="<!-- TMPL_VAR name="seqnum3" -->"></td>
+				<td class="bull">once every</td>
+				<td><input type="text" name="every1" value="<!-- TMPL_VAR name="every1" -->"></td>
+				<td><input type="text" name="every2" value="<!-- TMPL_VAR name="every2" -->"></td>
+				<td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
 			</tr>
 			<tr>
-				<td class="bull">Frequency</td>
-				<td><input type="text" name="freq1" value="<!-- TMPL_VAR name="freq1" -->"></td>
-				<td><input type="text" name="freq2" value="<!-- TMPL_VAR name="freq2" -->"></td>
-				<td><input type="text" name="freq3" value="<!-- TMPL_VAR name="freq3" -->"></td>
+				<td class="bull">When more than</td>
+				<td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
+				<td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
+				<td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
 			</tr>
 			<tr>
-				<td class="bull">Step</td>
-				<td><input type="text" name="step1" value="<!-- TMPL_VAR name="step1" -->"></td>
-				<td><input type="text" name="step2" value="<!-- TMPL_VAR name="step2" -->"></td>
-				<td><input type="text" name="step3" value="<!-- TMPL_VAR name="step3" -->"></td>
+				<td class="bull">Set back to</td>
+				<td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>
+				<td><input type="text" name="setto2" value="<!-- TMPL_VAR name="setto2" -->"></td>
+				<td><input type="text" name="setto3" value="<!-- TMPL_VAR name="setto3" -->"></td>
+			</tr>
+			<tr>
+				<td class="bull">
+					<!-- TMPL_IF name="mod" -->
+						Last value
+					<!-- TMPL_ELSE -->
+						Begins with
+					<!-- /TMPL_IF -->
+				</td>
+				<td><input type="text" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->"></td>
+				<td><input type="text" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->"></td>
+				<td><input type="text" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->"></td>
 			</tr>
 		</table>
-<td>Arrival date : </td><td>	<input type="text" name="arrivalplanified" value="<!-- TMPL_VAR name="arrivalplanified" -->">
+	</p>
 </div>
 <!-- TMPL_IF name="mod" -->
 	<input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" class="button bull">
@@ -237,10 +211,6 @@
 <!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
 
 <script language="JavaScript" type="text/javascript">
-
-select(<!--TMPL_VAR name="seqtype1"-->, 'X');
-select(<!--TMPL_VAR name="seqtype2"-->, 'Y');
-select(<!--TMPL_VAR name="seqtype3"-->, 'Z');
 
 function Plugin(f)
 {
