@@ -33,6 +33,7 @@ $VERSION = 0.02;
 
 use vars qw( $pedantic_attribute_error_in_nonpedantic_mode_p );
 use vars qw( $pedantic_tmpl_var_use_in_nonpedantic_mode_p );
+use vars qw( $pedantic_error_markup_in_pcdata_p );
 
 ###############################################################################
 
@@ -62,7 +63,7 @@ sub re_tag ($) {
    my $etag = $compat? '>': '<>\/';
    # This is no longer similar to the original regexp in subst.pl :-(
    # Note that we don't want <> in compat mode; Mozilla knows about <
-   q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:}
+   q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:(?!--)(?:$re_directive)*.)*--|(?:}
    . $re_directive
    . q{|(?!--)[^"'<>} . $etag . q{]))+))([} . $etag . q{]|(?=<))(.*)};
 }
@@ -91,6 +92,7 @@ sub LINENUM_START	() {'lc_0'}
 sub LINENUM		() {'lc'}
 sub CDATA_MODE_P	() {'cdata-mode-p'}
 sub CDATA_CLOSE		() {'cdata-close'}
+sub PCDATA_MODE_P	() {'pcdata-mode-p'}	# additional submode for CDATA
 
 sub ALLOW_CFORMAT_P	() {'allow-cformat-p'}
 
@@ -162,6 +164,11 @@ sub cdata_mode_p {
     return $this->{+CDATA_MODE_P};
 }
 
+sub pcdata_mode_p {
+    my $this = shift;
+    return $this->{+PCDATA_MODE_P};
+}
+
 sub cdata_close {
     my $this = shift;
     return $this->{+CDATA_CLOSE};
@@ -224,6 +231,12 @@ sub _set_line_number_start {
 sub _set_cdata_mode {
     my $this = shift;
     $this->{+CDATA_MODE_P} = $_[0];
+    return $this;
+}
+
+sub _set_pcdata_mode {
+    my $this = shift;
+    $this->{+PCDATA_MODE_P} = $_[0];
     return $this;
 }
 
@@ -320,6 +333,7 @@ sub _next_token_internal {
 		if !$this->cdata_mode_p && $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
+	my $bad_comment_p = 0;
 	for (my $cdata_close = $this->cdata_close;;) {
 	    if ($this->cdata_mode_p) {
 		my $next = $this->_pop_readahead;
@@ -349,12 +363,11 @@ sub _next_token_internal {
 		    $ok_p = 1;
 		    warn_normal "SGML \"closed start tag\" notation: $head<\n", $this->line_number if $tail eq '';
 		}
-	    } elsif ($this->_peek_readahead =~ /^<!--(?:(?!-->).)*-->/s) {
+	    } elsif ($this->_peek_readahead =~ /^<!--(?:(?!-->)$re_directive*.)*-->/os) {
 		($kind, $it) = (TmplTokenType::COMMENT, $&);
 		$this->_set_readahead( $' );
 		$ok_p = 1;
-		warn_normal "Syntax error in comment: $&\n", $this->line_number_start;
-		$this->_set_syntaxerror( 1 );
+		$bad_comment_p = 1;
 	    }
 	last if $ok_p;
 	    my $next = scalar <$h>;
@@ -376,6 +389,10 @@ sub _next_token_internal {
 	}
 	if ($it =~ /^$re_directive/ios && !$this->cdata_mode_p) {
 	    $kind = TmplTokenType::DIRECTIVE;
+	} elsif ($bad_comment_p) {
+	    warn_normal sprintf("Syntax error in comment: %s\n", $it),
+		    $this->line_number_start;
+	    $this->_set_syntaxerror( 1 );
 	}
 	if (!$ok_p && $eof_p) {
 	    ($kind, $it) = (TmplTokenType::UNKNOWN, $this->_peek_readahead);
@@ -400,6 +417,11 @@ sub _next_token_intermediate {
 	    if ($it->string =~ /^<(script|style|textarea)\b/is) {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
+		$this->_set_pcdata_mode( 0 );
+	    } elsif ($it->string =~ /^<(title)\b/is) {
+		$this->_set_cdata_mode( 1 );
+		$this->_set_cdata_close( "</$1\\s*>" );
+		$this->_set_pcdata_mode( 1 );
 	    }
 	    $it->set_attributes( $this->_extract_attributes($it->string, $it->line_number) );
 	}
@@ -414,7 +436,15 @@ sub _next_token_intermediate {
 	last unless $this->cdata_mode_p;
 	    $it .= $next->string;
 	}
+	if ($this->pcdata_mode_p) {
+	    my $check = $it;
+	    $check =~ s/$re_directive//gos;
+	    warn_pedantic "Markup found in PCDATA\n", $this->line_number,
+			    \$pedantic_error_markup_in_pcdata_p
+		    if $check =~ /$re_tag_compat/s;
+	}
 	$it = TmplToken->new( $it, TmplTokenType::CDATA, $this->line_number );
+	$this->_set_pcdata_mode, 0;
 	$this->_set_cdata_close, undef;
     }
     return $it;
