@@ -36,12 +36,13 @@ my %env;
 my $input = new CGI;
 my $result = $input->param('result');
 my $search_string= $input->param('search_string');
+$search_string = $result unless ($search_string);
 my $op = $input->param('op');
 my $id = $input->param('id');
 my $category = $input->param('category');
 my $index= $input->param('index');
 my $insert = $input->param('insert');
-
+my $nohierarchy = $input->param('nohierarchy'); # if 1, just show the last part of entry (Marseille). If 0, show everything (Europe -- France --Marseille)
 my $dbh = C4::Context->dbh;
 
 # make the page ...
@@ -51,9 +52,17 @@ if ($op eq "select") {
 	$sti->execute($id);
 	my ($father,$freelib_text) = $sti->fetchrow_array;
 	if (length($result)>0) {
-		$result .= "|$father $freelib_text";
+		if ($nohierarchy) {
+			$result .= "|$freelib_text";
+		} else {
+			$result .= "|$father $freelib_text";
+		}
 	} else {
-		$result = "$father $freelib_text";
+		if ($nohierarchy) {
+			$result = "$freelib_text";
+		} else {
+			$result = "$father $freelib_text";
+		}
 	}
 }
 if ($op eq "add") {
@@ -77,7 +86,11 @@ if ($search_string) {
 	my $sti=$dbh->prepare("select id,freelib,father from bibliothesaurus where match (category,freelib) AGAINST (?) and category =?");
 	$sti->execute($search_string,$category);
 	while (my $line=$sti->fetchrow_hashref) {
-		$stdlib{$line->{'id'}} = "$line->{'father'} $line->{'freelib'}";
+		if ($nohierarchy) {
+			$stdlib{$line->{'id'}} = "$line->{'freelib'}";
+		} else {
+			$stdlib{$line->{'id'}} = "$line->{'father'} $line->{'freelib'}";
+		}
 		push(@freelib,$line->{'id'});
 	}
 	$select_list= CGI::scrolling_list( -name=>'id',
@@ -105,7 +118,8 @@ $template->param(select_list => $select_list,
 						dig_list => $dig_list,
 						result => $result,
 						category => $category,
-						index => $index
+						index => $index,
+						nohierarchy => $nohierarchy,
 						);
 output_html_with_http_headers $input, $cookie, $template->output;
 
