@@ -110,6 +110,7 @@ my %requirefields=(
     		     'nocalc' => 'int(11)'},
     borrowers=>{'userid' => 'char(30)',
     		'password' => 'char(30)',},
+    aqorders=>{'budgetdate' => 'date'},		   
 );
 
 # Default system preferences
@@ -304,6 +305,10 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.18  2002/07/20 22:28:13  rangi
+# Fixing missing column (budgetdate) in aqorders
+# re bug 69
+#
 # Revision 1.4.2.17  2002/07/11 18:36:39  tonnesen
 # New fields and tables for authentication module.
 #
