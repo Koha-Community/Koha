@@ -22,6 +22,8 @@ package C4::Members;
 use strict;
 require Exporter;
 use C4::Context;
+use Date::Manip;
+use C4::Date;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -46,10 +48,91 @@ C4::Members - Perl Module containing convenience functions for member handling
 @ISA = qw(Exporter);
 @EXPORT = qw();
 
-@EXPORT_OK = qw(
-	&fixup_cardnumber
+@EXPORT = qw(
+	&fixup_cardnumber &findguarantees &modmember &newmember
     );
 
+
+sub modmember {
+	my (%data) = @_;
+	my $dbh = C4::Context->dbh;
+	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+	$data{'joining'}=format_date_in_iso($data{'joining'});
+	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+	my $query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
+	cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
+	streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
+	altnotes='$data{'altnotes'}',dateofbirth='$data{'dateofbirth'}',contactname='$data{'contactname'}',
+	emailaddress='$data{'emailaddress'}',dateenrolled='$data{'joining'}',streetcity='$data{'streetcity'}',
+	altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
+	categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
+	borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
+	initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
+	gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',
+	textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
+	zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}', sort1='$data{'sort1'}', sort2='$data{'sort2'}'
+	where borrowernumber=$data{'borrowernumber'}";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+	# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
+	# so when we update information for an adult we should check for guarantees and update the relevant part
+	# of their records, ie addresses and phone numbers
+	if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
+		# is adult check guarantees;
+		updateguarantees(%data);
+	}
+}
+
+sub newmember {
+	my (%data) = @_;
+	my $dbh = C4::Context->dbh;
+	$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
+	$data{'joining'}=format_date_in_iso($data{'joining'});
+	$data{'expiry'}=format_date_in_iso($data{'expiry'});
+# 	$data{'borrowernumber'}=NewBorrowerNumber();
+	my $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
+	firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
+	altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
+	initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,sort1,sort2) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
+	'$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
+	'$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
+	'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
+	'$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
+	'$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
+	'$data{'ethnicity'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}','$data{'sort1'}','$data{'sort2'}')";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	$sth->finish;
+	$data{borrowernumber} =$dbh->{'mysql_insertid'};
+	# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
+	# so when we update information for an adult we should check for guarantees and update the relevant part
+	# of their records, ie addresses and phone numbers
+	if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
+		# is adult check guarantees;
+		updateguarantees(%data);
+	}
+	return $data{borrowernumber};
+}
+
+sub updateguarantees {
+	my (%data) = @_;
+	my $dbh = C4::Context->dbh;
+	my ($count,$guarantees)=findguarantees($data{'borrowernumber'});
+	for (my $i=0;$i<$count;$i++){
+		# FIXME
+		# It looks like the $i is only being returned to handle walking through
+		# the array, which is probably better done as a foreach loop.
+		#
+		my $guaquery="update borrowers set streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',
+		streetcity='$data{'streetcity'}',phoneday='$data{'phoneday'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}'
+		,streetaddress='$data{'address'}'
+		where borrowernumber='$guarantees->[$i]->{'borrowernumber'}'";
+		my $sth3=$dbh->prepare($guaquery);
+		$sth3->execute;
+		$sth3->finish;
+	}
+}
 ################################################################################
 
 =item fixup_cardnumber
@@ -109,5 +192,48 @@ sub fixup_cardnumber ($) {
     }
     return $cardnumber;
 }
+
+sub findguarantees {
+  my ($bornum)=@_;
+  my $dbh = C4::Context->dbh;
+  my $sth=$dbh->prepare("select cardnumber,borrowernumber from borrowers where
+  guarantor=?");
+  $sth->execute($bornum);
+  my @dat;
+  my $i=0;
+  while (my $data=$sth->fetchrow_hashref){
+    $dat[$i]=$data;
+    $i++;
+  }
+  $sth->finish;
+  return($i,\@dat);
+}
+
+# =item NewBorrowerNumber
+# 
+#   $num = &NewBorrowerNumber();
+# 
+# Allocates a new, unused borrower number, and returns it.
+# 
+# =cut
+# #'
+# # FIXME - This is identical to C4::Search::NewBorrowerNumber.
+# # Pick one (preferably this one) and stick with it.
+# 
+# # FIXME - Race condition: this function just says what the next unused
+# # number is, but doesn't allocate it. Hence, two clients adding
+# # patrons at the same time could get the same new borrower number and
+# # clobber each other.
+# # A better approach might be to set borrowernumber autoincrement and 
+# 
+# sub NewBorrowerNumber {
+#   my $dbh = C4::Context->dbh;
+#   my $sth=$dbh->prepare("Select max(borrowernumber) from borrowers");
+#   $sth->execute;
+#   my $data=$sth->fetchrow_hashref;
+#   $sth->finish;
+#   $data->{'max(borrowernumber)'}++;
+#   return($data->{'max(borrowernumber)'});
+# }
 
 1;
