@@ -264,9 +264,9 @@ sub restore_strhash
 		chomp $line;
 
 		# extracts the two fields
-		my ($original, $translated,$nb) = split(/$split_char/, $line, 3);
+		my ($original, $translated) = split(/$split_char/, $line, 2);
 
-		if($translated ne "")
+		if($translated ne "*****")
 		{
 			# the key has been translated
 			%{$strhash}->{$original} = $translated;
@@ -307,7 +307,7 @@ sub write_strhash
 		}
 		else
 		{
-			printf($fh "%s%s\n", $str, $split_char);
+			printf($fh "%s%s%s\n", $str, $split_char,"*****");
 		}
 	}
 
