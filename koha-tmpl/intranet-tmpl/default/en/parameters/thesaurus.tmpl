@@ -78,7 +78,7 @@
 		<input type=hidden name=op value=delete_confirmed>
 		<input type=hidden name=id value='<TMPL_VAR name="id">'>
 		<input type="hidden" name="search_category" value="<TMPL_VAR name="search_category">">
-	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
+	<tr><td colspan=2 align=center>CONFIRM DELETION of this entry <b>and all entries depending from this one</b></td></tr>
 	<tr><td><INPUT type=submit value='YES'></form></td>
 		<td><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=NO></form></td></tr>
 </TMPL_IF>
@@ -98,22 +98,23 @@
 	<input type="submit" value="OK">
 	<a href="thesaurus.pl?op=add_form">New category...</a>
 </form>
-<TMPL_VAR name="search_category">
 <TMPL_LOOP name="hierarchy_loop">
-	<a href="thesaurus.pl?branch=<TMPL_VAR name="branch">"><TMPL_VAR name="string"></a><br />
+	<a href="thesaurus.pl?branch=<TMPL_VAR name="branch">&search_category=<TMPL_VAR name="category">"><TMPL_VAR name="string"></a><br />
 </TMPL_LOOP>
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=0>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif" width="10%">&nbsp;</td>
-	<td background="/images/background-mem.gif" width="50%"><b>Authority</b></td>
-	<td background="/images/background-mem.gif" width="10%"><b>Dig</b></td>
-	<td background="/images/background-mem.gif" width="10%"><b>Related</b></td>
-	<td background="/images/background-mem.gif" width="10%">&nbsp;</td>
-	<td background="/images/background-mem.gif" width="10%">&nbsp;</td>
+	<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
+	<td background="/images/background-mem.gif"><b>free form</b></td>
+	<td background="/images/background-mem.gif"><b>Authority</b></td>
+	<td background="/images/background-mem.gif" width="5%"><b>Dig</b></td>
+	<td background="/images/background-mem.gif" width="5%"><b>Related</b></td>
+	<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
+	<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
 <TMPL_LOOP name="loop">
 </tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 	<td>&nbsp;</td>
-	<td><TMPL_VAR name="stdlib"></td>
+	<td><TMPL_VAR name="freelib"></td>
+	<td><TMPL_VAR name="father"> <TMPL_VAR name="stdlib"></td>
 	<td><TMPL_VAR name="dig">Dig</a></td>
 	<td><TMPL_VAR name="related">Related</a></td>
 	<td><a href="<TMPL_VAR name="edit">">Edit</a></td>
