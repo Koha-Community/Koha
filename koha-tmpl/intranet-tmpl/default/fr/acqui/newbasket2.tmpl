@@ -4,7 +4,7 @@
 
 <TMPL_IF name ="testdonation">
 	<a href="newbiblio.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" align=right alt="Ajouter Notice"></a>
+	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" align=right alt="Ajouter Notice" border=0></a>
 <TMPL_ELSE>
 	<a href="newdonation.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
 	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" border=0 align=right alt="Ajouter Notice"></a>
@@ -31,8 +31,8 @@ Votre recherche:
 
 <br> Affichage des r&eacute;sultats <TMPL_VAR name="dispnum"> &agrave; <TMPL_VAR name="offset2">.
 
-<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 background="<TMPL_VAR name="themelang">/images/background-mem.gif" Color="<TMPL_VAR name="main">">
-	<TR  VALIGN=TOP>
+<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 Color="<TMPL_VAR name="main">">
+	<TR  VALIGN=TOP  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<TD><b>TITRE</b></TD>
 		<TD><b>AUTEUR</b></TD>
 		<TD><b>ANNEE</b></TD>
