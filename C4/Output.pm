@@ -382,19 +382,19 @@ sub endmenu {
   # FIXME - It's bad form to die in a CGI script. It's even worse form
   # to die without issuing an error message.
   if ($type eq 'issue') {
-    open (FILE,"$path/issues-bottom.inc") || die;
+    open (FILE,"<$path/issues-bottom.inc") || die;
   } elsif ($type eq 'opac') {
-    open (FILE,"$path/opac-bottom.inc") || die;
+    open (FILE,"<$path/opac-bottom.inc") || die;
   } elsif ($type eq 'member') {
-    open (FILE,"$path/members-bottom.inc") || die;
+    open (FILE,"<$path/members-bottom.inc") || die;
   } elsif ($type eq 'acquisitions') {
-    open (FILE,"$path/acquisitions-bottom.inc") || die;
+    open (FILE,"<$path/acquisitions-bottom.inc") || die;
   } elsif ($type eq 'report') {
-    open (FILE,"$path/reports-bottom.inc") || die;
+    open (FILE,"<$path/reports-bottom.inc") || die;
   } elsif ($type eq 'circulation') {
-    open (FILE,"$path/circulation-bottom.inc") || die;
+    open (FILE,"<$path/circulation-bottom.inc") || die;
   } else {
-    open (FILE,"$path/cat-bottom.inc") || die;
+    open (FILE,"<$path/cat-bottom.inc") || die;
   }
   my @string=<FILE>;
   close FILE;
