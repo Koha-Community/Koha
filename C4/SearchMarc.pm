@@ -244,8 +244,8 @@ sub catalogsearch {
 				$newline{biblionumber} = $oldbiblionumber;
 				my @CNresults2= @CNresults;
 				$newline{CN} = \@CNresults2;
-			    $newline{'even'} = 1 if $counter % 2 == 0;
-				$newline{'odd'} = 1 if $counter % 2 == 1;
+			    $newline{'even'} = 1 if $#finalresult % 2 == 0;
+				$newline{'odd'} = 1 if $#finalresult % 2 == 1;
 				@CNresults = ();
 				push @finalresult, \%newline;
 				$totalitems=0;
