@@ -1025,6 +1025,7 @@ sub returnbook {
 		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 		$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
 	}
+	itemseen($iteminformation->{'itemnumber'});
 	($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 	# transfer book to the current branch
 	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
