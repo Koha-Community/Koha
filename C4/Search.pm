@@ -1723,7 +1723,9 @@ Looks up patrons (borrowers) by name.
 
 C<$env> is ignored.
 
-BUGFIX 499: C<$type> is now used to determine
+BUGFIX 499: C<$type> is now used to determine type of search.
+if $type is "simple", search is performed on the first letter of the
+surname only.
 
 C<$searchstring> is a space-separated list of search terms. Each term
 must match the beginning a borrower's surname, first name, or other
