@@ -40,7 +40,7 @@ $VERSION = 0.01;
 
 =head1 NAME
 
-C4::Catalogue - FIXME
+C4::Catalogue - Koha functions for dealing with orders and acquisitions
 
 =head1 SYNOPSIS
 
@@ -48,7 +48,8 @@ C4::Catalogue - FIXME
 
 =head1 DESCRIPTION
 
-FIXME
+The functions in this module deal with acquisitions, managing book
+orders, converting money to different currencies, and so forth.
 
 =head1 FUNCTIONS
 
@@ -1221,9 +1222,5 @@ __END__
 =head1 AUTHOR
 
 Koha Developement team <info@koha.org>
-
-=head1 SEE ALSO
-
-L<perl>.
 
 =cut
