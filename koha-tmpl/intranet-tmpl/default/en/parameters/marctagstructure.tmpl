@@ -71,7 +71,7 @@
 
 <TMPL_IF name="delete_confirm">
 <!-------------------------------------------------------------------------------------------------->
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="/images/background-mem.gif"><b>tag</b></td>
 		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
@@ -98,7 +98,7 @@
 	<input type=reset name=reset value="clr">
 </form>
 <TMPL_VAR name="searchfield">
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
 	<td background="/images/background-mem.gif"><b>Tag</b></td>
 	<td background="/images/background-mem.gif"><b>Lib</b></td>
@@ -110,7 +110,7 @@
 	<td background="/images/background-mem.gif">&nbsp;</td>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><TMPL_VAR name="tagfield"></td>
+	<td><b><TMPL_VAR name="tagfield"></b></td>
 	<td><TMPL_VAR name="liblibrarian"></td>
 	<td><TMPL_IF name="repeatable">Yes<TMPL_ELSE>No</TMPL_IF></td>
 	<td><TMPL_IF name="mandatory">Yes<TMPL_ELSE>No</TMPL_IF></td>

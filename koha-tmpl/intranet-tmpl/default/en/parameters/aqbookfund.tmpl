@@ -6,7 +6,7 @@
 <TMPL_IF name=search>
 <br>You Searched for <b><TMPL_VAR name=searchfield><b><p><br>
 </TMPL_IF>
-<table border=0 cellspacing=0 cellpadding=5>
+<table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b>Name</b></td><td background="/images/background-mem.gif"><b>Group</b></td><td background="/images/background-mem.gif"><b>Budget</b></td><td background="/images/background-mem.gif">&nbsp;</td><td background="/images/background-mem.gif"> &nbsp; </td><td background="/images/background-mem.gif"> &nbsp; </td></tr>
 <TMPL_LOOP name="bookfund">
 <tr valign=top bgcolor="<TMPL_VAR name="toggle">"<td><TMPL_VAR name="bookfundid"></td><td><TMPL_VAR name="bookfundname"></td><td><TMPL_VAR name="bookfundgroup"> &nbsp;</td><td><a href="aqbudget.pl?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> ">Budget</a></td><td><a href="<TMPL_VAR name="action">?op=add_form&bookfundid=<TMPL_VAR name="bookfundid"> ">Edit</a></td><td><a href="<TMPL_VAR name="action">?op=delete_confirm&bookfundid=<TMPL_VAR name="bookfundid">">Delete</a></td><td> &nbsp; </td></tr>
