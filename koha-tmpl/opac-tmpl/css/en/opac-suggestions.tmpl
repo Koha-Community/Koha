@@ -1,0 +1,130 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF name="op_add" -->
+	<h1>Enter a new suggestion</h1>
+	<p>Fill this form to suggest the library a new acquisition. You will be mailed when the library treats you suggestion</p>
+	<p>No fields are mandatory. Fill whatever you know. The "Note" field can be used for whatever you want</p>
+	<form>
+		<input type="hidden" name="op" value="add_confirm">
+		<p><label>Title</label><input type="text" name="title" size=60 maxlentgh=80></p>
+		<p><label>Author</label><input type="text" name="author" size=60 maxlength=80></p>
+		<p><label>Copyright date</label><input type="text" name="copyrightdate" size=6 maxlength=4></p>
+		<p><label>Publisher</label><input type="text" name="publishercode" size=60 maxlength=80></p>
+		<p><label>Note</label><textarea name="note" rows="10" cols="60"></textarea></p>
+		<p><label>&nbsp;</label><input type="submit" value="Send suggestion to the library staff" class="button"></p>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="op_else" -->
+	<h1>Suggestions</h1>
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th>&copy;</th>
+			<th>Publisher</th>
+			<th>Status</th>
+			<th>Suggested by</th>
+			<th>Managed by</th>
+			<th>Note</th>
+		</tr>
+		<tr>
+			<form>
+				<th>
+					Filter on
+				</th>
+				<th>
+					<input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
+				</th>
+				<th>
+					<input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					<input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->">
+				</th>
+				<th>
+					<select name="status">
+						<option value="">Any</option>
+						<option value="ASKED" <!-- TMPL_IF name="ASKED" -->selected<!-- /TMPL_IF -->>Asked</option>
+						<option value="ORDERED" <!-- TMPL_IF name="ORDERED" -->selected<!-- /TMPL_IF -->>Ordered</option>
+						<option value="REJECTED"<!-- TMPL_IF name="REJECTED" -->selected<!-- /TMPL_IF -->>Rejected</option>
+						<option value="AVAILABLE"<!-- TMPL_IF name="AVAILABLE" -->selected<!-- /TMPL_IF -->>Available</option>
+					</select>
+				</th>
+				<th>
+					<select name="suggestedbyme">
+						<option value="1" <!-- TMPL_IF name="suggestedbyme" -->selected<!-- /TMPL_IF -->>Me</option>
+						<option value="0" <!-- TMPL_UNLESS name="suggestedbyme" -->selected<!-- /TMPL_UNLESS -->>Anybody</option>
+					</select>
+				</th>
+				<th>
+					&nbsp;
+				</th>
+				<th>
+					<input type="submit" class="button" value="Set Filter">
+				</th>
+			</form>
+		</tr>
+		<form>
+			<input type="hidden" name="op" value="delete_confirm">
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<tr>
+				<td>
+					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionnumber" -->">
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="title" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="author" -->
+				</td>
+				<td align="center"<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="copyrightdate" -->
+				</td>
+				<td align="center" <!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="publishercode" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF name="ASKED" -->Asked<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ORDERED" -->Ordered by the library<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="REJECTED" -->Suggestion rejected : won't be buy<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Available in the library<!-- /TMPL_IF -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+				</td>
+				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR name="note" -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td>
+				<input type="submit" class="button" value="Delete">
+			</td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+			<td> &nbsp; </td>
+		</tr>
+		</form>
+	</table>
+	<form>
+		<input type="hidden" name="op" value="add">
+		<input type="submit" class="button" value="Enter a new suggestion">
+	<br />
+	<p>Note : if you ask suggestion done by anybody, the result will contain only new suggestions. Suggestions treated by a librarian will not be shown.</p>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
