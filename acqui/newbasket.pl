@@ -27,7 +27,7 @@ print <<printend
 
 <div align=right>
 Our Reference: HLT-$basket<br>
-Authorsed By: $user<br>
+Authorised By: $user<br>
 $date
 </div>
 <FONT SIZE=6><em>Shopping Basket For: <a href=/cgi-bin/koha/acqui/supplier.pl?id=$booksellers[0]->{'id'}>
