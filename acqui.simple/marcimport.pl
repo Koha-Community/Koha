@@ -1590,6 +1590,7 @@ sub FormatMarcText {
 	$tag,
 	$label,
 	$subfieldcode,$subfieldvalue,
+	@values, $value
     );
 
 	#return "MARC text here";
@@ -1617,8 +1618,16 @@ sub FormatMarcText {
 		"  <table border=0 cellspacing=0>\n";
 	    foreach $subfieldcode ( sort( keys %{ $field->{'subfields'} }   )) {
 	        $subfieldvalue=$field->{'subfields'}->{$subfieldcode};
-	        $marctext.="<tr><td>$subfieldcode </td>" .
-		    "<td>$subfieldvalue</td></tr>\n";
+		if (ref($subfieldvalue) eq 'ARRAY' ) {
+		    # if it's a pointer to array, get the values
+		    @values=@{$subfieldvalue};
+		} else {
+		    @values=( $subfieldvalue );
+		} # if subfield array
+		foreach $value ( @values ) {
+	          $marctext.="<tr><td>$subfieldcode </td>" .
+		    "<td>$value</td></tr>\n";
+		} # foreach value
 	    } # foreach subfield
 	    $marctext.="</table></td>\n";
 	} # if subfields
