@@ -11,16 +11,16 @@ use C4::Circulation::Circ2;
 use C4::Auth;
 
 my $query = new CGI;
-
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
-
-my $template = gettemplate("opac-account.tmpl", "opac");
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-account.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 0,
+			     flagsrequired => {borrow => 1},
+			     debug => 1,
+			     });
 
 # get borrower information ....
-my $borrowernumber = getborrowernumber($loggedinuser);
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
 my @bordat;
@@ -40,9 +40,17 @@ for (my $i=0;$i<$numaccts;$i++){
     }
 }
 
+# add the row parity
+my $num = 0;
+foreach my $row (@$accts) {
+    $row->{'even'} = 1 if $num % 2 == 0;
+    $row->{'odd'} = 1 if $num % 2 == 1;
+    $num++;
+}
+
+
 $template->param( ACCOUNT_LINES => $accts );
 
 $template->param( total => $total );
 
-$template->param( loggedinuser => $loggedinuser );
-print "Content-Type: text/html\n\n", $template->output; 
+print $query->header(-cookie => $cookie), $template->output; 
