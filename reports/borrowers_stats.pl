@@ -102,7 +102,7 @@ if ($do_it) {
 	my @values;
 	my %labels;
 	my $req;
-	$req = $dbh->prepare( "select categorycode, description from categories");
+	$req = $dbh->prepare( "select categorycode, description from categories order by description");
 	$req->execute;
 	my %select_catcode;
 	my @select_catcode;
@@ -119,7 +119,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare( "select distinctrow sort1 from borrowers");
+	$req = $dbh->prepare( "select distinctrow sort1 from borrowers order by sort1");
 	$req->execute;
 	my @select_sort1;
 	push @select_sort1,"";
@@ -136,7 +136,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare( "select distinctrow sort2 from borrowers");
+	$req = $dbh->prepare( "select distinctrow sort2 from borrowers order by sort2");
 	$req->execute;
 	my @select_sort2;
 	push @select_sort2,"";
