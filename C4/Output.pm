@@ -477,6 +477,7 @@ sub getkeytableselectoptions {
 		$keyfieldname,	# column name of code to use in option list
 		$descfieldname,	# column name of descriptive field
 		$showkey,	# flag to show key in description
+		$default,	# optional default key
 	)=@_;
 	my $selectclause;	# return value
 
@@ -502,6 +503,11 @@ sub getkeytableselectoptions {
 	while ( ($key, $desc) = $sth->fetchrow) {
 	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
 	    $selectclause.="<option value='$key'>$desc\n";
+	    $selectclause.="<option";
+	    if (defined $default && $default eq $key) {
+		$selectclause.=" selected";
+	    }
+	    $selectclause.=" value='$key'>$desc\n";
 	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
 	}
 	return $selectclause;
