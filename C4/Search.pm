@@ -145,7 +145,7 @@ from the C<borrowers> database table;
 sub findguarantor{
   my ($bornum)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("select guarantor from borrowers where borrowernumber=?"");
+  my $sth=$dbh->prepare("select guarantor from borrowers where borrowernumber=?");
   $sth->execute($bornum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
@@ -486,7 +486,7 @@ EOT
       my @temp=split(/\|/,$search->{'class'});
       my $count=@temp;
       $query.= "and ( itemtype=?";
-      push(@bind,$item[0]);
+      push(@bind,$temp[0]);
       for (my $i=1;$i<$count;$i++){
         $query.=" or itemtype=?";
         push(@bind,$temp[$i]);
@@ -680,7 +680,7 @@ sub KeywordSearch2 {
   $sth->finish;
   $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
   like ? group by biblionumber");
-  $sth->execute(%$search->{'keyword'}%);
+  $sth->execute("%".$search->{'keyword'}."%");
   while (my $data=$sth->fetchrow_hashref){
     $query="Select * from biblio,biblioitems where
     biblio.biblionumber=? and
@@ -992,26 +992,26 @@ sub CatSearch  {
 					biblio.biblionumber=bibliosubtitle.biblionumber
 					where
 					(((title like ? or title like ?)";
-					@bind=("$key[0]%,"% $key[0]%");
+					@bind=("$key[0]%","% $key[0]%");
 					while ($i<$count){
 						$query .= " and (title like ? or title like ?)";
 						push(@bind,"$key[$i]%","% $key[$i]%");
 						$i++;
 					}
 					$query.=") or ((subtitle like ? or subtitle like ?)";
-					push(@bind,"$key[0]%,"% $key[0]%");
+					push(@bind,"$key[0]%","% $key[0]%");
 					for ($i=1;$i<$count;$i++){
 						$query.=" and (subtitle like ? or subtitle like ?)";
 						push(@bind,"$key[$i]%","% $key[$i]%");
 					}
 					$query.=") or ((seriestitle like ? or seriestitle like ?)";
-					push(@bind,"$key[0]%,"% $key[0]%");
+					push(@bind,"$key[0]%","% $key[0]%");
 					for ($i=1;$i<$count;$i++){
 						$query.=" and (seriestitle like ? or seriestitle like ?)";
 						push(@bind,"$key[$i]%","% $key[$i]%");
 					}
 					$query.=") or ((unititle like ? or unititle like ?)";
-					push(@bind,"$key[0]%,"% $key[0]%");
+					push(@bind,"$key[0]%","% $key[0]%");
 					for ($i=1;$i<$count;$i++){
 						$query.=" and (unititle like ? or unititle like ?)";
 						push(@bind,"$key[$i]%","% $key[$i]%");
@@ -1030,7 +1030,7 @@ sub CatSearch  {
 				$query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
 				my @temp=split(/\|/,$search->{'class'});
 				my $count=@temp;
-				$query.= " and ( itemtype= ?);
+				$query.= " and ( itemtype= ?)";
 				@bind=($temp[0]);
 				for (my $i=1;$i<$count;$i++){
 					$query.=" or itemtype=?";
@@ -1053,7 +1053,7 @@ sub CatSearch  {
 			} elsif ($search->{'illustrator'} ne '') {
 					$query="select * from biblioitems,biblio
 				where biblio.biblionumber=biblioitems.biblionumber
-				and biblioitems.illus like ?;
+				and biblioitems.illus like ?";
 					@bind=("%".$search->{'illustrator'}."%");
 			} elsif ($search->{'publisher'} ne ''){
 				$query = "Select * from biblio,biblioitems where biblio.biblionumber
@@ -1176,7 +1176,7 @@ sub CatSearch  {
 		}
 		if ($search->{'publisher'} ne ''){
 			$query.= " and (publishercode like ?)";
-			push(@bind,"%$search->{'publisher'}%";
+			push(@bind,"%$search->{'publisher'}%");
 		}
 		my $sti=$dbh->prepare($query);
 		$sti->execute(@bind);
@@ -1861,10 +1861,10 @@ sub borrdata {
   my $dbh = C4::Context->dbh;
   my $sth;
   if ($bornum eq ''){
-    $sth=$dbh->prepare("Select * from borrowers where cardnumber=?";
+    $sth=$dbh->prepare("Select * from borrowers where cardnumber=?");
     $sth->execute($cardnumber);
   } else {
-    $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?";
+    $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
   $sth->execute($bornum);
   }
   my $data=$sth->fetchrow_hashref;
@@ -2453,7 +2453,7 @@ sub breedingsearch {
 	my ($title,$isbn,$z3950random) = @_;
 	my $dbh   = C4::Context->dbh;
 	my $count = 0;
-	my $query,@bind;
+	my ($query,@bind);
 	my $sth;
 	my @results;
 
@@ -2617,7 +2617,7 @@ sub isbnsearch {
     my ($isbn,$title) = @_;
     my $dbh   = C4::Context->dbh;
     my $count = 0;
-    my $query,@bind;
+    my ($query,@bind);
     my $sth;
     my @results;
 

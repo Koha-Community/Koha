@@ -157,7 +157,7 @@ sub getpatroninformation {
 		$sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
 		$sth->execute($borrowernumber);
 	} elsif ($cardnumber) {
-		$sth = $dbh->$prepare("select * from borrowers where cardnumber=?");
+		$sth = $dbh->prepare("select * from borrowers where cardnumber=?");
 		$sth->execute($cardnumber);
 	} else {
 		$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
@@ -986,7 +986,7 @@ sub fixaccountforlostandreturned {
 			my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
 					where (borrowernumber = ?)
 					and (accountno=?)");
-			$usth->execute($amtos,$data->{'borrowernumber'},'$thisacct');
+			$usth->execute($newamtos,$data->{'borrowernumber'},'$thisacct');
 			$usth->finish;
 			$usth = $dbh->prepare("insert into accountoffsets
 				(borrowernumber, accountno, offsetaccount,  offsetamount)
@@ -1283,7 +1283,7 @@ sub currentissues {
 	items.biblionumber=biblio.biblionumber and
 	items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null
 	$crit order by issues.date_due");
-	$sth->execute($borrownumber);
+	$sth->execute($borrowernumber);
 	while (my $data = $sth->fetchrow_hashref) {
 		# FIXME - The Dewey code is a string, not a number.
 		$data->{'dewey'}=~s/0*$//;
