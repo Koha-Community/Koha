@@ -90,7 +90,10 @@ sub checkdigit {
 	#different from the one where the checkdigit on the number is
 	#not correct
 
-	unless ( $nounique ) 
+	if (C4::Context->preference("checkdigit") eq "none") {
+		return 1;
+	}
+	unless ( $nounique )
 	{
 		my $dbh=C4::Context->dbh;
 		my $query=qq{SELECT * FROM borrowers WHERE cardnumber="$infl"};
@@ -103,28 +106,24 @@ sub checkdigit {
 		}
 	}
 
-	if (C4::Context->preference("checkdigit") eq "none") {
-		return 1;
-	} else {
-		my @weightings = (8,4,6,3,5,2,1);
-		my $sum;
-		my $i = 1;
-		my $valid = 0;
+	my @weightings = (8,4,6,3,5,2,1);
+	my $sum;
+	my $i = 1;
+	my $valid = 0;
 
-		foreach $i (1..7) {
-			my $temp1 = $weightings[$i-1];
-			my $temp2 = substr($infl,$i,1);
-			$sum += $temp1 * $temp2;
-		}
-		my $rem = ($sum%11);
-		if ($rem == 10) {
-		$rem = "X";
-		}
-		if ($rem eq substr($infl,8,1)) {
-			$valid = 1;
-		}
-		return $valid;
+	foreach $i (1..7) {
+		my $temp1 = $weightings[$i-1];
+		my $temp2 = substr($infl,$i,1);
+		$sum += $temp1 * $temp2;
 	}
+	my $rem = ($sum%11);
+	if ($rem == 10) {
+	$rem = "X";
+	}
+	if ($rem eq substr($infl,8,1)) {
+		$valid = 1;
+	}
+	return $valid;
 } # sub checkdigit
 
 =item checkvalidisbn
