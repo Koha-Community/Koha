@@ -61,6 +61,13 @@ my $menu = $input->param('menu');
 if ($input->param('z3950queue')) {
 	AcceptZ3950Queue($dbh,$input);
 } 
+if ($input->param('clearsearchlist')) {
+    my $sth=$dbh->prepare("delete from z3950queue");
+    $sth->execute;
+    my $sth=$dbh->prepare("delete from z3950results");
+    $sth->execute;
+}
+
 
 if ($input->param('uploadmarc')) {
 	AcceptMarcUpload($dbh,$input)
@@ -635,7 +642,9 @@ sub z3950menu {
 		$type=$term</a> <font size=-1>Pending</font><br>\n";
 	} # if results done
     } # while queries
-    print "</ul> </td>\n";
+    print "</ul>\n";
+    print "<hr>\n<a href=marcimport.pl?menu=z3950&clearsearchlist=1>Clear Search List</a>\n";
+    print "</td>\n";
     # End of query listing
 
     #------------------------------
@@ -1154,6 +1163,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.37  2003/01/17 17:21:47  tonnesen
+# Adds ability to clear the Z39.50 search query list.
+#
 # Revision 1.6.2.36  2002/12/04 17:21:04  tonnesen
 # Added a link to delete uploaded marc records.
 #
