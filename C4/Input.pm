@@ -47,23 +47,23 @@ number or ISBN is valid.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&checkflds &checkdigit &checkvalidisbn
+	&checkdigit &checkvalidisbn
 );
 
 # FIXME - This is never used.
-sub checkflds {
-  my ($env,$reqflds,$data) = @_;
-  my $numrflds = @$reqflds;
-  my @probarr;
-  my $i = 0;
-  while ($i < $numrflds) {
-    if ($data->{@$reqflds[$i]} eq "") {
-      push(@probarr, @$reqflds[$i]);
-    }
-    $i++
-  }
-  return (\@probarr);
-}
+#sub checkflds {
+#  my ($env,$reqflds,$data) = @_;
+#  my $numrflds = @$reqflds;
+#  my @probarr;
+#  my $i = 0;
+#  while ($i < $numrflds) {
+#    if ($data->{@$reqflds[$i]} eq "") {
+#      push(@probarr, @$reqflds[$i]);
+#    }
+#    $i++
+#  }
+#  return (\@probarr);
+#}
 
 =item checkdigit
 
@@ -85,14 +85,12 @@ sub checkdigit {
   my $i = 1;
   my $valid = 0;
   #  print $infl."<br>";
-  # FIXME - for ($i = 1; $i < 8; $i++)
-  # or      foreach $i (1..7)
-  while ($i <8) {
+
+  foreach $i (1..7) {
     my $temp1 = $weightings[$i-1];
     my $temp2 = substr($infl,$i,1);
     $sum += $temp1 * $temp2;
 #    print "$sum $temp1 $temp2<br>";
-    $i++;
   }
   my $rem = ($sum%11);
   if ($rem == 10) {
@@ -127,25 +125,24 @@ sub checkvalidisbn {
         $q=~s/x$/X/g;           # upshift lower case X
         $q=~s/[^X\d]//g;
         $q=~s/X.//g;
-        if (length($q)==10) {
-            my $checksum=substr($q,9,1);
-            my $isbn=substr($q,0,9);
-            my $i;
-            my $c=0;
-            for ($i=0; $i<9; $i++) {
-                my $digit=substr($q,$i,1);
-                $c+=$digit*(10-$i);
-            }
-	    $c %= 11;
-            ($c==10) && ($c='X');
-            # FIXME - $isbngood = $c eq $checksum;
-            $isbngood = $c eq $checksum;
-        } else {
-            # FIXME - Put "return 0 if $length($q) != 10" near the
-            # top, so we don't have to indent the rest of the function
-            # as much.
-            $isbngood=0;
-        } # if length good
+        
+	#return 0 if $q is not ten digits long
+	if ($length($q)!=10) {
+		return 0;
+	}
+	
+	#If we get to here, length($q) must be 10
+        my $checksum=substr($q,9,1);
+        my $isbn=substr($q,0,9);
+        my $i;
+        my $c=0;
+        for ($i=0; $i<9; $i++) {
+            my $digit=substr($q,$i,1);
+            $c+=$digit*(10-$i);
+        }
+	$c %= 11;
+        ($c==10) && ($c='X');
+        $isbngood = $c eq $checksum;
 
         return $isbngood;
 
