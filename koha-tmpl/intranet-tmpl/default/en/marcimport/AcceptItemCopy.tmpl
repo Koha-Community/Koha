@@ -1,15 +1,15 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <center>
-<!-- TMPL_IF name="BARCODE_EXISTS" -->
-	<font color=red>Barcode <b><!-- TMPL_VAR name="barcode" --></b> has already been assigned.</font><p>
+<!-- TMPL_IF NAME="BARCODE_EXISTS" -->
+	<font color="red">Barcode <b><!-- TMPL_VAR NAME="barcode" --></b> has already been assigned.</font><p>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="ITEM_ERROR" -->
-	<font color=red>Error : <!-- TMPL_VAR name="error" --></font><p>
+<!-- TMPL_IF NAME="ITEM_ERROR" -->
+	<font color="red">Error : <!-- TMPL_VAR NAME="error" --></font><p>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="ITEM_CREATED" -->
-	<table border=1 align=center cellpadding=10>
-		<tr><td bgcolor=yellow>
-			Item added with barcode <!-- TMPL_VAR name="barcode" -->
+<!-- TMPL_IF NAME="ITEM_CREATED" -->
+	<table border="1" align="center" cellpadding="10">
+		<tr><td bgcolor="yellow">
+			Item added with barcode <!-- TMPL_VAR NAME="barcode" -->
 		</td></tr>
 	</table>
 <!-- /TMPL_IF -->
@@ -18,10 +18,10 @@
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Z39.50 Search</a>
+<li><a href="$ENV{'SCRIPT_NAME'}?menu=z3950">Z39.50 Search</a>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Upload MARC Records</a>
+<li><a href="$ENV{'SCRIPT_NAME'}?menu=uploadmarc">Upload MARC Records</a>
 </ul>
 <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
