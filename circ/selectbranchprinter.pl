@@ -132,7 +132,11 @@ $template->param(headerbackgroundcolor => $headerbackgroundcolor,
 							branchloop => \@branchloop
 							);
 
-output_html_with_http_headers $query, $cookie, $template->output;
+my $branchcookie=$query->cookie(-name => 'branch', -value => "$branch", -expires => '+1y');
+my $printercookie=$query->cookie(-name => 'printer', -value => "$printer", -expires => '+1y');
+
+my $cookies=[$cookie,$branchcookie, $printercookie]; 
+output_html_with_http_headers $query, $cookies, $template->output;
 
 
 # Local Variables:
