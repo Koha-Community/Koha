@@ -94,4 +94,21 @@ data recorded
 </form>
 </TMPL_IF>
 
+<TMPL_IF name="delete_confirm">
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top bgcolor=#99cc33><td background="/images/background-mem.gif"><b>Book fund</b></td><td background="/images/background-mem.gif"><b><TMPL_VAR name="bookfundid"></b></td></tr>
+<form action='<TMPL_VAR name="action">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<TMPL_VAR name="bookfundid">'>
+<tr><td>Name</td><td><TMPL_VAR name="bookfundname"></td></tr><tr><td>Group</td><td><TMPL_VAR name="bookfundgroup"></td></tr>
+<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
+<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="action">' method=post><input type=submit value=NO></form></td></tr><br clear=all>
+<p> &nbsp; </p>
+</TMPL_IF>
+
+<TMPL_IF name="delete_confirmed">
+data deleted
+<form action='<TMPL_VAR name="action">' method=post>
+<input type=submit value=OK>
+"</form>"
+</TMPL_IF>
+
 <TMPL_INCLUDE NAME="cat-bottom.inc">
