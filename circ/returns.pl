@@ -210,8 +210,6 @@ if ($messages->{'ResFound'}) {
     my ($iteminfo) = getiteminformation(\%env, 0, $barcode);
 
     if ($res->{'ResFound'} eq "Waiting") {
-# transfer book
-	my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
     Item $iteminfo->{'title'} ($iteminfo->{'author'}) <br>

@@ -527,7 +527,7 @@ sub returnbook {
     }
     ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 # transfer book
-    my ($transfered, $mess, $item) = transferbook($branch, $barcode);
+    my ($transfered, $mess, $item) = transferbook($branch, $barcode, 1);
     if ($transfered) {
 	$messages->{'WasTransfered'};
     }
