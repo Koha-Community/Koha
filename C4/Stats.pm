@@ -53,14 +53,16 @@ my $priv_func = sub {
 
 sub UpdateStats {
   #module to insert stats data into stats table
-  my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype)=@_;
+  my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype,$borrowernumber)=@_;
   my $dbh=C4Connect();
   my $branch=$env->{'branchcode'};
   my $user = $env->{'usercode'};
+  print $borrowernumber;
   my $sth=$dbh->prepare("Insert into statistics
-     (datetime,branch,type,usercode,value,other,itemnumber,itemtype) 
-     values (now(),'$branch',
-     '$type','$user','$amount','$other','$itemnum','$itemtype')");
+  (datetime,branch,type,usercode,value,
+  other,itemnumber,itemtype,borrowernumber) 
+  values (now(),'$branch','$type','$user','$amount',
+  '$other','$itemnum','$itemtype','$borrowernumber')");
   $sth->execute;
   $sth->finish;
   $dbh->disconnect;
@@ -145,14 +147,16 @@ sub TotalOwing{
 sub TotalPaid {
   my ($time)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from accountlines,borrowers where accounttype = 'Pay' 
-  and accountlines.borrowernumber = borrowers.borrowernumber";
+  my $query="Select * from statistics,borrowers
+  where statistics.borrowernumber= borrowers.borrowernumber
+  and (statistics.type='payment' or statistics.type='writeoff')";
   if ($time eq 'today'){
-    $query=$query." and date = now()";
+    $query=$query." and datetime = now()";
   } else {
-    $query.=" and date='$time'";
+    $query.=" and datetime > '$time'";
   }
 #  $query.=" order by timestamp";
+  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my @results;
@@ -172,18 +176,18 @@ sub getcharges{
   my $dbh=C4Connect;
   my $timestamp2=$timestamp-1;
   my $query="Select * from accountlines where borrowernumber=$borrowerno
-  and timestamp <= '$timestamp' and accounttype <> 'Pay' and
+  and timestamp = '$timestamp' and accounttype <> 'Pay' and
   accounttype <> 'W'";
   my $sth=$dbh->prepare($query);
-#  print $query,"<br>";
+  print $query,"<br>";
   $sth->execute;
   my $i=0;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
-    if ($data->{'timestamp'} == $timestamp){
+#    if ($data->{'timestamp'} == $timestamp){
       $results[$i]=$data;
       $i++;
-    }
+#    }
   }
   $dbh->disconnect;
   return(@results);

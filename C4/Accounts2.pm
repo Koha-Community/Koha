@@ -100,7 +100,7 @@ sub recordpayment{
   my $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
-  UpdateStats($env,'branch','payment',$data);
+  UpdateStats($env,'branch','payment',$data,'','','',$bornumber);
   $sth->finish;
   $dbh->disconnect;
 }
@@ -133,7 +133,7 @@ sub makepayment{
   my $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
-  UpdateStats($env,$user,'payment',$amount);
+  UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
   $sth->finish;
   $dbh->disconnect;
 }
