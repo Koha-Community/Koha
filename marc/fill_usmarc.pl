@@ -30,14 +30,14 @@ my $tag;
 my $subfield;
 $dbh->do("delete from marc_tag_structure");
 $dbh->do("delete from marc_subfield_structure");
-my $reqtag=$dbh->prepare("insert into marc_tag_structure (tagfield,liblibrarian,repeatable) values (?,?,?)");
-my $reqsubfield=$dbh->prepare("insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,repeatable) values (?,?,?,?)");
+my $reqtag=$dbh->prepare("insert into marc_tag_structure (tagfield,liblibrarian,libopac,repeatable) values (?,?,?,?)");
+my $reqsubfield=$dbh->prepare("insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable) values (?,?,?,?,?)");
 my $description;
 foreach $tag (sort keys %$fields) {
 	$fields->{$tag}->{"name"}  =~ s/\(R\)//g;
 	$fields->{$tag}->{"name"}  =~ s/\(NR\)//g;
 	$fields->{$tag}->{"name"}  =~ s/\<a h.*\<\/a>//g;
-	$reqtag->execute($tag,$fields->{$tag}->{"name"},$fields->{$tag}->{"repeating"});
+	$reqtag->execute($tag,$fields->{$tag}->{"name"},$fields->{$tag}->{"name"},$fields->{$tag}->{"repeating"});
 	foreach $subfield (sort keys %{$fields->{$tag}->{"subfields"}}) {
 	    if ($fields->{$tag}->{"subfields"}->{$subfield}->{"description"}) {
 		$description=$fields->{$tag}->{"subfields"}->{$subfield}->{"description"};
@@ -50,6 +50,7 @@ foreach $tag (sort keys %$fields) {
 	 	$reqsubfield->execute(
 				  $tag,
 				  $subfield,
+				  $description?$description:"Unknown",
 				  $description?$description:"Unknown",
 				  $fields->{$tag}->{"subfields"}->{$subfield}->{"repeating"}
 				  );
