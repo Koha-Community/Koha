@@ -70,7 +70,9 @@ if ($do_it) {
 		output_html_with_http_headers $input, $cookie, $template->output;
 		exit(1);
 	} else {
-		print $input->header(-type => 'application/vnd.sun.xml.calc', -name=>"$basename.csv" );
+		print $input->header(-type => 'application/vnd.sun.xml.calc',
+							 -name=>"$basename.csv",
+							 -attachment=>"$basename.csv");
 		my $cols = @$results[0]->{loopcol};
 		my $lines = @$results[0]->{looprow};
 		my $sep;
@@ -79,7 +81,7 @@ if ($do_it) {
 		foreach my $col ( @$cols ) {
 			print $col->{coltitle}.$sep;
 		}
-		print "\n";
+		print "Total\n";
 		foreach my $line ( @$lines ) {
 			my $x = $line->{loopcell};
 			print $line->{rowtitle}.$sep;

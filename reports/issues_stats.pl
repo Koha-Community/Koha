@@ -76,11 +76,9 @@ if ($do_it) {
 		exit(1);
 	} else {
 # Printing to a csv file
-		print $input->header(-type => 'application/vnd.ms-excel',
-		-disposition=>'inline',
-#		-title=>"$basename.csv",
-#		-file=>"$basename.csv",
-		-filename=>"$basename.csv" );
+		print $input->header(-type => 'application/vnd.sun.xml.calc',
+			-attachment=>"$basename.csv",
+			-filename=>"$basename.csv" );
 		my $cols = @$results[0]->{loopcol};
 		my $lines = @$results[0]->{looprow};
 		my $sep;
@@ -91,7 +89,7 @@ if ($do_it) {
 		foreach my $col ( @$cols ) {
 			print $col->{coltitle}.$sep;
 		}
-		print "\n";
+		print "Total\n";
 # Table
 		foreach my $line ( @$lines ) {
 			my $x = $line->{loopcell};
@@ -270,10 +268,10 @@ sub calculate {
 			push @loopfilter, \%cell;
 		}
 	}
-	push @loopfilter,{crit=>"Issue|Return : ",filter=>$type};
-	push @loopfilter,{crit=>"Display by :",filter=>$dsp} if ($dsp);
-	push @loopfilter,{crit=>"Select Day :",filter=>$daysel} if ($daysel);
-	push @loopfilter,{crit=>"Select Month :",filter=>$daysel} if ($monthsel);
+	push @loopfilter,{crit=>"Issue|Return ",filter=>$type};
+	push @loopfilter,{crit=>"Display by ",filter=>$dsp} if ($dsp);
+	push @loopfilter,{crit=>"Select Day ",filter=>$daysel} if ($daysel);
+	push @loopfilter,{crit=>"Select Month ",filter=>$daysel} if ($monthsel);
 	
 	
 	my @linefilter;
