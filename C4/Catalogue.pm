@@ -12,6 +12,7 @@ package C4::Catalogue; #asummes C4/Acquisitions.pm
 use strict;
 require Exporter;
 use C4::Database;
+use MARC::Record;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -20,9 +21,7 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&newBiblio &newBiblioItem &newItem &updateBiblio &updateBiblioItem
-	     &updateItem &changeSubfield &addSubfield &findSubfield 
-	     &addMarcBiblio &nextsubfieldid
-
+	     &updateItem 
 	     &getorders &bookseller &breakdown &basket &newbasket &bookfunds
 	     &ordersearch &newbiblio &newbiblioitem &newsubject &newsubtitle &neworder
 	     &newordernum &modbiblio &modorder &getsingleorder &invoice &receiveorder
@@ -33,7 +32,11 @@ $VERSION = 0.01;
 	     &updatecost &checkitems &modnote &getitemtypes &getbiblio
 	     &getbiblioitembybiblionumber
 	     &getbiblioitem &getitemsbybiblioitem &isbnsearch
-	     &websitesearch &addwebsite &updatewebsite &deletewebsite);
+	     &websitesearch &addwebsite &updatewebsite &deletewebsite
+
+	     &MARCchangeSubfield &MARCaddSubfield &MARCfindSubfield 
+	     &MARCaddMarcBiblio &MARCnextsubfieldid &MARCkoha2marc
+);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -118,11 +121,11 @@ sub newBiblio {
 }
 
 
-sub changeSubfield {
+sub MARCchangeSubfield {
 # Subroutine changes a subfield value given a subfieldid.
     my ( $subfieldid, $subfieldvalue )=@_;
 
-    my $dbh=&C4Connect;
+#    my $dbh=&C4Connect;
     $dbh->do("lock tables marc_blob_subfield WRITE,marc_subfield_table WRITE");
     my $sth1=$dbh->prepare("select valuebloblink from marc_subfield_table where subfieldid=?");
     $sth1->execute($subfieldid);
@@ -155,12 +158,13 @@ sub changeSubfield {
     return($subfieldid, $subfieldvalue);
 }
 
-sub findSubfield {
+sub MARCfindSubfield {
+# returns a subfields number given a bibid/tad/subfield values
     my ($bibid,$tag,$subfieldcode,$subfieldvalue,$subfieldorder) = @_;
     my $resultcounter=0;
     my $subfieldid;
     my $lastsubfieldid;
-    my $dbh=&C4Connect;
+#    my $dbh=&C4Connect;
     my $query="select subfieldid from marc_subfield_table where bibid=? and tag=? and subfieldcode=?";
     if ($subfieldvalue) {
 	$query .= " and subfieldvalue=".$dbh->quote($subfieldvalue);
@@ -185,18 +189,19 @@ sub findSubfield {
     }
 }
 
-sub addSubfield {
-# Add a new subfield to a tag.
+sub MARCaddSubfield {
+# Add a new subfield to a tag into the DB.
     my $bibid=shift;
     my $tagid=shift;
+    my $indicator=shift;
     my $tagorder=shift;
     my $subfieldcode=shift;
     my $subfieldorder=shift;
     my $subfieldvalue=shift;
 
-    my $dbh=&C4Connect;
+#    my $dbh=&C4Connect;
     unless ($subfieldorder) {
-	my $sth=$dbh->prepare("select max(subfieldorder) from marc_subfield_table where tagid=$tagid");
+	my $sth=$dbh->prepare("select max(subfieldorder) from marc_subfield_table where tag=$tagid");
 	$sth->execute;
 	if ($sth->rows) {
 	    ($subfieldorder) = $sth->fetchrow;
@@ -212,7 +217,7 @@ sub addSubfield {
 	$sth=$dbh->prepare("select max(blobidlink)from marc_blob_subfield");
 	$sth->execute;
 	my ($res)=$sth->fetchrow;
-	my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tagid,tagorder,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?)");
 	$sth->execute($bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$res);
 	$dbh->do("unlock tables");
     } else {
@@ -221,45 +226,43 @@ sub addSubfield {
     }
 }
 
-sub addMarcBiblio {
-# pass the marcperlstructure to this function, and it will create the records in the marc tables
-    my ($marcstructure) = @_;
-    my $dbh=C4Connect;
-    my $tag;
-    my $tagorder;
-    my $subfield;
-    my $subfieldorder;
+sub MARCaddMarcBiblio {
+# pass the MARC::Record to this function, and it will create the records in the marc tables
+    my ($record) = @_;
+    my @fields=$record->fields();
+#    my $dbh=C4Connect;
+    my $bibid;
     # adding main table, and retrieving bibid
     $dbh->do("lock tables marc_biblio WRITE");
-    my $sth=$dbh->prepare("insert into marc_biblio (datecreated,origincode) values (now(),?)");
-    $sth->execute($marcstructure->{origincode});
+    my $sth=$dbh->prepare("insert into marc_biblio (datecreated) values (now())");
+    $sth->execute;
     $sth=$dbh->prepare("select max(bibid) from marc_biblio");
     $sth->execute;
-    ($marcstructure->{bibid})=$sth->fetchrow;
-    print "BIBID :::".$marcstructure->{bibid}."\n";
+    ($bibid)=$sth->fetchrow;
+#    print "BIBID :::".$marcstructure->{bibid}."\n";
     $sth->finish;
     $dbh->do("unlock tables");
+    my $fieldcount=0;
     # now, add subfields...
-    foreach $tag (keys %{$marcstructure->{tags}}) {
-	foreach $tagorder (keys %{$marcstructure->{tags}->{$tag}}) { 
-	    foreach $subfield (keys %{$marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}}) {
-		foreach $subfieldorder (keys %{$marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}->{$subfield}}) {
-		    &addSubfield($marcstructure->{bibid},
-				 $tag,
-				 $tagorder,
-				 $subfield,
-				 $subfieldorder,
-				 $marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}->{$subfield}->{$subfieldorder}
+    foreach my $field (@fields) {
+	my @subfields=$field->subfields();
+	$fieldcount++;
+	foreach my $subfieldcount (0..$#subfields) {
+	    print $field->tag().":".$field->indicator(1).$field->indicator(2).":".$subfields[$subfieldcount][0].":".$subfields[$subfieldcount][1]."\n";
+		    &MARCaddSubfield($bibid,
+				 $field->tag(),
+				 $field->indicator(1).$field->indicator(2),
+				 $fieldcount,
+				 $subfields[$subfieldcount][0],
+				 $subfieldcount,
+				 $subfields[$subfieldcount][1]
 				 );
-#		    print "$tag / $tagorder / $subfield / $subfieldorder / ".$marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}->{$subfield}->{$subfieldorder}."\n";
-		}
-	    }
 	}
     }
 }
 
-sub buildPerlmarcstructure {
-# this function builds perlmarcstructure from the old koha-DB fields
+sub MARCkoha2marc {
+# this function builds MARC::Record from the old koha-DB fields
     my ($biblionumber,$author,$title,$unititle,$notes,$abstract,
 	$serial,$seriestitle,$copyrightdate,$biblioitemnumber,$volume,$number,
 	$classification,$itemtype,$isbn,$issn,
@@ -267,32 +270,58 @@ sub buildPerlmarcstructure {
 	$volumedate,$illus,$pages,$notes,
 	$size,$place,$lccn) = @_;
 
-    my $tagfield;
-    my $tagsubfield;
-    my $perlmarcstructure={};
-    my $i=0;
-    my $dbh=&C4Connect;
+    my $record = MARC::Record->new();
+#    my $dbh=&C4Connect;
     my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
-    $sth->execute("biblionumber");
-    if (($tagfield,$tagsubfield)=$sth->fetchrow) {
-	$i=nextsubfieldid($perlmarcstructure->{tags}->{$tagfield}->{1}->{subfields}->{$tagsubfield});
-	$perlmarcstructure->{tags}->{$i}->{tag}=$tagfield;
-	$perlmarcstructure->{tags}->{$i}->{tagorder}=1;
-	$perlmarcstructure->{tags}->{$i}->{indicator}='##';
-    }
+    &MARCkoha2marcOnefield($sth,$record,"biblio.author",$author);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.title",$title);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.unititle",$unititle);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.notes",$notes);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.abstract",$abstract);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.serial",$serial);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.seriestitle",$seriestitle);
+    &MARCkoha2marcOnefield($sth,$record,"biblio.copyrightdate",$copyrightdate);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.biblionumber",$biblionumber);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.biblioitemnumber",$biblioitemnumber);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.volume",$volume);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.number",$number);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.classification",$classification);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.itemtype",$itemtype);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.isbn",$isbn);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.issn",$issn);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.dewey",$dewey);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.subclass",$subclass);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.publicationyear",$publicationyear);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.publishercode",$publishercode);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.volumedate",$volumedate);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.illus",$illus);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.pages",$pages);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.notes",$notes);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.size",$size);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.place",$place);
+    &MARCkoha2marcOnefield($sth,$record,"biblioitems.lccn",$lccn);
+    print "RECORD : ".$record->as_formatted()."\n";
+    return $record;
 }
 
-sub nextsubfieldid {
-    my $subfieldhash=shift;
-    my $maxsubfieldnumber=0;
-    my $subfield;
-    my $number;
-    foreach $subfield (keys %$subfieldhash) {
-	foreach $number (keys %{$subfieldhash->{$subfield}}) {
-	    ($number>$maxsubfieldnumber) && ($maxsubfieldnumber=$number);
+sub MARCkoha2marcOnefield {
+    my ($sth,$record,$kohafieldname,$value)=@_;
+    my $tagfield;
+    my $tagsubfield;
+    $sth->execute($kohafieldname);
+    if (($tagfield,$tagsubfield)=$sth->fetchrow) {
+	if ($record->field($tagfield)) {
+	    my $tag =$record->field($tagfield);
+	    if ($tag) {
+		$tag->add_subfields($tagsubfield,$value);
+		$record->delete_field($tag);
+		$record->add_fields($tag);
+	    }
+	} else {
+	    $record->add_fields($tagfield," "," ",$tagsubfield => $value);
 	}
     }
-    return $maxsubfieldnumber+1;
+    return $record;
 }
 
 sub updateBiblio {
@@ -513,55 +542,6 @@ sub logchange {
 	my $new=shift;
 	print STDERR "MARC: $type $Record_ID $tag $mark $subfield_ID $original $new\n";
     }
-}
-
-sub addTag {
-# Subroutine to add a tag to an existing MARC Record.  If a new linkage id is
-# desired, set $env->{'linkage'} to 1.  If an existing linkage id should be
-# set, set $env->{'linkid'} to the link number.
-    my ($env, $Record_ID, $tag, $Indicator1, $Indicator2, $subfields) = @_;
-    my $dbh=&C4Connect;  
-    ($Indicator1) || ($Indicator1=' ');
-    ($Indicator2) || ($Indicator2=' ');
-    my $firstdigit=substr($tag,0,1);
-    my $Subfield_ID;
-    foreach (sort keys %$subfields) {
-	my $Subfield_Mark=$subfields->{$_}->{'Subfield_Mark'};
-	my $Subfield_Value=$subfields->{$_}->{'Subfield_Value'};
-	my $q_Subfield_Value=$dbh->quote($Subfield_Value);
-	if ($Subfield_ID) {
-	    my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_ID, Subfield_Mark, Subfield_Value) values ($Subfield_ID, '$Subfield_Mark', $q_Subfield_Value)");
-	    $sth->execute;
-	} else {
-	    my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_Mark, Subfield_Value) values ('$Subfield_Mark', $q_Subfield_Value)");
-	    $sth->execute;
-	    my $Subfield_Key=$dbh->{'mysql_insertid'};
-	    $Subfield_ID=$Subfield_Key;
-	    $sth=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_ID=$Subfield_ID where Subfield_Key=$Subfield_Key");
-	    $sth->execute;
-	}
-    }
-    if (my $linkid=$env->{'linkid'}) {
-	$env->{'linkage'}=0;
-	my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_ID, Subfield_Mark, Subfield_Value) values ($Subfield_ID, '8', '$linkid')");
-	$sth->execute;
-    }
-    my $sth=$dbh->prepare("insert into $firstdigit\XX_Tag_Table (Indicator1, Indicator2, Tag, Subfield_ID) values ('$Indicator1', '$Indicator2', '$tag', $Subfield_ID)");
-    $sth->execute;
-    my $Tag_Key=$dbh->{'mysql_insertid'};
-    my $Tag_ID=$Tag_Key;
-    $sth=$dbh->prepare("update $firstdigit\XX_Tag_Table set Tag_ID=$Tag_ID where Tag_Key=$Tag_Key");
-    $sth->execute;
-    $sth=$dbh->prepare("insert into Bib_Table (Record_ID, Tag_$firstdigit\XX_ID) values ($Record_ID, $Tag_ID)");
-    $sth->execute;
-    if ($env->{'linkage'}) {
-	my $sth=$dbh->prepare("insert into $firstdigit\XX_Subfield_Table (Subfield_ID, Subfield_Mark, Subfield_Value) values ($Subfield_ID, '8', '$Tag_ID')");
-	$sth->execute;
-	
-    }
-    $sth->finish;
-    $dbh->disconnect;
-    return ($env, $Tag_ID);
 }
 
 sub newBiblioItem {
