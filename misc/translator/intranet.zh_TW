@@ -16,7 +16,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha INTRANET 2.0.0RC4\n"
-"POT-Creation-Date: 2004-02-28 23:35-0500\n"
+"POT-Creation-Date: 2004-02-29 19:08-0500\n"
 "PO-Revision-Date: 2004-02-23 17:20-0500\n"
 "Last-Translator: Ambrose Li <acli@ada.dhs.org>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -786,6 +786,10 @@ msgstr "(%s, %s)"
 msgid "(Our Reference: %s, #%s, authorised by: %s)"
 msgstr "(檔號：%s, #%s，負責人：%s)"
 
+#  TODO GST 應只譯「稅項」，不直譯
+#  NOTE 理由一：在加拿大 GST 稱「貨勞稅」，在澳洲卻稱「貨品及服務稅」，完全不同
+#  NOTE 理由二：在加拿大，買書除了要付貨勞稅，還要付省銷售稅 (PST)
+#  NOTE 　　　　只計貨勞稅而不理會省銷售稅亦影響成本，不合情理
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:132
 msgid "(ex GST, inc discount)"
 msgstr "(不連貨勞稅，連折扣)"
@@ -1059,7 +1063,7 @@ msgstr "<a1>返回</a>讀者記錄"
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/reports-home.tmpl:7
 #, c-format
 msgid "<a1>Till Reconciliation:</a> Daily Report (today)"
-msgstr "<a1>對帳表</a>每日報告 (今天)"
+msgstr "<a1>對帳表：</a>每日報告 (今天)"
 
 #  NOTE 譯文更動 by Arthur
 #  NOTE 譯文更動 by Ambrose
@@ -2158,7 +2162,8 @@ msgstr "Al Banks"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/checkmarc.tmpl:32
 msgid "All item fields are in the same tag and in item tab"
-msgstr "圖書資料 (item) 表的各欄位均連結至同一機讀格式欄，並在「圖書資料」格顯示"
+msgstr ""
+"圖書資料 (item) 表的各欄位均連結至同一機讀格式欄，並在「圖書資料」格顯示"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:58
 msgid "Allow library staff to see my reading record"
@@ -3915,7 +3920,7 @@ msgstr "借書證號碼無效。"
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/reports-home.tmpl:9
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:2
 msgid "Inventory/Stocktaking"
-msgstr ""
+msgstr "盤點圖書館藏"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:147
 msgid "Invoice Item Price Includes GST"
@@ -5183,8 +5188,7 @@ msgstr "其他"
 msgid ""
 "Of course, if the ISBN already exists in the active DB, the biblio will be "
 "ignored."
-msgstr ""
-"當然，如果該個國際標準書號已在正式的資料庫內，書目將被忽略。"
+msgstr "當然，如果該個國際標準書號已在正式的資料庫內，書目將被忽略。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:159
 msgid "On Request - no renewals"
@@ -5334,12 +5338,6 @@ msgstr "Perl版本："
 msgid "Personal Authorities builder"
 msgstr ""
 
-#. %1$s: TMPL_VAR name=branchphone
-#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:110
-#, c-format
-msgid "Ph: %s"
-msgstr "電話：%s"
-
 #. %1$s: TMPL_VAR name=phone
 #. %2$s: TMPL_VAR name=fax
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket.tmpl:5
@@ -5391,8 +5389,10 @@ msgstr "電話 (住宅)"
 msgid "Phone home: %s"
 msgstr "電話 (住宅)：%s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=altphone
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:37
+#: ../../koha-tmpl/intranet-tmpl/default/en/parameters/branches.tmpl:110
 #, c-format
 msgid "Phone: %s"
 msgstr "電話：%s"
@@ -6482,7 +6482,8 @@ msgid ""
 "Then select a previous shopping basket or create a new one. Note the basket "
 "will be attached to the user you've logged to"
 msgstr ""
-"然後選擇一個已有的購物籃，或者新增一個。注意：新增的購物籃會連結到您目前的登入身份。"
+"然後選擇一個已有的購物籃，或者新增一個。注意：新增的購物籃會連結到您目前的登"
+"入身份。"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/includes/parameters-top.inc:79
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/admin-home.tmpl:45
@@ -6639,8 +6640,8 @@ msgid ""
 "To order an item you need to establish whether a biblio already exists for "
 "it, and either add an item, or set up a new biblio then add the item."
 msgstr ""
-"為圖書資料開訂單，您必須先行在搜尋該項圖書資料的書目。如果該該項圖書資料已有書目，"
-"便可直接新增圖書資料至該書目；否則便要先新增一個書，才可新增圖書資料。"
+"為圖書資料開訂單，您必須先行在搜尋該項圖書資料的書目。如果該該項圖書資料已有"
+"書目，便可直接新增圖書資料至該書目；否則便要先新增一個書，才可新增圖書資料。"
 
 #  NOTE If donors are also suppliers, then「供應商」is not really a「商」:-/
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acqui-home.tmpl:107
@@ -7016,8 +7017,8 @@ msgstr "您查詢 %s"
 #. %1$s: TMPL_VAR name=searchfield
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbookfund.tmpl:7
 #: ../../koha-tmpl/intranet-tmpl/default/en/parameters/aqbudget.tmpl:7
-#, c-format
-msgid "You Searched for <b>%s<b>"
+#, fuzzy, c-format
+msgid "You Searched for <b>%s</b>"
 msgstr "您查詢 <b>%s</b>"
 
 # FIXME
@@ -7639,3 +7640,6 @@ msgstr "你在此：<a1>借出及還書</a>"
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio.tmpl:37
 msgid "z3950 search"
 msgstr "z3950查詢"
+
+#~ msgid "Ph: %s"
+#~ msgstr "電話：%s"
