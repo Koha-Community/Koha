@@ -205,7 +205,11 @@ sub issuebook {
 	    last SWITCH;
 	}
 	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
-	if ($amount>5) {
+	if ($amount>5 && $patroninformation->{'categorycode'} ne 'L' &&
+$patroninformation->{'categorycode'} ne 'W' &&
+$patroninformation->{'categorycode'} ne 'I'
+&& $patroninformation->{'categorycode'} ne 'B' &&
+$patroninformation->{'categorycode'} ne 'P') {
 	    $rejected=sprintf "Patron owes \$%.02f.", $amount;
 	    last SWITCH;
 	}
@@ -340,6 +344,13 @@ sub issuebook {
     return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
 }
 
+sub updateitemlost{
+  my ($dbh,$itemno)=@_;
+  my $query="update items set itemlost=0 where itemnumber=$itemno";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+}
 
 sub returnbook {
     my ($env, $barcode) = @_;
@@ -352,6 +363,7 @@ sub returnbook {
 	$sth->execute;
 	my ($currentborrower) = currentborrower($env, $iteminformation->{'itemnumber'}, $dbh);
 	updatelastseen($env,$dbh,$iteminformation->{'itemnumber'});
+	updateitemlost($dbh,$iteminformation->{'itemnumber'});
 	if ($currentborrower) {
 	    ($borrower)=getpatroninformation($env,$currentborrower,0);
 	    my @datearr = localtime(time);
@@ -375,8 +387,14 @@ sub returnbook {
 		$overduecharge=$data->{'amountoutstanding'};
 	    }
 	    $sth->finish;
+	 }
+	 if ($iteminformation->{'itemlost'} eq '1'){
 	    # check for charge made for lost book
-	    $sth=$dbh->prepare("select * from accountlines where (borrowernumber=$borrower->{'borrowernumber'}) and (itemnumber = $iteminformation->{'itemnumber'}) and (accounttype='L')");
+	    my $query="select * from accountlines where (itemnumber =
+	    $iteminformation->{'itemnumber'}) and (accounttype='L' or accounttype='Rep') 
+	    order by date desc";
+#	    print $query;
+ 	    $sth=$dbh->prepare($query);
 	    $sth->execute;
 	    if (my $data = $sth->fetchrow_hashref) {
 		# writeoff this amount
@@ -384,6 +402,7 @@ sub returnbook {
 		my $amount = $data->{'amount'};
 		my $acctno = $data->{'accountno'};
 		my $amountleft;
+#		print $amount;
 		if ($data->{'amountoutstanding'} == $amount) {
 		    $offset = $data->{'amount'};
 		    $amountleft = 0;
@@ -393,18 +412,21 @@ sub returnbook {
 		}
 		my $uquery = "update accountlines
 		  set accounttype = 'LR',amountoutstanding='0'
-		  where (borrowernumber = $borrower->{'borrowernumber'})
+		  where (borrowernumber = $data->{'borrowernumber'})
 		  and (itemnumber = $iteminformation->{'itemnumber'})
 		  and (accountno = '$acctno') ";
+#		print $uquery;
 		my $usth = $dbh->prepare($uquery);
 		$usth->execute();
 		$usth->finish;
-		my $nextaccntno = C4::Accounts::getnextacctno($env,$borrower->{'borrowernumber'},$dbh);
+		my $nextaccntno = getnextacctno($env,$data->{'borrowernumber'},$dbh);
+		my $desc="Book Returned ".$iteminformation->{'barcode'};
 		$uquery = "insert into accountlines
 		  (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
-		  values ($borrower->{'borrowernumber'},$nextaccntno,now(),0-$amount,'Book Returned',
+		  values ($data->{'borrowernumber'},$nextaccntno,now(),0-$amount,'$desc',
 		  'CR',$amountleft)";
 		$usth = $dbh->prepare($uquery);
+#		print $uquery;
 		$usth->execute;
 		$usth->finish;
 		$uquery = "insert into accountoffsets
@@ -413,9 +435,13 @@ sub returnbook {
 		$usth = $dbh->prepare($uquery);
 		$usth->execute;
 		$usth->finish;
+		$uquery="update items set itemnotes='' where itemnumber=$iteminformation->{'itemnumber'}";
+		$usth = $dbh->prepare($uquery);
+		$usth->execute;
+		$usth->finish;
 	    }
 	    $sth->finish;
-	}
+        }	
 	my ($resfound,$resrec) = find_reserves($env, $dbh, $iteminformation->{'itemnumber'});
 	if ($resfound eq 'y') {
 	   my ($borrower) = getpatroninformation($env,$resrec->{'borrowernumber'},0);
@@ -599,7 +625,7 @@ sub currentissues {
 	$crit=" and !(issues.timestamp like '$today%') ";
     }
     my $select="select * from issues,items,biblioitems,biblio where
-    borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and
+    borrowernumber='$borrowernumber' and issues.itemnumber=items.itemnumber and
     items.biblionumber=biblio.biblionumber and
     items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null
     $crit order by issues.timestamp desc";
