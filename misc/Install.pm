@@ -2,7 +2,7 @@ package Install; #assumes Install.pm
 
 
 # Copyright 2000-2002 Katipo Communications
-# my.cnf, etcdir and prefix code Copyright 2003 MJ Ray
+# Contains parts Copyright 2003 MJ Ray
 #
 # This file is part of Koha.
 #
@@ -18,9 +18,17 @@ package Install; #assumes Install.pm
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+#
+# Recent Authors
+# MJR: my.cnf, etcdir, prefix, new display, apache conf
 
 use strict;
 use POSIX;
+#MJR: everyone will have these modules, right?
+# They look like part of perl core to me
+use Term::Cap;
+use Term::ANSIColor qw(:constants);
+use Text::Wrap;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -90,19 +98,22 @@ use vars qw( $newversion );			# XXX this seems to be unused
 
 The heading function takes one string, the text to be displayed as
 the heading, and returns a formatted heading (currently formatted
-in the "traditional Koha installer" style, i.e., surrounded by a
-box of equal signs).
+with ANSI colours).
 
 This reduces the likelihood of pod2man(1) etc. misinterpreting
 a line of equal signs as illegal POD directives.
 
 =cut
 
+my $termios = POSIX::Termios->new();
+$termios->getattr();
+my $terminal = Term::Cap->Tgetent({OSPEED=>$termios->getospeed()});
+my $clear_string = $terminal->Tputs('cl');
+
 sub heading ($) {
-   my($s) = @_;
-   my $n = length($s) + 4;
-   my $line = ('=' x $n) . "\n";
-   "\n$line= $s =\n$line\n";
+  my $title = shift;
+  my $bal = 5;
+  return($clear_string."koha-".$kohaversion." Installer\n".ON_BLUE.WHITE.BOLD." "x$bal.uc($title)." "x$bal.RESET."\n\n");
 }
 
 my $mycnf = $ENV{HOME}."/.my.cnf";
@@ -454,6 +465,7 @@ sub getmessage {
 
     $result = showmessage($message, 'restrictchar CHARS');
     $result = showmessage($message, 'free');
+    $result = showmessage($message, 'silentfree');
     $result = showmessage($message, 'numerical');
     $result = showmessage($message, 'email');
     $result = showmessage($message, 'PressEnter');
@@ -465,7 +477,7 @@ are mandatory.  The message must be the actual string to
 display; the caller is responsible for calling getmessage if
 required.
 
-The response type must be one of "none", "yn", "free",
+The response type must be one of "none", "yn", "free", "silentfree"
 "numerical", "email", "PressEnter", or a string consisting
 of "restrictchar " followed by a list of allowed characters
 (space can be specified). (Case is not significant, but case is
@@ -507,12 +519,14 @@ screen-clearing is not done.
 #'
 
 sub showmessage {
+    #MJR: Maybe refactor to use anonymous functions that
+    # check the responses instead of RnP branching.
     my $message=shift;
     my $responsetype=shift;
     my $defaultresponse=shift;
     my $noclear=shift;
     $noclear = 0 unless defined $noclear; # defaults to "clear"
-    ($noclear) || (system('clear'));
+    ($noclear) || (print $clear_string);
     if ($responsetype =~ /^yn$/) {
 	$responsetype='restrictchar ynYN';
     }
@@ -526,22 +540,24 @@ sub showmessage {
 	    chomp $response;
 	    (length($response)) || ($response=$defaultresponse);
             if ( $response=~/.*[\:\(\)\^\$\*\!\\].*/ ) {
-                ($noclear) || (system('clear'));
+                ($noclear) || (print $clear_string);
                 print "Response contains invalid characters.  Choose from [$options].\n\n";
                 print $message;
                 $response='\0';
             } else {
                 unless ($options=~/$response/) {
-                    ($noclear) || (system('clear'));
+                    ($noclear) || (print $clear_string);
                     print "Invalid Response.  Choose from [$options].\n\n";
                     print $message;
                 }
             }
 	}
 	return $response;
-    } elsif ($responsetype =~/^free$/i) {
+    } elsif ($responsetype =~/^(silent)?free$/i) {
 	(defined($defaultresponse)) || ($defaultresponse='');
+	if ($responsetype =~/^(silent)/i) { setecho(0) }; 
 	my $response=<STDIN>;
+	if ($responsetype =~/^(silent)/i) { setecho(1) }; 
 	chomp $response;
 	($response) || ($response=$defaultresponse);
 	return $response;
@@ -553,7 +569,7 @@ sub showmessage {
 	    chomp $response;
 	    ($response) || ($response=$defaultresponse);
 	    unless ($response=~/^\d+$/) {
-		($noclear) || (system('clear'));
+		($noclear) || (print $clear_string);
 		print "Invalid Response ($response).  Response must be a number.\n\n";
 		print $message;
 	    }
@@ -566,10 +582,10 @@ sub showmessage {
 	    $response=<STDIN>;
 	    chomp $response;
 	    ($response) || ($response=$defaultresponse);
-	    unless ($response=~/.*\@.*\..*/) {
-		($noclear) || (system('clear'));
-		print "Invalid Response ($response).  Response must be a valid email address.\n\n";
-		print $message;
+	    if ($response!~/.*\@.*\..*/) {
+			($noclear) || (print $clear_string);
+			print "Invalid Response ($response).  Response must be a valid email address.\n\n";
+			print $message;
 	    }
 	}
 	return $response;
@@ -1021,11 +1037,11 @@ OPAC and LIBRARIAN virtual hosts.  By default this installer
 will do this by using one ip address and two different ports
 for the virtual hosts.  There are other ways to set this up,
 and the installer will leave comments in
-$etcdir/koha-httpd.conf detailing
+%s/koha-httpd.conf detailing
 what these other options are.
 
 NOTE: You will need to add lines to your main httpd.conf to
-  Include $etcdir/koha-httpd.conf
+  Include %s/koha-httpd.conf
 and to make sure it is listening on the right ports
 (using the Listen directive).
 
@@ -1068,7 +1084,7 @@ sub getapachevhostinfo {
     $opacport=80;
     $intranetport=8080;
 
-    showmessage(getmessage('ApacheConfigIntroduction'), 'PressEnter');
+    showmessage(getmessage('ApacheConfigIntroduction',[$etcdir,$etcdir]), 'PressEnter');
 
     $svr_admin=showmessage(getmessage('GetVirtualHostEmail', [$svr_admin]), 'email', $svr_admin);
     $servername=showmessage(getmessage('GetServerName', [$servername]), 'free', $servername);
@@ -1128,21 +1144,9 @@ configuration.
 Press <ENTER> to continue: |;
 
 sub updateapacheconf {
-    my $logfiledir=`grep ^ErrorLog "$realhttpdconf"`;
-    chomp $logfiledir;
-    
+    my $logfiledir=$kohalogdir.'/logs';
     my $httpdconf = $etcdir."/koha-httpd.conf";
-
-    if ($logfiledir) {
-	$logfiledir=~m#ErrorLog (.*)/[^/]*$#
-	    or die "Can't parse ErrorLog directive\n";
-	$logfiledir=$1;
-    }
-
-    unless ($logfiledir) {
-	$logfiledir='logs';
-    }
-
+   
     showmessage(getmessage('StartUpdateApache'), 'none');
 	# to be polite about it: I don't think this should touch the main httpd.conf
 
@@ -1181,8 +1185,9 @@ sub updateapacheconf {
 	print SITE <<EOP
 
 # Ports to listen to for Koha
-$opaclisten
-$intranetlisten
+# uncomment these if they aren't already in main httpd.conf
+#$opaclisten
+#$intranetlisten
 
 # NameVirtualHost is used by one of the optional configurations detailed below
 
@@ -1197,6 +1202,7 @@ $intranetlisten
    ErrorLog $logfiledir/opac-error_log
    TransferLog $logfiledir/opac-access_log
    SetEnv PERL5LIB "$intranetdir/modules"
+   SetEnv KOHA_CONF "$etcdir/koha.conf"
    $includesdirectives
 </VirtualHost>
 
@@ -1462,7 +1468,7 @@ EOP
 	}
     }
     # we must not put the mysql root password on the command line
-	$mysqlpass=	showmessage(getmessage('MysqlRootPassword'),'free');
+	$mysqlpass=	showmessage(getmessage('MysqlRootPassword'),'silentfree');
 	
 	showmessage(getmessage('CreatingDatabase'),'none');
 	# set the login up
@@ -1733,6 +1739,22 @@ sub loadconfigfile {
 }
 
 END { }       # module clean-up code here (global destructor)
+
+### These things may move
+
+sub setecho {
+my $state=shift;
+my $t = POSIX::Termios->new;
+
+$t->getattr();
+if ($state) {
+  $t->setlflag(($t->getlflag) | &POSIX::ECHO);
+  }
+else {
+  $t->setlflag(($t->getlflag) & !(&POSIX::ECHO));
+  }
+$t->setattr();
+}
 
 sub setmysqlclipass {
 	my $pass = shift;
