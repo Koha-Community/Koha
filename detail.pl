@@ -33,8 +33,6 @@ my $type=$query->param('type');
 ($type) || ($type='intra');
 
 my $biblionumber=$query->param('bib');
-#my $type='intra';	# FIXME - There's already a $type in this scope
-
 
 # change back when ive fixed request.pl
 my @items = ItemInfo(undef, $biblionumber, $type);

@@ -279,7 +279,8 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'marc', value => 'ON', explanation => 'MARC support (ON or OFF)' },
     	{ uniquefieldrequired => 'variable', variable => 'marcflavour', value => 'MARC21', explanation => 'your MARC flavor (MARC21 or UNIMARC) used for character encoding' },
     	{ uniquefieldrequired => 'variable', variable => 'checkdigit', value => 'katipo', explanation => 'none= no check on member cardnumber. katipo= katipo check' },
-    ],
+    	{ uniquefieldrequired => 'variable', variable => 'dateformat', value => 'ISO', explanation => 'date format (US mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd) ' },
+   ],
 
 );
 
@@ -544,6 +545,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.39  2003/04/04 08:45:00  tipaul
+# last commits before 1.9.1
+#
 # Revision 1.38  2003/03/18 10:58:19  tipaul
 # adding checkdigit parameter that choose how to check the members cardnumber.
 # At the moment :

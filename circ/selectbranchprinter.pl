@@ -28,6 +28,7 @@ use C4::Print;
 use C4::Interface::CGI::Output;
 use HTML::Template;
 use DBI;
+use C4::Koha;
 
 
 # this is a reorganisation of circulationold.pl
