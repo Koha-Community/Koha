@@ -24,6 +24,8 @@ use C4::Biblio;
 use C4::SimpleMarc;
 use C4::Z3950;
 
+my $input = new CGI;
+
 #------------------
 # Constants
 
@@ -37,14 +39,14 @@ my $lc2='#ddaaaa';
 
 my $userid=$ENV{'REMOTE_USER'};
 
-my $input = new CGI;
 my $dbh=C4Connect;
 
 #-------------
 # Display output
-print $input->header;
+print $input->header();
 print startpage();
 print startmenu('acquisitions');
+
 
 #-------------
 # Process input parameters
@@ -83,7 +85,7 @@ if ($file) {
 SWITCH:
     {
 	if ($menu eq 'z3950') { z3950menu($dbh,$input); last SWITCH; }
-	if ($menu eq 'uploadmarc') { uploadmarc(); last SWITCH; }
+	if ($menu eq 'uploadmarc') { uploadmarc($dbh); last SWITCH; }
 	if ($menu eq 'manual') { manual(); last SWITCH; }
 	mainmenu();
     }
@@ -678,7 +680,7 @@ sub uploadmarc {
     use strict;
     my ($dbh)=@_;
 
-    requireDBI($dbh,"uploadmarc");
+    requireDBI($dbh,"uploadedmarc");
 
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
@@ -798,7 +800,7 @@ sub AcceptMarcUpload {
 	$input,		# CGI parms
     )=@_;
 
-    requireDBI($dbh,"AcceptMarcUpload");
+    requireDBI($dbh,"uploadedmarc");
 
     my $name=$input->param('name');
     my $data=$input->param('uploadmarc');
@@ -1144,6 +1146,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.33  2002/07/05 16:04:04  tonnesen
+# Fixing some bugs in marcimport.pl that broke uploading marc records.
+#
 # Revision 1.6.2.32  2002/06/29 17:33:47  amillar
 # Allow DEFAULT as input to addz3950search.
 # Check for existence of pid file (cat crashed otherwise).
