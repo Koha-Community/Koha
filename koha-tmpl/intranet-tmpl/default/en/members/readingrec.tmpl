@@ -1,49 +1,49 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<h1><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></h1>
-<br>Member Number: <TMPL_VAR NAME=bornum>
-<br>Card Number: <TMPL_VAR NAME=cardnumber>
+<h1><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></h1>
+<br>Member Number: <!-- TMPL_VAR NAME=bornum -->
+<br>Card Number: <!-- TMPL_VAR NAME=cardnumber -->
 <P>
-<TMPL_IF NAME=showfulllink>
-<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Full output</a>
+<!-- TMPL_IF NAME=showfulllink -->
+<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=full">Full output</a>
 <br/>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <br/>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TITLE</b></a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=title&limit=<!-- TMPL_VAR name="limit" -->"><b>TITLE</b></a>
 	</TD>
-	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>AUTHOR</b></a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=author&limit=<!-- TMPL_VAR name="limit" -->"><b>AUTHOR</b></a>
 	</TD>
-	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=<TMPL_VAR name="limit">"><b>DATE</b></a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>DATE</b></a>
 	</TD>
-	<TD background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 		<b>Volume</b>
 	</TD>
 </TR>
-<TMPL_LOOP name="loop_reading">
+<!-- TMPL_LOOP name="loop_reading" -->
 <TR VALIGN=TOP>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="title">&nbsp;
+ 		<!-- TMPL_VAR name="title" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="author">&nbsp;
+ 		<!-- TMPL_VAR name="author" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="returndate">&nbsp;
+		<!-- TMPL_VAR name="returndate" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<TMPL_VAR name="volumeddesc">&nbsp;
+		<!-- TMPL_VAR name="volumeddesc" -->&nbsp;
 	</TD>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </TABLE>
 
 <br>
-<a href="moremember.pl?bornum=<TMPL_VAR name="bornum">">Return</a> to Member Record
+<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">Return</a> to Member Record
 
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 
 

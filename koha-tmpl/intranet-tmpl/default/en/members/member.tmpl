@@ -1,43 +1,43 @@
 <HTML>
 
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
 <h1>Member Search</h1><br>
 
 <form action="/cgi-bin/koha/member.pl" method=post>
-  <input type=text name="member" value="<TMPL_VAR NAME=member>">
+  <input type=text name="member" value="<!-- TMPL_VAR NAME=member -->">
   <input type=reset name="reset" value="clr">
 </form>
 
-You Searched for <TMPL_VAR NAME=member><p>
+You Searched for <!-- TMPL_VAR NAME=member --><p>
 <table>
   <tr bgcolor="#99cc33">
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Card</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Surname</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Firstname</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Category</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Address</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>OD/Issues</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Charges</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Notes</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Card</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Surname</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Firstname</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Category</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Address</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>OD/Issues</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Charges</b></td>
+    <td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Notes</b></td>
   </tr>
   
-  <TMPL_LOOP NAME=resultsloop>
-    <TMPL_IF NAME="background">
+  <!-- TMPL_LOOP NAME=resultsloop -->
+    <!-- TMPL_IF NAME="background" -->
     <TR bgcolor="#ffffcc">
-    <TMPL_ELSE>
+    <!-- TMPL_ELSE -->
     <TR bgcolor=white>
-    </TMPL_IF>
-      <td><TMPL_VAR NAME=cardnumber></td>
-      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=borrowernumber>"><TMPL_VAR NAME=surname></td>
-      <td><TMPL_VAR NAME=firstname></a></td>
-      <td><TMPL_VAR NAME=categorycode></td>
-      <td><TMPL_VAR NAME=streetaddress> <TMPL_VAR NAME=city></td>
-      <td><TMPL_VAR NAME=odissue></td>
-      <td><TMPL_VAR NAME=fines></td>
-      <td><TMPL_VAR NAME=borrowernotes></td>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME=cardnumber --></td>
+      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME=borrowernumber -->"><!-- TMPL_VAR NAME=surname --></td>
+      <td><!-- TMPL_VAR NAME=firstname --></a></td>
+      <td><!-- TMPL_VAR NAME=categorycode --></td>
+      <td><!-- TMPL_VAR NAME=streetaddress --> <!-- TMPL_VAR NAME=city --></td>
+      <td><!-- TMPL_VAR NAME=odissue --></td>
+      <td><!-- TMPL_VAR NAME=fines --></td>
+      <td><!-- TMPL_VAR NAME=borrowernotes --></td>
     </tr>
-  </TMPL_LOOP>
+  <!-- /TMPL_LOOP -->
 </table>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
@@ -45,4 +45,4 @@ You Searched for <TMPL_VAR NAME=member><p>
 <INPUT TYPE="radio" name="chooseform" value="adult" checked>Adult
 <INPUT TYPE="radio" name="chooseform" value="organisation" >Organisation
 </form>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

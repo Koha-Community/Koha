@@ -1,11 +1,11 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-<h1><a href=<TMPL_VAR name="SCRIPT_NAME">>Main Menu</a></h1>
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->>Main Menu</a></h1>
 <h2>Select a set of MARC records</h2>\n<ul>
-<TMPL_LOOP name="marc">
-	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?file=<TMPL_VAR name="id">&menu=<TMPL_VAR name="menu">><TMPL_VAR name="name"></a></li>
-</TMPL_LOOP>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Z39.50 Search</a>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Upload MARC Records</a>
+<!-- TMPL_LOOP name="marc" -->
+	<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="id" -->&menu=<!-- TMPL_VAR name="menu" -->><!-- TMPL_VAR name="name" --></a></li>
+<!-- /TMPL_LOOP -->
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Z39.50 Search</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Upload MARC Records</a>
 </ul>
 </ul>
 <p>
@@ -16,13 +16,13 @@
 	<tr>
 		<td>Upload a set of MARC records:</td>
 		<td>
-			<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">?menu=<TMPL_VAR name="menu">" enctype="multipart/form-data">
+			<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=<!-- TMPL_VAR name="menu" -->" enctype="multipart/form-data">
 			<input type="file" name="uploadmarc"/>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<input type=hidden name=menu value=<TMPL_VAR name="menu">
+			<input type=hidden name=menu value=<!-- TMPL_VAR name="menu" -->
 			Name this set of MARC records:
 		</td>
 		<td>
@@ -37,5 +37,5 @@
 </table>
 </form>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
 

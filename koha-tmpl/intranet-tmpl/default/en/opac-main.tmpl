@@ -74,11 +74,11 @@ cellspacing=0 cellpadding=0 border=0 >
 	<img src="/images/holder.gif" width=1 height=8
 	alt=" " hspace=0 vspace=0>
 	<p>
-	<TMPL_IF NAME="loggedinuser">
-	    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
-	<TMPL_ELSE>
+	<!-- TMPL_IF NAME="loggedinuser" -->
+	    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+	<!-- TMPL_ELSE -->
 	    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 	</td>
 	</form>
   </tr>

@@ -1,10 +1,10 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+<!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
 <CENTER>
@@ -55,7 +55,7 @@
 	<select size="1"  name="class">
 	<option value="">Any
 	<!-- fetch class list -->
-	<TMPL_VAR name="classlist">
+	<!-- TMPL_VAR name="classlist" -->
 	<!--#include virtual="/includes/cat-class-list.inc" -->
 	</select>
 	</td>
@@ -85,4 +85,4 @@
 </CENTER>
 
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

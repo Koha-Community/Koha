@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Parameters</title>
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
@@ -90,8 +90,8 @@ a.parameters:hover {
 </tr>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
+<!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->

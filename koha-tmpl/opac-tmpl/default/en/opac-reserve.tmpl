@@ -1,54 +1,54 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 <center>
 
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+<!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="message">
+<!-- TMPL_IF NAME="message" -->
 	<table  cellpadding=5 cellspacing=0 border=1 >
 	<tr bgcolor="#fecc99" >
 	<td><font face="arial,helvetica" color="red" size=+1><B>
-	<TMPL_IF NAME="too_much_oweing">Sorry, you cannot make reserves because you owe <TMPL_VAR NAME="too_much_oweing">.  </TMPL_IF><br/>
-	<TMPL_IF NAME="too_many_reserves">Sorry, you cannot make more than <TMPL_VAR NAME="too_many_reserves"> reserves. </TMPL_IF><br/>
-	<TMPL_IF NAME="already_reserved">You already have a reserve placed on this item.</TMPL_IF><br/>
-	<TMPL_IF NAME="no_items_selected">You must select at least on item type!</TMPL_IF><br/>
-	<TMPL_IF NAME="no_branch_selected">You must select a branch for pickup!</TMPL_IF><br/>
+	<!-- TMPL_IF NAME="too_much_oweing" -->Sorry, you cannot make reserves because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="too_many_reserves" -->Sorry, you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves. <!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="already_reserved" -->You already have a reserve placed on this item.<!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="no_items_selected" -->You must select at least on item type!<!-- /TMPL_IF --><br/>
+	<!-- TMPL_IF NAME="no_branch_selected" -->You must select a branch for pickup!<!-- /TMPL_IF --><br/>
 	</B></font><P></td></tr></table>
-</TMPL_IF>
-<TMPL_IF NAME="select_item_types">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
-	<p>Reserve page for item: <b><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author"> <TMPL_VAR name="biblionumber">)</b></p>
-	<p> There are <b><TMPL_VAR NAME="reservecount"></b> reserves already on this item. </p>
+	<p>Reserve page for item: <b><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR name="biblionumber" -->)</b></p>
+	<p> There are <b><!-- TMPL_VAR NAME="reservecount" --></b> reserves already on this item. </p>
 	<p>Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you.<p>
 
 	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
 		<input type="hidden" name="item_types_selected" value="1">
-		<input type="hidden" name="bib" value="<TMPL_VAR name="biblionumber">">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
 		<TABLE border=1>
-			<tr bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+			<tr bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif'>
 				<th>Request</th>
 				<th>Item Type</th>
 				<th>Copies</th>
 			</tr>
-			<TMPL_LOOP NAME="TYPES">
+			<!-- TMPL_LOOP NAME="TYPES" -->
 				<tr>
-					<TMPL_UNLESS NAME="notforloan">
-						<td><input type="checkbox" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
-					<TMPL_ELSE>
+					<!-- TMPL_UNLESS NAME="notforloan" -->
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->"></td>
+					<!-- TMPL_ELSE -->
 						<td>Cannot be Reserved</td>
-					</TMPL_UNLESS>
-					<td><TMPL_VAR NAME="description"></td>
-					<td><TMPL_VAR NAME="copies"></td>
+					<!-- /TMPL_UNLESS -->
+					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><!-- TMPL_VAR NAME="copies" --></td>
 				</tr>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 		</table>
 		<p>
 		Please select the branch from which you want to collect the item:
-		<TMPL_VAR NAME="CGIbranch"><br>
+		<!-- TMPL_VAR NAME="CGIbranch" --><br>
 		<p>
 		<table border=0 cellpadding=0 cellspacing=0>
 			<tr>
@@ -79,34 +79,34 @@
 		<p>
 		<font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
 	</FORM>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="item_types_selected">
+<!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
 	<p>Please confirm that you wish to request an item of these types:<p>
 
 	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
 		<input type="hidden" name="place_reserve" value="1">
-		<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
-		<input type="hidden" name="required_date" value="<TMPL_VAR NAME='required_date'>">
-		<input type="hidden" name="expires_date" value="<TMPL_VAR NAME='expires_date'>">
+		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME='required_date' -->">
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME='expires_date' -->">
 		<TABLE border=1>
 			<tr>
-				<th bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>Item Type</th>
+				<th bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif'>Item Type</th>
 			</tr>
-			<TMPL_LOOP NAME="TYPES">
+			<!-- TMPL_LOOP NAME="TYPES" -->
 				<tr>
-					<input type="hidden" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
-					<td><TMPL_VAR NAME="description"></td>
+					<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->"></td>
+					<td><!-- TMPL_VAR NAME="description" --></td>
 				</tr>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 		</table>
-		Which is to be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br>
-		<input type="hidden" name="branch" value="<TMPL_VAR NAME='branch'>">
-		<TMPL_IF NAME="fee">
-			<br>Note there will be a reserve charge of <b>$<TMPL_VAR NAME="fee"></b><br>
-		</TMPL_IF>
+		Which is to be picked up from <b><!-- TMPL_VAR NAME="branchname" --></b>.<br>
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME='branch' -->">
+		<!-- TMPL_IF NAME="fee" -->
+			<br>Note there will be a reserve charge of <b>$<!-- TMPL_VAR NAME="fee" --></b><br>
+		<!-- /TMPL_IF -->
 		<font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve"></font>
 	</FORM>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 

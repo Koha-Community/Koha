@@ -1,23 +1,23 @@
-<TMPL_INCLUDE Name="reports-top.inc">
+<!-- TMPL_INCLUDE Name="reports-top.inc" -->
 <CENTER>
 <br>
 <h1>
-<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="bib">&type="intra"> <TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a></h1><P>
+<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="bib" -->&type="intra"> <!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</a></h1><P>
 <p>
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 width=440 >
 	<TR VALIGN=TOP>
 		<TD  bgcolor="99cc33" background="/images/background-mem.gif">
-			<B>BARCODE <TMPL_VAR Name="barcode"></B>
+			<B>BARCODE <!-- TMPL_VAR Name="barcode" --></B>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP  >
 		<TD width=440 >
 
-		<b>Home Branch: </b> <TMPL_VAR Name="homebranch"> <br>
-		<b>Current Branch: </b> <TMPL_VAR Name="holdingbranch"><br>
-		<b>Date arrived at current branch: </b> <TMPL_VAR Name="lastdate"> <br>
-		<b>Number of issues since the above date:</b> <TMPL_VAR Name="count"> <br>
+		<b>Home Branch: </b> <!-- TMPL_VAR Name="homebranch" --> <br>
+		<b>Current Branch: </b> <!-- TMPL_VAR Name="holdingbranch" --><br>
+		<b>Date arrived at current branch: </b> <!-- TMPL_VAR Name="lastdate" --> <br>
+		<b>Number of issues since the above date:</b> <!-- TMPL_VAR Name="count" --> <br>
 
 		<table cellspacing =0 cellpadding=5 border=1 width = 440>
 			<TR>
@@ -25,16 +25,16 @@
 				<TD> <b>No. of Issues</b></td>
 				<TD> <b>Last seen at branch</b></td>
 			</TR>
-			<TMPL_LOOP Name="branchloop">
+			<!-- TMPL_LOOP Name="branchloop" -->
 				<TR>
-					<TD> <b> <TMPL_VAR Name="branchname"> </b></td>
-					<TD> <b> <TMPL_VAR Name="issues"> </b></td>
-					<TD> <b> <TMPL_VAR Name="seen"> </b></td>
+					<TD> <b> <!-- TMPL_VAR Name="branchname" --> </b></td>
+					<TD> <b> <!-- TMPL_VAR Name="issues" --> </b></td>
+					<TD> <b> <!-- TMPL_VAR Name="seen" --> </b></td>
 				</TR>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 		</table>
 		</TD>
 	</TR>
 </table>
 
-<TMPL_INCLUDE Name="reports-bottom.inc">
+<!-- TMPL_INCLUDE Name="reports-bottom.inc" -->

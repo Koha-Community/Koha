@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
 <STYLE TYPE="text/css" MEDIA=screen>
 	table {	font-family:Arial;
@@ -11,14 +11,14 @@
 <tr>
 	<td width="80%">
 		<table width=100% cellspacing=0 cellpadding=5 border=1>
-		<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+		<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<td>
 			<table width="100%" border=0 cellpadding=0 cellspacing=0>
 				<tr>
-					<td width=8%><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png"></td>
-					<td width=8%><a href="javascript:confirm_deletion()"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png"></td>
-					<td width=8%><a href="detail.pl?bib=<TMPL_VAR name="biblionumber">">Normal</a></td>
-					<td align="center"><b>MARC biblio : <TMPL_VAR name="bibid"></b></td>
+					<td width=8%><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"></td>
+					<td width=8%><a href="javascript:confirm_deletion()"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png"></td>
+					<td width=8%><a href="detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">Normal</a></td>
+					<td align="center"><b>MARC biblio : <!-- TMPL_VAR name="bibid" --></b></td>
 				</tr>
 			</table>
 			</td>
@@ -45,25 +45,25 @@
 		</table>
 	</td>
 	<td>
-		<TMPL_IF NAME="norequests">
-		<TMPL_ELSE>
-			<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber"> class="button">Request</a>
-		</TMPL_IF>
+		<!-- TMPL_IF NAME="norequests" -->
+		<!-- TMPL_ELSE -->
+			<a href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" --> class="button">Request</a>
+		<!-- /TMPL_IF -->
 	</td>
 </tr>
 </table>
 
    <DIV name="0XX" id="0XX" style="position:absolute;visibility:visible;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
-	<TMPL_LOOP name="0XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="0XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%" align="right"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%" align="right"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
 	</tr>
 	</tmpl_loop>
 	</tmpl_loop>
@@ -72,167 +72,167 @@
 
     <DIV name="1XX" id="1XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
-	<TMPL_LOOP name="1XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="1XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="2XX" id="2XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
-	<TMPL_LOOP name="2XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="2XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="3XX" id="3XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
-	<TMPL_LOOP name="3XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="3XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="4XX" id="4XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
-	<TMPL_LOOP name="4XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="4XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="5XX" id="5XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
-	<TMPL_LOOP name="5XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="5XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
 	<DIV name="6XX" id="6XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=90% cellspacing=0 cellpadding=5  border=0>
-	<TMPL_LOOP name="6XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="6XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="7XX" id="7XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100%  cellspacing=0 cellpadding=5 border=0>
-	<TMPL_LOOP name="7XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="7XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="8XX" id="8XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=100% cellspacing=0 cellpadding=5  border=0>
-	<TMPL_LOOP name="8XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="8XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="9XX" id="9XX" style="position:absolute;visibility:hidden;width:90%">
     <table width=90% cellspacing=0 cellpadding=5  border=0>
-	<TMPL_LOOP name="9XX">
-	<tr background="<TMPL_VAR name="themelang">/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
-	<TMPL_LOOP name="subfield">
+	<!-- TMPL_LOOP name="9XX" -->
+	<tr background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><td colspan=5><b><tmpl_var name="tag"></td></tr>
+	<!-- TMPL_LOOP name="subfield" -->
 	<tr>
          <td width="3%">&nbsp;</td>
-	    <td width="2%"><b><TMPL_VAR name="marc_subfield"></b></td>
-		<td width="55%"><TMPL_VAR name="marc_lib"></td>
-		<td width="40%"><TMPL_VAR name="marc_value"></td>
-		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<TMPL_VAR name="marc_tag"><TMPL_VAR name="marc_subfield">&operator=&#x003D&type=intranet&value=<TMPL_VAR name="marc_value" ESCAPE=URL>"><img border="0" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filefind.png" height=15></a></td>
+	    <td width="2%"><b><!-- TMPL_VAR name="marc_subfield" --></b></td>
+		<td width="55%"><!-- TMPL_VAR name="marc_lib" --></td>
+		<td width="40%"><!-- TMPL_VAR name="marc_value" --></td>
+		<td width="20"><a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15></a></td>
        </tr>
-	</TMPL_LOOP>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
     <DIV name="10XX" id="10XX" style="position:absolute;visibility:hidden;width:90%">
     <table border=1 cellspacing=0 cellpadding=5>
-		<tr  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
-			<TMPL_LOOP name="item_header_loop"><th><tmpl_var name="header_value"></th></TMPL_LOOP>
+		<tr  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+			<!-- TMPL_LOOP name="item_header_loop" --><th><tmpl_var name="header_value"></th><!-- /TMPL_LOOP -->
 		</tr>
-		<TMPL_LOOP name="item_loop">
+		<!-- TMPL_LOOP name="item_loop" -->
 			<tr>
-					<TMPL_VAR name="item_value">
+					<!-- TMPL_VAR name="item_value" -->
 			</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
      </table>
      </DIV>
 
@@ -245,7 +245,7 @@ for (i=0; i <= 10 ; i++ ) {
     if (numlayer==i) {
 	document.getElementById(ong).style.visibility="visible";
 	document.getElementById(link).style.backgroundColor="#11AA11";
-	document.getElementById(link).style.backgroundImage="url(<TMPL_VAR name="themelang">/images/background-mem.gif)";
+	document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif)";
 } else {
 	document.getElementById(ong).style.visibility="hidden";
 	document.getElementById(link).style.backgroundColor="#FFFFFF";
@@ -256,7 +256,7 @@ for (i=0; i <= 10 ; i++ ) {
 function confirm_deletion() {
 	var is_confirmed = confirm('Confirmez vous la suppression ?');
 	if (is_confirmed) {
-		window.location="acqui.simple/addbiblio.pl?op=delete&oldbiblionumber=<TMPL_VAR name="bibid">";
+		window.location="acqui.simple/addbiblio.pl?op=delete&oldbiblionumber=<!-- TMPL_VAR name="bibid" -->";
 	}
 }
 </script>

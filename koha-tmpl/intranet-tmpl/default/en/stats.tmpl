@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="reports-top.inc">
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 
 <CENTER>
 	<table border=0 cellspacing=0 cellpadding=5>
@@ -9,25 +9,25 @@
 			<td background='/images/background-mem.gif'><b>Amount</b></td>
 			<td background='/images/background-mem.gif'><b>Branch</b></td>
 		<tr>
-		<TMPL_LOOP name=loop1>
+		<!-- TMPL_LOOP name=loop1 -->
 		<tr>
-			<td><TMPL_VAR NAME=name></td>
-			<td><TMPL_VAR NAME=type></td>
-			<td><TMPL_VAR NAME=time></td>
-			<td><TMPL_VAR NAME=amount></td>
-			<td><TMPL_VAR NAME=branch></td>
+			<td><!-- TMPL_VAR NAME=name --></td>
+			<td><!-- TMPL_VAR NAME=type --></td>
+			<td><!-- TMPL_VAR NAME=time --></td>
+			<td><!-- TMPL_VAR NAME=amount --></td>
+			<td><!-- TMPL_VAR NAME=branch --></td>
 		</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 	</table>
 </CENTER>
 
 
 <p>
-	<b>Total paid: <TMPL_VAR NAME=total></b>
+	<b>Total paid: <!-- TMPL_VAR NAME=total --></b>
 	<br>
-	<b>Total written off: <TMPL_VAR NAME=totalw></b>
+	<b>Total written off: <!-- TMPL_VAR NAME=totalw --></b>
 </p>
 
-<TMPL_INCLUDE NAME="reports-bottom.inc">
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
 </BODY>
 </HTML>

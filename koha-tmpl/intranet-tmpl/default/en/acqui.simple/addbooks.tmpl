@@ -1,14 +1,14 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 
 <font size="5"><em>MARC biblio management</em></font>
-<TMPL_IF name="noitemsfound">
+<!-- TMPL_IF name="noitemsfound" -->
 	<p />
 	<font color="red" size="4">No items found</font>
-</TMPL_IF>
-<TMPL_IF name="websiteadded">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="websiteadded" -->
 	<p />
 	<font color="red" size="4">Website Biblioitem Added</font>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 <p />
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
@@ -30,11 +30,11 @@
 			<td width="20%"><input type="text" name="title" /></td>
 		</tr>
 		<tr><td>&nbsp;</td>
-		<TMPL_IF NAME="NOTMARC">
+		<!-- TMPL_IF NAME="NOTMARC" -->
 			<td colspan=2><a href=addbiblio-nomarc.pl>Create Empty biblio</a></td></tr>
-		<TMPL_ELSE>
+		<!-- TMPL_ELSE -->
 			<td colspan=2><a href=addbiblio.pl>Create Empty biblio</a></td></tr>
-		</TMPL_IF>
+		<!-- /TMPL_IF -->
 	</table>
 </form>
 
@@ -56,4 +56,4 @@
 	</table>
 </FORM>
 <p />
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,4 +1,4 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <h1>Acquisitions</h1><br>
 
@@ -42,16 +42,16 @@
 	<TR VALIGN=TOP>
 		<TD  bgcolor="ffdf61" colspan=2><b>EXCHANGE RATES </b></TD>
 	</TR>
-	<TMPL_LOOP name="loop_currency">
+	<!-- TMPL_LOOP name="loop_currency" -->
 		<TR VALIGN=TOP>
 			<TD>
-				<TMPL_VAR name="currency">
+				<!-- TMPL_VAR name="currency" -->
 			</td>
 			<td>
-				<INPUT TYPE="text"  SIZE="10"   NAME="<TMPL_VAR name="currency">" value=<TMPL_VAR name="rate">>
+				<INPUT TYPE="text"  SIZE="10"   NAME="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
 			</td>
 		</TR>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 	<tr>
 		<td colspan=2 align="center"><input type=submit value="Save"></TD>
 	</tr>
@@ -74,21 +74,21 @@
 				<TD><b>Comtd</B></TD>
 				<TD><b>Avail</B></TD>
 			</TR>
-			<TMPL_LOOP name="loop_budget">
+			<!-- TMPL_LOOP name="loop_budget" -->
 				<tr>
-					<td><TMPL_VAR name="bookfundname"></TD>
-					<TD align=right><TMPL_VAR name="budgetamount"></TD>
-					<TD align=right><TMPL_VAR name="spent"></TD>
-					<TD align=right><TMPL_VAR name="comtd"></TD>
-					<TD align=right><TMPL_VAR name="avail"></TD>
+					<td><!-- TMPL_VAR name="bookfundname" --></TD>
+					<TD align=right><!-- TMPL_VAR name="budgetamount" --></TD>
+					<TD align=right><!-- TMPL_VAR name="spent" --></TD>
+					<TD align=right><!-- TMPL_VAR name="comtd" --></TD>
+					<TD align=right><!-- TMPL_VAR name="avail" --></TD>
 				</TR>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 			<tr>
 				<td><b>Total</b></TD>
-				<TD align=right><b><TMPL_VAR name="total"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totspent"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totcomtd"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totavail"></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="total" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totspent" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totcomtd" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totavail" --></b></TD>
 			</TR>
 		</table><br>
 		Use your reload button [ctrl + r] to get the most recent figures.
@@ -111,4 +111,4 @@
 </TR>
 </table>
 
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

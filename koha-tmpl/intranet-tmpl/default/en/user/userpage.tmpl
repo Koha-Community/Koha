@@ -1,7 +1,7 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<!-- TMPL_IF NAME="loggedinuser" -->
+	<p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
 	<p>
 	<center>
 	<h3>This page is just a mock up</h3>
@@ -42,7 +42,7 @@
 			<option value=english>Polish
 			</select>
 			</td></tr>
-			<tr><td>E-mail Address</td><td><input name=email size=30 value=<TMPL_VAR NAME=loggedinuser>@mylibrary.com></td></tr>
+			<tr><td>E-mail Address</td><td><input name=email size=30 value=<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com></td></tr>
 			<tr><td>Preferred Branch<br>for reserve pickups</td><td>
 			<select name=pickupbranch>
 			<option value=MAIN>Main Library
@@ -70,7 +70,7 @@
 	</table>
 
 	</center>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<center>
 	<form method=post>
 		<table border=1 cellpadding=10>
@@ -84,6 +84,6 @@
 	    </table>
 	</form>
 	</center>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

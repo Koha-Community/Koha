@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 <h1>MARC acquisition system</h1>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
@@ -7,24 +7,24 @@
 	</tr>
 </table>
 
-<TMPL_IF name="uploadmarc">
+<!-- TMPL_IF name="uploadmarc" -->
 <p>Import results :</p>
 <ul>
-	<p><TMPL_VAR name="imported"> imported records</p>
-	<p><TMPL_VAR name="alreadyindb"> not imported because already in DB</p>
-	<p><TMPL_VAR name="alreadyinfarm"> not imported because already in farm</p>
-	<p><TMPL_VAR name="notmarcrecord"> not imported because they seems not to be MARC format (or ISBN/ISSN missing) !</p>
-	<p><TMPL_VAR name="total">  records parsed</p>
+	<p><!-- TMPL_VAR name="imported" --> imported records</p>
+	<p><!-- TMPL_VAR name="alreadyindb" --> not imported because already in DB</p>
+	<p><!-- TMPL_VAR name="alreadyinfarm" --> not imported because already in farm</p>
+	<p><!-- TMPL_VAR name="notmarcrecord" --> not imported because they seems not to be MARC format (or ISBN/ISSN missing) !</p>
+	<p><!-- TMPL_VAR name="total" -->  records parsed</p>
 	<p><a href="addbooks.pl">Back to acquisition</a>
 </ul>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 <ul>
 	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
 	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
 	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
 	<li>Of course, if the ISBN already exists in the active DB, the biblio will be ignored.</li>
 </ul>
-<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 <table cellpadding="3" border=0>
 	<tr valign="top">
 		<td>Select the file to import:</td>
@@ -56,5 +56,5 @@
 
 </table>
 </form>
-</TMPL_IF>
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

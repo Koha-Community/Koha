@@ -1,9 +1,9 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 
-<TMPL_LOOP NAME="BIBLIO_RESULTS">
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font><p>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+<!-- TMPL_VAR NAME="class" --></em></font><p>
 <!-- FIXME - "callpadding" should be "cellpadding", right? -->
 <table cellspacing="0" callpadding="5" border="1" align="left" width="220">
 <!-----------------BIBLIO RECORD TABLE--------->
@@ -12,28 +12,28 @@
 <td bgcolor="#99cccc">
 <b>BIBLIO RECORD</b>
 
-<TMPL_VAR NAME="biblionumber">
+<!-- TMPL_VAR NAME="biblionumber" -->
 </td>
 </tr>
 <tr valign="top">
 <td>
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Subtitle:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Author:</b> <TMPL_VAR NAME="author"><br>
-<b>Additional Author:</b> <TMPL_VAR NAME="additional"><br>
-<b>Series Title:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Subject:</b> <TMPL_VAR NAME="subject"><br>
-<b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Notes:</b> <TMPL_VAR NAME="notes"><br>
-<b>Unititle:</b> <TMPL_VAR NAME="unititle"><br>
-<b>Serial:</b> <TMPL_VAR NAME="serial"><br>
-<b>Total Number of Items:</b> <TMPL_VAR NAME="count">
+<b>Subtitle:</b> <!-- TMPL_VAR NAME="subtitle" --><br>
+<b>Author:</b> <!-- TMPL_VAR NAME="author" --><br>
+<b>Additional Author:</b> <!-- TMPL_VAR NAME="additional" --><br>
+<b>Series Title:</b> <!-- TMPL_VAR NAME="seriestitle" --><br>
+<b>Subject:</b> <!-- TMPL_VAR NAME="subject" --><br>
+<b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="notes" --><br>
+<b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><br>
+<b>Serial:</b> <!-- TMPL_VAR NAME="serial" --><br>
+<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
 <p>
 </font></td>
 </tr>
 </table>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor="#99cccc">
@@ -43,27 +43,27 @@
 <td>Date Due</td>
 <td>Last Seen</td>
 </tr>
-<TMPL_LOOP NAME="ITEM_RESULTS">
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td><TMPL_VAR NAME="class"></td>
-<td><TMPL_VAR NAME="branchname"></td>
-<td><TMPL_VAR NAME="datedue"></td>
-<td><TMPL_VAR NAME="datelastseen"></td>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
+<td><!-- TMPL_VAR NAME="class" --></td>
+<td><!-- TMPL_VAR NAME="branchname" --></td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 </tr>
-</TMPL_LOOP>
-<TMPL_LOOP NAME="WEB_RESULTS">
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
 <td>Website</td>
 <td>Online</td>
 <td>Available</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
+NAME="itemnumber>&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<TMPL_VAR
+NAME="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
 <p>
 </center>
@@ -71,4 +71,4 @@ NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
 <p />
 <p />
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

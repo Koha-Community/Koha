@@ -1,44 +1,44 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+<!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 <i>Please, change what's needed. An email will be sent to the library.<br/>
 Your changes won't appear until the library has validated them.</i><br/><br/>
 
-<TMPL_LOOP NAME="BORROWER_INFO">
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
 
 <CENTER>
 <FORM ACTION="/cgi-bin/koha/opac-userupdate.pl" method=get>
 <TABLE >
 
 <TR VALIGN=TOP>
-<TD>Surname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='surname'>"  NAME="surname"></TD></TR>
+<TD>Surname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='surname' -->"  NAME="surname"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='title'>"  NAME="title"></TD></TR>
+<TD>Title</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='title' -->"  NAME="title"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Firstname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
+<TD>Firstname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='firstname' -->"  NAME="firstname"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Street address</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
+<TD>Street address</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='streetaddress' -->"  NAME="streetaddress"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>City</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='city'>"  NAME="city"></TD></TR>
+<TD>City</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='city' -->"  NAME="city"></TD></TR>
 
 
 <TR VALIGN=TOP> 
-<TD>Home phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
+<TD>Home phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='phone' -->"  NAME="phone"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Work/Fax phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
+<TD>Work/Fax phone</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='faxnumber' -->"  NAME="faxnumber"></TD></TR>
 
 <TR VALIGN=TOP> 
-<TD>Email</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
+<TD>Email</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<!-- TMPL_VAR NAME='emailaddress' -->"  NAME="emailaddress"></TD></TR>
 
 
 
@@ -51,6 +51,6 @@ Your changes won't appear until the library has validated them.</i><br/><br/>
 </FORM>
 </CENTER>
 
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -1,34 +1,34 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<TMPL_LOOP NAME="BORROWER_INFO">
-<FONT SIZE=6><em>Account for <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></FONT>
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+<FONT SIZE=6><em>Account for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em></FONT>
 [<a href=/cgi-bin/koha/opac-user.pl>Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]<p>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <center>
 <p>
 <TABLE  CELLSPACING=0 CELLPADDING=5 border=1>
 <TR VALIGN=TOP>
-<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=2><B>FINES & CHARGES</TD>
-<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=1><B>AMOUNT</TD>
-<td  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif' colspan=1><B>STILL OWING</TD>
+<td  bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif' colspan=2><B>FINES & CHARGES</TD>
+<td  bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif' colspan=1><B>AMOUNT</TD>
+<td  bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif' colspan=1><B>STILL OWING</TD>
 </TR>
 
-<TMPL_LOOP NAME="ACCOUNT_LINES">
+<!-- TMPL_LOOP NAME="ACCOUNT_LINES" -->
   <tr VALIGN=TOP  >
-  <td><TMPL_VAR NAME="date"></td>
-  <TD><TMPL_VAR NAME="description">
-      <TMPL_IF NAME="print_title"><TMPL_VAR NAME="title"></TMPL_IF></td>
+  <td><!-- TMPL_VAR NAME="date" --></td>
+  <TD><!-- TMPL_VAR NAME="description" -->
+      <!-- TMPL_IF NAME="print_title" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
 
-  <td><TMPL_VAR NAME="amount"></td>
-  <TD><TMPL_VAR NAME="amountoutstanding"></td>
+  <td><!-- TMPL_VAR NAME="amount" --></td>
+  <TD><!-- TMPL_VAR NAME="amountoutstanding" --></td>
   </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 
 <tr VALIGN=TOP  >
 <TD></td>
 <TD colspan=2><b>Total Due</b></td>
 
-<TD><b><TMPL_VAR NAME="total"></b></td>
+<TD><b><!-- TMPL_VAR NAME="total" --></b></td>
 
 </tr>
 </table>
@@ -36,4 +36,4 @@
 <p> &nbsp; </p>
 
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

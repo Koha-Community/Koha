@@ -1,10 +1,10 @@
-<TMPL_INCLUDE Name="members-top.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
 
 <Center><h3>Manual Credit</h3></center>
 <form action=/cgi-bin/koha/mancredit.pl method=post>
 <table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name="bornum" value="<TMPL_VAR Name="bornum">">
-<tr><td><b>Borrowernumber<b></td><td><TMPL_VAR Name="bornum"></td></tr>
+<input type=hidden name="bornum" value="<!-- TMPL_VAR Name="bornum" -->">
+<tr><td><b>Borrowernumber<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
 <tr><td><b>Type</b></td><Td>
 <select name=type>
 <option value=C>Credit</option>
@@ -19,4 +19,4 @@
 </table>
 </form>
 
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

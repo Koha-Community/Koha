@@ -1,8 +1,8 @@
-<TMPL_IF name="opac">
-	<TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-	<TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF name="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
 
 <!-- ----------------------- MAIN BODY OF PAGE ------------------------ -->
 <FORM ACTION="/cgi-bin/koha/search.pl" method=post>
@@ -64,7 +64,7 @@
 		<td>
 			<select name="class" size="1">
 			<option value="">Any
-			<TMPL_VAR name="classlist">
+			<!-- TMPL_VAR name="classlist" -->
 			</select>
 		</td>
 	</tr>
@@ -90,7 +90,7 @@
 				<tr align="center">
 					<td>
 						<input type="hidden" name="type" value="intra">
-						<INPUT TYPE="image"  alt="Start Search" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" BORDER=0 >
+						<INPUT TYPE="image"  alt="Start Search" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png" BORDER=0 >
 					</td>
 					<td>
 						<INPUT TYPE="reset"  VALUE= "Clear">

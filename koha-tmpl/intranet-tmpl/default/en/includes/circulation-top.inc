@@ -16,7 +16,7 @@ document.forms[0].elements[0].focus();
 // end hiding -->
 </script>
 
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <style>
 a.circulation {
 	font-weight: normal;
@@ -97,8 +97,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOn
 </tr>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
+<!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->

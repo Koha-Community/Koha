@@ -35,7 +35,7 @@ a.white {
 <tr BGCOLOR="#339999" >
 
 	<td width="7%">
-		<img src="<TMPL_VAR name="themelang">/images/front-background-small.gif" height=50 align="center"><b>KOHA</b>
+		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height=50 align="center"><b>KOHA</b>
 	</td>
         <td width="10%">
 		<a href="/cgi-bin/koha/opac-search.pl" title="Search the catalogue" class="white">

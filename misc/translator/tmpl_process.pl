@@ -53,7 +53,7 @@ elsif( -d $in_files[0] )
 	
 	@in_files = ();
 	@in_files = &listfiles(\@in_files, $in_dir, $type, $recursive);
-	
+
 	if(scalar(@in_files) == 0)
 	{
 		warn "Nothing to process in $in_dir matching *.$type.";
@@ -186,7 +186,8 @@ sub install_strhash
 					}
 				}
 			}
-
+			$line =~ s/\<TMPL_(.*?)\>/\<\!-- TMPL_$1 --\>/g;
+			$line =~ s/\<\/TMPL_(.*?)\>/\<\!-- \/TMPL_$1 --\>/g;
 			# Writing the modified (or not) line to output
 			printf($fh_out "%s", $line);
 		}
@@ -307,7 +308,7 @@ sub write_strhash
 		}
 		else
 		{
-			printf($fh "%s%s%s\n", $str, $split_char,"*****");
+			printf($fh "%s%s%s\n", $str, $split_char,"*****") unless ($str >0);
 		}
 	}
 

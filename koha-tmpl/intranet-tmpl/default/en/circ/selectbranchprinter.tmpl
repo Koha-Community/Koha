@@ -1,35 +1,35 @@
-<TMPL_INCLUDE Name="circulation-top.inc">
+<!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
 <h1>Circulation: Select Printer and Branch Settings</h1><br>
 
 <center>
 <form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5 cellspacing=0>
-<tr><td colspan=2 bgcolor=<TMPL_VAR Name="headerbackgroundcolor"> align=center background=<TMPL_VAR Name="backgroundimage">>
+<tr><td colspan=2 bgcolor=<!-- TMPL_VAR Name="headerbackgroundcolor" --> align=center background=<!-- TMPL_VAR Name="backgroundimage" -->>
 <font color=black><b>Please Set Branch and Printer</b></font></td></tr>
 <tr><td>
 <!--branchselection-->
-<TMPL_IF Name="onebranch">
-Branch: <TMPL_VAR Name="branchname"><br>
-<TMPL_ELSE>
+<!-- TMPL_IF Name="onebranch" -->
+Branch: <!-- TMPL_VAR Name="branchname" --><br>
+<!-- TMPL_ELSE -->
 	<select name=branch>
-	<TMPL_LOOP Name="branchloop">
-		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP Name="branchloop" -->
+		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
 	</select>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </td>
 <td>
 <!--printerselection-->
-<TMPL_IF Name="oneprinter">
-Printer: <TMPL_VAR Name="printername"><br>
-<TMPL_ELSE>
+<!-- TMPL_IF Name="oneprinter" -->
+Printer: <!-- TMPL_VAR Name="printername" --><br>
+<!-- TMPL_ELSE -->
 	<select name=printer>
-	<TMPL_LOOP Name="printerloop">
-		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP Name="printerloop" -->
+		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
 	</select>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </td></tr>
 </table>
 <input type="hidden" name="setcookies" value=1>
@@ -38,5 +38,5 @@ Printer: <TMPL_VAR Name="printername"><br>
 </center>
 
 
-<TMPL_INCLUDE Name="circulation-bottom.inc">
+<!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->
 

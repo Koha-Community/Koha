@@ -1,6 +1,6 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<TMPL_IF NAME=add_form>
+<!-- TMPL_IF NAME=add_form -->
         <script>
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
@@ -55,37 +55,37 @@
         }
         </SCRIPT>
 
-	<TMPL_IF NAME=searchfield>
+	<!-- TMPL_IF NAME=searchfield -->
 		<h1>Modify currency</h1>
-	<TMPL_ELSE>
+	<!-- TMPL_ELSE -->
 		<h1>Add currency</h1>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 
-        <form action='<TMPL_VAR NAME=script_name>' name=Aform method=post>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
 
 	<table>
 
-	<TMPL_IF NAME=searchfield>
+	<!-- TMPL_IF NAME=searchfield -->
 		<tr>
 			<td>Currency</td>
 			<td>
-				<input type=hidden name=currency value='<TMPL_VAR NAME=searchfield>'><TMPL_VAR NAME=searchfield>
+				<input type=hidden name=currency value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
 			</td>
 		</tr>
-	<TMPL_ELSE>
+	<!-- TMPL_ELSE -->
 		<tr>
 			<td>Currency</td>
 			<td>
 				<input type=text name=currency size=50 maxlength=50 onBlur=toUC(this)>
 			</td>
 		</tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 
         	<tr>
 			<td>Rate</td>
 			<td>
-				<input type=text name=rate size=10 maxlength=10 value='<TMPL_VAR NAME=rate>'>
+				<input type=text name=rate size=10 maxlength=10 value='<!-- TMPL_VAR NAME=rate -->'>
 			</td>
 		</tr>
         	<tr>
@@ -95,45 +95,45 @@
         </table>
         </form>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=add_validate>
+<!-- TMPL_IF NAME=add_validate -->
 	Data recorded
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=submit value=OK>
         </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=delete_confirm>
+<!-- TMPL_IF NAME=delete_confirm -->
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
 			<td background='/images/background-mem.gif'><b>Currency</b></td>
-			<td background='/images/background-mem.gif'><b><TMPL_VAR NAME=searchfield></b></td>
+			<td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
 		</tr>
 
-        	<form action='<TMPL_VAR NAME=script_name>' method=post>
+        	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 			<input type=hidden name=op value=delete_confirmed>
-			<input type=hidden name=searchfield value='<TMPL_VAR NAME=searchfield>'>
+			<input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
         
         	<tr>
 			<td>Rate</td>
-			<td><TMPL_VAR NAME=rate></td>
+			<td><!-- TMPL_VAR NAME=rate --></td>
 		</tr>
-		<TMPL_IF NAME=totalgtzero>
+		<!-- TMPL_IF NAME=totalgtzero -->
 		<tr>
 			<td colspan=2 align=center>
-				<b>This record is used <TMPL_VAR NAME=total> times. Deletion not possible</b>
+				<b>This record is used <!-- TMPL_VAR NAME=total --> times. Deletion not possible</b>
 			</td>
 		</tr>
 		<tr>
 			<td colspan=2>
 				</form>
-				<form action='<TMPL_VAR NAME=script_name>' method=post>
+				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 					<input type=submit value=OK>
 				</form>
 			</td>
 		</tr>
-		<TMPL_ELSE>
+		<!-- TMPL_ELSE -->
 		<tr>
 			<td colspan=2 align=center>CONFIRM DELETION</td>
 		</tr>
@@ -143,32 +143,32 @@
 				</form>
 			</td>
 			<td>
-				<form action='<TMPL_VAR NAME=script_name>' method=post>
+				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 					<input type=submit value=NO>
 				</form>
 			</td>
 		</tr>
-		</TMPL_IF>
+		<!-- /TMPL_IF -->
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=delete_confirmed>
+<!-- TMPL_IF NAME=delete_confirmed -->
 	Data deleted
-	<form action='<TMPL_VAR NAME=script_name>' method=post>
+	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 		<input type=submit value=OK>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME=else>
+<!-- TMPL_IF NAME=else -->
 	<h2>Currencies admin</h2>
-        <form action='<TMPL_VAR NAME=script_name>' method=post>
-                <input type=text name=description value=<TMPL_VAR NAME=searchfield>>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
                 <input type=reset name=reset value="clr">
         </form>
 
-	<TMPL_IF NAME=searchfield>
-		You searched for <b><TMPL_VAR NAME=searchfield></b>
-	</TMPL_IF>
+	<!-- TMPL_IF NAME=searchfield -->
+		You searched for <b><!-- TMPL_VAR NAME=searchfield --></b>
+	<!-- /TMPL_IF -->
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
@@ -177,35 +177,35 @@
 			<td background='/images/background-mem.gif'> </td>
 			<td background='/images/background-mem.gif'> </td>
 		</tr>
-		<TMPL_LOOP NAME=loop>
-		<tr bgcolor="<TMPL_VAR NAME=toggle>">
-			<td><TMPL_VAR NAME=currency></td>
-			<td><TMPL_VAR NAME=rate></td>
-			<td><a href="<TMPL_VAR NAME=script_name>?op=add_form&searchfield=<TMPL_VAR NAME=currency>">Edit</a></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=currency>">Delete</a></td>
+		<!-- TMPL_LOOP NAME=loop -->
+		<tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
+			<td><!-- TMPL_VAR NAME=currency --></td>
+			<td><!-- TMPL_VAR NAME=rate --></td>
+			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=currency -->">Edit</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=currency -->">Delete</a></td>
 		</tr>
-		</TMPL_LOOP>
+		<!-- /TMPL_LOOP -->
 	</table>
 
-	<form action='<TMPL_VAR NAME=script_name>' method=post>
+	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=hidden name=op value=add_form>
 	
-	<TMPL_IF NAME=offsetgtzero>
-		<a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=prevpage>"><< Prev</a>
-	</TMPL_IF>
+	<!-- TMPL_IF NAME=offsetgtzero -->
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->"><< Prev</a>
+	<!-- /TMPL_IF -->
 
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-	<TMPL_IF NAME=ltcount>
-		<a href="<TMPL_VAR NAME=script_name>?offset=<TMPL_VAR NAME=nextpage>">Next >></a>	
-	</TMPL_iF>
+	<!-- TMPL_IF NAME=ltcount -->
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Next >></a>	
+	<!-- /TMPL_iF -->
 
         <br>
 	<input type=submit class="button" value="Add Currency" alt="Add Currency">
 	<br>
         </form>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

@@ -1,73 +1,73 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 test
-<font size="6"><em><TMPL_VAR NAME="TITLE"></em></font>
+<font size="6"><em><!-- TMPL_VAR NAME="TITLE" --></em></font>
 <p>
-<TMPL_IF NAME="NOBARCODE">
+<!-- TMPL_IF NAME="NOBARCODE" -->
 <font size="5" color="red">You must give the item a barcode</font>
 <p>
-</TMPL_IF>
-<TMPL_IF NAME="NOBIBLIOITEM">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="NOBIBLIOITEM" -->
 <font size="5" color="red">You must create a new group for your item to be
 added to</font>
 <p>
-</TMPL_IF>
-<TMPL_IF NAME="BARCODEINUSE">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="BARCODEINUSE" -->
 <font size="5" color="red">Sorry, that barcode is already in use</font>
 <p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 <table align="left" cellpadding="5" cellspacing="0" border="1" width="220">
 <tr valign="top" bgcolor="#CCCC99">
-<td background="/images/background-mem.gif"><b>BIBLIO RECORD <TMPL_VAR NAME="BIBNUM"></b></td>
+<td background="/images/background-mem.gif"><b>BIBLIO RECORD <!-- TMPL_VAR NAME="BIBNUM" --></b></td>
 </tr>
 <tr valign="top">
-<td><b>Author:</b> <TMPL_VAR NAME="AUTHOR"><br>
-<b>Copyright:</b> <TMPL_VAR NAME="COPYRIGHT"><br>
-<b>Series Title:</b> <TMPL_VAR NAME="SERIES"><br>
-<b>Notes:</b> <TMPL_VAR NAME="NOTES"></td>
+<td><b>Author:</b> <!-- TMPL_VAR NAME="AUTHOR" --><br>
+<b>Copyright:</b> <!-- TMPL_VAR NAME="COPYRIGHT" --><br>
+<b>Series Title:</b> <!-- TMPL_VAR NAME="SERIES" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="NOTES" --></td>
 </tr>
-<TMPL_LOOP NAME="BIBITEMS">
-<TMPL_IF NAME="WEB">
+<!-- TMPL_LOOP NAME="BIBITEMS" -->
+<!-- TMPL_IF NAME="WEB" -->
 <tr valign="top" bgcolor="#CCCC99">
 <td
-background="/images/background-mem.gif"><b><TMPL_VAR NAME="biblioitemnumber"> GROUP -
-<TMPL_VAR NAME="itemtype">
+background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber" --> GROUP -
+<!-- TMPL_VAR NAME="itemtype" -->
 </b></td>
 </tr>
 <tr valign="top">
-<td><b>URL:</b> <TMPL_VAR NAME="url"><br>
-<b>Date:</b> <TMPL_VAR NAME="publicationyear"><br>
-<b>Notes:</b> <TMPL_VAR NAME="notes"></td>
+<td><b>URL:</b> <!-- TMPL_VAR NAME="url" --><br>
+<b>Date:</b> <!-- TMPL_VAR NAME="publicationyear" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="notes" --></td>
 </tr>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 <tr valign="top" bgcolor="#CCCC99">
 <td
-background="/images/background-mem.gif"><b><TMPL_VAR NAME="biblioitemnumber">
+background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber" -->
 
-GROUP - <TMPL_VAR NAME="itemtype"></b></td>
+GROUP - <!-- TMPL_VAR NAME="itemtype" --></b></td>
 </tr>
 <tr valign="top">
-<td><b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
-<b>Dewey:</b> <TMPL_VAR NAME="dewey"><br>
-<b>Publisher:</b> <TMPL_VAR NAME="publishercode"><br>
-<b>Place:</b> <TMPL_VAR NAME="place"><br>
-<b>Date:</b> <TMPL_VAR NAME="publicationyear"></td>
+<td><b>ISBN:</b> <!-- TMPL_VAR NAME="isbn" --><br>
+<b>Dewey:</b> <!-- TMPL_VAR NAME="dewey" --><br>
+<b>Publisher:</b> <!-- TMPL_VAR NAME="publishercode" --><br>
+<b>Place:</b> <!-- TMPL_VAR NAME="place" --><br>
+<b>Date:</b> <!-- TMPL_VAR NAME="publicationyear" --></td>
 </tr>
-<TMPL_LOOP NAME="ITEMS>
+<!-- TMPL_LOOP NAME="ITEMS -->
 <tr valign="top" bgcolor="#FFFFCC">
-<td><b>Item:</b> <TMPL_VAR NAME="barcode"><br>
-<b>Home Branch:</b> <TMPL_VAR NAME="homebranch"><br>
-<b>Notes:</b> <TMPL_VAR NAME="itemnotes"></td>
+<td><b>Item:</b> <!-- TMPL_VAR NAME="barcode" --><br>
+<b>Home Branch:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
+<b>Notes:</b> <!-- TMPL_VAR NAME="itemnotes" --></td>
 </tr>
-</TMPL_LOOP>
-</TMPL_IF>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
 </table>
 <img src="/images/holder.gif" width="16" height="650" align="left">
 
 <center>
 
 <form action="saveitem.pl" method="post">
-<input type="hidden" name="biblionumber" value="<TMPL_VAR NAME="BIBNUM">">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
 <table border="1" cellspacing="0" cellpadding="5">
 <tr valign="top" bgcolor="#CCCC99">
 <td background="/images/background-mem.gif" colspan="2"><b>ADD NEW
@@ -81,9 +81,9 @@ ITEM:</b><br>
 <tr valign="top">
 <td>Branch:</td>
 <td><select name="homebranch">
-<TMPL_LOOP NAME="BRANCHES">
-<option value="<TMPL_VAR NAME="branchcode">"><TMPL_VAR NAME="branchname"></option>
-</TMPL_LOOP>
+<!-- TMPL_LOOP NAME="BRANCHES" -->
+<option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+<!-- /TMPL_LOOP -->
 </select></td>
 </tr>
 <tr valign="top">
@@ -101,14 +101,14 @@ ITEM:</b><br>
 <td>Group:</td>
 <td><select name="biblioitemnumber">
 
-<TMPL_LOOP NAME="BIBITEMS">
-<TMPL_IF NAME="WEB">
-<TMPL_ELSE>
-    <option value="<TMPL_VAR NAME="biblioitemnumber">"><TMPL_VAR NAME="itemtype"></option>
+<!-- TMPL_LOOP NAME="BIBITEMS" -->
+<!-- TMPL_IF NAME="WEB" -->
+<!-- TMPL_ELSE -->
+    <option value="<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="itemtype" --></option>
 
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </select></td>
 </tr>
 <tr valign="top">
@@ -122,9 +122,9 @@ Group:</b></td>
 <tr valign="top">
 <td>Format:</td>
 <td><select name="itemtype">
-<TMPL_LOOP NAME="ITEMTYPES">
-<option value="<TMPL_VAR NAME="itemtype">"><TMPL_VAR NAME="description"></option>
-</TMPL_LOOP>
+<!-- TMPL_LOOP NAME="ITEMTYPES" -->
+<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+<!-- /TMPL_LOOP -->
 </select></td>
 </tr>
 <tr valign="top">
@@ -207,4 +207,4 @@ value="Add New Item to New Group"></td>
 
 </form>
 </center>
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

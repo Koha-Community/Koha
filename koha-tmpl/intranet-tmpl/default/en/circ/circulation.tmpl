@@ -1,10 +1,10 @@
-<TMPL_INCLUDE NAME="circulation-top.inc">
+<!-- TMPL_INCLUDE NAME="circulation-top.inc" -->
 
-<TMPL_IF name="borrowernumber">
+<!-- TMPL_IF name="borrowernumber" -->
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
-				<a class="button" href="circulation.pl?borrnumber=<TMPL_VAR name="borrowernumber">&amp;branch=<TMPL_VAR name="branch">&amp;printer=<TMPL_VAR name="printer">&amp;print=yes">
+				<a class="button" href="circulation.pl?borrnumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;branch=<!-- TMPL_VAR name="branch" -->&amp;printer=<!-- TMPL_VAR name="printer" -->&amp;print=yes">
 				Next Borrower</a>&nbsp;
 				<a class="button" href="returns.pl">
 				Returns</a>&nbsp;
@@ -14,13 +14,13 @@
 		</tr>
 	</table>
 	<h1>Circulation: Issues</h1><br>
-	<b>Branch:</b> <TMPL_VAR name="branchname"><br>
-	<b>Printer:</b> <TMPL_VAR name="printername"><br>
+	<b>Branch:</b> <!-- TMPL_VAR name="branchname" --><br>
+	<b>Printer:</b> <!-- TMPL_VAR name="printername" --><br>
 	<a href="selectbranchprinter.pl">Change Settings</a>
-	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-	<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
+	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<p>&nbsp;</p>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<table align="right" cellpadding="10">
 		<tr>
 			<td>
@@ -35,18 +35,18 @@
 		</tr>
 	</table>
 	<h1>Circulation: Issues</h1><br>
-	<b>Branch:</b> <TMPL_VAR name="branchname"> <br>
-	<b>Printer:</b> <TMPL_VAR name="printername"><br>
+	<b>Branch:</b> <!-- TMPL_VAR name="branchname" --> <br>
+	<b>Printer:</b> <!-- TMPL_VAR name="printername" --><br>
 	<a href="selectbranchprinter.pl">Change Settings</a>
-	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-	<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
+	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<p>&nbsp;</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="question">
+<!-- TMPL_IF name="question" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr>
-			<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+			<th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 				<font size="+2" color="red"><b>Issuing Question</b></font>
 			</th>
 		</tr>
@@ -55,9 +55,9 @@
 				<table border="0" cellpadding="10">
 					<tr>
 						<td>
-							Attempting to issue <TMPL_VAR name="title">
-							by <TMPL_VAR name="author"> to <TMPL_VAR name="firstname"> <TMPL_VAR name="surname">.
-							<p><TMPL_VAR name="question">
+							Attempting to issue <!-- TMPL_VAR name="title" -->
+							by <!-- TMPL_VAR name="author" --> to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.
+							<p><!-- TMPL_VAR name="question" -->
 						</td>
 					</tr>
 				</table>
@@ -69,36 +69,36 @@
 					<tr>
 						<td>
 							<form method="get">
-							<input type="hidden" name="borrnumber" value="<TMPL_VAR name="borrowernumber">">
-							<input type="hidden" name="barcode" value="<TMPL_VAR name="barcode">">
-							<input type="hidden" name="questionnumber" value="<TMPL_VAR name="questionnumber">">
-							<input type="hidden" name="day" value="<TMPL_VAR name="day">">
-							<input type="hidden" name="month" value="<TMPL_VAR name="month">">
-							<input type="hidden" name="year" value="<TMPL_VAR name="year">">
-							<input type="hidden" name="stickyduedate" value="<TMPL_VAR name="stickyduedate">">
-							<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-							<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
-							<TMPL_LOOP NAME="responseloop">
-							<input type="hidden" name="<TMPL_VAR NAME="name">" value="<TMPL_VAR NAME="value">">
-							</TMPL_LOOP>
+							<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
+							<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
+							<input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->">
+							<input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->">
+							<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
+							<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
+							<input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->">
+							<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+							<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+							<!-- TMPL_LOOP NAME="responseloop" -->
+							<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+							<!-- /TMPL_LOOP -->
 							<input type="hidden" name="answer" value="Y">
 							<input type="submit" value="Yes">
 							</form>
 						</td>
 						<td>
 							<form method="get">
-							<input type="hidden" name="borrnumber" value="<TMPL_VAR name="borrowernumber">">
-							<input type="hidden" name="barcode" value="<TMPL_VAR name="barcode">">
-							<input type="hidden" name="questionnumber" value="<TMPL_VAR name="questionnumber">">
-							<input type="hidden" name="day" value="<TMPL_VAR name="day">">
-							<input type="hidden" name="month" value="<TMPL_VAR name="month">">
-							<input type="hidden" name="year" value="<TMPL_VAR name="year">">
-							<input type="hidden" name="stickyduedate" value="<TMPL_VAR name="stickyduedate">">
-							<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-							<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
-							<TMPL_LOOP NAME="responseloop">
-							<input type="hidden" name="<TMPL_VAR NAME="name">" value="<TMPL_VAR NAME="value">">
-							</TMPL_LOOP>
+							<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
+							<input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->">
+							<input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->">
+							<input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->">
+							<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
+							<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
+							<input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->">
+							<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+							<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+							<!-- TMPL_LOOP NAME="responseloop" -->
+							<input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+							<!-- /TMPL_LOOP -->
 							<input type="hidden" name="answer" value="N">
 							<input type="submit" value="No">
 							</form>
@@ -109,64 +109,64 @@
 		</tr>
 	</table>
 	</td>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="rejected">
+<!-- TMPL_IF name="rejected" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr><th><font color="black" size="5">Error Issuing Book</font></th></tr>
-		<tr><td><font color="red" size="5"><TMPL_VAR name="rejected"></font></td></tr>
+		<tr><td><font color="red" size="5"><!-- TMPL_VAR name="rejected" --></font></td></tr>
 	</table>
 	<br>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="message">
+<!-- TMPL_IF name="message" -->
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
-		<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif">Messages</th></tr>
-		<tr><td><TMPL_VAR name="message"></td></tr>
+		<tr><th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">Messages</th></tr>
+		<tr><td><!-- TMPL_VAR name="message" --></td></tr>
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="CGIselectborrower">
+<!-- TMPL_IF name="CGIselectborrower" -->
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-	<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
+	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+	<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 	<table border="1" cellspacing="0" cellpadding="5" bgcolor="#dddddd">
 		<tr>
-			<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+			<th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 				<font color="black"><b>Select a borrower</b></font>
 			</th>
 		</tr>
 		<tr>
 			<td align="center">
-				<TMPL_VAR name="CGIselectborrower">
+				<!-- TMPL_VAR name="CGIselectborrower" -->
 				<br>
 				<input type="submit">
 			</td>
 		</tr>
 	</table>
-<TMPL_ELSE>
-    <TMPL_IF NAME="borrowernumber">
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF NAME="borrowernumber" -->
     
-    <TMPL_ELSE>
+    <!-- TMPL_ELSE -->
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
 	<table border="1" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
 		<tr>
-			<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+			<th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 				<font color="black"><b>Enter borrower card number<br> or partial last name</b></font>
 			</th>
 		</tr>
 		<tr>
 			<td>
 				<input name="findborrower">
-				<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-				<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
+				<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+				<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 			</td>
 		</tr>
 	</table>
 	</form>
-     </TMPL_IF>
-</TMPL_IF>
-<TMPL_IF name="borrowernumber">
+     <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="borrowernumber" -->
 <table border="1" width="100%">
 <tr>
 <td>
@@ -176,7 +176,7 @@
 	<td align="center" valign="top">
 		<table border="0" cellspacing="0" cellpadding="5">
 			<tr>
-				<th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+				<th background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 					<font color="black"><b>Enter Book Barcode</b></font>
 				</th>
 			</tr>
@@ -193,28 +193,28 @@
 								<table border="0" cellpadding="0" cellspacing="0">
 									<tr>
 										<td>
-											<select name="day"><option value="0">Day<TMPL_VAR name="dayoptions"></select>
+											<select name="day"><option value="0">Day<!-- TMPL_VAR name="dayoptions" --></select>
 										</td>
 										<td>
-											<select name="month"><option value="0">Month<TMPL_VAR name="monthoptions"></select>
+											<select name="month"><option value="0">Month<!-- TMPL_VAR name="monthoptions" --></select>
 										</td>
 										<td>
-											<select name="year"><option value="0">Year<TMPL_VAR name="yearoptions"></select>
+											<select name="year"><option value="0">Year<!-- TMPL_VAR name="yearoptions" --></select>
 										</td>
 									</tr>
 								</table>
-								<input type="checkbox" name="stickyduedate" <TMPL_VAR name="selected">> Sticky Due Date
+								<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR name="selected" -->> Sticky Due Date
 							</td>
 						</tr>
 					</table>
-					<input type="hidden" name="borrnumber" value="<TMPL_VAR name="borrowernumber">">
-					<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-					<input type="hidden" name="printer" value="<TMPL_VAR name="printer">">
+					<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->">
+					<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+					<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
 					<input type="hidden" name="print" value="maybe">
-					<TMPL_IF name="CHARGES">
+					<!-- TMPL_IF name="CHARGES" -->
 						<input type="hidden" name="charges" value="yes">
-						<input type="hidden" name="oldamount" value="<TMPL_VAR name="amountold">">
-					</TMPL_IF>
+						<input type="hidden" name="oldamount" value="<!-- TMPL_VAR name="amountold" -->">
+					<!-- /TMPL_IF -->
 				</td>
 			</tr>
 		</table>
@@ -227,47 +227,47 @@
 <table border="1" cellpadding="5" cellspacing="0" align="right">
     <tr><td colspan="2"><font color="black"><b>Patron information</b></font></td></tr>
     <tr><td colspan="2">
-    <a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR name="borrowernumber">" onClick="openWindow(this,'Member', 480, 640)">
-		<TMPL_VAR name="firstname"> <TMPL_VAR name="surname">
-    </a> <br> Category: <TMPL_VAR name="categorycode">
+    <a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this,'Member', 480, 640)">
+		<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+    </a> <br> Category: <!-- TMPL_VAR name="categorycode" -->
     </td></tr>
-<TMPL_IF name="noissues">
-	<TMPL_IF name="charges">
-		<tr><td valign="top"><font color="red">CHARGES</font></td><td bgcolor=<TMPL_VAR name="color">><a href="/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR name="borrowernumber">" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
-	<TMPL_ELSE>
-		<tr><td valign="top"><font color="red"><TMPL_VAR name="flag"></font></td><td bgcolor=<TMPL_VAR name="color"><TMPL_VAR name="message"></td></tr>
-	</TMPL_IF>
-<TMPL_ELSE>
-		<TMPL_IF name="charges">
-			<tr><td valign=top>CHARGES</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<TMPL_VAR name="borrowernumber">" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
-		</TMPL_IF>
-		<TMPL_IF name="waiting">
+<!-- TMPL_IF name="noissues" -->
+	<!-- TMPL_IF name="charges" -->
+		<tr><td valign="top"><font color="red">CHARGES</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+	<!-- TMPL_ELSE -->
+		<tr><td valign="top"><font color="red"><!-- TMPL_VAR name="flag" --></font></td><td bgcolor=<!-- TMPL_VAR name="color" --><!-- TMPL_VAR name="message" --></td></tr>
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+		<!-- TMPL_IF name="charges" -->
+			<tr><td valign=top>CHARGES</td><td><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="waiting" -->
 			<tr>
 			<td valign="top">WAITING</td>
 			<td>
-			<TMPL_LOOP name="itemswaiting">
-				<a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR name="biblionumber">&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR name="barcode"></a> <TMPL_VAR name="title"> (<TMPL_VAR name="branchname">)<br>
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP name="itemswaiting" -->
+				<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640)"><!-- TMPL_VAR name="barcode" --></a> <!-- TMPL_VAR name="title" --> (<!-- TMPL_VAR name="branchname" -->)<br>
+			<!-- /TMPL_LOOP -->
 			</td>
 			</tr>
-		</TMPL_IF>
-			<TMPL_IF name="odues">
-				<TMPL_IF name="nonreturns">
+		<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="odues" -->
+				<!-- TMPL_IF name="nonreturns" -->
 					<tr><td valign="top">ODUES</td><td>Yes, See below</td></tr>
-				</TMPL_IF>
-			</TMPL_IF>
-			<TMPL_IF name="notes">
-					<tr><td valign="top">NOTES</td><td><TMPL_VAR name="notesmsg"></td></tr>
-			</TMPL_IF>
-</TMPL_IF>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="notes" -->
+					<tr><td valign="top">NOTES</td><td><!-- TMPL_VAR name="notesmsg" --></td></tr>
+			<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 </table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </table>
 <p clear="all"><br><br></p>
-<TMPL_IF name="todayissues">
+<!-- TMPL_IF name="todayissues" -->
 <table border="1" cellpadding="5" cellspacing="0" width="80%">
 	<tr>
-		<th colspan="5" background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+		<th colspan="5" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 			<font color="black">
 			<b>Todays Issues</b></font>
 		</th>
@@ -275,21 +275,21 @@
 	<tr>
 		<th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th>
 	</tr>
-	<TMPL_LOOP name="todayissues">
-	    <tr><td bgcolor=<TMPL_VAR NAME="tcolor"> align="center"><TMPL_VAR NAME="dd"></td>
-	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align="center">
-	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><TMPL_VAR NAME="barcode"></a></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">"><TMPL_VAR NAME="title"></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">"><TMPL_VAR NAME="author"></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">" align="center"><TMPL_VAR NAME="dewey"> <TMPL_VAR NAME="subclass"></td></tr>
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP name="todayissues" -->
+	    <tr><td align="center" bgcolor=<!-- TMPL_VAR NAME="tcolor" -->><!-- TMPL_VAR NAME="dd" --></td>
+	    <td align="center" bgcolor=<!-- TMPL_VAR NAME="tcolor" -->>
+	    <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
+	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="title" --></td>
+	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="author" --></td>
+	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dewey" --> <!-- TMPL_VAR NAME="subclass" --></td></tr>
+	<!-- /TMPL_LOOP -->
 </table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="previssues">
+<!-- TMPL_IF name="previssues" -->
 	<table border="1" cellpadding="5" cellspacing="0" width="80%">
 		<tr>
-			<th colspan="5"  background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+			<th colspan="5"  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
 				<font color="black">
 				<b>Previous Issues</b></font>
 			</th>
@@ -297,16 +297,16 @@
 		<tr>
 			<th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th>
 		</tr>
-	<TMPL_LOOP name="previssues">
-	    <tr><td bgcolor="<TMPL_VAR NAME="tcolor">" align="center"><TMPL_VAR NAME="dd"></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">" align="center">
-	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><TMPL_VAR NAME="barcode"></a></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">"><TMPL_VAR NAME="title"></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">"><TMPL_VAR NAME="author"></td>
-	    <td bgcolor="<TMPL_VAR NAME="tcolor">" align="center"><TMPL_VAR NAME="dewey"> <TMPL_VAR NAME="subclass"></td></tr>
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP name="previssues" -->
+	    <tr><td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dd" --></td>
+	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->">
+	    <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcode" --></a></td>
+	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="title" --></td>
+	    <td bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="author" --></td>
+	    <td align="center" bgcolor="<!-- TMPL_VAR NAME="tcolor" -->"><!-- TMPL_VAR NAME="dewey" --> <!-- TMPL_VAR NAME="subclass" --></td></tr>
+	<!-- /TMPL_LOOP -->
 
 	</table>
-</TMPL_IF>
-<TMPL_INCLUDE name="circulation-bottom.inc">
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE name="circulation-bottom.inc" -->
 

@@ -30,14 +30,14 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 		<td COLSPAN=3>
 			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr valign=top bgcolor=ffcc00>
-					<td background="<TMPL_VAR name="themelang">/images/issues-spot-1.gif" width="224" height="29">
+					<td background="<!-- TMPL_VAR name="themelang" -->/images/issues-spot-1.gif" width="224" height="29">
 						<font size=1 face="arial">
-						<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=210 height=4 alt=" " hspace=0 vspace=0>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=210 height=4 alt=" " hspace=0 vspace=0>
 						<br>
-						<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=35 height=21 align=left alt=" " hspace=0 vspace=0>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=35 height=21 align=left alt=" " hspace=0 vspace=0>
 						KOHA: <A HREF="/cgi-bin/koha/mainpage.pl">HDL INTRANET</A>
 						<br>
-						<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0>
 						</FONT>
 					</td>
 				</TR>
@@ -49,12 +49,12 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	</tr>
 	<TR VALIGN=TOP BGCOLOR="ffcc00">
 		<TD  COLSPAN=6>
-			<img src="<TMPL_VAR name="themelang">/images/holder.gif"  WIDTH=1  HEIGHT=12  HSPACE=0 vspace=0>
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif"  WIDTH=1  HEIGHT=12  HSPACE=0 vspace=0>
 		</TD>
 	</TR>
 	<tr valign=top bgcolor=ffcc00>
 		<TD>
-			<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=35 height=21 align=left alt=" " hspace=0 vspace=0>
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=35 height=21 align=left alt=" " hspace=0 vspace=0>
 		</TD>
 		<td>
 			<font size=2>
@@ -306,12 +306,12 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 		<td  ALIGN=RIGHT COLSPAN=2 >
 			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr valign=top bgcolor=ffcc00 >
-					<td background="<TMPL_VAR name="themelang">/images/issues-spot-2.gif" width="235" height="29"  ALIGN=RIGHT >
+					<td background="<!-- TMPL_VAR name="themelang" -->/images/issues-spot-2.gif" width="235" height="29"  ALIGN=RIGHT >
 						<font size=1 face="arial">
-						<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=223 height=12 alt=" " hspace=0 vspace=0>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=223 height=12 alt=" " hspace=0 vspace=0>
 						<br>
-						<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=26 height=17 align=right alt=" " hspace=0 vspace=0>you are in <A HREF="index.html">ISSUES & RETURNS</a><br>
-						<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=223 height=1 alt=" " hspace=0 vspace=0></FONT>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=26 height=17 align=right alt=" " hspace=0 vspace=0>you are in <A HREF="index.html">ISSUES & RETURNS</a><br>
+						<img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=223 height=1 alt=" " hspace=0 vspace=0></FONT>
 					</td>
 				</TR>
 			</TABLE>
@@ -319,13 +319,13 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	</tr>
 	<TR VALIGN=TOP BGCOLOR="000000">
 		<TD  COLSPAN=6>
-			<img src="<TMPL_VAR name="themelang">/images/blackdot.gif"  WIDTH=1  HEIGHT=2  HSPACE=0 vspace=0>
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/blackdot.gif"  WIDTH=1  HEIGHT=2  HSPACE=0 vspace=0>
 		</TD>
 	</TR>
 </table>
 <BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
+<!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- /TMPL_IF -->
