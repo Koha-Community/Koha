@@ -50,6 +50,8 @@ my %requiretables=(
 	startdate int, 
 	enddate int, 
 	done smallint, 
+	results longblob, 
+	numrecords int, 
 	servers text, 
 	identifier char(30))",
     z3950results=>"( id int auto_increment primary key, 
@@ -64,6 +66,13 @@ my %requiretables=(
 	active smallint)",
     branchrelations=>"( branchcode varchar(4), 
 	categorycode varchar(4))",
+    websites=>"( websitenumber int(11) NOT NULL auto_increment,
+  	biblionumber int(11) NOT NULL default '0',
+  	title text,
+  	description text,
+  	url varchar(255),
+  	PRIMARY KEY (websitenumber) )",
+);
     marcrecorddone=>"( isbn char(40),
 		      issn char(40),
 		      lccn char(40),
@@ -284,6 +293,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.15  2002/07/04 16:40:22  tonnesen
+# Merged with trunk... added websites table even though it isn't used yet in 1.2
+#
 # Revision 1.4.2.14  2002/06/27 20:48:59  tonnesen
 # Fixing bug that reported an error if updatedatabase was run twice.
 #
