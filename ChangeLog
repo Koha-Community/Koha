@@ -1,5 +1,15 @@
 2002-10-13  Andrew Arensburger  <arensb@baa.ooblick.com>
 
+	* search.pl: Turned 'env' into a hash instead of a
+	reference-to-hash, for readability. Likewise, @$numbers ->
+	@numbers, @$forminputs -> @forminputs Added a foreach loop to set
+	up the search terms and output form, for readability and easy
+	extensibility.
+
+	* moredetail.pl: Removed unused variable.
+
+	* installer.pl: Fixed the name of the program.
+
 	* acqui.simple/processz3950queue, acqui/newbasket2.pl,
 	acqui/finishreceive.pl, C4/Circulation/Renewals2.pm,
 	C4/Circulation/Renewals.pm, C4/Circulation/Issues.pm,
