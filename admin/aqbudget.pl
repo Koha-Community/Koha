@@ -214,7 +214,7 @@ print "</table>";
 } else { # DEFAULT
 	my @inputs=(["text","searchfield",$searchfield],
 		["reset","reset","clr"]);
-	print mkheadr(2,'bookfund admin');
+	print mkheadr(2,'Budget admin');
 	print mkformnotable("$script_name",@inputs);
 	print <<printend
 
