@@ -34,6 +34,7 @@
 	<th>Call No.</th>
 	<th>Copies</th>
 	<th>Location</th>
+	<th>&nbsp;</th>
 	</tr>
 <tbody>
 	<!-- TMPL_LOOP name="result" -->
@@ -48,7 +49,7 @@
 					</p></td>
 					<td><!-- TMPL_VAR NAME="classification" --></td>
 			<td><!-- TMPL_VAR NAME="totitem" --></td>
-<td><!-- TMPL_LOOP NAME="CN" --><!-- TMPL_VAR NAME="holdingbranch" --><!-- TMPL_IF name="date_due" --> (due <!-- TMPL_VAR NAME="date_due" -->)	<!-- TMPL_ELSE --><!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td>
+<td><!-- TMPL_LOOP NAME="CN" --><!-- TMPL_VAR NAME="holdingbranch" --><!-- TMPL_IF name="date_due" --> (due <!-- TMPL_VAR NAME="date_due" -->)	<!-- TMPL_ELSE --><!-- TMPL_IF NAME="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td><td><!-- TMPL_UNLESS name="norequests" --><a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Reserves</a><!-- TMPL_ELSE -->Not Reservable<!-- /TMPL_UNLESS --></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table></div>
