@@ -338,16 +338,63 @@ sub KeywordSearch {
     $set1=$set1+$set4;
   }
   my $i2=0;
+  my $i3=0;
+  my $i4=0;
+
   my @res2;
   my @res = $set1->members;
   $count=@res;
 #  print $set1;
   $i=0;
 #  print "count $count";
+  if ($search->{'class'} ne ''){ 
+    while ($i2 <$count){
+      my $query="select * from biblio,biblioitems where 
+      biblio.biblionumber='$res[$i2]' and     
+      biblio.biblionumber=biblioitems.biblionumber ";         
+      if ($search->{'class'} ne ''){             
+      my @temp=split(/\|/,$search->{'class'});
+      my $count=@temp;                       
+      $query.= "and ( itemtype='$temp[0]'";     
+      for (my $i=1;$i<$count;$i++){     
+        $query.=" or itemtype='$temp[$i]'";                                     
+      } 
+      $query.=")"; 
+      }
+       my $sth=$dbh->prepare($query);    
+       #    print $query;        
+       $sth->execute;        
+       if (my $data2=$sth->fetchrow_hashref){            
+         my $dewey= $data2->{'dewey'};                
+         my $subclass=$data2->{'subclass'};          
+         $dewey=~s/\.*0*$//;           
+         ($dewey == 0) && ($dewey=''); 
+         ($dewey) && ($dewey.=" $subclass") ;                                    
+          $sth->finish;
+	  my $end=$offset +$num;
+	  if ($i4 <= $offset){
+	    $i4++;
+	  }
+#	  print $i4;
+	  if ($i4 <=$end && $i4 > $offset){
+	    $res2[$i3]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";	
+            $i3++;
+            $i4++;
+#	    print "in here $i3<br>";
+	  } else {
+#	    print $end;
+	  }
+	  $i++; 
+        }         
+     $i2++;
+     }
+     $count=$i;
+  
+   } else {
   while ($i2 < $num && $i2 < $count){
     my $query="select * from biblio,biblioitems where
     biblio.biblionumber='$res[$i2+$offset]' and        
-    biblio.biblionumber=biblioitems.biblionumber";
+    biblio.biblionumber=biblioitems.biblionumber ";
     if ($search->{'class'} ne ''){
       my @temp=split(/\|/,$search->{'class'});
       my $count=@temp;
@@ -375,10 +422,12 @@ sub KeywordSearch {
         $i++;
     }
     $i2++;
+    
+  }
   }
   $dbh->disconnect;
 
-#  $count=$i;
+  #$count=$i;
   return($count,@res2);
 }
 
@@ -1173,29 +1222,32 @@ by date_due";
   return($i,\@result);
 }
 
-sub allissues {
-  my ($bornum)=@_;
-  my $dbh=C4Connect;
-  my $query;
-  $query="Select * from issues,biblio,items where borrowernumber='$bornum' and
-items.itemnumber=issues.itemnumber and
-items.biblionumber=biblio.biblionumber order
-by date_due";
-  #print $query;
-  my $sth=$dbh->prepare($query);
-    $sth->execute;
-  my @result;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $result[$i]=$data;;
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return($i,\@result);
+sub allissues { 
+  my ($bornum,$order,$limit)=@_; 
+  my $dbh=C4Connect;   
+  my $query;     
+  $query="Select * from issues,biblio,items,biblioitems       
+  where borrowernumber='$bornum' and         
+  items.biblioitemnumber=biblioitems.biblioitemnumber and           
+  items.itemnumber=issues.itemnumber and             
+  items.biblionumber=biblio.biblionumber";               
+  $query.=" order by $order";                 
+  if ($limit !=0){                   
+    $query.=" limit $limit";                     
+  }                         
+  #print $query;                           
+  my $sth=$dbh->prepare($query);          
+  $sth->execute;
+  my @result;   
+  my $i=0;    
+  while (my $data=$sth->fetchrow_hashref){                                      
+    $result[$i]=$data;; 
+    $i++;     
+  }         
+  $sth->finish;           
+  $dbh->disconnect;             
+  return($i,\@result);               
 }
-
-
 
 sub borrdata2 {
   my ($env,$bornum)=@_;
