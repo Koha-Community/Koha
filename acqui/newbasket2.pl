@@ -27,6 +27,8 @@ use C4::Output;
 use C4::Catalogue;
 use C4::Biblio;
 use HTML::Template;
+use C4::Auth;
+use C4::Charset;
 
 my $env;
 my $input = new CGI;
@@ -74,31 +76,38 @@ if ($id == 72){
 }
 #print $sub;
 my ($count,@booksellers)=bookseller($id);
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/newbasket2.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {superlibrarian => 1},
+			     debug => 1,
+			     });
 
-my $template = gettemplate("acqui/newbasket2.tmpl");
+#my $template = gettemplate("acqui/newbasket2.tmpl");
 #print startpage();
 #print startmenu('acquisitions');
 
 my $testdonation = ($donation ne 'yes'); #tests if donation = true
-
-    if ($keyword ne ''){
-      ($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
-    } elsif ($search{'front'} ne '') {
-    ($count,@results)=FrontSearch(undef,'intra',\%search,$num,$offset);
-    }else {
-      ($count,@results)=CatSearch(undef,'loose',\%search,$num,$offset);
-    }
+if ($keyword ne ''){
+	($count,@results)=KeywordSearch(undef,'intra',\%search,$num,$offset);
+} elsif ($search{'front'} ne '') {
+	($count,@results)=FrontSearch(undef,'intra',\%search,$num,$offset);
+}else {
+	($count,@results)=CatSearch(undef,'loose',\%search,$num,$offset);
+}
 
 my @loopsearch;
 
 while ( my ($key, $value) = each %search) {
-  if ($value ne ''){
-	my %linesearch;
-	$value=~ s/\\//g;
-	$linesearch{key}=$key;
-	$linesearch{value}=$value;
-	push(@loopsearch,\%linesearch);
-  }
+	if ($value ne ''){
+		my %linesearch;
+		$value=~ s/\\//g;
+		$linesearch{key}=$key;
+		$linesearch{value}=$value;
+		push(@loopsearch,\%linesearch);
+	}
 }
 
 my $offset2=$num+$offset;
@@ -110,122 +119,114 @@ if ($offset2>$count) {
 
 my $count2=@results;
 if ($keyword ne '' && $offset > 0){
-  $count2=$count-$offset;
-  if ($count2 > 10){
-    $count2=10;
-  }
+	$count2=$count-$offset;
+	if ($count2 > 10){
+		$count2=10;
+	}
 }
-#print $count2;
 my $i=0;
 my $colour=0;
 
 my @loopresult;
 
 while ($i < $count2){
-#    print $results[$i]."\n";
-#    my @stuff=split('\t',$results[$i]);
+		my %lineres;
+		my $coltab;
 
-	my %lineres;
-	my $coltab;
+	my $result=$results[$i];
+	$result->{'title'}=~ s/\`/\\\'/g;
+	my $title2=$result->{'title'};
+	my $author2=$result->{'author'};
+	$author2=~ s/ /%20/g;
+	$title2=~ s/ /%20/g;
+	$title2=~ s/\#/\&\#x23;/g;
+	$title2=~ s/\"/\&quot\;/g;
 
-    my $result=$results[$i];
-    $result->{'title'}=~ s/\`/\\\'/g;
-    my $title2=$result->{'title'};
-    my $author2=$result->{'author'};
-    $author2=~ s/ /%20/g;
-    $title2=~ s/ /%20/g;
-    $title2=~ s/\#/\&\#x23;/g;
-    $title2=~ s/\"/\&quot\;/g;
+		my $itemcount;
+	my $location='';
+	my $word=$result->{'author'};
+		$word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
+		$word=~ s/  //g;
+		$word=~ s/ /%20/g;
+		$word=~ s/\,/\,%20/g;
+		$word=~ s/\n//g;
+		$lineres{word}=$word;
+		$lineres{type}=$type;
 
-	my $itemcount;
-    my $location='';
-    my $word=$result->{'author'};
-      $word=~ s/([a-z]) +([a-z])/$1%20$2/ig;
-      $word=~ s/  //g;
-      $word=~ s/ /%20/g;
-      $word=~ s/\,/\,%20/g;
-      $word=~ s/\n//g;
-	  $lineres{word}=$word;
-	  $lineres{type}=$type;
-
-      my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
-      if ($nacount > 0){
-        $location .= "On Loan";
-	if ($nacount >1 ){
-	  $location .= " ($nacount)";
-         }
-	 $location.=" ";
-      }
-      if ($lcount > 0){
-         $location .= "Levin";
-         if ($lcount >1 ){
-	  $location .= " ($lcount)";
-         }
-	 $location.=" ";
-      }
-      if ($fcount > 0){
-        $location .= "Foxton";
-         if ($fcount >1 ){
-	  $location .= " ($fcount)";
-         }
-	 $location.=" ";
-      }
-      if ($scount > 0){
-        $location .= "Shannon";
-         if ($scount >1 ){
-	  $location .= " ($scount)";
-         }
-	 $location.=" ";
-      }
-      if ($lostcount > 0){
-        $location .= "Lost";
-         if ($lostcount >1 ){
-	  $location .= " ($lostcount)";
-         }
-	 $location.=" ";
-      }
-      if ($mending > 0){
-        $location .= "Mending";
-         if ($mending >1 ){
-	  $location .= " ($mending)";
-         }
-	 $location.=" ";
-      }
-      if ($transit > 0){
-        $location .= "In Transit";
-         if ($transit >1 ){
-	  $location .= " ($transit)";
-         }
-	 $location.=" ";
-      }
-	if ($colour == 1){
-		$coltab=$secondary;
-		$colour=0;
-    } else{
-		$coltab=$main;
-		$colour=1;
-    }
-    $lineres{author2}=$author2;
-    $lineres{title2}=$title2;
-    $lineres{copyright}=$result->{'copyrightdate'};
+		my ($count,$lcount,$nacount,$fcount,$scount,$lostcount,$mending,$transit)=C4::Search::itemcount($env,$result->{'biblionumber'},$type);
+		if ($nacount > 0){
+			$location .= "On Loan";
+			if ($nacount >1 ){
+				$location .= " ($nacount)";
+			}
+			$location.=" ";
+		}
+		if ($lcount > 0){
+			$location .= "Levin";
+			if ($lcount >1 ){
+				$location .= " ($lcount)";
+			}
+			$location.=" ";
+		}
+		if ($fcount > 0){
+			$location .= "Foxton";
+			if ($fcount >1 ){
+				$location .= " ($fcount)";
+			}
+			$location.=" ";
+		}
+		if ($scount > 0){
+			$location .= "Shannon";
+			if ($scount >1 ){
+				$location .= " ($scount)";
+			}
+			$location.=" ";
+		}
+		if ($lostcount > 0){
+			$location .= "Lost";
+			if ($lostcount >1 ){
+				$location .= " ($lostcount)";
+			}
+			$location.=" ";
+		}
+		if ($mending > 0){
+			$location .= "Mending";
+			if ($mending >1 ){
+				$location .= " ($mending)";
+			}
+			$location.=" ";
+		}
+		if ($transit > 0){
+			$location .= "In Transit";
+			if ($transit >1 ){
+				$location .= " ($transit)";
+			}
+			$location.=" ";
+		}
+		if ($colour == 1){
+			$coltab=$secondary;
+			$colour=0;
+	} else{
+			$coltab=$main;
+			$colour=1;
+	}
+	$lineres{author2}=$author2;
+	$lineres{title2}=$title2;
+	$lineres{copyright}=$result->{'copyrightdate'};
 	$lineres{id}=$id;
 	$lineres{basket}=$basket;
 	$lineres{sub}=$sub;
 	$lineres{biblionumber}=$result->{biblionumber};
 	$lineres{title}=$result->{title};
-    $lineres{author}=$result->{author};
+	$lineres{author}=$result->{author};
 	$lineres{coltab}=$coltab;
 	$lineres{itemcount}=$count;
 	$lineres{location}=$location;
 	push(@loopresult,\%lineres);
-    $i++;
+	$i++;
 }
 
 $offset=$num+$offset;
-
-#print mktablerow(6,$main,' &nbsp; ',' &nbsp; ',' &nbsp;',' &nbsp;','','','/images/background-mem.gif');
-
-#print mktableft();
 $template->param(	bookselname => $booksellers[0]->{'name'},
 								id => $id,
 								basket => $basket,
@@ -245,5 +246,7 @@ $template->param(	bookselname => $booksellers[0]->{'name'},
 								loopsearch =>\@loopsearch,
 								loopresult =>\@loopresult);
 
-
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(
+-type => guesstype($template->output),
+-cookie => $cookie
+),$template->output;
