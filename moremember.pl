@@ -37,6 +37,9 @@ use C4::Reserves2;
 use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
 use C4::Koha;
+use C4::Database;
+
+my $dbh=C4Connect;
 
 my $input = new CGI;
 my $bornum=$input->param('bornum');
@@ -250,7 +253,7 @@ for (my $i=0;$i<$count;$i++){
   $issue->[$i]{'barcode'}</a></td>
   <TD>$issue->[$i]{'date_due'}</td>";
   #find the charge for an item
-  my ($charge,$itemtype)=calc_charges(undef,$issue->[$i]{'itemnumber'},$bornum);
+  my ($charge,$itemtype)=calc_charges(undef,$dbh,$issue->[$i]{'itemnumber'},$bornum);
   print "<TD>$itemtype</td>";
   print "<TD>$charge</td>";
 
@@ -302,7 +305,7 @@ print <<printend
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Requested</b></TD>
 
 
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Charge</b></TD>
+
 
 <td  bgcolor="99cc33" background="/images/background-mem.gif"><B>Remove</b></TD>
 </TR>
@@ -318,14 +321,17 @@ my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
 # kind of loop? 
 #
 for (my $i=0;$i<$rescount;$i++){
-  $reserves->[$i]{'reservedate'} = slashifyDate($reserves->[$i]{'reservedate'});
-
+  $reserves->[$i]{'reservedate2'} = slashifyDate($reserves->[$i]{'reservedate'});
+  my $restitle;
+  if ($reserves->[$i]{'constrainttype'} eq 'o'){
+      $restitle=getreservetitle($reserves->[$i]{'biblionumber'},$reserves->[$i]{'borrowernumber'},$reserves->[$i]{'reservedate'},$reserves->[$i]{'timestamp'});
+  } 
   print "<tr VALIGN=TOP  >
-  <TD><a href=\"/cgi-bin/koha/request.pl?bib=$reserves->[$i]{'biblionumber'}\">$reserves->[$i]{'btitle'}</a></td>
-  <TD>$reserves->[$i]{'reservedate'}</td>
+  <TD><a href=\"/cgi-bin/koha/request.pl?bib=$reserves->[$i]{'biblionumber'}\">$reserves->[$i]{'btitle'}</a> $restitle->{'volumeddesc'} $restitle->{'itemtype'}</td>
+  <TD>$reserves->[$i]{'reservedate2'}</td>
   <input type=hidden name=biblio value=$reserves->[$i]{'biblionumber'}>
   <input type=hidden name=borrower value=$bornum>
-  <TD></td>
+
   <TD><select name=\"rank-request\">
   <option value=n>No
   <option value=del>Yes
@@ -352,3 +358,4 @@ print endmenu('member');
 print endpage();
 
 
+$dbh->disconnect;
