@@ -1248,12 +1248,10 @@ sub ItemInfo {
   my @results;
 #  print $query;
   while (my $data=$sth->fetchrow_hashref){
-    my $iquery = "Select * from issues
-    where itemnumber = '$data->{'itemnumber'}'
-    and returndate is null";
+    my $iquery = "Select * from issues where itemnumber = ? and returndate is null";
     my $datedue = '';
     my $isth=$dbh->prepare($iquery);
-    $isth->execute;
+    $isth->execute($data->{'itemnumber'});
     if (my $idata=$isth->fetchrow_hashref){
       $datedue = format_date($idata->{'date_due'});
     }
@@ -1267,7 +1265,7 @@ sub ItemInfo {
 	$datedue="Cancelled";
     }
     if ($datedue eq ''){
-	$datedue="Available";
+#	$datedue="Available";
 	my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
 	if ($restype){
 	    $datedue=$restype;
@@ -1480,14 +1478,11 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 sub bibitemdata {
     my ($bibitem) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "Select *,biblioitems.notes as bnotes from biblio, biblioitems,itemtypes
-where biblio.biblionumber = biblioitems.biblionumber
-and biblioitemnumber = $bibitem
-and biblioitems.itemtype = itemtypes.itemtype";
+    my $query = "Select *,biblioitems.notes as bnotes from biblio, biblioitems,itemtypes where biblio.biblionumber = biblioitems.biblionumber and biblioitemnumber = ? and biblioitems.itemtype = itemtypes.itemtype";
     my $sth   = $dbh->prepare($query);
     my $data;
 
-    $sth->execute;
+    $sth->execute($bibitem);
 
     $data = $sth->fetchrow_hashref;
 
