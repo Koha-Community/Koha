@@ -1,35 +1,129 @@
-<!-- TMPL_INCLUDE name="opac-top.inc" -->
-
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <div id="mainbloc">
-	<h1>Advanced search</h1>
-	<form action="/cgi-bin/koha/opac-searchresults.pl" method="get">
-	<ul>
-		<li><label>keyword</label><input type="text"  size="25"   name="keyword" /></li>
-	</ul>
-	<p><b>OR :</b></p>
-	<ul>
-		<li><label>subject</label><input type="text"  size="25"   name="subject" /></li>
-	</ul>
-	<p><b>OR one or more from :</b></p>
-	<ul>
-		<li><label>Title</label><input type="text"  size="25"   name="title" /></li>
-		<li><label>Author</label><input type="text"  size="25"   name="author" /></li>
-		<li><label>Illustrator</label><input type="text"  size="25"   name="illustrator" /></li>
-		<li><label>Item type</label>
-			<select size="1"  name="class">
-				<option value="">Any</option>
-				<!-- TMPL_VAR name="classlist" -->
-			</select>
-		</li>
-		<li><label>Barcode</label><input type="text"  size="25"   name="itemnumber" /></li>
-	</ul>
-		<p>using <input type="radio" name="ttype" value="normal" />Normal or <input type="radio" name="ttype" value="exact" />Exact search</p>
 
-	<p>
-		<input type="submit" value="OK Start Search" class="button" />
-		<input type="reset"  value="Clear All Fields" class="button" />
-	</p>
-	<p>Note that if you enter a value in Keyword and a value somewhere else, only keyword will be used</p>
-	</form>
+<h1 class="catalogue">Catalogue search</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div id="bloc25">
+		<h2 class="catalogue">Search on</h2>
+		<p>
+			<label class="label20">Keyword</label>
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label20">Title</label>
+			<input type="hidden" name="marclist" value="biblio.title">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label20">author</label> <input type="hidden" name="marclist" value="biblio.author">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" onchange="sql_update()">
+		</p>
+		<p>
+				<label class="label20">barcode</label>
+				<input type="hidden" name="marclist" value="items.barcode">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label20">Illustrator</label>
+			<input type="hidden" name="marclist" value="biblioitems.illus">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label20">Dewey</label><input type="hidden" name="marclist" value="biblioitems.dewey">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label20">Item Type</label> <input type="hidden" name="marclist" value="biblioitems.itemtype">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="=">
+			<!-- TMPL_VAR name="CGIitemtype" -->
+		</p>
+		<p>
+				<label class="label20">branch</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="=">
+				<!-- TMPL_VAR name="CGIbranch" -->
+		</p>
+
+	</div>
+	<div id="bloc25">
+		<p>Results per page :
+			<select align="right" name="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		Ordered by
+			<select name="orderby" size="1">
+				<option value="biblio.title">Title</option>
+				<option value="biblio.author">Author</option>
+				<option value="biblioitems.dewey">Dewey</option>
+				<option value="biblioitems.publicationyear">Publication Year</option>
+				<option value="biblioitems.publishercode">Publisher</option>
+			</select>
+		</p>
+		<p>
+			<input type="submit" value="Start search" class="button catalogue">
+		</p>
+	</div>
+</form>
+
+<script>
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
 </div>
-<!-- TMPL_INCLUDE name="opac-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -53,7 +53,6 @@ $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SITE_RESULTS => $sitearray,
-			     LibraryName => C4::Context->preference("LibraryName"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

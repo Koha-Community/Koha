@@ -35,6 +35,5 @@ my ($template, $borrowernumber, $cookie)
 			 });
 
 $template->param(CGIitemtype => $CGIitemtype,
-			     LibraryName => C4::Context->preference("LibraryName"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
