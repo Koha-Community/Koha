@@ -15,10 +15,10 @@
 				</tr>
 				<!-- TMPL_LOOP Name="itemsloop" -->
 					<tr>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="barcode" --></td>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="barcode" --></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><a class="transparent" href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="author" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -33,7 +33,7 @@
 	</form>
 
 	<!-- TMPL_IF name="manageshelf" -->
-	<div id="bloc20">
+	<div class="bloc20">
 		<form>
 		<h2>Add a book by barcode</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
@@ -57,7 +57,7 @@
 				<p class="problem"><!-- TMPL_VAR NAME="string" --><p>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
-		<div id="bloc20">
+		<div class="bloc20">
 					<h2>Select Shelves to Delete</h2>
 					<form method="post">
 					<input type="hidden" name="shelves" value="1">
@@ -101,7 +101,7 @@
 			</form>
 		</div>
 	<!-- TMPL_ELSE -->
-		<div id="bloc20">
+		<div class="bloc60">
 			<h2>Shelf list</h2>
 			<table class="small">
 				<tr>
@@ -112,12 +112,12 @@
 				</tr>
 				<!-- TMPL_LOOP Name="shelvesloop" -->
 				<tr>
-					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
-						<a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+						<a class="transparent" href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
 							<!-- TMPL_VAR NAME="shelfname" -->
 						</a>
 					</td>
-					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
 						<!-- TMPL_IF NAME="category1" -->
 							Private
 						<!-- /TMPL_IF -->
@@ -128,11 +128,11 @@
 							Free
 						<!-- /TMPL_IF -->
 					</td>
-					<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
 						<!-- TMPL_VAR NAME="shelfbookcount" --> item(s)
 					</td>
 					<!-- TMPL_IF name="mine" -->
-						<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
 							<a href="opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button">Modify</a>
 							<!-- TMPL_VAR name="surname" --><!-- TMPL_VAR name="firstname" -->
 						</td>
@@ -141,14 +141,14 @@
 				<!-- /TMPL_LOOP -->
 			</table>
 		</div>
-		<div id="bloc20">
+		<div class="bloc20">
 			<a href="opac-shelves.pl?shelves=1" class="button">Add or Remove Book Shelves</a>
 		</div>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="edit" -->
-	<div id="bloc20">
+	<div class="bloc20">
 		<form method="post">
 			<input type="hidden" name="op" value="modifsave">
 			<h2>Modify shelf</h2>
