@@ -18,6 +18,15 @@ $VERSION = 0.01;
 
 sub checkauth {
     my $query=shift;
+    # $authnotrequired will be set for scripts which will run without authentication
+    my $authnotrequired=shift;
+    if (my $userid=$ENV{'REMOTE_USERNAME'}) {
+	# Using Basic Authentication, no cookies required
+	my $cookie=$query->cookie(-name => 'sessionID',
+				  -value => '',
+				  -expires => '+1y');
+	return ($userid, $cookie, '');
+    }
     my $sessionID=$query->cookie('sessionID');
     my $message='';
     warn "SID: ".$sessionID;
@@ -54,37 +63,42 @@ sub checkauth {
 
 
     warn "$sessionID wasn't in sessions table.";
-    
-    ($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
-    my $userid=$query->param('userid');
-    my $password=$query->param('password');
-    if ($userid eq 'librarian' && $password eq 'koha') {
-	my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
-	$sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
-	open L, ">>/tmp/sessionlog";
-	print L "$userid from ".$ENV{'REMOTE_ADDR'}." logged in at ".localtime(time()).".\n";
-	close L;
-	return ($userid, $sessionID, $sessionID);
-    } elsif ($userid eq 'patron' && $password eq 'koha') {
-	my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
-	$sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
-	open L, ">>/tmp/sessionlog";
-	print L "$userid from ".$ENV{'REMOTE_ADDR'}." at ".localtime(time()).".\n";
-	close L;
-	return ($userid, $sessionID, $sessionID);
-    } else {
-	if ($userid) {
-	    $message="Invalid userid or password entered.";
-	}
-	my $parameters;
-	foreach (param $query) {
-	    $parameters->{$_}=$query->{$_};
-	}
+    if ($authnotrequired) {
 	my $cookie=$query->cookie(-name => 'sessionID',
-				  -value => $sessionID,
+				  -value => '',
 				  -expires => '+1y');
-	print $query->header(-cookie=>$cookie);
-	print qq|
+	return('', $cookie, '');
+    } else {
+	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
+	my $userid=$query->param('userid');
+	my $password=$query->param('password');
+	if ($userid eq 'librarian' && $password eq 'koha') {
+	    my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
+	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+	    open L, ">>/tmp/sessionlog";
+	    print L "$userid from ".$ENV{'REMOTE_ADDR'}." logged in at ".localtime(time()).".\n";
+	    close L;
+	    return ($userid, $sessionID, $sessionID);
+	} elsif ($userid eq 'patron' && $password eq 'koha') {
+	    my $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
+	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+	    open L, ">>/tmp/sessionlog";
+	    print L "$userid from ".$ENV{'REMOTE_ADDR'}." at ".localtime(time()).".\n";
+	    close L;
+	    return ($userid, $sessionID, $sessionID);
+	} else {
+	    if ($userid) {
+		$message="Invalid userid or password entered.";
+	    }
+	    my $parameters;
+	    foreach (param $query) {
+		$parameters->{$_}=$query->{$_};
+	    }
+	    my $cookie=$query->cookie(-name => 'sessionID',
+				      -value => $sessionID,
+				      -expires => '+1y');
+	    print $query->header(-cookie=>$cookie);
+	    print qq|
 <html>
 <body background=/images/kohaback.jpg>
 <center>
@@ -100,7 +114,8 @@ sub checkauth {
 </body>
 </html>
 |;
-	exit
+	    exit;
+	}
     }
 }
 
