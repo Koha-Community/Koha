@@ -71,8 +71,18 @@ while (1) {
 			if ($r_enddate >0) {
 			    $serverdone{$r_server}=1;
 			} elsif ($active) {
+			    my $now=time();
+			    if ($now-$r_startdate > 1000) {
+				my $sti=$dbh->prepare("update z3950results set enddate=$now where id=$r_id");
+				$sti->execute;
+			    }
 			    $serverdone{$r_server}=1;
 			} else {
+			    my $now=time();
+			    if ($now-$r_startdate > 1000) {
+				my $sti=$dbh->prepare("update z3950results set enddate=$now where id=$r_id");
+				$sti->execute;
+			    }
 			    $serverdone{$r_server}=-1;
 			}
 		    }
