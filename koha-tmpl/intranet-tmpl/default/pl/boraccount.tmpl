@@ -1,0 +1,57 @@
+<HTML>
+
+<!-- startmenu (member)
+     this  includes the head-container and <body>
+     including this via var contradicts the separation of code and design
+     a solution via tmpl_include would be better -->
+
+<TMPL_VAR NAME=startmenumember>
+
+<!-- The manual invoice and credit buttons -->
+
+<FONT SIZE=6><em>Konto dla <TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></em></FONT><P>
+<a href="/cgi-bin/koha/maninvoice.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=/images/create-man-invoice.gif border=0></a>
+&nbsp;
+<a href="/cgi-bin/koha/mancredit.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=/images/create-man-credit.gif border=0></a>
+<center>
+<p>
+
+<!-- The table with the account items -->
+
+<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+
+  <TR VALIGN=TOP>
+    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><B>KARY I OP£ATY</TD>
+    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>KWOTA</TD>
+    <td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>DO ZAP£ATY</TD>
+  </TR>
+
+  <TMPL_LOOP NAME=accounts>
+
+    <tr VALIGN=TOP>
+      <td><TMPL_VAR NAME=date></td>
+      <td><TMPL_VAR NAME=description><TMPL_IF NAME=printtitle> <TMPL_VAR NAME=title></TMPL_IF></td>
+      <td><TMPL_VAR NAME=amount></td>
+      <td><TMPL_VAR NAME=amountoutstanding></td>
+    </tr>
+
+  </TMPL_LOOP>
+
+  <tr VALIGN=TOP  >
+    <td></td>
+    <td colspan=2><b>RAZEM DO ZAP£ATY</b></td>
+    <td><b><TMPL_VAR NAME=total></b></td>
+  </tr>
+
+</table>
+
+<br clear=all>
+<p> &nbsp; </p>
+
+<!-- endmenu (member) -->
+
+<TMPL_VAR NAME=member>
+
+</body>
+</HTML>
+
