@@ -65,17 +65,23 @@ sub getbranch {
   my $query = "select * from branches order by branchcode";
   my $sth = $dbh->prepare($query);
   $sth->execute;
-  my @branches;
-  while (my $data = $sth->fetchrow_hashref) {
-    push @branches,$data;
+  if ($sth->rows>1) {
+      my @branches;
+      while (my $data = $sth->fetchrow_hashref) {
+	push @branches,$data;
+      }
+      brmenu ($env,\@branches);
+  } else {
+      my $data = $sth->fetchrow_hashref;
+      $env->{'branchcode'}=$data->{'branchcode'};
   }
-  brmenu ($env,\@branches);
   my $query = "select * from branches  
     where branchcode = '$env->{'branchcode'}'";
   $sth = $dbh->prepare($query);
   $sth->execute;
   my $data = $sth->fetchrow_hashref;
   $env->{'brdata'} = $data;
+  $env->{'branchname'} = $data->{'branchname'};
   $sth->finish;
   $dbh->disconnect;
 }
@@ -86,11 +92,17 @@ sub getprinter {
   my $query = "select * from printers order by printername";
   my $sth = $dbh->prepare($query);
   $sth->execute;
-  my @printers;
-  while (my $data = $sth->fetchrow_hashref) {
-    push @printers,$data;
+  if ($sth->rows>1) {
+      my @printers;
+      while (my $data = $sth->fetchrow_hashref) {
+	push @printers,$data;
+      }
+      prmenu ($env,\@printers);
+  } else {
+      my $data=$sth->fetchrow_hashref;
+      $env->{'queue'}=$data->{'printqueue'};
+      $env->{'printtype'}=$data->{'printtype'};
   }
-  prmenu ($env,\@printers);
   $sth->finish;
   $dbh->disconnect;
   }
