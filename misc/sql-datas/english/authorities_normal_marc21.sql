@@ -1,14 +1,3 @@
--- MySQL dump 8.23
---
--- Host: localhost    Database: Koha
----------------------------------------------------------
--- Server version	3.23.58
-
---
--- Dumping data for table `auth_subfield_structure`
---
-
-
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','010','a','LC control number','',0,0,0,NULL,NULL,NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','010','z','Canceled/invalid LC control number','',1,0,0,NULL,NULL,NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','010','8','Field link and sequence number','',1,0,0,NULL,NULL,NULL);
@@ -1196,12 +1185,6 @@ INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblib
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','880','7','Same as associated field','',1,0,0,NULL,NULL,NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','880','8','Same as associated field','',1,0,0,NULL,NULL,NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','880','9','Same as associated field','',1,0,0,NULL,NULL,NULL);
-
---
--- Dumping data for table `auth_tag_structure`
---
-
-
 INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES ('','010','LIBRARY OF CONGRESS CONTROL NUMBER','',0,0,NULL);
 INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES ('','014','LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM','',1,0,NULL);
 INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES ('','016','National Bibliographic Agency Control Number','',1,0,NULL);

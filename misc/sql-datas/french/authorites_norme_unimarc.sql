@@ -1,17 +1,3 @@
-# phpMyAdmin MySQL-Dump
-# version 2.4.0
-# http://www.phpmyadmin.net/ (download page)
-#
-# Serveur: localhost
-# Généré le : Mercredi 18 Août 2004 à 17:31
-# Version du serveur: 4.0.18
-# Version de PHP: 4.3.4
-# Base de données: `EMN`
-
-#
-# Contenu de la table `auth_subfield_structure`
-#
-
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('', '035', 'a', 'Numéro de contrôle système', '', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('', '035', 'z', 'Numéro de contrôle annulé ou erroné', '', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('', '100', 'a', 'Données générale de traitement', '', 0, 0, 0, NULL, NULL, NULL);
@@ -691,11 +677,6 @@ INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblib
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('', '001', '@', 'tag 001', '', 0, 0, 0, '', NULL, '');
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('', '005', '@', 'tag 005', '', 0, 0, -1, '', NULL, '');
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('', '015', '@', 'tag 015', '', 0, 0, -1, '', NULL, '');
-
-#
-# Contenu de la table `auth_tag_structure`
-#
-
 INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES ('', '001', 'Identificateur de la notice', '', 0, 0, NULL);
 INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES ('', '005', 'Identificateur de la version', '', 0, 0, NULL);
 INSERT INTO auth_tag_structure (authtypecode, tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value) VALUES ('', '015', '(ISADN)', '', 0, 0, NULL);
