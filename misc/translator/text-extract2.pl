@@ -7,6 +7,8 @@
 
 # This script is meant to be a drop-in replacement of text-extract.pl
 
+# FIXME: Strings like "<< Prev" confuses *this* filter
+
 use Getopt::Long;
 use strict;
 
@@ -15,7 +17,14 @@ use vars qw( $debug_dump_only_p );
 
 ###############################################################################
 
-# Hideous stuff from subst.pl
+# Hideous stuff
+use vars qw( $re_directive );
+BEGIN {
+    # $re_directive must not do any backreferences
+    $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)\b(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s*(?:--)?)>};
+}
+
+# Hideous stuff from subst.pl, slightly modified to use the above hideous stuff
 # Note: The $re_tag's set $1 (<tag), $2 (>), and $3 (rest of string)
 use vars qw( $re_comment $re_entity_name $re_end_entity $re_etag );
 use vars qw( $re_tag_strict $re_tag_compat @re_tag );
@@ -23,7 +32,8 @@ sub re_tag ($) {
    my($compat) = @_;
    my $etag = $compat? '>': '<>\/';
    # See the file "subst.pl.test1" for how the following mess is derived
-   q{(<\/?(?:|(?:"[^"]*"|'[^']*'|--(?:[^-]|-[^-])*--|(?:[^-"'} . $etag . q{]|-[^-]))+))([} . $etag . q{])(.*)};
+   # Unfortunately, inserting $re_directive's has made this even messier
+   q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:} . $re_directive . q{|[^-"'} . $etag . q{]|-[^-]))+))([} . $etag . q{])(.*)};
 }
 BEGIN {
     $re_comment = '(?:--(?:[^-]|-[^-])*--)';
@@ -34,12 +44,6 @@ BEGIN {
 }
 
 # End of the hideous stuff
-
-use vars qw( $re_directive );
-BEGIN {
-    # $re_directive must not do any backreferences
-    $re_directive = q{<(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)\b(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s*(?:--)?>};
-}
 
 sub KIND_TEXT      () { 'TEXT' }
 sub KIND_CDATA     () { 'CDATA' }
@@ -200,7 +204,7 @@ sub text_extract (*) {
 	my($kind, $t, $attr) = @$s; # FIXME
 	if ($kind eq KIND_TEXT) {
 	    $t =~ s/\s+$//s;
-	    $text{$t} = 1 if $t =~ /\S/s; # FIXME... trailing whitespace
+	    $text{$t} = 1 if $t =~ /\S/s;
 	} elsif ($kind eq KIND_TAG && %$attr) {
 	    # value [tag=input], meta
 	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
@@ -208,7 +212,7 @@ sub text_extract (*) {
 		if ($attr->{$a}) {
 		    next if $a eq 'content' && $tag ne 'meta';
 		    next if $a eq 'value' && ($tag ne 'input'
-			|| (ref $attr->{'type'} && $attr->{'type'}->[1] eq 'hidden'));
+			|| (ref $attr->{'type'} && $attr->{'type'}->[1] eq 'hidden')); # FIXME
 		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
 		    $val =~ s/\s+$//s;
 		    $text{$val} = 1 if $val =~ /\S/s;
