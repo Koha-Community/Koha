@@ -29,7 +29,7 @@ $VERSION = 0.01;
 
 =head1 NAME
 
-C4::Print - FIXME
+C4::Print - Koha module dealing with printing
 
 =head1 SYNOPSIS
 
@@ -37,7 +37,7 @@ C4::Print - FIXME
 
 =head1 DESCRIPTION
 
-FIXME
+The functions in this module handle sending text to a printer.
 
 =head1 FUNCTIONS
 
