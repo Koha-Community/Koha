@@ -1,4 +1,4 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <!--Authored by rachel@katipo.co.nz 10:46 24/12/99-->
 
 <html>
