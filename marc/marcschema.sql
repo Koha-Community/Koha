@@ -115,7 +115,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_1XX_subfield_table (
@@ -126,7 +126,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_2XX_subfield_table (
@@ -137,7 +137,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_3XX_subfield_table (
@@ -148,7 +148,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_4XX_subfield_table (
@@ -159,7 +159,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_5XX_subfield_table (
@@ -170,7 +170,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_6XX_subfield_table (
@@ -181,7 +181,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_7XX_subfield_table (
@@ -192,7 +192,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_8XX_subfield_table (
@@ -203,7 +203,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 	CREATE TABLE marc_9XX_subfield_table (
@@ -214,7 +214,7 @@
 		subfieldcode char(1) NOT NULL default '',
 		subfieldvalue varchar(255) default NULL,
 		valuebloblink bigint(20) default NULL,
-		PRIMARY KEY (subfieldcode),
+		PRIMARY KEY (subfieldid),
 		KEY (bibid,tagid,subfieldcode)
 		) TYPE=MyISAM;
 
