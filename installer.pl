@@ -316,24 +316,6 @@ files using the "User" directive.
 }
 
 
-#Create the configuration file
-open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
-at $etcdir.  Must have write capability.\n";
-print SITES <<EOP
-database=$dbname
-hostname=$hostname
-user=$user
-pass=$pass
-includes=$kohadir/htdocs/includes
-intranetdir=$kohadir
-opacdir=$opacdir
-kohalogdir=$kohalogdir
-kohaversion=$kohaversion
-httpduser=$httpduser
-EOP
-;
-close(SITES);
-
 #
 # Set ownership of the koha.conf file for security
 #
@@ -699,6 +681,27 @@ system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 
 system("chown -R root.$httpduser $opacdir");
 system("chown -R root.$httpduser $kohadir");
+
+
+
+#Create the configuration file
+open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
+at $etcdir.  Must have write capability.\n";
+print SITES <<EOP
+database=$dbname
+hostname=$hostname
+user=$user
+pass=$pass
+includes=$kohadir/htdocs/includes
+intranetdir=$kohadir
+opacdir=$opacdir
+kohalogdir=$kohalogdir
+kohaversion=$kohaversion
+httpduser=$httpduser
+EOP
+;
+close(SITES);
+
 
 print qq|
 
