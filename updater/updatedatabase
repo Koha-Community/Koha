@@ -249,6 +249,9 @@ my %requirefields = (
 			   'options' => 'text' },
     z3950servers      => { 'syntax'      => 'char(80)' },
     marc_subfield_structure =>{'seealso'  => 'char(80)'},
+    bookshelf => {'owner' => 'char(80)',
+    					'category' => 'char(1)',
+				}
 );
 
 my %dropable_table = (
@@ -1015,6 +1018,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.74  2004/03/11 16:10:16  tipaul
+# *** empty log message ***
+#
 # Revision 1.73  2004/03/06 20:26:13  tipaul
 # adding seealso feature in MARC searches
 #

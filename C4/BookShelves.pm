@@ -53,9 +53,35 @@ items to and from bookshelves.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &RemoveFromShelf &AddShelf &RemoveShelf);
+@EXPORT = qw(&GetShelfList &GetShelfContents &AddToShelf &AddToShelfFromBiblio
+				&RemoveFromShelf &AddShelf &RemoveShelf
+				&ShelfPossibleAction);
 
 my $dbh = C4::Context->dbh;
+
+=item ShelfPossibleAction
+
+=over 4
+
+=item C<$loggedinuser,$shelfnumber,$action>
+
+$action can be "view" or "manage".
+
+Returns 1 if the user can do the $action in the $shelfnumber shelf.
+Returns 0 otherwise.
+
+=back
+
+=cut
+sub ShelfPossibleAction {
+	my ($loggedinuser,$shelfnumber,$action)= @_;
+	my $sth = $dbh->prepare("select owner,category from bookshelf where shelfnumber=?");
+	$sth->execute($shelfnumber);
+	my ($owner,$category) = $sth->fetchrow;
+	return 1 if (($category>=3 or $owner eq $loggedinuser) && $action eq 'manage');
+	return 1 if (($category>= 2 or $owner eq $loggedinuser) && $action eq 'view');
+	return 0;
+}
 
 =item GetShelfList
 
@@ -85,23 +111,25 @@ The number of books on that bookshelf.
 # a reference-to-hash? The shelf number can be just another key in the
 # hash.
 sub GetShelfList {
-    # FIXME - These two database queries can be combined into one:
-    #	SELECT		bookshelf.shelfnumber, bookshelf.shelfname,
-    #			count(shelfcontents.itemnumber)
-    #	FROM		bookshelf
-    #	LEFT JOIN	shelfcontents
-    #	ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
-    #	GROUP BY	bookshelf.shelfnumber
-    my $sth=$dbh->prepare("select shelfnumber,shelfname from bookshelf");
-    $sth->execute;
+	my ($owner,$mincategory) = @_;
+	# mincategory : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
+	# bookshelves of the owner are always selected, whatever the category
+	my $sth=$dbh->prepare("SELECT		bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname,
+							count(shelfcontents.itemnumber) as count
+								FROM		bookshelf
+								LEFT JOIN	shelfcontents
+								ON		bookshelf.shelfnumber = shelfcontents.shelfnumber
+								left join borrowers on bookshelf.owner = borrowers.borrowernumber
+								where owner=? or category>=?
+								GROUP BY	bookshelf.shelfnumber order by shelfname");
+    $sth->execute($owner,$mincategory);
     my %shelflist;
-    while (my ($shelfnumber, $shelfname) = $sth->fetchrow) {
-	my $sti=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=?");
-		# FIXME - Should there be an "order by" in here somewhere?
-	$sti->execute($shelfnumber);
-	my ($count) = $sti->fetchrow;
+    while (my ($shelfnumber, $shelfname,$owner,$surname,$firstname,$count) = $sth->fetchrow) {
 	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
 	$shelflist{$shelfnumber}->{'count'}=$count;
+	$shelflist{$shelfnumber}->{'owner'}=$owner;
+	$shelflist{$shelfnumber}->{surname} = $surname;
+	$shelflist{$shelfnumber}->{firstname} = $firstname;
     }
     return(\%shelflist);
 }
@@ -156,6 +184,21 @@ sub AddToShelf {
 		$sth->execute($shelfnumber, $itemnumber);
 	}
 }
+sub AddToShelfFromBiblio {
+	my ($env, $biblionumber, $shelfnumber) = @_;
+	return unless $biblionumber;
+	my $sth = $dbh->prepare("select itemnumber from items where biblionumber=?");
+	$sth->execute($biblionumber);
+	my ($itemnumber) = $sth->fetchrow;
+	$sth=$dbh->prepare("select * from shelfcontents where shelfnumber=? and itemnumber=?");
+	$sth->execute($shelfnumber, $itemnumber);
+	if ($sth->rows) {
+# already on shelf
+	} else {
+		$sth=$dbh->prepare("insert into shelfcontents (shelfnumber, itemnumber, flags) values (?, ?, 0)");
+		$sth->execute($shelfnumber, $itemnumber);
+	}
+}
 
 =item RemoveFromShelf
 
@@ -192,14 +235,14 @@ C<$env> is ignored.
 # FIXME - Perhaps this could/should return the number of the new bookshelf
 # as well?
 sub AddShelf {
-    my ($env, $shelfname) = @_;
+    my ($env, $shelfname,$owner,$category) = @_;
     my $sth=$dbh->prepare("select * from bookshelf where shelfname=?");
 	$sth->execute($shelfname);
     if ($sth->rows) {
 	return(1, "Shelf \"$shelfname\" already exists");
     } else {
-	$sth=$dbh->prepare("insert into bookshelf (shelfname) values (?)");
-	$sth->execute($shelfname);
+	$sth=$dbh->prepare("insert into bookshelf (shelfname,owner,category) values (?,?,?)");
+	$sth->execute($shelfname,$owner,$category);
 	return (0, "Done");
     }
 }
@@ -239,8 +282,11 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
-# Revision 1.12  2004/02/11 08:40:09  tipaul
-# synch'ing 2.0.0 branch and head
+# Revision 1.13  2004/03/11 16:06:20  tipaul
+# *** empty log message ***
+#
+# Revision 1.11.2.2  2004/02/19 10:15:41  tipaul
+# new feature : adding book to bookshelf from biblio detail screen.
 #
 # Revision 1.11.2.1  2004/02/06 14:16:55  tipaul
 # fixing bugs in bookshelves management.
