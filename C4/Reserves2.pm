@@ -302,13 +302,13 @@ sub Findgroupreserve {
   return($i,@results);
 }
 
-sub CreateReserve {                                                           
+sub CreateReserve {
   my
-($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title)= @_;   
+($env,$branch,$borrnum,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$required_date, $expires_date)= @_;
   my $fee=CalcReserveFee($env,$borrnum,$biblionumber,$constraint,$bibitems);
-  my $dbh = &C4Connect;       
-  my $const = lc substr($constraint,0,1);       
-  my @datearr = localtime(time);                                
+  my $dbh = &C4Connect;
+  my $const = lc substr($constraint,0,1);
+  my @datearr = localtime(time);
   my $resdate =(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];                   
   #eval {                                                           
   # updates take place here             
@@ -325,11 +325,19 @@ sub CreateReserve {
   }                     
   #if ($const eq 'a'){
     my $query="insert into reserves
-   (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,priority,reservenotes)
+   (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,priority,reservenotes,required_date,expires_date)
     values
-('$borrnum','$biblionumber','$resdate','$branch','$const','$priority','$notes')";   
+(?, ?, ?, ?, ?, ?, ?, ?, ?)";   
     my $sth = $dbh->prepare($query);                        
-    $sth->execute();                
+    $sth->execute($borrnum,
+    		  $biblionumber,
+		  $resdate,
+		  $branch,
+		  $const,
+		  $priority,
+		  $notes,
+		  $required_date,
+		  $expires_date);
     $sth->finish;
   #}
   if (($const eq "o") || ($const eq "e")) {     

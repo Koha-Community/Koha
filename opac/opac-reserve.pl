@@ -125,6 +125,14 @@ if ($query->param('item_types_selected')) {
 	$template->param(message => 1);
 	$template->param(no_items_selected => 1);
     }
+    my $required_date=join '-', $query->param('required-year'), $query->param('required-month'), $query->param('required-day');
+    my $expires_date=join '-', $query->param('expires-year'), $query->param('expires-month'), $query->param('expires-day');
+    ($query->param('required-year')) || ($required_date='');
+    ($query->param('expires-year')) || ($expires_date='');
+    warn "REQ: $required_date\n";
+    $template->param(required_date=> $required_date, 
+                     expires_date => $expires_date);
+
 
 } elsif ($query->param('place_reserve')) {
 # here we actually do the reserveration. Stage 3.
@@ -139,7 +147,9 @@ if ($query->param('item_types_selected')) {
 	}
     }
     my @reqbibs = keys %reqbibs;
-    CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title);
+    my $required_date=$query->param('required_date');
+    my $expires_date=$query->param('expires_date');
+    CreateReserve(undef,$branch,$borrowernumber,$biblionumber,'o',\@reqbibs,$rank,'',$title, $required_date, $expires_date);
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
 } else {
 # Here we check that the borrower can actually make reserves Stage 1.
