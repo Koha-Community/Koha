@@ -73,6 +73,7 @@ if ($query->param('resbarcode')) {
     my $borrnum = $query->param('borrowernumber');
     my $resbarcode = $query->param('resbarcode');
     my $tobranchcd = ReserveWaiting($item, $borrnum);
+    warn "tobranchcd = $tobranchcd";
     my $branchname = $branches->{$tobranchcd}->{'branchname'};
     my ($borr) = getpatroninformation(\%env, $borrnum, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
@@ -83,7 +84,8 @@ if ($query->param('resbarcode')) {
 	my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $resbarcode, 1);
 	$reservetext .= <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
-    Item needs to be transfered to <b>$branchname</b> <br>
+    Item: $iteminfo->{'title'} ($iteminfo->{'author'})<br>
+ needs to be transfered to <b>$branchname</b> <br>
 to be picked up by $name ($number).
 <center><form method=post action='returns.pl'>
 $ritext
@@ -181,7 +183,8 @@ if ($messages->{'ResFound'}) {
     if ($res->{'ResFound'} eq "Waiting") {
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
-    Item is marked waiting at <b>$branchname</b> for $name ($number).
+    Item $iteminfo->{'title'} ($iteminfo->{'author'}) <br>
+is marked waiting at <b>$branchname</b> for $name ($number).
 <center><form method=post action='returns.pl'>
 $ritext
 <input type=hidden name=barcode value=0>
@@ -215,7 +218,8 @@ $borr->{'emailaddress'}
 EOF
 
 	$reservetext = <<"EOF";
-<font color='red' size='+2'>Reserved found:</font> for $name ($number).
+<font color='red' size='+2'>Reserved found:</font> Item: $iteminfo->{'title'} ($iteminfo->{'author'}) <br>
+for $name ($number).
 <table cellpadding=5 cellspacing=0>
 <tr><td valign="top">Change status to waiting and print 
 <a href="" onClick='alert(document.forms[0].resslip.value); return false'>slip</a>?: </td>
