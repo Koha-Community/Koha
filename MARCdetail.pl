@@ -113,6 +113,9 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
 				} else {
+					if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{authtypecode}) {
+						$subfield_data{authority}=$field->subfield(9);
+					}
 					$subfield_data{marc_value}=$subf[$i][1];
 				}
 				$subfield_data{marc_subfield}=$subf[$i][0];
