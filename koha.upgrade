@@ -29,7 +29,7 @@ my $intranetdir=$configfile{'intranetdir'};
 my $opacdir=$configfile{'opacdir'};
 my $kohaversion=$configfile{'kohaversion'};
 my $database=$configfile{'database'};
-my $host=$configfile{'host'};
+my $hostname=$configfile{'hostname'};
 my $user=$configfile{'user'};
 my $pass=$configfile{'pass'};
 
@@ -115,7 +115,7 @@ $month++;
 $year+=1900;
 my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$sec;
 
-open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$host $database|");
+open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$hostname $database|");
 
 open BF, ">$backupdir/Koha.backup_$date";
 
