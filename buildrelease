@@ -141,12 +141,12 @@ if ($input =~ /^n/i) {
 }
 
 
-print "\nWould you like to tag the CVS repository?\n(answer yes if releasing tarball)  [Y]/N: ";
+print "\nWould you like to tag the CVS repository?\n(answer yes if releasing tarball)  Y/[N]: ";
 chomp ($input=<STDIN>);
-my $cvstag=1;
+my $cvstag=0;
 # FIXME: This means anything other than n will tag; too dangerous?
-if ($input=~/^n/i) {
-    $cvstag=0;
+if ($input=~/^y/i) {
+    $cvstag=1;
 }
 
 
@@ -283,8 +283,8 @@ system("rm -f $rootdir/intranet-cgi/buildrelease");
 system("rm -f $rootdir/intranet-cgi/database.mysql");
 system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
 # FIXME: The following two lines look suspicious
-system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
-system("rm -f $rootdir/intranet-cgi/rel-1-2");
+#system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
+#system("rm -f $rootdir/intranet-cgi/rel-1-2");
 system("rm -f $rootdir/intranet-cgi/testKoha.pl");
 system("rm -rf $rootdir/intranet-cgi/html-template");
 system("rm -rf $rootdir/intranet-cgi/t");
@@ -294,6 +294,11 @@ system("find $rootdir/intranet-cgi -name '*.pl' -exec chmod a+x \\{\\} \\;");
 # Copy all CVS files to intranet-html and opac-html
 system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
+
+# Move koha-tmpl files
+system("mv $rootdir/intranet-cgi/koha-tmpl/opac-tmpl/* $rootdir/opac-html");
+system("mv $rootdir/intranet-cgi/koha-tmpl/intranet-tmpl/* $rootdir/intranet-html");
+system("rm -rf $rootdir/intranet-cgi/koha-tmpl");
 
 # Remove extraneous files from opac-html
 system("rm -f $rootdir/opac-html/koha.mo");
