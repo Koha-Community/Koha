@@ -410,11 +410,11 @@ sub MARCaddsubfield {
         $tagorder, $subfieldcode, $subfieldorder, $subfieldvalues
       )
       = @_;
-
+# warn "$tagid / $subfieldcode / $subfieldvalues";
     # if not value, end of job, we do nothing
-    if ( length($subfieldvalues) == 0 ) {
-        return;
-    }
+#     if ( length($subfieldvalues) == 0 ) {
+#         return;
+#     }
     if ( not($subfieldcode) ) {
         $subfieldcode = ' ';
     }
@@ -1037,6 +1037,7 @@ sub MARChtml2marc {
 	my $field; # if tag >=10
 	for (my $i=0; $i< @$rtags; $i++) {
 		# rebuild MARC::Record
+# 			warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag < 10) {
 				if ($prevvalue) {
@@ -1052,14 +1053,16 @@ sub MARChtml2marc {
 				$prevvalue= @$rvalues[$i];
 			} else {
 				$field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
+# 			warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 			}
 			$prevtag = @$rtags[$i];
 		} else {
 			if (@$rtags[$i] <10) {
 				$prevvalue=@$rvalues[$i];
 			} else {
-				if (@$rvalues[$i]) {
+				if (length(@$rvalues[$i])>0) {
 					$field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
+# 			warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
 				}
 			}
 			$prevtag= @$rtags[$i];
@@ -1067,6 +1070,7 @@ sub MARChtml2marc {
 	}
 	# the last has not been included inside the loop... do it now !
 	$record->add_fields($field);
+# 	warn "HTML2MARC=".$record->as_formatted;
 	return $record;
 }
 
@@ -2536,6 +2540,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.103  2004/09/06 14:17:34  tipaul
+# some commented warning added + 1 major bugfix => drop empty fields, NOT fields containing 0
+#
 # Revision 1.102  2004/09/06 10:00:19  tipaul
 # adding a "location" field to the library.
 # This field is useful when the callnumber contains no information on the room where the item is stored.
