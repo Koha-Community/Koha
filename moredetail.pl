@@ -25,7 +25,7 @@ require Exporter;
 use C4::Koha;
 use CGI;
 use C4::Search;
-use C4::Acquisitions;
+use C4::Catalogue;
 use C4::Output; # contains gettemplate
 my $query=new CGI;
 
@@ -82,8 +82,7 @@ foreach my $item (@items){
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
-    # FIXME - This should be "==", not "=", right?
-    if ($item->{'date_due'} = 'Available'){
+    if ($item->{'date_due'} eq 'Available'){
 	$item->{'issue'}="<b>Available</b><br>";
     } else {
 	$item->{'issue'}="<b>Currently on issue to:</b> <a href=/cgi-bin/koha/moremember.pl?bornum=$item->{'borrower0'}>$item->{'card'}</a><br>";
