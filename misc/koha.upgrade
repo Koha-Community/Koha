@@ -317,8 +317,8 @@ print "Copying opac-cgi files to $::opacdir/cgi-bin...\n";
 system("cp -R opac-cgi/* $::opacdir/cgi-bin/");
 system("touch $::opacdir/cgi-bin/opac");
 
-system("chown -R root.$httpduser $::opacdir");
-system("chown -R root.$httpduser $::intranetdir");
+system("chown -R root:$httpduser $::opacdir");
+system("chown -R root:$httpduser $::intranetdir");
 
 
 # Copy custom templates and reports back in
