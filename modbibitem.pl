@@ -26,6 +26,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+require Exporter;
 
 use C4::Search;
 use C4::Output;
@@ -33,6 +34,10 @@ use C4::Koha;
 use CGI;
 use HTML::Template;
 
+use C4::Biblio;
+use C4::Catalogue;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 my $bibitemnum=$input->param('bibitem');
@@ -43,7 +48,14 @@ if ($submit eq ''){
   print $input->redirect("deletebiblioitem.pl?biblioitemnumber=$bibitemnum&biblionumber=$biblio");
 }
 
-my $template = gettemplate("modbibitem.tmpl");
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	template_name   => 'modbibitem.tmpl',
+	query           => $input,
+	type            => "intranet",
+	authnotrequired => 0,
+	flagsrequired   => {catalogue => 1},
+    });
+
 
 my %inputs;
 
@@ -85,7 +97,9 @@ $inputs{'bibitemnum'}="hidden\t$data->{'biblioitemnumber'}\t21";
 $template->param( biblionumber => $data->{'biblionumber'},
 								title => $data->{'title'},
 								author => $data->{'author'},
-								description => $data->{'description'});
+								description => $data->{'description'},
+								loggedinuser => $loggedinuser,
+								);
 
 my ($count,@bibitems)=bibitems($data->{'biblionumber'});
 

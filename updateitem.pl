@@ -22,7 +22,6 @@
 use strict;
 use CGI;
 use C4::Context;
-use C4::Acquisitions;
 use C4::Biblio;
 use C4::Output;
 use C4::Circulation::Circ2;
