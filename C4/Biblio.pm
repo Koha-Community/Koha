@@ -253,7 +253,7 @@ sub MARCgettagslib {
 
     $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
+"select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
     );
     $sth->execute($frameworkcode);
 
@@ -265,12 +265,13 @@ sub MARCgettagslib {
     my $seealso;
     my $hidden;
     my $isurl;
+	my $link;
 
     while (
         ( $tag,         $subfield,   $lib,              $tab,
         $mandatory,     $repeatable, $authorised_value, $authtypecode,
         $value_builder, $kohafield,  $seealso,          $hidden,
-        $isurl )
+        $isurl,			$link )
         = $sth->fetchrow
       )
     {
@@ -285,6 +286,7 @@ sub MARCgettagslib {
         $res->{$tag}->{$subfield}->{seealso}          = $seealso;
         $res->{$tag}->{$subfield}->{hidden}           = $hidden;
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
+        $res->{$tag}->{$subfield}->{link}            = $link;
     }
     return $res;
 }
@@ -2632,6 +2634,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.114  2005/01/03 10:48:33  tipaul
+# * bugfix for the search on a MARC detail, when you clic on the magnifying glass (caused an internal server error)
+# * partial support of the "linkage" MARC feature : if you enter a "link" on a MARC subfield, the magnifying glass won't search on the field, but on the linked field. I agree it's a partial support. Will be improved, but I need to investigate MARC21 & UNIMARC diffs on this topic.
+#
 # Revision 1.113  2004/12/10 16:27:53  tipaul
 # limiting the number of search term to 8. There was no limit before, but 8 words seems to be the upper limit mySQL can deal with (in less than a second. tested on a DB with 13 000 items)
 # In 2.4, a new DB structure will highly speed things and this limit will be removed.

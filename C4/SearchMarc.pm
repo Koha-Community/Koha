@@ -166,6 +166,7 @@ $marcflavour ("MARC21" or "UNIMARC") determines which tags are used for retrievi
 
 sub catalogsearch {
 	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$orderby) = @_;
+	warn "@$tags[0], @$and_or[0], @$excluding[0], @$operator[0], @$value[0], $offset,$length,$orderby";
 	# build the sql request. She will look like :
 	# select m1.bibid
 	#		from marc_subfield_table as m1, marc_subfield_table as m2
@@ -190,10 +191,11 @@ sub catalogsearch {
 	$orderby = "biblio.title" unless $orderby;
 	
 	#last minute stripping out of ' and ,
-	foreach $_ (@$value) {
-	$_=~ s/\'/ /g;
-	$_=~ s/\,/ /g;
-	}
+# paul : quoting, it's done a few lines lated.
+# 	foreach $_ (@$value) {
+# 		$_=~ s/\'/ /g;
+# 		$_=~ s/\,/ /g;
+# 	}
 	
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
@@ -201,7 +203,7 @@ sub catalogsearch {
 		@$value[$i] =~ s/\*/%/g;
 		# remove % at the beginning
 		@$value[$i] =~ s/^%//g;
-	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g;
+	    @$value[$i] =~ s/(\.|\?|\:|\!|\'|,|\-|\"|\(|\)|\[|\]|\{|\})/ /g if @$operator[$i] eq "contains";
 		if(@$excluding[$i])	# NOT statements
 		{
 			$any_not = 1;
