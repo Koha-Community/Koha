@@ -6,9 +6,10 @@
 use strict;
 use CGI;
 use C4::Circulation::Circ2;
-use C4::Search;
 use C4::Output;
 
+###############################################
+# constants
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -18,26 +19,27 @@ my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
 
+my $branches=getbranches();
+
+###############################################
+#  Getting state
+
 my $query=new CGI;
-my $branches=getbranches(\%env);
 
 my $tobranchcd=$query->param('tobranchcd');
 my $frbranchcd='';
 
-$env{'tobranchcd'}=$tobranchcd;
 
-
+# set up the branchselect options....
 my $tobranchoptions;
-foreach (keys %$branches) {
-        (next) unless ($_);
-        (next) if (/^TR$/);
-        my $selected='';
-        ($selected='selected') if ($_ eq $tobranchcd);
-        $tobranchoptions.="<option value=$_ $selected>$branches->{$_}->{'branchname'}\n";
+foreach my $br (keys %$branches) {
+    (next) if $branches->{$br}->{'PE'};
+    my $selected='';
+    ($selected='selected') if ($br eq $tobranchcd);
+    $tobranchoptions.="<option value=$br $selected>$branches->{$br}->{'branchname'}\n";
 }
 
 # collect the stack of books already transfered so they can printed...
-my @messages;
 my %transfereditems;
 my $ritext = '';
 my %frbranchcds;
@@ -57,38 +59,31 @@ foreach ($query->param){
     $ritext.="<input type=hidden name=tb-$counter value=$tobcd>\n";
     }
 
+# Warnings etc that get displayed at top of next page....
+my @messages;
+
 #if the barcode has been entered action that and write a message and onto the top of the stack...
 my $iteminformation;
-
-my $todaysdate;
 if (my $barcode=$query->param('barcode')) {
-    my $iteminformation = getiteminformation(\%env,0, $barcode);
-    my $fail=0;
-    if (not $iteminformation) {
-	$fail=1;
-	@messages = ("There is no book with barcode: $barcode ", @messages);
+    my $iteminformation = getiteminformation(\%env,0 ,$barcode);
+    my ($transfered, $message, $iteminformation) = transferbook($tobranchcd, $barcode);
+    if (not $transfered) {
+	push(@messages, $message);
     }
-    $frbranchcd = $iteminformation->{'holdingbranch'};
-    %env->{'frbranchcd'} = $frbranchcd;
-    if ($frbranchcd eq $tobranchcd) {
-	$fail=1;
-	@messages = ("You can't transfer the book to the branch it is already at!", @messages);
-    }
-# should add some more tests ... like is the book already out, maybe it cant be moved....
-    if (not $fail) {
-	my ($transfered, $message) = transferbook(\%env, $iteminformation, $barcode);
-	if (not $transfered) {@messages = ($message, @messages);}
-	else {
-	    $ritext.="<input type=hidden name=bc-0 value=$barcode>\n";
-	    $ritext.="<input type=hidden name=fb-0 value=$frbranchcd>\n";
-	    $ritext.="<input type=hidden name=tb-0 value=$tobranchcd>\n";
-	    $transfereditems{0}=$barcode;
-	    $frbranchcds{0}=$frbranchcd;
-	    $tobranchcds{0}=$tobranchcd;
-	    @messages = ("Book: $barcode has been transfered", @messages);
-	}
+    else {
+	my $frbranchcd = $iteminformation->{'holdingbranch'};
+	$ritext.="<input type=hidden name=bc-0 value=$barcode>\n";
+	$ritext.="<input type=hidden name=fb-0 value=$frbranchcd>\n";
+	$ritext.="<input type=hidden name=tb-0 value=$tobranchcd>\n";
+	$transfereditems{0}=$barcode;
+	$frbranchcds{0}=$frbranchcd;
+	$tobranchcds{0}=$tobranchcd;
+	push(@messages, "Book: $barcode has been transfered");
     }
 }
+
+#################################################################################
+# Html code....
 
 my $entrytext= << "EOF";
 <form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
@@ -114,25 +109,31 @@ my $messagetable;
 if (@messages) {
     my $messagetext='';
     foreach (@messages) {
-	$messagetext.="$_<p>\n";
+	$messagetext.="$_<br>";
     }
+    $messagetext = substr($messagetext, 0, -4);
     $messagetable = << "EOF";
-<table border=0 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Messages</font></th></tr>
+<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Messages</font></th></tr>
 <tr><td> $messagetext </td></tr></table>
 EOF
 }
 
-
+#######################################################################################
+# Make the page .....
 
 print $query->header;
 print startpage;
 print startmenu('circulation');
-print "<FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>";
+print <<"EOF";
+<p align=right>
+<FONT SIZE=2  face="arial, helvetica">
+<a href=circulationold.pl?module=issues>Next Borrower</a> ||
+<a href=returns.pl>Returns</a> ||
+<a href=branchtransfers.pl>Transfers</a></font></p><FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
+EOF
 
-
-print $messagetable if (@messages);
-
+print $messagetable;
 
 print $entrytext;
 
