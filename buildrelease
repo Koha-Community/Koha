@@ -89,6 +89,8 @@ print "Would you like to bump that up to $releaseversion?  [Y]/N: ";
 chomp($input = <STDIN>);
 if ($input =~ /^n/i) {
     $releaseversion=$currentversion;
+    print "Do not do this if you have released the tarball to anybody, as it will\n";
+    print "overwrite the tag marking the files that were in the tarball.\n\n";
     print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
     chomp($input = <STDIN>);
     if ($input =~ /^n/i || $input eq '') {
@@ -207,10 +209,12 @@ system("rm -rf $rootdir/intranet-cgi/t");
 system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
 
-# Remove extraneous files from intranet-html
+# Remove extraneous files from opac-html
 system("rm -f $rootdir/opac-html/koha.mo");
 system("rm -f $rootdir/opac-html/koha.pot");
 system("rm -f $rootdir/opac-html/test");
+
+# Remove extraneous files from intranet-html
 system("rm -f $rootdir/intranet-html/koha.pot");
 system("rm -f $rootdir/intranet-html/results.html");
 system("rm -f $rootdir/intranet-html/test");
