@@ -225,8 +225,7 @@ my %requiretables = (
 					authorised_value char(10) default NULL,
 					value_builder char(80) default NULL,
 					seealso char(255) default NULL,
-					PRIMARY KEY  (authtype,tagfield,tagsubfield),
-					KEY kohafield (kohafield),
+					PRIMARY KEY  (authtypecode,tagfield,tagsubfield),
 					KEY tab (tab)
 					)",
     auth_tag_structure => "(
@@ -237,7 +236,7 @@ my %requiretables = (
 					repeatable tinyint(4) NOT NULL default '0',
 					mandatory tinyint(4) NOT NULL default '0',
  					authorised_value char(10) default NULL,
-					PRIMARY KEY  (authtype,tagfield)
+					PRIMARY KEY  (authtypecode,tagfield)
 					)",
     auth_header => "(
 						authid bigint(20) unsigned NOT NULL auto_increment,
@@ -1161,6 +1160,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.81  2004/05/28 09:56:21  tipaul
+# bugfix
+#
 # Revision 1.80  2004/05/28 08:32:00  tipaul
 # adding :
 # * MARC authority file
