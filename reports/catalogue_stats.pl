@@ -105,9 +105,11 @@ if ($do_it) {
 	my $req;
 	$req = $dbh->prepare("select distinctrow left(dewey,3) from biblioitems");
 	$req->execute;
+	my $hasdewey=1;
 	my @select;
 	push @select,"";
 	while (my ($value) =$req->fetchrow) {
+		$hasdewey =1 if (($value) and (! $hasdewey));
 		push @select, $value;
 	}
 	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
@@ -120,7 +122,11 @@ if ($do_it) {
 	$req->execute;
 	undef @select;
 	push @select,"";
+	my $haslccn=1;
+	my $hlghtlccn;
 	while (my ($value) =$req->fetchrow) {
+		$hlghtlccn = !($hasdewey);
+		$haslccn =1 if (($value) and (! $haslccn));
 		push @select, $value;
 	}
 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
@@ -129,11 +135,15 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow left(itemcolnumber,5) from items");
+	$req = $dbh->prepare("select distinctrow left(itemcallnumber,5) from items");
 	$req->execute;
 	undef @select;
 	push @select,"";
+	my $hascote=1;
+	my $hlghtcote;
 	while (my ($value) =$req->fetchrow) {
+		$hascote =1 if (($value) and (! $hascote));
+		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
 		push @select, $value;
 	}
 	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
@@ -225,10 +235,15 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$template->param(CGIFromDeweyClass => $CGIdewey,
+	$template->param(hasdewey=>$hasdewey,
+					CGIFromDeweyClass => $CGIdewey,
 					CGIToDeweyClass => $CGIdewey,
+					haslccn=> $haslccn,
+					hlghtlccn => $hlghtlccn,
 					CGIFromLoCClass => $CGIlccn,
 					CGIToLoCClass => $CGIlccn,
+					hascote=> $hascote,
+					hlghtcote => $hlghtcote,
 					CGIFromCoteClass => $CGIcote,
 					CGIToCoteClass => $CGIcote,
 					CGIItemType => $CGIitemtype,
@@ -269,54 +284,54 @@ sub calculate {
 				$cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
 			}
 			$cell{filter} .= @$filters[$i];
-			$cell{crit} .="Dewey Classification From :" if ($i==0);
-			$cell{crit} .="Dewey Classification To :" if ($i==1);
-			$cell{crit} .="Lccn Classification From :" if ($i==2);
-			$cell{crit} .="Lccn Classification To :" if ($i==3);
-			$cell{crit} .="Cote Classification From :" if ($i==4);
-			$cell{crit} .="Cote Classification To :" if ($i==5);
-			$cell{crit} .="Document type :" if ($i==6);
-			$cell{crit} .="Publisher :" if ($i==7);
-			$cell{crit} .="Publication year From :" if ($i==8);
-			$cell{crit} .="Publication year To :" if ($i==9);
+			$cell{crit} .="Dewey Classification From" if ($i==0);
+			$cell{crit} .="Dewey Classification To" if ($i==1);
+			$cell{crit} .="Lccn Classification From" if ($i==2);
+			$cell{crit} .="Lccn Classification To" if ($i==3);
+			$cell{crit} .="Cote Classification From" if ($i==4);
+			$cell{crit} .="Cote Classification To" if ($i==5);
+			$cell{crit} .="Document type" if ($i==6);
+			$cell{crit} .="Publisher" if ($i==7);
+			$cell{crit} .="Publication year From" if ($i==8);
+			$cell{crit} .="Publication year To" if ($i==9);
 			$cell{crit} .="Branch :" if ($i==10);
 			$cell{crit} .="Location:" if ($i==11);
 			push @loopfilter, \%cell;
 		}
 	}
 	
-	my $linefilter = "";
+	my @linefilter;
 #	warn "filtres ".@filters[0];
 #	warn "filtres ".@filters[1];
 #	warn "filtres ".@filters[2];
 #	warn "filtres ".@filters[3];
 	
- 	$linefilter = @$filters[0] if ($line =~ /dewey/ )  ;
- 	$linefilter = @$filters[1] if ($line =~ /dewey/ )  ;
- 	$linefilter = @$filters[2] if ($line =~ /lccn/ )  ;
- 	$linefilter = @$filters[3] if ($line =~ /lccn/ )  ;
- 	$linefilter = @$filters[4] if ($line =~ /itemcolnumber/ )  ;
- 	$linefilter = @$filters[5] if ($line =~ /itemcolnumber/ )  ;
- 	$linefilter = @$filters[6] if ($line =~ /itemtype/ )  ;
- 	$linefilter = @$filters[7] if ($line =~ /publishercode/ ) ;
- 	$linefilter = @$filters[8] if ($line =~ /publicationyear/ ) ;
- 	$linefilter = @$filters[9] if ($line =~ /publicationyear/ ) ;
- 	$linefilter = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	$linefilter = @$filters[11] if ($line =~ /items.location/ ) ;
+ 	$linefilter[0] = @$filters[0] if ($line =~ /dewey/ )  ;
+ 	$linefilter[1] = @$filters[1] if ($line =~ /dewey/ )  ;
+ 	$linefilter[0] = @$filters[2] if ($line =~ /lccn/ )  ;
+ 	$linefilter[1] = @$filters[3] if ($line =~ /lccn/ )  ;
+ 	$linefilter[0] = @$filters[4] if ($line =~ /items.itemcallnumber/ )  ;
+ 	$linefilter[1] = @$filters[5] if ($line =~ /items.itemcallnumber/ )  ;
+ 	@linefilter[0] = @$filters[6] if ($line =~ /itemtype/ )  ;
+ 	@linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
+ 	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
+ 	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
+ 	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
+ 	@linefilter[0] = @$filters[11] if ($line =~ /items.location/ ) ;
 # 
- 	my $colfilter = "";
- 	$colfilter = @$filters[0] if ($column =~ /dewey/ )  ;
- 	$colfilter = @$filters[1] if ($column =~ /dewey/ )  ;
- 	$colfilter = @$filters[2] if ($column =~ /lccn/ )  ;
- 	$colfilter = @$filters[3] if ($column =~ /lccn/ )  ;
- 	$colfilter = @$filters[4] if ($column =~ /itemcolnumber/ )  ;
- 	$colfilter = @$filters[5] if ($column =~ /itemcolnumber/ )  ;
- 	$colfilter = @$filters[6] if ($column =~ /itemtype/ )  ;
- 	$colfilter = @$filters[7] if ($column =~ /publishercode/ ) ;
- 	$colfilter = @$filters[8] if ($column =~ /publicationyear/ ) ;
- 	$colfilter = @$filters[9] if ($column =~ /publicationyear/ ) ;
- 	$colfilter = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	$colfilter = @$filters[11] if ($column =~ /items.location/ ) ;
+ 	my @colfilter ;
+ 	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
+ 	$colfilter[1] = @$filters[1] if ($column =~ /dewey/ )  ;
+ 	$colfilter[0] = @$filters[2] if ($column =~ /lccn/ )  ;
+ 	$colfilter[1] = @$filters[3] if ($column =~ /lccn/ )  ;
+ 	$colfilter[0] = @$filters[4] if ($column =~ /itemcallnumber/ )  ;
+ 	$colfilter[1] = @$filters[5] if ($column =~ /itemcallnumber/ )  ;
+ 	@colfilter[0] = @$filters[6] if ($column =~ /itemtype/ )  ;
+ 	@colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
+ 	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
+ 	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
+ 	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
+ 	@colfilter[0] = @$filters[11] if ($column =~ /items.location/ ) ;
 
 # 1st, loop rows.
 	my $linefield;
@@ -324,7 +339,7 @@ sub calculate {
 		$linefield .="left($line,$deweydigits)";
 	} elsif (($line=~/lccn/) and ($lccndigits)) {
 		$linefield .="left($line,$lccndigits)";
-	} elsif (($line=~/itemcolnumber/) and ($cotedigits)) {
+	} elsif (($line=~/items.itemcallnumber/) and ($cotedigits)) {
 		$linefield .="left($line,$cotedigits)";
 	}else {
 		$linefield .= $line;
@@ -333,16 +348,23 @@ sub calculate {
 	
 	my $strsth;
 	$strsth .= "select distinctrow $linefield from biblioitems, items where (items.biblioitemnumber = biblioitems.biblioitemnumber) and $line is not null ";
-	$linefilter =~ s/\*/%/g;
-	if ( $linefilter ) {
-		$strsth .= " and $linefield LIKE ? " ;
+	if ( @linefilter ) {
+		if ($linefilter[1]){
+			$strsth .= " and $line >= ? " ;
+			$strsth .= " and $line <= ? " ;
+		} elsif ($linefilter[0]) {
+			$linefilter[0] =~ s/\*/%/g;
+			$strsth .= " and $line LIKE ? " ;
+		}
 	}
 	$strsth .=" order by $linefield";
 	warn "". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
-	if ( $linefilter ) {
-		$sth->execute($linefilter);
+	if (( @linefilter ) and ($linefilter[1])){
+		$sth->execute($linefilter[0],$linefilter[1]);
+	} elsif ($linefilter[0]) {
+		$sth->execute($linefilter[0]);
 	} else {
 		$sth->execute;
 	}
@@ -363,23 +385,27 @@ sub calculate {
 		$colfield .="left($column,$deweydigits)";
 	}elsif (($column=~/lccn/) and ($lccndigits)) {
 		$colfield .="left($column,$lccndigits)";
-	}elsif (($column=~/itemcolnumber/) and ($cotedigits)) {
+	}elsif (($column=~/itemcallnumber/) and ($cotedigits)) {
 		$colfield .="left($column,$cotedigits)";
 	}else {
 		$colfield .= $column;
 	}
 	
 	my $strsth2;
-	$colfilter =~ s/\*/%/g;
 	$strsth2 .= "select distinctrow $colfield from biblioitems, items where (items.biblioitemnumber = biblioitems.biblioitemnumber) and $column is not null ";
-	if ( $colfilter ) {
-		$strsth2 .= " and $colfield LIKE ? ";
+	if (( @colfilter ) and ($colfilter[1])) {
+		$strsth2 .= " and $column> ? and $column< ?";
+	}elsif ($colfilter[0]){
+		$colfilter[0] =~ s/\*/%/g;
+		$strsth2 .= " and $column LIKE ? ";
 	} 
 	$strsth2 .= " order by $colfield";
 	warn "". $strsth2;
 	my $sth2 = $dbh->prepare( $strsth2 );
-	if ($colfilter) {
-		$sth2->execute($colfilter);
+	if ((@colfilter) and ($colfilter[1])) {
+		$sth2->execute($colfilter[0],$colfilter[1]);
+	} elsif ($colfilter[0]){
+		$sth2->execute($colfilter[0]);
 	} else {
 		$sth2->execute;
 	}
@@ -418,9 +444,9 @@ sub calculate {
 	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
 	$strcalc .= " AND lccn <" . @$filters[3] ."" if ( @$filters[3] );
 	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
-	$strcalc .= " AND items.itemcolnumber >" . @$filters[4] ."" if ( @$filters[4] );
+	$strcalc .= " AND items.itemcallnumber >" . @$filters[4] ."" if ( @$filters[4] );
 	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
-	$strcalc .= " AND items.itemcolnumber <" . @$filters[5] ."" if ( @$filters[5] );
+	$strcalc .= " AND items.itemcallnumber <" . @$filters[5] ."" if ( @$filters[5] );
 	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
 	$strcalc .= " AND biblioitems.itemtype like '" . @$filters[6] ."'" if ( @$filters[6] );
 	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
@@ -437,9 +463,9 @@ sub calculate {
 	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
-#	warn "filling table";
+	warn "filling table";
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-#		warn "filling table $row / $col / $value ";
+		warn "filling table $row / $col / $value ";
 		$table{$row}->{$col}=$value;
 		$table{$row}->{totalrow}+=$value;
 		$grantotal += $value;
@@ -459,11 +485,14 @@ sub calculate {
 		$hilighted = -$hilighted;
 	}
 	
+	warn "footer processing";
 	foreach my $col ( @loopcol ) {
 		my $total=0;
-		foreach my $row ( @loopline ) {
+		foreach my $row ( @looprow ) {
 			$total += $table{$row->{rowtitle}}->{$col->{coltitle}};
+			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
 		}
+		warn "summ for column ".$col->{coltitle}."  = ".$total;
 		push @loopfooter, {'totalcol' => $total};
 	}
 			
