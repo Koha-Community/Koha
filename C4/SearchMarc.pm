@@ -69,7 +69,6 @@ sub catalogsearch {
 	my $sql_where1; # will contain the "true" where
 	my $sql_where2; # will contain m1.bibid=m2.bibid
 	my $nb=1;
-	warn "value : ".@$value;
 	for(my $i=0; $i<=@$value;$i++) {
 		if (@$value[$i]) {
 			if ($nb==1) {
@@ -128,9 +127,11 @@ sub catalogsearch {
 	chop $sql_tables;
 	my $sth;
 	if ($sql_where2) {
-		$sth = $dbh->prepare("select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
+		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
+		warn("-->select m1.bibid from $sql_tables where $sql_where2 and ($sql_where1)");
 	} else {
-		$sth = $dbh->prepare("select m1.bibid from $sql_tables where $sql_where1");
+		$sth = $dbh->prepare("select distinct m1.bibid from $sql_tables where $sql_where1");
+		warn("==>select m1.bibid from $sql_tables where $sql_where1");
 	}
 	$sth->execute;
 	my @result;

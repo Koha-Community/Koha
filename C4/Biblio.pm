@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.42  2003/04/04 08:41:11  tipaul
+# last commits before 1.9.1
+#
 # Revision 1.41  2003/04/01 12:26:43  tipaul
 # fixes
 #
@@ -723,7 +726,6 @@ sub MARCmodbiblio {
 		# modify the subfield if it's a different string
 					if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 						my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-						warn "subfieldid => $subfieldid";
 						&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 					}
 				}
