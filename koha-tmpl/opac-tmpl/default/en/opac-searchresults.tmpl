@@ -3,19 +3,19 @@
 <center>
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony cz³onkowskie</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj siê</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
 </TMPL_IF>
 
 
 <TMPL_IF NAME="searchdesc">
-    You searched on <b><TMPL_VAR NAME="searchdesc"></b>
+    Szuka³e¶ <b><TMPL_VAR NAME="searchdesc"></b>
 <TMPL_ELSE>
-    You did not specify any seach criteria<br>
+    Nie poda³e¶/a¶ ¿adnych kryteriów wyszukiwania<br>
 </TMPL_IF>
 
-<TMPL_VAR NAME="numrecords"> results found
+<TMPL_VAR NAME="numrecords"> - znalezione trafienia
 <p>
 
 
@@ -49,7 +49,7 @@
     <TMPL_IF NAME="subjectsearch">
     <table border=0 cellspacing=0 cellpadding=2>
     <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-    <th>Subject</th></tr>
+    <th>Przedmiot</th></tr>
        <TMPL_LOOP NAME=SEARCH_RESULTS>
        <tr>
        <td><a href=/cgi-bin/koha/opac-searchresults.pl?&subjectitems=<TMPL_VAR NAME=subject ESCAPE=URL>><TMPL_VAR NAME=subject></a></td>
@@ -65,7 +65,7 @@
 
     <table border=0 cellspacing=0 cellpadding=2 width=90%>
     <tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif>
-	    <th align=left>Title</th><th align=left>Author</th><th>&copy;</th><th>Item Count</th><th>Location</th><th>&nbsp</th>
+	    <th align=left>Tytu³</th><th align=left>Autor</th><th>&copy;</th><th>Ilo¶æ Pozycji</th><th>Lokalizacja</th><th>&nbsp</th>
     </tr>
 
 
@@ -80,9 +80,9 @@
       <td align=center> <TMPL_VAR NAME="itemcount"> </td>
       <td> <TMPL_VAR NAME="location"> </td>
       <td>
-<TMPL_UNLESS NAME="norequests"><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Request</a>
+<TMPL_UNLESS NAME="norequests"><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Zamówienie</a>
 <TMPL_ELSE>
-Not Reservable
+Nierezerwowalne
 </TMPL_UNLESS>
 </td> 
       </tr>
@@ -94,7 +94,7 @@ Not Reservable
 	<table border=0 cellpadding=0 cellspacing=0 width=100%>
 	<tr bgcolor=#99cccc background=<TMPL_VAR NAME="themelang">/images/background-opac.gif><td align=left>
 	<TMPL_IF NAME="displayprev">
-	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Previous Records</a>
+	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Rekordy poprzednie</a>
 	<TMPL_ELSE>
 	    &nbsp;
 	</TMPL_IF>
@@ -102,7 +102,7 @@ Not Reservable
 
 	</td><td align=right>
 	<TMPL_IF NAME="displaynext">
-	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Next Records</a>
+	    <a href=/cgi-bin/koha/opac-searchresults.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME=FORMINPUTS>&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>>Rekordy nastêpne</a>
 	<TMPL_ELSE>
 	    &nbsp;
 	</TMPL_IF>
@@ -113,14 +113,14 @@ Not Reservable
     </TMPL_IF>
 
     <br>
-    Results <TMPL_VAR NAME="startfrom"> through <TMPL_VAR NAME="endat"> of <TMPL_VAR NAME="numrecords"> records.
+    Trafienia od <TMPL_VAR NAME="startfrom"> do <TMPL_VAR NAME="endat"> z <TMPL_VAR NAME="numrecords"> rekordów.
     <hr>
 
 
 <TMPL_ELSE>
-Sorry, there were no results <br>
+Przepraszamy, nie znaleziono ¿adnych trafieñ <br>
 </TMPL_IF>
-    Try another <a href=/cgi-bin/koha/opac-search.pl>search</a>
+    Spróbuj kolejnej <a href=/cgi-bin/koha/opac-search.pl>kwerendy</a>
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
