@@ -31,7 +31,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name like "$data[0]%\") order by rank,name";
+	my $query="Select host,port,db,userid,password,name,id,checked,rank from z3950servers where (name like \"$data[0]\%\") order by rank,name";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -113,10 +113,16 @@ if ($op eq 'add_form') {
 		var _alertString="";
 		var alertString2;
 		if (f.searchfield.value.length==0) {
-			_alertString += "- branch code missing\\n";
+			_alertString += "- site name missing\\n";
 		}
-		if (f.branchname.value.length==0) {
-			_alertString += "- branch name missing\\n";
+		if (f.host.value.length==0) {
+			_alertString += "- host missing\\n";
+		}
+		if (f.port.value.length==0) {
+			_alertString += "- port missing\\n";
+		}
+		if (f.db.value.length==0) {
+			_alertString += "- database missing\\n";
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
@@ -139,15 +145,15 @@ printend
 	print "<input type=hidden name=op value='add_validate'>";
 	print "<table>";
 	if ($searchfield) {
-		print "<tr><td>Z39.50 Server</td><td><input type=hidden name=searchfield value=$searchfield>$searchfield</td></tr>";
+		print "<tr><td>Z39.50 Server</td><td><input type=hidden name=searchfield value=\"$searchfield\">$searchfield</td></tr>\n";
 	} else {
-		print "<tr><td>Z39.50 Server</td><td><input type=text name=searchfield size=5 maxlength=5></td></tr>";
+		print "<tr><td>Z39.50 Server</td><td><input type=text name=searchfield size=5 maxlength=5></td></tr>\n";
 	}
-	print "<tr><td>Hostname</td><td><input type=text name=host size=40 maxlength=80 value='$data->{'host'}'></td></tr>";
-	print "<tr><td>Port</td><td><input type=text name=port value='$data->{'port'}' onBlur=isNum(this)></td></tr>";
-	print "<tr><td>Database</td><td><input type=text name=db value='$data->{'db'}'></td></tr>";
-	print "<tr><td>Userid</td><td><input type=text name=userid value='$data->{'userid'}'></td></tr>";
-	print "<tr><td>Password</td><td><input type=text name=password value='$data->{'password'}'></td></tr>";
+	print "<tr><td>Hostname</td><td><input type=text name=host size=40 maxlength=80 value='$data->{'host'}'></td></tr>\n";
+	print "<tr><td>Port</td><td><input type=text name=port value='$data->{'port'}' onBlur=isNum(this)></td></tr>\n";
+	print "<tr><td>Database</td><td><input type=text name=db value='$data->{'db'}'></td></tr>\n";
+	print "<tr><td>Userid</td><td><input type=text name=userid value='$data->{'userid'}'></td></tr>\n";
+	print "<tr><td>Password</td><td><input type=text name=password value='$data->{'password'}'></td></tr>\n";
 	print "<tr><td>Checked (searched by default)</td><td><input type=text name=checked value='$data->{'checked'}' onBlur=isNum(this)></td></tr>";
 	print "<tr><td>Rank (display order)</td><td><input type=text name=rank value='$data->{'rank'}' onBlur=isNum(this)></td></tr>";
 	print "<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>";
@@ -159,19 +165,23 @@ printend
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh=C4Connect;
-	my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing) values (";
-	$query.= $dbh->quote($input->param('searchfield')).",";
-	$query.= $dbh->quote($input->param('branchname')).",";
-	$query.= $dbh->quote($input->param('branchaddress1')).",";
-	$query.= $dbh->quote($input->param('branchaddress2')).",";
-	$query.= $dbh->quote($input->param('branchaddress3')).",";
-	$query.= $dbh->quote($input->param('branchphone')).",";
-	$query.= $dbh->quote($input->param('branchfax')).",";
-	$query.= $dbh->quote($input->param('branchemail')).",";
-	$query.= $dbh->quote($input->param('issuing')).")";
-	my $query="replace z3950servers (host,port,db,userid,password,name,checked,rank) values (?, ?, ?, ?, ?, ?, ?, ?)");
-	my $sth=$dbh->prepare($query);
-	$sth->execute($input->param('host'),
+	my $sth=$dbh->prepare("select * from z3950servers where name=?");
+	$sth->execute($input->param('searchfield'));
+	if ($sth->rows) {
+		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=? where name=?");
+		$sth->execute($input->param('host'),
+		      $input->param('port'),
+		      $input->param('db'),
+		      $input->param('userid'),
+		      $input->param('password'),
+		      $input->param('searchfield'),
+		      $input->param('checked'),
+		      $input->param('rank'),
+		      $input->param('searchfield')
+		      );
+	} else {
+		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank) values (?, ?, ?, ?, ?, ?, ?, ?)");
+		$sth->execute($input->param('host'),
 		      $input->param('port'),
 		      $input->param('db'),
 		      $input->param('userid'),
@@ -180,6 +190,7 @@ printend
 		      $input->param('checked'),
 		      $input->param('rank'),
 		      );
+	}
 	$sth->finish;
 	print "data recorded";
 	print "<form action='$script_name' method=post>";
@@ -246,26 +257,32 @@ printend
 		print "You Searched for <b>$searchfield<b><p>";
 	}
 	print mktablehdr;
-	print mktablerow(9,'#99cc33',bold('Branch code'),bold('Name'),bold('Address'),
-	bold('Phone'),bold('Fax'),bold('E-mail'),bold('Issuing'),
+	print mktablerow(10,'#99cc33',bold('Site'),bold('hostname'),bold('port'),
+	bold('database'),bold('Userid'),bold('Password'),bold('Checked'),bold('Rank'),
 	'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my $toggle="white";
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		#find out stats
-	#  	my ($od,$issue,$fines)=categdata2($env,$results->[$i]{'borrowernumber'});
-	#  	$fines=$fines+0;
 	  	if ($toggle eq 'white'){
 	    		$toggle="#ffffcc";
 	  	} else {
 	    		$toggle="white";
 	  	}
-		print mktablerow(9,$toggle,$results->[$i]{'branchcode'},$results->[$i]{'branchname'},
-		$results->[$i]{'branchaddress1'}.$results->[$i]{'branchaddress2'}.$results->[$i]{'branchaddress3'},
-		$results->[$i]{'branchphone'},,$results->[$i]{'branchfax'},,$results->[$i]{'branchemail'},,$results->[$i]{'issuing'},
-		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'branchcode'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'branchcode'},'Delete'));
+		
+		my $urlsearchfield=$results->[$i]{name};
+		$urlsearchfield=~s/ /%20/g;
+		print mktablerow(10,$toggle,
+			$results->[$i]{'name'},
+			$results->[$i]{'host'},
+			$results->[$i]{'port'},
+			$results->[$i]{'db'},
+			$results->[$i]{'userid'},
+			($results->[$i]{'password'}) ? ('#######') : ('&nbsp;'),
+			$results->[$i]{'checked'},
+			$results->[$i]{'rank'},
+		mklink("$script_name?op=add_form&searchfield=$urlsearchfield".'','Edit'),
+		mklink("$script_name?op=delete_confirm&searchfield=$urlsearchfield",'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";

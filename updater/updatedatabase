@@ -158,6 +158,9 @@ my %fielddefinitions=(
 printers => [
 	{ field => 'printername', type => 'char(40)', null => '', key => 'PRI', default => '' },
 	],
+z3950servers => [
+	{ field => 'id', type => 'int', null => '', key => 'PRI', default => '', extra => 'auto_increment' },
+	],
 );
 
 
@@ -254,10 +257,6 @@ foreach $table ( keys %requirefields ) {
     } # foreach column
 } # foreach table
 
-#my %fielddefinitions=(
-#printers => [
-#	{ field => 'printername', type => 'char(40)', null => '', key => 'PRI', default='' },
-#);
 foreach $table ( keys %fielddefinitions ) {
     print "Check table $table\n" if $debug;
     $sth=$dbh->prepare("show columns from $table");
@@ -277,15 +276,19 @@ foreach $table ( keys %fielddefinitions ) {
 	my $null = $row->{null};
 	my $key = $row->{key};
 	my $default = $row->{default};
+	my $extra = $row->{extra};
 	my $def=$definitions->{$field};
-	unless ($type eq $def->{type} && $null eq $def->{null} && $key eq $def->{key} && $default eq $def->{default}) {
+	unless ($type eq $def->{type} && $null eq $def->{null} && $key eq $def->{key} && $default eq $def->{default} && $extra eq $def->{extra}) {
 	    if ($null eq '') {
 		$null='NOT NULL';
 	    }
 	    if ($key eq 'PRI') {
 		$key ='PRIMARY KEY';
 	    }
-	    my $sth=$dbh->prepare("alter table $table change $field $field $type $null $key default ?");
+	    unless ($extra eq 'auto_increment') {
+		$extra='';
+	    }
+	    my $sth=$dbh->prepare("alter table $table change $field $field $type $null $key $extra default ?");
 	    $sth->execute($default);
 	    print "  Alter $field in $table\n";
 	}
@@ -400,6 +403,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.23  2002/10/25 18:28:39  tonnesen
+# Added admin script for editing z39.50 server list.
+#
 # Revision 1.4.2.22  2002/10/25 17:34:33  tonnesen
 # Initialize the dateformat systempreference variable to 'metric' if it doesn't
 # exist.
