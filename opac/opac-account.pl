@@ -52,7 +52,9 @@ foreach my $row (@$accts) {
 }
 
 
-$template->param( ACCOUNT_LINES => $accts );
+$template->param( ACCOUNT_LINES => $accts,
+			     LibraryName => C4::Context->preference("LibraryName"),
+ );
 
 $template->param( total => $total );
 

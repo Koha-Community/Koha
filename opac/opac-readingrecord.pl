@@ -49,7 +49,9 @@ foreach my $row (@$issues) {
 }
 
 $template->param(count => $count);
-$template->param(READING_RECORD => $issues);
+$template->param(READING_RECORD => $issues,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 
 output_html_with_http_headers $query, $cookie, $template->output;

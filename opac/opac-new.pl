@@ -61,7 +61,9 @@ $template->param(nextstartfrom => $nextstartfrom,
 				itemtype => ItemType($itemtype),
 				duration => $duration);
 
-$template->param(SEARCH_RESULTS => $resultsarray);
+$template->param(SEARCH_RESULTS => $resultsarray,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 my $numbers;
 @$numbers = ();

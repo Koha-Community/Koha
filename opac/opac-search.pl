@@ -15,7 +15,7 @@ my $dbh=C4::Context->dbh;
 my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
 $sth->execute;
 while (my ($description,$itemtype) = $sth->fetchrow) {
-    $classlist.="<option value=\"$itemtype\">$description\n";
+    $classlist.="<option value=\"$itemtype\">$description</option>\n";
 }
 
 
@@ -30,6 +30,8 @@ my ($template, $borrowernumber, $cookie)
 			 });
 
 
-$template->param(classlist => $classlist);
+$template->param(classlist => $classlist,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

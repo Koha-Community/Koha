@@ -169,7 +169,9 @@ for (my $rownum=0;$rownum<$publictypes[0]->{'count'} ;$rownum++) {
 }
 $template->param(TYPE_ROWS => \@typerows);
 $width = 2*$width -1;
-$template->param(totalwidth => 2*$width-1);
+$template->param(totalwidth => 2*$width-1,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 if ($query->param('item_types_selected')) {
 	# this is what happens after the itemtypes have been selected. Stage 2
