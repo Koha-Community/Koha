@@ -35,13 +35,13 @@ use DBI;
 
 # Koha modules used
 use C4::Context;
-use C4::Database;
+#use C4::Database;
 use C4::Acquisitions;
 use C4::Output;
 use C4::Input;
 use C4::Biblio;
-use C4::SimpleMarc;
-use C4::Z3950;
+#use C4::SimpleMarc;
+#use C4::Z3950;
 use MARC::File::USMARC;
 use HTML::Template;
 
@@ -64,59 +64,82 @@ my $userid=$ENV{'REMOTE_USER'};
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
-#-------------
-# Display output
-#print $input->header;
-#print startpage();
-#print startmenu('acquisitions');
+my $uploadmarc=$input->param('uploadmarc');
+my $overwrite_biblio = $input->param('overwrite_biblio');
+my $filename = $input->param('filename');
 
-#-------------
-# Process input parameters
+my $template = gettemplate("acqui.simple/marcimport.tmpl");
+$template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
+						uploadmarc => $uploadmarc);
+if ($uploadmarc && length($uploadmarc)>0) {
+	my $marcrecord='';
+	while (<$uploadmarc>) {
+		$marcrecord.=$_;
+	}
+	my @marcarray = split /\x1D/, $marcrecord;
+	my $dbh = C4::Context->dbh;
+	my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
+	my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
+	my $searchbreeding = $dbh->prepare("select isbn from marc_breeding where isbn=?");
+	my $insertsql = $dbh->prepare("replace into marc_breeding (file,isbn,marc) values(?,?,?)");
+	# fields used for import results
+	my $imported=0;
+	my $alreadyindb = 0;
+	my $alreadyinfarm = 0;
+	my $notmarcrecord = 0;
+	for (my $i=0;$i<=$#marcarray;$i++) {
+		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D");
+		if (ref($marcrecord) eq undef) {
+			$notmarcrecord++;
+		} else {
+			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord);
+			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
+			if ($oldbiblio->{isbn} || $oldbiblio->{issn}) {
+				# search if biblio exists
+				my $biblioitemnumber;
+				if ($oldbiblio->{isbn}) {
+					$searchisbn->execute($oldbiblio->{isbn});
+					($biblioitemnumber) = $searchisbn->fetchrow;
+				} else {
+					$searchissn->execute($oldbiblio->{issn});
+					($biblioitemnumber) = $searchissn->fetchrow;
+				}
+				if ($biblioitemnumber) {
+					$alreadyindb++;
+				} else {
+				# search in breeding farm
+				my $breedingresult;
+					if ($oldbiblio->{isbn}) {
+						$searchbreeding->execute($oldbiblio->{isbn});
+						($breedingresult) = $searchbreeding->fetchrow;
+					} else {
+						$searchbreeding->execute($oldbiblio->{issn});
+						($breedingresult) = $searchbreeding->fetchrow;
+					}
+					if (!$breedingresult || $overwrite_biblio) {
+						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$marcarray[$i]."\x1D')");
+						$imported++;
+					} else {
+						$alreadyinfarm++;
+					}
+				}
+			} else {
+				$notmarcrecord++;
+			}
+		}
+	}
+	$template->param(imported => $imported,
+							alreadyindb => $alreadyindb,
+							alreadyinfarm => $alreadyinfarm,
+							notmarcrecord => $notmarcrecord,
+							total => $imported+$alreadyindb+$alreadyinfarm+$notmarcrecord,
+							);
 
-my $file=$input->param('file');
-my $menu = $input->param('menu');
-
-#
-#
-# TODO : parameter decoding and function call is quite dirty.
-# should be rewritten...
-#
-#
-if ($input->param('z3950queue')) {
-	AcceptZ3950Queue($dbh,$input);
 }
 
-if ($input->param('uploadmarc')) {
-	AcceptMarcUpload($dbh,$input)
-}
-
-if ($input->param('insertnewrecord')) {
-    # Add biblio item, and set up menu for adding item copies
-    my ($biblionumber,$biblioitemnumber)=AcceptBiblioitem($dbh,$input);
-    exit;
-}
-
-if ($input->param('newitem')) {
-    # Add item copy
-    &AcceptItemCopy($dbh,$input);
-    exit;
-} # if newitem
-
-
-if ($file) {
-    ProcessFile($dbh,$input);
-} else {
-  SWITCH:
-    {
-	if ($menu eq 'z3950') { z3950menu($dbh,$input); last SWITCH; }
-	if ($menu eq 'uploadmarc') { uploadmarc($dbh); last SWITCH; }
-	if ($menu eq 'manual') { manual(); last SWITCH; }
-	mainmenu();
-    }
-}
-#print endmenu();
-#print endpage();
-
+print "Content-Type: text/html\n\n",$template->output;
+my $menu;
+my $file;
 
 # Process a MARC file : show list of records, of 1 record detail, if numrecord exists
 sub ProcessFile {
@@ -124,7 +147,6 @@ sub ProcessFile {
     use strict;
     # Input params
     my (
-	$dbh,		# FIXME - Unused argument
 	$input,
     )=@_;
 
@@ -135,8 +157,6 @@ sub ProcessFile {
     );
 
     my $debug=0;
-
-    $dbh = C4::Context->dbh;
 
     # See if a particular result item was specified
     my $numrecord = $input->param('numrecord');
@@ -172,8 +192,7 @@ sub ProcessRecord {
 
     my $file=MARC::File::USMARC->indata ($data);
     my $oldkoha;
-    # FIXME - This "==" should be "=", right?
-    for (my $i==1;$i<$numrecord;$i++) {
+    for (my $i=1;$i<$numrecord;$i++) {
 	$record = $file->next;
     }
     if ($record) {
@@ -423,162 +442,6 @@ sub ResultRecordLink {
 
 #---------------------------------
 
-sub z3950menu {
-    use strict;
-    my (
-	$dbh,			# FIXME - Unused argument
-	$input,
-    )=@_;
-
-    my (
-	$sth, $sti,
-	$processing,
-	$realenddate,
-	$totalrecords,
-    	$elapsed,
-    	$elapsedtime,
-	$resultstatus, $statuscolor,
-	$id, $term, $type, $done,
-	$startdate, $enddate, $servers,
-	$record,$bib,$title,
-    );
-
-    $dbh = C4::Context->dbh;
-
-    # FIXME - This print statement doesn't belong here. It's just here
-    # so the script will display SOMEthing. But this section really
-    # ought to be properly templated.
-    print <<EOT;
-Content-Type: text/html;
-
-<HTML>
-<BODY>
-EOT
-
-    print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
-    print "<table border=0><tr><td valign=top>\n";
-    print "<h2>Results of Z39.50 searches</h2>\n";
-    print "<a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Refresh</a><br>\n" .
- 	  "<ul>\n";
-
-    # Check queued queries
-    $sth=$dbh->prepare("select id,term,type,done,
-		startdate,enddate,servers
-	from z3950queue
-	order by id desc
-	limit 20 ");
-    $sth->execute;
-    while ( ($id, $term, $type, $done,
-		$startdate, $enddate, $servers) = $sth->fetchrow) {
-	$type=uc($type);
-	$term=~s/</&lt;/g;
-	$term=~s/>/&gt;/g;
-
-	$title="";
-	# See if query produced results
-	$sti=$dbh->prepare("select id,server,startdate,enddate,numrecords,results
-		from z3950results
-		where queryid=?");
-	$sti->execute($id);
-	if ($sti->rows) {
-	    $processing=0;
-	    $realenddate=0;
-	    $totalrecords=0;
-	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords,$r_marcdata)
-		= $sti->fetchrow) {
-		if ($r_enddate==0) {
-		    # It hasn't finished yet
-		    $processing=1;
-		} else {
-		    # It finished, see how long it took.
-		    if ($r_enddate>$realenddate) {
-			$realenddate=$r_enddate;
-		    }
-		    # Snag any title from the results if there were any
-		    if ( ! $title && $r_marcdata ) {
-	    	        ($record)=parsemarcfileformat($r_marcdata);
-		        $bib=extractmarcfields($record);
-		        if ( $bib->{title} ) { $title=$bib->{title} };
-		    } # if no title yet
-		} # if finished
-
-		$totalrecords+=$r_numrecords;
-	    } # while results
-
-	    if ($processing) {
-		$elapsed=time()-$startdate;
-		$resultstatus="Processing...";
-		$statuscolor="red";
-	    } else {
-		$elapsed=$realenddate-$startdate;
-		$resultstatus="Done.";
-		$statuscolor="black";
-		}
-
-		if ($elapsed>60) {
-		    $elapsedtime=sprintf "%d minutes",($elapsed/60);
-		} else {
-		    $elapsedtime=sprintf "%d seconds",$elapsed;
-		}
-		if ($totalrecords) {
-		    $totalrecords="$totalrecords found.";
-		} else {
-		    $totalrecords='';
-		}
-		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>".
-		"$type=$term</a>" .
-		"<font size=-1 color=$statuscolor>$resultstatus $totalrecords " .
-		"($elapsedtime) $title </font><br>\n";
-	} else {
-	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>
-		$type=$term</a> <font size=-1>Pending</font><br>\n";
-	} # if results done
-    } # while queries
-    print "</ul> </td>\n";
-    # End of query listing
-
-    #------------------------------
-    # Search input form
-    print "<td valign=top width=30%>\n";
-
-    my $sth=$dbh->prepare("select id,name,checked
-	from z3950servers
-	order by rank");
-		# FIXME - There's already a $sth in this function.
-    $sth->execute;
-    my $serverlist='';
-    while (my ($id, $name, $checked) = $sth->fetchrow) {
-	($checked) ? ($checked='checked') : ($checked='');
-	$serverlist.="<input type=checkbox name=S-$id $checked> $name<br>\n";
-    }
-    $serverlist.="<input type=checkbox name=S-MAN> <input name=manualz3950server size=25 value=otherserver:210/DATABASE>\n";
-
-    my $rand=rand(1000000000);
-print << "EOF";
-    <form action=$ENV{'SCRIPT_NAME'} method=GET>
-    <input type=hidden name=z3950queue value=1>
-    <input type=hidden name=menu value=$menu>
-    <p>
-    <input type=hidden name=test value=testvalue>
-    <input type=hidden name=rand value=$rand>
-        <table border=1 bgcolor=#dddddd>
-	    <tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records</th></tr>
-    <tr><td>Query Term</td><td><input name=query></td></tr>
-    <tr><td colspan=2 align=center>
-		<input type=radio name=type value=isbn checked>&nbsp;ISBN
-		<input type=radio name=type value=lccn        >&nbsp;LCCN<br>
-		<input type=radio name=type value=author      >&nbsp;Author
-		<input type=radio name=type value=title       >&nbsp;Title
-		<input type=radio name=type value=keyword     >&nbsp;Keyword</td></tr>
-            <tr><td colspan=2> $serverlist </td></tr>
-            <tr><td colspan=2 align=center> <input type=submit> </td></tr>
-    </table>
-
-    </form>
-EOF
-    print "</td></tr></table>\n";
-} # sub z3950menu
-#---------------------------------
 
 sub uploadmarc {
     use strict;
@@ -614,75 +477,6 @@ sub mainmenu {
 	$template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'});
 	print "Content-Type: text/html\n\n", $template->output;
 } # sub mainmenu
-
-#----------------------------
-# Accept form results to add query to z3950 queue
-sub AcceptZ3950Queue {
-    use strict;
-
-    # input parameters
-    my (
-	$dbh, 		# DBI handle
-			# FIXME - Unused argument
-	$input,		# CGI parms
-    )=@_;
-
-    my @serverlist;
-    my $error;
-
-    $dbh = C4::Context->dbh;
-
-    my $query=$input->param('query');
-
-    my $isbngood=1;
-    if ($input->param('type') eq 'isbn') {
-	$isbngood=checkvalidisbn($query);
-    }
-    if ($isbngood) {
-    foreach ($input->param) {
-	if (/S-(.*)/) {
-	    my $server=$1;
-	    if ($server eq 'MAN') {
-                push @serverlist, "MAN/".$input->param('manualz3950server')."//"
-;
-	    } else {
-                push @serverlist, $server;
-            }
-          }
-        }
-
-	$error=addz3950queue($dbh,$input->param('query'), $input->param('type'),
-		$input->param('rand'), @serverlist);
-	if ( $error ) {
-	    print qq|
-<table border=1 cellpadding=5 cellspacing=0 align=center>
-<tr><td bgcolor=#99cc33 background=/images/background-acq.gif colspan=2><font color=red><b>Error</b></font></td></tr>
-<tr><td colspan=2>
-<b>$error</b><p>
-|;
-	    if ( $error =~ /daemon/i ) {
-	        print qq|
-There is a launcher for the Z39.50 client daemon in your intranet installation<br>
-directory under <b>./scripts/z3950daemon/z3950-daemon-launch.sh</b>.  This<br>
-script should be run as root, and it will start up the program running with the<br>
-privileges of your apache user.  Ideally, this script should be started from a<br>
-system init directory so that is running after the machine starts up.
-|;
-
-	    } # if daemon
-	    print qq|
-</td></tr>
-</table>
-
-<table border
-
-|;
-	} # if error
-    } else {
-	print "<font color=red size=+1>$query is not a valid ISBN
-	Number</font><p>\n";
-    }
-} # sub AcceptZ3950Queue
 
 #---------------------------------------------
 sub AcceptMarcUpload {
@@ -995,80 +789,19 @@ sub FormatMarcText {
 
 
 #---------------
+# log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
-# Revision 1.18  2002/10/14 07:41:04  tipaul
-# merging arens + my modifs/bugfixes
+# Revision 1.19  2002/10/15 10:14:44  tipaul
+# road to 1.3.2. Full rewrite of marcimport.pl.
+# The acquisition system in MARC version will work like this :
+# * marcimport will put marc records into a "breeding farm" table.
+# * when the user want to add a biblio, he enters first the ISBN/ISSN of the biblio. koha searches into breeding farm and if the record exists, it is shown to the user to help him adding the biblio. When the biblio is added, it's deleted from the breeding farm.
 #
-# Revision 1.17  2002/10/13 07:39:26  arensb
-# Added magic RCS comment.
-# Removed trailing whitespace.
+# This commit :
+# * modify acqui.simple home page  (addbooks.pl)
+# * adds import into breeding farm
 #
-# Revision 1.16  2002/10/11 12:45:10  arensb
-# Replaced &requireDBI with C4::Context->dbh, thus making the "use
-# Fixed muffed quotes in &gettemplate calls.
-# Added a temporary print statement in &z3950menu, so it'll print
-# something instead of giving a browser error.
-#
-# Revision 1.15  2002/10/09 18:09:16  tonnesen
-# switched from picktemplate() to gettemplate()
-#
-# Revision 1.14  2002/10/05 09:56:14  arensb
-# Merged with arensb-context branch: use C4::Context->dbh instead of
-# &C4Connect, and generally prefer C4::Context over C4::Database.
-#
-# Revision 1.13.2.1  2002/10/04 02:52:50  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-# Removed old code for reading /etc/koha.conf.
-#
-# Revision 1.13  2002/08/14 18:12:52  tonnesen
-# Added copyright statement to all .pl and .pm files
-#
-# Revision 1.12  2002/07/24 16:24:20  tipaul
-# Now, the acqui.simple system...
-# marcimport.pl has been almost completly rewritten, so LOT OF BUGS TO COME !!! You've been warned. It seems to work, but...
-#
-# As with my former messages, nothing seems to have been changed... but ...
-# * marcimport now uses HTML::Template.
-# * marcimport now uses MARC::Record. that means that when you import a record, the old-DB is populated with the data as in version 1.2, but the MARC-DB part is filled with full MARC::Record.
-#
-# <IMPORTANT NOTE>
-# to get correct response times, you MUST add an index on isbn, issn and lccn rows in biblioitem table. Note this should be done in 1.2 too...
-# </IMPORTANT NOTE>
-#
-# <IMPORTANT NOTE2>
-# acqui.simple manage biblio, biblioitems and items tables quite properly. Normal acquisition system manages biblio, biblioitems BUT NOT items. That will be done in the near future...
-# </IMPORTANT NOTE2>
-#
-# what's next now ?
-# * bug tracking, of course... Surely a dozen of dozens...
-# * LOT of developpments, i'll surely write a mail to koha-devel tomorrow (as it's time for dinner in France, and i plan to play NeverwinterNights after dinner ;-) ...
-#
-# Revision 1.6.2.32  2002/06/29 17:33:47  amillar
-# Allow DEFAULT as input to addz3950search.
-# Check for existence of pid file (cat crashed otherwise).
-# Return error messages in addz3950search.
-#
-# Revision 1.6.2.31  2002/06/28 18:50:46  tonnesen
-# Got rid of white text on black, replaced with black on background-acq.gif
-#
-# Revision 1.6.2.30  2002/06/28 18:07:27  tonnesen
-# marcimport.pl will print an error message if it can not signal the
-# processz3950queue program.  The message contains instructions for starting the
-# daemon.
-#
-# Revision 1.6.2.29  2002/06/27 18:35:01  tonnesen
-# $deweyinput was always defined (it's an HTML input field).  Check against
-# $bib->{dewey} instead.
-#
-# Revision 1.6.2.28  2002/06/27 17:41:26  tonnesen
-# Applying patch from Matt Kraai to pick F or NF based on presense of a dewey
-# number when adding a book via marcimport.pl
-#
-# Revision 1.6.2.27  2002/06/26 15:52:55  amillar
-# Fix display of marc tag labels and indicators
-#
-# Revision 1.6.2.26  2002/06/26 14:28:35  amillar
-# Removed subroutines now existing in modules: extractmarcfields,
-#  parsemarcfileformat, addz3950queue, getkeytableselectoptions
+# Please note that :
+# * z3950 functionnality is dropped from "marcimport" will be added somewhere else.
+# * templates are in a new acqui.simple sub directory, and the marcimport template directory will become obsolete soon.I think this is more logic
 #
