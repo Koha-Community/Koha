@@ -88,13 +88,13 @@ if ($search_string) {
 			-labels=> \%stdlib
 			);
 }
-my $x = SearchDeeper('',$category,$search_string);
+my @x = SearchDeeper('',$category,$search_string);
 #my @son;
 #foreach (my $value @$x) {
 #	warn \@$x[$value]->{'stdlib'};
 #}
 my $dig_list= CGI::scrolling_list( -name=>'search_string',
-		-values=> \@$x,
+		-values=> \@x,
 		-default=> "",
 		-size=>1,
 		-multiple=>0,
