@@ -19,26 +19,6 @@ if(valCookie){
 		var basketcount = "";
 }
 
-function addMultiple(){
-var c_value = "";
-if(document.myform.bibid.length > 0){
-for (var i=0; i < document.myform.bibid.length; i++)
-   {
-   if (document.myform.bibid[i].checked)
-      {
-      c_value = c_value + document.myform.bibid[i].value + "|";
-      }
-   }
-	var arrayChosen = c_value.split("|");
-	for(i=0;i<(arrayChosen.length-1);i++){
-		addRecord(arrayChosen[i],"","silent");
-	}
-	alert(i+MSG_NRECORDS_ADDED);
-	} else {
-		alert(MSG_NO_RECORD_SELECTED);
-	}
-}
-
 function writeCookie(name, val, wd) {
 	if (wd) {
 		parent.opener.document.cookie = name + "=" + val;
@@ -101,12 +81,6 @@ function openBasket() {
 	}
 
 	if (strCookie) {
-//		alert(strCookie);
-//		return;
-
-//		var Wmax = screen.width;
-//		var Hmax = screen.height;
-
 		var iW = 620;
 		var iH = 450;
 
@@ -116,12 +90,11 @@ function openBasket() {
 	}
 	else {
 		alert(MSG_BASKET_EMPTY);
-		//alert("Il n'y a aucune notice !");
 	}
 }
 
 
-function addRecord(val, selection, display) {
+function addRecord(val, selection) {
 	var nameCookie = "bib_list";
 	var valCookie = readCookie(nameCookie);
 	var write = 0;
@@ -147,9 +120,7 @@ function addRecord(val, selection, display) {
 			if (selection) {
 				return 0;
 			}
-			if( display != "silent" ){
 			alert(MSG_RECORD_IN_BASKET);
-			}
 		}
 		else {
 			valCookie += val + '/';
@@ -160,18 +131,29 @@ function addRecord(val, selection, display) {
 
 	if (write) {
 		writeCookie(nameCookie, valCookie);
-		if (selection) { // ajout à partir d'une sélection de notices
+		if (selection) { // when adding a selection of records
 			return 1;
 		}
-			if( display != "silent" ){
 		alert(MSG_RECORD_ADDED);
-		}
 	}
 }
 
 
-function addSelRecords(valSel) { // fonction permettant d'ajouter une sélection de notices
-									// (à partir d'une page de résultats) au panier
+function addMultiple(){
+	var c_value = "";
+	if(document.myform.bibid.length > 0) {
+		for (var i=0; i < document.myform.bibid.length; i++) {
+			if (document.myform.bibid[i].checked) {
+				c_value = c_value + document.myform.bibid[i].value + "/";
+			}
+		}
+		addSelRecords(c_value);
+	}
+}
+
+
+function addSelRecords(valSel) { // function for adding a selection of biblios to the basket
+												// from the results list
 	var arrayRecords = valSel.split("/");
 	var i = 0;
 	var nbAdd = 0;
@@ -187,7 +169,7 @@ function addSelRecords(valSel) { // fonction permettant d'ajouter une sélection 
 	var msg = "";
 	if (nbAdd) {
 		if (i > nbAdd) {
-			msg = nbAdd+" "+MSG_NRECORDS_ADDED+", "+(i-nbAj)+" "+MSG_NRECORDS_IN_BASKET;
+			msg = nbAdd+" "+MSG_NRECORDS_ADDED+", "+(i-nbAdd)+" "+MSG_NRECORDS_IN_BASKET;
 		}
 		else {
 			msg = nbAdd+" "+MSG_NRECORDS_ADDED;
