@@ -131,7 +131,11 @@ if ($op eq "do_search") {
 	my ($results,$total) = catalogsearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$orderby,$desc_or_asc);
-
+	if ($total == 1) {
+	 # if only 1 answer, jump directly to the biblio
+	     print $query->redirect("/cgi-bin/koha/MARCdetail.pl?bib=".@$results[0]->{biblionumber});
+		 exit
+	}
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",
 				query => $query,
