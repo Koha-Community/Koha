@@ -52,10 +52,10 @@ if ( $newpassword ) {
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
 
-    #Make sure the userid chosen is unique. If it is not,
+    #Make sure the userid chosen is unique and not theirs. If it is not,
     #Then we need to tell the user and have them create a new one.
-    my $sth2=$dbh->prepare("select * from borrowers where userid=?");
-    $sth2->execute($uid);
+    my $sth2=$dbh->prepare("select * from borrowers where userid=? and borrowernumber != ?");
+    $sth2->execute($uid,$member);
 
     if ( $sth2->fetchrow ) {
 	#The userid exists so we should display a warning.
