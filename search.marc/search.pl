@@ -194,7 +194,7 @@ if ($op eq "do_search") {
 							from=>$from,
 							to=>$to,
 							numbers=>\@numbers,
-							MARC_ON => C4::Context->preferences("MARC"),
+							MARC_ON => C4::Context->preference("marc"),
 							);
 
 } elsif ($op eq "AddStatement") {
