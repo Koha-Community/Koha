@@ -131,6 +131,7 @@ $data->{'borrowernotes'}<!--</a>-->
 <p>
 <INPUT TYPE="image" name="password"  VALUE="password" height=42  WIDTH=154 BORDER=0 src="/images/password-mem.gif"> 
 </p>
+<a href=member-flags.pl?member=$bornum>Modify User Flags</a>
 
 </TD>
 </TR>
