@@ -230,6 +230,7 @@ sub new
 
 	$self->{"dbh"} = undef;		# Database handle
 	$self->{"stopwords"} = undef; # stopwords list
+	$self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
 
 	bless $self, $class;
 	return $self;
@@ -515,6 +516,46 @@ sub restore_dbh
 	# return something, then this function should, too.
 }
 
+=item marcfromkohafield
+
+  $dbh = C4::Context->marcfromkohafield;
+
+Returns a hash with marcfromkohafield.
+
+This hash is cached for future use: if you call
+C<C4::Context-E<gt>marcfromkohafield> twice, you will get the same hash without real DB access
+
+=cut
+#'
+sub marcfromkohafield
+{
+	my $retval = {};
+
+	# If the hash already exists, return it.
+	return $context->{"marcfromkohafield"} if defined($context->{"marcfromkohafield"});
+
+	# No hash. Create one.
+	$context->{"marcfromkohafield"} = &_new_marcfromkohafield();
+
+	return $context->{"marcfromkohafield"};
+}
+
+# _new_marcfromkohafield
+# Internal helper function (not a method!). This creates a new
+# hash with stopwords
+sub _new_marcfromkohafield
+{
+	my $dbh = C4::Context->dbh;
+	my $marcfromkohafield;
+	my $sth = $dbh->prepare("select frameworkcode,kohafield,tagfield,tagsubfield from marc_subfield_structure where kohafield > ''");
+	$sth->execute;
+	while (my ($frameworkcode,$kohafield,$tagfield,$tagsubfield) = $sth->fetchrow) {
+		my $retval = {};
+		$marcfromkohafield->{$frameworkcode}->{$kohafield} = [$tagfield,$tagsubfield];
+	}
+	return $marcfromkohafield;
+}
+
 =item stopwords
 
   $dbh = C4::Context->stopwords;
@@ -554,6 +595,8 @@ sub _new_stopwords
 	}
 	return $stopwordlist;
 }
+
+
 
 1;
 __END__
