@@ -203,7 +203,7 @@ if ($messages->{'ResFound'}) {
 										branchname => $branches->{$res->{'branchcode'}}->{'branchname'},
 										reserved => 1,
 										today => $todaysdate,
-										itemnum => $res->{'itemnumber'},
+										itemnumber => $res->{'itemnumber'},
 										itemtitle => $iteminfo->{'title'},
 										itemauthor => $iteminfo->{'author'},
 										itembarcode => $iteminfo->{'barcode'},

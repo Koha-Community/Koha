@@ -513,7 +513,6 @@ C<biblioitemnumber>.
 sub Findgroupreserve {
   my ($bibitem,$biblio)=@_;
   my $dbh = C4::Context->dbh;
-  $bibitem=$dbh->quote($bibitem);
   my $query = "SELECT reserves.biblionumber               AS biblionumber,
                       reserves.borrowernumber             AS borrowernumber,
                       reserves.reservedate                AS reservedate,
