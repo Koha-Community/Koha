@@ -8,7 +8,12 @@ use C4::Auth;
  
 my $query=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
+
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1, $flagsrequired);
+
 
 my $template = gettemplate ("opac-detail.tmpl", "opac");
 
@@ -18,7 +23,7 @@ my $biblionumber=$query->param('bib');
 
 
 # change back when ive fixed request.pl
-my @items                                 = &ItemInfo(undef, $biblionumber, 'opac');
+my @items                                 = &ItemInfo(undef, $biblionumber, 'intra');
 my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);

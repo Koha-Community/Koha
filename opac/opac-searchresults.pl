@@ -8,7 +8,10 @@ use C4::Output; # now contains picktemplate
   
 my $query=new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1, $flagsrequired);
 
 
 my $template = gettemplate ("opac-searchresults.tmpl", "opac");
@@ -52,15 +55,14 @@ $template->param(FORMINPUTS => $forminputs);
 
 # do the searchs ....
 my $env;
-$env->{itemcount}=1;
-my $num=10;
+$env->{'itemcount'}=1;
+my $num = 10;
 my @results;
 my $count;
 my $startfrom = $query->param('startfrom');
 my $subjectitems=$query->param('subjectitems');
 if ($subjectitems) {
-    my $blah;
-    @results = subsearch(\$blah,$subjectitems, $num, $startfrom);
+    @results = subsearch($env,$subjectitems, $num, $startfrom);
     $count = $#results+1;
 } else {
     ($count, @results) = catalogsearch($env,'',\%search,$num,$startfrom);
@@ -75,6 +77,12 @@ foreach my $res (@results) {
     $res->{'norequests'} = $norequests;
 }
 
+my $debug = "";
+foreach my $res (@results) {
+    $debug .= "title : $res->{'title'} <br>";
+    $debug .= "biblionumber : $res->{'biblionumber'} <br>";
+    $debug .= "location : $res->{'location'} <br><hr><br>x";
+}
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
@@ -117,5 +125,6 @@ $template->param(numbers => $numbers);
 
 $template->param(loggedinuser => $loggedinuser);
 
-print $query->header(-cookie => $cookie), $template->output;
+#print $query->header(-cookie => $cookie), $debug, $template->output;
+print $query->header(-cookie => $cookie),  $template->output;
 

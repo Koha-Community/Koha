@@ -12,7 +12,10 @@ use C4::Circulation::Circ2;
 
 my $query = new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
 
 # get borrower information ....
 my $borrowernumber = getborrowernumber($loggedinuser);

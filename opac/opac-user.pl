@@ -32,6 +32,12 @@ if ($borr->{'amountoutstanding'} > 5) {
 } else {
     $borr->{'amountoverfive'} = 0;
 }
+if ($borr->{'amountoutstanding'} > 0) {
+    $borr->{'amountoverzero'} = 1;
+} else {
+    $borr->{'amountoverzero'} = 0;
+    $borr->{'amountoutstanding'} = -1*($borr->{'amountoutstanding'});
+}
 
 $borr->{'amountoutstanding'} = sprintf "\$%.02f", $borr->{'amountoutstanding'};
 
@@ -49,14 +55,14 @@ foreach my $key (keys %$issues) {
     my $issue = $issues->{$key};
     $issue->{'date_due'}  = slashifyDate($issue->{'date_due'});
     if ($issue->{'overdue'}) {
-	$issue->{'status'} = "OVERDUE";
+	$issue->{'status'} = "<font color='red'>OVERDUE</font>";
     } else {
 	$issue->{'status'} = "Issued";
     }
 # check for reserves
     my ($restype, $res) = CheckReserves($issue->{'itemnumber'});
     if ($restype) {
-	$issue->{'status'} .= "Reserved";
+	$issue->{'status'} .= " Reserved";
     }
     my ($charges, $itemtype) = calc_charges(undef, undef, $issue->{'itemnumber'}, $borrowernumber);
     $issue->{'charges'} = $charges; 
@@ -69,6 +75,9 @@ $template->param(issues_count => $count);
 
 # now the reserved items....
 my ($rcount, $reserves) = FindReserves(undef, $borrowernumber);
+foreach my $res (@$reserves) {
+    $res->{'reservedate'}  = slashifyDate($res->{'reservedate'});
+}
 
 $template->param(RESERVES => $reserves);
 $template->param(reserves_count => $rcount);

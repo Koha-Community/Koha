@@ -7,7 +7,11 @@ use CGI;
 use C4::Auth;
 
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query ,1);
+
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query ,1, $flagsrequired);
 
 my $template = gettemplate("opac-search.tmpl", "opac");
 
