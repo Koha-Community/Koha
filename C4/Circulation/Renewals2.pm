@@ -14,7 +14,6 @@ use C4::Database;
 use C4::Stats;
 use C4::Accounts2;
 use C4::Circulation::Circ2;
-use warnings;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
