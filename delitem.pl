@@ -29,8 +29,13 @@ use CGI;
 use C4::Output;
 use C4::Acquisitions;
 use C4::Biblio;
+use C4::Auth;
 
 my $input = new CGI;
+my $flagsrequired;
+$flagsrequired->{editcatalogue}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 #print $input->header;
 my $item=$input->param('itemnum');
 delitem($item);

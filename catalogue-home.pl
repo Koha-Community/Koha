@@ -8,7 +8,7 @@ use C4::Database;
 use HTML::Template;
 
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query,1);
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 my $template = gettemplate("catalogue/catalogue-home.tmpl");
 
 my $classlist='';

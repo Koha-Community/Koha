@@ -29,6 +29,11 @@ use C4::Groups;
 use C4::Circulation::Circ2;
 use C4::Print;
 use DBI;
+use C4::Database;
+
+my $configfile=configfile();
+my $intranetdir=$configfile->{'intranetdir'};
+
 
 my $input=new CGI;
 my $time=$input->param('time');
@@ -233,7 +238,7 @@ sub printgroup {
     my $type=shift;
     $output= "<head><title>Overdue list for $groups->{$group}</title></head><body><center>\n";
     my $members=groupmembers($env, $group);
-    ($type eq 'overdues') && ($output.="<img src=/usr/local/koha/librarian/htdocs/images/overdues.jpg><br>\n");
+    ($type eq 'overdues') && ($output.="<img src=/images/overdues.jpg><br>\n");
     $output.= "<table border=1 cellspacing=5 cellpadding=10>\n";
     my $typetext='';
     ($type eq 'overdues') ? ($typetext="Overdues") : ($typetext="Issues");
