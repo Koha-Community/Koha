@@ -1,0 +1,14 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+	<h1>Authority types</h1>
+	<p>You can define as many Authority types as you want.</p>
+	<ul>
+		<li>with the MARC structure button, you can define the MARC structure of a given authority type</li>
+		<li>The tag reported must contain a MARC tag number. Every subfield in the selected tag will be copied to the "destination tag" in the biblio. for example, in UNIMARC, the tag 200 ot personal authority will be reported to 600, 700, 701, depending on what is cliqued in the biblio MARC editor.</li>
+		<li>The summary contains an "ISBD" like description to explain how the entry must be shown in the result list. The syntax is : 
+		<ul>
+			<li>[xxxFFFSyyy] where xxx are up to 3 digits BEFORE the field, FFF the field number, S the subfield code, yyy up to 3 digits AFTER the field.</li>
+			<li>things outside [] are kept as is (including HTML)</li>
+			<li>repeatable fields are manages.</li>
+		<ul>
+	</ul>
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->
