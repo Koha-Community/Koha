@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Etats</title>
+<title>KOHA: INTRANET: Reports</title>
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
