@@ -201,12 +201,13 @@ printend
 	print mkformnotable("$script_name",@inputs);
 	print <<printend
 <b>Hints :</b>
-5 variables are useful in this table :
+6 variables are useful in this table :
 <li><i>acquisitions</i>, which value may be "simple" or "normal"</li>
 <li><i>autoMemberNum</i> which may be 1 or 0</li>
 <li><i>dateformat</i> which may be "US" for mm/dd/yy format, or "metric" for dd/mm/yy format.
 <li><i>printcirculationslips</i> which may be 1 or 0</li> 
 <li><i>printreserveslips</i> which may be 1 or 0</li> 
+<li><i>KohaAdminEmailAddress</i> - currently used for patron's to request changes to their information.
 <br><br>
 printend
 	;
