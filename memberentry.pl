@@ -61,12 +61,15 @@ if ($delete){
   }
   
   my $cardnumber=$data->{'cardnumber'};
-  my %systemprefs=systemprefs();
+  my $autonumber_members = C4::Context->preference("autoMemberNum") || 0;
+		# Find out whether member numbers should be generated
+		# automatically. Should be either "1" or something else.
+		# Defaults to "0", which is interpreted as "no".
   # FIXME
   # This logic should probably be moved out of the presentation code.
   # Not tonight though.
   #
-  if ($cardnumber eq '' && $systemprefs{'autoMemberNum'} eq '1') {
+  if ($cardnumber eq '' && $autonumber_members eq '1') {
     my $dbh = C4::Context->dbh;
     my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
     my $sth=$dbh->prepare($query);

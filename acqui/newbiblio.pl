@@ -231,8 +231,10 @@ print <<printend
 printend
 ;
 
-my %systemprefs=systemprefs();
-if ($systemprefs{'autoBarcode'} eq '1') {
+my $auto_barcode = C4::Context->preference("autoBarcode") || 0;
+	# See whether barcodes should be automatically allocated.
+	# Defaults to 0, meaning "no".
+if ($auto_barcode eq '1') {
   my $dbh = C4::Context->dbh;
   my $query="Select barcode from items order by barcode desc";
   my $sth=$dbh->prepare($query);

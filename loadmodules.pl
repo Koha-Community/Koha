@@ -22,6 +22,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use C4::Context;
 use C4::Acquisitions;
 use C4::Biblio;
 use C4::Search;
@@ -37,15 +38,15 @@ SWITCH: {
 
 
 sub acquisitions {
-    # FIXME
-    # instead of getting a hash, then reading/writing to it at least twice 
-    # and up to four times, maybe this should be a different function -
-    # areAquisitionsSimple() which returns a boolean
-    my %systemprefs=systemprefs();
-    ($systemprefs{'acquisitions'}) || ($systemprefs{'acquisitions'}='normal');
-    if ($systemprefs{'acquisitions'} eq 'simple') {
+    my $aq_type = C4::Context->preference("acquisitions") || "normal";
+		# Get the acquisition preference. This should be:
+		#	"simple" - minimal information required
+		#	"normal" - full information required
+		#	other - Same as "normal"
+
+    if ($aq_type eq 'simple') {
 	print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
-    } elsif ($systemprefs{'acquisitions'} eq 'normal') {
+    } elsif ($aq_type eq 'normal') {
 	print $input ->redirect("/acquisitions");
     } else {
 	print $input ->redirect("/acquisitions");
