@@ -98,18 +98,14 @@ number of elements in C<@orders>.
 sub basket {
   my ($basketno,$supplier)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select *,biblio.title from aqorders,biblio,biblioitems
-  where basketno=?
+  my $query="Select *,biblio.title from aqorders,biblio,biblioitems
+  where basketno='$basketno'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
   =aqorders.biblioitemnumber
   and (datecancellationprinted is NULL or datecancellationprinted =
-  '0000-00-00')"
-  .(($supplier ne '')?" and aqorders.booksellerid=?":"")
-  ." group by aqorders.ordernumber");
-  if ($supplier ne '') {
-    $sth->execute($basketno,$supplier);
-  } else {
-    $sth->execute($basketno);
+  '0000-00-00')";
+  if ($supplier ne ''){
+    $query.=" and aqorders.booksellerid='$supplier'";
   }
   $query.=" order by biblioitems.publishercode";
   my $sth=$dbh->prepare($query);
@@ -118,10 +114,11 @@ sub basket {
 #  print $query;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
-    push(@results,$data);
+    $results[$i]=$data;
+    $i++;
   }
   $sth->finish;
-  return(scalar(@results),@results);
+  return($i,@results);
 }
 
 =item newbasket
