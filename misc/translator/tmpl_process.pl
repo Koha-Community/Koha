@@ -223,7 +223,7 @@ sub install_strhash
 						$text =~ s/\?/\\\?/g;
 						$text =~ s/\./\\\./g;
 						$subst =~ s/^LIMITED;//g;
-						$lines =~ s/(.*)>$text/$1>$subst/g;
+						$lines =~ s/(.*)>$text(\W)/$1>$subst$2/g;
 						$lines =~ s/(.*) title="$text/$1 title="$subst/g;
 						$lines =~ s/(.*) alt="$text/$1 alt="$subst/g;
 					} else {
