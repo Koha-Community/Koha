@@ -3,6 +3,7 @@
 use CGI;
 use strict;
 use C4::Acquisitions;
+use C4::Search;
 use C4::Output;
 
 my $input    = new CGI;
@@ -18,8 +19,9 @@ if (! $keywords) {
 } else {
     if (! $offset) { $offset = 0 };
     if (! $num) { $num = 10 };
-
-    ($count, @results) = &keywordsearch($keywords);
+    my %search;
+    $search{'keyword'}=$keywords;
+    ($count, @results) = KeywordSearch(undef,'intra',\%search,$num,$offset);
 
     if ($count < ($offset + $num)) {
         $total = $count;
