@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to administer the aqbudget table
+#script to administer the branches table
 #written 20/02/2002 by paul.poulain@free.fr
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
@@ -163,7 +163,7 @@ printend
 } elsif ($op eq 'add_validate') {
 	my $dbh=C4Connect;
 	my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail,issuing) values (";
-	$query.= $dbh->quote($input->param('branchcode')).",";
+	$query.= $dbh->quote($input->param('searchfield')).",";
 	$query.= $dbh->quote($input->param('branchname')).",";
 	$query.= $dbh->quote($input->param('branchaddress1')).",";
 	$query.= $dbh->quote($input->param('branchaddress2')).",";
