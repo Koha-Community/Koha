@@ -1739,9 +1739,16 @@ sub createcharge {
 #Stolen from Issues.pm
     my ($env,$dbh,$itemno,$bornum,$charge) = @_;
     my $nextaccntno = getnextacctno($env,$bornum,$dbh);
-    my $query = "insert into accountlines (borrowernumber,itemnumber,accountno,date,amount, description,accounttype,amountoutstanding) values ($bornum,$itemno,$nextaccntno,now(),$charge,'Rental','Rent',$charge)";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
+    my $sth = $dbh->prepare(<<EOT);
+	INSERT INTO	accountlines
+			(borrowernumber, itemnumber, accountno,
+			 date, amount, description, accounttype,
+			 amountoutstanding)
+	VALUES		(?, ?, ?,
+			 now(), ?, 'Rental', 'Rent',
+			 ?)
+EOT
+    $sth->execute($bornum, $itemno, $nextaccntno, $charge, $charge)
     $sth->finish;
 }
 
