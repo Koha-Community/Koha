@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
-
+<div id="mainbloc">
 <!-- TMPL_IF name="detail_form" -->
 	<!-------------------------------------------------------------------->
 	<font SIZE=6><em>Thesaurus management</em></font><br />
@@ -104,8 +104,8 @@
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<!-- TMPL_VAR name="tab_list" -->
 		<input type="text" name="searchstring" value="<!-- TMPL_VAR name="searchstring" -->">
-		<input type="submit" value="OK">
-		<a href="thesaurus.pl?op=add_form">New category...</a>
+		<input type="submit" value="OK" class="button parameters">
+		<a href="thesaurus.pl?op=add_form" class="button parameters">New category...</a>
 	</form>
 	<!-- TMPL_LOOP name="hierarchy_loop" -->
 		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />
@@ -133,14 +133,11 @@
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=hidden name=op value=add_form>
 	</table>
-	<br/>
-	<table width=40% height="80">
-		<tr>
-			<td width=50%><a href="<!-- TMPL_VAR name="previous" -->" class="button">Previous</a></td>
-			<td width=50%><a href="<!-- TMPL_VAR name="next" -->" class="button"> Next</a></td>
+	<p>
+		<a href="<!-- TMPL_VAR name="previous" -->" class="button parameters">Previous</a>
+		<a href="<!-- TMPL_VAR name="next" -->" class="button parameters"> Next</a>
 		</tr>
-	</table>
-	<br/>
+	</p>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type="hidden" name="op" value="add_form">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
@@ -151,5 +148,5 @@
 
 
 <!-- /TMPL_IF -->
-
+</div>
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

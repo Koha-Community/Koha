@@ -21,14 +21,11 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 	color:#FFFFFF;
 	background-image:none;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 a.catalogue:hover {
 	background-color: #ad11ad;
 	color: #FFFFFF;
 	text-decoration: none;
-	font-weight: normal;
-	font-weight: bold;
 	}
 </style>
 </head>
@@ -58,3 +55,21 @@ a.catalogue:hover {
 <!-- TMPL_ELSE -->
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 <!-- /TMPL_IF -->
+<a href="
+javascript:(
+  function(){
+     var newSS;
+     newSS=document.getElementById('codepoetry-debug-stylesheet');
+     if(newSS){
+        newSS.href=null;
+        document.documentElement.childNodes[0].removeChild(newSS);
+      } else {
+        newSS=document.createElement('link');
+        newSS.rel='stylesheet';
+        newSS.type='text/css';
+        newSS.href='http://www.codepoetry.net/stuff/css-debug-2.css';
+        newSS.id='codepoetry-debug-stylesheet';
+        document.documentElement.childNodes[0].appendChild(newSS);
+      }
+   }
+)()">TOGGLE CSS</a>

@@ -60,6 +60,7 @@ function Check(f) {
 	}
 }
 </SCRIPT>
+<div id="mainbloc">
 <!-- TMPL_IF name="add_form" -->
 	<!-- TMPL_IF name="itemtype" -->
 		<h1>Modify item type</h1>
@@ -69,84 +70,80 @@ function Check(f) {
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>
 		<input type=hidden name=checked value=0>
-		<table>
 			<!-- TMPL_IF name="itemtype" -->
-				<tr><td>Item type</td><td><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></td></tr>
+				<p><label class="label100">Item type<label><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></p>
 			<!-- TMPL_ELSE -->
-				<tr><td>Item type</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
+				<p><label class="label100">Item type<label><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></p>
 			<!-- /TMPL_IF -->
-			<tr>
-				<td>Description</td>
-				<td><input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td>Not for loan</td>
-				<td>
-					<!-- TMPL_IF name="notforloan" -->
-						<input type=checkbox name=notforloan checked value=1>
-					<!-- TMPL_ELSE -->
-						<input type=checkbox name=notforloan value=1>
-					<!-- /TMPL_IF -->
-					if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item
-				</td>
-			</tr>
-			<tr>
-				<td>Loan length</td>
-				<td>
+			<p>
+				<label class="label100">Description</label>
+				<input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>
+			</p>
+			<p>
+				<label class="label100">Not for loan</label>
+				<!-- TMPL_IF name="notforloan" -->
+					<input type=checkbox name=notforloan checked value=1>
+				<!-- TMPL_ELSE -->
+					<input type=checkbox name=notforloan value=1>
+				<!-- /TMPL_IF -->
+				if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item
+			</p>
+			<p>
+				<label class="label100">Loan length</label>
 					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
 					meaningful only if not for loan is not set
-				</td>
-			</tr>
-			<tr>
-				<td>Renewals allowed</td>
-				<td><input type=checkbox name=renewalsallowed <!-- TMPL_IF name="renewalsallowed" -->checked<!-- /TMPL_IF --> value=1></td>
-			</tr>
-			<tr>
-				<td>Rental charge</td>
-				<td><input type=text name=rentalcharge size=10 value='<!-- TMPL_VAR name="rentalcharge" -->'></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
-			</tr>
-		</table>
+			</p>
+			<p>
+				<label class="label100" name="renewalsallowed">Number of renewals allowed</label>
+				<input type="text" name=renewalsallowed value="<!-- TMPL_VAR name="renewalsallowed" -->">
+			</p>
+			<p>
+				<label class="label100">Rental charge</label>
+				<input type=text name=rentalcharge size=10 value='<!-- TMPL_VAR name="rentalcharge" -->'>
+			</p>
+			<p>
+				<INPUT type=button value='OK' onClick='Check(this.form)'>
+			</p>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-	<TABLE bg="#99cc33">
-		<tr>
-			<th>Item type</th>
-			<th><!-- TMPL_VAR name="itemtype" --></th>
-		</tr>
+		<p><label>Item type</label><!-- TMPL_VAR name="itemtype" --></p>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<!-- TMPL_VAR name="itemtype" -->'>
-	<tr><td>Description</td><td><!-- TMPL_VAR name="description" --></td></tr>
-	<tr><td>Loan length</td><td><!-- TMPL_VAR name="loanlength" --></td></tr>
-	<tr><td>Renewals</td><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
-	<tr><td>Rental charge</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
+	<p><label>Description</label><!-- TMPL_VAR name="description" --></p>
+	<p><label>Loan length</label><!-- TMPL_VAR name="loanlength" --></p>
+	<p><label>Renewals</label><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></p>
+	<p><lable>Rental charge</label><!-- TMPL_VAR name="rentalcharge" --></p>
 	<!-- TMPL_IF name="total" -->
-		<tr><td colspan=2 align=center><b>This record is used <!-- TMPL_VAR name="total" --> times. Deletion not possible</b></td></tr>
-		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=OK></form></td></tr>
+		<p>
+			<b>This record is used <!-- TMPL_VAR name="total" --> times. Deletion not possible</b>
+		</p>
+		<p>
+			</form>
+			<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="OK" class="button parameters"></form>
+		</p>
 	<!-- TMPL_ELSE -->
-		<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-		<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
+		<p>CONFIRM DELETION</p>
+		<p>
+			<input type=submit value='YES' class="button parameters"></form>
+			<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO class="button parameters"></form>
+		</p>
 	<!-- /TMPL_IF -->
 
-	</table>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
 <h1>Item type Admin</h1>
-<table border='1' cellpadding='5' cellspacing='0' width='550'>
+<table>
 	<tr>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Code</b></th>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Description</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Loan length</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Renewable</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Charge</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">Edit</td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">Delete</td>
+		<th class="parameters">Code</th>
+		<th class="parameters">Description</th>
+		<th class="parameters">Loan length</th>
+		<th class="parameters">Renewable</th>
+		<th class="parameters">Charge</th>
+		<th class="parameters">Edit</th>
+		<th class="parameters">Delete</th>
 	</tr>
 	<!-- TMPL_LOOP name="loop" -->
 		<tr>
@@ -161,17 +158,11 @@ function Check(f) {
 	<!-- /TMPL_LOOP -->
 </table>
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-<input type=hidden name=op value=add_form>
-<br>
-<table width=40%>
-	<tr>
-		<td width="33%">
-			<input type=submit class="button" value="Add item type" title="Add item type" alt="Add item type" >
-		</td>
-		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a><!-- /TMPL_IF --></td>
-		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a><!-- /TMPL_IF --></td>
-	</tr>
-</table>
+	<input type=hidden name=op value=add_form>
+	<input type=submit class="button" value="Add item type" title="Add item type" alt="Add item type" >
+	<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a><!-- /TMPL_IF --></td>
+	<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a><!-- /TMPL_IF --></td>
 </form>
+</div>
 <!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

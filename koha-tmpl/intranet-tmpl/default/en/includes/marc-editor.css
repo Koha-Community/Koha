@@ -1,6 +1,6 @@
 body {
 	font-family:verdana,arial,helvetica;
-	font-size:12pt;
+	font-size:10pt;
 	margin:0px;
 	padding:0px;
 	background-color:#FFFFFF;
@@ -10,13 +10,15 @@ div.tabbed {
 	position: absolute;
 	margin-left:5%;
 	width:90%;
-	text-align:center;
 }
 
 div.tabs {
 	width:10px;
 	position:absolute;
+	margin-left:50px;
+	margin-top:100px;
 }
+
 div.tabs a {
 	display:block;
 	font-size: small;
@@ -30,17 +32,18 @@ div.tabs a {
 
 div.tab {
 	display: none;
-	width:90%;
+	width:95%;
 	text-align: center;
 	background-color:white;
 }
 
 div.tab:target {
-	width:95%;
+	width:90%;
 	text-align: center;
 	display: block;
 	position:absolute;
-	margin-left:5%;
+	margin-left:70px;
+	margin-top:100px;
 }
 
 :target div.tab {
@@ -50,6 +53,7 @@ div.tab:target {
 	position:absolute;
 	margin-left:10%;
 }
-:target div.tab + div.tab{
+
+:target div.tab{
 	display: none;
 }
