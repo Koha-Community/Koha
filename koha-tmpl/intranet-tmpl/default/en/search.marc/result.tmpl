@@ -13,6 +13,7 @@
 <center>
 
 <table border=0 cellspacing=0 cellpadding=2>
+<thead>
 	<tr
 	<TMPL_IF NAME="opac">
 			bgcolor=#99cccc background=/images/background-opac.gif
@@ -20,8 +21,14 @@
 			background="/images/background-mem.gif"
 		</TMPL_IF>
 	>
+<!--
 		<th colspan=5>Result</th>
+-->
+	<th>Biblio#</th>
+	<th>Author</th>
+	<th>Title</th>
 	</tr>
+<tbody>
 	<TMPL_LOOP name="result">
 		<tr>
 			<td><TMPL_VAR name="bibid"></td>
