@@ -45,7 +45,7 @@ if ($type eq 'Add'){
 }
 
 my $cardnumber=$data->{'cardnumber'};
-my %sysemprefs=systemprefs();
+my %systemprefs=systemprefs();
 # FIXME
 # This logic should probably be moved out of the presentation code.
 # Not tonight though.
@@ -275,12 +275,7 @@ print <<printend
 printend
 ;
 
-
-print "<OPTION value=EEBF";
-if ($data->{'area'} eq 'EEBF'){
-  print " Selected";
-}
-print ">EEBF - Delphi-E Flint
+print "
 <OPTION value=L";
 if ($data->{'area'} eq 'L'){
   print " Selected";
