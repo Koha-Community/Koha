@@ -45,9 +45,6 @@ use HTML::Template;
 
 my %env;
 my $input = new CGI;
-#get varibale that tells us whether to show confirmation page
-#or insert data
-my $insert=$input->param('insert');
 
 #get rest of data
 my %data;
