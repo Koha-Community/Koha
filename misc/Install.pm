@@ -1326,20 +1326,29 @@ $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 
 sub installfiles {
 
+	#MJR: preserve old files, just in case
+	sub neatcopy {
+		my $desc = shift;
+		my $src = shift;
+		my $tgt = shift;
+		
+		if (-d $tgt) {
+    		print getmessage('CopyingFiles', ["old ".$desc,$tgt.".old"]);
+			system("mv ".$tgt." ".$tgt.".old");
+			}
+
+    	print getmessage('CopyingFiles', [$desc,$tgt]);
+	    system("cp -R ".$src."/* ".$tgt);
+		}
 
     showmessage(getmessage('InstallFiles'),'none');
-    print getmessage('CopyingFiles', ['intranet-html', "$intranetdir/htdocs" ]);
-    system("cp -R intranet-html/* $intranetdir/htdocs/");
-    print getmessage('CopyingFiles', ['intranet-cgi', "$intranetdir/cgi-bin" ]);
-    system("cp -R intranet-cgi/* $intranetdir/cgi-bin/");
-    print getmessage('CopyingFiles', ['stand-alone scripts', "$intranetdir/scripts" ]);
-    system("cp -R scripts/* $intranetdir/scripts/");
-    print getmessage('CopyingFiles', ['perl modules', "$intranetdir/modules" ]);
-    system("cp -R modules/* $intranetdir/modules/");
-    print getmessage('CopyingFiles', ['opac-html', "$opacdir/htdocs" ]);
-    system("cp -R opac-html/* $opacdir/htdocs/");
-    print getmessage('CopyingFiles', ['opac-cgi', "$opacdir/cgi-bin" ]);
-    system("cp -R opac-cgi/* $opacdir/cgi-bin/");
+
+    neatcopy("admin templates", 'intranet-html', "$intranetdir/htdocs");
+    neatcopy("admin interface", 'intranet-cgi', "$intranetdir/cgi-bin");
+    neatcopy("main scripts", 'scripts', "$intranetdir/scripts/");
+    neatcopy("perl modules", 'modules', "$intranetdir/modules/");
+    neatcopy("OPAC templates", 'opac-html', "$opacdir/htdocs/");
+    neatcopy("OPAC interface", 'opac-cgi', "$opacdir/cgi-bin/");
     system("touch $opacdir/cgi-bin/opac");
 
     system("chown -R $httpduser:$httpduser $opacdir");
