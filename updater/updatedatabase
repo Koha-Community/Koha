@@ -59,6 +59,14 @@ my %requiretables=(
 	active smallint)",
     branchrelations=>"( branchcode varchar(4), 
 	categorycode varchar(4))",
+    marcrecorddone=>"( isbn char(40),
+		      issn char(40),
+		      lccn char(40),
+		      controlnumber char(40))",
+    uploadedmarc=>"( id int(11) NOT NULL auto_increment PRIMARY KEY,
+		    marc longblob,
+		    hidden smallint(6) default NULL,
+		    name varchar(255) default NULL)",
 );
 
 my %requirefields=(
