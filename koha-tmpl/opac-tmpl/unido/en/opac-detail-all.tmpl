@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//Dtd HTML 4.0 Transitional//EN"
+"http://www.w3.org/TR/REC-html40/loose.dtd">
+<!--
+design and HTML by rachel@katipo.co.nz, 
+templating by finlay@katipo.co.nz
+SEARCH RESULTS - ITEM DETAIL PAGE
+This is the part of the "vanilla" theme put together by Katipo
+Communications for general distribution with Koha. 
+If you see strange tags and comments you don't understand they may be out of
+Kea our content management system. If you'd like to use Kea to change your
+template & website text please contact Katipo.
+Cheers
+R
+12/1/03
+-->
+<html>
+<head>
+<title>Details</title>
+<link rel="stylesheet" href="<TMPL_VAR
+NAME='themelang'>/includes/vanilla-main.css" type="text/css" />
+<script type="text/javascript" language="javascript">
+<TMPL_INCLUDE name="script.js">
+</script>
+</head>
+<body marginheight="0" marginwidth="0">
+
+<!--START TOP TABLE-->
+<TMPL_INCLUDE name="vanilla-search-menu.inc">
+<!--START MAIN TABLE AND LEFT NAVIGATION-->
+<TMPL_INCLUDE name="vanilla-left-nav.inc">
+<!--SEARCH FORM-->
+<TMPL_INCLUDE name="vanilla-cat-search.inc">
+<!--END LEFT NAV, START CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-start.inc">	
+<a href="/">Home</a> &gt;<a
+href='/cgi-bin/koha/opac-search.pl'>Searching</a> &gt;<a
+href='/cgi-bin/koha/opac-detail-all.pl?bib=<TMPL_VAR
+NAME="biblionumber">'>Details</a>
+<!--END CRUMBS-->
+<TMPL_INCLUDE name="vanilla-crumb-end.inc">
+<!--CONTENT--><p>
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<table border="0" cellspacing="0" cellpadding="3">
+<tr valign="top"><td valign="top" class="head1bold" colspan="2"><TMPL_VAR NAME="title"><br />
+<TMPL_IF NAME="author"> (<TMPL_VAR NAME="author">)</TMPL_IF></td>
+<TMPL_UNLESS NAME="norequests">
+    <td><form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+    <input type="submit" name="submit" value="Place Reserve" align="right" class="submit">
+    <input type="hidden" name="bib" value=<TMPL_VAR NAME="biblionumber">>
+    </form></td>
+</TMPL_UNLESS>
+</tr>
+</table>
+<p>
+<table border="0" cellspacing="0" cellpadding="0">
+<TMPL_IF NAME="abstract">
+<tr valign="top"><td valign="top" colspan="2"><div class="padded"><TMPL_VAR
+NAME="abstract">abstrac</div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="url">
+<tr valign="top"><td><div class="padded"><b>Website:</b></div></td>
+    <td><div class="padded"><a href="<TMPL_VAR NAME="url">"><TMPL_VAR NAME="url"></a></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="subtitle">
+<tr valign="top"><td><div class="padded"><b>Subtitle:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="subtitle"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="seriestitle">
+<tr valign="top"><td><div class="padded"><b>Series Title:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="seriestitle"></div.</td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="conference">
+<tr valign="top"><td><div class="padded"><b>Conference Title:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="conference"></div</td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="author">
+<tr valign="top"><td><div class="padded"><b>Author:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="author"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="additional">
+<tr valign="top"><td><div class="padded"><b>Additional Author(s):</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="additional"></div></td></tr>
+</TMPL_IF>
+</TMPL_LOOP>			
+<!--new-->
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<TMPL_IF NAME="publishercode">
+<tr valign="top"><td><div class="padded"><b>Publisher:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="publishercode"></div></td></tr>
+</TMPL_IF>
+</TMPL_LOOP>
+<!--end new-->
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<tr valign="top"><td><div class="padded"><b>Copyright:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="copyrightdate"></div></td></tr>
+<TMPL_IF NAME="language">
+<tr valign="top"><td><div class="padded"><b>Language:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="language"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="subject">
+<tr valign="top"><td><div class="padded"><b>Subjects:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="subject"></div.</td></tr>
+</TMPL_IF>
+</TMPL_LOOP>					
+<!--new-->
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<TMPL_IF NAME="itemtype">
+<tr valign="top"><td><div class="padded"><b>Type/Format:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="itemtype"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="dewey">
+<tr valign="top"><td><div class="padded"><b>Classification:</b></div></td>
+    <td><div class="padded"><a href=/cgi-bin/koha/opac-searchresults.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="dewey"></a></div></td></tr>
+</TMPL_IF>
+
+<TMPL_IF NAME="isbn">
+<tr valign="top"><td><div class="padded"><b>ISBN / ISSN:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="isbn"><TMPL_VAR NAME="issn"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="issn">
+<tr valign="top"><td><div class="padded"><b>ISBN / ISSN:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="isbn"><TMPL_VAR NAME="issn"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="volumeddesc">
+<tr valign="top"><td><div class="padded"><b>Volume:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="volumeddesc"></div></td></tr>
+</TMPL_IF>
+</TMPL_LOOP>
+<!--end new-->
+<TMPL_LOOP NAME="BIBLIO_RESULTS">    
+<TMPL_IF NAME="notes">
+<tr valign="top"><td><div class="padded"><b>Notes:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="notes"></div></td></tr>
+</TMPL_IF>
+<TMPL_IF NAME="holdings">
+<tr valign="top"><td><div class="padded"><b>Holdings:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="holdings"></div></td></tr>
+</TMPL_IF>
+</TMPL_LOOP>
+
+<!--new-->
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<tr><td class="line" colspan="2"><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width="1" height="1" border="0" alt=""></td></tr>
+<tr><td><div class="padded"><b>Barcode:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="barcode"></div></td></tr>
+<tr><td><div class="padded"><b>Status:</b></div></td>
+    <td><table cellpadding="0" cellspacing="0"><tr><td><td
+style="background-color:#EDF8CD;border solid 1px #DAE4C1"><div
+class="padded"><TMPL_VAR NAME="datedue"></div></td></tr></table></td>
+<tr><td><div class="padded"><b>Location:</b></div></td>
+    <td><div class="padded"><TMPL_VAR NAME="branchname"></div></td></tr>
+</TMPL_LOOP>
+</table>
+<!--end new-->
+
+			
+<!--BOTTOM NAVIGATION - ALL-->
+<TMPL_INCLUDE name="vanilla-botnav-all.inc">
+<!--BOTTOM NAVIGATION - SECTION-->
+			
+<!--END MAIN TABLE-->
+<TMPL_INCLUDE name="vanilla-end-main.inc">
+</body>
+</html>
