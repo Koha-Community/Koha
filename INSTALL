@@ -1,0 +1,131 @@
+Koha - Requirements and quick-start installation guide
+
+INSTALL document included with [Koha]
+
+For information on how to install Koha without requiring multiple virtual servers - See KohaAllInOne. 
+For additional information on how your Configuration files should look see the Hints file.
+
+Important....
+To successfully use Koha you need some additional software:
+
+A webserver (It was built to work with Apache, but there is no reason it shouldnt work with any other webserver). 
+Mysql (You could intead use postgres, or another sql based database) 
+Perl (mod_perl isnt needed, tho koha should work with mod_perl but this hasnt been tested yet). 
+
+Perl Modules:
+
+Date::Manip 
+DBI 
+Set::Scalar 
+DBD::mysql (or whatever database system you use) 
+AuthenDBI (if you want to use Database based authentication) 
+CDK (for the telnet interface not nessecary if you plan to use the web based circulation module) also requires installation of the C CDK libraries http://www.vexus.ca/CDK.html ( CDKModuleHasProblems ) 
+
+--------------------------------------------------------------------------------
+
+
+Quick-start Installation Guide
+(Assumes the Use of MySQL and Apache)
+
+1. Create a new mysql database called for example Koha
+From command line: mysqladmin -uroot -ppassword create Koha 
+There is a databse installation shell script included with the Koha tarball.
+
+2. Set up a koha user and password in mysql
+Log in to mysql: mysql -uroot -ppassword 
+
+To create a user called "koha" who has full administrative rights to the "Koha" database when autheicting from "localhost", enter the following on mysql command line:
+
+grant all privileges on Koha.* to koha@localhost identified by 'kohapassword'; 
+
+Press ENTER, and if you see no errors then enter \q to quit mysql.
+
+
+3. Use the mysql script to create the tables
+mysql -uusername -ppassword Koha < koha.mysql 
+
+3.1 Update your database tables
+perl updatedatabase -I /pathtoC4 
+
+4. Edit koha.conf
+Set the database name to what you have called your database, hostname willprobably stay as localhost (unless you are installing the database on a different machine to the webserver) User and password should be changed to reflect the username and password you have chosen above.
+
+You can include a line called "includes= " with path to your includes folder instead of entering the path in Output.pm - see example in KohaHints.
+
+
+5. Copy koha.conf to /etc/
+The permissions on this config file should also be strict, since they contain the database password. At a minimum, the apache user needs to be able to read it, as well as any other user that runs circ.
+I would suggest ownership of www-data.libadmins with no access to others.libadmins contain all users that use koha (If you set the owner as www-data u will need to make sure apache is running
+as www-data)
+
+6. Create directories for scripts and html documents.
+Here you need to decide where your scripts and html are going to live.
+And edit C4/Output.pm to reflect that.
+Set $path= where your includes live,
+for example: $path="/usr/local/www/koha/htdocs/includes";
+
+You do not need to do that if you have already entered the includes path in koha.conf (see example above) 
+
+Next copy the C4 directory (in scripts/) to somewhere in your perl path
+eg /usr/local/lib/site_perl/i386-linux/
+
+If you do not have sufficient access to copy the files to the default perl folder (maybe you are using your ISPs hosting server) then you can copy the modules to any other location and add a line to apache.conf like:
+
+SetEnv? PERL5LIB "/usr/local/www/koha/modules"
+
+Copy the C4 directory into the modules folder (see detailed example in KohaHints)
+
+
+7. Set up your Online Public Access Catalogue (OPAC)
+
+Set up a webspace for the OPAC: For example: You might make /usr/local/www/opac ... and set a virtual host in apache to use that dir 
+In your opac dir make a dir called htdocs, and copy everything in opac-html/ to it. 
+Again in ur opac dir make a dir called cgi-bin and copy all the files in scripts/ that have a .pl extension to it, eg copy scripts/*.pl /usr/local/www/opac/cgi-bin/koha/ 
+Your virtual host should be set up to use these dirs, some thing like this: 
+
+
+   <VirtualHost opac.your.site>                         
+   ServerAdmin webmaster@your.site                            
+   DocumentRoot /usr/local/www/opac/htdocs                     
+   ServerName opac.your.site                      
+   ErrorLog logs/opac-error_log       
+   TransferLog logs/opac-access_log               
+   </VirtualHost>
+
+
+When finished, restart apache and point your browser at opac.your.site and it should be all go (of course - if you dont have any data in the database there wont be much to see!) 
+
+Find supplementary information and config examples in KohaHints
+
+8. Set up the intranet/librarian interface
+
+Create new directories and additional httpd.conf changes to Set up another webspace. Lets call it koha. 
+For example:
+
+In the dir you have just created make an htdocs dir and a cgi-bin dir 
+Copy everything in intranet-html/ to the htdocs dir 
+Copy all the .pl files in scripts/ to the cgi-bin/koha dir 
+Make sure ur virtual host is set up to use these dirs 
+Restart apache point your browser at koha.your.site and it should work 
+
+
+9. Configure SECURITY for the Librarians/Intranet Interface
+If you are using AuthenDBI to do your authentication, you will need to add some users to the users table in the koha database. And edit your apache conf file to use AuthenDBI on the intranet site.
+
+Otherwise, set up htaccess files in both koha/htdocs/ and koha/cgi-bin You can use general .htaccess based security. It is important though to password protect the librarians interface because from it you can delete and add items, remove borrowers fines and generally case havoc.
+
+
+10. Set up Issues, Returns and Telnet interface.
+Since we have already copied the files in scripts/C4 into somewhere in our perl source tree
+
+We just need to now copy the scripts from scripts/telnet/ into somewhere in the executable path, eg /usr/local/bin
+
+Then its done: type circ and your away, ready to issue and return.
+
+In release 1.1.0 on there is now a webbased circulation module, So issues and returns can be done from there, or from circ.
+
+
+You will find some Koha config examples in KohaHints 
+
+
+Check out KohaMiniFAQ for general, supplementary information. 
