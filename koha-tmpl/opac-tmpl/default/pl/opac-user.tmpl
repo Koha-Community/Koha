@@ -1,0 +1,136 @@
+
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+
+<table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
+<tr   bgcolor="#fecc99" >
+<td><b>CZY NASZ REKORD JEST POPRAWNY?</B></td></tr>
+<tr>
+<td><font size=2 face="arial,helvetica">
+Karta dostêpu: <TMPL_VAR NAME="cardnumber"> <p>
+<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
+<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
+<TMPL_VAR NAME="phone"> (dom)<br>
+<TMPL_VAR NAME="faxnumber"> (praca)<br>
+
+<TMPL_VAR NAME="emailaddress"><p>
+
+Czy którekolwiek z naszych danych s± niepoprawne? Czy ostatnio przeprowadza³e¶/a¶ siê, zmieni³e¶/a¶ numer telefonu lb adres e-mail?
+<p>
+
+<a href="/cgi-bin/koha/opac-userupdate.pl">Zaktualizuj Dane</a>
+
+</td></tr></table>
+
+
+
+
+<font size=6><em>Witaj <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font>
+[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Wyloguj siê</a>]<p>
+
+
+<TMPL_IF NAME="amountoverfive">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<font face="arial,helvetica" color="red" size=+2><B>Masz niezap³acone nale¿no¶ci i kary w wysoko¶ci <TMPL_VAR NAME="amountoutstanding"></B></font>
+</td></tr></table>
+
+</TMPL_IF>
+
+<TMPL_IF NAME="amountoverzero">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<td><font face="arial,helvetica" size=+2><B>Masz niezap³acone nale¿no¶ci i kary w wysoko¶ci <TMPL_VAR NAME="amountoutstanding"></B></font>
+</td></tr></table>
+</TMPL_IF>
+
+<TMPL_IF NAME"amountlessthanzero">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<td><font face="arial,helvetica" size=+2><B>Posiadasz kredyt na <TMPL_VAR NAME="amountoutstanding"></B></font>
+</td></tr></table>
+</TMPL_IF>
+<a href='/cgi-bin/koha/opac-account.pl'>Przegl±daj konta</a>
+
+</TMPL_LOOP>
+
+<TMPL_IF NAME="waiting_count">
+   <table  cellpadding=5 cellspacing=0 border=0><tr bgcolor="#fecc99" >
+   <td colspan=2><font color="red" face="arial,helvetica" size=+2><B>
+   Czekaj± na Ciebie zarezerwowane pozycje:
+   </B></font><P></td></tr>
+      <TMPL_LOOP NAME="WAITING">
+      <tr><td><b><TMPL_VAR NAME="btitle"></b></td><td>odbiór w: <b><TMPL_VAR NAME="branch"></b></td></tr>
+      </TMPL_LOOP>
+   </table>
+</TMPL_IF>
+
+<p>
+
+<TMPL_IF NAME="issues_count">
+
+Obecnie masz <TMPL_VAR NAME="issues_count"> wypo¿yczonych pozycji.<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+<TD><B>Tytu³</B></TD>
+<TD><B>Autor</B></TD>
+<TD><B>Do zwrotu</B></TD>
+<TD><B>Typ Pozycji</B></TD>
+<TD><B>Op³aty</B></TD>
+<TD><B>Status</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="ISSUES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="title"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="date_due"></TD>
+<TD><TMPL_VAR NAME="itemtype"></TD>
+<TD><TMPL_VAR NAME="charges"></TD>
+<TD><TMPL_VAR NAME="status"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+
+<TMPL_ELSE>
+Nie masz ¿adnej wypo¿yczonej pozycji.
+</TMPL_IF>
+
+<p>
+
+
+<TMPL_IF NAME="reserves_count">
+
+Obecnie masz <TMPL_VAR NAME="reserves_count"> zarezerwowan±(ych) pozycjê(i).<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
+<TD><B>Tytu³</B></TD>
+<TD><B>Autor</B></TD>
+<TD><B>Data rezerwacji</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="RESERVES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="btitle"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="reservedate"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+</TMPL_IF>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
+

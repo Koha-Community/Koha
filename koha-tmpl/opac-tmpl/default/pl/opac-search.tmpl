@@ -1,0 +1,69 @@
+<TMPL_INCLUDE NAME="opac-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony cz³onkowskie</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
+</TMPL_IF>
+
+
+<CENTER>
+<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
+<TABLE >
+
+<tr valign=top>
+<TD></td><td></td><td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="OK Start Search" width=164 height=44 border=0 >
+</td></tr>
+
+<TR VALIGN=TOP>
+<TD>S³owo kluczowe</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+</TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Tytu³</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+<td><input type=radio name=ttype value=normal checked>Zwyk³e<input
+type=radio name=ttype value=exact>Dok³adne</td>
+</TR>
+
+<TR VALIGN=TOP> 
+<TD>Autor</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
+
+<TR VALIGN=TOP> 
+<TD>Ilustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Przedmiot</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
+
+<td>Klasa</td>
+  <td>
+    <select size="1"  name="class">
+    <option value="">Ka¿da
+    <!-- fetch class list -->
+    <TMPL_VAR name="classlist">
+    <!--#include virtual="/includes/cat-class-list.inc" -->
+    </select>
+ </td>
+</tr>
+
+<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+-->
+<TR VALIGN=TOP>
+<TD>Item Number</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="item"></TD></TR>
+
+<!-- <TR VALIGN=TOP>
+<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+-->
+</TR>
+
+<TR VALIGN=TOP>
+<td></td>
+<TD><font size=4 face="arial,helvetica">
+<INPUT TYPE="reset"  value="Wyczy¶æ wszystkie pola"></font></td></tr>
+
+</TABLE>
+</FORM>
+</CENTER>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
+
