@@ -38,13 +38,13 @@
 		</p>
 	</form>
 	<h2>Other options</h2>
-	<!-- TMPL_IF name="virtualshelves" -->
-		<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Virtual shelves</a>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="suggestion" -->
-		<a href="opac-suggestions.pl" class="button">View & manage suggestions</a>
-	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="loggedinusername" -->
+		<!-- TMPL_IF name="virtualshelves" -->
+			<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Virtual shelves</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="suggestion" -->
+			<a href="opac-suggestions.pl" class="button">View & manage suggestions</a>
+		<!-- /TMPL_IF -->
 		<a href="/cgi-bin/koha/opac-user.pl" class="button">
 			<!-- TMPL_VAR NAME="loggedinusername" --> home
 		</a>
@@ -62,7 +62,7 @@
 		</form>
 
 	<!-- TMPL_ELSE -->
-	<h2><a href="/cgi-bin/koha/opac-user.pl">Log In to Koha</a></h2>
+		<p><a href="/cgi-bin/koha/opac-user.pl">Log in to Koha</a> to have personal options.</p>
 	<!-- /TMPL_IF -->
 	<p class="copyright">
 		This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards

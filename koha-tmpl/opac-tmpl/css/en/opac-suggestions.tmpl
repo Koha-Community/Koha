@@ -58,6 +58,11 @@
 						<!-- TMPL_ELSE -->
 							<option value="ASKED">Asked</option>
 						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ACCEPTED" -->
+							<option value="ACCEPTED" selected>Accepted</option>
+						<!-- TMPL_ELSE -->
+							<option value="ACCEPTED">Accepted</option>
+						<!-- /TMPL_IF -->
 						<!-- TMPL_IF name="ORDERED" -->
 							<option value="ORDERED" selected>Ordered</option>
 						<!-- TMPL_ELSE -->
@@ -110,9 +115,10 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_IF name="ASKED" -->Asked<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ACCEPTED" -->Accepted, will be ordered soon<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="ORDERED" -->Ordered by the library<!-- /TMPL_IF -->
 					<!-- TMPL_IF name="REJECTED" -->Suggestion rejected : won't be buy<!-- /TMPL_IF -->
-					<!-- TMPL_IF name="AVAILABLE" -->Available in the library<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Recieved by the library<!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
