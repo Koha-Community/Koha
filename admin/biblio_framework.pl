@@ -36,7 +36,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from auth_types where (authtypecode like ?) order by authtypecode");
+	my $sth=$dbh->prepare("Select * from biblio_framework where (frameworkcode like ?) order by frameworktext");
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -48,15 +48,15 @@ sub StringSearch  {
 }
 
 my $input = new CGI;
-my $searchfield=$input->param('authtypecode');
+my $searchfield=$input->param('frameworkcode');
 my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/authtypes.pl";
-my $authtypecode=$input->param('authtypecode');
+my $script_name="/cgi-bin/koha/admin/biblio_framework.pl";
+my $frameworkcode=$input->param('frameworkcode');
 my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "parameters/authtypes.tmpl",
+    = get_template_and_user({template_name => "parameters/biblio_framework.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -77,16 +77,15 @@ if ($op eq 'add_form') {
 	#start the page and read in includes
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
-	if ($authtypecode) {
+	if ($frameworkcode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select authtypecode,authtypetext,auth_tag_to_report from auth_types where authtypecode=?");
-		$sth->execute($authtypecode);
+		my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+		$sth->execute($frameworkcode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	$template->param(authtypecode => $authtypecode,
-							authtypetext => $data->{'authtypetext'},
-							auth_tag_to_report => $data->{'auth_tag_to_report'},
+	$template->param(frameworkcode => $frameworkcode,
+							frameworktext => $data->{'frameworktext'},
 							);
 ;
 													# END $OP eq ADD_FORM
@@ -94,10 +93,10 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace auth_types (authtypecode,authtypetext,auth_tag_to_report) values (?,?,?)");
-	$sth->execute($input->param('authtypecode'),$input->param('authtypetext'),$input->param('auth_tag_to_report'));
+	my $sth=$dbh->prepare("replace biblio_framework (frameworkcode,frameworktext) values (?,?)");
+	$sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -106,21 +105,22 @@ if ($op eq 'add_form') {
 	#start the page and read in includes
 	my $dbh = C4::Context->dbh;
 
+	# Check both categoryitem and biblioitems, see Bug 199
 	my $total = 0;
-	for my $table ('auth_tag_structure') {
-	   my $sth=$dbh->prepare("select count(*) as total from $table where authtypecode=?");
-	   $sth->execute($authtypecode);
+	for my $table ('marc_tag_structure') {
+	   my $sth=$dbh->prepare("select count(*) as total from $table where frameworkcode=?");
+	   $sth->execute($frameworkcode);
 	   $total += $sth->fetchrow_hashref->{total};
 	   $sth->finish;
 	}
 
-	my $sth=$dbh->prepare("select authtypecode,authtypetext from auth_types where authtypecode=?");
-	$sth->execute($authtypecode);
+	my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+	$sth->execute($frameworkcode);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 
-	$template->param(authtypecode => $authtypecode,
-							authtypetext => $data->{'authtypetext'},
+	$template->param(frameworkcode => $frameworkcode,
+							frameworktext => $data->{'frameworktext'},
 							total => $total);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -128,15 +128,15 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	#start the page and read in includes
 	my $dbh = C4::Context->dbh;
-	my $authtypecode=uc($input->param('authtypecode'));
-	my $sth=$dbh->prepare("delete from auth_tag_structure where authtypecode=?");
-	$sth->execute($authtypecode);
-	$sth=$dbh->prepare("delete from auth_subfield_structure where authtypecode=?");
-	$sth->execute($authtypecode);
-	$sth=$dbh->prepare("delete from auth_types where authtypecode=?");
-	$sth->execute($authtypecode);
+	my $frameworkcode=uc($input->param('frameworkcode'));
+	my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
+	$sth->execute($frameworkcode);
+	$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
+	$sth->execute($frameworkcode);
+	$sth=$dbh->prepare("delete from biblio_framework where frameworkcode=?");
+	$sth->execute($frameworkcode);
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
@@ -152,9 +152,8 @@ if ($op eq 'add_form') {
 		} else {
 			$row_data{toggle}="white";
 		}
-		$row_data{authtypecode} = $results->[$i]{'authtypecode'};
-		$row_data{authtypetext} = $results->[$i]{'authtypetext'};
-		$row_data{auth_tag_to_report} = $results->[$i]{'auth_tag_to_report'};
+		$row_data{frameworkcode} = $results->[$i]{'frameworkcode'};
+		$row_data{frameworktext} = $results->[$i]{'frameworktext'};
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);

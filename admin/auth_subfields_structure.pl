@@ -238,8 +238,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,value_builder from auth_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
-	$sth->execute($tagfield,$tagsubfield);
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,tab,authorised_value,value_builder from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
+	$sth->execute($tagfield,$tagsubfield,$authtypecode);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
@@ -257,6 +257,7 @@ if ($op eq 'add_form') {
 	unless (C4::Context->config('demo') eq 1) {
 		my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
 		$sth->execute($tagfield,$tagsubfield,$authtypecode);
+		warn "DEL : $tagfield,$tagsubfield,$authtypecode";
 		$sth->finish;
 	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
@@ -287,6 +288,9 @@ if ($op eq 'add_form') {
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&authtypecode=$authtypecode";
 		$row_data{bgcolor} = $toggle;
+		if ($row_data{tab} eq -1) {
+			$row_data{subfield_ignored} = 1;
+		}
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);

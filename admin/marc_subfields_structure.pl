@@ -28,13 +28,13 @@ use C4::Context;
 use HTML::Template;
 
 sub StringSearch  {
-	my ($env,$searchstring,$itemtype)=@_;
+	my ($env,$searchstring,$frameworkcode)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from marc_subfield_structure where (tagfield like ? and itemtype=?) order by tagfield");
-	$sth->execute("$searchstring%",$itemtype);
+	my $sth=$dbh->prepare("Select * from marc_subfield_structure where (tagfield like ? and frameworkcode=?) order by tagfield");
+	$sth->execute("$searchstring%",$frameworkcode);
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -49,7 +49,7 @@ sub StringSearch  {
 my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
-my $itemtype=$input->param('itemtype');
+my $frameworkcode=$input->param('frameworkcode');
 my $pkfield="tagfield";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
@@ -69,12 +69,12 @@ $tagfield=~ s/\,//g;
 if ($op) {
 $template->param(script_name => $script_name,
 						tagfield =>$tagfield,
-						itemtype => $itemtype,
+						frameworkcode => $frameworkcode,
 						$op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
 						tagfield =>$tagfield,
-						itemtype => $itemtype,
+						frameworkcode => $frameworkcode,
 						else              => 1); # we show only the TMPL_VAR names $op
 }
 
@@ -139,8 +139,8 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and itemtype=?"); # and tagsubfield='$tagsubfield'");
-	$sth->execute($tagfield,$itemtype);
+	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and frameworkcode=?"); # and tagsubfield='$tagsubfield'");
+	$sth->execute($tagfield,$frameworkcode);
 	my @loop_data = ();
 	my $toggle="white";
 	my $i=0;
@@ -253,7 +253,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder,hidden,isurl,itemtype)
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder,hidden,isurl,frameworkcode)
 									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
@@ -296,13 +296,13 @@ if ($op eq 'add_form') {
 									$value_builder,
 									$hidden,
 									$isurl,
-									$itemtype,
+									$frameworkcode,
 									);
 			}
 		}
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&itemtype=$itemtype\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 
 													# END $OP eq ADD_VALIDATE
@@ -310,7 +310,7 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
+	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
 	$sth->execute($tagfield,$tagsubfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -319,7 +319,7 @@ if ($op eq 'add_form') {
 							delete_link => $script_name,
 							tagfield      =>$tagfield,
 							tagsubfield => $tagsubfield,
-							itemtype => $itemtype,
+							frameworkcode => $frameworkcode,
 							);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -327,18 +327,18 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	unless (C4::Context->config('demo') eq 1) {
-		my $sth=$dbh->prepare("delete from marc_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
-		$sth->execute($tagfield,$tagsubfield,$itemtype);
+		my $sth=$dbh->prepare("delete from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
+		$sth->execute($tagfield,$tagsubfield,$frameworkcode);
 		$sth->finish;
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&itemtype=$itemtype\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 	$template->param(tagfield => $tagfield);
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	my $env;
-	my ($count,$results)=StringSearch($env,$tagfield,$itemtype);
+	my ($count,$results)=StringSearch($env,$tagfield,$frameworkcode);
 	my $toggle="white";
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
@@ -361,7 +361,7 @@ if ($op eq 'add_form') {
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{hidden}	= $results->[$i]{'hidden'};
 		$row_data{isurl}	= $results->[$i]{'isurl'};
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&itemtype=$itemtype";
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&frameworkcode=$frameworkcode";
 		$row_data{bgcolor} = $toggle;
 		if ($row_data{tab} eq -1) {
 			$row_data{subfield_ignored} = 1;
@@ -370,7 +370,7 @@ if ($op eq 'add_form') {
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
-	$template->param(edit => "<a href=\"$script_name?op=add_form&amp;tagfield=$tagfield&itemtype=$itemtype\">");
+	$template->param(edit => "<a href=\"$script_name?op=add_form&amp;tagfield=$tagfield&frameworkcode=$frameworkcode\">");
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param(prev =>"<a href=\"$script_name?offset=$prevpage\">");
