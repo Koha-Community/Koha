@@ -1595,15 +1595,15 @@ sample data, install them.
 =cut
 
 sub populatedatabase {
-	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
-	if ($response =~/^y/i) {
-		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
-		showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
-	} else {
+# 	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
+# 	if ($response =~/^y/i) {
+# 		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+# 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+# 		showmessage(getmessage('SampleDataInstalled'), 'PressEnter','',1);
+# 	} else {
 		my $input;
 		my $response=showmessage(getmessage('AddBranchPrinter'), 'yn', 'y');
 
@@ -1634,7 +1634,7 @@ sub populatedatabase {
 		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
 		$printerqueue=~s/[^A-Za-z0-9]//g;
 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
-		}
+# 		}
 	my $language=showmessage(getmessage('Language'), 'free', 'en');
 	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
