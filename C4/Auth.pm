@@ -347,35 +347,30 @@ sub checkpw {
 # (e.g. LDAP), as well as local authentication through the borrowers
 # tables passwd field
 #
-
-    my ($dbh, $userid, $password) = @_;
-    {
-      my $sth=$dbh->prepare
-	  ("select password,cardnumber from borrowers where userid=?");
-      $sth->execute($userid);
-      if ($sth->rows) {
-	my ($md5password,$cardnumber) = $sth->fetchrow;
-	if (md5_base64($password) eq $md5password) {
-	    return 1,$cardnumber;
+	my ($dbh, $userid, $password) = @_;
+	warn "$userid / $password";
+	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
+	$sth->execute($userid);
+	if ($sth->rows) {
+		my ($md5password,$cardnumber) = $sth->fetchrow;
+		warn "==> ".md5_base64($password)." = $md5password";
+		if (md5_base64($password) eq $md5password) {
+			return 1,$cardnumber;
+		}
 	}
-      }
-    }
-    {
-      my $sth=$dbh->prepare
-	  ("select password from borrowers where cardnumber=?");
-      $sth->execute($userid);
-      if ($sth->rows) {
-	my ($md5password) = $sth->fetchrow;
-	if (md5_base64($password) eq $md5password) {
-	    return 1,$userid;
+	my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+	$sth->execute($userid);
+	if ($sth->rows) {
+		my ($md5password) = $sth->fetchrow;
+		if (md5_base64($password) eq $md5password) {
+			return 1,$userid;
+		}
 	}
-      }
-    }
-    if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
-        # Koha superuser account
-	return 2;
-    }
-    return 0;
+	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
+		# Koha superuser account
+		return 2;
+	}
+	return 0;
 }
 
 

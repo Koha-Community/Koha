@@ -80,7 +80,6 @@ C<$env> is ignored.
 #'
 sub checkdigit {
 	if (C4::Context->preference("checkdigit") eq "none") {
-		warn "XXcheckdigit : ".C4::Context->preference("checkdigit");
 		return 1;
 	} else {
 		my ($env,$infl) =  @_;
