@@ -75,7 +75,7 @@ C4::Auth - Authenticates Koha users
 
 =item get_template_and_user
 
-  my ($template, $borrowernumber, $cookie) 
+  my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name   => "opac-main.tmpl",
                              query           => $query,
 			     type            => "opac",
@@ -115,7 +115,7 @@ sub get_template_and_user {
 	my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 	my @bordat;
 	$bordat[0] = $borr;
-    
+
 	$template->param(USER_INFO => \@bordat);
     }
     return ($template, $borrowernumber, $cookie);
@@ -179,7 +179,7 @@ sub checkauth {
 	$template_name = "opac-auth.tmpl";
     } else {
 	$template_name = "auth.tmpl";
-    }	
+    }
 
     # state variables
     my $loggedin = 0;

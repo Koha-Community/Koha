@@ -81,7 +81,7 @@ sub gettemplate {
     my ($tmplbase, $opac) = @_;
 
     my $htdocs;
-    if ($opac) {
+    if ($opac ne "intranet") {
 	$htdocs = C4::Context->config('opachtdocs');
     } else {
 	$htdocs = C4::Context->config('intrahtdocs');
