@@ -40,17 +40,21 @@
 	<table>
 		<caption>Reserved Items Waiting</caption>
 		<tr>
-			<th>Title</th>
-			<th>Author</th>
+			<th colspan="2">Title</th>
 			<th>Reserve date</th>
 			<th>Pick Up Branch</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="WAITING" -->
-			<tr>
+			<!-- TMPL_IF NAME="atdestination" --><tr>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
 				<td>
-					<b><a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a></b></td><td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td><td><!-- TMPL_VAR NAME="reservedate" --></td><td><b><!-- TMPL_VAR NAME="branch" --> <!-- TMPL_VAR NAME="holdingbranch" --></b>
-				</td>
-			</tr>
+					<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a><span class="item-details">
+<!-- TMPL_VAR NAME="author" --></span></td><td><!-- TMPL_VAR NAME="reservedate" --></td><td><!-- TMPL_IF NAME="atdestination" -->
+				<strong>Waiting</strong> at <!-- TMPL_VAR Name="branch" -->
+				<!-- TMPL_ELSE -->
+				In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="branch" -->
+				<!-- /TMPL_IF --></td>
+			</tr><!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
 	</table>
 <!-- /TMPL_IF -->
@@ -68,9 +72,9 @@
 
 <!-- TMPL_LOOP NAME="OVERDUES" -->
 <tr>
-<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="" /></td>
+<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
 <td> <a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
-<!-- TMPL_VAR NAME="author" --> (<!-- TMPL_VAR NAME="itemtype" -->)</span></td>
+<!-- TMPL_VAR NAME="author" --></span></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
 <!-- <td><!-- TMPL_VAR NAME="charges" --></td> -->
 </tr>
@@ -85,16 +89,24 @@
 <th colspan="2">Title</th>
 <th>Due</th>
 <!-- <th>Fines</th> -->
+<!-- <th>Status</th> -->
 </tr>
 
 <!-- TMPL_LOOP NAME="ISSUES" -->
 
 <tr>
-<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="" /></td>
+<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
-<!-- TMPL_VAR NAME="author" --> (<!-- TMPL_VAR NAME="itemtype" -->)</span></td>
+<!-- TMPL_VAR NAME="author" --></span></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
 <!-- <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td> -->
+<!-- <td>
+<!-- TMPL_IF NAME="status" -->
+<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bornum=<!-- TMPL_VAR NAME="borrowernumber" -->" class="padded">Renew</a>
+<!-- TMPL_ELSE -->
+Not renewable
+<!-- /TMPL_IF -->
+</td> -->
 </tr>
 <!-- /TMPL_LOOP -->
 </table></div>
@@ -112,22 +124,26 @@
 <caption>Reserves <span class="count">(<!-- TMPL_VAR NAME="reserves_count" --> total)</span></caption>
 <!-- RESERVES TABLE ROWS -->
 <tr>
-<th>Title</th>
+<th colspan="2">Title</th>
 <th>Placed On</th>
 <th>Pick Up Location</th>
+<th>Status</th>
 <!-- <th>Status</th> -->
 </tr>
 <!-- TMPL_LOOP NAME="RESERVES" -->
 <tr>
+<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a><span class="item-details">
-<!-- TMPL_VAR NAME="author" --> <!-- TMPL_IF NAME="itemtype" -->(<!-- TMPL_VAR NAME="itemtype" -->)<!-- /TMPL_IF --></span></td>
+<!-- TMPL_VAR NAME="author" --></span></td>
 <td><!-- TMPL_VAR NAME="reservedate" --></td>
-<td><!-- TMPL_VAR NAME="branch" --></td>
-<!--  --></tr>
+<td><!-- TMPL_VAR Name="branch" --></td>
+<td><!-- TMPL_IF NAME="atdestination" -->
+				<strong>Waiting</strong> at <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="holdingbranch" -->In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --><!-- /TMPL_IF --></td>
+</tr>
 <!-- /TMPL_LOOP -->
 </table></div>
 
-<p>If you no longer want a reserve, please <!-- Display for NPL <a href="mailto:nelpl@athenscounty.lib.oh.us">send us an e-mail</a>, or  /Display for NPL -->go to the circulation desk at your library to get it removed.</p>
+<p>If you no longer want a reserve, please <a href="mailto:nelpl@athenscounty.lib.oh.us">send us an e-mail</a>, or go to the circulation desk at your library to get it removed.</p>
 
 <!-- /TMPL_IF -->
 
