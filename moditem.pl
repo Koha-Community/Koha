@@ -26,13 +26,18 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+require Exporter;
 
 use C4::Search;
 use CGI;
 use C4::Output;
-use C4::Acquisitions;
+#use C4::Acquisitions;
 use C4::Biblio;
 use HTML::Template;
+use C4::Koha;
+use C4::Catalogue;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 my $submit=$input->param('delete.x');
@@ -42,9 +47,6 @@ if ($submit ne ''){
   print $input->redirect("/cgi-bin/koha/delitem.pl?itemnum=$itemnum&bibitemnum=$bibitemnum");
 }
 
-#print $input->header;
-#print $input->dump;
-
 my $data=bibitemdata($bibitemnum);
 
 my $item=itemnodata('blah','',$itemnum);
@@ -52,9 +54,13 @@ my $item=itemnodata('blah','',$itemnum);
 #my ($analyticauthor)=analytic($biblionumber,'a');
 
 
-#print startpage();
-#print startmenu('catalogue');
-my $template=gettemplate("moditem.tmpl");
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	template_name   => 'moditem.tmpl',
+	query           => $input,
+	type            => "intranet",
+	authnotrequired => 0,
+	flagsrequired   => {catalogue => 1},
+    });
 
 my %inputs;
 

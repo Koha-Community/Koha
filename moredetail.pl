@@ -30,7 +30,7 @@ use C4::Catalogue;
 use C4::Output; # contains gettemplate
 use C4::Auth;
 use C4::Interface::CGI::Output;
-  
+
 my $query=new CGI;
 
 # FIXME  subject is not exported to the template?
@@ -46,7 +46,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	flagsrequired   => {catalogue => 1},
     });
 
-# get variables 
+# get variables
 
 my $biblionumber=$query->param('bib');
 my $title=$query->param('title');
