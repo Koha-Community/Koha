@@ -34,6 +34,7 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	     &checkauth
+	     &getborrowernumber
 );
 
 
@@ -41,18 +42,23 @@ sub getuserflags {
     my $cardnumber=shift;
     my $dbh=shift;
     my $userflags;
-    my $sth=$dbh->prepare("select flags from borrowers where cardnumber=?");
+    my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
     $sth->execute($cardnumber);
     my ($flags) = $sth->fetchrow;
-    $sth=$dbh->prepare("select bit,flag from userflags");
+    $sth=$dbh->prepare("SELECT bit, flag FROM userflags");
     $sth->execute;
     while (my ($bit, $flag) = $sth->fetchrow) {
 	if ($flags & (2**$bit)) {
 	    $userflags->{$flag}=1;
 	}
     }
+    warn "Userflags: \n";
+    foreach my $f (keys %$userflags) {
+	warn ":    Flag: $f  => $userflags->{$f}\n ";
+    }
     return $userflags;
 }
+
 
 sub checkauth {
     my $query=shift;
@@ -67,22 +73,23 @@ sub checkauth {
 	return ($userid, $cookie, '');
     }
     my $sessionID=$query->cookie('sessionID');
-    my $message='';
-
+    my $message = '';
     my $dbh=C4Connect();
     my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
+	warn "userid, ip, lasttime = ".$userid.", ".$ip.", ".$lasttime."\n";
 	if ($lasttime<time()-7200) {
 	    # timed logout
 	    $message="You have been logged out due to inactivity.";
 	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
 	    $sti->execute($sessionID);
-	    my $scriptname=$ENV{'SCRIPT_NAME'};
+#	    my $scriptname=$ENV{'SCRIPT_NAME'};
 	    my $selfurl=$query->self_url();
-	    $sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, value) values (?, ?, ?)");
+	    $sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, url) values (?, ?, ?)");
 	    $sti->execute($sessionID, $userid, $selfurl);
+	    $sti->finish;
 	    open L, ">>/tmp/sessionlog";
 	    my $time=localtime(time());
 	    printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
@@ -90,7 +97,6 @@ sub checkauth {
 	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
 	    # Different ip than originally logged in from
 	    my $newip=$ENV{'REMOTE_ADDR'};
-
 	    $message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
 	} else {
 	    my $cookie=$query->cookie(-name => 'sessionID',
@@ -129,14 +135,14 @@ You do not have access to this portion of Koha
 	    return ($userid, $cookie, $sessionID, $flags);
 	}
     }
-
-
+    $sth->finish;
 
     if ($authnotrequired) {
 	my $cookie=$query->cookie(-name => 'sessionID',
 				  -value => '',
 				  -expires => '+1y');
 	return('', $cookie, '');
+
     } else {
 	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
 	my $userid=$query->param('userid');
@@ -194,9 +200,9 @@ You do not have access to this portion of Koha
 		$message="Invalid userid or password entered.";
 	    }
 	    my $parameters;
-	    foreach (param $query) {
-		$parameters->{$_}=$query->{$_};
-	    }
+#	    foreach (param $query) {
+#		$parameters->{$_}=$query->{$_};
+#	    }
 	    my $cookie=$query->cookie(-name => 'sessionID',
 				      -value => $sessionID,
 				      -expires => '+1y');
@@ -207,22 +213,22 @@ You do not have access to this portion of Koha
 <center>
 <h2>$message</h2>
 
-<form method=post>
-<table border=0 cellpadding=10 cellspacing=0 width=60%>
-    <tr><td align=center valign=top>
+<form method="post">
+<table border="0" cellpadding="10" cellspacing="0" width="60%">
+    <tr><td align="center" valign="top">
 
-    <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
-    <tr><th colspan=2 background=/images/background-mem.gif><font size=+2>Koha Login</font></th></tr>
-    <tr><td>Name:</td><td><input name=userid></td></tr>
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Koha Login</font></th></tr>
+    <tr><td>Name:</td><td><input name="userid"></td></tr>
     <tr><td>Password:</td><td><input type=password name=password></td></tr>
-    <tr><td colspan=2 align=center><input type=submit value=login></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="login"></td></tr>
     </table>
 <!--
     
-    </td><td align=center valign=top>
+    </td><td align="center" valign="top">
 
-    <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
-    <tr><th background=/images/background-mem.gif><font size=+2>Demo Information</font></th></tr>
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th background="/images/background-mem.gif"><font size="+2">Demo Information</font></th></tr>
     <td>
     Log in as librarian/koha or patron/koha.  The timeout is set to 40 seconds of
     inactivity for the purposes of this demo.  You can navigate to the Circulation
@@ -280,6 +286,25 @@ sub checkpw {
     }
     return 0;
 }
+
+sub getborrowernumber {
+    my ($userid) = @_;
+    my $dbh=C4Connect();
+    my $sth=$dbh->prepare("select borrowernumber from borrowers where userid=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($bnumber) = $sth->fetchrow;
+	return $bnumber;
+    }
+    my $sth=$dbh->prepare("select borrowernumber from borrowers where cardnumber=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($bnumber) = $sth->fetchrow;
+	return $bnumber;
+    }
+    return 0;
+}
+
 
 
 END { }       # module clean-up code here (global destructor)
