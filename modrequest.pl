@@ -48,7 +48,7 @@ for (my $i=0;$i<$count;$i++){
 
 my $from=$input->param('from');
 if ($from eq 'borrower'){
-  print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$borrower[0]");
+  print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrower[0]");
  } else {
    print $input->redirect("/cgi-bin/koha/request.pl?bib=$biblio[0]");
 }
