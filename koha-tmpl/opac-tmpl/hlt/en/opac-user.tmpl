@@ -98,8 +98,13 @@
 <td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top" ><div class="padded"><TMPL_VAR NAME="charges"></div></td>
 <td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
-<td valign="top" ><A HREF="renew.html" class="padded">Renew</A></td></tr>
-
+<td valign="top" >
+<TMPL_IF NAME="renewable">
+<A HREF='/cgi-bin/koha/opac-renew.pl?from=opac_user&item=<TMPL_VAR NAME="itemnumber">&bornum=<TMPL_VAR NAME="borrowernumber">' class="padded">Renew</A>
+<TMPL_ELSE>
+Not renewable
+</TMPL_IF>
+</td></tr>
 </TMPL_LOOP>
 
 <tr><td colspan="8"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="25" BORDER="0" hspace=0 vspace=0 ALT=""></td></tr> </table>
@@ -168,7 +173,13 @@
 <td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <td valign="top"  colspan="3"><div class="padded"><TMPL_VAR NAME="date_due"></div></td>
 <td class="tan"><IMG SRC="<TMPL_VAR NAME='themelang'>/images/tan-dot.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
-<td valign="top" ><A HREF="renew.html" class="padded">Renew</A></td></tr>
+<td valign="top" >
+<TMPL_IF NAME="renewable">
+<A HREF='/cgi-bin/koha/opac-renew.pl?from=opac_user&item=<TMPL_VAR NAME="itemnumber">&bornum=<TMPL_VAR NAME="borrowernumber">' class="padded">Renew</A>
+<TMPL_ELSE>
+Not renewable
+</TMPL_IF>
+</td></tr>
 </TMPL_LOOP>
 
 <tr><td colspan="8" ><IMG SRC="<TMPL_VAR NAME='themelang'>/images/holder.gif" WIDTH="1" HEIGHT="5" BORDER="0" ALT=""></td></tr>
