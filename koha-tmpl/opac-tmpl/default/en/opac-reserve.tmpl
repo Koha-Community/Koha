@@ -8,34 +8,44 @@
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
 </TMPL_IF>
 
+<TMPL_IF NAME="message">
+<table  cellpadding=5 cellspacing=0 border=1 >
+<tr bgcolor="#fecc99" >
+<td><font face="arial,helvetica" color="red" size=+1><B>
+<TMPL_IF NAME="too_much_oweing">Sorry, you cannot make reseves because you owe <TMPL_VAR NAME="too_much_oweing">, which is too much.  </TMPL_IF>
+<TMPL_IF NAME="too_many_reserves">Sorry, you cannot make reseves because you already have <TMPL_VAR NAME="too_many_reserves">, more than enough.  </TMPL_IF>
+<TMPL_IF NAME="already_reserved">You already have a reserve placed on this item.</TMPL_IF>
+<TMPL_IF NAME="no_items_selected">You must select at least on item type!</TMPL_IF>
+</B></font><P></td></tr></table>
+</TMPL_IF>
+
+
+<TMPL_IF NAME="select_item_types">
+<!-- The first time round you select which bibitems you want -->
+
 <p>
 Reserve page for item: <b><TMPL_VAR NAME="title"> ( <TMPL_VAR NAME="author"> )</b>
 </p>
-<!-- The first time round you select which bibitems you want -->
-<TMPL_IF NAME="selectbibitems">
-
+<p> There are <b><TMPL_VAR NAME="rank"></b> reserves already on this item. </p>
 <p>
-Please select the biblioitems you want to reserve.
+Please select the item type you want to reserve:
 <p>
 
 <FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
-<input type="hidden" name="bibitemsselected" value="1">
+<input type="hidden" name="item_types_selected" value="1">
 <input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
 <TABLE border=1>
-<tr><th>Request</th><th>Item Type</th><th>Classification</th><th>Volume</th><th>Pubdate</th><th>Copies</th></tr>
+<tr bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'><th>Request</th><th>Item Type</th><th>Copies</th></tr>
 
-<TMPL_LOOP NAME="BIBLIOITEMS">
+<TMPL_LOOP NAME="TYPES">
 
   <tr>
   <TMPL_UNLESS NAME="notforloan">
-    <td><input type="checkbox" name="reqbib" value="<TMPL_VAR NAME='biblioitemnumber'>"></td>
+    <td><input type="checkbox" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
   <TMPL_ELSE>
     <td>Cannot be Reserved</td>
   </TMPL_UNLESS>
   <td><TMPL_VAR NAME="description"></td>
-  <td><TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"></td>
-  <td><TMPL_VAR NAME="volumedesc"></td>
-  <td><TMPL_VAR NAME="publicationyear"></td>
   <td><TMPL_VAR NAME="copies"></td>
 
   </tr>
@@ -43,8 +53,8 @@ Please select the biblioitems you want to reserve.
 </TMPL_LOOP>
 
 </table>
-Please select which branch you want to pick the item up from:
-<select name="branch"><TMPL_VAR NAME="branchoptions"></select>
+Please select the branch from which you want to collect the item:
+<select name="branch"><TMPL_VAR NAME="branchoptions"></select><br>
 
 
 <font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
@@ -54,33 +64,30 @@ Please select which branch you want to pick the item up from:
 </TMPL_IF>
 
 <!-- if the bibitems have already been selected -->
-<TMPL_IF NAME="bibitemsselected">
+<TMPL_IF NAME="item_types_selected">
 
 <p>
-Place reserve on the following items:
+Please confirm:
 <p>
 
 <FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
-<input type="hidden" name="placereserve" value="1">
+<input type="hidden" name="place_reserve" value="1">
 <input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
-<TABLE>
-<tr><th>Item Type</th><th>Classification</th><th>Volume</th><th>Pubdate</th></tr>
+<TABLE border=1>
+<tr><th bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>Item Type</th></tr>
 
-<TMPL_LOOP NAME="BIBLIOITEMS">
+<TMPL_LOOP NAME="TYPES">
 
   <tr>
-  <input type="hidden" name="reqbib" value="<TMPL_VAR NAME='biblioitemnumber'>"></td>
+  <input type="hidden" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
   <td><TMPL_VAR NAME="description"></td>
-  <td><TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"></td>
-  <td><TMPL_VAR NAME="volumedesc"></td>
-  <td><TMPL_VAR NAME="publicationyear"></td>
   </tr>
 
 </TMPL_LOOP>
 
 </table>
 
-To be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br>
+Which is to be picked up from <b><TMPL_VAR NAME="branchname"></b>.<br>
 <input type="hidden" name="bib" value="<TMPL_VAR NAME='branch'>">
 
 <font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve"></font>

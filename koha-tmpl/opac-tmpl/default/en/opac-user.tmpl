@@ -28,13 +28,20 @@ Are any of our records incorrect? Have you moved recently, got a new phone numbe
 
 
 
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
 <TMPL_IF NAME="amountoverfive">
-
-<table  cellpadding=10 cellspacing=0 border=1 >
-<tr   bgcolor="#fecc99" >
-<td><font face="arial,helvetica" color="red" size=+2><B>You have Outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font><P></td></tr></table>
-
+<font face="arial,helvetica" color="red" size=+2><B>You have Outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font>
+<TMPL_ELSE>
+  <TMPL_IF NAME="amountoverzero">
+  <td><font face="arial,helvetica" size=+2><B>You have Outstanding charges and fines of <TMPL_VAR NAME="amountoutstanding"></B></font>
+  <TMPL_ELSE>
+  <td><font face="arial,helvetica" size=+2><B>You have a credit of <TMPL_VAR NAME="amountoutstanding"></B></font>
+  </TMPL_IF>
 </TMPL_IF>
+<a href='/cgi-bin/koha/opac-account.pl'>View Accounts</a>
+</td></tr></table>
 
 </TMPL_LOOP>
 
@@ -57,13 +64,13 @@ You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
 
 <TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
 
-<TR VALIGN=TOP  bgcolor="#99cccc">
+<TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
 <TD><B>Title</B></TD>
 <TD><B>Author</B></TD>
 <TD><B>Due date</B></TD>
 <TD><B>Itemtype</B></TD>
 <TD><B>Charges</B></TD>
-<TD><B>Status</B></TD>
+<TD><B>Current Loan</B></TD>
 </TR>
 
 <TMPL_LOOP NAME="ISSUES">
@@ -93,7 +100,7 @@ You have <TMPL_VAR NAME="reserves_count"> items currently reserved.<br>
 
 <TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
 
-<TR VALIGN=TOP  bgcolor="#99cccc">
+<TR VALIGN=TOP  bgcolor="#99cccc" background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
 <TD><B>Title</B></TD>
 <TD><B>Author</B></TD>
 <TD><B>Reserve date</B></TD>
