@@ -3,7 +3,7 @@
 <!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->MARC tag Structure<!-- /TMPL_IF -->
-<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
@@ -61,11 +61,12 @@
 
 <div id="main">	
 <!-- TMPL_IF name="add_form" -->
+<!-- -->
 	<h1><!-- TMPL_VAR name="action" --></h1>
 	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
 	<table>
-		<tr><td>Tag</td><td><!-- TMPL_IF NAME="searchfield" --><input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR name="searchfield" --><!-- TMPL_ELSE --><input type="text" name="tagfield" size="3" maxlength="3" /><!-- /TMPL_IF --></td></tr>
+		<tr><td>Tag</td><td><!-- TMPL_VAR name="searchfield" --></td></tr>
 <tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" escape="HTML" -->" size="80" maxlength="100" /></td></tr>
 	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value="<!-- TMPL_VAR name="libopac" escape="HTML" -->" size="80" maxlength="100" /></td></tr>
 	<tr><td>Repeatable</td><td><!-- TMPL_VAR name="repeatable" --></td></tr>
@@ -85,7 +86,7 @@
 		<td><!-- TMPL_VAR name="searchfield" --></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
-	</table><div class="tabitem"><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Delete this Tag" class="cancel" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do not Delete" class="submit" /></form></div>
+	</table><div class="form"><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Delete this Tag" class="cancel" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do not Delete" class="submit" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
@@ -122,21 +123,13 @@
 	<td><!-- TMPL_IF name="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_IF name="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
-	<td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">subfields</a></td>
-	<td><a class="edit" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Edit</a> <a class="delete" href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkdcode" -->">Delete</a></td>
+	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">subfields</a></td>
+	<td><a class="edit" href="<!-- TMPL_VAR name="edit" -->">Edit</a> <a class="delete" href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-<div class="tabitem">		<!-- TMPL_IF NAME="isprevpage" -->
-			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevpage" -->" /><input type="hidden" value="<!-- TMPL_VAR NAME="searchfield" -->" name="searchfield" /><input type="submit" value="&lt;&lt; Previous Page" class="submit" /></form>
-		<!-- /TMPL_IF -->
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="add_form">
-	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
-		<input type="submit" class="submit" value="Add Tag"></form>		
-		<!-- TMPL_IF NAME="nextpage" -->
-			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextpage" -->" /><input type="hidden" value="<!-- TMPL_VAR NAME="searchfield" -->" name="searchfield" /><input type="submit" value="Next Page &gt;&gt;" class="submit" /></form>
-		<!-- /TMPL_IF --></div>
-<!-- /TMPL_IF -->
+<div class="tabitem"><!-- TMPL_IF name="previous" --><!-- TMPL_VAR name="previous" -->&lt;&lt;Previous Tags</a><!-- TMPL_ELSE --><!-- /TMPL_IF -->
+<!-- /TMPL_IF --> <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form" /><input type="submit" value="Add tag" class="submit" /></form> <!-- TMPL_IF name="next" --><!-- TMPL_VAR name="next" -->Next Tags &gt;&gt;</a><!-- /TMPL_IF --></div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
