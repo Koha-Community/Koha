@@ -29,6 +29,7 @@ $lang{en_CA} = "English (Canadian)";
 $lang{en_GB} = "English (British)";
 $lang{es_AR} = "Spanish (Argentinian)";
 $lang{fr_FR} = "French"; # FIXME: should be just "fr"
+$lang{it_IT} = "Italian"; # FIXME: should be just "it"
 $lang{my_MM} = "Burmese (Myanmar)";
 $lang{pl_PL} = "Polish"; # FIXME: should be just "pl"
 $lang{pt_BR} = "Portuguese (Brazilian)";
