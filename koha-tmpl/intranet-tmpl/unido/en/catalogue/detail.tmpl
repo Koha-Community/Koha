@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+
+
+	<TMPL_INCLUDE NAME="general-top.inc">
+
+	<TMPL_INCLUDE NAME="cat-top.inc">
+
+	<TMPL_INCLUDE NAME="general-first-column-divider.inc">
+
+	
+<div class="chumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> > <a href="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a> > Details</div>
+
+
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+	<TMPL_IF NAME="norequests">
+	<TMPL_ELSE>
+		<div classs="view-requests">
+				<a class="button" href=request.pl?bib=<TMPL_VAR NAME="biblionumber">> View Requests</a>
+		</div>
+	</TMPL_IF>
+	<h1><TMPL_VAR NAME="title"><br>
+	 (<TMPL_VAR NAME="author">)</h1>
+	 
+	 
+	<TMPL_VAR NAME="class">
+	<table class="content">
+	<!-----------------BIBLIO RECORD TABLE--------->
+	<tr valign="top">
+		<td colspan="2" class="heading-row">
+			<h2 class="underline">Biblio Record Number </h2>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td colspan="2" class="edit-delete">
+			<form action="/cgi-bin/koha/modbib.pl" method="post">
+				<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
+						<input type="submit" name="submit" value="Long Biblio">
+					
+		
+			<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
+						<input type="submit" name="submit" value="Edit">
+					
+					<input type="submit" name="delete" value="Delete">
+					
+			</form></td>
+			
+			</tr>
+			<TMPL_IF NAME="abstract">		
+	<tr>
+			<td class="result" colspan=2>		
+			<TMPL_VAR NAME="abstract"></td></tr>
+			
+	</TMPL_IF>	
+		<TMPL_IF NAME="url">		
+
+			
+	</TMPL_IF>	
+	
+	<TMPL_IF NAME="subtitle">		
+	<tr>
+			<td class="label">		
+			Subtitle</td><td class="result"> <TMPL_VAR NAME="subtitle"></td></tr>
+			
+	</TMPL_IF>	
+			<TMPL_IF NAME="seriestitle">
+		<tr>	
+			<td class="label">
+			Series Title</td><td class="result"> <TMPL_VAR NAME="seriestitle"></td></tr>
+		
+	</TMPL_IF>
+	
+	<TMPL_IF NAME="conference">
+		<tr>	
+			<td class="label">
+			Conference Title</td><td class="result"> <TMPL_VAR NAME="conference"></td></tr>
+				<TMPL_IF NAME="unititle">		
+			<tr>
+			<td class="label">
+			Unititle</td><td class="result"><TMPL_VAR NAME="unititle"></td></tr>
+	</TMPL_IF>	
+		
+	</TMPL_IF>
+		<TMPL_IF NAME="author">	
+		<tr>	
+			<td class="label">Author</td><td class="result"> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR
+			NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td></tr>
+	</TMPL_IF>	
+		<TMPL_IF NAME="additional">		
+			<tr>
+			<td class="label">
+			Additional Author</td><td class="result"> <TMPL_VAR NAME="additional"></td></tr>
+	</TMPL_IF>	
+		<TMPL_IF NAME="copyrightdate">		
+			<tr>
+			<td class="label">
+			Copyright</td><td class="result"> <TMPL_VAR NAME="copyrightdate"></td></tr>
+	</TMPL_IF>	
+		<TMPL_IF NAME="subject">	
+			<tr>
+			<td class="label">
+			Subjects</td><td class="result"> <TMPL_VAR NAME="subject"></td></tr>
+			
+	</TMPL_IF>	
+		<TMPL_IF NAME="notes">		
+			
+			<tr>
+			<td class="label">
+			Notes</td><td class="result"> <TMPL_VAR NAME="notes"></td></tr>
+	</TMPL_IF>	
+	
+		<TMPL_IF NAME=serial">		
+			<tr>
+			<td class="label">
+			Serial</td><td class="result"> <TMPL_VAR NAME="serial"></td></tr>
+			
+	</TMPL_IF>	
+	
+			<tr>
+			<td class="label">
+			<a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">Show MARC Tags</a>
+		
+		</td>
+	</tr>
+	
+	
+	</table>
+</TMPL_LOOP>
+
+<h2>Holidings Information (<TMPL_VAR NAME="count"> items)</h2>
+<table class="data">
+	
+	<tr class="data-header">
+	<td class="column-first">Item Type</td>
+		<td class="column-middle">Class</td>
+		<td class="column-middle">Location</td>
+		<td class="column-middle">Date Due</td>
+		<td class="column-middle">Last Seen</td>
+		<td class="column-middle">Barcode</td>
+		<td class="column-middle">Volume</td>
+		
+		<td class="column-last"></td>
+		
+	</tr>
+	<TMPL_LOOP NAME="ITEM_RESULTS">
+		<tr>
+			
+			<td class="column-first"><TMPL_VAR NAME="itemtype"></td>
+			<td class="column-middle"><a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></td>
+			<td class="column-middle"><TMPL_VAR NAME="branchname"></td>
+			<td class="column-middle"><TMPL_VAR NAME="datedue"></td>
+			<td class="column-middle"><TMPL_VAR NAME="datelastseen"></td>
+			<td class="column-middle"><TMPL_VAR NAME="barcode"></td>
+			<td class="column-middle"><TMPL_VAR NAME="volumeddesc"></td>
+		    <td class="column-last"><a href="/cgi-bin/koha/moredetail.pl?type=<TMPL_VAR NAME="type">&item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">More ></a></td>
+		
+			<TMPL_IF NAME="type">
+				<td class="column-last">
+					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<TMPL_VAR NAME="biblioitemnumber">&item=<TMPL_VAR NAME="itemtype">>Fix Itemtype</a>
+				</td>
+			</TMPL_IF>
+		</tr>
+	</TMPL_LOOP>
+	<TMPL_LOOP NAME="WEB_RESULTS">
+		<tr>
+		<td  class="column-first"><TMPL_VAR NAME="itemtype"></td>
+			<td class="column-middle">Website</td>
+			<td class="column-middle">Online</td>
+			<td class="column-middle">Available</td>
+			<td class="column-middle"></td>
+		
+			<td class="column-last">
+				<a href="http://<TMPL_VAR NAME="url">"><TMPL_VAR NAME="url"></a>
+			
+			</td>
+				<td class="column-middle"></td>
+			<td class="column-last">
+				<a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">More ></a>
+			</td>
+		</tr>
+	</TMPL_LOOP>
+</table>
+
+
+	<div class="tip-wide">
+	<Spam class="tip-big">tip</span>
+	<span class="tip-text"> to <b>view or edit</b> the rest of the record for an item, 
+	click on <b>More ></b>. You will see the group and item information together.
+	<br>
+			<b>Editing the biblio</b>  will update
+			the record for <b>all</b> the items. <br>
+			
+			
+			<b>Make a new biblio or add items in  </b> 
+			<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>.
+			To move items to a new biblio you will need to re-aquire them and delete them
+			from this biblio.</span></div>
+
+
+	<TMPL_INCLUDE NAME="2-column-end.inc">
+	<TMPL_INCLUDE NAME="cat-bottom.inc">
+
+</BODY>
+
+<TMPL_INCLUDE NAME="cat-bottom.inc">
