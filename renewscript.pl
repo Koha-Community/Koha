@@ -44,6 +44,8 @@ for (my $i=0;$i<$count;$i++){
   }
 }
 my %env;
+my $destination = $input->param("destination");
+my $cardnumber = $input->param("cardnumber");
 my $bornum=$input->param("bornum");
 while ( my ($itemno, $value) = each %data) {
 #    warn "$itemno = $value\n";
@@ -57,4 +59,8 @@ while ( my ($itemno, $value) = each %data) {
    }
 }
 
-print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
+if($destination eq "circ"){
+	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
+} else {
+	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
+}
