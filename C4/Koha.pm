@@ -33,7 +33,7 @@ sub fixEthnicity($) { # a temporary fix ethnicity, it should really be handled
 	$ethnicity = 'European/Pakeha';
     } elsif ($ethnicity eq 'pi') {
 	$ethnicity = 'Pacific Islander'
-    } elsif ($ehtnicity eq 'asian') {
+    } elsif ($ethnicity eq 'asian') {
 	$ethnicity = 'Asian';
     }
     return $ethnicity;
