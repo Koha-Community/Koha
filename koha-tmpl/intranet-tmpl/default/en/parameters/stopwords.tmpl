@@ -1,176 +1,145 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
-
-<!-- TMPL_IF NAME="add_form" -->
-        <script language="javascript" type="text/javascript">
-	function _(s) { return s } // dummy function for gettext
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        function isNotNull(f,noalert) {
-                if (f.value.length ==0) {
-   return false;
-                }
-                return true;
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        function toUC(f) {
-                var x=f.value.toUpperCase();
-                f.value=x;
-                return true;
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        function isNum(v,maybenull) {
-        var n = new Number(v.value);
-        if (isNaN(n)) {
-                return false;
-                }
-        if (maybenull==0 && v.value=='') {
-                return false;
-        }
-        return true;
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        function isDate(f) {
-                var t = Date.parse(f.value);
-                if (isNaN(t)) {
-                        return false;
-                }
-        }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        function Check(f) {
-                var ok=1;
-                var _alertString="";
-                var alertString2;
-                if (f.word.value.length==0) {
-                        _alertString += "\n- " + _("word missing");
-                }
-                if (_alertString.length==0) {
-                        document.Aform.submit();
-                } else {
-                        alertString2  = _("Form not submitted because of the following problem(s)");
-                        alertString2 += "\n------------------------------------------------------------------------------------\n";
-                        alertString2 += _alertString;
-                        alert(alertString2);
-                }
-        }
-        </script>
-
-        <!-- TMPL_IF NAME="searchfield" -->
-                <h1>Modify word</h1>
-        <!-- TMPL_ELSE -->
-                <h1>Add word</h1>
-        <!-- /TMPL_IF -->
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-        <input type="hidden" name="op" value="add_validate">
-         
-        <table>
-        
-        <!-- TMPL_IF NAME="searchfield" -->
-                <tr>
-                        <td>Word</td>
-                        <td>
-                                <input type="hidden" name="word" value="<!-- TMPL_VAR NAME="searchfield" -->"><!-- TMPL_VAR NAME="searchfield" -->
-                        </td>
-                </tr>
-        <!-- TMPL_ELSE -->
-                <tr>
-                        <td>Word</td>
-                        <td>
-                                <input type="text" name="word" size="80" maxlength="250" onblur="toUC(this)">
-                        </td>
-                </tr>
-        <!-- /TMPL_IF -->
-                <tr>
-                        <td> </td>
-                        <td><input type="button" value="OK" onclick="Check(this.form)"></td>
-                </tr>
-        </table>
-        </form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="add_validate" -->
-        Data recorded
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="submit" value="OK">
-        </form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="delete_confirm" -->
-        <table border="0" cellspacing="0" cellpadding="5">
-                <tr bgcolor="#99cc33">
-                        <td background="/images/background-mem.gif"><b>Word</b></td>
-                        <td background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
-                </tr>
-
-                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                        <input type="hidden" name="op" value="delete_confirmed">
-                        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-
-                <tr>
-                        <td colspan="2" align="center">CONFIRM DELETION</td>
-                </tr>
-                <tr>
-                        <td>
-                                <input type="submit" value="YES">
-                                </form>
-                        </td>
-                        <td>
-                                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                                        <input type="submit" value="NO">
-                                </form>
-                        </td>
-                </tr>
-	</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="delete_confirmed" -->
-        Data deleted
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="submit" value="OK">
-        </form>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="else" -->
-        <h2>Stop words admin</h2>
-	<b>NOTE : if you change something in this table, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-                <input type="reset" name="reset" value="clr">
-        </form>
-
-        <!-- TMPL_IF NAME="searchfield" -->
-                You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
-        <!-- /TMPL_IF -->
-
-        <table border="0" cellspacing="0" cellpadding="5">
-                <tr bgcolor="#99cc33">
-                        <td background="/images/background-mem.gif"><b>Word</b></td>
-                        <td background="/images/background-mem.gif"> </td>
-                </tr>
-                <!-- TMPL_LOOP NAME="loop" -->
-                <tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
-                        <td><!-- TMPL_VAR NAME="word" --></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->">Delete</a></td>
-                </tr>
-                <!-- /TMPL_LOOP -->
-        </table>
-
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="hidden" name="op" value="add_form">
-
-        <!-- TMPL_IF NAME="offsetgtzero" -->
-                <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Prev</a>
-        <!-- /TMPL_IF -->
-
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-        <!-- TMPL_IF NAME="ltcount" -->
-                <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>
-        <!-- /TMPL_iF -->
-
-        <br>
-        <input type="submit" class="button" value="Add Stop word" alt="Add Stop word" >
-        <br>
-        </form>
-<!-- /TMPL_IF -->
-
+<div id="mainbloc">
+	<!-- TMPL_IF NAME="add_form" -->
+		<script language="javascript" type="text/javascript">
+			function _(s) { return s } // dummy function for gettext
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isNotNull(f,noalert) {
+					if (f.value.length ==0) {
+						return false;
+					}
+					return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function toUC(f) {
+				var x=f.value.toUpperCase();
+				f.value=x;
+				return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isNum(v,maybenull) {
+			var n = new Number(v.value);
+			if (isNaN(n)) {
+					return false;
+					}
+			if (maybenull==0 && v.value=='') {
+					return false;
+			}
+			return true;
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function isDate(f) {
+					var t = Date.parse(f.value);
+					if (isNaN(t)) {
+							return false;
+					}
+			}
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			function Check(f) {
+					var ok=1;
+					var _alertString="";
+					var alertString2;
+					if (f.word.value.length==0) {
+							_alertString += "\n- " + _("word missing");
+					}
+					if (_alertString.length==0) {
+							document.Aform.submit();
+					} else {
+							alertString2  = _("Form not submitted because of the following problem(s)");
+							alertString2 += "\n------------------------------------------------------------------------------------\n";
+							alertString2 += _alertString;
+							alert(alertString2);
+					}
+			}
+			</script>
+	
+			<!-- TMPL_IF NAME="searchfield" -->
+					<h1>Modify word</h1>
+			<!-- TMPL_ELSE -->
+					<h1>Add word</h1>
+			<!-- /TMPL_IF -->
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+			<input type="hidden" name="op" value="add_validate">
+			<!-- TMPL_IF NAME="searchfield" -->
+				<p>
+					<label>Word</label>
+					<label>
+						<input type="hidden" name="word" value="<!-- TMPL_VAR NAME="searchfield" -->"><!-- TMPL_VAR NAME="searchfield" -->
+					</label>
+				</p>
+			<!-- TMPL_ELSE -->
+				<p>
+					<label>Word</label>
+					<input type="text" name="word" size="80" maxlength="250" onblur="toUC(this)">
+				</p>
+			<!-- /TMPL_IF -->
+					<p>
+						<td><input type="button" value="OK" onclick="Check(this.form)" class="button"></td>
+					</p>
+			</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+			Data recorded
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="OK">
+			</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+		<p>CONFIRM DELETION of <!-- TMPL_VAR NAME="searchfield" --></p>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed">
+			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			<input type="submit" value="YES" class="button">
+		</form>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="NO" class="button">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+			Data deleted
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="OK" class="button">
+			</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+		<h1 class="parameters">Stop words admin</h1>
+		<b>NOTE : if you change something in this table, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+					<input type="submit" name="ok" value="OK" class="button">
+			</form>
+	
+			<!-- TMPL_IF NAME="searchfield" -->
+					You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
+			<!-- /TMPL_IF -->
+	
+			<table class="small">
+				<tr>
+					<th>Word</th>
+					<th> </th>
+				</tr>
+				<!-- TMPL_LOOP NAME="loop" -->
+					<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+						<td><!-- TMPL_VAR NAME="word" --></td>
+						<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->" class="button">Delete</a></td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="hidden" name="op" value="add_form">
+				<!-- TMPL_IF NAME="offsetgtzero" -->
+						<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->" class="button">&lt;&lt; Prev</a>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="ltcount" -->
+					<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->" class="button">Next &gt;&gt;</a>
+				<!-- /TMPL_iF -->
+				<input type="submit" class="button" value="Add Stop word" alt="Add Stop word">
+			</form>
+	<!-- /TMPL_IF -->
+</div>
 
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

@@ -1,54 +1,54 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
-
-<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
-<p>Member Number: <!-- TMPL_VAR NAME="bornum" --></p>
-<p>Card number: <!-- TMPL_VAR NAME="cardnumber" --></p>
-
-<!-- TMPL_IF NAME="showfulllink" -->
-<p><a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;limit=full">Full output</a></p>
-<!-- /TMPL_IF -->
-
-<table cellspacing="0"  cellpadding="5" border="1">
-<tr valign="top">
-	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=title&amp;limit=<!-- TMPL_VAR NAME="limit" -->"><b>TITLE</b></a>
-	</td>
-	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=author&amp;limit=<!-- TMPL_VAR NAME="limit" -->"><b>AUTHOR</b></a>
-	</td>
-	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;limit=<!-- TMPL_VAR NAME="limit" -->"><b>DATE DUE</b></a>
-	</td>
-	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-		<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=returndate&amp;limit=<!-- TMPL_VAR NAME="limit" -->"><b>RETURNED</b></a>
-	</td>
-	<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
-		<b>Volume</b>
-	</td>
-</tr>
-<!-- TMPL_LOOP NAME="loop_reading" -->
-<tr valign="top">
-	<td bgcolor="white"><!-- TMPL_VAR NAME="biblionumber" -->
- 		<!-- TMPL_VAR NAME="title" -->&nbsp;
-	</td>
-	<td bgcolor="white">
- 		<!-- TMPL_VAR NAME="author" -->&nbsp;
-	</td>
-	<td bgcolor="white">
-		<!-- TMPL_VAR NAME="date_due" -->&nbsp;
-	</td>
-	<td bgcolor="white">
-		<!-- TMPL_VAR NAME="returndate" -->&nbsp;
-	</td>
-	<td bgcolor="white">
-		<!-- TMPL_VAR NAME="volumeddesc" -->&nbsp;
-	</td>
-<!-- /TMPL_LOOP -->
-</table>
-
-<br>
-<a href="moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Return</a> to Member Record
-
+<div id="mainbloc">
+	<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+	<p>Member Number: <!-- TMPL_VAR NAME="bornum" --></p>
+	<p>Card number: <!-- TMPL_VAR NAME="cardnumber" --></p>
+	
+	<!-- TMPL_IF NAME="showfulllink" -->
+	<p><a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;limit=full">Full output</a></p>
+	<!-- /TMPL_IF -->
+	
+	<table>
+	<tr>
+		<th>
+			<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=title&amp;limit=<!-- TMPL_VAR NAME="limit" -->">Title</th>
+		</th>
+		<th>
+			<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=author&amp;limit=<!-- TMPL_VAR NAME="limit" -->">Author</th>
+		</td>
+		<th>
+			<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;limit=<!-- TMPL_VAR NAME="limit" -->"><th>Date due</th>
+		</th>
+		<th>
+			<a href="readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->&amp;order=returndate&amp;limit=<!-- TMPL_VAR NAME="limit" -->">Returned</th>
+		</th>
+		<th>
+			Volume
+		</th>
+	</tr>
+	<!-- TMPL_LOOP NAME="loop_reading" -->
+	<tr>
+		<td><!-- TMPL_VAR NAME="biblionumber" -->
+			<!-- TMPL_VAR NAME="title" -->&nbsp;
+		</td>
+		<td>
+			<!-- TMPL_VAR NAME="author" -->&nbsp;
+		</td>
+		<td>
+			<!-- TMPL_VAR NAME="date_due" -->&nbsp;
+		</td>
+		<td>
+			<!-- TMPL_VAR NAME="returndate" -->&nbsp;
+		</td>
+		<td>
+			<!-- TMPL_VAR NAME="volumeddesc" -->&nbsp;
+		</td>
+	<!-- /TMPL_LOOP -->
+	</table>
+	
+	<br>
+	<a href="members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" class="button member">Return</a> to Member Record
+</div>
 <!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 
 
