@@ -95,6 +95,10 @@ sub catalogsearch {
 	#		where m1.bibid=m2.bibid and
 	#		(m1.subfieldvalue like "Des%" and m2.subfieldvalue like "27%")
 
+	# last minute stripping out of stuff
+	# doesn't work @$value =~ s/\'/ /;
+	# @$value = map { $_ =~ s/\'/ /g } @$value;
+	
 	# "Normal" statements
 	my @normal_tags = ();
 	my @normal_and_or = ();
@@ -107,6 +111,13 @@ sub catalogsearch {
 	my @not_value = ();
 	my $any_not = 0;
 	$orderby = "biblio.title" unless $orderby;
+	
+	#last minute stripping out of ' and ,
+	foreach $_ (@$value) {
+	$_=~ s/\'/ /g;
+	$_=~ s/\,/ /g;
+	}
+	
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
 		if(@$excluding[$i])	# NOT statements
@@ -164,7 +175,7 @@ sub catalogsearch {
 	my $sth;
 	if ($sql_where2) {
 		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby");
-		warn "Q2 : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby";
+		warn "Q2 : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where2 and ($sql_where1) order by $orderby term is  @$value";
 	} else {
 		$sth = $dbh->prepare("select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby");
 		warn "Q : select distinct m1.bibid from biblio,biblioitems,marc_biblio,$sql_tables where biblio.biblionumber=marc_biblio.biblionumber and biblio.biblionumber=biblioitems.biblionumber and m1.bibid=marc_biblio.bibid and $sql_where1 order by $orderby";
