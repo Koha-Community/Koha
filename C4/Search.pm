@@ -1298,6 +1298,7 @@ sub ItemInfo {
     $bsth->execute;
     if (my $bdata=$bsth->fetchrow_hashref){
 	$data->{'description'} = $bdata->{'description'};
+	$data->{'publictype'} = $bdata->{'publictype'};
     }
 
 
