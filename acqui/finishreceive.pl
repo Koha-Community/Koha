@@ -44,9 +44,9 @@ my $freight=$input->param('freight');
 my $supplierid = $input->param('supplierid');
 my $branch=$input->param('branch');
 
-if ($quantrec != 0){
-	$cost /= $quantrec;
-}
+# if ($quantrec != 0){
+# 	$cost /= $quantrec;
+# }
 
 if ($quantity != 0) {
 	# save the quantity recieved.

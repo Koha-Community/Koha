@@ -45,10 +45,10 @@
 				<td><!-- TMPL_VAR NAME="isbn" --></td>
 				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 				<td><!-- TMPL_VAR NAME="author" --></td>
-				<td>$<!-- TMPL_VAR NAME="unitprice" --></td>
+				<td><!-- TMPL_VAR NAME="unitprice" --></td>
 				<td></td>
 				<td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
-				<td>$<!-- TMPL_VAR NAME="total" --></td>
+				<td><!-- TMPL_VAR NAME="total" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 		<tr bgcolor="white">
@@ -56,10 +56,10 @@
 			<th class="acquisition"></th>
 			<th class="acquisition"></th>
 			<th class="acquisition">SUBTOTALS</th>
-			<th class="acquisition">$<!-- TMPL_VAR NAME="totalprice" --></th>
+			<th class="acquisition"><!-- TMPL_VAR NAME="totalprice" --></th>
 			<th class="acquisition"><!-- TMPL_VAR NAME="totalfreight" --></th>
 			<th class="acquisition"><!-- TMPL_VAR NAME="totalquantity" --></th>
-			<th class="acquisition">$<!-- TMPL_VAR NAME="tototal" --></th>
+			<th class="acquisition"><!-- TMPL_VAR NAME="tototal" --></th>
 		</tr>
 		<tr>
 			<td colspan="5" rowspan=2  bgcolor="#ffdf61">
@@ -69,11 +69,11 @@
 			When you have finished this invoice save the changes.
 			</td>
 			<td colspan="2" align="right"><b>GST</b></td>
-			<td>$<!-- TMPL_VAR NAME="gst" --></td>
+			<td><!-- TMPL_VAR NAME="gst" --></td>
 		</tr>
 		<tr bgcolor="white">
 			<td colspan="2" align="right" ><b>TOTAL</b></td>
-			<td>$<!-- TMPL_VAR NAME="grandtot" --></td>
+			<td><!-- TMPL_VAR NAME="grandtot" --></td>
 		</tr>
 	</table>
 	</div>
