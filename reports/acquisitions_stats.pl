@@ -328,8 +328,8 @@ sub calculate {
  		my %cell;
 		if ($celvalue) {
 			$cell{rowtitle} = $celvalue;
-		} else {
-			$cell{rowtitle} = "";
+#		} else {
+#			$cell{rowtitle} = "";
 		}
  		$cell{totalrow} = 0;
 		push @loopline, \%cell;
@@ -392,10 +392,10 @@ sub calculate {
 
  	while (my ($celvalue) = $sth2->fetchrow) {
  		my %cell;
-		my %ft;
+		if ($celvalue){
 #		warn "coltitle :".$celvalue;
-		$cell{coltitle} = $celvalue;
-		$ft{totalcol} = 0;
+			$cell{coltitle} = $celvalue;
+		}
 		push @loopcol, \%cell;
  	}
 #	warn "fin des titres colonnes";
@@ -420,7 +420,7 @@ sub calculate {
 	$strcalc .= "SELECT $linefield, $colfield, ";
 	$strcalc .= "COUNT( aqorders.ordernumber ) " if ($process ==1);
 	$strcalc .= "SUM( aqorders.quantity * aqorders.listprice ) " if ($process ==2);
-	$strcalc .= "FROM aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) and $column is not null and $line is not null ";
+	$strcalc .= "FROM aqorders, aqbasket,aqorderbreakdown left join aqorderdelivery on (aqorders.ordernumber =aqorderdelivery.ordernumber ) left join aqbooksellers on (aqbasket.booksellerid=aqbooksellers.id) where (aqorders.basketno=aqbasket.basketno) and (aqorderbreakdown.ordernumber=aqorders.ordernumber) ";
 
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND aqbasket.closedate > '" . @$filters[0] ."'" if ( @$filters[0] );
@@ -442,36 +442,46 @@ sub calculate {
 	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
+
 # 	warn "filling table";
+	my $emptycol; 
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-# 		warn "filling table $row / $col / $value ";
-		$table{$row}->{$col}=$value;
+#		warn "filling table $row / $col / $value ";
+		$emptycol = 1 if ($col eq undef);
+		$col = "zzEMPTY" if ($col eq undef);
+		$row = "zzEMPTY" if ($row eq undef);
+		
+		$table{$row}->{$col}+=$value;
 		$table{$row}->{totalrow}+=$value;
 		$grantotal += $value;
 	}
+
+ 	push @loopcol,{coltitle => "NULL"} if ($emptycol);
 	
 	foreach my $row ( sort keys %table ) {
 		my @loopcell;
 		#@loopcol ensures the order for columns is common with column titles
+		# and the number matches the number of columns
 		foreach my $col ( @loopcol ) {
-			push @loopcell, {value => $table{$row}->{$col->{coltitle}}} ;
+			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+			push @loopcell, {value => $value  } ;
 		}
-		push @looprow,{ 'rowtitle' => $row,
+		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
 						'loopcell' => \@loopcell,
-						'hilighted' => 1 ,
+						'hilighted' => ($hilighted >0),
 						'totalrow' => $table{$row}->{totalrow}
 					};
 		$hilighted = -$hilighted;
 	}
 	
-# 	warn "footer processing";
+#	warn "footer processing";
 	foreach my $col ( @loopcol ) {
 		my $total=0;
 		foreach my $row ( @looprow ) {
-			$total += $table{$row->{rowtitle}}->{$col->{coltitle}};
-# 			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
+			$total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+#			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
 		}
-# 		warn "summ for column ".$col->{coltitle}."  = ".$total;
+#		warn "summ for column ".$col->{coltitle}."  = ".$total;
 		push @loopfooter, {'totalcol' => $total};
 	}
 			
