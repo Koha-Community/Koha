@@ -58,6 +58,8 @@ my %inputs;
 #the value is a tab separated list, the first item being the input type
 #$inputs{'Author'}="text\t$data->{'author'}\t0";
 #$inputs{'Title'}="text\t$data->{'title'}\t1";
+# FIXME - The Dewey code is a string, not a number. And "000" is a
+# perfectly acceptable value.
 my $dewey = $data->{'dewey'};
 $dewey =~ s/0+$//;
 if ($dewey eq "000.") { $dewey = "";};
