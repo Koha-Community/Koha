@@ -171,6 +171,10 @@ if ($question) {
 
 
 # Barcode entry box, with hidden inputs attached....
+
+# FIXME - How can we move this HTML into the template?  Can we create
+# arrays of the months, dates, etc and use <TMPL_LOOP> in the template to 
+# output the data that's getting built here?
 my $counter = 1;
 my $dayoptions = '';
 my $monthoptions = '';
@@ -230,6 +234,9 @@ if ($borrower) {
 		my $datedue = $book->{'date_due'};
 		$dd=format_date($dd);
 		$datedue=~s/-//g;
+# FIXME - Instead of declaring the font color here, can we set a variable 
+# that says 'overdue'?  Then the template can check for it: <TMPL_IF
+# NAME="overdue"><font color="red"></TMPL_IF>
 		if ($datedue < $todaysdate) {
 			$dd="<font color=red>$dd</font>\n";
 		}
@@ -258,6 +265,7 @@ if ($borrower) {
 	my $pcolor = '';
 	$datedue=~s/-//g;
 	if ($datedue < $todaysdate) {
+# FIXME - See line 233 above regarding overdues
 	    $dd="<font color=red>$dd</font>\n";
 	}
 	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1); 
@@ -306,6 +314,10 @@ $template->param(
 		firstname => $borrower->{'firstname'},
 		surname => $borrower->{'surname'},
 		categorycode => $borrower->{'categorycode'},
+		streetaddress => $borrower->{'streetaddress'},
+		city => $borrower->{'city'},
+		phone => $borrower->{'phone'},
+		cardnumber => $borrower->{'cardnumber'},
 		question => $question,
 		barcode => $barcode,
 		questionnumber => $questionnumber,
@@ -354,6 +366,13 @@ sub fixdate {
     if (($year eq 0) && ($month eq 0) && ($year eq 0)) {
 	$env{'datedue'}='';
     } else {
+	
+# FIXME - Can we set two flags here, one that says 'invalidduedate', so that 
+# the template can check for it, and then one for a particular message?
+# Ex: <TMPL_IF NAME="invalidduedate">  <TMPL_IF NAME="daysinFeb">
+# Invalid Due Date Specified. Book was not issued.  Never that many days
+# in February! </TMPL_IF> </TMPL_IF>
+
 	if (($year eq 0) || ($month eq 0) || ($year eq 0)) {
 	    $invalidduedate="Invalid Due Date Specified. Book was not issued.<p>\n";
 	} else {
