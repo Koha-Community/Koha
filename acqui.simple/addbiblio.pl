@@ -239,7 +239,7 @@ sub build_tabs ($$$$) {
 						my %tag_data;
 						$tag_data{tag} = $tag;
 						$tag_data{tag_lib} = $tagslib->{$tag}->{lib};
-						$tag_data{indicator} = $indicator;
+						$tag_data{indicator} = $record->field($tag)->indicator(1). $record->field($tag)->indicator(2);
 						$tag_data{subfield_loop} = \@subfields_data;
 						push (@loop_data, \%tag_data);
 					}
