@@ -55,10 +55,10 @@ sub remoteprint {
   #debug_msg($env,"In print");
   my $file=time;
   my $queue = $env->{'queue'};
-  if ($queue eq "") {
+  if ($queue eq "" || $queue eq 'nulllp') {
     open (PRINTER,">/tmp/kohaiss");
   } else {  
-    open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$!\n";
+    open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$queue!\n";
   }  
 #  print $queue;
   #open (FILE,">/tmp/$file");

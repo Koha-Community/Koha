@@ -8,7 +8,7 @@ use CGI;
 use C4::Circulation::Circ2;
 use C4::Search;
 use C4::Output;
-
+use C4::Print;
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
@@ -67,6 +67,20 @@ if ($findborrower) {
 
 my $borrowernumber = $query->param('borrnumber');    
 
+# check and see if we should print
+my $print=$query->param('print');
+my $barcode = $query->param('barcode');
+#if ($barcode eq '' ){
+#    $print = 'yes';
+#}
+if ($print eq 'yes' && $borrowernumber ne ''){
+    printslip(\%env,$borrowernumber);    
+    $query->param('borrnumber','');
+    $borrowernumber='';
+}
+    
+
+
 # get the currently issued books......
 my $borrower;
 my $flags;
@@ -87,7 +101,7 @@ if (my $qnumber = $query->param('questionnumber')) {
 
 
 # if the barcode is set    
-my $barcode = $query->param('barcode');
+
 my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
 
 my $year=$query->param('year');
@@ -154,7 +168,7 @@ EOF
 # title....
 my $title = <<"EOF";
 <table align="right"><tr><td>
-<a href=circulation.pl>
+<a href=circulation.pl?borrnumber=$borrowernumber&branch=$branch&printer=$printer&print=yes>
 <img src="/images/button-next-borrower.gif" width="171" height="42" border="0" alt="Next Borrower"></a> &nbsp
 <a href=returns.pl>
 <img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
@@ -179,6 +193,7 @@ my $cardnumberinput = << "EOF";
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
 <font color=black><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
 <tr><td><input name=findborrower></td></tr>
+  
 </table>
 </form>
 EOF
@@ -302,6 +317,7 @@ my $barcodeentrytext = <<"EOF";
 <input type=hidden name=borrnumber value=$borrowernumber>
 <input type=hidden name=branch value=$branch>
 <input type=hidden name=printer value=$printer>
+<input type=hidden name=print value=yes>
 </td></tr></table>
 </td></tr></table>
 </form>
@@ -416,6 +432,7 @@ if ($question) {
 
 print $rejectedtext;
 print $messagetable;
+
 
 unless ($borrower) {
     if ($borrowerslist) {
@@ -547,4 +564,34 @@ EOF
 
 
 
-
+sub printslip {
+    my ($env,$borrowernumber)=@_;
+    my ($borrower, $flags) = getpatroninformation($env,$borrowernumber,0);
+    $env->{'todaysissues'}=1;
+    my ($borrowerissues) = currentissues($env, $borrower);
+    $env->{'nottodaysissues'}=1;
+    $env->{'todaysissues'}=0;
+    my ($borroweriss2)=currentissues($env, $borrower);
+    $env->{'nottodaysissues'}=0;
+    my $i=0;
+    my @issues;
+    foreach (sort keys %$borrowerissues) {
+	$issues[$i]=$borrowerissues->{$_};
+	my $dd=$issues[$i]->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable
+	my @tempdate=split(/-/,$dd);
+	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	$i++;
+    }
+    foreach (sort keys %$borroweriss2) {
+	$issues[$i]=$borroweriss2->{$_};
+	my $dd=$issues[$i]->{'date_due'};
+	#convert to nz style dates
+	#this should be set with some kinda config variable
+	my @tempdate=split(/-/,$dd);
+	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
+	$i++;
+    }
+    remoteprint($env,\@issues,$borrower);
+}
