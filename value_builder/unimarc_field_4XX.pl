@@ -96,14 +96,10 @@ sub plugin {
 		my $req= $dbh->prepare("SELECT distinctrow bibid,biblionumber FROM `marc_biblio` WHERE biblionumber= ?");
 		$req->execute($bibnum);
 		($bibid,$bibnum) = $req->fetchrow;
-#		warn "bibid :".$bibid;
+		#warn "bibid :".$bibid;
 		#get marc record
 		$marcrecord = MARCgetbiblio($dbh,$bibid);
-#		warn "record : ".$marcrecord->as_formatted;
-# 		my @loop_data =();
-# 		my $tag;
-# 		my @loop_data =();
-# 		my @subfields_data;
+		warn "record : ".$marcrecord->as_formatted;
 		
 		my $subfield_value_9=$bibid;
 		my $subfield_value_0=$marcrecord->field('001')->data;
@@ -119,7 +115,7 @@ sub plugin {
 		my $subfield_value_d;
 		if ($marcrecord->field('100')){
 			my $publicationdate;
-			warn "date de publication 1".substr($marcrecord->field('100')->subfield("a"),9,4)."   date de publication 2 ".substr($marcrecord->field('100')->subfield("a"),12,4);
+			#warn "date de publication 1".substr($marcrecord->field('100')->subfield("a"),9,4)."   date de publication 2 ".substr($marcrecord->field('100')->subfield("a"),12,4);
 			$publicationdate = substr($marcrecord->field('100')->subfield("a"),9,4);
 			if (substr($marcrecord->field('100')->subfield("a"),12,4)>$publicationdate){
 			$publicationdate=substr($marcrecord->field('100')->subfield("a"),12,4);
@@ -168,26 +164,8 @@ sub plugin {
 		my $subfield_value_x = $marcrecord->field('011')->subfield("a") if ($marcrecord->field('011') and not (($marcrecord->field('011')->subfield("y")) or ($marcrecord->field('011')->subfield("z"))));
 		my $subfield_value_y = $marcrecord->field('013')->subfield("a") if ($marcrecord->field('013'));
 		if ($marcrecord->field('010')){
-			my $subfield_value_y = $marcrecord->field('010')->subfield("a");
+			$subfield_value_y = $marcrecord->field('010')->subfield("a");
 		}
-# 		my @subf;
-# 		#=(a,c,d,e,h,i,p,t,u,v,x,y,0,9);
-# 			# loop through each subfield
-# 		for my $i (0..$#subf) {
-# 			$subf[$i][0] = "@" unless $subf[$i][0];
-# 			my %subfield_data;
-# 			$subfield_data{marc_value}=$subf[$i][1];
-# 			$subfield_data{marc_subfield}=$subf[$i][0];
-# 			$subfield_data{marc_tag}="";#$field->tag();
-# 			push(@subfields_data, \%subfield_data);
-# 		}
-# 		if ($#subfields_data>=0) {
-# 			my %tag_data;
-# 			$tag_data{tag}="";#$field->tag().' -'. "";
-# 			$tag_data{subfield} = \@subfields_data;
-# 			push (@loop_data, \%tag_data);
-# 		}
-#		$template->param("0XX" =>\@loop_data);
 		$template->param(fillinput => 1,
 						index => $query->param('index')."",
 						bibid=>$bibid?$bibid:"",
