@@ -237,6 +237,7 @@ my %requirefields = (
 			'homezipcode' => 'varchar(25)',
     },
     aqorders => { 'budgetdate' => 'date' },
+    aqbudget => {'aqbudgetid' => 'tinyint(4) auto_increment'},
 
     #added so that reference items are not available for reserves...
     itemtypes         => { 'notforloan'  => 'smallint(6)' },
@@ -543,6 +544,15 @@ my %fielddefinitions = (
             default => ''
         },
     ],
+    aqbudget => [
+        {
+            field   => 'aqbudgetid',
+            type    => 'tinyint(4)',
+            null    => '',
+            key     => 'PRI',
+            default => 'auto_increment'
+        },
+    ],
     z3950servers => [
         {
             field   => 'id',
@@ -847,6 +857,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.51  2003/06/23 11:27:29  tipaul
+# *** empty log message ***
+#
 # Revision 1.50  2003/06/11 21:28:22  tonnesen
 # Added modifications required to the systempreferences table by the new
 # systempreferences.pl script.  The systempreferences.pl script will not work
