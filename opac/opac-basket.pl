@@ -47,13 +47,3 @@ my $resultsarray=\@results;
 $template->param(BIBLIO_RESULTS => $resultsarray);
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
-
-#print STDERR "\n----------------------\n";
-#foreach my $rrr (@results) {
-#	print STDERR "XXXXXXXXXXXX\n";
-#	foreach my $k (sort keys %$rrr) {
-#		print STDERR "$k __ ".$$rrr{$k}."\n",
-#	}
-#}
-#print STDERR "----------------------\n";
