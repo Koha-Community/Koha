@@ -83,7 +83,6 @@ foreach my $term (qw(keyword subject author illustrator itemnumber
 		     publisher ttype))
 {
 	my $value = $query->param($term);
-
 	next unless defined $value && $value ne "";
 				# Skip blank search terms
 	$search{$term} = $value;
