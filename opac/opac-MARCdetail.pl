@@ -111,7 +111,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
 				} else {
-					$subfield_data{marc_value}=$subf[$i][1];
+					$subfield_data{marc_value}=get_authorised_value_desc($field->tag(), $subf[$i][0], $subf[$i][1], '', $dbh);
 				}
 				$subfield_data{marc_subfield}=$subf[$i][0];
 				$subfield_data{marc_tag}=$field->tag();
@@ -180,3 +180,28 @@ $template->param(item_loop => \@item_value_loop,
 						biblionumber => $biblionumber);
 output_html_with_http_headers $query, $cookie, $template->output;
 
+sub get_authorised_value_desc ($$$$$) {
+   my($tag, $subfield, $value, $framework, $dbh) = @_;
+
+   #---- branch
+    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+       return getbranchname($value);
+    }
+
+   #---- itemtypes
+   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+       return ItemType($value);
+    }
+
+   #---- "true" authorized value
+   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+
+   if ($category ne "") {
+       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
+       $sth->execute($category, $value);
+       my $data = $sth->fetchrow_hashref;
+       return $data->{'lib'};
+   } else {
+       return $value; # if nothing is found return the original value
+   }
+}

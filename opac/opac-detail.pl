@@ -35,7 +35,7 @@ $dat->{'count'}=@items;
 
 $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {
-        $dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
+        $dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
 } # for
 
 my $norequests = 1;
@@ -74,3 +74,4 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
+

@@ -1480,6 +1480,7 @@ sub bibdata {
 								from biblio, biblioitems
 								left join bibliosubtitle on
 								biblio.biblionumber = bibliosubtitle.biblionumber
+								left join itemtypes on biblioitems.itemtype=itemtypes.itemtype
 								where biblio.biblionumber = ?
 								and biblioitems.biblionumber = biblio.biblionumber");
 	$sth->execute($bibnum);

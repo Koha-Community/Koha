@@ -63,7 +63,13 @@
 				<!-- TMPL_IF name="unititle" --><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="dewey" --><b>Dewey:</b><!-- TMPL_VAR name="dewey" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="url" --><b>URL:</b> <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a><br /><!-- /TMPL_IF -->
-				<b>Item type : </b><!-- TMPL_VAR NAME="itemtype" --><br/>
+				<b>Item type : </b>
+					<!-- TMPL_IF name="description" -->
+						<!-- TMPL_VAR name="description" -->
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_VAR NAME="itemtype" -->
+					<!-- /TMPL_IF -->
+					<br/>
 				<b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" -->
 			</td>
 		</tr>
