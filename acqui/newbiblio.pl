@@ -4,6 +4,7 @@
 #written by chris@katipo.co.nz 24/2/2000
 
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 use C4::Search;
 use C4::Database;
@@ -21,7 +22,6 @@ my $ordnum=$input->param('ordnum');
 my $biblio=$input->param('biblio');
 my $data;
 my $new;
-
 if ($ordnum eq ''){
   $new='yes';
   $ordnum=newordernum;
@@ -194,7 +194,8 @@ print <<printend
 <td><select name=branch size=1>
 printend
 ;
-my ($count2,@branches)=branches;
+my @branches;
+($count2,@branches)=branches();
 for (my $i=0;$i<$count2;$i++){
   print "<option value=$branches[$i]->{'branchcode'}";
   if ($data->{'branchcode'} == $branches[$i]->{'branchcode'}){
@@ -244,7 +245,8 @@ print <<printend
 printend
 ;
 
-my ($count2,@bookfund)=bookfunds;
+my @bookfund;
+($count2,@bookfund)=bookfunds();
 for (my $i=0;$i<$count2;$i++){
   print "<option value=$bookfund[$i]->{'bookfundid'}";
   if ($data->{'bookfundid'} == $bookfund[$i]->{'bookfundid'}){
