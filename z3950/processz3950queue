@@ -154,7 +154,8 @@ while (1) {
 								warn "no connection at $globalname ";
 							} else {
 								warn "$globalname ==> $globalsyntax";
- 								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "USMARC");
+ 								eval {$conn->option(elementSetName => 'F')};
+								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::USMARC);} if ($globalsyntax eq "USMARC");
  								eval { $conn->option(preferredRecordSyntax => Net::Z3950::RecordSyntax::UNIMARC);} if ($globalsyntax eq "UNIMARC");
  								if ($@) {
  									print "$globalname ERROR: $@\n";

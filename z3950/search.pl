@@ -39,6 +39,7 @@ my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $bibid=$input->param('bibid');
 my $title = $input->param('title');
+my $author = $input->param('author');
 my $isbn = $input->param('isbn');
 my $issn = $input->param('issn');
 my $random = $input->param('random');
@@ -48,18 +49,26 @@ my $toggle;
 
 my $record;
 my $oldbiblio;
-if ($bibid) {
+warn "search.pl : $bibid / $title / $author / $isbn";
+if ($bibid > 0) {
 	$record = MARCgetbiblio($dbh,$bibid);
 	$oldbiblio = MARCmarc2koha($dbh,$record);
 }
-$isbn = $oldbiblio->{'isbn'};
-$issn = $oldbiblio->{'issn'};
-$title = $oldbiblio->{'title'};
 my $errmsg;
 unless ($random) { # if random is a parameter => we're just waiting for the search to end, it's a refresh.
+warn "NO RANDOM";
 	if ($isbn) {
+	warn "ADD ISBN $isbn";
 		$random =rand(1000000000);
 		$errmsg = addz3950queue($isbn, "isbn", $random, 'CHECKED');
+	} elsif ($author) {
+	warn "ADD AUTHOR $author";
+		$random =rand(1000000000);
+		$errmsg = addz3950queue($author, "author", $random, 'CHECKED');
+	} elsif ($title) {
+	warn "ADD TITLE : $title";
+		$random =rand(1000000000);
+		$errmsg = addz3950queue($title, "title", $random, 'CHECKED');
 	}
 }
 my ($template, $loggedinuser, $cookie)
@@ -93,6 +102,7 @@ for (my $i=0; $i <= $#results; $i++) {
 
 $template->param(isbn => $isbn,
 						title => $title,
+						author => $author,
 						breeding_loop => \@breeding_loop,
 						refresh => ($numberpending eq 0 ? 0 : "search.pl?bibid=$bibid&random=$random"),
 						numberpending => $numberpending,
