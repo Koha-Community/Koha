@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<p>
+Każda kratka musi być wypełniona karą, początkiem naliczania, cyklem naliczania<br/>
+np.: 1,7,7 = kara 1PLN, EUR, etc, po 7 dniach, co 7 dni</p>
+<p>Uwaga: kary są wyliczane skryptem fines2.pl, który znajduje się w katalogu misc. Poproś administratora, aby uruchamiał ten skrypt z crontab-a, po północy. W ten sposób kary obliczane bedą na każdy kolejny dzień.
+</p>
+<form action=/cgi-bin/koha/admin/updatecharges.pl method=post>
+<table border=0>
+<TR align="center">
+	<th>&nbsp;</th><!-- TMPL_LOOP name="title" --><th><!-- TMPL_VAR name="in_title" --></th><!-- /TMPL_LOOP -->
+</TR>
+<!-- TMPL_LOOP name="row" -->
+	<TR align="center">
+		<th>
+			<!-- TMPL_VAR name="categorycode" -->
+		</th>
+		<!-- TMPL_LOOP name="cell" -->
+			<td bgcolor="<!-- TMPL_VAR name="toggle" -->">
+				<input name="<!-- TMPL_VAR name="inputname" -->" value="<!-- TMPL_VAR name="inputvalue" -->" size=6 maxlength=10>
+			</td>
+		<!-- /TMPL_LOOP -->
+	</TR>
+<!-- /TMPL_LOOP -->
+</table>
+<center><input type=submit value="OK"></center>
+</form>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

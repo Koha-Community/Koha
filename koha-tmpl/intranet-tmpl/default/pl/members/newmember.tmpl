@@ -1,0 +1,255 @@
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+
+<!-- TMPL_IF Name="OK" -->
+	<H1> Potwierdź Wpis </H1>
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> NOWY CZYTELNIK </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nazwa</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="name" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B> DANE CZŁONKOWSKIE </B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Numer Członkowski</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornum" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Numer karty</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="cardnum" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Kategoria Członkowska</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="memcat" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Opłata</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="fee" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Data zapisu</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="joindate" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Data wygaśnięcia</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="expdate" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Oddział Zapisu</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="branchcode" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>DANE OSOBISTE</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Data urodzenia</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="dob" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Płeć</B>
+			</td>
+			<td>
+				<!-- TMPL_IF Name="sex" -->
+					Mężczyzna
+				<!-- TMPL_ELSE -->
+					Kobieta
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>ADRES CZYTELNIKA</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Adres Pocztowy</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="postal" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Adres Domowy</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="home" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>SZCZEGÓŁY DANYCH KONTAKTOWYCH</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tel. domowy</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Tel. praca</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="phoneday" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Fax</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="faxnumber" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>E-mail</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="emailaddress" -->
+			</td>
+		</tr>
+                <tr valign=top bgcolor="white" >
+                        <td>
+                                <B>Komunikatory</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME=textmessaging -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>POŚREDNI RODZAJ KONTAKTU</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Nazwa</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="contactname" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Telefon</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altphone" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Relacja</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altrelationship" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Uwagi</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="altnotes" -->
+			</td>
+		</tr>
+		<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
+			<td colspan=2 background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+				<B>UWAGI</B>
+			</td>
+		</tr>
+		<tr valign=top bgcolor="white" >
+			<td>
+				<B>Uwagi Ogólne</B>
+			</td>
+			<td>
+				<!-- TMPL_VAR Name="bornotes" -->
+			</td>
+		</tr>
+		</TABLE><p>
+		<form action="/cgi-bin/koha/members/insertdata.pl" method=post>
+			<!-- TMPL_LOOP NAME=inputsloop -->
+				<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type=submit name=submit value="Prześlij">
+		</form>
+<!-- TMPL_ELSE -->
+	<h1>BŁĄD</H1>
+	<p>Następujące pola mają niewłaściwe wartości. Nacisnij przycisk wstecz i popraw: </p>
+	<!-- TMPL_IF name="cardnumber" -->
+		Numer karty<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="invalid_cardnumber" -->
+		Nie prawidłowy numer karty<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="gender" -->
+		Płeć<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="firstname" -->
+		Imiona<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="surname" -->
+		Nazwisko<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="address" -->
+		Ulica Adresu Pocztowego<br/>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="city" -->
+		Miasto<br/>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

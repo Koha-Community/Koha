@@ -1,0 +1,78 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+<div id="mainbloc">
+	<h1 class="catalogue">Wyniki szukania MARC</h1>
+	<div id="resultnumber">
+		<p>
+			<!-- TMPL_IF NAME=displayprev -->
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search>
+					<img src="/intranet-tmpl/default/images/numbers/prev.gif" border=0>
+				</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME=numbers -->
+				<!-- TMPL_IF NAME=highlight -->
+					<img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+					<a href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->.gif" border=0></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/next.gif" border=0></a>
+				<!-- /TMPL_IF -->
+		</p>
+		<p>
+			<!-- TMPL_IF name=total -->
+			&nbsp<b>Wyświetlono od <!-- TMPL_VAR name="from" --> do <!-- TMPL_VAR name="to" --> z <!-- TMPL_VAR name="total" --></b><br><br>
+			<!-- TMPL_ELSE -->
+			&nbsp Nic nie znaleziono.<br>
+			<!-- /TMPL_IF -->
+		</p>
+	</div>
+	<div id="resultlist">
+		<table>
+		<thead>
+			<!-- TMPL_IF NAME="opac" -->
+			<tr>
+				<!-- TMPL_ELSE -->
+			<tr>
+				<!-- /TMPL_IF -->
+			<th class="catalogue">Opis #</th>
+			<th class="catalogue">Autor</th>
+			<th class="catalogue">Tytuł</th>
+			</tr>
+		<tbody>
+			<!-- TMPL_LOOP name="result" -->
+				<tr>
+					<td><a href="../MARCdetail.pl?bibid=<!-- TMPL_VAR name="bibid" -->"><!-- TMPL_VAR name="bibid" --></a></td>
+					<td><!-- TMPL_VAR name="author" --></td>
+					<td><!-- TMPL_VAR name="title" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+	<div id="resultnumber">
+		<p>
+			<!-- TMPL_IF NAME=displayprev -->
+			<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/prev.gif" border=0></a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME=numbers -->
+				<!-- TMPL_IF NAME=highlight -->
+				<img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif">
+				<!-- TMPL_ELSE -->
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME=number -->.gif" border=0></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+			<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&<!-- /TMPL_LOOP -->&resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&type=intranet&op=do_search><img src="/intranet-tmpl/default/images/numbers/next.gif" border=0></a>
+				<!-- /TMPL_IF -->
+		</p>
+	</div>	
+</div>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->

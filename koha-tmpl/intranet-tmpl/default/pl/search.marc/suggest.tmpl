@@ -1,0 +1,58 @@
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+<div id="mainbloc">
+	<h1 class="catalogue">Szukaj w katalogu </h1>
+	<div id="bloc25">
+		<table>
+			<tr>
+				<th class="catalogue">
+					Początkowe słowo
+				</th>
+				<th class="catalogue">
+					Sugerowane
+				</th>
+				<th class="catalogue">
+					Użyto X razy
+				</th>
+			</tr>
+		<!-- TMPL_LOOP name="loop" -->
+			<tr>
+				<td>
+					<!-- TMPL_VAR name="word" -->
+				</td>
+				<td>
+					<a href="javascript:Import('<!-- TMPL_VAR name="word" -->','<!-- TMPL_VAR name="suggestion" -->')">
+						<!-- TMPL_VAR name="suggestion" -->
+					</a>
+				</td>
+				<td>
+					<!-- TMPL_VAR name="count" -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+</div>
+<script>
+	function Import(Replaced,ReplaceBy) {
+		for (i=0 ; i<opener.document.f.value.length ; i++) {
+				opener.document.forms[0].value[i].value = opener.document.forms[0].value[i].value.replace(Replaced,ReplaceBy);
+//			if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
+//				strQuery += "&isbn="+document.forms[0].field_value[i].value;
+//			}
+//			opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR name="oldbiblionumber" -->&breedingid="+GetThisOne;
+//			self.close();
+//			return false;
+		}
+	}
+</script>
+
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->
+

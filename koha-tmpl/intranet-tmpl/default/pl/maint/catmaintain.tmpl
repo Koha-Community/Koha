@@ -1,0 +1,94 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+
+
+<!-- TMPL_IF name=allsub-p -->
+<!-- TMPL_LOOP name=loop -->
+"<a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&sub=<!-- TMPL_VAR name=sub escape=url -->" onclick='messenger("/cgi-bin/koha/maint/catmaintain.pl?type=modsub&sub=<!-- TMPL_VAR name=sub2 escape=url -->");window1.focus()'><!-- TMPL_VAR name=subject escape=html -->"</a><br>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=modsub-p -->
+<form action="/cgi-bin/koha/maint/catmaintain.pl">
+Temat: <input type=text value="<!-- TMPL_VAR name=sub escape=html -->" name=sub size=40><br>
+<input type=hidden name=type value=upsub>
+<input type=hidden name=oldsub value="<!-- TMPL_VAR name=sub escape=html -->">
+<input type=submit value="zmień">
+</form>
+<p>Nastąpi zmiana haseł tematycznych na wszystkich opisach, do których odnosi się ten temat.
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=upsub-p -->
+Udana zmiana <!-- TMPL_VAR name=oldsub escape=html --> jest teraz <!-- TMPL_VAR name=sub escape=html -->
+<!-- <![ IGNORE [
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl" onclick="window0.focus()">Back to catalogue maintenance</a><br>
+<a href=nowhere onclick="self.close()">Close this window</a>
+]]> -->
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=undel-p -->
+<table border=0>
+<thead>
+<tr><th>Tytuł</th><th>Autor</th><th>Przywróć</th></tr>
+<tbody>
+<!-- TMPL_LOOP name=loop -->
+<tr>
+<td><!-- TMPL_VAR name=title escape=html --></td>
+<td><!-- TMPL_VAR name=author escape=html --></td>
+<td><a href="/cgi-bin/koha/maint/catmaintain.pl?<!-- TMPL_VAR name=undelete escape=url -->">Przywróć</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=finun-p -->
+wymazano z powodzeniem
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Powrót do Porządkowania katalogu</a>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=fixitemtype-p -->
+<form method=post action="/cgi-bin/koha/maint/catmaintain.pl">
+<input type=hidden name=bi value="<!-- TMPL_VAR name=bi escape=html>">
+<input type=hidden name=type value=updatetype>
+Rodzaj pozycji: <input type=text name=itemtype value="<!-- TMPL_VAR name=item escape=html>"><br>
+<input type=submit value="Zmień">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=updatetype-p -->
+Aktualizowano z powodzeniem
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Powrót do Porządkowania katalogu</a>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name=mainmenu-p -->
+<B>Hasło tematyczne - Zarządzanie</b><br>
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method=post>
+<input type=hidden name=type value=allsub>
+Pokaż hasła  tematyczne zaczynajace się na <input type=text name=sub><br>
+<input type=submit value="Pokaż">
+</form>
+<p>
+<B>Zarządzanie Grupą</b></br>
+<form action="/cgi-bin/koha/search.pl" method=post>
+<input type=hidden name=type value=catmain>
+Pokaż tytuły zaczynające się na <input type=text name=title><br>
+Numer pozycji <INPUT TYPE="text" SIZE="25" NAME="item"><br>
+<input type=submit value="Pokaż">
+</form>
+<p>
+<B>Przywróć Opis</b></br>
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method=post>
+<input type=hidden name=type value=undel>
+Pokaż tytuły zaczynające się na <input type=text name=title><br>
+<input type=submit value="Pokaż">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

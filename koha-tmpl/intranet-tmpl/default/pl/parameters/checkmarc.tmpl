@@ -1,0 +1,129 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<table width="100%" cellpadding=5 cellspacing=5>
+	<tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
+		<td><b>Test</b></td>
+		<td><b>Wynik</b></td>
+	</tr>
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="itemnum" -->
+	<tr>
+		<td><b>itemnum</b></td>
+		<td><li>Pole itemnum MUSI być zmapowane </li>
+			<li>podpole zaś to MUSI być w zakładce -1 (ignoruj)</td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>itemnum : pole itemnumber jest zmapowane do pola w zakładce -1</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="itemfields" -->
+	<tr>
+		<td><b>item fields</b></td>
+		<td>WSZYSTKIE pola egzemplarzy MUSZĄ:<br/>
+			<li>być zmapowane do tej samej etykiety,</li>
+			<li>a one wszystkie muszą znajdować się w 10 (egzemplarze) zakładce</li></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>Wszystkie pola dokumentu są w tym samym znaczniku i w zakładce egzemplarzy</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="itemtypes_empty" -->
+	<tr>
+		<td><b>tablica itemtypes pusta</b></td>
+		<td>tablica itemtypes (typ dokumentu) jest pusta. Musi zawierać choć jedną wartość</td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>tablica itemtypes wypełniona przynajmniej 1 wartością</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="itemtype" -->
+	<tr>
+		<td><b>tablica itamtype NIE zmapowana</b></td>
+		<td>pole biblioitems.itemtype MUSI :<br/>
+			<li>być zmapowane do podpola MARC, </li>
+			<li>podpole zaś to MUSI posiadać wartość autoryzowaną=itemtype</li></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>biblioitems.itemtype zdefiniowane</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="branches_empty" -->
+	<tr>
+		<td><b>tablica branch (oddział) pusta</b></td>
+		<td>tablica branch (oddział) jest pusta. Musi zawierać choć 1 wartość !</td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>tablica branch (oddział) wypełniona przynajmniej 1 wartością</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="branch" -->
+	<tr>
+		<td><b>oddział właściwy NIE zmapowany</b></td>
+		<td>pole item.homebranch MUSI:<br/>
+			<li>być zmapowane do podpola MARC,</li>
+			<li>podpole zaś to MUSI posiadać wartość autoryzowaną=branches</li></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>oddział właściwy zdefiniowany</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="holdingbranch" -->
+	<tr>
+		<td><b>oddział przechowania NIE zmapowany</b></td>
+		<td>pole items.holdingbranch MUSI:<br/>
+			<li>być zmapowane do podpola MARC, </li>
+			<li>podpole zaś to MUSI posiadać wartość autoryzowaną=branches</li></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>oddział przechowania zdefiniowany</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="biblionumber" -->
+	<tr>
+		<td><b>biblio and biblionumber</b></td>
+		<td>Pola biblio.biblionumber i biblioitems.biblioitemnumber MUSZĄ:<br/>
+			<li>być zmapowane do podpola MARC,</li>
+			<li>być w tej SAMEJ etykiecie (na przykład: 090$a oraz 090$b)</li>
+			<li>być w zakładce -1</li></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>OK</td>
+		<td><i>tablice biblionumber i biblioitemnumber zmapowane poprawnie</i></td>
+	</tr>
+<!-- /TMPL_IF -->
+<!------------------------------------------------------------------------------------------------------------>
+<!-- TMPL_IF name="total" -->
+	<tr>
+		<td><b>W SUMIE</b></td>
+		<td>Istnieją <b><!-- TMPL_VAR name="total" --></b> błędy w konfiguracji MARC. Popraw je zanim zaczniesz pracę w systemie koha.</td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>&nbsp;</td>
+		<td><b>Konfiguracja OK, nie ma błędów w tablicach parametrów MARC</b></td>
+	</tr>
+<!-- /TMPL_IF -->
+</table>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

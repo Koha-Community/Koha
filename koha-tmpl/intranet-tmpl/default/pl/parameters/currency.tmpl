@@ -1,0 +1,212 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+
+<!-- TMPL_IF NAME=add_form -->
+        <script>
+	function _(s) { return s } // dummy function for gettext
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+   return false;
+                }
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull==0 && v.value=='') {
+                return false;
+        }
+        return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isDate(f) {
+                var t = Date.parse(f.value);
+                if (isNaN(t)) {
+                        return false;
+                }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.currency.value.length==0) {
+                        _alertString += "\n- " + _("Brak nazwy waluty");
+                }
+                if (f.rate.value.length==0) {
+                        _alertString += "\n- " + _("Brak kursu");
+                }
+                if (_alertString.length==0) {
+                        document.Aform.submit();
+                } else {
+                        alertString2  = _("Formularz odrzucono z powodu następujących błędów(u)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
+                        alertString2 += _alertString;
+                        alert(alertString2);
+                }
+        }
+        </SCRIPT>
+
+	<!-- TMPL_IF NAME=searchfield -->
+		<h1>Zmieniaj walutę</h1>
+	<!-- TMPL_ELSE -->
+		<h1>Dodaj walutę</h1>
+	<!-- /TMPL_IF -->
+
+        <form action='<!-- TMPL_VAR NAME=script_name -->' name=Aform method=post>
+        <input type=hidden name=op value='add_validate'>
+
+	<table>
+
+	<!-- TMPL_IF NAME=searchfield -->
+		<tr>
+			<td>Waluta</td>
+			<td>
+				<input type=hidden name=currency value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
+			</td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>Waluta</td>
+			<td>
+				<input type=text name=currency size=50 maxlength=50 onBlur=toUC(this)>
+			</td>
+		</tr>
+	<!-- /TMPL_IF -->
+
+        	<tr>
+			<td>Kurs</td>
+			<td>
+				<input type=text name=rate size=10 maxlength=10 value='<!-- TMPL_VAR NAME=rate -->'>
+			</td>
+		</tr>
+        	<tr>
+			<td> </td>
+			<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
+		</tr>
+        </table>
+        </form>
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=add_validate -->
+	Dane zapisane
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+        <input type=submit value=OK>
+        </form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=delete_confirm -->
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'><b>Waluta</b></td>
+			<td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
+		</tr>
+
+        	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+			<input type=hidden name=op value=delete_confirmed>
+			<input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
+        
+        	<tr>
+			<td>Kurs</td>
+			<td><!-- TMPL_VAR NAME=rate --></td>
+		</tr>
+		<!-- TMPL_IF NAME=totalgtzero -->
+		<tr>
+			<td colspan=2 align=center>
+				<b>Ten rekord był w użyciu <!-- TMPL_VAR NAME=total --> razy. Wymazanie nie jest możliwe</b>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=2>
+				</form>
+				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+					<input type=submit value=OK>
+				</form>
+			</td>
+		</tr>
+		<!-- TMPL_ELSE -->
+		<tr>
+			<td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td>
+		</tr>
+		<tr>
+			<td>
+				<input type=submit value="TAK">
+				</form>
+			</td>
+			<td>
+				<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+					<input type=submit value="NIE">
+				</form>
+			</td>
+		</tr>
+		<!-- /TMPL_IF -->
+	</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=delete_confirmed -->
+	Dane wymazane
+	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+		<input type=submit value=OK>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=else -->
+	<h2>Zarządzaj Walutą</h2>
+        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+                <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
+                <input type=reset name=reset value="wyczyść">
+        </form>
+
+	<!-- TMPL_IF NAME=searchfield -->
+		Szukano <b><!-- TMPL_VAR NAME=searchfield --></b>
+	<!-- /TMPL_IF -->
+
+	<table border=0 cellspacing=0 cellpadding=5>
+		<tr bgcolor='#99cc33'>
+			<td background='/images/background-mem.gif'><b>Waluta</b></td>
+			<td background='/images/background-mem.gif'><b>Kurs</b></td>
+			<td background='/images/background-mem.gif'> </td>
+			<td background='/images/background-mem.gif'> </td>
+		</tr>
+		<!-- TMPL_LOOP NAME=loop -->
+		<tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
+			<td><!-- TMPL_VAR NAME=currency --></td>
+			<td><!-- TMPL_VAR NAME=rate --></td>
+			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=currency -->" class="button">Edytuj</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=currency -->" class="button">Wymaż</a></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+
+	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+        <input type=hidden name=op value=add_form>
+	
+	<!-- TMPL_IF NAME=offsetgtzero -->
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=prevpage -->">&lt;&lt; Wstecz</a>
+	<!-- /TMPL_IF -->
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<!-- TMPL_IF NAME=ltcount -->
+		<a href="<!-- TMPL_VAR NAME=script_name -->?offset=<!-- TMPL_VAR NAME=nextpage -->">Dalej &gt;&gt;</a>	
+	<!-- /TMPL_iF -->
+
+        <br>
+	<input type=submit class="button" value="Dodaj walutę" alt="Dodaj walutę">
+	<br>
+        </form>
+
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
