@@ -271,7 +271,7 @@ sub newitem {
     biblioitemnumber,barcode, itemnotes, holdingbranch, homebranch, dateaccessioned, replacementprice) values ($itemnumber,
     $biblionumber, $biblioitemnumber, ?, $q_itemnotes, $q_homebranch, $q_homebranch, '$date', $replacementprice)";
     $sth=$dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($barcode);
 #    print $query($barcode);
 }
 
