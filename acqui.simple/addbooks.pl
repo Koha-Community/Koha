@@ -269,10 +269,10 @@ sub newitem {
     my $q_homebranch=$dbh->quote($input->param('homebranch'));
     my $query="insert into items (itemnumber, biblionumber,
     biblioitemnumber,barcode, itemnotes, holdingbranch, homebranch, dateaccessioned, replacementprice) values ($itemnumber,
-    $biblionumber, $biblioitemnumber, $barcode, $q_itemnotes, $q_homebranch, $q_homebranch, '$date', $replacementprice)";
+    $biblionumber, $biblioitemnumber, ?, $q_itemnotes, $q_homebranch, $q_homebranch, '$date', $replacementprice)";
     $sth=$dbh->prepare($query);
     $sth->execute;
-#    print $query;
+#    print $query($barcode);
 }
 
 if ($isbn) {
