@@ -479,7 +479,7 @@ sub mktablerow {
       }
       $i++;
   }
-  $string=$string."</tr>\n";
+  $string=$string."</tr>\n";		# FIXME - .=
   return($string);
 }
 
@@ -501,7 +501,7 @@ sub mktableft() {
 sub mkform{
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
-  $string=$string.mktablehdr();
+  $string=$string.mktablehdr();		# FIXME - .=
   my $key;
   my @keys=sort keys %inputs;
 
@@ -513,6 +513,7 @@ sub mkform{
     #my $posn = shift(@data);
     if ($data[0] eq 'hidden'){
       $string=$string."<input type=hidden name=$keys[$i2] value=\"$data[1]\">\n";
+					# FIXME - .=
     } else {
       my $text;
       if ($data[0] eq 'radio') {
@@ -530,20 +531,22 @@ sub mkform{
 	my $i=1;
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
-      	  $text = $text."<option value=$data[$i]>$val";
-	  $i = $i+2;
+      	  $text = $text."<option value=$data[$i]>$val";		# FIXME - .=
+	  $i = $i+2;		# FIXME - +=
 	}
 	$text=$text."</select>";
+				# FIXME - .=
       }
-      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
+      $string=$string.mktablerow(2,'white',$keys[$i2],$text);	# FIXME - .=
       #@order[$posn] =mktablerow(2,'white',$keys[$i2],$text);
     }
     $i2++;
   }
   #$string=$string.join("\n",@order);
   $string=$string.mktablerow(2,'white','<input type=submit>','<input type=reset>');
-  $string=$string.mktableft;
-  $string=$string."</form>";
+				# FIXME - .=
+  $string=$string.mktableft;	# FIXME - .=
+  $string=$string."</form>";	# FIXME - .=
 }
 
 =item mkform3
@@ -650,10 +653,10 @@ sub mkform3 {
 	my $i=1;
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
-      	  $text = $text."<option value=$data[$i]>$val";
+      	  $text = $text."<option value=$data[$i]>$val";		# FIXME - .=
 	  $i = $i+2;		# FIXME - Use $i += 2.
 	}
-	$text=$text."</select>";
+	$text=$text."</select>";	# FIXME - .=
       }
 #      $string=$string.mktablerow(2,'white',$keys[$i2],$text);
       $order[$posn]=mktablerow(2,'white',$keys[$i2],$text);
@@ -661,11 +664,10 @@ sub mkform3 {
     $i2++;
   }
   my $temp=join("\n",@order);
-  # FIXME - Use ".=". That's what it's for.
-  $string=$string.$temp;
-  $string=$string.mktablerow(1,'white','<input type=submit>');
-  $string=$string.mktableft;
-  $string=$string."</form>";
+  $string=$string.$temp;					# FIXME - .=
+  $string=$string.mktablerow(1,'white','<input type=submit>');	# FIXME - .=
+  $string=$string.mktableft;					# FIXME - .=
+  $string=$string."</form>";					# FIXME - .=
   # FIXME - A return statement, while not strictly necessary, would be nice.
 }
 
@@ -737,24 +739,30 @@ sub mkformnotable{
   for (my $i=0; $i<$count; $i++){
     if ($inputs[$i][0] eq 'hidden'){
       $string=$string."<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
+				# FIXME - .=
     }
     if ($inputs[$i][0] eq 'radio') {
       $string.="<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
+				# FIXME - .=
     }
     if ($inputs[$i][0] eq 'text') {
       $string.="<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+				# FIXME - .=
     }
     if ($inputs[$i][0] eq 'textarea') {
         $string.="<textarea name=$inputs[$i][1] wrap=physical cols=40 rows=4>$inputs[$i][2]</textarea>";
+				# FIXME - .=
     }
     if ($inputs[$i][0] eq 'reset'){
       $string.="<input type=reset name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+				# FIXME - .=
     }
     if ($inputs[$i][0] eq 'submit'){
       $string.="<input type=submit name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
+				# FIXME - .=
     }
   }
-  $string=$string."</form>";
+  $string=$string."</form>";	# FIXME - .=
 }
 
 =item mkform2
@@ -833,7 +841,7 @@ corresponding choice will initially be selected.
 #'
 sub mkform2{
     # FIXME
-    # no POD and no tests yet.  Once tests are written,
+    # No tests yet.  Once tests are written,
     # this function can be cleaned up with the following steps:
     #  turn the while loop into a foreach loop
     #  pull the nested if,elsif structure back up to the main level
@@ -841,7 +849,7 @@ sub mkform2{
     #   functions
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
-  $string=$string.mktablehdr();
+  $string=$string.mktablehdr();		# FIXME - .=
   my $key;
   my @order;
   while ( my ($key, $value) = each %inputs) {
@@ -851,6 +859,7 @@ sub mkform2{
     my $ltext = shift(@data);
     if ($data[0] eq 'hidden'){
       $string=$string."<input type=hidden name=$key value=\"$data[1]\">\n";
+					# FIXME - .=
     } else {
       my $text;
       if ($data[0] eq 'radio') {
@@ -875,25 +884,26 @@ sub mkform2{
 	my $i=2;
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
-       	  $text = $text."<option value=\"$data[$i]\"";
+       	  $text = $text."<option value=\"$data[$i]\"";	# FIXME - .=
 	  if ($data[$i] eq $sel) {
-	     $text = $text." selected";
+	     $text = $text." selected";			# FIXME - .=
 	  }
-          $text = $text.">$val";
-	  $i = $i+2;
+          $text = $text.">$val";			# FIXME - .=
+	  $i = $i+2;					# FIXME - +=
 	}
-	$text=$text."</select>";
+	$text=$text."</select>";			# FIXME - .=
       }
       if ($reqd eq "R") {
-        $ltext = $ltext." (Req)";
+        $ltext = $ltext." (Req)";			# FIXME - .=
 	}
       $order[$posn] =mktablerow(2,'white',$ltext,$text);
     }
   }
-  $string=$string.join("\n",@order);
+  $string=$string.join("\n",@order);			# FIXME - .=
   $string=$string.mktablerow(2,'white','<input type=submit>','<input type=reset>');
-  $string=$string.mktableft;
-  $string=$string."</form>";
+							# FIXME - .=
+  $string=$string.mktableft;				# FIXME - .=
+  $string=$string."</form>";				# FIXME - .=
 }
 
 =item endpage
