@@ -233,6 +233,8 @@ if ($op eq 'add_form') {
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
+	$template->param('use-heading-flags-p' => 1);
+	$template->param('heading-edit-subfields-p' => 1);
 	$template->param(action => "Edit subfields",
 							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\">$tagfield",
 							loop => \@loop_data,
