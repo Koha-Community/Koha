@@ -7,7 +7,7 @@
 <td><b>ARE OUR RECORDS CORRECT?</B></td></tr>
 <tr>
 <td><font size=2 face="arial,helvetica">
-Library Card: <TMPL_VAR NAME="cardnumber"> <p>
+圖書證編號：<TMPL_VAR NAME="cardnumber"> <p>
 <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
 <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
 <TMPL_VAR NAME="phone"> (hm)<br>
@@ -15,16 +15,16 @@ Library Card: <TMPL_VAR NAME="cardnumber"> <p>
 
 <TMPL_VAR NAME="emailaddress"><p>
 
-Are any of our records incorrect? Have you moved recently, got a new phone number or e-mail address?<p>
+這個記錄有沒有錯漏？您最近有否搬了家，或轉了電話號碼或電郵地址？如果有，請您<p>
 
-<a href="/cgi-bin/koha/opac-userupdate.pl">Update Record</a>
+<a href="/cgi-bin/koha/opac-userupdate.pl">更新您的記錄</a>
 
 </td></tr></table>
 
 
 
-<font size=6><em>Hi <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font> 
-[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Logout</a>]<p>
+<font size=6><em><TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname">，您好！</em></font> 
+[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">登出</a>]<p>
 
 
 <TMPL_IF NAME="amountoverfive">
@@ -51,7 +51,7 @@ Are any of our records incorrect? Have you moved recently, got a new phone numbe
 <td><font face="arial,helvetica" size=+2><B>You have a credit of <TMPL_VAR NAME="amountoutstanding"></B></font>
 </td></tr></table>
 </TMPL_IF>
-<a href='/cgi-bin/koha/opac-account.pl'>View Accounts</a>
+<a href='/cgi-bin/koha/opac-account.pl'>查看帳目</a>
 
 </TMPL_LOOP>
 
@@ -70,16 +70,16 @@ Are any of our records incorrect? Have you moved recently, got a new phone numbe
 
 <TMPL_IF NAME="issues_count">
 
-You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
+您借出了 <TMPL_VAR NAME="issues_count"> 個項目。<br>
 
 <TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
 
 <TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-<TD><B>Title</B></TD>
-<TD><B>Author</B></TD>
-<TD><B>Due date</B></TD>
-<TD><B>Itemtype</B></TD>
-<TD><B>Charges</B></TD>
+<TD><B>書名</B></TD>
+<TD><B>著者</B></TD>
+<TD><B>還書日期</B></TD>
+<TD><B>類別</B></TD>
+<TD><B>費用</B></TD>
 <TD><B>Current Loan</B></TD>
 </TR>
 
