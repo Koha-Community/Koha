@@ -59,6 +59,7 @@ foreach my $itm (@items) {
      $norequests = 0 unless $itm->{'notforloan'};
 }
 
+
 warn "Biblionumber: $biblionumber";
 warn "Norequests: $norequests"; 
 
@@ -69,6 +70,7 @@ my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
 
 $dat->{'count'}=@items;
+$dat->{'norequests'} = $norequests;
 
 $dat->{'additional'}=$addauthor->[0]->{'author'};
 for (my $i = 1; $i < $authorcount; $i++) {
@@ -110,7 +112,6 @@ $template->param(prevstartfrom => $prevstartfrom);
 $template->param(includesdir => $includes);
 $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
-$template->param(norequests => $norequests);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SITE_RESULTS => $sitearray);
 print "Content-Type: text/html\n\n", $template->output;

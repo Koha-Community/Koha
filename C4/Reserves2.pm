@@ -102,11 +102,18 @@ sub CheckReserves {
     my $dbh=C4Connect;
     my $qitem=$dbh->quote($item);
 # get the biblionumber...
-    my $sth=$dbh->prepare("select biblionumber, biblioitemnumber from items where itemnumber=$qitem");
+    my $sth=$dbh->prepare("SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+                             FROM items, biblioitems, itemtypes 
+                            WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
+                              AND biblioitems.itemtype = itemtypes.itemtype
+                              AND itemnumber=$qitem");
     $sth->execute;
-    my ($biblio, $bibitem) = $sth->fetchrow_array;
+    my ($biblio, $bibitem, $notforloan) = $sth->fetchrow_array;
     $sth->finish;
     $dbh->disconnect;
+# if item is not for loan it cannot be reserved either.....
+warn "Not for loan: $notforloan";
+    return (0, 0) if ($notforloan);
 # get the reserves...
     my ($count, @reserves) = Findgroupreserve($bibitem, $biblio);
     my $priority = 10000000; 
