@@ -39,13 +39,12 @@
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td>
-		<SELECT NAME="title" SIZE="1">
-			<OPTION value=" ">No Title
-				<TMPL_LOOP NAME=titleloop>
-					<OPTION value="<TMPL_VAR NAME=title>"
-						<TMPL_VAR NAME=selected>>
-						<TMPL_VAR NAME=title>
-					</TMPL_LOOP>
+		<SELECT NAME="title">
+			<option<TMPL_VAR name="title_selected_ "> value=" ">Aucun</option>
+			<option value="Mlle"<TMPL_VAR name="title_Mlle">>Miss</option>
+			<option value="Mme"<TMPL_VAR name="title_Mme">>Mrs</option>
+			<option <TMPL_VAR name="title_M"> value="M" >M</option>
+			<option value="Dr" <TMPL_VAR name="title_Dr">>Dr</option>
 		</SELECT>
 		</td>
 		<td>

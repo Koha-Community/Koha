@@ -80,21 +80,6 @@ if ($delete){
     $template->param(female => 1);
   }
 
-  my @titles = ('Miss', 'Mrs', 'Ms', 'Mr', 'Dr', 'Sir');
-	# FIXME - Assumes English. This ought to be made part of i18n.
-  my @titledata;
-  while (@titles) {
-    my %row;
-    my $title = shift @titles;
-    $row{'title'} = $title;
-    if ($data->{'title'} eq $title) {
-      $row{'selected'}=' selected';
-    } else {
-      $row{'selected'}='';
-    }
-    push(@titledata, \%row);
-  }
-
   my ($categories,$labels)=ethnicitycategories();
   my $ethnicitycategoriescount=$#{$categories};
   my $ethcatpopup;
@@ -112,30 +97,6 @@ if ($delete){
   			        -default=>$data->{'categorycode'},
   			        -labels=>$labels);
 
-  my @areas = ('L','F','S','H','K','O','X','Z','V');
-  my %arealabels = ('L' => 'Levin',
-  		  'F' => 'Foxton',
-  		  'S' => 'Shannon',
-  		  'H' => 'Horowhenua',
-  		  'K' => 'Kapiti',
-  		  'O' => 'Out of District',
-  		  'X' => 'Temporary Visitor',
-  		  'Z' => 'Interloan Libraries',
-  		  'V' => 'Village');
-
-  my @areadata;
-  while (@areas) {
-    my %row;
-    my $shortcut = shift @areas;
-    $row{'shortcut'} = $shortcut;
-    if ($data->{'area'} eq $shortcut) {
-      $row{'selected'}=' selected';
-    } else {
-      $row{'selected'}='';
-    }
-    $row{'area'}=$arealabels{$shortcut};
-    push(@areadata, \%row);
-  }
 
 
   my @relationships = ('workplace', 'relative','friend', 'neighbour');
@@ -217,15 +178,14 @@ if ($delete){
   			borrowernotes	=> $data->{'borrowernotes'},
   			flagloop	=> \@flagdata,
   			relshiploop	=> \@relshipdata,
-  			titleloop       => \@titledata,
-  			arealoop        => \@areadata,
+			"title_".$data->{'title'} => " SELECTED ",
   			dateenrolled	=> $data->{'dateenrolled'},
   			expiry		=> $data->{'expiry'},
   			cardnumber	=> $cardnumber,
   			dateofbirth	=> $data->{'dateofbirth'},
 			dateformat      => display_date_format(),
 			CGIbranch => $CGIbranch);
-
+warn "title ==>".$data->{'title'}."<==";
 output_html_with_http_headers $input, $cookie, $template->output;
 
 
