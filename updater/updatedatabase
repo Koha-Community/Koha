@@ -301,6 +301,7 @@ my %requiretables = (
 				place char(255) default NULL,
 				isbn char(10) default NULL,
 				mailoverseeing smallint(1) default 0,
+				biblionumber int(11) default NULL,
 				PRIMARY KEY  (suggestionnumber),
 				KEY suggestedby (suggestedby),
 				KEY managedby (managedby)
@@ -335,7 +336,6 @@ my %requiretables = (
 						dow varchar(100) default '',
 						numberingmethod varchar(100) default '',
 						notes text,
-						arrivalplanified varchar(100) NOT NULL default '',
 						status varchar(100) NOT NULL default '',
 						add1 int(11) default 0,
 						every1 int(11) default 0,
@@ -357,28 +357,9 @@ my %requiretables = (
 						lastvalue3 int(11),
 						PRIMARY KEY  (subscriptionid)
 						)",
-# 						seqnum1 int(11) default '0',
-# 						startseqnum1 int(11) default '0',
-# 						seqtype1 int(11) default '0',
-# 						freq1 int(11) default '0',
-# 						step1 int(11) default '0',
-# 						seqnum2 int(11) default '0',
-# 						step2 int(11) default '0',
-# 						startseqnum2 int(11) default '0',
-# 						freq2 int(11) default '0',
-# 						seqtype2 int(11) default '0',
-# 						seqnum3 int(11) default '0',
-# 						freq3 int(11) default '0',
-# 						notes varchar(100) NOT NULL default '',
-# 						step3 int(11) default '0',
-# 						pos3 int(11) NOT NULL default '0',
-# 						pos2 int(11) NOT NULL default '0',
-# 						pos1 int(11) NOT NULL default '0',
-# 						seqtype3 int(11) default '0',
-
 	subscriptionhistory => "(biblionumber int(11) NOT NULL default '0',
 							subscriptionid int(11) NOT NULL default '0',
-							startdate date NOT NULL default '0000-00-00',
+							histstartdate date NOT NULL default '0000-00-00',
 							enddate date default '0000-00-00',
 							missinglist longtext NOT NULL,
 							recievedlist longtext NOT NULL,
@@ -1387,6 +1368,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.93  2004/08/12 14:50:50  tipaul
+# bugfixes
+#
 # Revision 1.92  2004/08/06 16:38:42  tipaul
 # changing DB structure to calculate next issue number.
 # Seems to work fine.
