@@ -1,0 +1,118 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Details for: <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<div class="details">
+<!-- Display for NPL 			<div style="float: right; padding: 5px;">
+<img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/images2/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" />
+</div>
+ /Display for NPL --><h2><!-- TMPL_VAR NAME="title" --></h2>
+<!-- TMPL_IF NAME="author" --><h3 class="author">By <!-- TMPL_VAR NAME="author" --></h3><!-- /TMPL_IF --> 
+
+<table>
+<!-- TMPL_IF NAME="subtitle" --><tr><th>Subtitle: </th><td><!-- TMPL_VAR NAME="subtitle" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="abstract" --><tr><th>Format:</th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="copyrightdate" -->
+    <tr><th>Copyright:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="isbn" -->
+	    <tr><th>ISBN:</th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lccn" -->
+	    <tr><th>LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publishercode" -->
+	    <tr><th>Publisher:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="pages" -->
+	<tr><th>Details: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="marcnotes" -->
+<tr><th>Notes:</th><td><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnotes" --></li><!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="subjects" -->	
+		<tr><th>Subject(s):</th><td> <!-- TMPL_LOOP NAME="SUBJECTS" -->
+	: <a href="http://koha.athenscounty.lib.oh.us/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="SUBJECTS" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=SUBJECTS --></a>  
+	<!-- /TMPL_LOOP --></td></tr>
+		<!-- /TMPL_IF -->
+<!-- <tr><th>Biblio Record:</th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> -->
+</table>
+
+	<table border="1">
+	<!-- TMPL_IF NAME="MARCNOTES" -->
+		<tr>
+			<th><i>Detailed notes:</i></th>
+			<td>
+				<ul>
+					<!-- TMPL_LOOP NAME="MARCNOTES" -->
+						<i>- <!-- TMPL_VAR NAME="marcnote" --></i><br>
+					<!-- /TMPL_LOOP -->
+				</ul>
+			</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="MARCSUBJCTS" -->
+		<tr>
+			<th>Related links:</th>
+			<td>
+				<ul>
+					<!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+						- <a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<!-- TMPL_VAR NAME="marcsubjct" ESCAPE="URL"-->">
+							<!-- TMPL_VAR NAME="marcsubjct" -->
+						</a><br>
+					<!-- /TMPL_LOOP -->
+				</ul>
+			</td>
+		</tr>
+	<!-- /TMPL_IF -->
+	</table>
+
+<TMPL_UNLESS NAME="norequests">
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
+    <input type="submit" name="submit"  VALUE="Place Reserve" class="submit" />
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form>
+</TMPL_UNLESS>
+<!--  <form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="isbd" value="ISBD" /></form> -->
+
+<!-- <form class="inline" action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="detail" value="MARC View" /></form> -->
+
+<!-- <form class="inline" action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="print" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form> -->
+
+<form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
+</div>
+
+<!-- TMPL_IF NAME="ITEM_RESULTS" -->
+<div class="table"><table>
+<!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
+<tr><!-- <th>&nbsp;</th> -->
+<th>Type/Format</th>
+<th>Call Number</th>
+<th>Location</th>
+<th>Due Date</th>
+<th>Last Seen</th>
+<!-- <th>Barcode</th> --></tr>
+<tbody>
+<!--INFORMATION ROWS-->
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+<tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
+<td><!-- TMPL_VAR NAME="class" --></td>
+<td><!-- TMPL_VAR NAME="branchname" --></td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+<!-- <td><!-- TMPL_VAR NAME="barcode" --></td> --></tr>
+<!-- /TMPL_LOOP -->
+</tbody>
+</table>
+<!-- TMPL_ELSE -->
+<table><tr><td>No copies available.</td></tr></table>
+<!-- /TMPL_IF -->
+</div>
+</div>
+</body>
+</html>
+

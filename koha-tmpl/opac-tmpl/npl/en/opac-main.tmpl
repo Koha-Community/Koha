@@ -1,0 +1,88 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> -- Library Catalog
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+<div class="content-block">
+
+<!-- TMPL_IF NAME="loggedinusername" -->
+<!-- TMPL_ELSE --><div id="sidebar">
+<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+<h3>Log in to Check Your Account</h3>
+<p><label for="userid">Card Number:</label> <input type="text" id="userid" size="10" name="userid" onblur="ValidateCode();" /></p>
+<p><label for="password">Password:</label> <input type="password" id="password" size="10" name="password" /></p>
+<p><input type="submit" value="Log In" class="submit" /></p>
+</form></div>
+<!-- /TMPL_IF -->
+
+<form action="/cgi-bin/koha/opac-search.pl">
+<h3>Search the Library Catalog</h3>
+<p>
+<label for="value">Enter Keyword(s):</label>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" size="27" name="value" id="value" /></p>
+		<p><input type="submit" value="Search" class="submit" /></p>
+		<p>
+			<a href="/cgi-bin/koha/opac-search.pl">Advanced Search (More Options)</a>
+		</p>
+		<p><em class="new">New! </em>Find the latest additions: <br /><a href="/format-search.php">Search by format and date</a></p>
+	</form>
+	<br clear="all" />
+</div>
+
+<div class="content-block">
+	<h3>Recent acquisitions</h3>
+	<form action="/cgi-bin/koha/opac-search.pl">
+		<p>
+			<!-- TMPL_VAR name="CGIitemtype" --> acquired recently (the most recent being first)
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="orderby" value="biblio.timestamp desc">
+			<input type="submit" value="Search" class="submit" />
+		</p>
+	</form>
+</div>
+	
+<!-- TMPL_IF NAME="loggedinusername" -->
+<div class="content-block">
+<h3>Logged in as </h3>
+<p><!-- TMPL_LOOP NAME="USER_INFO" -->
+ <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+<!-- /TMPL_LOOP --></p>
+<p><a href="/cgi-bin/koha/opac-user.pl">your library home</a> |   
+	<a href="/cgi-bin/koha/opac-account.pl">your account</a> |
+	<a href="/cgi-bin/koha/opac-userdetails.pl">your personal details</a>		<!-- TMPL_IF name="virtualshelves" -->| <a href="/cgi-bin/koha/opac-shelves.pl" class="button">virtual shelves</a><!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="opac-suggestions.pl" class="button">view &amp; manage suggestions</a><!-- /TMPL_IF --></p>
+		<!-- TMPL_IF name="textmessaging"-->
+			<h2>Message from the library</h2>
+			<p><!-- TMPL_VAR name="textmessaging" --></p>
+		<!-- /TMPL_IF -->
+<form method="post" action="/cgi-bin/koha/opac-logout.pl">
+<p><input type="submit" class="submit" name="logout" value="Log Out" /></p>
+</form>
+</div><!-- /TMPL_IF -->
+
+	<div class="content-block">
+	<h4 class="inline">Change Language:</h3>
+	<form action="/cgi-bin/koha/changelanguage.pl" method="post" class="inline">
+		<select name="language">
+			<TMPL_LOOP NAME="languages">
+				<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+			</TMPL_LOOP>
+		</select>
+		<input type="submit" value="Switch" class="submit">
+	</form></div>
+</div>
+
+</body>
+</html>

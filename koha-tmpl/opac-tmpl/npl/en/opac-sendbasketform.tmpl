@@ -1,0 +1,26 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Sending Your Book Bag
+<!-- TMPL_INCLUDE NAME="doc-head-close-basket.inc" -->
+
+<div id="window">
+<h3>Sending your book bag</h3>
+<div class="details">
+<!-- TMPL_IF NAME="email_add" -->
+	<!-- TMPL_IF NAME="SENT" -->
+	<p>The book bag was sent to: <span class="ex"><!-- TMPL_VAR NAME="email_add" --></span></p>
+	<!-- TMPL_ELSE -->
+	<p>Problem sending the book bag...</p>
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+	<div class="details">
+<p>		<label for="email_add">E-mail Address:</label> <input type="text" id="email_add" name="email_add" size="35" /></p>
+	
+<p><input type="submit" value="Send" class="send" />
+	<input type="hidden" name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" /></p>
+</form>
+<!-- /TMPL_IF -->
+	
+</div><p><form action="opac-sendbasket.pl" method="get" /><input type="submit" class="close" value="Close Window" onclick="window.close(); return false;" /></form></p>
+</div>
+</body>
+</html>

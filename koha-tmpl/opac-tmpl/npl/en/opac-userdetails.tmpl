@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Personal Details for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+
+<!--CONTENT-->
+<div id="main">
+<h2>Personal Details: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
+
+<div class="form">
+<table>
+<tr><th>Name:</th><td> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td></tr>
+<tr><th>
+Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
+</table>
+</div>
+
+<h3>Contact Details</h3>
+<div class="form">
+<table>
+<tr><th>Mailing Address:</th><td><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></td></tr>
+
+<tr><th>Permanent Address:</th><td> <!-- TMPL_VAR NAME="altstreetaddress" -->, <!-- TMPL_VAR NAME="altcity" --></td></tr>
+
+<tr><th>Phone (Home):</th><td><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Phone (Daytime):</th><td><!-- TMPL_IF NAME="phoneday" --><!-- TMPL_VAR NAME="phoneday" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Fax:</th><td><!-- TMPL_IF NAME="faxnumber" --><!-- TMPL_VAR NAME="faxnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>E-mail:</th><td><!-- TMPL_IF NAME="emailaddress" --><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Textmessaging:</th><td><!-- TMPL_IF NAME="textmessaging" --><!-- TMPL_VAR NAME="textmessaging" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+</table>
+</div>
+
+<h3>Membership Details</h3>
+<div class="form">
+<table><tr><th>Membership Number:</th><td> <!-- TMPL_VAR NAME="borrowernumber" --></td></tr>
+
+<tr><th>Membership Category:</th><td>  <!-- TMPL_VAR NAME="categorycode" --></td></tr>
+
+<!-- <td>Area:</th><td>  <!-- TMPL_VAR NAME="area" --></td> -->
+
+<!-- <td>Fee:</th><td>  /year, Paid</td> -->
+
+<tr><th>Joined:</th><td><!-- TMPL_VAR NAME="dateenrolled" --></td></tr>
+
+<tr><th>Expires:</th><td><!-- TMPL_VAR NAME="expiry" --></td></tr>
+
+<tr><th>Joining Branch:</th><td>&nbsp;</td></tr></table>
+</div>
+
+
+<h3>Identity Details</h3>
+<div class="form">
+<table><tr><th>DoB:</th><td> <!-- TMPL_IF NAME="dateofbirth" --><!-- TMPL_VAR NAME="dateofbirth" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Sex:</th><td><!-- TMPL_IF NAME="sex" --><!-- TMPL_VAR NAME="sex" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr></table>
+</div>
+
+
+<h3>Alternate Contact Details</h3>
+<div class="form">
+
+<table><tr><th>Alternate Contact:</th><td> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Phone:</th><td> <!-- TMPL_IF NAME="altphone" --><!-- TMPL_VAR NAME="altphone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Relationship:</th><td> <!-- TMPL_IF NAME="altrelationship" --><!-- TMPL_VAR NAME="altrelationship" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  </td></tr>
+
+<tr><th>Notes:</th><td> <!-- TMPL_IF NAME="altnotes" --><!-- TMPL_VAR NAME="altnotes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr>
+
+<tr><th>Guarantor:</th><td> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr></table>
+
+</div>
+
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
+<input type="submit" name="Modify" value="Modify Your Record" class="submit" />
+</form>
+
+</div>
+</body>
+</html>

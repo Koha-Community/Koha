@@ -1,0 +1,39 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<!--CONTENT-->
+
+<div id="main">
+<!-- TMPL_LOOP name="BORROWER_INFO" -->
+<h3>Updating Details for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h3>
+<p>Please make any necessary changes to your record.  Submitting the form will notify a library staff member, who will make the changes permanent.</p>
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+<input type="hidden" name="title" value="">
+<div class="form">
+<table>
+<tr><th><label for="surname">Last Name</label></th><td><input id="surname" type="text"  size="25" value="<!-- TMPL_VAR name="surname" -->"  name="surname"></td></tr>
+
+<tr><th><label for="firstname">First Name</label></th><td><input id="firstname" type="text"  size="25" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname"></td></tr>
+
+<tr><th><label for="streetaddress">Mailing Address</label></th><td><input id="streetaddress" type="text"  size="25" value="<!-- TMPL_VAR name="streetaddress" -->"  name="streetaddress"></td></tr>
+
+<tr><th><label for="city">City, State</label></th><td><input id="city" type="text"  size="25" value="<!-- TMPL_VAR name="city" -->"  name="city"></td></tr>
+
+<tr><th><label for="phone">Home Phone</label></th><td><input id="phone" type="text"  size="25" value="<!-- TMPL_VAR name="phone" -->"  name="phone"></td></tr>
+
+<tr><th><label for="faxnumber">Work/Fax phone</label></th><td><input id="faxnumber"  type="text"  size="25" value="<!-- TMPL_VAR name="faxnumber" -->"  name="faxnumber"></td></tr>
+
+<tr><th><label for="emailaddress">Email</label></th><td><input id="emailaddress" type="text"  size="40" value="<!-- TMPL_VAR name="emailaddress" -->"  name="emailaddress"></td></tr>
+</table>
+</div>
+<p>Clicking 'Submit Changes' will send an email to a library staff member with the information you've entered.  You will then be returned to your patron record.</p>
+<p><input type="submit" value="Submit Changes" class="submit"></p>
+</form>
+
+
+<!-- /TMPL_LOOP -->
+</div>
+</body>
+</html>

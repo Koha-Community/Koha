@@ -1,0 +1,48 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Log in to Your Account
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<!--CONTENT-->
+<div id="main">
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- login prompt time-->
+<h3>Log In to Your Account</h3>
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<p class="error">Sorry, the system doesn't think you have permission to access this page. </p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is displayed if login has timed out -->
+<p class="error">Sorry, your session has timed out.  Please log in again.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<p class="error">You are logging from a different IP address.  Please log in again.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<p class="error">You entered an incorrect username or password. Please try again! And remember, usernames and passwords are case sensitive.</p>
+<!-- /TMPL_IF -->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" name="auth" id="auth" method="post">
+<!-- TMPL_LOOP NAME="INPUTS" -->
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+<!-- /TMPL_LOOP -->
+<div class="form">
+<table>
+<tr><th><label for="userid">Your card number</label></th><td><input type="text"  size="25" id="userid"  name="userid" onblur="ValidateCode();"></td>
+<tr><th><label for="password">Password or PIN</label></th><td><input type="password"  size="25" id="password"  name="password"></td>
+</table>
+<input type="submit" value="Log In" class="submit"></div>
+  <p>If you don't have a password yet, next time you're in the library, take your card to the circulation desk and we'll happily set one up for you.</p>
+</form>
+
+
+<!-- /TMPL_IF -->
+</div>
+</body>
+</html>

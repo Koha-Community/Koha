@@ -1,0 +1,141 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- MARC Details for Record No. <!-- TMPL_VAR name="biblionumber" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<h2>MARC View</h2>
+<TMPL_UNLESS NAME="norequests">
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
+    <input type="submit" name="submit"  VALUE="Place Reserve" class="submit" />
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form>
+</TMPL_UNLESS>
+<!-- <form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="isbd" value="ISBD" /></form> -->
+
+<form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="brief" value="Normal View" /></form>
+
+<!-- <form class="inline" action="detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="print" value="Print" onclick="Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"/></form> -->
+
+<form class="inline"><input type="submit" class="cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Add to Book Bag" /></form>
+<div class="table">
+		<table><!-- TMPL_LOOP name="0XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="1XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="2XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="3XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="4XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="5XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="6XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="7XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="8XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+
+		<!-- TMPL_LOOP name="9XX" -->
+		<tr><td colspan="3" class="marctag"><!-- TMPL_VAR name="tag" --></td></tr>
+		<!-- TMPL_LOOP name="subfield" -->
+				<tr><td class="marcsubfieldletter"><!-- TMPL_VAR name="marc_subfield" --></td>
+					<td class="marcsubfieldname"><!-- TMPL_VAR name="marc_lib" --></td>
+					<td class="subfieldvalue"><!-- TMPL_VAR name="marc_value" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</table>
+	
+		<table>
+		<caption>Copies</caption>
+				<tr>
+					<!-- TMPL_LOOP name="item_header_loop" -->
+						<th>
+							<!-- TMPL_VAR name="header_value" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+				</tr>
+				<!-- TMPL_LOOP name="item_loop" -->
+					<tr>
+						<!-- TMPL_VAR name="item_value" -->
+					</tr>
+				<!-- /TMPL_LOOP -->
+		</table>
+</div>
+</div>
+</body>
+</html>

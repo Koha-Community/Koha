@@ -1,0 +1,102 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- Reserving <!-- TMPL_VAR NAME="title" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<!--CONTENT-->
+<!-- TMPL_IF NAME="message" -->
+<div id="main">
+<p class="error">
+<!-- TMPL_IF NAME="too_much_oweing" -->Sorry, you cannot make reserves because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="too_many_reserves" -->Sorry, you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves. <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="already_reserved" -->You already have a reserve placed on this item.<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="no_items_selected" -->You must select at least one item.<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_branch_selected" -->You must select a branch for pickup!<!-- /TMPL_IF -->
+</p>
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="select_item_types" -->
+<!-- The first time round you select which bibitems you want -->
+<div id="main">
+<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+<input type="hidden" name="item_types_selected" value="1">
+<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<h2>Reservation Details</h2>
+
+<div class="form">
+<table>
+   <tr><th>Reserving: </th><td><span class="title"><!-- TMPL_VAR NAME="title" --></span><!-- TMPL_IF NAME="author" --> (<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></td></tr>
+    <tr><th>For:</th><td><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></td></tr>
+
+    <tr><th>Pick up from:</th><td><!-- TMPL_VAR NAME="CGIbranch" --></td></tr>
+</table>
+
+<!-- TMPL_IF NAME="onlyone" -->
+<!-- If there is only one type -->
+
+</div><p><input type="submit" class="submit" value="Next &gt;&gt;">
+<input type="hidden" name="all" value="1"></p>
+</form>
+
+<!-- TMPL_ELSE -->
+<!-- If there is more than one type -->
+
+    <h4>Choose Either...</h4>
+      <p><input class="checkbox" type="checkbox" name="all" value="next-available">
+        Next Available Copy (any format)</p>
+    <h4>
+     ...Or Choose Acceptable Formats
+    </h4>
+
+<!-- TMPL_LOOP NAME="TYPE_ROWS" -->
+<ul><!-- TMPL_LOOP NAME="ROW" -->
+<li><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" class="checkbox"><!-- TMPL_VAR NAME="description" --></li>
+<!-- /TMPL_LOOP -->
+</ul><!-- /TMPL_LOOP -->
+<!-- <table>
+	<tr>
+    <th>Number of Copies</th><th>Requests already received for this title</th> <th>Items curently on issue, due back</th></tr>
+    <td><!-- TMPL_VAR NAME="itemcount" --></td>
+    <td><!-- TMPL_VAR NAME="reservecount" --></td>
+     <td><!-- TMPL_LOOP NAME="ITEMS" --><!-- TMPL_VAR NAME="date_due" -->, <!-- /TMPL_LOOP --></td>
+</table> -->
+</div>
+<p><input type="submit" class="submit" value="Confirm Reservation &gt;&gt;"></p>
+</form>
+</div>
+<!-- /TMPL_IF -->
+
+
+<!-- end of the first form -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+<div id="main">
+<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+<input type="hidden" name="place_reserve" value="1">
+<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->"><h3>Confirm Reservation</h3>
+<div class="details">
+	<table>
+		<tr><th>Title: </th><td><span class="title"><!-- TMPL_VAR NAME="title" --></span></td></tr>
+
+<!-- TMPL_IF NAME="all" -->
+		<tr><th>Item Type: </th><td>Any<input type="hidden" name="all" value="1"></td></tr>
+<!-- TMPL_ELSE -->
+		<tr><th>Item Types: </th><td><!-- TMPL_LOOP NAME="TYPES" -->
+<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" -->;
+<!-- /TMPL_LOOP --></td></tr>
+
+<!-- /TMPL_IF -->
+		<tr><th>Pick up From: </th><td><!-- TMPL_VAR NAME="branchname" --><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"></td></tr>
+</table>
+</div>
+<p><input type="submit" value="Finish and Place Reservation" class="submit" onclick="this.value='Please wait...'; this.disabled=true; this.form.submit();"></p>
+
+</FORM>
+
+<!-- /TMPL_IF -->
+</div>
+</body>
+</html>
