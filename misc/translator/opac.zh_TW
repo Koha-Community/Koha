@@ -20,6 +20,8 @@ msgid ""
 "%s\n"
 "(%s)"
 msgstr ""
+"%s\n"
+"(%s)"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:11
 #, c-format
@@ -58,7 +60,7 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:70
 msgid "&copy;"
-msgstr ""
+msgstr "&copy;"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:28
@@ -80,6 +82,8 @@ msgid ""
 "<B>BARCODE\n"
 "%s</b>"
 msgstr ""
+"<B>條碼\n"
+"%s</b>"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:15
 #, c-format
@@ -144,7 +148,7 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:36
 #, c-format
 msgid "<b>ISBN:</b> %s"
-msgstr ""
+msgstr "<b>國際標準書號：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:42
 #, c-format
@@ -154,27 +158,27 @@ msgstr "<b>繪圖：</b>%s"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:31
 #, c-format
 msgid "<b>Item Type:</b> %s"
-msgstr ""
+msgstr "<b>圖書資料類別：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:79
 #, c-format
 msgid "<b>Item lost:</b> %s"
-msgstr ""
+msgstr "<b>遺失圖書資料：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:37
 #, c-format
 msgid "<b>LCCN:</b> %s"
-msgstr ""
+msgstr "<b>LCCN:</b> %s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:75
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Last Borrower 1:</b> %s"
-msgstr "最近借出："
+msgstr "<b>最近借書之讀者1：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:76
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Last Borrower 2:</b> %s"
-msgstr "最近借出："
+msgstr "<b>最近借書之讀者2：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:73
 #, c-format
@@ -201,7 +205,7 @@ msgstr "<b>數量：</b>%s"
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:81
 #, c-format
 msgid "<b>Notes:</b> %s"
-msgstr ""
+msgstr "<b>備註：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:41
 #, c-format
@@ -286,7 +290,7 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-detail.tmpl:31
 #, c-format
 msgid "<b>Year :</b> %s"
-msgstr ""
+msgstr "<b>年份：</b>%s"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:51
 #, c-format
@@ -486,11 +490,7 @@ msgstr "國際標準書號："
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-search.tmpl:36
 msgid "Illustrator"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:89
-msgid "Issues:"
-msgstr ""
+msgstr "繪圖"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:71
 msgid "Item Count"
@@ -639,7 +639,8 @@ msgid ""
 "Note that if you enter a value in Keyword and a value somewhere else, only "
 "keyword will be used"
 msgstr ""
-"注意：在一旦輸入了「關鍵字」，即使在其他欄位輸入了其他查詢條件，也只會使用關鍵字。"
+"注意：在一旦輸入了「關鍵字」，即使在其他欄位輸入了其他查詢條件，也只會使用關"
+"鍵字。"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-reserve.tmpl:105
 #, c-format
@@ -839,8 +840,10 @@ msgid "Title"
 msgstr "書名"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-moredetail.tmpl:88
-msgid "Total"
-msgstr "總共"
+msgid ""
+"Total\n"
+"Issues:"
+msgstr "借書總次數："
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-account.tmpl:27
 msgid "Total Due"
@@ -911,14 +914,14 @@ msgid "You entered an incorrect username or password, please try again."
 msgstr "您輸入錯了使用者名稱或密碼，請重試。"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:90
-#, fuzzy, c-format
+#, c-format
 msgid "You have %s items currently issued."
-msgstr "您沒有借出任何圖書資料。"
+msgstr "您目前借了 %s 項圖書資料。"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:117
-#, fuzzy, c-format
+#, c-format
 msgid "You have %s items currently reserved."
-msgstr "您沒有借出任何圖書資料。"
+msgstr "您目前預訂了 %s 項圖書資料。"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-user.tmpl:112
 msgid "You have no items on issue."
@@ -943,7 +946,7 @@ msgstr "您查詢<b>%s</b>"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/cat-class-list.inc:10
 msgid "Young Adult Fiction"
-msgstr "青年小說"
+msgstr "青年小說類"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-userupdate.tmpl:4
 msgid "Your changes won't appear until the library has validated them."
@@ -983,7 +986,7 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-searchresults.tmpl:130
 msgid "search"
-msgstr ""
+msgstr "查詢"
 
 #: ../../koha-tmpl/opac-tmpl/default/en/opac-main.tmpl:4
 #: ../../koha-tmpl/opac-tmpl/default/en/includes/opac-top.inc:6
@@ -998,17 +1001,3 @@ msgstr ""
 msgid "||"
 msgstr ""
 
-#~ msgid "BARCODE"
-#~ msgstr "條碼"
-
-#~ msgid "Notes:"
-#~ msgstr "備註："
-
-#~ msgid "Pages:"
-#~ msgstr "頁數："
-
-#~ msgid "Year :"
-#~ msgstr "年："
-
-#~ msgid "You have"
-#~ msgstr "您有"
