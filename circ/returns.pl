@@ -238,6 +238,8 @@ foreach my $code (keys %$messages) {
 		$err{msg}= $branches->{$messages->{'IsPermanent'}}->{'branchname'};
     } elsif ($code eq 'WasLost'){
 		$err{waslost}=1;
+    } elsif ($code eq 'ResFound'){
+		;	# FIXME... anything to do here?
     } elsif ($code eq 'WasReturned'){
 		;	# FIXME... anything to do here?
     } elsif ($code eq 'WasTransfered'){
