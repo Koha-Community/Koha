@@ -44,9 +44,6 @@ function Check(f) {
 	if (!(isNotNull(window.document.Aform.description,1))) {
 		_alertString += "\n- " + _("Description missing");
 	}
-	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "\n- " + _("Loan length is not a number");
-	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
 		_alertString += "\n- " + _("Rental charge is not a number");
 	}
@@ -63,9 +60,9 @@ function Check(f) {
 <div id="mainbloc">
 <!-- TMPL_IF NAME="add_form" -->
 	<!-- TMPL_IF NAME="itemtype" -->
-		<h1>Modify item type</h1>
+		<h1 class="parameters">Modify item type</h1>
 	<!-- TMPL_ELSE -->
-		<h1>Add item type</h1>
+		<h1 class="parameters">Add item type</h1>
 	<!-- /TMPL_IF -->
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 		<input type="hidden" name="op" value="add_validate">
@@ -89,11 +86,6 @@ function Check(f) {
 				if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item
 			</p>
 			<p>
-				<label class="label100">Loan length</label>
-					<input type="text" name="loanlength" size="10" value="<!-- TMPL_VAR NAME="loanlength" -->">
-					meaningful only if not for loan is not set
-			</p>
-			<p>
 				<label class="label100" name="renewalsallowed">Number of renewals allowed</label>
 				<input type="text" name="renewalsallowed" value="<!-- TMPL_VAR NAME="renewalsallowed" -->">
 			</p>
@@ -112,7 +104,6 @@ function Check(f) {
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->">
 	<p><label>Description</label><!-- TMPL_VAR NAME="description" --></p>
-	<p><label>Loan length</label><!-- TMPL_VAR NAME="loanlength" --></p>
 	<p><label>Renewals</label><!-- TMPL_IF NAME="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></p>
 	<p><lable>Rental charge</label><!-- TMPL_VAR NAME="rentalcharge" --></p>
 	<!-- TMPL_IF NAME="total" -->
@@ -134,12 +125,11 @@ function Check(f) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
-<h1>Item type Admin</h1>
+<h1 class="parameters">Item type Admin</h1>
 <table>
 	<tr>
 		<th class="parameters">Code</th>
 		<th class="parameters">Description</th>
-		<th class="parameters">Loan length</th>
 		<th class="parameters">Renewable</th>
 		<th class="parameters">Charge</th>
 		<th class="parameters">Edit</th>
@@ -149,7 +139,6 @@ function Check(f) {
 		<tr>
 			<td><!-- TMPL_VAR NAME="itemtype" --></td>
 			<td><!-- TMPL_VAR NAME="description" --></td>
-			<td><!-- TMPL_VAR NAME="loanlength" --></td>
 			<td><!-- TMPL_IF NAME="renewalsallowed" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR NAME="rentalcharge" --></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&itemtype=<!-- TMPL_VAR NAME="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
@@ -159,7 +148,7 @@ function Check(f) {
 </table>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form">
-	<input type="submit" class="button" value="Add item type" title="Add item type" alt="Add item type" >
+	<input type="submit" class="button parameters" value="Add item type" title="Add item type" alt="Add item type" >
 	<td width="33%"><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0"></a><!-- /TMPL_IF --></td>
 	<td width="33%"><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0"></a><!-- /TMPL_IF --></td>
 </form>
