@@ -1,7 +1,6 @@
 package C4::Accounts2; #assumes C4/Accounts2
 
 use strict;
-use warnings;
 require Exporter;
 use DBI;
 use C4::Database;
