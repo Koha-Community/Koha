@@ -252,13 +252,14 @@ sub dirname ($;$) {
     mkdir_parents $path;
     mkdir_parents $path, $mode;
 
-Does the equivalent of mkdir -p. Given a path $path, create the path
-$path, recursively creating any intermediate directories. If $mode
-is given, the directory will be created with mode $mode.
+Does the equivalent of mkdir -p, or mkdir --parents. Given a path $path,
+create the directory $path, recursively creating any intermediate
+directories. If $mode is given, the directory will be created with
+mode $mode.
 
 WARNING: If $path already exists, mkdir_parents will just return
 successfully (just like mkdir -p), whether the mode of $path conforms
-to $mode or not.
+to $mode or not. (This is the behaviour of the mkdir -p command.)
 
 =cut
 
@@ -316,14 +317,26 @@ database is already created.
     }
 }
 
+
+=item checkperlmodules
+
+    checkperlmodules;
+
+Test whether the version of Perl is new enough, whether Perl is
+found at the expected location, and whether all required modules
+have been installed.
+
+=cut
+
+sub checkperlmodules {
 #
 # Test for Perl and Modules
 #
-#
-sub checkperlmodules {
+
     my $message = getmessage('CheckingPerlModules');
     showmessage($message, 'none');
 
+    # FIXME: Perl 5.6 is BUGGY!!! IT SHOULD NOT BE USED in production!!!
     unless (eval "require 5.006_000") {
 	die getmessage('PerlVersionFailure', ['5.6.0']);
     }
@@ -391,6 +404,25 @@ The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
 May I create this symlink? ([Y]/N):
 : |;
 
+
+=item getmessage
+
+    getmessage($msgid);
+    getmessage($msgid, $variables);
+
+Gets a localized message (format string) with message id $msgid,
+and, if an array reference of variables $variables is given,
+substitutes variables in the format string with @$variables.
+Returns the found message string, with variable substitutions
+if specified.
+
+$msgid must be the message identifier corresponding to a defined
+message string (a valid key to the $messages hash in the Installer
+package). getmessage throws an exception if the message cannot be
+found.
+
+=cut
+
 sub getmessage {
     my $messagename=shift;
     my $variables=shift;
@@ -401,6 +433,40 @@ sub getmessage {
     return $message;
 }
 
+
+=item showmessage
+    showmessage($message, 'none');
+    showmessage($message, 'none', undef, $noclear);
+
+    $result = showmessage($message, 'yn');
+    $result = showmessage($message, 'yn', $defaultresponse);
+    $result = showmessage($message, 'yn', $defaultresponse, $noclear);
+
+    $result = showmessage($message, 'restrictchar CHARS');
+    $result = showmessage($message, 'free');
+    $result = showmessage($message, 'numerical');
+    $result = showmessage($message, 'email');
+    $result = showmessage($message, 'PressEnter');
+
+Shows a message and optionally gets a response from the user.
+
+The first two arguments, the message and the response type,
+are mandatory.  The message must be the actual string to
+display. The caller is responsible for calling getmessage if
+required.
+
+If a response type other than 'none' is specified, a third
+argument, specifying the default value, is optional.
+
+The screen is normally cleared before the message is displayed;
+if a fourth argument is specified and is nonzero, this
+screen-clearing is not done.
+
+FIXME: If $noclear is not specified or specified as undef, we
+just test it for a non-zero value without testing it for being
+undef first.
+
+=cut
 
 sub showmessage {
     my $message=shift;
