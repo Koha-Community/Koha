@@ -1,5 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging Home<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
@@ -7,10 +8,6 @@
 <!-- TMPL_IF name="noitemsfound" -->
 	<p>&nbsp;</p>
 	<font color="red" size="4">No items found</font>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="websiteadded" -->
-	<p>&nbsp;</p>
-	<font color="red" size="4">Website Biblioitem Added</font>
 <!-- /TMPL_IF -->
 
 <!-- Display for NPL <div class="form">
@@ -106,11 +103,8 @@
 </div>< /Display for NPL -->
 
 <form action="addbiblio.pl"><p> <input type="submit" value="Add Record Without Search" class="submit" /></p></form>
-<!-- Hide from NPL -->
-<form action="websitesearch.pl" method="post">
-	<div class="form"><table>
-	<caption>Add New Website</caption>
-	<tr><th><label for="keyword">Keyword:</label></th><td><input type="text" id="keyword" name="keyword" /> </td></tr></table><input type="submit" value="Search" class="submit" /></div>
-</form> <!-- /Hide from NPL -->
 
-</div><!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
