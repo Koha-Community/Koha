@@ -1721,7 +1721,9 @@ sub itemnodata {
 
 Looks up patrons (borrowers) by name.
 
-C<$env> and C<$type> are ignored.
+C<$env> is ignored.
+
+BUGFIX 499: C<$type> is now used to determine
 
 C<$searchstring> is a space-separated list of search terms. Each term
 must match the beginning a borrower's surname, first name, or other
@@ -1741,30 +1743,38 @@ sub BornameSearch  {
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\,//g;
 	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $query="Select * from borrowers
-	where ((surname like \"$data[0]%\" or surname like \"% $data[0]%\"
-	or firstname  like \"$data[0]%\" or firstname like \"% $data[0]%\"
-	or othernames like \"$data[0]%\" or othernames like \"% $data[0]%\")
-	";
-	for (my $i=1;$i<$count;$i++){
-	$query=$query." and (surname like \"$data[$i]%\" or surname like \"% $data[$i]%\"
-	or firstname  like \"$data[$i]%\" or firstname like \"% $data[$i]%\"
-	or othernames like \"$data[$i]%\" or othernames like \"% $data[$i]%\")";
-				# FIXME - .= <<EOT;
+	my $query = ""; my $count; my @data;
+
+	if($type eq "simple")	# simple search for one letter only
+	{
+		$query="Select * from borrowers where surname like \"$searchstring%\" order by surname,firstname";
 	}
-	$query=$query.") or cardnumber = \"$searchstring\"
-	order by surname,firstname";
-				# FIXME - .= <<EOT;
-	#  print $query,"\n";
+	else	# advanced search looking in surname, firstname and othernames
+	{
+		@data=split(' ',$searchstring);
+		$count=@data;
+		$query="Select * from borrowers
+		where ((surname like \"$data[0]%\" or surname like \"% $data[0]%\"
+		or firstname  like \"$data[0]%\" or firstname like \"% $data[0]%\"
+		or othernames like \"$data[0]%\" or othernames like \"% $data[0]%\")
+		";
+		for (my $i=1;$i<$count;$i++){
+		$query=$query." and (surname like \"$data[$i]%\" or surname like \"% $data[$i]%\"
+		or firstname  like \"$data[$i]%\" or firstname like \"% $data[$i]%\"
+		or othernames like \"$data[$i]%\" or othernames like \"% $data[$i]%\")";
+					# FIXME - .= <<EOT;
+		}
+		$query=$query.") or cardnumber = \"$searchstring\"
+		order by surname,firstname";
+					# FIXME - .= <<EOT;
+	}
+
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
-	my $cnt=0;
+	my $cnt=$sth->rows;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
-	$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
