@@ -26,18 +26,27 @@ use C4::Koha;
 use CGI;
 use C4::Search;
 use C4::Acquisitions;
+<<<<<<< moredetail.pl
+use C4::Output;
+
+=======
 use C4::Output; # contains gettemplate
 
+>>>>>>> 1.14
 my $query=new CGI;
 
 my $includes = C4::Context->config('includes') ||
 	"/usr/local/www/hdl/htdocs/includes";
 my $startfrom=$query->param('startfrom') || 0;
 
-
-my $template = gettemplate("catalogue/moredetail.tmpl");
-
-# get variables
+my $subject=$query->param('subject');
+# if its a subject we need to use the subject.tmpl
+my $template;
+if ($subject){
+	$template = gettemplate("catalogue/subject.tmpl");
+} else {
+	$template = gettemplate("catalogue/moredetail.tmpl");
+}
 
 my $biblionumber=$query->param('bib');
 my $title=$query->param('title');
