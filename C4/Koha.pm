@@ -2,6 +2,7 @@ package C4::Koha;
 
 use strict;
 require Exporter;
+use C4::Database;
 
 use vars qw($VERSION @ISA @EXPORT);
   
@@ -23,20 +24,16 @@ sub slashifyDate {
     return("$dateOut[2]/$dateOut[1]/$dateOut[0]")
 }
 
-sub fixEthnicity($) { # a temporary fix ethnicity, it should really be handled
-                      # in Search.pm or the DB ... 
+sub fixEthnicity($) { 
 
     my $ethnicity = shift;
-    if ($ethnicity eq 'maori') {
-	$ethnicity = 'Maori';
-    } elsif ($ethnicity eq 'european') {
-	$ethnicity = 'European/Pakeha';
-    } elsif ($ethnicity eq 'pi') {
-	$ethnicity = 'Pacific Islander'
-    } elsif ($ethnicity eq 'asian') {
-	$ethnicity = 'Asian';
-    }
-    return $ethnicity;
+    my $dbh=C4Connect;
+    my $sth=$dbh->prepare("Select name from ethnicity where code = ?");
+    $sth->execute($ethnicity);
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
+    $dbh->disconnect;
+    return $data->{'name'};
 }
 
 
