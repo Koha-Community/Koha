@@ -262,7 +262,8 @@ EOF
 	$barcodeentrytext.= "<input type=hidden name=dd-0 value=$iteminformation->{'date_due'}>\n";
 	$barcodeentrytext.= "<input type=hidden name=bn-0 value=$borrower->{'borrowernumber'}>\n";
 	my @datearr = localtime(time());
-	my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
+	my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.
+	  sprintf ("%0.2d", $datearr[3]);
 	my $itemtable=<<"EOF";
 <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Returned Item Information</font></th></tr>
@@ -464,8 +465,8 @@ sub issues {
       <p align=right>
       <FONT SIZE=2  face="arial, helvetica">
       <a href=circulation.pl?borrnumber=$borrowernumber&module=issues&branch=$branch&printer=$printer&print>Next Borrower</a> ||
-      <a href=circulation.pl?module=returns&branch=$branch&printer=$printer>Returns</a></font><p>
-       
+      <a href=circulation.pl?module=returns&branch=$branch&printer=$printer>Returns</a> ||
+      <a href=branchtransfers.pl>Transfer Book</a></font><p>
         
 	</p>
 EOF
@@ -668,7 +669,7 @@ EOF
 	    if ($datedue < $todaysdate) {
 		$dd="<font color=red>$dd</font>\n";
 	    }
-	    $previssues.="<tr><td bgcolor=$color align=center>$dd</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$bookissue->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$bookissue->{'barcode'}</a></td><td bgcolor=$color>$bookissue->{'title'}</td><td bgcolor=$color>$bookissue->{'author'}</td><td bgcolor=$color align=center>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
+            $previssues.="<tr><td bgcolor=$color align=center>$dd</td><td bgcolor=$color align=center><a href=/cgi-bin/koha/detail.pl?bib=$bookissue->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$bookissue->{'barcode'}</a></td><td bgcolor=$color>$bookissue->{'title'}</td><td bgcolor=$color>$bookissue->{'author'}</td><td bgcolor=$color align=center>$bookissue->{'dewey'} $bookissue->{'subclass'}</td></tr>\n";
 	}
 	my $todaysissues='';
 	$color='';
