@@ -242,7 +242,7 @@ while (1) {
 								}
 								print "$$/$id : working on results entry $resultsid\n";
 	# set active to 1 => this request is on the way.
-								my $stj=$dbh->prepare("update z3950results set active=1 where id=?");
+								my $stj=$dbi->prepare("update z3950results set active=1 where id=?");
 								$stj->execute($resultsid);
 #######
 								print "$$/$id : connected to $globalname\n";
