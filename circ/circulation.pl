@@ -11,9 +11,9 @@ my %env;
 my $headerbackgroundcolor='#99cc33';
 my $circbackgroundcolor='#ffffcc';
 my $circbackgroundcolor='white';
-my $linecolor1='#bbbbbb';
-my $linecolor2='#dddddd';
-my $backgroundimage="/koha/images/background-mem.gif";
+my $linecolor1='#ffffcc';
+my $linecolor2='white';
+my $backgroundimage="/images/background-mem.gif";
 my $query=new CGI;
 my $branches=getbranches(\%env);
 my $printers=getprinters(\%env);
@@ -75,30 +75,6 @@ print startpage();
 print startmenu('circulation');
 
 
-print << "EOF";
-<center>
-<p>
-<table border=0 width=100% cellspacing=0 bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<tr>
-<th width=5%></th>
-<th width=30%><font color=black>$branchname</font></th>
-<th width=10%>
-	<a href=circulation.pl?module=issues&branch=$branch&printer=$printer><font color=black><img src=/koha/images/issues.gif border=0 height=40></font></a>
-</th>
-<th width=10%>
-    <a href=circulation.pl?selectnewbranchprinter=1><font color=black>Branch/Printer</font></a>
-</th>
-<th width=10%>
-    <a href=circulation.pl?module=returns&branch=$branch&printer=$printer><font color=black><img src=/koha/images/returns.gif border=0 height=40></font></a>
-</th>
-<th width=30%><font color=black>$printername</font></th>
-<th width=5%></th>
-</tr>
-</table>
-
-
-<br>
-EOF
 
 
 if ($printer && $branch) {
@@ -112,6 +88,7 @@ if ($printer && $branch) {
     my ($printerform, $branchform);
     if ($printercount>1) {
 	$printerform=<<"EOF";
+
 <table border=0 cellspacing=0 cellpadding=5>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Choose a Printer</font></td></tr>
 <tr><td>
@@ -141,6 +118,7 @@ $branchoptions
 EOF
     }
     print << "EOF";
+    <center>
     Select a branch and a printer
     <form method=get>
     <table border=0>
@@ -443,9 +421,14 @@ sub issues {
       $query->param('borrnumber','')
     }
     unless ($noheader) {
-	print << "EOF";
-    <table border=0 cellpadding=10 cellspacing=0><tr><th background=$backgroundimage><font color=black>Circulation - Issues  
-    </td></tr><tr><td bgcolor=$circbackgroundcolor align=center>
+      print <<EOF
+      <p align=right>
+      <FONT SIZE=2  face="arial, helvetica">
+      <a href=circulation.pl?borrnumber=$borrowernumber&module=issues&branch=$branch&printer=$printer&print>Next Borrower</a> ||
+      <a href=circulation.pl?module=returns&branch=$branch&printer=$printer>Returns</a></font><p>
+       
+        
+	</p>
 EOF
     }
     if (my $borrnumber=$query->param('borrnumber')) {
@@ -675,14 +658,19 @@ EOF
 	my ($borrower, $flags) = getpatroninformation(\%env,$borrnumber,0);
 	my ($patrontable, $flaginfotable) = patrontable($borrower);
 	print << "EOF";
+	$patrontable
+	$flaginfotable
+	<FONT SIZE=6><em>Issues</em></FONT> &nbsp; &nbsp;<br> <a href=circulation.pl?selectnewbranchprinter=1><b>Branch:</b></a> $branch,
+	 <a href=circulation.pl?selectnewbranchprinter=1><b>Printer:</b></a> $printer<P>
+	 <p>
 	<form method=get>
-    <table border=0 cellpadding=5>
+    <table border=1 cellpadding=5>
     <tr>
 	<td align=center valign=top>
-	    <table border=0 cellspacing=0 cellpadding=5 bgcolor=#dddddd width=100%>
+	    <table border=0 cellspacing=0 cellpadding=5>
 	        <tr><th align=center background=$backgroundimage><font color=black><b>Enter Book Barcode</b></font></th></tr>
 		<tr><td align=center>
-		<table border=0 bgcolor=#dddddd>
+		<table border=0>
 		<tr><td>Item Barcode:</td><td><input name=barcode size=10></td><td><input type=submit value=Issue></tr>
 		<tr><td colspan=3 align=center>
 		<table border=0 cellpadding=0 cellspacing=0>
@@ -694,38 +682,36 @@ EOF
 		<select name=year><option value=0>Year$yearoptions</select>
 		</td></tr>
 		</table>
-		<br>
 		<input type=checkbox name=stickyduedate $selected> Sticky Due Date
 		</td></tr>
-		</table>
-		</td></tr>
-	    </table>
-	<input type=hidden name=module value=issues>
+	      </table>
+       	<input type=hidden name=module value=issues>
 	<input type=hidden name=borrnumber value=$borrnumber>
 	<input type=hidden name=branch value=$branch>
 	<input type=hidden name=printer value=$printer>
 	</form>
 	</td>
-	<td align=center valign=top>
-	$patrontable
-	<br>
-	<a href=/cgi-bin/koha/circ/circulation.pl?borrnumber=$borrowernumber&module=issues&branch=$branch&printer=$printer&print=yes>Next borrower</a>
-	<br>
-	$flaginfotable
-	</td>
+
+
     </tr>
-    <tr>
+    </table>
+    </table>
+    
+    <p clear=all>
+<!-- issues tables-->
+	<table border=1 cellpadding=5 cellspacing=0 width=90%>
 	<td colspan=2 align=center>
-	<table border=0 cellpadding=5 cellspacing=0 width=100% bgcolor=#dddddd>
+	<table border=0 cellpadding=5 cellspacing=0 width=100% > 
 	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Issues Today</b></font></th></tr>
 	    <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
 	    $todaysissues
 	</table>
 	</td>
     </tr>
+
     <tr>
 	<td colspan=2 align=center>
-	<table border=0 cellpadding=5 cellspacing=0 width=100% bgcolor=#dddddd>
+	<table border=0 cellpadding=5 cellspacing=0 width=100%>
 	    <tr><th colspan=5 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Previous Issues</b></font></th></tr>
 	    <tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
 	    $previssues
@@ -805,13 +791,13 @@ sub patrontable {
 	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
 	if ($flags->{$flag}->{'noissues'}) {
 	    if ($flag eq 'CHARGES') {
-		$flaginfotext.="<tr><td bgcolor=$color valign=top><font color=red>$flag</font></td><td bgcolor=$color><b>$flags->{$flag}->{'message'}</b> <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
+		$flaginfotext.="<tr><td valign=top><font color=red>$flag</font></td><td bgcolor=$color><b>$flags->{$flag}->{'message'}</b> <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
 	    } else {
-		$flaginfotext.="<tr><td bgcolor=$color valign=top><font color=red>$flag</font></td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
+		$flaginfotext.="<tr><td valign=top><font color=red>$flag</font></td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
 	    }
 	} else {
 	    if ($flag eq 'CHARGES') {
-		$flaginfotext.="<tr><td valign=top bgcolor=$color>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
+		$flaginfotext.="<tr><td valign=top>$flag</td><td $flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
 	    } elsif ($flag eq 'WAITING') {
 		my $itemswaiting='';
 		my $items=$flags->{$flag}->{'itemlist'};
@@ -819,7 +805,7 @@ sub patrontable {
 		    my ($iteminformation) = getiteminformation($env, $item->{'itemnumber'}, 0);
 		    $itemswaiting.="<a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a> $iteminformation->{'title'} ($branches->{$iteminformation->{'holdingbranch'}}->{'branchname'})<br>\n";
 		}
-		$flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}<br>$itemswaiting</td></tr>\n";
+		$flaginfotext.="<tr><td valign=top>$flag</td><td>$itemswaiting</td></tr>\n";
 	    } elsif ($flag eq 'ODUES') {
 		my $items=$flags->{$flag}->{'itemlist'};
 		my $itemswaiting="<table border=0 cellspacing=0 cellpadding=2>\n";
@@ -829,35 +815,36 @@ sub patrontable {
 		    foreach $item (@$items) {
 			($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 			my ($iteminformation) = getiteminformation($env, $item->{'itemnumber'}, 0);
-			$itemswaiting.="<tr><td bgcolor=$color><font color=red>$iteminformation->{'date_due'}</font></td><td bgcolor=$color><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a></td><td bgcolor=$color>$iteminformation->{'title'}</td></tr>\n";
+			$itemswaiting.="<tr><td><font color=red>$iteminformation->{'date_due'}</font></td><td bgcolor=$color><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a></td><td>$iteminformation->{'title'}</td></tr>\n";
 		    }
 		}
 		$itemswaiting.="</table>\n";
 		if ($query->param('module') ne 'returns'){
-  		  $flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}<br>Overdue items can be seen in the Previous Issues table below</td></tr>\n";
+  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}, See below</td></tr>\n";
 		} else {
-  		  $flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
+  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n"; 
 		}
 	    } else {
-		$flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
+		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
 	    }
 	}
     }
-    ($flaginfotext) && ($flaginfotext="<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd><tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><font color=black>Patron Flags</font></th></tr>$flaginfotext</table>\n");
+    ($flaginfotext) && ($flaginfotext="<tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><b>Flags</b></td></tr>$flaginfotext</table>\n");
     my $patrontable= << "EOF";
-    <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-    <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Patron Information</b></font></td></tr>
-    <tr><td>
+    <table border=1
+    cellpadding=5 cellspacing=0 align=right>
+    <tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><font color=black><b>Patron Information</b></font></td></tr>
+    <tr><td colspan=2>
     <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
 EOF
     if ($query->param('module') ne 'returns'){ 
-       $patrontable.="$borrower->{'streetaddress'} $borrower->{'city'}<br>
+       $patrontable.="$borrower->{'streetaddress'} $borrower->{'city'} Cat:
        $borrower->{'categorycode'} ";
      }
     $patrontable.=<< "EOF";
-    $flagtext
+    
     </td></tr>
-    </table>
+
 EOF
     return($patrontable, $flaginfotext);
 }

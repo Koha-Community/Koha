@@ -200,6 +200,10 @@ sub issuebook {
 	    $rejected="Patron's card has been reported lost.";
 	    last SWITCH;
 	}
+	if ($patroninformation->{'debarred'}) {
+	    $rejected="Patron is Debarred";
+	    last SWITCH;
+	}
 	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
 	if ($amount>5) {
 	    $rejected=sprintf "Patron owes \$%.02f.", $amount;
@@ -451,6 +455,12 @@ sub patronflags {
 	$flaginfo{'noissues'}=1;
 	$flags{'LOST'}=\%flaginfo;
     }
+    if ($patroninformation->{'debarred'} == 1) {
+	my %flaginfo;
+	$flaginfo{'message'}='Borrower is Debarred.'; 
+	$flaginfo{'noissues'}=1;
+	$flags{'DBARRED'}=\%flaginfo;
+    }
     if ($patroninformation->{'borrowernotes'}) {
 	my %flaginfo;
 	$flaginfo{'message'}="$patroninformation->{'borrowernotes'}";
@@ -459,7 +469,7 @@ sub patronflags {
     my ($odues, $itemsoverdue) = checkoverdues($env,$patroninformation->{'borrowernumber'},$dbh);
     if ($odues > 0) {
 	my %flaginfo;
-	$flaginfo{'message'}="Patron has overdue items";
+	$flaginfo{'message'}="Yes";
 	$flaginfo{'itemlist'}=$itemsoverdue;
 	foreach (sort {$a->{'date_due'} cmp $b->{'date_due'}} @$itemsoverdue) {
 	    $flaginfo{'itemlisttext'}.="$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";
@@ -587,7 +597,11 @@ sub currentissues {
 	my $today = (1900+$datearr[5]).sprintf "0%02d", ($datearr[4]+1).sprintf "%02d", $datearr[3];
 	$crit=" and !(issues.timestamp like '$today%') ";
     }
-    my $select="select * from issues,items,biblioitems,biblio where borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and items.biblionumber=biblio.biblionumber and items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null $crit order by date_due";
+    my $select="select * from issues,items,biblioitems,biblio where
+    borrowernumber=$borrowernumber and issues.itemnumber=items.itemnumber and
+    items.biblionumber=biblio.biblionumber and
+    items.biblioitemnumber=biblioitems.biblioitemnumber and returndate is null
+    $crit order by issues.timestamp desc";
 #    print $select;
     my $sth=$dbh->prepare($select);
     $sth->execute;
