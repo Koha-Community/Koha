@@ -46,11 +46,7 @@ sub acquisitions {
 	#       other - Same as "normal"
 
 	if ($aq_type eq 'simple') {
-		if ($marc_bool eq "1") {
 			print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
-		} else {
-			print $input->redirect("/cgi-bin/koha/acqui.simple/addbiblio-nomarc.pl");
-		}
 	} else {
 		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
 	}
