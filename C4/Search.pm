@@ -21,7 +21,7 @@ $VERSION = 0.02;
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
-&findguarantor &getwebsites &getwebbiblioitems);
+&findguarantor &getwebsites &getwebbiblioitems &catalogsearch);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -115,6 +115,37 @@ sub NewBorrowerNumber {
   $dbh->disconnect;
   return($data->{'max(borrowernumber)'}); 
 }    
+
+sub catalogsearch {
+  my ($env,$type,$search,$num,$offset)=@_;
+  my $dbh = C4Connect();
+#  foreach my $key (%$search){
+#    $search->{$key}=$dbh->quote($search->{$key});
+#  }
+  my ($count,@results);
+  if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
+    ($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+  } else {
+    if ($search->{'subject'} ne ''){
+      ($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
+    } else {
+      if ($search->{'keyword'} ne ''){
+         ($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
+      } elsif ($search->{'title'} ne '' || $search->{'author'} ne '' ||
+               $search->{'illustrator'} ne '' || $search->{'dewey'} ne '' ||
+	       $search->{'class'} ne ''){
+	($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
+      }
+    }
+  }
+  if ($env->{itemcount}) {
+    foreach my $data (@results){
+      my ($count, $lcount, $nacount, $fcount, $scount, $lostcount, $mending, $transit, $ocount) = itemcount($env, $data->{'biblionumber'}, 'intra');
+      $data->{'itemcount'}=$count;
+    }
+  }
+  return ($count,@results);
+}
 
   
 sub KeywordSearch {
@@ -287,10 +318,6 @@ sub KeywordSearch {
         ($dewey) && ($dewey.=" $subclass") ;                      
         $sth->finish;                                             
 	$data2->{'dewey'}=$dewey;
-	if ($env->{itemcount}) {
-	    my ($count, $lcount, $nacount, $fcount, $scount, $lostcount, $mending, $transit, $ocount) = itemcount($env, $data2->{'biblionumber'}, 'intra');
-	    $data2->{'itemcount'}=$count;
-	}
 	$res2[$i]=$data2;
 #	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
         $i++;
@@ -540,18 +567,11 @@ while (my $data=$sth->fetchrow_hashref){
   $data->{'dewey'}=$dewey;
   $sti->finish;
   if ($true == 1){
-  if ($count > $offset && $count <= $limit){
-#    if ($type ne 'subject' && $type ne 'precise'){
-#       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-#    } elsif ($search->{'isbn'} ne '' || $search->{'item'} ne ''){
-#       $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-#    } else {  
-#     $results[$i]="$data->{'author'}\t$data->{'subject'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'illus'}";
-#    }
-    $results[$i]=$data;
-    $i++;
-  }
-  $count++;
+    if ($count > $offset && $count <= $limit){
+      $results[$i]=$data;
+      $i++;
+    }
+    $count++;
   }
 }
 $sth->finish;
@@ -733,11 +753,11 @@ sub bibdata {
     my ($bibnum, $type) = @_;
     my $dbh   = C4Connect;
     my $query = "Select *, biblio.notes  
-from biblio, biblioitems 
-left join bibliosubtitle on
-biblio.biblionumber = bibliosubtitle.biblionumber
-where biblio.biblionumber = $bibnum
-and biblioitems.biblionumber = $bibnum";
+    from biblio, biblioitems 
+    left join bibliosubtitle on
+    biblio.biblionumber = bibliosubtitle.biblionumber
+    where biblio.biblionumber = $bibnum
+    and biblioitems.biblionumber = $bibnum";
     my $sth   = $dbh->prepare($query);
     my $data;
 
@@ -1251,19 +1271,20 @@ C4::Search - Module that provides Catalog searching for Koha
 =head1 SYNOPSIS
 
   use C4::Search;
-  my ($count,@results)=KeywordSearch($env,$type,$search,$num,$offset);
-  my ($count,@results)=CatSearch($env,$type,$search,$num,$offset);
+  my ($count,@results)=catalogsearch($env,$type,$search,$num,$offset);
 
 =head1 DESCRIPTION
 
 This module provides the searching facilities for the Catalog.
 Here I should go through and document each function thats exported and what it does. But I havent yet.
 
+my ($count,@results)=catalogsearch($env,$type,$search,$num,$offset);
+This is a front end to all the other searches, depending on what is passed
+to it, it calls the appropriate search
+
 =head2 EXPORT
 
-KeywordSearch
-CatSearch
-ItemInfo
+catalogsearch
 
 =head1 AUTHOR
 
