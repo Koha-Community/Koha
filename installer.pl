@@ -1,58 +1,56 @@
 #!/usr/bin/perl -w # please develop with -w
 
-
+use diagnostics;
 use strict; # please develop with the strict pragma
 
+system('clear');
 print <<EOM;
 **********************************
 * Welcome to the Koha Installer  *
 **********************************
-
 
 This installer will prompt you with a series of questions.
 It assumes you (or your system administrator) has installed:
   * Apache (http://httpd.apache.org/)
   * Perl (http://www.perl.org)
 
-
 and one of the following database applications:
   * MySql (http://www.mysql.org)
 
-
 on some type of Unix or Unix-like operating system
-
 
 
 Are Apache, Perl, and a database from the list above installed 
 on this system? (Y/[N]):
 EOM
 
-my $answer = $_;                      
+my $answer = <STDIN>;
 chomp $answer;
 
 if ($answer eq "Y" || $answer eq "y") {
-	print "Great!  \n";
+	print "Great! continuing setup... \n";
     } else {
     print <<EOM;
-You will need to setup database space for your application.
-The installer currently does not support an automated setup with this database.
-Please be sure to read the documentation.
-EOM
-    exit(1);
-  };
+This installer currently does not support an completely automated 
+setup.
 
+Please be sure to read the documentation, or visit the Koha website 
+at http://www.koha.org for more information.
+EOM
+    exit;
+};
 
 #
 #  Hmm, on further thought, this file came out of the tarball ... so
 #  is it likely to be untarred again?
 #
-print "I need to unpack the Koha TarFile -- where is it?  ";
-$answer = $_;
-chomp $answer;    
+#print "I need to unpack the Koha TarFile -- where is it?  ";
+#$answer = $_;
+#chomp $answer;    
 
 # FIXME?  using system is probably not the best way to do this 
 # tar on solaris may not work properly, etc.
-system("tar -x $answer"); #unpack fill out
+#system("tar -x $answer"); #unpack fill out
 
 #
 # Test for Perl - Do we need to explicity check versions?
@@ -61,7 +59,6 @@ print "\nChecking perl modules ...\n";
     unless (eval "require 5.004") {
     die "Sorry, you need at least Perl 5.004\n";
 }
-	
 
 #
 # Test for Perl Dependancies
@@ -79,45 +76,63 @@ unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" }
 if (@missing > 0) {
     print "\n\n";
     print "You are missing some Perl modules which are required by Koha.\n";
+    print "Once these modules have been installed, rerun this installery.\n";
     print "They can be installed by running (as root) the following:\n";
     foreach my $module (@missing) {
-    print "   perl -MCPAN -e 'install \"$module\"'\n";
-    }
-    print "\n";
-    exit;
-}
+	print "   perl -MCPAN -e 'install \"$module\"'\n";
+	exit(1);
+    }} else{
+    print "All modules appear to be installed, continuing...\n";
+};
 
 
 #test for MySQL?
-print "Are you using MySql?(Y/[N]): ";
-$answer = $_;                      
-chomp $answer
-if ($answer eq "Y" || $answer eq "y") {
+#print "Are you using MySql?(Y/[N]): ";
+#$answer = $_;                      
+#chomp $answer
+#if ($answer eq "Y" || $answer eq "y") {
     # FIXME
     # there is no $password or $KohaDBNAME yet
-    system("mysqladmin -uroot -p$password create $KohaDBNAME ");
-    system("mysql -u$root -p$password ");
+#    system("mysqladmin -uroot -p$password create $KohaDBNAME ");
+#    system("mysql -u$root -p$password ");
     #need to get to mysql prompt  HOW DO I DO THIS?
     
     # FIXME 
     # you could pipe this into mysql in the shell that system generates
     # can this be done from dbi?
-    system("grant all privileges on Koha.* to koha@localhost identified by 'kohapassword'; ");
-} else {
-    print <<EOM;
-You will need to use the MySQL database system for your application.
-The installer currently does not support an automated setup with this database.
-EOM
-  };
+#    system("grant all privileges on Koha.* to koha@localhost identified by 'kohapassword'; ");
+#} else {
+#    print <<EOM;
+#You will need to use the MySQL database system for your application.
+#The installer currently does not support an automated setup with this database.
+#EOM
+#  };
 
 print "\n";
 #
 # FIXME
 # there is no updatedatabase program yet
 #
-system ("perl updatedatabase -I /pathtoC4 ");
+#system ("perl updatedatabase -I /pathtoC4 ");
 
+#
 #KOHA conf
+#
+print <<EOM;
+Koha uses a small configuration file that is usually placed in 
+the /etc/ directory (although technically you could place it
+anywhere you wish).
+
+Checking to see if koha.conf already exists...
+EOM
+
+# Check to see if the koha.conf file exists.
+my($file) = "/etc/koha.conf";
+my($content);
+open(FILE, "<$file") or die "cannot open $file for reading : $!";
+$content = <FILE>;
+close (FILE);
+
 
 # FIXME
 # is there a reason we don't just create the conf file here?
@@ -126,14 +141,14 @@ system ("perl updatedatabase -I /pathtoC4 ");
 # new file (possibly allowing the installer.pl user to edit the
 # file first).
 #
-print <<EOM;
-You will need to add the following to the Koha configuration file\n";
-database=Koha\n";
-hostname=localhost\n";
-user=Koha\n";
-pass=$password\n";
-includes=/usr/local/www/koha/htdocs/includes\n";
-EOM
+#print <<EOM;
+#You will need to add the following to the Koha configuration file\n";
+#database=Koha\n";
+#hostname=localhost\n";
+#user=Koha\n";
+#pass=$password\n";
+#includes=/usr/local/www/koha/htdocs/includes\n";
+#EOM
 
 
 # FIXME
@@ -158,4 +173,9 @@ EOM
 # this is a pretty rude thing to do on a system ...
 # perhaps asking the user first would be better.
 #
-system('/etc/rc.d/init.d/httpd restart');
+#system('/etc/rc.d/init.d/httpd restart');
+
+#
+# It is competed
+#
+print "\nCongratulations ... you Koha installation is complete!\n";
