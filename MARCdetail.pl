@@ -43,39 +43,88 @@ my $template = gettemplate("catalogue/MARCdetail.tmpl",0);
 # fill arrays
 my @loop_data =();
 my $tag;
-for ($tag=0 ; $tag<=9 ; $tag++) {
-# marc array (tags and subfields)
-# loop each field having tag = $tag."XX"
-	my @fields = $record->field($tag."XX");
-		my @loop_data =();
+# loop through each tab 0 through 9
+for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
+# loop through each tag
+	my @fields = $record->fields();
+	my @loop_data =();
 	foreach my $field (@fields) {
 		my @subf=$field->subfields;
 		my $previous_tag = '';
 		my @subfields_data;
 # loop through each subfield
 		for my $i (0..$#subf) {
-# if we not exactly the same tag (XX can varry !), loop for "tag tittle".
-			if ($previous_tag ne $field->tag()) {
-				my %tag_data;
-				$tag_data{tag}=$field->tag().' '. $tagslib->{$field->tag()}->{lib};
-				$tag_data{subfield} = \@subfields_data;
-				push (@loop_data, \%tag_data);
-				$previous_tag = $field->tag();
-			}
 			$previous_tag = $field->tag();
+			next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
 			my %subfield_data;
 			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
 			$subfield_data{marc_value}=$subf[$i][1];
 			$subfield_data{marc_tag}=$field->tag().$subf[$i][0];
 			push(@subfields_data, \%subfield_data);
 		}
+		if ($#subfields_data>=0) {
+			my %tag_data;
+			$tag_data{tag}=$field->tag().' '. $tagslib->{$field->tag()}->{lib};
+			$tag_data{subfield} = \@subfields_data;
+			push (@loop_data, \%tag_data);
+		}
 	}
-	$template->param($tag."XX" =>\@loop_data);
+	$template->param($tabloop."XX" =>\@loop_data);
+}
+# now, build item tab !
+# the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
+# loop through each tag
+# warning : we may have differents number of columns in each row. Thus, we first build a hash, complete it if necessary
+# then construct template.
+my @fields = $record->fields();
+my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
+my @big_array;
+warn "loop 1";
+foreach my $field (@fields) {
+	my @subf=$field->subfields;
+	my %this_row;
+# loop through each subfield
+	for my $i (0..$#subf) {
+		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
+		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
+		$this_row{$subf[$i][0]} =$subf[$i][1];
+	}
+	if (%this_row) {
+		push(@big_array, \%this_row);
+	}
+}
+#fill big_row with missing datas
+#warn "loop 2";
+foreach my $subfield_code  (keys(%witness)) {
+	for (my $i=0;$i<=$#big_array;$i++) {
+		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
+#		warn "filled : ".$big_array[$i]{$subfield_code};
+	}
+}
+# now, construct template !
+#warn "loop 3";
+my @item_value_loop;
+my @header_value_loop;
+for (my $i=0;$i<=$#big_array; $i++) {
+	my $items_data;
+	foreach my $subfield_code (keys(%witness)) {
+		$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
+	}
+#	warn $items_data;
+	my %row_data;
+	$row_data{item_value} = $items_data;
+	push(@item_value_loop,\%row_data);
+}
+foreach my $subfield_code (keys(%witness)) {
+	my %header_value;
+	$header_value{header_value} = $witness{$subfield_code};
+	warn "$subfield_code => ".$witness{$subfield_code};
+	push(@header_value_loop, \%header_value);
 }
 
-# fill template with arrays
-$template->param(biblionumber => $biblionumber);
-#$template->param(marc =>\@loop_data);
-$template->param(bibid => $bibid);
+$template->param(item_loop => \@item_value_loop,
+						item_header_loop => \@header_value_loop,
+						biblionumber => $biblionumber,
+						bibid => $bibid);
 print "Content-Type: text/html\n\n", $template->output;
 
