@@ -2,6 +2,7 @@ package Install; #assumes Install.pm
 
 
 # Copyright 2000-2002 Katipo Communications
+# my.cnf, etcdir and prefix code Copyright 2003 MJ Ray
 #
 # This file is part of Koha.
 #
@@ -63,6 +64,8 @@ $VERSION = 0.01;
 		&restartapache
 		&finalizeconfigfile
 		&loadconfigfile
+		&backupmycnf
+		&restoremycnf
 		);
 
 use vars qw( $kohaversion );			# set in installer.pl
@@ -76,7 +79,6 @@ use vars qw( $servername $svr_admin $opacport $intranetport );
 use vars qw( $mysqldir );
 use vars qw( $database $mysqluser );
 use vars qw( $mysqlpass );			# normally should not be used
-use vars qw( $mysqlpass_quoted );		# quoted, contains -p as needed
 use vars qw( $dbname $hostname $user $pass );	# virtual hosting
 
 use vars qw( $newversion );			# XXX this seems to be unused
@@ -103,19 +105,28 @@ sub heading ($) {
    "\n$line= $s =\n$line\n";
 }
 
+my $mycnf = $ENV{HOME}."/.my.cnf";
+my $mytmpcnf = `mktemp my.cnf.koha.XXXXXX`;
+
 my $messages;
 $messages->{'continuing'}->{en}="Great!  Continuing setup.\n\n";
 $messages->{'WelcomeToKohaInstaller'}->{en} =
    heading('Welcome to the Koha Installer') . qq|
 Welcome to the Koha install script!  This script will prompt you for some
-basic information about your desired setup, then install Koha according to
-your specifications.  To accept the default value for any question, simply hit
-Enter at the prompt.
+basic information about your desired setup, then install Koha for you.
+
+If you want to install the Koha configuration file somewhere other than /etc
+(eg for non-root installation, or multiple Koha versions on one system), you
+should set the etcdir and prefix environment variables.  If this is your
+only koha installation on this machine and you are running this as root, the
+default should be OK.
+
+To accept the default value for any question, simply hit Enter at the prompt.
 
 Please be sure to read the documentation, or visit the Koha website at
 http://www.koha.org for more information.
 
-Are you ready to begin the installation? (Y/[N]): |;
+Are you ready to begin the installation? ([Y]/N): |;
 $messages->{'ReleaseCandidateWarning'}->{en} =
    heading('RELEASE CANDIDATE') . qq|
 WARNING WARNING WARNING WARNING WARNING
@@ -704,6 +715,12 @@ The Koha scripts will _not_ work without a symlink from %s to /usr/bin/perl
 May I create this symlink? ([Y]/N):
 : |;
 
+$messages->{'DirFailed'}->{en} = qq|
+We could not create %s, but continuing anyway...
+
+|;
+
+
 
 =item getinstallationdirectories
 
@@ -718,8 +735,9 @@ function does not return any values.
 =cut
 
 sub getinstallationdirectories {
-    $opacdir = '/usr/local/koha/opac';
-    $intranetdir = '/usr/local/koha/intranet';
+	if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
+    $opacdir = $ENV{prefix}.'/koha/opac';
+    $intranetdir = $ENV{prefix}.'/koha/intranet';
     my $getdirinfo=1;
     while ($getdirinfo) {
 	# Loop until opac directory and koha directory are different
@@ -740,15 +758,15 @@ You must specify different directories for the OPAC and INTRANET files!
 	    $getdirinfo=0;
 	}
     }
-    $kohalogdir='/var/log/koha';
+    $kohalogdir=$ENV{prefix}.'/koha/log';
     my $message=getmessage('GetKohaLogDir', [$kohalogdir]);
     $kohalogdir=showmessage($message, 'free', $kohalogdir);
 
 
-    # FIXME: Missing error handling for all mkdir calls here
+    # FIXME: Need better error handling for all mkdir calls here
     unless ( -d $intranetdir ) {
-       mkdir_parents (dirname($intranetdir), 0775);
-       mkdir ($intranetdir,                  0770);
+       mkdir_parents (dirname($intranetdir), 0775) || print getmessage('DirFailed','parents of '.$intranetdir);
+       mkdir ($intranetdir,                  0770) || print getmessage('DirFailed',$intranetdir);
        chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir");
        chmod (oct(770), "$intranetdir");
     }
@@ -757,8 +775,8 @@ You must specify different directories for the OPAC and INTRANET files!
     mkdir_parents ("$intranetdir/modules",   0750);
     mkdir_parents ("$intranetdir/scripts",   0750);
     unless ( -d $opacdir ) {
-       mkdir_parents (dirname($opacdir),     0775);
-       mkdir ($opacdir,                      0770);
+       mkdir_parents (dirname($opacdir),     0775) || print getmessage('DirFailed','parents of '.$opacdir);
+       mkdir ($opacdir,                      0770) || print getmessage('DirFailed',$opacdir);
        chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
        chmod (oct(770), "$opacdir");
     }
@@ -767,8 +785,8 @@ You must specify different directories for the OPAC and INTRANET files!
 
 
     unless ( -d $kohalogdir ) {
-       mkdir_parents (dirname($kohalogdir),  0775);
-       mkdir ($kohalogdir,                   0770);
+       mkdir_parents (dirname($kohalogdir),  0775) || print getmessage('DirFailed','parents of '.$kohalogdir);
+       mkdir ($kohalogdir,                   0770) || print getmessage('DirFailed',$kohalogdir);
        chown (oct(0), (getgrnam($httpduser))[2,3], "$kohalogdir");
        chmod (oct(770), "$kohalogdir");
     }
@@ -790,7 +808,8 @@ function does not return any values.
 =cut
 
 $messages->{'DatabaseName'}->{en} = heading('Name of MySQL database') . qq|
-Please provide the name of the mysql database for your koha installation.
+Please provide the name that you wish to give your koha database.
+It must not exist already on the database server.
 
 Database name [%s]: |;
 
@@ -801,7 +820,7 @@ another machine this will be "localhost".
 Database host [%s]: |;
 
 $messages->{'DatabaseUser'}->{en} = heading('Database User') . qq|
-Please provide the name of the user, who will have full administrative rights
+Please provide the name of the user who will have full administrative rights
 to the %s database, when authenticating from %s.
 
 This user will also be used to access Koha's INTRANET interface.
@@ -816,7 +835,7 @@ This password will also be used to access Koha's INTRANET interface.
 Password for database user %s: |;
 
 $messages->{'BlankPassword'}->{en} = heading('BLANK PASSWORD') . qq|
-You must not use a blank password for your MySQL user!
+You must not use a blank password for your MySQL user.
 
 Press <ENTER> to try again: 
 |;
@@ -911,6 +930,8 @@ sub getapacheinfo {
 			  /usr/local/etc/apache/httpd.conf
 			  /usr/local/etc/apache/apache.conf
 			  /var/www/conf/httpd.conf
+			  /etc/apache2/httpd.conf
+			  /etc/apache2/apache.conf
 			  /etc/apache/conf/httpd.conf
 			  /etc/apache/conf/apache.conf
 			  /etc/apache-ssl/conf/apache.conf
@@ -1014,13 +1035,14 @@ E-mail contact [%s]: |;
 
 $messages->{'GetServerName'}->{en} =
    heading('WEB SERVER HOST NAME OR IP ADDRESS') . qq|
-Please enter the domain name or ip address of your computer.
+Please enter the host name or IP address that you wish to use for koha.
+Normally, this should be a name or IP that belongs to this machine.
 
 Host name or IP Address [%s]: |;
 
 $messages->{'GetOpacPort'}->{en} = heading('OPAC VIRTUAL HOST PORT') . qq|
 Please enter the port for your OPAC interface.  This defaults to port 80, but
-if you are already serving web content from this server, you should change it
+if you are already serving web content from this host, you should change it
 to a different port (8000 might be a good choice).
 
 Enter the OPAC Port [%s]: |;
@@ -1081,17 +1103,11 @@ $messages->{'StartUpdateApache'}->{en} =
 Checking for modules that need to be loaded...
 |;
 
-$messages->{'LoadingApacheModuleModEnv'}->{en}="Loading SetEnv Apache module.\n";
-
-$messages->{'LoadingApacheModuleModInc'}->{en}="Loading Includes Apache module.\n";
-
-$messages->{'ApacheConfigBackupFailed'}->{en} =
-   heading('APACHE CONFIGURATION BACKUP FAILED') . qq|
-An error occurred while trying to make a backup copy of %s.
-
-  %s
-
-No changes will be made to the apache configuration file at this time.
+$messages->{'ApacheConfigMissingModules'}->{en} =
+   heading('APACHE CONFIGURATION NEEDS UPDATE') . qq|
+Koha uses the mod_env and mod_include apache features, but the
+installer did not find statements for them in your config.  Please
+make sure that they are enabled for your Koha host.
 
 Press <ENTER> to continue: |;
 
@@ -1100,7 +1116,7 @@ $messages->{'ApacheAlreadyConfigured'}->{en} =
    heading('APACHE ALREADY CONFIGURED') . qq|
 %s appears to already have an entry for Koha
 Virtual Hosts.  You may need to edit %s
-f anything has changed since it was last set up.  This
+if anything has changed since it was last set up.  This
 script will not attempt to modify an existing Koha apache
 configuration.
 
@@ -1109,6 +1125,8 @@ Press <ENTER> to continue: |;
 sub updateapacheconf {
     my $logfiledir=`grep ^ErrorLog "$realhttpdconf"`;
     chomp $logfiledir;
+    
+    my $httpdconf = $etcdir."/httpd.conf";
 
     if ($logfiledir) {
 	$logfiledir=~m#ErrorLog (.*)/[^/]*$#
@@ -1121,44 +1139,24 @@ sub updateapacheconf {
     }
 
     showmessage(getmessage('StartUpdateApache'), 'none');
+	# to be polite about it: I don't think this should touch the main httpd.conf
 
-    my $httpdconf;
+	# QUESTION: Should we warn for includes_module too?
     my $envmodule=0;
     my $includesmodule=0;
     open HC, "<$realhttpdconf";
     while (<HC>) {
 	if (/^\s*#\s*LoadModule env_module /) {
-	    s/^\s*#\s*//;
-	    showmessage(getmessage('LoadingApacheModuleModEnv'));
+	    showmessage(getmessage('ApacheConfigMissingModules'));
 	    $envmodule=1;
-	}
-	if (/^\s*#\s*LoadModule includes_module /) {
-	    s/^\s*#\s*//;
-	    showmessage(getmessage('LoadingApacheModuleModInc'));
 	}
 	if (/\s*LoadModule includes_module / ) {
 	    $includesmodule=1;
 	}
-	$httpdconf.=$_;
     }
 
-    my $backupfailed=0;
-    $backupfailed=`cp -f $realhttpdconf $realhttpdconf\.prekoha`;
-    if ($backupfailed) {
-	showmessage(getmessage('ApacheConfigBackupFailed', [$realhttpdconf,$backupfailed ]), 'PressEnter');
-	return;
-    }
-
-    if ($envmodule || $includesmodule) {
-	open HC, ">$realhttpdconf";
-	print HC $httpdconf;
-	close HC;
-    }
-
-
-    
-    if (`grep 'VirtualHost $servername' "$realhttpdconf"`) {
-	showmessage(getmessage('ApacheAlreadyConfigured', [$realhttpdconf, $realhttpdconf]), 'PressEnter');
+    if (`grep 'VirtualHost $servername' "$httpdconf"`) {
+	showmessage(getmessage('ApacheAlreadyConfigured', [$httpdconf, $httpdconf]), 'PressEnter');
 	return;
     } else {
 	my $includesdirectives='';
@@ -1166,7 +1164,7 @@ sub updateapacheconf {
 	    $includesdirectives.="Options +Includes\n";
 	    $includesdirectives.="   AddHandler server-parsed .html\n";
 	}
-	open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
+	open(SITE,">$httpdconf") or warn "Insufficient priveleges to open $httpdconf for writing.\n";
 	my $opaclisten = '';
 	if ($opacport != 80) {
 	    $opaclisten="Listen $opacport";
@@ -1378,12 +1376,10 @@ then create the Koha database structure and MySQL permissions.
 
 $messages->{'MysqlRootPassword'}->{en} =
    heading('MYSQL ROOT USER PASSWORD') . qq|
-To allow us to create the koha database please supply your
+To allow us to create the koha database please enter your
 mysql server's root user password:
 
-Enter MySQL root user password: |;	#'
-
-$messages->{'InvalidMysqlRootPassword'}->{en}="Invalid Password.  Please try again.";
+Password: |;	#'
 
 $messages->{'CreatingDatabase'}->{en} = heading('CREATING DATABASE') . qq|
 Creating the MySQL database for Koha...
@@ -1428,14 +1424,6 @@ $messages->{'BranchName'}->{en}="Branch Name [%s]: ";
 $messages->{'BranchCode'}->{en}="Branch Code (4 letters or numbers) [%s]: ";
 $messages->{'PrinterQueue'}->{en}="Printer Queue [%s]: ";
 $messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
-$messages->{'BlankMysqlPassword'}->{en} = heading('Blank MySQL Password') . qq|
-Do not leave your MySQL root password blank unless you know exactly what you
-are doing.  To change your MySQL root password use the mysqladmin command:
-
-mysqladmin password NEWPASSWORDHERE
-
-Press <ENTER> to continue:
-|;
 
 sub databasesetup {
     $mysqluser = 'root';
@@ -1467,44 +1455,25 @@ EOP
 #'
 	}
     }
-
-
-    my $needpassword=1;
-    while ($needpassword) {
-	$mysqlpass=showmessage(getmessage('MysqlRootPassword'), 'free');
-	$mysqlpass_quoted = $mysqlpass;
-	$mysqlpass_quoted =~ s/"/\\"/g;
-	$mysqlpass_quoted="-p\"$mysqlpass_quoted\"";
-	$mysqlpass eq '' and $mysqlpass_quoted='';
-	my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser $mysqlpass_quoted proc > /dev/null 2>&1");
-	if ($result) {
-	    print getmessage('InvalidMysqlRootPassword');
-	} else {
-	    if ($mysqlpass eq '') {
-		showmessage(getmessage('BlankMysqlPassword'), 'PressEnter');
-	    }
-	    $needpassword=0;
-	}
-    }
-
-    showmessage(getmessage('CreatingDatabase'),'none');
-
-    my $result=system("$mysqldir/bin/mysqladmin", "-u$mysqluser", "-p$mysqlpass", "create", "$dbname");
-    if ($result) {
-	showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
-    } else {
-	# Create the database structure
-	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname < koha.mysql");
+    # we must not put the mysql root password on the command line
+	$mysqlpass=	showmessage(getmessage('MysqlRootPassword'),'free');
+	
+	showmessage(getmessage('CreatingDatabase'),'none');
+	# set the login up
+	setmysqlclipass($mysqlpass);
 	# Set up permissions
-	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
-	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
-	system("$mysqldir/bin/mysqladmin -u$mysqluser $mysqlpass_quoted reload");
-
-
-
-
-
-    }
+	print system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
+	system("$mysqldir/bin/mysql -u$mysqluser mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
+	# Change to admin user login
+	setmysqlclipass($pass);
+	my $result=system("$mysqldir/bin/mysqladmin", "-u$user", "create", "$dbname");
+	if ($result) {
+		showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
+	} else {
+		# Create the database structure
+		system("$mysqldir/bin/mysql -u$user $dbname < koha.mysql");
+	}
 
 }
 
@@ -1520,9 +1489,10 @@ The MARC tables are also populated in addition to being created.
 
 Because updatedatabase calls scripts/updater/updatedatabase to
 do the actual update, and that script uses C4::Context,
-$etcdir/koha.conf must exist at this point. We use a symlink to
-do this and to also at the same time faciliate detection of
-ahorted installs. (See checkabortedinstall.)
+$etcdir/koha.conf must exist at this point. We use the KOHA_CONF
+environment variable to do this.
+
+FIXME: (See checkabortedinstall as it depends on old symlink way.)
 
 =cut
 
@@ -1534,7 +1504,7 @@ You can import marc parameters for :
   2 UNIMARC
   N none
 
-Please choose which parameter you want to install. Note if you choose 3,
+Please choose which parameter you want to install. Note if you choose N,
 nothing will be added, and it can be a BIG job to manually create those tables
 
 Choose MARC definition [1]: |;
@@ -1558,8 +1528,10 @@ Which language do you choose? |;
 
 sub updatedatabase {
     # At this point, $etcdir/koha.conf must exist, for C4::Context
+    $ENV{"KOHA_CONF"}=$etcdir.'/koha.conf.tmp';
 	my $result=system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 	if ($result) {
+		restoremycnf();
 		print "Problem updating database...\n";
 		exit;
 	}
@@ -1567,18 +1539,20 @@ sub updatedatabase {
 	my $response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12N', '1');
 
 	if ($response eq '1') {
-		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
+		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
 	}
 	if ($response eq '2') {
-		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
-		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
+		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
+		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $dbname");
 	}
 
 	$result = system ("perl -I $intranetdir/modules scripts/marc/updatedb2marc.pl");
 	if ($result) {
 		print "Problem updating database to MARC...\n";
+		restoremycnf();
 		exit;
 	}
+	delete($ENV{"KOHA_CONF"});
 
 	print "\n\nFinished updating of database. Press <ENTER> to continue...";
 	<STDIN>;
@@ -1597,6 +1571,10 @@ sample data, install them.
 sub populatedatabase {
 # 	my $response=showmessage(getmessage('SampleData'), 'yn', 'n');
 # 	if ($response =~/^y/i) {
+#
+# FIXME: These calls are now unsafe and should either be removed
+# or updated to use -u$user and no mysqlpass_quoted
+#
 # 		system("gunzip -d < sampledata-1.2.gz | $mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname");
 # 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
 # 		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
@@ -1622,9 +1600,9 @@ sub populatedatabase {
 		$branchcode=substr($branchcode,0,4);
 		$branchcode or $branchcode='DEF';
 
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
+		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
+		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
 		my $printername='Library Printer';
 		$printername=showmessage(getmessage('PrinterName', [$printername]), 'free', $printername, 1);
@@ -1633,10 +1611,10 @@ sub populatedatabase {
 		my $printerqueue='lp';
 		$printerqueue=showmessage(getmessage('PrinterQueue', [$printerqueue]), 'free', $printerqueue, 1);
 		$printerqueue=~s/[^A-Za-z0-9]//g;
-		system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+		system("$mysqldir/bin/mysql -u$user $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 # 		}
 	my $language=showmessage(getmessage('Language'), 'free', 'en');
-	system("$mysqldir/bin/mysql -u$mysqluser $mysqlpass_quoted $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
+	system("$mysqldir/bin/mysql -u$user $dbname -e \"update systempreferences set value='$language' where variable='opaclanguages'\"");
 	}
 }
 
@@ -1656,8 +1634,9 @@ asks the question.
 
 $messages->{'RestartApache'}->{en} = heading('RESTART APACHE') . qq|
 Apache needs to be restarted to load the new configuration for Koha.
+This requires the root password.
 
-Would you like to restart Apache now?  [Y]/N: |;
+Would you like to try to restart Apache now?  [Y]/N: |;
 
 sub restartapache {
 
@@ -1668,11 +1647,11 @@ sub restartapache {
     unless ($response=~/^n/i) {
 	# Need to support other init structures here?
 	if (-e "/etc/rc.d/init.d/httpd") {
-	    system('/etc/rc.d/init.d/httpd restart');
+	    system('su root -c /etc/rc.d/init.d/httpd restart');
 	} elsif (-e "/etc/init.d/apache") {
-	    system('/etc//init.d/apache restart');
+	    system('su root -c /etc//init.d/apache restart');
 	} elsif (-e "/etc/init.d/apache-ssl") {
-	    system('/etc/init.d/apache-ssl restart');
+	    system('su root -c /etc/init.d/apache-ssl restart');
 	}
     }
 
@@ -1691,6 +1670,7 @@ Currently, failure to rename the file results only in a warning.
 =cut
 
 sub finalizeconfigfile {
+	restoremycnf();
    rename "$etcdir/koha.conf.tmp", "$etcdir/koha.conf"
       || showmessage(<<EOF, 'PressEnter', undef, 1);
 An unexpected error, $!, occurred
@@ -1747,6 +1727,29 @@ sub loadconfigfile {
 }
 
 END { }       # module clean-up code here (global destructor)
+
+sub setmysqlclipass {
+	my $pass = shift;
+	open(MYCNF,">$mycnf");
+	chmod(0600,$mycnf);
+	print MYCNF "[client]\npassword=$pass\n";
+	close(MYCNF);
+}
+
+sub backupmycnf {
+	if (-e $mycnf) {
+		rename $mycnf,$mytmpcnf;
+	}
+}
+
+sub restoremycnf {
+	if (-e $mycnf) {
+		unlink($mycnf);
+	}
+	if (-e $mytmpcnf) {
+		rename $mytmpcnf,$mycnf;
+	}
+}
 
 =back
 

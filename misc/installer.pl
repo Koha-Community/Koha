@@ -24,14 +24,13 @@ if ($domainname =~ /^[^\s\.]+\.([-a-z0-9\.]+)$/) {
 }
 Install::setdomainname $domainname;
 
-my $etcdir = '/etc';
+###############################################
+# SET  THE  etcdir  ENVIRONMENT  VAR  INSTEAD #
+###############################################
+my $etcdir = $ENV{etcdir}||'/etc';
+system("mkdir -p $etcdir");
+
 Install::setetcdir $etcdir;
-
-unless ($< == 0) {
-    print "You must be root to run this script.\n";
-    exit 1;
-}
-
 
 unless (-d 'intranet-html') {
    print <<EOP;
@@ -105,11 +104,15 @@ basicauthentication();
 
 installfiles();
 
+backupmycnf();
+
 databasesetup();
 
 updatedatabase();
 
 populatedatabase();
+
+restoremycnf();
 
 finalizeconfigfile();
 
