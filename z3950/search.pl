@@ -27,6 +27,7 @@ use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Z3950;
 use C4::Search;
+use C4::Breeding;
 use HTML::Template;
 use MARC::File::USMARC;
 
@@ -76,7 +77,7 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 # fill with books in breeding farm
-($count, @results) = breedingsearch($title,$isbn,$random);
+($count, @results) = BreedingSearch($title,$isbn,$random);
 my $numberpending= &checkz3950searchdone($random);
 my @breeding_loop = ();
 for (my $i=0; $i <= $#results; $i++) {
