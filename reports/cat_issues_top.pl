@@ -280,7 +280,7 @@ sub calculate {
 	my $strcalc ;
 	
 # Processing average loanperiods
-	$strcalc .= "SELECT biblio.title, COUNT(*) AS RANK, biblio.biblionumber AS ID";
+	$strcalc .= "SELECT DISTINCT biblio.title, COUNT(biblio.biblionumber) AS RANK, biblio.biblionumber AS ID";
 	$strcalc .= " , $colfield " if ($colfield);
 	$strcalc .= " FROM `issues`,borrowers,(items LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
 
@@ -305,7 +305,7 @@ sub calculate {
 	@$filters[9]=~ s/\*/%/g if (@$filters[9]);
 	$strcalc .= " AND year(issues.timestamp) like '" . @$filters[9] ."'" if ( @$filters[9] );
 	
-	$strcalc .= " group by borrowers.borrowernumber";
+	$strcalc .= " group by biblio.biblionumber";
 	$strcalc .= ", $colfield" if ($column);
 	$strcalc .= " order by ";
 	$strcalc .= "$colfield, " if ($colfield);
