@@ -1,0 +1,52 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+<div id="main">
+<!-- TMPL_IF name="do_it" -->
+<!-- TMPL_LOOP name="mainloop" -->
+	<h1>Koha : Issues by borrower category <!--TMPL_IF name="borrower_category" --> for category = <!-- TMPL_VAR name="borrower_category" --><!-- /TMPL_IF --></h1>
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<!-- TMPL_LOOP name="categorycodeloop" -->
+				<th><!-- TMPL_VAR name="categorycode" --></th>
+			<!-- /TMPL_LOOP -->
+			<th>TOTAL</th>
+		</tr>
+			<!-- TMPL_LOOP name="loopborrowertype" -->
+				<tr>
+					<td>
+					<!-- TMPL_VAR name="itemtype" --></td>
+					<!-- TMPL_LOOP name="loopitemtype" -->
+						<td>
+							<!-- TMPL_VAR name="issues" -->
+						</td>
+					<!-- /TMPL_LOOP -->
+					<td>
+						<!-- TMPL_VAR name="totalitemtype" -->
+					</td>
+				</tr>
+			<!-- /TMPL_LOOP name="loopitemtype" -->
+			<tr>
+				<th>TOTAL</th>
+				<!-- TMPL_LOOP name="loopborrowertotal" -->
+					<th>
+						<!-- TMPL_VAR name="issues" -->
+					</th>
+				<!-- /TMPL_LOOP -->
+				<th>&nbsp;</th>
+			</tr>
+	</table>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1>Issues by patron category</h1>
+	<form method="post">
+		<p>Select a patron category (leave blank to select all) <input type="text" name="value" /></p>
+		<p>Select a branch : <!-- TMPL_VAR name="CGIbranch" --></p>
+		<input type="submit" value="Submit" class="submit" />
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR name="report_name" -->" />
+		<input type="hidden" name="do_it" value="1" />
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
