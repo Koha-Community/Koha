@@ -10,12 +10,13 @@ use MARC::Record;
 use MARC::Batch;
 
 use Getopt::Long;
-my ( $input_marc_file,$number) = ('',0);
+my ( $input_marc_file,$number,$nowarning) = ('',0);
 my $version;
 GetOptions(
     'file:s'    => \$input_marc_file,
     'n:s' => \$number,
-    'v' => \$version
+    'v' => \$version,
+    'w' => \$nowarning,
 );
 
 warn "NUM : $number\n";
@@ -26,6 +27,7 @@ parameters :
 \tv : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
 \tn : the number of the record to dump. If missing, all the file is dumped
+\tw : warning and strict off. If your dump fail, try -w option. It it works, then, the file is iso2709, but a buggy one !
 SAMPLE : ./dumpmarc.pl -file /home/paul/koha.dev/local/npl -n 1
 EOF
 ;
@@ -33,8 +35,8 @@ die;
 }
 
 my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
-$batch->warnings_off();
-$batch->strict_off();
+$batch->warnings_off() unless $nowarning;
+$batch->strict_off() unless $nowarning;
 my $i=1;
 while ( my $record = $batch->next() ) {
 	print "\nNUMBER $i =>\n".$record->as_formatted() if ($i eq $number || $number eq 0);
