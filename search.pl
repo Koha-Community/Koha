@@ -28,10 +28,12 @@ use C4::Output;
 
 my $query=new CGI;
 my $type=$query->param('type');
-(-e "opac") && ($type='opac');
+warn $type;
+
+#(-e "opac") && ($type='opac');
 
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
-
+warn $type;
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
@@ -177,6 +179,11 @@ if ($count>10) {
 }
 
 $template->param(numbers => \@numbers);
+if (C4::Context->preference('acquisitions') eq 'simple') {
+	$template->param(script => "MARCdetail.pl");
+} else {
+	$template->param(script => "detail.pl");
+}
 
 # Print the page
 print $query->header(-cookie => $cookie), $template->output;

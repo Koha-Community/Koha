@@ -26,13 +26,7 @@ use C4::Koha;
 use CGI;
 use C4::Search;
 use C4::Acquisitions;
-<<<<<<< moredetail.pl
-use C4::Output;
-
-=======
 use C4::Output; # contains gettemplate
-
->>>>>>> 1.14
 my $query=new CGI;
 
 my $includes = C4::Context->config('includes') ||

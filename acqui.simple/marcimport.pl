@@ -247,7 +247,6 @@ sub ListFileRecords {
     $dbh = C4::Context->dbh;
 
     my $template=gettemplate('marcimport/ListFileRecords.tmpl');
-
     # File can be z3950 search query or uploaded MARC data
 
     # if z3950 results
@@ -744,8 +743,7 @@ sub AcceptBiblioitem {
     my $file= MARC::File::USMARC->indata($input->param('file'));
     my $numrecord = $input->param('numrecord');
     if ($numrecord) {
-	for (my $i==1;$i<$numrecord;$i++) {
-		# FIXME - This "==" was supposed to be a "=", right?
+	for (my $i=1;$i<$numrecord;$i++) {
 	    $record=$file->next;
 	}
     } else {
@@ -998,6 +996,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.18  2002/10/14 07:41:04  tipaul
+# merging arens + my modifs/bugfixes
+#
 # Revision 1.17  2002/10/13 07:39:26  arensb
 # Added magic RCS comment.
 # Removed trailing whitespace.
