@@ -26,11 +26,31 @@ use vars qw($VERSION @ISA @EXPORT);
 # set the version for version checking
 $VERSION = 0.01;
 
+=head1 NAME
+
+C4::Input - Miscellaneous sanity checks
+
+=head1 SYNOPSIS
+
+  use C4::Input;
+
+=head1 DESCRIPTION
+
+This module provides functions to see whether a given library card
+number or ISBN is valid.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	&checkflds &checkdigit &checkvalidisbn
 );
- 
+
+# FIXME - This is never used.
 sub checkflds {
   my ($env,$reqflds,$data) = @_;
   my $numrflds = @$reqflds;
@@ -39,12 +59,24 @@ sub checkflds {
   while ($i < $numrflds) {
     if ($data->{@$reqflds[$i]} eq "") {
       push(@probarr, @$reqflds[$i]);
-    }  
+    }
     $i++
   }
   return (\@probarr);
 }
 
+=item checkdigit
+
+  $valid = &checkdigit($env, $cardnumber);
+
+Takes a card number, computes its check digit, and compares it to the
+checkdigit at the end of C<$cardnumber>. Returns a true value iff
+C<$cardnumber> has a valid check digit.
+
+C<$env> is ignored.
+
+=cut
+#'
 sub checkdigit {
   my ($env,$infl) =  @_;
   $infl = uc $infl;
@@ -53,17 +85,19 @@ sub checkdigit {
   my $i = 1;
   my $valid = 0;
   #  print $infl."<br>";
+  # FIXME - for ($i = 1; $i < 8; $i++)
+  # or      foreach $i (1..7)
   while ($i <8) {
     my $temp1 = $weightings[$i-1];
     my $temp2 = substr($infl,$i,1);
-    $sum = $sum + ($temp1*$temp2);
+    $sum += $temp1 * $temp2;
 #    print "$sum $temp1 $temp2<br>";
     $i++;
   }
   my $rem = ($sum%11);
   if ($rem == 10) {
     $rem = "X";
-  }  
+  }
   #print $rem."<br>";
   if ($rem eq substr($infl,8,1)) {
     $valid = 1;
@@ -71,11 +105,21 @@ sub checkdigit {
   return $valid;
 } # sub checkdigit
 
+=item checkvalidisbn
+
+  $valid = &checkvalidisbn($isbn);
+
+Returns a true value iff C<$isbn> is a valid ISBN: it must be ten
+digits long (counting "X" as a digit), and must have a valid check
+digit at the end.
+
+=cut
+#'
 #--------------------------------------
 # Determine if a number is a valid ISBN number, according to length
 #   of 10 digits and valid checksum
 sub checkvalidisbn {
-        use strict; 
+        use strict;
         my ($q)=@_ ;	# Input: ISBN number
 
         my $isbngood = 0; # Return: true or false
@@ -86,20 +130,24 @@ sub checkvalidisbn {
         if (length($q)==10) {
             my $checksum=substr($q,9,1);
             my $isbn=substr($q,0,9);
-            my $i;  
+            my $i;
             my $c=0;
-            for ($i=0; $i<9; $i++) { 
+            for ($i=0; $i<9; $i++) {
                 my $digit=substr($q,$i,1);
                 $c+=$digit*(10-$i);
             }
 	    $c=$c%11;  # % is the modulus function
             ($c==10) && ($c='X');
+            # FIXME - $isbngood = $c eq $checksum;
             if ($c eq $checksum) {
                 $isbngood=1;
             } else {
                 $isbngood=0;
             }
         } else {
+            # FIXME - Put "return 0 if $length($q) != 10" near the
+            # top, so we don't have to indent the rest of the function
+            # as much.
             $isbngood=0;
         } # if length good
 
@@ -107,5 +155,19 @@ sub checkvalidisbn {
 
 } # sub checkvalidisbn
 
- 
 END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+L<perl>.
+
+=cut
