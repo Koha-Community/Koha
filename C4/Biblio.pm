@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.69  2003/11/24 13:27:17  tipaul
+# fix for #380 (bibliosubject)
+#
 # Revision 1.68  2003/11/06 17:18:30  tipaul
 # bugfix for #384
 #
@@ -1292,14 +1295,14 @@ sub NEWnewbiblio {
 	}
 	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
 	my @subj = $record->field($tagfield);
+	my @subjects;
 	foreach my $subject (@subj) {
 		my @subjsubfield = $subject->subfield($tagsubfield);
-		my @subjects;
 		foreach my $subfieldcount (0..$#subjsubfield) {
 			push @subjects,$subjsubfield[$subfieldcount];
 		}
-		OLDmodsubject($dbh,$oldbibnum,1,@subjects);
 	}
+	OLDmodsubject($dbh,$oldbibnum,1,@subjects);
 	# we must add bibnum and bibitemnum in MARC::Record...
 	# we build the new field with biblionumber and biblioitemnumber
 	# we drop the original field
@@ -1352,14 +1355,14 @@ sub NEWmodbiblio {
 	}
 	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject");
 	my @subj = $record->field($tagfield);
+	my @subjects;
 	foreach my $subject (@subj) {
 		my @subjsubfield = $subject->subfield($tagsubfield);
-		my @subjects;
 		foreach my $subfieldcount (0..$#subjsubfield) {
 			push @subjects,$subjsubfield[$subfieldcount];
 		}
-		OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
 	}
+	OLDmodsubject($dbh,$oldbiblionumber,1,@subjects);
 	return 1;
 }
 
@@ -1553,7 +1556,7 @@ sub OLDmodsubject {
 
 		if (my $data = $sth->fetchrow_hashref) {
 		} else {
-			if ($force eq $subject[$i] || $force eq 1) {
+			if ($force eq $subject[$i] || $force == 1) {
 				# subject not in aut, chosen to force anway
 				# so insert into cataloguentry so its in auth file
 				$query = "Insert into catalogueentry (entrytype,catalogueentry) values ('s','$subject[$i]')";
@@ -1580,11 +1583,11 @@ sub OLDmodsubject {
 		my $sth   = $dbh->prepare($query);
 		$sth->execute;
 		$sth->finish;
-		for (my $i = 0; $i < $count; $i++) {
-			$sth = $dbh->prepare("Insert into bibliosubject values ('$subject[$i]', $bibnum)");
-			$sth->execute;
-			$sth->finish;
-		} # for
+		$sth = $dbh->prepare("Insert into bibliosubject values (?,?)");
+		foreach $query (@subject) {
+			$sth->execute($query,$bibnum);
+		} # foreach
+		$sth->finish;
 	} # if
 
 	#  $dbh->disconnect;
