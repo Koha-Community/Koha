@@ -7,8 +7,13 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;
+#use Date::Manip;
 
 my $input = new CGI;
+#print $input->header;
+#print startpage();
+#print startmenu('acquisitions');
+#print $input->dump;
 my $existing=$input->param('existing');
 my $title=$input->param('title');
 $title=~ s/\'/\\\'/g;
@@ -45,8 +50,6 @@ if ($quantity ne '0'){
 	                   author    => $author?$author:"",
 	                   copyright => $copyright?$copyright:"",
 				    series => $series?$series:"",
-
-
 				     });
     $bibitemnum = &newbiblioitem({ biblionumber => $bibnum,
  	                           itemtype     => $itemtype?$itemtype:"",
