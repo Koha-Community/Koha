@@ -22,14 +22,16 @@ package C4::test;
 
 use strict;
 require Exporter;
-use C4::Database;
+#use C4::Database;
 use C4::Catalogue;
 use C4::Biblio;
 use MARC::Record;
 use MARC::File::USMARC;
+use C4::Context;
 
 #die;
-my $dbh=&C4Connect;
+#my $dbh=&C4Connect;
+my $dbh=C4::Context->dbh;
 $dbh->do("delete from marc_biblio");
 $dbh->do("delete from marc_blob_subfield");
 $dbh->do("delete from marc_subfield_table");

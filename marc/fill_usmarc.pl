@@ -33,6 +33,8 @@ my $reqtag=$dbh->prepare("insert into marc_tag_structure (tagfield,liblibrarian,
 my $reqsubfield=$dbh->prepare("insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,repeatable) values (?,?,?,?)");
 my $description;
 foreach $tag (sort keys %$fields) {
+	$fields->{$tag}->{"name"}  =~ s/\(R\)//g;
+	$fields->{$tag}->{"name"}  =~ s/\(NR\)//g;
 	$reqtag->execute($tag,$fields->{$tag}->{"name"},$fields->{$tag}->{"repeating"});
 	foreach $subfield (sort keys %{$fields->{$tag}->{"subfields"}}) {
 	    if ($fields->{$tag}->{"subfields"}->{$subfield}->{"description"}) {
