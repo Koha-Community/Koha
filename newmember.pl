@@ -149,12 +149,18 @@ if ($ok == 0) {
 	push(@inputsloop, \%line);
     }
 
+    #Get the fee
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode = ?");
+    $sth->execute($data{'categorycode'});
+    my ($fee) = $sth->fetchrow;
+    $sth->finish;
+
     $template->param(name => $name,
 		     bornum => $data{'borrowernumber'},
 		     cardnum => $data{'cardnumber'},
 		     memcat => $data{'categorycode'},
-		     area => $data{'area'},
-		     fee => $data{'fee'},
+		     fee => $fee,
 		     joindate => format_date($data{'joining'}),
 		     expdate => format_date($data{'expiry'}),
 		     branchcode => $data{'branchcode'},
