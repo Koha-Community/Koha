@@ -109,6 +109,8 @@ my %requiretables=(
     		       userid char(100) NOT NULL default '',
     		       ip char(18) NOT NULL default '',
 		       url text NOT NULL default ''  )",
+    itemtypesearchgroups=>"( groupname varchar(255) NOT NULL default '' primary key,
+    		       itemtypes char(100) NOT NULL default '')",
 );
 
 
@@ -415,6 +417,10 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.26  2002/11/05 19:47:12  tonnesen
+# Adding an admin script for setting up the 'class' list in the advanced search
+# pages.
+#
 # Revision 1.4.2.25  2002/10/29 20:22:43  tonnesen
 # buildrelease now puts the test scripts in $intranetdir/scripts/t/
 #

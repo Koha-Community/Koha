@@ -4,7 +4,7 @@ BEGIN {
 	exit;
     }
     
-    $| = 1; print "1..28\n";
+    $| = 1; print "1..29\n";
     $::intranetdir=`grep intranetdir /etc/koha.conf`;
     chomp $::intranetdir;
     $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
@@ -47,6 +47,10 @@ contains($script, $test, [225, 290, 8, 470]);
 $test='Author search - Thompson';
 $script="$intranetdir/cgi-bin/search.pl author=thompson";
 contains($script, $test, [200,164]);
+
+$test='Author search - Johnson, Edna';
+$script="$intranetdir/cgi-bin/search.pl author=Johnson,%20Edna";
+contains($script, $test, [276]);
 
 
 $test='Subject search - bear';
