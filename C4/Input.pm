@@ -74,7 +74,7 @@ sub checkvalidisbn {
                 my $digit=substr($q,$i,1);
                 $c+=$digit*(10-$i);
             }
-            $c=int(11-($c/11-int($c/11))*11+.1);
+	    $c=$c%11;  # % is the modulus function
             ($c==10) && ($c='X');
             if ($c eq $checksum) {
                 $isbngood=1;
