@@ -30,17 +30,15 @@ while (<KC>) {
 }
 my $includes=$configfile{'includes'};
 ($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
-my $templatebase="$includes/templates/catalogue/searchresults/";
-my $templatename=$query->param('template');
+my $templatebase="catalogue/searchresults.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
-($templatename) || ($templatename='default.tmpl');
-$templatename=picktemplate($templatebase);
+my $theme=picktemplate($includes, $templatebase);
 
 
 
 
-my $template = HTML::Template->new(filename => "$templatebase$templatename", die_on_bad_params => 0);
+my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
 
 ##my @results;
 #my $sth=$dbh->prepare("select * from biblio where author like 's%' order by author limit $startfrom,20");
@@ -67,19 +65,21 @@ my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
 my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
 $template->param(nextstartfrom => $nextstartfrom);
 $template->param(prevstartfrom => $prevstartfrom);
-$template->param(template => $templatename);
 $template->param(SEARCH_RESULTS => $resultsarray);
+$template->param(includesdir => $includes);
 
 print "Content-Type: text/html\n\n", $template->output;
 
 
 sub picktemplate {
-    my ($base) = @_;
+    my ($includes, $base) = @_;
     my $templates;
-    opendir (D, $base);
+    opendir (D, "$includes/templates");
     my @dirlist=readdir D;
     foreach (@dirlist) {
-	(next) unless (/\.tmpl$/);
+	(next) if (/^\./);
+	#(next) unless (/\.tmpl$/);
+	(next) unless (-e "$includes/templates/$_/$base");
 	$templates->{$_}=1;
     }
     my $sth=$dbh->prepare("select value from systempreferences where variable='template'");
@@ -89,7 +89,7 @@ sub picktemplate {
     if ($templates->{$preftemplate}) {
 	return $preftemplate;
     } else {
-	return 'default.tmpl';
+	return 'default';
     }
     
 }
