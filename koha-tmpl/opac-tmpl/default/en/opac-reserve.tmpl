@@ -1,29 +1,29 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
-<center>
+<div align="center">
 
 <!-- TMPL_IF NAME="message" -->
-	<table  cellpadding=5 cellspacing=0 border=1 >
+	<table  cellpadding="5" cellspacing="0" border="1">
 	<tr bgcolor="#fecc99" >
-	<td><font face="arial,helvetica" color="red" size=+1><B>
-	<!-- TMPL_IF NAME="too_much_oweing" -->Sorry, you cannot make reserves because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <!-- /TMPL_IF --><br/>
-	<!-- TMPL_IF NAME="too_many_reserves" -->Sorry, you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves. <!-- /TMPL_IF --><br/>
-	<!-- TMPL_IF NAME="already_reserved" -->You already have a reserve placed on this item.<!-- /TMPL_IF --><br/>
-	<!-- TMPL_IF NAME="no_items_selected" -->You must select at least on item type!<!-- /TMPL_IF --><br/>
-	<!-- TMPL_IF NAME="no_branch_selected" -->You must select a branch for pickup!<!-- /TMPL_IF --><br/>
-	</B></font><P></td></tr></table>
+	<td><font face="arial, helvetica, sans-serif" color="red" size="+1"><b>
+	<!-- TMPL_IF NAME="too_much_oweing" -->Sorry, you cannot make reserves because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.  <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="too_many_reserves" -->Sorry, you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves. <br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="already_reserved" -->You already have a reserve placed on this item.<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_items_selected" -->You must select at least one item type!<br><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="no_branch_selected" -->You must select a branch for pickup!<br><!-- /TMPL_IF -->
+	</b></font></td></tr></table>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="select_item_types" -->
 	<!-- The first time round you select which bibitems you want -->
 	<p>Reserve page for item: <b><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR name="biblionumber" -->)</b></p>
 	<p> There are <b><!-- TMPL_VAR NAME="reservecount" --></b> reserves already on this item. </p>
-	<p>Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you.<p>
+	<p>Please select which item types are ok for you. The first of these item that matches one of these types that becomes available will be set kept for you.</p>
 
-	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="item_types_selected" value="1">
 		<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->">
-		<TABLE border=1>
-			<tr bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif'>
+		<table border="1">
+			<tr bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">
 				<th>Request</th>
 				<th>Item Type</th>
 				<th>Copies</th>
@@ -31,7 +31,7 @@
 			<!-- TMPL_LOOP NAME="TYPES" -->
 				<tr>
 					<!-- TMPL_UNLESS NAME="notforloan" -->
-						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->"></td>
+						<td><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->"></td>
 					<!-- TMPL_ELSE -->
 						<td>Cannot be Reserved</td>
 					<!-- /TMPL_UNLESS -->
@@ -42,65 +42,72 @@
 		</table>
 		<p>
 		Please select the branch from which you want to collect the item:
-		<!-- TMPL_VAR NAME="CGIbranch" --><br>
-		<p>
-		<table border=0 cellpadding=0 cellspacing=0>
+		<!-- TMPL_VAR NAME="CGIbranch" -->
+		</p>
+		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td>Reserve on this date:</td>
 				<td>
-					<select name=required-day><option value=0>Day<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+					<select name="required-day"><option value="0">Day</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+</select>
 				</td>
 				<td>
-					<select name=required-month><option value=0>Month<option value=1 >Jan<option value=2 >Feb<option value=3 >Mar<option value=4 >Apr<option value=5 >May<option value=6 >Jun<option value=7 >Jul<option value=8 >Aug<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+					<select name="required-month"><option value="0">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+</select>
 				</td>
 				<td>
-					<select name=required-year><option value=0>Year<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+					<select name="required-year"><option value="0">Year</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
+</select>
 				</td>
 			</tr>
 			<tr>
 				<td>End reserve on this date:</td>
 				<td>
-					<select name=expires-day><option value=0>Day<option value=1 >1<option value=2 >2<option value=3 >3<option value=4 >4<option value=5 >5<option value=6 >6<option value=7 >7<option value=8 >8<option value=9 >9<option value=10 >10<option value=11 >11<option value=12 >12<option value=13 >13<option value=14 >14<option value=15 >15<option value=16 >16<option value=17 >17<option value=18 >18<option value=19 >19<option value=20 >20<option value=21 >21<option value=22 >22<option value=23 >23<option value=24 >24<option value=25 >25<option value=26 >26<option value=27 >27<option value=28 >28<option value=29 >29<option value=30 >30<option value=31 >31</select>
+					<select name="expires-day"><option value="0">Day</option><option value="1" >1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>
+</select>
 				</td>
 				<td>
-					<select name=expires-month><option value=0>Month<option value=1 >Jan<option value=2 >Feb<option value=3 >Mar<option value=4 >Apr<option value=5 >May<option value=6 >Jun<option value=7 >Jul<option value=8 >Aug<option value=9 >Sep<option value=10 >Oct<option value=11 >Nov<option value=12 >Dec</select>
+					<select name="expires-month"><option value="0">Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option><option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+</select>
 				</td>
 				<td>
-					<select name=expires-year><option value=0>Year<option value=2002 >2002<option value=2003 >2003<option value=2004 >2004<option value=2005 >2005<option value=2006 >2006</select>
+					<select name="expires-year"><option value="0">Year</option><option value="2002" >2002</option><option value="2003" >2003</option><option value="2004" >2004</option><option value="2005" >2005</option><option value="2006" >2006</option>
+</select>
 				</td>
 			</tr>
 		</table>
-		<p>
-		<font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
-	</FORM>
+		<p><input type="submit" value="Submit"></p>
+	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="item_types_selected" -->
 <!-- if the bibitems have already been selected -->
-	<p>Please confirm that you wish to request an item of these types:<p>
+	<p>Please confirm that you wish to request an item of these types:</p>
 
-	<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+	<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
 		<input type="hidden" name="place_reserve" value="1">
 		<input type="hidden" name="bib" value="<!-- TMPL_VAR NAME='biblionumber' -->">
-		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME='required_date' -->">
-		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME='expires_date' -->">
-		<TABLE border=1>
+		<input type="hidden" name="required_date" value="<!-- TMPL_VAR NAME="required_date" -->">
+		<input type="hidden" name="expires_date" value="<!-- TMPL_VAR NAME="expires_date" -->">
+		<table border="1">
 			<tr>
-				<th bgcolor="#99cccc" background='<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif'>Item Type</th>
+				<th bgcolor="#99cccc" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-opac.gif">Item Type</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="TYPES" -->
 				<tr>
-					<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME='itemtype' -->"></td>
-					<td><!-- TMPL_VAR NAME="description" --></td>
+					<td><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="'itemtype" -->"><!-- TMPL_VAR NAME="description" --></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
 		Which is to be picked up from <b><!-- TMPL_VAR NAME="branchname" --></b>.<br>
-		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME='branch' -->">
+		<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->">
 		<!-- TMPL_IF NAME="fee" -->
-			<br>Note there will be a reserve charge of <b>$<!-- TMPL_VAR NAME="fee" --></b><br>
+			<p>Note there will be a reserve charge of <b>$<!-- TMPL_VAR NAME="fee" --></b></p>
 		<!-- /TMPL_IF -->
-		<font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve"></font>
-	</FORM>
+		<input type="submit" value="Place Reserve">
+	</form>
 <!-- /TMPL_IF -->
 
+</div>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
