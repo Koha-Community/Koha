@@ -57,10 +57,11 @@ sub itemcount{
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh=C4Connect;
-  my $query="Select ordernumber from aqorders where biblionumber=$bib and
-  biblioitemnumber='$bi'";
+  my $query="Select ordernumber 
+	from aqorders 
+	where biblionumber=? and biblioitemnumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bib,$bi);
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
@@ -73,12 +74,12 @@ sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh=C4Connect;
   my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
-  where aqorders.ordernumber='$ordnum' 
+  where aqorders.ordernumber=?
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
   aqorders.ordernumber=aqorderbreakdown.ordernumber";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($ordnum);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
   $dbh->disconnect;
@@ -352,28 +353,31 @@ sub newbiblio {
   $sth->execute;
   my $data   = $sth->fetchrow_arrayref;
   my $bibnum = $$data[0] + 1;
-  my $series = 0;
+  my $series;
 
-  $biblio->{'title'}       = $dbh->quote($biblio->{'title'});
-  $biblio->{'author'}      = $dbh->quote($biblio->{'author'});
-  $biblio->{'copyright'}   = $dbh->quote($biblio->{'copyright'});
-  $biblio->{'seriestitle'} = $dbh->quote($biblio->{'seriestitle'});
-  $biblio->{'notes'}	   = $dbh->quote($biblio->{'notes'});
-  if ($biblio->{'seriestitle'}) { $series = 1 };
+  if ($biblio->{'seriestitle'}) { $series = 1 } else { $series = 0 };
 
   $sth->finish;
   $query = "insert into biblio set
-biblionumber  = $bibnum,
-title         = $biblio->{'title'},
-author        = $biblio->{'author'},
-copyrightdate = $biblio->{'copyright'},
-series        = $series;
-seriestitle   = $biblio->{'seriestitle'},
-notes         = $biblio->{'notes'}";
+	biblionumber  = ?,
+	title         = ?,
+	author        = ?,
+	copyrightdate = ?,
+	series        = ?,
+	seriestitle   = ?,
+	notes         = ?   ";
 
-  $sth = $dbh->prepare($query);
 #  print $query;
-  $sth->execute;
+  $sth = $dbh->prepare($query);
+  $sth->execute(
+    $bibnum,
+    $biblio->{'title'},
+    $biblio->{'author'},
+    $biblio->{'copyright'},
+    $series,
+    $biblio->{'seriestitle'} ,
+    $biblio->{'notes'}	   
+  ) ;
 
   $sth->finish;
   $dbh->disconnect;
