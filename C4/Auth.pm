@@ -165,7 +165,6 @@ sub checkpw {
 #
 
     my ($dbh, $userid, $password) = @_;
-    warn "Checking $userid $password";
     my $sth=$dbh->prepare("select password from borrowers where userid=?");
     $sth->execute($userid);
     if ($sth->rows) {
@@ -183,7 +182,6 @@ sub checkpw {
 	}
     }
     my $configfile=configfile();
-    warn "$userid $configfile->{'user'} $password $configfile->{'pass'}";
     if ($userid eq $configfile->{'user'} && $password eq $configfile->{'pass'}) {
         # Koha superuser account
 	return 1;
