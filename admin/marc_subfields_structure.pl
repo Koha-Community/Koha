@@ -33,9 +33,8 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like \"$searchstring%\") order by tagfield";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like ?) order by tagfield");
+	$sth->execute("$searchstring%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -52,8 +51,6 @@ my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
 my $pkfield="tagfield";
-my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
-my $reqdel="delete from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
 
@@ -140,8 +137,8 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
-	$sth->execute;
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=?"); # and tagsubfield='$tagsubfield'");
+	$sth->execute($tagfield);
 	my @loop_data = ();
 	my $toggle="white";
 	my $i=0;
@@ -295,8 +292,8 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqsel);
-	$sth->execute;
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=? and tagsubfield=?");
+	$sth->execute($tagfield,$tagsubfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
@@ -311,8 +308,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	unless (C4::Context->config('demo') eq 1) {
-		my $sth=$dbh->prepare($reqdel);
-		$sth->execute;
+		my $sth=$dbh->prepare("delete from marc_subfield_structure where tagfield=? and tagsubfield=?");
+		$sth->execute($tagfield,$tagsubfield);
 		$sth->finish;
 	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield\"></html>";
