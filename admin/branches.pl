@@ -360,6 +360,7 @@ sub getbranchinfo {
     } else {
 	$query = "Select * from branches";
     }
+    $query.=" order by branchcode";
     my $sth = $dbh->prepare($query);
     $sth->execute(@query_args);
     my @results;
