@@ -137,6 +137,7 @@ sub startmenu{
 
 sub endmenu {
   my ($type) = @_;
+  if ( ! defined $type ) { $type=''; }
   if ($type eq 'issue') {
     open (FILE,"$path/issues-bottom.inc") || die;
   } elsif ($type eq 'opac') {
