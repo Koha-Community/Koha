@@ -49,24 +49,19 @@ my $toggle;
 
 my $record;
 my $oldbiblio;
-warn "search.pl : $bibid / $title / $author / $isbn";
 if ($bibid > 0) {
 	$record = MARCgetbiblio($dbh,$bibid);
 	$oldbiblio = MARCmarc2koha($dbh,$record);
 }
 my $errmsg;
 unless ($random) { # if random is a parameter => we're just waiting for the search to end, it's a refresh.
-warn "NO RANDOM";
 	if ($isbn) {
-	warn "ADD ISBN $isbn";
 		$random =rand(1000000000);
 		$errmsg = addz3950queue($isbn, "isbn", $random, 'CHECKED');
 	} elsif ($author) {
-	warn "ADD AUTHOR $author";
 		$random =rand(1000000000);
 		$errmsg = addz3950queue($author, "author", $random, 'CHECKED');
 	} elsif ($title) {
-	warn "ADD TITLE : $title";
 		$random =rand(1000000000);
 		$errmsg = addz3950queue($title, "title", $random, 'CHECKED');
 	}
