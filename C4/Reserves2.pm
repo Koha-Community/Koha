@@ -1,7 +1,4 @@
-package C4::Reserves2; #asummes C4/Reserves2
-
-#requires DBI.pm to be installed
-#uses DBD:Pg
+package C4::Reserves2; #assumes C4/Reserves2
 
 use strict;
 require Exporter;
@@ -16,45 +13,13 @@ $VERSION = 0.01;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
 						    
 # make all your functions, whether exported or not;
 
 sub FindReserves {
-  my ($bib,$bor) = @_;
-  my $dbh = C4Connect;
-  my $query = "SELECT *,reserves.branchcode,biblio.title AS btitle
+  my ($bib,$bor)=@_;
+  my $dbh=C4Connect;
+  my $query="SELECT *,reserves.branchcode,biblio.title AS btitle
                       FROM reserves,borrowers,biblio ";
   if ($bib ne ''){
       $bib = $dbh->quote($bib);
@@ -417,7 +382,7 @@ sub CalcReserveFee {
     my $x = 0;                   
     my $allissued = 1; 
     while ($x < $cntitemsfound) { 
-      my $bitdata = @biblioitems[$x];                                       
+      my $bitdata = $biblioitems[$x];                                       
       my $query2 = "select * from items                   
       where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'";     
       my $sth2 = $dbh->prepare($query2);                       
