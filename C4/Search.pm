@@ -17,9 +17,9 @@ $VERSION = 0.01;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
-&itemdata &bibdata &GetItems &borrdata &getacctlist &itemnodata &itemcount
-&OpacSearch &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
-&getboracctrecord &ItemType &itemissues &FrontSearch &subject &subtitle
+&itemdata &bibdata &GetItems &borrdata &itemnodata &itemcount
+&borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
+&getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues &systemprefs
 &findguarantor); 
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
@@ -115,141 +115,6 @@ sub NewBorrowerNumber {
   $dbh->disconnect;
   return($data->{'max(borrowernumber)'}); 
 }    
-
-sub OpacSearch {
-  my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = &C4Connect;
-  $search->{'keyword'}=~ s/'/\\'/g;
-  my @key=split(' ',$search->{'keyword'});
-  my $count=@key;
-  my $i=1;
-  my @results;
-  my $query ="Select count(*) from biblio where 
-  ((title like '$key[0]%' or title like '% $key[0]%')";
-  while ($i < $count){
-    $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
-    $i++;
-  }
-  $query=$query.") or ((author like '$key[0]%' or author like '% $key[0]%')";
-  $i=1;
-  while ($i < $count){
-    $query=$query." and (author like '$key[$i]%' or author like '% $key[$i]%')";
-    $i++;
-  }
-  $query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%')";
-  for ($i=1;$i<$count;$i++){
-    $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
-  }
-  $query.= ") or ((notes like '$key[0]%' or notes like '% $key[0]%')";
-  for ($i=1;$i<$count;$i++){
-    $query.=" and (notes like '$key[$i]%' or notes like '% $key[$i]%')";
-  }
-  $query=$query.") order by title";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my $data=$sth->fetchrow_hashref;
-  my $count=$data->{'count(*)'};
-  $sth->finish;
-  $query=~ s/count\(\*\)/\*/;
-  $query= $query." limit $offset,$num";
-  $sth=$dbh->prepare($query);
-#  print $query;
-  $sth->execute;
-  $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-      my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}");
-      $sti->execute;
-      my ($dewey, $subclass) = $sti->fetchrow;
-      $dewey=~s/0*$//;
-      ($dewey == 0) && ($dewey='');
-      ($dewey) && ($dewey.=" $subclass");
-      $sti->finish;
-    $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$dewey";
-    $i++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return($count,@results);
-}
-
-
-  
-sub FrontSearch {
-  my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = &C4Connect;
-  $search->{'front'}=~ s/ +$//;
-  $search->{'front'}=~ s/'/\\'/;
-  my @key=split(' ',$search->{'front'});
-  my $count=@key;
-  my $i=1;
-  my @results;
-  my $query ="Select * from biblio,bibliosubtitle where
-  biblio.biblionumber=bibliosubtitle.biblionumber and
-  ((title like '$key[0]%' or title like '% $key[0]%'
-  or subtitle like '$key[0]%' or subtitle like '% $key[0]%'
-  or author like '$key[0]%' or author like '% $key[0]%')";
-  while ($i < $count){
-    $query=$query." and (title like '%$key[$i]%' or subtitle like '%$key[$i]%')";
-    $i++;
-  }
-  $query=$query.") group by biblio.biblionumber order by author,title";
-  print $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    my $sti=$dbh->prepare("select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}");
-    $sti->execute;
-    my ($dewey, $subclass) = $sti->fetchrow;
-    $dewey=~s/\.*0*$//;
-    ($dewey == 0) && ($dewey='');
-    ($dewey) && ($dewey.=" $subclass");
-    $sti->finish;
-    $results[$i]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey";
-#      print $results[$i];
-    $i++;
-  }
-  $sth->finish;
-  $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
-  like '%$search->{'keyword'}%'");
-  $sth->execute;
-  while (my $data=$sth->fetchrow_hashref){
-    my $sth2=$dbh->prepare("Select * from biblio where
-    biblionumber=$data->{'biblionumber'}");
-    $sth2->execute;
-    while (my $data2=$sth2->fetchrow_hashref){
-
-$results[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data->{'copyrightdate'}";
-#      print $results[$i];
-      $i++;   
-    }
-    $sth2->finish;
-  }    
-  my $i2=1;
-  @results=sort @results;
-  my @res;
-  my $count=@results;
-  $i=1;
-  $res[0]=$results[0];
-  while ($i2 < $count){
-    if ($results[$i2] ne $res[$i-1]){
-      $res[$i]=$results[$i2];
-      $i++;
-    }
-    $i2++;
-  }
-  $i2=0;
-  my @res2;
-  $count=@res;
-  while ($i2 < $num && $i2 < $count){
-    $res2[$i2]=$res[$i2+$offset];
-#    print $res2[$i2];
-    $i2++;
-  }
-  $sth->finish;
-  $dbh->disconnect;
-  return($i,@res2);
-}
 
   
 sub KeywordSearch {
@@ -796,7 +661,7 @@ sub CatSearch  {
 	$sth1->finish;
       }
   }
-print $query;
+#print $query;
 if ($type ne 'precise' && $type ne 'subject'){
   if ($search->{'author'} ne ''){   
       $query=$query." order by biblio.author,title";
@@ -1275,35 +1140,7 @@ sub borrdata2 {
 
 return($data2->{'count(*)'},$data->{'count(*)'},$data3->{'sum(amountoutstanding)'});
 }
-		  
-sub getacctlist {
-   my ($env,$params) = @_;
-   my $dbh=C4Connect;
-   my @acctlines;
-   my $numlines;
-   my $query = "Select borrowernumber, accountno, date, amount, description,
-      dispute, accounttype, amountoutstanding, barcode, title
-      from accountlines,items,biblio   
-      where borrowernumber = $params->{'borrowernumber'} ";
-   if ($params->{'acctno'} ne "") {
-      my $query = $query." and accountlines.accountno = $params->{'acctno'} ";
-      }
-   my $query = $query." and accountlines.itemnumber = items.itemnumber
-      and items.biblionumber = biblio.biblionumber
-      and accountlines.amountoutstanding<>0 order by date";
-   my $sth=$dbh->prepare($query);
-#   print $query;
-   $sth->execute;
-   my $total=0;
-   while (my $data=$sth->fetchrow_hashref){
-      $acctlines[$numlines] = $data;
-      $numlines++;
-      $total = $total+ $data->{'amountoutstanding'};
-   }
-   return ($numlines,\@acctlines,$total);
-   $sth->finish;
-   $dbh->disconnect;
-}
+	
 
 sub getboracctrecord {
    my ($env,$params) = @_;
