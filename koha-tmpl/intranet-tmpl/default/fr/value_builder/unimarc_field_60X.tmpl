@@ -67,7 +67,7 @@
 				<TMPL_LOOP name="results">
 					<tr>
 					<td>
-						<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&level=<TMPL_VAR name="level">&search_string=<TMPL_VAR name=value ESCAPE=URL>">
+						<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=<TMPL_VAR name="index">&level=<TMPL_VAR name="level">&search_string=<TMPL_VAR name=value ESCAPE=URL>">
 							<TMPL_VAR name="value">
 						</a>
 					</td>
@@ -86,7 +86,7 @@
 			<table>
 			<TMPL_LOOP name="deeper">
 				<tr><td>
-				<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&level=<TMPL_VAR name="level">&search_string=<TMPL_VAR ESCAPE="URL" name="father">+<TMPL_VAR ESCAPE="URL" name="stdlib">">
+				<a href="plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=<TMPL_VAR name="index">&level=<TMPL_VAR name="level">&search_string=<TMPL_VAR ESCAPE="URL" name="father">+<TMPL_VAR ESCAPE="URL" name="stdlib">">
 					<TMPL_VAR name="father"> <TMPL_VAR name="stdlib">
 				</a></td>
 				<td>
