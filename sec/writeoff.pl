@@ -45,6 +45,9 @@ print $input->redirect("/cgi-bin/koha/pay.pl?bornum=$bornum");
 sub writeoff{
   my ($bornum,$accountnum,$itemnum,$accounttype,$amount)=@_;
   my $user=$input->remote_user;
+  $user=~ s/Levin/C/;
+  $user=~ s/Foxton/F/;
+  $user=~ s/Shannon/S/;
   my $dbh=C4Connect;
   my $env;
   my $query="Update accountlines set amountoutstanding=0 where ";

@@ -34,6 +34,9 @@ for (my $i=0;$i<@names;$i++){
     $check=1;
   }
   if ($temp eq 'yes'){
+    $user=~ s/Levin/C/i;
+    $user=~ s/Foxton/F/i;
+    $user=~ s/Shannon/S/i;
     my $amount=$input->param($names[$i+4]);
     my $bornum=$input->param($names[$i+5]);
     my $accountno=$input->param($names[$i+6]);
@@ -42,6 +45,11 @@ for (my $i=0;$i<@names;$i++){
   }
 }
 my %env;
+    $user=~ s/Levin/C/i;
+    $user=~ s/Foxton/F/i;
+    $user=~ s/Shannon/S/i;
+
+$env{'branchcode'}=$user;
 my $total=$input->param('total');
 if ($check ==0){
   if ($total ne ''){

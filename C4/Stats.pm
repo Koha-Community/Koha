@@ -55,7 +55,9 @@ sub UpdateStats {
   #module to insert stats data into stats table
   my ($env,$branch,$type,$amount,$other,$itemnum,$itemtype,$borrowernumber)=@_;
   my $dbh=C4Connect();
-  my $branch=$env->{'branchcode'};
+  if ($branch eq ''){
+    $branch=$env->{'branchcode'};
+  }
   my $user = $env->{'usercode'};
   print $borrowernumber;
   my $sth=$dbh->prepare("Insert into statistics
@@ -147,16 +149,24 @@ sub TotalOwing{
 sub TotalPaid {
   my ($time)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from statistics,borrowers
-  where statistics.borrowernumber= borrowers.borrowernumber
-  and (statistics.type='payment' or statistics.type='writeoff')";
+  my $query="Select * from accountlines,borrowers where (accounttype = 'Pay'
+or accounttype ='W')
+  and accountlines.borrowernumber = borrowers.borrowernumber";
   if ($time eq 'today'){
-    $query=$query." and datetime = now()";
+    $query=$query." and date = now()";
   } else {
-    $query.=" and datetime > '$time'";
+    $query.=" and date='$time'";
   }
-#  $query.=" order by timestamp";
-  print $query;
+#  my $query="Select * from statistics,borrowers
+#  where statistics.borrowernumber= borrowers.borrowernumber
+#  and (statistics.type='payment' or statistics.type='writeoff') ";
+#  if ($time eq 'today'){
+#    $query=$query." and datetime = now()";
+#  } else {
+#    $query.=" and datetime > '$time'";
+#  }
+  $query.=" order by timestamp";
+#  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my @results;
@@ -179,7 +189,7 @@ sub getcharges{
   and timestamp = '$timestamp' and accounttype <> 'Pay' and
   accounttype <> 'W'";
   my $sth=$dbh->prepare($query);
-  print $query,"<br>";
+#  print $query,"<br>";
   $sth->execute;
   my $i=0;
   my @results;
@@ -194,9 +204,10 @@ sub getcharges{
 }
 
 sub Getpaidbranch{
-  my($date)=@_;
+  my($date,$borrno)=@_;
   my $dbh=C4Connect;
-  my $query="select * from statistics where type='payment' and datetime='$date'";
+  my $query="select * from statistics where type='payment' and datetime
+  >'$date' and  borrowernumber='$borrno'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
 #  print $query;

@@ -61,6 +61,7 @@ sub recordpayment{
   my $updquery = "";
   my $newamtos = 0;
   my $accdata = "";
+  my $branch=$env->{'branchcode'};
   my $amountleft = $data;
   # begin transaction
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
@@ -100,7 +101,7 @@ sub recordpayment{
   my $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
-  UpdateStats($env,'branch','payment',$data,'','','',$bornumber);
+  UpdateStats($env,$branch,'payment',$data,'','','',$bornumber);
   $sth->finish;
   $dbh->disconnect;
 }
