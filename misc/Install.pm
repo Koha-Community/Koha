@@ -1859,11 +1859,9 @@ sub updatedatabase {
 	startsysout();
 	if ($response eq '1') {
 		system("cat scripts/misc/marc_datas/marc21_en/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
-		system("cat scripts/misc/lang-datas/en/stopwords.sql | $mysqldir/bin/mysql -u$user $database");
 	}
 	if ($response eq '2') {
 		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $database");
-		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $database");
 	}
 	delete($ENV{"KOHA_CONF"});
 

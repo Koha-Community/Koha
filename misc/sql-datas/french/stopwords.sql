@@ -22,6 +22,7 @@ INSERT INTO stopwords VALUES ('CES');
 INSERT INTO stopwords VALUES ('CEUX');
 INSERT INTO stopwords VALUES ('CI');
 INSERT INTO stopwords VALUES ('DANS');
+INSERT INTO stopwords VALUES ('DE');
 INSERT INTO stopwords VALUES ('DES');
 INSERT INTO stopwords VALUES ('DU');
 INSERT INTO stopwords VALUES ('ELLE');
