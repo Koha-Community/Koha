@@ -369,7 +369,7 @@ my %tabledata = (
 	    			     'type' => 1,
 				     'options' => 1 },
             variable            => 'acquisitions',
-            value               => 'simple',
+            value               => 'normal',
             explanation         =>
 'Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions',
 	    type		=> 'Choice',
@@ -971,6 +971,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.69  2003/12/04 12:51:41  tipaul
+# setting default acquisition to NORMAL, which is better, imho (it's always possible to add a biblio directly through catalogue menu entry)
+#
 # Revision 1.68  2003/12/03 17:47:14  tipaul
 # bugfixes for biblio deletion
 #
