@@ -56,6 +56,7 @@ use C4::Search;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
+use C4::Bull; #uses getsubscriptionfrom biblionumber
 use HTML::Template;
 
 my $query=new CGI;
@@ -175,10 +176,13 @@ foreach my $subfield_code (keys(%witness)) {
 	push(@header_value_loop, \%header_value);
 }
 
+my $subscriptionid = getsubscriptionfrombiblionumber($biblionumber);
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
 						bibid => $bibid,
-						biblionumber => $biblionumber);
+						biblionumber => $biblionumber,
+						subscriptionid => $subscriptionid,
+						);
 output_html_with_http_headers $query, $cookie, $template->output;
 
