@@ -647,7 +647,9 @@ sub bookfundbreakdown {
 
 # FIXME - This is in effect identical to &C4::Biblio::newbiblio.
 # Pick one and stick with it.
-# XXX - POD
+
+# FIXME - Never used (anything that uses &newbiblio uses
+# &C4::Biblio::newbiblio). Nuke this.
 sub newbiblio {
   my ($biblio) = @_;
   my $dbh    = C4::Context->dbh;
@@ -683,9 +685,26 @@ EOT
   return($bibnum);
 }
 
+=item modbiblio
+
+  $biblionumber = &modbiblio($biblio);
+
+Update a biblio record.
+
+C<$biblio> is a reference-to-hash whose keys are the fields in the
+biblio table in the Koha database. All fields must be present, not
+just the ones you wish to change.
+
+C<&modbiblio> updates the record defined by
+C<$biblio-E<gt>{biblionumber}> with the values in C<$biblio>.
+
+C<&modbiblio> returns C<$biblio-E<gt>{biblionumber}> whether it was
+successful or not.
+
+=cut
+#'
 # FIXME - This is in effect the same as &C4::Biblio::modbiblio.
 # Pick one and stick with it.
-# XXX - POD
 sub modbiblio {
   my ($biblio) = @_;
   my $dbh   = C4::Context->dbh;
@@ -719,9 +738,20 @@ where biblionumber = $biblio->{'biblionumber'}";
   return($biblio->{'biblionumber'});
 } # sub modbiblio
 
+=item modsubtitle
+
+  &modsubtitle($biblionumber, $subtitle);
+
+Sets the subtitle of a book.
+
+C<$biblionumber> is the biblionumber of the book to modify.
+
+C<$subtitle> is the new subtitle.
+
+=cut
+#'
 # FIXME - This is in effect identical to &C4::Biblio::modsubtitle.
 # Pick one and stick with it.
-# XXX - POD
 sub modsubtitle {
   my ($bibnum, $subtitle) = @_;
   my $dbh   = C4::Context->dbh;
@@ -734,12 +764,24 @@ where biblionumber = $bibnum";
   $sth->finish;
 } # sub modsubtitle
 
-# XXX - POD
+=item modaddauthor
+
+  &modaddauthor($biblionumber, $author);
+
+Replaces all additional authors for the book with biblio number
+C<$biblionumber> with C<$author>. If C<$author> is the empty string,
+C<&modaddauthor> deletes all additional authors.
+
+=cut
+#'
 # FIXME - This is functionally identical to &C4::Biblio::modaddauthor
 # Pick one and stick with it.
+# FIXME - This API is bogus: you should be able to have more than 2
+# authors on a book.
 sub modaddauthor {
     my ($bibnum, $author) = @_;
     my $dbh   = C4::Context->dbh;
+    # FIXME - Use $dbh->do()
     my $query = "Delete from additionalauthors where biblionumber = $bibnum";
     my $sth = $dbh->prepare($query);
 
@@ -758,17 +800,34 @@ biblionumber = '$bibnum'";
     } # if
 } # sub modaddauthor
 
+=item modsubject
+
+  $error = &modsubject($biblionumber, $force, @subjects);
+
+$force - a subject to force
+
+$error - Error message, or undef if successful.
+
+=cut
+#'
 # FIXME - This is in effect identical to &C4::Biblio::modsubject.
 # Pick one and stick with it.
-# XXX - POD
+# FIXME - Bogus API: either $force should force all subjects to be
+# added to catalogueentry, or else you should be able to specify a
+# list of subjects to force.
 sub modsubject {
   my ($bibnum, $force, @subject) = @_;
   my $dbh   = C4::Context->dbh;
   my $count = @subject;
   my $error;
+
+  # Loop over list of subjects
+  # FIXME - Use foreach my $subject (@subjects)
   for (my $i = 0; $i < $count; $i++) {
-    $subject[$i] =~ s/^ //g;
+    $subject[$i] =~ s/^ //g;			# Trim whitespace
     $subject[$i] =~ s/ $//g;
+
+    # Look up the subject in the authority file.
     my $query = "select * from catalogueentry
 where entrytype = 's'
 and catalogueentry = '$subject[$i]'";
@@ -776,6 +835,7 @@ and catalogueentry = '$subject[$i]'";
     $sth->execute;
 
     if (my $data = $sth->fetchrow_hashref) {
+		# FIXME - Ick! Empty if-clauses suck. Use a "not" or something.
     } else {
       if ($force eq $subject[$i]) {
 
@@ -801,7 +861,7 @@ or catalogueentry like '% $subject[$i]')";
 
         $sth2->execute;
         while (my $data = $sth2->fetchrow_hashref) {
-          $error = $error."<br>$data->{'catalogueentry'}";
+          $error = $error."<br>$data->{'catalogueentry'}";	# FIXME - .=
         } # while
         $sth2->finish;
       } # else
@@ -830,7 +890,7 @@ values ('$subject[$i]', $bibnum)");
 
 # FIXME - This is very similar to &C4::Biblio::modbibitem.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub modbibitem {
     my ($biblioitem) = @_;
     my $dbh   = C4::Context->dbh;
@@ -877,7 +937,7 @@ EOT
 
 # FIXME - This is in effect identical to &C4::Biblio::modnote.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub modnote {
   my ($bibitemnum,$note)=@_;
   my $dbh = C4::Context->dbh;
@@ -889,8 +949,9 @@ sub modnote {
 EOT
 }
 
-# XXX - POD
 # FIXME - &C4::Biblio::newbiblioitem is quite similar to this
+# Pick one and stick with it.
+# If it's this one, it needs a POD.
 sub newbiblioitem {
   my ($biblioitem) = @_;
   my $dbh   = C4::Context->dbh;
@@ -959,7 +1020,7 @@ place		 = $biblioitem->{'place'}";
 
 # FIXME - This is in effect identical to &C4::Biblio::newsubject.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub newsubject {
   my ($bibnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -971,9 +1032,9 @@ sub newsubject {
   $sth->finish;
 }
 
-# XXX - POD
 # FIXME - This is in effect the same as &C4::Biblio::newsubtitle
 # Pick one and stick with it.
+# If it's this one, it needs a POD.
 sub newsubtitle {
   my ($bibnum, $subtitle) = @_;
   my $dbh   = C4::Context->dbh;
@@ -1244,7 +1305,7 @@ sub curconvert {
   if ($cur==0){
     $cur=1;
   }
-  $price=$price / $cur;
+  $price=$price / $cur;		# FIXME - /=
   return($price);
 }
 
@@ -1346,7 +1407,20 @@ sub updatesup {
 #   print $query;
 }
 
-# XXX - POD
+=item insertsup
+
+  $id = &insertsup($bookseller);
+
+Creates a new bookseller. C<$bookseller> is a reference-to-hash whose
+keys are the fields of the aqbooksellers table in the Koha database.
+All fields must be present.
+
+Returns the ID of the newly-created bookseller.
+
+=cut
+#'
+# FIXME - This function also appears in C4::Catalogue. Pick one and
+# stick with it.
 sub insertsup {
   my ($data)=@_;
   my $dbh = C4::Context->dbh;
@@ -1363,21 +1437,10 @@ sub insertsup {
   return($data->{'id'});
 }
 
-=item insertsup
-
-  $id = &insertsup($bookseller);
-
-Creates a new bookseller. C<$bookseller> is a reference-to-hash whose
-keys are the fields of the aqbooksellers table in the Koha database.
-All fields must be present.
-
-Returns the ID of the newly-created bookseller.
-
-=cut
-#'
-# FIXME - This function appears in C4::Catalogue
 # FIXME - This is different from &C4::Biblio::newitems, though both
 # are exported.
+# FIXME - Never used AFAICT. Obsolete.
+# Otherwise, this needs a POD.
 sub newitems {
   my ($item, @barcodes) = @_;
   my $dbh   = C4::Context->dbh;
@@ -1434,7 +1497,7 @@ notforloan           = $item->{'loan'}";
 
 # FIXME - This is the same as &C4::Biblio::Checkitems.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub checkitems{
   my ($count,@barcodes)=@_;
   my $dbh = C4::Context->dbh;
@@ -1455,7 +1518,7 @@ sub checkitems{
 # FIXME - This appears to be functionally equivalent to
 # &C4::Biblio::moditem.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub moditem {
   my ($loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
   my $dbh = C4::Context->dbh;
@@ -1492,7 +1555,7 @@ sub updatecost{
 
 # FIXME - This is identical to &C4::Biblio::countitems.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub countitems{
   my ($bibitemnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -1543,7 +1606,7 @@ sub needsmod{
 
 # FIXME - A nearly-identical function, appears in C4::Biblio
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub delitem{
   my ($itemnum)=@_;
   my $dbh = C4::Context->dbh;
@@ -1554,7 +1617,7 @@ sub delitem{
   $sth->finish;
   $query="Insert into deleteditems values (";
   foreach my $temp (@data){
-    $query=$query."'$temp',";
+    $query=$query."'$temp',";		# FIXME - .=
   }
   $query=~ s/\,$/\)/;
 #  print $query;
@@ -1569,7 +1632,7 @@ sub delitem{
 
 # FIXME - This is functionally identical to &C4::Biblio::deletebiblioitem.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub deletebiblioitem {
     my ($biblioitemnumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1629,7 +1692,7 @@ EOT
 
 # FIXME - This is functionally identical to &C4::Biblio::delbiblio.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub delbiblio{
   my ($biblio)=@_;
   my $dbh = C4::Context->dbh;
@@ -1641,7 +1704,7 @@ sub delbiblio{
     $query="Insert into deletedbiblio values (";
     foreach my $temp (@data){
       $temp=~ s/\'/\\\'/g;
-      $query=$query."'$temp',";
+      $query=$query."'$temp',";		# FIXME - .=
     }
     $query=~ s/\,$/\)/;
 #   print $query;
@@ -1657,7 +1720,9 @@ sub delbiblio{
   $sth->finish;
 }
 
-# XXX - POD
+# FIXME - There's also a C4::Biblio::getitemtypes.
+# FIXME - Never used AFAICT. This function is obsolete.
+# If not, it needs a POD.
 sub getitemtypes {
   my $dbh   = C4::Context->dbh;
   my $query = "select * from itemtypes";
@@ -1679,7 +1744,7 @@ sub getitemtypes {
 
 # FIXME - This is identical to &C4::Biblio::getitemtypes.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub getbiblio {
     my ($biblionumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1700,7 +1765,9 @@ sub getbiblio {
     return($count, @results);
 } # sub getbiblio
 
-# XXX - POD
+# FIXME - There's also a &C4::Biblio::getbiblioitem.
+# Pick one and stick with it.
+# If it's this one, it needs a POD.
 sub getbiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1723,7 +1790,7 @@ biblioitemnumber = $biblioitemnum";
 
 # FIXME - This is identical to &C4::Biblio::getbiblioitem.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub getbiblioitembybiblionumber {
     my ($biblionumber) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1747,7 +1814,7 @@ $biblionumber";
 # FIXME - This is identical to
 # &C4::Biblio::getbiblioitembybiblionumber.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub getitemsbybiblioitem {
     my ($biblioitemnum) = @_;
     my $dbh   = C4::Context->dbh;
@@ -1772,7 +1839,7 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
 
 # FIXME - This is identical to &C4::Biblio::isbnsearch.
 # Pick one and stick with it.
-# XXX - POD
+# If it's this one, it needs a POD.
 sub isbnsearch {
     my ($isbn) = @_;
     my $dbh   = C4::Context->dbh;
