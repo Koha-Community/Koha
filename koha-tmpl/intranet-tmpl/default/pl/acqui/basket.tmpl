@@ -1,20 +1,20 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <h1>Koszyk Zakupów <b><!-- TMPL_VAR name="basket" --> </b>dla <a href=supplier.pl?id=<!-- TMPL_VAR name="booksellerid" -->></a> <!-- TMPL_VAR name="name" --></h1><br />
-Our Reference: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name="basket" --></b> authorised by <b><!-- TMPL_VAR name="loggedinusername" --></b><br />
+Nasz odnośnik: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name="basket" --></b> zatwierdzone przez <b><!-- TMPL_VAR name="loggedinusername" --></b><br />
 <CENTER>
 <p>
 <table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor="#ffdf61">
-		<td width="5%"><b>Order</b></td>
-		<td width="10%"><b> Publisher</b></td>
+		<td width="5%"><b>Zamów</b></td>
+		<td width="10%"><b> Wydawca</b></td>
 		<td width="10%"><b>Isbn</b></td>
 		<td width="30%"><b>Tytuł</b></td>
 		<td width="20%"><b>Autor</b></td>
-		<td width="5%"><b>$ rrp</b></td>
-		<td width="7%"><b>$est</b></td>
-		<td width="7%"><b>Qty</b></td>
-		<td width="7%"><b> Total</b></td>
+		<td width="5%"><b>Wymiana</b></td>
+		<td width="7%"><b>Nabycie</b></td>
+		<td width="7%"><b>Ilość</b></td>
+		<td width="7%"><b> Łącznie</b></td>
 	</tr>
 	<!-- TMPL_LOOP name="books_loop" -->
 		<tr valign=top bgcolor="<!-- TMPL_VAR name="color" -->">
@@ -34,17 +34,17 @@ Our Reference: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name
 	<tr valign=top bgcolor=white>
 		<td colspan=6 rowspan=3  bgcolor="#ffdf61">
   			<b>POMOC</b><br>
-			To change any of the catalogue or accounting information attached to an order, click on the title.<br>
+			Aby zmienić dane katalogowe lub rachunkowe dołączone do zamówienia, kliknij na tytuł.<br>
 		</td>
-  		<td><b>SubTotal</b></td>
+  		<td><b>Łącznie</b></td>
   		<td><!-- TMPL_VAR name="currency" --><!-- TMPL_VAR name="sub_total" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td><b>GST</b></td>
+		<td><b>VAT</b></td>
 		<td><!-- TMPL_VAR name="currency" --><!-- TMPL_VAR name="gist" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td><b>TOTAL</b></td>
+		<td><b>W SUMIE</b></td>
 		<td><!-- TMPL_VAR name="currency" --><!-- TMPL_VAR name="grand_total" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
@@ -52,7 +52,7 @@ Our Reference: <b><!-- TMPL_VAR name="entrydate" --></b>, #<b><!-- TMPL_VAR name
 			<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
 				<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
 				<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
-				<b> Dodaj zamówienie: wprowadź hasło lub tytuł: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+				<b> Dodaj zamówienie: wprowadź hasło lub tytuł: </b> <INPUT TYPE="text"  SIZE="25"   NAME="search">
 			</form>
 		</td>
 	</tr>

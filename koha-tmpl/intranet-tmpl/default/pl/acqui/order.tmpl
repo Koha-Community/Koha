@@ -1,19 +1,19 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <h1>Wyniki Szukania Dostawców</h1><br />
 <CENTER>
-You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found<p>
+Szukano <b>dostawcy <!-- TMPL_VAR name="supplier" -->,</b>Liczba wyszukanych <!-- TMPL_VAR name="count" --> <p>
 <table border=0 cellspacing=0 cellpadding=5 width="80%">
 <tr valign=top bgcolor="#ffdf61">
-	<td width="10%"><b>Order</b></td>
-	<td width="10%"><b>Receive<b></td>
-	<td width="30%"><b>Company</b></td>
+	<td width="10%"><b>Zamów</b></td>
+	<td width="10%"><b>Przyjmij<b></td>
+	<td width="30%"><b>Firma</b></td>
 	<td width="50%">
 		<table width="100%" border=0 cellspacing=0 cellpadding=5>
 			<tr>
 				<td width="15%"><b>Koszyk</b></td>
-				<td width="15%"><b>Items</b></td>
-				<td width="40%"><b>Staff</b></td>
-				<td width="30%"><b>Date</b></td>
+				<td width="15%"><b>Pozycje</b></td>
+				<td width="40%"><b>Personel</b></td>
+				<td width="30%"><b>Data</b></td>
 			</tr>
 		</table>
 	</td>
@@ -25,11 +25,11 @@ You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR
 			<!-- TMPL_IF name="active" -->
 				<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Dodaj zamówienie" alt="Dodaj" border=0></a>
 			<!-- TMPL_ELSE -->
-				Inactive
+				Nieaktywny
 			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" alt="Dodaj" border=0></a>
+			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="odbiór" alt="Dodaj" border=0></a>
 		</td>
 		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=id -->"><!-- TMPL_VAR name="name" --></a></td>
 		<td>

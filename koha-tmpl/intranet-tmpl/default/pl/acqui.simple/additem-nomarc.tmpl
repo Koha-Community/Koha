@@ -3,16 +3,15 @@ test
 <font size="6"><em><!-- TMPL_VAR NAME="TITLE" --></em></font>
 <p>
 <!-- TMPL_IF NAME="NOBARCODE" -->
-<font size="5" color="red">You must give the item a barcode</font>
+<font size="5" color="red">Należy nadać pozycji kod kreskowy</font>
 <p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="NOBIBLIOITEM" -->
-<font size="5" color="red">You must create a new group for your item to be
-added to</font>
+<font size="5" color="red">Należy utworzyć nową grupę, by móc dodać ją do dokumentu</font>
 <p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="BARCODEINUSE" -->
-<font size="5" color="red">Sorry, that barcode is already in use</font>
+<font size="5" color="red">Niestety, ten kod kreskowy już jest w użyciu</font>
 <p>
 <!-- /TMPL_IF -->
 <table align="left" cellpadding="5" cellspacing="0" border="1" width="220">
@@ -68,7 +67,7 @@ background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber"
 <table border="1" cellspacing="0" cellpadding="5">
 <tr valign="top" bgcolor="#CCCC99">
 <td background="/images/background-mem.gif" colspan="2"><b>DODAJ NOWY EGZEMPLARZ:</b><br>
-<small><i>For a website add the group only</i></small></td>
+<small><i>Dla witryny dodaj tylko grupę</i></small></td>
 </tr>
 <tr valign="top">
 <td>Kod paskowy pozycji:</td>
@@ -94,7 +93,7 @@ background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber"
 <td colspan="2" background="/images/background-mem.gif"><b>Dodaj do istniejącej grupy:</b></td>
 </tr>
 <tr valign="top">
-<td>Group:</td>
+<td>Grupa:</td>
 <td><select name="biblioitemnumber">
 
 <!-- TMPL_LOOP NAME="BIBITEMS" -->
@@ -126,27 +125,27 @@ background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><input name="isbn" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Publisher:</td>
+<td>Wydawca:</td>
 <td><input name="publishercode" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Publication Year:</td>
+<td>Rok publikacji:</td>
 <td><input name="publicationyear" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Place of Publication:</td>
+<td>Miejsce publikacji:</td>
 <td><input name="place" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Illustrator:</td>
+<td>Ilustrator:</td>
 <td><INPUT name="illus" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Dodatkowi Autorzy:<br><i>One Author per line</i></td>
+<td>Dodatkowi Autorzy:<br><i>Jeden Autor na wiersz</i></td>
 <td><textarea name="additionalauthors" cols="30" rows="6"></textarea></td>
 </tr>
 <tr valign="top">
-<td>Subject Headings:<br><i>One Subject per line</i></td>
+<td>Hasła Tematyczne:<br><i>Jedno hasło tematyczne na wiersz</i></td>
 <td><textarea name="subjectheadings" cols="30" rows="6"></textarea></td>
 </tr>
 <tr valign="top">
@@ -158,7 +157,7 @@ background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><INPUT name="dewey" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Dewey Subclass:</td>
+<td>Podklasa Dewey:</td>
 <td><input name="subclass" size="40"></td>
 </tr>
 <tr valign="top">
@@ -174,7 +173,7 @@ background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><input name="volume" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Number:</td>
+<td>Numer:</td>
 <td><input name="number" size="40"></td>
 </tr>
 <tr valign="top">
@@ -182,11 +181,11 @@ background="/images/background-mem.gif"><b><!-- TMPL_VAR NAME="biblioitemnumber"
 <td><input name="volumeddesc" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Pages:</td>
+<td>Strony:</td>
 <td><input name="pages" size="40"></td>
 </tr>
 <tr valign="top">
-<td>Size:</td>
+<td>Rozmiar:</td>
 <td><input name="size" size="40"></td>
 </tr>
 <tr valign="top">

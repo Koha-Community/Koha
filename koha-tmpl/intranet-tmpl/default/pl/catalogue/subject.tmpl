@@ -11,8 +11,8 @@
 	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
 <!-- TMPL_ELSE -->
 	<tr background="/images/background-mem.gif">
-<!-- TMPL_ELSE -->
-		<th>Przedmiot</th>
+<!-- /TMPL_IF -->
+		<th>Temat</th>
 	</tr>
 <!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
 	<tr>
@@ -30,10 +30,10 @@
 			<table border=0 cellpadding=0 cellspacing=0 width=100%>
 			<tr>
 				<td align=left>
-					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Previous Records</a>
+					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Poprzednie rekordy</a>
 				</td>
 				<td align=right>
-					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">Next Records</a>
+					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">Następne Rekordy</a>
 				</td>
 			</tr>
 			</table>

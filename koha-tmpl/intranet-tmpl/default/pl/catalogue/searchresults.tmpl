@@ -7,9 +7,9 @@
 
 
 <!-- TMPL_IF NAME=searchdesc -->
-	You searched on <b><!-- TMPL_VAR NAME=searchdesc --></b>
+	Szukano <b><!-- TMPL_VAR NAME=searchdesc --></b>
 <!-- TMPL_ELSE -->
-	You did not specify any seach criteria<br>
+	Nie podałeś kryteriów wyszukiwania<br>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_VAR NAME=numrecords --> znalezionych rekordów
@@ -38,7 +38,7 @@
 <!-- TMPL_IF NAME=numrecords -->
 <table border=0 cellspacing=0 cellpadding=2 width=90%>
 <tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE --> background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
-	<th align=left>Tytuł</th><th align=left>Autor</th><th>&copy;</th><th>Item Count</th><th>Location</th>
+	<th align=left>Tytuł</th><th align=left>Autor</th><th>&copy;</th><th>Ilość pozycji</th><th>Lokalizacja</th>
 	<!-- TMPL_IF NAME="opac" -->
 	<!-- TMPL_ELSE -->
 	<th>&nbsp;</th>
@@ -55,9 +55,9 @@
 		<!-- TMPL_IF NAME="opac" -->
 		<!-- TMPL_ELSE -->
 			<!-- TMPL_UNLESS NAME="norequests" -->
-				<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Request</a></td>
+				<td> <a href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Zamów</a></td>
 			<!-- TMPL_ELSE -->
-				<td>Not Reservable</td>
+				<td>Nie rezerwowalne</td>
 			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
 	</tr>
@@ -69,14 +69,14 @@
 			<tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor=#ccccff background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
 			<td align=left>
 				<!-- TMPL_IF NAME=displayprev -->
-				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Previous Records</a>
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Poprzednie rekordy</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->
 			</td>
 			<td align=right>
 				<!-- TMPL_IF NAME=displaynext -->
-				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Next Records</a>
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Następne Rekordy</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->

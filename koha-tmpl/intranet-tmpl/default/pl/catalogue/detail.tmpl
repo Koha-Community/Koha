@@ -6,12 +6,12 @@
 		<table border=0 cellpadding=10 align=right>
 		<tr>
 			<td>
-				<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
+				<a class="button" href=request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Zamówienia</a>
 			</td>
 		</tr>
 		</table>
 	<!-- /TMPL_IF -->
-	<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)  <!-- TMPL_VAR NAME="class" --></em></font><p>
+	<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></em></font><p>
 	<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
 	<!-----------------BIBLIO RECORD TABLE--------->
 	<tr valign="top">
@@ -32,7 +32,7 @@
 			<!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
 			<!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><br>
 			<!-- TMPL_IF name="collection" --><b>Kolekcja:</b> <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><br>
-			<!-- TMPL_IF name="subject" --><b>Przedmiot:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
+			<!-- TMPL_IF name="subject" --><b>Temat:</b> <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="copyrightdate" --><b>Rok :</b> <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="notes" --><b>Uwagi:</b> <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><br>
 			<!-- TMPL_IF name="unititle" --><b>Tytuł Ujednolicony:</b> <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --> <br>
@@ -59,8 +59,8 @@
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr bgcolor="#cccc99" background="/images/background-mem.gif">
 		<th>Typ pozycji</th>
-		<th>Location</th>
-		<th>Date Due</th>
+		<th>Lokalizacja</th>
+		<th>Do zwrotu</th>
 		<th>Ostatnio rejestrowana</th>
 		<th>Kod Paskowy</th>
 		<td>Tom</td>

@@ -5,11 +5,11 @@
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
-		<b>START, RECEIVE, MODIFY ANY ORDER</b>
+		<b>ROZPOCZNIJ, PRZYJMIJ, ZMIEŃ ZAMÓWIENIE</b>
 	</TD>
 </TR>
 <TR VALIGN=TOP>
-	<TD>Supplier Name</TD>
+	<TD>Nazwa Dostawcy</TD>
 	<TD>
 		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
 		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
@@ -20,7 +20,7 @@
 <TABLE width="40%" cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
-		<b>RECEIVE OR MODIFY PERIODICAL ORDER</b>
+		<b>PRZYJMIJ LUB ZMIENIAJ ZAMÓWIENIA OKRESOWE</b>
 	</TD>
 </TR>
 <TR VALIGN=TOP>
@@ -40,7 +40,7 @@
 	<FORM ACTION="/cgi-bin/koha/currency.pl">
 	<input type=hidden name=type value=change>
 	<TR VALIGN=TOP>
-		<TD  bgcolor="ffdf61" colspan=2><b>EXCHANGE RATES </b></TD>
+		<TD  bgcolor="ffdf61" colspan=2><b>KURSY WYMIANY </b></TD>
 	</TR>
 	<!-- TMPL_LOOP name="loop_currency" -->
 		<TR VALIGN=TOP>
@@ -68,11 +68,11 @@
 	<TD colspan=2>
 		<table cellspacing=0 cellpadding=2 border=1>
 			<tr>
-				<td><b>Budgets</B></TD>
-				<TD><b> Total</B></TD>
-				<TD><b>Spent</B></TD>
-				<TD><b>Comtd</B></TD>
-				<TD><b>Avail</B></TD>
+				<td><b>Budżety</B></TD>
+				<TD><b> Łącznie</B></TD>
+				<TD><b>Wydane</B></TD>
+				<TD><b>Zamierzone</B></TD>
+				<TD><b>Dost.</B></TD>
 			</TR>
 			<!-- TMPL_LOOP name="loop_budget" -->
 				<tr>
@@ -84,7 +84,7 @@
 				</TR>
 			<!-- /TMPL_LOOP -->
 			<tr>
-				<td><b> Total</b></TD>
+				<td><b> Łącznie</b></TD>
 				<TD align=right><b><!-- TMPL_VAR name="total" --></b></TD>
 				<TD align=right><b><!-- TMPL_VAR name="totspent" --></b></TD>
 				<TD align=right><b><!-- TMPL_VAR name="totcomtd" --></b></TD>
@@ -92,7 +92,7 @@
 			</TR>
 		</table>
 		<p>
-		Use your reload button to get the most recent figures. Committed figures are approximate only, as exchange rates will affect the amount actually paid.
+		Posłuż się przyciskiem odświerz, aby uzyskać najswieższe cyfry. Cyfry zaplanowane są tylko w prztybliżeniu, gdyż ich wysokość zależeć będzie od kursu wymiany, z jaką dokonano transakcji.
 		</p>
 	</TD>
 </TR>
@@ -103,11 +103,11 @@
 <TABLE cellspacing=0 cellpadding=5 border=1 >
 <TR VALIGN=TOP>
 	<TD  bgcolor="ffdf61" colspan=2>
-		<p><b>HELP Ordering:</b></p>
-		<ul>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</ul>
-		<ul>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </ul>
-		<ul>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </ul>
-		<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
+		<p><b>Zamówienia POMOC:</b></p>
+		<ul>Aby rozpocząć gromadzenie czy to zamówienie czy lokalny zakup albo donację najpierw wyszkukaj dostawcę, dodaj nowego jeśli potrzeba.</ul>
+		<ul>potem wybierz poprzedni koszyk zakupów lub utwórz nowy. Uwaga, koszyk zostanie skojarzony z nazwą uzytkownika z jaką się zalogowałeś  </ul>
+		<ul>Aby dokonać zamówienia dokumentu trzeba najpierw ustalić czy istnieje już dla niego opis, oraz albo dodać egzemplarz albo utworzyć nowy dla niego opis i dodać egzemplarz.  </ul>
+		<p>Aby dokończyć koszyk zakupów kliknij na "przejrzyj koszyk zakupów" lub szukaj powyżej, a potem naciśnij "potwierdź koszyk".</p>
 	</td>
 </TR>
 </table>

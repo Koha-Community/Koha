@@ -67,7 +67,7 @@ win.document.write("</font></body></html>");
 <!-- /TMPL_LOOP -->
 <!-- TMPL_IF name="orderexists" --><input type=hidden name=orderexists value=yes><!-- /TMPL_IF -->
 <a href="basket.pl?basket=<!-- TMPL_VAR name=basket -->" class="button">Przejrzyj Koszyk</a> <h1><!-- TMPL_VAR name="ordnum" --> - Szczegóły Zamówienia </h1><br>
-Shopping Basket For: <!-- TMPL_VAR name="name" -->
+Koszyk zakupów dla: <!-- TMPL_VAR name="name" -->
 <P>
 <CENTER>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
@@ -83,11 +83,11 @@ Shopping Basket For: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" ></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD> Publisher</td>
+		<TD> Wydawca</td>
 		<td><input type=text size=30 name=publishercode value="<!-- TMPL_VAR name="publishercode" -->" ></td>
 	</tr>
 	<TR VALIGN=TOP>
-	<TD>Copyright Date</td>
+	<TD>Data Copyright</td>
 	<td><input type=text size=20 name=copyrightdate value="<!-- TMPL_VAR name="copyrightdate" -->">
 	</td>
 	</tr>
@@ -100,7 +100,7 @@ Shopping Basket For: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Series</td>
+		<TD>Seria</td>
 		<td><input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
@@ -112,19 +112,19 @@ Shopping Basket For: <!-- TMPL_VAR name="name" -->
 <table border=1 cellspacing=0 cellpadding=5 width="40%">
 	<tr valign=top bgcolor=#99cc33><td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>SZCZEGÓŁY RACHUNKU</B></td></tr>
 	<TR VALIGN=TOP>
-		<TD>Quantity</td>
+		<TD>Ilość</td>
 		<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->" onchange='update(this.form)' ></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Bookfund</td>
+		<TD>Fundusz Książkowy</td>
 		<td><!-- TMPL_VAR name="CGIbookfund" --></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Suppliers List Price</td>
+		<TD>Cena Katalogowa Dostawcy</td>
 		<td><input type=text size=20 name=list_price value="<!-- TMPL_VAR name="listprice" -->" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Replacement Cost <br><FONT SIZE=2></td>
+		<TD>Koszt wymiany <br><FONT SIZE=2></td>
 		<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->" onchange='update(this.form)'>
 	</tr>
 	<TR VALIGN=TOP>
@@ -136,7 +136,7 @@ Shopping Basket For: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=GST value="" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD><B>BUDGETED TOTAL</B></td>
+		<TD><B>BUDŻETOWANE ŁĄCZNIE</B></td>
 		<td><input type=text size=20 name=total value="" onchange='update(this.form)'></td>
 	</tr>
 	<TR VALIGN=TOP  bgcolor=#ffffcc>
@@ -144,7 +144,7 @@ Shopping Basket For: <!-- TMPL_VAR name="name" -->
 		<td><input type=text size=20 name=cost></td>
 	</tr>
 	<TR VALIGN=TOP  bgcolor=#ffffcc>
-		<TD>Invoice Number *</td>
+		<TD>Numer Faktury *</td>
 		<td><input type=text size=20 name=invoice ></td>
 	<TR VALIGN=TOP>
 		<TD>Uwagi</td>
@@ -161,7 +161,7 @@ Shopping Basket For: <!-- TMPL_VAR name="name" -->
 <tr><td bgcolor=#cccc99  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>POMOC</B><br>
 <UL>
 <LI>Tłuste pola muszą być wypełnione, aby utworzyć nowy opis i egzemplarz.<p>
-<LI>Shaded fields can be used to do a "quick" receive, when items have been purchased locally or gifted. In this case the quantity "ordered" will also be entered into the database as the quantity received.
+<LI>Zacienione pola mogą być uzyte do "szybkiego" przyjęcia, gdy pozycje były nabyte lokalnie lub ofiarowane. W tym wypadku ilość "zamówiona" bedzie również wpisana do bazy jako ilość otrzymana.
 </UL>
 </td></tr></table>
 <p> &nbsp; </p>

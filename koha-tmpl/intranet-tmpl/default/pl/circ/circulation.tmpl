@@ -191,7 +191,7 @@
 										</td>
 									</tr>
 								</table>
-								<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR name="selected" -->> Sticky Due Date
+								<input type="checkbox" name="stickyduedate" <!-- TMPL_VAR name="selected" -->> Przyczepna data zwrotu
 							</td>
 						</tr>
 					</table>
@@ -221,13 +221,13 @@
     </td></tr>
 <!-- TMPL_IF name="noissues" -->
 <!-- TMPL_IF NAME="gna" -->
-<tr><td valign="top"><font color="red">GNA</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Czytelnik zniknął bez adresu</td></tr>
+<tr><td valign="top"><font color="red">ZBA</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Czytelnik zniknął bez adresu</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="lost" -->
 <tr><td valign="top"><font color="red">ZGUBIONA</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Karta czytelnika zaginęła</td></tr>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="dbarred" -->
-<tr><td valign="top"><font color="red">ODBLOKOWANY</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Czytelnik jest odblokowany</td></tr>
+<tr><td valign="top"><font color="red">ODBLOKOWANY</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Czytelnik jest zablokowany</td></tr>
 <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
 		<tr><td valign="top"><font color="red">OPŁATY</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Płatność</a></td></tr>

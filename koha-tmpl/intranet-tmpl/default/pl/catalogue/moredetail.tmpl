@@ -6,7 +6,7 @@
 <table border=0 cellpadding=10 align=right>
 <tr>
 	<td>
-		<a class="button" href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Requests</a>
+		<a class="button" href=/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->>Zamówienia</a>
 	</td>
 </tr>
 </table>
@@ -24,12 +24,12 @@ href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intr
 </TR>
 <tr VALIGN=TOP  >
 <TD width=210 >
-<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
-<INPUT TYPE="image" name="delete"  VALUE="delete" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
+<input type="image" name="submit" value="zmień" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
+<input type="image" name="delete" value="wymaż" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
 <b>Numeropisu:</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
-<b>Typ pozycji:</b> <!-- TMPL_VAR NAME="itemtype" --><br>
+<b>Typ materiału:</b> <!-- TMPL_VAR NAME="itemtype" --><br>
 <b>URL:</b> <!-- TMPL_VAR NAME="url" --><br>
 <b>Okres wypożyczenia:</b> <!-- TMPL_VAR NAME="loanlength" --><br>
 <b>Opłata wynajmu:</b> <!-- TMPL_VAR NAME="rentalcharge" --><br>
@@ -54,7 +54,7 @@ href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intr
 <img src="<!-- TMPL_VAR name="themelang" -->/images/holder.gif" width=16 height=300 align=left>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
 <TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>BARCODE <!-- TMPL_VAR NAME="barcode" --></b></TD>
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>KOD PASKOWY <!-- TMPL_VAR NAME="barcode" --></b></TD>
 </TR>
 <tr VALIGN=TOP>
 <TD width=220>
@@ -62,8 +62,8 @@ href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intr
 <input type=hidden name=bibitem value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
 <input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
 <input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
-<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
-<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
+<input type="image" name="submit" value="zmień" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
+<input type="image" name="delete" value="wymaż" border=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
 <b>Oddział Właściwy:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
@@ -80,7 +80,7 @@ href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&type=intr
 <b>Opłacono przez:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
 <b>Uwagi:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
 <b>Przedłużenia:</b> <!-- TMPL_VAR NAME="renewals" --><br>
-<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Nabyto</a> dnia:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
+<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Nabyto</a> Dnia:<!-- TMPL_VAR NAME="dateaccessioned" --><br>
 <b>Anulowano: <!-- TMPL_VAR NAME="wthdrawn" --><br>
 <b><a
 href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>Wypożyczeń w sumie:</a></b> <!-- TMPL_VAR NAME="issues" --><br>

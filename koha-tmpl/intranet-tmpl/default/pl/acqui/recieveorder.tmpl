@@ -1,25 +1,25 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<h1>Przyjmij Zamówienia od Dostawcy <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR name="name" --></a></h1>
+<h1>Przyjmij Zamówienia Od Dostawcy <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR name="name" --></a></h1>
 <p>
 <CENTER>
 <form method=get action="receive.pl">
 <input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 <p>
 <table border=1 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor="#ffdf61"><td  colspan=2><B>SUPPLIER INVOICE INFORMATION</B></td></tr>
+<tr valign=top bgcolor="#ffdf61"><td  colspan=2><B>FAKTURA DOSTAWCY - INFORMACJE</B></td></tr>
 <TR VALIGN=TOP >
-<TD>Supplier Invoice Number</td>
+<TD>Numer Faktury Dostawcy</td>
 <td><input type=text size=20 name=invoice>
 </td>
 </tr>
 <TR VALIGN=TOP bgcolor="#ffffcc">
-<TD>GST</td>
+<TD>VAT</td>
 <td><input type=text size=20 name=gst>
 </td>
 </tr>
 <TR VALIGN=TOP>
-<TD>Freight</td>
+<TD>Transport</td>
 <td><input type=text size=20 name=freight>
 </td>
 </tr>

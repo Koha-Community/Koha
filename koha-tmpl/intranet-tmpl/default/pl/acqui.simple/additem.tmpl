@@ -29,7 +29,7 @@
 <DIV name="10XX" id="10XX">
 <table border=1 cellspacing=0 cellpadding=5 width=80%>
 	<tr  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-		<th>Existing items</th>
+		<th>Istniejące pozycje</th>
 	</tr>
 </table>
 <table border=1 cellspacing=0 cellpadding=0 width=80%>
@@ -49,7 +49,7 @@
 
 <table border=1 cellspacing=0 cellpadding=5 width=80%>
 	<tr  background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-		<th>New Item</th>
+		<th>Nowy Egzemplarz</th>
 	</tr>
 </table><table width=80%  cellspacing=0 cellpadding=1 border=0>
 	<!-- TMPL_LOOP name="item" -->
@@ -68,7 +68,7 @@
 </table>
 <input type="hidden" name="itemnum" value="<!-- TMPL_VAR name="itemnum" -->">
 <!-- TMPL_IF name="barcode_not_unique" -->
-	<div id="problem"><b>ERROR : Barcode already exists !<b></div>
+	<div id="problem"><b>BŁĄD : kod kreskowy już istnieje !<b></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="opisadd" -->
 <input type="button" value="Dodaj pozycję" onclick='Check(this.form)' accesskey="w">
@@ -76,7 +76,7 @@
 <input type="hidden" name="tag" value="<!-- TMPL_VAR name="itemtagfield" -->">
 <input type="hidden" name="subfield" value="<!-- TMPL_VAR name="itemtagsubfield" -->">
 <input type="hidden" name="field_value" value="<!-- TMPL_VAR name="itemnum" -->">
-<input type="button" value="Modify item" onClick='Check(this.form)' accesskey="w">
+<input type="button" value="Zmieniaj pozycję" onclick='Check(this.form)' accesskey="w">
 <!-- /TMPL_IF -->
 </center>
 </form>

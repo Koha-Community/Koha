@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Acquisitions</title>
+<title>KOHA: INTRANET: Gromadzenie</title>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
@@ -73,5 +73,5 @@ a.acquisition:hover {
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj do</a> Systemu Koha</p>
 <!-- /TMPL_IF -->

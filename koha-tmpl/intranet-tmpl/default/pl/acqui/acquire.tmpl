@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <div align=right>
-Invoice: <!-- TMPL_VAR name="invoice" --><br>
-Received By: <!-- TMPL_VAR name="user" --><br>
+Faktura: <!-- TMPL_VAR name="invoice" --><br>
+Przyjęte przez: <!-- TMPL_VAR name="user" --><br>
 <!-- TMPL_VAR name="date" -->
 </div>
 <h1>Receipt Summary for: <i><!-- TMPL_VAR name="name" --></i> Faktura <i><!-- TMPL_VAR name="invoice" --></i></h1>
@@ -25,8 +25,8 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 	</script>
 	<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
 	<h1><!-- TMPL_VAR name="ordernumber" --> - Przyjmij Zamówienie</h1><br>
-	Shopping Basket For: <!-- TMPL_VAR name="name" -->
-	<br> Order placed: <!-- TMPL_VAR name="date" -->
+	Koszyk zakupów dla: <!-- TMPL_VAR name="name" -->
+	<br> Zamówienie złożone: <!-- TMPL_VAR name="date" -->
 	<P>
 	<CENTER>
 	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
@@ -46,7 +46,7 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 			</td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>Copyright Date</td>
+			<TD>Data Copyright</td>
 			<td><input type=text size=20 name=copyright value="<!-- TMPL_VAR name="copyrightdate" -->" >
 			</td>
 		</tr>
@@ -59,7 +59,7 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 			<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>Series</td>
+			<TD>Seria</td>
 			<td><input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->"></td>
 		</tr>
 		<TR VALIGN=TOP>
@@ -67,7 +67,7 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 			<td><!-- TMPL_VAR name="CGIbranch" --></td>
 		</tr>
 		<TR VALIGN=TOP bgcolor=#ffffcc >
-			<TD><B>Item Barcode *</B></td>
+			<TD><B>Kod kreskowy pozycji *</B></td>
 			<td><input type=text size=20 name=barcode value="<!-- TMPL_VAR name="barcode" -->"></td>
 		</tr>
 		<TR VALIGN=TOP bgcolor=#ffffcc >
@@ -95,21 +95,21 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 			<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>SZCZEGÓŁY RACHUNKU</B></td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD><B>Bookfund *</B></td>
+			<TD><B>Fundusz Książkowy *</B></td>
 			<td><!-- TMPL_VAR name="CGIbookfund" -->
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>Quantity Ordered</td>
+			<TD>Zamówiona ilość</td>
 			<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->">
 			</td>
 		</tr>
 		<TR VALIGN=TOP bgcolor=#ffffcc>
-			<TD><B>Quantity Received *</B></td>
+			<TD><B>Otrzymana ilość *</B></td>
 			<td><input type=text size=20 name=quantityrec value="<!-- TMPL_VAR name="quantityreceived" -->">
 			</td>
 		</tr>
 		<TR VALIGN=TOP>
-			<TD>Replacement Cost</td>
+			<TD>Koszt wymiany</td>
 			<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->">
 		</tr>
 		<TR VALIGN=TOP>
@@ -121,7 +121,7 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 			<td><input type=text size=20 name=cost value="<!-- TMPL_VAR name="unitprice" -->"></td>
 		</tr>
 		<TR VALIGN=TOP bgcolor=#ffffcc>
-			<TD>Invoice Number</td>
+			<TD>Numer Faktury</td>
 			<td>
 				<!-- TMPL_VAR name="invoice" -->
 				<input type=hidden name=invoice value="<!-- TMPL_VAR name="invoice" -->">
@@ -145,8 +145,8 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 		<td><b>ISBN</b></td>
 		<td><b>TYTUŁ</b></td>
 		<td><b>AUTOR</b></td>
-		<td><b>Qty</b></td>
-		<td><b>Received</b></td>
+		<td><b>Ilość</b></td>
+		<td><b>Otrzymane</b></td>
 	</tr>
 	<!-- TMPL_LOOP name="loop" -->
 		<tr>

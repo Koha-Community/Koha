@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
 
- <H1>Koszyk Zakupów dla: <!-- TMPL_VAR name="bookselname" --></H1>
+ <H1>Koszyk zakupów dla: <!-- TMPL_VAR name="bookselname" --></H1>
 
 <!-- TMPL_IF name ="testdonation" -->
 	<a href="newbiblio.pl?id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&sub=<!-- TMPL_VAR name="parsub" -->">
@@ -15,7 +15,7 @@
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
 <input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 <input type=hidden name=basket value=<!-- TMPL_VAR name="basket" -->>
-<b>New Search: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
+<b>Nowe Zapytanie: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
 <br clear=all>
 
 <CENTER>
@@ -37,7 +37,7 @@ Szukano
 		<TD><b>AUTOR</b></TD>
 		<TD><b>&copy;</b></TD>
 		<TD><b>ILOŚĆ</b></TD>
-		<TD><b>LOCATION</b></TD>
+		<TD><b>LOKALIZACJA</b></TD>
 	</TR>
 
 <!-- TMPL_LOOP name="loopresult" -->

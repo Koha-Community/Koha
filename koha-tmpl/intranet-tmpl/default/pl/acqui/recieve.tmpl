@@ -1,11 +1,11 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <div align=right>
-Invoice: <!-- TMPL_VAR name="invoice" --><br>
-Received By: <!-- TMPL_VAR name="user" --><br>
+Faktura: <!-- TMPL_VAR name="invoice" --><br>
+Przyjęte przez: <!-- TMPL_VAR name="user" --><br>
 <!-- TMPL_VAR name="date" -->
 </div>
-<h1>Receipt Summary for : <i><!-- TMPL_VAR name="name" --></i> Faktura <i><!-- TMPL_VAR name="invoice" --></i></h1>
+<h1>Podsumowanie dla : <i><!-- TMPL_VAR name="name" --></i> Faktura <i><!-- TMPL_VAR name="invoice" --></i></h1>
 <CENTER>
 
 <FORM ACTION="/cgi-bin/koha/acqui/acquire.pl">
@@ -14,7 +14,7 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 <input type=hidden name=freight value="<!-- TMPL_VAR name="freight" -->">
 <input type=hidden name=invoice value="<!-- TMPL_VAR name="invoice" -->">
 
-<b>Szukaj wg. ISBN lub Tytułu:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
+<b>Szukaj wg. ISBN lub Tytułu: </b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
 </form>
 <p>
 <FORM ACTION="" method=get name=orderform>
@@ -25,10 +25,10 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 		<td><b>ISBN</b></td>
 		<td><b>TYTUŁ</b></td>
 		<td><b>AUTOR</b></td>
-		<td><b>ACTUAL</b></td>
-		<td><b>P&P</b></td>
-		<td><b>QTY</b></td>
-		<td><b>TOTAL</b></td>
+		<td><b>FAKTYCZNY</b></td>
+		<td><b>Manipulacyjne</b></td>
+		<td><b>ILOŚĆ</b></td>
+		<td><b>W SUMIE</b></td>
 	</tr>
 	<!-- TMPL_VAR name="count" -->
 	<!-- TMPL_LOOP name="loop_orders" -->
@@ -37,10 +37,10 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 			<td><!-- TMPL_VAR name="isbn" --></td>
 			<td><a href="acquire.pl?recieve=<!-- TMPL_VAR name="ordernumber" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->&invoice=<!-- TMPL_VAR name="invoice" -->&gst=<!-- TMPL_VAR name="gst" -->&freight=<!-- TMPL_VAR name="freight" -->&id=<!-- TMPL_VAR name="id" -->"><!-- TMPL_VAR name="title" --></a></td>
 			<td><!-- TMPL_VAR name="author" --></td>
-			<td>$<!-- TMPL_VAR name="unitprice" --></td>
+			<td>PLN<!-- TMPL_VAR name="unitprice" --></td>
 			<td></td>
 			<td><!-- TMPL_VAR name="quantityrecieved" --></td>
-			<td>$<!-- TMPL_VAR name="total" --></td>
+			<td>PLN<!-- TMPL_VAR name="total" --></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	<tr valign=top bgcolor=white>
@@ -51,25 +51,25 @@ Received By: <!-- TMPL_VAR name="user" --><br>
 		<td></td>
 		<td></td>
 		<td></td>
-		<td><b>SUBTOTALS</b></td>
-		<td>$<!-- TMPL_VAR name="totalprice" --></td>
+		<td><b>ŁĄCZNIE</b></td>
+		<td>PLN<!-- TMPL_VAR name="totalprice" --></td>
 		<td><!-- TMPL_VAR name="totalfreight" --></td>
 		<td><!-- TMPL_VAR name="totalquantity" --></td>
-		<td>$<!-- TMPL_VAR name="tototal" --></td>
+		<td>PLN<!-- TMPL_VAR name="tototal" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td colspan=5 rowspan=2  bgcolor="#ffdf61">
 		<b>POMOC</b>
 		<br>
-		The total at the bottom of the page should be within a few cents of the total for the invoice.<p>
+		Kwota łączna na dole strony powinna być różna o kilka groszy od kwoty łącznej na fakturze.<p>
 		Po skończeniu faktury zapisz zmiany.
 		</td>
-		<td colspan=2 align=right><b>GST</b></td>
-		<td>$<!-- TMPL_VAR name="gst" --></td>
+		<td colspan=2 align=right><b>VAT</b></td>
+		<td>PLN<!-- TMPL_VAR name="gst" --></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td colspan=2 align=right ><b>TOTAL</b></td>
-		<td>$<!-- TMPL_VAR name="grandtot" --></td>
+		<td colspan=2 align=right ><b>W SUMIE</b></td>
+		<td>PLN<!-- TMPL_VAR name="grandtot" --></td>
 	</tr>
 </table>
 </CENTER>

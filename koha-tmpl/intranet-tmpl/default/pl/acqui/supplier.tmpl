@@ -5,7 +5,7 @@
 <input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 
 <!-- TMPL_IF NAME=id -->
-	<h1>Update: <!-- TMPL_VAR name="name" --></h1>
+	<h1>Aktualizuj: <!-- TMPL_VAR name="name" --></h1>
 <!-- TMPL_ELSE -->
 	<h1><em>Dodaj dostawcę</h1>
 <!-- /TMPL_IF -->
@@ -17,7 +17,7 @@
 		<td colspan=2><B>DANE O FIRMIE</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD><b>Company Name</b></td>
+		<TD><b>Nazwa firmy</b></td>
 		<td><input type=text size=20 name=company value="<!-- TMPL_VAR name="name" -->">
 		</td>
 	</tr>
@@ -51,11 +51,11 @@
 		<td colspan=2><B>DANE KONTAKTOWE</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Contact Name</td>
+		<TD>Osoba kontaktowa</td>
 		<td><input type=text size=20 name=company_contact_name value="<!-- TMPL_VAR name="contact" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Position</td>
+		<TD>Pozycja</td>
 		<td><input type=text size=20 name=company_contact_position value="<!-- TMPL_VAR name="contpos" -->">
 		</td>
 	</tr>
@@ -91,24 +91,24 @@
 		<td colspan=2><B>STATUS BIEŻĄCY</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Supplier is</td>
+		<TD>Dostawca jest</td>
 		<td>
 			 <!-- TMPL_IF name="active" -->
-				<input type="radio" name="status" value="1" checked>Active  <input type="radio" name="status" value="0">Inactive</td>
+				<input type="radio" name="status" value="1" checked>Aktywny <input type="radio" name="status" value="0">Nieaktywny</td>
 			<!-- TMPL_ELSE -->
-				<input type="radio" name="status" value="1">Active  <input type="radio" name="status" value="0" checked>Inactive</td>
+				<input type="radio" name="status" value="1">Aktywny <input type="radio" name="status" value="0" checked>Nieaktywny</td>
 			<!-- /TMPL_IF -->
 	</tr>
 	<tr valign=top bgcolor="#ffdf61">
-		<td colspan=2><B>ORDERING INFORMATION</B></td>
+		<td colspan=2><B>DANE ZAMÓWIENIA</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Publishers and Imprints</td>
+		<TD>Wydawcy i druki</td>
 		<td><textarea name="publishers_imprints" cols=20 rows=4><!-- TMPL_VAR name="specialty" --></textarea>
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>List Prices are</td>
+		<TD>Cena katalogowa jest</td>
 		<td>
 			<select name=list_currency size=1>
 			<!-- TMPL_LOOP name="loop_pricescurrency" -->
@@ -118,7 +118,7 @@
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Invoice Prices are</td>
+		<TD>Ceny z faktury są</td>
 		<td>
 			<select name=invoice_currency size=1>
 			<!-- TMPL_LOOP name="loop_invoicecurrency" -->
@@ -128,25 +128,25 @@
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>GST Registered</td>
+		<TD>Płatnik VATu</td>
 		<td>
 			<input type=radio name=gst value=1 <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>Tak <input type=radio name=gst value=0 <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>Nie
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>List Item Price Includes GST</td>
+		<TD>Cena katalogowa pozycji zawiera VAT</td>
 		<td>
 			<input type=radio name=list_gst value=1 <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>Tak <input type=radio name=list_gst value=0 <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>Nie
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Invoice Item Price Includes GST</td>
+		<TD>Cena pozycji na fakturze zawiera VAT</td>
 		<td>
 			<input type=radio name=invoice_gst value=1 <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>Tak <input type=radio name=invoice_gst value=0 <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>Nie
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Discount</td>
+		<TD>Rabat</td>
 		<td><input type=text size=3 name=discount value=<!-- TMPL_VAR name="discount" -->> %
 	</tr>
 </table>
