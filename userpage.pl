@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# NOTE: This file uses standard 8-character tabs
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -25,6 +26,7 @@ use C4::Output;
 use CGI;
 use C4::Search;
 use C4::Auth;
+use C4::Interface::CGI::Output;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -39,3 +41,7 @@ my ($template, $loggedinuser, $cookie)
 warn "userloggedin : $loggedinuser (".$query->param('userid')." et ".$query->param('password');
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+# Local Variables:
+# tab-width: 8
+# End:
