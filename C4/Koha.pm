@@ -191,8 +191,7 @@ sub getbranches {
 	my $sth=$dbh->prepare("select * from branches");
 	$sth->execute;
 	while (my $branch=$sth->fetchrow_hashref) {
-		my $query = "select categorycode from branchrelations where branchcode = ?";
-		my $nsth = $dbh->prepare($query);
+		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
 		$nsth->execute($branch->{'branchcode'});
 		while (my ($cat) = $nsth->fetchrow_array) {
 			# FIXME - This seems wrong. It ought to be

@@ -93,10 +93,12 @@ sub TotalPaid {
 	my $dbh = C4::Context->dbh;
 	my $query="Select * from accountlines,borrowers where (accounttype = 'Pay' or accounttype ='W')
 					and accountlines.borrowernumber = borrowers.borrowernumber";
+	my @bind = ();
 	if ($time eq 'today'){
 		$query .= " and date = now()";
 	} else {
-		$query.=" and date>='$time' and date<='$time2'";
+		$query.=" and date>=? and date<=?";
+		@bind = ($time,$time2);
 	}
 	#  my $query="Select * from statistics,borrowers
 	#  where statistics.borrowernumber= borrowers.borrowernumber
@@ -109,7 +111,7 @@ sub TotalPaid {
 	$query.=" order by timestamp";
 	#  print $query;
 	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	$sth->execute(@bind);
 	my @results;
 	my $i=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -126,12 +128,12 @@ sub getcharges{
 	my($borrowerno,$timestamp)=@_;
 	my $dbh = C4::Context->dbh;
 	my $timestamp2=$timestamp-1;
-	my $query="Select * from accountlines where borrowernumber=$borrowerno
-	and timestamp = '$timestamp' and accounttype <> 'Pay' and
-	accounttype <> 'W'";
-	my $sth=$dbh->prepare($query);
+	my $query="";
+	my $sth=$dbh->prepare("Select * from accountlines where borrowernumber=?
+	and timestamp = ? and accounttype <> 'Pay' and
+	accounttype <> 'W'");
 	#  print $query,"<br>";
-	$sth->execute;
+	$sth->execute($borrowerno,$timestamp);
 	my $i=0;
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -147,9 +149,8 @@ sub getcharges{
 sub Getpaidbranch{
 	my($date,$borrno)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="select * from statistics where type='payment' and datetime >'$date' and  borrowernumber='$borrno'";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my $sth=$dbh->prepare("select * from statistics where type='payment' and datetime >? and  borrowernumber=?");
+	$sth->execute($date,$borrno);
 	#  print $query;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -161,7 +162,7 @@ sub Getpaidbranch{
 # Otherwise, it needs a POD.
 sub unfilledreserves {
 	my $dbh = C4::Context->dbh;
-	my $query="select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where found <> 'F' and cancellationdate
+	my $sth=$dbh->prepare("select *,biblio.title from reserves,reserveconstraints,biblio,borrowers,biblioitems where found <> 'F' and cancellationdate
 								is NULL and biblio.biblionumber=reserves.biblionumber and
 								reserves.constrainttype='o'
 								and (reserves.biblionumber=reserveconstraints.biblionumber
@@ -169,8 +170,7 @@ sub unfilledreserves {
 								and
 								reserves.borrowernumber=borrowers.borrowernumber and
 								biblioitems.biblioitemnumber=reserveconstraints.biblioitemnumber order by
-								biblio.title,reserves.reservedate";
-	my $sth=$dbh->prepare($query);
+								biblio.title,reserves.reservedate");
 	$sth->execute;
 	my $i=0;
 	my @results;
@@ -179,12 +179,11 @@ sub unfilledreserves {
 		$i++;
 	}
 	$sth->finish;
-	$query="select *,biblio.title from reserves,biblio,borrowers where found <> 'F' and cancellationdate
+	$sth=$dbh->prepare("select *,biblio.title from reserves,biblio,borrowers where found <> 'F' and cancellationdate
 		is NULL and biblio.biblionumber=reserves.biblionumber and reserves.constrainttype='a' and
 		reserves.borrowernumber=borrowers.borrowernumber
 		order by
-		biblio.title,reserves.reservedate";
-	$sth=$dbh->prepare($query);
+		biblio.title,reserves.reservedate");
 	$sth->execute;
 	while (my $data=$sth->fetchrow_hashref){
 		$results[$i]=$data;

@@ -36,14 +36,12 @@ $VERSION = 0.01;
 sub stockreport {
   my $dbh = C4::Context->dbh;
   my @results;
-  my $query="Select count(*) from items where homebranch='C'";
-  my $sth=$dbh->prepare($query);
+  my $sth=$dbh->prepare("Select count(*) from items where homebranch='C'");
   $sth->execute;
   my $count=$sth->fetchrow_hashref;
   $results[0]->{'value'}="$count->{'count'}\t Levin";
   $sth->finish;
-  $query="Select count(*) from items where homebranch='F'";
-  $sth=$dbh->prepare($query);
+  $sth=$dbh->prepare("Select count(*) from items where homebranch='F'");
   $sth->execute;
   $count=$sth->fetchrow_hashref;
   $results[1]->{'value'}="$count->{'count'}\t Foxton";

@@ -96,9 +96,9 @@ sub GetShelfList {
     $sth->execute;
     my %shelflist;
     while (my ($shelfnumber, $shelfname) = $sth->fetchrow) {
-	my $sti=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=$shelfnumber");
+	my $sti=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=?");
 		# FIXME - Should there be an "order by" in here somewhere?
-	$sti->execute;
+	$sti->execute($shelfnumber);
 	my ($count) = $sti->fetchrow;
 	$shelflist{$shelfnumber}->{'shelfname'}=$shelfname;
 	$shelflist{$shelfnumber}->{'count'}=$count;
@@ -123,15 +123,13 @@ I don't know what C<$env> is.
 sub GetShelfContents {
     my ($env, $shelfnumber) = @_;
     my @itemlist;
-    my $sth=$dbh->prepare("select itemnumber from shelfcontents where shelfnumber=$shelfnumber order by itemnumber");
-    $sth->execute;
+    my $sth=$dbh->prepare("select itemnumber from shelfcontents where shelfnumber=? order by itemnumber");
+    $sth->execute($shelfnumber);
     while (my ($itemnumber) = $sth->fetchrow) {
 	my ($item) = getiteminformation($env, $itemnumber, 0);
 	push (@itemlist, $item);
     }
     return (\@itemlist);
-		# FIXME - Wouldn't it be more intuitive to return a list,
-		# rather than a reference-to-list?
 }
 
 =item AddToShelf
@@ -177,8 +175,8 @@ C<$env> is ignored.
 #'
 sub RemoveFromShelf {
     my ($env, $itemnumber, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("delete from shelfcontents where shelfnumber=$shelfnumber and itemnumber=$itemnumber");
-    $sth->execute;
+    my $sth=$dbh->prepare("delete from shelfcontents where shelfnumber=? and itemnumber=?");
+    $sth->execute($shelfnumber,$itemnumber);
 }
 
 =item AddShelf
@@ -199,14 +197,13 @@ C<$env> is ignored.
 # as well?
 sub AddShelf {
     my ($env, $shelfname) = @_;
-    my $q_shelfname=$dbh->quote($shelfname);
-    my $sth=$dbh->prepare("select * from bookshelf where shelfname=$q_shelfname");
-    $sth->execute;
+    my $sth=$dbh->prepare("select * from bookshelf where shelfname=?");
+	$sth->execute($shelfname);
     if ($sth->rows) {
 	return(1, "Shelf \"$shelfname\" already exists");
     } else {
-	$sth=$dbh->prepare("insert into bookshelf (shelfname) values ($q_shelfname)");
-	$sth->execute;
+	$sth=$dbh->prepare("insert into bookshelf (shelfname) values (?)");
+	$sth->execute($shelfname);
 	return (0, "Done");
     }
 }
@@ -228,14 +225,14 @@ C<$env> is ignored.
 #'
 sub RemoveShelf {
     my ($env, $shelfnumber) = @_;
-    my $sth=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=$shelfnumber");
-    $sth->execute;
+    my $sth=$dbh->prepare("select count(*) from shelfcontents where shelfnumber=?");
+	$sth->execute($shelfnumber);
     my ($count)=$sth->fetchrow;
     if ($count) {
 	return (1, "Shelf has $count items on it.  Please remove all items before deleting this shelf.");
     } else {
-	$sth=$dbh->prepare("delete from bookshelf where shelfnumber=$shelfnumber");
-	$sth->execute;
+	$sth=$dbh->prepare("delete from bookshelf where shelfnumber=?");
+	$sth->execute($shelfnumber);
 	return (0, "Done");
     }
 }
@@ -246,6 +243,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.11  2003/12/15 10:57:08  slef
+# DBI call fix for bug 662
+#
 # Revision 1.10  2003/02/05 10:05:02  acli
 # Converted a few SQL statements to use ? to fix a few strange SQL errors
 # Noted correct tab size
