@@ -403,7 +403,7 @@ if ($borrower) {
 <td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
     } 
-    foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @previousissues){
+    foreach my $book (sort {$a->{'due_date'} <=> $b->{'due_date'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
