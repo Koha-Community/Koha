@@ -5,14 +5,12 @@ use CGI;
 use strict;
 use C4::Acquisitions;
 use C4::Output;
+use C4::Circulation::Circ2;
+use C4::Accounts2;
 
+my $env;
 my $input= new CGI;
-#print $input->header;
-#print $input->dump;
 
-
-#my $title=checkinp($input->param('Title'));
-#my $author=checkinp($input->param('Author'));
 my $bibnum=checkinp($input->param('bibnum'));
 my $itemnum=checkinp($input->param('itemnumber'));
 my $copyright=checkinp($input->param('Copyright'));
@@ -23,10 +21,8 @@ my $notes=checkinp($input->param('ItemNotes'));
 
 #need to do barcode check
 my $barcode=$input->param('Barcode');
-#modbiblio($bibnum,$title,$author,$copyright,$seriestitle,$serial,$unititle,$notes);
 
 my $bibitemnum=checkinp($input->param('bibitemnum'));
-#my $olditemtype
 my $itemtype=checkinp($input->param('Item'));
 my $isbn=checkinp($input->param('ISBN'));
 my $publishercode=checkinp($input->param('Publisher'));
@@ -38,11 +34,11 @@ my $wthdrawn=$input->param('withdrawn');
 my $classification;
 my $dewey;
 my $subclass;
+my $override=$input->param('override');
 if ($itemtype ne 'NF'){
   $classification=$class;
 }
 if ($class =~/[0-9]+/){
-#   print $class;
    $dewey= $class;
    $dewey=~ s/[a-z]+//gi;
    my @temp;
@@ -53,7 +49,6 @@ if ($class =~/[0-9]+/){
    }
    $classification=$temp[0];
    $subclass=$temp[1];
-#   print $classification,$dewey,$subclass;
 }else{
   $dewey='';
 }
@@ -61,21 +56,64 @@ my $illus=checkinp($input->param('Illustrations'));
 my $pages=checkinp($input->param('Pages'));
 my $volumeddesc=checkinp($input->param('Volume'));
 
-#have to check how many items are attached to this bibitem, if one, just change it,
-#if more than one, we must create a new one.
-#my $number=countitems($bibitemnum);
-#if ($number > 1){
-#   print $number;
-  #check if bibitemneeds modifying
-#  my $needsmod=needsmod($bibitemnum,$itemtype);
-#  if ($needsmod != 1){
-#    $bibitemnum=newbiblioitem($bibnum,$itemtype,$volumeddesc,$classification);
-#  }
-#} 
-#modbibitem($bibitemnum,$itemtype,$isbn,$publishercode,$publicationdate,$classification,$dewey,$subclass,$illus,$pages,$volumeddesc);
-moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn);
-
-print $input->redirect("moredetail.pl?type=intra&bib=$bibnum&bi=$bibitemnum");
+if ($wthdrawn == 0 && $override ne 'yes'){
+  moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn);
+  if ($lost ==1){
+    my $dbh=C4Connect;
+    my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)");
+    $sth->execute;
+    my $data=$sth->fetchrow_hashref;
+    if ($data->{'borrowernumber'} ne '') {
+      #item on issue add replacement cost to borrowers record
+      my $accountno=getnextacctno($env,$data->{'borrowernumber'},$dbh);
+      my $item=getiteminformation($env, $itemnum);
+      my $account="Insert into accountlines
+      (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+      values
+      ('$data->{'borrowernumber'}','$accountno',now(),'$item->{'replacementprice'}',
+      'Lost Item $item->{'title'} $item->{'barcode'}','L',
+      '$item->{'replacementprice'}','$itemnum')";
+      my $sth2=$dbh->prepare($account);
+#      print $input->header;
+#      print $account;
+      $sth2->execute;
+      $sth2->finish;
+    }
+    $sth->finish;
+  }
+  print $input->redirect("moredetail.pl?type=intra&bib=$bibnum&bi=$bibitemnum");
+} else {
+  
+#  print "marking cancelled";
+  #need to check if it is on reserve or issued
+  my $dbh=C4Connect;
+  my $flag=0; 
+  my ($resbor,$resrec)=C4::Circulation::Circ2::checkreserve($env,$dbh,$itemnum);
+ # print $resbor;
+  if ($resbor){
+    print $input->header;
+    print "The biblio or biblioitem this item belongs to has a reserve on it";
+    $flag=1;
+  }
+  my $sth=$dbh->prepare("Select * from issues where (itemnumber='$itemnum') and (returndate is null)"); 
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  if ($data->{'borrowernumber'} ne '') {
+    print $input->header;
+    print "<p>Item is on issue";
+    $flag=1;
+  }
+  $sth->finish;
+  $dbh->disconnect;
+  if ($flag == 1){
+    my $url=$input->self_url;
+    $url.="&override=yes";
+    print "<p> <a href=$url>Cancel Anyway</a> &nbsp; or <a href=\"\">Back</a>";
+  }else {
+    moditem('loan',$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn);
+    print $input->redirect("moredetail.pl?type=intra&bib=$bibnum&bi=$bibitemnum");
+  }
+}
 #print $bibitemnum;
 
 sub checkinp{
@@ -84,3 +122,6 @@ sub checkinp{
   $inp=~ s/\"/\\\"/g;
   return($inp);
 }
+
+#sub checkissue{
+  
