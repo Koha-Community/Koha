@@ -72,7 +72,7 @@ sub checkvalidisbn {
             my $c=0;
             for ($i=0; $i<9; $i++) { 
                 my $digit=substr($q,$i,1);
-                $c+=$digit*(10-$i);
+                $c+=$digit*($i+1);
             }
 	    $c=$c%11;  # % is the modulus function
             ($c==10) && ($c='X');
