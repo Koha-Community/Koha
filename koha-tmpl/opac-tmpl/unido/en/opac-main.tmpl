@@ -4,14 +4,18 @@
 <html>
 <title>WELCOME TO THE  UNIDO OPAC (Online Public Access Catalogue) </title>
 <style type="text/css">
+
 <!--
 
 @import url(<TMPL_VAR NAME='themelang'>/includes/css/home-modern.css);
-input {font-size:16px;
 
-      }
+input {
+font-size: 16px;
+height: 28px;      }
 
 
+.search {
+height: 28px;      }
 
 .search-heading {
   font-family: arial, helvetica, sans-serif;
@@ -45,6 +49,22 @@ h1 {
   margin-top: 64px;
   }
   
+
+.ok  {
+ height: 32px;
+width: 40px;
+  background-color: #d59b61;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px;
+  border-color: #000000;
+  border-style: solid;
+  padding: 0px;
+ 
+}
+
 -->
 
 </style>
@@ -97,22 +117,20 @@ alt="UNIDO Logo " hspace=0 vspace=0>
 <input type=hidden name=type value=opac>
 <span class="search-heading">Search</span></td>
 
-<td><input type=text size="24" name="keyword"> <input type="submit" value="OK" class="ok"></td>
+<td><input type=text size="24" name="keyword" class="search"> <input type="submit" value="OK" class="ok">
+</form></td>
 
 
-</form>
+
 </tr>
 <tr><td colspan=3>
 <div class="menu"><a href="/cgi-bin/koha/opac-search.pl">More Search Options</a> | <a href="/cgi-bin/koha/about.pl">About</a> | <a href="/cgi-bin/koha/contact.pl">Contact</a>  </div>
 <p> &nbsp; </p>
 <div class="credit">
-For more information on the koha libary system<br> 
-vist  <b><a href="http://www.koha.org">www.koha.org</a></b></center>
+For more information on the koha library system<br> 
+visit  <b><a href="http://www.koha.org">www.koha.org</a></b>
 </div>
 </td>
-
-</tr>
-
 
 </tr>
 
