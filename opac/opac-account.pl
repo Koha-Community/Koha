@@ -11,6 +11,7 @@ use C4::Circulation::Circ2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Date;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie)

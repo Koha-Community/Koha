@@ -27,6 +27,7 @@ use CGI;
 use C4::Search;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use C4::Date;
 
 my $query=new CGI;
 my $type=$query->param('type');

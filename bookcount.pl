@@ -32,6 +32,7 @@ use C4::Output;
 use C4::Koha;
 use C4::Auth;
 use HTML::Template;
+use C4::Date;
 
 # get all the data ....
 my %env;
@@ -92,7 +93,7 @@ $template->param(	bib => $bib,
 								barcode => $idata->{'barcode'},
 								homebranch =>$homebranch,
 								holdingbranch => $holdingbranch,
-								lastdate =>  $lastdate,
+								lastdate =>  format_date($lastdate),
 								count =>  $count,
 								branchloop => \@branchloop);
 
@@ -194,5 +195,5 @@ sub slashdate {
 	return "never";
     }
     my ($yr, $mo, $da, $hr, $mi) = (substr($date, 0, 4), substr($date, 4, 2), substr($date, 6, 2), substr($date, 8, 2), substr($date, 10, 2));
-    return "$hr:$mi  $da/$mo/$yr";
+    return "$hr:$mi  " . format_date("$yr-$mo-$da");
 }

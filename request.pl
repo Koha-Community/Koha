@@ -86,7 +86,7 @@ foreach my $br (keys %$branches) {
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $year=$year+1900;
 $mon++;
-my $date="$mday/$mon/$year";
+my $date=format_date("$year-$mon-$mday");
 
 
 # get biblioitem information and build rows for form

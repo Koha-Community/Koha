@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Reserves2;
 	# FIXME - C4::Search uses C4::Reserves2, which uses C4::Search.
 	# So Perl complains that all of the functions here get redefined.
+use C4::Date;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -1255,10 +1256,7 @@ sub ItemInfo {
     my $isth=$dbh->prepare($iquery);
     $isth->execute;
     if (my $idata=$isth->fetchrow_hashref){
-      # FIXME - The date ought to be properly parsed, and printed
-      # according to local convention.
-      my @temp=split('-',$idata->{'date_due'});
-      $datedue = "$temp[2]/$temp[1]/$temp[0]";
+      $datedue = format_date($idata->{'date_due'});
     }
     if ($data->{'itemlost'} eq '2'){
         $datedue='Very Overdue';
@@ -1305,8 +1303,7 @@ sub ItemInfo {
     # FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
     # to leave it empty, rather than convert it to "//".
     # Also ideally this should use the local format for displaying dates.
-    my @temp=split('-',$data->{'datelastseen'});
-    my $date="$temp[2]/$temp[1]/$temp[0]";
+    my $date=format_date($data->{'datelastseen'});
     $data->{'datelastseen'}=$date;
     $data->{'datedue'}=$datedue;
     $data->{'class'}=$class;
