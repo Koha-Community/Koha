@@ -1,5 +1,7 @@
 package C4::Circulation::Circ2;
 
+# $Id$
+
 #package to deal with Returns
 #written 3/11/99 by olwen@katipo.co.nz
 
@@ -1105,6 +1107,7 @@ sub fixaccountforlostandreturned {
 	    while (($accdata=$msth->fetchrow_hashref) and ($amountleft>0)){
 		if ($accdata->{'amountoutstanding'} < $amountleft) {
 		    $newamtos = 0;
+		    # FIXME - -=
 		    $amountleft = $amountleft - $accdata->{'amountoutstanding'};
 		}  else {
 		    $newamtos = $accdata->{'amountoutstanding'} - $amountleft;
@@ -1566,6 +1569,7 @@ sub checkaccount  {
   $sth->execute;
   my $total=0;
   while (my $data=$sth->fetchrow_hashref){
+    # FIXME = +=
     $total=$total+$data->{'sum(amountoutstanding)'};
   }
   $sth->finish;
@@ -1580,6 +1584,8 @@ sub checkaccount  {
   return($total);
 }
 
+# FIXME - This is identical to &C4::Circulation::Renewals::renewstatus.
+# Pick one and stick with it.
 sub renewstatus {
 # Stolen from Renewals.pm
   # check renewal status
@@ -1700,6 +1706,8 @@ sub calc_charges {
     return ($charge);
 }
 
+# FIXME - A virtually identical function appears in
+# C4::Circulation::Issues. Pick one and stick with it.
 sub createcharge {
 #Stolen from Issues.pm
     my ($env,$dbh,$itemno,$bornum,$charge) = @_;
@@ -1749,6 +1757,8 @@ the fields from the reserves table of the Koha database.
 #'
 # FIXME - This API is bogus: just return the record, or undef if none
 # was found.
+# FIXME - There's also a &C4::Circulation::Returns::find_reserves, but
+# that one looks rather different.
 sub find_reserves {
 # Stolen from Returns.pm
     my ($itemno) = @_;
@@ -1814,8 +1824,6 @@ sub find_reserves {
     $sth->finish;
     return ($resfound,$lastrec);
 }
-
-END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
