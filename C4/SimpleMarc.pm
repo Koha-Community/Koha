@@ -20,7 +20,6 @@ use C4::Database;
 
 require Exporter;
 
-use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -448,6 +447,9 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.1.2.3  2002/06/26 20:54:32  tonnesen
+# use warnings breaks on perl 5.005...
+#
 # Revision 1.1.2.2  2002/06/26 15:52:55  amillar
 # Fix display of marc tag labels and indicators
 #

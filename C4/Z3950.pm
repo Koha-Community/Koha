@@ -24,7 +24,6 @@ use C4::Biblio;
 
 require Exporter;
 
-use warnings;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
@@ -154,6 +153,9 @@ sub addz3950queue {
 
 #--------------------------------------
 # $Log$
+# Revision 1.1.2.2  2002/06/26 20:54:31  tonnesen
+# use warnings breaks on perl 5.005...
+#
 # Revision 1.1.2.1  2002/06/26 07:26:41  amillar
 # New module for Z39.50 searching
 #
