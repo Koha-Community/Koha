@@ -10,7 +10,7 @@ use Set::Scalar;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 0.02;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
@@ -530,11 +530,9 @@ sub CatSearch  {
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.dewey like '$search->{'dewey'}%'";
 	  } elsif ($search->{'illustrator'} ne '') {
-	  if ($search->{'illustrator'} ne ''){
 	     $query="select * from biblioitems,biblio 
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.illus like '%".$search->{'illustrator'}."%'";
-	  }
 	}
           $query .=" group by biblio.biblionumber";	 
       }
@@ -572,7 +570,7 @@ sub CatSearch  {
         my $search2=uc $search->{'isbn'};
         my $query1 = "select * from biblioitems where isbn='$search2'";
 	my $sth1=$dbh->prepare($query1);
-#	print $query1;
+#	print STDERR "$query1\n";
 	$sth1->execute;
         my $i2=0;
 	while (my $data=$sth1->fetchrow_hashref) {
@@ -605,7 +603,7 @@ if ($type ne 'precise' && $type ne 'subject'){
       $query=$query." order by subject";
   }
 }
-#print $query;
+#print STDERR "$query\n";
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $count=1;
