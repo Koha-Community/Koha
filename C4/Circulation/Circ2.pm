@@ -25,7 +25,8 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getissues &getiteminformation &findborrower &issuebook &returnbook &find_reserves &transferbook &decode);
+@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getissues &getiteminformation &findborrower &issuebook &returnbook &find_reserves &transferbook &decode
+calc_charges);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -456,7 +457,7 @@ sub issuebook {
 	$sth->execute;
 	$sth->finish;
 	$iteminformation->{'issues'}++;
-	$sth=$dbh->prepare("update items set issues=$iteminformation->{'issues'} where itemnumber=$iteminformation->{'itemnumber'}");
+	$sth=$dbh->prepare("update items set issues=$iteminformation->{'issues'},datelastseen=now() where itemnumber=$iteminformation->{'itemnumber'}");
 	$sth->execute;
 	$sth->finish;
 	my $charge=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
@@ -540,6 +541,11 @@ sub doreturn {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
+    $query="update items set datelastseen=now() where itemnumber=$itm";
+    $sth=$dbh->prepare($query);
+    $sth->execute;
+    $sth->finish;
+    $dbh->disconnect;
     return;
 }
 
@@ -876,7 +882,7 @@ sub getissues {
                      and items.biblionumber = biblio.biblionumber 
                      and items.biblioitemnumber = biblioitems.biblioitemnumber 
                      and issues.returndate is null
-                         order by issues.timestamp desc";
+                         order by issues.date_due";
 #    print $select;
     my $sth=$dbh->prepare($select);
     $sth->execute;
@@ -1025,27 +1031,42 @@ sub calc_charges {
 # Stolen from Issues.pm
 # calculate charges due
     my ($env, $dbh, $itemno, $bornum)=@_;
+#    if (!$dbh){
+#      $dbh=C4Connect();
+#    }
     my $charge=0;
+#    open (FILE,">>/tmp/charges");
     my $item_type;
-    my $q1 = "select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes where (items.itemnumber ='$itemno') and (biblioitems.biblioitemnumber = items.biblioitemnumber) and (biblioitems.itemtype = itemtypes.itemtype)";
+    my $q1 = "select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes 
+    where (items.itemnumber ='$itemno')
+    and (biblioitems.biblioitemnumber = items.biblioitemnumber) 
+    and (biblioitems.itemtype = itemtypes.itemtype)";
     my $sth1= $dbh->prepare($q1);
+#    print FILE "$q1\n";
     $sth1->execute;
     if (my $data1=$sth1->fetchrow_hashref) {
 	$item_type = $data1->{'itemtype'};
 	$charge = $data1->{'rentalcharge'};
+#	print FILE "charge is $charge\n";
 	my $q2 = "select rentaldiscount from borrowers,categoryitem 
 	where (borrowers.borrowernumber = '$bornum') 
 	and (borrowers.categorycode = categoryitem.categorycode)
 	and (categoryitem.itemtype = '$item_type')";
 	my $sth2=$dbh->prepare($q2);
+#	warn $q2;
 	$sth2->execute;
 	if (my $data2=$sth2->fetchrow_hashref) {
 	    my $discount = $data2->{'rentaldiscount'};
+#	    print FILE "discount is $discount";
+	    if ($discount eq 'NULL') {
+	      $discount=0;
+	    }
 	    $charge = ($charge *(100 - $discount)) / 100;
 	}
 	$sth2->finish;
     }      
     $sth1->finish;
+#    close FILE;
     return ($charge);
 }
 
