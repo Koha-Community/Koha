@@ -14,7 +14,7 @@
 			<!-- TMPL_IF Name="waiting" -->
 				<h2 class="circulation">Item marked Waiting:</h2>
 			<p>Item <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)
-		is marked waiting at <b><!-- TMPL_VAR NAME="branchname" --></b> for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow("/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->", "Member"); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
+		is marked waiting at <b><!-- TMPL_VAR NAME="branchname" --></b> for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 					<form method="post" action="returns.pl">
 					<!-- TMPL_LOOP Name="inputloop" -->
 						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
@@ -32,7 +32,7 @@
 					needs to be transfered to <b><!-- TMPL_VAR NAME="branchname" --></b>
 					to be picked up by 
 					<!-- TMPL_VAR NAME="name" --> 
-					(<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
+					(<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 				</p>
 				<center>
 				<form method="post" action="returns.pl">
