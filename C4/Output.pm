@@ -17,14 +17,13 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(
-	&startpage &endpage 
-	&mktablehdr &mktableft &mktablerow &mklink
-	&startmenu &endmenu &mkheadr 
-	&center &endcenter 
-	&mkform &mkform2 &bold
-	&gotopage &mkformnotable &mkform3
-	&getkeytableselectoptions
+@EXPORT = qw(&startpage &endpage 
+	     &mktablehdr &mktableft &mktablerow &mklink
+	     &startmenu &endmenu &mkheadr 
+	     &center &endcenter 
+	     &mkform &mkform2 &bold
+	     &gotopage &mkformnotable &mkform3
+	     &getkeytableselectoptions
 );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -56,29 +55,24 @@ my @more   = ();
 my %configfile;
 open (KC, "/etc/koha.conf");
 while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
+    chomp;
+    (next) if (/^\s*#/);
+    if (/(.*)\s*=\s*(.*)/) {
+        my $variable=$1;
+        my $value=$2;
+
+        $variable =~ s/^\s*//g;
+        $variable =~ s/\s*$//g;
+        $value    =~ s/^\s*//g;
+        $value    =~ s/\s*$//g;
+        $configfile{$variable}=$value;
+    } # if
+} # while
+close(KC);
+
 my $path=$configfile{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-# stuff goes here.
-  };
-   
 # make all your functions, whether exported or not;
  
 sub startpage() {
@@ -103,7 +97,7 @@ sub startmenu($) {
   } elsif ($type eq 'member') {
     open (FILE,"$path/members-top.inc") || die;
   } elsif ($type eq 'acquisitions'){
-    open (FILE,"$path/acquisitions-top.inc")|| die;
+    open (FILE,"$path/acquisitions-top.inc") || die;
   } elsif ($type eq 'report'){
     open (FILE,"$path/reports-top.inc") || die;
   } elsif ($type eq 'circulation') {
@@ -119,9 +113,9 @@ sub startmenu($) {
 }
 
 
-sub endmenu{
-  my ($type)=@_;
-  if ($type eq 'issue'){
+sub endmenu {
+  my ($type) = @_;
+  if ($type eq 'issue') {
     open (FILE,"$path/issues-bottom.inc") || die;
   } elsif ($type eq 'opac') {
     open (FILE,"$path/opac-bottom.inc") || die;
@@ -224,16 +218,16 @@ sub mkform{
   $string=$string."</form>";
 }
 
-sub mkform3{
-  my ($action,%inputs)=@_;
-  my $string="<form action=$action method=post>\n";
-  $string=$string.mktablehdr();
+sub mkform3 {
+  my ($action, %inputs) = @_;
+  my $string = "<form action=\"$action\" method=\"post\">\n";
+  $string   .= mktablehdr();
   my $key;
-  my @keys=sort keys %inputs;
-  my @order;  
-  my $count=@keys;
-  my $i2=0;
-  while ( $i2<$count) {
+  my @keys = sort(keys(%inputs));
+  my @order;
+  my $count = @keys;
+  my $i2 = 0;
+  while ($i2 < $count) {
     my $value=$inputs{$keys[$i2]};
     my @data=split('\t',$value);
     my $posn = $data[2];
@@ -369,7 +363,6 @@ sub mkform2{
 
 =cut
 
-
 sub endpage() {
   return("</body></html>\n");
 }
@@ -385,8 +378,7 @@ sub endpage() {
 
 =cut
 
-
-sub mklink($$)  {
+sub mklink($$) {
   my ($url,$text)=@_;
   my $string="<a href=\"$url\">$text</a>";
   return ($string);
@@ -416,7 +408,6 @@ sub mklink($$)  {
 
 =cut
 
-
 sub mkheadr {
     # FIXME
     # would it be better to make this more generic by accepting an optional
@@ -425,13 +416,15 @@ sub mkheadr {
   my ($type,$text)=@_;
   my $string;
   if ($type eq '1'){
-      $string="<br>";
-  } elsif ($type eq '3') {
-      $string="<p>";
-  } else {
-      $string="";
+    $string="<FONT SIZE=6><em>$text</em></FONT><br>";
   }
-  return ("<FONT SIZE=6><em>$text</em></FONT>$string");
+  if ($type eq '2'){
+    $string="<FONT SIZE=6><em>$text</em></FONT><br>";
+  }
+  if ($type eq '3'){
+    $string="<FONT SIZE=6><em>$text</em></FONT><p>";
+  }
+  return ($string);
 }
 
 =pod
