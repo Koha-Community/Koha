@@ -69,7 +69,6 @@ $VERSION = 0.01;
   &char_decode
   
   &FindDuplicate
-  &branches
 );
 
 #
@@ -2637,6 +2636,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.111  2004/11/25 17:39:44  tipaul
+# removing useless &branches in package declaration
+#
 # Revision 1.110  2004/11/24 16:00:01  tipaul
 # removing sub branches (commited by chris for MARC=OFF bugfix, but sub branches is already in Acquisition.pm)
 #
