@@ -1381,97 +1381,80 @@ If this is set, it is set to C<One Order>.
 =cut
 #'
 sub ItemInfo {
-    my ($env,$biblionumber,$type) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT *,items.notforloan as itemnotforloan FROM items, biblio, biblioitems left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
-                  WHERE items.biblionumber = ?
-                    AND biblioitems.biblioitemnumber = items.biblioitemnumber
-                    AND biblio.biblionumber = items.biblionumber";
-  if ($type ne 'intra'){
-    $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
-    or items.itemlost is NULL)
-    and (wthdrawn <> 1 or wthdrawn is NULL)";
-  }
-  $query .= " order by items.dateaccessioned desc";
-    #warn $query;
-  my $sth=$dbh->prepare($query);
-  $sth->execute($biblionumber);
-  my $i=0;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-    my $datedue = '';
-    my $isth=$dbh->prepare("Select * from issues where itemnumber = ? and returndate is null");
-    $isth->execute($data->{'itemnumber'});
-    if (my $idata=$isth->fetchrow_hashref){
-      $datedue = format_date($idata->{'date_due'});
-    }
-    if ($data->{'itemlost'} eq '2'){
-        $datedue='Very Overdue';
-    }
-    if ($data->{'itemlost'} eq '1'){
-        $datedue='Lost';
-    }
-    if ($data->{'wthdrawn'} eq '1'){
-	$datedue="Cancelled";
-    }
-    if ($datedue eq ''){
-#	$datedue="Available";
-	my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
-	if ($restype){
-	    $datedue=$restype;
+	my ($env,$biblionumber,$type) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $query = "SELECT *,items.notforloan as itemnotforloan FROM items, biblio, biblioitems 
+					left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
+					WHERE items.biblionumber = ?
+					AND biblioitems.biblioitemnumber = items.biblioitemnumber
+					AND biblio.biblionumber = items.biblionumber";
+	if ($type ne 'intra'){
+		$query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
+		or items.itemlost is NULL)
+		and (wthdrawn <> 1 or wthdrawn is NULL)";
 	}
-    }
-    $isth->finish;
-#get branch information.....
-    my $bsth=$dbh->prepare("SELECT * FROM branches
-                          WHERE branchcode = ?");
-    $bsth->execute($data->{'holdingbranch'});
-    if (my $bdata=$bsth->fetchrow_hashref){
-	$data->{'branchname'} = $bdata->{'branchname'};
-    }
-
-    my $class = $data->{'classification'};# FIXME : $class is useless
-    my $dewey = $data->{'dewey'};
-    $dewey =~ s/0+$//;
-    if ($dewey eq "000.") { $dewey = "";};	# FIXME - "000" is general books about computer science
-    if ($dewey < 10){$dewey='00'.$dewey;}
-    if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
-    if ($dewey <= 0){
-      $dewey='';
-    }
-    $dewey=~ s/\.$//;
-    $class .= $dewey;
-    if ($dewey ne ''){
-      $class .= $data->{'subclass'};
-    }
- #   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
-    # FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
-    # to leave it empty, rather than convert it to "//".
-    # Also ideally this should use the local format for displaying dates.
-    my $date=format_date($data->{'datelastseen'});
-    $data->{'datelastseen'}=$date;
-    $data->{'datedue'}=$datedue;
-    $data->{'class'}=$class;
-    $results[$i]=$data;
-    $i++;
-  }
- $sth->finish;
-  #FIXME: ordering/indentation here looks wrong
-  my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
-  $sth2->execute($biblionumber);
-  my $data;
-  my $ocount;
-  if ($data=$sth2->fetchrow_hashref){
-    $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
-    if ($ocount > 0){
-      $data->{'ocount'}=$ocount;
-      $data->{'order'}="One Order";
-      $results[$i]=$data;
-    }
-  }
-  $sth2->finish;
-
-  return(@results);
+	$query .= " order by items.dateaccessioned desc";
+	my $sth=$dbh->prepare($query);
+	$sth->execute($biblionumber);
+	my $i=0;
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+		my $datedue = '';
+		my $isth=$dbh->prepare("Select * from issues where itemnumber = ? and returndate is null");
+		$isth->execute($data->{'itemnumber'});
+		if (my $idata=$isth->fetchrow_hashref){
+		$datedue = format_date($idata->{'date_due'});
+		}
+		if ($data->{'itemlost'} eq '2'){
+			$datedue='Very Overdue';
+		}
+		if ($data->{'itemlost'} eq '1'){
+			$datedue='Lost';
+		}
+		if ($data->{'wthdrawn'} eq '1'){
+			$datedue="Cancelled";
+		}
+		if ($datedue eq ''){
+	#	$datedue="Available";
+			my ($restype,$reserves)=C4::Reserves2::CheckReserves($data->{'itemnumber'});
+			if ($restype) {
+				$datedue=$restype;
+			}
+		}
+		$isth->finish;
+	#get branch information.....
+		my $bsth=$dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
+		$bsth->execute($data->{'holdingbranch'});
+		if (my $bdata=$bsth->fetchrow_hashref){
+			$data->{'branchname'} = $bdata->{'branchname'};
+		}
+	#   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
+		# FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
+		# to leave it empty, rather than convert it to "//".
+		# Also ideally this should use the local format for displaying dates.
+		my $date=format_date($data->{'datelastseen'});
+		$data->{'datelastseen'}=$date;
+		$data->{'datedue'}=$datedue;
+		$results[$i]=$data;
+		$i++;
+	}
+	$sth->finish;
+	#FIXME: ordering/indentation here looks wrong
+	my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
+	$sth2->execute($biblionumber);
+	my $data;
+	my $ocount;
+	if ($data=$sth2->fetchrow_hashref){
+		$ocount=$data->{'quantity'} - $data->{'quantityreceived'};
+		if ($ocount > 0){
+		$data->{'ocount'}=$ocount;
+		$data->{'order'}="One Order";
+		$results[$i]=$data;
+		}
+	}
+	$sth2->finish;
+	
+	return(@results);
 }
 
 =item GetItems
@@ -1574,35 +1557,37 @@ the first one is considered.
 =cut
 #'
 sub bibdata {
-    my ($bibnum, $type) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare("Select *, biblioitems.notes AS bnotes, biblio.notes
-    from biblio, biblioitems
-    left join bibliosubtitle on
-    biblio.biblionumber = bibliosubtitle.biblionumber
-    where biblio.biblionumber = ?
-    and biblioitems.biblionumber = biblio.biblionumber");
-    $sth->execute($bibnum);
-    my $data;
-    $data  = $sth->fetchrow_hashref;
-    $sth->finish;
-    $sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
-    $sth->execute($bibnum);
-    while (my $dat = $sth->fetchrow_hashref){
-        $data->{'subject'} .= "$dat->{'subject'}, ";
-    } # while
-	chop $data->{'subject'};
-	chop $data->{'subject'};
-    $sth->finish;
-    $sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
-    $sth->execute($bibnum);
-    while (my $dat = $sth->fetchrow_hashref){
-        $data->{'additionalauthors'} .= "$dat->{'author'}, ";
-    } # while
+	my ($bibnum, $type) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $sth   = $dbh->prepare("Select *, biblioitems.notes AS bnotes, biblio.notes
+								from biblio, biblioitems
+								left join bibliosubtitle on
+								biblio.biblionumber = bibliosubtitle.biblionumber
+								where biblio.biblionumber = ?
+								and biblioitems.biblionumber = biblio.biblionumber");
+	$sth->execute($bibnum);
+	my $data;
+	$data  = $sth->fetchrow_hashref;
+	$sth->finish;
+	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
+	$sth->execute($bibnum);
+	my @subjects;
+	while (my $dat = $sth->fetchrow_hashref){
+		my %line;
+		$line{subject} = $dat->{'subject'};
+		push @subjects, \%line;
+	} # while
+	$data->{subjects} = \@subjects;
+	$sth->finish;
+	$sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
+	$sth->execute($bibnum);
+	while (my $dat = $sth->fetchrow_hashref){
+		$data->{'additionalauthors'} .= "$dat->{'author'}, ";
+	} # while
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
-    $sth->finish;
-    return($data);
+	$sth->finish;
+	return($data);
 } # sub bibdata
 
 =item bibitemdata
