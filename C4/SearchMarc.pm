@@ -319,17 +319,18 @@ sub catalogsearch {
 	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
-	# so if you dont' has an item, you get a not nice epty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid
+	# so if you dont' has an item, you get a not nice empty value.
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*,marc_biblio.bibid,itemtypes.notforloan
 							FROM biblio, marc_biblio 
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
+							LEFT JOIN itemtypes on itemtypes.itemtype=biblioitems.itemtype
 							WHERE biblio.biblionumber = marc_biblio.biblionumber AND bibid = ?");
 	my @finalresult = ();
 	my @CNresults=();
 	my $totalitems=0;
 	my $oldline;
 	my ($oldbibid, $oldauthor, $oldtitle);
-	my $sth_itemCN = $dbh->prepare("select * from items where biblionumber=?");
+	my $sth_itemCN = $dbh->prepare("select items.* from items where biblionumber=?");
 	my $sth_issue = $dbh->prepare("select date_due,returndate from issues where itemnumber=?");
 	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
@@ -337,11 +338,13 @@ sub catalogsearch {
 		$sth->execute($result[$counter]);
 		my $continue=1;
 		my $line = $sth->fetchrow_hashref;
+		warn "==> ".$line->{notforloan};
 		my $biblionumber=$line->{bn};
 # 		$continue=0 unless $line->{bn};
 # 		my $lastitemnumber;
 		$sth_itemCN->execute($biblionumber);
 		my @CNresults = ();
+		my $notforloan=1; # to see if there is at least 1 item that can be issued
 		while (my $item = $sth_itemCN->fetchrow_hashref) {
 			# parse the result, putting holdingbranch & itemcallnumber in separate array
 			# then all other fields in the main array
@@ -360,6 +363,7 @@ sub catalogsearch {
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
 			$lineCN{date_due} = format_date($date_due);
+			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
 			push @CNresults,\%lineCN;
 			$totalitems++;
 		}
@@ -368,6 +372,9 @@ sub catalogsearch {
 		%newline = %$line;
 		$newline{totitem} = $totalitems;
 		$newline{biblionumber} = $biblionumber;
+		$newline{norequests} = 0;
+		$newline{norequests} = 1 if ($line->{notforloan}); # itemtype not issuable
+		$newline{norequests} = 1 if (!$line->{notforloan} && $notforloan); # itemtype issuable but all items not issuable for instance
 		my @CNresults2= @CNresults;
 		$newline{CN} = \@CNresults2;
 		$newline{'even'} = 1 if $#finalresult % 2 == 0;
