@@ -1,0 +1,79 @@
+<!-- opac-search, translation by dnmeid, based on 1.10 -->
+<TMPL_INCLUDE NAME="opac-top.inc">
+
+<CENTER>
+
+<TMPL_INCLUDE NAME="opac-auth.inc">
+
+<FORM ACTION="/cgi-bin/koha/opac-searchresults.pl" method=get>
+<TABLE >
+
+<tr valign=top>
+	<TD></td>
+	<td></td>
+	<td><INPUT TYPE="image"  src="/<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="Suche beginnen" width=164 height=44 border=0 ></td>
+</tr>
+
+<TR VALIGN=TOP>
+	<TD>Stichwort</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	<td></TD>
+</TR>
+
+<TR VALIGN=TOP>
+	<TD colspan=3><B>ODER eine oder mehrere der folgenden Suchkriterien</B></TD>
+<td></TD></TR>
+
+<TR VALIGN=TOP>
+	<TD>Titel</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+	<td>
+  	<input type=radio name=ttype value=normal checked>Normal
+  	<input type=radio name=ttype value=exact>Genau
+	</td>
+</TR>
+
+<TR VALIGN=TOP>
+<TD>Autor</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Illustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Schlagwort</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
+
+<td>Klassifikation</td>
+  <td>
+    <select size="1"  name="class">
+    <option value="">Beliebig
+    <!-- fetch class list -->
+    <TMPL_VAR name="classlist">
+    <!--#include virtual="/includes/cat-class-list.inc" -->
+    </select>
+ </td>
+</tr>
+
+
+<TR VALIGN=TOP>
+	<TD>Strichcode</TD>
+	<TD><INPUT TYPE="text" SIZE="25" NAME="itemnumber"></TD>
+	<td></td>
+</TR>
+
+<TR VALIGN=TOP>
+	<td></td>
+	<TD><font size=4 face="arial,helvetica">
+		<INPUT TYPE="reset"  value="Löschen"></font>
+	</td>
+</tr>
+
+<TR VALIGN=TOP>
+	<TD colspan=3>Bitte beachten Sie, dass bei Eingabe eines Schlagwortes, zus&auml;tzlich zu einem anderen Suchkriterium, nur nach Schlagworten gesucht wird.</TD>
+</TD></TR>
+
+</TABLE>
+</FORM>
+</CENTER>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">

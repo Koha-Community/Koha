@@ -1,0 +1,134 @@
+<!-- opac-user, translation by dnmeid, based on 1.9 -->
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_INCLUDE NAME="opac-auth.inc">
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+
+<table align=right cellpadding=5 cellspacing=0 border=1 width=200 >
+<tr   bgcolor="#fecc99" >
+<td><b>Stimmen Ihre Daten noch?</B></td></tr>
+<tr>
+<td><font size=2 face="arial,helvetica">
+Benutzerkartennummer: <TMPL_VAR NAME="cardnumber"> <p>
+<TMPL_VAR NAME="title"> <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"><br>
+<TMPL_VAR NAME="streetaddress"><br>
+<TMPL_VAR NAME="city"><br>
+Tel.: <TMPL_VAR NAME="phone"><br>
+Fax.: <TMPL_VAR NAME="faxnumber"><br>
+eMail: <a href="mailto:<TMPL_VAR NAME="emailaddress">"><TMPL_VAR NAME="emailaddress"></a><p>
+
+Sollten Ihre Daten nicht mehr aktuell sein, können Sie hier Ihre <a href="/cgi-bin/koha/opac-userupdate.pl">Angaben berichtigen</a>
+
+</td></tr></table>
+
+
+
+<font size=6><em>Hallo <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font>
+[<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Abmelden</a>]<p>
+
+
+
+<TMPL_IF NAME="amountoverfive">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<font face="arial,helvetica" color="red" size=+2><B>Sie haben offene Geb&uuml;hren in H&ouml;he von <TMPL_VAR NAME="amountoutstanding"> Euro</B></font> <!-- FIXME Currency hard coded -->
+</td></tr></table>
+
+</TMPL_IF>
+
+<TMPL_IF NAME="amountoverzero">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+	<td><font face="arial,helvetica" size=+2><B>Sie haben offene Geb&uuml;hren in H&ouml;he von <TMPL_VAR NAME="amountoutstanding"> Euro</B></font> <!-- FIXME Currency hard coded --></td>
+</tr></table>
+</TMPL_IF>
+
+<TMPL_IF NAME"amountlessthanzero">
+<table cellpadding=5 cellspacing=0 border=1>
+<tr bgcolor="#fecc99">
+<td>
+<td><font face="arial,helvetica" size=+2><B>Sie haben ein Guthaben von <TMPL_VAR NAME="amountoutstanding"> Euro</B></font> <!-- FIXME Currency hard coded -->
+</td></tr></table>
+</TMPL_IF>
+<a href='/cgi-bin/koha/opac-account.pl'>Buchungen einsehen</a>
+
+</TMPL_LOOP>
+
+<TMPL_IF NAME="waiting_count">
+   <table  cellpadding=5 cellspacing=0 border=0><tr bgcolor="#fecc99" >
+   <td colspan=2><font color="red" face="arial,helvetica" size=+2><B>
+   Abholbereite Vorbestellungen:
+   </B></font><P></td></tr>
+      <TMPL_LOOP NAME="WAITING">
+      <tr><td><b><TMPL_VAR NAME="btitle"></b></td><td>Abholort: <b><TMPL_VAR NAME="branch"></b></td></tr>
+      </TMPL_LOOP>
+   </table>
+</TMPL_IF>
+
+<p>
+
+<TMPL_IF NAME="issues_count">
+
+Sie haben momentan <TMPL_VAR NAME="issues_count"> Medien entliehen.<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc"  background='/default/all/images/background-opac.gif'>
+<TD><B>Titel</B></TD>
+<TD><B>Autor</B></TD>
+<TD><B>Leihfristende</B></TD>
+<TD><B>Medientyp</B></TD>
+<TD><B>Geb&uuml;hr</B></TD>
+<TD><B>Status</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="ISSUES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="title"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="date_due"></TD>
+<TD><TMPL_VAR NAME="itemtype"></TD>
+<TD><TMPL_VAR NAME="charges"></TD>
+<TD><TMPL_VAR NAME="status"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+
+<TMPL_ELSE>
+Sie haben momentan keine Medien entliehen.
+</TMPL_IF>
+
+<p>
+
+
+<TMPL_IF NAME="reserves_count">
+
+Sie haben momentan <TMPL_VAR NAME="reserves_count"> Medien vorbestellt.<br>
+
+<TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc" background='/default/all/images/background-opac.gif'>
+<TD><B>Titel</B></TD>
+<TD><B>Autor</B></TD>
+<TD><B>Datum</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="RESERVES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="btitle"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="reservedate"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+</TMPL_IF>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
+

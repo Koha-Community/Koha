@@ -1,0 +1,74 @@
+<!-- opac-detail, translation by dnmeid, based on 1.7 -->
+<TMPL_INCLUDE NAME="opac-top.inc">
+
+<TMPL_INCLUDE NAME="opac-auth.inc">
+
+<TMPL_UNLESS NAME="norequests">
+<p align=right><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Vorbestellung</a></p>
+</TMPL_UNLESS>
+
+
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
+<TMPL_VAR NAME="class"></em></font><p>
+<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
+<!-----------------BIBLIO RECORD TABLE--------->
+<tr valign="top">
+
+<td bgcolor="#99cccc">
+<b>BIBLIO RECORD</b>
+
+<TMPL_VAR NAME="biblionumber">
+</td>
+</tr>
+<tr valign="top">
+<td>
+<FONT SIZE=2  face="arial, helvetica">
+<b>Untertitel:</b> <TMPL_VAR NAME="subtitle"><br>
+<!-- <b>&Uuml;bergeordneter Titel:</b> <TMPL_VAR NAME="seriestitle"><br> -->
+<b>Autor:</b> <TMPL_VAR NAME="author"><br>
+<b>Schlagworte:</b> <TMPL_VAR NAME="subject"><br>
+<b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
+<b>Exemplare insgesamt:</b> <TMPL_VAR NAME="count">
+<p>
+</font></td>
+</tr>
+</table>
+</TMPL_LOOP>
+<center>
+<table border=0 cellspacing=0 cellpadding=2>
+<tr bgcolor="#99cccc">
+<td>Medientyp</td>
+<td>Klassifikation</td>
+<td>Standort</td>
+<td>Entliehen bis</td>
+<td>Zuletzt gesehen am</td>
+<td>Strichcode</td>
+</tr>
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<tr>
+<td><TMPL_VAR NAME="itemtype"></td>
+<td><TMPL_VAR NAME="class"></td>
+<td><TMPL_VAR NAME="branchname"></td>
+<td><TMPL_VAR NAME="datedue"></td>
+<td><TMPL_VAR NAME="datelastseen"></td>
+<td><TMPL_VAR NAME="barcode"></td>
+</tr>
+</TMPL_LOOP>
+<TMPL_LOOP NAME="WEB_RESULTS">
+<tr>
+<td><TMPL_VAR NAME="itemtype"></td>
+<td>Internet-Seite</td>
+<td>Online</td>
+<td>Verf&uuml;gbar</td>
+<td></td>
+<td><TMPL_VAR NAME="url"></td>
+</tr>
+</TMPL_LOOP>
+</table>
+<p>
+</center>
+<br clear=all>
+<p />
+<TMPL_INCLUDE NAME="opac-bottom.inc">

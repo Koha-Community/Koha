@@ -1,0 +1,50 @@
+<!-- opac-userupdate, translation by dnmeid, based on 1.8 -->
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_INCLUDE NAME="opac-auth.inc">
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+
+<CENTER>
+<FORM ACTION="/cgi-bin/koha/opac-userupdate.pl" method=get>
+<TABLE >
+
+<TR VALIGN=TOP>
+<TD>Anrede</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='title'>"  NAME="title"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Vorname</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='firstname'>"  NAME="firstname"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Name</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='surname'>"  NAME="surname"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Stra&szlig;e</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='streetaddress'>"  NAME="streetaddress"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Ort</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='city'>"  NAME="city"></TD></TR>
+
+
+<TR VALIGN=TOP>
+<TD>Tel.</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='phone'>"  NAME="phone"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>Fax.</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='faxnumber'>"  NAME="faxnumber"></TD></TR>
+
+<TR VALIGN=TOP>
+<TD>eMail</TD> <TD><INPUT TYPE="text"  SIZE="25" value="<TMPL_VAR NAME='emailaddress'>"  NAME="emailaddress"></TD></TR>
+
+
+
+<TR VALIGN=TOP>
+<td><font size=4 face="arial,helvetica"><INPUT type="submit" value="Abschicken"></font></td>
+<TD><font size=4 face="arial,helvetica">
+</font></td></tr>
+
+</TABLE>
+</FORM>
+</CENTER>
+
+</TMPL_LOOP>
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">

@@ -1,0 +1,41 @@
+<!-- opac-account, translation by dnmeid, based on 1.2.2.1 -->
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+<FONT SIZE=6><em>Konto f&uuml;r <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></FONT>
+[<a href=/cgi-bin/koha/opac-user.pl>Zur&uuml;ck</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Abmelden</a>]<p>
+</TMPL_LOOP>
+<center>
+
+<p>
+<TABLE  CELLSPACING=0 CELLPADDING=5 border=1>
+<TR VALIGN=TOP>
+<td  bgcolor="#99cccc" background='/default/all/images/background-opac.gif' colspan=2><B>Geb&uuml;hren</TD>
+<td  bgcolor="#99cccc" background='/default/all/images/background-opac.gif' colspan=1><B>Menge</TD>
+<td  bgcolor="#99cccc" background='/default/all/images/background-opac.gif' colspan=1><B>Noch ausgeliehen</TD>
+</TR>
+
+<TMPL_LOOP NAME="ACCOUNT_LINES">
+  <tr VALIGN=TOP  >
+  <td><TMPL_VAR NAME="date"></td>
+  <TD><TMPL_VAR NAME="description">
+      <TMPL_IF NAME="print_title"><TMPL_VAR NAME="title"></TMPL_IF></td>
+
+  <td><TMPL_VAR NAME="amount"></td>
+  <TD><TMPL_VAR NAME="amountoutstanding"></td>
+  </tr>
+</TMPL_LOOP>
+
+<tr VALIGN=TOP  >
+<TD></td>
+<TD colspan=2><b>Geb&uuml;hren gesamt</b></td>
+
+<TD><b><TMPL_VAR NAME="total"></b></td>
+
+</tr>
+</table>
+<br clear=all>
+<p> &nbsp; </p>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">

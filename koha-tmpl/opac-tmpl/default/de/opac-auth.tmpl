@@ -1,0 +1,49 @@
+<!-- opac-auth, translation by dnmeid, based on 1.2.2.3 -->
+<TMPL_IF NAME="nopermission">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Sie haben keine Berechtigung zum Zugriff auf diese Seite.<h2>
+</TMPL_IF>
+
+<TMPL_IF NAME="timed_out">
+<!-- This is what is displayed if login has timed out -->
+<h2>Eine Zeit&uuml;berschreitung ist aufgetreten. Bitte melden Sie Sich erneut an.<h2>
+</TMPL_IF>
+
+<TMPL_IF NAME="different_ip">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Sie benutzen eine andere IP-Addresse. Bitte melden Sie Sich erneut an.<h2>
+</TMPL_IF>
+
+<TMPL_IF NAME="invalid_username_or_password">
+<!-- This is what is displayed if user doesnt have permission -->
+<h2>Sie haben eine ung&uuml;ltige Kartennummer oder Passwort eingegeben. Bitte versuchen Sie es erneut.<h2>
+</TMPL_IF>
+
+
+<TMPL_IF NAME="loginprompt">
+<!-- login prompt time-->
+
+<center>
+
+<form action='<TMPL_VAR NAME="url">' method="post">
+<TMPL_LOOP NAME="INPUTS">
+  <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
+</TMPL_LOOP>
+<table border="0" cellpadding="10" cellspacing="0" width="60%">
+    <tr><td align="center" valign="top">
+
+    <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
+    <tr><th colspan="2" background="/default/all/images/background-mem.gif"><font size="+2">Koha Anmeldung</font></th></tr>
+    <tr><td>Kartennummer:</td><td><input name="userid"></td></tr>
+    <tr><td>Passwort:</td><td><input type="password" name="password"></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="login"></td></tr>
+    </table>
+    </td><td align="center" valign="top">
+
+
+    </td></tr>
+</table>
+</form>
+
+
+</TMPL_IF>

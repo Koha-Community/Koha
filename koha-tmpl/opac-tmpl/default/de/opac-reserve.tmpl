@@ -1,0 +1,234 @@
+<!-- opac-reserve, translation by dnmeid, based on 1.8 -->
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<center>
+
+<TMPL_INCLUDE NAME="opac-auth.inc">
+
+<TMPL_IF NAME="message">
+<table  cellpadding=5 cellspacing=0 border=1 >
+<tr bgcolor="#fecc99" >
+<td><font face="arial,helvetica" color="red" size=+1><B>
+<TMPL_IF NAME="too_much_oweing">Sie k&ouml;nnen keine Medien mehr vorbestellen, da Sie schon <TMPL_VAR NAME="too_much_oweing"> entliehen haben. </TMPL_IF>
+<TMPL_IF NAME="too_many_reserves">Sie k&ouml;nnen maximal <TMPL_VAR NAME="too_many_reserves"> Medien vorbestellen. </TMPL_IF>
+<TMPL_IF NAME="already_reserved">Sie haben diesen Titel bereits vorbestellt.</TMPL_IF>
+<TMPL_IF NAME="no_items_selected">Sie m&uuml;ssen mindestens einen Medientyp ausw&auml;hlen</TMPL_IF>
+</B></font><P></td></tr></table>
+</TMPL_IF>
+
+
+<TMPL_IF NAME="select_item_types">
+<!-- The first time round you select which bibitems you want -->
+
+<p>Vorbestellen des Titels: <b><TMPL_VAR NAME="title"> ( <TMPL_VAR NAME="author"> )</b></p>
+<p>Für diesen Titel liegen bereits <b><TMPL_VAR NAME="rank"></b> Vorbestellungen vor.</p>
+<p>Bitte markieren Sie Ihre bevorzugten Medientypen. Der erste Medientyp Ihrer Auswahl, der verf&uuml;gbar wird, wird f&uuml;r Sie reserviert.<p>
+
+<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+<input type="hidden" name="item_types_selected" value="1">
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+<TABLE border=1>
+	<tr bgcolor="#99cccc" background="/default/all/images/background-opac.gif">
+		<th>Vorbestellen</th>
+		<th>Medientyp</th>
+		<th>Exemplare</th>
+	</tr>
+
+<TMPL_LOOP NAME="TYPES">
+
+  <tr>
+  <TMPL_UNLESS NAME="notforloan">
+    <td><input type="checkbox" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
+  <TMPL_ELSE>
+    <td>Keine Vorbestellung m&ouml;glich</td>
+  </TMPL_UNLESS>
+  <td><TMPL_VAR NAME="description"></td>
+  <td><TMPL_VAR NAME="copies"></td>
+
+  </tr>
+
+</TMPL_LOOP>
+
+</table>
+<p>
+Bevorzugter Abholort:
+<select name="branch"><TMPL_VAR NAME="branchoptions"></select><br>
+
+<p>
+<table border=0 cellpadding=0 cellspacing=0>
+<tr><td>Abholung im Zeitraum vom </td><td>
+<select name=required-day>
+  <option value=0 >Tag
+  <option value=1 >1
+  <option value=2 >2
+  <option value=3 >3
+  <option value=4 >4
+  <option value=5 >5
+  <option value=6 >6
+  <option value=7 >7
+  <option value=8 >8
+  <option value=9 >9
+  <option value=10 >10
+  <option value=11 >11
+  <option value=12 >12
+  <option value=13 >13
+  <option value=14 >14
+  <option value=15 >15
+  <option value=16 >16
+  <option value=17 >17
+  <option value=18 >18
+  <option value=19 >19
+  <option value=20 >20
+  <option value=21 >21
+  <option value=22 >22
+  <option value=23 >23
+  <option value=24 >24
+  <option value=25 >25
+  <option value=26 >26
+  <option value=27 >27
+  <option value=28 >28
+  <option value=29 >29
+  <option value=30 >30
+  <option value=31 >31
+</select>
+
+</td><td>
+<select name=required-month>
+  <option value=0 >Monat
+  <option value=1 >Jan
+  <option value=2 >Feb
+  <option value=3 >M&auml;r
+  <option value=4 >Apr
+  <option value=5 >Mai
+  <option value=6 >Jun
+  <option value=7 >Jul
+  <option value=8 >Aug
+  <option value=9 >Sep
+  <option value=10 >Okt
+  <option value=11 >Nov
+  <option value=12 >Dez
+</select>
+</td><td>
+<select name=required-year>
+  <option value=0    >Jahr
+  <option value=2003 >2003
+  <option value=2004 >2004
+  <option value=2005 >2005
+  <option value=2006 >2006
+  <option value=2007 >2007
+</select>
+
+</td></tr>
+<tr><td>bis</td><td>
+<select name=expires-day>
+  <option value=0 >Tag
+  <option value=1 >1
+  <option value=2 >2
+  <option value=3 >3
+  <option value=4 >4
+  <option value=5 >5
+  <option value=6 >6
+  <option value=7 >7
+  <option value=8 >8
+  <option value=9 >9
+  <option value=10 >10
+  <option value=11 >11
+  <option value=12 >12
+  <option value=13 >13
+  <option value=14 >14
+  <option value=15 >15
+  <option value=16 >16
+  <option value=17 >17
+  <option value=18 >18
+  <option value=19 >19
+  <option value=20 >20
+  <option value=21 >21
+  <option value=22 >22
+  <option value=23 >23
+  <option value=24 >24
+  <option value=25 >25
+  <option value=26 >26
+  <option value=27 >27
+  <option value=28 >28
+  <option value=29 >29
+  <option value=30 >30
+  <option value=31 >31
+</select>
+
+</td><td>
+<select name=expires-month>
+  <option value=0 >Monat
+  <option value=1 >Jan
+  <option value=2 >Feb
+  <option value=3 >M&auml;r
+  <option value=4 >Apr
+  <option value=5 >Mai
+  <option value=6 >Jun
+  <option value=7 >Jul
+  <option value=8 >Aug
+  <option value=9 >Sep
+  <option value=10 >Okt
+  <option value=11 >Nov
+  <option value=12 >Dez
+</select>
+</td><td>
+
+<select name=expires-year>
+  <option value=0    >Jahr
+  <option value=2003 >2003
+  <option value=2004 >2004
+  <option value=2005 >2005
+  <option value=2006 >2006
+  <option value=2007 >2007
+</select>
+
+</td></tr>
+</table>
+
+<p>
+
+<font size=4 face="arial,helvetica"><INPUT type="submit" value="Submit"></font>
+
+</FORM>
+
+</TMPL_IF>
+
+<!-- if the bibitems have already been selected -->
+<TMPL_IF NAME="item_types_selected">
+
+<p>
+Bitte best&auml;tigen Sie die Vorbestellung f&uuml;r diese Medientypen:
+<p>
+
+<FORM ACTION="/cgi-bin/koha/opac-reserve.pl" method=post>
+<input type="hidden" name="place_reserve" value="1">
+<input type="hidden" name="bib" value="<TMPL_VAR NAME='biblionumber'>">
+<input type="hidden" name="required_date" value="<TMPL_VAR NAME='required_date'>">
+<input type="hidden" name="expires_date" value="<TMPL_VAR NAME='expires_date'>">
+<TABLE border=1>
+<tr><th bgcolor="#99cccc" background="/default/all/images/background-opac.gif">Medientyp</th></tr>
+
+<TMPL_LOOP NAME="TYPES">
+
+  <tr>
+  <input type="hidden" name="itemtype" value="<TMPL_VAR NAME='itemtype'>"></td>
+  <td><TMPL_VAR NAME="description"></td>
+  </tr>
+
+</TMPL_LOOP>
+
+</table>
+
+Abholungsort: <b><TMPL_VAR NAME="branchname"></b><br>
+<input type="hidden" name="branch" value="<TMPL_VAR NAME='branch'>">
+
+<TMPL_IF NAME="fee">
+<br>Ihre Vorbestellung ist kostenpflichtig. Die Geb&uuml;hr betr&auml;gt <b>$<TMPL_VAR NAME="fee"></b> Euro.<br><!-- Fixme: Currency hard coded -->
+</TMPL_IF>
+
+<font size=4 face="arial,helvetica"><INPUT type="submit" value="Place Reserve"></font>
+
+</FORM>
+
+</TMPL_IF>
+

@@ -1,0 +1,43 @@
+<!-- subject, translation by dnmeid, based on 1.3 -->
+<TMPL_INCLUDE NAME="opac-top.inc">
+
+
+<TMPL_INCLUDE NAME="opac-auth.inc">
+
+<center>
+
+<table border=0 cellspacing=0 cellpadding=2>
+<tr bgcolor=#99cccc background="/default/all/images/background-opac.gif">
+<th>Subject</th></tr>
+<TMPL_LOOP NAME=SEARCH_RESULTS>
+  <tr>
+  <td><a href="/cgi-bin/koha/dosearch.pl?&subjectitems=<TMPL_VAR NAME=subject2 ESCAPE=URL>"><TMPL_VAR NAME=subject></a></td>
+  </tr>
+</TMPL_LOOP>
+<tr bgcolor=#99cccc background="/default/all/images/background-opac.gif"><td colspan=4>
+&nbsp;</td></tr>
+</table>
+<br>
+Treffer <TMPL_VAR NAME="startfrom"> bis <TMPL_VAR NAME="endat"> von insgesamt <TMPL_VAR NAME="numrecords"> Treffern.
+<br>
+    <TMPL_IF NAME="displayprev">
+	<a href="/cgi-bin/koha/dosearch.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>"><img src="/default/all/images/numbers/prev.gif" border=0></a>
+    <TMPL_ELSE>
+	<img src="/default/all/images/numbers/placeholder.gif" border=0>
+    </TMPL_IF>
+    <TMPL_LOOP NAME="numbers">
+	<TMPL_IF NAME="highlight">
+	    <img src="/default/all/images/numbers/<TMPL_VAR NAME=number>-highlight.gif">
+	<TMPL_ELSE>
+	    <a href="/cgi-bin/koha/dosearch.pl?startfrom=<TMPL_VAR NAME="startfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>"><img src="/default/all/images/numbers/<TMPL_VAR NAME=number>.gif" border=0></a>
+	</TMPL_IF>
+    </TMPL_LOOP>
+    <TMPL_IF NAME="displaynext">
+	<a href="/cgi-bin/koha/dosearch.pl?startfrom=<TMPL_VAR NAME="nextstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>"><img src="/default/all/images/numbers/next.gif" border=0></a>
+    <TMPL_ELSE>
+	<img src="/default/all/images/numbers/placeholder.gif" border=0>
+    </TMPL_IF>
+
+<hr>
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
