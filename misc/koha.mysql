@@ -43,6 +43,21 @@ CREATE TABLE additionalauthors (
 # --------------------------------------------------------
 
 #
+# Structure de la table `aqbasket`
+#
+
+CREATE TABLE aqbasket (
+  basketno int(11) NOT NULL auto_increment,
+  creationdate date default NULL,
+  closedate date default NULL,
+  booksellerid varchar(10) default NULL,
+  authorisedby varchar(10) default NULL,
+  booksellerinvoicenumber text,
+  PRIMARY KEY  (basketno)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Structure de la table `aqbookfund`
 #
 
@@ -147,15 +162,7 @@ CREATE TABLE aqorders (
   ordernumber int(11) NOT NULL auto_increment,
   biblionumber int(11) default NULL,
   title text,
-  requisitionedby varchar(10) default NULL,
-  authorisedby varchar(10) default NULL,
-  booksellerid varchar(10) NOT NULL default '',
-  deliverydays smallint(6) default NULL,
-  followupdays smallint(6) default NULL,
-  numberfollowupsallowed smallint(6) default NULL,
-  numberfollowupssent smallint(6) default NULL,
   entrydate date default NULL,
-  dateprinted date default NULL,
   quantity smallint(6) default NULL,
   currency char(3) default NULL,
   listprice decimal(28,6) default NULL,
@@ -165,16 +172,12 @@ CREATE TABLE aqorders (
   freight decimal(28,6) default NULL,
   unitprice decimal(28,6) default NULL,
   quantityreceived smallint(6) default NULL,
-  sourced text,
   cancelledby varchar(10) default NULL,
-  quantityreceiveddamaged smallint(6) default NULL,
   datecancellationprinted date default NULL,
   notes text,
   supplierreference text,
   purchaseordernumber text,
   subscription tinyint(1) default NULL,
-  subscriptionfrom date default NULL,
-  subscriptionto date default NULL,
   serialid varchar(30) default NULL,
   basketno int(11) default NULL,
   biblioitemnumber int(11) default NULL,
@@ -183,7 +186,113 @@ CREATE TABLE aqorders (
   ecost decimal(13,2) default NULL,
   gst decimal(13,2) default NULL,
   budgetdate date default NULL,
+  sort1 varchar(80) default NULL,
+  sort2 varchar(80) default NULL,
   PRIMARY KEY  (ordernumber)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `auth_header`
+#
+
+CREATE TABLE auth_header (
+  authid bigint(20) unsigned NOT NULL auto_increment,
+  authtypecode char(10) NOT NULL default '',
+  datecreated date NOT NULL default '0000-00-00',
+  datemodified date default NULL,
+  origincode char(20) default NULL,
+  PRIMARY KEY  (authid),
+  KEY origincode (origincode)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `auth_subfield_structure`
+#
+
+CREATE TABLE auth_subfield_structure (
+  authtypecode char(10) NOT NULL default '',
+  tagfield char(3) NOT NULL default '',
+  tagsubfield char(1) NOT NULL default '',
+  liblibrarian char(255) NOT NULL default '',
+  libopac char(255) NOT NULL default '',
+  repeatable tinyint(4) NOT NULL default '0',
+  mandatory tinyint(4) NOT NULL default '0',
+  tab tinyint(1) default NULL,
+  authorised_value char(10) default NULL,
+  value_builder char(80) default NULL,
+  seealso char(255) default NULL,
+  PRIMARY KEY  (authtypecode,tagfield,tagsubfield),
+  KEY tab (authtypecode,tab)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `auth_subfield_table`
+#
+
+CREATE TABLE auth_subfield_table (
+  subfieldid bigint(20) unsigned NOT NULL auto_increment,
+  authid bigint(20) unsigned NOT NULL default '0',
+  tag char(3) NOT NULL default '',
+  tagorder tinyint(4) NOT NULL default '1',
+  tag_indicator char(2) NOT NULL default '',
+  subfieldcode char(1) NOT NULL default '',
+  subfieldorder tinyint(4) NOT NULL default '1',
+  subfieldvalue varchar(255) default NULL,
+  PRIMARY KEY  (subfieldid),
+  KEY authid (authid),
+  KEY tag (tag),
+  KEY subfieldcode (subfieldcode),
+  KEY subfieldvalue (subfieldvalue)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `auth_tag_structure`
+#
+
+CREATE TABLE auth_tag_structure (
+  authtypecode char(10) NOT NULL default '',
+  tagfield char(3) NOT NULL default '',
+  liblibrarian char(255) NOT NULL default '',
+  libopac char(255) NOT NULL default '',
+  repeatable tinyint(4) NOT NULL default '0',
+  mandatory tinyint(4) NOT NULL default '0',
+  authorised_value char(10) default NULL,
+  PRIMARY KEY  (authtypecode,tagfield)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `auth_types`
+#
+
+CREATE TABLE auth_types (
+  authtypecode varchar(10) NOT NULL default '',
+  authtypetext varchar(255) NOT NULL default '',
+  auth_tag_to_report char(3) NOT NULL default '',
+  summary text NOT NULL,
+  PRIMARY KEY  (authtypecode)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `auth_word`
+#
+
+CREATE TABLE auth_word (
+  authid bigint(20) NOT NULL default '0',
+  tagsubfield varchar(4) NOT NULL default '',
+  tagorder tinyint(4) NOT NULL default '1',
+  subfieldorder tinyint(4) NOT NULL default '1',
+  word varchar(255) NOT NULL default '',
+  sndx_word varchar(255) NOT NULL default '',
+  KEY authid (authid),
+  KEY marc_search (tagsubfield,word),
+  KEY word (word),
+  KEY sndx_word (sndx_word)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -218,6 +327,17 @@ CREATE TABLE biblio (
   abstract text,
   PRIMARY KEY  (biblionumber),
   KEY blbnoidx (biblionumber)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `biblio_framework`
+#
+
+CREATE TABLE biblio_framework (
+  frameworkcode char(4) NOT NULL default '',
+  frameworktext char(255) NOT NULL default '',
+  PRIMARY KEY  (frameworkcode)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -315,6 +435,8 @@ CREATE TABLE bibliothesaurus (
 CREATE TABLE bookshelf (
   shelfnumber int(11) NOT NULL auto_increment,
   shelfname char(255) default NULL,
+  owner char(80) default NULL,
+  category char(1) default NULL,
   PRIMARY KEY  (shelfnumber)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
@@ -380,6 +502,8 @@ CREATE TABLE borrowers (
   userid varchar(30) default NULL,
   homezipcode varchar(25) default NULL,
   zipcode varchar(25) default NULL,
+  sort1 varchar(80) default NULL,
+  sort2 varchar(80) default NULL,
   UNIQUE KEY cardnumber (cardnumber),
   KEY borrowernumber (borrowernumber)
 ) TYPE=MyISAM;
@@ -470,24 +594,6 @@ CREATE TABLE categories (
   issuelimit smallint(6) default NULL,
   reservefee decimal(28,6) default NULL,
   UNIQUE KEY categorycode (categorycode)
-) TYPE=MyISAM;
-# --------------------------------------------------------
-
-#
-# Structure de la table `categoryitem`
-#
-
-CREATE TABLE categoryitem (
-  categorycode char(2) NOT NULL default '',
-  itemtype varchar(4) NOT NULL default '',
-  restrictedtype tinyint(1) default NULL,
-  rentaldiscount decimal(28,6) default NULL,
-  reservecharge decimal(28,6) default NULL,
-  fine decimal(28,6) default NULL,
-  firstremind int(11) default NULL,
-  chargeperiod int(11) default NULL,
-  accountsent int(11) default NULL,
-  chargename varchar(100) default NULL
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -681,6 +787,28 @@ CREATE TABLE issues (
 # --------------------------------------------------------
 
 #
+# Structure de la table `issuingrules`
+#
+
+CREATE TABLE issuingrules (
+  categorycode char(2) NOT NULL default '',
+  itemtype varchar(4) NOT NULL default '',
+  restrictedtype tinyint(1) default NULL,
+  rentaldiscount decimal(28,6) default NULL,
+  reservecharge decimal(28,6) default NULL,
+  fine decimal(28,6) default NULL,
+  firstremind int(11) default NULL,
+  chargeperiod int(11) default NULL,
+  accountsent int(11) default NULL,
+  chargename varchar(100) default NULL,
+  maxissueqty int(4) default NULL,
+  issuelength int(4) default NULL,
+  branchcode varchar(4) NOT NULL default '',
+  PRIMARY KEY  (branchcode,categorycode,itemtype)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Structure de la table `items`
 #
 
@@ -703,7 +831,7 @@ CREATE TABLE items (
   notforloan tinyint(1) default NULL,
   itemlost tinyint(1) default NULL,
   wthdrawn tinyint(1) default NULL,
-  bulk varchar(30) default NULL,
+  itemcallnumber varchar(30) default NULL,
   issues smallint(6) default NULL,
   renewals smallint(6) default NULL,
   reserves smallint(6) default NULL,
@@ -713,6 +841,7 @@ CREATE TABLE items (
   holdingbranch varchar(4) default NULL,
   paidfor text,
   timestamp timestamp(14) NOT NULL,
+  location varchar(80) default NULL,
   PRIMARY KEY  (itemnumber),
   KEY itembarcodeidx (barcode),
   KEY itembinoidx (biblioitemnumber),
@@ -755,6 +884,7 @@ CREATE TABLE marc_biblio (
   datecreated date NOT NULL default '0000-00-00',
   datemodified date default NULL,
   origincode char(20) default NULL,
+  frameworkcode char(4) NOT NULL default '',
   PRIMARY KEY  (bibid),
   KEY origincode (origincode),
   KEY biblionumber (biblionumber)
@@ -798,18 +928,23 @@ CREATE TABLE marc_breeding (
 CREATE TABLE marc_subfield_structure (
   tagfield char(3) NOT NULL default '',
   tagsubfield char(1) NOT NULL default '',
-  liblibrarian char(255) NOT NULL default '',
-  libopac char(255) NOT NULL default '',
+  liblibrarian varchar(255) NOT NULL default '',
+  libopac varchar(255) NOT NULL default '',
   repeatable tinyint(4) NOT NULL default '0',
   mandatory tinyint(4) NOT NULL default '0',
-  kohafield char(40) default NULL,
+  kohafield varchar(40) default NULL,
   tab tinyint(1) default NULL,
-  authorised_value char(10) default NULL,
-  thesaurus_category char(10) default NULL,
-  value_builder char(80) default NULL,
-  PRIMARY KEY  (tagfield,tagsubfield),
-  KEY kohafield (kohafield),
-  KEY tab (tab)
+  authorised_value varchar(10) default NULL,
+  authtypecode varchar(10) default NULL,
+  value_builder varchar(80) default NULL,
+  isurl tinyint(1) default NULL,
+  hidden tinyint(1) default NULL,
+  frameworkcode varchar(4) NOT NULL default '',
+  seealso varchar(255) default NULL,
+  link varchar(80) default NULL,
+  PRIMARY KEY  (frameworkcode,tagfield,tagsubfield),
+  KEY tab (frameworkcode,tab),
+  KEY kohafield (frameworkcode,kohafield)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -849,7 +984,8 @@ CREATE TABLE marc_tag_structure (
   repeatable tinyint(4) NOT NULL default '0',
   mandatory tinyint(4) NOT NULL default '0',
   authorised_value char(10) default NULL,
-  PRIMARY KEY  (tagfield)
+  frameworkcode char(4) NOT NULL default '',
+  PRIMARY KEY  (frameworkcode,tagfield)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -859,19 +995,17 @@ CREATE TABLE marc_tag_structure (
 
 CREATE TABLE marc_word (
   bibid bigint(20) NOT NULL default '0',
-  tag char(3) NOT NULL default '',
+  tagsubfield varchar(4) NOT NULL default '',
   tagorder tinyint(4) NOT NULL default '1',
-  subfieldid char(1) NOT NULL default '',
   subfieldorder tinyint(4) NOT NULL default '1',
   word varchar(255) NOT NULL default '',
   sndx_word varchar(255) NOT NULL default '',
   KEY bibid (bibid),
-  KEY tag (tag),
   KEY tagorder (tagorder),
-  KEY subfieldid (subfieldid),
   KEY subfieldorder (subfieldorder),
   KEY word (word),
-  KEY sndx_word (sndx_word)
+  KEY sndx_word (sndx_word),
+  KEY Search_Marc (tagsubfield,word)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -930,6 +1064,21 @@ CREATE TABLE reserves (
   found char(1) default NULL,
   timestamp timestamp(14) NOT NULL,
   itemnumber int(11) default NULL
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `serial`
+#
+
+CREATE TABLE serial (
+  serialid int(11) NOT NULL auto_increment,
+  biblionumber varchar(100) NOT NULL default '',
+  subscriptionid varchar(100) NOT NULL default '',
+  serialseq varchar(100) NOT NULL default '',
+  status tinyint(4) NOT NULL default '0',
+  planneddate date NOT NULL default '0000-00-00',
+  PRIMARY KEY  (serialid)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
 
@@ -998,12 +1147,99 @@ CREATE TABLE stopwords (
 # --------------------------------------------------------
 
 #
+# Structure de la table `subscription`
+#
+
+CREATE TABLE subscription (
+  biblionumber int(11) NOT NULL default '0',
+  subscriptionid int(11) NOT NULL auto_increment,
+  librarian varchar(100) default '',
+  startdate date default '0000-00-00',
+  aqbooksellerid int(11) default '0',
+  cost int(11) default '0',
+  aqbudgetid int(11) default '0',
+  weeklength tinyint(4) default '0',
+  monthlength tinyint(4) default '0',
+  numberlength tinyint(4) default '0',
+  periodicity tinyint(4) default '0',
+  dow varchar(100) default '',
+  numberingmethod varchar(100) default '',
+  notes text,
+  status varchar(100) NOT NULL default '',
+  add1 int(11) default '0',
+  every1 int(11) default '0',
+  whenmorethan1 int(11) default '0',
+  setto1 int(11) default NULL,
+  lastvalue1 int(11) default NULL,
+  add2 int(11) default '0',
+  every2 int(11) default '0',
+  whenmorethan2 int(11) default '0',
+  setto2 int(11) default NULL,
+  lastvalue2 int(11) default NULL,
+  add3 int(11) default '0',
+  every3 int(11) default '0',
+  innerloop1 int(11) default '0',
+  innerloop2 int(11) default '0',
+  innerloop3 int(11) default '0',
+  whenmorethan3 int(11) default '0',
+  setto3 int(11) default NULL,
+  lastvalue3 int(11) default NULL,
+  PRIMARY KEY  (subscriptionid)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `subscriptionhistory`
+#
+
+CREATE TABLE subscriptionhistory (
+  biblionumber int(11) NOT NULL default '0',
+  subscriptionid int(11) NOT NULL default '0',
+  histstartdate date NOT NULL default '0000-00-00',
+  enddate date default '0000-00-00',
+  missinglist longtext NOT NULL,
+  recievedlist longtext NOT NULL,
+  opacnote varchar(150) NOT NULL default '',
+  librariannote varchar(150) NOT NULL default '',
+  PRIMARY KEY  (subscriptionid),
+  KEY biblionumber (biblionumber)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Structure de la table `suggestions`
+#
+
+CREATE TABLE suggestions (
+  suggestionid int(8) NOT NULL auto_increment,
+  suggestedby int(11) NOT NULL default '0',
+  managedby int(11) default NULL,
+  STATUS varchar(10) NOT NULL default '',
+  note text,
+  author varchar(80) default NULL,
+  title varchar(80) default NULL,
+  copyrightdate smallint(6) default NULL,
+  publishercode varchar(255) default NULL,
+  date timestamp(8) NOT NULL,
+  volumedesc varchar(255) default NULL,
+  publicationyear smallint(6) default '0',
+  place varchar(255) default NULL,
+  isbn varchar(10) default NULL,
+  mailoverseeing smallint(1) default '0',
+  biblionumber int(11) default NULL,
+  PRIMARY KEY  (suggestionid),
+  KEY suggestedby (suggestedby),
+  KEY managedby (managedby)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
 # Structure de la table `systempreferences`
 #
 
 CREATE TABLE systempreferences (
   variable varchar(50) NOT NULL default '',
-  value varchar(200) default NULL,
+  value text,
   options text,
   explanation varchar(80) default NULL,
   type varchar(20) default NULL,
