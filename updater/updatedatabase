@@ -83,7 +83,17 @@ my %requiretables=(
     ethnicity=>"( code varchar(10) NOT NULL default '',
   		name varchar(255) default NULL,
   		PRIMARY KEY  (code)   )",
+    sessions=>"( sessionID varchar(255) NOT NULL default '',
+  		userid varchar(255) default NULL,
+  		ip varchar(16) default NULL,
+		lasttime int,
+		PRIMARY KEY (sessionID)   )",
+    sessionqueries=>"( sessionID varchar(255) NOT NULL default '',
+    		       userid char(100) NOT NULL default '',
+    		       ip char(18) NOT NULL default '',
+		       url text NOT NULL default ''  )",
 );
+
 
 my %requirefields=(
     biblio=>{ 'abstract' => 'text' },
@@ -98,6 +108,8 @@ my %requirefields=(
     statistics=>{'borrowernumber' =>'int(11)'},
     aqbooksellers=>{'invoicedisc' =>'float(6,4)',
     		     'nocalc' => 'int(11)'},
+    borrowers=>{'userid' => 'char(30)',
+    		'password' => 'char(30)',},
 );
 
 # Default system preferences
@@ -292,38 +304,15 @@ $dbh->disconnect;
 exit;
 
 # $Log$
-# Revision 1.4.2.16  2002/07/04 18:05:07  tonnesen
-# Bug fixes
+# Revision 1.4.2.17  2002/07/11 18:36:39  tonnesen
+# New fields and tables for authentication module.
 #
-# Revision 1.4.2.15  2002/07/04 16:40:22  tonnesen
-# Merged with trunk... added websites table even though it isn't used yet in 1.2
+# Revision 1.14  2002/07/08 16:20:26  tonnesen
+# Added sessionqueries table and password/userid fields to borrowers table
 #
-# Revision 1.4.2.14  2002/06/27 20:48:59  tonnesen
-# Fixing bug that reported an error if updatedatabase was run twice.
+# Revision 1.13  2002/07/04 18:05:36  tonnesen
+# bug fix
 #
-# Revision 1.4.2.13  2002/06/27 13:30:26  tonnesen
-# Fixed typo
-#
-# Revision 1.4.2.12  2002/06/26 18:19:53  tonnesen
-# Missing two fields for aqbooksellers.
-#
-# Revision 1.4.2.11  2002/06/26 06:04:46  amillar
-# Clean up systempreferences code to be table-driven
-#
-# Revision 1.4.2.10  2002/06/25 18:24:33  tonnesen
-# Fixed missing semicolons.
-#
-# Revision 1.4.2.9  2002/06/25 16:57:39  tonnesen
-# Fixed bug.  $sth->execute after $sti->prepare.
-#
-# Revision 1.4.2.8  2002/06/25 16:56:29  tonnesen
-# Populate systempreferences table with values for acquisitions and
-# autoMemberNum.  I have picked acquisitions='simple' and autoMemberNum='1' as
-# the defaults for these two variables.  Comments?
-#
-# Revision 1.4.2.7  2002/06/24 22:01:26  rangi
-# Have added missing borrowernumber field to the statistics table
-#
-# Revision 1.4.2.6  2002/06/20 15:07:08  amillar
-# Add table ethnicity
+# Revision 1.12  2002/07/04 16:41:06  tonnesen
+# Merged changes from rel-1-2.  Abstracted table structure changes by alan.
 #
