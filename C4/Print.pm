@@ -22,6 +22,10 @@ use strict;
 require Exporter;
 #use C4::InterfaceCDK;
 
+# Database is only used for configfile, remove this once Context.pm is used
+use C4::Database;
+
+
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
