@@ -1,0 +1,100 @@
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+ <H1>Nowy koszyk dla: <TMPL_VAR name="bookselname"></H1>
+
+<TMPL_IF name ="testdonation">
+        <a href="newbiblio.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
+        <img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Dodaj nowy opis"></a>
+<TMPL_ELSE>
+        <a href="newdonation.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
+        <img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Dodaj nowy opis"></a>
+</TMPL_IF>
+
+<a href="basket.pl?basket=<TMPL_VAR name="basket">">
+<img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="Obejrzyj koszyk"></a>
+<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
+<input type=hidden name=id value=<TMPL_VAR name="id">>
+<input type=hidden name=basket value=<TMPL_VAR name="basket">>
+<b>Szukaj od nowa: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
+<br clear=all>
+
+<CENTER>
+
+Szukano
+<B>
+<TMPL_LOOP name="loopsearch">
+        <TMPL_VAR name="key"> <TMPL_VAR name="value">
+</TMPL_LOOP>
+</B>
+<BR>
+<TMPL_VAR name="count">  znalezionych trafieñ.
+
+<br> Trafienia od<TMPL_VAR name="dispnum"> do <TMPL_VAR name="offset2"> wy¶wietlone.
+
+<TABLE  CELLSPACING=0  CELLPADDING=6 border=0 background="/images/background-mem.gif" Color="<TMPL_VAR name="main">">
+        <TR  VALIGN=TOP>
+                <TD><b>TYTU£</b></TD>
+                <TD><b>AUTOR</b></TD>
+                <TD><b>&copy;</b></TD>
+                <TD><b>ILO¦Æ</b></TD>
+                <TD><b>LOKALIZACJA</b></TD>
+        </TR>
+
+<TMPL_LOOP name="loopresult">
+        <TR VALIGN=TOP bgcolor="<TMPL_VAR name="coltab">">
+                <TD>
+                        <TMPL_IF name="testdonation">
+                                <A HREF="/cgi-bin/koha/acqui/newbiblio.pl?sub=<TMPL_VAR name="sub">&author=<TMPL_VAR name="author2">&copyright=<TMPL_VAR name="copyright">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&biblio=<TMPL_VAR name="biblionumber">&title=<TMPL_VAR name="title2">">
+                                <TMPL_VAR name="title">
+                                </A>
+                        <TMPL_ELSE>
+                                <A HREF="/cgi-bin/koha/acqui/newdonation.pl?author=<TMPL_VAR name="author2">&copyright=<TMPL_VAR name="copyright">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&biblio=<TMPL_VAR name="biblionumber">&title=<TMPL_VAR name="title2">">
+                                <TMPL_VAR name="title">
+                                </A>
+                        </TMPL_IF>
+                </TD>
+                <TD>
+                        <A HREF="/cgi-bin/koha/search.pl?author=<TMPL_VAR name="word">&type=<TMPL_VAR name="type">">
+                        <TMPL_VAR name="author">
+                        </A>
+                </TD>
+                <TD>
+                        <TMPL_VAR name="copyright">
+                </TD>
+                <TD>
+                        <TMPL_VAR name="itemcount">
+                </TD>
+                <TD>
+                        <TMPL_VAR name="location">
+                </TD>
+        </TR>
+
+</TMPL_LOOP>
+
+        <TR VALIGN=TOP>
+                <TD>
+                        &nbsp;
+                </TD>
+                <TD>
+                        &nbsp;
+                </TD>
+                <TD>
+                        &nbsp;
+                </TD>
+                <TD>
+                        &nbsp;
+                </TD>
+                <TD>
+                        &nbsp;
+                </TD>
+        </TR>
+</TABLE>
+
+<TMPL_IF name="offsetover">
+<A HREF="/cgi-bin/koha/acqui/newbasket2.pl?num=<TMPL_VAR name="num">&offset=<TMPL_VAR name="offset">&type=<TMPL_VAR name="type">&id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&search=<TMPL_VAR name="title">&author=<TMPL_VAR name="author">">
+Dalej
+</A>
+</TMPL_IF>
+</CENTER>
+
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
