@@ -20,15 +20,14 @@
 	</th>
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
-<tr>
+<tr<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="highlight"<!-- /TMPL_IF -->>
 	<td>
- 		<!-- TMPL_VAR name="title" -->&nbsp;
+ 		<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>&nbsp;
 	</td>
 	<td>
  		<!-- TMPL_VAR name="author" -->&nbsp;
 	</td>
-	<td>
-		<!-- TMPL_VAR name="returndate" -->&nbsp;
+	<td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
 	</td>
 <!-- /TMPL_LOOP -->
 </table>

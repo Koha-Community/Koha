@@ -14,6 +14,7 @@
     <th>OD/Issues</th>
 <!--     <th>Charges</th> -->
     <th>Notes</th>
+	<th>&nbsp;</th>
   </tr>
   <!-- TMPL_IF NAME="resultsloop" -->
   <!-- TMPL_LOOP NAME="resultsloop" -->
@@ -22,13 +23,14 @@
     <!-- TMPL_ELSE -->
     <tr>
     <!-- /TMPL_IF -->
-      <td><!-- TMPL_VAR NAME="cardnumber" --> (<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" title="Issue to this Patron">ISS</a>)</td>
-      <td><a class="searchresults" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a></td>
+      <td><!-- TMPL_VAR NAME="cardnumber" --> (<a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->" title="Issue to this Patron">Issue</a>)</td>
+      <td><a class="searchresults" href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> </td>
       <td><!-- TMPL_VAR NAME="categorycode" --></td>
       <td><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME=city --></td>
       <td><!-- TMPL_VAR NAME="odissue" --></td>
 <!--       <td><!-- TMPL_VAR NAME="fines" --></td> -->
       <td><div class="notes"><!-- TMPL_VAR NAME="borrowernotes" --></div></td>
+	  <td><a href="/cgi-bin/koha/members/memberentry.pl?bornum=20375&modify=edit">Edit</a></td>
     </tr>
   <!-- /TMPL_LOOP -->
   <!-- TMPL_ELSE --><td colspan="6">No results found</td><!-- /TMPL_IF -->
