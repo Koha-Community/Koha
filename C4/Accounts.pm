@@ -34,17 +34,17 @@ $VERSION = 0.01;
     
 =head1 NAME
 
-C4::Accounts - FIXME
+C4::Accounts - Functions for dealing with Koha accounts
 
 =head1 SYNOPSIS
 
   use C4::Accounts;
 
-FIXME
-
 =head1 DESCRIPTION
 
-FIXME
+The functions in this module deal with the monetary aspect of Koha,
+including looking up and modifying the amount of money owed by a
+patron.
 
 =head1 FUNCTIONS
 
