@@ -1265,26 +1265,26 @@ sub OLDmodsubject {
 	for (my $i = 0; $i < $count; $i++) {
 		$subject[$i] =~ s/^ //g;
 		$subject[$i] =~ s/ $//g;
-		my $query = "select * from catalogueentry where entrytype = 's' and catalogueentry = '$subject[$i]'";
+		my $query = "select * from catalogueentry where entrytype = 's' and catalogueentry = ?";
 		my $sth   = $dbh->prepare($query);
-		$sth->execute;
+		$sth->execute($subject[$i]);
 
 		if (my $data = $sth->fetchrow_hashref) {
 		} else {
 			if ($force eq $subject[$i] || $force == 1) {
 				# subject not in aut, chosen to force anway
 				# so insert into cataloguentry so its in auth file
-				$query = "Insert into catalogueentry (entrytype,catalogueentry) values ('s','$subject[$i]')";
+				$query = "Insert into catalogueentry (entrytype,catalogueentry) values ('s',?)";
 				my $sth2 = $dbh->prepare($query);
 
-				$sth2->execute;
+				$sth2->execute($subject[$i]);
 				$sth2->finish;
 			} else {
 				$error = "$subject[$i]\n does not exist in the subject authority file";
-				$query = "Select * from catalogueentry where entrytype = 's' and (catalogueentry like '$subject[$i] %'
-									or catalogueentry like '% $subject[$i] %' or catalogueentry like '% $subject[$i]')";
+				$query = "Select * from catalogueentry where entrytype = 's' and (catalogueentry like ?
+									or catalogueentry like ? or catalogueentry like ?)";
 				my $sth2 = $dbh->prepare($query);
-				$sth2->execute;
+				$sth2->execute("$subject[$i] %","% $subject[$i] %","% $subject[$i]");
 				while (my $data = $sth2->fetchrow_hashref) {
 					$error .= "<br>$data->{'catalogueentry'}";
 				} # while
@@ -1294,9 +1294,9 @@ sub OLDmodsubject {
 		$sth->finish;
 	} # else
 	if ($error eq '') {
-		my $query = "Delete from bibliosubject where biblionumber = $bibnum";
+		my $query = "Delete from bibliosubject where biblionumber = ?";
 		my $sth   = $dbh->prepare($query);
-		$sth->execute;
+		$sth->execute($bibnum);
 		$sth->finish;
 		$sth = $dbh->prepare("Insert into bibliosubject values (?,?)");
 		foreach $query (@subject) {
@@ -2217,6 +2217,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.74  2003/11/28 09:48:33  tipaul
+# bugfix : misusing prepare & execute => now using prepare(?) and execute($var)
+#
 # Revision 1.73  2003/11/28 09:45:25  tipaul
 # bugfix for iso2709 file import in the "notforloan" field.
 #
