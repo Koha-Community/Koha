@@ -548,6 +548,25 @@ Upgrading Database
 system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
 
 
+print qq|
+
+==================
+= Authentication =
+==================
+
+This release of Koha has a new authentication module.  If you are not already
+using basic authentication on your intranet, you will be required to log in to
+access some of the features of the intranet.  You can log in using the userid
+and password from the /etc/koha.conf configuration file at any time.  Use the
+"Members" module to add passwords for other accounts and set their permissions.
+
+[NOTE PERMISSIONS ARE NOT COMPLETED AS OF 1.2.3RC1.  Do not give passwords to
+ any patrons unless you want them to have full access to your intranet.]
+|;
+print "Press the <ENTER> key to continue: ";
+<STDIN>;
+
+
 
 print qq|
 

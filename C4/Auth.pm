@@ -39,7 +39,7 @@ sub checkauth {
     $sth->execute($sessionID);
     if ($sth->rows) {
 	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	if ($lasttime<time()-45 && $userid ne 'tonnesen') {
+	if ($lasttime<time()-7200) {
 	    # timed logout
 	    $message="You have been logged out due to inactivity.";
 	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
@@ -128,6 +128,7 @@ sub checkauth {
     <tr><td>Password:</td><td><input type=password name=password></td></tr>
     <tr><td colspan=2 align=center><input type=submit value=login></td></tr>
     </table>
+<!--
     
     </td><td align=center valign=top>
 
@@ -146,6 +147,8 @@ sub checkauth {
     </td>
     </tr>
     </table>
+-->
+
     </td></tr>
 </table>
 </form>
