@@ -19,6 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.32.2.3  2004/02/26 10:23:03  tipaul
+# porting inventory feature to rel_2_0, from HEAD
+#
 # Revision 1.32.2.2  2004/01/13 17:33:39  tipaul
 # removing useless (& buggy here) checkauth
 #
@@ -115,6 +118,20 @@ if (my $subject=$query->param('subjectitems')) {
     $count=$#results+1;
 } else {
     ($count,@results)=catalogsearch(\%env,'',\%search,$num,$startfrom);
+}
+
+my $num = 1;
+foreach my $res (@results) {
+    my @items = ItemInfo(undef, $res->{'biblionumber'}, "intra");
+    my $norequests = 1;
+    foreach my $itm (@items) {
+	$norequests = 0 unless $itm->{'notforloan'};
+    }
+    $res->{'norequests'} = $norequests;
+    # set up the even odd elements....
+    $res->{'even'} = 1 if $num % 2 == 0;
+    $res->{'odd'} = 1 if $num % 2 == 1;
+    $num++;
 }
 
 #my $resultsarray=\@results;
