@@ -1,5 +1,6 @@
 package C4::Accounts; #assumes C4/Accounts
 
+# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -28,10 +29,10 @@ use C4::Stats;
 use C4::InterfaceCDK;
 use C4::Interface::AccountsCDK;
 use vars qw($VERSION @ISA @EXPORT);
-  
+
 # set the version for version checking
 $VERSION = 0.01;
-    
+
 =head1 NAME
 
 C4::Accounts - Functions for dealing with Koha accounts
@@ -51,7 +52,7 @@ patron.
 =over 2
 
 =cut
-    
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&checkaccount &reconcileaccount &getnextacctno);
 # FIXME - This is never used
@@ -94,7 +95,7 @@ sub checkaccount  {
   #}
   #  pause();
   return($total);
-}    
+}
 
 # XXX - POD. Need to figure out C4/Interface/AccountsCDK.pm first,
 # though
@@ -111,9 +112,9 @@ sub reconcileaccount {
   my $borrower=$sth->fetchrow_hashref;
   $sth->finish();
   #get borrower information
-  $sth=$dbh->prepare("Select * from accountlines where 
-  borrowernumber=$bornumber and amountoutstanding<>0 order by date");   
-  $sth->execute;     
+  $sth=$dbh->prepare("Select * from accountlines where
+  borrowernumber=$bornumber and amountoutstanding<>0 order by date");
+  $sth->execute;
   #display account information
   &clearscreen();
   #&helptext('F11 quits');
@@ -138,7 +139,7 @@ sub reconcileaccount {
   }
   #get amount paid and update database
   my ($data,$reason)=
-    &accountsdialog($env,"Payment Entry",$borrower,\@accountlines,$total); 
+    &accountsdialog($env,"Payment Entry",$borrower,\@accountlines,$total);
   if ($data>0) {
     &recordpayment($env,$bornumber,$dbh,$data);
     #Check if the borrower still owes
@@ -162,7 +163,7 @@ sub recordpayment{
 #  $sth->execute;
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
-  my $query = "select * from accountlines 
+  my $query = "select * from accountlines
   where (borrowernumber = '$bornumber') and (amountoutstanding<>0)
   order by date";
   my $sth = $dbh->prepare($query);
@@ -182,7 +183,7 @@ sub recordpayment{
      my $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
-     $updquery = "insert into accountoffsets 
+     $updquery = "insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
      # FIXME - There's already a $usth in this scope.
@@ -196,8 +197,8 @@ sub recordpayment{
   #accountno,date,amount,description,accounttype,amountoutstanding) values
   #($bornumber,$nextaccntno,datetime('now'::abstime),0-$data,'Payment,thanks',
   #'Pay',0-$amountleft)";
-  $updquery = "insert into accountlines 
-  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)  
+  $updquery = "insert into accountlines
+  (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
   values ($bornumber,$nextaccntno,now(),0-$data,'Payment,thanks',
   'Pay',0-$amountleft)";
   my $usth = $dbh->prepare($updquery);
@@ -240,7 +241,7 @@ sub getnextacctno {
   $sth->finish;
   return($nextaccntno);
 }
-			
+
 END { }       # module clean-up code here (global destructor)
 
 1;
