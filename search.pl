@@ -19,6 +19,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.32.2.2  2004/01/13 17:33:39  tipaul
+# removing useless (& buggy here) checkauth
+#
 # Revision 1.32.2.1  2003/12/19 17:28:42  tipaul
 # fix for 683
 #
@@ -41,10 +44,6 @@ use C4::Interface::CGI::Output;
 
 my $query=new CGI;
 my $type=$query->param('type');
-
-#(-e "opac") && ($type='opac');
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
