@@ -65,7 +65,7 @@
 				<INPUT TYPE=submit class="button" value="Modifier">
 			</form>
 		</TMPL_IF>
-		<form action=/cgi-bin/koha/deletemem.pl method=post>
+		<form action="javascript:confirm_deletion()">
                         <input type=hidden name=member value="<TMPL_VAR NAME="bornum">">
 			<INPUT TYPE=submit class="button" value="Supprimer">
 		</form>
@@ -225,7 +225,14 @@
 <br />
 <br />
 <a class=button href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">">Fiche lecteur</a>
-
-<!-- endmenu -->
+<script>
+function confirm_deletion() {
+	var is_confirmed = confirm('Confirmez vous la suppression ?');
+	if (is_confirmed) {
+		window.location="/cgi-bin/koha/deletemem.pl?member=<TMPL_VAR NAME="bornum">";
+	}
+}
+</script>
+ <!-- endmenu -->
 
 <TMPL_INCLUDE NAME="members-bottom.inc">
