@@ -1,44 +1,42 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<!-- The manual invoice et credit buttons -->
+<!-- The manual invoice and credit buttons -->
 
-<h1>Compte pour <a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->"><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></a></h1><P>
-<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<!-- TMPL_VAR NAME=bornum -->">Créer une facture manuelle</a>
-&nbsp;
-<a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<!-- TMPL_VAR NAME=bornum -->">Créer un crédit manuel</a>
+<h1>Compte pour</h1><P>
+<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Créer une facture manuelle</a>
 <center>
 <p>
 
 <!-- The table with the account items -->
 
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
+<table  cellspacing="0"  cellpadding="5" border="1" >
 
-  <TR VALIGN=TOP>
-    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>AMENDES & FRAIS</TD>
-    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=1><B>MONTANT</TD>
-    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=1><B>DOIT ENCORE</TD>
-  </TR>
+  <tr valign="top">
+    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="2"><b>FRAIS & CHARGES</td>
+    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="1"><b>MONTANT</td>
+    <td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="1"><b>ENCORE DU</td>
+  </tr>
 
-  <!-- TMPL_LOOP NAME=accounts -->
+  <!-- TMPL_LOOP NAME="accounts" -->
 
-    <tr VALIGN=TOP>
-      <td><!-- TMPL_VAR NAME=date --></td>
-      <td><!-- TMPL_VAR NAME=description --><!-- TMPL_IF NAME=printtitle --> <!-- TMPL_VAR NAME=title --><!-- /TMPL_IF --></td>
-      <td><!-- TMPL_VAR NAME=amount --></td>
-      <td><!-- TMPL_VAR NAME=amountoutstanding --></td>
+    <tr valign="top">
+      <td><!-- TMPL_VAR NAME="date" --></td>
+      <td><!-- TMPL_VAR NAME="description" --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
+      <td><!-- TMPL_VAR NAME="amount" --></td>
+      <td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
     </tr>
 
   <!-- /TMPL_LOOP -->
 
-  <tr VALIGN=TOP  >
+  <tr valign="top">
     <td></td>
-    <td colspan=2><b>Total dû</b></td>
-    <td><b><!-- TMPL_VAR NAME=total --></b></td>
+    <td colspan="2"><b>Total dû</b></td>
+    <td><b><!-- TMPL_VAR NAME="total" --></b></td>
   </tr>
 
 </table>
 
-<br clear=all>
+<br clear="all">
 <p> &nbsp; </p>
 
 <!-- endmenu (member) -->

@@ -1,40 +1,36 @@
 <!-- TMPL_INCLUDE Name="reports-top.inc" -->
-<CENTER>
-<br>
-<h1>
-<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="bib" -->&type="intra"> <!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</a></h1><P>
-<p>
+<h1><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="bib" -->&amp;type=intra"> <!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)</a></h1><p>&nbsp;</p>
 
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 width=440 >
-	<TR VALIGN=TOP>
-		<TD  bgcolor="99cc33" background="/images/background-mem.gif">
-			<B>CODE BARRE <!-- TMPL_VAR Name="barcode" --></B>
-		</TD>
-	</TR>
-	<TR VALIGN=TOP  >
-		<TD width=440 >
+<table  cellspacing="0"  cellpadding="5" border="1" width="440">
+	<tr valign="top">
+		<td  bgcolor="#99cc33" background="/images/background-mem.gif">
+			<b>CODE BARRE <!-- TMPL_VAR NAME="barcode" --></b>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="440">
 
-		<b>Annexe propriétaire: </b> <!-- TMPL_VAR Name="homebranch" --> <br>
-		<b>Annexe: </b> <!-- TMPL_VAR Name="holdingbranch" --><br>
-		<b>Date d'arrivée à l'Annexe: </b> <!-- TMPL_VAR Name="lastdate" --> <br>
-		<b>Nombre de prêt depuis la date ci-dessus:</b> <!-- TMPL_VAR Name="count" --> <br>
+		</b> <!-- TMPL_VAR NAME="homebranch" -->'><b>Site d'origine: </b>  <br>
+		<b>Site Actuel: </b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
+		<b>Date d'arrivée au site actuel: </b> <!-- TMPL_VAR NAME="lastdate" --> <br>
+		<b>Nombre de prêts depuis la date ci-dessus:</b> <!-- TMPL_VAR NAME="count" --> <br>
 
-		<table cellspacing =0 cellpadding=5 border=1 width = 440>
-			<TR>
-				<TD> <b>Annexe</b></td>
-				<TD> <b>Nombre de prêts</b></td>
-				<TD> <b>Vu à l'Annexe</b></td>
-			</TR>
+		<table cellspacing="0" cellpadding="5" border="1" width="440">
+			<tr>
+				<th>Site</th>
+				<th>Nombre de prêts</th>
+				<th>Vue pour la dernière fois au site</th>
+			</tr>
 			<!-- TMPL_LOOP Name="branchloop" -->
-				<TR>
-					<TD> <b> <!-- TMPL_VAR Name="branchname" --> </b></td>
-					<TD> <b> <!-- TMPL_VAR Name="issues" --> </b></td>
-					<TD> <b> <!-- TMPL_VAR Name="seen" --> </b></td>
-				</TR>
+				<tr>
+					<td> <b> <!-- TMPL_VAR NAME="branchname" --> </b></td>
+					<td> <b> <!-- TMPL_VAR NAME="issues" --> </b></td>
+					<td> <b> <!-- TMPL_VAR NAME="seen" --> </b></td>
+				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		</TD>
-	</TR>
+		</td>
+	</tr>
 </table>
 
 <!-- TMPL_INCLUDE Name="reports-bottom.inc" -->

@@ -1,32 +1,29 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
-<!-- the site -->
-
-<h1>Ouvrages en retard depuis <!-- TMPL_VAR NAME="todaysdate" --></h1><br><P>
-
-<TABLE  cellspacing=0 cellpadding=5 border=1 align=center>
-  <TR VALIGN=TOP>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Date de retour</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Utilisateur</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Téléphone</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Titre</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Auteur</b></td>
-  </tr>
-
-  <!-- TMPL_LOOP NAME=overdueloop -->
-    <tr>
-      <td><!-- TMPL_VAR NAME="duedate" --></td>
-    <!-- TMPL_IF NAME=email -->
-      <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Signaler retard: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
-    <!-- TMPL_ELSE -->
-      <td><!-- TMPL_VAR NAME="name" --></td>
-    <!-- /TMPL_IF -->
-      <td><!-- TMPL_VAR NAME="phone" --></td>
-      <td><!-- TMPL_VAR NAME="title" --></td>
-      <td><!-- TMPL_VAR NAME="author" --></td>
-    </tr>
-  <!-- /TMPL_LOOP -->
-</table>
-
-
-<!-- endmenu -->
+<div id="mainbloc">
+	<h1 class="reports">exemplaire en retard depuis le <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	
+	<table>
+	<tr>
+		<th class="reports">Date de retour</th>
+		<th class="reports">Usager</th>
+		<th class="reports">Téléphone</th>
+		<th class="reports">Titre</th>
+		<th class="reports">Auteur</th>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="overdueloop" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="duedate" --></td>
+			<!-- TMPL_IF NAME="email" -->
+			<td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+			<!-- TMPL_ELSE -->
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="phone" --></td>
+			<td><!-- TMPL_VAR NAME="title" --></td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
 <!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
