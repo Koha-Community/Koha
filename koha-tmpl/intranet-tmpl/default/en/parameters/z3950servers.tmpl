@@ -158,10 +158,10 @@
 	
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='/images/background-mem.gif'>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'>
                                 <b>Site</b>
                         </td>
-                        <td background='/images/background-mem.gif'>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'>
                                 <TMPL_VAR NAME=searchfield>
                         </td>
                 </tr>
@@ -227,16 +227,16 @@
 
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='/images/background-mem.gif'><b>Site</b></td>
-                        <td background='/images/background-mem.gif'><b>Hostname</b></td>
-                        <td background='/images/background-mem.gif'><b>Port</b></td>
-                        <td background='/images/background-mem.gif'><b>Database</b></td>
-                        <td background='/images/background-mem.gif'><b>Userid</b></td>
-                        <td background='/images/background-mem.gif'><b>Password</b></td>
-                        <td background='/images/background-mem.gif'><b>Checked</b></td>
-                        <td background='/images/background-mem.gif'><b>Rank</b></td>       
-                        <td background='/images/background-mem.gif'> </td>
-                        <td background='/images/background-mem.gif'> </td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Site</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Hostname</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Port</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Database</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Userid</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Password</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Checked</b></td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Rank</b></td>       
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
+                        <td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
                 </tr>
                 <TMPL_LOOP NAME=loop>
                 <tr bgcolor="<TMPL_VAR NAME=toggle>">
@@ -248,8 +248,8 @@
                         <td><TMPL_VAR NAME=password></td>
                         <td><TMPL_VAR NAME=checked></td>
                         <td><TMPL_VAR NAME=rank></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&searchfield=<TMPL_VAR NAME=name>">Edit</a></td>
-                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=name>">Delete</a></td>                
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=add_form&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png" ALT="Edit" title="edit" BORDER=0 ></a></td>
+                        <td><a href="<TMPL_VAR NAME=script_name>?op=delete_confirm&searchfield=<TMPL_VAR NAME=name>"><img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png" ALT="Delete" title="delete" BORDER=0 ></a></td>                
 			</tr>
                 </TMPL_LOOP>
 	</table>
@@ -268,7 +268,7 @@
         </TMPL_iF>
                 
         <br>
-        <input type=image src="/images/button-add-new.gif" WIDTH=188 HEIGHT=44 ALT="Add z3950 server" title="add" BORDER=0 ></a>
+        <input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" ALT="Add z3950 server" title="add" BORDER=0 ></a>
         <br>
         </form>
 
