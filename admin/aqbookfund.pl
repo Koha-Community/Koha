@@ -120,7 +120,6 @@ if ($op eq 'add_form') {
 	$template->param(add_or_modify => $add_or_modify);
 	$template->param(bookfundid =>$bookfundid);
 	$template->param(bookfundname =>$data->{'bookfundname'});
-	$template->param(bookfundgroup =>$data->{'bookfundgroup'});
 
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -132,10 +131,9 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	$query = "replace aqbookfund (bookfundid,bookfundname,bookfundgroup) values (";
+	$query = "replace aqbookfund (bookfundid,bookfundname) values (";
 	$query.= $dbh->quote($input->param('bookfundid')).",";
-	$query.= $dbh->quote($input->param('bookfundname')).",";
-	$query.= $dbh->quote($input->param('bookfundgroup')).")";
+	$query.= $dbh->quote($input->param('bookfundname')).")";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
@@ -154,7 +152,6 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
 	$template->param(bookfundname => $data->{'bookfundname'});
-	$template->param(bookfundgroup => $data->{'bookfundgroup'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -184,22 +181,19 @@ if ($op eq 'add_form') {
 	   my @toggle = ();
 	   my @bookfundid = ();
 	   my @bookfundname = ();
-	   my @bookfundgroup = ();
 	   push(@toggle,$toggle);
 	   push(@bookfundid,$results->[$i]{'bookfundid'});
 	   push(@bookfundname,$results->[$i]{'bookfundname'});
-	   push(@bookfundgroup,$results->[$i]{'bookfundgroup'});
 	   if ($toggle eq 'white'){
 	    		$toggle="#ffffcc";
 	  	} else {
 	    		$toggle="white";
 	  	}
-	while (@toggle and @bookfundid and @bookfundname and @bookfundgroup) {
+	while (@toggle and @bookfundid and @bookfundname) {
 	   my %row_data;
 	   $row_data{toggle} = shift @toggle;
 	   $row_data{bookfundid} = shift @bookfundid;
 	   $row_data{bookfundname} = shift @bookfundname;
-	   $row_data{bookfundgroup} = shift @bookfundgroup;
 	   push(@loop_data, \%row_data);
        }
        }
