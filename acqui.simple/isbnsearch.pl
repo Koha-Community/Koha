@@ -20,12 +20,12 @@
 use strict;
 use CGI;
 use C4::Auth;
-# use C4::Catalogue;
 use C4::Biblio;
 use C4::Search;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Koha;
 
 my $input      = new CGI;
 my $isbn       = $input->param('isbn');
@@ -151,6 +151,16 @@ else {
     }
 
 
+	# get framework list
+	my $frameworks = getframeworks;
+	my @frameworkcodeloop;
+	foreach my $thisframeworkcode (keys %$frameworks) {
+		my %row =(value => $thisframeworkcode,
+					frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
+				);
+		push @frameworkcodeloop, \%row;
+	}
+
     $template->param(
         isbn          => $isbn,
         title         => $title,
@@ -162,7 +172,8 @@ else {
         numbers       => \@numbers,
         term          => $term,
         value         => $value,
-        NOTMARC       => !$marc_p
+        NOTMARC       => !$marc_p,
+		frameworkcodeloop => \@frameworkcodeloop,
     );
 
     print $input->header(

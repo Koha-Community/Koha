@@ -1,21 +1,21 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Biblio Search Results</h1>
+	<h1 class="catalogue">Biblio Search Results</h1>
 	<div id="bloc25">
-		<h2 class="acquisition">You searched on <b><!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR NAME="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></b></h2>
+		<h2 class="catalogue">You searched on <!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR NAME="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></h2>
 		<!-- TMPL_IF name="total" -->
 			<p><!-- TMPL_VAR NAME="total" --> results found</p>
 			<p>Results <i><!-- TMPL_VAR NAME="showoffset" --></i> to <i><!-- TMPL_VAR NAME="total" --></i> displayed</p>
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc100">
-		<h2 class="acquisition">Biblios in koha</h2>
+		<h2 class="catalogue">Biblios in koha</h2>
 		<table>
 			<tr>
-				<th class="acquisition">Title</th>
-				<th class="acquisition">Author</th>
-				<th class="acquisition">&copy;</th>
-				<th class="acquisition">&nbsp;</th>
+				<th class="catalogue">Title</th>
+				<th class="catalogue">Author</th>
+				<th class="catalogue">&copy;</th>
+				<th class="catalogue">&nbsp;</th>
 			</tr>
 			<!-- TMPL_IF name="loop" -->
 			<!-- TMPL_LOOP NAME="loop" -->
@@ -24,9 +24,9 @@
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="copyrightdate" --></td>
 					<!-- TMPL_IF NAME="NOTMARC" -->
-					<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button acquisition">Add items</a></td>
+					<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Add items</a></td>
 					<!-- TMPL_ELSE -->
-					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button acquisition">Edit...</a></td>
+					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">Edit...</a></td>
 					<!-- /TMPL_IF -->
 				</tr>
 			<!-- /TMPL_LOOP -->
@@ -60,7 +60,7 @@
 				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
 			<!-- /TMPL_IF -->
 		</p>
-		<h2 class="acquisition">Biblios in breeding farm</h2>
+		<h2 class="catalogue">Biblios in breeding farm</h2>
 		<!-- TMPL_IF name="breeding_loop" -->
 			<table>
 				<tr>
@@ -90,12 +90,18 @@
 		<!-- /TMPL_IF -->
 		<p class="center">
 		<!-- TMPL_IF NAME="NOTMARC" -->
-			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button acquisition">Add New Biblio</a>
+			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button catalogue">Add New Biblio</a>
 		<!-- TMPL_ELSE -->
-			<a href="addbiblio.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button acquisition">Add New Biblio</a>
+			<select name="frameworkcode">
+				<option value="">Default</option>
+				<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
+					<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
+				<!-- /TMPL_LOOP -->
+			</select>
+			<a href="addbiblio.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button catalogue">Add New Biblio</a>
 		<!-- /TMPL_IF -->
 		</p>
 	</div>
 	
 </div>
-<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
