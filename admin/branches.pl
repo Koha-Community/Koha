@@ -240,8 +240,8 @@ printend
 		print "You Searched for <b>$searchfield<b><p>";
 	}
 	print mktablehdr;
-	print mktablerow(9,'#99cc33',bold('Branch code'),bold('name'),bold('adress'),
-	bold('phone'),bold('fax'),bold('mail'),bold('issuing'),
+	print mktablerow(9,'#99cc33',bold('Branch code'),bold('Name'),bold('Address'),
+	bold('Phone'),bold('Fax'),bold('E-mail'),bold('Issuing'),
 	'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
@@ -257,7 +257,7 @@ printend
 	  	}
 		print mktablerow(9,$toggle,$results->[$i]{'branchcode'},$results->[$i]{'branchname'},
 		$results->[$i]{'branchaddress1'}.$results->[$i]{'branchaddress2'}.$results->[$i]{'branchaddress3'},
-		$results->[$i]{'branchphone'},,$results->[$i]{'branchfax'},,$results->[$i]{'branchmail'},,$results->[$i]{'issuing'},
+		$results->[$i]{'branchphone'},,$results->[$i]{'branchfax'},,$results->[$i]{'branchemail'},,$results->[$i]{'issuing'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'branchcode'},'Edit'),
 		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'branchcode'},'Delete'));
 	}
