@@ -50,17 +50,10 @@ my $printers = getprinters(\%env);
 #  Getting state
 
 my $query=new CGI;
-my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
 
 
-my $branch = $query->param("branch");
-my $printer = $query->param("printer");
-
-($branch) || ($branch=$query->cookie('branch')) ;
-($printer) || ($printer=$query->cookie('printer')) ;
-
-($branches->{$branch}) || ($branch=(keys %$branches)[0]);
-($printers->{$printer}) || ($printer=(keys %$printers)[0]);
+my $branch = getbranch($query, $branches);
+my $printer = getprinter($query, $printers);
 
 my $genbrname = $branches->{$branch}->{'branchname'} ;
 my $genprname = $printers->{$printer}->{'printername'};
@@ -110,7 +103,7 @@ if ($request eq 'KillReserved'){
 # set up the branchselect options....
 my @branchoptionloop;
 foreach my $br (keys %$branches) {
-    (next) unless $branches->{$br}->{'CU'};
+    #(next) unless $branches->{$br}->{'CU'}; #FIXME disabled to fix bug 202
     my %branch;
     $branch{selected}=($br eq $tobranchcd);
 	$branch{code}=$br;
@@ -284,7 +277,7 @@ $template->param(	genbrname => $genbrname,
 								branchoptionloop => \@branchoptionloop,
 								errmsgloop => \@errmsgloop
 							);
-output_html_with_http_headers $query, $sessioncookie, $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 
 
 sub name {

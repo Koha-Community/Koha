@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# WARNING: This file uses 4-character tabs!
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -24,6 +25,7 @@ use C4::Circulation::Circ2;
 use C4::Output;
 use C4::Auth;
 use C4::Print;
+use C4::Interface::CGI::Output;
 use HTML::Template;
 use DBI;
 
@@ -71,14 +73,14 @@ $env{'queue'}=$printer;
 my $branchcount=0;
 my $printercount=0;
 my @branchloop;
-foreach (keys %$branches) {
-    (next) unless ($_);
-    (next) unless ($branches->{$_}->{'IS'});
+foreach my $br (keys %$branches) {
+    next unless $br =~ /\S/;
+    #(next) unless ($branches->{$_}->{'IS'}); # FIXME disabled to fix bug 202
     $branchcount++;
 	my %branch;
-	$branch{selected}=($_ eq $oldbranch);
-	$branch{name}=$branches->{$_}->{'branchname'};
-	$branch{value}=$_;
+	$branch{selected}=($br eq $oldbranch);
+	$branch{name}=$branches->{$br}->{'branchname'};
+	$branch{value}=$br;
     push(@branchloop,\%branch);
 }
 my @printerloop;
@@ -129,6 +131,9 @@ $template->param(headerbackgroundcolor => $headerbackgroundcolor,
 							branchloop => \@branchloop
 							);
 
-print $query->header(), $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
 
 
+# Local Variables:
+# tab-width: 4
+# End:
