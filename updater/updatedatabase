@@ -133,11 +133,11 @@ my %requiretables=(
 						libopac char(255) NOT NULL default '',
 						repeatable tinyint(4) NOT NULL default '0',
 						mandatory tinyint(4) NOT NULL default '0',
-						kohafield char(40) NOT NULL default '',
-						tab tinyint(1),
+						kohafield char(40)  default NULL,
+						tab tinyint(1) default NULL,
 						authorised_value char(10) default NULL,
 						thesaurus_category char(10) default NULL,
-						value_builder char(80) NOT NULL default '',
+						value_builder char(80) default NULL,
 						PRIMARY KEY  (tagfield,tagsubfield),
 						KEY kohafield (kohafield),
 						KEY tab (tab)
@@ -526,6 +526,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.28  2002/12/10 13:27:47  tipaul
+# bugfixes (davide mails in koha-dev)
+#
 # Revision 1.27  2002/11/26 15:04:54  tipaul
 # road to 1.3.2. Updating db structure during installation
 #
