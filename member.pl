@@ -27,7 +27,7 @@ printend
 print "You Searched for $member<p>";
 print mktablehdr;
 print mktablerow(8,'#99cc33',bold('Card'),bold('Surname'),bold('Firstname'),bold('Category')
-,bold('Address'),bold('OD/Issues'),bold('Fines'),bold('Notes'),'/images/background-mem.gif');
+,bold('Address'),bold('OD/Issues'),bold('Charges'),bold('Notes'),'/images/background-mem.gif');
 my $env;
 my ($count,$results)=BornameSearch($env,$member,'web');
 #print $count;
