@@ -1,4 +1,4 @@
-package C4::Catalogue; #asummes C4/Acquisitions.pm
+package C4::Catalogue; #assumes C4/Acquisitions.pm
 
 # Continue working on updateItem!!!!!!
 #
@@ -38,18 +38,36 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 # set the version for version checking
 $VERSION = 0.01;
 
+=head1 NAME
+
+C4::Catalogue - FIXME
+
+=head1 SYNOPSIS
+
+  use C4::Catalogue;
+
+=head1 DESCRIPTION
+
+FIXME
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	     &basket &newbasket
 
-	     &getorders &getallorders &getrecorders 
+	     &getorders &getallorders &getrecorders
 	     &getorder &neworder &delorder
 	     &ordersearch
 	     &modorder &getsingleorder &invoice &receiveorder
-	     &updaterecorder &newordernum 
+	     &updaterecorder &newordernum
 
-	     &bookfunds &bookfundbreakdown &updatecost 
-	     &curconvert &getcurrencies &updatecurrencies &getcurrency 
+	     &bookfunds &bookfundbreakdown &updatecost
+	     &curconvert &getcurrencies &updatecurrencies &getcurrency
 
 	     &findall &needsmod &branches &updatesup &insertsup
 	     &bookseller &breakdown &checkitems
@@ -60,19 +78,20 @@ $VERSION = 0.01;
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - Unused
 
 
 # non-exported package globals go here
-use vars qw(@more $stuff);
+use vars qw(@more $stuff);		# FIXME - Unused
 
 # initalize package globals, first exported ones
-
+# FIXME - Unused
 my $Var1   = '';
 my %Hashit = ();
 
 
 # then the others (which are still accessible as $Some::Module::stuff)
+# FIXME - Unused
 my $stuff  = '';
 my @more   = ();
 
@@ -80,15 +99,17 @@ my @more   = ();
 # the functions below that use them.
 
 # file-private lexicals go here
+# FIXME - Unused
 my $priv_var    = '';
 my %secret_hash = ();
 
 # here's a file-private function as a closure,
 # callable as &$priv_func;  it cannot be prototyped.
+# FIXME - Unused
 my $priv_func = sub {
   # stuff goes here.
   };
-  
+
 # make all your functions, whether exported or not;
 
 
@@ -99,13 +120,28 @@ my $priv_func = sub {
 #
 #
 #
+=item basket
+
+  ($count, @orders) = &basket($basketnumber, $booksellerID);
+
+Looks up the pending (non-cancelled) orders with the given basket
+number. If C<$booksellerID> is non-empty, only orders from that seller
+are returned.
+
+C<&basket> returns a two-element array. C<@orders> is an array of
+references-to-hash, whose keys are the fields from the aqorders,
+biblio, and biblioitems tables in the Koha database. C<$count> is the
+number of elements in C<@orders>.
+
+=cut
+#'
 sub basket {
   my ($basketno,$supplier)=@_;
   my $dbh=C4Connect;
-  my $query="Select *,biblio.title from aqorders,biblio,biblioitems 
+  my $query="Select *,biblio.title from aqorders,biblio,biblioitems
   where basketno='$basketno'
   and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber
-  =aqorders.biblioitemnumber 
+  =aqorders.biblioitemnumber
   and (datecancellationprinted is NULL or datecancellationprinted =
   '0000-00-00')";
   if ($supplier ne ''){
@@ -126,6 +162,24 @@ sub basket {
   return($i,@results);
 }
 
+=item newbasket
+
+  $basket = &newbasket();
+
+Finds the next unused basket number in the aqorders table of the Koha
+database, and returns it.
+
+=cut
+#'
+# FIXME - There's a race condition here:
+#	A calls &newbasket
+#	B calls &newbasket (gets the same number as A)
+#	A updates the basket
+#	B updates the basket, and clobbers A's result.
+# A better approach might be to create a dummy order (with, say,
+# requisitionedby == "Dummy-$$" or notes == "dummy <time> <pid>"), and
+# see which basket number it gets. Then have a cron job periodically
+# remove out-of-date dummy orders.
 sub newbasket {
   my $dbh=C4Connect;
   my $query="Select max(basketno) from aqorders";
@@ -138,6 +192,30 @@ sub newbasket {
   $dbh->disconnect;
   return($basket);
 }
+
+=item neworder
+
+  &neworder($biblionumber, $title, $ordnum, $basket, $quantity, $listprice,
+	$booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
+	$ecost, $gst, $budget, $unitprice, $subscription,
+	$booksellerinvoicenumber);
+
+Adds a new order to the database. Any argument that isn't described
+below is the new value of the field with the same name in the aqorders
+table of the Koha database.
+
+C<$ordnum> is a "minimum order number." After adding the new entry to
+the aqorders table, C<&neworder> finds the first entry in aqorders
+with order number greater than or equal to C<$ordnum>, and adds an
+entry to the aqorderbreakdown table, with the order number just found,
+and the book fund ID of the newly-added order.
+
+C<$budget> is effectively ignored.
+
+C<$subscription> may be either "yes", or anything else for "no".
+
+=cut
+#'
 sub neworder {
   my ($bibnum,$title,$ordnum,$basket,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice)=@_;
   if ($budget eq 'now'){
@@ -179,6 +257,20 @@ sub neworder {
   $dbh->disconnect;
 }
 
+=item delorder
+
+  &delorder($biblionumber, $ordernumber);
+
+Cancel the order with the given order and biblio numbers. It does not
+delete any entries in the aqorders table, it merely marks them as
+cancelled.
+
+If there are no items remaining with the given biblionumber,
+C<&delorder> also deletes them from the marc_subfield_table and
+marc_biblio tables of the Koha database.
+
+=cut
+#'
 sub delorder {
   my ($bibnum,$ordnum)=@_;
   my $dbh=C4Connect;
@@ -191,16 +283,34 @@ sub delorder {
   $sth->finish;
   my $count=itemcount($bibnum);
   if ($count == 0){
-    delbiblio($bibnum);
+    delbiblio($bibnum);		# This is C4::Biblio::delbiblio, not
+				# C4::Acquisitions::delbiblio
   }
   $dbh->disconnect;
 }
 
+=item modorder
+
+  &modorder($title, $ordernumber, $quantity, $listprice,
+	$biblionumber, $basketno, $supplier, $who, $notes,
+	$bookfundid, $bibitemnum, $rrp, $ecost, $gst, $budget,
+	$unitprice, $booksellerinvoicenumber);
+
+Modifies an existing order. Updates the order with order number
+C<$ordernumber> and biblionumber C<$biblionumber>. All other arguments
+update the fields with the same name in the aqorders table of the Koha
+database.
+
+Entries with order number C<$ordernumber> in the aqorderbreakdown
+table are also updated to the new book fund ID.
+
+=cut
+#'
 sub modorder {
   my ($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice)=@_;
   my $dbh=C4Connect;
   my $query="update aqorders set title='$title',
-  quantity='$quantity',listprice='$listprice',basketno='$basketno', 
+  quantity='$quantity',listprice='$listprice',basketno='$basketno',
   rrp='$rrp',ecost='$ecost',unitprice='$cost',
   booksellerinvoicenumber='$invoice'
   where
@@ -218,6 +328,16 @@ sub modorder {
   $dbh->disconnect;
 }
 
+=item newordernum
+
+  $order = &newordernum();
+
+Finds the next unused order number in the aqorders table of the Koha
+database, and returns it.
+
+=cut
+#'
+# FIXME - Race condition
 sub newordernum {
   my $dbh=C4Connect;
   my $query="Select max(ordernumber) from aqorders";
@@ -231,6 +351,23 @@ sub newordernum {
   return($ordnum);
 }
 
+=item receiveorder
+
+  &receiveorder($biblionumber, $ordernumber, $quantityreceived, $user,
+	$unitprice, $booksellerinvoicenumber, $biblioitemnumber,
+	$freight, $bookfund, $rrp);
+
+Updates an order, to reflect the fact that it was received, at least
+in part. All arguments not mentioned below update the fields with the
+same name in the aqorders table of the Koha database.
+
+Updates the order with bibilionumber C<$biblionumber> and ordernumber
+C<$ordernumber>.
+
+Also updates the book fund ID in the aqorderbreakdown table.
+
+=cut
+#'
 sub receiveorder {
   my ($biblio,$ordnum,$quantrec,$user,$cost,$invoiceno,$bibitemno,$freight,$bookfund,$rrp)=@_;
   my $dbh=C4Connect;
@@ -249,9 +386,24 @@ sub receiveorder {
   $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
-  $sth->finish;  
+  $sth->finish;
   $dbh->disconnect;
 }
+
+=item updaterecorder
+
+  &updaterecorder($biblionumber, $ordernumber, $user, $unitprice,
+	$bookfundid, $rrp);
+
+Updates the order with biblionumber C<$biblionumber> and order number
+C<$ordernumber>. C<$bookfundid> is the new value for the book fund ID
+in the aqorderbreakdown table of the Koha database. All other
+arguments update the fields with the same name in the aqorders table.
+
+C<$user> is ignored.
+
+=cut
+#'
 sub updaterecorder{
   my($biblio,$ordnum,$user,$cost,$bookfund,$rrp)=@_;
   my $dbh=C4Connect;
@@ -268,7 +420,7 @@ sub updaterecorder{
   $sth=$dbh->prepare($query);
 #  print $query;
   $sth->execute;
-  $sth->finish;  
+  $sth->finish;
   $dbh->disconnect;
 }
 
@@ -278,10 +430,43 @@ sub updaterecorder{
 #
 #
 
+=item getorders
+
+  ($count, $orders) = &getorders($booksellerid);
+
+Finds pending orders from the bookseller with the given ID. Ignores
+completed and cancelled orders.
+
+C<$count> is the number of elements in C<@{$orders}>.
+
+C<$orders> is a reference-to-array; each element is a
+reference-to-hash with the following fields:
+
+=over 4
+
+=item C<count(*)>
+
+Gives the number of orders in with this basket number.
+
+=item C<authorizedby>
+
+=item C<entrydate>
+
+=item C<basketno>
+
+These give the value of the corresponding field in the aqorders table
+of the Koha database.
+
+=back
+
+Results are ordered from most to least recent.
+
+=cut
+#'
 sub getorders {
   my ($supplierid)=@_;
   my $dbh=C4Connect;
-  my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where 
+  my $query = "Select count(*),authorisedby,entrydate,basketno from aqorders where
   booksellerid='$supplierid' and (quantity > quantityreceived or
   quantityreceived is NULL)
   and (datecancellationprinted is NULL or datecancellationprinted = '0000-00-00')";
@@ -300,6 +485,19 @@ sub getorders {
   return ($i,\@results);
 }
 
+=item getorder
+
+  ($order, $ordernumber) = &getorder($biblioitemnumber, $biblionumber);
+
+Looks up the order with the given biblionumber and biblioitemnumber.
+
+Returns a two-element array. C<$ordernumber> is the order number.
+C<$order> is a reference-to-hash describing the order; its keys are
+fields from the biblio, biblioitems, aqorders, and aqorderbreakdown
+tables of the Koha database.
+
+=cut
+#'
 sub getorder{
   my ($bi,$bib)=@_;
   my $dbh=C4Connect;
@@ -307,6 +505,8 @@ sub getorder{
   biblioitemnumber='$bi'";
   my $sth=$dbh->prepare($query);
   $sth->execute;
+  # FIXME - Use fetchrow_array(), since we're only interested in the one
+  # value.
   my $ordnum=$sth->fetchrow_hashref;
   $sth->finish;
   my $order=getsingleorder($ordnum->{'ordernumber'});
@@ -315,11 +515,26 @@ sub getorder{
   return ($order,$ordnum->{'ordernumber'});
 }
 
+=item getsingleorder
+
+  $order = &getsingleorder($ordernumber);
+
+Looks up an order by order number.
+
+Returns a reference-to-hash describing the order. The keys of
+C<$order> are fields from the biblio, biblioitems, aqorders, and
+aqorderbreakdown tables of the Koha database.
+
+=cut
+#'
+# FIXME - This is basically the same thing as
+# C4::Acquisitions::getsingleorder. Figure out where it goes and nuke
+# the other one.
 sub getsingleorder {
   my ($ordnum)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown 
-  where aqorders.ordernumber='$ordnum' 
+  my $query="Select * from biblio,biblioitems,aqorders,aqorderbreakdown
+  where aqorders.ordernumber='$ordnum'
   and biblio.biblionumber=aqorders.biblionumber and
   biblioitems.biblioitemnumber=aqorders.biblioitemnumber and
   aqorders.ordernumber=aqorderbreakdown.ordernumber";
@@ -331,6 +546,21 @@ sub getsingleorder {
   return($data);
 }
 
+=item getallorders
+
+  ($count, @results) = &getallorders($booksellerid);
+
+Looks up all of the pending orders from the supplier with the given
+bookseller ID. Ignores cancelled and completed orders.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash. The keys of each element are fields from
+the aqorders, biblio, and biblioitems tables of the Koha database.
+
+C<@results> is sorted alphabetically by book title.
+
+=cut
+#'
 sub getallorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
@@ -356,17 +586,18 @@ sub getallorders {
   return($i,@results);
 }
 
+# FIXME - Never used
 sub getrecorders {
   #gets all orders from a certain supplier, orders them alphabetically
   my ($supid)=@_;
   my $dbh=C4Connect;
   my $query="Select * from aqorders,biblio,biblioitems where booksellerid='$supid'
   and (cancelledby is NULL or cancelledby = '')
-  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=                    
+  and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber=
   aqorders.biblioitemnumber and
   aqorders.quantityreceived>0
   and aqorders.datereceived >=now()
-  group by aqorders.biblioitemnumber 
+  group by aqorders.biblioitemnumber
   order by
   biblio.title";
   my $i=0;
@@ -382,6 +613,41 @@ sub getrecorders {
   return($i,@results);
 }
 
+=item ordersearch
+
+  ($count, @results) = &ordersearch($search, $biblionumber, $complete);
+
+Searches for orders.
+
+C<$search> may take one of several forms: if it is an ISBN,
+C<&ordersearch> returns orders with that ISBN. If C<$search> is an
+order number, C<&ordersearch> returns orders with that order number
+and biblionumber C<$biblionumber>. Otherwise, C<$search> is considered
+to be a space-separated list of search terms; in this case, all of the
+terms must appear in the title (matching the beginning of title
+words).
+
+If C<$complete> is C<yes>, the results will include only completed
+orders. In any case, C<&ordersearch> ignores cancelled orders.
+
+C<&ordersearch> returns an array. C<$count> is the number of elements
+in C<@results>. C<@results> is an array of references-to-hash with the
+following keys:
+
+=over 4
+
+=item C<author>
+
+=item C<seriestitle>
+
+=item C<branchcode>
+
+=item C<bookfundid>
+
+=back
+
+=cut
+#'
 sub ordersearch {
   my ($search,$biblio,$catview) = @_;
   my $dbh   = C4Connect;
@@ -397,6 +663,8 @@ and ((";
     $query .= "(biblio.title like '$data[$i]%' or biblio.title like '% $data[$i]%') and ";
   }
   $query=~ s/ and $//;
+		# FIXME - Redo this properly instead of hacking off the
+		# trailing 'and'.
   $query.=" ) or biblioitems.isbn='$search'
   or (aqorders.ordernumber='$search' and aqorders.biblionumber='$biblio')) ";
   if ($catview ne 'yes'){
@@ -435,6 +703,19 @@ and ((";
 # MONEY
 #
 #
+=item invoice
+
+  ($count, @results) = &invoice($booksellerinvoicenumber);
+
+Looks up orders by invoice number.
+
+Returns an array. C<$count> is the number of elements in C<@results>.
+C<@results> is an array of references-to-hash; the keys of each
+elements are fields from the aqorders, biblio, and biblioitems tables
+of the Koha database.
+
+=cut
+#'
 sub invoice {
   my ($invoice)=@_;
   my $dbh=C4Connect;
@@ -455,6 +736,19 @@ sub invoice {
   return($i,@results);
 }
 
+=item bookfunds
+
+  ($count, @results) = &bookfunds();
+
+Returns a list of all book funds.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are fields from the aqbookfund
+and aqbudget tables of the Koha database. Results are ordered
+alphabetically by book fund name.
+
+=cut
+#'
 sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
@@ -473,11 +767,13 @@ sub bookfunds {
   return($i,@results);
 }
 
+# FIXME - POD. I can't figure out what this function is doing. Then
+# again, I don't think it's being used (anymore).
 sub bookfundbreakdown {
   my ($id)=@_;
   my $dbh=C4Connect;
   my $query="Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived,subscription
-  from aqorders,aqorderbreakdown where bookfundid='$id' and 
+  from aqorders,aqorderbreakdown where bookfundid='$id' and
   aqorders.ordernumber=aqorderbreakdown.ordernumber
   and (datecancellationprinted is NULL or
   datecancellationprinted='0000-00-00')";
@@ -499,6 +795,18 @@ sub bookfundbreakdown {
   return($spent,$comtd);
 }
 
+=item curconvert
+
+  $foreignprice = &curconvert($currency, $localprice);
+
+Converts the price C<$localprice> to foreign currency C<$currency> by
+dividing by the exchange rate, and returns the result.
+
+If no exchange rate is found, C<&curconvert> assumes the rate is one
+to one.
+
+=cut
+#'
 sub curconvert {
   my ($currency,$price)=@_;
   my $dbh=C4Connect;
@@ -516,6 +824,18 @@ sub curconvert {
   return($price);
 }
 
+=item getcurrencies
+
+  ($count, $currencies) = &getcurrencies();
+
+Returns the list of all known currencies.
+
+C<$count> is the number of elements in C<$currencies>. C<$currencies>
+is a reference-to-array; its elements are references-to-hash, whose
+keys are the fields from the currency table in the Koha database.
+
+=cut
+#'
 sub getcurrencies {
   my $dbh=C4Connect;
   my $query="Select * from currency";
@@ -530,8 +850,9 @@ sub getcurrencies {
   $sth->finish;
   $dbh->disconnect;
   return($i,\@results);
-} 
+}
 
+# FIXME - Never used
 sub getcurrency {
   my ($cur)=@_;
   my $dbh=C4Connect;
@@ -543,8 +864,16 @@ sub getcurrency {
   $sth->finish;
   $dbh->disconnect;
   return($data);
-} 
+}
 
+=item updatecurrencies
+
+  &updatecurrencies($currency, $newrate);
+
+Sets the exchange rate for C<$currency> to be C<$newrate>.
+
+=cut
+#'
 sub updatecurrencies {
   my ($currency,$rate)=@_;
   my $dbh=C4Connect;
@@ -553,8 +882,9 @@ sub updatecurrencies {
   $sth->execute;
   $sth->finish;
   $dbh->disconnect;
-} 
+}
 
+# FIXME - Never used
 sub updatecost{
   my($price,$rrp,$itemnum)=@_;
   my $dbh=C4Connect;
@@ -572,6 +902,19 @@ sub updatecost{
 #
 #
 
+=item bookseller
+
+  ($count, @results) = &bookseller($searchstring);
+
+Looks up a book seller. C<$searchstring> may be either a book seller
+ID, or a string to look for in the book seller's name.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of of the
+aqbooksellers table in the Koha database.
+
+=cut
+#'
 sub bookseller {
   my ($searchstring)=@_;
   my $dbh=C4Connect;
@@ -589,6 +932,19 @@ sub bookseller {
   $dbh->disconnect;
   return($i,@results);
 }
+
+=item breakdown
+
+  ($count, $results) = &breakdown($ordernumber);
+
+Looks up an order by order ID, and returns its breakdown.
+
+C<$count> is the number of elements in C<$results>. C<$results> is a
+reference-to-array; its elements are references-to-hash, whose keys
+are the fields of the aqorderbreakdown table in the Koha database.
+
+=cut
+#'
 sub breakdown {
   my ($id)=@_;
   my $dbh=C4Connect;
@@ -606,6 +962,18 @@ sub breakdown {
   return($i,\@results);
 }
 
+=item branches
+
+  ($count, @results) = &branches();
+
+Returns a list of all library branches.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of the branches
+table of the Koha database.
+
+=cut
+#'
 sub branches {
     my $dbh   = C4Connect;
     my $query = "Select * from branches";
@@ -624,11 +992,12 @@ sub branches {
     return($i, @results);
 } # sub branches
 
+# FIXME - Never used
 sub findall {
   my ($biblionumber)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from biblioitems,items,itemtypes where 
-  biblioitems.biblionumber=$biblionumber 
+  my $query="Select * from biblioitems,items,itemtypes where
+  biblioitems.biblionumber=$biblionumber
   and biblioitems.biblioitemnumber=items.biblioitemnumber and
   itemtypes.itemtype=biblioitems.itemtype
   order by items.biblioitemnumber";
@@ -645,6 +1014,7 @@ sub findall {
   return(@results);
 }
 
+# FIXME - Never used
 sub needsmod{
   my ($bibitemnum,$itemtype)=@_;
   my $dbh=C4Connect;
@@ -661,6 +1031,21 @@ sub needsmod{
   return($result);
 }
 
+=item updatesup
+
+  &updatesup($bookseller);
+
+Updates the information for a given bookseller. C<$bookseller> is a
+reference-to-hash whose keys are the fields of the aqbooksellers table
+in the Koha database. It must contain entries for all of the fields.
+The entry to modify is determined by C<$bookseller-E<gt>{id}>.
+
+The easiest way to get all of the necessary fields is to look up a
+book seller with C<&booksellers>, modify what's necessary, then call
+C<&updatesup> with the result.
+
+=cut
+#'
 sub updatesup {
    my ($data)=@_;
    my $dbh=C4Connect;
@@ -685,6 +1070,18 @@ sub updatesup {
 #   print $query;
 }
 
+=item insertsup
+
+  $id = &insertsup($bookseller);
+
+Creates a new bookseller. C<$bookseller> is a reference-to-hash whose
+keys are the fields of the aqbooksellers table in the Koha database.
+All fields must be present.
+
+Returns the ID of the newly-created bookseller.
+
+=cut
+#'
 sub insertsup {
   my ($data)=@_;
   my $dbh=C4Connect;
@@ -702,6 +1099,22 @@ sub insertsup {
   return($data->{'id'});
 }
 
+=item websitesearch
+
+  ($count, @results) = &websitesearch($keywordlist);
+
+Looks up biblioitems by URL.
+
+C<$keywordlist> is a space-separated list of search terms.
+C<&websitesearch> returns those biblioitems whose URL contains at
+least one of the search terms.
+
+C<$count> is the number of elements in C<@results>. C<@results> is an
+array of references-to-hash, whose keys are the fields of the biblio
+and biblioitems tables in the Koha database.
+
+=cut
+#'
 sub websitesearch {
     my ($keywordlist) = @_;
     my $dbh   = C4Connect;
@@ -712,6 +1125,10 @@ biblio.biblionumber = biblioitems.biblionumber and (";
     my @results;
     my @keywords = split(/ +/, $keywordlist);
     my $keyword = shift(@keywords);
+
+    # FIXME - Can use
+    #	$query .= join(" and ",
+    #		apply { url like "%$_%" } @keywords
 
     $keyword =~ s/%/\\%/g;
     $keyword =~ s/_/\\_/;
@@ -741,38 +1158,64 @@ biblio.biblionumber = biblioitems.biblionumber and (";
     return($count, @results);
 } # sub websitesearch
 
+=item addwebsite
 
+  &addwebsite($website);
+
+Adds a new web site. C<$website> is a reference-to-hash, with the keys
+C<biblionumber>, C<title>, C<description>, and C<url>. All of these
+are mandatory.
+
+=cut
+#'
 sub addwebsite {
     my ($website) = @_;
     my $dbh = C4Connect;
     my $query;
-    
+
+    # FIXME -
+    #	for (qw( biblionumber title description url )) # and any others
+    #	{
+    #		$website->{$_} = $dbh->quote($_);
+    #	}
+    # Perhaps extend this to building the query as well. This might allow
+    # some of the fields to be optional.
     $website->{'biblionumber'} = $dbh->quote($website->{'biblionumber'});
     $website->{'title'}        = $dbh->quote($website->{'title'});
     $website->{'description'}  = $dbh->quote($website->{'description'});
     $website->{'url'}          = $dbh->quote($website->{'url'});
-    
+
     $query = "Insert into websites set
 biblionumber = $website->{'biblionumber'},
 title        = $website->{'title'},
 description  = $website->{'description'},
 url          = $website->{'url'}";
-    
+
     $dbh->do($query);
-    
+
     $dbh->disconnect;
 } # sub website
 
+=item updatewebsite
 
+  &updatewebsite($website);
+
+Updates an existing web site. C<$website> is a reference-to-hash with
+the keys C<websitenumber>, C<title>, C<description>, and C<url>. All
+of these are mandatory. C<$website-E<gt>{websitenumber}> identifies
+the entry to update.
+
+=cut
+#'
 sub updatewebsite {
     my ($website) = @_;
     my $dbh = C4Connect;
     my $query;
-    
+
     $website->{'title'}      = $dbh->quote($website->{'title'});
     $website->{'description'} = $dbh->quote($website->{'description'});
     $website->{'url'}        = $dbh->quote($website->{'url'});
-    
+
     $query = "Update websites set
 title       = $website->{'title'},
 description = $website->{'description'},
@@ -780,19 +1223,41 @@ url         = $website->{'url'}
 where websitenumber = $website->{'websitenumber'}";
 
     $dbh->do($query);
-    
+
     $dbh->disconnect;
 } # sub updatewebsite
 
+=item deletewebsite
 
+  &deletewebsite($websitenumber);
+
+Deletes the web site with number C<$websitenumber>.
+
+=cut
+#'
 sub deletewebsite {
     my ($websitenumber) = @_;
     my $dbh = C4Connect;
     my $query = "Delete from websites where websitenumber = $websitenumber";
-    
+
     $dbh->do($query);
-    
+
     $dbh->disconnect;
 } # sub deletewebsite
 
 END { }       # module clean-up code here (global destructor)
+
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+L<perl>.
+
+=cut
