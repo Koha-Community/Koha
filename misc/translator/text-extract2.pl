@@ -107,16 +107,18 @@ sub extract_attributes ($;$) {
 	    warn "Warning: TMPL_INCLUDE in attribute"
 		. (defined $lc? " near line $lc": '') . ": $val_orig\n";
 	} elsif ($val =~ /$re_tmpl_var/os && $val !~ /$re_tmpl_var_escaped/os) {
+	    # FIXME: we probably should not warn if key is "onclick" etc? :-/
 	    my $suggest = ($key =~ /^(?:action|archive|background|cite|classid|codebase|data|datasrc|for|href|longdesc|profile|src|usemap)$/? 'URL': 'HTML');
 	    warn_pedantic \$pedantic_tmpl_var_use_in_nonpedantic_mode_p,
 		    "Suggest ESCAPE=$suggest for TMPL_VAR in attribute \"$key\""
 		    . (defined $lc? " near line $lc": '') . ": $val_orig"
 		if $pedantic_p || !$pedantic_tmpl_var_use_in_nonpedantic_mode_p;
 	} elsif ($val_orig !~ /^['"]/) {
+	    my $t = $val; $t =~ s/$re_directive_control//os;
 	    warn_pedantic \$pedantic_attribute_error_in_nonpedantic_mode_p,
 		"Unquoted attribute contains character(s) that should be quoted"
 		. (defined $lc? " near line $lc": '') . ": $val_orig"
-		if $val =~ /[^-\.A-Za-z0-9]/s;
+		if $t =~ /[^-\.A-Za-z0-9]/s;
 	}
     }
     my $s2 = $s; $s2 =~ s/$re_tmpl_endif_endloop//g; # for the next check
