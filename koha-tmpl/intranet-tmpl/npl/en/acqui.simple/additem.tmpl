@@ -4,63 +4,60 @@
 
 <div id="main">
 
+<h1>Items for Bibliographic Record <!-- TMPL_VAR name="bibid" --></h1>
+	<div class="tabitem">
+	<form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="op" value="duplicate" /><input type="submit" class="submit" value="Duplicate this Record" /></form></div> <div class="tabitem"><form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form> <form action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View MARC in Catalog"></form>  <form action="/cgi-bin/koha/ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View ISBD in Catalog"></form></div>
 
-<h1>Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --></h1>
-<div class="tabitem">
-<form action="/cgi-bin/koha/acqui.simple/addbiblio.pl" method="get"><input type="hidden" name="oldbiblionumber" value="<!-- TMPL_VAR name="biblionumber" -->"><input type="submit" class="submit" value="Edit Bibliographic Record"></form> <form action="/cgi-bin/koha/detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->"> <input type="submit" class="submit" value="View in Catalog"></form>
-</div>
 <div class="error">Date Accessioned must be entered in this format:  <span class="ex">yyyy-mm-dd</span></div>
-<!-- TMPL_IF NAME="item_loop" -->
-<div class="table">
-<table class="editing">
-	<caption>Existing Items</caption>
-	<tr>
-		<!-- TMPL_LOOP name="item_header_loop" --><th><!-- TMPL_VAR name="header_value" --></th><!-- /TMPL_LOOP --><th colspan="2">&nbsp;</th>
-	</tr>
-		<!-- TMPL_LOOP name="item_loop" -->
-		<tr>
-			<!-- TMPL_VAR name="item_value" -->
-			<td><a href="/cgi-bin/koha/acqui.simple/additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR name="bibid" -->&amp;itemnum=<!-- TMPL_VAR name="itemnum" -->">Edit</a> </td>
-<td><a href="#" onclick="confirm_deletion(<!-- TMPL_VAR name="bibid" -->,<!-- TMPL_VAR name="itemnum" -->)">Delete</a></td>
-		</tr>
+
+	<!-- TMPL_IF name="item_loop" -->
+			<div name="10XX" id="10XX">
+			<table class="editing">
+			<caption>Existing Items</caption>
+				<tr>
+					<!-- TMPL_LOOP NAME="item_header_loop" -->
+						<th><!-- TMPL_VAR NAME="header_value" --></th>
+					<!-- /TMPL_LOOP -->
+					<th colspan="2">&nbsp;</th>
+				</tr>
+					<!-- TMPL_LOOP NAME="item_loop" -->
+					<tr>
+						<!-- TMPL_VAR NAME="item_value" -->
+						<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->">Edit</a></td>
+						<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)">Delete</a></td>
+					</tr>
+					<!-- /TMPL_LOOP -->
+			</table>
+			</div>
+
+	<!-- /TMPL_IF -->
+	<form method="post" action="additem.pl" name="f">
+	<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->">
+	<input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->">	
+	<div class="data">
+	<table>
+		<caption><!-- TMPL_IF name="opisadd" -->Add New Item<!-- TMPL_ELSE -->Update Item<!-- /TMPL_IF --></caption>
+	<!-- TMPL_LOOP NAME="item" -->
+		<tr><th><label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label></th><td><!-- TMPL_VAR NAME="marc_value" -->	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" /> <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />	<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" /></td></tr>
 		<!-- /TMPL_LOOP -->
-</table>
-</div>
-<!-- /TMPL_IF -->
+		</table>
+	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
 	 <!-- TMPL_IF name="barcode_not_unique" -->
  	         <div class="error">ERROR: Barcode already exists!</div>
  	 <!-- /TMPL_IF -->
-<div class="form">
-<h3><!-- TMPL_IF name="opisadd" -->Add New Item<!-- TMPL_ELSE -->Update Item<!-- /TMPL_IF --></h3>
-<form method="post" action="additem.pl" name="f">
-<input type="hidden" name="op" value="<!-- TMPL_VAR name="op" -->">
-<input type="hidden" name="bibid" value="<!-- TMPL_VAR name="bibid" -->">
-<table>
-	<!-- TMPL_LOOP name="item" -->
-	<tr>
-	<th><!-- TMPL_IF name="mandatory" --><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *<!-- /TMPL_IF --></th>
-		<td>
-			<!-- TMPL_VAR name="marc_value" -->
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
-			<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
-		</td>
-	</tr>
-	</tmpl_loop>
-</table>
-<input type="hidden" name="itemnum" value="<!-- TMPL_VAR name="itemnum" -->">
-
-<!-- TMPL_IF name="opisadd" -->
-<input type="button" value="Add Item" onClick="Check(this.form); return false;" class="submit" accesskey="w">
-<!-- TMPL_ELSE -->
-<input type="hidden" name="tag" value="<!-- TMPL_VAR name="itemtagfield" -->">
-<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="itemtagsubfield" -->">
-<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="itemnum" -->">
-<input type="button" value="Save Changes" onClick="Check(this.form); return false;" class="submit"  accesskey="w">
-<!-- /TMPL_IF -->
-</form>
-</div></div>
+	<!-- TMPL_IF name="opisadd" -->
+	<input type="button" value="Add item" onClick="Check(this.form)" accesskey="w" class="submit">
+	<!-- TMPL_ELSE -->
+	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->">
+	<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->">
+	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnum" -->">
+	<input type="button" value="Save Changes" onClick="Check(this.form)" accesskey="w" class="submit">
+	<!-- /TMPL_IF -->
+	</form>
+</div>
+</div>
 <script language="JavaScript" type="text/javascript">
+function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
 	for (i=10; i < 11 ; i++ ) {
@@ -69,7 +66,7 @@ function active(numlayer)
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
 			document.getElementById(link).style.backgroundColor="#11AA11";
-			document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif)";
+			document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
 			document.getElementById(link).style.backgroundColor="#FFFFFF";
@@ -93,9 +90,9 @@ function Check(f) {
 	if (total_errors==0) {
 		document.f.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\n";
-		alertString2 += "------------------------------------------------------------------------------------\n\n";
-		alertString2 += "- "+ total_errors+" mandatory fields empty (see bold subfields)";
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
 		alert(alertString2);
 	}
 }
@@ -104,11 +101,11 @@ function Dopop(link,i) {
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 function confirm_deletion(bibid,itemnum) {
-	var is_confirmed = confirm('Do you confirm item deletion ?');
+	var is_confirmed = confirm(_('Do you confirm item deletion?'));
 	if (is_confirmed) {
 	window.location = "additem.pl?op=delitem&bibid="+bibid+"&itemnum="+itemnum;
 	}
 }
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
