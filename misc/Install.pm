@@ -964,14 +964,14 @@ The file %s does not exist.
 
 Please press <ENTER> to continue: |;
 
-$messages->{'EnterApacheUser'}->{en} = heading('NEED APACHE USER') . qq|
-The installer could not find the User setting in the Apache configuration file.  
+$messages->{'EnterApacheUser'}->{en} = heading('NEED APACHE USER') . qq\
+The installer could not find the User setting in the Apache configuration file.
 This is used to set up access permissions for
 %s/koha.conf.  This user should be set in one of the Apache configuration.
 Please try to find it and enter the user name below.  You might find
 that "ps u|grep apache" will tell you.  It probably is NOT "root".
 
-Enter the Apache userid: |;
+Enter the Apache userid: \;
 
 $messages->{'InvalidUserid'}->{en} = heading('INVALID USER') . qq|
 The userid %s is not a valid userid on this system.
@@ -992,7 +992,9 @@ sub getapacheinfo {
 			  /etc/apache-ssl/conf/apache.conf
 			  /etc/apache-ssl/httpd.conf
 			  /etc/httpd/conf/httpd.conf
-			  /etc/httpd/httpd.conf)) {
+			  /etc/httpd/httpd.conf
+			  /etc/httpd/2.0/conf/httpd2.conf
+			  )) {
 	if ( -f $httpdconf ) {
 	    push @confpossibilities, $httpdconf;
 	}
@@ -1001,6 +1003,7 @@ sub getapacheinfo {
     if ($#confpossibilities==-1) {
 	my $message=getmessage('NoApacheConfFiles');
 	my $choice='';
+	$realhttpdconf='';
 	until (-f $realhttpdconf) {
 	    $choice=showmessage($message, "free", 1);
 	    if (-f $choice) {
@@ -1617,13 +1620,6 @@ sub updatedatabase {
 	if ($response eq '2') {
 		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql -u$user $dbname");
 		system("cat scripts/misc/lang-datas/fr/stopwords.sql | $mysqldir/bin/mysql -u$user $dbname");
-	}
-
-	$result = system ("perl -I $intranetdir/modules scripts/marc/updatedb2marc.pl");
-	if ($result) {
-		print "Problem updating database to MARC...\n";
-		restoremycnf();
-		exit;
 	}
 	delete($ENV{"KOHA_CONF"});
 

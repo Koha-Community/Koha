@@ -11,6 +11,14 @@ if ($<) {
 	exit;
 }
 
+###############################################
+# SET  THE  etcdir  ENVIRONMENT  VAR  INSTEAD #
+###############################################
+my $etcdir = $ENV{etcdir}||'/etc';
+system("mkdir -p $etcdir");
+
+Install::setetcdir $etcdir;
+
 my $input;
 loadconfigfile();
 
