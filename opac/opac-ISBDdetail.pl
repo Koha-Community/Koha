@@ -80,7 +80,6 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $ISBD = C4::Context->preference('ISBD');
-warn "ISBD : $ISBD";
 my @fields = $record->fields();
 foreach my $field (@fields) {
 	my $tag = $field->tag();
