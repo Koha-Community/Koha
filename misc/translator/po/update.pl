@@ -5,9 +5,19 @@
 
 use strict;
 use integer;
+use Getopt::Long;
+
+use vars qw( $pot_p );
+
+GetOptions(
+   '--pot' => \$pot_p,
+) || exit(1);
 
 my $lang = $ARGV[0];
-die "Usage: $0 LANG\n" unless $lang =~ /^[a-z]{2}(?:_[A-Z]{2})?$/;
+die <<EOF unless $pot_p || $lang =~ /^[a-z]{2}(?:_[A-Z]{2})?$/;
+Usage: $0 LANG
+       $0 --pot
+EOF
 
 # Remember whether we see the "po" directory; this is used later to guess
 # whether the current directory is translator/po or translator.
@@ -31,9 +41,15 @@ for my $spec (
       }
 
       # Now call tmpl_process3.pl to do the real work
-      exec('./tmpl_process3.pl', 'update',
+      #
+      # Traditionally, the pot file should be named PACKAGE.pot
+      # (for Koha probably something like koha_intranet_css.pot),
+      # but this is not Koha's convention.
+      #
+      my $target = "po/${theme}_${module}" . ($pot_p? ".pot": "$lang.po");
+      exec('./tmpl_process3.pl', ($pot_p? 'create': 'update'),
 	    '-i', "../../koha-tmpl/$module-tmpl/$theme/en/",
-	    '-s', "po/${theme}_${module}_$lang.po", '-r');
+	    '-s', $target, '-r');
 
       die "tmpl_process3.pl: exec: $!\n";
    }
