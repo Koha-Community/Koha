@@ -59,15 +59,27 @@
 				<th>Renewable</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="ISSUES" -->
-				<tr>
-					<td><!-- TMPL_VAR NAME="title" --></td>
-					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="date_due" --></td>
-					<td><!-- TMPL_VAR NAME="itemtype" --></td>
-					<td><!-- TMPL_VAR NAME="barcode" --></td>
-					<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-					<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-				</tr>
+				<!-- TMPL_IF name="overdue"-->
+					<tr>
+						<td><!-- TMPL_VAR NAME="title" --></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
+						<td><b>OVERDUE <!-- TMPL_VAR NAME="date_due" --></b></td>
+						<td><!-- TMPL_VAR NAME="itemtype" --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+					</tr>
+				<!-- TMPL_ELSE -->
+					<tr>
+						<td><!-- TMPL_VAR NAME="title" --></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
+						<td><!-- TMPL_VAR NAME="date_due" --></td>
+						<td><!-- TMPL_VAR NAME="itemtype" --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_IF NAME="status" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+					</tr>
+				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 		</table>
 	<!-- TMPL_ELSE -->
