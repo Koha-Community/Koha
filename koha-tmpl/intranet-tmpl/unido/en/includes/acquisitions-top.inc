@@ -80,10 +80,10 @@ We are using 2 and 3 column display tables, and there is a different set of incl
 
 <LI class="selected" > <a 
 
-href="/cgi-bin/koha/acqui.simple/addbiblio-nomarc.pl">Add New Items</a>
+href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Add New Items</a>
 <li> <a 
 
-href="/cgi-bin/koha/acqui.simple/">Add Periodical</a>
+href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Add Periodical</a>
 						
 </ul>
 
