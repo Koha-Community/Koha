@@ -98,7 +98,7 @@ sub FindReserves {
 
 sub CheckReserves {
     my ($item) = @_;
-    warn "In CheckReserves";
+    warn "In CheckReserves: itemnumber = $item";
     my $dbh=C4Connect;
     my $qitem=$dbh->quote($item);
 # get the biblionumber...
@@ -112,7 +112,6 @@ sub CheckReserves {
     $sth->finish;
     $dbh->disconnect;
 # if item is not for loan it cannot be reserved either.....
-warn "Not for loan: $notforloan";
     return (0, 0) if ($notforloan);
 # get the reserves...
     my ($count, @reserves) = Findgroupreserve($bibitem, $biblio);
@@ -129,6 +128,8 @@ warn "Not for loan: $notforloan";
 		}
 	    }
 	}
+    }
+    if ($highest) {
 	$highest->{'itemnumber'} = $item;
 	return ("Reserved", $highest);
     } else {
@@ -158,7 +159,7 @@ sub CancelReserve {
 # removing a reserve record....
 	my $q_biblio = $dbh->quote($biblio);
 	$borr = $dbh->quote($borr);
-# fix up the priorities on the other records....
+# get the prioritiy on this record....
 	my $query = "SELECT priority FROM reserves 
                                     WHERE biblionumber   = $q_biblio 
                                       AND borrowernumber = $borr
@@ -189,10 +190,19 @@ sub CancelReserve {
 sub FillReserve {
     my ($res) = @_;
     my $dbh=C4Connect;
-# removing a waiting reserve record....
+# fillinf a reserve record....
     my $biblio = $res->{'biblionumber'}; my $qbiblio = $dbh->quote($biblio);
     my $borr = $res->{'borrowernumber'}; $borr = $dbh->quote($borr);
     my $resdate = $res->{'reservedate'}; $resdate = $dbh->quote($resdate);
+# get the prioritiy on this record....
+    my $query = "SELECT priority FROM reserves 
+                                WHERE biblionumber   = $qbiblio 
+                                  AND borrowernumber = $borr
+                                  AND reservedate    = $resdate)";
+    my $sth=$dbh->prepare($query);
+    $sth->execute;
+    my ($priority) = $sth->fetchrow_array;
+    $sth->finish;
 # update the database...
     my $query = "UPDATE reserves SET found            = 'F', 
                                      priority         = 0 
@@ -202,6 +212,10 @@ sub FillReserve {
     my $sth = $dbh->prepare($query);
     $sth->execute;
     $sth->finish;
+# now fix the priority on the others (if the priority wasnt already sorted!)....
+    unless ($priority == 0) {
+	fixpriority($priority, $biblio);
+    }
     $dbh->disconnect;
 }
 
