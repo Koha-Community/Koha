@@ -2087,12 +2087,6 @@ sub newbiblioitem {
     my $dbh        = C4::Context->dbh;
     my $bibitemnum = &OLDnewbiblioitem( $dbh, $biblioitem );
 
-    ################################################################
-    ## Fix template and shift this to newbiblio
-    my @subjects = split ( /\n/, $biblioitem->{'subjectheadings'} );
-    modsubject( $biblioitem->{'biblionumber'}, 1, @subjects );
-
-    ################################################################
     my $MARCbiblio =
       MARCkoha2marcBiblio( $dbh, 0, $bibitemnum )
       ; # the 0 means "do NOT retrieve biblio, only biblioitem, in the MARC record
@@ -2531,6 +2525,8 @@ sub nsb_clean {
 sub FindDuplicate {
 	my ($record)=@_;
 	my $dbh = C4::Context->dbh;
+	# FIXME  re-activate FindDuplicate
+	return;
 	my $result = MARCmarc2koha($dbh,$record,'');
 	# search duplicate on ISBN, easy and fast...
 	my $sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
@@ -2636,6 +2632,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.112  2004/12/08 10:14:42  tipaul
+# * desactivate FindDuplicate
+# * fix from Genji
+#
 # Revision 1.111  2004/11/25 17:39:44  tipaul
 # removing useless &branches in package declaration
 #
