@@ -7,10 +7,6 @@
 
 # This script is meant to be a drop-in replacement of text-extract.pl
 
-# FIXME: Strings like "<< Prev" or "Next >>" may confuse *this* filter
-# TODO: Need to detect unclosed tags, empty tags, and other such stuff.
-# (Why? Because Mozilla apparently knows what SGML unclosed tags are :-/ )
-
 # A grander plan: Code could be written to detect template variables and
 # construct gettext-c-format-string-like meta-strings (e.g., "Results %s
 # through %s of %s records" that will be more likely to be translatable
@@ -56,7 +52,7 @@ sub re_tag ($) {
    # Note that we don't want <> in compat mode; Mozilla knows about <
    q{(<\/?(?:|(?:"(?:} . $re_directive . q{|[^"])*"|'(?:} . $re_directive . q{|[^'])*'|--(?:[^-]|-[^-])*--|(?:}
    . $re_directive
-   . q{|(?!--)[^"'<>} . $etag . q{]))+))([} . $etag . q{])(.*)};
+   . q{|(?!--)[^"'<>} . $etag . q{]))+))([} . $etag . q{]|(?=<))(.*)};
 }
 BEGIN {
     $re_comment = '(?:--(?:[^-]|-[^-])*--)';
@@ -168,8 +164,9 @@ sub next_token_internal (*) {
 		    $ok_p = 1;
 		}
 	    } elsif ($readahead =~ /^$re_tag_compat/os) {
-		($kind, $it, $readahead) = (KIND_TAG, "$1$2", $3);
+		($kind, $it, $readahead) = (KIND_TAG, "$1>", $3);
 		$ok_p = 1;
+		warn "Warning: SGML \"closed start tag\" notation near line $lc_0: $1$2\n" if $2 eq '';
 	    } elsif ($readahead =~ /^<!--(?:(?!-->).)*-->/s) {
 		($kind, $it, $readahead) = (KIND_COMMENT, $&, $');
 		$ok_p = 1;
