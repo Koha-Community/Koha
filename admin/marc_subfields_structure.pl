@@ -320,6 +320,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?");
+	#FIXME : called with 2 bind variables when 3 are needed
 	$sth->execute($tagfield,$tagsubfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;

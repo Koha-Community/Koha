@@ -68,7 +68,7 @@ if ($op eq "do_search") {
 	my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
 										\@excluding, \@operator, \@value,
 										$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
-	warn "R : $results";
+	warn "R test : $results";
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/searchresultlist.tmpl",
 				query => $query,
