@@ -2087,6 +2087,7 @@ if (!$ENV{prefix}) { $ENV{prefix} = "/usr/local"; }
 my $backupdir=$ENV{prefix}.'/backups';
 
 my $answer = showmessage(getmessage('BackupDir',[$backupdir]),'free',$backupdir);
+$backupdir = $answer; 
 
 if (! -e $backupdir) {
 	my $result=mkdir ($backupdir, oct(770));
