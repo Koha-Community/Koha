@@ -1,55 +1,74 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 <center>
 <FONT SIZE=6><em>Koha admin page</em></FONT><br><br><br>
-<table cellspacing=0 cellpadding=3 width=60%>
-<th width="30%" background="/images/background-mem.gif">Table</th><th width="70%" background="/images/background-mem.gif">Meaning</th>
-<tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/branches.pl>libraries branches</a></td>
-	<td>the differents branches you manage with this koha server</td>
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>Biblio related parameters </th>
 </tr>
+</table>
+<table cellspacing=0 cellpadding=3 width=80%>
 <tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/aqbudget.pl>budget</a></td>
-	<td>the budgets allowed to differents book funds.</td>
-</tr>
-<tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
-	<td>the differents book funds.</td>
-</tr>
-<tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/categorie.pl>categories</a></td>
-	<td>the differents types of borrowers.</td>
-</tr>
-<tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/itemtypes.pl>Item types</a></td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Item types</a></td>
 	<td>the supports of an item.</td>
 </tr>
 <tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/currency.pl>Currencies</a></td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>budget</a></td>
+	<td>the budgets allowed to differents book funds.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
+	<td>the differents book funds.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>authorised values</a></td>
+	<td>Define here categories and authorised values for them.
+			Authorised values are used in MARC form to limit/help editing MARC biblios</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thesaurus</a></td>
+	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
+</tr>
+
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>MARC related parameters </th>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=3 width=80%>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>MARC tag structure</a></td><td>MARC structure : tag then subfields</td></tr>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Links koha - MARC DB</a></td><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
+</table>
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>Various datas : </th>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=3 width="80%">
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>libraries branches</a></td>
+	<td>the differents branches you manage with this koha server</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/categorie.pl>categories</a></td>
+	<td>the differents types of borrowers.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/currency.pl>Currencies</a></td>
 	<td>Currencies of booksellers.</td>
 </tr>
 <tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/printers.pl>Printers</a></td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Printers</a></td>
 	<td>Printers (UNIX paths).</td>
 </tr>
 <tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/stopwords.pl>stopwords</a></td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>stopwords</a></td>
 	<td>Words deleted during searches</td>
 </tr>
 <tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/systempreferences.pl>systempreferences</a></td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>systempreferences</a></td>
 	<td>System preferences</td>
 </tr>
-<tr>
-	<td valign="top"><a href=/cgi-bin/koha/admin/authorised_values.pl>authorised values</a></td>
-	<td>Define here categories and authorised values for them. 
-			Authorised values are used in MARC form to limit/help editing MARC biblios</td>
-</tr>
-
-<th background="/images/background-mem.gif">Table</th><th background="/images/background-mem.gif">Meaning</th>
-<tr><td valign="top"><a href=/cgi-bin/koha/admin/marctagstructure.pl>MARC tag structure</a></td><td>MARC structure : tag then subfields</td></tr>
-<tr><td valign="top"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Links koha - MARC DB</a></td><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
-
-
 </table>
+
 </center>
 <TMPL_INCLUDE NAME="cat-bottom.inc">
