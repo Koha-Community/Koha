@@ -759,8 +759,8 @@ sub extractmarcfields {
 
     return $bib;
 
-#---------------------------------
 } # sub extractmarcfields
+#---------------------------------
 
 sub z3950menu {
     use strict;
@@ -904,6 +904,7 @@ print << "EOF";
 EOF
     print "</td></tr></table>\n";
 } # sub z3950menu
+#---------------------------------
 
 sub uploadmarc {
     use strict;
@@ -1164,7 +1165,6 @@ sub AcceptBiblioitem {
 	<p>
 EOF
     } else {
-	use strict;
 
 	# It doesn't exist; add it.
 
@@ -1530,6 +1530,7 @@ sub getoraddbiblio {
 #---------------------------------------
 sub addz3950queue {
     use strict;
+    # input
     my (
 	$dbh,		# DBI handle
 	$query,		# value to look up
@@ -1563,7 +1564,7 @@ sub addz3950queue {
 	my $serverlist='';
 	foreach (@serverlist) {
 	    $serverlist.="$_ ";
-    }
+    	} # foreach
 	chop $serverlist;
 
 	# Don't allow reinsertion of the same request number.
@@ -1606,7 +1607,7 @@ sub checkvalidisbn {
 	    }
 	} else {
 	    $isbngood=0;
-}
+	} # if length good
 
 	return $isbngood;
 
