@@ -415,11 +415,14 @@ msgid ""
 "biblioitemnumber %s"
 msgstr "%s 已存入資料庫內，書目號碼為 %s，biblioitemnumber 為 %s。"
 
+#  NOTE「Copyright date」中文理應為「版權年」
+#  NOTE (見 http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm )
+#  NOTE 但biblioitems.copyrightdate的連結為MARC21的260c，即「出版年/經銷年」
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbasket2.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/isbnsearch.tmpl:38
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/searchresults.tmpl:41
 msgid "&copy;"
-msgstr "著作年份"
+msgstr "出版年"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/intranet-tmpl/default/en/reports/inventory.tmpl:106
@@ -1426,6 +1429,8 @@ msgstr "<b>新的搜尋：</b>%S"
 msgid "<b>No. of Items:</b> %s"
 msgstr "<b>數量：</b>%s"
 
+#  NOTE 圖書資料的Notes (MARC21欄500) 中文稱「附註項」，不譯「備註」
+#  NOTE 見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=NOTES
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:26
@@ -1438,7 +1443,7 @@ msgstr "<b>數量：</b>%s"
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/detailprint.tmpl:22
 #, c-format
 msgid "<b>Notes:</b> %s"
-msgstr "<b>備註：</b>%s"
+msgstr "<b>附註：</b>%s"
 
 #  NOTE 譯文更動 by Arthur
 #. %1$s: TMPL_VAR name=count
@@ -1603,11 +1608,14 @@ msgstr "<b>網址：</b><a1>%s</a>"
 msgid "<b>Unititle:</b> %s"
 msgstr "<b>劃一題名：</b>%s"
 
+#  NOTE Koha 資料庫內的 volumeddesc (biblioitems.volumeddesc) 欄位
+#  NOTE Katipo的人員都不太清楚這是什麼，但Chris Cormack指這基本上是個自由形態的欄位
+#  NOTE 參見https://www.unido.org/cgi-bin/koha/opac-detail.pl?bib=13779&bibitem=17772之Volume一欄
 #. %1$s: TMPL_VAR name=volumeddesc
 #: ../../koha-tmpl/intranet-tmpl/default/en/catalogue/moredetail.tmpl:42
 #, c-format
 msgid "<b>Volume:</b> %s"
-msgstr "<b>集叢號：</b>%s"
+msgstr "<b>集叢號/敘述：</b>%s"
 
 # XXX tentative
 #. For the first occurrence,
@@ -1618,6 +1626,7 @@ msgstr "<b>集叢號：</b>%s"
 msgid "<b>Year :</b> %s"
 msgstr "<b>著作年：</b>%s"
 
+#  NOTE「出版年」為正確譯法，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 # XXX future problem
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
@@ -4138,9 +4147,11 @@ msgstr "圖書資料：%s (%s)"
 msgid "Item: %s (%s) <a1>%s</a>"
 msgstr "圖書資料：%s (%s) <a1>%s</a>"
 
+#  NOTE 圖書資料的Notes (MARC21欄500) 中文稱「附註項」，不譯「備註」
+#  NOTE 見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/moditem.tmpl:14
 msgid "ItemNotes"
-msgstr "圖書資料備註"
+msgstr "附註"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/mancredit.tmpl:15
 #: ../../koha-tmpl/intranet-tmpl/default/en/maninvoice.tmpl:18
@@ -5090,6 +5101,9 @@ msgstr "注意：這個工具不會匯出罰款數據"
 msgid "Note: in the last column, you can choose:"
 msgstr "注意：在最後一欄，您可以選擇："
 
+#  NOTE 圖書資料的Notes (MARC21欄500) 中文稱「附註項」，不譯「備註」
+#  NOTE 見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
+#  FIXME 問題來了，不是圖書資料的Notes，譯「附註」有些奇怪，但兩種Notes分不開:-(
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/supplier.tmpl:83
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:151
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:131
@@ -5108,13 +5122,15 @@ msgstr "注意：在最後一欄，您可以選擇："
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:17
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:98
 msgid "Notes"
-msgstr "備註"
+msgstr "附註/備註"
 
+#  NOTE 圖書資料的Notes (MARC21欄500) 中文稱「附註項」，不譯「備註」
+#  NOTE 見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio-nomarc.tmpl:46
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:94
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:199
 msgid "Notes:"
-msgstr "備註："
+msgstr "附註："
 
 #. %1$s: TMPL_VAR name=altnotes
 #: ../../koha-tmpl/intranet-tmpl/default/en/members/moremember.tmpl:41
@@ -5640,18 +5656,21 @@ msgstr "印表機"
 msgid "Printers (UNIX paths)."
 msgstr "印表機 (UNIX路徑）"
 
+#  NOTE「出版年」為正確譯法，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/request.tmpl:50
 msgid "Pubdate"
-msgstr "出版年份"
+msgstr "出版年"
 
+#  NOTE「出版年」為正確譯法，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/modbibitem.tmpl:43
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:33
 msgid "Publication Year"
-msgstr "出版年份"
+msgstr "出版年"
 
+#  NOTE「出版年」為正確譯法，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:139
 msgid "Publication Year:"
-msgstr "出版年份："
+msgstr "出版年："
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/newbiblio.tmpl:87
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/basket.tmpl:10
@@ -6154,9 +6173,11 @@ msgid "Sebastiaan Durand"
 msgstr "Sebastiaan Durand"
 
 #  NOTE 譯文更動 by Arthur
+#  NOTE 譯文更動 by Ambrose，見http://ceiba3.cc.ntu.edu.tw/course/8f0440/catalog2.htm
+#  NOTE「Copyright Information」中文為「出版事項」或簡稱「出版項」
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/addbiblio-nomarc.tmpl:7
 msgid "Section One: Copyright Information"
-msgstr "第一步：填寫版權資料"
+msgstr "第一步：填寫出版項"
 
 #: ../../koha-tmpl/intranet-tmpl/default/en/user/userpage.tmpl:49
 msgid "Sedgewick Library"
@@ -7130,20 +7151,18 @@ msgstr "到期日"
 
 #  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/marcimport/marcimportdetail.tmpl:24
-#, fuzzy
 msgid "Volume Description"
-msgstr "說明"
+msgstr "集叢號/敘述"
 
 #  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui.simple/additem-nomarc.tmpl:187
-#, fuzzy
 msgid "Volume Description:"
-msgstr "說明"
+msgstr "集叢號/敘述："
 
 #  NOTE Koha 資料庫內的 volumeddesc 欄位，意義不詳
 #: ../../koha-tmpl/intranet-tmpl/default/en/acqui/acquire.tmpl:74
 msgid "Volume Info (for serials) *"
-msgstr ""
+msgstr "集叢號/敘述 (期刊適用) *"
 
 #  NOTE MARC21 的 440$v, "Volume number/sequential designation (NR)", 例如 "v.1" 等
 #  NOTE 對應 CMARC 的 225$v,「集叢號」
