@@ -116,146 +116,154 @@ has authenticated.
 # table could be removed.
 
 sub checkauth {
-    my $query=shift;
-    # $authnotrequired will be set for scripts which will run without authentication
-    my $authnotrequired=shift;
-    if (my $userid=$ENV{'REMOTE_USERNAME'}) {
-	# Using Basic Authentication, no cookies required
-	my $cookie=$query->cookie(-name => 'sessionID',
-				  -value => '',
-				  -expires => '+1y');
-	return ($userid, $cookie, '');
-    }
-
-    # Get session ID from cookie.
-    my $sessionID=$query->cookie('sessionID');
-	# FIXME - Error-checking: if the user isn't allowing cookies,
-	# $sessionID will be undefined. Don't confuse this with an
-	# expired cookie.
-
-    my $message='';
-
-    # Make sure the session ID is (still) good.
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
-    $sth->execute($sessionID);
-    if ($sth->rows) {
-	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	# FIXME - Back door for tonnensen
-	if ($lasttime<time()-45 && $userid ne 'tonnesen') {
-	    # This session has been inactive for >45 seconds, and
-	    # doesn't belong to user tonnensen. It has expired.
-	    $message="You have been logged out due to inactivity.";
-
-	    # Remove this session ID from the list of active sessions.
-	    # FIXME - Ought to have a cron job clean this up as well.
-	    my $sti=$dbh->prepare("delete from sessions where sessionID=?");
-	    $sti->execute($sessionID);
-
-	    # Add an entry to sessionqueries, so that we can restart
-	    # the script once the user has authenticated.
-	    my $scriptname=$ENV{'SCRIPT_NAME'};	# FIXME - Unused
-	    my $selfurl=$query->self_url();
-	    $sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, value) values (?, ?, ?)");
-	    $sti->execute($sessionID, $userid, $selfurl);
-
-	    # Log the fact that someone tried to use an expired session ID.
-	    # FIXME - Ought to have a better logging mechanism,
-	    # ideally some wrapper that logs either to a
-	    # user-specified file, or to syslog, as determined by
-	    # either an entry in /etc/koha.conf, or a system
-	    # preference.
-	    open L, ">>/tmp/sessionlog";
-	    my $time=localtime(time());
-	    printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
-	    close L;
-	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-	    # This session is coming from an IP address other than the
-	    # one where it was set. The user might be doing something
-	    # naughty.
-	    my $newip=$ENV{'REMOTE_ADDR'};
-
-	    $message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
-	} else {
-	    # This appears to be a valid session. Update the time
-	    # stamp on it and return.
-	    my $cookie=$query->cookie(-name => 'sessionID',
-				      -value => $sessionID,
-				      -expires => '+1y');
-	    my $sti=$dbh->prepare("update sessions set lasttime=? where sessionID=?");
-	    $sti->execute(time(), $sessionID);
-	    return ($userid, $cookie, $sessionID);
+	my $query=shift;
+	# $authnotrequired will be set for scripts which will run without authentication
+	my $authnotrequired=shift;
+	if (my $userid=$ENV{'REMOTE_USERNAME'}) {
+		# Using Basic Authentication, no cookies required
+		my $cookie=$query->cookie(-name => 'sessionID',
+					-value => '',
+					-expires => '+1y');
+		return ($userid, $cookie, '');
 	}
-    }
+		warn "passe 1";
+	# Get session ID from cookie.
+	my $sessionID=$query->cookie('sessionID');
+		warn "sessionId = $sessionID";
+		# FIXME - Error-checking: if the user isn't allowing cookies,
+		# $sessionID will be undefined. Don't confuse this with an
+		# expired cookie.
 
-    # If we get this far, it's because we haven't received a cookie
-    # with a valid session ID. Need to start a new session and set a
-    # new cookie.
+	my $message='';
 
-    if ($authnotrequired) {
-	# This script doesn't require the user to be logged in. Return
-	# just the cookie, without user ID or session ID information.
-	my $cookie=$query->cookie(-name => 'sessionID',
-				  -value => '',
-				  -expires => '+1y');
-	return('', $cookie, '');
-    } else {
-	# This script requires authorization. Assume that we were
-	# given user and password information; generate a new session.
+	# Make sure the session ID is (still) good.
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
+	$sth->execute($sessionID);
+	if ($sth->rows) {
+		warn "IF 1";
+		my ($userid, $ip, $lasttime) = $sth->fetchrow;
+		# FIXME - Back door for tonnensen
+		if ($lasttime<time()-45 && $userid ne 'tonnesen') {
+		# This session has been inactive for >45 seconds, and
+		# doesn't belong to user tonnensen. It has expired.
+		$message="You have been logged out due to inactivity.";
 
-	# Generate a new session ID.
-	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
-	my $userid=$query->param('userid');
-	my $password=$query->param('password');
-	if (checkpw($dbh, $userid, $password)) {
-	    # The given password is valid
+		# Remove this session ID from the list of active sessions.
+		# FIXME - Ought to have a cron job clean this up as well.
+		my $sti=$dbh->prepare("delete from sessions where sessionID=?");
+		$sti->execute($sessionID);
 
-	    # Delete any old copies of this session.
-	    my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
-	    $sti->execute($sessionID, $userid);
+		# Add an entry to sessionqueries, so that we can restart
+		# the script once the user has authenticated.
+		my $scriptname=$ENV{'SCRIPT_NAME'};	# FIXME - Unused
+		my $selfurl=$query->self_url();
+		$sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, value) values (?, ?, ?)");
+		$sti->execute($sessionID, $userid, $selfurl);
 
-	    # Add this new session to the 'sessions' table.
-	    $sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
-	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+		# Log the fact that someone tried to use an expired session ID.
+		# FIXME - Ought to have a better logging mechanism,
+		# ideally some wrapper that logs either to a
+		# user-specified file, or to syslog, as determined by
+		# either an entry in /etc/koha.conf, or a system
+		# preference.
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+		close L;
+		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+		warn "ELSE1";
+		# This session is coming from an IP address other than the
+		# one where it was set. The user might be doing something
+		# naughty.
+		my $newip=$ENV{'REMOTE_ADDR'};
 
-	    # See if there's an entry for this session ID and user in
-	    # the 'sessionqueries' table. If so, then use that entry
-	    # to generate an HTTP redirect that'll take the user to
-	    # where ve wanted to go in the first place.
-	    $sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
-			# FIXME - There is no sessionqueries.value
-	    $sti->execute($sessionID, $userid);
-	    if ($sti->rows) {
-		my $stj=$dbh->prepare("delete from sessionqueries where sessionID=?");
-		$stj->execute($sessionID);
-		my ($selfurl) = $sti->fetchrow;
-		print $query->redirect($selfurl);
-		exit;
-	    }
-	    open L, ">>/tmp/sessionlog";
-	    my $time=localtime(time());
-	    printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-	    close L;
-	    my $cookie=$query->cookie(-name => 'sessionID',
-				      -value => $sessionID,
-				      -expires => '+1y');
-	    return ($userid, $cookie, $sessionID);
+		$message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
+		} else {
+		warn "ELSE2";
+		# This appears to be a valid session. Update the time
+		# stamp on it and return.
+		my $cookie=$query->cookie(-name => 'sessionID',
+						-value => $sessionID,
+						-expires => '+1y');
+		my $sti=$dbh->prepare("update sessions set lasttime=? where sessionID=?");
+		$sti->execute(time(), $sessionID);
+		return ($userid, $cookie, $sessionID);
+		}
+	}
+	warn "AFTER";
+	# If we get this far, it's because we haven't received a cookie
+	# with a valid session ID. Need to start a new session and set a
+	# new cookie.
+
+	if ($authnotrequired) {
+	warn "authnotrequired";
+		# This script doesn't require the user to be logged in. Return
+		# just the cookie, without user ID or session ID information.
+		my $cookie=$query->cookie(-name => 'sessionID',
+					-value => '',
+					-expires => '+1y');
+		return('', $cookie, '');
 	} else {
-	    # Either we weren't given a user id and password, or else
-	    # the password was invalid.
+		warn "ELSE3";
+		# This script requires authorization. Assume that we were
+		# given user and password information; generate a new session.
 
-	    if ($userid) {
-		$message="Invalid userid or password entered.";
-	    }
-	    my $parameters;
-	    foreach (param $query) {
-		$parameters->{$_}=$query->{$_};
-	    }
-	    my $cookie=$query->cookie(-name => 'sessionID',
-				      -value => $sessionID,
-				      -expires => '+1y');
-	    print $query->header(-cookie=>$cookie);
-	    print qq|
+		# Generate a new session ID.
+		($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
+		my $userid=$query->param('userid');
+		my $password=$query->param('password');
+		warn "calling checkpw";
+		if (checkpw($dbh, $userid, $password)) {
+			# The given password is valid
+			warn "VALID";
+			# Delete any old copies of this session.
+			my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
+			$sti->execute($sessionID, $userid);
+
+			# Add this new session to the 'sessions' table.
+			$sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
+			$sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
+
+			# See if there's an entry for this session ID and user in
+			# the 'sessionqueries' table. If so, then use that entry
+			# to generate an HTTP redirect that'll take the user to
+			# where ve wanted to go in the first place.
+			$sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
+					# FIXME - There is no sessionqueries.value
+			$sti->execute($sessionID, $userid);
+			if ($sti->rows) {
+				my $stj=$dbh->prepare("delete from sessionqueries where sessionID=?");
+				$stj->execute($sessionID);
+				my ($selfurl) = $sti->fetchrow;
+				print $query->redirect($selfurl);
+				exit;
+			}
+			open L, ">>/tmp/sessionlog";
+			my $time=localtime(time());
+			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+			close L;
+			my $cookie=$query->cookie(-name => 'sessionID',
+							-value => $sessionID,
+							-expires => '+1y');
+			return ($userid, $cookie, $sessionID);
+		} else {
+			# Either we weren't given a user id and password, or else
+			# the password was invalid.
+			warn "INVALID";
+			if ($userid) {
+				$message="Invalid userid or password entered.";
+			}
+			my $parameters;
+			foreach (param $query) {
+				$parameters->{$_}=$query->{$_};
+			}
+			my $cookie=$query->cookie(-name => 'sessionID',
+							-value => $sessionID,
+							-expires => '+1y');
+			return ("",$cookie,$sessionID);
+			print $query->header(-cookie=>$cookie);
+			print qq|
 <html>
 <body background=/images/kohaback.jpg>
 <center>
@@ -271,7 +279,7 @@ sub checkauth {
     <tr><td>Password:</td><td><input type=password name=password></td></tr>
     <tr><td colspan=2 align=center><input type=submit value=login></td></tr>
     </table>
-    
+
     </td><td align=center valign=top>
 
     <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
@@ -295,9 +303,9 @@ sub checkauth {
 </body>
 </html>
 |;
-	    exit;
+		exit;
+		}
 	}
-    }
 }
 
 # checkpw
@@ -307,33 +315,37 @@ sub checkauth {
 # Returns 1 if the password is good, or 0 otherwise.
 sub checkpw {
 
-# This should be modified to allow a select of authentication schemes (ie LDAP)
-# as well as local authentication through the borrowers tables passwd field
-#
-    my ($dbh, $userid, $password) = @_;
-    my $sth;
+	# This should be modified to allow a select of authentication schemes (ie LDAP)
+	# as well as local authentication through the borrowers tables passwd field
+	#
+	my ($dbh, $userid, $password) = @_;
+	my $sth;
 
-    # Try the user ID.
-    $sth = $dbh->prepare("select password from borrowers where userid=?");
-    $sth->execute($userid);
-    if ($sth->rows) {
-	my ($md5password) = $sth->fetchrow;
-	if (md5_base64($password) eq $md5password) {
-	    return 1;		# The password matches
+	# Try the user ID.
+	$sth = $dbh->prepare("select password from borrowers where userid=?");
+	$sth->execute($userid);
+	if ($sth->rows) {
+		my ($md5password) = $sth->fetchrow;
+		if (md5_base64($password) eq $md5password) {
+		return 1;		# The password matches
+		}
 	}
-    }
 
-    # Try the card number.
-    $sth = $dbh->prepare("select password from borrowers where cardnumber=?");
-    $sth->execute($userid);
-    if ($sth->rows) {
-	my ($md5password) = $sth->fetchrow;
-	if (md5_base64($password) eq $md5password) {
-	    return 1;		# The password matches
+	# Try the card number.
+	$sth = $dbh->prepare("select password from borrowers where cardnumber=?");
+	$sth->execute($userid);
+	if ($sth->rows) {
+		my ($md5password) = $sth->fetchrow;
+		if (md5_base64($password) eq $md5password) {
+		return 1;		# The password matches
+		}
 	}
-    }
-    return 0;		# Either there's no such user, or the password
-			# doesn't match.
+	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
+		# Koha superuser account
+		return 2;
+	}
+	return 0;		# Either there's no such user, or the password
+				# doesn't match.
 }
 
 

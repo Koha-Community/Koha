@@ -27,7 +27,7 @@ use C4::Search;
 use C4::Auth;
 
 my $query=new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0);
 
 my $template = gettemplate("user/userpage.tmpl",0);
 
