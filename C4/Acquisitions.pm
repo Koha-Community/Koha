@@ -591,64 +591,72 @@ sub modnote {
 sub newbiblioitem {
   my ($biblioitem) = @_;
   my $dbh   = C4Connect;
-  my $query = "Select max(biblioitemnumber) from biblioitems";
-  my $sth   = $dbh->prepare($query);
   my $data;
   my $bibitemnum;
+  my $error;
   
-  $biblioitem->{'volume'}          = $dbh->quote($biblioitem->{'volume'});
-  $biblioitem->{'number'} 	   = $dbh->quote($biblioitem->{'number'});
-  $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
-  $biblioitem->{'itemtype'}        = $dbh->quote($biblioitem->{'itemtype'});
-  $biblioitem->{'url'}             = $dbh->quote($biblioitem->{'url'});
-  $biblioitem->{'isbn'}            = $dbh->quote($biblioitem->{'isbn'});
-  $biblioitem->{'issn'}            = $dbh->quote($biblioitem->{'issn'});
-  $biblioitem->{'dewey'}           = $dbh->quote($biblioitem->{'dewey'});
-  $biblioitem->{'subclass'}        = $dbh->quote($biblioitem->{'subclass'});
-  $biblioitem->{'publicationyear'} = $dbh->quote($biblioitem->{'publicationyear'});
-  $biblioitem->{'publishercode'}   = $dbh->quote($biblioitem->{'publishercode'});
-  $biblioitem->{'volumedate'}      = $dbh->quote($biblioitem->{'volumedate'});
-  $biblioitem->{'volumeddesc'}     = $dbh->quote($biblioitem->{'volumeddesc'});  $biblioitem->{'illus'}            = $dbh->quote($biblioitem->{'illus'});
-  $biblioitem->{'pages'}           = $dbh->quote($biblioitem->{'pages'});
-  $biblioitem->{'notes'}           = $dbh->quote($biblioitem->{'notes'});
-  $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
-  $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
-  
+  # Get next unused number
+  my $query = "Select max(biblioitemnumber) from biblioitems";
+  my $sth   = $dbh->prepare($query);
   $sth->execute;
   $data       = $sth->fetchrow_arrayref;
   $bibitemnum = $$data[0] + 1;
-
   $sth->finish;
 
   $query = "insert into biblioitems set
-biblioitemnumber = $bibitemnum,
-biblionumber 	 = $biblioitem->{'biblionumber'},
-volume		 = $biblioitem->{'volume'},
-number		 = $biblioitem->{'number'},
-classification   = $biblioitem->{'classification'},
-itemtype         = $biblioitem->{'itemtype'},
-url              = $biblioitem->{'url'},
-isbn		 = $biblioitem->{'isbn'},
-issn		 = $biblioitem->{'issn'},
-dewey		 = $biblioitem->{'dewey'},
-subclass	 = $biblioitem->{'subclass'},
-publicationyear	 = $biblioitem->{'publicationyear'},
-publishercode	 = $biblioitem->{'publishercode'},
-volumedate	 = $biblioitem->{'volumedate'},
-volumeddesc	 = $biblioitem->{'volumeddesc'},
-illus		 = $biblioitem->{'illus'},
-pages		 = $biblioitem->{'pages'},
-notes		 = $biblioitem->{'notes'},
-size		 = $biblioitem->{'size'},
-place		 = $biblioitem->{'place'}";
+	biblioitemnumber = ?,
+	biblionumber 	 = ?,
+	volume		 = ?,
+	number		 = ?,
+	classification   = ?,
+	itemtype         = ?,
+	url              = ?,
+	isbn		 = ?,
+	issn		 = ?,
+	lccn		 = ?,
+	dewey		 = ?,
+	subclass	 = ?,
+	publicationyear	 = ?,
+	publishercode	 = ?,
+	volumedate	 = ?,
+	volumeddesc	 = ?,
+	illus		 = ?,
+	pages		 = ?,
+	notes		 = ?,
+	size		 = ?,
+	marc		 = ?,
+	place		 = ?   ";
 
   $sth = $dbh->prepare($query);
-  $sth->execute;
+  $sth->execute(
+	$bibitemnum,
+	$biblioitem->{'biblionumber'},
+	$biblioitem->{'volume'},
+	$biblioitem->{'number'},
+	$biblioitem->{'classification'},
+	$biblioitem->{'itemtype'},
+	$biblioitem->{'url'},
+	$biblioitem->{'isbn'},
+	$biblioitem->{'issn'},
+	$biblioitem->{'lccn'},
+	$biblioitem->{'dewey'},
+	$biblioitem->{'subclass'},
+	$biblioitem->{'publicationyear'},
+	$biblioitem->{'publishercode'},
+	$biblioitem->{'volumedate'},
+	$biblioitem->{'volumeddesc'},
+	$biblioitem->{'illus'},
+	$biblioitem->{'pages'},
+	$biblioitem->{'notes'},
+	$biblioitem->{'size'},
+	$biblioitem->{'marc'},
+	$biblioitem->{'place'},
+  ) or $error=$sth->errstr;
 
   $sth->finish;
   $dbh->disconnect;
   return($bibitemnum);
-}
+} # sub newbiblioitem
 
 sub newsubject {
   my ($bibnum)=@_;

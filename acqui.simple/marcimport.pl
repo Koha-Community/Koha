@@ -1401,58 +1401,9 @@ sub newcompletebiblioitem {
 	($biblionumber,$error)=getoraddbiblio($dbh, $biblio);
 
         if ( ! $error ) { 
-	  # Get next biblioitemnumber
-	  $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
-	  $sth->execute;
-	  ($biblioitemnumber) = $sth->fetchrow;
-	  $biblioitemnumber++;
 
-	  print "<PRE>Next biblio item is $biblioitemnumber</PRE>\n" if $debug;
-  
-	  $sth=$dbh->prepare("insert into biblioitems (
-	    biblioitemnumber,
-	    biblionumber,
-	    volume,
-	    number,
-	    itemtype,
-	    isbn,
-	    issn,
-	    dewey,
-	    subclass,
-	    publicationyear,
-	    publishercode,
-	    volumedate,
-	    volumeddesc,
-	    illus,
-	    pages,
-	    notes,
-	    size,
-	    place,
-	    lccn,
-	    marc)
-	  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
-
-	  $sth->execute(
-	    $biblioitemnumber,
-	    $biblionumber,
-	    $biblioitem->{volume},
-	    $biblioitem->{number},
-	    $biblioitem->{itemtype},
-	    $biblioitem->{isbn},
-	    $biblioitem->{issn},
-	    $biblioitem->{dewey},
-	    $biblioitem->{subclass},
-	    $biblioitem->{publicationyear},
-	    $biblioitem->{publishercode},
-	    $biblioitem->{volumedate},
-	    $biblioitem->{volumeddesc},
-	    $biblioitem->{illus},
-	    $biblioitem->{pages},
-	    $biblioitem->{notes},
-	    $biblioitem->{size},
-	    $biblioitem->{place},
-	    $biblioitem->{lccn},
-	    $biblioitem->{marc} ) or  $error.=$sth->errstr ;
+	  $biblioitem->{biblionumber}=$biblionumber;
+	  $biblioitemnumber=newbiblioitem($biblioitem);
 
 	  $sth=$dbh->prepare("insert into bibliosubject 
 		(biblionumber,subject)

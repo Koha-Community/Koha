@@ -17,7 +17,7 @@ use DBI;
 # Koha modules
 use C4::Database;
 
-my $debug=1;
+my $debug=0;
 
 my (
 	$sth,
@@ -67,8 +67,10 @@ my %requirefields=(
     biblio=>{ 'abstract' => 'text' },
     deletedbiblio=>{ 'abstract' => 'text' },
     biblioitems=>{ 'lccn' => 'char(25)',
+		'url' => 'varchar(255)',
 		'marc' => 'text' },
     deletedbiblioitems=>{ 'lccn' => 'char(25)',
+		'url' => 'varchar(255)',
 		'marc' => 'text' },
     branchtransfers=>{ 'datearrived' => 'datetime' },
 );
