@@ -32,7 +32,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select id,category,authorised_value from authorised_values where (category like \"$data[0]%\") order by category,authorised_value";
+	my $query="Select id,category,authorised_value,lib from authorised_values where (category like \"$data[0]%\") order by category,authorised_value";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -49,7 +49,7 @@ my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 $searchfield=~ s/\,//g;
 my $id = $input->param('id');
-my $reqsel="select category,authorised_value from authorised_values where id='$id'";
+my $reqsel="select category,authorised_value,lib from authorised_values where id='$id'";
 my $reqdel="delete from authorised_values where id='$id'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
@@ -72,7 +72,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select id,category,authorised_value from authorised_values where id='$id'");
+		my $sth=$dbh->prepare("select id,category,authorised_value,lib from authorised_values where id='$id'");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -86,6 +86,7 @@ if ($op eq 'add_form') {
 	}
 	$template->param(category => $data->{'category'},
 							authorised_value => $data->{'authorised_value'},
+							lib => $data->{'lib'},
 							id => $data->{'id'}
 							);
 	if ($data->{'category'}) {
@@ -97,9 +98,8 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value) values (?,?,?)");
-	warn "TOTO : ".$input->param('id'), $input->param('category'), $input->param('authorised_value');
-	$sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'));
+	my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
+	$sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'),$input->param('lib'));
 	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
 	exit;
@@ -161,6 +161,7 @@ if ($op eq 'add_form') {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{category} = $results->[$i]{'category'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
+		$row_data{lib} = $results->[$i]{'lib'};
 		$row_data{edit} = "$script_name?op=add_form&id=".$results->[$i]{'id'};
 		$row_data{delete} = "$script_name?op=delete_confirm&searchfield=$searchfield&id=".$results->[$i]{'id'};
 		push(@loop_data, \%row_data);

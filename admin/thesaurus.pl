@@ -73,9 +73,9 @@ if ($op eq 'add_form') {
 		$data->{'stdlib'} = $input->param('stdlib');
 	}
 	if ($search_category) {
-		$template->param(action => "Modify authorised value");
+		$template->param(action => "Modify thesaurus");
 	} else {
-		$template->param(action => "Add authorised value");
+		$template->param(action => "Add thesaurus");
 	}
 	$template->param(category => $data->{'category'},
 							stdlib => $data->{'stdlib'},
@@ -97,7 +97,9 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	newauthority($dbh,$input->param('category'),$input->param('stdlib'), $input->param('freelib'),'',1,'');
+	my $freelib = $input->param('freelib');
+	$freelib = $input->param('stdlib') unless ($input->param('freelib'));
+	newauthority($dbh,$input->param('category'),$input->param('father')." ".$input->param('stdlib'), $freelib,'',1,'');
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
 	exit;
 ################## DELETE_CONFIRM ##################################
@@ -117,10 +119,6 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-#	my $dbh = C4::Context->dbh;
-#	my $sth=$dbh->prepare($reqdel);
-#	$sth->execute;
-#	$sth->finish;
 	&delauthority($id);
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?search_category=$search_category&searchstring=$searchstring\"></html>";
 	exit;

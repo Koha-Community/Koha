@@ -166,7 +166,7 @@ if ($op eq 'add_form') {
 					);
 		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
 					-values=> \@value_builder,
-					-default=>$data->{'thesaurus_category'},
+					-default=>$data->{'value_builder'},
 					-size=>1,
 					-multiple=>0,
 					);
