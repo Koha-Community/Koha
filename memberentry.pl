@@ -15,11 +15,11 @@ if ($member eq ''){
   $member=NewBorrowerNumber();
 }
 my $type=$input->param('type');
-
+my $modify=$input->param('modify.x');
 print $input->header;
 print startpage();
 print startmenu('member');
-
+#print $modify;
 if ($type ne 'Add'){
   print mkheadr(1,'Update Member Details');
 } else {
@@ -371,16 +371,52 @@ print <<printend
 <td><FONT SIZE=2>Notes</font></td>
 <td  COLSPAN=4><textarea name=borrowernotes wrap=physical cols=70 rows=3>$data->{'borrowernotes'}</textarea></td></tr>
 <tr><td>&nbsp; </TD></TR>
-<tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
+
 printend
 ;
-if ($type ne 'modify'){
+if ($modify){
   print <<printend
+<tr><td><Font size=2>FLAGS</font></td></tr>
+<tr><td>Gone No Address</td>
+<td><input type=radio name=gna value=1
+printend
+;
+  if ($data->{'gonenoaddress'} eq '1'){
+    print " checked";
+  }
+print ">Yes <input type=radio name=gna value=0";
+  if ($data->{'gonenoaddress'} eq '0'){
+    print " checked";
+  }
+  print ">No</td></tr>\n";
+  print "<tr><td>Lost</td><td><input type=radio name=lost value=1";
+  if ($data->{'lost'} eq '1'){
+    print " checked";
+  }
+  print ">Yes<input type=radio name=lost value=0";
+  if ($data->{'lost'} eq '0'){
+    print " checked";
+  }
+  print ">No</td></tr>\n";
+  print "<tr><td>Debarred</td><td><input type=radio name=debarred value=1";
+  if ($data->{'debarred'} eq '1'){
+    print " checked";
+  }
+  print ">Yes<input type=radio name=debarred value=0";
+  if ($data->{'debarred'} eq '0'){
+    print " checked";
+  }
+  print ">No</td></tr>\n";
+}
+if ($type eq 'Add'){
+  print <<printend
+  <tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
 <input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
 printend
 ;
 } else {
 print <<printend
+<tr valign=top bgcolor=white><td  COLSPAN=5 align=right >
 <input type=image src="/images/save-changes.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" border=0 ></td>
 printend
 ;

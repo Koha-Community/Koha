@@ -37,7 +37,8 @@ if (my $data=$sth->fetchrow_hashref){
   altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
   categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
   borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
-  initials='$data{'initials'}',streetaddress='$data{'address'}',ethnicity='$data{'ethnicity'}'
+  initials='$data{'initials'}',streetaddress='$data{'address'}',ethnicity='$data{'ethnicity'}',
+  gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}'
   where borrowernumber=$data{'borrowernumber'}";
 #  print $query;
 
