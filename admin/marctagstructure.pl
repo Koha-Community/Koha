@@ -49,6 +49,7 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
+$searchfield=0 unless $searchfield;
 my $pkfield="tagfield";
 my $reqsel="select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
