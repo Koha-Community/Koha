@@ -385,17 +385,25 @@ sub bookfundbreakdown {
 }
       
 
+# Create a new biblio entry
 sub newbiblio {
-  my ($biblio) = @_;
+  my ($biblio) = @_;	# input is ref to hash of fields
+  my ($bibnum,$error);		# return resulting biblio number
+
+  $error="";
+
   my $dbh    = &C4Connect;
+
+  # Get next biblionumber in sequence
   my $query  = "Select max(biblionumber) from biblio";
   my $sth    = $dbh->prepare($query);
   $sth->execute;
   my $data   = $sth->fetchrow_arrayref;
-  my $bibnum = $$data[0] + 1;
-  my $series;
+  $bibnum = $$data[0] + 1;
 
-  if ($biblio->{'seriestitle'}) { $series = 1 } else { $series = 0 };
+  my $serial;		# is this item part of a series?
+
+  if ($biblio->{'seriestitle'}) { $serial = 1 } else { $serial = 0 };
 
   $sth->finish;
   $query = "insert into biblio set
@@ -403,25 +411,31 @@ sub newbiblio {
 	title         = ?,
 	author        = ?,
 	copyrightdate = ?,
-	series        = ?,
+	serial        = ?,
 	seriestitle   = ?,
 	notes         = ?   ";
 
 #  print $query;
   $sth = $dbh->prepare($query);
-  $sth->execute(
+  if (  $sth->execute(
     $bibnum,
     $biblio->{'title'},
     $biblio->{'author'},
     $biblio->{'copyright'},
-    $series,
+    $serial,
     $biblio->{'seriestitle'} ,
     $biblio->{'notes'}	   
-  ) ;
+  )  ) {
+	$error='';
+  } else {
+	$error=$sth->errstr;
+  	$bibnum = ""; 
+  } # if exec error
 
   $sth->finish;
   $dbh->disconnect;
-  return($bibnum);
+
+  return($bibnum,$error);
 }
 
 sub modbiblio {
@@ -940,7 +954,7 @@ notforloan           = $item->{'loan'}";
     $sth = $dbh->prepare($query);
     $sth->execute;
 
-    $error.=$sth->errstr;
+    $error=$sth->errstr;
 
     $sth->finish;
     $itemnumber++;
