@@ -1,5 +1,8 @@
-<TMPL_INCLUDE NAME="marc-top.inc">
-
+<TMPL_IF NAME="NOTMARC">
+  <TMPL_INCLUDE NAME="acquisitions-top.inc">
+<TMPL_ELSE>
+  <TMPL_INCLUDE NAME="marc-top.inc">
+</TMPL_IF>
 <font size="6"><em>Biblio Search Results</em></font><br />
 <CENTER>
 You searched on <b><TMPL_IF name="isbn">ISBN <TMPL_VAR name="isbn"></TMPL_IF><TMPL_IF name="title">title <TMPL_VAR name="title"></TMPL_IF></b><br />
@@ -45,7 +48,11 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 			<td><TMPL_VAR name="title"></a>
 			<td><TMPL_VAR name="author"></td>
 			<td><TMPL_VAR name="copyrightdate"></td>
-			<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
+			<TMPL_IF NAME="NOTMARC">
+			  <td><a href="additem-nomarc.pl?biblionumber=<TMPL_VAR name="biblionumber">">Add Items</a></td>
+			<TMPL_ELSE>
+			  <td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
+			</TMPL_IF>
 		</tr>
 	</TMPL_LOOP>
 	<TMPL_ELSE>
@@ -74,7 +81,11 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 			<td><TMPL_VAR name="author"></td>
 			<td><TMPL_VAR name="isbn"></td>
 			<td><TMPL_VAR name="file"></td>
+			<TMPL_IF NAME="NOTMARC">
+			
+			<TMPL_ELSE>
 			<td><a href="addbiblio.pl?breedingid=<TMPL_VAR name="id">">Add biblio</a></td>
+			</TMPL_IF>
 		</tr>
 	</TMPL_LOOP>
 	<TMPL_ELSE>
@@ -85,7 +96,11 @@ Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td>
+		<TMPL_IF NAME="NOTMARC">
+		<td><a href="addbiblio-nomarc.pl?isbn=<TMPL_VAR name="isbn">">Add New Biblio</a></td>
+		<TMPL_ELSE>
 		<td><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Add New Biblio</a></td>
+		</TMPL_IF>
 	</tr>
 </table>
 
