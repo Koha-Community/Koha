@@ -1,8 +1,6 @@
-#!/usr/bin/perl
+package C4::Z3950; 
 
 # $Id$
-
-package C4::Z3950; 
 
 # Routines for handling Z39.50 lookups
 
@@ -42,52 +40,51 @@ use C4::Biblio;
 
 require Exporter;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
 $VERSION = 0.01;
+
+=head1 NAME
+
+C4::Z3950 - Functions dealing with Z39.50 queries
+
+=head1 SYNOPSIS
+
+  use C4::Z3950;
+
+=head1 DESCRIPTION
+
+This module contains functions for looking up Z39.50 servers, and for
+entering Z39.50 lookup requests.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	 &z3950servername 
 	 &addz3950queue 
 );
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-  };
-  
-# make all your functions, whether exported or not;
 #------------------------------------------------
 
+=item z3950servername
 
+  $name = &z3950servername($dbh, $server_id, $default_name);
+
+Looks up a Z39.50 server by ID number, and returns its full name. If
+the server is not found, returns C<$default_name>.
+
+C<$server_id> is the Z39.50 server ID to look up.
+
+C<$dbh> is ignored.
+
+=cut
+#'
 sub z3950servername {
     # inputs
     my (
@@ -116,6 +113,39 @@ sub z3950servername {
 } # sub z3950servername
 
 #---------------------------------------
+
+=item addz3950queue
+
+  $errmsg = &addz3950queue($dbh, $query, $type, $request_id, @servers);
+
+Adds a Z39.50 search query for the Z39.50 server to look up.
+
+C<$dbh> is obsolete and is ignored.
+
+C<$query> is the term to search for.
+
+C<$type> is the query type, e.g. C<isbn>, C<lccn>, etc.
+
+C<$request_id> is a unique string that will identify this query.
+
+C<@servers> is a list of servers to query (obviously, this can be
+given either as an array, or as a list of scalars). Each element may
+be either a Z39.50 server ID from the z3950server table of the Koha
+database, the string C<DEFAULT> or C<CHECKED>, or a complete server
+specification containing a colon.
+
+C<DEFAULT> and C<CHECKED> are synonymous, and refer to those servers
+in the z3950servers table whose 'checked' field is set and non-NULL.
+
+Once the query has been submitted to the Z39.50 daemon,
+C<&addz3950queue> sends a SIGHUP to the daemon to tell it to process
+this new request.
+
+C<&addz3950queue> returns an error message. If it was successful, the
+error message is the empty string.
+
+=cut
+#'
 sub addz3950queue {
     use strict;
     # input
@@ -124,6 +154,7 @@ sub addz3950queue {
 			# FIXME - Unused argument
 	$query,		# value to look up
 	$type,		# type of value ("isbn", "lccn", etc).
+			# FIXME - What other values are legal?
 	$requestid,	# Unique value to prevent duplicate searches from multiple HTML form submits
 	@z3950list,	# list of z3950 servers to query
     )=@_;
@@ -138,6 +169,7 @@ sub addz3950queue {
 	$servername,
     );
 
+    # FIXME - Should be configurable, probably in /etc/koha.conf.
     my $pidfile='/var/log/koha/processz3950queue.pid';
     
     $error="";
@@ -172,11 +204,18 @@ sub addz3950queue {
 	}
 
 	my $serverlist='';
+	# FIXME - $serverlist = join(" ", @serverlist);
 	foreach (@serverlist) {
 	    $serverlist.="$_ ";
     	} # foreach
 	chop $serverlist;
 
+	# FIXME - Is this test supposed to test whether @serverlist is
+	# empty? If so, then a) there are better ways to do that in
+	# Perl (e.g., "if (@serverlist eq ())"), and b) it doesn't
+	# work anyway, since it checks whether $serverlist is composed
+	# of one or more spaces, which is never the case, not even
+	# when there are 0 or 1 elements in @serverlist.
 	if ( $serverlist !~ /^ +$/ ) {
 	    # Don't allow reinsertion of the same request identifier.
 	    $sth=$dbh->prepare("select identifier from z3950queue 
@@ -188,19 +227,32 @@ sub addz3950queue {
 		    values (?, ?, ?, ?)");
 	        $sth->execute($query, $type, $serverlist, $requestid);
 		if ( -r $pidfile ) { 
+		    # FIXME - Perl is good at opening files. No need to
+		    # spawn a separate 'cat' process.
 	            my $pid=`cat $pidfile`;
 	            chomp $pid;
+	            # Kill -HUP the Z39.50 daemon to tell it to process
+	            # this query.
 	            my $processcount=kill 1, $pid;
 	            if ($processcount==0) {
 		        $error.="Z39.50 search daemon error: no process signalled. ";
 	            }
 		} else {
+		    # FIXME - Error-checking like this should go close
+		    # to the test.
 		    $error.="No Z39.50 search daemon running: no file $pidfile. ";
 		} # if $pidfile
 	    } else {
+		# FIXME - Error-checking like this should go close
+		# to the test.
 	        $error.="Duplicate request ID $requestid. ";
 	    } # if rows
 	} else {
+	    # FIXME - Error-checking like this should go close to the
+	    # test. I.e.,
+	    #	return "No Z39.50 search servers specified. "
+	    #		if @serverlist eq ();
+
 	    # server list is empty
 	    $error.="No Z39.50 search servers specified. ";
 	} # if serverlist empty
@@ -209,8 +261,26 @@ sub addz3950queue {
 
 } # sub addz3950queue
 
+1;
+__END__
+
+=back
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=cut
+
 #--------------------------------------
 # $Log$
+# Revision 1.5  2002/10/13 06:13:23  arensb
+# Removed bogus #! line (this isn't a script!)
+# Removed unused global variables.
+# Added POD.
+# Added some explanatory comments.
+# Added some FIXME comments.
+#
 # Revision 1.4  2002/10/11 12:35:35  arensb
 # Replaced &requireDBI with C4::Context->dbh
 #
