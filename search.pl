@@ -5,8 +5,7 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
-use C4::Acquisitions;  # Only used for branches() routine which should probably
-                       # be elsewhere
+use C4::Acquisitions;
 
 my $env;
 my $input = new CGI;
@@ -216,15 +215,11 @@ while ($i < $count2){
 		  $stuff[5].=" ";
 	      }
       } else {
-	      my $circcount;
-	      foreach my $branchcode (sort keys %$branchcount) {
-		  $circcount=$branchcount->{$branchcode};
-	      }
-	      my $shelfcount=$count-$circcount-$lostcount-$mending-$transit;
-	      if ($circcount) {
+	      my $shelfcount=$count-$nacount-$lostcount-$mending-$transit;
+	      if ($nacount) {
 		      $stuff[5]="Circ ";
 		      if ($count>1) {
-			      $stuff[5].="($circcount) ";
+			      $stuff[5].="($nacount) ";
 		      }
 	      }
 	      if ($shelfcount) {
