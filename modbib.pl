@@ -92,7 +92,7 @@ $template->param ( biblionumber => $bibnum,
 						seriestitle => $data->{'seriestitle'},
 						additionalauthor => $additional,
 						subtitle => $data->{'subtitle'},
-						untitle => $data->{'untitle'},
+						unititle => $data->{'unititle'},
 						notes => $data->{'notes'},
 						serial => $data->{'serial'});
 
