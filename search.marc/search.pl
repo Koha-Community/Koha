@@ -115,11 +115,15 @@ if ($op eq "do_search") {
 	my @tags;
 
 	foreach my $marc (@marclist) {
-		my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
-		if ($tag) {
-			push @tags,$dbh->quote("$tag$subfield");
+		if ($marc) {
+			my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,$marc);
+			if ($tag) {
+				push @tags,$dbh->quote("$tag$subfield");
+			} else {
+				push @tags, $dbh->quote(substr($marc,0,4));
+			}
 		} else {
-			push @tags, $dbh->quote(substr($marc,0,4));
+			push @tags, "";
 		}
 	}
 	findseealso($dbh,\@tags);
