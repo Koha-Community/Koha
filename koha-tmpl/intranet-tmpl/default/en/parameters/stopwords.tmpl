@@ -57,7 +57,6 @@
         <TMPL_ELSE>
                 <h1>Add word</h1>
         </TMPL_IF>
-
         <form action="<TMPL_VAR NAME=script_name>" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
          
@@ -130,6 +129,7 @@
 
 <TMPL_IF NAME=else>
         <h2>Stop words admin</h2>
+	<b>NOTE : if you change something in this table, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
         <form action='<TMPL_VAR NAME=script_name>' method=post>
                 <input type=text name=searchfield value=<TMPL_VAR NAME=searchfield>>
                 <input type=reset name=reset value="clr">

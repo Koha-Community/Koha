@@ -57,12 +57,11 @@
         <TMPL_ELSE>
                 <h1>Ajouter mot vide</h1>
         </TMPL_IF>
-
         <form action="<TMPL_VAR NAME=script_name>" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
          
         <table>
-        
+
         <TMPL_IF NAME=searchfield>
                 <tr>
                         <td>Mot vide</td>
@@ -130,6 +129,7 @@
 
 <TMPL_IF NAME=else>
         <h2>Mots vides</h2>
+	<b>NOTE : Si vous modifiez cette table, demandez à votre administrateur système d'exécuter le script misc/rebuildnonmarc.pl</b>
         <form action='<TMPL_VAR NAME=script_name>' method=post>
                 <input type=text name=searchfield value=<TMPL_VAR NAME=searchfield>>
                 <input type=reset name=reset value="clr">
