@@ -5,7 +5,7 @@
 <head>
 	<title>OPAC Basket</title>
 	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang">/includes/opac.css">
-	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" ESCAPE=URL -->/includes/basket.js"></script>
+	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<SCRIPT language='javascript'>
 		var MSG_NO_RECORD_SELECTED = "No biblio selected";
 		var MSG_NO_RECORD_ADDED = "No biblio added";

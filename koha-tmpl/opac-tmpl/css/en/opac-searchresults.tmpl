@@ -47,7 +47,7 @@
 		<!-- Actual Search Results -->
 		<!-- TMPL_LOOP NAME="results" -->
 			<tr>
-			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->"></td>
+			<td<!-- TMPL_IF name="even" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="bibid" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p>
 						<p><b><a class="transparent" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
