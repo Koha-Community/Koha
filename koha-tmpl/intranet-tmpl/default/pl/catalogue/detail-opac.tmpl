@@ -1,13 +1,4 @@
-<head>
-<meta http-equiv="Content=Type" content=html/text; charset=iso8859-2>
-</head>
 <TMPL_INCLUDE NAME="opac-top.inc">
-
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Zaloguj się</a> do Koha</p>
-</TMPL_IF>
 
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
@@ -27,7 +18,7 @@
 <tr valign="top">
 <td>
 <br>
-<!-- <FONT SIZE=2  face="arial, helvetica"> -->
+<FONT SIZE=2  face="arial, helvetica">
 <b>Podtytuł:</b> <TMPL_VAR NAME="subtitle"><br>
 <b>Autor:</b> <TMPL_VAR NAME="author"><br>
 <b>Dodatkowy autor:</b> <TMPL_VAR NAME="additional"><br>
@@ -39,7 +30,7 @@
 <b>Seria:</b> <TMPL_VAR NAME="serial"><br>
 <b>W sumie pozycji:</b> <TMPL_VAR NAME="count">
 <p>
-<!-- </font> --></td>
+</font></td>
 </tr>
 </table>
 </TMPL_LOOP>
@@ -50,7 +41,7 @@
 <td>Class</td>
 <td>Lokalizacja</td>
 <td>Termin zwrotu</td>
-<td>Wypożyczono?</td>
+<td>Wypożyczono</td>
 </tr>
 <TMPL_LOOP NAME="ITEM_RESULTS">
 <tr>

@@ -4,92 +4,107 @@
 	<TMPL_INCLUDE NAME="cat-top.inc">
 </TMPL_IF>
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
 <!-- ----------------------- MAIN BODY OF PAGE ------------------------ -->
 <FORM ACTION="/cgi-bin/koha/search.pl" method=post>
 
-<FONT SIZE=6><em>Wyszukiwanie w katalogu</em></FONT>
+<h1>Przeszukiwanie katalogu</h1>
 
-<div align=right>
-<input type="hidden" name="type" value="intra">
-<INPUT TYPE="image"  alt="Start Search" src="/images/ok-start-search.gif"  WIDTH=187  HEIGHT=42 BORDER=0 > 
-</div>
 <CENTER>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
-
-<TR VALIGN=TOP>
-<TD>Numer pozycji</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td><td> <b> &nbsp; &nbsp; OR</b></TD></TR>
-<!-- <TR VALIGN=TOP>
-<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
+	<TR VALIGN=TOP>
+		<TD>Kod kreskowy</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
+		<td><b> &nbsp; &nbsp; LUB</b></TD></TR>
+	<!-- <TR VALIGN=TOP>
+	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
  -->
-<TR VALIGN=TOP>
-<TD colspan=2 > &nbsp;</td></TR>
-
-
-<TR VALIGN=TOP>
-<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><b>HELP</b><br>
-<b>Searching:</b>Using more fields for your search (eg Keyword + author + class) will slow it down.<p>
-<b><a href=/cgi-bin/koha/maint/catmaintain.pl target=window0>Catalogue
-Maintenance:</a></b> To  add a <b>new</b> biblio or item go to 
-<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">acquisitions</a>.<p>
-To <b>request, modify or delete</b> a biblio or item  first search for it here.
+	<TR VALIGN=TOP>
+		<TD colspan=2 > &nbsp;</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
+			<span style="color:#FFFFFF;">
+				<b>POMOC</b><br>
+				<b>Wyszukiwanie: </b>Wype³nienie kilku pól w kwerendzie (np. S³owo kluczowe + autor + klasa) spowoduje wolniejsze wyszukiwanie.<p>
+			</span>
+		</td>
    </TR>
 </table>
 
 
 
-<TABLE >
-<TR VALIGN=TOP>
-<TD>S³owa kluczowe</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD></TR>
-<TR VALIGN=TOP>
-<TD>Tytu³</TD> <TD><INPUT TYPE="text"  SIZE="25"
-NAME="title"></TD><td><input type=radio name=ttype value=normal checked>Zwyk³e<input
-type=radio name=ttype value=exact>Dok³adne</td></TR>
-<TR VALIGN=TOP> 
-<TD>Autor</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
-<TR VALIGN=TOP> 
-<TD>Ilustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+<TABLE border=0>
+	<TR VALIGN=TOP>
+		<TD>S³owo kluczowe</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Tytu³</TD>
+		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
+		<td>
+			<input type=radio name=ttype value=normal checked>Zwyk³e
+			<input type=radio name=ttype value=exact>Precyzyjne
+		</td>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Autor</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD>Ilustrator</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
+	</TR>
+		<TR VALIGN=TOP>
+		<TD>Dewey</TD><TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
+	</TR>
 
-<TR VALIGN=TOP> 
-<TD>Dewey</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD></TR>
-
-<TR VALIGN=TOP>
-<TD>Class</TD>
+	<TR VALIGN=TOP>
+	<TD>Class</TD>
   <td>
   <select name="class" size="1">
   <option value="">Any
   <TMPL_VAR name="classlist">
   </select>
   </td>
-</tr>
-<!-- <TR VALIGN=TOP>
-<td>Odzia³</td><td><select name=branch>
-<option value="F">Foxton
-</select>
-</td></tr> -->
+	</tr>
+	<!-- <TR VALIGN=TOP>
+	<td>Oddzia³</td><td><select name=branch>
+	<option value="F">Foxton
+	</select>
+	</td></tr> -->
 
-<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
+	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
  -->
-<TR VALIGN=TOP>
-<TD><b>OR</b></TD></TR>
+	<TR VALIGN=TOP>
+	<TD><b>LUB</b></TD>
+	</TR>
 
-
-<TR VALIGN=TOP>
-<TD>S</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
-<TD></TD> <TD><INPUT TYPE="reset"  VALUE= "Clear Fields">
-
-
-
-</TD></TR></TABLE>
-</FORM>
-<p>
-<a href=/cgi-bin/koha/shelves.pl>Pó³ki wirtualne</a>
-</CENTER>
-
+	<TR VALIGN=TOP>
+		<TD>Has³o przedm.</TD>
+		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+	</TR>
+	<tr>
+		<TD colspan=3>
+			<table width="100%" cellpadding=0 cellspacing=0>
+				<tr align="center">
+					<td>
+						<input type="hidden" name="type" value="intra">
+						<INPUT TYPE="image"  alt="Rozpocznij szukanie" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" BORDER=0 >
+					</td>
+					<td>
+						<INPUT TYPE="reset"  VALUE= "Wyczy¶æ">
+					</td>
+					<td>
+						<a href=/cgi-bin/koha/shelves.pl>Pó³ki wirtualne</a>
+					</td>
+				</tr>
+			</table>
+		</TD>
+	</TR>
+</TABLE>
+	</FORM>
+	<p>
+	</CENTER>
 <!--#include virtual="/includes/cat-bottom.inc" -->
 
