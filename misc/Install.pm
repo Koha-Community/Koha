@@ -633,6 +633,7 @@ sub checkperlmodules {
     unless (eval {require Set::Scalar})      { push @missing,"Set::Scalar" };
     unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
     unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
+    unless (eval {require Mail::Sendmail})   { push @missing,"Mail::Sendmail" };
     unless (eval {require Net::Z3950})       {
 	showmessage(getmessage('NETZ3950Missing'), 'PressEnter', '', 1);
 	if ($#missing>=0) { # XXX why only when $#missing >= 0?
