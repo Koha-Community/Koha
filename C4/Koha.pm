@@ -51,13 +51,13 @@ Koha.pm provides many functions for Koha scripts.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&slashifyDate
-	     &fixEthnicity
-	     &borrowercategories
-	     &ethnicitycategories
-	     &subfield_is_koha_internal_p
-		&getbranches &getprinters
-		&getbranch &getprinter
-	     $DEBUG);
+			&fixEthnicity
+			&borrowercategories
+			&ethnicitycategories
+			&subfield_is_koha_internal_p
+			&getbranches &getbranch &CGIbranches
+			&getprinters &getprinter
+			$DEBUG);
 
 use vars qw();
 

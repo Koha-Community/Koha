@@ -80,7 +80,7 @@ C<$itemnum> is the item number
 sub itemseen {
 	my ($itemnum) = @_;
 	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("update items set datelastseen  = now() where items.itemnumber = ?");
+	my $sth = $dbh->prepare("update items set itemlost=0, datelastseen  = now() where items.itemnumber = ?");
 	$sth->execute($itemnum);
 	return;
 }
@@ -201,7 +201,7 @@ fields from the reserves table of the Koha database.
 
 =cut
 
-#'
+
 sub getpatroninformation {
 # returns
 	my ($env, $borrowernumber,$cardnumber) = @_;
@@ -218,7 +218,6 @@ sub getpatroninformation {
 		$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
 		return();
 	}
-# 	$env->{'mess'} = $query;
 	my $borrower = $sth->fetchrow_hashref;
 	my $amount = checkaccount($env, $borrowernumber, $dbh);
 	$borrower->{'amountoutstanding'} = $amount;
@@ -788,234 +787,6 @@ sub issuebook {
 	}
 }
 
-# TO BE DELETED
-sub issuebook2 {
-	my ($env, $patroninformation, $barcode, $responses, $date) = @_;
-	my $dbh = C4::Context->dbh;
-	my $iteminformation = getiteminformation($env, 0, $barcode);
-	my ($datedue);
-	my ($rejected,$question,$defaultanswer,$questionnumber, $noissue);
-	my $message;
-
-	# See if there's any reason this book shouldn't be issued to this
-	# patron.
-	SWITCH: {	# FIXME - Yes, we know it's a switch. Tell us what it's for.
-		if ($patroninformation->{'gonenoaddress'}) {
-			$rejected="Patron is gone, with no known address.";
-			last SWITCH;
-		}
-		if ($patroninformation->{'lost'}) {
-			$rejected="Patron's card has been reported lost.";
-			last SWITCH;
-		}
-		if ($patroninformation->{'debarred'}) {
-			$rejected="Patron is Debarred";
-			last SWITCH;
-		}
-		my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
-		# FIXME - "5" shouldn't be hardcoded. An Italian library might
-		# be generous enough to lend a book to a patron even if he
-		# does still owe them 5 lire.
-		if ($amount > 5 && $patroninformation->{'categorycode'} ne 'L' &&
-								$patroninformation->{'categorycode'} ne 'W' &&
-								$patroninformation->{'categorycode'} ne 'I' &&
-								$patroninformation->{'categorycode'} ne 'B' &&
-								$patroninformation->{'categorycode'} ne 'P') {
-		# FIXME - What do these category codes mean?
-		$rejected = sprintf "Patron owes \$%.02f.", $amount;
-		last SWITCH;
-		}
-		# FIXME - This sort of error-checking should be placed closer
-		# to the test; in this case, this error-checking should be
-		# done immediately after the call to &getiteminformation.
-		unless ($iteminformation) {
-			$rejected = "$barcode is not a valid barcode.";
-			last SWITCH;
-		}
-		if ($iteminformation->{'notforloan'} == 1) {
-			$rejected="Item not for loan.";
-			last SWITCH;
-		}
-		if ($iteminformation->{'wthdrawn'} == 1) {
-			$rejected="Item withdrawn.";
-			last SWITCH;
-		}
-		if ($iteminformation->{'restricted'} == 1) {
-			$rejected="Restricted item.";
-			last SWITCH;
-		}
-		if ($iteminformation->{'itemtype'} eq 'REF') {
-			$rejected="Reference item:  Not for loan.";
-			last SWITCH;
-		}
-		my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-		if ($currentborrower eq $patroninformation->{'borrowernumber'}) {
-	# Already issued to current borrower. Ask whether the loan should
-	# be renewed.
-			my ($renewstatus) = renewstatus($env,$dbh,$patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
-			if ($renewstatus == 0) {
-				$rejected="No more renewals allowed for this item.";
-				last SWITCH;
-			} else {
-				if ($responses->{4} eq '') {
-					$questionnumber = 4;
-					$question = "Book is issued to this borrower.\nRenew?";
-					$defaultanswer = 'Y';
-					last SWITCH;
-				} elsif ($responses->{4} eq 'Y') {
-					my ($charge,$itemtype) = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
-					if ($charge > 0) {
-						createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
-						$iteminformation->{'charge'} = $charge;
-					}
-					&UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$patroninformation->{'borrowernumber'});
-					renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
-					$noissue=1;
-				} else {
-					$rejected="Item on issue to this borrower, and you have chosen not to renew";
-					last SWITCH;
-				}
-			}
-		} elsif ($currentborrower ne '') {
-			# This book is currently on loan, but not to the person
-			# who wants to borrow it now.
-			my ($currborrower, $cbflags) = getpatroninformation($env,$currentborrower,0);
-			if ($responses->{1} eq '') {
-				$questionnumber=1;
-				$question = "Issued to $currborrower->{'firstname'} $currborrower->{'surname'} ($currborrower->{'cardnumber'}).\nMark as returned?";
-				$defaultanswer='Y';
-				last SWITCH;
-			} elsif ($responses->{1} eq 'Y') {
-				returnbook($iteminformation->{'barcode'}, $env->{'branchcode'});
-			} else {
-				$rejected="Item on issue to another borrower, and you have chosen not to return it";
-				last SWITCH;
-			}
-		}
-
-		# See if the item is on reserve.
-		my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
-		if ($restype) {
-			my $resbor = $res->{'borrowernumber'};
-			if ($resbor eq $patroninformation->{'borrowernumber'}) {
-				# The item is on reserve to the current patron
-				FillReserve($res);
-			} elsif ($restype eq "Waiting") {
-				# The item is on reserve and waiting, but has been
-				# reserved by some other patron.
-				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-				my $branches = getbranches();
-				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				if ($responses->{2} eq '' && $responses->{3} eq '') {
-					$questionnumber=2;
-					# FIXME - Assumes HTML
-					$question="<font color=red>Waiting</font> for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) at $branchname \nAllow issue?";
-					$defaultanswer='N';
-					last SWITCH;
-				} elsif ($responses->{2} eq 'N') {
-					$rejected="Issue cancelled";
-					last SWITCH;
-				} else {
-					if ($responses->{3} eq '') {
-						$questionnumber=3;
-						$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
-						$defaultanswer='N';
-						last SWITCH;
-					} elsif ($responses->{3} eq 'Y') {
-						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
-					}
-
-}
-			} elsif ($restype eq "Reserved") {
-				# The item is on reserve for someone else.
-				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
-				my $branches = getbranches();
-				my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
-				if ($responses->{5} eq '' && $responses->{7} eq '') {
-					$questionnumber=5;
-					$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $res->{'reservedate'} \nAllow issue?";
-					$defaultanswer='N';
-					if ($responses->{6} eq 'Y') {
-					   my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
-					   transferbook($tobrcd,$barcode, 1);
-					   $message = "Item should now be waiting at $branchname";
-                                        }
-					last SWITCH;
-				} elsif ($responses->{5} eq 'N') {
-					if ($responses->{6} eq '') {
-						$questionnumber=6;
-						$question="Set reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) to waiting and transfer to $branchname?";
-						$defaultanswer='N';
-					} elsif ($responses->{6} eq 'Y') {
-						my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
-						transferbook($tobrcd, $barcode, 1);
-						$message = "Item should now be waiting at $branchname";
-					}
-					$rejected=-1;
-					last SWITCH;
-				} else {
-					if ($responses->{7} eq '') {
-						$questionnumber=7;
-						$question="Cancel reserve for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})?";
-						$defaultanswer='N';
-						last SWITCH;
-					} elsif ($responses->{7} eq 'Y') {
-						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
-					}
-				}
-			}
-		}
-	}
-    my $dateduef;
-    unless (($question) || ($rejected) || ($noissue)) {
-		# There's no reason why the item can't be issued.
-		# FIXME - my $loanlength = $iteminformation->{loanlength} || 21;
-		my $loanlength=21;
-		if ($iteminformation->{'loanlength'}) {
-			$loanlength=$iteminformation->{'loanlength'};
-		}
-		my $ti=time;		# FIXME - Never used
-		my $datedue=time+($loanlength)*86400;
-		# FIXME - Could just use POSIX::strftime("%Y-%m-%d", localtime);
-		# That's what it's for. Or, in this case:
-		#	$dateduef = $env->{datedue} ||
-		#		strftime("%Y-%m-%d", localtime(time +
-		#				     $loanlength * 86400));
-		my @datearr = localtime($datedue);
-		$dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-		if ($env->{'datedue'}) {
-			$dateduef=$env->{'datedue'};
-		}
-		$dateduef=~ s/2001\-4\-25/2001\-4\-26/;
-			# FIXME - What's this for? Leftover from debugging?
-
-		# Record in the database the fact that the book was issued.
-		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values (?,?,?,?)");
-		$sth->execute($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, $dateduef, $env->{'branchcode'});
-		$sth->finish;
-		$iteminformation->{'issues'}++;
-		$sth=$dbh->prepare("update items set issues=? where itemnumber=?");
-		$sth->execute($iteminformation->{'issues'},$iteminformation->{'itemnumber'});
-		$sth->finish;
-		&itemseen($iteminformation->{'itemnumber'});
-		# If it costs to borrow this book, charge it to the patron's account.
-		my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'});
-		if ($charge > 0) {
-			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
-			$iteminformation->{'charge'}=$charge;
-		}
-		# Record the fact that this book was issued.
-		&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$patroninformation->{'borrowernumber'});
-	}
-
-	if ($iteminformation->{'charge'}) {
-		$message=sprintf "Rental charge of \$%.02f applies.", $iteminformation->{'charge'};
-	}
-	return ($iteminformation, $dateduef, $rejected, $question, $questionnumber, $defaultanswer, $message);
-}
-
-
-
 =head2 returnbook
 
   ($doreturn, $messages, $iteminformation, $borrower) =
@@ -1066,7 +837,6 @@ patron who last borrowed the book.
 
 =cut
 
-#'
 # FIXME - This API is bogus. There's no need to return $borrower and
 # $iteminformation; the caller can ask about those separately, if it
 # cares (it'd be inefficient to make two database calls instead of
@@ -1079,10 +849,12 @@ patron who last borrowed the book.
 # $C4::Circulation::Circ2::errmsg to indicate the error. Or it can
 # return undef for success, and an error message on error (though this
 # is more C-ish than Perl-ish).
+
 sub returnbook {
 	my ($barcode, $branch) = @_;
 	my %env;
 	my $messages;
+	my $dbh = C4::Context->dbh;
 	my $doreturn = 1;
 	die '$branch not defined' unless defined $branch; # just in case (bug 170)
 	# get information on item
@@ -1111,7 +883,8 @@ sub returnbook {
 	# update issues, thereby returning book (should push this out into another subroutine
 	my ($borrower) = getpatroninformation(\%env, $currentborrower, 0);
 	if ($doreturn) {
-		doreturn($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+		my $sth = $dbh->prepare("update issues set returndate = now() where (borrowernumber = ?) and (itemnumber = ?) and (returndate is null)");
+		$sth->execute($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 		$messages->{'WasReturned'} = 1; # FIXME is the "= 1" right?
 	}
 	($borrower) = getpatroninformation(\%env, $currentborrower, 0);
@@ -1122,8 +895,6 @@ sub returnbook {
 	}
 	# fix up the accounts.....
 	if ($iteminformation->{'itemlost'}) {
-		# Mark the item as not being lost.
-		updateitemlost($iteminformation->{'itemnumber'});
 		fixaccountforlostandreturned($iteminformation, $borrower);
 		$messages->{'WasLost'} = 1; # FIXME is the "= 1" right?
 	}
@@ -1142,47 +913,25 @@ sub returnbook {
 	return ($doreturn, $messages, $iteminformation, $borrower);
 }
 
-# doreturn
-# Takes a borrowernumber and an itemnuber.
-# Updates the 'issues' table to mark the item as returned (assuming
-# that it's currently on loan to the given borrower. Otherwise, the
-# item remains on loan.
-# Updates items.datelastseen for the item.
-# Not exported
-# FIXME - This is only used in &returnbook. Why make it into a
-# separate function? (is this a recognizable step in the return process? - acli)
-sub doreturn {
-	my ($brn, $itm) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("update issues set returndate = now() where (borrowernumber = ?)
-		and (itemnumber = ?) and (returndate is null)");
-	$sth->execute($brn,$itm);
-	$sth->finish;
-	&itemseen($itm);
-	return;
-}
+=head2 fixaccountforlostandreturned
 
-# updateitemlost
-# Marks an item as not being lost.
-# Not exported
-sub updateitemlost{
-	my ($itemno)=@_;
-	my $dbh = C4::Context->dbh;
+	&fixaccountforlostandreturned($iteminfo,$borrower);
 
-	my $sth = $dbh->prepare("UPDATE items SET itemlost = 0 WHERE	itemnumber =?");
-	$sth->execute($itemno);
-	$sth->finish();
-}
+Calculates the charge for a book lost and returned (Not exported & used only once)
 
-# Not exported
+C<$iteminfo> is a hashref to iteminfo. Only {itemnumber} is used.
+
+C<$borrower> is a hashref to borrower. Only {borrowernumber is used.
+
+=cut
+
 sub fixaccountforlostandreturned {
 	my ($iteminfo, $borrower) = @_;
 	my %env;
 	my $dbh = C4::Context->dbh;
 	my $itm = $iteminfo->{'itemnumber'};
 	# check for charge made for lost book
-	my $sth = $dbh->prepare("select * from accountlines where (itemnumber = ?)
-				and (accounttype='L' or accounttype='Rep') order by date desc");
+	my $sth = $dbh->prepare("select * from accountlines where (itemnumber = ?) and (accounttype='L' or accounttype='Rep') order by date desc");
 	$sth->execute($itm);
 	if (my $data = $sth->fetchrow_hashref) {
 	# writeoff this amount
@@ -1259,7 +1008,18 @@ sub fixaccountforlostandreturned {
 	return;
 }
 
-# Not exported
+=head2 fixoverdueonreturn
+
+	&fixoverdueonreturn($brn,$itm);
+
+??
+
+C<$brn> borrowernumber
+
+C<$itm> itemnumber
+
+=cut
+
 sub fixoverduesonreturn {
 	my ($brn, $itm) = @_;
 	my $dbh = C4::Context->dbh;
@@ -1453,7 +1213,7 @@ sub checkreserve {
 	return ($resbor,$resrec);
 }
 
-=item currentissues
+=head2 currentissues
 
   $issues = &currentissues($env, $borrower);
 
@@ -1556,7 +1316,7 @@ sub currentissues {
 	return(\%currentissues);
 }
 
-=item getissues
+=head2 getissues
 
   $issues = &getissues($borrowernumber);
 
@@ -1650,20 +1410,53 @@ sub checkwaiting {
 	return ($cnt,\@itemswaiting);
 }
 
-# FIXME - This is identical to &C4::Circulation::Renewals::renewstatus.
-# Pick one and stick with it.
+=head2 renewstatus
+
+  $ok = &renewstatus($env, $dbh, $borrowernumber, $itemnumber);
+
+Find out whether a borrowed item may be renewed.
+
+C<$env> is ignored.
+
+C<$dbh> is a DBI handle to the Koha database.
+
+C<$borrowernumber> is the borrower number of the patron who currently
+has the item on loan.
+
+C<$itemnumber> is the number of the item to renew.
+
+C<$renewstatus> returns a true value iff the item may be renewed. The
+item must currently be on loan to the specified borrower; renewals
+must be allowed for the item's type; and the borrower must not have
+already renewed the loan.
+
+=cut
+
 sub renewstatus {
-# Stolen from Renewals.pm
   # check renewal status
-  my ($env,$dbh,$bornum,$itemno)=@_;
+  # FIXME - Two people can't borrow the same book at once, so
+  # presumably we can get $bornum from $itemno.
+  my ($env,$bornum,$itemno)=@_;
+  my $dbh = C4::Context->dbh;
   my $renews = 1;
   my $renewokay = 0;
+  # Look in the issues table for this item, lent to this borrower,
+  # and not yet returned.
+
+  # FIXME - I think this function could be redone to use only one SQL
+  # call.
   my $sth1 = $dbh->prepare("select * from issues
     where (borrowernumber = ?)
-    and (itemnumber = ?)
+    and (itemnumber = ?')
     and returndate is null");
   $sth1->execute($bornum,$itemno);
   if (my $data1 = $sth1->fetchrow_hashref) {
+    # Found a matching item
+
+    # See if this item may be renewed. This query is convoluted
+    # because it's a bit messy: given the item number, we need to find
+    # the biblioitem, which gives us the itemtype, which tells us
+    # whether it may be renewed.
     my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
        where (items.itemnumber = ?)
        and (items.biblioitemnumber = biblioitems.biblioitemnumber)
@@ -1681,13 +1474,47 @@ sub renewstatus {
   return($renewokay);
 }
 
+=head2 renewbook
+
+  &renewbook($env, $borrowernumber, $itemnumber, $datedue);
+
+Renews a loan.
+
+C<$env-E<gt>{branchcode}> is the code of the branch where the
+renewal is taking place.
+
+C<$env-E<gt>{usercode}> is the value to log in C<statistics.usercode>
+in the Koha database.
+
+C<$borrowernumber> is the borrower number of the patron who currently
+has the item.
+
+C<$itemnumber> is the number of the item to renew.
+
+C<$datedue> can be used to set the due date. If C<$datedue> is the
+empty string, C<&renewbook> will calculate the due date automatically
+from the book's item type. If you wish to set the due date manually,
+C<$datedue> should be in the form YYYY-MM-DD.
+
+=cut
+
 sub renewbook {
-# Stolen from Renewals.pm
   # mark book as renewed
-  my ($env,$dbh,$bornum,$itemno,$datedue)=@_;
-  $datedue=$env->{'datedue'};
+  # FIXME - A book can't be on loan to two people at once, so
+  # presumably we can get $bornum from $itemno.
+  my ($env,$bornum,$itemno,$datedue)=@_;
+  my $dbh = C4::Context->dbh;
+
+  # If the due date wasn't specified, calculate it by adding the
+  # book's loan length to today's date.
   if ($datedue eq "" ) {
-    my $loanlength=21;
+    #debug_msg($env, "getting date");
+    my $loanlength=21;		# Default loan length?
+				# FIXME - This is bogus. If there's no
+				# loan length defined for some book
+				# type or whatever, then that should
+				# be an error
+    # Find this item's item type, via its biblioitem.
     my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes
        where (items.itemnumber = ?)
        and (biblioitems.biblioitemnumber = items.biblioitemnumber)
@@ -1697,73 +1524,107 @@ sub renewbook {
       $loanlength = $data->{'loanlength'}
     }
     $sth->finish;
-    my $ti = time;
+    my $ti = time;		# FIXME - Unused
+    # FIXME - Use
+    #	POSIX::strftime("%Y-%m-%d", localtime(time + ...));
     my $datedu = time + ($loanlength * 86400);
     my @datearr = localtime($datedu);
     $datedue = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   }
-  my @date = split("-",$datedue);
-  my $odatedue = ($date[2]+0)."-".($date[1]+0)."-".$date[0];
+
+  # Find the issues record for this book
   my $sth=$dbh->prepare("select * from issues where borrowernumber=? and
     itemnumber=? and returndate is null");
   $sth->execute($bornum,$itemno);
   my $issuedata=$sth->fetchrow_hashref;
+	# FIXME - Error-checking
   $sth->finish;
+
+  # Update the issues record to have the new due date, and a new count
+  # of how many times it has been renewed.
   my $renews = $issuedata->{'renewals'} +1;
   $sth=$dbh->prepare("update issues
     set date_due = ?, renewals = ?
     where borrowernumber=? and
     itemnumber=? and returndate is null");
-
   $sth->execute($datedue,$renews,$bornum,$itemno);
   $sth->finish;
-  return($odatedue);
+
+  # Log the renewal
+  UpdateStats($env,$env->{'branchcode'},'renew','','',$itemno);
+
+  # Charge a new rental fee, if applicable?
+  my ($charge,$type)=calc_charges($env, $itemno, $bornum);
+  if ($charge > 0){
+    my $accountno=getnextacctno($env,$bornum,$dbh);
+    my $item=getiteminformation($env, $itemno);
+    $sth=$dbh->prepare("Insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+						values (?,?,now(),?,?,?,?,?)");
+    $sth->execute($bornum,$accountno,$charge,"Renewal of Rental Item $item->{'title'} $item->{'barcode'}",'Rent',$charge,$itemno);
+    $sth->finish;
+#     print $account;
+  }
+
+#  return();
 }
 
-# FIXME - This is almost, but not quite, identical to
-# &C4::Circulation::Issues::calc_charges and
-# &C4::Circulation::Renewals2::calc_charges.
-# Pick one and stick with it.
+
+
+=item calc_charges
+
+  ($charge, $item_type) = &calc_charges($env, $itemnumber, $borrowernumber);
+
+Calculate how much it would cost for a given patron to borrow a given
+item, including any applicable discounts.
+
+C<$env> is ignored.
+
+C<$itemnumber> is the item number of item the patron wishes to borrow.
+
+C<$borrowernumber> is the patron's borrower number.
+
+C<&calc_charges> returns two values: C<$charge> is the rental charge,
+and C<$item_type> is the code for the item's item type (e.g., C<VID>
+if it's a video).
+
+=cut
+
 sub calc_charges {
-# Stolen from Issues.pm
-# calculate charges due
-    my ($env, $dbh, $itemno, $bornum)=@_;
-#    if (!$dbh){
-#      $dbh=C4Connect();
-#    }
-    my $charge=0;
-#    open (FILE,">>/tmp/charges");
-    my $item_type;
-    my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
-    where (items.itemnumber =?)
-    and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-    and (biblioitems.itemtype = itemtypes.itemtype)");
-#    print FILE "$q1\n";
-    $sth1->execute($itemno);
-    if (my $data1=$sth1->fetchrow_hashref) {
-	$item_type = $data1->{'itemtype'};
-	$charge = $data1->{'rentalcharge'};
-#	print FILE "charge is $charge\n";
-	my $sth2=$dbh->prepare("select rentaldiscount from borrowers,categoryitem
-	where (borrowers.borrowernumber = ?)
-	and (borrowers.categorycode = categoryitem.categorycode)
-	and (categoryitem.itemtype = ?)");
-#	warn $q2;
-	$sth2->execute($bornum,$item_type);
-	if (my $data2=$sth2->fetchrow_hashref) {
-	    my $discount = $data2->{'rentaldiscount'};
-#	    print FILE "discount is $discount";
-	    if ($discount eq 'NULL') {
-	      $discount=0;
-	    }
-	    $charge = ($charge *(100 - $discount)) / 100;
-	}
-	$sth2->finish;
+  # calculate charges due
+  my ($env, $itemno, $bornum)=@_;
+  my $charge=0;
+  my $dbh = C4::Context->dbh;
+  my $item_type;
+
+  # Get the book's item type and rental charge (via its biblioitem).
+  my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
+  						 where (items.itemnumber =?)
+						 		and (biblioitems.biblioitemnumber = items.biblioitemnumber)
+								and (biblioitems.itemtype = itemtypes.itemtype)");
+  $sth1->execute($itemno);
+  # FIXME - Why not just use fetchrow_array?
+  if (my $data1=$sth1->fetchrow_hashref) {
+    $item_type = $data1->{'itemtype'};
+    $charge = $data1->{'rentalcharge'};
+
+    # Figure out the applicable rental discount
+    my $sth2=$dbh->prepare("select rentaldiscount from
+    borrowers,categoryitem
+    where (borrowers.borrowernumber = ?)
+    and (borrowers.categorycode = categoryitem.categorycode)
+    and (categoryitem.itemtype = ?)");
+    $sth2->execute($bornum,$item_type);
+    if (my$data2=$sth2->fetchrow_hashref) {
+      my $discount = $data2->{'rentaldiscount'};
+      $charge *= (100 - $discount) / 100;
     }
-    $sth1->finish;
-#    close FILE;
-    return ($charge, $item_type);
+    $sth2->finish;
+  }
+  $sth1->finish;
+#  print "item $item_type";
+  return ($charge,$item_type);
 }
+
 
 # FIXME - A virtually identical function appears in
 # C4::Circulation::Issues. Pick one and stick with it.

@@ -141,10 +141,6 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-#	my $sth=$dbh->prepare("select count(*) as total from categoryitem where itemtype='$itemtype'");
-#	$sth->execute;
-#	my $total = $sth->fetchrow_hashref;
-#	$sth->finish;
 	my $sth=$dbh->prepare("select bookfundid,bookfundname,bookfundgroup from aqbookfund where bookfundid=?");
 	$sth->execute($bookfundid);
 	my $data=$sth->fetchrow_hashref;

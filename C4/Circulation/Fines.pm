@@ -89,14 +89,14 @@ sub Getoverdues{
 
 Calculates the fine for a book.
 
-The categoryitems table in the Koha database is a fine matrix, listing
-the penalties for each type of patron for each type of item (e.g., the
+The issuingrules table in the Koha database is a fine matrix, listing
+the penalties for each type of patron for each type of item and each branch (e.g., the
 standard fine for books might be $0.50, but $1.50 for DVDs, or staff
 members might get a longer grace period between the first and second
 reminders that a book is overdue).
 
 The fine is calculated as follows: if it is time for the first
-reminder, the fine is the value listed for the given (item type,
+reminder, the fine is the value listed for the given (branch, item type,
 borrower code) combination. If it is time for the second reminder, the
 fine is doubled. Finally, if it is time to send the account to a
 collection agency, the fine is set to 5 local monetary units (a really

@@ -143,7 +143,7 @@ if ($op eq 'add_form') {
 
 	# Check both categoryitem and biblioitems, see Bug 199
 	my $total = 0;
-	for my $table ('categoryitem', 'biblioitems') {
+	for my $table ('issuingrules', 'biblioitems') {
 	   my $sth=$dbh->prepare("select count(*) as total from $table where itemtype=?");
 	   $sth->execute($itemtype);
 	   $total += $sth->fetchrow_hashref->{total};

@@ -92,7 +92,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode=?");
+		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,reservefee,overduenoticerequired from categories where categorycode=?");
 		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -106,7 +106,6 @@ if ($op eq 'add_form') {
                                 bulk                    => $data->{'bulk'},
                                 enrolmentfee            => $data->{'enrolmentfee'},
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
-                                issuelimit              => $data->{'issuelimit'},
                                 reservefee              => $data->{'reservefee'});
 
 
@@ -117,8 +116,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired) values (?,?,?,?,?,?,?,?,?,?,?)");
-	$sth->execute(map {$input->param($_)} ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','finetype','bulk','enrolmentfee','issuelimit','reservefee','overduenoticerequired'));
+	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,reservefee,overduenoticerequired) values (?,?,?,?,?,?,?,?,?,?)");
+	$sth->execute(map {$input->param($_)} ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','finetype','bulk','enrolmentfee','reservefee','overduenoticerequired'));
 	$sth->finish;
 	print "data recorded";
 	print "<form action='$script_name' method=post>";
@@ -135,7 +134,7 @@ if ($op eq 'add_form') {
 	my $total = $sth->fetchrow_hashref;
 	print "TOTAL : $categorycode : $total->{'total'}<br>";
 	$sth->finish;
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,issuelimit,reservefee,overduenoticerequired from categories where categorycode=?");
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,finetype,bulk,enrolmentfee,reservefee,overduenoticerequired from categories where categorycode=?");
 	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -148,7 +147,6 @@ if ($op eq 'add_form') {
                                 bulk                    => $data->{'bulk'},
                                 enrolmentfee            => $data->{'enrolmentfee'},
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
-                                issuelimit              => $data->{'issuelimit'},
                                 reservefee              => $data->{'reservefee'});
 
 													# END $OP eq DELETE_CONFIRM
@@ -178,7 +176,6 @@ if ($op eq 'add_form') {
                                 bulk => $results->[$i]{'bulk'},
                                 enrolmentfee => $results->[$i]{'enrolmentfee'},
                                 overduenoticerequired => $results->[$i]{'overduenoticerequired'},
-                                issuelimit => $results->[$i]{'issuelimit'},
                                 reservefee => $results->[$i]{'reservefee'},
 				toggle => $toggle );
                 push @loop, \%row;
