@@ -22,20 +22,23 @@
 	<td><font size="4">To add a new biblio/item, scan or type the ISBN/ISSN number:</font></td>
 	</tr>
 </table>
-<table cellpadding="3" border=0 width="100%">
-	<tr valign="top">
-	<form action="isbnsearch.pl">
-		<td width="5%">ISBN:</td>
-		<td width="20%"><input type="text" name="isbn" /></td>
-		<td width="10%"><input type="submit" value="Go" /></td>
-		<td>If the ISBN is found into the biblio table, it will be retrieved and can be modified.<br/>
-				If the ISBN is found into the breeding farm, it will be retrieved. and a biblio added.<br/>
-				Otherwise, a biblio can be added from scratch.</td>
-	</form>
-	</tr>
-	<tr><td>&nbsp;</td>
-		<td colspan=2><a href=addbiblio.pl>Add biblio without ISBN/ISSN</a></td></tr>
-</table>
+<form action="isbnsearch.pl">
+	<table cellpadding="3" border=0 width="100%">
+		<tr valign="top">
+			<td width="5%">ISBN:</td>
+			<td width="20%"><input type="text" name="isbn" /></td>
+			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
+			<td rowspan=2>If the ISBN is found into the biblio table, it will be retrieved and can be modified.<br/>
+					If the ISBN is found into the breeding farm, it will be retrieved. and a biblio added.<br/>
+					Otherwise, a biblio can be added from scratch.</td>
+		</tr>
+			<td width="5%">Title</td>
+			<td width="20%"><input type="text" name="title" /></td>
+		</tr>
+		<tr><td>&nbsp;</td>
+			<td colspan=2><a href=addbiblio.pl>Add biblio without ISBN/ISSN</a></td></tr>
+	</table>
+</form>
 
 <p />
 <p />
@@ -83,22 +86,5 @@
 	</tr>
 	</table>
 </FORM>
-
-<p />
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-		<td><FONT SIZE=4>Help</font></td>
-	</tr>
-</table>
-<FONT SIZE=5>Koha stores data in three sections</font>
-<p />
-<h2>Biblio</h2>
-The first section records bibliographic data such as title, author and copyright for a particular work.
-<p />
-<h2>Group</h2>
-The second records bibliographic data for a particular publication of that work, such as ISBN number, physical description, publisher information, etc
-<p />
-<h2>Item</h2>
-The third section holds specific item information, such as the bar code number
 <p />
 <TMPL_INCLUDE NAME="acquisitions-bottom.inc">

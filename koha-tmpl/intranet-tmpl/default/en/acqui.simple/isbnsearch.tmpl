@@ -2,30 +2,64 @@
 
 <font size="6"><em>Biblio Search Results</em></font><br />
 <CENTER>
-You searched on <b>ISBN <TMPL_VAR name="isbn">,</b> <TMPL_VAR name="count"> results found <br />
+You searched on <b><TMPL_IF name="isbn">ISBN <TMPL_VAR name="isbn"></TMPL_IF><TMPL_IF name="title">title <TMPL_VAR name="title"></TMPL_IF></b><br />
+						<TMPL_VAR name="count"> results found <br />
 Results <TMPL_VAR name="showoffset"> to <TMPL_VAR name="total"> displayed
-<div align="right">
-<h2><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Add New Biblio</a></h2>
-</div>
 <p />
-<table border="0" cellspacing="0" cellpadding="5">
-<tr valign=top bgcolor=#ffcc00>
-<td><b>TITLE</b></td>
-<td><b>AUTHOR</b></td>
-<td><b>&copy;</b></td>
-<td><b>Items</b></td>
 
-</tr>
-
-<TMPL_LOOP name="loop">
-	<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
-	<td><TMPL_VAR name="title"></a>
-	<td><TMPL_VAR name="author"></td>
-	<td><TMPL_VAR name="copyrightdate"></td>
-	<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Biblios in koha</font></td>
 	</tr>
-</TMPL_LOOP>
 </table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>Title</b></td>
+		<td><b>Author</b></td>
+		<td><b>&copy;</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<TMPL_LOOP name="loop">
+		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
+			<td><TMPL_VAR name="title"></a>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="copyrightdate"></td>
+			<td><a href="addbiblio.pl?oldbiblionumber=<TMPL_VAR name="biblionumber">">Edit...</a></td>
+		</tr>
+	</TMPL_LOOP>
+</table>
+<br />
+<table width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Biblios in breeding farm</font></td>
+	</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="5" width="80%">
+	<tr valign=top bgcolor=#ffcc00>
+		<td><b>Title</b></td>
+		<td><b>Author</b></td>
+		<td><b>ISBN</b></td>
+		<td><b>coming from</b></td>
+		<td><b>&nbsp;</b></td>
+		<td>&nbsp;</td>
+	</tr>
+	<TMPL_LOOP name="breeding_loop">
+		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
+			<td><TMPL_VAR name="title"></a>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="isbn"></td>
+			<td><TMPL_VAR name="file"></td>
+			<td><a href="addbiblio.pl?breedingid=<TMPL_VAR name="id">">Add biblio</a></td>
+		</tr>
+	</TMPL_LOOP>
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td><a href="addbiblio.pl?isbn=<TMPL_VAR name="isbn">">Add New Biblio</a></td>
+	</tr>
+</table>
+
 <br />
 <TMPL_LOOP name="loop_links">
 	<a href="isbnsearch.pl?isbn=<TMPL_VAR name="isbn">&offset=<TMPL_VAR name="newoffset">&num=<TMPL_VAR name="num">"><TMPL_VAR name="shownumber"></a>

@@ -86,8 +86,9 @@ if ($uploadmarc && length($uploadmarc)>0) {
 	my $dbh = C4::Context->dbh;
 	my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
 	my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
-	my $searchbreeding = $dbh->prepare("select isbn from marc_breeding where isbn=?");
-	my $insertsql = $dbh->prepare("replace into marc_breeding (file,isbn,title,marc) values(?,?,?,?)");
+	my $searchbreeding = $dbh->prepare("select id from marc_breeding where isbn=?");
+	my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc) values(?,?,?,?,?)");
+	my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=? where id=?");
 	# fields used for import results
 	my $imported=0;
 	my $alreadyindb = 0;
@@ -99,42 +100,44 @@ if ($uploadmarc && length($uploadmarc)>0) {
 			$notmarcrecord++;
 		} else {
 			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord);
+			$oldbiblio->{title} = char_decode($oldbiblio->{title});
+			$oldbiblio->{author} = char_decode($oldbiblio->{author});
 			# if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
-			if ($oldbiblio->{isbn} || $oldbiblio->{issn}) {
-				# drop every "special" char : spaces, - ...
-				$oldbiblio->{isbn} =~ s/ |-|\.//g,
-				# search if biblio exists
-				my $biblioitemnumber;
-				if ($oldbiblio->{isbn}) {
-					$searchisbn->execute($oldbiblio->{isbn});
-					($biblioitemnumber) = $searchisbn->fetchrow;
-				} else {
-					$searchissn->execute($oldbiblio->{issn});
-					($biblioitemnumber) = $searchissn->fetchrow;
-				}
-				if ($biblioitemnumber) {
-					$alreadyindb++;
-				} else {
-				# search in breeding farm
-				my $breedingresult;
-					if ($oldbiblio->{isbn}) {
-						$searchbreeding->execute($oldbiblio->{isbn});
-						($breedingresult) = $searchbreeding->fetchrow;
-					} else {
-						$searchbreeding->execute($oldbiblio->{issn});
-						($breedingresult) = $searchbreeding->fetchrow;
-					}
-					if (!$breedingresult || $overwrite_biblio) {
-						my $recoded;
-						$recoded = $marcrecord->as_usmarc();
-						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$oldbiblio->{title},$recoded);
-						$imported++;
-					} else {
-						$alreadyinfarm++;
-					}
-				}
+			# drop every "special" char : spaces, - ...
+			$oldbiblio->{isbn} =~ s/ |-|\.//g,
+			# search if biblio exists
+			my $biblioitemnumber;
+			if ($oldbiblio->{isbn}) {
+				$searchisbn->execute($oldbiblio->{isbn});
+				($biblioitemnumber) = $searchisbn->fetchrow;
 			} else {
-				$notmarcrecord++;
+				$searchissn->execute($oldbiblio->{issn});
+				($biblioitemnumber) = $searchissn->fetchrow;
+			}
+			if ($biblioitemnumber) {
+				$alreadyindb++;
+			} else {
+				# search in breeding farm
+				my $breedingid;
+				if ($oldbiblio->{isbn}) {
+					$searchbreeding->execute($oldbiblio->{isbn});
+					($breedingid) = $searchbreeding->fetchrow;
+				} else {
+					$searchbreeding->execute($oldbiblio->{issn});
+					($breedingid) = $searchbreeding->fetchrow;
+				}
+				if (!$breedingid || $overwrite_biblio) {
+					my $recoded;
+					$recoded = $marcrecord->as_usmarc();
+						if ($breedingid) {
+							$replacesql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$oldbiblio->{title},$oldbiblio->{author},$recoded,$breedingid);
+						} else {
+							$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$oldbiblio->{title},$oldbiblio->{author},$recoded);
+						}
+					$imported++;
+				} else {
+					$alreadyinfarm++;
+				}
 			}
 		}
 	}
@@ -803,6 +806,9 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.26  2003/01/23 12:26:41  tipaul
+# upgrading import in breeding farm (you can now search on ISBN or on title) AND character encoding.
+#
 # Revision 1.25  2003/01/21 08:13:50  tipaul
 # character encoding ISO646 => 8859-1, first draft
 #

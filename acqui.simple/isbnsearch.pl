@@ -30,6 +30,7 @@ use HTML::Template;
 
 my $input      = new CGI;
 my $isbn       = $input->param('isbn');
+my $title		= $input->param('title');
 my $offset     = $input->param('offset');
 my $num        = $input->param('num');
 my $showoffset = $offset + 1;
@@ -44,9 +45,10 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {catalogue => 1},
 			     debug => 1,
 			     });
-if (! $isbn) {
+if (! $isbn && !$title) {
 	print $input->redirect('addbooks.pl');
 } else {
+	# fill with books in ACTIVE DB (biblio)
 	if (! $offset) {
 		$offset     = 0;
 		$showoffset = 1;
@@ -84,11 +86,24 @@ if (! $isbn) {
 		$row_data{num} = $num;
 		push (@loop_links,\%row_data);
 	} # for
+	# fill with books in breeding farm
+	($count, @results) = breedingsearch($title,$isbn);
+	my @breeding_loop = ();
+	for (my $i=0; $i <= $#results; $i++) {
+		my %row_data;
+		$row_data{id} = $results[$i]->{'id'};
+		$row_data{isbn} = $results[$i]->{'isbn'};
+		$row_data{file} = $results[$i]->{'file'};
+		$row_data{title} = $results[$i]->{'title'};
+		$row_data{author} = $results[$i]->{'author'};
+		push (@breeding_loop, \%row_data);
+	}
 	$template->param(isbn => $isbn,
 							showoffset => $showoffset,
 							total => $total,
 							offset => $offset,
 							loop => \@loop_data,
+							breeding_loop => \@breeding_loop,
 							loop_links => \@loop_links);
 
 	print $input->header(
