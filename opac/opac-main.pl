@@ -26,6 +26,7 @@ my $CGIitemtype=CGI::scrolling_list( -name     => 'itemtype',
 			-size     => 1,
 			-multiple => 0 );
 $sth->finish;
+
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "opac-main.tmpl",
 			     type => "opac",
@@ -33,7 +34,8 @@ my ($template, $borrowernumber, $cookie)
 			     authnotrequired => 1,
 			     flagsrequired => {borrow => 1},
 			 });
-
 $template->param(CGIitemtype => $CGIitemtype,
+				suggestion => C4::Context->preference("suggestion"),
 );
+warn "X : ".C4::Context->preference("suggestion");
 output_html_with_http_headers $input, $cookie, $template->output;
