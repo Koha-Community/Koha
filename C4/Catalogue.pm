@@ -108,8 +108,8 @@ sub changeSubfield {
 # Also, currently, if more than one subfield matches the Record_ID, Tag,
 # Subfield_Mark, and Subfield_OldValue, only the first one will be modified.
 #
-# Might be nice to be able to pass a Subfield_ID directly to this routine to
-# remove ambiguity, if possible.
+# Might be nice to be able to pass a Subfield_ID or Subfield_Key directly to
+# this routine to remove ambiguity, if possible.
 #
 # Pass barcode to remove ambiguity for changes to individual items.  Look up
 # field link and sequence number based on barcode.
@@ -120,21 +120,41 @@ sub changeSubfield {
     my $Subfield_Mark=shift;
     my $Subfield_OldValue=shift;
     my $Subfield_Value=shift;
-    my $barcode=shift;
-    my $Subfield_ID;
+    my $Subfield_ID=shift;
+    my $Subfield_Key=shift;
     my $dbh=&C4Connect;  
-    my $sth=$dbh->prepare("select S.Subfield_ID, S.Subfield_Value from Bib_Table B, $firstdigit\XX_Tag_Table T, $firstdigit\XX_Subfield_Table S where B.Record_ID=$Record_ID and B.Tag_$firstdigit\XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and S.Subfield_Mark='$Subfield_Mark'");
-    $sth->execute;
-    while (my ($ID, $Value) = $sth->fetchrow) {
-	if ($Value eq $Subfield_OldValue) {
-	    my $q_Subfield_Value=$dbh->quote($Subfield_Value);
-	    my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_ID=$ID");
-	    $sti->execute;
-	    $Subfield_ID=$ID;
-	    last;
+    my $q_Subfield_Value=$dbh->quote($Subfield_Value);
+    if ($Subfield_Key) {
+	 # Great.  Subfield_Key makes the record absolutely unique.  Just make
+	 # the change
+	my $sth=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_Key=$Subfield_Key");
+	$sth->execute;
+    } elsif ($Subfield_ID) {
+	 # Subfield_ID does not make the record unique.  Could be multiple
+	 # records with the same mark.  This is a bad situatoin.
+	my $sth=$dbh->prepare("select Subfield_Key, Subfield_Value from $firstdigit\XX_Subfield_Table where Subfield_Mark='$Subfield_Mark' and Subfield_ID=$Subfield_ID");
+	$sth->execute;
+	while (my ($key, $Value) = $sth->fetchrow) {
+	    if ($Value eq $Subfield_OldValue) {
+		my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_Key=$key");
+		$sti->execute;
+		$Subfield_Key=$key;
+		last;
+	    }
+	}
+    } else {
+	my $sth=$dbh->prepare("select S.Subfield_Key, S.Subfield_ID, S.Subfield_Value from Bib_Table B, $firstdigit\XX_Tag_Table T, $firstdigit\XX_Subfield_Table S where B.Record_ID=$Record_ID and B.Tag_$firstdigit\XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and S.Subfield_Mark='$Subfield_Mark'");
+	$sth->execute;
+	while (my ($key, $ID, $Value) = $sth->fetchrow) {
+	    if ($Value eq $Subfield_OldValue) {
+		my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_Key=$key");
+		$sti->execute;
+		$Subfield_Key=$key;
+		last;
+	    }
 	}
     }
-    return($Subfield_ID);
+    return($Subfield_ID, $Subfield_Key);
 }
 
 sub updateBiblio {
@@ -234,10 +254,20 @@ sub updateBiblio {
 sub logchange {
 # Subroutine to log changes to databases
     my $database=shift;
-    my $section=shift;
-    my $item=shift;
-    my $original=shift;
-    my $new=shift;
+    if ($database eq 'kohadb') {
+	my $section=shift;
+	my $item=shift;
+	my $original=shift;
+	my $new=shift;
+	print "KOHA: $section $item $original $new\n";
+    } elsif ($database eq 'marc') {
+	my $tag=shift;
+	my $mark=shift;
+	my $subfield_ID=shift;
+	my $original=shift;
+	my $new=shift;
+	print "MARC: $tag $mark $subfield_ID $original $new\n";
+    }
 }
 
 sub addTag {
@@ -806,53 +836,55 @@ sub updateItem {
     $sth->execute;
     my $olditem=$sth->fetchrow_hashref;
     my $q_barcode=$dbh->quote($olditem->{'barcode'});
-    $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark='p' and Subfield_Value=$q_barcode");
+    $sth=$dbh->prepare("select S.Subfield_ID, B.Record_ID from 8XX_Subfield_Table S, 8XX_Tag_Table T, Bib_Table B where B.Tag_8XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and Subfield_Mark='p' and Subfield_Value=$q_barcode");
     $sth->execute;
-    my ($Subfield852_ID) = $sth->fetchrow;
-    $sth=$dbh->prepare("select Subfield_Value from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_ID=$Subfield852_ID");
+    my ($Subfield876_ID, $Record_ID) = $sth->fetchrow;
+    $sth=$dbh->prepare("select Subfield_Value from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_ID=$Subfield876_ID");
     $sth->execute;
     my ($link) = $sth->fetchrow;
-    $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_Value=$link");
+    $sth=$dbh->prepare("select Subfield_ID from 8XX_Subfield_Table where Subfield_Mark=8 and Subfield_Value=$link and !(Subfield_ID=$Subfield876_ID)");
     $sth->execute;
-    my ($Subfield876_ID) = $sth->fetchrow;
+    my ($Subfield852_ID) = $sth->fetchrow;
     
     if ($item->{'barcode'} ne $olditem->{'barcode'}) {
 	logchange('kohadb', 'items', 'barcode', $olditem->{'barcode'}, $item->{'barcode'});
 	my $q_barcode=$dbh->quote($item->{'barcode'});
 	my $sth=$dbh->prepare("update items set barcode=$q_barcode where itemnumber=$itemnumber");
-	logchange('marc', '876', 'p', $olditem->{'barcode'}, $item->{'barcode'});
-	($Subfield_ID) = changeSubfield($Record_ID, '876', 'p', $olditem->{'barcode'}, $item->{'barcode'});
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'p', $olditem->{'barcode'}, $item->{'barcode'}, $Subfield876_ID);
+	logchange('marc', '876', 'p', $Subfield_Key, $olditem->{'barcode'}, $item->{'barcode'});
     }
     if ($item->{'booksellerid'} ne $olditem->{'booksellerid'}) {
 	logchange('kohadb', 'items', 'booksellerid', $olditem->{'booksellerid'}, $item->{'booksellerid'});
 	my $q_booksellerid=$dbh->quote($item->{'booksellerid'});
 	my $sth=$dbh->prepare("update items set booksellerid=$q_booksellerid where itemnumber=$itemnumber");
-	logchange('marc', '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'});
-	changeSubfield($Record_ID, '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'});
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'e', $olditem->{'booksellerid'}, $item->{'booksellerid'}, $Subfield876_ID);
+	logchange('marc', '876', 'e', $Subfield_Key, $olditem->{'booksellerid'}, $item->{'booksellerid'});
     }
     if ($item->{'dateaccessioned'} ne $olditem->{'dateaccessioned'}) {
 	logchange('kohadb', 'items', 'dateaccessioned', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
 	my $q_dateaccessioned=$dbh->quote($item->{'dateaccessioned'});
 	my $sth=$dbh->prepare("update items set dateaccessioned=$q_dateaccessioned where itemnumber=$itemnumber");
-	logchange('marc', '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
-	changeSubfield($Record_ID, '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'd', $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'}, $Subfield876_ID);
+	logchange('marc', '876', 'd', $Subfield_Key, $olditem->{'dateaccessioned'}, $item->{'dateaccessioned'});
     }
     if ($item->{'homebranch'} ne $olditem->{'homebranch'}) {
-	# FIX ME!!!!  This really needs to check the field link and sequence
-	# number entry to make sure the right item is being modified!
-	# Use 876 p (piece designation) to ensure.
 	logchange('kohadb', 'items', 'homebranch', $olditem->{'homebranch'}, $item->{'homebranch'});
 	my $q_homebranch=$dbh->quote($item->{'homebranch'});
 	my $sth=$dbh->prepare("update items set homebranch=$q_homebranch where itemnumber=$itemnumber");
-	logchange('marc', '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'});
-	changeSubfield($Record_ID, '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'});
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'b', $olditem->{'homebranch'}, $item->{'homebranch'}, $Subfield876_ID);
+	logchange('marc', '876', 'b', $Subfield_Key, $olditem->{'homebranch'}, $item->{'homebranch'});
     }
     if ($item->{'holdingbranch'} ne $olditem->{'holdingbranch'}) {
 	logchange('kohadb', 'items', 'holdingbranch', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
 	my $q_holdingbranch=$dbh->quote($item->{'holdingbranch'});
 	my $sth=$dbh->prepare("update items set holdingbranch=$q_holdingbranch where itemnumber=$itemnumber");
-	logchange('marc', '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
-	changeSubfield($Record_ID, '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
+	$sth->execute;
+	my ($Subfield_ID, $Subfield_Key) = changeSubfield($Record_ID, '876', 'l', $olditem->{'holdingbranch'}, $item->{'holdingbranch'}, $Subfield876_ID);
+	logchange('marc', '876', 'l', $Subfield_Key, $olditem->{'holdingbranch'}, $item->{'holdingbranch'});
     }
 }
 
