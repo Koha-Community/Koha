@@ -6,6 +6,7 @@
 use C4::Acquisitions;
 use C4::Output;
 use C4::Search;
+use C4::Database;
 use CGI;
 use strict;
 
@@ -148,8 +149,27 @@ Shopping Basket For: $booksellers[0]->{'name'}
 </td>
 </tr>
 <TR VALIGN=TOP>
-<TD><A HREF="popbox.html" onclick="messenger(600,300,'ITEMTYPES<BR>ART = Art Print<BR>BCD = CD-ROM from book<BR>CAS = Cassette<BR>CD = Compact disc (WN)<BR>F = Free Fiction<BR>FVID = Free video<BR>FYA = Young Adult Fiction<BR>GWB = Get Well Bag<BR>HCVF = Horowhenua Collection Vertical File<BR>IL = Interloan<BR>JCF = Junior Castle Fiction<BR>JCNF = Junior Castle Non-fiction<BR>JF = Junior Fiction<BR>JHC = Junior Horowhenua Collection VF<BR>JIG = Jigsaw puzzle<BR>JK = Junior Kermit<BR>JNF = Junior Non-Fiction<BR>JPB = Junior Paperbacks<BR>JPC = Junior Picture Book<BR>JPER = Junior Periodical<BR>JREF = Junior Reference<BR>JVF = Junior Vertical File<BR>LP = Large Print<BR>MAP = Map<BR>NF = Adult NonFiction<BR>NFLP = NonFiction LargePrint<BR>NGA = Nga Pukapuka<BR>PAY = Pay Collection<BR>PB = Pamphlet Box<BR>PER = Periodical<BR>PHOT = Photograph<BR>POS = Junior Poster<BR>REF = Adult Reference<BR>ROM = CD-Rom<BR>STF = Stack Fiction<BR>STJ = Stack Junior<BR>STLP = Stack Large Print<BR>STNF = Stack Non-fiction<BR>TB = Talking Book<BR>TREF = Taonga<BR>VF = Vertical File<BR>VID = Video'); return false"><b>Format *</b></A></td>
-<td><input type=text size=20 name=format value=$data->{'itemtype'}>
+<TD>Format</td>
+<td>
+<select name=format size=1>
+printend
+;
+
+my $dbh=C4Connect;
+my $query="Select itemtype,description from itemtypes order by description";
+my $sth=$dbh->prepare($query);
+$sth->execute;
+print "<option value=\"\">Please choose:\n";
+while (my $data=$sth->fetchrow_hashref){
+  print "<option value=\"" . $data->{'itemtype'} . "\">" . $data->{'description'} . "\n";
+}
+$sth->finish;
+$dbh->disconnect;
+
+print <<printend
+</select>
+
+
 </td>
 </tr>
 <TR VALIGN=TOP>
@@ -182,7 +202,24 @@ print <<printend
 </tr>
 <TR VALIGN=TOP  bgcolor=#ffffcc>
 <TD >Item Barcode</td>
-<td><input type=text size=20 name=barcode>
+<td><input type=text size=20 name=barcode value=
+printend
+;
+
+my %systemprefs=systemprefs();
+if ($systemprefs{'autoBarcode'} eq '1') {
+  my $dbh=C4Connect;
+  my $query="Select barcode from items order by barcode desc";
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $data=$sth->fetchrow_hashref;
+  print $data->{'barcode'}+1;
+  $sth->finish;
+  $dbh->disconnect;
+}
+
+print <<printend
+>
 </td>
 </tr>
 </table>
