@@ -12,7 +12,7 @@
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
-			<input type="text" id="keyword" name="value" onchange="sql_update()"></td></tr>
+			<input type="text" id="keyword" name="value"> (<a href="<!-- TMPL_VAR NAME="SCRIP_NAME" -->" onclick="PopupSuggestion(); return false;">Suggestions</a>)</td></tr>
 		<tr><th><label for="resultsperpage">Results per page:</label></th><td><select align="right" name="resultsperpage" id="resultsperpage" size="1">
 				<option value="20">20</option>
 				<option value="50">50</option>
@@ -26,8 +26,7 @@
 				<option value="biblioitems.publishercode">Publisher</option>
 			</select></td></tr>
 		</table>		
-		<p><input type="submit" value="Start search" class="submit">
-			<a href="javascript:PopupSuggestion()" class="button catalogue">Suggestions</a></p>
+		<p><input type="submit" value="Start search" class="submit"></p>
 	</div>
 	<div>
 
