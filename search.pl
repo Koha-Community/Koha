@@ -45,65 +45,37 @@ if ($subject) {
 	$template = gettemplate("catalogue/searchresults.tmpl", 0);
 }
 
-my $env;
-$env->{itemcount}=1;
+# %env
+# Additional parameters for &catalogsearch
+my %env = (
+	itemcount	=> 1,	# If set to 1, &catalogsearch enumerates
+				# the results found and returns the number
+				# of items found, where they're located,
+				# etc.
+	);
 
 # get all the search variables
 # we assume that C4::Search will validate these values for us
-# FIXME - This whole section, up to the &catalogsearch call, is crying
-# out for
-#	foreach $search_term (qw(keyword subject author ...))
-#	{ ... }
-my %search;
-my $keyword=$query->param('keyword');
-$search{'keyword'}=$keyword;
+my %search;			# Search terms. If the key is "author",
+				# then $search{author} is the author the
+				# user is looking for.
 
-$search{'subject'}=$subject;
-my $author=$query->param('author');
-$search{'author'}=$author;
-$search{'authoresc'}=$author;
-#$search{'authorhtmlescaped'}=~s/ /%20/g;
-my $illustrator=$query->param('illustrator');
-$search{'param'}=$illustrator;
-my $itemnumber=$query->param('itemnumber');
-$search{'itemnumber'}=$itemnumber;
-my $isbn=$query->param('isbn');
-$search{'isbn'}=$isbn;
-my $datebefore=$query->param('date-before');
-$search{'date-before'}=$datebefore;
-my $class=$query->param('class');
-$search{'class'}=$class;
-my $dewey=$query->param('dewey');
-$search{'dewey'}=$dewey;
-my $branch=$query->param('branch');
-$search{'branch'}=$branch;
-my $title=$query->param('title');
-$search{'title'}=$title;
-my $abstract=$query->param('abstract');
-$search{'abstract'}=$abstract;
-my $publisher=$query->param('publisher');
-$search{'publisher'}=$publisher;
+my @forminputs;			# This is used in the form template.
 
-my $ttype=$query->param('ttype');
-$search{'ttype'}=$ttype;
+foreach my $term (qw(keyword subject author illustrator itemnumber
+		     isbn date-before class dewey branch title abstract
+		     publisher ttype))
+{
+	my $value = $query->param($term);
 
-my $forminputs;
-($keyword) && (push @$forminputs, { line => "keyword=$keyword"});
-($subject) && (push @$forminputs, { line => "subject=$subject"});
-($author) && (push @$forminputs, { line => "author=$author"});
-($illustrator) && (push @$forminputs, { line => "illustrator=$illustrator"});
-($itemnumber) && (push @$forminputs, { line => "itemnumber=$itemnumber"});
-($isbn) && (push @$forminputs, { line => "isbn=$isbn"});
-($datebefore) && (push @$forminputs, { line => "date-before=$datebefore"});
-($class) && (push @$forminputs, { line => "class=$class"});
-($dewey) && (push @$forminputs, { line => "dewey=$dewey"});
-($branch) && (push @$forminputs, { line => "branch=$branch"});
-($title) && (push @$forminputs, { line => "title=$title"});
-($ttype) && (push @$forminputs, { line => "ttype=$ttype"});
-($abstract) && (push @$forminputs, { line => "abstract=$abstract"});
-($publisher) && (push @$forminputs, { line => "publisher=$publisher"});
-($forminputs) || (@$forminputs=());
-$template->param(FORMINPUTS => $forminputs);
+	next unless defined $value && $value ne "";
+				# Skip blank search terms
+	$search{$term} = $value;
+	push @forminputs, { line => "$term=$value" };
+}
+
+$template->param(FORMINPUTS => \@forminputs);
+
 # whats this for?
 # I think it is (or was) a search from the "front" page...   [st]
 $search{'front'}=$query->param('front');
@@ -116,7 +88,7 @@ if (my $subject=$query->param('subjectitems')) {
     @results=subsearch(\$blah,$subject);
     $count=$#results+1;
 } else {
-    ($count,@results)=catalogsearch($env,'',\%search,$num,$startfrom);
+    ($count,@results)=catalogsearch(\%env,'',\%search,$num,$startfrom);
 }
 
 #my $resultsarray=\@results;
@@ -132,9 +104,9 @@ foreach my $result (@results) {
 ($resultsarray) || (@$resultsarray=());
 my $search="num=20";
 my $searchdesc='';
-if ($keyword){
-    $search .= "&keyword=$keyword";
-    $searchdesc.="keyword $keyword, ";
+if ($search{"keyword"}) {
+    $search .= "&keyword=$search{keyword}";
+    $searchdesc.="keyword $search{keyword}, ";
 }
 if (my $subjectitems=$query->param('subjectitems')){
     $search .= "&subjectitems=$subjectitems";
@@ -144,23 +116,23 @@ if ($subject){
     $search .= "&subject=$subject";
     $searchdesc.="subject $subject, ";
 }
-if ($author){
-    $search .= "&author=$author";
-    $searchdesc.="author $author, ";
+if ($search{"author"}){
+    $search .= "&author=$search{author}";
+    $searchdesc.="author $search{author}, ";
 }
-if ($class){
-    $search .= "&class=$class";
-    $searchdesc.="class $class, ";
+if ($search{"class"}){
+    $search .= "&class=$search{class}";
+    $searchdesc.="class $search{class}, ";
 }
-if ($title){
-    $search .= "&title=$title";
-    $searchdesc.="title $title, ";
+if ($search{"title"}){
+    $search .= "&title=$search{title}";
+    $searchdesc.="title $search{title}, ";
 }
-if ($dewey){
-    $search .= "&dewey=$dewey";
-    $searchdesc.="dewey $dewey, ";
+if ($search{"dewey"}){
+    $search .= "&dewey=$search{dewey}";
+    $searchdesc.="dewey $search{dewey}, ";
 }
-$search.="&ttype=$ttype";
+$search.="&ttype=$search{ttype}";
 
 $search=~ s/ /%20/g;
 $template->param(startfrom => $startfrom+1);
@@ -183,28 +155,29 @@ $template->param(SEARCH_RESULTS => $resultsarray);
 #$template->param(includesdir => $includes);
 $template->param(loggedinuser => $loggedinuser);
 
-my $numbers;
-@$numbers=();
+my @numbers = ();
 if ($count>10) {
     for (my $i=1; $i<$count/10+1; $i++) {
 	if ($i<16) {
-	    ($title) && (push @$forminputs, { line => "title=$title"});
+	    if ($search{"title"})
+	    {
+		push @forminputs, { line => "title=$search{title}"};
+	    }
 	    my $highlight=0;
 	    ($startfrom==($i-1)*10) && ($highlight=1);
 	    my $formelements='';
-	    foreach (@$forminputs) {
+	    foreach (@forminputs) {
 		my $line=$_->{line};
 		$formelements.="$line&";
 	    }
 	    $formelements=~s/ /+/g;
-	    push @$numbers, { number => $i, highlight => $highlight , FORMELEMENTS => $formelements, FORMINPUTS => $forminputs, startfrom => ($i-1)*10, opac => (($type eq 'opac') ? (1) : (0))};
+	    push @numbers, { number => $i, highlight => $highlight , FORMELEMENTS => $formelements, FORMINPUTS => \@forminputs, startfrom => ($i-1)*10, opac => (($type eq 'opac') ? (1) : (0))};
 	}
     }
 }
 
-$template->param(numbers => $numbers);
+$template->param(numbers => \@numbers);
 
-
-
+# Print the page
 print $query->header(-cookie => $cookie), $template->output;
 
