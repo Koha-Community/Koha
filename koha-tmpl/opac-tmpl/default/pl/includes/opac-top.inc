@@ -6,6 +6,7 @@
 <title>KOHA: Przeszukiwanie katalogu OPAC</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
 
+
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
@@ -31,16 +32,12 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
         <td valign=bottom><img src="<TMPL_VAR NAME='themelang'>/images/inside-top-search.gif" 
 	width=349 height=50 alt="KOHA: Przeszukiwanie Katalogu" hspace=0 vspace=0 border=0></td>
 
-
       
+
         <td align=right><a href="/cgi-bin/koha/opac-search.pl" 		onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img 
 	src="<TMPL_VAR NAME='themelang'>/images/menu-search.gif" 
 	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
-	
-<!--	<a href="/members/"
-	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-login.gif" 
-	width=111 height=30 alt="Logowanie" hspace=0 vspace=0 border=0 name="menu-login"></a>
--->
+
 	<a href="/join.html"
 	onMouseOver="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<TMPL_VAR NAME='themelang'>/images/holder.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/menu-join.gif" 
 	width=54 height=30 alt="Zapisy" hspace=0 vspace=0 border=0 name="menu-join"></a>
