@@ -13,7 +13,29 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	&C4Connect &requireDBI
+	     &configfile
 );
+
+
+sub configfile {
+    my $configfile;
+    open (KC, "/etc/koha.conf");
+    while (<KC>) {
+	chomp;
+	(next) if (/^\s*#/);
+	if (/(.*)\s*=\s*(.*)/) {
+	    my $variable=$1;
+	    my $value=$2;
+	    # Clean up white space at beginning and end
+	    $variable=~s/^\s*//g;
+	    $variable=~s/\s*$//g;
+	    $value=~s/^\s*//g;
+	    $value=~s/\s*$//g;
+	    $configfile->{$variable}=$value;
+	}
+    }
+    return $configfile;
+}
 
 
 sub C4Connect  {

@@ -13,32 +13,11 @@ $VERSION = 0.01;
 	     &fixEthnicity
 	     &borrowercategories
 	     &ethnicitycategories
-	     &configfile
 	     $DEBUG); 
 
 use vars qw();
 	
 my $DEBUG = 0;
-
-sub configfile {
-    my $configfile;
-    open (KC, "/etc/koha.conf");
-    while (<KC>) {
-	chomp;
-	(next) if (/^\s*#/);
-	if (/(.*)\s*=\s*(.*)/) {
-	    my $variable=$1;
-	    my $value=$2;
-	    # Clean up white space at beginning and end
-	    $variable=~s/^\s*//g;
-	    $variable=~s/\s*$//g;
-	    $value=~s/^\s*//g;
-	    $value=~s/\s*$//g;
-	    $configfile->{$variable}=$value;
-	}
-    }
-    return $configfile;
-}
 
 sub slashifyDate {
     # accepts a date of the form xx-xx-xx[xx] and returns it in the 
