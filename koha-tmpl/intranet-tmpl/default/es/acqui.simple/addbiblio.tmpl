@@ -2,9 +2,9 @@
 
 <STYLE TYPE="text/css" MEDIA=screen>
 	table {	font-family:Arial;
-	font-weight:normal;	
+	font-weight:normal;
 	text-decoration:none;
-	font-size:12pt;}
+	font-size:10pt;}
 </STYLE>
 
 <form method="post" name="f">
@@ -26,14 +26,10 @@
 		<td width=9% align="center"><a href="javascript:active(7)"><div id="link7">7</div></a></td>
 		<td width=9% align="center"><a href="javascript:active(8)"><div id="link8">8</div></a></td>
 		<td width=9% align="center"><a href="javascript:active(9)"><div id="link9">9</div></a></td>
-<<<<<<< addbiblio.tmpl
-		<td width=10% align="center"><input type="hidden" name="op" value="addbiblio"><input type="button" value=">>> artículos" onClick='Check(this.form)'></td>
-=======
 		<td width=10% align="center"><input type="hidden" name="op" value="addbiblio">
 												<input type="hidden" name="oldbiblionumber" value="<TMPL_VAR name="oldbiblionumber">">
-												<input type="button" value=">>> items" onClick='Check(this.form)'>
+												<input type="button" value=">>> artículos" onClick='Check(this.form)' accesskey="w">
 		</td>
->>>>>>> 1.4
 	</tr>
 	</table>
 	</td>
@@ -47,7 +43,7 @@
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -61,14 +57,14 @@
 		</DIV>
 
 	<DIV name="1XX" id="1XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100%  cellspacing=0 cellpadding=5 border=0>
+	<table width=100%  cellspacing=0 cellpadding=1 border=0>
 	<TMPL_LOOP name="1XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -82,14 +78,14 @@
      </DIV>
 
 	<DIV name="2XX" id="2XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="2XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -103,14 +99,14 @@
 	</DIV>
 
 	<DIV name="3XX" id="3XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="3XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><<TMPL_IF name="mandatory"></b></TMPL_IF>/td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><<TMPL_IF name="mandatory"></b></TMPL_IF>/td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -124,14 +120,14 @@
 	</DIV>
 
 	<DIV name="4XX" id="4XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100%  cellspacing=0 cellpadding=5 border=0>
+	<table width=100%  cellspacing=0 cellpadding=2 border=0>
 	<TMPL_LOOP name="4XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -145,14 +141,14 @@
 	</DIV>
 
 	<DIV name="5XX" id="5XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="5XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -166,14 +162,14 @@
 	</DIV>
 
 	<DIV name="6XX" id="6XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=90% cellspacing=0 cellpadding=5  border=0>
+	<table width=90% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="6XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -187,14 +183,14 @@
 	</DIV>
 
 	<DIV name="7XX" id="7XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100%  cellspacing=0 cellpadding=5 border=0>
+	<table width=100%  cellspacing=0 cellpadding=2 border=0>
 	<TMPL_LOOP name="7XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -208,14 +204,14 @@
 	</DIV>
 
 	<DIV name="8XX" id="8XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=100% cellspacing=0 cellpadding=5  border=0>
+	<table width=100% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="8XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -229,14 +225,14 @@
 	</DIV>
 
 	<DIV name="9XX" id="9XX" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=90% cellspacing=0 cellpadding=5  border=0>
+	<table width=90% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="9XX">
 	<tr background="/images/background-mem.gif"><td colspan=4><b><TMPL_VAR name="tag">  <input type="hidden" name="ind_tag" value="<TMPL_VAR name="tag">"><input type="text" name="indicator" size=3 maxlength=2 value="<TMPL_VAR name="indicator">"> - <tmpl_var name="tag_lib"></td></tr>
 	<TMPL_LOOP name="subfield_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -250,12 +246,12 @@
 	</DIV>
 
 	<DIV name="hidden" id="hidden" style="position:absolute;left:40px;top:150px;visibility:hidden;width:90%">
-	<table width=90% cellspacing=0 cellpadding=5  border=0>
+	<table width=90% cellspacing=0 cellpadding=2  border=0>
 	<TMPL_LOOP name="hidden_loop">
 	<tr>
 		<td width="3%">&nbsp;</td>
 		<td width="2%"><b><TMPL_VAR name="subfield"></b></td>
-		<td width="55%"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
+		<td width="55%" align="right"><TMPL_IF name="mandatory"><b></TMPL_IF><TMPL_VAR name="marc_lib"><TMPL_IF name="mandatory"></b></TMPL_IF></td>
 		<td width="40%">
 			<TMPL_VAR name="marc_value">
 			<input type="hidden" name="tag" value="<TMPL_VAR name="tag">">
@@ -266,6 +262,16 @@
 	</TMPL_LOOP>
 	</table>
 	</DIV>
+	<TMPL_IF name="oldbiblionumtagfield">
+		<input type="hidden" name="tag" value="<TMPL_VAR name="oldbiblionumtagfield">">
+		<input type="hidden" name="subfield" value="<TMPL_VAR name="oldbiblionumtagsubfield">">
+		<input type="hidden" name="field_value" value="<TMPL_VAR name="oldbiblionumber">">
+		<input type="hidden" name="mandatory" value="0">
+		<input type="hidden" name="tag" value="<TMPL_VAR name="oldbiblioitemnumtagfield">">
+		<input type="hidden" name="subfield" value="<TMPL_VAR name="oldbiblioitemnumtagsubfield">">
+		<input type="hidden" name="field_value" value="<TMPL_VAR name="oldbiblioitemnumber">">
+		<input type="hidden" name="mandatory" value="0">
+	</TMPL_IF>
 </form>
 
 
@@ -289,11 +295,13 @@ function active(numlayer)
 function Check(f) {
 	var total_errors=0;
 //	alert(f.field_value.length);
-	for (i=0 ; i<f.field_value.length ; i++) {
+	for (i=0 ; i<f.field_value.length-2 ; i++) {
 //	alert (f.field_value[i].value);
 		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
 			document.getElementById("error"+i).style.backgroundColor="#FF0000";
 			total_errors++;
+		} else {
+			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
 		}
 	}
 	var alertString2;
