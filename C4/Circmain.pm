@@ -64,8 +64,3 @@ sub Start_circ{
 
 
 END { }       # module clean-up code here (global destructor)
-
-
-
-
-

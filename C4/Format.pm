@@ -1,4 +1,4 @@
-package C4::Format; #assummes C4/Format
+package C4::Format; #assumes C4/Format
 
 use strict;
 require Exporter;
