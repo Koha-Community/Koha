@@ -8,6 +8,7 @@ use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Circulation::Renewals2;
 use C4::Reserves2;
+use C4::Search;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 
@@ -62,7 +63,15 @@ foreach my $key (keys %$issues) {
     if ($restype) {
 	$issue->{'reserved'} = 1;
     }
-    my ($charges, $itemtype) = calc_charges(undef, undef, $issue->{'itemnumber'}, $borrowernumber);
+
+    my ($numaccts,$accts,$total) = getboracctrecord(undef,$borr);
+    my $charges = 0;
+    foreach my $ac (@$accts) {
+	if ($ac->{'itemnumber'} == $issue->{'itemnumber'}) {
+	    $charges += $ac->{'amountoutstanding'} if $ac->{'accounttype'} eq 'F'; 
+	    $charges += $ac->{'amountoutstanding'} if $ac->{'accounttype'} eq 'L';
+	} 
+    }
     $issue->{'charges'} = $charges;
 
     # get publictype for icon
