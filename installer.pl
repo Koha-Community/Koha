@@ -638,7 +638,7 @@ data, you probably don't want this sample data installed.
 	system("gunzip sampledata-1.2.gz");
 	system("cat sampledata-1.2 | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
 	system("gzip -9 sampledata-1.2");
-	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('Main', 'Main Library', 1)\"");
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
 	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
 	print qq|
 
