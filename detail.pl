@@ -24,8 +24,13 @@ use C4::Context;
 use C4::Output;  # contains picktemplate
 use CGI;
 use C4::Search;
- 
+use C4::Auth;
+
 my $query=new CGI;
+my $type=$query->param('type');
+(-e "opac") && ($type='opac');
+($type) || ($type='intra');
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 my $biblionumber=$query->param('bib');
 my $type='intra';
@@ -38,9 +43,6 @@ foreach my $itm (@items) {
      $norequests = 0 unless $itm->{'notforloan'};
 }
 
-
-warn "Biblionumber: $biblionumber";
-warn "Norequests: $norequests"; 
 
 
 my $dat=bibdata($biblionumber);
@@ -65,15 +67,15 @@ my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
 
-my $includes = C4::Context->config('includes') ||
-	"/usr/local/www/hdl/htdocs/includes";
-my $templatebase="catalogue/detail.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
-my $theme=picktemplate($includes, $templatebase);
 
-my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
-
+my $template;
+if ($type='opac') {
+	$template = gettemplate("catalogue/detail-opac.tmpl");
+} else {
+	$template=gettemplate("catalogue/detail.tmpl");
+}
 my $count=1;
 
 # now to get the items into a hash we can use and whack that thru
@@ -86,12 +88,10 @@ my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
 my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
 $template->param(nextstartfrom => $nextstartfrom);
 $template->param(prevstartfrom => $prevstartfrom);
-# $template->param(template => $templatename);
-# $template->param(search => $search);
-$template->param(includesdir => $includes);
 $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
 $template->param(SITE_RESULTS => $sitearray);
-print "Content-Type: text/html\n\n", $template->output;
+$template->param(loggedinuser => $loggedinuser);
+print $query->header(-cookie => $cookie), $template->output;
 
