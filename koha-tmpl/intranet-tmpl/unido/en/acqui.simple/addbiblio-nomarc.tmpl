@@ -16,6 +16,7 @@
 </TMPL_IF>
 
 <FORM action="savebiblio.pl" method="post">
+<input type=hidden name="stype" value="<TMPL_VAR NAME="PERIODICAL">">
 <table align="center">
 <tr>
 <td>Title: *</td>
@@ -66,7 +67,12 @@
 
 <tr valign="top">
 <td>Language:</td>
-<td><INPUT name="language" size="40" value="English"></td>
+<td> <Select name="language">
+<TMPL_LOOP NAME="languages">
+<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+</TMPL_LOOP>
+</select>
+</td>
 </tr>
 
 <tr valign="top">
