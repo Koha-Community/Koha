@@ -19,7 +19,7 @@ GetOptions(
 	'exclude=s' => \@excludes,
 	'sep=s' => \$split_char,
 	'help'	=> sub { help() },
-) || (usage(), exit(-1));
+) || usage();
 
 # utiliser glob() pour tous les fichiers d'un repertoire
 
