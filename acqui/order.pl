@@ -48,14 +48,14 @@ my ($template, $loggedinuser, $cookie)
 my $supplier=$query->param('supplier');
 my ($count,@suppliers)=bookseller($supplier);
 
-my $colour='#ffffcc';
+my $colour='#EEEEEE';
 my $toggle=0;
 my @loop_suppliers;
 for (my $i=0; $i<$count; $i++) {
 	my ($ordcount,$orders)=getorders($suppliers[$i]->{'id'});
 	my %line;
 	if ($toggle==0){
-		$line{color}='#ffffcc';
+		$line{color}='#EEEEEE';
 		$toggle=1;
 	} else {
 		$line{color}='white';

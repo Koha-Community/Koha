@@ -70,7 +70,7 @@ for (my $i=0;$i<$count;$i++){
 	$sub_total+=$line_total;
 	my %line;
 	if ($toggle==0){
-		$line{color}='#ffffcc';
+		$line{color}='#EEEEEE';
 		$toggle=1;
 	} else {
 		$line{color}='white';
@@ -90,7 +90,8 @@ for (my $i=0;$i<$count;$i++){
 	$line{biblionumber} = $results[$i]->{'biblionumber'};
 	push @books_loop, \%line;
 }
-$gist=sprintf("%.2f",$sub_total*C4::Context->preference("gist"));
+my $prefgist =C4::Context->preference("gist");
+$gist=sprintf("%.2f",$sub_total*$prefgist);
 $grand_total=$sub_total+$gist;
 
 $template->param(basket => $basket,

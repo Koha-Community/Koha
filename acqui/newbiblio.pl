@@ -25,8 +25,6 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Catalogue;
-use C4::Biblio;
-use C4::Output;
 use C4::Search;
 use C4::Auth;
 use C4::Output;
@@ -151,7 +149,7 @@ $template->param( existing => $biblio,
 						biblioitemnumber => $data->{'biblioitemnumber'},
 						itemtype => $data->{'itemtype'},
 						discount => $booksellers[0]->{'discount'},
-      					listincgst => $booksellers[0]->{'listincgst'},
+      						listincgst => $booksellers[0]->{'listincgst'},
 						listprice => $booksellers[0]->{'listprice'},
 						gstreg => $booksellers[0]->{'gstreg'},
 						name => $booksellers[0]->{'name'},

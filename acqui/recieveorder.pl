@@ -43,6 +43,10 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {acquisition => 1},
 			     debug => 1,
 			     });
-$template->param(name => $booksellers[0]->{'name'},id => $id,);
+
+$template->param(
+		name => $booksellers[0]->{'name'},
+		id => $id,
+		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

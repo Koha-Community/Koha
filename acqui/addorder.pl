@@ -71,6 +71,10 @@ my $rrp=$input->param('rrp');
 my $ecost=$input->param('ecost');
 my $gst=$input->param('GST');
 my $orderexists=$input->param('orderexists');
+my $budget=$input->param('budget');
+my $cost=$input->param('cost');
+my$sub=$input->param('sub');
+my $invoice=$input->param('invoice');
 
 if ($quantity ne '0'){
 	#check to see if biblio exists
@@ -105,9 +109,9 @@ if ($quantity ne '0'){
 			series        => $series?$series:"" });
 	}
 	if ($orderexists ne '') {
-		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst);
+		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice);
 	}else {
-		neworder($bibnum,$title,$ordnum,$basketno,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst);
+		neworder($bibnum,$title,$ordnum,$basketno,$quantity,$listprice,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice);
 	}
 } else {
 	$bibnum=$input->param('biblio');

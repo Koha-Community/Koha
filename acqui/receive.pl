@@ -31,7 +31,6 @@ use CGI;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
-use C4::Catalogue;
 use strict;
 
 my $input=new CGI;
@@ -64,11 +63,11 @@ my $tototal;
 my $toggle;
 my @loop_orders = ();
 for (my$i=0;$i<$count;$i++){
-	$total=($results[$i]->{'unitprice'} + $results[$i]->{'freight'}) * $results[$i]->{'quantityreceived'};
+	$total=($results[$i]->{'unitprice'} + $results[$i]->{'freight'}) * $results[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
 	$results[$i]->{'unitprice'}+=0;
 	my %line;
 	if ($toggle==0){
-		$line{color}='#ffffcc';
+		$line{color}='#EEEEEE';
 		$toggle=1;
 	} else {
 		$line{color}='white';
