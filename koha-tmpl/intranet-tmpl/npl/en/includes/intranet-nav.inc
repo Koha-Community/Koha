@@ -11,7 +11,7 @@
 				<input type="submit" class="submit" value="Submit" />
 	</form></li><li><a href="/cgi-bin/koha/circ/returns.pl">Returns</a>
 </li><!-- Display for NPL <li><a href="/reserve_list.php">Reserve List</a></li><li><a href="http://66.213.78.70/secret/reserves/index.cfm">New Title Waiting List</a></li> /Display for NPL --><!-- Hide from NPL --><li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li><!-- /Hide from NPL --></ul></li>
-				<li><a href="/cgi-bin/koha/members-home.pl">Patrons</a><ul><li><form action="/cgi-bin/koha/member.pl" method="post">
+				<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a><ul><li><form action="/cgi-bin/koha/members/member.pl" method="post">
 	<label for="member">Search:</label><input id="member" type="text" size="10" name="member" />
 	<input type="submit" value="Search" class="submit" />
 
