@@ -31,12 +31,11 @@ a.about:hover {
 
 <!-- MENUS -->
 <div id="menubar">
-	<span class="koha">KOHA</span>
-	<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>
-	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>
-	<a class="members" href="/cgi-bin/koha/members-home.pl">Members</a>
+	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
 	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
+	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>
 	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
+	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
 	<a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
 	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
