@@ -35,7 +35,7 @@ class="logo">Koha</h1></A></td>
 
 href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
 	|
-	<a class="menu" href="/cgi-bin/koha/members-home.pl">Members</a>
+	<a class="menu" href="/cgi-bin/koha/members-home.pl">Patrons</a>
 	|
 	<a class="menu" href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 	|

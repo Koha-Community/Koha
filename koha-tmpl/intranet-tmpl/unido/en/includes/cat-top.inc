@@ -29,7 +29,7 @@ so you need a new menu for each section.
 	<td class="top-menuitems">
 	<a class="selected" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
 	|
-	<a class="menu" href="/cgi-bin/koha/members-home.pl">Members</a>
+	<a class="menu" href="/cgi-bin/koha/members-home.pl">Patrons</a>
 	|
 	<a class="menu"href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 	|
