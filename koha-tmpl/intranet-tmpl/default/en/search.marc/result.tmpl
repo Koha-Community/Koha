@@ -4,7 +4,7 @@
     <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <!-- /TMPL_IF -->
 <div id="mainbloc">
-	<h1 class="catalogue">MARC search results</h1>
+	<h1 class="catalogue">Search results</h1>
 	<div id="resultnumber">
 		<p>
 			<!-- TMPL_IF NAME="displayprev" -->
@@ -43,7 +43,13 @@
 			<tr>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p>
-						<p>							<b><a class="transparent" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b></p>
+						<p>
+							<!-- TMPL_IF name="MARC_ON" -->
+								<b><a class="transparent" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+							<!-- TMPL_ELSE -->
+								<b><a class="transparent" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a></b>
+							<!-- /TMPL_IF -->
+						</p>
 						<p><!-- TMPL_VAR NAME="author" -->
 						<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
