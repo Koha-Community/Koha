@@ -82,8 +82,10 @@ sub extract_attributes ($;$) {
 	$s = $rest;
 	warn "Warning: Attribute should be quoted"
 		. (defined $lc? " near line $lc": '') . ": $val_orig\n"
-		if $pedantic_p
-		&& $val =~ /[^-\.A-Za-z0-9]/s && $val_orig !~ /^['"]/;
+		if $val_orig !~ /^['"]/ && (
+			($pedantic_p && $val =~ /[^-\.A-Za-z0-9]/s)
+			|| $val =~ /[<>]/s	# this covers $re_directive, too
+		    )
     }
     if ($s =~ /\S/s) { # should never happen
 	if ($s =~ /^([^\n]*)\n/s) { # this is even worse
