@@ -1,8 +1,18 @@
+label10 {
+	float:left;
+	width: 10em;
+}
+label20 {
+	float:left;
+	width: 10em;
+}
+
 body {
 	font-family:verdana,arial,helvetica;
 	font-size:12pt;
 	margin:0px;
-	padding:0px
+	padding:0px;
+	background-color:#99CC33;
 }
 
 .button {
@@ -42,9 +52,7 @@ th {
 	background-image:url("/opac-tmpl/default/en/images/background-mem.gif");
 	font-weight:bold;
 	text-align:center;
-	border-left:1px solid #000000;
-	border-bottom:1px solid #000000;
-	border-top:1px solid #000000;
+	border:1px solid #000000;
 	padding:5px;
 }
 /* standard cell */
@@ -91,22 +99,14 @@ h1 {
 	color: red;
 	font-weight:bold;
 }
-#menubar {
-	border-top:1px solid #666666;
-	font: 1em sans-serif;
-	background-color:#DDDDDD;
-	padding-bottom:10px;
-}
-#submenu {
-	font: 0.8em sans-serif;
-	background-color:#EEEEEE;
-	border-left:1px solid #000000;
-}
 
 #mainbloc {
 	float:left;
 	width:90%;
-	border:1px solid #000000;
+	border-top:1px solid #000000;
+	border-left:1px solid #000000;
+	border-right:3px solid #000000;
+	border-bottom:3px solid #000000;
 	background-color:#FFFFFF;
 	margin-left:10px;
 	margin-right:10px;
@@ -177,122 +177,95 @@ a.submenu2:hover {
 	margin:0;
 }
 
+#menubar {
+	border-top:1px solid #666666;
+	font: 125% sans-serif;
+	background-color:#DDDDDD;
+	padding-bottom:5px;
+	font-weight:bold;
+}
+#submenu {
+	background-color:#EEEEEE;
+	border-left:1px solid #000000;
+	padding-bottom:5px;
+	font-size:110%;
+}
+
+#menubar a {
+	padding:5px;
+}
+#submenu a {
+	padding:5px;
+}
+
 .koha {
 	text-align:center;
 	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
+	font-size:130%;
+	font-weight:bold;
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:5px;
 }
 
 a.home {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.home:hover {
 	background-color: #339933;
 	color: #000000;
-	text-decoration: none;
-	font-weight: normal;
-	font-weight: bold;
 	}
 
 a.catalogue {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
-	margin:0;
 	}
 a.catalogue:hover {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	background-color:#ad11ad;
 	color:#FFFFFF;
-	font-weight: bold;
 	}
 
 a.members {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.members:hover {
 	background-color: #86c268;
 	color: #000000;
-	text-decoration: none;
-	font-weight: bold;
 	}
 
 a.acquisition {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.acquisition:hover {
 	background-color: #ffdf61;
 	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
 	}
 
 a.reports {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.reports:hover {
 	background-color: #6b7cbe;
 	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
 	}
 
 a.circulation {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.circulation:hover {
 	background-color: #be6170;
 	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
 	}
 
 a.parameters {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.parameters:hover {
 	background-color: #86c268;
 	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
 	}
 a.about {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color:#777777;
-	font-weight: bold;
 	}
 a.about:hover {
 	background-color: #86c268;
 	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
 	}

@@ -1,59 +1,36 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
-
-<font size="5"><em>MARC biblio management</em></font>
+<div id="mainbloc">
+<h1>MARC biblio management</h1>
 <!-- TMPL_IF name="noitemsfound" -->
-	<p />
 	<font color="red" size="4">No items found</font>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="websiteadded" -->
-	<p />
 	<font color="red" size="4">Website Biblioitem Added</font>
 <!-- /TMPL_IF -->
 
-<p />
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-	<td><font size="4">To add a new biblio/item, scan or type the ISBN/ISSN number:</font></td>
-	</tr>
-</table>
 <form action="isbnsearch.pl">
-	<table cellpadding="3" border=0 width="100%">
+	<table>
+		<tr>
+			<th colspan=4>To add a new biblio/item, scan or type the ISBN/ISSN number:</th>
+		</tr>
 		<tr valign="top">
-			<td width="5%">ISBN:</td>
-			<td width="20%"><input type="text" name="isbn" /></td>
-			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" class="button"/></td>
+			<td>ISBN:</td>
+			<td><input type="text" name="isbn" /></td>
+			<td rowspan=2 valign="middle"><input type="submit" value="Go" class="button"/></td>
 			<td rowspan=2>If the ISBN or title is found in the biblio table, it will be retrieved and can be modified.<br/>
 					If the ISBN or title is found in the breeding farm, it will be retrieved and a biblio will be added.<br/>
 					Otherwise, a biblio can be added from scratch.</td>
 		</tr>
-			<td width="5%">Title</td>
-			<td width="20%"><input type="text" name="title" /></td>
+		<tr>
+			<td>Title</td>
+			<td><input type="text" name="title" /></td>
 		</tr>
 		<tr><td>&nbsp;</td>
 		<!-- TMPL_IF NAME="NOTMARC" -->
-			<td colspan=2><a href="addbiblio-nomarc.pl" class="button">Create Empty biblio</a></td></tr>
+			<td colspan=2><br/><a href="addbiblio-nomarc.pl" class="button">Create Empty biblio</a></td></tr>
 		<!-- TMPL_ELSE -->
-			<td colspan=2><a href="addbiblio.pl" class="button">Create Empty biblio</a></td></tr>
+			<td colspan=2><br/><a href="addbiblio.pl" class="button">Create Empty biblio</a></td></tr>
 		<!-- /TMPL_IF -->
 	</table>
 </form>
-
-<p />
-<p />
-
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-		<td><FONT SIZE=4>Add New Website</font></td>
-	</tr>
-</table>
-<form action="websitesearch.pl" method="post">
-	<table>
-	<tr>
-		<td>Keyword:</td>
-		<td><input type="text" name="keyword" /></td>
-		<td><input type="submit" value="Go" class="button"/></td>
-	</tr>
-	</table>
-</FORM>
-<p />
 <!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

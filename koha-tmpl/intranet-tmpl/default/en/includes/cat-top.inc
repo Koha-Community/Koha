@@ -36,9 +36,6 @@ a.catalogue:hover {
 </style>
 </head>
 <body>
-
-
-
 <!------------------------MENUS-------------------------------->
 <div id="menubar">
 	<span class="koha">KOHA</span>
