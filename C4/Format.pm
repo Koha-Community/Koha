@@ -181,6 +181,12 @@ sub fmtdec {
        $tempdec = 0;
      }
      # If a comma was specified, then comma-separate the integer part
+     # FIXME - From the Perl Cookbook (ISBN 1-56592-243-3), sec. 2.1.7:
+     #	sub commify {
+     #		my $test = reverse $_[0];
+     #		$text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+     #		return scalar reverse $text;
+     #	}
      if ($comma eq ",") {
         while (length($tempdec) > 3) {
            $fnumb = ",".substr($tempint,-3,3).$fnumb;
