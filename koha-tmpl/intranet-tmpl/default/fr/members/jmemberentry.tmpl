@@ -1,11 +1,4 @@
-<HTML>
-
-<!-- startmenu (member)
-     this  includes the head-container and <body>
-     including this via var contradicts the separation of code and design
-     a solution via tmpl_include would be better -->
-
-<TMPL_VAR NAME=startmenumember>
+<TMPL_INCLUDE NAME="members-top.inc">
 
 <!-- here comes the junior stuff -->
 
@@ -122,7 +115,4 @@
 </form>
    
 
-<TMPL_VAR NAME=endmenumember>
-
-
-</blockquote></body></HTML>
+<TMPL_INCLUDE NAME="members-bottom.inc">

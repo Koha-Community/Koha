@@ -1,4 +1,5 @@
-<HTML> <TMPL_VAR NAME=startmenumember> <FONT SIZE=6><em>Chercher un lecteur</em></FONT><br>
+<TMPL_INCLUDE NAME="members-top.inc">
+<FONT SIZE=6><em>Chercher un lecteur</em></FONT><br>
 
 <form action="/cgi-bin/koha/member.pl" method=post>
   <input type=text name="member" value="<TMPL_VAR NAME=member>">
@@ -39,13 +40,10 @@ Votre recherche<TMPL_VAR NAME=member>
 
 <form action=/cgi-bin/koha/simpleredirect.pl method=post>
 <input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" BORDER=0 ><br>
-<INPUT TYPE="radio" name="chooseform" value="adulte" checked>
+<INPUT TYPE="radio" name="chooseform" value="adult" checked>
   Adulte 
   <INPUT TYPE="radio" name="chooseform" value="organisation" >
   Organisme 
 </form>
 
-<TMPL_VAR NAME=endmenumember>
-
-</body>
-</HTML>
+<TMPL_INCLUDE NAME="members-bottom.inc">
