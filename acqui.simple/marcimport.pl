@@ -260,25 +260,21 @@ if ($input->param('insertnewrecord')) {
 	<p>
 EOF
     } else {
-	my $q_title=$dbh->quote($input->param('title'));
-	my $q_subtitle=$dbh->quote($input->param('subtitle'));
-	my $q_author=$dbh->quote($input->param('author'));
-	my $q_copyrightdate=$dbh->quote($input->param('copyrightdate'));
-	my $q_seriestitle=$dbh->quote($input->param('seriestitle'));
-	$sth=$dbh->prepare("select biblionumber from biblio where title=$q_title and author=$q_author and copyrightdate=$q_copyrightdate and seriestitle=$q_seriestitle");
-	$sth->execute;
-	if ($sth->rows) {
-	    ($biblionumber) = $sth->fetchrow;
-	} else {
-	    $sth=$dbh->prepare("select max(biblionumber) from biblio");
-	    $sth->execute;
-	    ($biblionumber) = $sth->fetchrow;
-	    $biblionumber++;
-	    $sth=$dbh->prepare("insert into biblio (biblionumber, title, author, copyrightdate, seriestitle) values ($biblionumber, $q_title, $q_author, $q_copyrightdate, $q_seriestitle)");
-	    $sth->execute;
-	    $sth=$dbh->prepare("insert into bibliosubtitle (biblionumber,subtitle) values ($biblionumber, $q_subtitle)");
-	    $sth->execute;
-	}
+	use strict;
+
+	# It doesn't exist; add it.
+
+	$biblionumber=GetOrAddBiblio($dbh,
+		{ title		=>$input->param('title'),
+		 author		=>$input->param('author'),
+		 copyright	=>$input->param('copyrightdate'),
+		 seriestitle	=>$input->param('seriestitle'),
+		 notes		=>$input->param('notes'),
+		 abstract	=>$input->param('abstract'),
+		 subtitle	=>$input->param('subtitle'),
+		}
+	);
+
 	$sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
 	$sth->execute;
 	($biblioitemnumber) = $sth->fetchrow;
@@ -394,6 +390,42 @@ print endpage();
 exit;
 }
 
+#---------------------------------------
+# Find a biblio entry, or create a new one if it doesn't exist.
+sub GetOrAddBiblio {
+	use strict;		# in here until rest cleaned up
+	# input params
+	my (
+	  $dbh,		# db handle
+	  $biblio,	# hash ref to fields
+	)=@_;
+
+	# return
+	my $biblionumber;
+
+	my $sth;
+	
+	#-----
+	$sth=$dbh->prepare("select biblionumber 
+		from biblio 
+		where title=? and author=? 
+		  and copyrightdate=? and seriestitle=?");
+	$sth->execute(
+		$biblio->{title}, $biblio->{author}, 
+		$biblio->{copyright}, $biblio->{seriestitle} );
+	if ($sth->rows) {
+	    ($biblionumber) = $sth->fetchrow;
+	} else {
+	    # Doesn't exist.  Add new one.
+	    $biblionumber=&newbiblio($biblio);
+	    &newsubtitle($biblionumber,$biblio->{subtitle} );
+	}
+
+	return $biblionumber;
+
+} # sub GetOrAddBiblio
+#---------------------------------------
+
 if ($input->param('newitem')) {
     use strict;
     my $error;
@@ -419,6 +451,10 @@ if ($input->param('newitem')) {
             );
             if ( $error ) {
 		print "<font color=red>Error: $error </font><p>\n";
+	    } else {
+
+		print "<font color=green>Item added with barcode $barcode
+			</font><P>\n";
             } # if error
     } # if barcode exists
 }
