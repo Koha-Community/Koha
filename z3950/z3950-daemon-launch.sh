@@ -41,6 +41,9 @@ exit
 
 #--------------
 # $Log$
+# Revision 1.1  2002/11/22 10:15:22  tipaul
+# moving z3950 related scripts to specific dir
+#
 # Revision 1.3  2002/07/02 22:08:50  tonnesen
 # merging changes from rel-1-2
 #
