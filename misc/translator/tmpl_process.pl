@@ -74,7 +74,7 @@ if( $action eq "create" )
 elsif( $action eq "update" )
 {
 	# restores the string list from file
-	%strhash = &restore_strhash(\%strhash, $str_file, $split_char);
+	%strhash = &restore_strhash(\%strhash, $str_file, $split_char,1);
 	# updates the list, adding new entries if any
 	%strhash = &update_strhash(\%strhash, \@in_files, $exclude_regex, $filter);
 	# saves the list to the file
@@ -94,7 +94,7 @@ elsif( $action eq "install" )
 	}
 
 	# restores the string list from file
-	%strhash = &restore_strhash(\%strhash, $str_file, $split_char);
+	%strhash = &restore_strhash(\%strhash, $str_file, $split_char,0);
 	# creates the new tmpl file using the new translation
 	&install_strhash(\%strhash, \@in_files, $in_dir, $out_dir);
 }
@@ -159,7 +159,7 @@ sub install_strhash
 			close($fh_in);
 			exit(1);
 		}
-		
+
 		# opens handle for output
 		if( !open($fh_out, "> $out_file") )
 		{
@@ -172,8 +172,10 @@ sub install_strhash
 
 		while(my $line = <$fh_in>)
 		{
-			foreach my $text (sort  {length($b) <=> length($a)} keys %{$strhash})
+			foreach my $text (sort  {uc($b) cmp uc($a) || length($b) <=> length($a)} keys %{$strhash})
 			{
+#   			$text =~ s/\'/\\\'/g;
+#   			$text =~ s/\./\\\./g;
 				# Test if the key has been translated
 				if( %{$strhash}->{$text} != 1 )
 				{
@@ -235,6 +237,9 @@ sub update_strhash
 					{
 						# the line is not already in the list so add it
 						%{$strhash}->{$str}=1;
+					} else {
+						# remove UNUSED;
+						%{$strhash}->{$str} =~ s/^UNUSED;//;
 					}
 				}
 			}
@@ -252,14 +257,14 @@ sub update_strhash
 
 sub restore_strhash
 {
-	my($strhash, $str_file, $split_char) = @_;
-	
+	my($strhash, $str_file, $split_char, $detect_unused) = @_;
+
 	my $fh;
 	
 	open($fh, "< $str_file") or die "$str_file : $!";
 	
 	print "Restoring string list from $str_file...\n";
-	
+
 	while( my $line = <$fh> )
 	{
 		chomp $line;
@@ -276,6 +281,9 @@ sub restore_strhash
 		{
 			# the key exist but has no translation.
 			%{$strhash}->{$original} = 1;
+		}
+		if ($detect_unused) {
+			%{$strhash}->{$original} = "UNUSED;".%{$strhash}->{$original} unless %{$strhash}->{$original}=~ /^UNUSED;/;
 		}
 
 	}
@@ -300,9 +308,9 @@ sub write_strhash
 
 	print "Writing string list to $str_file...\n";
 
-	foreach my $str(sort {uc($a) cmp uc($b) || length($a) <=> length($b)} keys %{$strhash})
+	foreach my $str(sort {uc($a) cmp uc($b) || length($b) <=> length($a)} keys %{$strhash})
 	{
-		if(%{$strhash}->{$str} != 1)
+		if(%{$strhash}->{$str}!=1)
 		{
 			printf($fh "%s%s%s\n", $str, $split_char, %{$strhash}->{$str});
 		}
@@ -457,3 +465,4 @@ options can be :
 EOF
 	exit(0);
 }
+
