@@ -29,7 +29,7 @@ my $dat                                   = &bibdata($biblionumber);
 my ($authorcount, $addauthor)             = &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
 my ($websitecount, @websites)             = &getwebsites($biblionumber);
-my $subscriptionid = getsubscriptionfrombiblionumber($biblionumber);
+my $subscriptionsnumber = getsubscriptionfrombiblionumber($biblionumber);
 
 $dat->{'count'}=@items;
 
@@ -70,7 +70,7 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				ITEM_RESULTS => $itemsarray,
 				WEB_RESULTS => $webarray,
 				SITE_RESULTS => $sitearray,
-				subscriptionid => $subscriptionid,
+				subscriptionsnumber => $subscriptionsnumber,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

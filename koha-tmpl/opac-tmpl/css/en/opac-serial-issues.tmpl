@@ -4,7 +4,8 @@
 <h1 class="catalogue">Issues for a subscription</h1>
 <a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
 <form method="post" name="f">
-<div id="bloc25">
+<!-- TMPL_LOOP name="subscription_LOOP" -->
+<div id="bloc60">
 	<h2 class="catalogue">Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
 		<p>It began on <b><!-- TMPL_VAR name="startdate" --></b> and is issued every
 		<b>
@@ -74,12 +75,14 @@
 		since <b><!-- TMPl_VAR name="startdate" --></b>
 		</p>
 		<p><!-- TMPL_VAR name="notes" --></p>
-	<h2 class="catalogue">Issues summary</h2>
-	<p>
-		<!-- TMPL_VAR name="opacnote" -->
-	</p>
+	<!-- TMPL_IF name="opacnotes" -->
+		<h2 class="catalogue">Issues summary</h2>
+		<p>
+			<!-- TMPL_VAR name="opacnote" -->
+		</p>
+	<!-- /TMPL_IF -->
 </div>
-
+<!-- /TMPL_LOOP -->
 </div>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

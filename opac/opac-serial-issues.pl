@@ -17,10 +17,8 @@ my $dbh = C4::Context->dbh;
 my $sth;
 # my $id;
 my ($template, $loggedinuser, $cookie);
-my ($subscriptionid);
-
-$subscriptionid = $query->param('subscriptionid');
-my $subscription = &getsubscription($subscriptionid);
+my $biblionumber = $query->param('biblionumber');
+my $subscriptions = get_subscription_list_from_biblionumber($biblionumber);
 
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "opac-serial-issues.tmpl",
@@ -31,27 +29,28 @@ my $subscription = &getsubscription($subscriptionid);
 				});
 
 # replace CR by <br> in librarian note
-$subscription->{opacnote} =~ s/\n/\<br\/\>/g;
+# $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
 
 $template->param(
-	startdate => format_date($subscription->{startdate}),
-	periodicity => $subscription->{periodicity},
-	dow => $subscription->{dow},
-	numberlength => $subscription->{numberlength},
-	weeklength => $subscription->{weeklength},
-	monthlength => $subscription->{monthlength},
-	opacnote => $subscription->{opacnote},
-	numberingmethod => $subscription->{numberingmethod},
-	arrivalplanified => $subscription->{arrivalplanified},
-	status => $subscription->{status},
-	biblionumber => $subscription->{biblionumber},
-	bibliotitle => $subscription->{bibliotitle},
-	notes => $subscription->{notes},
-	subscriptionid => $subscription->{subscriptionid}
+	subscription_LOOP => $subscriptions
+# 	startdate => format_date($subscription->{startdate}),
+# 	periodicity => $subscription->{periodicity},
+# 	dow => $subscription->{dow},
+# 	numberlength => $subscription->{numberlength},
+# 	weeklength => $subscription->{weeklength},
+# 	monthlength => $subscription->{monthlength},
+# 	opacnote => $subscription->{opacnote},
+# 	numberingmethod => $subscription->{numberingmethod},
+# 	arrivalplanified => $subscription->{arrivalplanified},
+# 	status => $subscription->{status},
+# 	biblionumber => $subscription->{biblionumber},
+# 	bibliotitle => $subscription->{bibliotitle},
+# 	notes => $subscription->{notes},
+# 	subscriptionid => $subscription->{subscriptionid}
 	);
-$template->param(
-			"periodicity$subscription->{periodicity}" => 1,
-			"arrival$subscription->{dow}" => 1,
-			);
+# $template->param(
+# 			"periodicity$subscription->{periodicity}" => 1,
+# 			"arrival$subscription->{dow}" => 1,
+# 			);
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -129,10 +129,10 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-	<!-- TMPL_IF name="subscriptionid" -->
+	<!-- TMPL_IF name="subscriptionsnumber" -->
 		<p>
-			This is a serial subscription. You can see which 
-				<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
+			This is a serial subscription (we have <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions). You can see which 
+				<a href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue" title="Serial issues">
 					Issues
 				</a> we have and don't have
 		</p>
