@@ -280,6 +280,9 @@ END { }       # module clean-up code here (global destructor)
 
 #
 # $Log$
+# Revision 1.8  2002/10/10 04:32:44  arensb
+# Simplified references.
+#
 # Revision 1.7  2002/10/05 09:50:10  arensb
 # Merged with arensb-context branch: use C4::Context->dbh instead of
 # &C4Connect, and generally prefer C4::Context over C4::Database.
@@ -317,8 +320,6 @@ Koha Developement team <info@koha.org>
 
 =head1 SEE ALSO
 
-L<perl>.
-
-L<C4::Circulation::Circ2(3)>
+C4::Circulation::Circ2(3)
 
 =cut
