@@ -373,7 +373,7 @@ my %requiretables = (
 my %requirefields = (
     biblio        => { 'abstract' => 'text' },
     deletedbiblio => { 'abstract' => 'text', 'marc' => 'blob' },
-    deleteditems => { 'marc' => 'blob', 'paidfor' => 'text' },
+    deleteditems => { 'marc' => 'blob', 'paidfor' => 'text', 'location' => 'varchar(80)'},
     biblioitems   => {
         'lccn' => 'char(25)',
         'url'  => 'varchar(255)',
@@ -1369,6 +1369,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.95  2004/11/08 19:57:32  tipaul
+# bugfix
+#
 # Revision 1.94  2004/09/06 10:00:29  tipaul
 # adding a "location" field to the library.
 # This field is useful when the callnumber contains no information on the room where the item is stored.
