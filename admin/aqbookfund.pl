@@ -142,18 +142,9 @@ if ($op eq 'add_form') {
 	$sth->execute;
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	print mktablehdr;
-	print mktablerow(2,'#99cc33',bold('Book fund'),bold("$bookfundid"),'/images/background-mem.gif');
-	print "<form action='$script_name' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='$bookfundid'>";
-	print "<tr><td>Name</td><td>$data->{'bookfundname'}</td></tr>";
-	print "<tr><td>Group</td><td>$data->{'bookfundgroup'}</td></tr>";
-#	if ($total->{'total'} >0) {
-#		print "<tr><td colspan=2 align=center><b>This record is used $total->{'total'} times. Deletion not possible</b></td></tr>";
-#		print "<tr><td colspan=2></form><form action='$script_name' method=post><input type=submit value=OK></form></td></tr>";
-#	} else {
-		print "<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>";
-		print "<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>";
-#	}
+	$template->param(bookfundid => $bookfundid);
+	$template->param(bookfundname => $data->{'bookfundname'});
+	$template->param(bookfundgroup => $data->{'bookfundgroup'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -164,10 +155,6 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
-	print "data deleted";
-	print "<form action='$script_name' method=post>";
-	print "<input type=submit value=OK>";
-	print "</form>";
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
