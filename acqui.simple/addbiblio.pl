@@ -240,7 +240,7 @@ sub build_tabs ($$$$) {
 						next if (length $subfield !=1);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tag<10);
-						next if (defined($record->field($tag)->subfield($subfield)));
+						next if (defined($field->subfield($subfield)));
 						push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 						$i++;
 					}
