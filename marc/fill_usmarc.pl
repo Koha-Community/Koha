@@ -36,6 +36,7 @@ my $description;
 foreach $tag (sort keys %$fields) {
 	$fields->{$tag}->{"name"}  =~ s/\(R\)//g;
 	$fields->{$tag}->{"name"}  =~ s/\(NR\)//g;
+	$fields->{$tag}->{"name"}  =~ s/\<a h.*\<\/a>//g;
 	$reqtag->execute($tag,$fields->{$tag}->{"name"},$fields->{$tag}->{"repeating"});
 	foreach $subfield (sort keys %{$fields->{$tag}->{"subfields"}}) {
 	    if ($fields->{$tag}->{"subfields"}->{$subfield}->{"description"}) {
@@ -43,6 +44,7 @@ foreach $tag (sort keys %$fields) {
 	    } else {
 		$description=$fields->{$tag}->{"subfields"}->{$subfield}->{"name"};
 	    }
+		$description  =~ s/\<a href.*\<\/a\>//g;
 	    $reqsubfield->execute(
 				  $tag,
 				  $subfield,
