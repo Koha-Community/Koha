@@ -6,9 +6,9 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <h3 class="title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
 	<!-- TMPL_VAR NAME="class" --></h3><div class="details">
-			<div style="float: right;">
-<img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/koha/intranet/htdocs/intranet-tmpl/npl/en/images/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" />
-</div>
+			<!-- Display for NPL <div style="float: right;">
+<img src="/cgi-bin/koha/imgcheck.pl?image_location=/usr/local/images/<!-- TMPL_VAR NAME="isbn" -->.jpg" alt="Book Cover Image" />
+</div> /Display for NPL -->
 <h4>Biblio Record <!-- TMPL_VAR NAME="biblionumber" --></h4>
 	<div class="tabitem"><form action="MARCdetail.pl" method="get">
 <input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
@@ -22,20 +22,17 @@
 			<!-- TMPL_IF NAME="additional" --><li><b>Additional Author:</b> <!-- TMPL_VAR NAME="additional" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="isbn" --><li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="seriestitle" --><li><b>Series Title:</b> <!-- TMPL_VAR NAME="seriestitle" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subject" --><li><b>Subject:</b> <!-- TMPL_VAR NAME="subject" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="copyrightdate" --><li><b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="notes" --><li><b>Notes:</b> <!-- TMPL_VAR NAME="notes" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="unititle" --><li><b>Unititle:</b> <!-- TMPL_VAR NAME="unititle" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="serial" --><li><b>Serial:</b> <!-- TMPL_VAR NAME="serial" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="count" --><li><b>Total Number of Items:</b> <!-- TMPL_VAR NAME="count" --></li><!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-		<!-- TMPL_IF NAME="subjects" -->	
-		<li><b>Subject: </b><!-- TMPL_LOOP NAME="SUBJECTS" -->
-	<a href="/cgi-bin/koha/search.pl?type=intra&amp;subjectitems=<!-- TMPL_VAR NAME="SUBJECTS" ESCAPE="URL" -->"><!-- TMPL_VAR NAME=SUBJECTS --></a>
-	<!-- /TMPL_LOOP --></li>
-		<!-- /TMPL_IF -->
 			</ul>
 
 			</div>
+<!-- /TMPL_LOOP -->
+
 <div class="table"><table>
 	<tr>
 		<th>Item Type</th>
@@ -75,8 +72,8 @@
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table></div>
-<!-- 
-<p>
+
+<!-- Hide from NPL --><p>
 <table border="1" cellpadding="0" cellspacing="0" align="center" class="results" width="80%">
 	<tr>
 		<td class="cell">
@@ -95,7 +92,7 @@
 </table>
 </center>
 <br clear=all>
-<p /> -->
+<p /><!-- /Hide from NPL -->
 
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 <!-- TMPL_IF NAME="abstract -->
