@@ -131,7 +131,7 @@ if ($op eq 'add' or $op eq 'modify') {
 			initials='$data{'initials'}',physstreet='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',
 			gonenoaddress='$data{'gna'}',lost='$data{'lost'}',debarred='$data{'debarred'}',
 			textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
-			zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}'
+			zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}', sort1='$data{'sort1'}', sort2='$data{'sort2'}'
 			where borrowernumber=$data{'borrowernumber'}";
 		}else{
 			$data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
@@ -141,13 +141,13 @@ if ($op eq 'add' or $op eq 'modify') {
 			$query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
 			firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
 			altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-			initials,ethnicity,physstreet,branchcode,zipcode,homezipcode) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
+			initials,ethnicity,physstreet,branchcode,zipcode,homezipcode,sort1,sort2) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
 			'$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
 			'$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
 			'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
 			'$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
 			'$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
-			'$data{'ethnicity'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
+			'$data{'ethnicity'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}','$data{'sort1'}','$data{'sort2'}')";
 		}
 		# ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 		# so when we update information for an adult we should check for guarantees and update the relevant part
@@ -308,6 +308,8 @@ if ($delete){
 				expiry		=> $data->{'expiry'},
 				cardnumber	=> $cardnumber,
 				dateofbirth	=> $data->{'dateofbirth'},
+				sort1 => $data->{'sort1'},
+				sort2 => $data->{'sort2'},
 				dateformat      => display_date_format(),
 			        modify          => $modify,
 				CGIbranch => $CGIbranch);

@@ -56,7 +56,7 @@ for (my $i=0;$i<1;$i++){
 		altrelationship='$data{'altrelationship'}',othernames='$data{'othernames'}',phoneday='$data{'phoneday'}',
 		categorycode='$data{'categorycode'}',city='$data{'city'}',area='$data{'area'}',phone='$data{'phone'}',
 		borrowernotes='$data{'borrowernotes'}',altphone='$data{'altphone'}',surname='$data{'surname'}',
-		initials='$data{'initials'}',streetaddress='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',physstreet='$data{'physstreet'}'
+		initials='$data{'initials'}',streetaddress='$data{'streetaddress'}',ethnicity='$data{'ethnicity'}',physstreet='$data{'physstreet'}',sort1='$data{sort1}',sort2='$data{'sort2'}'
 		where borrowernumber=$data{'borrowernumber'}";
 		#  print $query;
 	}elsif ($data{"cardnumber_child_$i"} ne ''){
@@ -79,7 +79,7 @@ for (my $i=0;$i<1;$i++){
 		$query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
 		firstname,altnotes,dateofbirth,contactname,emailaddress,dateenrolled,streetcity,
 		altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-		initials,ethnicity,borrowernumber,guarantor,school,physstreet)
+		initials,ethnicity,borrowernumber,guarantor,school,physstreet,sort1,sort2)
 		values ('','$data{'expiry'}',
 		'$cardnumber',
 		'$sex','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
@@ -87,7 +87,7 @@ for (my $i=0;$i<1;$i++){
 		'$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
 		'$data{'phoneday'}','C','$data{'city'}','$data{'area'}','$data{'phone'}',
 		'$notes','$data{'altphone'}','$surname','$data{'initials'}',
-		'$data{'ethnicity'}','$bornum','$guarant','$school','$data{'physstreet'}')";
+		'$data{'ethnicity'}','$bornum','$guarant','$school','$data{'physstreet'}','$data{'sort1'}','$data{'sort2'}')";
 
 	}
 	#print $query;

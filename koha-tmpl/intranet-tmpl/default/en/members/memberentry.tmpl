@@ -242,7 +242,6 @@
 				<td> Notes</td>
 				<td colspan="4"><textarea name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td>
 			</tr>
-
 			<!-- TMPL_IF NAME="modify" -->
 				<tr><td colspan=5>FLAGS</td></tr>
 				<!-- TMPL_LOOP NAME="flagloop" -->
@@ -255,6 +254,20 @@
 				<!-- /TMPL_LOOP -->
 			<!-- /TMPL_IF -->
 
+			<tr>
+				<td colspan=5>The 2 following fields are available for your own usage. They can be useful for stat purposes</td>
+			<tr>
+				<td>Sorting field 1</td>
+				<td colspan="4">
+					<input type="text" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->">
+				</td>
+			</tr>
+			<tr>
+				<td>Sorting field 2</td>
+				<td colspan="4">
+					<input type="text" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->">
+				</td>
+			</tr>
 
 			<tr>
 				<td></td>

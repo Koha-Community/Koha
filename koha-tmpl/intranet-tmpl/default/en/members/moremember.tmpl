@@ -2,8 +2,8 @@
 
 <div id="mainbloc">
 	<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
-	<div class="bloc25">
-		<div class="bloctitle">MEMBERSHIP RECORD</div>
+	<div id="bloc25">
+		<h2 class="members">Membership record</h2>
 		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF name="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
 		<p>Card number: <!-- TMPL_VAR NAME="cardnumber" --><br>
 		Postal Address: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR name="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
@@ -34,6 +34,12 @@
 			Relationship: <!-- TMPL_VAR NAME="altrelationship" --><br>
 		<!-- /TMPL_UNLESS -->
 		Notes: <!-- TMPL_VAR NAME="altnotes" -->
+		<!-- TMPL_IF name="sort1" -->
+			<p>Sort field 1 : <!-- TMPL_VAR name="sort1" --></p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="sort2" -->
+			<p>Sort field 2 : <!-- TMPL_VAR name="sort2" --></p>
+		<!-- /TMPL_IF -->
 		</p>
 		<p>
 		<!-- TMPL_UNLESS name="I" -->
@@ -57,13 +63,12 @@
 		<!-- TMPL_IF name="IS_ADULT" -->
 			
 			<form action="/cgi-bin/koha/members/jmemberentry.pl" method="post">
-				<p align="right"><input type="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
+				<input type="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
 				<input type="hidden" name="type" value="Add">
-				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=borrowernumber -->"></p>
+				<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME=borrowernumber -->">
 			</form>
 			
 		<!-- /TMPL_IF -->
-		<br>
 		<!-- TMPL_IF name="I" -->
 			<form action="/cgi-bin/koha/members/imemberentry.pl" method="post">
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME="bornum" -->">
@@ -89,8 +94,8 @@
 		</form>
 	</div>
 
-	<div class="bloc25">
-		<div class="bloctitle">FINES &amp; CHARGES</div>
+	<div id="bloc25">
+		<h2 class="members">Fines &amp; charges</h2>
 		<!-- TMPL_IF name="totaldue" -->
 			Total due <!-- TMPL_VAR name="totaldue"-->
 		<TMPL_ELSE>
@@ -105,8 +110,56 @@
 			</a>
 		</p>
 	</div>
-	<div class="bloc25">
-		<div class="bloctitle">ITEMS CURRENTLY ON ISSUE</div>
+	<div id="bloc25">
+		<h2 class="members">Items requested</h2>
+			<!-- TMPL_IF NAME=reserveloop -->
+			<form action="/cgi-bin/koha/modrequest.pl" method="post">
+			<table>
+				<tr>
+					<th>Title</th>
+					<th>Requested</th>
+					<th>Remove</th>
+				</tr>
+					<!-- TMPL_LOOP NAME=reserveloop -->
+					<tr>
+						<td><input type="hidden" name="from" value="borrower">
+							<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
+							<!-- TMPL_IF NAME=volumeddesc -->
+								<!-- TMPL_VAR NAME="volumeddesc" -->
+								<!-- TMPL_VAR NAME="itemtype" -->
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="reservedate2" --></td>
+						<td>
+							<select name="rank-request">
+							<option value="n">No
+							<option value="del">Yes
+							</select><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+						<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
+						</td>
+						
+					</tr>
+					<!-- /TMPL_LOOP -->
+					<tr>
+						<td colspan="5" align="right">
+						<!-- TMPL_IF name="reserveloop" -->
+							<input type="submit" name="submit" value="Update" class="button">
+						<!-- /TMPL_IF -->
+						</td>
+					</tr>
+				</table>
+				</form>
+			<!-- TMPL_ELSE -->
+				None
+			<!-- /TMPL_IF -->
+	</div>
+
+	<div id="bloc25">
+		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Reading Record</a>
+	</div>
+
+	<div id="bloc25">
+		<h2 class="members">Items currently on issue</h2>
 		<!-- TMPL_IF name="issueloop" -->
 			<form action="renewscript.pl" method="post">
 			<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
@@ -149,53 +202,6 @@
 			None
 		<!-- /TMPL_IF -->
 	</div>
-	<div class="bloc25">
-		<div class="bloctitle">ITEMS REQUESTED</div>
-			<!-- TMPL_IF NAME=reserveloop -->
-			<form action="/cgi-bin/koha/modrequest.pl" method="post">	<table>
-					<tr>
-						<th>Title</th>
-						<th>Requested</th>
-						<th>Remove</th>
-					</tr>
-					
-						
-						<!-- TMPL_LOOP NAME=reserveloop -->
-						<tr>
-							<td><input type="hidden" name="from" value="borrower">
-								<a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a>
-								<!-- TMPL_IF NAME=volumeddesc -->
-									<!-- TMPL_VAR NAME="volumeddesc" -->
-									<!-- TMPL_VAR NAME="itemtype" -->
-								<!-- /TMPL_IF -->
-							</td>
-							<td><!-- TMPL_VAR NAME="reservedate2" --></td>
-							<td>
-								<select name="rank-request">
-								<option value="n">No
-								<option value="del">Yes
-								</select><input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-							<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="bornum" -->">
-							</td>
-							
-						</tr>
-						<!-- /TMPL_LOOP -->
-						<tr>
-							<td colspan="5" align="right">
-							<!-- TMPL_IF name="reserveloop" -->
-								<input type="submit" name="submit" value="Update" class="button">
-							<!-- /TMPL_IF -->
-							</td>
-						</tr>
-					
-				</table></form>
-			<!-- TMPL_ELSE -->
-				None
-			<!-- /TMPL_IF -->
-	</div>
-
-<p>		<a class="button" href="/cgi-bin/koha/readingrec.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Reading Record</a></p>
-
 </div>
 <script language="JavaScript" type="text/javascript">
 function confirm_deletion() {
