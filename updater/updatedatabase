@@ -88,6 +88,10 @@ my %requiretables=(
   		ip varchar(16) default NULL,
 		lasttime int,
 		PRIMARY KEY (sessionID)   )",
+    sessionqueries=>"( sessionID varchar(255) NOT NULL default '',
+    		       userid char(100) NOT NULL default '',
+    		       ip char(18) NOT NULL default '',
+		       url text NOT NULL default ''  )",
 );
 
 
@@ -104,6 +108,8 @@ my %requirefields=(
     statistics=>{'borrowernumber' =>'int(11)'},
     aqbooksellers=>{'invoicedisc' =>'float(6,4)',
     		     'nocalc' => 'int(11)'},
+    borrowers=>{'userid' => 'char(30)',
+    		'password' => 'char(30)',},
 );
 
 # Default system preferences
@@ -298,6 +304,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.14  2002/07/08 16:20:26  tonnesen
+# Added sessionqueries table and password/userid fields to borrowers table
+#
 # Revision 1.13  2002/07/04 18:05:36  tonnesen
 # bug fix
 #
