@@ -2,8 +2,6 @@
 
 <HTML>
 
-
-
 	<TMPL_INCLUDE NAME="general-top.inc">
 
 	<TMPL_INCLUDE NAME="cat-top.inc">
@@ -18,12 +16,12 @@
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
 	<TMPL_IF NAME="norequests">
 	<TMPL_ELSE>
-		<table align="right"><tr><td>
+		<table align="right"><tr valign="top"><td>
 				<a class="button" href=request.pl?bib=<TMPL_VAR NAME="biblionumber">>Requests</a>
 		</td></tr></table>
 	</TMPL_IF>
-	<h1><TMPL_VAR NAME="title"><br>
-	 (<TMPL_VAR NAME="author">)</h1>
+	<h1><TMPL_VAR NAME="title">
+	<TMPL_IF NAME="author"> (<TMPL_VAR NAME="author">)</h1></TMPL_IF>
 	 
 	 
 	<TMPL_VAR NAME="class">
@@ -41,15 +39,15 @@
 			
 		
 			<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
-						<input type="submit" name="submit" value="Edit">
+						<input type="submit" name="submit" value="Edit" class="go">
 					
-					<input type="submit" name="delete" value="Delete">
+					<input type="submit" name="delete" value="Delete" class="delete">
 					
 			</form></td>
 			
 			</tr>
 			<TMPL_IF NAME="abstract">		
-	<tr>
+	<tr valign="top">
 			<td class="result" colspan=2>		
 			<TMPL_VAR NAME="abstract"></td></tr>
 			
@@ -60,136 +58,142 @@
 	</TMPL_IF>	
 	
 	<TMPL_IF NAME="subtitle">		
-	<tr>
+	<tr valign="top">
 			<td class="label">		
 			Subtitle</td><td class="result"> <TMPL_VAR NAME="subtitle"></td></tr>
 			
 	</TMPL_IF>	
 			<TMPL_IF NAME="seriestitle">
-		<tr>	
+		<tr valign="top">	
 			<td class="label">
 			Series Title</td><td class="result"> <TMPL_VAR NAME="seriestitle"></td></tr>
 		
 	</TMPL_IF>
 	
 	<TMPL_IF NAME="conference">
-		<tr>	
+		<tr valign="top">	
 			<td class="label">
 			Conference Title</td><td class="result"> <TMPL_VAR NAME="conference"></td></tr>
 	</TMPL_IF>	
 	<TMPL_IF NAME="unititle">		
-			<tr>
+			<tr valign="top">
 			<td class="label">
 			Unititle</td><td class="result"><TMPL_VAR NAME="unititle"></td></tr>
 	
 		
 	</TMPL_IF>
 	<TMPL_IF NAME="author">	
-		<tr>	
+		<tr valign="top">	
 			<td class="label">Author</td><td class="result"> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR
 			NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></td></tr>
 	</TMPL_IF>	
 	<TMPL_IF NAME="additional">		
-			<tr>
+			<tr valign="top">
 			<td class="label">
 			Additional Author</td><td class="result"> <TMPL_VAR NAME="additional"></td></tr>
 	</TMPL_IF>	
 	<TMPL_IF NAME="copyrightdate">		
-			<tr>
+			<tr valign="top">
 			<td class="label">
 			Copyright</td><td class="result"> <TMPL_VAR NAME="copyrightdate"></td></tr>
 	</TMPL_IF>	
 	
 	<TMPL_IF NAME="language">		
-			<tr>
+			<tr valign="top">
 			<td class="label">
 			Language</td><td class="result"> <TMPL_VAR NAME="language"></td></tr>
 	</TMPL_IF>	
 	
 	<TMPL_IF NAME="subject">	
-			<tr>
+			<tr valign="top">
 			<td class="label">
-			Subjects</td><td class="result"> <TMPL_VAR NAME="subject"></td></tr>
+			Subjects</td><td class="result"><TMPL_VAR NAME="subject"></td></tr>
 			
 	</TMPL_IF>	
 	<TMPL_IF NAME="notes">		
 			
-			<tr>
+			<tr valign="top">
 			<td class="label">
 			Notes</td><td class="result"> <TMPL_VAR NAME="notes"></td></tr>
 	</TMPL_IF>	
 	
 	<TMPL_IF NAME=serial">		
-			<tr>
+			<tr valign="top">
 			<td class="label">
 			Serial</td><td class="result"> <TMPL_VAR NAME="serial"></td></tr>
 			
 	</TMPL_IF>	
 	
-			<tr>
+			<tr valign="top">
 			<td class="label">
-			<a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">Show MARC Tags</a>
+			<a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">Show MARC </a>
 		
 		</td>
 	</tr>
 	
 	
 	</table>
-
+	
+<p>&nbsp;</p>
 
 <h2>Holidings Information (<TMPL_VAR NAME="count"> items)</h2>
 
 </TMPL_LOOP>
 <table class="data" cellspacing=0 cellpadding=0>
 	
-	<tr class="data-header">
-	<td class="column-first">Item Type</td>
-		<td class="column-middle">Class</td>
-		<td class="column-middle">Location</td>
-		<td class="column-middle">Date Due</td>
-		<td class="column-middle">Last Seen</td>
-		<td class="column-middle">Barcode</td>
-		<td class="column-middle">Volume</td>
+	<tr class="data-header" valign="top">
+	<td class="column-first">&nbsp;Item Type</td>
+		<td class="column-middle">&nbsp;Class</td>
+		<td class="column-middle">&nbsp;Location</td>
+		<td class="column-middle">&nbsp;Date Due</td>
+		<td class="column-middle">&nbsp;Last Seen</td>
+		<td class="column-middle">&nbsp;Barcode</td>
+		<td class="column-middle">&nbsp;Volume</td>		
+		<td class="column-last">&nbsp;Action</td>		
 		
-		<td class="column-last"></td>
 		
 	</tr>
 	<TMPL_LOOP NAME="ITEM_RESULTS">
-		<tr>
+		<tr valign="top">
 			
-			<td class="column-first"><TMPL_VAR NAME="itemtype"></td>
-			<td class="column-middle"><a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a></td>
-			<td class="column-middle"><TMPL_VAR NAME="branchname"></td>
-			<td class="column-middle"><TMPL_VAR NAME="datedue"></td>
-			<td class="column-middle"><TMPL_VAR NAME="datelastseen"></td>
-			<td class="column-middle"><TMPL_VAR NAME="barcode"></td>
-			<td class="column-middle"><TMPL_VAR NAME="volumeddesc"></td>
-		    <td class="column-last"><a href="/cgi-bin/koha/moredetail.pl?type=<TMPL_VAR NAME="type">&item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">More ></a></td>
-		
-			<TMPL_IF NAME="type">
-				<td class="column-last">
-					<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<TMPL_VAR NAME="biblioitemnumber">&item=<TMPL_VAR NAME="itemtype">>Fix Itemtype</a>
+			<td class="column-first">&nbsp;<TMPL_VAR NAME="itemtype"> &nbsp;</td>
+			<td class="column-middle">&nbsp;<a href=/cgi-bin/koha/search.pl?dewey=<TMPL_VAR NAME="dewey" ESCAPE=URL>><TMPL_VAR NAME="class"></a> &nbsp;</td>
+			<td class="column-middle">&nbsp;<TMPL_VAR NAME="branchname"> &nbsp;</td>
+			<td class="column-middle">&nbsp;<b><TMPL_VAR NAME="datedue"></b> &nbsp;</td>
+			<td class="column-middle">&nbsp;<TMPL_VAR NAME="datelastseen"> &nbsp;</td>
+			<td class="column-middle">&nbsp;<TMPL_VAR NAME="barcode"> &nbsp;</td>
+			<td class="column-middle">&nbsp;<TMPL_VAR NAME="volumeddesc"> &nbsp;</td>
+			
+		    <td class="column-last">&nbsp;<a href="/cgi-bin/koha/moredetail.pl?type=<TMPL_VAR NAME="type">&item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">More</a>
+			
+<TMPL_IF NAME="type">
+			&nbsp;	|  &nbsp;<a href=/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=<TMPL_VAR NAME="biblioitemnumber">&item=<TMPL_VAR NAME="itemtype">>Fix Itemtype</a>
 				</td>
+				
+				<TMPL_ELSE></td>
+
+			
+		
+			
 			</TMPL_IF>
 		</tr>
 	</TMPL_LOOP>
 	<TMPL_LOOP NAME="WEB_RESULTS">
-		<tr>
-		<td  class="column-first"><TMPL_VAR NAME="itemtype"></td>
-			<td class="column-middle">Website</td>
-			<td class="column-middle">Online</td>
-			<td class="column-middle">Available</td>
-			<td class="column-middle"></td>
+> 		<tr >
+		<td  class="column-first">&nbsp;<TMPL_VAR NAME="itemtype"></td>
+			<td class="column-middle">&nbsp;Website</td>
+			<td class="column-middle">&nbsp;Online</td>
+			<td class="column-middle">&nbsp;<a href="http://<TMPL_VAR NAME="url">">Available</a></td>
+			<td class="column-middle">&nbsp;</td>
 		
-			<td class="column-last">
+			<td class="column-middle">&nbsp;
 				<a href="http://<TMPL_VAR NAME="url">"><TMPL_VAR NAME="url"></a>
 			
 			</td>
-				<td class="column-middle"></td>
-			<td class="column-last">
-				<a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">More ></a>
-			</td>
-		</tr>
+				<td class="column-middle">&nbsp;</td>
+				<td class="column-last">&nbsp;<a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">">More</a></td>
+	
+				</tr>
 	</TMPL_LOOP>
 </table>
 
@@ -197,11 +201,11 @@
 
 	<div class="tip">
 	<Span class="tip-big">tip</span>
-	<span class="tip-text"> to <b>view or edit</b> the rest of the record for an item, 
+	<span class="tip-text"> to <b>view or edit the rest of the record</b> for an item, 
 	click on <b>More </b>. You will see the group and item information together.
-	<br>
+	
 			<b>Editing the biblio</b>  will update
-			the record for <b>all</b> the items. <br>
+			the record for <b>all</b> the items. 
 			
 			
 			<b>Make a new biblio or add items in  </b> 

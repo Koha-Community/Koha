@@ -24,7 +24,7 @@ href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra>Bibli
 <h1>Group and Item Details For<br>
 <a
 href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
-(<TMPL_VAR NAME="author">)</a></h1>
+<TMPL_IF NAME="author">(<TMPL_VAR NAME="author">)</TMPL_IF></a></h1>
 
 <form action=/cgi-bin/koha/modbibitem.pl>
 <input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
@@ -39,12 +39,12 @@ is set up to only display those fields that a record has data for
 <TABLE  class="more-details-group" align="left">
 <TR class="more-details">
 <td  class="more-details-header">
-<H3> GROUP <TMPL_VAR NAME="biblioitemnumber"> - <TMPL_VAR NAME="description"></h3> </TD>
+<H3> Group <TMPL_VAR NAME="biblioitemnumber"> - <TMPL_VAR NAME="description"></h3> </TD>
 </TR>
 <tr>
 <TD class="more-details-data">
-<INPUT TYPE="submit" name="submit"  VALUE="Edit" >
-<INPUT TYPE="submit" name="delete"  VALUE="Delete">
+<INPUT TYPE="submit" name="submit"  VALUE="Edit" class="go">
+<INPUT TYPE="submit" name="delete"  VALUE="Delete" class="delete">
 <br>
 <b>Biblionumber:</b> <TMPL_VAR NAME="biblionumber"><br>
 <b>Item Type:</b> <TMPL_VAR NAME="itemtype"><br>
@@ -85,7 +85,7 @@ is set up to only display those fields that a record has data for
 
 <TABLE class="more-details-item" align="left">
 <TR VALIGN=TOP>
-<td  class="more-details-header"><h3>Item - Barcode
+<td  class="more-details-header"><h3>Item Barcode
 <TMPL_VAR NAME="barcode"></h3></TD>
 </TR>
 <tr class="more-details">
@@ -94,8 +94,8 @@ is set up to only display those fields that a record has data for
 <input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
 <input type=hidden name=item value=<TMPL_VAR NAME="itemnumber">>
 <input type=hidden name=type value=<TMPL_VAR NAME="type">>
-<INPUT TYPE="submit" name="submit"  VALUE="Edit">
-<INPUT TYPE="submit" name="delete"  VALUE="Delete">
+<INPUT TYPE="submit" name="submit"  VALUE="Edit" class="go">
+<INPUT TYPE="submit" name="delete"  VALUE="Delete" class="delete">
 <br>
 <TMPL_IF NAME="homebranch"><b>Home Branch:</b> <TMPL_VAR NAME="homebranch"><br></TMPL_IF>
 <TMPL_IF NAME="datelastseen"><b>Last seen:</b> <TMPL_VAR NAME="datelastseen"><br></TMPL_IF>
@@ -129,7 +129,7 @@ Issues:</a></b> <TMPL_VAR NAME="issues"><br>
 <p>
 </form>
 
-<TMPL_INCLUDE NAME="general-end.inc">
+<TMPL_INCLUDE NAME="cat-bottom.inc">
 	
 
 </BODY>
