@@ -71,21 +71,21 @@ my $priv_func = sub {
    
 # make all your functions, whether exported or not;
  
-sub startpage{
+sub startpage() {
   return("<html>\n");
 }
 
-sub gotopage{
-  my ($target) = @_;
-  print "<br>goto target = $target<br>";
+sub gotopage($) {
+  my ($target) = shift;
+  #print "<br>goto target = $target<br>";
   my $string = "<META HTTP-EQUIV=Refresh CONTENT=\"0;URL=http:$target\">";
   return $string;
 }
 
 
-sub startmenu{
+sub startmenu($) {
   # edit the paths in here
-  my ($type)=@_;
+  my ($type)=shift;
   if ($type eq 'issue') {
     open (FILE,"$path/issues-top.inc") || die;
   } elsif ($type eq 'opac') {
@@ -103,8 +103,8 @@ sub startmenu{
   }
   my @string=<FILE>;
   close FILE;
-  my $count=@string;
-  #  $string[$count]="<BLOCKQUOTE>";
+  # my $count=@string;
+  # $string[$count]="<BLOCKQUOTE>";
   return @string;
 }
 
@@ -131,7 +131,7 @@ sub endmenu{
   return @string;
 }
 
-sub mktablehdr {
+sub mktablehdr() {
     return("<table border=0 cellspacing=0 cellpadding=5>\n");
 }
 
@@ -340,7 +340,7 @@ sub mkform2{
       if ($reqd eq "R") {
         $ltext = $ltext." (Req)";
 	}
-      @order[$posn] =mktablerow(2,'white',$ltext,$text);
+      $order[$posn] =mktablerow(2,'white',$ltext,$text);
     }
   }
   $string=$string.join("\n",@order);
