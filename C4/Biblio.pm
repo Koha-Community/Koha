@@ -2653,8 +2653,8 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.116  2005/03/01 13:40:48  tipaul
-# merging 2.2 branch with head. Sorry for not making it before, many many commits done here
+# Revision 1.117  2005/03/07 08:55:29  tipaul
+# synch'ing with 2.2
 #
 # Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
 # exporting MARCdelsubfield sub. It's used in authority merging.

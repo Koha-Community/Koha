@@ -858,8 +858,8 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
-# Revision 1.10  2005/03/01 13:40:48  tipaul
-# merging 2.2 branch with head. Sorry for not making it before, many many commits done here
+# Revision 1.11  2005/03/07 08:55:29  tipaul
+# synch'ing with 2.2
 #
 # Revision 1.9.2.2  2005/02/28 14:03:13  tipaul
 # * adding search on "main entry" (ie $a subfield) on a given authority (the "search everywhere" field is still here).
