@@ -70,6 +70,7 @@ my $count=@items;
 $data->{'count'}=$count;
 my ($order,$ordernum)=getorder($bi,$biblionumber);
 
+
 my $env;
 $env->{itemcount}=1;
 
@@ -87,8 +88,11 @@ foreach my $item (@items){
     $item->{'timestamp0'}="$day/$mon/$year";
     $item->{'dateaccessioned'} = slashifyDate($item->{'dateaccessioned'});
     $item->{'datelastseen'} = slashifyDate($item->{'datelastseen'});
+    $item->{'ordernumber'} = $ordernum;
+    $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
+
     if ($item->{'date_due'} = 'Available'){
-	$item->{'issue'}="<b>Currently on issue to:</b><br>";
+	$item->{'issue'}="<b>Available</b><br>";
     } else {
 	$item->{'issue'}="<b>Currently on issue to:</b> <a href=/cgi-bin/koha/moremember.pl?bornum=$item->{'borrower0'}>$item->{'card'}</a><br>";
     }
