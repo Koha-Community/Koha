@@ -54,7 +54,7 @@ my $biblioitem       = {
     volumeddesc       => $input->param('volumeddesc')?$input->param('volumeddesc'):"",
     pages             => $input->param('pages')?$input->param('pages'):"",
     size              => $input->param('size')?$input->param('size'):"",
-    notes             => $input->param('notes')?$input->param('notes'):""
+    notes             => $input->param('itemnotes')?$input->param('itemnotes'):""
 }; # my biblioitem
 my $newgroup = 0;
 my $website  = 0;
