@@ -3,9 +3,16 @@
 <center>
 <br>
 <TMPL_LOOP NAME="BIBITEM_DATA">
-<FONT SIZE=6><em><a
+<table border=0 cellpadding=10 align=right>
+<tr>
+	<td>
+		<a class="button" href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">>R&eacute;servations</a>
+	</td>
+</tr>
+</table>
+<h1><a
 href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
-(<TMPL_VAR NAME="author">)</a></em></FONT>  <a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber"> class="button">R&eacute;servations</a>
+(<TMPL_VAR NAME="author">)</a></h1><P>
 <p>
 <form action=/cgi-bin/koha/modbibitem.pl>
 <input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
@@ -24,20 +31,20 @@ href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL
 <FONT SIZE=2  face="arial, helvetica">
 <b>num&eacute;ro de notice:</b> <TMPL_VAR NAME="biblionumber"><br>
 <b>Type de document:</b> <TMPL_VAR NAME="itemtype"><br>
-<b>URL:</b> <TMPL_VAR NAME="url"><br>
-<b>Dur&eacute;e de pr&ecirc;t:</b> <TMPL_VAR NAME="loanlength"><br>
-<b>Co&ucirc;t du pr&ecirc;t:</b> <TMPL_VAR NAME="rentalcharge"><br>
-<b>Cote:</b> <TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"><br>
+<b>URL :</b> <TMPL_VAR NAME="url"><br>
+<b>Dur&eacute;e de pr&ecirc;t :</b> <TMPL_VAR NAME="loanlength"><br>
+<b>Co&ucirc;t du pr&ecirc;t :</b> <TMPL_VAR NAME="rentalcharge"><br>
+<b>Cote :</b> <TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"><br>
 <b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
-<b>Editeur:</b> <TMPL_VAR NAME="publishercode"> <br>
-<b>Lieu:</b> <TMPL_VAR NAME="place"><br>
+<b>Editeur :</b> <TMPL_VAR NAME="publishercode"> <br>
+<b>Lieu :</b> <TMPL_VAR NAME="place"><br>
 <b>Date:</b> <TMPL_VAR NAME="publicationyear"><br>
-<b>Volume:</b> <TMPL_VAR NAME="volumeddesc"><br>
-<b>Pages:</b> <TMPL_VAR NAME="pages"><br>
-<b>Ill.:</b> <TMPL_VAR NAME="illus"><br>
-<b>Taille:</b> <TMPL_VAR NAME="size"><br>
-<b>Notes:</b> <TMPL_VAR NAME="bnotes"><br>
-<b>Nbre d'exemplaires:</b> <TMPL_VAR NAME="count">
+<b>Volume :</b> <TMPL_VAR NAME="volumeddesc"><br>
+<b>Pages :</b> <TMPL_VAR NAME="pages"><br>
+<b>Ill :</b> <TMPL_VAR NAME="illus"><br>
+<b>Taille :</b> <TMPL_VAR NAME="size"><br>
+<b>Notes :</b> <TMPL_VAR NAME="bnotes"><br>
+<b>Nbre d'exemplaires :</b> <TMPL_VAR NAME="count">
 </font>
 </TD>
 </tr>
@@ -45,7 +52,7 @@ href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL
 </form>
 </TMPL_LOOP>
 <TMPL_LOOP NAME="ITEM_DATA">
-<img src="/images/holder.gif" width=16 height=300 align=left>
+<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=16 height=300 align=left>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
 <TR VALIGN=TOP>
 <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>CODE-BARRES
@@ -61,28 +68,29 @@ href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL
 <INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Localisation d'origine:</b> <TMPL_VAR NAME="homebranch"><br>
-<b>Derni&egrave;re transaction:</b> <TMPL_VAR NAME="datelastseen"><br>
-<b>Dernier emprunt:</b> <TMPL_VAR NAME="timestamp0"><br>
+<b>Localisation d'origine :</b> <TMPL_VAR NAME="homebranch"><br>
+<b>Derni&egrave;re transaction :</b> <TMPL_VAR NAME="datelastseen"><br>
+<b>Dernier emprunt :</b> <TMPL_VAR NAME="timestamp0"><br>
 <!-- on issue bit -->
 <TMPL_VAR NAME="issue">
 <!-- after -->
-<b>Dernier emprunteur 1:</b> <TMPL_VAR NAME="card0"><br>
-<b>Dernier emprunteur 2:</b> <TMPL_VAR NAME="card1"><br>
-<b>Localisation actuelle:</b> <TMPL_VAR NAME="holdingbranch"><br>
-<b>Prix de remplacement:</b> <TMPL_VAR NAME="replacementprice"><br>
-<b>Exemplaire perdu:</b> <TMPL_VAR NAME="itemlost"><br>
-<b>Pay&eacute;:</b> <TMPL_VAR NAME="paidfor"><br>
+<b>Dernier emprunteur 1 :</b> <TMPL_VAR NAME="card0"><br>
+<b>Last Borrower 2 :</b> <TMPL_VAR NAME="card1"><br>
+<b>Localisation actuelle :</b> <TMPL_VAR NAME="holdingbranch"><br>
+<b>Prix de remplacement :</b> <TMPL_VAR NAME="replacementprice"><br>
+<b>Exemplaire perdu :</b> <TMPL_VAR NAME="itemlost"><br>
+<b>Pay&eacute; :</b> <TMPL_VAR NAME="paidfor"><br>
 <b>Notes:</b> <TMPL_VAR NAME="itemnotes"><br>
-<b>Prolongations:</b> <TMPL_VAR NAME="renewals"><br>
+<b>Prolongations :</b> <TMPL_VAR NAME="renewals"><br>
 <b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<TMPL_VAR NAME="ordernumber">&biblio=<TMPL_VAR NAME="biblionumber">&invoice=<TMPL_VAR NAME="booksellerinvoicenumber">&catview=yes">
-Acc&egrave;s </a>
+Accession</a>
 Date:<TMPL_VAR NAME="dateaccessioned"><br>
-<b>Annul&eacute;: <TMPL_VAR NAME="wthdrawn"><br>
+<b>Cancelled: <TMPL_VAR NAME="wthdrawn"><br>
 <b><a
-href=/cgi-bin/koha/bookcount.pl?&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">&itm=<TMPL_VAR NAME="itemnumber">>Nbre total d'exemplaires:</a></b> <TMPL_VAR NAME="issues"><br>
-<b>Num&eacute;ro de groupe:</b> <TMPL_VAR NAME="biblioitemnumber"> <br>
-<b>Num&eacute;ro de notice:</b> <TMPL_VAR NAME="biblionumber"> <br>
+href=/cgi-bin/koha/bookcount.pl?&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">&itm=<TMPL_VAR NAME="itemnumber">>
+Nbre total de prets :</a></b> <TMPL_VAR NAME="issues"><br>
+<b>Num&eacute;ro de groupe :</b> <TMPL_VAR NAME="biblioitemnumber"> <br>
+<b>Num&eacute;ro de notice :</b> <TMPL_VAR NAME="biblionumber"> <br>
 
 
 
