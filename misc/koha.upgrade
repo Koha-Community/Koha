@@ -6,11 +6,6 @@ use Install;
 
 $::language='en';
 
-if ($<) {
-	print "\n\nYou must run koha.upgrade as root.\n\n";
-	exit;
-}
-
 ###############################################
 # SET  THE  etcdir  ENVIRONMENT  VAR  INSTEAD #
 ###############################################
@@ -59,7 +54,7 @@ Aborting.  Please re-run koha.upgrade when you are ready to upgrade Koha.
 
 checkperlmodules();
 
-my $backupdir='/usr/local/koha/backups';
+my $backupdir=($ENV{prefix}||'/usr/local/koha').'/backups';
 print "Please specify a backup directory [$backupdir]: ";
 
 $answer = <STDIN>;
@@ -188,7 +183,7 @@ if ($::opacdir && $::intranetdir) {
 I believe that your old files are located in:
 
   OPAC:      $::opacdir
-  INTRANET:  $::intranetdir
+  LIBRARIAN: $::intranetdir
 
 
 Does this look right?  ([Y]/N):
@@ -209,7 +204,7 @@ if (!$::opacdir || !$::intranetdir) {
     $::intranetdir='';
     $::opacdir='';
     while (!$::intranetdir) {
-	print "Please specify the location of your INTRANET files: ";
+	print "Please specify the location of your LIBRARIAN files: ";
 
 	$answer = <STDIN>;
 	chomp $answer;
@@ -305,7 +300,7 @@ unless ($httpduser) {
     print qq|
 I was not able to determine the user that Apache is running as.  This
 information is necessary in order to set the access privileges correctly on
-/etc/koha.conf.  This user should be set in one of the Apache configuration
+koha.conf.  This user should be set in one of the Apache configuration
 files using the "User" directive.
 |;
     print "What is your Apache user? ";
@@ -469,7 +464,7 @@ print qq|
 This release of Koha has a new authentication module.  If you are not already
 using basic authentication on your intranet, you will be required to log in to
 access some of the features of the intranet.  You can log in using the userid
-and password from the /etc/koha.conf configuration file at any time.  Use the
+and password from the koha.conf configuration file at any time.  Use the
 "Members" module to add passwords for other accounts and set their permissions.
 |;
 print "Press the <ENTER> key to continue: ";
