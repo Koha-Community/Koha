@@ -93,7 +93,7 @@ sub startmenu{
   } elsif ($type eq 'member') {
     open (FILE,"$path/members-top.inc") || die;
   } elsif ($type eq 'acquisitions'){
-    open (FILE,"$path/aquisitions-top.inc")|| die;
+    open (FILE,"$path/acquisitions-top.inc")|| die;
   } elsif ($type eq 'report'){
     open (FILE,"$path/reports-top.inc") || die;
   } elsif ($type eq 'circulation') {
@@ -118,7 +118,7 @@ sub endmenu{
   } elsif ($type eq 'member') {
     open (FILE,"$path/members-bottom.inc") || die;
   } elsif ($type eq 'acquisitions') {
-    open (FILE,"$path/aquisitions-bottom.inc") || die;
+    open (FILE,"$path/acquisitions-bottom.inc") || die;
   } elsif ($type eq 'report') {
     open (FILE,"$path/reports-bottom.inc") || die;
   } elsif ($type eq 'circulation') {
