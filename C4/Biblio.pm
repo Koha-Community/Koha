@@ -1799,11 +1799,11 @@ sub OLDmoditem {
 #  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
     #  my $dbh=C4Connect;
     $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
-    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=? where itemnumber=?";
+    my $query = "update items set  barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=? where itemnumber=?";
     my @bind = (
         $item->{'barcode'},        $item->{'notes'},
         $item->{'itemcallnumber'}, $item->{'notforloan'},
-        $item->{'itemnum'}
+        $item->{'location'},	   $item->{'itemnum'}
     );
     if ( $item->{'barcode'} eq '' ) {
         $item->{'notforloan'} = 0 unless $item->{'notforloan'};
@@ -1984,7 +1984,6 @@ sub newbiblio {
     my ($biblio) = @_;
     my $dbh    = C4::Context->dbh;
     my $bibnum = OLDnewbiblio( $dbh, $biblio );
-
     # finds new (MARC bibid
     # 	my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$bibnum);
     my $record = &MARCkoha2marcBiblio( $dbh, $bibnum );
@@ -2101,7 +2100,7 @@ sub newbiblioitem {
     my $bibid =
       &MARCfind_MARCbibid_from_oldbiblionumber( $dbh,
         $biblioitem->{biblionumber} );
-    &MARCaddbiblio( $dbh, $MARCbiblio, $biblioitem->{biblionumber}, $bibid );
+    &MARCaddbiblio( $dbh, $MARCbiblio, $biblioitem->{biblionumber}, '',$bibid );
     return ($bibitemnum);
 }
 
@@ -2572,7 +2571,7 @@ sub FindDuplicate {
 			push @tags, "'".$tag.$subfield."'";
 			push @and_or, "and";
 			push @excluding, "";
-			push @operator, "contains";
+			push @operator, "=";
 			push @value, $record->field($tag)->subfield($subfield);
 # 			warn "for publicationyear, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
 		}
@@ -2584,7 +2583,7 @@ sub FindDuplicate {
 			push @tags, "'".$tag.$subfield."'";
 			push @and_or, "and";
 			push @excluding, "";
-			push @operator, "contains";
+			push @operator, "=";
 			push @value, $record->field($tag)->subfield($subfield);
 # 			warn "for size, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
 		}
@@ -2596,7 +2595,7 @@ sub FindDuplicate {
 			push @tags, "'".$tag.$subfield."'";
 			push @and_or, "and";
 			push @excluding, "";
-			push @operator, "contains";
+			push @operator, "=";
 			push @value, $record->field($tag)->subfield($subfield);
 # 			warn "for publishercode, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
 		}
@@ -2608,7 +2607,7 @@ sub FindDuplicate {
 			push @tags, "'".$tag.$subfield."'";
 			push @and_or, "and";
 			push @excluding, "";
-			push @operator, "contains";
+			push @operator, "=";
 			push @value, $record->field($tag)->subfield($subfield);
 # 			warn "for volume, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
 		}
@@ -2617,7 +2616,7 @@ sub FindDuplicate {
 	my ($finalresult,$nbresult) = C4::SearchMarc::catalogsearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10);
 	# there is at least 1 result => return the 1st one
 	if ($nbresult) {
-		warn "$nbresult => ".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
+# 		warn "$nbresult => ".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
 		return @$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
 	}
 	# no result, returns nothing
@@ -2653,6 +2652,10 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.109  2004/11/24 15:58:31  tipaul
+# * critical fix for acquisition (see RC3 release notes)
+# * critical fix for duplicate finder
+#
 # Revision 1.108  2004/11/19 19:41:22  rangi
 # Shifting branches() from deprecated C4::Catalogue to C4::Biblio
 # Allowing the non marc interface acquisitions to work.

@@ -211,7 +211,7 @@ sub catalogsearch {
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
 # 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
-					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
+					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @not_tags, @$tags[$i];
 						push @not_and_or, "or"; # as request is negated, finds "foo" or "bar" if final request is NOT "foo" and "bar"
 						push @not_operator, @$operator[$i];
@@ -236,7 +236,7 @@ sub catalogsearch {
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
 # 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
-					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
+					unless (C4::Context->stopwords->{uc($word)} or length($word)==1) {	#it's NOT a stopword => use it. Otherwise, ignore
 						my $tag = substr(@$tags[$i],0,3);
 						my $subf = substr(@$tags[$i],3,1);
 						push @normal_tags, @$tags[$i];
@@ -338,7 +338,6 @@ sub catalogsearch {
 		$sth->execute($result[$counter]);
 		my $continue=1;
 		my $line = $sth->fetchrow_hashref;
-		warn "==> ".$line->{notforloan};
 		my $biblionumber=$line->{bn};
 # 		$continue=0 unless $line->{bn};
 # 		my $lastitemnumber;
