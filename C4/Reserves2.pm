@@ -118,6 +118,7 @@ sub CheckReserves {
                             WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
                               AND biblioitems.itemtype = itemtypes.itemtype
                               AND barcode=$qbc");
+	# FIXME - This function uses $item later on. Ought to set it here.
     }
     $sth->execute;
     my ($biblio, $bibitem, $notforloan) = $sth->fetchrow_array;
@@ -130,6 +131,8 @@ sub CheckReserves {
     my $highest;
     if ($count) {
 	foreach my $res (@reserves) {
+	    # FIXME - $item might be undefined or empty: the caller
+	    # might be searching by barcode.
 	    if ($res->{'itemnumber'} == $item) {
 		return ("Waiting", $res);
 	    } else {
@@ -140,7 +143,7 @@ sub CheckReserves {
 	    }
 	}
     }
-    if ($highest) {
+    if ($highest) {	# FIXME - $highest might be undefined
 	$highest->{'itemnumber'} = $item;
 	return ("Reserved", $highest);
     } else {
