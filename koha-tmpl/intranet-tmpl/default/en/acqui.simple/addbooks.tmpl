@@ -23,8 +23,8 @@
 			<td width="5%">ISBN:</td>
 			<td width="20%"><input type="text" name="isbn" /></td>
 			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
-			<td rowspan=2>If the ISBN is found into the biblio table, it will be retrieved and can be modified.<br/>
-					If the ISBN is found into the breeding farm, it will be retrieved. and a biblio added.<br/>
+			<td rowspan=2>If the ISBN or title is found in the biblio table, it will be retrieved and can be modified.<br/>
+					If the ISBN or title is found in the breeding farm, it will be retrieved and a biblio will be added.<br/>
 					Otherwise, a biblio can be added from scratch.</td>
 		</tr>
 			<td width="5%">Title</td>
@@ -47,21 +47,24 @@
 		<td width="5%">&nbsp;</td>
 		<td width="20%"><li><a href=marcimport.pl>Upload MARC records</a></li></td>
 		<td width="10%">&nbsp;</td>
-		<td>The breeding farm is a table where are stored imported MARC records.<br/>
-			A MARC record is stored in the breeding farm as long as you've no item. When you type the ISBN of a biblio, it's searched in the breeding farm.
-			If found, the biblio is added to koha active table, and removed from breeding farm.
+		<td>The breeding farm is a table where imported MARC records are stored.<br/>
+			A MARC record is stored in the breeding farm as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the breeding farm.
+			If it is found, the biblio is added to Koha active table and removed from the breeding farm. <br/>
 		</td>
+	</tr>
+</table>
 
 
 <table bgcolor="#ffcc00" width="80%" cellpadding"5">
 	<tr>
-		<td><font size="4">Tools for importing MARC from a z3950 server</font></td>
+		<td><font size="4">Tools for importing a MARC record from a z39.50 server</font></td>
 	</tr>
 </table>
+
 <table cellpadding="3" border=0 width="100%">
 	<tr valign="top">
 		<td width="5%">&nbsp;</td>
-		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Z39.50 Search Tool</a></li></td>
+		<td width="20%"><li><a href=marcimport.pl?menu=z3950>z39.50 Search Tool</a></li></td>
 		<td width="10%">&nbsp;</td>
 		<td>does not work</td>
 	</tr>
