@@ -99,10 +99,11 @@ sub plugin {
 		#warn "bibid :".$bibid;
 		#get marc record
 		$marcrecord = MARCgetbiblio($dbh,$bibid);
-		warn "record : ".$marcrecord->as_formatted;
+# 		warn "record : ".$marcrecord->as_formatted;
 		
 		my $subfield_value_9=$bibid;
-		my $subfield_value_0=$marcrecord->field('001')->data;
+		my $subfield_value_0;
+		$subfield_value_0=$marcrecord->field('001')->data if $marcrecord->field;
 		my $subfield_value_a;
 		if ($marcrecord->field('200')){
 			$subfield_value_a=$marcrecord->field('200')->subfield("f");
