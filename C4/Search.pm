@@ -903,7 +903,7 @@ sub CatSearch  {
 	    my @key=split(' ',$search->{'title'});
 	    my $count=@key;
 	    my $i=1;
-            $query="select * from biblio
+            $query="select *,biblio.biblionumber from biblio
 	    left join bibliosubtitle on
 	    biblio.biblionumber=bibliosubtitle.biblionumber
 	    where
@@ -1033,7 +1033,7 @@ sub CatSearch  {
 	$sth1->finish;
       }
   }
-#print STDERR $query;
+#warn $query;
 if ($type ne 'precise' && $type ne 'subject'){
   if ($search->{'author'} ne ''){   
       $query=$query." order by biblio.author,title";
@@ -1073,7 +1073,7 @@ while (my $data=$sth->fetchrow_hashref){
 	    if ($search->{'publisher'} ne ''){
 	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
 	    }
-#print STDERR "$query\n";
+warn "$query\n";
   my $dewey;
   my $subclass;
   my $true=0;
@@ -1456,7 +1456,7 @@ the first one is considered.
 sub bibdata {
     my ($bibnum, $type) = @_;
     my $dbh   = C4Connect;
-    my $query = "Select *, biblio.notes  
+    my $query = "Select *, biblio.notes, biblio.biblionumber  
     from biblio, biblioitems 
     left join bibliosubtitle on
     biblio.biblionumber = bibliosubtitle.biblionumber
@@ -1472,10 +1472,11 @@ sub bibdata {
     $query = "Select * from bibliosubject where biblionumber = '$bibnum'";
     $sth   = $dbh->prepare($query);
     $sth->execute;
+    my @sub;
     while (my $dat = $sth->fetchrow_hashref){
-        $data->{'subject'} .= " | $dat->{'subject'}";
+        push @sub,$dat;
     } # while
-
+    $data->{'subjects'}=\@sub;
     $sth->finish;
     $dbh->disconnect;
     return($data);
