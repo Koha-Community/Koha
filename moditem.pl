@@ -28,7 +28,7 @@ my $item=itemnodata('blah','',$itemnum);
 #my ($analytictitle)=analytic($biblionumber,'t');
 #my ($analyticauthor)=analytic($biblionumber,'a');
 print startpage();
-print startmenu();
+print startmenu('catalogue');
 my %inputs;
 
 
