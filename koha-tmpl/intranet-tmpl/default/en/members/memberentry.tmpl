@@ -180,23 +180,23 @@
     </tr>
 
     <TMPL_IF NAME=modify>
-      <tr><td COLSPAN=5><Font size=2>FLAGS</font></td></tr>                                                                                                        
+      <tr><td COLSPAN=5><Font size=2>FLAGS</font></td></tr>
       <TMPL_LOOP NAME=flagloop>
         <tr>
           <td COLSPAN=2><TMPL_VAR NAME=html></td>
-          <td COLSPAN=3><input type=radio name="<TMPL_VAR NAME=name>" value="1" <TMPL_VAR NAME=yes>>Yes 
-              <input type=radio name="<TMPL_VAR NAME=name>" value="0" <TMPL_VAR NAME=no>>No 
+          <td COLSPAN=3><input type=radio name="<TMPL_VAR NAME=name>" value="1" <TMPL_VAR NAME=yes>>Yes
+              <input type=radio name="<TMPL_VAR NAME=name>" value="0" <TMPL_VAR NAME=no>>No
           </td>
         </tr>
       </TMPL_LOOP>
     </TMPL_IF>
-    
+
     <tr>
         <td></td>
 	   <td><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" ALT="Add New Member" border=0 ></td>
     </tr>
   </table>
-</form>																																																													
+</form>
 
 <TMPL_INCLUDE NAME="members-bottom.inc">
 

@@ -188,11 +188,23 @@
 
     <tr VALIGN=TOP  >
       <td colspan=5 align=right>
-        <INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/cancel-requests.gif">
-      </td>
+		<TMPL_IF name="reserveloop">
+			<INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/cancel-requests.gif">
+		</tmpl_if>
+	 </td>
     </tr>
   </form>
 </table>
+<table>
+	<tr VALIGN=TOP  >
+		<td colspan=5 align=right>
+			<p align=right>
+			<a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/reading-record.gif"></a>
+			</p>
+		</td>
+	</tr>
+</table>
+
 <p align=right>
   <a href="/cgi-bin/koha/readingrec.pl?bornum=<TMPL_VAR NAME="bornum">"><img height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/reading-record.gif"></a>
 </p>

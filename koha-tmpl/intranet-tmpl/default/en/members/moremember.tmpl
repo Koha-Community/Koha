@@ -193,7 +193,9 @@
 
 	<tr VALIGN=TOP  >
 		<td colspan=5 align=right>
-		<INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/cancel-requests.gif">
+		<TMPL_IF name="reserveloop">
+			<INPUT TYPE="image" name="submit" VALUE="update" height=42 WIDTH=187 BORDER=0 src="<TMPL_VAR name="themelang">/images/cancel-requests.gif">
+		</TMPL_IF>
 		</td>
 	</tr>
 	</form>

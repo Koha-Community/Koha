@@ -146,8 +146,6 @@ sub FindReserves {
   $query.=" order by priority";
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  # FIXME - $i is unnecessary and bogus
-  my $i=0;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
       # FIXME - What is this if-statement doing? How do constraints work?
@@ -173,12 +171,10 @@ sub FindReserves {
 	      $data->{$key} = $bdata->{$key};
 	  }
       }
-      $results[$i]=$data;		# FIXME - Use push @results
-      $i++;
+	push @results, $data;
   }
-#  print $query;
   $sth->finish;
-  return($i,\@results);
+  return($#results+1,\@results);
 }
 
 =item CheckReserves
@@ -790,6 +786,7 @@ sub getreservetitle {
  = $bor and reserveconstraints.reservedate='$date' and
  reserveconstraints.timestamp=$timestamp";
  my $sth=$dbh->prepare($query);
+ warn "q : $query";
  $sth->execute;
  my $data=$sth->fetchrow_hashref;
  $sth->finish;

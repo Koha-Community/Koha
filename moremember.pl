@@ -184,20 +184,16 @@ for (my $i=0;$i<$count;$i++){
 
 my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
 
-# FIXME
-# does it make sense to turn this into a foreach my $i (0..$rescount)
-# kind of loop?
-#
 my @reservedata;
-for (my $i=0;$i<$rescount;$i++){
-  $reserves->[$i]{'reservedate2'} = format_date($reserves->[$i]{'reservedate'});
-  my $restitle;
-  my %row = %$reserves->[$i];
-  if ($reserves->[$i]{'constrainttype'} eq 'o'){
-    $restitle=getreservetitle($reserves->[$i]{'biblionumber'},$reserves->[$i]{'borrowernumber'},$reserves->[$i]{'reservedate'},$reserves->[$i]{'timestamp'});
-    %row =  (%row , %$restitle);
-  }
-  push (@reservedata, \%row);
+foreach my $reserveline (@$reserves) {
+	$reserveline->{'reservedate2'} = format_date($reserveline->{'reservedate'});
+	my $restitle;
+	my %row = %$reserveline;
+	if ($reserveline->{'constrainttype'} eq 'o'){
+		$restitle=getreservetitle($reserveline->{'biblionumber'},$reserveline->{'borrowernumber'},$reserveline->{'reservedate'},$reserveline->{'timestamp'});
+		%row =  (%row , %$restitle);
+	}
+	push (@reservedata, \%row);
 }
 
 $template->param($data);
