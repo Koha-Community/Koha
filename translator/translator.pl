@@ -20,25 +20,32 @@ my $path=$ENV{"PATH_TRANSLATED"};
 
 textdomain("koha");
 
-my %lang=(
-  fr => "fr_FR",
-  pl => "pl_PL",
-);
+my @locale=`locale -a`;
+my %lang;
+foreach(@locale){
+  next unless (/_/);
+  push @{$lang{$`}}, $';
+}
 
-my @lang=split/,/,$ENV{"HTTP_ACCEPT_LANGUAGE"};
+my $str_env=$ENV{"HTTP_ACCEPT_LANGUAGE"};
+$str_env=~s/\s*//g;
+my @lang=split/,/,$str_env;
 my $lang="us_US";
 
-foreach (@lang){
-  my $lg=$lang{$_};
-  setlocale(LC_MESSAGES,$lg);
-  my $tmp = gettext($_);
-  if ($tmp ne $_)
-  {
-    $lang=$tmp;
-    last;
+foreach my $locale(@lang){
+  goto find_locale if ($locale eq 'en');
+  foreach my $lg(@{$lang{$locale}}){
+    setlocale(LC_MESSAGES,$locale."_".$lg);
+    my $tmp = gettext($locale);
+    if ($tmp ne $locale)
+    {
+      $lang=$tmp;
+      goto find_locale;
+    }
   }
 }
 
+find_locale:
 setlocale(LC_MESSAGES,$lang);
 
 my @katalog;
@@ -62,6 +69,8 @@ my (%dgettxt, %dane, %dane2, @dane2);
 my $i;
 
 $dgettxt{'iso-8859-1'}=1;
+$dgettxt{'us_US'}=1;
+
 my $txt =<<TXT;
 <HTML>
 <META http-equiv=Content-Type content="text/thml; 
@@ -102,7 +111,7 @@ foreach(@katalog){
   $dane=~s/\\\'/&zamien/ges;		# change \'
   $dane=~s/\\\"/&zamien/ges;		# change \"
   
-  # taka out graphics
+  # take out graphics
   $dane=~s/[\"\']\/?([\w-\/\.]*?\.gif)[\"\']/&zamien($1)/ges;
   
 #  $dane=~s/messenger\s*\((.*?)\)\s*[\}\{;]/&zamien($1)/ges;
@@ -167,4 +176,3 @@ sub zamien {
     }
     return "%${\($dane{$tmp})}%";
 }
-
