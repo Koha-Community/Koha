@@ -18,19 +18,40 @@ my $input = new CGI;
 my $member=$input->param('member');
 my %env;
 $env{'nottodayissues'}=1;
-my %member2;
-$member2{'borrowernumber'}=$member;
-my $issues=currentissues(\%env,\%member2);
-my $i=0;
-foreach (sort keys %$issues) {
+ my %member2;
+ $member2{'borrowernumber'}=$member;
+ my $issues=currentissues(\%env,\%member2);
+ my $i=0;
+ foreach (sort keys %$issues) {
   $i++;
-}
-if ($i > 0){ 
+ }
+  my ($bor,$flags)=getpatroninformation(\%env, $member,'');
+my $dbh=C4Connect;
+my $query="Select * from borrowers where guarantor='$member'";
+my $sth=$dbh->prepare($query);
+$sth->execute;
+my $data=$sth->fetchrow_hashref;
+$sth->finish;
+$dbh->disconnect;
+      
+
+if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){ 
   print $input->header;
-  print "error borrower has items on issue";
+  print "<table border=1>";
+  if ($i > 0){
+      print "<TR><TD>Items on Issue</td><td align=right>$i</td></tr>";
+  }
+  if ($flags->{'CHARGES'} ne ''){
+      print "<TR><TD>Charges</td><td>$flags->{'CHARGES'}->{'message'}</tr>";
+  }
+  if ($data ne ''){
+      print "<TR><TD>Guarantees</td></tr>";
+  }
+  print "</table>";
+
 } else {
-  delmember($member);
-  print $input->redirect("/members/");
+         delmember($member);
+         print $input->redirect("/members/");
 }
 
 sub delmember{
@@ -51,6 +72,10 @@ sub delmember{
   $sth->execute;
   $sth->finish;
   $query = "Delete from borrowers where borrowernumber='$member'";
+  $sth=$dbh->prepare($query);
+  $sth->execute;
+  $sth->finish;
+  $query="Delete from reserves where borrowernumber='$member'";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
