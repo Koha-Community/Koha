@@ -1886,7 +1886,7 @@ sub populatedatabase {
 	my ($auto_install) = @_;
 	my $input;
 	my $response;
-	my $branch;
+	my $branch='MAIN';
 	if ($auto_install->{BranchName}) {
 		$branch=$auto_install->{BranchName};
 		print ON_YELLOW.BLACK."auto-setting a branch : $branch".RESET."\n";
@@ -1918,8 +1918,8 @@ sub populatedatabase {
 		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
 		system("$mysqldir/bin/mysql -u$user $database -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\"");
 
-		my $printername;
-		my $printerqueue;
+		my $printername='lp';
+		my $printerqueue='/dev/lp0';
 		if ($auto_install->{PrinterName}) {
 			$printername=$auto_install->{PrinterName};
 			print ON_YELLOW.BLACK."auto-setting a printer : $printername".RESET."\n";
