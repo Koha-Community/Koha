@@ -1,7 +1,113 @@
+2002-10-13  Andrew Arensburger  <arensb@baa.ooblick.com>
+
+	* C4/Stock.pm: Removed unused finalizer.
+
+	* moditem.pl: Added a FIXME comment.
+
+	* C4/Interface/ReserveentCDK.pm, C4/Interface/RenewalsCDK.pm,
+	C4/Interface/FlagsCDK.pm, C4/Interface/BorrowerCDK.pm,
+	C4/Interface/AccountsCDK.pm, C4/Circulation/Returns.pm,
+	C4/Circulation/Issues.pm, C4/Circulation/Fines.pm,
+	C4/Circulation/Borrower.pm, C4/Z3950.pm, C4/SimpleMarc.pm,
+	C4/Reserves.pm, C4/Output.pm, C4/Circulation.pm, C4/Catalogue.pm,
+	C4/BookShelves.pm, C4/Biblio.pm, C4/Acquisitions.pm: Deleted
+	unused variables. Removed trailing whitespace.
+	
+	* newmember.pl, newjmember.pl: Removed trailing whitespace. Added a FIXME
+	comment.
+
+	* acqui.simple/viewmarc.pl, acqui.simple/saveitem.pl,
+	acqui.simple/processz3950queue, acqui.simple/marcimport.pl,
+	acqui.simple/additem.pl, acqui.simple/addbookslccn.pl,
+	acqui.simple/addbooks.pl, acqui.simple/addbiblio.pl,
+	acqui/supplier.pl, acqui/recieveorder.pl, acqui/receive.pl,
+	acqui/order.pl, acqui/newbasket.pl, acqui/basket.pl,
+	acqui/acquire.pl, C4/Security.pm, C4/Groups.pm, C4/Database.pm,
+	C4/Circmain.pm, updatewebsite.pl, updateitem.pl, updatecharges.pl,
+	updatebibitem.pl, tidyaccounts.pl, subjectsearch.pl, stats2.pl,
+	stats.pl, showbudget.pl, request.pl, reports.pl, renewscript.pl,
+	pay.pl, overdue.pl, newimember.pl, moremember.pl, moredetail.pl,
+	moditem.pl, modbibitem.pl, modbib.pl, memberentry.pl, member.pl,
+	koha.upgrade, installer.pl, installer-lite.pl, groups.pl,
+	deletemem.pl, currency.pl, boraccount.pl, bookcount.pl: Added
+	magic RCS comment. Removed trailing whitespace.
+
+	* C4/Circulation/Borrissues.pm: Deleted unused variables. Removed
+	trailing whitespace.
+
+	* misc/fines2.pl: Added magic RCS comment. Added a FIXME comment.
+
+	* acqui/newbasket2.pl: Added some FIXME comments. Removed trailing
+	whitespace.
+
+	* C4/Circulation/Returns.pm: Added magic RCS comment. Added some
+	FIXME comments explaining why I didn't write a POD. Removed unused
+	finalizer.
+
+	* C4/Circulation/Renewals2.pm: Added magic RCS comment. Added some
+	FIXME comments. Added some explanatory comments. Removed trailing
+	whitespace. Deleted unused variables. Added POD. Removed unused
+	finalizer.
+
+	* C4/Circulation/Renewals.pm: Added magic RCS comment. Added some
+	FIXME comments. Added some explanatory comments. Removed trailing
+	whitespace. Deleted unused variables. Added POD. Removed unused
+	finalizer.
+
+	* C4/Circulation/Main.pm: Added magic RCS comment. Added some
+	FIXME comments. Deleted unused variables. Added POD. Removed
+	unused finalizer.
+
+	* C4/Circulation/Issues.pm: Added magic RCS comment. Added some
+	FIXME comments. Deleted unused variables. Added POD. Removed
+	unused finalizer.
+
+	* C4/Circulation/Fines.pm: Added magic RCS comment. Removed a
+	lying comment. Removed unused global variables. Added POD. Added
+	some FIXME comments. Added some explanatory comments. Removed
+	unused finalizer.
+
+	* C4/Z3950.pm: Removed bogus #! line (this isn't a script!)
+	Removed unused global variables. Added POD. Added some explanatory
+	comments. Added some FIXME comments.
+
+	* C4/Stats.pm: Added magic RCS comment. Removed declarations for
+	nonexistent variables. Added some FIXME comments. Removed unused
+	finalizer.
+
+	* C4/Reserves2.pm: Added partial POD (but I don't understand
+	reserves well enough to continue). Added magic RCS comment. Added
+	some explanatory comments. Removed trailing whitespace. Added some
+	FIXME comments. Moved comments in first column to where they
+	wouldn't obscure the indentation. Removed unused finalizer.
+
+	* C4/Acquisitions.pm: Added a partial POD. Wrote some FIXME
+	comments explaining why I'm not going to write any more PODs.
+	Added some other FIXME comments.
+
+	* C4/Circulation/Circ2.pm, C4/Circulation/Borrissues.pm,
+	C4/Format.pm, C4/Circulation.pm: Added some FIXME comments. Added
+	RCS magic comment. Removed unused finalizer.
+
+	* C4/Search.pm, C4/Output.pm, C4/Accounts2.pm, C4/Accounts.pm,
+	thesaurus_popup.pl, search.pl, memberentry.pl, modbib.pl: Added
+	some FIXME comments.
+
+	* acqui.simple/processz3950queue, acqui.simple/bulkmarcimport.pl,
+	acqui/finishreceive.pl, C4/Maintainance.pm, C4/Input.pm,
+	updatebiblio.pl, deletemem.pl: Added a FIXME comment.
+
 2002-10-12  Andrew Arensburger  <arensb@baa.ooblick.com>
 
+	* circ/selectbranchprinter.pl (bug workaround): Commented out some
+	code that removes everything from the list of branches the user
+	can select. Added some FIXME comments.
+
+	* C4/Reserves2.pm, C4/Reserves.pm: Added some FIXME comments.
+	
 	* C4/Auth.pm: Turn off authentication entirely if systempreference
 	"insecure" is set to "yes".
+	
 	* search.pl: Sorted "use" statements in esthetic order.
 
 	* t/require.t, koha.upgrade, installer.pl, installer-lite.pl,
