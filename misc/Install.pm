@@ -510,67 +510,65 @@ sub showmessage {
 	$responsetype='restrictchar yn';
     }
     print $message;
-    SWITCH: {
-	if ($responsetype =~/^restrictchar (.*)/i) {
-	    my $response='\0';
-	    my $options=$1;
-	    until ($options=~/$response/) {
-		($defaultresponse) || ($defaultresponse=substr($options,0,1));
-		$response=<STDIN>;
-		chomp $response;
-		(length($response)) || ($response=$defaultresponse);
-		unless ($options=~/$response/) {
-		    ($noclear) || (system('clear'));
-		    print "Invalid Response.  Choose from [$options].\n\n";
-		    print $message;
-		}
+    if ($responsetype =~/^restrictchar (.*)/i) {
+	my $response='\0';
+	my $options=$1;
+	until ($options=~/$response/) {
+	    ($defaultresponse) || ($defaultresponse=substr($options,0,1));
+	    $response=<STDIN>;
+	    chomp $response;
+	    (length($response)) || ($response=$defaultresponse);
+	    unless ($options=~/$response/) {
+		($noclear) || (system('clear'));
+		print "Invalid Response.  Choose from [$options].\n\n";
+		print $message;
 	    }
-	    return $response;
 	}
-	if ($responsetype =~/^free$/i) {
-	    (defined($defaultresponse)) || ($defaultresponse='');
-	    my $response=<STDIN>;
+	return $response;
+    } elsif ($responsetype =~/^free$/i) {
+	(defined($defaultresponse)) || ($defaultresponse='');
+	my $response=<STDIN>;
+	chomp $response;
+	($response) || ($response=$defaultresponse);
+	return $response;
+    } elsif ($responsetype =~/^numerical$/i) {
+	(defined($defaultresponse)) || ($defaultresponse='');
+	my $response='';
+	until ($response=~/^\d+$/) {
+	    $response=<STDIN>;
 	    chomp $response;
 	    ($response) || ($response=$defaultresponse);
-	    return $response;
-	}
-	if ($responsetype =~/^numerical$/i) {
-	    (defined($defaultresponse)) || ($defaultresponse='');
-	    my $response='';
-	    until ($response=~/^\d+$/) {
-		$response=<STDIN>;
-		chomp $response;
-		($response) || ($response=$defaultresponse);
-		unless ($response=~/^\d+$/) {
-		    ($noclear) || (system('clear'));
-		    print "Invalid Response ($response).  Response must be a number.\n\n";
-		    print $message;
-		}
+	    unless ($response=~/^\d+$/) {
+		($noclear) || (system('clear'));
+		print "Invalid Response ($response).  Response must be a number.\n\n";
+		print $message;
 	    }
-	    return $response;
 	}
-	if ($responsetype =~/^email$/i) {
-	    (defined($defaultresponse)) || ($defaultresponse='');
-	    my $response='';
-	    until ($response=~/.*\@.*\..*/) {
-		$response=<STDIN>;
-		chomp $response;
-		($response) || ($response=$defaultresponse);
-		unless ($response=~/.*\@.*\..*/) {
-		    ($noclear) || (system('clear'));
-		    print "Invalid Response ($response).  Response must be a valid email address.\n\n";
-		    print $message;
-		}
+	return $response;
+    } elsif ($responsetype =~/^email$/i) {
+	(defined($defaultresponse)) || ($defaultresponse='');
+	my $response='';
+	until ($response=~/.*\@.*\..*/) {
+	    $response=<STDIN>;
+	    chomp $response;
+	    ($response) || ($response=$defaultresponse);
+	    unless ($response=~/.*\@.*\..*/) {
+		($noclear) || (system('clear'));
+		print "Invalid Response ($response).  Response must be a valid email address.\n\n";
+		print $message;
 	    }
-	    return $response;
 	}
-	if ($responsetype =~/^PressEnter$/i) {
-	    <STDIN>;
-	    return;
-	}
-	if ($responsetype =~/^none$/i) {
-	    return;
-	}
+	return $response;
+    } elsif ($responsetype =~/^PressEnter$/i) {
+	<STDIN>;
+	return;
+    } elsif ($responsetype =~/^none$/i) {
+	return;
+    } else {
+	# FIXME: There are a few places where we will get an undef as the
+	# response type. Should we thrown an exception here, or should we
+	# legitimize this usage and say "none" is the default if not specified?
+	#die "Illegal response type \"$responsetype\"";
     }
 }
 
