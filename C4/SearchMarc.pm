@@ -142,7 +142,7 @@ sub catalogsearch {
 				foreach my $word (split(/ /, @$value[$i]))	# if operator is contains, splits the words in separate requests
 				{
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-					warn "word : $word";
+# 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						push @not_tags, @$tags[$i];
@@ -167,7 +167,7 @@ sub catalogsearch {
 				foreach my $word (split(/ /, @$value[$i]))
 				{
 					# remove the "%" for small word (3 letters. (note : the >4 is due to the % at the end)
-					warn "word : $word";
+# 					warn "word : $word";
 					$word =~ s/%//g unless length($word)>4;
 					unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
 						my $tag = substr(@$tags[$i],0,3);
@@ -250,7 +250,7 @@ sub catalogsearch {
 
 	# we have bibid list. Now, loads title and author from [offset] to [offset]+[length]
 	my $counter = $offset;
-	$sth = $dbh->prepare("SELECT biblio.*, biblioitems.*, items.*,marc_biblio.bibid
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*, items.*,marc_biblio.bibid
 							FROM biblio, marc_biblio 
 							LEFT JOIN items on items.biblionumber = biblio.biblionumber
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
@@ -262,13 +262,19 @@ sub catalogsearch {
 	my $totalitems=0;
 	my $oldline;
 # 	my ($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid);
-	my ($oldbibid, $oldauthor, $oldtitle,$oldbiblionumber);
+	my ($oldbibid, $oldauthor, $oldtitle);
+	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
+# 		warn " bibid :".$result[$counter];
+		# search & parse all items & note itemcallnumber
 		$sth->execute($result[$counter]);
-		while (my $line = $sth->fetchrow_hashref) {
+		my $continue=1;
+		my $line = $sth->fetchrow_hashref;
+		$continue=0 unless $line;
+		while ($continue) {
 			# parse the result, putting holdingbranch & itemcallnumber in separate array
 			# then all other fields in the main array
-			if ($oldbiblionumber && ($oldbiblionumber ne $line->{biblionumber})) {
+			if ($oldbiblionumber && ($oldbiblionumber ne $line->{bn}) && $oldline) {
 				my %newline;
 				%newline = %$oldline;
 				$newline{totitem} = $totalitems;
@@ -281,34 +287,23 @@ sub catalogsearch {
 				push @finalresult, \%newline;
 				$totalitems=0;
 			}
-			$oldbiblionumber = $line->{biblionumber};
-			$totalitems++ if ($line->{holdingbranch});
-			$oldline = $line;
-			# item callnumber & branch
-			my %lineCN;
-			$lineCN{holdingbranch} = $line->{holdingbranch};
-			$lineCN{itemcallnumber} = $line->{itemcallnumber};
-			push @CNresults,\%lineCN;
+			$continue=0 unless $line;
+			if ($continue) {
+				$oldbiblionumber = $line->{bn};
+				$totalitems++ if ($line->{holdingbranch});
+				$oldline = $line;
+				# item callnumber & branch
+				my %lineCN;
+				$lineCN{holdingbranch} = $line->{holdingbranch};
+				$lineCN{itemcallnumber} = $line->{itemcallnumber};
+				push @CNresults,\%lineCN;
+				$line = $sth->fetchrow_hashref;
+			}
 		}
 		$counter++;
 	}
-# add the last line, that is not reached byt the loop / if ($oldbiblionumber...)
-	my %newline;
-	if ($oldline) {
-		%newline = %$oldline;
-		$newline{totitem} = $totalitems;
-		$newline{biblionumber} = $oldbiblionumber;
-		my @CNresults2= @CNresults;
-		$newline{CN} = \@CNresults2;
-		$newline{'even'} = 1 if $counter % 2 == 0;
-		$newline{'odd'} = 1 if $counter % 2 == 1;
-		@CNresults = ();
-		my @CNresults2= @CNresults;
-		$newline{CN} = \@CNresults2;
-		@CNresults = ();
-		push @finalresult, \%newline;
-	}
-	my $nbresults = $#result + 1;
+#add the last line, that is not reached byt the loop / if ($oldbiblionumber...)
+	my $nbresults = $#result+1;
 	return (\@finalresult, $nbresults);
 }
 

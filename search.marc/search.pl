@@ -144,15 +144,13 @@ if ($op eq "do_search") {
 	# multi page display gestion
 	my $displaynext=0;
 	my $displayprev=$startfrom;
-	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
+	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
 		$displaynext = 1;
 	}
 
 	my @field_data = ();
 
-
-	for(my $i = 0 ; $i <= $#marclist ; $i++)
-	{
+	for(my $i = 0 ; $i <= $#marclist ; $i++) {
 		push @field_data, { term => "marclist", val=>$marclist[$i] };
 		push @field_data, { term => "and_or", val=>$and_or[$i] };
 		push @field_data, { term => "excluding", val=>$excluding[$i] };
@@ -162,12 +160,9 @@ if ($op eq "do_search") {
 
 	my @numbers = ();
 
-	if ($total>$resultsperpage)
-	{
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
-		{
-			if ($i<16)
-			{
+	if ($total>$resultsperpage) {
+		for (my $i=1; $i<$total/$resultsperpage+1; $i++) {
+			if ($i<16) {
 	    		my $highlight=0;
 	    		($startfrom==($i-1)) && ($highlight=1);
 	    		push @numbers, { number => $i,
