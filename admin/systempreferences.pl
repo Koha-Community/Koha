@@ -79,7 +79,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
-my $pagesize=20;
+my $pagesize=100;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
