@@ -258,8 +258,8 @@ sub _extract_attributes ($;$) {
     my $this = shift;
     my($s, $lc) = @_;
     my %attr;
-    $s = $1 if $s =~ /^<\S+(.*)\/\S$/s	# XML-style self-closing tags
-	    || $s =~ /^<\S+(.*)\S$/s;	# SGML-style tags
+    $s = $1 if $s =~ /^<(?:(?!$re_directive_control)\S)+(.*)\/\S$/s	# XML-style self-closing tags
+	    || $s =~ /^<(?:(?!$re_directive_control)\S)+(.*)\S$/s;	# SGML-style tags
 
     for (my $i = 0; $s =~ /^(?:$re_directive_control)?\s+(?:$re_directive_control)?(?:([a-zA-Z][-a-zA-Z0-9]*)\s*=\s*)?('((?:$re_directive|[^'])*)'|"((?:$re_directive|[^"])*)"|((?:$re_directive|[^\s<>])+))/os;) {
 	my($key, $val, $val_orig, $rest)
@@ -430,10 +430,10 @@ sub _next_token_intermediate {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
 		$this->_set_pcdata_mode( 0 );
-	    } elsif ($it->string =~ /^<(title)\b/is) {
-		$this->_set_cdata_mode( 1 );
-		$this->_set_cdata_close( "</$1\\s*>" );
-		$this->_set_pcdata_mode( 1 );
+#	    } elsif ($it->string =~ /^<(title)\b/is) {
+#		$this->_set_cdata_mode( 1 );
+#		$this->_set_cdata_close( "</$1\\s*>" );
+#		$this->_set_pcdata_mode( 1 );
 	    }
 	    $it->set_attributes( $this->_extract_attributes($it->string, $it->line_number) );
 	}
@@ -465,7 +465,12 @@ sub _next_token_intermediate {
 			    \$pedantic_error_markup_in_pcdata_p
 		    if $check =~ /$re_tag_compat/s;
 	}
-	$it = TmplToken->new( $it, TmplTokenType::CDATA, $this->line_number )
+	# PCDATA should be treated as text, not CDATA
+	# Actually it should be treated as TEXT_PARAMETRIZED :-(
+	$it = TmplToken->new( $it,
+			($this->pcdata_mode_p?
+			    TmplTokenType::TEXT: TmplTokenType::CDATA),
+			$this->line_number )
 		if defined $it;
 	$this->_set_pcdata_mode, 0;
 	$this->_set_cdata_close, undef unless !defined $it;
@@ -854,6 +859,10 @@ words will require certain inflectional suffixes in sentences.
 
 Because this is an incompatible change, this mode must be explicitly
 turned on using the set_cformat(1) method call.
+
+=head1 BUGS
+
+There is no code to save the tag name anywhere in the scanned token.
 
 =head1 HISTORY
 
