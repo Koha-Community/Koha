@@ -164,8 +164,6 @@ Koha Developement team <info@koha.org>
 
 =head1 SEE ALSO
 
-L<perl>.
-
-L<C4::Circulation::Circ2(3)>
+C4::Circulation::Circ2(3)
 
 =cut
