@@ -462,7 +462,7 @@ sub getborrowernumber {
     return 0;
 }
 
-
+}
 
 END { }       # module clean-up code here (global destructor)
 1;
