@@ -1,8 +1,17 @@
 package C4::Biblio; #assumes C4/Biblio.pm
 
+# $Id$
+
+#-----------------
+# General requirements
 use strict;
+
 require Exporter;
+
+# Other Koha modules
 use C4::Database;
+
+#-----------------
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -19,6 +28,8 @@ $VERSION = 0.01;
 	&findall &needsmod &updatecost 
 	&getbiblioitem &getitemsbybiblioitem &isbnsearch &keywordsearch
 	&websitesearch &addwebsite &updatewebsite &deletewebsite
+	&newcompletebiblioitem 
+	&getoraddbiblio 
 );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -35,7 +46,6 @@ use vars qw(@more $stuff);
 
 my $Var1   = '';
 my %Hashit = ();
-
 
 
 # then the others (which are still accessible as $Some::Module::stuff)
@@ -843,4 +853,128 @@ sub deletewebsite {
 } # sub deletewebsite
 
 
+
+
+#------------------------------------------------
+
+# Add a biblioitem and related data to Koha database
+sub newcompletebiblioitem {
+	use strict;
+
+	my ( 
+	  $dbh,			# DBI handle
+	  $biblio,		# hash ref to biblio record
+	  $biblioitem,		# hash ref to biblioitem record
+	  $subjects,		# list ref of subjects
+	  $addlauthors,		# list ref of additional authors
+	)=@_ ;
+
+	my ( $biblionumber, $biblioitemnumber, $error);		# return values
+
+	my $debug=0;
+	my $sth;
+	my $subjectheading;
+	my $additionalauthor;
+
+	#--------
+    	requireDBI($dbh,"newcompletebiblioitem");
+
+	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
+		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
+
+	# Make sure master biblio entry exists
+	($biblionumber,$error)=getoraddbiblio($dbh, $biblio);
+
+        if ( ! $error ) { 
+
+	  $biblioitem->{biblionumber}=$biblionumber;
+
+	  # Add biblioitem
+	  $biblioitemnumber=newbiblioitem($biblioitem);
+
+	  # Add subjects
+	  $sth=$dbh->prepare("insert into bibliosubject 
+		(biblionumber,subject)
+		values (?, ? )" );
+	  foreach $subjectheading (@{$subjects} ) {
+	      $sth->execute($biblionumber, $subjectheading) 
+			or $error.=$sth->errstr ;
+	
+	  } # foreach subject
+
+	  # Add additional authors
+	  $sth=$dbh->prepare("insert into additionalauthors 
+		(biblionumber,author)
+		values (?, ? )");
+	  foreach $additionalauthor (@{$addlauthors} ) {
+	    $sth->execute($biblionumber, $additionalauthor) 
+			or $error.=$sth->errstr ;
+	  } # foreach author
+
+	} else {
+	  # couldn't get biblio
+	  $biblionumber='';
+	  $biblioitemnumber='';
+
+	} # if no biblio error
+
+	return ( $biblionumber, $biblioitemnumber, $error);
+
+} # sub newcompletebiblioitem
+
+#---------------------------------------
+# Find a biblio entry, or create a new one if it doesn't exist.
+#  If a "subtitle" entry is in hash, add it to subtitle table
+sub getoraddbiblio {
+	# input params
+	my (
+	  $dbh,		# db handle
+	  $biblio,	# hash ref to fields
+	)=@_;
+
+	# return
+	my $biblionumber;
+
+	my $debug=0;
+	my $sth;
+	my $error;
+	
+	#-----
+    	requireDBI($dbh,"getoraddbiblio");
+
+	print "<PRE>Looking for biblio </PRE>\n" if $debug;
+	$sth=$dbh->prepare("select biblionumber 
+		from biblio 
+		where title=? and author=? 
+		  and copyrightdate=? and seriestitle=?");
+	$sth->execute(
+		$biblio->{title}, $biblio->{author}, 
+		$biblio->{copyright}, $biblio->{seriestitle} );
+	if ($sth->rows) {
+	    ($biblionumber) = $sth->fetchrow;
+	    print "<PRE>Biblio exists with number $biblionumber</PRE>\n" if $debug;
+	} else {
+	    # Doesn't exist.  Add new one.
+	    print "<PRE>Adding biblio</PRE>\n" if $debug;
+	    ($biblionumber,$error)=&newbiblio($biblio);
+	    if ( $biblionumber ) {
+	      print "<PRE>Added with biblio number=$biblionumber</PRE>\n" if $debug;
+	      if ( $biblio->{subtitle} ) {
+	    	&newsubtitle($biblionumber,$biblio->{subtitle} );
+	      } # if subtitle
+	    } else {
+		print "<PRE>Couldn't add biblio: $error</PRE>\n" if $debug;
+	    } # if added
+	}
+
+	return $biblionumber,$error;
+
+} # sub getoraddbiblio
+
 END { }       # module clean-up code here (global destructor)
+
+#---------------------------------------
+# $Log$
+# Revision 1.1.2.3  2002/06/26 07:24:12  amillar
+# New subs to streamline biblio additions: addcompletebiblioitem and getoraddbiblio
+#
