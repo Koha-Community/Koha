@@ -1449,9 +1449,10 @@ sub bibdata {
     $sth   = $dbh->prepare($query);
     $sth->execute($bibnum);
     while (my $dat = $sth->fetchrow_hashref){
-        $data->{'subject'} .= " , $dat->{'subject'}";
+        $data->{'subject'} .= "$dat->{'subject'}, ";
     } # while
-
+	chop $data->{'subject'};
+	chop $data->{'subject'};
     $sth->finish;
     return($data);
 } # sub bibdata
