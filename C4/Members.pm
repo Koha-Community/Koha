@@ -75,8 +75,7 @@ sub fixup_cardnumber ($) {
 
     if ($cardnumber !~ /\S/ && $autonumber_members) {
 	my $dbh = C4::Context->dbh;
-	my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
-	my $sth=$dbh->prepare($query);
+	my $sth=$dbh->prepare("select max(substring(borrowers.cardnumber,2,7)) from borrowers");
 	$sth->execute;
 
 	my $data=$sth->fetchrow_hashref;

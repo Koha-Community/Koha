@@ -1,6 +1,6 @@
 package C4::Accounts; #assumes C4/Accounts
 
-# This module uses the CDK modules, and crashes if called from a web script
+# FIXME: This module uses the CDK modules, and crashes if called from a web script
 # Hence the existence of Accounts2
 #
 # This module will be deprecated when we build a new curses/slang/character
@@ -32,8 +32,8 @@ use C4::Context;
 use C4::Format;
 use C4::Search;
 use C4::Stats;
-use C4::InterfaceCDK;
-use C4::Interface::AccountsCDK;
+#use C4::InterfaceCDK;
+#use C4::Interface::AccountsCDK;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -156,7 +156,6 @@ sub reconcileaccount {
 sub recordpayment{
   #here we update both the accountoffsets and the account lines
   my ($env,$bornumber,$dbh,$data)=@_;
-  my $updquery = "";
   my $newamtos = 0;
   my $accdata = "";
   my $amountleft = $data;
@@ -165,11 +164,10 @@ sub recordpayment{
 #  $sth->execute;
   my $nextaccntno = getnextacctno($env,$bornumber,$dbh);
   # get lines with outstanding amounts to offset
-  my $query = "select * from accountlines
-  where (borrowernumber = '$bornumber') and (amountoutstanding<>0)
-  order by date";
-  my $sth = $dbh->prepare($query);
-  $sth->execute;
+  my $sth = $dbh->prepare("select * from accountlines
+  where (borrowernumber = ?) and (amountoutstanding<>0)
+  order by date");
+  $sth->execute($bornumber);
   # offset transactions
   while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
      if ($accdata->{'amountoutstanding'} < $amountleft) {
@@ -180,18 +178,16 @@ sub recordpayment{
 	$amountleft = 0;
      }
      my $thisacct = $accdata->{accountno};
-     $updquery = "update accountlines set amountoutstanding= '$newamtos'
-     where (borrowernumber = '$bornumber') and (accountno='$thisacct')";
-     my $usth = $dbh->prepare($updquery);
-     $usth->execute;
+     my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
+     where (borrowernumber = ?) and (accountno=?)");
+     $usth->execute($newamtos,$bornumber,$thisacct);
      $usth->finish;
      
-     $updquery = "insert into accountoffsets
+     $usth = $dbh->prepare("insert into accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
-     values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     $usth = $dbh->prepare($updquery);
+     values (?,?,?,?)");
 #     print $updquery
-     $usth->execute;
+     $usth->execute($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
      $usth->finish;
   }
   # create new line
@@ -199,12 +195,10 @@ sub recordpayment{
   #accountno,date,amount,description,accounttype,amountoutstanding) values
   #($bornumber,$nextaccntno,datetime('now'::abstime),0-$data,'Payment,thanks',
   #'Pay',0-$amountleft)";
-  $updquery = "insert into accountlines
+  my $usth = $dbh->prepare("insert into accountlines
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
-  values ($bornumber,$nextaccntno,now(),0-$data,'Payment,thanks',
-  'Pay',0-$amountleft)";
-  $usth = $dbh->prepare($updquery);
-  $usth->execute;
+  values (?,?,now(),?,?,'Payment,thanks','Pay')");
+  $usth->execute($bornumber,$nextaccntno,0-$data,0-$amountleft);
   $usth->finish;
   UpdateStats($env,'branch','payment',$data)
 }
@@ -226,8 +220,7 @@ sub getnextacctno {
   my ($env,$bornumber,$dbh)=@_;
   my $nextaccntno = 1;
   
-  my $query = "select max(accountno)+1 from accountlines";
-  my $sth = $dbh->prepare($query);
+  my $sth = $dbh->prepare("select max(accountno)+1 from accountlines");
   $sth->execute;
   if (my $accdata=$sth->fetchrow_hashref){
     $nextaccntno = $accdata->{'accountno'} + 1;
