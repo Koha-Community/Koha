@@ -319,25 +319,16 @@ sub manualinvoice{
     my $data=$sth->fetchrow_hashref;
     $sth->finish;
     $desc.=" ".$itemnum;
-    $desc=$dbh->quote($desc);
-    $dbh->do(<<EOT);
-	INSERT INTO	accountlines
-			(borrowernumber, accountno, date, amount,
-			 description, accounttype, amountoutstanding,
-			 itemnumber)
-	VALUES		($bornum, $accountno, now(), '$amount',
-			 $desc, '$type', '$amountleft',
-			 '$data->{'itemnumber'}')
-EOT
+    my $sth=$dbh->prepare("INSERT INTO	accountlines
+			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber)
+	VALUES (?, ?, now(), ?,?, ?,?,?)");
+    $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
   } else {
     $desc=$dbh->quote($desc);
-    $dbh->do(<<EOT);
-	INSERT INTO	accountlines
-			(borrowernumber, accountno, date, amount,
-			 description, accounttype, amountoutstanding)
-	VALUES		($bornum, $accountno, now(), '$amount',
-			 $desc, '$type', '$amountleft')
-EOT
+    my $sth=$dbh->prepare("INSERT INTO	accountlines
+			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding)
+			VALUES (?, ?, now(), ?, ?, ?, ?)");
+    $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft);
   }
 }
 
