@@ -227,7 +227,7 @@ Output file location:
 HTML::Template options:
   -a, --extract-all              Extract all strings
       --pedantic-warnings        Issue warnings even for detected problems
-			         which are likely to be harmless
+                                 which are likely to be harmless
 
 Output details:
   -s, --sort-output              generate sorted output
