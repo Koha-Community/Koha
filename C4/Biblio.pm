@@ -956,7 +956,7 @@ sub MARCkoha2marcBiblio {
         " SELECT subtitle FROM bibliosubtitle WHERE biblionumber=?");
     $sth2->execute($biblionumber);
     while ( my $row = $sth2->fetchrow_hashref ) {
-        &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.title",
+        &MARCkoha2marcOnefield( $sth, $record, "bibliosubtitle.subtitle",
             $row->{'subtitle'},'' );
     }
     return $record;
@@ -1234,7 +1234,7 @@ sub NEWnewbiblio {
         }
     }
     ( $tagfield, $tagsubfield ) =
-      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.title",$frameworkcode );
+      MARCfind_marc_from_kohafield( $dbh, "bibliosubtitle.subtitle",$frameworkcode );
     my @subtitlefields = $record->field($tagfield);
     foreach my $subtitlefield (@subtitlefields) {
         my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
@@ -1728,7 +1728,7 @@ sub OLDnewsubtitle {
     my $sth =
       $dbh->prepare(
         "insert into bibliosubtitle set biblionumber = ?, subtitle = ?");
-    $sth->execute( $bibnum, $subtitle );
+    $sth->execute( $bibnum, $subtitle ) if $subtitle;
     $sth->finish;
 }
 
@@ -2636,6 +2636,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.4  2005/02/17 12:44:25  tipaul
+# bug in acquisition : the title was also stored as subtitle.
+#
 # Revision 1.115.2.3  2005/02/10 13:14:36  tipaul
 # * multiple main authors are now correctly handled in simple (non-MARC) view
 #
