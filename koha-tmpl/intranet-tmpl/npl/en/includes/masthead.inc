@@ -1,1 +1,2 @@
 <h1>Koha Intranet<!-- TMPL_IF NAME="branchname" -->: <!-- TMPL_VAR name="branchname" --><!-- /TMPL_IF --></h1>
+<div id="help"><a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">[ ? ]</a></div>
