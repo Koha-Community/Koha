@@ -14,19 +14,15 @@
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME=displayprev -->
-				<a href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
-					<img src="/intranet-tmpl/default/images/numbers/prev.gif" border="0" />
-				</a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_LOOP NAME=numbers -->
-				<!-- TMPL_IF NAME=highlight -->
-					<img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif" />
-				<!-- TMPL_ELSE -->
-					<a href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0" /></a>
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><!-- TMPL_VAR NAME="number" --><!-- TMPL_ELSE -->
+					<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME=displaynext -->
-				<a href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><img src="/intranet-tmpl/default/images/numbers/next.gif" border="0" /></a>
+				<a class="results" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next &gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p>
 		<p class="center">
@@ -80,7 +76,7 @@
 		<tr>
 			<th align="left">
 				<!-- TMPL_IF NAME="displayprev" -->
-					<a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME=FORMINPUTS -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">&lt;&lt;&lt; Previous</a>
+					<a class="results" href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!-- TMPL_LOOP NAME=FORMINPUTS -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">&lt;&lt;&lt; Previous</a>
 				<!-- TMPL_ELSE -->
 					&nbsp;
 				<!-- /TMPL_IF -->
@@ -88,7 +84,7 @@
 			<th colspan="3">&nbsp;</th>
 			<th colspan="2" align="right">
 				<!-- TMPL_IF NAME="displaynext" -->
-					<a href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME=FORMINPUTS -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">Next &gt;&gt;&gt;</a>
+					<a class="results" href="/cgi-bin/koha/opac-searchresults.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!-- TMPL_LOOP NAME=FORMINPUTS -->&amp;<!-- TMPL_VAR NAME="field" -->=<!-- TMPL_VAR NAME="value" ESCAPE="URL" --><!-- /TMPL_LOOP -->">Next &gt;&gt;&gt;</a>
 				<!-- TMPL_ELSE -->
 					&nbsp;
 				<!-- /TMPL_IF -->
@@ -103,19 +99,17 @@
 	<div id="resultnumber">
 		<p class="center">
 			<!-- TMPL_IF NAME="displayprev" -->
-				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
-					<img src="/intranet-tmpl/default/images/numbers/prev.gif" border="0" />
-				</a>
+				<a class="results" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
-					<img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif" />
+					<!-- TMPL_VAR NAME="number" -->
 				<!-- TMPL_ELSE -->
-					<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0" /></a>
+					<a class="results" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME="displaynext" -->
-				<a href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><img src="/intranet-tmpl/default/images/numbers/next.gif" border="0" /></a>
+				<a class="results" href="search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next &gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p>
 		<p class="center">
