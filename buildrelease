@@ -175,6 +175,8 @@ system("mv $rootdir/intranet-cgi/databaseinstall.sh $rootdir");
 system("mv $rootdir/intranet-cgi/installer.pl $rootdir"); 
 system("mv $rootdir/intranet-cgi/koha.conf $rootdir");
 system("mv $rootdir/intranet-cgi/koha.mysql $rootdir");
+
+# Copy files from intranet-cgi to opac-cgi
 system("cp $rootdir/intranet-cgi/detail.pl $rootdir/opac-cgi");
 system("cp $rootdir/intranet-cgi/moredetail.pl $rootdir/opac-cgi");
 system("cp $rootdir/intranet-cgi/search.pl $rootdir/opac-cgi");
@@ -187,13 +189,33 @@ system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
 system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
 
+
+# Remove extraneous files from intranet-cgi
+system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
+system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
+system("rm -f $rootdir/intranet-cgi/SendMessages");
+system("rm -f $rootdir/intranet-cgi/buildrelease");
+system("rm -f $rootdir/intranet-cgi/database.mysql");
+system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
+system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
+system("rm -f $rootdir/intranet-cgi/rel-1-2");
+system("rm -f $rootdir/intranet-cgi/testKoha.pl");
+system("rm -rf $rootdir/intranet-cgi/html-template");
+system("rm -rf $rootdir/intranet-cgi/t");
+
 # Copy all CVS files to intranet-html and opac-html
 system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
+
+# Remove extraneous files from intranet-html
 system("rm -f $rootdir/opac-html/koha.mo");
 system("rm -f $rootdir/opac-html/koha.pot");
 system("rm -f $rootdir/opac-html/test");
+system("rm -f $rootdir/intranet-html/koha.pot");
+system("rm -f $rootdir/intranet-html/results.html");
+system("rm -f $rootdir/intranet-html/test");
 
+# Remove junk from directory
 system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
