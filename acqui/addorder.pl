@@ -43,18 +43,24 @@ if ($quantity ne '0'){
     #if it doesnt create it
     $bibnum = &newbiblio({ title     => $title?$title:"",
 	                   author    => $author?$author:"",
-	                   copyright => $copyright?$copyright:"" });
+	                   copyright => $copyright?$copyright:"",
+				    series => $series?$series:"",
+
+
+				     });
     $bibitemnum = &newbiblioitem({ biblionumber => $bibnum,
  	                           itemtype     => $itemtype?$itemtype:"",
-	                           isben        => $isbn?$isbn:"" });
+	                           isbn        => $isbn?$isbn:""
+						   });
 	if ($title) {
     		newsubtitle($bibnum,$title);
 	}
-    modbiblio({ biblionumber  => $bibnum,
-	        title         => $title?$title:"",
-	        author        => $author?$author:"",
-	        copyrightdate => $copyright?$copyright:"",
-	        series        => $series?$series:"" });
+#unuseful (already added 4 line before
+#     modbiblio({ biblionumber  => $bibnum,
+#	        title         => $title?$title:"",
+#	        author        => $author?$author:"",
+#	        copyrightdate => $copyright?$copyright:"",
+#	        series        => $series?$series:"" });
   } else {
     $bibnum=$input->param('biblio');
     $bibitemnum=$input->param('bibitemnum');
@@ -62,7 +68,7 @@ if ($quantity ne '0'){
     if ($bibitemnum eq '' || $itemtype ne $oldtype){
       $bibitemnum= &newbiblioitem({ biblionumber => $bibnum,
 	 						 itemtype => $itemtype?$itemtype:"",
-							 isben => $isbn?$isbn:"" });
+							 isbn => $isbn?$isbn:"" });
     }
     &modbiblio({
         biblionumber  => $bibnum,

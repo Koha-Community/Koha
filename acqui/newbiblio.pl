@@ -21,6 +21,7 @@ my $ordnum=$input->param('ordnum');
 my $biblio=$input->param('biblio');
 my $data;
 my $new;
+
 if ($ordnum eq ''){
   $new='yes';
   $ordnum=newordernum;
@@ -35,7 +36,7 @@ if ($ordnum eq ''){
 }else {
   $data=getsingleorder($ordnum);
   $biblio=$data->{'biblionumber'};
-} 
+}
 
 print startpage;
 
@@ -61,11 +62,11 @@ function update(f){
   //  rrp=f.rrp.value
   //  ecost=f.ecost.value  //budgetted cost
   //  GST=f.GST.value
-  //  total=f.total.value  
-  //make useful constants out of the above  
-  exchangerate=f.elements[currency].value      //get exchange rate  
+  //  total=f.total.value
+  //make useful constants out of the above
+  exchangerate=f.elements[currency].value      //get exchange rate
   gst_on=(!listinc && applygst);
-  //do real stuff  
+  //do real stuff
   rrp=listprice*exchangerate;
   ecost=rrp*(100-discount)/100
   GST=0;
@@ -73,17 +74,17 @@ function update(f){
     rrp=rrp*1.125;
     GST=ecost*0.125
   }
-  
+
   total=(ecost+GST)*quantity
-  
-  
+
+
   f.rrp.value=display(rrp)
   f.ecost.value=display(ecost)
   f.GST.value=display(GST)
   f.total.value=display(total)
-  
+
 }
-								      
+
 
 
 function messenger(X,Y,etc){
@@ -128,7 +129,7 @@ if ($new ne 'yes'){
   print "<input type=hidden name=orderexists value=yes>\n";
 }
 print <<printend
-<a href=basket.pl?basket=$basket><img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a> 
+<a href=basket.pl?basket=$basket><img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a>
 <FONT SIZE=6><em>$ordnum - Order Details </em></FONT><br>
 Shopping Basket For: $booksellers[0]->{'name'}
 <P>
@@ -162,8 +163,12 @@ my $query="Select itemtype,description from itemtypes order by description";
 my $sth=$dbh->prepare($query);
 $sth->execute;
 print "<option value=\"\">Please choose:\n";
-while (my $data=$sth->fetchrow_hashref){
-  print "<option value=\"" . $data->{'itemtype'} . "\">" . $data->{'description'} . "\n";
+while (my $data2=$sth->fetchrow_hashref){
+	if ($data2->{'itemtype'} eq $data->{'itemtype'}) {
+  		print "<option value=\"" . $data2->{'itemtype'} . "\" SELECTED>" . $data2->{'description'} . "\n";
+	} else {
+  		print "<option value=\"" . $data2->{'itemtype'} . "\">" . $data2->{'description'} . "\n";
+	}
 }
 $sth->finish;
 $dbh->disconnect;
