@@ -580,7 +580,7 @@ my %fielddefinitions = (
         {
             field   => 'z3950random',
             type    => 'varchar(40)',
-            null    => 'YES',
+            null    => 'NULL',
             key     => '',
             default => '',
             extra   => ''
@@ -917,8 +917,8 @@ $sth->finish;
 exit;
 
 # $Log$
-# Revision 1.60  2003/10/01 13:43:48  tipaul
-# fixing "z3950daemon not null" problem by changing the field to "null" instead of "not null".
+# Revision 1.61  2003/10/01 15:03:45  tipaul
+# oups... typo fix in z3950random field definition
 #
 # Revision 1.59  2003/09/30 16:22:05  tipaul
 # adding barcode NOT mandatory feature. Just run updatedatabase to get it.
