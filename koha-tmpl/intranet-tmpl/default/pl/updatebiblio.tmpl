@@ -1,18 +1,18 @@
-<TMPL_INCLUDE Name="cat-top.inc">
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
 
-<TMPL_VAR Name="error">
-<p> Kliknij "Prze¶lij..", by wymusiæ przedmiot
+<!-- TMPL_VAR Name="error" -->
+<p> NaciÅ›nij "przeÅ›lij", by wymusiÄ‡ temat
 <br>
 <form action="/cgi-bin/koha/updatebiblio.pl" method=post>
 <table border=0 cellspacing=0 cellpadding=5>
-<TMPL_LOOP Name="dataloop">
-	<input type=hidden name="<TMPL_VAR NAME="name">" value="<TMPL_VAR NAME="value">">
-</TMPL_LOOP>
-	<input type=hidden name="Force" value="<TMPL_VAR NAME="substring">">
+<!-- TMPL_LOOP Name="dataloop" -->
+	<input type=hidden name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+<!-- /TMPL_LOOP -->
+	<input type=hidden name="Force" value="<!-- TMPL_VAR NAME="substring" -->">
 <TR><TD><input type=submit></TD></TR>
 </TABLE>
 </form>
 
 
-<TMPL_INCLUDE Name="cat-bottom.inc">
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

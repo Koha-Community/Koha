@@ -1,194 +1,136 @@
-<HTML>
-<TITLE>WITAMY W INTRANECIE KOHA </TITLE>
-<meta http-equiv="Content-Type" content="text/html; charset=iso8859-2">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title>ZAPRASZAMY DO ADMINISTRACJI SYSTEMU </title>
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/intranet-main.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- JAVASCRIPT SCRIPTS -->
+	<script language="JavaScript" type="text/javascript">
+		var IE = document.all?true:false;
+		if (!IE) document.captureEvents(Event.MOUSEMOVE)
+		document.onmousemove = getMouseXY;
+		var mouseX = 0;
+		var mouseY = 0;
+		function getMouseXY(e) {
+			if (IE) {
+				mouseX = event.clientX + document.body.scrollLeft;
+				mouseY = event.clientY + document.body.scrollTop;
+			}
+			else {
+				mouseX = e.pageX;
+				mouseY = e.pageY;
+			}  
+			if (mouseX < 0){mouseX = 0;}
+			if (mouseY < 0){mouseY = 0;}  
+			return true;
+		}
+		function MM_findObj(n, d) { //v4.0
+			var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+			d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+			if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+			for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+			if(!x && document.getElementById) x=document.getElementById(n); return x;
+		}
+		function SetOn(item) {
+			for(i=1;i<=6;i++) {
+				SetOff(i);
+			}
+			if (!(layer = MM_findObj('Hint' + item))) return;
+			layer.style.visibility = 'visible';
+		}
+		function SetOff(item) {
+			if (!(layer = MM_findObj('Hint' + item))) return;
+			layer.style.visibility = 'hidden';
+		}
+	</script>
+	<script>
+	var blnOk=true;
+	function Load() {
+		if(document.body.style.backgroundColor!="") { blnOk=false; }
+		if(document.body.style.color!="") { blnOk=false; }
+		if(document.body.style.marginTop!="") { blnOk=false; }
+		if(blnOk) {
+			for(i=1;i<=6;i++) {
+				SetOff(i);
+			}
 
+			}
+		}
+	</script>
 
-<style type="text/css">
-<!--
-input{font-size:16px}
-
--->
-
-</style>
-<script language=javascript>
-<!--
-if (document.images){
-search=new Image;
-search.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif"
-members=new Image;
-members.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif"
-acquisitions=new Image;
-acquisitions.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-acquisitions.gif"
-reports=new Image;
-reports.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-reports.gif"
-circulation=new Image;
-circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation.gif"
-}
-//-->
-</script>
-
-</HEAD>
-
-<BODY
-	BGCOLOR="#99cc33"
-	text="black"
-
-
-	alink="#663366"
-	leftmargin=0
-	topmargin=0
-	marginheight=0
-	marginwidth=0 >
-
-<center>
-<table cellspacing=0 cellpadding=0 border=0 >
-
-  <tr valign=top >
-	<td background="<TMPL_VAR NAME='themelang'>/images/koha-front-background.gif"><img src="/images/holder.gif"
-	width=1 height=420 align=left alt=" " hspace=0 vspace=0 >
-	<table cellspacing=0 cellpadding=0 border=0 >
-		<!----ROW THAT SETS THE GRID FOR THE REST OF THE TABLE--->
-		<tr valign=top >
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=150 height=42
-			alt=" " hspace=0 vspace=0 ></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=42
-			alt=" " hspace=0 vspace=0 ></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=25 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=25 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=20 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=20 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=10 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=10 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=90 height=42
-			alt=" " hspace=0 vspace=0></td>
-		</tr>
-
-<!--------CATALOGUE SEARCH----->
-
-		<tr valign=top >
-			<td background="" colspan=5><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
-			width=1 height=1 hspace=0 vspace=0></td>
-
-			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif'" 		onMouseOut="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-search.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-search.gif" width=320 	height=37 name="search"
-			hspace=0 vspace=0 border=0></a></td>
-		</tr>
-
-
-		<tr valign=top >
-			<td background="" rowspan=3 align="right" colspan=5>
-				<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
-				width=1 height=35
-				alt=" " hspace=0 vspace=0><br>
-				<img src="<TMPL_VAR NAME='themelang'>/images/koha-front-koha.gif" width=200 height=128
-				alt="Koha: Horowhenua Library Trust" hspace=0 vspace=0></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=3>
-		 <TMPL_IF NAME="NOTMARC">
-		                <FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
-				<input type="hidden" name="module" value="search">
-				<input type="hidden" name="type" value="intranet">
-				<input type=text size="27" name="keyword"><input type=reset value="clr"><br>
-
-			<font size=1 face="arial,helvetica" ><b>Wprowad� wyra�enie i naci�nij klawisz enter.</b><br>
-			<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
-			<font size=2 face="arial narrow,arial,helvetica">
-			<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow-purple.gif" width=27 height=22
-			alt="-" hspace=0 vspace=0 border=0 align=middle >Wyszukiwanie zaawansowane (wi�cej opcji)</a><br>
+</head>
+<body onload="Load();">
+<div id="mainbloc">
+	<div class="image">
+		<img src="<!--TMPL_VAR name="themelang">/images/koha-front-koha.gif">
+	</div>
+	<div id="menus">
+<!-- RIGHT (disappearing) BLOC -->
+		<div id="Hint1" class="hint">
+			<h1 class="catalogue">Katalog</h1>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="catalogue">Wyszukaj w katalogu </a>
+				<p>Search a biblio. When these biblio is found, you can check it's status, reserve it, or see where it is</p>
+			<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="catalogue">Półki wirtualne</a>
+				<p>Wirtualne półki mogą być używane przez bibliotekarzy lub czytelników do wyodrębnienia wirtualnej biblioteki wewnątrz "realnej". Półki wirtualne mogą być np. użyte przez nauczyciela, by pomóc studentom w wyszukaniu informacji na poszczególny temat. Biblioteka może zdefiniować tutaj "najcenniejsze swoje zbiory dla &lt;niektórych kategorii czytelników&gt;"</p>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="catalogue">Dodaj opis</a>
+				<p>Dodaj opis bezpośrednio do katalogu bibliotecznego</p>
+			<!-- TMPL_IF NAME="NOTMARC" -->
+				<form action="/cgi-bin/koha/loadmodules.pl" method="post">
+					<input type="hidden" name="module" value="search">
+					<input type="hidden" name="type" value="intranet">
+					<input type="text" name="keyword" size="27">
+					<input type="reset" value="wyczyść"><br>
+					<p>Wpisz szukane słowo i naciśnij klawisz enter.</p>
+					<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue">Szukanie Zaawansowane (Więcej Opcji)</a><br>
+				</form>
+			<!-- /TMPL_IF -->
+		</div>
+		<div id="Hint2" class="hint">
+			<h1 class="members">Czytelnicy</h1>
+			<h2 class="members">Szukaj</h2>
+			<form action="/cgi-bin/koha/members/member.pl" method="post">
+				<input type="text" size="27" name="member">
+				<input type="submit" value="OK"><br>
+				<p>Wpisz szukane słowo i naciśnij klawisz enter.</p>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" width="1" height="12" alt="" hspace="0" vspace="0">
 			</form>
-		  </TMPL_IF>
-			<img src="/images/holder.gif" width=1 height=8
-			alt=" " hspace=0 vspace=0></td>
-		</tr>
 
-		<!--------MEMBER SEARCH----->
-
-		<tr valign=top >
-			<td></td>
-			<form action="/cgi-bin/koha/member.pl" method=post >
-			<td background=""  colspan=4>
-				<a href="/cgi-bin/koha/members-home.pl" onMouseOver="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif'" 		onMouseOut="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-member.gif'">
-				<img src="<TMPL_VAR NAME='themelang'>/images/front-member.gif" width=304 height=37 name="member"
-				hspace=0 vspace=0 border=0>
-			</td>
-
-		</tr>
-		<tr valign=top >
-			<td></td>
-			<td></td>
-			<form action="/cgi-bin/koha/member.pl" method=post >
-
-			<td background="" colspan=3 >
-			<input type=text size="27" name="member">
-			<input type=reset value="clr"><br>
-			<font size=1 face="arial,helvetica" ><b>Wprowad� wyra�enie i naci�nij kalwisz 			enter.</b><br>
-			<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0></td>
-
-		</tr>
-
- <!--------ACQUISITIONS----->
-		<tr valign=top >
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=5><A href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.acquisitions.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-acquisitions.gif'" 		onMouseOut="if(document.images)document.acquisitions.src='<TMPL_VAR NAME='themelang'>/images/front-acquisitions.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-acquisitions.gif" width=320 		height=36 name="acquisitions"
-			hspace=0 vspace=0 border=0></a><br>
-			<img src="/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0 ></td>
-
-
-		</tr>
-
-
-<!--------REPORTS----->
-		<tr valign=top >
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=6> <A href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.reports.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-reports.gif'" 		onMouseOut="if(document.images)document.reports.src='<TMPL_VAR NAME='themelang'>/images/front-reports.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-reports.gif" width=346 		height=37 name="reports"
-			hspace=0 vspace=0 border=0></a><br>
-			<img src="/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0 ></td>
-		</tr>
-
-<!--------ADMIN----->
-		<tr valign=top >
-
-			<td></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=7> <A href="/cgi-bin/koha/admin-home.pl" onMouseOver="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-admin.gif'" 		onMouseOut="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-admin.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-admin.gif" width=346 		height=37 name="admin"
-			hspace=0 vspace=0 border=0></a><br>
-			<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0 ></td>
-
-
-		</tr>
-
-<!--------CIRCULATION----->
-		<tr valign=top >
-
-			<td></td>
-			<td background="" colspan=9> <A href="/cgi-bin/koha/circ/circulation.pl" onMouseOver="if(document.images)document.circulation.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation.gif'" 		onMouseOut="if(document.images)document.circulation.src='<TMPL_VAR NAME='themelang'>/images/front-circulation.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-circulation.gif" width=346 		height=37 name="circulation"
-			hspace=0 vspace=0 border=0></a>
-			</td>
-		</tr>
-	</table>
-	</td>
-</tr>
-</table>
-</center>
+			<a href="/cgi-bin/koha/members/members-home.pl" class="members">Strona Domowa</a>
+			<p>Idź do głównej strony czytelników</p>
+			<a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add" class="members">Dodaj Czytelnika</a>
+			<p>Dodaj czytelnika dla biblioteki. Czytelnik może zostać przypisany do któregokolwiek z oddziałów biblioteki. Może również posiadać podopiecznych.</p>
+			<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&actionType=Add" class="members">Dodaj Organizację</a>
+			<p>Dodaj organizację do biblioteki. Ten czytelnik nie posiada niektórych informacji jakie posiada "fizyczny" członek.</p>
+		</div>
+		<div id="Hint3" class="hint">
+			<h1 class="acquisition">Gromadzenie</h1>
+			Zamów pozycję, przyjmij zamówienie, ustaw budżet...
+		</div>
+		<div id="Hint4" class="hint">
+			<h1 class="reports">Raporty</h1>
+			Wszystkie raporty systemowe
+		</div>
+		<div id="Hint5" class="hint">
+			<h1 class="parameters">Parametry</h1>
+			Zmień preferencje systemowe
+		</div>
+		<div id="Hint6" class="hint">
+			<h1 class="circulation">Cyrkulacja</h1>
+			Praca przy stanowisku wypozyczeń i zwrotów za pomocą czytnika kodów i myszki
+		</div>
+<!-- MAIN MENU -->
+		<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue" onMouseOver="SetOn(1);">Katalog</a><br/>
+		
+		<a href="/cgi-bin/koha/members/members-home.pl" class="members" onMouseOver="SetOn(2);">Czytelnicy</a><br/>
+		
+		<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" class="acquisition" onMouseOver="SetOn(3);">Gromadzenie</a><br/>
+		
+		<a href="/cgi-bin/koha/reports-home.pl" class="reports" onMouseOver="SetOn(4);">Raporty</a><br/>
+		
+		<a href="/cgi-bin/koha/admin-home.pl" class="parameters" onMouseOver="SetOn(5);">Parametry</a><br/>
+		
+		<a href="/cgi-bin/koha/circ/circulation.pl" class="circulation" onMouseOver="SetOn(6);">Cyrkulacja</a><br/>
+	</div>
+</div>
 </body>
 </html>

@@ -1,89 +1,95 @@
-<html>
-<TMPL_INCLUDE NAME="parameters-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj si�</a> do Koha</p>
-</TMPL_IF>
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
 <center>
-<FONT SIZE=6><em>Strona administratora systemu Koha</em></FONT><br>
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
-	<th>Parametry</th>
-</tr>
-</table>
-<table cellspacing=0 cellpadding=1 width=80%>
-<th colspan=2>Dotycz�ce ksi��ek</th>
+<h1>Parametry</h1><br>
+<div id="bloc100">
+	<div id="bloctitle">Parametry Systemu </div>
+<table>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Item types</a></td>
-	<td>W�a�ciwo�ci pozycji ksi��kowych.</td>
+<td colspan=2><b>Wypełnij poniższe tablice w kolejności, w jakiej występują, aby utworzyć funkcjonalny system biblioteczny Koha.</b></td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>budget</a></td>
-	<td>budget na wydatki ksi�zkowe.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>Oddziały biblioteki</a></td>
+	<td>Odpowiednie oddziały, które obsługiwane są przez ten serwer Koha.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
-	<td>R�ne wydatki ksi�zkowe.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>Fundusze książkowy</a></td>
+	<td>Administracja funduszu książkowego. Należy pamiętać o edycji funduszy książkowych zanim rozpocznie się edycję budgetu.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>warto�ci autoryzowane</a></td>
-	<td>Tutaj definiuj kategorie oraz autoryzowane dla nich warto�ci.
-			W formularzach MARC warto�ci autoryzowane s�u�a do tego, by ograniczy�/wspom�c edycj� opis�w bibliograficznych MARC</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/currency.pl>Waluty</a></td>
+	<td>Definicja kursów wymiany.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Typy zasobów</a></td>
+	<td>Deninicja typów materiału.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/categorie.pl>Kategorie czytelników</a></td>
+	<td>Definicja kategorii czytelników.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/charges.pl>Opłaty</a></td>
+	<td>Kwoty opłat dla typów pozycji / czytelników</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>Wartość autoryzowana</a></td>
+	<td>Definicja kategorii oraz autoryzowanych dla nich wartości. Wartości autoryzowane są stosowane w formularzach MARC, by pomoć w edycji opisów bibliograficznych MARC.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Tezaurus</a></td>
-	<td>Zarz�dzanie tezaurusem. Mo�na definiowa� dowoln� ilo�� tezaurus�w wybieraj�c "kategori�" definicji tezaurus�w</td>
+	<td>Zarządzanie tezaurusem oraz kartoteką haseł wzorcowych (khw).</td>
 </tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>Struktura etykiet MARC</a></td>
+	<td>Struktura etykiet MARC: Etykiety następnie podpola.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Powiązania pól: Koha - Baza MARC</a></td>
+	<td>Definicja powiązań pomiędzy standardową bazą Koha a bazą MARC. To samo uczynić można poprzez stukturę MARC. To narzędzie jest jedynie skrótem, aby przyśpieszyć powiązania.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>Sprawdzanie bazy MARC</a></td>
+	<td>Sprawdza strukturę MARC. UŻYJ przed pracą na danych rzeczywistych. Narzędzie to sprawdzi błędy, które mogą załamać bazę Koha!</td></tr>
 
-<th colspan=2>Dotycz�ce standardu MARC</th>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>MARC tag structure</a></td><td>MARC structure : tag then subfields</td></tr>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Links koha - MARC DB</a></td><td>Define links between the koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage</td></tr>
-<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>Checks MARC</a></td><td>Checks the MARC structure. USE IT before working with real datas. It will show mistakes that BREAKS koha database!</td></tr>
-
-<th colspan=2>Various parameters</th>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>libraries branches</a></td>
-	<td>the differents branches you manage with this koha server</td>
+<th colspan=2>Różne parametry</th>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/categorie.pl>categories</a></td>
-	<td>the differents types of borrowers.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Drukarki</a></td>
+	<td>Drukarki (ścieżki UNIXa)</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/currency.pl>Currencies</a></td>
-	<td>Currencies of booksellers.</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>Słowa pomijane</a></td>
+	<td>Słowa nie brane pod uwagę podczas szukania.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Printers</a></td>
-	<td>Printers (UNIX paths).</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>Serwery Z39.50</a></td>
+	<td>Serwery do odpytania dla danych MARC.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>stopwords</a></td>
-	<td>Words deleted during searches</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>Z39.50 Servers</a></td>
-	<td>Servers to query for MARC data</td>
-</tr>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>systempreferences</a></td>
-	<td>System preferences</td>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>Preferencje Systemu</a></td>
+	<td>Preferencje systemu.</td>
 </tr>
 </table>
 
-<table width=100% cellspacing=0 cellpadding=5 border=1>
-<tr background="/images/background-mem.gif">
-	<th>Tools</th>
-</tr>
-</table>
-<table cellspacing=0 cellpadding=1 width=80%>
-<th colspan=2>Export</th>
-<tr>
-	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>MARC biblio export</a></td>
-	<td>Exporting in MARC format</td>
-</tr>
+<h1>Narzędzia</h1>
+<table>
+	<tr>
+	<th colspan=2> Eksport</th>
+	</tr>
+	<tr>
+		<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">Export Opisu MARC</a></td>
+		<td> Eksportowanie w formacie MARC.</td>
+	</tr>
+	<tr>
+	<th colspan=2>Import</th>
+	</tr>
+	<tr valign="top">
+		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Dograj opisy MARC do Rezerwuaru</a></td>
+		<td>Rezerwuar opisów to tablica gdzie składowane są rekordy MARC. Rekordy MARC oczekują w reserwuarze doputy dopóki nie ma dla nich egzemplarza. Po wpisaniu numeru ISBN lub tytułu opisu zostaje on odpytywany w rezerwuarze. Jeśli się tam znajduje to do aktywnej tablicy Koha ten opis zostaje dopisany, a usunięty z rezerwuaru.
+		</td>
+	</tr>
 </table>
 </center>
-<TMPL_INCLUDE NAME="cat-bottom.inc">
-</html>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

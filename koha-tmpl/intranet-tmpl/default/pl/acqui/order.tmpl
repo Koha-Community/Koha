@@ -1,48 +1,53 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
-<h1>Wyniki wyszukiwania dostawc�w</h1><br />
-<CENTER>
-Szukano <b>dostawcy <TMPL_VAR name="supplier">,</b> znaleziono <TMPL_VAR name="count"> rezultat(y)(�w)<p>
-<table border=0 cellspacing=0 cellpadding=5 width="80%">
-<tr valign=top bgcolor="#ffdf61">
-	<td width="10%"><b>Zam�w</b></td>
-	<td width="10%"><b>Odbierz<b></td>
-	<td width="30%"><b>Podmiot</b></td>
-	<td width="50%">
-		<table width="100%" border=0 cellspacing=0 cellpadding=5>
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
+<h1>Wyniki Szukania Dostawców</h1>
+<div id="bloc100">
+<div id="bloctitle">Szukano <b>dostawcy <!-- TMPL_VAR name="supplier" -->,</b>Liczba wyszukanych <!-- TMPL_VAR name="count" --> </div>
+<table>
+<tr>
+	<td><b>Zamów</b></td>
+	<td><b>Przyjmij<b></td>
+	<td><b>Firma</b></td>
+	<td>
+		<table>
 			<tr>
-				<td width="15%"><b>Koszyk</b></td>
-				<td width="15%"><b>Pozycje</b></td>
-				<td width="40%"><b>Pracownik</b></td>
-				<td width="30%"><b>Data</b></td>
+				<td><b>Koszyk</b></td>
+				<td><b>Pozycje</b></td>
+				<td><b>Personel</b></td>
+				<td><b>Data</b></td>
 			</tr>
 		</table>
 	</td>
 </tr>
 
-<TMPL_LOOP name="loop_suppliers">
-	<tr valign=top bgcolor=<TMPL_VAR name="color">>
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
 		<td>
-			<a href="basket.pl?id=<TMPL_VAR name=id>"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<!-- TMPL_IF name="active" -->
+				<a href="basket.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Dodaj zamówienie" alt="Dodaj" border=0></a>
+			<!-- TMPL_ELSE -->
+				Nieaktywny
+			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<TMPL_VAR name=id>"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
+			<a href="recieveorder.pl?id=<!-- TMPL_VAR name=id -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="odbiór" alt="Dodaj" border=0></a>
 		</td>
-		<td><a href="supplier.pl?id=<TMPL_VAR name=id>"><TMPL_VAR name="name"></a></td>
+		<td><a href="supplier.pl?id=<!-- TMPL_VAR name=id -->"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=5 border=0>
-				<TMPL_LOOP name="loop_basket">
+				<!-- TMPL_LOOP name="loop_basket" -->
 					<tr>
-						<td width="15%"><a href="/cgi-bin/koha/acqui/basket.pl?basket=<TMPL_VAR name="basketno">"><TMPL_VAR name="basketno"></a></td>
+						<td width="15%"><a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a></td>
 						<td width="15%"><TMPl_VAR name="total"></td>
-						<td width="40%"><TMPL_VAR name="authorisedby"></td>
-						<td width="30%"><TMPL_VAR name="entrydate"></td>
+						<td width="40%"><!-- TMPL_VAR name="authorisedby" --></td>
+						<td width="30%"><!-- TMPL_VAR name="entrydate" --></td>
 					</tr>
-				</TMPL_LOOP>
+				<!-- /TMPL_LOOP -->
 			</table>
 	</tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
 </CENTER>
 <br>
-<a class="button" href="supplier.pl?id=0">Dodaj dostawc�</a>
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<a class="button" href="supplier.pl?id=0">Dodaj dostawcę</a>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

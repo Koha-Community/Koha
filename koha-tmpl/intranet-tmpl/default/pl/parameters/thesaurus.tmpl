@@ -1,152 +1,155 @@
-<html>
-<TMPL_INCLUDE NAME="cat-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<TMPL_IF name="detail_form">
-	<!-------------------------------------------------------------------------------------------------->
-	<font SIZE=6><em>Zarz±dzaj tezaurusem</em></font><br />
+<!-- TMPL_IF name="detail_form" -->
+	<!-------------------------------------------------------------------->
+	<font SIZE=6><em>ZarzÄ…dzanie Tezaurusem</em></font><br />
 	<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td  background="/images/background-mem.gif"><b>Warto¶ci zwi±zane z <TMPL_VAR name="stdlib"> (<TMPL_VAR name="category">)</b></td>
+		<td  background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>WartoÅ›ci odnoszÄ…ce siÄ™ do <!-- TMPL_VAR name="stdlib" --> (<!-- TMPL_VAR name="category" -->)</b></td>
 	</tr>
 	</table>
 	<br/><br/>
 	<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>Inne formy</b></td>
-		<td background="/images/background-mem.gif">&nbsp;</td>
-		<td background="/images/background-mem.gif">&nbsp;</td>
-	<TMPL_LOOP name="loop">
-	</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-		<td><TMPL_VAR name="freelib"></td>
-		<td><a href="<TMPL_VAR name="edit">">Edytuj</a></td>
-		<td><a href="<TMPL_VAR name="delete">">Wyma¿</a></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Inne formy</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
+	<!-- TMPL_LOOP name="loop" -->
+	</tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+		<td><!-- TMPL_VAR name="freelib" --></td>
+		<td><a href="<!-- TMPL_VAR name="edit" -->">Edytuj</a></td>
+		<td><a href="<!-- TMPL_VAR name="delete" -->">WymaÅ¼</a></td>
 	</tr>
-	</TMPL_LOOP>
-	<form action='<TMPL_VAR name="script_name">' method=post>
+	<!-- /TMPL_LOOP -->
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=hidden name=op value=add_form>
 	</table>
-	<form action='<TMPL_VAR name="script_name">' method=post>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type="hidden" name="op" value="add_form">
-	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-	<input type="hidden" name="stdlib" value="<TMPL_VAR name="stdlib">">
-	<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
+	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+	<input type="hidden" name="stdlib" value="<!-- TMPL_VAR name="stdlib" -->">
+	<br><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" title="Dodaj wpis tezaurusa" alt="Dodaj" border=0><br>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="add_form">
-<!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
-	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
+<!-- TMPL_IF name="add_form" -->
+<!---------------------------------------------------------------------------->
+<H1><!-- TMPL_IF name="search_category" -->ZmieÅ„<!-- TMPL_ELSE -->Dodaj<!-- /TMPL_IF --></H1>
+	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
+	<!-- TMPL_IF name="search_category" -->
+		<input type=hidden name=op value='mod_validate'>
+	<!-- TMPL_ELSE -->
+		<input type=hidden name=op value='add_validate'>
+	<!-- /TMPL_IF -->
 	<table cellpadding=3 cellspacing=3>
 	<tr>
 		<td>Kategoria</td>
-		<td><TMPL_VAR name="category"></td>
+		<td><!-- TMPL_VAR name="category" --></td>
 	</tr>
 	<tr>
-		<td>Odpowiedzialno¶æ lib</td>
-		<td><TMPL_VAR name="father"><input type="text" name="stdlib" value="<TMPL_VAR name="stdlib">" maxlength="80" size="80"></td>
+		<td>Etykieta HW</td>
+		<!-- TMPL_IF name="id" -->
+			<td><!-- TMPL_VAR name="father" --><!-- TMPL_VAR name="stdlib" --><input type="hidden" name="stdlib" value="<!-- TMPL_VAR name="stdlib" -->" ></td>
+		<!-- TMPL_ELSE -->
+			<td><!-- TMPL_VAR name="father" --><input type="text" name="stdlib" value="<!-- TMPL_VAR name="stdlib" escape=HTML -->" maxlength="80" size="80"></td>
+		<!-- /TMPL_IF -->
 	</tr>
 	<tr>
-		<td>Inne lib</td>
-		<td><TMPL_VAR name="father"><input type="text" name="freelib" value="<TMPL_VAR name="freelib">" maxlength="80" size="80"></td>
+		<td>Inne etykiety</td>
+		<td><!-- TMPL_VAR name="father" --><input type="text" name="freelib" value="<!-- TMPL_VAR name="freelib" escape=HTML -->" maxlength="80" size="80"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="id" value="<TMPL_VAR name="id">">
-			<input type="hidden" name="father" value="<TMPL_VAR name="father">">
-			<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-			<input type="hidden" name="toponly" value="<TMPL_VAR name="toponly">">
-			<input type="hidden" name="search_category" value="<TMPL_VAR name="search_category">">
-			<input type="hidden" name="searchstring" value="<TMPL_VAR name="searchstring">">
-			<input type="hidden" name="offset" value="<TMPL_VAR name="offset">">
+		<td><input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->">
+			<input type="hidden" name="father" value="<!-- TMPL_VAR name="father" escape=HTML -->">
+			<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" escape=HTML -->">
+			<input type="hidden" name="search_category" value="<!-- TMPL_VAR name="search_category" -->">
+			<input type="hidden" name="searchstring" value="<!-- TMPL_VAR name="searchstring" escape=HTML -->">
+			<input type="hidden" name="offset" value="<!-- TMPL_VAR name="offset" -->">
 			<INPUT type="submit" value='OK'></td>
 	</tr>
 	</table>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_IF name="delete_confirm">
-<!-------------------------------------------------------------------------------------------------->
+<!-- TMPL_IF name="delete_confirm" -->
+<!---------------------------------------------------------------------------->
 	<table border=0 cellspacing=0 cellpadding=2>
 		<tr valign=top bgcolor=#99cc33>
-			<td background="/images/background-mem.gif"><b>lib</b></td>
-			<td background="/images/background-mem.gif"><b><TMPL_VAR name="search_category"></b></td>
+			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Etykieta</b></td>
+			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="search_category" --></b></td>
 		</tr>
-		<tr><td>Warto¶æ</td><td><TMPL_VAR name="Tvalue"></td></tr>
+		<tr><td>WartoÅ›Ä‡</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
 		<tr><td>
-			<form action='<TMPL_VAR name="script_name">' method=post>
+			<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 				<input type=hidden name=op value=delete_confirmed>
-				<input type=hidden name=id value='<TMPL_VAR name="id">'>
-				<input type="hidden" name="search_category" value="<TMPL_VAR name="search_category">">
+				<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
+				<input type="hidden" name="search_category" value="<!-- TMPL_VAR name="search_category" -->">
 		</tr></td>
-		<tr><td colspan=2 align=center>POTWIERD¬ USUNIÊCIE tego wpisu <b>i wszystkich wspisów od niego ozale¿nych</b></td></tr>
-		<tr><td><INPUT type=submit value='Tak'></form></td>
-				<td><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=Nie></form></td></tr>
+		<tr><td colspan=2 align=center>POTWIERDÅ¹ WYMAZANIE tego wpisu <b>oraz wszystkie wpisy zaleÅ¼ne od tego </b></td></tr>
+		<tr><td><input type=submit value="TAK"></form></td>
+				<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
-<TMPL_IF name="else">
-	<font SIZE=6><em>Zarz±dzanie tezaurusem</em></font>
-	<p>Obs³uga tezaurusa i plików odpowiedzialno¶ci (auhorities files).<br />
+<!---------------------------------------------------------------------------->
+<!-- TMPL_IF name="else" -->
+	<h1>ZarzÄ…dzanie Tezaurusem</h1>
+	<p>ZarzÄ…dzanie tezaurusem i kartotekÄ… haseÅ‚ wzorcowych.<br />
 	<ul>
-		<b>Dig</b> : obejrzyj dane zale¿ne od tego<br />
-		<b>Related</b> : obejrzyj inne formy tego wpisu odpowiedzialno¶ci (authority)</p>
+		<b>Dig</b>: zobacz dane zaleÅ¼ne od tego<br />
+		<b>Related</b>: zobacz inne formy tego wpisu HW</p>
 	</ul>
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type="hidden" name="op" value="add_form">
-	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-	<input type="hidden" name="father" value="<TMPL_VAR name="father">">
-	<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
-	</form>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
-		<TMPL_VAR name="tab_list">
-		<input type="checkbox" name="toponly" value="1" <TMPL_IF name="toponly">checked</TMPL_IF>>Tylko najwy¿sza hierarchia
-		<input type="text" name="searchstring" value="<TMPL_VAR name="searchstring">">
+		<!-- TMPL_VAR name="tab_list" -->
+		<input type="text" name="searchstring" value="<!-- TMPL_VAR name="searchstring" -->">
 		<input type="submit" value="OK">
 		<a href="thesaurus.pl?op=add_form">Nowa kategoria...</a>
 	</form>
-	<TMPL_LOOP name="hierarchy_loop">
-		<a href="thesaurus.pl?branch=<TMPL_VAR name="branch">&search_category=<TMPL_VAR name="category">"><TMPL_VAR name="string"></a><br />
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP name="hierarchy_loop" -->
+		<a href="thesaurus.pl?branch=<!-- TMPL_VAR name="branch" -->&search_category=<!-- TMPL_VAR name="category" -->"><!-- TMPL_VAR name="string" --></a><br />
+	<!-- /TMPL_LOOP -->
 	<table border=0 cellspacing=0 cellpadding=0>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
-		<td background="/images/background-mem.gif"><b>dowolna forma</b></td>
-		<td background="/images/background-mem.gif"><b>Authority</b></td>
-		<td background="/images/background-mem.gif" width="5%"><b>Dig</b></td>
-		<td background="/images/background-mem.gif" width="5%"><b>Related</b></td>
-		<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
-		<td background="/images/background-mem.gif" width="5%">&nbsp;</td>
-	<TMPL_LOOP name="loop">
-	</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%">&nbsp;</td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>WyraÅ¼enie dowolne</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>HW</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>GÅ‚Ä™bsze</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="10%"><b>Pokrewne</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Edytuj</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>WymaÅ¼</b></td>
+	<!-- TMPL_LOOP name="loop" -->
+	</tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
 		<td>&nbsp;</td>
-		<td><TMPL_VAR name="freelib"></td>
-		<td><TMPL_VAR name="father"> <TMPL_VAR name="stdlib"></td>
-		<td><TMPL_VAR name="dig">Dig</a></td>
-		<td><TMPL_VAR name="related">Related</a></td>
-		<td><a href="<TMPL_VAR name="edit">">Edytuj</a></td>
-		<td><a href="<TMPL_VAR name="delete">">Wyma¿</a></td>
+		<td><!-- TMPL_VAR name="freelib" --></td>
+		<td><!-- TMPL_VAR name="father" --> <!-- TMPL_VAR name="stdlib" --></td>
+		<td><!-- TMPL_VAR name="dig" -->GÅ‚Ä™bsze</a>&nbsp;&nbsp;</td>
+		<td><!-- TMPL_VAR name="related" -->Pokrewne</a></td>
+		<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+		<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 	</tr>
-	</TMPL_LOOP>
-	<form action='<TMPL_VAR name="script_name">' method=post>
+	<!-- /TMPL_LOOP -->
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=hidden name=op value=add_form>
 	</table>
-	<table width=40%>
+	<br/>
+	<table width=40% height="80">
 		<tr>
-			<td width=50%><TMPL_VAR name="previous"></td>
-			<td width=50%><TMPL_VAR name="next"></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="previous" -->" class="button">Wstecz</a></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="next" -->" class="button"> Dalej</a></td>
 		</tr>
 	</table>
-</TMPL_IF>
+	<br/>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<input type="hidden" name="op" value="add_form">
+	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+	<input type="hidden" name="father" value="<!-- TMPL_VAR name="father" -->">
+	<br><input type=submit class="button" value="Dodaj" title="Dodaj Element Tezaurusa" alt="Dodaj Element Tezaurusa"><br>
+	</form>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
-<html>
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

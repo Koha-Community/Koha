@@ -1,74 +1,44 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<div id="mainbloc">
+<h1>Czytelnicy</h1>
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
-
-<FONT SIZE=6><em>Czytelnicy</em></FONT><P>
-
-
-<img src="/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1" 
-hspace=5 align=left BORDER=0>
-
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
-<tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
-<b>Wyszukiwanie czytelników</B>
-</FONT>
-<INPUT TYPE="text" size=50 name=member >
-<BR>
-Rozpoczynaj±c od wyszukiwania czytelników mo¿na wznawiaæ pozycje, przegl±daæ, dodawaæ, zmieniaæ i wymazywaæ
-wpisy.<br>
-Aby uaktywniæ wyszukiwanie, wpisz nazwisko czytelnika, czê¶æ nazwiska
-lub jego numer i naci¶nij klawisz enter, <br>
-</td></form><tr>
-</table>
- 
-<P>
-
-<img src="/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2" 
-hspace=5 align=left BORDER=0>
-
-
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
-<tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FONT SIZE=4>
-<b>Przegl±danie czytelników</B> 
-</FONT>
-</td></form><tr>
-<TR VALIGN=TOP>
-<TD><CENTER><B>
-<A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=b">B</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=c">C</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=d">D</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=e">E</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=f">F</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=g">G</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=h">H</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=i">I</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=j">J</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=k">K</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=l">L</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=m">M</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=n">N</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=o">O</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=p">P</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=q">Q</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=r">R</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=s">S</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=t">T</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=u">U</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=v">V</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=w">W</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=x">X</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=y">Y</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=z">Z</a>
-
-</B>
-</TD></TR></TABLE>
-
-<P>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<div id="bloc25">
+	<div id="bloctitle">Wyszukiwanie CzytelnikÃ³w</div>
+	<FORM ACTION="/cgi-bin/koha/members/member.pl" method=post>
+		<input type="text" size=50 name=member >
+		<input type="submit" class="button" value="OK">
+		<p>Prolonguj pozycjÄ™, obejrzyj, dodaj, zmieniaj lub wymazuj rekordy. Wszystkie funkcje rozpoczynaj od wyszukania.</p>
+		<p>Wpisz nazwÄ™ czytelnika, czÄ™Å›Ä‡ nazwiska, lub numer w powyÅ¼szym polu i naciÅ›nij klawisz "enter", by aktywowaÄ‡ wyszukiwanie</p>
+	</form>
+</div>
+<div id="bloc25">
+			<div id="bloctitle">PrzeglÄ…daj CzytelnikÃ³w</div>
+			<A HREF="/cgi-bin/koha/members/member.pl?member=a">A</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=b">B</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=c">C</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=d">D</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=e">E</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=f">F</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=g">G</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=h">H</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=i">I</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=j">J</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=k">K</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=l">L</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=m">M</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=n">N</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=o">O</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=p">P</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=q">Q</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=r">R</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=s">S</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=t">T</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=u">U</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=v">V</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=w">W</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=x">X</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=y">Y</a> ||
+			<A HREF="/cgi-bin/koha/members/member.pl?member=z">Z</a>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

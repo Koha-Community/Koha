@@ -1,60 +1,60 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
-<h1>System akwizycji MARC</h1>
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<h1>Mechanizm gromadzenia MARC</h1>
 
 <table bgcolor="#ffcc00" width="80%" cellpadding="3">
 	<tr valign="center">
-	<td><font size="4">Importuj do hurtowni opisów</font></td>
+	<td><font size="4">Importuj do rezerwuaru opisÃ³w</font></td>
 	</tr>
 </table>
 
-<TMPL_IF name="uploadmarc">
-<p>Import wyniki :</p>
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Importuj wyniki:</p>
 <ul>
-	<p><TMPL_VAR name="imported"> rekordy importowano</p>
-	<p><TMPL_VAR name="alreadyindb"> nie importowano poniewa¿ ju¿ s± w bazie</p>
-	<p><TMPL_VAR name="alreadyinfarm"> nie importowano poniewa¿ ju¿ s± w hurtowni</p>
-	<p><TMPL_VAR name="notmarcrecord"> nie importowano poniewa¿ nie wygl±daj± na bêd±ce w formacie MARC (lub brakuje ISBN/ISSN) !</p>
-	<p><TMPL_VAR name="total">  rekordów przeczytanych</p>
-	<p><a href="addbooks.pl">Powrót do akwizycji</a>
+	<p><!-- TMPL_VAR name="imported" --> zaimportowanych rekordÃ³w</p>
+	<p><!-- TMPL_VAR name="alreadyindb" --> nie zostaÅ‚ zaimportowany, gdyÅ¼ juÅ¼ jest w bazie</p>
+	<p><!-- TMPL_VAR name="alreadyinfarm" --> nie zostaÅ‚ zaimportowany, gdyÅ¼ juÅ¼ jest w buforze</p>
+	<p><!-- TMPL_VAR name="notmarcrecord" --> nie zaimportowano, gdyÅ¼ brakuje cech formatu MARC (albo brak ISBN/ISSN) !</p>
+	<p>przeanalizowano <!-- TMPL_VAR name="total" --> rekordÃ³w</p>
+	<p><a href="addbooks.pl">Spowrotem do akwizycji</a>
 </ul>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 <ul>
-	<li>Wybierz plik, by importowaæ go do hurtowni opisów. Bêdzie przeczytany i dla ka¿dego znalezionego numeru ISBN utworzone zostanie nowe "ciel±tko" w farmie.</li>
-	<li>Je¶li ISBN ju¿ w farmie istnieje mo¿na zdecydowaæ czy nowe powinno byæ zignorowane czy te¿ stare nadpisane nowym.</li>
-	<li>Mo¿na nadaæ nazwê dla tego importu. Mo¿e siê przydaæ przy tworzeniu opisu bibliograficznego wskazuj±c pochodzenie sugerowanych danych MARC !</li>
-	<li>Oczywi¶cie opis bêdzie ignorowany je¶li numer ISBN istnieje ju¿ w aktywnej bazie Koha.</li>
+	<li>Wybierz plik, by importowaÄ‡ go do rezerwuaru opisÃ³w. BÄ™dzie poddany analizie, i dla kaÅ¼dego napotkanego ISBN powstanie w rezerwuarze nowy opis.</li>
+	<li>JeÅ›li ISBN istnieje juÅ¼ w rezerwuarze, moÅ¼esz zdecydowaÄ‡ czy zignorowaÄ‡ nowy czy teÅ¼ nadpisaÄ‡ stary.</li>
+	<li>MoÅ¼na nazwaÄ‡ ten import. MoÅ¼e siÄ™ przydaÄ‡ przy tworzeniu opisu dla zapamiÄ™tania skÄ…d pochodzÄ… dane MARC !</li>
+	<li>OczywiÅ›cie, jesli ISBN juz istnieje w aktywnej bazie to opis bÄ™dzie pominiÄ™ty.</li>
 </ul>
-<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">" enctype="multipart/form-data">
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 <table cellpadding="3" border=0>
 	<tr valign="top">
-		<td>Wybierz plik do importu :</td>
+		<td>Wybierz plik do importu:</td>
 		<td>
 			<input type="file" name="uploadmarc"/><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Nazwa tego importu :</td>
+		<td>Nazwa tego importu:</td>
 		<td>
 			<input type="text" name="filename"/><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Character encoding (USMARC or UNIMARC)</td>
+		<td>Kodowanie czcionek (MARC21 lub UNIMARC)</td>
 		<td>
-			<select name="syntax"/><option value="USMARC">USMARC</option><option value="UNIMARC">UNIMARC</option></select><br/>
+			<select name="syntax"/><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
 		</td>
 	</tr>
 	<tr valign="top">
-		<td>Je¶li ISBN ju¿ jest w hurtowni: </td>
-		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignoruj to, zatrzymaj istniej±ce<br/>
-			<input type="radio" name="overwrite_biblio" value="1">Nadpisz istniej±ce obecnym</td>
+		<td>JeÅ›li ISBN jest juÅ¼ w rezerwuarze:  </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignoruj ten, zatrzymaj istniejÄ…cy<br/>
+			<input type="radio" name="overwrite_biblio" value="1">Nadpisz istniejÄ…cy</td>
 	</tr>
 	<tr valign="top">
 		<td>&nbsp; </td>
-		<td><input type="submit" value="import"></td>
+		<td><input type="submit" value="Import"></td>
 	</tr>
 
 </table>
 </form>
-</TMPL_IF>
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

@@ -1,36 +1,36 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<h1>Koszyk <TMPL_VAR name="basket"> dla <TMPL_VAR name="name"></h1><br />
-(Our Reference: <TMPL_VAR name="entrydate">, #<TMPL_VAR name="basket">, zatwierdzone przez: <TMPL_VAR name="user">)<br />
-Tel: <TMPL_VAR name="phone">, Fax: <TMPL_VAR name="fax"><br />
-<TMPL_VAR name="address1">, <TMPL_VAR name="address2"><br />
-<TMPL_VAR name="address3">, <TMPL_VAR name="address4"><br />
+<h1>Koszyk zakup√≥w  <!-- TMPL_VAR name="basket" --> dla <!-- TMPL_VAR name="name" --></h1><br />
+(Nasz odno≈õnik: <!-- TMPL_VAR name="entrydate" -->,#<!-- TMPL_VAR name="basket" -->, autoryzowano przez: <!-- TMPL_VAR name="user" -->)<br />
+Tel: <!-- TMPL_VAR name="phone" -->, Fax: <!-- TMPL_VAR name="fax" --><br />
+<!-- TMPL_VAR name="address1" -->, <!-- TMPL_VAR name="address2" --><br />
+<!-- TMPL_VAR name="address3" -->, <!-- TMPL_VAR name="address4" --><br />
 <p>
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
-<input type=hidden name=id value="<TMPL_VAR name="id">">
-<input type=hidden name=basket value="<TMPL_VAR name="basket">">
-<b> Wyszukaj has≥o lub tytu≥: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
+<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
+<b> Szukaj wg. S≈Çowa Kluczowego lub Tytu≈Çu: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
 
 </form>
 
 <table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor="#ffdf61">
-		<td width="5%"><b>ZamÛwienie</b></td>
+		<td width="5%"><b>Zam√≥w</b></td>
 		<td width="10%"><b>Isbn</b></td>
-		<td width="30%"><b>Tytu≥</b></td>
+		<td width="30%"><b>Tytu≈Ç</b></td>
 		<td width="20%"><b>Autor</b></td>
-		<td width="8%"><b>Ilo∂Ê</b></td>
+		<td width="8%"><b>Ilo≈õƒá</b></td>
 	</tr>
-	<TMPL_LOOP name="books_loop">
-		<tr valign=top bgcolor=<TMPL_VAR name="color">>
-			<td><TMPL_VAR name="ordernumber"></td>
-			<td><TMPL_VAR name="isbn"></td>
-			<td><TMPL_VAR name="title"></td>
-			<td><TMPL_VAR name="author"></td>
-			<td><TMPL_VAR name="quantity"></td>
+	<!-- TMPL_LOOP name="books_loop" -->
+		<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
+			<td><!-- TMPL_VAR name="ordernumber" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="title" --></td>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="quantity" --></td>
 		</tr>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 </table>
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
 
 

@@ -1,58 +1,58 @@
-<TMPL_INCLUDE Name="cat-top.inc">
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
-<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">ZmieÒ dowi±zania stron</a>
+<a href="modwebsites.pl?biblionumber=<!-- TMPL_VAR Name="biblionumber" -->">Zmieniaj link witryny</a>
 <form action="updatebiblio.pl" method="post" name="f">
-<input type="hidden" name="biblionumber" value="<TMPL_VAR Name="biblionumber">">
-<input type="hidden" name="biblioitemnumber" value="<TMPL_VAR Name="biblioitemnumber">">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->">
+<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->">
 <table border="0" cellspacing="0" cellpadding="5">
 <tr valign="top">
 <td>Autor</td>
-<td><input type="text" name="author" value="<TMPL_VAR Name="author" ESCAPE=HTML>"></td>
+<td><input type="text" name="author" value="<!-- TMPL_VAR Name="author" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Tytu≥</td>
-<td><input type="text" name="title" value="<TMPL_VAR Name="title" ESCAPE=HTML>"></td>
+<td>Tytu≈Ç</td>
+<td><input type="text" name="title" value="<!-- TMPL_VAR Name="title" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Abstrakt</td>
-<td><textarea name="abstract" cols="40" rows="4"><TMPL_VAR Name="abstract"></textarea></td>
+<td>Streszczenie</td>
+<td><textarea name="abstract" cols="40" rows="4"><!-- TMPL_VAR Name="abstract" --></textarea></td>
 </tr>
 <tr valign="top">
-<td>Przedmiot</td>
-<td><textarea name="subject" cols="40" rows="4"><TMPL_VAR Name="subject"></textarea>
+<td>Temat</td>
+<td><textarea name="subject" cols="40" rows="4"><!-- TMPL_VAR Name="subject" --></textarea>
 </td>
 </tr>
 <tr valign="top">
-<td>Data Copyright'u</td>
-<td><input type="text" name="copyrightdate" value="<TMPL_VAR Name="copyrightdate" ESCAPE=HTML>"></td>
+<td>Data Copyright</td>
+<td><input type="text" name="copyrightdate" value="<!-- TMPL_VAR Name="copyrightdate" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Tytu≥ Serii</td>
-<td><input type="text" name="seriestitle" value="<TMPL_VAR Name="seriestitle" ESCAPE=HTML>"></td>
+<td>Tytu≈Ç Serii</td>
+<td><input type="text" name="seriestitle" value="<!-- TMPL_VAR Name="seriestitle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Autor dodatkowy</td>
-<td><input type="text" name="additionalauthor" value="<TMPL_VAR Name="additionalauthor" ESCAPE=HTML>"></td>
+<td>Dodatkowy Autor</td>
+<td><input type="text" name="additionalauthor" value="<!-- TMPL_VAR Name="additionalauthor" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Podtytu≥</td>
-<td><input type="text" name="subtitle" value="<TMPL_VAR Name="subtitle" ESCAPE=HTML>"></td>
+<td>Podtytu≈Ç</td>
+<td><input type="text" name="subtitle" value="<!-- TMPL_VAR Name="subtitle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
 <td>Ujednolicony</td>
-<td><input type="text" name="unititle" value="<TMPL_VAR Name="unititle" ESCAPE=HTML>"></td>
+<td><input type="text" name="unititle" value="<!-- TMPL_VAR Name="unititle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Notatki</td>
-<td><textarea name="notes" cols="40" rows="4"><TMPL_VAR Name="notes" ESCAPE=HTML></textarea></td>
+<td>Uwagi</td>
+<td><textarea name="notes" cols="40" rows="4"><!-- TMPL_VAR Name="notes" ESCAPE=HTML --></textarea></td>
 </tr>
 <tr valign="top">
-<td>Seria</td>
-<td><input type="text" name="serial" value="<TMPL_VAR Name="serial" ESCAPE=HTML>"></td>
+<td>Wyd. ciƒÖg≈Çe</td>
+<td><input type="text" name="serial" value="<!-- TMPL_VAR Name="serial" ESCAPE=HTML -->"></td>
 </tr>
 </table>
 <br>
-<input type="submit" name="submit" value="Zapisz zmiany">
+<input type="submit" name="submit" value="Zapisz Zmiany">
 </form>
 <script>
 function Dopop() {
@@ -60,4 +60,4 @@ function Dopop() {
 }
 </script>
 
-<TMPL_INCLUDE Name="cat-bottom.inc">
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

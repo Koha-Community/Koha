@@ -1,20 +1,20 @@
 <html>
 <head>
-<title>Wpis Pola nr 100 w formacie UNIMARC</title>
+<title>Kreator pola 225a UNIMARC</title>
 </head>
 <body>
 <form name="f_pop" onSubmit="javascript:report()">
 <table>
 	<tr>
-		<td>Wybierz zbiór</td>
-		<td><TMPL_VAR name="collection"></td>
+		<td>Wybierz kolekcjÄ™</td>
+		<td><!-- TMPL_VAR name="collection" --></td>
 	</tr>
 	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
 </table>
 </form>
 <script>
 	function report() {
-		opener.document.f.field_value[<TMPL_VAR name="index">].value= document.f_pop.f1.value;
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
 		self.close();
 		return false;
 	}

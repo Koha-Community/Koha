@@ -1,27 +1,27 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <center>
-<TMPL_IF name="BARCODE_EXISTS">
-	<font color=red>Kod kreskowy '<TMPL_VAR name="barcode">' zosta³ ju¿ przydzielony.</font><p>
-</TMPL_IF>
-<TMPL_IF name="ITEM_ERROR">
-	<font color=red>B³±d : <TMPL_VAR name="error"></font><p>
-</TMPL_IF>
-<TMPL_IF name="ITEM_CREATED">
+<!-- TMPL_IF name="BARCODE_EXISTS" -->
+	<font color=red>Kod paskowy <b><!-- TMPL_VAR name="barcode" --></b> zostaÅ‚ juÅ¼ przydzielony.</font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="ITEM_ERROR" -->
+	<font color=red>BÅ‚Ä…d: <!-- TMPL_VAR name="error" --></font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="ITEM_CREATED" -->
 	<table border=1 align=center cellpadding=10>
 		<tr><td bgcolor=yellow>
-			Dodano pozycjê z kodem kreskowym <TMPL_VAR name="barcode">
+			Egzemplarz dodano z kodem <!-- TMPL_VAR name="barcode" -->
 		</td></tr>
 	</table>
-</TMPL_IF>
-<h1>Menu g³ówne</h1>
+<!-- /TMPL_IF -->
+<h1>Menu gÅ‚Ã³wne</h1>
 <ul>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Wyszukiwarka Z39.50</a>
+<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Wyszukiwanie Z39.50</a>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Za³aduj rekordy MARC</a>
+<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Wgraj rekordy MARC</a>
 </ul>
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

@@ -1,59 +1,31 @@
-<TMPL_INCLUDE NAME="acquisitions-top.inc">
-
-<font size="5"><em>Zarz±dzanie opisem MARC</em></font>
-<TMPL_IF name="noitemsfound">
-	<p />
-	<font color="red" size="4">Nic nie znaleziono</font>
-</TMPL_IF>
-<TMPL_IF name="websiteadded">
-	<p />
-	<font color="red" size="4">Dodano opis bibliograficzny witryny</font>
-</TMPL_IF>
-
-<p />
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-	<td><font size="4">Zeskanuj lub wpisz numer ISBN/ISSN, aby dodaæ nowy opis/pozycjê:</font></td>
-	</tr>
-</table>
-<form action="isbnsearch.pl">
-	<table cellpadding="3" border=0 width="100%">
-	<tr valign="top">
-		<td width="5%">ISBN:</td>
-		<td width="20%"><input type="text" name="isbn" /></td>
-			<td width="10%" rowspan=2 valign="middle"><input type="submit" value="Go" /></td>
-			<td rowspan=2>Je¶li tytu³ lub ISBN zostanie odnaleziony w tablicach opisów, zostanie przywo³any i bêdzie mo¿na go modyfikowaæ.<br/>
-					Je¶li tytu³ lub ISBN zostanie znaleziony w "przechowalni opisów", zostanie przywo³any a opis zostanie dodany.<br/>
-					W przeciwnym razie opis mo¿na utworzyæ od podstaw.</td>
-		</tr>
-			<td width="5%">Tytu³</td>
-			<td width="20%"><input type="text" name="title" /></td>
-	</tr>
-	<tr><td>&nbsp;</td>
-		<TMPL_IF NAME="NOTMARC">
-			<td colspan=2><a href=addbiblio-nomarc.pl>Utwórz pusty opis</a></td></tr>
-		<TMPL_ELSE>
-			<td colspan=2><a href=addbiblio.pl>Utwórz pusty opis</a></td></tr>
-		</TMPL_IF>
-	</table>
-</form>
-
-<p />
-<p />
-
-<table bgcolor="#ffcc00" width="80%" cellpadding="3">
-	<tr valign="center">
-		<td><FONT SIZE=4>Dodaj now± witrynê</font></td>
-	</tr>
-</table>
-<form action="websitesearch.pl" method="post">
-	<table>
-	<tr>
-		<td>Has³o:</td>
-		<td><input type="text" name="keyword" /></td>
-		<td><input type="submit" value="Go" /></td>
-	</tr>
-	</table>
-</FORM>
-<p />
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<div id="mainbloc">
+	<h1 class="acquisition">ZarzÄ…dzanie Opisem MARC</h1>
+	<!-- TMPL_IF name="noitemsfound" -->
+		<font color="red" size="4">Nie znaleziono egzemplarzy</font>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="websiteadded" -->
+		<font color="red" size="4">Dodano WitrynÄ™ Biblioitem</font>
+	<!-- /TMPL_IF -->
+	
+	<div id="bloc25">
+		<form action="isbnsearch.pl">
+			<h2 class="acquisition">Zeskanuj lub wpisz numer ISBN/ISSN, aby dodaÄ‡ nowy opis/egzemplarz</h2>
+				<p><label class="label20">ISBN</label> <input type="text" name="isbn" /></p>
+				<p><label class="label20">TytuÅ‚</label> <input type="text" name="title" /></p>
+				<p><input type="submit" value="IdÅº" class="button acquisition"></p>
+			<!-- TMPL_IF NAME="NOTMARC" -->
+				<p><a href="addbiblio-nomarc.pl" class="button acquisition">WprowadÅº od podstaw</a></p>
+			<!-- TMPL_ELSE -->
+				<p><a href="addbiblio.pl" class="button acquisition">WprowadÅº od podstaw</a></p>
+			<!-- /TMPL_IF -->
+		</form>
+	</div>
+	<div id="bloc25">
+		<h2 class="acquisition">PodpowiedÅº</h2>
+		<p>Po odnalezieniu i wyÅ›wietleniu numeru ISBN lub tytuÅ‚u z bazy opisÃ³w, bedzie moÅ¼na dokonaÄ‡ modyfikacji.<br/>
+				JeÅ›li ISBN lub tytuÅ‚ zostanÄ… odnalezione w rezerwuarze opisÃ³w to zostanie on wyswietlony i opis zostanie dodany.<br/>
+				W przeciwnym razie, opis moÅ¼na dodaÄ‡ od podstaw.</p>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

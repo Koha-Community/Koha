@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Katalog</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <script language="JavaScript">
 <!-- Hide from old browsers
@@ -13,17 +14,14 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 // end hiding -->
 </script>
 
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
 <style>
-a.catalogue {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
+.catalogue {
 	background-color:#ad11ad;
 	color:#FFFFFF;
-	padding:4px;
+	background-image:none;
+	text-decoration: normal;
 	font-weight: bold;
-	margin:0;
 	}
 a.catalogue:hover {
 	background-color: #ad11ad;
@@ -31,78 +29,21 @@ a.catalogue:hover {
 	text-decoration: none;
 	font-weight: normal;
 	font-weight: bold;
-	margin:0;
 	}
 </style>
 </head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
-
-
-
+<body>
 <!------------------------MENUS-------------------------------->
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
-<tr height="65">
-	<td valign="bottom" align="left">
-		<table width="100%" cellpadding=0 cellspacing=0 height=60>
-		<tr>
-			<td>
-			<div id="menubar">
-			<table cellpadding=0 cellspacing=0  border=0 height=29 width="70%">
-				<tr>
-					<td class="koha"><b>KOHA</b></td>
-					<td>
-						<a class="home" href="/cgi-bin/koha/mainpage.pl">Pocz±tek</a>
-					</td>
-					<td>
-						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Katalog</a>
-					</td>
-					<td>
-						<a class="members" href="/cgi-bin/koha/members-home.pl">Cz³onkowie</a>
-					</td>
-					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Akwizycje</a>
-					</td>
-					<td>
-						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Cyrkulacja</a>
-					</td>
-					<td>
-						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reporty</a>
-					</td>
-					<td>
-						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parametry</a>
-					</td>
-					<td>
-						<a class="about" href="/cgi-bin/koha/about.pl">About</a>
-					</td>
-				</TR>
-			</TABLE>
-			</div>
-			<table cellpadding=0 cellspacing=0  border=0 height=29>
-				<tr>
-					<td width="100"></td>
-					<td><b>opcje &gt;&gt;&nbsp;&nbsp;</b></td>
-					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Szybkie wyszukiwanie</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">szukaj MARC</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu">Dodaj opis</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu2">Zarz±dzaj kat.</a>
-					</td>
-				</tr>
-			</table>
-		</td></tr></table>
-	</TD>
-</tr>
-</table>
-<BLOCKQUOTE>
-<TMPL_IF NAME="loggedinusername">
-    <p align=left>Zalogowany jako: <TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj siê</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
+<div id="menubar">
+	<span class="koha">KOHA</span>
+	<a class="home" href="/cgi-bin/koha/mainpage.pl">PoczÄ…tek</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Katalog</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">CzÅ‚onkowie</a> <a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Gromadzenie</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">WypoÅ¼yczalnia</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Raporty</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parametry</a> <a class="about" href="/cgi-bin/koha/about.pl">O nas</a>
+</div>
+<div id="submenu">
+	<span class="koha">opcje &gt;&gt;&nbsp;&nbsp;</span>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Szybkie wyszukiwanie</a> <a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">Wyszukiwanie MARC</a> <a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">PÃ³Å‚ki wirtualne</a> <a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Dodaj opis</a> <a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">PorzÄ…tkowanie katalogu</a>
+</div>
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
+<!-- TMPL_ELSE -->
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj do</a> Systemu Koha</p>
+<!-- /TMPL_IF -->

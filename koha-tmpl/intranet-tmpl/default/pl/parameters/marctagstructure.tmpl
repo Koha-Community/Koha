@@ -1,12 +1,7 @@
-<html>
-<TMPL_INCLUDE NAME="cat-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
-</TMPL_IF>
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
+	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -44,102 +39,120 @@
 		var _alertString="";
 		var alertString2;
 		if (f.tagfield.value.length==0) {
-			_alertString += "- brakuje numeru znacznika\\n";
+			_alertString += "\n- " + _("brak numeru etykiety");
 		}
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\\n";
-			alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+			alertString2  = _("Formularz odrzucono z powodu nastÄ™pujÄ…cych bÅ‚Ä™dÃ³w(u)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}
 	}
 	</SCRIPT>
 
-<TMPL_IF name="add_form">
-<!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
-	<form action='<TMPL_VAR name="script_name">' name="Aform" method="post">
+<!-- TMPL_IF name="add_form" -->
+<!---------------------------------------------------------------------------->
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modify-tag-p" -->Zmieniaj etykietÄ™<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-tag-p" -->Dodaj znacznik<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	</h1>
+	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
 	<input type=hidden name=op value='add_validate'>
 	<table>
-	<tr><td>Zmienna</td><td><TMPL_VAR name="searchfield"></td></tr>
-	<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80></td></tr>
-	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td></tr>
-	<tr><td>Powtarzalne</td><td><TMPL_VAR name="repeatable"></td></tr>
-	<tr><td>Konieczne</td><td><TMPL_VAR name="mandatory"></td></tr>
-	<tr><td>Warto¶æ autoryzowana</td><td><TMPL_VAR name="authorised_value"> (je¶li wybierzesz jak±¶ warto¶æ tutaj, wska¼niki zostan± ograniczone tylko do zbioru tych warto¶ci)</td></tr>
+	<tr><td>Etykieta</td><td><!-- TMPL_VAR name="searchfield" --></td></tr>
+	<tr><td>Etykieta dla bibliotekarzy</td><td><input type="text" name="liblibrarian" value='<!-- TMPL_VAR name="liblibrarian" escape=HTML -->' size=80 maxlength=100></td></tr>
+	<tr><td>Etykieta dla czytelnikÃ³w</td><td><input type="text" name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></td></tr>
+	<tr><td>Powtarzalne</td><td><!-- TMPL_VAR name="repeatable" --></td></tr>
+	<tr><td>ObowiÄ…zkowe</td><td><!-- TMPL_VAR name="mandatory" --></td></tr>
+	<tr><td>WartoÅ›Ä‡ Autoryzowana</td><td><!-- TMPL_VAR name="authorised_value" --> (jeÅ›li wprowadzisz tutaj jakÄ…Å› wartoÅ›Ä‡ to wskaÅºniki bÄ™dÄ… ograniczone do listy autoryzowanych wartoÅ›ci)</td></tr>
 	<tr><td>&nbsp;</td><td><INPUT type="button" value='OK' onClick='Check(this.form)'></td></tr>
 	</table>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_IF name="delete_confirm">
-<!-------------------------------------------------------------------------------------------------->
+<!-- TMPL_IF name="delete_confirm" -->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>Etykieta (znacznik)</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>etykieta</b></td>
+		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
-	<tr><td>&nbsp;</td><td><TMPL_VAR name="liblibrarian"></td></tr>
-	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
-	<tr><td colspan=2 align=center>POTWIERD¬ USUNIÊCIE</td></tr>
-	<tr><td><INPUT type=submit value='Tak'></form></td><td><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=Nie></form></td></tr>
-</TMPL_IF>
+	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
+	<tr><td colspan=2 align=center>POTWIERDÅ¹ WYMAZANIE</td></tr>
+	<tr><td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="delete_confirmed">
-<!-------------------------------------------------------------------------------------------------->
-	dane usuniêto
-	<form action='<TMPL_VAR name="script_name">' method=post>
+<!-- TMPL_IF name="delete_confirmed" -->
+<!---------------------------------------------------------------------------->
+	Dane wymazane
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=submit value=OK>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
-<TMPL_IF name="else">
-<font SIZE=6><em>Zarz±dzaj struktur± etykiet MARC (znaczników)</em></font>
-<form action='<TMPL_VAR name="script_name">' method=post>
+<!---------------------------------------------------------------------------->
+<!-- TMPL_IF name="else" -->
+<h1>Struktura Etykiet MARC - zarzÄ…dzanie</h1>
+<b>UWAGA: jeÅ›li zmienisz Å‚Ä…cze pomiedzy podpolem MARC oraz nie-MARC poproÅ› administratora by uruchomiÅ‚ skrypt misc/rebuildnonmarc.pl.</b>
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=text name=searchfield value="">
-	<input type=reset name=reset value="clr">
+	<input type=reset name=reset value="wyczyÅ›Ä‡">
 </form>
-<TMPL_VAR name="searchfield">
+<!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="/images/background-mem.gif"><b>Etykieta</b></td>
-	<td background="/images/background-mem.gif"><b>Lib</b></td>
-	<td background="/images/background-mem.gif"><b>Powtarzalna</b></td>
-	<td background="/images/background-mem.gif"><b>Konieczna</b></td>
-	<td background="/images/background-mem.gif"><b>Autoryzowana<br />warto¶æ</b></td>
-	<td background="/images/background-mem.gif"><b>Podpola</b></td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
-<TMPL_LOOP name="loop">
-<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><b><TMPL_VAR name="tagfield"></b></td>
-	<td><TMPL_VAR name="liblibrarian"></td>
-	<td><TMPL_IF name="repeatable">Tak<TMPL_ELSE>Nie</TMPL_IF></td>
-	<td><TMPL_IF name="mandatory">Tak<TMPL_ELSE>Nie</TMPL_IF></td>
-	<td><TMPL_VAR name="authorised_value"></td>
-	<td><a href="<TMPL_VAR name="subfield_link">">podpola</a></td>
-	<td><a href="<TMPL_VAR name="edit">">Edytuj</a></td>
-	<td><a href="<TMPL_VAR name="delete">">Usuñ</a></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Etykieta</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Etykieta</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Powtarzalne</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>ObowiÄ…zkowe</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Autoryzowana<br />wartoÅ›Ä‡</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Podpola</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">Edytuj</td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">WymaÅ¼</td>
+<!-- TMPL_LOOP name="loop" -->
+<tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+	<td><b><!-- TMPL_VAR name="tagfield" --></b></td>
+	<td><!-- TMPL_VAR name="liblibrarian" --></td>
+	<td><!-- TMPL_IF name="repeatable" -->Tak<!-- TMPL_ELSE -->Nie<!-- /TMPL_IF --></td>
+	<td><!-- TMPL_IF name="mandatory" -->Tak<!-- TMPL_ELSE -->Nie<!-- /TMPL_IF --></td>
+	<td><!-- TMPL_VAR name="authorised_value" --></td>
+	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">podpola</a></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
-</TMPL_LOOP>
-<form action='<TMPL_VAR name="script_name">' method=post>
+<!-- /TMPL_LOOP -->
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 <input type=hidden name=op value=add_form>
 </table>
-	<form action='<TMPL_VAR name="script_name">' method=post>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=hidden name=op value=add_form>
 <table width=40%>
 	<tr>
-		<td width=50%><TMPL_VAR name="previous"></td>
-		<td width=50%><TMPL_VAR name="next"></td>
+		<td width="33%">
+			<input type=submit class="button" value="Dodaj Znacznik" title="Dodaj Znacznik" alt="Dodaj Znacznik">
+		</td>
+		<td width=33%>
+			<!-- TMPL_IF name="isprevpage" -->
+				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
+				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border=0>
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
+		<td width=33%>
+			<!-- TMPL_IF name="nextpage" -->
+				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
+					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border=0>
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
 	</tr>
 </table>
-<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
 </form>
-</TMPL_IF>
-
-<TMPL_INCLUDE NAME="cat-bottom.inc">
-<html>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

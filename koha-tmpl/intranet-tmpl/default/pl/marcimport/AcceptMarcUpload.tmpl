@@ -1,29 +1,30 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-<h1><a href=<TMPL_VAR name="SCRIPT_NAME">>Menu g丑wne</a></h1>
-<h2>Wybierz zbi髍 rekord體 MARC</h2>\n<ul>
-<TMPL_LOOP name="marc">
-	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?file=<TMPL_VAR name="id">&menu=<TMPL_VAR name="menu">><TMPL_VAR name="name"></a></li>
-</TMPL_LOOP>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Wyszukiwarka Z39.50</a>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Za砤duj rekordy MARC</a>
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->>Menu g艂贸wne</a></h1>
+<h2>Wybierz zestaw rekord贸w MARC</h2>
+<ul>
+<!-- TMPL_LOOP name="marc" -->
+	<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="id" -->&menu=<!-- TMPL_VAR name="menu" -->><!-- TMPL_VAR name="name" --></a></li>
+<!-- /TMPL_LOOP -->
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Wyszukiwanie Z39.50</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Wgraj rekordy MARC</a>
 </ul>
 </ul>
 <p>
 <table border=1 bgcolor=#dddddd>
 	<tr><th bgcolor=#bbbbbb colspan=2>
-		Za砤duj zbi髍 rekord體 MARC</th>
+		Upload zestaw rekord贸w MARC</th>
 	</tr>
 	<tr>
-		<td>Za砤duj zbi髍 rekord體 MARC:</td>
+		<td>Upload zestaw rekord贸w MARC:</td>
 		<td>
-			<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">?menu=<TMPL_VAR name="menu">" enctype="multipart/form-data">
+			<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=<!-- TMPL_VAR name="menu" -->" enctype="multipart/form-data">
 			<input type="file" name="uploadmarc"/>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<input type=hidden name=menu value=<TMPL_VAR name="menu">
-			Nazwij ten zbi髍 rekord體 MARC:
+			<input type=hidden name=menu value="<!-- TMPL_VAR name="menu" -->">
+			Nazwij ten zestaw rekord贸w MARC:
 		</td>
 		<td>
 			<input type=text name=name>
@@ -37,5 +38,5 @@
 </table>
 </form>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
 

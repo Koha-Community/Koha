@@ -1,16 +1,16 @@
-<html>
-<TMPL_INCLUDE NAME="reports-top.inc">
-<!-------------------------MAIN BODY OF PAGE-------------------------->
-
-<FONT SIZE=6><em>Reporty</em></FONT><br>
-
-
-
-
-<ul><li><a href=/cgi-bin/koha/stats.pl?time=yesterday>Till Reconciliation:</a> Raporty dzienne (wczoraj)
-<li><a href=/cgi-bin/koha/stats.pl?time=today>Till Reconciliation:</a> Raporty dzienne (dzisiaj)
-
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1>Raporty</h1>
+<ul>
+	<li><a href="/cgi-bin/koha/stats.pl?time=yesterday">Do punktu wyrównania:</a> Raport dzienny (wczoraj)</li>
+	<li><a href="/cgi-bin/koha/stats.pl?time=today">Do punktu wyrównania:</a> Raport dzienny (dziś)</li>
+	<li><a href="/cgi-bin/koha/overdue.pl">Pozycje zaległe</a></li>
+	<li><a href="/cgi-bin/koha/reports/inventory.pl">Inwentarz/Inwentaryzacja</a></li>
+	<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Katalogowanie wg. typu dokumentu</a></li>
+	<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Wypożyczenia wg. kategorii czytelników</a></li>
+	
 </ul>
-<TMPL_INCLUDE NAME="reports-bottom.inc">
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
 
-</html>

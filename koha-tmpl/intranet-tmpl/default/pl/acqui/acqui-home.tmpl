@@ -1,114 +1,84 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
 
-<h1>Akwizycje</h1><br>
-
-<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2>
-		<b>SK£ADANIE ZAMÓWIENIA, ODBIÓR LUB MODYFIKACJA</b>
-	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD>Nazwa dostawcy</TD>
-	<TD>
+<h1>Gromadzenie</h1>
+<div id="bloc25">
+	<div id="bloctitle">Rozpocznij, przyjmij, zmieÅ„ zamÃ³wienie</div>
+	Nazwa Dostawcy: 
 		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
-		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
+			<input type="text"  size="25"   name="supplier">
+			<input type="submit" class="button" value="OK">
 		</form>
-	</TD>
-</TR>
-</table>
-<TABLE width="40%" cellspacing=0 cellpadding=5 border=1 >
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2>
-		<b>ODBIÓR LUB MODYFIKACJA ZAMÓWIEÑ REGULARNYCH</b>
-	</TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD>Wyszukiwanie tytu³owe</TD>
-	<TD>
-		<FORM ACTION="/cgi-bin/koha/acqui/acquire.pl" method=post>
-		<INPUT TYPE="text"  SIZE="25"   NAME="recieve">
-		</form>
-	</TD>
-</TR>
-</table>
-
-<br />
+</div>
+<div id="bloc25">
+	<div id="bloctitle">Przyjmij lub zmieÅ„ zamÃ³wienie okresowe</div>
+	Szukaj wg. TytuÅ‚u
+	<form action="/cgi-bin/koha/acqui/acquire.pl" method=post>
+		<input type="text"  size="25"   name="recieve">
+		<input type="submit" class="button" value="OK">
+	</form>
+</div>
 
 <!-- currencies-->
-<TABLE align="left" cellspacing=0 cellpadding=5 border=1 >
-	<FORM ACTION="/cgi-bin/koha/currency.pl">
+<div id="bloc25">
+	<form action="/cgi-bin/koha/currency.pl">
 	<input type=hidden name=type value=change>
-	<TR VALIGN=TOP>
-		<TD  bgcolor="ffdf61" colspan=2><b>KURSY WYMIANY </b></TD>
-	</TR>
-	<TMPL_LOOP name="loop_currency">
-		<TR VALIGN=TOP>
-			<TD>
-				<TMPL_VAR name="currency">
+	<div id="bloctitle">kursy wymiany</div>
+	<table>
+	<!-- TMPL_LOOP name="loop_currency" -->
+		<tr>
+			<td>
+				<!-- TMPL_VAR name="currency" -->
 			</td>
 			<td>
-				<INPUT TYPE="text"  SIZE="10"   NAME="<TMPL_VAR name="currency">" value=<TMPL_VAR name="rate">>
+				<input type="text"  size="10"  name="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
 			</td>
-		</TR>
-	</TMPL_LOOP>
-	<tr>
-		<td colspan=2 align="center"><input type=submit value="Zapisz"></TD>
-	</tr>
-	</form>
-</table>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type=submit value="Zapisz" class="button">
+</div>
 
 <!-- showbudget-->
-<TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
-<FORM ACTION="/cgi-bin/koha/search.pl">
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2><b>BUD¯ET ORAZ WYDATKI KSIÊGARSKIE</b></TD>
-</TR>
-<TR VALIGN=TOP>
-	<TD colspan=2>
-		<table cellspacing=0 cellpadding=2 border=1>
+<div id="bloc25">
+	<form action="/cgi-bin/koha/search.pl">
+		<div id="bloctitle">budÅ¼ety i fundusze ksiÄ…Å¼kowe</div>
+		<table>
 			<tr>
-				<td><b>Bud¿et</B></TD>
-				<TD><b>Suma</B></TD>
-				<TD><b>Wydano</B></TD>
-				<TD><b>Alokowano</B></TD>
-				<TD><b>Dostêpne</B></TD>
-			</TR>
-			<TMPL_LOOP name="loop_budget">
+				<td><b>BudÅ¼ety</B></td>
+				<td><b> ÅÄ…cznie</B></td>
+				<td><b>Wydane</B></td>
+				<td><b>ZobowiÄ…zane</B></td>
+				<td><b>DostÄ™pne</B></td>
+			</tr>
+			<!-- TMPL_LOOP name="loop_budget" -->
 				<tr>
-					<td><TMPL_VAR name="bookfundname"></TD>
-					<TD align=right><TMPL_VAR name="budgetamount"></TD>
-					<TD align=right><TMPL_VAR name="spent"></TD>
-					<TD align=right><TMPL_VAR name="comtd"></TD>
-					<TD align=right><TMPL_VAR name="avail"></TD>
-				</TR>
-			</TMPL_LOOP>
+					<td><!-- TMPL_VAR name="bookfundname" --></td>
+					<td align=right><!-- TMPL_VAR name="budgetamount" --></td>
+					<td align=right><!-- TMPL_VAR name="spent" --></td>
+					<td align=right><!-- TMPL_VAR name="comtd" --></td>
+					<td align=right><!-- TMPL_VAR name="avail" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
 			<tr>
-				<td><b>Total</b></TD>
-				<TD align=right><b><TMPL_VAR name="total"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totspent"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totcomtd"></b></TD>
-				<TD align=right><b><TMPL_VAR name="totavail"></b></TD>
-			</TR>
-		</table><br>
-		Zastosuj kombinacjê klawiszy [ctrl + r] aby wy¶wietliæ uaktualnione cyfry. 
-		Podane cyfry s± przybli¿one, gdy¿ kurs wymiany wp³ywa na kwotê faktycznie zap³acon±. 
-	</TD>
-</TR>
-</form>
-</table>
+				<td><b> ÅÄ…cznie</b></td>
+				<td align=right><b><!-- TMPL_VAR name="total" --></b></td>
+				<td align=right><b><!-- TMPL_VAR name="totspent" --></b></td>
+				<td align=right><b><!-- TMPL_VAR name="totcomtd" --></b></td>
+				<td align=right><b><!-- TMPL_VAR name="totavail" --></b></td>
+			</tr>
+		</table>
+		<p>
+		PosÅ‚uÅ¼ siÄ™ przyciskiem odÅ›wierz, aby uzyskaÄ‡ aktualne liczby. Kwoty zobowiÄ…zane sÄ… podane tylko w przybliÅ¼eniu, gdyÅ¼ ich wysokoÅ›Ä‡ zaleÅ¼eÄ‡ bÄ™dzie od kursu wymiany, z jakÄ… dokonano transakcji.
+		</p>
+	</form>
+</div>
 
-<br />
-<TABLE cellspacing=0 cellpadding=5 border=1 >
-<TR VALIGN=TOP>
-	<TD  bgcolor="ffdf61" colspan=2>
-		<p><b>POMOC zamówienia:</b></p>
-		<ul>By rozpocz±æ akwizycjê, niezale¿nie czy jest to zamówienie, zakup w³asny czy darowizna najpierw wyszukaj dostawcê, dodaj go je¶li potrzeba.</ul>
-		<ul>Nastêpnie wybierz poprzedni koszyk lub utwórz nowy. Uwaga, koszyk bêdzie nale¿a³ do nazwy u¿ytkownika z jak± siê zalogowa³e¶/a¶.</ul>
-		<ul>Aby z³ozyæ zamówienie nale¿y ustaliæ czy istnieje ju¿ opis dla pozycji, nastêpnie albo dodaæ pozycjê albo wstawiæ nowy opis i dodaæ pozycjê. </ul>
-		<p>W celu zamkniêcia koszyka kliknij na "zobacz koszyki" lub szukaj powy¿ej, a nastêpnie naci¶nij "zatwierd¼ koszyk". </p>
-	</td
-</TR>
-</table>
-
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<div id="bloc100">
+	<div id="bloctitle">ZamÃ³wienia POMOC:</div>
+	<ul>Aby rozpoczÄ…Ä‡ gromadzenie czy to zamÃ³wienie czy lokalny zakup albo donacjÄ™ najpierw wyszkukaj dostawcÄ™, dodaj nowego jeÅ›li potrzeba.</ul>
+	<ul>Potem wybierz poprzedni koszyk zakupÃ³w lub utwÃ³rz nowy. Uwaga, koszyk zostanie skojarzony z nazwÄ… uzytkownika z jakÄ… siÄ™ zalogowaÅ‚eÅ›  </ul>
+	<ul>Aby dokonaÄ‡ zamÃ³wienia dokumentu trzeba najpierw ustaliÄ‡ czy istnieje juÅ¼ dla niego opis, oraz albo dodaÄ‡ egzemplarz albo utworzyÄ‡ nowy dla niego opis i dodaÄ‡ egzemplarz.  </ul>
+	<p>Aby dokoÅ„czyÄ‡ koszyk zakupÃ³w kliknij na "przejrzyj koszyk zakupÃ³w" lub szukaj powyÅ¼ej, a potem naciÅ›nij "potwierdÅº koszyk".</p>
+</DIV>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

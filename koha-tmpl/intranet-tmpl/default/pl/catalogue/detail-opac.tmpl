@@ -1,69 +1,66 @@
-<TMPL_INCLUDE NAME="opac-top.inc">
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 
 
-<TMPL_LOOP NAME="BIBLIO_RESULTS">
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font><p>
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<font SIZE=6><em><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></em></font><p>
 <!-- FIXME - "callpadding" should be "cellpadding", right? -->
 <table cellspacing="0" callpadding="5" border="1" align="left" width="220">
 <!-----------------BIBLIO RECORD TABLE--------->
 <tr valign="top">
 
 <td bgcolor="#99cccc">
-<b>REKORD BIBLIO</b>
-
-<TMPL_VAR NAME="biblionumber">
+<b>REKORD BIBLIO</b> <!-- TMPL_VAR NAME="biblionumber" -->
 </td>
 </tr>
 <tr valign="top">
 <td>
 <br>
 <FONT SIZE=2  face="arial, helvetica">
-<b>Podtytu≥:</b> <TMPL_VAR NAME="subtitle"><br>
-<b>Autor:</b> <TMPL_VAR NAME="author"><br>
-<b>Dodatkowy autor:</b> <TMPL_VAR NAME="additional"><br>
-<b>Tytu≥ serii:</b> <TMPL_VAR NAME="seriestitle"><br>
-<b>Has≥o przedmiotowe:</b> <TMPL_VAR NAME="subject"><br>
-<b>Copyright:</b> <TMPL_VAR NAME="copyrightdate"><br>
-<b>Notki:</b> <TMPL_VAR NAME="notes"><br>
-<b>Ujednolicony tytu≥:</b> <TMPL_VAR NAME="unititle"><br>
-<b>Seria:</b> <TMPL_VAR NAME="serial"><br>
-<b>W sumie pozycji:</b> <TMPL_VAR NAME="count">
+<b>Podtytu≈Ç:</b> <!-- TMPL_VAR NAME="subtitle" --><br>
+<b>Autor:</b> <!-- TMPL_VAR NAME="author" --><br>
+<b>Dodatkowy Autor:</b> <!-- TMPL_VAR NAME="additional" --><br>
+<b>Tytu≈Ç Serii:</b> <!-- TMPL_VAR NAME="seriestitle" --><br>
+<b>Temat:</b> <!-- TMPL_VAR NAME="subject" --><br>
+<b>Copyright:</b> <!-- TMPL_VAR NAME="copyrightdate" --><br>
+<b>Uwagi:</b> <!-- TMPL_VAR NAME="notes" --><br>
+<b>Tytu≈Ç Ujednolicony:</b> <!-- TMPL_VAR NAME="unititle" --><br>
+<b>Seria:</b> <!-- TMPL_VAR NAME="serial" --><br>
+<b>Egzemplarzy w sumie:</b> <!-- TMPL_VAR NAME="count" -->
 <p>
 </font></td>
 </tr>
 </table>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 <tr bgcolor="#99cccc">
 <td>Typ pozycji</td>
-<td>Class</td>
+<td>Typ pozycji</td>
 <td>Lokalizacja</td>
-<td>Termin zwrotu</td>
-<td>Wypoøyczono</td>
+<td>Do zwrotu</td>
+<td>Ostatnio rejestrowana</td>
 </tr>
-<TMPL_LOOP NAME="ITEM_RESULTS">
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
-<td><TMPL_VAR NAME="class"></td>
-<td><TMPL_VAR NAME="branchname"></td>
-<td><TMPL_VAR NAME="datedue"></td>
-<td><TMPL_VAR NAME="datelastseen"></td>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
+<td><!-- TMPL_VAR NAME="class" --></td>
+<td><!-- TMPL_VAR NAME="branchname" --></td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 </tr>
-</TMPL_LOOP>
-<TMPL_LOOP NAME="WEB_RESULTS">
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="WEB_RESULTS" -->
 <tr>
-<td><TMPL_VAR NAME="itemtype"></td>
+<td><!-- TMPL_VAR NAME="itemtype" --></td>
 <td>Witryna</td>
 <td>Online</td>
-<td>DostÍpna</td>
+<td>Dostƒôpna</td>
 <td></td>
 <td><a href="/cgi-bin/koha/moredetail.pl?item=<TMPL_VAR
-NAME="itemnumber>&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR
-NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
+NAME="itemnumber">&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<TMPL_VAR
+NAME="biblioitemnumber">">http://<!-- TMPL_VAR NAME="url" --></a></td>
 </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </table>
 <p>
 </center>
@@ -71,4 +68,4 @@ NAME="biblioitemnumber">">http://<TMPL_VAR NAME="url"></a></td>
 <p />
 <p />
 
-<TMPL_INCLUDE NAME="opac-bottom.inc">
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

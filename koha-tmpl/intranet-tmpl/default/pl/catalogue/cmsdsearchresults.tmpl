@@ -1,29 +1,29 @@
 <html>
-<head><title>Wyniki wyszukiwania</title>
+<head><title>Wyniki Szukania</title>
 </head>
 <body>
-<TMPL_INCLUDE NAME="searchheader.tmpl">
+<!-- TMPL_INCLUDE NAME="searchheader.tmpl" -->
 <table border=0 cellspacing=0 cellpadding=0>
-<tr bgcolor=#ccccff><th>Tytu�</th><th>Autor</th><th>Dewey</th></tr>
-<TMPL_LOOP NAME=SEARCH_RESULTS>
+<tr bgcolor=#ccccff><th>Tytuł</th><th>Autor</th><th>Dewey</th></tr>
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
   <tr>
-  <td><TMPL_VAR NAME=title></td>
-  <td><TMPL_VAR NAME=author></td>
-  <td align=right><TMPL_VAR NAME=dewey></td>
+  <td><!-- TMPL_VAR NAME=title --></td>
+  <td><!-- TMPL_VAR NAME=author --></td>
+  <td align=right><!-- TMPL_VAR NAME=dewey --></td>
   </tr>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 <tr><td colspan=3 bgcolor=#ccccff>
     <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr><td align=left>
-    <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="prevstartfrom">>Previous Records</a>
+    <a href=search.pl?template=<!-- TMPL_VAR NAME="template" -->&startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->>Poprzednie rekordy</a>
     </td><td align=right>
-    <a href=search.pl?template=<TMPL_VAR NAME="template">&startfrom=<TMPL_VAR NAME="nextstartfrom">>Next Records</a>
+    <a href=search.pl?template=<!-- TMPL_VAR NAME="template" -->&startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->>Następne Rekordy</a>
     </td></tr>
     </table>
 </td></tr>
 </table>
 <br>
-Trafienia od <TMPL_VAR NAME="startfrom"> do <TMPL_VAR NAME="endat"> z <TMPL_VAR NAME="numrecords"> rekord�w.
+Wyświetłono od <i><!-- TMPL_VAR NAME="startfrom" --></i> do <i><!-- TMPL_VAR NAME="endat" --></i> z <i><!-- TMPL_VAR NAME="numrecords" --></i> rekordów.
 <hr>
 </body>
 </html>

@@ -1,160 +1,159 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
 <form action=updatesupplier.pl method=post>
 
-<input type=hidden name=id value=<TMPL_VAR name="id">>
+<input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 
-<TMPL_IF NAME=id>
-	<h1>Uaktualnienie: <TMPL_VAR name="name"></h1>
-<TMPL_ELSE>
-	<h1><em>Dodaj dostawcê</h1>
-</TMPL_IF>
+<!-- TMPL_IF NAME=id -->
+	<h1>Aktualizuj: <!-- TMPL_VAR name="name" --></h1>
+<!-- TMPL_ELSE -->
+	<h1><em>Dodaj dostawcÄ™</h1>
+<!-- /TMPL_IF -->
 
 <P>
 <CENTER>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
 	<tr valign=top bgcolor="#ffdf61">
-		<td colspan=2><B>Szczegó³y podmiotu</B></td>
+		<td colspan=2><B>DANE O FIRMIE</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD><b>Nazwa podmiotu</b></td>
-		<td><input type=text size=20 name=company value="<TMPL_VAR name="name">">
+		<TD><b>Nazwa firmy</b></td>
+		<td><input type=text size=20 name=company value="<!-- TMPL_VAR name="name" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Adres pocztowy</td>
+		<TD>Adres Pocztowy</td>
 		<td>
-			<textarea name=company_postal cols=20 rows=3><TMPL_VAR name="postal"></textarea>
+			<textarea name="company_postal" cols=20 rows=3><!-- TMPL_VAR name="postal" --></textarea>
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Adres fizyczny</td>
-		<td><textarea name=physical cols=20 rows=4><TMPL_VAR name="address1"><TMPL_VAR name="address2"><TMPL_VAR name="address3"><TMPL_VAR name="address4"></textarea>
+		<TD>Adres Zamieszkania</td>
+		<td><textarea name=physical cols=20 rows=4><!-- TMPL_VAR name="address1" --><!-- TMPL_VAR name="address2" --><!-- TMPL_VAR name="address3" --><!-- TMPL_VAR name="address4" --></textarea>
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Telefon</td>
-		<td><input type=text size=20 name=company_phone value="<TMPL_VAR name="phone">">
+		<td><input type=text size=20 name=company_phone value="<!-- TMPL_VAR name="phone" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Fax</td>
-		<td><input type=text size=20 name=company_fax value="<TMPL_VAR name="fax">">
+		<td><input type=text size=20 name=company_fax value="<!-- TMPL_VAR name="fax" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Witryna</td>
-		<td><input type=text size=20 name=website value="<TMPL_VAR name="url">">
+		<td><input type=text size=20 name=website value="<!-- TMPL_VAR name="url" -->">
 		</td>
 	</tr>
 	<tr valign=top bgcolor="#ffdf61">
-		<td colspan=2><B>Dane kontaktowe</B></td>
+		<td colspan=2><B>DANE KONTAKTOWE</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Nazwisko</td>
-		<td><input type=text size=20 name=company_contact_name value="<TMPL_VAR name="contact">"></td>
+		<TD>Osoba kontaktowa</td>
+		<td><input type=text size=20 name=company_contact_name value="<!-- TMPL_VAR name="contact" -->"></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Stanowisko</td>
-		<td><input type=text size=20 name=company_contact_position value="<TMPL_VAR name="contpos">">
+		<TD>Pozycja</td>
+		<td><input type=text size=20 name=company_contact_position value="<!-- TMPL_VAR name="contpos" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Telefon</td>
-		<td><input type=text size=20 name=contact_phone value="<TMPL_VAR name="contphone">">
+		<td><input type=text size=20 name=contact_phone value="<!-- TMPL_VAR name="contphone" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Inny telefon</td>
-		<td><input type=text size=20 name=contact_phone_2 value="<TMPL_VAR name="contaltphone">">
+		<TD>Inny Telefon</td>
+		<td><input type=text size=20 name=contact_phone_2 value="<!-- TMPL_VAR name="contaltphone" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Fax</td>
-		<td><input type=text size=20 name=contact_fax value="<TMPL_VAR name="contfax">">
+		<td><input type=text size=20 name=contact_fax value="<!-- TMPL_VAR name="contfax" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>E-mail</td>
-		<td><input type=text size=20 name=company_email value="<TMPL_VAR name="contemail">">
+		<td><input type=text size=20 name=company_email value="<!-- TMPL_VAR name="contemail" -->">
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Uwagi</td>
-		<td><textarea name=notes cols=20 rows=4><TMPL_VAR name="contnotes"></textarea>
+		<td><textarea name=notes cols=20 rows=4><!-- TMPL_VAR name="contnotes" --></textarea>
 		</td>
-	</tr>
-	<tr>
-		<td colspan=2 align="center"><input type=image  name=submit src="/<TMPL_VAR name="theme">/images/filesave.png" border=0 title="save" alt="save"></td>
 	</tr>
 </table>
 
 <table border=1 cellspacing=0 cellpadding=5 width="40%">
 	<tr valign=top bgcolor="#ffdf61">
-		<td colspan=2><B>BIE¯¡CY STATUS</B></td>
+		<td colspan=2><B>STATUS BIEÅ»Ä„CY</B></td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Dostawca jest</td>
-		<td><input type="radio" name="status" value="1" <TMPL_IF name="active">checked</TMPL_IF>>Active
-			<input type="radio" name="status" value="0" <TMPL_UNLESS name="active">checked</TMPL_UNLESS>>Inactive</td>
+		<td>
+			 <!-- TMPL_IF name="active" -->
+				<input type="radio" name="status" value="1" checked>Aktywny <input type="radio" name="status" value="0">Nieaktywny</td>
+			<!-- TMPL_ELSE -->
+				<input type="radio" name="status" value="1">Aktywny <input type="radio" name="status" value="0" checked>Nieaktywny</td>
+			<!-- /TMPL_IF -->
 	</tr>
 	<tr valign=top bgcolor="#ffdf61">
-		<td colspan=2><B>DANE O ZAMÓWIENIACH</B></td>
+		<td colspan=2><B>DANE ZAMÃ“WIENIA</B></td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Publishers and Imprints</td>
-		<td><textarea name="publishers_imprints" cols=20 rows=4><TMPL_VAR name="specialty"></textarea>
+		<TD>Wydawcy i druki</td>
+		<td><textarea name="publishers_imprints" cols=20 rows=4><!-- TMPL_VAR name="specialty" --></textarea>
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>List Prices are</td>
+		<TD>Cena katalogowa jest</td>
 		<td>
 			<select name=list_currency size=1>
-			<TMPL_LOOP name="loop_pricescurrency">
-				<TMPL_VAR name="currency">
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP name="loop_pricescurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
 			</select>
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Invoice Prices are</td>
+		<TD>Ceny z faktury sÄ…</td>
 		<td>
 			<select name=invoice_currency size=1>
-			<TMPL_LOOP name="loop_invoicecurrency">
-				<TMPL_VAR name="currency">
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP name="loop_invoicecurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
 			</select>
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>GST Registered</td>
+		<TD>PÅ‚atnik VATu</td>
 		<td>
-			<input type=radio name=gst value=1 <TMPL_IF name="gstreg">checked</TMPL_IF>>Yes
-			<input type=radio name=gst value=0 <TMPL_UNLESS name="gstreg">checked</TMPL_UNLESS>>No
+			<input type=radio name=gst value=1 <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>Tak <input type=radio name=gst value=0 <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>Nie
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>List Item Price Includes GST</td>
+		<TD>Cena katalogowa pozycji zawiera VAT</td>
 		<td>
-			<input type=radio name=list_gst value=1 <TMPL_IF name="listincgst">checked</TMPL_IF>>Yes
-			<input type=radio name=list_gst value=0 <TMPL_UNLESS name="listincgst">checked</TMPL_UNLESS>>No
+			<input type=radio name=list_gst value=1 <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>Tak <input type=radio name=list_gst value=0 <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>Nie
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
-		<TD>Invoice Item Price Includes GST</td>
+		<TD>Cena pozycji na fakturze zawiera VAT</td>
 		<td>
-			<input type=radio name=invoice_gst value=1 <TMPL_IF name= "invoiceincgst">checked</TMPL_IF>>Yes
-			<input type=radio name=invoice_gst value=0 <TMPL_UNLESS name="invoiceincgst">checked</TMPL_UNLESS>>No
+			<input type=radio name=invoice_gst value=1 <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>Tak <input type=radio name=invoice_gst value=0 <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>Nie
 		</td>
 	</tr>
 	<TR VALIGN=TOP>
 		<TD>Rabat</td>
-		<td><input type=text size=3 name=discount value=<TMPL_VAR name="discount">> %
+		<td><input type=text size=3 name=discount value=<!-- TMPL_VAR name="discount" -->> %
 	</tr>
 </table>
-
+<br/>
+<br/><input type=image name=submit src="/<!-- TMPL_VAR name="theme" -->/images/filesave.png" border=0 title="Zapisz" alt="Zapisz" class="button">
 </form>
 </center>
 
 
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

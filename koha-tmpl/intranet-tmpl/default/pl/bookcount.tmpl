@@ -1,40 +1,40 @@
-<TMPL_INCLUDE Name="reports-top.inc">
+<!-- TMPL_INCLUDE Name="reports-top.inc" -->
 <CENTER>
 <br>
 <h1>
-<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="bib">&type="intra"> <TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</a></h1><P>
+<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="bib" -->&type="intra"> <!-- TMPL_VAR Name="title" --> (<!-- TMPL_VAR Name="author" -->)</a></h1><P>
 <p>
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 width=440 >
 	<TR VALIGN=TOP>
 		<TD  bgcolor="99cc33" background="/images/background-mem.gif">
-			<B>KOD KRESKOWY <TMPL_VAR Name="barcode"></B>
+			<B>KOD PASKOWY <!-- TMPL_VAR Name="barcode" --></B>
 		</TD>
 	</TR>
 	<TR VALIGN=TOP  >
 		<TD width=440 >
 
-		<b>Oddzia≥ w≥a∂ciwy: </b> <TMPL_VAR Name="homebranch"> <br>
-		<b>Oddzia≥ bieø±cy: </b> <TMPL_VAR Name="holdingbranch"><br>
-		<b>Data oddania do tego oddzia≥u: </b> <TMPL_VAR Name="lastdate"> <br>
-		<b>Liczba wypoøyczeÒ od powyøszej daty :</b> <TMPL_VAR Name="count"> <br>
+		<b>Oddzia≈Ç W≈Ça≈õciwy: </b> <!-- TMPL_VAR Name="homebranch" --> <br>
+		<b>Obecny Oddzia≈Ç: </b> <!-- TMPL_VAR Name="holdingbranch" --><br>
+		<b>Data przybycia do obecnego oddzia≈Çu: </b> <!-- TMPL_VAR Name="lastdate" --> <br>
+		<b>Liczba wypo≈ºycze≈Ñ od powy≈ºszej daty:</b> <!-- TMPL_VAR Name="count" --> <br>
 
 		<table cellspacing =0 cellpadding=5 border=1 width = 440>
 			<TR>
-				<TD> <b>Oddzia≥</b></td>
-				<TD> <b>Liczba wypoøyczeÒ</b></td>
-				<TD> <b>Ostatnia obecno∂Ê w oddziale</b></td>
+				<TD> <b>Oddzia≈Ç</b></td>
+				<TD> <b>Liczba Wypo≈ºycze≈Ñ</b></td>
+				<TD> <b>Ostatnio rejestrowana w oddziale</b></td>
 			</TR>
-			<TMPL_LOOP Name="branchloop">
+			<!-- TMPL_LOOP Name="branchloop" -->
 				<TR>
-					<TD> <b> <TMPL_VAR Name="branchname"> </b></td>
-					<TD> <b> <TMPL_VAR Name="issues"> </b></td>
-					<TD> <b> <TMPL_VAR Name="seen"> </b></td>
+					<TD> <b> <!-- TMPL_VAR Name="branchname" --> </b></td>
+					<TD> <b> <!-- TMPL_VAR Name="issues" --> </b></td>
+					<TD> <b> <!-- TMPL_VAR Name="seen" --> </b></td>
 				</TR>
-			</TMPL_LOOP>
+			<!-- /TMPL_LOOP -->
 		</table>
 		</TD>
 	</TR>
 </table>
 
-<TMPL_INCLUDE Name="reports-bottom.inc">
+<!-- TMPL_INCLUDE Name="reports-bottom.inc" -->

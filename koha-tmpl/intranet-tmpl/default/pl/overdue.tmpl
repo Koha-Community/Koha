@@ -1,32 +1,32 @@
-<TMPL_INCLUDE NAME="reports-top.inc">
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <!-- the site -->
 
-<h1>Pozycje zaleg≥e w dniu <TMPL_VAR NAME="todaysdate"></h1><br><P>
+<h1>Zaleg≈Çe pozycje do dnia <!-- TMPL_VAR NAME="todaysdate" --></h1><br><P>
 
 <TABLE  cellspacing=0 cellpadding=5 border=1 align=center>
   <TR VALIGN=TOP>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Termin zwrotu</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Klient</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Tel.</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Tytu≥</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Do Zwrotu</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Czytelnik</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Telefon</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Tytu≈Ç</b></td>
     <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Autor</b></td>
   </tr>
 
-  <TMPL_LOOP NAME=overdueloop>
+  <!-- TMPL_LOOP NAME=overdueloop -->
     <tr>
-      <td><TMPL_VAR NAME="duedate"></td>
-    <TMPL_IF NAME=email>
-      <td><a href="mailto:<TMPL_VAR NAME="email">?subject=Overdue: <TMPL_VAR NAME="title">"><TMPL_VAR NAME="name"></a></td>
-    <TMPL_ELSE>
-      <td><TMPL_VAR NAME="name"></td>
-    </TMPL_IF>
-      <td><TMPL_VAR NAME="phone"></td>
-      <td><TMPL_VAR NAME="title"></td>
-      <td><TMPL_VAR NAME="author"></td>
+      <td><!-- TMPL_VAR NAME="duedate" --></td>
+    <!-- TMPL_IF NAME=email -->
+      <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+    <!-- TMPL_ELSE -->
+      <td><!-- TMPL_VAR NAME="name" --></td>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME="phone" --></td>
+      <td><!-- TMPL_VAR NAME="title" --></td>
+      <td><!-- TMPL_VAR NAME="author" --></td>
     </tr>
-  </TMPL_LOOP>
+  <!-- /TMPL_LOOP -->
 </table>
 
 
 <!-- endmenu -->
-<TMPL_INCLUDE NAME="reports-bottom.inc">
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

@@ -1,113 +1,257 @@
-<HTML>
-<TMPL_INCLUDE NAME="cat-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj si�</a> do Koha</p>
-</TMPL_IF>
-
-<TMPL_IF name="add">
-<form action='<TMPL_VAR name=action>' name=Aform method=post>
-<input type=hidden name=op value='add_validate'>
-<table>
-<tr><td>Kod odzia�u</td><td><input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'</td></tr>
-<tr><td>Nazwa</td><td><input type=text name=branchname size=40 maxlength=80 value="<TMPL_VAR name=branchname escape="HTML">">&nbsp;</td></tr>
-<FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
-<tr><td><TMPL_VAR name=categoryname></td>
-<td><INPUT TYPE="checkbox" NAME="<TMPL_VAR name=categorycode>" VALUE="1" ><TMPL_VAR name=codedescription></td></tr>
-<tr><td>Adres</td><td><input type=text name=branchaddress1 value='<TMPL_VAR name=branchaddress1 escape="HTML">'></td></tr>
-<tr><td>&nbsp;</td><td><input type=text name=branchaddress2 value='<TMPL_VAR name=branchaddress2 escape="HTML">'></td></tr>
-<tr><td>&nbsp;</td><td><input type=text name=branchaddress3 value='<TMPL_VAR name=branchaddress3 escape="HTML">'></td></tr>
-<tr><td>Phone</td><td><input type=text name=branchphone value='<TMPL_VAR name=branchphone escape="HTML">'></td></tr>
-<tr><td>Fax</td><td><input type=text name=branchfax value='<TMPL_VAR name=branchfax escape="HTML">'></td></tr>
-<tr><td>E-mail</td><td><input type=text name=branchemail value='<TMPL_VAR name=branchemail escape="HTML">'></td></tr>
-<tr><td>&nbsp;</td><td><input type=submit value='Prze�lij'></td></tr>
-</table>
-</form>
-</TMPL_IF>
-
-<TMPL_IF name="delete_confirm">
-Potwierd� usuni�cie:
-<form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value='delete_confirmed'>
-<input type='hidden' name='branchcode' value=<TMPL_VAR name=branchcode escape="HTML">>
-<input type=submit value=Tak></form>
-<form action='<TMPL_VAR name=action>' method=post><input type='hidden' name='op' value=''>
-<input type=submit value=Nie></form>
-</TMPL_IF>
-
-<TMPL_IF name="else">
-<FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
-<font color='red'><TMPL_VAR name="message"></font>
-<form action=<TMPL_VAR name=action> method=post><input type='hidden' name='op' value='add'><input type=submit value='Dodaj nowy oddzia�'></form>
-<table border='1' cellpadding='5' cellspacing='0' width='550'>
-<tr> <th colspan='5' align='left' bgcolor='#99cc33'>
-<font size='5'><b>Oddzia�y</b></font></th> </tr>
-<tr bgcolor='#889999'>
-<td width='175'><b>Nazwa</b></td>
-<td width='25'><b>Kod</b></td>
-<td width='175'><b>Adres</b></td>
-<td width='175'><b>Kategorie</b></td>
-<td width='50'><b>&nbsp;</b></td>
-</tr>
-<TMPL_LOOP name="branches">
-<tr bgcolor='<TMPL_VAR name=color>'>
-    <td align='left' valign='top'><TMPL_VAR name=branch_name escape="HTML"></td>
-    <td align='left' valign='top'><TMPL_VAR name=branch_code escape="HTML"></td>
-    <td align='left' valign='top'>
-<TMPL_IF name=address-empty-p>
-(nothing entered)
-<TMPL_ELSE>
-<TMPL_IF name=branchaddress1>
-<TMPL_VAR name=branchaddress1 escape="HTML"></TMPL_IF>
-<TMPL_IF name=branchaddress2>
-<br><TMPL_VAR name=branchaddress2 escape="HTML"></TMPL_IF>
-<TMPL_IF name=branchaddress3>
-<br><TMPL_VAR name=branchaddress3 escape="HTML"></TMPL_IF>
-<TMPL_IF name=branchphone>
-<br>Ph: <TMPL_VAR name=branchphone escape="HTML"></TMPL_IF>
-<TMPL_IF name=branchfax>
-<br>Fax: <TMPL_VAR name=branchfax escape="HTML"></TMPL_IF>
-<TMPL_IF name=branchemail>
-<br>Email: <TMPL_VAR name=branchemail escape="HTML"></TMPL_IF>
-</TMPL_IF>
-    </td>
-    <td align='left' valign='top'>
-<TMPL_IF name=no-categories-p>
-(no categories set)
-<TMPL_ELSE>
-<TMPL_LOOP name=category_list>
-<TMPL_VAR name=categoryname><br>
-</TMPL_LOOP>
-</TMPL_IF>
-    </td>
-    <td align='left' valign='top'>
-<form action='<TMPL_VAR name=action>' method=post>
-<input type='hidden' name='op' value='edit'>
-<input type='hidden' name='branchcode' value='<TMPL_VAR name=value escape="HTML">'>
-<input type=submit value=Edytuj>
-</form>
-<form action='<TMPL_VAR name=action>' method=post>
-<input type='hidden' name='branchcode' value='<TMPL_VAR name=value escape="HTML">'>
-<input type='hidden' name='op' value='delete'><input type=submit value=Usu�>
-</form></td>
-</tr>
-</TMPL_LOOP>
-</table>
-<br>
-<table border='1' cellpadding='5' cellspacing='0'>
-<tr> <th colspan='5' align='left' bgcolor='#99cc33'>
-<font size='5'><b>Kategorie oddzia�ow</b></font></th> </tr>
-<tr bgcolor='#889999'> 
-<td width='175'><b>Nazwa</b></td>
-<td width='25'><b>Kod</b></td>
-<td width='200'><b>Opis</b></td>
-</tr>
-<tr bgcolor='<TMPL_VAR name="color">'>
-    <td align='left' valign='top'><TMPL_VAR name=categoryname></td>
-    <td align='left' valign='top'><TMPL_VAR name=categorycode></td>
-    <td align='left' valign='top'><TMPL_VAR name=codedescription></td>
-</tr>
-</table>
-</TMPL_IF>
-
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<!-- TMPL_IF NAME="add" -->
+	
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-branches-p" -->Oddziały<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Oddziały: Dodaj Oddział<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Oddziały: Edytuj Oddział<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Oddziały: Edytuj Kategorie<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
+	</h1>
+	
+	<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<table>
+		<tr>
+			<td>Kod oddziału</td>
+			<td>
+				<!-- TMPL_IF NAME="branchcode" -->
+					<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
+					<!-- TMPL_VAR NAME="branchcode" -->
+				<!-- TMPL_ELSE -->
+					<input type="text" name="branchcode" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
+				<!-- /TMPL_IF -->
+			</td>
+		</tr>
+		<tr>
+			<td>Nazwa</td>
+			<td><input type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">&nbsp;</td>
+		</tr>
+	
+		<tr>
+			<td><!-- TMPL_LOOP NAME="categoryloop" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="categoryname" --></td>
+							<td><INPUT TYPE="checkbox" NAME="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_VAR NAME="checked" -->><!-- TMPL_VAR NAME="codedescription" --></td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+			</td>
+		</tr>
+		<tr>
+			<td>Adres</td>
+			<td><input type="text" name="branchaddress1" value="<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" -->"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><input type="text" name="branchaddress2" value="<!-- TMPL_VAR NAME="branchaddress2" escape="HTML" -->"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><input type="text" name="branchaddress3" value="<!-- TMPL_VAR NAME="branchaddress3" escape="HTML" -->"></td>
+		</tr>
+		<tr>
+			<td>Telefon</td>
+			<td><input type="text" name="branchphone" value="<!-- TMPL_VAR NAME="branchphone" escape="HTML" -->"></td>
+		</tr>
+		<tr>
+			<td>Fax</td>
+			<td><input type="text" name="branchfax" value="<!-- TMPL_VAR NAME="branchfax" escape="HTML" -->"></td>
+		</tr>
+		<tr>
+			<td>E-mail</td>
+			<td><input type="text" name="branchemail" value="<!-- TMPL_VAR NAME="branchemail" escape="HTML" -->"></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td><input type="submit" value="Zapisz" class="button"></td>
+		</tr>
+	</table>
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+		Potwierdź wymazanie:
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed">
+			<input type="hidden" name="branchcode" value=<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->>
+			<input type="submit" value="TAK" class="button">
+		</form>
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
+			<input type="submit" value="NIE" class="button">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+		<h1>
+		<!-- TMPL_IF NAME="use-heading-flags-p" -->
+		<!-- TMPL_IF NAME="heading-branches-p" -->Oddziały<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Oddziały: Dodaj Oddział<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Oddziały: Edytuj Oddział<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Oddziały: Edytuj Kategorie<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
+		</h1>
+	
+		<font color="red"><!-- TMPL_VAR NAME="message" --></font>
+		<table border="1" cellpadding="5" cellspacing="0">
+			<tr>
+				<th colspan="6" align="left" bgcolor="#99cc33">
+					<font size="5"><b>Oddziały</b></font>
+				</th>
+			</tr>
+			<tr bgcolor="#889999">
+				<td width="175"><b>Nazwa</b></td>
+				<td width="25"><b>Kod</b></td>
+				<td width="175"><b>Adres</b></td>
+				<td width="175"><b>Kategorie</b></td>
+				<td width="50"><b>&nbsp;</b></td>
+				<td width="50"><b>&nbsp;</b></td>
+			</tr>
+			<!-- TMPL_LOOP NAME="branches" -->
+				<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<td align="left" valign="top"><!-- TMPL_VAR NAME="branch_name" escape="HTML" --></td>
+					<td align="left" valign="top"><!-- TMPL_VAR NAME="branch_code" escape="HTML" --></td>
+					<td align="left" valign="top">
+						<!-- TMPL_IF NAME="address-empty-p" -->
+							(nic nie wpisano)
+						<!-- TMPL_ELSE -->
+							<!-- TMPL_IF NAME="branchaddress1" -->
+								<!-- TMPL_VAR NAME="branchaddress1" escape="HTML" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="branchaddress2" -->
+								<br><!-- TMPL_VAR NAME="branchaddress2" escape="HTML" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="branchaddress3" -->
+								<br><!-- TMPL_VAR NAME="branchaddress3" escape="HTML" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="branchphone" -->
+								<br>Telefon: <!-- TMPL_VAR NAME="branchphone" escape="HTML" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="branchfax" -->
+								<br>Fax: <!-- TMPL_VAR NAME="branchfax" escape="HTML" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="branchemail" -->
+								<br>Email: <!-- TMPL_VAR NAME="branchemail" escape="HTML" --><!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+					</td>
+					<td align="left" valign="top">
+						<!-- TMPL_IF NAME="no-categories-p" -->
+							(nie ustawiono kategorii)
+						<!-- TMPL_ELSE -->
+							<!-- TMPL_LOOP NAME="category_list" -->
+								<!-- TMPL_VAR NAME="categoryname" --><br>
+							<!-- /TMPL_LOOP -->
+						<!-- /TMPL_IF -->
+					</td>
+					<td align="left" valign="top">
+						<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+						<input type="hidden" name="op" value="edit">
+						<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
+						<input type="submit" value="Edytuj" class="button">
+						</form>
+					</td>
+					<td align="left" valign="top">
+						<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+						<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->">
+						<input type="hidden" name="op" value="delete"><input type="submit" value="Wymaż" class="button">
+						</form>
+					</td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<br>
+		<form action=<!-- TMPL_VAR NAME="action" --> method="post">
+			<input type="hidden" name="op" value="add">
+			<input type="submit" class="button" value="Dodaj Nowy Oddział">
+		</form>
+	
+		<br>
+		<table border="1" cellpadding="5" cellspacing="0">
+		<tr>
+			<th colspan="5" align="left" bgcolor="#99cc33">
+				<font size="5"><b>Kategorie Oddziałów</b></font>
+			</th>
+		</tr>
+		<tr bgcolor="#889999">
+			<td width="175"><b>Nazwa</b></td>
+			<td width="25"><b>Kod</b></td>
+			<td width="200"><b>Wyjaśnienie</b></td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<!-- TMPL_LOOP NAME="branchcategories" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+			<td align="left" valign="top"><!-- TMPL_VAR NAME="categoryname" --></td>
+			<td align="left" valign="top"><!-- TMPL_VAR NAME="categorycode" --></td>
+			<td align="left" valign="top"><!-- TMPL_VAR NAME="codedescription" --></td>
+			<td align="left" valign="top">
+				<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+				<input type="hidden" name="op" value="editcategory">
+				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+				<input type="submit" value="Edytuj" class="button">
+				</form>
+			</td>
+			<td align="left" valign="top">
+				<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+				<input type="hidden" name="op" value="delete_category"><input type="submit" value="Wymaż" class="button">
+				</form>
+			</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+		<br />
+		<form action=<!-- TMPL_VAR NAME="action" --> method="post">
+			<input type="hidden" name="op" value="editcategory">
+			<input type="submit" class="button" value="Dodaj Nową Kategorię">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="editcategory" -->
+		<h1>
+		<!-- TMPL_IF NAME="use-heading-flags-p" -->
+		<!-- TMPL_IF NAME="heading-branches-p" -->Oddziały<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-branches-add-branch-p" -->Oddziały: Dodaj Oddział<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-branches-edit-branch-p" -->Oddziały: Edytuj Oddział<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="heading-branches-edit-category-p" -->Oddziały: Edytuj Kategorie<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="head" --><!-- /TMPL_IF -->
+		</h1>
+	
+		<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
+		<input type="hidden" name="op" value="addcategory_validate">
+		<table>
+			<tr>
+				<td>Kod Kategorii</td>
+				<td>
+					<!-- TMPL_IF NAME="categorycode" -->
+						<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+						<!-- TMPL_VAR NAME="categorycode" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+					<!-- /TMPL_IF -->
+				</td>
+			</tr>
+			<tr>
+				<td>Nazwa</td>
+				<td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="categoryname" escape="HTML" -->">&nbsp;</td>
+			</tr>
+			<tr>
+				<td>Wyjaśnienie</td>
+				<td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="codedescription" escape="HTML" -->">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><input type="submit" value="OK" class="button"></td>
+			</tr>
+		</table>
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_category" -->
+		Potwierdź wymazanie:
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+			<input type="hidden" name="op" value="categorydelete_confirmed">
+			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="HTML" -->">
+			<input type="submit" value="TAK" class="button">
+		</form>
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
+			<input type="submit" value="NIE" class="button">
+		</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

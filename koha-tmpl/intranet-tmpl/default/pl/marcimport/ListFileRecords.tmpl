@@ -1,8 +1,8 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-<h1>Menu g³ówne</h1>
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1>Menu gÅ‚Ã³wne</h1>
 <ul>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Wyszukiwarka Z39.50</a>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Za³aduj rekordy MARC</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Wyszukiwanie Z39.50</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Wgraj rekordy MARC</a>
 </ul>
 <center>
 <p>
@@ -11,43 +11,43 @@
   -->
 <a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Wybierz nowy plik</a>
 <p>
-<TMPL_IF name="IS_MARC">
+<!-- TMPL_IF name="IS_MARC" -->
 	<table border=0 cellpadding=10 cellspacing=0>
 	<tr>
 		<th background=/images/background-acq.gif>
-		 	Wybierz rekord dla importu <TMPL_VAR name="recordsource">
+		 	Z ktÃ³rego rekordu importowaÄ‡ <!-- TMPL_VAR name="recordsource" -->
 		</th>
 	</tr>
 	<tr>
 		<td bgcolor=#dddddd>
-</TMPL_IF>
-<TMPL_IF name="IS_Z3950">
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="IS_Z3950" -->
 <table border=0 cellpadding=10 cellspacing=0>
 <tr>
 		<td bgcolor=#dddddd>
-		<TMPL_IF name="HAS_NUMRECORDS">
-	            <a name=SERVER-<TMPL_VAR name="srvid">></a> " <TMPL_VAR name="srvname">
-		<font size=-1>[Przêgl±danie od <TMPL_VAR name="startrecord"> do <TMPL_VAR name="highest"> z <TMPL_VAR name="numrecords"> rekordów]  <TMPL_VAR name="previous"> | <TMPL_VAR name="next"> </font><br>
-		</TMPL_IF>
-		<TMPL_IF name="PENDING">
-			<font color=red>Wyszukiwanie wci±¿ trwa...</font>
-		<TMPL_ELSE>
-			<font color=red>przetwarzanie... <TMPL_VAR name="elapsedtime"></font>
-		</TMPL_IF>
-		<TMPL_IF name="NO_RECORDS">
-			<b>Nie znaleziono trafieñ dla kwerendy <TMPL_VAR name="id"></b>
-		</TMPL_IF>
-</TMPL_IF>
-	<TMPL_LOOP name="LINES">
-<!--		<a href=<TMPL_VAR name="SCRIPT_NAME">?file=<TMPL_VAR name="file">&resultsid=<TMPL_VAR name="resultsid">&<TMPL_VAR name="searchfield">=<TMPL_VAR name="searchvalue">&searchfield=<TMPL_VAR name="searchfield">&searchvalue=<TMPL_VAR name="searchvalue">> -->
-		<a href=<TMPL_VAR name="SCRIPT_NAME">?file=<TMPL_VAR name="file">&numrecord=<TMPL_VAR name="numrecord">>
-				<TMPL_VAR name="title">
-				<TMPL_VAR name="author">
+		<!-- TMPL_IF name="HAS_NUMRECORDS" -->
+	            <a name=SERVER-<!-- TMPL_VAR name="srvid" -->></a> " <!-- TMPL_VAR name="srvname" -->
+		<font size=-1>{PrzeglÄ…danie od <!-- TMPL_VAR name="startrecord" --> do <!-- TMPL_VAR name="highest" --> z <!-- TMPL_VAR name="numrecords" --> rekordÃ³w] <!-- TMPL_VAR name="previous" --> | <!-- TMPL_VAR name="next" --> </font><br>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="PENDING" -->
+			<font color=red>Szukanie nadal w toku...</font>
+		<!-- TMPL_ELSE -->
+			<font color=red>przetwarzanie... <!-- TMPL_VAR name="elapsedtime" --></font>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="NO_RECORDS" -->
+			<b>Nic nie znaleziono dla zapytania <!-- TMPL_VAR name="id" --></b>
+		<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP name="LINES" -->
+<!--		<a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="file" -->&resultsid=<!-- TMPL_VAR name="resultsid" -->&<!-- TMPL_VAR name="searchfield" -->=<!-- TMPL_VAR name="searchvalue" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->&searchvalue=<!-- TMPL_VAR name="searchvalue" -->> -->
+		<a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="file" -->&numrecord=<!-- TMPL_VAR name="numrecord" -->>
+				<!-- TMPL_VAR name="title" -->
+				<!-- TMPL_VAR name="author" -->
 		</a>
-		<TMPL_VAR name="donetext"><br>
-	</TMPL_LOOP>
+		<!-- TMPL_VAR name="donetext" --><br>
+	<!-- /TMPL_LOOP -->
 </td>
 </tr>
 </table>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

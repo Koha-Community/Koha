@@ -1,50 +1,49 @@
-<TMPL_IF name="opac">
-	<TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-	<TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF name="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
 
-<!-- ----------------------- MAIN BODY OF PAGE ------------------------ -->
+<!------------------------ MAIN BODY OF PAGE ---------------------------->
 <FORM ACTION="/cgi-bin/koha/search.pl" method=post>
 
-<h1>Przeszukiwanie katalogu</h1>
+<h1>Szukaj w katalogu</h1>
 
 <CENTER>
 
 <TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
 	<TR VALIGN=TOP>
-		<TD>Kod kreskowy</TD>
+		<TD>Kod Paskowy</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
 		<td><b> &nbsp; &nbsp; LUB</b></TD></TR>
 	<!-- <TR VALIGN=TOP>
 	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
- -->
+	-->
 	<TR VALIGN=TOP>
 		<TD colspan=2 > &nbsp;</td>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD  bgcolor="#ad11ad" background="/images/background-mem.gif" colspan=2>
+		<TD  bgcolor="#ad11ad" colspan=2>
 			<span style="color:#FFFFFF;">
 				<b>POMOC</b><br>
-				<b>Wyszukiwanie: </b>Wype≥nienie kilku pÛl w kwerendzie (np. S≥owo kluczowe + autor + klasa) spowoduje wolniejsze wyszukiwanie.<p>
+				<b>Szukaj :</b>Stosowanie wielu p√≥l w zapytaniu spowalnia wyszukiwanie.<p>
 			</span>
 		</td>
-   </TR>
+	</TR>
 </table>
 
 
 
 <TABLE border=0>
 	<TR VALIGN=TOP>
-		<TD>S≥owo kluczowe</TD>
+		<TD>S≈Çowa kluczowe</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
 	</TR>
 	<TR VALIGN=TOP>
-		<TD>Tytu≥</TD>
+		<TD>Tytu≈Ç</TD>
 		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
 		<td>
-			<input type=radio name=ttype value=normal checked>Zwyk≥e
-			<input type=radio name=ttype value=exact>Precyzyjne
+			<input type=radio name=ttype value=normal checked>Zwyk≈Çe <input type=radio name=ttype value=exact>Dok≈Çadne
 		</td>
 	</TR>
 	<TR VALIGN=TOP>
@@ -60,28 +59,27 @@
 	</TR>
 
 	<TR VALIGN=TOP>
-	<TD>Class</TD>
-  <td>
-  <select name="class" size="1">
-  <option value="">Any
-  <TMPL_VAR name="classlist">
-  </select>
-  </td>
+	<TD>Typ pozycji</TD>
+		<td>
+			<select name="class" size="1">
+			<option value=""> Ka≈ºdy <!-- TMPL_VAR name="classlist" -->
+			</select>
+		</td>
 	</tr>
 	<!-- <TR VALIGN=TOP>
-	<td>Oddzia≥</td><td><select name=branch>
+	<td>Branch</td><td><select name=branch>
 	<option value="F">Foxton
 	</select>
 	</td></tr> -->
 
 	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
- -->
+	-->
 	<TR VALIGN=TOP>
 	<TD><b>LUB</b></TD>
 	</TR>
 
 	<TR VALIGN=TOP>
-		<TD>Has≥o przedm.</TD>
+		<TD>Temat</TD>
 		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
 	</TR>
 	<tr>
@@ -90,13 +88,13 @@
 				<tr align="center">
 					<td>
 						<input type="hidden" name="type" value="intra">
-						<INPUT TYPE="image"  alt="Rozpocznij szukanie" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" BORDER=0 >
+						<input type="submit" class="button" value="Szukaj">
 					</td>
 					<td>
-						<INPUT TYPE="reset"  VALUE= "Wyczy∂Ê">
+						<input type="reset" value="Wyczy≈õƒá" class="button">
 					</td>
 					<td>
-						<a href=/cgi-bin/koha/shelves.pl>PÛ≥ki wirtualne</a>
+						<a href="/cgi-bin/koha/shelves.pl" class="button">P√≥≈Çki Wirtualne</a>
 					</td>
 				</tr>
 			</table>

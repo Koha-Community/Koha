@@ -1,41 +1,55 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
+<h1><!-- TMPL_VAR NAME=firstname --> <!-- TMPL_VAR NAME=surname --></h1>
+<br>Numer Czytelnika: <!-- TMPL_VAR NAME=bornum -->
+<br>Numer karty: <!-- TMPL_VAR NAME=cardnumber -->
+<P>
+<!-- TMPL_IF NAME=showfulllink -->
+<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=full">Pełen wykaz</a>
+<br/>
+<!-- /TMPL_IF -->
+<br/>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 <TR VALIGN=TOP>
-	<TD bgcolor="white" colspan=4 >
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=full">Pe�ny wykaz</a>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=title&limit=<!-- TMPL_VAR name="limit" -->"><b>TYTUŁ</b></a>
+	</TD>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=author&limit=<!-- TMPL_VAR name="limit" -->"><b>AUTOR</b></a>
+	</TD>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&limit=<!-- TMPL_VAR name="limit" -->"><b>DO ZWROTU</b></a>
+	</TD>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&order=returndate&limit=<!-- TMPL_VAR name="limit" -->"><b>ZWRÓCONO</b></a>
+	</TD>
+	<TD background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
+		<b>Tom</b>
 	</TD>
 </TR>
+<!-- TMPL_LOOP name="loop_reading" -->
 <TR VALIGN=TOP>
 	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=title&limit=<TMPL_VAR name="limit">"><b>TYTU�</b></a>
+ 		<!-- TMPL_VAR name="title" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&order=author&limit=<TMPL_VAR name="limit">"><b>AUTOR</b></a>
+ 		<!-- TMPL_VAR name="author" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<a href="readingrec.pl?bornum=<TMPL_VAR name="bornum">&limit=<TMPL_VAR name="limit">"><b>DATA</b></a>
+		<!-- TMPL_VAR name="date_due" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
-		<b>TOM</b>
-	</TD>
-</TR>
-<TMPL_LOOP name="loop_reading">
-<TR VALIGN=TOP>
-	<TD  bgcolor="white">
- 		<TMPL_VAR name="title">
+		<!-- TMPL_VAR name="returndate" -->&nbsp;
 	</TD>
 	<TD  bgcolor="white">
- 		<TMPL_VAR name="author">
+		<!-- TMPL_VAR name="volumeddesc" -->&nbsp;
 	</TD>
-	<TD  bgcolor="white">
-		<TMPL_VAR name="returndate">
-	</TD>
-	<TD  bgcolor="white">
-		<TMPL_VAR name="volumeddesc">
-	</TD>
-</TMPL_LOOP>
+<!-- /TMPL_LOOP -->
 </TABLE>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+
+<br>
+<a href="moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->">Powrót</a> do Danych Czytelnika
+
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 
 

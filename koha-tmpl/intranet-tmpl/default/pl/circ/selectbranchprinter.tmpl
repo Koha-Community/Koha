@@ -1,42 +1,42 @@
-<TMPL_INCLUDE Name="circulation-top.inc">
+<!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
-<h1>Cyrkulacja: Ustawienia wyboru drukarki i oddzia³u</h1><br>
+<h1>Cyrkulacja: Wybierz Ustawienia Drukarki i OddziaÅ‚u</h1><br>
 
 <center>
 <form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5 cellspacing=0>
-<tr><td colspan=2 bgcolor=<TMPL_VAR Name="headerbackgroundcolor"> align=center background=<TMPL_VAR Name="backgroundimage">>
-<font color=black><b>Proszê wybraæ drukarkê i oddzia³</b></font></td></tr>
+<tr><td colspan=2 bgcolor=<!-- TMPL_VAR Name="headerbackgroundcolor" --> align=center background=<!-- TMPL_VAR Name="backgroundimage" -->>
+<font color=black><b>Prosimy UstawiÄ‡ OddziaÅ‚ i DrukarkÄ™</b></font></td></tr>
 <tr><td>
 <!--branchselection-->
-<TMPL_IF Name="onebranch">
-Oddzia³: <TMPL_VAR Name="branchname"><br>
-<TMPL_ELSE>
+<!-- TMPL_IF Name="onebranch" -->
+OddziaÅ‚: <!-- TMPL_VAR Name="branchname" --><br>
+<!-- TMPL_ELSE -->
 	<select name=branch>
-	<TMPL_LOOP Name="branchloop">
-		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP Name="branchloop" -->
+		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
 	</select>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </td>
 <td>
 <!--printerselection-->
-<TMPL_IF Name="oneprinter">
-Drukarka: <TMPL_VAR Name="printername"><br>
-<TMPL_ELSE>
+<!-- TMPL_IF Name="oneprinter" -->
+Drukarka: <!-- TMPL_VAR Name="printername" --><br>
+<!-- TMPL_ELSE -->
 	<select name=printer>
-	<TMPL_LOOP Name="printerloop">
-		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP Name="printerloop" -->
+		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
 	</select>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </td></tr>
 </table>
 <input type="hidden" name="setcookies" value=1>
-<input type="submit" value="Prze¶lij" type="changesettings">
+<input value="PrzeÅ›lij" type="changesettings">
 </form>
 </center>
 
 
-<TMPL_INCLUDE Name="circulation-bottom.inc">
+<!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->
 
