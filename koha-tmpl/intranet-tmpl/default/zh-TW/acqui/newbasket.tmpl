@@ -1,0 +1,36 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+
+<H1><!-- TMPL_VAR name="name" --> 的購物籃 <!-- TMPL_VAR name="basket" --></H1><br />
+(Our Reference: <!-- TMPL_VAR name="entrydate" -->, #<!-- TMPL_VAR name="basket" -->, authorised by: <!-- TMPL_VAR name="user" -->)<br />
+電話：<!-- TMPL_VAR name="phone" -->，傳真：<!-- TMPL_VAR name="fax" --><br />
+<!-- TMPL_VAR name="address1" -->, <!-- TMPL_VAR name="address2" --><br />
+<!-- TMPL_VAR name="address3" -->, <!-- TMPL_VAR name="address4" --><br />
+<p>
+<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
+<input type=hidden name=id value="<!-- TMPL_VAR name="id" -->">
+<input type=hidden name=basket value="<!-- TMPL_VAR name="basket" -->">
+<b> 以關鍵字或題名查詢： </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
+
+</form>
+
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor="#ffdf61">
+		<td width="5%"><b>訂單</b></td>
+		<td width="10%"><b>ISBN</b></td>
+		<td width="30%"><b>題名</b></td>
+		<td width="20%"><b>著者</b></td>
+		<td width="8%"><b>數量</b></td>
+	</tr>
+	<!-- TMPL_LOOP name="books_loop" -->
+		<tr valign=top bgcolor=<!-- TMPL_VAR name="color" -->>
+			<td><!-- TMPL_VAR name="ordernumber" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="title" --></td>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="quantity" --></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->
+
+

@@ -1,29 +1,29 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-<h1><a href=<TMPL_VAR name="SCRIPT_NAME">>Main Menu</a></h1>
-<h2>Select a set of MARC records</h2>\n<ul>
-<TMPL_LOOP name="marc">
-	<li><a href=<TMPL_VAR name="SCRIPT_NAME">?file=<TMPL_VAR name="id">&menu=<TMPL_VAR name="menu">><TMPL_VAR name="name"></a></li>
-</TMPL_LOOP>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=z3950>Z39.50 Search</a>
-<li><a href=<TMPL_VAR name="SCRIPT_NAME">?menu=uploadmarc>Upload MARC Records</a>
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<h1><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->>主清單</a></h1>
+<h2>請選擇一組機讀格式記錄</h2>\n<ul>
+<!-- TMPL_LOOP name="marc" -->
+	<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?file=<!-- TMPL_VAR name="id" -->&menu=<!-- TMPL_VAR name="menu" -->><!-- TMPL_VAR name="name" --></a></li>
+<!-- /TMPL_LOOP -->
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Z39.50查詢</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>上載機讀格式記錄</a>
 </ul>
 </ul>
 <p>
 <table border=1 bgcolor=#dddddd>
 	<tr><th bgcolor=#bbbbbb colspan=2>
-		Upload a set of MARC records</th>
+		上載一組機讀格式記錄</th>
 	</tr>
 	<tr>
-		<td>Upload a set of MARC records:</td>
+		<td>上載一組機讀格式記錄：</td>
 		<td>
-			<form method="post" action="<TMPL_VAR name="SCRIPT_NAME">?menu=<TMPL_VAR name="menu">" enctype="multipart/form-data">
+			<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=<!-- TMPL_VAR name="menu" -->" enctype="multipart/form-data">
 			<input type="file" name="uploadmarc"/>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<input type=hidden name=menu value=<TMPL_VAR name="menu">
-			Name this set of MARC records:
+			<input type=hidden name=menu value="<!-- TMPL_VAR name="menu" -->">
+			這給這組機讀格式記錄起個名稱：
 		</td>
 		<td>
 			<input type=text name=name>
@@ -37,5 +37,5 @@
 </table>
 </form>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
 

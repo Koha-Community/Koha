@@ -1,44 +1,28 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>�n�X</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>�n�J</a> <span lang=mi>Koha</span></p>
-</TMPL_IF>
+<h1>讀者</h1><P>
 
-<FONT SIZE=6><em>�M��Ū��</em></FONT><P>
-
-
-<img src="/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1" 
-hspace=5 align=left BORDER=0>
 
 <table border=1 cellspacing=0 cellpadding=10 height="100" >
 <tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
-<b>�M��Ū��</B> 
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
+<b>讀者搜尋</B>
 </FONT>
 <INPUT TYPE="text" size=50 name=member >
-<BR>
-��ɮ��y�B�n�O�sŪ�̡B�ε��{����Ū�̧�s�ΧR���O���A�βγ��ѳo�ӷj�M�}�l�C<br>
-�b�W�C�Ů椺��JŪ�̩m�W�B�m�W���@�����B�ιϮ��ҽs���A�A���^����Y�i�C
+<p>續借書籍、登記新讀者、或給現有的讀者更新或刪除記錄，統統都由這個查詢開始。在上列空格內輸入讀者姓名、姓名的一部分、或圖書證編號，再按回車鍵即可。</p>
 </td></form><tr>
 </table>
- 
+
 <P>
-
-<img src="/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2" 
-hspace=5 align=left BORDER=0>
-
 
 <table border=1 cellspacing=0 cellpadding=10 height="100" >
 <tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><FONT SIZE=4>
-<b>�s��Ū�̰O��</B> 
+<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><FONT SIZE=4>
+<b>瀏覽讀者</B> 
 </FONT>
 </td></form><tr>
 <TR VALIGN=TOP>
-<TD><CENTER><B>
-<A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
+<TD><CENTER><B> <A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
 <A HREF="/cgi-bin/koha/member.pl?member=b">B</a> ||
 <A HREF="/cgi-bin/koha/member.pl?member=c">C</a> ||
 <A HREF="/cgi-bin/koha/member.pl?member=d">D</a> ||
@@ -69,4 +53,4 @@ hspace=5 align=left BORDER=0>
 </TD></TR></TABLE>
 
 <P>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

@@ -1,4 +1,4 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <script>
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,115 +38,139 @@ function Check(f) {
 	var _alertString="";
 	var alertString2;
 	if (f.itemtype.value.length==0) {
-		_alertString += "- itemtype missing\\n";
+		_alertString += "- Itemtype missing\n";
 	}
 	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "- description missing\\n";
+		_alertString += "- Description missing\n";
 	}
 	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "- loan length is not a number\\n";
+		_alertString += "- Loan length is not a number\n";
 	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "- rental charge is not a number\\n";
+		_alertString += "- Rental charge is not a number\n";
 	}
 	if (_alertString.length==0) {
 		document.Aform.submit();
 	} else {
-		alertString2 = "Form not submitted because of the following problem(s)\\n";
-		alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+		alertString2 = "Form not submitted because of the following problem(s)\n";
+		alertString2 += "------------------------------------------------------------------------------------\n\n";
 		alertString2 += _alertString;
 		alert(alertString2);
 	}
 }
 </SCRIPT>
-<TMPL_IF name="add_form">
-	<TMPL_IF name="itemtype">
-		<h1>§ó§ïÀ]ÂÃÃş§O</h1>
-	<TMPL_ELSE>
-		<h1>¥[¤@À]ÂÃÃş§O</h1>
-	</TMPL_IF>
-	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+<!-- TMPL_IF name="add_form" -->
+	<!-- TMPL_IF name="itemtype" -->
+		<h1>ä¿®æ”¹åœ–æ›¸è³‡æ–™é¡åˆ¥</h1>
+	<!-- TMPL_ELSE -->
+		<h1>æ–°å¢åœ–æ›¸è³‡æ–™é¡åˆ¥</h1>
+	<!-- /TMPL_IF -->
+	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>
 		<input type=hidden name=checked value=0>
 		<table>
-			<TMPL_IF name="itemtype">
-				<tr><td>À]ÂÃÃş§O</td><td><input type=hidden name=itemtype value=<TMPL_VAR name="itemtype">><TMPL_VAR name="itemtype"></td></tr>
-			<TMPL_ELSE>
-				<tr><td>À]ÂÃÃş§O</td><td><input type=text name=itemtype size=5 maxlength=3 onBlur="toUC(this)"></td></tr>
-			</TMPL_IF>
+			<!-- TMPL_IF name="itemtype" -->
+				<tr><td>åœ–æ›¸è³‡æ–™é¡åˆ¥</td><td><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></td></tr>
+			<!-- TMPL_ELSE -->
+				<tr><td>åœ–æ›¸è³‡æ–™é¡åˆ¥</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
+			<!-- /TMPL_IF -->
 			<tr>
-				<td>»¡©ú</td>
-				<td><input type=text name=description size=40 maxlength=80 value='<TMPL_VAR name="description">'>&nbsp;</td>
+				<td>èªªæ˜</td>
+				<td><input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
 			</tr>
 			<tr>
-				<td>¥i­É¦h¤[¡H¡]¥H¤é­p¡^</td>
-				<td><input type=text name=loanlength value='<TMPL_VAR name="loanlength">'></td>
+				<td>ä¸å¯å€Ÿå‡º</td>
+				<td>
+					<!-- TMPL_IF name="notforloan" -->
+						<input type=checkbox name=notforloan checked value=1>
+					<!-- TMPL_ELSE -->
+						<input type=checkbox name=notforloan value=1>
+					<!-- /TMPL_IF -->
+					é¸æ“‡ã€Œä¸å¯å€Ÿå‡ºã€ï¼Œé€™é¡åœ–æ›¸è³‡æ–™å°‡å…¨éƒ¨éƒ½ä¸å¯å€Ÿå‡ºï¼›å¦‚æœä¸é¸ï¼Œé€™é¡åœ–æ›¸è³‡æ–™å°‡å…¨éƒ¨å¯ä»¥å€Ÿå‡ºï¼Œä½†å€‹åˆ¥åœ–æ›¸è³‡æ–™å¯ä»¥åˆ†åˆ¥è¨­å®šæˆä¸å¯å€Ÿå‡ºã€‚
+				</td>
 			</tr>
 			<tr>
-				<td>¥i§_Äò­É¡H</td>
-				<td><input type=checkbox name=renewalsallowed <TMPL_IF name="renewalsallowed">checked</TMPL_IF> value=1></td>
+				<td>å€Ÿé–±æœŸé™</td>
+				<td>
+					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
+					åªé©ç”¨æ–¼å¯ä»¥å¤–å€Ÿä¹‹åœ–æ›¸è³‡æ–™
+				</td>
 			</tr>
 			<tr>
-				<td>¶O¥Î</td>
-				<td><input type=text name=rentalcharge value='<TMPL_VAR name="rentalcharge">'></td>
+				<td>å¯ä»¥çºŒå€Ÿ</td>
+				<td><input type=checkbox name=renewalsallowed <!-- TMPL_IF name="renewalsallowed" -->checked<!-- /TMPL_IF --> value=1></td>
+			</tr>
+			<tr>
+				<td>å€Ÿæ›¸è²»ç”¨</td>
+				<td><input type=text name=rentalcharge size=10 value='<!-- TMPL_VAR name="rentalcharge" -->'></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
-				<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
+				<td><input type=button value="å¥½ï¼" onclick='Check(this.form)'></td>
 			</tr>
 		</table>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="delete_confirm">
+<!-- TMPL_IF name="delete_confirm" -->
 	<TABLE bg="#99cc33">
 		<tr>
-			<th>À]ÂÃÃş§O</th>
-			<th><TMPL_VAR name="itemtype"></th>
+			<th>åœ–æ›¸è³‡æ–™é¡åˆ¥</th>
+			<th><!-- TMPL_VAR name="itemtype" --></th>
 		</tr>
-	<form action='<TMPL_VAR name="script_name">' method=post>
-		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<TMPL_VAR name="itemtype">'>
-	<tr><td>»¡©ú</td><td><TMPL_VAR name="description"></td></tr>
-	<tr><td>¥i­É¦h¤[</td><td><TMPL_IF name="loanlength"><TMPL_VAR name="loanlength"> ¤é<TMPL_ELSE>¤£¥i­É¥X</TMPL_IF></td></tr>
-	<tr><td>¥i§_Äò­É</td><td><TMPL_IF name="renewalsallowed">¥i¥HÄò­É<TMPL_ELSE>¤£¥iÄò­É</TMPL_IF></td></tr>
-	<tr><td>¶O¥Î</td><td><TMPL_VAR name="rentalcharge"></td></tr>
-	<TMPL_IF name="total">
-		<tr><td colspan=2 align=center><b>³oºØÀ]ÂÃÃş§O¦³¨t²Î¤º¤w¥X²{¤F <TMPL_VAR name="total"> ¦¸¡A¤£¥i§R°£¡C</b></td></tr>
-		<tr><td colspan=2></form><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=OK></form></td></tr>
-	<TMPL_ELSE>
-		<tr><td colspan=2 align=center>¯uªº­n§R°£¶Ü¡H</td></tr>
-		<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=NO></form></td></tr>
-	</TMPL_IF>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<!-- TMPL_VAR name="itemtype" -->'>
+	<tr><td>èªªæ˜</td><td><!-- TMPL_VAR name="description" --></td></tr>
+	<tr><td>å€Ÿé–±æœŸé™</td><td><!-- TMPL_VAR name="loanlength" --></td></tr>
+	<tr><td>çºŒå€Ÿ</td><td><!-- TMPL_IF name="renewalsallowed" -->æ‰¹å‡†<!-- TMPL_ELSE -->ä¸å¯<!-- /TMPL_IF --></td></tr>
+	<tr><td>å€Ÿæ›¸è²»ç”¨</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
+	<!-- TMPL_IF name="total" -->
+		<tr><td colspan=2 align=center><b>é€™å€‹è¨˜éŒ„ç›®å‰ç”¨äº† <!-- TMPL_VAR name="total" --> æ¬¡ï¼Œä¸å¯ç§»é™¤</b></td></tr>
+		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="å¥½ï¼"></form></td></tr>
+	<!-- TMPL_ELSE -->
+		<tr><td colspan=2 align=center>ç¢ºå®šè¦ç§»é™¤å—</td></tr>
+		<tr><td><input type=submit value="æ˜¯"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="å¦"></form></td></tr>
+	<!-- /TMPL_IF -->
 
 	</table>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_IF name="else">
+<!-- TMPL_IF name="else" -->
+<h1>åœ–æ›¸è³‡æ–™é¡åˆ¥ç®¡ç†</h1>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 	<tr>
-		<td background="/images/background-mem.gif"><b>½s½X</b></th>
-		<td background="/images/background-mem.gif"><b>»¡©ú</b></td>
-		<td background="/images/background-mem.gif" nowrap><b>¥i­É¦h¤[</b></td>
-		<td background="/images/background-mem.gif" nowrap><b>¥i§_Äò­É</b></td>
-		<td background="/images/background-mem.gif"><b>¶O¥Î</b></td>
-		<td background="/images/background-mem.gif">&nbsp;</td>
-		<td background="/images/background-mem.gif">&nbsp;</td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>ç·¨ç¢¼</b></th>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>èªªæ˜</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>å€Ÿé–±æœŸé™</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>å¯ä»¥çºŒå€Ÿ</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>è²»ç”¨</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">ä¿®æ”¹</td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">ç§»é™¤</td>
 	</tr>
-	<TMPL_LOOP name="loop">
+	<!-- TMPL_LOOP name="loop" -->
 		<tr>
-			<td><TMPL_VAR name="itemtype"></td>
-			<td><TMPL_VAR name="description"></td>
-			<td align=right nowrap><TMPL_IF name="loanlength"><TMPL_VAR name="loanlength"> ¤é<TMPL_ELSE>¤£¥i­É¥X</TMPL_IF></td>
-			<td><TMPL_IF name="renewalsallowed">¥i¥HÄò­É<TMPL_ELSE>¤£¥iÄò­É</TMPL_IF></td>
-			<td><TMPL_VAR name="rentalcharge"></td>
-			<td><a href="<TMPL_VAR name="script_name">?op=add_form&itemtype=<TMPL_VAR name="itemtype" escape="HTML">">§ó§ï</a></td>
-			<td><a href="<TMPL_VAR name="script_name">?op=delete_confirm&itemtype=<TMPL_VAR name="itemtype" escape="HTML">">§R°£</a></td>
+			<td><!-- TMPL_VAR name="itemtype" --></td>
+			<td><!-- TMPL_VAR name="description" --></td>
+			<td><!-- TMPL_VAR name="loanlength" --></td>
+			<td><!-- TMPL_IF name="renewalsallowed" -->æ˜¯<!-- TMPL_ELSE -->å¦<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR name="rentalcharge" --></td>
+			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 		</tr>
-	</TMPL_LOOP>
+	<!-- /TMPL_LOOP -->
 </table>
-<form action='<TMPL_VAR name="script_name">' method=post>
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 <input type=hidden name=op value=add_form>
-<input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44   ALT="¥[¤@·sÃş§O" BORDER=0 ></a>
+<br>
+<table width=40%>
+	<tr>
+		<td width="33%">
+			<input type=submit class="button" value="æ–°å¢åœ–æ›¸è³‡æ–™é¡åˆ¥" title="æ–°å¢åœ–æ›¸è³‡æ–™é¡åˆ¥" alt="æ–°å¢åœ–æ›¸è³‡æ–™é¡åˆ¥">
+		</td>
+		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="ä¸Šä¸€é " alt="ä¸Šä¸€é " border=0></a><!-- /TMPL_IF --></td>
+		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="ä¸‹ä¸€é " alt="ä¸‹ä¸€é " border=0></a><!-- /TMPL_IF --></td>
+	</tr>
+</table>
 </form>
-</TMPL_IF>
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

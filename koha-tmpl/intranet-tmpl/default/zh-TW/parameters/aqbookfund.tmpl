@@ -1,17 +1,17 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <!-- TMPL_IF name=else -->
-<h1>Bookfund admin</h1>
+<h1>書籍購置資金管理</h1>
 <form action=<!-- TMPL_VAR name=scriptname --> method=post>
-<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
+<input type=text name=searchfield value=""><input type=reset name=reset value="清空"></form>
 <!-- TMPL_IF name=search -->
-	<br>You Searched for <b><!-- TMPL_VAR name=searchfield --><b><p><br>
+	<br>您查詢 <b><!-- TMPL_VAR name=searchfield --></b><p><br>
 <!-- /TMPL_IF -->
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Book fund</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Name</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Edit</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Delete</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>書籍購置資金</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>名稱</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>修改</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>移除</b></td>
 	</tr>
 <!-- TMPL_LOOP name="bookfund" -->
 	<tr valign=top bgcolor="ffffcc">
@@ -22,8 +22,8 @@
 	</tr>
 	<tr valign=top bgcolor=#99cc33>
 		<td bgcolor="#FFFFFF">&nbsp;</td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Budget</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><a href="aqbudget.pl?op=add_form&bookfundid=<!-- TMPL_VAR name="bookfundid" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" ALT="Add budget" border=0></a></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>預算案</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><a href="aqbudget.pl?op=add_form&bookfundid=<!-- TMPL_VAR name="bookfundid" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" alt="新增預算" border=0></a></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"></td>
 	</tr>
 	<!-- TMPL_LOOP name="budget" -->
@@ -41,7 +41,7 @@
 </table>
 <form action='<!-- TMPL_VAR name=scriptname -->' method=post>
 	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<br><input type=submit class="button" value="Add Bookfund" title="Add Bookfund" ALT="Add Bookfund"><br>
+	<br><input type=submit class="button" value="新增書籍購置資金" title="新增書籍購置資金" alt="新增書籍購置資金"><br>
 	<br></form><br clear=all>
 <p> &nbsp; </p>
 <!-- /TMPL_IF -->
@@ -106,37 +106,37 @@
 <input type=hidden name=checked value=0>
 <table>
 <!-- TMPL_IF name="add_or_modify" -->
-<tr><td>Book fund</td><td><input type=hidden name=bookfundid value=<!-- TMPL_VAR name="bookfundid" -->><!-- TMPL_VAR name="bookfundid" --></td></tr>
+<tr><td>書籍購置資金</td><td><input type=hidden name=bookfundid value=<!-- TMPL_VAR name="bookfundid" -->><!-- TMPL_VAR name="bookfundid" --></td></tr>
 <!-- TMPL_ELSE -->
-<tr><td>Book fund</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
+<tr><td>書籍購置資金</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
 <!-- /TMPL_IF -->
-<tr><td>Name</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
+<tr><td>名稱</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td><input type=button value="好！" onclick='Check(this.form)'></td></tr>
 </table>
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_validate" -->
-Data recorded
+資料已寫入
 <form action='<!-- TMPL_VAR name="action" -->' method=post>
-<input type=submit value=OK>
+<input type=submit value="好！">
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
 <table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Book fund</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="bookfundid" --></b></td></tr>
+<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>書籍購置資金</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="bookfundid" --></b></td></tr>
 <form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<!-- TMPL_VAR name="bookfundid" -->'>
-<tr><td>Name</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
-<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NO></form></td></tr><br clear=all>
+<tr><td>名稱</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
+<tr><td colspan=2 align=center>確定要移除嗎</td></tr>
+<tr><td><input type=submit value="是"></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value="否"></form></td></tr><br clear=all>
 <p> &nbsp; </p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-Data deleted
+資料已移除
 <form action='<!-- TMPL_VAR name="action" -->' method=post>
-<input type=submit value=OK>
+<input type=submit value="好！">
 </form>
 <!-- /TMPL_IF -->
 

@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<p>
+Each box needs to be filled in with fine,time to start charging,charging cycle<br/>
+eg 1,7,7 = 1USD,EUR,etc fine, after 7 days, every 7 days</p>
+<p>Note : fines are calculated by the fines2.pl script, located in misc directory. Ask your administrator to put this script in crontab, after midnight, to have fines calculated every night
+</p>
+<form action=/cgi-bin/koha/admin/updatecharges.pl method=post>
+<table border=0>
+<TR align="center">
+	<th>&nbsp;</th><!-- TMPL_LOOP name="title" --><th><!-- TMPL_VAR name="in_title" --></th><!-- /TMPL_LOOP -->
+</TR>
+<!-- TMPL_LOOP name="row" -->
+	<TR align="center">
+		<th>
+			<!-- TMPL_VAR name="categorycode" -->
+		</th>
+		<!-- TMPL_LOOP name="cell" -->
+			<td bgcolor="<!-- TMPL_VAR name="toggle" -->">
+				<input name="<!-- TMPL_VAR name="inputname" -->" value="<!-- TMPL_VAR name="inputvalue" -->" size=6 maxlength=10>
+			</td>
+		<!-- /TMPL_LOOP -->
+	</TR>
+<!-- /TMPL_LOOP -->
+</table>
+<center><input type=submit value="好！"></center>
+</form>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

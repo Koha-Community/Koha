@@ -1,96 +1,104 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
-</TMPL_IF>
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<TMPL_IF name="add_form">
-<!-------------------------------------------------------------------------------------------------->
-	<H1><TMPL_VAR name="action"></H1>
-	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+<!-- TMPL_IF name="add_form" -->
+<!---------------------------------------------------------------------------->
+	<H1><!-- TMPL_VAR name="action" --></H1>
+	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
 	<tr>
-		<td>Ãş§O</td>
-		<td><TMPL_VAR name="category"></td>
+		<td>é¡åˆ¥</td>
+		<td><!-- TMPL_VAR name="category" --></td>
 	</tr>
 	<tr>
-		<td>®e³\­È</td>
-		<td><input type=text name="authorised_value" value='<TMPL_VAR name="authorised_value">'></td>
+		<td>å®¹è¨±å€¼</td>
+		<td><input type=text name="authorised_value" value='<!-- TMPL_VAR name="authorised_value" escape=HTML -->'></td>
 	</tr>
 	<tr>
 		<td>Lib</td>
-		<td><input type=text name="lib" value='<TMPL_VAR name="lib">'></td>
+		<td><input type=text name="lib" value='<!-- TMPL_VAR name="lib" -->'></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="id" value="<TMPL_VAR name="id">">
-			<INPUT type="submit" value='OK'></td>
+		<td><input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->">
+			<input type="submit" value="å¥½ï¼"></td>
 	</tr>
 	</table>
 	</form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
 
-<TMPL_IF name="delete_confirm">
-<!-------------------------------------------------------------------------------------------------->
+<!-- TMPL_IF name="delete_confirm" -->
+<!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="/images/background-mem.gif"><b>Variable</b></td>
-		<td background="/images/background-mem.gif"><b>»¡©ú</b></td>
-		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>è®Šæ•¸</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
-	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
-	<form action='<TMPL_VAR name="script_name">' method=post>
+	<tr><td>å€¼</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 		<input type=hidden name=op value=delete_confirmed>
-		<input type=hidden name=id value='<TMPL_VAR name="id">'>
-		<input type="hidden" name="searchfield" value="<TMPL_VAR name="searchfield">">
-	<tr><td colspan=2 align=center>¯uªº­n§R°£¶Ü¡H</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td>
-		<td><form action='<TMPL_VAR name="script_name">' method=post><input type=submit value=NO></form></td></tr>
-</TMPL_IF>
+		<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
+	<tr><td colspan=2 align=center>ç¢ºå®šè¦ç§»é™¤å—</td></tr>
+	<tr><td><input type=submit value="æ˜¯"></form></td>
+		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="å¦"></form></td></tr>
+<!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
-<TMPL_IF name="else">
-<font SIZE=6><em>³]©w®e³\­È</em></font>
+<!---------------------------------------------------------------------------->
+<!-- TMPL_IF name="else" -->
+<h1>å®¹è¨±å€¼ç®¡ç†</h1>
 <p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
-<p>When you define the MARC subfield structure, you can link a subfield to a authorised-value category. When the user ask for adding of modifying a biblio,
-the subfield is not entered through a free field, but though a list of authorised values</p>
+<p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds or modifies a biblio, the subfield is not entered through a free field, but though a list of authorised values.</p>
 <form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
-	<TMPL_VAR name="tab_list"><input type="submit" value="OK">   <a href="authorised_values.pl?op=add_form">¥t¶}·sÃş§O</a>
+	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="å¥½ï¼">   <a href="authorised_values.pl?op=add_form">æ–°é¡åˆ¥...</a>
 </form>
-<TMPL_VAR name="searchfield">
-<table border=0 cellspacing=0 cellpadding=2>
-<tr valign=top bgcolor="#99cc33">
-	<td background="/images/background-mem.gif"><b>Ãş§O</b></td>
-	<td background="/images/background-mem.gif"><b>®e³\­È</b></td>
-	<td background="/images/background-mem.gif"><b>»¡©ú</b></td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
-	<td background="/images/background-mem.gif">&nbsp;</td>
-<TMPL_LOOP name="loop">
-</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><TMPL_VAR name="category"></td>
-	<td><TMPL_VAR name="authorised_value"></td>
-	<td><TMPL_VAR name="lib"></td>
-	<td><a href="<TMPL_VAR name="edit">">§ó§ï</a></td>
-	<td><a href="<TMPL_VAR name="delete">">§R°£</a></td>
+<!-- TMPL_VAR name="searchfield" -->
+<table border=0 cellspacing=0 cellpadding=2 width="80%">
+<tr valign=top bgcolor=#99cc33>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>é¡åˆ¥</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>å®¹è¨±å€¼</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>ä¿®æ”¹</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>ç§»é™¤</b></td>
+<!-- TMPL_LOOP name="loop" -->
+</tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+	<td><!-- TMPL_VAR name="category" --></td>
+	<td><!-- TMPL_VAR name="authorised_value" --></td>
+	<td><!-- TMPL_VAR name="lib" --></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
-</TMPL_LOOP>
-<form action='<TMPL_VAR name="script_name">' method=post>
+<!-- /TMPL_LOOP -->
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 <input type=hidden name=op value=add_form>
 </table>
+
 <table width=40%>
 	<tr>
-		<td width=50%><TMPL_VAR name="previous"></td>
-		<td width=50%><TMPL_VAR name="next"></td>
+		<td width=50%>
+			<!-- TMPL_IF name="isprevpage" -->
+				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
+				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="ä¸Šä¸€é " alt="ä¸Šä¸€é " border=0>
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
+		<td width=50%>
+			<!-- TMPL_IF name="nextpage" -->
+				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
+					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="ä¸‹ä¸€é " alt="ä¸‹ä¸€é " border=0>
+				</a>
+			<!-- /TMPL_IF -->
+		</td>
 	</tr>
 </table>
-<form action='<TMPL_VAR name="script_name">' method=post>
+<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 <input type="hidden" name="op" value="add_form">
-<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ></a><br>
+<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
+<br><input type=submit class="button" value="æ–°å¢å®¹è¨±å€¼" title="æ–°å¢å®¹è¨±å€¼" alt="æ–°å¢å®¹è¨±å€¼"><br>
 </form>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

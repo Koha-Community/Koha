@@ -1,0 +1,115 @@
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+
+<h1>購置</h1><br>
+
+<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=1 >
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2>
+		<b>START, RECEIVE, MODIFY ANY ORDER</b>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>供應商名稱</TD>
+	<TD>
+		<form action="/cgi-bin/koha/acqui/order.pl" method=post>
+		<INPUT TYPE="text"  SIZE="25"   NAME="supplier">
+		</form>
+	</TD>
+</TR>
+</table>
+<TABLE width="40%" cellspacing=0 cellpadding=5 border=1 >
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2>
+		<b>收到期刊或修改期刊訂單</b>
+	</TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD>題名查詢</TD>
+	<TD>
+		<FORM ACTION="/cgi-bin/koha/acqui/acquire.pl" method=post>
+		<INPUT TYPE="text"  SIZE="25"   NAME="recieve">
+		</form>
+	</TD>
+</TR>
+</table>
+
+<br />
+
+<!-- currencies-->
+<TABLE align="left" cellspacing=0 cellpadding=5 border=1 >
+	<FORM ACTION="/cgi-bin/koha/currency.pl">
+	<input type=hidden name=type value=change>
+	<TR VALIGN=TOP>
+		<TD  bgcolor="ffdf61" colspan=2><b>匯率 </b></TD>
+	</TR>
+	<!-- TMPL_LOOP name="loop_currency" -->
+		<TR VALIGN=TOP>
+			<TD>
+				<!-- TMPL_VAR name="currency" -->
+			</td>
+			<td>
+				<INPUT TYPE="text"  SIZE="10"   NAME="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
+			</td>
+		</TR>
+	<!-- /TMPL_LOOP -->
+	<tr>
+		<td colspan=2 align="center"><input type=submit value="儲存"></TD>
+	</tr>
+	</form>
+</table>
+
+<!-- showbudget-->
+<TABLE  width="40%"  cellspacing=0 cellpadding=5 border=1 >
+<FORM ACTION="/cgi-bin/koha/search.pl">
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2><b>預算案及書籍購置資金</b></TD>
+</TR>
+<TR VALIGN=TOP>
+	<TD colspan=2>
+		<table cellspacing=0 cellpadding=2 border=1>
+			<tr>
+				<td><b>預算案</B></TD>
+				<TD><b> 總計</B></TD>
+				<TD><b>已用</B></TD>
+				<TD><b>已承擔</B></TD>
+				<TD><b>可用</B></TD>
+			</TR>
+			<!-- TMPL_LOOP name="loop_budget" -->
+				<tr>
+					<td><!-- TMPL_VAR name="bookfundname" --></TD>
+					<TD align=right><!-- TMPL_VAR name="budgetamount" --></TD>
+					<TD align=right><!-- TMPL_VAR name="spent" --></TD>
+					<TD align=right><!-- TMPL_VAR name="comtd" --></TD>
+					<TD align=right><!-- TMPL_VAR name="avail" --></TD>
+				</TR>
+			<!-- /TMPL_LOOP -->
+			<tr>
+				<td><b> 總計</b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="total" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totspent" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totcomtd" --></b></TD>
+				<TD align=right><b><!-- TMPL_VAR name="totavail" --></b></TD>
+			</TR>
+		</table>
+		<p>
+		Use your reload button to get the most recent figures. Committed figures are approximate only, as exchange rates will affect the amount actually paid.
+		</p>
+	</TD>
+</TR>
+</form>
+</table>
+
+<br />
+<TABLE cellspacing=0 cellpadding=5 border=1 >
+<TR VALIGN=TOP>
+	<TD  bgcolor="ffdf61" colspan=2>
+		<p><b>HELP Ordering:</b></p>
+		<ul>To start an acquisition, whether an order, local purchase or donation first search on the supplier, Add a new one if needed.</ul>
+		<ul>Then select a previous shopping basket or create a new one. Note the basket will be attached to the user you've logged to </ul>
+		<ul>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </ul>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and then click on "confirm basket".</p>
+	</td>
+</TR>
+</table>
+
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

@@ -1,42 +1,42 @@
-<TMPL_INCLUDE Name="circulation-top.inc">
+<!-- TMPL_INCLUDE Name="circulation-top.inc" -->
 
-<FONT SIZE=6><em>¬y³qªA°È¡G¿ï¾Ü¤ÀÀ]¤Î¥´¦L¾÷</em></FONT><br>
+<h1>æµé€šï¼šé¸æ“‡æ‰“å°æ©ŸåŠåˆ†é¤¨è¨­å®š</h1><br>
 
 <center>
 <form method=post action=/cgi-bin/koha/circ/circulation.pl>
 <table border=1 cellpadding=5 cellspacing=0>
-<tr><td colspan=2 bgcolor=<TMPL_VAR Name="headerbackgroundcolor"> align=center background=<TMPL_VAR Name="backgroundimage">>
-<font color=black><b>½Ğ¿ï¾Ü¤ÀÀ]¤Î¥´¦L¾÷</b></font></td></tr>
+<tr><td colspan=2 bgcolor=<!-- TMPL_VAR Name="headerbackgroundcolor" --> align=center background=<!-- TMPL_VAR Name="backgroundimage" -->>
+<font color=black><b>è«‹è¨­å®šåˆ†é¤¨åŠæ‰“å°æ©Ÿ</b></font></td></tr>
 <tr><td>
 <!--branchselection-->
-<TMPL_IF Name="onebranch">
-À]§O¡G<TMPL_VAR Name="branchname"><br>
-<TMPL_ELSE>
+<!-- TMPL_IF Name="onebranch" -->
+åˆ†é¤¨ï¼š<!-- TMPL_VAR Name="branchname" --><br>
+<!-- TMPL_ELSE -->
 	<select name=branch>
-	<TMPL_LOOP Name="branchloop">
-		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP Name="branchloop" -->
+		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
 	</select>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </td>
 <td>
 <!--printerselection-->
-<TMPL_IF Name="oneprinter">
-¥´¦L¾÷¡G<TMPL_VAR Name="printername"><br>
-<TMPL_ELSE>
+<!-- TMPL_IF Name="oneprinter" -->
+æ‰“å°æ©Ÿï¼š<!-- TMPL_VAR Name="printername" --><br>
+<!-- TMPL_ELSE -->
 	<select name=printer>
-	<TMPL_LOOP Name="printerloop">
-		<option value=<TMPL_VAR Name="value"><TMPL_IF Name="selected"> selected</TMPL_IF>><TMPL_VAR Name="name">
-	</TMPL_LOOP>
+	<!-- TMPL_LOOP Name="printerloop" -->
+		<option value=<!-- TMPL_VAR Name="value" --><!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+	<!-- /TMPL_LOOP -->
 	</select>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 </td></tr>
 </table>
 <input type="hidden" name="setcookies" value=1>
-<input type="submit" value="¦n¡I" type="changesettings">
+<input type="submit" value="Submit" type="changesettings">
 </form>
 </center>
 
 
-<TMPL_INCLUDE Name="circulation-bottom.inc">
+<!-- TMPL_INCLUDE Name="circulation-bottom.inc" -->
 

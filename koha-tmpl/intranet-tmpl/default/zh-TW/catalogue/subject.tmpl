@@ -1,0 +1,51 @@
+<!-- TMPL_IF NAME="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+
+<center>
+
+<table border=0 cellspacing=0 cellpadding=2>
+<!-- TMPL_IF NAME="opac" -->
+	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
+<!-- TMPL_ELSE -->
+	<tr background="/images/background-mem.gif">
+<!-- TMPL_ELSE -->
+		<th>主題</th>
+	</tr>
+<!-- TMPL_LOOP NAME=SEARCH_RESULTS -->
+	<tr>
+		<td>
+			<a href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject2 ESCAPE=HTML -->"><!-- TMPL_VAR NAME=subject --></a>
+		</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="opac" -->
+	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
+<!-- TMPL_ELSE -->
+	<tr background="/images/background-mem.gif">
+<!-- /TMPL_IF -->
+		<td colspan=4>
+			<table border=0 cellpadding=0 cellspacing=0 width=100%>
+			<tr>
+				<td align=left>
+					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">上一筆</a>
+				</td>
+				<td align=right>
+					<a href="search.pl?<!-- TMPL_LOOP name=FORMINPUTS --><!-- TMPL_VAR NAME=line -->&<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">下一筆</a>
+				</td>
+			</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<br>
+共<b><!-- TMPL_VAR NAME="numrecords" --></b>筆記錄中的第<b><!-- TMPL_VAR NAME="startfrom" --></b>至<b><!-- TMPL_VAR NAME="endat" --></b>項。
+<hr>
+
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->

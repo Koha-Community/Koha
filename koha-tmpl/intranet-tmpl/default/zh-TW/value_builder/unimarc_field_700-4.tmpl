@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>UNIMARC 欄 700-4 建立程序</title>
+</head>
+<body>
+<p>請選擇欄 700 $4 之值。此值在適當時將會自動在 700 $8 出現。</p>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>出版日期碼 </td><td><select name="f1" size="1">
+		<option value="075 - postface" <!-- TMPL_IF name="f1_075" -->SELECTED<!-- /TMPL_IF -->>書後語</option>
+			<option value="651 - dir. de publication" <!-- TMPL_IF name="f1_651" -->SELECTED<!-- /TMPL_IF -->>dir. de publication</option>
+			<option value="440 - illustrateur" <!-- TMPL_IF name="f1_440" -->SELECTED<!-- /TMPL_IF -->>繪圖</option>
+			<option value="080 - pr�face, notes" <!-- TMPL_IF name="f1_080" -->SELECTED<!-- /TMPL_IF -->>前言、註釋</option>
+			<option value="730 - traducteur" <!-- TMPL_IF name="f1_730" -->SELECTED<!-- /TMPL_IF -->>譯者</option>
+			</select>
+		</td>
+	</tr>
+	<tr><td colspan=2><input type="submit" value="好！"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		x = document.f_pop.f1.value.split(' - ');
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= x[0];
+		if (<!-- TMPL_VAR name="index2" -->>0) {
+			opener.document.f.field_value[<!-- TMPL_VAR name="index2" -->].value= x[1];
+		}
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>

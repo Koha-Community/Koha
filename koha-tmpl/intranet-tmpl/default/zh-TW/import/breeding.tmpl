@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<h1>機讀格式式購置系統</h1>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">匯入至Breeding Farm內</font></td>
+	</tr>
+</table>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>匯入結果：</p>
+<ul>
+	<p><!-- TMPL_VAR name="imported" --> 個記錄匯入</p>
+	<p><!-- TMPL_VAR name="alreadyindb" --> 個沒有被匯入，因為已經在資料庫內。</p>
+	<p><!-- TMPL_VAR name="alreadyinfarm" --> 個沒有被匯入，因為已經在Breeding Farm內。</p>
+	<p><!-- TMPL_VAR name="notmarcrecord" --> 個沒有被匯入，因為要是不像機讀格式，就是沒有ISBN或ISSN！</p>
+	<p>解析了 <!-- TMPL_VAR name="total" --> 個記錄</p>
+	<p><a href="/cgi-bin/koha/admin-home.pl">返回</a>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Select a file to import into the breeding farm. It will be parsed, and for each ISBN found, a new baby will be created in the breeding farm.</li>
+	<li>If an ISBN already exists in the breeding farm, you can choose whether to ignore the new one or overwrite the old one.</li>
+	<li>您可以給這次的匯入命名。命名可能會有用；譬如是當您建立一個書目的時候可以提醒一下建議的機讀格式的數據從何而來！</li>
+	<li>Of course, if the ISBN already exists in the active DB, the biblio will be ignored.</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table cellpadding="3" border=0>
+	<tr valign="top">
+		<td>匯入哪個檔案：</td>
+		<td>
+			<input type="file" name="uploadmarc"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>這次匯入的名稱：</td>
+		<td>
+			<input type="text" name="filename"/><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>Character encoding (MARC21 or UNIMARC)</td>
+		<td>
+			<select name="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select><br/>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td>若其國際標準書號已在Breeding Farm內： </td>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked>Ignore this one, keep the existing one<br/>
+			<input type="radio" name="overwrite_biblio" value="1">用這個覆蓋現有的</td>
+	</tr>
+	<tr valign="top">
+		<td>&nbsp; </td>
+		<td><input type="submit" value="匯入"></td>
+	</tr>
+
+</table>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

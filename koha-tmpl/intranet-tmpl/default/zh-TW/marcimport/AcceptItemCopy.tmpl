@@ -1,27 +1,27 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <center>
-<TMPL_IF name="BARCODE_EXISTS">
-	<font color=red>Barcode '<TMPL_VAR name="barcode">' has already been assigned.</font><p>
-</TMPL_IF>
-<TMPL_IF name="ITEM_ERROR">
-	<font color=red>Error : <TMPL_VAR name="error"></font><p>
-</TMPL_IF>
-<TMPL_IF name="ITEM_CREATED">
+<!-- TMPL_IF name="BARCODE_EXISTS" -->
+	<font color=red>條碼 <b><!-- TMPL_VAR name="barcode" --></b> 已在使用中。</font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="ITEM_ERROR" -->
+	<font color=red>錯誤：<!-- TMPL_VAR name="error" --></font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="ITEM_CREATED" -->
 	<table border=1 align=center cellpadding=10>
 		<tr><td bgcolor=yellow>
-			Item added with barcode <TMPL_VAR name="barcode">
+			已新增條碼為 <!-- TMPL_VAR name="barcode" --> 的圖書資料
 		</td></tr>
 	</table>
-</TMPL_IF>
-<h1>Main Menu</h1>
+<!-- /TMPL_IF -->
+<h1>主清單</h1>
 <ul>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Z39.50 Search</a>
+<li><a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Z39.50查詢</a>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>Upload MARC Records</a>
+<li><a href=$ENV{'SCRIPT_NAME'}?menu=uploadmarc>上載機讀格式記錄</a>
 </ul>
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
