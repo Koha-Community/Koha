@@ -103,6 +103,9 @@ if ($op eq 'add_form') {
 	while ((my $field) = $sth2->fetchrow_array) {
 		push @kohafields, "items.".$field;
 	}
+	
+	# other subfields
+	push @kohafields, "additionalauthors.author";
 	# build authorised value list
 	$sth2->finish;
 	$sth2 = $dbh->prepare("select distinct category from authorised_values");
