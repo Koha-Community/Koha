@@ -108,7 +108,12 @@
 						<td><!-- TMPL_VAR NAME="notes" --></td>
 						<td><!-- TMPL_VAR NAME="date" --></td>
 						<td><!-- TMPL_IF Name="wait" -->
-							Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+						<!-- TMPL_IF NAME="atdestination" -->
+				<strong>Waiting</strong> at <!-- TMPL_VAR Name="wbrcode" -->
+				<!-- TMPL_ELSE -->
+				In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="wbrcode" -->
+				<!-- /TMPL_IF -->
+		<input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
 							<!-- TMPL_ELSE -->
 								<select name="pickup">
 									<!-- TMPL_LOOP Name="branchloop" -->
