@@ -684,7 +684,8 @@ sub issuebook {
 					} elsif ($responses->{3} eq 'Y') {
 						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
 					}
-				}
+
+}
 			} elsif ($restype eq "Reserved") {
 				# The item is on reserve for someone else.
 				my ($resborrower, $flags)=getpatroninformation($env, $resbor,0);
@@ -694,6 +695,11 @@ sub issuebook {
 					$questionnumber=5;
 					$question="Reserved for $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}) since $res->{'reservedate'} \nAllow issue?";
 					$defaultanswer='N';
+					if ($responses->{6} eq 'Y') {
+					   my $tobrcd = ReserveWaiting($res->{'itemnumber'}, $res->{'borrowernumber'});
+					   transferbook($tobrcd,$barcode, 1);
+					   $message = "Item should now be waiting at $branchname";
+                                        }
 					last SWITCH;
 				} elsif ($responses->{5} eq 'N') {
 					if ($responses->{6} eq '') {
