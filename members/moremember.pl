@@ -71,6 +71,10 @@ $data->{'expiry'} = format_date($data->{'expiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
 $data->{'IS_ADULT'} = ($data->{'categorycode'} ne 'I');
 
+if($data->{'debarred'} || $data->{'gonenoaddress'} || $data->{'lost'}){
+	$template->param(flagged =>1);
+}
+
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 
 $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
