@@ -280,7 +280,7 @@ system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
 
-if (-e "/root/docs") {
+if (-e "/root/docs/manual") {
     print "Copying docs folder from /root/docs...";
     system("cp -r /root/docs/* $rootdir/docs/");
 } else {

@@ -3,12 +3,16 @@
 use diagnostics;
 use strict; # please develop with the strict pragma
 
+
 if ($<) {
     print "\n\nYou must run koha.upgrade as root.\n\n";
     exit;
 }
 
+my $input;
+
 my %configfile;
+
 open (KC, "/etc/koha.conf");
 while (<KC>) {
  chomp;
@@ -28,6 +32,7 @@ while (<KC>) {
 my $intranetdir=$configfile{'intranetdir'};
 my $opacdir=$configfile{'opacdir'};
 my $kohaversion=$configfile{'kohaversion'};
+my $kohalogdir=$configfile{'kohalogdir'};
 my $database=$configfile{'database'};
 my $hostname=$configfile{'hostname'};
 my $user=$configfile{'user'};
@@ -117,7 +122,7 @@ my $date= sprintf "%4d-%02d-%02d_%02d:%02d:%02d", $year, $month, $day,$hr,$min,$
 
 open (MD, "$mysqldir/bin/mysqldump --user=$user --password=$pass --host=$hostname $database|");
 
-open BF, ">$backupdir/Koha.backup_$date";
+(open BF, ">$backupdir/Koha.backup_$date") || (die "Error opening up backup file $backupdir/Koha.backup_$date: $!\n");
 
 my $itemcounter=0;
 my $bibliocounter=0;
@@ -296,7 +301,6 @@ information is necessary in order to set the access privileges correctly on
 files using the "User" directive.
 |;
     print "What is your Apache user? ";
-    my $input;
     chomp($input = <STDIN>);
 
     if ($input) {
@@ -324,6 +328,74 @@ system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 system("chown -R root.$httpduser $opacdir");
 system("chown -R root.$httpduser $intranetdir");
 
+# LAUNCH SCRIPT
+print "Modifying Z39.50 daemon launch script...\n";
+my $newfile='';
+open (L, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh");
+while (<L>) {
+    if (/^RunAsUser=/) {
+	$newfile.="RunAsUser=$httpduser\n";
+    } elsif (/^KohaZ3950Dir=/) {
+	$newfile.="KohaZ3950Dir=$intranetdir/scripts/z3950daemon\n";
+    } else {
+	$newfile.=$_;
+    }
+}
+close L;
+system("mv $intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh $intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh.orig");
+open L, ">$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
+print L $newfile;
+close L;
+
+unless ($kohalogdir && -e $kohalogdir) {
+    $kohalogdir='/var/log/koha';
+    print "\n\nDirectory for logging by Z39.50 daemon [$kohalogdir]: ";
+    chomp($input = <STDIN>);
+    if ($input) {
+	$kohalogdir=$input;
+    }
+}
+
+unless (-e "$kohalogdir") {
+    my $result = mkdir 0770, "$kohalogdir"; 
+    if ($result==0) {
+        my @dirs = split(m#/#, $kohalogdir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+    }
+}
+
+# SHELL SCRIPT
+print "Modifying Z39.50 daemon wrapper script...\n";
+$newfile='';
+open (S, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh");
+while (<S>) {
+    if (/^KohaModuleDir=/) {
+	$newfile.="KohaModuleDir=$intranetdir/modules\n";
+    } elsif (/^KohaZ3950Dir=/) {
+	$newfile.="KohaZ3950Dir=$intranetdir/scripts/z3950daemon\n";
+    } elsif (/^LogDir=/) {
+	$newfile.="LogDir=$kohalogdir\n";
+    } else {
+	$newfile.=$_;
+    }
+}
+close S;
+
+system("mv $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh.orig");
+open S, ">$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
+print S $newfile;
+close S;
+chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
+chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
+chmod 0750, "$intranetdir/scripts/z3950daemon/processz3950queue";
+chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 
 open (KC, "/etc/koha.conf");
@@ -339,6 +411,9 @@ while (<KC>) {
     } elsif (/^\s*kohaversion\s*=/) {
 	$kccontents.="kohaversion=$newversion\n";
 	$kc->{'kohaversion'}=1;
+    } elsif (/^\s*kohalogdir\s*=/) {
+	$kccontents.="kohalogdir=$kohalogdir\n";
+	$kc->{'kohalogdir'}=1;
     } elsif (/^\s*intranetdir\s*=/) {
 	$kccontents.="intranetdir=$intranetdir\n";
 	$kc->{'intranetdir'}=1;
@@ -364,6 +439,9 @@ unless (defined($kc->{'intranetdir'})) {
 }
 unless (defined($kc->{'opacdir'})) {
     $kccontents.="opacdir=$opacdir\n";
+}
+unless (defined($kc->{'kohalogdir'})) {
+    $kccontents.="kohalogdir=$kohalogdir\n";
 }
 
 

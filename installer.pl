@@ -327,6 +327,7 @@ pass=$pass
 includes=$kohadir/htdocs/includes
 intranetdir=$kohadir
 opacdir=$opacdir
+kohalogdir=$kohalogdir
 kohaversion=$kohaversion
 httpduser=$httpduser
 EOP
@@ -584,6 +585,33 @@ EOP
     print "Successfully updated Apache Configuration file.\n";
 }
 
+print qq|
+
+SETTING UP Z39.50 DAEMON
+========================
+|;
+
+my $kohalogdir='/var/log/koha';
+print "Directory for logging by Z39.50 daemon [$kohalogdir]: ";
+chomp($input = <STDIN>);
+if ($input) {
+    $kohalogdir=$input;
+}
+
+unless (-e "$kohalogdir") {
+    my $result = mkdir 0770, "$kohalogdir"; 
+    if ($result==0) {
+        my @dirs = split(m#/#, $kohalogdir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+    }
+}
+
 #
 # Setup the modules directory
 #
@@ -815,32 +843,6 @@ Press <ENTER> to continue...
 }
 
 
-print qq|
-
-SETTING UP Z39.50 DAEMON
-========================
-|;
-
-my $kohalogdir='/var/log/koha';
-print "Directory for logging by Z39.50 daemon [$kohalogdir]: ";
-chomp($input = <STDIN>);
-if ($input) {
-    $kohalogdir=$input;
-}
-
-unless (-e "$kohalogdir") {
-    my $result = mkdir 0770, "$kohalogdir"; 
-    if ($result==0) {
-        my @dirs = split(m#/#, $kohalogdir);
-	my $checkdir='';
-	foreach (@dirs) {
-	    $checkdir.="$_/";
-	    unless (-e "$checkdir") {
-		mkdir($checkdir, 0775);
-	    }
-	}
-    }
-}
 chmod 0770, $kohalogdir;
 chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
 
