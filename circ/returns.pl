@@ -8,6 +8,7 @@ use CGI;
 use C4::Circulation::Circ2;
 use C4::Search;
 use C4::Output;
+use C4::Print;
 use C4::Reserves2;
 
 my %env;
@@ -27,8 +28,6 @@ my $printer = $query->param("printer");
 
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
-
-my $request=$query->param('request');
 
 
 #
@@ -65,31 +64,36 @@ foreach ($query->param) {
 
 # Collect a few messages here...
 my $messagetext='';
+my $reservetext='';
 
 ############
 # Deal with the requests....
-if ($request eq "KillWaiting") {
+if ($query->param('resbarcode')) {
     my $item = $query->param('itemnumber');
     my $borrnum = $query->param('borrowernumber');
-    CancelReserve(0, $item, $borrnum);
-    $messagetext .= "Reserve Cancelled<br>";
-}
-if ($request eq "SetWaiting") {
-    my $item = $query->param('itemnumber');
-    my $borrnum = $query->param('borrowernumber');
-    my $barcode2 = $query->param('barcode2');
+    my $resbarcode = $query->param('resbarcode');
     my $tobranchcd = ReserveWaiting($item, $borrnum);
-    my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $barcode2, 1);
-    $messagetext .= "Item should now be waiting at branch: <b>$branches->{$tobranchcd}->{'branchname'}</b><br>";
-}
-if ($request eq 'KillReserved'){
-    my $biblio = $query->param('biblionumber');
-    my $borrnum = $query->param('borrowernumber');
-    warn "In Kill Reserved";
-    CancelReserve($biblio, 0, $borrnum);
-    $messagetext .= "Reserve Cancelled<br>";
-}
+    my $branchname = $branches->{$tobranchcd}->{'branchname'};
+    my ($borr) = getpatroninformation(\%env, $borrnum);
+    my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
+    my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
 
+    if ($tobranchcd ne $branch) {
+	my ($transfered, $messages, $iteminfo) = transferbook($tobranchcd, $resbarcode, 1);
+	$reservetext .= <<"EOF";
+<font color='red' size='+2'>Item marked Waiting:</font><br>
+    Item needs to be transfered to <b>$branchname</b> <br>
+to be picked up by $name ($number).
+<center><form method=post action='returns.pl'>
+$ritext
+<input type=hidden name=barcode value=0>
+<input type=submit value="OK">
+</form></center>
+EOF
+    }
+    my ($iteminfo) = getiteminformation(\%env, $item);
+    printreserve(\%env, $branchname, $borr, $iteminfo);
+}
 
 
 my $iteminformation;
@@ -167,10 +171,8 @@ $ritext
 EOF
 
 
-my $reservefoundtext;
 if ($messages->{'ResFound'}) {
     my $res = $messages->{'ResFound'};
-    my $reservetext;
     my $branchname = $branches->{$res->{'branchcode'}}->{'branchname'};
     my ($borr) = getpatroninformation(\%env, $res->{'borrowernumber'}, 0);
     my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
@@ -178,64 +180,34 @@ if ($messages->{'ResFound'}) {
     if ($res->{'ResFound'} eq "Waiting") {
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Item marked Waiting:</font><br>
-    Item is marked waiting at <b>$branchname</b> for $name ($number).<br>
-<table cellpadding=5 cellspacing=0>
-<tr><td>Cancel reservation: </td>
-<td>
-<form method=post action='returns.pl'>
-$ritext
-<input type=hidden name=itemnumber value=$res->{'itemnumber'}>
-<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
-<input type=hidden name=request value='KillWaiting'>
-<input type=hidden name=barcode value=0>
-<input type=submit value="Cancel">
-</form>
-</td></tr>
-<tr><td>Back to returns: </td>
-<td>
-<form method=post action='returns.pl'>
+    Item is marked waiting at <b>$branchname</b> for $name ($number).
+<center><form method=post action='returns.pl'>
 $ritext
 <input type=hidden name=barcode value=0>
 <input type=submit value="OK">
-</form>
-</td></tr></table>
+</form></center>
 EOF
     } 
     if ($res->{'ResFound'} eq "Reserved") {
 	$reservetext = <<"EOF";
 <font color='red' size='+2'>Reserved found:</font> for $name ($number).
 <table cellpadding=5 cellspacing=0>
-<tr><td>Set reserve to waiting and transfer book to <b>$branchname </b>: </td>
-<td>
+<tr><td valign="top">Change status to waiting and print slip?: </td>
+<td valign="top">
 <form method=post action='returns.pl'>
 $ritext
 <input type=hidden name=itemnumber value=$res->{'itemnumber'}>
 <input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
-<input type=hidden name=barcode2 value=$barcode>
-<input type=hidden name=request value='SetWaiting'>
-<input type=submit value="Waiting">
+<input type=hidden name=resbarcode value=$barcode>
+<input type=submit value="Print">
 </form>
 </td></tr>
-<tr><td>Cancel reservation: </td>
-<td>
-<form method=post action='returns.pl'>
-$ritext
-<input type=hidden name=biblionumber value=$res->{'biblionumber'}>
-<input type=hidden name=borrowernumber value=$res->{'borrowernumber'}>
-<input type=hidden name=barcode value=0>
-<input type=hidden name=request value='KillReserved'>
-<input type=submit value="Cancel">
-</form>
-</td></tr><tr><td>Back to returns: </td>
-<td>
-<form method=post action='returns.pl'>
-<input type=hidden name=barcode value=0>
-$ritext
-<input type=submit value="OK">
-</form>
-</td></tr></table>
+</table>
 EOF
     }
+}
+my $reservefoundtext;
+if ($reservetext) {
     $reservefoundtext = <<"EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Reserve Found</font></th></tr>
