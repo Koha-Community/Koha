@@ -59,16 +59,8 @@
 						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF --></td>
 					<td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></td>
 <td><!-- TMPL_VAR NAME="classification" --></td>
-				<td>
-					<!-- TMPL_VAR name="totitem" -->
-				</td>
-				<td><!-- TMPL_VAR name="locationstring" -->
-				<!-- 	<!-- TMPL_LOOP name="CN" -->
-						<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF -->
-					<!-- /TMPL_LOOP --> -->
-				</td>
-			</tr>
-		<!-- /TMPL_LOOP -->
+				<td><!-- TMPL_VAR name="totitem" -->
+				</td><td><!-- TMPL_LOOP name="CN" --><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" -->	<!-- TMPL_IF name="date_due" -->	<i>(On Loan until <!-- TMPL_VAR name="date_due" -->)</i><!-- TMPL_ELSE --><!-- TMPL_IF name="itemcallnumber" --> (<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td></tr><!-- /TMPL_LOOP -->
 	</table>
 </form>
 
