@@ -309,6 +309,7 @@ else {
 	}
 
 	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
+				-id => 'itemtype',
 				-values   => \@itemtype,
  				-labels   => \%itemtypes,
 				-size     => 1,
@@ -326,6 +327,7 @@ else {
 		$select_branches{$branches[$i]->{'branchcode'}} = $branches[$i]->{'branchname'};
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
+				-id => 'branch',
 				-values   => \@select_branch,
 				-labels   => \%select_branches,
 				-size     => 1,
