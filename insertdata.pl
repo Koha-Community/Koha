@@ -9,9 +9,15 @@ use C4::Database;
 use C4::Input;
 use C4::Search;
 use Date::Manip;
+use C4::Auth;
 use strict;
 
 my $input= new CGI;
+
+my $flagsrequired;
+$flagsrequired->{borrower}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 #print $input->header;
 #print $input->dump;
 

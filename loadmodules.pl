@@ -8,7 +8,13 @@ use C4::Acquisitions;
 use C4::Biblio;
 use C4::Search;
 use CGI;
+use C4::Auth;
 my $input=new CGI;
+
+my $flagsrequired;
+#$flagsrequired->{borrower}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
 
 my $module=$input->param('module');
 

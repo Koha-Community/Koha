@@ -7,8 +7,15 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Database;
+use C4::Auth;
 
 my $input = new CGI;
+
+my $flagsrequired;
+$flagsrequired->{circulation}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
+
 print $input->header;
 my $type=$input->param('type');
 print startpage();

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to delete items
+#script to delete borrowers
 #written 2/5/00
 #by chris@katipo.co.nz
 
@@ -12,8 +12,17 @@ use C4::Output;
 use C4::Database;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
+use C4::Auth;
+
 
 my $input = new CGI;
+
+my $flagsrequired;
+$flagsrequired->{borrower}=1;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
+
+
 #print $input->header;
 my $member=$input->param('member');
 my %env;
