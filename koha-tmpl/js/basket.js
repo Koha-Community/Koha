@@ -280,9 +280,15 @@ function quit() {
 }
 
 
-function formAddress() {
+function sendBasket() {
+	var nameCookie = "bib_list";
+	var valCookie = readCookie(nameCookie);
+	var strCookie = nameCookie + "=" + valCookie;
+
+	var loc = CGIBIN + "opac-sendbasket.pl?" + strCookie;
+
 	var optWin="dependant=yes,scrollbars=no,resizable=no,height=300,width=400,top=50,left=100";
-	var win_form = open(BIB + "formAddress.html","win_form",optWin);
+	var win_form = open(loc,"win_form",optWin);
 }
 
 

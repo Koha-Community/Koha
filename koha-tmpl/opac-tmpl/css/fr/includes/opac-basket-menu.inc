@@ -5,7 +5,7 @@
 		<span class="basketspacer">&nbsp;</span>
 		<A href='javascript:delSelRecords()' class="menu">Effacer la sélection</A>
 		<span class="basketspacer">&nbsp;</span>
-		<A href='javascript:formAddress()' class="menu">Envoyer</A>
+		<A href='javascript:sendBasket()' class="menu">Envoyer</A>
 		<span class="basketspacer">&nbsp;</span>
 		<A href='javascript:printBasket()' class="menu">Imprimer</A>
 		<span class="basketspacer">&nbsp;</span>
