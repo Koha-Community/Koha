@@ -1585,8 +1585,9 @@ sub bibdata {
 	$sth   = $dbh->prepare("Select * from additionalauthors where biblionumber = ?");
 	$sth->execute($bibnum);
 	while (my $dat = $sth->fetchrow_hashref){
-		$data->{'additionalauthors'} .= "$dat->{'author'}, ";
+		$data->{'additionalauthors'} .= "$dat->{'author'} - ";
 	} # while
+	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
 	chop $data->{'additionalauthors'};
 	$sth->finish;
