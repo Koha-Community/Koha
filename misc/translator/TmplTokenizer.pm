@@ -1119,7 +1119,7 @@ evoke any certain sensible data type.
 =item S
 
 Specifies a text input field (<INPUT TYPE=TEXT>).
-This use of the o conversion specifier is somewhat reasonable,
+This use of the S conversion specifier is somewhat reasonable,
 since text input fields contain values of undeterminable type,
 which can be treated as strings.
 
