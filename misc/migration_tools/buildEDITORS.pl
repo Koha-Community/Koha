@@ -104,7 +104,7 @@ while (my ($bibid) = $sth->fetchrow) {
 	$counter++;
 	print ".";
 	my $timeneeded = gettimeofday - $starttime;
-	print "$counter in $timeneeded s\n" unless ($counter % 50);
+	print "$counter in $timeneeded s\n" unless ($counter % 100);
 	
 	my $field = $record->field('210');
 	my $editor;
@@ -114,7 +114,7 @@ while (my ($bibid) = $sth->fetchrow) {
 	my $collection;
 	$collection=$field->subfield('a') if $field;
 	
-	print "WARNING : editor empty for ".$record->as_formatted unless $editor and !$verbose;
+# 	print "WARNING : editor empty for ".$record->as_formatted unless $editor and !$verbose;
 
 	$hash{$seg1.$seg2}->{editors} = $editor unless ($hash{$seg1.$seg2}->{editors});
 	$hash{$seg1.$seg2}->{collections}->{$collection}++ if $collection;
