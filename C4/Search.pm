@@ -287,6 +287,10 @@ sub KeywordSearch {
         ($dewey) && ($dewey.=" $subclass") ;                      
         $sth->finish;                                             
 	$data2->{'dewey'}=$dewey;
+	if ($env->{itemcount}) {
+	    my ($count, $lcount, $nacount, $fcount, $scount, $lostcount, $mending, $transit, $ocount) = itemcount($env, $data2->{'biblionumber'}, 'intra');
+	    $data2->{'itemcount'}=$count;
+	}
 	$res2[$i]=$data2;
 #	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
         $i++;
