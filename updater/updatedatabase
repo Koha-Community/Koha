@@ -568,6 +568,15 @@ my %tabledata = (
             explanation => 'ldap info. The ldap will be used in dn : uid=xxx, <ldapinfos>',
 	    type		=> 'free'
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'printcirculationslips',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '0',
+            explanation => 'if set to 1, print circulation slips. If set to 0, don\'t',
+	    type		=> 'free'
+        },
     ],
 
 );
@@ -1037,6 +1046,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.76  2004/05/03 09:32:25  tipaul
+# adding printcirculationsplit parameter (already existed, but was not in systempref by defaul)
+#
 # Revision 1.75  2004/04/14 19:49:00  tipaul
 # seealso field set to 255 chars
 #
