@@ -800,6 +800,9 @@ $dbh->do("ALTER TABLE `items` CHANGE `barcode` `barcode` VARCHAR( 20 )") unless 
 # changing z3950daemon field to NULL in marc_breeding
 $dbh->do("ALTER TABLE `marc_breeding` CHANGE `z3950random` `z3950random` VARCHAR( 40 )");
 
+# making borrowernumber an auto_increment field
+$dbh->do("ALTER TABLE `borrowers` CHANGE `borrowernumber` `borrowernumber` INTEGER auto_increment");
+
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
 
@@ -919,6 +922,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.64  2003/10/23 20:33:53  rangi
+# Making the borrowenumber an auto_increment field
+#
 # Revision 1.63  2003/10/20 16:13:01  slef
 # Omitted annotation added. Closes: 624
 #
