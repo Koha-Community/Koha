@@ -639,18 +639,17 @@ sub subsearch {
 sub ItemInfo {
     my ($env,$biblionumber,$type) = @_;
     my $dbh   = &C4Connect;
-    my $query = "Select * from items, biblio, biblioitems, branches
-where (items.biblioitemnumber = biblioitems.biblioitemnumber)
-and biblioitems.biblionumber = biblio.biblionumber
-and biblio.biblionumber = '$biblionumber'
-and branches.branchcode = items.holdingbranch";
-
+    my $query = "SELECT * FROM items, biblio, biblioitems
+                  WHERE items.biblionumber = '$biblionumber'
+                    AND biblioitems.biblioitemnumber = items.biblioitemnumber
+                    AND biblio.biblionumber = items.biblionumber";
   if ($type ne 'intra'){
     $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
     or items.itemlost is NULL)
     and (wthdrawn <> 1 or wthdrawn is NULL)";
   }
   $query .= " order by items.dateaccessioned desc";
+    warn $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $i=0;
@@ -675,13 +674,21 @@ and branches.branchcode = items.holdingbranch";
     }
     if ($datedue eq ''){
        $datedue="Available";
-       my ($rescount,$reserves)=Findgroupreserve($data->{'biblioitemnumber'},$biblionumber);
-
-       if ($rescount >0){                                
-          $datedue='Request';
+       my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
+       if ($restype){                                
+          $datedue=$restype;
        }
     }
     $isth->finish;
+#get branch information.....
+    my $bquery = "SELECT * FROM branches
+                          WHERE branchcode = '$data->{'holdingbranch'}'";
+    my $bsth=$dbh->prepare($bquery);
+    $bsth->execute;
+    if (my $bdata=$bsth->fetchrow_hashref){
+	$data->{'branchname'} = $bdata->{'branchname'};
+    }
+
     my $class = $data->{'classification'};
     my $dewey = $data->{'dewey'};
     $dewey =~ s/0+$//;
