@@ -388,7 +388,8 @@ sub catalogsearch {
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
 			$lineCN{date_due} = format_date($date_due);
-			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan});
+			$lineCN{notforloan} = $notforloanstatus{$line->{notforloan}} if ($line->{notforloan}); # setting not forloan if itemtype is not for loan
+			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan}); # setting not forloan it this item is not for loan
 			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
 			push @CNresults,\%lineCN;
 			$totalitems++;
