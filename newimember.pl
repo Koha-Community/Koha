@@ -1,12 +1,15 @@
 #!/usr/bin/perl
+# Note: This file now uses standard 8-space tabs
 
 # $Id$
 
-#script to print confirmation screen, then if accepted calls itself to insert data
+#script to print confirmation screen,
+#then if accepted calls itself to insert data
 #modified 2002/12/16 by hdl@ifrance.com : Templating
+#the "parent" is imemberentry.pl
 
 
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2000-2003 Katipo Communications
 #
 # This file is part of Koha.
 #
@@ -26,6 +29,9 @@
 use strict;
 use C4::Output;
 use C4::Input;
+use C4::Auth;
+use C4::Interface::CGI::Output;
+use C4::Members;
 use CGI;
 use Date::Manip;
 use HTML::Template;
@@ -36,57 +42,70 @@ my $input = new CGI;
 #or insert data
 my $insert=$input->param('insert');
 
-my $template=gettemplate("newimember.tmpl");
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	template_name => "newimember.tmpl",
+	query => $input,
+	type => "intranet",
+	authnotrequired => 0,
+	flagsrequired => {borrowers => 1},
+	debug => 1,
+  });
+
 #get rest of data
 my %data;
 my @names=$input->param;
 foreach my $key (@names){
   $data{$key}=$input->param($key);
 }
+
+# FIXME: $ok means "not ok", but $valid really means "valid"
 my $ok=0;
 
 my $string="The following compulsary fields have been left blank. Please push the back button
 and try again<p>";
-if ($data{'cardnumber_institution'} eq ''){
+if ($data{'cardnumber_institution'} !~ /\S/){
   $string.="Cardnumber<br>";
   $ok=1;
 }
-if ($data{'institution_name'} eq ''){
+if ($data{'institution_name'} !~ /\S/){
   $string.="Institution Name<br>";
   $ok=1;
 }
-if ($data{'address'} eq ''){
+if ($data{'address'} !~ /\S/){
   $string.="Postal Address<br>";
   $ok=1;
 }
-if ($data{'city'} eq ''){
+if ($data{'city'} !~ /\S/){
   $string.="City<br>";
   $ok=1;
 }
-if ($data{'contactname'} eq ''){
+if ($data{'contactname'} !~ /\S/){
   $string.="Contact Name";
   $ok=1;
 }
-#print $input->Dump;
-#print $string;
-#print startmenu('member');
 
 $template->param( missingloop => ($ok==1));
 $template->param( string => $string);
 if ($ok !=1) {
-	my $valid=checkdigit(\%env,$data{"cardnumber_institution"});
-	$template->param( invalid => ($valid !=1));
-	if (valid==1){
-		my @inputs;
-		while (my ($key, $value) = each %data) {
-			$value=~ s/\"/%22/g;
-			my %line;
-			$line{'key'}=$key;
-			$line{'value'}=$value;
-			push(@inputs, \%line);
-			}
-		$template->param(inputsloop => \@inputs);
-  }
-}
-print "Content-Type: text/html\n\n", $template->output;
+    $data{'cardnumber_institution'} = C4::Members::fixup_cardnumber
+	    ($data{'cardnumber_institution'});
 
+    my $valid=checkdigit(\%env,$data{"cardnumber_institution"});
+
+    $template->param( invalid => ($valid !=1));
+
+    if ($valid) {
+	my @inputs;
+	while (my ($key, $value) = each %data) {
+	    push(@inputs, { 'key'	=> $key,
+			    'value'	=> CGI::escapeHTML($value) });
+	}
+	$template->param(inputsloop => \@inputs);
+    }
+}
+output_html_with_http_headers $input, $cookie, $template->output;
+
+
+# Local Variables:
+# tab-width: 8
+# End:

@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# NOTE: This file uses standard 8-space tabs
+#       DO NOT SET TAB SIZE TO 4
 
 # $Id$
 
@@ -30,6 +32,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
+use C4::Members;
 use C4::Koha;
 use HTML::Template;
 
@@ -69,50 +72,7 @@ if ($delete){
     $template->param( updtype => 'M');
   }
 
-  my $cardnumber=$data->{'cardnumber'};
-  my $autonumber_members = C4::Context->boolean_preference("autoMemberNum") || 0;
-		# Find out whether member numbers should be generated
-		# automatically. Should be either "1" or something else.
-		# Defaults to "0", which is interpreted as "no".
-  # FIXME
-  # This logic should probably be moved out of the presentation code.
-  # Not tonight though.
-  #
-  if ($cardnumber eq '' && $autonumber_members) {
-    my $dbh = C4::Context->dbh;
-    my $query="select max(substring(borrowers.cardnumber,2,7)) from borrowers";
-    my $sth=$dbh->prepare($query);
-    $sth->execute;
-    my $data=$sth->fetchrow_hashref;
-    $cardnumber=$data->{'max(substring(borrowers.cardnumber,2,7))'};
-    $sth->finish;
-    # purpose: generate checksum'd member numbers.
-    # We'll assume we just got the max value of digits 2-8 of member #'s from the database and our job is to
-    # increment that by one, determine the 1st and 9th digits and return the full string.
-    my @weightings = (8,4,6,3,5,2,1);
-    my $sum;
-    my $i = 0;
-    if (! $cardnumber) { 			# If DB has no values, start at 1000000
-      $cardnumber = 1000000;
-    } else {
-      $cardnumber = $cardnumber + 1;		# FIXME - $cardnumber++;
-    }
-
-    while ($i <8) {			# step from char 1 to 7.
-      my $temp1 = $weightings[$i];	# read weightings, left to right, 1 char at a time
-      my $temp2 = substr($cardnumber,$i,1);	# sequence left to right, 1 char at a time
-  #print "$temp2<br>";
-      $sum += $temp1*$temp2;	# mult each char 1-7 by its corresponding weighting
-      $i++;				# increment counter
-    }
-    my $rem = ($sum%11);			# remainder of sum/11 (eg. 9999999/11, remainder=2)
-    if ($rem == 10) {			# if remainder is 10, use X instead
-      $rem = "X";
-    }
-    $cardnumber="V$cardnumber$rem";
-  } else {
-    $cardnumber=$data->{'cardnumber'};
-  }
+  my $cardnumber=C4::Members::fixup_cardnumber($data->{'cardnumber'});
 
   if ($data->{'sex'} eq 'F'){
     $template->param(female => 1);
@@ -246,3 +206,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 }
+
+# Local Variables:
+# tab-width: 8
+# End:
