@@ -1,0 +1,52 @@
+Notes on making non-en versions of the images with the same look as the en ones
+
+Fonts and adjustments:
+The en images use artificially-compressed versions of Helvetica;
+the ratio of the compression is not consistent among different images
+
+koha.gif	Adobe Helvetica Bold 12px 82%
+		Century Sclbk L Bold 15px [substitute; correct font not found]
+		Century Sclbk L Italic 15px [substitute; correct font not found]
+heading-*	Adobe Helvetica 24px 84%
+inside-*	Adobe Helvetica 26px 88.29%
+menu-*		Adobe Helvetica Bold 14px 81.58%
+		[Must resize the *canvas* & leave 12px margin-right]
+search-button	Adobe Helvetica 24px 82%
+		Adobe Helvetica 18px 91%
+
+For other images, to determine the ratio of the artificial compression:
+
+- Guess the correct font (guess Helvetica for sans-serif)
+- Using the text tool, type the English text
+- Guess the font size, repeating guess until the text you type is the same
+  height as the original English text
+- Measure the width of the original English text
+- Using the transform tool, determine the width of the text you typed
+- Based on the above 2 measurements, determine the ratio of the artificial
+  compression
+- Delete the English text you typed, and replace it with a translation
+- Using the transform tool, artificially compress your translated text
+- Write down the information you find (font name, variant, and ratio of
+  compression) in the layer name and perhaps also here
+
+To create the gif files:
+
+- If there are supposed to be transparent areas, but need to use a solid
+  background to prevent colour problems with converting to index mode:
+  - Flatten image
+  - Select all, Copy
+  - Add alpha channel, Add layer mask
+  - Paste (in layer mask), Anchor layer
+  - Image|Color|Invert
+  - Image|Color|Threshold| 1-255
+  - Apply layer mask
+  - Save as gif
+
+- If there are no trasparent areas:
+  - Flatten image
+  - Save as .gif
+
+- If there are transparent areas:
+  - Merge visible layers
+  - Delete all invisible layers (to avoid problems converting to index mode)
+  - Save as gif

@@ -31,7 +31,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
         <td align=right><a href="/cat/" 		onMouseOver="document.mouseover.src='/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 
 	src="../images/menu-search.gif" 
-	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
+	width=90 height=30 alt="Rechercher" hspace=0 vspace=0 border=0 name="menu-search"></a>
 	
 <!--	<a href="/members/"
 	onMouseOver="document.mouseover.src='/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-login.gif" 
@@ -39,11 +39,11 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 -->
 	<a href="/join.html"
 	onMouseOver="document.mouseover.src='/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-join.gif" 
-	width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
+	width=78 height=30 alt="S'inscrire" hspace=0 vspace=0 border=0 name="menu-join"></a>
 
 	<a href="/index.html" 
 	onMouseOver="document.mouseover.src='/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-home.gif" 
-	width=60 height=30 alt="Home" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
+	width=68 height=30 alt="Accueil" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
         
         </TR>
 
