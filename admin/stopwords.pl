@@ -167,10 +167,11 @@ printend
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $query = "replace stopwords (word) values (";
-	$query.= $dbh->quote($input->param('word')).")";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
+	my @tab = split / |,/, $input->param('word');
+	my $sth=$dbh->prepare("replace stopwords (word) values (?)");
+	foreach my $insert_value (@tab) {
+		$sth->execute($insert_value);
+	}
 	$sth->finish;
 	print "data recorded";
 	print "<form action='$script_name' method=post>";
