@@ -108,7 +108,12 @@ if ($op eq 'add_form') {
 			$toggle="white";
 	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab[]',
-					-values=>['','0','1','2','3','4','5','6','7','8','9','items'],
+					-values=>['','0','1','2','3','4','5','6','7','8','9','10'],
+					-labels => {'' =>'','0'=>'0','1'=>'1',
+									'2' =>'2','3'=>'3','4'=>'4',
+									'5' =>'5','6'=>'6','7'=>'7',
+									'8' =>'8','9'=>'9','10'=>'items (10)',
+									},
 					-default=>$data->{'tab'},
 					-size=>1,
 					-multiple=>0,
@@ -131,7 +136,7 @@ if ($op eq 'add_form') {
 	# add an empty line for add if needed
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab[]',
-					-values=>['','0','1','2','3','4','5','6','7','8','9','items'],
+					-values=>['','0','1','2','3','4','5','6','7','8','9','items (10)'],
 					-default=>"",
 					-size=>1,
 					-multiple=>0,
@@ -141,7 +146,12 @@ if ($op eq 'add_form') {
 		$row_data{libopac} = "";
 		$row_data{repeatable} = CGI::checkbox('repeatable[]','',1,'');
 		$row_data{mandatory} = CGI::checkbox('mandatory[]','',1,'');
-		$row_data{kohafield} = '';
+		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield[]',
+					-values=> \@kohafields,
+					-default=> "",
+					-size=>1,
+					-multiple=>0,
+					);
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 
@@ -162,7 +172,6 @@ if ($op eq 'add_form') {
 	my @mandatory	= $input->param('mandatory[]');
 	my @kohafield		= $input->param('kohafield[]');
 	my @tab				= $input->param('tab[]');
-	warn "taille : $#tagsubfield";
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
@@ -184,7 +193,7 @@ if ($op eq 'add_form') {
 		}
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield\"></html>";
 	exit;
 
 													# END $OP eq ADD_VALIDATE
@@ -198,6 +207,9 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							tagsubfield => $tagsubfield,
+							delete_link => $script_name,
+							tagfield      =>$tagfield,
+							tagsubfield => $tagsubfield,
 							);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -207,6 +219,9 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare($reqdel);
 	$sth->execute;
 	$sth->finish;
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield\"></html>";
+	exit;
+	$template->param(tagfield => $tagfield);
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
@@ -228,7 +243,7 @@ if ($op eq 'add_form') {
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{tab} = $results->[$i]{'tab'};
-		$row_data{delete} = "$script_name?op=delete_confirm&tagfield=$tagfield&tagsubfield=".$results->[$i]{'tagfield'};
+		$row_data{delete} = "$script_name?op=delete_confirm&tagfield=$tagfield&tagsubfield=".$results->[$i]{'tagsubfield'};
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
@@ -240,7 +255,7 @@ if ($op eq 'add_form') {
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
+		$template->param(next => "<a href=$script_name?offset=".$nextpage.'Next &gt;&gt;</a>');
 	}
 } #---- END $OP eq DEFAULT
 
