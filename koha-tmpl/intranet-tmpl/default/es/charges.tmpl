@@ -1,0 +1,32 @@
+<HTML>
+
+<TMPL_VAR NAME=startmenuissue>
+
+<p>
+Cada cambo debe ser rellenado con la multa, el momento de comienzo del cargo y el ciclo de cargo<br>
+Por ejemplo: 1,7,7 = 1 &euro de multa, tras 7 días, cada 7 días
+
+<table>
+  <tr bgcolor="white">
+    <TMPL_LOOP NAME=firstrowloop>
+      <td><TMPL_VAR NAME=description></td>
+    </TMPL_LOOP>
+  </tr>
+  <form action=/cgi-bin/koha/updatecharges.pl method=post>
+  <TMPL_LOOP NAME=tablebodyloop>
+    <tr bgcolor="white">
+      <td><TMPL_VAR NAME=description></td>
+      <TMPL_LOOP NAME=rowloop>
+        <td><input type=text name="<TMPL_VAR NAME=name>" value="<TMPL_VAR NAME=value>" size=6></td>
+      </TMPL_LOOP>
+    </tr>
+  </TMPL_LOOP>
+</table>
+
+<input type=submit>
+</form>
+
+<TMPL_VAR NAME=endmenuissue>
+
+</body>
+</HTML>
