@@ -143,7 +143,7 @@ command:
 
 perl -MCPAN -e 'install Net::Z3950'
 
-Press the <ENTER> key to continue: |;
+Press the <ENTER> key to continue: |;	#'
 
 $messages->{'CheckingPerlModules'}->{en} = heading('PERL & MODULES') . qq|
 Checking perl modules ...
@@ -179,14 +179,14 @@ $messages->{'GetOpacDir'}->{en} = heading('OPAC DIRECTORY') . qq|
 Please supply the directory you want Koha to store its OPAC files in.  This
 directory will be auto-created for you if it doesn't exist.
 
-OPAC Directory [%s]: |;
+OPAC Directory [%s]: |;	#'
 
 $messages->{'GetIntranetDir'}->{en} =
    heading('INTRANET/LIBRARIANS DIRECTORY') . qq|
 Please supply the directory you want Koha to store its Intranet/Librarians
 files in.  This directory will be auto-created for you if it doesn't exist.
 
-Intranet Directory [%s]: |;
+Intranet Directory [%s]: |;	#'
 
 $messages->{'GetKohaLogDir'}->{en} = heading('KOHA LOG DIRECTORY') . qq|
 Specify a log directory where any Koha daemons can create log files.
@@ -483,6 +483,7 @@ if a fourth argument is specified and is nonzero, this
 screen-clearing is not done.
 
 =cut
+#'
 
 sub showmessage {
     my $message=shift;
@@ -1194,7 +1195,7 @@ This is going to be phased out very soon. However, setting this up can provide
 an extra layer of security before the new authentication system is completely
 in place.
 
-Would you like to do this ([Y]/N): |;
+Would you like to do this ([Y]/N): |;	#'
 
 $messages->{'BasicAuthUsername'}->{en}="Please enter a userid for intranet access [%s]: ";
 $messages->{'BasicAuthPassword'}->{en}="Please enter a password for %s: ";
@@ -1303,7 +1304,7 @@ $messages->{'MysqlRootPassword'}->{en} =
 To allow us to create the koha database please supply your
 mysql server's root user password:
 
-Enter MySQL root user password: |;
+Enter MySQL root user password: |;	#'
 
 $messages->{'InvalidMysqlRootPassword'}->{en}="Invalid Password.  Please try again.";
 
@@ -1317,7 +1318,7 @@ $messages->{'CreatingDatabaseError'}->{en} =
 Couldn't connect to the MySQL server for the reason given above.
 This is a serious problem, the database will not get installed.
 
-Press <ENTER> to continue: |;
+Press <ENTER> to continue: |;	#'
 
 $messages->{'SampleData'}->{en} = heading('SAMPLE DATA') . qq|
 If you are installing Koha for evaluation purposes,  I have a batch of sample
@@ -1326,7 +1327,7 @@ data that you can install now.
 If you are installing Koha with the intention of populating it with your own
 data, you probably don't want this sample data installed.
 
-Would you like to install the sample data? Y/[N]: |;
+Would you like to install the sample data? Y/[N]: |;	#'
 
 $messages->{'SampleDataInstalled'}->{en} =
    heading('SAMPLE DATA INSTALLED') . qq|
@@ -1386,6 +1387,7 @@ The file mysqladmin should be in bin/mysqladmin under the directory that you
 provide here.
 
 EOP
+#'
 	}
     }
 
@@ -1575,6 +1577,7 @@ Couldn't rename file at $etcdir. Must have write capability.
 
 Press Enter to continue.
 EOF
+#'
 }
 
 
