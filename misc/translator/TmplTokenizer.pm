@@ -403,9 +403,12 @@ sub blank_p ($) {
 }
 
 sub trim ($) {
-    my($s) = @_;
-    $s =~ /^(\s|\&nbsp$re_end_entity)*(.*)(\s|\&nbsp$re_end_entity)*$/os;
-    return wantarray? ($2, $1, $3): $2;
+    my($s0) = @_;
+    my $l0 = length $s0;
+    my $s = $s0;
+    $s =~ s/^(\s|\&nbsp$re_end_entity)+//os; my $l1 = $l0 - length $s;
+    $s =~ s/(\s|\&nbsp$re_end_entity)+$//os; my $l2 = $l0 - $l1 - length $s;
+    return wantarray? (substr($s0, 0, $l1), $s, substr($s0, $l0 - $l2)): $s;
 }
 
 ###############################################################################
