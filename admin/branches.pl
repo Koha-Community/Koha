@@ -365,18 +365,13 @@ sub setbranchinfo {
 # sets the data from the editbranch form, and writes to the database...
     my ($data) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (";
-    my $tmp;
-    $tmp = $data->{'branchcode'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchname'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchaddress1'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchaddress2'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchaddress3'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchphone'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchfax'}; $query.= $dbh->quote($tmp).",";
-    $tmp = $data->{'branchemail'}; $query.= $dbh->quote($tmp).")";
+    my $query = "replace branches (branchcode,branchname,branchaddress1,branchaddress2,branchaddress3,branchphone,branchfax,branchemail) values (?,?,?,?,?,?,?,?)";
     my $sth=$dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($data->{'branchcode'}, $data->{'branchname'},
+	    $data->{'branchaddress1'}, $data->{'branchaddress2'},
+	    $data->{'branchaddress3'}, $data->{'branchphone'},
+	    $data->{'branchfax'}, $data->{'branchemail'});
+
     $sth->finish;
 # sort out the categories....
     my @checkedcats;
