@@ -1136,13 +1136,18 @@ sub MARCmarc2kohaOneField {
     my $subfield;
     ( $tagfield, $subfield ) = MARCfind_marc_from_kohafield("",$kohatable.".".$kohafield,$frameworkcode);
     foreach my $field ( $record->field($tagfield) ) {
-        if ( $field->subfield($subfield) ) {
-            if ( $result->{$kohafield} ) {
-                $result->{$kohafield} .= " | " . $field->subfield($subfield);
-            }
-            else {
-                $result->{$kohafield} = $field->subfield($subfield);
-            }
+        if ( $field->subfields ) {
+            my @subfields = $field->subfields();
+            foreach my $subfieldcount ( 0 .. $#subfields ) {
+				if ($subfields[$subfieldcount][0] eq $subfield) {
+					if ( $result->{$kohafield} ) {
+						$result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
+					}
+					else {
+						$result->{$kohafield} = $subfields[$subfieldcount][1];
+					}
+				}
+			}
         }
     }
 # 	warn "OneField for $kohatable.$kohafield and $frameworkcode=> $tagfield, $subfield";
@@ -1304,8 +1309,13 @@ sub NEWmodbiblio {
 	my @subtitlefields = $record->field($tagfield);
 	foreach my $subtitlefield (@subtitlefields) {
 		my @subtitlesubfields = $subtitlefield->subfield($tagsubfield);
+		# delete & create subtitle again because OLDmodsubtitle can't handle new subtitles
+		# between 2 modifs
+		$dbh->do("delete from bibliosubtitle where biblionumber=$oldbiblionumber");
 		foreach my $subfieldcount (0..$#subtitlesubfields) {
-			OLDmodsubtitle($dbh,$oldbiblionumber,$subtitlesubfields[$subfieldcount]);
+			foreach my $subtit(split /\||#/,$subtitlesubfields[$subfieldcount]) {
+				OLDnewsubtitle($dbh,$oldbiblionumber,$subtit);
+			}
 		}
 	}
 	($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"bibliosubject.subject",$frameworkcode);
@@ -2626,6 +2636,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.3  2005/02/10 13:14:36  tipaul
+# * multiple main authors are now correctly handled in simple (non-MARC) view
+#
 # Revision 1.115.2.2  2005/01/11 16:02:35  tipaul
 # in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
 #
