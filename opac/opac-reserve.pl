@@ -224,8 +224,6 @@ if ($query->param('item_types_selected')) {
 }
 # check that you can actually make the reserve.
 
-
-
 $template->param(BIBLIOITEMS => \@data);
 
 
