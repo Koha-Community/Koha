@@ -12,16 +12,18 @@
 		<th>Mandatory</th>
 		<th>Koha field</th>
 		<th>Tab</th>
+		<th>Authorised value</th>
 	</tr>
 	<TMPL_LOOP name="loop">
 		<tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
 		<td><TMPL_VAR name="tagfield"> - <TMPL_VAR name="tagsubfield"></td>
-		<td><input type=text name="liblibrarian[]" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80><br/>
-				<input type=text name="libopac[]" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td>
+		<td><input type=text name="liblibrarian" value='<TMPL_VAR name="liblibrarian">' size=40 maxlength=80><br/>
+				<input type=text name="libopac" value='<TMPL_VAR name="libopac">' size=40 maxlength=80></td>
 		<td><TMPL_VAR name="repeatable"></td>
 		<td><TMPL_VAR name="mandatory"></td>
 		<td><TMPL_VAR name="kohafield"></td>
 		<td><TMPL_VAR name="tab"></td>
+		<td><TMPL_VAR name="authorised_value"></td>
 	</TMPL_LOOP>
 	</table>
 	<INPUT type=submit value='OK'>
@@ -60,11 +62,12 @@ ensure that both DB are synchronized, thus you can change from MARC to KOHA inte
 <table border=0 cellspacing=0 cellpadding=5>
 <tr valign=top bgcolor=#99cc33>
 	<td background="/images/background-mem.gif" width=5%><b>Subfield</b></td>
-	<td background="/images/background-mem.gif" width=42%><b>Lib</b></td>
+	<td background="/images/background-mem.gif" width=30%><b>Lib</b></td>
 	<td background="/images/background-mem.gif" width=10%><b>koha field</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
 	<td background="/images/background-mem.gif" width=8%><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="/images/background-mem.gif" width=8%><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
 	<td background="/images/background-mem.gif" width=8%>
 <TMPL_LOOP name="loop">
 <tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
@@ -74,6 +77,7 @@ ensure that both DB are synchronized, thus you can change from MARC to KOHA inte
 	<td><TMPL_IF name="repeatable">Yes<TMPL_ELSE>No</TMPL_IF></td>
 	<td><TMPL_IF name="mandatory">Yes<TMPL_ELSE>No</TMPL_IF></td>
 	<td><TMPL_VAR name="tab"></td>
+	<td><TMPL_VAR name="authorised_value"></td>
 	<td><a href="<TMPL_VAR name="delete">">delete</a></td>
 </tr>
 </TMPL_LOOP>

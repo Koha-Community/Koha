@@ -82,7 +82,7 @@ my $template;
 my $tagslib = &MARCgettagslib($dbh,1);
 
 my $record = MARCgetbiblio($dbh,$bibid) if ($oldbiblionumber);
-#my $record = MARCfindbreeding($dbh,$isbn) if ($isbn);
+my $record = MARCfindbreeding($dbh,$isbn) if ($isbn);
 
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "addbiblio") {
@@ -104,15 +104,15 @@ if ($op eq "addbiblio") {
 			next if ($subfield eq 'lib');
 			next if ($subfield eq 'tab');
 			next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
+			$i++;
 			my %subfield_data;
 			$subfield_data{tag}=$tag;
 			$subfield_data{subfield}=$subfield;
 			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			$subfield_data{marc_value}="<input type=\"text\" name=\"value[]\">";
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
 			push(@loop_data, \%subfield_data);
-			$i++
 		}
 	}
 	$template = gettemplate("acqui.simple/addbiblio2.tmpl");
@@ -184,7 +184,7 @@ if ($op eq "addbiblio") {
 			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			$subfield_data{marc_value}="<input type=\"text\" name=\"value[]\">";
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
 			push(@loop_data, \%subfield_data);
 			$i++
 		}
@@ -201,6 +201,8 @@ if ($op eq "addbiblio") {
 	# fill arrays
 	my @loop_data =();
 	my $tag;
+	my $i=0;
+	my $authorised_values_sth = $dbh->prepare("select authorised_value from authorised_values where category=?");
 	# loop through each tab 0 through 9
 	for (my $tabloop = 0; $tabloop<=9;$tabloop++) {
 	# loop through each tag
@@ -217,16 +219,46 @@ if ($op eq "addbiblio") {
 				my %subfield_data;
 				$subfield_data{tag}=$tag;
 				$subfield_data{subfield}=$subfield;
-				$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
+				$subfield_data{marc_lib}="<DIV id=\"error$i\">".$tagslib->{$tag}->{$subfield}->{lib}."</div>";
 				$subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 				$subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
 				if ($record ne -1) {
-					my $value ="";# &find_value($tag,$subfield,$record);
-					$subfield_data{marc_value}="<input type=\"text\" name=\"value[]\" value=\"$value\">";
+					my $value = find_value($tag,$subfield,$record);
+					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+						$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+						my @authorised_values;
+						push @authorised_values, "" unless ($subfield_data{mandatory});
+						while ((my $value) = $authorised_values_sth->fetchrow_array) {
+							push @authorised_values, $value;
+						}
+						$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
+																					-values=> \@authorised_values,
+																					-default=>"$value",
+																					-size=>1,
+																					-multiple=>0,
+																					);
+					} else {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\">";
+					}
 				} else {
-					$subfield_data{marc_value}="<input type=\"text\" name=\"value[]\">";
+					if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+						$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+						my @authorised_values;
+						push @authorised_values, "" unless ($subfield_data{mandatory});
+						while ((my $value) = $authorised_values_sth->fetchrow_array) {
+							push @authorised_values, $value;
+						}
+						$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
+																					-values=> \@authorised_values,
+																					-size=>1,
+																					-multiple=>0,
+																					);
+					} else {
+						$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+					}
 				}
 				push(@subfields_data, \%subfield_data);
+				$i++;
 			}
 			if ($#subfields_data>=0) {
 				my %tag_data;
@@ -251,7 +283,7 @@ if ($op eq "addbiblio") {
 			$subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
 			$subfield_data{marc_mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
 			$subfield_data{marc_repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-			$subfield_data{marc_value}="<input type=\"hidden\" name=\"value[]\">";
+			$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\">";
 			push(@loop_data, \%subfield_data);
 			$i++
 		}

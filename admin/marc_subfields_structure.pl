@@ -31,7 +31,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab from marc_subfield_structure where (tagfield like \"$searchstring%\") order by tagfield";
+	my $query="Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab, authorised_value from marc_subfield_structure where (tagfield like \"$searchstring%\") order by tagfield";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -50,7 +50,7 @@ my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
 my $pkfield="tagfield";
-my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab from marc_subfield_structure where tagfield='$tagfield'";
+my $reqsel="select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value from marc_subfield_structure where tagfield='$tagfield'";
 my $reqdel="delete from marc_subfield_structure where tagfield='$tagfield' and tagsubfield='$tagsubfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
@@ -75,7 +75,7 @@ $template->param(script_name => $script_name,
 if ($op eq 'add_form') {
 	my $data;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value from marc_subfield_structure where tagfield='$tagfield'"); # and tagsubfield='$tagsubfield'");
 	$sth->execute;
 	# builds kohafield tables
 	my @kohafields;
@@ -95,11 +95,21 @@ if ($op eq 'add_form') {
 	while ((my $field) = $sth2->fetchrow_array) {
 		push @kohafields, "items.".$field;
 	}
+	# buiild authorised value list
+	$sth2->finish;
+	$sth2 = $dbh->prepare("select distinct category from authorised_values");
+	$sth2->execute;
+	my @authorised_values;
+	push @authorised_values,"";
+	while ((my $category) = $sth2->fetchrow_array) {
+		push @authorised_values, $category;
+	}
 	$template->param(action => "Edit subfields",
 							tagfield => "<input type=hidden name=tagfield value='$tagfield'>$tagfield",
 							);
 	my @loop_data = ();
 	my $toggle="white";
+	my $i=0;
 	while ($data =$sth->fetchrow_hashref) {
 		my %row_data;  # get a fresh hash for the row data
 		if ($toggle eq 'white'){
@@ -107,9 +117,9 @@ if ($op eq 'add_form') {
 	  	} else {
 			$toggle="white";
 	  	}
-		$row_data{tab} = CGI::scrolling_list(-name=>'tab[]',
-					-values=>['','0','1','2','3','4','5','6','7','8','9','10'],
-					-labels => {'' =>'','0'=>'0','1'=>'1',
+		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
+					-values=>['-1','0','1','2','3','4','5','6','7','8','9','10'],
+					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1',
 									'2' =>'2','3'=>'3','4'=>'4',
 									'5' =>'5','6'=>'6','7'=>'7',
 									'8' =>'8','9'=>'9','10'=>'items (10)',
@@ -118,37 +128,54 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield[]' value='".$data->{'tagsubfield'}."'>";
+		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield' value='".$data->{'tagsubfield'}."'>";
 		$row_data{liblibrarian} = $data->{'liblibrarian'};
 		$row_data{libopac} = $data->{'libopac'};
-		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield[]',
+		$row_data{kohafield}= CGI::scrolling_list( -name=>"kohafield",
 					-values=> \@kohafields,
 					-default=> "$data->{'kohafield'}",
 					-size=>1,
 					-multiple=>0,
 					);
+		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
+					-values=> \@authorised_values,
+					-default=>$data->{'authorised_value'},
+					-size=>1,
+					-multiple=>0,
+					);
 #		$row_data{kohafield} = $data->{'kohafield'};
-		$row_data{repeatable} = CGI::checkbox('repeatable[]',$data->{'repeatable'}?'checked':'',1,'');
-		$row_data{mandatory} = CGI::checkbox('mandatory[]',$data->{'mandatory'}?'checked':'',1,'');
+		$row_data{repeatable} = CGI::checkbox("repeatable$i",$data->{'repeatable'}?'checked':'',1,'');
+		$row_data{mandatory} = CGI::checkbox("mandatory$i",$data->{'mandatory'}?'checked':'',1,'');
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
+		$i++;
 	}
 	# add an empty line for add if needed
 		my %row_data;  # get a fresh hash for the row data
-		$row_data{tab} = CGI::scrolling_list(-name=>'tab[]',
-					-values=>['','0','1','2','3','4','5','6','7','8','9','items (10)'],
+		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
+					-values=>['-1','0','1','2','3','4','5','6','7','8','9','10'],
+					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1',
+									'2' =>'2','3'=>'3','4'=>'4',
+									'5' =>'5','6'=>'6','7'=>'7',
+									'8' =>'8','9'=>'9','10'=>'items (10)',
+									},
 					-default=>"",
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} = "<input type='text' name='tagsubfield[]' value='".$data->{'tagsubfield'}."' size=3 maxlength=1>";
+		$row_data{tagsubfield} = "<input type='text' name='tagsubfield' value='".$data->{'tagsubfield'}."' size=3 maxlength=1>";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
-		$row_data{repeatable} = CGI::checkbox('repeatable[]','',1,'');
-		$row_data{mandatory} = CGI::checkbox('mandatory[]','',1,'');
-		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield[]',
+		$row_data{repeatable} = CGI::checkbox('repeatable','',1,'');
+		$row_data{mandatory} = CGI::checkbox('mandatory','',1,'');
+		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
 					-values=> \@kohafields,
 					-default=> "",
+					-size=>1,
+					-multiple=>0,
+					);
+		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
+					-values=> \@authorised_values,
 					-size=>1,
 					-multiple=>0,
 					);
@@ -163,24 +190,24 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab)
-									values (?,?,?,?,?,?,?,?)");
-	my @tagsubfield	= $input->param('tagsubfield[]');
-	my @liblibrarian	= $input->param('liblibrarian[]');
-	my @libopac		= $input->param('libopac[]');
-	my @repeatable 	= $input->param('repeatable[]');
-	my @mandatory	= $input->param('mandatory[]');
-	my @kohafield		= $input->param('kohafield[]');
-	my @tab				= $input->param('tab[]');
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value)
+									values (?,?,?,?,?,?,?,?,?)");
+	my @tagsubfield	= $input->param('tagsubfield');
+	my @liblibrarian	= $input->param('liblibrarian');
+	my @libopac		= $input->param('libopac');
+	my @kohafield		= $input->param('kohafield');
+	my @tab				= $input->param('tab');
+	my @authorised_values	= $input->param('authorised_value');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
 		my $liblibrarian		=$liblibrarian[$i];
 		my $libopac			=$libopac[$i];
-		my $repeatable		=$repeatable[$i]?1:0;
-		my $mandatory		=$mandatory[$i]?1:0;
+		my $repeatable		=$input->param("repeatable$i")?1:0;
+		my $mandatory		=$input->param("mandatory$i")?1:0;
 		my $kohafield		=$kohafield[$i];
 		my $tab				=$tab[$i];
+		my $authorised_value		=$authorised_values[$i];
 		if ($tagsubfield) {
 			$sth->execute ($tagfield,
 								$tagsubfield,
@@ -189,7 +216,8 @@ if ($op eq 'add_form') {
 								$repeatable,
 								$mandatory,
 								$kohafield,
-								$tab);
+								$tab,
+								$authorised_value);
 		}
 	}
 	$sth->finish;
@@ -243,6 +271,7 @@ if ($op eq 'add_form') {
 		$row_data{repeatable} = $results->[$i]{'repeatable'};
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{tab} = $results->[$i]{'tab'};
+		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{delete} = "$script_name?op=delete_confirm&tagfield=$tagfield&tagsubfield=".$results->[$i]{'tagsubfield'};
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);

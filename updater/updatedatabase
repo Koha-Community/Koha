@@ -129,6 +129,7 @@ my %requiretables=(
 						mandatory tinyint(4) NOT NULL default '0',
 						kohafield char(40) NOT NULL default '',
 						tab tinyint(1),
+						authorised_value char(10) default NULL,
 						PRIMARY KEY  (tagfield,tagsubfield),
 						KEY kohafield (kohafield),
 						KEY tab (tab)
@@ -181,6 +182,12 @@ my %requiretables=(
 								marc text NOT NULL,
 								PRIMARY KEY  (isbn)
 								)",
+	authorised_values => "(id int(11) NOT NULL auto_increment,
+  									category char(10) NOT NULL default '',
+  									authorised_value char(80) NOT NULL default '',
+  									PRIMARY KEY  (id),
+  									KEY name (category)
+								)";
 	);
 
 
@@ -414,6 +421,20 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.23  2002/10/25 10:55:46  tipaul
+# Road to 1.3.2
+# * bugfixes and improvements
+# * manage mandatory MARC subfields
+# * new table : authorised_values. this table contains categories and authorised values for the category. On MARC management, you can map a subfield to a authorised_values category. If you do this, the subfield can only be filled with a authorised_value of the selected category.
+# this submit contains everything needed :
+# * updatedatabase
+# * admin screens
+# * "links" management
+# * creation of a html-list if a subfield is mapped to an authorised value.
+#
+# Note this is different from authorities support, which will come soon.
+# The authorised_values is supposed to contains a "small" number of authorised values for a category (less than 50-100). If you enter more authorised values than this, it should be hard to find what you want in a BIG list...
+#
 # Revision 1.22  2002/10/15 10:08:19  tipaul
 # fixme corrected, re-indent and adding the marc_breeding table (see commit of marcimport.pl for more explanations about breeding)
 #
