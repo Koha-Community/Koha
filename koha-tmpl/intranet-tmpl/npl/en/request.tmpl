@@ -23,11 +23,11 @@
 			</select>
 			</td></tr>
 
-		<!-- Hide from NPL --><tr><th>Notes</th><td><input type="text" size="20" name="notes"></tr><!-- /Hide from NPL -->
-		<tr><th>Date</th><td><!-- TMPL_VAR name="date" --></td></tr>
-		<tr><th>Pickup</th><td><!-- TMPL_VAR name="CGIbranch" --></td></tr>
-		<tr><th>Request</th><td><input type="checkbox" name="request" value="any">Next Available, (or choose from list below)</tr>
-		<tr><th>Card Number <a href="/cgi-bin/koha/member-search.pl" onclick="PopWin(this, 'newwin', 300, 400); return false;">(Quick Search)</a></th><td><input type="text" size="10" name="member" /></td></tr>
+		<!-- Hide from NPL --><tr><th><label for="notes">Notes</label></th><td><input type="text" size="20" name="notes" id="notes"></tr><!-- /Hide from NPL -->
+		<tr><th><label for="date">Date</label></th><td><!-- TMPL_VAR name="date" --></td></tr>
+		<tr><th><label for="pickup">Pickup</label></th><td><!-- TMPL_VAR name="CGIbranch" --></td></tr>
+		<tr><th><label for="request">Request</label></th><td><input type="checkbox" name="request" id="request" value="any">Next Available, (or choose from list below)</tr>
+		<tr><th><label for="member">Card Number</label> <a href="/cgi-bin/koha/members/members-home.pl?quicksearch=1" onclick="PopWin(this, 'newwin', 300, 400); return false;">(Quick Search)</a></th><td><input type="text" size="10" name="member" id="member" /></td></tr>
 	</table>
 </div>
 
