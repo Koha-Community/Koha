@@ -253,6 +253,14 @@ system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
 
+if (-e "/root/docs") {
+    print "Copying docs folder from /root/docs...";
+    system("cp /root/docs/* $rootdir/docs/");
+} else {
+    print "I would have copied the docs from from /root/docs, but I couldn't find it.\n";
+    print "Press <ENTER> to continue...\n";
+    <STDIN>;
+}
 
 chdir("/tmp");
 system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
