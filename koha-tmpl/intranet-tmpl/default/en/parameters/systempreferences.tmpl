@@ -55,41 +55,41 @@
 		}
 		</script>
 	
-	<!-- TMPL_IF name="add_form" -->
+	<!-- TMPL_IF NAME="add_form" -->
 	
-		<!-- TMPL_IF NAME=modify -->
+		<!-- TMPL_IF NAME="modify" -->
 			<h1>Modify a system preference</h1>
 		<!-- TMPL_ELSE -->
 			<h1>Add a system preference</h1>
 		<!-- /TMPL_IF -->
-		<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 		<div id="bloc25">
-			<h2 class="parameters"><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->"></h2>
+			<h2 class="parameters"><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->"></h2>
 			<input type="hidden" name="op" value="add_validate">
 			<p>
 			<!-- TMPL_IF NAME="searchfield" -->
-				<label>Variable</label><!-- TMPL_VAR name="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
+				<label>Variable</label><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
 			<!-- TMPL_ELSE -->
 				<label>Variable</label><input type="text" name="variable" size="60">
 			<!-- /TMPL_IF -->
 			</p>
 			<p><label>Value</label>
-				<!-- TMPL_IF name="type-free" -->
-					<input type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" size="<!-- TMPL_VAR name="fieldlength" -->">
+				<!-- TMPL_IF NAME="type-free" -->
+					<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" size="<!-- TMPL_VAR NAME="fieldlength" -->">
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="type-textarea" -->
-					<textarea name="value" rows="<!--TMPL_VAR name="rows" -->" cols="<!-- TMPL_VAR name="cols" -->"><!-- TMPL_VAR name="value" escape="HTML" --></textarea>
+				<!-- TMPL_IF NAME="type-textarea" -->
+					<textarea name="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="type-choice" -->
+				<!-- TMPL_IF NAME="type-choice" -->
 					<select name="value">
-						<!-- TMPL_LOOP name="options" -->
-							<option value="<!-- TMPL_VAR name="option" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="option" --></option>
+						<!-- TMPL_LOOP NAME="options" -->
+							<option value="<!-- TMPL_VAR NAME="option" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="option" --></option>
 						<!-- /TMPL_LOOP -->
 					</select>
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="type-yesno" -->
-					<input type="radio" name="value" value="1" <!-- TMPL_IF name="value-yes" -->checked<!-- /TMPL_IF -->>Yes
-					<input type="radio" name="value" value="0" <!-- TMPL_IF name="value-no" -->checked<!-- /TMPL_IF -->>No
+				<!-- TMPL_IF NAME="type-yesno" -->
+					<input type="radio" name="value" value="1"<!-- TMPL_IF NAME="value-yes" --> checked<!-- /TMPL_IF -->>Yes
+					<input type="radio" name="value" value="0"<!-- TMPL_IF NAME="value-no" --> checked<!-- /TMPL_IF -->>No
 				<!-- /TMPL_IF -->
 	
 			</p>
@@ -97,77 +97,77 @@
 		</div>
 		<div id="bloc25">
 			<h2 class="parameters">Koha internal (you should have no reasons to modify the following default values)</h2>
-			<p>Variable type: <input type="text" name="preftype" value="<!--TMPL_VAR name="preftype" -->" size=40 maxlength=40> (Choice, YesNo,Integer,Textarea,Float,Themes,Languages)</p>
-			Variable options :<input type="text" name="prefoptions" value="<!-- TMPL_VAR name="prefoptions" -->" size=80 maxlength=80> (choice list for Choice (separated by |) and cols|rows for Texarea)
+			<p>Variable type: <input type="text" name="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40"> (Choice, YesNo,Integer,Textarea,Float,Themes,Languages)</p>
+			Variable options :<input type="text" name="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="80" maxlength="80"> (choice list for Choice (separated by |) and cols|rows for Texarea)
 		</div>
 		</form>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="add_validate" -->
+	<!-- TMPL_IF NAME="add_validate" -->
 	
 		Data recorded
-		<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="submit" value="OK">
 		</form>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="delete_confirm" -->
+	<!-- TMPL_IF NAME="delete_confirm" -->
 	
 	<table border="0" cellspacing="0" cellpadding="2">
 		<tr valign="top" bgcolor="#99cc33">
-			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
-			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Variable</b></td>
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
 		</tr>
-		<tr><td>Value</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
-		<form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
+		<tr><td>Value</td><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
 		<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
-		<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="NO"></form></td></tr>
+		<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO"></form></td></tr>
 	</table>
 	
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="delete_confirmed" -->
+	<!-- TMPL_IF NAME="delete_confirmed" -->
 	
 		Data deleted
-		<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="submit" value="OK">
 		</form>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="else" -->
+	<!-- TMPL_IF NAME="else" -->
 	<h1>System preferences admin</h1>
 	<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
 		<input type="text" name="searchfield" value="">
 		<input type="reset" name="reset" value="clr">
 	</form>
-	<!-- TMPL_VAR name="searchfield" -->
+	<!-- TMPL_VAR NAME="searchfield" -->
 	<table border="0" cellspacing="0" cellpadding="2">
 	<tr valign="top" bgcolor="#99cc33">
 		<th>Variable</th>
 		<th>Value</th>
-		<th colspan=3>Explanation</th>
+		<th colspan="3">Explanation</th>
 	</tr>
-	<!-- TMPL_LOOP name="loop" -->
-	<tr valign="top" bgcolor="<!-- TMPL_VAR name="bgcolor" -->">
-		<td><!-- TMPL_VAR name="variable" --></td>
-		<td><!-- TMPL_VAR name="value" --></td>
-		<td><!-- TMPL_VAR name="explanation" --></td>
-		<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"><br>Edit</a></td>
-		<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"><br>Delete</a></td>
+	<!-- TMPL_LOOP NAME="loop" -->
+	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td><!-- TMPL_VAR NAME="variable" --></td>
+		<td><!-- TMPL_VAR NAME="value" --></td>
+		<td><!-- TMPL_VAR NAME="explanation" --></td>
+		<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"><br>Edit</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"><br>Delete</a></td>
 	</tr>
 	<!-- /TMPL_LOOP -->
-	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form">
 	</table>
 	<table width="40%">
 		<tr>
-			<td width="50%"><!-- TMPL_VAR name="previous" --></td>
-			<td width="50%"><!-- TMPL_VAR name="next" --></td>
+			<td width="50%"><!-- TMPL_VAR NAME="previous" --></td>
+			<td width="50%"><!-- TMPL_VAR NAME="next" --></td>
 		</tr>
 	</table>
 	</form>
 	
-	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="hidden" name="op" value="add_form">
 		<input type="submit" class="button" value="Add System preference">
 	</form>

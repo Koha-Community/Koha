@@ -2,10 +2,10 @@
 <div id="mainbloc">
 	<h1 class="acquisition">Biblio Search Results</h1>
 	<div id="bloc25">
-		<h2 class="acquisition">You searched on <b><!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR name="title" --><!-- /TMPL_IF --></b></h2>
+		<h2 class="acquisition">You searched on <b><!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR NAME="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></b></h2>
 		<!-- TMPL_IF name="total" -->
-			<p><!-- TMPL_VAR NAME=total --> results found</p>
-			<p>Results <i><!-- TMPL_VAR name="showoffset" --></i> to <i><!-- TMPL_VAR name="total" --></i> displayed</p>
+			<p><!-- TMPL_VAR NAME="total" --> results found</p>
+			<p>Results <i><!-- TMPL_VAR NAME="showoffset" --></i> to <i><!-- TMPL_VAR NAME="total" --></i> displayed</p>
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc100">
@@ -18,46 +18,46 @@
 				<th class="acquisition">&nbsp;</th>
 			</tr>
 			<!-- TMPL_IF name="loop" -->
-			<!-- TMPL_LOOP name="loop" -->
-				<tr bgcolor="<!-- TMPL_VAR name="toggle" -->">
-					<td><!-- TMPL_VAR name="title" --></a>
-					<td><!-- TMPL_VAR name="author" --></td>
-					<td><!-- TMPL_VAR name="copyrightdate" --></td>
+			<!-- TMPL_LOOP NAME="loop" -->
+				<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+					<td><!-- TMPL_VAR NAME="title" --></a>
+					<td><!-- TMPL_VAR NAME="author" --></td>
+					<td><!-- TMPL_VAR NAME="copyrightdate" --></td>
 					<!-- TMPL_IF NAME="NOTMARC" -->
-					<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Add items</a></td>
+					<td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button acquisition">Add items</a></td>
 					<!-- TMPL_ELSE -->
-					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Edit...</a></td>
+					<td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button acquisition">Edit...</a></td>
 					<!-- /TMPL_IF -->
 				</tr>
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_ELSE -->
-			<tr><td colspan=4>Nothing found</td></tr>
+			<tr><td colspan="4">Nothing found</td></tr>
 			<!-- /TMPL_IF -->
 		</table>
 		<p class="center">
 			<!-- Row of numbers corresponding to search result pages -->
-			<!-- TMPL_IF NAME=displayprev -->
-				<a href=isbnsearch.pl?offset=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->>
-					<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/prev.gif border=0>
+			<!-- TMPL_IF name="displayprev" -->
+				<a href="isbnsearch.pl?offset=<!-- TMPL_VAR NAME="prevstartfrom" -->&amp;<!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->">
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0">
 				</a>
 			<!-- TMPL_ELSE -->
-				<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/placeholder.gif border=0>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
 			<!-- /TMPL_IF -->
-			<!-- TMPL_LOOP NAME=numbers -->
-				<!-- TMPL_IF NAME=highlight -->
-					<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->-highlight.gif>
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF name="highlight" -->
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
 				<!-- TMPL_ELSE -->
-					<a href=isbnsearch.pl?offset=<!-- TMPL_VAR NAME=startfrom -->&<!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->>
-						<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/<!-- TMPL_VAR NAME=number -->.gif border=0>
+					<a href="isbnsearch.pl?offset=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->">
+						<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0">
 					</a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
-			<!-- TMPL_IF NAME=displaynext -->
-				<a href=isbnsearch.pl?offset=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->>
-					<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/next.gif border=0>
+			<!-- TMPL_IF name="displaynext" -->
+				<a href="isbnsearch.pl?offset=<!-- TMPL_VAR NAME="nextstartfrom" -->&amp;<!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="value" ESCAPE=URL -->">
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0">
 				</a>
 			<!-- TMPL_ELSE -->
-				<img src=<!-- TMPL_VAR name="themelang" -->/images/numbers/placeholder.gif border=0>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0">
 			<!-- /TMPL_IF -->
 		</p>
 		<h2 class="acquisition">Biblios in breeding farm</h2>
@@ -71,16 +71,16 @@
 					<th>&nbsp;</th>
 					<th>&nbsp;</th>
 				</tr>
-					<!-- TMPL_LOOP name="breeding_loop" -->
-						<tr bgcolor="<!-- TMPL_VAR name="toggle" -->">
-							<td><!-- TMPL_VAR name="title" --></a>
-							<td><!-- TMPL_VAR name="author" --></td>
-							<td><!-- TMPL_VAR name="isbn" --></td>
-							<td><!-- TMPL_VAR name="file" --></td>
+					<!-- TMPL_LOOP NAME="breeding_loop" -->
+						<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+							<td><!-- TMPL_VAR NAME="title" --></a>
+							<td><!-- TMPL_VAR NAME="author" --></td>
+							<td><!-- TMPL_VAR NAME="isbn" --></td>
+							<td><!-- TMPL_VAR NAME="file" --></td>
 							<!-- TMPL_IF NAME="NOTMARC" -->
 							
 							<!-- TMPL_ELSE -->
-							<td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR name="id" -->">Add biblio</a></td>
+							<td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->">Add biblio</a></td>
 							<!-- /TMPL_IF -->
 						</tr>
 					<!-- /TMPL_LOOP -->
@@ -90,9 +90,9 @@
 		<!-- /TMPL_IF -->
 		<p class="center">
 		<!-- TMPL_IF NAME="NOTMARC" -->
-			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR name="isbn" -->" class="button acquisition">Add New Biblio</a>
+			<a href="addbiblio-nomarc.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button acquisition">Add New Biblio</a>
 		<!-- TMPL_ELSE -->
-			<a href="addbiblio.pl?isbn=<!-- TMPL_VAR name="isbn" -->" class="button acquisition">Add New Biblio</a>
+			<a href="addbiblio.pl?isbn=<!-- TMPL_VAR NAME="isbn" -->" class="button acquisition">Add New Biblio</a>
 		<!-- /TMPL_IF -->
 		</p>
 	</div>

@@ -13,7 +13,7 @@
 			<h2 class="acquisition">To add a new biblio/item, scan or type the ISBN/ISSN number</h2>
 			<p><label class="label20">ISBN</label> <input type="text" name="isbn" /></p>
 			<p><label class="label20">Title</label> <input type="text" name="title" /></p>
-			<p><input type="submit" value="Go" class="button acquisition"/></p>
+			<p><input type="submit" value="Go" class="button acquisition" /></p>
 		</form>
 		<!-- TMPL_IF NAME="NOTMARC" -->
 			<p><a href="addbiblio-nomarc.pl" class="button acquisition">Create Empty biblio</a></p>
@@ -22,8 +22,8 @@
 				<form action="addbiblio.pl" method="post">
 					<select name="frameworkcode">
 						<option value="">Default</option>
-						<!-- TMPL_LOOP name="frameworkcodeloop" -->
-							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="frameworktext" --></option>
+						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
 						<!-- /TMPL_LOOP -->
 					</select>
 					<input type="submit" value="Create Empty biblio" class="button acquisition">

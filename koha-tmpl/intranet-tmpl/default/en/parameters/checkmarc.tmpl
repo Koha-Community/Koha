@@ -7,8 +7,8 @@
 			<th>Test</th>
 			<th>Result</th>
 		</tr>
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="itemnum" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemnum" -->
 		<tr>
 			<td><b>itemnum</b></td>
 			<td><li>The field itemnum MUST be mapped </li>
@@ -20,8 +20,8 @@
 			<td><i>itemnum : the field itemnumber is mapped to a field in tab -1</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="itemfields" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemfields" -->
 		<tr>
 			<td><b>item fields</b></td>
 			<td>ALL items fields MUST :<br/>
@@ -34,8 +34,8 @@
 			<td><i>All item fields are in the same tag and in item tab</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="itemtypes_empty" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtypes_empty" -->
 		<tr>
 			<td><b>itemtypes table empty</b></td>
 			<td>the itemtypes table is empty. It must contain at least 1 value</td>
@@ -46,13 +46,13 @@
 			<td><i>itemtypes table filled with at least 1 value</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="itemtype" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="itemtype" -->
 		<tr>
 			<td><b>itemtype NOT mapped</b></td>
 			<td>the biblioitems.itemtype field MUST :<br/>
 				<li>be mapped to a MARC subfield, </li>
-				<li>the correspounding subfield MUST have authorised_value=itemtype</li></td>
+				<li>the correspounding subfield MUST have authorised_value="itemtype"</li></td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
@@ -60,8 +60,8 @@
 			<td><i>biblioitems.itemtype defined</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="branches_empty" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="branches_empty" -->
 		<tr>
 			<td><b>branch table empty</b></td>
 			<td>the branch table is empty. It must contain at least 1 value !</td>
@@ -72,13 +72,13 @@
 			<td><i>branch table filled with at least 1 value</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="branch" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="branch" -->
 		<tr>
 			<td><b>homebranch NOT mapped</b></td>
 			<td>the items.homebranch field MUST :<br/>
 				<li>be mapped to a MARC subfield,</li>
-				<li>the correspounding subfield MUST have authorised value=branches</li></td>
+				<li>the correspounding subfield MUST have authorised value="branches"</li></td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
@@ -86,13 +86,13 @@
 			<td><i>homebranch defined</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="holdingbranch" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="holdingbranch" -->
 		<tr>
 			<td><b>holdingbranch NOT mapped</b></td>
 			<td>the items.holdingbranch field MUST :<br/>
 				<li>be mapped to a MARC subfield, </li>
-				<li>the correspounding subfield MUST have authorised value=branches</li></td>
+				<li>the correspounding subfield MUST have authorised value="branches"</li></td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
@@ -100,8 +100,8 @@
 			<td><i>holdingbranch defined</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="biblionumber" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="biblionumber" -->
 		<tr>
 			<td><b>biblio and biblionumber</b></td>
 			<td>The biblio.biblionumber and biblioitems.biblioitemnumber fields MUST :<br/>
@@ -115,11 +115,11 @@
 			<td><i>biblionumber and biblioitemnumber mapped correctly</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
-	<!------------------------------------------------------------------------------------------------------------>
-	<!-- TMPL_IF name="total" -->
+	<!-- -------------------------------------------------------------------------------------------------------- -->
+	<!-- TMPL_IF NAME="total" -->
 		<tr>
 			<td><b>TOTAL</b></td>
-			<td>You have <b><!-- TMPL_VAR name="total" --></b> error(s) in your MARC configuration. Please fix them before using koha</td>
+			<td>You have <b><!-- TMPL_VAR NAME="total" --></b> error(s) in your MARC configuration. Please fix them before using koha</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>

@@ -2,7 +2,7 @@
 <div id="mainbloc">
 	<h1 class="acquisition">Supplier Search Results</h1>
 	<div id="bloc100">
-	<h2 class="acquisition">You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
+	<h2 class="acquisition">You searched on <b>supplier <!-- TMPL_VAR NAME="supplier" -->,</b> <!-- TMPL_VAR NAME="count" --> results found</h2>
 	<table>
 	<tr>
 		<th class="acquisition">Order</th>
@@ -13,7 +13,7 @@
 		</th>
 	</tr>
 	
-	<!-- TMPL_LOOP name="loop_suppliers" -->
+	<!-- TMPL_LOOP NAME="loop_suppliers" -->
 		<!-- TMPL_IF name="even" -->
 		<tr bgcolor="#EEEEEE">
 		<!-- TMPL_ELSE -->
@@ -21,15 +21,15 @@
 		<!-- /TMPL_IF -->
 			<td>
 				<!-- TMPL_IF name="active" -->
-					<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+					<a href="basket.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR NAME="theme" -->/images/mail_send.png" title="Add order" alt="Add" border="0" ></a>
 				<!-- TMPL_ELSE -->
 					Inactive
 				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
+				<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR NAME="theme" -->/images/mail_get.png" title="receive" alt="Add" border="0" ></a>
 			</td>
-			<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
+			<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></td>
 			<td>
 				<table>
 					<tr>
@@ -39,17 +39,17 @@
 						<th class="acquisition">Date</th>
 						<th class="acquisition">&nbsp;</th>
 					</tr>
-					<!-- TMPL_LOOP name="loop_basket" -->
+					<!-- TMPL_LOOP NAME="loop_basket" -->
 						<tr>
-							<td><!-- TMPL_VAR name="basketno" --></a></td>
-							<td><TMPl_VAR name="total"></td>
-							<td><!-- TMPL_VAR name="authorisedby" --></td>
-							<td><!-- TMPL_VAR name="creationdate" --></td>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><TMPL_VAR NAME="total"></td>
+							<td><!-- TMPL_VAR NAME="authorisedby" --></td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
 							<td>
 								<!-- TMPL_IF name="closedate" -->
-									closed on <!-- TMPL_VAR name="closedate" -->
+									closed on <!-- TMPL_VAR NAME="closedate" -->
 								<!-- TMPL_ELSE -->
-									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR name="basketno" -->" class="button acquisition">modify</a>
+									<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">modify</a>
 								<!-- /TMPL_IF -->
 							</td>
 						</tr>

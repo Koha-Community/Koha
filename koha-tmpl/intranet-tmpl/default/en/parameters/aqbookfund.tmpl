@@ -1,59 +1,59 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
-	<!-- TMPL_IF name=else -->
+	<!-- TMPL_IF NAME="else" -->
 	<h1>Bookfund admin</h1>
-	<form action=<!-- TMPL_VAR name=scriptname --> method=post>
-	<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
-	<!-- TMPL_IF name=search -->
-		<br>You Searched for <b><!-- TMPL_VAR name=searchfield --></b><p><br>
+	<form action="<!-- TMPL_VAR NAME="scriptname" -->" method="post">
+	<input type="text" name="searchfield" value=""><input type="reset" name="reset" value="clr"></form>
+	<!-- TMPL_IF NAME="search" -->
+		<br>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
 	<!-- /TMPL_IF -->
-	<table border=0 cellspacing=0 cellpadding=2 width="80%">
+	<table border="0" cellspacing="0" cellpadding="2" width="80%">
 	<tr>
 		<th>Book fund</th>
 		<th>Name</th>
 		<th>Edit</th>
 		<th>Delete</th>
 		</tr>
-	<!-- TMPL_LOOP name="bookfund" -->
-		<tr valign=top bgcolor="ffffcc">
-			<td><!-- TMPL_VAR name="bookfundid" --></td>
-			<td><!-- TMPL_VAR name="bookfundname" --></td>
-			<td><a href="<!-- TMPL_VAR name="action" -->?op=add_form&bookfundid=<!-- TMPL_VAR name="bookfundid" --> ">
-				<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a>
+	<!-- TMPL_LOOP NAME="bookfund" -->
+		<tr valign="top" bgcolor="ffffcc">
+			<td><!-- TMPL_VAR NAME="bookfundid" --></td>
+			<td><!-- TMPL_VAR NAME="bookfundname" --></td>
+			<td><a href="<!-- TMPL_VAR NAME="action" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" --> ">
+				<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Edit" title="Edit" width="32" hspace="0" vspace="0" border="0"></a>
 			</td>
-			<td><a href="<!-- TMPL_VAR name="action" -->?op=delete_confirm&bookfundid=<!-- TMPL_VAR name="bookfundid" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><a href="<!-- TMPL_VAR NAME="action" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" alt="Delete" title="Delete" width="32" hspace="0" vspace="0" border="0"></a></td>
 		</tr>
-		<tr valign=top bgcolor=#99cc33>
+		<tr valign="top" bgcolor="#99cc33">
 			<th>&nbsp;</th>
 			<th>Budget</th>
 			<th>
-				<a href="aqbudget.pl?op=add_form&bookfundid=<!-- TMPL_VAR name="bookfundid" -->">
-				<img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" ALT="Add budget" border=0></a>
-			</t>
+				<a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR NAME="bookfundid" -->">
+				<img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filenew.png" alt="Add budget" border="0"></a>
+			</th>
 			<th>&nbsp;</th>
 		</tr>
-		<!-- TMPL_LOOP name="budget" -->
-			<tr valign=top>
+		<!-- TMPL_LOOP NAME="budget" -->
+			<tr valign="top">
 				<td>&nbsp;</td>
 				<td>
-					<!-- TMPL_VAR name="startdate" --> - <!-- TMPL_VAR name="enddate" --> : <b><!-- TMPL_VAR name="budgetamount" --></b>
+					<!-- TMPL_VAR NAME="startdate" --> - <!-- TMPL_VAR NAME="enddate" --> : <b><!-- TMPL_VAR NAME="budgetamount" --></b>
 				</td>
-				<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-				<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&aqbudgetid=<!-- TMPL_VAR name="aqbudgetid" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+				<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" alt="Edit" title="Edit" width="32" hspace="0" vspace="0" border="0"></a></td>
+				<td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" alt="Delete" title="Delete" width="32" hspace="0" vspace="0" border="0"></a></td>
 	
 			</tr>
 		<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
 	</table>
-	<form action='<!-- TMPL_VAR name=scriptname -->' method=post>
-		<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<br><input type=submit class="button" value="Add Bookfund" title="Add Bookfund" ALT="Add Bookfund"><br>
-		<br></form><br clear=all>
+	<form action="<!-- TMPL_VAR NAME="scriptname" -->" method="post">
+		<input type="hidden" name="op" value="add_form">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<br><input type="submit" class="button" value="Add Bookfund" title="Add Bookfund" alt="Add Bookfund"><br>
+		<br></form><br clear="all">
 	<p> &nbsp; </p>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="add_form" -->
-	<script>
+	<!-- TMPL_IF NAME="add_form" -->
+	<script language="javascript" type="text/javascript">
 		function _(s) { return s } // dummy function for gettext
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		function isNotNull(f,noalert) {
@@ -106,57 +106,57 @@
 				alert(alertString2);
 			}
 		}
-		</SCRIPT>
+		</script>
 	<h1>
-		<!-- TMPL_IF name=use-header-flags-p -->
-		<!-- TMPL_IF name=header-is-add-p -->Add book fund<!-- /TMPL_IF -->
-		<!-- TMPL_IF name=header-is-modify-p -->Modify book fund<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="use-header-flags-p" -->
+		<!-- TMPL_IF NAME="header-is-add-p" -->Add book fund<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="header-is-modify-p" -->Modify book fund<!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
-		<!-- TMPL_VAR name="header" -->
+		<!-- TMPL_VAR NAME="header" -->
 		<!-- /TMPL_IF -->
 	</h1>
-	<form action='<!-- TMPL_VAR name="action" -->' name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
-	<input type=hidden name=checked value=0>
-	<!-- TMPL_IF name="add_or_modify" -->
+	<form action="<!-- TMPL_VAR NAME="action" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+	<input type="hidden" name="checked" value="0">
+	<!-- TMPL_IF NAME="add_or_modify" -->
 	<p>
-		<label>Book fund</label><input type=hidden name=bookfundid value=<!-- TMPL_VAR name="bookfundid" -->><!-- TMPL_VAR name="bookfundid" -->
+		<label>Book fund</label><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->"><!-- TMPL_VAR NAME="bookfundid" -->
 	</p>
 	<!-- TMPL_ELSE -->
 	<p>
-		<label>Book fund</label><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)>
+		<label>Book fund</label><input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)">
 	</p>
 	<!-- /TMPL_IF -->
 	<p>
-		<label>Name</label><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;
+		<label>Name</label><input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="bookfundname" escape=HTML -->">&nbsp;
 	</p>
 	<p>
-		<label>&nbsp;</label><INPUT type=button value='OK' onClick='Check(this.form)' class="button">
+		<label>&nbsp;</label><input type="button" value="OK" onclick="Check(this.form)" class="button">
 	</p>
 	</form>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="add_validate" -->
+	<!-- TMPL_IF NAME="add_validate" -->
 	Data recorded
-	<form action='<!-- TMPL_VAR name="action" -->' method=post>
-	<input type=submit value=OK>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
 	</form>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="delete_confirm" -->
-	<table border=0 cellspacing=0 cellpadding=5>
-	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Book fund</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="bookfundid" --></b></td></tr>
-	<form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<!-- TMPL_VAR name="bookfundid" -->'>
-	<tr><td>Name</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
-	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NO></form></td></tr><br clear=all>
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	<table border="0" cellspacing="0" cellpadding="5">
+	<tr valign="top" bgcolor="#99cc33"><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Book fund</b></td><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="bookfundid" --></b></td></tr>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->">
+	<tr><td>Name</td><td><!-- TMPL_VAR NAME="bookfundname" --></td></tr>
+	<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
+	<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="submit" value="NO"></form></td></tr><br clear="all">
 	<p> &nbsp; </p>
 	<!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF name="delete_confirmed" -->
+	<!-- TMPL_IF NAME="delete_confirmed" -->
 	Data deleted
-	<form action='<!-- TMPL_VAR name="action" -->' method=post>
-	<input type=submit value=OK>
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
 	</form>
 	<!-- /TMPL_IF -->
 </div>

@@ -1,28 +1,28 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <div id="mainbloc">
 	<form method="post" action="additem.pl" name="f">
-	<input type="hidden" name="op" value="<!-- TMPL_VAR name="op" -->">
-	<input type="hidden" name="bibid" value="<!-- TMPL_VAR name="bibid" -->">
+	<input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->">
+	<input type="hidden" name="bibid" value="<!-- TMPL_VAR NAME="bibid" -->">
 		<h2 class="catalogue">
-			MARC biblio : <!-- TMPL_VAR name="biblionumber" -->
+			MARC biblio : <!-- TMPL_VAR NAME="biblionumber" -->
 		</h2>
 	<div id="bloc25">
 		<div name="10XX" id="10XX">
 		<h2 class="catalogue">Existing items</h2>
 		<table>
 			<tr>
-				<!-- TMPL_LOOP name="item_header_loop" -->
+				<!-- TMPL_LOOP NAME="item_header_loop" -->
 					<th class="catalogue">
-						<tmpl_var name="header_value">
+						<TMPL_VAR NAME="header_value">
 					</th>
 				<!-- /TMPL_LOOP -->
-				<th colspan=2 class="catalogue">&nbsp;</th>
+				<th colspan="2" class="catalogue">&nbsp;</th>
 			</tr>
-				<!-- TMPL_LOOP name="item_loop" -->
+				<!-- TMPL_LOOP NAME="item_loop" -->
 				<tr>
-					<!-- TMPL_VAR name="item_value" -->
-					<td><a href="additem.pl?op=edititem&bibid=<!-- TMPL_VAR name="bibid" -->&itemnum=<!-- TMPL_VAR name="itemnum" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png" border=0></a></td>
-					<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR name="bibid" -->,<!-- TMPL_VAR name="itemnum" -->)"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" border=0></a></td>
+					<!-- TMPL_VAR NAME="item_value" -->
+					<td><a href="additem.pl?op=edititem&amp;bibid=<!-- TMPL_VAR NAME="bibid" -->&amp;itemnum=<!-- TMPL_VAR NAME="itemnum" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png" border="0"></a></td>
+					<td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="bibid" -->,<!-- TMPL_VAR NAME="itemnum" -->)"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" border="0"></a></td>
 				</tr>
 				<!-- /TMPL_LOOP -->
 		</table>
@@ -34,26 +34,26 @@
 	<!-- TMPL_ELSE -->
 		<h2 class="catalogue">Modify Item</h2>
 	<!-- /TMPL_IF -->	
-		<!-- TMPL_LOOP name="item" -->
+		<!-- TMPL_LOOP NAME="item" -->
 			<p>
-					<label><!-- TMPL_VAR name="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR name="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
-					<!-- TMPL_VAR name="marc_value" -->
-					<input type="hidden" name="tag" value="<!-- TMPL_VAR name="tag" -->">
-					<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="subfield" -->">
-					<input type="hidden" name="mandatory" value="<!-- TMPL_VAR name="mandatory" -->">
+					<label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
+					<!-- TMPL_VAR NAME="marc_value" -->
+					<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
+					<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
+					<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
 			</p>
 		<!-- /tmpl_loop -->
-	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR name="itemnum" -->">
+	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
 	<!-- TMPL_IF name="barcode_not_unique" -->
 		<div id="problem"><b>ERROR : Barcode already exists !<b></div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="opisadd" -->
-	<input type="button" value="Add item" onClick='Check(this.form)' accesskey="w" class="button catalogue">
+	<input type="button" value="Add item" onClick="Check(this.form)" accesskey="w" class="button catalogue">
 	<!-- TMPL_ELSE -->
-	<input type="hidden" name="tag" value="<!-- TMPL_VAR name="itemtagfield" -->">
-	<input type="hidden" name="subfield" value="<!-- TMPL_VAR name="itemtagsubfield" -->">
-	<input type="hidden" name="field_value" value="<!-- TMPL_VAR name="itemnum" -->">
-	<input type="button" value="Modify item" onClick='Check(this.form)' accesskey="w" class="button catalogue">
+	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->">
+	<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->">
+	<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnum" -->">
+	<input type="button" value="Modify item" onClick="Check(this.form)" accesskey="w" class="button catalogue">
 	<!-- /TMPL_IF -->
 	</center>
 	</form>
@@ -68,7 +68,7 @@ function active(numlayer)
 		if (numlayer==i) {
 			document.getElementById(ong).style.visibility="visible";
 			document.getElementById(link).style.backgroundColor="#11AA11";
-			document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif)";
+			document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
 		} else {
 			document.getElementById(ong).style.visibility="hidden";
 			document.getElementById(link).style.backgroundColor="#FFFFFF";

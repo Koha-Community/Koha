@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
-	<h1 class="parameters">Defining issuing rule for <!-- TMPL_VAR name="branch" --></h1>
+	<h1 class="parameters">Defining issuing rule for <!-- TMPL_VAR NAME="branch" --></h1>
 	<div id="bloc25">
 		<h2 class="parameters">HINT for issues</h2>
 		<p>Each box needs to be filled in with issuelength,maxissues</p>
@@ -27,8 +27,8 @@
 		Select a branch :
 			<select name="branch">
 				<option value="">Default</option>
-			<!-- TMPL_LOOP name="branchloop" -->
-				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- TMPL_LOOP NAME="branchloop" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
 			<!-- /TMPL_LOOP -->
 			</select>
 			<input type="submit" value="Select" class="button parameters">
@@ -37,23 +37,23 @@
 			<input type="hidden" name="op" value="save">
 			<table>
 			<tr>
-				<th>&nbsp;</th><!-- TMPL_LOOP name="title" --><th><!-- TMPL_VAR name="in_title" --><br/>Issue / fine</th><!-- /TMPL_LOOP -->
+				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th><!-- TMPL_VAR NAME="in_title" --><br/>Issue / fine</th><!-- /TMPL_LOOP -->
 			</tr>
-			<!-- TMPL_LOOP name="row" -->
+			<!-- TMPL_LOOP NAME="row" -->
 				<tr align="center">
 					<th>
-						<!-- TMPL_VAR name="categorycode" -->
+						<!-- TMPL_VAR NAME="categorycode" -->
 					</th>
-					<!-- TMPL_LOOP name="cell" -->
-						<td bgcolor="<!-- TMPL_VAR name="toggle" -->">
-							<input name="<!-- TMPL_VAR name="issuingname" -->" value="<!-- TMPL_VAR name="issuingvalue" -->" size=6 maxlength=10> /
-							<input name="<!-- TMPL_VAR name="finesname" -->" value="<!-- TMPL_VAR name="finesvalue" -->" size=6 maxlength=10>
+					<!-- TMPL_LOOP NAME="cell" -->
+						<td bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10"> /
+							<input name="<!-- TMPL_VAR NAME="finesname" -->" value="<!-- TMPL_VAR NAME="finesvalue" -->" size="6" maxlength="10">
 						</td>
 					<!-- /TMPL_LOOP -->
 				</tr>
 			<!-- /TMPL_LOOP -->
 			</table>
-			<input type=submit value="Save" class="button parameters">
+			<input type="submit" value="Save" class="button parameters">
 		</form>
 	</div>
 </div>

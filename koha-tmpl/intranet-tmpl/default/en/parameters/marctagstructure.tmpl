@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <div id="mainbloc">
-<h1 class="parameters">MARC tag structure admin for <!-- TMPL_IF name="frameworkcode" --><!-- TMPL_VAR name="frameworktext" --> (<!-- TMPL_VAR name="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
-<script>
+<h1 class="parameters">MARC tag structure admin for <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
+<script language="javascript" type="text/javascript">
 	function _(s) { return s } // dummy function for gettext
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNotNull(f,noalert) {
@@ -52,78 +52,78 @@
 			alert(alertString2);
 		}
 	}
-	</SCRIPT>
+	</script>
 
-<!-- TMPL_IF name="add_form" -->
-<!---------------------------------------------------------------------------->
+<!-- TMPL_IF NAME="add_form" -->
+<!-- ------------------------------------------------------------------------ -->
 	<h1 class="parameters">
 	<!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-modify-tag-p" -->Modify tag<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-add-tag-p" -->Add tag<!-- /TMPL_IF -->
-	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
 	</h1>
-	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
-		<input type=hidden name=op value='add_validate'>
-		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
-		<p><label>Tag<label><!-- TMPL_VAR name="searchfield" --></p>
-		<p><label>Lib for librarians</label><input type="text" name="liblibrarian" value='<!-- TMPL_VAR name="liblibrarian" escape=HTML -->' size=80 maxlength=100></p>
-		<p><label>Lib for opac</label><input type="text" name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></p>
-		<p><label>Repeatable</label><!-- TMPL_VAR name="repeatable" --></p>
-		<p><label>Mandatory</label><!-- TMPL_VAR name="mandatory" --></p>
-		<p><label>Authorised value</label><!-- TMPL_VAR name="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
-		<p><label>&nbsp;</label><input type="button" value='OK' class="button" onClick='Check(this.form)'></p>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate">
+		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+		<p><label>Tag<label><!-- TMPL_VAR NAME="searchfield" --></p>
+		<p><label>Lib for librarians</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="80" maxlength="100"></p>
+		<p><label>Lib for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="80" maxlength="100"></p>
+		<p><label>Repeatable</label><!-- TMPL_VAR NAME="repeatable" --></p>
+		<p><label>Mandatory</label><!-- TMPL_VAR NAME="mandatory" --></p>
+		<p><label>Authorised value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
+		<p><label>&nbsp;</label><input type="button" value="OK" class="button" onclick="Check(this.form)"></p>
 	</form>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF name="delete_confirm" -->
-<!---------------------------------------------------------------------------->
+<!-- TMPL_IF NAME="delete_confirm" -->
+<!-- ------------------------------------------------------------------------ -->
 <table>
 	<tr>
 		<td>tag</td>
-		<td><!-- TMPL_VAR name="searchfield" --></td>
+		<td><!-- TMPL_VAR NAME="searchfield" --></td>
 	</tr>
-	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'><input type=hidden name=frameworkcode value='<!-- TMPL_VAR name="frameworkcode" -->'>
-	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
+	<tr><td>&nbsp;</td><td><!-- TMPL_VAR NAME="liblibrarian" --></td></tr>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+	<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
+	<tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO"></form></td></tr>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="delete_confirmed" -->
-<!---------------------------------------------------------------------------->
+<!-- TMPL_IF NAME="delete_confirmed" -->
+<!-- ------------------------------------------------------------------------ -->
 	Data deleted
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=frameworkcode value='<!-- TMPL_VAR name="frameworkcode" -->'>
-	<input type=submit value=OK>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+	<input type="submit" value="OK">
 	</form>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="framework_create" -->
-<!---------------------------------------------------------------------------->
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+<!-- TMPL_IF NAME="framework_create" -->
+<!-- ------------------------------------------------------------------------ -->
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="hidden" name="op" value="framework_create_confirm">
-		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
-		Create framework for <!-- TMPL_VAR name="frameworkcode" --> (<!-- TMPL_VAR name="frameworktext" -->) using
+		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+		Create framework for <!-- TMPL_VAR NAME="frameworkcode" --> (<!-- TMPL_VAR NAME="frameworktext" -->) using
 		<select name="existingframeworkcode">
 			<option value="">Default</option>
-		<!-- TMPL_LOOP name="existingframeworkloop" -->
-			<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="frameworktext" --></option>
+		<!-- TMPL_LOOP NAME="existingframeworkloop" -->
+			<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
 		<!-- /TMPL_LOOP -->
 		</select>
-		<input type=submit value="OK" class="button">
+		<input type="submit" value="OK" class="button">
 	</form>
 <!-- /TMPL_IF -->
 
-<!---------------------------------------------------------------------------->
-<!-- TMPL_IF name="else" -->
+<!-- ------------------------------------------------------------------------ -->
+<!-- TMPL_IF NAME="else" -->
 <div id="bloc25">
 <h2 class="parameters">Select a framework</h2>
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<select name="frameworkcode">
 		<option value="">Default</option>
-	<!-- TMPL_LOOP name="frameworkloop" -->
-		<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="frameworktext" --></option>
+	<!-- TMPL_LOOP NAME="frameworkloop" -->
+		<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="frameworktext" --></option>
 	<!-- /TMPL_LOOP -->
 	</select>
-	<input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+	<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
 	<input type="submit" value="OK" class="button">
 </form>
 <b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
@@ -139,33 +139,33 @@
 		<th>Subfields</th>
 		<th>Edit</th>
 		<th>Delete</th>
-	<!-- TMPL_LOOP name="loop" -->
-	<tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
-		<td><b><!-- TMPL_VAR name="tagfield" --></b></td>
-		<td><!-- TMPL_VAR name="liblibrarian" --></td>
-		<td><!-- TMPL_IF name="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-		<td><!-- TMPL_IF name="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-		<td><!-- TMPL_VAR name="authorised_value" --></td>
-		<td><a href="<!-- TMPL_VAR name="subfield_link" -->" class="button">subfields</a></td>
-		<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-		<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+	<!-- TMPL_LOOP NAME="loop" -->
+	<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="bgcolor" -->">
+		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
+		<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
+		<td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+		<td><!-- TMPL_IF NAME="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+		<td><!-- TMPL_VAR NAME="authorised_value" --></td>
+		<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->" class="button">subfields</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+		<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
 	</tr>
 	<!-- /TMPL_LOOP -->
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-	<input type=hidden name=op value=add_form>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form">
 	</table>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-		<input type=hidden name=op value=add_form>
-	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
-		<input type=submit class="button" value="Add Tag" title="Add Tag" alt="Add Tag" >
-		<!-- TMPL_IF name="isprevpage" -->
-			<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-			<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form">
+	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+		<input type="submit" class="button" value="Add Tag" title="Add Tag" alt="Add Tag" >
+		<!-- TMPL_IF NAME="isprevpage" -->
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">
+			<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0">
 			</a>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="nextpage" -->
-			<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+		<!-- TMPL_IF NAME="nextpage" -->
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">
+				<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0">
 			</a>
 		<!-- /TMPL_IF -->
 	</form>

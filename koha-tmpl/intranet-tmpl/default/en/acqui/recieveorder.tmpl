@@ -1,22 +1,22 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR name="name" --></a></h1>
+	<h1 class="acquisition">Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 	<div id="bloc25">
-		<form method=get action="receive.pl">
+		<form method="get" action="receive.pl">
 		<p>
-			<input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
+			<input type="hidden" name="id" value=<!-- TMPL_VAR NAME="id" -->>
 			<h2 class="acquisition">Supplier invoice information</h2>
 		<p>
 			<label>Supplier Invoice Number</label>
-			<input type=text size=20 name=invoice>
+			<input type="text" size="20" name="invoice">
 		</p>
 		<p>
 			<label>GST</label>
-			<input type=text size=20 name=gst>
+			<input type="text" size="20" name="gst">
 		</p>
 		<p>
 			<label>Freight</label>
-			<input type=text size=20 name=freight>
+			<input type="text" size="20" name="freight">
 		</p>
 		<p>
 			<input type="submit" class="button acquisition" value="save">

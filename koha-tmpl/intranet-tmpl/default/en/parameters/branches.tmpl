@@ -34,7 +34,7 @@
 			<td><!-- TMPL_LOOP NAME="categoryloop" -->
 						<tr>
 							<td><!-- TMPL_VAR NAME="categoryname" --></td>
-							<td><INPUT TYPE="checkbox" NAME="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_VAR NAME="checked" -->><!-- TMPL_VAR NAME="codedescription" --></td>
+							<td><input type="checkbox" NAME="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_VAR NAME="checked" -->><!-- TMPL_VAR NAME="codedescription" --></td>
 						</tr>
 					<!-- /TMPL_LOOP -->
 			</td>
@@ -75,7 +75,7 @@
 		Confirm delete:
 		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed">
-			<input type="hidden" name="branchcode" value=<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->>
+			<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" escape="HTML" -->">
 			<input type="submit" value="YES" class="button">
 		</form>
 		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="">
@@ -156,7 +156,7 @@
 			<!-- /TMPL_LOOP -->
 		</table>
 		<br>
-		<form action=<!-- TMPL_VAR NAME="action" --> method="post">
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 			<input type="hidden" name="op" value="add">
 			<input type="submit" class="button" value="Add New Branch">
 		</form>
@@ -197,7 +197,7 @@
 		<!-- /TMPL_LOOP -->
 		</table>
 		<br />
-		<form action=<!-- TMPL_VAR NAME="action" --> method="post">
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
 			<input type="hidden" name="op" value="editcategory">
 			<input type="submit" class="button" value="Add New Category">
 		</form>

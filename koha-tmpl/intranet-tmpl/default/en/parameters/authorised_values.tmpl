@@ -1,55 +1,55 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
-<!-- TMPL_IF name="add_form" -->
-<!---------------------------------------------------------------------------->
-	<H1>
+<!-- TMPL_IF NAME="add_form" -->
+<!-- ------------------------------------------------------------------------ -->
+	<h1>
 	<!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-modify-authorized-value-p" -->Modify authorised value<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-add-new-category-p" -->Add new category<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="heading-add-authorized-value-p" -->Add authorised value<!-- /TMPL_IF -->
-	<!-- TMPL_ELSE --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-	</H1>
-	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
-		<p><label>Category</label><!-- TMPL_VAR name="category" --></p>
-		<p><label>Authorised value</label><input type=text name="authorised_value" value='<!-- TMPL_VAR name="authorised_value" escape=HTML -->'></p>
-		<p><label>Text</label><input type=text name="lib" value='<!-- TMPL_VAR name="lib" -->'></p>
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
+	</h1>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate">
+		<p><label>Category</label><!-- TMPL_VAR NAME="category" --></p>
+		<p><label>Authorised value</label><input type="text" name="authorised_value" value="<!-- TMPL_VAR NAME="authorised_value" escape=HTML -->"></p>
+		<p><label>Text</label><input type="text" name="lib" value="<!-- TMPL_VAR NAME="lib" -->"></p>
 		<p>
-			<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->">
-			<input type="submit" value='OK' class="button parameters">
+			<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+			<input type="submit" value="OK" class="button parameters">
 		</p>
 	</form>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF name="delete_confirm" -->
-<!---------------------------------------------------------------------------->
-<table border=0 cellspacing=0 cellpadding=2>
-	<tr valign=top bgcolor=#99cc33>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
+<!-- TMPL_IF NAME="delete_confirm" -->
+<!-- ------------------------------------------------------------------------ -->
+<table border="0" cellspacing="0" cellpadding="2">
+	<tr valign="top" bgcolor="#99cc33">
+		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Variable</b></td>
+		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Lib</b></td>
+		<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
 	</tr>
-	<tr><td>Value</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-		<input type=hidden name=op value=delete_confirmed>
-		<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
-		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
-	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td>
-		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
+	<tr><td>Value</td><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+	<tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
+	<tr><td><input type="submit" value="YES"></form></td>
+		<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO"></form></td></tr>
 <!-- /TMPL_IF -->
 
-<!---------------------------------------------------------------------------->
-<!-- TMPL_IF name="else" -->
+<!-- ------------------------------------------------------------------------ -->
+<!-- TMPL_IF NAME="else" -->
 <h1>Authorised values admin</h1>
 <p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
 <p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds or modifies a biblio, the subfield is not entered through a free field, but though a list of authorised values.</p>
-<form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
-	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="OK" class="button parameters">
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post">
+	<!-- TMPL_VAR NAME="tab_list" --><input type="submit" value="OK" class="button parameters">
 		<a href="authorised_values.pl?op=add_form" class="button parameters">New category...</a>
 </form>
-<!-- TMPL_VAR name="searchfield" -->
+<!-- TMPL_VAR NAME="searchfield" -->
 <table>
 <tr>
 	<th class="parameters">Category</h>
@@ -58,32 +58,32 @@
 	<th class="parameters">Edit</th>
 	<th class="parameters">Delete</th>
 </tr>
-<!-- TMPL_LOOP name="loop" -->
+<!-- TMPL_LOOP NAME="loop" -->
 <tr>
-	<td><!-- TMPL_VAR name="category" --></td>
-	<td><!-- TMPL_VAR name="authorised_value" --></td>
-	<td><!-- TMPL_VAR name="lib" --></td>
-	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+	<td><!-- TMPL_VAR NAME="category" --></td>
+	<td><!-- TMPL_VAR NAME="authorised_value" --></td>
+	<td><!-- TMPL_VAR NAME="lib" --></td>
+	<td><a href="<!-- TMPL_VAR NAME="edit" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+	<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-<input type=hidden name=op value=add_form>
-<!-- TMPL_IF name="isprevpage" -->
-	<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-	<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
-	</a>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="nextpage" -->
-	<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-		<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
-	</a>
-<!-- /TMPL_IF -->
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 <input type="hidden" name="op" value="add_form">
-<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
-<br><input type=submit class="button" value="Add Authorised value" title="Add authorised Value" ALT="Add Authorised value"><br>
+<!-- TMPL_IF NAME="isprevpage" -->
+	<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">
+	<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0">
+	</a>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="nextpage" -->
+	<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->">
+		<input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0">
+	</a>
+<!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<input type="hidden" name="op" value="add_form">
+<input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->">
+<br><input type="submit" class="button" value="Add Authorised value" title="Add authorised Value" alt="Add Authorised value"><br>
 </form>
 <!-- /TMPL_IF -->
 

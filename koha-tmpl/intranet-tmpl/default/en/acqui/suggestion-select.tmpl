@@ -14,9 +14,9 @@
 			<form>
 				<th class="acquisition">
 					<p>Filter on :
-					title: <input type="text" name="title" value="<!-- TMPL_VAR name="title"-->">
-					author: <input type="text" name="author" value="<!-- TMPL_VAR name="author" -->">
-					publisher: <input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->">
+					title: <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->">
+					author: <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->">
+					publisher: <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->">
 				</th>
 				<th class="acquisition">
 					&nbsp;
@@ -34,22 +34,22 @@
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<p><!-- TMPL_VAR NAME="title" --> - <!-- TMPL_VAR NAME="author" --></p>
 					<p>
-						<!-- TMPL_IF name="copyrightdate" -->copy. year:<!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="isbn" -->ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="publishercode" --><br/>published by:<!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="place" --> at <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR name="note" -->)</i></p> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="copyrightdate" -->copy. year:<!-- TMPL_VAR NAME="copyrightdate" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR NAME="volumedesc" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="isbn" -->ISBN :<i><!-- TMPL_VAR NAME="isbn" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" --><br/>published by:<!-- TMPL_VAR NAME="publishercode" --> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR NAME="publicationyear" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> at <i><!-- TMPL_VAR NAME="place" --></i> <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR NAME="note" -->)</i></p> <!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+					<!-- TMPL_VAR NAME="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamesuggestedby" -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+					<!-- TMPL_VAR NAME="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="firstnamemanagedby" -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<a href="newbiblio.pl??id=<!-- TMPL_VAR name="supplierid" -->&basket=<!-- TMPL_VAR name="basket" -->&suggestionid=<!-- TMPL_VAR name="suggestionid" -->" class="button acquisition">Order</a>
+					<a href="newbiblio.pl?id=<!-- TMPL_VAR NAME="supplierid" -->&amp;basket=<!-- TMPL_VAR NAME="basket" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Order</a>
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
