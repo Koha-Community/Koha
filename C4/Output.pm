@@ -1,13 +1,14 @@
-package C4::Output; #asummes C4/Output
+package C4::Output;
 
 #package to deal with marking up output
 #You will need to edit parts of this pm
 #set the value of path to be where your html lives
 
 use strict;
-use warnings;
-use C4::Database;
 require Exporter;
+use warnings;
+
+use C4::Database;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -15,9 +16,14 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&startpage &endpage &mktablehdr &mktableft &mktablerow &mklink
-&startmenu &endmenu &mkheadr &center &endcenter &mkform &mkform2 &bold
-&gotopage &mkformnotable &mkform3 picktemplate);
+@EXPORT = qw(&startpage &endpage 
+	     &mktablehdr &mktableft &mktablerow &mklink
+	     &startmenu &endmenu &mkheadr 
+	     &center &endcenter 
+	     &mkform &mkform2 &bold
+	     &gotopage &mkformnotable &mkform3
+	     &getkeytableselectoptions
+	     &picktemplate);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -94,23 +100,21 @@ sub picktemplate {
   
 }
 				    
-
-
-sub startpage{
+sub startpage() {
   return("<html>\n");
 }
 
-sub gotopage{
-  my ($target) = @_;
-  print "<br>goto target = $target<br>";
+sub gotopage($) {
+  my ($target) = shif;
+  #print "<br>goto target = $target<br>";
   my $string = "<META HTTP-EQUIV=Refresh CONTENT=\"0;URL=http:$target\">";
   return $string;
 }
 
 
-sub startmenu{
+sub startmenu($) {
   # edit the paths in here
-  my ($type)=@_;
+  my ($type)=shift;
   if ($type eq 'issue') {
     open (FILE,"$path/issues-top.inc") || die;
   } elsif ($type eq 'opac') {
@@ -118,8 +122,7 @@ sub startmenu{
   } elsif ($type eq 'member') {
     open (FILE,"$path/members-top.inc") || die;
   } elsif ($type eq 'acquisitions'){
-    open (FILE,"$path/acquisitions-top.inc")
-      || die "Cannot open $path/acquisitions-top.inc";
+    open (FILE,"$path/acquisitions-top.inc") || die;
   } elsif ($type eq 'report'){
     open (FILE,"$path/reports-top.inc") || die;
   } elsif ($type eq 'circulation') {
@@ -129,8 +132,8 @@ sub startmenu{
   }
   my @string=<FILE>;
   close FILE;
-  my $count=@string;
-  #  $string[$count]="<BLOCKQUOTE>";
+  # my $count=@string;
+  # $string[$count]="<BLOCKQUOTE>";
   return @string;
 }
 
@@ -158,7 +161,7 @@ sub endmenu {
   return @string;
 }
 
-sub mktablehdr {
+sub mktablehdr() {
     return("<table border=0 cellspacing=0 cellpadding=5>\n");
 }
 
@@ -173,24 +176,23 @@ sub mktablerow {
   my $i=0;
   my $string="<tr valign=top bgcolor=$colour>";
   while ($i <$cols){
-    if ($data[$cols] ne ''){
-    #check for backgroundimage
-      $string.="<td background=\"$data[$cols]\">";
-    } else {
-      $string.="<td>";
-    }
-    if ($data[$i] eq "") {
-      $string.=" &nbsp; </td>";
-    } else {
-      $string.="$data[$i]</td>";
-    } 
-    $i++;
+      if (defined $data[$cols]) { # if there is a background image
+	  $string.="<td background=\"$data[$cols]\">";
+      } else { # if there's no background image
+	  $string.="<td>";
+      }
+      if ($data[$i] eq "") {
+	  $string.=" &nbsp; </td>";
+      } else {
+	  $string.="$data[$i]</td>";
+      } 
+      $i++;
   }
   $string=$string."</tr>\n";
   return($string);
 }
 
-sub mktableft {
+sub mktableft() {
   return("</table>\n");
 }
 
@@ -248,7 +250,7 @@ sub mkform3 {
   $string   .= mktablehdr();
   my $key;
   my @keys = sort(keys(%inputs));
-  my @order;  
+  my @order;
   my $count = @keys;
   my $i2 = 0;
   while ($i2 < $count) {
@@ -319,6 +321,13 @@ sub mkformnotable{
 }
 
 sub mkform2{
+    # FIXME
+    # no POD and no tests yet.  Once tests are written,
+    # this function can be cleaned up with the following steps:
+    #  turn the while loop into a foreach loop
+    #  pull the nested if,elsif structure back up to the main level
+    #  pull the code for the different kinds of inputs into separate
+    #   functions
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
   $string=$string.mktablehdr();
@@ -376,48 +385,158 @@ sub mkform2{
   $string=$string."</form>";
 }
 
+=pod
 
-sub endpage{
+=head2 &endpage
+
+ &endpage does not expect any arguments, it returns the string:
+   </body></html>\n
+
+=cut
+
+sub endpage() {
   return("</body></html>\n");
 }
 
-sub mklink {
+=pod
+
+=head2 &mklink
+
+ &mklink expects two arguments, the url to link to and the text of the link.
+ It returns this string:
+   <a href="$url">$text</a>
+ where $url is the first argument and $text is the second.
+
+=cut
+
+sub mklink($$) {
   my ($url,$text)=@_;
   my $string="<a href=\"$url\">$text</a>";
   return ($string);
 }
 
+=pod
+
+=head2 &mkheadr
+
+ &mkeadr expects two strings, a type and the text to use in the header.
+ types are:
+
+=over
+
+=item 1  ends with <br>
+
+=item 2  no special ending tag
+
+=item 3  ends with <p>
+
+=back
+
+ Other than this, the return value is the same:
+   <FONT SIZE=6><em>$text</em></FONT>$string
+ Where $test is the text passed in and $string is the tag generated from 
+ the type value.
+
+=cut
+
 sub mkheadr {
+    # FIXME
+    # would it be better to make this more generic by accepting an optional
+    # argument with a closing tag instead of a numeric type?
+
   my ($type,$text)=@_;
   my $string;
   if ($type eq '1'){
     $string="<FONT SIZE=6><em>$text</em></FONT><br>";
   }
   if ($type eq '2'){
-    $string="<FONT SIZE=6><em>$text</em></FONT>";
+    $string="<FONT SIZE=6><em>$text</em></FONT><br>";
   }
-    if ($type eq '3'){
+  if ($type eq '3'){
     $string="<FONT SIZE=6><em>$text</em></FONT><p>";
   }
   return ($string);
 }
 
-sub center {
+=pod
+
+=head2 &center and &endcenter
+
+ &center and &endcenter take no arguments and return html tags <CENTER> and
+ </CENTER> respectivley.
+
+=cut
+
+sub center() {
   return ("<CENTER>\n");
 }  
 
-sub endcenter {
+sub endcenter() {
   return ("</CENTER>\n");
 }  
 
-sub bold {
-  my ($text)=@_;
-  my $string="<b>$text</b>";
-  return($string);
+=pod
+
+=head2 &bold
+
+ &bold requires that a single string be passed in by the caller.  &bold 
+ will return "<b>$text</b>" where $text is the string passed in.
+
+=cut
+
+sub bold($) {
+  my ($text)=shift;
+  return("<b>$text</b>");
 }
 
+#---------------------------------------------
+# Create an HTML option list for a <SELECT> form tag by using
+#    values from a DB file
+sub getkeytableselectoptions {
+	use strict;
+	# inputs
+	my (
+		$dbh,		# DBI handle
+		$tablename,	# name of table containing list of choices
+		$keyfieldname,	# column name of code to use in option list
+		$descfieldname,	# column name of descriptive field
+		$showkey,	# flag to show key in description
+		$default,	# optional default key
+	)=@_;
+	my $selectclause;	# return value
 
+	my (
+		$sth, $query, 
+		$key, $desc, $orderfieldname,
+	);
+	my $debug=0;
 
+    	requireDBI($dbh,"getkeytableselectoptions");
+
+	if ( $showkey ) {
+		$orderfieldname=$keyfieldname;
+	} else {
+		$orderfieldname=$descfieldname;
+	}
+	$query= "select $keyfieldname,$descfieldname
+		from $tablename
+		order by $orderfieldname ";
+	print "<PRE>Query=$query </PRE>\n" if $debug; 
+	$sth=$dbh->prepare($query);
+	$sth->execute;
+	while ( ($key, $desc) = $sth->fetchrow) {
+	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
+	    $selectclause.="<option";
+	    if (defined $default && $default eq $key) {
+		$selectclause.=" selected";
+	    }
+	    $selectclause.=" value='$key'>$desc\n";
+	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
+	}
+	return $selectclause;
+} # sub getkeytableselectoptions
+
+#---------------------------------
 
 END { }       # module clean-up code here (global destructor)
     
