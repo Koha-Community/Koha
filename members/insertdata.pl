@@ -108,4 +108,4 @@ if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
   $sth2->execute;
   $sth2->finish;
 $sth->finish;
-print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$data{'borrowernumber'}");
+print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$data{'borrowernumber'}");
