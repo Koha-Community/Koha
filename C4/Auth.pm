@@ -45,7 +45,7 @@ C4::Auth - Authenticates Koha users
 
   my $query = new CGI;
 
-  my ($template, $borrowernumber, $cookie) 
+  my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name   => "opac-main.tmpl",
                              query           => $query,
 			     type            => "opac",
@@ -367,6 +367,11 @@ sub checkpw {
 		# Koha superuser account
 		return 2;
 	}
+	if ($userid eq 'demo' && $password eq 'demo' && C4::Context->config('demo')) {
+		# DEMO => the demo user is allowed to do everything (if demo set to 1 in koha.conf
+		# some features won't be effective : modify systempref, modify MARC structure,
+		return 2;
+	}
 	return 0;
 }
 
@@ -399,6 +404,10 @@ sub haspermission {
     my $configfile;
     if ($userid eq C4::Context->config('user')) {
 	# Super User Account from /etc/koha.conf
+	$flags->{'superlibrarian'}=1;
+    }
+    if ($userid eq 'demo' && C4::Context->config('demo')) {
+	# Demo user that can do "anything" (demo=1 in /etc/koha.conf)
 	$flags->{'superlibrarian'}=1;
     }
     return $flags if $flags->{superlibrarian};
