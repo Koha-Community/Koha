@@ -39,6 +39,7 @@ use C4::Interface::CGI::Template;
 use CGI;
 use C4::Search;
 use Date::Manip;
+use C4::Date;
 use C4::Reserves2;
 use C4::Circulation::Renewals2;
 use C4::Circulation::Circ2;
@@ -64,9 +65,9 @@ my $bornum=$input->param('bornum');
 
 my $data=borrdata('',$bornum);
 
-$data->{'dateenrolled'} = slashifyDate($data->{'dateenrolled'});
-$data->{'expiry'} = slashifyDate($data->{'expiry'});
-$data->{'dateofbirth'} = slashifyDate($data->{'dateofbirth'});
+$data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
+$data->{'expiry'} = format_date($data->{'expiry'});
+$data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
 
 $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 
