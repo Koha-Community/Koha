@@ -628,7 +628,7 @@ sub issuebook {
 						createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $patroninformation->{'borrowernumber'}, $charge);
 						$iteminformation->{'charge'} = $charge;
 					}
-					&UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
+					&UpdateStats($env,$env->{'branchcode'},'renew',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$patroninformation->{'borrowernumber'});
 					renewbook($env,$dbh, $patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'});
 					$noissue=1;
 				} else {
@@ -760,7 +760,7 @@ sub issuebook {
 			$iteminformation->{'charge'}=$charge;
 		}
 		# Record the fact that this book was issued.
-		&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'});
+		&UpdateStats($env,$env->{'branchcode'},'issue',$charge,'',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$patroninformation->{'borrowernumber'});
 	}
 
 	if ($iteminformation->{'charge'}) {
@@ -892,7 +892,7 @@ sub returnbook {
 	}
 	# update stats?
 	# Record the fact that this book was returned.
-	UpdateStats(\%env, $branch ,'return','0','',$iteminformation->{'itemnumber'});
+	UpdateStats(\%env, $branch ,'return','0','',$iteminformation->{'itemnumber'},$iteminformation->{'itemtype'},$borrower->{'borrowernumber'});
 	return ($doreturn, $messages, $iteminformation, $borrower);
 }
 
