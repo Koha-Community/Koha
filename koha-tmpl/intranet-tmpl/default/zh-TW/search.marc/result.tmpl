@@ -1,0 +1,44 @@
+<TMPL_IF NAME="opac">
+    <TMPL_INCLUDE NAME="opac-top.inc">
+<TMPL_ELSE>
+    <TMPL_INCLUDE NAME="cat-top.inc">
+</TMPL_IF>
+
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
+</TMPL_IF>
+
+<center>
+
+<table border=0 cellspacing=0 cellpadding=2>
+<thead>
+	<tr
+	<TMPL_IF NAME="opac">
+			bgcolor=#99cccc background=/images/background-opac.gif
+		<TMPL_ELSE>
+			background="/images/background-mem.gif"
+		</TMPL_IF>
+	>
+<!--
+		<th colspan=5>Result</th>
+-->
+	<th>Biblio#</th>
+	<th>Author</th>
+	<th>Title</th>
+	</tr>
+<tbody>
+	<TMPL_LOOP name="result">
+		<tr>
+			<td><TMPL_VAR name="bibid"></td>
+			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="title"></td>
+		</tr>
+	</TMPL_LOOP>
+</table>
+<TMPL_IF NAME="opac">
+    <TMPL_INCLUDE NAME="opac-bottom.inc">
+<TMPL_ELSE>
+    <TMPL_INCLUDE NAME="cat-bottom.inc">
+</TMPL_IF>

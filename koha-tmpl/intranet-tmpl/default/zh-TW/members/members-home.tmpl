@@ -1,0 +1,72 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+	<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>登出</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>登入</a> <span lang=mi>Koha</span></p>
+</TMPL_IF>
+
+<FONT SIZE=6><em>尋找讀者</em></FONT><P>
+
+
+<img src="/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1" 
+hspace=5 align=left BORDER=0>
+
+<table border=1 cellspacing=0 cellpadding=10 height="100" >
+<tr VALIGN=TOP  >
+<td  bgcolor="99cc33" background="/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
+<b>尋找讀者</B> 
+</FONT>
+<INPUT TYPE="text" size=50 name=member >
+<BR>
+續借書籍、登記新讀者、或給現有的讀者更新或刪除記錄，統統都由這個搜尋開始。<br>
+在上列空格內輸入讀者姓名、姓名的一部分、或圖書證編號，再按回車鍵即可。
+</td></form><tr>
+</table>
+ 
+<P>
+
+<img src="/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2" 
+hspace=5 align=left BORDER=0>
+
+
+<table border=1 cellspacing=0 cellpadding=10 height="100" >
+<tr VALIGN=TOP  >
+<td  bgcolor="99cc33" background="/images/background-mem.gif"><FONT SIZE=4>
+<b>瀏覽讀者記錄</B> 
+</FONT>
+</td></form><tr>
+<TR VALIGN=TOP>
+<TD><CENTER><B>
+<A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=b">B</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=c">C</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=d">D</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=e">E</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=f">F</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=g">G</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=h">H</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=i">I</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=j">J</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=k">K</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=l">L</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=m">M</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=n">N</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=o">O</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=p">P</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=q">Q</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=r">R</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=s">S</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=t">T</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=u">U</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=v">V</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=w">W</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=x">X</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=y">Y</a> ||
+<A HREF="/cgi-bin/koha/member.pl?member=z">Z</a>
+
+</B>
+</TD></TR></TABLE>
+
+<P>
+<TMPL_INCLUDE NAME="members-bottom.inc">

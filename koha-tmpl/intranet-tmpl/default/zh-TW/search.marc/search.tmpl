@@ -1,0 +1,145 @@
+<TMPL_IF NAME="opac">
+    <TMPL_INCLUDE NAME="opac-top.inc">
+<TMPL_ELSE>
+    <TMPL_INCLUDE NAME="cat-top.inc">
+</TMPL_IF>
+
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
+</TMPL_IF>
+
+<center>
+
+<form name="f" method="post">
+<input type="hidden" name="type" value="intranet">
+	<table border=0 cellspacing=0 cellpadding=2>
+		<tr
+		<TMPL_IF NAME="opac">
+				bgcolor=#99cccc background=/images/background-opac.gif
+			<TMPL_ELSE>
+				background="/images/background-mem.gif"
+			</TMPL_IF>
+		>
+			<th colspan=5>Search</th>
+		</tr>
+		<tr align="center">
+			<td colspan=5>
+			<div name="sql">
+			<input type="hidden" name="op" value="do_search">
+			<textarea name="sql" rows=5 cols=85 disabled readonly></textarea>
+			</td>
+		</tr>
+
+		<!-- 000000000000000000000000000000000000000000000000000000 -->
+		<tr>
+			<td rowspan=3
+				<TMPL_IF NAME="opac">
+					bgcolor=#99cccc background=/images/background-opac.gif
+				<TMPL_ELSE>
+					background="/images/background-mem.gif"
+				</TMPL_IF>
+			align=center valign=center>
+				<b>0</b>
+			</td>
+			<td>
+				<input type=hidden name="and_or" value="">&nbsp;
+			</td>
+			<td><TMPL_VAR name="marclist"></td>
+			<td>
+				<select name="excluding" size="1" onchange="sql_update()">
+					<option value=""> </option>
+					<option value="not">not</option>
+				</select>
+			</td>
+			<td>
+				<select name="operator" size="1" onchange="sql_update()">
+					<option value="=">equals</option>
+					<option value=">">More than</option>
+					<option value=">=">More or equal than</option>
+					<option value="<">Less than</option>
+					<option value="<=">Less or equal than</option>
+					<option value="start">start</option>
+					<option value="contains">contains</option>
+				</select>
+			</td>
+			<td><input type="text" name="value" onChange="sql_update()"></td>
+		</tr>
+		<tr>
+			<td>
+				<select name="and_or" size="1" onchange="sql_update()">
+					<option value="and">and</option>
+					<option value="or">or</option>
+				</select>
+			</td>
+			<td><TMPL_VAR name="marclist"></td>
+			<td>
+				<select name="excluding" size="1" onchange="sql_update()">
+					<option value=""> </option>
+					<option value="not">not</option>
+				</select>
+			</td>
+			<td>
+				<select name="operator" size="1" onchange="sql_update()">
+					<option value="=">equals</option>
+					<option value=">">More than</option>
+					<option value=">=">More or equal than</option>
+					<option value="<">Less than</option>
+					<option value="<=">Less or equal than</option>
+					<option value="start">start</option>
+					<option value="contains">contains</option>
+				</select>
+			</td>
+			<td><input type="text" name="value" onChange="sql_update()"></td>
+		</tr>
+		<tr>
+			<td>
+				<select name="and_or" size="1" onchange="sql_update()">
+					<option value="and">and</option>
+					<option value="or">or</option>
+				</select>
+			</td>
+			<td><TMPL_VAR name="marclist"></td>
+			<td>
+				<select name="excluding" size="1" onchange="sql_update()">
+					<option value=""> </option>
+					<option value="not">not</option>
+				</select>
+			</td>
+			<td>
+				<select name="operator" size="1" onchange="sql_update()">
+					<option value="=">equals</option>
+					<option value=">">More than</option>
+					<option value=">=">More or equal than</option>
+					<option value="<">Less than</option>
+					<option value="<=">Less or equal than</option>
+					<option value="start">start</option>
+					<option value="contains">contains</option>
+				</select>
+			</td>
+			<td><input type="text" name="value" onChange="sql_update()"></td>
+		</tr>
+		<tr><td colspan=5 align=center><input type="submit" value="OK"></td></tr>
+	</table>
+</form>
+<script>
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.marclist[i].value != '') {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + '' +
+										document.f.operator[i].value + '' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+</script>
+<TMPL_IF NAME="opac">
+    <TMPL_INCLUDE NAME="opac-bottom.inc">
+<TMPL_ELSE>
+    <TMPL_INCLUDE NAME="cat-bottom.inc">
+</TMPL_IF>

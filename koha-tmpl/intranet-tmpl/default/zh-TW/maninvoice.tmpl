@@ -1,0 +1,25 @@
+<TMPL_INCLUDE Name="members-top.inc">
+
+<Center><h3>手發收據</h3></center>
+<form action=/cgi-bin/koha/maninvoice.pl method=post>
+<table cellpadding=2 cellspacing=0 border=0>
+<input type=hidden name=bornum value="<TMPL_VAR Name="bornum">">
+<tr><td><b>讀者編號<b></td><td><TMPL_VAR Name="bornum"></td></tr>
+<tr><td><b>類別</b></td><Td>
+<select name=type>
+<option value=L>賠償</option>
+<option value=F>罰款</option>
+<option value=A>戶口手續費</option>
+<option value=N>新證</option>
+<option value=M>雜項</option>
+<option value=REF>退款</option>
+</select>
+</td></tr>
+<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>說明</b></td><td><input type=text name=desc size=50></td></tr>
+<tr><td><b>金額</b></td><td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value=Add></td></tr>
+</table>
+</form>
+
+<TMPL_INCLUDE Name="members-bottom.inc">

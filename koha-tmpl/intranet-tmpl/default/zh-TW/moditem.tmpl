@@ -1,0 +1,47 @@
+<TMPL_INCLUDE Name="cat-top.inc">
+
+<FONT SIZE=6><em><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</em></FONT><br>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top bgcolor=white><td><form action=updateitem.pl method=post>
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top bgcolor=white><td>Barcode</td><td><input type=text name=Barcode value="<TMPL_VAR Name="barcode">" size=40></td></tr>
+<input type=hidden name=Class value="<TMPL_VAR Name="classification">">
+<input type=hidden name=Publisher value="<TMPL_VAR Name="publisher">">
+<input type=hidden name=ISBN value="<TMPL_VAR Name="isbn">">
+<input type=hidden name=Publication Year value="<TMPL_VAR Name="publicationyear">">
+<input type=hidden name=Pages value="<TMPL_VAR Name="pages">">
+<input type=hidden name=Illustrations value="<TMPL_VAR Name="illustration">">
+<tr valign=top bgcolor=white><td>ItemNotes</td><td><textarea name=ItemNotes cols=40 rows=4><TMPL_VAR Name="itemnotes"></textarea></td></tr>
+<input type=hidden name=Volume value="<TMPL_VAR Name="volumeddesc">">
+<tr valign=top bgcolor=white><td>Home Branch</td><td><input type=text name=Home Branch value="<TMPL_VAR Name="homebranch">" size=40></td></tr>
+<tr valign=top bgcolor=white>
+
+<td>Lost</td>
+<td>
+<input type=radio name=Lost value=1 <TMPL_IF Name="itemlost">  checked </TMPL_IF> >
+Yes
+<input type=radio name=Lost value=0 <TMPL_UNLESS Name="itemlost"> checked </TMPL_UNLESS> >
+No
+</td>
+</tr>
+<tr valign=top bgcolor=white>
+<td>Cancelled</td>
+<td><input type=radio name=withdrawn value=1 <TMPL_IF Name="withdrawn"> checked </TMPL_IF> >
+Yes
+<input type=radio name=withdrawn value=0 <TMPL_UNLESS Name="withdrawn"> checked </TMPL_UNLESS> >
+No
+</td>
+</tr>
+<input type=hidden name=bibnum value="<TMPL_VAR Name="biblionumber">">
+<input type=hidden name=bibitemnum value="<TMPL_VAR Name="biblioitemnumber">">
+<input type=hidden name=itemnumber value="<TMPL_VAR Name="itemnumber">">
+<tr valign=top bgcolor=white><td></td><td>
+
+<input type=image  name=submit src=/images/save-changes.gif border=0 width=187
+height=42></td></tr>
+</table>
+</form></td></tr>
+</table>
+
+
+<TMPL_INCLUDE Name="cat-bottom.inc">

@@ -1,0 +1,18 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_IF NAME="missingloop">
+	<TMPL_VAR Name="string">
+<TMPL_ELSE>
+	<TMPL_IF NAME=invalid>
+		Invalid cardnumber.<p>
+	<TMPL_ELSE>
+		<form action="/cgi-bin/koha/insertidata.pl" method=post>
+			<TMPL_LOOP NAME=inputsloop>
+				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
+			</TMPL_LOOP>
+			<input type=submit name=submit value=submit>
+		</form>
+	</TMPL_IF>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="members-bottom.inc">

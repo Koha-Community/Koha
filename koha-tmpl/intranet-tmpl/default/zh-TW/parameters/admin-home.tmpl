@@ -1,0 +1,89 @@
+<html>
+<TMPL_INCLUDE NAME="parameters-top.inc">
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>您目前登入為: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a> <span lang=mi>Koha</span></p>
+</TMPL_IF>
+<center>
+<FONT SIZE=6><em><span lang=mi>Koha</span>的系統設定</em></FONT><br>
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>系統參數</th>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=1 width=80%>
+<th colspan=2>書目相關設定</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Item types</a></td>
+	<td>各種館藏的分類</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>budget</a></td>
+	<td>the budgets allowed to differents book funds.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>book funds</a></td>
+	<td>the differents book funds.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>容許值</a></td>
+	<td>設定容許值的類別及相關的容許值。
+在機讀格式結構的設定裡，可指定某些分欄只能用某些「容許值」，令輸入書目時可以減少錯誤或更加方便</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thesaurus</a></td>
+	<td>Thesaurus management. You can define as many thesaurus as needed, through definiitions of thesaurus "category"</td>
+</tr>
+
+<th colspan=2>機讀格式 (<abbr lang=en>MARC</abbr>) 相關設定</th>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>定義機讀格式的結構</a></td><td>機讀格式的結構：欄及分欄</td></tr>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>定義機讀格式和<span lang=mi>koha</span>資料庫間的連結</a></td><td>定義<span lang=mi>Koha</span>資料庫和機讀格式資料庫間的關係。註：使用「定義機讀格式的結構」功能也可做到這點，但用這個工具做連結會快一些。</td></tr>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>核對機讀格式結構</a></td><td>核實機讀格式結構的定義有沒有導致資料庫不能正常操作的嚴重錯誤。處理真正的資料前，務必用這個核一核對！</td></tr>
+
+<th colspan=2>其他參數</th>
+<tr>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl" >分館設定</a></td>
+	<td>這套 <span lang=mi>Koha</span> 伺服器由哪些圖書館共用</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">讀者類別</a></td>
+	<td>設定不同的讀者類別</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl" >幣值設定</a></td>
+	<td>書藉供應商用什麼貨幣</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl" >打印機設定</a></td>
+	<td>印表機 (UNIX 路徑) 設定</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>stopword</a></td>
+	<td>查詢時應該省略的字眼</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>Z39.50 伺服器</a></td>
+	<td>用來查詢機讀格式資料的各伺服器</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>系統偏好</a></td>
+	<td>其他影響系統運作的偏好設定</td>
+</tr>
+</table>
+
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>相關工具</th>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=1 width=80%>
+<th colspan=2>匯出</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>MARC biblio export</a></td>
+	<td>以機讀格式匯出</td>
+</tr>
+</table>
+</center>
+<TMPL_INCLUDE NAME="cat-bottom.inc">
+</html>
