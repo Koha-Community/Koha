@@ -43,7 +43,7 @@ if ($add){
   my $amount=$input->param('amount');
   my $type=$input->param('type');
   manualinvoice($bornum,$itemnum,$desc,$type,$amount);
-  print $input->redirect("/cgi-bin/koha/moremember.pl?bornum=$bornum");
+  print $input->redirect("/cgi-bin/koha/boraccount.pl?bornum=$bornum");
 } else {
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "maninvoice.tmpl",

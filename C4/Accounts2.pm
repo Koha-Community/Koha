@@ -314,15 +314,16 @@ sub manualinvoice{
     $amountleft=refund('',$bornum,$amount);
   }
   if ($itemnum ne ''){
-    my $sth=$dbh->prepare("Select * from items where barcode='$itemnum'");
-    $sth->execute;
-    my $data=$sth->fetchrow_hashref;
-    $sth->finish;
+#     my $sth=$dbh->prepare("Select * from items where barcode='$itemnum'");
+#     $sth->execute;
+#     my $data=$sth->fetchrow_hashref;
+#     $sth->finish;
     $desc.=" ".$itemnum;
     my $sth=$dbh->prepare("INSERT INTO	accountlines
 			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber)
 	VALUES (?, ?, now(), ?,?, ?,?,?)");
-    $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
+#     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
+     $sth->execute($bornum, $accountno, $amount, $desc, $type, $amountleft, $itemnum);
   } else {
     $desc=$dbh->quote($desc);
     my $sth=$dbh->prepare("INSERT INTO	accountlines
