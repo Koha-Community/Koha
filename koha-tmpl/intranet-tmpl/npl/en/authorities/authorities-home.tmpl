@@ -1,37 +1,31 @@
-    <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
-<div id="mainbloc">
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Authorities
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
-<h1 class="authority">Authority search</h1>
+<div id="main">
 
-<form name="f" method="post">
-	<input type="hidden" name="op" value="do_search">
-	<input type="hidden" name="type" value="intranet">
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-	<div id="bloc25">
-		<h2 class="authority">Search on</h2>
-		<p>
-			<label class="label100">Authority type</label>
-			<select name="authtypecode">
+<form name="f" method="post" action="/cgi-bin/koha/authorities/authorities-home.pl">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="type" value="intranet" />
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+<table>
+<caption>Authority search</caption>
+<tr><td><label for="authtypecode">Authority type</label></td><td><select id="authtypecode" name="authtypecode">
 			<!-- TMPL_LOOP NAME="authtypesloop" -->
 				<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR NAME="authtypetext" -->
 				</option>
 			<!-- /TMPL_LOOP -->
-			</select>
-		</p>
-		<p>
-			<label class="label100">Search value</label>
-			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
-			<input type="hidden" name="marclist" value="">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-		</p>
-		<p>
-			<input type="submit" value="Start search" class="button authority">
-		</p>
-	</div>
+			</select></td></tr>
+<tr><td><label for="value">Search value</label></td><td><input type="text" id="value" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" /></td></tr>			
+</table>
+	<input type="submit" value="Start search" class="submit" />
 </form>
 </div>
-<!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
