@@ -88,19 +88,12 @@
 
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
-	<font SIZE=6><em>Thesaurus management</em></font>
+	<h1>Thesaurus management</h1>
 	<p>Manages thesaurus and authorities files.<br />
 	<ul>
 		<b>Dig</b>: see data dependent one this one<br />
 		<b>Related</b>: see other forms of this authority entry</p>
 	</ul>
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type="hidden" name="op" value="add_form">
-	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
-	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
-	<input type="hidden" name="father" value="<TMPL_VAR name="father">">
-	<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add thesaurus entry" ALT="Add" BORDER=0 ><br>
-	</form>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<TMPL_VAR name="tab_list">
 		<input type="checkbox" name="toponly" value="1" <TMPL_IF name="toponly">checked</TMPL_IF>>Top hierarchy only
@@ -140,6 +133,15 @@
 			<td width=50%><TMPL_VAR name="next"></td>
 		</tr>
 	</table>
+
+	<form action='<TMPL_VAR name="script_name">' method=post>
+	<input type="hidden" name="op" value="add_form">
+	<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+	<input type="hidden" name="branch" value="<TMPL_VAR name="branch">">
+	<input type="hidden" name="father" value="<TMPL_VAR name="father">">
+	<br><input type=submit class="button"  value="Add Thesaurus entry" title="Add Thesaurus entry" ALT="Add Thesaurus entry"><br>
+	</form>
+
 </TMPL_IF>
 
 <TMPL_INCLUDE NAME="parameters-bottom.inc">

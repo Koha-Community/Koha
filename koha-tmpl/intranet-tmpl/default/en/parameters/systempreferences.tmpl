@@ -140,8 +140,13 @@
 		<td width=50%><TMPL_VAR name="next"></td>
 	</tr>
 </table>
-<br><a href='<TMPL_VAR name="script_name">?op=add_form'><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add a system preference" ALT="Add" BORDER=0 >Add a system preference</a><br>
 </form>
+
+<form action=<TMPL_VAR name="script_name"> method=post>
+        <input type='hidden' name='op' value='add_form'>
+        <input type=submit class="button" value='Add System preference'>
+</form>
+
 </TMPL_IF>
 
 

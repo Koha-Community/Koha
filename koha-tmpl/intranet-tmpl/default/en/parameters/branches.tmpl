@@ -50,9 +50,8 @@ Confirm delete:
 </TMPL_IF>
 
 <TMPL_IF name="else">
-<FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
+<h1><TMPL_VAR name=head></h1><br>
 <font color='red'><TMPL_VAR name="message"></font>
-<form action=<TMPL_VAR name=action> method=post><input type='hidden' name='op' value='add'><input type=submit value='Add New Branch'></form>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33'>
 <font size='5'><b>Branches</b></font></th> </tr>
@@ -108,6 +107,12 @@ Confirm delete:
 </TMPL_LOOP>
 </table>
 <br>
+<form action=<TMPL_VAR name=action> method=post>
+	<input type='hidden' name='op' value='add'>
+	<input type=submit class="button" value='Add New Branch'>
+</form>
+
+<br>
 <table border='1' cellpadding='5' cellspacing='0'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33'>
 <font size='5'><b>Branches Categories</b></font></th> </tr> 
@@ -122,6 +127,7 @@ Confirm delete:
     <td align='left' valign='top'><TMPL_VAR name=codedescription></td>
 </tr>
 </table>
+
 </TMPL_IF>
 
 <TMPL_INCLUDE NAME="parameters-bottom.inc">

@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="parameters-top.inc">
 
 <TMPL_IF name="else">
-	<FONT SIZE=6><em>Budget admin</em></FONT><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
+	<h1>Budget admin</h1><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
 	<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
 	<TMPL_IF name=search>
 	<br>You Searched for <b><TMPL_VAR name=searchfield><b><p><br>
@@ -20,8 +20,8 @@
 	</TMPL_LOOP>
 	</table>
 	<form action='/cgi-bin/koha/admin/aqbudget.pl' method=post>
-	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add budget" ALT="Add" BORDER=0 ><br>
+	<input type=hidden name=op value=add_form>
+	<br><input type=submit class="button" value="Add Budget" title="Add Budget" ALT="Add Budget"><br>
 	</form><br clear=all>
 </TMPL_IF>
 

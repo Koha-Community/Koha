@@ -48,7 +48,7 @@
 
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
-<font SIZE=6><em>Authorised values admin</em></font>
+<h1>Authorised values admin</h1>
 <p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
 <p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds or modifies a biblio,
 the subfield is not entered through a free field, but though a list of authorised values.</p>
@@ -84,7 +84,7 @@ the subfield is not entered through a free field, but though a list of authorise
 <form action='<TMPL_VAR name="script_name">' method=post>
 <input type="hidden" name="op" value="add_form">
 <input type="hidden" name="category" value="<TMPL_VAR name="category">">
-<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add Authorised Value" ALT="Add" BORDER=0 ><br>
+<br><input type=submit class="button" value="Add Authorised value" title="Add authorised Value" ALT="Add Authorised value"><br>
 </form>
 </TMPL_IF>
 

@@ -92,7 +92,7 @@
 
 <!-------------------------------------------------------------------------------------------------->
 <TMPL_IF name="else">
-<font SIZE=6><em>MARC tag structure admin</em></font>
+<h1>MARC tag structure admin</h1>
 <form action='<TMPL_VAR name="script_name">' method=post>
 	<input type=text name=searchfield value="">
 	<input type=reset name=reset value="clr">
@@ -128,7 +128,7 @@
 <table width=40%>
 	<tr>
 		<td width="33%">
-			<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" title="Add tag" ALT="Add" BORDER=0 >
+			<input type=submit class="button" value="Add Tag" title="Add Tag" alt="Add Tag" >
 		</td>
 		<td width=33%><TMPL_IF name="previous"><TMPL_VAR name="previous"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a></TMPL_IF></td>
 		<td width=33%><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
