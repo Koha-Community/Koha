@@ -1,0 +1,52 @@
+<HTML>
+
+<TMPL_VAR NAME=startmenumember>
+
+<FONT SIZE=6><em>Wyszukiwanie czytelników</em></FONT><br>
+
+<form action="/cgi-bin/koha/member.pl" method=post>
+  <input type=text name="member" value="<TMPL_VAR NAME=member>">
+  <input type=reset name="reset" value="wyczy¶æ">
+</form>
+
+Szukano <TMPL_VAR NAME=member><p>
+<table>
+  <tr bgcolor="#99cc33">
+    <td background="/images/background-mem.gif"><b>Karta</b></td>
+    <td background="/images/background-mem.gif"><b>Nazwisko</b></td>
+    <td background="/images/background-mem.gif"><b>Imiê</b></td>
+    <td background="/images/background-mem.gif"><b>Kategoria</b></td>
+    <td background="/images/background-mem.gif"><b>Adres</b></td>
+    <td background="/images/background-mem.gif"><b>Zaleg³e pozycje</b></td>
+    <td background="/images/background-mem.gif"><b>Op³aty</b></td>
+    <td background="/images/background-mem.gif"><b>Uwagi</b></td>
+  </tr>
+  
+  <TMPL_LOOP NAME=resultsloop>
+    <TMPL_IF NAME="__ODD__">
+    <TR bgcolor="#ffffcc">
+    <TMPL_ELSE>
+    <TR bgcolor=white>
+    </TMPL_IF>
+      <td><TMPL_VAR NAME=cardnumber></td>
+      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=borrowernumber>"><TMPL_VAR NAME=surname></td>
+      <td><TMPL_VAR NAME=firstname></a></td>
+      <td><TMPL_VAR NAME=categorycode></td>
+      <td><TMPL_VAR NAME=streetaddress> <TMPL_VAR NAME=city></td>
+      <td><TMPL_VAR NAME=odissue></td>
+      <td><TMPL_VAR NAME=fines></td>
+      <td><TMPL_VAR NAME=borrowernotes></td>
+    </tr>
+  </TMPL_LOOP>
+</table>
+
+<form action=/cgi-bin/koha/simpleredirect.pl method=post>
+<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Dodaj nowego czyteln." BORDER=0 ></a><br>
+<INPUT TYPE="radio" name="chooseform" value="adult" checked>Osoba
+<INPUT TYPE="radio" name="chooseform" value="organisation" >Organizacja
+</form>
+
+<TMPL_VAR NAME=endmenumember>
+
+</body>
+</HTML>
