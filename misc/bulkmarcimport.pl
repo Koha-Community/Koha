@@ -1,531 +1,99 @@
 #!/usr/bin/perl
-#
-# Tool for importing bulk marc records
-#
-# WARNING!!
-#
-# Do not use this script on a production system, it is still in development
-#
-#
+# small script that import an iso2709 file into koha 2.0
 
+use strict;
 
-
-
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
-$file=$ARGV[0];
-
-$branchname='MAIN';
-
-unless ($file) {
-    print "USAGE: ./bulkmarcimport.pl filename\n";
-    exit;
-}
-
-
-
-
-my $lc1='#dddddd';
-my $lc2='#ddaaaa';
-
-
+# Koha modules used
+use MARC::File::USMARC;
+use MARC::Record;
+use MARC::Batch;
 use C4::Context;
-use CGI;
-use DBI;
-#use strict;
-use C4::Catalogue;
 use C4::Biblio;
-use C4::Output;
-my $dbh = C4::Context->dbh;
-my $userid=$ENV{'REMOTE_USER'};
 
-# FIXME - Wouldn't it be better to use &C4::SimpleMarc::taglabel
-# instead of duplicating this information?
-%tagtext = (
-    '001' => 'Control number',
-    '003' => 'Control number identifier',
-    '005' => 'Date and time of latest transaction',
-    '006' => 'Fixed-length data elements -- additional material characteristics',
-    '007' => 'Physical description fixed field',
-    '008' => 'Fixed length data elements',
-    '010' => 'LCCN',
-    '015' => 'LCCN Cdn',
-    '020' => 'ISBN',
-    '022' => 'ISSN',
-    '037' => 'Source of acquisition',
-    '040' => 'Cataloging source',
-    '041' => 'Language code',
-    '043' => 'Geographic area code',
-    '050' => 'Library of Congress call number',
-    '060' => 'National Library of Medicine call number',
-    '082' => 'Dewey decimal call number',
-    '100' => 'Main entry -- Personal name',
-    '110' => 'Main entry -- Corporate name',
-    '130' => 'Main entry -- Uniform title',
-    '240' => 'Uniform title',
-    '245' => 'Title statement',
-    '246' => 'Varying form of title',
-    '250' => 'Edition statement',
-    '256' => 'Computer file characteristics',
-    '260' => 'Publication, distribution, etc.',
-    '263' => 'Projected publication date',
-    '300' => 'Physical description',
-    '306' => 'Playing time',
-    '440' => 'Series statement / Added entry -- Title',
-    '490' => 'Series statement',
-    '500' => 'General note',
-    '504' => 'Bibliography, etc. note',
-    '505' => 'Formatted contents note',
-    '508' => 'Creation/production credits note',
-    '510' => 'Citation/references note',
-    '511' => 'Participant or performer note',
-    '520' => 'Summary, etc. note',
-    '521' => 'Target audience note (ie age)',
-    '530' => 'Additional physical form available note',
-    '538' => 'System details note',
-    '586' => 'Awards note',
-    '600' => 'Subject added entry -- Personal name',
-    '610' => 'Subject added entry -- Corporate name',
-    '650' => 'Subject added entry -- Topical term',
-    '651' => 'Subject added entry -- Geographic name',
-    '656' => 'Index term -- Occupation',
-    '700' => 'Added entry -- Personal name',
-    '710' => 'Added entry -- Corporate name',
-    '730' => 'Added entry -- Uniform title',
-    '740' => 'Added entry -- Uncontrolled related/analytical title',
-    '800' => 'Series added entry -- Personal name',
-    '830' => 'Series added entry -- Uniform title',
-    '852' => 'Location',
-    '856' => 'Electronic location and access',
+use Getopt::Long;
+my ( $input_marc_file, $number) = ('',0);
+my ($version, $delete, $test_parameter,$char_encoding);
+GetOptions(
+    'file:s'    => \$input_marc_file,
+    'n' => \$number,
+    'v' => \$version,
+    'd' => \$delete,
+    't' => \$test_parameter,
+    'c:s' => \$char_encoding,
 );
 
+if ($version || ($input_marc_file eq '')) {
+	print <<EOF
+small script to import an iso2709 file into Koha.
+parameters :
+\tv : this version/help screen
+\tfile /path/to/file/to/dump : the file to dump
+\tn : the number of the record to import. If missing, all the file is imported
+\tt : test mode : parses the file, saying what he would do, but doing nothing.
+\tc : the char encoding. At the moment, only USMARC and UNIMARC supported. USMARC by default.
+\d : delete EVERYTHING related to biblio in koha-DB before import  :tables :
+\t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
+\t\tadditionalauthors, \tbibliosubtitles, \tmarc_biblio,
+\t\tmarc_subfield_table, \tmarc_word, \t\tmarc_blob_subfield
+IMPORTANT : don't use this script before you've entered and checked twice (or more) your  MARC parameters tables.
+If you fail this, the import won't work correctly and you will get invalid datas.
 
-if ($file) {
-    open (F, "$file");
-    my $data=<F>;
-    close F;
-    $splitchar=chr(29);
+SAMPLE : ./bulkmarcimport.pl -file /home/paul/koha.dev/local/npl -n 1
+EOF
+;#'
+die;
+}
 
+my $dbh = C4::Context->dbh;
 
-# Cycle through all of the records in the file
+if ($delete) {
+	print "deleting biblios\n";
+	$dbh->do("delete from biblio");
+	$dbh->do("delete from biblioitems");
+	$dbh->do("delete from items");
+	$dbh->do("delete from bibliosubject");
+	$dbh->do("delete from additionalauthors");
+	$dbh->do("delete from bibliosubtitle");
+	$dbh->do("delete from marc_biblio");
+	$dbh->do("delete from marc_subfield_table");
+	$dbh->do("delete from marc_word");
+	$dbh->do("delete from marc_blob_subfield");
+}
+if ($test_parameter) {
+	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
+}
+$char_encoding = 'USMARC' unless ($char_encoding);
+print "CHAR : $char_encoding\n";
+my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
+$batch->warnings_off();
+$batch->strict_off();
+my $i=1;
+#1st of all, find item MARC tag.
+my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
 
+while ( my $record = $batch->next() ) {
+	$i++;
+	#now, parse the record, extract the item fields, and store them in somewhere else.
+	$record = MARC::File::USMARC::decode(char_decode($record->as_usmarc(),$char_encoding));
+	my @fields = $record->field($tagfield);
+	print "biblio $i";
+	my @items;
+	my $nbitems;
 
-RECORD:
-    foreach $record (split(/$splitchar/, $data)) {
-	$leader=substr($record,0,24);
-	print "\n\n---------------------------------------------------------------------------\n";
-	print "Leader: $leader\n";
-	$record=substr($record,24);
-	$splitchar2=chr(30);
-	my $directory=0;
-	my $tagcounter=0;
-	my %tag;
-	my @record;
-	my %record;
-	foreach $field (split(/$splitchar2/, $record)) {
-	    my %field;
-	    unless ($directory) {
-		# Parse the MARC directory and store the cotents in the %tag hash
-		$directory=$field;
-		my $itemcounter=1;
-		$counter=0;
-		while ($item=substr($directory,0,12)) {	# FIXME - $item never used
-		    $tag=substr($directory,0,3);
-		    $length=substr($directory,3,4);	# FIXME - Unused
-		    $start=substr($directory,7,6);	# FIXME - Unused
-		    $directory=substr($directory,12);
-		    $tag{$counter}=$tag;
-		    $counter++;
-		}
-		$directory=1;
-		next;
-	    }
-	    $tag=$tag{$tagcounter};
-	    $tagcounter++;
-	    $field{'tag'}=$tag;
-	    printf "%4s %-40s ",$tag, $tagtext{$tag};
-	    $splitchar3=chr(31);
-	    my @subfields=split(/$splitchar3/, $field);
-	    $indicator=$subfields[0];
-	    $field{'indicator'}=$indicator;
-	    my $firstline=1;
-	    if ($#subfields==0) {
-		print "$indicator\n";
-	    } else {
-		print "\n";
-		my %subfields;
-		for ($i=1; $i<=$#subfields; $i++) {
-		    my $text=$subfields[$i];
-		    my $subfieldcode=substr($text,0,1);
-		    my $subfield=substr($text,1);
-		    print "   $subfieldcode $subfield\n";
-		    if ($subfields{$subfieldcode}) {
-			my $subfieldlist=$subfields{$subfieldcode};
-			my @subfieldlist=@$subfieldlist;
-			if ($#subfieldlist>=0) {
-			    push (@subfieldlist, $subfield);
-			} else {
-			    @subfieldlist=($subfields{$subfieldcode}, $subfield);
-			}
-			$subfields{$subfieldcode}=\@subfieldlist;
-		    } else {
-			$subfields{$subfieldcode}=$subfield;
-		    }
-		}
-		$field{'subfields'}=\%subfields;
-	    }
-	    if ($record{$tag}) {
-		my $fieldlist=$record{$tag};
-		if ($fieldlist->{'tag'}) {
-		    @fieldlist=($fieldlist, \%field);
-		    $fieldlist=\@fieldlist;
-		} else {
-		    push (@$fieldlist,\%field);
-		}
-		$record{$tag}=$fieldlist;
-	    } else {
-		$record{$tag}=[\%field];
-	    }
-	    push (@record, \%field);
+	foreach my $field (@fields) {
+		my $item = MARC::Record->new();
+		$item->append_fields($field);
+		push @items,$item;
+		$record->delete_field($field);
+		$nbitems++;
 	}
-	$rec=\@record;
-	$counter++;
-	my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $note, $additionalauthors, $illustrator, $copyrightdate, $barcode, $itemtype, $seriestitle, @barcodes);
-	my $marc=$record;
-	foreach $field (sort {$a->{'tag'} cmp $b->{'tag'}} @$rec) {
-	    # LCCN is stored in field 010 a
-	    if ($field->{'tag'} eq '010') {
-		$lccn=$field->{'subfields'}->{'a'};
-		$lccn=~s/^\s*//;
-		$lccn=~s/cn //;
-		$lccn=~s/^\s*//;
-		($lccn) = (split(/\s+/, $lccn))[0];
-	    }
-	    # LCCN is stored in field 015 a
-	    if ($field->{'tag'} eq '015') {
-		$lccn=$field->{'subfields'}->{'a'};
-		$lccn=~s/^\s*//;
-		$lccn=~s/^C//;
-		($lccn) = (split(/\s+/, $lccn))[0];
-	    }
-	    # ISBN is stored in field 020 a
-	    if ($field->{'tag'} eq '020') {
-		$isbn=$field->{'subfields'}->{'a'};
-		$isbn=~s/^\s*//;
-		($isbn) = (split(/\s+/, $isbn))[0];
-	    }
-	    # ISSN is stored in field 022 a
-	    if ($field->{'tag'} eq '022') {
-		$issn=$field->{'subfields'}->{'a'};
-		$issn=~s/^\s*//;
-		($issn) = (split(/\s+/, $issn))[0];
-	    }
-	    # Dewey number stored in field 082 a
-	    # If there is more than one dewey number (more than one 'a'
-	    # subfield) I just take the first one
-	    if ($field->{'tag'} eq '082') {
-		$dewey=$field->{'subfields'}->{'a'};
-		$dewey=~s/\///g;
-		if (@$dewey) {
-		    $dewey=$$dewey[0];
+	print " : $nbitems items found\n";
+	# now, create biblio and items with NEWnewXX call.
+	unless ($test_parameter) {
+		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
+		warn "ADDED biblio NB $bibid in DB\n";
+		for (my $i=0;$i<=$#items;$i++) {
+			NEWnewitem($dbh,$items[$i],$bibid);
 		}
-	    }
-	    # Author is stored in field 100 a
-	    if ($field->{'tag'} eq '100') {
-		$author=$field->{'subfields'}->{'a'};
-	    }
-	    # Title is stored in field 245 a
-	    # Subtitle in field 245 b
-	    # Illustrator in field 245 c
-	    if ($field->{'tag'} eq '245') {
-		$title=$field->{'subfields'}->{'a'};
-		$title=~s/ \/$//;
-		$subtitle=$field->{'subfields'}->{'b'};
-		$subtitle=~s/ \/$//;
-		my $name=$field->{'subfields'}->{'c'};
-		if ($name=~/illustrated by]*\s+(.*)/) {
-		    $illustrator=$1;
-		}
-	    }
-	    # Publisher Info in field 260
-	    #   a = place
-	    #   b = publisher
-	    #   c = publication date
-	    #     (also store as copyright date if date starts with a 'c' as in c1995)
-	    if ($field->{'tag'} eq '260') {
-		$place=$field->{'subfields'}->{'a'};
-		if (@$place) {
-		    $place=$$place[0];
-		}
-		$place=~s/\s*:$//g;
-		$publisher=$field->{'subfields'}->{'b'};
-		if (@$publisher) {
-		    $publisher=$$publisher[0];
-		}
-		$publisher=~s/\s*:$//g;
-		$publicationyear=$field->{'subfields'}->{'c'};
-		if ($publicationyear=~/c(\d\d\d\d)/) {
-		    $copyrightdate=$1;
-		}
-		if ($publicationyear=~/[^c](\d\d\d\d)/) {
-		    $publicationyear=$1;
-		} elsif ($copyrightdate) {
-		    $publicationyear=$copyrightdate;
-		} else {
-		    $publicationyear=~/(\d\d\d\d)/;
-		    $publicationyear=$1;
-		}
-	    }
-	    # Physical Dimensions in field 300
-	    #   a = pages
-	    #   c = size
-	    if ($field->{'tag'} eq '300') {
-		$pages=$field->{'subfields'}->{'a'};
-		$pages=~s/ \;$//;
-		$size=$field->{'subfields'}->{'c'};
-		$pages=~s/\s*:$//g;
-		$size=~s/\s*:$//g;
-	    }
-	    # Vol/No in field 362 a
-	    if ($field->{'tag'} eq '362') {
-		if ($field->{'subfields'}->{'a'}=~/(\d+).*(\d+)/) {
-		    $volume=$1;
-		    $number=$2;
-		}
-	    }
-	    # Series Title in field 440 a
-	    # Vol/No in field 440 v
-	    if ($field->{'tag'} eq '440') {
-		$seriestitle=$field->{'subfields'}->{'a'};
-		if ($field->{'subfields'}->{'v'}=~/(\d+).*(\d+)/) {
-		    $volume=$1;
-		    $number=$2;
-		}
-	    }
-	    # BARCODES!!!
-	    # 852 p stores barcodes
-	    # 852 h stores dewey field
-	    # 852 9 stores replacement price
-	    #   I check for an itemtype identifier in 852h as well... pb or pbk means PBK
-	    #   also if $dewey is > 0, then I assign JNF, otherwise JF.
-	    #   Note that my libraries are school libraries, so I assume Junior.
-	    if ($field->{'tag'} eq '852') {
-		$barcode=$field->{'subfields'}->{'p'};
-		push (@barcodes, $barcode);
-		my $q_barcode=$dbh->quote($barcode);
-		my $deweyfield=$field->{'subfields'}->{'h'};
-		$deweyfield=~/^([\d\.]*)/;
-		$dewey=$1;
-		if (($deweyfield=~/pbk/) || ($deweyfield=~/pb$/)) {
-		    $itemtype='PBK';
-		} elsif ($dewey) {
-		    $itemtype='JNF';
-		} else {
-		    $itemtype='JF';
-		}
-
-		$replacementprice=$field->{'subfields'}->{'9'};
-	    }
-	    # 700 a stores additional authors / illustrator info
-	    # 700 c will contain 'ill' if it's an illustrator
-	    if ($field->{'tag'} eq '700') {
-		my $name=$field->{'subfields'}->{'a'};
-		if ($field->{'subfields'}->{'c'}=~/ill/) {
-		    $illustrator=$name;
-		} else {
-		    $additionalauthors.="$name\n";
-		}
-	    }
-	    # I concatenate all 5XX a entries as notes
-	    if ($field->{'tag'} =~/^5/) {
-		$note.="$field->{'subfields'}->{'a'}\n";
-	    }
-	    # 6XX entries are subject entries
-	    #   Not sure why I'm skipping 691 tags
-	    #   691 a contains the subject.
-	    # I take subfield a, and append entries from subfield x (general
-	    # subdivision) y (Chronological subdivision) and z (geographic
-	    # subdivision)
-	    if ($field->{'tag'} =~/6\d\d/) {
-		(next) if ($field->{'tag'} eq '691');
-		my $subject=$field->{'subfields'}->{'a'};
-		print "SUBJECT: $subject\n";
-		$subject=~s/\.$//;
-		if ($gensubdivision=$field->{'subfields'}->{'x'}) {
-		    my @sub=@$gensubdivision;
-		    if ($#sub>=0) {
-			foreach $s (@sub) {
-			    $s=~s/\.$//;
-			    $subject.=" -- $s";
-			}
-		    } else {
-			$gensubdivision=~s/\.$//;
-			$subject.=" -- $gensubdivision";
-		    }
-		}
-		if ($chronsubdivision=$field->{'subfields'}->{'y'}) {
-		    my @sub=@$chronsubdivision;
-		    if ($#sub>=0) {
-			foreach $s (@sub) {
-			    $s=~s/\.$//;
-			    $subject.=" -- $s";
-			}
-		    } else {
-			$chronsubdivision=~s/\.$//;
-			$subject.=" -- $chronsubdivision";
-		    }
-		}
-		if ($geosubdivision=$field->{'subfields'}->{'z'}) {
-		    my @sub=@$geosubdivision;
-		    if ($#sub>=0) {
-			foreach $s (@sub) {
-			    $s=~s/\.$//;
-			    $subject.=" -- $s";
-			}
-		    } else {
-			$geosubdivision=~s/\.$//;
-			$subject.=" -- $geosubdivision";
-		    }
-		}
-		push @subjects, $subject;
-	    }
 	}
-
-	my $q_isbn=$dbh->quote($isbn);
-	my $q_issn=$dbh->quote($issn);
-	my $q_lccn=$dbh->quote($lccn);
-	my $sth=$dbh->prepare("select biblionumber,biblioitemnumber from biblioitems where issn=$q_issn or isbn=$q_isbn or lccn=$q_lccn");
-	$sth->execute;
-	my $biblionumber=0;
-	my $biblioitemnumber=0;
-	if ($sth->rows) {
-	    ($biblionumber, $biblioitemnumber) = $sth->fetchrow;
-	    my $title=$title;			# FIXME - WTF?
-#title already in the database
-	} else {
-	    my $q_title=$dbh->quote("$title");
-	    my $q_subtitle=$dbh->quote("$subtitle");
-	    my $q_author=$dbh->quote($author);
-	    my $q_copyrightdate=$dbh->quote($copyrightdate);
-	    my $q_seriestitle=$dbh->quote($seriestitle);
-	    $sth=$dbh->prepare("select biblionumber from biblio where title=$q_title and author=$q_author and copyrightdate=$q_copyrightdate and seriestitle=$q_seriestitle");
-	    $sth->execute;
-	    if ($sth->rows) {
-		($biblionumber) = $sth->fetchrow;
-#title already in the database
-	    } else {
-		$sth=$dbh->prepare("select max(biblionumber) from biblio");
-		$sth->execute;
-		($biblionumber) = $sth->fetchrow;
-		$biblionumber++;
-		my $q_notes=$dbh->quote($note);
-		$sth=$dbh->prepare("insert into biblio (biblionumber, title, author, copyrightdate, seriestitle, notes) values ($biblionumber, $q_title, $q_author, $q_copyrightdate, $q_seriestitle, $q_notes)");
-		$sth->execute;
-		$sth=$dbh->prepare("insert into bibliosubtitle values ($q_subtitle, $biblionumber)");
-		$sth->execute;
-	    }
-	    $sth=$dbh->prepare("select max(biblioitemnumber) from biblioitems");
-	    $sth->execute;
-	    ($biblioitemnumber) = $sth->fetchrow;
-	    $biblioitemnumber++;
-	    my $q_isbn=$dbh->quote($isbn);
-	    my $q_issn=$dbh->quote($issn);
-	    my $q_lccn=$dbh->quote($lccn);
-	    my $q_volume=$dbh->quote($volume);
-	    my $q_number=$dbh->quote($number);
-	    my $q_itemtype=$dbh->quote($itemtype);
-	    my $q_dewey=$dbh->quote($dewey);
-	    $cleanauthor=$author;
-	    $cleanauthor=~s/[^A-Za-z]//g;
-	    $subclass=ucz(substr($cleanauthor,0,3));
-			# FIXME - WTF is the author being converted
-			# to upper case?
-	    my $q_subclass=$dbh->quote($subclass);
-	    my $q_publicationyear=$dbh->quote($publicationyear);
-	    my $q_publishercode=$dbh->quote($publishercode);	# FIXME - $publishercode undefined
-	    my $q_volumedate=$dbh->quote($volumedate);	# FIXME - $volumedate undefined
-	    my $q_volumeddesc=$dbh->quote($volumeddesc);	# FIXME - $volumeddesc undefined
-	    my $q_illus=$dbh->quote($illustrator);
-	    my $q_pages=$dbh->quote($pages);
-	    my $q_notes=$dbh->quote($note);
-	    ($q_notes) || ($q_notes="''");
-	    my $q_size=$dbh->quote($size);
-	    my $q_place=$dbh->quote($place);
-	    my $q_marc=$dbh->quote($marc);
-
-	    $sth=$dbh->prepare("insert into biblioitems (biblioitemnumber, biblionumber, volume, number, itemtype, isbn, issn, dewey, subclass, publicationyear, publishercode, volumedate, volumeddesc, illus, pages, size, place, lccn, marc) values ($biblioitemnumber, $biblionumber, $q_volume, $q_number, $q_itemtype, $q_isbn, $q_issn, $q_dewey, $q_subclass, $q_publicationyear, $q_publishercode, $q_volumedate, $q_volumeddesc, $q_illus, $q_pages, $q_size, $q_place, $q_lccn, $q_marc)");
-	    $sth->execute;
-	    my $subjectheading;
-	    foreach $subjectheading (@subjects) {
-		# convert to upper case
-		$subjectheading=uc($subjectheading);
-				# FIXME - WTF is the subject being
-				# converted to upper case?
-		# quote value
-		my $q_subjectheading=$dbh->quote($subjectheading);
-		$sth=$dbh->prepare("insert into bibliosubject (biblionumber,subject)
-		    values ($biblionumber, $q_subjectheading)");
-		$sth->execute;
-	    }
-	    my @additionalauthors=split(/\n/,$additionalauthors);
-	    my $additionalauthor;
-	    foreach $additionalauthor (@additionalauthors) {
-		# remove any line ending characters (Ctrl-L or Ctrl-M)
-		$additionalauthor=~s/\013//g;
-		$additionalauthor=~s/\010//g;
-		# convert to upper case
-		$additionalauthor=uc($additionalauthor);
-				# FIXME - WTF is the author being converted
-				# to upper case?
-		# quote value
-		my $q_additionalauthor=$dbh->quote($additionalauthor);
-		$sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values ($biblionumber, $q_additionalauthor)");
-		$sth->execute;
-	    }
-	}
-	my $q_barcode=$dbh->quote($barcode);
-	my $q_homebranch="'$branchname'";
-	my $q_notes="''";
-	#my $replacementprice=0;
-	# FIXME - There's already a $sth in this scope.
-	my $sth=$dbh->prepare("select max(itemnumber) from items");
-	$sth->execute;
-	my ($itemnumber) = $sth->fetchrow;
-	$itemnumber++;
-	my @datearr=localtime(time);
-	my $date=(1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-BARCODE:
-	foreach $barcode (@barcodes) {
-	    my $q_barcode=$dbh->quote($barcode);
-	    my $sti=$dbh->prepare("select barcode from items where barcode=$q_barcode");
-	    $sti->execute;
-	    if ($sti->rows) {
-		print "Skipping $barcode\n";
-		next BARCODE;
-	    }
-	    $replacementprice=~s/^p//;
-	    ($replacementprice) || ($replacementprice=0);
-	    $replacementprice=~s/\$//;
-	    $task="insert into items (itemnumber, biblionumber, biblioitemnumber, barcode, itemnotes, homebranch, holdingbranch, dateaccessioned, replacementprice) values ($itemnumber, $biblionumber, $biblioitemnumber, $q_barcode, $q_notes, $q_homebranch, '$branchname', '$date', $replacementprice)";
-	    $sth=$dbh->prepare($task);
-	    print "$task\n";
-	    $sth->execute;
-	}
-    }
 }
