@@ -19,10 +19,7 @@ use strict;
 use DBI;
 
 # Koha modules
-use C4::Context("/etc/koha.conf.tmp");
-
-# FIXME - /etc/koha.conf might not exist, so shouldn't use
-# C4::Context.
+use C4::Context;
 
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
@@ -780,6 +777,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.48  2003/05/20 19:50:45  slef
+# Initial fix to bug 456: hardwired paths
+#
 # Revision 1.47  2003/05/15 12:23:33  tipaul
 # adding zipcode and homezipcode into borrowers table (bug #246
 #

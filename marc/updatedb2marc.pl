@@ -22,7 +22,7 @@ package C4::test;
 
 use strict;
 require Exporter;
-use C4::Context("/etc/koha.conf.tmp");
+use C4::Context;
 use C4::Catalogue;
 use C4::Biblio;
 use MARC::Record;
