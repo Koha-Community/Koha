@@ -237,7 +237,7 @@
 	<TMPL_LOOP name="todayissues">
 	    <tr><td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dd"></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center>
-	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra" onClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR NAME="barcode"></a></td>
+	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><TMPL_VAR NAME="barcode"></a></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="title"></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="author"></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dewey"> <TMPL_VAR NAME="subclass"></td></tr>
@@ -259,7 +259,7 @@
 	<TMPL_LOOP name="previssues">
 	    <tr><td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dd"></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center>
-	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra" onClick="openWindow(this, 'Item', 480, 640)"><TMPL_VAR NAME="barcode"></a></td>
+	    <a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><TMPL_VAR NAME="barcode"></a></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="title"></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor">><TMPL_VAR NAME="author"></td>
 	    <td bgcolor=<TMPL_VAR NAME="tcolor"> align=center><TMPL_VAR NAME="dewey"> <TMPL_VAR NAME="subclass"></td></tr>

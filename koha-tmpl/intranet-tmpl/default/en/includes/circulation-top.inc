@@ -3,11 +3,17 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Circulation</title>
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
-</head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
+<script language="JavaScript">
+<!-- Hide from old browsers
+function openWindow(targeturl, windowname) {
+newwin =
+window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
+}
+// end hiding -->
+</script>
+
+<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
 <style>
 a.circulation {
 	font-weight: normal;
@@ -25,6 +31,9 @@ a.circulation:hover {
 	font-weight: bold;
 	}
 </style>
+</head>
+<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
+marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <!------------------------MENUS-------------------------------->
 <table cellpadding=0 cellspacing=0 width="100%" border=0>

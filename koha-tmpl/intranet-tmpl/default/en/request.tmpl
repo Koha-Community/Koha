@@ -137,7 +137,7 @@
 			</td>
 			<TD>
 				<TMPL_IF Name="wait">
-					<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name=''biblionumber"> &type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">
+					<a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name=''biblionumber">&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;">
 						<TMPL_VAR Name="barcode">
 					</a>
 				<TMPL_ELSE>
