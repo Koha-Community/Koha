@@ -31,26 +31,28 @@ use C4::Print;
 use DBI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
+use C4::Koha;
+use HTML::Template;
 
 my $query=new CGI;
-my ($loggedinuser, $sessioncookie, $sessionID) = checkauth
-	($query, 0, { circulate => 1 });
+#my ($loggedinuser, $sessioncookie, $sessionID) = checkauth
+#	($query, 0, { circulate => 1 });
 
-#my ($template, $loggedinuser, $sessioncookie) = get_template_and_user
-#    ({
-#	template_name	=> 'circ/circulation.tmpl',
-#	query		=> $query,
-#	type		=> "intranet",
-#	authnotrequired	=> 0,
-#	flagsrequired	=> { circulate => 1 },
-#    });
+my ($template, $loggedinuser, $cookie) = get_template_and_user
+    ({
+	template_name	=> 'circ/circulation.tmpl',
+	query		=> $query,
+	type		=> "intranet",
+	authnotrequired	=> 0,
+	flagsrequired	=> { circulate => 1 },
+    });
 
 
 my %env;
-my $headerbackgroundcolor='#99cc33';
+#my $headerbackgroundcolor='#99cc33';
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
-my $backgroundimage="/images/background-mem.gif";
+#my $backgroundimage="/images/background-mem.gif";
 
 my $branches = getbranches();
 my $printers = getprinters(\%env);
@@ -60,12 +62,11 @@ my $printer = getprinter($query, $printers);
 
 
 #set up cookie.....
-my $info = '';
 my $branchcookie;
 my $printercookie;
 if ($query->param('setcookies')) {
-    $branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
-    $printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
+	$branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
+	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 }
 
 $env{'branchcode'}=$branch;
@@ -83,17 +84,17 @@ my $borrowerslist;
 # if there is a list of find borrowers....
 my $findborrower = $query->param('findborrower');
 if ($findborrower) {
-    my ($borrowers, $flags) = findborrower(\%env, $findborrower);
-    my @borrowers=@$borrowers;
-    if ($#borrowers == -1) {
-	$query->param('findborrower', '');
-	$message =  "No borrower matched '$findborrower'";
-    } elsif ($#borrowers == 0) {
-	$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
-	$query->param('barcode','');
-    } else {
-	$borrowerslist = \@borrowers;
-    }
+	my ($borrowers, $flags) = findborrower(\%env, $findborrower);
+	my @borrowers=@$borrowers;
+	if ($#borrowers == -1) {
+		$query->param('findborrower', '');
+		$message =  "No borrower matched '$findborrower'";
+	} elsif ($#borrowers == 0) {
+		$query->param('borrnumber', $borrowers[0]->{'borrowernumber'});
+		$query->param('barcode','');
+	} else {
+		$borrowerslist = \@borrowers;
+	}
 }
 
 my $borrowernumber = $query->param('borrnumber');
@@ -102,15 +103,13 @@ my $bornum = $query->param('borrnumber');
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
 if ($barcode eq ''  && $print eq 'maybe'){
-    $print = 'yes';
+	$print = 'yes';
 }
 if ($print eq 'yes' && $borrowernumber ne ''){
-    printslip(\%env,$borrowernumber);
-    $query->param('borrnumber','');
-    $borrowernumber='';
+	printslip(\%env,$borrowernumber);
+	$query->param('borrnumber','');
+	$borrowernumber='';
 }
-
-
 
 # get the borrower information.....
 my $borrower;
@@ -122,15 +121,13 @@ if ($borrowernumber) {
 # get the responses to any questions.....
 my %responses;
 foreach (sort $query->param) {
-    if ($_ =~ /response-(\d*)/) {
-	$responses{$1} = $query->param($_);
-    }
+	if ($_ =~ /response-(\d*)/) {
+		$responses{$1} = $query->param($_);
+	}
 }
 if (my $qnumber = $query->param('questionnumber')) {
-    $responses{$qnumber} = $query->param('answer');
+	$responses{$qnumber} = $query->param('answer');
 }
-
-
 
 my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
 
@@ -140,171 +137,34 @@ my $day=$query->param('day');
 
 # if the barcode is set
 if ($barcode) {
-    $barcode = cuecatbarcodedecode($barcode);
-    my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
+	$barcode = cuecatbarcodedecode($barcode);
+	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
 
-    unless ($invalidduedate) {
-	$env{'datedue'}=$datedue;
-	my @time=localtime(time);
-	my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
-	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message)
-                     = issuebook(\%env, $borrower, $barcode, \%responses, $date);
-    }
+	unless ($invalidduedate) {
+		$env{'datedue'}=$datedue;
+		my @time=localtime(time);
+		my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
+		($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message)
+					= issuebook(\%env, $borrower, $barcode, \%responses, $date);
+	}
 }
 
 # reload the borrower info for the sake of reseting the flags.....
 if ($borrowernumber) {
-    ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
+	($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
 }
-
 
 ##################################################################################
 # HTML code....
-
-
-my $rejectedtext;
-if ($rejected) {
-    if ($rejected == -1) {
-    } else {
-	$rejectedtext = << "EOF";
-<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
-<tr><th><font color=black size=5>Error Issuing Book</font></th></tr>
-<tr><td><font color=red size=5>$rejected</font></td></tr>
-</table>
-<br>
-EOF
-    }
-}
-
-my $selectborrower;
-if ($borrowerslist) {
-    $selectborrower = <<"EOF";
-<form method=post action=/cgi-bin/koha/circ/circulation.pl>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-<table border=1 cellspacing=0 cellpadding=5 bgcolor="#dddddd">
-<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<font color=black><b>Select a borrower</b></font></th></tr>\n
-<tr><td align=center>
-<select name=borrnumber size=7>
-EOF
-    foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowerslist){
-	$selectborrower .= <<"EOF";
-<option value=$_->{'borrowernumber'}>$_->{'surname'}, $_->{'firstname'} ($_->{'cardnumber'})
-EOF
-    }
-    $selectborrower .= <<"EOF";
-</select><br>
-<input type=submit>
-</td></tr></table>
-EOF
-}
-
-# title....
-my $title = <<"EOF";
-<table align="right"><tr><td>
-<a href=circulation.pl?borrnumber=$borrowernumber&branch=$branch&printer=$printer&print=yes>
-<img src="/images/button-next-borrower.gif" width="171" height="42" border="0" alt="Next Borrower"></a> &nbsp
-<a href=returns.pl>
-<img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
-&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
-</td></tr></table>
-<FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
-<b>Printer:</b> $printers->{$printer}->{'printername'} <br>
-<a href=selectbranchprinter.pl>Change Settings</a></td>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-<p>
-EOF
-
-my $titlenoborrower = <<"EOF";
-<table align="right"><tr><td>
-<a href=returns.pl>
-<img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
-&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
-</td></tr></table>
-<FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
-<b>Printer:</b> $printers->{$printer}->{'printername'} <br>
-<a href=selectbranchprinter.pl>Change Settings</a></td>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-<p>
-EOF
-
-
-
-my $cardnumberinput = << "EOF";
-<form method=post action=/cgi-bin/koha/circ/circulation.pl>
-<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
-<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<font color=black><b>Enter borrower card number<br> or partial last name</b></font></td></tr>
-<tr><td><input name=findborrower></td></tr>
-  <input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-</table>
-</form>
-EOF
 
 my $responsesform = '';
 foreach (keys %responses) {
     $responsesform.="<input type=hidden name=response-$_ value=$responses{$_}>\n";
 }
 my $questionform;
+my $stickyduedate;
 if ($question) {
-    my $stickyduedate=$query->param('stickyduedate');
-    $questionform = <<"EOF";
-<table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
-<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<font size=+2 color=red><b>Issuing Question</b></font></th></tr>
-<tr><td><table border=0 cellpadding=10><tr><td>
-Attempting to issue $iteminformation->{'title'}
-by $iteminformation->{'author'} to $borrower->{'firstname'} $borrower->{'surname'}.
-<p>
-$question
-</td></tr></table></td></tr>
-<tr><td align=center>
-<table border=0>
-<tr><td>
-<form method=get>
-<input type=hidden name=borrnumber value=$borrowernumber>
-<input type=hidden name=barcode value=$barcode>
-<input type=hidden name=questionnumber value=$questionnumber>
-<input type=hidden name=day value=$day>
-<input type=hidden name=month value=$month>
-<input type=hidden name=year value=$year>
-<input type=hidden name=stickyduedate value=$stickyduedate>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-$responsesform
-<input type=hidden name=answer value=Y>
-<input type=submit value=Yes>
-</form>
-</td>
-<td>
-<form method=get>
-<input type=hidden name=borrnumber value=$borrowernumber>
-<input type=hidden name=barcode value=$barcode>
-<input type=hidden name=questionnumber value=$questionnumber>
-<input type=hidden name=day value=$day>
-<input type=hidden name=month value=$month>
-<input type=hidden name=year value=$year>
-<input type=hidden name=stickyduedate value=$stickyduedate>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-$responsesform
-<input type=hidden name=answer value=N>
-<input type=submit value=No>
-</form>
-</td>
-</tr>
-</table>
-</td></tr>
-</table>
-</td></tr>
-</table>
-EOF
+    $stickyduedate=$query->param('stickyduedate');
 }
 
 
@@ -337,61 +197,6 @@ for (my $i=$datearr[5]+1900; $i<$datearr[5]+1905; $i++) {
 }
 my $selected='';
 ($query->param('stickyduedate')) && ($selected='checked');
-
-
-my $barcodeentrytext = <<"EOF";
-<form method=post action=/cgi-bin/koha/circ/circulation.pl>
-<table border=1 cellpadding=5>
-<tr>
-<td align=center valign=top>
-<table border=0 cellspacing=0 cellpadding=5>
-<tr><th align=center background=$backgroundimage>
-<font color=black><b>Enter Book Barcode</b></font></th></tr>
-<tr><td align=center>
-<table border=0>
-<tr><td>Item Barcode:</td><td><input name=barcode size=10></td><td><input type=submit value=Issue></td></tr>
-<tr><td colspan=3 align=center>
-<table border=0 cellpadding=0 cellspacing=0>
-<tr><td>
-<select name=day><option value=0>Day$dayoptions</select>
-</td><td>
-<select name=month><option value=0>Month$monthoptions</select>
-</td><td>
-<select name=year><option value=0>Year$yearoptions</select>
-</td></tr>
-</table>
-<input type=checkbox name=stickyduedate $selected> Sticky Due Date
-</td></tr>
-</table>
-<input type=hidden name=borrnumber value=$borrowernumber>
-<input type=hidden name=branch value=$branch>
-<input type=hidden name=printer value=$printer>
-<input type=hidden name=print value=maybe>
-EOF
-if ($flags->{'CHARGES'}){
-    $barcodeentrytext.="<input type=hidden name=charges value=yes>";
-}
-my $amountold=$flags->{'CHARGES'}->{'message'};
-my @temp=split(/\$/,$amountold);
-$amountold=$temp[1];
-$barcodeentrytext.="<input type=hidden name=oldamount value=$amountold>";
-$barcodeentrytext.=<<"EOF";
-</td></tr></table>
-</td></tr></table>
-</form>
-EOF
-
-
-# collect the messages and put into message table....
-my $messagetable;
-if ($message) {
-    $messagetable = << "EOF";
-<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Messages</font></th></tr>
-<tr><td> $message </td></tr></table>
-EOF
-}
-
 
 
 # make the issued books table.....
@@ -460,96 +265,76 @@ EOF
     }
 }
 
-my $issuedbookstable;
-if ($todaysissues) {
-    $issuedbookstable .= <<"EOF";
-<table border=1 cellpadding=5 cellspacing=0 width=80%>
-<tr><th colspan=5 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>
-<b>Todays Issues</b></font></th></tr>
-<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
-$todaysissues
-</table>
-EOF
-}
-if ($previssues) {
-    $issuedbookstable .= <<"EOF";
-<table border=1 cellpadding=5 cellspacing=0 width=80%>
-<tr><th colspan=5 bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>
-<b>Previous Issues</b></font></th></tr>
-<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Class</th></tr>
-$previssues
-</table>
-EOF
-}
-
-
-
-
-
 # actually print the page!
+#if ($branchcookie && $printercookie) {
+#    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
+#} else {
+#    print $query->header(-cookie=>[$sessioncookie]);
+#}
 
+#if ($query->param('barcode') eq '' && $query->param('charges') eq 'yes'){
+#    my $count=@inp;
+#     for (my $i=0;$i<$count;$i++){
+#	 $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\",700,600\)\;window1.focus\(\)/;
+#     }
+#}
 
-if ($branchcookie && $printercookie) {
-    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
-} else {
-    print $query->header(-cookie=>[$sessioncookie]);
+my @values;
+my %labels;
+my $CGIselectborrower;
+if ($borrowerslist) {
+	foreach (sort {$a->{'surname'}.$a->{'firstname'} cmp $b->{'surname'}.$b->{'firstname'}} @$borrowerslist){
+		push @values,$_->{'borrowernumber'};
+		$labels{$_->{'borrowernumber'}} ="$_->{'surname'}, $_->{'firstname'} ($_->{'cardnumber'})";
+	}
+	$CGIselectborrower=CGI::scrolling_list( -name     => 'borrnumber',
+				-values   => \@values,
+				-labels   => \%labels,
+				-size     => 7,
+				-multiple => 0 );
 }
+#title
 
-print startpage();
-my @inp=startmenu('circulation');
-if ($query->param('barcode') eq '' && $query->param('charges') eq 'yes'){
-    my $count=@inp;
-     for (my $i=0;$i<$count;$i++){
-	 $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\",700,600\)\;window1.focus\(\)/;
-     }
-}
+my ($patrontable, $flaginfotable) = patrontable($borrower);
+my $amountold=$flags->{'CHARGES'}->{'message'};
+my @temp=split(/\$/,$amountold);
+$amountold=$temp[1];
+$template->param(
+		findborrower => $findborrower,
+		borrower => $borrower,
+		borrowernumber => $borrowernumber,
+		branch => $branch,
+		printer => $printer,
+		branchname => $branches->{$branch}->{'branchname'},
+		printername => $printers->{$printer}->{'printername'},
 
-print @inp;
+		#question form
+		question => $question,
+		title => $iteminformation->{'title'},
+		author => $iteminformation->{'author'},
+		firstname => $borrower->{'firstname'},
+		surname => $borrower->{'surname'},
+		question => $question,
+		barcode => $barcode,
+		questionnumber => $questionnumber,
+		dayoptions => $dayoptions,
+		monthoptions => $monthoptions,
+		yearoptions => $yearoptions,
+		stickyduedate => $stickyduedate,
+		responseform => $responsesform,
+		rejected => $rejected,
+		message => $message,
+		CGIseleborrower => $CGIselectborrower,
 
+		patrontable => $patrontable,
+		flaginfotable => $flaginfotable,
+		CHARGES => $flags->{'CHARGES'},
+		amountold => $amountold,
+		todayissues => $todaysissues,
+		previssues => $previssues,
+	);
 
-#print startmenu('circulation');
-if ($borrower) {
-    print $title;
-} else {
-    print $titlenoborrower;
-}
-
-
-print $info;
-
-if ($question) {
-    print $questionform;
-}
-
-print $rejectedtext;
-print $messagetable;
-
-
-unless ($borrower) {
-    if ($borrowerslist) {
-	print $selectborrower;
-    } else {
-	print $cardnumberinput;
-    }
-}
-
-
-
-if ($borrower) {
-    my ($patrontable, $flaginfotable) = patrontable($borrower);
-    print $patrontable;
-    print $flaginfotable;
-    print $barcodeentrytext;
-    print "<p clear=all><br><br>";
-    print $issuedbookstable;
-}
-
-
-
-
-print endmenu('circulation');
-print endpage();
-
+output_html_with_http_headers $query, $cookie, $template->output;
 
 ####################################################################
 # Extra subroutines,,,
@@ -641,12 +426,12 @@ sub patrontable {
 	    }
 	}
     }
-    ($flaginfotext) && ($flaginfotext="<tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><b>Flags</b></td></tr>$flaginfotext\n");
+    ($flaginfotext) && ($flaginfotext="<tr><td  colspan=2><b>Flags</b></td></tr>$flaginfotext\n");
     $flaginfotext.="</table>";
     my $patrontable= << "EOF";
 <br><p>
     <table border=1 cellpadding=5 cellspacing=0 align=right>
-    <tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><font color=black><b>Patron Information</b></font></td></tr>
+    <tr><td colspan=2 background="/images/background-mem.gif"><font color=black><b>Patron Information</b></font></td></tr>
     <tr><td colspan=2>
     <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>$borrower->{'streetaddress'} $borrower->{'city'} Cat: $borrower->{'categorycode'} </td></tr>
 EOF
