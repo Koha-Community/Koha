@@ -16,6 +16,10 @@ if ($member eq ''){
 }
 my $type=$input->param('type');
 my $modify=$input->param('modify.x'); 
+my $delete=$input->param('delete.x');
+if ($delete){
+  print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$member");
+} else {
 print $input->header;
 print startpage();
 print startmenu('member');
@@ -480,3 +484,4 @@ printend
 ;
 print endmenu('member');
 print endpage();
+}
