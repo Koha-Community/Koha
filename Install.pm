@@ -1233,7 +1233,7 @@ sub populatedatabase {
 	    $branchcode=~s/[^A-Za-z0-9]//g;
 	    $branchcode=uc($branchcode);
 	    $branchcode=substr($branchcode,0,4);
-	    $branchcode || $branchcode='DEF';
+	    $branchcode or $branchcode='DEF';
 
 	    system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
 	    system("$::mysqldir/bin/mysql -u$::mysqluser $::mysqlpass_quoted $::dbname -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\"");
