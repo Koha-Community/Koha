@@ -13,11 +13,31 @@
 # Bugs/To Do:
 #   Needs SysV-type start/stop options
 
+
+# Parse /etc/koha.conf
+for line in `cat /etc/koha.conf` ; do
+    OIFS=$IFS
+    IFS='='
+    set -- $line
+    if [ $1 = 'intranetdir' ] ; then
+	intranetdir=$2
+    fi
+    if [ $1 = 'httpduser' ] ; then
+	httpduser=$2
+    fi
+    if [ $1 = 'kohalogdir' ] ; then
+	kohalogdir=$2
+    fi
+    IFS=$OIFS
+done
+
+
+
 #----------------------------
 # User ID to run the daemon as.  Don't use "root"
-RunAsUser=apache
+RunAsUser=$httpduser
 
-KohaZ3950Dir=/usr/local/www/koha/htdocs/cgi-bin/koha/acqui.simple
+KohaZ3950Dir=$intranetdir/scripts/z3950daemon
 export KohaZ3950Dir
 
 #----------------------------
@@ -41,6 +61,10 @@ exit
 
 #--------------
 # $Log$
+# Revision 1.1.2.4  2002/07/25 17:34:02  tonnesen
+# shell scripts now parse the config file to get working directories and apache
+# userid
+#
 # Revision 1.1.2.3  2002/06/26 19:56:57  tonnesen
 # Bug fix.  Single quotes were causing $KohaZ3950Shell variable to not get
 # expanded

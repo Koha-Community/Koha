@@ -13,9 +13,31 @@
 
 #----------------------------
 
-KohaZ3950Dir=/usr/local/www/koha/htdocs/cgi-bin/koha/acqui.simple
-KohaModuleDir=/usr/local/koha/modules
-LogDir=/var/log/koha
+
+# Parse /etc/koha.conf
+for line in `cat /etc/koha.conf` ; do
+    OIFS=$IFS
+    IFS='='
+    set -- $line
+    if [ $1 = 'intranetdir' ] ; then
+	intranetdir=$2
+    fi
+    if [ $1 = 'httpduser' ] ; then
+	httpduser=$2
+    fi
+    if [ $1 = 'kohalogdir' ] ; then
+	kohalogdir=$2
+    fi
+    IFS=$OIFS
+done
+
+
+
+
+
+KohaZ3950Dir=$intranetdir/scripts/z3950daemon
+KohaModuleDir=$intranetdir/modules
+LogDir=$kohalogdir
 
 #----------------------------
 LOGFILE=$LogDir/z3950-daemon-`date +%Y%m%d-%H%M`.log
@@ -41,6 +63,10 @@ exec $KohaZ3950Script $LogDir >>$LOGFILE 2>&1
 
 #-------------------
 # $Log$
+# Revision 1.1.2.4  2002/07/25 17:34:02  tonnesen
+# shell scripts now parse the config file to get working directories and apache
+# userid
+#
 # Revision 1.1.2.3  2002/06/28 17:45:39  tonnesen
 # z3950queue now listens for a -HUP signal before processing the queue.  Z3950.pm
 # sends the -HUP signal when queries are added to the queue.
