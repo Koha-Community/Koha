@@ -144,7 +144,8 @@ if ($op eq 'add_form') {
                          userid => $data->{'userid'},
                          password => $data->{'password'},
                          checked => $data->{'checked'},
-                         rank => $data->{'rank'});
+                         rank => $data->{'rank'},
+			 id => $data->{'id'});
 
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -152,7 +153,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	$template->param(delete_confirmed => 1);
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("delete from z3950servers where name=?");
+	my $sth=$dbh->prepare("delete from z3950servers where id=?");
+	warn "S : $searchfield";
 	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
