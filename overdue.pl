@@ -29,9 +29,14 @@ my $input = new CGI;
 my $type=$input->param('type');
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-my %tmpldata = pathtotemplate ( template => 'overdue.tmpl', theme => $theme);
-my $template = HTML::Template->new( filename => $tmpldata{'path'},
-				    die_on_bad_params => 0);
+my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "overdue.tmpl",
+		     query => $query,
+		     type => "intranet",
+		     authnotrequired => 0,
+		     flagsrequired => {catalogue => 1},
+		     debug => 1,
+		     });
 my $duedate;
 my $bornum;
 my $itemnum;
