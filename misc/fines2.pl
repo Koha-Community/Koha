@@ -24,22 +24,12 @@ my ($numOverdueItems,$data)=Getoverdues();
 print $numOverdueItems if $DEBUG;
 my $overdueItemsCounted=0 if $DEBUG;
 
-# FIXME
-# delete this?
-# yep just a debuging thing
-#$numOverdueItems=1000;
-
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $mon++;
 $year=$year+1900;
 
 my $date=Date_DaysSince1BC($mon,$mday,$year);
 
-# FIXME
-# delete this?
-# another debugging thing, and yep it can go (you can make the script fake a day, say u want to rerun the overdues for
-# a day when for some reason the script didnt run)
-#my $date=Date_DaysSince1BC(1,24,2002);
 print $date if $DEBUG;
 
 my $bornum;
@@ -89,10 +79,10 @@ for (my $i=0;$i<$numOverdueItems;$i++){
 # FIXME
 # If this isn't needed it should be deleted
 #
-
 #      if ($amount ==5){
 #	      marklost();
 #      }
+
        if ($borrower->{'categorycode'} eq 'C'){  # FIXME
 	                                         # this should be a
                                                  # separate function
