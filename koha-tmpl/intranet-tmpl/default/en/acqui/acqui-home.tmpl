@@ -9,31 +9,18 @@
 			<input type="submit" class="button acquisition" value="OK">
 		</form>
 </div>
-<div id="bloc25">
-	<h2 class="acquisition">Receive or modify periodical order</h2>
-	<form action="/cgi-bin/koha/acqui/acquire.pl" method=post>
-		Title Search : <input type="text"  size="25"   name="recieve">
-		<input type="submit" class="button acquisition" value="OK">
-	</form>
-</div>
 
 <!-- currencies-->
 <div id="bloc25">
 	<form action="/cgi-bin/koha/currency.pl">
 	<input type=hidden name=type value=change>
 	<h2 class="acquisition">exchange rates</h2>
-	<table>
 	<!-- TMPL_LOOP name="loop_currency" -->
-		<tr>
-			<td>
-				<!-- TMPL_VAR name="currency" -->
-			</td>
-			<td>
-				<input type="text"  size="10"  name="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
-			</td>
-		</tr>
+		<p>
+			<label><!-- TMPL_VAR name="currency" --></label>
+			<input type="text"  size="10"  name="<!-- TMPL_VAR name="currency" -->" value=<!-- TMPL_VAR name="rate" -->>
+		</p>
 	<!-- /TMPL_LOOP -->
-	</table>
 	<input type=submit value="Save" class="button acquisition">
 </div>
 
@@ -41,7 +28,7 @@
 <div id="bloc25">
 	<form action="/cgi-bin/koha/search.pl">
 		<h2 class="acquisition">budgets and bookfunds</h2>
-		<table>
+		<table class="noborder">
 			<tr>
 				<th class="acquisition">Budgets</th>
 				<th class="acquisition">Total</th>
