@@ -482,22 +482,6 @@ The screen is normally cleared before the message is displayed;
 if a fourth argument is specified and is nonzero, this
 screen-clearing is not done.
 
-FIXME: A response type of "yn" should allow the user to specify
-"y" or "n" in either uppercase or lowercase. This is especially
-true since the message shown to the user will contain uppercase
-characters as valid choices.
-
-FIXME: If the response type is "free", the user cannot specify
-an empty string; showmessage will return "1" as the result.
-
-FIXME: A default response of "0" cannot be specified. This is
-wrong; the default response should be checked for undef, not
-for 0.
-
-FIXME: If $noclear is not specified or specified as undef, we
-just test it for a non-zero value without testing it for being
-undef first.
-
 =cut
 
 sub showmessage {
@@ -505,6 +489,7 @@ sub showmessage {
     my $responsetype=shift;
     my $defaultresponse=shift;
     my $noclear=shift;
+    $noclear = 0 unless defined $noclear; # defaults to "clear"
     ($noclear) || (system('clear'));
     if ($responsetype =~ /^yn$/) {
 	$responsetype='restrictchar yn';
