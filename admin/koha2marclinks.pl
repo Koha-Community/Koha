@@ -121,7 +121,7 @@ if ($op eq 'add_form') {
 		$row_data{tagsubfield} = $fields{$tablename.".".$field}->{tagsubfield};
 		$row_data{liblibrarian} = $fields{$tablename.".".$field}->{liblibrarian};
 		$row_data{kohafield} = $field;
-		$row_data{edit} = "$script_name?op=add_form&tablename=$tablename&kohafield=$field";
+		$row_data{edit} = "$script_name?op=add_form&amp;tablename=$tablename&amp;kohafield=$field";
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data,\%row_data);
 	}
