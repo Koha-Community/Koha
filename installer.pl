@@ -204,10 +204,6 @@ do {
 #Create the configuration file
 open(SITES,">$conf_path/koha.conf") or die "Couldn't create file
 at $conf_path.  Must have write capability.\n";
-#print SITES qq|\database=$dbname\n|;
-#print SITES qq|\hostname=$hostname\n|;
-#print SITES qq|\user=$user\n|;
-#print SITES qq|\password=$pass\n|;
 print SITES <<EOP
 database=$dbname
 hostname=$hostname
