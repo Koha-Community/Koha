@@ -48,7 +48,10 @@ print "\nWhere is the 'koha' cvs module located [$kohadir]: ";
 chomp($input = <STDIN>);
 if ($input) {
     $kohadir=$input;
-    $kohahtmldir=guess_kohahtmldir($kohadir, $kohahtmldir) unless $has_kohaautobuild_conf;
+    unless ($has_kohaautobuild_conf) {
+	$kohahtmldir=guess_kohahtmldir($kohadir, $kohahtmldir);
+	$kohatmpldir=guess_kohatmpldir($kohadir, $kohatmpldir);
+    }
 }
 
 
@@ -291,6 +294,7 @@ print KV "$releaseversion\n";
 close KV;
 
 # Copy all CVS files to intranet-cgi
+# FIXME: "cp -a" is GNU-ism. It is not portable.
 system("cp -a $kohadir/* $rootdir/intranet-cgi");
 
 # Move C4 to modules directory
@@ -346,10 +350,12 @@ system("rm -rf $rootdir/intranet-cgi/t");
 # Set all .pl scripts executable
 system("find $rootdir/intranet-cgi -name '*.pl' -exec chmod a+x \\{\\} \\;");
 # Copy all CVS files to intranet-html and opac-html
+# FIXME: "cp -a" is GNU-ism. It is not portable.
 system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
 system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
 
 # Copy koha-tmpl files
+# FIXME: "cp -a" is GNU-ism. It is not portable.
 system('cp', '-a', "$kohatmpldir/opac-tmpl", "$rootdir/opac-html");
 system('cp', '-a', "$kohatmpldir/intranet-tmpl", "$rootdir/intranet-html");
 system('rm', '-rf', "$rootdir/intranet-cgi/koha-tmpl");
@@ -370,6 +376,7 @@ system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
 system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
 
 
+# FIXME: Why do we copy from $roothomedir? What is supposed to be there?
 if (-e "$roothomedir/docs") {
     print "Copying docs folder from $roothomedir/docs...";
     system("cp -r $roothomedir/docs/* $rootdir/docs/");
@@ -424,9 +431,12 @@ sub guess_kohahtmldir ($;$) {
 sub guess_kohatmpldir ($;$) {
     my($kohadir, $default) = @_;
     my $kohatmpldir;
-    # It probably makes sense to assume that the 'koha' and 'koha-tmpl'
-    # modules are checked out within the same parent directory
-    if (-d $kohadir && $kohadir =~ /^(.*)\/[^\/]+$/) {
+    # "koha-tmpl" is now just a subdirectory within the "koha" module.
+    # Otherwise, it probably makes sense to assume that the "koha" and
+    # "koha-tmpl" modules are checked out within the same parent directory
+    if (-d $kohadir && -d "$kohadir/koha-tmpl") {
+	$kohatmpldir = "$kohadir/koha-tmpl";
+    } elsif (-d $kohadir && $kohadir =~ /^(.*)\/[^\/]+$/) {
 	$kohatmpldir = "$1/koha-tmpl"
     } else {
 	$kohatmpldir = $default;
