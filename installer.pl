@@ -274,8 +274,8 @@ chmod 0440, "$etcdir/koha.conf";
 my $svr_admin = "webmaster\@$domainname";
 my $servername=`hostname -f`;
 chomp $servername;
-$opacport=80;
-$kohaport=8080;
+my $opacport=80;
+my $kohaport=8080;
 
 print qq|
 
