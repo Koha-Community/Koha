@@ -232,6 +232,15 @@
     </a> <br> Category: <!-- TMPL_VAR name="categorycode" -->
     </td></tr>
 <!-- TMPL_IF name="noissues" -->
+<!-- TMPL_IF NAME="gna" -->
+<tr><td valign="top"><font color="red">GNA</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Patron is gone with no address</td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lost" -->
+<tr><td valign="top"><font color="red">LOST</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Patron's card is lost</td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="dbarred" -->
+<tr><td valign="top"><font color="red">DBARRED</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->>Patron is debarred</td></tr>
+<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="charges" -->
 		<tr><td valign="top"><font color="red">CHARGES</font></td><td bgcolor=<!-- TMPL_VAR name="color" -->><a href="/cgi-bin/koha/pay.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this, 'Payment', 480,640)">Payment</a></td></tr>
 	<!-- TMPL_ELSE -->
