@@ -46,14 +46,18 @@
 									(<!-- TMPL_VAR NAME="itemcallnumber" -->)
 								<!-- /TMPL_IF -->
 							<!-- /TMPL_IF -->
+							<!-- TMPL_IF name="notforloan" -->
+								<i>(<!-- TMPL_VAR name="notforloan" -->)</i>
+							<!-- /TMPL_IF -->
 						</p>
 					<!-- /TMPL_LOOP -->
+					<!-- TMPL_IF name="onorder" --><p>On order</p><!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF NAME="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_UNLESS name="norequests" -->
 						<a class="button catalogue" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">Request</a>
 					<!-- TMPL_ELSE -->
-						Not Reservable
+						<p>Not Reservable</p>
 					<!-- /TMPL_UNLESS -->
 				</td>
 			</tr>

@@ -78,16 +78,21 @@
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_LOOP name="CN" -->
-						<p><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --> 
-						<!-- TMPL_IF name="date_due" -->
-							<i>(On Loan until <!-- TMPL_VAR name="date_due" -->)</i>
-						<!-- TMPL_ELSE -->
-							<!-- TMPL_IF name="itemcallnumber" -->
-								(<!-- TMPL_VAR name="itemcallnumber" -->)
+						<p>
+							<!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" -->
+							<!-- TMPL_IF name="date_due" -->
+								<i>(On Loan until <!-- TMPL_VAR name="date_due" -->)</i>
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF name="itemcallnumber" -->
+									(<!-- TMPL_VAR name="itemcallnumber" -->)
+								<!-- /TMPL_IF -->
 							<!-- /TMPL_IF -->
-						<!-- /TMPL_IF -->
+							<!-- TMPL_IF name="notforloan" -->
+								<i>(<!-- TMPL_VAR name="notforloan" -->)</i>
+							<!-- /TMPL_IF -->
 						</p>
 					<!-- /TMPL_LOOP -->
+					<!-- TMPL_IF name="onorder" --><p>On order</p><!-- /TMPL_IF -->
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
 					<!-- TMPL_UNLESS NAME="norequests" -->

@@ -118,13 +118,26 @@
 		</tr>
 		<tr>
 			<th>location</th>
+			<th>status</th>
 			<th>date Due</th>
 			<th>last Seen</th>
 			<th>barcode</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 			<tr>
-				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --></td>
+				<td>
+					<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+					<!-- TMPL_IF name="itemcallnumber" -->
+						(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+					<!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="datedue" -->
+						On loan
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_VAR name="notforloan" -->
+					<!-- /TMPL_IF -->
+				</td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 				<td><!-- TMPL_VAR NAME="barcode" --></td>

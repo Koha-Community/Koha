@@ -60,10 +60,11 @@
 <!-- /TMPL_LOOP -->
 <div id="bloc25">
 	<h2 class="catalogue">Items</h2>
-	<table class="small">
+	<table>
 		<tr>
 			<th class="catalogue">Item type</th>
 			<th class="catalogue">Location</th>
+			<th class="catalogue">Status</th>
 			<th class="catalogue">Date Due</th>
 			<th class="catalogue">Last seen</th>
 			<th class="catalogue">Barcode</th>
@@ -73,6 +74,13 @@
 			<tr>
 				<td><!-- TMPL_VAR NAME="description" --></td>
 				<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+				<td>
+					<!-- TMPL_IF name="datedue" -->
+						On issue to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_VAR name="notforloan" -->
+					<!-- /TMPL_IF -->
+				</td>
 				<td><!-- TMPL_VAR NAME="datedue" --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
