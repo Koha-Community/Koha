@@ -93,6 +93,7 @@ sub LINENUM		() {'lc'}
 sub CDATA_MODE_P	() {'cdata-mode-p'}
 sub CDATA_CLOSE		() {'cdata-close'}
 sub PCDATA_MODE_P	() {'pcdata-mode-p'}	# additional submode for CDATA
+sub JS_MODE_P		() {'js-mode-p'}	# cdata-mode-p must also be true
 
 sub ALLOW_CFORMAT_P	() {'allow-cformat-p'}
 
@@ -169,6 +170,11 @@ sub pcdata_mode_p {
     return $this->{+PCDATA_MODE_P};
 }
 
+sub js_mode_p {
+    my $this = shift;
+    return $this->{+JS_MODE_P};
+}
+
 sub cdata_close {
     my $this = shift;
     return $this->{+CDATA_CLOSE};
@@ -240,6 +246,12 @@ sub _set_pcdata_mode {
     return $this;
 }
 
+sub _set_js_mode {
+    my $this = shift;
+    $this->{+JS_MODE_P} = $_[0];
+    return $this;
+}
+
 sub _set_cdata_close {
     my $this = shift;
     $this->{+CDATA_CLOSE} = $_[0];
@@ -250,6 +262,100 @@ sub set_allow_cformat {
     my $this = shift;
     $this->{+ALLOW_CFORMAT_P} = $_[0];
     return $this;
+}
+
+###############################################################################
+
+use vars qw( $js_EscapeSequence );
+BEGIN {
+    # Perl quoting is really screwed up, but this common subexp is way too long
+    $js_EscapeSequence = q{\\\\(?:['"\\\\bfnrt]|[^0-7xu]|[0-3]?[0-7]{1,2}|x[\da-fA-F]{2}|u[\da-fA-F]{4})};
+}
+sub parenleft  () { '(' }
+sub parenright () { ')' }
+
+sub split_js ($) {
+    my ($s0) = @_;
+    my @it = ();
+    while (length $s0) {
+	if ($s0 =~ /^\s+/s) {				# whitespace
+	    push @it, $&;
+	    $s0 = $';
+	} elsif ($s0 =~ /^\/\/[^\r\n]*(?:[\r\n]|$)/s) {	# C++-style comment
+	    push @it, $&;
+	    $s0 = $';
+	} elsif ($s0 =~ /^\/\*(?:(?!\*\/).)*\*\//s) {	# C-style comment
+	    push @it, $&;
+	    $s0 = $';
+	# Keyword or identifier, ECMA-262 p.13 (section 7.5)
+	} elsif ($s0 =~ /^[A-Z_\$][A-Z\d_\$]*/is) {	# IdentifierName
+	    push @it, $&;
+	    $s0 = $';
+	# Punctuator, ECMA-262 p.13 (section 7.6)
+	} elsif ($s0 =~ /^(?:[\(\){}\[\];]|>>>=|<<=|>>=|[-\+\*\/\&\|\^\%]=|>>>|<<|>>|--|\+\+|\|\||\&\&|==|<=|>=|!=|[=><,!~\?:\.\-\+\*\/\&\|\^\%])/s) {
+	    push @it, $&;
+	    $s0 = $';
+	# DecimalLiteral, ECMA-262 p.14 (section 7.7.3); note: bug in the spec
+	} elsif ($s0 =~ /^(?:0|[1-9]\d+(?:\.\d*(?:[eE][-\+]?\d+)?)?)/s) {
+	    push @it, $&;
+	    $s0 = $';
+	# HexIntegerLiteral, ECMA-262 p.15 (section 7.7.3)
+	} elsif ($s0 =~ /^0[xX][\da-fA-F]+/s) {
+	    push @it, $&;
+	    $s0 = $';
+	# OctalIntegerLiteral, ECMA-262 p.15 (section 7.7.3)
+	} elsif ($s0 =~ /^0[\da-fA-F]+/s) {
+	    push @it, $&;
+	    $s0 = $';
+	# StringLiteral, ECMA-262 p.17 (section 7.7.4)
+	# XXX SourceCharacter doesn't seem to be defined (?)
+	} elsif ($s0 =~ /^(?:"(?:(?!["\\\r\n]).|$js_EscapeSequence)*"|'(?:(?!['\\\r\n]).|$js_EscapeSequence)*')/os) {
+	    push @it, $&;
+	    $s0 = $';
+	} elsif ($s0 =~ /^./) {				# UNKNOWN TOKEN !!!
+	    push @it, $&;
+	    $s0 = $';
+	}
+    }
+    return @it;
+}
+
+sub STATE_UNDERSCORE     () { 1 }
+sub STATE_PARENLEFT      () { 2 }
+sub STATE_STRING_LITERAL () { 3 }
+
+# XXX This is a crazy hack. I don't want to write an ECMAScript parser.
+# XXX A scanner is one thing; a parser another thing.
+sub identify_js_translatables (@) {
+    my @input = @_;
+    my @output = ();
+    # We mark a JavaScript translatable string as in C, i.e., _("literal")
+    # For simplicity, we ONLY look for "_" "(" StringLiteral ")"
+    for (my $i = 0, my $state = 0, my($j, $q, $s); $i <= $#input; $i += 1) {
+	my $reset_state_p = 0;
+	push @output, [0, $input[$i]];
+	if ($input[$i] !~ /\S/s) {
+	    ;
+	} elsif ($state == 0) {
+	    $state = STATE_UNDERSCORE if $input[$i] eq '_';
+	} elsif ($state == STATE_UNDERSCORE) {
+	    $state = $input[$i] eq parenleft ? STATE_PARENLEFT : 0;
+	} elsif ($state == STATE_PARENLEFT) {
+	    if ($input[$i] =~ /^(['"])(.*)\1$/s) {
+		($state, $j, $q, $s) = (STATE_STRING_LITERAL, $#output, $1, $2);
+	    } else {
+		$state = 0;
+	    }
+	} elsif ($state == STATE_STRING_LITERAL) {
+	    if ($input[$i] eq parenright) {
+		$output[$j] = [1, $output[$j]->[1], $q, $s];
+	    }
+	    $state = 0;
+	} else {
+	    die "identify_js_translatables internal error: Unknown state $state"
+	}
+    }
+    return \@output;
 }
 
 ###############################################################################
@@ -430,6 +536,7 @@ sub _next_token_intermediate {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
 		$this->_set_pcdata_mode( 0 );
+		$this->_set_js_mode( lc($1) eq 'script' );
 #	    } elsif ($it->string =~ /^<(title)\b/is) {
 #		$this->_set_cdata_mode( 1 );
 #		$this->_set_cdata_close( "</$1\\s*>" );
@@ -470,8 +577,20 @@ sub _next_token_intermediate {
 	$it = TmplToken->new( $it,
 			($this->pcdata_mode_p?
 			    TmplTokenType::TEXT: TmplTokenType::CDATA),
-			$this->line_number )
+			$this->line_number, $this->filename )
 		if defined $it;
+	if ($this->js_mode_p) {
+	    my $s0 = $it->string;
+	    my @head = ();
+	    my @tail = ();
+	    if ($s0 =~ /^(\s*<!--\s*)(.*)(\s*--\s*>\s*)$/s) {
+		push @head, $1;
+		push @tail, $3;
+		$s0 = $2;
+	    }
+	    push @head, split_js $s0;
+	    $it->set_js_data( identify_js_translatables(@head, @tail) );
+	}
 	$this->_set_pcdata_mode, 0;
 	$this->_set_cdata_close, undef unless !defined $it;
     }

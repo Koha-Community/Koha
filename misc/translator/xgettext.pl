@@ -107,6 +107,10 @@ sub text_extract (*) {
 		    remember( $s, $val ) if $val =~ /\S/s;
 		}
 	    }
+	} elsif ($s->has_js_data) {
+	    for my $t (@{$s->js_data}) {
+		remember( $s, $t->[3] ) if $t->[0]; # FIXME
+	    }
 	}
     }
 }
@@ -198,6 +202,9 @@ EOF
 		    . (defined $type? " type=$type->[1]": '')
 		    . (defined $name? " name=$name->[1]": '');
 	    }
+	} elsif ($text{$t}->[0]->has_js_data) {
+	    printf OUTPUT "#. For the first occurrence,\n" if @{$text{$t}} > 1;
+	    printf OUTPUT "#. SCRIPT\n";
 	}
 	my $cformat_p;
 	for my $token (@{$text{$t}}) {
@@ -376,7 +383,6 @@ A gettext-like format provides the following advantages:
 
 =item -
 
-(Future goal)
 Translation to non-English-like languages with different word
 order:  gettext's c-format strings can theoretically be
 emulated if we are able to do some analysis on the .tmpl input
@@ -416,6 +422,20 @@ files (passed to -f) can be generated thus:
 
 This is, however, quite pointless, because the "create" and
 "update" actions have already been implemented in tmpl_process3.pl.
+
+=head2 Strings inside JavaScript
+
+In the SCRIPT elements, the script will attempt to scan for
+_("I<string literal>") patterns, and extract the I<string literal>
+as a translatable string.
+
+Note that the C-like _(...) notation is required.
+
+The JavaScript must actually define a _ function
+so that the code remains correct JavaScript.
+A suitable definition of such a function can be
+
+	function _(s) { return s } // dummy function for gettext
 
 =head1 SEE ALSO
 

@@ -109,6 +109,49 @@ sub set_form {
     return $this;
 }
 
+sub has_js_data {
+    my $this = shift;
+    return defined $this->{'_js_data'} && ref($this->{'_js_data'}) eq 'ARRAY';
+}
+
+sub js_data {
+    my $this = shift;
+    return $this->{'_js_data'};
+}
+
+sub set_js_data {
+    my $this = shift;
+    $this->{'_js_data'} = $_[0];
+    return $this;
+}
+
+# predefined tests
+
+sub tag_p {
+    my $this = shift;
+    return $this->type == TmplTokenType::TAG;
+}
+
+sub cdata_p {
+    my $this = shift;
+    return $this->type == TmplTokenType::CDATA;
+}
+
+sub text_p {
+    my $this = shift;
+    return $this->type == TmplTokenType::TEXT;
+}
+
+sub text_parametrized_p {
+    my $this = shift;
+    return $this->type == TmplTokenType::TEXT_PARAMETRIZED;
+}
+
+sub directive_p {
+    my $this = shift;
+    return $this->type == TmplTokenType::DIRECTIVE;
+}
+
 ###############################################################################
 
 1;

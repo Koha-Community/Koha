@@ -97,6 +97,16 @@ sub text_replace (**) {
 		    text_replace_tag($t, $attr): $t });
 	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
 	    print $output text_replace_tag($t, $attr);
+	} elsif ($s->has_js_data) {
+	    for my $t (@{$s->js_data}) {
+		# FIXME for this whole block
+		if ($t->[0]) {
+		    printf $output "%s%s%s", $t->[2], find_translation $t->[3],
+			    $t->[2];
+		} else {
+		    print $output $t->[1];
+		}
+	    }
 	} elsif (defined $t) {
 	    print $output $t;
 	}

@@ -60,6 +60,12 @@ sub debug_dump ($) { # for testing only
 		$i += 1;
 	    }
 	}
+	if ($s->has_js_data) {
+	    printf "JavaScript translatable strings:\n";
+	    for my $t (@{$s->js_data}) {
+		printf "%dH%s\n", length $t->[3], underline $t->[3] if $t->[0]; # FIXME
+	    }
+	}
     }
 }
 
@@ -87,6 +93,10 @@ sub text_extract ($) {
 		    $val = TmplTokenizer::trim $val;
 		    $text{$val} = 1 if $val =~ /\S/s;
 		}
+	    }
+	} elsif ($s->has_js_data) {
+	    for my $t (@{$s->js_data}) {
+		remember( $s, $t->[3] ) if $t->[0]; # FIXME
 	    }
 	}
     }
