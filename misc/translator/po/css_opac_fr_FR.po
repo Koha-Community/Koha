@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: css_opac_fr_FR\n"
-"POT-Creation-Date: 2005-03-17 18:29+0100\n"
-"PO-Revision-Date: 2005-03-17 18:45+0100\n"
+"POT-Creation-Date: 2005-03-30 15:44+0200\n"
+"PO-Revision-Date: 2005-03-30 16:34+0200\n"
 "Last-Translator: POULAIN <paul@koha-fr.org>\n"
-"co.uk<kyfieithu@dotmon.com>\n"
 "Language-Team: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"co.uk<kyfieithu@dotmon.com>\n"
 "X-Generator: KBabel 1.3.1\n"
 "\n"
 
@@ -32,14 +32,6 @@ msgstr "Notice(s) ajoutée(s)"
 msgid "%S and"
 msgstr "%S et"
 
-#. %1$s: TMPL_VAR name=firstname
-#. %2$s: TMPL_VAR name=surname
-#. %3$s: TMPL_VAR name=title
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:7
-#, c-format
-msgid "%s %s (%s)"
-msgstr "%s %s (%s)"
-
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=author
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:9
@@ -47,20 +39,8 @@ msgstr "%s %s (%s)"
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
-#. %1$s: TMPL_VAR name=phone
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:9
-#, c-format
-msgid "%s (hm)"
-msgstr "%s(domicile)"
-
-#. %1$s: TMPL_VAR name=faxnumber
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:10
-#, c-format
-msgid "%s (wk)"
-msgstr "%s (travail)"
-
 #. %1$s: TMPL_VAR name=subtitle
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:51
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:50
 #, c-format
 msgid "%s ;"
 msgstr "%s ;"
@@ -104,13 +84,6 @@ msgstr "%s documents(s)"
 msgid "%s months"
 msgstr "%s mois"
 
-#. %1$s: TMPL_VAR name=seriestitle
-#. %2$s: TMPL_VAR name=volume
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:63
-#, c-format
-msgid "%s vol. %s"
-msgstr "%s vol. %s"
-
 #. %1$s: TMPL_VAR name=weeklength
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:72
 #, c-format
@@ -123,18 +96,26 @@ msgstr "%s semaines"
 msgid "%s,"
 msgstr "%s,"
 
-#. For the first occurrence,
-#. %1$s: TMPL_VAR name=streetaddress
-#. %2$s: TMPL_VAR name=city
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:8
+#. %1$s: TMPL_VAR name=branchname
+#. %2$s: TMPL_VAR name=itemcallnumber
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:39
 #, c-format
 msgid "%s, %s"
 msgstr "%s, %s"
 
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=streetaddress
+#. %2$s: TMPL_VAR name=zipcode
+#. %3$s: TMPL_VAR name=city
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:8
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:9
+#, c-format
+msgid "%s, %s %s"
+msgstr "%s, %s %s"
+
 #. %1$s: TMPL_VAR name=btitle
 #. %2$s: TMPL_VAR name=branch
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:43
 #, c-format
 msgid "%s, pick up at: <b>%s</b>"
 msgstr "%s, à récupérer à <b>%s</b>"
@@ -143,12 +124,12 @@ msgstr "%s, à récupérer à <b>%s</b>"
 msgid "&copy;"
 msgstr "©"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:112
 msgid "&lt;&lt;&lt;Previous"
 msgstr "<<<Précédent"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:17
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:132
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:134
 msgid "&lt;&lt;Previous"
 msgstr "Précédent"
 
@@ -158,37 +139,48 @@ msgstr "Pas de résultats"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=itemcallnumber
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:87
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:91
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:132
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:133
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:122
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:179
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:33
 #, c-format
 msgid "(%s)"
 msgstr "(%s)"
 
 #. %1$s: TMPL_VAR name=date_due
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:88
 #, c-format
 msgid "(On Loan until %s)"
 msgstr "(prété jusqu'au %s)"
 
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:10
+msgid "(hm)"
+msgstr "(domicile)"
+
 #. %1$s: TMPL_VAR name=timestamp
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:74
 #, c-format
 msgid "(modified on %s)"
 msgstr "(modifié le %s)"
 
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:11
+msgid "(wk)"
+msgstr "(travail)"
+
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:67
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:68
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:70
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:92
 #, c-format
 msgid "- %s"
 msgstr "- %s"
 
 #. %1$s: TMPL_VAR name=marcsubjct
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:104
 #, c-format
 msgid "- <a1> %s </a>"
 msgstr "- <a1> %s </a>"
@@ -218,21 +210,21 @@ msgid "3 weeks"
 msgstr "3 semaines"
 
 #. %1$s: TMPL_VAR name=notes
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:72
 #, c-format
 msgid ": %s"
 msgstr ": %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=place
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:73
 #, c-format
 msgid "; %s"
 msgstr "; %s"
 
 #. %1$s: TMPL_VAR name=loggedinusername
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:60
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:61
 #, c-format
 msgid "<a1> %s home </a> <a2> Log Out </a>"
 msgstr "<a1> %s accueil </a> <a2> Déconnexion </a>"
@@ -262,7 +254,7 @@ msgid "<a1>%s</a> (%s item(s))"
 msgstr "<a1>%s</a> (%s document(s))"
 
 #. %1$s: TMPL_VAR name=subject
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:67
 #, c-format
 msgid "<a1>%s</a>,"
 msgstr "<a1>%s</a>,"
@@ -272,7 +264,7 @@ msgstr "<a1>%s</a>,"
 msgid "<a1>Log In</a> to Koha"
 msgstr "<a1>Se connecter</a> à  Koha"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:73
 #, c-format
 msgid "<a1>Log in to Koha</a> to have personal options."
 msgstr "<a1>S'identifier</a> pour accéder à votre dossier personnel"
@@ -291,13 +283,13 @@ msgid "<b><a1>Total Issues:</a></b> %s"
 msgstr "<b>Total des prêts:</b> %s"
 
 #. %1$s: TMPL_VAR name=additional
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:138
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:153
 #, c-format
 msgid "<b>Additional authors:</b>%s"
 msgstr "<b>Auteurs secondaires:</b>%s"
 
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:137
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:152
 #, c-format
 msgid "<b>Author:</b> %s"
 msgstr "<b>Auteur :</b> %s"
@@ -316,7 +308,7 @@ msgstr "<b>Numéro de notice :</b> %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=classification
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:150
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:165
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:25
 #, c-format
 msgid "<b>Classification:</b> %s"
@@ -332,14 +324,14 @@ msgstr "<b>Cote:</b>%s%s%s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=seriestitle
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:158
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:19
 #, c-format
 msgid "<b>Collection:</b> %s"
 msgstr "<b>Collection:</b> %s"
 
 #. %1$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:145
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:160
 #, c-format
 msgid "<b>Copyright year:</b> %s"
 msgstr "<b>Date de copyright:</b>%s"
@@ -363,7 +355,7 @@ msgid "<b>Dewey:</b> <a1>%s</a>"
 msgstr "<b>Dewey:</b> <a1>%s</a>"
 
 #. %1$s: TMPL_VAR name=dewey
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:149
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:164
 #, c-format
 msgid "<b>Dewey:</b>%s"
 msgstr "<b>Dewey:</b>%s"
@@ -388,7 +380,7 @@ msgstr "<b>ISBN:</b>%s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=ISBN
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:150
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:28
 #, c-format
 msgid "<b>ISBN:</b>%s"
@@ -414,7 +406,7 @@ msgstr "<b> Document perdu :</b> %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=lccn
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:151
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:166
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:26
 #, c-format
 msgid "<b>LCCN:</b> %s"
@@ -460,7 +452,7 @@ msgstr "<b>Nbre. d'exemplaires:</b> %s"
 #. %1$s: TMPL_VAR name=bnotes
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:40
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:75
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:146
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:161
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:22
 #, c-format
 msgid "<b>Notes:</b> %s"
@@ -515,7 +507,7 @@ msgid "<b>Replacement Price:</b> %s"
 msgstr "<b>Prix de Remplacement :</b> %s"
 
 #. %1$s: TMPL_VAR name=serial
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:148
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:163
 #, c-format
 msgid "<b>Serial:</b>%s"
 msgstr "<b>Publication en série:</b>%s"
@@ -528,14 +520,14 @@ msgstr "<b>Format :</b> %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=subject
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:144
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:159
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:20
 #, c-format
 msgid "<b>Subject:</b> %s"
 msgstr "<b>Sujet :</b> %s"
 
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:81
 #, c-format
 msgid "<b>Total Number of Items:</b> %s"
 msgstr "<b>Nombre Total d'exemplaires %s"
@@ -543,7 +535,7 @@ msgstr "<b>Nombre Total d'exemplaires %s"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=url
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:152
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:167
 #, c-format
 msgid "<b>URL:</b> %s"
 msgstr "<b>URL:</b> %s"
@@ -555,7 +547,7 @@ msgid "<b>URL:</b> <a1>%s</a>"
 msgstr "<b>URL:</b> <a1>%s</a>"
 
 #. %1$s: TMPL_VAR name=unititle
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:147
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:162
 #, c-format
 msgid "<b>Uniform title:</b> %s"
 msgstr "<b>titre uniforme</b> %s"
@@ -570,7 +562,7 @@ msgstr "<b>titre uniforme</b> %s"
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-moredetail.tmpl:36
 #, c-format
 msgid "<b>Volume:</b> %s"
-msgstr "<b>Type de volume</b> %s"
+msgstr "<b>Reliure</b> %s"
 
 #. %1$s: TMPL_VAR name=copyrightdate
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:21
@@ -580,20 +572,20 @@ msgstr "<b>Année :</b> %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:155
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detailprint.tmpl:16
 #, c-format
 msgid "<b>in </b>%s"
 msgstr "<b>en </b>%s"
 
 #. %1$s: TMPL_VAR name=publishercode
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:139
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:154
 #, c-format
 msgid "<b>published by :</b>%s"
 msgstr "<b>publié par :</b>%s"
 
 #. %1$s: TMPL_VAR name=subtitle
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:136
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:151
 #, c-format
 msgid "<b>subtitle:</b>%s"
 msgstr "<b>sous-titre:</b>%s"
@@ -680,11 +672,11 @@ msgstr "Ajouter au panier"
 msgid "Add to virtual shelf"
 msgstr "Ajouter dans l'étagère virtuelle"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:55
 msgid "Additional Author:"
 msgstr "Autres auteurs :"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:37
 msgid "Additional authors:"
 msgstr "Autres auteurs :"
 
@@ -743,14 +735,14 @@ msgstr "Demandé"
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:10
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:28
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:14
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:54
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:55
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:97
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-addbookbybiblionumber.tmpl:5
 msgid "Author"
 msgstr "Auteur"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:55
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:30
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:31
 msgid "Author:"
 msgstr "Auteur :"
 
@@ -760,7 +752,7 @@ msgstr "Auteur :"
 msgid "Author: %s"
 msgstr "Auteur: %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:152
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:153
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:77
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:79
 msgid "Available"
@@ -783,7 +775,7 @@ msgid "Back to biblio"
 msgstr "Retour à la notice"
 
 #
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:58
 msgid "Barcode"
 msgstr "Code à barres"
 
@@ -799,7 +791,7 @@ msgid "Biblio added to the basket"
 msgstr "Notice ajoutée au panier"
 
 #. A
-#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:44
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:52
 msgid "Biblio basket"
 msgstr "Panier de notices"
 
@@ -823,7 +815,7 @@ msgstr "Résumé"
 msgid "Call Number"
 msgstr "Cote du document"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:97
 msgid "Call Number:"
 msgstr "Cote du document :"
 
@@ -853,11 +845,11 @@ msgid "Category"
 msgstr "Catégorie"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:82
 msgid "Change Language"
 msgstr "Changer la langue"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:58
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:59
 msgid "Charges"
 msgstr "Payant"
 
@@ -887,8 +879,8 @@ msgstr "Effacer Tout"
 msgid "Close"
 msgstr "Fermer"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:63
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:55
 msgid "Collection:"
 msgstr "Collection :"
 
@@ -917,7 +909,7 @@ msgstr "Date copyright"
 msgid "Copyright year: %s"
 msgstr "Date copyright : %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:67
 msgid "Copyright:"
 msgstr "Date copyright :"
 
@@ -935,11 +927,11 @@ msgstr "Supprimer étagères"
 msgid "Descending"
 msgstr "Décroissant"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:87
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:88
 msgid "Detailed notes:"
 msgstr "Notes détaillées"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:49
 msgid "Details:"
 msgstr "Détails :"
 
@@ -947,8 +939,8 @@ msgstr "Détails :"
 msgid "Dewey"
 msgstr "code Dewey"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:71
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:91
 msgid "Dewey:"
 msgstr "code Dewey :"
 
@@ -968,7 +960,7 @@ msgstr "Voulez vous vider le panier ?"
 msgid "Do you want to remove selected biblios ?"
 msgstr "Voulez vous enlever les notices sélectionnées ?"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:55
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:56
 msgid "Due date"
 msgstr "Date de retour"
 
@@ -1051,8 +1043,8 @@ msgstr "ISBN :"
 msgid "ISBN/ISSN"
 msgstr "ISBN/ISSN"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:61
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:25
 msgid "ISBN:"
 msgstr "ISBN :"
 
@@ -1062,7 +1054,7 @@ msgstr "ISBN :"
 msgid "ISBN: %s"
 msgstr "ISBN : %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:63
 msgid "ISSN:"
 msgstr "ISBN :"
 
@@ -1101,11 +1093,11 @@ msgstr "Abrégé des numéros"
 msgid "It began on <b>%s</b> and is issued every <b>"
 msgstr "Débutant le <b>%s</b> et paraissant chaque<b>"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:118
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:119
 msgid "Item"
 msgstr "Exemplaire"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:45
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:46
 msgid "Item Count"
 msgstr "Nombre d'exemplaires"
 
@@ -1118,7 +1110,11 @@ msgstr "Type de document"
 msgid "Item barcode"
 msgstr "Code à barres"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:45
+msgid "Item type"
+msgstr "Type de document"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:74
 msgid "Item type :"
 msgstr "Type de document"
 
@@ -1126,7 +1122,11 @@ msgstr "Type de document"
 msgid "Items"
 msgstr "Exemplaires"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-sendbasket.tmpl:32
+msgid "Items :"
+msgstr "Exemplaires"
+
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:57
 msgid "Itemtype"
 msgstr "Type de document"
 
@@ -1139,7 +1139,7 @@ msgstr "Identification"
 msgid "Koha home page"
 msgstr "Page d'accueil Koha"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:103
 msgid "LCCN:"
 msgstr "LCCN :"
 
@@ -1155,7 +1155,7 @@ msgstr "LCCN : %s"
 msgid "Library Card: %s"
 msgstr "Identifiant %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:47
 msgid "Location"
 msgstr "Localisation"
 
@@ -1178,7 +1178,7 @@ msgid "Me"
 msgstr "Moi-même"
 
 #. A
-#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:42
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:50
 msgid "Member Home page"
 msgstr "Page d'accueil Membre"
 
@@ -1186,7 +1186,7 @@ msgstr "Page d'accueil Membre"
 msgid "Member information change"
 msgstr "Modifier vos informations"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:69
 msgid "Message from the library"
 msgstr "Message de la bibliothèque"
 
@@ -1220,18 +1220,18 @@ msgid "Name"
 msgstr "Nom"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:25
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:142
 msgid "Next &gt;&gt;"
 msgstr "Suivant >>"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:119
 msgid "Next &gt;&gt;&gt;"
 msgstr "Suivant >>>"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:70
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:81
 msgid "No"
 msgstr "Non"
 
@@ -1255,12 +1255,8 @@ msgid ""
 "No fields are mandatory. Fill whatever you know. The \"Note\" field can be "
 "used for whatever you want"
 msgstr ""
-"Aucun champ obligatoire. Remplissez les champs que vous connaissez. Le "
-"champ \"Note\" peut être utilisé pour ce que vous voulez"
-
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:101
-msgid "Not Reservable"
-msgstr "Non Réservable"
+"Aucun champ obligatoire. Remplissez les champs que vous connaissez. Le champ "
+"\"Note\" peut être utilisé pour ce que vous voulez"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:17
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:34
@@ -1289,14 +1285,14 @@ msgstr "Notez qu'il y aura un coût de <b>$%s</b> pour la réservation"
 msgid "Notes : %s"
 msgstr "Notes : %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:73
 msgid "Notes:"
 msgstr "Notes:"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:31
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:50
 msgid "OK"
 msgstr "OK"
 
@@ -1305,20 +1301,20 @@ msgid "OPAC Basket"
 msgstr "Panier"
 
 #. %1$s: TMPL_VAR name=date_due
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:67
 #, c-format
 msgid "OVERDUE %s"
 msgstr "RETARD %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:137
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:138
 msgid "On loan"
 msgstr "En prêt"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:99
 msgid "On order"
 msgstr "Commandé"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:151
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:152
 msgid "Online"
 msgstr "En ligne"
 
@@ -1335,7 +1331,7 @@ msgstr "Trié par"
 msgid "Ordered by the library"
 msgstr "Commandé par la bibliothèque"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:53
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:69
 msgid "Other options"
 msgstr "Autres options"
@@ -1354,7 +1350,7 @@ msgstr "Recherche avec troncature"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:42
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:50
 msgid "Personal page"
 msgstr "Vos informations"
 
@@ -1429,7 +1425,7 @@ msgstr "Année de Publication"
 msgid "Published between"
 msgstr "Publié entre"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:56
 msgid "Published by :"
 msgstr "Publié par :"
 
@@ -1446,7 +1442,7 @@ msgstr "Publié par : %s"
 msgid "Publisher"
 msgstr "Editeur"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:43
 msgid "Publisher:"
 msgstr "Editeur"
 
@@ -1470,7 +1466,7 @@ msgstr "Acquisitions récentes"
 msgid "Rejected"
 msgstr "Rejeté"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:99
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:100
 msgid "Related links:"
 msgstr "Liens en relation"
 
@@ -1493,19 +1489,19 @@ msgid "Remove selection"
 msgstr "Supprimer la sélection"
 
 #
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:60
 msgid "Renewable"
 msgstr "Renouvelable"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-MARCdetail.tmpl:20
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:99
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:103
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:22
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:29
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-ISBDdetail.tmpl:21
 msgid "Request"
 msgstr "Réserver"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:98
 msgid "Reserve date"
 msgstr "Date de réservation"
 
@@ -1528,7 +1524,7 @@ msgstr "Résultats %s à %s sur %s réponses"
 #. %2$s: TMPL_VAR name=to
 #. %3$s: TMPL_VAR name=total
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:31
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:126
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:128
 #, c-format
 msgid "Results <b><i>%s</i> through <i>%s</i> of <i>%s</i></b>"
 msgstr "Réponses <i>%s</i> à <i>%s</i> sur <i>%s</i> réponses."
@@ -1587,7 +1583,7 @@ msgstr ""
 msgid "Select bookshelf"
 msgstr "Sélectionnez l'étagère"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:18
 msgid "Select this Item"
 msgstr "Sélectionnez ce document"
 
@@ -1612,7 +1608,7 @@ msgstr "Envoyer le panier"
 msgid "Serial issues"
 msgstr "Bulletins"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:85
 msgid "Serial:"
 msgstr "Périodique:"
 
@@ -1622,7 +1618,7 @@ msgstr "Périodique:"
 msgid "Serial: %s"
 msgstr "Périodique: %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:44
+	#: ../../koha-tmpl/opac-tmpl/css/en/opac-search.tmpl:44
 msgid "Series title"
 msgstr "Titre collection"
 
@@ -1650,7 +1646,7 @@ msgstr "Nom de l'étagère virtuelle"
 msgid "Sorry, KOHA doesnt think you have permission for this page."
 msgstr "Désolé, Koha pense que vous ne pouvez pas accéder à cette page."
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:146
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:148
 msgid "Sorry, there were no results"
 msgstr "Désolé, il n'y a aucun résultat"
 
@@ -1682,11 +1678,11 @@ msgid "Subject"
 msgstr "Sujet"
 
 #
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:65
 msgid "Subject(s):"
 msgstr "Sujet :"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:60
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:61
 msgid "Subject:"
 msgstr "Sujet"
 
@@ -1708,7 +1704,7 @@ msgstr "Soumettre"
 msgid "Subscription information for %s"
 msgstr "Information d'abonnement pour%s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:48
 msgid "Subtitle(s):"
 msgstr "Sous-titre:"
 
@@ -1755,7 +1751,7 @@ msgstr "Le panier a été envoyé à : %s"
 msgid "There are <b>%s</b> reserves already on this item."
 msgstr "Il y a déjà <b>%s</b> réservations pour ce document"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:86
 #, c-format
 msgid ""
 "This Library is powered by <a1>Koha</a> free software ILS, and compliant "
@@ -1779,7 +1775,7 @@ msgstr ""
 "bibliothèque"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:161
 #, c-format
 msgid ""
 "This is a serial subscription (we have %s subscriptions). You can see which "
@@ -1798,8 +1794,8 @@ msgstr "Jeudi"
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:9
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-userupdate.tmpl:11
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:53
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:96
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-addbookbybiblionumber.tmpl:4
 msgid "Title"
 msgstr "Titre"
@@ -1808,7 +1804,7 @@ msgstr "Titre"
 msgid "Total Due"
 msgstr "Somme due"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:150
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:152
 #, c-format
 msgid "Try another <a1>Advanced search</a>"
 msgstr "<a1>Autre recherche</a>"
@@ -1823,12 +1819,12 @@ msgstr "Mardi"
 msgid "URL : %s"
 msgstr "URL : %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:72
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:109
 msgid "URL:"
 msgstr "URL :"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:79
 msgid "Unified title:"
 msgstr "Titre uniforme :"
 
@@ -1838,38 +1834,40 @@ msgstr "Titre uniforme :"
 msgid "Unified title: %s"
 msgstr "Titre uniforme : %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:71
 msgid "Unititle:"
 msgstr "Titre uniforme : %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:13
 msgid "Update Record"
 msgstr "Mettre à jour"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:87
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:88
 msgid "Valid XHTML 1.0!"
 msgstr "XHTML 1.0 valide !"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:58
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:46
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:59
 msgid "View & manage suggestions"
 msgstr "Voir et gérer les suggestions"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:17
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:24
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:32
 msgid "View Accounts"
 msgstr "Voir le compte"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:55
+#: ../../koha-tmpl/opac-tmpl/css/en/includes/opac-top.inc:43
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-main.tmpl:56
 msgid "Virtual shelves"
 msgstr "Etagères virtuelles"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-suggestions.tmpl:13
 msgid "Volume"
-msgstr "Volume"
+msgstr "Reliure"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:150
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:151
 msgid "Website"
 msgstr "Site Web"
 
@@ -1886,14 +1884,14 @@ msgstr "Qui doit être récupéré à"
 msgid "Work/Fax phone"
 msgstr "N° de téléphone/fax bureau"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:69
 msgid "Year :"
 msgstr "Année :"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:70
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:81
 msgid "Yes"
 msgstr "Oui"
 
@@ -1928,12 +1926,14 @@ msgid ""
 "additional authors and other author related fields (translator, "
 "illustrator...)"
 msgstr ""
-"Vous pouvez entrer un nom ou un prénom. La recherche est aussi faite sur "
-"les co-auteurs et les autres champs en relation (traducteur, illustrateur...)"
+"Vous pouvez entrer un nom ou un prénom. La recherche est aussi faite sur les "
+"co-auteurs et les autres champs en relation (traducteur, illustrateur...)"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-reserve.tmpl:7
 msgid "You can't make reserve in this library (feature unactivated)"
-msgstr "Vous ne pouvez pas faire de réservation dans cette bibliothèque (fonctionnalité désactivée)"
+msgstr ""
+"Vous ne pouvez pas faire de réservation dans cette bibliothèque "
+"(fonctionnalité désactivée)"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-searchresults.tmpl:9
 msgid "You did not specify any search criteria"
@@ -1946,36 +1946,36 @@ msgstr ""
 "réessayer."
 
 #. %1$s: TMPL_VAR name=issues_count
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:50
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:51
 #, c-format
 msgid "You have <b>%s</b> items currently issued."
 msgstr "Vous avez <b>%s</b> document(s) en cours de prêt"
 
 #. %1$s: TMPL_VAR name=reserves_count
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:92
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:93
 #, c-format
 msgid "You have <b>%s</b> items currently reserved."
 msgstr "Vous avez <b>%s</b> document(s) actuellement réservés"
 
 #. %1$s: TMPL_VAR name=amountoutstanding
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:30
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:31
 #, c-format
 msgid "You have a credit of %s"
 msgstr "Vous avez un crédit de %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:86
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:87
 msgid "You have no items on issue."
 msgstr "Vous n'avez pas de document en prêt"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=amountoutstanding
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:24
 #, c-format
 msgid "You have outstanding charges and fines of %s"
 msgstr "Vous devez %s"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-user.tmpl:40
 msgid "You have reserved items waiting:"
 msgstr "Des document réservés vous attendent :"
 
@@ -2018,8 +2018,10 @@ msgstr "Envoyer le panier"
 msgid "back to shelf list"
 msgstr "Retour à l'étagère virtuelle"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:125
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:126
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:172
 msgid "barcode"
 msgstr "code à barres"
 
@@ -2027,7 +2029,7 @@ msgstr "code à barres"
 msgid "basket.txt"
 msgstr "basket.txt"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:123
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:124
 msgid "date Due"
 msgstr "Date de retour"
 
@@ -2061,11 +2063,13 @@ msgstr "Koha"
 msgid "koha logo"
 msgstr "Logo Koha"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:124
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:125
 msgid "last Seen"
 msgstr "Vu pour la dernière fois"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:122
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:114
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-basket.tmpl:171
 msgid "location"
 msgstr "Localisation"
 
@@ -2114,7 +2118,7 @@ msgstr "trimestre"
 msgid "since <b>%s</b>"
 msgstr "depuis <b>%s</b>"
 
-#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:122
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:123
 msgid "status"
 msgstr "Etat"
 
@@ -2130,6 +2134,12 @@ msgstr "text/html; charset=iso-8859-1"
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-shelves.tmpl:13
 msgid "title"
 msgstr "Titre"
+
+#. %1$s: TMPL_VAR name=volume
+#: ../../koha-tmpl/opac-tmpl/css/en/opac-detail.tmpl:64
+#, c-format
+msgid "vol. %s"
+msgstr "vol. %s"
 
 #: ../../koha-tmpl/opac-tmpl/css/en/opac-serial-issues.tmpl:16
 msgid "week"
