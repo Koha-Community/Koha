@@ -5,6 +5,7 @@
 #script to modify/delete biblios
 #written 8/11/99
 # modified 11/11/99 by chris@katipo.co.nz
+# modified 12/16/2002 by hdl@ifrance.com : templating
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -29,6 +30,7 @@ use strict;
 use C4::Search;
 use CGI;
 use C4::Output;
+use HTML::Template;
 
 my $input = new CGI;
 
@@ -45,11 +47,12 @@ if ($submit eq '') {
   print $input->redirect("/cgi-bin/koha/delbiblio.pl?biblio=$bibnum");
 } # if
 
-print $input->header;
+#print $input->header;
 # my ($analytictitle)  = &analytic($biblionumber,'t');
 # my ($analyticauthor) = &analytic($biblionumber,'a');
-print startpage();
-print startmenu('catalogue');
+#print startpage();
+#print startmenu('catalogue');
+my $template = gettemplate("modbib.tmpl");
 
 # have to get all subtitles, subjects and additional authors
 $sub = join("|", map { $_->{'subject'} } @{$subject});
@@ -74,79 +77,21 @@ $dewey = ~ s/\.$//;
 
 $data->{'title'} = &tidyhtml($data->{'title'});
 
-print << "EOF";
-<a href="modwebsites.pl?biblionumber=$data->{'biblionumber'}">Modify Website Links</a>
-<form action="updatebiblio.pl" method="post" name="f">
-<input type="hidden" name="biblionumber" value="$data->{'biblionumber'}">
-<input type="hidden" name="biblioitemnumber" value="$data=>{'biblioitemnumber'}">
-<table border="0" cellspacing="0" cellpadding="5">
-<tr valign="top">
-<td>Author</td>
-<td><input type="text" name="author" value="$data->{'author'}"></td>
-</tr>
-<tr valign="top">
-<td>Title</td>
-<td><input type="text" name="title" value="$data->{'title'}"></td>
-</tr>
-<tr valign="top">
-<td>Abstract</td>
-<td><textarea name="abstract" cols="40" rows="4">$data->{'abstract'}</textarea></td>
-</tr>
-<tr valign="top">
-<td>Subject</td>
-<td><textarea name="subject" cols="40" rows="4">$sub</textarea>
-<a href="javascript:Dopop()">...</a>
-</td>
-</tr>
-<tr valign="top">
-<td>Copyright Date</td>
-<td><input type="text" name="copyrightdate" value="$data->{'copyrightdate'}"></td>
-</tr>
-<tr valign="top">
-<td>Series Title</td>
-<td><input type="text" name="seriestitle" value="$data->{'seriestitle'}"></td>
-</tr>
-<tr valign="top">
-<td>Additional Author</td>
-<td><input type="text" name="additionalauthor" value="$additional"></td>
-</tr>
-<tr valign="top">
-<td>Subtitle</td>
-<td><input type="text" name="subtitle" value="$data->{'subtitle'}"></td>
-</tr>
-<tr valign="top">
-<td>Unititle</td>
-<td><input type="text" name="unititle" value="$data->{'untitle'}"></td>
-</tr>
-<tr valign="top">
-<td>Notes</td>
-<td><textarea name="notes" cols="40" rows="4">$data->{'notes'}</textarea></td>
-</tr>
-<tr valign="top">
-<td>Serial</td>
-<td><input type="text" name="serial" value="$data->{'serial'}"></td>
-</tr>
-<tr valign="top">
-<td>Analytic Author</td>
-<td><input type="text" name="analyticauthor"></td>
-</tr>
-<tr valign="top">
-<td>Analytic Title</td>
-<td><input type="text" name="analytictitle"></td>
-</tr>
-</table>
-<br>
-<input type="submit" name="submit" value="Save Changes">
-</form>
-<script>
-function Dopop() {
-        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-</script>
-EOF
+$template->param ( biblionumber => $data->{'biblionumber'});
+$template->param ( biblioitemnumber => $data->{'biblioitemnumber'});
+$template->param ( author => $data->{'author'});
+$template->param ( title => $data->{'title'});
+$template->param ( abstract => $data->{'abstract'});
+$template->param ( subject => $sub);
+$template->param ( copyrightdate => $data->{'copyrightdate'});
+$template->param ( seriestitle => $data->{'seriestitle'});
+$template->param ( additionalauthor => $additional);
+$template->param ( subtitle => $data->{'subtitle'});
+$template->param ( untitle => $data->{'untitle'});
+$template->param ( notes => $data->{'notes'});
+$template->param ( serial => $data->{'serial'});
 
-print endmenu();
-print endpage();
+print "Content-Type: text/html\n\n", $template->output;
 
 sub tidyhtml {
   my ($inp)=@_;

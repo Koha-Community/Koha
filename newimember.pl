@@ -3,6 +3,7 @@
 # $Id$
 
 #script to print confirmation screen, then if accepted calls itself to insert data
+#modified 2002/12/16 by hdl@ifrance.com : Templating
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -27,13 +28,15 @@ use C4::Output;
 use C4::Input;
 use CGI;
 use Date::Manip;
+use HTML::Template;
 
 my %env;
 my $input = new CGI;
 #get varibale that tells us whether to show confirmation page
 #or insert data
 my $insert=$input->param('insert');
-print $input->header;
+
+my $template=gettemplate("newimember.tmpl");
 #get rest of data
 my %data;
 my @names=$input->param;
@@ -66,25 +69,24 @@ if ($data{'contactname'} eq ''){
 }
 #print $input->Dump;
 #print $string;
-print startmenu('member');
-if ($ok ==1){
-  print $string;
-} else {
-  my $valid=checkdigit(\%env,$data{"cardnumber_institution"});
-  if ($valid != 1){
-    print "Invalid cardnumber";
-  } else {
+#print startmenu('member');
 
-     my @inputs;
-     my $i=0;
-     while (my ($key, $value) = each %data) {
-       $value=~ s/\"/%22/g;
-       $inputs[$i]=["hidden","$key","$value"];
-       $i++;
-     }
-     $inputs[$i]=["submit","submit","submit"];
-     print mkformnotable("/cgi-bin/koha/insertidata.pl",@inputs);
+$template->param( missingloop => ($ok==1));
+$template->param( string => $string);
+if ($ok !=1) {
+	my $valid=checkdigit(\%env,$data{"cardnumber_institution"});
+	$template->param( invalid => ($valid !=1));
+	if (valid==1){
+		my @inputs;
+		while (my ($key, $value) = each %data) {
+			$value=~ s/\"/%22/g;
+			my %line;
+			$line{'key'}=$key;
+			$line{'value'}=$value;
+			push(@inputs, \%line);
+			}
+		$template->param(inputsloop => \@inputs);
   }
 }
-print endmenu('member');
-print endpage();
+print "Content-Type: text/html\n\n", $template->output;
+

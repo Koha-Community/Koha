@@ -2,10 +2,11 @@
 
 # $Id$
 
+
 #script to modify/delete biblios
 #written 8/11/99
 # modified 11/11/99 by chris@katipo.co.nz
-
+# modified 12/16/02 by hdl@ifrance.com : Templating
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -31,6 +32,7 @@ use CGI;
 use C4::Output;
 use C4::Acquisitions;
 use C4::Biblio;
+use HTML::Template;
 
 my $input = new CGI;
 my $submit=$input->param('delete.x');
@@ -40,7 +42,7 @@ if ($submit ne ''){
   print $input->redirect("/cgi-bin/koha/delitem.pl?itemnum=$itemnum&bibitemnum=$bibitemnum");
 }
 
-print $input->header;
+#print $input->header;
 #print $input->dump;
 
 my $data=bibitemdata($bibitemnum);
@@ -48,8 +50,12 @@ my $data=bibitemdata($bibitemnum);
 my $item=itemnodata('blah','',$itemnum);
 #my ($analytictitle)=analytic($biblionumber,'t');
 #my ($analyticauthor)=analytic($biblionumber,'a');
-print startpage();
-print startmenu('catalogue');
+
+
+#print startpage();
+#print startmenu('catalogue');
+my $template=gettemplate("moditem.tmpl");
+
 my %inputs;
 
 
@@ -69,6 +75,9 @@ if ($dewey <= 0){
   $dewey='';
 }
 $dewey=~ s/\.$//;
+
+# 12/16/2002 hdl@ifrance.com : all these inputs seem unused !!!
+
 $inputs{'Barcode'}="text\t$item->{'barcode'}\t0";
 $inputs{'Class'}="hidden\t$data->{'classification'}$dewey$data->{'subclass'}\t2";
 #$inputs{'Item Type'}="text\t$data->{'itemtype'}\t3";
@@ -90,77 +99,31 @@ $inputs{'Home Branch'}="text\t$item->{'homebranch'}\t18";
 $inputs{'Lost'}="radio\t$item->{'itemlost'}\t19";
 #$inputs{'Analytic author'}="text\t\t18";
 #$inputs{'Analytic title'}="text\t\t19";
-
 $inputs{'bibnum'}="hidden\t$data->{'biblionumber'}\t20";
 $inputs{'bibitemnum'}="hidden\t$data->{'biblioitemnumber'}\t21";
 $inputs{'itemnumber'}="hidden\t$itemnum\t22";
 
-
-
-print <<printend
-<FONT SIZE=6><em>$data->{'title'} ($data->{'author'})</em></FONT><br>
-<table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=white><td><form action=updateitem.pl method=post>
-<table border=0 cellspacing=0 cellpadding=5>
-<tr valign=top bgcolor=white><td>Barcode</td><td><input type=text name=Barcode value="$item->{'barcode'}" size=40></td></tr>
-<input type=hidden name=Class value="$data->{'classification'}$dewey$data->{'subclass'}">
-<input type=hidden name=Publisher value="$data->{'publisher'}">
-<input type=hidden name=ISBN value="$data->{'isbn'}">
-<input type=hidden name=Publication Year value="$data->{'publicationyear'}">
-<input type=hidden name=Pages value="$data->{'pages'}">
-<input type=hidden name=Illustrations value="$data->{'illustration'}">
-<tr valign=top bgcolor=white><td>ItemNotes</td><td><textarea name=ItemNotes cols=40 rows=4>$item->{'itemnotes'}</textarea></td></tr>
-<input type=hidden name=Volume value="$data->{'volumeddesc'}">
-<tr valign=top bgcolor=white><td>Home Branch</td><td><input type=text name=Home Branch value="$item->{'homebranch'}" size=40></td></tr>
-<tr valign=top bgcolor=white><td>Lost</td><td><input type=radio name=Lost value=1
-printend
-;
-if ($item->{'itemlost'} ==1){
-  print " checked ";
-}
-print <<printend
->Yes
-<input type=radio name=Lost value=0
-printend
-;
-if ($item->{'itemlost'} ==0){
-  print " checked ";
-}
-print <<printend
->No</td></tr>
-<tr valign=top bgcolor=white><td>Cancelled</td><td><input type=radio name=withdrawn value=1
-printend
-;
-if ($item->{'wthdrawn'} ==1){
-  print " checked ";
-}
-print <<printend
->Yes
-<input type=radio name=withdrawn value=0
-printend
-;
-if ($item->{'wthdrawn'} ==0){
-  print " checked ";
-}
-print <<printend
->No</td></tr>
-<input type=hidden name=bibnum value="$data->{'biblionumber'}">
-<input type=hidden name=bibitemnum value="$data->{'biblioitemnumber'}">
-<input type=hidden name=itemnumber value="$itemnum">
-<tr valign=top bgcolor=white><td></td><td>
-
-<input type=image  name=submit src=/images/save-changes.gif border=0 width=187
-height=42></td></tr>
-</table>
-</form></td></tr>
-</table>
-
-printend
-;
+#12/16/2002 hdl@ifrance.com : end of comment
 
 
 
+#12/16/2002 hdl@ifrance.com : templating
+$template->param(	title => $data->{'title'},
+								author => $data->{'author'},
+								barcode => $item->{'barcode'},
+								classification => "$data->{'classification'}$dewey$data->{'subclass'}",
+								publisher => $data->{'publisher'},
+								publicationyear => $data->{'publicationyear'},
+								pages => $data->{'pages'},
+								illustration => $data->{'illustration'},
+								itemnotes => $item->{'itemnotes'},
+								volumedesc => $data->{'volumedesc'},
+								homebranch => $data->{'homebranch'},
+								itemlost => ($item->{'itemlost'} ==1),
+								itemwithdrawn => ($item->{'wthdrawn'} ==1),
+								biblionumber => $data->{'biblionumber'},
+								biblioitemnumber => $data->{'biblioitemnumber'},
+								itemnumber => $itemnum);
 
-
-print endmenu();
-print endpage();
+print "Content-Type: text/html\n\n", $template->output;
+#12/16/2002 hdl@ifrance.com : templating
