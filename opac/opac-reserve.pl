@@ -82,6 +82,34 @@ $template->param(BRANCHES => \@branches);
 #### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
 # get the itemtype data....
 my @items = ItemInfo(undef, $biblionumber, 'opac');
+
+#######################################################
+# old version, add so that old templates still work
+my %types_old;
+foreach my $itm (@items) {
+    my $ity = $itm->{'itemtype'};
+    unless ($types_old {$ity}) {
+	$types_old{$ity}->{'itemtype'} = $ity;
+	$types_old{$ity}->{'branchinfo'}->{$itm->{'branchcode'}} = 1;
+	$types_old{$ity}->{'description'} = $itm->{'description'};
+    } else {
+	$types_old{$ity}->{'branchinfo'}->{$itm->{'branchcode'}} ++;
+    }
+}
+
+foreach my $type (values %types_old) {
+    my $copies = "";
+    foreach my $bc (keys %{$type->{'branchinfo'}}) {
+	$copies .= $branches->{$bc}->{'branchname'}."(".$type->{'branchinfo'}->{$bc}.")";
+    }
+    $type->{'copies'} = $copies;
+}
+
+my @types_old = values %types_old;
+
+# end old version
+################################
+
 my @temp;
 foreach my $itm (@items) {
     push @temp, $itm if $itm->{'itemtype'};
@@ -221,9 +249,11 @@ if ($query->param('item_types_selected')) {
 	}
     }
     unless ($noreserves) {
+	$template->param(TYPES => \@types_old);
 	$template->param(select_item_types => 1);
     }
 }
+
 # check that you can actually make the reserve.
 
 # $template->param(BIBLIOITEMS => \@data);
