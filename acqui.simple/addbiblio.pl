@@ -181,6 +181,7 @@ sub build_tabs ($$$) {
 			# if breeding is not empty
 			if ($record ne -1) {
 				my ($x,@value) = find_value($tag,$subfield,$record);
+				push (@value,"") if ($#value eq -1);
 				foreach my $value (@value) {
 					my %subfield_data;
 					$subfield_data{tag}=$tag;
@@ -329,7 +330,9 @@ if ($op eq "addbiblio") {
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
+	warn "MARChtml";
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	warn "MARChtml2";
 # MARC::Record built => now, record in DB
 	my $oldbibnum;
 	my $oldbibitemnum;
