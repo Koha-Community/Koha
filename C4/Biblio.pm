@@ -2623,21 +2623,6 @@ sub FindDuplicate {
 	return;
 }
 
-sub branches {                                                                                                                   
-        my $dbh   = C4::Context->dbh;                                                                                                
-        my $sth   = $dbh->prepare("Select * from branches order by branchname");                                                     
-        my @results = ();                                                                                                            
-                                                                                                                                     
-        $sth->execute();                                                                                                             
-        while (my $data = $sth->fetchrow_hashref) {                                                                                  
-	            push(@results,$data);                                                                                                    
-	        } # while                                                                                                                    
-                                                                                                                                     
-        $sth->finish;                                                                                                                
-        return(scalar(@results), @results);                                                                                          
-} # sub branches
-
-
 END { }    # module clean-up code here (global destructor)
 
 =back
@@ -2652,6 +2637,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.110  2004/11/24 16:00:01  tipaul
+# removing sub branches (commited by chris for MARC=OFF bugfix, but sub branches is already in Acquisition.pm)
+#
 # Revision 1.109  2004/11/24 15:58:31  tipaul
 # * critical fix for acquisition (see RC3 release notes)
 # * critical fix for duplicate finder
