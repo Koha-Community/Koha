@@ -20,6 +20,7 @@
 use strict;
 require Exporter;
 use CGI;
+use C4::Auth;
 use HTML::Template;
 use C4::Context;
 use C4::Search;
@@ -37,12 +38,26 @@ my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 
 my $subject=$query->param('subject');
-my $template;
 # if it's a subject we need to use the subject.tmpl
+my ($template, $loggedinuser, $cookie);
 if ($subject) {
-	$template = gettemplate("catalogue/subject.tmpl",0);
+ 	($template, $loggedinuser, $cookie)
+   		= get_template_and_user({template_name => "catalogue/subject.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
 } else {
-	$template = gettemplate("catalogue/searchresults.tmpl", 0);
+ 	($template, $loggedinuser, $cookie)
+		= get_template_and_user({template_name => "catalogue/searchresults.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
 }
 
 # %env

@@ -20,6 +20,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Context;
 use HTML::Template;
@@ -78,7 +79,14 @@ my ($input) = @_;
 	my $isbn_found = $input->param('isbn_found');
 	my $dbh = C4::Context->dbh;
 	my $authoritysep = C4::Context->preference("authoritysep");
-	my $template = gettemplate("value_builder/unimarc_field_225a.tmpl",0);
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "value_builder/unimarc_field_225a.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {parameters => 1},
+					debug => 1,
+					});
 # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
 	my $sth = $dbh->prepare("select stdlib from bibliothesaurus where father=? and category='EDITORS'");
 	my @splited = split //, $isbn_found;
@@ -100,7 +108,7 @@ my ($input) = @_;
 												);
 	$template->param(index => $index,
 							collection => $collection);
-	print "Content-Type: text/html\n\n", $template->output;
+	print $input->header(-cookie => $cookie),$template->output;
 }
 
 1;

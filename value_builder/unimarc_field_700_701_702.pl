@@ -20,6 +20,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Context;
 use HTML::Template;
@@ -138,7 +139,14 @@ sub plugin {
 				-labels=> \%stdlib
 				);
 	}
-	my $template = gettemplate("value_builder/unimarc_field_700_701_702.tmpl",0);
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "value_builder/unimarc_field_700_701_702.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {parameters => 1},
+					debug => 1,
+					});
 # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
 	$template->param(index => $index,
 							result =>$result,
@@ -148,7 +156,7 @@ sub plugin {
 							b => $b,
 							c => $c,
 							f => $f,);
-	print "Content-Type: text/html\n\n", $template->output;
+	print $input->header(-cookie => $cookie),$template->output;
 }
 
 1;

@@ -40,6 +40,7 @@ The 10 firsts presents the biblio, the 11th one presents the items attached to t
 
 use strict;
 require Exporter;
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 use CGI;
@@ -61,7 +62,15 @@ my $tagslib = &MARCgettagslib($dbh,1);
 my $record =MARCgetbiblio($dbh,$bibid);
 #warn $record->as_formatted();
 # open template
-my $template = gettemplate("catalogue/MARCdetail.tmpl",0);
+my ($template, $loggedinuser, $cookie)
+		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
+
 # fill arrays
 my @loop_data =();
 my $tag;
@@ -144,5 +153,5 @@ $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,
 						bibid => $bibid);
-print "Content-Type: text/html\n\n", $template->output;
+print $query->header(-cookie => $cookie),$template->output;
 

@@ -20,6 +20,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Context;
 use HTML::Template;
@@ -84,12 +85,19 @@ my ($input) = @_;
 
 	my $dbh = C4::Context->dbh;
 
-	my $template = gettemplate("value_builder/unimarc_field_700-4.tmpl",0);
+	my ($template, $loggedinuser, $cookie)
+	= get_template_and_user({template_name => "value_builder/unimarc_field_700-4.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {parameters => 1},
+					debug => 1,
+					});
 	$template->param(index => $index,
 							index2 => $index2,
 							"f1_$result" => "f1_".$result,
 							);
-	print "Content-Type: text/html\n\n", $template->output;
+	print $input->header(-cookie => $cookie),$template->output;
 }
 
 1;

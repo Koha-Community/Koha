@@ -22,6 +22,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Context;
 use HTML::Template;
@@ -58,8 +59,14 @@ if ($op eq "add") {
 	newauthority($dbh,$category,$insert,$insert,'',1,'');
 	$search_string=$insert;
 }
-
-my $template = gettemplate("thesaurus_popup.tmpl",0);
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "thesaurus_popup.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 # /search thesaurus terms starting by search_string
 my @freelib;
 my %stdlib;
@@ -86,6 +93,6 @@ $template->param(select_list => $select_list,
 						category => $category,
 						index => $index
 						);
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;
 
 

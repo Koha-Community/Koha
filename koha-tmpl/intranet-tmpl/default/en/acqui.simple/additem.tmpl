@@ -73,13 +73,13 @@
 	</tr>
 	</tmpl_loop>
 </table>
-<input type="hidden" name="tag" value="<TMPL_VAR name="itemtagfield">">
-<input type="hidden" name="subfield" value="<TMPL_VAR name="itemtagsubfield">">
-<input type="hidden" name="field_value" value="<TMPL_VAR name="itemnum">">
 <input type="hidden" name="itemnum" value="<TMPL_VAR name="itemnum">">
 <TMPL_IF name="opisadd">
 <input type="submit" value="Add item">
 <TMPL_ELSE>
+<input type="hidden" name="tag" value="<TMPL_VAR name="itemtagfield">">
+<input type="hidden" name="subfield" value="<TMPL_VAR name="itemtagsubfield">">
+<input type="hidden" name="field_value" value="<TMPL_VAR name="itemnum">">
 <input type="submit" value="Modify item">
 </TMPL_IF>
 </center>
