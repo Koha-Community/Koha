@@ -1802,7 +1802,15 @@ sub borrdata {
   $sth->execute;
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
-  return($data);
+  if ($data) {
+  	return($data);
+	} else { # try with firstname
+		my $sth=$dbh->prepare("select * from borrowers where firstname='$cardnumber'");
+		$sth->execute;
+		my $data=$sth->fetchrow_hashref;
+		$sth->finish;
+		return($data);
+	}
 }
 
 =item borrissues
