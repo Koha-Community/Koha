@@ -44,47 +44,48 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 <table cellspacing=0 cellpadding=0 border=0 >
 
   <tr valign=top >
-	<td background="/images/koha-front-background.gif"><img src="/images/holder.gif"
+	<td background="<TMPL_VAR NAME='themelang'>/images/koha-front-background.gif"><img src="/images/holder.gif"
 	width=1 height=420 align=left alt=" " hspace=0 vspace=0 >
 	<table cellspacing=0 cellpadding=0 border=0 >
 		<!----ROW THAT SETS THE GRID FOR THE REST OF THE TABLE--->
 		<tr valign=top >
-			<td background=""><img src="/images/holder.gif" width=150 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=150 height=42
 			alt=" " hspace=0 vspace=0 ></td>
-			<td background=""><img src="/images/holder.gif" width=30 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=42
 			alt=" " hspace=0 vspace=0 ></td>
-			<td background=""><img src="/images/holder.gif" width=25 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=25 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=25 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=25 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=30 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=20 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=20 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=20 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=20 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=10 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=10 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=10 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=10 height=42
 			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="/images/holder.gif" width=90 height=42
+			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=90 height=42
 			alt=" " hspace=0 vspace=0></td>
 		</tr>
 
 <!--------CATALOGUE SEARCH----->
 
 		<tr valign=top >
-			<td background="" colspan=5><img src="/images/holder.gif"
+			<td background="" colspan=5><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
 			width=1 height=1 hspace=0 vspace=0></td>
 
 			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif'" onMouseOut="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-search.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-search.gif" width=320 height=37 name="search"
 			alt="館藏查詢"
 			hspace=0 vspace=0 border=0></a></td>
 		</tr>
-		<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
+
+
 		<tr valign=top >
 			<td background="" rowspan=3 align="right" colspan=5>
-				<img src="/images/holder.gif"
+				<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
 				width=1 height=35
 				alt=" " hspace=0 vspace=0><br>
 				<img src="<TMPL_VAR NAME='themelang'>/images/koha-front-koha.gif" width=200 height=128
@@ -92,19 +93,22 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td></td>
 			<td></td>
 			<td background="" colspan=3>
-				<input type=text size="27" name="keyword"><input type=reset value="清空"><br>
+		 <TMPL_IF NAME="NOTMARC">
+		                <FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
+				<input type="hidden" name="module" value="search">
+				<input type="hidden" name="type" value="intranet">
+				<input type=text size="27" name="keyword"><input type=reset value="clr"><br>
 
-			<small>在上面空格輸入關鍵字，再按回車鍵即可。</small><br>
-			<a href="/cgi-bin/koha/catalogue-home.pl">
-			
-			<img src="/images/front-arrow-purple.gif" width=27 height=22
-			alt="-" hspace=0 vspace=0 border=0 align=middle>進階搜尋 (<!--FIXME-->更多選項)</a><br>
-
+			<small>在上面空格輸入後，再按回車鍵即可。</small><br>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
+			<font size=2 face="arial narrow,arial,helvetica">
+			<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow-purple.gif" width=27 height=22
+			alt="-" hspace=0 vspace=0 border=0 align=middle >進階搜尋 (更多選項)</a><br>
+			</form>
+		  </TMPL_IF>
 			<img src="/images/holder.gif" width=1 height=8
 			alt=" " hspace=0 vspace=0></td>
-
-		</tr>
-		</form>
+		</tr>		
 
 		<!--------MEMBER SEARCH----->
 
@@ -127,8 +131,8 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td background="" colspan=3 >
 			<input type=text size="27" name="member">
 			<input type=reset value="清空"><br>
-			<small>在上面空格輸入讀者姓名，再按回車鍵即可。</small><br>
-			<img src="/images/holder.gif" width=1 height=12
+			<small>在上面空格輸入後，再按回車鍵即可。</small><br>
+			<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=12
 			alt=" " hspace=0 vspace=0></td>
 
 		</tr>
@@ -172,7 +176,7 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td background="" colspan=7> <A href="/cgi-bin/koha/admin-home.pl" onMouseOver="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-admin.gif'" onMouseOut="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-admin.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-admin.gif" width=346 height=37 name="admin"
 			alt="系統設定"
 			hspace=0 vspace=0 border=0></a><br>
-			<img src="/images/holder.gif" width=1 height=12
+			<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=12
 			alt=" " hspace=0 vspace=0 ></td>
 
 
