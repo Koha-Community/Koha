@@ -710,6 +710,8 @@ foreach $table ( keys %fielddefinitions ) {
                 $null = 'NOT NULL';
             }
             if ( $key eq 'PRI' ) {
+# if it's a primary key, drop the previous pk, before altering the table
+			$dbh->do("alter table $table drop primary key");
                 $key = 'PRIMARY KEY';
             }
             unless ( $extra eq 'auto_increment' ) {
@@ -866,6 +868,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.54  2003/07/07 15:23:56  tipaul
+# fix to avoid errors when creating fields that are primary keys and a previous primary key exist.
+#
 # Revision 1.53  2003/07/07 14:11:16  tipaul
 # fixing bug #526 : gst rate is now calculated through systempref gist entry.
 # Before this fix :
