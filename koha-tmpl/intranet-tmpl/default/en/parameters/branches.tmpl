@@ -40,10 +40,10 @@ Confirm delete:
 <form action=<TMPL_VAR name=action> method=post><input type='hidden' name='op' value='add'><input type=submit value='Add New Branch'></form>
 <table border='1' cellpadding='5' cellspacing='0' width='550'>
 <tr> <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage>
-<font size='5'><b>Branches</b></font></th> </tr> 
-<tr bgcolor='#889999'> 
-<td width='175'><b>Name</b></td> 
-<td width='25'><b>Code</b></td> 
+<font size='5'><b>Branches</b></font></th> </tr>
+<tr bgcolor='#889999'>
+<td width='175'><b>Name</b></td>
+<td width='25'><b>Code</b></td>
 <td width='175'><b>Address</b></td>
 <td width='175'><b>Categories</b></td>
 <td width='50'><b>&nbsp;</b></td>
@@ -51,10 +51,10 @@ Confirm delete:
 <TMPL_LOOP name="branches">
 <tr bgcolor='<TMPL_VAR name=color>'>
     <td align='left' valign='top'><TMPL_VAR name=branch_name escape="HTML"></td>
-    <td align='left' valign='top'><TMPL_VAR name=branch_code> escape="HTML"</td>
+    <td align='left' valign='top'><TMPL_VAR name=branch_code escape="HTML"></td>
     <td align='left' valign='top'><TMPL_VAR name=address escape="HTML"></td>
     <td align='left' valign='top'><TMPL_VAR name=categories escape="HTML"></td>
-    <td align='left' valign='top'> 
+    <td align='left' valign='top'>
 <form action='<TMPL_VAR name=action>' method=post>
 <input type='hidden' name='op' value='edit'>
 <input type='hidden' name='branchcode' value='<TMPL_VAR name=value escape="HTML">'>
