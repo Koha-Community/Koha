@@ -2,9 +2,9 @@
 
 <table align=right><tr><td>
 <a href=circulation.pl>
-<img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Next Borrower"></a> &nbsp
+<img src="<TMPL_VAR name="themelang">/images/button-issues.gif" width="99" height="42" border="0" alt="Next Borrower"></a> &nbsp
 <a href=returns.pl>
-<img src="/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
+<img src="<TMPL_VAR name="themelang">/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
 </td></tr></table>
 
 <FONT SIZE=6><em>Circulation: Transfers</em></FONT><br>
@@ -17,7 +17,7 @@
 
 <TMPL_IF Name="found">
 	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-	<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font>Reserve Found</font></th></tr>
+	<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Reserve Found</font></th></tr>
 	<tr><td> <font color='red' size='+2'>
 		<TMPL_IF Name="reserved">Reserved:</font> reserve found for <TMPL_VAR Name="name"> (<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum"> onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="borcnum"></a>).</TMPL_IF>
 		<TMPL_IF Name="waiting"> Item marked Waiting:</font><br>
@@ -81,7 +81,7 @@
 
 <TMPL_ELSE>
 	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-	<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font>Messages</font></th></tr>
+	<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Messages</font></th></tr>
 	<tr><td>
 	<TMPL_IF Name="reqmessage">
 		<TMPL_IF Name="cancelled">
@@ -111,10 +111,10 @@ onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="borcnum"></a>
 		<BR>
 	</TMPL_LOOP>
 	</td></tr></table>
-	<img src="/images/holder.gif" width=24 height=24>
+	<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=24 height=24>
 	<form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
 	<table border=1 cellpadding=5 cellspacing=0 align=left>
-	<tr><td colspan=2 align=center background=<TMPL_VAR Name="bckgdimg">>
+	<tr><td colspan=2 align=center background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<font color=black><b>Select Branch</b></font></td></tr>
 	<tr><td>Destination Branch:</td>
 		<td><select name=tobranchcd>
@@ -123,10 +123,10 @@ onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="borcnum"></a>
 			</TMPL_LOOP>
 		</select></td></tr></table>
 
-	<img src="/images/holder.gif" width=24 height=50 align=left>
+	<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=24 height=50 align=left>
 
 	<table border=1 cellpadding=5 cellspacing=0 ><tr>
-	<td colspan=2 align=center background=<TMPL_VAR Name="bckgdimg">>
+	<td colspan=2 align=center background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 	<font color=black><b>Enter Book Barcode</b></font></td></tr>
 	<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
 	</table>
@@ -142,7 +142,7 @@ onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="borcnum"></a>
 	<TMPL_IF Name="transferred">
 		<p>
 		<table border=1 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-		<tr><th colspan=6 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font color=black>Transfered Items</font></th></tr>
+		<tr><th colspan=6  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font color=black>Transfered Items</font></th></tr>
 		<tr><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>From</th><th>To</th></tr>
 		<TMPL_LOOP Name="trsfitemloop">
 			<tr><td bgcolor=<TMPL_VAR Name="color"> align=center>

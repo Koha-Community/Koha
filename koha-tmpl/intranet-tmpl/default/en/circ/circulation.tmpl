@@ -117,7 +117,7 @@
 	</table>
 </TMPL_IF>
 
-<TMPL_IF name="borrowerlist">
+<TMPL_IF name="CGIselectborrower">
 	<form method=post action=/cgi-bin/koha/circ/circulation.pl>
 	<input type=hidden name=branch value=<TMPL_VAR name="branch">>
 	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
@@ -129,7 +129,7 @@
 		</tr>
 		<tr>
 			<td align=center>
-				<TMPL_VAR name="borrnumber">
+				<TMPL_VAR name="CGIselectborrower">
 				<br>
 				<input type=submit>
 			</td>
@@ -153,8 +153,10 @@
 	</table>
 	</form>
 </TMPL_IF>
-<TMPL_VAR name="patrontable">
-<TMPL_VAR name="flaginfotable">
+<TMPL_IF name="borrowernumber">
+	<TMPL_VAR name="patrontable">
+	<TMPL_VAR name="flaginfotable">
+</TMPL_IF>
 
 <TMPL_IF name="borrowernumber">
 <form method=post action=/cgi-bin/koha/circ/circulation.pl>

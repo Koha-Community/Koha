@@ -30,17 +30,14 @@ use C4::Reserves2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Koha;
 
 ###############################################
 # constants
 
 my %env;
-my $headerbackgroundcolor='#99cc33';
-my $circbackgroundcolor='#ffffcc';
-my $circbackgroundcolor='white';
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
-my $backgroundimage="/images/background-mem.gif";
 
 my $branches = getbranches();
 my $printers = getprinters(\%env);
@@ -258,8 +255,6 @@ $template->param(	genbrname => $genbrname,
 								branch => $branch,
 								printer => $printer,
 								found => $found,
-								hdrbckgdcolor => $headerbackgroundcolor,
-								bckgdimg => $backgroundimage,
 								reserved => $reserved,
 								waiting => $waiting,
 								name => $name,

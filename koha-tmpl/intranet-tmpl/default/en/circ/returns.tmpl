@@ -2,8 +2,8 @@
 
 <table align="right"><tr><td>
 <a href=circulation.pl>
-<img src="/images/button-issues.gif" width="99" height="42" border="0" alt="Issues"></a>
-&nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Issues"></a>
+<img src="<TMPL_VAR name="themelang">/images/button-issues.gif" width="99" height="42" border="0" alt="Issues"></a>
+&nbsp<a href=branchtransfers.pl><img src="<TMPL_VAR name="themelang">/images/button-transfers.gif" width="127" height="42" border="0" alt="Issues"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Returns</em></FONT><br>
 <b>Branch:</b> <TMPL_VAR Name="genbrname"> &nbsp;
@@ -19,7 +19,7 @@
 	<tr>
 	<td colspan=2>
 		<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-		<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font>Reserve Found</font></th></tr>
+		<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Reserve Found</font></th></tr>
 		<tr><td>
 		<TMPL_IF Name="waiting">
 			<font color='red' size='+2'>Item marked Waiting:</font><br>
@@ -102,7 +102,7 @@ Phone: <TMPL_VAR Name="borphone">
 	<td valign=top align=left>
 		<form method=post action=/cgi-bin/koha/circ/returns.pl>
 			<table border=1 cellpadding=5 cellspacing=0>
-			<tr><td colspan=2 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> align=center background=<TMPL_VAR Name="bckgdimg">>
+			<tr><td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 			<font color=black><b>Enter Book Barcode</b></font></td></tr>
 			<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
 			</table>
@@ -116,7 +116,7 @@ Phone: <TMPL_VAR Name="borphone">
 	<td valign=top align=left>
 </TMPL_IF>
 		<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
-		<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">><font>Messages</font></th></tr>
+		<tr><th  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Messages</font></th></tr>
 		<tr><td>
 			<TMPL_LOOP Name="errmsgloop">
 				<font color='red' size='+2'>
@@ -145,7 +145,7 @@ Phone: <TMPL_VAR Name="borphone">
 	<tr>
 	<td valign=top align=left>
 		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><th bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">>
+		<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<font color=black>Returned Item Information</font></th></tr>
 		<tr><td>
 		Title: <TMPL_VAR Name="itemtitle"><br>
@@ -154,14 +154,14 @@ Phone: <TMPL_VAR Name="borphone">
 	</td>
 	<td valign=top align=left>
 		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><td colspan=2 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">>
+		<tr><td colspan=2 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<font color=black><b>Borrower Information</b></font></td></tr>
 		<tr><td colspan=2>
 		<a href=/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="ribornum"> onClick="openWindow(this,'Member', 480, 640)"><TMPL_VAR Name="riborcnum"></a>
 		<TMPL_VAR Name="riborsurname">, <TMPL_VAR Name="ribortitle"> <TMPL_VAR Name="riborfirstname"><br>
 		</td></tr>
 		<TMPL_IF Name="flagset">
-			<tr><td bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg"> colspan=2>
+			<tr><td  background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2>
 			<b>Flags</b></td></tr>
 			<TMPL_LOOP Name="flagloop">
 				<tr><td valign=top><TMPL_IF Name="redfont"><font color="red"></TMPL_IF><TMPL_VAR Name="flag"><TMPL_IF Name="redfont"></font></TMPL_IF></td>
@@ -198,7 +198,7 @@ Phone: <TMPL_VAR Name="borphone">
 <TMPL_IF Name="returneditems">
     <tr><td colspan=2>
 		<table border=1 cellpadding=5 cellspacing=0>
-		<tr><th colspan=6 bgcolor=<TMPL_VAR Name="hdrbckgdcolor"> background=<TMPL_VAR Name="bckgdimg">>
+		<tr><th colspan=6 background="<TMPL_VAR name="themelang">/images/background-mem.gif">
 		<font color=black>Returned Items</font></th></tr>
 		<tr><th>Due Date</th><th>Bar Code</th><th>Title</th><th>Author</th><th>Type</th><th>Borrower</th></tr>
 		<TMPL_LOOP Name="returneditemloop">

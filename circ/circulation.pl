@@ -324,7 +324,7 @@ $template->param(
 		responseform => $responsesform,
 		rejected => $rejected,
 		message => $message,
-		CGIseleborrower => $CGIselectborrower,
+		CGIselectborrower => $CGIselectborrower,
 
 		patrontable => $patrontable,
 		flaginfotable => $flaginfotable,
@@ -454,7 +454,6 @@ sub printslip {
     foreach (sort {$a <=> $b} keys %$borrowerissues) {
 	$issues[$i]=$borrowerissues->{$_};
 	my $dd=$issues[$i]->{'date_due'};
-#	warn $_,$dd;
 	#convert to nz style dates
 	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
@@ -464,7 +463,6 @@ sub printslip {
     foreach (sort {$a <=> $b} keys %$borroweriss2) {
 	$issues[$i]=$borroweriss2->{$_};
 	my $dd=$issues[$i]->{'date_due'};
-#	warn $_,$dd;
 	#convert to nz style dates
 	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
