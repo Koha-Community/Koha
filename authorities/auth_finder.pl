@@ -38,6 +38,7 @@ my $op = $query->param('op');
 my $authtypecode = $query->param('authtypecode');
 my $index = $query->param('index');
 my $category = $query->param('category');
+my $resultstring = $query->param('result');
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$query->param('startfrom');
@@ -66,7 +67,6 @@ if ($op eq "do_search") {
 
 	$resultsperpage= $query->param('resultsperpage');
 	$resultsperpage = 19 if(!defined $resultsperpage);
-# 	my $orderby = $query->param('orderby');
 
 	# builds tag and subfield arrays
 	my @tags;
@@ -88,15 +88,14 @@ if ($op eq "do_search") {
 	# multi page display gestion
 	my $displaynext=0;
 	my $displayprev=$startfrom;
-	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
+	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
 		$displaynext = 1;
 	}
 
 	my @field_data = ();
 
 
-	for(my $i = 0 ; $i <= $#marclist ; $i++)
-	{
+	for(my $i = 0 ; $i <= $#marclist ; $i++) {
 		push @field_data, { term => "marclist", val=>$marclist[$i] };
 		push @field_data, { term => "and_or", val=>$and_or[$i] };
 		push @field_data, { term => "excluding", val=>$excluding[$i] };
@@ -106,12 +105,9 @@ if ($op eq "do_search") {
 
 	my @numbers = ();
 
-	if ($total>$resultsperpage)
-	{
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
-		{
-			if ($i<16)
-			{
+	if ($total>$resultsperpage) {
+		for (my $i=1; $i<$total/$resultsperpage+1; $i++) {
+			if ($i<16) {
 	    		my $highlight=0;
 	    		($startfrom==($i-1)) && ($highlight=1);
 	    		push @numbers, { number => $i,
@@ -125,8 +121,7 @@ if ($op eq "do_search") {
 	my $from = $startfrom*$resultsperpage+1;
 	my $to;
 
- 	if($total < (($startfrom+1)*$resultsperpage))
-	{
+ 	if($total < (($startfrom+1)*$resultsperpage)) {
 		$to = $total;
 	} else {
 		$to = (($startfrom+1)*$resultsperpage);
@@ -145,6 +140,8 @@ if ($op eq "do_search") {
 							from=>$from,
 							to=>$to,
 							numbers=>\@numbers,
+							authtypecode =>$authtypecode,
+							resultstring =>$value[0],
 							);
 } else {
 	($template, $loggedinuser, $cookie)
@@ -156,7 +153,9 @@ if ($op eq "do_search") {
 				debug => 1,
 				});
 
-	$template->param(index => $index);
+	$template->param(index => $index,
+					resultstring => $resultstring
+					);
 }
 
 $template->param(authtypesloop => \@authtypesloop);

@@ -49,8 +49,6 @@ use CGI;
 use C4::Search;
 use MARC::Record;
 use C4::Koha;
-# use C4::Biblio;
-# use C4::Catalogue;
 use HTML::Template;
 
 my $query=new CGI;
@@ -61,6 +59,9 @@ my $authid = $query->param('authid');
 my $index = $query->param('index');
 my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
 my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
+
+my $auth_type = AUTHgetauth_type($authtypecode);
+warn "XX = ".$auth_type->{auth_tag_to_report};
 
 my $record =AUTHgetauthority($dbh,$authid);
 # open template
@@ -76,109 +77,41 @@ my ($template, $loggedinuser, $cookie)
 # fill arrays
 my @loop_data =();
 my $tag;
-# loop through each tab 0 through 9
-# for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
-# loop through each tag
-	my @fields = $record->fields();
-	my @loop_data =();
-	foreach my $field (@fields) {
-			my @subfields_data;
-		# if tag <10, there's no subfield, use the "@" trick
-		if ($field->tag()<10) {
-# 			next if ($tagslib->{$field->tag()}->{'@'}->{tab}  ne $tabloop);
-			next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
-			my %subfield_data;
-			$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
-			$subfield_data{marc_value}=$field->data();
-			$subfield_data{marc_subfield}='@';
-			$subfield_data{marc_tag}=$field->tag();
-			push(@subfields_data, \%subfield_data);
-		} else {
-			my @subf=$field->subfields;
+my @loop_data =();
+foreach my $field ($record->fields($auth_type->{auth_tag_to_report})) {
+		my @subfields_data;
+		my @subf=$field->subfields;
 	# loop through each subfield
-			for my $i (0..$#subf) {
-				$subf[$i][0] = "@" unless $subf[$i][0];
-# 				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne $tabloop);
-				next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
-				my %subfield_data;
-				$subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-				if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
-					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
-				} else {
-					$subfield_data{marc_value}=$subf[$i][1];
-				}
-				$subfield_data{marc_subfield}=$subf[$i][0];
-				$subfield_data{marc_tag}=$field->tag();
-				push(@subfields_data, \%subfield_data);
-			}
-		}
-		if ($#subfields_data>=0) {
-			my %tag_data;
-			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
-			$tag_data{subfield} = \@subfields_data;
-			push (@loop_data, \%tag_data);
-		}
+	for my $i (0..$#subf) {
+		$subf[$i][0] = "@" unless $subf[$i][0];
+		my %subfield_data;
+			$subfield_data{marc_value}=$subf[$i][1];
+		$subfield_data{marc_subfield}=$subf[$i][0];
+		$subfield_data{marc_tag}=$field->tag();
+		push(@subfields_data, \%subfield_data);
 	}
-	$template->param("0XX" =>\@loop_data);
-# }
-# now, build item tab !
-# the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
-# loop through each tag
-# warning : we may have differents number of columns in each row. Thus, we first build a hash, complete it if necessary
-# then construct template.
-# my @fields = $record->fields();
-# my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
-# my @big_array;
-# foreach my $field (@fields) {
-# 	next if ($field->tag()<10);
-# 	my @subf=$field->subfields;
-# 	my %this_row;
-# # loop through each subfield
-# 	for my $i (0..$#subf) {
-# 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
-# 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-# 		$this_row{$subf[$i][0]} =$subf[$i][1];
-# 	}
-# 	if (%this_row) {
-# 		push(@big_array, \%this_row);
-# 	}
-# }
-# #fill big_row with missing datas
-# foreach my $subfield_code  (keys(%witness)) {
-# 	for (my $i=0;$i<=$#big_array;$i++) {
-# 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
-# 	}
-# }
-# # now, construct template !
-# my @item_value_loop;
-# my @header_value_loop;
-# for (my $i=0;$i<=$#big_array; $i++) {
-# 	my $items_data;
-# 	foreach my $subfield_code (keys(%witness)) {
-# 		$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
-# 	}
-# 	my %row_data;
-# 	$row_data{item_value} = $items_data;
-# 	push(@item_value_loop,\%row_data);
-# }
-# foreach my $subfield_code (keys(%witness)) {
-# 	my %header_value;
-# 	$header_value{header_value} = $witness{$subfield_code};
-# 	push(@header_value_loop, \%header_value);
-# }
-
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
-	my $selected = 1 if $thisauthtype eq $authtypecode;
-	my %row =(value => $thisauthtype,
-				selected => $selected,
-				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-			);
-	push @authtypesloop, \%row;
+	if ($#subfields_data>=0) {
+		my %tag_data;
+		$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+		$tag_data{subfield} = \@subfields_data;
+		push (@loop_data, \%tag_data);
+	}
 }
+$template->param("0XX" =>\@loop_data);
+
+# my $authtypes = getauthtypes;
+# my @authtypesloop;
+# foreach my $thisauthtype (keys %$authtypes) {
+# 	my $selected = 1 if $thisauthtype eq $authtypecode;
+# 	my %row =(value => $thisauthtype,
+# 				selected => $selected,
+# 				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+# 			);
+# 	push @authtypesloop, \%row;
+# }
 
 $template->param(authid => $authid,
-				authtypesloop => \@authtypesloop, index => $index);
+# 				authtypesloop => \@authtypesloop,
+				index => $index);
 output_html_with_http_headers $query, $cookie, $template->output;
 
