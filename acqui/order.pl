@@ -33,6 +33,7 @@ use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
 use C4::Catalogue;
+use C4::Date;
 
 my $query=new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -71,7 +72,7 @@ for (my $i=0; $i<$count; $i++) {
 		$inner_line{basketno} =$orders->[$i2]->{'basketno'};
 		$inner_line{total} =$orders->[$i2]->{'count(*)'};
 		$inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-		$inner_line{entrydate} = $orders->[$i2]->{'entrydate'};
+		$inner_line{entrydate} = format_date($orders->[$i2]->{'entrydate'});
 		push @loop_basket, \%inner_line;
 	}
 	$line{loop_basket} = \@loop_basket;

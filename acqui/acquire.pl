@@ -33,6 +33,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
+use C4::Date;
 
 my $input=new CGI;
 my $id=$input->param('id');
@@ -46,8 +47,7 @@ my $catview=$input->param('catview');
 my $gst=$input->param('gst');
 my ($count,@results)=ordersearch($search,$id,$biblio,$catview);
 my ($count2,@booksellers)=bookseller($results[0]->{'booksellerid'});
-my @date=split('-',$results[0]->{'entrydate'});
-my $date="$date[2]/$date[1]/$date[0]";
+my $date = $results[0]->{'entrydate'};
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/acquire.tmpl",
@@ -140,10 +140,10 @@ if ($count == 1){
 		gst => $gst,
 		catview => ($catview ne 'yes'?1:0),
 		name => $booksellers[0]->{'name'},
-		date => $date,
+		date => format_date($date),
 		title => $results[0]->{'title'},
 		author => $results[0]->{'author'},
-		copyrightdate => $results[0]->{'copyrightdate'},
+		copyrightdate => format_date($results[0]->{'copyrightdate'}),
 		CGIitemtype => $CGIitemtype,
 		CGIbranch => $CGIbranch,
 		isbn => $results[0]->{'isbn'},
@@ -177,7 +177,7 @@ if ($count == 1){
 		push @loop,\%line;
 	}
 	$template->param( loop => \@loop,
-						date => $date,
+						date => format_date($date),
 						name => $booksellers[0]->{'name'},
 						id => $id,
 						invoice => $invoice,

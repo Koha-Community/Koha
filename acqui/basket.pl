@@ -32,6 +32,7 @@ use C4::Interface::CGI::Output;
 use C4::Database;
 use HTML::Template;
 use C4::Catalogue;
+use C4::Date;
 use strict;
 
 my $query =new CGI;
@@ -95,7 +96,7 @@ for (my $i=0;$i<$count;$i++){
 }
 $template->param(basket => $basket,
 						authorisedby => $results[0]->{'authorisedby'},
-						entrydate =>$results[0]->{'entrydate'},
+						entrydate => format_date($results[0]->{'entrydate'}),
 						id=> $results[0]->{'booksellerid'},
 						name => $booksellers[0]->{'name'},
 						books_loop => \@books_loop,
