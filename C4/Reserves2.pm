@@ -725,6 +725,7 @@ sub UpdateReserve {
     #subroutine to update a reserve
     my ($rank,$biblio,$borrower,$branch)=@_;
     return if $rank eq "W";
+    return if $rank eq "n";
     my $dbh = C4::Context->dbh;
     if ($rank eq "del") {
 	my $query = "UPDATE reserves SET cancellationdate=now()
