@@ -61,7 +61,8 @@ on what is passed to it, it calls the appropriate search function.
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
 &getboracctrecord &ItemType &itemissues &subject &subtitle
 &addauthor &bibitems &barcodes &findguarantees &allissues
-&findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2);
+&findguarantor &getwebsites &getwebbiblioitems &catalogsearch &itemcount2
+&isbnsearch &breedingsearch);
 # make all your functions, whether exported or not;
 
 =item findguarantees
@@ -193,71 +194,70 @@ HTML.
 =cut
 #'
 sub catalogsearch {
-  my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = C4::Context->dbh;
-#  foreach my $key (%$search){
-#    $search->{$key}=$dbh->quote($search->{$key});
-#  }
-  my ($count,@results);
-#  print STDERR "Doing a search \n";
-  # FIXME - Use "elsif" to avoid this sort of deep nesting
-  if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
-        print STDERR "Doing a precise search\n";
-    ($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+	my ($env,$type,$search,$num,$offset)=@_;
+	my $dbh = C4::Context->dbh;
+	#  foreach my $key (%$search){
+	#    $search->{$key}=$dbh->quote($search->{$key});
+	#  }
+	my ($count,@results);
+	#  print STDERR "Doing a search \n";
+	# FIXME - Use "elsif" to avoid this sort of deep nesting
+	if ($search->{'itemnumber'} ne '' || $search->{'isbn'} ne ''){
+		print STDERR "Doing a precise search\n";
+		($count,@results)=CatSearch($env,'precise',$search,$num,$offset);
+	} else {
+		if ($search->{'subject'} ne ''){
+			($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
+		} else {
+			if ($search->{'keyword'} ne ''){
+				($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
+			} else {
+				($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
 
-  } else {
-    if ($search->{'subject'} ne ''){
-      ($count,@results)=CatSearch($env,'subject',$search,$num,$offset);
-    } else {
-      if ($search->{'keyword'} ne ''){
-         ($count,@results)=&KeywordSearch($env,'keyword',$search,$num,$offset);
-       } else {
-	($count,@results)=CatSearch($env,'loose',$search,$num,$offset);
-
-      }
-    }
-  }
-  if ($env->{itemcount} eq '1') {
-    foreach my $data (@results){
-      my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
-      my $subject2=$data->{'subject'};
-      $subject2=~ s/ /%20/g;
-      $data->{'itemcount'}=$counts->{'total'};
-      my $totalitemcounts=0;
-      foreach my $key (keys %$counts){
-        if ($key ne 'total'){	# FIXME - Should ignore 'order', too.
-          #$data->{'location'}.="$key $counts->{$key} ";
-	  $totalitemcounts+=$counts->{$key};
-          $data->{'locationhash'}->{$key}=$counts->{$key};
-         }
-      }
-      my $locationtext='';
-      my $notavailabletext='';
-      foreach (sort keys %{$data->{'locationhash'}}) {
-	  if ($_ eq 'notavailable') {
-	      $notavailabletext="Not available";
-	      my $c=$data->{'locationhash'}->{$_};
-	      if ($totalitemcounts>1) {
-		  $notavailabletext.=" ($c)";
-	      }
-	  } else {
-	      $locationtext.="$_";
-	      my $c=$data->{'locationhash'}->{$_};
-	      if ($totalitemcounts>1) {
-		  $locationtext.=" ($c), ";
-	      }
-	  }
-      }
-      if ($notavailabletext) {
-	  $locationtext.=$notavailabletext;
-      } else {
-	  $locationtext=~s/, $//;
-      }
-      $data->{'location'}=$locationtext;
-      $data->{'subject2'}=$subject2;
-    }
-  }
-  return ($count,@results);
+			}
+		}
+	}
+	if ($env->{itemcount} eq '1') {
+		foreach my $data (@results){
+			my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
+			my $subject2=$data->{'subject'};
+			$subject2=~ s/ /%20/g;
+			$data->{'itemcount'}=$counts->{'total'};
+			my $totalitemcounts=0;
+			foreach my $key (keys %$counts){
+				if ($key ne 'total'){	# FIXME - Should ignore 'order', too.
+					#$data->{'location'}.="$key $counts->{$key} ";
+					$totalitemcounts+=$counts->{$key};
+					$data->{'locationhash'}->{$key}=$counts->{$key};
+				}
+			}
+			my $locationtext='';
+			my $notavailabletext='';
+			foreach (sort keys %{$data->{'locationhash'}}) {
+				if ($_ eq 'notavailable') {
+					$notavailabletext="Not available";
+					my $c=$data->{'locationhash'}->{$_};
+					if ($totalitemcounts>1) {
+					$notavailabletext.=" ($c)";
+					}
+				} else {
+					$locationtext.="$_";
+					my $c=$data->{'locationhash'}->{$_};
+					if ($totalitemcounts>1) {
+					$locationtext.=" ($c), ";
+					}
+				}
+			}
+			if ($notavailabletext) {
+				$locationtext.=$notavailabletext;
+			} else {
+				$locationtext=~s/, $//;
+			}
+			$data->{'location'}=$locationtext;
+			$data->{'subject2'}=$subject2;
+		}
+	}
+	return ($count,@results);
 }
 
 =item KeywordSearch
@@ -859,307 +859,295 @@ not ordered.
 =cut
 #'
 sub CatSearch  {
-  my ($env,$type,$search,$num,$offset)=@_;
-  my $dbh = C4::Context->dbh;
-  my $query = '';
-    my @results;
-  # FIXME - Why not just
-  #	$search->{'title'} = quotemeta($search->{'title'})
-  # to escape all questionable characters, not just single-quotes?
-  $search->{'title'}=~ s/'/\\'/g;
-  $search->{'author'}=~ s/'/\\'/g;
-  $search->{'illustrator'}=~ s/'/\\'/g;
-  my $title = lc($search->{'title'});
-
-  if ($type eq 'loose') {
-      if ($search->{'author'} ne ''){
-        my @key=split(' ',$search->{'author'});
-	my $count=@key;
-	my $i=1;
-        $query="select *,biblio.author,biblio.biblionumber from
-         biblio
-	 left join additionalauthors
-	 on additionalauthors.biblionumber =biblio.biblionumber
-	 where
-         ((biblio.author like '$key[0]%' or biblio.author like '% $key[0]%' or
-	 additionalauthors.author like '$key[0]%' or additionalauthors.author
-	 like '% $key[0]%'
-	 	 )";
-	 while ($i < $count){
-           $query .= " and (
-	   biblio.author like '$key[$i]%' or biblio.author like '% $key[$i]%' or
-	   additionalauthors.author like '$key[$i]%' or additionalauthors.author like '% $key[$i]%'
-	   )";
-           $i++;
-	 }
-	 $query .= ")";
-         if ($search->{'title'} ne ''){
-	   my @key=split(' ',$search->{'title'});
-	   my $count=@key;
-           my $i=0;
-	   $query.= " and (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
-            while ($i<$count){
-	      $query .= " and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
-              $i++;
-	    }
-#	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0] %' or subtitle like '% $key[0]')";
-#            for ($i=1;$i<$count;$i++){
-#	      $query.=" and (subtitle like '$key[$i]%' or subtitle like '% $key[$i] %' or subtitle like '% $key[$i]')";
-#            }
-	    $query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%' or seriestitle like '% $key[0]')";
-            for ($i=1;$i<$count;$i++){
-	        $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
-            }
-	    $query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0]%' or unititle like '% $key[0]')";
-            for ($i=1;$i<$count;$i++){
-	        $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
-            }
-	    $query .= "))";
-	   #$query=$query. " and (title like '%$search->{'title'}%'
-	   #or seriestitle like '%$search->{'title'}%')";
-	 }
-	 if ($search->{'abstract'} ne ''){
-	    $query.= " and (abstract like '%$search->{'abstract'}%')";
-	 }
-	 if ($search->{'date-before'} ne ''){
-	    $query.= " and (copyrightdate like '%$search->{'date-before'}%')";
-	   }
-
-	 $query.=" group by biblio.biblionumber";
-      } else {
-          if ($search->{'title'} ne '') {
-	   if ($search->{'ttype'} eq 'exact'){
-	     $query="select * from biblio
-	     where
-	     (biblio.title='$search->{'title'}' or (biblio.unititle = '$search->{'title'}'
-	     or biblio.unititle like '$search->{'title'} |%' or
-	     biblio.unititle like '%| $search->{'title'} |%' or
-	     biblio.unititle like '%| $search->{'title'}') or
-	     (biblio.seriestitle = '$search->{'title'}' or
-	     biblio.seriestitle like '$search->{'title'} |%' or
-	     biblio.seriestitle like '%| $search->{'title'} |%' or
-	     biblio.seriestitle like '%| $search->{'title'}')
-	     )";
-	   } else {
-	    my @key=split(' ',$search->{'title'});
-	    my $count=@key;
-	    my $i=1;
-            $query="select * from biblio
-	    left join bibliosubtitle on
-	    biblio.biblionumber=bibliosubtitle.biblionumber
-	    where
-	    (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
-	    while ($i<$count){
-	      $query .= " and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
-	      $i++;
-	    }
-	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0]%' or subtitle like '% $key[0]')";
-	    for ($i=1;$i<$count;$i++){
-	      $query.=" and (subtitle like '$key[$i]%' or subtitle like '% $key[$i]%' or subtitle like '% $key[$i]')";
-	    }
-	    $query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%' or seriestitle like '% $key[0]')";
-	    for ($i=1;$i<$count;$i++){
-	      $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
-	    }
-	    $query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0]%' or unititle like '% $key[0]')";
-	    for ($i=1;$i<$count;$i++){
-	      $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
-	    }
-	    $query .= "))";
-	   }
-	   if ($search->{'abstract'} ne ''){
-	    $query.= " and (abstract like '%$search->{'abstract'}%')";
-	   }
-	   if ($search->{'date-before'} ne ''){
-	    $query.= " and (copyrightdate like '%$search->{'date-before'}%')";
-	   }
-	  } elsif ($search->{'class'} ne ''){
-	     $query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
-	     my @temp=split(/\|/,$search->{'class'});
-	      my $count=@temp;
-	      $query.= " and ( itemtype='$temp[0]'";
-	      for (my $i=1;$i<$count;$i++){
-	       $query.=" or itemtype='$temp[$i]'";
-	      }
-	      $query.=")";
-	      if ($search->{'illustrator'} ne ''){
-	        $query.=" and illus like '%".$search->{'illustrator'}."%' ";
-	      }
-	      if ($search->{'dewey'} ne ''){
-	        $query.=" and biblioitems.dewey like '$search->{'dewey'}%'";
-	      }
-	  } elsif ($search->{'dewey'} ne ''){
-	     $query="select * from biblioitems,biblio
-	     where biblio.biblionumber=biblioitems.biblionumber
-	     and biblioitems.dewey like '$search->{'dewey'}%'";
-	  } elsif ($search->{'illustrator'} ne '') {
-      	     $query="select * from biblioitems,biblio
-	     where biblio.biblionumber=biblioitems.biblionumber
-	     and biblioitems.illus like '%".$search->{'illustrator'}."%'";
-	  } elsif ($search->{'publisher'} ne ''){
-	    $query.= "Select * from biblio,biblioitems where biblio.biblionumber
-	    =biblioitems.biblionumber and (publishercode like '%$search->{'publisher'}%')";
-	  } elsif ($search->{'abstract'} ne ''){
-	    $query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
-
-	  } elsif ($search->{'date-before'} ne ''){
-	    $query.= "Select * from biblio where copyrightdate like '%$search->{'date-before'}%'";
-	  }
-          $query .=" group by biblio.biblionumber";
-      }
-  }
-  if ($type eq 'subject'){
-    # FIXME - Subject search is badly broken. The query defined by
-    # $query returns a single item (the subject), but later code
-    # expects a ref-to-hash with all sorts of stuff in it.
-    # Also, the count of items (biblios?) with the given subject is
-    # wrong.
-
-    my @key=split(' ',$search->{'subject'});
-    my $count=@key;
-    my $i=1;
-    $query="select distinct(subject) from bibliosubject where( subject like
-    '$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject like '%($key[0])%')";
-    while ($i<$count){
-      $query.=" and (subject like '$key[$i]%' or subject like '% $key[$i]%'
-      or subject like '% $key[$i]'
-      or subject like '%($key[$i])%')";
-      $i++;
-    }
-
-    # FIXME - Wouldn't it be better to fix the database so that if a
-    # book has a subject "NZ", then it also gets added the subject
-    # "New Zealand"?
-    # This can also be generalized by adding a table of subject
-    # synonyms to the database: just declare "NZ" to be a synonym for
-    # "New Zealand", "SF" a synonym for both "Science fiction" and
-    # "Fantastic fiction", etc.
-
-    # FIXME - This can be rewritten as
-    #	if (lc($search->{"subject"}) eq "nz") {
-    if ($search->{'subject'} eq 'NZ' || $search->{'subject'} eq 'nz'){
-      $query.= " or (subject like 'NEW ZEALAND %' or subject like '% NEW ZEALAND %'
-      or subject like '% NEW ZEALAND' or subject like '%(NEW ZEALAND)%' ) ";
-    } elsif ( $search->{'subject'} =~ /^nz /i || $search->{'subject'} =~ / nz /i || $search->{'subject'} =~ / nz$/i){
-      $query=~ s/ nz/ NEW ZEALAND/ig;
-      $query=~ s/nz /NEW ZEALAND /ig;
-      $query=~ s/\(nz\)/\(NEW ZEALAND\)/gi;
-    }
-  }
-  if ($type eq 'precise'){
-
-      if ($search->{'item'} ne ''){
-        $query="select * from items,biblio ";
-        my $search2=uc $search->{'item'};
-        $query=$query." where
-        items.biblionumber=biblio.biblionumber
-	and barcode='$search2'";
-			# FIXME - .= <<EOT;
-      }
-      if ($search->{'isbn'} ne ''){
-        my $search2=uc $search->{'isbn'};
-        my $query1 = "select * from biblioitems where isbn='$search2'";
-	my $sth1=$dbh->prepare($query1);
-#	print STDERR "$query1\n";
-	$sth1->execute;
-        my $i2=0;
-	while (my $data=$sth1->fetchrow_hashref) {
-	   $query="select * from biblioitems,biblio where
-           biblio.biblionumber = $data->{'biblionumber'}
-           and biblioitems.biblionumber = biblio.biblionumber";
-	   my $sth=$dbh->prepare($query);
-	   $sth->execute;
-	   # FIXME - There's already a $data in this scope.
-	   my $data=$sth->fetchrow_hashref;
-	   my ($dewey, $subclass) = ($data->{'dewey'}, $data->{'subclass'});
-	   # FIXME - The following assumes that the Dewey code is a
-	   # floating-point number. It isn't: it's a string.
-	   $dewey=~s/\.*0*$//;
-	   ($dewey == 0) && ($dewey='');
-	   ($dewey) && ($dewey.=" $subclass");
-	   $data->{'dewey'}=$dewey;
-	   $results[$i2]=$data;
-#           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
-           $i2++;
-	   $sth->finish;
+	my ($env,$type,$search,$num,$offset)=@_;
+	warn "type = $type";
+	my $dbh = C4::Context->dbh;
+	my $query = '';
+	my @results;
+	# FIXME - Why not just
+	#	$search->{'title'} = quotemeta($search->{'title'})
+	# to escape all questionable characters, not just single-quotes?
+	$search->{'title'}=~ s/'/\\'/g;
+	$search->{'author'}=~ s/'/\\'/g;
+	$search->{'illustrator'}=~ s/'/\\'/g;
+	my $title = lc($search->{'title'});
+	if ($type eq 'loose') {
+		if ($search->{'author'} ne ''){
+			my @key=split(' ',$search->{'author'});
+			my $count=@key;
+			my $i=1;
+			$query="select *,biblio.author,biblio.biblionumber from
+							biblio
+							left join additionalauthors
+							on additionalauthors.biblionumber =biblio.biblionumber
+							where
+							((biblio.author like '$key[0]%' or biblio.author like '% $key[0]%' or
+							additionalauthors.author like '$key[0]%' or additionalauthors.author
+							like '% $key[0]%'
+								)";
+			while ($i < $count){
+					$query .= " and (
+									biblio.author like '$key[$i]%' or biblio.author like '% $key[$i]%' or
+									additionalauthors.author like '$key[$i]%' or additionalauthors.author like '% $key[$i]%'
+									)";
+				$i++;
+			}
+			$query .= ")";
+			if ($search->{'title'} ne ''){
+				my @key=split(' ',$search->{'title'});
+				my $count=@key;
+				my $i=0;
+				$query.= " and (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
+				while ($i<$count){
+					$query .= " and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
+					$i++;
+				}
+				$query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%' or seriestitle like '% $key[0]')";
+				for ($i=1;$i<$count;$i++){
+					$query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
+					}
+				$query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0]%' or unititle like '% $key[0]')";
+				for ($i=1;$i<$count;$i++){
+					$query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
+					}
+				$query .= "))";
+				#$query=$query. " and (title like '%$search->{'title'}%'
+				#or seriestitle like '%$search->{'title'}%')";
+			}
+			if ($search->{'abstract'} ne ''){
+				$query.= " and (abstract like '%$search->{'abstract'}%')";
+			}
+			if ($search->{'date-before'} ne ''){
+				$query.= " and (copyrightdate like '%$search->{'date-before'}%')";
+			}
+			$query.=" group by biblio.biblionumber";
+		} else {
+			if ($search->{'title'} ne '') {
+				if ($search->{'ttype'} eq 'exact'){
+					$query="select * from biblio
+					where
+					(biblio.title='$search->{'title'}' or (biblio.unititle = '$search->{'title'}'
+					or biblio.unititle like '$search->{'title'} |%' or
+					biblio.unititle like '%| $search->{'title'} |%' or
+					biblio.unititle like '%| $search->{'title'}') or
+					(biblio.seriestitle = '$search->{'title'}' or
+					biblio.seriestitle like '$search->{'title'} |%' or
+					biblio.seriestitle like '%| $search->{'title'} |%' or
+					biblio.seriestitle like '%| $search->{'title'}')
+					)";
+				} else {
+					my @key=split(' ',$search->{'title'});
+					my $count=@key;
+					my $i=1;
+					$query="select biblio.biblionumber,author,title,unititle,notes,abstract,serial,seriestitle,copyrightdate,timestamp,subtitle from biblio
+					left join bibliosubtitle on
+					biblio.biblionumber=bibliosubtitle.biblionumber
+					where
+					(((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
+					while ($i<$count){
+						$query .= " and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
+						$i++;
+					}
+					$query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0]%' or subtitle like '% $key[0]')";
+					for ($i=1;$i<$count;$i++){
+						$query.=" and (subtitle like '$key[$i]%' or subtitle like '% $key[$i]%' or subtitle like '% $key[$i]')";
+					}
+					$query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%' or seriestitle like '% $key[0]')";
+					for ($i=1;$i<$count;$i++){
+						$query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
+					}
+					$query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0]%' or unititle like '% $key[0]')";
+					for ($i=1;$i<$count;$i++){
+						$query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
+					}
+					$query .= "))";
+				}
+				if ($search->{'abstract'} ne ''){
+					$query.= " and (abstract like '%$search->{'abstract'}%')";
+				}
+				if ($search->{'date-before'} ne ''){
+					$query.= " and (copyrightdate like '%$search->{'date-before'}%')";
+				}
+			} elsif ($search->{'class'} ne ''){
+				$query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
+				my @temp=split(/\|/,$search->{'class'});
+				my $count=@temp;
+				$query.= " and ( itemtype='$temp[0]'";
+				for (my $i=1;$i<$count;$i++){
+					$query.=" or itemtype='$temp[$i]'";
+				}
+				$query.=")";
+				if ($search->{'illustrator'} ne ''){
+					$query.=" and illus like '%".$search->{'illustrator'}."%' ";
+				}
+				if ($search->{'dewey'} ne ''){
+					$query.=" and biblioitems.dewey like '$search->{'dewey'}%'";
+				}
+			} elsif ($search->{'dewey'} ne ''){
+				$query="select * from biblioitems,biblio
+				where biblio.biblionumber=biblioitems.biblionumber
+				and biblioitems.dewey like '$search->{'dewey'}%'";
+			} elsif ($search->{'illustrator'} ne '') {
+					$query="select * from biblioitems,biblio
+				where biblio.biblionumber=biblioitems.biblionumber
+				and biblioitems.illus like '%".$search->{'illustrator'}."%'";
+			} elsif ($search->{'publisher'} ne ''){
+				$query.= "Select * from biblio,biblioitems where biblio.biblionumber
+				=biblioitems.biblionumber and (publishercode like '%$search->{'publisher'}%')";
+			} elsif ($search->{'abstract'} ne ''){
+				$query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
+			} elsif ($search->{'date-before'} ne ''){
+				$query.= "Select * from biblio where copyrightdate like '%$search->{'date-before'}%'";
+			}
+			$query .=" group by biblio.biblionumber";
+		}
 	}
-	$sth1->finish;
-      }
-  }
-#print $query;
-if ($type ne 'precise' && $type ne 'subject'){
-  if ($search->{'author'} ne ''){
-      $query .= " order by biblio.author,title";
-  } else {
-      $query .= " order by title";
-  }
-} else {
-  if ($type eq 'subject'){
-      $query .= " order by subject";
-  }
-}
-#print STDERR "$query\n";
-my $sth=$dbh->prepare($query);
-$sth->execute;
-my $count=1;
-my $i=0;
-my $limit= $num+$offset;
-while (my $data=$sth->fetchrow_hashref){
-  my $query="select dewey,subclass,publishercode from biblioitems where biblionumber=$data->{'biblionumber'}";
-  	    if ($search->{'class'} ne ''){
-	      my @temp=split(/\|/,$search->{'class'});
-	      my $count=@temp;
-	      $query.= " and ( itemtype='$temp[0]'";
-	      for (my $i=1;$i<$count;$i++){
-	       $query.=" or itemtype='$temp[$i]'";
-	      }
-	      $query.=")";
-	    }
-	    if ($search->{'dewey'} ne ''){
-	      $query.=" and dewey='$search->{'dewey'}' ";
-	    }
-	    if ($search->{'illustrator'} ne ''){
-	      $query.=" and illus like '%".$search->{'illustrator'}."%' ";
-	    }
-	    if ($search->{'publisher'} ne ''){
-	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
-	    }
+	if ($type eq 'subject'){
+		# FIXME - Subject search is badly broken. The query defined by
+		# $query returns a single item (the subject), but later code
+		# expects a ref-to-hash with all sorts of stuff in it.
+		# Also, the count of items (biblios?) with the given subject is
+		# wrong.
 
-  my $sti=$dbh->prepare($query);
-  $sti->execute;
-  my $dewey;
-  my $subclass;
-  my $true=0;
-  my $publishercode;
-  my $bibitemdata;
-  if ($bibitemdata = $sti->fetchrow_hashref() || $type eq 'subject'){
-    $true=1;
-    $dewey=$bibitemdata->{'dewey'};
-    $subclass=$bibitemdata->{'subclass'};
-    $publishercode=$bibitemdata->{'publishercode'};
-  }
-#  print STDERR "$dewey $subclass $publishercode\n";
-  # FIXME - The Dewey code is a string, not a number.
-  $dewey=~s/\.*0*$//;
-  ($dewey == 0) && ($dewey='');
-  ($dewey) && ($dewey.=" $subclass");
-  $data->{'dewey'}=$dewey;
-  $data->{'publishercode'}=$publishercode;
-  $sti->finish;
-  if ($true == 1){
-    if ($count > $offset && $count <= $limit){
-      $results[$i]=$data;
-      $i++;
-    }
-    $count++;
-  }
-}
-$sth->finish;
-#if ($type ne 'precise'){
-  $count--;
-#}
-#$count--;
-return($count,@results);
+		my @key=split(' ',$search->{'subject'});
+		my $count=@key;
+		my $i=1;
+		$query="select distinct(subject) from bibliosubject where( subject like
+		'$key[0]%' or subject like '% $key[0]%' or subject like '% $key[0]' or subject like '%($key[0])%')";
+		while ($i<$count){
+			$query.=" and (subject like '$key[$i]%' or subject like '% $key[$i]%'
+			or subject like '% $key[$i]'
+			or subject like '%($key[$i])%')";
+			$i++;
+		}
+
+		# FIXME - Wouldn't it be better to fix the database so that if a
+		# book has a subject "NZ", then it also gets added the subject
+		# "New Zealand"?
+		# This can also be generalized by adding a table of subject
+		# synonyms to the database: just declare "NZ" to be a synonym for
+		# "New Zealand", "SF" a synonym for both "Science fiction" and
+		# "Fantastic fiction", etc.
+
+		# FIXME - This can be rewritten as
+		#	if (lc($search->{"subject"}) eq "nz") {
+		if ($search->{'subject'} eq 'NZ' || $search->{'subject'} eq 'nz'){
+			$query.= " or (subject like 'NEW ZEALAND %' or subject like '% NEW ZEALAND %'
+			or subject like '% NEW ZEALAND' or subject like '%(NEW ZEALAND)%' ) ";
+		} elsif ( $search->{'subject'} =~ /^nz /i || $search->{'subject'} =~ / nz /i || $search->{'subject'} =~ / nz$/i){
+			$query=~ s/ nz/ NEW ZEALAND/ig;
+			$query=~ s/nz /NEW ZEALAND /ig;
+			$query=~ s/\(nz\)/\(NEW ZEALAND\)/gi;
+		}
+	}
+	if ($type eq 'precise'){
+		if ($search->{'itemnumber'} ne ''){
+			$query="select * from items,biblio ";
+			my $search2=uc $search->{'itemnumber'};
+			$query=$query." where
+			items.biblionumber=biblio.biblionumber
+			and barcode='$search2'";
+					# FIXME - .= <<EOT;
+		}
+		if ($search->{'isbn'} ne ''){
+			my $search2=uc $search->{'isbn'};
+			my $query1 = "select * from biblioitems where isbn='$search2'";
+			my $sth1=$dbh->prepare($query1);
+		#	print STDERR "$query1\n";
+			$sth1->execute;
+			my $i2=0;
+			while (my $data=$sth1->fetchrow_hashref) {
+				$query="select * from biblioitems,biblio where
+					biblio.biblionumber = $data->{'biblionumber'}
+					and biblioitems.biblionumber = biblio.biblionumber";
+				my $sth=$dbh->prepare($query);
+				$sth->execute;
+				# FIXME - There's already a $data in this scope.
+				my $data=$sth->fetchrow_hashref;
+				my ($dewey, $subclass) = ($data->{'dewey'}, $data->{'subclass'});
+				# FIXME - The following assumes that the Dewey code is a
+				# floating-point number. It isn't: it's a string.
+				$dewey=~s/\.*0*$//;
+				($dewey == 0) && ($dewey='');
+				($dewey) && ($dewey.=" $subclass");
+				$data->{'dewey'}=$dewey;
+				$results[$i2]=$data;
+			#           $results[$i2]="$data->{'author'}\t$data->{'title'}\t$data->{'biblionumber'}\t$data->{'copyrightdate'}\t$dewey\t$data->{'isbn'}\t$data->{'itemtype'}";
+				$i2++;
+				$sth->finish;
+			}
+			$sth1->finish;
+		}
+	}
+	if ($type ne 'precise' && $type ne 'subject'){
+		if ($search->{'author'} ne ''){
+			$query .= " order by biblio.author,title";
+		} else {
+			$query .= " order by title";
+		}
+	} else {
+		if ($type eq 'subject'){
+			$query .= " order by subject";
+		}
+	}
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my $count=1;
+	my $i=0;
+	my $limit= $num+$offset;
+	while (my $data=$sth->fetchrow_hashref){
+		my $query="select dewey,subclass,publishercode from biblioitems where biblionumber=$data->{'biblionumber'}";
+		if ($search->{'class'} ne ''){
+			my @temp=split(/\|/,$search->{'class'});
+			my $count=@temp;
+			$query.= " and ( itemtype='$temp[0]'";
+			for (my $i=1;$i<$count;$i++){
+			$query.=" or itemtype='$temp[$i]'";
+			}
+			$query.=")";
+		}
+		if ($search->{'dewey'} ne ''){
+			$query.=" and dewey='$search->{'dewey'}' ";
+		}
+		if ($search->{'illustrator'} ne ''){
+			$query.=" and illus like '%".$search->{'illustrator'}."%' ";
+		}
+		if ($search->{'publisher'} ne ''){
+			$query.= " and (publishercode like '%$search->{'publisher'}%')";
+		}
+		warn $query;
+		my $sti=$dbh->prepare($query);
+		$sti->execute;
+		my $dewey;
+		my $subclass;
+		my $true=0;
+		my $publishercode;
+		my $bibitemdata;
+		if ($bibitemdata = $sti->fetchrow_hashref() || $type eq 'subject'){
+			$true=1;
+			$dewey=$bibitemdata->{'dewey'};
+			$subclass=$bibitemdata->{'subclass'};
+			$publishercode=$bibitemdata->{'publishercode'};
+		}
+		#  print STDERR "$dewey $subclass $publishercode\n";
+		# FIXME - The Dewey code is a string, not a number.
+		$dewey=~s/\.*0*$//;
+		($dewey == 0) && ($dewey='');
+		($dewey) && ($dewey.=" $subclass");
+		$data->{'dewey'}=$dewey;
+		$data->{'publishercode'}=$publishercode;
+		$sti->finish;
+		if ($true == 1){
+			if ($count > $offset && $count <= $limit){
+				$results[$i]=$data;
+				$i++;
+			}
+			$count++;
+		}
+	}
+	$sth->finish;
+	$count--;
+	return($count,@results);
 }
 
 sub updatesearchstats{
@@ -2381,6 +2369,87 @@ and itemtype = 'WEB'";
     return($count, @results);
 } # sub getwebbiblioitems
 
+
+=item breedingsearch
+
+  ($count, @results) = &breedingsearch($title);
+
+C<$count> is the number of items in C<@results>. C<@results> is an
+array of references-to-hash; the keys are the items from the
+C<marc_breeding> table of the Koha database.
+
+=cut
+
+sub breedingsearch {
+	my ($title,$isbn) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $count = 0;
+	my $query;
+	my $sth;
+	my @results;
+
+	$query = "Select id,file,isbn,title,author from marc_breeding where ";
+	if ($title) {
+		$query .= "title like \"$title%\"";
+	}
+	if ($title && $isbn) {
+		$query .= " and ";
+	}
+	if ($isbn) {
+		$query .= "isbn like \"$isbn%\"";
+	}
+	$sth   = $dbh->prepare($query);
+	$sth->execute;
+	while (my $data = $sth->fetchrow_hashref) {
+			$results[$count] = $data;
+			$count++;
+	} # while
+
+	$sth->finish;
+	return($count, @results);
+} # sub breedingsearch
+
+=item isbnsearch
+
+  ($count, @results) = &isbnsearch($isbn,$title);
+
+Given an isbn and/or a title, returns the biblios having it.
+Used in acqui.simple, isbnsearch.pl only
+
+C<$count> is the number of items in C<@results>. C<@results> is an
+array of references-to-hash; the keys are the items from the
+C<biblioitems> table of the Koha database.
+
+=cut
+
+sub isbnsearch {
+    my ($isbn,$title) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $count = 0;
+    my $query;
+    my $sth;
+    my @results;
+
+    $query = "Select distinct biblio.* from biblio, biblioitems where
+				biblio.biblionumber = biblioitems.biblionumber";
+	if ($isbn) {
+		$query .= " and isbn=".$dbh->quote($isbn);
+	}
+	if ($title) {
+		$query .= " and title like ".$dbh->quote($title."%");
+	}
+	warn $query;
+    $sth   = $dbh->prepare($query);
+
+    $sth->execute;
+    while (my $data = $sth->fetchrow_hashref) {
+        $results[$count] = $data;
+	$count++;
+    } # while
+
+    $sth->finish;
+    return($count, @results);
+} # sub isbnsearch
 
 END { }       # module clean-up code here (global destructor)
 
