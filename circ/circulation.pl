@@ -100,6 +100,7 @@ if ($barcode) {
     my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
 
     unless ($invalidduedate) {
+	$env{'datedue'}=$datedue;
 	my @time=localtime(time);
 	my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
 	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) 
