@@ -2,13 +2,13 @@
 
 <div id="mainbloc">
 	<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
-	<h2>Compte de <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
+	<h2>Compte <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
 	<!-- /TMPL_LOOP -->
 	<table cellspacing=0>
 		<tr>
-			<th colspan=2>Dettes & paiements</th>
-			<th>Quantité</th>
-			<th>Doit encore</th>
+			<th colspan=2>Amendes et charges</th>
+			<th>Montant</th>
+			<th>Dettes</th>
 		</tr>
 
 		<!-- TMPL_LOOP NAME="ACCOUNT_LINES" -->
@@ -31,7 +31,7 @@
 		<!-- /TMPL_LOOP -->
 
 		<tr>
-			<th colspan=2><b>Total dû</th>
+			<th colspan=2><b>Somme due</th>
 			<th align="right"><!-- TMPL_VAR NAME="total" --></th>
 			<th>&nbsp;</th>
 		</tr>

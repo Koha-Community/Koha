@@ -1,0 +1,160 @@
+<!-- TMPL_INCLUDE Name="opac-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF Name="viewshelf" -->
+<form>
+    <table>
+    		<tr>
+			<th colspan=4>
+				Contenu de <!-- TMPL_VAR Name="shelfname" -->
+			</th>
+		</tr>
+		<!-- TMPL_LOOP Name="itemsloop" -->
+			<tr>
+				<!-- TMPL_IF name="color" -->
+					<td class="hilighted"><input type=checkbox name="REM-<!-- TMPL_VAR Name="itemnumber" -->"></td>
+					<td class="hilighted"><a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
+					<td class="hilighted"><!-- TMPL_VAR Name="title" --></td>
+					<td class="hilighted"><!-- TMPL_VAR Name="author" --></td>
+				<!-- TMPL_ELSE -->
+					<td><input type=checkbox name="REM-<!-- TMPL_VAR Name="itemnumber" -->"></td>
+					<td class="hilighted"><a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
+					<td><!-- TMPL_VAR Name="title" --></td>
+					<td><!-- TMPL_VAR Name="author" --></td>
+				<!-- /TMPL_IF -->
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<br>
+	<a href="opac-shelves.pl" class="button">Liste de l'étagère virtuelle</a>
+	<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
+	<input type=hidden name=modifyshelfcontents value=1>
+	<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
+	<!-- TMPL_IF name="manageshelf" -->
+		<input type=submit value="Supprimer les documents sélectionnés" class="button">
+	<!-- /TMPL_IF -->
+</form>
+<!-- TMPL_IF name="manageshelf" -->
+<form>
+	<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
+	<input type=hidden name=modifyshelfcontents value=1>
+	<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
+	<table>
+		<tr>
+			<td>
+				Ajouter un livre par saisie du code barre dans <!-- TMPL_VAR name="shelfname" -->
+			</td>
+			<td>
+				<input name="addbarcode">
+				<input type=hidden name=modifyshelfcontents value=1>
+				<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR Name="shelfnumber" -->">
+				<input type="submit" value="Enregistrer" class="button">
+			</td>
+		</tr>
+	</table>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_IF Name="shelves" -->
+		<!-- TMPL_IF Name="status1" -->
+			<font color=red><!-- TMPL_VAR Name="string1" --></font><p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP Name="paramsloop" -->
+			<!-- TMPL_IF Name="status" -->
+				<font color=red><!-- TMPL_VAR Name="string" --></font><p>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<center>
+		<h1>Rayons</h1>
+		<table border=0 cellpadding=7>
+			<tr>
+				<td align=center valign="bottom">
+					<form>
+						<p>
+							<a href="opac-shelves.pl" class="button">Liste de l'étagère virtuelle</a>
+						</p>
+					</form>
+				</td>
+				<td align=center valign="bottom">
+					<form method=post>
+					<input type="hidden" name="shelves" value=1>
+					<table border=0 cellpadding=0 cellspacing=0>
+						<tr>
+							<th>Sélectionner les étagères virtuelles à supprimer
+							</th>
+						</tr>
+						<!-- TMPL_LOOP Name="shelvesloop" -->
+						<!-- TMPL_IF name="canmanage" -->
+						<tr>
+							<td bgcolor="<!-- TMPL_VAR Name="color" -->">
+								<input type=checkbox name="DEL-<!-- TMPL_VAR Name="shelf" -->">
+								<!-- TMPL_VAR Name="shelfname" --> (<!-- TMPL_VAR Name="shelfbookcount" --> livres)
+							</td>
+						</tr>
+						<!-- /TMPL_IF -->
+						<!-- /TMPL_LOOP -->
+					</table>
+					<p>
+						<input type=submit value="Supprimer étagères" class="button"></form>
+					</p>
+				</td>
+				<td align=center valign=bottom>
+					<form method=post>
+					<input type=hidden name=shelves value=1>
+					<table border=0 cellpadding=0 cellspacing=0>
+						<tr>
+							<th>
+								<font color=white>Créer une étagère</font>
+							</th>
+						</tr>
+						<tr>
+							<td>
+								<p>Nom : <input type="text" name="addshelf" size="25"></p>
+								<p>Propriétaire <input type="hidden" name="owner" value="<!-- TMPL_VAR name="loggedinuser" -->"><!-- TMPL_VAR name="loggedinusername" --></p>
+								<p>Catégorie <select name="category">
+									<option value="1">Privé</option>
+									<option value="2">Public</option>
+									<option value="3">Libre</option>
+									</select>
+								</p>
+								<p> <li>Une Ãéagère virtuelle privée est gérée par vous seul, et ne peut être vue que de vous.</li>
+									<li> public peut être vu par tous, mais géré uniquement par vous</li>
+									<li> libre peut être géré par n'importe quel utilisateur</li>
+								</p>
+							</td>
+						</tr>
+					</table>
+								<p><input type=submit value="Créer une étagère" class="button"></p>
+					</form>
+				</td>
+			</tr>
+		</table>
+
+	<!-- TMPL_ELSE -->
+		<center>
+		<table border=0 cellpadding=4 cellspacing=0>
+			<tr>
+				<th>
+				Liste de l'étagère virtuelle
+				</th>
+			</tr>
+			<!-- TMPL_LOOP Name="shelvesloop" -->
+			<tr>
+				<!-- TMPL_IF name="color" -->
+					<td class="hilighted">
+				<!-- TMPL_ELSE -->
+					<td>
+				<!-- /TMPL_IF -->
+					<a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->">
+						<!-- TMPL_VAR Name="shelfname" -->(<!-- TMPL_VAR Name="shelfbookcount" --> livres)
+					</a>
+				</td>
+			</tr>
+			<!-- /TMPL_LOOP -->
+		</table>
+		<P>
+			<a href="opac-shelves.pl?shelves=1" class="button">Créer ou Supprimer une (des) étagère(s)</a>
+		</p>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="opac-bottom.inc" -->

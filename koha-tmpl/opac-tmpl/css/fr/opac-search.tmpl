@@ -1,35 +1,151 @@
-<!-- TMPL_INCLUDE name="opac-top.inc" -->
-
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <div id="mainbloc">
-	<h1>Recherche avancée</h1>
-	<form action="/cgi-bin/koha/opac-searchresults.pl" method="get">
-	<ul>
-		<li><label>mot-clef</label><input type="text"  size="25"   name="keyword" /></li>
-	</ul>
-	<p><b>OU :</b></p>
-	<ul>
-		<li><label>sujet</label><input type="text"  size="25"   name="sujet" /></li>
-	</ul>
-	<p><b>OU un ou plus de : :</b></p>
-	<ul>
-		<li><label>Titre</label><input type="text"  size="25"   name="title" /></li>
-		<li><label>Auteur</label><input type="text"  size="25"   name="author" /></li>
-		<li><label>Illustrateur</label><input type="text"  size="25"   name="illustrator" /></li>
-		<li><label>Type d'exemplaire</label>
-			<select size="1"  name="class">
-				<option value="">Tout</option>
-				<!-- TMPL_VAR name="classlist" -->
-			</select>
-		</li>
-		<li><label>Code barre</label><input type="text"  size="25"   name="itemnumber" /></li>
-	</ul>
-		<p>qui utilise <input type="radio" name="ttype" value="normal" />Normal ou <input type="radio" name="ttype" value="exact" />Recherche exacte</p>
 
-	<p>
-		<input type="submit" value="Lancer recherche" class="button" />
-		<input type="reset"  value="Effacer" class="button" />
-	</p>
-	<p>Notez que le mot clef est prioritaire</p>
-	</form>
+<h1 class="catalogue">Recherche dans le Catalogue</h1>
+
+<form name="f" method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->">
+	
+	<div id="bloc20">
+		<h2 class="catalogue">Chercher sur</h2>
+		<p>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+			<label class="label20">Mot Clé</label>
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Titre</label>
+			<input type="hidden" name="marclist" value="biblio.title" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Auteur</label> <input type="hidden" name="marclist" value="biblio.author" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Sujet</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />  
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Type de documents</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<!-- TMPL_VAR name="CGIitemtype" -->
+		</p>
+		<p>
+				<label class="label20">Site</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+				<!-- TMPL_VAR name="CGIbranch" -->
+		</p>
+		<p>
+			<input type="submit" value="Commencer la recherche" class="button catalogue">
+		</p>
+	</div>
+	<div id="bloc20">
+		<h2>Autres options</h2>
+		<p>
+				<label class="label20">Item barcode</label>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="contains" />
+				<input type="text" name="value" onchange="sql_update()" /> 
+		</p>
+		<p>
+			<label class="label20">Call Number</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">ISBN</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>
+			<label class="label20">Editeur</label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" name="value" onchange="sql_update()" />
+		</p>
+		<p>Réponses par page
+			<select name="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		</p>
+		<p>Commandé par
+			<select name="orderby" size="1">
+				<option value="biblio.title">Titre</option>
+				<option value="biblio.author">Auteur</option>
+				<option value="biblioitems.dewey">code Dewey</option>
+				<option value="biblioitems.publicationyear">Année de Publication</option>
+				<option value="biblioitems.publishercode">Editeur</option>
+			</select>
+		</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+	</div>
+</form>
+
+<script type="text/javascript">
+function sql_update() {
+document.f.sql.value="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+			document.f.sql.value = document.f.sql.value+
+										document.f.and_or[i].value + ' (' +
+										document.f.excluding[i].value + ' ' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
+										'\''+document.f.value[i].value + '\') ';
+		}
+	}
+}
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
+</script>
 </div>
-<!-- TMPL_INCLUDE name="opac-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -9,39 +9,58 @@
 
 <body>
 <div id="leftbloc">
-	<img src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="koha" alt="koha" />
+	<img class="relative" src="<!-- TMPL_VAR NAME='themelang' -->/images/front-background-med.gif" title="Koha" alt="Koha">
 </div>
 
 <div id="homebloc">
-	<h1 class="LibraryName"><!-- TMPL_VAR name="LibraryName" --></h1>
+	<h1 class="LibraryName"><TMPL_VAR name="LibraryName"></h1>
 	<h2>Chercher dans le catalogue</h2>
-	<form action="/cgi-bin/koha/opac-searchresults.pl">
+	<form action="/cgi-bin/koha/opac-search.pl">
 		<p>
+			<input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="type" value="opac" />
-			<input type="text" size="27" name="keyword" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" size="27" name="value" tabindex="1" /> <input type="submit" value="OK" class="button" /><br />
 		</p>
 		<p>
-			<a href="/cgi-bin/koha/opac-search.pl">Recherche avancée, plus d'options	</a>
+			<a href="/cgi-bin/koha/opac-search.pl">Recherche Avancée, Plus d'Options	</a>
 		</p>
 	</form>
 
 	<h2>Acquisitions récentes</h2>
 	<form action="/cgi-bin/koha/opac-new.pl">
 		<p>
-		<!-- TMPL_VAR name="CGIitemtype" --> acquis dans les derniers <b><input type="text" name="duration" value="30" size="3" /></b> jours
+		<!-- TMPL_VAR name="CGIitemtype" --> acquis dans les <b><input type="text" name="duration" value="30" size="3" /></b> derniers jours
 		<input type="submit" value="OK" class="button" />
 		</p>
 	</form>
+	<h2>Autres options</h2>
+	<!-- TMPL_IF name="virtualshelves" -->
+		<a href="/cgi-bin/koha/opac-shelves.pl" class="button">Etagères virtuelles</a>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="suggestion" -->
+		<a href="opac-suggestions.pl" class="button">Voir et gérer les suggestions</a>
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="loggedinusername" -->
-		<h2>Connecté en tant que <!-- TMPL_VAR NAME="loggedinusername" --></h2>
-		<p><a href="/cgi-bin/koha/opac-user.pl">Accueil lecteur</a> || <a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Déconnecter</a></p>
+		<a href="/cgi-bin/koha/opac-user.pl" class="button"> <!-- TMPL_VAR NAME="loggedinusername" --> accueil </a> <a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="button"> Déconnexion </a>
+		<form action="/cgi-bin/koha/changelanguage.pl" method="post">
+			<select name="language">
+				<TMPL_LOOP NAME="languages">
+					<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
+				</TMPL_LOOP>
+			</select>
+			<input type="submit" value="Change Language" class="button">
+		</form>
+
 	<!-- TMPL_ELSE -->
-	<h2><a href="/cgi-bin/koha/opac-user.pl">S'identifier</a></h2>
+	<h2><a href="/cgi-bin/koha/opac-user.pl">Connectez-vous à Koha</a></h2>
 	<!-- /TMPL_IF -->
 	<p class="copyright">
-		Cette bibliothèque fonctionne avec <a href="http://www.koha.org">Koha</a> SIGB sous licence libre, respectant les standards de l'internet
-		<a href="http://validator.w3.org/check/referer">
-			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="XHTML 1.0 valide" height="16" width="44" />
+		This Library is powered by <a href="http://www.koha.org">Koha</a> free software ILS, and compliant with web standards  <a href="http://validator.w3.org/check/referer">
+			<img src="http://www.w3.org/Icons/valid-xhtml10" alt="XHTML 1.0 valide !" height="16" width="44">
 		</a>
 	</p>
 </div>

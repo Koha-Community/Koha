@@ -20,9 +20,23 @@ a.transparent {
 }
 
 a:hover {
-	background-color: #FF6600;
+/* 	background-color: #FF6600; */
+	background-image: url(/opac-tmpl/css/en/images/bar.gif);
+	background-repeat:no-repeat;
 	text-decoration:none;
 	color:#000000;
+}
+
+a.results {
+	background-color : #FFD9BF;
+	padding : 0px 2px 0px 2px;
+	margin : 2px 1px 2px 0px;
+}
+
+a.results:hover {
+	background-color: #FFFFCC;
+	padding : 0px 2px 0px 2px;
+	margin : 2px 1px 2px 0px;
 }
 
 label {
@@ -33,8 +47,14 @@ label {
 img {
 	border-width:0px;
 	text-align:left;
+	position:absolute;
 }
 
+.relative { /* for images in relative position */
+	border-width:5px;
+	text-align:left;
+	position:relative;
+}
 
 h1 {
 	color:#FFD9BF;
@@ -54,17 +74,31 @@ h1 {
 	font-weight:bold;
 	font-size: 150%;
 	text-align:center;
-	vertical-align:top;
 	padding: 2px;
 	border: 4px inset #FF6600;
 	width:75%;
 }
 
+.SmallLibraryName {
+	color:#FFD9BF;
+	background-color:transparent;
+	font-weight:bold;
+	font-size: 115%;
+	text-align : center;
+	vertical-align:top;
+	padding: 2px;
+	width:100%;
+	margin-left:70px;
+}
+
 h2 {
 	color:#FFD9BF;
-	background-color:#FF6600;
+/* 	background-color:#FF6600; */
+	background-image: url(/opac-tmpl/css/en/images/bar.gif);
+	background-repeat:no-repeat;
 	font-weight:bold;
 	font-size: 125%;
+	margin: 0px 0px 10px 0px;
 }
 
 p {
@@ -106,6 +140,7 @@ th {
 td {
 	font-size:10pt;
 	border-left:1px solid #000000;
+	vertical-align:top;
 }
 
 /* hilighted cell */
@@ -113,6 +148,7 @@ td.hilighted {
 	font-size:10pt;
 	border-left:1px solid #000000;
 	background-color:#ffffcc;
+	vertical-align:top;
 }
 
 /* FORMS */
@@ -129,6 +165,7 @@ td.hilighted {
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	background-color:#FFD9BF;
+	margin : 3px 3px 3px 0px;
 }
 
 .button:hover {
@@ -143,11 +180,15 @@ td.hilighted {
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	background-color:#FF6600;
+	background-image: url(/opac-tmpl/css/en/images/bar.gif);
+	background-repeat:no-repeat;
+	margin : 3px 3px 3px 0px;
 }
 
 input {
 	border:0px;
 	border-bottom:1px solid #000000;
+	margin-bottom:2px;
 	background-color:#009999;
 }
 
@@ -157,11 +198,30 @@ input:hover {
 	background-color:#FF6600;
 }
 
-select {
-	background-color: #ACE6E6;
-	text-decoration:none;
-	color:#000000;
+textarea {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#009999;
 }
+
+textarea:hover {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#FF6600;
+}
+
+select {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#009999;
+}
+
+select:hover {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#FF6600;
+}
+
 
 /* span classes */
 /* used to show small 1,2,3, to reach other pages when too much results */
@@ -221,7 +281,7 @@ select {
 }
 
 /* used in members */
-#bloc20 {
+#bloc20, .bloc20 {
 	float:left;
 	width:30%;
 	border:0;
@@ -229,7 +289,7 @@ select {
 	margin-right:20px;
 	margin-bottom:20px;
 }
-#bloc60 {
+#bloc60, .bloc60 {
 	float:left;
 	width:60%;
 	border:0;
@@ -257,16 +317,25 @@ select {
 	border:1px solid #000000;
 	padding-left:10pt;
 	padding-right:10pt;
-	float:left;
+/* 	float:left; */
 	margin-bottom:10px;
 	-moz-border-radius: 6px;
 }
+
 #menuline {
+/*	width:100%;
+	vertical-align:top;*/
+	float:left;
+/*	position:relative;*/
+	display:block;
+}
+
+#bibliomenu {
+	position: relative;
+	float:left;
+	display:block;
+	margin-left:10%;
 	width:100%;
-	height:200%;
-	vertical-align:top;
-	float:none;
-	position:relative;
 }
 
 /* a little spacer. should not be used */

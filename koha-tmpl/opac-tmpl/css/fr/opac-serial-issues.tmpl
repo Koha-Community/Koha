@@ -1,0 +1,84 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+<h1 class="catalogue">Bulletins</h1>
+<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Retour à la bibliothèque</a>
+<form method="post" name="f">
+<div id="bloc25">
+	<h2 class="catalogue">Information de souscription pour <!-- TMPL_VAR name="bibliotitle" --></h2>
+		<p>Débutant le <b><!-- TMPL_VAR name="startdate" --></b> et un numéro chaque<b>
+		<!--TMPL_IF name="periodicity1" -->
+				jour
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				semaine
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				2 semaines
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				3 semaines
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				mois
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				2 months
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				3 months
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				trimestre
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				2 trimestres
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				année
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				2 ans
+		<!-- /TMPL_IF -->
+		</b>
+		Le
+		<b>
+		<!--TMPL_IF name="arrival1" -->
+			Lundi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+				Mardi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+				Mercredi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+				Jeudi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+				Vendredi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+				Samedi
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+				Dimanche
+		<!-- /TMPL_IF -->
+		</b>
+		pour <b>
+			<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> prêts<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> mois<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> mois<!-- /TMPL_IF -->
+			</b>
+		depuis <b><!-- TMPl_VAR name="startdate" --></b>
+		</p>
+		<p><!-- TMPL_VAR name="notes" --></p>
+	<h2 class="catalogue">Bulletins</h2>
+	<p>
+		<!-- TMPL_VAR name="opacnote" -->
+	</p>
+</div>
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

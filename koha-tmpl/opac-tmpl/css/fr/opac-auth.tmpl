@@ -2,35 +2,35 @@
 <div id="mainbloc">
 <!-- TMPL_IF NAME="nopermission" -->
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>Désolé, je pense que vous n'avez pas les permissions suffisantes.<h2>
+<h2>Désolé, Koha ne pense pas que vous pouvez accéder à cette page<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
-<!-- This is what is displayed if Connecter has timed out -->
-<h2>Déconnecté. Identifiez vous à nouveau.<h2>
+<!-- This is what is displayed if login has timed out -->
+<h2>Désolé, votre session a expiré, merci de vous reconnecter<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>Vous avez changé d'adresse IP. Identifiez vous à nouveau<h2>
+<h2>Vous accédez déjà à Koha à partir d'une autre adresse IP ! Merci de vous reconnecter<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
 <!-- This is what is displayed if user doesnt have permission -->
-<h2>Identifiant ou mot de passe erroné. Essayez encore.<h2>
+<h2>Vous avez saisi un nom de membre ou un mot de document invalide, merci de réessayer<h2>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="loginprompt" -->
-<!-- Connecter prompt time-->
+<!-- login prompt time-->
 
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
-	<h1>Identifiant Koha</h1>
-	<p><label>N° de carte</label><input name="userid" /></p>
-	<p><label>Mot de passe :</label><input type="password" name="password" /></p>
+	<h1>Identification</h1>
+	<p><label>Numéro de carte</label><input name="userid" /></p>
+	<p><label>Mot de passe</label><input type="password" name="password" /></p>
 	<!-- TMPL_LOOP NAME="INPUTS" -->
 		<input type="hidden" name='<!-- TMPL_VAR NAME="name" -->' value='<!-- TMPL_VAR NAME="value" -->' />
 	<!-- /TMPL_LOOP -->
-	<input type="submit" value="Connecter" class="button" />
+	<input type="submit" value="identifiant" class="button">
 </form>
 
 <!-- /TMPL_IF -->
