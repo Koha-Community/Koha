@@ -1,30 +1,18 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<div id="mainbloc">
+<h1>Members</h1>
 
-<h1>Members</h1><P>
-
-
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
-<tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-<FORM ACTION="/cgi-bin/koha/members/member.pl" method=post><FONT SIZE=4>
-<b>Member Search</B>
-</FONT>
-<INPUT TYPE="text" size=50 name=member >
-<p>Renew Items, view add, modify and delete records, all by starting with this search. Type a borrower name, part of a name, or number in the field above and hit the enter key to activate search</p>
-</td></form><tr>
-</table>
-
-<P>
-
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
-	<tr VALIGN=TOP  >
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">
-			<FONT SIZE=4><b>Browse Members</B></FONT>
-		</td>
-	</tr>
-	<TR VALIGN=TOP>
-		<TD>
-			<CENTER><B>
+<div id="bloc25">
+	<div id="bloctitle">Member Search</div>
+	<FORM ACTION="/cgi-bin/koha/members/member.pl" method=post>
+		<input type="text" size=50 name=member >
+		<input type="submit" class="button" value="OK">
+		<p>Renew Items, view add, modify and delete records, all by starting with this search.</p>
+		<p>Type a borrower name, part of a name, or number in the field above and hit the enter key to activate search</p>
+	</form>
+</div>
+<div id="bloc25">
+			<div id="bloctitle">Browse Members</div>
 			<A HREF="/cgi-bin/koha/members/member.pl?member=a">A</a> ||
 			<A HREF="/cgi-bin/koha/members/member.pl?member=b">B</a> ||
 			<A HREF="/cgi-bin/koha/members/member.pl?member=c">C</a> ||
@@ -51,8 +39,6 @@
 			<A HREF="/cgi-bin/koha/members/member.pl?member=x">X</a> ||
 			<A HREF="/cgi-bin/koha/members/member.pl?member=y">Y</a> ||
 			<A HREF="/cgi-bin/koha/members/member.pl?member=z">Z</a>
-			</B>
-		</TD>
-	</TR>
-</TABLE>
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
