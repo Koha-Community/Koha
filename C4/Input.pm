@@ -20,6 +20,7 @@ package C4::Input; #assumes C4/Input
 
 use strict;
 require Exporter;
+use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -78,29 +79,31 @@ C<$env> is ignored.
 =cut
 #'
 sub checkdigit {
-  my ($env,$infl) =  @_;
-  $infl = uc $infl;
-  my @weightings = (8,4,6,3,5,2,1);
-  my $sum;
-  my $i = 1;
-  my $valid = 0;
-  #  print $infl."<br>";
+	if (C4::Context->preference("checkdigit") eq "none") {
+		warn "XXcheckdigit : ".C4::Context->preference("checkdigit");
+		return 1;
+	} else {
+		my ($env,$infl) =  @_;
+		$infl = uc $infl;
+		my @weightings = (8,4,6,3,5,2,1);
+		my $sum;
+		my $i = 1;
+		my $valid = 0;
 
-  foreach $i (1..7) {
-    my $temp1 = $weightings[$i-1];
-    my $temp2 = substr($infl,$i,1);
-    $sum += $temp1 * $temp2;
-#    print "$sum $temp1 $temp2<br>";
-  }
-  my $rem = ($sum%11);
-  if ($rem == 10) {
-    $rem = "X";
-  }
-  #print $rem."<br>";
-  if ($rem eq substr($infl,8,1)) {
-    $valid = 1;
-  }
-  return $valid;
+		foreach $i (1..7) {
+			my $temp1 = $weightings[$i-1];
+			my $temp2 = substr($infl,$i,1);
+			$sum += $temp1 * $temp2;
+		}
+		my $rem = ($sum%11);
+		if ($rem == 10) {
+		$rem = "X";
+		}
+		if ($rem eq substr($infl,8,1)) {
+			$valid = 1;
+		}
+		return $valid;
+	}
 } # sub checkdigit
 
 =item checkvalidisbn

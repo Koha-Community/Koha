@@ -278,6 +278,7 @@ my %tabledata=(
     	{ uniquefieldrequired => 'variable', variable => 'timeout', value => '12000000', explanation => 'login timeout' },
     	{ uniquefieldrequired => 'variable', variable => 'marc', value => 'ON', explanation => 'MARC support (ON or OFF)' },
     	{ uniquefieldrequired => 'variable', variable => 'marcflavour', value => 'MARC21', explanation => 'your MARC flavor (MARC21 or UNIMARC) used for character encoding' },
+    	{ uniquefieldrequired => 'variable', variable => 'checkdigit', value => 'katipo', explanation => 'none= no check on member cardnumber. katipo= katipo check' },
     ],
 
 );
@@ -543,6 +544,12 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.38  2003/03/18 10:58:19  tipaul
+# adding checkdigit parameter that choose how to check the members cardnumber.
+# At the moment :
+# * none = no checking
+# * katipo = checked as before
+#
 # Revision 1.37  2003/01/30 01:47:48  acli
 # Corrected syntax error reported by Benedict
 #
