@@ -612,47 +612,66 @@ if ($result) {
 
 
 
-    print "\n\nWould you like to add a branch and printer? [Y]/N: ";
+    print qq|
+
+If you are installing Koha for evaluation purposes,  I have a batch of sample
+data that you can install now.
+
+If you are installing Koha with the intention of populating it with your own
+data, you probably don't want this sample data installed.
+
+|;
+    print "\n\nWould you like to install the sample data? Y/[N]: ";
     chomp($input = <STDIN>);
+    unless ($input =~/^y/i) {
+	system("gunzip sampledata-1.2.gz");
+	system("cat sampledata-1.2 | mysql -u$mysqluser -p$mysqlpass $dbname");
+	system("gzip -9 sampledata-1.2");
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('Main', 'Main Library', 1)\"");
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+    } else {
+	print "\n\nWould you like to add a branch and printer? [Y]/N: ";
+	chomp($input = <STDIN>);
 
 
-    unless ($input =~/^n/i) {
-	my $branch='Main Library';
-	print "Enter a name for the library branch [$branch]: ";
-	chomp($input = <STDIN>);
-	if ($input) {
-	    $branch=$input;
+	unless ($input =~/^n/i) {
+	    my $branch='Main Library';
+	    print "Enter a name for the library branch [$branch]: ";
+	    chomp($input = <STDIN>);
+	    if ($input) {
+		$branch=$input;
+	    }
+	    $branch=~s/[^A-Za-z0-9\s]//g;
+	    my $branchcode=$branch;
+	    $branchcode=~s/[^A-Za-z0-9]//g;
+	    $branchcode=uc($branchcode);
+	    $branchcode=substr($branchcode,0,4);
+	    print "Enter a four letter code for your branch [$branchcode]: ";
+	    chomp($input = <STDIN>);
+	    if ($input) {
+		$branchcode=$input;
+	    }
+	    $branchcode=~s/[^A-Z]//g;
+	    $branchcode=uc($branchcode);
+	    $branchcode=substr($branchcode,0,4);
+	    print "Adding branch '$branch' with code '$branchcode'.\n";
+	    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+	    my $printername='Library Printer';
+	    print "Enter a name for the printer [$printername]: ";
+	    chomp($input = <STDIN>);
+	    if ($input) {
+		$printername=$input;
+	    }
+	    $printername=~s/[^A-Za-z0-9\s]//g;
+	    my $printerqueue='lp';
+	    print "Enter the queue for the printer [$printerqueue]: ";
+	    chomp($input = <STDIN>);
+	    if ($input) {
+		$printerqueue=$input;
+	    }
+	    $printerqueue=~s/[^A-Za-z0-9]//g;
+	    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 	}
-	$branch=~s/[^A-Za-z0-9\s]//g;
-	my $branchcode=$branch;
-	$branchcode=~s/[^A-Za-z0-9]//g;
-	$branchcode=uc($branchcode);
-	$branchcode=substr($branchcode,0,4);
-	print "Enter a four letter code for your branch [$branchcode]: ";
-	chomp($input = <STDIN>);
-	if ($input) {
-	    $branchcode=$input;
-	}
-	$branchcode=~s/[^A-Z]//g;
-	$branchcode=uc($branchcode);
-	$branchcode=substr($branchcode,0,4);
-	print "Adding branch '$branch' with code '$branchcode'.\n";
-	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass Koha -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
-	my $printername='Library Printer';
-	print "Enter a name for the printer [$printername]: ";
-	chomp($input = <STDIN>);
-	if ($input) {
-	    $printername=$input;
-	}
-	$printername=~s/[^A-Za-z0-9\s]//g;
-	my $printerqueue='lp';
-	print "Enter the queue for the printer [$printerqueue]: ";
-	chomp($input = <STDIN>);
-	if ($input) {
-	    $printerqueue=$input;
-	}
-	$printerqueue=~s/[^A-Za-z0-9]//g;
-	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass Koha -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
     }
 
 
