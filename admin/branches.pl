@@ -10,13 +10,18 @@
 #        TMPL_LOOP'ized; doing this properly will fix bug 130; need to
 #        notify translators
 # FIXME: need to implement the branch categories stuff
-# FIXME: heading() need to be moved to templates, need to notify translators
 # FIXME: there are too many TMPL_IF's; the proper way to do it is to have
 #        separate templates for each individual action; need to notify
 #        translators
 # FIXME: there are lots of error messages exported to the template; a lot
 #        of these should be converted into exported booleans / counters etc
 #        so that the error messages can be localized; need to notify translators
+#
+# NOTE:  heading() should now be called like this:
+#        1. Use heading() as before
+#        2. $template->param('heading-LISPISHIZED-HEADING-p' => 1);
+#        3. $template->param('use-heading-flags-p' => 1);
+#        This ensures that both converted and unconverted templates work
 
 # Finlay working on this file from 26-03-2002
 # Reorganising this branches admin page.....
@@ -81,11 +86,15 @@ $template->param(action => $script_name);
 if ($op eq 'add') {
 	# If the user has pressed the "add new branch" button.
 	heading("Branches: Add Branch");
+	$template->param('heading-branches-add-branch-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	editbranchform();
 
 } elsif ($op eq 'edit') {
 	# if the user has pressed the "edit branch settings" button.
 	heading("Branches: Edit Branch");
+	$template->param('heading-branches-edit-branch-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	$template->param(add => 1);
 	editbranchform($branchcode);
 } elsif ($op eq 'add_validate') {
@@ -114,8 +123,10 @@ if ($op eq 'add') {
 	$template->param(else => 1);
 	default("The branch with code $branchcode has been deleted.");
 } elsif ($op eq 'editcategory') {
-	# If the user has pressed the "add new category" button.
+	# If the user has pressed the "add new category" or "modify" buttons.
 	heading("Branches: Edit Category");
+	$template->param('heading-branches-edit-category-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	editcatform($categorycode);
 } elsif ($op eq 'addcategory_validate') {
 	# confirm settings change...
@@ -157,6 +168,8 @@ if ($op eq 'add') {
 sub default {
 	my ($message) = @_;
 	heading("Branches");
+	$template->param('heading-branches-p' => 1);
+	$template->param('use-heading-flags-p' => 1);
 	$template->param(message => $message);
 	$template->param(action => $script_name);
 	branchinfotable();
