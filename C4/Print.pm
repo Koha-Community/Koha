@@ -33,10 +33,9 @@ $VERSION = 0.01;
 
 sub remoteprint {
   my ($env,$items,$borrower)=@_;
-  #open (FILE,">/tmp/olwen");
-  #print FILE "queue $env->{'queue'}";
-  #close FILE;
-  #debug_msg($env,"In print");
+
+  my $config=configfile();
+  (return) unless ($config->{printcirculationslips});
   my $file=time;
   my $queue = $env->{'queue'};
   if ($queue eq "" || $queue eq 'nulllp') {
@@ -44,7 +43,6 @@ sub remoteprint {
   } else {  
     open(PRINTER, "| lpr -P $queue") or die "Couldn't write to queue:$queue!\n";
   }  
-#  print $queue;
   #open (FILE,">/tmp/$file");
   my $i=0;
   my $brdata = $env->{'brdata'};
@@ -56,7 +54,6 @@ sub remoteprint {
   print PRINTER "$borrower->{'cardnumber'}\r\n";
   print PRINTER "$borrower->{'title'} $borrower->{'initials'} $borrower->{'surname'}\r\n";
   while ($items->[$i]){
-#    print $i;
     my $itemdata = $items->[$i];
     print PRINTER "$i $itemdata->{'title'}\r\n";
     print PRINTER "$itemdata->{'barcode'}";
@@ -76,6 +73,8 @@ sub printreserve {
   my($env, $branchname, $bordata, $itemdata)=@_;
   my $file=time;
   my $printer = $env->{'printer'};
+  my $config=configfile();
+  (return) unless ($config->{'printreserveslips'});
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">>/tmp/kohares");
   } else {
@@ -115,6 +114,8 @@ EOF
 sub printslip {
   my($env, $slip)=@_;
   my $printer = $env->{'printer'};
+  my $config=configfile();
+  (return) unless ($config->{printcirculationslips});
   if ($printer eq "" || $printer eq 'nulllp') {
     open (PRINTER,">/tmp/kohares");
   } else {
