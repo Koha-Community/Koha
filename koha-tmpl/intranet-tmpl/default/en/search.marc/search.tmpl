@@ -4,26 +4,25 @@
     <TMPL_INCLUDE NAME="cat-top.inc">
 </TMPL_IF>
 
-<center>
+<span style="font-size:2em; text-align:left;">MARC Search</span>
 
+<center>
 <form name="f" method="post">
 <input type="hidden" name="type" value="intranet">
-	<table border=0 cellspacing=0 cellpadding=2>
-		<tr
-		<TMPL_IF NAME="opac">
-			bgcolor="#ad11ad"
-				bgcolor="#99cccc" background="/images/background-opac.gif"
-			<TMPL_ELSE>
-				bgcolor="#ad11ad"
-			</TMPL_IF>
-		>
-			<th colspan=6>Search</th>
-		</tr>
+	<table border=0 cellspacing=0 cellpadding=2 width="80%>
 		<tr align="center">
-			<td colspan=6>
-			<div name="sql">
-			<input type="hidden" name="op" value="do_search">
-			<textarea name="sql" rows=5 cols=80 disabled readonly></textarea>
+			<td colspan=3>
+				<div name="sql">
+				<input type="hidden" name="op" value="do_search">
+				<textarea name="sql" rows=5 cols=60 disabled readonly></textarea>
+				</div>
+			</td>
+			<td colspan=2 bgcolor="#ad11ad" valign="top" align="left">
+				<span style="color:#FFFFFF;">
+					<b>HELP :</b><br/>
+					Build your request using MARC fields and subfields.
+					OK will show the list of the corresponding biblios in your library.
+				</span>
 			</td>
 		</tr>
 
