@@ -1,9 +1,9 @@
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<!--Authored by rachel@katipo.co.nz 10:46 24/12/99-->
 
 <html>
 <head>
-<title>KOHA: Rechercher dans le catalogue</title>
+<title>Recherche OPAC</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso8859-1">
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
@@ -19,16 +19,42 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
 -->
-
+<style>
+a.white {
+	font-weight: normal;
+	text-decoration: none;
+	cursor: hand;
+	color:#FFFFFF;
+	padding:4px;
+	font-weight: bold;
+	}
+</style>
 <!------------------------MENUS-------------------------------->
 
-<table cellpadding=0 cellspacing=0 border=0 width="40%">
-<tr   bgcolor="#fecc99" >
+<table cellpadding=0 cellspacing=0 width="100%" border=0>
+<tr BGCOLOR="#339999" >
 
-<td align=right><a href="/cgi-bin/koha/opac-main.pl">Accueil</a>
-<td align=right><a href="/cgi-bin/koha/opac-search.pl">Rechercher</a>
-<td align=right><a href="/cgi-bin/koha/opac-user.pl">Votre compte lecteur</a>
+	<td width="7%">
+		<img src="<TMPL_VAR name="themelang">/images/front-background-small.gif" height=50 align="center"><b>KOHA</b>
+	</td>
+        <td width="10%">
+		<a href="/cgi-bin/koha/opac-search.pl" title="Chercher dans le catalogue" class="white">
+			Search
+		</a>
+	</td>
+        <td width="10%">
+		<a href="/cgi-bin/koha/opac-user.pl" title="S'inscrire" class="white">
+			Rejoindre
+		</a>
+	</td>
+	<td align="left" width="10%">
+		<a href="/cgi-bin/koha/opac-main.pl" title="Accueil" class="white">Accueil</a>
+	</td>
+	<td width="60%">
+		&nbsp;
+	</td>
         </TR>
 </TABLE>
-<br/><br/>
+
 <!-------------------------MAIN BODY OF PAGE-------------------------->
+<BLOCKQUOTE>

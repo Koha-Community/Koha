@@ -1,16 +1,16 @@
 <!--
- list of Classes to be included in /catalogue/index.html and cat/index.html
+ list de Classes to be included dans /catalogue/index.html and cat/index.html
  This is a qick-fix - These should really be fetched from the database
 -->
-<option value="E">Easy / Picture Books
-<option value="ER">Easy Reader	
-<option value="JNF">Junior Non-Fiction
-<option value="JF">Junior Fiction
-<option value="TREF">Teacher Reference
-<option value="FYA">Young Adult Fiction	
-<option value="REF">Reference Books
+<option value="E">BD
+<option value="ER">Lecture facile	
+<option value="JNF">Junior NF
+<option value="JF">Junior
+<option value="TREF">Ref. prof.
+<option value="FYA">Ado fiction	
+<option value="REF">Références
 <option value="F">Fiction
-<option value="NF">Non-Fiction
-<option value="CD">Compact Disc
+<option value="NF">NF
+<option value="CD">CD
 <!--	<option value="E|ER">Easy Books-->
 
