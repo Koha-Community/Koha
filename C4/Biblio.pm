@@ -1805,11 +1805,6 @@ sub OLDmoditem {
         $item->{'itemcallnumber'}, $item->{'notforloan'},
         $item->{'location'},	   $item->{'itemnum'}
     );
-    if ( $item->{'barcode'} eq '' ) {
-        $item->{'notforloan'} = 0 unless $item->{'notforloan'};
-        $query = "update items set notforloan=? where itemnumber=?";
-        @bind = ( $item->{'notforloan'}, $item->{'itemnum'} );
-    }
     if ( $item->{'lost'} ne '' ) {
         $query = "update items set biblioitemnumber=?,
                              barcode=?,
@@ -2631,6 +2626,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.2  2005/01/11 16:02:35  tipaul
+# in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
+#
 # Revision 1.115.2.1  2005/01/11 14:45:37  tipaul
 # bugfix : issn were not stored correctly in non-MARC DB on biblio modification
 #
