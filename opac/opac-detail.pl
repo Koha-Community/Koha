@@ -72,7 +72,8 @@ $template->param(BIBLIO_RESULTS => $resultsarray,
 				SITE_RESULTS => $sitearray,
 				subscriptionid => $subscriptionid,
 );
-  ## get Amazon.com stuff
+  ## Amazon.com stuff
+=head
 my $isbn=$dat->{'isbn'};
 my $amazon_details = &get_amazon_details($isbn);
 foreach my $result (@{$amazon_details->{Details}}){
@@ -100,4 +101,5 @@ for my $details( @{ $amazon_details->{ Details } } ) {
 $template->param( SIMILAR_PRODUCTS => \@products );
 $template->param( REVIEWS => \@reviews );
   ## End of Amazon Stuff
+=cut
 output_html_with_http_headers $query, $cookie, $template->output;
