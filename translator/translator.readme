@@ -1,0 +1,28 @@
+This is small note about 'translator.pl'.
+Author: Pawel Skuza
+email: pawelzc@cz.top.pl
+
+Script 'translator.pl' do two things:
+1. Prepare strings which can be translate;
+2. Translate strings used gettext.
+
+1. Prepare strings which can be translate.
+Copy file 'translator.pl' into root koha directory and execute it.
+eg. 
+    cd /usr/src/koha
+    cp scripts/translator.pl .
+    ./translator.pl some_file_name
+    xgettext some_file_name -okoha.po
+    vi koha.po 					//now you must translate koha.po
+    msgfmt koha.po -okoha.mo
+    cp koha.mo /usr/share/locale/$$/LC_MESSAGES //where $$ is your language
+    
+note: if you omnit 'some_file_name' translator create 'koha.gettext.c'
+    
+2. Translate strings used gettext.
+You have to configure your apache. Put this lines in koha and opac virtual:
+
+    Action text/html /cgi-bin/koha/translator.pl
+    Action text/plane /cgi-bin/koha/translator.pl
+
+Don't forget set up the language preference in your browser.
