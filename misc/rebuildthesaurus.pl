@@ -19,7 +19,6 @@ GetOptions(
     'h' => \$version,
     'd' => \$delete,
     't' => \$test_parameter,
-    'f:s' => \$field,
     's:s' => \$subfields,
     'v' => \$verbose,
     'c:s' => \$category,
@@ -33,12 +32,12 @@ parameters :
 \tc : thesaurus category
 \tv : verbose mode.
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
-\tf : the field
 \ts : the subfields
 \d : delete every entry of the selected category before doing work.
 
-SAMPLE : ./bulkmarcimport.pl -c NP -f 700 -s "\$a, \$b (\$c ; \$d)" => will build authority file NP with value constructed with 700 field \$a, \$b, \$c & \$d subfields
-In UNIMARC this rebuild author authority file.
+SAMPLES :
+ ./rebuildthesaurus.pl -c NP -s "##700#a, ##700#b (##700#c ; ##700#d)" => will build authority file NP with value constructed with 700 field \$a, \$b, \$c & \$d subfields In UNIMARC this rebuild author authority file.
+ ./rebuildthesaurus.pl -c EDITORS -s "##210#c -- ##225#a" => will build authority for editor and collection. The EDITORS authority category is used with plugins for 210 & 225 in UNIMARC.
 EOF
 ;#
 die;
@@ -62,20 +61,23 @@ my $i;
 while (my ($bibid) = $sth->fetchrow) {
 	my $record = MARCgetbiblio($dbh,$bibid);
 #	warn $record->as_formatted;
-	foreach my $fieldwanted ($record->field($field)) {
-		my $resultstring = $subfields;
+	my $resultstring = $subfields;
+	foreach my $fieldwanted ($record->fields) {
+		next if $fieldwanted->tag()<=10;
 		foreach my $pair ( $fieldwanted->subfields() ) {
-			$resultstring =~ s/\$$pair->[0]/$pair->[1]/g;
+			my $fieldvalue = $fieldwanted->tag();
+#			warn "$fieldvalue ==> #$fieldvalue#$pair->[0]/$pair->[1]";
+			$resultstring =~ s/##$fieldvalue##$pair->[0]/$pair->[1]/g;
 		}
 		# deals empty subfields
 		foreach my $empty (@subfields) {
 			$resultstring =~ s/\$$empty//g;
 		}
-		warn "result : $resultstring" if $verbose;
+		warn "RRR $resultstring";
+		if ($resultstring ne $subfields && $resultstring &&
 		&newauthority($dbh,$category,$resultstring);
 		$i++;
 	}
-
 }
 my $timeneeded = gettimeofday - $starttime;
 print "$i entries done in $timeneeded seconds\n";
