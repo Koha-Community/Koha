@@ -1573,7 +1573,6 @@ database=$database
 hostname=$hostname
 user=$user
 pass=$pass
-includes=$opacdir/htdocs/includes
 intranetdir=$intranetdir
 opacdir=$opacdir
 kohalogdir=$kohalogdir
