@@ -105,10 +105,10 @@ if ($op eq 'add_form') {
 
 	if ($searchfield) {
 		$template->param(action => "Modify tag",
-								searchfield => "<input type=hidden name=tagfield value='$searchfield'>$searchfield");
+								searchfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$searchfield\" />$searchfield");
 	} else {
 		$template->param(action => "Add tag",
-								searchfield => "<input type=text name=tagfield size=5 maxlength=3>");
+								searchfield => "<input type=\"text\" name=\"tagfield\" size=\"5\" maxlength=\"3\" />");
 	}
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							libopac => $data->{'libopac'},
@@ -165,7 +165,7 @@ if ($op eq 'add_form') {
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	if  ($searchfield ne '') {
-		 $template->param(searchfield => "You Searched for <b>$searchfield<b><p>");
+		 $template->param(searchfield => "<p>You Searched for <strong>$searchfield<strong></p>");
 	}
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
@@ -184,8 +184,8 @@ if ($op eq 'add_form') {
 		$row_data{mandatory} = $results->[$i]{'mandatory'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'};
-		$row_data{edit} = "$script_name?op=add_form&searchfield=".$results->[$i]{'tagfield'};
-		$row_data{delete} = "$script_name?op=delete_confirm&searchfield=".$results->[$i]{'tagfield'};
+		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'};
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'};
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
