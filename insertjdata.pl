@@ -61,7 +61,6 @@ for (my $i=0;$i<3;$i++){
 		where borrowernumber=$data{'borrowernumber'}";
 		#  print $query;
 	}elsif ($data{"cardnumber_child_$i"} ne ''){
-	warn "INSERT";
 		my $dob=$data{"dateofbirth_child_$i"};
 		$dob=ParseDate($dob);
 		$dob=UnixDate($dob,'%Y-%m-%d');
@@ -94,7 +93,6 @@ for (my $i=0;$i<3;$i++){
 	}
 	#print $query;
 	my $sth2=$dbh->prepare($query);
-	warn "QQQ = $query";
 	$sth2->execute;
 	$sth2->finish;
 	$sth->finish;

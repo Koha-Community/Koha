@@ -2,6 +2,7 @@
 
 <!-- main site -->
 
+
 <h1><TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></h1><P>
 <p>
 
@@ -24,9 +25,9 @@
 		<br>
 		<FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF><p>
 		Card Number: <TMPL_VAR NAME="cardnumber"><BR>
-		Postal Address: <TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><BR>
-		Home Address: <TMPL_VAR NAME="physstreet">, <TMPL_VAR NAME="streetcity"><BR>
-		Phone (Home): <TMPL_VAR NAME="phone"><BR>
+		Postal Address: <TMPL_VAR NAME="streetaddress">, <TMPL_VAR name="zipcode"> <TMPL_VAR NAME="city"><BR>
+		<TMPL_UNLESS name="I">Home Address: <TMPL_VAR NAME="physstreet">, <TMPL_VAR name="homezipcode"> <TMPL_VAR NAME="streetcity"><BR>
+		Phone (Home): <TMPL_VAR NAME="phone"><BR></TMPL_UNLESS>
 		Phone (Daytime): <TMPL_VAR NAME="phoneday"><BR>
 		Fax: <TMPL_VAR NAME="faxnumber"><BR>
 		E-mail: <a href="mailto:<TMPL_VAR NAME="emailaddress">"><TMPL_VAR NAME="emailaddress"></a><br>
@@ -39,31 +40,50 @@
 		<TMPL_IF NAME="printethnicityline">
 			Ethnicity: <TMPL_VAR NAME="ethnicity">, <TMPL_VAR NAME="ethnotes"><br>
 		</TMPL_IF>
-		DoB: <TMPL_VAR NAME="dateofbirth"><BR>
-		Sex: <TMPL_VAR NAME="sex"><P>
-		Alternative Contact: <TMPL_VAR NAME="contactname"><BR>
+		<TMPL_UNLESS name="I">
+			DoB: <TMPL_VAR NAME="dateofbirth"><BR>
+			Sex: <TMPL_VAR NAME="sex"><P>
+			Alternative</TMPL_UNLESS> Contact: <TMPL_VAR NAME="contactname"><BR>
 		Phone: <TMPL_VAR NAME="altphone"><BR>
-		Relationship: <TMPL_VAR NAME="altrelationship"><BR>
+		<TMPL_UNLESS name="I">
+			Relationship: <TMPL_VAR NAME="altrelationship"><BR>
+		</TMPL_UNLESS>
 		Notes: <TMPL_VAR NAME="altnotes"><P>
-		<TMPL_IF NAME="isguarantee">
-			Guarantees:<br><TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME=name> - <TMPL_VAR NAME="cardnumber"></a><br></TMPL_LOOP>
-		<TMPL_ELSE>
-			Guarantor:
-			<TMPL_IF NAME="guarantorborrowernumber">
-				<A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
+		<TMPL_UNLESS name="I">
+			<TMPL_IF NAME="isguarantee">
+				Guarantees:<br><TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME=name> - <TMPL_VAR NAME="cardnumber"></a><br></TMPL_LOOP>
 			<TMPL_ELSE>
-				no guarantor<br>
+				Guarantor:
+				<TMPL_IF NAME="guarantorborrowernumber">
+					<A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
+				<TMPL_ELSE>
+					no guarantor<br>
+				</TMPL_IF>
 			</TMPL_IF>
-		</TMPL_IF>
+		</TMPL_UNLESS>
 		<P>
 		General Notes: <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to and delete notes.'); return false">-->
 		<TMPL_VAR NAME="borrowernotes"><!--</a>-->
 		<p align=right>
 		</font>
-		<form action=/cgi-bin/koha/memberentry.pl method=post>
-			<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
-			<INPUT TYPE=submit class="button" value="Modify">
-		</form>
+		<TMPL_IF name="A">
+			<form action=/cgi-bin/koha/memberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE=submit class="button" value="Modify">
+			</form>
+		</TMPL_IF>
+		<TMPL_IF name="C">
+			<form action=/cgi-bin/koha/memberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE=submit class="button" value="Modify">
+			</form>
+		</TMPL_IF>
+		<TMPL_IF name="I">
+			<form action=/cgi-bin/koha/imemberentry.pl method=post>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
+				<INPUT TYPE=submit class="button" value="Modify">
+			</form>
+		</TMPL_IF>
 		<form action=/cgi-bin/koha/deletemem.pl method=post>
                         <input type=hidden name=member value="<TMPL_VAR NAME="bornum">">
 			<INPUT TYPE=submit class="button" value="Delete">

@@ -156,16 +156,18 @@ if ($delete){
 				-multiple => 0 );
 
   $template->param(
-  			member          => $member,
+			member          => $member,
 			address         => $data->{'streetaddress'},
-  			firstname       => $data->{'firstname'},
-  			surname         => $data->{'surname'},
-  			othernames	=> $data->{'othernames'},
-  			initials	=> $data->{'initials'},
-  			ethcatpopup	=> $ethcatpopup,
-  			catcodepopup	=> $catcodepopup,
-  			streetaddress   => $data->{'physstreet'},
-  			streetcity      => $data->{'streetcity'},
+			firstname       => $data->{'firstname'},
+			surname         => $data->{'surname'},
+			othernames	=> $data->{'othernames'},
+			initials	=> $data->{'initials'},
+			ethcatpopup	=> $ethcatpopup,
+			catcodepopup	=> $catcodepopup,
+			streetaddress   => $data->{'physstreet'},
+			zipcode => $data->{'zipcode'},
+			streetcity      => $data->{'streetcity'},
+			homezipcode => $data->{'homezipcode'},
 			city		=> $data->{'city'},
   			phone           => $data->{'phone'},
   			phoneday        => $data->{'phoneday'},
@@ -185,7 +187,6 @@ if ($delete){
   			dateofbirth	=> $data->{'dateofbirth'},
 			dateformat      => display_date_format(),
 			CGIbranch => $CGIbranch);
-warn "title ==>".$data->{'title'}."<==";
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

@@ -31,6 +31,7 @@ use C4::Interface::CGI::Output;
 use C4::Koha;
 use HTML::Template;
 use C4::Members;
+use C4::Date;
 
 my $input = new CGI;
 
@@ -62,7 +63,7 @@ foreach my $branch (keys %$branches) {
 	push @select_branch, $branch;
   	$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 }
-my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
+my $CGIbranch=CGI::scrolling_list( -name     => 'branchcode',
 			-values   => \@select_branch,
 			-default  => $data->{'branchcode'},
 			-labels   => \%select_branches,
@@ -70,7 +71,32 @@ my $CGIbranch=CGI::scrolling_list( -name     => 'branch',
 			-multiple => 0 );
 
 $template->param(member => $member,
-				cardnumber_institution => $cardnumber,	
+				member          => $member,
+				address         => $data->{'streetaddress'},
+				firstname       => $data->{'firstname'},
+				surname         => $data->{'surname'},
+				othernames	=> $data->{'othernames'},
+				streetaddress   => $data->{'streetaddress'},
+				streetcity      => $data->{'streetcity'},
+				zipcode => $data->{'zipcode'},
+				homezipcode => $data->{'homezipcode'},
+				city		=> $data->{'city'},
+				phone           => $data->{'phone'},
+				phoneday        => $data->{'phoneday'},
+				faxnumber       => $data->{'faxnumber'},
+				emailaddress    => $data->{'emailaddress'},
+				textmessaging   => $data->{'textmessaging'},
+				contactname     => $data->{'contactname'},
+				altphone        => $data->{'altphone'},
+				altnotes	=> $data->{'altnotes'},
+				borrowernotes	=> $data->{'borrowernotes'},
+				"title_".$data->{'title'} => " SELECTED ",
+				dateenrolled	=> $data->{'dateenrolled'},
+				expiry		=> $data->{'expiry'},
+				cardnumber	=> $cardnumber,
+				dateofbirth	=> $data->{'dateofbirth'},
+				dateformat      => display_date_format(),
+				cardnumber_institution => $cardnumber,
 				CGIbranch => $CGIbranch);
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -88,12 +88,15 @@
 
 	<tr valign=top bgcolor=white>
 		<td  COLSPAN=3><FONT SIZE=2><b>Postal Address*</b></FONT></td>
-		<td><FONT SIZE=2><b>Town*</b></FONT></td>
+		<td><FONT SIZE=2><b>Zipcode / Town*</b></FONT></td>
 		<td><FONT SIZE=2>Joining Branch</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=address>"></td>
-		<td><input type=text name=city size=20 value="<TMPL_VAR NAME=city>"></td>
+		<td>
+			<input type=text name="zipcode" size=20 value="<TMPL_VAR NAME="zipcode">"><br />
+			<input type=text name=city size=20 value="<TMPL_VAR NAME=city>">
+		</td>
 		<td>
 			<TMPL_VAR name="CGIbranch">
 		</td>
@@ -102,11 +105,13 @@
 
 	<tr valign=top bgcolor=white>
 		<td COLSPAN=3><FONT SIZE=2>Street Address if different</FONT></td>
-		<td><FONT SIZE=2>Town</FONT></td>
+		<td><FONT SIZE=2>Zipcode / Town</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
 		<td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
-		<td><input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
+		<td>
+			<input type=text name="homezipcode" size=20 value="<TMPL_VAR NAME="homezipcode">"></br/>
+			<input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
 	</tr>
 
 

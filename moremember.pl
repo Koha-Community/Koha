@@ -65,6 +65,8 @@ my $bornum=$input->param('bornum');
 
 my $data=borrdata('',$bornum);
 
+$template->param($data->{'categorycode'} => 1); # in template <TMPL_IF name="I"> => instutitional (A for Adult & C for children)
+
 $data->{'dateenrolled'} = format_date($data->{'dateenrolled'});
 $data->{'expiry'} = format_date($data->{'expiry'});
 $data->{'dateofbirth'} = format_date($data->{'dateofbirth'});
@@ -75,13 +77,14 @@ $data->{'ethnicity'} = fixEthnicity($data->{'ethnicity'});
 $data->{&expand_sex_into_predicate($data->{'sex'})} = 1;
 
 if ($data->{'categorycode'} eq 'C'){
-    my $data2=borrdata('',$data->{'guarantor'});
-    $data->{'streetaddress'}=$data2->{'streetaddress'};
-    $data->{'city'}=$data2->{'city'};
-    $data->{'physstreet'}=$data2->{'physstreet'};
-    $data->{'streetcity'}=$data2->{'streetcity'};
-    $data->{'phone'}=$data2->{'phone'};
-    $data->{'phoneday'}=$data2->{'phoneday'};
+	my $data2=borrdata('',$data->{'guarantor'});
+	$data->{'streetaddress'}=$data2->{'streetaddress'};
+	$data->{'city'}=$data2->{'city'};
+	$data->{'physstreet'}=$data2->{'physstreet'};
+	$data->{'streetcity'}=$data2->{'streetcity'};
+	$data->{'phone'}=$data2->{'phone'};
+	$data->{'phoneday'}=$data2->{'phoneday'};
+	$data->{'zipcode'} = $data2->{'zipcode'};
 }
 
 
@@ -90,25 +93,25 @@ if ($data->{'ethnicity'} || $data->{'ethnotes'}) {
 }
 
 if ($data->{'categorycode'} ne 'C'){
-  $template->param(isguarantee => 1);
-  # FIXME
-  # It looks like the $i is only being returned to handle walking through
-  # the array, which is probably better done as a foreach loop.
-  #
-  my ($count,$guarantees)=findguarantees($data->{'borrowernumber'});
-  my @guaranteedata;
-  for (my $i=0;$i<$count;$i++){
-    push (@guaranteedata, {borrowernumber => $guarantees->[$i]->{'borrowernumber'},
-    			   cardnumber => $guarantees->[$i]->{'cardnumber'},
-			   name => $guarantees->[$i]->{'firstname'} . " " . $guarantees->[$i]->{'surname'}});
-  }
-  $template->param(guaranteeloop => \@guaranteedata);
+	$template->param(isguarantee => 1);
+	# FIXME
+	# It looks like the $i is only being returned to handle walking through
+	# the array, which is probably better done as a foreach loop.
+	#
+	my ($count,$guarantees)=findguarantees($data->{'borrowernumber'});
+	my @guaranteedata;
+	for (my $i=0;$i<$count;$i++){
+		push (@guaranteedata, {borrowernumber => $guarantees->[$i]->{'borrowernumber'},
+					cardnumber => $guarantees->[$i]->{'cardnumber'},
+					name => $guarantees->[$i]->{'firstname'} . " " . $guarantees->[$i]->{'surname'}});
+	}
+	$template->param(guaranteeloop => \@guaranteedata);
 
 } else {
-  my ($guarantor)=findguarantor($data->{'borrowernumber'});
-  unless ($guarantor->{'borrowernumber'} == 0){
-    $template->param(guarantorborrowernumber => $guarantor->{'borrowernumber'}, guarantorcardnumber => $guarantor->{'cardnumber'});
-  }
+	my ($guarantor)=findguarantor($data->{'borrowernumber'});
+	unless ($guarantor->{'borrowernumber'} == 0){
+		$template->param(guarantorborrowernumber => $guarantor->{'borrowernumber'}, guarantorcardnumber => $guarantor->{'cardnumber'});
+	}
 }
 
 my %bor;
@@ -125,63 +128,63 @@ my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 #}
 my @accountdata;
 for (my$i=0;$i<$numaccts;$i++){
-  my $amount= $accts->[$i]{'amount'} + 0.00;
-  my $amount2= $accts->[$i]{'amountoutstanding'} + 0.00;
-  my %row = %$accts->[$i];
-  if ($amount2 != 0){
-    my $item=" &nbsp; ";
-    $row{'date'} = format_date($accts->[$i]{'date'});
+	my $amount= $accts->[$i]{'amount'} + 0.00;
+	my $amount2= $accts->[$i]{'amountoutstanding'} + 0.00;
+	my %row = %$accts->[$i];
+	if ($amount2 != 0){
+		my $item=" &nbsp; ";
+		$row{'date'} = format_date($accts->[$i]{'date'});
 
-    if ($accts->[$i]{'accounttype'} ne 'Res'){
-      #get item data
-      #$item=
-    }
+		if ($accts->[$i]{'accounttype'} ne 'Res'){
+			#get item data
+			#$item=
+		}
 
-    # FIXME
-    # why set this variable if it's not going to be used?
-    #
-    my $env;
-    if ($accts->[$i]{'accounttype'} ne 'Res'){
-      my $iteminfo=C4::Circulation::Circ2::getiteminformation($env,$accts->[$i]->{'itemnumber'},'');
-   # FIXME, seems to me $iteminfo gets not defined
-      %row = (%row , %$iteminfo) if $iteminfo;
-    }
-  }
-  push (@accountdata, \%row);
+		# FIXME
+		# why set this variable if it's not going to be used?
+		#
+		my $env;
+		if ($accts->[$i]{'accounttype'} ne 'Res'){
+			my $iteminfo=C4::Circulation::Circ2::getiteminformation($env,$accts->[$i]->{'itemnumber'},'');
+		# FIXME, seems to me $iteminfo gets not defined
+			%row = (%row , %$iteminfo) if $iteminfo;
+		}
+	}
+	push (@accountdata, \%row);
 }
 
 my ($count,$issue)=borrissues($bornum);
 my $today=ParseDate('today');
 my @issuedata;
 for (my $i=0;$i<$count;$i++){
-  my $datedue=ParseDate($issue->[$i]{'date_due'});
-  $issue->[$i]{'date_due'} = format_date($issue->[$i]{'date_due'});
-  my %row = %{$issue->[$i]};
-  if ($datedue < $today){
-    $row{'red'}=1; #print "<font color=red>";
-  }
-  #find the charge for an item
-  # FIXME - This is expecting
-  # &C4::Circulation::Renewals2::calc_charges, but it's getting
-  # &C4::Circulation::Circ2::calc_charges, which only returns one
-  # element, so itemtype isn't being set.
-  # But &C4::Circulation::Renewals2::calc_charges doesn't appear to
-  # return the correct item type either (or a properly-formatted
-  # charge, for that matter).
-  my ($charge,$itemtype)=calc_charges(undef,$dbh,$issue->[$i]{'itemnumber'},$bornum);
-  $row{'itemtype'}=$itemtype;
-  $row{'charge'}=$charge;
+	my $datedue=ParseDate($issue->[$i]{'date_due'});
+	$issue->[$i]{'date_due'} = format_date($issue->[$i]{'date_due'});
+	my %row = %{$issue->[$i]};
+	if ($datedue < $today){
+		$row{'red'}=1; #print "<font color=red>";
+	}
+	#find the charge for an item
+	# FIXME - This is expecting
+	# &C4::Circulation::Renewals2::calc_charges, but it's getting
+	# &C4::Circulation::Circ2::calc_charges, which only returns one
+	# element, so itemtype isn't being set.
+	# But &C4::Circulation::Renewals2::calc_charges doesn't appear to
+	# return the correct item type either (or a properly-formatted
+	# charge, for that matter).
+	my ($charge,$itemtype)=calc_charges(undef,$dbh,$issue->[$i]{'itemnumber'},$bornum);
+	$row{'itemtype'}=$itemtype;
+	$row{'charge'}=$charge;
 
-  #check item is not reserved
-  my ($restype,$reserves)=CheckReserves($issue->[$i]{'itemnumber'});
-  if ($restype){
-    print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
-#  } elsif ($issue->[$i]->{'renewals'} > 0) {
-#      print "<TD>Previously Renewed - no renewals</td></tr>";
-  } else {
-    $row{'norenew'}=0;
-  }
-  push (@issuedata, \%row);
+	#check item is not reserved
+	my ($restype,$reserves)=CheckReserves($issue->[$i]{'itemnumber'});
+	if ($restype){
+		print "<TD><a href=/cgi-bin/koha/request.pl?bib=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
+		#  } elsif ($issue->[$i]->{'renewals'} > 0) {
+		#      print "<TD>Previously Renewed - no renewals</td></tr>";
+	} else {
+		$row{'norenew'}=0;
+	}
+	push (@issuedata, \%row);
 }
 
 my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2

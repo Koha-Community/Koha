@@ -1,7 +1,11 @@
 <TMPL_INCLUDE name="members-top.inc">
 <BLOCKQUOTE>
 
-<h1>Add New Institution</h1><br>
+<TMPL_IF name="surname">
+	<h1>Edit Institution</h1><br>
+<TMPL_ELSE>
+	<h1>Add new Institution</h1><br>
+</TMPL_IF>
 <form action=/cgi-bin/koha/newimember.pl method=post>
   <input type=hidden name=joining value="">
   <input type=hidden name=expiry value="">
@@ -36,7 +40,7 @@
       <td><FONT SIZE=2>Institution Name</FONT></td>
     </tr>
     <tr valign=top bgcolor=white>
-      <td colspan=3><input type=text name=institution_name size=50 value=""></td>
+      <td colspan=3><input type=text name=institution_name size=50 value="<TMPL_VAR name="surname">"></td>
     </tr>
     <tr><td>&nbsp;</TD></TR>
 
@@ -48,12 +52,12 @@
 
     <tr valign=top bgcolor=white>
 	<td ><FONT SIZE=2>Postal Address*</FONT></td>
-	<td><FONT SIZE=2>Town*</FONT></td>
+	<td><FONT SIZE=2>Zipcode / Town*</FONT></td>
 	<td><FONT SIZE=2>Area</FONT></td>
     </tr>
     <tr valign=top bgcolor=white>
-	<td><input type=text name=address size=40 value=""></td>
-	<td><input type=text name=city size=20 value=""></td>
+	<td><input type=text name=address size=40 value="<TMPL_VAR name="streetaddress">"></td>
+	<td><input type=text name=zipcode size=20 value="<TMPL_VAR name="zipcode">"> <br/><input type=text name=city size=20 value="<TMPL_VAR name="city">"></td>
 	<td>
       	<TMPL_VAR name="CGIbranch">
 	 </td>
@@ -70,7 +74,7 @@
 	<td COLSPAN=3><FONT SIZE=2>Contact Name*</td>
     </tr>
     <tr valign=top bgcolor=white>
-	<td COLSPAN=3><input type=text name=contactname size=40 value=""></td>
+	<td COLSPAN=3><input type=text name=contactname size=40 value="<TMPL_VAR name="contactname">"></td>
     </tr>
 
 
@@ -80,9 +84,9 @@
 	<td><FONT SIZE=2>Email</td>
     </tr>
     <tr valign=top bgcolor=white>
-	<td ><input type=text name=phoneday size=20 value=""></td>
-	<td><input type=text name=faxnumber size=20 value=""></td>
-	<td ><input type=text name=emailaddress size=20 value=""></td>
+	<td ><input type=text name=phoneday size=20 value="<TMPL_VAR name="phoneday">"></td>
+	<td><input type=text name=faxnumber size=20 value="<TMPL_VAR name="faxnumber">"></td>
+	<td ><input type=text name=emailaddress size=20 value="<TMPL_VAR name="emailaddress">"></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
@@ -91,7 +95,7 @@
 	<td><FONT SIZE=2>Notes</font></td>
     </tr>
     <tr valign=top bgcolor=white>
-	<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3></textarea></td>
+	<td COLSPAN=4><textarea name=altnotes wrap=physical cols=70 rows=3><TMPL_VAR name="altnotes"></textarea></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
@@ -104,7 +108,7 @@
 	<td ><FONT SIZE=2>Notes</font></td>
     </tr>
     <tr valign=top >
-	<td  COLSPAN=5><textarea name=borrowernotes wrap=physical cols=70 rows=3></textarea></td>
+	<td  COLSPAN=5><textarea name=borrowernotes wrap=physical cols=70 rows=3><TMPL_VAR name="borrowernotes"></textarea></td>
     </tr>
 
     <tr><td>&nbsp;</TD></TR>
