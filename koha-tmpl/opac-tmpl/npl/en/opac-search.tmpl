@@ -5,10 +5,35 @@
 
 <!-- CONTENT -->
 <div id="main">
+<form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
 <h1>Search the Catalog</h1>
 
-<form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
 <div class="form">
+
+<div id="search-sidebar"><div class="sidebar-box">
+			<h3>Results:</h3>
+			<p><label for="resultsperpage">Results per page:</label>
+			<select name="resultsperpage" id="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select></p>
+		<p><label for="orderby">Ordered by:</label>
+			<select name="orderby" id="orderby" size="1">
+				<option value="biblio.title">Title</option>
+				<option value="biblio.author">Author</option>
+				<option value="biblioitems.dewey">Dewey</option>
+				<option value="biblioitems.publicationyear">Publication Year</option>
+				<option value="biblioitems.publishercode">Publisher</option>
+			</select>
+		</p>
+</div>
+<div class="sidebar-box">
+			<h3>More Searches:</h3>
+			<h4><a href="/format-search.php">Search by Format and Date</a></h4>
+			<p>Find the latest additions</p>
+</div></div>
+
 <table>
 <tr><th><label for="keyword">Keyword</label></th><td><input type="hidden" name="op" value="do_search" />
 			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
@@ -45,20 +70,20 @@
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
 			<!-- TMPL_VAR name="CGIitemtype" --></td></tr>
-<tr><th><label for="branch">Location</label></th><td><input type="hidden" name="marclist" value="items.holdingbranch" />
+<tr><th><label for="branch">Location</label></th><td><input type="hidden" name="marclist" value="items.homebranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="=" />  
 				<!-- TMPL_VAR name="CGIbranch" --></td></tr>
-</table>
-<input type="submit" value="Search" class="submit" />
+</table>			
+<p><input type="submit" value="Search" class="submit" /></p>
 <table>
 <caption>Other options:</caption>
 <tr><th><label for="barcode">Barcode</label></th><td>
 				<input type="hidden" name="marclist" value="items.barcode" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
-				<input type="hidden" name="operator" value="start" />
+				<input type="hidden" name="operator" value="=" />
 				<input type="text" id="barcode" name="value" size="14" maxlength="14" /></td></tr>
 <tr><th><label for="dewey">Call Number</label></th><td><input type="hidden" name="marclist" value="biblioitems.dewey" />
 			<input type="hidden" name="and_or" value="and" />
@@ -86,25 +111,26 @@
 			<input type="hidden" name="operator" value="<=" />
 			<input type="text" id="puband" name="value" size="6" maxlength="4" /></td></tr>
 </table>
-		<p>Results per page :
-			<select name="resultsperpage" size="1">
-				<option value="20">20</option>
-				<option value="50">50</option>
-				<option value="100">100</option>
-			</select>
-		Ordered by
-			<select name="orderby" size="1">
-				<option value="biblio.title">Title</option>
-				<option value="biblio.author">Author</option>
-				<option value="biblioitems.dewey">Dewey</option>
-				<option value="biblioitems.publicationyear">Publication Year</option>
-				<option value="biblioitems.publishercode">Publisher</option>
-			</select>
-		</p>
-		<p>	<input type="submit" value="Search" class="submit" /></p>
+		<p><input type="submit" value="Search" class="submit" /></p>
 	</div>
 </form>
 
+<!-- Hide from NPL --><div class="content-block">
+<h3>Recent acquisitions</h3>
+	<form action="/cgi-bin/koha/opac-search.pl">
+		<p>
+			<!-- TMPL_VAR name="CGIitemtype" --> acquired recently (the most recent being first)
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="orderby" value="biblio.timestamp desc">
+			<input type="submit" value="Search" class="submit" />
+		</p>
+	</form>
+</div><!-- /Hide from NPL -->
 <script type="text/javascript">
 function sql_update() {
 document.f.sql.value="";
