@@ -124,7 +124,7 @@ dosql($dbh,"CREATE TABLE bibliothesaurus (code BIGINT not null AUTO_INCREMENT, f
 	print "done\n biblio/borrowers...";
 	dosql($dbh,"ALTER TABLE aqorderdelivery DROP PRIMARY KEY, ADD PRIMARY KEY(ordernumber);");
 	dosql($dbh,"ALTER TABLE aqorders DROP PRIMARY KEY, ADD PRIMARY KEY(ordernumber);");
-	dosql($dbh,"ALTER TABLE biblio DROP PRIMARY KEY, ADD PRIMARY KEY(biblionumber, biblionumber);");
+	dosql($dbh,"ALTER TABLE biblio DROP PRIMARY KEY, ADD PRIMARY KEY(biblionumber);");
 	dosql($dbh,"ALTER TABLE biblioitems DROP PRIMARY KEY, ADD PRIMARY KEY(biblionumber, biblioitemnumber)");
 	dosql($dbh,"CREATE INDEX SUBTITLE ON bibliosubtitle (subtitle(80))");
 	dosql($dbh,"ALTER TABLE borexp CHANGE borrowernumber borrowernumber INT (11) not null");
