@@ -78,7 +78,9 @@
 							<input type=hidden name=stickyduedate value=<TMPL_VAR name="stickyduedate">>
 							<input type=hidden name=branch value=<TMPL_VAR name="branch">>
 							<input type=hidden name=printer value=<TMPL_VAR name="printer">>
-							<TMPL_VAR name="responsesform">
+							<TMPL_LOOP NAME="responseloop">
+							<input type=hidden name="<TMPL_VAR="name">" value="<TMPL_VAR NAME="value">">
+							</TMPL_LOOP>
 							<input type=hidden name=answer value=Y>
 							<input type=submit value=Yes>
 							</form>
@@ -94,7 +96,9 @@
 							<input type=hidden name=stickyduedate value=<TMPL_VAR name="stickyduedate">>
 							<input type=hidden name=branch value=<TMPL_VAR name="branch">>
 							<input type=hidden name=printer value=<TMPL_VAR name="printer">>
-							<TMPL_VAR name="responsesform">
+							<TMPL_LOOP NAME="responseloop">
+							<input type=hidden name="<TMPL_VAR="name">" value="<TMPL_VAR NAME="value">">
+							</TMPL_LOOP>
 							<input type=hidden name=answer value=N>
 							<input type=submit value=No>
 							</form>

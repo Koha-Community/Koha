@@ -155,9 +155,13 @@ if ($borrowernumber) {
 ##################################################################################
 # HTML code....
 
-my $responsesform = '';
+my %responseform;
+my @responsearray;
 foreach (keys %responses) {
-    $responsesform.="<input type=hidden name=response-$_ value=$responses{$_}>\n";
+#    $responsesform.="<input type=hidden name=response-$_ value=$responses{$_}>\n";
+    $responseform{'name'}=$_;
+    $responseform{'value'}=$responses{$_};
+    push @responsearray,\%responseform;
 }
 my $questionform;
 my $stickyduedate;
@@ -289,7 +293,6 @@ $template->param(
 		branchname => $branches->{$branch}->{'branchname'},
 		printername => $printers->{$printer}->{'printername'},
 		allowborrow =>$allowborrow,
-
 		#question form
 		question => $question,
 		title => $iteminformation->{'title'},
@@ -304,14 +307,13 @@ $template->param(
 		monthoptions => $monthoptions,
 		yearoptions => $yearoptions,
 		stickyduedate => $stickyduedate,
-		responseform => $responsesform,
 		rejected => $rejected,
 		message => $message,
 		CGIselectborrower => $CGIselectborrower,
-
 		amountold => $amountold,
 		todayissues => \@realtodayissues,
-		previssues => \@realprevissues
+		previssues => \@realprevissues,
+		responseloop => \@responsearray 
 	);
 
 if ($branchcookie) {
