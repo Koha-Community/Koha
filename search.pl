@@ -192,7 +192,7 @@ if ($count>10) {
 }
 
 $template->param(numbers => \@numbers);
-if (C4::Context->preference('acquisitions') eq 'simple') {
+if (C4::Context->preference('marc') eq 'on') {
 	$template->param(script => "MARCdetail.pl");
 } else {
 	$template->param(script => "detail.pl");
