@@ -12,20 +12,97 @@
 	background-color:#FFFFFF;
 	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
 }
+
+/* TABLES */
+table {
+	border:1px solid #000000;
+	border-collapse:collapse;
+}
+
+table.noborder {
+	border:0px;
+	border-collapse:collapse;
+	float:center;
+}
+
+/* header */
+th {
+	background-color: #99cccc;
+	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	font-weight:bold;
+	text-align:center;
+	font-size:10pt;
+	border-left:1px solid #000000;
+	border-bottom:1px solid #000000;
+	border-top:1px solid #000000;
+	padding:5px;
+}
+/* standard cell */
+td {
+	font-size:10pt;
+	border-left:0px;
+}
+
+/* hilighted cell */
+td.hilighted {
+	font-size:10pt;
+	border-left:0px;
+	background-color:#ffffcc;
+}
+
+h1 {
+	color:#666666;
+	background-color:#DDDDDD;
+	background-image:url("/opac-tmpl/default/images/background-mem.gif");
+	font-size: 150%;
+	text-align:center;
+	padding: 2px;
+	border: 4px inset #666666;
+	width:95%;
+}
+
 #problem {
 	color: red;
 	font-weight:bold;
 }
 #menubar {
 	border-top:1px solid #666666;
-	font: 1.2em sans-serif;
+	font: 1em sans-serif;
 	background-color:#DDDDDD;
+	padding-bottom:5px;
 }
 #submenu {
-	font: 0.5em sans-serif;
+	font: 0.8em sans-serif;
 	background-color:#EEEEEE;
 	border-left:1px solid #000000;
+	padding-top:5px;
 }
+
+#mainbloc {
+	float:left;
+	width:90%;
+	border:1px solid #000000;
+	background-color:#FFFFFF;
+	margin-left:10px;
+	margin-right:10px;
+	padding-bottom:100px;
+	padding-left:10px;
+	padding-top:10px;
+	padding-right:10px;
+}
+
+#bloc25 {
+	float:left;
+	width=25%;
+	border:1;
+}
+#bloc100 {
+	float:left;
+	position:relative;
+	width=90%;
+	border:1;
+}
+
 a {
 	text-decoration: none;
 }
@@ -55,6 +132,8 @@ a.submenu2 {
 .koha {
 	text-align:center;
 	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
+	padding-left:10px;
+	padding-right:10px;
 	}
 
 a.home {

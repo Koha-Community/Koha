@@ -42,69 +42,25 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 
 <!------------------------MENUS-------------------------------->
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
-<tr height="65">
-	<td valign="bottom" align="left">
-		<table width="100%" cellpadding=0 cellspacing=0 height=60>
-		<tr>
-			<td>
-			<div id="menubar">
-			<table cellpadding=0 cellspacing=0  border=0 height=29 width="70%">
-				<tr>
-					<td class="koha"><b>KOHA</b></td>
-					<td>
-						<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>
-					</td>
-					<td>
-						<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
-					</td>
-					<td>
-						<a class="members" href="/cgi-bin/koha/members-home.pl">Members</a>
-					</td>
-					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
-					</td>
-					<td>
-						<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
-					</td>
-					<td>
-						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
-					</td>
-					<td>
-						<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
-					</td>
-					<td>
-						<a class="about" href="/cgi-bin/koha/about.pl">About</a>
-					</td>
-				</TR>
-			</TABLE>
-			</div>
-			<table cellpadding=0 cellspacing=0  border=0 height=29>
-				<tr>
-					<td width="100"></td>
-					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
-					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Quick search</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">MARC search</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/shelves.pl" class="submenu">Virtual shelves</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Add biblio</a>
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
-					</td>
-				</tr>
-			</table>
-		</td></tr></table>
-	</TD>
-</tr>
-</table>
-<BLOCKQUOTE>
+<div id="menubar">
+	<span class="koha">KOHA</span>
+	<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>
+	<a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Catalogue</a>
+	<a class="members" href="/cgi-bin/koha/members-home.pl">Members</a>
+	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>
+	<a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
+	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
+	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
+	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
+</div>
+<div id="submenu">
+<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Quick search</a>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">MARC search</a>
+	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Add biblio</a>
+	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
+
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
 <!-- TMPL_ELSE -->
