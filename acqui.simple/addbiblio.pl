@@ -212,7 +212,7 @@ sub build_tabs ($$$$) {
 					if ($tag<10) {
 						my $value=$field->data();
 						my $subfield="@";
-						push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth))
+						push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth))
 								unless ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						$i++;
 					} else {
@@ -222,7 +222,7 @@ sub build_tabs ($$$$) {
 							my $value=$subfields[$subfieldcount][1];
 							next if subfield_is_koha_internal_p($subfield);
 							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
-							push(@subfields_data, &create_input($tag,$subfield,$value,$i,$tabloop,$record,$authorised_values_sth));
+							push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth));
 							$i++;
 						}
 					}
