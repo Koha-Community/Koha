@@ -4,6 +4,7 @@
 #written 8/11/99
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Output;
 use C4::Stats;

@@ -3,6 +3,7 @@
 #now script to do searching for acquisitions
 
 use strict;
+use C4::Auth;
 use C4::Search;
 use CGI;
 use C4::Output;

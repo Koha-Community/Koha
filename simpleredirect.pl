@@ -4,6 +4,7 @@
 #used by members section
 
 use CGI;
+use C4::Auth;
 use strict;
 
 my $input=new CGI;

@@ -4,6 +4,7 @@
 #script to write off accounts
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Database;
 use C4::Stats;

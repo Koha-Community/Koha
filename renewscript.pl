@@ -4,6 +4,7 @@
 #script to renew items from the web
 
 use CGI;
+use C4::Auth;
 use C4::Circulation::Renewals2;
 #get input
 my $input= new CGI;

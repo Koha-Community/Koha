@@ -4,6 +4,7 @@
 #written 29/2/00 by chris@katipo.co.nz
 
 use strict;
+use C4::Auth;
 use CGI;
 use C4::Output;
 use C4::Acquisitions;

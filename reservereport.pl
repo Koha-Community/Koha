@@ -4,6 +4,7 @@
 #script to display reports
 
 use C4::Stats;
+use C4::Auth;
 use strict;
 use Date::Manip;
 use CGI;

@@ -4,6 +4,7 @@
 #script to display borrowers account details
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;

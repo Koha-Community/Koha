@@ -5,6 +5,7 @@
 #last update 27/1/2000 by chris@katipo.co.nz
 
 use strict;
+use C4::Auth;
 #use DBI;
 use C4::Search;
 use CGI;

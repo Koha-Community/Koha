@@ -9,6 +9,7 @@
 my $starttime=gettime();
 
 use C4::Database;
+use C4::Auth;
 use CGI;
 use strict;
 use C4::Acquisitions;

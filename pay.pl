@@ -4,6 +4,7 @@
 #part of the koha library system, script to facilitate paying off fines
 
 use strict;
+use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Search;

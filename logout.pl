@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use CGI;
+use C4::Auth;
 use C4::Database;
 use C4::Output;
 
