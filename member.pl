@@ -25,54 +25,44 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
-
+use HTML::Template;
 
 my $input = new CGI;
+
+my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
+my $template = HTML::Template->new( filename => $tmpldata{'path'}, 
+				    die_on_bad_params => 0,
+				    loop_context_vars => 1 );
+
 my $member=$input->param('member');
 $member=~ s/\,//g;
-print $input->header;
-#start the page and read in includes
-print startpage();
-print startmenu('member');
-my @inputs=(["text","member",$member],
-            ["reset","reset","clr"]);
-print mkheadr(2,'Member Search');
-print mkformnotable("/cgi-bin/koha/member.pl",@inputs);
-print <<printend 
 
-printend
-;
-print "You Searched for $member<p>";
-print mktablehdr;
-print mktablerow(8,'#99cc33',bold('Card'),bold('Surname'),bold('Firstname'),bold('Category')
-,bold('Address'),bold('OD/Issues'),bold('Charges'),bold('Notes'),'/images/background-mem.gif');
 my $env;
 my ($count,$results)=BornameSearch($env,$member,'web');
-#print $count;
-my $toggle="white";
+
+my @resultsdata;
 for (my $i=0; $i < $count; $i++){
   #find out stats
   my ($od,$issue,$fines)=borrdata2($env,$results->[$i]{'borrowernumber'});
-  $fines=$fines+0;
-  if ($toggle eq 'white'){
-    $toggle="#ffffcc";
-  } else {
-    $toggle="white";
-  }
-  #mklink("/cgi-bin/koha/memberentry.pl?bornum=".$results->[$i]{'borrowernumber'},$results->[$i]{'cardnumber'}),
-  print mktablerow(8,$toggle,mklink("/cgi-bin/koha/moremember.pl?bornum=".$results->[$i]{'borrowernumber'},$results->[$i]{'cardnumber'}),
-  $results->[$i]{'surname'},$results->[$i]{'firstname'},
-  $results->[$i]{'categorycode'},$results->[$i]{'streetaddress'}." ".$results->[$i]{'city'},"$od/$issue",$fines,
-  $results->[$i]{'borrowernotes'});
+
+  my %row = (
+        borrowernumber => $results->[$i]{'borrowernumber'},
+        cardnumber => $results->[$i]{'cardnumber'},
+        surname => $results->[$i]{'surname'},
+        firstname => $results->[$i]{'firstname'},
+        categorycode => $results->[$i]{'categorycode'},
+        streetaddress => $results->[$i]{'streetaddress'},
+        city => $results->[$i]{'city'},
+        odissue => "$od/$issue",
+        fines => $fines,
+        borrowernotes => $results->[$i]{'borrowernotes'});
+  push(@resultsdata, \%row);
 }
-print mktableft;
-print <<printend
-<form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=image src="/images/button-add-member.gif"  WIDTH=188  HEIGHT=44  ALT="Add New Member" BORDER=0 ></a><br>
-<INPUT TYPE="radio" name="chooseform" value="adult" checked>Adult
-<INPUT TYPE="radio" name="chooseform" value="organisation" >Organisation
-</form>
-printend
-;
-print endmenu('member');
-print endpage();
+
+$template->param( startmenumember => join ('', startmenu('member')),
+			endmenumember   => join ('', endmenu('member')),
+			member          => $member,
+			resultsloop     => \@resultsdata );
+			
+print "Content-Type: text/html\n\n", $template->output;

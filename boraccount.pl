@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#wrriten 11/1/2000 by chris@katipo.oc.nz
+#writen 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details
 
 
@@ -25,74 +25,47 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Search;
+use HTML::Template;
+
 my $input=new CGI;
 
+my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+my %tmpldata = pathtotemplate ( template => 'boraccount.tmpl', theme => $theme );
+my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
 
 my $bornum=$input->param('bornum');
 #get borrower details
 my $data=borrdata('',$bornum);
-
 
 #get account details
 my %bor;
 $bor{'borrowernumber'}=$bornum;                            
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);   
 
+my @accountrows; # this is for the tmpl-loop
 
-  
-print $input->header;
-print startpage();
-print startmenu('member');
-print <<printend
-<FONT SIZE=6><em>Account for $data->{'firstname'} $data->{'surname'}</em></FONT><P>
-<a href=/cgi-bin/koha/maninvoice.pl?bornum=$bornum><image src=/images/create-man-invoice.gif border=0></a>
- &nbsp; <a href=/cgi-bin/koha/mancredit.pl?bornum=$bornum><image src=/images/create-man-credit.gif border=0></a>
-<center>
-<p>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-<TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><B>FINES & CHARGES</TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>AMOUNT</TD>
-<td  bgcolor="99cc33" background="/images/background-mem.gif" colspan=1><B>STILL OWING</TD>
-</TR>
-
-printend
-;
 for (my $i=0;$i<$numaccts;$i++){
   $accts->[$i]{'amount'}+=0.00;
   $accts->[$i]{'amountoutstanding'}+=0.00;
-  print <<printend
-  <tr VALIGN=TOP  >
-  <td>$accts->[$i]{'date'}</td>
-  <TD>$accts->[$i]{'description'}
-printend
-;
+  my %row = (   'date'              => $accts->[$i]{'date'},
+		'description'       => $accts->[$i]{'description'},
+  		'amount'            => $accts->[$i]{'amount'},
+		'amountoutstanding' => $accts->[$i]{'amountoutstanding'} );
+
   if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
-     print "$accts->[$i]{'title'}";
+    $row{'printtitle'}=1;
+    $row{'title'} = $accts->[$i]{'title'};
   }
-  print <<printend
-  </td>
 
-  <td>$accts->[$i]{'amount'}</td>
-  <TD>$accts->[$i]{'amountoutstanding'}</td>
-</tr>
-printend
-;
+  push(@accountrows, \%row);
 }
-print <<printend
-<tr VALIGN=TOP  >
-<TD></td>
-<TD colspan=2><b>Total Due</b></td>
 
-<TD><b>$total</b></td>
+$template->param( startmenumember => startmenu('member'),
+			endmenumember   => endmenu('member'),
+			firstname       => $data->{'firstname'},
+			surname         => $data->{'surname'},
+			bornum          => $bornum,
+			total           => $total,
+			accounts        => \@accountrows ); 
 
-</tr>
-</table>
-<br clear=all>
-<p> &nbsp; </p>
-
-printend
-;
-print endmenu('member');
-print endpage();
-
+print "Content-Type: text/html\n\n", $template->output;
