@@ -31,10 +31,17 @@
 	</form>
 
 	<h2>Recent acquisitions</h2>
-	<form action="/cgi-bin/koha/opac-new.pl">
+	<form action="/cgi-bin/koha/opac-search.pl">
 		<p>
-		<!-- TMPL_VAR name="CGIitemtype" --> acquired in the last <b><input type="text" name="duration" value="30" size="3" /></b> days
-		<input type="submit" value="OK" class="button" />
+			<!-- TMPL_VAR name="CGIitemtype" --> acquired recently (the most recent being first)
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="orderby" value="biblio.timestamp desc">
+			<input type="submit" value="OK" class="button" />
 		</p>
 	</form>
 	<h2>Other options</h2>

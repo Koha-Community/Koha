@@ -21,7 +21,7 @@ while (my ($value,$lib) = $sth->fetchrow_array) {
 	$itemtypes{$value}=$lib;
 }
 
-my $CGIitemtype=CGI::scrolling_list( -name     => 'itemtype',
+my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
 			-values   => \@itemtype,
 			-labels   => \%itemtypes,
 			-size     => 1,

@@ -57,7 +57,6 @@ on what is passed to it, it calls the appropriate search function.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-&newsearch
 &CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
 &itemdata &bibdata &GetItems &borrdata &itemnodata &itemcount
 &borrdata2 &NewBorrowerNumber &bibitemdata &borrissues
@@ -67,92 +66,6 @@ on what is passed to it, it calls the appropriate search function.
 &isbnsearch &breedingsearch &getbranchname &getborrowercategory);
 # make all your functions, whether exported or not;
 
-
-=item newsearch
-	my (@results) = newsearch($itemtype,$duration,$number_of_results,$startfrom);
-c<newsearch> find biblio acquired recently (last 30 days)
-=cut
-sub newsearch {
-	my ($itemtype,$duration,$num,$offset)=@_;
-
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT to_days( now( ) ) - to_days( dateaccessioned ) AS duration,  biblio.biblionumber, barcode, title, author, classification, itemtype, dewey, dateaccessioned, price, replacementprice
-						FROM items, biblio, biblioitems
-						WHERE biblio.biblionumber = biblioitems.biblionumber AND
-						items.biblionumber = biblio.biblionumber AND
-						to_days( now( ) ) - to_days( dateaccessioned ) < ? and itemtype=?
-						ORDER BY duration ASC ");
-	$sth->execute($duration,$itemtype);
-	my $i=0;
-	my @result;
-	while (my $data = $sth->fetchrow_hashref) {
-		if ($i>=$offset && $i<$num+$offset) {
-			my ($counts) = itemcount2("", $data->{'biblionumber'}, 'intra');
-			my $subject2=$data->{'subject'};
-			$subject2=~ s/ /%20/g;
-			$data->{'itemcount'}=$counts->{'total'};
-			my $totalitemcounts=0;
-			foreach my $key (keys %$counts){
-				if ($key ne 'total'){	# FIXME - Should ignore 'order', too.
-					#$data->{'location'}.="$key $counts->{$key} ";
-					$totalitemcounts+=$counts->{$key};
-					$data->{'locationhash'}->{$key}=$counts->{$key};
-				}
-			}
-			my $locationtext='';
-			my $locationtextonly='';
-			my $notavailabletext='';
-			foreach (sort keys %{$data->{'locationhash'}}) {
-				if ($_ eq 'notavailable') {
-					$notavailabletext="Not available";
-					my $c=$data->{'locationhash'}->{$_};
-					$data->{'not-available-p'}=$totalitemcounts;
-					if ($totalitemcounts>1) {
-					$notavailabletext.=" ($c)";
-					$data->{'not-available-plural-p'}=1;
-					}
-				} else {
-					$locationtext.="$_ ";
-					my $c=$data->{'locationhash'}->{$_};
-					if ($_ eq 'Item Lost') {
-					$data->{'lost-p'}=$totalitemcounts;
-					$data->{'lost-plural-p'}=1
-							if $totalitemcounts > 1;
-					} elsif ($_ eq 'Withdrawn') {
-					$data->{'withdrawn-p'}=$totalitemcounts;
-					$data->{'withdrawn-plural-p'}=1
-							if $totalitemcounts > 1;
-					} elsif ($_ eq 'On Loan') {
-					$data->{'on-loan-p'}=$totalitemcounts;
-					$data->{'on-loan-plural-p'}=1
-							if $totalitemcounts > 1;
-					} else {
-					$locationtextonly.=$_;
-					$locationtextonly.=" ($c), "
-							if $totalitemcounts>1;
-					}
-					if ($totalitemcounts>1) {
-					$locationtext.=" ($c), ";
-					}
-				}
-			}
-			if ($notavailabletext) {
-				$locationtext.=$notavailabletext;
-			} else {
-				$locationtext=~s/, $//;
-			}
-			$data->{'location'}=$locationtext;
-			$data->{'location-only'}=$locationtextonly;
-			$data->{'subject2'}=$subject2;
-			$data->{'use-location-flags-p'}=1; # XXX
-
-			push @result,$data;
-		}
-		$i++
-	}
-	return($i,@result);
-
-}
 
 =item findguarantees
 

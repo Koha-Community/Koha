@@ -22,6 +22,8 @@ require Exporter;
 use DBI;
 use C4::Context;
 use C4::Biblio;
+use C4::Date;
+use Date::Manip;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -283,6 +285,7 @@ sub catalogsearch {
 				$newline{CN} = \@CNresults2;
 			    $newline{'even'} = 1 if $#finalresult % 2 == 0;
 				$newline{'odd'} = 1 if $#finalresult % 2 == 1;
+				$newline{'timestamp'} = format_date($newline{timestamp});
 				@CNresults = ();
 				push @finalresult, \%newline;
 				$totalitems=0;
