@@ -19,20 +19,20 @@
 		<label for="keyword">Quick Search:</label><input id="keyword" type="text"  size="25" name="keyword" />
 		<input type="submit" value="Search" class="submit" />
 		</form>
-		<ul><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=0&amp;type=intranet">Advanced Search</a></li> 
+		<ul><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=0&amp;type=intranet">Advanced Search</a></li> <!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li> /Display for NPL -->
 <li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">MARC Search</a></li> </ul>
 		</dd>
-
+<!-- Hide from NPL -->
 <dt><a href="/cgi-bin/koha/reports-home.pl">Accounts and Reports
 			</a></dt>
 			<dd>Till reconciliation, overdues, and inventory</dd>
-
+<!-- /Hide from NPL -->
 <dt><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a></dt>
 			<dd><ul>
-
-<li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Advanced Cataloging</a> </li>  <li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li> </ul></dd>
- <dt><a href="/cgi-bin/koha/admin-home.pl">Koha Administration</a></dt>
-<dd><ul><li><a href="/cgi-bin/koha/admin-home.pl">System Adminstration Home</a></li> <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li></ul></dd> 
+<!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Enter Brief Record (Temp Cards)</a> </li> /Display for NPL -->
+<li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Advanced Cataloging</a> </li> <!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li><li><a href="/cgi-bin/koha/bull-home.pl">Serials</a> Manage serial subscriptions and issues</li> <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual shelves</a> Virtual shelves can be used by librarian or patrons to build virtual libraries inside the "real" one. The virtual shelf can be used by a teacher to help his/her students searching information on a specific topic. It can be used by a library to define "most valuable books for [some category of patron]"</li><!-- /Hide from NPL --></ul></dd>
+<!-- Hide from NPL --><dt><a href="/cgi-bin/koha/admin-home.pl">Koha Administration</a></dt>
+<dd><ul><li><a href="/cgi-bin/koha/admin-home.pl">System Adminstration Home</a></li> <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li><li><a href="/cgi-bin/koha/barcodes/barcodes.pl">Barcodes generator</a></li><li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></li><li><a href="/cgi-bin/koha/import/breeding.pl">Import to reservoir</a></li></ul></dd> <!-- /Hide from NPL -->
 </dl></div>
             
 </div>
