@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.33  2003/01/23 12:22:37  tipaul
+# adding char_decode to decode MARC21 or UNIMARC extended chars
+#
 # Revision 1.32  2002/12/16 15:08:50  tipaul
 # small but important bugfix (fixes a problem in export)
 #
@@ -190,7 +193,7 @@ $VERSION = 0.01;
 	     &delitem &deletebiblioitem &delbiblio
 	     &getitemtypes &getbiblio
 	     &getbiblioitembybiblionumber
-	     &getbiblioitem &getitemsbybiblioitem &isbnsearch
+	     &getbiblioitem &getitemsbybiblioitem
 	     &skip
 	     &newcompletebiblioitem
 
@@ -210,6 +213,7 @@ $VERSION = 0.01;
 		&MARCkoha2marcItem &MARChtml2marc
 	     &MARCgetbiblio &MARCgetitem
 	     &MARCaddword &MARCdelword
+		&char_decode
  );
 
 #
@@ -558,18 +562,13 @@ sub MARCgetbiblio {
 			$sth2->finish;
 			$row->{'subfieldvalue'}=$row2->{'subfieldvalue'};
 		}
-#		warn "$row->{bibid} = $row->{tag} - $row->{subfieldcode} -> value : $row->{subfieldvalue}";
 		if ($row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag) {
 		    if (length($prevtag) <3) {
 				$prevtag = "0".$prevtag;
 			}
 			$previndicator.="  ";
-#			warn "NEW : subfieldcode : $prevtag".substr($previndicator,0,1).substr($previndicator,1,1),;
-#			foreach my $x (keys %subfieldlist) {
-#				warn "                      $x => ".$subfieldlist{$x};
-#			}
 			my $field = MARC::Field->new( $prevtag, substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
-#			warn $field;
+			undef %subfieldlist;
 			$record->add_fields($field);
 			$prevtagorder=$row->{tagorder};
 			$prevtag = $row->{tag};
@@ -577,10 +576,6 @@ sub MARCgetbiblio {
 			%subfieldlist;
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 		} else {
-#			warn "subfieldcode : $row->{'subfieldcode'} / value : $row->{'subfieldvalue'}, tag : $row->{tag}";
-#			if (%subfieldlist->{$row->{'subfieldcode'}}) {
-#				%subfieldlist->{$row->{'subfieldcode'}}.='|';
-#			}
 			%subfieldlist->{$row->{'subfieldcode'}} .= $row->{'subfieldvalue'};
 			$prevtag= $row->{tag};
 			$previndicator=$row->{tag_indicator};
@@ -588,10 +583,6 @@ sub MARCgetbiblio {
 	}
 	# the last has not been included inside the loop... do it now !
 	my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
-#			warn "NEW : subfieldcode : $prevtag".substr($previndicator,0,1).substr($previndicator,1,1),;
-#			foreach my $x (keys %subfieldlist) {
-#				warn "                      $x => ".$subfieldlist{$x};
-#			}
 	$record->add_fields($field);
 	return $record;
 }
@@ -2029,70 +2020,6 @@ biblio.biblionumber = items.biblionumber and biblioitemnumber
     return($count, @results);
 } # sub getitemsbybiblioitem
 
-sub isbnsearch {
-    my ($isbn) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $count = 0;
-    my $query;
-    my $sth;
-    my @results;
-
-    $isbn  = $dbh->quote($isbn);
-    $query = "Select distinct biblio.* from biblio, biblioitems where
-biblio.biblionumber = biblioitems.biblionumber
-and isbn = $isbn";
-    $sth   = $dbh->prepare($query);
-
-    $sth->execute;
-    while (my $data = $sth->fetchrow_hashref) {
-        $results[$count] = $data;
-	$count++;
-    } # while
-
-    $sth->finish;
-    return($count, @results);
-} # sub isbnsearch
-
-#sub skip {
-# At the moment this is just a straight copy of the subject code.  Needs heavy
-# modification to work for additional authors, obviously.
-# Check for additional author changes
-
-#    my $newadditionalauthor='';
-#    my $additionalauthors;
-#    foreach $newadditionalauthor (@{$biblio->{'additionalauthor'}}) {
-#	$additionalauthors->{$newadditionalauthor}=1;
-#	if ($origadditionalauthors->{$newadditionalauthor}) {
-#	    $additionalauthors->{$newadditionalauthor}=2;
-#	} else {
-#	    my $q_newadditionalauthor=$dbh->quote($newadditionalauthor);
-#	    my $sth=$dbh->prepare("insert into biblioadditionalauthors (additionalauthor,biblionumber) values ($q_newadditionalauthor, $biblionumber)");
-#	    $sth->execute;
-#	    logchange('kohadb', 'add', 'biblio', 'additionalauthor', $newadditionalauthor);
-#	    my $subfields;
-#	    $subfields->{1}->{'Subfield_Mark'}='a';
-#	    $subfields->{1}->{'Subfield_Value'}=$newadditionalauthor;
-#	    my $tag='650';
-#	    my $Record_ID;
-#	    foreach $Record_ID (@marcrecords) {
-#		addTag($env, $Record_ID, $tag, ' ', ' ', $subfields);
-#		logchange('marc', 'add', $Record_ID, '650', 'a', $newadditionalauthor);
-#	    }
-#	}
-#    }
-#    my $origadditionalauthor;
-#    foreach $origadditionalauthor (keys %$origadditionalauthors) {
-#	if ($additionalauthors->{$origadditionalauthor} == 1) {
-#	    my $q_origadditionalauthor=$dbh->quote($origadditionalauthor);
-#	    logchange('kohadb', 'delete', 'biblio', '$biblionumber', 'additionalauthor', $origadditionalauthor);
-#	    my $sth=$dbh->prepare("delete from biblioadditionalauthors where biblionumber=$biblionumber and additionalauthor=$q_origadditionalauthor");
-#	    $sth->execute;
-#	}
-#    }
-#
-#}
-#    $dbh->disconnect;
-#}
 
 sub logchange {
 # Subroutine to log changes to databases
@@ -2170,6 +2097,145 @@ sub getoraddbiblio {
 	return $biblionumber,$error;
 
 } # sub getoraddbiblio
+
+sub char_decode {
+	# converts ISO 5426 coded string to ISO 8859-1
+	# sloppy code : should be improved in next issue
+	my ($string) = @_ ;
+	$_ = $string ;
+	if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+		s/\xe1/Æ/gm ;
+		s/\xe2/Ð/gm ;
+		s/\xe9/Ø/gm ;
+		s/\xec/þ/gm ;
+		s/\xf1/æ/gm ;
+		s/\xf3/ð/gm ;
+		s/\xf9/ø/gm ;
+		s/\xfb/ß/gm ;
+		s/\xc1\x61/à/gm ;
+		s/\xc1\x65/è/gm ;
+		s/\xc1\x69/ì/gm ;
+		s/\xc1\x6f/ò/gm ;
+		s/\xc1\x75/ù/gm ;
+		s/\xc1\x41/À/gm ;
+		s/\xc1\x45/È/gm ;
+		s/\xc1\x49/Ì/gm ;
+		s/\xc1\x4f/Ò/gm ;
+		s/\xc1\x55/Ù/gm ;
+		s/\xc2\x41/Á/gm ;
+		s/\xc2\x45/É/gm ;
+		s/\xc2\x49/Í/gm ;
+		s/\xc2\x4f/Ó/gm ;
+		s/\xc2\x55/Ú/gm ;
+		s/\xc2\x59/Ý/gm ;
+		s/\xc2\x61/á/gm ;
+		s/\xc2\x65/é/gm ;
+		s/\xc2\x69/í/gm ;
+		s/\xc2\x6f/ó/gm ;
+		s/\xc2\x75/ú/gm ;
+		s/\xc2\x79/ý/gm ;
+		s/\xc3\x41/Â/gm ;
+		s/\xc3\x45/Ê/gm ;
+		s/\xc3\x49/Î/gm ;
+		s/\xc3\x4f/Ô/gm ;
+		s/\xc3\x55/Û/gm ;
+		s/\xc3\x61/â/gm ;
+		s/\xc3\x65/ê/gm ;
+		s/\xc3\x69/î/gm ;
+		s/\xc3\x6f/ô/gm ;
+		s/\xc3\x75/û/gm ;
+		s/\xc4\x41/Ã/gm ;
+		s/\xc4\x4e/Ñ/gm ;
+		s/\xc4\x4f/Õ/gm ;
+		s/\xc4\x61/ã/gm ;
+		s/\xc4\x6e/ñ/gm ;
+		s/\xc4\x6f/õ/gm ;
+		s/\xc8\x45/Ë/gm ;
+		s/\xc8\x49/Ï/gm ;
+		s/\xc8\x65/ë/gm ;
+		s/\xc8\x69/ï/gm ;
+		s/\xc8\x76/ÿ/gm ;
+		s/\xc9\x41/Ä/gm ;
+		s/\xc9\x4f/Ö/gm ;
+		s/\xc9\x55/Ü/gm ;
+		s/\xc9\x61/ä/gm ;
+		s/\xc9\x6f/ö/gm ;
+		s/\xc9\x75/ü/gm ;
+		s/\xca\x41/Å/gm ;
+		s/\xca\x61/å/gm ;
+		s/\xd0\x43/Ç/gm ;
+		s/\xd0\x63/ç/gm ;
+	} else {
+		if(/[\xc1-\xff]/) {
+			s/\xe1\x61/à/gm ;
+			s/\xe1\x65/è/gm ;
+			s/\xe1\x69/ì/gm ;
+			s/\xe1\x6f/ò/gm ;
+			s/\xe1\x75/ù/gm ;
+			s/\xe1\x41/À/gm ;
+			s/\xe1\x45/È/gm ;
+			s/\xe1\x49/Ì/gm ;
+			s/\xe1\x4f/Ò/gm ;
+			s/\xe1\x55/Ù/gm ;
+			s/\xe2\x41/Á/gm ;
+			s/\xe2\x45/É/gm ;
+			s/\xe2\x49/Í/gm ;
+			s/\xe2\x4f/Ó/gm ;
+			s/\xe2\x55/Ú/gm ;
+			s/\xe2\x59/Ý/gm ;
+			s/\xe2\x61/á/gm ;
+			s/\xe2\x65/é/gm ;
+			s/\xe2\x69/í/gm ;
+			s/\xe2\x6f/ó/gm ;
+			s/\xe2\x75/ú/gm ;
+			s/\xe2\x79/ý/gm ;
+			s/\xe3\x41/Â/gm ;
+			s/\xe3\x45/Ê/gm ;
+			s/\xe3\x49/Î/gm ;
+			s/\xe3\x4f/Ô/gm ;
+			s/\xe3\x55/Û/gm ;
+			s/\xe3\x61/â/gm ;
+			s/\xe3\x65/ê/gm ;
+			s/\xe3\x69/î/gm ;
+			s/\xe3\x6f/ô/gm ;
+			s/\xe3\x75/û/gm ;
+			s/\xe4\x41/Ã/gm ;
+			s/\xe4\x4e/Ñ/gm ;
+			s/\xe4\x4f/Õ/gm ;
+			s/\xe4\x61/ã/gm ;
+			s/\xe4\x6e/ñ/gm ;
+			s/\xe4\x6f/õ/gm ;
+			s/\xe8\x45/Ë/gm ;
+			s/\xe8\x49/Ï/gm ;
+			s/\xe8\x65/ë/gm ;
+			s/\xe8\x69/ï/gm ;
+			s/\xe8\x76/ÿ/gm ;
+			s/\xe9\x41/Ä/gm ;
+			s/\xe9\x4f/Ö/gm ;
+			s/\xe9\x55/Ü/gm ;
+			s/\xe9\x61/ä/gm ;
+			s/\xe9\x6f/ö/gm ;
+			s/\xe9\x75/ü/gm ;
+			s/\xea\x41/Å/gm ;
+			s/\xea\x61/å/gm ;
+		}
+	}
+	# this handles non-sorting blocks (if implementation requires this)
+	$string = nsb_clean($_) ;
+	return($string) ;
+}
+
+sub nsb_clean {
+	my $NSB = '\x88' ;		# NSB : begin Non Sorting Block
+	my $NSE = '\x89' ;		# NSE : Non Sorting Block end
+	# handles non sorting blocks
+	my ($string) = @_ ;
+	$_ = $string ;
+	s/$NSB/(/gm ;
+	s/[ ]{0,1}$NSE/) /gm ;
+	$string = $_ ;
+	return($string) ;
+}
 
 END { }       # module clean-up code here (global destructor)
 
