@@ -1,21 +1,29 @@
-<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog Maintenance<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
-
+<div id="main">
 <!-- TMPL_IF NAME=allsub-p -->
+<table>
+<caption>Results</caption>
 <!-- TMPL_LOOP NAME="loop" -->
-"<a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" escape=url -->" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME=sub2 escape=url -->');window1.focus()"><!-- TMPL_VAR NAME="subject" escape=html -->"</a><br>
+<tr><td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" escape=url -->" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME=sub2 escape=url -->');window1.focus()"><!-- TMPL_VAR NAME="subject" escape=html --></a></td></tr>
 <!-- /TMPL_LOOP -->
+</table>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME=modsub-p -->
 <form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
-Subject:<input type="text" value="<!-- TMPL_VAR NAME="sub" escape=html -->" name="sub" size="40"><br>
-<input type="hidden" name="type" value="upsub">
-<input type="hidden" name="oldsub" value="<!-- TMPL_VAR NAME="sub" escape=html -->">
-<input type="submit" value="modify">
+<div class="error">This will change the subject headings on <strong>all</strong> the records this subject is applied to.</div>
+<table>
+<caption>Subject Heading Global Update</caption>
+<tr><td><label for="sub">Subject:</label></td><td><input type="text" value="<!-- TMPL_VAR NAME="sub" escape=html -->" name="sub" id="sub" size="40" /><input type="hidden" name="type" value="upsub" />
+<input type="hidden" name="oldsub" value="<!-- TMPL_VAR NAME="sub" escape=html -->" /></td></tr>
+</table>
+<input type="submit" value="Modify" class="submit" />
 </form>
-<p>This will change the subject headings on all the biblios this subject is applied to.
 <!-- /TMPL_IF -->
 
 
@@ -30,10 +38,9 @@ is now <!-- TMPL_VAR NAME="sub" escape=html -->
 
 
 <!-- TMPL_IF NAME=undel-p -->
-<table border="0">
+<table>
 <thead>
 <tr><th>Title</th><th>Author</th><th>Undelete</th></tr>
-<tbody>
 <!-- TMPL_LOOP NAME="loop" -->
 <tr>
 <td><!-- TMPL_VAR NAME="title" escape=html --></td>
@@ -46,50 +53,58 @@ is now <!-- TMPL_VAR NAME="sub" escape=html -->
 
 
 <!-- TMPL_IF NAME=finun-p -->
-Succesfully undeleted
-<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Back to Catalogue Maintenance</a>
+<h3>Succesfully undeleted</h3>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Back to Catalogue Maintenance</a></p>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME=fixitemtype-p -->
 <form method="post" action="/cgi-bin/koha/maint/catmaintain.pl">
-<input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="bi" escape=html>">
-<input type="hidden" name="type" value="updatetype">
-Itemtype:<input type="text" name="itemtype" value="<!-- TMPL_VAR NAME="item" escape=html>"><br>
-<input type="submit" value="Change">
+<table>
+<tr><td><label for="itemtype">Itemtype:</label></td><td><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="bi" escape=html>" />
+<input type="hidden" name="type" value="updatetype" />
+<input type="text" name="itemtype" id="itemtype" value="<!-- TMPL_VAR NAME="item" escape=html>" /></td></tr>
+</table>
+<input type="submit" value="Change" class="submit" />
 </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME=updatetype-p -->
-Updated successfully
-<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Back to Catalogue Maintenance</a>
+<h3>Updated successfully</h3>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Back to Catalogue Maintenance</a></p>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME=mainmenu-p -->
-<b>Subject Maintenance</b><br>
+<div class="menu">
+<h1>Catalog Maintenance</h1>
 <form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
-<input type="hidden" name="type" value="allsub">
-Show all subjects beginning with <input type="text" name="sub"><br>
-<input type="submit" value="Show">
+<table>
+<caption>Subject Maintenance</caption>
+<tr><td><label for="sub">Show all subjects beginning with: </label></td><td><input type="text" name="sub" id="sub"><input type="hidden" name="type" value="allsub" /></td></tr>
+</table>
+<input type="submit" value="Show" class="submit" />
 </form>
-<p>
-<b>Group Maintenance</b></br>
+
 <form action="/cgi-bin/koha/search.pl" method="post">
-<input type="hidden" name="type" value="catmain">
-Show all Titles beginning with <input type="text" name="title"><br>
-Item Number <input type="text" size="25" name="item"><br>
-<input type="submit" value="Show">
+<table>
+<caption>Group Maintenance</caption>
+<tr><td><label for="title">Show all Titles beginning with:</label></td><td><input type="hidden" name="type" value="catmain"><input type="text" name="title" id="title" /></td></tr>
+<tr><td><label for="item">Item Number:</label></td><td><input type="text" size="25" id="item" name="item" /></td></tr>
+</table>
+<input type="submit" value="Show" class="submit" />
 </form>
-<p>
-<b>Undelete Biblio</b></br>
+
 <form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
-<input type="hidden" name="type" value="undel">
-Show all Titles beginning with <input type="text" name="title"><br>
-<input type="submit" value="Show">
+<table>
+<caption>Undelete Biblio</caption>
+<tr><td><label for="title">Show all Titles beginning with</label></td><td><input type="text" name="title" id="title" /><input type="hidden" name="type" value="undel" /></td></tr>
+</table>
+<input type="submit" value="Show" class="submit" />
 </form>
+</div>
 <!-- /TMPL_IF -->
 
-
-<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
