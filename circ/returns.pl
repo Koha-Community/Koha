@@ -90,6 +90,7 @@ if ($query->param('resbarcode')) {
     my $item = $query->param('itemnumber');
     my $borrnum = $query->param('borrowernumber');
     my $resbarcode = $query->param('resbarcode');
+# set to waiting....
     my $tobranchcd = ReserveWaiting($item, $borrnum);
     my $branchname = $branches->{$tobranchcd}->{'branchname'};
     my ($borr) = getpatroninformation(\%env, $borrnum, 0);
@@ -124,18 +125,24 @@ if ($barcode) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
     ($returned, $messages, $iteminformation, $borrower) = returnbook($barcode, $branch);
-    $returneditems{0} = $barcode;
     $ritext.= "<input type=hidden name=ri-0 value=$barcode>\n";
     if ($returned) {
+	$returneditems{0} = $barcode;
 	$riborrowernumber{0} = $borrower->{'borrowernumber'};
 	$riduedate{0} = $iteminformation->{'date_due'};
 	$ritext.= "<input type=hidden name=dd-0 value=$iteminformation->{'date_due'}>\n";
 	$ritext.= "<input type=hidden name=bn-0 value=$borrower->{'borrowernumber'}>\n";
-    } else {
-	$riborrowernumber{0} = 0;
+    } elsif (! $messages->{'BadBarcode'}) {
+	$returneditems{0} = $barcode;
 	$riduedate{0} = 0;
 	$ritext.= "<input type=hidden name=dd-0 value=0>\n";
-	$ritext.= "<input type=hidden name=bn-0 value=0>\n";
+	if ($messages->{'wthdrawn'}) {
+	    $ritext.= "<input type=hidden name=bn-0 value='Item Cancelled'>\n";
+	    $riborrowernumber{0} = 'Item Cancelled';
+	} else {
+	    $ritext.= "<input type=hidden name=bn-0 value='&nbsp;'>\n";
+	    $riborrowernumber{0} = '&nbsp;';
+	}
     }
 }
 
@@ -282,8 +289,9 @@ foreach my $code (keys %$messages) {
     if ($code eq 'WasLost'){
 	$messagetext .= "<font color='red' size='+2'> Item was lost, now found. </font> <br>";
     }
-    if ($code eq 'wthdrawm'){
-	$messagetext .= "<font color='red' size='+2'> Item Cancelled. </font> <br>";
+    if ($code eq 'wthdrawn'){
+	$messagetext = "<font color='red' size='+2'> Item Cancelled. </font> <br>";
+	last;
     }
     if (($code eq 'IsPermanent') && (not $messages->{'ResFound'})) {
 	if ($messages->{'IsPermanent'} ne $branch) {
@@ -393,6 +401,7 @@ foreach (sort {$a <=> $b} keys %returneditems) {
 	my $barcode = $returneditems{$_};
 	my $duedate = $riduedate{$_};
 	my $overduetext;
+        my $borrowerinfo;
 	if ($duedate) {
 	    my @tempdate = split ( /-/ , $duedate ) ;
             my $duedatenz = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
@@ -401,16 +410,11 @@ foreach (sort {$a <=> $b} keys %returneditems) {
 	    $overduetext = "$duedatenz";
 	    ($overduetext="<font color=red>$duedate</font>") if ($duedate lt $todaysdate);
 	    ($duedatenz) || ($overduetext = "<img src=/images/blackdot.gif>");
+	    my ($borrower) = getpatroninformation(\%env, $riborrowernumber{$_}, 0);
+            $borrowerinfo = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}";
         } else {
-            $overduetext = "Not on loan.";
-	}
-        my $borrowernumber = $riborrowernumber{$_};
-        my $borrowerinfo;
-        if ($borrowernumber) {
-	    my ($borrower) = getpatroninformation(\%env,$borrowernumber,0);
-            my $borrowerinfo = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this,'Member', 480, 640)\">$borrower->{'cardnumber'}</a> $borrower->{'firstname'} $borrower->{'surname'}";
-        } else {
-	    $borrowerinfo = "Not on loan.";
+            $overduetext = "Not on Issue.";
+	    $borrowerinfo = $riborrowernumber{$_};
 	}
 	my ($iteminformation) = getiteminformation(\%env, 0, $barcode);;
 	$returneditemstable .= << "EOF";
@@ -436,9 +440,18 @@ print $query->header();
 print startpage();
 print startmenu('circulation');
 
+
+#debug
+#    foreach my $key (keys %$messages) {
+#	print "$key : $messages->{$key}<br>";
+#    }
+
+
 print <<"EOF";
 $links
 $title
+
+
 <table cellpadding=5 cellspacing=0 width=100%>
 EOF
 
