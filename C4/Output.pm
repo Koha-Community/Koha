@@ -267,26 +267,20 @@ sub mkformnotable{
   my ($action,@inputs)=@_;
   my $string="<form action=$action method=post>\n";
   foreach my $input (@inputs){
-      if ($$input[0] eq 'hidden'){
+      if ($$input[0] eq 'textarea') {
 	  $string .= 
-	      "<input type=hidden name=$$input[1] value=\"$$input[2]\">\n";
-      } elsif ($$input[0] eq 'radio') {
+	      "<textarea name=$$input[1] wrap=physical cols=40 rows=4>";
 	  $string .= 
-	      "<input type=radio name=$$input[1] value=$$input[2]>$$input[2]";
-      } elsif ($$input[0] eq 'text') {
+	      "$$input[2]</textarea>";
+      } else {
 	  $string .= 
 	      "<input type=$$input[0] name=$$input[1] value=\"$$input[2]\">";
-      } elsif ($$input[0] eq 'textarea') {
-        $string .= 
-	    "<textarea name=$$input[1] wrap=physical cols=40 rows=4>";
-	$string .= 
-	    "$$input[2]</textarea>";
-    } elsif ($$input[0] eq 'reset'){
-	$string .= 
-	    "<input type=reset name=$$input[1] value=\"$$input[2]\">";
-    } elsif ($$input[0] eq 'submit'){
-      $string.="<input type=submit name=$$input[1] value=\"$$input[2]\">";
-    }    
+	  if ($$input[0] eq 'radio') {
+	      $string .= 
+	      "$$input[2]";
+	  }  
+      }
+      $string .= "\n";
   }
   $string=$string."</form>";
 }

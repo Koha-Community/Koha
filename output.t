@@ -190,7 +190,7 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 # 1 input; radio
 @inputs = (\@inputRadio);
 $return ="<form action=actionurl method=post>\n";
-$return .= "<input type=radio name=radioname value=radiovalue>radiovalue";
+$return .= "<input type=radio name=radioname value=\"radiovalue\">radiovalue\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
@@ -202,7 +202,7 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 # 1 input; text
 @inputs = (\@inputText);
 $return = "<form action=actionurl method=post>\n";
-$return .= "<input type=text name=textname value=\"textvalue\">";
+$return .= "<input type=text name=textname value=\"textvalue\">\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
@@ -215,7 +215,7 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 # 1 input; textarea
 @inputs = (\@inputTextarea);
 $return = "<form action=actionurl method=post>\n";
-$return .= "<textarea name=textareaname wrap=physical cols=40 rows=4>textareavalue</textarea>";
+$return .= "<textarea name=textareaname wrap=physical cols=40 rows=4>textareavalue</textarea>\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
@@ -227,7 +227,7 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 # 1 input; submit
 @inputs = (\@inputSubmit);
 $return = "<form action=actionurl method=post>\n";
-$return .= "<input type=submit name=submitname value=\"submitvalue\">";
+$return .= "<input type=submit name=submitname value=\"submitvalue\">\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
@@ -239,7 +239,7 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 # 1 input; reset
 @inputs = (\@inputReset);
 $return = "<form action=actionurl method=post>\n";
-$return .= "<input type=reset name=resetname value=\"resetvalue\">";
+$return .= "<input type=reset name=resetname value=\"resetvalue\">\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
@@ -252,7 +252,7 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 @inputs = (\@inputHidden, \@inputSubmit);
 $return = "<form action=actionurl method=post>\n";
 $return .= "<input type=hidden name=hiddenname value=\"hiddenvalue\">\n";
-$return .= "<input type=submit name=submitname value=\"submitvalue\">";
+$return .= "<input type=submit name=submitname value=\"submitvalue\">\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
@@ -265,9 +265,9 @@ if ($return eq mkformnotable('actionurl', @inputs)) {
 # 3 inputs; text, submit, and reset
 @inputs = (\@inputText, \@inputSubmit, \@inputReset);
 $return = "<form action=actionurl method=post>\n";
-$return .= "<input type=text name=textname value=\"textvalue\">";
-$return .= "<input type=submit name=submitname value=\"submitvalue\">";
-$return .= "<input type=reset name=resetname value=\"resetvalue\">";
+$return .= "<input type=text name=textname value=\"textvalue\">\n";
+$return .= "<input type=submit name=submitname value=\"submitvalue\">\n";
+$return .= "<input type=reset name=resetname value=\"resetvalue\">\n";
 $return .= "</form>";
 
 if ($return eq mkformnotable('actionurl', @inputs)) {
