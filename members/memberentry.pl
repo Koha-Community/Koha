@@ -58,6 +58,7 @@ my $modify=$input->param('modify');
 my $delete=$input->param('delete');
 my $op=$input->param('op');
 my $categorycode=$input->param('categorycode');
+my $destination=$input->param('destination');
 
 my $nok;
 # if a add or modify is requested => check validity of data.
@@ -121,7 +122,12 @@ if ($op eq 'add' or $op eq 'modify') {
 		}else{
 			$data{borrowernumber} = &newmember(%data);
 		}
+		
+	if($destination eq "circ"){
+		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
+	} else {
 		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$data{'borrowernumber'}");
+		}
 	}
 }
 if ($delete){
@@ -228,6 +234,7 @@ if ($delete){
 				-multiple => 0 );
 
 	$template->param(	actionType 		=> $actionType,
+				destination => $destination,
 				member          => $member,
 				address         => $data->{'streetaddress'},
 				firstname       => $data->{'firstname'},
