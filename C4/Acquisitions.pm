@@ -19,7 +19,7 @@ $VERSION = 0.01;
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
 &updatecost &checkitems &modnote &getitemtypes &getbiblio
 &getbiblioitem &getitemsbybiblioitem &isbnsearch &keywordsearch
-&websitesearch);
+&websitesearch &addwebsite &updatewebsite &deletewebsite);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -1325,6 +1325,60 @@ biblio.biblionumber = biblioitems.biblionumber and (";
     $dbh->disconnect;
     return($count, @results);
 } # sub websitesearch
+
+
+sub addwebsite {
+    my ($website) = @_;
+    my $dbh = C4Connect;
+    my $query;
+    
+    $website->{'biblionumber'} = $dbh->quote($website->{'biblionumber'});
+    $website->{'title'}        = $dbh->quote($website->{'title'});
+    $website->{'description'}  = $dbh->quote($website->{'description'});
+    $website->{'url'}          = $dbh->quote($website->{'url'});
+    
+    $query = "Insert into websites set
+biblionumber = $website->{'biblionumber'},
+title        = $website->{'title'},
+description  = $website->{'description'},
+url          = $website->{'url'}";
+    
+    $dbh->do($query);
+    
+    $dbh->disconnect;
+} # sub website
+
+
+sub updatewebsite {
+    my ($website) = @_;
+    my $dbh = C4Connect;
+    my $query;
+    
+    $website->{'title'}      = $dbh->quote($website->{'title'});
+    $website->{'description'} = $dbh->quote($website->{'description'});
+    $website->{'url'}        = $dbh->quote($website->{'url'});
+    
+    $query = "Update websites set
+title       = $website->{'title'},
+description = $website->{'description'},
+url         = $website->{'url'}
+where websitenumber = $website->{'websitenumber'}";
+
+    $dbh->do($query);
+    
+    $dbh->disconnect;
+} # sub updatewebsite
+
+
+sub deletewebsite {
+    my ($websitenumber) = @_;
+    my $dbh = C4Connect;
+    my $query = "Delete from websites where websitenumber = $websitenumber";
+    
+    $dbh->do($query);
+    
+    $dbh->disconnect;
+} # sub deletewebsite
 
 
 END { }       # module clean-up code here (global destructor)
