@@ -21,7 +21,7 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(&newBiblio &newBiblioItem &newItem &updateBiblio &updateBiblioItem
 	     &updateItem &changeSubfield &addSubfield &findSubfield 
-	     &addMarcBiblio
+	     &addMarcBiblio &nextsubfieldid
 
 	     &getorders &bookseller &breakdown &basket &newbasket &bookfunds
 	     &ordersearch &newbiblio &newbiblioitem &newsubject &newsubtitle &neworder
@@ -225,9 +225,10 @@ sub addMarcBiblio {
 # pass the marcperlstructure to this function, and it will create the records in the marc tables
     my ($marcstructure) = @_;
     my $dbh=C4Connect;
-    my $tags;
-    my $i;
-    my $j;
+    my $tag;
+    my $tagorder;
+    my $subfield;
+    my $subfieldorder;
     # adding main table, and retrieving bibid
     $dbh->do("lock tables marc_biblio WRITE");
     my $sth=$dbh->prepare("insert into marc_biblio (datecreated,origincode) values (now(),?)");
@@ -239,20 +240,59 @@ sub addMarcBiblio {
     $sth->finish;
     $dbh->do("unlock tables");
     # now, add subfields...
-    foreach $tags ($marcstructure->{tags}) {
-	foreach $i (keys %{$tags}) {
-	    foreach $j (keys %{$tags->{$i}->{subfields}}) {
-		&addSubfield($marcstructure->{bibid},
-			     $tags->{$i}->{tag},
-			     $tags->{$i}->{tagorder},
-			     $tags->{$i}->{subfields}->{$j}->{mark},
-			     $tags->{$i}->{subfields}->{$j}->{subfieldorder},
-			     $tags->{$i}->{subfields}->{$j}->{value}
-			     );
-		print $tags->{$i}->{tag}."//".$tags->{$i}->{subfields}->{$j}->{value}."\n";
+    foreach $tag (keys %{$marcstructure->{tags}}) {
+	foreach $tagorder (keys %{$marcstructure->{tags}->{$tag}}) { 
+	    foreach $subfield (keys %{$marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}}) {
+		foreach $subfieldorder (keys %{$marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}->{$subfield}}) {
+		    &addSubfield($marcstructure->{bibid},
+				 $tag,
+				 $tagorder,
+				 $subfield,
+				 $subfieldorder,
+				 $marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}->{$subfield}->{$subfieldorder}
+				 );
+#		    print "$tag / $tagorder / $subfield / $subfieldorder / ".$marcstructure->{tags}->{$tag}->{$tagorder}->{subfields}->{$subfield}->{$subfieldorder}."\n";
+		}
 	    }
 	}
     }
+}
+
+sub buildPerlmarcstructure {
+# this function builds perlmarcstructure from the old koha-DB fields
+    my ($biblionumber,$author,$title,$unititle,$notes,$abstract,
+	$serial,$seriestitle,$copyrightdate,$biblioitemnumber,$volume,$number,
+	$classification,$itemtype,$isbn,$issn,
+	$dewey,$subclass,$publicationyear,$publishercode,
+	$volumedate,$illus,$pages,$notes,
+	$size,$place,$lccn) = @_;
+
+    my $tagfield;
+    my $tagsubfield;
+    my $perlmarcstructure={};
+    my $i=0;
+    my $dbh=&C4Connect;
+    my $sth=$dbh->prepare("select tagfield,tagsubfield from marc_subfield_structure where kohafield=?");
+    $sth->execute("biblionumber");
+    if (($tagfield,$tagsubfield)=$sth->fetchrow) {
+	$i=nextsubfieldid($perlmarcstructure->{tags}->{$tagfield}->{1}->{subfields}->{$tagsubfield});
+	$perlmarcstructure->{tags}->{$i}->{tag}=$tagfield;
+	$perlmarcstructure->{tags}->{$i}->{tagorder}=1;
+	$perlmarcstructure->{tags}->{$i}->{indicator}='##';
+    }
+}
+
+sub nextsubfieldid {
+    my $subfieldhash=shift;
+    my $maxsubfieldnumber=0;
+    my $subfield;
+    my $number;
+    foreach $subfield (keys %$subfieldhash) {
+	foreach $number (keys %{$subfieldhash->{$subfield}}) {
+	    ($number>$maxsubfieldnumber) && ($maxsubfieldnumber=$number);
+	}
+    }
+    return $maxsubfieldnumber+1;
 }
 
 sub updateBiblio {

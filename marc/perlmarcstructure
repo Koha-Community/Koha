@@ -29,18 +29,17 @@ bibid=58973,
 120 01 $nno, another text
 
 in perlmarcstructure, it can be writen :
-$record->{bibid}=58973
+$record->{bibid}=58973;
 $record->{tags}->{110}->{1}->{indicator}='##';
-$record->{tags}->{110}->{1}->->{a}->{1}='first text';
-$record->{tags}->{110}->{1}->{a}->{2}='second text';
-$record->{tags}->{110}->{1}->{b}->{1}='third text';
+$record->{tags}->{110}->{1}->{subfields}->{a}->{1}='first text';
+$record->{tags}->{110}->{1}->{subfields}->{a}->{2}='second text';
+$record->{tags}->{110}->{1}->{subfields}->{b}->{1}='third text';
 
 $record->{tags}->{120}->{1}->{indicator}='##';
-$record->{tags}->{120}->{1}->{a}->{1}='last text ??';
+$record->{tags}->{120}->{1}->{subfields}->{a}->{1}='last text ??';
 
 $record->{tags}->{120}->{2}->{indicator}='01';
-$record->{tags}->{120}->{2}->{n}->{1}='no, another text';
-
+$record->{tags}->{120}->{2}->{subfields}->{n}->{1}='no, another text';
 
 This takes care of possible repeating tags and subfields as well as ordering of
 tags and subfields, but it makes it difficult to look up specific tags and
