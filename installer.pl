@@ -74,7 +74,7 @@ EOM
   };
 
 print "\n";
-system ("perl updatedatabase -I /pathtoC4 ");
+system ("perl -I /pathtoC4 updatedatabase");
 
 #KOHA conf
 # FIXME
