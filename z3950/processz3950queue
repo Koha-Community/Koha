@@ -190,6 +190,7 @@ while (1) {
 							my $db_user   = C4::Context->config("user");
 							my $db_passwd = C4::Context->config("pass");
 							my $dbi = DBI->connect("DBI:$db_driver:$db_name:$db_host",$db_user, $db_passwd);
+							$dbh->{"InactiveDestroy"} = "true";
 							my ($name, $server, $database, $user, $password,$syntax) = split(/\//, $serverinfo, 6);
 							$globalname=$name;
 							$globalsyntax = $syntax;
