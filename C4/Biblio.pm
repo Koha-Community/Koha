@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.47  2003/05/20 16:22:44  tipaul
+# fixing typo in Biblio.pm POD
+#
 # Revision 1.46  2003/05/19 13:45:18  tipaul
 # support for subtitles, additional authors, subject.
 # This supports is only for MARC <-> OLD-DB link. It worked previously, but values entered as MARC were not reported to OLD-DB, neither values entered as OLD-DB were reported to MARC.
@@ -1140,7 +1143,7 @@ sub MARCdelword {
 #
 
 
-=item (oldbibnum,$oldbibitemnum) = NEWnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
+=item ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbibilio($dbh,$MARCRecord,$oldbiblio,$oldbiblioitem);
 
 creates a new biblio from a MARC::Record. The 3rd and 4th parameter are hashes and may be ignored. If only 2 params are passed to the sub, the old-db hashes
 are builded from the MARC::Record. If they are passed, they are used.
