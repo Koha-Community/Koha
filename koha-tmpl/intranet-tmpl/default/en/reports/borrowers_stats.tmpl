@@ -95,12 +95,14 @@
 			</td>
 			<td>&nbsp;</td>
 			</tr>
-			<tr>
-			<td>Sort1</td>
-			<td align="center"><input type="radio" name="Line" value="sort1"></td>
-			<td align="center"><input type="radio" name="Column" value="sort1"></td>
-			<td ><!-- TMPL_VAR NAME="CGISort1" --></td>
-			</tr>
+			<!-- TMPL_IF name="hassort1" -->
+				<tr>
+				<td>Sort1</td>
+				<td align="center"><input type="radio" name="Line" value="sort1"></td>
+				<td align="center"><input type="radio" name="Column" value="sort1"></td>
+				<td ><!-- TMPL_VAR NAME="CGISort1" --></td>
+				</tr>
+			<!-- /TMPL_IF -->
 			<tr class="hilighted" >
 			<td>Sort2</td>
 			<td align="center"><input type="radio" name="Line" value="sort2"></td>

@@ -123,8 +123,12 @@ if ($do_it) {
 	$req->execute;
 	my @select_sort1;
 	push @select_sort1,"";
+	my $hassort1;
 	while (my ($value) =$req->fetchrow) {
-		push @select_sort1, $value;
+		if ($value) {
+			$hassort1=1;
+			push @select_sort1, $value;
+		}
 	}
 	my $CGIsort1=CGI::scrolling_list( -name     => 'Filter',
 				-id => 'Filter',
@@ -164,9 +168,9 @@ if ($do_it) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
-	
 	$template->param(CGICatcode => $CGICatCode,
 					CGISort1 => $CGIsort1,
+					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice
