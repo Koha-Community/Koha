@@ -222,7 +222,7 @@ sub catalogsearch {
 		  $notavailabletext.=" ($c)";
 	      }
 	  } else {
-	      $locationtext.="$_";
+	      $locationtext .= ($_) ? "$_" : "unknown branch";
 	      my $c=$data->{'locationhash'}->{$_};
 	      if ($totalitemcounts>1) {
 		  $locationtext.=" ($c), ";
@@ -1232,7 +1232,7 @@ sub ItemInfo {
     my ($env,$biblionumber,$type) = @_;
     my $dbh   = &C4Connect;
     my $query = "SELECT * FROM items, biblio, biblioitems
-                  WHERE items.biblionumber = '$biblionumber'
+                  WHERE items.biblionumber = ?
                     AND biblioitems.biblioitemnumber = items.biblioitemnumber
                     AND biblio.biblionumber = items.biblionumber";
   if ($type ne 'intra'){
@@ -1241,11 +1241,11 @@ sub ItemInfo {
     and (wthdrawn <> 1 or wthdrawn is NULL)";
   }
   $query .= " order by items.dateaccessioned desc";
+    #warn $query;
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($biblionumber);
   my $i=0;
   my @results;
-#  print $query;
   while (my $data=$sth->fetchrow_hashref){
     my $iquery = "Select * from issues
     where itemnumber = '$data->{'itemnumber'}'
@@ -1259,18 +1259,21 @@ sub ItemInfo {
       my @temp=split('-',$idata->{'date_due'});
       $datedue = "$temp[2]/$temp[1]/$temp[0]";
     }
-    if ($data->{'itemlost'} eq '1' || $data->{'itemlost'} eq '2'){
-        $datedue='Itemlost';
+    if ($data->{'itemlost'} eq '2'){
+        $datedue='Very Overdue';
+    }
+    if ($data->{'itemlost'} eq '1'){
+        $datedue='Lost';
     }
     if ($data->{'wthdrawn'} eq '1'){
-      $datedue="Cancelled";
+	$datedue="Cancelled";
     }
     if ($datedue eq ''){
-       $datedue="Available";
-       my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
-       if ($restype){                                
-          $datedue=$restype;
-       }
+	$datedue="Available";
+	my ($restype,$reserves)=CheckReserves($data->{'itemnumber'});
+	if ($restype){
+	    $datedue=$restype;
+	}
     }
     $isth->finish;
 #get branch information.....
@@ -1281,6 +1284,15 @@ sub ItemInfo {
     if (my $bdata=$bsth->fetchrow_hashref){
 	$data->{'branchname'} = $bdata->{'branchname'};
     }
+# get the itemtype description.
+    my $bquery = "SELECT * FROM itemtypes
+                          WHERE itemtype = '$data->{'itemtype'}'";
+    my $bsth=$dbh->prepare($bquery);
+    $bsth->execute;
+    if (my $bdata=$bsth->fetchrow_hashref){
+	$data->{'description'} = $bdata->{'description'};
+    }
+
 
     my $class = $data->{'classification'};
     my $dewey = $data->{'dewey'};
@@ -1311,21 +1323,20 @@ sub ItemInfo {
   }
  $sth->finish;
   my $query2="Select * from aqorders where biblionumber=$biblionumber";
-  my $sth2=$dbh->prepare($query2);         
-  $sth2->execute;                                        
+  my $sth2=$dbh->prepare($query2);
+  $sth2->execute;
   my $data;
   my $ocount;
-  if ($data=$sth2->fetchrow_hashref){                   
-    $ocount=$data->{'quantity'} - $data->{'quantityreceived'};                                                  
+  if ($data=$sth2->fetchrow_hashref){
+    $ocount=$data->{'quantity'} - $data->{'quantityreceived'};
     if ($ocount > 0){
       $data->{'ocount'}=$ocount;
       $data->{'order'}="One Order";
       $results[$i]=$data;
     }
-  } 
+  }
   $sth2->finish;
 
-  $dbh->disconnect;
   return(@results);
 }
 
@@ -2139,15 +2150,14 @@ that branch.
 sub itemcount2 { 
   my ($env,$bibnum,$type)=@_; 
   my $dbh=C4Connect;   
-  my $query="Select * from items,branches where     
-  biblionumber=$bibnum and items.holdingbranch=branches.branchcode";
+  my $query="SELECT items.*, branches.branchname FROM items LEFT JOIN branches ON items.holdingbranch = branches.branchcode WHERE biblionumber = ?";
   if ($type ne 'intra'){
     $query.=" and ((itemlost <>1 and itemlost <> 2) or itemlost is NULL) and
     (wthdrawn <> 1 or wthdrawn is NULL)";      
   }
   my $sth=$dbh->prepare($query);         
   #  print $query;           
-  $sth->execute;           
+  $sth->execute($bibnum);           
   my %counts;
   $counts{'total'}=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -2165,9 +2175,11 @@ sub itemcount2 {
     # sort for this?
     if (my $data2=$sth2->fetchrow_hashref){         
        $counts{'notavailable'}++;         
-    } else {         
+    } elsif ($data->{'branchname'}) {         
        $counts{$data->{'branchname'}}++;
-    }                             
+   } else {
+       $counts{'unknown branch'}++;
+   }
     $sth2->finish;     
   } 
   my $query2="Select * from aqorders where biblionumber=$bibnum and
