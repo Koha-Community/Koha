@@ -217,9 +217,11 @@ EOF
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Returned Item Information</font></th></tr>
 <tr><td>
 Title: $iteminformation->{'title'}<br>
+<!--Hlt decided they dont want these showing, uncoment the html to make it work
+
 Author: $iteminformation->{'author'}<br>
 Barcode: <a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick="openWindow(this, 'Item', 480, 640)">$iteminformation->{'barcode'}</a><br>
-Date Due: $iteminformation->{'date_due'}
+Date Due: $iteminformation->{'date_due'}-->
 </td></tr>
 </table>
 EOF
@@ -754,7 +756,11 @@ sub patrontable {
 		    }
 		}
 		$itemswaiting.="</table>\n";
-		$flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}<br>Overdue items can be seen in the Previous Issues table below</td></tr>\n";
+		if ($query->param('module') ne 'returns'){
+  		  $flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}<br>Overdue items can be seen in the Previous Issues table below</td></tr>\n";
+		} else {
+  		  $flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
+		}
 	    } else {
 		$flaginfotext.="<tr><td bgcolor=$color valign=top>$flag</td><td bgcolor=$color>$flags->{$flag}->{'message'}</td></tr>\n";
 	    }
@@ -766,8 +772,13 @@ sub patrontable {
     <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black><b>Patron Information</b></font></td></tr>
     <tr><td>
     <a href=/cgi-bin/koha/moremember.pl?bornum=$borrower->{'borrowernumber'} onClick="openWindow(this,'Member', 480, 640)">$borrower->{'cardnumber'}</a> $borrower->{'surname'}, $borrower->{'title'} $borrower->{'firstname'}<br>
-    $borrower->{'streetaddress'} $borrower->{'city'}<br>
-    $borrower->{'categorycode'} $flagtext
+EOF
+    if ($query->param('module') ne 'returns'){ 
+       $patrontable.="$borrower->{'streetaddress'} $borrower->{'city'}<br>
+       $borrower->{'categorycode'} ";
+     }
+    $patrontable.=<< "EOF";
+    $flagtext
     </td></tr>
     </table>
 EOF
