@@ -203,7 +203,7 @@ sub ordersearch {
 	where aqorders.biblioitemnumber = biblioitems.biblioitemnumber
 	and biblio.biblionumber=aqorders.biblionumber
 	and ((datecancellationprinted is NULL)
-	or (datecancellationprinted = '0000-00-00')
+	or (datecancellationprinted = '0000-00-00'))
   and ((";
   my @data=split(' ',$search);
   my $count=@data;
