@@ -163,6 +163,7 @@ if ($op eq 'add_form') {
 			$toggle=1;
 	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
+					-id=>"tab$i",
 					-values=>['-1','0','1','2','3','4','5','6','7','8','9','10'],
 					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1',
 									'2' =>'2','3'=>'3','4'=>'4',
@@ -173,39 +174,60 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type='hidden' name='tagsubfield' value='".$data->{'tagsubfield'}."'>";
+		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\">";
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
 		$row_data{kohafield}= CGI::scrolling_list( -name=>"kohafield",
+					-id=>"kohafield$i",
 					-values=> \@kohafields,
 					-default=> "$data->{'kohafield'}",
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
+					-id=>'authorised_value',
 					-values=> \@authorised_values,
 					-default=>$data->{'authorised_value'},
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
+					-id=>'value_builder',
 					-values=> \@value_builder,
 					-default=>$data->{'value_builder'},
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
+					-id=>'authtypecode',
 					-values=> \@authtypes,
 					-default=>$data->{'authtypecode'},
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{repeatable} = CGI::checkbox("repeatable$i",$data->{'repeatable'}?'checked':'',1,'');
-		$row_data{mandatory} = CGI::checkbox("mandatory$i",$data->{'mandatory'}?'checked':'',1,'');
-		$row_data{hidden} = CGI::checkbox("hidden$i",$data->{'hidden'}?'checked':'',1,'');
-		$row_data{isurl} = CGI::checkbox("isurl$i",$data->{'isurl'}?'checked':'',1,'');
-		$row_data{bgcolor} = $toggle;
+		$row_data{repeatable} = CGI::checkbox(-name=>"repeatable$i",
+	-checked => $data->{'repeatable'}?'checked':'',
+	-value => 1,
+	-label => '',
+	-id => "repeatable$i");
+		$row_data{mandatory} = CGI::checkbox(-name => "mandatory$i",
+	-checked => $data->{'mandatory'}?'checked':'',
+	-value => 1,
+	-label => '',
+	-id => "mandatory$i");
+		$row_data{hidden} = CGI::checkbox( -name=>"hidden$i",
+			-id => "hidden$i",
+			-checked => $data->{'hidden'}?'checked':'',
+			-value => 1,
+			-label => '');
+		$row_data{isurl} = CGI::checkbox( -name => "isurl$i",
+			-id => "isurl$i",
+			-checked => $data->{'isurl'}?'checked':'',
+			-value => 1,
+			-label => '');
+		$row_data{row} = $i;
+		$row_data{toggle} = $toggle;
 		$row_data{link} = CGI::escapeHTML($data->{'link'});
 		push(@loop_data, \%row_data);
 		$i++;
@@ -214,6 +236,7 @@ if ($op eq 'add_form') {
 	for (my $i=1;$i<=$more_subfields;$i++) {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
+					-id => "tab$i",
 					-values=>['-1','0','1','2','3','4','5','6','7','8','9','10'],
 					-labels => {'-1' =>'ignore','0'=>'0','1'=>'1',
 									'2' =>'2','3'=>'3','4'=>'4',
@@ -224,32 +247,52 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"3\" maxlength=\"1\">";
+		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\">";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
-		$row_data{repeatable} = CGI::checkbox('repeatable','',1,'');
-		$row_data{mandatory} = CGI::checkbox('mandatory','',1,'');
-		$row_data{hidden} = CGI::checkbox('hidden','',1,'');
-		$row_data{isurl} = CGI::checkbox('isurl','',1,'');
+		$row_data{repeatable} = CGI::checkbox( -name=> 'repeatable',
+				-id => "repeatable$i",
+				-checked => '',
+				-value => 1,
+				-label => '');
+		$row_data{mandatory} = CGI::checkbox( -name=> 'mandatory',
+			-id => "mandatory$i",
+			-checked => '',
+			-value => 1,
+			-label => '');
+		$row_data{hidden} = CGI::checkbox( -name => 'hidden',
+			-id => "hidden$i",
+			-checked=> '',
+			-value => 1,
+			-label => '');
+		$row_data{isurl} = CGI::checkbox(-name => 'isurl',
+			-id => "isurl$i",
+			-checked => '',
+			-value => 1,
+			-label => '');
 		$row_data{kohafield}= CGI::scrolling_list( -name=>'kohafield',
+					-id => "kohafield$i",
 					-values=> \@kohafields,
 					-default=> "",
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
+					-id => 'authorised_value',
 					-values=> \@authorised_values,
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{authtypes}  = CGI::scrolling_list(-name=>'authtypecode',
+					-id => 'authtypecode',
 					-values=> \@authtypes,
 					-size=>1,
 					-multiple=>0,
 					);
 		$row_data{link} = CGI::escapeHTML($data->{'link'});
-		$row_data{bgcolor} = $toggle;
+		$row_data{toggle} = $toggle;
+		$row_data{row} = $i;
 		push(@loop_data, \%row_data);
 	}
 	$template->param('use-heading-flags-p' => 1);
