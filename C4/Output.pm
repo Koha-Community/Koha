@@ -94,7 +94,8 @@ sub gettemplate {
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 
-    $template->param(themelang => "/$theme/$lang",
+    # XXX temporary patch for Bug 182 for themelang
+    $template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
     							theme => $theme,
 							lang => $lang);
     return $template;
