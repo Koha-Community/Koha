@@ -40,10 +40,11 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-	<form action="/cgi-bin/koha/members/simpleredirect.pl" method="post">
+	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
 	<input type="submit" class="button" value="Add member" title="Add member" alt="Add member">
-	<input type="radio" name="chooseform" value="adult" checked>Adult
-	<input type="radio" name="chooseform" value="organisation" >Organisation
+	<input type="radio" name="categorycode" value="" checked>Adult
+	<input type="radio" name="categorycode" value="I" >Organisation
+	<input type="hidden" name="actionType" value="Add">
 	</form>
 </div>
 </div>
