@@ -123,41 +123,7 @@ $data->{'branchcode'} = &getbranchname($data->{'branchcode'});
 # Converts the categorycode to the description
 $data->{'categorycode'} = &getborrowercategory($data->{'categorycode'});
 
-# FIXME
-# it looks like $numaccts is a temp variable and that the
-# for (my $i;$i<$numaccts;$i++)
-# can be turned into a foreach loop instead
-#
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
-#if ($numaccts > 10){
-#  $numaccts=10;
-#}
-my @accountdata;
-for (my$i=0;$i<$numaccts;$i++){
-	my $amount= $accts->[$i]{'amount'} + 0.00;
-	my $amount2= $accts->[$i]{'amountoutstanding'} + 0.00;
-	my %row = %$accts->[$i];
-	if ($amount2 != 0){
-		my $item=" &nbsp; ";
-		$row{'date'} = format_date($accts->[$i]{'date'});
-
-		if ($accts->[$i]{'accounttype'} ne 'Res'){
-			#get item data
-			#$item=
-		}
-
-		# FIXME
-		# why set this variable if it's not going to be used?
-		#
-		my $env;
-		if ($accts->[$i]{'accounttype'} ne 'Res'){
-			my $iteminfo=C4::Circulation::Circ2::getiteminformation($env,$accts->[$i]->{'itemnumber'},'');
-		# FIXME, seems to me $iteminfo gets not defined
-			%row = (%row , %$iteminfo) if $iteminfo;
-		}
-	}
-	push (@accountdata, \%row);
-}
 
 my ($count,$issue)=borrissues($bornum);
 my $today=ParseDate('today');
@@ -210,7 +176,7 @@ foreach my $reserveline (@$reserves) {
 $template->param($data);
 $template->param(
 		 bornum          => $bornum,
-		 accountloop     => \@accountdata,
+		 totaldue =>$total,
 		 issueloop       => \@issuedata,
 		 reserveloop     => \@reservedata);
 

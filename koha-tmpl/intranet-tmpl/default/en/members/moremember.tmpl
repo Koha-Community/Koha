@@ -98,28 +98,20 @@
 
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
 	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=4><B>FINES & CHARGES</TD>
+		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2><B>FINES & CHARGES</TD>
 	</TR>
-
-	<!-- TMPL_LOOP NAME=accountloop -->
-		<!-- TMPL_IF NAME=amountoutstanding -->
-		<tr VALIGN=TOP>
-			<td><!-- TMPL_VAR NAME="date" --></td>
-			<td>
-				<!-- TMPL_IF NAME=biblionumber -->
-				<a href="/cgi-bin/koha/moredetail.pl?itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="blionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="description" --> <!-- TMPL_VAR NAME="title" --></a>
-				<!-- TMPL_ELSE -->
-				&nbsp;
-				<!-- /TMPL_IF -->
-			</td>
-			<td><!-- TMPL_VAR NAME="amount" --></td>
-			<td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
+	<TMPL_IF name="totaldue">
+		<tr valign="top">
+			<td>Total due</td>
+			<td><!-- TMPL_VAR name="totaldue"--></td>
 		</tr>
-		<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP -->
-
+	<TMPL_ELSE>
+		<tr valign="top">
+			<td colspan=2>No debts</td>
+		</tr>
+	</TMPL_IF>
 	<tr VALIGN=TOP  >
-	<TD colspan=3 align=right>
+	<TD colspan=2 align=right>
 		<p>
 			<br>
 			<a class="button" href=/cgi-bin/koha/boraccount.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->>View Account</a>
