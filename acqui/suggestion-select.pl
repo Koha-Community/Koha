@@ -23,7 +23,7 @@ my $publicationyear = $input->param('publicationyear');
 my $place = $input->param('place');
 my $isbn = $input->param('isbn');
 my $status = 'ACCEPTED';
-my $suggestedbyme = 1;
+my $suggestedbyme = -1; # search ALL suggestors
 my $op = $input->param('op');
 $op = 'else' unless $op;
 

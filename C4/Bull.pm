@@ -176,7 +176,8 @@ sub get_subscription_list_from_biblionumber {
 	$sth->execute($biblionumber);
 	my @res;
 	while (my $subs = $sth->fetchrow_hashref) {
-		$subs->{'startdate'} = format_date($subs->{'startdate'});
+		$subs->{startdate} = format_date($subs->{startdate});
+		$subs->{opacnote} =~ s/\n/\<br\/\>/g;
 		push @res,$subs;
 	}
 	return \@res;
