@@ -180,7 +180,7 @@ foreach my $subfield_code (sort keys(%witness)) {
 # next item form
 my @loop_data =();
 my $i=0;
-my $authorised_values_sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=? order by authorised_value");
+my $authorised_values_sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=? order by lib");
 
 foreach my $tag (sort keys %{$tagslib}) {
 	my $previous_tag = '';
@@ -203,7 +203,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 			# builds list, depending on authorised value...
 			#---- branch
 			if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-				my $sth=$dbh->prepare("select branchcode,branchname from branches");
+				my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
 				$sth->execute;
 				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
 				while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
@@ -212,7 +212,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 				}
 			#----- itemtypes
 			} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
-				my $sth=$dbh->prepare("select itemtype,description from itemtypes");
+				my $sth=$dbh->prepare("select itemtype,description from itemtypes order by description");
 				$sth->execute;
 				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
 				while (my ($itemtype,$description) = $sth->fetchrow_array) {

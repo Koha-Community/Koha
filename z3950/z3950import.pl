@@ -162,12 +162,12 @@ sub ProcessRecord {
     if ($file=~/Z-(\d+)/) {
 	my $id=$1;
 	my $resultsid=$input->param('resultsid');
-	my $sth=$dbh->prepare("select results from z3950results where id=$resultsid");
-	$sth->execute;
+	my $sth=$dbh->prepare("select results from z3950results where id=?");
+	$sth->execute($resultsid);
 	($data) = $sth->fetchrow;
     } else {
-	my $sth=$dbh->prepare("select marc from uploadedmarc where id=$file");
-	$sth->execute;
+	my $sth=$dbh->prepare("select marc from uploadedmarc where id=?");
+	$sth->execute($file);
 	($data) = $sth->fetchrow;
     }
 
@@ -253,8 +253,8 @@ sub ListFileRecords {
     # if z3950 results
     if (not $file=~/Z-(\d+)/) {
 	# This is a Marc upload
-	$sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
-	$sth->execute;
+	$sth=$dbh->prepare("select marc,name from uploadedmarc where id=?");
+	$sth->execute($file);
 	($data, $name) = $sth->fetchrow;
 	$template->param(IS_MARC => 1);
 	$template->param(recordsource => $name);
@@ -997,6 +997,12 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.5  2004/01/12 16:56:29  tipaul
+# synch'ing with rel_2_0
+#
+# Revision 1.4.2.1  2004/01/08 16:31:54  slef
+# DBI call fix for bug 662. No syntax check: missing module?
+#
 # Revision 1.4  2003/07/15 00:02:49  slef
 # Work on bug 515... can we do a single-side rename of notes to bnotes?
 #
