@@ -27,6 +27,7 @@ use C4::Context;
 use C4::Input;
 use C4::Search;
 use Date::Manip;
+use C4::Date;
 use strict;
 
 my $input= new CGI;
@@ -50,6 +51,8 @@ my $query="Select * from borrowers where borrowernumber=$data{'borrowernumber'}"
 my $sth=$dbh->prepare($query);
 $sth->execute;
 if (my $data=$sth->fetchrow_hashref){
+  $data{'dateofbirth'}=fomat_date_in_iso($data{'dateofbirth'});
+  $data{'joining'}=format_date_in_iso($data{'joining'});
   $query="update borrowers set title='$data{'title'}',expiry='$data{'expiry'}',
   cardnumber='$data{'cardnumber'}',sex='$data{'sex'}',ethnotes='$data{'ethnicnotes'}',
   streetaddress='$data{'address'}',faxnumber='$data{'faxnumber'}',firstname='$data{'firstname'}',
@@ -64,10 +67,8 @@ if (my $data=$sth->fetchrow_hashref){
 #  print $query;
 
 }else{
-  $data{'dateofbirth'}=ParseDate($data{'dateofbirth'});
-  $data{'dateofbirth'}=UnixDate($data{'dateofbirth'},'%Y-%m-%d');
-  $data{'joining'}=ParseDate($data{'joining'});
-  $data{'joining'}=UnixDate($data{'joining'},'%Y-%m-%d');
+  $data{'dateofbirth'}=fomat_date_in_iso($data{'dateofbirth'});
+  $data{'joining'}=format_date_in_iso($data{'joining'});
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
   altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,

@@ -21,7 +21,6 @@ $VERSION = 0.01;
 );
 
 
-
 sub get_date_format
 {
 	#Get the database handle
