@@ -1,0 +1,87 @@
+<TMPL_INCLUDE NAME="parameters-top.inc">
+<TMPL_IF NAME="loggedinuser">
+    <p align=left>Connecté en tant que : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> à Koha</p>
+</TMPL_IF>
+<center>
+<FONT SIZE=6><em>Page d'administration de koha</em></FONT><br>
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>Paramètres </th>
+</tr>
+</table>
+<table cellspacing=5 cellpadding=1 width=90%>
+<th colspan=2>En rapport avec les bibliographies</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/itemtypes.pl>Types d'exemplaires</a></td>
+	<td>Les supports physiques d'un exemplaire</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbudget.pl>Budget</a></td>
+	<td>Les budgets alloués à un fonds.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/aqbookfund.pl>Fonds</a></td>
+	<td>Les différents fonds</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/authorised_values.pl>Valeurs autorisées</a></td>
+	<td>Les différentes catégories et les valeurs autorisées pour chaque catégorie.
+	Les valeurs autorisées sont utilisées dans la saisie des notices MARc pour faciliter la saisie.</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/thesaurus.pl>Thésaurus</a></td>
+	<td>Gestion du thésaurus. Vous pouvez définir autant de thésaurus que nécessaires au travers de la définition de "catégories" de thésaurus</td>
+</tr>
+
+<th colspan=2>MARC</th>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/marctagstructure.pl>Structure MARC</a></td><td>La structure MARC : les champs et les sous champs</td></tr>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/koha2marclinks.pl>Liens koha - structure MARC</a></td><td>Les liens entre la base "standard" de koha et la base MARC. Notez que ces liens peuvent être définis depuis la structure MARC. Cet utilitaire est un raccourci pour valider et corriger les liens</td></tr>
+<tr><td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>Vérifier la structure MARC</a></td><td>Vérifie la structure MARC. <b>UTILISEZ-LE</b> avant de travailler avec des données réelles. Il vous indiquera les erreurs de configuration qui CASSENT la cohérence de la base de données</td></tr>
+
+<th colspan=2>Divers</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>Annexes</a></td>
+	<td>Les différentes annexes gérées par ce serveur koha</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/categorie.pl>catégories</a></td>
+	<td>Les différents types de lecteurs</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/currency.pl>Monnaies</a></td>
+	<td>Les monnaies des fournisseurs</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Imprimantes</a></td>
+	<td>Les imprimantes (chemin UNIX)</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>Mots vides</a></td>
+	<td>Liste des mots ignorés pendant les recherches</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/z3950servers.pl>serveurs Z39.50</a></td>
+	<td>Serveurs z39.50 pour rechercher des notices</td>
+</tr>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/systempreferences.pl>Préférences systèmes</a></td>
+	<td>Les préférences systèmes.</td>
+</tr>
+</table>
+
+<table width=100% cellspacing=0 cellpadding=5 border=1>
+<tr background="/images/background-mem.gif">
+	<th>Utilitaires</th>
+</tr>
+</table>
+<table cellspacing=0 cellpadding=1 width=80%>
+<th colspan=2>Export</th>
+<tr>
+	<td valign="top" width="25%"><a href=/cgi-bin/koha/export/marc.pl>Export de notices</a></td>
+	<td>Export au format MARC</td>
+</tr>
+</table>
+</center>
+<TMPL_INCLUDE NAME="parameters-bottom.inc">

@@ -1,0 +1,97 @@
+<TMPL_INCLUDE NAME="parameters-top.inc">
+
+<TMPL_IF name="add_form">
+<!-------------------------------------------------------------------------------------------------->
+	<H1><TMPL_VAR name="action"></H1>
+	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
+	<input type=hidden name=op value='add_validate'>
+	<table>
+	<tr>
+
+      <td>Cat&eacute;gorie</td>
+		<td><TMPL_VAR name="category"></td>
+	</tr>
+	<tr>
+
+      <td>Valeur autoris&eacute;e</td>
+		<td><input type=text name="authorised_value" value='<TMPL_VAR name="authorised_value">'></td>
+	</tr>
+	<tr>
+		<td>Lib</td>
+		<td><input type=text name="lib" value='<TMPL_VAR name="lib">'></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="hidden" name="id" value="<TMPL_VAR name="id">">
+			<INPUT type="submit" value='OK'></td>
+	</tr>
+	</table>
+	</form>
+</TMPL_IF>
+<TMPL_IF name="delete_confirm">
+<!-------------------------------------------------------------------------------------------------->
+<table border=0 cellspacing=0 cellpadding=5>
+	<tr valign=top bgcolor=#99cc33>
+		<td background="/images/background-mem.gif"><b>Variable</b></td>
+		<td background="/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
+	</tr>
+	<tr>
+    <td>Valeur</td>
+    <td><TMPL_VAR name="Tvalue"></td></tr>
+	<form action='<TMPL_VAR name="script_name">' method=post>
+		<input type=hidden name=op value=delete_confirmed>
+		<input type=hidden name=id value='<TMPL_VAR name="id">'>
+		<input type="hidden" name="searchfield" value="<TMPL_VAR name="searchfield">">
+	<tr>
+      <td colspan=2 align=center>CONFIRMEZ LA SUPPRESSION</td>
+    </tr>
+	<tr><td>
+        <INPUT type=submit value='OUI'>
+      </form>
+		<td><form action='<TMPL_VAR name="script_name">' method=post>
+        <input type=submit value=NON>
+      </form></td></tr>
+</TMPL_IF>
+
+<!-------------------------------------------------------------------------------------------------->
+<TMPL_IF name="else">
+<font SIZE=6><em>Gestion des valeurs autorisées</em></font>
+<p>Cette table est utilisée pour la définition MARC. Vous pouvez définir autant de catégories que vous le souhaitez et autant de valeurs autorisées voulues dans chaque catégorie.</p>
+<p>Lorsque vous définissez la structure de sous-champ MARC, il est possible de faire un lien entre le sous-champ et une valeur autorisée. Lorsque l'utilisateur demande à ajouter ou à modifier une notice le sous-champ 
+n'est pas renseigné par un champ vide mais par une liste de valeurs autorisées.</p>
+<form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
+	<TMPL_VAR name="tab_list"><input type="submit" value="OK">   <a href="authorised_values.pl?op=add_form">Nouvelle catégorie...</a>
+</form>
+<TMPL_VAR name="searchfield">
+<table border=0 cellspacing=0 cellpadding=5>
+<tr valign=top bgcolor=#99cc33>
+	<td background="/images/background-mem.gif"><b>Catégorie</b></td>
+	<td background="/images/background-mem.gif"><b>Valeur autorisée</b></td>
+	<td background="/images/background-mem.gif">&nbsp;</td>
+	<td background="/images/background-mem.gif">&nbsp;</td>
+<TMPL_LOOP name="loop">
+</tr valign=top bgcolor='><TMPL_VAR name="bgcolor">'>
+	<td><TMPL_VAR name="Category"></td>
+	<td><TMPL_VAR name="Authorised_value"></td>
+	<td><a href="<TMPL_VAR name="edit">">Modifier</a></td>
+	<td><a href="<TMPL_VAR name="delete">">Supprimer</a></td>
+</tr>
+</TMPL_LOOP>
+<form action='<TMPL_VAR name="script_name">' method=post>
+<input type=hidden name=op value=add_form>
+</form></table>
+<table width=40%>
+	<tr>
+		<td width=50%><TMPL_VAR name="previous"></td>
+		<td width=50%><TMPL_VAR name="next"></td>
+	</tr>
+</table>
+<form action='<TMPL_VAR name="script_name">' method=post>
+<input type="hidden" name="op" value="add_form">
+<input type="hidden" name="category" value="<TMPL_VAR name="category">">
+<br><input type=image src="/images/button-add-new.gif"  WIDTH=188  HEIGHT=44  ALT="Add budget" BORDER=0 ><br>
+</form>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="parameters-bottom.inc">
+</table>

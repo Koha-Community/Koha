@@ -1,0 +1,148 @@
+<TMPL_INCLUDE NAME="cat-top.inc">
+<TMPL_IF NAME="loggedinuser">
+   <p align=left>Connect&eacute; : <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>D&eacute;connexion</a>]</p>
+<TMPL_ELSE>
+   <p align=left><a href=/cgi-bin/koha/opac-user.pl>Se connecter</a> &agrave; Koha</p>
+</TMPL_IF>
+
+<TMPL_IF NAME="loggedinuser">
+	
+<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> 
+[<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+	<p>
+	<center>
+	
+<h3>Ceci est une page de d&eacute;monstration</h3>
+
+	<table border=0 cellspacing=15>
+	<tr>
+<td valign=top>
+
+	<table border=1 cellpadding=10>
+	<tr>
+<th bgcolor=#99cccc background=/images/background-opac.gif>
+<font size=+2>R&eacute;servations</font></th></tr>
+	<tr><td>
+	
+<b>Les livres ci dessous sont &aacute; votre disposition:</b>
+	<ul>
+	<li>
+The Great Mom Swap par Betsy Hanes &aacute la Biblioth&egrave;que Centrale
+	<li>
+Between Brothers par Irene Morck &aacute la Biblioth&egrave;que Centrale
+	</ul>
+	<p>
+	
+<b>Vous avez des r&eacute;servations en cours pour les documents ci dessous:</b>
+	<ul>
+	<li>
+The Amazing Apple Book par Paulette Bourgeois
+	<li>
+Tracey the Great par Alan Cliburn
+	<li>
+The biography of a grizzly par Ernest Thompson Seton
+	</ul>
+	</td></tr>
+	
+</table>
+
+	</td><td valign=top>
+
+		<form method=post>
+		
+<table border=1 cellpadding=10>
+		<tr>
+<th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>User Preferences</font>
+</th></tr>
+		<tr><td align =center>
+		
+<table border=0 cellpadding=5>
+			<tr>
+<td>Langue</td><td>
+			
+<select name=language>
+			
+<option value=english>Anglais
+			
+<option value=english>Fran&ccedil;ais
+			
+<option value=english>Allemand
+			
+<option value=english>Polonais
+			</select>
+			
+</td></tr>
+			<tr><td>Adresse &eacute;lectronique</td>
+<td><input name=email size=30 value=<TMPL_VAR NAME=loggedinuser>@mylibrary.com></td></tr>
+
+			<tr><td>Site s&eacute;lectionn&eacute;<br>pour les retrait des r&eacute;servations</td><td>
+
+			<select name=pickupbranch>
+			
+<option value=MAIN>Biblioth&egrave;que Centrale
+
+			<option value=SEDGE>Biblioth&egrave;que Sedgewick
+
+			<option value=HANSEN selected>Biblioth&egrave;que Rick Hansen
+
+			<option value=CAT>Biblioth&egrave;que Cataline
+
+			</select>
+			
+</td></tr>
+			<tr><td colspan=2>
+
+
+<input name=specialeventsbyemail type=checkbox checked> M'informer par courrier &eacute;lectronique des &eacute;v&egrave;nements particuliers<br>
+
+<input name=overduesbyemail type=checkbox checked> Me pr&eacutevenir par courrier &eacute;lectronique en cas de retards<br>
+			
+<input name=recordreadingrecord type=checkbox> Conserver un historique des livres que j'ai lus<br>
+			
+<input name=recordreadingrecord type=checkbox>
+ Autoriser le personnel de la bibliothèque &aacute; voir mon historique d'emprunt<br>
+</td></tr>
+			<tr>
+<td align=center colspan=2>
+<input type=submit value="Set Preferences">
+
+</td>
+			</tr>
+		</table>
+		</td></tr>
+
+	</table>
+	</form>
+
+	</td></tr>
+	</table>
+
+	
+</center>
+<TMPL_ELSE>
+	<center>
+	
+<form method=post>
+		
+<table border=1 cellpadding=10>
+		
+<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2>
+<font size=+2>Pr&eacute;f&eacute;rences de l'usager</font></th></tr>
+		<tr>
+<td>Name:</td><td><input name="userid"></td></tr>
+		<tr>
+<td>Mot de passe:</td><td><input type=password name=password></td></tr>
+		<tr>
+<td align=center colspan=2>
+		    
+<input type=submit value="Login">
+		</td>
+		</tr>
+	    
+</table>
+	</form>
+	</center>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
+

@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>UNIMARC constructeur champ 700-4</title>
+</head>
+<body>
+<p>Sélectionnez la valeur pour la zone 700 $4. Elle sera automatiquement reportée 
+  dans la zone 700 $8.</p>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Code date publication </td>
+		<td><select name="f1" size="1">
+		  <option value="075 - postface" selected>SELECTED>postface</option>
+		  <option value="651 - dir. de publication">SELECTED>dir. de publication</option>
+		  <option value="440 - illustrateur">SELECTED>illustrateur</option>
+		  <option value="080 - pr&eacute;face, notes">SELECTED>pr&eacute;face, notes</option>
+		  <option value="730 - traducteur">SELECTED>traducteur</option>
+		</select>
+		</td>
+	</tr>
+	<tr><td colspan=2><input type="submit" value="Envoyer"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+		x = document.f_pop.f1.value.split(' - ');
+		opener.document.f.field_value[<TMPL_VAR name="index">].value= x[0];
+		if (<TMPL_VAR name="index2">>0) {
+			opener.document.f.field_value[<TMPL_VAR name="index2">].value= x[1];
+		}
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>
