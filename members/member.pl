@@ -32,15 +32,19 @@ use C4::Search;
 use HTML::Template;
 
 my $input = new CGI;
-
-my $theme = $input->param('theme') || "default";
-			# only used if allowthemeoverride is set
-#my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
-	# FIXME - Error-checking
-#my $template = HTML::Template->new( filename => $tmpldata{'path'},
-#				    die_on_bad_params => 0,
-#				    loop_context_vars => 1 );
-my ($template, $loggedinuser, $cookie)
+my $quicksearch = $input->param('quicksearch');
+my ($template, $loggedinuser, $cookie);
+if($quicksearch){
+	($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "members/member-quicksearch-results.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {borrowers => 1},
+			     debug => 1,
+			     });
+} else {
+	($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -48,6 +52,15 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {borrowers => 1},
 			     debug => 1,
 			     });
+}
+my $theme = $input->param('theme') || "default";
+			# only used if allowthemeoverride is set
+#my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
+	# FIXME - Error-checking
+#my $template = HTML::Template->new( filename => $tmpldata{'path'},
+#				    die_on_bad_params => 0,
+#				    loop_context_vars => 1 );
+
 
 my $member=$input->param('member');
 $member =~ s/,//g;   #remove any commas from search string
