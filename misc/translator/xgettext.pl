@@ -8,6 +8,7 @@ xgettext.pl - xgettext(1)-like interface for .tmpl strings extraction
 
 use strict;
 use Getopt::Long;
+use POSIX;
 use Locale::PO;
 use TmplTokenizer;
 use VerboseWarnings;
@@ -19,6 +20,7 @@ use vars qw( $pedantic_p );
 use vars qw( %text %translation );
 use vars qw( $charset_in $charset_out );
 use vars qw( $verbose_p );
+use vars qw( $po_mode_p );
 
 ###############################################################################
 
@@ -123,6 +125,10 @@ sub generate_po_file () {
     # We don't emit the Plural-Forms header; it's meaningless for us
     my $pot_charset = (defined $charset_out? $charset_out: 'CHARSET');
     $pot_charset = TmplTokenizer::charset_canon $pot_charset;
+    # Time stamps aren't exactly right semantically. I don't know how to fix it.
+    my $time = POSIX::strftime('%Y-%m-%d %H:%M%z', localtime(time));
+    my $time_pot = $time;
+    my $time_po  = $po_mode_p? $time: 'YEAR-MO-DA HO:MI+ZONE';
     print OUTPUT <<EOF;
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -133,8 +139,8 @@ sub generate_po_file () {
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\\n"
-"POT-Creation-Date: 2004-02-05 20:55-0500\\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
+"POT-Creation-Date: $time_pot\\n"
+"PO-Revision-Date: $time_po\\n"
 "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n"
 "Language-Team: LANGUAGE <LL\@li.org>\\n"
 "MIME-Version: 1.0\\n"
@@ -255,6 +261,7 @@ GetOptions(
     'pedantic-warnings|pedantic'	=> sub { $pedantic_p = 1 },
     'O|output-charset=s'		=> \$charset_out,	# INTERNAL
     'output|o=s'			=> \$output,
+    'po-mode'				=> \$po_mode_p,		# INTERNAL
     's|sort-output'			=> sub { $sort = 's' },
     'F|sort-by-file'			=> sub { $sort = 'F' },
     'v|verbose'				=> \$verbose_p,

@@ -239,6 +239,7 @@ if ($action eq 'create')  {
     close $tmph1;
     # Generate the temporary file that acts as <MODULE>/<LANG>.pot
     my $st = system($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
+	    '--po-mode',
 	    (defined $charset_in? ('-I', $charset_in): ()),
 	    (defined $charset_out? ('-O', $charset_out): ()));
     if ($st == 0) {
