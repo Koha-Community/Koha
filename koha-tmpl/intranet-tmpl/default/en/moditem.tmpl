@@ -1,11 +1,5 @@
 <TMPL_INCLUDE Name="cat-top.inc">
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Log In</a> to Koha</p>
-</TMPL_IF>
-
 <FONT SIZE=6><em><TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)</em></FONT><br>
 <table border=0 cellspacing=0 cellpadding=5>
 <tr valign=top bgcolor=white><td><form action=updateitem.pl method=post>
