@@ -125,7 +125,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername=");
+	my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername=?");
 	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
