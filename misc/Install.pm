@@ -1518,15 +1518,14 @@ $messages->{'CopyingFiles'}->{en}="Copying %s to %s.\n";
 sub installfiles {
 
 	#MJR: preserve old files, just in case
-	#FIXME: use dated backups
 	sub neatcopy {
 		my $desc = shift;
 		my $src = shift;
 		my $tgt = shift;
 		
-		if (-d $tgt) {
-    		print getmessage('CopyingFiles', ["old ".$desc,$tgt.".old"]);
-			startsysout;
+		if (-e $tgt) {
+    		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]);
+			startsysout();
 			system("mv ".$tgt." ".$tgt.".old");
 		}
 
