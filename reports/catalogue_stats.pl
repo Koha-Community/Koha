@@ -103,7 +103,7 @@ if ($do_it) {
 	my @values;
 	my %labels;
 	my $req;
-	$req = $dbh->prepare("select distinctrow left(dewey,3) from biblioitems");
+	$req = $dbh->prepare("select distinctrow left(dewey,3) from biblioitems order by dewey");
 	$req->execute;
 	my $hasdewey=1;
 	my @select;
@@ -118,7 +118,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare( "select distinctrow left(lccn,3) from biblioitems");
+	$req = $dbh->prepare( "select distinctrow left(lccn,3) from biblioitems order by lccn");
 	$req->execute;
 	undef @select;
 	push @select,"";
@@ -135,7 +135,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow left(itemcallnumber,5) from items");
+	$req = $dbh->prepare("select distinctrow left(itemcallnumber,5) from items order by itemcallnumber");
 	$req->execute;
 	undef @select;
 	push @select,"";
@@ -163,7 +163,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow itemtype from biblioitems");
+	$req = $dbh->prepare("select distinctrow itemtype from biblioitems order by itemtype");
 	$req->execute;
 	undef @select;
 	push @select,"";
@@ -176,7 +176,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow publishercode from biblioitems");
+	$req = $dbh->prepare("select distinctrow publishercode from biblioitems order by publishercode");
 	$req->execute;
 	undef @select;
 	push @select,"";
@@ -205,7 +205,7 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow location from items");
+	$req = $dbh->prepare("select distinctrow location from items order by location");
 	$req->execute;
 	undef @select;
 	push @select,"";
