@@ -58,35 +58,34 @@ foreach my $key (@names){
   $data{$key}=$input->param($key);
 }
 
-# FIXME: $ok means "not ok", but $valid really means "valid"
-my $ok=0;
+my $missing=0;
 
 my $string="The following compulsary fields have been left blank. Please push the back button
 and try again<p>";
 if ($data{'cardnumber_institution'} !~ /\S/){
   $string.="Cardnumber<br>";
-  $ok=1;
+  $missing=1;
 }
 if ($data{'institution_name'} !~ /\S/){
   $string.="Institution Name<br>";
-  $ok=1;
+  $missing=1;
 }
 if ($data{'address'} !~ /\S/){
   $string.="Postal Address<br>";
-  $ok=1;
+  $missing=1;
 }
 if ($data{'city'} !~ /\S/){
   $string.="City<br>";
-  $ok=1;
+  $missing=1;
 }
 if ($data{'contactname'} !~ /\S/){
   $string.="Contact Name";
-  $ok=1;
+  $missing=1;
 }
 
-$template->param( missingloop => ($ok==1));
+$template->param( missingloop => ($missing==1));
 $template->param( string => $string);
-if ($ok !=1) {
+if ($missing !=1) {
     $data{'cardnumber_institution'} = C4::Members::fixup_cardnumber
 	    ($data{'cardnumber_institution'});
 

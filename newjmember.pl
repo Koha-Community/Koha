@@ -45,7 +45,7 @@ my @names=$input->param;
 foreach my $key (@names){
   $data{$key}=$input->param($key);
 }
-my $ok=0;
+my $missing=0;
 
 my $string="The following compulsary fields have been left blank. Please push the back button
 and try again<p>";
@@ -58,29 +58,29 @@ for (my $i=0;$i<3;$i++){
   if ($number eq ''){
     if ($i == 0){
       $string.=" Cardnumber<br>";
-      $ok=1;
+      $missing=1;
     }
   } else {
     if ($firstname eq ''){
       $string.=" Given Names<br>";
-      $ok=1;
+      $missing=1;
     }
     if ($surname eq ''){
       $string.=" Surname<br>";
-      $ok=1;
+      $missing=1;
     }
     if ($dob eq ''){
       $string.=" Date Of Birth<br>";
-      $ok=1;
+      $missing=1;
     }
     if ($sex eq ''){
       $string.=" Gender <br>";
-      $ok=1;
+      $missing=1;
     }
     my $valid=checkdigit(\%env,$data{"cardnumber_child_$i"});
     if ($valid != 1){
-      $ok=1;
       $string.=" Invalid Cardnumber $number<br>";
+      $missing=1;
     }
   }
 }
@@ -111,7 +111,7 @@ for (my $i=0;$i<3;$i++){
 	}
 
 # FIXME IF main and image are not fetched by HTML::TEMPLATE get them into identsloop
-$template->param( 	NOK => (ok==1),
+$template->param( 	NOK => ($missing==1),
 								main => $main,
 								image => $image,
 								identsloop => \@identsloop,
