@@ -122,7 +122,7 @@ sub catalogsearch {
       }
     }
   }
-  if ($env->{itemcount}) {
+  if ($env->{itemcount} eq '1') {
     foreach my $data (@results){
       my ($counts) = itemcount2($env, $data->{'biblionumber'}, 'intra');
       my $subject2=$data->{'subject'};
@@ -336,6 +336,7 @@ sub KeywordSearch {
         ($dewey) && ($dewey.=" $subclass") ;                      
         $sth->finish;                                             
 	$data2->{'dewey'}=$dewey;
+	
 	$res2[$i]=$data2;
 #	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
         $i++;
@@ -560,7 +561,9 @@ sub CatSearch  {
 	 if ($search->{'abstract'} ne ''){
 	    $query.= " and (abstract like '%$search->{'abstract'}%')";
 	 }
-	 
+	 if ($search->{'date-before'} ne ''){
+	    $query.= " and (copyrightdate like '%$search->{'date-before'}%')";
+	   }
 
 	 $query.=" group by biblio.biblionumber";
       } else {
@@ -607,6 +610,9 @@ sub CatSearch  {
 	   if ($search->{'abstract'} ne ''){
 	    $query.= " and (abstract like '%$search->{'abstract'}%')";
 	   }
+	   if ($search->{'date-before'} ne ''){
+	    $query.= " and (copyrightdate like '%$search->{'date-before'}%')";
+	   }
 	  } elsif ($search->{'class'} ne ''){
 	     $query="select * from biblioitems,biblio where biblio.biblionumber=biblioitems.biblionumber";
 	     my @temp=split(/\|/,$search->{'class'});
@@ -635,6 +641,9 @@ sub CatSearch  {
 	    =biblioitems.biblionumber and (publishercode like '%$search->{'publisher'}%')";
 	  } elsif ($search->{'abstract'} ne ''){
 	    $query.= "Select * from biblio where abstract like '%$search->{'abstract'}%'";
+	  
+	  } elsif ($search->{'date-before'} ne ''){
+	    $query.= "Select * from biblio where copyrightdate like '%$search->{'date-before'}%'";
 	  }
           $query .=" group by biblio.biblionumber";	 
       }
@@ -715,7 +724,7 @@ my $count=1;
 my $i=0;
 my $limit= $num+$offset;
 while (my $data=$sth->fetchrow_hashref){
-  my $query="select dewey,subclass from biblioitems where biblionumber=$data->{'biblionumber'}";
+  my $query="select dewey,subclass,publishercode from biblioitems where biblionumber=$data->{'biblionumber'}";
   	    if ($search->{'class'} ne ''){
 	      my @temp=split(/\|/,$search->{'class'});
 	      my $count=@temp;
@@ -734,19 +743,26 @@ while (my $data=$sth->fetchrow_hashref){
 	    if ($search->{'publisher'} ne ''){
 	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
 	    }
-#print STDERR "$query\n";
+
   my $sti=$dbh->prepare($query);
   $sti->execute;
   my $dewey;
   my $subclass;
   my $true=0;
-  if (($dewey, $subclass) = $sti->fetchrow || $type eq 'subject'){
+  my $publishercode;
+  my $bibitemdata;
+  if ($bibitemdata = $sti->fetchrow_hashref() || $type eq 'subject'){
     $true=1;
+    $dewey=$bibitemdata->{'dewey'};
+    $subclass=$bibitemdata->{'subclass'};
+    $publishercode=$bibitemdata->{'publishercode'};
   }
+  print STDERR "$dewey $subclass $publishercode\n";
   $dewey=~s/\.*0*$//;
   ($dewey == 0) && ($dewey='');
   ($dewey) && ($dewey.=" $subclass");
   $data->{'dewey'}=$dewey;
+  $data->{'publishercode'}=$publishercode;
   $sti->finish;
   if ($true == 1){
     if ($count > $offset && $count <= $limit){
@@ -967,7 +983,7 @@ sub bibdata {
     $sth   = $dbh->prepare($query);
     $sth->execute;
     while (my $dat = $sth->fetchrow_hashref){
-        $data->{'subject'} .= " | $dat->{'subject'}";
+        $data->{'subject'} .= " , $dat->{'subject'}";
     } # while
 
     $sth->finish;
@@ -1085,7 +1101,8 @@ and issues.borrowernumber = borrowers.borrowernumber";
         $query2 = "select * from issues, borrowers
 where itemnumber = '$data->{'itemnumber'}'
 and issues.borrowernumber = borrowers.borrowernumber 
-order by date_due desc";
+and returndate is not NULL
+order by returndate desc,timestamp desc";
         $sth2 = $dbh->prepare($query2)
           || die $dbh->errstr;
         $sth2->execute
@@ -1384,7 +1401,7 @@ sub itemcount2 {
     my $sth2=$dbh->prepare($query2);     
     $sth2->execute;         
     if (my $data2=$sth2->fetchrow_hashref){         
-       $counts{'notavailable'}++;         
+       $counts{'not available'}++;         
     } else {         
        $counts{$data->{'branchname'}}++;
     }                             
