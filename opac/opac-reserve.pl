@@ -4,7 +4,6 @@ require Exporter;
 use CGI;
 
 use C4::Search;
-use C4::Output;       # gettemplate
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation::Circ2;
@@ -14,18 +13,16 @@ my $MAXIMUM_NUMBER_OF_RESERVES = 5;
 
 
 my $query = new CGI;
-
-
-my $flagsrequired;
-$flagsrequired->{borrow}=1;
-
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
-
-
-my $template = gettemplate("opac-reserve.tmpl", "opac");
+my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name => "opac-reserve.tmpl",
+			     query => $query,
+			     type => "opac",
+			     authnotrequired => 0,
+			     flagsrequired => {borrow => 1},
+			     debug => 1,
+			     });
 
 # get borrower information ....
-my $borrowernumber = getborrowernumber($loggedinuser);
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 my @bordat;
 $bordat[0] = $borr;
@@ -40,6 +37,8 @@ $template->param($bibdata);
 
 # get the rank number....
 my ($rank,$reserves) = FindReserves($biblionumber);
+$template->param(reservecount => $rank);
+
 foreach my $res (@$reserves) {
     if ($res->{'found'} eq 'W') {
 	$rank--;
@@ -60,6 +59,7 @@ $template->param(branchname => $branches->{$branch}->{'branchname'});
 
 # make branch selection options...
 my $branchoptions = '';
+my @branches;
 foreach my $br (keys %$branches) {
     (next) unless $branches->{$br}->{'IS'};
     my $selected = "";
@@ -67,14 +67,20 @@ foreach my $br (keys %$branches) {
 	$selected = "selected";
     }
     $branchoptions .= "<option value=$br $selected>$branches->{$br}->{'branchname'}</option>\n";
+    push @branches, {branchcode => $br, branchname => $branches->{$br}->{'branchname'}, selected => $selected};
 }
 $template->param( branchoptions => $branchoptions);
+$template->param(BRANCHES => \@branches);
 
 #### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
 # get the itemtype data....
 my @items = ItemInfo(undef, $biblionumber, 'intra');
+my $itemcount = @items;
+$template->param(itemcount => $itemcount);
+
 my %types;
 foreach my $itm (@items) {
+    $itm->{'datedue'} = slashifyDate($itm->{'datedue'});
     my $ity = $itm->{'itemtype'};
     unless ($types {$ity}) {
 	$types{$ity}->{'itemtype'} = $ity;
@@ -84,6 +90,8 @@ foreach my $itm (@items) {
 	$types{$ity}->{'branchinfo'}->{$itm->{'branchcode'}} ++;
     }
 }
+
+$template->param(ITEMS => \@items);
 
 foreach my $type (values %types) {
     my $copies = "";
@@ -181,5 +189,5 @@ if ($query->param('item_types_selected')) {
 }
 
 
-$template->param(loggedinuser => $loggedinuser);
-print "Content-Type: text/html\n\n", $template->output;
+
+print $query->header(-cookie => $cookie), $template->output;
