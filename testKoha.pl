@@ -2,6 +2,15 @@
 
 # $Id$
 
+BEGIN {
+    my $intranetdir=`grep intranetdir /etc/koha.conf`;
+    chomp $intranetdir;
+    $intranetdir=~s/\s*intranetdir\s*=\s*//i;
+    $::modulesdir=$intranetdir."/modules";
+}
+
+use lib $::modulesdir;
+
 use strict;
 use Test::Harness;
 
@@ -24,6 +33,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.1.2.10  2002/10/29 20:22:38  tonnesen
+# buildrelease now puts the test scripts in $intranetdir/scripts/t/
+#
 # Revision 1.1.2.9  2002/10/29 19:47:57  tonnesen
 # New test script for circulation module.
 #

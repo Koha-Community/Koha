@@ -16,13 +16,13 @@
 # Set C4 module directory
 
 BEGIN {
-    $::intranetdir=`grep intranetdir /etc/koha.conf`;
-    chomp $::intranetdir;
-    $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
-    print "$::intranetdir\n";
+    $intranetdir=`grep intranetdir /etc/koha.conf`;
+    chomp $intranetdir;
+    $intranetdir=~s/\s*intranetdir\s*=\s*//i;
+    $::modulesdir=$intranetdir."/modules";
 }
 
-use lib $::intranetdir."/modules";
+use lib $::modulesdir;
 
 
 use strict;
@@ -415,6 +415,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.25  2002/10/29 20:22:43  tonnesen
+# buildrelease now puts the test scripts in $intranetdir/scripts/t/
+#
 # Revision 1.4.2.24  2002/10/25 18:52:47  tonnesen
 # Moved bulkmracimport.pl to scripts directory (through buildrelease script)
 # Made bulkmarcimport.pl and updatedatabase able to run from the command line
