@@ -27,6 +27,7 @@ use strict;
 #use DBI;
 use C4::Search;
 use C4::Output;
+use C4::Auth;
 use C4::Reserves2;
 use C4::Biblio;
 use C4::Koha;
@@ -66,7 +67,6 @@ for (my $i=1; $i<=$num; $i++){
 my $branch = $input->cookie('branch');
 ($branch) || ($branch = 'L');
 my $branches = getbranches();
-my $branchoptions = branchoptions($branch);
 # make branch selection options...
 my @branchloop;
 foreach my $br (keys %$branches) {
@@ -153,7 +153,7 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 		$reserve{'barcode'}=$item->{'barcode'};
 		$reserve{'biblionumber'}=$item->{'biblionumber'};
 		$reserve{'wbrcode'} = $res->{'branchcode'};
-		$reserve{'wbrname'} = $branches->{$wbrcd}->{'branchname'};
+		$reserve{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
     }
     $reserve{'date'} = slashifyDate($res->{'reservedate'});
 	$reserve{'borrowernumber'}=$res->{'borrowernumber'};
