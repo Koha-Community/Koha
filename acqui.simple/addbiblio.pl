@@ -197,14 +197,17 @@ sub create_input () {
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" DISABLE READONLY>";
 	# it's a standard field
 	} else {
-		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\">"; #"
+		if (length($value) >200) {
+			$subfield_data{marc_value}="<textarea name=\"fieldvalue\" cols=\"50\" rows=\"5\" >$value</textarea>";
+		} else {
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\">"; #"
+		}
 	}
 	return \%subfield_data;
 }
 
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
-
     # fill arrays
     my @loop_data =();
     my $tag;
@@ -260,7 +263,7 @@ sub build_tabs ($$$$) {
 						push (@loop_data, \%tag_data);
 					}
 # If there is more than 1 field, add an empty hidden field as separator.
-					if ($#fields >=1) {
+					if ($#fields >1) {
 						my @subfields_data;
 						my %tag_data;
 						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));

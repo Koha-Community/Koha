@@ -20,6 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.4.2.1  2005/03/25 12:52:44  tipaul
+# needs "editcatalogue" flag, not "catalogue"
+#
 # Revision 1.4  2004/11/19 16:41:49  tipaul
 # improving behaviour when MARC=OFF
 #
@@ -95,7 +98,7 @@ else {
                 query           => $input,
                 type            => "intranet",
                 authnotrequired => 0,
-                flagsrequired   => { catalogue => 1 },
+                flagsrequired   => { editcatalogue => 1 },
                 debug           => 1,
             }
         );

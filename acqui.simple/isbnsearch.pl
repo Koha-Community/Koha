@@ -44,7 +44,7 @@ my $dbh = C4::Context->dbh;
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { catalogue => 1 },
+            flagsrequired   => { editcatalogue => 1 },
             debug           => 1,
         }
     );

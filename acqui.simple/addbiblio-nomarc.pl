@@ -26,6 +26,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # $Log$
+# Revision 1.2.4.1  2005/03/25 12:52:42  tipaul
+# needs "editcatalogue" flag, not "catalogue"
+#
 # Revision 1.2  2003/05/09 23:47:22  rangi
 # This script is now templated
 # 3 more to go i think
@@ -45,7 +48,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { catalogue => 1 },
+        flagsrequired   => { editcatalogue => 1 },
         debug           => 1,
     }
 );
