@@ -14,7 +14,7 @@ use C4::Auth;
 
 my $env;
 my $query = new CGI;
-my ($userid, $cookie, $sessionID) = checkauth($query);
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 print $query->header(-cookie => $cookie);
 my $headerbackgroundcolor='#663266';
 my $circbackgroundcolor='#555555';
@@ -26,7 +26,7 @@ print startpage();
 print startmenu('catalogue');
 
 
-print "SessionID: $sessionID<br>\n";
+print "Logged in as: $loggedinuser  <a href=logout.pl>Log Out</a><br>\n";
 
 
 my ($shelflist) = GetShelfList();
@@ -169,6 +169,9 @@ EOF
 
 #
 # $Log$
+# Revision 1.5  2002/07/04 19:42:48  tonnesen
+# Minor changes
+#
 # Revision 1.4  2002/07/04 19:21:29  tonnesen
 # Beginning of authentication api.  Applied to shelves.pl for now as a test case.
 #
