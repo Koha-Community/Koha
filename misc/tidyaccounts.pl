@@ -41,5 +41,5 @@ foreach my $key (@name){
     }
   }
 }
-    
+
 print $input->redirect("boraccount.pl?bornum=$bornum");
