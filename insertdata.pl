@@ -65,7 +65,6 @@ if (my $data2=$sth->fetchrow_hashref){
   textmessaging='$data{'textmessaging'}', branchcode = '$data{'branchcode'}',
   zipcode = '$data{'zipcode'}',homezipcode='$data{'homezipcode'}'
   where borrowernumber=$data{'borrowernumber'}";
-#  print $query;
 
 }else{
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
@@ -81,7 +80,6 @@ if (my $data2=$sth->fetchrow_hashref){
   '$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
   '$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
   '$data{'ethnicity'}','$data{'borrowernumber'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
-  warn "".$query;
 }
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
