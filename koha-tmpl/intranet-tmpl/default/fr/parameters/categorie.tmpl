@@ -255,19 +255,19 @@
 	
         <table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Categorie</b></td>
-			<td background='/images/background-mem.gif'><b>Description</b></td>
-			<td background='/images/background-mem.gif'><b>Inscription</b></td>
-			<td background='/images/background-mem.gif'><b>Age maxi</b></td>
-			<td background='/images/background-mem.gif'><b>Age mini</b></td>
-			<td background='/images/background-mem.gif'><b>Profil</b></td>
-			<td background='/images/background-mem.gif'><b>??</b></td>
-			<td background='/images/background-mem.gif'><b>Frais</b></td>
-			<td background='/images/background-mem.gif'><b>overdue</b></td>
-			<td background='/images/background-mem.gif'><b>nb max emprunt</b></td>
-			<td background='/images/background-mem.gif'><b>frais réserv</b></td>
-			<td background='/images/background-mem.gif'> </td>
-			<td background='/images/background-mem.gif'> </td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Catégorie</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Description</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Inscription</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Age maxi</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Age mini</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Profil</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Durée</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Frais</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>Depass</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>nb max emprunt</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'><b>frais réserv</b></td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
+			<td background='<TMPL_VAR name="themelang">/images/background-mem.gif'> </td>
 		</tr>
 		<TMPL_LOOP NAME=loop>
 		<tr bgcolor="<TMPL_VAR NAME=toggle>">
@@ -290,7 +290,7 @@
 	</table>
 	<p><form action='<TMPL_VAR NAME=script_name>' method=post>
 		<input type=hidden name=op value=add_form>
-		<input type=submit class="button" value="Add Category"  ALT="Add Category"><br>
+		<input type=submit class="button" value="Ajout Catégorie"  ALT="Ajout Catégorie"><br>
 	</form></p>
 </TMPL_IF>
 
