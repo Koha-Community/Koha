@@ -52,15 +52,17 @@ my $date="$mday/$mon/$year";
 # get biblioitem information and build rows for form
 my ($count2,@data) = bibitems($bib);
 my $bibitemrows = "";
-for (my $i=0; $i<$count2; $i++){
-    my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
-    if ($data[$i]->{'dewey'} == 0){
-	$data[$i]->{'dewey'}="";
-    }
-    $data[$i]->{'dewey'}=~ s/\.0000$//;
-    $data[$i]->{'dewey'}=~ s/00$//;
-    my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
-    $bibitemrows .= <<"EOF";
+for (my $i=0; $i<$count2; $i++) {
+    if ($data[$i]->{'renewalsallowed'}){
+	my @barcodes = barcodes($data[$i]->{'biblioitemnumber'});
+	if ($data[$i]->{'dewey'} == 0){
+	    $data[$i]->{'dewey'}="";
+	}
+	$data[$i]->{'volumeddesc'} = "&nbsp;" unless $data[$i]->{'volumeddesc'};
+	$data[$i]->{'dewey'}=~ s/\.0000$//;
+	$data[$i]->{'dewey'}=~ s/00$//;
+	my $class="$data[$i]->{'classification'}$data[$i]->{'dewey'}$data[$i]->{'subclass'}";
+	$bibitemrows .= <<"EOF";
 <tr VALIGN=TOP>
 <TD><input type=checkbox name=reqbib value=$data[$i]->{'biblioitemnumber'}>
 <input type=hidden name=biblioitem value=$data[$i]->{'biblioitemnumber'}>
@@ -74,6 +76,7 @@ for (my $i=0; $i<$count2; $i++){
 <td>@barcodes</td>
 </tr>
 EOF
+    }
 }
 
 
