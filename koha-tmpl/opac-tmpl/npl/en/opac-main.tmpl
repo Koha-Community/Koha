@@ -11,7 +11,7 @@
 <!-- TMPL_ELSE --><div id="sidebar">
 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
 <h3>Log in to Check Your Account</h3>
-<p><label for="userid">Card Number:</label> <input type="text" id="userid" size="10" name="userid" /></p>
+<p><label for="userid">Card Number:</label><!-- Hide from NPL --><input type="text" id="userid" size="10" name="userid" /><!-- /Hide from NPL --> <!-- Display for NPL // <input type="text" id="userid" size="10" name="userid" onblur="ValidateCode();" /> //Display for NPL --></p>
 <p><label for="password">Password:</label> <input type="password" id="password" size="10" name="password" /></p>
 <p><input type="submit" value="Log In" class="submit" /></p>
 </form></div>
@@ -32,12 +32,12 @@
 		<p>
 			<a href="/cgi-bin/koha/opac-search.pl">Advanced Search (More Options)</a>
 		</p>
-<!-- Display for NPL <p><em class="new">New! </em>Find the latest additions: <br /><a href="/format-search.php">Search by format and date</a></p> /Display for NPL -->
+<!-- Display for NPL // <p>Find the latest additions: <br /><a href="/opac-format-search.php">Search by format and date</a></p> //Display for NPL -->
 	</form>
 	<br clear="right" />
 </div>
 
-<div class="content-block">
+<!-- Hide from NPL --><div class="content-block">
 	<h3>Recent acquisitions</h3>
 	<form action="/cgi-bin/koha/opac-search.pl">
 		<p>
@@ -52,19 +52,16 @@
 			<input type="submit" value="Search" class="submit" />
 		</p>
 	</form>
-</div>
+</div><!-- /Hide from NPL -->
 	
 <!-- TMPL_IF NAME="loggedinusername" -->
 <div class="content-block">
-<h3>Logged in as </h3>
-<p><!-- TMPL_LOOP NAME="USER_INFO" -->
- <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
-<!-- /TMPL_LOOP --></p>
+<h3>You're logged in as <em><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em> <span class="print">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span><!-- /TMPL_LOOP --></h3>
 <p><a href="/cgi-bin/koha/opac-user.pl">your library home</a> |   
-	<a href="/cgi-bin/koha/opac-account.pl">your account</a> |
+	<!-- Hide from NPL--> <a href="/cgi-bin/koha/opac-account.pl">your account</a> | <!-- Hide from NPL -->
 	<a href="/cgi-bin/koha/opac-userdetails.pl">your personal details</a>		<!-- TMPL_IF name="virtualshelves" -->| <a href="/cgi-bin/koha/opac-shelves.pl" class="button">virtual shelves</a><!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">view &amp; manage suggestions</a><!-- /TMPL_IF --></p>
 		<!-- TMPL_IF name="textmessaging"-->
-			<h2>Message from the library</h2>
+			<h3>Message from the library</h3>
 			<p><!-- TMPL_VAR name="textmessaging" --></p>
 		<!-- /TMPL_IF -->
 <form method="post" action="/cgi-bin/koha/opac-logout.pl">
@@ -72,16 +69,16 @@
 </form>
 </div><!-- /TMPL_IF -->
 
-	<div class="content-block">
+	<!-- Hide from NPL --><div class="content-block">
 	<h4 class="inline">Change Language:</h3>
 	<form action="/cgi-bin/koha/changelanguage.pl" method="post" class="inline">
 		<select name="language">
-			<TMPL_LOOP NAME="languages">
-				<option value="<TMPL_VAR NAME="language">"><TMPL_VAR NAME="language"></option>
-			</TMPL_LOOP>
+			<!-- TMPL_LOOP NAME="languages" -->
+				<option value="<TMPL_VAR NAME="language">"><!-- TMPL_VAR NAME="language" --></option>
+			<!-- /TMPL_LOOP -->
 		</select>
 		<input type="submit" value="Switch" class="submit">
-	</form></div>
+	</form></div> <!-- /Hide from NPL -->
 </div>
 
 </body>
