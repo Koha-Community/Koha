@@ -43,7 +43,7 @@ my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "opac-addbookbybiblionumber.tmpl",
 							query => $query,
 							type => "opac",
-							authnotrequired => 0,
+							authnotrequired => 1,
 						});
 
 my $x; # for trash
@@ -80,6 +80,11 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.1  2005/03/10 08:44:43  tipaul
+# bugfix in baskets :
+# * The user does not need to have to have librarian rights to use virtual shelves
+# * error when adding a biblio to an existing basket
+#
 # Revision 1.1  2005/01/03 11:09:59  tipaul
 # *** empty log message ***
 #
