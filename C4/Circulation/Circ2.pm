@@ -683,7 +683,7 @@ sub issuebook {
 			} elsif ($responses->{1} eq 'Y') {
 				returnbook($iteminformation->{'barcode'}, $env->{'branchcode'});
 			} else {
-				$rejected=-1;
+				$rejected="Item on issue to another borrower, and you have chosen not to return it";
 				last SWITCH;
 			}
 		}
