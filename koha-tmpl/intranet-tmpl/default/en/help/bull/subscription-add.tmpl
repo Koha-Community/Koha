@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-	<h1>Serials subscription add help</h1>
+	<h1>Serials subscription add & modify help</h1>
 	<ul>
 		<h2>Subscription information bloc</h2>
 		<p>it contains the name of the librarian that created the subscription, the name of the supplier providing the subscription, the cost and the budget affected. It also contains the title of the biblio managed by the subscription.</p>
@@ -17,11 +17,14 @@
 				<li>Last value / begins with : the last value calculated or the 1st value (when adding a subscription</li>
 			</ul>
 		<h2>Sample</h2>
-			Consider the formula <b>N°{X}/{Y}</b>. The following XYZ settings :
+		Consider the formula <b>N°{X}/{Y}</b>. The following XYZ settings :
+		<ul>
 			<li> <b>X</b> add <b>1</b> once every <b>4</b> times. When more than <b>9999999</b> set back to <b>empty</b>. Begins with <b>2004</b></li>
 			<li> <b>Y</b> add <b>1</b> once every <b>1</b> times. When more than <b>4</b> set back to <b>4</b>. Begins with <b>1</b></li>
-			will result in the following issues numbers :
-			<b>N°2004/1, N°2004/2, N°2004/3, N°2004/4, N°2005/1, N°2005/2, N°2005/3, N°2005/4, N°2006/1
+		</ul>
+		will result in the following issues numbers :
+		<p>N°2004/1, N°2004/2, N°2004/3, N°2004/4, N°2005/1, N°2005/2, N°2005/3, N°2005/4, N°2006/1</p>
 		<p>
+			<b>Note:</b> when you add a subscription, Koha consider you already have done the order, or that you will do it soon. So, NO information is sent to the acquisition module. This is not the case when the subscription expires. In this case, a subscription renewal creates a "suggestion" that is sent to the acquisition module.
 		</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->
