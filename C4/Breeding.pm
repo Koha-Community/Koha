@@ -73,7 +73,7 @@ where isbn=? and title=?");
 	for (my $i=0;$i<=$#marcarray;$i++) {
 		my $marcrecord = MARC::File::USMARC::decode($marcarray[$i]."\x1D");
 		my @warnings = $marcrecord->warnings();
-		if (ref($marcrecord) eq undef) {
+		if (scalar($marcrecord->fields()) == 0) {
 			$notmarcrecord++;
 		} else {
 			my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
