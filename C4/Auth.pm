@@ -28,6 +28,8 @@ use C4::Context;
 use C4::Output;              # to get the template
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;  # getpatroninformation
+use Net::LDAP;
+use Net::LDAP qw(:all);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -45,7 +47,7 @@ C4::Auth - Authenticates Koha users
 
   my $query = new CGI;
 
-  my ($template, $borrowernumber, $cookie)
+  my ($template, $borrowernumber, $cookie) 
     = get_template_and_user({template_name   => "opac-main.tmpl",
                              query           => $query,
 			     type            => "opac",
@@ -177,7 +179,7 @@ user has authenticated, C<&checkauth> restarts the original script
 (this time, C<&checkauth> returns).
 
 The login page is provided using a HTML::Template, which is set in the
-systempreferences table or at the top of this file. The variable C<$type> 
+systempreferences table or at the top of this file. The variable C<$type>
 selects which template to use, either the opac or the intranet 
 authentification template.
 
@@ -347,6 +349,36 @@ sub checkpw {
 # tables passwd field
 #
 	my ($dbh, $userid, $password) = @_;
+# LDAP
+	my $sth=$dbh->prepare("select value from systempreferences where variable=?");
+	$sth->execute("ldapserver");
+	my $ldapserver = C4::Context->preferences('ldapserver');
+	if ($ldapserver) {
+		my $ldapinfos = C4::Context->preferences('ldapinfos');
+		my %bindargs;
+		my $nom  = "uid=$userid, $ldapinfos";
+		my $db = Net::LDAP->new( $ldapserver );
+		$bindargs{dn}=$nom;
+		$bindargs{password}=$password;
+		my $res =$db->bind(%bindargs);
+		if($res->code) {
+		# auth refused
+			return 0;
+		} else {
+		#get the cardnumber
+		my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
+		$sth->execute($userid);
+		if ($sth->rows) {
+			my $cardnumber = $sth->fetchrow;
+			#we have the cardnumber
+			return 1,$cardnumber;
+		}
+		if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
+			# Koha superuser account
+			return 2;
+		}
+	}
+# INTERNAL AUTH
 	my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
 	$sth->execute($userid);
 	if ($sth->rows) {
@@ -374,8 +406,6 @@ sub checkpw {
 	}
 	return 0;
 }
-
-
 
 sub getuserflags {
     my $cardnumber=shift;
@@ -405,8 +435,8 @@ sub haspermission {
     if ($userid eq C4::Context->config('user')) {
 	# Super User Account from /etc/koha.conf
 	$flags->{'superlibrarian'}=1;
-    }
-    if ($userid eq 'demo' && C4::Context->config('demo')) {
+     }
+     if ($userid eq 'demo' && C4::Context->config('demo')) {
 	# Demo user that can do "anything" (demo=1 in /etc/koha.conf)
 	$flags->{'superlibrarian'}=1;
     }
