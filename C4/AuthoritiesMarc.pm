@@ -511,7 +511,11 @@ sub AUTHmodauthority {
 # 2nd recreate it
 	&AUTHdelauthority($dbh,$authid,1);
 	&AUTHaddauthority($dbh,$record,$authid,AUTHfind_authtypecode($dbh,$authid));
-	# FIXME : modify the authority in biblio too.
+	# save the file in localfile/modified_authorities
+	my $filename = C4::Context->config("intranetdir")."/localfile/modified_authorities/$authid.authid";
+	open AUTH, "> $filename";
+	print AUTH $authid;
+	close AUTH;
 }
 
 sub AUTHdelauthority {
@@ -837,6 +841,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.9.2.1  2005/02/24 13:12:13  tipaul
+# saving authority modif in a text file. This will be used soon with another script (in crontab). The script in crontab will retrieve every authorityid in the directory localfile/authorities and modify every biblio using this authority. Those modifs may be long. So they can't be done through http, because we may encounter a webserver timeout, and kill the process before end of the job.
+# So, it will be done through a cron job.
+# (/me agree we need some doc for command line scripts)
+#
 # Revision 1.9  2004/12/23 09:48:11  tipaul
 # Minor changes in summary "exploding" (the 3 digits AFTER the subfield were not on the right place).
 #
