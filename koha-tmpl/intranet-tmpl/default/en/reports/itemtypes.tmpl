@@ -1,0 +1,32 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+<!-- TMPL_IF name="do_it" -->
+<!-- TMPL_LOOP name="mainloop" -->
+	<h1>Koha : Reports on itemtypes <!--TMPL_IF name="branch" --> for branch = <!-- TMPL_VAR name="branch" --><!-- /TMPL_IF --></h1>
+	<table>
+		<tr>
+			<th>Item type</th>
+			<th>count</th>
+		</tr>
+			<!-- TMPL_LOOP name="loopitemtype" -->
+				<tr>
+					<td><!-- TMPL_VAR name="itemtype" --></td>
+					<td><!-- TMPL_VAR name="count" --></td>
+				</tr>
+			<!-- /TMPL_LOOP name="loopitemtype" -->
+			<tr>
+				<th>TOTAL</th>
+				<th><!-- TMPL_VAR name="total" --></th>
+	</table>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<h1>View catalogue group by itemtypes</h1>
+	<form method="post">
+		Select a branch (or don't if you want the report for all branches) <!-- TMPL_VAR name="CGIbranch" -->
+		<input type="submit" value="OK" class="button">
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR name="report_name" -->">
+		<input type="hidden" name="do_it" value="1">
+	</form>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
