@@ -121,7 +121,7 @@ my ($input) = @_;
 		my $sth = $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
 						left join auth_header on auth_subfield_table.authid=auth_header.authid 
 						where authtypecode='EDITORS' and tag='200' and subfieldcode='a' and subfieldvalue=?");
-		my $sth2 = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='c' and authid=?");
+		my $sth2 = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='c' and authid=? order by subfieldvalue");
 		my @splited = split //, $isbn_found;
 		my $isbn_rebuild='';
 		foreach my $x (@splited) {
