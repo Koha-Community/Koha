@@ -4,6 +4,7 @@ use strict;
 require Exporter;
 use DBI;
 use C4::Database;
+use C4::Search;
 #use C4::Accounts;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -51,8 +52,25 @@ sub FindReserves {
   my $i=0;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]=$data;
-    $i++;
+      if ($data->{'constrainttype'} eq 'o') {
+	  my $conquery = "SELECT biblioitemnumber FROM reserveconstraints 
+                           WHERE biblionumber   = ? 
+                             AND borrowernumber = ?
+                             AND reservedate    = ?";
+	  my $csth=$dbh->prepare($conquery);
+	  my $bibn = $data->{'biblionumber'};
+	  my $born = $data->{'borrowernumber'};
+	  my $resd = $data->{'reservedate'};
+	  $csth->execute($bibn, $born, $resd);
+	  my ($bibitemno) = $csth->fetchrow_array;
+	  $csth->finish;
+	  my $bdata = C4::Search::bibitemdata($bibitemno);
+	  foreach my $key (keys %$bdata) {
+	      $data->{$key} = $bdata->{$key};
+	  }
+      }
+      $results[$i]=$data;
+      $i++;
   }
 #  print $query;
   $sth->finish;
