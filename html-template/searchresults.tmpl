@@ -2,19 +2,13 @@
 <head><title>Test Template</title>
 </head>
 <body>
-Testing <TMPL_VAR NAME=NAME>
-<p>
-Pet's Name: <TMPL_VAR NAME=PET>
-<p>
-<hr>
 <table border=1>
-<tr><th>Barcode</th><th>Title</th><th>Author</th><th>Dewey</th></tr>
+<tr><th>Title</th><th>Author</th><th>Biblionumber</th></tr>
 <TMPL_LOOP NAME=SEARCH_RESULTS>
   <tr>
-  <td> <TMPL_VAR NAME=BARCODE> </td>
-  <td> <TMPL_VAR NAME=TITLE> </td>
-  <td> <TMPL_VAR NAME=AUTHOR> </td>
-  <td> <TMPL_VAR NAME=DEWEY> </td>
+  <td> <TMPL_VAR NAME=title> </td>
+  <td> <TMPL_VAR NAME=author> </td>
+  <td> <TMPL_VAR NAME=biblionumber> </td>
   </tr>
 </TMPL_LOOP>
 </table>
