@@ -208,6 +208,80 @@ my %requiretables = (
 				flag char(30), flagdesc char(255),
 				defaulton int(11)
 			)",
+	auth_types => "(
+					authtypecode char(10) not NULL,
+					authtypetext char(255) not NULL,
+					auth_tag_to_report char(3) not NULL,
+			)",
+    auth_subfield_structure => "(
+					authtypecode char(10) NOT NULL default '',
+					tagfield char(3) NOT NULL default '',
+					tagsubfield char(1) NOT NULL default '',
+					liblibrarian char(255) NOT NULL default '',
+					libopac char(255) NOT NULL default '',
+					repeatable tinyint(4) NOT NULL default '0',
+					mandatory tinyint(4) NOT NULL default '0',
+					tab tinyint(1) default NULL,
+					authorised_value char(10) default NULL,
+					value_builder char(80) default NULL,
+					seealso char(255) default NULL,
+					PRIMARY KEY  (authtype,tagfield,tagsubfield),
+					KEY kohafield (kohafield),
+					KEY tab (tab)
+					)",
+    auth_tag_structure => "(
+					authtypecode char(10) NOT NULL default '',
+					tagfield char(3) NOT NULL default '',
+					liblibrarian char(255) NOT NULL default '',
+					libopac char(255) NOT NULL default '',
+					repeatable tinyint(4) NOT NULL default '0',
+					mandatory tinyint(4) NOT NULL default '0',
+ 					authorised_value char(10) default NULL,
+					PRIMARY KEY  (authtype,tagfield)
+					)",
+    auth_header => "(
+						authid bigint(20) unsigned NOT NULL auto_increment,
+						datecreated date NOT NULL default '0000-00-00',
+						datemodified date default NULL,
+						origincode char(20) default NULL,
+						PRIMARY KEY  (authid),
+						KEY origincode (origincode),
+						) ",
+    marc_subfield_table => "(
+						subfieldid bigint(20) unsigned NOT NULL auto_increment,
+						authid bigint(20) unsigned NOT NULL default '0',
+						tag char(3) NOT NULL default '',
+						tagorder tinyint(4) NOT NULL default '1',
+						tag_indicator char(2) NOT NULL default '',
+						subfieldcode char(1) NOT NULL default '',
+						subfieldorder tinyint(4) NOT NULL default '1',
+						subfieldvalue varchar(255) default NULL,
+						valuebloblink bigint(20) default NULL,
+						PRIMARY KEY  (subfieldid),
+						KEY authid (authid),
+						KEY tag (tag),
+						KEY tag_indicator (tag_indicator),
+						KEY subfieldorder (subfieldorder),
+						KEY subfieldcode (subfieldcode),
+						KEY subfieldvalue (subfieldvalue),
+						KEY tagorder (tagorder)
+					)",
+    auth_word => "(
+				authid bigint(20) NOT NULL default '0',
+				tag char(3) NOT NULL default '',
+				tagorder tinyint(4) NOT NULL default '1',
+				subfieldid char(1) NOT NULL default '',
+				subfieldorder tinyint(4) NOT NULL default '1',
+				word varchar(255) NOT NULL default '',
+				sndx_word varchar(255) NOT NULL default '',
+				KEY authid (authid),
+				KEY tag (tag),
+				KEY tagorder (tagorder),
+				KEY subfieldid (subfieldid),
+				KEY subfieldorder (subfieldorder),
+				KEY word (word),
+				KEY sndx_word (sndx_word)
+			)",
 );
 
 my %requirefields = (
@@ -251,7 +325,10 @@ my %requirefields = (
 	marc_tag_structure =>{
 							'itemtype' => 'char(4) not NULL default \'\''},
     marc_subfield_structure =>{'seealso'  => 'char(255)',
-							'itemtype' => 'char(4) not NULL default \'\''},
+							'itemtype' => 'char(4) not NULL default \'\'',
+							'hidden' => 'tinyint(1)',
+							'isurl' => 'tinyint(1)',
+							},
     bookshelf => {'owner' => 'char(80)',
     					'category' => 'char(1)',
 				},
@@ -578,6 +655,15 @@ my %tabledata = (
 	    			     'type' => 1 },
             value               => '0',
             explanation => 'if set to 1, print circulation slips. If set to 0, don\'t',
+	    type		=> 'free'
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'suggestion',
+	    forceupdate		=> { 'explanation' => 1,
+	    			     'type' => 1 },
+            value               => '0',
+            explanation => 'if set to 1, suggestions are activated in OPAC',
 	    type		=> 'free'
         },
     ],
@@ -1075,6 +1161,11 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.80  2004/05/28 08:32:00  tipaul
+# adding :
+# * MARC authority file
+# * seealso & hidden in MARC biblio structure.
+#
 # Revision 1.79  2004/05/18 09:50:07  tipaul
 # *** empty log message ***
 #
