@@ -79,7 +79,7 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif'" 		onMouseOut="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-search.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-search.gif" width=320 	height=37 name="search"
 			hspace=0 vspace=0 border=0></a></td>
 		</tr>
-		<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
+		<FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
 		<tr valign=top >
 			<td background="" rowspan=3 align="right" colspan=5>
 				<img src="/images/holder.gif"
@@ -90,6 +90,8 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<td></td>
 			<td></td>
 			<td background="" colspan=3>
+				<input type="hidden" name="module" value="search">
+				<input type="hidden" name="type" value="intranet">
 				<input type=text size="27" name="keyword"><input type=reset value="clr"><br>
 
 			<font size=1 face="arial,helvetica" ><b>Type in the box and press the enter key.</b><br>
@@ -111,7 +113,7 @@ circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation
 			<form action="/cgi-bin/koha/member.pl" method=post >
 			<td background=""  colspan=4>
 				<a href="/cgi-bin/koha/members-home.pl" onMouseOver="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif'" 		onMouseOut="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-member.gif'">
-				<img src="<TMPL_VAR NAME='themelang'>/images/front-member.gif" width=304		height=37 name="member"
+				<img src="<TMPL_VAR NAME='themelang'>/images/front-member.gif" width=304 height=37 name="member"
 				hspace=0 vspace=0 border=0>
 			</td>
 

@@ -35,7 +35,6 @@ SWITCH: {
 	if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
 }
 
-
 sub acquisitions {
 	my $aq_type = C4::Context->preference("acquisitions") || "normal";
 		# Get the acquisition preference. This should be:
@@ -55,12 +54,21 @@ sub acquisitions {
 sub catalogue_search {
 	my $marc_p = C4::Context->boolean_preference("marc");
 	$marc_p = 1 unless defined $marc_p;
+	my $keyword=$input->param('keyword');
 	my $query = new CGI;
 	my $type = $query->param('type');
-	if ($marc_p) {
-		print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
+	if ($keyword) {
+		if ($marc_p) {
+			print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
+		} else {
+			print $input ->redirect("/cgi-bin/koha/search.pl?keyword=$keyword");
+		}
 	} else {
-		print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
+		if ($marc_p) {
+			print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
+		} else {
+			print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
+		}
 	}
 }
 

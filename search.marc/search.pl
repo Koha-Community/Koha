@@ -35,7 +35,6 @@ use C4::Koha; # XXX subfield_is_koha_internal_p
 my $query=new CGI;
 my $type=$query->param('type');
 my $op = $query->param('op');
-#$type="opac" unless $type;
 
 my $dbh = C4::Context->dbh;
 
@@ -58,8 +57,8 @@ if ($op eq "do_search") {
 		push @tags, substr($marc,0,3);
 		push @subfields, substr($marc,3,1);
 	}
-	my @results = catalogsearch($dbh, \@tags, \@subfields, \@and_or, 
-											\@excluding, \@operator, \@value, 
+	my @results = catalogsearch($dbh, \@tags, \@subfields, \@and_or,
+											\@excluding, \@operator, \@value,
 											$startfrom, 20);
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "search.marc/result.tmpl",
