@@ -3,6 +3,8 @@ use HTML::Template;
 use strict;
 require Exporter;
 use C4::Database;
+use C4::Auth;
+use C4::Interface::CGI::Output;
 use C4::Output;  # contains gettemplate
 use C4::Biblio;
 use CGI;
@@ -37,6 +39,6 @@ if ($op eq "export") {
 					flagsrequired => {parameters => 1},
 					debug => 1,
 					});
-	print  $query->header(-cookie => $cookie), $template->output;
+	output_html_with_http_headers $query, $cookie, $template->output;
 }
 
