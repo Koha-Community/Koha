@@ -3,11 +3,17 @@
 <html>
 <head>
 <title>KOHA: INTRANET: Catalogue</title>
-<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
-</head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
+<script language="JavaScript">
+<!-- Hide from old browsers
+function openWindow(targeturl, windowname) {
+newwin =
+window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
+}
+// end hiding -->
+</script>
+
+<link rel="stylesheet" type="text/css" href="<TMPL_VAR name="themelang">/includes/common-style.css">
 <style>
 a.catalogue {
 	font-weight: normal;
@@ -28,12 +34,17 @@ a.catalogue:hover {
 	margin:0;
 	}
 </style>
+</head>
+<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
+marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
+
+
 
 <!------------------------MENUS-------------------------------->
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
 <tr height="65">
 	<td valign="bottom" align="left">
-		<table width="100%" cellpadding=0 cellspacing=0>
+		<table width="100%" cellpadding=0 cellspacing=0 height=60>
 		<tr>
 			<td>
 			<div id="menubar">
@@ -67,8 +78,7 @@ a.catalogue:hover {
 				</TR>
 			</TABLE>
 			</div>
-			<div id="submenu" style="border-left:0px;">
-			<table cellpadding=0 cellspacing=0  border=0 height=20>
+			<table cellpadding=0 cellspacing=0  border=0 height=29>
 				<tr>
 					<td width="100"></td>
 					<td><b>options &gt;&gt;&nbsp;&nbsp;</b></td>
@@ -76,23 +86,16 @@ a.catalogue:hover {
 						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=0&type=intranet" class="submenu">Recherche simple</a>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu">Recherche MARC</a>
-						</div>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">Recherche MARC</a>
 					</td>
 					<td>
-						<div id="submenu">
 						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu">Ajout notice</a>
-						</div>
 					</td>
 					<td>
-						<div id="submenu">
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Maintenance catalogue</a>
-						</div>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu2">Maintenance catalogue</a>
 					</td>
 				</tr>
 			</table>
-			</div>
 		</td></tr></table>
 	</TD>
 </tr>
