@@ -11,7 +11,7 @@ use CGI;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "intranet-main.tmpl",
+    = get_template_and_user({template_name => "about.tmpl",
 			     query => $query,
 			     type => "intranet",
 			     authnotrequired => 0,
@@ -25,7 +25,7 @@ my $perlVersion = `/usr/bin/perl -v`;
 my $mysqlVersion = "unknown";
 my $apacheVersion =  "unknown";
 
-$template>param(
+$template->param(
                         osVersion          => $osVersion,
                         perlVersion        => $perlVersion,
                         mysqlVersion       => $mysqlVersion,
