@@ -79,27 +79,28 @@ my $path = C4::Context->config('includes') ||
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub gettemplate {
-    my ($tmplbase, $opac) = @_;
+	my ($tmplbase, $opac) = @_;
 
-    my $htdocs;
-    if ($opac ne "intranet") {
-	$htdocs = C4::Context->config('opachtdocs');
-    } else {
-	$htdocs = C4::Context->config('intrahtdocs');
-    }
+	my $htdocs;
+	if ($opac ne "intranet") {
+		$htdocs = C4::Context->config('opachtdocs');
+	} else {
+		$htdocs = C4::Context->config('intrahtdocs');
+	}
 
-    my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
+	my ($theme, $lang) = themelanguage($htdocs, $tmplbase);
 
-    my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
+	my $template = HTML::Template->new(filename      => "$htdocs/$theme/$lang/$tmplbase",
 				   die_on_bad_params => 0,
 				   global_vars       => 1,
 				   path              => ["$htdocs/$theme/$lang/includes"]);
 
-    # XXX temporary patch for Bug 182 for themelang
-    $template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
-    							theme => $theme,
+	# XXX temporary patch for Bug 182 for themelang
+	$template->param(themelang => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl') . "/$theme/$lang",
+							interface => ($opac ne 'intranet'? '/opac-tmpl': '/intranet-tmpl'),
+							theme => $theme,
 							lang => $lang);
-    return $template;
+	return $template;
 }
 
 #---------------------------------------------------------------------------------------------------------
