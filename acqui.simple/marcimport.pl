@@ -128,13 +128,38 @@ if ($input->param('newitem')) {
 
 
 if ($file) {
+    ProcessFile($dbh,$input);
+} else {
+
+SWITCH:
+    {
+	if ($menu eq 'z3950') { z3950menu($dbh,$input); last SWITCH; }
+	if ($menu eq 'uploadmarc') { uploadmarc(); last SWITCH; }
+	if ($menu eq 'manual') { manual(); last SWITCH; }
+	mainmenu();
+    }
+
+}
+print endmenu();
+print endpage();
+
+
+sub ProcessFile {
     # A MARC file has been specified; process it for review form
+
+    my (
+	$dbh,
+	$input,
+    )=@_;
+
     my $sth;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $qisbn=$input->param('isbn');
     my $qissn=$input->param('issn');
     my $qlccn=$input->param('lccn');
     my $qcontrolnumber=$input->param('controlnumber');
+
+    # See if a particular result record was specified
     if ($qisbn || $qissn || $qlccn || $qcontrolnumber) {
 	print "<a href=$ENV{'SCRIPT_NAME'}>New File</a><hr>\n";
 	#open (F, "$file");
@@ -469,21 +494,50 @@ RECORD:
 EOF
 	} # foreach record
     } else {
+
+	ListSearchResults($dbh,$input);
+    } # if
+} # sub ProcessFile
+
+sub ListSearchResults {
+    #use strict;
+
+    my (
+	$dbh,
+	$input,
+    )=@_;
+
+        # No result record specified, list records
 	#open (F, "$file");
 	#my $data=<F>;
 	my $data;
 	my $name;
 	my $z3950=0;
+	my $recordsource;
+
+	# File can be results of z3950 search or uploaded MARC data
+
+	# if z3950 results
 	if ($file=~/Z-(\d+)/) {
+	    $recordsource='';
+	} else {
+	    my $sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
+	    $sth->execute;
+	    ($data, $name) = $sth->fetchrow;
+	    $recordsource="from $name";
+	}
 	    print << "EOF";
-<center>
-<p>
-<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
-<p>
-<table border=0 cellpadding=10 cellspacing=0>
-<tr><th bgcolor=black><font color=white>Select a Record to Import</font></th></tr>
-<tr><td bgcolor=#dddddd>
+	<center>
+	<p>
+	<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
+	<p>
+	<table border=0 cellpadding=10 cellspacing=0>
+	<tr><th bgcolor=black>
+	  <font color=white>Select a Record to Import $recordsource</font>
+	</th></tr>
+	<tr><td bgcolor=#dddddd>
 EOF
+	if ($file=~/Z-(\d+)/) {
 	    my $id=$1;
 	    my $sth=$dbh->prepare("select servers from z3950queue where id=$id");
 	    $sth->execute;
@@ -555,10 +609,12 @@ EOF
 		    my $splitchar=chr(29);
 		    my @records=split(/$splitchar/, $data);
 		    $data='';
+		    my $i;
+		    my $record;
 		    for ($i=$startrecord; $i<$startrecord+10; $i++) {
 			$data.=$records[$i].$splitchar;
 		    }
-		    @records=parsemarcdata($data);
+		    @records=parsemarcfileformat($data);
 		    my $counter=0;
 		    foreach $record (@records) {
 			$counter++;
@@ -636,20 +692,9 @@ EOF
 	    my $elapsed=time()-$starttimer;
 	    print "<hr>It took $elapsed seconds to process this page.\n";
 	} else {
-	    my $sth=$dbh->prepare("select marc,name from uploadedmarc where id=$file");
-	    $sth->execute;
-	    ($data, $name) = $sth->fetchrow;
-	    print << "EOF";
-<center>
-<p>
-<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
-<p>
-<table border=0 cellpadding=10 cellspacing=0>
-<tr><th bgcolor=black><font color=white>Select a Record to Import<br>from $name</font></th></tr>
-<tr><td bgcolor=#dddddd>
-EOF
 	    
-	    my @records=parsemarcdata($data);
+	    my @records=parsemarcfileformat($data);
+	    $counter=$#records+1;
 	    foreach $record (@records) {
 		my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $controlnumber);
 		foreach $field (@$record) {
@@ -717,20 +762,7 @@ EOF
 	    }
 	}
 	print "</td></tr></table>\n";
-    }
-} else {
-
-SWITCH:
-    {
-	if ($menu eq 'z3950') { z3950menu($dbh,$input); last SWITCH; }
-	if ($menu eq 'uploadmarc') { uploadmarc(); last SWITCH; }
-	if ($menu eq 'manual') { manual(); last SWITCH; }
-	mainmenu();
-    }
-
-}
-print endmenu();
-print endpage();
+} # sub ListSearchResults
 
 
 sub z3950menu {
@@ -930,16 +962,19 @@ sub skip {
 
 }
 
-sub parsemarcdata {
+sub parsemarcfileformat {
+    #use strict;
     my $data=shift;
     my $splitchar=chr(29);
+    my $splitchar2=chr(30);
+    my $splitchar3=chr(31);
+    my $debug=1;
     my @records;
     my $record;
     foreach $record (split(/$splitchar/, $data)) {
 	my $leader=substr($record,0,24);
 	#print "<tr><td>Leader:</td><td>$leader</td></tr>\n";
 	$record=substr($record,24);
-	my $splitchar2=chr(30);
 	my $directory=0;
 	my $tagcounter=0;
 	my %tag;
@@ -947,18 +982,22 @@ sub parsemarcdata {
 	my $field;
 	foreach $field (split(/$splitchar2/, $record)) {
 	    my %field;
-	    ($color eq $lc1) ? ($color=$lc2) : ($color=$lc1);
+	    my $tag;
+	    my $indicator;
 	    unless ($directory) {
 		$directory=$field;
 		my $itemcounter=1;
-		$counter=0;
+		my $counter2=0;
+		my $item;
+		my $length;
+		my $start;
 		while ($item=substr($directory,0,12)) {
 		    $tag=substr($directory,0,3);
 		    $length=substr($directory,3,4);
 		    $start=substr($directory,7,6);
 		    $directory=substr($directory,12);
-		    $tag{$counter}=$tag;
-		    $counter++;
+		    $tag{$counter2}=$tag;
+		    $counter2++;
 		}
 		$directory=1;
 		next;
@@ -966,13 +1005,13 @@ sub parsemarcdata {
 	    $tag=$tag{$tagcounter};
 	    $tagcounter++;
 	    $field{'tag'}=$tag;
-	    $splitchar3=chr(31);
 	    my @subfields=split(/$splitchar3/, $field);
 	    $indicator=$subfields[0];
 	    $field{'indicator'}=$indicator;
 	    my $firstline=1;
 	    unless ($#subfields==0) {
 		my %subfields;
+		my $i;
 		for ($i=1; $i<=$#subfields; $i++) {
 		    my $text=$subfields[$i];
 		    my $subfieldcode=substr($text,0,1);
@@ -997,7 +1036,7 @@ sub parsemarcdata {
 	    push (@record, \%field);
 	} # foreach field in record
 	push (@records, \@record);
-	$counter++;
+	# $counter++;
     }
     print "</pre>" if $debug;
     return @records;
