@@ -24,19 +24,21 @@ use C4::Context;
 use C4::Output;
 use CGI;
 use HTML::Template;
+use C4::Auth;
 
 my $input = new CGI;
 my $type=$input->param('type');
 
 my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+
 my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "overdue.tmpl",
-		     query => $query,
-		     type => "intranet",
-		     authnotrequired => 0,
-		     flagsrequired => {catalogue => 1},
-		     debug => 1,
-		     });
+      = get_template_and_user({template_name => "overdue.tmpl",
+	                                 query => $input,
+	                                 type => "intranet",
+	                                 authnotrequired => 0,
+	                                 flagsrequired => {borrowers => 1},
+	                                 debug => 1,
+	                                 });
 my $duedate;
 my $bornum;
 my $itemnum;
