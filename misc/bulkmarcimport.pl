@@ -65,6 +65,7 @@ if ($delete) {
 if ($test_parameter) {
 	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
+
 $char_encoding = 'MARC21' unless ($char_encoding);
 print "CHAR : $char_encoding\n" if $verbose;
 my $starttime = gettimeofday;
@@ -78,9 +79,44 @@ my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumb
 while ( my $record = $batch->next() ) {
 	$i++;
 	#now, parse the record, extract the item fields, and store them in somewhere else.
-	$record = MARC::File::USMARC::decode(char_decode($record->as_usmarc(),$char_encoding));
-	warn "$i ==>".$record->as_formatted() if $verbose eq 2;
-	my @fields = $record->field($tagfield);
+
+#	$record = MARC::File::USMARC::decode(char_decode($record->as_usmarc(),$char_encoding));
+    ## create an empty record object to populate
+    my $newRecord = MARC::Record->new();
+
+    # go through each field in the existing record
+    foreach my $oldField ( $record->fields() ) {
+
+	# just reproduce tags < 010 in our new record
+	if ( $oldField->tag() < 10 ) {
+	    $newRecord->append_fields( $oldField );
+	    next();
+	}
+
+	# store our new subfield data in this list
+	my @newSubfields = ();
+
+	# go through each subfield code/data pair
+	foreach my $pair ( $oldField->subfields() ) { 
+	    # upper case the data portion and store
+	    push( @newSubfields, $pair->[0], char_decode($pair->[1],$char_encoding) );
+	}
+
+	# add the new field to our new record
+	my $newField = MARC::Field->new(
+	    $oldField->tag(),
+	    $oldField->indicator(1),
+	    $oldField->indicator(2),
+	    @newSubfields
+	);
+
+	$newRecord->append_fields( $newField );
+
+    }
+
+
+	warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
+	my @fields = $newRecord->field($tagfield);
 	my @items;
 	my $nbitems=0;
 
@@ -94,7 +130,7 @@ while ( my $record = $batch->next() ) {
 	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
+		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$newRecord);
 		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
 			NEWnewitem($dbh,$items[$i],$bibid);
