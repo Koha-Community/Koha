@@ -153,14 +153,14 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("select * from marc_subfield_structure where tagfield=? and frameworkcode=?"); # and tagsubfield='$tagsubfield'");
 	$sth->execute($tagfield,$frameworkcode);
 	my @loop_data = ();
-	my $toggle="white";
+	my $toggle=1;
 	my $i=0;
 	while ($data =$sth->fetchrow_hashref) {
 		my %row_data;  # get a fresh hash for the row data
-		if ($toggle eq 'white'){
-			$toggle="#ffffcc";
+		if ($toggle eq 1){
+			$toggle=0;
 	  	} else {
-			$toggle="white";
+			$toggle=1;
 	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-values=>['-1','0','1','2','3','4','5','6','7','8','9','10'],
@@ -357,13 +357,13 @@ if ($op eq 'add_form') {
 } else { # DEFAULT
 	my $env;
 	my ($count,$results)=StringSearch($env,$tagfield,$frameworkcode);
-	my $toggle="white";
+	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-			$toggle="#ffffcc";
+	  	if ($toggle eq 1){
+			$toggle=0;
 	  	} else {
-			$toggle="white";
+			$toggle=1;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
@@ -381,7 +381,7 @@ if ($op eq 'add_form') {
 		$row_data{isurl}	= $results->[$i]{'isurl'};
 		$row_data{link}	= $results->[$i]{'link'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&frameworkcode=$frameworkcode";
-		$row_data{bgcolor} = $toggle;
+		$row_data{toggle} = $toggle;
 		if ($row_data{tab} eq -1) {
 			$row_data{subfield_ignored} = 1;
 		}
