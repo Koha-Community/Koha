@@ -20,6 +20,7 @@
 
 use strict;
 use C4::Output;
+use C4::Auth;
 use CGI;
 use C4::Search;
 use C4::Context;
@@ -33,7 +34,14 @@ my $kohafield = $input->param('kohafield');
 my $op=$input->param('op');
 my $script_name = 'koha2marclinks.pl';
 
-my $template = gettemplate("parameters/koha2marclinks.tmpl",0);
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "parameters/koha2marclinks.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 
 if ($op) {
 $template->param(script_name => $script_name,
@@ -127,4 +135,4 @@ if ($op eq 'add_form') {
 							);
 } #---- END $OP eq DEFAULT
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie), $template->output;

@@ -23,6 +23,7 @@
 
 use strict;
 use CGI;
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 use HTML::Template;
@@ -42,7 +43,14 @@ my $input = new CGI;
 my $branchcode=$input->param('branchcode');
 my $op = $input->param('op');
 
-my $template = gettemplate("parameters/branches.tmpl",0);
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "parameters/branches.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 if ($op) {
 $template->param(script_name => $script_name,
 						$op              => 1); # we show only the TMPL_VAR names $op
@@ -53,7 +61,7 @@ $template->param(script_name => $script_name,
 $template->param(action => $script_name);
 
 if ($op eq 'add') {
-# If the user has pressed the "add new branch" button. 
+# If the user has pressed the "add new branch" button.
     heading("Branches: Add Branch");
     editbranchform();
 
@@ -368,4 +376,4 @@ sub checkdatabasefor {
     return $message;
 }
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie), $template->output;

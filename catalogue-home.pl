@@ -8,8 +8,14 @@ use C4::Database;
 use HTML::Template;
 
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
-my $template = gettemplate("catalogue/catalogue-home.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "catalogue/catalogue-home.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 
 my $classlist='';
 #open C, "$intranetdir/htdocs/includes/cat-class-list.inc";
@@ -18,6 +24,6 @@ my $classlist='';
 #}
 $template->param(loggedinuser => $loggedinuser,
 						classlist => $classlist,
-						opac => 0);
+						type => 'intranet',);
 
 print $query->header(-cookie => $cookie), $template->output;

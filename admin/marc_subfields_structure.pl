@@ -20,6 +20,7 @@
 
 use strict;
 use C4::Output;
+use C4::Auth;
 use CGI;
 use C4::Search;
 use C4::Context;
@@ -55,7 +56,14 @@ my $reqdel="delete from marc_subfield_structure where tagfield='$tagfield' and t
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
 
-my $template = gettemplate("parameters/marc_subfields_structure.tmpl",0);
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "parameters/marc_subfields_structure.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 my $pagesize=30;
 my $op = $input->param('op');
 $tagfield=~ s/\,//g;
@@ -339,4 +347,4 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie), $template->output;

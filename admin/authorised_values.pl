@@ -19,6 +19,7 @@
 
 use strict;
 use CGI;
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Search;
@@ -55,7 +56,14 @@ my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
-my $template = gettemplate("parameters/authorised_values.tmpl",0);
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "parameters/authorised_values.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 my $pagesize=20;
 my $op = $input->param('op');
 
@@ -180,4 +188,4 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie), $template->output;

@@ -39,6 +39,7 @@
 
 use strict;
 use CGI;
+use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Search;
@@ -73,7 +74,15 @@ my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
-my $template = gettemplate("parameters/aqbookfund.tmpl",0);
+my ($template, $borrowernumber, $cookie)
+    = get_template_and_user({template_name => "parameters/aqbookfund.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
+
 if ($op) {
 $template->param(script_name => $script_name,
 						$op              => 1); # we show only the TMPL_VAR names $op
@@ -196,6 +205,4 @@ if ($op eq 'add_form') {
        $template->param(bookfund => \@loop_data);
 } #---- END $OP eq DEFAULT
 
-
-
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie), $template->output;

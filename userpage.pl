@@ -26,11 +26,16 @@ use CGI;
 use C4::Search;
 use C4::Auth;
 
-my $query=new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0);
+my $query = new CGI;
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "user/userpage.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 
-my $template = gettemplate("user/userpage.tmpl",0);
-
-$template->param(loggedinuser => $loggedinuser);
+warn "userloggedin : $loggedinuser (".$query->param('userid')." et ".$query->param('password');
 
 print $query->header(-cookie => $cookie), $template->output;

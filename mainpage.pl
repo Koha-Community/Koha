@@ -8,8 +8,13 @@ use CGI;
 use C4::Auth;
 
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
-
-my $template = gettemplate("intranet-main.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "intranet-main.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
 
 print  $query->header(-cookie => $cookie), $template->output;
