@@ -1,21 +1,31 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
 <div id="bibliomenu">
 	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
-		Normal
+		Simple
+	</a>
+	<a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">
+		Complete
 	</a>
 	<a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
 		ISBD
 	</a>
+	<a href="javascript:Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+		Add to shelf
+	</a>
 	<a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
 		Print
 	</a>
-	<!-- TMPL_IF NAME="norequests" -->
-	<!-- TMPL_ELSE -->
+	<!-- TMPL_UNLESS NAME="norequests" -->
 		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
 			Request
 		</a>
+	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF name="subscriptionid" -->
+	<a href="opac-serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues">
+		Issues
+	</a>
 	<!-- /TMPL_IF -->
+	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Add to basket</a>
 </div>
 
 	<div class="tabs">

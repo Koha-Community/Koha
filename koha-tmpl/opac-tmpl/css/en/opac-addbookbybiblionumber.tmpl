@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE Name="popup-top.inc" -->
+<div id="mainbloc">
+<h1>Add book to bookshelf</h1> 
+<p><label>Title</label><!-- TMPL_VAR NAME="title" --></p>
+<p><label>Author</label><!-- TMPL_VAR NAME="author" --></p>
+<h2>Select bookshelf</h2>
+<form>
+	<p><label>Add to virtual shelf</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
+</form>
+<form>
+<h2>or add to a new bookshelf</h2>
+	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+		<select name="category">
+			<option value="1">Private</option>
+			<option value="2">Public</option>
+			<option value="3">Free</option>
+		</select>
+	</p>
+	<input type="submit" value="Add to virtual shelf" class="button catalogue">
+</form>
+<!-- TMPL_INCLUDE Name="popup-bottom.inc" -->

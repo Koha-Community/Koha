@@ -3,13 +3,12 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/opac.css" />
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
 	<title><!--TMPL_VAR name="LibraryName"--></title>
-	<style type="text/css">
-	input {
-		background-color: #ACE6E6;
-	}
-	</style>
 </head>
 
 <body>

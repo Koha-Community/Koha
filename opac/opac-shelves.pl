@@ -33,11 +33,16 @@ use HTML::Template;
 
 my $env;
 my $query = new CGI;
+my $headerbackgroundcolor='#663266';
+my $circbackgroundcolor='#555555';
+my $circbackgroundcolor='#550000';
+my $linecolor1='#bbbbbb';
+my $linecolor2='#dddddd';
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "opac-shelves.tmpl",
 							query => $query,
 							type => "opac",
-							authnotrequired => 1,
+							authnotrequired => 0,
 						});
 
 if ($query->param('modifyshelfcontents')) {
@@ -57,25 +62,48 @@ if ($query->param('modifyshelfcontents')) {
 my ($shelflist) = GetShelfList($loggedinuser,2);
 
 $template->param({	loggedinuser => $loggedinuser,
-					     LibraryName => C4::Context->preference("LibraryName"),
-					});
+					headerbackgroundcolor => $headerbackgroundcolor,
+					circbackgroundcolor => $circbackgroundcolor });
 SWITCH: {
-	if ($query->param('viewshelf')) {  viewshelf($query->param('viewshelf')); last SWITCH;}
-	if ($query->param('shelves')) {  shelves(); last SWITCH;}
+	if ($query->param('op') eq 'modifsave') {
+		ModifShelf($query->param('shelfnumber'),$query->param('shelfname'),$loggedinuser,$query->param('category'));
+		last SWITCH;
+	}
+	if ($query->param('op') eq 'modif') {
+		my ($shelfnumber,$shelfname,$owner,$category) = GetShelf($query->param('shelf'));
+		$template->param(edit => 1,
+						shelfnumber => $shelfnumber,
+						shelfname => $shelfname,
+						"category$category" => 1);
+# 		editshelf($query->param('shelf'));
+		last SWITCH;
+	}
+	if ($query->param('viewshelf')) {
+		viewshelf($query->param('viewshelf'));
+		last SWITCH;
+	}
+	if ($query->param('shelves')) {
+		shelves();
+		last SWITCH;
+	}
 }
 
 ($shelflist) = GetShelfList($loggedinuser,2); # rebuild shelflist in case a shelf has been added
 
-my $color=1;
+my $color='';
 my @shelvesloop;
 foreach my $element (sort keys %$shelflist) {
 		my %line;
-		$line{'color'}= 1 if ($color eq 1);
-		$color = -$color;
+		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		$line{'color'}= $color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+		$line{"category".$shelflist->{$element}->{'category'}} = 1;
+		$line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'};
 		$line{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
+		$line{'firstname'}=$shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+		$line{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
 ;
 		push (@shelvesloop, \%line);
 }
@@ -83,6 +111,14 @@ $template->param(shelvesloop => \@shelvesloop);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
+# sub editshelf {
+# 	my ($shelfnumber) = @_;
+# 	my ($shelfnumber,$shelfname,$owner,$category) = GetShelf($shelfnumber);
+# 	$template->param(edit => 1,
+# 					shelfnumber => $shelfnumber,
+# 					shelfname => $shelfname,
+# 					"category$category" => 1);
+# }
 sub shelves {
 	if (my $newshelf=$query->param('addshelf')) {
 		my ($status, $string) = AddShelf($env,$newshelf,$query->param('owner'),$query->param('category'));
@@ -106,12 +142,12 @@ sub shelves {
 	}
 	$template->param(paramsloop => \@paramsloop);
 	my ($shelflist) = GetShelfList($loggedinuser,2);
-	my $color=1;
+	my $color='';
 	my @shelvesloop;
 	foreach my $element (sort keys %$shelflist) {
 		my %line;
-		$line{'color'}=1 if ($color eq 1);
-		$color = -$color;
+		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		$line{'color'}=$color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'} ;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'} ;
@@ -128,17 +164,17 @@ sub viewshelf {
 	return unless (ShelfPossibleAction($loggedinuser,$shelfnumber,'view'));
 	my ($itemlist) = GetShelfContents($env, $shelfnumber);
 	my $item='';
-	my $color=1;
+	my $color='';
 	my @itemsloop;
 	foreach $item (sort {$a->{'barcode'} cmp $b->{'barcode'}} @$itemlist) {
 		my %line;
-		$line{'color'}=1 if ($color eq 1);
-		$color = -$color;
+		($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+		$line{'color'}=$color;
 		$line{'itemnumber'}=$item->{'itemnumber'};
 		$line{'barcode'}=$item->{'barcode'};
 		$line{'title'}=$item->{'title'};
 		$line{'author'}=$item->{'author'};
-		$line{'biblionumber'} = $item->{'biblionumber'};
+		$line{biblionumber} = $item->{biblionumber};
 		push(@itemsloop, \%line);
 	}
 	$template->param(	itemsloop => \@itemsloop,
@@ -151,11 +187,24 @@ sub viewshelf {
 
 #
 # $Log$
-# Revision 1.2  2004/11/12 16:27:33  tipaul
-# fixes for printing a biblio
+# Revision 1.3  2005/01/03 11:09:34  tipaul
+# synch'ing virtual shelves management in opac with the librarian one, that has more features
 #
-# Revision 1.1  2004/03/15 15:02:19  tipaul
-# adding virtual shelves to opac
+# Revision 1.5  2004/12/16 11:30:57  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf name & status
+#
+# Revision 1.4  2004/12/15 17:28:23  tipaul
+# adding bookshelf features :
+# * create bookshelf on the fly
+# * modify a bookshelf (this being not finished, will commit the rest soon)
+#
+# Revision 1.3  2004/12/02 16:38:50  tipaul
+# improvement in book shelves
+#
+# Revision 1.2  2004/11/19 16:31:30  tipaul
+# bugfix for bookshelves not in official CVS
 #
 # Revision 1.1.2.1  2004/03/10 15:08:18  tipaul
 # modifying shelves : introducing category of shelf : private, public, free for all

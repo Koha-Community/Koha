@@ -2,11 +2,17 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
 
 <div id="bibliomenu">
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+		Simple
+	</a>
+	<a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">
+		Complete
+	</a>
 	<a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
 		ISBD
 	</a>
-	<a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">
-		MARC
+	<a href="javascript:Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">
+		Add to shelf
 	</a>
 	<a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
 		Print
