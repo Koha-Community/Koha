@@ -179,6 +179,8 @@ sub create_input () {
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  value=\"$value\" DISABLE READONLY size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+	} elsif  ($tag eq '') {
+		$subfield_data{marc_value}="<input type=\"hidden\" name=\"field_value\" size=50 maxlength=255>"; #"
 	} else {
 		$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>"; #"
 	}
@@ -200,7 +202,6 @@ sub build_tabs ($$$$) {
 	for (my $tabloop = 0; $tabloop <= 9; $tabloop++) {
 		my @loop_data = ();
 		foreach my $tag (sort(keys (%{$tagslib}))) {
-			my $previous_tag = '';
 			my $indicator;
 	# if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
 	# if MARC::Record is empty => use tab as master loop.
@@ -239,6 +240,18 @@ sub build_tabs ($$$$) {
 						$tag_data{indicator} = $indicator;
 						$tag_data{subfield_loop} = \@subfields_data;
 						push (@loop_data, \%tag_data);
+					}
+# If there is more than 1 field, add an empty hidden field as separator.
+					if ($#fields >=1) {
+						my @subfields_data;
+						my %tag_data;
+						push(@subfields_data, &create_input('','','',$i,$tabloop,$record,$authorised_values_sth));
+						$tag_data{tag} = '';
+						$tag_data{tag_lib} = '';
+						$tag_data{indicator} = '';
+						$tag_data{subfield_loop} = \@subfields_data;
+						push (@loop_data, \%tag_data);
+						$i++;
 					}
 				}
 	# if breeding is empty
