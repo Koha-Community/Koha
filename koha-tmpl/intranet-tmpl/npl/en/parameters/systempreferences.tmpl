@@ -71,11 +71,11 @@
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 		<div class="details">
 		<table>
-			<tr><td><label for="explanation">Explanation: </label></td><td><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->"><input type="hidden" name="op" value="add_validate"></td></tr>
+			<tr><td><label for="explanation">Explanation: </label></td><td><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" /><input type="hidden" name="op" value="add_validate" /></td></tr>
 			<tr><!-- TMPL_IF NAME="searchfield" --><td><label>Variable</label></td><td><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->"></td>
-			<!-- TMPL_ELSE --><td><label for="variable">Variable</label></td><td><input type="text" name="variable" id="variable" size="60"></td><!-- /TMPL_IF --></tr>
+			<!-- TMPL_ELSE --><td><label for="variable">Variable</label></td><td><input type="text" name="variable" id="variable" size="60" /></td><!-- /TMPL_IF --></tr>
 			<tr><td><label for="value">Value</label></td><td><!-- TMPL_IF NAME="type-free" -->
-					<input type="text" id="value" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" size="<!-- TMPL_VAR NAME="fieldlength" -->">
+					<input type="text" id="value" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" size="<!-- TMPL_VAR NAME="fieldlength" -->" />
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="type-textarea" -->
 					<textarea name="value" id="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
@@ -88,9 +88,11 @@
 					</select>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="type-yesno" -->
-					<input type="radio" name="value" id="value" value="1"<!-- TMPL_IF NAME="value-yes" --> checked="checked"<!-- /TMPL_IF -->>Yes
-					<input type="radio" name="value" value="0"<!-- TMPL_IF NAME="value-no" --> checked="checked"<!-- /TMPL_IF -->>No
-				<!-- /TMPL_IF --></td></tr>
+					<!-- TMPL_IF NAME="value-yes" -->
+					<input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->Yes
+				<!-- TMPL_IF NAME="value-no" -->	
+					<input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->No<!-- /TMPL_IF -->
+				</td></tr>
 		</table></div>
 		<p><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->" class="submit"> <input type="button" class="cancel" value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
 		
@@ -98,7 +100,7 @@
 		<div class="details"><span class="note">Note: you should have no reasons to modify the following default values</span>
 		<table>
 		<tr><td><label for="preftype">Variable type:</label></td><td><input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40"><span class="formfield-notes"> (<em>Choice</em>, <em>YesNo</em>, <em>Integer</em>, <em>Textarea</em>, <em>Float</em>, <em>Themes</em>, or <em>Languages</em>)</span></td></tr>
-		<tr><td><label for="prefoptions">Variable options:</label></td><td><input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80"> <span class="formfield-notes">(a choice list for <em>Choice</em> (separated by <strong>|</strong>) or <strong>cols|rows</strong> for <em>Texarea</em>)</span></td></tr>
+		<tr><td><label for="prefoptions">Variable options:</label></td><td><input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80" /> <span class="formfield-notes">(a choice list for <em>Choice</em> (separated by <strong>|</strong>) or <strong>cols|rows</strong> for <em>Texarea</em>)</span></td></tr>
 		</table></div>
 		</form>
 	<!-- /TMPL_IF -->
@@ -109,21 +111,21 @@
 		<h3>Data recorded</h3>
 		<div class="details">
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="submit" class="submit" value="OK">
+		<input type="submit" class="submit" value="OK" />
 		</form></div>
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="delete_confirm" -->
 	
 <div class="data">	<table>
-		<caption>Confirm Deletion of <em>Test</em></caption>
+		<caption>Confirm Deletion of <em><!-- TMPL_VAR NAME="searchfield" -->?</em></caption>
 		<tr>
 			<th>Variable Name:</th>
 			<td><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
 		</tr>
 		<tr><th>Value: </th><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr></table>
-		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-		<input type="submit" class="cancel" value="Yes, Delete"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="submit" value="No, Do not Delete"></form>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+		<input type="submit" class="cancel" value="Yes, Delete"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="submit" value="No, Do not Delete" /></form>
 	</div>
 	
 	<!-- /TMPL_IF -->
