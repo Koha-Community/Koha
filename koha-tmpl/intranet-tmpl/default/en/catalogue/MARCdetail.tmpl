@@ -18,6 +18,7 @@
 					<td width=8%><a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"></td>
 					<td width=8%><a href="javascript:confirm_deletion()"><img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png"></td>
 					<td width=8%><a href="detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->">Normal</a></td>
+					<td width=8%><a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')">Print</a></td>
 					<td align="center"><b>MARC biblio : <!-- TMPL_VAR name="bibid" --></b></td>
 				</tr>
 			</table>
@@ -256,8 +257,11 @@ for (i=0; i <= 10 ; i++ ) {
 function confirm_deletion() {
 	var is_confirmed = confirm('Confirmez vous la suppression ?');
 	if (is_confirmed) {
-		window.location="acqui.simple/addbiblio.pl?op=delete&oldbiblionumber=<!-- TMPL_VAR name="bibid" -->";
+		window.location="acqui.simple/addbiblio.pl?op=delete&bibid=<!-- TMPL_VAR name="bibid" -->";
 	}
+}
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
 </body>

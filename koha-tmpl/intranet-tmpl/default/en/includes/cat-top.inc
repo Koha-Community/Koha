@@ -89,10 +89,13 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="submenu2">MARC search</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu">Add biblio</a>
+						<a href="/cgi-bin/koha/shelves.pl" class="submenu">Virtual shelves</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu2">Cat maintenance</a>
+						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Add biblio</a>
+					</td>
+					<td>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Cat maintenance</a>
 					</td>
 				</tr>
 			</table>
