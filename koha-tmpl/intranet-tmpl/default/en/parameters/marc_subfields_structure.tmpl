@@ -14,7 +14,6 @@
 	<input type=hidden name=op value='add_validate'>
 	<input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->">
 	<table>
-	</tr>
 	<!-- TMPL_LOOP name="loop" -->
 		<tr bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
 		<td>
@@ -29,7 +28,7 @@
 				<label>Search also</label><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20 maxlength=80> (example for 200a : '700a','701a','702a')
 			</p>
 			<p><label>&nbsp;</label><label>Koha link:</label> <!-- TMPL_VAR name="kohafield" --></p>
-			<h3>Editor constaints</h2>
+			<h3>Editor constaints</h3>
 			<p> <label>&nbsp;</label>
 				<label>Text for librarian</label>
 				<input type=text name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" -->" size=40 maxlength=80>
@@ -47,6 +46,7 @@
 				or plugin: <!-- TMPL_VAR name="value_builder" -->
 			</p>
 		</td>
+		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
 	<INPUT type=submit value='OK'>
@@ -91,7 +91,7 @@
 <table>
 <tr>
 	<th>Subfield</th>
-	<th>Lib</th>
+	<th>Text</th>
 	<th>Constraints</th>
 	<th>Delete</th>
 <!-- TMPL_LOOP name="loop" -->
@@ -103,7 +103,7 @@
 		<!-- TMPL_ELSE -->
 			<!-- TMPL_VAR name="liblibrarian" -->
 		<!-- /TMPL_IF -->
-		</td>
+	</td>
 	<td>
 		<!-- TMPL_IF name="subfield_ignored" -->
 			<i>subfield ignored</i>

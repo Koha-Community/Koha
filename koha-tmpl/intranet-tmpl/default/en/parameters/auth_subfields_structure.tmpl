@@ -12,23 +12,38 @@
 	<input type=hidden name=op value='add_validate'>
 	<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
 	<table>
-	<tr><th>Field</th>
-		<th colspan=2>Constraints</th>
-	</tr>
 	<!-- TMPL_LOOP name="loop" -->
 		<tr bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
 		<td>
-			<p><!-- TMPL_VAR name="tagfield" --> - <!-- TMPL_VAR name="tagsubfield" --></p>
-			<p><input type=text name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" -->" size=40 maxlength=80></p>
-			<p><input type=text name="libopac" value="<!-- TMPL_VAR name="libopac" -->" size=40 maxlength=80></p>
+			<h2 class="parameters">Tag <!-- TMPL_VAR name="tagfield" -->, Subfield <!-- TMPL_VAR name="tagsubfield" --></h2>
+			<h3>MARC constraints</h3>
+			<p>
+				<label>&nbsp;</label><!-- TMPL_VAR name="repeatable" --> repeatable 
+				<!-- TMPL_VAR name="mandatory" --> mandatory
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<label>Search also</label><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20 maxlength=80> (example for 200a : '700a','701a','702a')
+			</p>
+			<h3>Editor constaints</h3>
+			<p> <label>&nbsp;</label>
+				<label>Text for librarian</label>
+				<input type=text name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" -->" size=40 maxlength=80>
+			</p>
+			<p>
+				<label>&nbsp;</label>
+				<label>Text for OPAC</label> <input type=text name="libopac" value="<!-- TMPL_VAR name="libopac" -->" size=40 maxlength=80>
+			</p>
+			<p><label>&nbsp;</label><label>Managed in tab</label> <!-- TMPL_VAR name="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
+			<p><label>&nbsp;</label><!-- TMPL_VAR name="hidden" --> hidden (subfield is managed, but hidden. -should be filled by a plugin or thesaurus-)</p>
+			<p><label>&nbsp;</label><!-- TMPL_VAR name="isurl" --> URL (if checked, it means that the subfield is an URL and can be clicked</p>
+			<p>
+				<label>&nbsp;</label><label>Auth value:</label> <!-- TMPL_VAR name="authorised_value" -->
+				or thesaurus: <!-- TMPL_VAR name="thesaurus_category" -->
+				or plugin: <!-- TMPL_VAR name="value_builder" -->
+			</p>
 		</td>
-		<td>
-			<p><label>Appears in tab:</label> <!-- TMPL_VAR name="tab" --></p>
-			<p><label>Repeatable:</label> <!-- TMPL_VAR name="repeatable" --></p>
-			<p><label>Mandatory:</label><!-- TMPL_VAR name="mandatory" --></p>
-			<p><label>See also:</label> <input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20 maxlength=80></p>
-			<p><label>Auth value:</label> <!-- TMPL_VAR name="authorised_value" --></p>
-			<p><label>plugin:</label> <!-- TMPL_VAR name="value_builder" --></td>
+		</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
 	<INPUT type=submit value='OK' class="button parameters">
@@ -87,24 +102,33 @@
 <table>
 <tr>
 	<th>Subfield</th>
-	<th>Lib</th>
-	<th>Rep<span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></th>
-	<th>Mand <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></th>
-	<th>Tab <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></th>
-	<th>See also<span style="font-size:8;color:red" title="if subfields entered here, searches on this field will also be done on seealso subfields (syntax 200a,300e)">?</span></th>
-	<th>Auth value<span style="font-size:8;color:red" title="values authorised for this subfield">?</span></th>
-	<th>Val build<span style="font-size:8;color:red" title="Value builder">?</span></th>
+	<th>Text</th>
+	<th>Constraints</th>
 	<th>Delete</th>
 <!-- TMPL_LOOP name="loop" -->
 <tr bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
 	<td><!-- TMPL_VAR name="tagsubfield" --></td>
-	<td><!-- TMPL_VAR name="liblibrarian" --></td>
-	<td><!-- TMPL_IF name="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-	<td><!-- TMPL_IF name="mandatory" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-	<td><!-- TMPL_VAR name="tab" --></td>
-	<td><!-- TMPL_VAR name="seealso" --></td>
-	<td><!-- TMPL_VAR name="authorised_value" --></td>
-	<td><!-- TMPL_VAR name="value_builder" --></td>
+	<td>
+		<!-- TMPL_IF name="subfield_ignored" -->
+			<i><!-- TMPL_VAR name="liblibrarian" --></i>
+		<!-- TMPL_ELSE -->
+			<!-- TMPL_VAR name="liblibrarian" -->
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<!-- TMPL_IF name="subfield_ignored" -->
+			<i>subfield ignored</i>
+		<!-- TMPL_ELSE -->
+			Tab :<!-- TMPL_VAR name="tab" -->,
+			<!-- TMPL_IF name="repeatable" -->Repeatable, <!-- TMPL_ELSE -->Not repeatable,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="mandatory" -->Mandatory, <!-- TMPL_ELSE -->Not mandatory,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="seealso" -->see also : <!-- TMPL_VAR name="seealso" -->,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="hidden" -->hidden,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="isurl" -->is an url,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="authorised_value" --> Auth value :<!-- TMPL_VAR name="authorised_value" -->,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="value_builder" -->Plugin :<!-- TMPL_VAR name="value_builder" -->,<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	</td>
 	<td>
 		<a href="<!-- TMPL_VAR name="delete" -->">
 			<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0>
