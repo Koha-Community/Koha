@@ -19,7 +19,7 @@
 			</tr>
 			<!-- TMPL_IF name="loop" -->
 			<!-- TMPL_LOOP NAME="loop" -->
-				<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
 					<td><!-- TMPL_VAR NAME="title" --></a>
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="copyrightdate" --></td>
@@ -72,7 +72,7 @@
 					<th>&nbsp;</th>
 				</tr>
 					<!-- TMPL_LOOP NAME="breeding_loop" -->
-						<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+				<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
 							<td><!-- TMPL_VAR NAME="title" --></a>
 							<td><!-- TMPL_VAR NAME="author" --></td>
 							<td><!-- TMPL_VAR NAME="isbn" --></td>
