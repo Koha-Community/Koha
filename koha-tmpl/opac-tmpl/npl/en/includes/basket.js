@@ -148,6 +148,9 @@ function addMultiple(){
 			}
 		}
 		addSelRecords(c_value);
+	} else {
+		c_value = c_value + document.myform.bibid.value + "/";
+		addSelRecords(c_value);
 	}
 }
 
@@ -354,4 +357,9 @@ function updateBasket(updated_value,target) {
 document.getElementById == "undefined") {
         target.all['basket'].innerHTML = " ("+updated_value+")";
     }
+}
+
+function openBiblio(biblionumber) {
+	openerURL="opac-detail.pl?bib="+biblionumber;
+	opener.document.location = openerURL;
 }
