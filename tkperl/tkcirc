@@ -13,6 +13,13 @@ my $issuebut, $returnbut, $mainholder;
 my $borrnumber, $borrower, $borrowerlist;
 my @items2, $currentissues;
 my $returnedframe;
+my (@flagbold, @flagnormal, @flagnoissues, @flagtag, @textnoissues);
+@flagbold=(-background=>undef, -foreground=>'blue', -underline=>1, -relief=>'sunken', -borderwidth=>1);
+@flagnormal=(-background=>undef, -foreground=>'blue', -underline=>1, -relief=>'flat');
+@flagtag=(-background=>undef, -foreground=>'blue', -underline=>1, -relief=>'flat');
+@flagnoissues=(-background=>undef, -foreground=>'red', -underline=>1, -relief=>'flat');
+@textnoissues=(-background=>undef, -foreground=>'red', -relief=>'flat');
+@flagnoissuesbold=(-background=>undef, -foreground=>'red', -underline=>1, -relief=>'sunken', -borderwidth=>1);
 
 my $MW=MainWindow->new(-height => 500, -width => 600);
 $MW->fontCreate('C_normal',-family => 'courier', -size => -12);
@@ -147,10 +154,37 @@ sub issues {
     $line .= "$borrower->{'surname'}, ";
     $line .= "$borrower->{'title'} $borrower->{'firstname'}\n";
     $line .= "$borrower->{'streetaddress'}, $borrower->{'city'}\n";
-    $line .= "$borrower->{'categorycode'}";
-
-
+    $line .= "$borrower->{'categorycode'}  ";
     $borrowerinfo->insert('0.0',$line);
+    open O, ">>/root/tkcirc.out";
+    my $flag='';
+    my $nossisues=0;
+    foreach $flag (sort keys %$flags) {
+	print O "Configuring flag $flag\n";
+	$borrowerinfo->insert('end', $flag, "$flag", " ");
+	if ($flags->{$flag}->{'noissues'}) {
+	    $noissues=1;
+	    $borrowerinfo->tag('configure', "$flag", @flagnoissues);
+	    $borrowerinfo->tag('bind', "$flag", "<Any-Leave>" => sub {shift->tag('configure', "$flag", @flagnoissues)});
+	    $borrowerinfo->tag('bind', "$flag", "<Any-Enter>" => sub {shift->tag('configure', "$flag", @flagnoissuesbold)});
+	} else {
+	    $borrowerinfo->tag('configure', "$flag", @flagtag);
+	    $borrowerinfo->tag('bind', "$flag", "<Any-Leave>" => sub {shift->tag('configure', "$flag", @flagtag)});
+	    $borrowerinfo->tag('bind', "$flag", "<Any-Enter>" => sub {shift->tag('configure', "$flag", @flagbold)});
+	}
+
+	$borrowerinfo->tag('bind', "$flag", "<1>" => sub {&patronnote($borrower,$flags, $flag)});
+    }
+    close O;
+    if ($noissues) {
+	$borrowerinfo->insert('end', "\n", "");
+	$borrowerinfo->insert('end', "No issues allowed for this borrower!", "noissuestag");
+	$borrowerinfo->tag('configure', 'noissuestag', @textnoissues);
+    }
+    
+
+
+    #$borrowerinfo->insert('0.0',$line);
     $borrowerinfo->configure(-state => 'disabled');
     $borrowerinfo->pack;
     my $ciframe=$mainholder->LabFrame(-label=>'Current Issues', -labelside=>acrosstop);
@@ -208,15 +242,33 @@ sub issues {
     }
 }
 
+sub patronnote {
+    my ($borrower, $flags, $flag) = @_;
+    my $flaginfo=$flags->{$flag};
+    info_msg($env, "$borrower->{'surname'} $flag\n$flags->{$flag}->{'message'}");
+}
+
 sub error_msg {
     my ($env, $message) = @_;
-    $MW->bell();
-    $MW->bell();
     $MW->bell();
     my $button = $MW->messageBox(-type => 'OK', -title => 'Error Message', -message => "$message");
 }
 
+
 sub info_msg {
+    my ($env, $message) = @_;
+    my $window=$MW->Toplevel();
+    $window->title('Informational Message');
+    my $text=$window->Scrolled('Text', -height=>4, -width=>40, -wrap=>'word', -scrollbars=>'oe');
+    $text->pack(-expand=>1, -fill=>'both');
+    $text->insert('0.0', "$message");
+    #$text->configure(-state => 'disabled');
+    my $button=$window->Button(-text=>'OK', -command => sub { $window->destroy()});
+    $button->pack();
+    $window->bind('<Return>' => sub {$window->destroy()});
+}
+
+sub info_msg_old {
     $MW->bell();
     my ($env, $message) = @_;
     my $button = $MW->messageBox(-type => 'OK', -title => 'Informational Message', -message => "$message");
@@ -228,7 +280,7 @@ sub msg_yn {
     my $message = $message1;
     ($message2) && ($message.="\n$message2");
     ($message3) && ($message.="\n$message3");
-    my $button = $MW ->messageBox(-type => 'YesNo', -default => 'Yes', -title => 'Message', -message => "$message");
+    my $button = $MW->messageBox(-type => 'YesNo', -default => 'Yes', -title => 'Message', -message => "$message");
     $button=substr($button,0,1);
     return ($button);
 }
@@ -698,15 +750,22 @@ sub returnbk {
     my $item = $barcodeentry->get();
     $barcodeentry->delete('0.0', 'end');
     my ($iteminformation,$borrower,$messages,$overduecharge) = returnbook($env, $item);
-    my $line = "$borrower->{'cardnumber'} ";
-    $line .= "$borrower->{'surname'}, ";
-    $line .= "$borrower->{'title'} $borrower->{'firstname'}\n";
-    $line .= "$borrower->{'streetaddress'}, $borrower->{'city'}\n";
-    $line .= "$borrower->{'categorycode'}";
-    $borrowerinfo->configure(-state => 'normal');
-    $borrowerinfo->delete('0.0', 'end');
-    $borrowerinfo->insert('0.0',$line);
-    $borrowerinfo->configure(-state => 'disabled');
+    if ($borrower) {
+	my $line = "$borrower->{'cardnumber'} ";
+	$line .= "$borrower->{'surname'}, ";
+	$line .= "$borrower->{'title'} $borrower->{'firstname'}\n";
+	$line .= "$borrower->{'streetaddress'}, $borrower->{'city'}\n";
+	$line .= "$borrower->{'categorycode'}";
+	$borrowerinfo->configure(-state => 'normal');
+	$borrowerinfo->delete('0.0', 'end');
+	$borrowerinfo->insert('0.0',$line);
+	$borrowerinfo->configure(-state => 'disabled');
+    } else {
+	$borrowerinfo->configure(-state => 'normal');
+	$borrowerinfo->delete('0.0', 'end');
+	$borrowerinfo->insert('0.0','Not Loaned Out');
+	$borrowerinfo->configure(-state => 'disabled');
+    }
     #if ($bornum ne "") {
 #	($issues,$odues,$amt_owing) = borrdata2($env,$bornum);
 #    } else {
