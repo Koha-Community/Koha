@@ -1231,10 +1231,9 @@ If this is set, it is set to C<One Order>.
 sub ItemInfo {
     my ($env,$biblionumber,$type) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM items, biblio, biblioitems, itemtypes
+    my $query = "SELECT * FROM items, biblio, biblioitems left join itemtypes on biblioitems.itemtype = itemtypes.itemtype
                   WHERE items.biblionumber = ?
                     AND biblioitems.biblioitemnumber = items.biblioitemnumber
-                    AND biblioitems.itemtype = itemtypes.itemtype
                     AND biblio.biblionumber = items.biblionumber";
   if ($type ne 'intra'){
     $query .= " and ((items.itemlost<>1 and items.itemlost <> 2)
