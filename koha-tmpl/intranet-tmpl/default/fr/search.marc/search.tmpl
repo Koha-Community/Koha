@@ -8,107 +8,80 @@
 
 <center>
 <form name="f" method="post">
+
+<input type="hidden" name="op" value="do_search">
 <input type="hidden" name="type" value="intranet">
+<input type="hidden" name="nbstatements" value="<TMPL_VAR NAME="nbstatements">">
+
 	<table border=0 cellspacing=0 cellpadding=2 width="80%>
 		<tr align="center">
 			<td colspan=3>
 				<div name="sql">
-				<input type="hidden" name="op" value="do_search">
 				<textarea name="sql" rows=5 cols=60 disabled readonly></textarea>
 				</div>
 			</td>
 			<td colspan=2 bgcolor="#ad11ad" valign="top" align="left">
 				<span style="color:#FFFFFF;">
 					<b>AIDE :</b><br/>
-					Construisez votre requète en utilisant les champs MARC.
-					OK affichera la liste des notices correspondant à vos critères.
+					Construisez votre requète en utilisant les champs MARC puis lancez
+					la recherche pour afficher la liste des notices correspondant à vos critères.
+					En cliquant sur "Ajouter un critère" vous pouvez ajouter un critère de recherche sans perdre vos critères déjà entrés.
 				</span>
 			</td>
 		</tr>
 
+		<TMPL_LOOP NAME="statements">
+		<tr>
+			<td>
+				<TMPL_IF NAME="first">
+					<input type="hidden" name="and_or" value="">&nbsp;
+				<TMPL_ELSE>
+					<select name="and_or" size="1" onchange="sql_update()">
+						<option value="and">et</option>
+						<option <TMPL_IF NAME="or">selected </TMPL_IF>value="or">ou</option>
+					</select>
+				</TMPL_IF>
+			</td>
+			<td><TMPL_VAR name="marclist"></td>
+			<td>
+				<select name="excluding" size="1" onchange="sql_update()">
+					<option value="0"> </option>
+					<option <TMPL_IF NAME="not">selected </TMPL_IF>value="1">non</option>
+				</select>
+			</td>
+			<td>
+				<select name="operator" size="1" onchange="sql_update()">
+					<option <TMPL_IF NAME="eq">selected</TMPL_IF> value="=">Egale</option>
+					<option <TMPL_IF NAME="start">selected</TMPL_IF> value="start">Commence par</option>
+					<option <TMPL_IF NAME="contains">selected</TMPL_IF> value="contains">Contient</option>
+					<option <TMPL_IF NAME="gt">selected</TMPL_IF> value=">">Supérieur à</option>
+					<option <TMPL_IF NAME="ge">selected</TMPL_IF> value=">=">Supérieur ou égal à</option>
+					<option <TMPL_IF NAME="lt">selected</TMPL_IF> value="<">Inférieur à</option>
+					<option <TMPL_IF NAME="le">selected</TMPL_IF> value="<=">Inférieur ou égal à</option>
+				</select>
+			</td>
+			<td><input type="text" name="value" onChange="sql_update()" <TMPL_IF NAME="value">value="<TMPL_VAR NAME="value">"</TMPL_IF>></td>
+		</tr>
+		</TMPL_LOOP>
+	</table>
+	<br>
 
-		<!-- 000000000000000000000000000000000000000000000000000000 -->
-		<tr>
-			<td>
-				<input type=hidden name="and_or" value="">&nbsp;
-			</td>
-			<td><TMPL_VAR name="marclist"></td>
-			<td>
-				<select name="excluding" size="1" onchange="sql_update()">
-					<option value=""> </option>
-					<option value="not">non</option>
-				</select>
-			</td>
-			<td>
-				<select name="operator" size="1" onchange="sql_update()">
-					<option value="=">Egale</option>
-					<option value=">">Supérieur à</option>
-					<option value=">=">Supérieur ou égal à</option>
-					<option value="<">Inférieur à</option>
-					<option value="<=">Inférieur ou égal à</option>
-					<option value="start">Commence par</option>
-					<option value="contains">Contient</option>
-				</select>
-			</td>
-			<td><input type="text" name="value" onChange="sql_update()"></td>
-		</tr>
-		<tr>
-			<td>
-				<select name="and_or" size="1" onchange="sql_update()">
-					<option value="and">et</option>
-					<option value="or">ou</option>
-				</select>
-			</td>
-			<td><TMPL_VAR name="marclist"></td>
-			<td>
-				<select name="excluding" size="1" onchange="sql_update()">
-					<option value=""> </option>
-					<option value="not">non</option>
-				</select>
-			</td>
-			<td>
-				<select name="operator" size="1" onchange="sql_update()">
-					<option value="=">Egale</option>
-					<option value=">">Supérieur à</option>
-					<option value=">=">Supérieur ou égal à</option>
-					<option value="<">Inférieur à</option>
-					<option value="<=">Inférieur ou égal à</option>
-					<option value="start">Commence par</option>
-					<option value="contains">Contient</option>
-				</select>
-			</td>
-			<td><input type="text" name="value" onChange="sql_update()"></td>
-		</tr>
-		<tr>
-			<td>
-				<select name="and_or" size="1" onchange="sql_update()">
-					<option value="and">et</option>
-					<option value="or">ou</option>
-				</select>
-			</td>
-			<td><TMPL_VAR name="marclist"></td>
-			<td>
-				<select name="excluding" size="1" onchange="sql_update()">
-					<option value=""> </option>
-					<option value="not">not</option>
-				</select>
-			</td>
-			<td>
-				<select name="operator" size="1" onchange="sql_update()">
-					<option value="=">Egale</option>
-					<option value=">">Supérieur à</option>
-					<option value=">=">Supérieur ou égal à</option>
-					<option value="<">Inférieur à</option>
-					<option value="<=">Inférieur ou égal à</option>
-					<option value="start">Commence par</option>
-					<option value="contains">Contient</option>
-				</select>
-			</td>
-			<td><input type="text" name="value" onChange="sql_update()"></td>
-		</tr>
-		<tr><td colspan=5 align=center><input type="submit" value="OK"></td></tr>
+	<table width="90%">
+	<tr>
+	<td align="left" width="33%"><input type="button" value="Ajouter un critère" onClick="AddStatement()"></td>
+	<td align="center" width="33%"><input type="submit" value="Lancer la recherche"></td>
+	<td align="right" width="33%">Résultats par page :
+		<select align="right" name="resultsperpage" size="1">
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</td>
+	</tr>
 	</table>
 </form>
+</center>
+
 <script>
 function sql_update() {
 document.f.sql.value="";
@@ -117,15 +90,23 @@ document.f.sql.value="";
 			document.f.sql.value = document.f.sql.value+
 										document.f.and_or[i].value + ' (' +
 										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + '' +
-										document.f.operator[i].value + '' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
 										'\''+document.f.value[i].value + '\') ';
 		}
 	}
 }
+
+function AddStatement() {
+
+	document.forms[0].op.value="AddStatement";
+	document.f.submit();
+}
+
 </script>
 <TMPL_IF NAME="opac">
     <TMPL_INCLUDE NAME="opac-bottom.inc">
 <TMPL_ELSE>
     <TMPL_INCLUDE NAME="cat-bottom.inc">
 </TMPL_IF>
+
