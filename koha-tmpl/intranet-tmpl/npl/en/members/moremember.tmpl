@@ -7,10 +7,25 @@
 <div id="main">
 <h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h1>
 <div class="tabitem">
-			 <form method="post" action="/cgi-bin/koha/circ/circulation.pl"><input name="findborrower" type="hidden" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /> <input type="submit" class="submit" value="Issue" /></form><!-- TMPL_IF name="IS_ADULT" --> <form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form> <!-- /TMPL_IF --><!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Modify" /></form><!-- TMPL_ELSE --> <form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" name="modify" value="Edit" /></form><!-- /TMPL_IF --> <form action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Change Password" /></form> <form action="/cgi-bin/koha/members/member-flags.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Modify Privileges" /></form> <form action="/cgi-bin/koha/deletemem.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="cancel" value="Delete" /></form></div>
+			 <form method="post" action="/cgi-bin/koha/circ/circulation.pl"><input name="findborrower" type="hidden" value="<!-- TMPL_VAR NAME="cardnumber" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /> <input type="submit" class="submit" value="Issue" /></form>
+
+<!-- Hide from NPL --><!-- TMPL_IF name="IS_ADULT" --> <form action="/cgi-bin/koha/jmemberentry.pl" method="post"> <input type="submit" name="submit" value="Add Child" class="submit" alt="Add Child" /><input type="hidden" name="type" value="add" /><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form><!-- /TMPL_IF --><!-- /Hide from NPL -->
+
+<!-- TMPL_IF name="I" --> <form action="/cgi-bin/koha/members/imemberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" name="modify" class="submit" value="Modify" /></form>
+<!-- TMPL_ELSE --> <form action="/cgi-bin/koha/members/memberentry.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" name="modify" value="Edit" /></form>
+<!-- /TMPL_IF -->
+
+<form action="/cgi-bin/koha/members/member-password.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Change Password" /></form>
+
+ <form action="/cgi-bin/koha/members/member-flags.pl" method="post"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME=bornum -->" /> <input type="submit" class="submit" value="Modify Privileges" /></form>
+
+
+<form action="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->" onclick="confirm_deletion(); return false;"><input type="hidden" name="member" value="<!-- TMPL_VAR NAME="bornum" -->"><input type="submit" class="cancel" value="Delete"></form>
+
+</div>
 <div class="table"><div class="compact">
 <table>
-<tr><th>Name:</th><td><!-- TMPL_IF name="IS_ADULT" --><!-- TMPL_VAR NAME="title" -->. <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_IF NAME="othernames" -->"<!-- TMPL_VAR NAME="othernames" -->" <!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="initials" -->(<!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --></td></tr>
+<tr><th>Name:</th><td><!-- TMPL_IF name="IS_ADULT" --><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" -->. <!-- /TMPL_IF --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_IF NAME="othernames" -->"<!-- TMPL_VAR NAME="othernames" -->" <!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="initials" -->(<!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --></td></tr>
 		<tr><th>Address:</th><td><!-- TMPL_IF NAME="streetaddress" --><!-- TMPL_VAR NAME="streetaddress" --><br /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="physstreet" --><!-- TMPL_VAR NAME="physstreet" --><br /><!-- /TMPL_IF --><!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></td></tr>
 		<!-- TMPL_UNLESS name="I" -->
@@ -82,7 +97,11 @@
 			<th>Total Due</th></tr>
 			<tr><td><!-- TMPL_IF name="totaldue" --><!-- TMPL_VAR NAME="totaldue" --><!-- TMPL_ELSE -->No Outstanding Charges<!-- /TMPL_IF --></td></tr></table>
 <p><form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><input type="submit" value="View Account" class="submit" /></form>
+
+
 	<form class="inline" action="/cgi-bin/koha/pay.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><input type="submit" value="Pay Fines" class="submit" /></form>
+
+
 </p></div>
 
 <form class="inline" action="renewscript.pl" method="post">
@@ -98,7 +117,7 @@
 		<th>Return</th>
 	</tr>
 
-	<tmpl_loop name="issueloop">
+	<!-- tmpl_loop name="issueloop" -->
 	<tr>
 		<td><!-- TMPL_IF name="red" --><font color="red"><!-- /TMPL_IF -->
 		<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="red" --></font><!-- /TMPL_IF -->
@@ -118,9 +137,13 @@
 		</td>
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Return</a></td>
 	</tr>
-	</tmpl_loop>
+	<!-- /tmpl_loop -->
 	</table></div><p><input type="submit" class="submit" value="Renew Checked Items" /></p>
-</form><form class="inline" action="renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><!-- TMPL_LOOP NAME="issueloop" --><!-- TMPL_UNLESS NAME="norenew" --><input type="hidden" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y" /><!-- /TMPL_UNLESS --><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form>
+</form>
+
+<form class="inline" action="renewscript.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /><!-- TMPL_LOOP NAME="issueloop" --><!-- TMPL_UNLESS NAME="norenew" --><input type="hidden" name="renew_item_<!-- TMPL_VAR NAME="itemnumber" -->" value="y" /><!-- /TMPL_UNLESS --><!-- /TMPL_LOOP --><input type="submit" class="submit" value="Renew All" /></form>
+
+
 
 
 	<form action="/cgi-bin/koha/modrequest.pl" method="post">
@@ -159,13 +182,22 @@
 </table>		<!-- TMPL_IF name="reserveloop" -->
 			<p><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></p>
 		<!-- /TMPL_IF --></div></form>
-<div class="table">
+
+
+<!-- Hide from NPL --><div class="table">
 <h1>Reading Record</h1>
 <form class="inline" action="/cgi-bin/koha/readingrec.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->" /> <input type="submit" class="submit" value="View Patron's Reading Record" /></form>
-</div>
+</div><!-- /Hide from NPL -->
+
 </div>
 
-
-<!-- endmenu -->
+<script language="JavaScript" type="text/javascript">
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this patron?');
+	if (is_confirmed) {
+		window.location="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="bornum" -->";
+	}
+}
+</script>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
