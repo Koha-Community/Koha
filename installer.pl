@@ -849,7 +849,7 @@ data that you can install now.
 
 If you are installing Koha with the intention of populating it with your own
 data, you probably don't want this sample data installed.
-|;
+|;#'
     print "\nWould you like to install the sample data? Y/[N]: ";
     chomp($input = <STDIN>);
     if ($input =~/^y/i) {
