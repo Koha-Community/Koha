@@ -40,6 +40,16 @@ foreach my $itm (@items) {
     $itm->{$itm->{'publictype'}} = 1;
 }
 
+my @subjects;
+my $subject;
+my @subj = split /, /,($dat->{'subject'});  #split returned string into array
+foreach my $subjct (@subj) {
+    $subject= {
+	SUBJECTS => $subjct,
+    };
+    push @subjects, $subject;
+}
+
 $template->param(norequests => $norequests);
 
 my @results = ($dat,);
@@ -48,10 +58,12 @@ my $resultsarray=\@results;
 my $itemsarray=\@items;
 my $webarray=\@webbiblioitems;
 my $sitearray=\@websites;
+my $subjectsarray=\@subjects;
 
 $template->param(BIBLIO_RESULTS => $resultsarray);
 $template->param(ITEM_RESULTS => $itemsarray);
 $template->param(WEB_RESULTS => $webarray);
+$template->param(SUBJECTS => $subjectsarray);
 $template->param(SITE_RESULTS => $sitearray,
 			     LibraryName => C4::Context->preference("LibraryName"),
 );
