@@ -251,13 +251,13 @@ unless ($branchcategories{'codedescription'} eq 'text') {
 
 # Populate systempreferences if it is empty
 
-$sth=$dbh->prepare("select value from systempreferences where variable='autoMemberNum'")
+$sth=$dbh->prepare("select value from systempreferences where variable='autoMemberNum'");
 $sth->execute;
 unless ($sth->rows) {
     my $sth=$dbh->prepare("insert into systempreferences (variable, value) values ('autoMemberNum', '1')");
     $sth->execute;
 }
-$sth=$dbh->prepare("select value from systempreferences where variable='acquisitions'")
+$sth=$dbh->prepare("select value from systempreferences where variable='acquisitions'");
 $sth->execute;
 unless ($sth->rows) {
     my $sth=$dbh->prepare("insert into systempreferences (variable, value) values ('acquisitions', 'simple')");
@@ -271,6 +271,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.10  2002/06/25 18:24:33  tonnesen
+# Fixed missing semicolons.
+#
 # Revision 1.4.2.9  2002/06/25 16:57:39  tonnesen
 # Fixed bug.  $sth->execute after $sti->prepare.
 #
