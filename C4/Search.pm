@@ -1,4 +1,5 @@
 package C4::Search;
+#require '/u/acli/lib/cvs.pl'; # XXX
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -1973,10 +1974,10 @@ sub getboracctrecord {
    my @acctlines;
    my $numlines=0;
    my $query= "Select * from accountlines where
-borrowernumber=$params->{'borrowernumber'} order by date desc,timestamp desc";
+borrowernumber=? order by date desc,timestamp desc";
    my $sth=$dbh->prepare($query);
 #   print $query;
-   $sth->execute;
+   $sth->execute($params->{'borrowernumber'});
    my $total=0;
    while (my $data=$sth->fetchrow_hashref){
 #      if ($data->{'itemnumber'} ne ''){
@@ -2175,6 +2176,8 @@ sub itemcount2 {
     # sort for this?
     if (my $data2=$sth2->fetchrow_hashref){
        $counts{'not available'}++;
+       #my $x = "Not available, data2=" . (defined $data2? CGI::escapeHTML(cvs($data2)): "undef");
+       #$counts{$x}++; #XXX
     } else {
        $counts{$data->{'branchname'}}++;
     }
