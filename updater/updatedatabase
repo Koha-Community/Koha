@@ -249,12 +249,33 @@ unless ($branchcategories{'codedescription'} eq 'text') {
 }
 
 
+# Populate systempreferences if it is empty
+
+$sth=$dbh->prepare("select value from systempreferences where variable='autoMemberNum'")
+$sth->execute;
+unless ($sth->rows) {
+    my $sth=$dbh->prepare("insert into systempreferences (variable, value) values ('autoMemberNum', '1')");
+    $sth->execute;
+}
+$sth=$dbh->prepare("select value from systempreferences where variable='acquisitions'")
+$sth->execute;
+unless ($sth->rows) {
+    my $sth=$dbh->prepare("insert into systempreferences (variable, value) values ('acquisitions', 'simple')");
+    $sth->execute;
+}
+
+
 $sth->finish;
 $dbh->disconnect;
 
 exit;
 
 # $Log$
+# Revision 1.4.2.8  2002/06/25 16:56:29  tonnesen
+# Populate systempreferences table with values for acquisitions and
+# autoMemberNum.  I have picked acquisitions='simple' and autoMemberNum='1' as
+# the defaults for these two variables.  Comments?
+#
 # Revision 1.4.2.7  2002/06/24 22:01:26  rangi
 # Have added missing borrowernumber field to the statistics table
 #
