@@ -19,6 +19,7 @@
 	<th>Author</th>
 	<th>Title</th>
 	</tr>
+</thead>
 <tbody>
 	<TMPL_LOOP name="result">
 		<tr>
@@ -27,7 +28,9 @@
 			<td><TMPL_VAR name="title"></td>
 		</tr>
 	</TMPL_LOOP>
+</tbody>
 </table>
+
 <TMPL_IF NAME="opac">
     <TMPL_INCLUDE NAME="opac-bottom.inc">
 <TMPL_ELSE>
