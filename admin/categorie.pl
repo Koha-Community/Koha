@@ -182,7 +182,7 @@ if ($op eq 'add_form') {
 	my $env;
 	my @loop;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
-	my $toggle='white';
+	my $toggle = 'white';
 	for (my $i=0; $i < $count; $i++){
 		my %row = (categorycode => $results->[$i]{'categorycode'},
 				description => $results->[$i]{'description'},
@@ -195,7 +195,7 @@ if ($op eq 'add_form') {
 				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
 				issuelimit => $results->[$i]{'issuelimit'},
 				reservefee => $results->[$i]{'reservefee'},
-				toggle = $toggle );	
+				toggle => $toggle );	
 		push @loop, \%row;
 		if ( $toggle eq 'white' )
 		{
