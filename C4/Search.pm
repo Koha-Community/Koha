@@ -1073,7 +1073,6 @@ while (my $data=$sth->fetchrow_hashref){
 	    if ($search->{'publisher'} ne ''){
 	    $query.= " and (publishercode like '%$search->{'publisher'}%')";
 	    }
-warn "$query\n";
   my $dewey;
   my $subclass;
   my $true=0;
