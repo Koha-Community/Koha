@@ -265,6 +265,13 @@ sub next_token (*) {
 
 ###############################################################################
 
+# Other easy functions
+
+sub blank_p ($) {
+    my($s) = @_;
+    return $s =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var)*$/os;
+}
+
 sub trim ($) {
     my($s) = @_;
     $s =~ s/^(?:\s|\&nbsp$re_end_entity)+//os;

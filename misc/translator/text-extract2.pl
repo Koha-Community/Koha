@@ -27,7 +27,7 @@ use vars qw( $pedantic_p );
 
 sub debug_dump (*) { # for testing only
     my($h) = @_;
-    print "re_tag_compat is /$TmplTokenizer::re_tag_compat/\n";
+    print "re_tag_compat is /", TmplTokenizer::re_tag(1), "/\n";
     for (;;) {
 	my $s = TmplTokenizer::next_token $h;
     last unless defined $s;
@@ -79,7 +79,7 @@ sub text_extract (*) {
     # Don't emit pure whitespace, pure numbers, or TMPL_VAR's.
     for my $t (keys %text) {
 	printf "%s\n", $t
-	    unless $t =~ /^(?:\s|\&nbsp$TmplTokenizer::re_end_entity|$TmplTokenizer::re_tmpl_var)*$/os || $t =~ /^\d+$/;
+	    unless TmplTokenizer::blank_p($t) || $t =~ /^\d+$/;
     }
 }
 
