@@ -252,7 +252,7 @@ sub catalogsearch {
 	my $counter = $offset;
 	# HINT : biblionumber as bn is important. The hash is fills biblionumber with items.biblionumber.
 	# so if you dont' has an item, you get a not nice epty value.
-	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,biblio.*, biblioitems.*, items.*,marc_biblio.bibid
+	$sth = $dbh->prepare("SELECT biblio.biblionumber as bn,count(*) as tot,biblio.*, biblioitems.*, items.*,marc_biblio.bibid
 							FROM biblio, marc_biblio 
 							LEFT JOIN items on items.biblionumber = biblio.biblionumber
 							LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
@@ -262,11 +262,9 @@ sub catalogsearch {
 	my @CNresults=();
 	my $totalitems=0;
 	my $oldline;
-# 	my ($biblionumber,$author,$title,$holdingbranch, $itemcallnumber, $bibid);
 	my ($oldbibid, $oldauthor, $oldtitle);
 	# parse all biblios between start & end.
 	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
-# 		warn " bibid :".$result[$counter];
 		# search & parse all items & note itemcallnumber
 		$sth->execute($result[$counter]);
 		my $continue=1;
@@ -277,7 +275,6 @@ sub catalogsearch {
 			# parse the result, putting holdingbranch & itemcallnumber in separate array
 			# then all other fields in the main array
 			if ($oldbiblionumber && ($oldbiblionumber ne $line->{bn}) && $oldline) {
-# 			warn "HERE $oldbiblionumber && ($oldbiblionumber ne $line->{bn}) && $oldline";
 				my %newline;
 				%newline = %$oldline;
 				$newline{totitem} = $totalitems;
@@ -292,14 +289,14 @@ sub catalogsearch {
 			}
 			$continue=0 unless $line->{bn};
 			if ($continue) {
-# 			warn "IN ".$line->{bn}."<<" if($line->{bn});
 				$oldbiblionumber = $line->{bn};
-				$totalitems++ if ($line->{holdingbranch});
+				$totalitems +=$line->{tot} if ($line->{holdingbranch});
 				$oldline = $line;
 				# item callnumber & branch
 				my %lineCN;
 				$lineCN{holdingbranch} = $line->{holdingbranch};
 				$lineCN{itemcallnumber} = $line->{itemcallnumber};
+				$lineCN{location} = $line->{location};
 				push @CNresults,\%lineCN;
 				$line = $sth->fetchrow_hashref;
 			}
