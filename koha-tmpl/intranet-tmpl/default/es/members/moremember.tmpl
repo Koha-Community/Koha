@@ -61,7 +61,11 @@
         <input type=hidden name=bornum value="<TMPL_VAR NAME="bornum">">
         <INPUT TYPE="image" name="modify"  VALUE="modify" height=42  WIDTH=93 BORDER=0 src="/images/modify-mem.gif">
         <INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93 BORDER=0 src="/images/delete-mem.gif">
-        </p>
+
+	<p>
+	<a href="member-password.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=124 BORDER=0 src="/images/password-mem.gif" alt="Password">
+	</p>
+	<a href="member-flags.pl?member=<TMPL_VAR NAME="bornum">"><img height=42  WIDTH=187 BORDER=0 src="/images/modify-user-flags.gif" alt="Privileges"></a>
       </form>
     </TD>
   </TR>
