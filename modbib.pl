@@ -39,7 +39,6 @@ my ($subtitlecount, $subtitle)   = &subtitle($data->{'biblionumber'});
 my ($addauthorcount, $addauthor) = &addauthor($data->{'biblionumber'});
 my $sub        = $subject->[0]->{'subject'};
 my $additional = $addauthor->[0]->{'author'};
-my %inputs;
 my $dewey;
 my $submit=$input->param('submit.x');
 if ($submit eq '') {
@@ -51,18 +50,11 @@ print $input->header;
 # my ($analyticauthor) = &analytic($biblionumber,'a');
 print startpage();
 print startmenu('catalogue');
-my %inputs;
 
 # have to get all subtitles, subjects and additional authors
-for (my $i = 1; $i < $subjectcount; $i++) {
-  $sub = $sub . "|" . $subject->[$i]->{'subject'};	# FIXME - .=
-} # for
+$sub = join("|", map { $_->{'subject'} } @{$subject});
 
-for (my $i = 1; $i < $addauthorcount; $i++) {
-  $additional = $additional . "|" . $addauthor->[$i]->{'author'};
-							# FIXME - .=
-} # for
-
+$additional = join("|", map { $_->{'author'} } @{$addauthor});
 
 $dewey = $data->{'dewey'};
 $dewey =~ s/0+$//;
