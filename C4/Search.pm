@@ -1,5 +1,4 @@
 package C4::Search;
-#require '/u/acli/lib/cvs.pl'; # XXX
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -2151,25 +2150,39 @@ sub itemcount2 {
   $counts{'total'}=0;
   while (my $data=$sth->fetchrow_hashref){
     $counts{'total'}++;
-    my $query2="select * from issues,items where issues.itemnumber=
-    '$data->{'itemnumber'}' and returndate is NULL
-    and items.itemnumber=issues.itemnumber and ((items.itemlost <>1 and
-    items.itemlost <> 2) or items.itemlost is NULL)
-    and (wthdrawn <> 1 or wthdrawn is NULL)";
 
-    my $sth2=$dbh->prepare($query2);
-    $sth2->execute;
-    # FIXME - fetchrow_hashref() can fail for any number of reasons
-    # (e.g., a database server crash). Perhaps use a left join of some
-    # sort for this?
-    if (my $data2=$sth2->fetchrow_hashref){
-       $counts{'not available'}++;
-       #my $x = "Not available, data2=" . (defined $data2? CGI::escapeHTML(cvs($data2)): "undef");
-       #$counts{$x}++; #XXX
-    } else {
-       $counts{$data->{'branchname'}}++;
+    my $status;
+    for my $test (
+      [
+	'Item Lost',
+	'select * from items
+	  where itemnumber=?
+	    and not ((items.itemlost <>1 and items.itemlost <> 2)
+		      or items.itemlost is NULL)'
+      ], [
+	'Withdrawn',
+	'select * from items
+	  where itemnumber=? and not (wthdrawn <> 1 or wthdrawn is NULL)'
+      ], [
+	'On Loan', "select * from issues,items
+	  where issues.itemnumber=? and returndate is NULL
+	    and items.itemnumber=issues.itemnumber"
+      ],
+    ) {
+	my($testlabel, $query2) = @$test;
+
+	my $sth2=$dbh->prepare($query2);
+	$sth2->execute($data->{'itemnumber'});
+
+	# FIXME - fetchrow_hashref() can fail for any number of reasons
+	# (e.g., a database server crash). Perhaps use a left join of some
+	# sort for this?
+	$status = $testlabel if $sth2->fetchrow_hashref;
+	$sth2->finish;
+    last if defined $status;
     }
-    $sth2->finish;
+    $status = $data->{'branchname'} unless defined $status;
+    $counts{$status}++;
   }
   my $query2="Select * from aqorders where biblionumber=$bibnum and
   datecancellationprinted is NULL and quantity > quantityreceived";
