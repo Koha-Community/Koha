@@ -29,6 +29,8 @@ use C4::Context;
 use C4::Search;
 use C4::Circulation::Circ2;
 use C4::Output;
+use C4::Koha;
+use C4::Auth;
 use HTML::Template;
 
 # get all the data ....
@@ -61,7 +63,17 @@ if (not $lastmove) {
 }
 
 # make the page ...
-my $template = gettemplate("bookcount.tmpl");
+
+my ($template, $loggedinuser, $cookie)
+      = get_template_and_user({template_name => "bookcount.tmpl",
+	                                 query => $input,
+	                                 type => "intranet",
+	                                 authnotrequired => 0,
+	                                 flagsrequired => {borrowers => 1},
+	                                 debug => 1,
+	                                 });
+
+
 
 my @branchloop;
 
