@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# NOTE: Use standard 8-space tabs for this file (indents are 4 spaces)
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -25,12 +26,11 @@ use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Search;
 use C4::Auth;
+use C4::Interface::CGI::Output;
 
 my $query=new CGI;
 my $type=$query->param('type');
-#(-e "opac") && ($type='opac');
 ($type) || ($type='intra');
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 my $biblionumber=$query->param('bib');
 #my $type='intra';	# FIXME - There's already a $type in this scope
@@ -70,12 +70,15 @@ my $sitearray=\@websites;
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 
-my $template;
-if ($type eq 'opac') {
-	$template = gettemplate("catalogue/detail-opac.tmpl");
-} else {
-	$template=gettemplate("catalogue/detail.tmpl");
-}
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	template_name   => ($type eq 'opac'? 'catalogue/detail-opac.tmpl':
+					     'catalogue/detail.tmpl'),
+	query           => $query,
+	type            => "intranet",
+	authnotrequired => ($type eq 'opac'),
+	flagsrequired   => {catalogue => 1},
+    });
+
 my $count=1;
 
 # now to get the items into a hash we can use and whack that thru
@@ -95,3 +98,7 @@ $template->param(SITE_RESULTS => $sitearray);
 $template->param(loggedinuser => $loggedinuser);
 output_html_with_http_headers $query, $cookie, $template->output;
 
+
+# Local Variables:
+# tab-width: 8
+# End:
