@@ -31,6 +31,7 @@ my $module=$input->param('module');
 SWITCH: {
 	if ($module eq 'acquisitions') { acquisitions(); last SWITCH; }
 	if ($module eq 'search') { catalogue_search(); last SWITCH; }
+	if ($module eq 'cataloguing') {cataloguing(); last SWITCH; }
 	if ($module eq 'somethingelse') { somethingelse(); last SWITCH; }
 }
 
@@ -45,9 +46,9 @@ sub acquisitions {
 	if ($aq_type eq 'simple') {
 		print $input->redirect("/cgi-bin/koha/acqui.simple/addbooks.pl");
 	} elsif ($aq_type eq 'normal') {
-		print $input ->redirect("/acquisitions");
+		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
 	} else {
-		print $input ->redirect("/acquisitions");
+		print $input ->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
 	}
 }
 
@@ -58,6 +59,18 @@ sub catalogue_search {
 	my $type = $query->param('type');
 	if ($marc_p) {
 		print $input->redirect("/cgi-bin/koha/search.marc/search.pl?type=$type");
+	} else {
+		print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
+	}
+}
+
+sub cataloguing {
+	my $marc_p = C4::Context->boolean_preference("marc");
+	$marc_p = 1 unless defined $marc_p;
+	my $query = new CGI;
+	my $type = $query->param('type');
+	if ($marc_p) {
+		print $input->redirect("/cgi-bin/koha/cataloguing.marc/cataloguing-home.pl");
 	} else {
 		print $input ->redirect("/cgi-bin/koha/catalogue-home.pl");
 	}
