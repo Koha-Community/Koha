@@ -128,7 +128,7 @@ for (my$i=0;$i<$numaccts;$i++){
   my %row = %$accts->[$i];
   if ($amount2 != 0){
     my $item=" &nbsp; ";
-    $row{'date'} = slashifyDate($accts->[$i]{'date'});
+    $row{'date'} = format_date($accts->[$i]{'date'});
 
     if ($accts->[$i]{'accounttype'} ne 'Res'){
       #get item data
@@ -153,7 +153,7 @@ my $today=ParseDate('today');
 my @issuedata;
 for (my $i=0;$i<$count;$i++){
   my $datedue=ParseDate($issue->[$i]{'date_due'});
-  $issue->[$i]{'date_due'} = slashifyDate($issue->[$i]{'date_due'});
+  $issue->[$i]{'date_due'} = format_date($issue->[$i]{'date_due'});
   my %row = %{$issue->[$i]};
   if ($datedue < $today){
     $row{'red'}=1; #print "<font color=red>";
@@ -190,7 +190,7 @@ my ($rescount,$reserves)=FindReserves('',$bornum); #From C4::Reserves2
 #
 my @reservedata;
 for (my $i=0;$i<$rescount;$i++){
-  $reserves->[$i]{'reservedate2'} = slashifyDate($reserves->[$i]{'reservedate'});
+  $reserves->[$i]{'reservedate2'} = format_date($reserves->[$i]{'reservedate'});
   my $restitle;
   my %row = %$reserves->[$i];
   if ($reserves->[$i]{'constrainttype'} eq 'o'){

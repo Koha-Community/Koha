@@ -11,6 +11,7 @@ use C4::Reserves2;
 use C4::Search;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Date;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 
@@ -25,9 +26,9 @@ my ($template, $borrowernumber, $cookie)
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
-$borr->{'dateenrolled'} = slashifyDate($borr->{'dateenrolled'});
-$borr->{'expiry'}       = slashifyDate($borr->{'expiry'});
-$borr->{'dateofbirth'}  = slashifyDate($borr->{'dateofbirth'});
+$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
+$borr->{'expiry'}       = format_date($borr->{'expiry'});
+$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 if ($borr->{'amountoutstanding'} > 5) {
@@ -58,7 +59,7 @@ my @overdues;
 my @issuedat;
 foreach my $key (keys %$issues) {
     my $issue = $issues->{$key};
-    $issue->{'date_due'}  = slashifyDate($issue->{'date_due'});
+    $issue->{'date_due'}  = format_date($issue->{'date_due'});
 
     # check for reserves
     my ($restype, $res) = CheckReserves($issue->{'itemnumber'});
@@ -109,7 +110,7 @@ my $branches = getbranches();
 # now the reserved items....
 my ($rcount, $reserves) = FindReserves(undef, $borrowernumber);
 foreach my $res (@$reserves) {
-    $res->{'reservedate'}  = slashifyDate($res->{'reservedate'});
+    $res->{'reservedate'}  = format_date($res->{'reservedate'});
     my $publictype = $res->{'publictype'};
     $res->{$publictype} = 1;
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';

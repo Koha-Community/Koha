@@ -12,6 +12,7 @@ use C4::Circulation::Circ2;
 use C4::Reserves2;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Date;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = 5;
 
@@ -122,7 +123,7 @@ my %types;
 my %itemtypes;
 my @duedates;
 foreach my $itm (@items) {
-    push @duedates, {date_due => slashifyDate($itm->{'date_due'})} if defined $itm->{'date_due'};
+    push @duedates, {date_due => format_date($itm->{'date_due'})} if defined $itm->{'date_due'};
     $itm->{$itm->{'publictype'}} = 1;
     # FIXME CalcReserveFee is supposed to be internal-use-only
     my $fee  = CalcReserveFee(undef, $borrowernumber, $itm->{'biblionumber'},'a',($itm->{'biblioitemnumber'}));

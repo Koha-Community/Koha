@@ -10,6 +10,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Acquisitions;
 use C4::Biblio;
+use C4::Date;
 use HTML::Template;
 
 use CGI;
@@ -139,8 +140,8 @@ my $mon=substr($items[$i]->{'timestamp0'},4,2);
 my $day=substr($items[$i]->{'timestamp0'},6,2);
 $items[$i]->{'timestamp0'}="$day/$mon/$year";
 
-$items[$i]->{'dateaccessioned'} = slashifyDate($items[$i]->{'dateaccessioned'});
-$items[$i]->{'datelastseen'} = slashifyDate($items[$i]->{'datelastseen'});
+$items[$i]->{'dateaccessioned'} = format_date($items[$i]->{'dateaccessioned'});
+$items[$i]->{'datelastseen'} = format_date($items[$i]->{'datelastseen'});
 
 print <<printend
 <FONT SIZE=2  face="arial, helvetica">

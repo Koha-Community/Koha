@@ -10,7 +10,7 @@ use C4::Koha;
 use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
 use HTML::Template;
-
+use C4::Date;
 
 my $query = new CGI;
 
@@ -78,9 +78,9 @@ EOF
 }
 
 
-$borr->{'dateenrolled'} = slashifyDate($borr->{'dateenrolled'});
-$borr->{'expiry'}       = slashifyDate($borr->{'expiry'});
-$borr->{'dateofbirth'}  = slashifyDate($borr->{'dateofbirth'});
+$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
+$borr->{'expiry'}       = format_date($borr->{'expiry'});
+$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 

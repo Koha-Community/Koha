@@ -34,6 +34,8 @@ use C4::Circulation::Circ2;
 use HTML::Template;
 use C4::Catalogue;
 use CGI;
+use C4::Date;
+
 my $input = new CGI;
 
 # get biblio information....
@@ -154,7 +156,7 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 		$reserve{'wbrcode'} = $res->{'branchcode'};
 		$reserve{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
     }
-    $reserve{'date'} = slashifyDate($res->{'reservedate'});
+    $reserve{'date'} = format_date($res->{'reservedate'});
 	$reserve{'borrowernumber'}=$res->{'borrowernumber'};
 	$reserve{'biblionumber'}=$res->{'biblionumber'};
 	$reserve{'bornum'}=$res->{'borrowernumber'};

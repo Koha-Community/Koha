@@ -9,6 +9,7 @@ use C4::Circulation::Circ2;
 use C4::Search;
 use HTML::Template;
 use C4::Interface::CGI::Output;
+use C4::Date;
 
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 
@@ -23,9 +24,9 @@ my ($template, $borrowernumber, $cookie)
 # get borrower information ....
 my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
 
-$borr->{'dateenrolled'} = slashifyDate($borr->{'dateenrolled'});
-$borr->{'expiry'}       = slashifyDate($borr->{'expiry'});
-$borr->{'dateofbirth'}  = slashifyDate($borr->{'dateofbirth'});
+$borr->{'dateenrolled'} = format_date($borr->{'dateenrolled'});
+$borr->{'expiry'}       = format_date($borr->{'expiry'});
+$borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 
