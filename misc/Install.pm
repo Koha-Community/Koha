@@ -202,16 +202,16 @@ Checking perl modules ...
 $messages->{'PerlVersionFailure'}->{en}="Sorry, you need at least Perl %s\n";
 
 $messages->{'MissingPerlModules'}->{en} = heading('MISSING PERL MODULES') . qq|
-You are missing some Perl modules which are required by Koha.
-Once these modules have been installed, rerun this installer.
-They may be installed by running (as root) the following:
+You are missing some Perl modules required by Koha.
+Please run this again after installing them.
+They may be installed by finding packages from your operating system supplier, or running (as root) the following commands:
 
 %s
 |;
 
 $messages->{'AllPerlModulesInstalled'}->{en} =
    heading('PERL MODULES AVAILABLE') . qq|
-All mandatory perl modules are installed.
+All required perl modules are installed.
 
 Press <ENTER> to continue: |;
 $messages->{'KohaVersionInstalled'}->{en}="You currently have Koha %s on your system.";
@@ -979,7 +979,8 @@ Get the MySQL database server installation directory, automatically if possible.
 =cut
 
 $messages->{'WhereIsMySQL'}->{en} = heading('MYSQL LOCATION').qq|
-Koha can't find MySQL. If you compiled mysql yourself,
+Koha can't find the MySQL command-line tools. If you installed a MySQL package, you may need to install an additional package containing mysqladmin.
+If you compiled mysql yourself,
 please give the value of --prefix when you ran configure.
 The file mysqladmin should be in bin/mysqladmin under the directory that you give here.
 
