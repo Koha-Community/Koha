@@ -670,7 +670,7 @@ while (my $data=$sth->fetchrow_hashref){
   my $dewey;
   my $subclass;
   my $true=0;
-  if (($dewey, $subclass) = $sti->fetchrow){
+  if (($dewey, $subclass) = $sti->fetchrow || $type eq 'subject'){
     $true=1;
   }
   $dewey=~s/\.*0*$//;
@@ -792,7 +792,20 @@ sub ItemInfo {
 #    print "$results[$i] <br>";
     $i++;
   }
-  $sth->finish;
+ $sth->finish;
+  my $query2="Select * from aqorders where biblionumber=$biblionumber";
+  my $sth2=$dbh->prepare($query2);         
+  $sth2->execute;                                        
+  my $data;
+  my $ocount;
+  if ($data=$sth2->fetchrow_hashref){                   
+    $ocount=$data->{'quantity'} - $data->{'quantityreceived'};                                                  
+    if ($ocount > 0){
+      $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$ocount\tOn Order\t\t$data->{'itemnumber'}\t$data->{'itemtype'}\t\t$data->{'biblioitemnumber'}\t$data->{'volumeddesc'}";
+    }
+  } 
+  $sth2->finish;
+
   $dbh->disconnect;
   return(@results);
 }
@@ -854,9 +867,13 @@ sub itemdata {
 sub bibdata {
   my ($bibnum,$type)=@_;
   my $dbh=C4Connect;
-  my $query="Select *,biblio.notes  from biblio,biblioitems,bibliosubtitle where biblio.biblionumber=$bibnum
-  and biblioitems.biblionumber=$bibnum and 
-(bibliosubtitle.biblionumber=$bibnum)"; 
+  my $query="Select *,biblio.notes  
+  from biblio,biblioitems 
+  left join bibliosubtitle on                                                
+  biblio.biblionumber=bibliosubtitle.biblionumber
+  
+  where biblio.biblionumber=$bibnum
+  and biblioitems.biblionumber=$bibnum"; 
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
