@@ -1855,13 +1855,11 @@ by date_due";
   my $sth=$dbh->prepare($query);
     $sth->execute;
   my @result;
-  my $i=0;
-  while (my $data=$sth->fetchrow_hashref){
-    $result[$i]=$data;;
-    $i++;
+  while (my $data = $sth->fetchrow_hashref) {
+    push @result, $data;
   }
   $sth->finish;
-  return($i,\@result);
+  return(scalar(@result), \@result);
 }
 
 =item allissues
