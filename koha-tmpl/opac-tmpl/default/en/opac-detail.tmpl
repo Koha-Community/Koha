@@ -1,21 +1,21 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
 <TMPL_IF NAME="loggedinusername">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Members Home</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Log Out</a>]</p>
+    <p align="left">Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href="/cgi-bin/koha/opac-user.pl">Members Home</a>][<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a>]</p>
 <TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+    <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
 </TMPL_IF>
 
 <TMPL_UNLESS NAME="norequests">
-<p align=right><a href=/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>>Request</a></p>
+<p align="right"><a href="/cgi-bin/koha/opac-reserve.pl?bib=<TMPL_VAR NAME="biblionumber" ESCAPE=URL>">Request</a></p>
 </TMPL_UNLESS>
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font><p>
-<!-- FIXME - "callpadding" should be "cellpadding", right? -->
-<table cellspacing="0" callpadding="5" border="1" align="left" width="220">
-	<!-----------------BIBLIO RECORD TABLE--------->
+<p><font size="6"><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
+<TMPL_VAR NAME="class"></em></font></p>
+
+<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
+	<!-- BIBLIO RECORD TABLE -->
 	<tr valign="top">
 		<td bgcolor="#99cccc">
 			<b>BIBLIO RECORD</b>
@@ -24,30 +24,29 @@
 	</tr>
 	<tr valign="top">
 		<td>
-			<FONT SIZE=2  face="arial, helvetica">
+			<FONT size="2"  face="arial,helvetica,sans-serif">
 				<TMPL_IF name="subtitle"><b>Subtitle:</b></TMPL_IF> <TMPL_VAR NAME="subtitle">
-				<TMPL_IF name="author"><b>Author:</b> <a href=/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>><TMPL_VAR NAME="author"></a></TMPL_IF><br>
+				<TMPL_IF name="author"><b>Author:</b> <a href="/cgi-bin/koha/search.pl?author=<TMPL_VAR NAME="author" ESCAPE=URL>"><TMPL_VAR NAME="author"></a></TMPL_IF><br>
 				<TMPL_IF name="additional"><b>Additional Author:</b><TMPL_VAR NAME="additional"><br></TMPL_IF>
 				<TMPL_IF name="publishercode"><b>Published by :</b></TMPL_IF> <TMPL_VAR NAME="publishercode">
 				<TMPL_IF name="publicationyear"><b>in </b></TMPL_IF><TMPL_VAR NAME="publicationyear">
 				<TMPL_IF name="pages">, </TMPL_IF><TMPL_VAR name="pages">
-				<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br/>
-				<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br/>
-				<TMPL_IF name="subject"><b>Subject:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br/>
-				<TMPL_IF name="copyrightdate"><b>Year :</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br/>
-				<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br/>
-				<TMPL_IF name="unititle"><b>Unititle:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br/>
-				<TMPL_IF name="serial"><b>Serial:</b><TMPL_VAR NAME="serial"></TMPL_IF><br/>
-				<TMPL_IF name="dewey"><b>Dewey:</b></TMPL_IF><TMPL_VAR name="dewey"><br/>
-				<TMPL_IF name="url"><b>URL:</b> <a hre="<TMPL_VAR name="url"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
-				<b>total number of Items:</b> <TMPL_VAR NAME="count">
+				<TMPL_IF name="size">, </TMPL_IF><TMPL_VAR name="size"><br>
+				<TMPL_IF name="collection"><b>Collection:</b></TMPL_IF> <TMPL_VAR NAME="seriestitle"><br>
+				<TMPL_IF name="subject"><b>Subject:</b></TMPL_IF> <TMPL_VAR NAME="subject"><br>
+				<TMPL_IF name="copyrightdate"><b>Year :</b></TMPL_IF> <TMPL_VAR NAME="copyrightdate"><br>
+				<TMPL_IF name="notes"><b>Notes:</b></TMPL_IF> <TMPL_VAR NAME="notes"><br>
+				<TMPL_IF name="unititle"><b>Unititle:</b></TMPL_IF> <TMPL_VAR NAME="unititle"><br>
+				<TMPL_IF name="serial"><b>Serial:</b><TMPL_VAR NAME="serial"></TMPL_IF><br>
+				<TMPL_IF name="dewey"><b>Dewey:</b></TMPL_IF><TMPL_VAR name="dewey"><br>
+				<TMPL_IF name="url"><b>URL:</b> <a href="<TMPL_VAR name="url">"><TMPL_VAR NAME="url"></a></TMPL_IF><br>
+				<b>Total Number of Items:</b> <TMPL_VAR NAME="count">
 			</font>
 		</td>
 	</tr>
 </table>
 </TMPL_LOOP>
-<center>
-<table border=0 cellspacing=0 cellpadding=2>
+<table border="0" cellspacing="2" cellpadding="2" align="center">
 	<tr bgcolor="#99cccc">
 		<td>Item Type</td>
 		<td>Class</td>
@@ -72,13 +71,11 @@
 			<td>Website</td>
 			<td>Online</td>
 			<td>Available</td>
-			<td></td>
+			<td>&nbsp;</td>
 			<td><TMPL_VAR NAME="url"></td>
 		</tr>
 	</TMPL_LOOP>
 </table>
 <p>
-</center>
-<br clear=all>
-<p />
+<p><br clear="all"></p>
 <TMPL_INCLUDE NAME="opac-bottom.inc">
