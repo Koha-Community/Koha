@@ -133,12 +133,17 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 		my %env;
 		my $item = $res->{'itemnumber'};
 		$item = getiteminformation(\%env,$item);
+		$reserve{'holdingbranch'}=$item->{'holdingbranch'};
 		$reserve{'barcode'}=$item->{'barcode'};
 		$reserve{'biblionumber'}=$item->{'biblionumber'};
 		$reserve{'wbrcode'} = $res->{'branchcode'};
 		$reserve{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
+		if($reserve{'holdingbranch'} eq $reserve{'wbrcode'}){
+			$reserve{'atdestination'} = 1;
+		}
     }
-    $reserve{'date'} = format_date($res->{'reservedate'});
+	
+   $reserve{'date'} = format_date($res->{'reservedate'});
 	$reserve{'borrowernumber'}=$res->{'borrowernumber'};
 	$reserve{'biblionumber'}=$res->{'biblionumber'};
 	$reserve{'bornum'}=$res->{'borrowernumber'};
