@@ -12,53 +12,72 @@
 <TABLE >
 
 <tr valign=top>
-<TD></td><td></td><td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="OK Start Search" width=164 height=44 border=0 >
-</td></tr>
-
-<TR VALIGN=TOP>
-<TD>Mots clefs</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-</TD></TR>
-
-<TR VALIGN=TOP>
-<TD>Titre</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
-<td><input type=radio name=ttype value=normal checked>Normal<input
-type=radio name=ttype value=exact>Exact</td>
-</TR>
-
-<TR VALIGN=TOP>
-<TD>Auteur</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
-
-<TR VALIGN=TOP>
-<TD>Illustrateur</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
-
-<TR VALIGN=TOP>
-<TD>Sujet</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
-
-<td>Classe</td>
-  <td>
-    <select size="1"  name="class">
-    <option value="">Toutes
-    <!-- fetch class list -->
-    <TMPL_INCLUDE NAME="cat-class-list.inc">
-    <!--#include virtual="/includes/cat-class-list.inc" -->
-    </select>
- </td>
+	<TD></td>
+	<td></td>
+	<td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="Lancer recherche" width=164 height=44 border=0 ></td>
 </tr>
 
-<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
--->
 <TR VALIGN=TOP>
-<TD>Numéro d'exemplaire</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD></TR>
+	<TD>Mots clefs</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	<td></td>
+</TR>
+<TR VALIGN=TOP>
+	<TD colspan=3><B>OU autres critères (plusieurs possibles) :</B></TD>
+<td></TD></TR>
 
-<!-- <TR VALIGN=TOP>
-<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
--->
+<TR VALIGN=TOP>
+	<TD>Titre</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+	<td><input type=radio name=ttype value=normal checked>Normal<input type=radio name=ttype value=exact>Exact</td>
 </TR>
 
 <TR VALIGN=TOP>
-<td></td>
-<TD><font size=4 face="arial,helvetica">
-<INPUT TYPE="reset"  value="Clear All Fields"></font></td></tr>
+	<TD>Auteur</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
+	<td></td>
+</TR>
+
+<TR VALIGN=TOP>
+	<TD>Illustrateur</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
+	<td></td>
+</TR>
+
+<TR VALIGN=TOP>
+	<TD>Sujet</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+	<td></td>
+</TR>
+
+<tr>
+	<td>Classe</td>
+	<td>
+		<select size="1"  name="class">
+		<option value="">Toutes
+		<!-- fetch class list -->
+		<TMPL_INCLUDE NAME="cat-class-list.inc">
+		<!--#include virtual="/includes/cat-class-list.inc" -->
+		</select>
+	</td>
+	<td></td>
+</tr>
+
+<TR VALIGN=TOP>
+	<TD>Numéro d'exemplaire</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
+	<td></td>
+</TR>
+
+<TR VALIGN=TOP>
+	<td></td>
+	<TD><font size=4 face="arial,helvetica"><INPUT TYPE="reset"  value="Clear All Fields"></font></td>
+	<td></td>
+</tr>
+
+<TR VALIGN=TOP>
+	<TD colspan=3>Notez que si vous entrez un mot clef et une valeur dans une autre zone, seul le mot clef sera utilisé.</TD>
+</TD></TR>
 
 </TABLE>
 </FORM>
