@@ -1,6 +1,20 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.35  2003/02/03 18:46:00  acli
+# Minor factoring in C4/Biblio.pm, plus change to export the per-tag
+# 'mandatory' property to a per-subfield 'tag_mandatory' template parameter,
+# so that addbiblio.tmpl can distinguish between mandatory subfields in a
+# mandatory tag and mandatory subfields in an optional tag
+#
+# Not-minor factoring in acqui.simple/addbiblio.pl to make the if-else blocks
+# smaller, and to add some POD; need further testing for this
+#
+# Added function to check if a MARC subfield name is "koha-internal" (instead
+# of checking it for 'lib' and 'tag' everywhere); temporarily added to Koha.pm
+#
+# Use above function in acqui.simple/additem.pl and search.marc/search.pl
+#
 # Revision 1.34  2003/01/28 14:50:04  tipaul
 # fixing MARCmodbiblio API and reindenting code
 #
@@ -376,23 +390,17 @@ used to manage MARC_word table and should not be useful elsewhere
 sub MARCgettagslib {
 	my ($dbh,$forlibrarian)= @_;
 	my $sth;
-	if ($forlibrarian eq 1) {
-		$sth=$dbh->prepare("select tagfield,liblibrarian as lib from marc_tag_structure order by tagfield");
-	} else {
-		$sth=$dbh->prepare("select tagfield,libopac as lib from marc_tag_structure order by tagfield");
-	}
+	my $libfield = ($forlibrarian eq 1)? 'liblibrarian' : 'libopac';
+	$sth=$dbh->prepare("select tagfield,$libfield as lib,mandatory from marc_tag_structure order by tagfield");
 	$sth->execute;
 	my ($lib,$tag,$res,$tab,$mandatory,$repeatable);
-	while ( ($tag,$lib,$tab) = $sth->fetchrow) {
+	while ( ($tag,$lib,$mandatory) = $sth->fetchrow) {
 		$res->{$tag}->{lib}=$lib;
-		$res->{$tab}->{tab}="";
+		$res->{$tab}->{tab}=""; # XXX
+		$res->{$tag}->{mandatory}=$mandatory;
 	}
 
-	if ($forlibrarian eq 1) {
-		$sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure order by tagfield,tagsubfield");
-	} else {
-		$sth=$dbh->prepare("select tagfield,tagsubfield,libopac as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure order by tagfield,tagsubfield");
-	}
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder from marc_subfield_structure order by tagfield,tagsubfield");
 	$sth->execute;
 
 	my $subfield;

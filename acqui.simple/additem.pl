@@ -26,6 +26,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::Context;
+use C4::Koha; # XXX subfield_is_koha_internal_p
 use HTML::Template;
 use MARC::File::USMARC;
 
@@ -166,8 +167,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	my $previous_tag = '';
 # loop through each subfield
 	foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
-		next if ($subfield eq 'lib');
-		next if ($subfield eq 'tab');
+		next if subfield_is_koha_internal_p($subfield);
 		next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
 		my %subfield_data;
 		$subfield_data{tag}=$tag;

@@ -29,6 +29,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Biblio;
 use C4::SearchMarc;
+use C4::Koha; # XXX subfield_is_koha_internal_p
 
 my $query=new CGI;
 my $type=$query->param('type');
@@ -92,8 +93,7 @@ if ($op eq "do_search") {
 	push @marcarray,"--------------------------------------- $tabloop ---------------------------------------";
 		foreach my $tag (sort(keys (%{$tagslib}))) {
 			foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
-				next if ($subfield eq 'lib'); # skip lib and tabs, which are koha internal
-				next if ($subfield eq 'tab');
+				next if subfield_is_koha_internal_p($subfield);
 				next unless ($tagslib->{$tag}->{$subfield}->{tab} eq $tabloop);
 				push @marcarray, "$tag$subfield - $tagslib->{$tag}->{$subfield}->{lib}";
 			}

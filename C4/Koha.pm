@@ -54,6 +54,7 @@ Koha.pm provides many functions for Koha scripts.
 	     &fixEthnicity
 	     &borrowercategories
 	     &ethnicitycategories
+	     &subfield_is_koha_internal_p
 	     $DEBUG);
 
 use vars qw();
@@ -148,6 +149,17 @@ sub ethnicitycategories {
     }
     $sth->finish;
     return(\@codes,\%labels);
+}
+
+# FIXME.. this should be moved to a MARC-specific module
+sub subfield_is_koha_internal_p ($) {
+    my($subfield) = @_;
+
+    # We could match on 'lib' and 'tab' (and 'mandatory', & more to come!)
+    # But real MARC subfields are always single-character
+    # so it really is safer just to check the length
+
+    return length $subfield != 1;
 }
 
 1;
