@@ -19,7 +19,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	padding:4px;
 	font-weight: bold;
 	text-align:center;
-	}
+	background-image:url("/intranet-tmpl/default/en/images/background-mem.gif");
+}
 
 a.home {
 	font-weight: normal;
