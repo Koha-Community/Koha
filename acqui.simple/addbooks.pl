@@ -35,14 +35,18 @@
 
 use CGI;
 use strict;
+use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Output;
 use HTML::Template;
 
 my $query = new CGI;
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 
 my $error   = $query->param('error');
 my $success = $query->param('biblioitem');
 my $template= gettemplate("acqui.simple/addbooks.tmpl");
-print "Content-Type: text/html\n\n",$template->output;
+$template->param(loggedinuser => $loggedinuser);
+
+print $query->header(-cookie => $cookie),$template->output;

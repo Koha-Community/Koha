@@ -70,7 +70,7 @@ if ($op eq "additem") {
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
-	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
 	$nextop = "additem";
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
@@ -88,13 +88,14 @@ if ($op eq "additem") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
+#	my $itemnum = $input->param('itemnum');
 	my %indicators;
 	for (my $i=0;$i<=$#ind_tag;$i++) {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
-	my ($bibid,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
 	$nextop="additem";
 }
 
@@ -155,7 +156,7 @@ foreach my $subfield_code (sort keys(%witness)) {
 # next item form
 my @loop_data =();
 my $i=0;
-my $authorised_values_sth = $dbh->prepare("select authorised_value from authorised_values where category=?");
+my $authorised_values_sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=? order by authorised_value");
 
 foreach my $tag (sort keys %{$tagslib}) {
 	my $previous_tag = '';
@@ -174,6 +175,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 		($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
 		if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 			my @authorised_values;
+			my %authorised_lib;
 			# builds list, depending on authorised value...
 			#---- branch
 			if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
@@ -182,6 +184,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
 				while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
 					push @authorised_values, $branchcode;
+					$authorised_lib{$branchcode}=$branchname;
 				}
 			#----- itemtypes
 			} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
@@ -190,28 +193,32 @@ foreach my $tag (sort keys %{$tagslib}) {
 				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
 				while (my ($itemtype,$description) = $sth->fetchrow_array) {
 					push @authorised_values, $itemtype;
+					$authorised_lib{$itemtype}=$description;
 				}
 			#---- "true" authorised value
 			} else {
 				$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
 				push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-				while ((my $value) = $authorised_values_sth->fetchrow_array) {
+				while (my ($value,$lib) = $authorised_values_sth->fetchrow_array) {
 					push @authorised_values, $value;
+					$authorised_lib{$value}=$lib;
 				}
 			}
 			$subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
 																		-values=> \@authorised_values,
 																		-default=>"$value",
+																		-labels => \%authorised_lib,
 																		-size=>1,
 																		-multiple=>0,
 																		);
 		} elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('../thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
 		} elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
 			my $plugin="../value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
 			require $plugin;
 			my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY> <a href=\"javascript:Dopop('../plugin_launcher.pl?plugin_name=$tagslib->{$tag}->{$subfield}->{value_builder}&index=$i$extended_param',$i)\">...</a>";
+			my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,0);
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 		} else {
 			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
 		}
@@ -227,5 +234,8 @@ $template->param(item_loop => \@item_value_loop,
 						bibid => $bibid,
 						item => \@loop_data,
 						itemnum => $itemnum,
-						op => $nextop);
+						itemtagfield => $itemtagfield,
+						itemtagsubfield =>$itemtagsubfield,
+						op => $nextop,
+						opisadd => ($nextop eq "saveitem")?0:1);
 print "Content-Type: text/html\n\n", $template->output;
