@@ -675,7 +675,7 @@ sub issuebook {
 					$defaultanswer='N';
 					last SWITCH;
 				} elsif ($responses->{2} eq 'N') {
-					$rejected=-1;
+					$rejected="Issue cancelled";
 					last SWITCH;
 				} else {
 					if ($responses->{3} eq '') {
