@@ -23,8 +23,8 @@ if ($submit eq ''){
 }  
 
 print $input->header;
-#my ($analytictitle)=analytic($biblionumber,'t');
-#my ($analyticauthor)=analytic($biblionumber,'a');
+#my ($analytictitle)  = analytic($biblionumber,'t');
+#my ($analyticauthor) = analytic($biblionumber,'a');
 print startpage();
 print startmenu('catalogue');
 my %inputs;
