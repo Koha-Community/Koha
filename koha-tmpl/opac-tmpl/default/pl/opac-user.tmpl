@@ -1,4 +1,3 @@
-
 <TMPL_INCLUDE NAME="members-top.inc">
 
 <TMPL_LOOP NAME="BORROWER_INFO">
@@ -16,13 +15,11 @@ Karta dostêpu: <TMPL_VAR NAME="cardnumber"> <p>
 
 <TMPL_VAR NAME="emailaddress"><p>
 
-Czy którekolwiek z naszych danych s± niepoprawne? Czy ostatnio przeprowadza³e¶/a¶ siê, zmieni³e¶/a¶ numer telefonu lub adres e-mail?
-<p>
+Czy którekolwiek z naszych danych s± niepoprawne?  Czy ostatnio przeprowadza³e¶/a¶ siê, zmieni³e¶/a¶ numer telefonu lub adres e-mail?<p>
 
-<a href="/cgi-bin/koha/opac-userupdate.pl">Zaktualizuj Dane</a>
+<a href="/cgi-bin/koha/opac-userupdate.pl">Zaktualizuj dane</a>
 
 </td></tr></table>
-
 
 
 
@@ -42,7 +39,6 @@ Czy którekolwiek z naszych danych s± niepoprawne? Czy ostatnio przeprowadza³e¶/a
 <TMPL_IF NAME="amountoverzero">
 <table cellpadding=5 cellspacing=0 border=1>
 <tr bgcolor="#fecc99">
-<td>
 <td><font face="arial,helvetica" size=+2><B>Masz niezap³acone nale¿no¶ci i kary w wysoko¶ci <TMPL_VAR NAME="amountoutstanding"></B></font>
 </td></tr></table>
 </TMPL_IF>
@@ -50,7 +46,6 @@ Czy którekolwiek z naszych danych s± niepoprawne? Czy ostatnio przeprowadza³e¶/a
 <TMPL_IF NAME"amountlessthanzero">
 <table cellpadding=5 cellspacing=0 border=1>
 <tr bgcolor="#fecc99">
-<td>
 <td><font face="arial,helvetica" size=+2><B>Posiadasz kredyt na <TMPL_VAR NAME="amountoutstanding"></B></font>
 </td></tr></table>
 </TMPL_IF>
@@ -73,17 +68,17 @@ Czy którekolwiek z naszych danych s± niepoprawne? Czy ostatnio przeprowadza³e¶/a
 
 <TMPL_IF NAME="issues_count">
 
-Obecnie masz <TMPL_VAR NAME="issues_count"> wypo¿yczonych pozycji.<br>
+Obecnie masz <TMPL_VAR NAME="issues_count"> wypo¿yczonych pozycji<br>
 
 <TABLE  CELLPADDING=5  CELLSPACING=0 border=1 >
 
 <TR VALIGN=TOP  bgcolor="#99cccc"  background='<TMPL_VAR NAME="themelang">/images/background-opac.gif'>
-<TD><B>Tytu³</B></TD>
+<TD><B>tytu³</B></TD>
 <TD><B>Autor</B></TD>
 <TD><B>Do zwrotu</B></TD>
-<TD><B>Typ Pozycji</B></TD>
+<TD><B>Typ pozycji</B></TD>
 <TD><B>Op³aty</B></TD>
-<TD><B>Status</B></TD>
+<TD><B>Bie¿±cy Status</B></TD>
 </TR>
 
 <TMPL_LOOP NAME="ISSUES">
@@ -93,8 +88,8 @@ Obecnie masz <TMPL_VAR NAME="issues_count"> wypo¿yczonych pozycji.<br>
 <TD><TMPL_VAR NAME="author"></TD>
 <TD><TMPL_VAR NAME="date_due"></TD>
 <TD><TMPL_VAR NAME="itemtype"></TD>
-<TD><TMPL_VAR NAME="charges"></TD>
-<TD><TMPL_VAR NAME="status"></TD>
+<TD><TMPL_IF NAME="charges">Tak<TMPL_ELSE>Nie</TMPL_IF></TD>
+<TD><TMPL_IF NAME="status">Tak<TMPL_ELSE>Nie</TMPL_IF></TD>
 </TR>
 
 </TMPL_LOOP>
@@ -133,4 +128,5 @@ Obecnie masz <TMPL_VAR NAME="reserves_count"> zarezerwowan±(ych) pozycjê(i).<br>
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
+
 

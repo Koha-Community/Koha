@@ -1,6 +1,4 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
-<!-- dodany przeze mnie -->
-
 <center>
 <TMPL_IF NAME="loggedinuser">
     <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony cz³onkowskie</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj</a>]</p>
@@ -12,14 +10,15 @@
 <br>
 <TMPL_LOOP NAME="BIBITEM_DATA">
 <a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">
-<img src=/images/requests.gif width=120 height=42 border=0 align=right border=0></a>
-<FONT SIZE=6><em>
-<a href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
+<img src=/images/requests.gif 
+width=120 height=42 border=0 align=right border=0></a>
+<FONT SIZE=6><em><a 
+href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
 (<TMPL_VAR NAME="author">)</a></em></FONT><P>
 <p>
 <form action=/cgi-bin/koha/modbibitem.pl>
-<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">
-<input type=hidden name=biblio value=<TMPL_VAR NAME="biblionumber">
+<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
+<input type=hidden name=biblio value=<TMPL_VAR NAME="biblionumber">>
 <!-------------------BIBLIO ITEM------------>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left>
 <TR VALIGN=TOP>
@@ -66,9 +65,9 @@ BORDER=0 src="/images/delete-mem.gif">
 <tr VALIGN=TOP>
 <TD width=220>
 <form action=/cgi-bin/koha/moditem.pl method=post>
-<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblionumber">
-<input type=hidden name=item value=<TMPL_VAR NAME="itemnumber">
-<input type=hidden name=type value=<TMPL_VAR NAME="type">
+<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblionumber">>
+<input type=hidden name=item value=<TMPL_VAR NAME="itemnumber">>
+<input type=hidden name=type value=<TMPL_VAR NAME="type">>
 <INPUT TYPE="image" name="wprowad¼"  VALUE="modify" height=42  WIDTH=93
 BORDER=0 src="/images/modify-mem.gif">
 <INPUT TYPE="image" name="skasuj"  VALUE="delete" height=42  WIDTH=93
@@ -111,5 +110,3 @@ Issues:</a></b> <TMPL_VAR NAME="issues"><br>
 </center>
 
 <TMPL_INCLUDE NAME="cat-bottom.inc">
-</html>
-

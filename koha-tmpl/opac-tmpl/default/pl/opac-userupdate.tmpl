@@ -1,11 +1,13 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
-<TMPL_IF NAME="loggedinuser">
+<TMPL_IF NAME="loggedinusername">
     <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj siê</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
 </TMPL_IF>
 
+<i>Proszê nanie¶æ potrzebne zmiany. Biblioteka otrzyma wiadomo¶æ e-mailem.<br/>
+Zmiany te nie uka¿± siê dopóki biblioteka ich nie zatwierdzi..<i><br/><br/>
 
 <TMPL_LOOP NAME="BORROWER_INFO">
 

@@ -1,6 +1,6 @@
 <TMPL_INCLUDE NAME="opac-top.inc">
 
-<TMPL_IF NAME="loggedinuser">
+<TMPL_IF NAME="loggedinusername">
     <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/opac-user.pl>Strony cz³onkowskie</a>][<a href=/cgi-bin/koha/opac-main.pl?logout.x=1>Wyloguj</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj siê</a> do Koha</p>
@@ -12,28 +12,49 @@
 <TABLE >
 
 <tr valign=top>
-<TD></td><td></td><td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="OK Start Search" width=164 height=44 border=0 >
-</td></tr>
+	<TD></td>
+	<td></td>
+	<td><INPUT TYPE="image"  src="<TMPL_VAR NAME='themelang'>/images/search-button.gif" alt="OK Rozpoczyna szukanie" width=164 height=44 border=0 ></td>
+</tr>
 
 <TR VALIGN=TOP>
-<TD>S³owo kluczowe</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-</TD></TR>
+	<TD>S³owa kluczowe</TD> 
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
+	<td></TD>
+</TR>
 
 <TR VALIGN=TOP>
-<TD>Tytu³</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
-<td><input type=radio name=ttype value=normal checked>Zwyk³e<input
-type=radio name=ttype value=exact>Dok³adne</td>
+	<TD colspan=3><B>LUB :</B></TD>
+<td></TD></TR>
+<TR VALIGN=TOP>
+	<TD>Przedmiot</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
+	<td></td>
+</TR>
+
+<TR VALIGN=TOP>
+	<TD colspan=3><B>LUB jedno albo wiêcej z :</B></TD>
+<td></TD></TR>
+
+<TR VALIGN=TOP> 
+	<TD>Tytu³</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="title"></TD>
+	<td><input type=radio name=ttype value=normal checked>Normalne<input type=radio name=ttype value=exact>Precyzyjne</td>
 </TR>
 
 <TR VALIGN=TOP> 
-<TD>Autor</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD></TR>
-
-<TR VALIGN=TOP> 
-<TD>Ilustrator</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD></TR>
+	<TD>Autor</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
+	<td></td>
+</TR>
 
 <TR VALIGN=TOP>
-<TD>Przedmiot</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD></TR>
+	<TD>Ilustrator</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
+	<td></td>
+</TR>
 
+<tr>
 <td>Klasa</td>
   <td>
     <select size="1"  name="class">
@@ -42,28 +63,30 @@ type=radio name=ttype value=exact>Dok³adne</td>
     <TMPL_VAR name="classlist">
     <!--#include virtual="/includes/cat-class-list.inc" -->
     </select>
- </td>
+    </td>
+	<td></td>
 </tr>
 
-<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
--->
 <TR VALIGN=TOP>
-<TD>Barcode</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD></TR>
-
-<!-- <TR VALIGN=TOP>
-<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
--->
+	<TD>Kod kreskowy</TD>
+	<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></TD>
+	<td></td>
 </TR>
 
 <TR VALIGN=TOP>
-<td></td>
-<TD><font size=4 face="arial,helvetica">
-<INPUT TYPE="reset"  value="Wyczy¶æ wszystkie pola"></font></td></tr>
+	<td></td>
+	<TD><font size=4 face="arial,helvetica"><INPUT TYPE="reset"  value="Wyczy¶æ wszystkie pola"></font></td>
+	<td></td>
+</tr>
+
+<TR VALIGN=TOP>
+	<TD colspan=3>Zauwa¿, ¿e je¶li wpiszesz jak±¶ warto¶æ do S³owa kluczowe, oraz inn± gdzie indziej to u¿yta zostanie jedynie warto¶æ S³owa kluczowego</TD>
+</TD></TR>
 
 </TABLE>
+
 </FORM>
 </CENTER>
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
-

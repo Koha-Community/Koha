@@ -2,7 +2,7 @@
 
 
 <TMPL_IF NAME="loggedinuser">
-    <p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=./logout.pl>Wyloguj siê</a>]</p>
+    <p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=./logout.pl>Wyloguj siê</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=./userpage.pl>Zaloguj siê</a> do Koha</p>
 </TMPL_IF>
@@ -21,7 +21,7 @@
 &nbsp;</td></tr>
 </table>
 <br>
-trafienia od <TMPL_VAR NAME="startfrom"> do <TMPL_VAR NAME="endat"> z <TMPL_VAR NAME="numrecords"> recordów.
+Trafienia od <TMPL_VAR NAME="startfrom"> do <TMPL_VAR NAME="endat"> z <TMPL_VAR NAME="numrecords"> rekordów.
 <br>
     <TMPL_IF NAME="displayprev">
 	<a href=./dosearch.pl?startfrom=<TMPL_VAR NAME="prevstartfrom"><TMPL_LOOP NAME="FORMINPUTS">&<TMPL_VAR NAME="field">=<TMPL_VAR NAME="value" ESCAPE=URL></TMPL_LOOP>><img src=<TMPL_VAR NAME="themelang">/images/numbers/prev.gif border=0></a>
@@ -47,4 +47,3 @@ trafienia od <TMPL_VAR NAME="startfrom"> do <TMPL_VAR NAME="endat"> z <TMPL_VAR 
 
 
 <TMPL_INCLUDE NAME="opac-bottom.inc">
-
