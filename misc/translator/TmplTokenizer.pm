@@ -664,7 +664,11 @@ sub parametrize ($$$) {
 	    my($i, $width, $prec) = ((defined $1? $1: $n), $2, $3);
 	    $fmt = $';
 	    if (!defined $width && !defined $prec) {
-		$it .= $params->[$i]
+		my $param = $params->[$i - 1];
+		$it .= $param;
+		warn_normal "$&: Undefined parameter $i for msgid \"$fmt_0\"",
+			    undef
+			unless defined $param;
 	    } elsif (defined $width && defined $prec && !$width && !$prec) {
 		;
 	    } else {
