@@ -48,9 +48,6 @@ Press ENTER, and if you see no errors then enter \q to quit mysql.
 3. Use the mysql script to create the tables
 mysql -uusername -ppassword Koha < koha.mysql 
 
-3.1 Update your database tables
-perl scripts/updater/updatedatabase -I /pathtoC4 
-
 4. Edit koha.conf
 Set the database name to what you have called your database, hostname
 willprobably stay as localhost (unless you are installing the database
@@ -72,7 +69,10 @@ others.libadmins contain all users that use koha (If you set the owner
 as www-data u will need to make sure apache is running 
 as www-data)
 
-6. Create directories for scripts and html documents.
+6. Update your database tables
+perl scripts/updater/updatedatabase -I /pathtoC4 
+
+7. Create directories for scripts and html documents.
 Here you need to decide where your scripts and html are going to live.
 And edit modules/C4/Output.pm to reflect that.
 Set $path= where your includes live,
@@ -95,7 +95,7 @@ Copy the C4 directory into the modules folder (see detailed example in
 Hints) 
 
 
-7. Set up your Online Public Access Catalogue (OPAC)
+8. Set up your Online Public Access Catalogue (OPAC)
 
 Set up a webspace for the OPAC: For example: You might make
 /usr/local/www/opac ... and set a virtual host in apache to use that
@@ -123,7 +123,7 @@ database there won't be much to see!)
 
 Find supplementary information and config examples in Hints
 
-8. Set up the intranet/librarian interface
+9. Set up the intranet/librarian interface
 
 Create new directories and additional httpd.conf changes to Set up
 another webspace. Lets call it koha.  
@@ -136,7 +136,7 @@ Make sure your virtual host is set up to use these dirs
 Restart apache point your browser at koha.your.site and it should work 
 
 
-9. Configure SECURITY for the Librarians/Intranet Interface
+10. Configure SECURITY for the Librarians/Intranet Interface
 If you are using AuthenDBI to do your authentication, you will need to
 add some users to the users table in the koha database. And edit your
 apache conf file to use AuthenDBI on the intranet site. 
@@ -148,7 +148,7 @@ delete and add items, remove borrowers fines and generally case
 havoc. 
 
 
-10. Set up Issues, Returns and Telnet interface.
+11. Set up Issues, Returns and Telnet interface.
 Since we have already copied the files in scripts/C4 into somewhere in
 our perl source tree 
 
