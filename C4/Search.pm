@@ -1948,7 +1948,7 @@ sub allissues {
     $query.=" limit $limit";
   }
   #print $query;
-  my $sth=$dbh->prepare("");
+  my $sth=$dbh->prepare($query);
   $sth->execute($bornum);
   my @result;
   my $i=0;
