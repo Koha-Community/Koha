@@ -319,10 +319,16 @@ if ($isbn) {
 
 EOF
 	}
-#	my $sth=$dbh->prepare("select max(barcode) from items");
-#	$sth->execute;
-#	my ($maxbarcode) = $sth->fetchrow;
-#	$maxbarcode++;
+	my $sth=$dbh->prepare("select max(barcode) from items");
+	$sth->execute;
+	my ($maxbarcode) = $sth->fetchrow;
+	if ($maxbarcode=~/\d$/) {
+	    # maxbarcode ends in a digit
+	    $maxbarcode++;
+	} else {
+	    $maxbarcode=$biblionumber;
+	}
+	$maxbarcode++;
 #       print STDERR "MaxBarcode: $maxbarcode \n";
 	print << "EOF";
 <center>
@@ -332,8 +338,8 @@ EOF
 <input type=hidden name=biblionumber value=$biblionumber>
 <input type=hidden name=biblioitemnumber value=$biblioitemnumber>
 <table>
-<!-- tr><td>BARCODE</td><td><input name=barcode size=10 value=\$maxbarcode --> 
-<tr><td>BARCODE</td><td><input name=barcode size=10 value=$biblionumber> 
+<tr><td>BARCODE</td><td><input name=barcode size=10 value=$maxbarcode> 
+<!-- <tr><td>BARCODE</td><td><input name=barcode size=10 value=$biblionumber> --> 
 Home Branch: <select name=homebranch>
 EOF
 	  
