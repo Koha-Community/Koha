@@ -8,6 +8,7 @@ require Exporter;
 use DBI;
 use C4::Database;
 use C4::Reserves2;
+use Set::Scalar;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
@@ -260,11 +261,140 @@ sub KeywordSearch {
   my $count=@key;
   my $i=1;
   my @results;
+  my $query="Select biblionumber from biblio
+  where ((title like '$key[0]%' or title like '% $key[0]%')";
+  while ($i < $count){                                                  
+      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";                                                   
+      $i++;                                                  
+  }
+  $query.= ") or ((biblio.notes like '$key[0]%' or biblio.notes like '% $key[0]%')";                                             
+  for ($i=1;$i<$count;$i++){                                                  
+      $query.=" and (biblio.notes like '$key[$i]%' or biblio.notes like '% $key[$i]%')";                                           
+  }
+   $query.= ") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%')";                                               
+  for ($i=1;$i<$count;$i++){                                                  
+      $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";                                             
+  }
+  $query.=" )";
+#  print $query;
+  my $sth=$dbh->prepare($query);
+  $sth->execute;
+  my $i=0;
+  while (my @res=$sth->fetchrow_array){
+    $results[$i]=$res[0];
+    $i++;
+  }
+  $sth->finish;
+  my $set1=Set::Scalar->new(@results);
+  $query="Select biblionumber from bibliosubtitle where
+  ((subtitle like '$key[0]%' or subtitle like '% $key[0]%')";                 
+  for ($i=1;$i<$count;$i++){   
+        $query.= " and (subtitle like '$key[$i]%' or subtitle like '% $key[$i]%')";                                                  
+  }                   
+  $query.=" )";
+#  print $query;
+  $sth=$dbh->prepare($query);
+  $sth->execute;
+  $i=0;
+  while (my @res=$sth->fetchrow_array){
+    $results[$i]=$res[0];
+    $i++;
+  }
+  $sth->finish;
+  my $set2=Set::Scalar->new(@results);
+  if ($i > 0){
+    $set1=$set1+$set2;
+  }
+  $query ="Select biblionumber from biblioitems where
+  ((biblioitems.notes like '$key[0]%' or biblioitems.notes like '% $key[0]%')";                                   
+  for ($i=1;$i<$count;$i++){                                                  
+      $query.=" and (biblioitems.notes like '$key[$i]%' or biblioitems.notes like '% $key[$i]%')";                                 
+  }            
+  $query.=" )";
+#  print $query;
+  $sth=$dbh->prepare($query);
+  $sth->execute;
+  $i=0;
+  while (my @res=$sth->fetchrow_array){
+    $results[$i]=$res[0];
+    $i++;
+  }
+  $sth->finish;
+  my $set3=Set::Scalar->new(@results);    
+  if ($i > 0){
+    $set1=$set1+$set3;
+  }
+  $sth=$dbh->prepare("Select biblionumber from bibliosubject where subject
+  like '%$search->{'keyword'}%' group by biblionumber");
+  $sth->execute;
+  $i=0;
+  while (my @res=$sth->fetchrow_array){
+    $results[$i]=$res[0];
+    $i++;
+  }
+  $sth->finish;
+  my $set4=Set::Scalar->new(@results);    
+  if ($i > 0){
+    $set1=$set1+$set4;
+  }
+  my $i2=0;
+  my @res2;
+  my @res = $set1->members;
+  $count=@res;
+#  print $set1;
+  $i=0;
+#  print "count $count";
+  while ($i2 < $num && $i2 < $count){
+    my $query="select * from biblio,biblioitems where
+    biblio.biblionumber='$res[$i2+$offset]' and        
+    biblio.biblionumber=biblioitems.biblionumber";
+    if ($search->{'class'} ne ''){
+      my @temp=split(/\|/,$search->{'class'});
+      my $count=@temp;
+      $query.= "and ( itemtype='$temp[0]'";
+      for (my $i=1;$i<$count;$i++){
+        $query.=" or itemtype='$temp[$i]'";
+      }
+      $query.=")"; 
+    }
+    if ($search->{'dewey'} ne ''){
+      $query.= "and (dewey like '$search->{'dewey'}%') ";
+    }
+
+    my $sth=$dbh->prepare($query);
+#    print $query;
+    $sth->execute;
+    if (my $data2=$sth->fetchrow_hashref){
+        my $dewey= $data2->{'dewey'};               
+        my $subclass=$data2->{'subclass'};                   
+	$dewey=~s/\.*0*$//;     
+        ($dewey == 0) && ($dewey='');               
+        ($dewey) && ($dewey.=" $subclass") ;                      
+        $sth->finish;                                                        
+	$res2[$i]="$data2->{'author'}\t$data2->{'title'}\t$data2->{'biblionumber'}\t$data2->{'copyrightdate'}\t$dewey";
+        $i++;
+    }
+    $i2++;
+  }
+  $dbh->disconnect;
+
+#  $count=$i;
+  return($count,@res2);
+}
+
+sub KeywordSearch2 {
+  my ($env,$type,$search,$num,$offset)=@_;
+  my $dbh = &C4Connect;
+  $search->{'keyword'}=~ s/ +$//;
+  $search->{'keyword'}=~ s/'/\\'/;
+  my @key=split(' ',$search->{'keyword'});
+  my $count=@key;
+  my $i=1;
+  my @results;
   my $query ="Select * from biblio,bibliosubtitle,biblioitems where
   biblio.biblionumber=biblioitems.biblionumber and
   biblio.biblionumber=bibliosubtitle.biblionumber and
   (((title like '$key[0]%' or title like '% $key[0]%')";
-
   while ($i < $count){
     $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%')";
     $i++;
@@ -376,7 +506,7 @@ sub KeywordSearch {
   @results=sort @results;
   my @res;
   my $count=@results;
-  $i=0;
+  $i=1;
   if ($count > 0){
     $res[0]=$results[0];
   }
@@ -398,6 +528,7 @@ sub KeywordSearch {
   $sth->finish;
   $dbh->disconnect;
 #  $i--;
+#  $i++;
   return($i,@res2);
 }
 
@@ -435,8 +566,29 @@ sub CatSearch  {
 	 }   
 	 $query=$query.")";
          if ($search->{'title'} ne ''){ 
-	   $query=$query. " and (title like '%$search->{'title'}%' 
-	   or seriestitle like '%$search->{'title'}%')";
+	   my @key=split(' ',$search->{'title'});
+	   my $count=@key;
+           my $i=0;
+	   $query.= " and (((title like '$key[0]%' or title like '% $key[0]%' or title like '% $key[0]')";
+            while ($i<$count){            
+	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
+              $i++; 
+	    }                       
+#	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0] %' or subtitle like '% $key[0]')"; 
+#            for ($i=1;$i<$count;$i++){
+#	      $query.=" and (subtitle like '$key[$i]%' or subtitle like '% $key[$i] %' or subtitle like '% $key[$i]')";   
+#            }
+	    $query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%' or seriestitle like '% $key[0]')";  
+            for ($i=1;$i<$count;$i++){                    
+	        $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
+            }                                                             
+	    $query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0]%' or unititle like '% $key[0]')";                         
+            for ($i=1;$i<$count;$i++){                    
+	        $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";   
+            }                                                             
+	    $query=$query."))"; 
+	   #$query=$query. " and (title like '%$search->{'title'}%' 
+	   #or seriestitle like '%$search->{'title'}%')";
 	 }
 	 if ($search->{'class'} ne ''){
       	   my @temp=split(/\|/,$search->{'class'});
@@ -482,17 +634,17 @@ sub CatSearch  {
 	      $query=$query." and (title like '$key[$i]%' or title like '% $key[$i]%' or title like '% $key[$i]')";
 	      $i++;
 	    }
-	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0] %' or subtitle like '% $key[0]')";
+	    $query.=") or ((subtitle like '$key[0]%' or subtitle like '% $key[0]%' or subtitle like '% $key[0]')";
 	    for ($i=1;$i<$count;$i++){
-	      $query.=" and (subtitle like '$key[$i]%' or subtitle like '% $key[$i] %' or subtitle like '% $key[$i]')";
+	      $query.=" and (subtitle like '$key[$i]%' or subtitle like '% $key[$i]%' or subtitle like '% $key[$i]')";
 	    }
-	    $query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0] %' or seriestitle like '% $key[0]')";
+	    $query.=") or ((seriestitle like '$key[0]%' or seriestitle like '% $key[0]%' or seriestitle like '% $key[0]')";
 	    for ($i=1;$i<$count;$i++){
-	      $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i] %')";
+	      $query.=" and (seriestitle like '$key[$i]%' or seriestitle like '% $key[$i]%')";
 	    }
-	    $query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0] %' or unititle like '% $key[0]')";
+	    $query.=") or ((unititle like '$key[0]%' or unititle like '% $key[0]%' or unititle like '% $key[0]')";
 	    for ($i=1;$i<$count;$i++){
-	      $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i] %')";
+	      $query.=" and (unititle like '$key[$i]%' or unititle like '% $key[$i]%')";
 	    }
 	    $query=$query."))";
 	    if ($search->{'class'} ne ''){
@@ -536,7 +688,7 @@ sub CatSearch  {
 	     where biblio.biblionumber=biblioitems.biblionumber
 	     and biblioitems.illus like '%".$search->{'illustrator'}."%'";
 	  }
-	  }
+	}
           $query .=" group by biblio.biblionumber";	 
       }
   } 
@@ -606,6 +758,7 @@ if ($type ne 'precise' && $type ne 'subject'){
       $query=$query." order by subject";
   }
 }
+#print $query;
 my $sth=$dbh->prepare($query);
 $sth->execute;
 my $count=1;
@@ -647,9 +800,10 @@ sub updatesearchstats{
 sub subsearch {
   my ($env,$subject)=@_;
   my $dbh=C4Connect();
+  $subject=$dbh->quote($subject);
   my $query="Select * from biblio,bibliosubject where
   biblio.biblionumber=bibliosubject.biblionumber and
-  bibliosubject.subject='$subject' group by biblio.biblionumber
+  bibliosubject.subject=$subject group by biblio.biblionumber
   order by biblio.title";
   my $sth=$dbh->prepare($query);
   $sth->execute;
@@ -720,7 +874,9 @@ sub ItemInfo {
     }
     $dewey=~ s/\.$//;
     $class = $class.$dewey;
-    $class = $class.$data->{'subclass'};
+    if ($dewey ne ''){
+      $class = $class.$data->{'subclass'};
+    }
  #   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
     my @temp=split('-',$data->{'datelastseen'});
     my $date="$temp[2]/$temp[1]/$temp[0]";
@@ -790,7 +946,7 @@ sub itemdata {
 sub bibdata {
   my ($bibnum,$type)=@_;
   my $dbh=C4Connect;
-  my $query="Select *,biblio.notes from biblio,biblioitems,bibliosubtitle where biblio.biblionumber=$bibnum
+  my $query="Select *,biblio.notes  from biblio,biblioitems,bibliosubtitle where biblio.biblionumber=$bibnum
   and biblioitems.biblionumber=$bibnum and 
 (bibliosubtitle.biblionumber=$bibnum)"; 
 #  print $query;
@@ -814,7 +970,7 @@ sub bibdata {
 sub bibitemdata {
   my ($bibitem)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from biblio,biblioitems,itemtypes where biblio.biblionumber=
+  my $query="Select *,biblioitems.notes as bnotes from biblio,biblioitems,itemtypes where biblio.biblionumber=
   biblioitems.biblionumber and biblioitemnumber=$bibitem and
   biblioitems.itemtype=itemtypes.itemtype";
 #  print $query;
