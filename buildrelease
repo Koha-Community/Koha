@@ -1,0 +1,301 @@
+#!/usr/bin/perl
+
+my $kohadir=`pwd`;
+chomp $kohadir;
+my $kohahtmldir="/koha/koha/koha-html/";
+
+if (-e "/root/.kohaautobuild.conf") {
+    open C, "/root/.kohaautobuild.conf";
+    while (<C>) {
+	chomp;
+	if (/kohadir=(.*)/) {
+	    $kohadir=$1;
+	}
+	if (/kohahtmldir=(.*)/) {
+	    $kohahtmldir=$1;
+	}
+    }
+}
+
+my $input;
+
+print qq |
+***************************************
+* Welcome to the Koha Release Builder *
+***************************************
+
+This script will automatically build a release tarball.
+
+The script assumes that you already have the koha and koha-html modules checked
+out for the release that you want to build, although it will update the modules
+before building.
+
+|;
+print "\nWhere is the 'koha' cvs module located [$kohadir]: ";
+chomp($input = <STDIN>);
+if ($input) {
+    $kohadir=$input;
+}
+
+
+print "\nWhere is the 'koha-html' cvs module located [$kohahtmldir]: ";
+chomp($input = <STDIN>);
+if ($input) {
+    $kohahtmldir=$input;
+}
+
+open (C, ">/root/.kohaautobuild.conf");
+print C qq|
+kohadir=$kohadir
+kohahtmldir=$kohahtmldir
+|;
+
+print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
+chdir $kohadir;
+open (CVSLOG, "cvs log buildrelease|");
+my $symbolicnamessection=0;
+my $symbolicnames;
+my $highestversion;
+my $highestrc;
+my $released;
+while (<CVSLOG>) {
+    if (/^symbolic names:/) {
+	$symbolicnamessection=1;
+    }
+    if ($symbolicnamessection && (/^\s+([^:]*):/)) {
+	my $tag=$1;
+	if ($tag=~/R_(.*)/) {
+	    my $version='';
+	    my $rc=0;
+	    my $id=$1;
+	    $id=~s/-/\./g;
+	    if ($id =~/(.*)RC(.*)/) {
+		$version=$1;
+		$rc=$2;
+		if (versioncompare($version, $highestversion)) {
+		    $highestversion=$version;
+		    $released=0;
+		    $highestrc=$rc;
+		}
+	    } else {
+		$version=$id;
+		if (versioncompare($version, $highestversion)) {
+		    $highestversion=$version;
+		    $released=1;
+		    $highestrc=0;
+		}
+	    }
+	    $symbolicnames->{$version}->{$rc}=1;
+	}
+    }
+}
+
+
+my $releaseversion='';
+my $currentversion='';
+
+if ($released) {
+    $releaseversion=($highestversion+1)."RC1";
+    $currentversion=$highestversion;
+} else {
+    $releaseversion="$highestversion\RC".($highestrc+1);
+    $currentversion="$highestversion\RC$highestrc";
+}
+
+print "Current release tag is $currentversion.\n";
+print "\nWould you like to bump that up to $releaseversion?  [Y]/N: ";
+chomp($input = <STDIN>);
+if ($input =~ /^n/i) {
+    print "\nWould you like to rebuild the $currentversion tarball?  Y/[N]: ";
+    chomp($input = <STDIN>);
+    if ($input =~ /^y/i) {
+	$releaseversion=$currentversion;
+	print "\n\n";
+	print "Do not do this if you have released the tarball to anybody, as it will\n";
+	print "overwrite the tag marking the files that were in the tarball.\n\n";
+	print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
+	chomp($input = <STDIN>);
+	if ($input =~ /^n/i || $input eq '') {
+	    print "\nStopping.  Please re-run buildrelease now.\n";
+	    exit;
+	}
+    } else {
+	print "What should the new version be? [$releaseversion]: ";
+	chomp ($input=<STDIN>);
+	if ($input) {
+	    $releaseversion=$input;
+	}
+    }
+}
+
+
+my $sfuserid='';
+if ($cvsroot=$ENV{'CVSROOT'}) {
+    $cvsroot=~m#(.*)\@cvs#;
+    $sfuserid=$1;
+} else {
+    $ENV{'CVS_RSH'}='ssh';
+    print "\nWhat is your userid at SourceForge: ";
+    chomp($input = <STDIN>);
+    if ($input) {
+	$sfuserid=$input;
+    }
+    $ENV{'CVSROOT'}="$sfuserid\@cvs.koha.sourceforge.net:/cvsroot/koha";
+}
+my $tagname=$releaseversion;
+$tagname=~s/\./-/g;
+
+print qq|
+Updating the 'koha' CVS files.  You may need to enter your SourceForge password.
+Using $kohadir.
+|;
+chdir($kohadir);
+system("cvs update");
+print qq|
+Tagging koha with tag R_$tagname
+|;
+system("cvs tag -F R_$tagname");
+print qq|
+Updating the 'koha-html' CVS files.  You may need to enter your SourceForge password.
+Using $kohahtmldir.
+|;
+chdir($kohahtmldir);
+system("cvs update");
+print qq|
+Tagging koha-html with tag R_$tagname
+|;
+system("cvs tag -F R_$tagname");
+
+
+
+
+my $rootdir="/tmp/koha-".$releaseversion;
+system("rm -rf $rootdir");
+mkdir ($rootdir, 0700);
+chdir($rootdir);
+
+mkdir("intranet-cgi", 0755);
+mkdir("intranet-html", 0755);
+mkdir("opac-cgi", 0755);
+mkdir("opac-html", 0755);
+mkdir("scripts", 0755);
+mkdir("scripts/z3950daemon", 0755);
+mkdir("modules", 0755);
+mkdir("docs", 0755);
+
+# Create koha.versin file
+
+open (KV, ">$rootdir/koha.version");
+print KV "$releaseversion\n";
+close KV;
+
+# Copy all CVS files to intranet-cgi
+system("cp -a $kohadir/* $rootdir/intranet-cgi");
+
+# Move C4 to modules directory
+system("mv $rootdir/intranet-cgi/C4 $rootdir/modules");
+
+# Move files from intranet-cgi to root of tarball
+system("mv $rootdir/intranet-cgi/INSTALL $rootdir");
+system("mv $rootdir/intranet-cgi/ChangeLog* $rootdir");
+system("mv $rootdir/intranet-cgi/Hints $rootdir");
+system("mv $rootdir/intranet-cgi/LICENSE $rootdir");
+system("mv $rootdir/intranet-cgi/News $rootdir");
+system("mv $rootdir/intranet-cgi/README $rootdir");
+system("mv $rootdir/intranet-cgi/TODO $rootdir");
+system("mv $rootdir/intranet-cgi/databaseinstall.sh $rootdir");
+system("mv $rootdir/intranet-cgi/installer.pl $rootdir"); 
+system("mv $rootdir/intranet-cgi/koha.upgrade $rootdir"); 
+chmod 0770, "$rootdir/installer.pl";
+chmod 0770, "$rootdir/koha.upgrade";
+system("mv $rootdir/intranet-cgi/koha.conf $rootdir");
+system("mv $rootdir/intranet-cgi/koha.mysql $rootdir");
+system("mv $rootdir/intranet-cgi/sampledata-1.2 $rootdir");
+system("gzip -9 $rootdir/sampledata-1.2");
+
+# Copy files from intranet-cgi to opac-cgi
+system("cp $rootdir/intranet-cgi/detail.pl $rootdir/opac-cgi");
+system("cp $rootdir/intranet-cgi/moredetail.pl $rootdir/opac-cgi");
+system("cp $rootdir/intranet-cgi/search.pl $rootdir/opac-cgi");
+
+
+# Move files from intranet-cgi to /scripts/ directory
+system("mv $rootdir/intranet-cgi/telnet $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/tkperl $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/translator $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/updater $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/misc $rootdir/scripts");
+system("mv $rootdir/intranet-cgi/acqui.simple/processz3950queue $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-launch.sh $rootdir/scripts/z3950daemon/");
+system("mv $rootdir/intranet-cgi/acqui.simple/z3950-daemon-shell.sh $rootdir/scripts/z3950daemon/");
+
+
+# Remove extraneous files from intranet-cgi
+system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
+system("rm -f $rootdir/intranet-cgi/ChangeLog.bak");
+system("rm -f $rootdir/intranet-cgi/SendMessages");
+system("rm -f $rootdir/intranet-cgi/buildrelease");
+system("rm -f $rootdir/intranet-cgi/database.mysql");
+system("rm -f $rootdir/intranet-cgi/installer-lite.pl");
+system("rm -f $rootdir/intranet-cgi/koha-1.2.0.tar.gz");
+system("rm -f $rootdir/intranet-cgi/rel-1-2");
+system("rm -f $rootdir/intranet-cgi/testKoha.pl");
+system("rm -rf $rootdir/intranet-cgi/html-template");
+system("rm -rf $rootdir/intranet-cgi/t");
+
+# Copy all CVS files to intranet-html and opac-html
+system("cp -a $kohahtmldir/intranet-html/* $rootdir/intranet-html");
+system("cp -a $kohahtmldir/opac-html/* $rootdir/opac-html");
+
+# Remove extraneous files from opac-html
+system("rm -f $rootdir/opac-html/koha.mo");
+system("rm -f $rootdir/opac-html/koha.pot");
+system("rm -f $rootdir/opac-html/test");
+
+# Remove extraneous files from intranet-html
+system("rm -f $rootdir/intranet-html/koha.pot");
+system("rm -f $rootdir/intranet-html/results.html");
+system("rm -f $rootdir/intranet-html/test");
+
+# Remove junk from directory
+system("find $rootdir -name CVS -exec rm -rf \\{\\} \\; 2>/dev/null");
+system("find $rootdir -name *~ -exec rm -rf \\{\\} \\; 2>/dev/null");
+system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
+
+if (-e "/root/docs") {
+    print "Copying docs folder from /root/docs...";
+    system("cp -r /root/docs/* $rootdir/docs/");
+} else {
+    print "I would have copied the docs from from /root/docs, but I couldn't find it.\n";
+    print "Press <ENTER> to continue...\n";
+    <STDIN>;
+}
+
+chdir("/tmp");
+system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
+system("rm -rf $rootdir");
+
+print qq|
+============
+= ALL DONE =
+============
+
+Your new tarball is located in /tmp/koha-$releaseversion.tar.gz
+
+|;
+
+
+sub versioncompare {
+    my $v1=shift;
+    my $v2=shift;
+    my @v1=split(/\./, $v1);
+    my @v2=split(/\./, $v2);
+    my $count=$#v1;
+    ($#v2>$count) && ($count=$#v2);
+    for (my $index=0; $index<$count; $index++) {
+	if ($v1[$index]>$v2[$index]) {
+	    return 1;
+	}
+    }
+    return 0;
+}
