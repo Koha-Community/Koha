@@ -1,6 +1,5 @@
 package C4::Auth;
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -21,9 +20,10 @@ package C4::Auth;
 use strict;
 use Digest::MD5 qw(md5_base64);
 
-
 require Exporter;
 use C4::Context;
+use C4::Output;              # to get the template
+use C4::Circulation::Circ2;  # getpatroninformation
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -39,12 +39,25 @@ C4::Auth - Authenticates Koha users
   use CGI;
   use C4::Auth;
 
-  $query = new CGI;
-  ($userid, $cookie, $sessionID) = &checkauth($query);
+  my $query = new CGI;
+
+  my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name   => "opac-main.tmpl",
+                             query           => $query,
+			     type            => "opac",
+			     authnotrequired => 1,
+			     flagsrequired   => {borrow => 1},
+			  });
+
+  print $query->header(-cookie => $cookie), $template->output;
+
 
 =head1 DESCRIPTION
 
-This module provides authentication for Koha users.
+    The main function of this module is to provide
+    authentification. However the get_template_and_user function has
+    been provided so that a users login information is passed along
+    automatically. This gets loaded into the template.
 
 =head1 FUNCTIONS
 
@@ -52,14 +65,66 @@ This module provides authentication for Koha users.
 
 =cut
 
+
+
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	     &checkauth
+	     &get_template_and_user
 );
+
+=item get_template_and_user
+
+  my ($template, $borrowernumber, $cookie) 
+    = get_template_and_user({template_name   => "opac-main.tmpl",
+                             query           => $query,
+			     type            => "opac",
+			     authnotrequired => 1,
+			     flagsrequired   => {borrow => 1},
+			  });
+
+    This call passes the C<query>, C<flagsrequired> and C<authnotrequired> to
+    C<&checkauth> (in this module) to perform authentification. See below
+    for more information on the C<&checkauth> subroutine.
+
+    The C<template_name> is then used to find the correct template for
+    the page. The authenticated users details are loaded onto the
+    template in the HTML::Template LOOP variable C<USER_INFO>. Also the
+    C<sessionID> is passed to the template. This can be used in templates
+    if cookies are disabled. It needs to be put as and input to every
+    authenticated page.
+
+    more information on the C<gettemplate> sub can be found in the
+    Output.pm module.
+
+=cut
+
+
+sub get_template_and_user {
+    my $in = shift;
+    my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+    my ($user, $cookie, $sessionID, $flags)
+	= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'}, $in->{'type'});
+
+    my $borrowernumber;
+    if ($user) {
+	$template->param(loggedinuser => $user);
+	$template->param(sessionID => $sessionID);
+
+	$borrowernumber = getborrowernumber($user);
+	my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+	my @bordat;
+	$bordat[0] = $borr;
+    
+	$template->param(USER_INFO => \@bordat);
+    }
+    return ($template, $borrowernumber, $cookie);
+}
+
 
 =item checkauth
 
-  ($userid, $cookie, $sessionID) = &checkauth($query, $noauth);
+  ($userid, $cookie, $sessionID) = &checkauth($query, $noauth, $flagsrequired, $type);
 
 Verifies that the user is authorized to run this script. Note that
 C<&checkauth> will return if and only if the user is authorized, so it
@@ -75,6 +140,8 @@ C<&checkauth> fetches user and session information from C<$query> and
 ensures that the user is authorized to run scripts that require
 authorization.
 
+XXXX Some more information about the flagsrequired hash should go in here.
+
 If C<$query> does not have a valid session ID associated with it
 (i.e., the user has not logged in) or if the session has expired,
 C<&checkauth> presents the user with a login page (from the point of
@@ -82,225 +149,258 @@ view of the original script, C<&checkauth> does not return). Once the
 user has authenticated, C<&checkauth> restarts the original script
 (this time, C<&checkauth> returns).
 
+The login page is provided using a HTML::Template, which is set in the
+systempreferences table or at the top of this file. The variable C<$type> 
+selects which template to use, either the opac or the intranet 
+authentification template.
+
 C<&checkauth> returns a user ID, a cookie, and a session ID. The
 cookie should be sent back to the browser; it verifies that the user
 has authenticated.
 
 =cut
-#'
-# FIXME - (Or rather, proofreadme)
-# As I understand it, the 'sessionqueries' table in the Koha database
-# is supposed to save state while the user authenticates. If
-# (re-)authentication is required, &checkauth saves the browser's
-# original call to a new entry in sessionqueries, then presents a form
-# for the user to authenticate. Once the user has authenticated
-# visself, &checkauth retrieves the stored information from
-# sessionqueries and allows the original request to proceed.
-#
-# One problem, however, is that sessionqueries only stores the URL,
-# not the various values passed along from an HTML form. Thus, if the
-# request came from a form and contains information on stuff to change
-# (e.g., modify the contents of a virtual bookshelf), but the session
-# has timed out, then when &checkauth finally allows the request to
-# proceed, it will not contain the user's modifications. This is bad.
-#
-# Another problem is that entries in sessionqueries are supposed to be
-# temporary, but there's no mechanism for removing them in case of
-# error (e.g., the user can't remember vis password and walks away, or
-# if the user's machine crashes in the middle of authentication).
-#
-# Perhaps a better implementation would be to use $query->param to get
-# the parameter with which the original script was invoked, and pass
-# that along through all of the authentication pages. That way, all of
-# the pertinent information would be preserved, and the sessionqueries
-# table could be removed.
+
+
 
 sub checkauth {
-	my $query=shift;
-	# $authnotrequired will be set for scripts which will run without authentication
-	my $authnotrequired=shift;
-	if (my $userid=$ENV{'REMOTE_USERNAME'}) {
-		# Using Basic Authentication, no cookies required
-		my $cookie=$query->cookie(-name => 'sessionID',
-					-value => '',
-					-expires => '+1y');
-		return ($userid, $cookie, '');
+    my $query=shift;
+    # $authnotrequired will be set for scripts which will run without authentication
+    my $authnotrequired = shift;
+    my $flagsrequired = shift;
+    my $type = shift;
+    $type = 'opac' unless $type;
+
+    my $dbh = C4::Context->dbh;
+    my $timeout = C4::Context->preference('timeout');
+    $timeout = 120 unless $timeout;
+
+    my $template_name;
+    if ($type eq 'opac') {
+	$template_name = "opac-auth.tmpl";
+    } else {
+	$template_name = "auth.tmpl";
+    }	
+
+    # state variables
+    my $loggedin = 0;
+    my %info;
+    my ($userid, $cookie, $sessionID, $flags);
+    my $logout = $query->param('logout.x');
+    if ($userid = $ENV{'REMOTE_USER'}) {
+	# Using Basic Authentication, no cookies required
+	$cookie=$query->cookie(-name => 'sessionID',
+			       -value => '',
+			       -expires => '+1y');
+	$loggedin = 1;
+    } elsif ($sessionID=$query->cookie('sessionID')) {
+	my ($ip , $lasttime);
+	($userid, $ip, $lasttime) = $dbh->selectrow_array(
+                        "SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
+							  undef, $sessionID);
+	if ($logout) {
+	    warn "In logout!\n";
+	    # voluntary logout the user
+	    $dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+	    $sessionID = undef;
+	    $userid = undef;
+	    open L, ">>/tmp/sessionlog";
+	    my $time=localtime(time());
+	    printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
+	    close L;
 	}
-	# Get session ID from cookie.
-	my $sessionID=$query->cookie('sessionID');
-		# FIXME - Error-checking: if the user isn't allowing cookies,
-		# $sessionID will be undefined. Don't confuse this with an
-		# expired cookie.
-
-	my $message='';
-
-	# Make sure the session ID is (still) good.
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
-	$sth->execute($sessionID);
-	if ($sth->rows) {
-		my ($userid, $ip, $lasttime) = $sth->fetchrow;
-		# FIXME - Back door for tonnensen
-		if ($lasttime<time()-45 && $userid ne 'tonnesen') {
-		# This session has been inactive for >45 seconds, and
-		# doesn't belong to user tonnensen. It has expired.
-		$message="You have been logged out due to inactivity.";
-
-		# Remove this session ID from the list of active sessions.
-		# FIXME - Ought to have a cron job clean this up as well.
-		my $sti=$dbh->prepare("delete from sessions where sessionID=?");
-		$sti->execute($sessionID);
-
-		# Add an entry to sessionqueries, so that we can restart
-		# the script once the user has authenticated.
-		my $scriptname=$ENV{'SCRIPT_NAME'};	# FIXME - Unused
-		my $selfurl=$query->self_url();
-		$sti=$dbh->prepare("insert into sessionqueries (sessionID, userid, value) values (?, ?, ?)");
-		$sti->execute($sessionID, $userid, $selfurl);
-
-		# Log the fact that someone tried to use an expired session ID.
-		# FIXME - Ought to have a better logging mechanism,
-		# ideally some wrapper that logs either to a
-		# user-specified file, or to syslog, as determined by
-		# either an entry in /etc/koha.conf, or a system
-		# preference.
+	if ($userid) {
+	    if ($lasttime<time()-$timeout) {
+		# timed logout
+		$info{'timed_out'} = 1;
+		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		$userid = undef;
+		$sessionID = undef;
 		open L, ">>/tmp/sessionlog";
 		my $time=localtime(time());
 		printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
 		close L;
-		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-		# This session is coming from an IP address other than the
-		# one where it was set. The user might be doing something
-		# naughty.
-		my $newip=$ENV{'REMOTE_ADDR'};
-
-		$message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
+	    } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+		# Different ip than originally logged in from
+		$info{'oldip'} = $ip;
+		$info{'newip'} = $ENV{'REMOTE_ADDR'};
+		$info{'different_ip'} = 1;
+		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		$sessionID = undef;
+		$userid = undef;
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
+		close L;
+	    } else {
+		$cookie=$query->cookie(-name => 'sessionID',
+				       -value => $sessionID,
+				       -expires => '+1y');
+		$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+			 undef, (time(), $sessionID));
+		$flags = haspermission($dbh, $userid, $flagsrequired);
+		if ($flags) {
+		    $loggedin = 1;
 		} else {
-		# This appears to be a valid session. Update the time
-		# stamp on it and return.
-		my $cookie=$query->cookie(-name => 'sessionID',
-						-value => $sessionID,
-						-expires => '+1y');
-		my $sti=$dbh->prepare("update sessions set lasttime=? where sessionID=?");
-		$sti->execute(time(), $sessionID);
-		return ($userid, $cookie, $sessionID);
+		    $info{'nopermission'} = 1;
 		}
+	    }
 	}
-	# If we get this far, it's because we haven't received a cookie
-	# with a valid session ID. Need to start a new session and set a
-	# new cookie.
-
-	my $insecure = C4::Context->preference("insecure");
-
-	if ($authnotrequired ||
-	    (defined($insecure) && $insecure eq "yes")) {
-		# This script doesn't require the user to be logged in. Return
-		# just the cookie, without user ID or session ID information.
-		my $cookie=$query->cookie(-name => 'sessionID',
-					-value => '',
-					-expires => '+1y');
-		return('', $cookie, '');
+    }
+    unless ($userid) {
+	$sessionID=int(rand()*100000).'-'.time();
+	$userid=$query->param('userid');
+	my $password=$query->param('password');
+	my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
+	if ($return) {
+	    $dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+		     undef, ($sessionID, $userid));
+	    $dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+		     undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
+	    open L, ">>/tmp/sessionlog";
+	    my $time=localtime(time());
+	    printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
+	    close L;
+	    $cookie=$query->cookie(-name => 'sessionID',
+				   -value => $sessionID,
+				   -expires => '+1y');
+	    if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+		$loggedin = 1;
+	    } else {
+		$info{'nopermission'} = 1;
+	    }
 	} else {
-		# This script requires authorization. Assume that we were
-		# given user and password information; generate a new session.
-
-		# Generate a new session ID.
-		($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
-		my $userid=$query->param('userid');
-		my $password=$query->param('password');
-		if (checkpw($dbh, $userid, $password)) {
-			# The given password is valid
-			# Delete any old copies of this session.
-			my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
-			$sti->execute($sessionID, $userid);
-
-			# Add this new session to the 'sessions' table.
-			$sti=$dbh->prepare("insert into sessions (sessionID, userid, ip,lasttime) values (?, ?, ?, ?)");
-			$sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
-
-			# See if there's an entry for this session ID and user in
-			# the 'sessionqueries' table. If so, then use that entry
-			# to generate an HTTP redirect that'll take the user to
-			# where ve wanted to go in the first place.
-			$sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
-					# FIXME - There is no sessionqueries.value
-			$sti->execute($sessionID, $userid);
-			if ($sti->rows) {
-				my $stj=$dbh->prepare("delete from sessionqueries where sessionID=?");
-				$stj->execute($sessionID);
-				my ($selfurl) = $sti->fetchrow;
-				print $query->redirect($selfurl);
-				exit;
-			}
-			open L, ">>/tmp/sessionlog";
-			my $time=localtime(time());
-			printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
-			close L;
-			my $cookie=$query->cookie(-name => 'sessionID',
-							-value => $sessionID,
-							-expires => '+1y');
-			return ($userid, $cookie, $sessionID);
-		} else {
-			# Either we weren't given a user id and password, or else
-			# the password was invalid.
-			if ($userid) {
-				$message="Invalid userid or password entered.";
-			}
-			my $parameters;
-			foreach (param $query) {
-				$parameters->{$_}=$query->{$_};
-			}
-			my $cookie=$query->cookie(-name => 'sessionID',
-							-value => $sessionID,
-							-expires => '+1y');
-			return ("",$cookie,$sessionID);
-		}
+	    if ($userid) {
+		$info{'invalid_username_or_password'} = 1;
+	    }
 	}
+    }
+    my $insecure = C4::Context->preference("insecure");
+    # finished authentification, now respond
+    if ($loggedin || $authnotrequired ||(defined($insecure) && $insecure eq "yes")) {
+	# successful login
+	unless ($cookie) {
+	    $cookie=$query->cookie(-name => 'sessionID',
+				   -value => '',
+				   -expires => '+1y');
+	}
+	return ($userid, $cookie, $sessionID, $flags);
+	exit;
+    }
+    # else we have a problem...
+    # get the inputs from the incoming query
+    my @inputs =();
+    foreach my $name (param $query) {
+	(next) if ($name eq 'userid' || $name eq 'password');
+	my $value = $query->param($name);
+	push @inputs, {name => $name , value => $value};
+    }
+
+    my $template = gettemplate($template_name, $type);
+    $template->param(INPUTS => \@inputs);
+    $template->param(loginprompt => 1) unless $info{'nopermission'};
+
+    my $self_url = $query->url(-absolute => 1);
+    $template->param(url => $self_url);
+    $template->param(\%info);
+    $cookie=$query->cookie(-name => 'sessionID',
+				  -value => $sessionID,
+				  -expires => '+1y');
+    print $query->header(-cookie=>$cookie), $template->output;
+    exit;
 }
 
-# checkpw
-# Takes a database handle, user ID, and password, and verifies that
-# the password is good. The user ID may be either a user ID or a card
-# number.
-# Returns 1 if the password is good, or 0 otherwise.
+
+
+
 sub checkpw {
 
-	# This should be modified to allow a select of authentication schemes (ie LDAP)
-	# as well as local authentication through the borrowers tables passwd field
-	#
-	my ($dbh, $userid, $password) = @_;
-	my $sth;
+# This should be modified to allow a select of authentication schemes (ie LDAP)
+# as well as local authentication through the borrowers tables passwd field
+#
 
-	# Try the user ID.
-	$sth = $dbh->prepare("select password from borrowers where userid=?");
-	$sth->execute($userid);
-	if ($sth->rows) {
-		my ($md5password) = $sth->fetchrow;
-		if (md5_base64($password) eq $md5password) {
-		return 1;		# The password matches
-		}
+    my ($dbh, $userid, $password) = @_;
+    my $sth=$dbh->prepare("select password,cardnumber from borrowers where userid=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($md5password,$cardnumber) = $sth->fetchrow;
+	if (md5_base64($password) eq $md5password) {
+	    return 1,$cardnumber;
 	}
-
-	# Try the card number.
-	$sth = $dbh->prepare("select password from borrowers where cardnumber=?");
-	$sth->execute($userid);
-	if ($sth->rows) {
-		my ($md5password) = $sth->fetchrow;
-		if (md5_base64($password) eq $md5password) {
-		return 1;		# The password matches
-		}
+    }
+    my $sth=$dbh->prepare("select password from borrowers where cardnumber=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($md5password) = $sth->fetchrow;
+	if (md5_base64($password) eq $md5password) {
+	    return 1,$userid;
 	}
-	if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
-		# Koha superuser account
-		return 2;
-	}
-	return 0;		# Either there's no such user, or the password
-				# doesn't match.
+    }
+    if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
+        # Koha superuser account
+	return 2;
+    }
+    return 0;
 }
+
+
+
+sub getuserflags {
+    my $cardnumber=shift;
+    my $dbh=shift;
+    my $userflags;
+    my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
+    $sth->execute($cardnumber);
+    my ($flags) = $sth->fetchrow;
+    $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
+    $sth->execute;
+    while (my ($bit, $flag, $defaulton) = $sth->fetchrow) {
+	if (($flags & (2**$bit)) || $defaulton) {
+	    $userflags->{$flag}=1;
+	}
+    }
+    return $userflags;
+}
+
+sub haspermission {
+    my ($dbh, $userid, $flagsrequired) = @_;
+    my $sth=$dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
+    $sth->execute($userid);
+    my ($cardnumber) = $sth->fetchrow;
+    ($cardnumber) || ($cardnumber=$userid);
+    my $flags=getuserflags($cardnumber,$dbh);
+    my $configfile;
+    if ($userid eq C4::Context->config('user')) {
+	# Super User Account from /etc/koha.conf
+	$flags->{'superlibrarian'}=1;
+    }
+    return $flags if $flags->{superlibrarian};
+    foreach (keys %$flagsrequired) {
+	return $flags if $flags->{$_};
+    }
+    return 0;
+}
+
+sub getborrowernumber {
+    my ($userid) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select borrowernumber from borrowers where userid=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($bnumber) = $sth->fetchrow;
+	return $bnumber;
+    }
+    my $sth=$dbh->prepare("select borrowernumber from borrowers where cardnumber=?");
+    $sth->execute($userid);
+    if ($sth->rows) {
+	my ($bnumber) = $sth->fetchrow;
+	return $bnumber;
+    }
+    return 0;
+}
+
 
 
 END { }       # module clean-up code here (global destructor)
-
 1;
 __END__
 
@@ -309,6 +409,8 @@ __END__
 =head1 SEE ALSO
 
 CGI(3)
+
+C4::Output(3)
 
 Digest::MD5(3)
 
