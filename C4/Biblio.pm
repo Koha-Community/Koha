@@ -382,27 +382,22 @@ sub newitems {
   $itemnumber = $data->{'max(itemnumber)'} + 1;
   $sth->finish;
   
-  $item->{'booksellerid'}     = $dbh->quote($item->{'bookselletid'});
-  $item->{'homebranch'}       = $dbh->quote($item->{'homebranch'});
-  $item->{'price'}            = $dbh->quote($item->{'price'});
-  $item->{'replacementprice'} = $dbh->quote($item->{'replacementprice'});
-  $item->{'itemnotes'}        = $dbh->quote($item->{'itemnotes'});
 
   foreach my $barcode (@barcodes) {
     $barcode = uc($barcode);
     $query   = "Insert into items set
-itemnumber           = $itemnumber,
-biblionumber         = $item->{'biblionumber'},
-biblioitemnumber     = $item->{'biblioitemnumber'},
-barcode              = $barcode,
-booksellerid         = $item->{'booksellerid'},
+itemnumber           = ?,
+biblionumber         = ?,
+biblioitemnumber     = ?,
+barcode              = ?,
+booksellerid         = ?,
 dateaccessioned      = NOW(),
-homebranch           = $item->{'homebranch'},
-holdingbranch        = $item->{'homebranch'},
-price                = $item->{'price'},
-replacementprice     = $item->{'replacementprice'},
+homebranch           = ?,
+holdingbranch        = ?,
+price                = ?,
+replacementprice     = ?,
 replacementpricedate = NOW(),
-itemnotes            = $item->{'itemnotes'}";
+itemnotes            = ?";
 
     if ($item->{'loan'}) {
       $query .= ",
@@ -410,7 +405,18 @@ notforloan           = $item->{'loan'}";
     } # if
 
     $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute(
+    	$itemnumber,
+	$item->{'biblionumber'},
+	$item->{'biblioitemnumber'},
+	$barcode,
+	$item->{'booksellerid'},
+	$item->{'homebranch'},
+	$item->{'homebranch'},
+	$item->{'price'},
+	$item->{'replacementprice'},
+	$item->{'itemnotes'}
+    );
 
     $error=$sth->errstr;
 
@@ -975,6 +981,9 @@ END { }       # module clean-up code here (global destructor)
 
 #---------------------------------------
 # $Log$
+# Revision 1.1.2.4  2002/06/26 22:13:49  tonnesen
+# Fix to allow non-numeric barcodes.
+#
 # Revision 1.1.2.3  2002/06/26 07:24:12  amillar
 # New subs to streamline biblio additions: addcompletebiblioitem and getoraddbiblio
 #
