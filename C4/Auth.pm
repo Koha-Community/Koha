@@ -70,12 +70,15 @@ sub getuserflags {
     my $sth=$dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
     $sth->execute($cardnumber);
     my ($flags) = $sth->fetchrow;
-    $sth=$dbh->prepare("SELECT bit, flag FROM userflags");
+    $sth=$dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
-    while (my ($bit, $flag) = $sth->fetchrow) {
-	if ($flags & (2**$bit)) {
+    while (my ($bit, $flag, $defaulton) = $sth->fetchrow) {
+	if (($flags & (2**$bit)) || $defaulton) {
 	    $userflags->{$flag}=1;
 	}
+    }
+    foreach my $key (keys %$userflags) {
+	warn "$key \n";
     }
     return $userflags;
 }
