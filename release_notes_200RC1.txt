@@ -49,22 +49,36 @@ Now Koha 2.0.0RC1 is ready for you to test.
 BUGFIXES/IMPROVEMENTS
 
 BUGS FIXED:
-
-619 : Visiting selectbranchprinter.pl automatically resets branch
-618 : Add member process does not check for duplicate barcode
-532 : Can't assign new password without changing UserID
-599 : edited items are stored incorrectly in old Koha DB (aka : barcode non mandatory bug)
-616 : MARCgetbiblio doesn't create leader
-500 : [INTRANET]Only 21 items are displayed in the search result
-595 : 'Add field' link in /acqui.simple/addbiblio.pl adds incorrect field.
-622 : processz3950queue fails
-576 : add install locale test
-39 : Update Dirs in z3950 scripts
-536 : bulkmarcimport.pl generates subtitle error
-436 : circulation.pl only partially templated (this bug is partially fixed)
+* biblio deletion now works in MARC & non MARC tables as well. tools for deletion added in MARCeditor (biblio & item deletion)
+* bug in circulation that breaked the 1st circ screen
+* biblio subject adding  when more than 1 subject.
+* bibliothesaurus : a fulltext index was missing. The updatedatabase script now creates it.
+* 621 ; Returns not marking reserves waiting
+* 649 : french word in english template
+* 639 : unclosed <form> & other HTML error
+* 592 : Re-issuing book does not renew correctly
+* 654 : missing image
+* 535 : major display problem with issues
+* 678 : odd case usage in opac
+* 634 : MARC21/USMARC confusion
+* 385 : crash when trying to open an empty MARC::Record
+* 564 : duplicate member number
 
 IMPROVEMENTS:
+* removing some unused code
+* improved polish version
+* improved installer & updater for non "standard" locations (/etc...)
+* adding the classification column to the variables available to the template
+* new plugin for unimarc, for field 60X.
 
-* Polish version of Koha (courtesy of Benedykt)
-* some useful tools in misc directory to manage the DB
-* adding "fines" entry in parameters section : to manage fees when a book is returned too late
+
+DB change :
+* fulltext index added in bibliothesaurus.
+* added missing columns in deletedXXX tables
+
+KNOWN BUGS :
+* some bugs in circulation : english-only messages, errors issuing books, or returning books with reserves, cancelling reserves.
+Note that those bugs doesn't appear everytime (they need specific circumstances it seems).
+* MARC upload fails silently (in breeding farm)
+* autobarcode not calculated even if autobarcode system parameter is set.
+* the MARC21 english default parameter setup is working, but some librarians reports that some choices are poor. If you use MARC21, tweak some setups to fit your needs.
