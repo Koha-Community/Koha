@@ -414,12 +414,13 @@ if ($op eq "addbiblio") {
 	my $start=0;
 	my $end=0;
 	my $started;
-	for (my $i=0;$i<=$#tags;$i++) {
+	for (my $i=$#tags;$i>0;$i--) {
 		$start=$i if ($start eq 0 && $tags[$i] == $addedfield);
 		$end=$i if ($start>0 && $tags[$i] eq $addedfield);
 		last if ($start>0 && $tags[$i] ne $addedfield);
 	}
-# add an empty line in all arrays. This forces a new field in MARC::Record.
+# 	warn "ST : $addedfield => $start / $end";
+	# add an empty line in all arrays. This forces a new field in MARC::Record.
 	splice(@tags,$end+1,0,'');
 	splice(@subfields,$end+1,0,'');
 	splice(@values,$end+1,0,'');
