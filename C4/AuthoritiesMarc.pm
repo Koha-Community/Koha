@@ -872,32 +872,32 @@ sub FindDuplicate {
 	}
 	
 	if ($record->fields($auth_tag_to_report)) {
-		foreach my $subfieldcount (1..$#subfield){
-			if ($record->field($auth_tag_to_report)->subfields($subfield[$subfieldcount])) {
-#				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
-				push @tags, $auth_tag_to_report.$subfield[$subfieldcount];
-#				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
-				push @and_or, "and";
-				push @excluding, "";
-				push @operator, "contains";
-				push @value, $record->field($auth_tag_to_report)->subfield($subfield[$subfieldcount]);
-			}
-		}
-		
-# 		my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where tagfield=? and authtypecode=? and tab >= 0");
-# 		$sth->execute($auth_tag_to_report,$authtypecode);
-# 		warn " field $auth_tag_to_report exists";
-# 		while (my ($tag,$subfield) = $sth->fetchrow){
-# 			if ($record->field($tag)->subfields($subfield)) {
+# 		foreach my $subfieldcount (1..$#subfield){
+# 			if ($record->field($auth_tag_to_report)->subfields($subfield[$subfieldcount])) {
 # #				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
-# 				push @tags, $tag.$subfield;
+# 				push @tags, $auth_tag_to_report.$subfield[$subfieldcount];
 # #				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
 # 				push @and_or, "and";
 # 				push @excluding, "";
 # 				push @operator, "contains";
-# 				push @value, $record->field($tag)->subfield($subfield);
+# 				push @value, $record->field($auth_tag_to_report)->subfield($subfield[$subfieldcount]);
 # 			}
 # 		}
+		
+ 		my $sth = $dbh->prepare("select tagfield,tagsubfield from auth_subfield_structure where tagfield=? and authtypecode=? ");
+ 		$sth->execute($auth_tag_to_report,$authtypecode);
+ #		warn " field $auth_tag_to_report exists";
+ 		while (my ($tag,$subfield) = $sth->fetchrow){
+ 			if ($record->field($tag)->subfield($subfield)) {
+ #				warn "tag :".$tag." subfield: $subfield value : ".$record->field($tag)->subfield($subfield);
+ 				push @tags, $tag.$subfield;
+ #				warn "'".$tag.$subfield."' value :". $record->field($tag)->subfield($subfield);
+ 				push @and_or, "and";
+ 				push @excluding, "";
+ 				push @operator, "contains";
+ 				push @value, $record->field($tag)->subfield($subfield);
+ 			}
+ 		}
 	}
  
 	my ($finalresult,$nbresult) = authoritysearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10,$authtypecode);
@@ -924,6 +924,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.14  2005/04/05 17:07:46  hdl
+# Scanning every the Subfields of auth_tag_to_report for FindDuplicate
+#
 # Revision 1.13  2005/04/05 15:23:41  hdl
 # Searching for double entries when adding a new authority.
 #
