@@ -78,7 +78,7 @@ if ($data->{'categorycode'} eq 'C'){
     my $data2=borrdata('',$data->{'guarantor'});
     $data->{'streetaddress'}=$data2->{'streetaddress'};
     $data->{'city'}=$data2->{'city'};
-    $data->{'physstreet'}=$data2->{'phystreet'};
+    $data->{'physstreet'}=$data2->{'physstreet'};
     $data->{'streetcity'}=$data2->{'streetcity'};
     $data->{'phone'}=$data2->{'phone'};
     $data->{'phoneday'}=$data2->{'phoneday'};
@@ -192,7 +192,7 @@ foreach my $reserveline (@$reserves) {
 	my %row = %$reserveline;
 	if ($reserveline->{'constrainttype'} eq 'o'){
 		$restitle=getreservetitle($reserveline->{'biblionumber'},$reserveline->{'borrowernumber'},$reserveline->{'reservedate'},$reserveline->{'timestamp'});
-		%row =  (%row , %$restitle);
+		%row =  (%row , %$restitle) if $restitle;
 	}
 	push (@reservedata, \%row);
 }
