@@ -360,7 +360,6 @@
     	<listitem><para>Download the following files, from the following locations:	</para>
     				<para><itemizedlist>
 			    	<listitem><para> Bundle-KohaSupport-0.08.tar.gz  from <ulink url="http://www.cpan.org">http://www.cpan.org/</ulink>, Locate by searching for Koha </para></listitem>
-		    	  	<listitem><para>Net-Z3950-0.32.tar.gz  [Net::Z3950]  from <ulink url="http://www.cpan.org">http://www.cpan.org</ulink>, Locate by searching for 3950</para></listitem>
     	<listitem><para> yaz-2.0.tar.gz from <ulink url="http://www.indexdata.dk/yaz/">http://www.indexdata.dk/yaz/</ulink>
     (Specific instructions: right-hand menu/download/sources)
     	</para></listitem>
@@ -391,27 +390,6 @@
                # make install
                # exit
                $
-    		</programlisting>
-    
-    	</para></listitem>
-    	<listitem><para>
-    Install Net::Z3950.  Use one of the two following scripts:
-    	<programlisting>
-          	   $ su
-               PASSWORD: XXXX
-               # perl -MCPAN -e 'install Net::Z3950'
-    		</programlisting>
-    
-     <emphasis>or</emphasis>
-          	<programlisting>
-               $ cd /tmp/Koha/Net-Z3950-0.32
-               $ perl Makefile.PL
-               $ make
-               $ make test
-               $ su
-               PASSWORD: XXXX
-               # make install
-               # exit
     		</programlisting>
     
     	</para></listitem>
