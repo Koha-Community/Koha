@@ -177,6 +177,7 @@ if ($op eq 'add_form') {
 		}
 		$row_data{itemtype} = $results->[$i]{'itemtype'};
 		$row_data{description} = $results->[$i]{'description'};
+		$row_data{notforloan} = $results->[$i]{'notforloan'};
 		$row_data{renewalsallowed} = $results->[$i]{'renewalsallowed'};
 		$row_data{rentalcharge} = $results->[$i]{'rentalcharge'};
 		push(@loop_data, \%row_data);
