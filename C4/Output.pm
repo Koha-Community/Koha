@@ -33,6 +33,28 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 # set the version for version checking
 $VERSION = 0.01;
 
+=head1 NAME
+
+C4::Output - Functions for generating HTML for the Koha web interface
+
+=head1 SYNOPSIS
+
+  use C4::Output;
+
+  $str = &mklink("http://www.koha.org/", "Koha web page");
+  print $str;
+
+=head1 DESCRIPTION
+
+The functions in this module generate HTML, and return the result as a
+printable string.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&startpage &endpage 
 	     &mktablehdr &mktableft &mktablerow &mklink
@@ -48,19 +70,21 @@ $VERSION = 0.01;
 # your exported package globals go here,
 # as well as any optionally exported functions
 
-@EXPORT_OK   = qw($Var1 %Hashit);
+@EXPORT_OK   = qw($Var1 %Hashit);	# FIXME - These are never used
 
 
 # non-exported package globals go here
-use vars qw(@more $stuff);
+use vars qw(@more $stuff);		# FIXME - These are never used
 
 # initalize package globals, first exported ones
 
+# FIXME - These are never used
 my $Var1   = '';
 my %Hashit = ();
 
 
 # then the others (which are still accessible as $Some::Module::stuff)
+# FIXME - These are never used
 my $stuff  = '';
 my @more   = ();
 
@@ -70,6 +94,9 @@ my @more   = ();
 #
 # Change this value to reflect where you will store your includes
 #
+# FIXME - Since this is used in several places, it ought to be put
+# into a separate file. Better yet, put "use C4::Config;" inside the
+# &import method of any package that requires the config file.
 my %configfile;
 open (KC, "/etc/koha.conf");
 while (<KC>) {
@@ -93,10 +120,31 @@ my $path=$configfile{'includes'};
 
 # make all your functions, whether exported or not;
 
+=item picktemplate
+
+  $template = &picktemplate($includes, $base);
+
+Returns the preferred template for a given page. C<$base> is the
+basename of the script that will generate the page (with the C<.pl>
+extension stripped off), and C<$includes> is the directory in which
+HTML include files are located.
+
+The preferred template is given by the C<template> entry in the
+C<systempreferences> table in the Koha database. If
+C<$includes>F</templates/preferred-template/>C<$base.tmpl> exists,
+C<&picktemplate> returns the preferred template; otherwise, it returns
+the string C<default>.
+
+=cut
+#'
 sub picktemplate {
   my ($includes, $base) = @_;
   my $dbh=C4Connect;
   my $templates;
+  # FIXME - Instead of generating the list of possible templates, and
+  # then querying the database to see if, by chance, one of them has
+  # been selected, wouldn't it be better to query the database first,
+  # and then see whether the selected template file exists?
   opendir (D, "$includes/templates");
   my @dirlist=readdir D;
   foreach (@dirlist) {
@@ -236,10 +284,25 @@ sub startmenu($) {
   return @string;
 }
 
+=item endmenu
 
+  @lines = &endmenu($type);
+  print join("", @lines);
+
+Given a page type, or category, returns a set of lines of HTML which,
+when concatenated, generate the menu at the bottom of the web page.
+
+C<$type> may be one of C<issue>, C<opac>, C<member>, C<acquisitions>,
+C<report>, C<circulation>, or something else, in which case the menu
+will be for the catalog pages.
+
+=cut
+#'
 sub endmenu {
   my ($type) = @_;
   if ( ! defined $type ) { $type=''; }
+  # FIXME - It's bad form to die in a CGI script. It's even worse form
+  # to die without issuing an error message.
   if ($type eq 'issue') {
     open (FILE,"$path/issues-bottom.inc") || die;
   } elsif ($type eq 'opac') {
@@ -364,10 +427,12 @@ sub mkform3 {
       if ($data[0] eq 'radio') {
         $text="<input type=radio name=$keys[$i2] value=$data[1]>$data[1]
 	<input type=radio name=$keys[$i2] value=$data[2]>$data[2]";
-      } 
+      }
+      # FIXME - Is 40 the right size in all cases?
       if ($data[0] eq 'text') {
         $text="<input type=$data[0] name=$keys[$i2] value=\"$data[1]\" size=40>";
       }
+      # FIXME - Is 40x4 the right size in all cases?
       if ($data[0] eq 'textarea') {
         $text="<textarea name=$keys[$i2] cols=40 rows=4>$data[1]</textarea>";
       }
@@ -377,7 +442,7 @@ sub mkform3 {
        	while ($data[$i] ne "") {
 	  my $val = $data[$i+1];
       	  $text = $text."<option value=$data[$i]>$val";
-	  $i = $i+2;
+	  $i = $i+2;		# FIXME - Use $i += 2.
 	}
 	$text=$text."</select>";
       }	
@@ -387,12 +452,15 @@ sub mkform3 {
     $i2++;
   }
   my $temp=join("\n",@order);
+  # FIXME - Use ".=". That's what it's for.
   $string=$string.$temp;
   $string=$string.mktablerow(1,'white','<input type=submit>');
   $string=$string.mktableft;
   $string=$string."</form>";
+  # FIXME - A return statement, while not strictly necessary, would be nice.
 }
 
+# XXX - POD
 sub mkformnotable{
   my ($action,@inputs)=@_;
   my $string="<form action=$action method=post>\n";
@@ -420,6 +488,79 @@ sub mkformnotable{
   $string=$string."</form>";
 }
 
+=item mkform2
+
+  $str = &mkform2($action,
+	$fieldname => "$fieldpos\t$required\t$label\t$fieldtype\t$value0\t$value1\t...",
+	...
+	);
+  print $str;
+
+Takes a set of arguments that define an input form, generates an HTML
+string for the form, and returns the string.
+
+C<$action> is the action for the form, usually the URL of the script
+that will process it.
+
+The remaining arguments define the fields in the form. C<$fieldname>
+is the field's name. This is for the script's benefit, and will not be
+shown to the user.
+
+C<$fieldpos> is an integer; fields will be output in order of
+increasing C<$fieldpos>. This number must be unique: if two fields
+have the same C<$fieldpos>, one will be picked at random, and the
+other will be ignored. See below for special considerations, however.
+
+If C<$required> is the string C<R>, then the field is required, and
+the label will have C< (Req.)> appended.
+
+C<$label> is a string that will appear next to the input field.
+
+C<$fieldtype> specifies the type of the input field. It may be one of
+the following:
+
+=over 4
+
+=item C<hidden>
+
+Generates a hidden field, used to pass data to the script without
+showing it to the user. C<$value0> is its value.
+
+=item C<radio>
+
+Generates a pair of radio buttons, with values C<$value0> and
+C<$value1>. In both cases, C<$value0> and C<$value1> will be shown to
+the user, next to the radio button.
+
+=item C<text>
+
+Generates a one-line text input field. Its size may be specified by
+C<$value0>. The default is 40. The initial text of the field may be
+specified by C<$value1>.
+
+=item C<textarea>
+
+Generates a text input area. C<$value0> may be a string of the form
+"WWWxHHH", in which case the text input area will be WWW columns wide
+and HHH rows tall. The size defaults to 40x4.
+
+The initial text (which, of course, may not contain any tabs) may be
+specified by C<$value1>.
+
+=item C<select>
+
+Generates a list of items, from which the user may choose one. Here,
+C<$value1>, C<$value2>, etc. are a list of key-value pairs. In each
+pair, the key specifies an internal label for a choice, and the value
+specifies the description of the choice that will be shown the user.
+
+If C<$value0> is the same as one of the keys that follows, then the
+corresponding choice will initially be selected.
+
+=back
+
+=cut
+#'
 sub mkform2{
     # FIXME
     # no POD and no tests yet.  Once tests are written,
@@ -639,6 +780,13 @@ sub getkeytableselectoptions {
 #---------------------------------
 
 END { }       # module clean-up code here (global destructor)
-    
 
+1;
+__END__
+=back
 
+=head1 SEE ALSO
+
+L<DBI(3)|DBI>
+
+=cut

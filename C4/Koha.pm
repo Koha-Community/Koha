@@ -26,6 +26,30 @@ use vars qw($VERSION @ISA @EXPORT);
   
 $VERSION = 0.01;
     
+=head1 NAME
+
+C4::Koha - Perl Module containing convenience functions for Koha scripts
+
+=head1 SYNOPSIS
+
+  use C4::Koha;
+
+
+  $date = slashifyDate("01-01-2002")
+  $ethnicity = fixEthnicity('asian');
+  ($categories, $labels) = borrowercategories();
+  ($categories, $labels) = ethnicitycategories();
+
+=head1 DESCRIPTION
+
+Koha.pm provides many functions for Koha scripts.
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 @ISA = qw(Exporter);
 @EXPORT = qw(&slashifyDate
 	     &fixEthnicity
@@ -37,12 +61,32 @@ use vars qw();
 	
 my $DEBUG = 0;
 
+=item slashifyDate
+
+  $slash_date = &slashifyDate($dash_date);
+
+Takes a string of the form "DD-MM-YYYY" (or anything separated by
+dashes), converts it to the form "YYYY/MM/DD", and returns the result.
+
+=cut
+
 sub slashifyDate {
     # accepts a date of the form xx-xx-xx[xx] and returns it in the 
     # form xx/xx/xx[xx]
     my @dateOut = split('-', shift);
     return("$dateOut[2]/$dateOut[1]/$dateOut[0]")
 }
+
+=item fixEthnicity
+
+  $ethn_name = &fixEthnicity($ethn_code);
+
+Takes an ethnicity code (e.g., "european" or "pi") and returns the
+corresponding descriptive name from the C<ethnicity> table in the
+Koha database ("European" or "Pacific Islander").
+
+=cut
+#'
 
 sub fixEthnicity($) { 
 
@@ -55,6 +99,18 @@ sub fixEthnicity($) {
     $dbh->disconnect;
     return $data->{'name'};
 }
+
+=item borrowercategories
+
+  ($codes_arrayref, $labels_hashref) = &borrowercategories();
+
+Looks up the different types of borrowers in the database. Returns two
+elements: a reference-to-array, which lists the borrower category
+codes, and a reference-to-hash, which maps the borrower category codes
+to category descriptions.
+
+=cut
+#'
 
 sub borrowercategories {
     my $dbh=C4Connect;
@@ -70,6 +126,18 @@ sub borrowercategories {
     $dbh->disconnect;
     return(\@codes,\%labels);
 }
+
+=item ethnicitycategories
+
+  ($codes_arrayref, $labels_hashref) = &ethnicitycategories();
+
+Looks up the different ethnic types in the database. Returns two
+elements: a reference-to-array, which lists the ethnicity codes, and a
+reference-to-hash, which maps the ethnicity codes to ethnicity
+descriptions.
+
+=cut
+#'
 
 sub ethnicitycategories {
     my $dbh=C4Connect;
@@ -89,25 +157,7 @@ sub ethnicitycategories {
 1;
 __END__
 
-=head1 NAME
-
-Koha - Perl Module containing convenience functions for Koha scripts
-
-=head1 SYNOPSIS
-
-  use Koha;
-
-
-  $date = slashifyDate("01-01-2002")
-  $ethnicity=fixEthnicity('asian');
-  ($categories,$labels)=borrowercategories();
-
-=head1 DESCRIPTION
-
-Koha.pm provides many functions for Koha scripts.
-
-slashifyDate() takes a dash separated date string and returns a slash 
-separated date string
+=back
 
 =head1 AUTHOR
 
@@ -118,8 +168,3 @@ Pat Eyler, pate@gnu.org
 perl(1).
 
 =cut
-
-
-
-
-
