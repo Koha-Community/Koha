@@ -69,7 +69,7 @@ Also deals with stocktaking.
 
 # &getbranches &getprinters &getbranch &getprinter => moved to C4::Koha.pm
 
-=item itemseen
+=head2 itemseen
 
 &itemseen($itemnum)
 Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking
@@ -101,7 +101,7 @@ sub listitemsforinventory {
 	return \@results;
 }
 
-=item getpatroninformation
+=head2 getpatroninformation
 
   ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, $cardnumber);
 
@@ -128,30 +128,50 @@ with a true value.
 
 The possible flags are:
 
-=over 4
+=head3 CHARGES
 
-=item CHARGES
+=over 4
 
 Shows the patron's credit or debt, if any.
 
-=item GNA
+=back
+
+=head3 GNA
+
+=over 4
 
 (Gone, no address.) Set if the patron has left without giving a
 forwarding address.
 
-=item LOST
+=back
+
+=head3 LOST
+
+=over 4
 
 Set if the patron's card has been reported as lost.
 
-=item DBARRED
+=back
+
+=head3 DBARRED
+
+=over 4
 
 Set if the patron has been debarred.
 
-=item NOTES
+=back
+
+=head3 NOTES
+
+=over 4
 
 Any additional notes about the patron.
 
-=item ODUES
+=back
+
+=head3 ODUES
+
+=over 4
 
 Set if the patron has overdue items. This flag has several keys:
 
@@ -163,13 +183,19 @@ biblioitems, and items tables of the Koha database.
 C<$flags-E<gt>{ODUES}{itemlist}> is a string giving a text listing of
 the overdue items, one per line.
 
-=item WAITING
+=back
+
+=head3 WAITING
+
+=over 4
 
 Set if any items that the patron has reserved are available.
 
 C<$flags-E<gt>{WAITING}{itemlist}> is a reference-to-array listing the
 available items. Each element is a reference-to-hash whose keys are
 fields from the reserves table of the Koha database.
+
+=back
 
 =back
 
@@ -192,7 +218,7 @@ sub getpatroninformation {
 		$env->{'apierror'} = "invalid borrower information passed to getpatroninformation subroutine";
 		return();
 	}
-	$env->{'mess'} = $query;
+# 	$env->{'mess'} = $query;
 	my $borrower = $sth->fetchrow_hashref;
 	my $amount = checkaccount($env, $borrowernumber, $dbh);
 	$borrower->{'amountoutstanding'} = $amount;
@@ -212,16 +238,23 @@ sub getpatroninformation {
 	return ($borrower); #, $flags, $accessflagshash);
 }
 
-=item decode
+=head2 decode
 
-  $str = &decode($chunk);
+=over 4
+
+=head3 $str = &decode($chunk);
+
+=over 4
 
 Decodes a segment of a string emitted by a CueCat barcode scanner and
 returns it.
 
+=back
+
+=back
+
 =cut
 
-#'
 # FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
 sub decode {
 	my ($encoded) = @_;
@@ -251,9 +284,11 @@ sub decode {
 	return $r;
 }
 
-=item getiteminformation
+=head2 getiteminformation
 
-  $item = &getiteminformation($env, $itemnumber, $barcode);
+=over 4
+
+$item = &getiteminformation($env, $itemnumber, $barcode);
 
 Looks up information about an item, given either its item number or
 its barcode. If C<$itemnumber> is a nonzero value, it is used;
@@ -265,26 +300,36 @@ C<$item> is a reference-to-hash whose keys are fields from the biblio,
 items, and biblioitems tables of the Koha database. It may also
 contain the following keys:
 
-=over 4
+=head3 date_due
 
-=item C<date_due>
+=over 4
 
 The due date on this item, if it has been borrowed and not returned
 yet. The date is in YYYY-MM-DD format.
 
-=item C<loanlength>
+=back
+
+=head3 loanlength
+
+=over 4
 
 The length of time for which the item can be borrowed, in days.
 
-=item C<notforloan>
+=back
+
+=head3 notforloan
+
+=over 4
 
 True if the item may not be borrowed.
 
 =back
 
+=back
+
 =cut
 
-#'
+
 sub getiteminformation {
 # returns a hash of item information given either the itemnumber or the barcode
 	my ($env, $itemnumber, $barcode) = @_;
@@ -303,26 +348,13 @@ sub getiteminformation {
 	}
 	my $iteminformation=$sth->fetchrow_hashref;
 	$sth->finish;
-	# FIXME - Style: instead of putting the entire rest of the
-	# function in a block, just say
-	#	return undef unless $iteminformation;
-	# That way, the rest of the function needn't be indented as much.
 	if ($iteminformation) {
 		$sth=$dbh->prepare("select date_due from issues where itemnumber=? and isnull(returndate)");
 		$sth->execute($iteminformation->{'itemnumber'});
 		my ($date_due) = $sth->fetchrow;
 		$iteminformation->{'date_due'}=$date_due;
 		$sth->finish;
-		# FIXME - The Dewey code is a string, not a number. Besides,
-		# "000" is a perfectly valid Dewey code.
-		#$iteminformation->{'dewey'}=~s/0*$//;
 		($iteminformation->{'dewey'} == 0) && ($iteminformation->{'dewey'}='');
-		# FIXME - fetchrow_hashref is documented as being inefficient.
-		# Perhaps this should be rewritten as
-		#	$sth = $dbh->prepare("select loanlength, notforloan ...");
-		#	$sth->execute;
-		#	($iteminformation->{loanlength},
-		#	 $iteminformation->{notforloan}) = fetchrow_array;
 		$sth=$dbh->prepare("select * from itemtypes where itemtype=?");
 		$sth->execute($iteminformation->{'itemtype'});
 		my $itemtype=$sth->fetchrow_hashref;
@@ -335,16 +367,15 @@ sub getiteminformation {
 	return($iteminformation);
 }
 
-=item transferbook
+=head2 transferbook
 
-  ($dotransfer, $messages, $iteminformation) =
-	&transferbook($newbranch, $barcode, $ignore_reserves);
+=over 4
 
-Transfers an item to a new branch. If the item is currently on loan,
-it is automatically returned before the actual transfer.
+($dotransfer, $messages, $iteminformation) = &transferbook($newbranch, $barcode, $ignore_reserves);
 
-C<$newbranch> is the code for the branch to which the item should be
-transferred.
+Transfers an item to a new branch. If the item is currently on loan, it is automatically returned before the actual transfer.
+
+C<$newbranch> is the code for the branch to which the item should be transferred.
 
 C<$barcode> is the barcode of the item to be transferred.
 
@@ -353,48 +384,43 @@ Otherwise, if an item is reserved, the transfer fails.
 
 Returns three values:
 
-C<$dotransfer> is true iff the transfer was successful.
+=head3 $dotransfer 
 
-C<$messages> is a reference-to-hash which may have any of the
-following keys:
+is true if the transfer was successful.
+
+=head3 $messages
+ 
+is a reference-to-hash which may have any of the following keys:
 
 =over 4
 
-=item C<BadBarcode>
+C<BadBarcode>
 
-There is no item in the catalog with the given barcode. The value is
-C<$barcode>.
+There is no item in the catalog with the given barcode. The value is C<$barcode>.
 
-=item C<IsPermanent>
+C<IsPermanent>
 
-The item's home branch is permanent. This doesn't prevent the item
-from being transferred, though. The value is the code of the item's
-home branch.
+The item's home branch is permanent. This doesn't prevent the item from being transferred, though. The value is the code of the item's home branch.
 
-=item C<DestinationEqualsHolding>
+C<DestinationEqualsHolding>
 
-The item is already at the branch to which it is being transferred.
-The transfer is nonetheless considered to have failed. The value
-should be ignored.
+The item is already at the branch to which it is being transferred. The transfer is nonetheless considered to have failed. The value should be ignored.
 
-=item C<WasReturned>
+C<WasReturned>
 
-The item was on loan, and C<&transferbook> automatically returned it
-before transferring it. The value is the borrower number of the patron
-who had the item.
+The item was on loan, and C<&transferbook> automatically returned it before transferring it. The value is the borrower number of the patron who had the item.
 
-=item C<ResFound>
+C<ResFound>
 
-The item was reserved. The value is a reference-to-hash whose keys are
-fields from the reserves table of the Koha database, and
-C<biblioitemnumber>. It also has the key C<ResFound>, whose value is
-either C<Waiting> or C<Reserved>.
+The item was reserved. The value is a reference-to-hash whose keys are fields from the reserves table of the Koha database, and C<biblioitemnumber>. It also has the key C<ResFound>, whose value is either C<Waiting> or C<Reserved>.
 
-=item C<WasTransferred>
+C<WasTransferred>
 
-The item was eligible to be transferred. Barring problems
-communicating with the database, the transfer should indeed have
-succeeded. The value should be ignored.
+The item was eligible to be transferred. Barring problems communicating with the database, the transfer should indeed have succeeded. The value should be ignored.
+
+=back
+
+=back
 
 =back
 
@@ -482,6 +508,90 @@ sub dotransfer {
 	return;
 }
 
+=head2 canbookbeissued
+
+Check if a book can be issued.
+
+my ($issuingimpossible,$needsconfirmation) = canbookbeissued($env,$borrower,$barcode,$year,$month,$day);
+
+=over 4
+
+C<$env> Environment variable. Should be empty usually, but used by other subs. Next code cleaning could drop it.
+
+C<$borrower> hash with borrower informations (from getpatroninformation)
+
+C<$barcode> is the bar code of the book being issued.
+
+C<$year> C<$month> C<$day> contains the date of the return (in case it's forced by "stickyduedate".
+
+=back
+
+Returns :
+
+=over 4
+
+C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
+Possible values are :
+
+=head3 INVALID_DATE 
+
+sticky due date is invalid
+
+=head3 GNA
+
+borrower gone with no address
+
+=head3 CARD_LOST
+ 
+borrower declared it's card lost
+
+=head3 DEBARRED
+
+borrower debarred
+
+=head3 UNKNOWN_BARCODE
+
+barcode unknown
+
+=head3 NOT_FOR_LOAN
+
+item is not for loan
+
+=head3 WTHDRAWN
+
+item withdrawn.
+
+=head3 RESTRICTED
+
+item is restricted (set by ??)
+
+=back
+
+C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
+Possible values are :
+
+=head3 DEBT
+
+borrower has debts.
+
+=head3 RENEW_ISSUE
+
+renewing, not issuing
+
+=head3 ISSUED_TO_ANOTHER
+
+issued to someone else.
+
+=head3 RESERVED
+
+reserved for someone else.
+
+=head3 INVALID_DATE
+
+sticky due date is invalid
+
+=cut
+
 # check if a book can be issued.
 # returns an array with errors if any
 
@@ -490,7 +600,6 @@ sub canbookbeissued {
 	warn "CHECKING CANBEISSUED for $borrower->{'borrowernumber'}, $barcode";
 	my %needsconfirmation; # filled with problems that needs confirmations
 	my %issuingimpossible; # filled with problems that causes the issue to be IMPOSSIBLE
-# 	my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
 	my $iteminformation = getiteminformation($env, 0, $barcode);
 	my $dbh = C4::Context->dbh;
 #
@@ -544,7 +653,6 @@ sub canbookbeissued {
 # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
 #
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
-warn "current borrower  for $iteminformation->{'itemnumber'} : $currentborrower";
 	if ($currentborrower eq $borrower->{'borrowernumber'}) {
 # Already issued to current borrower. Ask whether the loan should
 # be renewed.
@@ -556,7 +664,9 @@ warn "current borrower  for $iteminformation->{'itemnumber'} : $currentborrower"
 		}
 	} elsif ($currentborrower) {
 # issued to someone else
-		$needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+		my $currborinfo = getpatroninformation(0,$currentborrower);
+		warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
+		$needsconfirmation{ISSUED_TO_ANOTHER} = "$currborinfo->{'reservedate'} : $currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
 	}
 # See if the item is on reserve.
 	my ($restype, $res) = CheckReserves($iteminformation->{'itemnumber'});
@@ -579,6 +689,24 @@ warn "current borrower  for $iteminformation->{'itemnumber'} : $currentborrower"
 	}
 	return(\%issuingimpossible,\%needsconfirmation);
 }
+
+=head2 issuebook
+
+Issue a book. Does no check, they are done in canbookbeissued. If we reach this sub, it means the user confirmed if needed.
+
+&issuebook($env,$borrower,$barcode,$date)
+
+=over 4
+
+C<$env> Environment variable. Should be empty usually, but used by other subs. Next code cleaning could drop it.
+
+C<$borrower> hash with borrower informations (from getpatroninformation)
+
+C<$barcode> is the bar code of the book being issued.
+
+C<$date> contains the max date of return. calculated if empty.
+
+=cut
 
 #
 # issuing book. We already have checked it can be issued, so, just issue it !
@@ -660,110 +788,7 @@ sub issuebook {
 	}
 }
 
-=item issuebook
-
-  ($iteminformation, $datedue, $rejected, $question, $questionnumber,
-   $defaultanswer, $message) =
-	&issuebook($env, $patroninformation, $barcode, $responses, $date);
-
-Issue a book to a patron.
-
-C<$env-E<gt>{usercode}> will be used in the usercode field of the
-statistics table of the Koha database when this transaction is
-recorded.
-
-C<$env-E<gt>{datedue}>, if given, specifies the date on which the book
-is due back. This should be a string of the form "YYYY-MM-DD".
-
-C<$env-E<gt>{branchcode}> is the code of the branch where this
-transaction is taking place.
-
-C<$patroninformation> is a reference-to-hash giving information about
-the person borrowing the book. This is the first value returned by
-C<&getpatroninformation>.
-
-C<$barcode> is the bar code of the book being issued.
-
-C<$responses> is a reference-to-hash. It represents the answers to the
-questions asked by the C<$question>, C<$questionnumber>, and
-C<$defaultanswer> return values (see below). The keys are numbers, and
-the values can be "Y" or "N".
-
-C<$date> is an optional date in the form "YYYY-MM-DD". If specified,
-then only fines and charges up to that date will be considered when
-checking to see whether the patron owes too much money to be lent a
-book.
-
-C<&issuebook> returns an array of seven values:
-
-C<$iteminformation> is a reference-to-hash describing the item just
-issued. This in a form similar to that returned by
-C<&getiteminformation>.
-
-C<$datedue> is a string giving the date when the book is due, in the
-form "YYYY-MM-DD".
-
-C<$rejected> is either a string, or -1. If it is defined and is a
-string, then the book may not be issued, and C<$rejected> gives the
-reason for this. If C<$rejected> is -1, then the book may not be
-issued, but no reason is given.
-
-If there is a problem or question (e.g., the book is reserved for
-another patron), then C<$question>, C<$questionnumber>, and
-C<$defaultanswer> will be set. C<$questionnumber> indicates the
-problem. C<$question> is a text string asking how to resolve the
-problem, as a yes-or-no question, and C<$defaultanswer> is either "Y"
-or "N", giving the default answer. The questions, their numbers, and
-default answers are:
-
-=over 4
-
-=item 1: "Issued to <name>. Mark as returned?" (Y)
-
-=item 2: "Waiting for <patron> at <branch>. Allow issue?" (N)
-
-=item 3: "Cancel reserve for <patron>?" (N)
-
-=item 4: "Book is issued to this borrower. Renew?" (Y)
-
-=item 5: "Reserved for <patron> at <branch> since <date>. Allow issue?" (N)
-
-=item 6: "Set reserve for <patron> to waiting and transfer to <branch>?" (Y)
-
-This is asked if the answer to question 5 was "N".
-
-=item 7: "Cancel reserve for <patron>?" (N)
-
-=back
-
-C<$message>, if defined, is an additional information message, e.g., a
-rental fee notice.
-
-=cut
-
-#'
-# FIXME - The business with $responses is absurd. For one thing, these
-# questions should have names, not numbers. For another, it'd be
-# better to have the last argument be %extras. Then scripts can call
-# this function with
-#	&issuebook(...,
-#		-renew		=> 1,
-#		-mark_returned	=> 0,
-#		-cancel_reserve	=> 1,
-#		...
-#		);
-# and the script can use
-#	if (defined($extras{"-mark_returned"}) && $extras{"-mark_returned"})
-# Heck, the $date argument should go in there as well.
-#
-# Also, there might be several reasons why a book can't be issued, but
-# this API only supports asking one question at a time. Perhaps it'd
-# be better to return a ref-to-list of problem IDs. Then the calling
-# script can display a list of all of the problems at once.
-#
-# Is it this function's place to decide the default answer to the
-# various questions? Why not document the various problems and allow
-# the caller to decide?
+# TO BE DELETED
 sub issuebook2 {
 	my ($env, $patroninformation, $barcode, $responses, $date) = @_;
 	my $dbh = C4::Context->dbh;
@@ -991,7 +1016,7 @@ sub issuebook2 {
 
 
 
-=item returnbook
+=head2 returnbook
 
   ($doreturn, $messages, $iteminformation, $borrower) =
 	  &returnbook($barcode, $branch);
