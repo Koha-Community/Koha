@@ -219,7 +219,7 @@ EOF
     } 
     if ($res->{'ResFound'} eq "Reserved") {
 	my @da = localtime(time());
-	my $todaysdate = sprintf ("%0.2d", ($da[3]+1))."/".sprintf ("%0.2d", ($da[4]+1))."/".($da[5]+1900);
+	my $todaysdate = sprintf ("%0.2d", ($da[3]))."/".sprintf ("%0.2d", ($da[4]+1))."/".($da[5]+1900);
 	my $slip =  <<"EOF";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Date: $todaysdate;
