@@ -14,13 +14,19 @@ Call tmpl_process --help to get full explanations.
 HOW TO TRANSLATE Koha :
 ============
 1- create your translation file :
-./tmpl_process.pl update -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -s opac.fr -r
-2- translate your opac.fr file (english & french being separated by a tab, using IGNORE and LIMITED pragmas, see below)
+./tmpl_process.pl create -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -s opac.fr -r
+2- translate your opac.fr file (english & other_language being separated by a tab, using IGNORE and LIMITED pragmas, see below)
 3- create your translated version :
 ./tmpl_process.pl install -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s opac.fr -r
-4- copy images in your new directory (as they are NOT moved by tmpl_process.pl install)
+4- copy images/css files in your new directory (as they are NOT moved by tmpl_process.pl install)
 
-If something changes in english version, go back to pt1 & repeat.
+If something changes in english version :
+1- update your translation file :
+./tmpl_process.pl update -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -s opac.fr -r
+2- translate new  your opac.fr file (english & other_language being separated by a tab, using IGNORE and LIMITED pragmas, see below)
+3- create your translated version :
+./tmpl_process.pl install -i /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/en/ -o /home/paul/koha.dev/koha/koha-tmpl/opac-tmpl/default/fr2/ -s opac.fr -r
+4- copy new images/css files in your new directory if needed
 
 WEAKNESSES
 =======
