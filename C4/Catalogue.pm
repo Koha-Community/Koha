@@ -890,7 +890,7 @@ table of the Koha database.
 #'
 sub branches {
     my $dbh   = C4::Context->dbh;
-    my $query = "Select * from branches";
+    my $query = "Select * from branches order by branchname";
     my $sth   = $dbh->prepare($query);
     my $i     = 0;
     my @results;
