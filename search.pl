@@ -11,7 +11,7 @@ use C4::Output; # no contains gettemplate
 my $query=new CGI;
 my $type=$query->param('type');
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query, (1);
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 1);
 
 
 
