@@ -15,6 +15,8 @@ use HTML::Template;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = 5;
 
+my $MAXIMUM_NUMBER_OF_RESERVES = 10;
+
 my $query = new CGI;
 my ($template, $borrowernumber, $cookie) 
     = get_template_and_user({template_name => "opac-reserve.tmpl",
@@ -224,7 +226,7 @@ if ($query->param('item_types_selected')) {
 }
 # check that you can actually make the reserve.
 
-$template->param(BIBLIOITEMS => \@data);
+# $template->param(BIBLIOITEMS => \@data);
 
 
 output_html_with_http_headers $query, $cookie, $template->output;
