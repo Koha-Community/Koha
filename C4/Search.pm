@@ -108,7 +108,7 @@ sub KeywordSearch {
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
-  my $i=0;
+  $i=0;
   while (my @res=$sth->fetchrow_array){
     $results[$i]=$res[0];
     $i++;
@@ -383,7 +383,7 @@ sub KeywordSearch2 {
   my $i2=1;
   @results=sort @results;
   my @res;
-  my $count=@results;
+  $count=@results;
   $i=1;
   if ($count > 0){
     $res[0]=$results[0];
@@ -952,7 +952,7 @@ sub itemissues {
     $query2="select * from issues,borrowers where itemnumber='$data->{'itemnumber'}'
     and issues.borrowernumber=borrowers.borrowernumber 
     order by date_due desc";
-    my $sth2=$dbh->prepare($query2) || die $dbh->errstr;
+    $sth2=$dbh->prepare($query2) || die $dbh->errstr;
     $sth2->execute || die $sth2->errstr;
     for (my $i2=0;$i2<2;$i2++){
       if (my $data2=$sth2->fetchrow_hashref){

@@ -18,13 +18,14 @@ print $input->header;
 
 #setup colours
 print startpage();
-print startmenu();
+print startmenu('catalogue');
 my $blah;
 my $bib=$input->param('bib');
 my $dat=bibdata($bib);
 my ($count,$reserves)=FindReserves($bib);
-#print $count;
-#print $input->dump;
+
+print $count if $DEBUG;
+print $input->dump if $DEBUG;
 
 
 print <<printend
@@ -55,16 +56,21 @@ print <<printend
 <TD><select name=rank-request>
 printend
 ;
-$count++;
-my $i;
-for ($i=1;$i<$count;$i++){
-  print "<option value=$i>$i\n";
+my $value;
+for $value(1..$count){
+  print "<option value=$value>$value\n";
 }
-print "<option value=$i selected>$i\n";
+print "<option value=$value selected>$value\n";
+
+# FIXME
+# we should create a today function (in C4::Koha) that returns
+# either a US or non-US date string based on a configuration switch
+#
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $year=$year+1900;
 $mon++;
 my $date="$mday/$mon/$year";
+
 print <<printend
 </select>
 </td>
@@ -104,9 +110,10 @@ print <<printend
 </TR>
 printend
 ;
-my $blah;
-my ($count2,@data)=bibitems($bib);
-for ($i=0;$i<$count2;$i++){
+
+my @data;
+($count2,@data)=bibitems($bib);
+for (my $i=0;$i<$count2;$i++){
   my @barcodes=barcodes($data[$i]->{'biblioitemnumber'});
   if ($data[$i]->{'dewey'} == 0){
     $data[$i]->{'dewey'}="";
@@ -155,7 +162,7 @@ printend
 ;
 $count--;
 
-for ($i=0;$i<$count;$i++){
+for (my $i=0;$i<$count;$i++){
 print "<input type=hidden name=borrower value=$reserves->[$i]{'borrowernumber'}>";
 print "<input type=hidden name=biblio value=$reserves->[$i]{'biblionumber'}>";
 #my $bor=$reserves->[$i]{'firstname'}."%20".$reserves->[$i]{'surname'};
@@ -213,6 +220,7 @@ print "
 </tr>
 ";
 }
+
 print <<printend
 
 

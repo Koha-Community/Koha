@@ -395,7 +395,7 @@ sub returnbook {
 
 	    # check for overdue fine
 
-	    $overduecharge;
+
 	    $sth=$dbh->prepare("select * from accountlines where (borrowernumber=$borrower->{'borrowernumber'}) and (itemnumber = $iteminformation->{'itemnumber'}) and (accounttype='FU' or accounttype='O')");
 	    $sth->execute;
 	    # alter fine to show that the book has been returned
@@ -471,7 +471,7 @@ sub returnbook {
 		    (borrowernumber, accountno, offsetaccount,  offsetamount)
 		    values
 		    ($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos)";
-		    my $usth = $dbh->prepare($updquery);
+		    $usth = $dbh->prepare($updquery);
 		    $usth->execute;
 	            $usth->finish;
 	          }
@@ -729,7 +729,7 @@ sub checkwaiting {
   $sth->execute();
   my $cnt=0;
   if (my $data=$sth->fetchrow_hashref) {
-    @itemswaiting[$cnt] =$data;
+    $itemswaiting[$cnt] =$data;
     $cnt ++
   }
   $sth->finish;
@@ -820,7 +820,7 @@ sub renewbook {
     $datedue = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   }
   my @date = split("-",$datedue);
-  my $odatedue = (@date[2]+0)."-".(@date[1]+0)."-".@date[0];
+  my $odatedue = ($date[2]+0)."-".($date[1]+0)."-".$date[0];
   my $issquery = "select * from issues where borrowernumber='$bornum' and
     itemnumber='$itemno' and returndate is null";
   my $sth=$dbh->prepare($issquery);
@@ -832,7 +832,7 @@ sub renewbook {
     set date_due = '$datedue', renewals = '$renews'
     where borrowernumber='$bornum' and
     itemnumber='$itemno' and returndate is null";
-  my $sth=$dbh->prepare($updquery);
+  $sth=$dbh->prepare($updquery);
   
   $sth->execute;
   $sth->finish;
@@ -861,7 +861,7 @@ sub calc_charges {
 	    my $discount = $data2->{'rentaldiscount'};
 	    $charge = ($charge *(100 - $discount)) / 100;
 	}
-	$sth2->{'finish'};
+	$sth2->finish;
     }      
     $sth1->finish;
     return ($charge);

@@ -59,7 +59,7 @@ my $isbn=validate($input->param('isbn'));
 $search{'isbn'}=$isbn;
 
 my $datebefore=validate($input->param('date-before'));
-$search{'date-before'};
+$search{'date-before'}=$datebefore;
 
 my $class=$input->param('class');
 $search{'class'}=$class;
@@ -94,7 +94,6 @@ if ($type eq 'intra'){
 }
 print center();
 my $count;
-my @results;
 if ($itemnumber ne '' || $isbn ne ''){
     ($count,@results)=&CatSearch(\$blah,'precise',\%search,$num,$offset);
 } else {

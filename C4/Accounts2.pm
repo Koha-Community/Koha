@@ -1,6 +1,7 @@
 package C4::Accounts2; #assummes C4/Accounts2
 
 use strict;
+use warnings;
 require Exporter;
 use DBI;
 use C4::Database;
@@ -55,7 +56,7 @@ sub recordpayment{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }
@@ -105,7 +106,7 @@ sub makepayment{
   $updquery = "insert into accountlines 
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)  
   values ($bornumber,$nextaccntno,now(),$payment,'Payment,thanks - $user', 'Pay',0)";
-  my $usth = $dbh->prepare($updquery);
+  $usth = $dbh->prepare($updquery);
   $usth->execute;
   $usth->finish;
   UpdateStats($env,$user,'payment',$amount,'','','',$bornumber);
@@ -258,7 +259,7 @@ sub fixcredit{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }
@@ -289,7 +290,7 @@ sub fixcredit{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }
@@ -342,7 +343,7 @@ sub refund{
      $updquery = "insert into accountoffsets 
      (borrowernumber, accountno, offsetaccount,  offsetamount)
      values ($bornumber,$accdata->{'accountno'},$nextaccntno,$newamtos)";
-     my $usth = $dbh->prepare($updquery);
+     $usth = $dbh->prepare($updquery);
      $usth->execute;
      $usth->finish;
   }

@@ -186,7 +186,7 @@ sub CalcReserveFee {
     my $x = 0;                   
     my $allissued = 1; 
     while ($x < $cntitemsfound) { 
-      my $bitdata = @biblioitems[$x];                                       
+      my $bitdata = $biblioitems[$x];                                       
       my $query2 = "select * from items                   
       where biblioitemnumber = '$bitdata->{'biblioitemnumber'}'";     
       my $sth2 = $dbh->prepare($query2);                       

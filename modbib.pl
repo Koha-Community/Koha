@@ -26,7 +26,7 @@ print $input->header;
 #my ($analytictitle)=analytic($biblionumber,'t');
 #my ($analyticauthor)=analytic($biblionumber,'a');
 print startpage();
-print startmenu();
+print startmenu('catalogue');
 my %inputs;
 
 #have to get all subtitles, subjects and additional authors

@@ -3,7 +3,7 @@ package C4::Acquisitions; #assumes C4/Acquisitions.pm
 use strict;
 require Exporter;
 use C4::Database;
-
+use warnings;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -742,7 +742,7 @@ sub curconvert {
   if ($cur==0){
     $cur=1;
   }
-  my $price=$price / $cur;
+  $price=$price / $cur;
   return($price);
 }
 
@@ -1046,7 +1046,7 @@ sub getitemtypes {
   $sth->execute;
     # || die "Cannot execute $query\n" . $sth->errstr;
   while (my $data = $sth->fetchrow_hashref) {
-    @results[$count] = $data;
+    $results[$count] = $data;
     $count++;
   } # while
   
