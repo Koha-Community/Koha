@@ -98,19 +98,19 @@
 			<tr>
 				<td>Enrollment period</td>
 				<td>
-					<input type="text" name="enrolmentperiod" size="3" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->">
+					<input type="text" name="enrolmentperiod" size="3" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->">  year(s)
 				</td>
 			</tr>
 			<tr>
 				<td>Upperage limit</td>
 				<td>
-					<input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->">
+					<input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->">  years
 				</td>
 			</tr>
 			<tr>
 				<td>Age Required</td>
 				<td>
-					<input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="2">
+					<input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="2">  year(s)
 				</td>
 			</tr>
 			<tr>
@@ -173,19 +173,15 @@
 			</tr>
 			<tr>
 				<td>Enrollment period</td>
-				<td><!-- TMPL_VAR NAME="enrolmentperiod" --></td>
+				<td><!-- TMPL_VAR NAME="enrolmentperiod" -->  year(s)</td>
 			</tr>
 			<tr>
 				<td>Upperage limit</td>
-				<td><!-- TMPL_VAR NAME="upperagelimit" --></td>
+				<td><!-- TMPL_VAR NAME="upperagelimit" -->  years</td>
 			</tr>
 			<tr>
 				<td>Age Required</td>
-				<td><!-- TMPL_VAR NAME="dateofbirthrequired" --></td>
-			</tr>
-			<tr>
-				<td>Fine type</td>
-				<td><!-- TMPL_VAR NAME="finetype" --></td>
+				<td><!-- TMPL_VAR NAME="dateofbirthrequired" -->  year(s)</td>
 			</tr>
 			<tr>
 				<td>Enrollment fee</td>
@@ -196,16 +192,12 @@
 				<td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 			</tr>
 			<tr>
-				<td>Issue limit</td>
-				<td><!-- TMPL_VAR NAME="issuelimit" --></td>
-			</tr>
-			<tr>
 				<td>Reserve fee</td>
 				<td><!-- TMPL_VAR NAME="reservefee" --></td>
 			</tr>
 			<!-- TMPL_IF NAME="totalgtzero" -->
 			<tr>
-				<td colspan="2" align="center"><b>This record is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</b></td>
+				<td colspan="2" align="center" class="problem">This record is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</td>
 			</tr>
 		<tr>
 				<td colspan="2">
@@ -223,7 +215,7 @@
 				<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO"></form></td>
 			</tr>
 			<!-- /TMPL_IF -->
-
+	</table>
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="delete_confirmed" -->
