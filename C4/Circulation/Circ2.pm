@@ -63,7 +63,7 @@ Also deals with stocktaking.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&getpatroninformation
-	&currentissues &getissues &getiteminformation
+	&currentissues &getissues &getiteminformation &renewstatus
 	&canbookbeissued &issuebook &returnbook &find_reserves &transferbook &decode
 	&calc_charges &listitemsforinventory &itemseen &fixdate);
 
@@ -600,42 +600,42 @@ sub TooMany ($$){
 	my $sth = $dbh->prepare('select itemtype from biblioitems where biblionumber = ?');
 	$sth->execute($iteminformation->{'biblionumber'});
 	my $type = $sth->fetchrow;
-	warn "checking $branch_borrower / $cat_borrower / $type";
 	$sth = $dbh->prepare('select * from issuingrules where categorycode = ? and itemtype = ? and branchcode = ?');
 	my $sth2 = $dbh->prepare("select COUNT(*) from issues i, biblioitems s where i.borrowernumber = ? and i.returndate is null and i.itemnumber = s.biblioitemnumber and s.itemtype like ?");
 	my $sth3 = $dbh->prepare('select COUNT(*) from issues where borrowernumber = ? and returndate is null');
 	my $alreadyissued;
+	# check the 3 parameters
 	$sth->execute($cat_borrower, $type, $branch_borrower);
 	my $result = $sth->fetchrow_hashref;
-	warn "==>".$result->{maxissueqty};
+# 	warn "==>".$result->{maxissueqty};
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("A $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
-
-	$sth->execute($cat_borrower, $type, "*");
+	# check for branch=*
+	$sth->execute($cat_borrower, $type, "");
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("B $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
-
+	# check for itemtype=*
 	$sth->execute($cat_borrower, "*", $branch_borrower);
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth2->fetchrow;
-		return ("C $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
-
+	#check for borrowertype=*
 	$sth->execute("*", $type, $branch_borrower);
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("D $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
 	$sth->execute("*", "*", $branch_borrower);
@@ -643,31 +643,31 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth2->fetchrow;
-		return ("E $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
-	$sth->execute("*", $type, "*");
+	$sth->execute("*", $type, "");
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("F $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
-	$sth->execute($cat_borrower, "*", "*");
+	$sth->execute($cat_borrower, "*", "");
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("G $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
-	$sth->execute("*", "*", "*");
+	$sth->execute("*", "*", "");
 	my $result = $sth->fetchrow_hashref;
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth2->fetchrow;
-		return ("H $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	return;
 }
@@ -1427,10 +1427,8 @@ sub getissues {
 	my $dbh = C4::Context->dbh;
 	my $borrowernumber = $borrower->{'borrowernumber'};
 	my %currentissues;
-	my $select = "SELECT issues.timestamp      AS timestamp,
+	my $select = "SELECT items.*,issues.timestamp      AS timestamp,
 				issues.date_due       AS date_due,
-				items.biblionumber    AS biblionumber,
-				items.itemnumber    AS itemnumber,
 				items.barcode         AS barcode,
 				biblio.title          AS title,
 				biblio.author         AS author,
