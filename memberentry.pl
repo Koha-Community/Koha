@@ -177,7 +177,9 @@ printend
 ;
 
 my ($categories,$labels)=ethnicitycategories();
-print $input->popup_menu(-name=>'ethnicity',
+my $ethnicitycategoriescount=$#{$categories};
+if ($ethnicitycategoriescount>=0) {
+	print $input->popup_menu(-name=>'ethnicity',
 			        -values=>$categories,
 			        -default=>$data->{'ethnicity'},
 			        -labels=>$labels);
@@ -187,6 +189,9 @@ print <<printend
 <td> 
 printend
 ;
+} else {
+	print "</td><td colspan=2>&nbsp;</td><td>\n";
+}
 ($categories,$labels)=borrowercategories();
 print $input->popup_menu(-name=>'categorycode',
 			        -values=>$categories,
@@ -195,13 +200,21 @@ print $input->popup_menu(-name=>'categorycode',
 
 
 
+my $ethnicitylabels='';
+if ($ethnicitycategoriescount>=0) {
+	$ethnicitylabels=qq|
+<td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
+<td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
+|;
+} else {
+	$ethnicitylabels="<td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td>";
+}
 print <<printend
 
 </td>
 </tr>																																													
 <tr valign=top bgcolor=white>
-<td colspan=2><FONT SIZE=2>Ethnicity</FONT></td>
-<td colspan=2><FONT SIZE=2>Ethnicity Notes</FONT></td>
+$ethnicitylabels
 <td><FONT SIZE=2>Membership Category*</FONT></td>
 </tr>
 <tr><td>&nbsp; </TD></TR>
