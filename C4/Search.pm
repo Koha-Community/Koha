@@ -13,7 +13,7 @@ use Set::Scalar;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
   
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 0.02;
     
 @ISA = qw(Exporter);
 @EXPORT = qw(&CatSearch &BornameSearch &ItemInfo &KeywordSearch &subsearch
@@ -1169,8 +1169,33 @@ sub barcodes{
 }
 END { }       # module clean-up code here (global destructor)
 
+=head1 NAME
 
+C4::Search - Module that provides Catalog searching for Koha
 
+=head1 SYNOPSIS
 
+  use C4::Search;
+  my ($count,@results)=KeywordSearch($env,$type,$search,$num,$offset);
+  my ($count,@results)=CatSearch($env,$type,$search,$num,$offset);
 
+=head1 DESCRIPTION
 
+This module provides the searching facilities for the Catalog.
+Here I should go through and document each function thats exported and what it does. But I havent yet.
+
+=head2 EXPORT
+
+KeywordSearch
+CatSearch
+ItemInfo
+
+=head1 AUTHOR
+
+Koha Developement team <info@koha.org>
+
+=head1 SEE ALSO
+
+L<perl>.
+
+=cut
