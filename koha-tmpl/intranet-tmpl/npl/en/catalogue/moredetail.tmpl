@@ -40,13 +40,13 @@
 <div class="items">
 <table>
 <!-- TMPL_IF NAME="homebranch" --><tr><th>Home Branch:</th><td> <!-- TMPL_VAR NAME="homebranch" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="holdingbranch" --><tr><th>Current Branch:</th><td> <!-- TMPL_VAR NAME="holdingbranch" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="datelastseen" --><tr><th>Last seen:</th><td> <!-- TMPL_VAR NAME="datelastseen" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="issue" --><tr><th>On loan to:</th><td><!-- TMPL_VAR NAME="issue" --></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="timestamp0" --><tr><th>Last borrowed:</th><td> <!-- TMPL_VAR NAME="timestamp0" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="issue" --><tr><th>Item Status:</th><td> Due <!-- TMPL_VAR NAME="date_due" --> (Issued to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>)</td></tr><!-- TMPL_ELSE --><tr><th>Item Status</th><td>Available</td></tr><!-- /TMPL_IF -->
+<tr><th>Last borrowed:</th><td> <!-- TMPL_VAR NAME="datelastborrowed" --></td></tr>
 <!-- on issue bit -->
 <!-- TMPL_IF NAME="card0" --><tr><th>Last Borrower 1:</th><td> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="card0" -->"><!-- TMPL_VAR NAME="card0" --></a></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="card1" --><tr><th>Last Borrower 2:</th><td> <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="card1" -->"><!-- TMPL_VAR NAME="card1" --></a></td></tr><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="holdingbranch" --><tr><th>Current Branch:</th><td> <!-- TMPL_VAR NAME="holdingbranch" --></td></tr><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="replacementprice" --><tr><th>Replacement Price:</th><td> <!-- TMPL_VAR NAME="replacementprice" --></td></tr><!-- /TMPL_IF -->
 <tr><th><a href="/cgi-bin/koha/moditem.pl?bibitem=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Item lost:</a></th><td> <!-- TMPL_VAR NAME="itemlost" --></td></tr>
 <!-- TMPL_IF NAME="paidfor" --><tr><th>Paid for:</th><td> <!-- TMPL_VAR NAME="paidfor" --></td></tr><!-- /TMPL_IF -->
@@ -58,7 +58,7 @@ Date:</th><td><!-- TMPL_VAR NAME="dateaccessioned" --></td></tr><!-- /TMPL_IF --
 <!-- TMPL_IF NAME="wthdrawn" --><tr><th>Withdrawn: </th><td>Yes</td></tr><!-- /TMPL_IF -->
 <tr><th><a
 href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total
-Issues:</a></th><td>&nbsp; <!-- TMPL_VAR NAME="issues" --></td></tr>
+Issues:</a></th><td><!-- TMPL_VAR NAME="issues" --></td></tr>
 <tr><th>Group Number:</th><td> <!-- TMPL_VAR NAME="biblioitemnumber" --> </td></tr>
 <tr><th>Biblio number:</th><td> <!-- TMPL_VAR NAME="biblionumber" --> </td></tr>
 </table></form></div>
