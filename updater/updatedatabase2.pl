@@ -17,6 +17,7 @@ use C4::Database;
 use C4::Catalogue;
 use DBI;
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 
 sub droptable {

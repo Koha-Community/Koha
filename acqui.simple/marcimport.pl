@@ -18,6 +18,7 @@ use C4::Database;
 use C4::Acquisitions;
 use C4::Output;
 use C4::Input;
+use C4::Biblio;
 
 #------------------
 # Constants
@@ -529,7 +530,7 @@ EOF
 	    my $elapsed=time()-$starttimer;
 	    print "<hr>It took $elapsed seconds to process this page.\n";
 	    } else {
-		print "<b>No results found for query $id</b>/n";
+		print "<b>No results found for query $id</b>\n";
 	    } # if rows
 	} else {
 	    # This is an uploaded Marc record   

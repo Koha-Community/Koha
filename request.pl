@@ -9,6 +9,7 @@ use C4::Search;
 use C4::Output;
 use C4::Reserves2;
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Koha;
 
 use CGI;

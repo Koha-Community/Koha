@@ -4,6 +4,7 @@
 #written by chris@katipo.co.nz 24/2/2000
 
 use C4::Acquisitions;
+use C4::Biblio;
 use C4::Output;
 use C4::Search;
 use C4::Database;
