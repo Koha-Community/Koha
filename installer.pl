@@ -56,9 +56,9 @@ print "\nChecking perl modules ...\n";
 #
 my @missing = ();
 unless (eval require DBI)               { push @missing,"DBI" };
-unless (eval require Date::Manip)       { push @missing,"Datr::Manip" }
-unless (eval require DBD::mysql)        { push @missing,"DBD::mysql" }
-unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" }
+unless (eval require Date::Manip)       { push @missing,"Datr::Manip" };
+unless (eval require DBD::mysql)        { push @missing,"DBD::mysql" };
+unless (eval require Set::Scalar)       { push @missing,"Set::Scalar" };
 
 #
 # Print out a list of any missing modules
@@ -219,11 +219,29 @@ close(SITES);
 
 print "Successfully created the Koha configuration file.\n";
 
+print "\n";
+print "\n";
+my $apache_owner;
+print qq|
+The permissions on the koha.conf file should also be strict, 
+since they contain the database password.
+Please supply the username that your apache webserver runs under. 
+|;
+do {
+	print "Enter apache user:";
+	chomp($apache_owner = <STDIN>);
+};
 
+
+#
+# Set ownership of the koha.conf file for security
+# FIXME - this will only work if run as work.
+#
+
+chown((getpwnam($apache_owner)) [2,3], "$conf_path/koha.conf") or die "can't chown koha.conf: $!";
 
 print "\n";
 print "\n";
-
 
 #
 #SETUP opac
@@ -243,7 +261,7 @@ usually located in \"/usr/local/apache/conf/httpd.conf\".
 do {
 	print "Enter path:";
 	chomp($apache_conf_path = <STDIN>);
-	print "$conf_path is a valid file.\n" if !-f $apache_conf_path;
+	print "$conf_path is not a valid file.\n" if !-f $apache_conf_path;
 } until -f $apache_conf_path;
 
 
@@ -312,3 +330,7 @@ print "Successfully updated Apache Configuration file.\n";
 #
 print "\nCongratulations ... your Koha installation is complete!\n";
 print "\nYou will need to restart your webserver before using Koha!\n";
+
+#
+#Sub for chown of conf and cgi-bin dir
+#    
