@@ -22,12 +22,12 @@ You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="coun
 <TMPL_LOOP name="loop_suppliers">
 	<tr valign=top bgcolor=<TMPL_VAR name="color">>
 		<td>
-			<a href="basket.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<a href="basket.pl?id=<TMPL_VAR name=id>"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
+			<a href="recieveorder.pl?id=<TMPL_VAR name=id>"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="receive" ALT="Add" BORDER=0 ></a>
 		</td>
-		<td><a href="supplier.pl?id=<TMPL_VAR name="id">"><TMPL_VAR name="name"></a></td>
+		<td><a href="supplier.pl?id=<TMPL_VAR name=id>"><TMPL_VAR name="name"></a></td>
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=5 border=0>
 				<TMPL_LOOP name="loop_basket">
