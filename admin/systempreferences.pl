@@ -31,7 +31,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select variable,value from systempreferences where (variable like \"$data[0]%\") order by variable";
+	my $query="Select variable,value,explanation from systempreferences where (variable like \"$data[0]%\") order by variable";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -49,7 +49,7 @@ sub StringSearch  {
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $pkfield="variable";
-my $reqsel="select variable,value from systempreferences where $pkfield='$searchfield'";
+my $reqsel="select variable,value,explanation from systempreferences where $pkfield='$searchfield'";
 my $reqdel="delete from systempreferences where $pkfield='$searchfield'";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
@@ -70,7 +70,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = &C4Connect;
-		my $sth=$dbh->prepare("select variable,value from systempreferences where variable='$searchfield'");
+		my $sth=$dbh->prepare("select variable,value,explanation from systempreferences where variable='$searchfield'");
 		$sth->execute;
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -138,6 +138,7 @@ printend
 	}
 	print "<form action='$script_name' name=Aform method=post>";
 	print "<input type=hidden name=op value='add_validate'>";
+	print "<input type=hidden name=explanation value='".$data->{'explanation'}."'>";
 	print "<table>";
 	if ($searchfield) {
 		print "<tr><td>Variable</td><td><input type=hidden name=variable value='$searchfield'>$searchfield</td></tr>";
@@ -154,9 +155,10 @@ printend
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh=C4Connect;
-	my $query = "replace systempreferences (variable,value) values (";
+	my $query = "replace systempreferences (variable,value,explanation) values (";
 	$query.= $dbh->quote($input->param('variable')).",";
-	$query.= $dbh->quote($input->param('value')).")";
+	$query.= $dbh->quote($input->param('value')).",";
+	$query.= $dbh->quote($input->param('explanation')).")";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	$sth->finish;
@@ -200,18 +202,13 @@ printend
 	print mkheadr(2,'System preferences admin');
 	print mkformnotable("$script_name",@inputs);
 	print <<printend
-<b>Hints :</b>
-2 variables are useful in this table :
-<li><i>acquisitions</i>, which value may be "simple" or "normal"</li>
-<li><i>autoMemberNum</i> which may be 1 or 0</li>
-<br><br>
 printend
 	;
 	if  ($searchfield ne '') {
 		print "You Searched for <b>$searchfield<b><p>";
 	}
 	print mktablehdr;
-	print mktablerow(4,'#99cc33',bold('Variable'),bold('Value'),
+	print mktablerow(5,'#99cc33',bold('Variable'),bold('Value'),bold('Explanation'),
 	'&nbsp;','&nbsp;','/images/background-mem.gif');
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
@@ -222,7 +219,7 @@ printend
 	  	} else {
 	    		$toggle="white";
 	  	}
-		print mktablerow(4,$toggle,$results->[$i]{'variable'},$results->[$i]{'value'},
+		print mktablerow(5,$toggle,$results->[$i]{'variable'},$results->[$i]{'value'},$results->[$i]{'explanation'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'variable'},'Edit'),
 		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'variable'},'Delete',''));
 	}
