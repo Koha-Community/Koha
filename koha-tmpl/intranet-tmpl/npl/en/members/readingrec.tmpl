@@ -7,7 +7,8 @@
 <table>
 <caption>Reading Record for <a href="moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></caption>
 <!-- TMPL_IF NAME="showfulllink" -->
-<tr><td colspan="4"><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Full output</a></td></tr>
+<tr><td colspan="4"><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show Last 50 Items Only</a></td></tr><!-- TMPL_ELSE -->
+<tr><td colspan="4"><a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;limit=full">Show All Items</a></td></tr>
 <!-- /TMPL_IF --><tr>
 	<th>
 		<a href="readingrec.pl?bornum=<!-- TMPL_VAR name="bornum" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
