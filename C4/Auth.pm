@@ -24,7 +24,7 @@ sub checkauth {
     my $query=shift;
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired=shift;
-    if (my $userid=$ENV{'REMOTE_USERNAME'}) {
+    if (my $userid=$ENV{'REMOTE_USER'}) {
 	# Using Basic Authentication, no cookies required
 	my $cookie=$query->cookie(-name => 'sessionID',
 				  -value => '',
