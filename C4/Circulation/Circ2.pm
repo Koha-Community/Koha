@@ -1659,7 +1659,7 @@ sub renewbook {
 		my $iteminformation = getiteminformation($env, $itemno,0);
 		my $borrower = getpatroninformation($env,$bornum,0);
 		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
-		$datedue = UnixDate(DateCalc($iteminformation->{date_due},"$loanlength days"),"%Y-%m-%d");
+		$datedue = UnixDate(DateCalc("today","$loanlength days"),"%Y-%m-%d");
 	}
 
 	# Find the issues record for this book
