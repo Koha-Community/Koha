@@ -827,9 +827,9 @@ sub CatSearch  {
   my $dbh = &C4Connect;
   my $query = '';
   my @results;
-  $search->{'title'} = quotemeta($search->{'title'});
-  $search->{'author'} = quotemeta($search->{'author'});
-  $search->{'illustrator'} = quotemeta($search->{'illustrator'});
+  #$search->{'title'} = quotemeta($search->{'title'});
+  #$search->{'author'} = quotemeta($search->{'author'});
+  #$search->{'illustrator'} = quotemeta($search->{'illustrator'});
   my $title = lc($search->{'title'}); 
   
   if ($type eq 'loose') {
