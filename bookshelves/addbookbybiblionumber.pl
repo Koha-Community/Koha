@@ -51,7 +51,7 @@ if ($shelfnumber) {
 								flagsrequired => {catalogue => 1},
 							});
 
-	my ($shelflist) = GetShelfList();
+	my ($shelflist) = GetShelfList($loggedinuser,3);
 	my @shelvesloop;
 	my %shelvesloop;
 	foreach my $element (sort keys %$shelflist) {
@@ -74,6 +74,9 @@ if ($shelfnumber) {
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
 # $Log$
+# Revision 1.1.2.2  2004/03/10 15:08:18  tipaul
+# modifying shelves : introducing category of shelf : private, public, free for all
+#
 # Revision 1.1.2.1  2004/02/19 10:14:36  tipaul
 # new feature : adding book to bookshelf from biblio detail screen.
 #
