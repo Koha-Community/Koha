@@ -698,6 +698,75 @@ Press <ENTER> to continue...
 }
 
 
+print qq|
+
+SETTING UP Z39.50 DAEMON
+========================
+|;
+
+my $kohalog='/var/log/koha';
+print "Directory for logging by Z39.50 daemon [$kohalogdir]: ";
+chomp($input = <STDIN>);
+if ($input) {
+    $kohalogdir=$input;
+}
+
+unless (-e "$kohalogdir") {
+    my $result = mkdir 0770, "$kohalogdir"; 
+    if ($result==0) {
+        my @dirs = split(m#/#, $kohalogdir);
+	my $checkdir='';
+	foreach (@dirs) {
+	    $checkdir.="$_/";
+	    unless (-e "$checkdir") {
+		mkdir($checkdir, 0775);
+	    }
+	}
+    }
+}
+chmod 0770, $kohalogdir;
+chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
+
+# LAUNCH SCRIPT
+my $newfile='';
+open (L, "scripts/z3950-daemon-launch.sh");
+while (<L>) {
+    if (/^RunAsUser=/) {
+	$newfile.="RunAsUser=$httpduser\n";
+    } elsif (/^KohaZ3950Dir=/) {
+	$newfile.="KohaZ3950Dir=$kohadir/scripts/\n";
+    } else {
+	$newfile.=$_;
+    }
+}
+close L;
+system("mv scripts/z3950-daemon-launch.sh z3950-daemon-launch.sh.orig");
+open L, ">scripts/z3950-daemon-launch.sh";
+print L $newfile;
+close L;
+
+# SHELL SCRIPT
+$newfile='';
+open (S, "scripts/z3950-daemon-shell.sh");
+while (<S>) {
+    if (/^KohaModuleDir=/) {
+	$newfile.="KohaModuleDir=$kohadir/modules\n";
+    } elsif (/^KohaZ3950Dir=/) {
+	$newfile.="KohaZ3950Dir=$kohadir/scripts\n";
+    } elsif (/^LogDir=/) {
+	$newfile.="LogDir=$kohalogdir\n";
+    } else {
+	$newfile.=$_;
+    }
+}
+close S;
+
+system("mv scripts/z3950-daemon-shell.sh z3950-daemon-shell.sh.orig");
+open S, ">scripts/z3950-daemon-shell.sh";
+print S $newfile;
+close S;
+
+
 #RESTART APACHE
 print "\n\n";
 print qq|
