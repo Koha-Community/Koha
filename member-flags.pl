@@ -71,7 +71,7 @@ if ($input->param('newflags')) {
     </table>
 
     <p>
-    <input type=submit value="Set Password">
+    <input type=submit value="Set Flags">
     </form>
     |;
 
