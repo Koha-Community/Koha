@@ -1854,7 +1854,7 @@ INSERT INTO marc_subfield_structure VALUES ('852', 'g', 'Non-coded location qual
 INSERT INTO marc_subfield_structure VALUES ('852', 'h', 'Classification part (NR)', 'Classification part (NR)', 0, 0, 'biblioitems.classification', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'i', 'Item part (R)', 'Item part (R)', 1, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'j', 'Shelving control number (NR)', 'Shelving control number (NR)', 0, 0, '', -1, '', '', '');
-INSERT INTO marc_subfield_structure VALUES ('852', 'k', 'Call number prefix (NR)', 'Call number prefix (NR)', 0, 1, 'biblioitems.dewey', 0, 'itemtypes', '', '');
+INSERT INTO marc_subfield_structure VALUES ('852', 'k', 'Call number prefix (NR)', 'Call number prefix (NR)', 0, 1, 'biblioitems.dewey', 0, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'l', 'Shelving form of title (NR)', 'Shelving form of title (NR)', 0, 0, '', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'm', 'Call number suffix (NR)', 'Call number suffix (NR)', 0, 0, 'biblioitems.subclass', -1, '', '', '');
 INSERT INTO marc_subfield_structure VALUES ('852', 'n', 'Country code (NR)', 'Country code (NR)', 0, 0, '', -1, '', '', '');
