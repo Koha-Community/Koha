@@ -36,8 +36,8 @@ my ($loggedinuser, $sessioncookie, $sessionID) = checkauth($query);
 
 my %env;
 my $headerbackgroundcolor='#99cc33';
-my $circbackgroundcolor='#ffffcc';
-my $circbackgroundcolor='white';
+my $circbackgroundcolor='#ffffcc';	# FIXME - Never used
+my $circbackgroundcolor='white';	# FIXME - Never used
 my $linecolor1='#ffffcc';
 my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
@@ -72,8 +72,9 @@ $env{'printer'}=$printer;
 $env{'queue'}=$printer;
 
 my @datearr = localtime(time());
-my $tday = localtime(time());
-warn "today: $tday \n";
+my $tday = localtime(time());		# FIXME - Unused
+#warn "today: $tday \n";
+# FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", ($datearr[3]));
 #warn $todaysdate;
 
@@ -96,8 +97,8 @@ if ($findborrower) {
     }
 }
 
-my $borrowernumber = $query->param('borrnumber');    
-my $bornum = $query->param('borrnumber');    
+my $borrowernumber = $query->param('borrnumber');
+my $bornum = $query->param('borrnumber');
 # check and see if we should print
 my $print=$query->param('print');
 my $barcode = $query->param('barcode');
@@ -105,14 +106,14 @@ if ($barcode eq ''  && $print eq 'maybe'){
     $print = 'yes';
 }
 if ($print eq 'yes' && $borrowernumber ne ''){
-    printslip(\%env,$borrowernumber);    
+    printslip(\%env,$borrowernumber);
     $query->param('borrnumber','');
     $borrowernumber='';
 }
-    
 
 
-# get the currently issued books......
+
+# get the borrower information.....
 my $borrower;
 my $flags;
 if ($borrowernumber) {
@@ -131,29 +132,31 @@ if (my $qnumber = $query->param('questionnumber')) {
 }
 
 
-# if the barcode is set
+
 my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
 
 my $year=$query->param('year');
 my $month=$query->param('month');
 my $day=$query->param('day');
 
-
+# if the barcode is set
 if ($barcode) {
     $barcode = cuecatbarcodedecode($barcode);
     my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
-
 
     unless ($invalidduedate) {
 	$env{'datedue'}=$datedue;
 	my @time=localtime(time);
 	my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
-	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) 
+	($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message)
                      = issuebook(\%env, $borrower, $barcode, \%responses, $date);
     }
 }
 
-
+# reload the borrower info for the sake of reseting the flags.....
+if ($borrowernumber) {
+    ($borrower, $flags) = getpatroninformation(\%env,$borrowernumber,0);
+}
 
 
 ##################################################################################
@@ -208,7 +211,7 @@ my $title = <<"EOF";
 &nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
 <b>Printer:</b> $printers->{$printer}->{'printername'} <br>
 <a href=selectbranchprinter.pl>Change Settings</a></td>
 <input type=hidden name=branch value=$branch>
@@ -223,7 +226,7 @@ my $titlenoborrower = <<"EOF";
 &nbsp<a href=branchtransfers.pl><img src="/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
 </td></tr></table>
 <FONT SIZE=6><em>Circulation: Issues</em></FONT><br>
-<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp
 <b>Printer:</b> $printers->{$printer}->{'printername'} <br>
 <a href=selectbranchprinter.pl>Change Settings</a></td>
 <input type=hidden name=branch value=$branch>
@@ -255,9 +258,9 @@ if ($question) {
     $questionform = <<"EOF";
 <table border=1 cellpadding=5 cellspacing=0 bgcolor="#dddddd">
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage>
-<font color=black><b>Issuing Question</b></font></th></tr>
-<tr><td><table border=0 cellpadding=10><tr><td> 
-Attempting to issue $iteminformation->{'title'} 
+<font size=+2 color=red><b>Issuing Question</b></font></th></tr>
+<tr><td><table border=0 cellpadding=10><tr><td>
+Attempting to issue $iteminformation->{'title'}
 by $iteminformation->{'author'} to $borrower->{'firstname'} $borrower->{'surname'}.
 <p>
 $question
@@ -388,7 +391,6 @@ if ($message) {
 <tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Messages</font></th></tr>
 <tr><td> $message </td></tr></table>
 EOF
-
 }
 
 
@@ -415,7 +417,7 @@ if ($borrower) {
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
-	#this should be set with some kinda config variable	    
+	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
 	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
      	$datedue=~s/-//g;
@@ -431,12 +433,16 @@ if ($borrower) {
 <td bgcolor=$tcolor>$book->{'author'}</td>
 <td bgcolor=$tcolor align=center>$book->{'dewey'} $book->{'subclass'}</td></tr>
 EOF
-    } 
-    foreach my $book (sort {$a->{'due_date'} <=> $b->{'due_date'}} @previousissues){
+    }
+    # FIXME - For small and private libraries, it'd be nice if this
+    # table included a "Return" link next to each book, so that you
+    # don't have to remember the book's bar code and type it in on the
+    # "Returns" page.
+    foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	#convert to nz style dates
-	#this should be set with some kinda config variable	    
+	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
 	$dd="$tempdate[2]/$tempdate[1]/$tempdate[0]";
      	$datedue=~s/-//g;
@@ -558,8 +564,8 @@ sub cuecatbarcodedecode {
   	return $results[2];
     } else {
 	return $barcode;
-    } 
-} 
+    }
+}
 
 sub fixdate {
     my ($year, $month, $day) = @_;
@@ -623,13 +629,13 @@ sub patrontable {
 			($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
 			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
 			$itemswaiting.="<tr><td><font color=red>$iteminformation->{'date_due'}</font></td><td bgcolor=$color><a href=/cgi-bin/koha/detail.pl?bib=$iteminformation->{'biblionumber'}&type=intra onClick=\"openWindow(this, 'Item', 480, 640)\">$iteminformation->{'barcode'}</a></td><td>$iteminformation->{'title'}</td></tr>\n";
-		    }		    
+		    }
 		}
 		$itemswaiting.="</table>\n";
 		if ($query->param('module') ne 'returns'){
   		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}, See below</td></tr>\n";
 		} else {
-  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n"; 
+  		  $flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
 		}
 	    } else {
 		$flaginfotext.="<tr><td valign=top>$flag</td><td>$flags->{$flag}->{'message'}</td></tr>\n";
@@ -649,7 +655,7 @@ EOF
 }
 
 
-
+# FIXME - This clashes with &C4::Print::printslip
 sub printslip {
     my ($env,$borrowernumber)=@_;
     my ($borrower, $flags) = getpatroninformation($env,$borrowernumber,0);
@@ -661,18 +667,20 @@ sub printslip {
     $env->{'nottodaysissues'}=0;
     my $i=0;
     my @issues;
-    foreach (sort keys %$borrowerissues) {
+    foreach (sort {$a <=> $b} keys %$borrowerissues) {
 	$issues[$i]=$borrowerissues->{$_};
 	my $dd=$issues[$i]->{'date_due'};
+#	warn $_,$dd;
 	#convert to nz style dates
 	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
 	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
 	$i++;
     }
-    foreach (sort keys %$borroweriss2) {
+    foreach (sort {$a <=> $b} keys %$borroweriss2) {
 	$issues[$i]=$borroweriss2->{$_};
 	my $dd=$issues[$i]->{'date_due'};
+#	warn $_,$dd;
 	#convert to nz style dates
 	#this should be set with some kinda config variable
 	my @tempdate=split(/-/,$dd);
