@@ -1,7 +1,7 @@
 <HTML>
-<TMPL_IF name="refresh">
-	<meta http-equiv="refresh" content="2; url=<TMPL_VAR name="refresh">">
-</TMPL_IF>
+<!-- TMPL_IF name="refresh" -->
+	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR name="refresh" -->">
+<!-- /TMPL_IF -->
 <font size="6"><em>Z3950 Search Results</em></font><br />
 
 <table width="80%" cellpadding="3">
@@ -18,27 +18,27 @@
 		<td><b>&nbsp;</b></td>
 		<td>&nbsp;</td>
 	</tr>
-	<TMPL_IF name="breeding_loop">
-	<TMPL_LOOP name="breeding_loop">
-		<tr valign="top" bgcolor="<TMPL_VAR name="toggle">">
-			<td><TMPL_VAR name="title"></a>
-			<td><TMPL_VAR name="author"></td>
-			<td><TMPL_VAR name="isbn"></td>
-			<td><TMPL_VAR name="file"></td>
-			<td><a href="javascript:Import(<TMPL_VAR name="id">)">Import this biblio</a></td>
+	<!-- TMPL_IF name="breeding_loop" -->
+	<!-- TMPL_LOOP name="breeding_loop" -->
+		<tr valign="top" bgcolor="<!-- TMPL_VAR name="toggle" -->">
+			<td><!-- TMPL_VAR name="title" --></a>
+			<td><!-- TMPL_VAR name="author" --></td>
+			<td><!-- TMPL_VAR name="isbn" --></td>
+			<td><!-- TMPL_VAR name="file" --></td>
+			<td><a href="javascript:Import(<!-- TMPL_VAR name="id" -->)">Import this biblio</a></td>
 		</tr>
-	</TMPL_LOOP>
-	<TMPL_ELSE>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
 		<tr><td colspan=6>Nothing found</td></tr>
-	</TMPL_IF>
+	<!-- /TMPL_IF -->
 </table>
-<TMPL_IF name="numberpending"><H1><center>Still <TMPL_VAR name="numberpending"> requests to go</center></H1></TMPL_IF>
+<!-- TMPL_IF name="numberpending" --><H1><center>Still <!-- TMPL_VAR name="numberpending" --> requests to go</center></H1><!-- /TMPL_IF -->
 <br />
 <script>
 	function Import(GetThisOne) {
-		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<TMPL_VAR name="oldbiblionumber">&breedingid="+GetThisOne;
+		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR name="oldbiblionumber" -->&breedingid="+GetThisOne;
 		self.close();
 		return false;
 	}
 </script>
-<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
