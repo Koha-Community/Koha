@@ -87,6 +87,8 @@ $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 my @bordat;
 $bordat[0] = $borr;
 
-$template->param(BORROWER_INFO => \@bordat);
+$template->param(BORROWER_INFO => \@bordat,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

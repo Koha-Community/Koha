@@ -30,7 +30,9 @@ $borr->{'dateofbirth'}  = format_date($borr->{'dateofbirth'});
 $borr->{'ethnicity'}    = fixEthnicity($borr->{'ethnicity'});
 
 
-$template->param($borr);
+$template->param($borr,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

@@ -122,6 +122,8 @@ if ($count>$number_of_results) {
     }
 }
 
-$template->param(numbers => $numbers);
+$template->param(numbers => $numbers,
+			     LibraryName => C4::Context->preference("LibraryName"),
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
