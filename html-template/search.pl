@@ -75,6 +75,11 @@ my $branch=$query->param('branch');
 $search{'branch'}=$branch;
 my $title=$query->param('title');
 $search{'title'}=$title;
+my $abstract=$query->param('abstract');
+$search{'abstract'}=$abstract;
+my $publisher=$query->param('publisher');
+$search{'publisher'}=$publisher;
+
 my $ttype=$query->param('ttype');
 $search{'ttype'}=$ttype;
 
@@ -91,12 +96,14 @@ my $forminputs;
 ($branch) && (push @$forminputs, { line => "branch=$branch"});
 ($title) && (push @$forminputs, { line => "title=$title"});
 ($ttype) && (push @$forminputs, { line => "ttype=$ttype"});
+($abstract) && (push @$forminputs, { line => "abstract=$abstract"});
+($publisher) && (push @$forminputs, { line => "publisher=$publisher"});
 $template->param(FORMINPUTS => $forminputs);
 # whats this for?
 # I think it is (or was) a search from the "front" page...   [st]
 $search{'front'}=$query->param('front');
 
-my $num=20;
+my $num=10;
 my ($count,@results)=catalogsearch($env,'',\%search,$num,$startfrom);
 
 my $resultsarray=\@results;
@@ -124,10 +131,10 @@ $search.="&ttype=$ttype";
 
 $search=~ s/ /%20/g;
 $template->param(startfrom => $startfrom+1);
-$template->param(endat => $startfrom+20);
+$template->param(endat => $startfrom+$num);
 $template->param(numrecords => $count);
-my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
-my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
+my $nextstartfrom=($startfrom+$num<$count-$num) ? ($startfrom+$num) : ($count-$num);
+my $prevstartfrom=($startfrom-$num>0) ? ($startfrom-$num) : (0);
 $template->param(nextstartfrom => $nextstartfrom);
 $template->param(prevstartfrom => $prevstartfrom);
 $template->param(search => $search);
