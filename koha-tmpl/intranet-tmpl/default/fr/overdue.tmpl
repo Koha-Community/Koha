@@ -1,0 +1,38 @@
+<HTML>
+
+<!-- startmenu -->
+<TMPL_VAR NAME="startmenureport">
+
+<!-- the site --> <FONT SIZE=6><em>Documents en retard au <TMPL_VAR NAME="todaysdate"></em></FONT><br>
+<P>
+
+<TABLE  cellspacing=0 cellpadding=5 border=1 align=center>
+  <TR VALIGN=TOP>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Date de retour</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Lecteur</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>T&eacute;l&eacute;phone</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Titre</b></td>
+    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Auteur</b></td>
+  </tr>
+
+  <TMPL_LOOP NAME=overdueloop>
+    <tr>
+      <td><TMPL_VAR NAME="duedate"></td>
+    <TMPL_IF NAME=email>
+      <td><a href="mailto:<TMPL_VAR NAME="email">?subject=Overdue: <TMPL_VAR NAME="title">"><TMPL_VAR NAME="name"></a></td>
+    <TMPL_ELSE>
+      <td><TMPL_VAR NAME="name"></td>
+    </TMPL_IF>
+      <td><TMPL_VAR NAME="phone"></td>
+      <td><TMPL_VAR NAME="title"></td>
+      <td><TMPL_VAR NAME="author"></td>
+    </tr>
+  </TMPL_LOOP>
+</table>
+
+
+<!-- endmenu -->
+<TMPL_VAR NAME="endmenureport">
+
+</body>
+</HTML>

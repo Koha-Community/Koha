@@ -1,0 +1,32 @@
+<TMPL_INCLUDE Name="members-top.inc">
+
+<Center>
+  <h3>Cr&eacute;dit manuel</h3>
+</center>
+<form action=/cgi-bin/koha/mancredit.pl method=post>
+<table cellpadding=2 cellspacing=0 border=0>
+<input type=hidden name="bornum" value="<TMPL_VAR Name="bornum">">
+<tr>
+	  <td><b>Num&eacute;ro de lecteur<b></b></b></td>
+	  <td><TMPL_VAR Name="bornum"></td></tr>
+<tr>
+	  <td><b>Type de cr&eacute;dit</b></td>
+	  <Td>
+<select name=type>
+<option value=C>Cr&eacute;dit</option>
+<option value=BAY>Baycorp Adjustment</option>
+<option value=WORK>Worked off</option>
+</select>
+</td></tr>
+<tr>
+	  <td><b>Num&eacute;ro de document</b></td>
+	  <td><input type=text name=itemnum></td></tr>
+<tr><td><b>Description</b></td><td><input type=text name=desc size=50></td></tr>
+<tr>
+	  <td><b>Montant</b></td>
+	  <td><input type=text name=amount></td></tr>
+<tr><td><input type=submit name=add value=Ajouter></td></tr>
+</table>
+</form>
+
+<TMPL_INCLUDE Name="members-bottom.inc">

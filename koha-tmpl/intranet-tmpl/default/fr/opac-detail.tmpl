@@ -1,0 +1,65 @@
+
+
+<TMPL_LOOP NAME="BIBLIO_RESULTS">
+<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
+<TMPL_VAR NAME="class"></em></font><p>
+<!-- FIXME - "callpadding" should be "cellpadding", right? -->
+<table cellspacing="0" callpadding="5" border="1" align="left" width="220">
+<!-----------------BIBLIO RECORD TABLE--------->
+<tr valign="top">
+
+<td bgcolor="#99cccc">
+<b>NOTICE</b>
+
+<TMPL_VAR NAME="biblionumber">
+</td>
+</tr>
+<tr valign="top">
+<td>
+<FONT SIZE=2  face="arial, helvetica">
+<b>Sous-titre:</b> <TMPL_VAR NAME="subtitle"><br>
+<b>Auteur:</b> <TMPL_VAR NAME="author"><br>
+<b>Sujet:</b> <TMPL_VAR NAME="subject"><br>
+<b>Ann&eacute;e:</b> <TMPL_VAR NAME="copyrightdate"><br>
+<b>Nombre d'exemplaires:</b> <TMPL_VAR NAME="count">
+<p>
+</font></td>
+</tr>
+</table>
+</TMPL_LOOP>
+<center>
+<table border=0 cellspacing=0 cellpadding=2>
+<tr bgcolor="#99cccc">
+<td>Type de document</td>
+<td>Cat&eacute;gorie</td>
+<td>Localisation</td>
+<td>Date de retour</td>
+<td>Derni&egrave;re transaction</td>
+<td>Code barres</td>
+</tr>
+<TMPL_LOOP NAME="ITEM_RESULTS">
+<tr>
+<td><TMPL_VAR NAME="itemtype"></td>
+<td><TMPL_VAR NAME="class"></td>
+<td><TMPL_VAR NAME="branchname"></td>
+<td><TMPL_VAR NAME="datedue"></td>
+<td><TMPL_VAR NAME="datelastseen"></td>
+<td><TMPL_VAR NAME="barcode"></td>
+</tr>
+</TMPL_LOOP>
+<TMPL_LOOP NAME="WEB_RESULTS">
+<tr>
+<td><TMPL_VAR NAME="itemtype"></td>
+<td>Site web</td>
+<td>En ligne</td>
+<td>Disponible</td>
+<td></td>
+<td><TMPL_VAR NAME="url"></td>
+</tr>
+</TMPL_LOOP>
+</table>
+<p>
+</center>
+<br clear=all>
+<p />&nbsp;       
+<TMPL_INCLUDE NAME="opac-bottom.inc">

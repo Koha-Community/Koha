@@ -1,0 +1,46 @@
+<TMPL_INCLUDE Name="reports-top.inc">
+<CENTER>
+<br>
+<FONT SIZE=6><em>
+<a href=/cgi-bin/koha/detail.pl?bib=><TMPL_VAR Name="bib">&type="intra"> <TMPL_VAR Name="title"> (<TMPL_VAR Name="author">)
+</a></em></FONT>
+<p>
+<img src="/images/holder.gif" width=16 height=200 align=left>
+
+<TABLE CELLSPACING=0 CELLPADDING=5 border=1 width=440 >
+	<TR VALIGN=TOP>
+		
+	  <TD bgcolor="99cc33" background="/images/background-mem.gif"> <B>CODE BARRES<TMPL_VAR Name="barcode"></B> 
+	  </TD>
+	</TR>
+	<TR VALIGN=TOP  >
+		<TD>
+
+		<b>Site d'origine :</b> <TMPL_VAR Name="homebranch"> <br>
+		<b>Site actuel :</b> <TMPL_VAR Name="holdingbranch"><br>
+		<b>Date d'arriv&eacute;e sur le site actuel :</b> <TMPL_VAR Name="lastdate"> 
+		<br>
+		<b>Nombre de sortie depuis cette date :</b> <TMPL_VAR Name="count"> <br>
+
+		<table cellspacing =0 cellpadding=5 border=1 width = 440>
+			<TR>
+				
+			<TD> <b>Site</b></td>
+				
+			<TD> <b>Nombre de sorties</b></td>
+				
+			<TD> <b>Derni&egrave;re apparition sur le site</b></td>
+			</TR>
+			<TMPL_LOOP Name="branchloop">
+				<TR>
+					<TD> <b> <TMPL_VAR Name="branchname"> </b></td>
+					<TD> <b> <TMPL_VAR Name="issues"> </b></td>
+					<TD> <b> <TMPL_VAR Name="seen"> </b></td>
+				</TR>
+			</TMPL_LOOP>
+		</table>
+		</TD>
+	</TR>
+</table>
+
+<TMPL_INCLUDE Name="reports-bottom.inc"></center>

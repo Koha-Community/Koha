@@ -1,0 +1,33 @@
+<HTML>
+
+<TMPL_VAR NAME=startmenuissue>
+
+<p> Chaque champ doit &ecirc;tre rempli avec le montant de l'amende, le d&eacute;lai 
+  et le cycle<br>
+  (par ex. 1,7,7 = &euro; 1.- d'amende, apr&egrave;s 7 jours, tous les 7 jours). 
+<p>
+
+<table>
+  <tr bgcolor="white">
+    <TMPL_LOOP NAME=firstrowloop>
+      <td><TMPL_VAR NAME=description></td>
+    </TMPL_LOOP>
+  </tr>
+  <form action=/cgi-bin/koha/updatecharges.pl method=post>
+  <TMPL_LOOP NAME=tablebodyloop>
+    <tr bgcolor="whitw">
+      <td><TMPL_VAR NAME=description></td>
+      <TMPL_LOOP NAME=rowloop>
+        <td><input type=text name="<TMPL_VAR NAME=name>" value="<TMPL_VAR NAME=value>" size=6></td>
+      </TMPL_LOOP>
+    </tr>
+  </TMPL_LOOP>
+</form></table>
+
+<input type=submit value="Envoyer">
+
+
+<TMPL_VAR NAME=endmenuissue>
+
+</body>
+</HTML>
