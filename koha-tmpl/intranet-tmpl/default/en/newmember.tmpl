@@ -237,12 +237,6 @@
 			</TMPL_LOOP>
 			<input type=submit name=submit value=Submit>
 		</form>
-		<form action="/cgi-bin/koha/memberentry.pl" method=post>
-			<TMPL_LOOP NAME=inputsloop>
-				<input type=hidden name="<TMPL_VAR NAME="key">" value="<TMPL_VAR NAME="value">">
-			</TMPL_LOOP>
-			<input type=submit name=return value="Go Back">
-		</form>
 <TMPL_ELSE>
 	<TMPL_VAR Name="string">
 </TMPL_IF>
