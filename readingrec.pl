@@ -29,6 +29,7 @@ use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use HTML::Template;
+use C4::Date;
 my $input=new CGI;
 
 
@@ -61,11 +62,15 @@ my @loop_reading;
 
 for (my $i=0;$i<$count;$i++){
  	my %line;
+	if($i%2){
+		$line{'toggle'} = 1;
+	}
 	$line{biblionumber}=$issues->[$i]->{'biblionumber'};
 	$line{title}=$issues->[$i]->{'title'};
 	$line{author}=$issues->[$i]->{'author'};
-	$line{date_due}=$issues->[$i]->{'date_due'};
-	$line{returndate}=$issues->[$i]->{'returndate'};
+	$line{classification} = $issues->[$i]->{'classification'};
+	$line{date_due}=format_date($issues->[$i]->{'date_due'});
+	$line{returndate}=format_date($issues->[$i]->{'returndate'});
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
 	push(@loop_reading,\%line);
 }
