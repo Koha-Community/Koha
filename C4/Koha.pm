@@ -59,7 +59,7 @@ Koha.pm provides many functions for Koha scripts.
 			&getprinters &getprinter
 			&getitemtypes &getitemtypeinfo
 			&getframeworks &getframeworkinfo
-			&getauthtypes
+			&getauthtypes &getauthtype
 			$DEBUG);
 
 use vars qw();
@@ -320,6 +320,17 @@ sub getauthtypes {
 			$authtypes{$IT->{'authtypecode'}}=$IT;
 	}
 	return (\%authtypes);
+}
+
+sub getauthtype {
+	my ($authtypecode) = @_;
+# returns a reference to a hash of references to authtypes...
+	my %authtypes;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
+	$sth->execute($authtypecode);
+	my $res=$sth->fetchrow_hashref;
+	return $res;
 }
 
 =head2 getframework

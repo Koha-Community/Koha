@@ -73,6 +73,10 @@ function Check(f) {
 				<label class="label100">Description</label>
 				<input type=text name="authtypetext" size=40 maxlength=80 value='<!-- TMPL_VAR name="authtypetext" escape=HTML -->'>
 			</p>
+			<p>
+				<label class="label100">Summary</label>
+				<textarea name="summary" cols="40" rows="10"><!-- TMPL_VAR name="summary" --></textarea>
+			</p>
 			<p><label class="label100">Report tag</label>
 				<input type="text" name="auth_tag_to_report" size=5 maxlength=3 value="<!-- TMPL_VAR name="auth_tag_to_report">">
 				Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</p>
@@ -112,6 +116,7 @@ function Check(f) {
 	<tr>
 		<th class="parameters">Code</th>
 		<th class="parameters">Description</th>
+		<th class="parameters">summary</th>
 		<th class="parameters">Tag reported</th>
 		<th class="parameters">&nbsp;</th>
 		<th class="parameters">Edit</th>
@@ -120,6 +125,7 @@ function Check(f) {
 	<tr>
 		<td>&nbsp;</td>
 		<td>Default framework</td>
+		<td>&nbsp;</td>
 		<td>&nbsp;</td>
 		<td><a href="auth_tag_structure.pl" class="button parameters">MARC structure</td>
 		<td>&nbsp;</td>
@@ -130,6 +136,7 @@ function Check(f) {
 		<tr>
 			<td><!-- TMPL_VAR name="authtypecode" --></td>
 			<td><!-- TMPL_VAR name="authtypetext" --></td>
+			<td><!-- TMPL_VAR name="summary" --></td>
 			<td><!-- TMPL_VAR name="auth_tag_to_report" --></td>
 			<td><a href="auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR name="authtypecode" -->" class="button parameters" >MARC structure</a></td>
 			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&authtypecode=<!-- TMPL_VAR name="authtypecode" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>

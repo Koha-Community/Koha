@@ -20,6 +20,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Database;
+use C4::Koha;
 use MARC::Record;
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -30,14 +31,16 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT = qw(
 	&AUTHgettagslib
-	&MARCfindsubfield
-	&MARCfind_frameworkcode
+	&AUTHfindsubfield
+	&AUTHfind_authtypecode
 
 	&AUTHaddauthority
 	&AUTHmodauthority
 	&AUTHdelauthority
 	&AUTHaddsubfield
 	&AUTHgetauthority
+	
+	&authoritysearch
 	
 	&MARCmodsubfield
 	&AUTHhtml2marc
@@ -46,12 +49,209 @@ $VERSION = 0.01;
 	&char_decode
  );
 
+sub authoritysearch {
+	my ($dbh, $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode) = @_;
+	# build the sql request. She will look like :
+	# select m1.bibid
+	#		from auth_subfield_table as m1, auth_subfield_table as m2
+	#		where m1.authid=m2.authid and
+	#		(m1.subfieldvalue like "Des%" and m2.subfieldvalue like "27%")
+
+	# "Normal" statements
+	my @normal_tags = ();
+	my @normal_and_or = ();
+	my @normal_operator = ();
+	my @normal_value = ();
+	# Extracts the NOT statements from the list of statements
+	for(my $i = 0 ; $i <= $#{$value} ; $i++)
+	{
+		if(@$operator[$i] eq "contains") # if operator is contains, splits the words in separate requests
+		{
+			foreach my $word (split(/ /, @$value[$i]))
+			{
+				unless (C4::Context->stopwords->{uc($word)}) {	#it's NOT a stopword => use it. Otherwise, ignore
+					my $tag = substr(@$tags[$i],0,3);
+					my $subf = substr(@$tags[$i],3,1);
+					push @normal_tags, @$tags[$i];
+					push @normal_and_or, "and";	# assumes "foo" and "bar" if "foo bar" is entered
+					push @normal_operator, @$operator[$i];
+					push @normal_value, $word;
+				}
+			}
+		}
+		else
+		{
+			push @normal_tags, @$tags[$i];
+			push @normal_and_or, @$and_or[$i];
+			push @normal_operator, @$operator[$i];
+			push @normal_value, @$value[$i];
+		}
+	}
+
+	# Finds the basic results without the NOT requests
+	my ($sql_tables, $sql_where1, $sql_where2) = create_request($dbh,\@normal_tags, \@normal_and_or, \@normal_operator, \@normal_value);
+
+	my $sth;
+	if ($sql_where2) {
+		$sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)");
+		warn "Q2 : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where2 and ($sql_where1)";
+	} else {
+		$sth = $dbh->prepare("select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where1");
+		warn "Q : select distinct m1.authid from auth_header,$sql_tables where  m1.authid=auth_header.authid and auth_header.authtypecode=? and $sql_where1";
+	}
+	$sth->execute($authtypecode);
+	my @result = ();
+
+	while (my ($authid) = $sth->fetchrow) {
+			warn "AUTH: $authid";
+			push @result,$authid;
+		}
+
+	# we have authid list. Now, loads summary from [offset] to [offset]+[length]
+	my $counter = $offset;
+	my @finalresult = ();
+	my $oldline;
+	while (($counter <= $#result) && ($counter <= ($offset + $length))) {
+		warn "HERE";
+		# get MARC::Record of the authority
+		my $record = AUTHgetauthority($dbh,$result[$counter]);
+		# then build the summary
+		my $authtypecode = AUTHfind_authtypecode($dbh,$result[$counter]);
+		my $authref = getauthtype($authtypecode);
+		my $summary = $authref->{summary};
+		my @fields = $record->fields();
+		foreach my $field (@fields) {
+			my $tag = $field->tag();
+			if ($tag<10) {
+			} else {
+				my @subf = $field->subfields;
+				for my $i (0..$#subf) {
+					my $subfieldcode = $subf[$i][0];
+					my $subfieldvalue = $subf[$i][1];
+					my $tagsubf = $tag.$subfieldcode;
+					$summary =~ s/\[(.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue\[$1$tagsubf$2]$2$3/g;
+				}
+			}
+		}
+		$summary =~ s/\[(.*?)]//g;
+		$summary =~ s/\n/<br>/g;
+		# then add a line for the template loop
+		my %newline;
+		$newline{summary} = $summary;
+		$newline{authid} = $result[$counter];
+		push @finalresult, \%newline;
+		my $nbresults = $#result + 1;
+		return (\@finalresult, $nbresults);
+	}
+}
+
+# Creates the SQL Request
+
+sub create_request {
+	my ($dbh,$tags, $and_or, $operator, $value) = @_;
+
+	my $sql_tables; # will contain marc_subfield_table as m1,...
+	my $sql_where1; # will contain the "true" where
+	my $sql_where2 = "("; # will contain m1.authid=m2.authid
+	my $nb_active=0; # will contain the number of "active" entries. and entry is active is a value is provided.
+	my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
+
+	for(my $i=0; $i<=@$value;$i++) {
+		if (@$value[$i]) {
+			$nb_active++;
+			if ($nb_active==1) {
+				if (@$operator[$i] eq "start") {
+					$sql_tables .= "auth_subfield_table as m$nb_table,";
+					$sql_where1 .= "(m1.subfieldvalue like ".$dbh->quote("@$value[$i]%");
+					if (@$tags[$i]) {
+						$sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
+					}
+					$sql_where1.=")";
+				} elsif (@$operator[$i] eq "contains") {
+					$sql_tables .= "auth_word as m$nb_table,";
+					$sql_where1 .= "(m1.word  like ".$dbh->quote("@$value[$i]%");
+					if (@$tags[$i]) {
+						 $sql_where1 .=" and m1.tag+m1.subfieldid in (@$tags[$i])";
+					}
+					$sql_where1.=")";
+				} else {
+					$sql_tables .= "auth_subfield_table as m$nb_table,";
+					$sql_where1 .= "(m1.subfieldvalue @$operator[$i] ".$dbh->quote("@$value[$i]");
+					if (@$tags[$i]) {
+						 $sql_where1 .=" and m1.tag+m1.subfieldcode in (@$tags[$i])";
+					}
+					$sql_where1.=")";
+				}
+			} else {
+				if (@$operator[$i] eq "start") {
+					$nb_table++;
+					$sql_tables .= "auth_subfield_table as m$nb_table,";
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue like ".$dbh->quote("@$value[$i]%");
+					if (@$tags[$i]) {
+					 	$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
+					}
+					$sql_where1.=")";
+					$sql_where2 .= "m1.authid=m$nb_table.authid and ";
+				} elsif (@$operator[$i] eq "contains") {
+					if (@$and_or[$i] eq 'and') {
+						$nb_table++;
+						$sql_tables .= "auth_word as m$nb_table,";
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
+						if (@$tags[$i]) {
+							$sql_where1 .=" and m$nb_table.tag+m$nb_table.subfieldid in(@$tags[$i])";
+						}
+						$sql_where1.=")";
+						$sql_where2 .= "m1.authid=m$nb_table.authid and ";
+					} else {
+						$sql_where1 .= "@$and_or[$i] (m$nb_table.word like ".$dbh->quote("@$value[$i]%");
+						if (@$tags[$i]) {
+							$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldid in (@$tags[$i])";
+						}
+						$sql_where1.=")";
+						$sql_where2 .= "m1.authid=m$nb_table.authid and ";
+					}
+				} else {
+					$nb_table++;
+					$sql_tables .= "auth_subfield_table as m$nb_table,";
+					$sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue @$operator[$i] ".$dbh->quote(@$value[$i]);
+					if (@$tags[$i]) {
+					 	$sql_where1 .="  and m$nb_table.tag+m$nb_table.subfieldcode in (@$tags[$i])";
+					}
+					$sql_where2 .= "m1.authid=m$nb_table.authid and ";
+					$sql_where1.=")";
+				}
+			}
+		}
+	}
+
+	if($sql_where2 ne "(")	# some datas added to sql_where2, processing
+	{
+		$sql_where2 = substr($sql_where2, 0, (length($sql_where2)-5)); # deletes the trailing ' and '
+		$sql_where2 .= ")";
+	}
+	else	# no sql_where2 statement, deleting '('
+	{
+		$sql_where2 = "";
+	}
+	chop $sql_tables;	# deletes the trailing ','
+	return ($sql_tables, $sql_where1, $sql_where2);
+}
+
+
+sub AUTHfind_authtypecode {
+	my ($dbh,$authid) = @_;
+	my $sth = $dbh->prepare("select authtypecode from auth_header where authid=?");
+	$sth->execute($authid);
+	my ($authtypecode) = $sth->fetchrow;
+	return $authtypecode;
+}
  
+
 sub AUTHgettagslib {
 	my ($dbh,$forlibrarian,$authtypecode)= @_;
-	warn "AUTH : $authtypecode";
+# 	warn "AUTH : $authtypecode";
 	$authtypecode="" unless $authtypecode;
-	warn "AUTH : $authtypecode";
+# 	warn "AUTH : $authtypecode";
 	my $sth;
 	my $libfield = ($forlibrarian eq 1)? 'liblibrarian' : 'libopac';
 	# check that framework exists
@@ -171,7 +371,7 @@ sub AUTHgetauthority {
     my $record = MARC::Record->new();
 #---- TODO : the leader is missing
 	$record->leader('                        ');
-    my $sth=$dbh->prepare("select authid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
+    my $sth=$dbh->prepare("select authid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue
 		 		 from auth_subfield_table
 		 		 where authid=? order by tag,tagorder,subfieldcode
 		 	 ");
@@ -558,6 +758,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.2  2004/06/10 08:29:01  tipaul
+# MARC authority management (continued)
+#
 # Revision 1.1  2004/06/07 07:35:01  tipaul
 # MARC authority management package
 #

@@ -172,6 +172,7 @@ sub build_tabs ($$$$) {
 	my @loop_data = ();
 	foreach my $tag (sort(keys (%{$tagslib}))) {
 		my $indicator;
+# 		warn "TAG : $tag => ".$tagslib->{$tag}->{lib}."//";
 # if MARC::Record is not empty => use it as master loop, then add missing subfields that should be in the tab.
 # if MARC::Record is empty => use tab as master loop.
 		if ($record ne -1 && $record->field($tag)) {
@@ -285,9 +286,11 @@ my $error = $input->param('error');
 my $authid=$input->param('authid'); # if authid exists, it's a modif, not a new authority.
 my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
+# warn "OP : $op";
 my $authtypecode = $input->param('authtypecode');
 my $dbh = C4::Context->dbh;
 $authtypecode = &AUTHfind_authtypecode($dbh,$authid) if $authid;
+# warn "authtypecode : $authtypecode && authid = $authid";
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "authorities/authorities.tmpl",
 			     query => $input,
@@ -300,11 +303,11 @@ my ($template, $loggedinuser, $cookie)
 $tagslib = AUTHgettagslib($dbh,1,$authtypecode);
 my $record=-1;
 my $encoding="";
-$record = AUTHgetauth($dbh,$authid) if ($authid);
+$record = AUTHgetauthority($dbh,$authid) if ($authid);
 
 $is_a_modif=0;
-my ($oldbiblionumtagfield,$oldbiblionumtagsubfield);
-my ($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield,$bibitem,$oldbiblioitemnumber);
+# my ($oldbiblionumtagfield,$oldbiblionumtagsubfield);
+# my ($oldbiblioitemnumtagfield,$oldbiblioitemnumtagsubfield,$bibitem,$oldbiblioitemnumber);
 if ($authid) {
 	$is_a_modif=1;
 	# if it's a modif, retrieve old biblio and bibitem numbers for the future modification of old-DB.
@@ -331,6 +334,7 @@ if ($op eq "add") {
 	}
 	my $record = AUTHhtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record built => now, record in DB
+	warn "IN ADD : ".$record->as_formatted();
 	if ($is_a_modif) {
 		 AUTHmodauthority($dbh,$record,$authid,$authtypecode);
 	} else {
@@ -384,30 +388,40 @@ if ($op eq "add") {
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
-		authid                       => $authid,
-		oldbiblionumtagfield        => $oldbiblionumtagfield,
-		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
-		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
-		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
-		oldbiblioitemnumber         => $oldbiblioitemnumber );
+		authid                       => $authid,);
+# 		oldbiblionumtagfield        => $oldbiblionumtagfield,
+# 		oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
+# 		oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
+# 		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
+# 		oldbiblioitemnumber         => $oldbiblioitemnumber );
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
 	&AUTHdelauthority($dbh,$authid);
 }
-#------------------------------------------------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------------------------------------------
-# MAIN
-#------------------------------------------------------------------------------------------------------------------------------
+
 build_tabs ($template, $record, $dbh,$encoding);
 build_hidden_data;
 $template->param(
 	authid                       => $authid,
-	oldbiblionumtagfield        => $oldbiblionumtagfield,
-	oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
-	oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
-	oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
-	oldbiblioitemnumber         => $oldbiblioitemnumber );
-$template->param(
-		authtypecode => $authtypecode,
-		);
+# 	oldbiblionumtagfield        => $oldbiblionumtagfield,
+# 	oldbiblionumtagsubfield     => $oldbiblionumtagsubfield,
+# 	oldbiblioitemnumtagfield    => $oldbiblioitemnumtagfield,
+# # 	oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
+# 	oldbiblioitemnumber         => $oldbiblioitemnumber,
+	authtypecode => $authtypecode,
+	);
+
+	my $authtypes = getauthtypes;
+my @authtypesloop;
+foreach my $thisauthtype (keys %$authtypes) {
+	my $selected = 1 if $thisauthtype eq $authtypecode;
+	my %row =(value => $thisauthtype,
+				selected => $selected,
+				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+			);
+	warn "X = $authtypes->{$thisauthtype}{'authtypetext'}";
+	push @authtypesloop, \%row;
+}
+
+$template->param(authtypesloop => \@authtypesloop);
 output_html_with_http_headers $input, $cookie, $template->output;

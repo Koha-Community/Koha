@@ -1,4 +1,4 @@
-    <!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+    <!-- TMPL_INCLUDE NAME="popup-top.inc" -->
 <div id="mainbloc">
 
 <h1 class="authority">Authority search</h1>
@@ -11,7 +11,7 @@
 		<h2 class="authority">Search on</h2>
 		<p>
 			<label class="label100">Authority type</label>
-			<select name="authtypecode">
+			<select name="authtype">
 			<!-- TMPL_LOOP name="authtypesloop" -->
 				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
 					<!-- TMPL_VAR name="authtypetext" -->
@@ -33,5 +33,5 @@
 	</div>
 </form>
 </div>
-<!-- TMPL_INCLUDE NAME="auth-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
 

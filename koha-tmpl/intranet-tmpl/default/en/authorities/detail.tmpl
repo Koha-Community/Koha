@@ -1,0 +1,48 @@
+<!-- TMPL_INCLUDE NAME="auth-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<div class="tabbed">
+	<h1 class="authority">Authority number : <!-- TMPL_VAR name="authid" --></h1>
+	<a href="authorities.pl?authid=<!-- TMPL_VAR name="authid" -->">
+		<img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png">
+	</a>
+	<a href="javascript:confirm_deletion()">
+		<img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png">
+	</a>
+	<a href="javascript:Dopop('detailprint.pl?authid=<!-- TMPL_VAR name="authid" -->')" class="button authority">
+		Print
+	</a>
+</div>
+
+<div name="0XX" id="0XX" class="tab" style="visibility:visible">
+	<!-- TMPL_LOOP name="0XX" -->
+			<p class="MARCtag">
+				<!-- TMPL_VAR name="tag" -->
+			</p>
+		<!-- TMPL_LOOP name="subfield" -->
+			<p>
+				<label class="labelsubfield">
+				<a href="search.marc/search.pl?op=do_search&marclist=<!-- TMPL_VAR name="marc_tag" --><!-- TMPL_VAR name="marc_subfield" -->&operator=&#x003D&type=intranet&value=<!-- TMPL_VAR name="marc_value" ESCAPE=URL -->">
+					<img border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filefind.png" height=15>
+				</a>
+				<!-- TMPL_VAR name="marc_subfield" -->
+				<!-- TMPL_VAR name="marc_lib" --></label>
+				<!-- TMPL_VAR name="marc_value" -->
+			</p>
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
+</div>
+	
+<script language="JavaScript" type="text/javascript">
+
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+	if (is_confirmed) {
+		window.location="acqui.simple/addbiblio.pl?op=delete&bibid=<!-- TMPL_VAR name="bibid" -->";
+	}
+}
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+</body>
+</html>

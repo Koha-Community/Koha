@@ -240,24 +240,24 @@ sub MARCgettagslib {
 		$res->{$tag}->{repeatable}=$repeatable;
 	}
 
-	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso,hidden,isurl from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield");
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield");
 	$sth->execute($frameworkcode);
 
 	my $subfield;
 	my $authorised_value;
-	my $thesaurus_category;
+	my $authtypecode;
 	my $value_builder;
 	my $kohafield;
 	my $seealso;
 	my $hidden;
 	my $isurl;
-	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$thesaurus_category,$value_builder,$kohafield,$seealso,$hidden,$isurl) = $sth->fetchrow) {
+	while ( ($tag, $subfield, $lib, $tab, $mandatory, $repeatable,$authorised_value,$authtypecode,$value_builder,$kohafield,$seealso,$hidden,$isurl) = $sth->fetchrow) {
 		$res->{$tag}->{$subfield}->{lib}=$lib;
 		$res->{$tag}->{$subfield}->{tab}=$tab;
 		$res->{$tag}->{$subfield}->{mandatory}=$mandatory;
 		$res->{$tag}->{$subfield}->{repeatable}=$repeatable;
 		$res->{$tag}->{$subfield}->{authorised_value}=$authorised_value;
-		$res->{$tag}->{$subfield}->{thesaurus_category}=$thesaurus_category;
+		$res->{$tag}->{$subfield}->{authtypecode}=$authtypecode;
 		$res->{$tag}->{$subfield}->{value_builder}=$value_builder;
 		$res->{$tag}->{$subfield}->{kohafield}=$kohafield;
 		$res->{$tag}->{$subfield}->{seealso}=$seealso;
@@ -2191,6 +2191,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.92  2004/06/10 08:29:01  tipaul
+# MARC authority management (continued)
+#
 # Revision 1.91  2004/06/03 10:03:01  tipaul
 # * frameworks and itemtypes are independant
 # * in the MARC editor, showing the + to duplicate a tag only if the tag is repeatable

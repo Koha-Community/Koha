@@ -34,7 +34,7 @@
 				<label>&nbsp;</label>
 				<label>Text for OPAC</label> <input type=text name="libopac" value="<!-- TMPL_VAR name="libopac" -->" size=40 maxlength=80>
 			</p>
-			<p><label>&nbsp;</label><label>Managed in tab</label> <!-- TMPL_VAR name="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
+			<p><label>&nbsp;</label><label>Managed</label> <!-- TMPL_VAR name="tab" --></p>
 			<p><label>&nbsp;</label><!-- TMPL_VAR name="hidden" --> hidden (subfield is managed, but hidden. -should be filled by a plugin or thesaurus-)</p>
 			<p><label>&nbsp;</label><!-- TMPL_VAR name="isurl" --> URL (if checked, it means that the subfield is an URL and can be clicked</p>
 			<p>
@@ -103,8 +103,7 @@
 		<!-- TMPL_IF name="subfield_ignored" -->
 			<i>subfield ignored</i>
 		<!-- TMPL_ELSE -->
-			Tab :<!-- TMPL_VAR name="tab" -->,
-			<!-- TMPL_IF name="repeatable" -->Repeatable, <!-- TMPL_ELSE -->Not repeatable,<!-- /TMPL_IF -->
+			Managed, <!-- TMPL_IF name="repeatable" -->Repeatable, <!-- TMPL_ELSE -->Not repeatable,<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="mandatory" -->Mandatory, <!-- TMPL_ELSE -->Not mandatory,<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="seealso" -->see also : <!-- TMPL_VAR name="seealso" -->,<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="hidden" -->hidden,<!-- /TMPL_IF -->

@@ -42,7 +42,7 @@
 			<p><label>&nbsp;</label><!-- TMPL_VAR name="isurl" --> URL (if checked, it means that the subfield is an URL and can be clicked</p>
 			<p>
 				<label>&nbsp;</label><label>Auth value:</label> <!-- TMPL_VAR name="authorised_value" -->
-				or thesaurus: <!-- TMPL_VAR name="thesaurus_category" -->
+				or thesaurus: <!-- TMPL_VAR name="authtypes" -->
 				or plugin: <!-- TMPL_VAR name="value_builder" -->
 			</p>
 		</td>
@@ -116,7 +116,7 @@
 			<!-- TMPL_IF name="hidden" -->hidden,<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="isurl" -->is an url,<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="authorised_value" --> Auth value :<!-- TMPL_VAR name="authorised_value" -->,<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="thesaurus_category" --> Thesaurus :<!-- TMPL_VAR name="thesaurus_category" -->,<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="authtypecode" --> Authority :<!-- TMPL_VAR name="authtypecode" -->,<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="value_builder" -->Plugin :<!-- TMPL_VAR name="value_builder" -->,<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
 	</td>

@@ -212,6 +212,7 @@ my %requiretables = (
 					authtypecode char(10) not NULL,
 					authtypetext char(255) not NULL,
 					auth_tag_to_report char(3) not NULL,
+					summary text not NULL,
 					PRIMARY KEY (authtypecode)
 			)",
 	biblio_framework => "(
@@ -261,7 +262,6 @@ my %requiretables = (
 						subfieldcode char(1) NOT NULL default '',
 						subfieldorder tinyint(4) NOT NULL default '1',
 						subfieldvalue varchar(255) default NULL,
-						valuebloblink bigint(20) default NULL,
 						PRIMARY KEY  (subfieldid),
 						KEY authid (authid),
 						KEY tag (tag),
@@ -1111,6 +1111,23 @@ if ($items{'bulk'} eq "varchar(30)") {
     $sti->execute;
 }
 
+# changing the marc_subfield_structure table around...
+my %marc_subfield_structure;
+
+$sth = $dbh->prepare("show columns from marc_subfield_structure");
+$sth->execute;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $marc_subfield_structure{$column} = $type;
+}
+
+if ($marc_subfield_structure{thesaurus_category}) {
+    print "  changing thesaurus_category in marc_subfield_structure table\n";
+    my $sti =
+      $dbh->prepare("ALTER TABLE marc_subfield_structure CHANGE `thesaurus_category` `authtypecode` VARCHAR(10 ) DEFAULT NULL");
+    $sti->execute;
+}
+
 #
 # creating  index in issuingrules if needed
 #
@@ -1183,6 +1200,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.83  2004/06/10 08:32:02  tipaul
+# MARC authority management (continued)
+#
 # Revision 1.82  2004/06/03 12:46:58  tipaul
 # * frameworks and itemtypes are independant
 #

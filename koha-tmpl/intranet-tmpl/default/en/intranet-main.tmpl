@@ -32,7 +32,7 @@
 			if(!x && document.getElementById) x=document.getElementById(n); return x;
 		}
 		function SetOn(item) {
-			for(i=1;i<=6;i++) {
+			for(i=1;i<=7;i++) {
 				SetOff(i);
 			}
 			if (!(layer = MM_findObj('Hint' + item))) return;
@@ -113,10 +113,14 @@
 			All the system reports
 		</div>
 		<div id="Hint5" class="hint">
+			<h1 class="reports">Authorities</h1>
+			Authorities management & searches
+		</div>
+		<div id="Hint6" class="hint">
 			<h1 class="parameters">Parameters</h1>
 			Alter Koha System preferences
 		</div>
-		<div id="Hint6" class="hint">
+		<div id="Hint7" class="hint">
 			<h1 class="circulation">Circulation</h1>
 			Work at the front desk on Issues and returns using only a barcode reader and a mouse
 		</div>
@@ -125,13 +129,15 @@
 		
 		<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue" onMouseOver="SetOn(1);">Catalogue</a><br/>
 		
-		<a href="/cgi-bin/koha/circ/circulation.pl" class="circulation" onMouseOver="SetOn(6);">Circulation</a><br/>
+		<a href="/cgi-bin/koha/circ/circulation.pl" class="circulation" onMouseOver="SetOn(7);">Circulation</a><br/>
 		
 		<a href="/cgi-bin/koha/members/members-home.pl" class="members" onMouseOver="SetOn(2);">Members</a><br/>
 		
+		<a href="/cgi-bin/koha/authorities/authorities-home.pl" class="reports" onMouseOver="SetOn(5);">Authorities</a><br/>
+		
 		<a href="/cgi-bin/koha/reports-home.pl" class="reports" onMouseOver="SetOn(4);">Reports</a><br/>
 		
-		<a href="/cgi-bin/koha/admin-home.pl" class="parameters" onMouseOver="SetOn(5);">Parameters</a><br/>
+		<a href="/cgi-bin/koha/admin-home.pl" class="parameters" onMouseOver="SetOn(6);">Parameters</a><br/>
 	</div>
 </div>
 </body>
