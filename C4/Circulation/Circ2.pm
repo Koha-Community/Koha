@@ -35,6 +35,7 @@ use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
 use C4::Accounts;
+use Date::Manip;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -63,7 +64,7 @@ Also deals with stocktaking.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&getpatroninformation
-	&currentissues &getissues &getiteminformation &renewstatus
+	&currentissues &getissues &getiteminformation &renewstatus &renewbook
 	&canbookbeissued &issuebook &returnbook &find_reserves &transferbook &decode
 	&calc_charges &listitemsforinventory &itemseen &fixdate);
 
@@ -611,7 +612,7 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("a $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	# check for branch=*
 	$sth->execute($cat_borrower, $type, "");
@@ -619,7 +620,7 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("b $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	# check for itemtype=*
 	$sth->execute($cat_borrower, "*", $branch_borrower);
@@ -627,7 +628,7 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("c $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	#check for borrowertype=*
 	$sth->execute("*", $type, $branch_borrower);
@@ -635,7 +636,7 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("d $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
 	$sth->execute("*", "*", $branch_borrower);
@@ -643,15 +644,15 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("e $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
 	$sth->execute("*", $type, "");
 	my $result = $sth->fetchrow_hashref;
-	if (defined($result)) {
+	if (defined($result) && $result->{maxissueqty}>=0) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("f $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
 	$sth->execute($cat_borrower, "*", "");
@@ -659,7 +660,7 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth2->execute($borrower->{'borrowernumber'}, "%$type%");
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("g $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 
 	$sth->execute("*", "*", "");
@@ -667,7 +668,7 @@ sub TooMany ($$){
 	if (defined($result)) {
 		$sth3->execute($borrower->{'borrowernumber'});
 		my $alreadyissued = $sth2->fetchrow;
-		return ("$alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
+		return ("h $alreadyissued / ".($result->{maxissueqty}+0)) if ($result->{'maxissueqty'} <= $alreadyissued);
 	}
 	return;
 }
@@ -808,7 +809,7 @@ sub issuebook {
 #
 	my ($currentborrower) = currentborrower($iteminformation->{'itemnumber'});
 	if ($currentborrower eq $borrower->{'borrowernumber'}) {
-		my ($charge,$itemtype) = calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
+		my ($charge,$itemtype) = calc_charges($env, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
 		if ($charge > 0) {
 			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'}, $charge);
 			$iteminformation->{'charge'} = $charge;
@@ -849,7 +850,7 @@ sub issuebook {
 		}
 		# Record in the database the fact that the book was issued.
 		my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values (?,?,?,?)");
-		my $loanlength = $iteminformation->{loanlength} || 21;
+		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
 		my $datedue=time+($loanlength)*86400;
 		my @datearr = localtime($datedue);
 		my $dateduef = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
@@ -864,7 +865,7 @@ sub issuebook {
 		$sth->finish;
 		&itemseen($iteminformation->{'itemnumber'});
 		# If it costs to borrow this book, charge it to the patron's account.
-		my ($charge,$itemtype)=calc_charges($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
+		my ($charge,$itemtype)=calc_charges($env, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'});
 		if ($charge > 0) {
 			createcharge($env, $dbh, $iteminformation->{'itemnumber'}, $borrower->{'borrowernumber'}, $charge);
 			$iteminformation->{'charge'}=$charge;
@@ -874,6 +875,55 @@ sub issuebook {
 	}
 }
 
+=head2 getLoanLength
+
+Get loan length for an itemtype, a borrower type and a branch
+
+my $loanlength = &getLoanLength($borrowertype,$itemtype,branchcode)
+
+=cut
+
+sub getLoanLength {
+	my ($borrowertype,$itemtype,$branchcode) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select issuelength from issuingrules where categorycode=? and itemtype=? and branchcode=?");
+	# try to find issuelength & return the 1st available.
+	# check with borrowertype, itemtype and branchcode, then without one of those parameters
+	$sth->execute($borrowertype,$itemtype,$branchcode);
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+	
+	$sth->execute($borrowertype,$itemtype,"");
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+	
+	$sth->execute($borrowertype,"*",$branchcode);
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+
+	$sth->execute("*",$itemtype,$branchcode);
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+
+	$sth->execute($borrowertype,"*","");
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+
+	$sth->execute("*","*",$branchcode);
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+
+	$sth->execute("*",$itemtype,"");
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+
+	$sth->execute("*","*","");
+	my $loanlength = $sth->fetchrow_hashref;
+	return $loanlength->{issuelength} if defined($loanlength);
+
+	# if no rule is set => 21 days (hardcoded)
+	return 21;
+}
 =head2 returnbook
 
   ($doreturn, $messages, $iteminformation, $borrower) =
@@ -1518,45 +1568,42 @@ already renewed the loan.
 =cut
 
 sub renewstatus {
-  # check renewal status
-  # FIXME - Two people can't borrow the same book at once, so
-  # presumably we can get $bornum from $itemno.
-  my ($env,$bornum,$itemno)=@_;
-  my $dbh = C4::Context->dbh;
-  my $renews = 1;
-  my $renewokay = 0;
-  # Look in the issues table for this item, lent to this borrower,
-  # and not yet returned.
-
-  # FIXME - I think this function could be redone to use only one SQL
-  # call.
-  my $sth1 = $dbh->prepare("select * from issues
-    where (borrowernumber = ?)
-    and (itemnumber = ?')
-    and returndate is null");
-  $sth1->execute($bornum,$itemno);
-  if (my $data1 = $sth1->fetchrow_hashref) {
-    # Found a matching item
-
-    # See if this item may be renewed. This query is convoluted
-    # because it's a bit messy: given the item number, we need to find
-    # the biblioitem, which gives us the itemtype, which tells us
-    # whether it may be renewed.
-    my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
-       where (items.itemnumber = ?)
-       and (items.biblioitemnumber = biblioitems.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)");
-    $sth2->execute($itemno);
-    if (my $data2=$sth2->fetchrow_hashref) {
-      $renews = $data2->{'renewalsallowed'};
-    }
-    if ($renews > $data1->{'renewals'}) {
-      $renewokay = 1;
-    }
-    $sth2->finish;
-  }
-  $sth1->finish;
-  return($renewokay);
+	# check renewal status
+	my ($env,$bornum,$itemno)=@_;
+	my $dbh = C4::Context->dbh;
+	my $renews = 1;
+	my $renewokay = 0;
+	# Look in the issues table for this item, lent to this borrower,
+	# and not yet returned.
+	
+	# FIXME - I think this function could be redone to use only one SQL call.
+	my $sth1 = $dbh->prepare("select * from issues
+								where (borrowernumber = ?)
+								and (itemnumber = ?)
+								and returndate is null");
+	$sth1->execute($bornum,$itemno);
+	if (my $data1 = $sth1->fetchrow_hashref) {
+		# Found a matching item
+	
+		# See if this item may be renewed. This query is convoluted
+		# because it's a bit messy: given the item number, we need to find
+		# the biblioitem, which gives us the itemtype, which tells us
+		# whether it may be renewed.
+		my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
+		where (items.itemnumber = ?)
+		and (items.biblioitemnumber = biblioitems.biblioitemnumber)
+		and (biblioitems.itemtype = itemtypes.itemtype)");
+		$sth2->execute($itemno);
+		if (my $data2=$sth2->fetchrow_hashref) {
+			$renews = $data2->{'renewalsallowed'};
+		}
+		if ($renews > $data1->{'renewals'}) {
+			$renewokay = 1;
+		}
+		$sth2->finish;
+	}
+	$sth1->finish;
+	return($renewokay);
 }
 
 =head2 renewbook
@@ -1584,73 +1631,50 @@ C<$datedue> should be in the form YYYY-MM-DD.
 =cut
 
 sub renewbook {
-  # mark book as renewed
-  # FIXME - A book can't be on loan to two people at once, so
-  # presumably we can get $bornum from $itemno.
-  my ($env,$bornum,$itemno,$datedue)=@_;
-  my $dbh = C4::Context->dbh;
+	# mark book as renewed
+	my ($env,$bornum,$itemno,$datedue)=@_;
+	my $dbh = C4::Context->dbh;
 
-  # If the due date wasn't specified, calculate it by adding the
-  # book's loan length to today's date.
-  if ($datedue eq "" ) {
-    #debug_msg($env, "getting date");
-    my $loanlength=21;		# Default loan length?
-				# FIXME - This is bogus. If there's no
-				# loan length defined for some book
-				# type or whatever, then that should
-				# be an error
-    # Find this item's item type, via its biblioitem.
-    my $sth=$dbh->prepare("Select * from biblioitems,items,itemtypes
-       where (items.itemnumber = ?)
-       and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-       and (biblioitems.itemtype = itemtypes.itemtype)");
-    $sth->execute($itemno);
-    if (my $data=$sth->fetchrow_hashref) {
-      $loanlength = $data->{'loanlength'}
-    }
-    $sth->finish;
-    my $ti = time;		# FIXME - Unused
-    # FIXME - Use
-    #	POSIX::strftime("%Y-%m-%d", localtime(time + ...));
-    my $datedu = time + ($loanlength * 86400);
-    my @datearr = localtime($datedu);
-    $datedue = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
-  }
+	# If the due date wasn't specified, calculate it by adding the
+	# book's loan length to today's date.
+	if ($datedue eq "" ) {
+		#debug_msg($env, "getting date");
+		my $iteminformation = getiteminformation($env, $itemno,0);
+		my $borrower = getpatroninformation($env,$bornum,0);
+		my $loanlength = getLoanLength($borrower->{'categorycode'},$iteminformation->{'itemtype'},$borrower->{'branchcode'});
+		$datedue = UnixDate(DateCalc($iteminformation->{date_due},"$loanlength days"),"%Y-%m-%d");
+	}
 
-  # Find the issues record for this book
-  my $sth=$dbh->prepare("select * from issues where borrowernumber=? and
-    itemnumber=? and returndate is null");
-  $sth->execute($bornum,$itemno);
-  my $issuedata=$sth->fetchrow_hashref;
-	# FIXME - Error-checking
-  $sth->finish;
+	# Find the issues record for this book
+	my $sth=$dbh->prepare("select * from issues where borrowernumber=? and itemnumber=? and returndate is null");
+	$sth->execute($bornum,$itemno);
+	my $issuedata=$sth->fetchrow_hashref;
+	$sth->finish;
 
-  # Update the issues record to have the new due date, and a new count
-  # of how many times it has been renewed.
-  my $renews = $issuedata->{'renewals'} +1;
-  $sth=$dbh->prepare("update issues
-    set date_due = ?, renewals = ?
-    where borrowernumber=? and
-    itemnumber=? and returndate is null");
-  $sth->execute($datedue,$renews,$bornum,$itemno);
-  $sth->finish;
+	# Update the issues record to have the new due date, and a new count
+	# of how many times it has been renewed.
+	my $renews = $issuedata->{'renewals'} +1;
+	$sth=$dbh->prepare("update issues set date_due = ?, renewals = ?
+		where borrowernumber=? and itemnumber=? and returndate is null");
+	$sth->execute($datedue,$renews,$bornum,$itemno);
+	$sth->finish;
 
-  # Log the renewal
-  UpdateStats($env,$env->{'branchcode'},'renew','','',$itemno);
+	# Log the renewal
+	UpdateStats($env,$env->{'branchcode'},'renew','','',$itemno);
 
-  # Charge a new rental fee, if applicable?
-  my ($charge,$type)=calc_charges($env, $itemno, $bornum);
-  if ($charge > 0){
-    my $accountno=getnextacctno($env,$bornum,$dbh);
-    my $item=getiteminformation($env, $itemno);
-    $sth=$dbh->prepare("Insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-						values (?,?,now(),?,?,?,?,?)");
-    $sth->execute($bornum,$accountno,$charge,"Renewal of Rental Item $item->{'title'} $item->{'barcode'}",'Rent',$charge,$itemno);
-    $sth->finish;
-#     print $account;
-  }
-
-#  return();
+	# Charge a new rental fee, if applicable?
+	my ($charge,$type)=calc_charges($env, $itemno, $bornum);
+	if ($charge > 0){
+		my $accountno=getnextacctno($env,$bornum,$dbh);
+		my $item=getiteminformation($env, $itemno);
+		$sth=$dbh->prepare("Insert into accountlines (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+							values (?,?,now(),?,?,?,?,?)");
+		$sth->execute($bornum,$accountno,$charge,"Renewal of Rental Item $item->{'title'} $item->{'barcode'}",'Rent',$charge,$itemno);
+		$sth->finish;
+	#     print $account;
+	}
+	
+	#  return();
 }
 
 
@@ -1675,39 +1699,23 @@ if it's a video).
 =cut
 
 sub calc_charges {
-  # calculate charges due
-  my ($env, $itemno, $bornum)=@_;
-  my $charge=0;
-  my $dbh = C4::Context->dbh;
-  my $item_type;
-
-  # Get the book's item type and rental charge (via its biblioitem).
-  my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
-  						 where (items.itemnumber =?)
-						 		and (biblioitems.biblioitemnumber = items.biblioitemnumber)
+	# calculate charges due
+	my ($env, $itemno, $bornum)=@_;
+	my $charge=0;
+	my $dbh = C4::Context->dbh;
+	my $item_type;
+	
+	# Get the book's item type and rental charge (via its biblioitem).
+	my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
+								where (items.itemnumber =?)
+								and (biblioitems.biblioitemnumber = items.biblioitemnumber)
 								and (biblioitems.itemtype = itemtypes.itemtype)");
-  $sth1->execute($itemno);
-  # FIXME - Why not just use fetchrow_array?
-  if (my $data1=$sth1->fetchrow_hashref) {
-    $item_type = $data1->{'itemtype'};
-    $charge = $data1->{'rentalcharge'};
-
-    # Figure out the applicable rental discount
-    my $sth2=$dbh->prepare("select rentaldiscount from
-    borrowers,categoryitem
-    where (borrowers.borrowernumber = ?)
-    and (borrowers.categorycode = categoryitem.categorycode)
-    and (categoryitem.itemtype = ?)");
-    $sth2->execute($bornum,$item_type);
-    if (my$data2=$sth2->fetchrow_hashref) {
-      my $discount = $data2->{'rentaldiscount'};
-      $charge *= (100 - $discount) / 100;
-    }
-    $sth2->finish;
-  }
-  $sth1->finish;
-#  print "item $item_type";
-  return ($charge,$item_type);
+	$sth1->execute($itemno);
+	my $data1=$sth1->fetchrow_hashref;
+	$item_type = $data1->{'itemtype'};
+	$charge = $data1->{'rentalcharge'};
+	$sth1->finish;
+	return ($charge,$item_type);
 }
 
 
