@@ -16,10 +16,8 @@
 		</p>
 	
 	<!-- TMPL_IF name="message" -->
-		<table>
-			<tr><th>Messages</th></tr>
-			<tr><td>No borrower matched  <!-- TMPL_VAR name="message" --></td></tr>
-		</table>
+		<h2 class="circulation">Messages</h2>
+			<p>No borrower matched  <!-- TMPL_VAR name="message" --></p>
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF name="CGIselectborrower" -->
@@ -31,41 +29,30 @@
 		<input type="submit" value="OK" class="button circulation">
 	<!-- TMPL_ELSE -->
 		<!-- TMPL_IF NAME="borrowernumber" -->
-		
+			<h2 class="circulation">Borrower information</h2>
+			<p>
+				<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this,'Member', 480, 640)">
+					<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+				</a>
+			</p>
+			<p>
+				<!-- TMPL_VAR name="streetaddress" --> <!-- TMPL_VAR name="city" -->
+			</p>
+			<p>
+				<!-- TMPL_VAR name="phone" -->
+			</p>
+			<p>Category: <!-- TMPL_VAR name="categorycode" --></p>
 		<!-- TMPL_ELSE -->
-		<table>
-			<tr>
-				<th class="circulation">
+				<h2 class="circulation">
 					Enter borrower card number or partial last name
-				</th>
-			</tr>
-			<tr>
-				<td>
-					<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-						<input name="findborrower">
-						<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
-						<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
-						<input type="submit" value="OK" class="button circulation">
-					</form>
-				</td>
-			</tr>
-		</table>
+				</h2>
+				<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+					<input name="findborrower">
+					<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
+					<input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+					<input type="submit" value="OK" class="button circulation">
+				</form>
 		<!-- /TMPL_IF -->
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="borrowernumber" -->
-		<h2 class="circulation">Borrower information</h2>
-		<p>
-			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR name="borrowernumber" -->" onClick="openWindow(this,'Member', 480, 640)">
-				<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
-			</a>
-		</p>
-		<p>
-			<!-- TMPL_VAR name="streetaddress" --> <!-- TMPL_VAR name="city" -->
-		</p>
-		<p>
-			<!-- TMPL_VAR name="phone" -->
-		</p>
-		<p>Category: <!-- TMPL_VAR name="categorycode" --></p>
 	<!-- /TMPL_IF -->
 	</div>
 
