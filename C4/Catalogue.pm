@@ -334,11 +334,11 @@ sub receiveorder {
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
-  $query="update aqorderbreakdown set bookfundid=$bookfund where
-  ordernumber=$ordnum";
+  $query="update aqorderbreakdown set bookfundid=? where
+  ordernumber=?";
   $sth=$dbh->prepare($query);
 #  print $query;
-  $sth->execute;
+  $sth->execute($bookfund,$ordnum);
   $sth->finish;
 }
 
