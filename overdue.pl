@@ -22,13 +22,15 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Database;
+use HTML::Template;
 
 my $input = new CGI;
-print $input->header;
 my $type=$input->param('type');
-print startpage();
-print startmenu('report');
 
+my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+my %tmpldata = pathtotemplate ( template => 'overdue.tmpl', theme => $theme);
+my $template = HTML::Template->new( filename => $tmpldata{'path'}, 
+				    die_on_bad_params => 0);
 my $duedate;
 my $bornum;
 my $itemnum;
@@ -44,24 +46,13 @@ my $author;
 my @datearr = localtime(time());
 my $todaysdate = (1900+$datearr[5]).'-'.sprintf ("%0.2d", ($datearr[4]+1)).'-'.sprintf ("%0.2d", $datearr[3]);
 
-print "<FONT SIZE=6><em>Items Overdue as of $todaysdate</em></FONT><br><P>";
-
-print << "EOF";
-<TABLE  cellspacing=0 cellpadding=5 border=0 align=center>
-<TR VALIGN=TOP>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif" colspan ><b>Due Date</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif" colspan ><b>Patron</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif"><b>Phone</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif"><b>Title</b></td>
-<TD  bgcolor="99cc33" background="/koha/images/background-mem.gif"><b>Author</b></td>
-</tr>
-EOF
-
 my $dbh=C4Connect;
 
 my $query="select date_due,borrowernumber,itemnumber from issues where isnull(returndate) && date_due<'$todaysdate' order by date_due,borrowernumber";
 my $sth=$dbh->prepare($query);
 $sth->execute;
+
+my @overduedata;
 while (my $data=$sth->fetchrow_hashref) {
   $duedate=$data->{'date_due'};
   $bornum=$data->{'borrowernumber'};
@@ -90,18 +81,24 @@ while (my $data=$sth->fetchrow_hashref) {
   $title=$data3->{'title'};
   $author=$data3->{'author'};
   $sth3->finish;
+  push (@overduedata, {	duedate      => $duedate,
+			bornum       => $bornum,
+			itemnum      => $itemnum,
+			name         => $name,
+			phone        => $phone,
+			email        => $email,
+			biblionumber => $biblionumber,
+			title        => $title,
+			author       => $author });
 
-  if (!$email){
-    print "<tr><td>$duedate</td><td>$name</td><td>$phone</td><td>$title</td><td>$author</td></tr>";
-  } else {
-    print "<tr><td>$duedate</td><td><a href=\"mailto:$email?subject=Overdue: $title\">$name</a></td><td>$phone</td><td>$title</td><td>$author</td></tr>";
-  }
 }
 
 $sth->finish;
 $dbh->disconnect;
 
-print "</table>";
-
-print endmenu('report');
-print endpage();
+$template->param( startmenureport => join ('', startmenu('report')),
+		endmenureport     => join ('', endmenu('report')),
+		todaysdate        => $todaysdate,
+		overdueloop       => \@overduedata );
+			
+print "Content-Type: text/html\n\n", $template->output;
