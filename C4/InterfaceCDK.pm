@@ -3,7 +3,7 @@ package C4::InterfaceCDK; #assumes C4/InterfaceCDK
 #uses Newt
 use C4::Format;
 use strict;
-#use Cdk;
+use Cdk;
 use Date::Manip;
 use C4::Accounts;
 use C4::Circulation::Borrissues;
