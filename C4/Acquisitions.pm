@@ -381,20 +381,36 @@ sub bookfundbreakdown {
       
 
 sub newbiblio {
-  my ($title,$author,$copyright)=@_;
-  my $dbh=C4Connect;
-  my $query="Select max(biblionumber) from biblio";
-  my $sth=$dbh->prepare($query);
+  my ($biblio) = @_;
+  my $dbh    = &C4Connect;
+  my $query  = "Select max(biblionumber) from biblio";
+  my $sth    = $dbh->prepare($query);
   $sth->execute;
-  my $data=$sth->fetchrow_arrayref;
-  my $bibnum=$$data[0];
-  $bibnum++;
+  my $data   = $sth->fetchrow_arrayref;
+  my $bibnum = $$data[0] + 1;
+  my $series = 0;
+
+  $biblio->{'title'}       = $dbh->quote($biblio->{'title'});
+  $biblio->{'author'}      = $dbh->quote($biblio->{'author'});
+  $biblio->{'copyright'}   = $dbh->quote($biblio->{'copyright'});
+  $biblio->{'seriestitle'} = $dbh->quote($biblio->{'seriestitle'});
+  $biblio->{'notes'}	   = $dbh->quote($biblio->{'notes'});
+  if ($biblio->{'seriestitle'}) { $series = 1 };
+
   $sth->finish;
-  $query="insert into biblio (biblionumber,title,author,copyrightdate) values
-  ($bibnum,'$title','$author','$copyright')";
-  $sth=$dbh->prepare($query);
+  $query = "insert into biblio set
+biblionumber  = $bibnum,
+title         = $biblio->{'title'},
+author        = $biblio->{'author'},
+copyrightdate = $biblio->{'copyright'},
+series        = $series;
+seriestitle   = $biblio->{'seriestitle'},
+notes         = $biblio->{'notes'}";
+
+  $sth = $dbh->prepare($query);
 #  print $query;
   $sth->execute;
+
   $sth->finish;
   $dbh->disconnect;
   return($bibnum);
