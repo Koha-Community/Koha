@@ -414,6 +414,9 @@ system("cp -R opac-html/* $opacdir/htdocs/");
 print "Copying opac-cgi files to $opacdir/cgi-bin...\n";
 system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 
+system("chown -R root.$httpduser $opacdir");
+system("chown -R root.$httpduser $kohadir");
+
 print qq|
 
 MYSQL CONFIGURATION
