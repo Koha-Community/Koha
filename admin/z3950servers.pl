@@ -154,7 +154,6 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirmed => 1);
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare("delete from z3950servers where id=?");
-	warn "S : $searchfield";
 	$sth->execute($searchfield);
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
