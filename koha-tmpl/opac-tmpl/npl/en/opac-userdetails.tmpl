@@ -49,7 +49,7 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 
 <tr><th>Expires:</th><td><!-- TMPL_VAR NAME="expiry" --></td></tr>
 
-<tr><th>Joining Branch:</th><td>&nbsp;</td></tr></table>
+<!-- TMPL_IF NAME="joiningbranch" --><tr><th>Joining Branch:</th><td><!-- TMPL_VAR NAME="joiningbranch" --></td></tr><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></table>
 </div>
 
 
@@ -72,7 +72,7 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 
 <tr><th>Notes:</th><td> <!-- TMPL_IF NAME="altnotes" --><!-- TMPL_VAR NAME="altnotes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr>
 
-<tr><th>Guarantor:</th><td> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr></table>
+<!-- <tr><th>Guarantor:</th><td> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr> --></table>
 
 </div>
 
