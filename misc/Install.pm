@@ -469,6 +469,17 @@ significant in the list of allowed characters.) If a response
 type other than the above-listed is specified, the result is
 undefined.
 
+Note that the response type "yn" is equivalent to "restrictchar yn".
+Because "restrictchar" is case-sensitive, the user is expected
+to enter "y" or "n" in lowercase only.
+
+Note that the response type of "email" does not actually
+guarantee that the returned value is a well-formed RFC-822
+email address, nor does it accept all well-formed RFC-822 email
+addresses. What it does is to restrict the returned value to a
+string that is looks reasonably likely to be an email address
+in the "real world".
+
 If a response type other than "none" or "PressEnter" is
 specified, a third argument, specifying the default value, can
 be specified:  If this default response is not specified, the
@@ -482,6 +493,12 @@ the user's response.
 The screen is normally cleared before the message is displayed;
 if a fourth argument is specified and is nonzero, this
 screen-clearing is not done.
+
+FIXME: A response type of "yn" should allow the user to specify
+"y" or "n" in either upercase or lowercase.
+
+FIXME: If the response type is "free", the user cannot specify
+an empty string; showmessage will return "1" as the result.
 
 FIXME: A default response of "0" cannot be specified. This is
 wrong; the default response should be checked for undef, not
