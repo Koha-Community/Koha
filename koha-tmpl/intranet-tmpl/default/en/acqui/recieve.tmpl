@@ -5,10 +5,11 @@ Invoice: <TMPL_VAR name="invoice"><br>
 Received By: <TMPL_VAR name="user"><br>
 <TMPL_VAR name="date">
 </div>
-<FONT SIZE=6><em>Receipt Summary For : <a href=whitcoulls.html><TMPL_VAR name="name"></a> </em></FONT>
+<FONT SIZE=6><em>Receipt Summary for : <TMPL_VAR name="name">, Invoice <TMPL_VAR name="invoice"></em></FONT>
 <CENTER>
 
 <FORM ACTION="/cgi-bin/koha/acqui/acquire.pl">
+<input type=hidden name=id value="<TMPL_VAR name="id">">
 <input type=hidden name=gst value="<TMPL_VAR name="gst">">
 <input type=hidden name=freight value="<TMPL_VAR name="freight">">
 <input type=hidden name=invoice value="<TMPL_VAR name="invoice">">
@@ -16,7 +17,7 @@ Received By: <TMPL_VAR name="user"><br>
 <b>Search ISBN or Title:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
 </form>
 <p>
-<FORM ACTION="" method=post name=orderform>
+<FORM ACTION="" method=get name=orderform>
 
 <table border=0 cellspacing=0 cellpadding=5>
 	<tr valign=top bgcolor="#ffdf61">
@@ -69,17 +70,6 @@ Received By: <TMPL_VAR name="user"><br>
 	<tr valign=top bgcolor=white>
 		<td colspan=2 align=right ><b>TOTAL</b></td>
 		<td>$<TMPL_VAR name="grandtot"></td>
-	</tr>
-	<tr valign=top bgcolor=white>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td colspan=3>
-			<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right>
-		</td>
 	</tr>
 </table>
 </CENTER>

@@ -1,5 +1,14 @@
 <TMPL_INCLUDE name="acquisitions-top.inc">
 
+<div align=right>
+Invoice: <TMPL_VAR name="invoice"><br>
+Received By: <TMPL_VAR name="user"><br>
+<TMPL_VAR name="date">
+</div>
+<FONT SIZE=6><em>Receipt Summary for : <TMPL_VAR name="name"> Invoice, <TMPL_VAR name="invoice"></em></FONT>
+<CENTER>
+
+
 <TMPL_IF name="count">
 	<script language="javascript" type="text/javascript">
 	<!--
@@ -16,7 +25,7 @@
 	</script>
 	<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
 	<input type=hidden name=biblio value=<TMPL_VAR name="biblionumber">>
-	<input type=hidden name=ordnum value=<TMPL_VAR name=""ordernumber">>
+	<input type=hidden name=ordnum value=<TMPL_VAR name="ordernumber">>
 	<input type=hidden name=biblioitemnum value=<TMPL_VAR name="biblioitemnumber">>
 	<input type=hidden name=id value="<TMPL_VAR name="booksellerid">">
 	<input type=hidden name=freight value="<TMPL_VAR name="freight">">
@@ -125,17 +134,25 @@
 	<br clear=all>
 	<p> &nbsp; </p>
 <TMPL_ELSE>
-	<center><table>
-	<tr valign=top bgcolor=#99cc33>
+	<br />
+	<center>
+	<table width=80%>
+	<tr valign=top bgcolor="#ffdf61">
+		<td><b>Basket</b></td>
 		<td><b>ISBN</b></td>
 		<td><b>TITLE</b></td>
 		<td><b>AUTHOR</b></td>
+		<td><b>Qty</b></td>
+		<td><b>Recieved</b></td>
 	</tr>
 	<TMPL_LOOP name="loop">
 		<tr>
+			<TD><TMPL_VAR name="basketno"></td>
 			<TD><TMPL_VAR name="isbn"></td>
-			<td><a href=acquire.pl?recieve=<TMPL_VAR name="ordernumber">&biblio=<TMPL_VAR name="biblionumber">&invoice=<TMPL_VAR name="invoice">&freight=<TMPL_VAR name="freight">&gst=<TMPL_VAR name="gst">><TMPL_VAR name="title"></a></td>
+			<td><a href=acquire.pl?recieve=<TMPL_VAR name="ordernumber">&biblio=<TMPL_VAR name="biblionumber">&invoice=<TMPL_VAR name="invoice">&freight=<TMPL_VAR name="freight">&gst=<TMPL_VAR name="gst">&id=<TMPL_VAR name="id">><TMPL_VAR name="title"></a></td>
 			<td><TMPL_VAR name="author"></td>
+			<td><TMPL_VAR name="quantity"></td>
+			<td><TMPL_VAR name="quantityrecieved"></td>
 		</tr>
 	</TMPL_LOOP>
 	</table>
