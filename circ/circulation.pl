@@ -233,10 +233,7 @@ if ($borrower) {
 		$book->{'tcolor'}=$tcolor;
 		push @realtodayissues,$book;
 	}
-	($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
-	$book->{'dd'}=$dd;
-	$book->{'tcolor'}=$tcolor;
-	push @realtodayissues,$book
+
 }
     # FIXME - For small and private libraries, it'd be nice if this
     # table included a "Return" link next to each book, so that you
@@ -250,12 +247,17 @@ if ($borrower) {
 	my $dd = $book->{'date_due'};
 	my $datedue = $book->{'date_due'};
 	$dd=format_date($dd);
+	my $pcolor = '';
 	$datedue=~s/-//g;
 	if ($datedue < $todaysdate) {
 	    $dd="<font color=red>$dd</font>\n";
 	}
+	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1); 
+	$book->{'dd'}=$dd; 
+	$book->{'tcolor'}=$pcolor; 
+	push @realprevissues,$book
+   }
 }
-
 # actually print the page!
 #if ($branchcookie && $printercookie) {
 #    print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie,$sessioncookie]);
@@ -322,6 +324,8 @@ $template->param(
 		flaginfotable => $flaginfotable,
 		CHARGES => $flags->{'CHARGES'},
 		amountold => $amountold,
+		todayissues => \@realtodayissues, 
+		previssues => \@realprevissues
 	);
 
 if ($branchcookie) {
