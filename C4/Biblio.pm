@@ -2533,10 +2533,94 @@ sub FindDuplicate {
 	my ($record)=@_;
 	my $dbh = C4::Context->dbh;
 	my $result = MARCmarc2koha($dbh,$record,'');
+	# search duplicate on ISBN, easy and fast...
 	my $sth = $dbh->prepare("select biblio.biblionumber,bibid,title from biblio,biblioitems,marc_biblio where biblio.biblionumber=biblioitems.biblionumber and marc_biblio.biblionumber=biblioitems.biblionumber and isbn=?");
 	$sth->execute($result->{'isbn'});
 	my ($biblionumber,$bibid,$title) = $sth->fetchrow;
-	return $biblionumber,$bibid,$title;
+	return $biblionumber,$bibid,$title if ($biblionumber);
+	# a more complex search : build a request for SearchMarc::catalogsearch()
+	my (@tags, @and_or, @excluding, @operator, @value, $offset,$length);
+	# search on biblio.title
+	my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.title","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for title, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
+	# ... and on biblio.author
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.author","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for author, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
+	# ... and on publicationyear.
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.publicationyear","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for publicationyear, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
+	# ... and on size.
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.size","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for size, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
+	# ... and on publisher.
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.publishercode","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for publishercode, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
+	# ... and on volume.
+	($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.volume","");
+	if ($record->field($tag)) {
+		if ($record->field($tag)->subfields($subfield)) {
+			push @tags, "'".$tag.$subfield."'";
+			push @and_or, "and";
+			push @excluding, "";
+			push @operator, "contains";
+			push @value, $record->field($tag)->subfield($subfield);
+# 			warn "for volume, I add $tag / $subfield".$record->field($tag)->subfield($subfield);
+		}
+	}
+
+	my ($finalresult,$nbresult) = C4::SearchMarc::catalogsearch($dbh,\@tags,\@and_or,\@excluding,\@operator,\@value,0,10);
+	# there is at least 1 result => return the 1st one
+	if ($nbresult) {
+		warn "$nbresult => ".@$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
+		return @$finalresult[0]->{biblionumber},@$finalresult[0]->{bibid},@$finalresult[0]->{title};
+	}
+	# no result, returns nothing
+	return;
 }
 
 END { }    # module clean-up code here (global destructor)
@@ -2553,6 +2637,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.107  2004/11/05 10:15:27  tipaul
+# Improving FindDuplicate to find duplicate records on adding biblio
+#
 # Revision 1.106  2004/11/02 16:44:45  tipaul
 # new feature : checking for duplicate biblio.
 #
