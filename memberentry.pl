@@ -16,6 +16,14 @@ my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
+my %systemprefs=systemprefs();
+my $dateformat=$systemprefs{'dateformat'};
+($dateformat) || ($dateformat='nonus');
+my $datehintstring='';
+($dateformat eq 'US') ? ($datehintstring="mm/dd/yy") : ($datehintstring="dd/mm/yy");
+
+
+
 my $member=$input->param('bornum');
 if ($member eq ''){
   $member=NewBorrowerNumber();
@@ -54,7 +62,6 @@ if ($type eq 'Add'){
 }
 
 my $cardnumber=$data->{'cardnumber'};
-my %systemprefs=systemprefs();
 # FIXME
 # This logic should probably be moved out of the presentation code.
 # Not tonight though.
@@ -124,7 +131,7 @@ if ($data->{'sex'} eq 'M'){
 }
 print <<printend
 >M
-&nbsp; &nbsp;  <B>Date of Birth</B> (dd/mm/yy)
+&nbsp; &nbsp;  <B>Date of Birth</B> ($datehintstring)
 <input type=text name=dateofbirth size=10 value="$data->{'dateofbirth'}">
 </td></tr>
 <tr valign=top bgcolor=white>

@@ -5,10 +5,17 @@
 use strict;
 use C4::Output;
 use C4::Input;
-use C4::Input;
 use C4::Auth;
+use C4::Search;  # Only used for systemprefs, remove when switching to Context
 use CGI;
 use Date::Manip;
+
+
+my %systemprefs=systemprefs();
+my $dateformat=$systemprefs{'dateformat'};
+($dateformat) || ($dateformat='nonus');
+Date_Init("DateFormat=$dateformat");
+
 
 my %env;
 my $input = new CGI;
