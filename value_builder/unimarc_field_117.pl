@@ -39,7 +39,7 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "100".(int(rand(100000))+1);
+my $function_name= "117".(int(rand(100000))+1);
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
@@ -52,7 +52,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_100.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../plugin_launcher.pl?plugin_name=unimarc_field_117.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 117\",'width=600,height=225,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -68,51 +68,29 @@ my ($input) = @_;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
 
-
 	my $dbh = C4::Context->dbh;
-
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/unimarc_field_100.tmpl",
+    = get_template_and_user({template_name => "value_builder/unimarc_field_117.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
-	my $f1 = substr($result,0,8);
-	my $f2 = substr($result,8,1);
-	my $f3 = substr($result,9,4);
-        my $f4 = substr($result,13,4);
-	my $f5 = substr($result,17,1);
-	my $f6 = substr($result,18,1);
-	my $f7 = substr($result,19,1);
-	my $f8 = substr($result,20,1);
-	my $f9 = substr($result,21,1);
-        my $f10 = substr($result,22,3);
-	my $f11 = substr($result,25,1);
-	my $f12 = substr($result,26,2);
-	my $f13 = substr($result,28,2);
-	my $f14 = substr($result,30,4);
-        my $f15 = substr($result,34,2);
+ 	my $f1 = substr($result,0,2);
+ 	my $f2 = substr($result,2,2);
+ 	my $f3 = substr($result,4,2);
+ 	my $f4 = substr($result,6,2);
 
+ 	my $f5 = substr($result,8,1);
 
 	$template->param(index => $index,
-							f1 => $f1,
-							f3 => $f3,
+							"f1$f1" => $f1,
 							"f2$f2" => $f2,
-							f4 => $f4,
-			                                "f5$f5" => $f5,
-							"f6$f6" => $f6,
-			                                "f7$f7" => $f7,
-							"f8$f8" => $f8,
-			                                "f9$f9" => $f9,
-							"f10" => $f10,
-			                                "f11$f11" => $f11,
-			                                "f12$f12" => $f12,
-			                                "f13$f13" => $f13,
-							"f14" => $f14,
-			                                "f15$f15" => $f15
-			                                );
+							"f3$f3" => $f3,
+							"f4$f4" => $f4,
+							"f5$f5" => $f5
+ );
 	print $input->header(-cookie => $cookie),$template->output;
 }
 
