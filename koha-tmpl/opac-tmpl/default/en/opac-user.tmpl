@@ -1,0 +1,78 @@
+<TMPL_INCLUDE NAME="members-top.inc">
+
+<TMPL_LOOP NAME="BORROWER_INFO">
+
+<table align=right cellpadding=10 cellspacing=0 border=1 width=200 >
+<tr   bgcolor="#fecc99" >
+<td><b>ARE OUR RECORDS CORRECT?</B></td></tr>
+<tr>
+<td><font size=1 face="arial,helvetica">
+Library Card: <TMPL_VAR NAME="cardnumber"> <p>
+<TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"> (<TMPL_VAR NAME="title">) <br>
+<TMPL_VAR NAME="streetaddress">, <TMPL_VAR NAME="city"><br>
+<TMPL_VAR NAME="phone"> (hm)<br>
+<TMPL_VAR NAME="faxnumber"> (wk)<br>
+
+<TMPL_VAR NAME="emailaddress"><p>
+
+Are any of our records incorrect? Have you moved recently, got a new phone number or e-mail address?<p>
+
+??? Link goes here to update record page ???
+
+</td></tr></table>
+
+
+
+<font size=6><em>Hi <TMPL_VAR NAME="firstname"> <TMPL_VAR NAME="surname"></em></font> 
+[<a href="/cgi-bin/koha/opac-logout.pl">Logout</a>]<p>
+
+
+</TMPL_LOOP>
+
+<P>We are still developing these services, but would love to know what you'd like to see here, so feel free to send us your feedback - koha@library.org.nz</P>
+
+
+<!--
+<table  cellpadding=10 cellspacing=0 border=1 >
+<tr   bgcolor="#fecc99" >
+<td><font face="arial,helvetica"><B>You have Outstanding charges and fines of <A HREF="error.html" onclick="fines(); return false">$4.00</B></font><P></td></tr></table>
+-->
+
+<p>
+
+<TMPL_IF NAME="issues_count">
+
+You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
+
+<TABLE  CELLPADDING=10  CELLSPACING=0 border=0 >
+
+<TR VALIGN=TOP  bgcolor="#99cccc">
+<TD><B>Title</B></TD>
+<TD><B>Author</B></TD>
+<TD><B>Due date</B></TD>
+<TD><B>Itemtype</B></TD>
+<TD><B>Charges</B></TD>
+<TD><B>Status</B></TD>
+</TR>
+
+<TMPL_LOOP NAME="ISSUES">
+
+<TR VALIGN=TOP>
+<TD><TMPL_VAR NAME="title"></TD>
+<TD><TMPL_VAR NAME="author"></TD>
+<TD><TMPL_VAR NAME="date_due"></TD>
+<TD><TMPL_VAR NAME="itemtype"></TD>
+<TD><TMPL_VAR NAME="charges"></TD>
+<TD><TMPL_VAR NAME="status"></TD>
+</TR>
+
+</TMPL_LOOP>
+</table>
+
+<TMPL_ELSE>
+You have no items on issue.
+</TMPL_IF>
+
+
+<TMPL_INCLUDE NAME="opac-bottom.inc">
+
