@@ -129,10 +129,12 @@
 </div>
 <div id="bloc25">
 	<h2 class="bull">Subscription length</h2>
-	<p><label class="label100">Number of num</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
-	<p><label class="label100">Number of weeks</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
-	<p><label class="label100">Number of months</label><input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></p>
-
+	<p>* fill 1 from :</p>
+	<ul>
+		<p><label class="label100">Number of num</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
+		<p><label class="label100">Number of weeks</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
+		<p><label class="label100">Number of months</label><input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></p>
+	</ul>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Numbering calculation</h2>
@@ -169,6 +171,14 @@
 				<td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
 				<td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
 			</tr>
+			<!-- TMPL_IF name="mod" -->
+			<tr>
+				<td class="bull">The loop is for instance</td>
+				<td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
+				<td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
+				<td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
+			</tr>
+			<!-- /TMPL_IF -->
 			<tr>
 				<td class="bull">Set back to</td>
 				<td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>
@@ -215,12 +225,11 @@ function FindAcqui(f)
 
 function Check(f)
 {
-  if (f.dow.value.length != 0
-	&& f.startdate.value.length != 0 && f.dow.value.length != 0)
-	{
-// 		alert('subscription ok');
-		document.f.submit();
-        }
+	if (f.startdate.value.length != 0 && 
+			f.numberlength.value+f.weeklength.value+f.monthlength.value > 0)
+		{
+			document.f.submit();
+		}
 else
 {
  	alert('field marked with * are mandatory');

@@ -114,9 +114,12 @@
 			</tr>
 			<tr>
 				<td class="bull">When more than</td>
-				<td><!-- TMPL_VAR name="whenmorethan1" --></td>
-				<td><!-- TMPL_VAR name="whenmorethan2" --></td>
-				<td><!-- TMPL_VAR name="whenmorethan3" --></td>
+				<td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
+					<i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
+					<i>(is <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
+				<td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
+					<i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
 			</tr>
 			<tr>
 				<td class="bull">Set back to</td>
@@ -131,7 +134,8 @@
 				<td><!-- TMPL_VAR name="lastvalue1" --></td>
 				<td><!-- TMPL_VAR name="lastvalue2" --></td>
 				<td><!-- TMPL_VAR name="lastvalue3" --></td>
-			</tr>		</table>
+			</tr>
+		</table>
 </div>
 <div id="bloc25">
 	<h2 class="bull">Issues</h2>

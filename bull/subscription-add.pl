@@ -19,9 +19,9 @@ my $op = $query->param('op');
 my $dbh = C4::Context->dbh;
 my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
 	$dow, $numberlength, $weeklength, $monthlength,
-	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 	$numberingmethod, $status, $biblionumber, 
 	$bibliotitle, $notes);
 
@@ -57,16 +57,19 @@ if ($op eq 'mod') {
 	$whenmorethan1 = $subs->{'whenmorethan1'};
 	$setto1 = $subs->{'setto1'};
 	$lastvalue1 = $subs->{'lastvalue1'};
+	$innerloop1 = $subs->{'innerloop1'};
 	$add2 = $subs->{'add2'};
 	$every2 = $subs->{'every2'};
 	$whenmorethan2 = $subs->{'whenmorethan2'};
 	$setto2 = $subs->{'setto2'};
 	$lastvalue2 = $subs->{'lastvalue2'};
+	$innerloop2 = $subs->{'innerloop2'};
 	$add3 = $subs->{'add3'};
 	$every3 = $subs->{'every3'};
 	$whenmorethan3 = $subs->{'whenmorethan3'};
 	$setto3 = $subs->{'setto3'};
 	$lastvalue3 = $subs->{'lastvalue3'};
+	$innerloop3 = $subs->{'innerloop3'};
 	$numberingmethod = $subs->{'numberingmethod'};
 	$status = $subs->{status};
 	$biblionumber = $subs->{'biblionumber'};
@@ -92,16 +95,19 @@ if ($op eq 'mod') {
 		whenmorethan1 => $whenmorethan1,
 		setto1 => $setto1,
 		lastvalue1 => $lastvalue1,
+		innerloop1 => $innerloop1,
 		add2 => $add2,
 		every2 => $every2,
 		whenmorethan2 => $whenmorethan2,
 		setto2 => $setto2,
 		lastvalue2 => $lastvalue2,
+		innerloop2 => $innerloop2,
 		add3 => $add3,
 		every3 => $every3,
 		whenmorethan3 => $whenmorethan3,
 		setto3 => $setto3,
 		lastvalue3 => $lastvalue3,
+		innerloop3 => $innerloop3,
 		numberingmethod => $numberingmethod,
 		status => $status,
 		biblionumber => $biblionumber,

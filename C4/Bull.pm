@@ -82,17 +82,21 @@ sub newsubscription {
 	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
 	$sth->execute($subscriptionid);
 	my $val = $sth->fetchrow_hashref;
-	# next issue number
-	my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
-	# next date (calculated from actual date & frequency parameters)
-	my $nextplanneddate = Get_Next_Date($startdate,$val);
+
+	# calculate issue number
+	my $serialseq = Get_Seq($val);
 	$sth = $dbh->prepare("insert into serial (serialseq,subscriptionid,biblionumber,status, planneddate) values (?,?,?,?,?)");
-	$sth->execute($newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextplanneddate);
-	$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
-													innerloop1=?,innerloop2=?,innerloop3=?
-													where subscriptionid = ?");
-	$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3,$subscriptionid);
-	$sth->finish;  
+	$sth->execute($serialseq, $subscriptionid, $val->{'biblionumber'}, 1, format_date_in_iso($startdate));
+
+	# next issue number
+	#my ($newserialseq,$newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3) = Get_Next_Seq($val);
+	# next date (calculated from actual date & frequency parameters)
+	#my $nextplanneddate = Get_Next_Date($startdate,$val);
+# 	$sth = $dbh->prepare("update subscription set lastvalue1=?, lastvalue2=?,lastvalue3=?,
+# 													innerloop1=?,innerloop2=?,innerloop3=?
+# 													where subscriptionid = ?");
+# 	$sth->execute($newlastvalue1,$newlastvalue2,$newlastvalue3,$newinnerloop1,$newinnerloop2,$newinnerloop3,$subscriptionid);
+# 	$sth->finish;  
 	return $subscriptionid;
 }
 sub getsubscription {
@@ -122,22 +126,22 @@ sub getsubscriptionfrombiblionumber {
 sub modsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $biblionumber, $notes, $subscriptionid)= @_;
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("update subscription set librarian=?, aqbooksellerid=?,cost=?,aqbudgetid=?,startdate=?,
 						 periodicity=?,dow=?,numberlength=?,weeklength=?,monthlength=?,
-						add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,
-						add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,
-						add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,
+						add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,innerloop1=?,
+						add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,innerloop2=?,
+						add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,innerloop3=?,
 						numberingmethod=?, status=?, biblionumber=?, notes=? where subscriptionid = ?");
 	$sth->execute($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $biblionumber, $notes, $subscriptionid);
 	$sth->finish;
 
@@ -148,7 +152,7 @@ sub getsubscriptions {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
-	$sth->execute($title,$ISSN);
+	$sth->execute("%$title%",$ISSN);
 	my @results;
 	while (my $line = $sth->fetchrow_hashref) {
 		push @results, $line;
@@ -255,6 +259,18 @@ sub Get_Next_Date(@) {
 		$resultdate=DateCalc($planneddate,"2 years");
 	}
     return format_date_in_iso($resultdate);
+}
+
+sub Get_Seq {
+	my ($val) =@_;
+	my $calculated = $val->{numberingmethod};
+	my $x=$val->{'lastvalue1'};
+	$calculated =~ s/\{X\}/$x/g;
+	my $y=$val->{'lastvalue2'};
+	$calculated =~ s/\{Y\}/$y/g;
+	my $z=$val->{'lastvalue3'};
+	$calculated =~ s/\{Z\}/$z/g;
+	return $calculated;
 }
 
 sub Get_Next_Seq {

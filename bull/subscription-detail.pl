@@ -19,9 +19,9 @@ my $sth;
 my ($template, $loggedinuser, $cookie, $subs);
 my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
 	$dow, $numberlength, $weeklength, $monthlength,
-	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 	$numberingmethod, $status, $biblionumber, $bibliotitle, $notes);
 
 $subscriptionid = $query->param('subscriptionid');
@@ -44,25 +44,28 @@ if ($op eq 'modsubscription') {
 	$whenmorethan1 = $query->param('whenmorethan1');
 	$setto1 = $query->param('setto1');
 	$lastvalue1 = $query->param('lastvalue1');
+	$innerloop1 = $query->param('innerloop1');
 	$add2 = $query->param('add2');
 	$every2 = $query->param('every2');
 	$whenmorethan2 = $query->param('whenmorethan2');
 	$setto2 = $query->param('setto2');
 	$lastvalue2 = $query->param('lastvalue2');
+	$innerloop2 = $query->param('innerloop2');
 	$add3 = $query->param('add3');
 	$every3 = $query->param('every3');
 	$whenmorethan3 = $query->param('whenmorethan3');
 	$setto3 = $query->param('setto3');
 	$lastvalue3 = $query->param('lastvalue3');
+	$innerloop3 = $query->param('innerloop3');
 	$numberingmethod = $query->param('numberingmethod');
 	$status = 1;
 	$notes = $query->param('notes');
     
 	&modsubscription($auser,$aqbooksellerid,$cost,$aqbudgetid,$startdate,
 					$periodicity,$dow,$numberlength,$weeklength,$monthlength,
-					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,
-					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,
-					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,
+					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $biblionumber, $notes, $subscriptionid);
 }
 
@@ -98,6 +101,7 @@ $template->param(
 	add1 => $subs->{add1},
 	every1 => $subs->{every1},
 	whenmorethan1 => $subs->{whenmorethan1},
+	innerloop1 => $subs->{innerloop1},
 	setto1 => $subs->{setto1},
 	lastvalue1 => $subs->{lastvalue1},
 	add2 => $subs->{add2},
@@ -105,11 +109,13 @@ $template->param(
 	whenmorethan2 => $subs->{whenmorethan2},
 	setto2 => $subs->{setto2},
 	lastvalue2 => $subs->{lastvalue2},
+	innerloop2 => $subs->{innerloop2},
 	add3 => $subs->{add3},
 	every3 => $subs->{every3},
 	whenmorethan3 => $subs->{whenmorethan3},
 	setto3 => $subs->{setto3},
 	lastvalue3 => $subs->{lastvalue3},
+	innerloop3 => $subs->{innerloop3},
 	numberingmethod => $subs->{numberingmethod},
 	status => $subs->{status},
 	biblionumber => $subs->{biblionumber},
