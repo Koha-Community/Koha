@@ -24,13 +24,15 @@ Modify Group - <TMPL_VAR Name="description"></h1><br>
 		</tr>
 
 		<tr valign=top bgcolor=white><td>Item Type</td><td><input type=text name=Item Type value="<TMPL_VAR Name="itemtype">" size=20></td></tr>
-
+		<tr valign=top bgcolor=white><td>Volume</td>
+		<td><input type=text name=Volume value="<TMPL_VAR Name="volumeddesc">" size=20></td></tr>
 		<tr valign="top" bgcolor="white">
 			<td>URL</td>
 			<td><input type="text" name="url" value="<TMPL_VAR Name="url">" size="20"></td>
 		</tr>
+		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<TMPL_VAR Name="isbn">" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Class</td><td><input type=text name=Class value="<TMPL_VAR Name="classification"><TMPL_VAR Name="dewey"><TMPL_VAR Name="subclass">" size=20></td></tr>
+		<tr valign=top bgcolor=white><td>UDC</td><td><input type=text name=Class value="<TMPL_VAR Name="classification"><TMPL_VAR Name="dewey"><TMPL_VAR Name="subclass">" size=20></td></tr>
 
 
 
@@ -38,20 +40,21 @@ Modify Group - <TMPL_VAR Name="description"></h1><br>
 		<tr valign=top bgcolor=white><td>Place</td><td><input type=text name=Place value="<TMPL_VAR Name="place">" size=20></td></tr>
 
 
-		<tr valign=top bgcolor=white><td>ISBN</td><td><input type=text name=ISBN value="<TMPL_VAR Name="isbn">" size=20></td></tr>
-
+		
 		<tr valign=top bgcolor=white><td>Publication Year</td><td><input type=text name=Publication Year value="<TMPL_VAR Name="publicationyear">" size=20></td></tr>
 
+		
+		<!--tr valign=top bgcolor=white><td>Illustrations</td><td><input type=text name=Illustrations value="<TMPL_VAR Name="illustration">" size=20></td></tr-->
+
+		
+		
 		<tr valign=top bgcolor=white><td>Pages</td><td><input type=text name=Pages value="<TMPL_VAR Name="pages">" size=20></td></tr>
 
-		<tr valign=top bgcolor=white><td>Illustrations</td><td><input type=text name=Illustrations value="<TMPL_VAR Name="illustration">" size=20></td></tr>
-
-		<tr valign=top bgcolor=white><td>Volume</td>
-		<td><input type=text name=Volume value="<TMPL_VAR Name="volumeddesc">" size=20></td></tr>
-		<tr valign=top bgcolor=white><td>Notes</td>
-		<td><input name="Notes" size="20" value="<TMPL_VAR name="bnotes">"></td></tr>
 		<tr valign=top bgcolor=white><td>Size</td>
 		<td><input type=text name=Size value="<TMPL_VAR Name="size">" size=20></td></tr>
+		
+		<tr valign=top bgcolor=white><td>Notes</td>
+		<td><input name="Notes" size="20" value="<TMPL_VAR name="bnotes">"></td></tr>
 
 		<input type=hidden name=bibnum value="<TMPL_VAR Name="biblionumber">">
 
