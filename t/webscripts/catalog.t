@@ -1,4 +1,4 @@
-BEGIN { $| = 1; print "1..19\n";
+BEGIN { $| = 1; print "1..28\n";
     $::intranetdir=`grep intranetdir /etc/koha.conf`;
     chomp $::intranetdir;
     $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
@@ -12,6 +12,9 @@ $ENV{PERLLIB}=$::intranetdir."/modules";
 use C4::Context;
 $loaded = 1;
 print "ok 1 Test script load\n";
+
+my $dbh=C4::Context->dbh();
+my $sth;
 
 my $debug=$ARGV[0];
 
@@ -79,8 +82,7 @@ contains($script, $test, ['name=Author value="Wellikoff, Alan"', 'name=Title val
 
 # Add subject headings for #163 to catalogueentry table
 
-my $dbh=C4::Context->dbh();
-my $sth=$dbh->prepare("select * from catalogueentry where entrytype='s' and catalogueentry=?");
+$sth=$dbh->prepare("select * from catalogueentry where entrytype='s' and catalogueentry=?");
 $sth->execute('UNITED STATES-MANUFACTURERS-CATALOGUE');
 unless ($sth->rows) {
     $sth=$dbh->prepare("insert into catalogueentry (entrytype,catalogueentry) values ('s', ?)");
@@ -97,17 +99,60 @@ $test='Modify Biblio change title to "Testing" - biblio #163';
 $script="$intranetdir/cgi-bin/updatebiblio.pl 'Author=Wellikoff%2C+Alan&Title=Testing&Subject=UNITED+STATES-MANUFACTURERS-CATALOGUE%7CCATALOGUES-HISTORICAL+SUPPLIES&Copyright=&Series=&Additional=&Subtitle=&Unititle=&Notes=&Serial=&Analytic=&Analytic=&bibnum=163&bibitemnum=163'";
 contains($script, $test, ['location: detail.pl', 'bib=163']);
 
+$sth=$dbh->prepare("select title from biblio where biblionumber=163");
+$sth->execute();
+my ($title) = $sth->fetchrow;
+if ($title eq 'Testing') {
+    print "ok ".$testnumber++." title is now 'Testing'\n";
+} else {
+    print "not ok ".$testnumber++." title is now $title\n";
+}
+
+
 $test='Modify Biblio change title back to "The Historical Supply Catalogue" - biblio #163';
 $script="$intranetdir/cgi-bin/updatebiblio.pl 'Author=Wellikoff%2C+Alan&Title=The+Historical+Supply+Catalogue&Subject=UNITED+STATES-MANUFACTURERS-CATALOGUE%7CCATALOGUES-HISTORICAL+SUPPLIES&Copyright=&Series=&Additional=&Subtitle=&Unititle=&Notes=&Serial=&Analytic=&Analytic=&bibnum=163&bibitemnum=163'";
 contains($script, $test, ['location: detail.pl', 'bib=163']);
+
+$sth=$dbh->prepare("select title from biblio where biblionumber=163");
+$sth->execute();
+my ($title) = $sth->fetchrow;
+if ($title eq 'The Historical Supply Catalogue') {
+    print "ok ".$testnumber++." title is now 'The Historical Supply Catalogue'\n";
+} else {
+    print "not ok ".$testnumber++." title is now $title\n";
+}
 
 $test='Delete Biblio with items - biblio #163';
 $script="$intranetdir/cgi-bin/delbiblio.pl 'biblio=163'";
 contains($script, $test, ['delete them before deleting this biblio']);
 
+$sth=$dbh->prepare("select biblionumber from biblio where biblionumber=163");
+$sth->execute;
+if ($sth->rows) {
+    print "ok ".$testnumber++." biblio 163 was not deleted.\n";
+} else {
+    print "not ok ".$testnumber++." biblio 163 is gone!\n";
+}
+
 $test='Delete Biblio with no items - biblio #57';
 $script="$intranetdir/cgi-bin/delbiblio.pl 'biblio=57'";
 contains($script, $test, ['location:', 'catalogue-home.pl']);
+
+$sth=$dbh->prepare("select * from biblio where biblionumber=57");
+$sth->execute;
+if ($sth->rows) {
+    print "not ok ".$testnumber++." biblio 57 is still in biblio table!\n";
+} else {
+    print "ok ".$testnumber++." biblio 57 was deleted.\n";
+}
+
+$sth=$dbh->prepare("select biblionumber from deletedbiblio where biblionumber=57");
+$sth->execute;
+if ($sth->rows) {
+    print "ok ".$testnumber++." biblio 57 is in deletedbiblio table.\n";
+} else {
+    print "not ok ".$testnumber++." biblio 57 is not in deletedbiblio table!\n";
+}
 
 my $query="select * from deletedbiblio where biblionumber=57";
 $sth=$dbh->prepare($query);
@@ -129,10 +174,36 @@ if (my @data=$sth->fetchrow_array) {
     $sth->finish;
 }
 
-$test='Modify biblioitem (group) - biblio #331';
+$test='Modify biblioitem (group) - biblioitem #331';
 $script="$intranetdir/cgi-bin/modbibitem.pl 'bibitem=331&biblio=331&submit.x=62&submit=modify'";
 contains($script, $test, ['Dog stories', 'Herriot, James', 'T291', 331]);
 
+$test='Modify biblioitem (group) change itemtype to JNF - biblioitem #331';
+$script="$intranetdir/cgi-bin/updatebibitem.pl 'existinggroup=331&existing=NO&Item=JNF&Class=HER&Publisher=&Place=&ISBN=0330296957&Publication=0&Pages=20p.+Illus.&Illustrations=&Volume=&Notes=&Size=&bibnum=331&bibitemnum=331&check_group_T291=on&submit.x=103&submit.y=30'";
+contains($script, $test, ['location:', 'moredetail.pl', 331]);
+
+$sth=$dbh->prepare("select itemtype from biblioitems where biblioitemnumber=331");
+$sth->execute();
+my ($itemtype) = $sth->fetchrow;
+if ($itemtype eq 'JNF') {
+    print "ok ".$testnumber++." itemtype is now JNF\n";
+} else {
+    print "not ok ".$testnumber++." itemtype is now $itemtype\n";
+}
+
+$test='Modify biblioitem (group) change itemtype back to JF - biblioitem #331';
+$script="$intranetdir/cgi-bin/updatebibitem.pl 'existinggroup=331&existing=NO&Item=JF&Class=HER&Publisher=&Place=&ISBN=0330296957&Publication=0&Pages=20p.+Illus.&Illustrations=&Volume=&Notes=&Size=&bibnum=331&bibitemnum=331&check_group_T291=on&submit.x=103&submit.y=30'";
+contains($script, $test, ['location:', 'moredetail.pl', 331]);
+
+
+$sth=$dbh->prepare("select itemtype from biblioitems where biblioitemnumber=331");
+$sth->execute();
+my ($itemtype) = $sth->fetchrow;
+if ($itemtype eq 'JF') {
+    print "ok ".$testnumber++." itemtype is now JF\n";
+} else {
+    print "not ok ".$testnumber++." itemtype is now $itemtype\n";
+}
 
 
 
