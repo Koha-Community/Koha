@@ -1436,6 +1436,10 @@ sub OLDnewitems {
 	$data       = $sth->fetchrow_hashref;
 	$itemnumber = $data->{'max(itemnumber)'} + 1;
 	$sth->finish;
+# FIXME the "notforloan" field seems to be named "loan" in some places. workaround bugfix.
+	if ($item->{'loan'}) {
+		$item->{'notforloan'} = $item->{'loan'};
+	}
 # if dateaccessioned is provided, use it. Otherwise, set to NOW()
 	if ($item->{'dateaccessioned'}) {
 		$sth=$dbh->prepare("Insert into items set
@@ -1452,7 +1456,7 @@ sub OLDnewitems {
 								$item->{'booksellerid'},$item->{'dateaccessioned'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'loan'});
+								$item->{'itemnotes'},$item->{'notforloan'});
 	} else {
 		$sth=$dbh->prepare("Insert into items set
 							itemnumber           = ?,				biblionumber         = ?,
@@ -1468,7 +1472,7 @@ sub OLDnewitems {
 								$item->{'booksellerid'},
 								$item->{'homebranch'},$item->{'holdingbranch'},
 								$item->{'price'},$item->{'replacementprice'},
-								$item->{'itemnotes'},$item->{'loan'});
+								$item->{'itemnotes'},$item->{'notforloan'});
 	}
 	if (defined $sth->errstr) {
 		$error .= $sth->errstr;
@@ -2213,6 +2217,11 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.73  2003/11/28 09:45:25  tipaul
+# bugfix for iso2709 file import in the "notforloan" field.
+#
+# But notforloan field called "loan" somewhere, so in case "loan" is used, copied to "notforloan" to avoid a bug.
+#
 # Revision 1.72  2003/11/24 17:40:14  tipaul
 # fix for #385
 #
