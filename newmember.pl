@@ -109,10 +109,6 @@ if ($data{'city'} eq ''){
     $string.=" Postal City<br>";
     $ok=1;
 }
-if ($data{'contactname'} eq ''){
-    $string.=" Alternate Contact<br>";
-    $ok=1;
-}
 
 # Pass the ok/not ok status and the error message to the template
 $template->param(	OK=> ($ok==0),
