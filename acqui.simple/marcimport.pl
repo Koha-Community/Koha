@@ -680,7 +680,7 @@ sub uploadmarc {
     use strict;
     my ($dbh)=@_;
 
-    requireDBI($dbh,"uploadedmarc");
+    requireDBI($dbh,"uploadmarc");
 
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $sth=$dbh->prepare("select id,name from uploadedmarc");
@@ -800,7 +800,7 @@ sub AcceptMarcUpload {
 	$input,		# CGI parms
     )=@_;
 
-    requireDBI($dbh,"uploadedmarc");
+    requireDBI($dbh,"AcceptMarcUpload");
 
     my $name=$input->param('name');
     my $data=$input->param('uploadmarc');
@@ -1146,6 +1146,9 @@ sub FormatMarcText {
 
 #---------------
 # $Log$
+# Revision 1.6.2.34  2002/07/05 19:30:14  amillar
+# Second arg of requireDBI is calling subroutine name
+#
 # Revision 1.6.2.33  2002/07/05 16:04:04  tonnesen
 # Fixing some bugs in marcimport.pl that broke uploading marc records.
 #
