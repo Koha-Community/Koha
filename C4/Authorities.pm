@@ -48,36 +48,100 @@ It contains every functions to manage/find authorities.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&newauthority &searchauthority
+@EXPORT = qw(	&newauthority
+						&searchauthority
+						&delauthority
 					);
 # FIXME - This is never used
 
 =item newauthority
 
-  $id = &newauthority($dbh,$hash);
+  $id = &newauthority($dbh,$category,$stdlib,$freelib,$father,$level,$hierarchy);
 
   adds an authority entry in the db.
   It calculates the level of the authority with the authoritysep and the complete hierarchy.
 
 C<$dbh> is a DBI::db handle for the Koha database.
+C<$category> is the category of the entry
+C<$stdlib> is the authority form to be created
+C<$freelib> is a free form for the authority
+C<$father> is the father in case of creation of a thesaurus sub-entry
+C<$level> is the level of the entry (1 being the 1st thasaurus level)
+C<$hierarchy> is the id of all the fathers of the enty.
 
-C<$hash> is a hash containing freelib,stdlib,category and father.
+Note :
+ you can safely pass a full hierarchy without testing the existence of the father.
+ As many father, grand-father... as needed are created.
+
+ Usually, this function is called with '',1,'' as the 3 lasts parameters.
+ if not provided, it's the default value.
+
+ The function is recursive
+
+ The function uses the authoritysep defined in systempreferences table to split the lib.
 
 =cut
+
 sub newauthority  {
+	my ($dbh,$category,$stdlib,$freelib,$father,$level,$hierarchy)=@_;
+	exit unless ($stdlib);
+	$freelib = $stdlib unless ($freelib);
+	my $dbh = C4::Context->dbh;
+	my $sth1b=$dbh->prepare("select id from bibliothesaurus where freelib=? and hierarchy=? and category=?");
+	my $sth2 =$dbh->prepare("insert into bibliothesaurus (category,stdlib,freelib,father,level,hierarchy) values (?,?,?,?,?,?)");
+	$freelib=$stdlib unless ($freelib);
+	my $authoritysep = C4::Context->preference('authoritysep');
+	my @Thierarchy = split(/$authoritysep/,$stdlib);
+	#---- split freelib. If not same structure as stdlib (different number of authoritysep),
+	#---- then, drop it => we will use stdlib to build hiearchy, freelib will be used only for last occurence.
+	my @Fhierarchy = split(/$authoritysep/,$freelib);
+	if ($#Fhierarchy eq 0) {
+		$#Fhierarchy=-1;
+	}
+	for (my $xi=0;$xi<$#Thierarchy;$xi++) {
+		$Thierarchy[$xi] =~ s/^\s+//;
+		$Thierarchy[$xi] =~ s/\s+$//;
+		my $x = &newauthority($dbh,$category,$Thierarchy[$xi],$Fhierarchy[$xi]?$Fhierarchy[$xi]:$Thierarchy[$xi],$father,$level,$hierarchy);
+		$father .= $Thierarchy[$xi]." $authoritysep ";
+		$hierarchy .= "$x|" if ($x);
+		$level++;
+	}
+	my $id;
+	if ($#Thierarchy >=0) {
+		# free form
+		$sth1b->execute($freelib,$hierarchy,$category);
+		($id) = $sth1b->fetchrow;
+		unless ($id) {
+			$Thierarchy[$#Thierarchy] =~ s/^\s+//;
+			$Thierarchy[$#Thierarchy] =~ s/\s+$//;
+			$Fhierarchy[$#Fhierarchy] =~ s/^\s+// if ($#Fhierarchy>=0);
+			$Fhierarchy[$#Fhierarchy] =~ s/\s+$// if ($#Fhierarchy>=0);
+			$freelib =~ s/\s+$//;
+			$sth2->execute($category,$Thierarchy[$#Thierarchy],$#Fhierarchy==$#Thierarchy?$Fhierarchy[$#Fhierarchy]:$freelib,$father,$level,$hierarchy);
+		}
+		# authority form
+		$sth1b->execute($Thierarchy[$#Thierarchy],$hierarchy,$category);
+		($id) = $sth1b->fetchrow;
+		unless ($id) {
+			$Thierarchy[$#Thierarchy] =~ s/^\s+//;
+			$Thierarchy[$#Thierarchy] =~ s/\s+$//;
+			$sth2->execute($category,$Thierarchy[$#Thierarchy],$Thierarchy[$#Thierarchy],$father,$level,$hierarchy);
+			$sth1b->execute($stdlib,$hierarchy,$category);
+			($id) = $sth1b->fetchrow;
+		}
+	}
+	return $id;
 }
 
 =item SearchAuthority
 
-  $id = &SearchAuthority($dbh,$category,$toponly,$branch,$searchstring,$type);
+  $id = &SearchAuthority($dbh,$category,$branch,$searchstring,$type,$offset,$pagesize);
 
   searches for an authority
 
 C<$dbh> is a DBI::db handle for the Koha database.
 
 C<$category> is the category of the authority
-
-C<$toponly> if set, returns only one level of entries. If unset, returns the main level and the sub entries.
 
 C<$branch> can contain a branch hierarchy. For example, if C<$branch> contains 1024|2345, SearchAuthority will return only
 entries beginning by 1024|2345
@@ -87,32 +151,64 @@ C<$searchstring> contains a string. Only entries beginning by C<$searchstring> a
 
 =cut
 sub searchauthority  {
-	my ($env,$category,$toponly,$branch,$searchstring)=@_;
+	my ($env,$category,$branch,$searchstring,$offset,$pagesize)=@_;
+	$offset=0 unless ($offset);
+#	warn "==> ($env,$category,$branch,$searchstring,$offset,$pagesize)";
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
-	my $query="Select distinct stdlib,id,hierarchy,level from bibliothesaurus where (category like \"$category%\")";
-	$query .= " and hierarchy='$branch'" if ($branch && $toponly);
-	$query .= " and hierarchy like \"$branch%\"" if ($branch && !$toponly);
-	$query .= " and hierarchy=''" if (!$branch & $toponly);
-	$query .= " and stdlib like \"$searchstring%\"" if ($searchstring);
-	$query .= " order by category,stdlib";
+	my $query="Select stdlib,freelib,father,id,hierarchy,level from bibliothesaurus where (category =\"$category\")";
+	$query .= " and hierarchy='$branch'" if ($branch);
+	$query .= " and match (category,freelib) AGAINST ('$searchstring')" if ($searchstring);
+#	$query .= " and freelib like \"$searchstring%\"" if ($searchstring);
+	$query .= " order by category,freelib limit $offset,".($pagesize*4);
+#	warn "q : $query";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
-	my $cnt=0;
 	my $old_stdlib="";
 	while (my $data=$sth->fetchrow_hashref){
-	if ($old_stdlib ne $data->{'stdlib'}) {
-		$cnt ++;
-		push(@results,$data);
-	}
-	$old_stdlib = $data->{'stdlib'};
+			push(@results,$data);
 	}
 	$sth->finish;
+	$query="Select count(*) from bibliothesaurus where (category =\"$category\")";
+	$query .= " and hierarchy='$branch'" if ($branch);
+	$query .= " and stdlib like \"$searchstring%\"" if ($searchstring);
+	$query .= "";
+	$sth=$dbh->prepare($query);
+	$sth->execute;
+	my ($cnt) = $sth->fetchrow;
+	$cnt = $pagesize+1 if ($cnt>$pagesize);
 	return ($cnt,\@results);
 }
 
 
+=item delauthority
+
+  $id = &delauthority($id);
+
+  delete an authority and all it's "childs" and "related"
+
+C<$id> is the id of the authority
+
+=cut
+sub delauthority {
+	my ($id) = @_;
+	my $dbh = C4::Context->dbh;
+	# we must delete : - the id, every sons from the id.
+	# to do this, we can : reconstruct the full hierarchy of the id and delete with hierarchy as a key.
+	my $sth=$dbh->prepare("select hierarchy from bibliothesaurus where id=?");
+	$sth->execute($id);
+	my ($hierarchy) = $sth->fetchrow;
+	if ($hierarchy) {
+		$dbh->do("delete from bibliothesaurus where hierarchy like '$hierarchy|$id|%'");
+#		warn("delete from bibliothesaurus where hierarchy like '$hierarchy|$id|%'");
+	} else {
+		$dbh->do("delete from bibliothesaurus where hierarchy like '$id|%'");
+#		warn("delete from bibliothesaurus where hierarchy like '$id|%'");
+	}
+#	warn("delete from bibliothesaurus where id='$id|'");
+	$dbh->do("delete from bibliothesaurus where id='$id|'");
+}
 END { }       # module clean-up code here (global destructor)
 
 1;

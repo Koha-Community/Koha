@@ -1,6 +1,9 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.28  2002/12/10 13:30:03  tipaul
+# fugfixes from Dombes Abbey work
+#
 # Revision 1.27  2002/11/19 12:36:16  tipaul
 # road to 1.3.2
 # various bugfixes, improvments, and migration from acquisition.pm to biblio.pm
@@ -609,7 +612,7 @@ sub MARCmodbiblio {
     my $oldrecord=&MARCgetbiblio($dbh,$bibid);
 # if nothing to change, don't waste time...
     if ($oldrecord eq $record) {
-    warn "NOTHING TO CHANGE";
+#    warn "NOTHING TO CHANGE";
 	return;
     }
 # otherwise, skip through each subfield...
@@ -627,11 +630,12 @@ sub MARCmodbiblio {
 		&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
 				 1,@$subfield[0],$subfieldorder,@$subfield[1]);
 	    } else {
-# modify he subfield if it's a different string
+# modify the subfield if it's a different string
 		if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 		    my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
 		    &MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 		} else {
+# FIXME ???
 		}
 	    }
 	}
@@ -642,10 +646,10 @@ sub MARCmoditem {
 	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
 	# if nothing to change, don't waste time...
 	if ($oldrecord eq $record) {
-		warn "nothing to change";
+#		warn "nothing to change";
 		return;
 	}
-	warn "MARCmoditem : ".$record->as_formatted;
+#	warn "MARCmoditem : ".$record->as_formatted;
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();
 	# search old MARC item
@@ -660,17 +664,18 @@ sub MARCmoditem {
 		$subfieldorder++;
 		if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
 	# just adding datas...
-		warn "addfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
+#		warn "addfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
 			&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
 					$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
 		} else {
-		warn "modfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
+#		warn "modfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
 	# modify he subfield if it's a different string
 			if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
 				my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-				warn "HERE : $subfieldid, $bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder";
+#				warn "HERE : $subfieldid, $bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder";
 				&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
 			} else {
+#FIXME ???
 				warn "ICI";
 			}
 		}
@@ -927,6 +932,7 @@ sub MARCmarc2koha {
 sub MARCmarc2kohaOneField {
 # FIXME ? if a field has a repeatable subfield that is used in old-db, only the 1st will be retrieved...
     my ($sth,$kohatable,$kohafield,$record,$result)= @_;
+#    warn "kohatable / $kohafield / $result / ";
     my $res="";
     my $tagfield;
     my $subfield;
@@ -1043,6 +1049,9 @@ sub NEWnewbiblio {
 sub NEWmodbiblio {
 my ($dbh,$record,$bibid) =@_;
 &MARCmodbiblio($dbh,$record,$bibid);
+my $oldbiblio = MARCmarc2koha($dbh,$record);
+my $oldbiblionumber = OLDmodbiblio($dbh,$oldbiblio);
+OLDmodbibitem($dbh,$oldbiblio);
 return 1;
 }
 
@@ -1067,6 +1076,8 @@ sub NEWnewitem {
 sub NEWmoditem {
 	my ($dbh,$record,$bibid,$itemnumber,$delete) = @_;
 	&MARCmoditem($dbh,$record,$bibid,$itemnumber,$delete);
+	my $olditem = MARCmarc2koha($dbh,$record);
+	OLDmoditem($dbh,$olditem);
 }
 
 #
@@ -1202,7 +1213,6 @@ unititle      = $biblio->{'unititle'},
 notes         = $biblio->{'notes'}
 where biblionumber = $biblio->{'biblionumber'}";
     $sth   = $dbh->prepare($query);
-
     $sth->execute;
 
     $sth->finish;
@@ -1474,11 +1484,11 @@ sub OLDmoditem {
     my ($dbh,$item) = @_;
 #  my ($dbh,$loan,$itemnum,$bibitemnum,$barcode,$notes,$homebranch,$lost,$wthdrawn,$replacement)=@_;
 #  my $dbh=C4Connect;
-  my $query="update items set biblioitemnumber=$item->{'bibitemnum'},
-                              barcode='$item->{'barcode'}',itemnotes='$item->{'notes'}'
+$item->{'itemnum'}=$item->{'itemnumber'} unless $item->{'itemnum'};
+  my $query="update items set  barcode='$item->{'barcode'}',itemnotes='$item->{'notes'}'
                           where itemnumber=$item->{'itemnum'}";
   if ($item->{'barcode'} eq ''){
-    $query="update items set biblioitemnumber=$item->{'bibitemnum'},notforloan=$item->{'loan'} where itemnumber=$item->{'itemnum'}";
+    $query="update items set notforloan=$item->{'loan'} where itemnumber=$item->{'itemnum'}";
   }
   if ($item->{'lost'} ne ''){
     $query="update items set biblioitemnumber=$item->{'bibitemnum'},
@@ -1492,7 +1502,6 @@ sub OLDmoditem {
   if ($item->{'replacement'} ne ''){
     $query=~ s/ where/,replacementprice='$item->{'replacement'}' where/;
   }
-
   my $sth=$dbh->prepare($query);
   $sth->execute;
   $sth->finish;
@@ -1678,7 +1687,7 @@ sub newbiblio {
   my ($biblio) = @_;
   my $dbh    = C4::Context->dbh;
   my $bibnum=OLDnewbiblio($dbh,$biblio);
-# TODO : MARC add
+# FIXME : MARC add
   return($bibnum);
 }
 
@@ -1705,6 +1714,7 @@ sub modbiblio {
   my $dbh  = C4::Context->dbh;
   my $biblionumber=OLDmodbiblio($dbh,$biblio);
   return($biblionumber);
+# FIXME : MARC mod
 } # sub modbiblio
 
 =item modsubtitle
