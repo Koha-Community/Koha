@@ -15,6 +15,8 @@ $VERSION = 0.01;
 		&releasecandidatewarning
 		&getinstallationdirectories
 		&getdatabaseinfo
+		&getapacheinfo
+		&getapachevhostinfo
 		);
 
 
@@ -89,6 +91,15 @@ They can be installed by running (as root) the following:
 
 %s
 |;
+$messages->{'AllPerlModulesInstalled'}->{en}=qq|
+
+==============================
+= ALL PERL MODULES INSTALLED =
+==============================
+
+All mandatory perl modules are installed.
+
+Press <ENTER> to continue: |;
 $messages->{'KohaVersionInstalled'}->{en}="You currently have Koha %s on your system.";
 $messages->{'KohaUnknownVersionInstalled'}->{en}="I am not able to determine what version of Koha is installed now.";
 $messages->{'KohaAlreadyInstalled'}->{en}=qq|
@@ -124,15 +135,13 @@ files in.  This directory will be auto-created for you if it doesn't exist.
 Intranet Directory [%s]: |;
 
 sub releasecandidatewarning {
-    my $language=shift;
-    my $kohaversion=shift;
-    my $message=getmessage('ReleaseCandidateWarning', $language, [$kohaversion, $kohaversion]);
+    my $message=getmessage('ReleaseCandidateWarning', [$::kohaversion, $::kohaversion]);
     my $answer=showmessage($message, 'yn', 'n');
 
     if ($answer =~ /y/i) {
-	print getmessage('continuing', $language);
+	print getmessage('continuing');
     } else {
-	my $message=getmessage('WatchForReleaseAnnouncements', $language);
+	my $message=getmessage('WatchForReleaseAnnouncements');
 	print $message;
 	exit;
     };
@@ -144,12 +153,11 @@ sub releasecandidatewarning {
 #
 #
 sub checkperlmodules {
-    my $language=shift;
-    my $message = getmessage('CheckingPerlModules', $language);
+    my $message = getmessage('CheckingPerlModules');
     showmessage($message, 'none');
     
     unless (eval "require 5.6.0") {
-	die getmessage('PerlVersionFailure', $language, ['5.6.0']);
+	die getmessage('PerlVersionFailure', ['5.6.0']);
     }
 
     my @missing = ();
@@ -158,7 +166,7 @@ sub checkperlmodules {
     unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
     unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
     unless (eval {require Net::Z3950})        { 
-	my $message = getmessage('NETZ3950Missing', $language);
+	my $message = getmessage('NETZ3950Missing');
 	showmessage($message, 'PressEnter', '', 1);
 	if ($#missing>=0) {
 	    push @missing, "Net::Z3950";
@@ -174,9 +182,11 @@ sub checkperlmodules {
 	foreach my $module (@missing) {
 	    $missing.="   perl -MCPAN -e 'install \"$module\"'\n";
 	}
-	my $message=getmessage('MissingPerlModules', $language, [$missing]);
+	my $message=getmessage('MissingPerlModules', [$missing]);
 	showmessage($message, 'none');
 	exit;
+    } else {
+	showmessage(getmessage('AllPerlModulesInstalled'), 'PressEnter', '', 1);
     }
 
 
@@ -185,9 +195,8 @@ sub checkperlmodules {
 
 sub getmessage {
     my $messagename=shift;
-    my $lang=shift;
     my $variables=shift;
-    my $message=$messages->{$messagename}->{$lang} || $messages->{$messagename}->{en} || "Error: No message named $messagename in Install.pm\n";
+    my $message=$messages->{$messagename}->{$::language} || $messages->{$messagename}->{en} || "Error: No message named $messagename in Install.pm\n";
     if (defined($variables)) {
 	$message=sprintf $message, @$variables;
     }
@@ -207,11 +216,19 @@ sub showmessage {
     print $message;
     SWITCH: {
 	if ($responsetype =~/^restrictchar (.*)/i) {
+	    my $response='\0';
 	    my $options=$1;
-	    ($defaultresponse) || ($defaultresponse=substr($options,0,1));
-	    my $response=<STDIN>;
-	    chomp $response;
-	    ($response) || ($response=$defaultresponse);
+	    until ($options=~/$response/) {
+		($defaultresponse) || ($defaultresponse=substr($options,0,1));
+		$response=<STDIN>;
+		chomp $response;
+		(length($response)) || ($response=$defaultresponse);
+		unless ($options=~/$response/) {
+		    ($noclear) || (system('clear'));
+		    print "Invalid Response.  Choose from [$options].\n\n";
+		    print $message;
+		}
+	    }
 	    return $response;
 	}
 	if ($responsetype =~/^free$/i) {
@@ -232,16 +249,15 @@ sub showmessage {
 }
 
 sub getinstallationdirectories {
-    my $language=shift;
     my $opacdir = '/usr/local/koha/opac';
     my $intranetdir = '/usr/local/koha/intranet';
     my $getdirinfo=1;
     while ($getdirinfo) {
 	# Loop until opac directory and koha directory are different
-	my $message=getmessage('GetOpacDir', $language, [$opacdir]);
+	my $message=getmessage('GetOpacDir', [$opacdir]);
 	$opacdir=showmessage($message, 'free', $opacdir);
 
-	my $message=getmessage('GetIntranetDir', $language, [$intranetdir]);
+	my $message=getmessage('GetIntranetDir', [$intranetdir]);
 	$intranetdir=showmessage($message, 'free', $intranetdir);
 
 	if ($intranetdir eq $opacdir) {
@@ -309,34 +325,208 @@ Press <ENTER> to try again:
 |;
 
 sub getdatabaseinfo {
-    my ($language,$dbname,$hostname,$user,$pass)=@_;
 #Get the database name
 
-    my $message=getmessage('DatabaseName', $language, [$dbname]);
-    $dbname=showmessage($message, 'free', $dbname);
+    my $message=getmessage('DatabaseName', [$::dbname]);
+    $::dbname=showmessage($message, 'free', $::dbname);
 
 #Get the hostname for the database
     
-    $message=getmessage('DatabaseHost', $language, [$hostname]);
-    $hostname=showmessage($message, 'free', $hostname);
+    $message=getmessage('DatabaseHost', [$::hostname]);
+    $::hostname=showmessage($message, 'free', $::hostname);
 
 #Get the username for the database
 
-    $message=getmessage('DatabaseUser', $language, [$dbname, $hostname, $user]);
-    $user=showmessage($message, 'free', $user);
+    $message=getmessage('DatabaseUser', [$::dbname, $::hostname, $::user]);
+    $::user=showmessage($message, 'free', $::user);
 
 #Get the password for the database user
 
-    while ($pass eq '') {
-	my $message=getmessage('DatabasePassword', $language, [$user]);
-	$pass=showmessage($message, 'free', $pass);
-	if ($pass eq '') {
-	    my $message=getmessage('BlankPassword', $language);
+    while ($::pass eq '') {
+	my $message=getmessage('DatabasePassword', [$::user]);
+	$::pass=showmessage($message, 'free', $::pass);
+	if ($::pass eq '') {
+	    my $message=getmessage('BlankPassword');
 	    showmessage($message,'PressEnter');
 	}
     }
-    return($dbname,$hostname,$user,$pass);
 }
+
+
+
+$messages->{'FoundMultipleApacheConfFiles'}->{en}=qq|
+================================
+= MULTIPLE APACHE CONFIG FILES =
+================================
+
+I found more than one possible Apache configuration file:
+
+%s
+
+Choose the correct file [1]: |;
+
+$messages->{'NoApacheConfFiles'}->{en}=qq|
+===============================
+= NO APACHE CONFIG FILE FOUND =
+===============================
+
+I was not able to find your Apache configuration file.
+
+The file is usually called httpd.conf or apache.conf.
+
+Please specify the location of your config file: |;
+
+$messages->{'NotAFile'}->{en}=qq|
+=======================
+= FILE DOES NOT EXIST =
+=======================
+
+The file %s does not exist.
+
+Please press <ENTER> to continue: |;
+
+$messages->{'EnterApacheUser'}->{en}=qq|
+====================
+= NEED APACHE USER =
+====================
+
+I was not able to determine the user that Apache is running as.  This
+information is necessary in order to set the access privileges correctly on
+/etc/koha.conf.  This user should be set in one of the Apache configuration
+files using the "User" directive.
+
+Enter the Apache userid: |;
+
+$messages->{'InvalidUserid'}->{en}=qq|
+==================
+= INVALID USERID =
+==================
+
+The userid %s is not a valid userid on this system.
+
+Press <ENTER> to continue: |;
+
+sub getapacheinfo {
+    my @confpossibilities;
+
+    foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
+			  /usr/local/etc/apache/httpd.conf
+			  /usr/local/etc/apache/apache.conf
+			  /var/www/conf/httpd.conf
+			  /etc/apache/conf/httpd.conf
+			  /etc/apache/conf/apache.conf
+			  /etc/apache-ssl/conf/apache.conf
+			  /etc/httpd/conf/httpd.conf
+			  /etc/httpd/httpd.conf)) {
+	if ( -f $httpdconf ) {
+	    push @confpossibilities, $httpdconf;
+	}
+    }
+
+    if ($#confpossibilities==-1) {
+	my $message=getmessage('NoApacheConfFiles');
+	my $choice='';
+	until (-f $choice) {
+	    $choice=showmessage($message, "free", 1);
+	    unless (-f $choice) {
+		showmessage(getmessage('NotAFile', [$choice]),'PressEnter', '', 1);
+	    }
+	}
+    } elsif ($#confpossibilities>0) {
+	my $conffiles='';
+	my $counter=1;
+	my $options='';
+	foreach (@confpossibilities) {
+	    $conffiles.="   $counter: $_\n";
+	    $options.="$counter";
+	    $counter++;
+	}
+	my $message=getmessage('FoundMultipleApacheConfFiles', [$conffiles]);
+	my $choice=showmessage($message, "restrictchar $options", 1);
+	$::realhttpdconf=$confpossibilities[$choice-1];
+    } else {
+	$::realhttpdconf=$confpossibilities[0];
+    }
+    open (HTTPDCONF, $::realhttpdconf) or warn "Insufficient privileges to open $::realhttpdconf for reading.\n";
+    while (<HTTPDCONF>) {
+	if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
+	    $::httpduser = $1;
+	}
+    }
+    close(HTTPDCONF);
+
+
+
+
+    unless ($::httpduser) {
+	my $message=getmessage('EnterApacheUser');
+	until (length($::httpduser) && getpwnam($::httpduser)) {
+	    $::httpduser=showmessage($message, "free", '');
+	    if (length($::httpduser)>0) {
+		unless (getpwnam($::httpduser)) {
+		    my $message=getmessage('InvalidUserid', [$::httpduser]);
+		    showmessage($message,'PressEnter');
+		}
+	    } else {
+	    }
+	}
+	print "AU: $::httpduser\n";
+    }
+    exit;
+}
+
+
+sub getapachevhostinfo {
+
+    my $svr_admin = "webmaster\@$::domainname";
+    my $servername=`hostname -f`;
+    chomp $servername;
+    my $opacport=80;
+    my $kohaport=8080;
+
+    print qq|
+
+OPAC and KOHA/LIBRARIAN CONFIGURATION
+=====================================
+Koha needs to setup your Apache configuration file for the
+OPAC and LIBRARIAN virtual hosts.  By default this installer
+will do this by using one ip address and two different ports
+for the virtual hosts.  There are other ways to set this up,
+and the installer will leave comments in httpd.conf detailing
+what these other options are.
+
+Please enter the e-mail address for your webserver admin.
+Usually $svr_admin
+|;
+
+    print "Enter e-mail address [$svr_admin]:";
+      #$svr_admin = $input;
+
+
+    print qq|
+
+
+Please enter the domain name or ip address of your computer.
+|;
+      #$servername = $input;
+
+    print qq|
+
+Please enter the port for your OPAC interface.
+|;
+    print "Enter OPAC port [$opacport]:";
+      #$opacport = $input;
+
+    print qq|
+
+Please enter the port for your Intranet/Librarian interface.
+|;
+      #$kohaport = $input;
+
+
+
+}
+
 
 END { }       # module clean-up code here (global destructor)
 

@@ -6,7 +6,7 @@ use Install;
 use strict; # please develop with the strict pragma
 
 
-my $language='en';
+$::language='en';
 
 if ($<) {
     print "\n\nYou must run koha.upgrade as root.\n\n";
@@ -17,33 +17,34 @@ unless ($< == 0) {
     exit 1;
 }
 
-my $kohaversion=`cat koha.version`;
-chomp $kohaversion;
+$::kohaversion=`cat koha.version`;
+chomp $::kohaversion;
 
 
-if ($kohaversion =~ /RC/) {
-    releasecandidatewarning($language, $kohaversion);
+if ($::kohaversion =~ /RC/) {
+    releasecandidatewarning();
 }
 
 if (-e "/etc/koha.conf") {
-    my $installedversion=`grep kohaversion= /etc/koha.conf`;
-    chomp $installedversion;
-    $installedversion=~m/kohaversion=(.*)/;
-    $installedversion=$1;
-    if ($installedversion) {
-	$installedversion=getmessage('KohaVersionInstalled', $language, [$installedversion]);
+    $::installedversion=`grep kohaversion= /etc/koha.conf`;
+    chomp $::installedversion;
+    $::installedversion=~m/kohaversion=(.*)/;
+    $::installedversion=$1;
+    my $installedversionmsg;
+    if ($::installedversion) {
+	$installedversionmsg=getmessage('KohaVersionInstalled', [$::installedversion]);
     } else {
-	$installedversion=getmessage('KohaUnknownVersionInstalled', $language);
+	$installedversionmsg=getmessage('KohaUnknownVersionInstalled');
     }
 
-    my $message=getmessage('KohaAlreadyInstalled', $language, [$kohaversion, $installedversion]);
+    my $message=getmessage('KohaAlreadyInstalled', [$::kohaversion, $installedversionmsg]);
     showmessage($message, 'none');
     exit;
 }
 
-my $continuingmsg=getmessage('continuing', $language);
+my $continuingmsg=getmessage('continuing');
 
-my $message=getmessage('WelcomeToKohaInstaller', $language);
+my $message=getmessage('WelcomeToKohaInstaller');
 my $answer=showmessage($message, 'yn');
 
 if ($answer eq "Y" || $answer eq "y") {
@@ -60,185 +61,51 @@ at http://www.koha.org for more information.
 };
 
 my $input;
-my $domainname = `hostname -d`;
-chomp $domainname;
+$::domainname = `hostname -d`;
+chomp $::domainname;
 
 
 # Check for missing Perl Modules
 
-checkperlmodules($language);
+checkperlmodules();
 
 
 # Ask for installation directories
 
-my ($opacdir, $intranetdir) = getinstallationdirectories($language);
+my ($opacdir, $intranetdir) = getinstallationdirectories();
 
 
 
 
-my $etcdir = '/etc';
+$::etcdir = '/etc';
 
 
 
-my $dbname = 'Koha';
-my $hostname = 'localhost';
-my $user = 'kohaadmin';
-my $pass = '';
+$::dbname = 'Koha';
+$::hostname = 'localhost';
+$::user = 'kohaadmin';
+$::pass = '';
 
 
-($dbname, $hostname,$user, $pass) = getdatabaseinfo($language,$dbname,$hostname,$user,$pass);
+getdatabaseinfo();
 
-print qq|
-DBNAME:		$dbname
-HOSTNAME:	$hostname
-USER:		$user
-PASS:		$pass
-|;
+
+
+getapacheinfo();
+
+
+print "user: $::httpduser\n";
+print "conf:  $::realhttpdconf\n";
 exit;
 
-
-
-
-my $httpduser;
-my $realhttpdconf;
-
-foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
-                      /usr/local/etc/apache/httpd.conf
-                      /usr/local/etc/apache/apache.conf
-                      /var/www/conf/httpd.conf
-                      /etc/apache/conf/httpd.conf
-                      /etc/apache/conf/apache.conf
-                      /etc/apache-ssl/conf/apache.conf
-                      /etc/httpd/conf/httpd.conf
-                      /etc/httpd/httpd.conf)) {
-   if ( -f $httpdconf ) {
-            $realhttpdconf=$httpdconf;
-            open (HTTPDCONF, $httpdconf) or warn "Insufficient privileges to open $httpdconf for reading.\n";
-      while (<HTTPDCONF>) {
-         if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
-            $httpduser = $1;
-         }
-      }
-      close(HTTPDCONF);
-   }
-}
-unless ($realhttpdconf) {
-    print qq|
-
-I was not able to find your apache configuration file.  It is usually
-called httpd.conf or apache.conf.
-|;
-    print "Where is your Apache configuratin file? ";
-    chomp($input = <STDIN>);
-
-    if ($input) {
-	$realhttpdconf = $input;
-    } else {
-	$realhttpdconf='';
-    }
-    if ( -f $realhttpdconf ) {
-	open (HTTPDCONF, $realhttpdconf) or warn "Insufficient privileges to open $realhttpdconf for reading.\n";
-	while (<HTTPDCONF>) {
-	    if (/^\s*User\s+"?([-\w]+)"?\s*$/) {
-		$httpduser = $1;
-	    }
-	}
-	close(HTTPDCONF);
-    }
-}
-
-unless ($httpduser) {
-    print qq|
-
-I was not able to determine the user that Apache is running as.  This
-information is necessary in order to set the access privileges correctly on
-/etc/koha.conf.  This user should be set in one of the Apache configuration
-files using the "User" directive.
-|;
-    print "What is your Apache user? ";
-    chomp($input = <STDIN>);
-
-    if ($input) {
-	$httpduser = $input;
-    } else {
-	$httpduser='Undetermined';
-    }
-}
-
-
-#
-#SETUP opac
-#
-my $svr_admin = "webmaster\@$domainname";
-my $servername=`hostname -f`;
-chomp $servername;
-my $opacport=80;
-my $kohaport=8080;
-
-print qq|
-
-OPAC and KOHA/LIBRARIAN CONFIGURATION
-=====================================
-Koha needs to setup your Apache configuration file for the
-OPAC and LIBRARIAN virtual hosts.  By default this installer
-will do this by using one ip address and two different ports
-for the virtual hosts.  There are other ways to set this up,
-and the installer will leave comments in httpd.conf detailing
-what these other options are.
-
-Please enter the e-mail address for your webserver admin.
-Usually $svr_admin
-|;
-
-print "Enter e-mail address [$svr_admin]:";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $svr_admin = $input;
-}
-
-
-print qq|
-
-
-Please enter the domain name or ip address of your computer.
-|;
-print "Enter server name/ip address [$servername]:";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $servername = $input;
-}
-
-print qq|
-
-Please enter the port for your OPAC interface.
-|;
-print "Enter OPAC port [$opacport]:";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $opacport = $input;
-}
-
-print qq|
-
-Please enter the port for your Intranet/Librarian interface.
-|;
-print "Enter intranet port [$kohaport]:";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $kohaport = $input;
-}
-
+getapachevhostinfo();
 
 #
 # Update Apache Conf File.
 #
 #
 
-my $logfiledir=`grep ^ErrorLog $realhttpdconf`;
+my $logfiledir=`grep ^ErrorLog $$::realhttpdconf`;
 chomp $logfiledir;
 
 if ($logfiledir) {
@@ -261,7 +128,7 @@ print "Checking for modules that need to be loaded...\n";
 my $httpdconf='';
 my $envmodule=0;
 my $includesmodule=0;
-open HC, $realhttpdconf;
+open HC, $$::realhttpdconf;
 while (<HC>) {
     if (/^\s*#\s*LoadModule env_module /) {
 	s/^\s*#\s*//;
@@ -280,84 +147,85 @@ while (<HC>) {
 
 my $apachebackupmade=0;
 if ($envmodule || $includesmodule) {
-    system("mv -f $realhttpdconf $realhttpdconf\.prekoha");
+    system("mv -f $$::realhttpdconf $$::realhttpdconf\.prekoha");
     $apachebackupmade=1;
-    open HC, ">$realhttpdconf";
+    open HC, ">$$::realhttpdconf";
     print HC $httpdconf;
     close HC;
 }
 
 
-if (`grep 'VirtualHost $servername' $realhttpdconf`) {
-    print qq|
-$realhttpdconf appears to already have an entry for Koha
-Virtual Hosts.  You may need to edit $realhttpdconf
-if anything has changed since it was last set up.  This
-script will not attempt to modify an existing Koha apache
-configuration.
-
-|;
+if (0) {
+#if (`grep 'VirtualHost $servername' $$::realhttpdconf`) {
+#    print qq|
+#$$::realhttpdconf appears to already have an entry for Koha
+#Virtual Hosts.  You may need to edit $$::realhttpdconf
+#if anything has changed since it was last set up.  This
+#script will not attempt to modify an existing Koha apache
+#configuration.
+#
+#|;
     print "Press <ENTER> to continue...";
     <STDIN>;
     print "\n";
 } else {
     unless ($apachebackupmade) {
-	system("cp -f $realhttpdconf $realhttpdconf\.prekoha");
+	system("cp -f $$::realhttpdconf $$::realhttpdconf\.prekoha");
     }
     my $includesdirectives='';
     if ($includesmodule) {
 	$includesdirectives.="Options +Includes\n";
 	$includesdirectives.="   AddHandler server-parsed .html\n";
     }
-    open(SITE,">>$realhttpdconf") or warn "Insufficient priveleges to open $realhttpdconf for writing.\n";
-    print SITE <<EOP
-
-
-# Ports to listen to for Koha
-Listen $opacport
-Listen $kohaport
-
-# NameVirtualHost is used by one of the optional configurations detailed below
-
-#NameVirtualHost 11.22.33.44
-
-# KOHA's OPAC Configuration
-<VirtualHost $servername\:$opacport>
-   ServerAdmin $svr_admin
-   DocumentRoot $opacdir/htdocs
-   ServerName $servername
-   ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
-   ErrorLog $logfiledir/opac-error_log
-   TransferLog $logfiledir/opac-access_log
-   SetEnv PERL5LIB "$intranetdir/modules"
-   $includesdirectives
-</VirtualHost>
-
-# KOHA's INTRANET Configuration
-<VirtualHost $servername\:$kohaport>
-   ServerAdmin $svr_admin
-   DocumentRoot $intranetdir/htdocs
-   ServerName $servername
-   ScriptAlias /cgi-bin/koha/ "$intranetdir/cgi-bin/"
-   ErrorLog $logfiledir/koha-error_log
-   TransferLog $logfiledir/koha-access_log
-   SetEnv PERL5LIB "$intranetdir/modules"
-   $includesdirectives
-</VirtualHost>
-
-# If you want to use name based Virtual Hosting:
-#   1. remove the two Listen lines
-#   2. replace $servername\:$opacport wih your.opac.domain.name
-#   3. replace ServerName $servername wih ServerName your.opac.domain.name
-#   4. replace $servername\:$kohaport wih your intranet domain name
-#   5. replace ServerName $servername wih ServerName your.intranet.domain.name
+    open(SITE,">>$$::realhttpdconf") or warn "Insufficient priveleges to open $$::realhttpdconf for writing.\n";
+#    print SITE <<EOP
 #
-# If you want to use NameVirtualHost'ing (using two names on one ip address):
-#   1.  Follow steps 1-5 above
-#   2.  Uncomment the NameVirtualHost line and set the correct ip address
-
-EOP
-;
+#
+## Ports to listen to for Koha
+#Listen $opacport
+#Listen $kohaport
+#
+## NameVirtualHost is used by one of the optional configurations detailed below
+#
+##NameVirtualHost 11.22.33.44
+#
+## KOHA's OPAC Configuration
+#<VirtualHost $servername\:$opacport>
+#   ServerAdmin $svr_admin
+#   DocumentRoot $opacdir/htdocs
+#   ServerName $servername
+#   ScriptAlias /cgi-bin/koha/ $opacdir/cgi-bin/
+#   ErrorLog $logfiledir/opac-error_log
+#   TransferLog $logfiledir/opac-access_log
+#   SetEnv PERL5LIB "$intranetdir/modules"
+#   $includesdirectives
+#</VirtualHost>
+#
+## KOHA's INTRANET Configuration
+#<VirtualHost $servername\:$kohaport>
+#   ServerAdmin $svr_admin
+#   DocumentRoot $intranetdir/htdocs
+#   ServerName $servername
+#   ScriptAlias /cgi-bin/koha/ "$intranetdir/cgi-bin/"
+#   ErrorLog $logfiledir/koha-error_log
+#   TransferLog $logfiledir/koha-access_log
+#   SetEnv PERL5LIB "$intranetdir/modules"
+#   $includesdirectives
+#</VirtualHost>
+#
+## If you want to use name based Virtual Hosting:
+##   1. remove the two Listen lines
+##   2. replace $servername\:$opacport wih your.opac.domain.name
+##   3. replace ServerName $servername wih ServerName your.opac.domain.name
+##   4. replace $servername\:$kohaport wih your intranet domain name
+##   5. replace ServerName $servername wih ServerName your.intranet.domain.name
+##
+## If you want to use NameVirtualHost'ing (using two names on one ip address):
+##   1.  Follow steps 1-5 above
+##   2.  Uncomment the NameVirtualHost line and set the correct ip address
+#
+#EOP
+#;
 
 
     print qq|
@@ -462,7 +330,7 @@ unless ( -d $intranetdir ) {
 	    }
 	}
    }
-   chown (oct(0), (getgrnam($httpduser))[2], "$intranetdir");
+   chown (oct(0), (getgrnam($::httpduser))[2], "$intranetdir");
    chmod (oct(770), "$intranetdir");
 }
 unless ( -d "$intranetdir/htdocs" ) {
@@ -494,7 +362,7 @@ unless ( -d $opacdir ) {
 	    }
 	}
    }
-   chown (oct(0), (getgrnam($httpduser))[2], "$opacdir");
+   chown (oct(0), (getgrnam($::httpduser))[2], "$opacdir");
    chmod (oct(770), "$opacdir");
 }
 unless ( -d "$opacdir/htdocs" ) {
@@ -523,8 +391,8 @@ system("cp -R opac-html/* $opacdir/htdocs/");
 print "Copying opac-cgi files to $opacdir/cgi-bin...\n";
 system("cp -R opac-cgi/* $opacdir/cgi-bin/");
 
-system("chown -R root.$httpduser $opacdir");
-system("chown -R root.$httpduser $intranetdir");
+system("chown -R root.$::httpduser $opacdir");
+system("chown -R root.$::httpduser $intranetdir");
 
 
 print qq|
@@ -537,19 +405,19 @@ directory. The configuration file, will be created in this directory.
 |;
 
 #Create the configuration file
-open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
-at $etcdir.  Must have write capability.\n";
+open(SITES,">$::etcdir/koha.conf") or warn "Couldn't create file
+at $::etcdir.  Must have write capability.\n";
 print SITES <<EOP
-database=$dbname
-hostname=$hostname
-user=$user
-pass=$pass
+database=$::dbname
+hostname=$::hostname
+user=$::user
+pass=$::pass
 includes=$intranetdir/htdocs/includes
 intranetdir=$intranetdir
 opacdir=$opacdir
 kohalogdir=$kohalogdir
-kohaversion=$kohaversion
-httpduser=$httpduser
+kohaversion=$::kohaversion
+httpduser=$::httpduser
 EOP
 ;
 close(SITES);
@@ -557,8 +425,8 @@ close(SITES);
 #
 # Set ownership of the koha.conf file for security
 #
-chown((getpwnam($httpduser)) [2,3], "$etcdir/koha.conf") or warn "can't chown koha.conf: $!";
-chmod 0440, "$etcdir/koha.conf";
+chown((getpwnam($::httpduser)) [2,3], "$::etcdir/koha.conf") or warn "can't chown koha.conf: $!";
+chmod 0440, "$::etcdir/koha.conf";
 
 
 print "Successfully created the Koha configuration file.\n";
@@ -607,7 +475,7 @@ print qq|
 CREATING DATABASE
 =================
 |;
-my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass create $dbname");
+my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass create $::dbname");
 if ($result) {
     print "\nCouldn't connect to the MySQL server for the reason given above.\n";
     print "This is a serious problem, the database will not get installed.\n";
@@ -615,9 +483,9 @@ if ($result) {
     <STDIN>;
     print "\n";
 } else {
-    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname < koha.mysql");
-    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\"\;");
-    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$dbname','$user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $::dbname < koha.mysql");
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into user (Host,User,Password) values ('$::hostname','$::user',password('$::pass'))\"\;");
+    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass mysql -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$::dbname','$::user','Y','Y','Y','Y','Y','Y','Y','Y')\"");
     system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass reload");
 
     system ("perl -I $intranetdir/modules scripts/updater/updatedatabase");
@@ -637,10 +505,10 @@ data, you probably don't want this sample data installed.
     chomp($input = <STDIN>);
     if ($input =~/^y/i) {
 	system("gunzip sampledata-1.2.gz");
-	system("cat sampledata-1.2 | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname");
+	system("cat sampledata-1.2 | $mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $::dbname");
 	system("gzip -9 sampledata-1.2");
-	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
-	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('MAIN', 'Main Library', 1)\"");
+	system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('Circulation Desk Printer', 'lp', 'hp')\"");
 	print qq|
 
 Sample data has been installed.  For some suggestions on testing Koha, please
@@ -683,7 +551,7 @@ Press <ENTER> to continue...
 	    $branchcode=uc($branchcode);
 	    $branchcode=substr($branchcode,0,4);
 	    print "Adding branch '$branch' with code '$branchcode'.\n";
-	    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
+	    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $::dbname -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\"");
 	    my $printername='Library Printer';
 	    print "Enter a name for the printer [$printername]: ";
 	    chomp($input = <STDIN>);
@@ -698,7 +566,7 @@ Press <ENTER> to continue...
 		$printerqueue=$input;
 	    }
 	    $printerqueue=~s/[^A-Za-z0-9]//g;
-	    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
+	    system("$mysqldir/bin/mysql -u$mysqluser -p$mysqlpass $::dbname -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\"");
 	}
     }
 
@@ -707,7 +575,7 @@ Press <ENTER> to continue...
 
 
 chmod 0770, $kohalogdir;
-chown((getpwnam($httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
+chown((getpwnam($::httpduser)) [2,3], $kohalogdir) or warn "can't chown $kohalogdir: $!";
 
 # LAUNCH SCRIPT
 print "Modifying Z39.50 daemon launch script...\n";
@@ -715,7 +583,7 @@ my $newfile='';
 open (L, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh");
 while (<L>) {
     if (/^RunAsUser=/) {
-	$newfile.="RunAsUser=$httpduser\n";
+	$newfile.="RunAsUser=$::httpduser\n";
     } elsif (/^KohaZ3950Dir=/) {
 	$newfile.="KohaZ3950Dir=$intranetdir/scripts/z3950daemon\n";
     } else {
@@ -753,8 +621,8 @@ close S;
 chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-launch.sh";
 chmod 0750, "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh";
 chmod 0750, "$intranetdir/scripts/z3950daemon/processz3950queue";
-chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
-chown(0, (getpwnam($httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
+chown(0, (getpwnam($::httpduser)) [3], "$intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $intranetdir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
+chown(0, (getpwnam($::httpduser)) [3], "$intranetdir/scripts/z3950daemon/processz3950queue") or warn "can't chown $intranetdir/scripts/z3950daemon/processz3950queue: $!";
 
 print qq|
 
@@ -777,28 +645,28 @@ print "Press the <ENTER> key to continue: ";
 
 #RESTART APACHE
 print "\n\n";
-print qq|
-
-COMPLETED
-=========
-Congratulations ... your Koha installation is almost complete!
-The final step is to restart your webserver.
-
-You will be able to connect to your Librarian interface at:
-
-   http://$servername\:$kohaport/
-
-and the OPAC interface at :
-
-   http://$servername\:$opacport/
-
-
-Be sure to read the INSTALL, and Hints files. 
-
-For more information visit http://www.koha.org
-
-Would you like to restart your webserver now? (Y/[N]):
-|;
+#print qq|
+#
+#COMPLETED
+#=========
+#Congratulations ... your Koha installation is almost complete!
+#The final step is to restart your webserver.
+#
+#You will be able to connect to your Librarian interface at:
+#
+#   http://$servername\:$kohaport/
+#
+#and the OPAC interface at :
+#
+#   http://$servername\:$opacport/
+#
+#
+#Be sure to read the INSTALL, and Hints files. 
+#
+#For more information visit http://www.koha.org
+#
+#Would you like to restart your webserver now? (Y/[N]):
+#|;
 
 my $restart = <STDIN>;
 chomp $restart;
