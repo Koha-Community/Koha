@@ -1,0 +1,24 @@
+<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
+<div id="bibliomenu">
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+		Normal
+	</a>
+	<a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button">
+		MARC
+	</a>
+	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
+		Print
+	</a>
+	<!-- TMPL_UNLESS NAME="norequests" -->
+		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
+			Request
+		</a>
+	<!-- /TMPL_UNLESS -->
+</div>
+
+<div id="mainbloc">
+	<p>ISBD : <!-- TMPL_VAR name="ISBD" --></p>
+</div>
+</body>
+</html>

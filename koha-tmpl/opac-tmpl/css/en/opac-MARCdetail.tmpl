@@ -1,8 +1,11 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css">
-<div class="tabbed">
+<div id="bibliomenu">
 	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
 		Normal
+	</a>
+	<a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">
+		ISBD
 	</a>
 	<a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue">
 		Print

@@ -173,10 +173,6 @@ foreach my $subfield_code (keys(%witness)) {
 	push(@header_value_loop, \%header_value);
 }
 
-my $ISBD = C4::Context->preference('ISBD');
-warn "ISBD : $ISBD";
-# build ISBD from MARC::Record
-
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
 						biblionumber => $biblionumber,

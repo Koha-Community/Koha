@@ -66,7 +66,7 @@ h1 {
 	font-weight:bold;
 	font-size: 150%;
 	text-align:center;
-	vertical-align:top;
+/* 	vertical-align:top; */
 	padding: 2px;
 	border: 4px inset #FF6600;
 	width:75%;
@@ -118,6 +118,7 @@ th {
 td {
 	font-size:10pt;
 	border-left:1px solid #000000;
+	vertical-align:top;
 }
 
 /* hilighted cell */
@@ -125,6 +126,7 @@ td.hilighted {
 	font-size:10pt;
 	border-left:1px solid #000000;
 	background-color:#ffffcc;
+	vertical-align:top;
 }
 
 /* FORMS */
@@ -169,11 +171,30 @@ input:hover {
 	background-color:#FF6600;
 }
 
-select {
-	background-color: #ACE6E6;
-	text-decoration:none;
-	color:#000000;
+textarea {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#009999;
 }
+
+textarea:hover {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#FF6600;
+}
+
+select {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#009999;
+}
+
+select:hover {
+	border:0px;
+	border-bottom:1px solid #000000;
+	background-color:#FF6600;
+}
+
 
 /* span classes */
 /* used to show small 1,2,3, to reach other pages when too much results */
@@ -273,12 +294,21 @@ select {
 	margin-bottom:10px;
 	-moz-border-radius: 6px;
 }
+
 #menuline {
+/*	width:100%;
+	vertical-align:top;*/
+	float:left;
+/*	position:relative;*/
+	display:block;
+}
+
+#bibliomenu {
+	position: relative;
+	float:left;
+	display:block;
+	margin-left:10%;
 	width:100%;
-	height:200%;
-	vertical-align:top;
-	float:none;
-	position:relative;
 }
 
 /* a little spacer. should not be used */
