@@ -46,6 +46,9 @@ for (my $i=1;$i<$count3;$i++){
   $additional=$additional."|".$addauthor->[$i]->{'author'};                                             
 }  
 my @temp=split('\t',$items[0]);
+if ($type eq 'catmain'){
+  print mkheadr(3,"Catalogue Maintenance");
+}
 if ($dat->{'author'} ne ''){
   print mkheadr(3,"$dat->{'title'} ($dat->{'author'}) $temp[4]");
 } else {
@@ -173,41 +176,36 @@ while ($i < $count){
 #  print $items[$i],"<br>";
   my @results=split('\t',$items[$i]);
   if ($type ne 'opac'){
-    $results[1]=mklink("/cgi-bin/koha/moredetail.pl?item=$results[5]&bib=$bib&bi=$results[8]",$results[1]);
+    $results[1]=mklink("/cgi-bin/koha/moredetail.pl?item=$results[5]&bib=$bib&bi=$results[8]&type=$type",$results[1]);
   }
   if ($results[2] eq ''){
     $results[2]='Available';
   }
+  if ($type eq 'catmain'){
+    $results[10]=mklink("/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&bi=$results[8]&item=$results[6]","Fix Itemtype");
+  }
   if ($colour == 1){
     if ($type ne 'opac'){
-#      if ($results[6] eq 'PER'){
+      if ($type eq 'catmain'){
+        print mktablerow(8,$secondary,$results[6],$results[4],$results[3],$results[2],$results[7],$results[1],$results[9],$results[10]);
+      } else {
         print mktablerow(7,$secondary,$results[6],$results[4],$results[3],$results[2],$results[7],$results[1],$results[9]);
-#      } else {
-#            print mktablerow(6,$secondary,$results[6],$results[4],$results[3],$results[2],$results[7],$results[1]);
-#      }
+      }
     } else {
-       $results[6]=ItemType($results[6]);
-#       if ($results[6] =~ /Periodical/){
-          print mktablerow(6,$secondary,$results[6],$results[4],$results[3],$results[2],$results[7],$results[9]);
-#	} else {
-#         print mktablerow(5,$secondary,$results[6],$results[4],$results[3],$results[2],$results[7]);
-#       }       
+      $results[6]=ItemType($results[6]);
+      print mktablerow(6,$secondary,$results[6],$results[4],$results[3],$results[2],$results[7],$results[9]);
     } 
     $colour=0;                                                                                
   } else{                                                                                     
     if ($type ne 'opac'){
-#      if ($results[6] eq 'PER'){
-      print mktablerow(7,'white',$results[6],$results[4],$results[3],$results[2],$results[7],$results[1],$results[9]);                                          
-#      }else{
-#           print mktablerow(6,'white',$results[6],$results[4],$results[3],$results[2],$results[7],$results[1]);                                          
-#      }
+      if ($type eq 'catmain'){
+        print mktablerow(8,'white',$results[6],$results[4],$results[3],$results[2],$results[7],$results[1],$results[9],$results[10]);
+      } else {
+        print mktablerow(7,'white',$results[6],$results[4],$results[3],$results[2],$results[7],$results[1],$results[9]);
+      }
     } else {
       $results[6]=ItemType($results[6]);
-#       if ($results[6] =~ /Periodical/){
-          print mktablerow(6,'white',$results[6],$results[4],$results[3],$results[2],$results[7],$results[9]);
-#	} else {
-#         print mktablerow(5,'white',$results[6],$results[4],$results[3],$results[2],$results[7]);
-#       }       
+      print mktablerow(6,'white',$results[6],$results[4],$results[3],$results[2],$results[7],$results[9]);
     }
     $colour=1;                                                                                
   }
@@ -222,11 +220,28 @@ print <<printend
 <TR VALIGN=TOP>
 <TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2><p><b>HELP</b><br>
 <b>Update Biblio for all Items:</b> Click on the <b>Modify</b> button [left] to amend the biblio.  Any changes you make will update the record for <b>all</b> the items listed above. <p>
-<b>Updating the Biblio for only ONE or SOME Items:</b> If some of the items listed above need a different biblio, or are on the wrong biblio, you must use the <a href="acquisitions/">acquisitions</a> process to fix this. You will need to "re-order" the items, and delete them from this biblio.<p>
+<b>Updating the Biblio for only ONE or SOME Items:</b> 
+printend
+;
+if ($type eq 'catmain'){
+print <<printend
+If some of the items listed above need a different biblio, 
+you need to click on the wrong item, then shift the group it belongs to, to the correct biblio.
+You will need to know the correct biblio number
+<p>
 
    </TR>
 printend
 ;
+} else {
+print <<printend
+If some of the items listed above need a different biblio, or are on the wrong biblio, you must use the <a href="acquisitions/">acquisitions</a> process to fix this. You will need to "re-order" the items, and delete them from this biblio.
+<p>
+
+   </TR>
+printend
+;
+}
 }
 print mktableft();
 print endcenter();
