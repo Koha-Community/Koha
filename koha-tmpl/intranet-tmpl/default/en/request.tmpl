@@ -1,81 +1,81 @@
 <!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
-<form action="placerequest.pl" method=post>
-<input type=hidden name=biblio value="<!-- TMPL_VAR Name="bib" -->">
-<input type=hidden name=type value=str8>
-<input type=hidden name=title value="<!-- TMPL_VAR Name="title" -->">
+<form action="placerequest.pl" method="post">
+<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="bib" -->">
+<input type="hidden" name="type" value="str8">
+<input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->">
 <h1>Requesting:
-<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="bib" -->><!-- TMPL_VAR Name="title" --></a>
-<!-- TMPL_VAR Name="author" --></h1><P>
+<a href=/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="bib" -->><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_VAR NAME="author" --></h1><P>
 <p>
 
 
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Rank</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Member Number</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Notes</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Date</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Pickup</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Request</b></TD>
-	</TR>
-	<tr VALIGN=TOP  >
+<table  cellspacing="0"  cellpadding="5" border="1" >
+	<tr valign="top">
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Rank</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Member Number</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Notes</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Date</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Pickup</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Request</b></td>
+	</tr>
+	<tr valign="top"  >
 		<td>
-			<select name=rank-request>
+			<select name="rank-request">
 			<!--$priorityoptions-->
 			<!-- TMPL_LOOP Name="optionloop" -->
-				<option value="<!-- TMPL_VAR Name="num" -->" <!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->>
-					<!-- TMPL_VAR Name="num" -->
+				<option value="<!-- TMPL_VAR NAME="num" -->" <!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="num" -->
 				</option>
 			<!-- /TMPL_LOOP -->
 			</select>
 		</td>
-		<td><input type=text size=10 name=member></td>
-		<td><input type=text size=20 name=notes></td>
-		<td><!-- TMPL_VAR Name=date --></td>
-		<td><!-- TMPL_VAR name="CGIbranch" --></td>
+		<td><input type="text" size="10" name="member"></td>
+		<td><input type="text" size="20" name="notes"></td>
+		<td><!-- TMPL_VAR NAME="date" --></td>
+		<td><!-- TMPL_VAR NAME="CGIbranch" --></td>
 		<td>
-			<input type=checkbox name=request value=any>Next Available, or choose from list below
+			<input type="checkbox" name="request" value="any">Next Available, or choose from list below
 		</td>
 	</tr>
 </table>
-<INPUT type="submit" value="request" class="button">
+<input type="submit" value="request" class="button">
 
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-<TR VALIGN=TOP>
-	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Request</b></TD>
-	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Item type</b></TD>
-	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Classification</b></TD>
-	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Volume</b></TD>
-	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Pubdate</b></TD>
-	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Copies</b></TD>
-</TR>
+<table  cellspacing="0" cellpadding="5" border="1" >
+<tr valign="top">
+	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Request</b></td>
+	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Item type</b></td>
+	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Classification</b></td>
+	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Volume</b></td>
+	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Pubdate</b></td>
+	<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Copies</b></td>
+</tr>
 <!--$bibitemrows-->
 <!-- TMPL_LOOP Name="bibitemloop" -->
-	<tr VALIGN=TOP>
-		<TD>
+	<tr valign="top">
+		<td>
 			<!-- TMPL_IF Name="itemlost" -->
 				Cannot be selected
 			<!-- TMPL_ELSE -->
-				<input type=checkbox name=reqbib value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
-				<input type=hidden name=biblioitem value=<!-- TMPL_VAR Name="biblioitemnumber" -->>
+				<input type="checkbox" name="reqbib" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+				<input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
 			<!-- /TMPL_IF -->
 		</td>
-		<TD>
-			<!-- TMPL_VAR Name="description" -->
-		</td>
-		<TD>
-			<!-- TMPL_VAR Name="class" -->
+		<td>
+			<!-- TMPL_VAR NAME="description" -->
 		</td>
 		<td>
-			<!-- TMPL_VAR Name="volumeddesc" -->
+			<!-- TMPL_VAR NAME="class" -->
 		</td>
 		<td>
-			<!-- TMPL_VAR Name="publicationyear" -->
+			<!-- TMPL_VAR NAME="volumeddesc" -->
+		</td>
+		<td>
+			<!-- TMPL_VAR NAME="publicationyear" -->
 		</td>
 		<td>
 			<!-- TMPL_LOOP Name="barcodeloop" -->
-				<!-- TMPL_VAR Name="barcode" --> <!-- TMPL_VAR Name="message" --><br>
+				<!-- TMPL_VAR NAME="barcode" --> <!-- TMPL_VAR NAME="message" --><br>
 			<!-- /TMPL_LOOP -->
 		</td>
 	</tr>
@@ -87,64 +87,64 @@
 <p>&nbsp;</p>
 
 
-<form name=T<!-- TMPL_VAR Name="time" --> action=modrequest.pl method=post>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=7><B>MODIFY EXISTING REQUESTS </b></TD>
-	</TR>
-	<TR VALIGN=TOP>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Rank</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Member</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Notes</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Date</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Pickup</b></TD>
-		<td  bgcolor="99cc33" background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><B>Request</b></TD>
-	</TR>
+<form name="T<!-- TMPL_VAR NAME="time" -->" action="modrequest.pl" method="post">
+<table  cellspacing="0"  cellpadding="5" border="1" >
+	<tr valign="top">
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif" colspan="7"><b>MODIFY EXISTING REQUESTS </b></td>
+	</tr>
+	<tr valign="top">
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Rank</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Member</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Notes</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Date</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Pickup</b></td>
+		<td  bgcolor="#99cc33" background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Request</b></td>
+	</tr>
 	<!--$existingreserves-->
 	<!-- TMPL_LOOP Name="reserveloop" -->
-		<tr VALIGN=TOP>
-			<TD>
-			<input type=hidden name=borrowernumber value=<!-- TMPL_VAR Name="borrowernumber" -->>
-			<input type=hidden name=biblio value=<!-- TMPL_VAR Name="biblionumber" -->>
-			<select name=rank-request>
+		<tr valign="top">
+			<td>
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+			<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+			<select name="rank-request">
 				<!-- TMPL_IF Name="wait" -->
-					<option value=W selected>Waiting</option>
+					<option value="W" selected>Waiting</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_LOOP Name="optionloop" -->
-					<option value="<!-- TMPL_VAR Name="num" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
-						<!-- TMPL_VAR Name="num" -->
+					<option value="<!-- TMPL_VAR NAME="num" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+						<!-- TMPL_VAR NAME="num" -->
 					</option>
 				<!-- /TMPL_LOOP -->
-				<option value=del>Del</option>
+				<option value="del">Del</option>
 			</select></td>
-			<TD>
-			<a href=/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR Name="borrowernumber" -->><!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR Name="surname" --></a>
+			<td>
+			<a href="/cgi-bin/koha/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
 			</td>
-			<td><!-- TMPL_VAR Name="notes" --></td>
-			<TD><!-- TMPL_VAR Name="date" --></td>
-			<TD><!-- TMPL_IF Name="wait" -->
-				Item waiting at <b> <!-- TMPL_VAR Name="wbrname" --></b> <input type=hidden name=pickup value=<!-- TMPL_VAR Name="wbrcd" -->>
+			<td><!-- TMPL_VAR NAME="notes" --></td>
+			<td><!-- TMPL_VAR NAME="date" --></td>
+			<td><!-- TMPL_IF Name="wait" -->
+				Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
 				<!-- TMPL_ELSE -->
-					<select name=pickup>
+					<select name="pickup">
 						<!-- TMPL_LOOP Name="branchloop" -->
-							<option value="<!-- TMPL_VAR Name="branch" -->"<!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->>
-								<!-- TMPL_VAR Name="branchname" -->
+							<option value="<!-- TMPL_VAR NAME="branch" -->"<!-- TMPL_IF Name="selected" --> selected<!-- /TMPL_IF -->>
+								<!-- TMPL_VAR NAME="branchname" -->
 							</option>
 						<!-- /TMPL_LOOP -->
 					</select>
 				<!-- /TMPL_IF -->
 			</td>
-			<TD>
+			<td>
 				<!-- TMPL_IF Name="wait" -->
-					<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name=''biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;">
-						<!-- TMPL_VAR Name="barcode" -->
+					<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME=''biblionumber" -->&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;">
+						<!-- TMPL_VAR NAME="barcode" -->
 					</a>
 				<!-- TMPL_ELSE -->
 					<!-- TMPL_IF Name="constrainttypea" -->
 						<i>Next Available</i>
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_IF Name="constrainttypeo" -->
-							This type only : <b><!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_VAR Name="itemtype" --></b>
+							This type only : <b><!-- TMPL_VAR NAME="volumeddesc" --> <!-- TMPL_VAR NAME="itemtype" --></b>
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
@@ -152,15 +152,14 @@
 			</td>
 		</tr>
 	<!-- /TMPL_LOOP -->
-	<tr VALIGN=TOP>
-	<TD colspan=6 align=right>
+	<tr valign="top">
+	<td colspan="6" align="right">
 		Delete a request by selecting "del" from the rank list.
-		<INPUT TYPE="image" name="submit"  VALUE="request" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png">
+		<input type="image" name="submit"  VALUE="request" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/2rightarrow.png">
 	</td>
 	</tr>
 </table>
-<P>
-<br>
+<p>&nbsp;</p>
 </form>
 
 <!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

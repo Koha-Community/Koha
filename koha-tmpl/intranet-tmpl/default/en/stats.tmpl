@@ -1,33 +1,31 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 
-<CENTER>
-	<table border=0 cellspacing=0 cellpadding=5>
-		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Name</b></td>
-			<td background='/images/background-mem.gif'><b>Type</b></td>
-			<td background='/images/background-mem.gif'><b>Date/time</b></td>
-			<td background='/images/background-mem.gif'><b>Amount</b></td>
-			<td background='/images/background-mem.gif'><b>Branch</b></td>
+	<table border="0" cellspacing="0" cellpadding="5" align="center">
+		<tr bgcolor="#99cc33">
+			<td background="/images/background-mem.gif"><b>Name</b></td>
+			<td background="/images/background-mem.gif"><b>Type</b></td>
+			<td background="/images/background-mem.gif"><b>Date/time</b></td>
+			<td background="/images/background-mem.gif"><b>Amount</b></td>
+			<td background="/images/background-mem.gif"><b>Branch</b></td>
 		<tr>
-		<!-- TMPL_LOOP name=loop1 -->
+		<!-- TMPL_LOOP NAME=loop1 -->
 		<tr>
-			<td><!-- TMPL_VAR NAME=name --></td>
-			<td><!-- TMPL_VAR NAME=type --></td>
-			<td><!-- TMPL_VAR NAME=time --></td>
-			<td><!-- TMPL_VAR NAME=amount --></td>
-			<td><!-- TMPL_VAR NAME=branch --></td>
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<td><!-- TMPL_VAR NAME="type" --></td>
+			<td><!-- TMPL_VAR NAME="time" --></td>
+			<td><!-- TMPL_VAR NAME="amount" --></td>
+			<td><!-- TMPL_VAR NAME="branch" --></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-</CENTER>
 
 
 <p>
-	<b>Total paid: <!-- TMPL_VAR NAME=total --></b>
+	<b>Total paid: <!-- TMPL_VAR NAME="total" --></b>
 	<br>
-	<b>Total written off: <!-- TMPL_VAR NAME=totalw --></b>
+	<b>Total written off: <!-- TMPL_VAR NAME="totalw" --></b>
 </p>
 
 <!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
-</BODY>
-</HTML>
+</body>
+</html>

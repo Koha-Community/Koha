@@ -1,30 +1,29 @@
-<!-- TMPL_INCLUDE name="about-top.inc" -->
+<!-- TMPL_INCLUDE NAME="about-top.inc" -->
 
 <div id="mainbloc">
-	<!-- TMPL_VAR NAME=about -->
+	<!-- TMPL_VAR NAME="about" -->
 	
 	<h1>Data about the current version of Koha for bug reports (or general interest).</h1>
-	<center>
-	<table>
+	<table align="center">
 		<tr>
-			<td width=25%>Koha version:</td>
-			<td><!-- TMPL_VAR ESCAPE=HTML NAME=kohaVersion --></td>
+			<td width="25%">Koha version:</td>
+			<td><!-- TMPL_VAR ESCAPE=HTML name="kohaVersion" --></td>
 		</tr>
 		<tr>
 			<td>OS version (from 'uname -a'):</td>
-			<td><!-- TMPL_VAR ESCAPE=HTML NAME=osVersion --></td>
+			<td><!-- TMPL_VAR ESCAPE=HTML name="osVersion" --></td>
 		</tr>
 		<tr>
 			<td>Perl version:</td>
-			<td><!-- TMPL_VAR ESCAPE=HTML NAME=perlVersion --></td>
+			<td><!-- TMPL_VAR ESCAPE=HTML name="perlVersion" --></td>
 		</tr>
 		<tr>
 			<td>MySQL version:</td>
-			<td><!-- TMPL_VAR ESCAPE=HTML NAME=mysqlVersion --></td>
+			<td><!-- TMPL_VAR ESCAPE=HTML name="mysqlVersion" --></td>
 		</tr>
 		<tr>
 			<td>Apache version:</td>
-			<td><!-- TMPL_VAR ESCAPE=HTML NAME=apacheVersion --></td>
+			<td><!-- TMPL_VAR ESCAPE=HTML name="apacheVersion" --></td>
 		</tr>
 		<tr>
 			<td>Credits</td>
@@ -35,11 +34,11 @@
 						<td width="50%">
 							<b>Pat Eyler</b>, Kaitiaki<br/>
 							<b>Paul Poulain</b>, 2.2 release manager (MARC developper)<br/>
-							Joshua Ferraro & the <b>Nelsonville Public Library</b> (MARC features funders)<br/>
+							Joshua Ferraro &amp; the <b>Nelsonville Public Library</b> (MARC features funders)<br/>
 							<b>Steve Tonnesen</b> (early MARC work, Virtual Bookshelves concept, KohaCD)<br/>
 							Nicholas Rosasco, (Documentation Compiler)<br/>
 							Mike Hansen<br/>
-							MJ Ray and <b>Turo Technology LLP</b>, England (quality control, installer & updater, 2.0 release maintainer)<br/>
+							MJ Ray and <b>Turo Technology LLP</b>, England (quality control, installer &amp; updater, 2.0 release maintainer)<br/>
 							Nicolas Morin, French Translation<br/>
 						</td>
 						<td width="50%" valign="top">
@@ -53,7 +52,7 @@
 					</tr>
 				</table>
 				<h2>Thanks to</h2>
-				<table width=100%>
+				<table width="100">
 					<tr>
 						<td width="33%">
 							Adam Thick<br/>
@@ -95,6 +94,5 @@
 			</td>
 		</tr>
 	</table>
-	</center>
 </div>
-<!-- TMPL_INCLUDE name="about-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="about-bottom.inc" -->

@@ -1,7 +1,7 @@
 <HTML>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<!-- TMPL_IF name="refresh" -->
-	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR name="refresh" -->">
+<!-- TMPL_IF NAME="refresh" -->
+	<meta http-equiv="refresh" content="2; url=<!-- TMPL_VAR NAME="refresh" -->">
 <!-- /TMPL_IF -->
 <font size="6"><em>Z3950 Search Results</em></font><br />
 
@@ -11,7 +11,7 @@
 	</tr>
 </table>
 <table border="0" cellspacing="0" cellpadding="5" width="80%">
-	<tr valign=top bgcolor=#ffcc00>
+	<tr valign="top" bgcolor="#ffcc00">
 		<td><b>Title</b></td>
 		<td><b>Author</b></td>
 		<td><b>ISBN</b></td>
@@ -19,25 +19,25 @@
 		<td><b>&nbsp;</b></td>
 		<td>&nbsp;</td>
 	</tr>
-	<!-- TMPL_IF name="breeding_loop" -->
-	<!-- TMPL_LOOP name="breeding_loop" -->
-		<tr valign="top" bgcolor="<!-- TMPL_VAR name="toggle" -->">
-			<td><!-- TMPL_VAR name="title" --></a>
-			<td><!-- TMPL_VAR name="author" --></td>
-			<td><!-- TMPL_VAR name="isbn" --></td>
-			<td><!-- TMPL_VAR name="file" --></td>
-			<td><a href="javascript:Import(<!-- TMPL_VAR name="id" -->)">Import this biblio</a></td>
+	<!-- TMPL_IF NAME="breeding_loop" -->
+	<!-- TMPL_LOOP NAME="breeding_loop" -->
+		<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+			<td><!-- TMPL_VAR NAME="title" --></a>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="isbn" --></td>
+			<td><!-- TMPL_VAR NAME="file" --></td>
+			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="id" -->)">Import this biblio</a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	<!-- TMPL_ELSE -->
-		<tr><td colspan=6>Nothing found</td></tr>
+		<tr><td colspan="6">Nothing found</td></tr>
 	<!-- /TMPL_IF -->
 </table>
-<!-- TMPL_IF name="numberpending" --><H1><center>Still <!-- TMPL_VAR name="numberpending" --> requests to go</center></H1><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="numberpending" --><h1><center>Still <!-- TMPL_VAR NAME="numberpending" --> requests to go</center></h1><!-- /TMPL_IF -->
 <br />
-<script>
+<script language="javascript" type="text/javascript">
 	function Import(GetThisOne) {
-		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR name="oldbiblionumber" -->&breedingid="+GetThisOne;
+		opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
 		self.close();
 		return false;
 	}

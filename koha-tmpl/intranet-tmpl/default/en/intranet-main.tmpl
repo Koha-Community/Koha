@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>WELCOME TO THE KOHA INTRANET </title>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/intranet-main.css">
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/intranet-main.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <!-- JAVASCRIPT SCRIPTS -->
 	<script language="JavaScript" type="text/javascript">
@@ -43,7 +43,7 @@
 			layer.style.visibility = 'hidden';
 		}
 	</script>
-	<script>
+	<script language="javascript" type="text/javascript">
 	var blnOk=true;
 	function Load() {
 		if(document.body.style.backgroundColor!="") { blnOk=false; }
@@ -65,20 +65,20 @@
 		<p class="kohalogo">Koha</p>
 		<p class="kohalogo2">Open Source  Library System</p>
 		<p class="kohalogo2">Librarian interface</p>
-		<hr width="50%"/>
+		<hr width="50%" />
 		<p class="kohalogo2">Koha : gift, donation or contribution</p>
 	</div>
 	<div id="menus">
 <!-- RIGHT (disappearing) BLOC -->
 		<div id="Hint1" class="hint">
 			<h1 class="catalogue">Catalogue</h1>
-			<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&type=intranet" class="catalogue">Search catalogue</a>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="catalogue">Search catalogue</a>
 				<p>Search a biblio. When this biblio is found, you can check its status, reserve it, or see where it is</p>
 			<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="catalogue">Virtual shelves</a>
 				<p>Virtual shelves can be used by librarian or patrons to build virtual libraries inside the "real" one.
 				The virtual shelf can be used by a teacher to help his/her students searching information on a specific topic.
 				It can be used by a library to define "most valuable books for &lt;some category of patron&gt;"</p>
-			<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="catalogue">Add biblio</a>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="catalogue">Add biblio</a>
 				<p>Directly add a biblio in the library catalogue</p>
 			<!-- TMPL_IF NAME="NOTMARC" -->
 				<form action="/cgi-bin/koha/loadmodules.pl" method="post">
@@ -118,7 +118,7 @@
 		</div>
 		<div id="Hint5" class="hint">
 			<h1 class="reports">Authorities</h1>
-			Authorities management & searches
+			Authorities management &amp; searches
 		</div>
 		<div id="Hint6" class="hint">
 			<h1 class="parameters">Parameters</h1>

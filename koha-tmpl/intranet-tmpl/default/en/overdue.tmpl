@@ -11,10 +11,10 @@
 		<th class="reports">Author</th>
 	</tr>
 	
-	<!-- TMPL_LOOP NAME=overdueloop -->
+	<!-- TMPL_LOOP NAME="overdueloop" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="duedate" --></td>
-			<!-- TMPL_IF NAME=email -->
+			<!-- TMPL_IF NAME="email" -->
 			<td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
 			<!-- TMPL_ELSE -->
 			<td><!-- TMPL_VAR NAME="name" --></td>

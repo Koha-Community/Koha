@@ -1,25 +1,25 @@
 <!-- TMPL_INCLUDE Name="acquisitions-top.inc" -->
 <p>
-<a href="detail.pl?type=intra&bib=<!-- TMPL_VAR Name="biblionumber" -->">Return to Details Page</a>
+<a href="detail.pl?type=intra&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->">Return to Details Page</a>
 
 
 <!-- TMPL_LOOP Name="websitesloop" -->
 <p>
 <form action="updatewebsite.pl" method="post">
-<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->">
-<input type="hidden" name="websitenumber" value="<!-- TMPL_VAR Name="websitenumber" -->">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<input type="hidden" name="websitenumber" value="<!-- TMPL_VAR NAME="websitenumber" -->">
 <table>
 <tr valign="top">
 <td>Title</td>
-<td><input type="text" name="title" value="<!-- TMPL_VAR Name="title" -->"></td>
+<td><input type="text" name="title" value="<!-- TMPL_VAR NAME="title" -->"></td>
 </tr>
 <tr valign="top">
 <td>Description</td>
-<td><textarea name="description" cols="40" rows="4"><!-- TMPL_VAR Name="description" --></textarea></td>
+<td><textarea name="description" cols="40" rows="4"><!-- TMPL_VAR NAME="description" --></textarea></td>
 </tr>
 <tr valign="top">
 <td>URL</td>
-<td><input type="text" name="url" value="<!-- TMPL_VAR Name="url" -->"></td>
+<td><input type="text" name="url" value="<!-- TMPL_VAR NAME="url" -->"></td>
 </tr>
 </table>
 <input type="submit" value="Update this Website Link">   <input type="submit" name="delete" value="Delete this Website link">
@@ -29,7 +29,7 @@
 <p>
 <h2><b>Add another Website Link</b></h2>
 <form action="addwebsite.pl" method="post">
-<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
 <table>
 <tr valign="top">
 <td>Title</td>

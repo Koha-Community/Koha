@@ -1,42 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<title>Thesaurus value builder for category <!-- TMPL_VAR name="category" --></title>
+	<title>Thesaurus value builder for category <!-- TMPL_VAR NAME="category" --></title>
 </head>
 <body>
 	<form name="f_pop" action="thesaurus_popup.pl" method="post">
-		<textarea name="result" rows=10 cols=60><!-- TMPL_VAR name="result" --></textarea></br>
+		<textarea name="result" rows="10" cols="60"><!-- TMPL_VAR NAME="result" --></textarea></br>
 		<br/><input type="button" value="OK" onClick="javascript:report()">
 		<p>
-			<input type="text" name="search_string" value="<!-- TMPL_VAR name="search_string" -->">
-			<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
-			<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR name="nohierarchy" -->">
-			<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
+			<input type="text" name="search_string" value="<!-- TMPL_VAR NAME="search_string" -->">
+			<input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->">
+			<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR NAME="nohierarchy" -->">
+			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 			<input type="hidden" name="op" value="search">
 			<input type="submit" value="Search">
 		</p>
 	</form>
-<!-- TMPL_IF name="search_string" -->
+<!-- TMPL_IF NAME="search_string" -->
 	<form name="f2_pop" action="thesaurus_popup.pl" method="post">
-	<!-- TMPL_VAR name="select_list" -->
-	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
-	<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR name="nohierarchy" -->">
-	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
+	<!-- TMPL_VAR NAME="select_list" -->
+	<input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->">
+	<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR NAME="nohierarchy" -->">
+	<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
 	<input type="hidden" name="op" value="select">
-	<input type="hidden" name="result" value="<!-- TMPL_VAR name="result" -->">
+	<input type="hidden" name="result" value="<!-- TMPL_VAR NAME="result" -->">
 	<input type="submit" name="OK" value="OK">
 	</form>
 <!-- /TMPL_IF -->
 <form name="f3_pop"  action="thesaurus_popup.pl" method="post">
-	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
-	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
-	<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR name="nohierarchy" -->">
+	<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
+	<input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->">
+	<input type="hidden" name="nohierarchy" value="<!-- TMPL_VAR NAME="nohierarchy" -->">
 	<input type="hidden" name="op" value="add">
 	insert a new authority : <input type="text" name="insert">
 	<input type="submit" name="NEW" value="NEW">
 	</form>
-	<script>
+	<script language="javascript" type="text/javascript">
 		function report() {
-			opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.result.value;
+			opener.document.f.field_value[<!-- TMPL_VAR NAME="index" -->].value= document.f_pop.result.value;
 			self.close();
 			return false;
 		}

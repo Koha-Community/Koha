@@ -1,43 +1,42 @@
 <!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
 <!-- TMPL_IF Name="viewshelf" -->
-<center>
 <form>
-    <table border=0 cellpadding=2 cellspacing=0>
+    <table border="0" cellpadding="2" cellspacing="0" align="center">
     		<tr>
-			<th colspan=4 bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-				<font color=white>Contents of <!-- TMPL_VAR Name="shelfname" --></font>
+			<th colspan="4" bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+				<font color="white">Contents of <!-- TMPL_VAR NAME="shelfname" --></font>
 			</th>
 		</tr>
 		<!-- TMPL_LOOP Name="itemsloop" -->
 			<tr>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><input type=checkbox name="REM-<!-- TMPL_VAR Name="itemnumber" -->"></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="barcode" --></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="title" --></td>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->"><!-- TMPL_VAR Name="author" --></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="barcode" --></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="title" --></td>
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->"><!-- TMPL_VAR NAME="author" --></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 	<br>
 	<a href="shelves.pl" class="button">Shelf list</a>
-	<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
-	<input type=hidden name=modifyshelfcontents value=1>
-	<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
-	<input type=submit value="Remove Selected Items" class="button">
+	<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<input type="hidden" name="modifyshelfcontents" value="1">
+	<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<input type="submit" value="Remove Selected Items" class="button">
 </form>
 <form>
-	<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
-	<input type=hidden name=modifyshelfcontents value=1>
-	<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
+	<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+	<input type="hidden" name="modifyshelfcontents" value="1">
+	<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 	<table>
 		<tr>
 			<td>
-				Add a book by barcode in <!-- TMPL_VAR name="shelfname" -->:
+				Add a book by barcode in <!-- TMPL_VAR NAME="shelfname" -->:
 			</td>
 			<td>
 				<input name="addbarcode">
-				<input type=hidden name=modifyshelfcontents value=1>
-				<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR Name="shelfnumber" -->">
+				<input type="hidden" name="modifyshelfcontents" value="1">
+				<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 				<input type="submit" value="Save" class="button">
 			</td>
 		</tr>
@@ -46,62 +45,61 @@
 <!-- TMPL_ELSE -->
 	<!-- TMPL_IF Name="shelves" -->
 		<!-- TMPL_IF Name="status1" -->
-			<font color=red><!-- TMPL_VAR Name="string1" --></font><p>
+			<font color="red"><!-- TMPL_VAR NAME="string1" --></font><p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_LOOP Name="paramsloop" -->
 			<!-- TMPL_IF Name="status" -->
-				<font color=red><!-- TMPL_VAR Name="string" --></font><p>
+				<font color="red"><!-- TMPL_VAR NAME="string" --></font><p>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
-		<center>
 		<h1>Bookshelves</h1>
-		<table border=0 cellpadding=7>
+		<table border="0" cellpadding="7" align="center">
 			<tr>
-				<td align=center valign="bottom">
+				<td align="center" valign="bottom">
 					<form>
 						<p>
 							<a href="shelves.pl" class="button">Shelf list</a>
 						</p>
 					</form>
 				</td>
-				<td align=center valign="bottom">
-					<form method=post>
-					<input type="hidden" name="shelves" value=1>
-					<table border=0 cellpadding=0 cellspacing=0>
+				<td align="center" valign="bottom">
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
+					<table border="0" cellpadding="0" cellspacing="0">
 						<tr>
-							<th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-								<font color=white>Select Shelves to Delete</font>
+							<th bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+								<font color="white">Select Shelves to Delete</font>
 							</th>
 						</tr>
 						<!-- TMPL_LOOP Name="shelvesloop" -->
 						<tr>
-							<td bgcolor="<!-- TMPL_VAR Name="color" -->">
-								<input type=checkbox name="DEL-<!-- TMPL_VAR Name="shelf" -->">
-								<!-- TMPL_VAR Name="shelfname" --> (<!-- TMPL_VAR Name="shelfbookcount" --> books)
+							<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
+								<!-- TMPL_VAR NAME="shelfname" --> (<!-- TMPL_VAR NAME="shelfbookcount" --> books)
 							</td>
 						</tr>
 						<!-- /TMPL_LOOP -->
 					</table>
 					<p>
-						<input type=submit value="Delete Shelves" class="button"></form>
+						<input type="submit" value="Delete Shelves" class="button"></form>
 					</p>
 				</td>
-				<td align=center valign=bottom>
-					<form method=post>
-					<input type=hidden name=shelves value=1>
-					<table border=0 cellpadding=0 cellspacing=0>
+				<td align="center" valign="bottom">
+					<form method="post">
+					<input type="hidden" name="shelves" value="1">
+					<table border="0" cellpadding="0" cellspacing="0">
 						<tr>
-							<th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-								<font color=white>Add Shelf</font>
+							<th bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+								<font color="white">Add Shelf</font>
 							</th>
 						</tr>
 						<tr>
 							<td>
-								<p><input name=addshelf size=25></p>
+								<p><input name="addshelf" size="25"></p>
 							</td>
 						</tr>
 					</table>
-								<p><input type=submit value="Add New Shelf" class="button"></p>
+								<p><input type="submit" value="Add New Shelf" class="button"></p>
 					</form>
 				</td>
 			</tr>
@@ -109,13 +107,13 @@
 
 	<!-- TMPL_ELSE -->
 		<center>
-		<table border=0 cellpadding=4 cellspacing=0>
+		<table border="0" cellpadding="4" cellspacing="0">
 			<tr>
-				<td bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-					<table border=0 cellpadding=5 cellspacing=0 width=100%>
+				<td bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+					<table border="0" cellpadding="5" cellspacing="0" width="100%">
 						<tr>
-							<th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-								<font color=white>Shelf List</font>
+							<th bgcolor="<!-- TMPL_VAR NAME="headerbackgroundcolor" -->">
+								<font color="white">Shelf List</font>
 							</th>
 						</tr>
 					</table>
@@ -123,9 +121,9 @@
 			</tr>
 			<!-- TMPL_LOOP Name="shelvesloop" -->
 			<tr>
-				<td bgcolor="<!-- TMPL_VAR Name="color" -->">
-					<a href="shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->">
-						<!-- TMPL_VAR Name="shelfname" -->(<!-- TMPL_VAR Name="shelfbookcount" --> books)
+				<td bgcolor="<!-- TMPL_VAR NAME="color" -->">
+					<a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
+						<!-- TMPL_VAR NAME="shelfname" -->(<!-- TMPL_VAR NAME="shelfbookcount" --> books)
 					</a>
 				</td>
 			</tr>
