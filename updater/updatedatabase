@@ -17,9 +17,17 @@ use DBI;
 # Koha modules
 use C4::Database;
 
-my %existingtables;	# tables already in database
-my %types;
-my $table;
+my $debug=1;
+
+my (
+	$sth,
+	$query,
+	%existingtables,	# tables already in database
+	%types,
+	$table,
+	$column,
+    	$type, $null, $key, $default, $extra,
+);
 
 #-------------------
 # Defines
@@ -55,6 +63,16 @@ my %requiretables=(
 	categorycode varchar(4))",
 );
 
+my %requirefields=(
+    biblio=>{ 'abstract' => 'text' },
+    deletedbiblio=>{ 'abstract' => 'text' },
+    biblioitems=>{ 'lccn' => 'char(25)',
+		'marc' => 'text' },
+    deletedbiblioitems=>{ 'lccn' => 'char(25)',
+		'marc' => 'text' },
+    branchtransfers=>{ 'datearrived' => 'datetime' },
+);
+
 #-------------------
 # Initialize
 my $dbh=C4Connect;
@@ -73,7 +91,7 @@ if ($mysqlversion ge '3.23') {
 # Tables
 
 # Collect all tables into a list
-my $sth=$dbh->prepare("show tables");
+$sth=$dbh->prepare("show tables");
 $sth->execute;
 while (my ($table) = $sth->fetchrow) {
     $existingtables{$table}=1;
@@ -81,6 +99,7 @@ while (my ($table) = $sth->fetchrow) {
 
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
+    print "Checking $table table...\n" if $debug;;
     unless ($existingtables{$table} ) {
 	print "Adding $table table...\n";
 	my $sth=$dbh->prepare(
@@ -92,7 +111,6 @@ foreach $table ( keys %requiretables ) {
         } # if error
     } # unless exists
 } # foreach
-exit;
 
 unless ($existingtables{'z3950servers'}) {
     print "Adding z3950servers table...\n";
@@ -120,30 +138,34 @@ unless ($existingtables{'z3950servers'}) {
 #---------------------------------
 # Columns
 
+foreach $table ( keys %requirefields ) {
+    print "Check table $table\n";
+    $sth=$dbh->prepare("show columns from $table");
+    $sth->execute();
+    undef %types;
+    while ( ($column, $type, $null, $key, $default, $extra) 
+		= $sth->fetchrow) {
+        $types{$column}=$type;
+    } # while 
+    foreach $column ( keys %{ $requirefields{$table} } )  {
+	print "  Check column $column\n";
+	if ( ! $types{$column} ) {
+	    # column doesn't exist
+	    print "Adding $column field to $table table...\n";
+    	    $query="alter table $table
+		add column $column " . $requirefields{$table}->{$column} ;
+	    print "Execute: $query\n" if $debug;
+    	    my $sti=$dbh->prepare($query);
+    	    $sti->execute;
+            if ($sti->err) {
+                    print "**Error : $sti->errstr \n";
+                    $sti->finish;
+            } # if error
+	} # if column
+    } # foreach column
+} # foreach table
 
-# Get list of columns from biblioitems table
-
-my $sth=$dbh->prepare("show columns from biblioitems");
-$sth->execute;
-while (my ($column, $type, $null, $key, $default, $extra) = $sth->fetchrow) {
-    $types{$column}=$type;
-}
-unless ($types{'lccn'}) {
-    # Add LCCN field to biblioitems db
-    print "Adding lccn field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems 
-	add column lccn char(25)");
-    $sti->execute;
-}
-unless ($types{'marc'}) {
-    # Add MARC field to biblioitems db (not used anymore)
-    print "Adding marc field to biblioitems table...\n";
-    my $sti=$dbh->prepare("alter table biblioitems 
-	add column marc text");
-    $sti->execute;
-}
-
-# Get list of columns from biblioitems table
+# Get list of columns from items table
 my %itemtypes;
 
 my $sth=$dbh->prepare("show columns from items");
