@@ -100,65 +100,39 @@ sub newBiblio {
 
 
 sub changeSubfield {
-# Subroutine changes a subfield value given a Record_ID, Tag, and Subfield_Mark.
-# Routine should be made more robust.  It currently checks to make sure that
-# the existing Subfield_Value is the same as the one passed in.  What if no
-# subfield matches this Subfield_OldValue?  Create a new Subfield?  Maybe check
-# to make sure that the mark is repeatable first and that no other subfield
-# with that mark already exists?  Ability to return errors and status?
-# 
-# Also, currently, if more than one subfield matches the Record_ID, Tag,
-# Subfield_Mark, and Subfield_OldValue, only the first one will be modified.
-#
-# Might be nice to be able to pass a Subfield_ID or Subfield_Key directly to
-# this routine to remove ambiguity, if possible.
-#
-# Pass barcode to remove ambiguity for changes to individual items.  Look up
-# field link and sequence number based on barcode.
-
-    my $Record_ID=shift;
-    my $tag=shift;
-    my $firstdigit=substr($tag, 0, 1);
-    my $Subfield_Mark=shift;
-    my $Subfield_OldValue=shift;
-    my $Subfield_Value=shift;
-    my $Subfield_ID=shift;
-    my $Subfield_Key=shift;
-    my $dbh=&C4Connect;  
-    my $q_Subfield_Value=$dbh->quote($Subfield_Value);
-    if ($Subfield_Key) {
-	 # Great.  Subfield_Key makes the record absolutely unique.  Just make
-	 # the change
-	my $sth=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_Key=$Subfield_Key");
-	$sth->execute;
-    } elsif ($Subfield_ID) {
-	 # Subfield_ID does not make the record unique.  Could be multiple
-	 # records with the same mark.  This is a bad situation.
-	my $sth=$dbh->prepare("select Subfield_Key, Subfield_Value from $firstdigit\XX_Subfield_Table where Subfield_Mark='$Subfield_Mark' and Subfield_ID=$Subfield_ID");
-	$sth->execute;
-	while (my ($key, $Value) = $sth->fetchrow) {
-	    if ($Value eq $Subfield_OldValue) {
-		my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_Key=$key");
-		$sti->execute;
-		$Subfield_Key=$key;
-		last;
-	    }
-	}
-    } else {
-	my $sth=$dbh->prepare("select S.Subfield_Key, S.Subfield_ID, S.Subfield_Value from Bib_Table B, $firstdigit\XX_Tag_Table T, $firstdigit\XX_Subfield_Table S where B.Record_ID=$Record_ID and B.Tag_$firstdigit\XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and S.Subfield_Mark='$Subfield_Mark'");
-	$sth->execute;
-	while (my ($key, $ID, $Value) = $sth->fetchrow) {
-	    if ($Value eq $Subfield_OldValue) {
-		my $sti=$dbh->prepare("update $firstdigit\XX_Subfield_Table set Subfield_Value=$q_Subfield_Value where Subfield_Key=$key");
-		$sti->execute;
-		$Subfield_Key=$key;
-		last;
-	    }
-	}
-    }
+# Subroutine changes a subfield value given a subfieldid.
+    my $subfieldid=shift;
+    my $subfieldvalue=shift;
+    my $dbh=&c4connect;  
+    my $sth=$dbh->prepare("update marc_$firstdigit\XX_subfield_table set subfieldvalue=? where subfieldid=?");
+    $sth->execute($subfieldvalue, $subfieldid;
     $dbh->disconnect;
     return($Subfield_ID, $Subfield_Key);
 }
+
+
+sub addSubfield {
+# Add a new subfield to a tag.
+    my $bibid=shift;
+    my $tagid=shift;
+    my $subfieldcode=shift;
+    my $subfieldvalue=shift;
+    my $subfieldorder=shift;
+    my $dbh=&c4connect;  
+    unless ($subfieldorder) {
+	my $sth=$dbh->prepare("select max(subfieldorder) from marc_$firstdigit\XX_subfield_table where tagid=$tagid");
+	$sth->execute;
+	if ($sth->rows) {
+	    ($subfieldorder) = $sth->fetchrow;
+	    $subfieldorder++;
+	} else {
+	    $subfieldorder=1;
+	}
+    }
+    my $sth=$dbh->prepare("insert into marc_$firstdigit\XX_subfield_table (tagid,bibid,subfieldorder,subfieldcode,subfieldvalue) values (?,?,?,?,?)");
+    $sth->execute($tagid,$bibid,$subfieldorder,$subfieldcode,$subfieldvalue);
+}
+
 
 sub updateBiblio {
 # Update the biblio with biblionumber $biblio->{'biblionumber'}
@@ -197,24 +171,24 @@ sub updateBiblio {
 
     
 # Obtain a list of MARC Record_ID's that are tied to this biblio
-    $sth=$dbh->prepare("select B.Record_ID from Bib_Table B, 0XX_Tag_Table T, 0XX_Subfield_Table S where B.Tag_0XX_ID=T.Tag_ID and T.Subfield_ID=S.Subfield_ID and T.Tag='090' and S.Subfield_Value=$biblionumber and S.Subfield_Mark='c'");
+    $sth=$dbh->prepare("select T.bibid from marc_0XX_tag_table T, marc_0XX_subfield_table S where T.tagid=S.tagid and T.tagnumber='090' and S.subfieldvalue=$biblionumber and S.subfieldcode='c'");
     $sth->execute;
     my @marcrecords;
-    while (my ($Record_ID) = $sth->fetchrow) {
-	push(@marcrecords, $Record_ID);
+    while (my ($bibid) = $sth->fetchrow) {
+	push(@marcrecords, $bibid);
     }
 
 
 
-    my $Record_ID='';
+    my $bibid='';
     if ($biblio->{'author'} ne $origbiblio->{'author'}) {
 	my $q_author=$dbh->quote($biblio->{'author'});
 	logchange('kohadb', 'change', 'biblio', 'author', $origbiblio->{'author'}, $biblio->{'author'});
 	my $sti=$dbh->prepare("update biblio set author=$q_author where biblionumber=$biblio->{'biblionumber'}");
 	$sti->execute;
-	foreach $Record_ID (@marcrecords) {
-	    logchange('marc', 'change', $Record_ID, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
-	    changeSubfield($Record_ID, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
+	foreach $bibid (@marcrecords) {
+	    logchange('marc', 'change', $bibid, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
+	    changeSubfield($bibid, '100', 'a', $origbiblio->{'author'}, $biblio->{'author'});
 	}
     }
     if ($biblio->{'title'} ne $origbiblio->{'title'}) {
