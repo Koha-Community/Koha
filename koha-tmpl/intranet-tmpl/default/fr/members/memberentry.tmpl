@@ -1,6 +1,6 @@
 <TMPL_INCLUDE NAME="members-top.inc">
 
-<FONT SIZE=6><em><TMPL_VAR NAME=header></em></FONT><br>
+<h1><TMPL_VAR NAME=header></h1><br>
 
 <form action=/cgi-bin/koha/newmember.pl method=post>
 	<input type=hidden name=joining value="<TMPL_VAR NAME=dateenrolled>">
@@ -38,11 +38,11 @@
 		<td><font size="2">Nom d'usage</font></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td>
+		<td><TMPL_VAR name="Mr">
 		<SELECT NAME="title">
 			<option<TMPL_VAR name="title_selected_ "> value=" ">Aucun</option>
-			<option value="Mlle"<TMPL_VAR name="title_Mlle">>Miss</option>
-			<option value="Mme"<TMPL_VAR name="title_Mme">>Mrs</option>
+			<option value="Miss"<TMPL_VAR name="title_Mlle">>Mlle</option>
+			<option value="Mrs"<TMPL_VAR name="title_Mme">>Mme</option>
 			<option <TMPL_VAR name="title_M"> value="M" >M</option>
 			<option value="Dr" <TMPL_VAR name="title_Dr">>Dr</option>
 		</SELECT>
@@ -80,16 +80,15 @@
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td  COLSPAN=3><font size="2">Adresse postale*</font></td>
-		<td><font size="2">Ville*</font></td>
-		<td><font size="2">CP</font></td>
+		<td  COLSPAN=3><FONT SIZE=2><b>Adresse postale*</b></FONT></td>
+		<td><FONT SIZE=2><b>CP /Ville*</b></FONT></td>
+		<td><FONT SIZE=2>Annexe rattachement</FONT></td>
 	</tr>
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=3>
-		<input type=text name=address size=40 value="<TMPL_VAR NAME=streetaddress>">
-		</td>
+		<td COLSPAN=3><input type=text name=address size=40 value="<TMPL_VAR NAME=address>"></td>
 		<td>
-		<input type=text name=city size=20 value="<TMPL_VAR NAME=city>">
+			<input type=text name="zipcode" size=20 value="<TMPL_VAR NAME="zipcode">"><br />
+			<input type=text name=city size=20 value="<TMPL_VAR NAME=city>">
 		</td>
 		<td>
 			<TMPL_VAR name="CGIbranch">
@@ -97,19 +96,14 @@
 	</tr>
 
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=3><font size="2">Rue</font></td>
-		<td><font size="2">Ville</font></td>
+		<td COLSPAN=3><FONT SIZE=2>Autre adresse</FONT></td>
+		<td><FONT SIZE=2>CP / Ville</FONT></td>
 	</tr>
-	<tr>
-		<td>&nbsp; </TD>
-	</TR>
 	<tr valign=top bgcolor=white>
-		<td COLSPAN=3>
-		<input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>">
-		</td>
+		<td COLSPAN=3><input type=text name=streetaddress size=40 value="<TMPL_VAR NAME=streetaddress>"></td>
 		<td>
-		<input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>">
-		</td>
+			<input type=text name="homezipcode" size=20 value="<TMPL_VAR NAME="homezipcode">"></br/>
+			<input type=text name=streetcity size=20 value="<TMPL_VAR NAME=streetcity>"></td>
 	</tr>
 
 	<tr valign=top bgcolor="99cc33">
@@ -134,6 +128,9 @@
 		</td>
 		<td>
 		<input type=text name=emailaddress size=20 value="<TMPL_VAR NAME=emailaddress>">
+		</td>
+		<td>
+		<input type=text name=textmessaging size=20 value="<TMPL_VAR NAME=textmessaging>">
 		</td>
 	</tr>
 

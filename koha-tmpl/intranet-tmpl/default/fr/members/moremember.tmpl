@@ -11,15 +11,6 @@
 
 	<tr VALIGN=TOP  >
 	<TD>
-		<TMPL_IF name="IS_ADULT">
-			<p align=right>
-			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
-				<INPUT TYPE="submit" name="submit" VALUE="Add Child" class="button" alt="Add Child">
-				<input type=hidden name=type value=Add>
-				<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
-			</form>
-			</P>
-		</TMPL_IF>
 		<br>
 		<FONT SIZE=2  face="arial, helvetica"><TMPL_VAR NAME="title"> <TMPL_VAR NAME="othernames"> <TMPL_VAR NAME="surname"> <TMPL_IF name="IS_ADULT">(<TMPL_VAR NAME="firstname">, <TMPL_VAR NAME="initials">)</TMPL_IF><p>
 		N&deg; de carte: <TMPL_VAR NAME="cardnumber"><BR>
@@ -86,6 +77,15 @@
 			<input type=hidden name=member value=<TMPL_VAR NAME=bornum>>
 			<input type=submit class="button" value="Modifier autorisations">
 		</form>
+		<TMPL_IF name="IS_ADULT">
+			<p align=right>
+			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
+				<INPUT TYPE="submit" name="submit" VALUE="Ajouter enfant" class="button" alt="Ajouter enfant">
+				<input type=hidden name=type value=Add>
+				<input type=hidden name=bornum value="<TMPL_VAR NAME=borrowernumber>">
+			</form>
+			</P>
+		</TMPL_IF>
 
 	</TD>
 	</TR>
