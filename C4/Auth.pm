@@ -223,11 +223,7 @@ sub checkauth {
     $template->param(loginprompt => 1) unless $info{'nopermission'};
 
     my $self_url = $query->url(-absolute => 1);
-    # Strip userid and password parameters off the self_url variable
-#    $self_url=~s/\?*userid=[^;]*;*//g;
-#    $self_url=~s/\?*password=[^;]*;*//g;    
     $template->param(url => $self_url);
-
     $template->param(\%info);
     $cookie=$query->cookie(-name => 'sessionID',
 				  -value => $sessionID,
