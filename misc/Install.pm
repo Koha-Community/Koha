@@ -283,13 +283,13 @@ Press <ENTER> to exit the installer: |;
 
 #'
 sub releasecandidatewarning {
-    my $message=getmessage('ReleaseCandidateWarning', [$newversion, $newversion]);
+    my $message=getmessage('ReleaseCandidateWarning', [$::newversion, $::newversion]);
     my $answer=showmessage($message, 'yn', 'n');
 
     if ($answer =~ /y/i) {
 	print getmessage('continuing');
     } else {
-	my $message=getmessage('WatchForReleaseAnnouncements');
+	my $message=getmessage('WatchForReleaseAnnouncements','');
 	print $message."\n";
 	exit;
     };
@@ -1624,6 +1624,7 @@ sub installfiles {
 		if (!$is_first_install && -e $tgt) {
     		print getmessage('CopyingFiles', ["old ".$desc,$tgt.strftime("%Y%m%d%H%M",localtime())]) unless ($auto_install->{NoPressEnter});
 			system("mv ".$tgt." ".$tgt.strftime("%Y%m%d%H%M",localtime()));
+			system("mkdir ".$tgt);   ##New line 
 		}
 		print getmessage('CopyingFiles', [$desc,$tgt]) unless ($auto_install->{NoPressEnter});
 		system("cp -R ".$src."/* ".$tgt);
