@@ -17,7 +17,7 @@ $VERSION = 0.01;
 &getcurrencies &modsubtitle &modsubject &modaddauthor &moditem &countitems 
 &findall &needsmod &delitem &delbibitem &delbiblio &delorder &branches
 &getallorders &getrecorders &updatecurrencies &getorder &getcurrency &updaterecorder
-&updatecost &checkitems &modnote);
+&updatecost &checkitems &modnote &getitemtypes &getbiblio);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
 # your exported package globals go here,
@@ -545,22 +545,60 @@ sub modnote {
 }
 
 sub newbiblioitem {
-  my ($bibnum,$itemtype,$isbn,$volinf,$class)=@_;
-  my $dbh=C4Connect;
-  my $query="Select max(biblioitemnumber) from biblioitems";
-  my $sth=$dbh->prepare($query);
+  my ($biblioitem) = @_;
+  my $dbh   = C4Connect;
+  my $query = "Select max(biblioitemnumber) from biblioitems";
+  my $sth   = $dbh->prepare($query);
+  my $data;
+  my $bibitemnum;
+  
+  $biblioitem->{'volume'}          = $dbh->quote($biblioitem->{'volume'});
+  $biblioitem->{'number'} 	   = $dbh->quote($biblioitem->{'number'});
+  $biblioitem->{'classification'}  = $dbh->quote($biblioitem->{'classification'});
+  $biblioitem->{'itemtype'}        = $dbh->quote($biblioitem->{'itemtype'});
+  $biblioitem->{'isbn'}            = $dbh->quote($biblioitem->{'isbn'});
+  $biblioitem->{'issn'}            = $dbh->quote($biblioitem->{'issn'});
+  $biblioitem->{'dewey'}           = $dbh->quote($biblioitem->{'dewey'});
+  $biblioitem->{'subclass'}        = $dbh->quote($biblioitem->{'subclass'});
+  $biblioitem->{'publicationyear'} = $dbh->quote($biblioitem->{'publicationyear'});
+  $biblioitem->{'publishercode'}   = $dbh->quote($biblioitem->{'publishercode'});
+  $biblioitem->{'volumedate'}      = $dbh->quote($biblioitem->{'volumedate'});
+  $biblioitem->{'volumeddesc'}     = $dbh->quote($biblioitem->{'volumeddesc'});  $biblioitem->{'illus'}            = $dbh->quote($biblioitem->{'illus'});
+  $biblioitem->{'pages'}           = $dbh->quote($biblioitem->{'pages'});
+  $biblioitem->{'notes'}           = $dbh->quote($biblioitem->{'notes'});
+  $biblioitem->{'size'}            = $dbh->quote($biblioitem->{'size'});
+  $biblioitem->{'place'}           = $dbh->quote($biblioitem->{'place'});
+  
   $sth->execute;
-  my $data=$sth->fetchrow_arrayref;
-  my $bibitemnum=$$data[0];
-  $bibitemnum++;
+  $data       = $sth->fetchrow_arrayref;
+  $bibitemnum = $$data[0] + 1;
+
   $sth->finish;
-  $query="insert into biblioitems (biblionumber,biblioitemnumber,
-  itemtype,isbn,volumeddesc,classification) 
-  values
-  ($bibnum,$bibitemnum,'$itemtype','$isbn','$volinf','$class')";
-  $sth=$dbh->prepare($query);
-#  print $query;
+
+  $query = "insert into biblioitems set
+biblioitemnumber = $bibitemnum,
+biblionumber 	 = $biblioitem->{'biblionumber'},
+volume		 = $biblioitem->{'volume'},
+number		 = $biblioitem->{'number'},
+classification   = $biblioitem->{'classification'},
+itemtype         = $biblioitem->{'itemtype'},
+isbn		 = $biblioitem->{'isbn'},
+issn		 = $biblioitem->{'issn'},
+dewey		 = $biblioitem->{'dewey'},
+subclass	 = $biblioitem->{'subclass'},
+publicationyear	 = $biblioitem->{'publicationyear'},
+publishercode	 = $biblioitem->{'publishercode'},
+volumedate	 = $biblioitem->{'volumedate'},
+volumeddesc	 = $biblioitem->{'volumeddesc'},
+illus		 = $biblioitem->{'illus'},
+pages		 = $biblioitem->{'pages'},
+notes		 = $biblioitem->{'notes'},
+size		 = $biblioitem->{'size'},
+place		 = $biblioitem->{'place'}";
+
+  $sth = $dbh->prepare($query);
   $sth->execute;
+
   $sth->finish;
   $dbh->disconnect;
   return($bibitemnum);
@@ -579,13 +617,16 @@ sub newsubject {
 }
 
 sub newsubtitle {
-  my ($bibnum)=@_;
-  my $dbh=C4Connect;
-  my $query="insert into bibliosubtitle (biblionumber) values
-  ($bibnum)";
-  my $sth=$dbh->prepare($query);
-#  print $query;
+  my ($bibnum, $subtitle) = @_;
+  my $dbh   = C4Connect;
+  $subtitle = $dbh->quote($subtitle);
+  my $query = "insert into bibliosubtitle set
+biblionumber = $bibnum,
+subtitle = $subtitle";
+  my $sth   = $dbh->prepare($query);
+
   $sth->execute;
+
   $sth->finish;
   $dbh->disconnect;
 }
@@ -1025,10 +1066,52 @@ sub delbiblio{
     $sth->execute;
     $sth->finish;
   }
+
   $sth->finish;
   $dbh->disconnect;
 }
 
-END { }       # module clean-up code here (global destructor)
+sub getitemtypes {
+  my $dbh   = C4Connect;
+  my $query = "select * from itemtypes";
+  my $sth   = $dbh->prepare($query);
+    # || die "Cannot prepare $query" . $dbh->errstr;
+  my $count = 0;
+  my @results;
   
+  $sth->execute;
+    # || die "Cannot execute $query\n" . $sth->errstr;
+  while (my $data = $sth->fetchrow_hashref) {
+    @results[$count] = $data;
+    $count++;
+  } # while
+  
+  $sth->finish;
+  $dbh->disconnect;
+  return($count, @results);
+} # sub getitemtypes
+
+
+sub getbiblio {
+    my ($biblionumber) = @_;
+    my $dbh   = C4Connect;
+    my $query = "Select * from biblio where biblionumber = $biblionumber";
+    my $sth   = $dbh->prepare($query);
+      # || die "Cannot prepare $query" . $dbh->errstr;
+    my $count = 0;
+    my @results;
     
+    $sth->execute;
+      # || die "Cannot execute $query" . $sth->errstr;
+    while (my $data = $sth->fetchrow_hashref) {
+      $results[$count] = $data;
+      $count++;
+    } # while
+    
+    $sth->finish;
+    $dbh->disconnect;
+    return($count, @results);
+} # sub getbiblio
+
+
+END { }       # module clean-up code here (global destructor)

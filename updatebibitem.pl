@@ -83,7 +83,10 @@ if ($existing eq 'YES'){
    }
    my $loan;
    if ($flag eq 'notall' && $flag2 eq 'leastone'){
-      $bibitemnum=newbiblioitem($bibnum,$itemtype,$volumeddesc,$classification);
+      $bibitemnum = &newbiblioitem({ biblionumber   => $bibnum,
+	                             itemtype       => $itemtype,
+	                             volumeddesc    => $volumeddesc,
+	                             classification => $classification });
       modbibitem($bibitemnum,$itemtype,$isbn,$publishercode,$publicationdate,$classification,$dewey,$subclass,$illus,$pages,$volumeddesc,$notes,$size,$place);
       if ($itemtype =~ /REF/){
         $loan=1;

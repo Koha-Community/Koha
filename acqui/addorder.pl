@@ -47,10 +47,12 @@ if ($quantity ne '0'){
 
   if ($existing eq 'no'){
     #if it doesnt create it
-    $bibnum=newbiblio({ title     => $title,
-	                author    =>$author,
-	                copyright => $copyright });
-    $bibitemnum=newbiblioitem($bibnum,$itemtype,$isbn);
+    $bibnum = &newbiblio({ title     => $title,
+	                   author    =>$author,
+	                   copyright => $copyright });
+    $bibitemnum = &newbiblioitem({ biblionumber => $bibnum,
+ 	                           itemtype     => $itemtype,
+	                           isben        => $isbn });
     newsubtitle($bibnum);
     modbiblio($bibnum,$title,$author,$copyright,$series);
   } else {
