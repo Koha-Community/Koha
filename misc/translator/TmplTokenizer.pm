@@ -322,12 +322,17 @@ sub _next_token_internal {
 	my $ok_p = 0;
 	for (my $cdata_close = $this->cdata_close;;) {
 	    if ($this->cdata_mode_p) {
-		if ($this->_peek_readahead =~ /^$cdata_close/) {
+		my $next = $this->_pop_readahead;
+		if ($next =~ /^$cdata_close/) {
 		    ($kind, $it) = (TmplTokenType::TAG, $&);
-		    $this->_set_readahead( $' );
+		    $this->_push_readahead( $' );
+		    $ok_p = 1;
+		} elsif ($next =~ /^((?:(?!$cdata_close).)+)($cdata_close)/) {
+		    ($kind, $it) = (TmplTokenType::TEXT, $1);
+		    $this->_push_readahead( "$2$'" );
 		    $ok_p = 1;
 		} else {
-		    ($kind, $it) = (TmplTokenType::TEXT, $this->_pop_readahead);
+		    ($kind, $it) = (TmplTokenType::TEXT, $next);
 		    $ok_p = 1;
 		}
 	    } elsif ($this->_peek_readahead =~ /^$re_tag_compat/os) {
@@ -446,7 +451,7 @@ sub next_token {
 	$it = pop @{$this->{_queue}};
     } else {
 	$it = $this->_next_token_intermediate($h);
-	if ($this->allow_cformat_p && defined $it
+	if (!$this->cdata_mode_p && $this->allow_cformat_p && defined $it
 	    && ($it->type == TmplTokenType::TEXT?
 		!blank_p( $it->string ): _token_groupable_p( $it ))) {
 	    my @structure = ( $it );
