@@ -301,14 +301,14 @@ sub KeywordSearch {
     or seriestitle like '% new zealand')"
   }
   $query=$query."))";
-    if ($search->{'class'} ne ''){
+  if ($search->{'class'} ne ''){
     my @temp=split(/\|/,$search->{'class'});
     my $count=@temp;
     $query.= "and ( itemtype='$temp[0]'";
     for (my $i=1;$i<$count;$i++){
       $query.=" or itemtype='$temp[$i]'";
-    }
-    $query.=")"; 
+     }
+  $query.=")"; 
   }
    $query.="group by biblio.biblionumber order by author,title";
 #  print $query;
@@ -334,8 +334,8 @@ sub KeywordSearch {
   $sth->execute;
   while (my $data=$sth->fetchrow_hashref){
     $query="Select * from biblio,biblioitems where
-    biblio.biblionumber=$data->{'biblionumber'} and biblio.biblionumber=biblioitems.biblionumber
-    group by biblio.biblionumber";
+    biblio.biblionumber=$data->{'biblionumber'} and
+    biblio.biblionumber=biblioitems.biblionumber ";
     if ($search->{'class'} ne ''){
       my @temp=split(/\|/,$search->{'class'});
       my $count=@temp;
