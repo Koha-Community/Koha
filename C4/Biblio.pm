@@ -702,6 +702,7 @@ sub MARCdelitem {
 
 sub MARCmoditem {
 	my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
+
 	my $oldrecord=&MARCgetitem($dbh,$bibid,$itemnumber);
 	# if nothing to change, don't waste time...
 	if ($oldrecord eq $record) {
@@ -1359,7 +1360,8 @@ sub NEWnewitem {
 
 sub NEWmoditem {
     my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
-    &MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
+    
+	&MARCmoditem( $dbh, $record, $bibid, $itemnumber, $delete );
 	my $frameworkcode=MARCfind_frameworkcode($dbh,$bibid);
     my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
     OLDmoditem( $dbh, $olditem );
@@ -2540,6 +2542,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.105  2004/09/23 16:15:37  tipaul
+# indenting diff
+#
 # Revision 1.104  2004/09/16 15:06:46  tipaul
 # enabling # (| still possible too) for repeatable subfields
 #
