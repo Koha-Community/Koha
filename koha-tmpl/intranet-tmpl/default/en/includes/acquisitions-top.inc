@@ -8,6 +8,12 @@
 </head>
 <body>
 
+<script>
+function Help() {
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
+</script>
+
 <style>
 .acquisition {
 	background-color: #ffdf61;
@@ -35,6 +41,7 @@ a.acquisition:hover {
 	<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 	<a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>
 	<a class="about" href="/cgi-bin/koha/about.pl">About</a>
+	<a class="catalogue" href="javascript:Help()">Help</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Log Out</a>]</p>
