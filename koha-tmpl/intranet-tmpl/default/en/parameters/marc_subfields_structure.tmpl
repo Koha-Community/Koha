@@ -1,8 +1,8 @@
-<html>
 <!-- clarification needed about this page. many questions... what is Lib? a Library? -->
 
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
+<div id="mainbloc">
 <!-- TMPL_IF name="add_form" -->
 <!---------------------------------------------------------------------------->
 	<H1>
@@ -12,30 +12,28 @@
 	</H1>
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
+	<input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->">
 	<table>
 	<tr><th>Field</th>
-		<th>Lib for librarians / for opac</th>
-		<th>Repet</th>
-		<th>Mand</th>
-		<th>Koha field</th>
-		<th>Tab</th>
-		<th>See also (in searches)</th>
-		<th>Authorised value or<br/>
-				Thesaurus category</th>
+		<th colspan=2>Constraints</th>
 	</tr>
 	<!-- TMPL_LOOP name="loop" -->
-		<tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
-		<td><!-- TMPL_VAR name="tagfield" --> - <!-- TMPL_VAR name="tagsubfield" --></td>
-		<td><input type=text name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" -->" size=40 maxlength=80><br/>
-				<input type=text name="libopac" value="<!-- TMPL_VAR name="libopac" -->" size=40 maxlength=80></td>
-		<td><!-- TMPL_VAR name="repeatable" --></td>
-		<td><!-- TMPL_VAR name="mandatory" --></td>
-		<td><!-- TMPL_VAR name="kohafield" --></td>
-		<td><!-- TMPL_VAR name="tab" --></td>
-		<td><input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20 maxlength=80></td>
-		<td><!-- TMPL_VAR name="authorised_value" --><br/>
-				or <!-- TMPL_VAR name="thesaurus_category" --><br/>
-				or <!-- TMPL_VAR name="value_builder" --></td>
+		<tr bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+		<td>
+			<p><!-- TMPL_VAR name="tagfield" --> - <!-- TMPL_VAR name="tagsubfield" --></p>
+			<p><input type=text name="liblibrarian" value="<!-- TMPL_VAR name="liblibrarian" -->" size=40 maxlength=80></p>
+			<p><input type=text name="libopac" value="<!-- TMPL_VAR name="libopac" -->" size=40 maxlength=80></p>
+		<td>
+			<p><label>Appears in tab:</label> <!-- TMPL_VAR name="tab" --></p>
+			<p><label>Repeatable:</label> <!-- TMPL_VAR name="repeatable" --></p>
+			<p><label>Mandatory:</label><!-- TMPL_VAR name="mandatory" --></p>
+			<p><label>See also:</label> <input type="text" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size=20 maxlength=80></p>
+		</td>
+		<td>
+			<p><label>Koha link:</label> <!-- TMPL_VAR name="kohafield" --></p>
+			<p><label>Auth value:</label> <!-- TMPL_VAR name="authorised_value" --></p>
+			<p><label>Thesaurus:</label> <!-- TMPL_VAR name="thesaurus_category" --></p>
+			<p><label>plugin:</label> <!-- TMPL_VAR name="value_builder" --></td>
 	<!-- /TMPL_LOOP -->
 	</table>
 	<INPUT type=submit value='OK'>
@@ -73,25 +71,25 @@
 
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
-<h1>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --></h1>
+<h1>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --> (framework <!--TMPL_VAR name="itemtype" -->)</h1>
 <p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
 <p>The column <b>Koha field</b> shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, or a Koha interface. This link ensures that both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
 
-<table border=0 cellspacing=0 cellpadding=2 width="80%">
-<tr valign=top bgcolor=#99cc33>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>Subfield</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Lib</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Koha field</b> <span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>See also</b> <span style="font-size:8;color:red" title="if subfields entered here, searches on this field will also be done on seealso subfields (syntax 200a,300e)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Auth value</b> <span style="font-size:8;color:red" title="values authorised for this subfield">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Thesaurus</b> <span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%"><b>Val build</b> <span style="font-size:8;color:red" title="Value builder">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="8%">Delete</td>
+<table>
+<tr>
+	<th>Subfield</th>
+	<th>Lib</th>
+	<th>Koha field<span style="font-size:8;color:red" title="the koha-DB field linked to this subfield">?</span></th>
+	<th>Rep<span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></th>
+	<th>Mand <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></th>
+	<th>Tab <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></th>
+	<th>See also<span style="font-size:8;color:red" title="if subfields entered here, searches on this field will also be done on seealso subfields (syntax 200a,300e)">?</span></th>
+	<th>Auth value<span style="font-size:8;color:red" title="values authorised for this subfield">?</span></th>
+	<th>Thesaurus<span style="font-size:8;color:red" title="Thesaurus linked to this subfield">?</span></th>
+	<th>Val build<span style="font-size:8;color:red" title="Value builder">?</span></th>
+	<th>Delete</th>
 <!-- TMPL_LOOP name="loop" -->
-<tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
+<tr bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
 	<td><!-- TMPL_VAR name="tagsubfield" --></td>
 	<td><!-- TMPL_VAR name="liblibrarian" --></td>
 	<td><!-- TMPL_VAR name="kohafield" --></td>
@@ -106,15 +104,22 @@
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-<table width=60%>
-	<tr>
-		<td width="25%"><!-- TMPL_VAR name="edit" --><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-		<td width="25%"><a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0></a></td>
-		<td width="25%"><!-- TMPL_IF name="previous" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a><!-- /TMPL_IF --></td>
-		<td width="25%"><!-- TMPL_IF name="next" --><!-- TMPL_VAR name="next" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a><!-- /TMPL_IF --></td>
-	</tr>
-</table>
+<!-- TMPL_VAR name="edit" -->
+	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
+</a>
+<a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->">
+	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0>
+</a>
+<!-- TMPL_IF name="previous" -->
+	<input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 >
+	</a><!-- /TMPL_IF -->
+<!-- TMPL_IF name="next" -->
+	<!-- TMPL_VAR name="next" -->
+		<input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+	</a>
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
+</div>
+
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
-</html>

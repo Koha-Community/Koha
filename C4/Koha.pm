@@ -199,7 +199,7 @@ sub getbranches {
 # returns a reference to a hash of references to branches...
 	my %branches;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from branches");
+	my $sth=$dbh->prepare("select * from branches order by branchname");
 	$sth->execute;
 	while (my $branch=$sth->fetchrow_hashref) {
 		my $nsth = $dbh->prepare("select categorycode from branchrelations where branchcode = ?");
@@ -263,7 +263,7 @@ sub getitemtypes {
 # returns a reference to a hash of references to branches...
 	my %itemtypes;
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select * from itemtypes");
+	my $sth=$dbh->prepare("select * from itemtypes order by description");
 	$sth->execute;
 	while (my $IT=$sth->fetchrow_hashref) {
 			$itemtypes{$IT->{'itemtype'}}=$IT;

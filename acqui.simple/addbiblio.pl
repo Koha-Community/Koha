@@ -34,6 +34,8 @@ use vars qw( $tagslib);
 use vars qw( $authorised_values_sth);
 use vars qw( $is_a_modif );
 
+my $itemtype; # created here because it can be used in build_authorized_values_list sub
+
 =item find_value
 
     ($indicators, $value) = find_value($tag, $subfield, $record,$encoding);
@@ -103,49 +105,47 @@ sub MARCfindbreeding {
 =cut
 
 sub build_authorized_values_list ($$$$$) {
-    my($tag, $subfield, $value, $dbh,$authorised_values_sth) = @_;
+	my($tag, $subfield, $value, $dbh,$authorised_values_sth) = @_;
 
-    my @authorised_values;
-    my %authorised_lib;
+	my @authorised_values;
+	my %authorised_lib;
 
-    # builds list, depending on authorised value...
+	# builds list, depending on authorised value...
 
-    #---- branch
-    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-	my $sth=$dbh->prepare("select branchcode,branchname from branches");
+	#---- branch
+	if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+	my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
 	$sth->execute;
 	push @authorised_values, ""
 		unless ($tagslib->{$tag}->{$subfield}->{mandatory});
 
 	while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
-	    push @authorised_values, $branchcode;
-	    $authorised_lib{$branchcode}=$branchname;
+		push @authorised_values, $branchcode;
+		$authorised_lib{$branchcode}=$branchname;
 	}
 
-    #----- itemtypes
-    } elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
-	my $sth=$dbh->prepare("select itemtype,description from itemtypes");
-	$sth->execute;
-	push @authorised_values, ""
-		unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+	#----- itemtypes
+	} elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
+		my $sth=$dbh->prepare("select itemtype,description from itemtypes order by description");
+		$sth->execute;
+		push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+	
+		while (my ($itemtype,$description) = $sth->fetchrow_array) {
+			push @authorised_values, $itemtype;
+			$authorised_lib{$itemtype}=$description;
+		}
+		$value=$itemtype unless ($value);
 
-	while (my ($itemtype,$description) = $sth->fetchrow_array) {
-	    push @authorised_values, $itemtype;
-	    $authorised_lib{$itemtype}=$description;
-	}
+	#---- "true" authorised value
+	} else {
+		$authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
 
-    #---- "true" authorised value
-    } else {
-	$authorised_values_sth->execute
-		($tagslib->{$tag}->{$subfield}->{authorised_value});
-
-	push @authorised_values, ""
-		unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-
-	while (my ($value,$lib) = $authorised_values_sth->fetchrow_array) {
-	    push @authorised_values, $value;
-	    $authorised_lib{$value}=$lib;
-	}
+		push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+	
+		while (my ($value,$lib) = $authorised_values_sth->fetchrow_array) {
+			push @authorised_values, $value;
+			$authorised_lib{$value}=$lib;
+		}
     }
     return CGI::scrolling_list( -name     => 'field_value',
 				-values   => \@authorised_values,
@@ -313,12 +313,16 @@ my $oldbiblionumber=$input->param('oldbiblionumber'); # if bib exists, it's a mo
 my $breedingid = $input->param('breedingid');
 my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
+$itemtype = $input->param('itemtype');
 my $dbh = C4::Context->dbh;
 my $bibid;
 if ($oldbiblionumber) {
 	$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$oldbiblionumber);
+	# find itemtype
+	$itemtype = &MARCfind_itemtype($dbh,$bibid) if $bibid;
 }else {
 	$bibid = $input->param('bibid');
+	$itemtype = &MARCfind_itemtype($dbh,$bibid) if $bibid;
 }
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
@@ -329,10 +333,11 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-$tagslib = &MARCgettagslib($dbh,1);
+$tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record=-1;
 my $encoding="";
 $record = MARCgetbiblio($dbh,$bibid) if ($bibid);
+warn "R".$record->as_formatted;
 ($record,$encoding) = MARCfindbreeding($dbh,$breedingid) if ($breedingid);
 
 $is_a_modif=0;
@@ -372,7 +377,8 @@ if ($op eq "addbiblio") {
 		($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
 	}
 # now, redirect to additem page
-	print $input->redirect("additem.pl?bibid=$bibid");
+	print $input->redirect("additem.pl?bibid=$bibid&itemtype=$itemtype");
+	warn "redirect : $itemtype";
 	exit;
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
@@ -434,7 +440,8 @@ if ($op eq "addbiblio") {
 	&NEWdelbiblio($dbh,$bibid);
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=/cgi-bin/koha/search.marc/search.pl?type=intranet\"></html>";
 	exit;
-#------------------------------------------------------------------------------------------------------------------------------#------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
 	build_tabs ($template, $record, $dbh,$encoding);
@@ -448,4 +455,7 @@ if ($op eq "addbiblio") {
 		oldbiblioitemnumtagsubfield => $oldbiblioitemnumtagsubfield,
 		oldbiblioitemnumber         => $oldbiblioitemnumber );
 }
+$template->param(
+		itemtype => $itemtype
+		);
 output_html_with_http_headers $input, $cookie, $template->output;

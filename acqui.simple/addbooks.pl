@@ -40,6 +40,7 @@ use C4::Biblio;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use HTML::Template;
+use C4::Koha;
 
 my $query = new CGI;
 
@@ -55,7 +56,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+# get itemtype list
+my $itemtypes = getitemtypes;
+my @itemtypesloop;
+foreach my $thisitemtype (keys %$itemtypes) {
+	my %row =(value => $thisitemtype,
+				description => $itemtypes->{$thisitemtype}->{'description'},
+			);
+	push @itemtypesloop, \%row;
+}
+
 my $marc_p = C4::Context->boolean_preference("marc");
-$template->param( NOTMARC => !$marc_p );
+$template->param( NOTMARC => !$marc_p,
+				itemtypeloop => \@itemtypesloop );
 
 output_html_with_http_headers $query, $cookie, $template->output;

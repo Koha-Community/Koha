@@ -28,20 +28,19 @@ use C4::Context;
 use HTML::Template;
 
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($env,$searchstring,$itemtype)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like ?) order by tagfield");
-	$sth->execute("$searchstring%");
+	my $sth=$dbh->prepare("Select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where (tagfield like ? and itemtype=?) order by tagfield");
+	$sth->execute("$searchstring%",$itemtype);
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
+		push(@results,$data);
+		$cnt ++;
 	}
-	#  $sth->execute;
 	$sth->finish;
 	$dbh->disconnect;
 	return ($cnt,\@results);
@@ -50,6 +49,7 @@ sub StringSearch  {
 my $input = new CGI;
 my $tagfield=$input->param('tagfield');
 my $tagsubfield=$input->param('tagsubfield');
+my $itemtype=$input->param('itemtype');
 my $pkfield="tagfield";
 my $offset=$input->param('offset');
 my $script_name="/cgi-bin/koha/admin/marc_subfields_structure.pl";
@@ -69,10 +69,12 @@ $tagfield=~ s/\,//g;
 if ($op) {
 $template->param(script_name => $script_name,
 						tagfield =>$tagfield,
+						itemtype => $itemtype,
 						$op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
 						tagfield =>$tagfield,
+						itemtype => $itemtype,
 						else              => 1); # we show only the TMPL_VAR names $op
 }
 
@@ -137,8 +139,8 @@ if ($op eq 'add_form') {
 	closedir DIR;
 
 	# build values list
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=?"); # and tagsubfield='$tagsubfield'");
-	$sth->execute($tagfield);
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=? and itemtype=?"); # and tagsubfield='$tagsubfield'");
+	$sth->execute($tagfield,$itemtype);
 	my @loop_data = ();
 	my $toggle="white";
 	my $i=0;
@@ -247,8 +249,8 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder)
-									values (?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,thesaurus_category,value_builder,itemtype)
+									values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
@@ -285,12 +287,12 @@ if ($op eq 'add_form') {
 									$seealso,
 									$authorised_value,
 									$thesaurus_category,
-									$value_builder);
+									$value_builder,$itemtype);
 			}
 		}
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&itemtype=$itemtype\"></html>";
 	exit;
 
 													# END $OP eq ADD_VALIDATE
@@ -298,7 +300,7 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=? and tagsubfield=?");
+	my $sth=$dbh->prepare("select tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,authorised_value,thesaurus_category,value_builder from marc_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
 	$sth->execute($tagfield,$tagsubfield);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
@@ -307,6 +309,7 @@ if ($op eq 'add_form') {
 							delete_link => $script_name,
 							tagfield      =>$tagfield,
 							tagsubfield => $tagsubfield,
+							itemtype => $itemtype,
 							);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -314,18 +317,18 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	my $dbh = C4::Context->dbh;
 	unless (C4::Context->config('demo') eq 1) {
-		my $sth=$dbh->prepare("delete from marc_subfield_structure where tagfield=? and tagsubfield=?");
-		$sth->execute($tagfield,$tagsubfield);
+		my $sth=$dbh->prepare("delete from marc_subfield_structure where tagfield=? and tagsubfield=? and itemtype=?");
+		$sth->execute($tagfield,$tagsubfield,$itemtype);
 		$sth->finish;
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&itemtype=$itemtype\"></html>";
 	exit;
 	$template->param(tagfield => $tagfield);
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	my $env;
-	my ($count,$results)=StringSearch($env,$tagfield,'web');
+	my ($count,$results)=StringSearch($env,$tagfield,$itemtype);
 	my $toggle="white";
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
@@ -346,12 +349,12 @@ if ($op eq 'add_form') {
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{thesaurus_category}	= $results->[$i]{'thesaurus_category'};
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'};
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&itemtype=$itemtype";
 		$row_data{bgcolor} = $toggle;
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data);
-	$template->param(edit => "<a href=\"$script_name?op=add_form&amp;tagfield=$tagfield\">");
+	$template->param(edit => "<a href=\"$script_name?op=add_form&amp;tagfield=$tagfield&itemtype=$itemtype\">");
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
 		$template->param(prev =>"<a href=\"$script_name?offset=$prevpage\">");

@@ -55,7 +55,10 @@ my $oldbiblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid);
 my $op = $input->param('op');
 my $itemnum = $input->param('itemnum');
 
-my $tagslib = &MARCgettagslib($dbh,1);
+# find itemtype
+my $itemtype = &MARCfind_itemtype($dbh,$bibid);
+
+my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 my $record = MARCgetbiblio($dbh,$bibid);
 my $itemrecord;
 my $nextop="additem";

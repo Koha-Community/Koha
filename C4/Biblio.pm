@@ -33,37 +33,38 @@ $VERSION = 0.01;
 # as the old-style API and the NEW one are the only public functions.
 #
 @EXPORT = qw(
-	     &updateBiblio &updateBiblioItem &updateItem
-	     &itemcount &newbiblio &newbiblioitem
-	     &modnote &newsubject &newsubtitle
-	     &modbiblio &checkitems
-	     &newitems &modbibitem
-	     &modsubtitle &modsubject &modaddauthor &moditem &countitems
-	     &delitem &deletebiblioitem &delbiblio
-	     &getbiblio
-	     &getbiblioitembybiblionumber
-	     &getbiblioitem &getitemsbybiblioitem
-	     &skip
-	     &newcompletebiblioitem
+	&updateBiblio &updateBiblioItem &updateItem
+	&itemcount &newbiblio &newbiblioitem
+	&modnote &newsubject &newsubtitle
+	&modbiblio &checkitems
+	&newitems &modbibitem
+	&modsubtitle &modsubject &modaddauthor &moditem &countitems
+	&delitem &deletebiblioitem &delbiblio
+	&getbiblio
+	&getbiblioitembybiblionumber
+	&getbiblioitem &getitemsbybiblioitem
+	&skip
+	&newcompletebiblioitem
 
-	     &MARCfind_oldbiblionumber_from_MARCbibid
-	     &MARCfind_MARCbibid_from_oldbiblionumber
-		&MARCfind_marc_from_kohafield
-	     &MARCfindsubfield
-	     &MARCgettagslib
+	&MARCfind_oldbiblionumber_from_MARCbibid
+	&MARCfind_MARCbibid_from_oldbiblionumber
+	&MARCfind_marc_from_kohafield
+	&MARCfindsubfield
+	&MARCfind_itemtype
+	&MARCgettagslib
 
-		&NEWnewbiblio &NEWnewitem
-		&NEWmodbiblio &NEWmoditem
-		&NEWdelbiblio &NEWdelitem
+	&NEWnewbiblio &NEWnewitem
+	&NEWmodbiblio &NEWmoditem
+	&NEWdelbiblio &NEWdelitem
 
-	     &MARCaddbiblio &MARCadditem
-	     &MARCmodsubfield &MARCaddsubfield
-	     &MARCmodbiblio &MARCmoditem
-	     &MARCkoha2marcBiblio &MARCmarc2koha
-		&MARCkoha2marcItem &MARChtml2marc
-	     &MARCgetbiblio &MARCgetitem
-	     &MARCaddword &MARCdelword
-		&char_decode
+	&MARCaddbiblio &MARCadditem
+	&MARCmodsubfield &MARCaddsubfield
+	&MARCmodbiblio &MARCmoditem
+	&MARCkoha2marcBiblio &MARCmarc2koha
+	&MARCkoha2marcItem &MARChtml2marc
+	&MARCgetbiblio &MARCgetitem
+	&MARCaddword &MARCdelword
+	&char_decode
  );
 
 #
@@ -129,9 +130,10 @@ the db header $dbh is always passed as parameter to avoid over-DB connexion
 
 =over 4
 
-=item @tagslib = &MARCgettagslib($dbh,1|0);
+=item @tagslib = &MARCgettagslib($dbh,1|0,$itemtype);
 
 last param is 1 for liblibrarian and 0 for libopac
+$itemtype contains the itemtype framework reference. If empty or does not exist, the default one is used
 returns a hash with tag/subfield meaning
 =item ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,$kohafield);
 
@@ -219,11 +221,17 @@ used to manage MARC_word table and should not be useful elsewhere
 =cut
 
 sub MARCgettagslib {
-	my ($dbh,$forlibrarian)= @_;
+	my ($dbh,$forlibrarian,$itemtype)= @_;
+	$itemtype="" unless $itemtype;
 	my $sth;
 	my $libfield = ($forlibrarian eq 1)? 'liblibrarian' : 'libopac';
-	$sth=$dbh->prepare("select tagfield,$libfield as lib,mandatory from marc_tag_structure order by tagfield");
-	$sth->execute;
+	# check that itemtype framework exists
+	$sth=$dbh->prepare("select count(*) from marc_tag_structure where itemtype=? order by ?");
+	$sth->execute($itemtype,$itemtype);
+	my ($total) = $sth->fetchrow;
+	$itemtype="" unless ($total >0);
+	$sth=$dbh->prepare("select tagfield,$libfield as lib,mandatory from marc_tag_structure where itemtype=? order by tagfield");
+	$sth->execute($itemtype);
 	my ($lib,$tag,$res,$tab,$mandatory,$repeatable);
 	while ( ($tag,$lib,$mandatory) = $sth->fetchrow) {
 		$res->{$tag}->{lib}=$lib;
@@ -231,8 +239,8 @@ sub MARCgettagslib {
 		$res->{$tag}->{mandatory}=$mandatory;
 	}
 
-	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso from marc_subfield_structure order by tagfield,tagsubfield");
-	$sth->execute;
+	$sth=$dbh->prepare("select tagfield,tagsubfield,$libfield as lib,tab, mandatory, repeatable,authorised_value,thesaurus_category,value_builder,kohafield,seealso from marc_subfield_structure where itemtype=? order by tagfield,tagsubfield");
+	$sth->execute($itemtype);
 
 	my $subfield;
 	my $authorised_value;
@@ -691,6 +699,14 @@ sub MARCfindsubfieldid {
     return $res;
 }
 
+sub MARCfind_itemtype {
+	my ($dbh,$bibid) = @_;
+	my ($tagfield,$tagsubfield) = MARCfind_marc_from_kohafield($dbh,"biblioitems.itemtype");
+	my $sth = $dbh->prepare("select subfieldvalue from marc_subfield_table where bibid=? and tag=? and subfieldcode=?");
+	$sth->execute($bibid,$tagfield,$tagsubfield);
+	my ($subfieldvalue) = $sth->fetchrow;
+	return $subfieldvalue;
+}
 sub MARCdelsubfield {
 # delete a subfield for $bibid / tag / tagorder / subfield / subfieldorder
     my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
@@ -2178,6 +2194,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.88  2004/05/18 15:23:49  tipaul
+# framework management : 1 MARC framework for each itemtype
+#
 # Revision 1.87  2004/05/18 11:54:07  tipaul
 # getitemtypes moved in Koha.pm
 #
