@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# NOTE: 4-character tabs
 
 #script to administer the categories table
 #written 20/02/2002 by paul.poulain@free.fr
@@ -135,21 +136,27 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	#start the page and read in includes
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from categoryitem where itemtype='$itemtype'");
-	$sth->execute;
-	my $total = $sth->fetchrow_hashref;
-	$sth->finish;
-	# FIXME - There's already a $sth in this scope.
-	my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge from itemtypes where itemtype='$itemtype'");
-	$sth->execute;
+
+	# Check both categoryitem and biblioitems, see Bug 199
+	my $total = 0;
+	for my $table ('categoryitem', 'biblioitems') {
+	   my $sth=$dbh->prepare("select count(*) as total from $table where itemtype=?");
+	   $sth->execute($itemtype);
+	   $total += $sth->fetchrow_hashref->{total};
+	   $sth->finish;
+	}
+
+	my $sth=$dbh->prepare("select itemtype,description,loanlength,renewalsallowed,rentalcharge from itemtypes where itemtype=?");
+	$sth->execute($itemtype);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
+
 	$template->param(itemtype => $itemtype,
 							description => $data->{'description'},
 							loanlength => $data->{'loanlength'},
 							renewalsallowed => $data->{'renewalsallowed'},
 							rentalcharge => $data->{'rentalcharge'},
-							total => $total->{'total'});
+							total => $total);
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
@@ -187,3 +194,7 @@ if ($op eq 'add_form') {
 	$template->param(loop => \@loop_data);
 } #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
+
+# Local Variables:
+# tab-width: 4
+# End:
