@@ -44,7 +44,6 @@ my $count=@rank;
 # no attempt is made to check consistency.
 for (my $i=0;$i<$count;$i++){
     UpdateReserve($rank[$i],$biblio[$i],$borrower[$i],$branch[$i]); #from C4::Reserves2
-      print "updating reserve";
 }
 
 my $from=$input->param('from');

@@ -63,25 +63,6 @@ for (my $i=1; $i<=$num; $i++){
 	push(@optionloop, \%option);
 }
 
-
-# get branch information
-my $branch = $input->cookie('branch');
-($branch) || ($branch = 'L');
-my $branches = getbranches();
-# make branch selection options...
-my @branchloop;
-foreach my $br (keys %$branches) {
-#	(next) unless $branches->{$br}->{'IS'};
-#			# Only branches with the 'IS' branchrelation
-#			# can issue books
-	my %abranch;
-	$abranch{'selected'}=($br eq $branch);
-	$abranch{'branch'}=$br;
-	$abranch{'branchname'}=$branches->{$br}->{'branchname'};
-	push(@branchloop,\%abranch);
-}
-
-
 # todays date
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $year=$year+1900;
@@ -124,6 +105,7 @@ foreach my $dat (sort {$b->{'dateaccessioned'} cmp $a->{'dateaccessioned'}} @dat
 
 #existingreserves building
 my @reserveloop;
+my $branches = getbranches();
 foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 	my %reserve;
 #    my $prioropt = priorityoptions($totalcount, $res->{'priority'});
@@ -134,18 +116,17 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 		$option{selected}=($i==$res->{'priority'});
 		push(@optionloop, \%option);
 	}
-#    my $bropt = branchoptions($res->{'branchcode'});
-#	my @branchloop;
-#	foreach my $br (keys %$branches) {
-#		(next) unless $branches->{$br}->{'IS'};
-#				# Only branches with the 'IS' branchrelation
-#				# can issue books
-#		my %abranch;
-#		$abranch{'selected'}=($br eq $res->{'branchcode'});
-#		$abranch{'branch'}=$br;
-#		$abranch{'branchname'}=$branches->{$br}->{'branchname'};
-#		push(@branchloop,\%abranch);
-#	}
+	my @branchloop;
+	foreach my $br (keys %$branches) {
+# 		(next) unless $branches->{$br}->{'IS'};
+				# Only branches with the 'IS' branchrelation
+				# can issue books
+		my %abranch;
+		$abranch{'selected'}=($br eq $res->{'branchcode'});
+		$abranch{'branch'}=$br;
+		$abranch{'branchname'}=$branches->{$br}->{'branchname'};
+		push(@branchloop,\%abranch);
+	}
 
     if ($res->{'found'} eq 'W') {
 		my %env;

@@ -128,11 +128,9 @@
 				<TMPL_ELSE>
 					<select name=pickup>
 						<TMPL_LOOP Name="branchloop">
-							<option value=<TMPL_VAR Name="branch">
-								<TMPL_IF Name="selected">
-									selected
-								</TMPL_IF>
-							><TMPL_VAR Name="branchname"></option>
+							<option value="<TMPL_VAR Name="branch">"<TMPL_IF Name="selected"> selected</TMPL_IF>>
+								<TMPL_VAR Name="branchname">
+							</option>
 						</TMPL_LOOP>
 					</select>
 				</TMPL_IF>
@@ -147,7 +145,7 @@
 						Next Available
 					<TMPL_ELSE>
 						<TMPL_IF Name="constrainttypeo">
-							This type only <TMPL_VAR Name="volumeddesc"> <TMPL_VAR Name="itemtype">
+							This type only : <TMPL_VAR Name="volumeddesc"> <TMPL_VAR Name="itemtype">
 						</TMPL_IF>
 					</TMPL_IF>
 				</TMPL_IF>
