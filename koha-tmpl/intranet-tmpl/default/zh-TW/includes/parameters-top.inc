@@ -86,7 +86,7 @@ a.parameters:hover {
 </table>
 <BLOCKQUOTE>
 <TMPL_IF NAME="loggedinusername">
-    <p align=left>目前登入為：<TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>]</p>
+    <p align=left>使用者身分：<TMPL_VAR NAME="loggedinusername"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>登出</a>]</p>
 <TMPL_ELSE>
     <p align=left><a href=/cgi-bin/koha/opac-user.pl>登入</a><span lang=mi>Koha</span></p>
 </TMPL_IF>
