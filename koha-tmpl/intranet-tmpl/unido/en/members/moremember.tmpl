@@ -39,27 +39,15 @@
 		</TMPL_IF>
 		
 		
-	<TMPL_IF NAME="contactname">	Alternative</TMPL_UNLESS> Contact: <TMPL_VAR NAME="contactname"><BR></TMPL_IF>
+	<TMPL_IF NAME="contactname">	Alternative Contact: <TMPL_VAR NAME="contactname"><BR></TMPL_IF>
 		<TMPL_IF NAME="altphone">Phone: <TMPL_VAR NAME="altphone"><BR></TMPL_IF>
-		<TMPL_IF NAME="altrelationship"><TMPL_UNLESS name="I">
-			Relationship: <TMPL_VAR NAME="altrelationship"><BR>
-		</TMPL_UNLESS></TMPL_IF>
 		<TMPL_IF NAME="altnotes">Notes: <TMPL_VAR NAME="altnotes"><P></TMPL_IF>
-		<TMPL_UNLESS name="I">
-			<TMPL_IF NAME="isguarantee">
-				Guarantees:<br><TMPL_LOOP NAME="guaranteeloop"><A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="borrowernumber">"><TMPL_VAR NAME=name> - <TMPL_VAR NAME="cardnumber"></a><br></TMPL_LOOP>
-			<TMPL_ELSE>
-				Guarantor:
-				<TMPL_IF NAME="guarantorborrowernumber">
-					<A HREF="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME="guarantorborrowernumber">"><TMPL_VAR NAME="guarantorcardnumber"></a><br>
-				<TMPL_ELSE>
-					no guarantor<br>
-				</TMPL_IF>
-			</TMPL_IF>
-		</TMPL_UNLESS>
+
+
 		<P>
 		<TMPL_IF NAME="borrowernotes">General Notes: 
 		<TMPL_VAR NAME="borrowernotes">
+		</TMPL_IF>
 		<p>
 		</font>
 		
