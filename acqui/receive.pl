@@ -11,7 +11,7 @@ use strict;
 my $input=new CGI;
 print $input->header();
 my $id=$input->param('id');
-my ($count,@booksellers)=bookseller($id); 
+my ($count,@booksellers)=bookseller($id);
 my $invoice=$input->param('invoice');
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
@@ -54,9 +54,11 @@ $date
 
 EOP
 ;
-my ($count,@results)=invoice($invoice);
+my ($count,@results);
 if ($invoice eq ''){
-  ($count,@results)=getallorders($id);
+	($count,@results)=getallorders($id);
+} else {
+	($count,@results)=invoice($invoice);
 }
 print $count;
 my $totalprice=0;
