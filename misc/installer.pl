@@ -53,7 +53,7 @@ if ($kohaversion =~ /RC/) {
 checkabortedinstall();
 
 if (-e "$etcdir/koha.conf") {
-    my $installedversion=`grep kohaversion= $etcdir/koha.conf`;
+    my $installedversion=`grep kohaversion= "$etcdir/koha.conf"`;
     chomp $installedversion;
     $installedversion=~m/kohaversion=(.*)/;
     $installedversion=$1;
