@@ -72,6 +72,7 @@ if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
 					debug => 1,
 					});
 	#   print $input->header;
+	$template->param(bornum => $member);
 	if ($i >0) {
 		$template->param(ItemsOnIssues => $i);
 	}
