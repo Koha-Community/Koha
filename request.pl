@@ -34,9 +34,8 @@ my $priorityoptions = priorityoptions($num, $num);
 
 # get branch information
 my $branch = $input->cookie('branch');
+($branch) || ($branch = 'L');
 my $branches = getbranches();
-
-
 my $branchoptions = branchoptions($branch);
 
 
@@ -154,7 +153,7 @@ sub branchoptions {
     my ($selbr) = @_;
     my $out = "";
     foreach my $br (keys %$branches) {
-	(next) unless $branches->{$br}->{'CU'};
+	(next) unless $branches->{$br}->{'IS'};
 	my $selected = "";
 	if ($br eq $selbr) {
 	    $selected = "selected";
