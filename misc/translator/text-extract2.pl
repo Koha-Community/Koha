@@ -153,7 +153,8 @@ sub next_token_internal (*) {
     # FIXME the following (the [<\s] part) is an unreliable HACK :-(
     } elsif ($readahead =~ /^(?:[^<]|<[<\s])+/s) {	# non-space normal text
 	($kind, $it, $readahead) = (KIND_TEXT, $&, $');
-	warn "Warning: Unescaped < near line $lc_0: $it\n" if $it =~ /</s;
+	warn "Warning: Unescaped < near line $lc_0: $it\n"
+		if !$cdata_mode_p && $it =~ /</s;
     } else {				# tag/declaration/processing instruction
 	my $ok_p = 0;
 	for (;;) {
