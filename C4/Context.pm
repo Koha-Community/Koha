@@ -260,9 +260,9 @@ sub restore_context
 
 =item config
 
-  $value = C4::Config->config("config_variable");
+  $value = C4::Context->config("config_variable");
 
-  $value = C4::Config->config_variable;
+  $value = C4::Context->config_variable;
 
 Returns the value of a variable specified in the configuration file
 from which the current context was created.
@@ -290,7 +290,7 @@ sub config
 
 # AUTOLOAD
 # This implements C4::Config->foo, and simply returns
-# C4::Config->config("foo"), as described in the documentation for
+# C4::Context->config("foo"), as described in the documentation for
 # &config, above.
 sub AUTOLOAD
 {
