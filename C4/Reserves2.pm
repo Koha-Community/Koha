@@ -54,7 +54,7 @@ my $priv_func = sub {
 sub FindReserves {
   my ($bib,$bor)=@_;
   my $dbh=C4Connect;
-  my $query="Select *,reserves.branchcode
+  my $query="Select *,reserves.branchcode,biblio.title as btitle
   from reserves,borrowers,biblio ";
   if ($bib ne ''){
     if ($bor ne ''){
@@ -175,8 +175,15 @@ sub CalcReserveFee {
 	  }               
 	  $x++;                                       
 	}               
-	if ($const eq 'o') {if ($found == 1) {push @biblioitems,$data;}                            
-        } else {if ($found == 0) {push @biblioitems,$data;} }     
+	if ($const eq 'o') {
+	  if ( $found == 1) {
+	    push @biblioitems,$data1;
+	  }                            
+        } else {
+	  if ($found == 0) {
+	    push @biblioitems,$data1;
+	  } 
+	}     
       }   
     }             
     $sth1->finish;                                  
@@ -193,11 +200,14 @@ sub CalcReserveFee {
       while (my $itdata=$sth2->fetchrow_hashref) { 
         my $query3 = "select * from issues
         where itemnumber = '$itdata->{'itemnumber'}' and
-        returndate is null";                                                          
+        returndate is null";
+	
         my $sth3 = $dbh->prepare($query3);                      
         $sth3->execute();                     
-        if (my $isdata=$sth3->fetchrow_hashref) { } else
-        {$allissued = 0; }  
+        if (my $isdata=$sth3->fetchrow_hashref) {
+	} else {
+	  $allissued = 0; 
+	}  
       }                                                           
       $x++;   
     }         
@@ -206,7 +216,8 @@ sub CalcReserveFee {
       where biblionumber = '$biblionumber'"; 
       my $rsth = $dbh->prepare($rquery);   
       $rsth->execute();   
-      if (my $rdata = $rsth->fetchrow_hashref) { } else {                                     
+      if (my $rdata = $rsth->fetchrow_hashref) { 
+      } else {                                     
         $fee = 0;                                                           
       }   
     }             

@@ -23,7 +23,8 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook);
+@EXPORT = qw(&getbranches &getprinters &getpatroninformation &currentissues &getiteminformation &findborrower &issuebook &returnbook
+&find_reserves);
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 		  
 # your exported package globals go here,
@@ -476,7 +477,7 @@ sub returnbook {
 		$usth = $dbh->prepare($uquery);
 		$usth->execute;
 		$usth->finish;
-		$uquery="update items set itemnotes='' where itemnumber=$iteminformation->{'itemnumber'}";
+		$uquery="update items set paidfor='' where itemnumber=$iteminformation->{'itemnumber'}";
 		$usth = $dbh->prepare($uquery);
 		$usth->execute;
 		$usth->finish;
@@ -887,30 +888,32 @@ sub find_reserves {
   my $resfound = "n";
   my $resrec;
   my $lastrec;
+#  print $query;
   while (($resrec=$sth->fetchrow_hashref) && ($resfound eq "n")) {
       $lastrec=$resrec;
     if ($resrec->{'found'} eq "W") {
       if ($resrec->{'itemnumber'} eq $itemno) {
         $resfound = "y";
-      }
-    } 
-    if ($resrec->{'constrainttype'} eq "a") {
-      $resfound = "y";
+      } 
     } else {
-      my $conquery = "select * from reserveconstraints where borrowernumber
-= $resrec->{'borrowernumber'} and reservedate = '$resrec->{'reservedate'}' and biblionumber = $resrec->{'biblionumber'} and biblioitemnumber = $itemdata->{'biblioitemnumber'}";
-      my $consth = $dbh->prepare($conquery);
-      $consth->execute;
-      if (my $conrec=$consth->fetchrow_hashref) {
-        if ($resrec->{'constrainttype'} eq "o") {
-	   $resfound = "y";
-	 }
+      if ($resrec->{'constrainttype'} eq "a") {
+        $resfound = "y";
       } else {
-        if ($resrec->{'constrainttype'} eq "e") {
-	  $resfound = "y";
-	}
+        my $conquery = "select * from reserveconstraints where borrowernumber
+= $resrec->{'borrowernumber'} and reservedate = '$resrec->{'reservedate'}' and biblionumber = $resrec->{'biblionumber'} and biblioitemnumber = $itemdata->{'biblioitemnumber'}";
+        my $consth = $dbh->prepare($conquery);
+        $consth->execute;
+        if (my $conrec=$consth->fetchrow_hashref) {
+          if ($resrec->{'constrainttype'} eq "o") {
+	     $resfound = "y";
+	   }
+        } else {
+          if ($resrec->{'constrainttype'} eq "e") {
+	    $resfound = "y";
+	  }
+        }
+        $consth->finish;
       }
-      $consth->finish;
     }
     if ($resfound eq "y") {
       my $updquery = "update reserves 
