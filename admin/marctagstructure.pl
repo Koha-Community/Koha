@@ -33,7 +33,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield like \"$data[0]%\") order by tagfield";
+	my $query="Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield > $data[0]) order by tagfield";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
@@ -134,7 +134,7 @@ if ($op eq 'add_form') {
 						$authorised_value
 						);
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?tagfield=$tagfield\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
