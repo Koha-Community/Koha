@@ -502,7 +502,6 @@ sub getkeytableselectoptions {
 	$sth->execute;
 	while ( ($key, $desc) = $sth->fetchrow) {
 	    if ($showkey || ! $desc ) { $desc="$key - $desc"; }
-	    $selectclause.="<option value='$key'>$desc\n";
 	    $selectclause.="<option";
 	    if (defined $default && $default eq $key) {
 		$selectclause.=" selected";
