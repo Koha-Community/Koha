@@ -494,7 +494,7 @@ RECORD:
 EOF
 	} # foreach record
     } else {
-
+        # No result file specified, list results
 	ListSearchResults($dbh,$input);
     } # if
 } # sub ProcessFile
@@ -502,18 +502,21 @@ EOF
 sub ListSearchResults {
     #use strict;
 
+    # Input parameters
     my (
 	$dbh,
 	$input,
     )=@_;
 
-        # No result record specified, list records
-	#open (F, "$file");
-	#my $data=<F>;
+    my (
+	$field,
+    );
+
 	my $data;
 	my $name;
 	my $z3950=0;
 	my $recordsource;
+	my $record;
 
 	# File can be results of z3950 search or uploaded MARC data
 
@@ -544,6 +547,8 @@ EOF
 	    my ($servers) = $sth->fetchrow;
 	    my $serverstring;
 	    my $starttimer=time();
+
+	    # loop through all servers in search request
 	    foreach $serverstring (split(/\s+/, $servers)) {
 		my ($name, $server, $database, $auth) = split(/\//, $serverstring, 4);
 		if ($name eq 'MAN') {
@@ -563,7 +568,10 @@ EOF
 		my $q_server=$dbh->quote($serverstring);
 		my $startrecord=$input->param("ST-$name");
 		($startrecord) || ($startrecord='0');
-		my $sti=$dbh->prepare("select numrecords,id,results,startdate,enddate from z3950results where queryid=$id and server=$q_server");
+		my $sti=$dbh->prepare("
+		    select numrecords,id,results,startdate,enddate 
+			from z3950results 
+			where queryid=$id and server=$q_server");
 		$sti->execute;
 		($numrecords,$resultsid,$data,$startdate,$enddate) = $sti->fetchrow;
 		my $serverplaceholder='';
@@ -610,79 +618,16 @@ EOF
 		    my @records=split(/$splitchar/, $data);
 		    $data='';
 		    my $i;
-		    my $record;
 		    for ($i=$startrecord; $i<$startrecord+10; $i++) {
 			$data.=$records[$i].$splitchar;
 		    }
 		    @records=parsemarcfileformat($data);
 		    my $counter=0;
 		    foreach $record (@records) {
-			$counter++;
-			#(next) unless ($counter>=$startrecord && $counter<=$startrecord+10);
-			my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $controlnumber);
-			foreach $field (@$record) {
-			    if ($field->{'tag'} eq '001') {
-				$controlnumber=$field->{'indicator'};
-			    }
-			    if ($field->{'tag'} eq '010') {
-				$lccn=$field->{'subfields'}->{'a'};
-				$lccn=~s/^\s*//;
-				($lccn) = (split(/\s+/, $lccn))[0];
-			    }
-			    if ($field->{'tag'} eq '015') {
-				$lccn=$field->{'subfields'}->{'a'};
-				$lccn=~s/^\s*//;
-				$lccn=~s/^C//;
-				($lccn) = (split(/\s+/, $lccn))[0];
-			    }
-			    if ($field->{'tag'} eq '020') {
-				$isbn=$field->{'subfields'}->{'a'};
-				($isbn=~/ARRAY/) && ($isbn=$$isbn[0]);
-				$isbn=~s/[^\d]*//g;
-			    }
-			    if ($field->{'tag'} eq '022') {
-				$issn=$field->{'subfields'}->{'a'};
-				$issn=~s/^\s*//;
-				($issn) = (split(/\s+/, $issn))[0];
-			    }
-			    if ($field->{'tag'} eq '100') {
-				$author=$field->{'subfields'}->{'a'};
-			    }
-			    if ($field->{'tag'} eq '245') {
-				$title=$field->{'subfields'}->{'a'};
-				$title=~s/ \/$//;
-				$subtitle=$field->{'subfields'}->{'b'};
-				$subtitle=~s/ \/$//;
-			    }
-			}
-			my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
-			my $q_issn=$dbh->quote((($issn) || ('NIL')));
-			my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
-			my $q_controlnumber=$dbh->quote((($controlnumber) || ('NIL')));
-			#my $sth=$dbh->prepare("select * from marcrecorddone where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn or controlnumber=$q_controlnumber");
-			#$sth->execute;
-			#my $donetext='';
-			#if ($sth->rows) {
-			#    $donetext="DONE";
-			#}
-			$sth=$dbh->prepare("select * from biblioitems where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn");
-			$sth->execute;
-			if ($sth->rows) {
-			    $donetext="DONE";
-			}
-			($author) && ($author="by $author");
-			if ($isbn) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&isbn=$isbn>$title $subtitle $author</a> $donetext<br>\n";
-			} elsif ($lccn) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&lccn=$lccn>$title $subtitle $author</a> $donetext<br>\n";
-			} elsif ($issn) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&issn=$issn>$title $subtitle $author</a><br> $donetext\n";
-			} elsif ($controlnumber) {
-			    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=$file&resultsid=$resultsid&controlnumber=$controlnumber>$title $subtitle $author</a><br> $donetext\n";
-			} else {
-			    print "Error: Contact steve regarding $title by $author<br>\n";
-			}
-		    }
+
+			&PrintResultRecordLink($record,$resultsid);
+			
+		    } # foreach record
 		    print "<p>\n";
 		} else {
 		    print "No records returned.<p>\n";
@@ -694,76 +639,109 @@ EOF
 	} else {
 	    
 	    my @records=parsemarcfileformat($data);
-	    $counter=$#records+1;
 	    foreach $record (@records) {
-		my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $notes, $controlnumber);
-		foreach $field (@$record) {
-		    if ($field->{'tag'} eq '001') {
-			$controlnumber=$field->{'indicator'};
-		    }
-		    if ($field->{'tag'} eq '010') {
-			$lccn=$field->{'subfields'}->{'a'};
-			$lccn=~s/^\s*//;
-			($lccn) = (split(/\s+/, $lccn))[0];
-		    }
-		    if ($field->{'tag'} eq '015') {
-			$lccn=$field->{'subfields'}->{'a'};
-			$lccn=~s/^\s*//;
-			$lccn=~s/^C//;
-			($lccn) = (split(/\s+/, $lccn))[0];
-		    }
-		    if ($field->{'tag'} eq '020') {
-			$isbn=$field->{'subfields'}->{'a'};
-			($isbn=~/ARRAY/) && ($isbn=$$isbn[0]);
-			$isbn=~s/[^\d]*//g;
-		    }
-		    if ($field->{'tag'} eq '022') {
-			$issn=$field->{'subfields'}->{'a'};
-			$issn=~s/^\s*//;
-			($issn) = (split(/\s+/, $issn))[0];
-		    }
-		    if ($field->{'tag'} eq '100') {
-			$author=$field->{'subfields'}->{'a'};
-		    }
-		    if ($field->{'tag'} eq '245') {
-			$title=$field->{'subfields'}->{'a'};
-			$title=~s/ \/$//;
-			$subtitle=$field->{'subfields'}->{'b'};
-			$subtitle=~s/ \/$//;
-		    }
-		}
-		my $q_isbn=$dbh->quote((($isbn) || ('NIL')));
-		my $q_issn=$dbh->quote((($issn) || ('NIL')));
-		my $q_lccn=$dbh->quote((($lccn) || ('NIL')));
-		my $q_controlnumber=$dbh->quote((($controlnumber) || ('NIL')));
-		#my $sth=$dbh->prepare("select * from marcrecorddone where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn or controlnumber=$q_controlnumber");
-		#$sth->execute;
-		#my $donetext='';
-		#if ($sth->rows) {
-		#    $donetext="DONE";
-		#}
-		$sth=$dbh->prepare("select * from biblioitems where isbn=$q_isbn or issn=$q_issn or lccn=$q_lccn");
-		$sth->execute;
-		if ($sth->rows) {
-		    $donetext="DONE";
-		}
-		($author) && ($author="by $author");
-		if ($isbn) {
-		    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file&isbn=$isbn>$title$subtitle $author</a> $donetext<br>\n";
-		} elsif ($lccn) {
-		    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file&lccn=$lccn>$title$subtitle $author</a> $donetext<br>\n";
-		} elsif ($issn) {
-		    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file&issn=$issn>$title$subtitle $author</a><br> $donetext\n";
-		} elsif ($controlnumber) {
-		    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file&controlnumber=$controlnumber>$title by $author</a><br> $donetext\n";
-		} else {
-		    print "Error: Contact steve regarding $title by $author<br>\n";
-		}
-	    }
-	}
+
+		&PrintResultRecordLink($record,'');
+
+	    } # foreach record
+	} # if z3950 or marc upload
 	print "</td></tr></table>\n";
 } # sub ListSearchResults
 
+sub PrintResultRecordLink {
+    my ($record,$resultsid)=@_; 	# input
+
+	my $bib;	# hash ref to named fields
+	my $searchfield, $searchvalue;
+	
+
+	$bib=simplemarcfields($record);
+
+	$sth=$dbh->prepare("select * 
+	  from biblioitems 
+	  where isbn=?  or issn=?  or lccn=? ");
+	$sth->execute($bib->{isbn},$bib->{issn},$bib->{lccn});
+	if ($sth->rows) {
+	    $donetext="DONE";
+	} else {
+	    $donetext="";
+	}
+	($bib->{author}) && ($bib->{author}="by $bib->{author}");
+
+	$searchfield="";
+	foreach $fieldname ( "controlnumber", "lccn", "issn", "isbn") {
+	    if ( defined $bib->{$fieldname} ) {
+		$searchfield=$fieldname;
+		$searchvalue=$bib->{$fieldname};
+	    } # if defined fieldname
+	} # foreach
+
+	if ( $searchfield ) {
+	    print "<a href=$ENV{'SCRIPT_NAME'}?file=$file" . 
+		"&resultsid=$resultsid" .
+		"&$searchfield=$searchvalue" .
+		"&searchfield=$searchfield" .
+		"&searchvalue=$searchvalue" .
+		">$bib->{title} by $bib->{author}</a>" .
+		" $donetext <BR>\n";
+	} else {
+	    print "Error: Problem with $title by $bib->{author}<br>\n";
+	} # if searchfield
+} # sub PrintResultRecordLink
+
+#------------------
+sub simplemarcfields {
+    # input
+    my (
+	$record,	# list ref
+    )=@_;
+
+    # return 
+    my $bib;		# hash of named fields
+
+
+    my (
+	$field, $value,
+    );
+    foreach $field (@$record) {
+	    if ($field->{'tag'} eq '001') {
+		$bib->{controlnumber}=$field->{'indicator'};
+	    }
+	    if ($field->{'tag'} eq '010') {
+		$bib->{lccn}=$field->{'subfields'}->{'a'};
+		$bib->{lccn}=~s/^\s*//;
+		($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0];
+	    }
+	    if ($field->{'tag'} eq '015') {
+		$bib->{lccn}=$field->{'subfields'}->{'a'};
+		$bib->{lccn}=~s/^\s*//;
+		$bib->{lccn}=~s/^C//;
+		($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0];
+	    }
+	    if ($field->{'tag'} eq '020') {
+		$bib->{isbn}=$field->{'subfields'}->{'a'};
+		($bib->{isbn}=~/ARRAY/) && ($bib->{isbn}=$$bib->{isbn}[0]);
+		$bib->{isbn}=~s/[^\d]*//g;
+	    }
+	    if ($field->{'tag'} eq '022') {
+		$bib->{issn}=$field->{'subfields'}->{'a'};
+		$bib->{issn}=~s/^\s*//;
+		($bib->{issn}) = (split(/\s+/, $bib->{issn}))[0];
+	    }
+	    if ($field->{'tag'} eq '100') {
+		$bib->{author}=$field->{'subfields'}->{'a'};
+	    }
+	    if ($field->{'tag'} eq '245') {
+		$bib->{title}=$field->{'subfields'}->{'a'};
+		$bib->{title}=~s/ \/$//;
+		$bib->{subtitle}=$field->{'subfields'}->{'b'};
+		$bib->{subtitle}=~s/ \/$//;
+	    }
+    } # foreach field
+
+    return $bib;
+
+} # sub simplemarcfields
 
 sub z3950menu {
     use strict;
@@ -781,7 +759,8 @@ sub z3950menu {
     	$elapsedtime,
 	$resultstatus, $statuscolor,
 	$id, $term, $type, $done, $numrecords, $length, 
-	$startdate, $enddate, $servers
+	$startdate, $enddate, $servers,
+	$record,$bib,$title,
     );
 
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
@@ -803,8 +782,9 @@ sub z3950menu {
 	$term=~s/</&lt;/g;
 	$term=~s/>/&gt;/g;
 
+	$title="";
 	# See if query produced results
-	$sti=$dbh->prepare("select id,server,startdate,enddate,numrecords 
+	$sti=$dbh->prepare("select id,server,startdate,enddate,numrecords,results
 		from z3950results 
 		where queryid=?");
 	$sti->execute($id);
@@ -812,7 +792,7 @@ sub z3950menu {
 	    $processing=0;
 	    $realenddate=0;
 	    $totalrecords=0;
-	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords) 
+	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords,$r_marcdata) 
 		= $sti->fetchrow) {
 		if ($r_enddate==0) {
 		    # It hasn't finished yet
@@ -822,7 +802,13 @@ sub z3950menu {
 		    if ($r_enddate>$realenddate) {
 			$realenddate=$r_enddate;
 		    }
-		}
+		    # Snag any title from the results
+		    if ( ! $title ) {
+	    	        ($record)=parsemarcfileformat($r_marcdata);
+		        $bib=simplemarcfields($record);
+		        if ( $bib->{title} ) { $title=$bib->{title} };
+		    } # if no title yet
+		} # if finished
 
 		$totalrecords+=$r_numrecords;
 	    } # while results
@@ -850,7 +836,7 @@ sub z3950menu {
 		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>".
 		"$type=$term</a>" .
 		"<font size=-1 color=$statuscolor>$resultstatus $totalrecords " .
-		"($elapsedtime)</font><br>\n";
+		"($elapsedtime) $title </font><br>\n";
 	} else {
 	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>
 		$type=$term</a> <font size=-1>Pending</font><br>\n";
