@@ -65,7 +65,7 @@ my ($template, $borrowernumber, $cookie)
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
-my $pagesize=20;
+my $pagesize=5;
 my $op = $input->param('op');
 
 if ($op) {
@@ -187,13 +187,18 @@ if ($op eq 'add_form') {
 
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "<a href=\"$script_name?offset=$prevpage&searchfield=$searchfield\">");
+		$template->param(isprevpage => $offset,
+						prevpage=> $prevpage,
+						searchfield => $searchfield,
+						script_name => $script_name,
+		 );
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
-		$template->param(next => "<a href=\"$script_name?offset=$nextpage&searchfield=$searchfield\">");
-
-
+		$template->param(nextpage =>$nextpage,
+						searchfield => $searchfield,
+						script_name => $script_name,
+		);
 	}
 } #---- END $OP eq DEFAULT
 

@@ -131,8 +131,20 @@
 		<td width="33%">
 			<input type=submit class="button" value="Add Tag" title="Add Tag" alt="Add Tag" >
 		</td>
-		<td width=33%><TMPL_IF name="previous"><TMPL_VAR name="previous"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a></TMPL_IF></td>
-		<td width=33%><TMPL_IF name="next"><TMPL_VAR name="next"><input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a></TMPL_IF></td>
+		<td width=33%>
+			<TMPL_IF name="isprevpage">
+				<a href="<TMPL_VAR name="script_name">?offset=<TMPL_VAR name="prevpage">&searchfield=<TMPL_VAR name="searchfield">">
+				<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
+				</a>
+			</TMPL_IF>
+		</td>
+		<td width=33%>
+			<TMPL_IF name="nextpage">
+				<a href="<TMPL_VAR name="script_name">?offset=<TMPL_VAR name="nextpage">&searchfield=<TMPL_VAR name="searchfield">">
+					<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+				</a>
+			</TMPL_IF>
+		</td>
 	</tr>
 </table>
 </form>
