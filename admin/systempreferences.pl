@@ -221,7 +221,7 @@ printend
 	  	}
 		print mktablerow(5,$toggle,$results->[$i]{'variable'},$results->[$i]{'value'},$results->[$i]{'explanation'},
 		mklink("$script_name?op=add_form&searchfield=".$results->[$i]{'variable'},'Edit'),
-		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'variable'},'Delete',''));
+		mklink("$script_name?op=delete_confirm&searchfield=".$results->[$i]{'variable'},'Delete'));
 	}
 	print mktableft;
 	print "<form action='$script_name' method=post>";
@@ -235,7 +235,7 @@ printend
 		my $nextpage =$offset+$pagesize;
 		print mklink("$script_name?offset=".$nextpage,'Next &gt;&gt;');
 	}
-	print "<br><input type=image src=\"/images/button-add-variable.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";
+	print "<br><input type=image src=\"/images/button-add-new.gif\"  WIDTH=188  HEIGHT=44  ALT=\"Add budget\" BORDER=0 ></a><br>";
 	print "</form>";
 } #---- END $OP eq DEFAULT
 print endmenu('admin');
