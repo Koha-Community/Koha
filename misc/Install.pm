@@ -958,7 +958,38 @@ You must specify different directories for the OPAC and INTRANET files!
     }
 }
 
+=item getmysqldir
 
+	getmysqldir;
+
+Get the MySQL database server installation directory, automatically if possible.
+
+=cut
+
+$messages->{'WhereIsMySQL'}->{en} = heading('MYSQL LOCATION').qq|
+Koha can't find MySQL. If you compiled mysql yourself,
+please give the value of --prefix when you ran configure.
+The file mysqladmin should be in bin/mysqladmin under the directory that you give here.
+
+MySQL installation directory: |;
+
+sub getmysqldir {
+    foreach my $mysql (qw(/usr/local/mysql
+			  /opt/mysql
+			  /usr
+			  )) {
+       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
+	    $mysqldir=$mysql;
+       }
+    }
+    if (!$mysqldir){
+	for (;;) {
+	    $mysqldir = showmessage(getmessage('WhereisMySQL'),'free');
+	    last if -f "$mysqldir/bin/mysqladmin";
+	}
+    }
+    return($mysqldir);
+}
 
 =item getdatabaseinfo
 
@@ -1627,33 +1658,8 @@ $messages->{'PrinterName'}->{en}="Printer Name [%s]: ";
 sub databasesetup {
     $mysqluser = 'root';
     $mysqlpass = '';
+	my $mysqldir = getmysqldir();
 
-    foreach my $mysql (qw(/usr/local/mysql
-			  /opt/mysql
-			  /usr
-			  )) {
-       if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
-	    $mysqldir=$mysql;
-       }
-    }
-    if (!$mysqldir){
-	print "I don't see mysql in the usual places.\n";
-	for (;;) {
-	    print "Where have you installed mysql? ";
-	    chomp($mysqldir = <STDIN>);
-	    last if -f "$mysqldir/bin/mysqladmin";
-	print <<EOP;
-
-I can't find it there either. If you compiled mysql yourself,
-please give the value of --prefix when you ran configure.
-
-The file mysqladmin should be in bin/mysqladmin under the directory that you
-provide here.
-
-EOP
-#'
-	}
-    }
     # we must not put the mysql root password on the command line
 	$mysqlpass=	showmessage(getmessage('MysqlRootPassword'),'silentfree');
 	
@@ -1828,23 +1834,17 @@ sub populatedatabase {
 Asks the user whether to restart Apache, and restart it if the user
 wants so.
 
-FIXME: If the installer does not know how to restart the Apache
-server (e.g., if the user is not actually using Apache), it still
-asks the question.
-
 =cut
 
 $messages->{'RestartApache'}->{en} = heading('RESTART APACHE') . qq|
-Apache needs to be restarted to load the new configuration for Koha.
-This requires the root password.
+The web server daemon needs to be restarted to load the new configuration for Koha.
+The installer can do this if you are using Apache and give the root password.
 
 Would you like to try to restart Apache now?  [Y]/N: |;
 
 sub restartapache {
 
     my $response=showmessage(getmessage('RestartApache'), 'yn', 'y');
-
-
 
     unless ($response=~/^n/i) {
 	startsysout();
@@ -1868,17 +1868,31 @@ This function attempts to back up all koha's details.
 
 =cut
 
+$messages->{'BackupDir'}->{en} = heading('BACKUP STORAGE').qq|
+The upgrader will now try to backup your old files.
+
+Please specify a directory to store the backup in [%s]: |;
+
+$messages->{'BackupSummary'}->{en} = heading('BACKUP SUMMARY').qq|
+Backed up:
+
+%6d biblio entries
+%6d biblioitems entries
+%6d items entries
+%6d borrowers
+
+File Listing
+---------------------------------------------------------------------
+%s
+---------------------------------------------------------------------
+
+Does this look right? ([Y]/N): |;
+
 #FIXME: rewrite to use Install.pm
 sub backupkoha {
-my $backupdir=($ENV{prefix}||'/usr/local/koha').'/backups';
-print "Please specify a backup directory [$backupdir]: ";
+my $backupdir=$ENV{'prefix'}.'/backups';
 
-$answer = <STDIN>;
-chomp $answer;
-
-if ($answer) {
-	$backupdir=$answer;
-}
+$answer = showmessage(getmessage('BackupDir',[$backupdir]),'free',$backupdir);
 
 if (! -e $backupdir) {
 	my $result=mkdir ($backupdir, oct(770));
@@ -1899,37 +1913,7 @@ chmod 0770, $backupdir;
 # Backup MySql database
 #
 #
-my $mysql;
-my $mysqldir;
-
-foreach my $mysql (qw(/usr/local/mysql
-					/opt/mysql
-					/usr
-			)) {
-	if ( -d $mysql  && -f "$mysql/bin/mysqladmin") {
-		$mysqldir=$mysql;
-	}
-}
-if (!$mysqldir){
-	print "I don't see mysql in the usual places.\n";
-	for (;;) {
-		print "Where have you installed mysql? ";
-		chomp($mysqldir = <STDIN>);
-		last if -f "$mysqldir/bin/mysqladmin";
-	print <<EOP;
-
-I can't find it there either. If you compiled mysql yourself,
-please give the value of --prefix when you ran configure.
-
-The file mysqladmin should be in bin/mysqladmin under the directory that you
-provide here.
-
-EOP
-#'
-	}
-} else {
-print "Doing backup\n";
-}
+my $mysqldir = getmysqldir();
 
 my ($sec, $min, $hr, $day, $month, $year) = (localtime(time))[0,1,2,3,4,5];
 $month++;
@@ -1958,25 +1942,7 @@ close MD;
 
 my $filels=`ls -hl $backupdir/Koha.backup_$date`;
 chomp $filels;
-printf qq|
-
-Backed up:
-
-%6d biblio entries
-%6d biblioitems entries
-%6d items entries
-%6d borrowers
-
-File Listing
----------------------------------------------------------------------
-$filels
----------------------------------------------------------------------
-
-Does this look right? ([Y]/N):
-|, $bibliocounter, $biblioitemcounter, $itemcounter, $membercounter;
-
-$answer = <STDIN>;
-chomp $answer;
+$answer = showmessage(getmessage('BackupSummary',[$bibliocounter, $biblioitemcounter, $itemcounter, $membercounter, $filels]),'yn');
 
 if ($answer=~/^n/i) {
     print qq|
