@@ -33,7 +33,7 @@ my $type=$query->param('type');
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 my $biblionumber=$query->param('bib');
-my $type='intra';
+my $type='intra';	# FIXME - There's already a $type in this scope
 
 
 # change back when ive fixed request.pl
@@ -71,7 +71,7 @@ my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
 
 my $template;
-if ($type='opac') {
+if ($type eq 'opac') {
 	$template = gettemplate("catalogue/detail-opac.tmpl");
 } else {
 	$template=gettemplate("catalogue/detail.tmpl");
