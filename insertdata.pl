@@ -45,9 +45,9 @@ foreach my $key (@names){
   $data{$key}=~ s/\"/\\\"/g;
 }
 my $dbh = C4::Context->dbh;
-my $query="Select * from borrowers where borrowernumber=$data{'borrowernumber'}";
+my $query="Select * from borrowers where borrowernumber=?";
 my $sth=$dbh->prepare($query);
-$sth->execute;
+$sth->execute($data{'borrowernumber'});
 if (my $data2=$sth->fetchrow_hashref){
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
   $data{'joining'}=format_date_in_iso($data{'joining'});
@@ -70,16 +70,17 @@ if (my $data2=$sth->fetchrow_hashref){
   $data{'dateofbirth'}=format_date_in_iso($data{'dateofbirth'});
   $data{'joining'}=format_date_in_iso($data{'joining'});
   $data{'expiry'}=format_date_in_iso($data{'expiry'});
+    $data{'borrowernumber'}=NewBorrowerNumber();
   $query="insert into borrowers (title,expiry,cardnumber,sex,ethnotes,streetaddress,faxnumber,
   firstname,altnotes,dateofbirth,contactname,emailaddress,textmessaging,dateenrolled,streetcity,
   altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
-  initials,ethnicity,borrowernumber,physstreet,branchcode,zipcode,homezipcode) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
+  initials,ethnicity,physstreet,branchcode,zipcode,homezipcode) values ('$data{'title'}','$data{'expiry'}','$data{'cardnumber'}',
   '$data{'sex'}','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
   '$data{'firstname'}','$data{'altnotes'}','$data{'dateofbirth'}','$data{'contactname'}','$data{'emailaddress'}','$data{'textmessaging'}',
   '$data{'joining'}','$data{'streetcity'}','$data{'altrelationship'}','$data{'othernames'}',
   '$data{'phoneday'}','$data{'categorycode'}','$data{'city'}','$data{'area'}','$data{'phone'}',
   '$data{'borrowernotes'}','$data{'altphone'}','$data{'surname'}','$data{'initials'}',
-  '$data{'ethnicity'}','$data{'borrowernumber'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
+  '$data{'ethnicity'}','$data{'streetaddress'}','$data{'branchcode'}','$data{'zipcode'}','$data{'homezipcode'}')";
 }
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
@@ -103,7 +104,7 @@ if ($data{'categorycode'} eq 'A' || $data{'categorycode'} eq 'W'){
      }
 }
 
-#print $query;
+warn $query;
   my $sth2=$dbh->prepare($query);
   $sth2->execute;
   $sth2->finish;

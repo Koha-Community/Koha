@@ -50,9 +50,9 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $member=$input->param('bornum');
-if ($member eq ''){
-	$member=NewBorrowerNumber();
-}
+# if ($member eq ''){
+#	$member=NewBorrowerNumber();
+# }
 my $type=$input->param('type') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
