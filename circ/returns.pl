@@ -20,12 +20,15 @@ my $backgroundimage="/images/background-mem.gif";
 
 my $query=new CGI;
 my $branches = getbranches();
+my $printers = getprinters(\%env);
 
 my $branch = $query->param("branch");
 my $printer = $query->param("printer");
 
 ($branch) || ($branch=$query->cookie('branch')) ;
 ($printer) || ($printer=$query->cookie('printer')) ;
+
+
 
 #
 # Some code to handle the error if there is no branch or printer setting.....
@@ -66,7 +69,7 @@ my $messages;
 if (my $barcode = $query->param('barcode')) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
-    ($returned, $messages, $iteminformation, $borrower) = returnbook2(\%env, $barcode);
+    ($returned, $messages, $iteminformation, $borrower) = returnbook($barcode, $branch);
     if ($returned) {
 	$returneditems{0} = $barcode;
 	$riborrowernumber{0} = $borrower->{'borrowernumber'};
@@ -81,13 +84,22 @@ if (my $barcode = $query->param('barcode')) {
 # HTML code....
 # title....
 my $title = <<"EOF";
-<p align=right>
+<p>
+<table border=0 cellpadding=5 width=90%><tr>
+<td align="left"><FONT SIZE=6><em>Circulation: Returns</em></FONT><br>
+<b>Branch:</b> $branches->{$branch}->{'branchname'} &nbsp 
+<b>Printer:</b> $printers->{$printer}->{'printername'}<br>
+<a href=selectbranchprinter.pl>Change Settings</a>
+</td>
+<td align="right">
 <FONT SIZE=2  face="arial, helvetica">
-<a href=circulationold.pl?module=issues&branch=$branch&printer=$printer&print>Next Borrower</a> ||
-<a href=returns.pl>Returns</a> ||
-<a href=branchtransfers.pl>Transfers</a></font></p>
-<FONT SIZE=6><em>Circulation: Returns</em></FONT>
-
+<a href=circulation.pl>Next Borrower</a> || 
+<a href=returns.pl>Returns</a> || 
+<a href=branchtransfers.pl>Transfers</a></font><p>
+</td></tr></table>
+<input type=hidden name=branch value=$branch>
+<input type=hidden name=printer value=$printer>
+</p>
 EOF
 
 my $itemtable;
@@ -111,7 +123,7 @@ EOF
 }
 
 # Barcode entry box, with hidden inputs attached....
-my $barcodeentrytext= << "EOF";
+my $barcodeentrytext = << "EOF";
 <form method=post action=/cgi-bin/koha/circ/returns.pl>
 <table border=1 cellpadding=5 cellspacing=0 align=left>
 <tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage>
@@ -124,26 +136,51 @@ $ritext
 </form>
 EOF
 
-# collect the messages and put into message table....
-my $messagetable;
-if ($messages) {
-    my $messagetext='';
-    foreach (@$messages) {
-	$messagetext .= "$_<br>";
-    }
-    $messagetext = substr($messagetext, 0, -4);
-    if ($messagetext) {
-	$messagetable = << "EOF";
-<table border=1 cellpadding=5 cellspacing=0>
-<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font color=black>Messages</font></th></tr>
-<tr><td>
-$messagetext
-</td></tr>
-</table>
-<p>
+my $reservefoundtext;
+if ($messages->{'ResFound'}) {
+    my $resrec = $messages->{'ResFound'};
+    my ($borr) = getpatroninformation(\%env, $resrec->{'borrowernumber'}, 0);
+    my $name = $borr->{'surname'}." ".$borr->{'title'}." ".$borr->{'firstname'};
+    my $number = "<a href=/cgi-bin/koha/moremember.pl?bornum=$borr->{'borrowernumber'} onClick='openWindow(this,'Member', 480, 640)'>$borr->{'cardnumber'}</a>";
+    my $branch = $branches->{$resrec->{'branchcode'}}->{'branchname'};
+    my $reservetext = "<font size='+2' color='red'>RESERVED</font><font size='+2'> for collection by <br>$name ($number) at $branch </font>";
+    $reservefoundtext = <<"EOF";
+<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Reserve Found</font></th></tr>
+<tr><td> $reservetext </td></tr></table>
 EOF
+}
+
+# collect the messages and put into message table....
+my $messagetext='';
+foreach my $code (keys %$messages) {
+    if ($code eq 'BadBarcode'){
+	$messagetext .= "<font color='red' size='+2'> No Item with barcode: $messages->{'BadBarcode'} </font> <br>";
+    }
+    if ($code eq 'NotIssued'){
+	my $braname = $branches->{$messages->{'IsPermanent'}}->{'branchname'};
+	$messagetext .= "<font color='red' size='+2'> Item is not Issued, cannot be returned. </font> <br>";
+    }
+    if ($code eq 'WasLost'){
+	$messagetext .= "<font color='red' size='+2'> Item was lost, now found. </font> <br>";
+    }
+    if (($code eq 'IsPermanent') && (not $messages->{'ResFound'})) {
+	if ($messages->{'IsPermanent'} ne $branch) {
+	    $messagetext .= "<font color='red' size='+2'> Item is part of permanent collection, please return to $branches->{$messages->{'IsPermanent'}}->{'branchname'} </font> <br>";
+	}
     }
 }
+$messagetext = substr($messagetext, 0, -4);
+
+my $messagetable;
+if ($messagetext) {
+    $messagetable = << "EOF";
+<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+<tr><th bgcolor=$headerbackgroundcolor background=$backgroundimage><font>Messages</font></th></tr>
+<tr><td> $messagetext </td></tr></table>
+EOF
+}
+
 
 # patrontable ....
 my $borrowertable;
@@ -276,22 +313,18 @@ $returneditemstable .= "</table>\n";
 
 
 # actually print the page!
-
-
 print $query->header();
 print startpage();
 print startmenu('circulation');
 
 print $title;
 
-# my $flags = $borrower->{'flags'};
-# foreach my $key (keys %$flags) {
-#     print "$key : $flags->{$key} <br> ";
-# }
+print $reservefoundtext;
 
 print $barcodeentrytext;
 
 print $messagetable;
+
 
 if ($returned) {
     print $itemtable;
