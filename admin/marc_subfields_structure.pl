@@ -37,9 +37,11 @@ sub StringSearch  {
 	$sth->execute("$searchstring%",$frameworkcode);
 	my @results;
 	my $cnt=0;
+	my $u=1;
 	while (my $data=$sth->fetchrow_hashref){
 		push(@results,$data);
 		$cnt ++;
+		$u++;
 	}
 	$sth->finish;
 	$dbh->disconnect;

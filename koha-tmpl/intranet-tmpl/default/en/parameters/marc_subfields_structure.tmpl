@@ -70,6 +70,7 @@
 	<form action='<!-- TMPL_VAR name="delete_link" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
 	<input type=hidden name=tagfield value='<!-- TMPL_VAR name="tagfield" -->'>
 	<input type=hidden name=tagsubfield value='<!-- TMPL_VAR name="tagsubfield" -->'>
+	<input type=hidden name="frameworkcode" value='<!-- TMPL_VAR name="frameworkcode" -->'>
 	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
 	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->"><input type=submit value=NO></form></td></tr>
 <!-- /TMPL_IF -->
@@ -127,7 +128,7 @@
 <!-- TMPL_VAR name="edit" -->
 	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
 </a>
-<a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->">
+<a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->">
 	<img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0>
 </a>
 <!-- TMPL_IF name="previous" -->

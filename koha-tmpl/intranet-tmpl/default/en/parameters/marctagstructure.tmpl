@@ -84,7 +84,7 @@
 		<td><!-- TMPL_VAR name="searchfield" --></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'><input type=hidden name=frameworkcode value='<!-- TMPL_VAR name="frameworkcode" -->'>
 	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
 	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
 <!-- /TMPL_IF -->
@@ -92,7 +92,7 @@
 <!-- TMPL_IF name="delete_confirmed" -->
 <!---------------------------------------------------------------------------->
 	Data deleted
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=frameworkcode value='<!-- TMPL_VAR name="frameworkcode" -->'>
 	<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
@@ -102,7 +102,7 @@
 		<input type="hidden" name="op" value="framework_create_confirm">
 		<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
 		Create framework for <!-- TMPL_VAR name="frameworkcode" --> (<!-- TMPL_VAR name="frameworktext" -->) using
-		<select name="existingfarmeworkcode">
+		<select name="existingframeworkcode">
 			<option value="">Default</option>
 		<!-- TMPL_LOOP name="existingframeworkloop" -->
 			<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="frameworktext" --></option>
@@ -156,6 +156,7 @@
 	</table>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 		<input type=hidden name=op value=add_form>
+	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR name="frameworkcode" -->">
 		<input type=submit class="button" value="Add Tag" title="Add Tag" alt="Add Tag" >
 		<!-- TMPL_IF name="isprevpage" -->
 			<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
