@@ -31,7 +31,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	width=349 height=50 alt="KOHA: Catalogue Search" hspace=0 vspace=0 border=0></td>
 
 
-        <td align=right><a href="/cat/" 		onMouseOver="document.mouseover.src='/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 
+        <td align=right><a href="/cgi-bin/koha/catalogue-home.pl" 		onMouseOver="document.mouseover.src='/images/mouseover-search.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img 
 	src="/images/menu-search.gif" 
 	width=71 height=30 alt="Search" hspace=0 vspace=0 border=0 name="menu-search"></a>
 	
@@ -39,23 +39,31 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	onMouseOver="document.mouseover.src='/images/mouseover-member.gif'" 			onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-login.gif" 
 	width=111 height=30 alt="Member Login" hspace=0 vspace=0 border=0 name="menu-login"></a>
 -->
-	<a href="/join.html"
-	onMouseOver="document.mouseover.src='/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-join.gif" 
-	width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
+	<TMPL_IF NAME=loggedinuser>
+	    <a href="/cgi-bin/koha/userpage.pl"
+	    onMouseOver="document.mouseover.src='/images/mouseover-mysettings.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'">
+	    <img src="/images/menu-mysettings.gif"
+	    width=90 height=30 alt="My Settings" hspace=0 vspace=0 border=0 name="menu-mysettings"></a>
+	<TMPL_ELSE>
+	    <a href="/join.html"
+	    onMouseOver="document.mouseover.src='/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'">
+	    <img src="/images/menu-join.gif"
+	    width=54 height=30 alt="Join" hspace=0 vspace=0 border=0 name="menu-join"></a>
+	</TMPL_IF>
 
-	<a href="/" 
-	onMouseOver="document.mouseover.src='/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-home.gif" 
+	<a href="/cgi-bin/koha/mainpage.pl"
+	onMouseOver="document.mouseover.src='/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='/images/holder.gif'"><img src="/images/menu-home.gif"
 	width=60 height=30 alt="Home" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
-        
+
         </TR>
 
 
 <tr valign=top>
 
-        <td><img src="/images/inside-koha-bottom.gif" 
+        <td><img src="/images/inside-koha-bottom.gif"
 	width=69 height=44 alt="KOHA" hspace=0 vspace=0 border=0 ></td>
 
-        <td align=right><img src="/images/holder.gif" 
+        <td align=right><img src="/images/holder.gif"
 	width=300 height=48 alt="" hspace=0 vspace=0 name="mouseover" ></a></td>
 
         </TR>

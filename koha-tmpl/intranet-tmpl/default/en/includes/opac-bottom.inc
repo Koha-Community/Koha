@@ -6,10 +6,10 @@
 
 <font size=2  face="arial, helvetica">
 
-<A HREF="/cat/">Catalogue Search</a> || 
-<!--<A HREF="/members/">Members Area</a> || -->
-<A HREF="/join.html">Become a Member</a> || 
-<A HREF="/">Home</a> 
+<A HREF="/cgi-bin/koha/catalogue-home.pl">Catalogue Search</a> ||
+<!--<A HREF="/cgi-bin/koha/members-home.pl">Members Area</a> || -->
+<A HREF="/join.html">Become a Member</a> ||
+<A HREF="/cgi-bin/koha/mainpage.pl">Home</a>
 
 </font>
 </center>

@@ -34,7 +34,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	<td background="/images/issues-spot-1.gif" width="224" 
 	height="29"><font size=1 face="arial"><img src="/images/holder.gif" width=210 height=4 alt=" " hspace=0 vspace=0><br>
 	<img src="/images/holder.gif" 
-	width=35 height=21 align=left alt=" " hspace=0 vspace=0>KOHA: <A HREF="/">HDL INTRANET</A><br>
+	width=35 height=21 align=left alt=" " hspace=0 vspace=0>KOHA: <A HREF="/cgi-bin/koha/mainpage.pl">HDL INTRANET</A><br>
 	<img src="/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0></FONT></td>
 	
 	</TR></TABLE></TD>

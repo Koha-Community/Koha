@@ -66,8 +66,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	<tr valign=top bgcolor="#339933">
 	<td background="/images/members-spot-1.gif" width="224" 
 	height="29"><font size=1 face="arial"><img src="/images/holder.gif" width=210 height=4 alt=" " 	hspace=0 vspace=0><br>
-	<img src="/images/holder.gif" 
-	width=35 height=21 align=left alt=" " hspace=0 vspace=0><font size="+1">KOHA: <A HREF="/">Main Menu</A></font><br>
+	<img src="/images/holder.gif"
+	width=35 height=21 align=left alt=" " hspace=0 vspace=0><font size="+1">KOHA: <A HREF="/cgi-bin/koha/mainpage.pl">Main Menu</A></font><br>
 	<img src="/images/holder.gif" width=210 height=1 alt=" " hspace=0 vspace=0></FONT></td>
 	
 	</TR></TABLE></TD>
@@ -89,17 +89,17 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
 <map name="map">
-<area shape="rect" coords="18,8,84,27" href="/catalogue/" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/mem-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
+<area shape="rect" coords="18,8,84,27" href="/cgi-bin/koha/catalogue-home.pl" alt="Catalogue" onMouseOver="if(document.images)document.menu.src='/images/mem-cat.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 
-<area shape="rect" coords="94,8,149,28" href="/members/" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/mem-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
+<area shape="rect" coords="94,8,149,28" href="/cgi-bin/koha/members-home.pl" alt="Members" onMouseOver="if(document.images)document.menu.src='/images/mem-mem.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 
 <area shape="rect" coords="154,9,212,29" alt="Acquisitions"   href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.menu.src='/images/mem-acq.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 
-<area  shape="rect"alt="Reports"  coords="217,7,289,27"href="/reports/" onMouseOver="if(document.images)document.menu.src='/images/mem-rep.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
+<area  shape="rect"alt="Reports"  coords="217,7,289,27"href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.menu.src='/images/mem-rep.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 
 <area shape="rect" coords="306,8,352,27" href="/cgi-bin/koha/circ/circulation.pl" alt="Circulation" onMouseOver="if(document.images)document.menu.src='/images/mem-crc.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 
-<area  shape="rect" alt="Home" coords="374,9,419,29" href="/" onMouseOver="if(document.images)document.menu.src='/images/mem-hom.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
+<area  shape="rect" alt="Home" coords="374,9,419,29" href="/cgi-bin/koha/mainpage.pl" onMouseOver="if(document.images)document.menu.src='/images/mem-hom.gif'" onMouseOut="if(document.images)document.menu.src='/images/mem-mem.gif'">
 <area shape="default" nohref>
 </map>
 
