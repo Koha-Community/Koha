@@ -379,6 +379,7 @@ if ($op eq 'add_form') {
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{hidden}	= $results->[$i]{'hidden'};
 		$row_data{isurl}	= $results->[$i]{'isurl'};
+		$row_data{link}	= $results->[$i]{'link'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&frameworkcode=$frameworkcode";
 		$row_data{bgcolor} = $toggle;
 		if ($row_data{tab} eq -1) {

@@ -73,7 +73,6 @@ my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
 my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
 
 my $record =MARCgetbiblio($dbh,$bibid);
-warn "=>".$record->as_formatted;
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "catalogue/MARCdetail.tmpl",
@@ -95,7 +94,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 # 	foreach my $field (@fields) {
 	my @subfields_data;
 	for (my $x_i=0;$x_i<=$#fields;$x_i++) {
-		warn "$tabloop => $x_i";
+# 		warn "$tabloop => $x_i";
 		# if tag <10, there's no subfield, use the "@" trick
 		if ($fields[$x_i]->tag()<10) {
 			next if ($tagslib->{$fields[$x_i]->tag()}->{'@'}->{tab}  ne $tabloop);
@@ -115,6 +114,7 @@ for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 				next if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{hidden});
 				my %subfield_data;
 				$subfield_data{marc_lib}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{lib};
+				$subfield_data{link}=$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{link};
 				if ($tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}->{isurl}) {
 					$subfield_data{marc_value}="<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
 				} else {
