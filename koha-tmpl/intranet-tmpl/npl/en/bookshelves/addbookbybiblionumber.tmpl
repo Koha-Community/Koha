@@ -1,0 +1,20 @@
+<!-- TMPL_INCLUDE Name="main-top.inc" -->
+<div id="main-compact">
+<form>
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+	<table>
+		<caption>Select a Bookshelf</caption>
+		<tr><td><label>Title</label></td><td><!-- TMPL_VAR NAME="title" --></td></tr>
+		<tr><td><label>Author</label></td><td><!-- TMPL_VAR NAME="author" --></td></tr>
+		<tr><td><label>Add to virtual shelf</label></td><td><!-- TMPL_VAR NAME="CGIbookshelves" --></td></tr>
+		<tr><th colspan="2">...or add to a new bookshelf:</th></tr>
+		<tr><td><label for="newbookshelf">Shelf Name:</label> </td><td><input type="text" name="newbookshelf" id="newbookshelf" maxlength="40" size="20" /></td></tr>
+		<tr><td><label for="category">Category:</label> </td><td><select name="category" id="category">
+			<option value="1">Private</option>
+			<option value="2">Public</option>
+			<option value="3">Free</option>
+		</select></td></tr>
+	</table>
+	<input type="submit" value="Add to virtual shelf" class="submit" />
+</form>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
