@@ -71,9 +71,9 @@ my $branches = getbranches();
 # make branch selection options...
 my @branchloop;
 foreach my $br (keys %$branches) {
-	(next) unless $branches->{$br}->{'IS'};
-			# Only branches with the 'IS' branchrelation
-			# can issue books
+#	(next) unless $branches->{$br}->{'IS'};
+#			# Only branches with the 'IS' branchrelation
+#			# can issue books
 	my %abranch;
 	$abranch{'selected'}=($br eq $branch);
 	$abranch{'branch'}=$br;
@@ -135,17 +135,17 @@ foreach my $res (sort {$a->{'found'} cmp $b->{'found'}} @$reserves){
 		push(@optionloop, \%option);
 	}
 #    my $bropt = branchoptions($res->{'branchcode'});
-	my @branchloop;
-	foreach my $br (keys %$branches) {
-		(next) unless $branches->{$br}->{'IS'};
-				# Only branches with the 'IS' branchrelation
-				# can issue books
-		my %abranch;
-		$abranch{'selected'}=($br eq $res->{'branchcode'});
-		$abranch{'branch'}=$br;
-		$abranch{'branchname'}=$branches->{$br}->{'branchname'};
-		push(@branchloop,\%abranch);
-	}
+#	my @branchloop;
+#	foreach my $br (keys %$branches) {
+#		(next) unless $branches->{$br}->{'IS'};
+#				# Only branches with the 'IS' branchrelation
+#				# can issue books
+#		my %abranch;
+#		$abranch{'selected'}=($br eq $res->{'branchcode'});
+#		$abranch{'branch'}=$br;
+#		$abranch{'branchname'}=$branches->{$br}->{'branchname'};
+#		push(@branchloop,\%abranch);
+#	}
 
     if ($res->{'found'} eq 'W') {
 		my %env;
