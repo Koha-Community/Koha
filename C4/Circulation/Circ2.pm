@@ -67,6 +67,7 @@ sub getbranches {
     my $sth=$dbh->prepare("select * from branches");
     $sth->execute;
     while (my $branch=$sth->fetchrow_hashref) {
+#	(next) if ($branch->{'branchcode'} eq 'TR');
 	$branches{$branch->{'branchcode'}}=$branch;
     }
     return (\%branches);
@@ -143,7 +144,8 @@ sub getiteminformation {
 	my ($date_due) = $sth->fetchrow;
 	$iteminformation->{'date_due'}=$date_due;
 	$sth->finish;
-	$iteminformation->{'dewey'}=~s/0*$//;
+	#$iteminformation->{'dewey'}=~s/0*$//;
+	($iteminformation->{'dewey'} == 0) && ($iteminformation->{'dewey'}='');
     }
     $dbh->disconnect;
     return($iteminformation);
@@ -402,6 +404,14 @@ sub returnbook {
 	    }
 	    $sth->finish;
 	}
+	my ($resfound,$resrec) = find_reserves($env, $dbh, $iteminformation->{'itemnumber'});
+	if ($resfound eq 'y') {
+	   my ($borrower) = getpatroninformation($env,$resrec->{'borrowernumber'},0);
+	   #printreserve($env,$resrec,$resborrower,$itemrec);
+	   my ($branches) = getbranches();
+	   my $branchname=$branches->{$resrec->{'branchcode'}}->{'branchname'};
+	   push (@$messages, "Reserved for collection by $borrower->{'firstname'} $borrower->{'surname'} ($borrower->{'cardnumber'}) at $branchname");
+	}
 	UpdateStats($env,'branch','return','0','',$iteminformation->{'itemnumber'});
     }
     $dbh->disconnect;
@@ -442,9 +452,10 @@ sub patronflags {
     my ($odues, $itemsoverdue) = checkoverdues($env,$patroninformation->{'borrowernumber'},$dbh);
     if ($odues > 0) {
 	my %flaginfo;
-	$flaginfo{'message'}="Overdue Items\n";
+	$flaginfo{'message'}="Patron has overdue items";
+	$flaginfo{'itemlist'}=$itemsoverdue;
 	foreach (sort {$a->{'date_due'} cmp $b->{'date_due'}} @$itemsoverdue) {
-	    $flaginfo{'message'}.="$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";
+	    $flaginfo{'itemlisttext'}.="$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";
 	}
 	$flags{'ODUES'}=\%flaginfo;
     }
@@ -571,6 +582,7 @@ sub currentissues {
     $sth->execute;
     while (my $data = $sth->fetchrow_hashref) {
 	$data->{'dewey'}=~s/0*$//;
+	($data->{'dewey'} == 0) && ($data->{'dewey'}='');
 	my $datedue=$data->{'date_due'};
 	my $itemnumber=$data->{'itemnumber'};
 	$currentissues{$counter}=$data;
@@ -751,5 +763,64 @@ sub getnextacctno {
     return($nextaccntno);
 }
 
+sub find_reserves {
+# Stolen from Returns.pm
+  my ($env,$dbh,$itemno) = @_;
+  my ($itemdata) = getiteminformation($env,$itemno,0);
+  my $query = "select * from reserves where found is null 
+  and biblionumber = $itemdata->{'biblionumber'} and cancellationdate is NULL
+  order by priority,reservedate ";
+  my $sth = $dbh->prepare($query);
+  $sth->execute;
+  my $resfound = "n";
+  my $resrec;
+  my $lastrec;
+  while (($resrec=$sth->fetchrow_hashref) && ($resfound eq "n")) {
+      $lastrec=$resrec;
+    if ($resrec->{'found'} eq "W") {
+      if ($resrec->{'itemnumber'} eq $itemno) {
+        $resfound = "y";
+      }
+    } elsif ($resrec->{'constrainttype'} eq "a") {
+      $resfound = "y";
+    } else {
+      my $conquery = "select * from reserveconstraints where borrowernumber
+= $resrec->{'borrowernumber'} and reservedate = '$resrec->{'reservedate'}' and biblionumber = $resrec->{'biblionumber'} and biblioitemnumber = $itemdata->{'biblioitemnumber'}";
+      my $consth = $dbh->prepare($conquery);
+      $consth->execute;
+      if (my $conrec=$consth->fetchrow_hashref) {
+        if ($resrec->{'constrainttype'} eq "o") {
+	   $resfound = "y";
+	 }
+      } else {
+        if ($resrec->{'constrainttype'} eq "e") {
+	  $resfound = "y";
+	}
+      }
+      $consth->finish;
+    }
+    if ($resfound eq "y") {
+      my $updquery = "update reserves 
+        set found = 'W',itemnumber='$itemno'
+        where borrowernumber = $resrec->{'borrowernumber'}
+        and reservedate = '$resrec->{'reservedate'}'
+        and biblionumber = $resrec->{'biblionumber'}";
+      my $updsth = $dbh->prepare($updquery);
+      $updsth->execute;
+      $updsth->finish;
+      my $itbr = $resrec->{'branchcode'};
+      if ($resrec->{'branchcode'} ne $env->{'branchcode'}) {
+         my $updquery = "update items
+          set holdingbranch = 'TR'
+	  where itemnumber = $itemno";
+        my $updsth = $dbh->prepare($updquery);
+        $updsth->execute;
+        $updsth->finish;
+      }	
+    }
+  }
+  $sth->finish;
+  return ($resfound,$lastrec);
+}
 
 END { }       # module clean-up code here (global destructor)
