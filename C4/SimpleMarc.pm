@@ -255,10 +255,10 @@ sub extractmarcfields {
 		if ($field->{'tag'} eq '700') {
 		    my $name=$field->{'subfields'}->{'a'};
 		    if ( defined($field->{'subfields'}->{'e'}) 
-		        and  $field->{'subfields'}->{'e'}!~/ill/) {
-			$additionalauthors.="$name\n";
-		    } else {
+		        and  $field->{'subfields'}->{'e'}=~/ill/) {
 			$illustrator=$name;
+		    } else {
+			$additionalauthors.="$name\n";
 		    }
 		}
 		if ($field->{'tag'} =~/^5/) {
@@ -447,6 +447,9 @@ sub taglabel {
 
 #---------------------------------------------
 # $Log$
+# Revision 1.1.2.4  2002/06/28 14:36:47  amillar
+# Fix broken logic on illustrator vs. add'l author
+#
 # Revision 1.1.2.3  2002/06/26 20:54:32  tonnesen
 # use warnings breaks on perl 5.005...
 #
