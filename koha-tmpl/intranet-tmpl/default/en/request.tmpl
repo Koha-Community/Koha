@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE Name="cat-top.inc" -->
 <div id="mainbloc">
-	<form action="placerequest.pl" method="post">
+	<form action="placerequest.pl" method="post" name="request">
 	<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="bib" -->">
 	<input type="hidden" name="type" value="str8">
 	<input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->">
@@ -21,7 +21,7 @@
 			<!-- /TMPL_LOOP -->
 			</select>
 		</p>
-		<p><label class="label100">Member Number</label><input type="text" size="10" name="member"></p>
+		<p><label class="label100">Member Number</label><input type="text" size="10" name="member"> <a href="/cgi-bin/koha/members/members-home.pl?quicksearch=1" onclick="openWindow('/cgi-bin/koha/members/members-home.pl?quicksearch=1', 'newwin'); return false;">(Quick Search)</a></p>
 		<p><label class="label100">Notes</label><input type="text" size="20" name="notes"></p>
 		<p><label class="label100">Date</label><!-- TMPL_VAR NAME="date" --></p>
 		<p><label class="label100">Pickup</label><!-- TMPL_VAR NAME="CGIbranch" --></p>
@@ -148,4 +148,15 @@
 		</div>
 	<!-- /TMPL_IF -->
 </div>
+<script language="javascript" type="text/javascript">
+	// Set the value of the form field to the passed value and optionally shift
+	// focus and close the popup.
+	function FillForm(val,formname,formfield) {
+		document.forms[formname].elements[formfield].value = val;
+		// Uncomment below to shift focus after clicking link in popup.
+		document.forms[formname].elements[formfield].focus();
+		// Uncomment below to close popup after clicking link.
+		newwin.close();
+	}
+</script>
 <!-- TMPL_INCLUDE Name="cat-bottom.inc" -->
