@@ -170,6 +170,7 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
+	$template->param(delete_confirmed => 1);
 	my $dbh = C4::Context->dbh;
 	my $categorycode=uc($input->param('categorycode'));
 	my $query = "delete from categories where categorycode='$categorycode'";
