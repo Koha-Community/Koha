@@ -929,6 +929,24 @@ chmod 0750, "$kohadir/scripts/z3950daemon/processz3950queue";
 chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/z3950-daemon-shell.sh") or warn "can't chown $kohadir/scripts/z3950daemon/z3950-daemon-shell.sh: $!";
 chown(0, (getpwnam($httpduser)) [3], "$kohadir/scripts/z3950daemon/processz3950queue") or warn "can't chown $kohadir/scripts/z3950daemon/processz3950queue: $!";
 
+print qq|
+
+==================
+= Authentication =
+==================
+
+This release of Koha has a new authentication module.  If you are not already
+using basic authentication on your intranet, you will be required to log in to
+access some of the features of the intranet.  You can log in using the userid
+and password from the /etc/koha.conf configuration file at any time.  Use the
+"Members" module to add passwords for other accounts and set their permissions.
+
+[NOTE PERMISSIONS ARE NOT COMPLETED AS OF 1.2.3RC1.  Do not give passwords to
+ any patrons unless you want them to have full access to your intranet.]
+|;
+print "Press the <ENTER> key to continue: ";
+<STDIN>;
+
 
 #RESTART APACHE
 print "\n\n";

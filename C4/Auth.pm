@@ -86,9 +86,10 @@ sub checkauth {
 	    $sti=$dbh->prepare("select value from sessionqueries where sessionID=? and userid=?");
 	    $sti->execute($sessionID, $userid);
 	    if ($sti->rows) {
+		my ($selfurl) = $sti->fetchrow;
 		my $stj=$dbh->prepare("delete from sessionqueries where sessionID=?");
 		$stj->execute($sessionID);
-		my ($selfurl) = $sti->fetchrow;
+		($selfurl) || ($selfurl=$ENV{'SCRIPT_NAME'});
 		print $query->redirect($selfurl);
 		exit;
 	    }
