@@ -82,7 +82,7 @@ sub UpdateStats {
 	# FIXME - Use $dbh->do() instead
 	my $sth=$dbh->prepare("Insert into statistics (datetime,branch,type,usercode,value,
 					other,itemnumber,itemtype,borrowernumber) values (now(),?,?,?,?,?,?,?,?)");
-	$sth->execute('$branch','$type','$user','$amount','$other','$itemnum','$itemtype','$borrowernumber');
+	$sth->execute($branch,$type,$user,$amount,$other,$itemnum,$itemtype,$borrowernumber);
 	$sth->finish;
 }
 
