@@ -103,78 +103,77 @@ reserves, borrowers, and biblio tables of the Koha database.
 =cut
 #'
 sub FindReserves {
-  my ($bib,$bor)=@_;
-  my $dbh = C4::Context->dbh;
-  # Find the desired items in the reserves
-  my $query="SELECT *,reserves.branchcode,biblio.title AS btitle
-                      FROM reserves,borrowers,biblio ";
-  # FIXME - These three bits of SQL seem to contain a fair amount of
-  # redundancy. Wouldn't it be better to have a @clauses array, add
-  # one or two clauses as necessary, then join(" AND ", @clauses) ?
-  if ($bib ne ''){
-      $bib = $dbh->quote($bib);
-      if ($bor ne ''){
-	  # Both $bib and $bor specified
-	  # Find a particular book for a particular patron
-	  $bor = $dbh->quote($bor);
-          $query .=  " where reserves.biblionumber   = $bib
-                         and borrowers.borrowernumber = $bor
-                         and reserves.borrowernumber = borrowers.borrowernumber
-                         and biblio.biblionumber     = $bib
-                         and cancellationdate is NULL
-                         and (found <> 'F' or found is NULL)";
-      } else {
-	  # $bib specified, but not $bor
-	  # Find a particular book for all patrons
-          $query .= " where reserves.borrowernumber = borrowers.borrowernumber
-                        and biblio.biblionumber     = $bib
-                        and reserves.biblionumber   = $bib
-                        and cancellationdate is NULL
-                        and (found <> 'F' or found is NULL)";
-      }
-  } else {
-      # FIXME - Check that $bor was given
-
-      # No $bib given.
-      # Find all books for the given patron.
-      $query .= " where borrowers.borrowernumber = $bor
-                    and reserves.borrowernumber  = borrowers.borrowernumber
-                    and reserves.biblionumber    = biblio.biblionumber
-                    and cancellationdate is NULL and
-                    (found <> 'F' or found is NULL)";
-  }
-  $query.=" order by priority";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
-  my @results;
-  while (my $data=$sth->fetchrow_hashref){
-      # FIXME - What is this if-statement doing? How do constraints work?
-      if ($data->{'constrainttype'} eq 'o') {
-	  my $conquery = "SELECT biblioitemnumber FROM reserveconstraints
-                           WHERE biblionumber   = ?
-                             AND borrowernumber = ?
-                             AND reservedate    = ?";
-	  my $csth=$dbh->prepare($conquery);
-	  # FIXME - Why use separate variables for this?
-	  my $bibn = $data->{'biblionumber'};
-	  my $born = $data->{'borrowernumber'};
-	  my $resd = $data->{'reservedate'};
-	  $csth->execute($bibn, $born, $resd);
-	  my ($bibitemno) = $csth->fetchrow_array;
-	  $csth->finish;
-	  # Look up the book we just found.
-	  my $bdata = C4::Search::bibitemdata($bibitemno);
-	  # Add the results of this latest search to the current
-	  # results.
-	  # FIXME - An 'each' would probably be more efficient.
-	  foreach my $key (keys %$bdata) {
-	      $data->{$key} = $bdata->{$key};
-	  }
-      }
-	push @results, $data;
-  }
-  $sth->finish;
-  return($#results+1,\@results);
+	my ($bib,$bor)=@_;
+	warn "bib : $bib , bor : $bor";
+	my $dbh = C4::Context->dbh;
+	# Find the desired items in the reserves
+	my $query="SELECT *,reserves.branchcode,biblio.title AS btitle  FROM reserves,borrowers,biblio ";
+	# FIXME - These three bits of SQL seem to contain a fair amount of
+	# redundancy. Wouldn't it be better to have a @clauses array, add
+	# one or two clauses as necessary, then join(" AND ", @clauses) ?
+	if ($bib ne ''){
+		$bib = $dbh->quote($bib);
+		if ($bor ne ''){
+			# Both $bib and $bor specified
+			# Find a particular book for a particular patron
+			$bor = $dbh->quote($bor);
+			$query .=  " where reserves.biblionumber   = $bib
+						and borrowers.borrowernumber = $bor
+						and reserves.borrowernumber = borrowers.borrowernumber
+						and biblio.biblionumber     = $bib
+						and cancellationdate is NULL
+						and (found <> 'F' or found is NULL)";
+		} else {
+			# $bib specified, but not $bor
+			# Find a particular book for all patrons
+			$query .= " where reserves.borrowernumber = borrowers.borrowernumber
+					and biblio.biblionumber     = $bib
+					and reserves.biblionumber   = $bib
+					and cancellationdate is NULL
+					and (found <> 'F' or found is NULL)";
+		}
+	} else {
+		# FIXME - Check that $bor was given
+		# No $bib given.
+		# Find all books for the given patron.
+		$query .= " where borrowers.borrowernumber = $bor
+					and reserves.borrowernumber  = borrowers.borrowernumber
+					and reserves.biblionumber    = biblio.biblionumber
+					and cancellationdate is NULL and
+					(found <> 'F' or found is NULL)";
+	}
+	$query.=" order by priority";
+	my $sth=$dbh->prepare($query);
+	$sth->execute;
+	my @results;
+	while (my $data=$sth->fetchrow_hashref){
+		# FIXME - What is this if-statement doing? How do constraints work?
+		if ($data->{'constrainttype'} eq 'o') {
+			my $conquery = "SELECT biblioitemnumber FROM reserveconstraints
+							WHERE biblionumber   = ?
+							AND borrowernumber = ?
+							AND reservedate    = ?";
+			my $csth=$dbh->prepare($conquery);
+			# FIXME - Why use separate variables for this?
+			my $bibn = $data->{'biblionumber'};
+			my $born = $data->{'borrowernumber'};
+			my $resd = $data->{'reservedate'};
+			$csth->execute($bibn, $born, $resd);
+			my ($bibitemno) = $csth->fetchrow_array;
+			$csth->finish;
+			# Look up the book we just found.
+			my $bdata = C4::Search::bibitemdata($bibitemno);
+			# Add the results of this latest search to the current
+			# results.
+			# FIXME - An 'each' would probably be more efficient.
+			foreach my $key (keys %$bdata) {
+				$data->{$key} = $bdata->{$key};
+			}
+		}
+		push @results, $data;
+	}
+	$sth->finish;
+	return($#results+1,\@results);
 }
 
 =item CheckReserves
@@ -379,6 +378,7 @@ sub FillReserve {
                                 WHERE biblionumber   = $qbiblio
                                   AND borrowernumber = $borr
                                   AND reservedate    = $resdate)";
+	warn "q : $query";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     ($priority) = $sth->fetchrow_array;
