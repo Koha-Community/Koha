@@ -217,7 +217,7 @@ sub checkperlmodules {
     unless (eval {require DBI})               { push @missing,"DBI" };
     unless (eval {require Date::Manip})       { push @missing,"Date::Manip" };
     unless (eval {require DBD::mysql})        { push @missing,"DBD::mysql" };
-    unless (eval {require Template})          { push @missing,"Template" };
+    unless (eval {require HTML::Template})          { push @missing,"HTML::Template" };
     unless (eval {require Set::Scalar})       { push @missing,"Set::Scalar" };
     unless (eval {require Digest::MD5})       { push @missing,"Digest::MD5" };
     unless (eval {require Net::Z3950})        { 
