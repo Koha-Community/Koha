@@ -153,6 +153,7 @@ EOF
 
 print endmenu('circulation');
 print endpage();
+
 sub default {
 print << "EOF";
 <a href=circulation.pl?module=issues&branch=$branch&printer=$printer>Issues</a>
