@@ -891,9 +891,9 @@ sub subject {
 sub addauthor {
   my ($bibnum)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from additionalauthors where biblionumber=$bibnum";
+  my $query="Select * from additionalauthors where biblionumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bibnum);
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
@@ -908,9 +908,9 @@ sub addauthor {
 sub subtitle {
   my ($bibnum)=@_;
   my $dbh=C4Connect;
-  my $query="Select * from bibliosubtitle where biblionumber=$bibnum";
+  my $query="Select * from bibliosubtitle where biblionumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bibnum);
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){
