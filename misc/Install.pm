@@ -782,7 +782,7 @@ Enter the Intranet Port [%s]: |;
 sub getapachevhostinfo {
 
     $::svr_admin = "webmaster\@$::domainname";
-    $::servername=`hostname -f`;
+    $::servername=`hostname`;
     chomp $::servername;
     $::opacport=80;
     $::intranetport=8080;
