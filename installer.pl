@@ -3,6 +3,10 @@
 use diagnostics;
 use strict; # please develop with the strict pragma
 
+if ($<) {
+    print "\n\nYou must run koha.upgrade as root.\n\n";
+    exit;
+}
 unless ($< == 0) {
     print "You must be root to run this script.\n";
     exit 1;
@@ -267,21 +271,6 @@ if ($input) {
 print "\n";
 
 
-#Create the configuration file
-open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
-at $etcdir.  Must have write capability.\n";
-print SITES <<EOP
-database=$dbname
-hostname=$hostname
-user=$user
-pass=$pass
-includes=$kohadir/htdocs/includes
-intranetdir=$kohadir
-opacdir=$opacdir
-kohaversion=$kohaversion
-EOP
-;
-close(SITES);
 
 print "Successfully created the Koha configuration file.\n";
 
@@ -308,7 +297,41 @@ foreach my $httpdconf (qw(/usr/local/apache/conf/httpd.conf
       close(HTTPDCONF);
    }
 }
-$httpduser ||= 'Undetermined';
+unless ($httpduser) {
+    print qq|
+
+I was not able to determine the user that Apache is running as.  This
+information is necessary in order to set the access privileges correctly on
+/etc/koha.conf.  This user should be set in one of the Apache configuration
+files using the "User" directive.
+|;
+    print "What is your Apache user? ";
+    chomp($input = <STDIN>);
+
+    if ($input) {
+	$httpduser = $input;
+    } else {
+	$httpduser='Undetermined';
+    }
+}
+
+
+#Create the configuration file
+open(SITES,">$etcdir/koha.conf") or warn "Couldn't create file
+at $etcdir.  Must have write capability.\n";
+print SITES <<EOP
+database=$dbname
+hostname=$hostname
+user=$user
+pass=$pass
+includes=$kohadir/htdocs/includes
+intranetdir=$kohadir
+opacdir=$opacdir
+kohaversion=$kohaversion
+httpduser=$httpduser
+EOP
+;
+close(SITES);
 
 #
 # Set ownership of the koha.conf file for security
@@ -674,11 +697,17 @@ To allow us to create the koha database please supply the
 mysql\'s root users password
 |;
 
-print "Enter mysql\'s root users password: ";
-chomp($input = <STDIN>);
-
-if ($input) {
-  $mysqlpass = $input;
+my $needpassword=1;
+while ($needpassword) {
+    print "Enter mysql\'s root users password: ";
+    chomp($input = <STDIN>);
+    $mysqlpass = $input;
+    my $result=system("$mysqldir/bin/mysqladmin -u$mysqluser -p$mysqlpass proc > /dev/null 2>&1");
+    if ($result) {
+	print "\n\nInvalid password for the MySql root user.\n\n";
+    } else {
+	$needpassword=0;
+    }
 }
 
 
