@@ -185,7 +185,7 @@ sub create_input () {
 		unless (opendir(DIR, "$cgidir")) {
 			$cgidir = C4::Context->intranetdir."/value_builder";
 		} 
-		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'}; 
+		my $plugin=$cgidir."/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
 		require $plugin;
 		my $extended_param = plugin_parameters($dbh,$rec,$tagslib,$i,$tabloop);
 		my ($function_name,$javascript) = plugin_javascript($dbh,$rec,$tagslib,$i,$tabloop);
@@ -485,6 +485,14 @@ if ($op eq "addbiblio") {
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
+	# If we're in a duplication case, we have to set to "" the bibid and biblionumber
+	# as we'll save the biblio as a new one.
+	if ($op eq "duplicate")
+	{
+		$bibid = "";
+		$oldbiblionumber= "";
+	}
+
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
