@@ -46,7 +46,7 @@ my $resultsperpage;
 
 my $authtypes = getauthtypes;
 my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
+foreach my $thisauthtype (sort { $authtypes->{$a} <=> $authtypes->{$b} } keys %$authtypes) {
 	my $selected = 1 if $thisauthtype eq $authtypecode;
 	my %row =(value => $thisauthtype,
 				selected => $selected,
