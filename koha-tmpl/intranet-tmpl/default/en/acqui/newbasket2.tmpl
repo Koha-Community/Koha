@@ -4,14 +4,14 @@
 
 <TMPL_IF name ="testdonation">
 	<a href="newbiblio.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Add New Biblio"></a>
+	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png" border=0 align=right alt="Add New Biblio"></a>
 <TMPL_ELSE>
 	<a href="newdonation.pl?id=<TMPL_VAR name="id">&basket=<TMPL_VAR name="basket">&sub=<TMPL_VAR name="parsub">">
-	<img src=/images/add-biblio.gif width=187 heigth=42 border=0 align=right alt="Add New Biblio"></a>
+	<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png"  border=0 align=right alt="Add New Biblio"></a>
 </TMPL_IF>
 
 <a href="basket.pl?basket=<TMPL_VAR name="basket">">
-<img src=/images/view-basket.gif width=187 heigth=42 border=0 align=right alt="View Basket"></a>
+<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/1uparrow.png"  border=0 align=right alt="View Basket"></a>
 <FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl">
 <input type=hidden name=id value=<TMPL_VAR name="id">>
 <input type=hidden name=basket value=<TMPL_VAR name="basket">>

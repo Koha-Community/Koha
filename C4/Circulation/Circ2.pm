@@ -38,6 +38,7 @@ use C4::Context;
 #use C4::Scan;
 use C4::Stats;
 use C4::Reserves2;
+use C4::Koha;
 #use C4::Search;
 #use C4::Print;
 
@@ -337,17 +338,15 @@ sub findborrower {
     my ($env, $key) = @_;
     my $dbh = C4::Context->dbh;
     my @borrowers;
-    my $q_key=$dbh->quote($key);
-    my $sth=$dbh->prepare("select * from borrowers where cardnumber=$q_key");
-    $sth->execute;
+    my $sth=$dbh->prepare("select * from borrowers where cardnumber=?");
+    $sth->execute($key);
     if ($sth->rows) {
 	my ($borrower)=$sth->fetchrow_hashref;
 	push (@borrowers, $borrower);
     } else {
-	$q_key=$dbh->quote("$key%");
 	$sth->finish;
-	$sth=$dbh->prepare("select * from borrowers where surname like $q_key");
-	$sth->execute;
+	$sth=$dbh->prepare("select * from borrowers where surname like ?");
+	$sth->execute($key."%");
 	while (my $borrower = $sth->fetchrow_hashref) {
 	    push (@borrowers, $borrower);
 	}
