@@ -1,0 +1,162 @@
+<html><TMPL_INCLUDE Name="circulation-top.inc">
+
+<table align=right cellpadding=10><tr><td>
+<a class="button" href=circulation.pl>
+Nastêpny Czytelnik</a>
+<a class="button" href=returns.pl>
+Zwroty
+</td></tr></table>
+
+<h1>Wypo¿yczalnia: Transfery</h1><br>
+<b>Oddzia³:</b> <TMPL_VAR Name="genbrname"> &nbsp
+<b>Drukarka:</b> <TMPL_VAR Name="genprname"><br>
+<a href=selectbranchprinter.pl>Zmieñ ustawienia</a>
+<input type=hidden name=branch value=<TMPL_VAR Name="branch">>
+<input type=hidden name=printer value=<TMPL_VAR Name="printer">>
+<p>
+
+<TMPL_IF Name="found">
+	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+	<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Wykryto rezerwacjê</font></th></tr>
+	<tr><td> <font color='red' size='+2'>
+		<TMPL_IF Name="reserved">Zarezerwowano:</font> wykryto rezerwacjê dla <TMPL_VAR Name="name"> (<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">" onClick="openWindow(this,'Member', 480, 640); return false;"><TMPL_VAR Name="borcnum"></a>).</TMPL_IF>
+		<TMPL_IF Name="waiting"> Pozycja oznaczona czeka:</font><br>
+    Pozycja jest oznaczona i czeka w <TMPL_VAR Name="branchname"> dla <TMPL_VAR Name="name"> (<a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">" onClick="openWindow(this,'Member', 480, 640); return false;"><TMPL_VAR Name="borcnum"></a>).<br></TMPL_IF>
+		<table border=1 cellpadding=5 cellspacing=0>
+		<tr><td>
+			<TMPL_IF Name="reserved">Ustaw rezerwacjê jako czekaj±c± i transferuj ksi±¿ke do <b><TMPL_VAR Name="branchname"> </b>: </TMPL_IF>
+			<TMPL_IF Name="waiting">Uniewa¿nij rezerwacjê, nastêpnie spróbuj transferowaæ: </TMPL_IF>
+		</td>
+		<td>
+			<form method=post action='branchtransfers.pl'>
+				<TMPL_LOOP Name="trsfitemloop">
+					<input type=hidden name=bc-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
+					<input type=hidden name=fb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="frombrcd">>
+					<input type=hidden name=tb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="tobrcd">>
+				</TMPL_LOOP>
+				<input type=hidden name=itemnumber value=<TMPL_VAR Name="itemnumber">>
+				<input type=hidden name=borrowernumber value=<TMPL_VAR Name="bornum">>
+				<TMPL_IF Name="waiting"><input type=hidden name=barcode value=<TMPL_VAR Name="barcode">>
+					<input type=hidden name=request value='KillWaiting'>
+					<input type=submit value="Cancel">
+				</TMPL_IF>
+				<TMPL_IF Name="reserved"><input type=hidden name=request value='SetWaiting'>
+					<input type=submit value="Waiting"></TMPL_IF>
+			</form>
+		</td></tr>
+		<TMPL_IF Name="reserved"><tr><td>Uniewa¿nij rezerwacjê, nastêpnie spróbuj transferowaæ:</td>
+			<td>
+			<form method=post action='branchtransfers.pl'>
+
+			<TMPL_LOOP Name="trsfitemloop">
+				<input type=hidden name=bc-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
+				<input type=hidden name=fb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="frombrcd">>
+				<input type=hidden name=tb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="tobrcd">>
+			</TMPL_LOOP>
+
+			<input type=hidden name=biblionumber value=<TMPL_VAR Name="biblionumber">>
+			<input type=hidden name=borrowernumber value=<TMPL_VAR Name="bornum">>
+			<input type=hidden name=tobranchcd value=<TMPL_VAR Name="tobranchcd">>
+			<input type=hidden name=barcode value=<TMPL_VAR Name="barcode">>
+			<input type=hidden name=request value='KillReserved'>
+			<input type=submit value="Cancel">
+			</form>
+		</TMPL_IF>
+		</td></tr>
+		<tr><td>Ignoruj i powróæ do transferów: </td>
+			<td>
+			<form method=post action='branchtransfers.pl'>
+			<input type=hidden name=tobranchcd value=<TMPL_VAR Name="tobranchcd">>
+			<input type=hidden name=barcode value=0>
+			<TMPL_LOOP Name="trsfitemloop">
+				<input type=hidden name=bc-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
+				<input type=hidden name=fb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="frombrcd">>
+				<input type=hidden name=tb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="tobrcd">>
+			</TMPL_LOOP>
+			<input type=submit value="Ignore">
+			</form>
+			</td>
+		</tr></table>
+	</td></tr></table>
+
+<TMPL_ELSE>
+	<table border=1 cellpadding=5 cellspacing=0 bgcolor='#dddddd'>
+	<tr><th background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font>Wiadomo¶ci</font></th></tr>
+	<tr><td>
+	<TMPL_IF Name="reqmessage">
+		<TMPL_IF Name="cancelled">
+			Rezerwacja uniewa¿niona<br>
+		</TMPL_IF>
+		<TMPL_IF Name="setwaiting">
+			Pozycja powinna teraz czekaæ w oddziale: <TMPL_VAR Name="reqbrchname"><br>
+		</TMPL_IF>
+	</TMPL_IF>
+	<TMPL_LOOP Name="errmsgloop">
+		<font color='red' size='+2'>
+		<TMPL_IF Name="errbadcode">
+			Brak pozycji o kodzie kreskowym: <TMPL_VAR Name="msg">
+		</TMPL_IF>
+		<TMPL_IF Name="errispermanent">
+			Proszê zwrócic pozycjê do rodzimego oddzia³u: <TMPL_VAR Name="msg">
+		</TMPL_IF>
+		<TMPL_IF Name="errdesteqholding">
+			Pozycja ju¿ jest w docelowym oddziale.
+		</TMPL_IF>
+		<TMPL_IF Name="errwasreturned">
+			Pozycjê wypo¿yczy³/a <a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR Name="bornum">"
+onClick="openWindow(this,'Member', 480, 640); return false;"><TMPL_VAR Name="borcnum"></a>
+<TMPL_VAR Name="name"> i zosta³a zwrócona.
+		</TMPL_IF>
+		</font>
+		<BR>
+	</TMPL_LOOP>
+	</td></tr></table>
+	<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=24 height=24>
+	<form method=post action=/cgi-bin/koha/circ/branchtransfers.pl>
+	<table border=1 cellpadding=5 cellspacing=0 align=left>
+	<tr><td colspan=2 align=center background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+	<font color=black><b>Wybierz oddzia³</b></font></td></tr>
+	<tr><td>Oddzia³ docelowy:</td>
+		<td><select name=tobranchcd>
+			<TMPL_LOOP Name="branchoptionloop">
+				<option value=<TMPL_VAR Name="code"> <TMPL_VAR Name="selected">><TMPL_VAR Name="name"> <br>
+			</TMPL_LOOP>
+		</select></td></tr></table>
+
+	<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=24 height=50 align=left>
+
+	<table border=1 cellpadding=5 cellspacing=0 ><tr>
+	<td colspan=2 align=center background="<TMPL_VAR name="themelang">/images/background-mem.gif">
+	<font color=black><b>Wprowad¼ kod kreskowy ksi±¿ki</b></font></td></tr>
+	<tr><td>Kod kreskowy pozycji:</td><td><input name=barcode size=10></td></tr>
+	</table>
+	<input type=hidden name=tobranchcd value=<TMPL_VAR Name="tobrancd">>
+
+	<TMPL_LOOP Name="trsfitemloop">
+		<input type=hidden name=bc-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="barcode">>
+		<input type=hidden name=fb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="frombrcd">>
+		<input type=hidden name=tb-<TMPL_VAR Name="counter"> value=<TMPL_VAR Name="tobrcd">>
+	</TMPL_LOOP>
+
+	</form>
+	<TMPL_IF Name="transferred">
+		<p>
+		<table border=1 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
+		<tr><th colspan=6  background="<TMPL_VAR name="themelang">/images/background-mem.gif"><font color=black>Pozycje transferowane</font></th></tr>
+		<tr><th>Kod kreskowy</th><th>Tytu³</th><th>Autor</th><th>Typ</th><th>Od</th><th>Do</th></tr>
+		<TMPL_LOOP Name="trsfitemloop">
+			<tr><td bgcolor=<TMPL_VAR Name="color"> align=center>
+			<a href="/cgi-bin/koha/detail.pl?bib=<TMPL_VAR Name="biblionumber">&amp;type=intra" onClick="openWindow(this, 'Item', 480, 640); return false;"><TMPL_VAR Name="barcode"></a></td>
+			<td bgcolor=<TMPL_VAR Name="color">><TMPL_VAR Name="title"></td>
+			<td bgcolor=<TMPL_VAR Name="color">><TMPL_VAR Name="author"></td>
+			<td bgcolor=<TMPL_VAR Name="color"> align=center><TMPL_VAR Name="itemtype"></td>
+			<td bgcolor=<TMPL_VAR Name="color"> align=center><TMPL_VAR Name="frbrname"></td>
+			<td bgcolor=<TMPL_VAR Name="color"> align=center><TMPL_VAR Name="tobrname"></td>
+			</tr>
+		</TMPL_LOOP>
+		</table>
+	</TMPL_IF>
+</TMPL_IF>
+
+
+<TMPL_INCLUDE Name="circulation-bottom.inc">
