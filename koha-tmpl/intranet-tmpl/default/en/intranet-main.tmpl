@@ -70,20 +70,18 @@
 	</div>
 	<div id="menus">
 <!-- RIGHT (disappearing) BLOC -->
-		<div id="Hint8" class="hint">
-			<h1 class="bull">Serial</h1>
-			Ici une explication de ce qu'est le bulltinage
-		</div>
 		<div id="Hint1" class="hint">
 			<h1 class="catalogue">Catalogue</h1>
 			<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="catalogue">Search catalogue</a>
 				<p>Search a biblio. When this biblio is found, you can check its status, reserve it, or see where it is</p>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="catalogue">Add biblio</a>
+				<p>Directly add a biblio in the library catalogue</p>
+			<a class="catalogue" href="/cgi-bin/koha/bull-home.pl">Serials</a>
+				<p>Manage serial subscriptions and issues</p>
 			<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="catalogue">Virtual shelves</a>
 				<p>Virtual shelves can be used by librarian or patrons to build virtual libraries inside the "real" one.
 				The virtual shelf can be used by a teacher to help his/her students searching information on a specific topic.
 				It can be used by a library to define "most valuable books for &lt;some category of patron&gt;"</p>
-			<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="catalogue">Add biblio</a>
-				<p>Directly add a biblio in the library catalogue</p>
 			<!-- TMPL_IF NAME="NOTMARC" -->
 				<form action="/cgi-bin/koha/loadmodules.pl" method="post">
 					<input type="hidden" name="module" value="search">
@@ -146,8 +144,6 @@
 		
 		<a href="/cgi-bin/koha/reports-home.pl" class="reports" onMouseOver="SetOn(4);">Reports</a><br/>
 		
-		<a href="/cgi-bin/koha/bull-home.pl" class="parameters" onMouseOver="SetOn(8);">Serial</a><br/>
-
 		<a href="/cgi-bin/koha/admin-home.pl" class="parameters" onMouseOver="SetOn(6);">Parameters</a><br/>
 
 
