@@ -28,7 +28,8 @@ use C4::Authorities;
 
 my $input = new CGI;
 my $search_category=$input->param('search_category');
-my $toponly = $input->param('toponly');
+$search_category=$input->param('category') unless $search_category;
+#my $toponly = $input->param('toponly');
 my $branch = $input->param('branch');
 my $searchstring = $input->param('searchstring');
 $searchstring=~ s/\,//g;
@@ -36,15 +37,18 @@ my $id = $input->param('id');
 my $offset=$input->param('offset');
 my $father=$input->param('father');
 
-my $reqsel="select category,stdlib,freelib from authorised_values where id='$id'";
-my $reqdel="delete from authorised_values where id='$id'";
+my $reqsel="select category,stdlib,freelib from bibliothesaurus where id='$id'";
+my $reqdel="delete from bibliothesaurus where id='$id'";
 my $script_name="/cgi-bin/koha/admin/thesaurus.pl";
 my $dbh = C4::Context->dbh;
 my $authoritysep = C4::Context->preference("authoritysep");
-warn "authority : $authoritysep";
 
 my $template = gettemplate("parameters/thesaurus.tmpl",0);
 my $pagesize=20;
+
+my $prevpage = $offset-$pagesize;
+my $nextpage =$offset+$pagesize;
+
 my $op = $input->param('op');
 
 if ($op) {
@@ -59,7 +63,6 @@ $template->param(script_name => $script_name,
 if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
-		warn "id => $id";
 		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select id,category,freelib,stdlib from bibliothesaurus where id='$id'");
 		$sth->execute;
@@ -79,7 +82,7 @@ if ($op eq 'add_form') {
 							freelib => $data->{'freelib'},
 							id => $data->{'id'},
 							branch => $branch,
-							toponly => $toponly,
+#							toponly => $toponly,
 							search_category => $search_category,
 							searchstring => $searchstring,
 							offset => $offset,
@@ -94,10 +97,8 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace bibliothesaurus (id,category,stdlib,freelib,father,hierarchy) values (?,?,?,?,?)");
-	$sth->execute($input->param('id'), $input->param('category'), $input->param('stdlib'), $input->param('freelib'),$father);
-	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&toponly=$toponly&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
+	newauthority($dbh,$input->param('category'),$input->param('stdlib'), $input->param('freelib'),'',1,'');
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset\"></html>";
 	exit;
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
@@ -116,11 +117,12 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare($reqdel);
-	$sth->execute;
-	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?search_category=$search_category\"></html>";
+#	my $dbh = C4::Context->dbh;
+#	my $sth=$dbh->prepare($reqdel);
+#	$sth->execute;
+#	$sth->finish;
+	&delauthority($id);
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=thesaurus.pl?search_category=$search_category&searchstring=$searchstring\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DETAIL_FORM ##################################
@@ -142,12 +144,12 @@ if ($op eq 'add_form') {
 		$search_category=$category_list[0];
 	}
 	my $env;
-	my $sth = $dbh->prepare("select stdlib,category from bibliothesaurus where id=?");
+	my $sth = $dbh->prepare("select father,stdlib,category,hierarchy from bibliothesaurus where id=?");
 	$sth->execute($id);
-	my ($stdlib,$category) = $sth->fetchrow_array;
+	my ($father,$stdlib,$category,$suphierarchy) = $sth->fetchrow_array;
 	$sth->finish;
-	$sth= $dbh->prepare("select id,freelib from bibliothesaurus where stdlib=?");
-	$sth->execute($stdlib);
+	$sth= $dbh->prepare("select id,freelib from bibliothesaurus where father=? and stdlib=?");
+	$sth->execute($father,$stdlib);
 	my $toggle="white";
 	# builds value list
 	my @loop_data;
@@ -167,7 +169,7 @@ if ($op eq 'add_form') {
 	$template->param(loop => \@loop_data,
 							tab_list => $tab_list,
 							category => $search_category,
-							toponly => $toponly,
+#							toponly => $toponly,
 							searchstring => $searchstring,
 							stdlib => $stdlib,
 							category => $category);
@@ -190,25 +192,30 @@ if ($op eq 'add_form') {
 		$search_category=$category_list[0];
 	}
 	my $env;
-	my ($count,$results)=searchauthority($env,$search_category,$toponly,$branch,$searchstring);
+	my ($count,$results)=searchauthority($env,$search_category,$branch,$searchstring,$offset,$pagesize);
 	my $toggle="white";
 	my @loop_data = ();
 	# builds value list
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-			$toggle="#ffffcc";
-	  	} else {
-			$toggle="white";
-	  	}
-		my %row_data;  # get a fresh hash for the row data
-		$row_data{category} = $results->[$i]{'category'};
-		$row_data{stdlib} = ("&nbsp;&nbsp;&nbsp;&nbsp;" x $results->[$i]{'level'}).$results->[$i]{'stdlib'};
-		$row_data{stdlib} = $results->[$i]{'stdlib'};
-		$row_data{dig} ="<a href=thesaurus.pl?branch=$results->[$i]{'hierarchy'}".($results->[$i]{'hierarchy'}?"|":"")."$results->[$i]{'id'}&toponly=$toponly&search_category=$search_category>";
-		$row_data{related} ="<a href=thesaurus.pl?id=$results->[$i]{'id'}&search_category=$search_category&op=detail_form>";
-		$row_data{edit} = "$script_name?op=add_form&branch=$branch&toponly=$toponly&search_category=$search_category&searchstring=$searchstring&offset=$offset&id=".$results->[$i]{'id'};
-		$row_data{delete} = "$script_name?op=delete_confirm&search_category=$search_category&id=".$results->[$i]{'id'};
-		push(@loop_data, \%row_data);
+	for (my $i=0; $i < $pagesize; $i++){
+		if ($results->[$i]{'stdlib'}) {
+			if ($toggle eq 'white'){
+				$toggle="#ffffcc";
+			} else {
+				$toggle="white";
+			}
+			my %row_data;  # get a fresh hash for the row data
+			$row_data{category} = $results->[$i]{'category'};
+#			$row_data{stdlib} = ("&nbsp;&nbsp;&nbsp;&nbsp;" x $results->[$i]{'level'}).$results->[$i]{'stdlib'};
+			$row_data{stdlib} = $results->[$i]{'stdlib'};
+			$row_data{freelib} = $results->[$i]{'freelib'};
+			$row_data{freelib} =~ s/($searchstring)/<b>$1<\/b>/gi;
+			$row_data{father} = $results->[$i]{'father'};
+			$row_data{dig} ="<a href=thesaurus.pl?branch=$results->[$i]{'hierarchy'}$results->[$i]{'id'}|&search_category=$search_category>";
+			$row_data{related} ="<a href=thesaurus.pl?id=$results->[$i]{'id'}&search_category=$search_category&op=detail_form>";
+			$row_data{edit} = "$script_name?op=add_form&branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$offset&id=".$results->[$i]{'id'};
+			$row_data{delete} = "$script_name?op=delete_confirm&search_category=$search_category&id=".$results->[$i]{'id'};
+			push(@loop_data, \%row_data);
+		}
 	}
 	# rebuild complete hierarchy
 	my  $sth = $dbh->prepare("select stdlib from bibliothesaurus where id=?");
@@ -220,28 +227,25 @@ if ($op eq 'add_form') {
 		my %link;
 		$sth->execute($hierarchy[$xi]);
 		my ($t) = $sth->fetchrow_array;
-		$x.=$hierarchy[$xi];
+		$x.=$hierarchy[$xi]."|";
 		$link{'string'}=$t;
 		$link{'branch'}=$x;
 		push (@hierarchy_loop, \%link);
-		$x.='|';
-		$father = $t." $authoritysep ";
+		$father .= $t." $authoritysep ";
 	}
 	$template->param(loop => \@loop_data,
 							tab_list => $tab_list,
 							category => $search_category,
-							toponly => $toponly,
+#							toponly => $toponly,
 							searchstring => $searchstring,
 							hierarchy_loop => \@hierarchy_loop,
 							branch => $branch,
 							father => $father);
 	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "<a href=$script_name?branch=$branch&toponly=$toponly&search_category=$search_category&searchstring=$searchstring&offset=$prevpage>&lt;&lt; Prev</a>");
+		$template->param(previous => "<a href=$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$prevpage>&lt;&lt; Prev</a>");
 	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(next => "<a href=$script_name?branch=$branch&toponly=$toponly&search_category=$search_category&searchstring=$searchstring&offset=$nextpage>Next &gt;&gt;</a>");
+	if ($pagesize<$count) {
+		$template->param(next => "<a href=$script_name?branch=$branch&search_category=$search_category&searchstring=$searchstring&offset=$nextpage>Next &gt;&gt;</a>");
 	}
 } #---- END $OP eq DEFAULT
 
