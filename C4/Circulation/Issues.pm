@@ -216,14 +216,13 @@ sub issueitem{
    $itemnum=uc $itemnum;
    my $canissue = 1;
    ##  my ($itemnum,$reason)=&scanbook();
-   my $query="Select * from items,biblio,biblioitems where (barcode='$itemnum') and
-      (items.biblionumber=biblio.biblionumber) and
-      (items.biblioitemnumber=biblioitems.biblioitemnumber) ";
    my $item;
    my $charge;
    my $datedue = $env->{'loanlength'};
-   my $sth=$dbh->prepare($query);
-   $sth->execute;
+   my $sth=$dbh->prepare("Select * from items,biblio,biblioitems where (barcode=?) and
+      (items.biblionumber=biblio.biblionumber) and
+      (items.biblioitemnumber=biblioitems.biblioitemnumber) ");
+   $sth->execute($itemnum);
    if ($item=$sth->fetchrow_hashref) {
      $sth->finish;
      #check if item is restricted
@@ -269,19 +268,16 @@ sub issueitem{
        my ($resbor,$resrec) =  &C4::Circulation::Main::checkreserve($env,$dbh,$item->{'itemnumber'});
        #debug_msg($env,$resbor);
        if ($resbor eq $bornum) {
-         my $rquery = "update reserves
+	 my $rsth = $dbh->prepare("update reserves
 	   set found = 'F'
-	   where reservedate = '$resrec->{'reservedate'}'
-	   and borrowernumber = '$resrec->{'borrowernumber'}'
-	   and biblionumber = '$resrec->{'biblionumber'}'";
-	 my $rsth = $dbh->prepare($rquery);
-	 $rsth->execute;
+	   where reservedate = ?
+	   and borrowernumber = ?
+	   and biblionumber = ?");
+	 $rsth->execute($resrec->{'reservedate'},$resrec->{'borrowernumber'},$resrec->{'biblionumber'});
 	 $rsth->finish;
        } elsif ($resbor ne "") {
-         my $bquery = "select * from borrowers
-	    where borrowernumber = '$resbor'";
-	 my $btsh = $dbh->prepare($bquery);
-	 $btsh->execute;
+	 my $btsh = $dbh->prepare("select * from borrowers where borrowernumber = ?");
+	 $btsh->execute($resbor);
 	 my $resborrower = $btsh->fetchrow_hashref;
 	 my $msgtxt = chr(7)."Res for $resborrower->{'cardnumber'},";
          $msgtxt .= " $resborrower->{'initials'} $resborrower->{'surname'}";
@@ -293,15 +289,14 @@ sub issueitem{
 	 } else {
 	   my $ans = msg_ny($env,"Cancel reserve?");
 	   if ($ans eq "Y") {
-	     my $rquery = "update reserves
+			my $rsth = $dbh->prepare("update reserves
 	       set found = 'F'
-	       where reservedate = '$resrec->{'reservedate'}'
-	       and borrowernumber = '$resrec->{'borrowernumber'}'
-	       and biblionumber = '$resrec->{'biblionumber'}'";
-             my $rsth = $dbh->prepare($rquery);
-	     $rsth->execute;
-             $rsth->finish;
-	   }
+	       where reservedate = ?
+	       and borrowernumber = ?
+	       and biblionumber = ?");
+	 		$rsth->execute($resrec->{'reservedate'},$resrec->{'borrowernumber'},$resrec->{'biblionumber'});
+			$rsth->finish;
+		}
 	 }
 	 $btsh->finish();
        };
@@ -345,12 +340,11 @@ sub issueitem{
 sub createcharge {
   my ($env,$dbh,$itemno,$bornum,$charge) = @_;
   my $nextaccntno = getnextacctno($env,$bornum,$dbh);
-  my $query = "insert into accountlines
+  my $sth = $dbh->prepare("insert into accountlines
      (borrowernumber,itemnumber,accountno,date,amount,
      description,accounttype,amountoutstanding)
-     values ($bornum,$itemno,$nextaccntno,now(),$charge,'Rental','Rent',$charge)";
-  my $sth = $dbh->prepare($query);
-  $sth->execute;
+     values (?,?,?,now(),?,'Rental','Rent',?)");
+  $sth->execute($bornum,$itemno,$nextaccntno,$charge,$charge);
   $sth->finish;
 }
 
@@ -360,11 +354,10 @@ sub updateissues{
   # issue the book
   my ($env,$itemno,$bitno,$dbh,$bornum)=@_;
   my $loanlength=21;
-  my $query="Select *  from biblioitems,itemtypes
-  where (biblioitems.biblioitemnumber='$bitno')
-  and (biblioitems.itemtype = itemtypes.itemtype)";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  my $sth=$dbh->prepare("Select *  from biblioitems,itemtypes
+  where (biblioitems.biblioitemnumber=?)
+  and (biblioitems.itemtype = itemtypes.itemtype)");
+  $sth->execute($bitno);
   if (my $data=$sth->fetchrow_hashref) {
     $loanlength = $data->{'loanlength'}
   }
@@ -378,20 +371,18 @@ sub updateissues{
   } else {
     $dateduef = $env->{'loanlength'};
   }
-  $query = "Insert into issues (borrowernumber,itemnumber, date_due,branchcode)
-  values ($bornum,$itemno,'$dateduef','$env->{'branchcode'}')";
-  my $sth=$dbh->prepare($query);
-  $sth->execute;
+  #FIXME: what is going on above? Replaces with MySQL function or strftime?
+  my $sth=$dbh->prepare("Insert into issues (borrowernumber,itemnumber, date_due,branchcode)
+  values (?,?,?,?)");
+  $sth->execute($bornum,$itemno,$dateduef,$env->{'branchcode'});
   $sth->finish;
-  $query = "Select * from items where itemnumber=$itemno";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("Select * from items where itemnumber=?");
+  $sth->execute($itemno);
   my $item=$sth->fetchrow_hashref;
   $sth->finish;
   $item->{'issues'}++;
-  $query="Update items set issues=$item->{'issues'} where itemnumber=$itemno";
-  $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth=$dbh->prepare("Update items set issues=? where itemnumber=?");
+  $sth->execute($item->{'issues'},$itemno);
   $sth->finish;
   #my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($datedue);
   my @datearr = split('-',$dateduef);
@@ -411,26 +402,24 @@ sub calc_charges {
   my ($env, $dbh, $itemno, $bornum)=@_;
   my $charge=0;
   my $item_type;
-  my $q1 = "select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
-    where (items.itemnumber ='$itemno')
+  my $sth1= $dbh->prepare("select itemtypes.itemtype,rentalcharge from items,biblioitems,itemtypes
+    where (items.itemnumber =?)
     and (biblioitems.biblioitemnumber = items.biblioitemnumber)
-    and (biblioitems.itemtype = itemtypes.itemtype)";
-  my $sth1= $dbh->prepare($q1);
-  $sth1->execute;
+    and (biblioitems.itemtype = itemtypes.itemtype)");
+  $sth1->execute($itemno);
   if (my $data1=$sth1->fetchrow_hashref) {
      $item_type = $data1->{'itemtype'};
      $charge = $data1->{'rentalcharge'};
-     my $q2 = "select rentaldiscount from borrowers,categoryitem
-        where (borrowers.borrowernumber = '$bornum')
+     my $sth2=$dbh->prepare("select rentaldiscount from borrowers,categoryitem
+        where (borrowers.borrowernumber = ?)
         and (borrowers.categorycode = categoryitem.categorycode)
-        and (categoryitem.itemtype = '$item_type')";
-     my $sth2=$dbh->prepare($q2);
-     $sth2->execute;
+        and (categoryitem.itemtype = ?)");
+     $sth2->execute($bornum,$item_type);
      if (my $data2=$sth2->fetchrow_hashref) {
         my $discount = $data2->{'rentaldiscount'};
 	$charge = ($charge *(100 - $discount)) / 100;
      }
-     $sth2->{'finish'};	# FIXME - Was this supposed to be $sth2->finish ?
+     $sth2->finish;
   }
   $sth1->finish;
   return ($charge);
