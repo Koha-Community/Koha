@@ -326,7 +326,7 @@ sub bookfunds {
   my $dbh=C4Connect;
   my $query="Select * from aqbookfund,aqbudget where aqbookfund.bookfundid
   =aqbudget.bookfundid 
-  and aqbudget.startdate='2001=07-01' 
+  and aqbudget.startdate='2001-07-01' 
   group by aqbookfund.bookfundid order by bookfundname";
   my $sth=$dbh->prepare($query);
   $sth->execute;
