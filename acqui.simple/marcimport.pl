@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# $Id$
+
 # Script for handling import of MARC data into Koha db
 #   and Z39.50 lookups
 
@@ -19,6 +21,8 @@ use C4::Acquisitions;
 use C4::Output;
 use C4::Input;
 use C4::Biblio;
+use C4::SimpleMarc;
+use C4::Z3950;
 
 #------------------
 # Constants
@@ -26,89 +30,6 @@ use C4::Biblio;
 # HTML colors for alternating lines
 my $lc1='#dddddd';
 my $lc2='#ddaaaa';
-
-my %tagtext = (
-    '001' => 'Control number',
-    '003' => 'Control number identifier',
-    '005' => 'Date and time of latest transaction',
-    '006' => 'Fixed-length data elements -- additional material characteristics',
-    '007' => 'Physical description fixed field',
-    '008' => 'Fixed length data elements',
-    '010' => 'LCCN',
-    '015' => 'LCCN Cdn',
-    '020' => 'ISBN',
-    '022' => 'ISSN',
-    '037' => 'Source of acquisition',
-    '040' => 'Cataloging source',
-    '041' => 'Language code',
-    '043' => 'Geographic area code',
-    '050' => 'Library of Congress call number',
-    '060' => 'National Library of Medicine call number',
-    '082' => 'Dewey decimal call number',
-    '100' => 'Main entry -- Personal name',
-    '110' => 'Main entry -- Corporate name',
-    '130' => 'Main entry -- Uniform title',
-    '240' => 'Uniform title',
-    '245' => 'Title statement',
-    '246' => 'Varying form of title',
-    '250' => 'Edition statement',
-    '256' => 'Computer file characteristics',
-    '260' => 'Publication, distribution, etc.',
-    '263' => 'Projected publication date',
-    '300' => 'Physical description',
-    '306' => 'Playing time',
-    '440' => 'Series statement / Added entry -- Title',
-    '490' => 'Series statement',
-    '500' => 'General note',
-    '504' => 'Bibliography, etc. note',
-    '505' => 'Formatted contents note',
-    '508' => 'Creation/production credits note',
-    '510' => 'Citation/references note',
-    '511' => 'Participant or performer note',
-    '520' => 'Summary, etc. note',
-    '521' => 'Target audience note (ie age)',
-    '530' => 'Additional physical form available note',
-    '538' => 'System details note',
-    '586' => 'Awards note',
-    '600' => 'Subject added entry -- Personal name',
-    '610' => 'Subject added entry -- Corporate name',
-    '650' => 'Subject added entry -- Topical term',
-    '651' => 'Subject added entry -- Geographic name',
-    '656' => 'Index term -- Occupation',
-    '700' => 'Added entry -- Personal name',
-    '710' => 'Added entry -- Corporate name',
-    '730' => 'Added entry -- Uniform title',
-    '740' => 'Added entry -- Uncontrolled related/analytical title',
-    '800' => 'Series added entry -- Personal name',
-    '830' => 'Series added entry -- Uniform title',
-    '852' => 'Location',
-    '856' => 'Electronic location and access',
-);
-
-# tag, subfield, field name, repeats, striptrailingchars
-my %tagmap=(
-    '010'=>{'a'=>{name=> 'lccn',	rpt=>0 	}},
-    '015'=>{'a'=>{name=> 'lccn',	rpt=>0	}},
-    '020'=>{'a'=>{name=> 'isbn',	rpt=>0	}},
-    '022'=>{'a'=>{name=> 'issn',	rpt=>0	}},
-    '082'=>{'a'=>{name=> 'dewey',	rpt=>0	}},
-    '100'=>{'a'=>{name=> 'author',	rpt=>0, striptrail=>',:;/-'	}},
-    '245'=>{'a'=>{name=> 'title',	rpt=>0, striptrail=>',:;/'	},
-            'b'=>{name=> 'subtitle',	rpt=>0, striptrail=>',:;/'	}},
-    '260'=>{'a'=>{name=> 'place',	rpt=>0, striptrail=>',:;/-'	},
-            'b'=>{name=> 'publisher',	rpt=>0, striptrail=>',:;/-'	},
-            'c'=>{name=> 'year' ,	rpt=>0, striptrail=>'.,:;/-'	}},
-    '300'=>{'a'=>{name=> 'pages',	rpt=>0, striptrail=>',:;/-'	},
-            'c'=>{name=> 'size',	rpt=>0, striptrail=>',:;/-'	}},
-    '362'=>{'a'=>{name=> 'volume-number',	rpt=>0	}},
-    '440'=>{'a'=>{name=> 'seriestitle',	rpt=>0, striptrail=>',:;/'	},
-            'v'=>{name=> 'volume-number',rpt=>0	}},
-    '490'=>{'a'=>{name=> 'seriestitle',	rpt=>0, striptrail=>',:;/'	},
-            'v'=>{name=> 'volume-number',rpt=>0	}},
-    '700'=>{'a'=>{name=> 'addtional-author-illus',rpt=>1, striptrail=>',:;/'	}},
-    '5xx'=>{'a'=>{name=> 'notes',	rpt=>1	}},
-    '65x'=>{'a'=>{name=> 'subject',	rpt=>1, striptrail=>'.,:;/-'	}},
-);
 
 #-------------
 #-------------
@@ -291,6 +212,8 @@ RECORD:
 	    $illustratorinput=$input->textfield(-name=>'illustrator', 
 		-default=>$bib->{illustrator});
 	    $additionalauthorsinput=$input->textarea(-name=>'additionalauthors', -default=>$additionalauthors, -rows=>4, -cols=>20);
+
+	    print "<PRE>lccn=$lccn</PRE>\n" if $debug;
 
 	    my $subject='';
 	    foreach ( @{$bib->{subject} } ) {
@@ -546,31 +469,6 @@ EOF
 } # sub ListFileRecords
 
 #--------------
-sub z3950servername {
-    # inputs
-    my (
-	$dbh,
-	$srvid,		# server id number 
-	$default,
-    )=@_;
-    # return
-    my $longname;
-    #----
-
-    requireDBI($dbh,"z3950servername");
-
-	my $sti=$dbh->prepare("select name 
-		from z3950servers 
-		where id=?");
-	$sti->execute($srvid);
-	if ( ! $sti->err ) {
-	    ($longname)=$sti->fetchrow;
-	}
-	if (! $longname) {
-	    $longname="$default";
-	}
-	return $longname;
-} # sub z3950servername
 
 sub PrintResultRecordLink {
     use strict;
@@ -620,164 +518,6 @@ sub PrintResultRecordLink {
 	} # if searchfield
 } # sub PrintResultRecordLink
 
-#------------------
-sub extractmarcfields {
-    use strict;
-    # input
-    my (
-	$record,	# pointer to list of MARC field hashes.
-			# Example: $record->[0]->{'tag'} = '100' # Author
-			# 	$record->[0]->{'subfields'}->{'a'} = subfieldvalue
-    )=@_;
-
-    # return 
-    my $bib;		# pointer to hash of named output fields
-			# Example: $bib->{'author'} = "Twain, Mark";
-
-    my $debug=0;
-
-    my (
-	$field, 	# hash ref
-	$value, 
-	$subfield,	# Marc subfield [a-z]
-	$fieldname,	# name of field "author", "title", etc.
-	$strip,		# chars to remove from end of field
-	$stripregex,	# reg exp pattern
-    );
-    my ($lccn, $isbn, $issn,    
-	$publicationyear, @subjects, $subject,
-	$controlnumber, 
-	$notes, $additionalauthors, $illustrator, $copyrightdate, 
-	$s, $subdivision, $subjectsubfield,
-    );
-
-    print "<PRE>\n" if $debug;
-
-    if ( ref($record) eq "ARRAY" ) {
-        foreach $field (@$record) {
-
-	    # Check each subfield in field
-	    foreach $subfield ( keys %{$field->{subfields}} ) {
-		# see if it is defined in our Marc to koha mapping table
-	    	if ( $fieldname=$tagmap{ $field->{'tag'} }->{$subfield}->{name} ) {
-		    # Yes, so keep the value
-		    if ( ref($field->{'subfields'}->{$subfield} ) eq 'ARRAY' ) {
-		        # if it was an array, just keep first element.
-		        $bib->{$fieldname}=$field->{'subfields'}->{$subfield}[0];
-		    } else {
-		        $bib->{$fieldname}=$field->{'subfields'}->{$subfield};
-		    } # if array
-		    print "$field->{'tag'} $subfield $fieldname=$bib->{$fieldname}\n" if $debug;
-		    # see if this field should have trailing chars dropped
-	    	    if ($strip=$tagmap{ $field->{'tag'} }->{$subfield}->{striptrail} ) {
-			$strip=~s//\\/; # backquote each char
-			$stripregex='[ ' . $strip . ']+$';  # remove trailing spaces also
-			$bib->{$fieldname}=~s/$stripregex//;
-		    } # if strip
-		    print "Found subfield $field->{'tag'} $subfield " .
-			"$fieldname = $bib->{$fieldname}\n" if $debug;
-		} # if tagmap exists
-
-	    } # foreach subfield
-
-
-	    if ($field->{'tag'} eq '001') {
-		$bib->{controlnumber}=$field->{'indicator'};
-	    }
-	    if ($field->{'tag'} eq '015') {
-		$bib->{lccn}=$field->{'subfields'}->{'a'};
-		$bib->{lccn}=~s/^\s*//;
-		$bib->{lccn}=~s/^C//;
-		($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0];
-	    }
-
-
-		if ($field->{'tag'} eq '260') {
-
-		    $publicationyear=$field->{'subfields'}->{'c'};
-		    if ($publicationyear=~/c(\d\d\d\d)/) {
-			$copyrightdate=$1;
-		    }
-		    if ($publicationyear=~/[^c](\d\d\d\d)/) {
-			$publicationyear=$1;
-		    } elsif ($copyrightdate) {
-			$publicationyear=$copyrightdate;
-		    } else {
-			$publicationyear=~/(\d\d\d\d)/;
-			$publicationyear=$1;
-		    }
-		}
-		if ($field->{'tag'} eq '700') {
-		    my $name=$field->{'subfields'}->{'a'};
-		    if ($field->{'subfields'}->{'e'}!~/ill/) {
-			$additionalauthors.="$name\n";
-		    } else {
-			$illustrator=$name;
-		    }
-		}
-		if ($field->{'tag'} =~/^5/) {
-		    $notes.="$field->{'subfields'}->{'a'}\n";
-		}
-		if ($field->{'tag'} =~/65\d/) {
-		    my $sub;
-		    my $subject=$field->{'subfields'}->{'a'};
-		    $subject=~s/\.$//;
-		    print "Subject=$subject\n" if $debug;
-		    foreach $subjectsubfield ( 'x','y','z' ) {
-		      if ($subdivision=$field->{'subfields'}->{$subjectsubfield}) {
-			if ( ref($subdivision) eq 'ARRAY' ) {
-			    foreach $s (@$subdivision) {
-				$s=~s/\.$//;
-				$subject.=" -- $s";
-			    } # foreach subdivision
-			} else {
-			    $subdivision=~s/\.$//;
-			    $subject.=" -- $subdivision";
-			} # if array
-		      } # if subfield exists
-		    } # foreach subfield
-		    print "Subject=$subject\n" if $debug;
-		    push @subjects, $subject;
-		} # if tag 65x
-
-
-        } # foreach field
-	($publicationyear	) && ($bib->{publicationyear}=$publicationyear  );
-	($copyrightdate		) && ($bib->{copyrightdate}=$copyrightdate  );
-	($additionalauthors	) && ($bib->{additionalauthors}=$additionalauthors  );
-	($illustrator		) && ($bib->{illustrator}=$illustrator  );
-	($notes			) && ($bib->{notes}=$notes  );
-	($#subjects		) && ($bib->{subject}=\@subjects  );
-
-	# Misc cleanup
-	$bib->{dewey}=~s/\///g;	# drop any slashes
-
-	($bib->{lccn}) = (split(/\s+/, $bib->{lccn}))[0]; # only keep first word
-
-	$bib->{isbn}=~s/[^\d]*//g;	# drop non-digits
-
-	$bib->{issn}=~s/^\s*//;
-	($bib->{issn}) = (split(/\s+/, $bib->{issn}))[0];
-
-	if ( $bib->{'volume-number'} ) {
-	    if ($bib->{'volume-number'}=~/(\d+).*(\d+)/ ) {
-		$bib->{'volume'}=$1;
-		$bib->{'number'}=$2;
-	    } else {
-		$bib->{volume}=$bib->{'volume-number'};
-	    }
-	    delete $bib->{'volume-number'};
-	} # if volume-number
-
-    } else {
-	print "Error: extractmarcfields: input ref $record is " .
-		ref($record) . " not ARRAY. Contact sysadmin.\n";
-    }
-    print "</PRE>\n" if $debug;
-
-    return $bib;
-
-} # sub extractmarcfields
 #---------------------------------
 
 sub z3950menu {
@@ -973,105 +713,6 @@ sub mainmenu {
 </ul>
 EOF
 } # sub mainmenu
-
-
-#--------------------------
-# Parse MARC data in file format with control-character separators
-#   May be multiple records.
-sub parsemarcfileformat {
-    use strict;
-    # Input is one big text string
-    my $data=shift;
-    # Output is list of records.  Each record is list of field hashes
-    my @records;
-
-    my $splitchar=chr(29);
-    my $splitchar2=chr(30);
-    my $splitchar3=chr(31);
-    my $debug=0;
-    my $record;
-    foreach $record (split(/$splitchar/, $data)) {
-	my @record;
-	my $directory=0;
-	my $tagcounter=0;
-	my %tag;
-	my $field;
-
-	my $leader=substr($record,0,24);
-	print "<tr><td>Leader:</td><td>$leader</td></tr>\n" if $debug;
-	push (@record, {
-		'tag' => 'Leader',
-		'indicator' => $leader ,
-	} );
-
-	$record=substr($record,24);
-	foreach $field (split(/$splitchar2/, $record)) {
-	    my %field;
-	    my $tag;
-	    my $indicator;
-	    unless ($directory) {
-		$directory=$field;
-		my $itemcounter=1;
-		my $counter2=0;
-		my $item;
-		my $length;
-		my $start;
-		while ($item=substr($directory,0,12)) {
-		    $tag=substr($directory,0,3);
-		    $length=substr($directory,3,4);
-		    $start=substr($directory,7,6);
-		    $directory=substr($directory,12);
-		    $tag{$counter2}=$tag;
-		    $counter2++;
-		}
-		$directory=1;
-		next;
-	    }
-	    $tag=$tag{$tagcounter};
-	    $tagcounter++;
-	    $field{'tag'}=$tag;
-	    my @subfields=split(/$splitchar3/, $field);
-	    $indicator=$subfields[0];
-	    $field{'indicator'}=$indicator;
-	    my $firstline=1;
-	    unless ($#subfields==0) {
-		my %subfields;
-		my @subfieldlist;
-		my $i;
-		for ($i=1; $i<=$#subfields; $i++) {
-		    my $text=$subfields[$i];
-		    my $subfieldcode=substr($text,0,1);
-		    my $subfield=substr($text,1);
-		    # if this subfield already exists, do array
-		    if ($subfields{$subfieldcode}) {
-			my $subfieldlist=$subfields{$subfieldcode};
-			if ( ref($subfieldlist) eq 'ARRAY' ) {
-                            # Already an array, add on to it
-			    print "$tag Adding to array $subfieldcode -- $subfield<br>\n" if $debug;
-			    @subfieldlist=@$subfieldlist;
-			    push (@subfieldlist, $subfield);
-			} else {
-                            # Change simple value to array
-			    print "$tag Arraying $subfieldcode -- $subfield<br>\n" if $debug;
-			    @subfieldlist=($subfields{$subfieldcode}, $subfield);
-			}
-			# keep new array
-			$subfields{$subfieldcode}=\@subfieldlist;
-		    } else {
-			# subfield doesn't exist yet, keep simple value
-			$subfields{$subfieldcode}=$subfield;
-		    }
-		}
-		$field{'subfields'}=\%subfields;
-	    }
-	    push (@record, \%field);
-	} # foreach field in record
-	push (@records, \@record);
-	# $counter++;
-    }
-    print "</pre>" if $debug;
-    return @records;
-} # sub parsemarcfileformat
 
 #----------------------------
 # Accept form results to add query to z3950 queue
@@ -1367,211 +1008,7 @@ sub AcceptItemCopy {
     } # if barcode exists
 } # sub AcceptItemCopy
 
-#---------------
-# Create an HTML option list for a <SELECT> form tag by using
-#    values from a DB file
-sub getkeytableselectoptions {
-	use strict;
-	# inputs
-	my (
-		$dbh,		# DBI handle
-		$tablename,	# name of table containing list of choices
-		$keyfieldname,	# column name of code to use in option list
-		$descfieldname,	# column name of descriptive field
-		$showkey,	# flag to show key in description
-	)=@_;
-	my $selectclause;	# return value
-
-	my (
-		$sth, $query, 
-		$key, $desc, $orderfieldname,
-	);
-	my $debug=0;
-
-    	requireDBI($dbh,"getkeytableselectoptions");
-
-	if ( $showkey ) {
-		$orderfieldname=$keyfieldname;
-	} else {
-		$orderfieldname=$descfieldname;
-	}
-	$query= "select $keyfieldname,$descfieldname
-		from $tablename
-		order by $orderfieldname ";
-	print "<PRE>Query=$query </PRE>\n" if $debug; 
-	$sth=$dbh->prepare($query);
-	$sth->execute;
-	while ( ($key, $desc) = $sth->fetchrow) {
-	    if ($showkey) { $desc="$key - $desc"; }
-	    $selectclause.="<option value='$key'>$desc\n";
-	    print "<PRE>Sel=$selectclause </PRE>\n" if $debug; 
-	}
-	return $selectclause;
-} # sub getkeytableselectoptions
-
-#---------------------------------
-# Add a biblioitem and related data
-sub newcompletebiblioitem {
-	use strict;
-
-	my ( $dbh,		# DBI handle
-	  $biblio,		# hash ref to biblio record
-	  $biblioitem,		# hash ref to biblioitem record
-	  $subjects,		# list ref of subjects
-	  $addlauthors,		# list ref of additional authors
-	)=@_ ;
-
-	my ( $biblionumber, $biblioitemnumber, $error);		# return values
-
-	my $debug=0;
-	my $sth;
-	my $subjectheading;
-	my $additionalauthor;
-
-	#--------
-    	requireDBI($dbh,"newcompletebiblioitem");
-
-	print "<PRE>Trying to add biblio item Title=$biblio->{title} " .
-		"ISBN=$biblioitem->{isbn} </PRE>\n" if $debug;
-
-	# Make sure master biblio entry exists
-	($biblionumber,$error)=getoraddbiblio($dbh, $biblio);
-
-        if ( ! $error ) { 
-
-	  $biblioitem->{biblionumber}=$biblionumber;
-	  $biblioitemnumber=newbiblioitem($biblioitem);
-
-	  $sth=$dbh->prepare("insert into bibliosubject 
-		(biblionumber,subject)
-		values (?, ? )" );
-	  foreach $subjectheading (@{$subjects} ) {
-	      $sth->execute($biblionumber, $subjectheading) 
-			or $error.=$sth->errstr ;
-	
-	  } # foreach subject
-
-	  $sth=$dbh->prepare("insert into additionalauthors 
-		(biblionumber,author)
-		values (?, ? )");
-	  foreach $additionalauthor (@{$addlauthors} ) {
-	    $sth->execute($biblionumber, $additionalauthor) 
-			or $error.=$sth->errstr ;
-	  } # foreach author
-
-	} else {
-	  # couldn't get biblio
-	  $biblionumber='';
-	  $biblioitemnumber='';
-
-	} # if no biblio error
-
-	return ( $biblionumber, $biblioitemnumber, $error);
-
-} # sub newcompletebiblioitem
 #---------------------------------------
-# Find a biblio entry, or create a new one if it doesn't exist.
-sub getoraddbiblio {
-	use strict;		# in here until rest cleaned up
-	# input params
-	my (
-	  $dbh,		# db handle
-	  $biblio,	# hash ref to fields
-	)=@_;
-
-	# return
-	my $biblionumber;
-
-	my $debug=0;
-	my $sth;
-	my $error;
-	
-	#-----
-    	requireDBI($dbh,"getoraddbiblio");
-
-	print "<PRE>Looking for biblio </PRE>\n" if $debug;
-	$sth=$dbh->prepare("select biblionumber 
-		from biblio 
-		where title=? and author=? 
-		  and copyrightdate=? and seriestitle=?");
-	$sth->execute(
-		$biblio->{title}, $biblio->{author}, 
-		$biblio->{copyright}, $biblio->{seriestitle} );
-	if ($sth->rows) {
-	    ($biblionumber) = $sth->fetchrow;
-	    print "<PRE>Biblio exists with number $biblionumber</PRE>\n" if $debug;
-	} else {
-	    # Doesn't exist.  Add new one.
-	    print "<PRE>Adding biblio</PRE>\n" if $debug;
-	    ($biblionumber,$error)=&newbiblio($biblio);
-	    if ( $biblionumber ) {
-	      print "<PRE>Added with biblio number=$biblionumber</PRE>\n" if $debug;
-	      if ( $biblio->{subtitle} ) {
-	    	&newsubtitle($biblionumber,$biblio->{subtitle} );
-	      } # if subtitle
-	    } else {
-		print "<PRE>Couldn't add biblio: $error</PRE>\n" if $debug;
-	    } # if added
-	}
-
-	return $biblionumber,$error;
-
-} # sub getoraddbiblio
-#---------------------------------------
-sub addz3950queue {
-    use strict;
-    # input
-    my (
-	$dbh,		# DBI handle
-	$query,		# value to look up
-	$type,		# type of value ("isbn", "lccn", etc).
-	$requestid,
-	@z3950list,	# list of z3950 servers to query
-    )=@_;
-
-    my (
-	@serverlist,
-	$server,
-	$failed,
-    );
-    
-    requireDBI($dbh,"addz3950queue");
-
-	# list of servers: entry can be a fully qualified URL-type entry
-        #   or simply just a server ID number.
-
-        my $sth=$dbh->prepare("select host,port,db,userid,password 
-	  from z3950servers 
-	  where id=? ");
-        foreach $server (@z3950list) {
-	    if ($server =~ /:/ ) {
-		push @serverlist, $server;
-	    } else {
-		$sth->execute($server);
-		my ($host, $port, $db, $userid, $password) = $sth->fetchrow;
-		push @serverlist, "$server/$host\:$port/$db/$userid/$password";
-	    }
-	}
-
-	my $serverlist='';
-	foreach (@serverlist) {
-	    $serverlist.="$_ ";
-    	} # foreach
-	chop $serverlist;
-
-	# Don't allow reinsertion of the same request number.
-	my $sth=$dbh->prepare("select identifier from z3950queue 
-		where identifier=?");
-	$sth->execute($requestid);
-	unless ($sth->rows) {
-	    $sth=$dbh->prepare("insert into z3950queue 
-		(term,type,servers, identifier) 
-		values (?, ?, ?, ?)");
-	    $sth->execute($query, $type, $serverlist, $requestid);
-	}
-} # sub addz3950queue
-
-#--------------------------------------
 sub FormatMarcText {
     use strict;
 
@@ -1638,3 +1075,11 @@ sub FormatMarcText {
     return $marctext;
 
 } # sub FormatMarcText
+
+
+#---------------
+# $Log$
+# Revision 1.6.2.26  2002/06/26 14:28:35  amillar
+# Removed subroutines now existing in modules: extractmarcfields,
+#  parsemarcfileformat, addz3950queue, getkeytableselectoptions
+#
