@@ -271,7 +271,11 @@ sub AUTHcount_usage {
 		$tags_using_authtype.= "'".$tagfield."9',";
 	}
 	chop $tags_using_authtype;
-	$sth = $dbh->prepare("select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=?");
+	if ($tags_using_authtype) {
+		$sth = $dbh->prepare("select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=?");
+	} else {
+		$sth = $dbh->prepare("select count(*) from marc_subfield_table where subfieldvalue=?");
+	}
 # 	warn "Q : select count(*) from marc_subfield_table where concat(tag,subfieldcode) in ($tags_using_authtype) and subfieldvalue=$authid";
 	$sth->execute($authid);
 	my ($result) = $sth->fetchrow;
@@ -505,7 +509,7 @@ sub AUTHmodauthority {
 # 1st delete the authority,
 # 2nd recreate it
 	&AUTHdelauthority($dbh,$authid,1);
-	&AUTHaddauthority($dbh,$record,$authid);
+	&AUTHaddauthority($dbh,$record,$authid,AUTHfind_authtypecode($dbh,$authid));
 	# FIXME : modify the authority in biblio too.
 }
 
@@ -517,7 +521,7 @@ sub AUTHdelauthority {
 # the best solution for a modif is to delete / recreate the record.
 
 	my $record = AUTHgetauthority($dbh,$authid);
-	$dbh->do("delete from auth_header where authid=$authid");
+	$dbh->do("delete from auth_header where authid=$authid") unless $keep_biblio;
 	$dbh->do("delete from auth_subfield_table where authid=$authid");
 	$dbh->do("delete from auth_word where authid=$authid");
 # FIXME : delete or not in biblio tables (depending on $keep_biblio flag)
@@ -832,6 +836,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.7  2004/09/23 16:13:00  tipaul
+# Bugfix in modification
+#
 # Revision 1.6  2004/08/18 16:00:24  tipaul
 # fixes for authorities management
 #

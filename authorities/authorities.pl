@@ -160,7 +160,7 @@ sub create_input () {
 
 sub build_tabs ($$$$) {
     my($template, $record, $dbh,$encoding) = @_;
-# warn "=>".$record->as_formatted;
+# "=>".$record->as_formatted;
     # fill arrays
     my @loop_data =();
     my $tag;
