@@ -160,8 +160,4 @@ __END__
 
 Pat Eyler, pate@gnu.org
 
-=head1 SEE ALSO
-
-perl(1).
-
 =cut

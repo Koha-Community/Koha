@@ -166,8 +166,4 @@ __END__
 
 Koha Developement team <info@koha.org>
 
-=head1 SEE ALSO
-
-L<perl>.
-
 =cut
