@@ -62,8 +62,8 @@ while (1) {
 					($stk->execute($id)) || (next);
 					my %serverdone;
 					unless ($stk->rows) {
-						my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=$now where id=$id");
-						$sti->execute;
+						my $sti=$dbh->prepare("update z3950queue set done=-1,startdate=$now where id=?");
+						$sti->execute($id);
 					}
 					while (my ($r_id, $r_server,$r_startdate,$r_enddate,$r_numrecords,$active) = $stk->fetchrow) {
 						if ($r_enddate >0) {
@@ -114,24 +114,24 @@ while (1) {
 							my $q_serverinfo=$dbi->quote($serverinfo);
 							my $resultsid;
 							if ($serverdone{$serverinfo}==-1) {
-								my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
-								$stj->execute;
+								my $stj=$dbi->prepare("select id from z3950results where server=? and queryid=?");
+								$stj->execute($q_serverinfo,$id);
 								($resultsid) = $stj->fetchrow;
 								$stj->finish;
 							} else {
-								my $stj=$dbi->prepare("select id from z3950results where server=$q_serverinfo and queryid=$id");
-								$stj->execute;
+								my $stj=$dbi->prepare("select id from z3950results where server=? and queryid=?");
+								$stj->execute($q_serverinfo,$id);
 								($resultsid) = $stj->fetchrow;
 								$stj->finish;
 								unless ($resultsid) {
-									$stj=$dbi->prepare("insert into z3950results (server, queryid, startdate) values ($q_serverinfo, $id, $now)");
-									$stj->execute;
+									$stj=$dbi->prepare("insert into z3950results (server, queryid, startdate) values (?,?,?)");
+									$stj->execute($q_serverinfo, $id, $now);
 									$resultsid=$dbi->{'mysql_insertid'};
 									$stj->finish;
 								}
 							}
-							my $stj=$dbh->prepare("update z3950results set active=1 where id=$resultsid");
-							$stj->execute;
+							my $stj=$dbh->prepare("update z3950results set active=1 where id=?");
+							$stj->execute($resultsid);
 							my $conn;
 							my $noconnection=0;
 							my $error=0;
@@ -203,19 +203,17 @@ while (1) {
 									($q_result) || ($q_result='""');
 									$now=time();
 									if ($numresults >0) {
-										my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results=$q_result,enddate=$now where id=$resultsid";
-										my $stj=$dbi->prepare($task);
-										$stj->execute;
+										my $stj=$dbi->prepare("update z3950results set numrecords=?,numdownloaded=?,highestseen=0,results=?,enddate=? where id=?");
+										$stj->execute($numresults,$numrecords,$q_result,$now,$resultsid);
 									} else { # no results...
-										my $task="update z3950results set numrecords=$numresults,numdownloaded=$numrecords,highestseen=0,results='',enddate=$now where id=$resultsid";
-										my $stj=$dbi->prepare($task);
-										$stj->execute;
+										my $stj=$dbi->prepare("update z3950results set numrecords=?,numdownloaded=?,highestseen=0,results='',enddate=? where id=?");
+										$stj->execute($numresults,$numrecords,$now,$resultsid);
 									}
 									my $counter=0;
 									while ($counter<60 && $numrecords<$numresults) {
 										$counter++;
-										my $stj=$dbi->prepare("select highestseen from z3950results where id=$resultsid");
-										$stj->execute;
+										my $stj=$dbi->prepare("select highestseen from z3950results where id=?");
+										$stj->execute($resultsid);
 										my ($highestseen) = $stj->fetchrow;
 										if ($highestseen>($numrecords-30)) {
 											$counter=0;
@@ -237,17 +235,16 @@ while (1) {
 											my $q_result=$dbi->quote($result);
 											($q_result) || ($q_result='""');
 											$now=time();
-											my $task="update z3950results set numdownloaded=$numrecords,results=$q_result where id=$resultsid";
-											my $stj=$dbi->prepare($task);
-											$stj->execute;
+											my $stj=$dbi->prepare("update z3950results set numdownloaded=?,results=? where id=?");
+											$stj->execute($numrecords,$q_result,$resultsid);
 										}
 										sleep 5;
 									}
  								}
 							}
 							# FIXME - There's already a $stj in this scope
-							my $stj=$dbi->prepare("update z3950results set active=0 where id=$resultsid");
-							$stj->execute;
+							my $stj=$dbi->prepare("update z3950results set active=0 where id=?");
+							$stj->execute($resultsid);
 							eval {$stj->finish};
 							print "    $server done.\n";
 							exit;
@@ -266,8 +263,8 @@ EOF
 						}
 					}
 					unless ($stillprocessing) {
-						#my $sti=$dbh->prepare("select enddate from z3950queue where id=$id");
-						#$sti->execute;
+						#my $sti=$dbh->prepare("select enddate from z3950queue where id=?");
+						#$sti->execute($id);
 						#my ($enddate) = $sti->fetchrow;
 						#unless ($enddate) {
 					}
