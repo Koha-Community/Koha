@@ -72,8 +72,16 @@ my $printercookie=$query->cookie(-name=>'printer', -value=>"$printer", -expires=
 print $query->header(-type=>'text/html',-expires=>'now', -cookie=>[$branchcookie,$printercookie]);
 #print $query->dump;
 print startpage();
-print startmenu('circulation');
-
+#print startmenu('circulation');
+my @inp=startmenu('circulation');
+if ($query->param('module') eq 'issues' && $query->param('barcode') eq '' && $query->param('charges') eq 'yes'){
+ my $count=@inp;
+ for (my $i=0;$i<$count;$i++){
+  my $bornum=$query->param('borrnumber');
+  $inp[$i]=~ s/onLoad=focusinput\(\)/onLoad=focusinput\(\)\;messenger\(\"\/cgi-bin\/koha\/pay.pl?bornum=$bornum\"\)\;window1.focus\(\)/;
+ }
+}
+print @inp;
 
 print <<EOF
 <script language="javascript" type="text/javascript">
@@ -84,7 +92,7 @@ function messenger(url){
 //-->
 </script>
 EOF
-
+;
 if ($printer && $branch) {
 
     SWITCH: {
@@ -225,7 +233,7 @@ EOF
     }
 	
     my $barcodeentrytext= << "EOF";
-    <form method=get>
+    <form method=post action=/cgi-bin/koha/circ/circulation.pl>
     <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
 	<tr><td colspan=2 bgcolor=$headerbackgroundcolor align=center background=$backgroundimage><font color=black><b>Enter Book Barcode</b></font></td></tr>
 	<tr><td>Item Barcode:</td><td><input name=barcode size=10></td></tr>
@@ -487,7 +495,9 @@ EOF
 		$responses{$qnumber}=$query->param('answer');
 	    }
 	    unless ($invalidduedate) {
-		my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) = issuebook(\%env, $borrower, $barcode, \%responses);
+	        my @time=localtime(time);
+		my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
+		my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message) = issuebook(\%env, $borrower, $barcode, \%responses,$date);
 		unless ($iteminformation) {
 		    print << "EOF";
 		    <table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
@@ -505,8 +515,8 @@ EOF
 		    } else {
 			print << "EOF"
 			<table border=0 cellpadding=5 cellspacing=0 bgcolor=#dddddd>
-			<tr><th bgcolor= background=$backgroundimage><font color=black>Error Issuing Book</font></th></tr>
-			<tr><td><font color=red>$rejected</font></td></tr>
+			<tr><th><font color=black size=6>Error Issuing Book</font></th></tr>
+			<tr><td><font color=red size=6>$rejected</font></td></tr>
 			</table>
 			<br>
 EOF
@@ -697,7 +707,18 @@ EOF
 	<input type=hidden name=borrnumber value=$borrnumber>
 	<input type=hidden name=branch value=$branch>
 	<input type=hidden name=printer value=$printer>
-	</form>
+	
+EOF
+;
+  my $amountold=$flags->{'CHARGES'}->{'message'};
+  my @temp=split(/\$/,$amountold);
+  $amountold=$temp[1];
+  print "<input type=hidden name=oldamount value=$amountold>";
+  if ($flags->{'CHARGES'}){
+            print "<input type=hidden name=charges value=yes>";
+  }
+print <<EOF
+</form>
 	</td>
 
 
@@ -805,7 +826,7 @@ sub patrontable {
 	    }
 	} else {
 	    if ($flag eq 'CHARGES') {
-		$flaginfotext.="<tr><td valign=top>$flag</td><td $flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
+		$flaginfotext.="<tr><td valign=top>$flag</td><td> $flags->{$flag}->{'message'} <a href=/cgi-bin/koha/pay.pl?bornum=$borrower->{'borrowernumber'} onClick=\"openWindow(this, 'Payment', 480,640)\">Payment</a></td></tr>\n";
 	    } elsif ($flag eq 'WAITING') {
 		my $itemswaiting='';
 		my $items=$flags->{$flag}->{'itemlist'};
@@ -837,7 +858,8 @@ sub patrontable {
 	    }
 	}
     }
-    ($flaginfotext) && ($flaginfotext="<tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><b>Flags</b></td></tr>$flaginfotext</table>\n");
+    ($flaginfotext) && ($flaginfotext="<tr><td bgcolor=$headerbackgroundcolor background=$backgroundimage colspan=2><b>Flags</b></td></tr>$flaginfotext\n");
+    $flaginfotext.="</table>";
     my $patrontable= << "EOF";
     <table border=1
     cellpadding=5 cellspacing=0 align=right>

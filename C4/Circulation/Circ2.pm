@@ -186,7 +186,7 @@ sub findborrower {
 
 
 sub issuebook {
-    my ($env, $patroninformation, $barcode, $responses) = @_;
+    my ($env, $patroninformation, $barcode, $responses, $date) = @_;
     my $dbh=&C4Connect;
     my $iteminformation=getiteminformation($env, 0, $barcode);
     my ($datedue);
@@ -204,7 +204,7 @@ sub issuebook {
 	    $rejected="Patron is Debarred";
 	    last SWITCH;
 	}
-	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh);
+	my $amount = checkaccount($env,$patroninformation->{'borrowernumber'}, $dbh,$date);
 	if ($amount>5) {
 	    $rejected=sprintf "Patron owes \$%.02f.", $amount;
 	    last SWITCH;
@@ -317,6 +317,7 @@ sub issuebook {
 	if ($env->{'datedue'}) {
 	    $dateduef=$env->{'datedue'};
 	}
+	$dateduef=~ s/2001\-4\-25/2001\-4\-26/;
 	my $sth=$dbh->prepare("insert into issues (borrowernumber, itemnumber, date_due, branchcode) values ($patroninformation->{'borrowernumber'}, $iteminformation->{'itemnumber'}, '$dateduef', '$env->{'branchcode'}')");
 	$sth->execute;
 	$sth->finish;
@@ -642,9 +643,14 @@ sub checkaccount  {
 # Stolen from Accounts.pm
   #take borrower number
   #check accounts and list amounts owing
-  my ($env,$bornumber,$dbh)=@_;
-  my $sth=$dbh->prepare("Select sum(amountoutstanding) from accountlines where
-  borrowernumber=$bornumber and amountoutstanding<>0");
+  my ($env,$bornumber,$dbh,$date)=@_;
+  my $select="Select sum(amountoutstanding) from accountlines where
+  borrowernumber=$bornumber and amountoutstanding<>0";
+  if ($date ne ''){
+    $select.=" and date < '$date'";
+  }
+#  print $select;
+  my $sth=$dbh->prepare($select);
   $sth->execute;
   my $total=0;
   while (my $data=$sth->fetchrow_hashref){
