@@ -3,7 +3,6 @@ use strict;
 require Exporter;
 use CGI;
 
-use C4::Search;       # borrdata
 use C4::Output;       # gettemplate
 use C4::Auth;         # checkauth, getborrowernumber.
 use C4::Koha;
@@ -12,7 +11,10 @@ use C4::Reserves2;
 
 my $query = new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
 
 my $template = gettemplate("opac-user.tmpl", "opac");
 

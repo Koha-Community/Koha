@@ -16,7 +16,11 @@ my $MAXIMUM_NUMBER_OF_RESERVES = 5;
 my $query = new CGI;
 
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
+my $flagsrequired;
+$flagsrequired->{borrow}=1;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired);
+
 
 my $template = gettemplate("opac-reserve.tmpl", "opac");
 
