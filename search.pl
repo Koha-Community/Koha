@@ -6,7 +6,7 @@ use C4::Database;
 use CGI;
 use C4::Search;
 use C4::Auth;
-use C4::Output; # no contains picktemplate
+use C4::Output; # no contains gettemplate
   
 my $query=new CGI;
 my $type=$query->param('type');
@@ -15,42 +15,19 @@ my $type=$query->param('type');
 my ($loggedinuser, $cookie, $sessionID) = checkauth($query, ($type eq 'opac') ? (1) : (0));
 
 
-my $language='french';
 
-
-my %configfile;
-open (KC, "/etc/koha.conf");
-while (<KC>) {
- chomp;
- (next) if (/^\s*#/);
- if (/(.*)\s*=\s*(.*)/) {
-   my $variable=$1;
-   my $value=$2;
-   # Clean up white space at beginning and end
-   $variable=~s/^\s*//g;
-   $variable=~s/\s*$//g;
-   $value=~s/^\s*//g;
-   $value=~s/\s*$//g;
-   $configfile{$variable}=$value;
- }
-}
-#print $query->header;
-
-my $includes=$configfile{'includes'};
-($includes) || ($includes="/usr/local/www/hdl/htdocs/includes");
-my $templatebase="catalogue/searchresults.tmpl";
 my $startfrom=$query->param('startfrom');
 ($startfrom) || ($startfrom=0);
-my $theme=picktemplate($includes, $templatebase);
 
 my $subject=$query->param('subject');
-# if its a subject we need to use the subject.tmpl
+
+my $template;
 if ($subject) {
-    $templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
-    $theme=picktemplate($includes, $templatebase);
+    $template=gettemplate('catalogue/subject.tmpl');
+} else {
+    $template=gettemplate('catalogue/searchresults.tmpl');
 }
 
-my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
 
 my $env;
 $env->{itemcount}=1;
@@ -183,7 +160,7 @@ $template->param(prevstartfrom => $prevstartfrom);
 $template->param(search => $search);
 $template->param(searchdesc => $searchdesc);
 $template->param(SEARCH_RESULTS => $resultsarray);
-$template->param(includesdir => $includes);
+#$template->param(includesdir => $includes);
 $template->param(loggedinuser => $loggedinuser);
 
 my $numbers;
