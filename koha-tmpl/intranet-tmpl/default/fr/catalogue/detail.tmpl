@@ -10,18 +10,14 @@
 
 <TMPL_LOOP NAME="BIBLIO_RESULTS">
 
-
-
+<p><font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
+<TMPL_VAR NAME="class"></em></font>
 <TMPL_IF NAME="norequests">
 <TMPL_ELSE>
-<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber">><img height=42  WIDTH=120 BORDER="0"
-src="<TMPL_VAR name="themelang">/images/requests.gif" align="right" border="0"></a>
+	<a href=request.pl?bib=<TMPL_VAR NAME="biblionumber"> class="button">R&eacute;servations</a>
 </TMPL_IF>
-
-<font SIZE=6><em><TMPL_VAR NAME="title"> (<TMPL_VAR NAME="author">)
-<TMPL_VAR NAME="class"></em></font><p>
-<!-- FIXME - "callpadding" should be "cellpadding", right? -->
-<table cellspacing="0" callpadding="5" border="1" align="left" width="220">
+</p>
+<table cellspacing="0" cellpadding="5" border="1" align="left" width="220">
 <!-----------------BIBLIO RECORD TABLE--------->
 <tr valign="top">
 
@@ -32,14 +28,14 @@ src="<TMPL_VAR name="themelang">/images/requests.gif" align="right" border="0"><
 <tr valign="top">
 <td>
 <form action="/cgi-bin/koha/modbib.pl" method="post">
-			<table width="100%" border=0 cellspacing=0 cellpadding=0>
+			<table width="100%" border=0 cellpadding=10>
 				<tr>
-					<td width="33%">
+					<td>
 						<input type="hidden" name="bibnum" value="<TMPL_VAR NAME="biblionumber">">
 						<input type="image" name="submit" value="modify" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0>
 					</td>
-					<td width="33%"><input type="image" name="delete" value="delete" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0"></td>
-					<td width="33%"><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">">MARC</a></td>
+					<td><input type="image" name="delete" value="delete" border="0" src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0"></td>
+					<td><a href="MARCdetail.pl?bib=<TMPL_VAR name="biblionumber">" class="button">MARC</a></td>
 				</tr>
 			</table>
 </form>

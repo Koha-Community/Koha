@@ -8,6 +8,7 @@
 marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
+<TMPL_INCLUDE NAME="common-style.css">
 #menubar {
 	border-top:1px solid #666;
 }
@@ -19,7 +20,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 	padding:4px;
 	font-weight: bold;
 	text-align:center;
-	background-image:url("/images/background-mem.gif");
+	background-image:url("<TMPL_VAR name="themelang">/images/background-mem.gif");
 	}
 
 a.home {

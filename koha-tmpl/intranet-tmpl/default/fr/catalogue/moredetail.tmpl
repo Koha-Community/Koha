@@ -1,20 +1,11 @@
 <TMPL_INCLUDE NAME="cat-top.inc">
 
-<TMPL_IF NAME="loggedinuser">
-    <p align=left>Connect&eacute;: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>D&eacute;connexion</a>]</p>
-<TMPL_ELSE>
-    <p align=left><a href=/cgi-bin/koha/userpage.pl>Se connecter</a> &agrave; Koha</p>
-</TMPL_IF>
-
 <center>
 <br>
 <TMPL_LOOP NAME="BIBITEM_DATA">
-<a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">
-<img src=/images/requests.gif
-width=120 height=42 border=0 align=right border=0></a>
 <FONT SIZE=6><em><a
 href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
-(<TMPL_VAR NAME="author">)</a></em></FONT><P>
+(<TMPL_VAR NAME="author">)</a></em></FONT>  <a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber"> class="button">R&eacute;servations</a>
 <p>
 <form action=/cgi-bin/koha/modbibitem.pl>
 <input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
@@ -22,15 +13,13 @@ href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL
 <!-------------------BIBLIO ITEM------------>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left>
 <TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"
+<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"
 ><B><TMPL_VAR NAME="biblioitemnumber"> GROUPE - <TMPL_VAR NAME="description"> </b> </TD>
 </TR>
 <tr VALIGN=TOP  >
 <TD width=210 >
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
-BORDER=0 src="/images/modify-mem.gif">
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
-BORDER=0 src="/images/delete-mem.gif">
+<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png">
+<INPUT TYPE="image" name="delete"  VALUE="delete"border=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
 <b>num&eacute;ro de notice:</b> <TMPL_VAR NAME="biblionumber"><br>
@@ -59,7 +48,7 @@ BORDER=0 src="/images/delete-mem.gif">
 <img src="/images/holder.gif" width=16 height=300 align=left>
 <TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
 <TR VALIGN=TOP>
-<td  bgcolor="99cc33" background="/images/background-mem.gif"><B>CODE-BARRES
+<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>CODE-BARRES
 <TMPL_VAR NAME="barcode"></b></TD>
 </TR>
 <tr VALIGN=TOP>
@@ -68,10 +57,8 @@ BORDER=0 src="/images/delete-mem.gif">
 <input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
 <input type=hidden name=item value=<TMPL_VAR NAME="itemnumber">>
 <input type=hidden name=type value=<TMPL_VAR NAME="type">>
-<INPUT TYPE="image" name="submit"  VALUE="modify" height=42  WIDTH=93
-BORDER=0 src="/images/modify-mem.gif">
-<INPUT TYPE="image" name="delete"  VALUE="delete" height=42  WIDTH=93
-BORDER=0 src="/images/delete-mem.gif">
+<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png">
+<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png">
 <br>
 <FONT SIZE=2  face="arial, helvetica">
 <b>Localisation d'origine:</b> <TMPL_VAR NAME="homebranch"><br>

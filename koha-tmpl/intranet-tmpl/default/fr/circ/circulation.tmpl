@@ -4,11 +4,10 @@
 	<table align="right">
 		<tr>
 			<td>
-				<a href=circulation.pl?borrnumber=<TMPL_VAR name="borrowernumber">&branch=<TMPL_VAR name="branch">&printer=<TMPL_VAR name="printer">&print=yes>
-				<img src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" border="0" alt="Next Borrower"></a> &nbsp;
-				<a href=returns.pl>
-				<img src="<TMPL_VAR name="themelang">/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
-				&nbsp;<a href=branchtransfers.pl><img src="<TMPL_VAR name="themelang">/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
+				<a class="button" href=circulation.pl?borrnumber=<TMPL_VAR name="borrowernumber">&branch=<TMPL_VAR name="branch">&printer=<TMPL_VAR name="printer">&print=yes>
+				Next Borrower</a> &nbsp;
+				<a class="button" href=returns.pl>Returns</a>
+				&nbsp;<a class="button" href=branchtransfers.pl>Transfers</a>
 			</td>
 		</tr>
 	</table>
@@ -20,12 +19,11 @@
 	<input type=hidden name=printer value=<TMPL_VAR name="printer">>
 	<p>
 <TMPL_ELSE>
-	<table align="right">
+	<table align="right" cellpadding=10>
 		<tr>
 			<td>
-				<a href=returns.pl>
-				<img src="<TMPL_VAR name="themelang">/images/button-returns.gif" width="110" height="42" border="0" alt="Returns"></a>
-				&nbsp<a href=branchtransfers.pl><img src="<TMPL_VAR name="themelang">/images/button-transfers.gif" width="127" height="42" border="0" alt="Transfers"></a>
+				<a class="button" href=returns.pl>Retour</a>
+				<a class="button" href=branchtransfers.pl>Transfers</a>
 			</td>
 		</tr>
 	</table>
