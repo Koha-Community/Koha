@@ -1215,6 +1215,7 @@ sub updateapacheconf {
    ErrorLog $logfiledir/koha-error_log
    TransferLog $logfiledir/koha-access_log
    SetEnv PERL5LIB "$intranetdir/modules"
+   SetEnv KOHA_CONF "$etcdir/koha.conf"
    $includesdirectives
 </VirtualHost>
 
