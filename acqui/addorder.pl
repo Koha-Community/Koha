@@ -58,13 +58,17 @@ if ($quantity ne '0'){
     $bibitemnum=$input->param('bibitemnum');
     my $oldtype=$input->param('oldtype');
     if ($bibitemnum eq '' || $itemtype ne $oldtype){
-      $bibitemnum=newbiblioitem($bibnum,$itemtype,$isbn);
+      $bibitemnum = &newbiblioitem({
+	  biblionumber => $bibnum,
+	  itemtype     => $itemtype?$itemtype:"",
+	  isbn         => $isbn?$isbn:"" });
     }
-    modbiblio({ biblionumber  => $bibnum,
-	        title         => $title?$title:"",
-	        author        => $author?$author:"",
-	        copyrightdate => $copyright?$copyright:"",
-	        series        => $series?$series:"" });
+    &modbiblio({
+        biblionumber  => $bibnum,
+	title         => $title?$title:"",
+	author        => $author?$author:"",
+	copyrightdate => $copyright?$copyright:"",
+	series        => $series?$series:"" });
   }
   if ($orderexists ne '') {
     modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$supplier,$who,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst);

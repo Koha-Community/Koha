@@ -61,7 +61,12 @@ if ($itemtype =~ /REF/){
 if ($itemtype =~ /PER/){
 #  print "$bibitemno";
   $class="Periodical";
-  $bibitemno=newbiblioitem($biblionumber,$itemtype,$isbn,$volinf,$class);
+  $bibitemno = &newbiblioitem({
+      biblionumber   => $biblionumber,
+      itemtype       => $itemtype?$itemtype:"",
+      isbn           => $isbn?$isbn:"",
+      volumeddesc    => $volinf?$volinf:"",
+      classification => $class?$class:"" });
 #  print "here $bibitemno";
 }
 if ($quantity != 0){
