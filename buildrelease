@@ -2,6 +2,20 @@
 
 my $kohadir=`pwd`;
 chomp $kohadir;
+my $kohahtmldir="/koha/koha/koha-html/";
+
+if (-e "/root/.kohaautobuild.conf") {
+    open C, "/root/.kohaautobuild.conf";
+    while (<C>) {
+	chomp;
+	if (/kohadir=(.*)/) {
+	    $kohadir=$1;
+	}
+	if (/kohahtmldir=(.*)/) {
+	    $kohahtmldir=$1;
+	}
+    }
+}
 
 my $input;
 
@@ -24,13 +38,17 @@ if ($input) {
 }
 
 
-my $kohahtmldir="/koha/koha/koha-html/";
 print "\nWhere is the 'koha-html' cvs module located [$kohahtmldir]: ";
 chomp($input = <STDIN>);
 if ($input) {
     $kohahtmldir=$input;
 }
 
+open (C, ">/root/.kohaautobuild.conf");
+print C qq|
+kohadir=$kohadir
+kohahtmldir=$kohahtmldir
+|;
 
 print "\n\nGuessing at next release version.  You may need to enter your SourceForge password...\n";
 chdir $kohadir;
@@ -85,13 +103,14 @@ if ($released) {
 }
 
 print "Current release tag is $currentversion.\n";
-print "Would you like to bump that up to $releaseversion?  [Y]/N: ";
+print "\nWould you like to bump that up to $releaseversion?  [Y]/N: ";
 chomp($input = <STDIN>);
 if ($input =~ /^n/i) {
-    print "Would you like to rebuild the $currentversion tarball?  Y/[N]: ";
+    print "\nWould you like to rebuild the $currentversion tarball?  Y/[N]: ";
     chomp($input = <STDIN>);
     if ($input =~ /^y/i) {
 	$releaseversion=$currentversion;
+	print "\n\n";
 	print "Do not do this if you have released the tarball to anybody, as it will\n";
 	print "overwrite the tag marking the files that were in the tarball.\n\n";
 	print "Confirm that you want to overwrite the tag for $releaseversion? Y/[N]: ";
@@ -133,7 +152,7 @@ Using $kohadir.
 chdir($kohadir);
 system("cvs update");
 print qq|
-Tagging koha with tag release-$tagname
+Tagging koha with tag R_$tagname
 |;
 system("cvs tag -F R_$tagname");
 print qq|
@@ -143,7 +162,7 @@ Using $kohahtmldir.
 chdir($kohahtmldir);
 system("cvs update");
 print qq|
-Tagging koha-html with tag release-$tagname
+Tagging koha-html with tag R_$tagname
 |;
 system("cvs tag -F R_$tagname");
 
@@ -233,6 +252,16 @@ system("find $rootdir -name .#* -exec rm -rf \\{\\} \\; 2>/dev/null");
 
 chdir("/tmp");
 system("tar czf /tmp/koha-$releaseversion.tar.gz koha-".$releaseversion);
+system("rm -rf $rootdir");
+
+print qq|
+============
+= ALL DONE =
+============
+
+Your new tarball is located in /tmp/koha-$releaseversion.tar.gz
+
+|;
 
 
 sub versioncompare {
