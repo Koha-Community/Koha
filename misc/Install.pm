@@ -133,19 +133,6 @@ web site (http://www.koha.org/).
 
 |;
 
-$messages->{'MARCCharsetMissing'}->{en}=qq|
-
-The MARC::Charset module is missing.  This module is necessary if you want to
-be able to upload MARC records from Simple Acquisitions.
-
-To install this module, you will need to either have Perl 5.8.0, or have Perl
-5.6.1 and are willing to manually patch the MARC::Charset module. If you have
-Perl 5.8.0, the module can be installed with
-
-perl -MCPAN -e 'install MARC::Charset'
-
-Press the <ENTER> key to continue: |;
-
 $messages->{'NETZ3950Missing'}->{en}=qq|
 
 The Net::Z3950 module is missing.  This module is necessary if you want to use
@@ -646,12 +633,6 @@ sub checkperlmodules {
     unless (eval {require Set::Scalar})      { push @missing,"Set::Scalar" };
     unless (eval {require Digest::MD5})      { push @missing,"Digest::MD5" };
     unless (eval {require MARC::Record})     { push @missing,"MARC::Record" };
-    unless (eval {require MARC::Charset})    {
-	showmessage(getmessage('MARCCharsetMissing'), 'PressEnter', '', 1);
-	if ($#missing>=0) { # XXX why only when $#missing >= 0?
-	    push @missing, "MARC::Charset";
-	}
-    }
     unless (eval {require Net::Z3950})       {
 	showmessage(getmessage('NETZ3950Missing'), 'PressEnter', '', 1);
 	if ($#missing>=0) { # XXX why only when $#missing >= 0?
