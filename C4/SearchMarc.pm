@@ -195,7 +195,21 @@ sub catalogsearch {
 # 		$_=~ s/\'/ /g;
 # 		$_=~ s/\,/ /g;
 # 	}
-	
+
+# the item.notforloan contains an integer. Every value <>0 means "book unavailable for loan".
+# but each library can have it's own table of meaning for each value. Get them
+# 1st search if there is a list of authorised values connected to items.notforloan
+	my $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
+	$sth->execute;
+	my %notforloanstatus;
+	my ($authorised_valuecode) = $sth->fetchrow;
+	if ($authorised_valuecode) {
+		$sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=?");
+		$sth->execute($authorised_valuecode);
+		while (my ($authorised_value,$lib) = $sth->fetchrow) {
+			$notforloanstatus{$authorised_value} = $lib?$lib:$authorised_value;
+		}
+	}
 	for(my $i = 0 ; $i <= $#{$value} ; $i++)
 	{
 		# replace * by %
@@ -374,6 +388,7 @@ sub catalogsearch {
 			$lineCN{itemcallnumber} = $item->{itemcallnumber};
 			$lineCN{location} = $item->{location};
 			$lineCN{date_due} = format_date($date_due);
+			$lineCN{notforloan} = $notforloanstatus{$item->{notforloan}} if ($item->{notforloan});
 			$notforloan=0 unless ($item->{notforloan} or $item->{wthdrawn} or $item->{itemlost});
 			push @CNresults,\%lineCN;
 			$totalitems++;
@@ -382,6 +397,13 @@ sub catalogsearch {
 		my %newline;
 		%newline = %$line;
 		$newline{totitem} = $totalitems;
+		# if $totalitems == 0, check if it's being ordered.
+		if ($totalitems == 0) {
+			my $sth = $dbh->prepare("select count(*) from aqorders where biblionumber=?");
+			$sth->execute($biblionumber);
+			my ($ordered) = $sth->fetchrow;
+			$newline{onorder} = 1 if $ordered;
+		}
 		$newline{biblionumber} = $biblionumber;
 		$newline{norequests} = 0;
 		$newline{norequests} = 1 if ($line->{notforloan}); # itemtype not issuable

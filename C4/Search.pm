@@ -1317,9 +1317,11 @@ sub ItemInfo {
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
 		my $datedue = '';
-		my $isth=$dbh->prepare("Select * from issues where itemnumber = ? and returndate is null");
+		my $isth=$dbh->prepare("Select issues.*,borrowers.cardnumber from issues,borrowers where itemnumber = ? and returndate is null and issues.borrowernumber=borrowers.borrowernumber");
 		$isth->execute($data->{'itemnumber'});
 		if (my $idata=$isth->fetchrow_hashref){
+		$data->{borrowernumber} = $idata->{borrowernumber};
+		$data->{cardnumber} = $idata->{cardnumber};
 		$datedue = format_date($idata->{'date_due'});
 		}
 		if ($data->{'itemlost'} eq '2'){
@@ -1345,13 +1347,19 @@ sub ItemInfo {
 		if (my $bdata=$bsth->fetchrow_hashref){
 			$data->{'branchname'} = $bdata->{'branchname'};
 		}
-	#   $results[$i]="$data->{'title'}\t$data->{'barcode'}\t$datedue\t$data->{'branchname'}\t$data->{'dewey'}";
-		# FIXME - If $data->{'datelastseen'} is NULL, perhaps it'd be prettier
-		# to leave it empty, rather than convert it to "//".
-		# Also ideally this should use the local format for displaying dates.
 		my $date=format_date($data->{'datelastseen'});
 		$data->{'datelastseen'}=$date;
 		$data->{'datedue'}=$datedue;
+	# get notforloan complete status if applicable
+		my $sthnflstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield="items.notforloan"');
+		$sthnflstatus->execute;
+		my ($authorised_valuecode) = $sthnflstatus->fetchrow;
+		if ($authorised_valuecode) {
+			$sthnflstatus = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=?");
+			$sthnflstatus->execute($authorised_valuecode,$data->{itemnotforloan});
+			my ($lib) = $sthnflstatus->fetchrow;
+			$data->{notforloan} = $lib;
+		}
 		$results[$i]=$data;
 		$i++;
 	}
