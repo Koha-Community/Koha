@@ -1,3 +1,182 @@
+2004-11-17 13:03:42 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.2
+
+    Summary:
+      2.0.2 release update
+
+    README: updated version number, noted mod_perl unsafe
+    
+    modified files:
+     README
+
+
+2004-11-05 12:02:53 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.1-patch-9
+
+    Summary:
+      Bugfixes
+
+    modules/C4/Maintenance.pm
+      Removed superfluous quote() calls after Chris spotted it in 2.1
+      Might fix some catmaint.pl problems.
+    
+    koha.version
+      2.0.2
+    
+    modified files:
+     koha.version modules/C4/Maintainance.pm
+
+
+2004-10-29 19:52:14 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.1
+
+    Summary:
+      small bugfixes
+    Revision:
+
+    C4::Biblio bugfix from Paul Poulain:
+      drop empty fields, but NOT fields containing 0
+    
+    Remove spanish language option:
+      will be readded when translators answer email
+    
+    README:
+      add comment about fines2.pl
+    
+    Fix for bug 789:
+      shedges: patch -F 3 modules/C4/Search.pm BorrSearchPatch.txt
+
+    modified files:
+     INSTALL Install.pm modules/C4/Biblio.pm modules/C4/Search.pm
+
+
+2004-08-27 23:37:02 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-7
+
+    Summary:
+      Add release docs
+
+    2.0.1 release documentation
+    
+
+    new files:
+     INSTALL
+
+    modified files:
+     README
+
+
+2004-08-24 18:33:51 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-6
+
+    Summary:
+      Fix bug 816
+
+    Fixes bugs.koha.org 816 - use httpd config instead of meta redirect
+
+    modified files:
+     Install.pm
+
+
+2004-07-28 23:19:07 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-5
+
+    Summary:
+      Add kohaRHinstall
+
+    Slightly modified version of this, with Stephen's blessing. Probably
+    needs updating before release, if possible.
+    
+
+    new files:
+     docs/KohaRHinstall.html
+
+
+2004-07-28 23:18:06 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-4
+
+    Summary:
+      Bugfixes (esp. statistics/reports) and documentation
+
+    Complete bug 791 limit fix in C4::Authorities and C4::Maintainance, thanks to Kris Boutilier
+    
+    Check etcdir can be written to, in setetcdir.
+    
+    Added docs/installing_koha_on_debian.html from Joshua (GPL)
+    
+    Added optional parameter to C4::Stats::unfilledreserves to only select today's reserves
+    
+    Used unused parameter $time in intranet-cgi/reservereport.pl to only select today's reserves
+    
+    Updated reports/reports-home.tmpl
+    
+    Added reports/activity.tmpl
+    
+    Added missing function C4::Stats:statsreport
+    
+    Added intranet-cgi/reports/activity.pl
+
+    new files:
+     docs/installing_koha_on_debian.html docs/sources.txt
+     intranet-cgi/reports/activity.pl
+     intranet-html/intranet-tmpl/default/en/reports/activity.tmpl
+
+    modified files:
+     Install.pm intranet-cgi/reservereport.pl
+     intranet-html/intranet-tmpl/default/en/reports/reports-home.tmpl
+     modules/C4/Authorities.pm modules/C4/Circulation/Fines.pm
+     modules/C4/Maintainance.pm modules/C4/Stats.pm
+     opac-cgi/opac-new.pl
+
+
+2004-06-30 15:36:28 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-3
+
+    Summary:
+      Brown paper bag upgrade/Install fixes
+
+    Removed $etcdir from koha.upgrade (no longer needed)
+    
+    Added typo-removed $ to Install.pm
+    
+    modified files:
+     Install.pm koha.upgrade
+
+
+2004-06-30 15:13:48 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-2
+
+    Summary:
+      Bugfixes
+
+    Fix perldoc C4::Search
+    
+    Fix search parameter display bug 196
+    
+    Half-fix thesaurus word search bug 791 - thanks to M. Parienti
+    
+    Fix member.pl search bug 789
+    
+    removed files:
+     scripts/misc/my.cnf.koha.jsqrGh
+
+    modified files:
+     intranet-cgi/admin/thesaurus.pl modules/C4/Search.pm
+     opac-html/opac-tmpl/css/en/opac-searchresults.tmpl
+     opac-html/opac-tmpl/css/fr/opac-searchresults.tmpl
+     opac-html/opac-tmpl/default/de/opac-searchresults.tmpl
+     opac-html/opac-tmpl/default/en/opac-searchresults.tmpl
+     opac-html/opac-tmpl/default/fr/opac-searchresults.tmpl
+     opac-html/opac-tmpl/default/pl/opac-searchresults.tmpl
+     opac-html/opac-tmpl/default/zh-TW/opac-searchresults.tmpl
+     opac-html/opac-tmpl/vanilla/en/opac-searchresults.tmpl
+
+
+2004-06-30 12:15:25 GMT	MJ Ray <mjr@dsl.pipex.com>	2.0.0-patch-1
+
+    Summary:
+      Installation bugfixes
+
+    Fix mysql command syntax in Install.pm (database must be after -e in some v3)
+    
+    Removed FIXMEs from upgradecomplete by moving message inside Install.pm
+    
+    Fixed koha.upgrade mysql password handling
+    
+    Removed duplicate restoremycnf() calls from Install.pm - this is installer.pl's concern
+
+
 2002-10-30  Andrew Arensburger  <arensb@baa.ooblick.com>
 
 	* koha.conf.in (added) Ancillary files for new installer.
