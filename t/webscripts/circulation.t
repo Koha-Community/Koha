@@ -1,4 +1,10 @@
-BEGIN { $| = 1; print "1..10\n";
+BEGIN { 
+    unless ($ENV{'nonproductionserver'}) {
+	print "1..0 # Skipped: environment variable 'nonproductionserver' not set\n";
+	exit;
+    }
+
+    $| = 1; print "1..10\n";
     $::intranetdir=`grep intranetdir /etc/koha.conf`;
     chomp $::intranetdir;
     $::intranetdir=~s/\s*intranetdir\s*=\s*//i;

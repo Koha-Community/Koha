@@ -1,10 +1,18 @@
-BEGIN { $| = 1; print "1..28\n";
+BEGIN { 
+    unless ($ENV{'nonproductionserver'}) {
+	print "1..0 # Skipped: environment variable 'nonproductionserver' not set\n";
+	exit;
+    }
+    
+    $| = 1; print "1..28\n";
     $::intranetdir=`grep intranetdir /etc/koha.conf`;
     chomp $::intranetdir;
     $::intranetdir=~s/\s*intranetdir\s*=\s*//i;
 }
 
 END {print "not ok 1 test script load\n" unless $loaded;}
+
+
 
 use lib $::intranetdir."/modules";
 $ENV{PERLLIB}=$::intranetdir."/modules";
