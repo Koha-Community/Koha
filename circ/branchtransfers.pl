@@ -277,7 +277,13 @@ EOF
 
 print $query->header;
 print startpage;
-print startmenu('circulation');
+#print startmenu('circulation');
+my @inp=startmenu('circulation');
+my $count=@inp;
+for (my $i=0;$i<$count;$i++){
+        $inp[$i]=~ s/document.forms\[0\].elements\[0\]/document\.forms\[0\]\.elements\[1\]/;
+    }
+print @inp;
 
 #foreach my $key (%$messages) {
 #    print $key." : ".$messages->{$key}."<br>";
