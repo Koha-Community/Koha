@@ -1,6 +1,12 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.39  2003/03/07 16:35:42  tipaul
+# * moving generic functions to Koha.pm
+# * improvement of SearchMarc.pm
+# * bugfixes
+# * code cleaning
+#
 # Revision 1.38  2003/02/27 16:51:59  tipaul
 # * moving prepare / execute to ? form.
 # * some # cleaning
@@ -1279,16 +1285,11 @@ sub OLDmodbiblio {
 } # sub modbiblio
 
 sub OLDmodsubtitle {
-  my ($dbh,$bibnum, $subtitle) = @_;
-#  my $dbh   = C4Connect;
-  my $query = "update bibliosubtitle set
-subtitle = '$subtitle'
-where biblionumber = $bibnum";
-  my $sth   = $dbh->prepare($query);
-
-  $sth->execute;
-  $sth->finish;
-#  $dbh->disconnect;
+	my ($dbh,$bibnum, $subtitle) = @_;
+	my $query = "update bibliosubtitle set subtitle = ? where biblionumber = ?";
+	my $sth   = $dbh->prepare($query);
+	$sth->execute($subtitle,$bibnum);
+	$sth->finish;
 } # sub modsubtitle
 
 
@@ -1303,11 +1304,11 @@ sub OLDmodaddauthor {
 
     if ($author ne '') {
         $query = "Insert into additionalauthors set
-                        author       = '$author',
-                        biblionumber = '$bibnum'";
+                        author       = ?,
+                        biblionumber = ?";
         $sth   = $dbh->prepare($query);
 
-        $sth->execute;
+        $sth->execute($author,$bibnum);
 
         $sth->finish;
     } # if

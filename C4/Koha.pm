@@ -55,6 +55,8 @@ Koha.pm provides many functions for Koha scripts.
 	     &borrowercategories
 	     &ethnicitycategories
 	     &subfield_is_koha_internal_p
+		&getbranches &getprinters
+		&getbranch &getprinter
 	     $DEBUG);
 
 use vars qw();
@@ -161,6 +163,96 @@ sub subfield_is_koha_internal_p ($) {
 
     return length $subfield != 1;
 }
+
+=item getbranches
+
+  $branches = &getbranches();
+  @branch_codes = keys %$branches;
+  %main_branch_info = %{$branches->{"MAIN"}};
+
+Returns information about existing library branches.
+
+C<$branches> is a reference-to-hash. Its keys are the branch codes for
+all of the existing library branches, and its values are
+references-to-hash describing that particular branch.
+
+In each branch description (C<%main_branch_info>, above), there is a
+key for each field in the branches table of the Koha database. In
+addition, there is a key for each branch category code to which the
+branch belongs (the category codes are taken from the branchrelations
+table).
+
+=cut
+
+sub getbranches {
+# returns a reference to a hash of references to branches...
+	my %branches;
+	my $dbh = C4::Context->dbh;
+	my $sth=$dbh->prepare("select * from branches");
+	$sth->execute;
+	while (my $branch=$sth->fetchrow_hashref) {
+		my $query = "select categorycode from branchrelations where branchcode = ?";
+		my $nsth = $dbh->prepare($query);
+		$nsth->execute($branch->{'branchcode'});
+		while (my ($cat) = $nsth->fetchrow_array) {
+			# FIXME - This seems wrong. It ought to be
+			# $branch->{categorycodes}{$cat} = 1;
+			# otherwise, there's a namespace collision if there's a
+			# category with the same name as a field in the 'branches'
+			# table (i.e., don't create a category called "issuing").
+			# In addition, the current structure doesn't really allow
+			# you to list the categories that a branch belongs to:
+			# you'd have to list keys %$branch, and remove those keys
+			# that aren't fields in the "branches" table.
+			$branch->{$cat} = 1;
+			}
+			$branches{$branch->{'branchcode'}}=$branch;
+	}
+	return (\%branches);
+}
+
+=item getprinters
+
+  $printers = &getprinters($env);
+  @queues = keys %$printers;
+
+Returns information about existing printer queues.
+
+C<$env> is ignored.
+
+C<$printers> is a reference-to-hash whose keys are the print queues
+defined in the printers table of the Koha database. The values are
+references-to-hash, whose keys are the fields in the printers table.
+
+=cut
+
+sub getprinters {
+    my ($env) = @_;
+    my %printers;
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("select * from printers");
+    $sth->execute;
+    while (my $printer=$sth->fetchrow_hashref) {
+	$printers{$printer->{'printqueue'}}=$printer;
+    }
+    return (\%printers);
+}
+sub getbranch ($$) {
+    my($query, $branches) = @_; # get branch for this query from branches
+    my $branch = $query->param('branch');
+    ($branch) || ($branch = $query->cookie('branch'));
+    ($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+    return $branch;
+}
+
+sub getprinter ($$) {
+    my($query, $printers) = @_; # get printer for this query from printers
+    my $printer = $query->param('printer');
+    ($printer) || ($printer = $query->cookie('printer'));
+    ($printers->{$printer}) || ($printer = (keys %$printers)[0]);
+    return $printer;
+}
+
 
 1;
 __END__

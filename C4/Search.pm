@@ -1443,18 +1443,16 @@ sub bibdata {
     from biblio, biblioitems
     left join bibliosubtitle on
     biblio.biblionumber = bibliosubtitle.biblionumber
-    where biblio.biblionumber = $bibnum
-    and biblioitems.biblionumber = $bibnum";
+    where biblio.biblionumber = ?
+    and biblioitems.biblionumber = biblio.biblionumber";
     my $sth   = $dbh->prepare($query);
+    $sth->execute($bibnum);
     my $data;
-
-    $sth->execute;
     $data  = $sth->fetchrow_hashref;
     $sth->finish;
-
-    $query = "Select * from bibliosubject where biblionumber = '$bibnum'";
+    $query = "Select * from bibliosubject where biblionumber = ?";
     $sth   = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute($bibnum);
     while (my $dat = $sth->fetchrow_hashref){
         $data->{'subject'} .= " , $dat->{'subject'}";
     } # while
@@ -1506,9 +1504,9 @@ elements in C<$subjects>.
 sub subject {
   my ($bibnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $query="Select * from bibliosubject where biblionumber=$bibnum";
+  my $query="Select * from bibliosubject where biblionumber=?";
   my $sth=$dbh->prepare($query);
-  $sth->execute;
+  $sth->execute($bibnum);
   my @results;
   my $i=0;
   while (my $data=$sth->fetchrow_hashref){

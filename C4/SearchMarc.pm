@@ -70,27 +70,57 @@ sub catalogsearch {
 	my $sql_where1; # will contain the "true" where
 	my $sql_where2; # will contain m1.bibid=m2.bibid
 	my $nb=1;
-	for(my $i=0; $i<=@$tags;$i++) {
-		if (@$tags[$i] && @$value[$i]) {
-			$sql_tables .= "marc_subfield_table as m$nb,";
+	warn "value : ".@$value;
+	for(my $i=0; $i<=@$value;$i++) {
+		if (@$value[$i]) {
 			if ($nb==1) {
 				if (@$operator[$i] eq "starts") {
-					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue like '@$value[$i] %' and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]')";
+					$sql_tables .= "marc_subfield_table as m$nb,";
+					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue like '@$value[$i]%'";
+					if (@$tags[$i]) {
+						$sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]'";
+					}
+					$sql_where1.=")";
 				} elsif (@$operator[$i] eq "contains") {
-					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue like '%@$value[$i]%' and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]')";
+					$sql_tables .= "marc_word as m$nb,";
+					$sql_where1 .= "@$excluding[$i](m1.word ='@$value[$i]'";
+					if (@$tags[$i]) {
+						 $sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldid='@$subfields[$i]'";
+					}
+					$sql_where1.=")";
 				} else {
-					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue @$operator[$i] '@$value[$i]' and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]')";
+					$sql_tables .= "marc_subfield_table as m$nb,";
+					$sql_where1 .= "@$excluding[$i](m1.subfieldvalue @$operator[$i] '@$value[$i]' ";
+					if (@$tags[$i]) {
+						 $sql_where1 .=" and m1.tag=@$tags[$i] and m1.subfieldcode='@$subfields[$i]'";
+					}
+					$sql_where1.=")";
 				}
 			} else {
 				if (@$operator[$i] eq "starts") {
-					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue like '@$value[$i]%' and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i]')";
+					$sql_tables .= "marc_subfield_table as m$nb,";
+					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue like '@$value[$i]%'";
+					if (@$tags[$i]) {
+						 $sql_where1 .=" and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i])";
+					}
+					$sql_where1.=")";
 					$sql_where2 .= "m1.bibid=m$nb.bibid";
 				} elsif (@$operator[$i] eq "contains") {
-					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue like '%@$value[$i]%' and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i]')";
+					$sql_tables .= "marc_word as m$nb,";
+					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.word='@$value[$i]'";
+					if (@$tags[$i]) {
+						 $sql_where1 .="  and m$nb.tag=@$tags[$i] and m$nb.subfieldid='@$subfields[$i]'";
+					}
+					$sql_where1.=")";
 					$sql_where2 .= "m1.bibid=m$nb.bibid";
 				} else {
-					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue @$operator[$i] '@$value[$i]' and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i]')";
+					$sql_tables .= "marc_subfield_table as m$nb,";
+					$sql_where1 .= "@$and_or[$i] @$excluding[$i](m$nb.subfieldvalue @$operator[$i] '@$value[$i]'";
+					if (@$tags[$i]) {
+						 $sql_where1 .="  and m$nb.tag=@$tags[$i] and m$nb.subfieldcode='@$subfields[$i]'";
+					}
 					$sql_where2 .= "m1.bibid=m$nb.bibid";
+					$sql_where1.=")";
 				}
 			}
 			$nb++;
