@@ -10,7 +10,17 @@
 <form action='<TMPL_VAR name=action>' name=Aform method=post>
 <input type=hidden name=op value='add_validate'>
 <table>
-<tr><td>Branch code</td><td><input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'</td></tr>
+<tr>
+	<td>Branch code</td>
+	<td>
+		<TMPL_IF name="branchcode">
+			<input type=hidden name=branchcode value='<TMPL_VAR name=branchcode escape="HTML">'>
+			<TMPL_VAR name="branchcode">
+		<TMPL_ELSE>
+			<input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'>
+		</TMPL_IF>
+	</td>
+</tr>
 <tr><td>Name</td><td><input type=text name=branchname size=40 maxlength=80 value="<TMPL_VAR name=branchname escape="HTML">">&nbsp;</td></tr>
 <FONT SIZE=6><em><TMPL_VAR name=head></em></FONT><br>
 <tr><td><TMPL_VAR name=categoryname></td>

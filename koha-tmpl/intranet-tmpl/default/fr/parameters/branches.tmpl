@@ -6,7 +6,15 @@
 <table>
 <tr>
       <td>Code annexe</td>
-      <td><input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode>'></td></tr>
+      <td>
+		<TMPL_IF name="branchcode">
+			<input type=hidden name=branchcode value='<TMPL_VAR name=branchcode escape="HTML">'>
+			<TMPL_VAR name="branchcode">
+		<TMPL_ELSE>
+			<input type=text name=branchcode size=5 maxlength=5 value='<TMPL_VAR name=branchcode escape="HTML">'>
+		</TMPL_IF>
+	</td>
+</tr>
 <tr>
       <td>Nom</td>
       <td><input type=text name=branchname size=40 maxlength=80 value='<TMPL_VAR name=branchname>'}'>&nbsp;</td></tr>
@@ -49,9 +57,9 @@
     <th colspan='5' align='left' bgcolor='#99cc33' background=$backgroundimage> 
       <font size='5'><b>Annexes</b></font></th>
   </tr> 
-<tr bgcolor='#889999'> 
-    <td width='175'><b>Nom</b></td> 
-<td width='25'><b>Code</b></td> 
+<tr bgcolor='#889999'>
+    <td width='175'><b>Nom</b></td>
+<td width='25'><b>Code</b></td>
     <td width='175'><b>Adresse</b></td>
     <td width='175'><b>Cat&eacute;gories</b></td>
 <td width='50'><b>&nbsp;</b></td>
