@@ -126,10 +126,8 @@ sub checkauth {
 					-expires => '+1y');
 		return ($userid, $cookie, '');
 	}
-		warn "passe 1";
 	# Get session ID from cookie.
 	my $sessionID=$query->cookie('sessionID');
-		warn "sessionId = $sessionID";
 		# FIXME - Error-checking: if the user isn't allowing cookies,
 		# $sessionID will be undefined. Don't confuse this with an
 		# expired cookie.
@@ -141,7 +139,6 @@ sub checkauth {
 	my $sth=$dbh->prepare("select userid,ip,lasttime from sessions where sessionid=?");
 	$sth->execute($sessionID);
 	if ($sth->rows) {
-		warn "IF 1";
 		my ($userid, $ip, $lasttime) = $sth->fetchrow;
 		# FIXME - Back door for tonnensen
 		if ($lasttime<time()-45 && $userid ne 'tonnesen') {
@@ -172,7 +169,6 @@ sub checkauth {
 		printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
 		close L;
 		} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-		warn "ELSE1";
 		# This session is coming from an IP address other than the
 		# one where it was set. The user might be doing something
 		# naughty.
@@ -180,7 +176,6 @@ sub checkauth {
 
 		$message="ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)";
 		} else {
-		warn "ELSE2";
 		# This appears to be a valid session. Update the time
 		# stamp on it and return.
 		my $cookie=$query->cookie(-name => 'sessionID',
@@ -191,13 +186,11 @@ sub checkauth {
 		return ($userid, $cookie, $sessionID);
 		}
 	}
-	warn "AFTER";
 	# If we get this far, it's because we haven't received a cookie
 	# with a valid session ID. Need to start a new session and set a
 	# new cookie.
 
 	if ($authnotrequired) {
-	warn "authnotrequired";
 		# This script doesn't require the user to be logged in. Return
 		# just the cookie, without user ID or session ID information.
 		my $cookie=$query->cookie(-name => 'sessionID',
@@ -205,7 +198,6 @@ sub checkauth {
 					-expires => '+1y');
 		return('', $cookie, '');
 	} else {
-		warn "ELSE3";
 		# This script requires authorization. Assume that we were
 		# given user and password information; generate a new session.
 
@@ -213,10 +205,8 @@ sub checkauth {
 		($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
 		my $userid=$query->param('userid');
 		my $password=$query->param('password');
-		warn "calling checkpw";
 		if (checkpw($dbh, $userid, $password)) {
 			# The given password is valid
-			warn "VALID";
 			# Delete any old copies of this session.
 			my $sti=$dbh->prepare("delete from sessions where sessionID=? and userid=?");
 			$sti->execute($sessionID, $userid);
@@ -250,7 +240,6 @@ sub checkauth {
 		} else {
 			# Either we weren't given a user id and password, or else
 			# the password was invalid.
-			warn "INVALID";
 			if ($userid) {
 				$message="Invalid userid or password entered.";
 			}
@@ -262,48 +251,6 @@ sub checkauth {
 							-value => $sessionID,
 							-expires => '+1y');
 			return ("",$cookie,$sessionID);
-			print $query->header(-cookie=>$cookie);
-			print qq|
-<html>
-<body background=/images/kohaback.jpg>
-<center>
-<h2>$message</h2>
-
-<form method=post>
-<table border=0 cellpadding=10 cellspacing=0 width=60%>
-    <tr><td align=center valign=top>
-
-    <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
-    <tr><th colspan=2 background=/images/background-mem.gif><font size=+2>Koha Login</font></th></tr>
-    <tr><td>Name:</td><td><input name=userid></td></tr>
-    <tr><td>Password:</td><td><input type=password name=password></td></tr>
-    <tr><td colspan=2 align=center><input type=submit value=login></td></tr>
-    </table>
-
-    </td><td align=center valign=top>
-
-    <table border=0 bgcolor=#dddddd cellpadding=10 cellspacing=0>
-    <tr><th background=/images/background-mem.gif><font size=+2>Demo Information</font></th></tr>
-    <td>
-    Log in as librarian/koha or patron/koha.  The timeout is set to 40 seconds of
-    inactivity for the purposes of this demo.  You can navigate to the Circulation
-    or Acquisitions modules and you should see an indicator in the upper left of
-    the screen saying who you are logged in as.  If you want to try it out with
-    a longer timout period, log in as tonnesen/koha and there will be no
-    timeout period.
-    <p>
-    You can also log in using a patron cardnumber.   Try V10000008 and
-    V1000002X with password koha.
-    </td>
-    </tr>
-    </table>
-    </td></tr>
-</table>
-</form>
-</body>
-</html>
-|;
-		exit;
 		}
 	}
 }
