@@ -1,55 +1,36 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Add a Non-MARC Record<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav-brief.inc" -->
 
-<font size="6"><em>Adding a new Biblio</em></font><br>
+<div id="main">
 
-<table bgcolor="#ffcc00" width="80%" cellpadding="5">
-  <tr>
-  <td><font size="5">Section One: Copyright Information </font></td>
-  </tr>
-</table>
-
-<TMPL_IF name="ERROR">
-<p>&nbsp;</p>
-<center>
-<font color="#FF0000">Please Specify a Title</font>
-</center>
-</TMPL_IF>
+<!-- TMPL_IF name="ERROR" -->
+<div class="error">Please Specify a Title</div>
+<!-- /TMPL_IF -->
 
 <form action="savebiblio.pl" method="post">
-<table align="center">
-<tr>
-<td>Title: *</td>
-<td><input name="title" size="40"></td>
+<div class="data">
+<table>
+	<caption>Adding a new bibliographic record</caption>
+	<tr><th><label for="title">Title: *</label></th><td><input name="title" id="title" type="text" size="40"> * Required</td>
 </tr>
-<tr>
-<td>Subtitle:</td>
-<td><input name="subtitle" size="40"></td>
+<tr><th><label for="subtitle">Subtitle:</label></th><td><input name="subtitle" id="subtitle" type="text" size="40"></td>
 </tr>
-<tr>
-<td>Author:</td>
-<td><input name="author" size="40"></td>
+<tr><th><label for="author">Author:</label></th><td><input name="author" id="author" type="text" size="40"></td>
 </tr>
-<tr valign="top">
-<td>Series Title:<br>
-<i>(if applicable)</i></td>
-<td><input name="seriestitle" size="40"></td>
+<tr><th><label for="seriestitle">Series Title:</label><br>
+<i>(if applicable)</i></th><td><input name="seriestitle" type="text" id="seriestitle" size="40"></td>
 </tr>
-<tr>
-<td>Copyright Date:</td>
-<td><input name="copyrightdate" size="40"></td>
+<tr><th><label for="copyrightdate">Copyright Date:</label></th><td><input id="copyrightdate" name="copyrightdate" type="text" size="40"></td>
 </tr>
-<tr valign="top">
-<td>Abstract:</td>
-<td><textarea cols="30" rows="6" name="abstract"></textarea></td>
+<tr><th><label for="abstract">Abstract:</label></th><td><textarea cols="30" id="abstract" rows="6" name="abstract"></textarea></td>
 </tr>
-<tr valign="top">
-<td>Notes:</td>
-<td><textarea cols="30" rows="6" name="notes"></textarea></td>
-</tr>
-<tr valign="top">
-<td colspan="2"><center><input type="submit" value="Submit"></center></td>
+<tr><th><label for="bib-notes">Notes:</label></th><td><textarea cols="30" rows="6" id="bib-notes" name="notes"></textarea></td>
 </tr>
 </table>
+<p><input type="submit" value="Add Record" class="submit" /></p>
+</div>
 </form>
 * Required
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
