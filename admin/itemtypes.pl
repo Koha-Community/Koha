@@ -77,7 +77,7 @@ my ($template, $borrowernumber, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
+			     flagsrequired => {parameters => 1, management => 1},
 			     debug => 1,
 			     });
 
