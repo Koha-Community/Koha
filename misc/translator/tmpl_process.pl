@@ -36,7 +36,7 @@ if( !@in_files || !defined($str_file) )
 # Type match defaults to *.tmpl if not specified
 $type = "tmpl|inc" if !defined($type);
 
-$filter = "./text-extract2.pl -f" if !defined($filter);
+$filter = "./text-extract.pl -f" if !defined($filter);
 # Input is not a file nor a directory
 if( !(-d $in_files[0]) && !(-f $in_files[0]))
 {
