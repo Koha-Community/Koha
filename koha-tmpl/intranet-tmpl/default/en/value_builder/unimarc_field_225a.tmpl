@@ -1,17 +1,14 @@
-<html>
-<head>
+<!-- TMPL_INCLUDE name="auth-search-top.inc" -->
 <title>UNIMARC Field 225a builder</title>
 </head>
 <body>
-<form name="f_pop" onSubmit="javascript:report()">
-<table>
-	<tr>
-		<td>Select a collection</td>
-		<td><!-- TMPL_VAR name="collection" --></td>
-	</tr>
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
-</table>
-</form>
+<div id="mainbloc">
+	<form name="f_pop" onSubmit="javascript:report()">
+		<h2 class="authority">Collection</h2>
+		<p><label>Select a collection</label><!-- TMPL_VAR name="collection" --></p>
+		<input type="submit" value="OK" class="button authority"></p>
+	</form>
+</div>
 <script>
 	function report() {
 		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
@@ -19,5 +16,4 @@
 		return false;
 	}
 </script>
-</body>
-</html>
+<!-- TMPL_INCLUDE name="auth-search-bottom.inc" -->
