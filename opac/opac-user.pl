@@ -86,8 +86,8 @@ foreach my $key (keys %$issues) {
     my %env;
     my $status = renewstatus(\%env,$borrowernumber, $issue->{'itemnumber'});
 
-    $issue->{'renewable'} = $status;
-    
+    $issue->{'status'} = $status;
+
     if ($issue->{'overdue'}) {
 	push @overdues, $issue;
 	$overdues_count++;

@@ -88,8 +88,8 @@ You have <TMPL_VAR NAME="issues_count"> items currently issued.<br>
 <TD><TMPL_VAR NAME="author"></TD>
 <TD><TMPL_VAR NAME="date_due"></TD>
 <TD><TMPL_VAR NAME="itemtype"></TD>
-<TD><TMPL_VAR NAME="charges"></TD>
-<TD><TMPL_VAR NAME="status"></TD>
+<TD><TMPL_IF NAME="charges">Yes<TMPL_ELSE>No</TMPL_IF></TD>
+<TD><TMPL_IF NAME="status">Yes<TMPL_ELSE>No</TMPL_IF></TD>
 </TR>
 
 </TMPL_LOOP>
