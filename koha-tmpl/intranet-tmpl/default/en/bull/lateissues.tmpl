@@ -1,0 +1,49 @@
+<!-- TMPL_INCLUDE NAME="bull-top.inc" -->
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="mainbloc">
+	<h1 class="bull">Late issues</h1>
+	<table>
+		<tr>
+			<th class="bull">Supplier</th>
+			<th class="bull">Title</th>
+			<th class="bull">Issue number</th>
+			<th class="bull">Late since</th>
+			<th class="bull" colspan=2>&nbsp;</th>
+		</tr>
+		<tr>
+			<form action="lateissues.pl" method="post">
+				<td>
+					<!-- TMPL_VAR name="CGIsupplier" -->
+				</td>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					<input type="submit" value="filter" class="button bull">
+				</td>
+			</form>
+		</tr>
+		<!-- TMPL_LOOP name="lateissues" -->
+			<tr>
+				<td>
+					<!-- TMPL_VAR name="name" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="Title" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="serialseq" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="planneddate" -->
+				</td>
+				<td>
+					<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Detail</a>
+					<a href="statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Recieve</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="bull-bottom.inc" -->
+

@@ -48,8 +48,57 @@ Give all XYZ functions
 			&modsubscriptionhistory
 			&getserials &serialchangestatus
 			&Find_Next_Date, &Get_Next_Seq
-			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew);
+			&hassubscriptionexpired &subscriptionexpirationdate &subscriptionrenew
+			&getSupplierListWithLateIssues &GetLateIssues);
 
+sub getSupplierListWithLateIssues {
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT DISTINCT id, name
+							FROM subscription, serial
+							LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+							WHERE subscription.subscriptionid = serial.subscriptionid AND
+							(planneddate < now( ) OR serial.STATUS = 3)
+							");
+	$sth->execute;
+	my %supplierlist;
+	while (my ($id,$name) = $sth->fetchrow) {
+		$supplierlist{$id} = $name;
+	}
+	return %supplierlist;
+}
+sub GetLateIssues {
+	my ($supplierid) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth;
+	if ($supplierid) {
+		$sth = $dbh->prepare("SELECT name,title,planneddate,serialseq,serial.subscriptionid
+							FROM subscription, serial, biblio
+							LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+							WHERE subscription.subscriptionid = serial.subscriptionid AND
+							((planneddate < now() and serial.STATUS =1) OR serial.STATUS = 3) and
+							subscription.aqbooksellerid=$supplierid and
+							biblio.biblionumber = subscription.biblionumber
+							");
+	} else {
+		$sth = $dbh->prepare("SELECT name,title,planneddate,serialseq,serial.subscriptionid
+							FROM subscription, serial, biblio
+							LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+							WHERE subscription.subscriptionid = serial.subscriptionid AND
+							((planneddate < now() and serial.STATUS <=3) OR serial.STATUS = 3) and
+							biblio.biblionumber = subscription.biblionumber
+							");
+	}
+	$sth->execute;
+	my @issuelist;
+	my $last_title;
+	while (my $line = $sth->fetchrow_hashref) {
+		$line->{title} = "" if $line->{title} eq $last_title;
+		$last_title = $line->{title} if ($line->{title});
+		$line->{planneddate} = format_date($line->{planneddate});
+		push @issuelist,$line;
+	}
+	return @issuelist;
+}
 sub newsubscription {
 	my ($auser,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 		$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
@@ -77,7 +126,7 @@ sub newsubscription {
 	#then create the 1st waited number
 	my $subscriptionid = $dbh->{'mysql_insertid'};
 	$sth = $dbh->prepare("insert into subscriptionhistory (biblionumber, subscriptionid, histstartdate, enddate, missinglist, recievedlist, opacnote, librariannote) values (?,?,?,?,?,?,?,?)");
-	$sth->execute($biblionumber, $subscriptionid, format_date_in_iso($startdate), 0, "", "", 0, $notes);
+	$sth->execute($biblionumber, $subscriptionid, format_date_in_iso($startdate), 0, "", "", "", $notes);
 	# reread subscription to get a hash (for calculation of the 1st issue number)
 	$sth = $dbh->prepare("select * from subscription where subscriptionid = ? ");
 	$sth->execute($subscriptionid);
@@ -149,6 +198,7 @@ sub modsubscription {
 
 sub getsubscriptions {
 	my ($title,$ISSN) = @_;
+	return unless $title or $ISSN;
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	$sth = $dbh->prepare("select subscription.subscriptionid,biblio.title,biblioitems.issn from subscription,biblio,biblioitems where  biblio.biblionumber = biblioitems.biblionumber and biblio.biblionumber=subscription.biblionumber and (biblio.title like ? or biblioitems.issn = ? )");
@@ -247,7 +297,7 @@ sub Get_Next_Date(@) {
 		$resultdate=DateCalc($planneddate,"3 months");
 	}
 	if ($subscription->{periodicity} == 8) {
-		$resultdate=DateCalc($planneddate,"1 quarter");
+		$resultdate=DateCalc($planneddate,"3 months");
 	}
 	if ($subscription->{periodicity} == 9) {
 		$resultdate=DateCalc($planneddate,"2 weeks");
@@ -312,7 +362,7 @@ sub hassubscriptionexpired {
 	# we don't do the same test if the subscription is based on X numbers or on X weeks/months
 	if ($subscription->{numberlength}) {
 		my $sth = $dbh->prepare("select count(*) from serial where subscriptionid=?  and planneddate>=?");
-		$sth->execute($subscriptionid,$subscription->{planneddate});
+		$sth->execute($subscriptionid,$subscription->{startdate});
 		my $res = $sth->fetchrow;
 		if ($subscription->{numberlength}>=$res) {
 			return 0;
