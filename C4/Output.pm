@@ -2,9 +2,9 @@ package C4::Output;
 
 # $Id$
 
-#package to deal with marking up output
-#You will need to edit parts of this pm
-#set the value of path to be where your html lives
+# package to deal with marking up output
+# You will need to edit parts of this pm
+# set the value of path to be where your html lives
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -30,6 +30,7 @@ require Exporter;
 use HTML::Template;
 use C4::Database;
 use C4::Koha;
+use C4::Auth;         # checkauth, getborrowernumber.
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -66,7 +67,7 @@ printable string.
 	     &mkform &mkform2 &bold
 	     &gotopage &mkformnotable &mkform3
 	     &getkeytableselectoptions
-	     &picktemplate &themelanguage &gettemplate
+	     &picktemplate &themelanguage &gettemplate 
 );
 %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
 
@@ -97,9 +98,9 @@ my @more   = ();
 #
 # Change this value to reflect where you will store your includes
 #
-my $configfile=configfile();
+my $configfile = configfile();
 
-my $path=$configfile->{'includes'};
+my $path = $configfile->{'includes'};
 ($path) || ($path="/usr/local/www/hdl/htdocs/includes");
 
 # make all your functions, whether exported or not;

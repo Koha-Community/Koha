@@ -25,6 +25,7 @@ require Exporter;
 use C4::Database;
 use C4::Koha;
 use C4::Output;
+use C4::Circulation::Circ2;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -35,7 +36,31 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	     &checkauth
 	     &getborrowernumber
+	     &get_template_and_user
 );
+
+
+sub get_template_and_user {
+    my $in = shift;
+    my $template = gettemplate($in->{'template_name'}, $in->{'type'});
+    my ($user, $cookie, $sessionID, $flags)
+	= checkauth($in->{'query'}, $in->{'authnotrequired'}, $in->{'flagsrequired'});
+
+    my $borrowernumber;
+    if ($user) {
+	$template->param(loggedinuser => $user);
+	$template->param(sessionID => $sessionID);
+
+	$borrowernumber = getborrowernumber($user);
+	my ($borr, $flags) = getpatroninformation(undef, $borrowernumber);
+	my @bordat;
+	$bordat[0] = $borr;
+    
+	$template->param(USER_INFO => \@bordat);
+    }
+    return ($template, $borrowernumber, $cookie);
+}
+
 
 
 sub getuserflags {
@@ -62,9 +87,6 @@ sub haspermission {
     my ($cardnumber) = $sth->fetchrow;
     ($cardnumber) || ($cardnumber=$userid);
     my $flags=getuserflags($cardnumber,$dbh);
-    foreach my $fl (keys %$flags){
-	warn "$fl : $flags->{$fl}\n";
-    }
     my $configfile=configfile();
     if ($userid eq $configfile->{'user'}) {
 	# Super User Account from /etc/koha.conf
@@ -82,134 +104,140 @@ sub haspermission {
 sub checkauth {
     my $query=shift;
     # $authnotrequired will be set for scripts which will run without authentication
-    my $authnotrequired=shift;
-    my $flagsrequired=shift;
-    if (my $userid=$ENV{'REMOTE_USER'}) {
-	# Using Basic Authentication, no cookies required
-	my $cookie=$query->cookie(-name => 'sessionID',
-				  -value => '',
-				  -expires => '+1y');
-	return ($userid, $cookie, '');
-    }
-    my $sessionID=$query->cookie('sessionID');
-    my $template = gettemplate("opac-auth.tmpl", "opac");
+    my $authnotrequired = shift;
+    my $flagsrequired = shift;
+    # state variables
     my $dbh=C4Connect();
-    my $sth=$dbh->prepare("SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?");
-    warn "SessionID = $sessionID\n";
-    $sth->execute($sessionID);
-    if ($sth->rows) {
-	my ($userid, $ip, $lasttime) = $sth->fetchrow;
-	if ($lasttime<time()-7200) {
-	    # timed logout
-	    $template->param( message => "You have been logged out due to inactivity.");
-	    my $sti=$dbh->prepare("DELETE FROM sessions WHERE sessionID=?");
-	    $sti->execute($sessionID);
-#	    my $scriptname=$ENV{'SCRIPT_NAME'};
-	    my $selfurl=$query->self_url();
-	    $sti=$dbh->prepare("INSERT INTO sessionqueries (sessionID, userid, url) VALUES (?, ?, ?)");
-	    $sti->execute($sessionID, $userid, $selfurl);
-	    $sti->finish;
+    my $loggedin = 0;
+    my %info;
+    my ($userid, $cookie, $sessionID, $flags);
+    my $logout = $query->param('logout.x');
+    if ($userid = $ENV{'REMOTE_USER'}) {
+	# Using Basic Authentication, no cookies required
+	$cookie=$query->cookie(-name => 'sessionID',
+			       -value => '',
+			       -expires => '+1y');
+	$loggedin = 1;
+    } elsif ($sessionID=$query->cookie('sessionID')) {
+	my ($ip , $lasttime);
+	($userid, $ip, $lasttime) = $dbh->selectrow_array(
+                        "SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
+							  undef, $sessionID);
+	if ($logout) {
+	    warn "In logout!\n";
+	    # voluntary logout the user
+	    $dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+	    $sessionID = undef;
+	    $userid = undef;
 	    open L, ">>/tmp/sessionlog";
 	    my $time=localtime(time());
-	    printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+	    printf L "%20s from %16s logged out at %30s (manually).\n", $userid, $ip, $time;
 	    close L;
-	} elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
-	    # Different ip than originally logged in from
-	    my $newip=$ENV{'REMOTE_ADDR'};
-	    $template->param( message => "ERROR ERROR ERROR ERROR<br>Attempt to re-use a cookie from a different ip address.<br>(authenticated from $ip, this request from $newip)");
-	} else {
-	    my $cookie=$query->cookie(-name => 'sessionID',
-				      -value => $sessionID,
-				      -expires => '+1y');
-	    my $sti=$dbh->prepare("UPDATE sessions SET lasttime=? WHERE sessionID=?");
-	    $sti->execute(time(), $sessionID);
-
-	    my $flags = haspermission($dbh, $userid, $flagsrequired);
-	    warn "Flags : $flags\n";
-	    if ($flags) {
-		return ($userid, $cookie, $sessionID, $flags);
+	}
+	if ($userid) {
+	    if ($lasttime<time()-7200) {
+		# timed logout
+		$info{'timed_out'} = 1;
+		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		$sessionID = undef;
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from %16s logged out at %30s (inactivity).\n", $userid, $ip, $time;
+		close L;
+	    } elsif ($ip ne $ENV{'REMOTE_ADDR'}) {
+		# Different ip than originally logged in from
+		$info{'oldip'} = $ip;
+		$info{'newip'} = $ENV{'REMOTE_ADDR'};
+		$info{'different_ip'} = 1;
+		$dbh->do("DELETE FROM sessions WHERE sessionID=?", undef, $sessionID);
+		$sessionID = undef;
+		open L, ">>/tmp/sessionlog";
+		my $time=localtime(time());
+		printf L "%20s from logged out at %30s (ip changed from %16s to %16s).\n", $userid, $time, $ip, $info{'newip'};
+		close L;
 	    } else {
-		$template->param(nopermission => 1);
-		print "Content-Type: text/html\n\n", $template->output;
-		exit;
+		$cookie=$query->cookie(-name => 'sessionID',
+				       -value => $sessionID,
+				       -expires => '+1y');
+		$dbh->do("UPDATE sessions SET lasttime=? WHERE sessionID=?",
+			 undef, (time(), $sessionID));
+		$flags = haspermission($dbh, $userid, $flagsrequired);
+		if ($flags) {
+		    $loggedin = 1;
+		} else {
+		    $info{'nopermission'} = 1;
+		}
 	    }
 	}
     }
-    $sth->finish;
-
-    if ($authnotrequired) {
-	my $cookie=$query->cookie(-name => 'sessionID',
-				  -value => '',
-				  -expires => '+1y');
-	return('', $cookie, '');
-
-    } else {
-	($sessionID) || ($sessionID=int(rand()*100000).'-'.time());
-	warn "sessionID : $sessionID";
-	my $userid=$query->param('userid');
+    unless ($sessionID) {
+	$sessionID=int(rand()*100000).'-'.time();
+	$userid=$query->param('userid');
 	my $password=$query->param('password');
 	my ($return, $cardnumber) = checkpw($dbh,$userid,$password);
 	if ($return) {
-	    my $sti=$dbh->prepare("DELETE FROM sessions WHERE sessionID=? AND userid=?");
-	    $sti->execute($sessionID, $userid);
-	    $sti=$dbh->prepare("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)");
-	    $sti->execute($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time());
-	    $sti=$dbh->prepare("SELECT url FROM sessionqueries WHERE sessionID=? AND userid=?");
-	    $sti->execute($sessionID, $userid);
-	    if ($sti->rows) {
-		my ($selfurl) = $sti->fetchrow;
-		my $stj=$dbh->prepare("DELETE FROM sessionqueries WHERE sessionID=?");
-		$stj->execute($sessionID);
-		($selfurl) || ($selfurl=$ENV{'SCRIPT_NAME'});
-		print $query->redirect($selfurl);
-		exit;
-	    }
+	    $dbh->do("DELETE FROM sessions WHERE sessionID=? AND userid=?",
+		     undef, ($sessionID, $userid));
+	    $dbh->do("INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
+		     undef, ($sessionID, $userid, $ENV{'REMOTE_ADDR'}, time()));
 	    open L, ">>/tmp/sessionlog";
 	    my $time=localtime(time());
 	    printf L "%20s from %16s logged in  at %30s.\n", $userid, $ENV{'REMOTE_ADDR'}, $time;
 	    close L;
-	    my $cookie=$query->cookie(-name => 'sessionID',
-				      -value => $sessionID,
-				      -expires => '+1y');
-
-	    if (my $flags = haspermission($dbh, $userid, $flagsrequired)) {
-		return ($userid, $cookie, $sessionID, $flags);
+	    $cookie=$query->cookie(-name => 'sessionID',
+				   -value => $sessionID,
+				   -expires => '+1y');
+	    if ($flags = haspermission($dbh, $userid, $flagsrequired)) {
+		$loggedin = 1;
 	    } else {
-		$template->param(nopermission => 1);
-		print "Content-Type: text/html\n\n", $template->output;
-		exit;
+		$info{'nopermission'} = 1;
 	    }
 	} else {
 	    if ($userid) {
-		$template->param(message => "Invalid userid or password entered.");
+		$info{'invalid_username_or_password'};
 	    }
-	    warn "Im in here!\n";
-	    my @inputs;
-	    my $self_url = $query->self_url();
-	    foreach my $name (param $query) {
-		(next) if ($name eq 'userid' || $name eq 'password');
-		my $value = $query->param($name);
-		push @inputs, {name => $name , value => $value};
-	    }
-	    @inputs = () unless @inputs;
-	    $template->param(INPUTS => \@inputs);
-	    my $cookie=$query->cookie(-name => 'sessionID',
-				      -value => $sessionID,
-				      -expires => '+1y');
-
-	    $template->param(loginprompt => 1);
-
-	    # Strip userid and password parameters off the self_url variable
-
-	    $self_url=~s/\?*userid=[^;]*;*//g;
-	    $self_url=~s/\?*password=[^;]*;*//g;
-
-	    $template->param(url => $self_url);
-	    print $query->header(-cookie=>$cookie), $template->output;
-	    exit;
 	}
     }
+    # finished authentification, now respond
+    if ($loggedin || $authnotrequired) {
+	# successful login
+	unless ($cookie) {
+	    $cookie=$query->cookie(-name => 'sessionID',
+				   -value => '',
+				   -expires => '+1y');
+	}
+	return ($userid, $cookie, $sessionID, $flags);
+	exit;
+    }
+    # else we have a problem...
+    # get the inputs from the incoming query
+    my @inputs;
+    foreach my $name (param $query) {
+	(next) if ($name eq 'userid' || $name eq 'password');
+	my $value = $query->param($name);
+	push @inputs, {name => $name , value => $value};
+    }
+    @inputs = () unless @inputs;
+
+    my $template = gettemplate("opac-auth.tmpl", "opac");
+    $template->param(INPUTS => \@inputs);
+    $template->param(loginprompt => 1) unless $info{'nopermission'};
+
+    my $self_url = $query->self_url();
+    # Strip userid and password parameters off the self_url variable
+    $self_url=~s/\?*userid=[^;]*;*//g;
+    $self_url=~s/\?*password=[^;]*;*//g;    
+    $template->param(url => $self_url);
+
+    $template->param(\%info);
+    $cookie=$query->cookie(-name => 'sessionID',
+				  -value => $sessionID,
+				  -expires => '+1y');
+    print $query->header(-cookie=>$cookie), $template->output;
+    exit;
 }
+
+
 
 
 sub checkpw {
