@@ -304,8 +304,17 @@ CREATE TABLE borrowers (
 #
 CREATE TABLE branchcategories (
   categorycode char(2) DEFAULT '' NOT NULL,
-  branchcode char(4) DEFAULT '' NOT NULL,
-  branchholding int(11)
+  categoryname text,
+  codedescription text,
+  PRIMARY KEY (categorycode)
+);
+
+#
+# Table structure for table 'branchrelations'
+#
+CREATE TABLE branchrelations (
+  branchcode varchar(4) DEFAULT '' NOT NULL,
+  categorycode varchar(4) DEFAULT '' NOT NULL
 );
 
 #
@@ -329,9 +338,9 @@ CREATE TABLE branches (
 #
 CREATE TABLE branchtransfers (
   itemnumber int(11) DEFAULT '0' NOT NULL,
-  datesent date DEFAULT '0000-00-00' NOT NULL,
+  datesent datetime DEFAULT '0000-00-00' NOT NULL,
   frombranch varchar(4),
-  datearrived date,
+  datearrived datetime,
   tobranch varchar(4),
   comments text
 );
