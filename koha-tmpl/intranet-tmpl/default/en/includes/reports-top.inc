@@ -96,7 +96,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <area shape="rect" coords="306,8,352,27" href="/cgi-bin/koha/circ/circulation.pl" alt="Circulation" onMouseOver="if(document.images)document.menu.src='/images/rep-crc.gif'" onMouseOut="if(document.images)document.menu.src='/images/rep-rep.gif'">
 
-<area  shape="rect" alt="Home" coords="374,9,419,29" href="/cgi-bin/koha/mainpage.pl" onMouseOver="if(document.images)document.menu.src='/images/rep-hom.gif'" onMouseOut="if(document.images)document.menu.src='/images/rep-rep.gif'">
+<area  shape="rect" alt="Home" coords="374,9,419,29" href="/cgi-bin/koha/mainpage.pl" onMouseOver="if(document.images)document.menu.src='/images/rep-home.gif'" onMouseOut="if(document.images)document.menu.src='/images/rep-rep.gif'">
 <area shape="default" nohref>
 </map>
 
