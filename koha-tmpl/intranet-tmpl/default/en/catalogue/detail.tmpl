@@ -69,7 +69,7 @@
 	<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="description" --></td>
-			<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="bulk" --> <!-- TMPL_VAR NAME="bulk" --><!-- /TMPL_IF --></td>
+			<td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_IF name="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
 			<td><!-- TMPL_VAR NAME="datedue" --></td>
 			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 			<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
