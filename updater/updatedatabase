@@ -762,9 +762,41 @@ foreach $table ( keys %fielddefinitions ) {
 	}
 }
 
-# Get list of columns from items table
+# Get list of columns from borrowers table
 my %itemtypes;
 my %nullenabled;
+$sth = $dbh->prepare("show columns from borrowers");
+$sth->execute;
+while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+{
+    $itemtypes{$column} = $type;
+    $nullenabled{$column} = $null;
+}
+
+unless ( $itemtypes{'cardnumber'} eq 'varchar(20)' ) {
+    $itemtypes{'cardnumber'} =~ /varchar\((\d+)\)/;
+    my $oldlength = $1;
+    if ( $oldlength < 16 ) {
+        print "Setting maximum cardnumber length to 16 (was $oldlength) and marking unique.\n";
+        my $sti =
+          $dbh->prepare(
+            "alter table borrowers change cardnumber cardnumber varchar(16)");
+        $sti->execute;
+        $sti->finish;
+        $sti =
+          $dbh->prepare(
+            "alter table borrowers drop index cardnumber");
+        $sti->execute;
+        $sti->finish;
+        $sti =
+          $dbh->prepare(
+            "alter table borrowers add unique(cardnumber)");
+        $sti->execute;
+        $sti->finish;
+    }
+}
+#
+# Get list of columns from items table
 $sth = $dbh->prepare("show columns from items");
 $sth->execute;
 while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
@@ -923,6 +955,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.66  2003/11/12 16:14:42  slef
+# lengthen cardnumber to 16 and make it unique
+#
 # Revision 1.65  2003/11/06 15:07:11  tipaul
 # adding marc fields in deletedbiblio & deleteditems
 #
