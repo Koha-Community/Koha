@@ -1487,6 +1487,17 @@ sub bibdata {
 	my $data;
 	$data  = $sth->fetchrow_hashref;
 	$sth->finish;
+	# handle management of repeated subtitle
+	$sth   = $dbh->prepare("Select * from bibliosubtitle where biblionumber = ?");
+	$sth->execute($bibnum);
+	my @subtitles;
+	while (my $dat = $sth->fetchrow_hashref){
+		my %line;
+		$line{subtitle} = $dat->{subtitle};
+		push @subtitles, \%line;
+	} # while
+	$data->{subtitles} = \@subtitles;
+	$sth->finish;
 	$sth   = $dbh->prepare("Select * from bibliosubject where biblionumber = ?");
 	$sth->execute($bibnum);
 	my @subjects;

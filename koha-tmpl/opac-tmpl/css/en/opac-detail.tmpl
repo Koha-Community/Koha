@@ -40,12 +40,18 @@
 		<!-- BIBLIO RECORD TABLE -->
 		<tr>
 			<th>
-				<!-- TMPL_VAR NAME="title" -->  (record <!-- TMPL_VAR NAME="biblionumber" -->)
+				<!-- TMPL_VAR NAME="title" -->
 			</th>
 		</tr>
 		<tr>
 			<td>
-				<!-- TMPL_IF name="subtitle" --><b>Subtitle:</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle" -->
+				<!-- TMPL_IF name="subtitles" -->
+					<b>Subtitle(s):</b> 
+					<!-- TMPL_LOOP name="subtitles" -->
+						<!-- TMPL_VAR NAME="subtitle" --> ; 
+					<!-- /TMPL_LOOP -->
+					<br />
+				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="author" --><b>Author:</b> <!-- TMPL_VAR NAME="author" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="additional" --><b>Additional Author:</b><!-- TMPL_VAR NAME="additional" --><br /><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="publishercode" --><b>Published by :</b><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="publishercode" -->
