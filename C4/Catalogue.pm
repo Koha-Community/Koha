@@ -64,14 +64,6 @@ sub newBiblio {
 # only created when new biblioitems are added.
     my ($env, $biblio) = @_;
     my $dbh=&C4Connect;  
-    my $title=$biblio->{'title'};
-    my $subtitle=$biblio->{'subtitle'};
-    my $author=$biblio->{'author'};
-    my $unititle=$biblio->{'unititle'};
-    my $copyrightdate=$biblio->{'copyrightdate'};
-    my $serial=$biblio->{'serial'};
-    my $seriestitle=$biblio->{'seriestitle'};
-    my $notes=$biblio->{'notes'};
     my $subject=$biblio->{'subject'};
     my $additionalauthors=$biblio->{'additionalauthors'};
 
@@ -79,33 +71,50 @@ sub newBiblio {
 # this needs code to ensure that two inserts didn't use the same
 # biblionumber...
 
+    # Get next biblio number
     my $sth=$dbh->prepare("select max(biblionumber) from biblio");
     $sth->execute;
     my ($biblionumber) = $sth->fetchrow;
     $biblionumber++;
-    $sth=$dbh->prepare("insert into biblio (biblionumber,title,author,unititle,copyrightdate,serial,seriestitle,notes) values (?, ?, ?, ?, ?, ?, ?, ?)");
-    $sth->execute($biblionumber, $title, $author, $unititle, $copyrightdate, $serial, $seriestitle, $notes);
-    $sth=$dbh->prepare("insert into bibliosubtitle (biblionumber,subtitle) values ($biblionumber,$q_subtitle)");
-    $sth->execute;
-    foreach (@$subject) {
-	my $q_subject=$dbh->quote($_);
-	my $sth=$dbh->prepare("insert into bibliosubject (biblionumber,subject) values ($biblionumber,$q_subject)");
-	$sth->execute;
+
+    $sth=$dbh->prepare("insert into biblio 
+	(biblionumber,title,author,
+	unititle,copyrightdate,
+	serial,seriestitle,notes)
+	 values (?, ?, ?, ?, ?, ?, ?, ?)");
+    $sth->execute($biblionumber, $biblio->{'title'}, $biblio->{'author'},
+        $biblio->{'unititle'}, $biblio->{'copyrightdate'}, 
+    	$biblio->{'serial'}, $biblio->{'seriestitle'}, $biblio->{'notes'} );
+    $sth=$dbh->prepare("insert into bibliosubtitle 
+	(biblionumber,subtitle) 
+	values (?,?)");
+    $sth->execute($biblionumber, $biblio->{'subtitle'} );
+
+    my $sth=$dbh->prepare("insert into bibliosubject
+	(biblionumber,subject)
+ 	values (?,?) ");
+    foreach $_ (@$subject) {
+	$sth->execute($biblionumber,$_);
     }
-    foreach (@$additionalauthors) {
-	my $sth=$dbh->prepare("insert into additionalauthors (biblionumber,author) values (?, ?)");
-	$sth->execute($biblionumber, $additionalauthor);
+    my $sth=$dbh->prepare("insert into additionalauthors 
+	(biblionumber,author)
+	 values (?, ?)");
+    foreach $_ (@$additionalauthors) {
+	$sth->execute($biblionumber, $_ );
     }
 }
 
 
 sub changeSubfield {
 # Subroutine changes a subfield value given a subfieldid.
-    my $subfieldid=shift;
-    my $subfieldvalue=shift;
+    my ( $subfieldid, $subfieldvalue )=@_;
+
+    my $firstdigit="?";
+
     my $dbh=&c4connect;  
     my $sth=$dbh->prepare("update marc_$firstdigit\XX_subfield_table set subfieldvalue=? where subfieldid=?");
-    $sth->execute($subfieldvalue, $subfieldid;
+    $sth->execute($subfieldvalue, $subfieldid);
+
     $dbh->disconnect;
     return($Subfield_ID, $Subfield_Key);
 }
@@ -118,6 +127,8 @@ sub addSubfield {
     my $subfieldcode=shift;
     my $subfieldvalue=shift;
     my $subfieldorder=shift;
+    my $firstdigit="?";
+
     my $dbh=&c4connect;  
     unless ($subfieldorder) {
 	my $sth=$dbh->prepare("select max(subfieldorder) from marc_$firstdigit\XX_subfield_table where tagid=$tagid");
@@ -145,6 +156,7 @@ sub updateBiblio {
 # this logging feature to be usable to undo changes easily.
 
     my ($env, $biblio) = @_;
+    my $Record_ID;
     my $biblionumber=$biblio->{'biblionumber'};
     my $dbh=&C4Connect;  
     my $sth=$dbh->prepare("select * from biblio where biblionumber=$biblionumber");
