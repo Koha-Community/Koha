@@ -58,8 +58,10 @@ if ($input->param('newflags')) {
     $sth->execute($flags, $member);
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
 } else {
-    my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
-
+#     my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
+    my $bor = getpatroninformation(\%env, $member,'');
+    my $flags = $bor->{'flags'};
+    my $accessflags = $bor->{'authflags'};
     my $dbh=C4::Context->dbh();
     my $sth=$dbh->prepare("select bit,flag,flagdesc from userflags order by bit");
     $sth->execute;
