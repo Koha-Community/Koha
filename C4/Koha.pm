@@ -195,7 +195,6 @@ sub getbranches {
 		my $nsth = $dbh->prepare($query);
 		$nsth->execute($branch->{'branchcode'});
 		while (my ($cat) = $nsth->fetchrow_array) {
-		warn "XX";
 			# FIXME - This seems wrong. It ought to be
 			# $branch->{categorycodes}{$cat} = 1;
 			# otherwise, there's a namespace collision if there's a
