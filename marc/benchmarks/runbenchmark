@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+#
+#
+#  This script will iterate through each benchmark 5 times, looking up 500
+#  random records each time.  Results will be printed to STDOUT.
+
+my @benchmarks=('getdata-steve', 'getdata-paul', 'getdata-paul-regex');
+
+my $iterations=5;
+
+foreach (@benchmarks) {
+    print "$_:\t";
+    for ($i=1; $i<=$iterations; $i++) {
+	my $timer=`/usr/bin/time -f "%E" perl $_ 500 2>&1`;
+	chomp $timer;
+	print "$timer\t";
+    }
+    print "\n";
+}

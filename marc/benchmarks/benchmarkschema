@@ -1,0 +1,22 @@
+CREATE TABLE marc_0XX_tag_table (
+		bibcode bigint(20) NOT NULL default '0',
+		tagnumber char(3) NOT NULL default '',
+		tagorder tinyint(4) NOT NULL default '0',
+		tagvalue varchar(255) default NULL,
+		valuebloblink bigint(20) default NULL,
+		PRIMARY KEY  (bibcode,tagnumber,tagorder)
+		) TYPE=MyISAM;
+
+CREATE TABLE marc_2XX_subfield_table (
+		subfieldid bigint(20) unsigned NOT NULL auto_increment,
+		tagid bigint(20) NOT NULL default '0',
+		tag char(3) NOT NULL default '',
+		bibid bigint(20) NOT NULL default '0',
+		subfieldorder tinyint(4) NOT NULL default '0',
+		subfieldcode char(1) NOT NULL default '',
+		subfieldvalue varchar(255) default NULL,
+		valuebloblink bigint(20) default NULL,
+		PRIMARY KEY (subfieldid),
+		KEY (bibid,tagid,tag,subfieldcode)
+		) TYPE=MyISAM;
+
