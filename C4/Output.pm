@@ -105,7 +105,6 @@ sub themelanguage {
 
   my $dbh = C4::Context->dbh;
   my @languages = split " ", C4::Context->preference("opaclanguages");
-  warn "==>".C4::Context->preference("opaclanguages");
 			# language preference
   my @themes = split " ", C4::Context->preference("opacthemes");
 			# theme preferences
@@ -125,10 +124,8 @@ sub themelanguage {
     }
   }
   if ($theme and $lang) {
-  	warn "IN";
     return ($theme, $lang);
   } else {
-  	warn "OUT";
     return ('default', 'en');
   }
 }
