@@ -33,8 +33,8 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use CGI;
 use strict;
+use CGI;
 use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
@@ -42,11 +42,15 @@ use C4::Output;
 use HTML::Template;
 
 my $query = new CGI;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($query);
 
 my $error   = $query->param('error');
 my $success = $query->param('biblioitem');
-my $template= gettemplate("acqui.simple/addbooks.tmpl");
-$template->param(loggedinuser => $loggedinuser);
-
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui.simple/addbooks.tmpl",
+			     query => $query,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
 print $query->header(-cookie => $cookie),$template->output;

@@ -1,6 +1,10 @@
 package C4::Biblio;
 # $Id$
 # $Log$
+# Revision 1.29  2002/12/12 16:35:00  tipaul
+# adding authentification with Auth.pm and
+# MAJOR BUGFIX on marc biblio modification
+#
 # Revision 1.28  2002/12/10 13:30:03  tipaul
 # fugfixes from Dombes Abbey work
 #
@@ -450,6 +454,7 @@ sub MARCaddbiblio {
 sub MARCadditem {
 # pass the MARC::Record to this function, and it will create the records in the marc tables
     my ($dbh,$record,$biblionumber) = @_;
+    warn "adding : ".$record->as_formatted();
 # search for MARC biblionumber
     $dbh->do("lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ");
     my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber);
@@ -470,6 +475,13 @@ sub MARCadditem {
 				 $subfieldcount+1,
 				 $subfields[$subfieldcount][1]
 				 );
+				 warn "ADDING :$bibid,".
+				 $field->tag().
+				 $field->indicator(1).$field->indicator(2).",
+				 $fieldcount,
+				 $subfields[$subfieldcount][0],
+				 $subfieldcount+1,
+				 $subfields[$subfieldcount][1]";
 	}
     }
     $dbh->do("unlock tables");
@@ -478,37 +490,37 @@ sub MARCadditem {
 
 sub MARCaddsubfield {
 # Add a new subfield to a tag into the DB.
-    my ($dbh,$bibid,$tagid,$tag_indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue) = @_;
-    # if not value, end of job, we do nothing
-    if (not($subfieldvalue)) {
-	return;
-    }
+	my ($dbh,$bibid,$tagid,$tag_indicator,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue) = @_;
+	# if not value, end of job, we do nothing
+	if (length($subfieldvalue) ==0) {
+		return;
+	}
     if (not($subfieldcode)) {
 	$subfieldcode=' ';
     }
-    if (length($subfieldvalue)>255) {
-#	$dbh->do("lock tables marc_blob_subfield WRITE, marc_subfield_table WRITE");
-	my $sth=$dbh->prepare("insert into marc_blob_subfield (subfieldvalue) values (?)");
-	$sth->execute($subfieldvalue);
-	$sth=$dbh->prepare("select max(blobidlink)from marc_blob_subfield");
-	$sth->execute;
-	my ($res)=$sth->fetchrow;
-	$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?,?)");
-	if ($tagid<100) {
-	    $sth->execute($bibid,'0'.$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
-	} else {
-	    $sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
-	}
-	if ($sth->errstr) {
-	    print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
-	}
+	if (length($subfieldvalue)>255) {
+	#	$dbh->do("lock tables marc_blob_subfield WRITE, marc_subfield_table WRITE");
+		my $sth=$dbh->prepare("insert into marc_blob_subfield (subfieldvalue) values (?)");
+		$sth->execute($subfieldvalue);
+		$sth=$dbh->prepare("select max(blobidlink)from marc_blob_subfield");
+		$sth->execute;
+		my ($res)=$sth->fetchrow;
+		$sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,valuebloblink) values (?,?,?,?,?,?,?)");
+		if ($tagid<100) {
+		$sth->execute($bibid,'0'.$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
+		} else {
+		$sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$res);
+		}
+		if ($sth->errstr) {
+		print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
+		}
 #	$dbh->do("unlock tables");
-    } else {
-	my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
-	$sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
-	if ($sth->errstr) {
-	    print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
-	}
+	} else {
+		my $sth=$dbh->prepare("insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values (?,?,?,?,?,?,?)");
+		$sth->execute($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue);
+		if ($sth->errstr) {
+		print STDERR "ERROR ==> insert into marc_subfield_table (bibid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue) values ($bibid,$tagid,$tagorder,$tag_indicator,$subfieldcode,$subfieldorder,$subfieldvalue)\n";
+		}
     }
     &MARCaddword($dbh,$bibid,$tagid,$tagorder,$subfieldcode,$subfieldorder,$subfieldvalue);
 }
@@ -520,12 +532,12 @@ sub MARCgetbiblio {
 #---- TODO : the leader is missing
     my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
 		 		 from marc_subfield_table
-		 		 where bibid=? order by tagorder,subfieldorder
+		 		 where bibid=? order by tag,tagorder,subfieldcode
 		 	 ");
     my $sth2=$dbh->prepare("select subfieldvalue from marc_blob_subfield where blobidlink=?");
     $sth->execute($bibid);
     my $prevtagorder=1;
-    my $prevtag;
+    my $prevtag='  ';
     my $previndicator;
     my %subfieldlist={};
     while (my $row=$sth->fetchrow_hashref) {
@@ -541,6 +553,7 @@ sub MARCgetbiblio {
 				$prevtag = "0".$prevtag;
 			}
 			$previndicator.="  ";
+#			warn "NEW : subfieldcode : $prevtag";
 			my $field = MARC::Field->new( $prevtag, substr($previndicator,0,1), substr($previndicator,1,1), %subfieldlist);
 #			warn $field->as_formatted();
 			$record->add_fields($field);
@@ -550,7 +563,11 @@ sub MARCgetbiblio {
 			%subfieldlist={};
 			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
 		} else {
-			%subfieldlist->{$row->{'subfieldcode'}} = $row->{'subfieldvalue'};
+			warn "subfieldcode : $row->{'subfieldcode'} / value : $row->{'subfieldvalue'}, tag : $row->{tag}";
+			if (%subfieldlist->{$row->{'subfieldcode'}}) {
+				%subfieldlist->{$row->{'subfieldcode'}}.='|';
+			}
+			%subfieldlist->{$row->{'subfieldcode'}} .= $row->{'subfieldvalue'};
 			$prevtag= $row->{tag};
 			$previndicator=$row->{tag_indicator};
 		}
@@ -571,7 +588,7 @@ sub MARCgetitem {
 #---- TODO : the leader is missing
     my $sth=$dbh->prepare("select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
 		 		 from marc_subfield_table
-		 		 where bibid=? and tagorder=? order by subfieldorder
+		 		 where bibid=? and tagorder=? order by subfieldcode,subfieldorder
 		 	 ");
 	$sth2=$dbh->prepare("select subfieldvalue from marc_blob_subfield where blobidlink=?");
 	$sth->execute($bibid,$tagorder);
@@ -610,6 +627,9 @@ sub MARCgetitem {
 sub MARCmodbiblio {
     my ($dbh,$record,$bibid,$itemnumber,$delete)=@_;
     my $oldrecord=&MARCgetbiblio($dbh,$bibid);
+    warn "OLD : ".$oldrecord->as_formatted();
+    warn "----------------------------------\nNEW : ".$record->as_formatted();
+    warn "\n";
 # if nothing to change, don't waste time...
     if ($oldrecord eq $record) {
 #    warn "NOTHING TO CHANGE";
@@ -649,7 +669,9 @@ sub MARCmoditem {
 #		warn "nothing to change";
 		return;
 	}
-#	warn "MARCmoditem : ".$record->as_formatted;
+	warn "MARCmoditem : ".$record->as_formatted;
+	warn "OLD : ".$oldrecord->as_formatted;
+
 	# otherwise, skip through each subfield...
 	my @fields = $record->fields();
 	# search old MARC item
@@ -661,26 +683,29 @@ sub MARCmoditem {
 		my @subfields=$field->subfields();
 		my $subfieldorder=0;
 		foreach my $subfield (@subfields) {
-		$subfieldorder++;
-		if ($oldfield eq 0 or (! $oldfield->subfield(@$subfield[0])) ) {
-	# just adding datas...
+			$subfieldorder++;
+			warn "compare : $oldfield".$oldfield->subfield(@$subfield[0]);
+			if ($oldfield eq 0 or (length($oldfield->subfield(@$subfield[0])) ==0) ) {
+		# just adding datas...
 #		warn "addfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
-			&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
-					$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
-		} else {
-#		warn "modfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
-	# modify he subfield if it's a different string
-			if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
-				my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
-#				warn "HERE : $subfieldid, $bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder";
-				&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
+				warn "NEW subfield : $bibid,".$field->tag().",".$tagorder.",".@$subfield[0].",".$subfieldorder.",".@$subfield[1].")";
+				&MARCaddsubfield($dbh,$bibid,$field->tag(),$field->indicator(1).$field->indicator(2),
+						$tagorder,@$subfield[0],$subfieldorder,@$subfield[1]);
 			} else {
+#		warn "modfield : / $subfieldorder / @$subfield[0] - @$subfield[1]";
+		# modify he subfield if it's a different string
+				if ($oldfield->subfield(@$subfield[0]) ne @$subfield[1] ) {
+					my $subfieldid=&MARCfindsubfieldid($dbh,$bibid,$field->tag(),$tagorder,@$subfield[0],$subfieldorder);
+					warn "changing : $subfieldid, $bibid,".$field->tag(),",$tagorder,@$subfield[0],@$subfield[1],$subfieldorder";
+					&MARCmodsubfield($dbh,$subfieldid,@$subfield[1]);
+				} else {
 #FIXME ???
-				warn "ICI";
+					warn "nothing to change : ".$oldfield->subfield(@$subfield[0]);
+				}
 			}
 		}
-		}
 	}
+	warn "-----------------------";
 }
 
 
@@ -754,12 +779,19 @@ sub MARCfindsubfield {
 }
 
 sub MARCfindsubfieldid {
-    my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
-    my $sth=$dbh->prepare("select subfieldid from marc_subfield_table
-			where bibid=? and tag=? and tagorder=?
-				and subfieldcode=? and subfieldorder=?");
-    $sth->execute($bibid,$tag,$tagorder,$subfield,$subfieldorder);
-    my ($res) = $sth->fetchrow;
+	my ($dbh,$bibid,$tag,$tagorder,$subfield,$subfieldorder) = @_;
+	my $sth=$dbh->prepare("select subfieldid from marc_subfield_table
+				where bibid=? and tag=? and tagorder=?
+					and subfieldcode=? and subfieldorder=?");
+	$sth->execute($bibid,$tag,$tagorder,$subfield,$subfieldorder);
+	my ($res) = $sth->fetchrow;
+	unless ($res) {
+		$sth=$dbh->prepare("select subfieldid from marc_subfield_table
+				where bibid=? and tag=? and tagorder=?
+					and subfieldcode=?");
+		$sth->execute($bibid,$tag,$tagorder,$subfield);
+		($res) = $sth->fetchrow;
+	}
     return $res;
 }
 
@@ -880,7 +912,7 @@ sub MARChtml2marc {
 	my $prevtag = @$rtags[0];
 	my $record = MARC::Record->new();
 	my %subfieldlist={};
-	for (my $i=0; $i<= @$rtags; $i++) {
+	for (my $i=0; $i< @$rtags; $i++) {
 		# rebuild MARC::Record
 		if (@$rtags[$i] ne $prevtag) {
 			if ($prevtag<10) {
@@ -892,9 +924,14 @@ sub MARChtml2marc {
 			$prevtag = @$rtags[$i];
 			%subfieldlist={};
 			%subfieldlist->{@$rsubfields[$i]} = @$rvalues[$i];
+			warn " ==>@$rsubfields[$i]} = @$rvalues[$i];";
 		} else {
-			%subfieldlist->{@$rsubfields[$i]} = @$rvalues[$i];
+#			if (%subfieldlist->{@$rsubfields[$i]}) {
+#				%subfieldlist->{@$rsubfields[$i]} .= '|';
+#			}
+			%subfieldlist->{@$rsubfields[$i]} .=@$rvalues[$i];
 			$prevtag= @$rtags[$i];
+			warn " ==>@$rsubfields[$i]} ,= @$rvalues[$i];";
 		}
 	}
 	# the last has not been included inside the loop... do it now !

@@ -18,8 +18,9 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use CGI;
 use strict;
+use CGI;
+use C4::Auth;
 use C4::Catalogue;
 use C4::Biblio;
 use C4::Search;
@@ -34,7 +35,14 @@ my $showoffset = $offset + 1;
 my $total;
 my $count;
 my @results;
-my $template = gettemplate("acqui.simple/isbnsearch.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui.simple/isbnsearch.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
 if (! $isbn) {
 	print $input->redirect('addbooks.pl');
 } else {
@@ -82,5 +90,5 @@ if (! $isbn) {
 							loop => \@loop_data,
 							loop_links => \@loop_links);
 
-	print "Content-Type: text/html\n\n", $template->output;
+	print $input->header(-cookie => $cookie),$template->output;
 } # else

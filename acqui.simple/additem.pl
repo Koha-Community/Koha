@@ -21,6 +21,7 @@
 
 use CGI;
 use strict;
+use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Context;
@@ -69,6 +70,7 @@ if ($op eq "additem") {
 		$indicators{$ind_tag[$i]} = $indicator[$i];
 	}
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+	warn "item before NEWnewitem : ".$record->as_formatted();
 # MARC::Record builded => now, record in DB
 	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWnewitem($dbh,$record,$bibid);
 	$nextop = "additem";
@@ -96,6 +98,7 @@ if ($op eq "additem") {
 	my $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
 # MARC::Record builded => now, record in DB
 	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = NEWmoditem($dbh,$record,$bibid,$itemnum,0);
+	$itemnum="";
 	$nextop="additem";
 }
 
@@ -227,7 +230,15 @@ foreach my $tag (sort keys %{$tagslib}) {
 		$i++
 	}
 }
-my $template = gettemplate("acqui.simple/additem.tmpl");
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui.simple/additem.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {parameters => 1},
+			     debug => 1,
+			     });
+
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(item_loop => \@item_value_loop,
 						item_header_loop => \@header_value_loop,
@@ -238,4 +249,4 @@ $template->param(item_loop => \@item_value_loop,
 						itemtagsubfield =>$itemtagsubfield,
 						op => $nextop,
 						opisadd => ($nextop eq "saveitem")?0:1);
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;

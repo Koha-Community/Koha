@@ -19,8 +19,9 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use CGI;
 use strict;
+use CGI;
+use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Context;
@@ -72,7 +73,14 @@ if ($oldbiblionumber) {
 }else {
 	$bibid = $input->param('bibid');
 }
-my $template;
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui.simple/addbiblio.tmpl",
+			     query => $input,
+			     type => "intranet",
+			     authnotrequired => 0,
+			     flagsrequired => {catalogue => 1},
+			     debug => 1,
+			     });
 
 my $tagslib = &MARCgettagslib($dbh,1);
 my $record=-1;
@@ -115,7 +123,6 @@ if ($op eq "addbiblio") {
 #------------------------------------------------------------------------------------------------------------------------------
 } else {
 #------------------------------------------------------------------------------------------------------------------------------
-	$template = gettemplate("acqui.simple/addbiblio.tmpl");
 	# fill arrays
 	my @loop_data =();
 	my $tag;
@@ -286,4 +293,4 @@ if ($op eq "addbiblio") {
 							oldbiblionumtagfield => $oldbiblionumtagfield,
 							oldbiblionumtagsubfield => $oldbiblionumtagsubfield);
 }
-print "Content-Type: text/html\n\n", $template->output;
+print $input->header(-cookie => $cookie),$template->output;
