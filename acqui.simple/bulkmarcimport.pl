@@ -98,12 +98,14 @@ if ($file) {
     my $data=<F>;
     close F;
     $splitchar=chr(29);
+
+
+# Cycle through all of the records in the file
+
+
 RECORD:
     foreach $record (split(/$splitchar/, $data)) {
-	my $marctext="<table border=0 cellspacing=0>\n";
-	$marctext.="<tr><th colspan=3 bgcolor=black><font color=white>MARC RECORD</font></th></tr>\n";
 	$leader=substr($record,0,24);
-	$marctext.="<tr><td>Leader:</td><td colspan=2>$leader</td></tr>\n";
 	print "\n\n---------------------------------------------------------------------------\n";
 	print "Leader: $leader\n";
 	$record=substr($record,24);
@@ -115,8 +117,8 @@ RECORD:
 	my %record;
 	foreach $field (split(/$splitchar2/, $record)) {
 	    my %field;
-	    ($color eq $lc1) ? ($color=$lc2) : ($color=$lc1);
 	    unless ($directory) {
+		# Parse the MARC directory and store the cotents in the %tag hash
 		$directory=$field;
 		my $itemcounter=1;
 		$counter=0;
@@ -134,7 +136,6 @@ RECORD:
 	    $tag=$tag{$tagcounter};
 	    $tagcounter++;
 	    $field{'tag'}=$tag;
-	    $marctext.="<tr><td bgcolor=$color valign=top>$tagtext{$tag}</td><td bgcolor=$color valign=top>$tag</td>";
 	    printf "%4s %-40s ",$tag, $tagtext{$tag};
 	    $splitchar3=chr(31);
 	    my @subfields=split(/$splitchar3/, $field);
@@ -142,19 +143,14 @@ RECORD:
 	    $field{'indicator'}=$indicator;
 	    my $firstline=1;
 	    if ($#subfields==0) {
-		$marctext.="<td bgcolor=$color valign=top>$indicator</td></tr>";
 		print "$indicator\n";
 	    } else {
 		print "\n";
 		my %subfields;
-		$marctext.="<td bgcolor=$color valign=top><table border=0 cellspacing=0>\n";
-		my $color2=$color;
 		for ($i=1; $i<=$#subfields; $i++) {
-		    ($color2 eq $lc1) ? ($color2=$lc2) : ($color2=$lc1);
 		    my $text=$subfields[$i];
 		    my $subfieldcode=substr($text,0,1);
 		    my $subfield=substr($text,1);
-		    $marctext.="<tr><td colour=$color2><table border=0 cellpadding=0 cellspacing=0><tr><td>$subfieldcode </td></tr></table></td><td colour=$color2>$subfield</td></tr>\n";
 		    print "   $subfieldcode $subfield\n";
 		    if ($subfields{$subfieldcode}) {
 			my $subfieldlist=$subfields{$subfieldcode};
@@ -169,7 +165,6 @@ RECORD:
 			$subfields{$subfieldcode}=$subfield;
 		    }
 		}
-		$marctext.="</table></td></tr>\n";
 		$field{'subfields'}=\%subfields;
 	    }
 	    if ($record{$tag}) {
@@ -186,13 +181,12 @@ RECORD:
 	    }
 	    push (@record, \%field);
 	}
-	$marctext.="</table>\n";
 	$rec=\@record;
 	$counter++;
 	my ($lccn, $isbn, $issn, $dewey, $author, $title, $place, $publisher, $publicationyear, $volume, $number, @subjects, $note, $additionalauthors, $illustrator, $copyrightdate, $barcode, $itemtype, $seriestitle, @barcodes);
 	my $marc=$record;
 	foreach $field (sort {$a->{'tag'} cmp $b->{'tag'}} @$rec) {
-	    #print $field->{'tag'}." ".$field->{'subfields'}->{'a'}."\n";
+	    # LCCN is stored in field 010 a
 	    if ($field->{'tag'} eq '010') {
 		$lccn=$field->{'subfields'}->{'a'};
 		$lccn=~s/^\s*//;
@@ -200,34 +194,42 @@ RECORD:
 		$lccn=~s/^\s*//;
 		($lccn) = (split(/\s+/, $lccn))[0];
 	    }
+	    # LCCN is stored in field 015 a
 	    if ($field->{'tag'} eq '015') {
 		$lccn=$field->{'subfields'}->{'a'};
 		$lccn=~s/^\s*//;
 		$lccn=~s/^C//;
 		($lccn) = (split(/\s+/, $lccn))[0];
 	    }
+	    # ISBN is stored in field 020 a
 	    if ($field->{'tag'} eq '020') {
 		$isbn=$field->{'subfields'}->{'a'};
 		$isbn=~s/^\s*//;
 		($isbn) = (split(/\s+/, $isbn))[0];
 	    }
+	    # ISSN is stored in field 022 a
 	    if ($field->{'tag'} eq '022') {
 		$issn=$field->{'subfields'}->{'a'};
 		$issn=~s/^\s*//;
 		($issn) = (split(/\s+/, $issn))[0];
 	    }
+	    # Dewey number stored in field 082 a
+	    # If there is more than one dewey number (more than one 'a'
+	    # subfield) I just take the first one
 	    if ($field->{'tag'} eq '082') {
 		$dewey=$field->{'subfields'}->{'a'};
-		print "DEWEY: $dewey\n";
 		$dewey=~s/\///g;
 		if (@$dewey) {
 		    $dewey=$$dewey[0];
 		}
-		#$dewey=~s/\///g;
 	    }
+	    # Author is stored in field 100 a
 	    if ($field->{'tag'} eq '100') {
 		$author=$field->{'subfields'}->{'a'};
 	    }
+	    # Title is stored in field 245 a
+	    # Subtitle in field 245 b
+	    # Illustrator in field 245 c
 	    if ($field->{'tag'} eq '245') {
 		$title=$field->{'subfields'}->{'a'};
 		$title=~s/ \/$//;
@@ -238,6 +240,11 @@ RECORD:
 		    $illustrator=$1;
 		}
 	    }
+	    # Publisher Info in field 260
+	    #   a = place
+	    #   b = publisher
+	    #   c = publication date
+	    #     (also store as copyright date if date starts with a 'c' as in c1995)
 	    if ($field->{'tag'} eq '260') {
 		$place=$field->{'subfields'}->{'a'};
 		if (@$place) {
@@ -262,6 +269,9 @@ RECORD:
 		    $publicationyear=$1;
 		}
 	    }
+	    # Physical Dimensions in field 300
+	    #   a = pages
+	    #   c = size
 	    if ($field->{'tag'} eq '300') {
 		$pages=$field->{'subfields'}->{'a'};
 		$pages=~s/ \;$//;
@@ -269,12 +279,15 @@ RECORD:
 		$pages=~s/\s*:$//g;
 		$size=~s/\s*:$//g;
 	    }
+	    # Vol/No in field 362 a
 	    if ($field->{'tag'} eq '362') {
 		if ($field->{'subfields'}->{'a'}=~/(\d+).*(\d+)/) {
 		    $volume=$1;
 		    $number=$2;
 		}
 	    }
+	    # Series Title in field 440 a
+	    # Vol/No in field 440 v
 	    if ($field->{'tag'} eq '440') {
 		$seriestitle=$field->{'subfields'}->{'a'};
 		if ($field->{'subfields'}->{'v'}=~/(\d+).*(\d+)/) {
@@ -282,10 +295,16 @@ RECORD:
 		    $number=$2;
 		}
 	    }
+	    # BARCODES!!!
+	    # 852 p stores barcodes
+	    # 852 h stores dewey field
+	    # 852 9 stores replacement price
+	    #   I check for an itemtype identifier in 852h as well... pb or pbk means PBK
+	    #   also if $dewey is > 0, then I assign JNF, otherwise JF.
+	    #   Note that my libraries are school libraries, so I assume Junior.
 	    if ($field->{'tag'} eq '852') {
 		$barcode=$field->{'subfields'}->{'p'};
 		push (@barcodes, $barcode);
-		print "BARCODE: $barcode\n";
 		my $q_barcode=$dbh->quote($barcode);
 		my $deweyfield=$field->{'subfields'}->{'h'};
 		$deweyfield=~/^([\d\.]*)/;
@@ -299,8 +318,9 @@ RECORD:
 		}
 
 		$replacementprice=$field->{'subfields'}->{'9'};
-		#print "BC: $barcode, $title, $author\n";
 	    }
+	    # 700 a stores additional authors / illustrator info
+	    # 700 c will contain 'ill' if it's an illustrator
 	    if ($field->{'tag'} eq '700') {
 		my $name=$field->{'subfields'}->{'a'};
 		if ($field->{'subfields'}->{'c'}=~/ill/) {
@@ -309,9 +329,16 @@ RECORD:
 		    $additionalauthors.="$name\n";
 		}
 	    }
+	    # I concatenate all 5XX a entries as notes
 	    if ($field->{'tag'} =~/^5/) {
 		$note.="$field->{'subfields'}->{'a'}\n";
 	    }
+	    # 6XX entries are subject entries
+	    #   Not sure why I'm skipping 691 tags
+	    #   691 a contains the subject.
+	    # I take subfield a, and append entries from subfield x (general
+	    # subdivision) y (Chronological subdivision) and z (geographic
+	    # subdivision)
 	    if ($field->{'tag'} =~/6\d\d/) {
 		(next) if ($field->{'tag'} eq '691');
 		my $subject=$field->{'subfields'}->{'a'};
