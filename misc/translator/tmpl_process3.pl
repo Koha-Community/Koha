@@ -205,7 +205,7 @@ if (defined $href) {
 	    my $candidate = TmplTokenizer::charset_canon $2;
 	    die "Conflicting charsets in msgid: $charset_in vs $candidate\n"
 		    if defined $charset_in && $charset_in ne $candidate;
-	    $charset_in = $2;
+	    $charset_in = $candidate;
 	}
     }
 }
