@@ -34,7 +34,7 @@ my $biblionumber=$query->param('bib');
 my $type='intra';
 
 # change back when ive fixed request.pl
-my @items = ItemInfo2(undef, $biblionumber, $type);
+my @items = ItemInfo(undef, $biblionumber, $type);
 my $dat=bibdata($biblionumber);
 my ($authorcount, $addauthor)= &addauthor($biblionumber);
 my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
