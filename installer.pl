@@ -481,7 +481,13 @@ chomp $restart;
 
 if ($answer eq "Y" || $answer eq "y") {
 	# Need to support other init structures here?
-	system('/etc/rc.d/init.d/httpd restart');
+	if (-e "/etc/rc.d/init.d/httpd") {
+	    system('/etc/rc.d/init.d/httpd restart');
+	} elsif (-e "/etc/init.d/apache") {
+	    system('/etc//init.d/apache restart');
+	} elsif (-e "/etc/init.d/apache-ssl") {
+	    system('/etc/init.d/apache-ssl restart');
+	}
     } else {
     print qq|
 print "\nCongratulations ... your Koha installation is complete!\n";
