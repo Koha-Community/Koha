@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription Details for <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription Details for <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
 
 <div id="main">
 <h1>Subscription: <!-- TMPL_VAR name="bibliotitle" --></h1>
-<form class="inline" action="subscription-add.pl" method="get"><input type="hidden" name="op" value="mod" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="Edit Subscription" /></form> <form class="inline" action="statecollection.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="View Issues" /></form> <form class="inline" action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="submit" value="View Bibliographic Record" /></form>
+<form class="inline" action="subscription-add.pl" method="get"><input type="hidden" name="op" value="mod" /><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="Edit Subscription" /></form> <form class="inline" action="statecollection.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="submit" class="submit" value="View Issues" /></form> <form class="inline" action="/cgi-bin/koha/MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="submit" value="View Bibliographic Record" /></form><!-- TMPL_UNLESS name="totalissues" --><form class="inline" action="subscription-detail.pl" method="get"><input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" /><input type="hidden" name="op" value="del" /><input type="submit" class="cancel" value="Delete subscription" /></form><!-- /TMPL_UNLESS -->
 
 <div class="data">
 <table>
