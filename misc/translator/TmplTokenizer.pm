@@ -448,9 +448,25 @@ sub _quote_cformat ($) {
     return $s;
 }
 
+sub string_canon ($) {
+    my($s) = @_;
+    if (1) { # FIXME
+	# Fold all whitespace into single blanks
+	$s =~ s/\s+/ /gs;
+    }
+    return $s;
+}
+
+sub _formalize_string_cformat ($) {
+    my($s) = @_;
+    return _quote_cformat string_canon $s;
+}
+
 sub _formalize ($) {
     my($t) = @_;
     return $t->type == TmplTokenType::DIRECTIVE? '%s':
+	   $t->type == TmplTokenType::TEXT?
+		   _formalize_string_cformat($t->string):
 	   $t->type == TmplTokenType::TAG?
 		   ($t->string =~ /^<a\b/is? '<a>': _quote_cformat($t->string)):
 	       _quote_cformat($t->string);
@@ -597,6 +613,10 @@ sub next_token {
 		$it = pop @{$this->{_queue}};
 	    }
 	}
+    }
+    if (defined $it && $it->type == TmplTokenType::TEXT) {
+	my $form = string_canon $it->string;
+	$it->set_form( $form );
     }
     return $it;
 }

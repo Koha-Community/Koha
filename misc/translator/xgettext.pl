@@ -55,8 +55,9 @@ sub remember ($$) {
     my($token, $string) = @_;
     # If we determine that the string is negligible, don't bother to remember
     unless (string_negligible_p( $string ) || token_negligible_p( $token )) {
-	$text{$string} = [] unless defined $text{$string};
-	push @{$text{$string}}, $token;
+	my $key = TmplTokenizer::string_canon( $string );
+	$text{$key} = [] unless defined $text{$key};
+	push @{$text{$key}}, $token;
     }
 }
 
@@ -153,6 +154,7 @@ EOF
 	}
 	printf OUTPUT "#, c-format\n" if $cformat_p;
 	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po
+		TmplTokenizer::string_canon
 		TmplTokenizer::charset_convert $t, $charset_in, $charset_out;
 	printf OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
 		TmplTokenizer::quote_po( $translation{$t} ): "\"\"");

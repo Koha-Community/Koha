@@ -32,8 +32,14 @@ use vars qw( $charset_in $charset_out );
 
 sub find_translation ($) {
     my($s) = @_;
-    my $key = TmplTokenizer::quote_po($s) if $s =~ /\S/;
-    $key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
+    my $key = $s;
+    if ($s =~ /\S/s) {
+    print STDERR "DEBUG: before: ($key)\n";
+	$key = TmplTokenizer::string_canon($key);
+	$key = TmplTokenizer::charset_convert($key, $charset_in, $charset_out);
+	$key = TmplTokenizer::quote_po($key);
+    print STDERR "DEBUG: after: ($key)\n";
+    }
     return defined $href->{$key}
 		&& !$href->{$key}->fuzzy
 		&& length Locale::PO->dequote($href->{$key}->msgstr)?
@@ -312,18 +318,14 @@ appears to be a full sentence (this actual work being done by
 TmplTokenizer(3)); these larger patterns appear in the translation
 file as c-format strings with %s.
 
+Whitespace in extracted strings are folded to single blanks, in
+order to prevent new strings from appearing when minor changes in
+the original templates occur, and to prevent overly difficult to
+read strings in the PO file.
+
 =head1 BUGS
 
 The --help option has not been implemented yet.
-
-If an extracted string contain actual text (versus tags or
-TMPL_VAR directives), the strings are extracted verbatim,
-resulting in unwieldy things like multiple spaces, tabs,
-and/or newlines which are semantically indistinguishable
-from single blanks. If the template writer changes the
-spacing just a little bit, the new formatting would be
-considered new strings. This is arguably wrong, and in any
-case counter-productive.
 
 xgettext.pl must be present in the current directory; the
 msgmerge(1) command must also be present in the search path.
