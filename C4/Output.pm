@@ -383,9 +383,12 @@ sub endcenter() {
 }  
 
 =pod
+
 =head2 &bold
-    &bold requires that a single string be passed in by the caller.  &bold 
-    will return "<b>$text</b>" where $text is the string passed in.
+
+ &bold requires that a single string be passed in by the caller.  &bold 
+ will return "<b>$text</b>" where $text is the string passed in.
+
 =cut
 
 sub bold($) {
