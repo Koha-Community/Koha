@@ -272,7 +272,7 @@ sub mkformnotable{
       $string=$string."<input type=hidden name=$inputs[$i][1] value=\"$inputs[$i][2]\">\n";
     }
     if ($inputs[$i][0] eq 'radio') {
-      $string.="<input type=radio name=$inputs[1] value=$inputs[$i][2]>$inputs[$i][2]";
+      $string.="<input type=radio name=$inputs[$i][1] value=$inputs[$i][2]>$inputs[$i][2]";
     } 
     if ($inputs[$i][0] eq 'text') {
       $string.="<input type=$inputs[$i][0] name=$inputs[$i][1] value=\"$inputs[$i][2]\">";
@@ -291,6 +291,13 @@ sub mkformnotable{
 }
 
 sub mkform2{
+    # FIXME
+    # no POD and no tests yet.  Once tests are written,
+    # this function can be cleaned up with the following steps:
+    #  turn the while loop into a foreach loop
+    #  pull the nested if,elsif structure back up to the main level
+    #  pull the code for the different kinds of inputs into separate
+    #   functions
   my ($action,%inputs)=@_;
   my $string="<form action=$action method=post>\n";
   $string=$string.mktablehdr();
@@ -348,10 +355,31 @@ sub mkform2{
   $string=$string."</form>";
 }
 
+=pod
+
+=head2 &endpage
+
+ &endpage does not expect any arguments, it returns the string:
+   </body></html>\n
+
+=cut
+
 
 sub endpage() {
   return("</body></html>\n");
 }
+
+=pod
+
+=head2 &mklink
+
+ &mklink expects two arguments, the url to link to and the text of the link.
+ It returns this string:
+   <a href="$url">$text</a>
+ where $url is the first argument and $text is the second.
+
+=cut
+
 
 sub mklink($$)  {
   my ($url,$text)=@_;
@@ -359,20 +387,56 @@ sub mklink($$)  {
   return ($string);
 }
 
+=pod
+
+=head2 &mkheadr
+
+ &mkeadr expects two strings, a type and the text to use in the header.
+ types are:
+
+=over
+
+=item 1  ends with <br>
+
+=item 2  no special ending tag
+
+=item 3  ends with <p>
+
+=back
+
+ Other than this, the return value is the same:
+   <FONT SIZE=6><em>$text</em></FONT>$string
+ Where $test is the text passed in and $string is the tag generated from 
+ the type value.
+
+=cut
+
+
 sub mkheadr {
+    # FIXME
+    # would it be better to make this more generic by accepting an optional
+    # argument with a closing tag instead of a numeric type?
+
   my ($type,$text)=@_;
   my $string;
   if ($type eq '1'){
-    $string="<FONT SIZE=6><em>$text</em></FONT><br>";
+      $string="<br>";
+  } elsif ($type eq '3') {
+      $string="<p>";
+  } else {
+      $string="";
   }
-  if ($type eq '2'){
-    $string="<FONT SIZE=6><em>$text</em></FONT>";
-  }
-    if ($type eq '3'){
-    $string="<FONT SIZE=6><em>$text</em></FONT><p>";
-  }
-  return ($string);
+  return ("<FONT SIZE=6><em>$text</em></FONT>$string");
 }
+
+=pod
+
+=head2 &center and &endcenter
+
+ &center and &endcenter take no arguments and return html tags <CENTER> and
+ </CENTER> respectivley.
+
+=cut
 
 sub center() {
   return ("<CENTER>\n");
