@@ -121,7 +121,7 @@ if ($quantity ne '0'){
 # 			);
 	}
 	if ($ordnum) {
-		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
+		modorder($title,$ordnum,$quantity,$listprice,$bibnum,$basketno,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$invoice,$sort1,$sort2);
 	}else {
 		$basketno=neworder($basketno,$bibnum,$title,$quantity,$listprice,$booksellerid,$loggedinuser,$notes,$bookfund,$bibitemnum,$rrp,$ecost,$gst,$budget,$cost,$sub,$invoice,$sort1,$sort2);
 	}
