@@ -1377,7 +1377,7 @@ sub ItemInfo {
   }
  $sth->finish;
   #FIXME: ordering/indentation here looks wrong
-  my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=>");
+  my $sth2=$dbh->prepare("Select * from aqorders where biblionumber=?");
   $sth2->execute($biblionumber);
   my $data;
   my $ocount;
