@@ -10,6 +10,9 @@ function openWindow(targeturl, windowname) {
 newwin =
 window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 }
+function focusOnFirst (){
+document.forms[0].elements[0].focus();
+}
 // end hiding -->
 </script>
 
@@ -33,7 +36,7 @@ a.circulation:hover {
 </style>
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
+marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 onLoad="javascript:focusOnFirst()">
 
 <!------------------------MENUS-------------------------------->
 <table cellpadding=0 cellspacing=0 width="100%" border=0>
