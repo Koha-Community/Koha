@@ -9,83 +9,6 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 
 <style>
 <TMPL_INCLUDE NAME="common-style.css">
-#menubar {
-	border-top:1px solid #666;
-}
-.koha {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	text-align:center;
-	background-image:url("<TMPL_VAR name="themelang">/images/background-mem.gif");
-	}
-
-a.home {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.home:hover {
-	background-color: #339933;
-	color: #000000;
-	text-decoration: none;
-	font-weight: normal;
-	font-weight: bold;
-	}
-
-a.catalogue {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	margin:0;
-	}
-a.catalogue:hover {
-	background-color: #ad11ad;
-	color: #000000;
-	text-decoration: none;
-	font-weight: normal;
-	font-weight: bold;
-	margin:0;
-	}
-
-a.members {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.members:hover {
-	background-color: #86c268;
-	color: #000000;
-	text-decoration: none;
-	font-weight: bold;
-	}
-
-a.acquisition {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.acquisition:hover {
-	background-color: #ffdf61;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
 a.marc {
 	font-weight: normal;
 	text-decoration: none;
@@ -103,65 +26,6 @@ a.marc:hover {
 	font-weight: normal;
 	font-weight: bold;
 	margin:0;
-	}
-
-a.reports {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.reports:hover {
-	background-color: #6b7cbe;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-
-a.circulation {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.circulation:hover {
-	background-color: #be6170;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-
-a.parameters {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.parameters:hover {
-	background-color: #86c268;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-a.about {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.about:hover {
-	background-color: #86c268;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
 	}
 </style>
 
@@ -206,7 +70,10 @@ a.about:hover {
 				</TR>
 			</TABLE>
 			</div>
-		</td></tr></table>
+			</td>
+		</tr>
+		<tr>
+		</table>
 	</TD>
 </tr>
 </table>
