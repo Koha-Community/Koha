@@ -176,6 +176,9 @@ my %fielddefinitions=(
 printers => [
 	{ field => 'printername', type => 'char(40)', null => '', key => 'PRI', default => '' },
 	],
+aqbookfund => [
+	{ field => 'bookfundid', type => 'char(5)', null => '', key => 'PRI', default => '' },
+	],
 z3950servers => [
 	{ field => 'id', type => 'int', null => '', key => 'PRI', default => '', extra => 'auto_increment' },
 	],
@@ -421,6 +424,9 @@ $dbh->disconnect;
 exit;
 
 # $Log$
+# Revision 1.4.2.29  2002/11/12 17:30:35  tonnesen
+# change bookfundid to primary key in aqbookfund
+#
 # Revision 1.4.2.28  2002/11/05 22:53:28  tonnesen
 # Removed set_date (reservedate already provides that functionality).
 #
