@@ -18,32 +18,32 @@
 					Used X times
 				</th>
 			</tr>
-		<!-- TMPL_LOOP name="loop" -->
+		<!-- TMPL_LOOP NAME="loop" -->
 			<tr>
 				<td>
-					<!-- TMPL_VAR name="word" -->
+					<!-- TMPL_VAR NAME="word" -->
 				</td>
 				<td>
-					<a href="javascript:Import('<!-- TMPL_VAR name="word" -->','<!-- TMPL_VAR name="suggestion" -->')">
-						<!-- TMPL_VAR name="suggestion" -->
+					<a href="javascript:Import('<!-- TMPL_VAR NAME="word" -->','<!-- TMPL_VAR NAME="suggestion" -->')">
+						<!-- TMPL_VAR NAME="suggestion" -->
 					</a>
 				</td>
 				<td>
-					<!-- TMPL_VAR name="count" -->
+					<!-- TMPL_VAR NAME="count" -->
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 		</table>
 	</div>
 </div>
-<script>
+<script language="javascript" type="text/javascript">
 	function Import(Replaced,ReplaceBy) {
 		for (i=0 ; i<opener.document.f.value.length ; i++) {
 				opener.document.forms[0].value[i].value = opener.document.forms[0].value[i].value.replace(Replaced,ReplaceBy);
 //			if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
 //				strQuery += "&isbn="+document.forms[0].field_value[i].value;
 //			}
-//			opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR name="oldbiblionumber" -->&breedingid="+GetThisOne;
+//			opener.document.location= "../acqui.simple/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
 //			self.close();
 //			return false;
 		}

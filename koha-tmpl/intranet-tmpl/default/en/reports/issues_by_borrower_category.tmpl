@@ -1,35 +1,35 @@
 <!-- TMPL_INCLUDE NAME="reports-top.inc" -->
 <div id="mainbloc">
-<!-- TMPL_IF name="do_it" -->
-<!-- TMPL_LOOP name="mainloop" -->
-	<h1>Koha : Issues by borrower category <!--TMPL_IF name="borrower_category" --> for category = <!-- TMPL_VAR name="borrower_category" --><!-- /TMPL_IF --></h1>
+<!-- TMPL_IF NAME="do_it" -->
+<!-- TMPL_LOOP NAME="mainloop" -->
+	<h1>Koha : Issues by borrower category <!--TMPL_IF NAME="borrower_category" --> for category = <!-- TMPL_VAR NAME="borrower_category" --><!-- /TMPL_IF --></h1>
 	<table>
 		<tr>
 			<th>&nbsp;</th>
-			<!-- TMPL_LOOP name="categorycodeloop" -->
-				<th><!-- TMPL_VAR name="categorycode" --></th>
+			<!-- TMPL_LOOP NAME="categorycodeloop" -->
+				<th><!-- TMPL_VAR NAME="categorycode" --></th>
 			<!-- /TMPL_LOOP -->
 			<th>TOTAL</th>
 		</tr>
-			<!-- TMPL_LOOP name="loopborrowertype" -->
+			<!-- TMPL_LOOP NAME="loopborrowertype" -->
 				<tr>
-					<!-- TMPL_IF name="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-					<!-- TMPL_VAR name="itemtype" --></td>
-					<!-- TMPL_LOOP name="loopitemtype" -->
-						<!-- TMPL_IF name="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
-							<!-- TMPL_VAR name="issues" -->
+					<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+					<!-- TMPL_VAR NAME="itemtype" --></td>
+					<!-- TMPL_LOOP NAME="loopitemtype" -->
+						<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+							<!-- TMPL_VAR NAME="issues" -->
 						</td>
 					<!-- /TMPL_LOOP -->
-					<!-- TMPL_IF name="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
-						<!-- TMPL_VAR name="totalitemtype" -->
+					<!-- TMPL_IF NAME="hilighted" --><td class="numberhilighted"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="totalitemtype" -->
 					</td>
 				</tr>
-			<!-- /TMPL_LOOP name="loopitemtype" -->
+			<!-- /TMPL_LOOP NAME="loopitemtype" -->
 			<tr>
 				<th>TOTAL</th>
-				<!-- TMPL_LOOP name="loopborrowertotal" -->
+				<!-- TMPL_LOOP NAME="loopborrowertotal" -->
 					<th>
-						<!-- TMPL_VAR name="issues" -->
+						<!-- TMPL_VAR NAME="issues" -->
 					</th>
 				<!-- /TMPL_LOOP -->
 				<th>&nbsp;</th>
@@ -40,9 +40,9 @@
 	<h1>Issues by borrower category</h1>
 	<form method="post">
 		<p>Select a borrower category (or don't if you want to see global status) <input type="text" name="value"></p>
-		<p>Select a branch : <!-- TMPL_VAR name="CGIbranch" --></p>
+		<p>Select a branch : <!-- TMPL_VAR NAME="CGIbranch" --></p>
 		<input type="submit" value="OK" class="button">
-		<input type="hidden" name="report_name" value="<!--TMPL_VAR name="report_name" -->">
+		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
 		<input type="hidden" name="do_it" value="1">
 	</form>
 <!-- /TMPL_IF -->

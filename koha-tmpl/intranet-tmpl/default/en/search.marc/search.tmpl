@@ -67,7 +67,7 @@
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="=">
-			<!-- TMPL_VAR name="CGIitemtype" -->
+			<!-- TMPL_VAR NAME="CGIitemtype" -->
 		</p>
 						<p>
 				<label class="label20">branch</label>
@@ -75,7 +75,7 @@
 				<input type="hidden" name="and_or" value="and">
 				<input type="hidden" name="excluding" value="">
 				<input type="hidden" name="operator" value="=">
-				<!-- TMPL_VAR name="CGIbranch" -->
+				<!-- TMPL_VAR NAME="CGIbranch" -->
 	</p>
 
 	</div>
@@ -87,7 +87,7 @@
 					<option value="and">and</option>
 					<option <!-- TMPL_IF NAME="or" -->selected <!-- /TMPL_IF -->value="or">or</option>
 				</select>
-				<!-- TMPL_VAR name="marclist" -->
+				<!-- TMPL_VAR NAME="marclist" -->
 				<select name="excluding" size="1" onchange="sql_update()">
 					<option value="0"> </option>
 					<option <!-- TMPL_IF NAME="not" -->selected <!-- /TMPL_IF -->value="1">not</option>
@@ -111,7 +111,7 @@
 	<div id="bloc25">
 		<p>
 			<div name="sql">
-				<textarea name="sql" rows=3 cols=70 disabled readonly></textarea>
+				<textarea name="sql" rows="3" cols="70" disabled readonly></textarea>
 			</div>
 		</p>
 		<p>Results per page :
@@ -136,7 +136,7 @@
 	</div>
 </form>
 
-<script>
+<script language="javascript" type="text/javascript">
 function sql_update() {
 document.f.sql.value="";
 	for (i=0 ; i<document.f.marclist.length ; i++) {
