@@ -212,6 +212,8 @@ if (!defined $charset_in) {
     warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
 }
 
+my $xgettext = './xgettext.pl';	# actual text extractor script
+
 if ($action eq 'create')  {
     # updates the list. As the list is empty, every entry will be added
     die "$str_file: Output file already exists" if -f $str_file;
@@ -222,7 +224,8 @@ if ($action eq 'create')  {
     }
     close $tmph;
     # Generate the specified po file ($str_file)
-    system ('xgettext.pl', '-s', '-f', $tmpfile, '-o', $str_file);
+    my $st = system ($xgettext, '-s', '-f', $tmpfile, '-o', $str_file);
+    warn_normal "Text extraction failed: $xgettext: $!\n", undef if $st != 0;
     unlink $tmpfile || warn_normal "$tmpfile: unlink failed: $!\n", undef;
 
 } elsif ($action eq 'update') {
@@ -235,13 +238,18 @@ if ($action eq 'create')  {
     }
     close $tmph1;
     # Generate the temporary file that acts as <MODULE>/<LANG>.pot
-    system('./xgettext.pl', '-s', '-f', $tmpfile1, '-o', $tmpfile2,
+    my $st = system($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
 	    (defined $charset_in? ('-I', $charset_in): ()),
 	    (defined $charset_out? ('-O', $charset_out): ()));
-    # Merge the temporary "pot file" with the specified po file ($str_file)
-    # FIXME: msgmerge(1) is a Unix dependency
-    # FIXME: need to check the return value
-    system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
+    if ($st == 0) {
+	# Merge the temporary "pot file" with the specified po file ($str_file)
+	# FIXME: msgmerge(1) is a Unix dependency
+	# FIXME: need to check the return value
+	system('msgmerge', '-U', '-s', $str_file, $tmpfile2);
+    } else {
+	warn_normal "Text extraction failed: $xgettext: $!\n", undef;
+	warn_normal "Will not run msgmerge\n", undef;
+    }
     unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
     unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
 
