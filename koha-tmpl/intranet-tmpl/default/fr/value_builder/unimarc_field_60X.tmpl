@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Recherche Thésaurus</title>
+	<title>Thesaurus search</title>
 </head>
 <body>
 	<script>
@@ -37,7 +37,7 @@
 	<table>
 	<tr>
 		<td valign="top">
-		<h2>Réponses</h2>
+		<h2>Results</h2>
 			<table>
 				<!-- TMPL_LOOP name="results" -->
 					<tr>
@@ -56,7 +56,7 @@
 		<td>
 		<!-- TMPL_IF name=deeper -->
 		<td valign="top">
-			<h2>Dépendances</h2>
+			<h2>Dependancies</h2>
 			<!-- /TMPL_IF -->
 			<table>
 			<!-- TMPL_LOOP name="deeper" -->
@@ -72,12 +72,12 @@
 		</td>
 	</tr>
 	</table>
-<h2>Ajout en cours</h2>
+<h2>Adding</h2>
 <form name="f3_pop"  action="thesaurus_popup.pl" method="post">
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="op" value="add">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
-	Créer une nouvelle autorité/entrée au thésaurus : <input type="text" name="insert" value="<!-- TMPL_VAR name="search_string" -->">
+	Create a new authority/thesaurus entry : <input type="text" name="insert" value="<!-- TMPL_VAR name="search_string" -->">
 	<input type="submit" name="NEW" value="Ajouter">
 	</form>
 </body>

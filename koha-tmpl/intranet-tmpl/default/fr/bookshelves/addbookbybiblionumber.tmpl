@@ -5,7 +5,15 @@
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
 	<p><label>Titre</label><!-- TMPL_VAR NAME="title" --></p>
 	<p><label>Auteur</label><!-- TMPL_VAR NAME="author" --></p>
-	<p><label>Ajouter une étagère virtuelle</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
-	<input type="submit" value="Ajouter une étagère virtuelle" class="button catalogue">
+	<p><label>Ajouter dans l'étagère virtuelle</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
+	<p>ou ajouter une nouvlle étagère virtuelle </p>
+	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
+		<select name="category">
+			<option value="1">Privé</option>
+			<option value="2">Publique</option>
+			<option value="3">Libre</option>
+		</select>
+	</p>
+	<input type="submit" value="Ajouter dans l'étagère virtuelle" class="button catalogue">
 </form>
 <!-- TMPL_INCLUDE Name="popup-bottom.inc" -->

@@ -14,7 +14,6 @@
 		<!-- TMPL_ELSE -->
 			<input type="button" value="Ajouter une autorité" onclick="Check(this.form)" accesskey="w" class="button authority">
 		<!-- /TMPL_IF -->
-<!--		<a href="javascript:PopupZ3950()" class="button authority">z3950 search</a> -->
 	</p>
 </div>
 
@@ -133,8 +132,8 @@ function Check(f) {
 	if (total_errors!=0) {
 		alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
-		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
+		alertString2 += "\n- "+ total_missing_mandatory_tags +_("Champ(s) obligatoire(s) non renseigné(s)");
+		alertString2 += "\n- "+ total_missing_mandatory_subfields +_("champs obligatoires non renseignés (voir les champs en caractère gras)");
 		alert(alertString2);
 	} else {
 		document.forms[1].submit();

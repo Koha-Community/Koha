@@ -2,24 +2,24 @@
 <div id="mainbloc">
 	<h1 class="parameters">Définir les règles de prêt pour <!-- TMPL_VAR NAME="branch" --></h1>
 	<div id="bloc25">
-		<h2 class="parameters">Optimisation pour les prêts</h2>
+		<h2 class="parameters">Astuces pour les prêts</h2>
 		<p>Remplir chaque pavé  avec la durée du prêt, le nombre maximum de prêts</p>
 		<p>égal à 21,5 permet 5 prêts pour une durée de 21 jours</p>
-		<h2 class="parameters">Optimisation pour les amendes</h2>
-		<p>Each box needs to be filled in with fine,time to start charging,charging cycle</p>
-		<p> par ex. 1,7,7 = 1Eur d'amende, au bout de 7 jours, par tranche de 7 jours</p>
-		<p>Note : fines are calculated by the fines2.pl script, located in misc directory. </p>
-		<p>Ask your administrator to put this script in crontab, after midnight, to have fines calculated every night</p>
+		<h2 class="parameters">Astuce pour les amendes</h2>
+		<p>Chaque cellule doit être remplie avec l'amende, l'échéance et la durée des charges</p>
+		<p>par ex. 1,7,7 = 1Eur d'amende, au bout de 7 jours, par tranche de 7 jours</p>
+		<p>Remarque : les amendes sont calculées par le script fines2.pl, situé dans le répertoire misc </p>
+		<p>Demandez à votre administrateur d'ajouter ce script dans le planificateur de tâches (crontab), après minuit, pour que les amendes soient calculées chaque nuit</p>
 	</div>
 	<div id="bloc25">
 		<h2 class="parameters">Valeurs par défaut</h2>
-		<p>  Si une cellule n'est pas renseignée, la première des valeurs suivantes est recherchée :</p>
+		<p> Si une cellule n'est pas renseignée, la première des valeurs suivantes est recherchée :</p>
 		<ul>
-			<li>même site et même catégorie de lecteur, type d'ouvrage*</li>
-			<li>Même site, même type d'ouvrage, catégorie de lecteur</li>
-			<li>Même type d'ouvrage, catégorie de lecteur, site</li>
-			<li>partout</li>
-			<li> Si rien n'est défini, la valeur par defaut est 21,5 (figé dans le code)</li>
+			<li>Même site et même catégorie de lecteur, type de document*</li>
+			<li>Même site, même type de document, catégorie de lecteur</li>
+			<li>Même type de document, catégorie de lecteur, site</li>
+			<li>Partout</li>
+			<li>Si rien n'est défini, la valeur par defaut est 21,5 (figé dans le code)</li>
 		</li>
 	</div>
 	<div id="bloc100">

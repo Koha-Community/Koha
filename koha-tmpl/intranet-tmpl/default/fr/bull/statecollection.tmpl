@@ -2,30 +2,8 @@
 <!-- TMPL_INCLUDE name="bull-top.inc" -->
 <!--------------------------MAIN BODY OF PAGE-------------------------->
 <div id="mainbloc">
-<h1 class="bull">Abonnement pour</h1>
+<h1 class="bull">Abonnement pour <!-- TMPL_VAR name="bibliotitle" --></h1>
 <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull">Abonnement</a>
-
-<div id="bloc25">
-	<h2 class="bull">Résumé d'abonnement</h2>
-	<form method="post" name="f" action="statecollection.pl">
-		<input type="hidden" name="op" value="modsubscriptionhistory">
-		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
-		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
-		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
-		<p><label>Bibliothécaire</label><!-- TMPL_VAR name="user" --></p>
-		<p><label>Date de début (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
-		<p><label>Date de fin</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
-		<p>N° Arrivés</p>
-		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
-		<p>Numéros enregistrés</p>
-		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
-		<p>Remarque de l'OPAC</p>
-		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
-		<p>Note interne</p>
-		<p>&nbsp;<textarea name="librariannote" COLS=60 ROWS=5><!-- TMPL_VAR name="librariannote" --></textarea></p>
-		<input type="submit" value="Enregistrer les changements" class="button bull">
-	</form>
-</div>
 
 <div id="bloc25">
 <h2 class="bull">Numéros attendus ou en retard</h2>
@@ -82,12 +60,31 @@
 	</table>
 	<input type="submit" value="Enregistrer les changements" accesskey="w" class="button bull">
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
-		<p>Subscription has expired. Waited last issue status can't be changed. <a href="#" onClick="popup()" class="button bull">Renew</a> your subscription</p>
+		<p>L'abonnement a expiré.L'état du prochain numero attendu ne peut-être changé. <a href="#" onClick="popup()" class="button bull">Renouveller</a>votre abonnement</p>
 	<!-- /TMPL_IF -->
 	</form>
 </div>
 
-</form>
+<div id="bloc25">
+	<h2 class="bull">Résumé d'abonnement</h2>
+	<form method="post" name="f" action="statecollection.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Bibliothécaire</label><!-- TMPL_VAR name="user" --></p>
+		<p><label class="label100">Date de début (*)</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"></p>
+		<p><label class="label100">Date de fin</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->"></p>
+		<p>Bulletins reçus</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Bulletins manquants</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Remarque de l'OPAC</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<input type="submit" value="Enregistrer les changements" class="button bull">
+	</form>
+</div>
+
 </table>
 <script language="JavaScript" type="text/javascript">
 

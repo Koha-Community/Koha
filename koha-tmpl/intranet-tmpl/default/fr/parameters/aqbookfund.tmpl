@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <div id="mainbloc">
 	<!-- TMPL_IF NAME="else" -->
-	<h1>Gestion des budgets</h1>
+	<h1>Gestion des lignes de crédit</h1>
 	<form action="<!-- TMPL_VAR NAME="scriptname" -->" method="post">
 	<input type="text" name="searchfield" value=""><input type="reset" name="reset" value="eff"></form>
 	<!-- TMPL_IF NAME="search" -->
@@ -9,7 +9,7 @@
 	<!-- /TMPL_IF -->
 	<table border="0" cellspacing="0" cellpadding="2" width="80%">
 	<tr>
-		<th>Fonds de livres</th>
+		<th>Ligne de crédit</th>
 		<th>Nom</th>
 		<th>Editer</th>
 		<th>Supprimer</th>
@@ -54,7 +54,7 @@
 	</table>
 	<form action="<!-- TMPL_VAR NAME="scriptname" -->" method="post">
 		<input type="hidden" name="op" value="add_form">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<br><input type="submit" class="button" value="Ajouter un budget" title="Ajouter un budget" alt="Ajouter un budget"><br>
+		<br><input type="submit" class="button" value="Ajouter une ligne de crédit" title="Ajouter une ligne de crédit" alt="Ajouter une ligne de crédit"><br>
 		<br></form><br clear="all">
 	<p> &nbsp; </p>
 	<!-- /TMPL_IF -->
@@ -99,10 +99,10 @@
 			var _alertString="";
 			var alertString2;
 			if (f.bookfundid.value.length==0) {
-				_alertString += "\n- " + _("code budget absent");
+				_alertString += "\n- " + _("code ligne de crédit absent");
 			}
 			if (f.bookfundname.value.length==0) {
-				_alertString += "\n- " + _("Libellé du budget absent");
+				_alertString += "\n- " + _("Libellé de la ligne de crédit absent");
 			}
 			if (_alertString.length==0) {
 				document.Aform.submit();
@@ -116,8 +116,8 @@
 		</script>
 	<h1>
 		<!-- TMPL_IF NAME="use-header-flags-p" -->
-		<!-- TMPL_IF NAME="header-is-add-p" -->Ajouter un fond de livres<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="header-is-modify-p" -->Modifier un fonds de livres<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="header-is-add-p" -->Ajouter une ligne de crédit<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="header-is-modify-p" -->Modifier une ligne de crédit<!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
 		<!-- TMPL_VAR NAME="header" -->
 		<!-- /TMPL_IF -->
@@ -127,11 +127,11 @@
 	<input type="hidden" name="checked" value="0">
 	<!-- TMPL_IF NAME="add_or_modify" -->
 	<p>
-		<label>Fonds de livres</label><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->"><!-- TMPL_VAR NAME="bookfundid" -->
+		<label>Ligne de crédit</label><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->"><!-- TMPL_VAR NAME="bookfundid" -->
 	</p>
 	<!-- TMPL_ELSE -->
 	<p>
-		<label>Fonds de livres</label><input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)">
+		<label>Ligne de crédit</label><input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)">
 	</p>
 	<!-- /TMPL_IF -->
 	<p>
@@ -152,7 +152,7 @@
 	
 	<!-- TMPL_IF NAME="delete_confirm" -->
 	<table border="0" cellspacing="0" cellpadding="5">
-	<tr valign="top" bgcolor="#99cc33"><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Fonds de livres</b></td><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="bookfundid" --></b></td></tr>
+	<tr valign="top" bgcolor="#99cc33"><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Ligne de crédit</b></td><td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="bookfundid" --></b></td></tr>
 	<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->">
 	<tr><td>Nom</td><td><!-- TMPL_VAR NAME="bookfundname" --></td></tr>
 	<tr><td colspan="2" align="center">CONFIRMEZ SUPPRESSION</td></tr>

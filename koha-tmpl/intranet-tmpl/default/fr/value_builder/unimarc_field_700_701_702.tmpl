@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Constructeur d'autorité nom de personne</title>
+<title>Personal Authorities builder</title>
 </head>
 <body>
 	<form name="f_pop" action="plugin_launcher.pl" method="post">
@@ -13,7 +13,7 @@
 	<input type="hidden" name="b" value="<!-- TMPL_VAR name="b" -->">
 	<input type="hidden" name="c" value="<!-- TMPL_VAR name="c" -->">
 	<input type="hidden" name="f" value="<!-- TMPL_VAR name="f" -->">
-	<input type="submit" value="Recherche"><input type="button" value="FIN" onclick="javascript:report()">
+	<input type="submit" value="Recherche"><input type="button" value="END" onClick="javascript:report()">
 	</form>
 <!-- TMPL_IF name="search_string" -->
 	<form name="f2_pop"  action="plugin_launcher.pl" method="post">
@@ -29,7 +29,7 @@
 	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="op" value="add">
-	Ajouter une nouvelle autorité
+	Ajouter une nouvelle autorité: <input type="text" name="insert" value="<!-- TMPL_VAR name="search_string" -->">
 	<input type="submit" name="NEW" value="NOUVEAU">
 	</form>
 		<script>

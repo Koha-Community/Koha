@@ -2,25 +2,25 @@
 	<h1>Abonnement Périodiques et résumé</h1>
 	<p>Cet écran est divisé en 2 parties</p>
 	<h2>La partie droite</h2>
-	<p>The right part deals with issues. When you create a new subscription, the 1st issue is automatically calculated. When you want/need, you can define issues that have a new status:</p>
+	<p>La partie droite concerne les parutions.Quand vous créer un nouvel abonnement, le 1er numéro est calculée automatiquement.Lorsque vous  voulez/ avez besoin,vous pouvez  définir les numeros qui ont un nouveau statut :</p>
 	<ul>
-		<li>Arrived : when an book arrives, you can set it's status to "arrived". Then, the issue disappear from this list, and the number of the issue is added to the "arrived list" (on the left box)</li>
-		<li>Late : means that the book is late and should be arrived. A books changed to "late" status stays on the issue list, and the next waited number is generated</li>
-		<li>Missing : means the book will never arrive. The issue disappear from the list, and the number of the issue is added to the "missing list" (on the left box)</li>
+		<li>Arrivé : lorqu'un bulletin arrive, vous pouvez le mettre en état"arrivé". Le bulletin disparait de la liste et le numéro est ajouté dans la liste des bulletins arrivés (à gauche)</li>
+		<li>En retard : signifie que le document est en retard et devrait être arrivé.Un numéro, qui noté à l'état en retard reste dans la liste des bulletins attendus et le  bulletin suivant attendu est généré</li>
+		<li>Manquant : signifie que la livraison n'aura jamais lieu.Le numéro disparaît de la liste et est ajouté à la liste "Liste des lacunes" (sur la partie gauche)</li>
 	</ul>
 	<h2>La partie gauche</h2>
-	<p>the left part contains 6 differents informations, that are automatically calculated for some of them, but that you can change<p>
+	<p>Il y a 6 informations différentes dans la partie gauche, qui sont calculées automatiquement pour la plupart, mais vous pouvez les changer<p>
 	<ul>
-		<li>Subscription beginning date : the date of the beginning of the 1st subscription. Should not be modified and is not modified automatically by subscriptions renewals</li>
-		<li>Subscription enddate : must be entered manually when the subscription is definetly closed</li>
-		<li>Arrived numbers : the list of issues you have in your library. Automatically filled when a new number is marked "arrived". You can manually change this field if you want, for example, to change a long list (1,2,3,4,...,51) to a shorter one (1-51)</li>
-		<li>Missing numbers : the list of issues you don't have in your library, and that will never arrive (or have been lost). Automatically filled when a new number is marked "missing". You can manually change this field if you want, for example, to change a long list (1,2,3,4,...,51) to a shorter one (1-51)</li>
-		<li>opac note : the field that appears in the OPAC (with some other subscription information like beginning date & end date. This field must be filled manually. Nothing is put here automatically</li>
-		<li>opac note : the field that appears in the librarian interface (with some other subscription information like beginning date & end date. This field must be filled manually. Nothing is put here automatically.</li>
+		<li>Date de début d'abonnement : la date de début du premier abonnement.Ne devrait être modifiée et n'est pas modifié automatiquement lors du renouvellement des abonnements</li>
+		<li>date de fin d'abonnement : doit être entré manuellement lorsque l'abonnement est définitivement clos</li>
+		<li>Numéros arrivés : la liste des numéros que vous avez dans votre bibliothèque. Automatiquement rempli quand un bulletin est marqué arrivé. Vous pouvez modifier ce champ manuellement, par exemple pour changer une longue liste (1,2,3,4,...,51) en une plus courte(1-50)</li>
+		<li>Numéros manquants : la liste des  numéros que vous n'avez pas dans votre bibliothèque, et qui n'arriveront jamais (ou qui ont été perdus).</li>
+		<li>note de l'OPAC : le champ qui apparaît à l'OPAC (avec quelques autres informations sur l'abonnement comme la date de début et de fin).Ce champ doit être rempli manuellement.Rien n'est mis ici automatiquement</li>
+		<li>Note de l'OPAC : le champ qui apparaît dans l'interface bibliothécaire (avec quelques autres informations sur l'abonnement comme la date de début et de fin).Ce champ doit être rempli manuellement.Rien n'est mis ici automatiquement</li>
 	</ul>
 	<h2>Renouvellement d'abonnement</h2>
-	<p>Koha calculates automatically the end of the subscription (based on the start date and the number of issues recieved). when a subscription has ended, you can't change the status of the last "waited number" (as it's not waited in fact). To be able to "recieve" this number, you must renew your subscription.</p>
-	<p>Renewing a subscription means that you define some informations for the renewal. When those informations have been filled, a suggestion is automatically created in Koha. This suggestion can be managed by the librarian that orders books, as any other order (= budget & bookseller are defined here).</p>
-	<p><i>Note that the subscription renewal done by the "serials librarian" is supposed to be immediate. We have decided to keep Koha as simple as possible. In fact, the subscription renewal won't be immediate, but we didn't wanted to add too much complexity.</i></p>
+	<p>Koha calcule automatiquement la fin de l'abonnement (à partir de la date de début et du nombre d'exemplaires reçus). Lorsqu'un abonnement a pris fin, vous ne pouvez plus changer l'état du dernier "exemplaire en attente" (car il n'est plus attendu en fait). Pour pouvoir "recevoir" ce numéro, vous devez renouveler votre abonnement.</p>
+	<p>Renouveller un abonnement signifie que vous devez compléter quelques informations pour le renouvellement.Lorsque ces informations sont saisies, une suggestion est automatiquement créée dans Koha.Cette suggestion peut- être gérée par la/le bibliothécaire qui commande les livres, comme n'importe quelle autre commande (= budget et fournisseur sont définis ici).</p>
+	<p><i>Noter que le renouvellement de l'abonnement fait par le bibliothécaire responsable des périodiques est censé être immédiat.Nous avons choisi de rendre Koha aussi simple que possible.En fait, le renouvellement de l'abonnement ne peut pas être immédiat, mais nous n'avons pas voulu ajouter trop de complications.</i></p>
 	</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

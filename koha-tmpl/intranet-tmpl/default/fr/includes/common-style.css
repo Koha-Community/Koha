@@ -1,5 +1,5 @@
 body {
-	font-family:arial,helvetica;
+	font-family:arial,helvetica,sans-serif;
 	font-size:10pt;
 	margin:0px;
 	padding:0px;
@@ -57,7 +57,6 @@ label {
 	border-color: black;
 	text-decoration: none;
 	color: black;
-	border-radius: 6px;
 	cursor:pointer;
 	vertical-align:middle;
 	-moz-border-radius: 6px;
@@ -70,13 +69,12 @@ table {
 	border:1px solid #000000;
 	border-collapse:collapse;
 	width:100%;
-	font-size:10px;
 }
 
 table.noborder {
 	border:0px;
 	border-collapse:collapse;
-	float:center;
+	margin : auto;
 }
 table.small {
 	width:auto;
@@ -96,7 +94,6 @@ th.noborder {
 	background-image:none;
 	font-weight:bold;
 	text-align:center;
-	border:0px;
 	border:1px solid #ad11ad;
 /* 	border-left:1px solid #ad11ad; */
 	padding:3px 0px 3px 0px;
@@ -123,6 +120,18 @@ td.numberhilighted {
 	text-align:right;
 }
 
+#resultlist table {
+	margin : auto;
+}
+
+#resultlist table td {
+	border-right : 1px solid #CCCCCC;
+}
+
+#resultlist table td:last-child {
+	border-right : 1px solid Black;
+}
+
 h1 {
 	color:#000000;
 	background-color:#DDDDDD;
@@ -144,6 +153,11 @@ h2 {
 	padding-bottom:3px;
 	padding-top:3px;
 }
+
+h2.help {
+	text-align : left;
+	margin-top : 10px;
+	}
 
 h3 {
 	margin-top:0px;
@@ -192,30 +206,66 @@ h3 {
 	position:absolute;
 }
 
-#bloc25 {
+#bloc25, .bloc25 {
 	float:left;
-	width=30%;
 	border:1px solid #000000;
 	margin:10px;
 	padding:0px;
 }
-#bloc100 {
+#bloc100, .bloc100 {
 	float:left;
 	position:relative;
-	width=100%;
+	width:100%;
 	border:1px solid #000000;
 	margin:10px;
 }
 
 #resultnumber {
-	width=30%;
-	margin-left:35%;
-	margin:right:35%;
+	margin-top : 5px;
+	text-align : center;
 }
+
+a.resultnumber {
+	margin-bottom : 5px;
+	padding : 2px 4px;
+	background-color : White;
+	border : 1px solid #339900;
+	font-weight : bold;
+}
+
+#resultnumber .highlight {
+	margin-bottom : 5px;
+	padding : 2px 4px;
+	background-color : #EEEEEE;
+	border : 1px solid Black;
+	font-weight : bold;
+}
+
+a.resultnumber:hover {
+	background-color : #ffffcc;
+}
+
+.resultcount {
+	border-top : 1px solid white;
+	font-weight : bold;
+	padding : 3px;
+}
+
 #resultlist {
-	width=70%;
-	margin-left:5%;
-	margin:right:5%;
+	width:95%;
+	margin : auto;
+/*	margin-left:5%;
+	margin-right:5%;*/
+}
+
+#resultlist p {
+	font-size : .8em;
+}
+
+a.resultlist {
+	font-weight : bold;
+	display : block;
+	padding-left : 5px;
 }
 
 a {
@@ -228,7 +278,7 @@ a:hover {
 
 a.submenu {
 	text-decoration: none;
-	cursor: hand;
+	cursor : pointer;
 	color:#777777;
 	background-color:#EEEEEE;
 	font-weight: bold;
@@ -236,7 +286,7 @@ a.submenu {
 }
 a.submenu:hover {
 	text-decoration: none;
-	cursor: hand;
+	cursor:pointer;
 	color:#777777;
 	background-color:#EEEEEE;
 	font-weight: bold;
@@ -246,7 +296,7 @@ a.submenu:hover {
 
 a.submenu2 {
 	text-decoration: none;
-	cursor: hand;
+	cursor:pointer;
 	color:#777777;
 	background-color:#CCCCCC;
 	font-weight: bold;
@@ -254,7 +304,7 @@ a.submenu2 {
 }
 a.submenu2:hover {
 	text-decoration: none;
-	cursor: hand;
+	cursor:pointer;
 	color:#777777;
 	background-color:#CCCCCC;
 	font-weight: bold;
@@ -264,10 +314,9 @@ a.submenu2:hover {
 
 #menubar {
 	border-top:1px solid #666666;
-	font: 125% sans-serif;
+	font: 125% bold sans-serif;
 	background-color:#DDDDDD;
 	padding-bottom:5px;
-	font-weight:bold;
 }
 #submenu {
 	background-color:#EEEEEE;

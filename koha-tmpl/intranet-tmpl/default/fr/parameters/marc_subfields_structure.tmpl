@@ -36,11 +36,11 @@
 				<label>&nbsp;</label>
 				<label>Texte pour l'OPAC</label> <input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80">
 			</p>
-			<p><label>&nbsp;</label><label>Géré dans la table</label> <!-- TMPL_VAR NAME="tab" --> (</p>
-			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="hidden" --> hidden (subfield is managed, but hidden. -should be filled by a plugin or thesaurus-)</p>
-			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="isurl" --> URL (if checked, it means that the subfield is an URL and can be clicked</p>
+			<p><label>&nbsp;</label><label>Géré dans l'onglet</label> <!-- TMPL_VAR NAME="tab" --> (non reconnu signifie que le sous-champ n'est pas géré par Koha)</p>
+			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="hidden" --> caché (champ géré, mais caché. - devrait être rempli par un module d'extension ou une liste d'autorité-)</p>
+			<p><label>&nbsp;</label><!-- TMPL_VAR NAME="isurl" --> URL (si coché, indique que le champ est une URL valide et peut-être cliquée</p>
 			<p>
-				<label>&nbsp;</label><label>Valeur Autorisée :</label>  <!-- TMPL_VAR NAME="authorised_value" --> ou thésaurus : <!-- TMPL_VAR NAME="authtypes" --> ou module d'extension : <!-- TMPL_VAR NAME="value_builder" --> ou lien : <input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5"> (exemple : 200b)
+				<label>&nbsp;</label><label>Valeur Autorisée :</label> <!-- TMPL_VAR NAME="authorised_value" --> ou liste d'autorité : <!-- TMPL_VAR NAME="authtypes" --> ou module d'extension : <!-- TMPL_VAR NAME="value_builder" --> ou lien : <input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5"> (exemple 200b)
 			</p>
 		</td>
 		</tr>
@@ -48,9 +48,9 @@
 	</table>
 	<input type="submit" value="OK">
 	<p>Remarque : dans la dernière colonne, vous pouvez choisir :
-	<ul><li>An "authorised value": it refers to a list of authorised values for this subfield. See the corresponding admin table.</li>
-	<li>A "thesaurus category": it refers to a thesaurus category. See the corresponding admin table.</li>
-	<li>A "value builder": values builders are perl programs that help you select the value of the field. They are MARC-flavor dependant and sometimes fill another subfield automatically.</li>
+	<ul><li>Une "valeur autorisée" : renvoie à une liste de valeurs autorisées pour le sous-champ. Voir dans la table de gestion correspondante</li>
+	<li>Une "catégorie d'autorité" : cela renvoie à une catégorie d'autorité.Voir la table d'administration correspondante.</li>
+	<li>"plug in" les plugins sont des programmes Perl qui vous aident à entrer la valeur d'un sous champ. Ils changent en fonction de votre déclinaison MARC et remplissent parfois un autre champ automatiquement</li>
 	</ul>
 	</p>
 	</form>
@@ -99,8 +99,8 @@
 <!-- ------------------------------------------------------------------------ -->
 <!-- TMPL_IF NAME="else" -->
 <h1>Gestion de la structure des sous-champs MARC pour <!-- TMPL_VAR NAME="tagfield" --> (Grille <!--TMPL_VAR NAME="frameworkcode" -->)</h1>
-<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
-<p>The column <b>Koha field</b> shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, or a Koha interface. This link ensures that both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
+<p>Cet écran montre les sous-champs  associés au champ sélectionné.Vous pouvez ouvrir les sous-champs ou en ajouter de nouveaux en cliquant sur edit. </p>
+<p>La colonne <b>Champ Koha</b> montre que le sous-champ est lié à un champ Koha. Koha peut présenter une interface MARC ou une interface Koha. Ce lien assure la synchronisation des deux modes (dans la base de données), de cette façon vous pouvez passer du mode MARC au mode non-MARC facilement.</p>
 
 <table>
 <tr>
@@ -132,6 +132,7 @@
 			<!-- TMPL_IF NAME="authorised_value" --> Valeur Autorisée :<!-- TMPL_VAR NAME="authorised_value" -->,<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="authtypecode" --> Autorité :<!-- TMPL_VAR NAME="authtypecode" -->,<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="value_builder" -->Plugin : <!-- TMPL_VAR NAME="value_builder" -->,<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="link" -->Lien : <!-- TMPL_VAR NAME="link" -->,<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
 	</td>
 	<td><a href="<!-- TMPL_VAR NAME="delete" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>

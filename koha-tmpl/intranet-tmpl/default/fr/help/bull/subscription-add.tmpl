@@ -2,19 +2,19 @@
 	<h1>Aide de Abonnement Périodiques Ajouter et modifier</h1>
 	<ul>
 		<h2>Bloc d'information d'abonnement</h2>
-		<p>it contains the name of the librarian that created the subscription, the name of the supplier providing the subscription, the cost and the budget affected. It also contains the title of the biblio managed by the subscription.</p>
+		<p>Comporte le nom du bibliothécaire qui a créé l'abonnement, le nom du fournisseur qui procure l'abonnement, le prix et le budget affecté.Comporte aussi le titre de la notice concernée par l'abonnement</p>
 		<h2>Bloc d'information sur le calendrier</h2>
 		<p>Contient des informations diverses pour calculer les dates d'arrivée</p>
-		<h2>Duréé d'abonnement</h2>
-		<p>one field in this bloc should be filled : the subscription length can be calculated in weeks, months or number of issues to recieve</p>
+		<h2>Durée d'abonnement</h2>
+		<p>Un champ de ce bloc doit être rempli : la durée de l'abonnement peut être calculée en semaines, mois ou nombre de numéros à recevoir</p>
 		<h2>Calcul de la numérotation</h2>
-		<p>The numbering of issues recieved can be a complex formulas. The "numbering formula" can be filled with any text and/or numbers. 3 special tokens <b>{X} {Y}</b> and <b>{Z}</b> can be user to define the calculation formula. XYZ values are calculated with the following method:</p>
+		<p>Le numéro des bulletins reçus peut être une formule complexe. La formule peut contenir n'importe quel texte et/ou chiffre. <b>{X} {Y}</b> et <b>{Z}</ b> sont particuliers. Vous pouvez les utiliser pour définir une formule de calcul. les valeurs de XYZ sont calculées de la manière suivante :</p>
 			<ul>
 				<li>Ajouter: ce nombre est ajouté à XYZ</li>
-				<li>once every : the number before can be added on every issue or less often</li>
+				<li>toutes les : le nombre avant peut être ajouter à chaque parution ou moins souvent</li>
 				<li>Quand supérieur à : si le chiffre calculé est supérieur à la valeur ci</li>
-				<li>Set back to : if the previous condition is valid, the calculated number is set to this one instead</li>
-				<li>Last value / begins with : the last value calculated or the 1st value (when adding a subscription</li>
+				<li>Retourner à : si la condition précédente est validée, le numéro calculé est fixé à celui-ci à la place</li>
+				<li>Dernière valeur/commence avec : la dernière valeur calculée ou la 1ère (quand on ajoute un abonnement)</li>
 			</ul>
 		<h2>Echantillon</h2>
 		Etudier la formule <b>N°{X}/{Y}</b>.
@@ -23,8 +23,8 @@
 			<li> <b>Y</b> ajouter <b>1</b> toutes les <b>1</b> fois.Quand supérieur à <b>4</b> Retourner à <b>4</b>. Commence par <b>1</b></li>
 		</ul>
 		Donnera les numéros de parution suivants
-		<p>N°2004/1, N°2004/2, N°2004/3, N°2004/4, N°2005/1, N°2005/2, N°2005/3, N°2005/4, N°2006/1</p>
+		<p>N°2004/1, N°2004/2, N°2004/3, N°2004/4, N°2005/1, N°2005/2, N°2005/3, N° 2005/4, N°2006/1</p>
 		<p>
-			<b>Note:</b> when you add a subscription, Koha consider you already have done the order, or that you will do it soon. So, NO information is sent to the acquisition module. This is not the case when the subscription expires. In this case, a subscription renewal creates a "suggestion" that is sent to the acquisition module.
+			<b>Note:</b>lorsque vous ajoutez un abonnement, Koha considère que vous avez déjà passé la commande où que vous allez le faire bientôt.Aussi, AUCUNE information n'est envoyée vers le module acquisition.Ca n'est pas le cas quand l'abonnement arive à expiration.Dans ce cas,un renouvellement de l'abonnement  crée une
 		</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

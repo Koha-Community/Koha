@@ -3,7 +3,7 @@
 <!-- TMPL_UNLESS name="popup" -->
 	<div class="tabbed">
 		<h1 class="catalogue">Notice MARC : <!-- TMPL_VAR NAME="bibid" --></h1>
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Edit biblio  </a>  <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue">  Edit item  </a>   <a href="javascript:confirm_deletion()" class="button catalogue">  delete  </a>  <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  Normal  </a>  <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">  ISBD  </a>  <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  Add to shelf  </a>  <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue">  Print  </a>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Editer notice </a> <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue"> Editer exemplaires </a> <a href="javascript:confirm_deletion()" class="button catalogue"> supprimer </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Normal </a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Ajouter dans étagère virtuelle </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Imprimer </a>
 		<!-- TMPL_IF name="subscriptionid" -->
 		<a href="bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue"> Abonnement </a> <a href="bull/serial-issues.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button catalogue" title="Serial issues"> Numéros </a>
 		<!-- /TMPL_IF -->
@@ -49,20 +49,28 @@
 
 	<div name="0XX" id="0XX" class="tab" style="visibility:visible">
 		<!-- TMPL_LOOP NAME="0XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Search on this Field's Value">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF NAME="authority" -->
-						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
+						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Auth</a>
 					<!-- /TMPL_IF -->
 				</p>
 			<!-- /TMPL_LOOP -->
@@ -71,14 +79,22 @@
 	
 	<div id="1XX" class="tab">
 		<!-- TMPL_LOOP NAME="1XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
@@ -93,20 +109,28 @@
 	
 	<div id="2XX" class="tab">
 		<!-- TMPL_LOOP NAME="2XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Search on this Field's Value">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF NAME="authority" -->
-						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
+						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Auth</a>
 					<!-- /TMPL_IF -->
 				</p>
 			<!-- /TMPL_LOOP -->
@@ -115,14 +139,22 @@
 	
 	<div id="3XX" class="tab">
 		<!-- TMPL_LOOP NAME="3XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
@@ -137,20 +169,28 @@
 	
 	<div id="4XX" class="tab">
 		<!-- TMPL_LOOP NAME="4XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Search on this Field's Value">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF NAME="authority" -->
-						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
+						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Auth</a>
 					<!-- /TMPL_IF -->
 				</p>
 			<!-- /TMPL_LOOP -->
@@ -159,14 +199,22 @@
 	
 	<div  id="5XX" class="tab">
 		<!-- TMPL_LOOP NAME="5XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
@@ -181,20 +229,28 @@
 	
 	<div id="6XX" class="tab">
 		<!-- TMPL_LOOP NAME="6XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Search on this Field's Value">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF NAME="authority" -->
-						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
+						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Auth</a>
 					<!-- /TMPL_IF -->
 				</p>
 			<!-- /TMPL_LOOP -->
@@ -203,14 +259,22 @@
 	
 	<div  id="7XX" class="tab">
 		<!-- TMPL_LOOP NAME="7XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
@@ -225,20 +289,28 @@
 	
 	<div id="8XX" class="tab">
 		<!-- TMPL_LOOP NAME="8XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Search on this Field's Value">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
 					<!-- TMPL_VAR NAME="marc_value" -->
 					<!-- TMPL_IF NAME="authority" -->
-						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autorité</a>
+						<a href="authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Auth</a>
 					<!-- /TMPL_IF -->
 				</p>
 			<!-- /TMPL_LOOP -->
@@ -247,14 +319,22 @@
 	
 	<div id="9XX" class="tab">
 		<!-- TMPL_LOOP NAME="9XX" -->
-				<p class="MARCtag">
-					<!-- TMPL_VAR NAME="tag" -->
-				</p>
+				<!-- TMPL_IF name="tag" -->
+					<p class="MARCtag">
+						<!-- TMPL_VAR NAME="tag" -->
+					</p>
+				<!-- TMPL_ELSE -->
+					<br />
+				<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="subfield" -->
 				<p>
 					<label class="labelsubfield">
-					<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator=&amp;#x003D&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
-						<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
+					<!-- TMPL_IF name="link">
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- TMPL_ELSE -->
+						<a href="search.marc/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="marc_tag" --><!-- TMPL_VAR NAME="marc_subfield" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+					<!-- /TMPL_IF -->
+					<img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" alt="Rechercher à partir des valeurs de ces champs">
 					</a>
 					<!-- TMPL_VAR NAME="marc_subfield" -->
 					<!-- TMPL_VAR NAME="marc_lib" --></label>
@@ -306,7 +386,7 @@ function confirm_deletion() {
 	}
 }
 function Dopop(link) {
-	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
 </body>

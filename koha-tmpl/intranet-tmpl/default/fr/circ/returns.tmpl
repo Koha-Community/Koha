@@ -3,14 +3,14 @@
 <div id="mainbloc">
 	<h1 class="circulation">Prêt: Retours</h1>
 	<p>
-		<b>Site:</b> <!-- TMPL_VAR NAME="branchname" -->, <b>Imprimante:</b> <!-- TMPL_VAR NAME="printername" --> <a href="selectbranchprinter.pl" class="button circulation">Changer Paramètres</a>
+		<b>Site:</b> <!-- TMPL_VAR NAME="branchname" -->, <b>Imprimante:</b> <!-- TMPL_VAR NAME="printername" --> <a href="selectbranchprinter.pl" class="button circulation">Changer Réglages</a>
 	</p>
 	
 	<!-- TMPL_IF Name="found" -->
 		<div id="bloc25">
 			<!-- TMPL_IF Name="waiting" -->
 				<h2 class="circulation">Exemplaire marqué 'En attente' :</h2>
-			<p> Le document <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) est noté en attente à <b><!-- TMPL_VAR NAME="branchname" --></b> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
+			<p>Le document <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) est noté en attente à <b><!-- TMPL_VAR NAME="branchname" --></b> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 					<form method="post" action="returns.pl">
 					<!-- TMPL_LOOP Name="inputloop" -->
 						<input type="hidden" name=ri-<!-- TMPL_VAR NAME="counter" --> value=<!-- TMPL_VAR NAME="barcode" -->>
@@ -24,7 +24,7 @@
 			<!-- TMPL_IF Name="diffbranch" -->
 				<h2 class="circulation">Exemplaire marqué 'En attente' :</h2>
 				<p>
-					Item: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)  needs to be transfered to <b><!-- TMPL_VAR NAME="branchname" --></b>  to be picked up by  <!-- TMPL_VAR NAME="name" -->  (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
+					L'exemplaire: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) doit être transféré à <b><!-- TMPL_VAR NAME="branchname" --></b> pour être retiré par <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false;"><!-- TMPL_VAR NAME="borcnum" --></a>).
 				</p>
 				<center>
 				<form method="post" action="returns.pl">
@@ -42,7 +42,7 @@
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="reserved" -->
 				<h2 class="circulation">Réservation trouvée</h2>
-				<p>Item: <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->)  <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;">  <!-- TMPL_VAR NAME="itembarcode" -->  </a>  for <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) to be collected at <b><!-- TMPL_VAR NAME="branchname" --></b>.
+				<p>Exemplaire : <!-- TMPL_VAR NAME="itemtitle" --> (<!-- TMPL_VAR NAME="itemauthor" -->) <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra" onclick="openWindow('/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;type=intra', 'Item'); return false;"> <!-- TMPL_VAR NAME="itembarcode" --> </a> pour <!-- TMPL_VAR NAME="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->" onclick="openWindow('/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->', 'Member'); return false"><!-- TMPL_VAR NAME="borcnum" --></a>) peut être retiré à <b> <!-- TMPL_VAR NAME="branchname" --></b>.
 				</p>
 				<p>
 				Mettre en attente et imprimer <a href="" class="circulation" onClick="alert(document.forms[0].resslip.value); return false">bon de prêt</a> ? </p>
@@ -83,8 +83,8 @@
 	<!-- TMPL_ELSE -->
 		<div id="bloc25">
 			<form method="post" action="/cgi-bin/koha/circ/returns.pl">
-				<h2 class="circulation">Entrez le code barre du livre</h2>
-				<label class="label20">Code Barre de l'exemplaire :</label><input name="barcode" size="10">
+				<h2 class="circulation">Entrez le code à barres du livre</h2>
+				<label class="label20">Code à Barres de l'exemplaire :</label><input name="barcode" size="10">
 				</table>
 				<!-- TMPL_LOOP Name="inputloop" -->
 					<input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->">
@@ -99,7 +99,7 @@
 				<!-- TMPL_LOOP Name="errmsgloop" -->
 					<span id="problem">
 					<!-- TMPL_IF Name="badbarcode" -->
-						Pas d'exemplaire avec code barre : <!-- TMPL_VAR NAME="msg" -->
+						Pas d'exemplaire avec code à barres : <!-- TMPL_VAR NAME="msg" -->
 					<!-- /TMPL_IF -->
 					<!-- TMPL_IF Name="ispermanent" -->
 						Merci de retourner à <!-- TMPL_VAR NAME="msg" -->
@@ -118,7 +118,7 @@
 		</div>
 	<!-- TMPL_IF Name="returned" -->
 		<div id="bloc25">
-			<h2 class="circulation">Information sur l'ouvrage rendu</h2>
+			<h2 class="circulation">Information sur le document rendu</h2>
 			<p>Titre : <!-- TMPL_VAR NAME="itemtitle" --></p>
 			<h2 class="circulation">Information lecteur</h2>
 			<p>
@@ -161,15 +161,15 @@
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF Name="riloop" -->
 		<div id="bloc25">
-			<h2 class="circulation">Ouvrages rendus</h2>
+			<h2 class="circulation">Documents rendus</h2>
 			<table>
 			<tr>
 				<th class="circulation">Date de retour</th>
-				<th class="circulation">Code Barre</th>
+				<th class="circulation">Code à Barres</th>
 				<th class="circulation">Titre</th>
 				<th class="circulation">Auteur</th>
 				<th class="circulation">Type</th>
-				<th class="circulation">Lecteur</th>
+				<th class="circulation">Emprunteur</th>
 			</tr>
 			<!-- TMPL_LOOP Name="riloop" -->
 				<tr>

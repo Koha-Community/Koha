@@ -1,15 +1,15 @@
 <!-- TMPL_INCLUDE name="help-top.inc" -->
 <h1>Gestion des serveurs Z39.50</h1>
-<p>Defines the Z39.50 servers you want Koha to search.</p>
+<p>Détermine les serveurs Z3950 sur lesquels vous voulez que Koha cherche.</p>
 
-<p>Koha comes with one Z39.50 server site defined (the U.S. Library of Congress) for finding catalog records to import directly into your catalog. In this area, you can define other servers for searching.</p>
+<p>Koha est fourni avec un serveur Z3950 défini (La Bibliothèque du Congrès des Etat-Unis)pour chercher des notices de catalogage à importer directement dans votre catalogue.A cet endroit, vous pouvez indiquer d'autres serveurs pour la recherche.</p>
 
 <p>To add servers, you will need to know the domain name or IP address of the server, the port number to use, and the name of the database to access. This information is available for many servers worldwide by acessing the Index Data website at http://www.indexdata.dk/targettest/. All of the servers listed there accept anonymous connections. (Be sure to choose servers which deliver records in the proper MARC format for your Koha installation.)</p>
 
-<p>If you have a login name and password for other Z39.50 servers, Koha will save your user ID and password in addition to the other information it needs to make a connection. (For anonymous servers, leave the userid and password fields blank.) The other fields on the form control whether or not the server is automatically searched when you request a Z39.50 search (put a "1" in the "Checked" field) and the order in which it is checked.</p>
+<p>Si vous avez un nom d'ouverture de session, et un mot de passe pour d'autres serveurs z3950, Koha sauvera  votre identification d'utilisateur et mot de passe en plus des autres informations dont il a besoin pour se connecter.(Pour les serveurs anonymes, laissez les champs identifiant et  mot de passe en blanc.)Les autres champs du formulaire commandent si le serveur cherche automatiquement ou non quand vous lancer une requête z3950 (Mettre un "1"dans le champ "Checked" et l'ordre dans lequel il sera contrôlé.</p>
 
-<p>It is a good idea to be selective in choosing servers. Defining more than five or six checked servers may slow down your Z39.50 search results, even if they are queried all together.</p>
+<p>C'est une bonne idée d'être sélectif dans le choix des serveurs.Définir plus de cinq ou six serveurs controlés pourrait retarder les résultats de votre recherche z3950, même s'ils sont interrogés en même temps.</p>
 
-<p>IMPORTANT NOTE : the z3950search will NOT work until your system administrator has not activated the z3950 client daemon on your server. The daemon is in KohaDirectory/script/z3950daemon. It should be added to rc.d to be launched during server boot.</p>
+<p>REMARQUE IMPORTANTE : la recherche Z3950 NE fonctionnera PAS tant que votre administrateur système n'aura pas désactivé le démon du client z3950 sur votre serveur.Le démon se trouve dans KohaDirectory/script/z3950daemon.Il peut être ajouter au rc.d pour être lancé pendant l'initialisation du serveur.</p>
 
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

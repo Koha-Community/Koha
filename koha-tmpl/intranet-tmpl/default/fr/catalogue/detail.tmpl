@@ -3,7 +3,7 @@
 <div id="mainbloc">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
-	 <a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">MARC</a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD</a><a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Ajouter à l'étagère</a><a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Imprimer</a>
+	<a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">MARC</a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD</a><a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Ajouter à l'étagère</a><a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Imprimer</a>
 	<!-- TMPL_IF NAME="norequests" -->
 	<!-- TMPL_ELSE -->
 		<a class="button catalogue" href="request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Demandes</a>
@@ -29,6 +29,7 @@
 			<!-- TMPL_IF NAME="classification" -->Classification : <!-- TMPL_VAR NAME="classification" --><br><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="lccn" --><b>LCCN :</b> <!-- TMPL_VAR NAME="lccn" --><br><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="url" --><b>URL:</b> <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a><br><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="subjects" --><b>Subjects:</b> <!-- TMPL_VAR NAME="subjects" --><br><!-- /TMPL_IF -->
 			<b>Nombre Total d'exemplaires :</b> <!-- TMPL_VAR NAME="count" -->
 	</div>
 <!-- /TMPL_LOOP -->
@@ -40,7 +41,7 @@
 			<th class="catalogue">Localisation</th>
 			<th class="catalogue">Date de retour</th>
 			<th class="catalogue">Vue pour la dernière fois</th>
-			<th class="catalogue">Code Barre</th>
+			<th class="catalogue">Code à Barres</th>
 			<th class="catalogue">Volume</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -53,7 +54,7 @@
 				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 				<!-- TMPL_IF NAME="type" -->
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Etablir le type de document</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Déterminer le type de document</a>
 					</td>
 				<!-- /TMPL_IF -->
 			</tr>

@@ -4,12 +4,12 @@
 	<form method="post">
 		<h2 class="reports">Sélectionnez les exemplaires que vous souhaitez vérifier</h2>
 		<p>
-			Localisation de l'exemplaire (items.itemcallnumber) entre <input type="text" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->"> et <input type="text" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->">
+			Cote de l'exemplaire ((items.itemcallnumber) entre <input type="text" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->"> et <input type="text" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->">
 		</p>
 		<p><label>pas vu depuis</label>
 			<input type="text" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->">
 		</p>
-		<p><label>voir</label>
+		<p><label>afficher</label>
 			<input type="text" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5"><i> exemplaires commençant au </i> <input type="text" name="offset" value="<!-- TMPL_VAR NAME="offset" -->" size="5" maxlength="5">
 		</p>
 		<p>
@@ -28,7 +28,7 @@
 	<table>
 		<tr>
 			<th class="reports">Vu</th>
-			<th class="reports">Code Barre</th>
+			<th class="reports">Code à Barres</th>
 			<th class="reports">Cote</th>
 			<th class="reports">Titre</th>
 			<th class="reports">Auteur</th>

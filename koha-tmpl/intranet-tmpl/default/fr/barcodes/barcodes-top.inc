@@ -203,11 +203,11 @@ function removeItem() {
 <!-- MENUS -->
 <div id="menubar">
 	<span class="koha">KOHA</span>
-	<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>  <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>  <a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>  <a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>  <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>  <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>  <a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>  <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>  <a class="about" href="/cgi-bin/koha/about.pl">About</a>  <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
+	<a class="home" href="/cgi-bin/koha/mainpage.pl">Accueil</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Lecteurs</a> <a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Prêt</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Rapports</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a> <a class="about" href="/cgi-bin/koha/about.pl">A propos</a> <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Aide</a>
 </div>
 <div id="submenu">
 	<span class="koha">options >></span>
-	<a href="/cgi-bin/koha/admin/aqbookfund.pl" class="submenu">Funds</a>  <a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu2">Auth value</a>  <a href="/cgi-bin/koha/admin/thesaurus.pl" class="submenu">Thesaurus</a>  <a href="/cgi-bin/koha/admin/currency.pl" class="submenu2">Currencies</a>  <a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Printers</a>
+	<a href="/cgi-bin/koha/admin/aqbookfund.pl" class="submenu">Crédits</a> <a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu2"> Valeurs autorisées</a> <a href="/cgi-bin/koha/admin/thesaurus.pl" class="submenu">Thésaurus</a> <a href="/cgi-bin/koha/admin/currency.pl" class="submenu2">Devises</a> <a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Imprimantes</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align="left">Connecté en tant que : <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Déconnecter</a>]</p>

@@ -2,17 +2,17 @@
 	<h1>Types d'autorité</h1>
 	<p>Vous pouvez définir autant de types d'Autorités que vous le souhaitez.</p>
 	<ul>
-		<li>with the MARC structure button, you can define the MARC structure of a given authority type</li>
-		<li>The tag reported must contain a MARC tag number. Every subfield in the selected tag will be copied to the "destination tag" in the biblio. for example, in UNIMARC, the tag 200 ot personal authority will be reported to 600, 700, 701, depending on what is cliqued in the biblio MARC editor.</li>
-		<li>The summary contains an "ISBD" like description to explain how the entry must be shown in the result list. The syntax is : 
+		<li>avec le bouton MARC, vous pouvez déterminer la structure MARC d'un type d'autorité donné</li>
+		<li>Le champ reporté doit contenir un numéro d'étiquette MARC.Chaque sous-champ du champ sélectionné sera copié dans le"champ destinataire" de la notice biblio.Par exemple, dans UNIMARC, le champ 200 de l'autorité nom de personne sera reporté dans le 600, 700, 701...selon ce qui aura été coché dans l'éditeur MARC.</li>
+		<li>Le récapitulatif contient une description de type"ISBD"qui définit comment les données doivent être affichées dans la liste de résultats.La syntaxe est : 
 		<ul>
-			<li>[xxxFFFSyyy] where xxx are up to 3 digits BEFORE the field, FFF the field number, S the subfield code, yyy up to 3 digits AFTER the field.</li>
+			<li>[xxxFFFSyyy] où xxx représentent 3 caractères AVANT le champ, FFF le numéro de champ, S le code du sous champ, YYY pour 3 caractères APRES le champ.</li>
 			<li>Les éléments en dehors de []sont pris comme (y compris HTML)</li>
 			<li>les champs répétables sont gérés</li>
 		<ul>
 	</ul>
 	<p>REMARQUE IMPORTANTE :</p>
 	<p>
-		In the biblio framework, the reported tag <b>MUST</b> contain a $9 subfield, activated in the tab where the tag is, and hidden (hidden maybe omitted, but the field has no reason to appear anywhere). The $9 subfield in the biblio will contain the Authority number (the internal Koha number)
+		Dans le framework bibliographique, le champ reporté <b>DOIT</b> contenir un sous-champ $9, activé dans le même onglet que les autres sous champs (le sous champ devrait logiquement avoir la case "caché" cochée, mais ce n'est pas obligatoire
 	</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

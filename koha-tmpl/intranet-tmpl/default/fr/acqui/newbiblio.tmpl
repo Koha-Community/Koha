@@ -73,26 +73,42 @@ win.document.write("</font></body></html>");
 		<!-- TMPL_ELSE -->
 			Nouvelle commande
 		<!-- /TMPL_IF -->
-		 <!-- TMPL_IF name="suggestionid" -->spécifier à partir d'une suggestion<!-- /TMPL_IF -->
+		 <!-- TMPL_IF name="suggestionid" -->spécifié à partir de la suggestion #<!-- TMPL_VAR NAME="suggestionid" --><!-- /TMPL_IF -->
 	</h1>
 	Panier d'Achat pour <!-- TMPL_VAR NAME="name" -->
 	<div id="bloc25">
 		<h2 class="acquisition">Détails du catalogue</h2>
 		<p>
 			<label class="label100"><b>Titre *</b></label>
-			<input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="title" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Auteur</label>
-			<input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" >
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100"> Editeur</label>
-			<input type="text" size="30" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" >
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->"><!-- TMPL_VAR NAME="publishercode" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Date de copyright</label>
-			<input type="text" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->"><!-- TMPL_VAR NAME="copyrightdate" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Format</label>
@@ -100,11 +116,19 @@ win.document.write("</font></body></html>");
 		</p>
 		<p>
 			<label class="label100">ISBN</label>
-			<input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Périodique</label>
-			<input type="text" size="20" name="Series" value="<!-- TMPL_VAR NAME="seriestitle" -->">
+			<!-- TMPL_IF name="biblio" -->
+				<input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->"><!-- TMPL_VAR NAME="seriestitle" -->
+			<!-- TMPL_ELSE -->
+				<input type="text" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->">
+			<!-- /TMPL_IF -->
 		</p>
 		<p>
 			<label class="label100">Site</label>
@@ -118,7 +142,7 @@ win.document.write("</font></body></html>");
 			<input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);">
 		</p>
 		<p>
-			<label class="label100">Budget</label>
+			<label class="label100">Ligne de crédit</label>
 			<!-- TMPL_VAR NAME="CGIbookfund" -->
 		</p>
 		<p>
@@ -152,7 +176,7 @@ win.document.write("</font></body></html>");
 			<label class="label100">Notes</label>
 			<input type="text" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->">
 		</p>
-		<p>The 2 following fields are available for your own usage. They can be useful for stat purposes</p>
+		<p>Les deux champs suivants sont disponibles pour votre usage propre. Ils peuvent être utiles pour des besoins statistiques.</p>
 		<p>
 			<label class="label100">Champ de tri 1</label>
 			<input type="text" size="20" name=sort1 value="<!-- TMPL_VAR NAME="sort1" -->">

@@ -4,13 +4,13 @@
 	<div id="bloc25">
 		<p>
 		<!-- TMPL_IF NAME="NOBARCODE" -->
-			<p class="problem">Vous devez attribuer un code barre à l'exemplaire</p>
+			<p class="problem">Vous devez attribuer un code à barres à l'exemplaire</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="NOBIBLIOITEM" -->
 			<p class="problem">Vous devez créer un nouveau groupe pour y ajouter votre exemplaire</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="BARCODEINUSE" -->
-			<p class="problem">Désolé, ce code barre est déjà utilisé</p>
+			<p class="problem">Désolé, ce code à barres est déjà utilisé</p>
 		<!-- /TMPL_IF -->
 		<h2 class="catalogue">NOTICE <!-- TMPL_VAR NAME="BIBNUM" --></h2>
 		<p><label class="label100">Auteur:</label> <!-- TMPL_VAR NAME="AUTHOR" --></p>
@@ -28,7 +28,7 @@
 				<p><label>ISBN :</label> <!-- TMPL_VAR NAME="isbn" --></p>
 				<p><label>Dewey :</label> <!-- TMPL_VAR NAME="dewey" --></p>
 				<p><label>Editeur :</label> <!-- TMPL_VAR NAME="publishercode" --></p>
-				<p><label>Localisation</label> <!-- TMPL_VAR NAME="place" --></p>
+				<p><label>Emplacement</label> <!-- TMPL_VAR NAME="place" --></p>
 				<p><label>Date</label> <!-- TMPL_VAR NAME="publicationyear" --></p>
 				<!-- TMPL_LOOP NAME="ITEMS -->
 					<p><label class="label100">Exemplaire(s)</label> <!-- TMPL_VAR NAME="barcode" --></p>
@@ -43,7 +43,7 @@
 		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="BIBNUM" -->">
 		<h2 class="catalogue">AJOUTER UN NOUVEL EXEMPLAIRE</h2>
 		<p><i>Pour un site Web ajouter seulement le groupe</i></p>
-		<p><label>Code Barre de l'exemplaire :</label><input type="text" name="barcode" size="40"></p>
+		<p><label>Code à Barres de l'exemplaire :</label><input type="text" name="barcode" size="40"></p>
 		<p>
 			<label>Site:</label>
 			<select name="homebranch">

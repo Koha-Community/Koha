@@ -62,7 +62,7 @@ function Check(f) {
 	<!-- TMPL_IF NAME="itemtype" -->
 		<h1 class="parameters">Modifier le type de document</h1>
 	<!-- TMPL_ELSE -->
-		<h1 class="parameters">Ajouter un type d'ouvrage</h1>
+		<h1 class="parameters">Ajouter un type de document</h1>
 	<!-- /TMPL_IF -->
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 		<input type="hidden" name="op" value="add_validate">
@@ -83,14 +83,14 @@ function Check(f) {
 				<!-- TMPL_ELSE -->
 					<input type="checkbox" name="notforloan" value="1">
 				<!-- /TMPL_IF -->
-				if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item
+				Coché aucun document de ce type ne pourra être prêté.Décoché, tous les documents de ce type pourront être prêtés sauf si l'option exclu du prêt est choisie pour un exemplaire précis.
 			</p>
 			<p>
 				<label class="label100" name="renewalsallowed">Nombre de renouvellement autorisé</label>
 				<input type="text" name="renewalsallowed" value="<!-- TMPL_VAR NAME="renewalsallowed" -->">
 			</p>
 			<p>
-				<label class="label100">Droit de prêt</label>
+				<label class="label100">Coût du prêt</label>
 				<input type="text" name="rentalcharge" size="10" value="<!-- TMPL_VAR NAME="rentalcharge" -->">
 			</p>
 			<p>
@@ -105,7 +105,7 @@ function Check(f) {
 		<input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->">
 	<p><label>Description</label><!-- TMPL_VAR NAME="description" --></p>
 	<p><label>Renouvellements</label><!-- TMPL_IF NAME="renewalsallowed" -->Autorisé<!-- TMPL_ELSE -->Non autorisé<!-- /TMPL_IF --></p>
-	<p><lable>Droit de prêt</label><!-- TMPL_VAR NAME="rentalcharge" --></p>
+	<p><lable>Coût du prêt</label><!-- TMPL_VAR NAME="rentalcharge" --></p>
 	<!-- TMPL_IF NAME="total" -->
 		<p>
 			<b>Cet enregistrement est utilisé <!-- TMPL_VAR NAME="total" --> fois. Suppression impossible</b>
@@ -131,7 +131,7 @@ function Check(f) {
 		<th class="parameters">Code</th>
 		<th class="parameters">Description</th>
 		<th class="parameters">Renouvelable</th>
-		<th class="parameters">Droits de prêt</th>
+		<th class="parameters">Frais</th>
 		<th class="parameters">Editer</th>
 		<th class="parameters">Supprimer</th>
 	</tr>
@@ -153,7 +153,7 @@ function Check(f) {
 </table>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form">
-	<input type="submit" class="button parameters" value="Ajouter un type d'ouvrage" title="Ajouter un type d'ouvrage" alt="Ajouter un type d'ouvrage">
+	<input type="submit" class="button parameters" value="Ajouter un type de document" title="Ajouter un type de document" alt="Ajouter un type de document">
 	<td width="33%"><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="précédent" alt="précédent" border="0"></a><!-- /TMPL_IF --></td>
 	<td width="33%"><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="suivant" alt="suivant" border="0"></a><!-- /TMPL_IF --></td>
 </form>

@@ -56,7 +56,7 @@
 				<p>Doublon suspecté avec <a href='javascript:openWindow("../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1", "Duplicate biblio")' class="button catalogue"><!-- TMPL_VAR name="duplicatetitle" --></a></p>
 				<p>Vous devez soit :</p>
 				<ul>
-					<p><input type="checkbox" value=1 name="confirm_not_duplicate"> Confirmer que ce n'est pas un doublon (et cliquer sur Ajouter Notice à nouveau)</p>
+					<p><input type="checkbox" value=1 name="confirm_not_duplicate">Confirmer que ce n'est pas un doublon (et cliquer sur Ajouter Notice à nouveau)</p>
 					<p><a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->" class="button catalogue">Editer les exemplaires</a> à partir de cette notice</p>
 				</ul>
 			</div>
@@ -454,8 +454,8 @@ function Check(f) {
 	if (total_errors!=0) {
 		alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
-		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
+		alertString2 += "\n- "+ total_missing_mandatory_tags +_("Champ(s) obligatoire(s) non renseigné(s)");
+		alertString2 += "\n- "+ total_missing_mandatory_subfields +_("champs obligatoires non renseignés (voir les champs en caractère gras)");
 		alert(alertString2);
 	} else {
 		document.forms[0].submit();

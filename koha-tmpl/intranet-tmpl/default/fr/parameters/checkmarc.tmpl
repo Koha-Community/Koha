@@ -17,39 +17,39 @@
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i> N° exemplaires : le champ numéro d'exemplaire est relié à un champ dans la table -1</i></td>
+			<td><i>N° exemplaires : le champ numéro d'exemplaire est relié à un champ dans l'onglet -1</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="itemfields" -->
 		<tr>
 			<td><b>Champs exemplaires</b></td>
-			<td>TOUS les champs des d'exemplaire doivent :<br/>
+			<td>TOUS les champs d'exemplaire DOIVENT :<br/>
 				<li>être relié au même champ</li>
-				<li>et il doivent tous être dans la table 10 (Exemplaires)</li></td>
+				<li>et il doivent tous être dans l'onglet 10 (Exemplaires)</li></td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i> Tous les champs d'exemplaires sont sous la même étiquette et dans le même onglet</i></td>
+			<td><i>Tous les champs d'exemplaires sont sous la même étiquette et dans le même onglet</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="itemtypes_empty" -->
 		<tr>
-			<td><b>table type d'ouvrage vide</b></td>
-			<td> la table des types d'ouvrages est vide.Elle doit contenir au moins une valeur</td>
+			<td><b>Table types de document vide</b></td>
+			<td>la table des types de document est vide.Elle doit contenir au moins une valeur</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i>table type d'ouvrages remplie avec au moins une valeur</i></td>
+			<td><i>Table types de document remplie avec au moins une valeur</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="itemtype" -->
 		<tr>
-			<td><b>Type d'ouvrage non paramétré</b></td>
+			<td><b>Type de document non paramétré</b></td>
 			<td>Le champ biblioitems.itemtype DOIT<br/>
 				<li>être relié à un sous-champ MARC </li>
 				<li>le sous-champ correspondant doit avoir une valeur autorisée=</li></td>
@@ -57,19 +57,19 @@
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i>biblioitems.itemtype défini</i></td>
+			<td><i>Biblioitems.itemtype défini</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="branches_empty" -->
 		<tr>
-			<td><b>table des sites vide</b></td>
+			<td><b>Table des sites vide</b></td>
 			<td>La table des sites est vide.Elle doit comporter au moins une valeur !</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i>table des sites remplie avec au moins une valeur</i></td>
+			<td><i>Table des sites remplie avec au moins une valeur</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
@@ -104,7 +104,7 @@
 	<!-- TMPL_IF NAME="biblionumber" -->
 		<tr>
 			<td><b>biblio et biblionumber</b></td>
-			<td> Les champs du biblio.biblionumber et du biblioitems.biblioitemnumber DOIVENT :<br/>
+			<td>Les champs du biblio.biblionumber et du biblioitems.biblioitemnumber DOIVENT :<br/>
 				<li>être relié à un sous-champ MARC</li>
 				<li>être dans le même champ (par exemple : 090$a et 090 $b)</li>
 				<li>être dans l'onglet-1</li></td>
@@ -112,19 +112,19 @@
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>OK</td>
-			<td><i>biblionumber et biblioitemnumber paramétrés correctement</i></td>
+			<td><i>Biblionumber et biblioitemnumber correctement construits</i></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- -------------------------------------------------------------------------------------------------------- -->
 	<!-- TMPL_IF NAME="total" -->
 		<tr>
 			<td><b>TOTAL</b></td>
-			<td>You have <b><!-- TMPL_VAR NAME="total" --></b> error(s) in your MARC configuration. Please fix them before using koha</td>
+			<td>Vous avez <b><!-- TMPL_VAR NAME="total" --></b> erreur(s) dans votre configuration MARC.SVP corrigez les avant d'utiliser Koha</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
 			<td>&nbsp;</td>
-			<td><b> Configuration OK, il n'y pas d'erreurs dans votre table de paramètres MARC</b></td>
+			<td><b>Configuration OK, il n'y pas d'erreurs dans votre table de paramètres MARC</b></td>
 		</tr>
 	<!-- /TMPL_IF -->
 	</table>

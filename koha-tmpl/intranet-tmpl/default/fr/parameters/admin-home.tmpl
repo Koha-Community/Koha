@@ -6,15 +6,15 @@
 	<div id="bloctitle">Paramètres Système </div>
 <table>
 <tr>
-<td colspan="2"><b> Remplissez ces tables dans l'ordre où elles apparaissent pour que Koha fonctionne</b></td>
+<td colspan="2"><b>Remplissez ces tables dans l'ordre où elles apparaissent pour que Koha fonctionne</b></td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/branches.pl">Sites de la Bibliothèque</a></td>
 	<td>Les différents sites que vous gérez avec ce serveur Koha</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Fonds de livres</a></td>
-	<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/aqbookfund.pl">Lignes de crédit</a></td>
+	<td>Administration des lignes de crédit.Pensez à mettre vos lignes de crédit à jour avant de commencer à libeller les budgets.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/currency.pl">Devises</a></td>
@@ -22,38 +22,38 @@
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/itemtypes.pl">Types de document</a></td>
-	<td>Définir des types d'ouvrages.</td>
+	<td>Définir des types de documents</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/categorie.pl">Catégories de lecteur</a></td>
 	<td>Définir les catégories de lecteurs</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/issuingrules.pl">Règles d'emprunt</a></td>
-	<td>Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)</td>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/issuingrules.pl">Règles de prêt</a></td>
+	<td>Définir les règles de prêt par site/type de lecteur/de document (nbre de prêts, durée, coût...)</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authorised_values.pl">Valeurs autorisées</a></td>
-	<td>Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios.</td>
+	<td>Definir des catégories et les valeurs autorisées pour celles-ci.Les valeurs autorisées sont utilisées dans la grille MARC pour limiter et aider la saisie des notices  MARC biblio.</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Structure du Thésaurus</a></td>
-	<td>Définir des catégories et des structures MARC de thésaurus/autorité</td>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/authtypes.pl">Structure des autorités</a></td>
+	<td>Définir des catégories et les structures  des autorités MARC </td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/biblio_framework.pl">Grille de catalogage</a></td>
-	<td>the frameworks defined for the MARC editor. Create frameworks, then define the MARC structure (fields &amp; subfields)</td>
+	<td>Les grilles définies pour l'éditeur MARC.Créer des grilles, puis déterminer la structure MARC (champs et sous-champs)</td>
 </tr>
 <tr>
-	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Liens Koha - Base de Donnée MARC</a></td>
-	<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
+	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Liens Koha - Base de Données MARC</a></td>
+	<td>Définir les liens entre la base de données Koha et la base MARC.Noter que ces liens peuvent être définis dans la structure MARC.Cet outil est juste un raccourci pour activer les liens.</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/checkmarc.pl">Contrôle MARC</a></td>
-	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
+	<td>Contrôle la structure MARC.A UTILISER avant de travailler avec des données réelles.Ça pointe les erreurs qui peuvent CASSER la base de données Koha</td></tr>
 
 <tr>
-<th colspan="2">Différents paramètres</th>
+<th colspan="2">Paramètres divers</th>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href="/cgi-bin/koha/admin/printers.pl">Imprimantes</a></td>
@@ -87,14 +87,14 @@
 	</tr>
 	<tr valign="top">
 		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Chargez les enregistrements MARC dans le réservoir</a></td>
-		<td>The reservoir is a table where imported MARC records are stored. A MARC record is stored in the reservoir as long as you have no item. When you type the ISBN or title of a biblio, it's searched for in the reservoir. If it is found, the biblio is added to Koha active table.
+		<td>Le réservoir est une table où les enregistrements MARC importés sont stockés. Un enregistrement MARC est stocké dans le réservoir aussi longtemps que vous ne l'avez pas exemplarisé.Lorsque vous entrez l'ISBN ou le titre d'un enregistrement, la recherche se fait dans le réservoir.S'il est trouvé, l'enregistrement est ajouté à la table active de Koha et supprimé du réservoir
 		</td>
 	</tr>
-	<th colspan="2">Générateur de code-barre</th>
+	<th colspan="2">Générateur de code à barres</th>
 	</tr>
 	<tr valign="top">
 		<td width="20%"><a href="/cgi-bin/koha/barcodes/barcodes.pl">Générer les codes barres</a></td>
-		<td>the barcode generator deals with generating barcodes for items you acquire
+		<td>Le générateur de code-barres génère les étiquettes pour les documents que vous achetez
 		</td>
 	</tr>
 </table>

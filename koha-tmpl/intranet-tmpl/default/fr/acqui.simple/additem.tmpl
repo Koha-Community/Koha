@@ -45,10 +45,10 @@
 		<!-- /tmpl_loop -->
 	<input type="hidden" name="itemnum" value="<!-- TMPL_VAR NAME="itemnum" -->">
 	<!-- TMPL_IF name="barcode_not_unique" -->
-		<div id="problem"><b>ERREUR : Code barre déjà utilisé!<b></div>
+		<div id="problem"><b>ERREUR : Code à barres déjà utilisé!<b></div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="opisadd" -->
-	<input type="button" value="Ajouter un ouvrage" onclick="Check(this.form)" accesskey="w" class="button catalogue">
+	<input type="button" value="Ajouter un document" onclick="Check(this.form)" accesskey="w" class="button catalogue">
 	<!-- TMPL_ELSE -->
 	<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->">
 	<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->">
@@ -94,7 +94,7 @@ function Check(f) {
 	} else {
 		alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+		alertString2 += "\n- "+ total_errors+_("champs obligatoires non renseignés (voir les champs en caractère gras)");
 		alert(alertString2);
 	}
 }
@@ -103,7 +103,7 @@ function Dopop(link,i) {
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 function confirm_deletion(bibid,itemnum) {
-	var is_confirmed = confirm(_('Confirmez-vous la suppression de l'ouvrage ?'));
+	var is_confirmed = confirm(_('Confirmez-vous la suppression de l exemplaire ?'));
 	if (is_confirmed) {
 	window.location = "additem.pl?op=delitem&bibid="+bibid+"&itemnum="+itemnum;
 	}

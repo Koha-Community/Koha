@@ -1,18 +1,25 @@
 <!-- TMPL_INCLUDE name="help-top.inc" -->
 <h1>Catégories de lecteur</h1>
 
-<p>Here is where you define the types of users of your library and how they will be handled.</p>
+<p>C'est ici que vous déterminez les types d'usagers de votre bibliothèque et comment ils seront traités.</p>
 
-<p>Start by assigning a Category Code and a Description to each borrower type. The code is limited on no more than two characters and may be anything you choose. Four codes, however, have special meaning for Koha :</p>
+<h2 class="help">Gestion des catégories</h2>
+<p>Commencez en attribuant un Code de Catégorie et une définition pour chaque type de lecteur.Le code est limité à deux caractères et peut être ce que vous voulez.Toutefois, quatre codes ont un sens particulier pour Koha :</p>
 <ul>
-	<li>"I" can be used for institutional members, like other libraries that borrow from you, in which case Koha expects slightly different information about the institution;</li>
-	<li>"A" (Adult) and "W" can be linked as "guarantors" to other borrowers who are their dependents.</li>
-	<li>"C" (Children) his a borrower category that has a "guarantor"</li>
+	<li>"C"peut être utilisé pour les collectivités, telles que d'autres bibliothèques qui vous empruntent, auquel cas Koha demande une information lègèrement différente sur la collectivité;</li>
+	<li>"A" (Adultes) and "W" peuvent être considérés comme des "garants" d'autres lecteurs qui dépendent d'eux.</li>
+	<li>"A"(Enfants) est une catégorie de lecteur qui a un "garant"</li>
 </ul>
 
-<p>Enrollment period is a number indicating how many years a user's enrollment is valid. If you consider enrollments to expire after four years for example (as in a school, perhaps), then set this number to 4. If enrollments never expire, set this to an impossibly high number (99).</p>
+<h2 class="help">Période d'inscription</h2>
+<p>La durée d'inscription est un nombre qui indique combien d'années l'inscription d'un lecteur est valide.Si vous considérez que les inscriptions doivent expirer au bout de 4 ans par exemple (comme dans une école, peut-être), fixez alors le nombre à 4. Si l'inscription n'expire jamais, fixer le sur un nombre anormalement élevé (99).</p>
 
+<h2 class="help">Upper Age Limit and Age Required</h2>
 <p>Upper Age Limit and Age Required set the age parameters for this type of user. If you issue children's cards to users between the ages of 2 and 18, for example, then Age Required would be "2" and Upper Age Limit would be "18." If there is no upper age limit, set this value to 99 (the highest allowed).</p>
 
-<p>Enrollment Fee and Reserve Fee (if any) should be entered either as whole numbers or with six decimal places, with no currency notation (e.g. "1.250000" instead of "$1.25"). Overdue Notice Required lets you bypass generating overdue notices for this user type, and Issue Limit sets the highest number of items which this type of user may have borrowed.</p>
+<h2 class="help">Enrollment Fee and Reserve Fee</h2>
+<p>Les frais d'inscription et de réservation (s'il y en a)doivent être entrés soit comme des nombres entiers ou avec 6 décimales, sans indications de la devise (ex. "1,25000" au lieu de "1,25 €").</p>
+
+<h2 class="help">Avis de retard demandé</h2>
+<p>Overdue Notice Required lets you bypass generating overdue notices for this user type.</p>
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

@@ -1,49 +1,25 @@
-<!-- TMPL_IF NAME="opac" -->
-	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
-<!-- TMPL_ELSE -->
-	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
-<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
-<table border="0" cellspacing="0" cellpadding="2" align="center">
-<!-- TMPL_IF NAME="opac" -->
-	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
-<!-- TMPL_ELSE -->
-	<tr background="/images/background-mem.gif">
-<!-- /TMPL_IF -->
-		<th>Sujet</th>
+<div id="mainbloc">
+
+<h1 class="catalogue">Résultats de recherche</h1>
+
+<div id="resultnumber"><p>Réponses <b><!-- TMPL_VAR NAME="startfrom" --></b> à <b><!-- TMPL_VAR NAME="endat" --> sur <!-- TMPL_VAR NAME="numrecords" --></b> enregistrements.<br></p></div>
+
+<table>
+<tr>
+		<th class="catalogue">Vedette sujet</th>
 	</tr>
 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
 	<tr>
-		<td>
+		<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 			<a href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;subjectitems=<!-- TMPL_VAR NAME=subject2 ESCAPE=HTML -->"><!-- TMPL_VAR NAME="subject" --></a>
 		</td>
 	</tr>
 <!-- /TMPL_LOOP -->
-<!-- TMPL_IF NAME="opac" -->
-	<tr bgcolor="#99cccc" background="/images/background-opac.gif">
-<!-- TMPL_ELSE -->
-	<tr background="/images/background-mem.gif">
-<!-- /TMPL_IF -->
-		<td colspan="4">
-			<table border="0" cellpadding="0" cellspacing="0" width="100%">
-			<tr>
-				<td align="left">
-					<a href="search.pl?<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="line" -->&amp;<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Enregistrements Précédents</a>
-				</td>
-				<td align="right">
-					<a href="search.pl?<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="line" -->&amp;<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->">Enregistrements Suivants</a>
-				</td>
-			</tr>
-			</table>
-		</td>
-	</tr>
 </table>
-<br>
-Réponses <b><!-- TMPL_VAR NAME="startfrom" --></b> à <b><!-- TMPL_VAR NAME="endat" --> sur <!-- TMPL_VAR NAME="numrecords" --></b> enregistrements.
-<hr>
+<p><a  class="button catalogue" href="search.pl?<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="line" -->&amp;<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->">Précédent</a> <a class="button catalogue" href="search.pl?<!-- TMPL_LOOP NAME="FORMINPUTS" --><!-- TMPL_VAR NAME="line" -->&amp;<!-- /TMPL_LOOP -->startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->"> Suivant</a></p>
 
-<!-- TMPL_IF NAME="opac" -->
-    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
-<!-- TMPL_ELSE -->
-    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
-<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+

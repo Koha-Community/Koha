@@ -8,7 +8,7 @@
 <a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> ||
 <a href="/cgi-bin/koha/circ/circulation.pl">Prêt</a> ||
 <a href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a> ||
-<a href="/cgi-bin/koha/reports-home.pl">Rapports</a> ||
+<a href="/cgi-bin/koha/reports-home.pl">Bilans</a> ||
 <a href="/cgi-bin/koha/admin-home.pl">Paramètres</a> ||
 <a href="/cgi-bin/koha/about.pl">A propos</a> || 
 Aide

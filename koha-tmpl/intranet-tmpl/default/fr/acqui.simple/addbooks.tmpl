@@ -1,6 +1,6 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Gestion des notices MARC</h1>
+	<h1 class="catalogue">Gestion des notices MARC</h1>
 	<!-- TMPL_IF name="noitemsfound" -->
 		<font color="red" size="4">Pas d'exemplaire(s) trouvé(s)</font>
 	<!-- /TMPL_IF -->
@@ -10,13 +10,13 @@
 	
 	<div id="bloc25">
 		<form action="isbnsearch.pl">
-			<h2 class="acquisition"> Pour ajouter une nouvelle notice/exemplaire, scannez ou entrez le code ISBN/ ISSN</h2>
+			<h2 class="catalogue">Pour ajouter une nouvelle notice/exemplaire, scannez ou entrez le code ISBN/ ISSN</h2>
 			<p><label class="label20">ISBN</label> <input type="text" name="isbn" /></p>
 			<p><label class="label20">Titre</label> <input type="text" name="title" /></p>
-			<p><input type="submit" value="Aller" class="button acquisition"></p>
+			<p><input type="submit" value="Aller" class="button catalogue"></p>
 		</form>
 		<!-- TMPL_IF NAME="NOTMARC" -->
-			<p><a href="addbiblio-nomarc.pl" class="button acquisition">Créer une nouvelle notice</a></p>
+			<p><a href="addbiblio-nomarc.pl" class="button catalogue">Créer une nouvelle notice</a></p>
 		<!-- TMPL_ELSE -->
 			<p>
 				<form action="addbiblio.pl" method="post">
@@ -26,15 +26,16 @@
 							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
 						<!-- /TMPL_LOOP -->
 					</select>
-					<input type="submit" value="Créer une nouvelle notice" class="button acquisition">
-				</p>
+					<input type="submit" value="Créer une nouvelle notice" class="button catalogue">
+				</form>
+			</p>
 		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="acquisition">Optimisation</h2>
-		<p>If the ISBN or title is found in the biblio table, it will be retrieved and can be modified.<br/>
-				If the ISBN or title is found in the breeding farm, it will be retrieved and a biblio will be added.<br/>
-				Sinon, une notice peut-être ajouté à partir de zéro.</p>
+		<h2 class="catalogue">Optimisation</h2>
+		<p>Si l'ISBN ou le titre est trouvé dans la table il peut être récupéré puis modifié<br/>
+				Si l'ISBN ou le titre est trouvé dans le réservoir, il sera récupéré et une notice sera rajoutée<br/>
+				Sinon, une notice peut-être ajoutée en partant de zéro.</p>
 	</div>
 </div>
-<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

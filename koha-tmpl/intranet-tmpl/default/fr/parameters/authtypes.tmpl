@@ -39,7 +39,7 @@ function Check(f) {
 	var _alertString="";
 	var alertString2;
 	if (f.authtypecode.value.length==0) {
-		_alertString += "\n- " + _("type d'autorité : code manquant");
+		_alertString += "\n- " + _("Type d'autorité : code absent");
 	}
 	if (!(isNotNull(window.document.Aform.authtypetext,1))) {
 		_alertString += "\n- " + _("Description manquante");
@@ -59,7 +59,7 @@ function Check(f) {
 	<!-- TMPL_IF NAME="authtypecode" -->
 		<h1>Modifier un type d'autorité</h1>
 	<!-- TMPL_ELSE -->
-		<h1>ajouter un type d'autorité</h1>
+		<h1>Ajouter un type d'autorité</h1>
 	<!-- /TMPL_IF -->
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 		<input type="hidden" name="op" value="add_validate">
@@ -74,11 +74,11 @@ function Check(f) {
 				<input type="text" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" escape=HTML -->">
 			</p>
 			<p>
-				<label class="label100">Abrégé</label>
+				<label class="label100">Résumé</label>
 				<textarea name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea>
 			</p>
 			<p><label class="label100">Champ de report</label>
-				<input type="text" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">">  Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</p>
+				<input type="text" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">"> Saisir ici le numero du champ qui sera recopié dans la notice bibliographique (sous-champ par sous-champ).Par exemple, en UNIMARC, saisir 200 pour recopier tous les sous-champs du 200 dans le champ 70x de la notice biblio</p>
 			</p>
 			<p>
 				<input type="button" value="OK"class="button parameters" onclick="Check(this.form)">
@@ -110,7 +110,7 @@ function Check(f) {
 
 <!-- TMPL_IF NAME="else" -->
 <h1>Administration des types d'autorité</h1>
-<p>Define authority types, then authority MARC structure in the same way you define itemtypes &amp; biblio MARC tag structure. Authority values are managed through plugins</p>
+<p>Définissez des types d'autorité, puis la structure de MARC autorités, de la même façon dont vous avez défini les types de document et la structure des champs MARC biblio.Les valeurs des autorités sont gérées par des modules d'extension</p>
 <table>
 	<tr>
 		<th class="parameters">Code</th>
@@ -145,7 +145,7 @@ function Check(f) {
 </table>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form">
-	<input type="submit" class="button" value="ajouter un type d'autorité" title="ajouter un type d'autorité" alt="ajouter un type d'autorité">
+	<input type="submit" class="button" value="Ajouter un type d'autorité" title="Ajouter un type d'autorité" alt="Ajouter un type d'autorité">
 	<td width="33%"><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="précédent" alt="précédent" border="0"></a><!-- /TMPL_IF --></td>
 	<td width="33%"><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="suivant" alt="suivant" border="0"></a><!-- /TMPL_IF --></td>
 </form>

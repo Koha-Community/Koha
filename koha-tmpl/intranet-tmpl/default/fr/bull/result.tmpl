@@ -30,7 +30,7 @@
 	<div id="resultlist">
 		<table>
 			<tr>
-			<th class="catalogue">Abrégé</th>
+			<th class="catalogue">Résumé</th>
 			<th class="catalogue">&nbsp;</th>
 			</tr>
 			<!-- TMPL_LOOP name="result" -->
@@ -47,11 +47,7 @@
 					</p>
 				</td>
 				<td <!-- TMPL_IF name="even" -->class="hilighted"<!-- /TMPL_IF -->>
-					<!-- TMPL_UNLESS NAME="norequests" -->
 						<a class="transparent" href="#" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR name="title" -->') ">Le choisir</a>
-					<!-- TMPL_ELSE -->
-						Non Réservable
-					<!-- /TMPL_UNLESS -->
 				</td>
 			</tr>
 			<!-- /TMPL_LOOP -->

@@ -7,7 +7,7 @@
 		<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="othernames" --> <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_IF NAME="IS_ADULT" -->(<!-- TMPL_VAR NAME="firstname" -->, <!-- TMPL_VAR NAME="initials" -->)<!-- /TMPL_IF -->
 		<p>Numéro de Carte : <!-- TMPL_VAR NAME="cardnumber" --><br>
 		Adresse Postale: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="city" --><br>
-		<!-- TMPL_UNLESS name="I" -->Adresse domicile : <!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" -->: ,  <br>
+		<!-- TMPL_UNLESS name="I" -->Adresse domicile : <!-- TMPL_VAR NAME="physstreet" -->, <!-- TMPL_VAR NAME="homezipcode" --> <!-- TMPL_VAR NAME="streetcity" --><br>
 		Téléphone Domicile : <!-- TMPL_VAR NAME="phone" --><br><!-- /TMPL_UNLESS -->
 		Téléphone travail : <!-- TMPL_VAR NAME="phoneday" --><br>
 		Fax: <!-- TMPL_VAR NAME="faxnumber" --><br>
@@ -25,7 +25,7 @@
 		<!-- /TMPL_IF -->
 		<!-- TMPL_UNLESS name="I" -->
 			D.nais:<!-- TMPL_VAR NAME="dateofbirth" --><br>
-			Sexe<br>
+			Sexe <!-- TMPL_VAR NAME="sex" --><br>
 			Autre
 		<!-- /TMPL_UNLESS -->
 		Contact : <!-- TMPL_VAR NAME="contactname" --><br>
@@ -164,7 +164,7 @@
 				<th>Titre</th>
 				<th>Retour</th>
 				<th>Type de document</th>
-				<th>Droits de prêt</th>
+				<th>Frais</th>
 				<th>Renouvellement</th>
 			</tr>
 

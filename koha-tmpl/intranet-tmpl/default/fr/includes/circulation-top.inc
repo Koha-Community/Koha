@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Circulation</title>
+<title>KOHA: INTRANET:Prêt</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <script language="JavaScript">
@@ -47,11 +47,11 @@ a.circulation:hover {
 <!-- MENUS -->
 <div id="menubar">
 	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
-	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a>  <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a>  <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>  <a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>  <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>  <a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>  <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parameters</a>  <a class="about" href="/cgi-bin/koha/about.pl">About</a>  <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Help</a>
+	<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Catalogue</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Prêt</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Lecteurs</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Bilans</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a> <a class="about" href="/cgi-bin/koha/about.pl">A propos</a> <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Aide</a>
 </div>
 <div id="submenu">
 	<span class="koha">options >></span>
-	<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu">Prêts</a> <a href="/cgi-bin/koha/circ/returns.pl" class="submenu2">Retours</a> <a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Transferts</a>
+	<a href="/cgi-bin/koha/circ/circulation.pl" class="submenu">Sorties</a> <a href="/cgi-bin/koha/circ/returns.pl" class="submenu2">Retours</a> <a href="/cgi-bin/koha/circ/branchtransfers.pl" class="submenu">Transferts</a>
 </div>
 
 <!-- TMPL_IF NAME="loggedinusername" -->

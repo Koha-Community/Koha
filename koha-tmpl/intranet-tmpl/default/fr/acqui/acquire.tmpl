@@ -34,20 +34,20 @@
 				<label class="label100">Périodique</label>
 				<!-- TMPL_VAR NAME="seriestitle" -->
 			</p>
-			<p> Entrer un(des) codes-barre et un site, si vous souhaitez ajouter un(des) exemplaires maintenant</p>
+			<p>Entrer un(des) codes-barre et un site, si vous souhaitez ajouter un(des) exemplaires maintenant</p>
 			<p>
 				<label class="label100">Site</label>
 				<!-- TMPL_VAR NAME="CGIbranch" -->
 			</p>
 			<p>
-				<label class="label100">Code Barre de l'exemplaire *</label>
+				<label class="label100">Code à Barres de l'exemplaire *</label>
 				<input type=text size=20 name=barcode value="<!-- TMPL_VAR name="barcode" -->">
 			</p>
 		</div>
 		<div id="bloc25">
 			<h2 class="acquisition">Détails de comptabilité</h2>
 			<p>
-				<label class="label100">Budget</label>
+				<label class="label100">Ligne de crédit</label>
 				<!-- TMPL_VAR NAME="bookfund" -->
 			</p>
 			<p>
@@ -69,7 +69,7 @@
 			</p>
 			<p>
 				<label class="label100">Coût réel *</label>
-				<input type="text" size="20" name="cost" value="<!-- TMPL_VAR NAME="unitprice" -->">
+				<input type="text" size="20" name="cost" value="<!-- TMPL_IF name="unitprice"--><!-- TMPL_VAR NAME="unitprice" --><!-- TMPL_ELSE --><!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF -->">
 			</p>
 			<p>
 				<label class="label100">Numéro de Facture</label>

@@ -7,12 +7,12 @@
 <!-- TMPL_IF NAME="BIBLIO_EXISTS" -->
 	<table border="0" width="50%" cellpadding="10" cellspacing="0">
 		<tr>
-			<th background="/images/background-acq.gif">Enregistrement déjà dans la Base de Donnée
+			<th background="/images/background-acq.gif">Enregistrement déjà dans la base de données
 			</th>
 		</tr>
 		<tr>
 			<td bgcolor="#dddddd">
-				<!-- TMPL_VAR NAME="title" --> is already in the database with  biblionumber <!-- TMPL_VAR NAME="biblionumber" --> and biblioitemnumber <!-- TMPL_VAR NAME="biblioitemnumber" -->
+				<!-- TMPL_VAR NAME="title" --> est déjà dans la base de données avec le numéro de notice <!-- TMPL_VAR NAME="biblionumber" --> / <!-- TMPL_VAR NAME="biblioitemnumber" -->
 			  </td>
 		</tr>
 	</table>
@@ -25,7 +25,7 @@
 		</tr>
 		<tr>
 			<td bgcolor="#dddddd">
-				<!-- TMPL_VAR NAME="title" -->has been entered into the database with biblionumber  <!-- TMPL_VAR NAME="biblionumber" --> and biblioitemnumber <!-- TMPL_VAR NAME="biblioitemnumber" --></td>
+				<!-- TMPL_VAR NAME="title" --> a été saisi dans la base de données avec le numéro de notice <!-- TMPL_VAR NAME="biblionumber" --> / <!-- TMPL_VAR NAME="biblioitemnumber" --></td>
 		</tr>
 	  </table>
 <!-- /TMPL_IF -->
@@ -40,7 +40,7 @@
         <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
         <input type="hidden" name="file" value="<!-- TMPL_VAR NAME="file" -->">
         <table border="0">
-          <tr><td>CODE BARRE</td><td><input name="barcode" size="10" value="<!-- TMPL_VAR NAME="barcode" -->">
+          <tr><td>CODE A BARRES</td><td><input name="barcode" size="10" value="<!-- TMPL_VAR NAME="barcode" -->">
           Site d'affectation: <select name="homebranch"><!-- TMPL_VAR NAME="branchselect" --></select>
 	  </td></tr>
           <tr><td>Prix de Remplacement :</td>

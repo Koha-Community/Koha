@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="circulation-top.inc" -->
  <div id="mainbloc">
-	<h1 class="circulation">Circulation : prêts</h1>
+	<h1 class="circulation">Prêt : Sorties</h1>
 
 <!--
 
@@ -10,7 +10,7 @@
 	<div id="bloc25">
 		<h2 class="circulation">Paramètres</h2>
 		<p>
-			<b>Site:</b> <!-- TMPL_VAR NAME="branchname" -->, <b>Imprimante:</b> <!-- TMPL_VAR NAME="printername" --> <a href="selectbranchprinter.pl" class="button circulation">Changer Paramètres</a>
+			<b>Site:</b> <!-- TMPL_VAR NAME="branchname" -->, <b>Imprimante:</b> <!-- TMPL_VAR NAME="printername" --> <a href="selectbranchprinter.pl" class="button circulation">Changer Réglages</a>
 		</p>
 	
 	<!-- TMPL_IF NAME="message" -->
@@ -40,7 +40,7 @@
 				<!-- TMPL_VAR NAME="phone" -->
 			</p>
 			<p>Catégorie : <!-- TMPL_VAR NAME="categorycode" --></p>
-			<p><!-- TMPL_VAR NAME="issuecount" --> Prêts<!-- TMPL_IF NAME="overduecount" -->,<!-- TMPL_VAR NAME="overduecount" --> En retard<!-- /TMPL_IF --></p>
+			<p><!-- TMPL_VAR NAME="issuecount" --> Sorties<!-- TMPL_IF NAME="overduecount" -->,<!-- TMPL_VAR NAME="overduecount" --> En retard<!-- /TMPL_IF --></p>
 			<p><b><!-- TMPL_VAR NAME="borrowernotes" --></b></p>
 
 		<!-- TMPL_ELSE -->
@@ -64,8 +64,8 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 	<div id="bloc25">
 	<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-		<h2 class="circulation">Entrez le code barre du livre</h2>
-		<p>Code Barre de l'exemplaire :<input name="barcode" size="10"> <input type="submit" value="Prêter" class="button circulation"></p>
+		<h2 class="circulation">Entrez le code à barres du livre</h2>
+		<p>Code à Barres de l'exemplaire :<input name="barcode" size="10"> <input type="submit" value="Prêter" class="button circulation"></p>
 		<p>
 			<select name="day">
 				<option value="0">Jour</option>
@@ -151,7 +151,7 @@
 				<p class="problem">La date de retour est invalide</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
-				<p class="problem">Le code barre est inconnu</p>
+				<p class="problem">Le code à barres est inconnu</p>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
 				<p class="problem">Exemplaire exclu du prêt</p>
@@ -195,6 +195,12 @@
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS name="IMPOSSIBLE" -->
 			<form method="post">
+				<!-- TMPL_IF NAME="RESERVED" -->
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Annuler réservation</p>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+					<p><input type="checkbox" checked name="cancelreserve" value="1">Annuler réservation</p>
+				<!-- /TMPL_IF -->
 				<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->">
 				<input type="hidden" name="borrnumber" value="<!-- TMPL_VAR NAME="borrowernumber">">
 				<input type="hidden" name="issueconfirmed" value="1">
@@ -202,6 +208,7 @@
 				<input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->">
 				<input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->">
 				<input type="submit" value="Confirmer le prêt" class="button circulation">
+				<a href="circulation.pl?borrnumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="button circulation">Ne pas préter</a>
 			</form>
 			<!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
@@ -223,7 +230,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 	<table>
 		<tr>
 			<th class="circulation">Date de retour</th>
-			<th class="circulation">Code Barre</th>
+			<th class="circulation">Code à Barres</th>
 			<th class="circulation">Titre</th>
 			<th class="circulation">Auteur</th>
 			<th class="circulation">Cote</th>
@@ -252,7 +259,7 @@ SUMMARY : TODAY & PREVIOUS ISSUES
 	<table>
 		<tr>
 			<th class="circulation">Date de retour</th>
-			<th class="circulation">Code Barre</th>
+			<th class="circulation">Code à Barres</th>
 			<th class="circulation">Titre</th>
 			<th class="circulation">Auteur</th>
 			<th class="circulation">Cote</th>
