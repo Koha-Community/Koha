@@ -341,19 +341,19 @@ sub startmenu($) {
   # edit the paths in here
   my ($type)=shift;
   if ($type eq 'issue') {
-    open (FILE,"$path/issues-top.inc") || die;
+    open (FILE,"$path/issues-top.inc") || die "could not find : $path/issues-top.inc";
   } elsif ($type eq 'opac') {
-    open (FILE,"$path/opac-top.inc") || die;
+    open (FILE,"$path/opac-top.inc") || die "could not find : $path/opac-top.inc";
   } elsif ($type eq 'member') {
-    open (FILE,"$path/members-top.inc") || die;
+    open (FILE,"$path/members-top.inc") || die "could not find : $path/members-top.inc";
   } elsif ($type eq 'acquisitions'){
-    open (FILE,"$path/acquisitions-top.inc") || die;
+    open (FILE,"$path/acquisitions-top.inc") || die "could not find : $path/acquisition-top.inc";
   } elsif ($type eq 'report'){
-    open (FILE,"$path/reports-top.inc") || die;
+    open (FILE,"$path/reports-top.inc") || die "could not find : $path/reports-top.inc";
   } elsif ($type eq 'circulation') {
-    open (FILE,"$path/circulation-top.inc") || die;
+    open (FILE,"$path/circulation-top.inc") || die "could not find : $path/circulation-top.inc";
   } else {
-    open (FILE,"$path/cat-top.inc") || die;
+    open (FILE,"$path/cat-top.inc") || die "could not find : $path/cat-top.inc";
   }
   my @string=<FILE>;
   close FILE;
