@@ -148,7 +148,7 @@
 		<th colspan="3">Explanation</th>
 	</tr>
 	<!-- TMPL_LOOP NAME="loop" -->
-	<tr valign="top"<!-- TMPL_IF NAME="toggle" --> class="hilighted"<!-- /TMPL_IF -->>
+	<!-- TMPL_IF NAME="toggle" --><tr valign="top" class="hilighted"><!-- TMPL_ELSE --><tr valign="top"><!-- /TMPL_IF -->
 		<td><!-- TMPL_VAR NAME="variable" --></td>
 		<td><!-- TMPL_VAR NAME="value" --></td>
 		<td><!-- TMPL_VAR NAME="explanation" --></td>
