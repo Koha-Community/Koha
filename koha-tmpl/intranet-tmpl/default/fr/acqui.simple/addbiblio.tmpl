@@ -397,7 +397,7 @@ function Dopop(link,i) {
 	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=600,height=400,toolbar=false,scrollbars=yes');
 }
 
-function PopupZ3950(link,i) {
+function PopupZ3950() {
     var strQuery="";
 	for (i=0 ; i<document.forms[0].field_value.length ; i++) {
 		if (document.forms[0].kohafield[i].value == "biblioitems.isbn" && document.forms[0].field_value[i].value.length>0) {
