@@ -164,7 +164,7 @@ if ($op eq 'add_form') {
 	}
 	if ($offset+$pagesize<$count) {
 		$template->param(ltcount => 1,
-				 next_page => $offset+$pagesize);
+				 nextpage => $offset+$pagesize);
 	}
 }
                                                               
