@@ -14,7 +14,7 @@ my ($template, $loggedinuser, $cookie)
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {permissions => 1},
+				flagsrequired => {catalogue => 1},
 				debug => 1,
 				});
 output_html_with_http_headers $query, $cookie, $template->output;

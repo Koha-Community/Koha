@@ -1,0 +1,112 @@
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<h1>Inventory/Stocktaking</h1>
+<form method="post">
+	<table>
+		<tr>
+			<th colspan=2>
+				Select items you want to check
+			</th>
+		</tr>
+		<tr>
+			<td>
+					Item Location (items.bulk) between
+			</td>
+			<td>
+				 <input type="text" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->"> and <input type="text" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+			</td>
+		</tr>
+		<tr>
+			<td>
+					not seen since
+			</td>
+			<td>
+				<input type="text" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+			</td>
+		</tr>
+		<tr>
+			<td>
+					show
+			</td>
+			<td>
+				<input type="text" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+				<i> items beginning at offset</i>
+				 <input type="text" name="offset" value="<!-- TMPL_VAR name="offset" -->">
+			</td>
+		</tr>
+		<tr colspan=2>
+			<td>
+				<input type="submit" value="OK" class="button">
+			</td>
+		</tr>
+	</table>
+</form>
+
+<form method="post">
+<input type="hidden" name="markseen" value="1">
+<input type="hidden" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">
+<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+<input type="hidden" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+<input type="hidden" name="offset" value="<!-- TMPL_VAR name="offset" -->">
+<!-- TMPL_IF name="loop" -->
+<table width="100%">
+	<tr>
+		<th>Seen</th>
+		<th>Barcode</th>
+		<th>Bulk</th>
+		<th>Title</th>
+		<th>Author</th>
+	</tr>
+<!-- TMPL_LOOP name="loop" -->
+	<tr>
+		<td>
+			<input type="checkbox" name="SEEN-<!-- TMPL_VAR name="itemnumber" -->" value="1">
+		</td>
+		<td>
+			<!-- TMPL_VAR name="barcode" -->
+		</td>
+		<td>
+			<!-- TMPL_VAR name="bulk" -->
+		</td>
+		<td>
+			<!-- TMPL_VAR name="title" -->
+		</td>
+		<td>
+			<!-- TMPL_VAR name="author" -->
+		</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<input type="submit" value="Mark seen" class="button">
+</form>
+<!-- /TMPL_IF -->
+
+<table>
+<tr>
+	<td>
+		<!-- TMPL_IF name="offset" -->
+		<form method="post">
+			<input type="hidden" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">
+			<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+			<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+			<input type="hidden" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+			<input type="hidden" name="offset" value="<!-- TMPL_VAR name="prevoffset" -->">
+			<input type="submit" value="&lt;&lt;&lt;" class="button">
+		</form>
+		<!-- /TMPL_IF -->
+	</td>
+	<td>
+		<!-- TMPL_IF name="nextoffset" -->
+		<form method="post">
+			<input type="hidden" name="minlocation" value="<!-- TMPL_VAR name="minlocation" -->">
+			<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR name="maxlocation" -->">
+			<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR name="datelastseen" -->">
+			<input type="hidden" name="pagesize" value="<!-- TMPL_VAR name="pagesize" -->">
+			<input type="hidden" name="offset" value="<!-- TMPL_VAR name="nextoffset" -->">
+			<input type="submit" value="&gt;&gt;&gt;" class="button">
+		</form>
+		<!-- /TMPL_IF -->
+	</td>
+</tr>
+</table>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
