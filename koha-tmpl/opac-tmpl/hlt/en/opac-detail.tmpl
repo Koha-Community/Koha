@@ -43,10 +43,12 @@
     <td VALIGN="TOP"><B><!--+Katipo+start name="copyright" -->Copyright:<!--+Katipo+end--> </B> </TD>
     <TD VALIGN="TOP"><TMPL_VAR NAME="copyrightdate"></td>
   </tr>
+  <TMPL_IF NAME="subjects">
   <tr>
     <td VALIGN="TOP"><B><!--+Katipo+start name="subject" -->Subject:<!--+Katipo+end--> </B> </TD>
-    <TD VALIGN="TOP"><TMPL_VAR NAME="subject"></a></td>
+    <TD VALIGN="TOP"><TMPL_LOOP NAME="subjects"><a href="/cgi-bin/koha/opac-searchresults.pl?subjectitems=<TMPL_VAR NAME="subject" ESCAPE="URL">"><TMPL_VAR NAME="subject"> </a>|</TMPL_LOOP></td>
   </tr>
+  </TMPL_IF>
   <tr>
     <td VALIGN="TOP"><B><!--+Katipo+start name="biblio" -->Biblio Record:<!--+Katipo+end--> </B> </TD>
     <TD VALIGN="TOP"><TMPL_VAR NAME="biblionumber"></td>
