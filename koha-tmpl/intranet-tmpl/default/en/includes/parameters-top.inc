@@ -56,7 +56,7 @@ a.parameters:hover {
 						<a class="reports" href="/cgi-bin/koha/reports-home.pl">Reports</a>
 					</td>
 					<td>
-						<a class="parameters" href="/cgi-bin/koha/admin-home.pl" alt="Paramètres">Parameters</a>
+						<a class="parameters" href="/cgi-bin/koha/admin-home.pl" alt="Parameters">Parameters</a>
 					</td>
 					<td>
 						<a class="about" href="/cgi-bin/koha/about.pl">About</a>
