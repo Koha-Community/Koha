@@ -40,7 +40,10 @@ my $theme=picktemplate($includes, $templatebase);
 
 my $subject=$query->param('subject');
 # if its a subject we need to use the subject.tmpl
-$templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
+if ($subject) {
+    $templatebase=~ s/searchresults\.tmpl/subject\.tmpl/;
+    $theme=picktemplate($includes, $templatebase);
+}
 
 my $template = HTML::Template->new(filename => "$includes/templates/$theme/$templatebase", die_on_bad_params => 0, path => [$includes]);
 
@@ -75,7 +78,22 @@ $search{'title'}=$title;
 my $ttype=$query->param('ttype');
 $search{'ttype'}=$ttype;
 
+my $forminputs;
+($keyword) && (push @$forminputs, { line => "keyword=$keyword"});
+($subject) && (push @$forminputs, { line => "subject=$subject"});
+($author) && (push @$forminputs, { line => "author=$author"});
+($illustrator) && (push @$forminputs, { line => "illustrator=$illustrator"});
+($itemnumber) && (push @$forminputs, { line => "itemnumber=$itemnumber"});
+($isbn) && (push @$forminputs, { line => "isbn=$isbn"});
+($datebefore) && (push @$forminputs, { line => "date-before=$datebefore"});
+($class) && (push @$forminputs, { line => "class=$class"});
+($dewey) && (push @$forminputs, { line => "dewey=$dewey"});
+($branch) && (push @$forminputs, { line => "branch=$branch"});
+($title) && (push @$forminputs, { line => "title=$title"});
+($ttype) && (push @$forminputs, { line => "ttype=$ttype"});
+$template->param(FORMINPUTS => $forminputs);
 # whats this for?
+# I think it is (or was) a search from the "front" page...   [st]
 $search{'front'}=$query->param('front');
 
 my $num=20;
