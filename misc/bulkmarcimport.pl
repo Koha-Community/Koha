@@ -9,25 +9,28 @@ use MARC::Record;
 use MARC::Batch;
 use C4::Context;
 use C4::Biblio;
+use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter,$char_encoding);
+my ($version, $delete, $test_parameter,$char_encoding, $verbose);
 GetOptions(
     'file:s'    => \$input_marc_file,
     'n' => \$number,
-    'v' => \$version,
+    'h' => \$version,
     'd' => \$delete,
     't' => \$test_parameter,
     'c:s' => \$char_encoding,
+    'v:s' => \$verbose,
 );
 
 if ($version || ($input_marc_file eq '')) {
 	print <<EOF
 small script to import an iso2709 file into Koha.
 parameters :
-\tv : this version/help screen
+\th : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
+\tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
 \tn : the number of the record to import. If missing, all the file is imported
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
 \tc : the char encoding. At the moment, only USMARC and UNIMARC supported. USMARC by default.
@@ -63,23 +66,23 @@ if ($test_parameter) {
 	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
 $char_encoding = 'USMARC' unless ($char_encoding);
-print "CHAR : $char_encoding\n";
+print "CHAR : $char_encoding\n" if $verbose;
+my $starttime = gettimeofday;
 my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber");
-
+# $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 while ( my $record = $batch->next() ) {
 	$i++;
 	#now, parse the record, extract the item fields, and store them in somewhere else.
 	$record = MARC::File::USMARC::decode(char_decode($record->as_usmarc(),$char_encoding));
-	warn "==>".$record->as_formatted();
+	warn "$i ==>".$record->as_formatted() if $verbose eq 2;
 	my @fields = $record->field($tagfield);
-	print "biblio $i";
 	my @items;
-	my $nbitems;
+	my $nbitems=0;
 
 	foreach my $field (@fields) {
 		my $item = MARC::Record->new();
@@ -88,13 +91,16 @@ while ( my $record = $batch->next() ) {
 		$record->delete_field($field);
 		$nbitems++;
 	}
-	print " : $nbitems items found\n";
+	print "$i : $nbitems items found\n" if $verbose;
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
 		my ($bibid,$oldbibnum,$oldbibitemnum) = NEWnewbiblio($dbh,$record);
-		warn "ADDED biblio NB $bibid in DB\n";
+		warn "ADDED biblio NB $bibid in DB\n" if $verbose;
 		for (my $i=0;$i<=$#items;$i++) {
 			NEWnewitem($dbh,$items[$i],$bibid);
 		}
 	}
 }
+# $dbh->do("unlock tables");
+my $timeneeded = gettimeofday - $starttime;
+print "$i MARC record done in $timeneeded seconds";
