@@ -120,9 +120,9 @@ if ($uploadmarc && length($uploadmarc)>0) {
 					}
 					if (!$breedingresult || $overwrite_biblio) {
 						my $recoded;
-						warn "IMPORT => $marcarray[$i]\x1D')";
+#						warn "IMPORT => $marcarray[$i]\x1D')";
 						$recoded = $marcrecord->as_usmarc(); #MARC::File::USMARC::encode($marcrecord);
-						warn "RECODED : $recoded";
+#						warn "RECODED : $recoded";
 						$insertsql ->execute($filename,$oldbiblio->{isbn}.$oldbiblio->{issn},$recoded);
 						$imported++;
 					} else {
@@ -799,6 +799,9 @@ sub FormatMarcText {
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.23  2003/01/06 13:06:28  tipaul
+# removing trailing #
+#
 # Revision 1.22  2002/11/12 15:58:43  tipaul
 # road to 1.3.2 :
 # * many bugfixes
