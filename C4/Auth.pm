@@ -350,8 +350,8 @@ sub checkpw {
 #
 	my ($dbh, $userid, $password) = @_;
 # LDAP
-	my $sth=$dbh->prepare("select value from systempreferences where variable=?");
-	$sth->execute("ldapserver");
+#	my $sth=$dbh->prepare("select value from systempreferences where variable=?");
+#	$sth->execute("ldapserver");
 	my $ldapserver = C4::Context->preferences('ldapserver');
 	if ($ldapserver) {
 		my $ldapinfos = C4::Context->preferences('ldapinfos');
@@ -365,17 +365,18 @@ sub checkpw {
 		# auth refused
 			return 0;
 		} else {
-		#get the cardnumber
-		my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
-		$sth->execute($userid);
-		if ($sth->rows) {
-			my $cardnumber = $sth->fetchrow;
-			#we have the cardnumber
-			return 1,$cardnumber;
-		}
-		if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
-			# Koha superuser account
-			return 2;
+			#get the cardnumber
+			my $sth=$dbh->prepare("select cardnumber from borrowers where userid=?");
+			$sth->execute($userid);
+			if ($sth->rows) {
+				my $cardnumber = $sth->fetchrow;
+				#we have the cardnumber
+				return 1,$cardnumber;
+			}
+			if ($userid eq C4::Context->config('user') && $password eq C4::Context->config('pass')) {
+				# Koha superuser account
+				return 2;
+			}
 		}
 	}
 # INTERNAL AUTH
@@ -460,8 +461,6 @@ sub getborrowernumber {
       }
     }
     return 0;
-}
-
 }
 
 END { }       # module clean-up code here (global destructor)
