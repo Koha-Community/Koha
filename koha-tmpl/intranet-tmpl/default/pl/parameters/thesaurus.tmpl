@@ -11,7 +11,7 @@
 	<br/><br/>
 	<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Other forms</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Inne formy</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
 	<!-- TMPL_LOOP name="loop" -->
@@ -47,7 +47,7 @@
 		<td><!-- TMPL_VAR name="category" --></td>
 	</tr>
 	<tr>
-		<td>Authority lib</td>
+		<td>Etykieta HW</td>
 		<!-- TMPL_IF name="id" -->
 			<td><!-- TMPL_VAR name="father" --><!-- TMPL_VAR name="stdlib" --><input type="hidden" name="stdlib" value="<!-- TMPL_VAR name="stdlib" -->" ></td>
 		<!-- TMPL_ELSE -->
@@ -55,7 +55,7 @@
 		<!-- /TMPL_IF -->
 	</tr>
 	<tr>
-		<td>Other lib</td>
+		<td>Inne etykiety</td>
 		<td><!-- TMPL_VAR name="father" --><input type="text" name="freelib" value="<!-- TMPL_VAR name="freelib" escape=HTML -->" maxlength="80" size="80"></td>
 	</tr>
 	<tr>
@@ -77,7 +77,7 @@
 <!---------------------------------------------------------------------------->
 	<table border=0 cellspacing=0 cellpadding=2>
 		<tr valign=top bgcolor=#99cc33>
-			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>lib</b></td>
+			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Etykieta</b></td>
 			<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="search_category" --></b></td>
 		</tr>
 		<tr><td>Wartość</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
@@ -87,7 +87,7 @@
 				<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
 				<input type="hidden" name="search_category" value="<!-- TMPL_VAR name="search_category" -->">
 		</tr></td>
-		<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE tego wpisu <b>and all entries depending from this one</b></td></tr>
+		<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE tego wpisu <b>oraz wszystkie wpisy zależne od tego</b></td></tr>
 		<tr><td><input type=submit value="TAK"></form></td>
 				<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
 	</table>
@@ -99,7 +99,7 @@
 	<p>Zarządzanie tezaurusem i plikami odpowiedzialności.<br />
 	<ul>
 		<b>Dig</b>: zobacz dane zależne od tego<br />
-		<b>Related</b>: zobacz inne formy tego wpisu odpowiedzialności</p>
+		<b>Related</b>: zobacz inne formy tego wpisu HW</p>
 	</ul>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<!-- TMPL_VAR name="tab_list" -->
@@ -113,8 +113,8 @@
 	<table border=0 cellspacing=0 cellpadding=0>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%">&nbsp;</td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Free form</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Authority</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wyrażenie dowolne</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>HW</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Dig</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="10%"><b>Related</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width="5%"><b>Edytuj</b></td>

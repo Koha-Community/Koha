@@ -4,15 +4,15 @@
 	<p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
 	<p>
 	<center>
-	<h3>This page is just a mock up</h3>
+	<h3>Ta strona jest tylko projektem</h3>
 
 	<table border=0 cellspacing=15>
 	<tr><td valign=top>
 
 	<table border=1 cellpadding=10>
-	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Reserves</font></th></tr>
+	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Rezerwacje</font></th></tr>
 	<tr><td>
-	<b>You have the following books waiting to be picked up:</b>
+	<b>Czekają na Ciebie nastepujące pozycje do odebrania:</b>
 	<ul>
 	<li>The Great Mom Swap by Betsy Hanes at Main Library
 	<li>Between Brothers by Irene Morck at Main Library
@@ -34,31 +34,31 @@
 		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Preferencje Użytkownika</font></th></tr>
 		<tr><td align =center>
 		<table border=0 cellpadding=5>
-			<tr><td>Language</td><td>
+			<tr><td>Język</td><td>
 			<select name=language>
-			<option value=english>English
-			<option value=english>French
-			<option value=english>German
-			<option value=english>Polish
+			<option value=english>Angielski
+			<option value=english>Francuski
+			<option value=english>Niemiecki
+			<option value=english>Polski
 			</select>
 			</td></tr>
 			<tr><td>Adres E-mail</td><td><input name=email size=30 value=<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com></td></tr>
 			<tr><td>Preferowany Oddział<br>for reserve pickups</td><td>
 			<select name=pickupbranch>
-			<option value=MAIN>Main Library
+			<option value=MAIN>Biblioteka Główna
 			<option value=SEDGE>Sedgewick Library
 			<option value=HANSEN selected>Rick Hansen Library
 			<option value=CAT>Cataline Library
 			</select>
 			</td></tr>
 			<tr><td colspan=2>
-			<input name=specialeventsbyemail type=checkbox checked> Notify me about Special Events by email<br>
-			<input name=overduesbyemail type=checkbox checked> Notify me about overdues by email<br>
-			<input name=recordreadingrecord type=checkbox> Keep a record of books I have read<br>
+			<input name=specialeventsbyemail type=checkbox checked> Powiadom mnie o Ważnych Wydarzeniach  e-mailem<br>
+			<input name=overduesbyemail type=checkbox checked> Powiadom mnie o zaległych e-mailem<br>
+			<input name=recordreadingrecord type=checkbox> Zatrzymaj historię książek, które czytałem/am.<br>
 			<input name=recordreadingrecord type=checkbox> Zezwalaj pracownikom biblioteki na przeglądanie historii wypożyczeń<br>
 			</td></tr>
 			<tr><td align=center colspan=2>
-			<input type=submit value="Set Preferences">
+			<input type=submit value="Ustaw preferencje">
 			</td>
 			</tr>
 		</table>
@@ -75,7 +75,7 @@
 	<form method=post>
 		<table border=1 cellpadding=10>
 		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>Preferencje Użytkownika</font></th></tr>
-		<tr><td>Name:</td><td><input name="userid"></td></tr>
+		<tr><td>Nazwisko:</td><td><input name="userid"></td></tr>
 		<tr><td>Hasło:</td><td><input type=password name=password></td></tr>
 		<tr><td align=center colspan=2>
 		    <input type=submit value="Login">

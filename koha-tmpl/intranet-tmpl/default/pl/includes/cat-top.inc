@@ -2,7 +2,7 @@
 
 <html>
 <head>
-<title>KOHA: INTRANET: Catalogue</title>
+<title>KOHA: INTRANET: Katalog</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <script language="JavaScript">
@@ -96,7 +96,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 						<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&type=intranet" class="submenu2">Dodaj opis</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/maint/catmaintain.pl" target="window0" class="submenu">Porządkowanie katalogu</a>
+						<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Porządkowanie katalogu</a>
 					</td>
 				</tr>
 			</table>
@@ -108,5 +108,5 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
 <!-- TMPL_IF NAME="loggedinusername" -->
     <p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Log In</a> to Koha</p>
+    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj do</a> Systemu Koha</p>
 <!-- /TMPL_IF -->

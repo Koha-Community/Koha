@@ -61,9 +61,9 @@ function Check(f) {
 </SCRIPT>
 <!-- TMPL_IF name="add_form" -->
 	<!-- TMPL_IF name="itemtype" -->
-		<h1>Modify item type</h1>
+		<h1>Zmień rodzaj pozycji</h1>
 	<!-- TMPL_ELSE -->
-		<h1>Dodaj typ pozycji</h1>
+		<h1>Dodaj typ materiału</h1>
 	<!-- /TMPL_IF -->
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 		<input type=hidden name=op value='add_validate'>
@@ -79,24 +79,24 @@ function Check(f) {
 				<td><input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
 			</tr>
 			<tr>
-				<td>Not for loan</td>
+				<td>Nie na wynos</td>
 				<td>
 					<!-- TMPL_IF name="notforloan" -->
 						<input type=checkbox name=notforloan checked value=1>
 					<!-- TMPL_ELSE -->
 						<input type=checkbox name=notforloan value=1>
 					<!-- /TMPL_IF -->
-					if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item
+					jeśli zaznaczone to żaden dokument tego typu nie może być wypożyczony. Jeśli pozostawiony pusty, to każdy dokument tego typu może być wypożyczony, chyba, że dla konkretnego egzemplarza ustawiono flagę &quot;nienawynos.&quote;
 				</td>
 			</tr>
 			<tr>
 				<td>Okres wypożyczenia</td>
 				<td>
-					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>  meaningful only if not for loan is not set
+					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'> ma znaczenie tylko wtedy gdy &quot;nie na wynos&quot; jest puste
 				</td>
 			</tr>
 			<tr>
-				<td>Wolno Przedłużać</td>
+				<td>Wolno przedłużać</td>
 				<td><input type=checkbox name=renewalsallowed <!-- TMPL_IF name="renewalsallowed" -->checked<!-- /TMPL_IF --> value=1></td>
 			</tr>
 			<tr>
@@ -121,13 +121,13 @@ function Check(f) {
 		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<!-- TMPL_VAR name="itemtype" -->'>
 	<tr><td>Wyjaśnienie</td><td><!-- TMPL_VAR name="description" --></td></tr>
 	<tr><td>Okres wypożyczenia</td><td><!-- TMPL_VAR name="loanlength" --></td></tr>
-	<tr><td>Przedłużenia</td><td><!-- TMPL_IF name="renewalsallowed" -->Możliwe<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
+	<tr><td>Przedłużenia</td><td><!-- TMPL_IF name="renewalsallowed" -->Możliwe<!-- TMPL_ELSE -->Nie możliwe<!-- /TMPL_IF --></td></tr>
 	<tr><td>Opłata wynajmu</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
 	<!-- TMPL_IF name="total" -->
 		<tr><td colspan=2 align=center><b>Ten rekord był w użyciu <!-- TMPL_VAR name="total" --> razy. Wymazanie nie jest możliwe</b></td></tr>
 		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=OK></form></td></tr>
 	<!-- TMPL_ELSE -->
-		<tr><td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td></tr>
+		<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td></tr>
 		<tr><td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
 	<!-- /TMPL_IF -->
 
@@ -141,7 +141,7 @@ function Check(f) {
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Kod</b></th>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wyjaśnienie</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Okres wypożyczenia</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Renewable</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Przedłużalność</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Opłata</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">Edytuj</td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">Wymaż</td>
@@ -164,10 +164,10 @@ function Check(f) {
 <table width=40%>
 	<tr>
 		<td width="33%">
-			<input type=submit class="button" value="Dodaj typ pozycji" title="Dodaj typ pozycji" alt="Dodaj typ pozycji">
+			<input type=submit class="button" value="Dodaj typ materiału" title="Dodaj typ materiału" alt="Dodaj typ materiału">
 		</td>
-		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0></a><!-- /TMPL_IF --></td>
-		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a><!-- /TMPL_IF --></td>
+		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border=0></a><!-- /TMPL_IF --></td>
+		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border=0></a><!-- /TMPL_IF --></td>
 	</tr>
 </table>
 </form>

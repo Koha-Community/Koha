@@ -9,12 +9,12 @@
 	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
 	<input type=hidden name=op value='add_validate'>
 	<table>
-	<tr><th>Field</th>
-		<th>Lib for librarians / for opac</th>
-		<th>Repet</th>
-		<th>Mand</th>
-		<th>Koha field</th>
-		<th>Tab</th>
+	<tr><th>Pole</th>
+		<th>Etykieta dla bibliotekarzy / dla katalogu</th>
+		<th>Powt</th>
+		<th>Obow</th>
+		<th>Pole Koha</th>
+		<th>Zakładka</th>
 		<th>Wartość autoryzowana lub<br/>
 				Kategoria tezaurusa</th>
 	</tr>
@@ -28,15 +28,15 @@
 		<td><!-- TMPL_VAR name="kohafield" --></td>
 		<td><!-- TMPL_VAR name="tab" --></td>
 		<td><!-- TMPL_VAR name="authorised_value" --><br/>
-				or <!-- TMPL_VAR name="thesaurus_category" --><br/>
-				or <!-- TMPL_VAR name="value_builder" --></td>
+				lub <!-- TMPL_VAR name="thesaurus_category" --><br/>
+				lub <!-- TMPL_VAR name="value_builder" --></td>
 	<!-- /TMPL_LOOP -->
 	</table>
 	<INPUT type=submit value='OK'>
-	<p>Note: in the last column, you can choose:
-	<ul><li>An "authorised value": it refers to a list of authorised values for this subfield. See the corresponding admin table.</li>
-	<li>A "thesaurus category": it refers to a thesaurus category. See the corresponding admin table.</li>
-	<li>A "value builder": values builders are perl programs that help you select the value of the field. They are MARC-flavor dependant and sometimes fill another subfield automatically.</li>
+	<p>Uwaga: w ostatnij kolumnie możesz wybrać:
+	<ul><li>"Wartość autoryzowana": odnosi sie do autoryzowanych wartości dla tego podpola. Zob. odpowiednią tablicę administracyjną.</li>
+	<li>"Kategoria tezaurusa": odnosi się do kategorii tazaurusa. Zob. odpowiednia tablica administracyjna.</li>
+	<li>"Kreator wartości": kreatory wartości to programy perla, które wspomagają wybór wartości pola. Zależą w dużej mierze od odmiany MARC i czasem automatycznie wypełniają inne podpola.</li>
 	</ul>
 	</p>
 	</form>
@@ -46,20 +46,20 @@
 <!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Subfield</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Podpole</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="tagsubfield" --></b></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
 	<form action='<!-- TMPL_VAR name="delete_link" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
 	<input type=hidden name=tagfield value='<!-- TMPL_VAR name="tagfield" -->'>
 	<input type=hidden name=tagsubfield value='<!-- TMPL_VAR name="tagsubfield" -->'>
-	<tr><td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td></tr>
+	<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td></tr>
 	<tr><td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->"><input type=submit value="NIE"></form></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
 <!---------------------------------------------------------------------------->
-	Data deleted
+	Dane wymazane
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->">
 	<input type=submit value=OK>
 	</form>
@@ -67,21 +67,21 @@
 
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
-<h1>Admin struktury podpól MARC dla <!-- TMPL_VAR name="tagfield" --></h1>
-<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
-<p>The column <b>Koha field</b> shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, or a Koha interface. This link ensures that both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
+<h1>Struktura podpól MARC dla <!-- TMPL_VAR name="tagfield" --></h1>
+<p>Ten ekran pokazuje podpola skojarzone z wybraną etykietą. Można dokonać edycji podpól lub dodawać nowe naciskając edytuj. </p>
+<p>Kolumna <b>pole Koha</b> pokazuje, że podpole jest skorelowane z polem Koha. System potrafi zarządzać interfejsem MARC lub interfejsem Koha. Łącze to zapewnia spójność pomiedzy dwoma bazami. W efekcie można dość łatwo przechodzić z jednego interfejsu do drugiego.</p>
 
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>Subfield</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Lib</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Koha field</b> <span style="font-size:8;color:red" title="Pole bazy Koha powiązane z tym podpolem">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=yes, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Mand</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=yes, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Tab</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 or item)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>Podpole</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Etykieta</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>Pole Koha</b> <span style="font-size:8;color:red" title="Pole bazy Koha powiązane z tym podpolem">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Pow</b> <span style="font-size:8;color:red" title="podpole może być powtórzone (1=tak, 0=nie)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Obow</b> <span style="font-size:8;color:red" title="podpole jest obowiązkowe (1=tak, 0=nie)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Zakładka</b> <span style="font-size:8;color:red" title="w której zakładce ma być podpole ukazane (0-9 lub egzemplarz)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Wartości</b> <span style="font-size:8;color:red" title="wartość autoryzowana dla tego podpola">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Tezaurus</b> <span style="font-size:8;color:red" title="Tezaurus skojarzony z tym podpolem">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Kreator Wartości">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Buduj war.</b> <span style="font-size:8;color:red" title="Kreator Wartości">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%>Wymaż</td>
 <!-- TMPL_LOOP name="loop" -->
 <tr valign=top bgcolor='<!-- TMPL_VAR name="bgcolor" -->'>
@@ -102,8 +102,8 @@
 	<tr>
 		<td width="25%"><!-- TMPL_VAR name="edit" --><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 		<td width="25%"><a href="marctagstructure.pl?searchfield=<!-- TMPL_VAR name="tagfield" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/2uparrow.png" width=32 hspace=0 vspace=0 border=0></a></td>
-		<td width="25%"><!-- TMPL_IF name="previous" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0 ></a><!-- /TMPL_IF --></td>
-		<td width="25%"><!-- TMPL_IF name="next" --><!-- TMPL_VAR name="next" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0></a><!-- /TMPL_IF --></td>
+		<td width="25%"><!-- TMPL_IF name="previous" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border=0></a><!-- /TMPL_IF --></td>
+		<td width="25%"><!-- TMPL_IF name="next" --><!-- TMPL_VAR name="next" --><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border=0></a><!-- /TMPL_IF --></td>
 	</tr>
 </table>
 <!-- /TMPL_IF -->

@@ -56,7 +56,7 @@
         </SCRIPT>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		<h1>Modify currency</h1>
+		<h1>Zmieniaj walutę</h1>
 	<!-- TMPL_ELSE -->
 		<h1>Dodaj walutę</h1>
 	<!-- /TMPL_IF -->
@@ -68,14 +68,14 @@
 
 	<!-- TMPL_IF NAME=searchfield -->
 		<tr>
-			<td>Currency</td>
+			<td>Waluta</td>
 			<td>
 				<input type=hidden name=currency value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>Currency</td>
+			<td>Waluta</td>
 			<td>
 				<input type=text name=currency size=50 maxlength=50 onBlur=toUC(this)>
 			</td>
@@ -83,7 +83,7 @@
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>Rate</td>
+			<td>Kurs</td>
 			<td>
 				<input type=text name=rate size=10 maxlength=10 value='<!-- TMPL_VAR NAME=rate -->'>
 			</td>
@@ -98,7 +98,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=add_validate -->
-	Data recorded
+	Dane zapisane
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=submit value=OK>
         </form>
@@ -107,7 +107,7 @@
 <!-- TMPL_IF NAME=delete_confirm -->
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Currency</b></td>
+			<td background='/images/background-mem.gif'><b>Waluta</b></td>
 			<td background='/images/background-mem.gif'><b><!-- TMPL_VAR NAME=searchfield --></b></td>
 		</tr>
 
@@ -116,7 +116,7 @@
 			<input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
         
         	<tr>
-			<td>Rate</td>
+			<td>Kurs</td>
 			<td><!-- TMPL_VAR NAME=rate --></td>
 		</tr>
 		<!-- TMPL_IF NAME=totalgtzero -->
@@ -135,7 +135,7 @@
 		</tr>
 		<!-- TMPL_ELSE -->
 		<tr>
-			<td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td>
+			<td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td>
 		</tr>
 		<tr>
 			<td>
@@ -153,27 +153,27 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirmed -->
-	Data deleted
+	Dane wymazane
 	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 		<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-	<h2>Currencies admin</h2>
+	<h2>Zarządzaj Walutą</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
                 <input type=reset name=reset value="wyczyść">
         </form>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		You searched for <b><!-- TMPL_VAR NAME=searchfield --></b>
+		Szukano <b><!-- TMPL_VAR NAME=searchfield --></b>
 	<!-- /TMPL_IF -->
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Currency</b></td>
-			<td background='/images/background-mem.gif'><b>Rate</b></td>
+			<td background='/images/background-mem.gif'><b>Waluta</b></td>
+			<td background='/images/background-mem.gif'><b>Kurs</b></td>
 			<td background='/images/background-mem.gif'> </td>
 			<td background='/images/background-mem.gif'> </td>
 		</tr>

@@ -15,7 +15,7 @@
 		<td><b>Tytuł</b></td>
 		<td><b>Autor</b></td>
 		<td><b>ISBN</b></td>
-		<td><b>coming from</b></td>
+		<td><b>pochądzący z</b></td>
 		<td><b>&nbsp;</b></td>
 		<td>&nbsp;</td>
 	</tr>
@@ -26,14 +26,14 @@
 			<td><!-- TMPL_VAR name="author" --></td>
 			<td><!-- TMPL_VAR name="isbn" --></td>
 			<td><!-- TMPL_VAR name="file" --></td>
-			<td><a href="javascript:Import(<!-- TMPL_VAR name="id" -->)">Import this biblio</a></td>
+			<td><a href="javascript:Import(<!-- TMPL_VAR name="id" -->)">Importuj opis</a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 	<!-- TMPL_ELSE -->
-		<tr><td colspan=6>Nothing found</td></tr>
+		<tr><td colspan=6>Nic nie znaleziono</td></tr>
 	<!-- /TMPL_IF -->
 </table>
-<!-- TMPL_IF name="numberpending" --><H1><center>Still <!-- TMPL_VAR name="numberpending" --> requests to go</center></H1><!-- /TMPL_IF -->
+<!-- TMPL_IF name="numberpending" --><H1><center>Jeszcze <!-- TMPL_VAR name="numberpending" --> kwerenda do zrobienia</center></H1><!-- /TMPL_IF -->
 <br />
 <script>
 	function Import(GetThisOne) {

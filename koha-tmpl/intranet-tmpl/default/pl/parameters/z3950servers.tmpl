@@ -71,7 +71,7 @@
         </SCRIPT>
 
         <!-- TMPL_IF NAME=searchfield -->
-                <h1>Modify Z39.50 Server</h1>
+                <h1>Zmieniaj serwer Z39.50</h1>
         <!-- TMPL_ELSE -->
                 <h1>Dodaj Serwer Z39.50</h1>
         <!-- /TMPL_IF -->
@@ -82,14 +82,14 @@
         
         <!-- TMPL_IF NAME=searchfield -->
                 <tr>
-                        <td>Z39.50 Server</td>
+                        <td>Serwer Z39.50</td>
                         <td>
                                 <input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'><!-- TMPL_VAR NAME=searchfield -->
                         </td>
                 </tr>
         <!-- TMPL_ELSE -->
                 <tr>
-                        <td>Z39.50 Server</td>
+                        <td>Serwer Z39.50</td>
                         <td>
                                 <input type=text name=searchfield size=100 maxlength=100 onBlur=toUC(this)>
                         </td>
@@ -97,7 +97,7 @@
         <!-- /TMPL_IF -->
 
 		<tr>
-			<td>Hostname</td>
+			<td>Nazwa hosta</td>
 			<td>
 				<input type=text name=host size=30 value='<!-- TMPL_VAR NAME=host -->'>
 			</td>
@@ -109,7 +109,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Database</td>
+			<td>Baza danych</td>
 			<td>
 				<input type=text name=db value='<!-- TMPL_VAR NAME=db -->'>
 			</td>
@@ -121,23 +121,23 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Password</td>
+			<td>Hasło</td>
 			<td>
 				<input type=text name=password value='<!-- TMPL_VAR NAME=password -->'>
 			</td>
 		</tr>
 		<tr>
-			<td>Checked (searched by default)</td>
+			<td>Zaznaczony (używany domyślnie)</td>
 			<td>
 				<input type=text size=1 name=checked value='<!-- TMPL_VAR NAME=checked -->' onBlur=isNum(this)>  
 		<tr>
-			<td>Rank (display order)</td>
+			<td>Ranga (kolejność występowania)</td>
 			<td>
 				<input type=text name=rank size=4 value='<!-- TMPL_VAR NAME=rank -->' onBlur=isNum(this)>
 			</td>
 		</tr>
 		<tr>
-			<td>Syntax (z3950 can send records in various format. Choose one)</td>
+			<td>Składnia (z3950 może przesyłać rekordy w rozmaitych formatach. Wybierz jeden)</td>
 			<td>
 				<select name="syntax">
 					<option value="MARC21">MARC21</option>
@@ -156,7 +156,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=add_validate -->
-        Data recorded
+        Dane zapisane
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=submit value=OK>
         </form>
@@ -168,7 +168,7 @@
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'>
-                                <b>Site</b>
+                                <b>Źródło</b>
                         </td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'>
                                 <!-- TMPL_VAR NAME=searchfield -->
@@ -178,7 +178,7 @@
                         <input type=hidden name=op value=delete_confirmed>
                         <input type=hidden name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
                 <tr>
-                        <td>Hostname</td>
+                        <td>Nazwa hosta</td>
                         <td><!-- TMPL_VAR NAME=host --></td>
                 </tr>
                 <tr>
@@ -186,7 +186,7 @@
                         <td><!-- TMPL_VAR NAME=port --></td>
                 </tr>
                 <tr>
-                        <td>Database</td>
+                        <td>Baza danych</td>
                         <td><!-- TMPL_VAR NAME=db --></td>
                 </tr>
                 <tr>
@@ -194,19 +194,19 @@
                         <td><!-- TMPL_VAR NAME=userid --></td>
                 </tr>
                 <tr>
-                        <td>Password</td>
+                        <td>Hasło</td>
                         <td><!-- TMPL_VAR NAME=password --></td>
                 </tr>
                 <tr>
-                        <td>Checked</td>
+                        <td>Zaznaczony</td>
                         <td><!-- TMPL_VAR NAME=checked --></td>
                 </tr>
                 <tr>
-                        <td>Rank</td>
+                        <td>Ranga</td>
                         <td><!-- TMPL_VAR NAME=rank --></td>
                 </tr>
                 <tr>
-                        <td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td>
+                        <td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td>
                 </tr>
                 <tr>
                         <td><input type=submit value="TAK"></form></td>
@@ -217,34 +217,34 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirmed -->
-        Data deleted
+        Dane wymazane
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=submit value=OK>
         </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=else -->
-        <h2>Z39.50 Servers admin</h2>
+        <h2>Serwery Z39.50</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
                 <input type=reset name=reset value="wyczyść">
         </form>
 
         <!-- TMPL_IF NAME=searchfield -->
-                You searched for <b><!-- TMPL_VAR NAME=searchfield --></b>
+                Szukano <b><!-- TMPL_VAR NAME=searchfield --></b>
         <!-- /TMPL_IF -->
 
         <table border=0 cellspacing=0 cellpadding=5>
                 <tr bgcolor='#99cc33'>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Site</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Hostname</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Źródło</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Nazwa hosta</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Port</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Database</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Baza danych</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Użytkownik</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Password</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Checked</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Rank</b></td>
-                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Syntax</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Hasło</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Zaznaczony</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Ranga</b></td>
+                        <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Składnia</b></td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
                         <td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
                 </tr>
@@ -259,8 +259,8 @@
                         <td><!-- TMPL_VAR NAME=checked --></td>
                         <td><!-- TMPL_VAR NAME=rank --></td>
                         <td><!-- TMPL_VAR NAME=syntax --></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=name -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png" alt="Edytuj" title="edit" border=0></a></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=name -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" alt="Wymaż" title="delete" border=0></a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=name -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png" alt="Edytuj" title="edytuj" border=0></a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=name -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" alt="Wymaż" title="wymaż" border=0></a></td>
 			</tr>
                 <!-- /TMPL_LOOP -->
 	</table>

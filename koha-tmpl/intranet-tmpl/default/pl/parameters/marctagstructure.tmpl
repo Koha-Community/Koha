@@ -57,11 +57,11 @@
 	<form action='<!-- TMPL_VAR name="script_name" -->' name="Aform" method="post">
 	<input type=hidden name=op value='add_validate'>
 	<table>
-	<tr><td>Tag</td><td><!-- TMPL_VAR name="searchfield" --></td></tr>
-	<tr><td>Lib for librarians</td><td><input type="text" name="liblibrarian" value='<!-- TMPL_VAR name="liblibrarian" escape=HTML -->' size=80 maxlength=100></td></tr>
-	<tr><td>Lib for opac</td><td><input type="text" name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></td></tr>
-	<tr><td>Repeatable</td><td><!-- TMPL_VAR name="repeatable" --></td></tr>
-	<tr><td>Mandatory</td><td><!-- TMPL_VAR name="mandatory" --></td></tr>
+	<tr><td>Etykieta</td><td><!-- TMPL_VAR name="searchfield" --></td></tr>
+	<tr><td>Etykieta dla bibliotekarzy</td><td><input type="text" name="liblibrarian" value='<!-- TMPL_VAR name="liblibrarian" escape=HTML -->' size=80 maxlength=100></td></tr>
+	<tr><td>Etykieta dla czytelników</td><td><input type="text" name="libopac" value='<!-- TMPL_VAR name="libopac" escape=HTML -->' size=80 maxlength=100></td></tr>
+	<tr><td>Powtarzalne</td><td><!-- TMPL_VAR name="repeatable" --></td></tr>
+	<tr><td>Obowiązkowe</td><td><!-- TMPL_VAR name="mandatory" --></td></tr>
 	<tr><td>Wartość Autoryzowana</td><td><!-- TMPL_VAR name="authorised_value" --> (jeśli wprowadzisz tutaj jakąś wartość to wskaźniki będą ograniczone do listy autoryzowanych wartości)</td></tr>
 	<tr><td>&nbsp;</td><td><INPUT type="button" value='OK' onClick='Check(this.form)'></td></tr>
 	</table>
@@ -73,18 +73,18 @@
 <!---------------------------------------------------------------------------->
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>tag</b></td>
+		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>etykieta</b></td>
 		<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
 	<tr><td>&nbsp;</td><td><!-- TMPL_VAR name="liblibrarian" --></td></tr>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
-	<tr><td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td></tr>
+	<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td></tr>
 	<tr><td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
 <!---------------------------------------------------------------------------->
-	Data deleted
+	Dane wymazane
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=submit value=OK>
 	</form>
@@ -92,8 +92,8 @@
 
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
-<h1>MARC tag structure admin</h1>
-<b>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
+<h1>Zarządzanie strukturą etykiet MARC</h1>
+<b>UWAGA: jeśli zmienisz łącze pomiedzy podpolem MARC oraz nie-MARC poproś administratora by uruchomił skrypt misc/rebuildnonmarc.pl.</b>
 <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=text name=searchfield value="">
 	<input type=reset name=reset value="wyczyść">
@@ -101,12 +101,12 @@
 <!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2>
 <tr valign=top bgcolor=#99cc33>
-	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Tag</b></td>
-	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Lib</b></td>
-	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Repeatable</b></td>
-	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Mandatory</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Etykieta</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Etykieta</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Powtarzalne</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Obowiązkowe</b></td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Autoryzowana<br />wartość</b></td>
-	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Subfields</b></td>
+	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"><b>Podpola</b></td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">Edytuj</td>
 	<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif">Wymaż</td>
 <!-- TMPL_LOOP name="loop" -->
@@ -116,7 +116,7 @@
 	<td><!-- TMPL_IF name="repeatable" -->Tak<!-- TMPL_ELSE -->Nie<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_IF name="mandatory" -->Tak<!-- TMPL_ELSE -->Nie<!-- /TMPL_IF --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
-	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">subfields</a></td>
+	<td><a href="<!-- TMPL_VAR name="subfield_link" -->">podpola</a></td>
 	<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 	<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
 </tr>
@@ -134,14 +134,14 @@
 		<td width=33%>
 			<!-- TMPL_IF name="isprevpage" -->
 				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
+				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border=0>
 				</a>
 			<!-- /TMPL_IF -->
 		</td>
 		<td width=33%>
 			<!-- TMPL_IF name="nextpage" -->
 				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border=0>
 				</a>
 			<!-- /TMPL_IF -->
 		</td>

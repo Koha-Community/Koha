@@ -6,7 +6,7 @@
     <table border=0 cellpadding=2 cellspacing=0>
     		<tr>
 			<th colspan=4 bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-				<font color=white>Contents of <!-- TMPL_VAR Name="shelfname" --></font>
+				<font color=white>Zawartość <!-- TMPL_VAR Name="shelfname" --></font>
 			</th>
 		</tr>
 		<!-- TMPL_LOOP Name="itemsloop" -->
@@ -19,11 +19,11 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 	<br>
-	<a href="shelves.pl" class="button">Shelf list</a>
+	<a href="shelves.pl" class="button">Lista półek</a>
 	<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
 	<input type=hidden name=modifyshelfcontents value=1>
 	<input type=hidden name=viewshelf value="<!-- TMPL_VAR Name="shelfnumber" -->">
-	<input type=submit value="Remove Selected Items" class="button">
+	<input type=submit value="Usuń wybrane pozycje" class="button">
 </form>
 <form>
 	<input type=hidden name=shelfnumber value="<!-- TMPL_VAR Name="shelfnumber" -->">
@@ -60,7 +60,7 @@
 				<td align=center valign="bottom">
 					<form>
 						<p>
-							<a href="shelves.pl" class="button">Shelf list</a>
+							<a href="shelves.pl" class="button">Lista półek</a>
 						</p>
 					</form>
 				</td>
@@ -70,7 +70,7 @@
 					<table border=0 cellpadding=0 cellspacing=0>
 						<tr>
 							<th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-								<font color=white>Select Shelves to Delete</font>
+								<font color=white>Wybierz półki do wymazania</font>
 							</th>
 						</tr>
 						<!-- TMPL_LOOP Name="shelvesloop" -->
@@ -83,7 +83,7 @@
 						<!-- /TMPL_LOOP -->
 					</table>
 					<p>
-						<input type=submit value="Delete Shelves" class="button"></form>
+						<input type=submit value="Wymaż półki" class="button"></form>
 					</p>
 				</td>
 				<td align=center valign=bottom>
@@ -115,7 +115,7 @@
 					<table border=0 cellpadding=5 cellspacing=0 width=100%>
 						<tr>
 							<th bgcolor="<!-- TMPL_VAR Name="headerbackgroundcolor" -->">
-								<font color=white>Shelf List</font>
+								<font color=white>Lista Półek</font>
 							</th>
 						</tr>
 					</table>

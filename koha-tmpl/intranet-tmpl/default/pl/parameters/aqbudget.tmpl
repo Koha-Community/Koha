@@ -1,13 +1,13 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
 <!-- TMPL_IF name="else" -->
-	<h1>Budget admin</h1><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
+	<h1>Budget zarządzanie</h1><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
 	<input type=text name=searchfield value=""><input type=reset name=reset value="wyczyść"></form>
 	<!-- TMPL_IF name=search -->
 	<br>Wyszukiwano <b><!-- TMPL_VAR name=searchfield --></b><p><br>
 	<!-- /TMPL_IF -->
 	<table border=0 cellspacing=0 cellpadding=5>
-	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Fundusz książkowy</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Start date</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>End date</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Kwota budgetu</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
+	<tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Fundusz książkowy</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Data początkowa</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Data końcowa</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Kwota budgetu</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
 	<!-- TMPL_LOOP name="budget" -->
 		<tr valign=top bgcolor=<!-- TMPL_VAR name="toggle" --> >
 			<td><!-- TMPL_VAR name="bookfundid" --> (<!-- TMPL_VAR name="bookfundname" -->)</td>
@@ -88,11 +88,11 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="adding" -->
-	<tr><td>Bookfund</td><td><input type=hidden name=bookfundid size=5 maxlength=5 value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundid" --></td></tr>
+	<tr><td>Fundusz Książkowy</td><td><input type=hidden name=bookfundid size=5 maxlength=5 value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundid" --></td></tr>
 <!-- /TMPL_IF -->
 
-<tr><td>Start date <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=startdate size=11 value='<!-- TMPL_VAR name="startdate" -->'>&nbsp;</td></tr>
-<tr><td>End date <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=enddate size=11 value='<!-- TMPL_VAR name="enddate" -->'></td></tr>
+<tr><td>Data początkowa <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=startdate size=11 value='<!-- TMPL_VAR name="startdate" -->'>&nbsp;</td></tr>
+<tr><td>Data końcowa <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=enddate size=11 value='<!-- TMPL_VAR name="enddate" -->'></td></tr>
 <tr><td>Kwota budgetu</td><td><input type=text name=budgetamount value='<!-- TMPL_VAR name="budgetamount" -->'></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->"><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
@@ -102,7 +102,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_validate" -->
-Data recorded
+Dane zapisane
 <form action='<!-- TMPL_VAR name="action" -->' method=post>
 <input type=submit value=OK>
 </form>
@@ -121,17 +121,17 @@ Data recorded
 
 	<form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=aqbudgetid value='<!-- TMPL_VAR name="aqbudgetid" -->'>
 	<tr>
-		<td>Start date</td>
+		<td>Data początkowa</td>
 		<td><!-- TMPL_VAR name="startdate" --></td>
 	</tr>
 	<tr>
-		<td>End date</td><td><!-- TMPL_VAR name="enddate" --></td>
+		<td>Data końcowa</td><td><!-- TMPL_VAR name="enddate" --></td>
 	</tr>
 	<tr>
-		<td>budgetamount</td><td><!-- TMPL_VAR name="budgetamount" --></td>
+		<td>kwota budżetu</td><td><!-- TMPL_VAR name="budgetamount" --></td>
 	</tr>
 	<tr>
-		<td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td>
+		<td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td>
 	</tr>
 	<tr>
 		<td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value="NIE"></form></td>
@@ -140,7 +140,7 @@ Data recorded
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-Data deleted
+Dane wymazane
 <form action='<!-- TMPL_VAR name="action" -->' method=post>
 <input type=submit value=OK>
 </form>

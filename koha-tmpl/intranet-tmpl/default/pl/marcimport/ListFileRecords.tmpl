@@ -1,21 +1,21 @@
 <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
-<h1>Main Menu</h1>
+<h1>Menu główne</h1>
 <ul>
-<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Z39.50 Search</a>
-<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Upload MARC Records</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=z3950>Wyszukiwanie Z39.50</a>
+<li><a href=<!-- TMPL_VAR name="SCRIPT_NAME" -->?menu=uploadmarc>Wgraj rekordy MARC</a>
 </ul>
 <center>
 <p>
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Select a New File</a>
+<a href=$ENV{'SCRIPT_NAME'}?menu=$menu>Wybierz nowy plik</a>
 <p>
 <!-- TMPL_IF name="IS_MARC" -->
 	<table border=0 cellpadding=10 cellspacing=0>
 	<tr>
 		<th background=/images/background-acq.gif>
-		 	Select a Record to Import from <!-- TMPL_VAR name="recordsource" -->
+		 	Z którego rekordu importować <!-- TMPL_VAR name="recordsource" -->
 		</th>
 	</tr>
 	<tr>
@@ -27,12 +27,12 @@
 		<td bgcolor=#dddddd>
 		<!-- TMPL_IF name="HAS_NUMRECORDS" -->
 	            <a name=SERVER-<!-- TMPL_VAR name="srvid" -->></a> " <!-- TMPL_VAR name="srvname" -->
-		<font size=-1>[Viewing <!-- TMPL_VAR name="startrecord" --> to <!-- TMPL_VAR name="highest" --> of <!-- TMPL_VAR name="numrecords" --> records] <!-- TMPL_VAR name="previous" --> | <!-- TMPL_VAR name="next" --> </font><br>
+		<font size=-1>{Przeglądanie od <!-- TMPL_VAR name="startrecord" --> do <!-- TMPL_VAR name="highest" --> z <!-- TMPL_VAR name="numrecords" --> rekordów] <!-- TMPL_VAR name="previous" --> | <!-- TMPL_VAR name="next" --> </font><br>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="PENDING" -->
-			<font color=red>Search still pending...</font>
+			<font color=red>Szukanie nadal w toku...</font>
 		<!-- TMPL_ELSE -->
-			<font color=red>processing... <!-- TMPL_VAR name="elapsedtime" --></font>
+			<font color=red>przetwarzanie... <!-- TMPL_VAR name="elapsedtime" --></font>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="NO_RECORDS" -->
 			<b>Nic nie znaleziono dla zapytania <!-- TMPL_VAR name="id" --></b>

@@ -56,7 +56,7 @@
         </SCRIPT>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		<h1>Modify printer</h1>
+		<h1>Zmień drukarkę</h1>
 	<!-- TMPL_ELSE -->
 		<h1>Dodaj drukarkę</h1>
 	<!-- /TMPL_IF -->
@@ -84,7 +84,7 @@
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>Queue</td>
+			<td>Kolejka</td>
 			<td><input type=text name=printqueue size=50 maxlength=50 value='<!-- TMPL_VAR NAME=printqueue -->'> </td>
 		</tr>
         	<tr>
@@ -101,7 +101,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=add_validate -->
-	Data recorded
+	Dane zapisane
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
         <input type=submit value=OK>
         </form>
@@ -119,7 +119,7 @@
 			<input type=hidden name=searchfield value='<!-- TMPL_VAR NAME=searchfield -->'>
         
 		<tr>
-			<td>Queue</td>
+			<td>Kolejka</td>
 			<td><!-- TMPL_VAR NAME=printqueue --></td>
 		</tr>
         	<tr>
@@ -127,7 +127,7 @@
 			<td><!-- TMPL_VAR NAME=printtype --></td>
 		</tr>
         	<tr>
-			<td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td>
+			<td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td>
 		</tr>
         	<tr>
 			<td>
@@ -144,7 +144,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirmed -->
-	Data deleted
+	Dane wymazane
 	<form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
 		<input type=submit value=OK>
 	</form>
@@ -158,13 +158,13 @@
         </form>
 
 	<!-- TMPL_IF NAME=searchfield -->
-		You searched for <b><!-- TMPL_VAR NAME=searchfield --></b>
+		Szukano <b><!-- TMPL_VAR NAME=searchfield --></b>
 	<!-- /TMPL_IF -->
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
-			<td background='/images/background-mem.gif'><b>Imię i Nazwisko</b></td>
-			<td background='/images/background-mem.gif'><b>Queue</b></td>
+			<td background='/images/background-mem.gif'><b>Nazwa</b></td>
+			<td background='/images/background-mem.gif'><b>Kolejka</b></td>
 			<td background='/images/background-mem.gif'><b>Typ</b></td>
 			<td background='/images/background-mem.gif'> </td>
 			<td background='/images/background-mem.gif'> </td>

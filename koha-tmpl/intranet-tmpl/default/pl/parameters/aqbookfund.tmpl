@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <!-- TMPL_IF name=else -->
-<h1>Bookfund admin</h1>
+<h1>Fundusz Książkowy admin</h1>
 <form action=<!-- TMPL_VAR name=scriptname --> method=post>
 <input type=text name=searchfield value=""><input type=reset name=reset value="wyczyść"></form>
 <!-- TMPL_IF name=search -->
@@ -9,7 +9,7 @@
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Fundusz książkowy</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Imię i Nazwisko</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Nazwa</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Edytuj</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wymaż</b></td>
 	</tr>
@@ -110,14 +110,14 @@
 <!-- TMPL_ELSE -->
 <tr><td>Fundusz książkowy</td><td><input type=text name=bookfundid size=5 maxlength=5 onBlur=toUC(this)></td></tr>
 <!-- /TMPL_IF -->
-<tr><td>Imię i Nazwisko</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;</td></tr>
+<tr><td>Nazwa</td><td><input type=text name=bookfundname size=40 maxlength=80 value='<!-- TMPL_VAR name="bookfundname" escape=HTML -->'>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_validate" -->
-Data recorded
+Dane zapisane
 <form action='<!-- TMPL_VAR name="action" -->' method=post>
 <input type=submit value=OK>
 </form>
@@ -127,14 +127,14 @@ Data recorded
 <table border=0 cellspacing=0 cellpadding=5>
 <tr valign=top bgcolor=#99cc33><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Fundusz książkowy</b></td><td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="bookfundid" --></b></td></tr>
 <form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<!-- TMPL_VAR name="bookfundid" -->'>
-<tr><td>Imię i Nazwisko</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
-<tr><td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td></tr>
+<tr><td>Nazwa</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
+<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td></tr>
 <tr><td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value="NIE"></form></td></tr><br clear=all>
 <p> &nbsp; </p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-Data deleted
+Dane wymazane
 <form action='<!-- TMPL_VAR name="action" -->' method=post>
 <input type=submit value=OK>
 </form>

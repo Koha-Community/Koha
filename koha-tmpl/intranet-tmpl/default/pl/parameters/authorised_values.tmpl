@@ -15,7 +15,7 @@
 		<td><input type=text name="authorised_value" value='<!-- TMPL_VAR name="authorised_value" escape=HTML -->'></td>
 	</tr>
 	<tr>
-		<td>Lib</td>
+		<td>Etykieta</td>
 		<td><input type=text name="lib" value='<!-- TMPL_VAR name="lib" -->'></td>
 	</tr>
 	<tr>
@@ -33,7 +33,7 @@
 <table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Zmienna</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Etykieta</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
 	<tr><td>Wartość</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
@@ -41,7 +41,7 @@
 		<input type=hidden name=op value=delete_confirmed>
 		<input type=hidden name=id value='<!-- TMPL_VAR name="id" -->'>
 		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
-	<tr><td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td></tr>
+	<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td></tr>
 	<tr><td><input type=submit value="TAK"></form></td>
 		<td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
 <!-- /TMPL_IF -->
@@ -49,7 +49,7 @@
 <!---------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
 <h1>Admin Wartości Autoryzowanych</h1>
-<p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
+<p>Tablica ta jest używana w definiowaniu MARC. Można definiować dowolną ilość kategorii oraz dowolną ilość wartości autoryzowanych w każdej kategorii.</p>
 <p>Przy definiowaniu struktury podpól MARC, można dowiązać podpole do pewnej kategorii wartości autoryzawanych. Gdy wprowadzający dokonuje zmian opisu bibliograficznego lub gdy go dodaje podpole to nie jest wprowadzane jako wartość dowolna lecz wybierana jest z listy wartości autoryzowanych.</p>
 <form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
 	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="OK">   <a href="authorised_values.pl?op=add_form">Nowa kategoria...</a>
@@ -59,7 +59,7 @@
 <tr valign=top bgcolor=#99cc33>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Kategoria</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wartość Autoryzowana</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Lib</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Etykieta</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Edytuj</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wymaż</b></td>
 <!-- TMPL_LOOP name="loop" -->
@@ -80,14 +80,14 @@
 		<td width=50%>
 			<!-- TMPL_IF name="isprevpage" -->
 				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="prevpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="previous" ALT="previous" BORDER=0>
+				<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border=0>
 				</a>
 			<!-- /TMPL_IF -->
 		</td>
 		<td width=50%>
 			<!-- TMPL_IF name="nextpage" -->
 				<a href="<!-- TMPL_VAR name="script_name" -->?offset=<!-- TMPL_VAR name="nextpage" -->&searchfield=<!-- TMPL_VAR name="searchfield" -->">
-					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="next" ALT="next" BORDER=0>
+					<input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border=0>
 				</a>
 			<!-- /TMPL_IF -->
 		</td>

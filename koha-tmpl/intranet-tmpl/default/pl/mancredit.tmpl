@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE Name="members-top.inc" -->
 
-<Center><h3>Manual Credit</h3></center>
+<Center><h3>Kredyt</h3></center>
 <form action=/cgi-bin/koha/mancredit.pl method=post>
 <table cellpadding=2 cellspacing=0 border=0>
 <input type=hidden name="bornum" value="<!-- TMPL_VAR Name="bornum" -->">
-<tr><td><b>Borrowernumber<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+<tr><td><b>Numer Czytelnika<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
 <tr><td><b>Typ</b></td><Td>
 <select name=type>
-<option value=C>Credit</option>
+<option value=C>Kredyt</option>
 <option value=BAY>Baycorp Adjustment</option>
 <option value=WORK>Odpracowany</option>
 </select>
 </td></tr>
-<tr><td><b>Itemnumber</b></td><td><input type=text name=itemnum></td></tr>
+<tr><td><b>Numer pozycji</b></td><td><input type=text name=itemnum></td></tr>
 <tr><td><b>Wyjaśnienie</b></td><td><input type=text name=desc size=50></td></tr>
 <tr><td><b>Kwota</b></td><td><input type=text name=amount></td></tr>
 <tr><td><input type=submit name=add value="Dodaj"></td></tr>

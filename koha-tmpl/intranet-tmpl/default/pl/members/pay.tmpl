@@ -12,7 +12,7 @@
 	<input type="hidden" name="bornum" value="<!-- TMPL_VAR name="bornum" -->">
 <!-- TMPL_LOOP name="loop_pay" -->
 <tr VALIGN=TOP  >
-	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>Unpaid  <input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="yes">Pay  <input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">Writeoff
+	<TD><input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="no" checked>Niezapłacono <input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="yes">Płać <input type=radio name="payfine<!-- TMPL_VAR name="i" -->" value="wo">Odpisz
 	<input type=hidden name="itemnumber<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="itemnumber" -->">
 	<input type=hidden name="accounttype<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="accounttype" -->">
 	<input type=hidden name="amount<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="amount'}" -->">
@@ -27,12 +27,12 @@
 </tr>
 <!-- /TMPL_LOOP -->
 <tr VALIGN=TOP  >
-	<TD colspan=4 align=right><b>Total Due</b></td>
+	<TD colspan=4 align=right><b>Do zapłaty</b></td>
 	<TD><b><!-- TMPL_VAR name="total" --></b></td>
 	</tr>
 	<tr VALIGN=TOP  >
 	<TD colspan=5 align=right>
-	<INPUT TYPE="submit" name="submit"  VALUE="pay" class="button"></td>
+	<input type="submit" name="submit" value="zapłać" class="button"></td>
 </tr>
 </table>
 </form>

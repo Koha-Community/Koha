@@ -3,11 +3,11 @@
 <!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
      was in Perl.
   -->
-<a href=$ENV{'SCRIPT_NAME'}?file=$file>New Record</a> | <a href=marcimport.pl>New File</a><br>
+<a href=$ENV{'SCRIPT_NAME'}?file=$file>Nowy Rekord</a> | <a href=marcimport.pl>Nowy Plik</a><br>
 <!-- TMPL_IF name="BIBLIO_EXISTS" -->
 	<table border=0 width=50% cellpadding=10 cellspacing=0>
 		<tr>
-			<th background=/images/background-acq.gif>Record already in database
+			<th background=/images/background-acq.gif>Rekord jest już w bazie
 			</th>
 		</tr>
 		<tr>
@@ -21,7 +21,7 @@
 <!-- TMPL_IF name="BIBLIO_CREATE" -->
     <table cellpadding=10 cellspacing=0 border=0 width=50%>
 		<tr>
-			<th background=/images/background-acq.gif>Record entered into database</th>
+			<th background=/images/background-acq.gif>Rekord wprowadzony do bazy</th>
 		</tr>
 		<tr>
 			<td bgcolor=#dddddd>
@@ -40,7 +40,7 @@
         <input type=hidden name=biblioitemnumber value="<!-- TMPL_VAR name="biblioitemnumber" -->">
         <input type=hidden name=file value="<!-- TMPL_VAR name="file" -->">
         <table border=0>
-          <tr><td>BARCODE</td><td><input name=barcode size=10 value="<!-- TMPL_VAR name="barcode" -->">
+          <tr><td>KOD PASKOWY</td><td><input name=barcode size=10 value="<!-- TMPL_VAR name="barcode" -->">
           Oddział Właściwy <select name=homebranch><!-- TMPL_VAR name="branchselect" --></select>
 	  </td></tr>
           <tr><td>Cana Wymiany:</td>

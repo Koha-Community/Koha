@@ -60,7 +60,7 @@
 	</SCRIPT>
 
 	<!-- TMPL_IF NAME=categorycode -->
-		<h1>Modify category</h1>
+		<h1>Zmieniaj kategorię</h1>
 	<!-- TMPL_ELSE -->
 		<h1>Dodaj kategorię</h1>
 	<!-- /TMPL_IF -->
@@ -95,7 +95,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Enrollment period</td>
+			<td>Okres wpisu</td>
 			<td>
 				<input type=text name=enrolmentperiod size=3 maxlength=2 value="<!-- TMPL_VAR NAME=enrolmentperiod -->">
 			</td>
@@ -113,13 +113,13 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Enrollment fee</td>
+			<td>Opłata wpisowa</td>
 			<td>
 				<input type=text name=enrolmentfee value="<!-- TMPL_VAR NAME=enrolmentfee -->">
 			</td>
 		</tr>
 		<tr>
-			<td>Overdue notice required</td>
+			<td>Potrzebne upomnienie o zaległości</td>
 			<td>
 				<select name="overduenoticerequired">
 					<option <!-- TMPL_UNLESS name="overduenoticerequired" -->selected<!-- /TMPL_UNLESS --> value="0">Nie</option>
@@ -128,13 +128,13 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Issue limit</td>
+			<td>Limit wypożyczeń</td>
 			<td>
 				<input type=text name=issuelimit size=2 maxlength=2 value="<!-- TMPL_VAR NAME=issuelimit -->">
 			</td>
 		</tr>
 		<tr>
-			<td>Reserve fee</td>
+			<td>Opłata rezerwacyjna</td>
 			<td>
 				<input type=text name=reservefee value="<!-- TMPL_VAR NAME=reservefee -->">
 			</td>
@@ -151,14 +151,14 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=add_validate -->
-	Data recorded
+	Dane zapisane
 	<form action=<!-- TMPL_VAR NAME=script_name --> method=post>
 		<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirm -->
-	TOTAL : <!-- TMPL_VAR NAME=categorycode --> : <!-- TMPL_VAR NAME=total --><br>
+	KWOTA ŁĄCZNA: <!-- TMPL_VAR NAME=categorycode --> : <!-- TMPL_VAR NAME=total --><br>
 
 	<table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
@@ -177,7 +177,7 @@
 			<td><!-- TMPL_VAR NAME=description --></td>
 		</tr>
 		<tr>
-			<td>Enrollment period</td>
+			<td>Okres wpisu</td>
 			<td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
 		</tr>
 		<tr>
@@ -189,23 +189,23 @@
 			<td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
 		</tr>
 		<tr>
-			<td>Fine type</td>
+			<td>Typ kary</td>
 			<td><!-- TMPL_VAR NAME=finetype --></td>
 		</tr>
 		<tr>
-			<td>Enrollment fee</td>
+			<td>Opłata wpisowa</td>
 			<td><!-- TMPL_VAR NAME=enrolmentfee --></td>
 		</tr>
 		<tr>
-			<td>Overdue notice required</td>
+			<td>Potrzebne upomnienie o zaległości</td>
 			<td><!-- TMPL_IF NAME=overduenoticerequired -->Tak<!-- TMPL_ELSE -->Nie<!-- /TMPL_IF --></td>
 		</tr>
 		<tr>
-			<td>Issue limit</td>
+			<td>Limit wypożyczeń</td>
 			<td><!-- TMPL_VAR NAME=issuelimit --></td>
 		</tr>
 		<tr>
-			<td>Reserve fee</td>
+			<td>Opłata rezerwacyjna</td>
 			<td><!-- TMPL_VAR NAME=reservefee --></td>
 		</tr>
 		<!-- TMPL_IF NAME=totalgtzero -->
@@ -221,7 +221,7 @@
 		</tr>
 		<!-- TMPL_ELSE -->
                 <tr>
-			<td colspan=2 align=center>POTWIERDZENIE WYMAZANIA</td>
+			<td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td>
 		</tr>
                 <tr>
 			<td><input type=submit value="TAK"></form></td>
@@ -232,7 +232,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME=delete_confirmed -->
-	Data deleted
+	Dane wymazane
         <form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
         <input type=submit value=OK>
         </form>
@@ -254,14 +254,14 @@
 		<tr bgcolor='#99cc33'>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Kategoria</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Wyjaśnienie</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Enrollment period</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Enrollment fee</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Okres wpisu</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Opłata wpisowa</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Górna Granica Wieku</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Wymagany Wiek</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Fine</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Overdue</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Issue limit</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Reserve</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Kara</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Zaległe</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Limit wypożyczeń</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Rezerwacja</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
 		</tr>

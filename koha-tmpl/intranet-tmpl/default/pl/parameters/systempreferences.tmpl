@@ -57,7 +57,7 @@
 <!-- TMPL_IF name="add_form" -->
 
 	<!-- TMPL_IF NAME=modify -->
-		<h1>Modify a system preference</h1>
+		<h1>Zmień którąś z preferencji</h1>
 	<!-- TMPL_ELSE -->
 		<h1>Dodaj preferencje systemowe</h1>
 	<!-- /TMPL_IF -->
@@ -70,7 +70,7 @@
 		<tr><td>Zmienna</td><td><input type="text" name="variable" size="60"></td></tr>
 	<!-- /TMPL_IF -->
 	<tr><td>Wartość</td><td><input type="text" name="value" value="<!-- TMPL_VAR name="value" escape="HTML" -->" size="60"></td></tr>
-	<tr><td>Explanation</td><td><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->"></td></tr>
+	<tr><td>Wyjaśnienie</td><td><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR name="explanation" escape="HTML" -->"></td></tr>
 	<tr><td>&nbsp;</td><td><INPUT type="button" value="OK" onclick="Check(this.form)"></td></tr>
 	</table>
 	</form>
@@ -78,7 +78,7 @@
 
 <!-- TMPL_IF name="add_validate" -->
 
-	Data recorded
+	Dane zapisane
 	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 	<input type="submit" value="OK">
 	</form>
@@ -93,7 +93,7 @@
 	</tr>
 	<tr><td>Wartość</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
 	<form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->">
-	<tr><td colspan="2" align="center">POTWIERDZENIE WYMAZANIA</td></tr>
+	<tr><td colspan="2" align="center">POTWIERDŹ WYMAZANIE</td></tr>
 	<tr><td><input type="submit" value="TAK"></form></td><td><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="NIE"></form></td></tr>
 </table>
 
@@ -101,14 +101,14 @@
 
 <!-- TMPL_IF name="delete_confirmed" -->
 
-	Data deleted
+	Dane wymazane
 	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 	<input type="submit" value="OK">
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-<h1>System preferences admin</h1>
+<h1>Zmiany preferencji systemowych</h1>
 <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
 	<input type="text" name="searchfield" value="">
 	<input type="reset" name="reset" value="wyczyść">
@@ -118,7 +118,7 @@
 <tr valign="top" bgcolor="#99cc33">
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Zmienna</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wartość</b></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Explanation</b></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wyjaśnienie</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">&nbsp;</td></tr>
 <!-- TMPL_LOOP name="loop" -->
