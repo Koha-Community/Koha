@@ -1,0 +1,113 @@
+<html>
+<TMPL_INCLUDE NAME="acquisitions-top.inc">
+
+<TMPL_IF NAME="loggedinuser">
+	<p align=left>Zalogowano jako: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
+<TMPL_ELSE>
+    <p align=left><a href=/cgi-bin/koha/userpage.pl>Zaloguj siê</a> do Koha</p>
+</TMPL_IF>
+
+<font size="5"><em>Importowanie MARC i zarz±dzanie OPISEM</em></font>
+<TMPL_IF name="noitemsfound">
+	<p />
+	<font color="red" size="4">nie ma ¿adnej pozycji</font>
+</TMPL_IF>
+<TMPL_IF name="websiteadded">
+	<p />
+	<font color="red" size="4">Website Biblioitem Added</font>
+</TMPL_IF>
+
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+	<td><font size="4">Zeskanuj numer ISBN/ISSN, aby dodaæ nowy opis bibliograficzny/pozycjê:</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+	<form action="isbnsearch.pl">
+		<td width="5%">ISBN:</td>
+		<td width="20%"><input type="text" name="isbn" /></td>
+		<td width="10%"><input type="submit" value="Go" /></td>
+		<td>Je¶li ISBN znajduje siê w tablicy opisów, bedzie wyci±gniêty i mo¿na go modyfikowaæ.<br/>
+				Je¶li ISBN znajduje siê w "farmie hodowlanej", bêdzie wyci±gniêty i opis zostanie dodany.<br/>
+				W innym wypadku opis mo¿na dodaæ od podstaw.</td>
+	</form>
+	</tr>
+	<tr><td>&nbsp;</td>
+		<td colspan=2><a href=addbiblio.pl>Dodaj opis bez u¿ycia ISBN/ISSN</a></td></tr>
+</table>
+
+<p />
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><font size="4">Narzêdzia do importowania rekordów MARC do "farmy hodowlanej"</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+		<td width="5%">&nbsp;</td>
+		<td width="20%"><li><a href=marcimport.pl>Za³aduj rekordy MARC</a></li></td>
+		<td width="10%">&nbsp;</td>
+		<td>"Farma hodowlana" to tablica gdzie przechowywane s± rekordy MARC.<br/>
+			Rekord MARC znajduje siê w farmie hodowlanej o ile nie posiadasz danej pozycji. Gdy zostanie wpisany ISBN opisu, jest on szukany w farmie hodowlanej.
+			Je¶li tam jest to opis zostanie dodany do aktywnej tablicy systemu bibliotecznego koha, a nastêpnie usuniêty z farmy.
+		</td>
+
+
+<table bgcolor="#ffcc00" width="80%" cellpadding"5">
+	<tr>
+		<td><font size="4">Narzêdzia do importowania rekordów MARC z serwera z3950</font></td>
+	</tr>
+</table>
+<table cellpadding="3" border=0 width="100%">
+	<tr valign="top">
+		<td width="5%">&nbsp;</td>
+		<td width="20%"><li><a href=marcimport.pl?menu=z3950>Wyszukiwarka Z39.50</a></li></td>
+		<td width="10%">&nbsp;</td>
+		<td>nie dzia³a</td>
+	</tr>
+</table>
+
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><FONT SIZE=4>Dodaj now± witrynê</font></td>
+	</tr>
+</table>
+<form action="websitesearch.pl" method="post">
+	<table>
+	<tr>
+		<td>S³owo:</td>
+		<td><input type="text" name="keyword" /></td>
+		<td><input type="submit" value="Go" /></td>
+	</tr>
+	</table>
+</FORM>
+
+<p />
+<table bgcolor="#ffcc00" width="80%" cellpadding="3">
+	<tr valign="center">
+		<td><FONT SIZE=4>Pomoc</font></td>
+	</tr>
+</table>
+<FONT SIZE=5>System Koha przechowuje dane w trzech sekcjach</font>
+<p />
+<h2>Opis</h2>
+
+Piersza sekcja zapisuje dane bibliograficzne takie jak tytu³, autor i copywrite dla danego dzie³a.<br>
+The first section records bibliographic data such as title, author and copyright for a particular work.
+<p />
+<h2>Grupa</h2>
+
+Druga zapisuje dane bibliograficzne dla poszczególnego wydania tego dzie³a, jak np. numer ISBN,
+opis fizyczny, informacja o wydawcy, etc.<br>
+The second records bibliographic data for a particular publication of that work, such as ISBN number,
+physical description, publisher information, etc
+<p />
+<h2>Pozycja</h2>
+
+Trzecia sekcja posiada ¶cis³e informacje o pozycji, np. kod kreskowy.<br>
+The third section holds specific item information, such as the bar code number.
+<p />
+<TMPL_INCLUDE NAME="acquisitions-bottom.inc">
