@@ -258,6 +258,9 @@ my %dropable_table = (
     serialissues   => 'serialissues',
 );
 
+# the other hash contains other actions that can't be done elsewhere. they are done
+# either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
+
 # The tabledata hash contains data that should be in the tables.
 # The uniquefieldrequired hash entry is used to determine which (if any) fields
 # must not exist in the table for this row to be inserted.  If the
@@ -616,6 +619,7 @@ while ( my ($table) = $sth->fetchrow ) {
     $existingtables{$table} = 1;
 }
 
+
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
     print "Checking $table table...\n" if $debug;
@@ -757,12 +761,13 @@ foreach $table ( keys %fielddefinitions ) {
 
 # Get list of columns from items table
 my %itemtypes;
-
+my %nullenabled;
 $sth = $dbh->prepare("show columns from items");
 $sth->execute;
 while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
 {
     $itemtypes{$column} = $type;
+    $nullenabled{$column} = $null;
 }
 
 unless ( $itemtypes{'barcode'} eq 'varchar(20)' ) {
@@ -772,10 +777,23 @@ unless ( $itemtypes{'barcode'} eq 'varchar(20)' ) {
         print "Setting maximum barcode length to 20 (was $oldlength).\n";
         my $sti =
           $dbh->prepare(
-            "alter table items change barcode barcode varchar(20) not null");
+            "alter table items change barcode barcode varchar(20)");
         $sti->execute;
     }
 }
+#
+# dropping unique barcode index & setting barcode to null allowed.
+#
+$sth = $dbh->prepare("show index from items");
+$sth->execute;
+while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow )
+{
+	if ($key_name eq 'barcode' && $non_unique eq 0) {
+		print "dropping BARCODE index to enable empty barcodes\n";
+		$dbh->do("ALTER TABLE `items` DROP INDEX `barcode`");
+	}
+}
+$dbh->do("ALTER TABLE `items` CHANGE `barcode` `barcode` VARCHAR( 20 )") unless ($nullenabled{barcode} eq 'YES');
 
 # extending the timestamp in branchtransfers...
 my %branchtransfers;
@@ -896,6 +914,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.59  2003/09/30 16:22:05  tipaul
+# adding barcode NOT mandatory feature. Just run updatedatabase to get it.
+# Note it's impossible to issue an item without barcode, as issue/returns is based on barcode...
+#
 # Revision 1.58  2003/07/16 04:08:29  acli
 # Minor spelling correction
 #
