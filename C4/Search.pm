@@ -1785,6 +1785,7 @@ the C<borrowers> table in the Koha database.
 #'
 sub borrdata {
   my ($cardnumber,$bornum)=@_;
+   warn "bornum $bornum";
   $cardnumber = uc $cardnumber;
   my $dbh = C4::Context->dbh;
   my $query;
@@ -1801,12 +1802,15 @@ sub borrdata {
   if ($data) {
   	return($data);
 	} else { # try with firstname
-		my $sth=$dbh->prepare("select * from borrowers where firstname='$cardnumber'");
-		$sth->execute;
-		my $data=$sth->fetchrow_hashref;
-		$sth->finish;
-		return($data);
+		if ($cardnumber) {
+			my $sth=$dbh->prepare("select * from borrowers where firstname='$cardnumber'");
+			$sth->execute;
+			my $data=$sth->fetchrow_hashref;
+			$sth->finish;
+			return($data);
+		}
 	}
+	return undef;
 }
 
 =item borrissues
