@@ -8,7 +8,8 @@ use vars qw($VERSION @ISA @EXPORT);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-@EXPORT = qw(&slashifyDate); 
+@EXPORT = qw(&slashifyDate
+	     &fixEthnicity); 
 
 use vars qw();
 	
@@ -20,6 +21,21 @@ sub slashifyDate {
     return("$dateOut[2]/$dateOut[1]/$dateOut[0]")
 }
 
+sub fixEthnicity($) { # a temporary fix ethnicity, it should really be handled
+                      # in Search.pm or the DB ... 
+
+    my $ethnicity = shift;
+    if ($ethnicity eq 'maori') {
+	$ethnicity = 'Maori';
+    } elsif ($ethnicity eq 'european') {
+	$ethnicity = 'European/Pakeha';
+    } elsif ($ethnicity eq 'pi') {
+	$ethnicity = 'Pacific Islander'
+    } elsif ($ehtnicity eq 'asian') {
+	$ethnicity = 'Asian';
+    }
+    return $ethnicity;
+}
 
 
 1;
