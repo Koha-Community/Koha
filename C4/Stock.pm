@@ -40,13 +40,13 @@ sub stockreport {
   my $sth=$dbh->prepare($query);
   $sth->execute;
   my $count=$sth->fetchrow_hashref;
-  $results[0]="$count->{'count'}\t Levin";
+  $results[0]->{'value'}="$count->{'count'}\t Levin";
   $sth->finish;
   $query="Select count(*) from items where homebranch='F'";
   $sth=$dbh->prepare($query);
   $sth->execute;
   $count=$sth->fetchrow_hashref;
-  $results[1]="$count->{'count'}\t Foxton";
+  $results[1]->{'value'}="$count->{'count'}\t Foxton";
   $sth->finish;
   return(@results);
 }

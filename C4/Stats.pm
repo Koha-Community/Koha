@@ -123,8 +123,9 @@ sub circrep {
   my $i=0;
   my @results;
   while (my $data=$sth->fetchrow_hashref){
-    $results[$i]="$data->{'datetime'}\t$data->{'branch'}";
-    $i++;
+  	my %tempvalue;
+    $tempvalue->{'value'}="$data->{'datetime'}\t$data->{'branch'}";
+    push(@results, \%tempvalue);
   }
   $sth->finish;
 #  print $query;

@@ -28,25 +28,31 @@ use CGI;
 use C4::Output;
 use C4::Stats;
 use C4::Stock;
+use HTML::Template;
 
 my $input = new CGI;
-print $input->header;
 my $type=$input->param('type');
-print startpage();
-print startmenu('issue');
-my @data;
+# 2002/12/19 hdl@ifrance.com templating
+my $template=gettemplate("reports.tmpl");
+#print startpage();
+#print startmenu('issue');
+# 2002/12/19 hdl@ifrance.com templating end
+
+my @dataloop;
 if ($type eq 'search'){
- @data=statsreport('search','something');
+ @dataloop=statsreport('search','something');
 }
 if ($type eq 'issue'){
- @data=statsreport('issue','today');
+ @dataloop=statsreport('issue','today');
 }
 if ($type eq 'stock'){
- @data=stockreport();
+ @dataloop=stockreport();
 }
 
-print mkheadr(1,"$type reports");
-print @data;
-
-print endmenu('issue');
-print endpage();
+# 2002/12/19 hdl@ifrance.com templating
+$template->param(	type => $type,
+								dataloop => \@dataloop);
+#print endmenu('issue');
+#print endpage();
+print "Content-Type: text/html\n\n", $template->output;
+# 2002/12/19 hdl@ifrance.com templating
