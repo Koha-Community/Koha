@@ -50,8 +50,7 @@
 <!-- TMPL_IF name="else" -->
 <h1>Admin Valeurs autorisées</h1>
 <p>Cette table est utilisée dans les définitions MARC. Vous pouvez définir autant de catégories et autant de valeurs autorisées pour chaque catégorie que vous voulez.</p>
-<p>When you define the MARC subfield structure, you can link a subfield to an authorised-value category. When the user adds ou modifies a biblio,
-the subfield is not entered à a free field, but though a list sur authorised values.</p>
+<p>Quand vous définissez la structure des sous-champs MARC, vous pouvez lier un sous-champ à une catégorie de valeurs autorisées. Quand l'utilisateur ajoute ou modifie une notice biblio, la valeur du sous-champ n'est pas libre, mais doit appartenir à la liste des valeurs autorisées.</p>
 <form action=/cgi-bin/koha/admin/authorised_values.pl method=post>
 	<!-- TMPL_VAR name="tab_list" --><input type="submit" value="OK">   <a href="authorised_values.pl?op=add_form">Nouvelle catégorie...</a>
 </form>

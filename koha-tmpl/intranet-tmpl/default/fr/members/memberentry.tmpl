@@ -1,12 +1,15 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<h1>
 <!-- TMPL_IF NAME=addAction -->
+<h1>
 	Ajouter un lecteur
+</h1>
 <!-- TMPL_ELSE -->
+<h1>
 	Mise à jour du lecteur
+</h1>
 <!-- /TMPL_IF -->
-</h1><br>
+<br>
 
 <form action=/cgi-bin/koha/newmember.pl method=post>
 	<input type=hidden name=joining value="<!-- TMPL_VAR NAME=dateenrolled -->">

@@ -17,7 +17,7 @@
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNum(v,maybenull) {
-        var n = new Nombre(v.value);
+        var n = new Number(v.value);
         if (isNaN(n)) {
                 return false;
                 }
@@ -163,7 +163,7 @@
 	<h2>Admin Monnaies</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="clr">
+                <input type=reset name=reset value="effacer">
         </form>
 
 	<!-- TMPL_IF NAME=searchfield -->
@@ -181,8 +181,8 @@
 		<tr bgcolor="<!-- TMPL_VAR NAME=toggle -->">
 			<td><!-- TMPL_VAR NAME=currency --></td>
 			<td><!-- TMPL_VAR NAME=rate --></td>
-			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=currency -->">Editer</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=currency -->">Supprimer</a></td>
+			<td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&searchfield=<!-- TMPL_VAR NAME=currency -->" class="button">Editer</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=delete_confirm&searchfield=<!-- TMPL_VAR NAME=currency -->" class="button">Supprimer</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

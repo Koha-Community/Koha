@@ -2,7 +2,7 @@
 <!-- TMPL_IF name=else -->
 <h1>Admin Compte</h1>
 <form action=<!-- TMPL_VAR name=scriptname --> method=post>
-<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
+<input type=text name=searchfield value=""><input type=reset name=reset value="effacer"></form>
 <!-- TMPL_IF name=search -->
 	<br>Votre recherche sur <b><!-- TMPL_VAR name=searchfield --><b><p><br>
 <!-- /TMPL_IF -->
@@ -23,7 +23,7 @@
 	<tr valign=top bgcolor=#99cc33>
 		<td bgcolor="#FFFFFF">&nbsp;</td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Budget</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><a href="aqbudget.pl?op=add_form&bookfundid=<!-- TMPL_VAR name="bookfundid" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" ALT="Ajouter budget" border=0></a></td>
+		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><a href="aqbudget.pl?op=add_form&bookfundid=<!-- TMPL_VAR name="bookfundid" -->"><img src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" ALT="Add budget" border=0></a></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"></td>
 	</tr>
 	<!-- TMPL_LOOP name="budget" -->
@@ -42,7 +42,7 @@
 <form action='<!-- TMPL_VAR name=scriptname -->' method=post>
 	<input type=hidden name=op value=add_form>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<br><input type=submit class="button" value="Ajouter un compte" title="Ajouter un compte" ALT="Ajouter un compte"><br>
-	<br></form><br clear=tous>
+	<br></form><br clear=all>
 <p> &nbsp; </p>
 <!-- /TMPL_IF -->
 
@@ -63,7 +63,7 @@
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNum(v,maybenull) {
-	var n = new Nombre(v.value);
+	var n = new Number(v.value);
 	if (isNaN(n)) {
 		return false;
 		}
@@ -129,7 +129,7 @@ Donnée enregistrée
 <form action='<!-- TMPL_VAR name="action" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=bookfundid value='<!-- TMPL_VAR name="bookfundid" -->'>
 <tr><td>Nom</td><td><!-- TMPL_VAR name="bookfundname" --></td></tr>
 <tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
-<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NO></form></td></tr><br clear=tous>
+<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="action" -->' method=post><input type=submit value=NO></form></td></tr><br clear=all>
 <p> &nbsp; </p>
 <!-- /TMPL_IF -->
 

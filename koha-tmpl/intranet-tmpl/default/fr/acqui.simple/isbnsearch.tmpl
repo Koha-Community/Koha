@@ -4,7 +4,7 @@
 Recherche effectuée sur <b><!-- TMPL_IF name="isbn" -->ISBN <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="title" -->title <!-- TMPL_VAR name="title" --><!-- /TMPL_IF --></b><br />
 <!-- TMPL_IF name="total" -->
 <!-- TMPL_VAR NAME=total --> Résultats trouvés<br />
-Résultats <!-- TMPL_VAR name="showoffset" --> to <!-- TMPL_VAR name="total" --> displayed
+Résultats <i><!-- TMPL_VAR name="showoffset" --></i> to <i><!-- TMPL_VAR name="total" --></i> affiché
 <!-- /TMPL_IF -->
 <p />
 <!-- Row sur numbers corresponding to search result pages -->
@@ -45,7 +45,7 @@ Résultats <!-- TMPL_VAR name="showoffset" --> to <!-- TMPL_VAR name="total" --> 
 			<td><!-- TMPL_VAR name="author" --></td>
 			<td><!-- TMPL_VAR name="copyrightdate" --></td>
 			<!-- TMPL_IF NAME="NOTMARC" -->
-			  <td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Ajouter Ouvrages</a></td>
+			  <td><a href="additem-nomarc.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Ajouter items</a></td>
 			<!-- TMPL_ELSE -->
 			  <td><a href="addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR name="biblionumber" -->">Editer...</a></td>
 			<!-- /TMPL_IF -->

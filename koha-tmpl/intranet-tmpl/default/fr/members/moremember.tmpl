@@ -24,7 +24,7 @@
 		Ecriture d'un texte: <!-- TMPL_VAR NAME="textmessaging" --><p>
 		N° Lecteur: <!-- TMPL_VAR NAME="borrowernumber" --><BR>
 		Catégorie Lecteur: <!-- TMPL_VAR NAME="categorycode" --><BR>
-		Frais:$30/year, Paid<BR>
+		Frais:$30/année, Payé<BR>
 		Joined: <!-- TMPL_VAR NAME="dateenrolled" -->,  Expires: <!-- TMPL_VAR NAME="expiry" --><BR>
 		Annexe d'inscription: <!-- TMPL_VAR NAME="branchcode" --><P>
 		<!-- TMPL_IF NAME="printethnicityline" -->
@@ -52,7 +52,7 @@
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_UNLESS -->
 		<P>
-		Notes générales: <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you ajouter to et delete notes.'); return false">-->
+		Notes générales: <!--<A HREF="popbox.html" onclick="messenger(200,250,'Form that lets you add to et delete notes.'); return false">-->
 		<!-- TMPL_VAR NAME="borrowernotes" --><!--</a>-->
 		<p align=right>
 		</font>
@@ -60,7 +60,7 @@
 			<p align=right>
 			<form action=/cgi-bin/koha/jmemberentry.pl method=post>
 				<INPUT TYPE="submit" name="submit" VALUE="Ajouter un enfant" class="button" alt="Ajouter un enfant">
-				<input type=hidden name=type value=Ajouter>
+				<input type=hidden name=type value=Add>
 				<input type=hidden name=bornum value="<!-- TMPL_VAR NAME=borrowernumber -->">
 			</form>
 			</P>

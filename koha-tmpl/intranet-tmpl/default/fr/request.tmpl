@@ -141,10 +141,10 @@
 					</a>
 				<!-- TMPL_ELSE -->
 					<!-- TMPL_IF Name="constrainttypea" -->
-						Suivant Disponible
+						<i>Suivant</i>
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_IF Name="constrainttypeo" -->
-							This type only : <!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_VAR Name="itemtype" -->
+							This type only : <b><!-- TMPL_VAR Name="volumeddesc" --> <!-- TMPL_VAR Name="itemtype" --></b>
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
@@ -154,8 +154,9 @@
 	<!-- /TMPL_LOOP -->
 	<tr VALIGN=TOP>
 	<TD colspan=6 align=right>
-	Supprimer une demande en sélectionnant "suppr." dans la liste.
-	<INPUT TYPE="image" name="submit"  VALUE="request" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png"></td>
+		Supprimer une demande en sélectionnant "suppr." dans la liste.
+		<INPUT TYPE="image" name="submit"  VALUE="request" BORDER=0 src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/2rightarrow.png">
+	</td>
 	</tr>
 </table>
 <P>

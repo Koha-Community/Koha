@@ -16,7 +16,7 @@
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNum(v,maybenull) {
-	var n = new Nombre(v.value);
+	var n = new Number(v.value);
 	if (isNaN(n)) {
 		return false;
 		}
@@ -55,7 +55,7 @@
 	</SCRIPT>
 
 <!-- TMPL_IF name="add_form" -->
-<!-------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------>
 	<!-- TMPL_IF NAME=modifier -->
 		<h1>Modifier une préférence système</h1>
 	<!-- TMPL_ELSE -->
@@ -77,7 +77,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_validate" -->
-<!-------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------>
 	Donnée enregistrée
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=submit value=OK>
@@ -85,38 +85,38 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------>
 <table border=0 cellspacing=0 cellpadding=2>
-	<tr valign=top bgcolor=#99cc33>
+	<tr valign=top bgcolor="#99cc33">
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
 		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b><!-- TMPL_VAR name="searchfield" --></b></td>
 	</tr>
 	<tr><td>Valeur</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<!-- TMPL_VAR name="searchfield" -->'>
 	<tr><td colspan=2 align=center>CONFIRMER SUPPRESSION</td></tr>
-	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
+	<tr><td><INPUT type=submit value='OUI'></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=NO></form></td></tr>
 </table>
 
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<!-------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------>
 	Donnée effacée
 	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
 	<input type=submit value=OK>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------>
 <!-- TMPL_IF name="else" -->
 <h1>Admin Préférences système</h1>
 <form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
 	<input type=text name=searchfield value="">
-	<input type=reset name=reset value="clr">
+	<input type=reset name=reset value="effacer">
 </form>
 <!-- TMPL_VAR name="searchfield" -->
 <table border=0 cellspacing=0 cellpadding=2>
-<tr valign=top bgcolor=#99cc33>
+<tr valign=top bgcolor="#99cc33">
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Variable</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Valeur</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Explication</b></td>

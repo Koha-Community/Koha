@@ -5,7 +5,7 @@
 	<font SIZE=6><em>Gestion du thésaurus</em></font><br />
 	<table border=0 cellspacing=0 cellpadding=2>
 	<tr valign=top bgcolor=#99cc33>
-		<td  background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Values related to <!-- TMPL_VAR name="stdlib" --> (<!-- TMPL_VAR name="category" -->)</b></td>
+		<td  background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>En liaison avec <!-- TMPL_VAR name="stdlib" --> (<!-- TMPL_VAR name="category" -->)</b></td>
 	</tr>
 	</table>
 	<br/><br/>
@@ -28,7 +28,7 @@
 	<input type="hidden" name="op" value="add_form">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
 	<input type="hidden" name="stdlib" value="<!-- TMPL_VAR name="stdlib" -->">
-	<br><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" title="Ajouter thesaurus entry" ALT="Ajouter" BORDER=0 ><br>
+	<br><input type=image src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/filenew.png" title="Ajouter thesaurus entry" ALT="Add" BORDER=0 ><br>
 	</form>
 <!-- /TMPL_IF -->
 
@@ -98,8 +98,8 @@
 	<h1>Gestion du thésaurus</h1>
 	<p>Gestion du thésaurus et des fichiers autorités.<br />
 	<ul>
-		<b>Extraire</b>: see data dependent one this one<br />
-		<b>Lié</b>: see other forms sur this authority entry</p>
+		<b>Extraire</b>: Voir les formes associées<br />
+		<b>Lié</b>: Voir les formes rejetées</p>
 	</ul>
 	<form action="/cgi-bin/koha/admin/thesaurus.pl" method="post">
 		<!-- TMPL_VAR name="tab_list" -->
@@ -124,7 +124,7 @@
 		<td>&nbsp;</td>
 		<td><!-- TMPL_VAR name="freelib" --></td>
 		<td><!-- TMPL_VAR name="father" --> <!-- TMPL_VAR name="stdlib" --></td>
-		<td><!-- TMPL_VAR name="dig" -->Extraire</a></td>
+		<td><!-- TMPL_VAR name="dig" -->Extraire</a>&nbsp;&nbsp;</td>
 		<td><!-- TMPL_VAR name="related" -->Lié</a></td>
 		<td><a href="<!-- TMPL_VAR name="edit" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
 		<td><a href="<!-- TMPL_VAR name="delete" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
@@ -136,8 +136,8 @@
 	<br/>
 	<table width=40% height="80">
 		<tr>
-			<td width=50%><a href="<!-- TMPL_VAR name="previous" -->" class="button">Précédents</a></td>
-			<td width=50%><a href="<!-- TMPL_VAR name="next" -->" class="button"> Suivant</a></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="previous" -->" class="button">Previous</a></td>
+			<td width=50%><a href="<!-- TMPL_VAR name="next" -->" class="button"> Next</a></td>
 		</tr>
 	</table>
 	<br/>
@@ -146,7 +146,7 @@
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->">
 	<input type="hidden" name="father" value="<!-- TMPL_VAR name="father" -->">
-	<br><input type=submit class="button"  value="Ajouter" title="Ajouter une entrée du thésaurus" ALT="Ajouter une entrée du thésaurus"><br>
+	<br><input type=submit class="button"  value="Add" title="Ajouter une entrée du thésaurus" ALT="Ajouter une entrée du thésaurus"><br>
 	</form>
 
 

@@ -16,7 +16,7 @@
 <input type=hidden name=id value=<!-- TMPL_VAR name="id" -->>
 <input type=hidden name=basket value=<!-- TMPL_VAR name="basket" -->>
 <b>Nouvelle recherche: </b><INPUT TYPE="text"  SIZE="25"   NAME="search"></form>
-<br clear=tous>
+<br clear=all>
 
 <CENTER>
 
@@ -29,7 +29,7 @@ Recherche effectuée sur
 <BR>
 <!-- TMPL_VAR name="count" -->  Résultats trouvés.
 
-<br> Résultats <!-- TMPL_VAR name="dispnum" --> to <!-- TMPL_VAR name="offset2" --> displayed.
+<br> Résultats <i><!-- TMPL_VAR name="dispnum" --></i> to <i><!-- TMPL_VAR name="offset2" --></i> affiché.
 
 <TABLE  CELLSPACING=0  CELLPADDING=6 border=0>
 	<TR  VALIGN=TOP bgcolor="#ffdf61">
@@ -92,7 +92,7 @@ Recherche effectuée sur
 
 <!-- TMPL_IF name="offsetover" -->
 <A HREF="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&offset=<!-- TMPL_VAR name="offset" -->&type=<!-- TMPL_VAR name="type" -->&id=<!-- TMPL_VAR name="id" -->&basket=<!-- TMPL_VAR name="basket" -->&search=<!-- TMPL_VAR name="title" -->&author=<!-- TMPL_VAR name="author" -->">
-Suivant
+Next
 </A>
 <!-- /TMPL_IF -->
 </CENTER>

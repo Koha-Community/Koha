@@ -72,10 +72,10 @@ a.members:hover {
 						<a href="/cgi-bin/koha/members-home.pl" class="submenu">Adresse Lecteur</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/simpleredirect.pl?type=Ajouter&chooseform=adult" class="submenu2">Ajouter un lecteur</a>
+						<a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=adult" class="submenu2">Ajouter un lecteur</a>
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/simpleredirect.pl?type=Ajouter&chooseform=organisation" class="submenu">Ajouter une organisation</a>
+						<a href="/cgi-bin/koha/simpleredirect.pl?type=Add&chooseform=organisation" class="submenu">Ajouter une organisation</a>
 					</td>
 				</tr>
 			</table>

@@ -10,7 +10,7 @@
 	<input type=hidden name=op value='add_validate'>
 	<table>
 	<tr><th>Champ</th>
-		<th>Lib for librarians / for opac</th>
+		<th>Libellé OPAC</th>
 		<th>Repet</th>
 		<th>obligatoire</th>
 		<th>champ Koha</th>
@@ -67,19 +67,18 @@
 
 <!-------------------------------------------------------------------------------------------------->
 <!-- TMPL_IF name="else" -->
-<font SIZE=6><em>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --></em></font>
-<p>This screen shows the subfields associated with the selected tag. Vous can edit subfields ou ajouter a new one by clicking on "edit". </p>
-<p>The column <b>champ Koha</b> shows that the subfield is linked with a "champ Koha". Koha can manage a MARC interface, ou a Koha interface. This link ensures that 
-both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
+<h1>MARC subfield structure admin for <!-- TMPL_VAR name="tagfield" --></h1>
+<p>This screen shows the subfields associated with the selected tag. Vous can edit subfields ou add a new one by clicking on edit. </p>
+<p>The column <b>champ Koha</b> shows that the subfield is linked with a champ Koha. Koha can manage a MARC interface, ou a Koha interface. This link ensures that both DB are synchronized, thus you can change from a MARC to a Koha interface easily.</p>
 
 <table border=0 cellspacing=0 cellpadding=2 width="80%">
 <tr valign=top bgcolor=#99cc33>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=5%><b>Sous-champ</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=30%><b>Lib</b></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=10%><b>champ Koha</b> <span style="font-size:8;color:red" title="le champ koha-DB lié à ce sous-champ">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="subfield may be repeated (1=oui, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>obligatoire</b> <span style="font-size:8;color:red" title="subfield is mandatory (1=oui, 0=no)">?</span></td>
-	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Onglet</b> <span style="font-size:8;color:red" title="subfield is shown in which tab (0-9 ou item)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Rep</b> <span style="font-size:8;color:red" title="sous-champ répétable (1=oui, 0=non)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>obligatoire</b> <span style="font-size:8;color:red" title="sous-champ obligatoire (1=oui, 0=non)">?</span></td>
+	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Onglet</b> <span style="font-size:8;color:red" title="sous-champ affiché dans quel onglet (0-9 ou item)">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Valeur autorisée</b> <span style="font-size:8;color:red" title="valeurs autorisées pour ce sous-champ">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Thésaurus</b> <span style="font-size:8;color:red" title="Thésaurus lié à ce sous-champ">?</span></td>
 	<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif" width=8%><b>Val build</b> <span style="font-size:8;color:red" title="Constructeur de valeur">?</span></td>

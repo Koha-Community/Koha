@@ -17,7 +17,7 @@
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNum(v,maybenull) {
-        var n = new Nombre(v.value);
+        var n = new Number(v.value);
         if (isNaN(n)) {
                 return false;
                 }
@@ -127,17 +127,17 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Vérifié (searched by default)</td>
+			<td>Coché (recherche par défaut)</td>
 			<td>
 				<input type=text size=1 name=checked value='<!-- TMPL_VAR NAME=checked -->' onBlur=isNum(this)>  
 		<tr>
-			<td>Rang (display order)</td>
+			<td>Rang (ordre d'affichage)</td>
 			<td>
 				<input type=text name=rank size=4 value='<!-- TMPL_VAR NAME=rank -->' onBlur=isNum(this)>
 			</td>
 		</tr>
 		<tr>
-			<td>Syntaxe (z3950 can send enregistrements in various format. Choose one)</td>
+			<td>Syntaxe (Z39.50 peut envoyer des notices en différents formats. Sélectionnez lequel)</td>
 			<td>
 				<select name="syntax">
 					<option value="MARC21">MARC21</option>
@@ -227,7 +227,7 @@
         <h2>Admin Serveurs Z39.50</h2>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="clr">
+                <input type=reset name=reset value="effacer">
         </form>
 
         <!-- TMPL_IF NAME=searchfield -->

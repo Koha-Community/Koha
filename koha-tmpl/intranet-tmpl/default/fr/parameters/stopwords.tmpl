@@ -17,7 +17,7 @@
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNum(v,maybenull) {
-        var n = new Nombre(v.value);
+        var n = new Number(v.value);
         if (isNaN(n)) {
                 return false;
                 }
@@ -132,7 +132,7 @@
 	<b>Note : si vous changez quelque chose dans cette table, demandez à votre administrateur de lancer le script misc/rebuildnonmarc.pl.</b>
         <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
                 <input type=text name=searchfield value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="clr">
+                <input type=reset name=reset value="effacer">
         </form>
 
         <!-- TMPL_IF NAME=searchfield -->

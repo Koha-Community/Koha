@@ -10,7 +10,7 @@
 	<tr>
 		<td><b>itemnum</b></td>
 		<td><li>Le champ itemnumb DOIT être connecté </li>
-			<li>The correspounding subfield MUST be in with -1 (ignore) tab</td>
+			<li>Le sous-champ correspondant DOIT être dans l'onglet -1 (ignore)</td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
@@ -24,7 +24,7 @@
 		<td><b>champ ouvrage</b></td>
 		<td>TOUS les champs ouvrage DOIVENT :<br/>
 			<li>être relié à la même étiquette,</li>
-			<li>et they doit tous be in the 10 (items) tab</li></td>
+			<li>et ils doivent tous être dans l'onglet 10 (items)</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
@@ -104,8 +104,8 @@
 		<td><b>notice bibliographique et n° biblio</b></td>
 		<td>Les champs biblio.biblionumber et biblioitems.biblioitemnumber DOIVENT :<br/>
 			<li>être relié à l'étiquette MARC,</li>
-			<li>be in the SAME tag (for example : 090$a et 090$b)</li>
-			<li>\$etre dans l'onglet -1 \(items\)</li></td>
+			<li>être dans la MEME étiquette (par ex. : 090$a et 090$b)</li>
+			<li>être dans l'onglet -1 (items)</li></td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>
@@ -117,7 +117,7 @@
 <!-- TMPL_IF name="total" -->
 	<tr>
 		<td><b>TOTAL</b></td>
-		<td>Vous have <!-- TMPL_VAR name="total" --> error(s) in your MARC configuration. Please fix them before using koha</td>
+		<td>Vous avez <b><!-- TMPL_VAR name="total" --></b> erreurs dans votre configuration MARC. Corrigez-les avant d'utiliser Koha</td>
 	</tr>
 <!-- TMPL_ELSE -->
 	<tr>

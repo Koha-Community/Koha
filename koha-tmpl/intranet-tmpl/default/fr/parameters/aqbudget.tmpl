@@ -2,7 +2,7 @@
 
 <!-- TMPL_IF name="else" -->
 	<h1>Admin Budget</h1><form action=/cgi-bin/koha/admin/aqbudget.pl method=post>
-	<input type=text name=searchfield value=""><input type=reset name=reset value="clr"></form>
+	<input type=text name=searchfield value=""><input type=reset name=reset value="effacer"></form>
 	<!-- TMPL_IF name=search -->
 	<br>Votre recherche sur <b><!-- TMPL_VAR name=searchfield --><b><p><br>
 	<!-- /TMPL_IF -->
@@ -22,7 +22,7 @@
 	<form action='/cgi-bin/koha/admin/aqbudget.pl' method=post>
 	<input type=hidden name=op value=add_form>
 	<br><input type=submit class="button" value="Ajouter Budget" title="Ajouter Budget" ALT="Ajouter Budget"><br>
-	</form><br clear=tous>
+	</form><br clear=all>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_form" -->
@@ -42,7 +42,7 @@
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNum(v,maybenull) {
-	var n = new Nombre(v.value);
+	var n = new Number(v.value);
 	if (isNaN(n)) {
 		return false;
 		}
@@ -91,13 +91,13 @@
 	<tr><td>Comptes</td><td><input type=hidden name=bookfundid size=5 maxlength=5 value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundid" --></td></tr>
 <!-- /TMPL_IF -->
 
-<tr><td>Date de début (<!-- TMPL_VAR NAME=dateformat -->)</td><td><input type=text name=startdate size=11 value='<!-- TMPL_VAR name="startdate" -->'>&nbsp;</td></tr>
-<tr><td>Date de fin (<!-- TMPL_VAR NAME=dateformat -->)</td><td><input type=text name=enddate size=11 value='<!-- TMPL_VAR name="enddate" -->'></td></tr>
+<tr><td>Date de début <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=startdate size=11 value='<!-- TMPL_VAR name="startdate" -->'>&nbsp;</td></tr>
+<tr><td>Date de fin <i>(<!-- TMPL_VAR NAME=dateformat -->)</i></td><td><input type=text name=enddate size=11 value='<!-- TMPL_VAR name="enddate" -->'></td></tr>
 <tr><td>Montant budget</td><td><input type=text name=budgetamount value='<!-- TMPL_VAR name="budgetamount" -->'></td></tr>
 <tr><td>&nbsp;</td><td><input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR name="aqbudgetid" -->"><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
 </table>
 </form>
-<br clear=tous>
+<br clear=all>
 <p> &nbsp; </p>
 <!-- /TMPL_IF -->
 

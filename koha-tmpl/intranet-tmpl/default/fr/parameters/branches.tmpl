@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<!-- TMPL_IF name="ajouter" -->
+<!-- TMPL_IF name="add" -->
+
 <h1><!-- TMPL_VAR name=head --></h1><br>
 <form action='<!-- TMPL_VAR name=action -->' name=Aform method=post>
 <input type=hidden name=op value='add_validate'>
@@ -56,7 +57,7 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type=submit value='Submit'></td>
+		<td><input type=submit value='Enregistrer' class="button"></td>
 	</tr>
 </table>
 </form>
@@ -97,7 +98,7 @@
 				<td align='left' valign='top'><!-- TMPL_VAR name=branch_code escape="HTML" --></td>
 				<td align='left' valign='top'>
 					<!-- TMPL_IF name=address-empty-p -->
-						(nothing entered)
+						(pas de saisie)
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_IF name=branchaddress1 -->
 							<!-- TMPL_VAR name=branchaddress1 escape="HTML" --><!-- /TMPL_IF -->
@@ -115,7 +116,7 @@
 				</td>
 				<td align='left' valign='top'>
 					<!-- TMPL_IF name=no-categories-p -->
-						(no categories set)
+						(pas de catégorie définie)
 					<!-- TMPL_ELSE -->
 						<!-- TMPL_LOOP name=category_list -->
 							<!-- TMPL_VAR name=categoryname --><br>
@@ -126,7 +127,7 @@
 					<form action='<!-- TMPL_VAR name=action -->' method=post>
 					<input type='hidden' name='op' value='edit'>
 					<input type='hidden' name='branchcode' value='<!-- TMPL_VAR name=value escape="HTML" -->'>
-					<input type=submit value=Edit class="button">
+					<input type=submit value="Edit" class="button">
 					</form>
 				</td>
 				<td align='left' valign='top'>
@@ -140,7 +141,7 @@
 	</table>
 	<br>
 	<form action=<!-- TMPL_VAR name=action --> method=post>
-		<input type='hidden' name='op' value='ajouter'>
+		<input type='hidden' name='op' value='add'>
 		<input type=submit class="button" value='Ajouter une nouvelle annexe'>
 	</form>
 

@@ -65,14 +65,14 @@
 			<tr <!-- TMPL_IF NAME="opac" -->bgcolor=#99cccc background=<!-- TMPL_VAR name="themelang" -->/images/background-opac.gif<!-- TMPL_ELSE -->bgcolor=#ccccff background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif"<!-- /TMPL_IF -->>
 			<td align=left>
 				<!-- TMPL_IF NAME=displayprev -->
-				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Précédents Records</a>
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Previous Records</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->
 			</td>
 			<td align=right>
 				<!-- TMPL_IF NAME=displaynext -->
-				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Suivant Records</a>
+				<a href=search.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->&<!-- TMPL_LOOP NAME=FORMINPUTS --><!-- TMPL_VAR NAME=term -->=<!-- TMPL_VAR name="value" ESCAPE=URL -->&<!-- /TMPL_LOOP -->type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->>Next Records</a>
 				<!-- TMPL_ELSE -->
 				&nbsp;
 				<!-- /TMPL_IF -->

@@ -17,7 +17,7 @@
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNum(v,maybenull) {
-        var n = new Nombre(v.value);
+        var n = new Number(v.value);
         if (isNaN(n)) {
                 return false;
                 }
@@ -154,7 +154,7 @@
 	<h2>Admin Imprimante</h2>
         <form action='<TMP_VAR NAME=script_name>' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="clr">
+                <input type=reset name=reset value="effacer">
         </form>
 
 	<!-- TMPL_IF NAME=searchfield -->

@@ -17,7 +17,7 @@
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function isNum(v,maybenull) {
-	var n = new Nombre(v.value);
+	var n = new Number(v.value);
 	if (isNaN(n)) {
 		return false;
 		}
@@ -95,19 +95,19 @@
 			</td>
 		</tr>
 		<tr>
-			<td>Période d'inscription</td>
+			<td>Durée inscription</td>
 			<td>
 				<input type=text name=enrolmentperiod size=3 maxlength=2 value="<!-- TMPL_VAR NAME=enrolmentperiod -->">
 			</td>
 		</tr>
 		<tr>
-			<td>Limite d'âge supérieure</td>
+			<td>Age maxi</td>
 			<td>
 				<input type=text name=upperagelimit size=3 maxlength=3 value="<!-- TMPL_VAR NAME=upperagelimit -->">
 			</td>
 		</tr>
 		<tr>
-			<td>Age obligatoire</td>
+			<td>Age mini</td>
 			<td>
 				<input type=text name=dateofbirthrequired value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size=3 maxlength=2>
 			</td>
@@ -177,24 +177,20 @@
 			<td><!-- TMPL_VAR NAME=description --></td>
 		</tr>
 		<tr>
-			<td>Période d'inscription</td>
+			<td>Durée inscription</td>
 			<td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
 		</tr>
 		<tr>
-			<td>Limite d'âge supérieure</td>
+			<td>Age maxi</td>
 			<td><!-- TMPL_VAR NAME=upperagelimit --></td>
 		</tr>
 		<tr>
-			<td>Age obligatoire</td>
+			<td>Age mini</td>
 			<td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
 		</tr>
 		<tr>
 			<td>Saisir d'amende</td>
 			<td><!-- TMPL_VAR NAME=finetype --></td>
-		</tr>
-		<tr>
-			<td>en gros</td>
-			<td><!-- TMPL_VAR NAME=bulk --></td>
 		</tr>
 		<tr>
 			<td>Frais d'inscription</td>
@@ -237,7 +233,7 @@
 
 <!-- TMPL_IF NAME=delete_confirmed -->
 	Donnée effacée
-        <form action='<!-- TMPL_VAR NAME=script_name -->' method=post>
+        <form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
         <input type=submit value=OK>
         </form>
 
@@ -246,25 +242,24 @@
 <!-- TMPL_IF NAME=else -->
 	<h2>Admin Catégorie</h2>
 	<!-- TMPL_IF NAME=searchfield -->
-		Votre recherche sur <!-- TMPL_VAR NAME=searchfield -->
+		Votre recherche sur <!-- TMPL_VAR name=searchfield -->
 	<!-- /TMPL_IF -->
 
-	<form action='<TMP_VAR NAME=script_name>' method=post>
-		<input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-		<input type=reset name=reset value="clr">
+	<form action='<!-- TMPL_VAR NAME="script_name" -->' method=post>
+		<input type=text name=description value=<!-- TMPL_VAR name="searchfield" -->>
+		<input type="submit" name="submit" value="OK" class="button">
 	</form>
-	
+
         <table border=0 cellspacing=0 cellpadding=5>
 		<tr bgcolor='#99cc33'>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Catégorie</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Description</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Inscription</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Limite d'âge supérieure</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Age obligatoire</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Durée inscription</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Frais d'inscription</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Age maxi</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Age mini</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Amende</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>en gros</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Frais</b></td>
-			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>En retard</b></td>
+			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Signaler retard</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Limite de prêt</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'><b>Réserver</b></td>
 			<td background='<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif'> </td>
@@ -275,12 +270,16 @@
                         <td><!-- TMPL_VAR NAME=categorycode --></td>
                         <td><!-- TMPL_VAR NAME=description --></td>
                         <td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
+                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
                         <td><!-- TMPL_VAR NAME=upperagelimit --></td>
                         <td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
                         <td><!-- TMPL_VAR NAME=finetype --></td>
-                        <td><!-- TMPL_VAR NAME=bulk --></td>
-                        <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
-                        <td><!-- TMPL_IF NAME=overduenoticerequired -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
+                        <td><!-- TMPL_IF NAME=overduenoticerequired -->
+					<i>Oui</i>
+				<!-- TMPL_ELSE -->
+					<i>Non</i>
+				<!-- /TMPL_IF -->
+			</td>
                         <td><!-- TMPL_VAR NAME=issuelimit --></td>
                         <td><!-- TMPL_VAR NAME=reservefee --></td>
                         <td><a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&categorycode=<!-- TMPL_VAR NAME=categorycode -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>

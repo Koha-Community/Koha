@@ -88,8 +88,8 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  En retard Books
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - En retard Today
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Signaler retard Books
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Signaler retard Today
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Money Reçu
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - Today
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - - This Week
@@ -118,11 +118,11 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Search
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Full Ajouter New
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Full Add New
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Bibliography
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Ajouter
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Add
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Modifier
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Delete
@@ -133,7 +133,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>->  Ouvrages
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Ajouter
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Add
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Modifier
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Delete
@@ -171,7 +171,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<form name=choose2>
 			<select name=dest size=1 onChange="leapto(this.form)">
 
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>AQUISITIONS
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=57>ACQUISITIONS
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-> Orders
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Commande Books
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Commande Serials
@@ -225,7 +225,7 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - End Of Année Reports
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp;
-			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Suivant Years Commitment
+			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>&nbsp; &nbsp; - Next Years Commitment
 
 
 			<option value=/cgi-bin/tododisplay.pl?user=Rachel&todo=43>-----------------------------------

@@ -1,13 +1,15 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 <center>
 <h1>Paramètres</h1><br>
-<table width=100% cellspacing=0 cellpadding=5 border=1>
+<table width="100%" cellspacing=0 cellpadding=5 border=1>
 <tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 	<th>Paramètres système </th>
 </tr>
 </table>
-<table cellspacing=0 cellpadding=1 width=80%>
+<table cellspacing=0 cellpadding=1 width="80%">
+<tr>
 <th colspan=2>Remplir ces tables dans l'ordre pour obtenir un Koha qui fonctionne</th>
+</tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/branches.pl>Annexes</a></td>
 	<td>Les différentes annexes que vous gérez avec ce serveur Koha.</td>
@@ -55,10 +57,12 @@
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/checkmarc.pl>Vérification MARC</a></td>
 	<td>Contrôle la structure MARC. A utiliser avant de travailler avec de vraies données. Cela permet de mettre en évidence les erreurs qui peuvent corrompre la base de données.</td></tr>
 
+<tr>
 <th colspan=2>Divers paramètres</th>
+</tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/printers.pl>Imprimantes</a></td>
-	<td>Imprimantes (UNIX paths).</td>
+	<td>Imprinantes (chemin UNIX).</td>
 </tr>
 <tr>
 	<td valign="top" width="25%"><a href=/cgi-bin/koha/admin/stopwords.pl>Mots vide de sens</a></td>
@@ -74,18 +78,22 @@
 </tr>
 </table>
 
-<table width=100% cellspacing=0 cellpadding=5 border=1>
+<table width="100%" cellspacing=0 cellpadding=5 border=1>
 <tr background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">
 	<th>Outils</th>
 </tr>
 </table>
-<table cellspacing=5 cellpadding=1 width=80%>
+<table cellspacing=5 cellpadding=1 width="80%">
+	<tr>
 	<th colspan=2> Export</th>
+	</tr>
 	<tr>
 		<td valign="top" width="25%"><a href="/cgi-bin/koha/export/marc.pl">Exporter une notice biblio MARC</a></td>
 		<td> Exporter en format MARC.</td>
 	</tr>
+	<tr>
 	<th colspan=2>Importer</th>
+	</tr>
 	<tr valign="top">
 		<td width="20%"><a href="/cgi-bin/koha/import/breeding.pl">Charger des notices MARC dans le réservoir</a></td>
 		<td>Le réservoir est une table dans laquelle sont stockées des notices qui seront récupérées pour un catalogage rapide..

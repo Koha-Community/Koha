@@ -16,7 +16,7 @@ function toUC(f) {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function isNum(v,maybenull) {
-var n = new Nombre(v.value);
+var n = new Number(v.value);
 if (isNaN(n)) {
 	return false;
 	}
@@ -80,12 +80,21 @@ function Check(f) {
 			</tr>
 			<tr>
 				<td>Non empruntable</td>
-				<td><input type=checkbox name=notforloan <!-- TMPL_IF name="notforloan" -->checked<!-- /TMPL_IF --> value=1> (if checked, no item sur this type can be issued.
-							If not checked, every item sur this type can be issued unless notforloan is set for a specific item)</td>
+				<td>
+					<!-- TMPL_IF name="notforloan" -->
+						<input type=checkbox name=notforloan checked value=1>
+					<!-- TMPL_ELSE -->
+						<input type=checkbox name=notforloan value=1>
+					<!-- /TMPL_IF -->
+					Si coché, aucun ouvrage de ce type ne peut être emprunté. Sinon, les ouvrages peuvent être empruntés sauf si le champ "notforloan" de l'ouvrage est coché.
+				</td>
 			</tr>
 			<tr>
 				<td>Durée de prêt</td>
-				<td><input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'> (meaningful only if not for loan is not set)</td>
+				<td>
+					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'>
+					Utilisé seulement si "Non empruntable" n'est pas coché.
+				</td>
 			</tr>
 			<tr>
 				<td>Renouvellements autorisés</td>

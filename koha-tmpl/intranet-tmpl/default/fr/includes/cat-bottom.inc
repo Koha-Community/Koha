@@ -1,4 +1,4 @@
-<br clear=tous>
+<br clear=all>
 <p> &nbsp; </p>
 
 

@@ -17,7 +17,7 @@
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNum(v,maybenull) {
-        var n = new Nombre(v.value);
+        var n = new Number(v.value);
         if (isNaN(n)) {
                 return false;
                 }
@@ -92,19 +92,19 @@
                         </td>
                 </tr>
                 <tr>
-                        <td>Période d'inscription</td>
+                        <td>Durée d'inscription</td>
                         <td>
                                 <input type=text name=enrolmentperiod value=<!-- TMPL_VAR NAME=enrolmentperiod -->>
                         </td>
                 </tr>
                 <tr>
-                        <td>Limite d'âge supérieure</td>
+                        <td>Age maxi</td>
                         <td>
                                 <input type=text name=upperagelimit value=<!-- TMPL_VAR NAME=upperagelimit -->>
                         </td>
                 </tr>
                 <tr>
-                        <td>Age obligatoire</td>
+                        <td>Age mini</td>
                         <td>
                                 <input type=text name=dateofbirthrequired value=<!-- TMPL_VAR NAME=dateofbirthrequired -->>
                         </td>
@@ -122,7 +122,7 @@
                         </td>
                 </tr>
                 <tr>
-                        <td>Frais d'inscription</td>
+                        <td>Frais inscription</td>
                         <td>
                                 <input type=text name=enrolmentfee value=<!-- TMPL_VAR NAME=enrolmentfee -->>
                         </td>
@@ -180,15 +180,15 @@
                         <td><!-- TMPL_VAR NAME=description --></td>
                 </tr>
                 <tr>
-                        <td>Période d'inscription</td>
+                        <td>Durée d'inscription</td>
                         <td><!-- TMPL_VAR NAME=enrolmentperiod --></td>
                 </tr>
                 <tr>
-                        <td>Limite d'âge supérieure</td>
+                        <td>Age maxi</td>
                         <td><!-- TMPL_VAR NAME=upperagelimit --></td>
                 </tr>
                 <tr>
-                        <td>Age obligatoire</td>
+                        <td>Age mini</td>
                         <td><!-- TMPL_VAR NAME=dateofbirthrequired --></td>
                 </tr>
                 <tr>
@@ -200,7 +200,7 @@
                         <td><!-- TMPL_VAR NAME=bulk --></td>
                 </tr>
                 <tr>
-                        <td>Frais d'inscription</td>
+                        <td>Frais inscription</td>
                         <td><!-- TMPL_VAR NAME=enrolmentfee --></td>
                 </tr>
                 <tr>
@@ -254,7 +254,7 @@
 
         <form action='<TMP_VAR NAME=script_name>' method=post>
                 <input type=text name=description value=<!-- TMPL_VAR NAME=searchfield -->>
-                <input type=reset name=reset value="clr">
+                <input type=reset name=reset value="effacer">
         </form>
 
         <table border=0 cellspacing=0 cellpadding=5>
@@ -262,12 +262,12 @@
                         <td background='/images/background-mem.gif'><b>Catégorie</b></td>
                         <td background='/images/background-mem.gif'><b>Description</b></td>
                         <td background='/images/background-mem.gif'><b>Inscription</b></td>
-                        <td background='/images/background-mem.gif'><b>Limite d'âge supérieure</b></td>
-                        <td background='/images/background-mem.gif'><b>Age obligatoire</b></td>
+                        <td background='/images/background-mem.gif'><b>Age maxi</b></td>
+                        <td background='/images/background-mem.gif'><b>Age mini</b></td>
                         <td background='/images/background-mem.gif'><b>Amende</b></td>
                         <td background='/images/background-mem.gif'><b>en gros</b></td>
                         <td background='/images/background-mem.gif'><b>Frais</b></td>
-                        <td background='/images/background-mem.gif'><b>En retard</b></td>
+                        <td background='/images/background-mem.gif'><b>Signaler retard</b></td>
                         <td background='/images/background-mem.gif'><b>Limite de prêt</b></td>
                         <td background='/images/background-mem.gif'><b>Réserver</b></td>
                         <td background='/images/background-mem.gif'> </td>
