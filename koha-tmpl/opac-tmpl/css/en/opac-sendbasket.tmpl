@@ -1,17 +1,17 @@
-§SUBJECT§
+<SUBJECT>
 Your biblio basket
-§END_SUBJECT§
+<END_SUBJECT>
 
-§HEADER§
+<HEADER>
 Hi,
 Here is your biblio basket...
-§END_HEADER§
+<END_HEADER>
 
-§FILENAME§
+<FILENAME>
 basket.txt
-§END_FILENAME§
+<END_FILENAME>
 
-§MESSAGE§
+<MESSAGE>
 ---------------------------------------------
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" -->(record <!-- TMPL_VAR NAME="biblionumber" -->)<!-- TMPL_IF name="isbn" -->
 ISBN:		<!-- TMPL_VAR NAME="ISBN" --><!-- /TMPL_IF --><!-- TMPL_IF name="subtitle" -->
@@ -31,4 +31,4 @@ LCCN:		<!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><!-- TMPL_IF name="url" -->
 URL :		<!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
 ---------------------------------------------
 <!-- /TMPL_LOOP -->
-§END_MESSAGE§
+<END_MESSAGE>
