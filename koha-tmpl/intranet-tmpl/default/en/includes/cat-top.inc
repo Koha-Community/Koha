@@ -1,23 +1,19 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
 <html>
 <head>
 <title>KOHA: INTRANET: Catalogue</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-<script language="JavaScript">
+<script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
 function openWindow(targeturl, windowname) {
-newwin =
+	newwin =
 window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 }
-// end hiding -->
-</script>
-
-<script language="JavaScript" type="text/javascript">
 function Help() {
 	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
+// end hiding -->
 </script>
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
@@ -52,7 +48,7 @@ a.catalogue:hover {
 </div>
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
-	<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="submenu2">search</a>
+	<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet" class="submenu2">search</a>
 	<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="submenu">Add biblio</a>
 	<a class="submenu2" href="/cgi-bin/koha/bull-home.pl">Serial</a>
 	<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Virtual shelves</a>
