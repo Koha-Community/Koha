@@ -74,6 +74,7 @@ if ($query->param('setcookies')) {
 }
 
 my %env; # FIXME env is used as an "environment" variable. Could be dropped probably...
+
 $env{'branchcode'}=$branch;
 $env{'printer'}=$printer;
 $env{'queue'}=$printer;
@@ -260,6 +261,7 @@ if ($borrowerslist) {
 }
 #title
 
+my ($patrontable, $flaginfotable) = patrontable($borrower);
 my $amountold=$borrower->{flags}->{'CHARGES'}->{'message'};
 my @temp=split(/\$/,$amountold);
 $amountold=$temp[1];
@@ -307,6 +309,93 @@ output_html_with_http_headers $query, $cookie, $template->output;
 
 ####################################################################
 # Extra subroutines,,,
+
+sub patrontable {
+    my ($borrower) = @_;
+    my $flags = $borrower->{'flags'};
+    my $flaginfotable='';
+    my $flaginfotext;
+    #my $flaginfotext='';
+    my $flag;
+    my $color='';
+    foreach $flag (sort keys %$flags) {
+    	warn $flag;
+#    	my @itemswaiting='';
+	$flags->{$flag}->{'message'}=~s/\n/<br>/g;
+	if ($flags->{$flag}->{'noissues'}) {
+		$template->param(
+			noissues => 'true',
+			 );
+		if ($flag eq 'GNA'){
+			$template->param(
+				gna => 'true'
+				);
+			}
+		if ($flag eq 'LOST'){
+			$template->param(
+				lost => 'true'
+			);
+			}
+		if ($flag eq 'DBARRED'){
+			$template->param(
+				dbarred => 'true'
+			);
+			}
+		if ($flag eq 'CHARGES') {
+			$template->param(
+				charges => 'true',
+				chargesmsg => $flags->{'CHARGES'}->{'message'}
+				 );
+		}
+	} else {
+		 if ($flag eq 'CHARGES') {
+			$template->param(
+				charges => 'true',
+				chargesmsg => $flags->{'CHARGES'}->{'message'}
+			 );
+		}
+	    	if ($flag eq 'WAITING') {
+			my $items=$flags->{$flag}->{'itemlist'};
+		        my @itemswaiting;
+			foreach my $item (@$items) {
+			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
+			$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
+			push @itemswaiting, $iteminformation;
+			}
+			$template->param(
+				waiting => 'true',
+				waitingmsg => $flags->{'WAITING'}->{'message'},
+				itemswaiting => \@itemswaiting,
+				 );
+		}
+		if ($flag eq 'ODUES') {
+			$template->param(
+				odues => 'true',
+				oduesmsg => $flags->{'ODUES'}->{'message'}
+				 );
+
+			my $items=$flags->{$flag}->{'itemlist'};
+			{
+			    my @itemswaiting;
+			foreach my $item (@$items) {
+				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
+				push @itemswaiting, $iteminformation;
+			}
+			}
+			if ($query->param('module') ne 'returns'){
+				$template->param( nonreturns => 'true' );
+			}
+		}
+		if ($flag eq 'NOTES') {
+			$template->param(
+				notes => 'true',
+				notesmsg => $flags->{'NOTES'}->{'message'}
+				 );
+		}
+	}
+    }
+    return($patrontable, $flaginfotext);
+}
 
 sub cuecatbarcodedecode {
     my ($barcode) = @_;
