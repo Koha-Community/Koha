@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+
+
+
+use C4::Database;
+use C4::Catalogue;
+use CGI;
+use DBI;
+#use strict;
+use C4::Acquisitions;
+use C4::Output;
+my $userid=$ENV{'REMOTE_USER'};
+
+
+my $dbh=C4Connect;
+
+my $newschool=$ARGV[0];
+($newschool) || ($newschool='SHE');
+
+#changeSubfield(45,'876','c','7.20','7.30',451);
+
+
+my $sth=$dbh->prepare("select * from items where barcode='1024'");
+$sth->execute;
+my $item=$sth->fetchrow_hashref();
+print $item->{'homebranch'}."\n";
+print $item->{'barcode'}."\n";
+print $item->{'biblionumber'}."\n";
+$item->{'homebranch'}=$newschool;
+print $item->{'homebranch'}."\n";
+updateItem($env, $item);
+$sth->finish;
+$dbh->disconnect;
