@@ -221,7 +221,7 @@ sub build_tabs ($$$$) {
 						foreach my $subfieldcount (0..$#subfields) {
 							my $subfield=$subfields[$subfieldcount][0];
 							my $value=$subfields[$subfieldcount][1];
-							next if subfield_is_koha_internal_p($subfield);
+							next if (length $subfield !=1);
 							next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 							push(@subfields_data, &create_input($tag,$subfield,char_decode($value,$encoding),$i,$tabloop,$record,$authorised_values_sth));
 							$i++;
@@ -229,7 +229,7 @@ sub build_tabs ($$$$) {
 					}
 # now, loop again to add parameter subfield that are not in the MARC::Record
 					foreach my $subfield (sort( keys %{$tagslib->{$tag}})) {
-						next if subfield_is_koha_internal_p($subfield);
+						next if (length $subfield !=1);
 						next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 						next if ($tag<10);
 						next if (defined($record->field($tag)->subfield($subfield)));
@@ -261,7 +261,7 @@ sub build_tabs ($$$$) {
 			} else {
 				my @subfields_data;
 				foreach my $subfield (sort(keys %{$tagslib->{$tag}})) {
-					next if subfield_is_koha_internal_p($subfield);
+					next if (length $subfield !=1);
 					next if ($tagslib->{$tag}->{$subfield}->{tab} ne $tabloop);
 					push(@subfields_data, &create_input($tag,$subfield,'',$i,$tabloop,$record,$authorised_values_sth));
 					$i++;
