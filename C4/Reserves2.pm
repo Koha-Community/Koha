@@ -30,43 +30,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 $VERSION = 0.01;
     
 @ISA = qw(Exporter);
-<<<<<<< Reserves2.pm
-@EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &Findgroupreserve);
-%EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-		  
-# your exported package globals go here,
-# as well as any optionally exported functions
-
-@EXPORT_OK   = qw($Var1 %Hashit);
-
-
-# non-exported package globals go here
-use vars qw(@more $stuff);
-	
-# initalize package globals, first exported ones
-
-my $Var1   = '';
-my %Hashit = ();
-		    
-# then the others (which are still accessible as $Some::Module::stuff)
-my $stuff  = '';
-my @more   = ();
-	
-# all file-scoped lexicals must be created before
-# the functions below that use them.
-		
-# file-private lexicals go here
-my $priv_var    = '';
-my %secret_hash = ();
-			    
-# here's a file-private function as a closure,
-# callable as &$priv_func;  it cannot be prototyped.
-my $priv_func = sub {
-  # stuff goes here.
-};
-=======
 @EXPORT = qw(&FindReserves &CheckReserves &CheckWaiting &CancelReserve &FillReserve &ReserveWaiting &CreateReserve &updatereserves &getreservetitle &Findgroupreserve);
->>>>>>> 1.8
 						    
 # make all your functions, whether exported or not;
 
