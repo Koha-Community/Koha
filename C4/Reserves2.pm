@@ -19,25 +19,30 @@ $VERSION = 0.01;
 sub FindReserves {
   my ($bib,$bor)=@_;
   my $dbh=C4Connect;
-  my $query="Select *,reserves.branchcode,biblio.title as btitle
-  from reserves,borrowers,biblio ";
+  my $query="SELECT *,reserves.branchcode,biblio.title AS btitle
+                      FROM reserves,borrowers,biblio ";
   if ($bib ne ''){
     if ($bor ne ''){
-       $query=$query." where reserves.biblionumber=$bib and
-       reserves.borrowernumber=borrowers.borrowernumber and
-       biblio.biblionumber=$bib and cancellationdate is NULL and 
-       (found <> 'F' or found is NULL)";
-    } else {
-       $query=$query." where reserves.borrowernumber=borrowers.borrowernumber
-       and biblio.biblionumber=$bib and reserves.biblionumber=$bib
-       and cancellationdate is NULL and 
-       (found <> 'F' or found is NULL)";
-    }
+          $query .=  " where reserves.biblionumber   = $bib
+                         and borrowers.borrowernumber = $bor 
+                         and reserves.borrowernumber = borrowers.borrowernumber 
+                         and biblio.biblionumber     = $bib 
+                         and cancellationdate is NULL 
+                         and (found <> 'F' or found is NULL)";
+      } else {
+          $query .= " where reserves.borrowernumber = borrowers.borrowernumber
+                        and biblio.biblionumber     = $bib 
+                        and reserves.biblionumber   = $bib
+                        and cancellationdate is NULL 
+                        and (found <> 'F' or found is NULL)";
+      }
   } else {
-    $query=$query." where borrowers.borrowernumber=$bor and
-    reserves.borrowernumber=borrowers.borrowernumber and reserves.biblionumber
-    =biblio.biblionumber and cancellationdate is NULL and 
-    (found <> 'F' or found is NULL)";
+      $query .= " where borrowers.borrowernumber = $bor 
+                    and reserves.borrowernumber  = borrowers.borrowernumber 
+                    and reserves.biblionumber    = biblio.biblionumber 
+                    and cancellationdate is NULL and 
+                    (found <> 'F' or found is NULL)";
+  }
   }
   $query.=" order by priority";
   my $sth=$dbh->prepare($query);
@@ -58,17 +63,26 @@ sub Findgroupreserve {
   my ($bibitem,$biblio)=@_;
   my $dbh=C4Connect;
   $bibitem=$dbh->quote($bibitem);
-  my $query="Select * from reserves 
-  left join reserveconstraints on
-  reserves.biblionumber=reserveconstraints.biblionumber
-  where
-  reserves.biblionumber=$biblio and
-  ((reserveconstraints.biblioitemnumber=$bibitem 
-  and reserves.borrowernumber=reserveconstraints.borrowernumber
-  and reserves.reservedate=reserveconstraints.reservedate)
-  or reserves.constrainttype='a')
-  and reserves.cancellationdate is NULL
-  and (reserves.found <> 'F' or reserves.found is NULL)";
+  my $query = "SELECT reserves.biblionumber               AS biblionumber, 
+                      reserves.borrowernumber             AS borrowernumber, 
+                      reserves.reservedate                AS reservedate, 
+                      reserves.branchcode                 AS branchcode, 
+                      reserves.cancellationdate           AS cancellationdate, 
+                      reserves.found                      AS found, 
+                      reserves.reservenotes               AS reservenotes, 
+                      reserves.priority                   AS priority, 
+                      reserves.timestamp                  AS timestamp, 
+                      reserveconstraints.biblioitemnumber AS biblioitemnumber, 
+                      reserves.itemnumber                 AS itemnumber 
+                 FROM reserves LEFT JOIN reserveconstraints
+                   ON reserves.biblionumber = reserveconstraints.biblionumber
+                WHERE reserves.biblionumber = $biblio
+                  AND ( ( reserveconstraints.biblioitemnumber = $bibitem 
+                      AND reserves.borrowernumber = reserveconstraints.borrowernumber
+                      AND reserves.reservedate    =reserveconstraints.reservedate )
+                   OR reserves.constrainttype='a' )
+                  AND reserves.cancellationdate is NULL
+                  AND (reserves.found <> 'F' or reserves.found is NULL)";
 #  print $query;
   my $sth=$dbh->prepare($query);
   $sth->execute;
