@@ -271,7 +271,7 @@ sub calculate {
 	for (my $i=1;$i<=$line;$i++) {
 		foreach my $col ( @loopcol ) {
 #			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"total"}=0;
+			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"total"}->{'name'}=0;
 		}
 	}
 
@@ -280,9 +280,9 @@ sub calculate {
 	my $strcalc ;
 	
 # Processing average loanperiods
-	$strcalc .= "SELECT CONCAT( biblioitems.biblioitemnumber) , COUNT(*) AS RANK";
+	$strcalc .= "SELECT biblio.title, COUNT(*) AS RANK, biblio.biblionumber AS ID";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+	$strcalc .= " FROM `issues`,borrowers,(items LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
 
  	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
  	$strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
@@ -323,38 +323,41 @@ sub calculate {
 	my $previous_col;
 	my $i=1;
 	while (my  @data = $dbcalc->fetchrow) {
-		my ($row, $rank, $col )=@data;
-#		warn "filling table $row / $col / $issuedate / $returndate /$weight";
+		my ($row, $rank, $id, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
 		$i=1 if (($previous_col) and not($col eq $previous_col));
-		$table[$i]->{$col}=$row;
+		$table[$i]->{$col}->{'name'}=(($row eq "") or ($row eq undef))?"Title":$row;
+		$table[$i]->{$col}->{'count'}=$rank;
+		$table[$i]->{$col}->{'link'}=$id;
 #		warn " ".$i." ".$col. " ".$row;
 		$i++;
 		$previous_col=$col;
-#		$table{$row}->{totalrow}+=$weight*$loanlength;
 	}
 	
-	push @loopcol,{coltitle => "Global"} if not ($column);
+	push @loopcol,{coltitle => "Global"} if not($column);
 	
 	for ($i=1; $i<=$line;$i++) {
-		warn " ".$i;
 		my @loopcell;
+		warn " $i";
 		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		my $colcount=0;
 		foreach my $col ( @loopcol ) {
+#			warn " colonne :$col->{coltitle}";
 			my $value;
+			my $count=0;
+			my $link;
 			if (@loopcol){
-				#warn " test ".(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle};
-				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
+				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'name'};
+				$count =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'count'};
+				$link =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'link'};
 			} else {
-				$value =$table[$i]->{"zzEMPTY"};
+				$value =$table[$i]->{"zzEMPTY"}->{'name'};
+				$count =$table[$i]->{"zzEMPTY"}->{'count'};
+				$link =$table[$i]->{"zzEMPTY"}->{'link'};
 			}
-#			$table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} = $value;
-			#$table{$row}->{totalrow}+=$value;
-			#warn "row : $row col:$col  $cnttable{$row}->{(($col->{coltitle} eq \"NULL\")or ($col->{coltitle} eq \"\"))?\"zzEMPTY\":$col->{coltitle}}";
-#			$colcount+=$cnttable{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}};
-			push @loopcell, {value => $value} ;
+#			warn " ".$i ." value:$value count:$count reference:$link";
+			push @loopcell, {value => $value, count =>$count, reference => $link} ;
 		}
 		#warn "row : $row colcount:$colcount";
 		#my $total = $table[$i]->{totalrow}/$colcount if ($colcount>0);

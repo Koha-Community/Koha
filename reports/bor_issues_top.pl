@@ -239,21 +239,11 @@ sub calculate {
 		warn "". $strsth2;
 		
 		my $sth2 = $dbh->prepare( $strsth2 );
-		if (( @colfilter ) and ($colfilter[1])){
-			$sth2->execute("'".$colfilter[0]."'","'".$colfilter[1]."'");
-		} elsif ($colfilter[0]) {
-			$sth2->execute($colfilter[0]);
-		} else {
-			$sth2->execute;
-		}
-		
+		$sth2->execute;
 	
 		while (my ($celvalue) = $sth2->fetchrow) {
 			my %cell;
-	#		my %ft;
-	#		warn "coltitle :".$celvalue;
 			$cell{coltitle} = $celvalue;
-	#		$ft{totalcol} = 0;
 			push @loopcol, \%cell;
 		}
 	#	warn "fin des titres colonnes";
@@ -270,7 +260,7 @@ sub calculate {
 	for (my $i=1;$i<=$line;$i++) {
 		foreach my $col ( @loopcol ) {
 #			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"total"}=0;
+			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"total"}->{'name'}=0;
 		}
 	}
 
@@ -279,9 +269,9 @@ sub calculate {
 	my $strcalc ;
 	
 # Processing average loanperiods
-	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber) , COUNT(*) AS RANK";
+	$strcalc .= "SELECT  CONCAT(borrowers.surname , \"\\t\",borrowers.firstname),  COUNT(*) AS RANK, borrowers.borrowernumber AS ID";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+	$strcalc .= " FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber)  WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
 
  	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
  	$strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
@@ -322,10 +312,12 @@ sub calculate {
 	my $previous_col;
 	my $i=1;
 	while (my  @data = $dbcalc->fetchrow) {
-		my ($row, $rank, $col )=@data;
+		my ($row, $rank, $id, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
 		$i=1 if (($previous_col) and not($col eq $previous_col));
-		$table[$i]->{$col}=$row;
+		$table[$i]->{$col}->{'name'}=$row;
+		$table[$i]->{$col}->{'count'}=$rank;
+		$table[$i]->{$col}->{'link'}=$id;
 		warn " ".$i." ".$col. " ".$row;
 		$i++;
 		$previous_col=$col;
@@ -334,19 +326,27 @@ sub calculate {
 	push @loopcol,{coltitle => "Global"} if not($column);
 	
 	for ($i=1; $i<=$line;$i++) {
-		warn " ".$i;
 		my @loopcell;
+		warn " $i";
 		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		my $colcount=0;
 		foreach my $col ( @loopcol ) {
+#			warn " colonne :$col->{coltitle}";
 			my $value;
+			my $count=0;
+			my $link;
 			if (@loopcol){
-				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
+				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'name'};
+				$count =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'count'};
+				$link =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'link'};
 			} else {
-				$value =$table[$i]->{"zzEMPTY"};
+				$value =$table[$i]->{"zzEMPTY"}->{'name'};
+				$count =$table[$i]->{"zzEMPTY"}->{'count'};
+				$link =$table[$i]->{"zzEMPTY"}->{'link'};
 			}
-			push @loopcell, {value => $value} ;
+#			warn " ".$i ." value:$value count:$count reference:$link";
+			push @loopcell, {value => $value, count =>$count, reference => $link} ;
 		}
 		push @looprow,{ 'rowtitle' => $i ,
 						'loopcell' => \@loopcell,

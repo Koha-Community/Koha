@@ -2,6 +2,11 @@
 <div id="mainbloc" >
 
 <!-- TMPL_IF NAME="do_it" -->
+<script language="JavaScript" type="text/javascript">
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
 	<!-- TMPL_LOOP NAME="mainloop" -->
 		<h1 class="reports">Koha : Top <!-- TMPL_VAR NAME="limit"--> List borrowers for Issues </h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
@@ -11,11 +16,18 @@
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF NAME="loopfilter"-->
 		<br>
-		<table>
+		<table border="1">
 			<tr >
 				<th class="reports">Rank/Borrowers</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
-					<th class="reports"><!-- TMPL_VAR NAME="coltitle" --></th>
+					<th class="reports" colspan="2"><!-- TMPL_VAR NAME="coltitle" --></th>
+				<!-- /TMPL_LOOP -->
+			</tr>
+			<tr >
+				<th class="reports">&nbsp;</th>
+				<!-- TMPL_LOOP NAME="loopcol" -->
+					<th class="reports">Borrower</th>
+					<th class="reports">Issues count</th>
 				<!-- /TMPL_LOOP -->
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
@@ -24,7 +36,12 @@
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../members/moremember.pl?bornum=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
+							</td>
+							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="count" --><!-- TMPL_VAR NAME="count" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
