@@ -307,7 +307,7 @@ sub calculate {
 	my $linefield;                               
 	if (($line =~/datetime/) and ($dsp == 1)) {
 		#Display by day
-		$linefield .="dayname($line)";  
+		$linefield .="concat(weekday($line),' ',dayname($line))";  
 	} elsif (($line=~/datetime/) and ($dsp == 2)) {
 		#Display by Month
 		$linefield .="monthname($line)";  
@@ -319,7 +319,9 @@ sub calculate {
 	} else {
 		$linefield .= $line;
 	}  
-	
+	my $lineorder = $linefield;
+	$lineorder = "weekday($line)" if $lineorder =~ "^dayname";
+
  	my $strsth;
  	$strsth .= "select distinctrow $linefield from statistics, borrowers where (statistics.borrowernumber=borrowers.borrowernumber) and $line is not null ";
 	
@@ -339,8 +341,8 @@ sub calculate {
  		$strsth .= " and $line LIKE ? " ;
  	}
 	$strsth .=" group by $linefield";
-	$strsth .=" order by $linefield";
-#	warn "". $strsth;
+	$strsth .=" order by $lineorder";
+	warn "". $strsth;
 	
 	my $sth = $dbh->prepare( $strsth );
 	if (( @linefilter ) and ($linefilter[1])){
@@ -467,8 +469,8 @@ sub calculate {
 	$strcalc .= " AND monthname(datetime) like '" . $monthsel ."'" if ( $monthsel );
 	$strcalc .= " AND statistics.type like '" . $type ."'" if ( $type );
 	
-	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
-#	warn "". $strcalc;
+	$strcalc .= " group by $linefield, $colfield order by $lineorder,$colfield";
+	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 # 	warn "filling table";
