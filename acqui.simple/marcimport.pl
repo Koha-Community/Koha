@@ -101,16 +101,15 @@ print startmenu('acquisitions');
 # Process input parameters
 
 my $file=$input->param('file');
+my $menu = $input->param('menu');
 
 if ($input->param('z3950queue')) {
 	PostToZ3950Queue($dbh,$input);
 } 
 
-
 if ($input->param('uploadmarc')) {
 	AcceptMarcUpload($dbh,$input)
 }
-
 
 if ($input->param('insertnewrecord')) {
     # Add biblio item, and set up menu for adding item copies
@@ -122,16 +121,14 @@ if ($input->param('insertnewrecord')) {
 }
 
 
-#---------------------------------------
-# Add item copy
 if ($input->param('newitem')) {
+    # Add item copy
     &AcceptItemCopy($dbh,$input);
 } # if newitem
 
 
-
-my $menu = $input->param('menu');
 if ($file) {
+    # A MARC file has been specified; process it for review form
     my $sth;
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     my $qisbn=$input->param('isbn');
@@ -374,7 +371,7 @@ RECORD:
 		    }
 		    push @subjects, $subject;
 		}
-	    }
+	    } # foreach field
 	    $titleinput=$input->textfield(-name=>'title', -default=>$title, -size=>40);
 	    $marcinput=$input->hidden(-name=>'marc', -default=>$marc);
 	    $subtitleinput=$input->textfield(-name=>'subtitle', -default=>$subtitle, -size=>40);
@@ -470,7 +467,7 @@ RECORD:
 	    </form>
 	    $marctext
 EOF
-	}
+	} # foreach record
     } else {
 	#open (F, "$file");
 	#my $data=<F>;
@@ -725,60 +722,89 @@ EOF
 
 SWITCH:
     {
-	if ($menu eq 'z3950') { z3950(); last SWITCH; }
+	if ($menu eq 'z3950') { z3950menu($dbh,$input); last SWITCH; }
 	if ($menu eq 'uploadmarc') { uploadmarc(); last SWITCH; }
 	if ($menu eq 'manual') { manual(); last SWITCH; }
 	mainmenu();
     }
 
 }
+print endmenu();
+print endpage();
 
 
-sub z3950 {
-    my $sth=$dbh->prepare("select id,term,type,done,numrecords,length(results),startdate,enddate,servers from z3950queue order by id desc limit 20");
-    $sth->execute;
+sub z3950menu {
+    use strict;
+    my (
+	$dbh,
+	$input,
+    )=@_;
+
+    my (
+	$sth, $sti,
+	$processing,
+	$realenddate,
+	$totalrecords,
+    	$elapsed,
+    	$elapsedtime,
+	$resultstatus, $statuscolor,
+	$id, $term, $type, $done, $numrecords, $length, 
+	$startdate, $enddate, $servers
+    );
+
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
     print "<table border=0><tr><td valign=top>\n";
     print "<h2>Results of Z39.50 searches</h2>\n";
-    print "<a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Refresh</a><br>\n<ul>\n";
-    while (my ($id, $term, $type, $done, $numrecords, $length, $startdate, $enddate, $servers) = $sth->fetchrow) {
+    print "<a href=$ENV{'SCRIPT_NAME'}?menu=z3950>Refresh</a><br>\n" .
+ 	  "<ul>\n";
+
+    # Check queued queries
+    $sth=$dbh->prepare("select id,term,type,done,
+		numrecords,length(results),startdate,enddate,servers 
+	from z3950queue 
+	order by id desc 
+	limit 20 ");
+    $sth->execute;
+    while ( ($id, $term, $type, $done, $numrecords, $length, 
+		$startdate, $enddate, $servers) = $sth->fetchrow) {
 	$type=uc($type);
 	$term=~s/</&lt;/g;
 	$term=~s/>/&gt;/g;
-	my $sti=$dbh->prepare("select id,server,startdate,enddate,numrecords from z3950results where queryid=$id");
-	$sti->execute;
+
+	# See if query produced results
+	$sti=$dbh->prepare("select id,server,startdate,enddate,numrecords 
+		from z3950results 
+		where queryid=?");
+	$sti->execute($id);
 	if ($sti->rows) {
-	    my $processing=0;
-	    my $realenddate=0;
-	    my $totalrecords=0;
-	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords) = $sti->fetchrow) {
+	    $processing=0;
+	    $realenddate=0;
+	    $totalrecords=0;
+	    while (my ($r_id,$r_server,$r_startdate,$r_enddate,$r_numrecords) 
+		= $sti->fetchrow) {
 		if ($r_enddate==0) {
+		    # It hasn't finished yet
 		    $processing=1;
 		} else {
+		    # It finished, see how long it took.
 		    if ($r_enddate>$realenddate) {
 			$realenddate=$r_enddate;
 		    }
 		}
 
 		$totalrecords+=$r_numrecords;
-	    }
+	    } # while results
+
 	    if ($processing) {
-		my $elapsed=time()-$startdate;
-		my $elapsedtime='';
-		if ($elapsed>60) {
-		    $elapsedtime=sprintf "%d minutes",($elapsed/60);
-		} else {
-		    $elapsedtime=sprintf "%d seconds",$elapsed;
-		}
-		if ($totalrecords) {
-		    $totalrecords="$totalrecords found.";
-		} else {
-		    $totalrecords='';
-		}
-		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1 color=red>Processing... $totalrecords ($elapsedtime)</font><br>\n";
+		$elapsed=time()-$startdate;
+		$resultstatus="Processing...";
+		$statuscolor="red";
 	    } else {
-		my $elapsed=$realenddate-$startdate;
-		my $elapsedtime='';
+		$elapsed=$realenddate-$startdate;
+		$resultstatus="Done.";
+		$statuscolor="black";
+		}
+
 		if ($elapsed>60) {
 		    $elapsedtime=sprintf "%d minutes",($elapsed/60);
 		} else {
@@ -789,15 +815,25 @@ sub z3950 {
 		} else {
 		    $totalrecords='';
 		}
-		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1>Done. $totalrecords ($elapsedtime)</font><br>\n";
-	    }
+		print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>".
+		"$type=$term</a>" .
+		"<font size=-1 color=$statuscolor>$resultstatus $totalrecords " .
+		"($elapsedtime)</font><br>\n";
 	} else {
-	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>$type=$term</a> <font size=-1>Pending</font><br>\n";
-	}
-    }
-    print "</ul>\n";
-    print "</td><td valign=top width=30%>\n";
-    my $sth=$dbh->prepare("select id,name,checked from z3950servers order by rank");
+	    print "<li><a href=$ENV{'SCRIPT_NAME'}?file=Z-$id&menu=$menu>
+		$type=$term</a> <font size=-1>Pending</font><br>\n";
+	} # if results done
+    } # while queries
+    print "</ul> </td>\n";
+    # End of query listing
+
+    #------------------------------
+    # Search input form
+    print "<td valign=top width=30%>\n";
+
+    my $sth=$dbh->prepare("select id,name,checked 
+	from z3950servers 
+	order by rank");
     $sth->execute;
     my $serverlist='';
     while (my ($id, $name, $checked) = $sth->fetchrow) {
@@ -814,21 +850,23 @@ print << "EOF";
     <p>
     <input type=hidden name=test value=testvalue>
     <input type=hidden name=rand value=$rand>
-    <table border=1 bgcolor=#dddddd><tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records</th></tr>
+        <table border=1 bgcolor=#dddddd>
+	    <tr><th bgcolor=#bbbbbb colspan=2>Search for MARC records</th></tr>
     <tr><td>Query Term</td><td><input name=query></td></tr>
-    <tr><td colspan=2 align=center><input type=radio name=type value=isbn checked>&nbsp;ISBN <input type=radio name=type value=lccn>&nbsp;LCCN<br><input type=radio name=type value=author>&nbsp;Author <input type=radio name=type value=title>&nbsp;Title <input type=radio name=type value=keyword>&nbsp;Keyword</td></tr>
-    <tr><td colspan=2>
-    $serverlist
-    </td></tr>
     <tr><td colspan=2 align=center>
-    <input type=submit>
-    </td></tr>
+		<input type=radio name=type value=isbn checked>&nbsp;ISBN 
+		<input type=radio name=type value=lccn        >&nbsp;LCCN<br>
+		<input type=radio name=type value=author      >&nbsp;Author 
+		<input type=radio name=type value=title       >&nbsp;Title 
+		<input type=radio name=type value=keyword     >&nbsp;Keyword</td></tr>
+            <tr><td colspan=2> $serverlist </td></tr>
+            <tr><td colspan=2 align=center> <input type=submit> </td></tr>
     </table>
 
     </form>
 EOF
 print "</td></tr></table>\n";
-}
+} # sub z3950
 
 sub uploadmarc {
     print "<a href=$ENV{'SCRIPT_NAME'}>Main Menu</a><hr>\n";
@@ -891,8 +929,6 @@ sub skip {
     #<form action=$ENV{'SCRIPT_NAME'} method=POST enctype=multipart/form-data>
 
 }
-print endmenu();
-print endpage();
 
 sub parsemarcdata {
     my $data=shift;
@@ -959,12 +995,13 @@ sub parsemarcdata {
 		$field{'subfields'}=\%subfields;
 	    }
 	    push (@record, \%field);
-	}
+	} # foreach field in record
 	push (@records, \@record);
 	$counter++;
     }
+    print "</pre>" if $debug;
     return @records;
-}
+} # sub parsemarcfileformat
 
 #----------------------------
 # Accept form results to add query to z3950 queue
