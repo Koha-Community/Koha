@@ -265,7 +265,7 @@ sub modorder {
   $sth->finish;
   $sth=$dbh->prepare("update aqorderbreakdown set bookfundid=? where
   ordernumber=?");
-  if ($sth->execute($bookfund,$ordnum) == 0) { # zero rows affected [Bug 734]
+  unless ($sth->execute($bookfund,$ordnum)) { # zero rows affected [Bug 734]
     my $query="insert into aqorderbreakdown (ordernumber,bookfundid) values (?,?)";
     $sth=$dbh->prepare($query);
     $sth->execute($ordnum,$bookfund);
@@ -606,7 +606,6 @@ sub histsearch {
 	$query .= " and biblio.title like ".$dbh->quote("%".$title."%") if $title;
 	$query .= " and biblio.author like ".$dbh->quote("%".$author."%") if $author;
 	$query .= " and name like ".$dbh->quote("%".$name."%") if $name;
-	warn "Q : $query";
 	my $sth = $dbh->prepare($query);
 	$sth->execute;
 	my @order_loop;
