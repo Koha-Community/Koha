@@ -4,8 +4,8 @@ my $kohadir=`pwd`;
 chomp $kohadir;
 my $kohahtmldir="/koha/koha/koha-html/";
 
-if (-e "/root/.kohaautobuild.conf") {
-    open C, "/root/.kohaautobuild.conf";
+if (-e "$kohadir/.kohaautobuild.conf") {
+    open C, "$kohadir/.kohaautobuild.conf";
     while (<C>) {
 	chomp;
 	if (/kohadir=(.*)/) {
@@ -44,7 +44,7 @@ if ($input) {
     $kohahtmldir=$input;
 }
 
-open (C, ">/root/.kohaautobuild.conf");
+open (C, "> $kohadir/.kohaautobuild.conf") || die "unable to create kohaautobuild file";
 print C qq|
 kohadir=$kohadir
 kohahtmldir=$kohahtmldir
@@ -215,8 +215,8 @@ system("mv $rootdir/intranet-cgi/LICENSE $rootdir");
 system("mv $rootdir/intranet-cgi/News $rootdir");
 system("mv $rootdir/intranet-cgi/README $rootdir");
 system("mv $rootdir/intranet-cgi/TODO $rootdir");
-system("mv $rootdir/intranet-cgi/installer.pl $rootdir"); 
-system("mv $rootdir/intranet-cgi/koha.upgrade $rootdir"); 
+system("mv $rootdir/intranet-cgi/installer.pl $rootdir");
+system("mv $rootdir/intranet-cgi/koha.upgrade $rootdir");
 chmod 0770, "$rootdir/installer.pl";
 chmod 0770, "$rootdir/koha.upgrade";
 system("mv $rootdir/intranet-cgi/koha.conf $rootdir");
