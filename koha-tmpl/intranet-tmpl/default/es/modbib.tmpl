@@ -1,0 +1,64 @@
+<TMPL_INCLUDE Name="cat-top.inc">
+
+<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">Modificación de Links del Sitio</a>
+<form action="updatebiblio.pl" method="post" name="f">
+<input type="hidden" name="biblionumber" value="<TMPL_VAR Name="biblionumber">">
+<input type="hidden" name="biblioitemnumber" value="<TMPL_VAR Name="biblioitemnumber">">
+<table border="0" cellspacing="0" cellpadding="5">
+<tr valign="top">
+<td>Autor</td>
+<td><input type="text" name="author" value="<TMPL_VAR Name="author" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Título</td>
+<td><input type="text" name="title" value="<TMPL_VAR Name="title" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Abstract</td>
+<td><textarea name="abstract" cols="40" rows="4"><TMPL_VAR Name="abstract"></textarea></td>
+</tr>
+<tr valign="top">
+<td>Materias/Descriptores</td>
+<td><textarea name="subject" cols="40" rows="4"><TMPL_VAR Name="subject"></textarea>
+<a href="javascript:Dopop()">...</a>
+</td>
+</tr>
+<tr valign="top">
+<td>Fecha Copyright</td>
+<td><input type="text" name="copyrightdate" value="<TMPL_VAR Name="copyrightdate" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Título de la serie</td>
+<td><input type="text" name="seriestitle" value="<TMPL_VAR Name="seriestitle" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Otro Autor</td>
+<td><input type="text" name="additionalauthor" value="<TMPL_VAR Name="additionalauthor" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Subtítulo</td>
+<td><input type="text" name="subtitle" value="<TMPL_VAR Name="subtitle" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Título unificado</td>
+<td><input type="text" name="unititle" value="<TMPL_VAR Name="untitle" ESCAPE=HTML>"></td>
+</tr>
+<tr valign="top">
+<td>Notas</td>
+<td><textarea name="notes" cols="40" rows="4"><TMPL_VAR Name="notes" ESCAPE=HTML></textarea></td>
+</tr>
+<tr valign="top">
+<td>Número Inventario</td>
+<td><input type="text" name="serial" value="<TMPL_VAR Name="serial" ESCAPE=HTML>"></td>
+</tr>
+</table>
+<br>
+<input type="submit" name="submit" value="Save Changes">
+</form>
+<script>
+function Dopop() {
+        newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<TMPL_INCLUDE Name="cat-bottom.inc">
